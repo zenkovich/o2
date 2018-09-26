@@ -384,7 +384,7 @@ namespace Editor
 
 				SetLayoutDirty();
 
-				Vec2F anchor = (layout->worldLeftTop + layout->worldRightTop)*0.5f;
+				Vec2F anchor = (layout->worldLeftTop + layout->worldRightTop.Get())*0.5f;
 
 				if (auto headLayer = GetLayer(mTabLayerPath))
 					anchor.y -= headLayer->GetRect().Height()*0.5f;

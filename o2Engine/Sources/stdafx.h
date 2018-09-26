@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Utils/Types/CommonTypes.h"
-
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
 #include "Render/Render.h"

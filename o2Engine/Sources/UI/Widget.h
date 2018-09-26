@@ -541,7 +541,12 @@ namespace o2
 		friend class InternalChildrenEditableEditable;
 #endif // IS_EDITOR
 	};
+}
 
+#include "UI/WidgetLayer.h"
+
+namespace o2
+{
 	template<typename _type>
 	_type* UIWidget::GetLayerDrawableByType()
 	{
@@ -574,7 +579,7 @@ namespace o2
 	template<typename _type>
 	_type* UIWidget::GetInternalWidgetByType(const String& path) const
 	{
-		return dynamic_cast<_type>GetInternalWidget(path);
+		return dynamic_cast<_type>(GetInternalWidget(path));
 	}
 
 	template<typename _type>
@@ -607,10 +612,10 @@ namespace o2
 			if (_type* res = dynamic_cast<_type*>(widget))
 				return res;
 
-			if (_type* res = widget->FindChildByType())
+			if (_type* res = widget->FindChildByType<_type>())
 				return res;
 
-			if (_type* res = widget->FindInternalWidgetByType())
+			if (_type* res = widget->FindInternalWidgetByType<_type>())
 				return res;
 		}
 

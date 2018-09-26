@@ -137,7 +137,7 @@ namespace o2
 		AnimationState* state = GetState(name);
 		if (!state)
 		{
-			o2Debug.LogWarning("Can't play animation: %s", name);
+			o2Debug.LogWarning("Can't play animation: " + name);
 			return nullptr;
 		}
 		state->animation.Play();
@@ -161,7 +161,7 @@ namespace o2
 		AnimationState* state = GetState(name);
 		if (!state)
 		{
-			o2Debug.LogWarning("Can't blend animation: %s", name);
+			o2Debug.LogWarning("Can't blend animation: " + name);
 			return nullptr;
 		}
 		return BlendTo(state, duration);
@@ -189,7 +189,7 @@ namespace o2
 		AnimationState* state = GetState(animationName);
 		if (!state)
 		{
-			o2Debug.LogWarning("Can't stop animation: %s", animationName);
+			o2Debug.LogWarning("Can't stop animation: " + animationName);
 			return;
 		}
 		state->animation.Stop();

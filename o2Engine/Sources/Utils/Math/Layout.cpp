@@ -128,17 +128,22 @@ namespace o2
 			res.offsetMin.y = -offsY - height;
 			res.offsetMax.y = -offsY;
 			break;
+
 			case VerAlign::Middle:
 			res.anchorMin.y = 0.5f;
 			res.anchorMax.y = 0.5f;
 			res.offsetMin.y = offsY - height*0.5f;
 			res.offsetMax.y = offsY + height*0.5f;
 			break;
+
 			case VerAlign::Bottom:
 			res.anchorMin.y = 0.0f;
 			res.anchorMax.y = 0.0f;
 			res.offsetMin.y = offsY;
 			res.offsetMax.y = offsY + height;
+			break;
+
+			case VerAlign::Both:
 			break;
 		}
 
@@ -161,17 +166,22 @@ namespace o2
 			res.offsetMin.x = offsX + width;
 			res.offsetMax.x = offsX;
 			break;
+
 			case HorAlign::Middle:
 			res.anchorMin.x = 0.5f;
 			res.anchorMax.x = 0.5f;
 			res.offsetMin.x = offsX - width*0.5f;
 			res.offsetMax.x = offsX + width*0.5f;
 			break;
+
 			case HorAlign::Right:
 			res.anchorMin.x = 1.0f;
 			res.anchorMax.x = 1.0f;
 			res.offsetMin.x = -offsX - width;
 			res.offsetMax.x = -offsX;
+			break;
+
+			case HorAlign::Both:
 			break;
 		}
 

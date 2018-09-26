@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef PLATFORM_WINDOWS
+
 #include "Dependencies/StackWalker/StackWalker.h"
 #include "Utils/Types/String.h"
 
@@ -36,3 +38,5 @@ namespace o2
 	// Returns stack trace as text
 	String GetStackTrace();
 }
+
+#endif //PLATFORM_WINDOWS

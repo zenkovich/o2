@@ -19,7 +19,6 @@
 #include "UI/VerticalProgress.h"
 #include "UI/WidgetLayout.h"
 #include "UI/Window.h"
-#include "Utils/CommonTypes.h"
 
 UITestScreen::UITestScreen(TestApplication* application):
 	ITestScreen(application)
@@ -33,8 +32,14 @@ UITestScreen::~UITestScreen()
 void UITestScreen::Load()
 {
 	Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
-	BasicUIStyleBuilder uiBuilder;
-	uiBuilder.RebuildBasicUIManager();
+
+	if (GetEnginePlatform() == Platform::Windows)
+	{
+		BasicUIStyleBuilder uiBuilder;
+		uiBuilder.RebuildBasicUIManager();
+	}
+	else o2UI.LoadStyle("basic_ui_style.xml");
+
 	Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 
 	mBackground.LoadFromImage("ui/UI_Background.png");
@@ -42,7 +47,7 @@ void UITestScreen::Load()
 	o2Application.onResizing += [&]() { mBackground.size = (Vec2I)o2Render.resolution + Vec2I(30, 30); };
 
 	auto window = o2UI.CreateWindow("UI elements samples");
-	*window->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(400, 400));
+	*window->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(300, 300));
 	window->name = "UI elements window";
 	//window->SetEnableScrollsHiding(false);
 
@@ -52,7 +57,7 @@ void UITestScreen::Load()
 	verLayout->expandHeight = false;
 	verLayout->expandWidth = true;
 	verLayout->fitByChildren = true;
-	verLayout->border = RectF(5, 5, 5, 5);
+	verLayout->border = BorderF(5, 5, 5, 5);
 	verLayout->spacing = 10;
 	*verLayout->layout = UIWidgetLayout::BothStretch();
 	window->AddChild(verLayout);
@@ -69,7 +74,7 @@ void UITestScreen::Load()
 	for (int i = 0; i < 15; i++)
 	{
 		WString itemName = WString::Format("Item #%i", i + 1);
-		buttonContext->AddItem(UIContextMenu::Item(itemName, [=]() { o2Debug.Log("Pressed %sw", itemName); }));
+		buttonContext->AddItem(UIContextMenu::Item(itemName, [=]() { o2Debug.Log("Pressed " + itemName); }));
 	}
 
 	buttonContext->AddItem(
@@ -77,11 +82,11 @@ void UITestScreen::Load()
 		ImageAssetRef("ui/UI_search_regular.png")));
 
 	UIContextMenu::Item itm("Sub items", {
-		UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
-		UIContextMenu::Item("Sub 2",{ UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }),
-							UIContextMenu::Item("Sub 2", []() { o2Debug.Log("Pressed sub 2"); }),
-							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }) }),
-							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); })
+		UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }, ImageAssetRef()),
+		UIContextMenu::Item("Sub 2",{ UIContextMenu::Item("Sub 1", []() { o2Debug.Log("Pressed sub 1"); }, ImageAssetRef()),
+							UIContextMenu::Item("Sub 2", []() { o2Debug.Log("Pressed sub 2"); }, ImageAssetRef()),
+							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }, ImageAssetRef()) }),
+							UIContextMenu::Item("Sub 3", []() { o2Debug.Log("Pressed sub 3"); }, ImageAssetRef())
 	});
 
 	buttonContext->AddItem(itm);
@@ -235,8 +240,8 @@ void UITestScreen::Load()
 	labelTestWindow->AddChild(testButtonslayout);
 	labelTestWindow->layout->size = Vec2F(300, 300);
 
-	auto treeWnd = o2UI.CreateWindow("Tree");
-	treeWnd->layout->size = Vec2F(300, 300);
+//	auto treeWnd = o2UI.CreateWindow("Tree");
+//	treeWnd->layout->size = Vec2F(300, 300);
 }
 
 void UITestScreen::Unload()
@@ -256,6 +261,11 @@ void UITestScreen::Update(float dt)
 void UITestScreen::Draw()
 {
 	mBackground.Draw();
+
+    o2Render.DrawCross(o2Input.GetCursorPos(), 50);
+    o2Debug.DrawText(o2Application.GetContentSize().InvertedY()/-2, "FPS: " + String(o2Time.GetFPS()) +
+            "\nCursor: " + (o2Input.IsCursorDown() ? (o2Input.IsCursorPressed() ? "pressed" : "down") : "up") +
+            "\nCursors: " + String(o2Input.GetCursors().Count()));
 }
 
 String UITestScreen::GetId() const

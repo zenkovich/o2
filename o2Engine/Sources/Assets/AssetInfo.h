@@ -30,10 +30,10 @@ namespace o2
 
 	protected:
 		// Beginning serialization callback, writes asset type name
-		void OnSerialize(DataNode& node) const;
+		void OnSerialize(DataNode& node) const override;
 
 		// Completion deserialization callback, reads asset type name
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 	};
 	typedef Vector<AssetInfo> AssetInfosVec;
 }

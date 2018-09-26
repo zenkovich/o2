@@ -57,8 +57,8 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;PLATFORM_WINDOWS</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>true</MinimalRebuild>
@@ -81,7 +81,7 @@
       <AdditionalOptions>/WHOLEARCHIVE %(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PreBuildEvent>
-      <Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>
+      <Command>$(ProjectDir)../../CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Reflection generation</Message>
@@ -94,8 +94,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;WIN32;_LIB;FT2_BUILD_LIBRARY;PLATFORM_WINDOWS</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
@@ -119,7 +119,7 @@
       <LinkTimeCodeGeneration>true</LinkTimeCodeGeneration>
     </Lib>
     <PreBuildEvent>
-      <Command>$(O2)/CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>
+      <Command>$(ProjectDir)../../CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Reflection generation</Message>
@@ -321,8 +321,9 @@
     <ClCompile Include="..\Sources\Animation\AnimationMask.cpp" />
     <ClCompile Include="..\Sources\Animation\AnimationState.cpp" />
     <ClCompile Include="..\Sources\Animation\IAnimation.cpp" />
+    <ClCompile Include="..\Sources\Application\Application.cpp" />
     <ClCompile Include="..\Sources\Application\Input.cpp" />
-    <ClCompile Include="..\Sources\Application\Windows\Application.cpp" />
+    <ClCompile Include="..\Sources\Application\Windows\ApplicationImpl.cpp" />
     <ClCompile Include="..\Sources\Assets\ActorAsset.cpp" />
     <ClCompile Include="..\Sources\Assets\AnimationAsset.cpp" />
     <ClCompile Include="..\Sources\Assets\Asset.cpp" />
@@ -361,6 +362,7 @@
     <ClCompile Include="..\Sources\Render\ParticlesEmitter.cpp" />
     <ClCompile Include="..\Sources\Render\ParticlesEmitterShapes.cpp" />
     <ClCompile Include="..\Sources\Render\RectDrawable.cpp" />
+    <ClCompile Include="..\Sources\Render\Render.cpp" />
     <ClCompile Include="..\Sources\Render\Sprite.cpp" />
     <ClCompile Include="..\Sources\Render\Text.cpp" />
     <ClCompile Include="..\Sources\Render\Texture.cpp" />
@@ -368,7 +370,7 @@
     <ClCompile Include="..\Sources\Render\VectorFont.cpp" />
     <ClCompile Include="..\Sources\Render\VectorFontEffects.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp" />
-    <ClCompile Include="..\Sources\Render\Windows\Render.cpp" />
+    <ClCompile Include="..\Sources\Render\Windows\RenderImpl.cpp" />
     <ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp" />
     <ClCompile Include="..\Sources\Scene\Actor.cpp" />
     <ClCompile Include="..\Sources\Scene\ActorCreationMode.cpp" />
@@ -428,6 +430,8 @@
     <ClCompile Include="..\Sources\Utils\FileSystem\File.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileInfo.cpp" />
     <ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileImpl.cpp" />
+    <ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileSystemImpl.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Color.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Curve.cpp" />
     <ClCompile Include="..\Sources\Utils\Math\Geometry.cpp" />

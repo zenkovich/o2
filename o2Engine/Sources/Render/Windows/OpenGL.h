@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef PLATFORM_WINDOWS
+
 #include <windows.h>	
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -22,12 +24,12 @@ const char* GetGLErrorDesc(GLenum errorId);
 bool IsGLExtensionSupported(const char *extension);
 
 // Checks OpenGL error
-void glCheckError(o2::LogStream* log, const char* filename = nullptr, unsigned int line = 0);
+void glCheckError(const char* filename = nullptr, unsigned int line = 0);
 
 #if RENDER_DEBUG
-#	define GL_CHECK_ERROR(log) glCheckError(log, __FILE__, __LINE__);
+#	define GL_CHECK_ERROR() glCheckError(__FILE__, __LINE__);
 #else
-#	define GL_CHECK_ERROR(log) 
+#	define GL_CHECK_ERROR()
 #endif
 
 extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT;
@@ -37,3 +39,5 @@ extern PFNGLDRAWBUFFERSPROC               glDrawBuffers;
 extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers;
 extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT;
+
+#endif // PLATFORM_WINDOWS

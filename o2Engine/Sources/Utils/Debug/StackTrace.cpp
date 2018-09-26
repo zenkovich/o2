@@ -1,4 +1,7 @@
 #include "stdafx.h"
+
+#ifdef PLATFORM_WINDOWS
+
 #include "StackTrace.h"
 
 namespace o2
@@ -38,3 +41,5 @@ namespace o2
 		mRes += szText;
 	}
 }
+
+#endif // PLATFORM_WINDOWS

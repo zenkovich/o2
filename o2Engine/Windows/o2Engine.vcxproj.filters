@@ -31,6 +31,9 @@
 		<Filter Include="Sources\Utils\Types" />
 		<Filter Include="Sources\Utils\Types\Containers" />
 		<Filter Include="Sources\Config" />
+		<Filter Include="Sources\Utils\FileSystem\Windows">
+			<UniqueIdentifier>{6c0b2fec-74f4-4669-9f79-34862a6962f9}</UniqueIdentifier>
+		</Filter>
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\Sources\Animation\Animatable.h">
@@ -599,10 +602,13 @@
 		<ClCompile Include="..\Sources\Animation\IAnimation.cpp">
 			<Filter>Sources\Animation</Filter>
 		</ClCompile>
+		<ClCompile Include="..\Sources\Application\Application.cpp">
+			<Filter>Sources\Application</Filter>
+		</ClCompile>
 		<ClCompile Include="..\Sources\Application\Input.cpp">
 			<Filter>Sources\Application</Filter>
 		</ClCompile>
-		<ClCompile Include="..\Sources\Application\Windows\Application.cpp">
+		<ClCompile Include="..\Sources\Application\Windows\ApplicationImpl.cpp">
 			<Filter>Sources\Application\Windows</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Assets\ActorAsset.cpp">
@@ -719,6 +725,9 @@
 		<ClCompile Include="..\Sources\Render\RectDrawable.cpp">
 			<Filter>Sources\Render</Filter>
 		</ClCompile>
+		<ClCompile Include="..\Sources\Render\Render.cpp">
+			<Filter>Sources\Render</Filter>
+		</ClCompile>
 		<ClCompile Include="..\Sources\Render\Sprite.cpp">
 			<Filter>Sources\Render</Filter>
 		</ClCompile>
@@ -740,7 +749,7 @@
 		<ClCompile Include="..\Sources\Render\Windows\OpenGL.cpp">
 			<Filter>Sources\Render\Windows</Filter>
 		</ClCompile>
-		<ClCompile Include="..\Sources\Render\Windows\Render.cpp">
+		<ClCompile Include="..\Sources\Render\Windows\RenderImpl.cpp">
 			<Filter>Sources\Render\Windows</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Render\Windows\TextureImpl.cpp">
@@ -919,6 +928,12 @@
 		</ClCompile>
 		<ClCompile Include="..\Sources\Utils\FileSystem\FileSystem.cpp">
 			<Filter>Sources\Utils\FileSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileImpl.cpp">
+			<Filter>Sources\Utils\FileSystem\Windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Utils\FileSystem\Windows\FileSystemImpl.cpp">
+			<Filter>Sources\Utils\FileSystem\Windows</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Utils\Math\Color.cpp">
 			<Filter>Sources\Utils\Math</Filter>

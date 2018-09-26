@@ -34,7 +34,7 @@ namespace o2
 		MetaInfo* GetMeta() const;
 
 		// Returns extensions string
-		const char* GetFileExtensions() const;
+		const char* GetFileExtensions() const override;
 
 		// Returns actor
 		Actor* GetActor() const;
@@ -49,7 +49,7 @@ namespace o2
 		{
 		public:
 			// Returns asset type id
-			const Type* GetAssetType() const;
+			const Type* GetAssetType() const override;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -71,10 +71,10 @@ namespace o2
 		ActorAsset(UID id);
 
 		// Loads data
-		void LoadData(const String& path);
+		void LoadData(const String& path) override;
 
 		// Saves data
-		void SaveData(const String& path);
+		void SaveData(const String& path) override;
 
 		friend class Assets;
 	};
@@ -131,7 +131,7 @@ namespace o2
 		bool operator!=(const ActorAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
-		const Type& GetAssetType() const { return TypeOf(ActorAsset); }
+		const Type& GetAssetType() const override { return TypeOf(ActorAsset); }
 
 		SERIALIZABLE(ActorAssetRef);
 

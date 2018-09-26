@@ -315,6 +315,9 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 		if (dir.find("OSX") != string::npos)
 			continue;
 
+		if (dir.find("Android") != string::npos)
+			continue;
+
 		while (!dir.empty() && find(filters.begin(), filters.end(), dir) == filters.end())
 		{
 			filters.push_back(dir);
@@ -920,6 +923,13 @@ string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 	return res;
 }
 
+void RemoveSubstrs(string& s, string& p)
+{
+	string::size_type n = p.length();
+	for (string::size_type i = s.find(p); i != string::npos; i = s.find(p))
+		s.erase(i, n);
+}
+
 void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName)
 {
 	if (sec->GetParentSection())
@@ -936,7 +946,11 @@ void CodeToolApplication::AggregateTemplates(SyntaxSection* sec, string& templat
 		if (!cls->GetTemplateParameters().empty())
 		{
 			templates += "META_TEMPLATES(" + cls->GetTemplateParameters() + ")\n";
-			fullName += "<" + cls->GetTemplateParameters() + ">";
+
+			string classTemplates = cls->GetTemplateParameters();
+			RemoveSubstrs(classTemplates, (std::string)"typename ");
+
+			fullName += "<" + classTemplates + ">";
 		}
 	}
 }

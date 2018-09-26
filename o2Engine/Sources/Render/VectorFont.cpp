@@ -1,7 +1,11 @@
 #include "stdafx.h"
 #include "VectorFont.h"
 
+#if defined PLATFORM_WINDOWS
 #include "Render/Windows/OpenGL.h"
+#elif defined PLATFORM_ANDROID
+#include "Render/Android/OpenGL.h"
+#endif
 
 #include "Application/Application.h"
 #include "Render/Render.h"
@@ -9,30 +13,31 @@
 #include "Utils/Debug/Debug.h"
 #include "Utils/Debug/Log/LogStream.h"
 #include "Utils/System/Time/Timer.h"
+#include "Assets/Assets.h"
 
 namespace o2
 {
-	VectorFont::VectorFont():
+	VectorFont::VectorFont() :
 		Font(), mFreeTypeFace(nullptr)
 	{
-		mTexture = TextureRef(Vec2I(256, 256));
-		mTextureSrcRect.Set(0, 0, 256, 256);
+		mTexture = TextureRef(Vec2I(512, 512));
+		mTextureSrcRect.Set(0, 0, 512, 512);
 	}
 
-	VectorFont::VectorFont(const String& fileName):
+	VectorFont::VectorFont(const String& fileName) :
 		Font(), mFreeTypeFace(nullptr)
 	{
-		mTexture = TextureRef(Vec2I(256, 256));
-		mTextureSrcRect.Set(0, 0, 256, 256);
+		mTexture = TextureRef(Vec2I(512, 512));
+		mTextureSrcRect.Set(0, 0, 512, 512);
 
 		Load(fileName);
 	}
 
-	VectorFont::VectorFont(const VectorFont& other):
+	VectorFont::VectorFont(const VectorFont& other) :
 		Font(), mFreeTypeFace(other.mFreeTypeFace)
 	{
-		mTexture = TextureRef(Vec2I(256, 256));
-		mTextureSrcRect.Set(0, 0, 256, 256);
+		mTexture = TextureRef(Vec2I(512, 512));
+		mTextureSrcRect.Set(0, 0, 512, 512);
 	}
 
 	VectorFont::~VectorFont()
@@ -44,12 +49,36 @@ namespace o2
 			delete effect;
 	}
 
+	const char* GetFreeTypeErrorMessage(FT_Error err)
+	{
+#undef __FTERRORS_H__
+#define FT_ERRORDEF( e, v, s )  case e: return s;
+#define FT_ERROR_START_LIST     switch (err) {
+#define FT_ERROR_END_LIST       }
+#include FT_ERRORS_H
+		return "(Unknown error)";
+	}
+
 	bool VectorFont::Load(const String& fileName)
 	{
-		FT_Error error = FT_New_Face(o2Render.mFreeTypeLib, fileName.Data(), 0, &mFreeTypeFace);
+		InFile file(fileName);
+
+		if (!file.IsOpened())
+		{
+			o2Render.mLog->Error("Failed to load vector font: " + fileName);
+			return false;
+		}
+
+		UInt8* data = mnew UInt8[file.GetDataSize()];
+		file.ReadFullData(data);
+
+		FT_Error error = FT_New_Memory_Face(o2Render.mFreeTypeLib, data, file.GetDataSize(), 0, &mFreeTypeFace);
+
+		//delete[] data;
+
 		if (error)
 		{
-			o2Render.mLog->Error("Failed to load vector font: %s, error: %i", fileName, error);
+			o2Render.mLog->Error("Failed to load vector font: " + fileName + ", error: " + (String)GetFreeTypeErrorMessage(error));
 			return false;
 		}
 
@@ -58,24 +87,24 @@ namespace o2
 		return true;
 	}
 
-// 	void VectorFont::SetSize(UInt size)
-// 	{
-// 		if (size == mSize)
-// 			return;
-// 
-// 		mSize = size;
-// 		Vec2I dpi = o2Render.GetDPI();
-// 		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, mSize*64, dpi.x, dpi.y);
-// 
-// 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
-// 		mBaseHeight = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
-// 		mLineHeight = mBaseHeight*2.0f;
-// 
-// // 		mBaseHeight = mFreeTypeFace->ascender/64.0f;
-// // 		mLineHeight = (mFreeTypeFace->ascender - mFreeTypeFace->descender)/64.0f + 5.0f;
-// 
-// 		Reset();
-// 	}
+	// 	void VectorFont::SetSize(UInt size)
+	// 	{
+	// 		if (size == mSize)
+	// 			return;
+	// 
+	// 		mSize = size;
+	// 		Vec2I dpi = o2Render.GetDPI();
+	// 		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, mSize*64, dpi.x, dpi.y);
+	// 
+	// 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
+	// 		mBaseHeight = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+	// 		mLineHeight = mBaseHeight*2.0f;
+	// 
+	// // 		mBaseHeight = mFreeTypeFace->ascender/64.0f;
+	// // 		mLineHeight = (mFreeTypeFace->ascender - mFreeTypeFace->descender)/64.0f + 5.0f;
+	// 
+	// 		Reset();
+	// 	}
 
 	String VectorFont::GetFileName() const
 	{
@@ -86,7 +115,7 @@ namespace o2
 	{
 		Vec2I dpi = o2Render.GetDPI();
 		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, height*64, dpi.x, dpi.y);
-		
+
 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
 		return mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
 	}
@@ -157,52 +186,12 @@ namespace o2
 
 	void VectorFont::UpdateCharacters(Vector<wchar_t>& newCharacters, int height)
 	{
-		CharDefsVec charactersDefs;
-		mRectsPacker.Clear();
-		
-		ExtractCharacterDefsFromTexture(charactersDefs);
-		RenderNewCharacters(charactersDefs, newCharacters, height);
-		PackCharactersDefs(charactersDefs);
+		RenderNewCharacters(newCharacters, height);
 
 		onCharactersRebuild();
 	}
 
-	void VectorFont::ExtractCharacterDefsFromTexture(CharDefsVec& charDefs)
-	{
-		if (mCharacters.Count() == 0)
-			return;
-
-		Bitmap texBitmap(Bitmap::Format::R8G8B8A8, mTexture->GetSize());
-
-		glBindTexture(GL_TEXTURE_2D, mTexture->mHandle);
-		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, texBitmap.GetData());
-
-		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
-
-		for (auto& ch : mCharacters)
-		{
-			CharDef charDef;
-
-			Bitmap* charBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, ch.mSize);
-
-			RectI srcRect;
-			Vec2F texSize = texBitmap.GetSize();
-			srcRect.left = (int)(ch.mTexSrc.left*texSize.x);
-			srcRect.right = (int)(ch.mTexSrc.right*texSize.x);
-			srcRect.bottom = (int)(ch.mTexSrc.top*texSize.y);
-			srcRect.top = (int)(ch.mTexSrc.bottom*texSize.y);
-
-			charBitmap->CopyImage(&texBitmap, Vec2I(), srcRect);
-
-			charDef.mCharacter = ch;
-			charDef.mBitmap = charBitmap;
-			charDef.mPackRect = mRectsPacker.AddRect(ch.mSize);
-
-			charDefs.Add(charDef);
-		}
-	}
-
-	void VectorFont::RenderNewCharacters(CharDefsVec& charDefs, Vector<wchar_t>& newCharacters, int height)
+	void VectorFont::RenderNewCharacters(Vector<wchar_t>& newCharacters, int height)
 	{
 		Vec2I dpi = o2Render.GetDPI();
 		FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
@@ -216,7 +205,9 @@ namespace o2
 		}
 
 		border += Vec2I(2, 2);
-		//border = Vec2F();
+
+		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
+		int symbolsHeight = Math::CeilToInt((mFreeTypeFace->glyph->bitmap.rows + border.y*2)*1.25f);
 
 		for (auto ch : newCharacters)
 		{
@@ -227,7 +218,7 @@ namespace o2
 
 			Vec2I glyphSize(glyph->bitmap.width, glyph->bitmap.rows);
 
-			Bitmap* newBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, glyphSize + border*2);
+			Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, glyphSize + border*2);
 			newBitmap->Fill(Color4(255, 255, 255, 0));
 			UInt8* newBitmapData = newBitmap->GetData();
 			Vec2I newBitmapSize = newBitmap->GetSize();
@@ -245,69 +236,77 @@ namespace o2
 			for (auto effect : mEffects)
 				effect->Process(newBitmap);
 
-			newCharDef.mPackRect = mRectsPacker.AddRect(glyphSize + border*2);
-			newCharDef.mBitmap = newBitmap;
-			newCharDef.mCharacter.mId = ch;
-			newCharDef.mCharacter.mHeight = height;
-			newCharDef.mCharacter.mSize = newBitmapSize;
-			newCharDef.mCharacter.mAdvance = glyph->advance.x/64.0f;
-			newCharDef.mCharacter.mOrigin.x = -glyph->metrics.horiBearingX/64.0f + border.x;
-			newCharDef.mCharacter.mOrigin.y = (glyph->metrics.height - glyph->metrics.horiBearingY)/64.0f + border.y;
+			newCharDef.bitmap = newBitmap;
+			newCharDef.character.mId = ch;
+			newCharDef.character.mHeight = height;
+			newCharDef.character.mSize = newBitmapSize;
+			newCharDef.character.mAdvance = glyph->advance.x/64.0f;
+			newCharDef.character.mOrigin.x = -glyph->metrics.horiBearingX/64.0f + border.x;
+			newCharDef.character.mOrigin.y = (glyph->metrics.height - glyph->metrics.horiBearingY)/64.0f + border.y;
 
-			charDefs.Add(newCharDef);
+			PackCharacter(newCharDef, symbolsHeight);
 		}
 	}
 
-	void VectorFont::PackCharactersDefs(CharDefsVec& charDefs)
+	void VectorFont::PackCharacter(CharDef& character, int height)
 	{
-		mCharacters.Clear();
+		PackLine* packLine = nullptr;
 
-		int texSizes[] ={64, 128, 256, 512, 1024};
-		Vec2I newTexSize;
-
-		for (int i = 0; i < 5; i++)
+		while (!packLine)
 		{
-			newTexSize = Vec2I(texSizes[i], texSizes[i]);
-			mRectsPacker.SetMaxSize(newTexSize);
+			packLine = mPackLines.FindMatch([&](PackLine* x) {
+				return x->height >= height && x->length + character.bitmap->GetSize().x < mTexture->GetSize().x; });
 
-			if (!mRectsPacker.Pack())
-				continue;
+			if (!packLine)
+			{
+				if (mLastPackLinePos + height <= mTexture->GetSize().y)
+				{
+					packLine = mnew PackLine();
+					packLine->position = mLastPackLinePos;
+					packLine->height = height;
 
-			if (mRectsPacker.GetPagesCount() > 1)
-				continue;
+					mPackLines.Add(packLine);
 
-			break;
+					mLastPackLinePos += height;
+				}
+				else
+				{
+					TextureRef lastTexture = mTexture;
+					mTexture = TextureRef(lastTexture->GetSize()*2, PixelFormat::R8G8B8A8, Texture::Usage::Default);
+					mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
+
+					for (auto ch : mCharacters)
+					{
+						ch.mTexSrc.left *= 0.5f;
+						ch.mTexSrc.right *= 0.5f;
+						ch.mTexSrc.top *= 0.5f;
+						ch.mTexSrc.bottom *= 0.5f;
+					}
+				}
+			}
 		}
 
-		if (newTexSize != mTexture->GetSize())
-		{
-			mTexture = TextureRef(newTexSize, Texture::Format::R8G8B8A8, Texture::Usage::Default);
-			mTextureSrcRect.Set(Vec2I(), newTexSize);
-		}
+		character.packLine = packLine;
+		packLine->characters.Add(character);
 
-		Bitmap texBitmap(Bitmap::Format::R8G8B8A8, mTexture->GetSize());
-		texBitmap.Fill(Color4(255, 255, 255, 0));
+		character.rect.left = packLine->length;
+		character.rect.top = packLine->position + character.bitmap->GetSize().y;
+		character.rect.right = packLine->length + character.bitmap->GetSize().x;
+		character.rect.bottom = packLine->position;;
+
+		packLine->length += character.bitmap->GetSize().x;
+
 		Vec2F invTexSize(1.0f/mTexture->GetSize().x, 1.0f/mTexture->GetSize().y);
-		for (auto& def : charDefs)
-		{
-			texBitmap.CopyImage(def.mBitmap, def.mPackRect->mRect.LeftBottom());
+		character.character.mTexSrc.left = character.rect.left*invTexSize.x;
+		character.character.mTexSrc.right = character.rect.right*invTexSize.x;
+		character.character.mTexSrc.top = 1.0f - character.rect.top*invTexSize.y;
+		character.character.mTexSrc.bottom = 1.0f - character.rect.bottom*invTexSize.y;
 
-			def.mCharacter.mTexSrc.left = def.mPackRect->mRect.left*invTexSize.x;
-			def.mCharacter.mTexSrc.right = def.mPackRect->mRect.right*invTexSize.x;
-			def.mCharacter.mTexSrc.top = def.mPackRect->mRect.bottom*invTexSize.y;
-			def.mCharacter.mTexSrc.bottom = def.mPackRect->mRect.top*invTexSize.y;
+		mTexture->SetSubData(character.rect.LeftBottom(), character.bitmap);
 
-			mCharacters.Add(def.mCharacter);
+		mCharacters.Add(character.character);
 
-			delete def.mBitmap;
-		}
-
-		glBindTexture(GL_TEXTURE_2D, mTexture->mHandle);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, texBitmap.GetSize().x, texBitmap.GetSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-					 texBitmap.GetData());
-
-		GL_CHECK_ERROR(o2Render.mLog);
-		//glBindTexture(GL_TEXTURE_2D, o2Render.mLastDrawTexture->mHandle);
+		delete character.bitmap;
 	}
 }
 

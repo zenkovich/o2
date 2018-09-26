@@ -1,6 +1,12 @@
 #pragma once
 
+#ifdef PLATFORM_WINDOWS
 #include <Windows.h>
+#endif
+
+#ifdef PLATFORM_ANDROID
+#include <sys/time.h>
+#endif
 
 namespace o2
 {
@@ -26,9 +32,16 @@ namespace o2
 		float GetDeltaTime();
 
 	protected:
+#ifdef PLATFORM_WINDOWS
 		LONGLONG      mLastElapsedTime;
 		LARGE_INTEGER mFrequency;
 		LARGE_INTEGER mStartTime;
+#endif
+
+#ifdef PLATFORM_ANDROID
+		struct timeval mLastElapsedTime;
+		struct timeval mStartTime;
+#endif
 	};
 
 	class ScopeTimer

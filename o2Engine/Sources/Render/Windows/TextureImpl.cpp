@@ -1,55 +1,11 @@
 #include "stdafx.h"
-#include "Render/Texture.h"
 
-#include "Assets/Assets.h"
-#include "Assets/AtlasAsset.h"
-#include "Render/Render.h"
-#include "Utils/Bitmap/Bitmap.h"
+#ifdef PLATFORM_WINDOWS
+#include "Render/Texture.h"
 #include "Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {
-	Texture::Texture():
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		o2Render.mTextures.Add(this);
-	}
-
-	Texture::Texture(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/):
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(size, format, usage);
-		o2Render.mTextures.Add(this);
-	}
-
-	Texture::Texture(const String& fileName):
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(fileName);
-		o2Render.mTextures.Add(this);
-	}
-
-	Texture::Texture(Bitmap* bitmap):
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(bitmap);
-		o2Render.mTextures.Add(this);
-	}
-
-	Texture::Texture(UID atlasAssetId, int page):
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(atlasAssetId, page);
-		o2Render.mTextures.Add(this);
-	}
-
-	Texture::Texture(const String& atlasAssetName, int page):
-		mReady(false), mAtlasAssetId(0), mAtlasPage(-1)
-	{
-		Create(atlasAssetName, page);
-		o2Render.mTextures.Add(this);
-	}
-
 	Texture::~Texture()
 	{
 		o2Render.mTextures.Remove(this);
@@ -66,7 +22,7 @@ namespace o2
 		glDeleteTextures(1, &mHandle);
 	}
 
-	void Texture::Create(const Vec2I& size, Format format /*= Format::Default*/, Usage usage /*= Usage::Default*/)
+	void Texture::Create(const Vec2I& size, PixelFormat format /*= Format::R8G8B8A8*/, Usage usage /*= Usage::Default*/)
 	{
 		if (mReady)
 		{
@@ -84,9 +40,9 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
-		if (format == Format::R8G8B8A8)
+		if (format == PixelFormat::R8G8B8A8)
 			texFormat = GL_RGBA;
-		else if (format == Format::R8G8B8)
+		else if (format == PixelFormat::R8G8B8)
 			texFormat = GL_RGB;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, (GLsizei)size.x, (GLsizei)size.y, 0, texFormat, GL_UNSIGNED_BYTE, NULL);
@@ -103,7 +59,7 @@ namespace o2
 
 			glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mHandle, 0);
 
-			GLenum DrawBuffers[2] ={GL_COLOR_ATTACHMENT0};
+			GLenum DrawBuffers[2] = { GL_COLOR_ATTACHMENT0 };
 			glDrawBuffers(1, DrawBuffers);
 
 			if (glCheckFramebufferStatusEXT(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -125,19 +81,6 @@ namespace o2
 		mReady = true;
 	}
 
-	void Texture::Create(const String& fileName)
-	{
-		Bitmap* image = mnew Bitmap();
-		if (image->Load(fileName, Bitmap::ImageType::Auto))
-		{
-			mFileName = fileName;
-			Create(image);
-		}
-
-		delete image;
-		mReady = true;
-	}
-
 	void Texture::Create(Bitmap* bitmap)
 	{
 		if (mReady)
@@ -148,13 +91,7 @@ namespace o2
 			glDeleteTextures(1, &mHandle);
 		}
 
-		Bitmap::Format imageFormat = bitmap->GetFormat();
-
-		if (imageFormat == Bitmap::Format::Default)
-			mFormat = Format::Default;
-		else if (imageFormat == Bitmap::Format::R8G8B8A8)
-			mFormat = Format::R8G8B8A8;
-
+		mFormat = bitmap->GetFormat();
 		mUsage = Usage::Default;
 		mSize = bitmap->GetSize();
 		mFileName = bitmap->GetFilename();
@@ -163,9 +100,9 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
-		if (mFormat == Format::R8G8B8A8)
+		if (mFormat == PixelFormat::R8G8B8A8)
 			texFormat = GL_RGBA;
-		else if (mFormat == Format::R8G8B8)
+		else if (mFormat == PixelFormat::R8G8B8)
 			texFormat = GL_RGB;
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
@@ -184,88 +121,57 @@ namespace o2
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
-		if (mFormat == Format::R8G8B8A8)
+		if (mFormat == PixelFormat::R8G8B8A8)
 			texFormat = GL_RGBA;
-		else if (mFormat == Format::R8G8B8)
+		else if (mFormat == PixelFormat::R8G8B8)
 			texFormat = GL_RGB;
+
+		mSize = bitmap->GetSize();
 
 		glTexImage2D(GL_TEXTURE_2D, 0, texFormat, bitmap->GetSize().x, bitmap->GetSize().y, 0, texFormat, GL_UNSIGNED_BYTE,
 					 bitmap->GetData());
 
-		GL_CHECK_ERROR(o2Render.mLog);
+		GL_CHECK_ERROR();
 	}
 
-	void Texture::Create(UID atlasAssetId, int page)
+	void Texture::SetSubData(const Vec2I& offset, Bitmap* bitmap)
 	{
-		if (o2Assets.IsAssetExist(atlasAssetId))
-		{
-			mAtlasAssetId = atlasAssetId;
-			mAtlasPage = page;
-			String textureFileName = AtlasAsset::GetPageTextureFileName(atlasAssetId, page);
-			Create(textureFileName);
+		glBindTexture(GL_TEXTURE_2D, mHandle);
 
-			mReady = true;
-		}
-		else o2Render.mLog->Error("Failed to load atlas texture with id %i and page %i", atlasAssetId, page);
+		GLint texFormat = GL_RGB;
+		if (mFormat == PixelFormat::R8G8B8A8)
+			texFormat = GL_RGBA;
+		else if (mFormat == PixelFormat::R8G8B8)
+			texFormat = GL_RGB;
+
+		glTexSubImage2D(GL_TEXTURE_2D, 0, offset.x, offset.y, bitmap->GetSize().x, bitmap->GetSize().y, texFormat, GL_UNSIGNED_BYTE,
+						bitmap->GetData());
+
+		GL_CHECK_ERROR();
 	}
 
-	void Texture::Create(const String& atlasAssetName, int page)
+	void Texture::Copy(const Texture& from, const RectI& rect)
 	{
-		if (o2Assets.IsAssetExist(atlasAssetName))
-		{
-			mAtlasAssetId = o2Assets.GetAssetId(atlasAssetName);
-			mAtlasPage = page;
-			String textureFileName = AtlasAsset::GetPageTextureFileName(atlasAssetName, page);
-			Create(textureFileName);
+		glBindTexture(GL_TEXTURE_2D, from.mHandle);
 
-			mReady = true;
-		}
-		else o2Render.mLog->Error("Failed to load atlas texture with %s and page %i", atlasAssetName, page);
+		GLint texFormat = GL_RGB;
+		if (mFormat == PixelFormat::R8G8B8A8)
+			texFormat = GL_RGBA;
+		else if (mFormat == PixelFormat::R8G8B8)
+			texFormat = GL_RGB;
+
+		glCopyTexImage2D(GL_TEXTURE_2D, 0, texFormat, rect.left, rect.top, rect.Width(), rect.Height(), 0);
 	}
 
-	void Texture::Reload()
+	Bitmap* Texture::GetData()
 	{
-		if (!mFileName.IsEmpty())
-			Create(mFileName);
-	}
+		Bitmap* bitmap = mnew Bitmap(mFormat, mSize);
 
-	Vec2I Texture::GetSize() const
-	{
-		return mSize;
-	}
+		glBindTexture(GL_TEXTURE_2D, mHandle);
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->GetData());
 
-	Texture::Format Texture::GetFormat() const
-	{
-		return mFormat;
-	}
-
-	Texture::Usage Texture::GetUsage() const
-	{
-		return mUsage;
-	}
-
-	String Texture::GetFileName() const
-	{
-		return mFileName;
-	}
-
-	bool Texture::IsReady() const
-	{
-		return mReady;
-	}
-
-	bool Texture::IsAtlasPage() const
-	{
-		return mAtlasAssetId != 0;
-	}
-
-	UID Texture::GetAtlasAssetId() const
-	{
-		return mAtlasAssetId;
-	}
-
-	int Texture::GetAtlasPage() const
-	{
-		return mAtlasPage;
+		return bitmap;
 	}
 }
+
+#endif //PLATFORM_WINDOWS

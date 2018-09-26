@@ -1660,7 +1660,7 @@ namespace o2
 				objects.Add(sel);
 		}
 
-		o2Debug.Log("Drop parent:%s, prev:%s", GetObjectDebug(targetParent), GetObjectDebug(targetPrevObject));
+		o2Debug.Log("Drop parent:" + GetObjectDebug(targetParent) + ", prev:" + GetObjectDebug(targetPrevObject));
 		OnDraggedObjects(objects, targetParent, targetPrevObject);
 
 		UpdateNodesStructure();

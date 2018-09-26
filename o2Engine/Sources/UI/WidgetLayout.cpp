@@ -498,6 +498,9 @@ namespace o2
 			res.mData->offsetMin.x = -offsX - width;
 			res.mData->offsetMax.x = -offsX;
 			break;
+
+			default:
+			break;
 		}
 
 		return res;
@@ -532,6 +535,9 @@ namespace o2
 			res.mData->anchorMax.y = 0.0f;
 			res.mData->offsetMin.y = offsY;
 			res.mData->offsetMax.y = offsY + height;
+			break;
+
+			case VerAlign::Both:
 			break;
 		}
 

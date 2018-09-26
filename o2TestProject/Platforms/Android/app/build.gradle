@@ -1,0 +1,98 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+        config {
+            keyAlias 'key0'
+            keyPassword 'maodzedun'
+            storeFile file('C:/work/o2/o2TestProject/Platforms/Android/key.jks')
+            storePassword 'maodzedun'
+        }
+    }
+    flavorDimensions "default"
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.test.testapplication"
+        minSdkVersion 16
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        productFlavors {
+            armV7 {
+                ndk {
+                    abiFilter "armeabi-v7a"
+                }
+            }
+            arm64V8 {
+                ndk {
+                    abiFilter "arm64-v8a"
+                }
+            }
+            x86 {
+                ndk {
+                    abiFilter "x86"
+                }
+            }
+            fat {
+                ndk {
+                    abiFilter "armeabi-v7a"
+                    abiFilter "arm64-v8a"
+                    abiFilter "x86"
+                }
+            }
+        }
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14 -frtti -fexceptions"
+                cppFlags += "-DPLATFORM_ANDROID"
+                cppFlags += "-Wno-inconsistent-missing-override"
+                cppFlags += "-Wno-undefined-var-template"
+            }
+        }
+        signingConfig signingConfigs.config
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
+        }
+        debug {
+        }
+    }
+    sourceSets {
+        main.assets.srcDirs += 'Assets'
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+    productFlavors {
+        armV7 {
+            signingConfig signingConfigs.config
+            minSdkVersion 16
+            applicationId 'com.test.testapplication'
+            targetSdkVersion 28
+            versionCode 1
+            versionName '1.0'
+        }
+        arm64V8 {
+            signingConfig signingConfigs.config
+        }
+        fat {
+            signingConfig signingConfigs.config
+        }
+        x86 {
+            signingConfig signingConfigs.config
+        }
+    }
+    buildToolsVersion '28.0.2'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:28.0.0-rc01'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+}

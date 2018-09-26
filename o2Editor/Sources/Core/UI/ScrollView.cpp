@@ -10,7 +10,7 @@ namespace Editor
 {
 	UIScrollView::UIScrollView()
 	{
-		mRenderTarget = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 
 		mBackColor = Color4(170, 170, 170, 255);
@@ -22,7 +22,7 @@ namespace Editor
 	UIScrollView::UIScrollView(const UIScrollView& other):
 		UIWidget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
-		mRenderTarget = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
@@ -109,7 +109,7 @@ namespace Editor
 
 		mBackColor          = other.mBackColor;
 		mGridColor          = other.mGridColor;
-		mRenderTarget       = TextureRef(Vec2I(256, 256), Texture::Format::Default, Texture::Usage::RenderTarget);
+		mRenderTarget       = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
 
 		RetargetStatesAnimations();
@@ -126,7 +126,7 @@ namespace Editor
 		size.x = Math::Max(size.x, 32);
 		size.y = Math::Max(size.y, 32);
 
-		mRenderTarget = TextureRef(size, Texture::Format::Default, Texture::Usage::RenderTarget);
+		mRenderTarget = TextureRef(size, PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		*mRenderTargetSprite = Sprite(mRenderTarget, RectI(Vec2I(), size));
 		mRenderTargetSprite->SetRect(layout->worldRect);
 		mNeedRedraw = true;

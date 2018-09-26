@@ -156,14 +156,17 @@ namespace o2
 }
 
 #define DECLARE_FUNDAMENTAL_TYPE(TYPE) \
+    template<>                         \
 	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
 
 #define ENUM_META(NAME)                                                                                  \
+    template<>                                                                                           \
     o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
     typedef NAME EnumName;                                                                               \
     o2::Dictionary<int, o2::String> res;    
 
 #define ENUM_META_(NAME, U)                                                                              \
+    template<>                                                                                           \
     o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
     typedef NAME EnumName;                                                                               \
     o2::Dictionary<int, o2::String> res;                                        
@@ -209,7 +212,7 @@ namespace o2
 		Type* res = mnew TObjectType<_type>(name, sizeof(_type), &CastFunc<IObject, _type>,
 											&CastFunc<_type, IObject>);
 
-		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::ProcessType<ReflectionInitializationTypeProcessor>);
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::template ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
 		Reflection::Instance().mTypes.Add(res);
@@ -224,7 +227,7 @@ namespace o2
 	{
 		Type* res = mnew FundamentalType<_type>(name);
 
-		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::InitializeType<ReflectionInitializationTypeProcessor>);
+		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::template InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 		Reflection::Instance().mTypes.Add(res);
 

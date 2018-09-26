@@ -1,6 +1,11 @@
 #pragma once
 
 #include "Utils/Types/String.h"
+#include <iomanip>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
 namespace o2
 {
@@ -56,14 +61,14 @@ namespace o2
 			st[32] = '\0';
 			for (int i = 0; i < 16; i += 4)
 			{
-				char buf[9];
-				_itoa(*(int*)(data + i), buf, 16);
+				std::stringstream stream;
+				stream << std::hex << *(int*)(data + i);
 
-				int l = strlen(buf);
+				int l = (int)stream.str().length();
 				for (int j = 0; j < 8; j++)
 				{
 					int x = l - 8 + j;
-					st[i*2 + j] = x < 0 ? '0' : buf[x];
+					st[i*2 + j] = x < 0 ? '0' : stream.str()[x];
 				}
 			}
 

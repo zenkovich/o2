@@ -184,7 +184,7 @@ namespace o2
 		void SetOwnerActor(Actor* actor);
 
 		// Calling when deserializing
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 	};
 }
 

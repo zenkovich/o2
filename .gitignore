@@ -249,3 +249,12 @@ pip-log.txt
 /o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db-shm
 /o2Engine/dependencies/vs2015/.vs/Dependencies/v15/Solution.VC.db-wal
 /o2Editor/Sources/CodeToolCache.xml
+/o2TestProject/Platforms/Android/.gitignore
+/o2TestProject/Platforms/Android/.idea/caches/build_file_checksums.ser
+/o2TestProject/Platforms/Android/.idea/codeStyles/Project.xml
+/o2TestProject/Platforms/Android/.idea/gradle.xml
+/o2TestProject/Platforms/Android/.idea/misc.xml
+/o2TestProject/Platforms/Android/.idea/runConfigurations.xml
+/o2TestProject/Platforms/Android/.gradle
+/o2TestProject/Platforms/Android/.idea
+/o2TestProject/Platforms/Android/app/.externalNativeBuild

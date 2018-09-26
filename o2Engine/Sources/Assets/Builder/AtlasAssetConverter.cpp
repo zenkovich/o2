@@ -206,7 +206,7 @@ namespace o2
 
 			if (!imgInfo)
 			{
-				mAssetsBuilder->mLog->Error("Can't find asset info by id: %i", img.id);
+				mAssetsBuilder->mLog->Error("Can't find asset info by id: " + (String)img.id);
 				continue;
 			}
 
@@ -216,7 +216,7 @@ namespace o2
 			Bitmap* bitmap = mnew Bitmap();
 			if (!bitmap->Load(assetFullPath))
 			{
-				mAssetsBuilder->mLog->Error("Can't load bitmap for image asset: %s", imgInfo->path);
+				mAssetsBuilder->mLog->Error("Can't load bitmap for image asset: " + imgInfo->path);
 				delete bitmap;
 				continue;
 			}
@@ -236,11 +236,11 @@ namespace o2
 		// Try to pack
 		if (!packer.Pack())
 		{
-			mAssetsBuilder->mLog->Error("Atlas %s packing failed", atlasInfo->path);
+			mAssetsBuilder->mLog->Error("Atlas " + atlasInfo->path + " packing failed");
 			return;
 		}
 		else
-			mAssetsBuilder->mLog->Out("Atlas %s successfully packed", atlasInfo->path);
+			mAssetsBuilder->mLog->Out("Atlas " + atlasInfo->path + " successfully packed");
 
 		// Initialize bitmaps and pages
 		int pagesCount = packer.GetPagesCount();
@@ -253,7 +253,7 @@ namespace o2
 			atlasPage.mSize = packer.GetMaxSize();
 			resAtlasPages.Add(atlasPage);
 
-			Bitmap* newBitmap = mnew Bitmap(Bitmap::Format::R8G8B8A8, packer.GetMaxSize());
+			Bitmap* newBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, packer.GetMaxSize());
 			newBitmap->Fill(Color4(255, 255, 255, 0));
 
 			resAtlasBitmaps.Add(newBitmap);

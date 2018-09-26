@@ -99,7 +99,7 @@ namespace Editor
 		TextureRef texture = mSprite->GetTexture();
 		if (!texture || texture->GetSize() != layout->GetSize())
 		{
-			texture = TextureRef(layout->GetSize(), Texture::Format::Default, Texture::Usage::RenderTarget);
+			texture = TextureRef(layout->GetSize(), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			mSprite->SetTexture(texture);
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}

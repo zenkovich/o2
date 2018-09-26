@@ -19,6 +19,7 @@ int main()
 	INITIALIZE_O2;
 
 	EditorApplication* app = mnew EditorApplication();
+	app->Initialize();
 	app->Launch();
 	delete app;
 

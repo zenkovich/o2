@@ -3,9 +3,14 @@
 #include "ft2build.h"
 #include FT_FREETYPE_H
 
+#if defined PLATFORM_WINDOWS
+#include "Render/Windows/RenderBase.h"
+#elif defined PLATFORM_ANDROID
+#include "Render/Android/RenderBase.h"
+#endif
+
 #include "Render/Camera.h"
 #include "Render/TextureRef.h"
-#include "Render/Windows/RenderBase.h"
 #include "Utils/Math/Vertex2.h"
 #include "Utils/Singleton.h"
 
@@ -65,7 +70,7 @@ namespace o2
 		GETTER(bool, renderTextureAvailable, IsRenderTextureAvailable);          // Render textures available getter
 		GETTER(Vec2I, maxTextureSize, GetMaxTextureSize);                        // Maximal texture size getter
 
-		Function<void()> preRender;  // Pre rendering event. Call after beginning drawing. Clearing every fram
+		Function<void()> preRender;  // Pre rendering event. Call after beginning drawing. Clearing every frame
 		Function<void()> postRender; // Post rendering event. Call before ending drawing. Clearing every frame
 
 		// Default constructor
@@ -232,7 +237,7 @@ namespace o2
 		void DrawAAPolyLine(Vertex2* vertices, int count, float width = 1.0f, LineType lineType = LineType::Solid,
 							bool scaleToScreenSpace = true);
 
-	// Binding render target
+	    // Binding render target
 		void SetRenderTexture(TextureRef renderTarget);
 
 		// Unbinding render target
@@ -258,10 +263,6 @@ namespace o2
 		typedef Vector<Font*> FontsVec;
 		typedef Vector<Sprite*> SpritesVec;
 
-		UInt8*            mVertexData;               // Vertex data buffer
-		UInt16*           mVertexIndexData;          // Index data buffer
-		UInt              mVertexBufferSize = 6000;  // Maximum size of vertex buffer
-		UInt              mIndexBufferSize = 6000*3; // Maximum size of index buffer
 		PrimitiveType     mCurrentPrimitiveType;     // Type of drawing primitives for next DIP
 
 		Texture*          mLastDrawTexture;          // Stored texture ptr from last DIP
@@ -314,9 +315,6 @@ namespace o2
 		// Don't copy
 		Render& operator=(const Render& other);
 
-		// It is called when target frame or window was resized
-		void OnFrameResized();
-
 		// Initializes index buffer for drawing lines - pairs of lines beginnings and ends
 		void InitializeLinesIndexBuffer();
 
@@ -328,6 +326,9 @@ namespace o2
 
 		// Deinitializes free type library
 		void DeinitializeFreeType();
+
+		// It is called when target frame or window was resized
+		void OnFrameResized();
 
 		// Send buffers to draw
 		void DrawPrimitives();

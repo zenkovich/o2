@@ -202,7 +202,7 @@ namespace o2
 		_type* res = nullptr;
 		
 		if (sample)
-			res = sample->CloneAs<_type>();
+			res = sample->template CloneAs<_type>();
 		else
 			res = mnew _type();
 

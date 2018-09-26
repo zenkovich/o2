@@ -254,7 +254,7 @@ namespace o2
 		KeysVec GetKeysNonContant();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node);
+		void OnDeserialized(const DataNode& node) override;
 
 		// Smooths key at index and doesn't updates approximation
 		void InternalSmoothKeyAt(int idx, float smoothCoef = 1.0f);

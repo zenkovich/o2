@@ -14,20 +14,19 @@ namespace o2
 	class Bitmap
 	{
 	public:
-		enum class Format { Default = 0, R8G8B8A8 };
 		enum class ImageType { Auto = 0, Png };
 
 	public:
 		PROPERTIES(Bitmap);
 		GETTER(UInt8*, data, GetData);     // Data getter
 		GETTER(Vec2I, size, GetSize);      // Image size getter
-		GETTER(Format, format, GetFormat); // Data format getter
+		GETTER(PixelFormat, format, GetFormat); // Data format getter
 
 		// Default constructor
 		Bitmap();
 
 		// Constructor with format and size
-		Bitmap(Format format, const Vec2I& size);
+		Bitmap(PixelFormat format, const Vec2I& size);
 
 		// Constructor that loads from file
 		Bitmap(const String& fileName, ImageType type = ImageType::Auto);
@@ -45,7 +44,7 @@ namespace o2
 		Bitmap* Clone() const;
 
 		// Creates image with specified format
-		void Create(Format format, const Vec2I& size);
+		void Create(PixelFormat format, const Vec2I& size);
 
 		// Loading image from file
 		bool Load(const String& fileName, ImageType type = ImageType::Auto);
@@ -66,7 +65,7 @@ namespace o2
 		Vec2I GetSize() const;
 
 		// Returns pixel format
-		Format GetFormat() const;
+		PixelFormat GetFormat() const;
 
 		// Return file name
 		const String& GetFilename() const;
@@ -97,9 +96,9 @@ namespace o2
 		void Outline(float radius, const Color4& color, int threshold = 100);
 
 	protected:
-		Format mFormat;   // Image format
-		UInt8* mData;     // Data array
-		Vec2I  mSize;     // Size of image, in pixels
-		String mFilename; // File name. Empty if no file
+		PixelFormat mFormat;   // Image format
+		UInt8*      mData;     // Data array
+		Vec2I       mSize;     // Size of image, in pixels
+		String      mFilename; // File name. Empty if no file
 	};
 }

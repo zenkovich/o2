@@ -12,7 +12,8 @@ namespace o2
 	{
 	}
 
-	TextureRef::TextureRef(const Vec2I& size, Texture::Format format /*= Texture::Format::Default*/,
+	TextureRef::TextureRef(const Vec2I& size, 
+						   PixelFormat format /*= PixelFormat::R8G8B8A8*/,
 						   Texture::Usage usage /*= Texture::Usage::Default*/)
 	{
 		mTexture = mnew Texture(size, format, usage);
@@ -66,7 +67,7 @@ namespace o2
 		UID atlasAssetId = o2Assets.GetAssetId(atlasAssetName);
 		if (atlasAssetId == 0)
 		{
-			o2Render.mLog->Error("Can't load texture for atlas %s and page %i: atlas isn't exist", atlasAssetName, page);
+			o2Render.mLog->Error("Can't load texture for atlas " + atlasAssetName + " and page " + (String)page + ": atlas isn't exist");
 			mTexture = nullptr;
 			return;
 		}
@@ -106,6 +107,11 @@ namespace o2
 	}
 
 	const Texture* TextureRef::operator->() const
+	{
+		return mTexture;
+	}
+
+	Texture* TextureRef::Get() const
 	{
 		return mTexture;
 	}

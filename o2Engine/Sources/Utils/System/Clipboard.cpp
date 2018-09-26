@@ -1,14 +1,17 @@
 #include "stdafx.h"
 #include "Clipboard.h"
 
+#if defined PLATFORM_WINDOWS
 #include <Windows.h>
 #include <shlobj.h>
+#endif
 
 namespace o2
 {
 
 	void Clipboard::SetText(const WString& text)
 	{
+#if defined PLATFORM_WINDOWS
 		if (OpenClipboard(NULL))
 		{
 			HGLOBAL hgBuffer;
@@ -21,10 +24,12 @@ namespace o2
 			SetClipboardData(CF_UNICODETEXT, hgBuffer);
 			CloseClipboard();
 		}
+#endif
 	}
 
 	WString Clipboard::GetText()
 	{
+#if defined PLATFORM_WINDOWS
 		WString res;
 
 		if (OpenClipboard(NULL))
@@ -37,12 +42,16 @@ namespace o2
 		}
 
 		return res;
+#elif PLATFORM_ANDROID
+        return WString();
+#endif
 	}
 
 #undef CopyFile
 
 	void Clipboard::CopyFile(const WString& path)
 	{
+#if defined PLATFORM_WINDOWS
 		if (OpenClipboard(NULL))
 		{
 			EmptyClipboard();
@@ -59,10 +68,12 @@ namespace o2
 			SetClipboardData(CF_HDROP, hGlobal);
 			CloseClipboard();
 		}
+#endif
 	}
 
 	void Clipboard::CopyFiles(const Vector<WString>& paths)
 	{
+#if defined PLATFORM_WINDOWS
 		if (OpenClipboard(NULL))
 		{
 			EmptyClipboard();
@@ -89,12 +100,14 @@ namespace o2
 			SetClipboardData(CF_HDROP, hGlobal);
 			CloseClipboard();
 		}
+#endif
 	}
 
 	Vector<WString> Clipboard::GetCopyFiles()
 	{
 		Vector<WString> res;
 
+#if defined PLATFORM_WINDOWS
 		if (OpenClipboard(NULL))
 		{
 			HANDLE hData = GetClipboardData(CF_HDROP);
@@ -128,6 +141,7 @@ namespace o2
 
 			CloseClipboard();
 		}
+#endif
 
 		return res;
 	}

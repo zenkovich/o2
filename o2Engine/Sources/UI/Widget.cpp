@@ -3,6 +3,7 @@
 
 #include "Application/Input.h"
 #include "Render/Render.h"
+#include "Scene/Scene.h"
 #include "Scene/SceneLayer.h"
 #include "UI/UIManager.h"
 #include "UI/WidgetLayer.h"
@@ -17,7 +18,7 @@ namespace o2
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
-		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+		if ((mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
 			&& mLayer)
 		{
 			mLayer->RegisterDrawable(this);
@@ -34,7 +35,7 @@ namespace o2
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 
-		if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+		if ((mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
 			&& mLayer && !mOverrideDepth)
 		{
 			mLayer->RegisterDrawable(this);
@@ -52,7 +53,7 @@ namespace o2
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
-		if ((mode == ActorCreateMode::InScene || mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)
+		if ((mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
 			&& mLayer)
 		{
 			mLayer->RegisterDrawable(this);

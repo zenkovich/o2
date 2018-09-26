@@ -1,6 +1,8 @@
 #include "stdafx.h"
-#include "OpenGL.h"
 
+#ifdef PLATFORM_WINDOWS
+
+#include "OpenGL.h"
 #include "Utils/Debug/Log/LogStream.h"
 
 // Returns address of function
@@ -8,19 +10,19 @@ PROC GetSafeWGLProcAddress(const char* id, o2::LogStream* log)
 {
 	PROC res = wglGetProcAddress(id);
 	if (!res)
-		log->Error("Failed to get function address: '%s'", id);
+		log->Error("Failed to get function address: " + (o2::String)id);
 
 	return res;
 }
 
 void GetGLExtensions(o2::LogStream* log /*= nullptr*/)
 {
-	glGenFramebuffersEXT        = (PFNGLGENFRAMEBUFFERSEXTPROC)GetSafeWGLProcAddress("glGenFramebuffersEXT", log);
-	glBindFramebufferEXT        = (PFNGLBINDFRAMEBUFFEREXTPROC)GetSafeWGLProcAddress("glBindFramebufferEXT", log);
-	glFramebufferTexture        = (PFNGLFRAMEBUFFERTEXTUREPROC)GetSafeWGLProcAddress("glFramebufferTexture", log);
-	glDrawBuffers               = (PFNGLDRAWBUFFERSPROC)GetSafeWGLProcAddress("glDrawBuffers", log);
-	glDeleteBuffers             = (PFNGLDELETEBUFFERSPROC)GetSafeWGLProcAddress("glDeleteBuffers", log);
-	glDeleteFramebuffersEXT     = (PFNGLDELETEFRAMEBUFFERSPROC)GetSafeWGLProcAddress("glDeleteFramebuffersEXT", log);
+	glGenFramebuffersEXT = (PFNGLGENFRAMEBUFFERSEXTPROC)GetSafeWGLProcAddress("glGenFramebuffersEXT", log);
+	glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC)GetSafeWGLProcAddress("glBindFramebufferEXT", log);
+	glFramebufferTexture = (PFNGLFRAMEBUFFERTEXTUREPROC)GetSafeWGLProcAddress("glFramebufferTexture", log);
+	glDrawBuffers = (PFNGLDRAWBUFFERSPROC)GetSafeWGLProcAddress("glDrawBuffers", log);
+	glDeleteBuffers = (PFNGLDELETEBUFFERSPROC)GetSafeWGLProcAddress("glDeleteBuffers", log);
+	glDeleteFramebuffersEXT = (PFNGLDELETEFRAMEBUFFERSPROC)GetSafeWGLProcAddress("glDeleteFramebuffersEXT", log);
 	glCheckFramebufferStatusEXT = (PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC)GetSafeWGLProcAddress("glCheckFramebufferStatusEXT", log);
 
 }
@@ -78,20 +80,22 @@ const char* GetGLErrorDesc(GLenum errorId)
 	return "UNKNOWN";
 }
 
-void glCheckError(o2::LogStream* log, const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
+void glCheckError(const char* filename /*= nullptr*/, unsigned int line /*= 0*/)
 {
 	GLenum errId = glGetError();
 	if (errId != GL_NO_ERROR)
 	{
-		log->Out("OpenGL ERROR %i: %s at file: %s line: %i", errId, (o2::String)GetGLErrorDesc(errId),
-			(o2::String)(filename ? filename : "unknown"), line);
+		o2Debug.LogError("OpenGL ERROR " + (o2::String)errId + ": " + (o2::String)GetGLErrorDesc(errId) +
+						 " at file: " + (o2::String)(filename ? filename : "unknown") + " line: " + (o2::String)line);
 	}
 }
 
-extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT        = NULL;
-extern PFNGLBINDFRAMEBUFFEREXTPROC        glBindFramebufferEXT        = NULL;
-extern PFNGLFRAMEBUFFERTEXTUREPROC        glFramebufferTexture        = NULL;
-extern PFNGLDRAWBUFFERSPROC               glDrawBuffers               = NULL;
-extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers             = NULL;
-extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT     = NULL;
+extern PFNGLGENFRAMEBUFFERSEXTPROC        glGenFramebuffersEXT = NULL;
+extern PFNGLBINDFRAMEBUFFEREXTPROC        glBindFramebufferEXT = NULL;
+extern PFNGLFRAMEBUFFERTEXTUREPROC        glFramebufferTexture = NULL;
+extern PFNGLDRAWBUFFERSPROC               glDrawBuffers = NULL;
+extern PFNGLDELETEBUFFERSPROC             glDeleteBuffers = NULL;
+extern PFNGLDELETEFRAMEBUFFERSPROC        glDeleteFramebuffersEXT = NULL;
 extern PFNGLCHECKFRAMEBUFFERSTATUSEXTPROC glCheckFramebufferStatusEXT = NULL;
+
+#endif // PLATFORM_WINDOWS
