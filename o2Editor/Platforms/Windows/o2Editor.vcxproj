@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -98,7 +98,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;DEBUG;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
@@ -155,7 +155,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\FreeType\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -225,32 +225,35 @@
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
     <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\ActorProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\AssetProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\BooleanProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\BorderFloatProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\BorderIntProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\ColorProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\ComponentProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\CurveProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\EnumMaskProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\EnumProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\FloatProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\IntegerProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\LayerProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\ObjectProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\ObjectPtrProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\RectangleFloatProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\RectangleIntProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\StringProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\TagProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\Vector2FloatProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\Vector2IntProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\VectorProperty.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\Basic\WStringProperty.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\FieldPropertiesInfo.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\IObjectPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\IPropertyField.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\DefaultObjectViewer.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\SpriteProperty.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\Properties.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\ActorProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\AssetProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\BooleanProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\BorderFloatProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\BorderIntProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\ColorProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\ComponentProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\CurveProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\EnumMaskProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\EnumProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\FloatProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\IntegerProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\LayerProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\ObjectProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\ObjectPtrProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\RectangleFloatProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\RectangleIntProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\StringProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\TagProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\Vector2FloatProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\Vector2IntProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\VectorProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\Widgets\WStringProperty.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\FrameTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\MoveTool.h" />
@@ -286,7 +289,7 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.h" />
+    <ClInclude Include="..\..\Sources\PropertiesWindow\IPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\PropertiesWindow.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.h" />
@@ -322,31 +325,34 @@
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
     <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\ActorProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\AssetProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\BooleanProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\BorderFloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\BorderIntProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\ColorProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\ComponentProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\CurveProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\EnumProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\FloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\IntegerProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\LayerProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\ObjectProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\ObjectPtrProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\RectangleFloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\RectangleIntProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\StringProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\TagProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\Vector2FloatProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\Vector2IntProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\VectorProperty.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\Basic\WStringProperty.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\FieldPropertiesInfo.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\IObjectPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\IPropertyField.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\DefaultObjectViewer.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\SpriteProperty.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\Properties.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\ActorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\AssetProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\BooleanProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\BorderFloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\BorderIntProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\ColorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\ComponentProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\CurveProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\EnumProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\FloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\IntegerProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\LayerProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\ObjectProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\ObjectPtrProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\RectangleFloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\RectangleIntProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\StringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\TagProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\Vector2FloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\Vector2IntProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\VectorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\Widgets\WStringProperty.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\FrameTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\IEditorTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\MoveTool.cpp" />
@@ -381,7 +387,7 @@
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\IObjectPropertiesViewer.cpp" />
+    <ClCompile Include="..\..\Sources\PropertiesWindow\IPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\PropertiesWindow.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp" />

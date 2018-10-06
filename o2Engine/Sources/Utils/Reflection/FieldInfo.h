@@ -8,7 +8,6 @@
 #include "Utils/Types/Containers/Dictionary.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/String.h"
-#include <string>
 
 namespace o2
 {

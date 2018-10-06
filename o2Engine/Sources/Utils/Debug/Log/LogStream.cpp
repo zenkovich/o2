@@ -131,7 +131,7 @@ namespace o2
 		OutStrEx("ERROR:" + str);
 
 	if (IsStoppingOnLogErrors())
-		Assert(false, (char*)((String)str));
+		Assert(false, (const char*)((String)str));
 	}
 
 	void LogStream::OutWarningEx(const WString& str)

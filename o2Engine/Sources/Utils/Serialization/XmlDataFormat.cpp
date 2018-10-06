@@ -53,15 +53,28 @@ namespace o2
 		{
 			struct xmlWriter :public pugi::xml_writer
 			{
-				String* str;
+				int size = 1024;
 				int length = 0;
+				char* data = new char[1024];
+
+				~xmlWriter()
+				{
+					delete[] data;
+				}
 
 				void write(const void* data, size_t size)
 				{
-					str->Reserve(length + size + 5);
-					memcpy(str->Data() + length, data, size);
+					if (length + size > this->size)
+					{
+						char* newData = new char[this->size*2];
+						memcpy(newData, this->data, this->size);
+						delete[] this->data;
+						this->data = newData;
+						this->size *= 2;
+					}
+
+					memcpy(this->data + length, data, size);
 					length += size;
-					str->Data()[length] = '\0';
 				}
 			};
 
@@ -73,16 +86,17 @@ namespace o2
 				pugi::xml_node newNode = xmlDoc.append_child(docNode->GetName().Data());
 
 				if (!docNode->Data().IsEmpty())
-					newNode.append_child(pugi::node_pcdata).set_value((wchar_t*)docNode->Data());
+					newNode.append_child(pugi::node_pcdata).set_value((const wchar_t*)docNode->Data());
 
 				SaveDataNode(newNode, *docNode);
 			}
 
 			xmlWriter writer;
-			writer.str = &res;
 			xmlDoc.save(writer);
 
-			return res;
+			writer.data[writer.length] = '\0';
+
+			return String(writer.data);
 		}
 
 		void SaveDataNode(pugi::xml_node& xmlNode, const DataNode& dataNode)
@@ -92,14 +106,14 @@ namespace o2
 				if (docNode->GetChildNodes().Count() == 0 && false)
 				{
 					pugi::xml_attribute newAttribute = xmlNode.append_attribute((pugi::char_t*)docNode->GetName().Data());
-					newAttribute.set_value((wchar_t*)docNode->Data());
+					newAttribute.set_value((const wchar_t*)docNode->Data());
 				}
 				else
 				{
 					pugi::xml_node newNode = xmlNode.append_child((pugi::char_t*)docNode->GetName().Data());
 
 					if (!docNode->Data().IsEmpty())
-						newNode.append_child(pugi::node_pcdata).set_value((wchar_t*)docNode->Data());
+						newNode.append_child(pugi::node_pcdata).set_value((const wchar_t*)docNode->Data());
 
 					SaveDataNode(newNode, *docNode);
 				}

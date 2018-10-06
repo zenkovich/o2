@@ -213,7 +213,7 @@ namespace Editor
 
 		for (auto styleWidget : styleWidgets)
 		{
-			mTreeContextMenu->AddItem("Create UI/" + styleWidget->GetType().GetName() + " - " + styleWidget->GetName(),
+			mTreeContextMenu->AddItem(String("Create UI/") + styleWidget->GetType().GetName() + " - " + styleWidget->GetName(),
 									  [=]()
 			{
 				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();

@@ -78,7 +78,8 @@ namespace o2
 		void FromString(const String& stringData)
 		{
 			char* pp;
-			char* str = stringData.Data();
+			char* str = mnew char[stringData.Length() + 1];
+			strcpy(str, stringData.Data());
 			for (int i = 0; i < 16; i += 4)
 			{
 				int ii = i*2;

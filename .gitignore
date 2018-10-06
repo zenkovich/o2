@@ -258,3 +258,5 @@ pip-log.txt
 /o2TestProject/Platforms/Android/.gradle
 /o2TestProject/Platforms/Android/.idea
 /o2TestProject/Platforms/Android/app/.externalNativeBuild
+/o2Editor/Platforms/Windows/.vs
+/o2TestProject/Platforms/Windows/.vs

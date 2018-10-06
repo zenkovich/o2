@@ -194,7 +194,8 @@ namespace o2
 			if (cursor.id == id)
 				return &cursor;
 
-		return nullptr;
+		static Cursor dummy;
+		return &dummy;
 	}
 
 	const Input::CursorsVec& Input::GetCursors() const
