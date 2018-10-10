@@ -11,7 +11,7 @@ namespace o2
 	class KeyValuePair
 	{
 	public:
-		_key_type   mKey;  
+		_key_type   mKey;
 		_value_type mValue;
 
 	public:
@@ -19,8 +19,8 @@ namespace o2
 		KeyValuePair(const _key_type& key, const _value_type& value);
 		KeyValuePair(const KeyValuePair& otherPair);
 
-		bool operator==(const KeyValuePair& otherPair);
-		bool operator!=(const KeyValuePair& otherPair);
+		bool operator==(const KeyValuePair& otherPair) const;
+		bool operator!=(const KeyValuePair& otherPair) const;
 
 		_key_type& Key();
 		_value_type& Value();
@@ -111,30 +111,27 @@ namespace o2
 #pragma region KeyValuePair Implementation
 
 	template<typename _key_type, typename _value_type>
-	KeyValuePair<_key_type, _value_type>::KeyValuePair() 
-	{
-	}
+	KeyValuePair<_key_type, _value_type>::KeyValuePair()
+	{}
 
 	template<typename _key_type, typename _value_type>
-	KeyValuePair<_key_type, _value_type>::KeyValuePair(const _key_type& key, const _value_type& value):
-		mKey(key), mValue(value) 
-	{
-	}
+	KeyValuePair<_key_type, _value_type>::KeyValuePair(const _key_type& key, const _value_type& value) :
+		mKey(key), mValue(value)
+	{}
 
 	template<typename _key_type, typename _value_type>
-	KeyValuePair<_key_type, _value_type>::KeyValuePair(const KeyValuePair& otherPair):
-		mKey(otherPair.mKey), mValue(otherPair.mValue) 
-	{
-	}
+	KeyValuePair<_key_type, _value_type>::KeyValuePair(const KeyValuePair& otherPair) :
+		mKey(otherPair.mKey), mValue(otherPair.mValue)
+	{}
 
 	template<typename _key_type, typename _value_type>
-	bool KeyValuePair<_key_type, _value_type>::operator==(const KeyValuePair& otherPair)
+	bool KeyValuePair<_key_type, _value_type>::operator==(const KeyValuePair& otherPair) const
 	{
 		return mKey == otherPair.mKey && mValue == otherPair.mValue;
 	}
 
 	template<typename _key_type, typename _value_type>
-	bool KeyValuePair<_key_type, _value_type>::operator!=(const KeyValuePair& otherPair)
+	bool KeyValuePair<_key_type, _value_type>::operator!=(const KeyValuePair& otherPair) const
 	{
 		return mKey != otherPair.mKey || mValue != otherPair.mValue;
 	}

@@ -354,29 +354,28 @@ namespace o2
 		return nullptr;
 	}
 
-	bool UIWidget::RemoveLayer(UIWidgetLayer* layer)
+	void UIWidget::RemoveLayer(UIWidgetLayer* layer)
 	{
-		bool res = mLayers.Remove(layer);
+		mLayers.Remove(layer);
 		delete layer;
 		UpdateLayersDrawingSequence();
-
-		return res;
 	}
 
-	bool UIWidget::RemoveLayer(const String& path)
+	void UIWidget::RemoveLayer(const String& path)
 	{
 		auto layer = GetLayer(path);
 
 		if (!layer)
-			return false;
+			return;
 
 		if (layer->GetParent())
-			return layer->GetParent()->RemoveChild(layer);
+		{
+			layer->GetParent()->RemoveChild(layer);
+			return;
+		}
 
-		bool res = mLayers.Remove(layer);
+		mLayers.Remove(layer);
 		UpdateLayersDrawingSequence();
-
-		return res;
 	}
 
 	void UIWidget::RemoveAllLayers()
@@ -1066,13 +1065,16 @@ namespace o2
 
 		Actor::CopyData(other);
 
-		for (auto layer : mLayers)
+		auto layers = mLayers;
+		for (auto layer : layers)
 			delete layer;
 
-		for (auto state : mStates)
+		auto states = mStates;
+		for (auto state : states)
 			delete state;
 
-		for (auto child : mInternalWidgets)
+		auto internalChildren = mInternalWidgets;
+		for (auto child : internalChildren)
 			delete child;
 
 		mInternalWidgets.Clear();

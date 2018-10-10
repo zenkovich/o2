@@ -47,11 +47,12 @@ namespace o2
     String InFile::ReadFullData()
     {
         UInt len = GetDataSize();
-        String res;
-        res.Reserve(len + 1);
-        ReadData(res.Data(), len);
-        res[len] = '\0';
-        return res;
+        char* buffer = mnew char[len + 1];
+
+        ReadData(buffer, len);
+        buffer[len] = '\0';
+
+		return String(buffer);
     }
 
     void InFile::ReadData(void *dataPtr, UInt bytes)

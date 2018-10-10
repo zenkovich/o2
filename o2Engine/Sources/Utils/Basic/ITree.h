@@ -89,8 +89,7 @@ namespace o2
 	{
 		node->mParent = nullptr;
 
-		if (!mChildren.Remove(node))
-			return false;
+		mChildren.Remove(node);
 
 		OnChildRemoved(node);
 

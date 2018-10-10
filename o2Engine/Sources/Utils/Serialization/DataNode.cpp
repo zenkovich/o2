@@ -755,12 +755,15 @@ namespace o2
 		if (!file.IsOpened())
 			return false;
 
-		WString data;
-		data.Reserve(file.GetDataSize() + 1);
-		auto sz = file.ReadFullData(data.Data());
-		data[sz / sizeof(wchar_t)] = '\0';
+		auto sz = file.GetDataSize();
+		wchar_t* data = mnew wchar_t[sz];
+		file.ReadData(data, file.GetDataSize());
+		data[sz/sizeof(wchar_t)] = '\0';
 
-		return LoadFromData(data);
+		bool res = LoadFromData(data);
+		delete data;
+
+		return res;
 	}
 
 	bool DataNode::LoadFromData(const WString& data)

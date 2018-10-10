@@ -120,10 +120,10 @@ namespace o2
 								const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
 		// Removes layer
-		bool RemoveLayer(UIWidgetLayer* layer);
+		void RemoveLayer(UIWidgetLayer* layer);
 
 		// Removes layer
-		bool RemoveLayer(const String& path);
+		void RemoveLayer(const String& path);
 
 		// Removes all layers
 		void RemoveAllLayers();
@@ -689,8 +689,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, UIWidgetLayer*);
 	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
-	PUBLIC_FUNCTION(bool, RemoveLayer, UIWidgetLayer*);
-	PUBLIC_FUNCTION(bool, RemoveLayer, const String&);
+	PUBLIC_FUNCTION(void, RemoveLayer, UIWidgetLayer*);
+	PUBLIC_FUNCTION(void, RemoveLayer, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllLayers);
 	PUBLIC_FUNCTION(UIWidgetLayer*, GetLayer, const String&);
 	PUBLIC_FUNCTION(UIWidgetLayer*, FindLayer, const String&);

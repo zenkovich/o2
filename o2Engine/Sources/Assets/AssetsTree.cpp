@@ -37,8 +37,7 @@ namespace o2
 	{
 		node->parent = nullptr;
 
-		if (!children.Remove(node))
-			return false;
+		children.Remove(node);
 
 		if (release && node)
 			delete node;
@@ -231,7 +230,9 @@ namespace o2
 				bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 				if (!isExistMetaForFolder)
 				{
-					mLog->Warning("Can't load asset info for " + subFolder.mPath + " - missing meta file");
+					if (mLog)
+						mLog->Warning("Can't load asset info for " + subFolder.mPath + " - missing meta file");
+
 					continue;
 				}
 

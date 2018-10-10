@@ -96,7 +96,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\o2Engine\;$(SolutionDir)..\..\..\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;$(SolutionDir)..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\o2Engine\;$(SolutionDir)..\..\..\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;$(SolutionDir)..\..\..\o2Engine\Dependencies\;$(SolutionDir)..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BrowseInformation>false</BrowseInformation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
@@ -149,7 +149,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\o2Engine\;$(SolutionDir)..\..\..\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;$(SolutionDir)..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\..\o2Engine\;$(SolutionDir)..\..\..\o2Engine\Sources\;$(SolutionDir)..\..\Sources\;$(SolutionDir)..\..\..\o2Engine\Dependencies\;$(SolutionDir)..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>

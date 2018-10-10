@@ -1,6 +1,6 @@
 #pragma once
 
-
+#include "utf8cpp/utf8.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Color.h"
 #include "Utils/Math/Border.h"
@@ -8,30 +8,6 @@
 
 namespace o2
 {
-	inline void ConvertStringPtr(char* dst, const wchar_t* src, int size)
-	{
-		auto sz = wcstombs(dst, src, size);
-		if (sz == size)
-			dst[sz - 1] = '\0';
-	}
-
-	inline void ConvertStringPtr(wchar_t* dst, const char* src, int size)
-	{
-		auto sz = mbstowcs(dst, src, size);
-		if (sz == size)
-			dst[sz - 1] = '\0';
-	}
-
-	inline void ConvertStringPtr(wchar_t* dst, const wchar_t* src, int size)
-	{
-		memcpy(dst, src, size*sizeof(wchar_t));
-	}
-
-	inline void ConvertStringPtr(char* dst, const char* src, int size)
-	{
-		memcpy(dst, src, size*sizeof(char));
-	}
-
 	inline String operator+(const char* left, const String& right)
 	{
 		String _left(left);
@@ -44,235 +20,111 @@ namespace o2
 		return _left + right;
 	}
 
-	template<typename T>
-	TString<T>::TString():
-		mData((T*)malloc(20 * sizeof(T))), mCapacity(20)
+	inline void ConvertString(TString<char>& dest, const TString<wchar_t>& source)
 	{
-		mData[0] = '\0';
+		dest.Clear();
+		utf8::utf16to8(source.begin(), source.end(), back_inserter(dest));
+	}
+
+	inline void ConvertString(TString<wchar_t>& dest, const TString<char>& source)
+	{
+		dest.Clear();
+		utf8::utf8to16(source.begin(), source.end(), back_inserter(dest));
+	}
+
+	inline void ConvertString(TString<wchar_t>& dest, const TString<wchar_t>& source)
+	{
+		dest = source;
+	}
+
+	inline void ConvertString(TString<char>& dest, const TString<char>& source)
+	{
+		dest = source;
 	}
 
 	template<typename T>
-	TString<T>::TString(const TString& other):
-		mCapacity(other.mCapacity), mData((T*)malloc(other.mCapacity*sizeof(T)))
-	{
-		ConvertStringPtr(mData, other.mData, mCapacity);
-	}
+	TString<T>::TString()
+	{}
+
+	template<typename T>
+	TString<T>::TString(const T* data) :
+		std::basic_string<T>(data)
+	{}
+
+	template<typename T>
+	TString<T>::TString(const std::basic_string<T>& data) :
+		std::basic_string<T>(data)
+	{}
+
+	template<typename T>
+	TString<T>::TString(const TString& other) :
+		std::basic_string<T>(other)
+	{}
 
 	template<typename T>
 	template<typename T2, typename X>
-	TString<T>::TString(T2* data):
-		mCapacity(0)
+	TString<T>::TString(const T2* data)
 	{
-		const UInt maxLength = 1000;
-		UInt length = 0;
-		while (data[length] != '\0' && length < maxLength) length++;
-		mCapacity = length + 5;
-
-		mData = (T*)malloc(mCapacity*sizeof(T));
-		ConvertStringPtr(mData, data, mCapacity);
-		mData[length] = '\0';
+		ConvertString(*this, TString<T2>(data));
 	}
 
 
 	template<typename T>
 	template<typename T2, typename X>
-	TString<T>::TString(const TString<T2>& other):
-		mCapacity(other.Capacity()), mData((T*)malloc(other.Capacity()*sizeof(T)))
+	TString<T>::TString(const TString<T2>& other)
 	{
-		ConvertStringPtr(mData, other.Data(), mCapacity);
+		ConvertString(*this, other);
 	}
 
 	template<typename T>
-	TString<T>::TString(bool value):
-		mCapacity(8), mData((T*)malloc(8 * sizeof(T)))
+	TString<T>::TString(bool value)
 	{
-		if (value)
-			ConvertStringPtr(mData, "true", 5);
-		else
-			ConvertStringPtr(mData, "false", 6);
+		*this = value ? "true" : "false";
 	}
 
 	template<typename T>
-	TString<T>::TString(int value):
-		mCapacity(32), mData((T*)malloc(32 * sizeof(T)))
+	TString<T>::TString(int value)
 	{
-		int len = 0;
-
-		bool neg = value < 0;
-		if (neg) value = -value;
-
-		do
-		{
-			mData[len++] = (value % 10) + '0';
-			value /= 10;
-		}
-		while (value > 0);
-
-		if (neg) mData[len++] = '-';
-
-		for (int i = 0; i < len / 2; i++)
-			Math::Swap(mData[i], mData[len - 1 - i]);
-
-		mData[len++] = '\0';
+		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
 	}
 
 	template<typename T>
-	TString<T>::TString(UInt value):
-		mCapacity(32), mData((T*)malloc(32 * sizeof(T)))
+	TString<T>::TString(UInt value)
 	{
-		int len = 0;
-
-		do
-		{
-			mData[len++] = (value % 10) + '0';
-			value /= 10;
-		}
-		while (value > 0);
-
-		for (int i = 0; i < len / 2; i++)
-			Math::Swap(mData[i], mData[len - 1 - i]);
-
-		mData[len++] = '\0';
+		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
 	}
 
 	template<typename T>
-	TString<T>::TString(UInt64 value):
-		mCapacity(64), mData((T*)malloc(64 * sizeof(T)))
+	TString<T>::TString(UInt64 value)
 	{
-		int len = 0;
-
-		do
-		{
-			mData[len++] = (value % 10) + '0';
-			value /= 10;
-		}
-		while (value > 0);
-
-		for (int i = 0; i < len / 2; i++)
-			Math::Swap(mData[i], mData[len - 1 - i]);
-
-		mData[len++] = '\0';
+		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
 	}
 
 	template<typename T>
-	TString<T>::TString(float value):
-		mCapacity(64), mData((T*)malloc(64 * sizeof(T)))
+	TString<T>::TString(float value)
 	{
-		if (isnan(value))
-		{
-			mData[0] = 'n'; mData[1] = 'a'; mData[2] = 'n'; mData[3] = '\0';
-		}
-		else if (isinf(value))
-		{
-			mData[0] = 'i'; mData[1] = 'n'; mData[2] = 'f'; mData[3] = '\0';
-		}
-		else if (value == 0.0f)
-		{
-			mData[0] = '0'; mData[1] = '\0';
-		}
-		else
-		{
-			int digit, m, m1;
-			T* c = mData;
-
-			int neg = (value < 0);
-			if (neg) value = -value;
-
-			// calculate magnitude
-			m = (int)log10(value);
-			int useExp = (m >= 14 || (neg && m >= 9) || m <= -9);
-
-			if (neg) *(c++) = '-';
-
-			// set up for scientific notation
-			if (useExp)
-			{
-				if (m < 0)
-					m -= 1;
-				value = value / pow(10.0f, m);
-				m1 = m;
-				m = 0;
-			}
-
-			if (m < 1.0) m = 0;
-
-			// convert the number
-			int it = 0;
-			while ((value > 0.00001f || m >= 0) && it < 100)
-			{
-				float weight = pow(10.0f, m);
-				if (weight > 0 && !isinf(weight))
-				{
-					digit = (int)floor(value / weight);
-					value -= (digit * weight);
-					*(c++) = '0' + digit;
-				}
-				if (m == 0 && value > 0)
-					*(c++) = '.';
-				m--;
-
-				it++;
-			}
-			if (useExp)
-			{
-				// convert the exponent
-				int i, j;
-				*(c++) = 'e';
-				if (m1 > 0)
-				{
-					*(c++) = '+';
-				}
-				else
-				{
-					*(c++) = '-';
-					m1 = -m1;
-				}
-				m = 0;
-				while (m1 > 0)
-				{
-					*(c++) = '0' + m1 % 10;
-					m1 /= 10;
-					m++;
-				}
-				c -= m;
-				for (i = 0, j = m - 1; i < j; i++, j--)
-				{
-					// swap without temporary
-					c[i] ^= c[j];
-					c[j] ^= c[i];
-					c[i] ^= c[j];
-				}
-				c += m;
-			}
-			*(c) = '\0';
-		}
+		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
 	}
 
 	template<typename T>
-	TString<T>::TString(const Vec2F& value):
-		mCapacity(256), mData((T*)malloc(256 * sizeof(T)))
+	TString<T>::TString(const Vec2F& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.x);
 		Append((TString)";");
 		Append((TString)value.y);
 	}
 
 	template<typename T>
-	TString<T>::TString(const Vec2I& value):
-		mCapacity(256), mData((T*)malloc(256 * sizeof(T)))
+	TString<T>::TString(const Vec2I& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.x);
 		Append((TString)";");
 		Append((TString)value.y);
 	}
 
 	template<typename T>
-	TString<T>::TString(const RectF& value):
-		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	TString<T>::TString(const RectF& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.left);
 		Append((TString)";");
 		Append((TString)value.top);
@@ -283,10 +135,8 @@ namespace o2
 	}
 
 	template<typename T>
-	TString<T>::TString(const RectI& value):
-		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	TString<T>::TString(const RectI& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.left);
 		Append((TString)";");
 		Append((TString)value.top);
@@ -297,10 +147,8 @@ namespace o2
 	}
 
 	template<typename T>
-	TString<T>::TString(const BorderF& value):
-		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	TString<T>::TString(const BorderF& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.left);
 		Append((TString)";");
 		Append((TString)value.top);
@@ -311,10 +159,8 @@ namespace o2
 	}
 
 	template<typename T>
-	TString<T>::TString(const BorderI& value):
-		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	TString<T>::TString(const BorderI& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.left);
 		Append((TString)";");
 		Append((TString)value.top);
@@ -325,10 +171,8 @@ namespace o2
 	}
 
 	template<typename T>
-	TString<T>::TString(const Color4& value):
-		mCapacity(512), mData((T*)malloc(512 * sizeof(T)))
+	TString<T>::TString(const Color4& value)
 	{
-		mData[0] = '\0';
 		Append((TString)value.r);
 		Append((TString)";");
 		Append((TString)value.g);
@@ -340,43 +184,36 @@ namespace o2
 
 	template<typename T>
 	TString<T>::~TString()
-	{
-		free(mData);
-	}
+	{}
 
 	template<typename T>
 	template<typename T2, typename X>
 	TString<T>& TString<T>::operator=(const TString<T2>& other)
 	{
 		Reserve(other.Capacity());
-		ConvertStringPtr(mData, other.Data(), other.Capacity());
+		ConvertString(*this, other);
 		return *this;
 	}
 
 	template<typename T>
 	TString<T>& TString<T>::operator=(const TString& other)
 	{
-		Reserve(other.mCapacity);
-		ConvertStringPtr(mData, other.mData, other.mCapacity);
+		std::basic_string<T>::operator=(other);
 		return *this;
 	}
 
 	template<typename T>
 	template<typename T2, typename X>
-	TString<T>& TString<T>::operator=(T2* data)
+	TString<T>& TString<T>::operator=(const T2* data)
 	{
-		int dataLength = 0;
-		while (data[dataLength] != '\0') dataLength++;
-		Reserve(dataLength + 5);
-		ConvertStringPtr(mData, data, dataLength);
-		mData[dataLength] = '\0';
+		ConvertString(*this, TString<T2>(data));
 		return *this;
 	}
 
 	template<typename T>
-	TString<T>::operator T*() const
+	TString<T>::operator const T*() const
 	{
-		return mData;
+		return std::basic_string<T>::c_str();
 	}
 
 	template<typename T>
@@ -388,121 +225,26 @@ namespace o2
 	template<typename T>
 	TString<T>::operator int() const
 	{
-		int res = 0;
-		int m = 1;
-		int l = Length();
-		for (int i = l - 1; i >= 0; i--)
-		{
-			auto c = mData[i];
-			if (c >= '0' && c <= '9')
-			{
-				res += m*(c - '0');
-				m *= 10;
-			}
-			else
-			{
-				if (i == 0 && c == '-')
-					break;
-				else
-					return 0;
-			}
-		}
-
-		if (mData[0] == '-') res = -res;
-
-		return res;
+		return std::stoi(*this);
 	}
 
 	template<typename T>
 	TString<T>::operator float() const
 	{
-		float integerPart = 0;
-		float fractionPart = 0;
-		int divisorForFraction = 1;
-		int sign = 1;
-		bool inFraction = false;
-		T* num = mData;
-
-		/*Take care of +/- sign*/
-		if (*num == '-')
-		{
-			++num;
-			sign = -1;
-		}
-		else if (*num == '+')
-		{
-			++num;
-		}
-		while (*num != '\0')
-		{
-			if (*num >= '0' && *num <= '9')
-			{
-				if (inFraction)
-				{
-					/*See how are we converting a character to integer*/
-					fractionPart = fractionPart * 10 + (*num - '0');
-					divisorForFraction *= 10;
-				}
-				else
-				{
-					integerPart = integerPart*10.0f + (*num - '0');
-				}
-			}
-			else if (*num == '.')
-			{
-				if (inFraction)
-					return sign*(integerPart + fractionPart / divisorForFraction);
-				else
-					inFraction = true;
-			}
-			else
-			{
-				return sign*(integerPart + fractionPart / divisorForFraction);
-			}
-			++num;
-		}
-		return sign*(integerPart + fractionPart / divisorForFraction);
+		return std::stof(*this);
 	}
 
 	template<typename T>
 	TString<T>::operator UInt() const
 	{
-		int res = 0;
-		int m = 1;
-		int l = Length();
-		for (int i = l - 1; i >= 0; i--)
-		{
-			auto c = mData[i];
-			if ((c >= '0' && c <= '9') || (i == 0 && c == '-'))
-			{
-				res += m*(c - '0');
-				m *= 10;
-			}
-			else return 0;
-		}
-
-		return res;
+		return (UInt)std::stoi(*this);
 	}
 
 
 	template<typename T>
 	TString<T>::operator UInt64() const
 	{
-		UInt64 res = 0;
-		UInt64 m = 1;
-		int l = Length();
-		for (int i = l - 1; i >= 0; i--)
-		{
-			auto c = mData[i];
-			if ((c >= '0' && c <= '9') || (i == 0 && c == '-'))
-			{
-				res += m*(c - '0');
-				m *= 10;
-			}
-			else return 0;
-		}
-
-		return res;
+		return std::stoull(*this);
 	}
 
 	template<typename T>
@@ -608,65 +350,34 @@ namespace o2
 
 	template<typename T>
 	template<typename T2, typename X>
-	bool TString<T>::operator==(T2* data) const
+	bool TString<T>::operator==(const T2* data) const
 	{
-		int l2 = 0;
-		while (data[l2] != '\0') l2++;
-
-		int l1 = Length();
-		if (l1 != l2)
-			return false;
-
-		for (int i = 0; i < l1; i++)
-		{
-			if (mData[i] != data[i])
-				return false;
-		}
-
-		return true;
+		return std::basic_string<T>::compare(TString<T>(data)) == 0;
 	}
 
 	template<typename T>
 	template<typename T2, typename X>
-	bool TString<T>::operator!=(T2* data) const
+	bool TString<T>::operator!=(const T2* data) const
 	{
-		return !(*this == data);
+		return std::basic_string<T>::compare(TString<T>(data)) != 0;
 	}
 
 	template<typename T>
 	bool TString<T>::operator==(const TString& other) const
 	{
-		int l1 = Length(), l2 = other.Length();
-		if (l1 != l2)
-			return false;
-
-		for (int i = 0; i < l1; i++)
-		{
-			if (mData[i] != other.mData[i])
-				return false;
-		}
-
-		return true;
+		return std::basic_string<T>::compare(other) == 0;
 	}
 
 	template<typename T>
 	bool TString<T>::operator!=(const TString& other) const
 	{
-		return !(*this == other);
+		return std::basic_string<T>::compare(other) != 0;
 	}
 
 	template<typename T>
 	bool TString<T>::operator>(const TString& other) const
 	{
-		int l1 = Length(), l2 = other.Length();
-
-		for (int i = 0; i < l1 && i < l2; i++)
-		{
-			if (mData[i] > other.mData[i])
-				return true;
-		}
-
-		return l1 > l2;
+		return std::basic_string<T>::compare(other) > 0;
 	}
 
 	template<typename T>
@@ -700,120 +411,129 @@ namespace o2
 	}
 
 	template<typename T>
-	T& TString<T>::operator[](int idx)
+	template<typename T2, typename X>
+	TString<T>& TString<T>::operator+=(T2 symbol)
 	{
-		idx = Math::Clamp(idx, 0, mCapacity - 1);
-		return mData[idx];
+		TString<T2> str("x");
+		str[0] = symbol;
+		Append(str);
+		return *this;
 	}
 
 	template<typename T>
-	T* TString<T>::Data() const
+	template<typename T2, typename X>
+	TString<T> TString<T>::operator+(T2 symbol) const
 	{
-		return mData;
+		TString res(*this);
+		TString<T2> str("x");
+		str[0] = symbol;
+		res.Append(str);
+		return res;
+	}
+
+	template<typename T>
+	TString<T>& TString<T>::operator+=(const T* str)
+	{
+		Append(str);
+		return *this;
+	}
+
+	template<typename T>
+	TString<T> TString<T>::operator+(const T* str) const
+	{
+		TString res(*this);
+		res.Append(str);
+		return res;
+	}
+
+	template<typename T>
+	template<typename T2, typename X>
+	TString<T>& TString<T>::operator+=(const T2* str)
+	{
+		Append(TString<T>(str));
+		return *this;
+	}
+
+	template<typename T>
+	template<typename T2, typename X>
+	TString<T> TString<T>::operator+(const T2* str) const
+	{
+		TString res(*this);
+		res.Append(TString<T>(str));
+		return res;
+	}
+
+	template<typename T>
+	T& TString<T>::operator[](int idx)
+	{
+		return std::basic_string<T>::operator[](idx);
+	}
+
+	template<typename T>
+	const T* TString<T>::Data() const
+	{
+		return std::basic_string<T>::c_str();
 	}
 
 	template<typename T>
 	void TString<T>::Reserve(int size)
 	{
-		if (size < 5)
-			size = 5;
-
-		if (size <= mCapacity)
-			return;
-
-		mCapacity = size;
-
-		mData = (T*)realloc(mData, mCapacity*sizeof(T));
+		std::basic_string<T>::reserve(size);
 	}
 
 	template<typename T>
 	int TString<T>::Length() const
 	{
-		for (int i = 0; i < mCapacity; i++)
-		{
-			if (mData[i] == '\0')
-				return i;
-		}
-
-		return 0;
+		return std::basic_string<T>::length();
 	}
 
 	template<typename T>
 	int TString<T>::Capacity() const
 	{
-		return mCapacity;
+		return std::basic_string<T>::capacity();
 	}
 
 
 	template<typename T>
 	void TString<T>::Clear()
 	{
-		mData[0] = '\0';
+		std::basic_string<T>::clear();
 	}
 
 	template<typename T>
 	bool TString<T>::IsEmpty() const
 	{
-		return mData[0] == '\0';
+		return std::basic_string<T>::length() == 0;
 	}
 
 	template<typename T>
 	void TString<T>::Append(const TString& other)
 	{
-		int l1 = Length(), l2 = other.Length();
-		Reserve(l1 + l2 + 10);
-		for (int i = 0; i < l2; i++)
-			mData[i + l1] = other.mData[i];
-		mData[l1 + l2] = '\0';
+		std::basic_string<T>::operator+=(other);
 	}
 
 	template<typename T>
 	void TString<T>::Append(T symbol)
 	{
-		int l = Length();
-		Reserve(l + 2);
-		mData[l] = symbol;
-		mData[l + 1] = '\0';
+		std::basic_string<T>::operator+=(symbol);
 	}
 
 	template<typename T>
 	void TString<T>::Insert(const TString& other, int position /*= 0*/)
 	{
-		int l1 = Length(), l2 = other.Length();
-		Reserve(l1 + l2 + 10);
-		for (int i = l1; i >= position; i--)
-			mData[i + l2] = mData[i];
-
-		for (int i = 0; i < l2; i++)
-			mData[i + position] = other.mData[i];
-
-		mData[l1 + l2] = '\0';
+		std::basic_string<T>::insert(position, other);
 	}
 
 	template<typename T>
 	void TString<T>::Insert(T character, int position /*= 0*/)
 	{
-		int len = Length();
-		Reserve(len + 10);
-		for (int i = len; i > position; i--)
-			mData[i] = mData[i - 1];
-
-		mData[position] = character;
-		mData[len + 1] = '\0';
+		std::basic_string<T>::insert(std::basic_string<T>::begin() + position, character);
 	}
 
 	template<typename T>
 	void TString<T>::Erase(int begin, int end /*= -1*/)
 	{
-		int l = Length();
-		if (end < 0) end = l;
-
-		if (end < begin || begin == end)
-			return;
-
-		int d = end - begin;
-		for (int i = begin; i < l - d + 1; i++)
-			mData[i] = mData[i + d];
+		std::basic_string<T>::erase(begin, end - begin);
 	}
 
 	template<typename T>
@@ -829,37 +549,13 @@ namespace o2
 	template<typename T>
 	int TString<T>::Find(const TString& other, int startIdx /*= 0*/) const
 	{
-		int l1 = Length(), l2 = other.Length();
-		int lastFndStartIdx = startIdx - 1;
-		int fndIdx = 0;
-		for (int i = startIdx; i < l1; i++)
-		{
-			if (mData[i] == other.mData[fndIdx])
-			{
-				fndIdx++;
-				if (fndIdx == l2)
-					return lastFndStartIdx + 1;
-			}
-			else
-			{
-				fndIdx = 0;
-				lastFndStartIdx = i;
-			}
-		}
-
-		return -1;
+		return std::basic_string<T>::find(other, startIdx);
 	}
 
 	template<typename T>
 	int TString<T>::Find(T symbol, int startIdx /*= 0*/) const
 	{
-		int l = Length();
-
-		for (int i = 0; i < l; i++)
-			if (mData[i] == symbol)
-				return i;
-
-		return -1;
+		return std::basic_string<T>::find(symbol, startIdx);
 	}
 
 	template<typename T>
@@ -888,8 +584,7 @@ namespace o2
 
 			res++;
 			searchIdx = srch + l2;
-		}
-		while (searchIdx < l1);
+		} while (searchIdx < l1);
 
 		return res;
 	}
@@ -897,68 +592,26 @@ namespace o2
 	template<typename T>
 	int TString<T>::FindLast(const TString& other, int startIdx /*= -1*/) const
 	{
-		int l1 = Length(), l2 = other.Length();
-
-		if (startIdx < 0) startIdx = l1 - 1;
-
-		int fndIdx = l2 - 1;
-		for (int i = startIdx; i >= 0; i--)
-		{
-			if (mData[i] == other.mData[fndIdx])
-			{
-				fndIdx--;
-
-				if (fndIdx < 0)
-					return i;
-			}
-			else fndIdx = l2 - 1;
-		}
-
-		return -1;
+		return std::basic_string<T>::rfind(other, startIdx);
 
 	}
 
 	template<typename T>
 	bool TString<T>::EndsWith(const TString& other) const
 	{
-		int l1 = Length(), l2 = other.Length();
-		for (int i = 0; i < l1 && i < l2; i++)
-		{
-			if (mData[l1 - 1 - i] == other.mData[l2 - 1 - i] && i == l2 - 1)
-				return true;
-		}
-
-		return false;
+		return std::basic_string<T>::rfind(other) == Length() - other.Length();
 	}
 
 	template<typename T>
 	bool TString<T>::StartsWith(const TString& other) const
 	{
-		int l1 = Length(), l2 = other.Length();
-		for (int i = 0; i < l1 && i < l2; i++)
-		{
-			if (mData[i] != other.mData[i])
-				return false;
-		}
-
-		return true;
+		return std::basic_string<T>::find(other) == 0;
 	}
 
 	template<typename T>
 	TString<T> TString<T>::SubStr(int begin, int end /*= -1*/) const
 	{
-		if (end < 0)
-			end = Length();
-
-		int b = Math::Min(begin, end);
-		int e = Math::Max(begin, end);
-		int d = e - b;
-
-		TString res;
-		res.Reserve(d + 1);
-		memcpy(res.mData, mData + b, d*sizeof(T));
-		res.mData[d] = '\0';
-		return res;
+		return TString<T>(std::basic_string<T>::substr(begin, end - begin));
 	}
 
 	template<typename T>
@@ -1014,10 +667,10 @@ namespace o2
 		for (int i = 0; i < l1; i++)
 		{
 			bool breaking = true;
-			auto dataChar = mData[i];
+			auto dataChar = (*this)[i];
 			for (int j = 0; j < l2; j++)
 			{
-				if (dataChar == trimSymbols.mData[j])
+				if (dataChar == trimSymbols[j])
 				{
 					breaking = false;
 					break;
@@ -1041,10 +694,10 @@ namespace o2
 		for (int i = l1 - 1; i >= 0; i--)
 		{
 			bool breaking = true;
-			auto dataChar = mData[i];
+			auto dataChar = (*this)[i];
 			for (int j = 0; j < l2; j++)
 			{
-				if (dataChar == trimSymbols.mData[j])
+				if (dataChar == trimSymbols[j])
 				{
 					breaking = false;
 					break;
@@ -1100,77 +753,11 @@ namespace o2
 	template<typename T>
 	TString<T> TString<T>::Format(const TString format, va_list vlist)
 	{
-		int len = format.Length();
+		int maxSize = 2048;
+		char* buffer = mnew char[maxSize];
+		vsnprintf(buffer, maxSize, TString<char>(format).c_str(), vlist);
 
-		TString res;
-		res.Reserve(len * 2 + 100);
-
-		int resLen = 0;
-
-		auto appendStr = [&](const TString& str)
-		{
-			int l = str.Length();
-			res.Reserve(resLen + l + 15);
-			for (int i = 0; i < l; i++)
-				res.mData[resLen++] = str.mData[i];
-		};
-
-		for (int i = 0; i < len; i++)
-		{
-			if (resLen >= res.Capacity())
-				res.Reserve(resLen*2);
-
-			if (format.mData[i] == '%')
-			{
-				bool success = true;
-
-				if (format.mData[i + 1] == 'i')
-				{
-					appendStr((TString)va_arg(vlist, int));
-				}
-				else if (format.mData[i + 1] == 'f')
-				{
-					appendStr((TString)(float)va_arg(vlist, double));
-				}
-				else if (format.mData[i + 1] == 'd')
-				{
-					appendStr((TString)(float)va_arg(vlist, double));
-				}
-				else if (format.mData[i + 1] == 'u' && format.mData[i + 2] == 'i')
-				{
-					appendStr((TString)va_arg(vlist, UInt));
-					i++;
-				}
-				
-				else if (format.mData[i + 1] == 's' && format.mData[i + 2] == 'c')
-				{
-					appendStr(va_arg(vlist, char*));
-					i++;
-				}
-				else if (format.mData[i + 1] == 'c')
-				{
-					res.mData[resLen++] = va_arg(vlist, int);
-				}
-				else if (format.mData[i + 1] == 'b')
-				{
-					appendStr(va_arg(vlist, int) ? "true" : "false");
-					i++;
-				}
-				else
-				{
-					res.mData[resLen++] = format.mData[i];
-					continue;
-				}
-
-				i++;
-				continue;
-			}
-
-			res.mData[resLen++] = format.mData[i];
-		}
-
-		res.mData[resLen] = '\0';
-		return res;
+		return TString<T>(buffer);
 	}
 
 	template<typename T>
@@ -1201,15 +788,15 @@ namespace o2
 	T TString<T>::PopBack()
 	{
 		int l = Length();
-		T res = mData[l];
-		mData[l] = '\0';
+		T res = (*this)[l - 1];
+		(*this)[l] = '\0';
 		return res;
 	}
 
 	template<typename T>
 	T TString<T>::First() const
 	{
-		return mData[0];
+		return (*this)[0];
 	}
 
 	template<typename T>
@@ -1219,7 +806,7 @@ namespace o2
 		if (len == 0)
 			return T();
 
-		return mData[len - 1];
+		return (*this)[len - 1];
 	}
 
 	template<typename T>

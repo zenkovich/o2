@@ -3,7 +3,11 @@
 
 o2::Platform GetEnginePlatform()
 {
+#ifdef PLATFORM_WINDOWS
 	return o2::Platform::Windows;
+#elif defined PLATFORM_ANDROID
+    return o2::Platform::Android;
+#endif
 }
 
 const char* GetProjectPath()

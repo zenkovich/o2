@@ -2,13 +2,21 @@
 #include "Utils/Types/CommonTypes.h"
 
 // Enables memory managing
+#if defined DEBUG
 #define ENALBE_MEMORY_MANAGE true
+#else
+#define ENALBE_MEMORY_MANAGE false
+#endif
+
+// Enables render debugging
+#if defined DEBUG
+#define RENDER_DEBUG true
+#else
+#define RENDER_DEBUG false
+#endif
 
 // Describes that engine running as editor
 #define IS_EDITOR true
-
-// Enables render debugging
-#define RENDER_DEBUG true
 
 // Current working platform
 o2::Platform GetEnginePlatform();

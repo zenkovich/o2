@@ -41,7 +41,7 @@ namespace o2
 			ScissorInfo();
 			ScissorInfo(const RectI& rect, float beginDepth);
 
-			bool operator==(const ScissorInfo& other);
+			bool operator==(const ScissorInfo& other) const;
 		};
 		typedef Vector<ScissorInfo> ScissorInfosVec;
 
@@ -57,7 +57,7 @@ namespace o2
 			ScissorStackItem();
 			ScissorStackItem(const RectI& rect, const RectI& summaryRect, bool renderTarget = false);
 
-			bool operator==(const ScissorStackItem& other);
+			bool operator==(const ScissorStackItem& other) const;
 		};
 		typedef Vector<ScissorStackItem> StackScissorVec;
 

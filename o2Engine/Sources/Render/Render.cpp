@@ -541,7 +541,7 @@ namespace o2
 		mScissorRect(rect), mBeginDepth(beginDepth), mEndDepth(beginDepth)
 	{}
 
-	bool Render::ScissorInfo::operator==(const ScissorInfo& other)
+	bool Render::ScissorInfo::operator==(const ScissorInfo& other) const
 	{
 		return Math::Equals(mBeginDepth, other.mBeginDepth) && Math::Equals(mEndDepth, other.mEndDepth) &&
 			mScissorRect == other.mScissorRect;
@@ -554,7 +554,7 @@ namespace o2
 		mScrissorRect(rect), mSummaryScissorRect(summaryRect), mRenderTarget(renderTarget)
 	{}
 
-	bool Render::ScissorStackItem::operator==(const ScissorStackItem& other)
+	bool Render::ScissorStackItem::operator==(const ScissorStackItem& other) const
 	{
 		return mScrissorRect == other.mScrissorRect;
 	}

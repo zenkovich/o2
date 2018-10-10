@@ -10,11 +10,11 @@ namespace o2
 	template<typename T>
 	class Vec2;
 
-	typedef Vec2<float> Vec2F;
-	typedef Vec2<int>   Vec2I;
-
 	template<typename T>
 	class Rect;
+
+	typedef Vec2<float> Vec2F;
+	typedef Vec2<int>   Vec2I;
 
 	typedef Rect<float> RectF;
 	typedef Rect<int>   RectI;
@@ -28,7 +28,7 @@ namespace o2
 	typedef Border<int>   BorderI;
 
 
-#define TStringEnableType \
+#define CheckCharacterType \
 	typename X = typename std::enable_if<std::is_same<T2, char>::value || \
 	                                     std::is_same<T2, wchar_t>::value || \
 		                                 std::is_same<T2, const char>::value || \
@@ -38,25 +38,28 @@ namespace o2
 	// Template character string
 	// -------------------------
 	template<typename T>
-	class TString
+	class TString: public std::basic_string<T>
 	{
-		T*  mData;     // Data array
-		int mCapacity; // Data array capacity
-
 	public:
 		// Default constructor
 		TString();
 
-		// Copy-constructor from string with another characters type
-		template<typename T2, TStringEnableType>
-		TString(const TString<T2>& other);
+		// Constructor from characters array
+		TString(const T* data);
 
 		// Constructor from characters array
-		template<typename T2, TStringEnableType>
-		TString(T2* data);
+		template<typename T2, CheckCharacterType>
+		TString(const T2* data);
 
 		// Copy-constructor
 		TString(const TString& other);
+
+		// Copy-constructor from string with another characters type
+		template<typename T2, CheckCharacterType>
+		TString(const TString<T2>& other);
+
+		// Constructor from basic string
+		TString(const std::basic_string<T>& data);
 
 		// Explicit constructor from boolean value
 		explicit TString(bool value);
@@ -98,18 +101,18 @@ namespace o2
 		~TString();
 
 		// Copy-operator from string with another characters type
-		template<typename T2, TStringEnableType>
+		template<typename T2, CheckCharacterType>
 		TString& operator=(const TString<T2>& other);
 
 		// Copy-operator
 		TString& operator=(const TString& other);
 
 		// Assign operator from characters array
-		template<typename T2, TStringEnableType>
-		TString& operator=(T2* data);
+		template<typename T2, CheckCharacterType>
+		TString& operator=(const T2* data);
 
 		// Cast to characters array
-		operator T*() const;
+		operator const T*() const;
 
 		// Cast operator to boolean
 		explicit operator bool() const;
@@ -148,12 +151,12 @@ namespace o2
 		explicit operator Color4() const;
 
 		// Check equal operator to characters array
-		template<typename T2, TStringEnableType>
-		bool operator==(T2* data) const;
+		template<typename T2, CheckCharacterType>
+		bool operator==(const T2* data) const;
 
 		// Check not equal operator to characters array
-		template<typename T2, TStringEnableType>
-		bool operator!=(T2* data) const;
+		template<typename T2, CheckCharacterType>
+		bool operator!=(const T2* data) const;
 
 		// Check equal operator
 		bool operator==(const TString& other) const;
@@ -176,11 +179,33 @@ namespace o2
 		// Plus and assign operator - adds string at the end
 		TString& operator+=(T symbol);
 
+		// Plus operator - returns sum string
+		template<typename T2, CheckCharacterType>
+		TString operator+(T2 symbol) const;
+
+		// Plus and assign operator - adds string at the end
+		template<typename T2, CheckCharacterType>
+		TString& operator+=(T2 symbol);
+
+		// Plus operator - returns sum string
+		TString operator+(const T* str) const;
+
+		// Plus and assign operator - adds string at the end
+		TString& operator+=(const T* str);
+
+		// Plus operator - returns sum string
+		template<typename T2, CheckCharacterType>
+		TString operator+(const T2* str) const;
+
+		// Plus and assign operator - adds string at the end
+		template<typename T2, CheckCharacterType>
+		TString& operator+=(const T2* str);
+
 		// Symbol access operator
 		T& operator[](int idx);
 
 		// Return data
-		T* Data() const;
+		const T* Data() const;
 
 		// Returns length of string
 		int Length() const;
@@ -290,38 +315,10 @@ namespace o2
 		// Removing specified symbols at end of string
 		TString TrimedEnd(const TString& trimSymbols = " ");
 
-		// Returns formatted string, like printf()
-		// Format sample: ("some text %i and more %s inserted things %vf", 4, "asd", Vec2F(3, 3))
-		// Supports type parameters:
-		// %i - int
-		// %f - float
-		// %d - double
-		// %s - char*
-		// %b - bool
-		// %c - char
-		// %vf - Vec2F
-		// %vi - Vec2I
-		// %rf - RectF
-		// %ri - RectI
-		// %cl - Color4
-		// %ts - TString
+		// Returns formatted string, like sprintf()
 		static TString Format(TString format, ...);
 
-		// Returns formatted string, like printf()
-		// Format sample: ("some text %i and more %s inserted things %vf", 4, "asd", Vec2F(3, 3))
-		// Supports type parameters:
-		// %i - int
-		// %f - float
-		// %d - double
-		// %s - char*
-		// %b - bool
-		// %c - char
-		// %vf - Vec2F
-		// %vi - Vec2I
-		// %rf - RectF
-		// %ri - RectI
-		// %cl - Color4
-		// %ts - TString
+		// Returns formatted string, like sprintf()
 		static TString Format(TString format, va_list vlist);
 	};
 

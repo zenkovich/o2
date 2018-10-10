@@ -194,7 +194,8 @@ namespace o2
 			if (cursor.id == id)
 				return &cursor;
 
-		return nullptr;
+		static Cursor dummy;
+		return &dummy;
 	}
 
 	const Input::CursorsVec& Input::GetCursors() const
@@ -438,7 +439,7 @@ namespace o2
 	}
 
 
-	bool Input::Cursor::operator==(const Cursor& other)
+	bool Input::Cursor::operator==(const Cursor& other) const
 	{
 		return Math::Equals(position, other.position) && Math::Equals(delta, other.delta) && id == other.id &&
 			Math::Equals(pressedTime, other.pressedTime);
