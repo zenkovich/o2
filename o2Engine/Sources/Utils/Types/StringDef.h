@@ -1,11 +1,5 @@
 #pragma once
 
-#undef _SECURE_SCL
-#define _SECURE_SCL 0
-
-#undef _HAS_ITERATOR_DEBUGGING
-#define _HAS_ITERATOR_DEBUGGING 0
-
 #include <string>
 #include <cstdarg>
 #include "Utils/Types/Containers/Vector.h"
@@ -16,11 +10,11 @@ namespace o2
 	template<typename T>
 	class Vec2;
 
-	typedef Vec2<float> Vec2F;
-	typedef Vec2<int>   Vec2I;
-
 	template<typename T>
 	class Rect;
+
+	typedef Vec2<float> Vec2F;
+	typedef Vec2<int>   Vec2I;
 
 	typedef Rect<float> RectF;
 	typedef Rect<int>   RectI;

@@ -45,16 +45,16 @@ namespace o2
 			Iterator& operator-=(int offs);
 
 			// Increment operator
-			Iterator& operator++();    
+			Iterator& operator++();
 
 			// Post increment operator
-			Iterator  operator++(int); 
+			Iterator  operator++(int);
 
 			// Decrement operator
-			Iterator& operator--();    
+			Iterator& operator--();
 
 			// Post decrement operator
-			Iterator  operator--(int); 
+			Iterator  operator--(int);
 
 			// Greater check operator
 			bool operator>(const Iterator& itr) const;
@@ -117,16 +117,16 @@ namespace o2
 			ConstIterator& operator-=(int offs);
 
 			// Increment operator
-			ConstIterator& operator++();   
+			ConstIterator& operator++();
 
 			// Post increment operator
-			ConstIterator  operator++(int); 
+			ConstIterator  operator++(int);
 
 			// Decrement operator
-			ConstIterator& operator--();    
+			ConstIterator& operator--();
 
 			// Post decrement operator
-			ConstIterator  operator--(int); 
+			ConstIterator  operator--(int);
 
 			// Greater check operator
 			bool operator>(const ConstIterator& itr) const;
@@ -251,7 +251,10 @@ namespace o2
 		bool TryGetValue(const _key_type& key, _value_type& output) const;
 
 		// Returns value reference by index
-		TKeyValue& GetIdx(int index) const;
+		const TKeyValue& GetIdx(int index) const;
+
+		// Returns value reference by index
+		TKeyValue& GetIdx(int index);
 
 		// Returns count of elements
 		int Count() const;
@@ -267,7 +270,7 @@ namespace o2
 
 		// Sorts element by predicate
 		void Sort(const Function<bool(const TKeyValue&, const TKeyValue&)>& pred);
-		
+
 		// Invokes function for all elements
 		void ForEach(const Function<void(TKeyValue&)>& func);
 
@@ -327,13 +330,12 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::Iterator::Iterator(Dictionary* dictionary, int index /*= 0*/) :
 		mDictionary(dictionary), mPairIt(mDictionary->mPairs.Begin() + index)
-	{
-	}
+	{}
 
 	template<typename _key_type, typename _value_type>
 	int Dictionary<_key_type, _value_type>::Iterator::Index() const
 	{
-		return mPairIt.Index();
+		return mPairIt - mDictionary->mPairs.Begin();
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -437,13 +439,13 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	_key_type& Dictionary<_key_type, _value_type>::Iterator::Key()
 	{
-		return mPairIt.Value().mKey;
+		return mPairIt->mKey;
 	}
 
 	template<typename _key_type, typename _value_type>
 	_value_type& Dictionary<_key_type, _value_type>::Iterator::Value()
 	{
-		return mPairIt.Value().mValue;
+		return mPairIt->mValue;
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -459,8 +461,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	Dictionary<_key_type, _value_type>::ConstIterator::ConstIterator(const Dictionary* dictionary, int index /*= 0*/) :
 		mDictionary(dictionary), mPairIt(mDictionary->mPairs.Begin() + index)
-	{
-	}
+	{}
 
 	template<typename _key_type, typename _value_type>
 	int Dictionary<_key_type, _value_type>::ConstIterator::Index() const
@@ -569,13 +570,13 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	const _key_type& Dictionary<_key_type, _value_type>::ConstIterator::Key() const
 	{
-		return mPairIt.Value().mKey;
+		return mPairIt->mKey;
 	}
 
 	template<typename _key_type, typename _value_type>
 	const _value_type& Dictionary<_key_type, _value_type>::ConstIterator::Value() const
 	{
-		return mPairIt.Value().mValue;
+		return mPairIt->mValue;
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -585,7 +586,7 @@ namespace o2
 	}
 
 #pragma endregion Dictionary::ConstIterator implementation
-	
+
 #pragma region Dictionary implementation
 
 	template<typename _key_type, typename _value_type>
@@ -679,7 +680,7 @@ namespace o2
 		{
 			if (kv->mKey == key)
 			{
-				idx = kv.Index();
+				idx = kv - mPairs.Begin();
 				break;
 			}
 		}
@@ -815,7 +816,13 @@ namespace o2
 
 
 	template<typename _key_type, typename _value_type>
-	typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::GetIdx(int index) const
+	const typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::GetIdx(int index) const
+	{
+		return mPairs.Get(index);
+	}
+
+	template<typename _key_type, typename _value_type>
+	typename Dictionary<_key_type, _value_type>::TKeyValue& Dictionary<_key_type, _value_type>::GetIdx(int index)
 	{
 		return mPairs.Get(index);
 	}

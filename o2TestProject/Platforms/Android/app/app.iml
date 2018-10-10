@@ -124,68 +124,68 @@
     <content url="file://$MODULE_DIR$/../../../../o2Engine/Sources/Utils/Types">
       <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/Sources/Utils/Types" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/autofit">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/autofit" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/autofit">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/autofit" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/base">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/base" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/base">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/base" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/bdf">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/bdf" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/bdf">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/bdf" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/bzip2">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/bzip2" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/bzip2">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/bzip2" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/cache">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/cache" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/cache">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/cache" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/cff">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/cff" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/cff">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/cff" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/cid">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/cid" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/cid">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/cid" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/gzip">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/gzip" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/gzip">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/gzip" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/lzw">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/lzw" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/lzw">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/lzw" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/pcf">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/pcf" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/pcf">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/pcf" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/pfr">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/pfr" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/pfr">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/pfr" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/psaux">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/psaux" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/psaux">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/psaux" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/pshinter">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/pshinter" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/pshinter">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/pshinter" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/psnames">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/psnames" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/psnames">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/psnames" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/raster">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/raster" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/raster">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/raster" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/sfnt">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/sfnt" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/sfnt">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/sfnt" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/smooth">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/smooth" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/smooth">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/smooth" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/truetype">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/truetype" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/truetype">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/truetype" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/type1">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/type1" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/type1">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/type1" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/type42">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/type42" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/type42">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/type42" isTestSource="false" />
     </content>
-    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/winfonts">
-      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/freetype/src/winfonts" isTestSource="false" />
+    <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/winfonts">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/FreeType/src/winfonts" isTestSource="false" />
     </content>
     <content url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/libpng">
       <sourceFolder url="file://$MODULE_DIR$/../../../../o2Engine/dependencies/libpng" isTestSource="false" />
@@ -230,14 +230,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/armV7/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/armV7/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/armV7/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmV7/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmV7/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmV7/assets" type="java-test-resource" />
@@ -246,6 +238,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmV7/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmV7/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/androidTestArmV7/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/testArmV7/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/release/res" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/release/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/release/assets" type="java-resource" />
@@ -271,14 +271,6 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/jni" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/rs" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/shaders" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/res" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/assets" type="java-test-resource" />
@@ -287,10 +279,17 @@
       <sourceFolder url="file://$MODULE_DIR$/src/test/jni" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/rs" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/shaders" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/res" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/assets" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/aidl" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/java" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/jni" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/rs" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src/androidTest/shaders" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/assets" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/blame" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/build-info" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/builds" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/check-manifest" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/classes" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/cmake" />
@@ -302,6 +301,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/instant-run-resources" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaPrecompile" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jniLibs" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/lint" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifest-checker" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/manifests" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/prebuild" />

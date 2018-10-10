@@ -22,7 +22,10 @@ namespace o2
 		const _type& operator[](int idx) const;
 
 		// Returns value at index
-		virtual _type& Get(int idx) const = 0;
+		virtual const _type& Get(int idx) const = 0;
+
+		// Returns value at index
+		virtual _type& Get(int idx) = 0;
 
 		// Sets value at index
 		virtual void Set(int idx, const _type& value) = 0;
@@ -53,13 +56,13 @@ namespace o2
 		virtual _type PopBack() = 0;
 
 		// Removes element at position
-		virtual bool RemoveAt(int idx) = 0;
+		virtual void RemoveAt(int idx) = 0;
 
 		// Removes elements in range
-		virtual bool RemoveRange(int begin, int end) = 0;
+		virtual void RemoveRange(int begin, int end) = 0;
 
 		// Removes equal array element
-		virtual bool Remove(const _type& value) = 0;
+		virtual void Remove(const _type& value) = 0;
 
 		// Removes all elements that pass function
 		virtual void RemoveAll(const Function<bool(const _type&)>& match);
@@ -228,7 +231,7 @@ namespace o2
 		int count = Count();
 		for (int i = 0; i < count; i++)
 		{
-			_type& val = Get(i);
+			const _type& val = Get(i);
 			if (match(val))
 				return val;
 		}
@@ -262,7 +265,7 @@ namespace o2
 		int count = Count();
 		for (int i = 0; i < count; i++)
 		{
-			_type& val = Get(i);
+			const _type& val = Get(i);
 			if (match(val))
 				return val;
 		}
@@ -289,7 +292,7 @@ namespace o2
 		int count = Count();
 		for (int i = count - 1; i >= 0; i--)
 		{
-			_type& val = Get(i);
+			const _type& val = Get(i);
 			if (match(val))
 				return val;
 		}
@@ -318,12 +321,12 @@ namespace o2
 		if (count == 0)
 			return _type();
 
-		_type& res = Get(0);
+		const _type& res = Get(0);
 		_sel_type minSel = selector(res);
 
 		for (int i = 1; i < count; i++)
 		{
-			_type& itVal = Get(i);
+			const _type& itVal = Get(i);
 			_sel_type itSel = selector(itVal);
 
 			if (itSel < minSel)
@@ -369,12 +372,12 @@ namespace o2
 		if (count == 0)
 			return _type();
 
-		_type* res = &Get(0);
+		const _type* res = &Get(0);
 		_sel_type minSel = selector(*res);
 
 		for (int i = 1; i < count; i++)
 		{
-			_type* itVal = &Get(i);
+			const _type* itVal = &Get(i);
 			_sel_type itSel = selector(*itVal);
 
 			if (itSel > minSel)
@@ -460,9 +463,7 @@ namespace o2
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
-		{
 			func(Get(i));
-		}
 	}
 
 	template<typename _type>

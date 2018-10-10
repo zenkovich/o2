@@ -177,7 +177,7 @@ namespace o2
 			Cursor(const Vec2F& position = Vec2F(), CursorId id = 0);
 
 			// Equals operator
-			bool operator==(const Cursor& other);
+			bool operator==(const Cursor& other) const;
 		};
 
 		// ---------------------

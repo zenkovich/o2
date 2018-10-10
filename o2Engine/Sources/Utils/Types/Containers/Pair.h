@@ -21,12 +21,12 @@ namespace o2
 		Pair(const Pair& otherPair) :
 			first(otherPair.first), second(otherPair.second) {}
 
-		bool operator==(const Pair& otherPair)
+		bool operator==(const Pair& otherPair) const
 		{
 			return first == otherPair.first && second == otherPair.second;
 		}
 
-		bool operator!=(const Pair& otherPair)
+		bool operator!=(const Pair& otherPair) const
 		{
 			return first != otherPair.first || second != otherPair.second;
 		}

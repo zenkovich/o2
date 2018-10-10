@@ -27,6 +27,7 @@
 #include "UI/Window.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/Debug/Log/LogStream.h"
+#include "Utils/System/Time/Timer.h"
 
 #undef CreateWindow
 
@@ -106,8 +107,12 @@ namespace o2
 
 	void UIManager::LoadStyle(const String& path)
 	{
+		Timer t;
+
 		DataNode styleData;
 		styleData.LoadFromFile(o2Assets.GetDataPath() + path);
+
+		o2Debug.Log("Loaded file " + path + " for " + String(t.GetDeltaTime()) + "sec");
 
 		for (auto st : mStyleSamples)
 			delete st;
@@ -118,6 +123,8 @@ namespace o2
 
 		for (auto styleSample : mStyleSamples)
 			styleSample->Hide(true);
+
+		o2Debug.Log("Loaded styles for " + String(t.GetDeltaTime()) + "sec");
 	}
 
 	void UIManager::SaveStyle(const String& path)
