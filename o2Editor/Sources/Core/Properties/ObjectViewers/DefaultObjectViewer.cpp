@@ -6,18 +6,34 @@
 namespace Editor
 {
 
-	void DefaultObjectViewer::InitializeControls(UIVerticalLayout* layout, const Type& objectType,
-												 const OnChangeCompletedFunc& onChangeCompleted,
-												 const OnChangedFunc& onChanged)
+	UIWidget* DefaultObjectViewer::InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
+													  const OnChangedFunc& onChanged)
 	{
-		mSpecializedType = &objectType;
-		o2EditorProperties.BuildObjectProperties(layout, &objectType, mFieldProperties, "", onChangeCompleted, onChanged);
+		mFieldsPath = path;
+		mOnFieldChanged = onChanged;
+		mOnFieldChangeCompleted = onChangeCompleted;
 	}
 
 	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
 	{
-		if (mSpecializedType)
+		if (targetObjets.IsEmpty())
+			return;
+
+		const Type* objectsType = (GetProxy<IObject*>(targetObjets[0]->first))->GetType();
+
+		if (mRealObjectType == &objectsType)
+			return;
+
+		mRealObjectType = &objectsType;
+
+		if (mRealObjectType)
+			o2EditorProperties.FreeProperties(mFieldProperties);
+
+		if (mRealObjectType)
 		{
+			o2EditorProperties.BuildObjectProperties(layout, &mRealObjectType, mFieldProperties, mFieldsPath,
+													 mOnFieldChangeCompleted, mOnFieldChanged);
+
 			mFieldProperties.Set(targetObjets.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{

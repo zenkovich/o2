@@ -3,24 +3,23 @@
 
 namespace Editor
 {
-	void IObjectPropertiesViewer::InitializeControls(UIVerticalLayout* layout, const Type& objectType,
-													 const OnChangeCompletedFunc& onChangeCompleted,
-													 const OnChangedFunc& onChanged)
+	UIWidget* IObjectPropertiesViewer::InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
+														  const OnChangedFunc& onChanged)
 	{
-		mSpecializedType = &objectType;
+		return mViewWidget;
 	}
 
 	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets)
 	{}
 
-	const Type& IObjectPropertiesViewer::GetSpecializedObjectType() const
-	{
-		return *mSpecializedType;
-	}
-
 	const Type* IObjectPropertiesViewer::GetViewingObjectType() const
 	{
 		return nullptr;
+	}
+
+	UIWidget* IObjectPropertiesViewer::GetViewWidget() const
+	{
+		return mViewWidget;
 	}
 
 }

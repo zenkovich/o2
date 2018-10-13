@@ -22,7 +22,7 @@ namespace Editor
 
 	Properties::Properties()
 	{
-		InitializePropertiesFields();
+		InitializeAvailablePropertiesFields();
 
 		mOnPropertyCompletedChangingUndoCreateDelegate = Func<EditorApplication, void, const String&, const Vector<DataNode>&, const Vector<DataNode>&>(
 			&o2EditorApplication, &EditorApplication::DoneActorPropertyChangeAction);
@@ -34,7 +34,7 @@ namespace Editor
 			delete field;
 	}
 
-	void Properties::InitializePropertiesFields()
+	void Properties::InitializeAvailablePropertiesFields()
 	{
 		auto a = TypeOf(IAssetProperty).GetDerivedTypes();
 		auto b = TypeOf(IPropertyField).GetDerivedTypes();
@@ -49,6 +49,13 @@ namespace Editor
 			auto sample = (IPropertyField*)x->CreateSample();
 			mAvailablePropertiesFields.Add(sample);
 		}
+	}
+
+	void Properties::InitializeAvailableObjectPropertiesViewers()
+	{
+		auto availableTypes = TypeOf(IObjectPropertiesViewer).GetDerivedTypes();
+
+		availableTypes.rem
 	}
 
 	IPropertyField* Properties::BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo,
@@ -363,6 +370,11 @@ namespace Editor
 		fieldProperty->SetCaption(name);
 
 		return fieldProperty;
+	}
+
+	IObjectPropertiesViewer* Properties::GetObjectViewer(const Type* type)
+	{
+
 	}
 
 	String Properties::MakeSmartFieldName(const String& fieldName)

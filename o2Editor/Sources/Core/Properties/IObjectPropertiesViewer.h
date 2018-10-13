@@ -20,7 +20,7 @@ namespace Editor
 	// Object properties viewer interface. Used in IObjectProperty and IObjectPtrProperty
 	// Override this class to create new object properties viewer
 	// ----------------------------------------------------------------------------------
-	class IObjectPropertiesViewer: public IObject
+	class IObjectPropertiesViewer : public IObject
 	{
 	public:
 		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
@@ -30,23 +30,22 @@ namespace Editor
 
 	public:
 		// Initializes controls and properties inside layout, with specialized type and change delegates
-		virtual void InitializeControls(UIVerticalLayout* layout, const Type& objectType, 
-										const OnChangeCompletedFunc& onChangeCompleted, 
-										const OnChangedFunc& onChanged);
+		virtual UIWidget* InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
+											 const OnChangedFunc& onChanged);
 
 		// Refreshing controls and properties by target objects
 		virtual void Refresh(const TargetsVec& targetObjets);
 
-		// Returns specialized viewing object type
-		virtual const Type& GetSpecializedObjectType() const;
-
 		// Returns viewing objects base type
 		virtual const Type* GetViewingObjectType() const;
+
+		// Returns view widget
+		UIWidget* GetViewWidget() const;
 
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
-		const Type* mSpecializedType = nullptr; // Specialized viewing object type
+		UIWidget* mViewWidget = nullptr;      // View layout
 
 		// Sets value via proxy
 		template<typename T>

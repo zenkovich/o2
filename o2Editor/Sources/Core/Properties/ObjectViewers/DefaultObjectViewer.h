@@ -12,9 +12,8 @@ namespace Editor
 	{
 	public:
 		// Initializes controls and properties inside
-		void InitializeControls(UIVerticalLayout* layout, const Type& objectType,
-								const OnChangeCompletedFunc& onChangeCompleted,
-								const OnChangedFunc& onChanged) override;
+		UIWidget* InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
+									 const OnChangedFunc& onChanged) override;
 
 		// Refreshing controls and properties by target objects
 		void Refresh(const TargetsVec& targetObjets) override;
@@ -25,7 +24,12 @@ namespace Editor
 		IOBJECT(DefaultObjectViewer);
 
 	private:
-		FieldPropertiesInfo mFieldProperties; // Field properties information
+		OnChangeCompletedFunc mOnFieldChangeCompleted;
+		OnChangedFunc         mOnFieldChanged;
+		String                mFieldsPath;
+
+		const Type*           mRealObjectType = nullptr; // Specialized viewing object type
+		FieldPropertiesInfo   mFieldProperties; // Field properties information
 	};
 }
 

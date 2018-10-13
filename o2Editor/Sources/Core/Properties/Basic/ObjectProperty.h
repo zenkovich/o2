@@ -13,6 +13,8 @@ namespace o2
 
 namespace Editor
 {
+	class IObjectPropertiesViewer;
+
 	// ----------------------
 	// Editor object property
 	// ----------------------
@@ -67,13 +69,13 @@ namespace Editor
 		IOBJECT(ObjectProperty);
 
 	protected:
-		const Type*         mObjectType = nullptr;          // Type of target objects
+		const Type*              mObjectType = nullptr;             // Type of target objects
+							     								    
+		bool                     mPropertiesInitialized = false;    // True when properties were built and initialized
+		TargetsVec               mTargetObjects;                    // Target objects
+		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
-		bool                mPropertiesInitialized = false; // True when properties were built and initialized
-		TargetsVec          mTargetObjects;                 // Target objects
-		FieldPropertiesInfo mFieldProperties;               // Field properties information
-
-		UISpoiler*          mSpoiler = nullptr;             // Properties spoiler
+		UISpoiler*               mSpoiler = nullptr;                // Properties spoiler
 
 	protected:
 		// Copies data of actor from other to this

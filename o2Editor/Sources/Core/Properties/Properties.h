@@ -20,6 +20,8 @@ namespace o2
 
 namespace Editor
 {
+	class IObjectPropertiesViewer;
+
 	// ------------------------------------------------------------------------------
 	// Editor properties building utility. Can cache, build and reuse property fields
 	// ------------------------------------------------------------------------------
@@ -106,6 +108,9 @@ namespace Editor
 										  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 										  const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
+		// Returns object properties viewer
+		IObjectPropertiesViewer* GetObjectViewer(const Type* type);
+
 		// Makes smarter field name
 		static String MakeSmartFieldName(const String& fieldName);
 
@@ -113,18 +118,27 @@ namespace Editor
 		typedef Vector<IPropertyField*> PropertiesFieldsVec;
 		typedef Dictionary<const Type*, PropertiesFieldsVec> TypePropertyDict;
 
+		typedef Vector<IObjectPropertiesViewer*> IObjectPropertiesViewersVec;
+		typedef Dictionary<const Type*, IObjectPropertiesViewersVec> TypeObjectPropertiesViewerDict;
+
 		int  mPropertyFieldsPoolStep = 5; // Field properties pools resize step						    
 		bool mPrivateVisible = false;     // Is private fields visible
 
-		PropertiesFieldsVec mAvailablePropertiesFields;  // Available properties fields
+		PropertiesFieldsVec         mAvailablePropertiesFields;        // Available properties fields samples
+		IObjectPropertiesViewersVec mAvailableObjectPropertiesViewers; // Available object properties viewers samples
 
 		TypePropertyDict mPropertiesPool; // Pool of properties, grouped by property type
+
+		TypeObjectPropertiesViewerDict mObjectPropertiesViewersPool; // Pool of object properties viewers, grouped by object type
 
 		static IPropertyField::OnChangeCompletedFunc mOnPropertyCompletedChangingUndoCreateDelegate;
 
 	protected:
-		// Initializes available properties fields and pools
-		void InitializePropertiesFields();
+		// Initializes available properties fields samples
+		void InitializeAvailablePropertiesFields();
+
+		// Initializes available objectproperties viewers samples
+		void InitializeAvailableObjectPropertiesViewers();
 
 		// Builds layout viewer by fields without filtering
 		void BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
