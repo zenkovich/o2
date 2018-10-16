@@ -110,11 +110,6 @@ namespace Editor
 		return mSpoiler->IsExpanded();
 	}
 
-	const FieldPropertiesInfo& ObjectProperty::GetPropertiesInfo() const
-	{
-		return mFieldProperties;
-	}
-
 	void ObjectProperty::OnExpand()
 	{
 		if (mPropertiesInitialized)

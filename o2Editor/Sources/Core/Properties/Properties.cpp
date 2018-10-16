@@ -24,6 +24,7 @@ namespace Editor
 	Properties::Properties()
 	{
 		InitializeAvailablePropertiesFields();
+		InitializeAvailableObjectPropertiesViewers();
 
 		mOnPropertyCompletedChangingUndoCreateDelegate = Func<EditorApplication, void, const String&, const Vector<DataNode>&, const Vector<DataNode>&>(
 			&o2EditorApplication, &EditorApplication::DoneActorPropertyChangeAction);

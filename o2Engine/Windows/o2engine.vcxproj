@@ -58,7 +58,7 @@
       <SDLCheck>true</SDLCheck>
       <BrowseInformation>false</BrowseInformation>
       <AdditionalIncludeDirectories>$(ProjectDir)..\;$(ProjectDir)..\Sources\;$(ProjectDir)..\Dependencies\;$(ProjectDir)..\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;PLATFORM_WINDOWS;_SECURE_SCL 0;_HAS_ITERATOR_DEBUGGING 0</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;PLATFORM_WINDOWS</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <MinimalRebuild>true</MinimalRebuild>

@@ -63,9 +63,6 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		// Returns fields properties info
-		const FieldPropertiesInfo& GetPropertiesInfo() const;
-
 		IOBJECT(ObjectProperty);
 
 	protected:
@@ -120,7 +117,6 @@ CLASS_METHODS_META(Editor::ObjectProperty)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(const FieldPropertiesInfo&, GetPropertiesInfo);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnExpand);
