@@ -12,6 +12,9 @@ namespace Editor
 		mFieldsPath = path;
 		mOnFieldChanged = onChanged;
 		mOnFieldChangeCompleted = onChangeCompleted;
+		
+		mViewWidget = mnew UIVerticalLayout();
+		return mViewWidget;
 	}
 
 	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
@@ -19,20 +22,20 @@ namespace Editor
 		if (targetObjets.IsEmpty())
 			return;
 
-		const Type* objectsType = (GetProxy<IObject*>(targetObjets[0]->first))->GetType();
+		const Type* objectsType = &(GetProxy<IObject*>(targetObjets[0].first))->GetType();
 
-		if (mRealObjectType == &objectsType)
+		if (mRealObjectType == objectsType)
 			return;
 
-		mRealObjectType = &objectsType;
+		mRealObjectType = objectsType;
 
 		if (mRealObjectType)
 			o2EditorProperties.FreeProperties(mFieldProperties);
 
 		if (mRealObjectType)
 		{
-			o2EditorProperties.BuildObjectProperties(layout, &mRealObjectType, mFieldProperties, mFieldsPath,
-													 mOnFieldChangeCompleted, mOnFieldChanged);
+			o2EditorProperties.BuildObjectProperties(dynamic_cast<UIVerticalLayout*>(mViewWidget), mRealObjectType, 
+													 mFieldProperties, mFieldsPath, mOnFieldChangeCompleted, mOnFieldChanged);
 
 			mFieldProperties.Set(targetObjets.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)

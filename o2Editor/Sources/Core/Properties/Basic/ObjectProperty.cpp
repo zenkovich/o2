@@ -4,6 +4,7 @@
 #include "Core/Properties/Properties.h"
 #include "UI/Spoiler.h"
 #include "UI/UIManager.h"
+#include "Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;
 
@@ -57,8 +58,11 @@ namespace Editor
 
 	void ObjectProperty::Refresh()
 	{
-		if (mObjectPropertiesViewer)
-			mObjectPropertiesViewer->Refresh(mTargetObjects);
+		if (mSpoiler->IsExpanded())
+		{
+			if (mObjectPropertiesViewer)
+				mObjectPropertiesViewer->Refresh(mTargetObjects);
+		}
 	}
 
 	const Type* ObjectProperty::GetFieldType() const
@@ -122,7 +126,14 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		o2EditorProperties.BuildObjectProperties(mSpoiler, mObjectType, mFieldProperties, "", onChangeCompletedFunc, onChanged);
+		if (!mObjectPropertiesViewer)
+		{
+			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType);
+			mObjectPropertiesViewer->InitializeControls(mValuesPath, onChangeCompletedFunc, onChanged);
+			mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
+		}
+
+		mObjectPropertiesViewer->Refresh(mTargetObjects);
 
 		mPropertiesInitialized = true;
 	}

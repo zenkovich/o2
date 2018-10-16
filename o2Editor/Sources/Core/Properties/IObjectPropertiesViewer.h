@@ -79,15 +79,15 @@ CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 {
-	PROTECTED_FIELD(mSpecializedType);
+	PROTECTED_FIELD(mViewWidget);
 }
 END_META;
 CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, InitializeControls, UIVerticalLayout*, const Type&, const OnChangeCompletedFunc&, const OnChangedFunc&);
+	PUBLIC_FUNCTION(UIWidget*, InitializeControls, const String&, const OnChangeCompletedFunc&, const OnChangedFunc&);
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
-	PUBLIC_FUNCTION(const Type&, GetSpecializedObjectType);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_FUNCTION(UIWidget*, GetViewWidget);
 }
 END_META;

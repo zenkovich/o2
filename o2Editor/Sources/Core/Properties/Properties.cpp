@@ -7,6 +7,7 @@
 #include "Basic/ObjectPtrProperty.h"
 #include "Basic/VectorProperty.h"
 #include "Core/EditorApplication.h"
+#include "Core/Properties/IObjectPropertiesViewer.h"
 #include "UI/Label.h"
 #include "UI/Spoiler.h"
 #include "UI/UIManager.h"
@@ -54,8 +55,13 @@ namespace Editor
 	void Properties::InitializeAvailableObjectPropertiesViewers()
 	{
 		auto availableTypes = TypeOf(IObjectPropertiesViewer).GetDerivedTypes();
+		availableTypes.Remove(&TypeOf(IObjectPropertiesViewer));
 
-		availableTypes.rem
+		for (auto x : availableTypes)
+		{
+			auto sample = (IObjectPropertiesViewer*)x->CreateSample();
+			mAvailableObjectPropertiesViewers.Add(sample);
+		}
 	}
 
 	IPropertyField* Properties::BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo,
@@ -372,9 +378,33 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IObjectPropertiesViewer* Properties::GetObjectViewer(const Type* type)
+	IObjectPropertiesViewer* Properties::CreateObjectViewer(const Type* type)
 	{
+		auto sample = mAvailableObjectPropertiesViewers.FindMatch([=](IObjectPropertiesViewer* x) {
+			return type->IsBasedOn(*x->GetViewingObjectType()); });
 
+		if (!sample)
+		{
+			o2Debug.LogWarning("Can't create object properties viewer for type " + type->GetName());
+			return nullptr;
+		}
+
+		if (mObjectPropertiesViewersPool.ContainsKey(sample->GetViewingObjectType()))
+		{
+			if (!mObjectPropertiesViewersPool[sample->GetViewingObjectType()].IsEmpty())
+				return mObjectPropertiesViewersPool[sample->GetViewingObjectType()].PopBack();
+		}
+
+		return (IObjectPropertiesViewer*)(sample->GetType().CreateSample());
+	}
+
+	void Properties::FreeObjectViewer(IObjectPropertiesViewer* viewer)
+	{
+		if (!mObjectPropertiesViewersPool.ContainsKey(viewer->GetViewingObjectType()))
+			mObjectPropertiesViewersPool.Add(viewer->GetViewingObjectType(), IObjectPropertiesViewersVec());
+
+		mObjectPropertiesViewersPool[viewer->GetViewingObjectType()].Add(viewer);
+		viewer->GetViewWidget()->SetParent(nullptr);
 	}
 
 	String Properties::MakeSmartFieldName(const String& fieldName)

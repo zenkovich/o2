@@ -40,13 +40,17 @@ CLASS_BASES_META(Editor::DefaultObjectViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultObjectViewer)
 {
+	PRIVATE_FIELD(mOnFieldChangeCompleted);
+	PRIVATE_FIELD(mOnFieldChanged);
+	PRIVATE_FIELD(mFieldsPath);
+	PRIVATE_FIELD(mRealObjectType);
 	PRIVATE_FIELD(mFieldProperties);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultObjectViewer)
 {
 
-	PUBLIC_FUNCTION(void, InitializeControls, UIVerticalLayout*, const Type&, const OnChangeCompletedFunc&, const OnChangedFunc&);
+	PUBLIC_FUNCTION(UIWidget*, InitializeControls, const String&, const OnChangeCompletedFunc&, const OnChangedFunc&);
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 }

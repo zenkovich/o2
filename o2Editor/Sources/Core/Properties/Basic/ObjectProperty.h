@@ -102,7 +102,7 @@ CLASS_FIELDS_META(Editor::ObjectProperty)
 	PROTECTED_FIELD(mObjectType);
 	PROTECTED_FIELD(mPropertiesInitialized);
 	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mObjectPropertiesViewer);
 	PROTECTED_FIELD(mSpoiler);
 }
 END_META;
