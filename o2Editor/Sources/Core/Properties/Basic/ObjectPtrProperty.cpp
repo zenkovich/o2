@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "ObjectPtrProperty.h"
 
+#include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
 #include "UI/Button.h"
+#include "UI/ContextMenu.h"
 #include "UI/Label.h"
 #include "UI/Spoiler.h"
 #include "UI/UIManager.h"
-#include "UI/ContextMenu.h"
 
 using namespace o2;
 
@@ -112,7 +113,8 @@ namespace Editor
 		{
 			mObjectPtrType = objectPtrType;
 
-			o2EditorProperties.FreeProperties(mFieldProperties);
+			if (mObjectPropertiesViewer)
+				o2EditorProperties.FreeObjectViewer(mObjectPropertiesViewer, mObjectPtrType);
 
 			if (mObjectPtrType)
 			{
@@ -124,15 +126,17 @@ namespace Editor
 					onChangeCompleted(mValuesPath + "/" + path, before, after);
 				};
 
-				o2EditorProperties.BuildObjectProperties(mSpoiler, mObjectType, mFieldProperties, "", onChangeCompleted, onChanged);
+				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType);
+				mObjectPropertiesViewer->InitializeControls(mValuesPath, onChangeCompletedFunc, onChanged);
+				mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 			}
 
 			mPropertiesInitialized = true;
 		}
 
-		if (mObjectPtrType)
+		if (mObjectPtrType && mObjectPropertiesViewer)
 		{
-			mFieldProperties.Set(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+			mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{
 				return Pair<IObject*, IObject*>(GetProxy<IObject*>(x.first),
@@ -195,11 +199,6 @@ namespace Editor
 	bool ObjectPtrProperty::IsExpanded() const
 	{
 		return mSpoiler->IsExpanded();
-	}
-
-	const FieldPropertiesInfo& ObjectPtrProperty::GetPropertiesInfo() const
-	{
-		return mFieldProperties;
 	}
 
 	void ObjectPtrProperty::OnCreateOrDeletePressed()

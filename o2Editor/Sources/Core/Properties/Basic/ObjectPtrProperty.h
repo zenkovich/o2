@@ -17,6 +17,8 @@ namespace o2
 
 namespace Editor
 {
+	class IObjectPropertiesViewer;
+
 	// ------------------------------
 	// Editor object pointer property
 	// ------------------------------
@@ -65,17 +67,14 @@ namespace Editor
 		// Returns is properties expanded
 		bool IsExpanded() const;
 
-		// Returns fields properties info
-		const FieldPropertiesInfo& GetPropertiesInfo() const;
-
 		IOBJECT(ObjectPtrProperty);
 
 	protected:
 		const Type* mObjectType = nullptr;    // Type of target objects
 		const Type* mObjectPtrType = nullptr; // Type of target object pointer
 
-		TargetsVec          mTargetObjects;   // Target objects
-		FieldPropertiesInfo mFieldProperties; // Field properties information
+		TargetsVec               mTargetObjects;   // Target objects
+		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
 		UIWidget*      mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
 		UISpoiler*     mSpoiler = nullptr;            // Properties spoiler
@@ -117,7 +116,7 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FIELD(mObjectType);
 	PROTECTED_FIELD(mObjectPtrType);
 	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mObjectPropertiesViewer);
 	PROTECTED_FIELD(mTypeContainer);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mTypeCaption);
@@ -142,7 +141,6 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(const FieldPropertiesInfo&, GetPropertiesInfo);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);

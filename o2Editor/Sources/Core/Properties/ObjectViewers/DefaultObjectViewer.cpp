@@ -2,27 +2,26 @@
 #include "DefaultObjectViewer.h"
 
 #include "Core/Properties/Properties.h"
+#include "UI/VerticalLayout.h"
 
 namespace Editor
 {
-
-	UIWidget* DefaultObjectViewer::InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-													  const OnChangedFunc& onChanged)
+	DefaultObjectViewer::DefaultObjectViewer()
 	{
-		mFieldsPath = path;
-		mOnFieldChanged = onChanged;
-		mOnFieldChangeCompleted = onChangeCompleted;
-		
-		mViewWidget = mnew UIVerticalLayout();
-		return mViewWidget;
+		auto layout = mnew UIVerticalLayout();
+		layout->spacing = 5;
+		layout->fitByChildren = true;
+
+		mViewWidget = layout;
 	}
 
-	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
+	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets, const String& path, 
+									  const OnChangeCompletedFunc& onChangeCompleted, const OnChangedFunc& onChanged)
 	{
 		if (targetObjets.IsEmpty())
 			return;
 
-		const Type* objectsType = &(GetProxy<IObject*>(targetObjets[0].first))->GetType();
+		const Type* objectsType = &(targetObjets[0].first)->GetType();
 
 		if (mRealObjectType == objectsType)
 			return;
@@ -35,14 +34,9 @@ namespace Editor
 		if (mRealObjectType)
 		{
 			o2EditorProperties.BuildObjectProperties(dynamic_cast<UIVerticalLayout*>(mViewWidget), mRealObjectType, 
-													 mFieldProperties, mFieldsPath, mOnFieldChangeCompleted, mOnFieldChanged);
+													 mFieldProperties, path, onChangeCompleted, onChanged);
 
-			mFieldProperties.Set(targetObjets.Select<Pair<IObject*, IObject*>>(
-				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
-			{
-				return Pair<IObject*, IObject*>(GetProxy<IObject*>(x.first),
-												x.second ? GetProxy<IObject*>(x.second) : nullptr);
-			}));
+			mFieldProperties.Set(targetObjets);
 		}
 	}
 

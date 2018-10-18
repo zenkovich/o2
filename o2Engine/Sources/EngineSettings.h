@@ -15,6 +15,8 @@
 #define RENDER_DEBUG false
 #endif
 
+#define _HAS_ITERATOR_DEBUGGING 0
+
 // Describes that engine running as editor
 #define IS_EDITOR true
 

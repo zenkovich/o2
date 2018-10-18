@@ -112,7 +112,7 @@ namespace Editor
 		IObjectPropertiesViewer* CreateObjectViewer(const Type* type);
 
 		// Free object viewer, store in pool for reuse
-		void FreeObjectViewer(IObjectPropertiesViewer* viewer);
+		void FreeObjectViewer(IObjectPropertiesViewer* viewer, const Type* type);
 
 		// Makes smarter field name
 		static String MakeSmartFieldName(const String& fieldName);

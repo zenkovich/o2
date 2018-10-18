@@ -8,6 +8,7 @@
 #include "Basic/VectorProperty.h"
 #include "Core/EditorApplication.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
+#include "Core/Properties/ObjectViewers/DefaultObjectViewer.h"
 #include "UI/Label.h"
 #include "UI/Spoiler.h"
 #include "UI/UIManager.h"
@@ -57,6 +58,7 @@ namespace Editor
 	{
 		auto availableTypes = TypeOf(IObjectPropertiesViewer).GetDerivedTypes();
 		availableTypes.Remove(&TypeOf(IObjectPropertiesViewer));
+		availableTypes.Remove(&TypeOf(DefaultObjectViewer));
 
 		for (auto x : availableTypes)
 		{
@@ -384,27 +386,23 @@ namespace Editor
 		auto sample = mAvailableObjectPropertiesViewers.FindMatch([=](IObjectPropertiesViewer* x) {
 			return type->IsBasedOn(*x->GetViewingObjectType()); });
 
-		if (!sample)
+		auto& viewerType = sample ? sample->GetType() : TypeOf(DefaultObjectViewer);
+
+		if (mObjectPropertiesViewersPool.ContainsKey(type))
 		{
-			o2Debug.LogWarning("Can't create object properties viewer for type " + type->GetName());
-			return nullptr;
+			if (!mObjectPropertiesViewersPool[type].IsEmpty())
+				return mObjectPropertiesViewersPool[type].PopBack();
 		}
 
-		if (mObjectPropertiesViewersPool.ContainsKey(sample->GetViewingObjectType()))
-		{
-			if (!mObjectPropertiesViewersPool[sample->GetViewingObjectType()].IsEmpty())
-				return mObjectPropertiesViewersPool[sample->GetViewingObjectType()].PopBack();
-		}
-
-		return (IObjectPropertiesViewer*)(sample->GetType().CreateSample());
+		return (IObjectPropertiesViewer*)(viewerType.CreateSample());
 	}
 
-	void Properties::FreeObjectViewer(IObjectPropertiesViewer* viewer)
+	void Properties::FreeObjectViewer(IObjectPropertiesViewer* viewer, const Type* type)
 	{
-		if (!mObjectPropertiesViewersPool.ContainsKey(viewer->GetViewingObjectType()))
-			mObjectPropertiesViewersPool.Add(viewer->GetViewingObjectType(), IObjectPropertiesViewersVec());
+		if (!mObjectPropertiesViewersPool.ContainsKey(type))
+			mObjectPropertiesViewersPool.Add(type, IObjectPropertiesViewersVec());
 
-		mObjectPropertiesViewersPool[viewer->GetViewingObjectType()].Add(viewer);
+		mObjectPropertiesViewersPool[type].Add(viewer);
 		viewer->GetViewWidget()->SetParent(nullptr);
 	}
 

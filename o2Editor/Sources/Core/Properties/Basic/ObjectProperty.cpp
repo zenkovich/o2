@@ -61,7 +61,15 @@ namespace Editor
 		if (mSpoiler->IsExpanded())
 		{
 			if (mObjectPropertiesViewer)
-				mObjectPropertiesViewer->Refresh(mTargetObjects);
+			{
+				mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				{
+					auto target = GetProxyPtr(x.first);
+					auto prototype = x.second ? GetProxyPtr(x.second) : nullptr;
+					return Pair<IObject*, IObject*>(target, prototype);
+				}));
+			}
 		}
 	}
 
@@ -128,7 +136,7 @@ namespace Editor
 			mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 		}
 
-		mObjectPropertiesViewer->Refresh(mTargetObjects);
+		Refresh();
 
 		mPropertiesInitialized = true;
 	}

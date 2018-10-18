@@ -11,12 +11,12 @@ namespace Editor
 	class DefaultObjectViewer : public IObjectPropertiesViewer
 	{
 	public:
-		// Initializes controls and properties inside
-		UIWidget* InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-									 const OnChangedFunc& onChanged) override;
+		// Default constructor, creates view widget as vertical layout
+		DefaultObjectViewer();
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets) override;
+		void Refresh(const TargetsVec& targetObjets, const String& path, const OnChangeCompletedFunc& onChangeCompleted,
+					 const OnChangedFunc& onChanged) override;
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
@@ -24,10 +24,6 @@ namespace Editor
 		IOBJECT(DefaultObjectViewer);
 
 	private:
-		OnChangeCompletedFunc mOnFieldChangeCompleted;
-		OnChangedFunc         mOnFieldChanged;
-		String                mFieldsPath;
-
 		const Type*           mRealObjectType = nullptr; // Specialized viewing object type
 		FieldPropertiesInfo   mFieldProperties; // Field properties information
 	};

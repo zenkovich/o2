@@ -3,13 +3,8 @@
 
 namespace Editor
 {
-	UIWidget* IObjectPropertiesViewer::InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-														  const OnChangedFunc& onChanged)
-	{
-		return mViewWidget;
-	}
-
-	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets)
+	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets, const String& path, 
+										  const OnChangeCompletedFunc& onChangeCompleted, const OnChangedFunc& onChanged)
 	{}
 
 	const Type* IObjectPropertiesViewer::GetViewingObjectType() const

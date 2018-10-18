@@ -23,18 +23,15 @@ namespace Editor
 	class IObjectPropertiesViewer : public IObject
 	{
 	public:
-		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
+		typedef Vector<Pair<IObject*, IObject*>> TargetsVec;
 
 		typedef Function<void(IPropertyField*)> OnChangedFunc;
 		typedef Function<void(const String&, const Vector<DataNode>&, const Vector<DataNode>&)> OnChangeCompletedFunc;
 
 	public:
-		// Initializes controls and properties inside layout, with specialized type and change delegates
-		virtual UIWidget* InitializeControls(const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-											 const OnChangedFunc& onChanged);
-
 		// Refreshing controls and properties by target objects
-		virtual void Refresh(const TargetsVec& targetObjets);
+		virtual void Refresh(const TargetsVec& targetObjets, const String& path, const OnChangeCompletedFunc& onChangeCompleted,
+							 const OnChangedFunc& onChanged);
 
 		// Returns viewing objects base type
 		virtual const Type* GetViewingObjectType() const;
@@ -45,31 +42,8 @@ namespace Editor
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
-		UIWidget* mViewWidget = nullptr;      // View layout
-
-		// Sets value via proxy
-		template<typename T>
-		void SetProxy(IAbstractValueProxy* proxy, const T& value) const;
-
-		// Returns value from proxy
-		template<typename T>
-		T GetProxy(IAbstractValueProxy* proxy) const;
+		UIWidget* mViewWidget = nullptr; // View layout
 	};
-
-	template<typename T>
-	T IObjectPropertiesViewer::GetProxy(IAbstractValueProxy* proxy) const
-	{
-		T res;
-		proxy->GetValuePtr(&res);
-		return res;
-	}
-
-	template<typename T>
-	void IObjectPropertiesViewer::SetProxy(IAbstractValueProxy* proxy, const T& value) const
-	{
-		proxy->SetValuePtr(&const_cast<T&>(value));
-	}
-
 }
 
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
