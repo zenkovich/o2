@@ -28,7 +28,7 @@ namespace Editor
 	class Properties : public Singleton<Properties>
 	{
 	public:
-		Function<void(IPropertyField*)> onFieldChanged;   // Some field changed event
+		Function<void(IPropertyField*)> onFieldChanged; // Some field changed event
 
 		// Default constructor. Initializes properties samples and fills pools
 		Properties();
@@ -109,7 +109,9 @@ namespace Editor
 										  const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Returns object properties viewer
-		IObjectPropertiesViewer* CreateObjectViewer(const Type* type);
+		IObjectPropertiesViewer* CreateObjectViewer(const Type* type, const String& path,
+													const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
+													const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Free object viewer, store in pool for reuse
 		void FreeObjectViewer(IObjectPropertiesViewer* viewer, const Type* type);

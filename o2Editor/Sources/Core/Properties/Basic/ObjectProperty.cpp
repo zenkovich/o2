@@ -131,8 +131,7 @@ namespace Editor
 
 		if (!mObjectPropertiesViewer)
 		{
-			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType);
-			mObjectPropertiesViewer->InitializeControls(mValuesPath, onChangeCompletedFunc, onChanged);
+			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompleted, onChanged);
 			mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 		}
 

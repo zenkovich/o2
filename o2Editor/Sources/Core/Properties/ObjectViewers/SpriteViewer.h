@@ -32,8 +32,7 @@ namespace Editor
 		SpriteViewer();
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets, const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-					 const OnChangedFunc& onChanged) override;
+		void Refresh(const TargetsVec& targetObjets) override;
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
@@ -91,7 +90,6 @@ END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)
 {
 
-	PUBLIC_FUNCTION(UIWidget*, InitializeControls, const String&, const OnChangeCompletedFunc&, const OnChangedFunc&);
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PROTECTED_FUNCTION(void, OnModeSelected);

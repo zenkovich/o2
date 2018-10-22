@@ -126,8 +126,7 @@ namespace Editor
 					onChangeCompleted(mValuesPath + "/" + path, before, after);
 				};
 
-				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType);
-				mObjectPropertiesViewer->InitializeControls(mValuesPath, onChangeCompletedFunc, onChanged);
+				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompletedFunc, onChanged);
 				mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 			}
 

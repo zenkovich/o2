@@ -381,20 +381,31 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IObjectPropertiesViewer* Properties::CreateObjectViewer(const Type* type)
+	IObjectPropertiesViewer* Properties::CreateObjectViewer(const Type* type, const String& path,
+															const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
+															const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
 		auto sample = mAvailableObjectPropertiesViewers.FindMatch([=](IObjectPropertiesViewer* x) {
 			return type->IsBasedOn(*x->GetViewingObjectType()); });
 
 		auto& viewerType = sample ? sample->GetType() : TypeOf(DefaultObjectViewer);
 
+		IObjectPropertiesViewer* viewer = nullptr;
+
 		if (mObjectPropertiesViewersPool.ContainsKey(type))
 		{
 			if (!mObjectPropertiesViewersPool[type].IsEmpty())
-				return mObjectPropertiesViewersPool[type].PopBack();
+				viewer = mObjectPropertiesViewersPool[type].PopBack();
 		}
 
-		return (IObjectPropertiesViewer*)(viewerType.CreateSample());
+		if (!viewer)
+			viewer = (IObjectPropertiesViewer*)(viewerType.CreateSample());
+
+		viewer->path = path;
+		viewer->onChanged = onChanged;
+		viewer->onChangeCompleted = onChangeCompleted;
+
+		return viewer;
 	}
 
 	void Properties::FreeObjectViewer(IObjectPropertiesViewer* viewer, const Type* type)

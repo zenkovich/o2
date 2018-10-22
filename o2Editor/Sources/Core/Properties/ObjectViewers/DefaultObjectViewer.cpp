@@ -15,8 +15,7 @@ namespace Editor
 		mViewWidget = layout;
 	}
 
-	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets, const String& path, 
-									  const OnChangeCompletedFunc& onChangeCompleted, const OnChangedFunc& onChanged)
+	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
 	{
 		if (targetObjets.IsEmpty())
 			return;
@@ -34,7 +33,7 @@ namespace Editor
 		if (mRealObjectType)
 		{
 			o2EditorProperties.BuildObjectProperties(dynamic_cast<UIVerticalLayout*>(mViewWidget), mRealObjectType, 
-													 mFieldProperties, path, onChangeCompleted, onChanged);
+													 mFieldProperties, "", mOnChildFieldChangeCompleted, onChanged);
 
 			mFieldProperties.Set(targetObjets);
 		}

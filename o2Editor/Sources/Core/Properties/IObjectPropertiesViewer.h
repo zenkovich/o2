@@ -29,9 +29,17 @@ namespace Editor
 		typedef Function<void(const String&, const Vector<DataNode>&, const Vector<DataNode>&)> OnChangeCompletedFunc;
 
 	public:
+		OnChangedFunc         onChanged;         // Immediate change value by user event
+		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
+
+		String                path;              // Path to viewing object fields
+
+	public:
+		// Default constructor
+		IObjectPropertiesViewer();
+
 		// Refreshing controls and properties by target objects
-		virtual void Refresh(const TargetsVec& targetObjets, const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-							 const OnChangedFunc& onChanged);
+		virtual void Refresh(const TargetsVec& targetObjets);
 
 		// Returns viewing objects base type
 		virtual const Type* GetViewingObjectType() const;
@@ -43,6 +51,13 @@ namespace Editor
 
 	protected:
 		UIWidget* mViewWidget = nullptr; // View layout
+
+		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
+		                                                    // inChangeCompleted from this with full combined path
+
+	protected:
+		// It is called when some child field were changed
+		void OnFieldChangeCompleted(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
 	};
 }
 
@@ -53,15 +68,19 @@ CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 {
+	PUBLIC_FIELD(onChanged);
+	PUBLIC_FIELD(onChangeCompleted);
+	PUBLIC_FIELD(path);
 	PROTECTED_FIELD(mViewWidget);
+	PROTECTED_FIELD(mOnChildFieldChangeCompleted);
 }
 END_META;
 CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(UIWidget*, InitializeControls, const String&, const OnChangeCompletedFunc&, const OnChangedFunc&);
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_FUNCTION(UIWidget*, GetViewWidget);
+	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

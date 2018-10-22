@@ -3,8 +3,15 @@
 
 namespace Editor
 {
-	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets, const String& path, 
-										  const OnChangeCompletedFunc& onChangeCompleted, const OnChangedFunc& onChanged)
+
+	IObjectPropertiesViewer::IObjectPropertiesViewer()
+	{
+		mOnChildFieldChangeCompleted =
+			Func<IObjectPropertiesViewer, void, const String&,
+			const Vector<DataNode>&, const Vector<DataNode>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
+	}
+
+	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets)
 	{}
 
 	const Type* IObjectPropertiesViewer::GetViewingObjectType() const
@@ -15,6 +22,11 @@ namespace Editor
 	UIWidget* IObjectPropertiesViewer::GetViewWidget() const
 	{
 		return mViewWidget;
+	}
+
+	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	{
+		onChangeCompleted(this->path + "/" + path, before, after);
 	}
 
 }

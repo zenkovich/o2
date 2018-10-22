@@ -15,8 +15,7 @@ namespace Editor
 		DefaultObjectViewer();
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets, const String& path, const OnChangeCompletedFunc& onChangeCompleted,
-					 const OnChangedFunc& onChanged) override;
+		void Refresh(const TargetsVec& targetObjets) override;
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
@@ -36,9 +35,6 @@ CLASS_BASES_META(Editor::DefaultObjectViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultObjectViewer)
 {
-	PRIVATE_FIELD(mOnFieldChangeCompleted);
-	PRIVATE_FIELD(mOnFieldChanged);
-	PRIVATE_FIELD(mFieldsPath);
 	PRIVATE_FIELD(mRealObjectType);
 	PRIVATE_FIELD(mFieldProperties);
 }
@@ -46,7 +42,6 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultObjectViewer)
 {
 
-	PUBLIC_FUNCTION(UIWidget*, InitializeControls, const String&, const OnChangeCompletedFunc&, const OnChangedFunc&);
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 }
