@@ -255,6 +255,7 @@
     <ClInclude Include="..\..\Sources\Core\Properties\IPropertyField.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\DefaultObjectViewer.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\SpriteViewer.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\TextViewer.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\Properties.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\FrameTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\IEditorTool.h" />
@@ -354,6 +355,7 @@
     <ClCompile Include="..\..\Sources\Core\Properties\IPropertyField.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\DefaultObjectViewer.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\SpriteViewer.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\TextViewer.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\Properties.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\FrameTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\IEditorTool.cpp" />

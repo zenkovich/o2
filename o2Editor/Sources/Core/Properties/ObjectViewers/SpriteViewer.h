@@ -42,9 +42,9 @@ namespace Editor
 	protected:
 		typedef AssetProperty<ImageAssetRef> ImageAssetProperty;
 
-		FieldPropertiesInfo mFieldProperties;               // Field properties information
+		FieldPropertiesInfo mFieldProperties; // Field properties information
 
-		UIVerticalLayout*   mHiddenProperties = nullptr;    // Hidden properties
+		UIVerticalLayout*   mHiddenProperties = nullptr; // Hidden properties
 
 		ImageAssetProperty* mImageProperty = nullptr;
 		ColorProperty*      mColorProperty = nullptr;

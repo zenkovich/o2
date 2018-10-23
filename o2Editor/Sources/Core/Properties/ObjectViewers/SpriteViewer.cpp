@@ -15,24 +15,33 @@ namespace Editor
 	SpriteViewer::SpriteViewer()
 	{
 		auto layout = mnew UIVerticalLayout();
-		layout->spacing = 5;
+		layout->borderTop = 5;
+		layout->expandWidth = true;
+		layout->expandHeight = false;
 		layout->fitByChildren = true;
 
 		mViewWidget = layout;
 
+		auto commonFieldsLayout = mnew UIVerticalLayout();
+		commonFieldsLayout->spacing = 5;
+		commonFieldsLayout->expandWidth = true;
+		commonFieldsLayout->expandHeight = false;
+		commonFieldsLayout->fitByChildren = true;
+		layout->AddChild(commonFieldsLayout);
+
 		const Type& spriteType = TypeOf(Sprite);
 
 		mImageProperty = dynamic_cast<ImageAssetProperty*>(
-			o2EditorProperties.BuildField(layout, spriteType, "image", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "image", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		mColorProperty = dynamic_cast<ColorProperty*>(
-			o2EditorProperties.BuildField(layout, spriteType, "color", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "color", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		mAlphaProperty = dynamic_cast<FloatProperty*>(
-			o2EditorProperties.BuildField(layout, spriteType, "transparency", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "transparency", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		mModeProperty = dynamic_cast<EnumProperty*>(
-			o2EditorProperties.BuildField(layout, spriteType, "mode", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "mode", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		mModeProperty->onChanged += [&](IPropertyField* x) { OnModeSelected(); };
 
@@ -46,16 +55,20 @@ namespace Editor
 		mFillPropertiesSpoiler = o2UI.CreateWidget<UISpoiler>();
 		mHiddenProperties->AddChild(mFillPropertiesSpoiler);
 
-		mFillProperty = dynamic_cast<FloatProperty*>(
-			o2EditorProperties.BuildField(mFillPropertiesSpoiler, spriteType, "fill", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
-
 		auto fillSpace = mnew UIWidget();
 		fillSpace->layout->minHeight = 5;
 		mFillPropertiesSpoiler->AddChildWidget(fillSpace);
 
+		mFillProperty = dynamic_cast<FloatProperty*>(
+			o2EditorProperties.BuildField(mFillPropertiesSpoiler, spriteType, "fill", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+
 		// Slice properties
 		mSlicedPropertiesSpoiler = o2UI.CreateWidget<UISpoiler>();
 		mHiddenProperties->AddChild(mSlicedPropertiesSpoiler);
+
+		auto sliceSpace = mnew UIWidget();
+		sliceSpace->layout->minHeight = 5;
+		mSlicedPropertiesSpoiler->AddChildWidget(sliceSpace);
 
 		mSliceBorderProperty = dynamic_cast<BorderIProperty*>(
 			o2EditorProperties.BuildField(mSlicedPropertiesSpoiler, spriteType, "sliceBorder", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
@@ -63,6 +76,10 @@ namespace Editor
 		// Slice properties
 		mTiledPropertiesSpoiler = o2UI.CreateWidget<UISpoiler>();
 		mHiddenProperties->AddChild(mTiledPropertiesSpoiler);
+
+		auto tiledSpace = mnew UIWidget();
+		tiledSpace->layout->minHeight = 5;
+		mTiledPropertiesSpoiler->AddChildWidget(tiledSpace);
 
 		mTileScaleProperty = dynamic_cast<FloatProperty*>(
 			o2EditorProperties.BuildField(mTiledPropertiesSpoiler, spriteType, "tileScale", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));

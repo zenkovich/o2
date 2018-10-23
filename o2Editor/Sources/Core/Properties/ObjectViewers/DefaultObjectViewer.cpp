@@ -10,6 +10,7 @@ namespace Editor
 	{
 		auto layout = mnew UIVerticalLayout();
 		layout->spacing = 5;
+		layout->borderTop = 5;
 		layout->fitByChildren = true;
 
 		mViewWidget = layout;

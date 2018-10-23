@@ -62,7 +62,7 @@ namespace Editor
 		mTypeContainer->AddChild(mTypeCaption);
 
 		mCreateDeleteButton = o2UI.CreateButton("Create");
-		*mCreateDeleteButton->layout = UIWidgetLayout(1, 1, 1, 0, -75, 0, 0, 0);
+		*mCreateDeleteButton->layout = UIWidgetLayout(1, 1, 1, 0, -75, 0, 0, -3);
 		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
 		mTypeContainer->AddChild(mCreateDeleteButton);
 
