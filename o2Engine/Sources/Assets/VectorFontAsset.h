@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Assets/Asset.h"
-#include "Render/FontRef.h"
+#include "Assets/FontAsset.h"
 #include "Render/VectorFont.h"
 
 namespace o2
@@ -11,7 +10,7 @@ namespace o2
 	// -----------------
 	// Vector font asset
 	// -----------------
-	class VectorFontAsset: public Asset
+	class VectorFontAsset: public FontAsset
 	{
 	public:
 		class MetaInfo;
@@ -21,7 +20,6 @@ namespace o2
 	public:
 		PROPERTIES(VectorFontAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
-		GETTER(FontRef, font, GetFont);   // Font getter
 
 		// Destructor
 		~VectorFontAsset();
@@ -37,9 +35,6 @@ namespace o2
 
 		// Returns meta information
 		MetaInfo* GetMeta() const;
-
-		// Returns font pointer
-		FontRef GetFont() const;
 
 		// Returns font effects array 
 		const EffectsVec& GetEffects() const;
@@ -87,9 +82,6 @@ namespace o2
 		};
 
 	protected:
-		FontRef mFont;
-
-	protected:
 		// Default constructor
 		VectorFontAsset();
 
@@ -111,26 +103,26 @@ namespace o2
 	// ---------------------------
 	// Vector font Asset reference
 	// ---------------------------
-	class VectorFontAssetRef: public AssetRef
+	class VectorFontAssetRef: public FontAssetRef
 	{
 	public:
 		// Creates VectorFontAsset and returns reference to it
 		static VectorFontAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		VectorFontAssetRef(): AssetRef() {}
+		VectorFontAssetRef(): FontAssetRef() {}
 
 		// Copy-constructor
-		VectorFontAssetRef(const AssetRef& other): AssetRef(other) { CheckType<VectorFontAsset>(); }
+		VectorFontAssetRef(const AssetRef& other): FontAssetRef(other) { CheckType<VectorFontAsset>(); }
 
 		// Copy-constructor
-		VectorFontAssetRef(const VectorFontAssetRef& other): AssetRef(other) {}
+		VectorFontAssetRef(const VectorFontAssetRef& other): FontAssetRef(other) {}
 
 		// Constructor from asset path
-		VectorFontAssetRef(const String& path): AssetRef(path) {}
+		VectorFontAssetRef(const String& path): FontAssetRef(path) {}
 
 		// Constructor from asset id
-		VectorFontAssetRef(UID id): AssetRef(id) {}
+		VectorFontAssetRef(UID id): FontAssetRef(id) {}
 
 		// Destructor
 		~VectorFontAssetRef() {}
@@ -166,7 +158,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		VectorFontAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+		VectorFontAssetRef(Asset* assetPtr, int* refCounter): FontAssetRef(assetPtr, refCounter) {}
 	};
 
 	template<typename _type, typename ... _args>
@@ -178,21 +170,18 @@ namespace o2
 
 CLASS_BASES_META(o2::VectorFontAsset)
 {
-	BASE_CLASS(o2::Asset);
+	BASE_CLASS(o2::FontAsset);
 }
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAsset)
 {
 	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(font);
-	PROTECTED_FIELD(mFont);
 }
 END_META;
 CLASS_METHODS_META(o2::VectorFontAsset)
 {
 
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(FontRef, GetFont);
 	PUBLIC_FUNCTION(const EffectsVec&, GetEffects);
 	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
 	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
@@ -204,7 +193,7 @@ END_META;
 
 CLASS_BASES_META(o2::VectorFontAssetRef)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::FontAssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAssetRef)

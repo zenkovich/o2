@@ -2098,31 +2098,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/EditorUIStyle.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="EditorUIStyleBuilder" fullname="Editor::EditorUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="BasicUIStyleBuilder" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/IEditorWindow.h">
 		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
 		<globalNamespace name="" fullname="">
@@ -3155,7 +3130,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/ObjectViewers/TextViewer.h">
-		<date year="2018" month="10" day="23" hour="0" minute="58" second="52" />
+		<date year="2018" month="10" day="24" hour="1" minute="2" second="16" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3167,10 +3142,37 @@
 					<sections>
 						<section name="TextViewer" fullname="Editor::TextViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
-							<typedefs />
+							<typedefs>
+								<typedef what="AssetProperty&lt;FontAssetRef&gt;" newDef="FontAssetProperty" />
+							</typedefs>
 							<usings />
 							<baseClasses>
 								<class name="IObjectPropertiesViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/EditorUIStyle.h">
+		<date year="2018" month="10" day="24" hour="1" minute="4" second="52" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="EditorUIStyleBuilder" fullname="Editor::EditorUIStyleBuilder" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="BasicUIStyleBuilder" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

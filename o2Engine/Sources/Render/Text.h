@@ -22,13 +22,14 @@ namespace o2
 
 	public:
 		PROPERTIES(Text);
-		PROPERTY(FontRef, font, SetFont, GetFont);                                            // Font pointer property
+		PROPERTY(FontRef, font, SetFont, GetFont);                                            // Font reference property
+		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset);                        // Font asset reference property
 		PROPERTY(WString, text, SetText, GetText);                                            // Text property, wstring
 		PROPERTY(int, height, SetHeight, GetHeight);                                          // Text height
 		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign);                               // vertical align property
 		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign);                               // Horizontal align property
 		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);                                   // Words wrapping flag property
-		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings);                           // Dots engings when overflow property
+		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings);                           // Dots endings when overflow property
 		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard
 		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
 
@@ -69,22 +70,10 @@ namespace o2
 		FontRef GetFont() const;
 
 		// Sets bitmap font asset 
-		void SetFontAsset(const BitmapFontAssetRef& asset);
-
-		// Sets vector font asset
-		void SetFontAsset(const VectorFontAssetRef& asset);
-
-		// Sets font asset id (loads asset by this id)
-		void SetFontAsset(UID assetId);
-
-		// Sets font asset (loads asset by file name)
-		void SetFontAsset(const String& fileName);
+		void SetFontAsset(const FontAssetRef& asset);
 
 		// Returns asset by font asset id
-		AssetRef GetFontAsset() const;
-
-		// Returns font asset id
-		UID GetFontAssetId() const;
+		FontAssetRef GetFontAsset() const;
 
 		// Sets font height
 		void SetHeight(int height);
@@ -285,6 +274,7 @@ END_META;
 CLASS_FIELDS_META(o2::Text)
 {
 	PUBLIC_FIELD(font);
+	PUBLIC_FIELD(fontAsset);
 	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(height);
 	PUBLIC_FIELD(verAlign);
@@ -316,12 +306,8 @@ CLASS_METHODS_META(o2::Text)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetFont, FontRef);
 	PUBLIC_FUNCTION(FontRef, GetFont);
-	PUBLIC_FUNCTION(void, SetFontAsset, const BitmapFontAssetRef&);
-	PUBLIC_FUNCTION(void, SetFontAsset, const VectorFontAssetRef&);
-	PUBLIC_FUNCTION(void, SetFontAsset, UID);
-	PUBLIC_FUNCTION(void, SetFontAsset, const String&);
-	PUBLIC_FUNCTION(AssetRef, GetFontAsset);
-	PUBLIC_FUNCTION(UID, GetFontAssetId);
+	PUBLIC_FUNCTION(void, SetFontAsset, const FontAssetRef&);
+	PUBLIC_FUNCTION(FontAssetRef, GetFontAsset);
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
 	PUBLIC_FUNCTION(void, SetText, const WString&);

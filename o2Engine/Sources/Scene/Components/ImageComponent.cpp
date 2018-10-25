@@ -2,7 +2,7 @@
 #include "ImageComponent.h"
 
 #include "Scene/Actor.h"
-#include "Utils/Editor/EditorPropertyAttribute.h"
+#include "Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {

@@ -27,7 +27,8 @@ namespace o2
 
 	Text::Text(const Text& text):
 		IRectDrawable(text), mUpdatingMesh(false), font(this), text(this), height(this), verAlign(this),
-		horAlign(this), wordWrap(this), dotsEngings(this), symbolsDistanceCoef(this), linesDistanceCoef(this)
+		horAlign(this), wordWrap(this), dotsEngings(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
+		fontAsset(this)
 	{
 		mText = text.mText;
 		mFont = text.mFont;
@@ -141,7 +142,7 @@ namespace o2
 		return mFont;
 	}
 
-	void Text::SetFontAsset(const BitmapFontAssetRef& asset)
+	void Text::SetFontAsset(const FontAssetRef& asset)
 	{
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
@@ -155,95 +156,13 @@ namespace o2
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
 
-	void Text::SetFontAsset(const VectorFontAssetRef& asset)
-	{
-		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		mFont = asset->GetFont();
-		mFontAssetId = asset->GetAssetId();
-
-		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
-	}
-
-	void Text::SetFontAsset(UID assetId)
-	{
-		if (!o2Assets.IsAssetExist(assetId))
-		{
-			o2Debug.LogError("Can't load font asset: " + (String)assetId + " - isn't exist");
-			return;
-		}
-
-		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		mFontAssetId = assetId;
-		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
-		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
-		{
-			auto asset = BitmapFontAssetRef(mFontAssetId);
-			mFont = asset->GetFont();
-		}
-		else
-		{
-			auto asset = VectorFontAssetRef(mFontAssetId);
-			mFont = asset->GetFont();
-		}
-
-		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
-
-		UpdateMesh();
-	}
-
-	void Text::SetFontAsset(const String& fileName)
-	{
-		if (!o2Assets.IsAssetExist(fileName))
-		{
-			o2Debug.LogError("Can't load font asset: " + fileName + " - isn't exist");
-			return;
-		}
-
-		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(fileName);
-		mFontAssetId = fontAssetInfo.id;
-
-		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
-		{
-			auto asset = BitmapFontAssetRef(mFontAssetId);
-			mFont = asset->GetFont();
-		}
-		else
-		{
-			auto asset = VectorFontAssetRef(mFontAssetId);
-			mFont = asset->GetFont();
-		}
-
-		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
-	}
-
-	AssetRef Text::GetFontAsset() const
+	FontAssetRef Text::GetFontAsset() const
 	{
 		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
 		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 			return BitmapFontAssetRef(mFontAssetId);
 
 		return VectorFontAssetRef(mFontAssetId);
-	}
-
-	UID Text::GetFontAssetId() const
-	{
-		return mFontAssetId;
 	}
 
 	void Text::SetHeight(int height)

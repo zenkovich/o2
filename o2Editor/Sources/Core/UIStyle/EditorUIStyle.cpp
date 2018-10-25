@@ -1257,7 +1257,7 @@ namespace Editor
 		nameEditBox->SetMultiLine(false);
 
 		Text* textDrawable = nameEditBox->GetTextDrawable();
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 		textDrawable->height = 8;
 
 		Sprite* caretDrawable = nameEditBox->GetCaretDrawable();
@@ -1584,7 +1584,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1762,7 +1762,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -2106,7 +2106,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -2143,7 +2143,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -2383,6 +2383,7 @@ namespace Editor
 		RebuildAssetPropety<o2::FolderAssetRef>();
 		RebuildAssetPropety<o2::ImageAssetRef>();
 		RebuildAssetPropety<o2::VectorFontAssetRef>();
+		RebuildAssetPropety<o2::FontAssetRef>();
 	}
 
 	void EditorUIStyleBuilder::RebuildBoolPropety()
@@ -3154,6 +3155,7 @@ namespace Editor
 		BuildPropertyWithCaption<AssetProperty<o2::FolderAssetRef>>("standard", "with caption");
 		BuildPropertyWithCaption<AssetProperty<o2::ImageAssetRef>>("standard", "with caption");
 		BuildPropertyWithCaption<AssetProperty<o2::VectorFontAssetRef>>("standard", "with caption");
+		BuildPropertyWithCaption<AssetProperty<o2::FontAssetRef>>("standard", "with caption");
 
 		BuildPropertyWithCaption<BooleanProperty>("standard", "with caption");
 		BuildPropertyWithCaption<BorderFProperty>("standard", "with caption");

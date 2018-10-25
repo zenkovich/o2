@@ -34,6 +34,9 @@
 		<Filter Include="Sources\Utils\FileSystem\Windows">
 			<UniqueIdentifier>{6c0b2fec-74f4-4669-9f79-34862a6962f9}</UniqueIdentifier>
 		</Filter>
+		<Filter Include="Sources\Utils\Editor\Attributes">
+			<UniqueIdentifier>{f31df98b-2178-4cf0-add7-bc0c3380ec41}</UniqueIdentifier>
+		</Filter>
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\Sources\Animation\Animatable.h">
@@ -124,6 +127,9 @@
 			<Filter>Sources\Assets</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Assets\FolderAsset.h">
+			<Filter>Sources\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Assets\FontAsset.h">
 			<Filter>Sources\Assets</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Assets\ImageAsset.h">
@@ -390,13 +396,16 @@
 		<ClInclude Include="..\Sources\Utils\Delegates.h">
 			<Filter>Sources\Utils</Filter>
 		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Editor\Attributes\EditorPropertyAttribute.h">
+			<Filter>Sources\Utils\Editor\Attributes</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Editor\Attributes\ExpandedByDefaultAttribute.h">
+			<Filter>Sources\Utils\Editor\Attributes</Filter>
+		</ClInclude>
 		<ClInclude Include="..\Sources\Utils\Editor\DragAndDrop.h">
 			<Filter>Sources\Utils\Editor</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Utils\Editor\DragHandle.h">
-			<Filter>Sources\Utils\Editor</Filter>
-		</ClInclude>
-		<ClInclude Include="..\Sources\Utils\Editor\EditorPropertyAttribute.h">
 			<Filter>Sources\Utils\Editor</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Utils\Editor\FrameHandles.h">
@@ -660,6 +669,9 @@
 			<Filter>Sources\Assets</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Assets\FolderAsset.cpp">
+			<Filter>Sources\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\Sources\Assets\FontAsset.cpp">
 			<Filter>Sources\Assets</Filter>
 		</ClCompile>
 		<ClCompile Include="..\Sources\Assets\ImageAsset.cpp">

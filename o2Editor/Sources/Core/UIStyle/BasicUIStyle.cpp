@@ -521,7 +521,7 @@ namespace o2
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Top;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1081,7 +1081,7 @@ namespace o2
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1116,7 +1116,7 @@ namespace o2
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
-		textDrawable->SetFontAsset("stdFont.ttf");
+		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
 		*caretDrawable = Sprite();

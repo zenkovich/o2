@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Assets/Asset.h"
-#include "Render/FontRef.h"
+#include "Assets/FontAsset.h"
 
 namespace o2
 {
@@ -10,7 +9,7 @@ namespace o2
 	// -----------------
 	// Bitmap font asset
 	// -----------------
-	class BitmapFontAsset: public Asset
+	class BitmapFontAsset: public FontAsset
 	{
 	public:
 		class MetaInfo;
@@ -18,7 +17,6 @@ namespace o2
 	public:
 		PROPERTIES(BitmapFontAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
-		GETTER(FontRef, font, GetFont);   // Font getter
 
 		// Destructor
 		~BitmapFontAsset();
@@ -34,9 +32,6 @@ namespace o2
 
 		// Returns meta information
 		MetaInfo* GetMeta() const;
-
-		// Returns font pointer
-		FontRef GetFont() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
@@ -55,9 +50,6 @@ namespace o2
 
 			SERIALIZABLE(MetaInfo);
 		};
-
-	protected:
-		FontRef mFont;
 
 	protected:
 		// Default constructor
@@ -81,26 +73,26 @@ namespace o2
 	// ---------------------------
 	// Bitmap font Asset reference
 	// ---------------------------
-	class BitmapFontAssetRef: public AssetRef
+	class BitmapFontAssetRef: public FontAssetRef
 	{
 	public:
 		// Creates BitmapFontAsset and returns reference to it
 		static BitmapFontAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		BitmapFontAssetRef(): AssetRef() {}
+		BitmapFontAssetRef(): FontAssetRef() {}
 
 		// Copy-constructor
-		BitmapFontAssetRef(const AssetRef& other): AssetRef(other) { CheckType<BitmapFontAsset>(); }
+		BitmapFontAssetRef(const AssetRef& other): FontAssetRef(other) { CheckType<BitmapFontAsset>(); }
 
 		// Copy-constructor
-		BitmapFontAssetRef(const BitmapFontAssetRef& other): AssetRef(other) {}
+		BitmapFontAssetRef(const BitmapFontAssetRef& other): FontAssetRef(other) {}
 
 		// Constructor from asset path
-		BitmapFontAssetRef(const String& path): AssetRef(path) {}
+		BitmapFontAssetRef(const String& path): FontAssetRef(path) {}
 
 		// Constructor from asset id
-		BitmapFontAssetRef(UID id): AssetRef(id) {}
+		BitmapFontAssetRef(UID id): FontAssetRef(id) {}
 
 		// Destructor
 		~BitmapFontAssetRef() {}
@@ -136,27 +128,24 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		BitmapFontAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+		BitmapFontAssetRef(Asset* assetPtr, int* refCounter): FontAssetRef(assetPtr, refCounter) {}
 	};
 }
 
 CLASS_BASES_META(o2::BitmapFontAsset)
 {
-	BASE_CLASS(o2::Asset);
+	BASE_CLASS(o2::FontAsset);
 }
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset)
 {
 	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(font);
-	PROTECTED_FIELD(mFont);
 }
 END_META;
 CLASS_METHODS_META(o2::BitmapFontAsset)
 {
 
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(FontRef, GetFont);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 }
@@ -164,7 +153,7 @@ END_META;
 
 CLASS_BASES_META(o2::BitmapFontAssetRef)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::FontAssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAssetRef)

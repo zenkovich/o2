@@ -2,6 +2,7 @@
 
 #include "Render/RectDrawable.h"
 #include "Utils/Basic/ITree.h"
+#include "Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Serialization/Serializable.h"
 #include "Utils/Types/String.h"
@@ -45,7 +46,7 @@ namespace o2
 		Layout          layout;             // Drawable layout @SERIALIZABLE
 		Layout          interactableLayout; // Interactable area layout @SERIALIZABLE
 					    
-		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE
+		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE @EXPANDED_BY_DEFAULT
 
 	public:
 		// Default constructor
@@ -301,7 +302,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE();
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);

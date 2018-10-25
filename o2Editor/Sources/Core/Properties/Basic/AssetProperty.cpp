@@ -20,6 +20,7 @@ DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::DataAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::FolderAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::ImageAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::VectorFontAssetRef>);
+DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::FontAssetRef>);
 
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::ActorAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::AtlasAssetRef>);
@@ -30,3 +31,4 @@ DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::DataAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::FolderAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::ImageAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::VectorFontAssetRef>);
+DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::FontAssetRef>);

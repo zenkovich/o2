@@ -45,13 +45,13 @@ namespace o2
 	}
 
 	VectorFontAsset::VectorFontAsset():
-		Asset()
+		FontAsset()
 	{
 		mMeta = mnew MetaInfo();
 	}
 
 	VectorFontAsset::VectorFontAsset(const String& path):
-		Asset()
+		FontAsset()
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
@@ -70,7 +70,7 @@ namespace o2
 	}
 
 	VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
-		Asset(asset), mFont(asset.mFont), meta(this), font(this)
+		FontAsset(asset), meta(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
@@ -82,7 +82,7 @@ namespace o2
 
 	VectorFontAsset& VectorFontAsset::operator=(const VectorFontAsset& asset)
 	{
-		Asset::operator=(asset);
+		FontAsset::operator=(asset);
 		mFont = asset.mFont;
 		*mMeta = *(MetaInfo*)(asset.mMeta);
 		return *this;
@@ -96,11 +96,6 @@ namespace o2
 	bool VectorFontAsset::operator!=(const VectorFontAsset& other) const
 	{
 		return !mMeta->IsEqual(other.mMeta);
-	}
-
-	FontRef VectorFontAsset::GetFont() const
-	{
-		return mFont;
 	}
 
 	const VectorFontAsset::EffectsVec& VectorFontAsset::GetEffects() const

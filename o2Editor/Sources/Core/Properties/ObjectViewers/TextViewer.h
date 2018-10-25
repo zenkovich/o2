@@ -41,18 +41,21 @@ namespace Editor
 		IOBJECT(TextViewer);
 
 	protected:
+		typedef AssetProperty<FontAssetRef> FontAssetProperty;
+
 		FieldPropertiesInfo mFieldProperties; // Field properties information
 
-		ColorProperty*   mColorProperty = nullptr;
-		FloatProperty*   mAlphaProperty = nullptr;
-		WStringProperty* mTextProperty = nullptr;
-		FloatProperty*   mHeightProperty = nullptr;
-		EnumProperty*    mHorAlignProperty = nullptr;
-		EnumProperty*    mVerAlignProperty = nullptr;
-		BooleanProperty* mWordWrapProperty = nullptr;
-		BooleanProperty* mDotsEndingsProperty = nullptr;
-		FloatProperty*   mSymbolsDistCoefProperty = nullptr;
-		FloatProperty*   mLinesDistCoefProperty = nullptr;
+		ColorProperty*     mColorProperty = nullptr;
+		FloatProperty*     mAlphaProperty = nullptr;
+		FontAssetProperty* mFontProperty = nullptr;
+		WStringProperty*   mTextProperty = nullptr;
+		FloatProperty*     mHeightProperty = nullptr;
+		EnumProperty*      mHorAlignProperty = nullptr;
+		EnumProperty*      mVerAlignProperty = nullptr;
+		BooleanProperty*   mWordWrapProperty = nullptr;
+		BooleanProperty*   mDotsEndingsProperty = nullptr;
+		FloatProperty*     mSymbolsDistCoefProperty = nullptr;
+		FloatProperty*     mLinesDistCoefProperty = nullptr;
 	};
 }
 
@@ -66,6 +69,7 @@ CLASS_FIELDS_META(Editor::TextViewer)
 	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mColorProperty);
 	PROTECTED_FIELD(mAlphaProperty);
+	PROTECTED_FIELD(mFontProperty);
 	PROTECTED_FIELD(mTextProperty);
 	PROTECTED_FIELD(mHeightProperty);
 	PROTECTED_FIELD(mHorAlignProperty);

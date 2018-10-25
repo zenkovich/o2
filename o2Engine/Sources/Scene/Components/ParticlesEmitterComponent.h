@@ -2,7 +2,7 @@
 
 #include "Render/ParticlesEmitter.h"
 #include "Scene/DrawableComponent.h"
-#include "Utils/Editor/EditorPropertyAttribute.h"
+#include "Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {
@@ -42,7 +42,7 @@ CLASS_BASES_META(o2::ParticlesEmitterComponent)
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitterComponent)
 {
-	PROTECTED_FIELD(mEmitter).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEmitter).SERIALIZABLE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesEmitterComponent)

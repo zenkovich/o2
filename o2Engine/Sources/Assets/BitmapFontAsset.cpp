@@ -14,13 +14,13 @@ namespace o2
 	}
 
 	BitmapFontAsset::BitmapFontAsset():
-		Asset()
+		FontAsset()
 	{
 		mMeta = mnew MetaInfo();
 	}
 
 	BitmapFontAsset::BitmapFontAsset(const String& path):
-		Asset()
+		FontAsset()
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
@@ -39,7 +39,7 @@ namespace o2
 	}
 
 	BitmapFontAsset::BitmapFontAsset(const BitmapFontAsset& asset):
-		Asset(asset), mFont(asset.mFont), meta(this), font(this)
+		FontAsset(asset), meta(this)
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
@@ -49,15 +49,9 @@ namespace o2
 	BitmapFontAsset::~BitmapFontAsset()
 	{}
 
-	FontRef BitmapFontAsset::GetFont() const
-	{
-		return mFont;
-	}
-
 	BitmapFontAsset& BitmapFontAsset::operator=(const BitmapFontAsset& asset)
 	{
-		Asset::operator=(asset);
-		mFont = asset.mFont;
+		FontAsset::operator=(asset);
 		*mMeta = *(MetaInfo*)(asset.mMeta);
 		return *this;
 	}
