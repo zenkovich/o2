@@ -42,6 +42,9 @@ namespace Editor
 		// Specializes field type
 		void SpecializeType(const Type* type) override;
 
+		// Specializes field info, processing attributes
+		void SpecializeFieldInfo(const FieldInfo* fieldInfo) override;
+
 		// Returns specialized type
 		const Type* GetSpecializedType() const override;
 
@@ -110,6 +113,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);

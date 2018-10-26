@@ -108,6 +108,11 @@ namespace Editor
 		return mRevertable;
 	}
 
+	void IPropertyField::SpecializeFieldInfo(const FieldInfo* fieldInfo)
+	{
+		SpecializeType(fieldInfo->GetType());
+	}
+
 	void IPropertyField::CheckValueChangeCompleted()
 	{
 		Vector<DataNode> valuesData;

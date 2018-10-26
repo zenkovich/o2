@@ -158,6 +158,14 @@ namespace Editor
 		mContextInitialized = false;
 	}
 
+	void ObjectPtrProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
+	{
+		SpecializeType(fieldInfo->GetType());
+
+		if (fieldInfo->GetAttribute<ExpandedByDefaultAttribute>())
+			mSpoiler->Expand();
+	}
+
 	const Type* ObjectPtrProperty::GetSpecializedType() const
 	{
 		return mObjectPtrType;

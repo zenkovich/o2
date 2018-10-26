@@ -82,7 +82,7 @@ namespace Editor
 			return nullptr;
 
 		fieldWidget->SetValuePath(path + fieldInfo->GetName());
-		fieldWidget->SpecializeType(fieldType);
+		fieldWidget->SpecializeFieldInfo(fieldInfo);
 
 		layout->AddChild(fieldWidget, false);
 

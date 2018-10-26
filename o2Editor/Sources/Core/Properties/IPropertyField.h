@@ -87,6 +87,9 @@ namespace Editor
 		// Specializes field type
 		virtual void SpecializeType(const Type* type) {}
 
+		// Specializes field info
+		virtual void SpecializeFieldInfo(const FieldInfo* fieldInfo);
+
 		// Returns specialized type
 		virtual const Type* GetSpecializedType() const { return nullptr; }
 
@@ -484,6 +487,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetRevertable, bool);
 	PUBLIC_FUNCTION(bool, IsRevertable);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);

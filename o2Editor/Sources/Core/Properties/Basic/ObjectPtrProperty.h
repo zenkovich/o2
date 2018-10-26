@@ -46,6 +46,9 @@ namespace Editor
 		// Specializes field type. Just storing type, but not creating fields
 		void SpecializeType(const Type* type) override;
 
+		// Specializes field info, processing attributes
+		void SpecializeFieldInfo(const FieldInfo* fieldInfo) override;
+
 		// Returns specialized type
 		const Type* GetSpecializedType() const override;
 
@@ -134,6 +137,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);

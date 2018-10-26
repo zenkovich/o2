@@ -83,6 +83,14 @@ namespace Editor
 		mObjectType = type;
 	}
 
+	void ObjectProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
+	{
+		SpecializeType(fieldInfo->GetType());
+
+		if (fieldInfo->GetAttribute<ExpandedByDefaultAttribute>())
+			mSpoiler->Expand();
+	}
+
 	const Type* ObjectProperty::GetSpecializedType() const
 	{
 		return mObjectType;
