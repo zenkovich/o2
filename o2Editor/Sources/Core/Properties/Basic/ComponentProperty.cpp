@@ -29,7 +29,7 @@ namespace Editor
 
 	ComponentProperty& ComponentProperty::operator=(const ComponentProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<Component*>::operator=(other);
 		return *this;
 	}
 

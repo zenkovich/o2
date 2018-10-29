@@ -33,7 +33,7 @@ namespace o2
 
 	UIToggle& UIToggle::operator=(const UIToggle& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

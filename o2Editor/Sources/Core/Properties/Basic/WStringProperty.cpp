@@ -16,7 +16,7 @@ namespace Editor
 
 	WStringProperty& WStringProperty::operator=(const WStringProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<WString>::operator=(other);
 		return *this;
 	}
 

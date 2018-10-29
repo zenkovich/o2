@@ -25,7 +25,7 @@ namespace Editor
 
 	UICurvePreview& UICurvePreview::operator=(const UICurvePreview& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

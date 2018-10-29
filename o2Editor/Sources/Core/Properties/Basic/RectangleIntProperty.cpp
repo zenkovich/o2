@@ -16,7 +16,7 @@ namespace Editor
 
 	RectIProperty& RectIProperty::operator=(const RectIProperty& other)
 	{
-		CopyData(other);
+		IPropertyField::operator=(other);
 		return *this;
 	}
 

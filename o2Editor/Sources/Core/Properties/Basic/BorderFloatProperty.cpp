@@ -16,7 +16,7 @@ namespace Editor
 
 	BorderFProperty& BorderFProperty::operator=(const BorderFProperty& other)
 	{
-		CopyData(other);
+		IPropertyField::operator=(other);
 		return *this;
 	}
 

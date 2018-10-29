@@ -19,7 +19,7 @@ namespace Editor
 
 	CurveProperty& CurveProperty::operator=(const CurveProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<Curve>::operator=(other);
 		return *this;
 	}
 

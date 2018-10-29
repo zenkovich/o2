@@ -54,7 +54,7 @@ namespace Editor
 
 	UIDockableWindow& UIDockableWindow::operator=(const UIDockableWindow& other)
 	{
-		CopyData(other);
+		UIWindow::operator=(other);
 		return *this;
 	}
 

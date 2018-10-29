@@ -50,7 +50,7 @@ namespace o2
 
 	UIMenuPanel& UIMenuPanel::operator=(const UIMenuPanel& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

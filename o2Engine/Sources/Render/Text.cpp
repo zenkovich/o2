@@ -532,7 +532,7 @@ namespace o2
 
 			curLine->mString += mText[i];
 
-			bool outOfBounds = checkAreaBounds ? curLine->mSize.x > mAreaSize.x:false;
+			bool outOfBounds = checkAreaBounds ? curLine->mSize.x > mAreaSize.x && i > curLine->mLineBegSymbol : false;
 
 			if (mText[i] == '\n' || outOfBounds)
 			{

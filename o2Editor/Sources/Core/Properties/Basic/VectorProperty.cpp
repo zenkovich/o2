@@ -22,7 +22,7 @@ namespace Editor
 
 	VectorProperty& VectorProperty::operator=(const VectorProperty& other)
 	{
-		CopyData(other);
+		IPropertyField::operator=(other);
 		return *this;
 	}
 

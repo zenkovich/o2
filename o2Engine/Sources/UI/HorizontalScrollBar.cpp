@@ -30,7 +30,7 @@ namespace o2
 
 	UIHorizontalScrollBar& UIHorizontalScrollBar::operator=(const UIHorizontalScrollBar& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

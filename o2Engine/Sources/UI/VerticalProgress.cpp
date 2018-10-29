@@ -27,7 +27,7 @@ namespace o2
 
 	UIVerticalProgress& UIVerticalProgress::operator=(const UIVerticalProgress& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

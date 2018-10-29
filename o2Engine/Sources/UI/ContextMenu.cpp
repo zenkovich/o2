@@ -110,7 +110,7 @@ namespace o2
 
 	UIContextMenu& UIContextMenu::operator=(const UIContextMenu& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 

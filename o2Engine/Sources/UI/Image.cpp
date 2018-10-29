@@ -22,7 +22,7 @@ namespace o2
 
 	UIImage& UIImage::operator=(const UIImage& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

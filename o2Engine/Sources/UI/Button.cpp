@@ -24,7 +24,7 @@ namespace o2
 
 	UIButton& UIButton::operator=(const UIButton& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

@@ -47,7 +47,7 @@ namespace o2
 
 	UIWindow& UIWindow::operator=(const UIWindow& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 

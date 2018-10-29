@@ -24,7 +24,7 @@ namespace o2
 
 	UIDropDown& UIDropDown::operator=(const UIDropDown& other)
 	{
-		CopyData(other);
+		UICustomDropDown::operator=(other);
 		return *this;
 	}
 

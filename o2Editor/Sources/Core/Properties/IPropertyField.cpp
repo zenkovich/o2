@@ -19,9 +19,14 @@ namespace Editor
 		mCaption = FindChildByType<UILabel>("caption");
 	}
 
-	IPropertyField::IPropertyField(const IPropertyField& other):
+	IPropertyField::IPropertyField(const IPropertyField& other) :
 		UIHorizontalLayout(other)
+	{}
+
+	IPropertyField& IPropertyField::operator=(const IPropertyField& other)
 	{
+		UIHorizontalLayout::operator=(other);
+		return *this;
 	}
 
 	void IPropertyField::SetValueAndPrototypeProxy(const TargetsVec& targets)

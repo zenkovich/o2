@@ -26,7 +26,7 @@ namespace o2
 
 	UIVerticalLayout& UIVerticalLayout::operator=(const UIVerticalLayout& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

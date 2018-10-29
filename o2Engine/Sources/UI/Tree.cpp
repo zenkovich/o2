@@ -41,7 +41,7 @@ namespace o2
 
 	UITreeNode& UITreeNode::operator=(const UITreeNode& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 
@@ -199,7 +199,7 @@ namespace o2
 
 	UITree& UITree::operator=(const UITree& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 

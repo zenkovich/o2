@@ -63,7 +63,7 @@ namespace o2
 
 	UICustomList& UICustomList::operator=(const UICustomList& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 

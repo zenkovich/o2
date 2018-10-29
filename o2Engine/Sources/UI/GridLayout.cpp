@@ -26,7 +26,7 @@ namespace o2
 
 	UIGridLayout& UIGridLayout::operator=(const UIGridLayout& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

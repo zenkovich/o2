@@ -66,7 +66,7 @@ namespace o2
 
 	UIScrollArea& UIScrollArea::operator=(const UIScrollArea& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

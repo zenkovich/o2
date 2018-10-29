@@ -52,7 +52,7 @@ namespace o2
 
 	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 

@@ -19,7 +19,7 @@ namespace Editor
 
 	FloatProperty& FloatProperty::operator=(const FloatProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<float>::operator=(other);
 		return *this;
 	}
 

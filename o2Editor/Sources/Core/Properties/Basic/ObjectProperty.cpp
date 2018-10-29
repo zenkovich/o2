@@ -23,7 +23,7 @@ namespace Editor
 
 	ObjectProperty& ObjectProperty::operator=(const ObjectProperty& other)
 	{
-		CopyData(other);
+		IPropertyField::operator=(other);
 		return *this;
 	}
 

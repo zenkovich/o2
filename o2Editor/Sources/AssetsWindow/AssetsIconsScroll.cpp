@@ -89,7 +89,7 @@ namespace Editor
 
 	UIAssetsIconsScrollArea& UIAssetsIconsScrollArea::operator=(const UIAssetsIconsScrollArea& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 
@@ -504,6 +504,7 @@ namespace Editor
 		*mDragIcon = *mSelectedAssetsIcons.Last();
 		mDragIcon->DragDropArea::SetInteractable(false);
 		mDragIcon->CursorAreaEventsListener::SetInteractable(false);
+		mDragIcon->SetEnabled(true);
 		mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
 		if (mSelectedAssetsIcons.Count() > 1)
@@ -523,6 +524,8 @@ namespace Editor
 		mDragIcon->SetEditableParent(nullptr);
 		mDragIcon->layout->SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
 								  o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
+
+		mDragIcon->UpdateTransform();
 	}
 
 	void UIAssetsIconsScrollArea::OnDragEnter(ISelectableDragableObjectsGroup* group)

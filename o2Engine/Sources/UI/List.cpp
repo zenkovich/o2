@@ -25,7 +25,7 @@ namespace o2
 
 	UIList& UIList::operator=(const UIList& other)
 	{
-		CopyData(other);
+		UICustomList::operator=(other);
 		return *this;
 	}
 

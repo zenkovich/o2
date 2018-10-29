@@ -19,7 +19,7 @@ namespace Editor
 
 	TagsProperty& TagsProperty::operator=(const TagsProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<TagGroup>::operator=(other);
 		return *this;
 	}
 

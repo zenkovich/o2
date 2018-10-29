@@ -20,7 +20,7 @@ namespace Editor
 
 	ColorProperty& ColorProperty::operator=(const ColorProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<Color4>::operator=(other);
 		return *this;
 	}
 

@@ -19,7 +19,7 @@ namespace Editor
 
 	UISpoilerWithHead& UISpoilerWithHead::operator=(const UISpoilerWithHead& other)
 	{
-		CopyData(other);
+		UISpoiler::operator=(other);
 		return *this;
 	}
 

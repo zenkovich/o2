@@ -41,7 +41,7 @@ namespace o2
 
 	UISpoiler& UISpoiler::operator=(const UISpoiler& other)
 	{
-		CopyData(other);
+		UIVerticalLayout::operator=(other);
 		return *this;
 	}
 

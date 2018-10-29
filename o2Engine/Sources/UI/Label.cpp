@@ -25,7 +25,7 @@ namespace o2
 
 	UILabel& UILabel::operator=(const UILabel& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

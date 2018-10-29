@@ -18,7 +18,7 @@ namespace Editor
 
 	IntegerProperty& IntegerProperty::operator=(const IntegerProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<int>::operator=(other);
 		return *this;
 	}
 

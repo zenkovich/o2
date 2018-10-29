@@ -55,7 +55,7 @@ namespace Editor
 
 	UIFrameScrollView& UIFrameScrollView::operator=(const UIFrameScrollView& other)
 	{
-		CopyData(other);
+		UIScrollView::operator=(other);
 		return *this;
 	}
 

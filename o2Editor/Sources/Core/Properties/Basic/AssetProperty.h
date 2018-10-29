@@ -104,7 +104,7 @@ namespace Editor
 	template<typename _type>
 	AssetProperty<_type>& AssetProperty<_type>::operator=(const AssetProperty<_type>& other)
 	{
-		CopyData(other);
+		TPropertyField<_type>::operator =(other);
 		return *this;
 	}
 
@@ -234,7 +234,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (*lastSelectedAsset.assetType != mCommonValue.GetAssetType())
+		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -249,7 +249,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (*lastSelectedAsset.assetType != mCommonValue.GetAssetType())
+		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		SetAssetIdByUser(lastSelectedAsset.id);

@@ -31,7 +31,7 @@ namespace Editor
 
 	UIAssetIcon& UIAssetIcon::operator=(const UIAssetIcon& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

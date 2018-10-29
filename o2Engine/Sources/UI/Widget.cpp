@@ -154,7 +154,7 @@ namespace o2
 
 	UIWidget& UIWidget::operator=(const UIWidget& other)
 	{
-		CopyData(other);
+		Actor::operator=(other);
 		return *this;
 	}
 

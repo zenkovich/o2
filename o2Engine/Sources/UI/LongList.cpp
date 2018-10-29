@@ -40,7 +40,7 @@ namespace o2
 
 	UILongList& UILongList::operator=(const UILongList& other)
 	{
-		CopyData(other);
+		UIScrollArea::operator=(other);
 		return *this;
 	}
 

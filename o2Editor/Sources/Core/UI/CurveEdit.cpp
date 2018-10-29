@@ -89,7 +89,7 @@ namespace Editor
 
 	Editor::UICurveEditor& UICurveEditor::operator=(const UICurveEditor& other)
 	{
-		CopyData(other);
+		UIFrameScrollView::operator=(other);
 		return *this;
 	}
 

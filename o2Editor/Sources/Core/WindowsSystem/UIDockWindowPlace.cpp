@@ -30,7 +30,7 @@ namespace Editor
 
 	UIDockWindowPlace& UIDockWindowPlace::operator=(const UIDockWindowPlace& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

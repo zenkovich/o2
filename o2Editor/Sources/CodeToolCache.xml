@@ -654,40 +654,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/AssetProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IAssetProperty" fullname="Editor::IAssetProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-						<section name="AssetProperty" fullname="Editor::AssetProperty" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="TPropertyField&lt;_type&gt;" protection="0" />
-								<class name="IAssetProperty" protection="0" />
-								<class name="DragDropArea" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/BooleanProperty.h">
 		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
 		<globalNamespace name="" fullname="">
@@ -3143,8 +3109,42 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/AssetProperty.h">
+		<date year="2018" month="10" day="29" hour="1" minute="15" second="8" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IAssetProperty" fullname="Editor::IAssetProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="AssetProperty" fullname="Editor::AssetProperty" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="TPropertyField&lt;_type&gt;" protection="0" />
+								<class name="IAssetProperty" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/IPropertyField.h">
-		<date year="2018" month="10" day="26" hour="8" minute="53" second="33" />
+		<date year="2018" month="10" day="29" hour="1" minute="15" second="8" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">

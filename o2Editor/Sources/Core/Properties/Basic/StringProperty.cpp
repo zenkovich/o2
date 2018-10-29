@@ -16,7 +16,7 @@ namespace Editor
 
 	StringProperty& StringProperty::operator=(const StringProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<String>::operator=(other);
 		return *this;
 	}
 

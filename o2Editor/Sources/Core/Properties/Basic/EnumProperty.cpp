@@ -17,7 +17,7 @@ namespace Editor
 
 	EnumProperty& EnumProperty::operator=(const EnumProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<int>::operator=(other);
 		return *this;
 	}
 

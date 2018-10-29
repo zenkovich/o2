@@ -19,7 +19,7 @@ namespace Editor
 
 	LayerProperty& LayerProperty::operator=(const LayerProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<SceneLayer*>::operator=(other);
 		return *this;
 	}
 

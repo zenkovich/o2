@@ -30,7 +30,7 @@ namespace o2
 
 	UIVerticalScrollBar& UIVerticalScrollBar::operator=(const UIVerticalScrollBar& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

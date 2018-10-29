@@ -27,7 +27,7 @@ namespace Editor
 
 	ActorProperty& ActorProperty::operator=(const ActorProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<Actor*>::operator=(other);
 		return *this;
 	}
 

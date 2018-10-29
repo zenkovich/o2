@@ -16,7 +16,7 @@ namespace Editor
 
 	Editor::Vec2IProperty& Vec2IProperty::operator=(const Vec2IProperty& other)
 	{
-		CopyData(other);
+		IPropertyField::operator=(other);
 		return *this;
 	}
 

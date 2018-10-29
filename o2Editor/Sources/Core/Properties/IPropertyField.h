@@ -42,6 +42,9 @@ namespace Editor
 		// Virtual destructor
 		virtual ~IPropertyField() {}
 
+		// Copy-operator
+		IPropertyField& operator=(const IPropertyField& other);
+
 		// Sets targets pointers
 		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets);
 
@@ -177,6 +180,9 @@ namespace Editor
 		// Copy-constructor
 		TPropertyField(const TPropertyField& other);
 
+		// COpy operator
+		TPropertyField& operator=(const TPropertyField& other);
+
 		// Checks common value and fill fields
 		void Refresh() override;
 
@@ -225,6 +231,13 @@ namespace Editor
 	TPropertyField<_type>::TPropertyField(const TPropertyField& other) :
 		IPropertyField(other)
 	{}
+
+	template<typename _type>
+	TPropertyField<_type>& Editor::TPropertyField<_type>::operator=(const TPropertyField& other)
+	{
+		IPropertyField::operator=(other);
+		return *this;
+	}
 
 	template<typename _type>
 	void Editor::TPropertyField<_type>::Refresh()

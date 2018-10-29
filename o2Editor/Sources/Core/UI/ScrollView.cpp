@@ -38,7 +38,7 @@ namespace Editor
 
 	UIScrollView& UIScrollView::operator=(const UIScrollView& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

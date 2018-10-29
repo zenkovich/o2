@@ -19,7 +19,7 @@ namespace Editor
 
 	BooleanProperty& BooleanProperty::operator=(const BooleanProperty& other)
 	{
-		CopyData(other);
+		TPropertyField<bool>::operator=(other);
 		return *this;
 	}
 

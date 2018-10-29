@@ -59,7 +59,7 @@ namespace Editor
 
 	UIAssetsFoldersTree& UIAssetsFoldersTree::operator=(const UIAssetsFoldersTree& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

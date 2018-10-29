@@ -25,7 +25,7 @@ namespace o2
 
 	UIHorizontalLayout& UIHorizontalLayout::operator=(const UIHorizontalLayout& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 

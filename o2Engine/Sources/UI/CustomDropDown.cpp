@@ -37,7 +37,7 @@ namespace o2
 
 	UICustomDropDown& UICustomDropDown::operator=(const UICustomDropDown& other)
 	{
-		CopyData(other);
+		UIWidget::operator=(other);
 		return *this;
 	}
 
