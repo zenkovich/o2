@@ -1109,6 +1109,7 @@ namespace o2
 		for (auto child : other.mInternalWidgets)
 		{
 			auto newChild = child->CloneAs<UIWidget>();
+			newChild->ExcludeFromScene();
 			newChild->mParent = this;
 			newChild->mParentWidget = this;
 			mInternalWidgets.Add(newChild);

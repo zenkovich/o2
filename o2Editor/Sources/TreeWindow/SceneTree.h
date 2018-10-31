@@ -88,7 +88,7 @@ namespace Editor
 		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
 		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor when dragging actor
 
-		bool               mWatchEditor = true;
+		bool               mWatchEditor = false;
 
 	protected:
 		// Initializes widget logic

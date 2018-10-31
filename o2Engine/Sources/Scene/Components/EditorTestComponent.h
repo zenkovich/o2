@@ -20,10 +20,10 @@ namespace o2
 		class TestInside: public ISerializable
 		{
 		public:
-			float mFloat;					           // @SERIALIZABLE
-			String mString;					           // @SERIALIZABLE
-			WString mWString;				           // @SERIALIZABLE
-			bool mBool;						           // @SERIALIZABLE
+			float mFloat;	  // @SERIALIZABLE
+			String mString;	  // @SERIALIZABLE
+			WString mWString; // @SERIALIZABLE
+			bool mBool;		  // @SERIALIZABLE
 
 			bool operator==(const TestInside& other) const { return false; }
 

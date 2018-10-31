@@ -106,7 +106,7 @@ namespace Editor
 								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		Timer t;
+		Timer t; // tags, layer, enum
 		for (auto fieldInfo : fields)
 			BuildField(layout, fieldInfo, propertiesInfo, path, onChangeCompleted, onChanged);
 

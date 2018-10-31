@@ -23,10 +23,9 @@ namespace o2
 		UIWidget(other), DrawableCursorEventsListener(this), mClipLayout(other.mClipLayout),
 		mMaxListItems(other.mMaxListItems), selectedItem(this), selectedItemPos(this), itemsCount(this)
 	{
-		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->SetInternalParent(this, false);
-		mItemsList->Hide(true);
+		mItemsList = FindInternalWidgetByType<UICustomList>();
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mItemsList->Hide(true);
 		mItemsList->SetMultiselectionAvailable(false);
 
 		RetargetStatesAnimations();
@@ -214,10 +213,9 @@ namespace o2
 
 		UIWidget::CopyData(other);
 
-		mItemsList = other.mItemsList->CloneAs<UICustomList>();
-		mItemsList->SetInternalParent(this, false);
-		mItemsList->Hide(true);
+		mItemsList = FindInternalWidgetByType<UICustomList>();
 		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mItemsList->Hide(true);
 		mItemsList->SetMultiselectionAvailable(false);
 
 		mClipLayout = other.mClipLayout;

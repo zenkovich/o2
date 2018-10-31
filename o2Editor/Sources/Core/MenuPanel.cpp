@@ -69,7 +69,7 @@ namespace Editor
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddToggleItem("Edit/Options/View editor UI tree", true,
+		mMenuPanel->AddToggleItem("Edit/Options/View editor UI tree", false,
 								  [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
 
 		// VIEW
