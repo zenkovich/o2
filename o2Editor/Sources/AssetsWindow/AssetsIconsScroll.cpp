@@ -505,6 +505,7 @@ namespace Editor
 		mDragIcon->DragDropArea::SetInteractable(false);
 		mDragIcon->CursorAreaEventsListener::SetInteractable(false);
 		mDragIcon->SetEnabled(true);
+		mDragIcon->ExcludeFromScene();
 		mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
 		if (mSelectedAssetsIcons.Count() > 1)

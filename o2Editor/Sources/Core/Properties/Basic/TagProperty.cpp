@@ -36,7 +36,10 @@ namespace Editor
 		{
 			mTagsContext = FindChildByType<UIContextMenu>();
 			if (!mTagsContext)
+			{
 				mTagsContext = o2UI.CreateWidget<UIContextMenu>();
+				AddChild(mTagsContext);
+			}
 
 			mTagsContext->SetMaxItemsVisible(10);
 			mEditBox->AddChild(mTagsContext);
@@ -57,7 +60,6 @@ namespace Editor
 			return;
 
 		mTagsContext->RemoveAllItems();
-
 		mTagsContext->Show(mEditBox->layout->GetWorldLeftBottom());
 
 		for (auto tag : o2Scene.GetTags())

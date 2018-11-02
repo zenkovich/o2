@@ -690,6 +690,9 @@ namespace o2
 		mItemsLayout       = FindChildByType<UIVerticalLayout>();
 		mMaxVisibleItems   = other.mMaxVisibleItems;
 
+		mItemSample->ExcludeFromScene();
+		mSeparatorSample->ExcludeFromScene();
+
 		mFitSizeMin = other.mFitSizeMin;
 
 		RetargetStatesAnimations();
