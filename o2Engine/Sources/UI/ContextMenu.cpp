@@ -6,6 +6,7 @@
 #include "Render/Sprite.h"
 #include "Render/Text.h"
 #include "UI/Button.h"
+#include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/WidgetLayer.h"
 #include "UI/WidgetLayout.h"
@@ -249,14 +250,12 @@ namespace o2
 			});
 
 			if (!subChild)
-				subChild = AddItem(subMenu);
+				subChild = resultContext->AddItem(subMenu);
 
 			UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
 			if (!subContext)
 			{
-				subContext = CloneAs<UIContextMenu>();
-				subContext->RemoveAllItems();
-
+				subContext = o2UI.CreateWidget<UIContextMenu>();
 				subChild->AddChild(subContext);
 
 				if (auto subIconLayer = subChild->FindLayer("subIcon"))

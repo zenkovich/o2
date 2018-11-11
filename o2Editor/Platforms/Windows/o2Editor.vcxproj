@@ -178,7 +178,7 @@
       <Path>$(SolutionDir)Tmp\$(Configuration)\build.log</Path>
     </BuildLog>
     <PreBuildEvent>
-      <Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "..\..\..\o2Engine\Sources\CodeToolCache.xml"</Command>
+      <Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "..\..\..\o2Engine\Sources\CodeToolCache.xml" -r</Command>
     </PreBuildEvent>
     <PreBuildEvent>
       <Message>Generating reflection</Message>

@@ -171,13 +171,15 @@ namespace Editor
 			UIContextMenu::Item::Separator(),
 
 			UIContextMenu::Item("View widgets layers", true, THIS_FUNC(OnViewLayersToggled)),
-			UIContextMenu::Item("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled)),
-
-			UIContextMenu::Item::Separator()
+			UIContextMenu::Item("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled))
 		});
 
-		InitializeCreateMenu();
 		CreateUICreateMenu();
+		CreateUILayersMenu();
+
+		mTreeContextMenu->AddItem(UIContextMenu::Item::Separator());
+
+		InitializeCreateMenu();
 
 		mWindow->AddChild(mTreeContextMenu);
 
@@ -187,23 +189,17 @@ namespace Editor
 
 	void TreeWindow::InitializeCreateMenu()
 	{
-		CreateActorSubtypesCreateMenu(&TypeOf(Actor));
-	}
-
-	void TreeWindow::CreateActorSubtypesCreateMenu(const Type* type)
-	{
-		auto subTypes = type->GetDerivedTypes();
+		auto subTypes = TypeOf(Actor).GetDerivedTypes();
 
 		for (auto subType : subTypes)
 		{
-			mTreeContextMenu->AddItem("Create/" + subType->GetName(), [=]() {
+			String path = subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/");
+			mTreeContextMenu->AddItem("Create/" + path, [=]() {
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
 				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
-				newActor->name = subType->GetName();
-				CreateActor(newActor);
+				newActor->name = path;
+				CreateObject(newActor);
 			});
-
-			CreateActorSubtypesCreateMenu(subType);
 		}
 	}
 
@@ -213,14 +209,40 @@ namespace Editor
 
 		for (auto styleWidget : styleWidgets)
 		{
-			mTreeContextMenu->AddItem(String("Create UI/") + styleWidget->GetType().GetName() + " - " + styleWidget->GetName(),
-									  [=]()
+			auto path = styleWidget->GetType().GetName() + "/" + styleWidget->GetName();
+			path.ReplaceAll("o2::", "");
+			path.ReplaceAll("::", "/");
+
+			mTreeContextMenu->AddItem(String("Create/UI style/") + path, [=]()
 			{
 				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
 				newWidget->SetEnableForcible(true);
-				CreateActor(newWidget);
+				CreateObject(newWidget);
 			});
 		}
+	}
+
+	void TreeWindow::CreateUILayersMenu()
+	{
+		mTreeContextMenu->AddItem("Create/UI layer/Empty", [&]()
+		{
+			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			CreateObject(newLayer);
+		});
+
+		mTreeContextMenu->AddItem("Create/UI layer/Sprite", [&]()
+		{
+			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			newLayer->drawable = mnew Sprite();
+			CreateObject(newLayer);
+		});
+
+		mTreeContextMenu->AddItem("Create/UI layer/Text", [&]()
+		{
+			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			newLayer->drawable = mnew Text();
+			CreateObject(newLayer);
+		});
 	}
 
 	void TreeWindow::PostInitializeWindow()
@@ -263,7 +285,7 @@ namespace Editor
 		mTreeContextMenu->Show();
 	}
 
-	void TreeWindow::CreateActor(Actor* newActor)
+	void TreeWindow::CreateObject(SceneEditableObject* newObject)
 	{
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
@@ -273,10 +295,10 @@ namespace Editor
 			auto node = mSceneTree->GetNode(obj);
 
 			SceneEditableObject* parentObject = obj;
-			parentObject->AddChild(newActor);
+			parentObject->AddChild(newObject);
 
 			auto parentChilds = parentObject->GetEditablesChildren();
-			auto action = mnew CreateAction({ newActor }, parentObject,
+			auto action = mnew CreateAction({ newObject }, parentObject,
 											parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
 
 			o2EditorApplication.DoneAction(action);
@@ -285,12 +307,16 @@ namespace Editor
 		{
 			mSceneTree->UpdateNodesView();
 
-			auto scereObjects = o2Scene.GetRootEditableObjects();
-			auto action = mnew CreateAction({ newActor }, nullptr,
-											scereObjects.Count() > 1 ? scereObjects[scereObjects.Count() - 2] : nullptr);
+			auto sceneObjects = o2Scene.GetRootEditableObjects();
+			auto action = mnew CreateAction({ newObject }, nullptr,
+											sceneObjects.Count() > 1 ? sceneObjects[sceneObjects.Count() - 2] : nullptr);
 
 			o2EditorApplication.DoneAction(action);
 		}
+
+		newObject->SetTransform(Basis(Vec2F(), Vec2F(100, 0), Vec2F(0, 100)));
+		mSceneTree->SelectObject(newObject);
+		mSceneTree->ScrollTo(newObject);
 	}
 
 	void TreeWindow::OnContextCreateNewPressed()
@@ -300,7 +326,7 @@ namespace Editor
 
 		Actor* newActor = mnew Actor();
 		newActor->name = "Empty";
-		CreateActor(newActor);
+		CreateObject(newActor);
 	}
 
 	void TreeWindow::OnContextCreateSprite()
@@ -311,7 +337,7 @@ namespace Editor
 		Actor* newActor = mnew Actor({ mnew ImageComponent() });
 		newActor->name = "Sprite";
 		newActor->transform->size = Vec2F(10, 10);
-		CreateActor(newActor);
+		CreateObject(newActor);
 	}
 
 	void TreeWindow::OnContextCreateButton()

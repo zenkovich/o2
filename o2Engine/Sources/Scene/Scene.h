@@ -165,17 +165,17 @@ namespace o2
 #endif       
 
 	protected:
-		ActorsVec       mRootActors;          // Scene root actors		
-		ActorsVec       mAllActors;           // All scene actors
-		SceneLayersVec  mLayers;              // Scene layers
-		TagsVec         mTags;                // Scene tags
-		SceneLayer*     mDefaultLayer;        // Default scene layer
-		ActorsAssetsVec mCache;               // Cached actors assets
+		ActorsVec       mRootActors;   // Scene root actors		
+		ActorsVec       mAllActors;    // All scene actors
+		SceneLayersVec  mLayers;       // Scene layers
+		TagsVec         mTags;         // Scene tags
+		SceneLayer*     mDefaultLayer; // Default scene layer
+		ActorsAssetsVec mCache;        // Cached actors assets
 
 #if IS_EDITOR	  						      
 		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
 
-		SceneEditableObjectsVec mChangedObjects;   // Changed actors array
+		SceneEditableObjectsVec mChangedObjects;  // Changed actors array
 		SceneEditableObjectsVec mEditableObjects; // All scene editable objects
 
 		friend class SceneEditableObject;
@@ -197,6 +197,8 @@ namespace o2
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
+		friend class UIWidget;
+		friend class UIWidgetLayer;
 	};
 }
 

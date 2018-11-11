@@ -328,26 +328,29 @@ namespace Editor
 
 		if (selectedObjects.Count() == 1)
 		{
-			mFrame = selectedObjects[0]->GetTransform();
-			mPivotHandle.position = selectedObjects[0]->GetPivot();
+			auto object = selectedObjects[0];
 
-			UIWidget* widget = dynamic_cast<UIWidget*>(selectedObjects[0]);
-			mAnchorsFrameEnabled = widget != nullptr && widget->GetParent() != nullptr;
+			mFrame = object->GetTransform();
+			mPivotHandle.position = object->GetPivot();
+
+			mAnchorsFrameEnabled = object->IsSupportsLayout();
 
 			if (mAnchorsFrameEnabled)
 			{
-				auto parent = widget->GetParent();
+				auto parent = object->GetEditableParent();
 				auto parentWidget = dynamic_cast<UIWidget*>(parent);
 
 				RectF parentWorldRect;
 
 				if (parentWidget)
 					parentWorldRect = parentWidget->GetChildrenRect();
+				else if (parent)
+					parentWorldRect = parent->GetTransform().AABB();
 				else
-					parentWorldRect = parent->transform->GetWorldRect();
+					mAnchorsFrameEnabled = false;
 
-				RectF worldRectangle(parentWorldRect.LeftBottom() + widget->layout->GetAnchorMin()*parentWorldRect.Size(),
-									 parentWorldRect.LeftBottom() + widget->layout->GetAnchorMax()*parentWorldRect.Size());
+				RectF worldRectangle(parentWorldRect.LeftBottom() + object->GetLayout().anchorMin*parentWorldRect.Size(),
+									 parentWorldRect.LeftBottom() + object->GetLayout().anchorMax*parentWorldRect.Size());
 
 				mAnchorsFrame.origin = worldRectangle.LeftBottom();
 				mAnchorsFrame.xv = Vec2F(Math::Max(worldRectangle.Width(), 0.001f), 0);
@@ -1379,6 +1382,9 @@ namespace Editor
 		Vector<Vec2F> worldSnapLines;
 		for (auto object : objects)
 		{
+			if (!object->IsOnScene())
+				continue;
+
 			if (o2EditorSceneScreen.GetSelectedObjects().Contains(object))
 				continue;
 

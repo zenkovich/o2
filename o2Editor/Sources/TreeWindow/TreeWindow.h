@@ -86,11 +86,11 @@ namespace Editor
 		// Gets all actor types and creates create sub menu
 		void InitializeCreateMenu();
 
-		// Creates creation menu items for subtypes of type
-		void CreateActorSubtypesCreateMenu(const Type* type);
-
 		// Creates creation menu items for UI style
 		void CreateUICreateMenu();
+
+		// Creates creation menu for UI layers
+		void CreateUILayersMenu();
 
 		// It is called after that all windows was created
 		void PostInitializeWindow();
@@ -110,8 +110,8 @@ namespace Editor
 		// It is called when tree node clicked by right button (For tree widget)
 		void OnTreeRBPressed(UITreeNode* node);
 
-		// It is called when some actor needs to created and registers actor insert action
-		void CreateActor(Actor* newActor);
+		// It is called when some object needs to be created and registers object insert action
+		void CreateObject(SceneEditableObject* newObject);
 
 		// It is called when pressed "Create new" in context menu
 		void OnContextCreateNewPressed();
@@ -196,15 +196,15 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, InitializeTopPanel);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeCreateMenu);
-	PROTECTED_FUNCTION(void, CreateActorSubtypesCreateMenu, const Type*);
 	PROTECTED_FUNCTION(void, CreateUICreateMenu);
+	PROTECTED_FUNCTION(void, CreateUILayersMenu);
 	PROTECTED_FUNCTION(void, PostInitializeWindow);
 	PROTECTED_FUNCTION(void, OnSearchPressed);
 	PROTECTED_FUNCTION(void, OnListTreeToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, SearchObjectsRecursive, SceneEditableObject*, const String&);
 	PROTECTED_FUNCTION(void, OnTreeRBPressed, UITreeNode*);
-	PROTECTED_FUNCTION(void, CreateActor, Actor*);
+	PROTECTED_FUNCTION(void, CreateObject, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnContextCreateNewPressed);
 	PROTECTED_FUNCTION(void, OnContextCreateSprite);
 	PROTECTED_FUNCTION(void, OnContextCreateButton);

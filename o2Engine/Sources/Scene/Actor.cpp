@@ -36,6 +36,9 @@ namespace o2
 			{
 				o2Scene.mRootActors.Add(this);
 				o2Scene.mAllActors.Add(this);
+#if IS_EDITOR
+				o2Scene.mEditableObjects.Add(this);
+#endif
 				mLayer->mEnabledActors.Add(this);
 
 				mIsOnScene = true;
@@ -74,6 +77,9 @@ namespace o2
 		{
 			o2Scene.mRootActors.Add(this);
 			o2Scene.mAllActors.Add(this);
+#if IS_EDITOR
+			o2Scene.mEditableObjects.Add(this);
+#endif
 			o2Scene.onCreated(this);
 		}
 
@@ -111,6 +117,9 @@ namespace o2
 		{
 			o2Scene.mRootActors.Add(this);
 			o2Scene.mAllActors.Add(this);
+#if IS_EDITOR
+			o2Scene.mEditableObjects.Add(this);
+#endif
 			o2Scene.onCreated(this);
 		}
 
@@ -155,6 +164,9 @@ namespace o2
 			{
 				o2Scene.onDestroying(this);
 				o2Scene.mAllActors.Remove(this);
+#if IS_EDITOR
+				o2Scene.mEditableObjects.Remove(this);
+#endif
 			}
 
 			o2Scene.OnActorPrototypeBreaked(this);
@@ -294,6 +306,9 @@ namespace o2
 
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Remove(this);
+#endif
 
 		OnExcludeFromScene();
 
@@ -317,6 +332,10 @@ namespace o2
 			mLayer->mEnabledActors.Add(this);
 
 		o2Scene.mAllActors.Add(this);
+
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Add(this);
+#endif
 
 		mIsOnScene = true;
 

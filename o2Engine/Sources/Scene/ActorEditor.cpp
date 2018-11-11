@@ -848,7 +848,12 @@ namespace o2
 	void Actor::AddChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (Actor* actor = dynamic_cast<Actor*>(object))
-			AddChild(actor, idx);
+		{
+			if (idx >= 0)
+				AddChild(actor, idx);
+			else
+				AddChild(actor);
+		}
 	}
 
 	bool Actor::IsSupportsDisabling() const

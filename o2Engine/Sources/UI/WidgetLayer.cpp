@@ -3,10 +3,11 @@
 
 #include "UI/Widget.h"
 #include "UI/WidgetLayout.h"
+#include "Scene/Scene.h"
 
 namespace o2
 {
-	UIWidgetLayer::UIWidgetLayer():
+	UIWidgetLayer::UIWidgetLayer() :
 		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), drawable(nullptr)
 	{}
@@ -26,6 +27,9 @@ namespace o2
 	UIWidgetLayer::~UIWidgetLayer()
 	{
 		delete drawable;
+
+		for (auto child : mChildren)
+			delete child;
 	}
 
 	UIWidgetLayer& UIWidgetLayer::operator=(const UIWidgetLayer& other)
@@ -93,6 +97,7 @@ namespace o2
 			node->GetParent()->RemoveChild(node, false);
 
 		node->mParent = this;
+		node->mOwnerWidget = mOwnerWidget;
 
 		mChildren.Add(node);
 
@@ -104,6 +109,7 @@ namespace o2
 	bool UIWidgetLayer::RemoveChild(UIWidgetLayer* node, bool release /*= true*/)
 	{
 		node->mParent = nullptr;
+		node->mOwnerWidget = nullptr;
 
 		mChildren.Remove(node);
 
@@ -116,8 +122,10 @@ namespace o2
 	void UIWidgetLayer::RemoveAllChilds()
 	{
 		for (auto child : mChildren)
+		{
 			if (child)
 				delete child;
+		}
 
 		mChildren.Clear();
 	}
@@ -134,6 +142,7 @@ namespace o2
 				mParent->RemoveChild(this, false);
 
 			mParent = nullptr;
+			mOwnerWidget = nullptr;
 		}
 	}
 
@@ -258,7 +267,7 @@ namespace o2
 		return mInteractableArea.IsInside(point);
 	}
 
-	const o2::RectF& UIWidgetLayer::GetRect() const
+	const RectF& UIWidgetLayer::GetRect() const
 	{
 		return mAbsolutePosition;
 	}
@@ -266,7 +275,10 @@ namespace o2
 	void UIWidgetLayer::OnDeserialized(const DataNode& node)
 	{
 		for (auto child : mChildren)
+		{
 			child->mParent = this;
+			child->mOwnerWidget = mOwnerWidget;
+		}
 	}
 
 	void UIWidgetLayer::SetOwnerWidget(UIWidget* owner)
@@ -320,6 +332,26 @@ namespace o2
 			child->UpdateResTransparency();
 	}
 
+	void UIWidgetLayer::OnIncludeInScene()
+	{
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Add(this);
+#endif
+
+		for (auto layer : mChildren)
+			layer->OnIncludeInScene();
+	}
+
+	void UIWidgetLayer::OnExcludeFromScene()
+	{
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Remove(this);
+#endif
+
+		for (auto layer : mChildren)
+			layer->OnIncludeInScene();
+	}
+
 	Dictionary<String, UIWidgetLayer*> UIWidgetLayer::GetAllChildLayers()
 	{
 		Dictionary<String, UIWidgetLayer*> res;
@@ -330,6 +362,17 @@ namespace o2
 	}
 
 #if IS_EDITOR
+
+	bool UIWidgetLayer::IsOnScene() const
+	{
+		if (mParent)
+			return mParent->IsOnScene();
+
+		if (mOwnerWidget)
+			return mOwnerWidget->IsOnScene();
+
+		return true;
+	}
 
 	SceneUID UIWidgetLayer::GetID() const
 	{
@@ -362,8 +405,8 @@ namespace o2
 		return mChildren.Select<SceneEditableObject*>([](UIWidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	o2::SceneEditableObject* UIWidgetLayer::GetEditableParent() const
-{
+	SceneEditableObject* UIWidgetLayer::GetEditableParent() const
+	{
 		if (mParent)
 			return dynamic_cast<SceneEditableObject*>(mParent);
 
@@ -376,6 +419,8 @@ namespace o2
 			layer->AddChild(this);
 		else if (UIWidget* widget = dynamic_cast<UIWidget*>(object))
 			widget->AddLayer(this);
+		else if (UIWidget::LayersEditable* layers = dynamic_cast<UIWidget::LayersEditable*>(object))
+			layers->AddChild(this);
 	}
 
 	void UIWidgetLayer::AddChild(SceneEditableObject* object, int idx /*= -1*/)
@@ -386,7 +431,31 @@ namespace o2
 
 	void UIWidgetLayer::SetIndexInSiblings(int idx)
 	{
+		if (mParent)
+		{
+			int lastIdx = mParent->mChildren.Find(this);
+			mParent->mChildren.Insert(this, idx);
 
+			if (idx <= lastIdx)
+				lastIdx++;
+
+			mParent->mChildren.RemoveAt(lastIdx);
+		}
+		else
+		{
+			int lastIdx = mOwnerWidget->mLayers.Find(this);
+			mOwnerWidget->mLayers.Insert(this, idx);
+
+			if (idx <= lastIdx)
+				lastIdx++;
+
+			mOwnerWidget->mLayers.RemoveAt(lastIdx);
+		}
+	}
+
+	bool UIWidgetLayer::CanBeParentedTo(const Type& parentType)
+	{
+		return parentType.IsBasedOn(TypeOf(UIWidget::LayersEditable));
 	}
 
 	bool UIWidgetLayer::IsSupportsDisabling() const
@@ -427,13 +496,18 @@ namespace o2
 
 	void UIWidgetLayer::SetTransform(const Basis& transform)
 	{
+		Basis thisTransform = GetTransform();
+		layout.offsetMin += transform.origin - thisTransform.origin;
+		layout.offsetMax += transform.origin - thisTransform.origin + 
+			Vec2F(transform.xv.Length() - thisTransform.xv.Length(),
+				  transform.yv.Length() - thisTransform.yv.Length());
 
+		mOwnerWidget->UpdateTransform();
+		mOwnerWidget->OnChanged();
 	}
 
 	void UIWidgetLayer::UpdateTransform(bool withChildren /*= true*/)
-	{
-
-	}
+	{}
 
 	bool UIWidgetLayer::IsSupportsPivot() const
 	{
@@ -441,9 +515,7 @@ namespace o2
 	}
 
 	void UIWidgetLayer::SetPivot(const Vec2F& pivot)
-	{
-
-	}
+	{}
 
 	Vec2F UIWidgetLayer::GetPivot() const
 	{
@@ -463,6 +535,12 @@ namespace o2
 	void UIWidgetLayer::SetLayout(const Layout& layout)
 	{
 		this->layout = layout;
+	}
+
+	void UIWidgetLayer::OnChanged()
+	{
+		if (mOwnerWidget)
+			mOwnerWidget->OnChanged();
 	}
 
 #endif // IS_EDITOR

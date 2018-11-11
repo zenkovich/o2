@@ -84,10 +84,15 @@ namespace Editor
 	{
 		if (!mTargetObjects.IsEmpty())
 		{
-			auto object = GetProxy<IObject*>(mTargetObjects[0].first);
+			auto object = GetProxy(mTargetObjects[0].first);
 
 			if (object)
 			{
+				auto tp = &object->GetType();
+
+				if (tp == nullptr)
+					tp = &object->GetType();
+
 				mTypeCaption->text = object->GetType().GetName();
 				mCreateDeleteButton->caption = "Delete";
 			}
@@ -104,7 +109,7 @@ namespace Editor
 		const Type* objectPtrType = nullptr;
 		if (!mTargetObjects.IsEmpty())
 		{
-			auto object = GetProxy<IObject*>(mTargetObjects[0].first);
+			auto object = GetProxy(mTargetObjects[0].first);
 			if (object)
 				objectPtrType = object->GetType().GetPointerType();
 		}
@@ -138,8 +143,8 @@ namespace Editor
 			mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{
-				return Pair<IObject*, IObject*>(GetProxy<IObject*>(x.first),
-												x.second ? GetProxy<IObject*>(x.second) : nullptr);
+				return Pair<IObject*, IObject*>(GetProxy(x.first),
+												x.second ? GetProxy(x.second) : nullptr);
 			}));
 		}
 	}
@@ -210,17 +215,17 @@ namespace Editor
 
 	void ObjectPtrProperty::OnCreateOrDeletePressed()
 	{
-		bool hasObject = !mTargetObjects.IsEmpty() && GetProxy<IObject*>(mTargetObjects[0].first) != nullptr;
+		bool hasObject = !mTargetObjects.IsEmpty() && GetProxy(mTargetObjects[0].first) != nullptr;
 		if (hasObject)
 		{
 			for (auto targetObj : mTargetObjects)
 			{
-				IObject* object = GetProxy<IObject*>(targetObj.first);
+				IObject* object = GetProxy(targetObj.first);
 
 				if (object != nullptr)
 				{
 					delete object;
-					SetProxy<IObject*>(targetObj.first, nullptr);
+					SetProxy(targetObj.first, nullptr);
 				}
 			}
 
@@ -258,13 +263,30 @@ namespace Editor
 	{
 		for (auto targetObj : mTargetObjects)
 		{
-			if (GetProxy<IObject*>(targetObj.first) == nullptr)
-				SetProxy<IObject*>(targetObj.first, (IObject*)type->CreateSample());
+			if (GetProxy(targetObj.first) == nullptr)
+				SetProxy(targetObj.first, (IObject*)type->CreateSample());
 		}
 
 		Refresh();
 		mSpoiler->SetLayoutDirty();
 	}
+
+	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy)
+	{
+		auto objectProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
+		if (objectProxy)
+			return objectProxy->GetObjectPtr();
+
+		return nullptr;
+	}
+
+	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
+	{
+		auto objectProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
+		if (objectProxy)
+			objectProxy->SetObjectPtr(object);
+	}
+
 }
 
 DECLARE_CLASS(Editor::ObjectPtrProperty);

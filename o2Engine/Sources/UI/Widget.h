@@ -475,6 +475,8 @@ namespace o2
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
 
+			SERIALIZABLE(LayersEditable);
+
 		private:
 			UIWidget* mWidget = nullptr;
 			SceneUID  mUID = Math::Random();
@@ -520,6 +522,8 @@ namespace o2
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
 
+			SERIALIZABLE(InternalChildrenEditableEditable);
+
 		private:
 			UIWidget* mWidget = nullptr;
 			SceneUID  mUID = Math::Random();
@@ -536,6 +540,16 @@ namespace o2
 	public:
 		// Returns list of object's children
 		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+		// Returns is that type of object can be transformed with layout
+		bool IsSupportsLayout() const override;
+
+		// Returns layout, override when it's supports
+		Layout GetLayout() const override;
+
+		// Sets layout of object, override when it's supports
+		void SetLayout(const Layout& layout) override;
+
 
 		friend class LayersEditable;
 		friend class InternalChildrenEditableEditable;
@@ -665,6 +679,8 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(mIsClipped);
 	PROTECTED_FIELD(mBounds);
 	PROTECTED_FIELD(mBoundsWithChilds);
+	PROTECTED_FIELD(layerEditable);
+	PROTECTED_FIELD(internalChildrenEditable);
 }
 END_META;
 CLASS_METHODS_META(o2::UIWidget)
@@ -765,5 +781,61 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(_tmp3, GetAllStates);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(bool, IsSupportsLayout);
+	PUBLIC_FUNCTION(Layout, GetLayout);
+	PUBLIC_FUNCTION(void, SetLayout, const Layout&);
+}
+END_META;
+
+CLASS_BASES_META(o2::UIWidget::LayersEditable)
+{
+	BASE_CLASS(o2::SceneEditableObject);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidget::LayersEditable)
+{
+	PRIVATE_FIELD(mWidget);
+	PRIVATE_FIELD(mUID);
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidget::LayersEditable)
+{
+
+	PUBLIC_FUNCTION(SceneUID, GetID);
+	PUBLIC_FUNCTION(void, GenerateNewID, bool);
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, SetName, const String&);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
+	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
+}
+END_META;
+
+CLASS_BASES_META(o2::UIWidget::InternalChildrenEditableEditable)
+{
+	BASE_CLASS(o2::SceneEditableObject);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidget::InternalChildrenEditableEditable)
+{
+	PRIVATE_FIELD(mWidget);
+	PRIVATE_FIELD(mUID);
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidget::InternalChildrenEditableEditable)
+{
+
+	PUBLIC_FUNCTION(SceneUID, GetID);
+	PUBLIC_FUNCTION(void, GenerateNewID, bool);
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, SetName, const String&);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
+	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 }
 END_META;

@@ -549,6 +549,35 @@ namespace o2
 	}
 
 	template<typename T>
+	TString<T> TString<T>::Replaced(const TString& other, int begin, int end) const
+	{
+		TString res(*this);
+		res.Replace(other, begin, end);
+		return res;
+	}
+
+	template<typename T>
+	TString<T> TString<T>::ReplacedAll(const TString& oldStr, const TString& newStr) const
+	{
+		TString res(*this);
+		res.ReplaceAll(oldStr, newStr);
+		return res;
+	}
+
+	template<typename T>
+	void TString<T>::ReplaceAll(const TString& oldStr, const TString& newStr)
+	{
+		while (true)
+		{
+			int fnd = Find(oldStr);
+			if (fnd < 0)
+				break;
+
+			Replace(newStr, fnd, fnd + oldStr.Length());
+		}
+	}
+
+	template<typename T>
 	int TString<T>::Find(const TString& other, int startIdx /*= 0*/) const
 	{
 		return std::basic_string<T>::find(other, startIdx);
@@ -809,13 +838,5 @@ namespace o2
 			return T();
 
 		return (*this)[len - 1];
-	}
-
-	template<typename T>
-	TString<T> TString<T>::Replaced(const TString& other, int begin, int end) const
-	{
-		TString res(*this);
-		res.Replace(other, begin, end);
-		return res;
 	}
 }

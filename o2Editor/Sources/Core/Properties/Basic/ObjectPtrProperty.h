@@ -106,6 +106,12 @@ namespace Editor
 
 		// Creates object by type
 		void CreateObject(const Type* type);
+
+		// Converts proxy to IObject property, gets value and returns
+		IObject* GetProxy(IAbstractValueProxy* proxy);
+
+		// Converts proxy to IObject proxy, then sets value thru proxy
+		void SetProxy(IAbstractValueProxy* proxy, IObject* object);
 	};
 }
 
@@ -149,5 +155,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);
 	PROTECTED_FUNCTION(void, CreateObject, const Type*);
+	PROTECTED_FUNCTION(IObject*, GetProxy, IAbstractValueProxy*);
+	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, IObject*);
 }
 END_META;

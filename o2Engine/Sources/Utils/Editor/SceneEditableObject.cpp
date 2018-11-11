@@ -6,15 +6,14 @@
 namespace o2
 {
 	SceneEditableObject::SceneEditableObject()
-	{
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.mEditableObjects.Add(this);
-	}
+	{}
 
 	SceneEditableObject::~SceneEditableObject()
+	{}
+
+	bool SceneEditableObject::IsOnScene() const
 	{
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.mEditableObjects.Remove(this);
+		return true;
 	}
 
 	SceneUID SceneEditableObject::GetID() const
@@ -51,6 +50,11 @@ namespace o2
 
 	void SceneEditableObject::SetIndexInSiblings(int idx)
 	{}
+
+	bool SceneEditableObject::CanBeParentedTo(const Type& parentType)
+	{
+		return parentType.IsBasedOn(TypeOf(Actor));
+	}
 
 	bool SceneEditableObject::IsSupportsDisabling() const
 	{

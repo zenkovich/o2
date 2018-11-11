@@ -21,6 +21,10 @@ namespace o2
 		virtual ~SceneEditableObject();
 
 
+		// Returns true when object is on scene
+		virtual bool IsOnScene() const;
+
+
 		// Returns unique id
 		virtual SceneUID GetID() const;
 
@@ -49,6 +53,9 @@ namespace o2
 
 		// Sets index in siblings - children of parent
 		virtual void SetIndexInSiblings(int idx);
+
+		// Checks that this object can be added as child to another object
+		virtual bool CanBeParentedTo(const Type& parentType);
 
 
 		// Returns is that type of object can be enabled and disabled
@@ -138,6 +145,7 @@ END_META;
 CLASS_METHODS_META(o2::SceneEditableObject)
 {
 
+	PUBLIC_FUNCTION(bool, IsOnScene);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(String, GetName);
@@ -147,6 +155,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
+	PUBLIC_FUNCTION(bool, CanBeParentedTo, const Type&);
 	PUBLIC_FUNCTION(bool, IsSupportsDisabling);
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);

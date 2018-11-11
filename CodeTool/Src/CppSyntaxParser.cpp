@@ -112,7 +112,11 @@ void CppSyntaxParser::InitializeParsers()
 	mParsers.push_back(new ExpressionParser("#pragma", &CppSyntaxParser::ParsePragma, false, true));
 	mParsers.push_back(new ExpressionParser("#include", &CppSyntaxParser::ParseInclude, false, true));
 	mParsers.push_back(new ExpressionParser("#define", &CppSyntaxParser::ParseDefine, true, true));
+	mParsers.push_back(new ExpressionParser("#ifdef", &CppSyntaxParser::ParseIfdefMacros, true, true));
 	mParsers.push_back(new ExpressionParser("#if", &CppSyntaxParser::ParseIfMacros, true, true));
+	mParsers.push_back(new ExpressionParser("#endif", &CppSyntaxParser::ParseEndIfMacros, true, true));
+	mParsers.push_back(new ExpressionParser("#else", &CppSyntaxParser::ParseElseMacros, true, true));
+	mParsers.push_back(new ExpressionParser("#elif", &CppSyntaxParser::ParseElifMacros, true, true));
 	mParsers.push_back(new ExpressionParser("meta class", &CppSyntaxParser::ParseMetaClass, true, true));
 	mParsers.push_back(new ExpressionParser("class", &CppSyntaxParser::ParseClass, true, true));
 	mParsers.push_back(new ExpressionParser("struct", &CppSyntaxParser::ParseStruct, true, true));
@@ -561,8 +565,14 @@ void CppSyntaxParser::ParseDefine(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#define");
+	ReadWord(section.mData, caret, "\n");
+}
 
-	ReadWord(section.mData, caret);
+void CppSyntaxParser::ParseIfdefMacros(SyntaxSection& section, int& caret,
+									SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+	caret += (int)strlen("#ifdef");
 	ReadWord(section.mData, caret, "\n");
 }
 
@@ -571,14 +581,31 @@ void CppSyntaxParser::ParseIfMacros(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#if");
+	ReadWord(section.mData, caret, "\n");
+}
 
-	string endWord = "#endif";
-	int endIfPos = (int)section.mData.find(endWord, caret);
+void CppSyntaxParser::ParseEndIfMacros(SyntaxSection& section, int& caret,
+									SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+	caret += (int)strlen("#endif");
+	ReadWord(section.mData, caret, "\n");
+}
 
-	if (endIfPos == section.mData.npos)
-		caret = (int)section.mData.length();
-	else
-		caret = endIfPos + (int)endWord.length();
+void CppSyntaxParser::ParseElifMacros(SyntaxSection& section, int& caret,
+									SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+	caret += (int)strlen("#elif");
+	ReadWord(section.mData, caret, "\n");
+}
+
+void CppSyntaxParser::ParseElseMacros(SyntaxSection& section, int& caret,
+									SyntaxProtectionSection& protectionSection)
+{
+	int begin = caret;
+	caret += (int)strlen("#else");
+	ReadWord(section.mData, caret, "\n");
 }
 
 void CppSyntaxParser::ParseMetaClass(SyntaxSection& section, int& caret,

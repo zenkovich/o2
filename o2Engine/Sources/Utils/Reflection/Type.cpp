@@ -61,14 +61,6 @@ namespace o2
 		return false;
 	}
 
-	const Type* Type::GetPointerType() const
-	{
-		if (!mPtrType)
-			Reflection::InitializePointerType(this);
-
-		return mPtrType;
-	}
-
 	Type::Usage Type::GetUsage() const
 	{
 		return Usage::Regular;
@@ -431,6 +423,9 @@ namespace o2
 
 	IAbstractValueProxy* PointerType::GetValueProxy(void* object) const
 	{
+		if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mUnptrType))
+			return objectUnptrType->GetValueProxy(*(void**)object);
+
 		return mnew PointerValueProxy<void*>((void**)object);
 	}
 

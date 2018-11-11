@@ -127,9 +127,7 @@ namespace o2
 	UIWidget::~UIWidget()
 	{
 		if (mParent)
-		{
 			mParent->OnChildRemoved(this);
-		}
 
 		for (auto layer : mLayers)
 			delete layer;
@@ -934,12 +932,31 @@ namespace o2
 		for (auto child : mInternalWidgets)
 			child->ExcludeFromScene();
 
+		for (auto layer : mLayers)
+			layer->OnExcludeFromScene();
+
 		SceneDrawable::OnExcludeFromScene();
+
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Remove(&layerEditable);
+		o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
+#endif
 	}
 
 	void UIWidget::OnIncludeToScene()
 	{
 		SceneDrawable::OnIncludeToScene();
+
+		for (auto child : mInternalWidgets)
+			child->IncludeInScene();
+
+		for (auto layer : mLayers)
+			layer->OnIncludeInScene();
+
+#if IS_EDITOR
+		o2Scene.mEditableObjects.Add(&layerEditable);
+		o2Scene.mEditableObjects.Add(&internalChildrenEditable);
+#endif
 	}
 
 	void UIWidget::OnDeserialized(const DataNode& node)
@@ -950,7 +967,7 @@ namespace o2
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		for (auto layer : mLayers)
-			layer->mOwnerWidget = this;
+			layer->SetOwnerWidget(this);
 
 		mChildWidgets.Clear();
 		for (auto child : mChildren)
@@ -1093,7 +1110,7 @@ namespace o2
 		for (auto layer : other.mLayers)
 		{
 			auto newLayer = mnew UIWidgetLayer(*layer);
-			newLayer->mOwnerWidget = this;
+			newLayer->SetOwnerWidget(this);
 			mLayers.Add(newLayer);
 			OnLayerAdded(newLayer);
 		}
@@ -1221,6 +1238,24 @@ namespace o2
 		return res;
 	}
 
+	bool UIWidget::IsSupportsLayout() const
+	{
+		return true;
+	}
+
+	Layout UIWidget::GetLayout() const
+	{
+		return Layout(layout->GetAnchorMin(), layout->GetAnchorMax(), layout->GetOffsetMin(), layout->GetOffsetMax());
+	}
+
+	void UIWidget::SetLayout(const Layout& layout)
+	{
+		this->layout->SetAnchorMin(layout.anchorMin);
+		this->layout->SetAnchorMax(layout.anchorMax);
+		this->layout->SetOffsetMin(layout.offsetMin);
+		this->layout->SetOffsetMax(layout.offsetMax);
+	}
+
 	UIWidget::LayersEditable::LayersEditable()
 	{}
 
@@ -1319,3 +1354,7 @@ namespace o2
 }
 
 DECLARE_CLASS(o2::UIWidget);
+
+DECLARE_CLASS(o2::UIWidget::LayersEditable);
+
+DECLARE_CLASS(o2::UIWidget::InternalChildrenEditableEditable);

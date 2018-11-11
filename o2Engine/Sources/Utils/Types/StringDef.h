@@ -261,6 +261,12 @@ namespace o2
 		// Returns string with replace by another string in range
 		TString Replaced(const TString& other, int begin, int end) const;
 
+		// Replaces all occurrences of all old strings to new
+		void ReplaceAll(const TString& oldStr, const TString& newStr);
+
+		// Replaces all occurrences of all old strings to new and returns as new string
+		TString ReplacedAll(const TString& oldStr, const TString& newStr) const;
+
 		// Return index of specified string. Returns -1 if can't find
 		int Find(const TString& other, int startIdx = 0) const;
 

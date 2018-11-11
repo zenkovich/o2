@@ -73,7 +73,7 @@ namespace o2
 
 	const char* FontAsset::GetFileExtensions() const
 	{
-		return "fnt";
+		return "ufnt";
 	}
 
 	FontAsset::MetaInfo* FontAsset::GetMeta() const

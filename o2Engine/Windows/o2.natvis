@@ -43,18 +43,6 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::Vector&lt;*&gt;">
-    <DisplayString>{{ size={ mCount } }}</DisplayString>
-    <Expand>
-      <Item Name="size" ExcludeView="simple">mCount</Item>
-      <Item Name="capacity" ExcludeView="simple">mCapacity</Item>
-      <ArrayItems>
-        <Size>mCount</Size>
-        <ValuePointer>mValues</ValuePointer>
-      </ArrayItems>
-    </Expand>
-  </Type>
-
   <Type Name="o2::KeyValuePair&lt;*&gt;">
     <DisplayString>{{ { mKey } { mValue } }}</DisplayString>
     <Expand>
@@ -63,36 +51,27 @@
     </Expand>
   </Type>
 
+  <Type Name="o2::Type">
+    <DisplayString>{{ { mName } }}</DisplayString>
+    <Expand>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="base types" ExcludeView="simple">mBaseTypes</Item>
+      <Item Name="fields" ExcludeView="simple">mFields</Item>
+      <Item Name="functions" ExcludeView="simple">mFunctions</Item>
+      <Item Name="pointer" ExcludeView="simple">mPtrType</Item>
+      <Item Name="size" ExcludeView="simple">mSize</Item>
+    </Expand>
+  </Type>
+
   <Type Name="o2::Dictionary&lt;*&gt;">
-    <DisplayString>{{ size={ mPairs.mCount } }}</DisplayString>
+    <DisplayString>{{ size={ mPairs._Mypair._Myval2._Mylast - mPairs._Mypair._Myval2._Myfirst } }}</DisplayString>
     <Expand>
-      <Item Name="size" ExcludeView="simple">mPairs.mCount</Item>
-      <Item Name="capacity" ExcludeView="simple">mPairs.mCapacity</Item>
+      <Item Name="size" ExcludeView="simple">mPairs._Mypair._Myval2._Mylast - mPairs._Mypair._Myval2._Myfirst</Item>
+      <Item Name="capacity" ExcludeView="simple">mPairs._Mypair._Myval2._Myend - mPairs._Mypair._Myval2._Myfirst</Item>
       <ArrayItems>
-        <Size>mPairs.mCount</Size>
-        <ValuePointer>mPairs.mValues</ValuePointer>
-      </ArrayItems>
-    </Expand>
-  </Type>
-
-  <Type Name="o2::TString&lt;char&gt;">
-    <DisplayString>{{ {mData,s} }}</DisplayString>
-    <Expand>
-      <Item Name="capacity">mCapacity</Item>
-      <ArrayItems>
-        <Size>mCapacity</Size>
-        <ValuePointer>mData</ValuePointer>
-      </ArrayItems>
-    </Expand>
-  </Type>
-
-  <Type Name="o2::TString&lt;wchar_t&gt;">
-    <DisplayString>{{ {mData,su} }}</DisplayString>
-    <Expand>
-      <Item Name="capacity">mCapacity</Item>
-      <ArrayItems>
-        <Size>mCapacity</Size>
-        <ValuePointer>mData</ValuePointer>
+        <Size>mPairs._Mypair._Myval2._Mylast - mPairs._Mypair._Myval2._Myfirst</Size>
+        <ValuePointer>mPairs._Mypair._Myval2._Myfirst</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -107,15 +86,15 @@
   </Type>
 
   <Type Name="o2::DataNode">
-    <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes.mCount} }}</DisplayString>
+    <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst} }}</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="data" ExcludeView="simple">mData</Item>
       <Item Name="parent" ExcludeView="simple">mParent</Item>
-      <Item Name="childs" ExcludeView="simple">mChildNodes.mCount</Item>
+      <Item Name="childs" ExcludeView="simple">mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst</Item>
       <ArrayItems>
-        <Size>mChildNodes.mCount</Size>
-        <ValuePointer>mChildNodes.mValues</ValuePointer>
+        <Size>mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst</Size>
+        <ValuePointer>mChildNodes._Mypair._Myval2._Myfirst</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -126,11 +105,11 @@
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
       <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
-      <Item Name="visible" ExcludeView="simple">mVisible</Item>
-      <Item Name="res visible" ExcludeView="simple">mResVisible</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="res enabled" ExcludeView="simple">mResEnabled</Item>
+      <Item Name="enabled in hierarchy" ExcludeView="simple">mResEnabledInHierarchy</Item>
       <Item Name="parent" ExcludeView="simple">mParent</Item>
       <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
-      <Item Name="fully disabled" ExcludeView="simple">mFullyDisabled</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
       <Item Name="children rect" ExcludeView="simple">mChildrenWorldRect</Item>
       
@@ -142,68 +121,68 @@
       </Synthetic>
 
       <Synthetic Name="layers">
-        <DisplayString>count={mLayers.mCount}</DisplayString>
+        <DisplayString>count={mLayers._Mypair._Myval2._Mylast - mLayers._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mLayers.mCount</Size>
-            <ValuePointer>mLayers.mValues</ValuePointer>
+            <Size>mLayers._Mypair._Myval2._Mylast - mLayers._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mLayers._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <Synthetic Name="states">
-        <DisplayString>count={mStates.mCount}</DisplayString>
+        <DisplayString>count={mStates._Mypair._Myval2._Mylast - mStates._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mStates.mCount</Size>
-            <ValuePointer>mStates.mValues</ValuePointer>
+            <Size>mStates._Mypair._Myval2._Mylast - mStates._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mStates._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <Synthetic Name="draw layers">
-        <DisplayString>count={mDrawingLayers.mCount}</DisplayString>
+        <DisplayString>count={mDrawingLayers._Mypair._Myval2._Mylast - mDrawingLayers._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mDrawingLayers.mCount</Size>
-            <ValuePointer>mDrawingLayers.mValues</ValuePointer>
+            <Size>mDrawingLayers._Mypair._Myval2._Mylast - mDrawingLayers._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mDrawingLayers._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <Synthetic Name="draw children">
-        <DisplayString>count={mDrawingChildren.mCount}</DisplayString>
+        <DisplayString>count={mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mDrawingChildren.mCount</Size>
-            <ValuePointer>mDrawingChildren.mValues</ValuePointer>
+            <Size>mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mDrawingChildren._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <Synthetic Name="top draw layers">
-        <DisplayString>count={mTopDrawingLayers.mCount}</DisplayString>
+        <DisplayString>count={mTopDrawingLayers._Mypair._Myval2._Mylast - mTopDrawingLayers._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mTopDrawingLayers.mCount</Size>
-            <ValuePointer>mTopDrawingLayers.mValues</ValuePointer>
+            <Size>mTopDrawingLayers._Mypair._Myval2._Mylast - mTopDrawingLayers._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mTopDrawingLayers._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <Synthetic Name="internal children">
-        <DisplayString>count={mInternalWidgets.mCount}</DisplayString>
+        <DisplayString>count={mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mInternalWidgets.mCount</Size>
-            <ValuePointer>mInternalWidgets.mValues</ValuePointer>
+            <Size>mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mInternalWidgets._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <ArrayItems>
-        <Size>mChildWidgets.mCount</Size>
-        <ValuePointer>mChildWidgets.mValues</ValuePointer>
+        <Size>mChildWidgets._Mypair._Myval2._Mylast - mChildWidgets._Mypair._Myval2._Myfirst</Size>
+        <ValuePointer>mChildWidgets._Mypair._Myval2._Myfirst</ValuePointer>
       </ArrayItems>
 
     </Expand>
@@ -236,8 +215,8 @@
       <Item Name="rect" ExcludeView="simple">mAbsolutePosition</Item>
 
       <ArrayItems>
-        <Size>mChildren.mCount</Size>
-        <ValuePointer>mChildren.mValues</ValuePointer>
+        <Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
+        <ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
       </ArrayItems>
 
     </Expand>
@@ -276,21 +255,21 @@
       </Synthetic>
 
       <Synthetic Name="components">
-        <DisplayString>count={mComponents.mCount}</DisplayString>
+        <DisplayString>count={mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mComponents.mCount</Size>
-            <ValuePointer>mComponents.mValues</ValuePointer>
+            <Size>mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mComponents._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
 
       <Synthetic Name="children">
-        <DisplayString>count={mChildren.mCount}</DisplayString>
+        <DisplayString>count={mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mChildren.mCount</Size>
-            <ValuePointer>mChildren.mValues</ValuePointer>
+            <Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
@@ -383,11 +362,11 @@
   </Type>
 
   <Type Name="o2::Curve">
-    <DisplayString>(keys count={ mKeys.mCount })</DisplayString>
+    <DisplayString>(keys count={ mKeys._Mypair._Myval2._Mylast - mKeys._Mypair._Myval2._Myfirst })</DisplayString>
     <Expand>
       <ArrayItems>
-        <Size>mKeys.mCount</Size>
-        <ValuePointer>mKeys.mValues</ValuePointer>
+        <Size>mKeys._Mypair._Myval2._Mylast - mKeys._Mypair._Myval2._Myfirst</Size>
+        <ValuePointer>mKeys._Mypair._Myval2._Myfirst</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>

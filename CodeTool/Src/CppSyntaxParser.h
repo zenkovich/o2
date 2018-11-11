@@ -82,7 +82,15 @@ protected:
 
 	void ParseDefine(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
+	void ParseIfdefMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
 	void ParseIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseEndIfMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseElifMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
+
+	void ParseElseMacros(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 
 	void ParseMetaClass(SyntaxSection& section, int& caret, SyntaxProtectionSection& protectionSection);
 

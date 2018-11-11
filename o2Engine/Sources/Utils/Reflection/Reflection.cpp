@@ -123,7 +123,7 @@ namespace o2
 		if (name[name.Length() - 1] == '*')
 		{
 			const Type* unptrType = GetType(name.SubStr(0, name.Length() - 1));
-			return InitializePointerType(unptrType);
+			return unptrType->GetPointerType();
 		}
 
 		return nullptr;
@@ -142,20 +142,5 @@ namespace o2
 
 		mInstance->mTypes.Add(FundamentalTypeContainer<void>::type);
 		mInstance->mTypes.Add(Type::Dummy::type);
-	}
-
-	const Type* Reflection::InitializePointerType(const Type* type)
-	{
-		if (type->mPtrType)
-			return type->mPtrType;
-
-		PointerType* newType = mnew PointerType(type);
-		newType->mId = mInstance->mLastGivenTypeId++;
-
-		type->mPtrType = newType;
-
-		mInstance->mTypes.Add(newType);
-
-		return newType;
 	}
 }

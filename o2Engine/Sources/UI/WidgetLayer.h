@@ -62,7 +62,7 @@ namespace o2
 		UIWidgetLayer& operator=(const UIWidgetLayer& other);
 
 
-		// Returns pointer to owenr widget
+		// Returns pointer to owner widget
 		UIWidget* GetOwnerWidget() const;
 
 
@@ -151,6 +151,9 @@ namespace o2
 		SERIALIZABLE(UIWidgetLayer);
 
 #if IS_EDITOR
+		// Returns true when object is on scene
+		bool IsOnScene() const override;
+
 		// Returns unique id
 		SceneUID GetID() const override;
 
@@ -179,6 +182,9 @@ namespace o2
 
 		// Sets index in siblings - children of parent
 		void SetIndexInSiblings(int idx) override;
+
+		// Checks that this object can be added as child to another object
+		bool CanBeParentedTo(const Type& parentType) override;
 
 
 		// Returns is that type of object can be enabled and disabled
@@ -230,6 +236,10 @@ namespace o2
 		// Sets layout of object, override when it's supports
 		void SetLayout(const Layout& layout) override;
 
+
+		// It is called when something changed in this object
+		void OnChanged() override;
+
 #endif // IS_EDITOR
 
 	protected:
@@ -264,6 +274,12 @@ namespace o2
 		// It is called when transparency was changed and updates children transparencies
 		void UpdateResTransparency();
 
+		// It is called when owner widget including in scene. Registers editable object and it's children
+		void OnIncludeInScene();
+
+		// It is called when owner widget excluding in scene. Unregisters editable object and it's children
+		void OnExcludeFromScene();
+
 		// Returns dictionary with all child layers
 		Dictionary<String, UIWidgetLayer*> GetAllChildLayers();
 
@@ -290,7 +306,7 @@ namespace o2
 
 CLASS_BASES_META(o2::UIWidgetLayer)
 {
-	BASE_CLASS(UIWidgetLayerBase);
+	BASE_CLASS(o2::SceneEditableObject);
 }
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayer)
@@ -299,10 +315,11 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PUBLIC_FIELD(depth);
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(child);
+	PUBLIC_FIELD(locked);
 	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(drawable).SERIALIZABLE_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE();
+	PUBLIC_FIELD(drawable).EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
@@ -312,6 +329,8 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PROTECTED_FIELD(mOwnerWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mParent).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mIsLocked);
+	PROTECTED_FIELD(mUID);
 }
 END_META;
 CLASS_METHODS_META(o2::UIWidgetLayer)
@@ -343,11 +362,40 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(float, GetResTransparency);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(const RectF&, GetRect);
+	PUBLIC_FUNCTION(bool, IsOnScene);
+	PUBLIC_FUNCTION(SceneUID, GetID);
+	PUBLIC_FUNCTION(void, GenerateNewID, bool);
+	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(void, SetName, const String&);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
+	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
+	PUBLIC_FUNCTION(bool, CanBeParentedTo, const Type&);
+	PUBLIC_FUNCTION(bool, IsSupportsDisabling);
+	PUBLIC_FUNCTION(bool, IsSupportsLocking);
+	PUBLIC_FUNCTION(bool, IsLocked);
+	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
+	PUBLIC_FUNCTION(void, SetLocked, bool);
+	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
+	PUBLIC_FUNCTION(Basis, GetTransform);
+	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
+	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(bool, IsSupportsPivot);
+	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPivot);
+	PUBLIC_FUNCTION(bool, IsSupportsLayout);
+	PUBLIC_FUNCTION(Layout, GetLayout);
+	PUBLIC_FUNCTION(void, SetLayout, const Layout&);
+	PUBLIC_FUNCTION(void, OnChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetOwnerWidget, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidgetLayer*);
 	PROTECTED_FUNCTION(void, UpdateLayout);
 	PROTECTED_FUNCTION(void, UpdateResTransparency);
+	PROTECTED_FUNCTION(void, OnIncludeInScene);
+	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(_tmp1, GetAllChildLayers);
 }
 END_META;

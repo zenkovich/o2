@@ -75,6 +75,7 @@ namespace o2
 		static EnumType* InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func);
 
 		// Initializes pointer type
+		template<typename _type>
 		static const Type* InitializePointerType(const Type* type);
 
 		// Initializes property type 
@@ -232,6 +233,22 @@ namespace o2
 		Reflection::Instance().mTypes.Add(res);
 
 		return res;
+	}
+
+	template<typename _type>
+	const Type* Reflection::InitializePointerType(const Type* type)
+	{
+		if (type->mPtrType)
+			return type->mPtrType;
+
+		TPointerType<_type>* newType = mnew TPointerType<_type>(type);
+		newType->mId = mInstance->mLastGivenTypeId++;
+
+		type->mPtrType = newType;
+
+		mInstance->mTypes.Add(newType);
+
+		return newType;
 	}
 
 	template<typename _type>
