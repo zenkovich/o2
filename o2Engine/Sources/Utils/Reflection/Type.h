@@ -910,7 +910,7 @@ namespace o2
 	template<typename _element_type>
 	IAbstractValueProxy* TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
 	{
-		return mnew VariableValueProxy<_element_type>(&((Vector<_element_type>*)object)->Get(idx));
+		return mElementType->GetValueProxy(&((Vector<_element_type>*)object)->Get(idx));
 	}
 
 	template<typename _element_type>

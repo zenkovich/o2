@@ -45,7 +45,7 @@ namespace Editor
 		if (mSpoiler)
 			mSpoiler->onExpand = THIS_FUNC(OnExpand);
 
-		expandHeight = true;
+		expandHeight = false;
 		expandWidth = true;
 		fitByChildren = true;
 	}

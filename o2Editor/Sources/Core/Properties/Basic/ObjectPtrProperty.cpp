@@ -69,7 +69,7 @@ namespace Editor
 		mCreateMenu = o2UI.CreateWidget<UIContextMenu>();
 		mCreateDeleteButton->AddChild(mCreateMenu);
 
-		expandHeight = true;
+		expandHeight = false;
 		expandWidth = true;
 		fitByChildren = true;
 	}
@@ -273,7 +273,11 @@ namespace Editor
 
 	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy)
 	{
-		auto objectProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
+		auto pointerProxy = dynamic_cast<IVariablePointerValueProxy*>(proxy);
+		if (!pointerProxy)
+			return nullptr;
+
+		auto objectProxy = dynamic_cast<IIObjectPointerValueProxy*>(pointerProxy->GetUnptrValueProxy());
 		if (objectProxy)
 			return objectProxy->GetObjectPtr();
 
