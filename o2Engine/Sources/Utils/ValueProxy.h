@@ -22,40 +22,59 @@ namespace o2
 		void GetValuePtr(void* value) const override { *(_type*)value = GetValue(); }
 	};
 
-	class NestedPointerValueProxy : public IAbstractValueProxy
-	{
-	public:
-		NestedPointerValueProxy() {}
-		NestedPointerValueProxy(IAbstractValueProxy* nested) : mNested(nested) {}
-
-		void SetValuePtr(void* value) override { mNested->SetValuePtr(*(void**)value); }
-		void GetValuePtr(void* value) const override { mNested->GetValuePtr(*(void**)value); }
-
-	private:
-		IAbstractValueProxy* mNested = nullptr;
-	};
-
-	class IPointerValueProxy
+	class IVariableValueProxy
 	{
 	public:
 		virtual void* GetValueVoidPointer() const = 0;
 	};
 
 	template<typename _type>
-	class PointerValueProxy: public IValueProxy<_type>, public IPointerValueProxy
+	class VariableValueProxy: public IValueProxy<_type>, public IVariableValueProxy
 	{
 	protected:
 		_type* mValuePtr = nullptr;
 
 	public:
-		PointerValueProxy() {}
-		PointerValueProxy(_type* valuePtr):mValuePtr(valuePtr) {}
+		VariableValueProxy() {}
+		VariableValueProxy(_type* valuePtr):mValuePtr(valuePtr) {}
 
 		void SetValue(const _type& value) override { *mValuePtr = value; }
 		_type GetValue() const override { return *mValuePtr; }
 
 		_type* GetValuePointer() const { return mValuePtr; }
 		void* GetValueVoidPointer() const override { return (void*)mValuePtr; }
+	};
+
+	class IVariablePointerValueProxy
+	{
+	public:
+		virtual IAbstractValueProxy* GetUnptrValueProxy() const = 0;
+		virtual void** GetValuePointerVoidPointer() const = 0;
+	};
+
+	template<typename _type>
+	class VariablePointerValueProxy : public IValueProxy<_type*>, public IVariablePointerValueProxy
+	{
+	protected:
+		_type** mValuePointerPtr = nullptr;
+		IValueProxy<_type>* mUnptrValueProxy = nullptr;
+
+	public:
+		typedef _type* _typePtr;
+
+		VariablePointerValueProxy() {}
+		VariablePointerValueProxy(_type** valuePtr, IValueProxy<_type>* unptrValueProxy):
+			mValuePointerPtr(valuePtr), mUnptrValueProxy(unptrValueProxy) {}
+
+		void SetValue(const _typePtr& value) override { *mValuePointerPtr = value; }
+		_type* GetValue() const override { return *mValuePointerPtr; }
+
+		IAbstractValueProxy* GetUnptrValueProxy() const override { return mUnptrValueProxy; }
+
+		IValueProxy<_type>* GetSpecializedUnptrValueProxy() const { return mUnptrValueProxy; }
+
+		_type** GetValuePointerPointer() const { return mValuePointerPtr; }
+		void** GetValuePointerVoidPointer() const override { return (void**)mValuePointerPtr; }
 	};
 
 	class IIObjectPointerValueProxy
@@ -66,20 +85,20 @@ namespace o2
 	};
 
 	template<typename _type>
-	class IObjectPointerValueProxy : public PointerValueProxy<_type>, public IIObjectPointerValueProxy
+	class IObjectPointerValueProxy : public VariableValueProxy<_type>, public IIObjectPointerValueProxy
 	{
 	public:
-		IObjectPointerValueProxy() :PointerValueProxy<_type>() {}
-		IObjectPointerValueProxy(_type* valuePtr) :PointerValueProxy<_type>(valuePtr) {}
+		IObjectPointerValueProxy() :VariableValueProxy<_type>() {}
+		IObjectPointerValueProxy(_type* valuePtr) :VariableValueProxy<_type>(valuePtr) {}
 
 		IObject* GetObjectPtr() const override
 		{
-			return dynamic_cast<IObject*>(PointerValueProxy<_type>::mValuePtr);
+			return dynamic_cast<IObject*>(VariableValueProxy<_type>::mValuePtr);
 		}
 
 		void SetObjectPtr(IObject* object) override
 		{
-			PointerValueProxy<_type>::mValuePtr = dynamic_cast<_type*>(object);
+			VariableValueProxy<_type>::mValuePtr = dynamic_cast<_type*>(object);
 		}
 	};
 }

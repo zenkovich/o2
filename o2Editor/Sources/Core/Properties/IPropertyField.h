@@ -410,7 +410,7 @@ namespace Editor
 			[&](_object_type* target)
 		{
 			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PointerValueProxy<_type>(getter(target)), nullptr);
+				mnew VariableValueProxy<_type>(getter(target)), nullptr);
 		}));
 	}
 
@@ -436,8 +436,8 @@ namespace Editor
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
 			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PointerValueProxy<_type>(getter(targets[i])),
-				prototypes[i] ? mnew PointerValueProxy<_type>(getter(prototypes[i])) : nullptr
+				mnew VariableValueProxy<_type>(getter(targets[i])),
+				prototypes[i] ? mnew VariableValueProxy<_type>(getter(prototypes[i])) : nullptr
 				));
 		}
 

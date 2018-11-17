@@ -773,7 +773,7 @@ namespace o2
 	template<typename _type>
 	IAbstractValueProxy* TType<_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<_type>((_type*)object);
+		return mnew VariableValueProxy<_type>((_type*)object);
 	}
 
 	template<typename _type>
@@ -842,10 +842,8 @@ namespace o2
 	template<typename _type>
 	IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
 	{
-		if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mUnptrType))
-			return objectUnptrType->GetValueProxy(*(void**)object);
-
-		return mnew PointerValueProxy<_type*>((_type**)object);
+		auto unptrProxy = dynamic_cast<IValueProxy<_type>*>(GetUnpointedType()->GetValueProxy(*(void**)object));
+		return mnew VariablePointerValueProxy<_type>((_type**)object, unptrProxy);
 	}
 
 	template<typename _type>
@@ -912,7 +910,7 @@ namespace o2
 	template<typename _element_type>
 	IAbstractValueProxy* TVectorType<_element_type>::GetObjectVectorElementProxy(void* object, int idx) const
 	{
-		return mnew PointerValueProxy<_element_type>(&((Vector<_element_type>*)object)->Get(idx));
+		return mnew VariableValueProxy<_element_type>(&((Vector<_element_type>*)object)->Get(idx));
 	}
 
 	template<typename _element_type>
@@ -935,7 +933,7 @@ namespace o2
 	template<typename _element_type>
 	IAbstractValueProxy* TVectorType<_element_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<Vector<_element_type>>((Vector<_element_type>*)object);
+		return mnew VariableValueProxy<Vector<_element_type>>((Vector<_element_type>*)object);
 	}
 
 	template<typename _element_type>
@@ -1054,7 +1052,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	IAbstractValueProxy* TDictionaryType<_key_type, _value_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<Dictionary<_key_type, _value_type>>((Dictionary<_key_type, _value_type>*)object);
+		return mnew VariableValueProxy<Dictionary<_key_type, _value_type>>((Dictionary<_key_type, _value_type>*)object);
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -1093,7 +1091,7 @@ namespace o2
 	template<typename _return_type, typename _accessor_type>
 	IAbstractValueProxy* StringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<_accessor_type>((_accessor_type*)object);
+		return mnew VariableValueProxy<_accessor_type>((_accessor_type*)object);
 	}
 
 	template<typename _return_type, typename _accessor_type>
@@ -1163,7 +1161,7 @@ namespace o2
 	template<typename _type>
 	IAbstractValueProxy* TEnumType<_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<_type>((_type*)object);
+		return mnew VariableValueProxy<_type>((_type*)object);
 	}
 
 	template<typename _type>

@@ -75,7 +75,7 @@ private:                                                                        
 	friend class o2::TObjectType;                                                                               \
                                                                                                                 \
     template<typename __type>                                                                                   \
-	friend class PointerValueProxy;                                                                             \
+	friend class VariableValueProxy;                                                                             \
                                                                                                                 \
     friend class o2::TypeInitializer;                                                                           \
     friend class o2::Reflection;                                                                                \

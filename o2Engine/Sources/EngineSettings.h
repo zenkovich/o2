@@ -15,8 +15,6 @@
 #define RENDER_DEBUG false
 #endif
 
-#define _HAS_ITERATOR_DEBUGGING 0
-
 // Describes that engine running as editor
 #define IS_EDITOR true
 
@@ -70,4 +68,12 @@ const char* GetDataAssetsTreePath();
 // Returns android assets path prefix
 const char* GetAndroidAssetsPath();
 
+#endif
+
+// --------------------
+// Other configurations
+// --------------------
+
+#ifndef _HAS_ITERATOR_DEBUGGING
+#define _HAS_ITERATOR_DEBUGGING 0
 #endif

@@ -234,9 +234,9 @@ namespace Editor
 
 	void* VectorProperty::GetProxyValuePointer(IAbstractValueProxy* proxy) const
 	{
-		IPointerValueProxy* pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy);
-		if (pointerProxy)
-			return pointerProxy->GetValueVoidPointer();
+		IVariableValueProxy* variableProxy = dynamic_cast<IVariableValueProxy*>(proxy);
+		if (variableProxy)
+			return variableProxy->GetValueVoidPointer();
 
 		return nullptr;
 	}
