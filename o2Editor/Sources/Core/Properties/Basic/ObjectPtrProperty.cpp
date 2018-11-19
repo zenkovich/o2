@@ -69,7 +69,7 @@ namespace Editor
 		mCreateMenu = o2UI.CreateWidget<UIContextMenu>();
 		mCreateDeleteButton->AddChild(mCreateMenu);
 
-		expandHeight = false;
+		expandHeight = true;
 		expandWidth = true;
 		fitByChildren = true;
 	}

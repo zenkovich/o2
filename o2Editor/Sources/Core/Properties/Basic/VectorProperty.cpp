@@ -60,7 +60,7 @@ namespace Editor
 			mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
 		}
 
-		expandHeight = false;
+		expandHeight = true;
 		expandWidth = true;
 		fitByChildren = true;
 	}
