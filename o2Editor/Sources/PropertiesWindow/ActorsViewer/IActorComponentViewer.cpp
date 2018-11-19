@@ -11,6 +11,9 @@ namespace Editor
 	{
 		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
 
+		mSpoiler->expandHeight = false;
+		mSpoiler->expandWidth = true;
+		mSpoiler->fitByChildren = true;
 		mSpoiler->borderBottom = 5;
 		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
