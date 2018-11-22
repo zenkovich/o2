@@ -541,6 +541,17 @@ namespace o2
 		// Returns list of object's children
 		Vector<SceneEditableObject*> GetEditablesChildren() const override;
 
+
+		// Returns is that type of object can be transformed
+		bool IsSupportsTransforming() const override;
+
+		// Returns transform, override when it's supports
+		Basis GetTransform() const override;
+
+		// Sets transform of object, override when it's supports
+		void SetTransform(const Basis& transform) override;
+
+
 		// Returns is that type of object can be transformed with layout
 		bool IsSupportsLayout() const override;
 
@@ -782,6 +793,9 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
+	PUBLIC_FUNCTION(Basis, GetTransform);
+	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
 	PUBLIC_FUNCTION(bool, IsSupportsLayout);
 	PUBLIC_FUNCTION(Layout, GetLayout);
 	PUBLIC_FUNCTION(void, SetLayout, const Layout&);

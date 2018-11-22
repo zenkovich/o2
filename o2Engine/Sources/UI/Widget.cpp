@@ -1238,6 +1238,21 @@ namespace o2
 		return res;
 	}
 
+	bool UIWidget::IsSupportsTransforming() const
+	{
+		return true;
+	}
+
+	Basis UIWidget::GetTransform() const
+	{
+		return layout->GetWorldBasis();
+	}
+
+	void UIWidget::SetTransform(const Basis& transform)
+	{
+		layout->SetWorldBasis(transform);
+	}
+
 	bool UIWidget::IsSupportsLayout() const
 	{
 		return true;

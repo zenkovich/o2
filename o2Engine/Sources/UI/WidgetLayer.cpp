@@ -501,13 +501,13 @@ namespace o2
 		layout.offsetMax += transform.origin - thisTransform.origin + 
 			Vec2F(transform.xv.Length() - thisTransform.xv.Length(),
 				  transform.yv.Length() - thisTransform.yv.Length());
-
-		mOwnerWidget->UpdateTransform();
-		mOwnerWidget->OnChanged();
 	}
 
 	void UIWidgetLayer::UpdateTransform(bool withChildren /*= true*/)
-	{}
+	{
+		mOwnerWidget->UpdateTransform();
+		mOwnerWidget->OnChanged();
+	}
 
 	bool UIWidgetLayer::IsSupportsPivot() const
 	{

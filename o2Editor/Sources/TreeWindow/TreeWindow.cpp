@@ -171,15 +171,15 @@ namespace Editor
 			UIContextMenu::Item::Separator(),
 
 			UIContextMenu::Item("View widgets layers", true, THIS_FUNC(OnViewLayersToggled)),
-			UIContextMenu::Item("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled))
+			UIContextMenu::Item("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled)),
+
+			UIContextMenu::Item::Separator()
 		});
 
-		CreateUICreateMenu();
 		CreateUILayersMenu();
-
-		mTreeContextMenu->AddItem(UIContextMenu::Item::Separator());
-
 		InitializeCreateMenu();
+
+		CreateUICreateMenu();
 
 		mWindow->AddChild(mTreeContextMenu);
 
@@ -213,7 +213,7 @@ namespace Editor
 			path.ReplaceAll("o2::", "");
 			path.ReplaceAll("::", "/");
 
-			mTreeContextMenu->AddItem(String("Create/UI style/") + path, [=]()
+			mTreeContextMenu->AddItem(String("Create UI style/") + path, [=]()
 			{
 				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
 				newWidget->SetEnableForcible(true);
@@ -315,6 +315,7 @@ namespace Editor
 		}
 
 		newObject->SetTransform(Basis(Vec2F(), Vec2F(100, 0), Vec2F(0, 100)));
+		newObject->UpdateTransform();
 		mSceneTree->SelectObject(newObject);
 		mSceneTree->ScrollTo(newObject);
 	}

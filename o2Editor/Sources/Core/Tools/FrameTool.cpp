@@ -307,8 +307,9 @@ namespace Editor
 					layout.anchorMin = (anchorsFrame.LeftBottom() - parentWorldRect.LeftBottom())/parentWorldRect.Size();
 					layout.anchorMax = (anchorsFrame.RightTop() - parentWorldRect.LeftBottom())/parentWorldRect.Size();
 					object->SetLayout(layout);
-					object->SetTransform(prevTransform);
+					object->UpdateTransform();
 
+					object->SetTransform(prevTransform);
 					object->UpdateTransform();
 				}
 			}

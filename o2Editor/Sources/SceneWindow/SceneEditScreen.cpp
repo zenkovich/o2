@@ -51,7 +51,7 @@ namespace Editor
 		if (!mReady)
 			return;
 
-		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw) || true)
+		if (mNeedRedraw || (mEnabledTool && mEnabledTool->mNeedRedraw))
 			RedrawRenderTarget();
 
 		mRenderTargetSprite->Draw();
