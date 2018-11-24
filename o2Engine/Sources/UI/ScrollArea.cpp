@@ -25,8 +25,7 @@ namespace o2
 	{
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
-			mHorScrollBar->SetInternalParent(this, false);
+			mHorScrollBar = FindInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
@@ -36,8 +35,7 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
-			mVerScrollBar->SetInternalParent(this, false);
+			mVerScrollBar = FindInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
@@ -247,6 +245,7 @@ namespace o2
 
 		if (mHorScrollBar)
 		{
+			mHorScrollBar->name = "horScrollBar";
 			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
@@ -274,6 +273,7 @@ namespace o2
 
 		if (mVerScrollBar)
 		{
+			mVerScrollBar->name = "verScrollBar";
 			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
@@ -791,10 +791,9 @@ namespace o2
 
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = other.mHorScrollBar->CloneAs<UIHorizontalScrollBar>();
-			mHorScrollBar->SetInternalParent(this, false);
-			mHorScrollBar->layout->mData->drivenByParent = true;
+			mHorScrollBar = FindInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
+			mHorScrollBar->layout->mData->drivenByParent = true;
 
 			mEnableHorScroll = mHorScrollBar->IsEnabled();
 		}
@@ -802,10 +801,9 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = other.mVerScrollBar->CloneAs<UIVerticalScrollBar>();
-			mVerScrollBar->SetInternalParent(this, false);
-			mVerScrollBar->layout->mData->drivenByParent = true;
+			mVerScrollBar = FindInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
+			mVerScrollBar->layout->mData->drivenByParent = true;
 
 			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
@@ -814,17 +812,6 @@ namespace o2
 		RetargetStatesAnimations();
 		UpdateScrollParams();
 		SetLayoutDirty();
-	}
-
-	void UIScrollArea::OnSerialize(DataNode& node) const
-	{
-		UIWidget::OnSerialize(node);
-
-		if (mOwnHorScrollBar)
-			*node.AddNode("mHorScrollBar") = mHorScrollBar;
-
-		if (mOwnVerScrollBar)
-			*node.AddNode("mVerScrollBar") = mVerScrollBar;
 	}
 
 	void UIScrollArea::OnDeserialized(const DataNode& node)
@@ -847,25 +834,15 @@ namespace o2
 			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 
-		auto horScrollNode = node.GetNode("mHorScrollBar");
-		mOwnHorScrollBar = horScrollNode != nullptr;
+		mHorScrollBar = FindInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+		mOwnHorScrollBar = mHorScrollBar != nullptr;
 		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = *horScrollNode;
-			mHorScrollBar->SetInternalParent(this, false);
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
-		}
-		else mHorScrollBar = nullptr;
 
-		auto varScrollNode = node.GetNode("mVerScrollBar");
-		mOwnVerScrollBar = varScrollNode != nullptr;
+		mVerScrollBar = FindInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+		mOwnVerScrollBar = mVerScrollBar != nullptr;
 		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = *varScrollNode;
-			mVerScrollBar->SetInternalParent(this, false);
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
-		}
-		else mVerScrollBar = nullptr;
 
 		for (auto child : mChildWidgets)
 			child->layout->mData->drivenByParent = true;

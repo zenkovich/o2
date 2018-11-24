@@ -176,12 +176,12 @@ namespace Editor
 		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
 		closeBtn->name = "closeButton";
 		*closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 2));
-		sample->AddWindowElement(closeBtn);
+		sample->AddInternalWidget(closeBtn);
 
 		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
 		optionsBtn->name = "optionsButton";
 		*optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 2));
-		sample->AddWindowElement(optionsBtn);
+		sample->AddInternalWidget(optionsBtn);
 
 		// drag handles
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head

@@ -118,9 +118,6 @@ namespace Editor
 
 		DrawDebugFrame();
 
-		for (auto elem : mWindowElements)
-			elem->Draw();
-
 		mDockingFrameSample->Draw();
 	}
 

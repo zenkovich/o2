@@ -812,7 +812,7 @@ namespace o2
 		closeBtn->layout->anchorMax = Vec2F(1, 1);
 		closeBtn->layout->offsetMin = Vec2F(-19, -15);
 		closeBtn->layout->offsetMax = Vec2F(1, 3);
-		sample->AddWindowElement(closeBtn);
+		sample->AddInternalWidget(closeBtn);
 
 		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
 		optionsBtn->name = "optionsButton";
@@ -820,7 +820,7 @@ namespace o2
 		optionsBtn->layout->anchorMax = Vec2F(1, 1);
 		optionsBtn->layout->offsetMin = Vec2F(-34, -15);
 		optionsBtn->layout->offsetMax = Vec2F(-16, 3);
-		sample->AddWindowElement(optionsBtn);
+		sample->AddInternalWidget(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head
 								   Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -2), Vec2F(-5, 5)),      // top

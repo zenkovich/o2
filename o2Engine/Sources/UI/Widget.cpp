@@ -102,9 +102,7 @@ namespace o2
 		{
 			auto newChild = child->CloneAs<UIWidget>();
 			newChild->ExcludeFromScene();
-			newChild->mParent = this;
-			newChild->mParentWidget = this;
-			mInternalWidgets.Add(newChild);
+			newChild->SetInternalParent(this, false);
 		}
 
 		for (auto state : other.mStates)
@@ -974,7 +972,10 @@ namespace o2
 		{
 			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
 			if (childWidget)
+			{
+				childWidget->mParentWidget = this;
 				mChildWidgets.Add(childWidget);
+			}
 		}
 
 		for (auto child : mInternalWidgets)
@@ -1127,9 +1128,7 @@ namespace o2
 		{
 			auto newChild = child->CloneAs<UIWidget>();
 			newChild->ExcludeFromScene();
-			newChild->mParent = this;
-			newChild->mParentWidget = this;
-			mInternalWidgets.Add(newChild);
+			newChild->SetInternalParent(this, false);
 		}
 
 		for (auto state : other.mStates)

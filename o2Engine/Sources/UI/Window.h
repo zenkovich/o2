@@ -32,23 +32,11 @@ namespace o2
 		// Copy-operator
 		UIWindow& operator=(const UIWindow& other);
 
-		// Updates drawables, states and widget
-		void Update(float dt) override;
-
 		// Draws widget
 		void Draw() override;
 
 		// Shows window as modal
 		void ShowModal();
-
-		// Adds window element widget
-		UIWidget* AddWindowElement(UIWidget* widget);
-
-		// Removes window element widget
-		void RemoveWindowElement(UIWidget* widget);
-
-		// Removes all window elements widgets
-		void RemoveAllWindowElements();
 
 		// Sets icon sprite
 		virtual void SetIcon(Sprite* icon);
@@ -97,47 +85,45 @@ namespace o2
 		const char* mIconLayerPath = "icon";
 		const char* mCaptionLayerPath = "caption";
 
-		WidgetsVec           mWindowElements;            // Windows elements widgets @SERIALIZABLE
+		UIContextMenu*   mOptionsMenu;               // Window options context menu
 
-		UIContextMenu*       mOptionsMenu;               // Window options context menu
+		CursorEventsArea mBackCursorArea;            // Cursor area listener at back of window, for catching events
 
-		CursorEventsArea     mBackCursorArea;            // Cursor area listener at back of window, for catching events
-
-		CursorEventsArea     mHeadDragHandle;			 // Head drag handle, for moving window
-		Layout               mHeadDragAreaLayout;		 // Head drag handle layout @SERIALIZABLE
-		RectF                mHeadDragAreaRect;			 // Head drag handle rect
-														 
-		CursorEventsArea     mTopDragHandle;			 //	Top drag handle, for resizing window
-		Layout               mTopDragAreaLayout;		 //	Top drag handle layout @SERIALIZABLE
-		RectF                mTopDragAreaRect;			 //	Top drag handle rect
-														 
-		CursorEventsArea     mBottomDragHandle;			 //	Bottom drag handle, for resizing window
-		Layout               mBottomDragAreaLayout;		 //	Bottom drag handle layout @SERIALIZABLE
-		RectF                mBottomDragAreaRect;		 //	Bottom drag handle rect
-														 
-		CursorEventsArea     mLeftDragHandle;			 //	Left drag handle, for resizing window
-		Layout               mLeftDragAreaLayout;		 //	Left drag handle layout @SERIALIZABLE
-		RectF                mLeftDragAreaRect;			 //	Left drag handle rect
-														 
-		CursorEventsArea     mRightDragHandle;			 //	Right drag handle, for resizing window
-		Layout               mRightDragAreaLayout;		 //	Right drag handle layout @SERIALIZABLE
-		RectF                mRightDragAreaRect;		 //	Right drag handle rect
-														 
-		CursorEventsArea     mLeftTopDragHandle;		 //	Left Top drag handle, for resizing window
-		Layout               mLeftTopDragAreaLayout;	 //	Left Top drag handle layout @SERIALIZABLE
-		RectF                mLeftTopDragAreaRect;		 //	Left Top drag handle rect
-														 
-		CursorEventsArea     mRightTopDragHandle;		 //	Right Top drag handle, for resizing window
-		Layout               mRightTopDragAreaLayout;	 //	Right Top drag handle layout @SERIALIZABLE
-		RectF                mRightTopDragAreaRect;		 //	Right Top drag handle rect
-														 
-		CursorEventsArea     mLeftBottomDragHandle;		 //	Left Bottom drag handle, for resizing window
-		Layout               mLeftBottomDragAreaLayout;	 //	Left Bottom drag handle layout @SERIALIZABLE
-		RectF                mLeftBottomDragAreaRect;	 //	Left Bottom drag handle rect
-														 
-		CursorEventsArea     mRightBottomDragHandle;	 //	Right Bottom drag handle, for resizing window
-		Layout               mRightBottomDragAreaLayout; //	Right Bottom drag handle layout @SERIALIZABLE
-		RectF                mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
+		CursorEventsArea mHeadDragHandle;			 // Head drag handle, for moving window
+		Layout           mHeadDragAreaLayout;		 // Head drag handle layout @SERIALIZABLE
+		RectF            mHeadDragAreaRect;			 // Head drag handle rect
+													 
+		CursorEventsArea mTopDragHandle;			 //	Top drag handle, for resizing window
+		Layout           mTopDragAreaLayout;		 //	Top drag handle layout @SERIALIZABLE
+		RectF            mTopDragAreaRect;			 //	Top drag handle rect
+													 
+		CursorEventsArea mBottomDragHandle;			 //	Bottom drag handle, for resizing window
+		Layout           mBottomDragAreaLayout;		 //	Bottom drag handle layout @SERIALIZABLE
+		RectF            mBottomDragAreaRect;		 //	Bottom drag handle rect
+													 
+		CursorEventsArea mLeftDragHandle;			 //	Left drag handle, for resizing window
+		Layout           mLeftDragAreaLayout;		 //	Left drag handle layout @SERIALIZABLE
+		RectF            mLeftDragAreaRect;			 //	Left drag handle rect
+													 
+		CursorEventsArea mRightDragHandle;			 //	Right drag handle, for resizing window
+		Layout           mRightDragAreaLayout;		 //	Right drag handle layout @SERIALIZABLE
+		RectF            mRightDragAreaRect;		 //	Right drag handle rect
+													 
+		CursorEventsArea mLeftTopDragHandle;		 //	Left Top drag handle, for resizing window
+		Layout           mLeftTopDragAreaLayout;	 //	Left Top drag handle layout @SERIALIZABLE
+		RectF            mLeftTopDragAreaRect;		 //	Left Top drag handle rect
+													 
+		CursorEventsArea mRightTopDragHandle;		 //	Right Top drag handle, for resizing window
+		Layout           mRightTopDragAreaLayout;	 //	Right Top drag handle layout @SERIALIZABLE
+		RectF            mRightTopDragAreaRect;		 //	Right Top drag handle rect
+													 
+		CursorEventsArea mLeftBottomDragHandle;		 //	Left Bottom drag handle, for resizing window
+		Layout           mLeftBottomDragAreaLayout;	 //	Left Bottom drag handle layout @SERIALIZABLE
+		RectF            mLeftBottomDragAreaRect;	 //	Left Bottom drag handle rect
+													 
+		CursorEventsArea mRightBottomDragHandle;	 //	Right Bottom drag handle, for resizing window
+		Layout           mRightBottomDragAreaLayout; //	Right Bottom drag handle layout @SERIALIZABLE
+		RectF            mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
 
 	protected:
 		// Copies data of actor from other to this
@@ -190,7 +176,6 @@ CLASS_FIELDS_META(o2::UIWindow)
 	PUBLIC_FIELD(icon);
 	PROTECTED_FIELD(mIconLayerPath);
 	PROTECTED_FIELD(mCaptionLayerPath);
-	PROTECTED_FIELD(mWindowElements).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mOptionsMenu);
 	PROTECTED_FIELD(mBackCursorArea);
 	PROTECTED_FIELD(mHeadDragHandle);
@@ -225,12 +210,8 @@ END_META;
 CLASS_METHODS_META(o2::UIWindow)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ShowModal);
-	PUBLIC_FUNCTION(UIWidget*, AddWindowElement, UIWidget*);
-	PUBLIC_FUNCTION(void, RemoveWindowElement, UIWidget*);
-	PUBLIC_FUNCTION(void, RemoveAllWindowElements);
 	PUBLIC_FUNCTION(void, SetIcon, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetIcon);
 	PUBLIC_FUNCTION(void, SetIconLayout, const Layout&);

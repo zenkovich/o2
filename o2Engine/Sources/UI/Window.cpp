@@ -29,13 +29,6 @@ namespace o2
 		mLeftBottomDragAreaLayout(other.mLeftBottomDragAreaLayout), mRightBottomDragAreaLayout(other.mRightBottomDragAreaLayout),
 		caption(this), icon(this)
 	{
-		for (auto elem : other.mWindowElements)
-		{
-			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->SetInternalParent(this, false);
-			mWindowElements.Add(newElem);
-		}
-
 		RestoreControls();
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -49,17 +42,6 @@ namespace o2
 	{
 		UIScrollArea::operator=(other);
 		return *this;
-	}
-
-	void UIWindow::Update(float dt)
-	{
-		if (!mResEnabledInHierarchy)
-			return;
-
-		UIScrollArea::Update(dt);
-
-		for (auto elem : mWindowElements)
-			elem->Update(dt);
 	}
 
 	void UIWindow::Draw()
@@ -81,9 +63,6 @@ namespace o2
 		mLeftBottomDragHandle.OnDrawn();
 		mRightBottomDragHandle.OnDrawn();
 
-		for (auto elem : mWindowElements)
-			elem->Draw();
-
 //  		int clr = 0;
 //  		o2Render.DrawRectFrame(mHeadDragAreaRect, Color4::SomeColor(clr++));
 //  		o2Render.DrawRectFrame(mTopDragAreaRect, Color4::SomeColor(clr++));
@@ -100,30 +79,6 @@ namespace o2
 	{
 		Show();
 		SetModal(true);
-	}
-
-	UIWidget* UIWindow::AddWindowElement(UIWidget* widget)
-	{
-		widget->SetInternalParent(this, false);
-		mWindowElements.Add(widget);
-		SetLayoutDirty();
-
-		return widget;
-	}
-
-	void UIWindow::RemoveWindowElement(UIWidget* widget)
-	{
-		mWindowElements.Remove(widget);
-		delete widget;
-		SetLayoutDirty();
-	}
-
-	void UIWindow::RemoveAllWindowElements()
-	{
-		for (auto elem : mWindowElements)
-			delete elem;
-
-		SetLayoutDirty();
 	}
 
 	void UIWindow::SetIcon(Sprite* icon)
@@ -250,13 +205,6 @@ namespace o2
 		const UIWindow& other = dynamic_cast<const UIWindow&>(otherActor);
 
 		UIScrollArea::CopyData(other);
-
-		for (auto elem : other.mWindowElements)
-		{
-			auto newElem = dynamic_cast<UIWidget*>(elem->Clone());
-			newElem->SetInternalParent(this, false);
-			mWindowElements.Add(newElem);
-		}
 
 		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
 		mTopDragAreaLayout         = other.mTopDragAreaLayout;
@@ -390,9 +338,9 @@ namespace o2
 
 		mOptionsMenu->name = "options context";
 		InitializeContextItems();
-		AddWindowElement(mOptionsMenu);
+		AddInternalWidget(mOptionsMenu);
 
-		UIButton* optionsBtn = dynamic_cast<UIButton*>(mWindowElements.FindMatch(
+		UIButton* optionsBtn = dynamic_cast<UIButton*>(mInternalWidgets.FindMatch(
 			[](UIWidget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(UIButton); }));
 
 		if (optionsBtn)
@@ -406,17 +354,17 @@ namespace o2
 
 	void UIWindow::RestoreControls()
 	{
-		UIButton* closeBtn = dynamic_cast<UIButton*>(mWindowElements.FindMatch(
+		UIButton* closeBtn = dynamic_cast<UIButton*>(mInternalWidgets.FindMatch(
 			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); }));
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
 
-		for (auto element : mWindowElements)
+		for (auto element : mInternalWidgets)
 		{
 			if (element->GetName() == "options context" && element->GetType() == TypeOf(UIContextMenu))
 			{
-				mWindowElements.Remove(element);
+				mInternalWidgets.Remove(element);
 				delete element;
 				break;
 			}

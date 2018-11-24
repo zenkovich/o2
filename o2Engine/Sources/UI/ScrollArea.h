@@ -149,9 +149,6 @@ namespace o2
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
-		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const override;
-
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node) override;
 
@@ -266,7 +263,6 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(void, UpdateTransform, bool);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
