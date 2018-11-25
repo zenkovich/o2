@@ -24,6 +24,9 @@ namespace o2
 		// Returns true when object is on scene
 		virtual bool IsOnScene() const;
 
+		// Returns true when object's hierarchy is on scene. This is on scene or one of parent is on scene
+		virtual bool IsHieararchyOnScene() const;
+
 
 		// Returns unique id
 		virtual SceneUID GetID() const;
@@ -146,6 +149,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 {
 
 	PUBLIC_FUNCTION(bool, IsOnScene);
+	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(String, GetName);

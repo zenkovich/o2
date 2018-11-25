@@ -16,6 +16,11 @@ namespace o2
 		return true;
 	}
 
+	bool SceneEditableObject::IsHieararchyOnScene() const
+	{
+		return true;
+	}
+
 	SceneUID SceneEditableObject::GetID() const
 	{
 		return 0;

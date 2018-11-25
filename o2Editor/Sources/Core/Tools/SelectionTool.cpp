@@ -4,6 +4,7 @@
 #include "Core/Actions/Select.h"
 #include "Core/EditorApplication.h"
 #include "Render/Sprite.h"
+#include "Scene/Scene.h"
 #include "Scene/SceneLayer.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
@@ -14,6 +15,7 @@ namespace Editor
 	SelectionTool::SelectionTool()
 	{
 		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
+		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
 	}
 
 	SelectionTool::~SelectionTool()
@@ -45,6 +47,28 @@ namespace Editor
 		mSelectingObjects = false;
 	}
 
+	void SelectionTool::OnSceneObjectsChanged(const SceneEditableObjectsVec& chnaged)
+	{
+		mSelectableSceneObjects.Clear();
+
+		for (auto object : o2Scene.GetRootActors())
+		{
+			mSelectableSceneObjects.Add(object);
+			CollectSelectableObjects(object);
+		}
+	}
+
+	void SelectionTool::CollectSelectableObjects(SceneEditableObject* object)
+	{
+		for (auto child : object->GetEditablesChildren())
+		{
+			if (child->IsHieararchyOnScene())
+				mSelectableSceneObjects.Add(child);
+
+			CollectSelectableObjects(child);
+		}
+	}
+
 	void SelectionTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
 	{}
 
@@ -68,27 +92,23 @@ namespace Editor
 		{
 			bool selected = false;
 			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
-			for (auto layer : o2Scene.GetLayers())
+			for (auto object : mSelectableSceneObjects)
 			{
-				for (auto object : layer->GetEnabledActors())
+				if (!object->IsLockedInHierarchy() && object->GetTransform().IsPointInside(sceneSpaceCursor))
 				{
-					if (!object->IsLockedInHierarchy() && object->IsOnScene() && 
-						object->transform->IsPointInside(sceneSpaceCursor))
-					{
-						mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
+					mBeforeSelectingObjects = o2EditorSceneScreen.GetSelectedObjects();
 
-						if (!o2Input.IsKeyDown(VK_CONTROL))
-							o2EditorSceneScreen.ClearSelectionWithoutAction(false);
+					if (!o2Input.IsKeyDown(VK_CONTROL))
+						o2EditorSceneScreen.ClearSelectionWithoutAction(false);
 
-						o2EditorSceneScreen.SelectObjectWithoutAction(object);
-						o2EditorTree.HightlightObjectTreeNode(object);
-						selected = true;
+					o2EditorSceneScreen.SelectObjectWithoutAction(object);
+					o2EditorTree.HightlightObjectTreeNode(object);
+					selected = true;
 
-						auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),
-																		  mBeforeSelectingObjects);
-						o2EditorApplication.DoneAction(selectionAction);
-						break;
-					}
+					auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),
+															 mBeforeSelectingObjects);
+					o2EditorApplication.DoneAction(selectionAction);
+					break;
 				}
 			}
 
@@ -132,19 +152,13 @@ namespace Editor
 					mCurrentSelectingObjects.Add(object);
 			}
 
-			for (auto layer : o2Scene.GetLayers())
+			for (auto object : mSelectableSceneObjects)
 			{
-				for (auto object : layer->GetEnabledActors())
-				{
-					if (mCurrentSelectingObjects.Contains(object))
-						continue;
+				if (mCurrentSelectingObjects.Contains(object))
+					continue;
 
-					if (!object->IsLockedInHierarchy() && object->IsOnScene()
-						&& object->transform->GetWorldRect().IsIntersects(selectionRect))
-					{
-						mCurrentSelectingObjects.Add(object);
-					}
-				}
+				if (!object->IsLockedInHierarchy() && object->GetTransform().AABB().IsIntersects(selectionRect))
+					mCurrentSelectingObjects.Add(object);
 			}
 
 			mNeedRedraw = true;

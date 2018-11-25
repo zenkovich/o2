@@ -369,7 +369,7 @@ namespace o2
 
 	void Actor::SetPrototype(ActorAssetRef asset)
 	{
-		o2Scene.OnActorPrototypeBreaked(this);
+		o2Scene.OnActorPrototypeBroken(this);
 
 		auto linkAsset = asset;
 		while (linkAsset)
@@ -881,7 +881,7 @@ namespace o2
 	{
 		onChanged();
 
-		if (Scene::IsSingletonInitialzed() && mIsOnScene)
+		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
 			o2Scene.OnObjectChanged(this);
 	}
 
@@ -890,7 +890,7 @@ namespace o2
 		onLockChanged(mLocked);
 		onChanged();
 
-		if (Scene::IsSingletonInitialzed() && mIsOnScene)
+		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
 		{
 			o2Scene.OnObjectChanged(this);
 			o2Scene.onLockChanged(this);
@@ -902,7 +902,7 @@ namespace o2
 		onNameChanged();
 		onChanged();
 
-		if (Scene::IsSingletonInitialzed() && mIsOnScene)
+		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
 		{
 			o2Scene.OnObjectChanged(this);
 			o2Scene.onNameChanged(this);
@@ -914,7 +914,7 @@ namespace o2
 		onChildHierarchyChanged();
 		onChanged();
 
-		if (Scene::IsSingletonInitialzed() && mIsOnScene)
+		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
 		{
 			o2Scene.OnObjectChanged(this);
 			o2Scene.onChildrenHierarchyChanged(this);
@@ -931,7 +931,7 @@ namespace o2
 		onParentChanged(oldParent);
 		onChanged();
 
-		if (Scene::IsSingletonInitialzed() && mIsOnScene)
+		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
 		{
 			o2Scene.OnObjectChanged(this);
 			o2Scene.OnObjectChanged(oldParent);

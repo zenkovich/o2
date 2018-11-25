@@ -18,7 +18,7 @@ namespace o2
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default &&
-			  mDefaultCreationMode == ActorCreateMode::InScene))
+															  mDefaultCreationMode == ActorCreateMode::InScene))
 	{
 		mIsOnScene = false;
 
@@ -46,7 +46,9 @@ namespace o2
 
 			mLayer->mActors.Add(this);
 
-			o2Scene.onCreated(this);
+#if IS_EDITOR
+			o2Scene.OnObjectCreated(this);
+#endif
 		}
 
 		ActorDataNodeConverter::ActorCreated(this);
@@ -72,15 +74,20 @@ namespace o2
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
-		if (Scene::IsSingletonInitialzed() && (mode == ActorCreateMode::InScene ||
-			(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene)))
+		if (Scene::IsSingletonInitialzed())
 		{
-			o2Scene.mRootActors.Add(this);
-			o2Scene.mAllActors.Add(this);
+			if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
+			{
+				o2Scene.mRootActors.Add(this);
+				o2Scene.mAllActors.Add(this);
 #if IS_EDITOR
-			o2Scene.mEditableObjects.Add(this);
+				o2Scene.mEditableObjects.Add(this);
 #endif
-			o2Scene.onCreated(this);
+			}
+
+#if IS_EDITOR
+			o2Scene.OnObjectCreated(this);
+#endif
 		}
 
 		ActorDataNodeConverter::ActorCreated(this);
@@ -113,14 +120,20 @@ namespace o2
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
-		if (Scene::IsSingletonInitialzed() && mDefaultCreationMode == ActorCreateMode::InScene)
+		if (Scene::IsSingletonInitialzed())
 		{
-			o2Scene.mRootActors.Add(this);
-			o2Scene.mAllActors.Add(this);
+			if (mDefaultCreationMode == ActorCreateMode::InScene)
+			{
+				o2Scene.mRootActors.Add(this);
+				o2Scene.mAllActors.Add(this);
 #if IS_EDITOR
-			o2Scene.mEditableObjects.Add(this);
+				o2Scene.mEditableObjects.Add(this);
 #endif
-			o2Scene.onCreated(this);
+			}
+
+#if IS_EDITOR
+			o2Scene.OnObjectCreated(this);
+#endif
 		}
 
 		ActorDataNodeConverter::ActorCreated(this);
@@ -162,14 +175,17 @@ namespace o2
 		{
 			if (mIsOnScene)
 			{
-				o2Scene.onDestroying(this);
 				o2Scene.mAllActors.Remove(this);
 #if IS_EDITOR
 				o2Scene.mEditableObjects.Remove(this);
 #endif
 			}
 
-			o2Scene.OnActorPrototypeBreaked(this);
+#if IS_EDITOR
+			o2Scene.OnObjectDestroyed(this);
+#endif
+
+			o2Scene.OnActorPrototypeBroken(this);
 		}
 
 		RemoveAllChildren();
@@ -349,6 +365,14 @@ namespace o2
 
 	bool Actor::IsOnScene() const
 	{
+		return mIsOnScene;
+	}
+
+	bool Actor::IsHieararchyOnScene() const
+	{
+		if (mParent)
+			return mIsOnScene || mParent->mIsOnScene || mParent->IsHieararchyOnScene();
+
 		return mIsOnScene;
 	}
 
@@ -1046,9 +1070,9 @@ namespace o2
 				if (field->GetType()->IsBasedOn(TypeOf(ISerializable)))
 					serializableObjects.Add((ISerializable*)field->GetValuePtr(dest));
 
-                auto fields = field->GetType()->GetFieldsWithBaseClasses();
+				auto fields = field->GetType()->GetFieldsWithBaseClasses();
 				CopyFields(fields, (IObject*)field->GetValuePtr(source),
-						   (IObject*)field->GetValuePtr(dest),
+					(IObject*)field->GetValuePtr(dest),
 						   actorsPointers, componentsPointers, serializableObjects);
 			}
 			else field->CopyValue(dest, source);

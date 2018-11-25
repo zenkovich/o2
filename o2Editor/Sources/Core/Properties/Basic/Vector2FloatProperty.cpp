@@ -81,7 +81,7 @@ namespace Editor
 			return;
 
 		mXProperty->Refresh();
-		mXProperty->Refresh();
+		mYProperty->Refresh();
 
 		CheckRevertableState();
 	}
@@ -92,7 +92,7 @@ namespace Editor
 			return;
 
 		mXProperty->Refresh();
-		mXProperty->Refresh();
+		mYProperty->Refresh();
 
 		CheckRevertableState();
 	}

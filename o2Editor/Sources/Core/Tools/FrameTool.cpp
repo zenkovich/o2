@@ -303,13 +303,21 @@ namespace Editor
 						parentWorldRect = parent->GetTransform().AABB();
 
 					auto prevTransform = object->GetTransform();
+
 					Layout layout = object->GetLayout();
+					Layout prevLayout = layout;
 					layout.anchorMin = (anchorsFrame.LeftBottom() - parentWorldRect.LeftBottom())/parentWorldRect.Size();
 					layout.anchorMax = (anchorsFrame.RightTop() - parentWorldRect.LeftBottom())/parentWorldRect.Size();
-					object->SetLayout(layout);
-					object->UpdateTransform();
 
-					object->SetTransform(prevTransform);
+					RectF newAnchoredFrame(parentWorldRect.LeftBottom() + layout.anchorMin*parentWorldRect.Size(),
+										   parentWorldRect.LeftBottom() + layout.anchorMax*parentWorldRect.Size());
+
+					RectF prevRect(prevTransform.origin, prevTransform.origin + Vec2F(prevTransform.xv.Length(), prevTransform.yv.Length()));
+
+					layout.offsetMin = prevRect.LeftBottom() - newAnchoredFrame.LeftBottom();
+					layout.offsetMax = prevRect.RightTop() - newAnchoredFrame.RightTop();
+					
+					object->SetLayout(layout);
 					object->UpdateTransform();
 				}
 			}

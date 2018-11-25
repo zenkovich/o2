@@ -38,13 +38,13 @@ namespace o2
 
 	public:
 #if IS_EDITOR
-		Function<void(SceneEditableObject*)>    onCreated;                  // Actor creation event
-		Function<void(SceneEditableObject*)>    onDestroying;               // Actor destroying event
-		Function<void(SceneEditableObjectsVec)> onObjectsChanged;           // Actors some change event
-		Function<void(SceneEditableObject*)>    onEnableChanged;            // Actor enable changing
-		Function<void(SceneEditableObject*)>    onLockChanged;			    // Actor locking change
-		Function<void(SceneEditableObject*)>    onNameChanged;			    // Actor name changing event
-		Function<void(SceneEditableObject*)>    onChildrenHierarchyChanged; // Actor childs hierarchy change event
+		Function<void(SceneEditableObject*)>           onCreated;                  // Actor creation event
+		Function<void(SceneEditableObject*)>           onDestroying;               // Actor destroying event
+		Function<void(SceneEditableObject*)>           onEnableChanged;            // Actor enable changing
+		Function<void(SceneEditableObject*)>           onLockChanged;			   // Actor locking change
+		Function<void(SceneEditableObject*)>           onNameChanged;			   // Actor name changing event
+		Function<void(SceneEditableObject*)>           onChildrenHierarchyChanged; // Actor childs hierarchy change event
+		Function<void(const SceneEditableObjectsVec&)> onObjectsChanged;           // Actors some change event
 #endif
 
 		// Returns layer by name
@@ -141,6 +141,11 @@ namespace o2
 		void ReparentEditableObjects(const Vector<SceneEditableObject*>& objects,
 									 SceneEditableObject* newParent, SceneEditableObject* prevObject);
 
+		// It is called when object was created
+		void OnObjectCreated(SceneEditableObject* object);
+
+		// It is called when object is destroying
+		void OnObjectDestroyed(SceneEditableObject* object);
 
 		// It is called when object was changed
 		void OnObjectChanged(SceneEditableObject* object);
@@ -161,7 +166,7 @@ namespace o2
 		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
 
 		// It is called when actor destroying or prototype link broken, updates cache
-		void OnActorPrototypeBreaked(Actor* actor);
+		void OnActorPrototypeBroken(Actor* actor);
 #endif       
 
 	protected:

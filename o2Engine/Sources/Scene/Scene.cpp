@@ -435,6 +435,18 @@ namespace o2
 			OnObjectChanged(prevObject);
 	}
 
+	void Scene::OnObjectCreated(SceneEditableObject* object)
+	{
+		onCreated(object);
+		OnObjectChanged(object);
+	}
+
+	void Scene::OnObjectDestroyed(SceneEditableObject* object)
+	{
+		onDestroying(object);
+		OnObjectChanged(nullptr);
+	}
+
 	void Scene::OnObjectChanged(SceneEditableObject* object)
 	{
 		if (!mChangedObjects.Contains(object))
@@ -474,7 +486,7 @@ namespace o2
 		mPrototypeLinksCache[assetRef].Add(actor);
 	}
 
-	void Scene::OnActorPrototypeBreaked(Actor* actor)
+	void Scene::OnActorPrototypeBroken(Actor* actor)
 	{
 		for (auto kv = mPrototypeLinksCache.Begin(); kv != mPrototypeLinksCache.End();)
 		{

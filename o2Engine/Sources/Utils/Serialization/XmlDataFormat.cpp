@@ -53,8 +53,8 @@ namespace o2
 		{
 			struct xmlWriter :public pugi::xml_writer
 			{
-				int size = 1024;
-				int length = 0;
+				size_t size = 1024;
+				size_t length = 0;
 				char* data = new char[1024];
 
 				~xmlWriter()

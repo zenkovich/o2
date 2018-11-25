@@ -30,13 +30,14 @@ namespace Editor
 		IOBJECT(SelectionTool);
 
 	protected:
-		Sprite*   mSelectionSprite = nullptr; // Selection frame sprite
+		Sprite* mSelectionSprite = nullptr; // Selection frame sprite
 
+		SceneEditableObjectsVec mSelectableSceneObjects;  // All available for selection editable objects. Updating after each scene changing
 		SceneEditableObjectsVec mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
 		SceneEditableObjectsVec mBeforeSelectingObjects;  // Before selection objects array
 
-		Vec2F     mPressPoint;				  // Press point before selecting
-		bool      mSelectingObjects = false;  // Is selecting objects now
+		Vec2F mPressPoint;				  // Press point before selecting
+		bool  mSelectingObjects = false;  // Is selecting objects now
 
 	protected:
 		// Draws tool
@@ -53,6 +54,12 @@ namespace Editor
 
 		// It is called when tool was disabled
 		void OnDisabled();
+
+		// It is called when scene objects has changed, updates selectable objects list
+		void OnSceneObjectsChanged(const SceneEditableObjectsVec& chnaged);
+
+		// Collects selectable objects from object's children
+		void CollectSelectableObjects(SceneEditableObject* object);
 
 		// It is called when objects selection was changed
 		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
@@ -86,6 +93,7 @@ END_META;
 CLASS_FIELDS_META(Editor::SelectionTool)
 {
 	PROTECTED_FIELD(mSelectionSprite);
+	PROTECTED_FIELD(mSelectableSceneObjects);
 	PROTECTED_FIELD(mCurrentSelectingObjects);
 	PROTECTED_FIELD(mBeforeSelectingObjects);
 	PROTECTED_FIELD(mPressPoint);
@@ -100,6 +108,8 @@ CLASS_METHODS_META(Editor::SelectionTool)
 	PROTECTED_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, OnSceneObjectsChanged, const SceneEditableObjectsVec&);
+	PROTECTED_FUNCTION(void, CollectSelectableObjects, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

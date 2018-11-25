@@ -140,6 +140,9 @@ namespace o2
 		// Is actor on scene
 		bool IsOnScene() const;
 
+		// Is actor hierarchy on scene. Returns true when this on scene, or some parent actor on scene
+		bool IsHieararchyOnScene() const;
+
 
 		// Sets actor enabling
 		virtual void SetEnabled(bool enabled);
@@ -786,6 +789,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, ExcludeFromScene);
 	PUBLIC_FUNCTION(void, IncludeInScene);
 	PUBLIC_FUNCTION(bool, IsOnScene);
+	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);

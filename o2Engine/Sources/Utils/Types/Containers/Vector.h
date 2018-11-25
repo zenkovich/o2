@@ -518,7 +518,7 @@ namespace o2
 	Vector<_type> Vector<_type>::Take(int begin, int end) const
 	{
 		Vector<_type> res;
-		for (unsigned int i = begin; i < end && i < std::vector<_type>::size(); i++)
+		for (int i = begin; i < end && i < (int)std::vector<_type>::size(); i++)
 			res.Add(Get(i));
 
 		return res;
