@@ -15,12 +15,6 @@ namespace o2
 		// Returns a copy of this
 		virtual IArray* Clone() const = 0;
 
-		// Access operator
-		_type& operator[](int idx);
-
-		// Access operator
-		const _type& operator[](int idx) const;
-
 		// Returns value at index
 		virtual const _type& Get(int idx) const = 0;
 
@@ -165,18 +159,6 @@ namespace o2
 	const _type& IArray<_type>::Last() const
 	{
 		return Get(Count() - 1);
-	}
-
-	template<typename _type>
-	_type& IArray<_type>::operator[](int idx)
-	{
-		return Get(idx);
-	}
-
-	template<typename _type>
-	const _type& IArray<_type>::operator[](int idx) const
-	{
-		return Get(idx);
 	}
 
 	template<typename _type>

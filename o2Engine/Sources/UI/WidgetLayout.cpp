@@ -134,9 +134,7 @@ namespace o2
 
 	RectF UIWidgetLayout::GetRect() const
 	{
-		RectF parentRect;
-		if (mData->owner->mParentWidget)
-			parentRect = mData->owner->mParentWidget->mChildrenWorldRect;
+		RectF parentRect = GetParentRectangle();
 
 		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
 						mData->offsetMax + mData->anchorMax*parentRect.Size());
@@ -624,7 +622,15 @@ namespace o2
 
 	void UIWidgetLayout::UpdateOffsetsByCurrentTransform()
 	{
-		SetRect(ActorTransform::GetRect());
+		Vec2F offs;
+		
+		if (mData->owner->mParentWidget)
+		{
+			offs = mData->owner->mParentWidget->mChildrenWorldRect.LeftBottom() -
+				mData->owner->mParentWidget->layout->mData->worldRectangle.LeftBottom();
+		}
+
+		SetRect(ActorTransform::GetRect() - offs);
 	}
 
 	void UIWidgetLayout::CopyFrom(const ActorTransform& other)

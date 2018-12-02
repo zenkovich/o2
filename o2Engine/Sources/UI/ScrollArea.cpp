@@ -25,7 +25,7 @@ namespace o2
 	{
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = FindInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+			mHorScrollBar = GetInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
@@ -35,7 +35,7 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = FindInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+			mVerScrollBar = GetInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
@@ -791,7 +791,7 @@ namespace o2
 
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = FindInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+			mHorScrollBar = GetInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 
@@ -801,7 +801,7 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = FindInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+			mVerScrollBar = GetInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 
@@ -834,12 +834,12 @@ namespace o2
 			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 
-		mHorScrollBar = FindInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+		mHorScrollBar = GetInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
 		mOwnHorScrollBar = mHorScrollBar != nullptr;
 		if (mOwnHorScrollBar)
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
-		mVerScrollBar = FindInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+		mVerScrollBar = GetInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
 		mOwnVerScrollBar = mVerScrollBar != nullptr;
 		if (mOwnVerScrollBar)
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);

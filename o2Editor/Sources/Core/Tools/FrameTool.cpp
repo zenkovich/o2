@@ -255,7 +255,7 @@ namespace Editor
 	{
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
-			if (object->GetTransform().GetScale() != Vec2F())
+ 			if (object->GetTransform().GetScale() != Vec2F())
 				object->SetTransform(object->GetTransform()*transform);
 // 			else
 // 				actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);

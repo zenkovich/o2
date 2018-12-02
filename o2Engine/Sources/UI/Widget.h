@@ -604,7 +604,7 @@ namespace o2
 	template<typename _type>
 	_type* UIWidget::GetInternalWidgetByType(const String& path) const
 	{
-		return dynamic_cast<_type>(GetInternalWidget(path));
+		return dynamic_cast<_type*>(GetInternalWidget(path));
 	}
 
 	template<typename _type>
