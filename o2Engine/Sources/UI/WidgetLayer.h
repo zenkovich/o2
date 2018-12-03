@@ -30,14 +30,14 @@ namespace o2
 
 	public:
 		PROPERTIES(UIWidgetLayer);
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property
-		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later)
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                       // Enable property
+		PROPERTY(float, depth, SetDepth, GetDepth);                           // Drawing depth (higher depths will draw later)
+		PROPERTY(float, transparency, SetTransparency, GetTransparency);      // Drawable transparency property
 
 		ACCESSOR(UIWidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
 #if IS_EDITOR
-		PROPERTY(bool, locked, SetLocked, IsLocked);  // Is locked property
+		PROPERTY(bool, locked, SetLocked, IsLocked);                          // Is locked property
 #endif 
 
 	public:

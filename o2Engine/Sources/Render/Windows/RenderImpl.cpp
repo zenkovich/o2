@@ -18,7 +18,7 @@
 
 namespace o2
 {
-	Render::Render():
+	Render::Render() :
 		mReady(false), mStencilDrawing(false), mStencilTest(false), mClippingEverything(false)
 	{
 		mVertexBufferSize = USHRT_MAX;
@@ -98,7 +98,7 @@ namespace o2
 		CheckCompatibles();
 
 		// Initialize buffers
-		mVertexData = mnew UInt8[mVertexBufferSize*sizeof(Vertex2)];
+		mVertexData = mnew UInt8[mVertexBufferSize * sizeof(Vertex2)];
 
 		mVertexIndexData = mnew UInt16[mIndexBufferSize];
 		mLastDrawVertex = 0;
@@ -180,7 +180,7 @@ namespace o2
 	void Render::CheckCompatibles()
 	{
 		//check render targets available
-		char* extensions[] ={ "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
+		char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
 			"GL_EXT_packed_depth_stencil" };
 
 		mRenderTargetsAvailable = true;
@@ -296,7 +296,7 @@ namespace o2
 		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F::Right()*resf.x, Vec2F().Up()*resf.y);
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
 		mViewScale = Vec2F(camTransf.xv.Length(), camTransf.yv.Length());
-		mInvViewScale = Vec2F(1.0f/mViewScale.x, 1.0f/mViewScale.y);
+		mInvViewScale = Vec2F(1.0f / mViewScale.x, 1.0f / mViewScale.y);
 
 		float camTransfMatr[16] =
 		{
@@ -307,7 +307,6 @@ namespace o2
 		};
 
 		glMultMatrixf(camTransfMatr);
-
 	}
 
 	void Render::BeginRenderToStencilBuffer()
@@ -408,12 +407,15 @@ namespace o2
 
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
 		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
+		
+		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F(mCurrentResolution.x, 0.0f), Vec2F(0.0f, mCurrentResolution.y));
+		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
+		Basis scissorBasis(summaryScissorRect.LeftBottom(), Vec2F(summaryScissorRect.Width(), 0.0f), Vec2F(0.0f, summaryScissorRect.Height()));
+		Basis screenScissorBasis = scissorBasis * camTransf;
+		RectI screenScissorRect = screenScissorBasis.AABB();
 
-		RectI screenScissorRect = (summaryScissorRect - mCamera.position.Get()/mCamera.scale.Get())/mCamera.scale.Get();
-		glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f),
-			      (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
-				  (int)screenScissorRect.Width(),
-				  (int)screenScissorRect.Height());
+		glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
+				  (int)screenScissorRect.Width(), (int)screenScissorRect.Height());
 	}
 
 	void Render::DisableScissorTest(bool forcible /*= false*/)
@@ -487,9 +489,9 @@ namespace o2
 
 		UInt indexesCount;
 		if (primitiveType == PrimitiveType::Line)
-			indexesCount = elementsCount*2;
+			indexesCount = elementsCount * 2;
 		else
-			indexesCount = elementsCount*3;
+			indexesCount = elementsCount * 3;
 
 		if (mLastDrawTexture != texture.mTexture ||
 			mLastDrawVertex + verticesCount >= mVertexBufferSize ||
@@ -516,7 +518,7 @@ namespace o2
 			else glDisable(GL_TEXTURE_2D);
 		}
 
-		memcpy(&mVertexData[mLastDrawVertex*sizeof(Vertex2)], vertices, sizeof(Vertex2)*verticesCount);
+		memcpy(&mVertexData[mLastDrawVertex * sizeof(Vertex2)], vertices, sizeof(Vertex2)*verticesCount);
 
 		for (UInt i = mLastDrawIdx, j = 0; j < indexesCount; i++, j++)
 			mVertexIndexData[i] = mLastDrawVertex + indexes[j];
