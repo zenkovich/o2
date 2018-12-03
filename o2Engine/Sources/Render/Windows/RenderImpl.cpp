@@ -384,24 +384,36 @@ namespace o2
 		RectI summaryScissorRect = rect;
 		if (!mStackScissors.IsEmpty())
 		{
-			RectI lastSummaryClipRect = mStackScissors.Last().mSummaryScissorRect;
-			mClippingEverything = !summaryScissorRect.IsIntersects(lastSummaryClipRect);
-			summaryScissorRect = summaryScissorRect.GetIntersection(lastSummaryClipRect);
 			mScissorInfos.Last().mEndDepth = mDrawingDepth;
+
+			if (!mStackScissors.Last().mRenderTarget)
+			{
+				RectI lastSummaryClipRect = mStackScissors.Last().mSummaryScissorRect;
+				mClippingEverything = !summaryScissorRect.IsIntersects(lastSummaryClipRect);
+				summaryScissorRect = summaryScissorRect.GetIntersection(lastSummaryClipRect);
+			}
+			else
+			{
+				glEnable(GL_SCISSOR_TEST);
+				GL_CHECK_ERROR();
+				mClippingEverything = false;
+			}
 		}
 		else
 		{
 			glEnable(GL_SCISSOR_TEST);
 			GL_CHECK_ERROR();
+			mClippingEverything = false;
 		}
 
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
 		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
 
-		glScissor((int)(summaryScissorRect.left + mCurrentResolution.x*0.5f),
-			(int)(summaryScissorRect.bottom + mCurrentResolution.y*0.5f),
-				  (int)summaryScissorRect.Width(),
-				  (int)summaryScissorRect.Height());
+		RectI screenScissorRect = (summaryScissorRect - mCamera.position.Get()/mCamera.scale.Get())/mCamera.scale.Get();
+		glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f),
+			      (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
+				  (int)screenScissorRect.Width(),
+				  (int)screenScissorRect.Height());
 	}
 
 	void Render::DisableScissorTest(bool forcible /*= false*/)
@@ -439,15 +451,25 @@ namespace o2
 			{
 				mStackScissors.PopBack();
 				RectI lastClipRect = mStackScissors.Last().mSummaryScissorRect;
-				glScissor((int)(lastClipRect.left + mCurrentResolution.x*0.5f),
-					(int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
-						  (int)lastClipRect.Width(),
-						  (int)lastClipRect.Height());
 
 				mScissorInfos.Last().mEndDepth = mDrawingDepth;
 				mScissorInfos.Add(ScissorInfo(lastClipRect, mDrawingDepth));
 
-				mClippingEverything = lastClipRect == RectI();
+				if (mStackScissors.Last().mRenderTarget)
+				{
+					glDisable(GL_SCISSOR_TEST);
+					GL_CHECK_ERROR();
+					mClippingEverything = false;
+				}
+				else
+				{
+					glScissor((int)(lastClipRect.left + mCurrentResolution.x*0.5f),
+						(int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
+							  (int)lastClipRect.Width(),
+							  (int)lastClipRect.Height());
+
+					mClippingEverything = lastClipRect == RectI();
+				}
 			}
 		}
 	}
