@@ -1317,6 +1317,11 @@ namespace o2
 	void UIWidget::LayersEditable::SetIndexInSiblings(int idx)
 	{}
 
+	Basis UIWidget::LayersEditable::GetTransform() const
+	{
+		return mWidget->GetTransform();
+	}
+
 	UIWidget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
 	{}
 

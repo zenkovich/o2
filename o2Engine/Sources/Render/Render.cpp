@@ -86,6 +86,17 @@ namespace o2
 		return mCamera;
 	}
 
+	RectI Render::CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect)
+	{
+		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F((float)mCurrentResolution.x, 0.0f), Vec2F(0.0f, (float)mCurrentResolution.y));
+		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
+		Basis scissorBasis(cameraSpaceScissorRect.LeftBottom(), Vec2F(cameraSpaceScissorRect.Width(), 0.0f), Vec2F(0.0f, cameraSpaceScissorRect.Height()));
+		Basis screenScissorBasis = scissorBasis * camTransf;
+		RectI screenScissorRect = screenScissorBasis.AABB();
+
+		return screenScissorRect;
+	}
+
 	void Render::CheckTexturesUnloading()
 	{
 		TexturesVec unloadTextures;

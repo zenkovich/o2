@@ -408,12 +408,7 @@ namespace o2
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
 		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
 		
-		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F(mCurrentResolution.x, 0.0f), Vec2F(0.0f, mCurrentResolution.y));
-		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
-		Basis scissorBasis(summaryScissorRect.LeftBottom(), Vec2F(summaryScissorRect.Width(), 0.0f), Vec2F(0.0f, summaryScissorRect.Height()));
-		Basis screenScissorBasis = scissorBasis * camTransf;
-		RectI screenScissorRect = screenScissorBasis.AABB();
-
+		RectI screenScissorRect = CalculateScreenSpaceScissorRect(summaryScissorRect);
 		glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
 				  (int)screenScissorRect.Width(), (int)screenScissorRect.Height());
 	}
@@ -465,10 +460,9 @@ namespace o2
 				}
 				else
 				{
-					glScissor((int)(lastClipRect.left + mCurrentResolution.x*0.5f),
-						(int)(lastClipRect.bottom + mCurrentResolution.y*0.5f),
-							  (int)lastClipRect.Width(),
-							  (int)lastClipRect.Height());
+					RectI screenScissorRect = CalculateScreenSpaceScissorRect(lastClipRect);
+					glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
+						      (int)screenScissorRect.Width(), (int)screenScissorRect.Height());
 
 					mClippingEverything = lastClipRect == RectI();
 				}
