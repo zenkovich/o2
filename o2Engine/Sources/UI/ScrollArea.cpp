@@ -70,8 +70,12 @@ namespace o2
 
 	void UIScrollArea::Draw()
 	{
-		if (!mResEnabledInHierarchy || mIsClipped)
+		if (!mResEnabledInHierarchy || mIsClipped) {
+			for (auto child : mDrawingChildren)
+				child->Draw();
+
 			return;
+		}
 
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
@@ -85,14 +89,11 @@ namespace o2
 
 		o2Render.DisableScissorTest();
 
+		for (auto child : mInternalWidgets)
+			child->Draw();
+
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
-
-		if (mOwnHorScrollBar)
-			mHorScrollBar->Draw();
-
-		if (mOwnVerScrollBar)
-			mVerScrollBar->Draw();
 
 		DrawDebugFrame();
 	}

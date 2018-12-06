@@ -82,6 +82,8 @@ namespace Editor
 		Basis               mAnchorsFrame;                // Anchors frame basis
 		bool                mAnchorsFrameEnabled = false; // Is selected some UI widgets and anchors frame enabled
 
+		bool                mPivotHandleEnabled = false;  // Is selected object supports pivot 
+
 		Basis               mBeginDraggingFrame;          // Frame before dragging any handle
 		Vec2F               mBeginDraggingOffset;         // Offset at beginning dragging from frame origin to cursor
 
@@ -358,6 +360,7 @@ CLASS_FIELDS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mFrame);
 	PROTECTED_FIELD(mAnchorsFrame);
 	PROTECTED_FIELD(mAnchorsFrameEnabled);
+	PROTECTED_FIELD(mPivotHandleEnabled);
 	PROTECTED_FIELD(mBeginDraggingFrame);
 	PROTECTED_FIELD(mBeginDraggingOffset);
 	PROTECTED_FIELD(mIsDragging);

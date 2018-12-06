@@ -234,6 +234,9 @@ namespace o2
 		for (auto child : mDrawingChildren)
 			child->Draw();
 
+		for (auto child : mInternalWidgets)
+			child->Draw();
+
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
 
@@ -1368,6 +1371,11 @@ namespace o2
 
 	void UIWidget::InternalChildrenEditableEditable::SetIndexInSiblings(int idx)
 	{}
+
+	Basis UIWidget::InternalChildrenEditableEditable::GetTransform() const
+	{
+		return mWidget->GetTransform();
+	}
 
 #endif // IS_EDITOR
 }

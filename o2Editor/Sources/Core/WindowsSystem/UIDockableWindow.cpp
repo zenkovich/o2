@@ -95,15 +95,6 @@ namespace Editor
 
 			o2Render.DisableScissorTest();
 
-			for (auto layer : mTopDrawingLayers)
-				layer->Draw();
-
-			if (mOwnHorScrollBar)
-				mHorScrollBar->Draw();
-
-			if (mOwnVerScrollBar)
-				mVerScrollBar->Draw();
-
 			mTopDragHandle.OnDrawn();
 			mBottomDragHandle.OnDrawn();
 			mLeftDragHandle.OnDrawn();
@@ -112,9 +103,22 @@ namespace Editor
 			mRightTopDragHandle.OnDrawn();
 			mLeftBottomDragHandle.OnDrawn();
 			mRightBottomDragHandle.OnDrawn();
-		}
+			mHeadDragHandle.OnDrawn();
 
-		mHeadDragHandle.OnDrawn();
+			for (auto child : mInternalWidgets)
+				child->Draw();
+
+			for (auto layer : mTopDrawingLayers)
+				layer->Draw();
+
+			if (mOwnHorScrollBar)
+				mHorScrollBar->Draw();
+
+			if (mOwnVerScrollBar)
+				mVerScrollBar->Draw();
+		}
+		else
+			mHeadDragHandle.OnDrawn();
 
 		DrawDebugFrame();
 

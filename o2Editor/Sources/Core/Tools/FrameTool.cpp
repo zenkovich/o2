@@ -326,6 +326,7 @@ namespace Editor
 		auto selectedObjects = o2EditorSceneScreen.GetSelectedObjects();
 
 		mAnchorsFrameEnabled = false;
+		mPivotHandleEnabled = true;
 
 		if (selectedObjects.Count() == 1)
 		{
@@ -335,6 +336,7 @@ namespace Editor
 			mPivotHandle.position = object->GetPivot();
 
 			mAnchorsFrameEnabled = object->IsSupportsLayout();
+			mPivotHandleEnabled = object->IsSupportsPivot();
 
 			if (mAnchorsFrameEnabled)
 			{

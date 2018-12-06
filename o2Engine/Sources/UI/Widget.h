@@ -526,6 +526,10 @@ namespace o2
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
 
+
+			// Returns transform, override when it's supports
+			Basis GetTransform() const override;
+
 			SERIALIZABLE(InternalChildrenEditableEditable);
 
 		private:
@@ -856,5 +860,6 @@ CLASS_METHODS_META(o2::UIWidget::InternalChildrenEditableEditable)
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
+	PUBLIC_FUNCTION(Basis, GetTransform);
 }
 END_META;
