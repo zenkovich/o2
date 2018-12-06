@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Utils/System/ShortcutKeys.h"
+#include "Events/IEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
+#include "Utils/System/ShortcutKeys.h"
 
 namespace o2
 {
 	// ----------------------------------------------------------------------------------------
 	// Shortcut keys listener. Calls event when hit shortcut and this listener has max priority
 	// ----------------------------------------------------------------------------------------
-	class ShortcutKeysListener
+	class ShortcutKeysListener: public IEventsListener
 	{
 	public:
 		// Virtual destructor. Unregistering from manager

@@ -32,6 +32,8 @@ namespace o2
 		typedef Dictionary<CursorId, CursorAreaEventsListener*> CursorListenerDict;
 
 	public:
+		static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
+
 		// Returns drag event listener under cursor
 		CursorAreaEventsListener* GetCursorListenerUnderCursor(CursorId cursorId) const;
 
@@ -121,20 +123,21 @@ namespace o2
 		void ProcessKeyReleased(const Input::Key& key);
 
 	protected:
-		float                        mDblClickTime = 0.3f;                   // Time between clicks for double click reaction
+		float                         mDblClickTime = 0.3f;                   // Time between clicks for double click reaction
 
-		CursorEventsListenersVec     mCursorListeners;                       // All cursor non area listeners
-		CursorAreaEventsListenersVec mAreaCursorListeners;                   // All cursor area listeners
-		CursorListenerDict           mPressedListeners;                      // Pressed listeners for all pressed cursors
-		CursorAreaEventsListener*    mRightButtonPressedListener = nullptr;  // Right mouse button pressed listener
-		CursorAreaEventsListener*    mMiddleButtonPressedListener = nullptr; // Middle mouse button pressed listener
-		CursorListenerDict           mUnderCursorListeners;                  // Under cursor listeners for each cursor
-		CursorListenerDict           mLastUnderCursorListeners;              // Under cursor listeners for each cursor on last frame
-		DragEventsListenersVec       mDragListeners;                         // Drag events listeners
-		KeybEventsListenersVec       mKeyboardListeners;                     // Keyboard events listeners
-		AppEventsListenersVec        mApplicationListeners;                  // Application events listeners
+		CursorEventsListenersVec      mCursorListeners;                       // All cursor non area listeners
+		CursorAreaEventsListenersVec  mAreaCursorListeners;                   // All cursor area listeners
+		CursorListenerDict            mPressedListeners;                      // Pressed listeners for all pressed cursors
+		CursorAreaEventsListener*     mRightButtonPressedListener = nullptr;  // Right mouse button pressed listener
+		CursorAreaEventsListener*     mMiddleButtonPressedListener = nullptr; // Middle mouse button pressed listener
+		CursorListenerDict            mUnderCursorListeners;                  // Under cursor listeners for each cursor
+		CursorListenerDict            mLastUnderCursorListeners;              // Under cursor listeners for each cursor on last frame
+		DragEventsListenersVec        mDragListeners;                         // Drag events listeners
 
-		ShortcutKeysListenersManager* mShortcutEventsManager;                // Shortcut events manager
+		KeybEventsListenersVec        mKeyboardListeners;                     // Keyboard events listeners
+		AppEventsListenersVec         mApplicationListeners;                  // Application events listeners
+
+		ShortcutKeysListenersManager* mShortcutEventsManager;                 // Shortcut events manager
 
 	protected:
 		// Registering cursor area events listener

@@ -2,19 +2,19 @@
 
 namespace o2
 {
-// Outs assert with description, when x is false
+// Outs assert with description, when true_condition is false
 #ifdef PLATFORM_WINDOWS
-#define Assert(x, desc)                         \
-	if (!(x))                                   \
-	{                                           \
-	    ErrorMessage(desc, __FILE__, __LINE__); \
-	    _asm{ int 3 };                          \
+#define Assert(true_condition, desc)                \
+	if (!(true_condition))                          \
+	{                                               \
+	    o2::ErrorMessage(desc, __FILE__, __LINE__); \
+	    _asm{ int 3 };                              \
     }
 #else
-#define Assert(x, desc)                         \
-	if (!(x))                                   \
-	{                                           \
-	    ErrorMessage(desc, __FILE__, __LINE__); \
+#define Assert(true_condition, desc)                \
+	if (!(true_condition))                          \
+	{                                               \
+	    o2::ErrorMessage(desc, __FILE__, __LINE__); \
     }
 #endif
 	void ErrorMessage(const char* desc, const char* file, long line);

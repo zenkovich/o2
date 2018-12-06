@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Events/IEventsListener.h"
+
 namespace o2
 {
 	// ---------------------------
 	// Application events listener
 	// ---------------------------
-	class ApplicationEventsListener
+	class ApplicationEventsListener: public IEventsListener
 	{
 	public:
 		// Default constructor

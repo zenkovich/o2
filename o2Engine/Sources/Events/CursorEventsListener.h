@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Application/Input.h"
-#include "Utils/Math/Vector2.h"
+#include "Events/IEventsListener.h"
 #include "Utils/Math/Rect.h"
+#include "Utils/Math/Vector2.h"
 
 namespace o2
 {
@@ -11,7 +12,7 @@ namespace o2
 	// -----------------------
 	// Cursors events listener
 	// -----------------------
-	class CursorAreaEventsListener
+	class CursorAreaEventsListener: public IEventsListener
 	{
 	public:
 		PROPERTIES(CursorAreaEventsListener);

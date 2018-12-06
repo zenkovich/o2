@@ -226,6 +226,7 @@
     <ClInclude Include="..\..\Sources\Core\Dialogs\EditNameDlg.h" />
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
+    <ClInclude Include="..\..\Sources\Core\EditorScope.h" />
     <ClInclude Include="..\..\Sources\Core\MenuPanel.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\Basic\ActorProperty.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\Basic\AssetProperty.h" />
@@ -279,7 +280,6 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorViewer.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ComponentsViewers\ImageComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
@@ -327,6 +327,7 @@
     <ClCompile Include="..\..\Sources\Core\Dialogs\EditNameDlg.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
+    <ClCompile Include="..\..\Sources\Core\EditorScope.cpp" />
     <ClCompile Include="..\..\Sources\Core\MenuPanel.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\Basic\ActorProperty.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\Basic\AssetProperty.cpp" />

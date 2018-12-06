@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Application/Input.h"
+#include "Events/IEventsListener.h"
 
 namespace o2
 {
 	// ------------------------
 	// Keyboard events listener
 	// ------------------------
-	class KeyboardEventsListener
+	class KeyboardEventsListener: public IEventsListener
 	{
 	public:
 		// Default constructor

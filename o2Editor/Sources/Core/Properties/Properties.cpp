@@ -7,6 +7,7 @@
 #include "Basic/ObjectPtrProperty.h"
 #include "Basic/VectorProperty.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/ObjectViewers/DefaultObjectViewer.h"
 #include "UI/Label.h"
@@ -245,6 +246,8 @@ namespace Editor
 													const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 													const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
+		PushScopeEnterOnStack enterScope;
+
 		if (type->GetUsage() == Type::Usage::Vector)
 			return CreateVectorField(type, name, onChangeCompleted, onChanged);
 

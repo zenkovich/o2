@@ -172,6 +172,7 @@
     <ClInclude Include="..\Sources\Events\CursorEventsListener.h" />
     <ClInclude Include="..\Sources\Events\DrawableCursorEventsListener.h" />
     <ClInclude Include="..\Sources\Events\EventSystem.h" />
+    <ClInclude Include="..\Sources\Events\IEventsListener.h" />
     <ClInclude Include="..\Sources\Events\KeyboardEventsListener.h" />
     <ClInclude Include="..\Sources\Events\ShortcutKeysListener.h" />
     <ClInclude Include="..\Sources\O2.h" />
@@ -354,6 +355,7 @@
     <ClCompile Include="..\Sources\Events\CursorEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\DrawableCursorEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\EventSystem.cpp" />
+    <ClCompile Include="..\Sources\Events\IEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp" />
     <ClCompile Include="..\Sources\Events\ShortcutKeysListener.cpp" />
     <ClCompile Include="..\Sources\Render\BitmapFont.cpp" />

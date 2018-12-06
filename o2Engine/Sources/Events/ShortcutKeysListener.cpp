@@ -96,7 +96,16 @@ namespace o2
 		for (auto kv : mListeners)
 		{
 			if (kv.Key().IsPressed() && !kv.Value().IsEmpty())
-				kv.Value().Last()->OnShortcutPressed();
+			{
+				for (int i = kv.Value().Count() - 1; i >= 0; i--)
+				{
+					if (kv.Value()[i]->IsListeningEvents())
+					{
+						kv.Value()[i]->OnShortcutPressed();
+						break;
+					}
+				}
+			}
 		}
 	}
 

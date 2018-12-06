@@ -2368,14 +2368,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/ComponentsViewers/ImageComponentViewer.h">
-		<date year="2018" month="10" day="3" hour="10" minute="27" second="49" />
-		<globalNamespace name="" fullname="">
-			<sections />
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
 		<date year="2018" month="10" day="16" hour="10" minute="16" second="22" />
 		<globalNamespace name="" fullname="">
@@ -3184,6 +3176,35 @@
 			<usings>
 				<typedef name="o2" />
 			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorScope.h">
+		<date year="2018" month="12" day="6" hour="20" minute="11" second="27" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="Scope" fullname="Editor::Scope" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+						<section name="PushScopeEnterOnStack" fullname="Editor::PushScopeEnterOnStack" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings>
+						<typedef name="o2" />
+					</usings>
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
 		</globalNamespace>
 	</file>
 </files>

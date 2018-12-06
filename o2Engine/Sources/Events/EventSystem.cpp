@@ -131,31 +131,46 @@ namespace o2
 	void EventSystem::OnApplicationStarted()
 	{
 		for (auto listener : mApplicationListeners)
-			listener->OnApplicationStarted();
+		{
+			if (listener->IsListeningEvents())
+				listener->OnApplicationStarted();
+		}
 	}
 
 	void EventSystem::OnApplicationClosing()
 	{
 		for (auto listener : mApplicationListeners)
-			listener->OnApplicationClosing();
+		{
+			if (listener->IsListeningEvents())
+				listener->OnApplicationClosing();
+		}
 	}
 
 	void EventSystem::OnApplicationActivated()
 	{
 		for (auto listener : mApplicationListeners)
-			listener->OnApplicationActivated();
+		{
+			if (listener->IsListeningEvents())
+				listener->OnApplicationActivated();
+		}
 	}
 
 	void EventSystem::OnApplicationDeactivated()
 	{
 		for (auto listener : mApplicationListeners)
-			listener->OnApplicationDeactivated();
+		{
+			if (listener->IsListeningEvents())
+				listener->OnApplicationDeactivated();
+		}
 	}
 
 	void EventSystem::OnApplicationSized()
 	{
 		for (auto listener : mApplicationListeners)
-			listener->OnApplicationSized();
+		{
+			if (listener->IsListeningEvents())
+				listener->OnApplicationSized();
+		}
 	}
 
 	void EventSystem::ProcessCursorTracing(const Input::Cursor& cursor)
@@ -198,6 +213,8 @@ namespace o2
 			}
 		}
 	}
+
+	bool EventSystem::eventsListenersEnabledByDefault = true;
 
 	CursorAreaEventsListener* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
 	{
@@ -394,21 +411,30 @@ namespace o2
 	{
 		auto listeners = mKeyboardListeners;
 		for (auto listener : listeners)
-			listener->OnKeyPressed(key);
+		{
+			if (listener->IsListeningEvents())
+				listener->OnKeyPressed(key);
+		}
 	}
 
 	void EventSystem::ProcessKeyDown(const Input::Key& key)
 	{
 		auto listeners = mKeyboardListeners;
 		for (auto listener : listeners)
-			listener->OnKeyStayDown(key);
+		{
+			if (listener->IsListeningEvents())
+				listener->OnKeyStayDown(key);
+		}
 	}
 
 	void EventSystem::ProcessKeyReleased(const Input::Key& key)
 	{
 		auto listeners = mKeyboardListeners;
 		for (auto listener : listeners)
-			listener->OnKeyReleased(key);
+		{
+			if (listener->IsListeningEvents())
+				listener->OnKeyReleased(key);
+		}
 	}
 
 	void EventSystem::DrawnCursorAreaListener(CursorAreaEventsListener* listener)
@@ -416,8 +442,10 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		if (mInstance)
-			mInstance->mAreaCursorListeners.Add(listener);
+		if (!listener->IsListeningEvents())
+			return;
+
+		mInstance->mAreaCursorListeners.Add(listener);
 	}
 
 	void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)

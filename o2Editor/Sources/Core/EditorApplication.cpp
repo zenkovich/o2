@@ -7,6 +7,7 @@
 #include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Core/Actions/IAction.h"
+#include "Core/EditorScope.h"
 #include "Core/MenuPanel.h"
 #include "Core/Properties/Properties.h"
 #include "Core/ToolsPanel.h"
@@ -16,16 +17,17 @@
 #include "Render/Render.h"
 #include "Scene/Actor.h"
 #include "Scene/Components/ImageComponent.h"
+#include "Scene/Scene.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
 #include "UI/MenuPanel.h"
 #include "UI/MenuPanel.h"
 #include "UI/UIManager.h"
+#include "UIStyle/EditorUIStyle.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/System/Time/Time.h"
 #include "Utils/System/Time/Timer.h"
 #include "Utils/Tasks/TaskManager.h"
-#include "UIStyle/EditorUIStyle.h"
 
 namespace Editor
 {
@@ -143,8 +145,9 @@ namespace Editor
 
 	void EditorApplication::OnStarted()
 	{
+		PushScopeEnterOnStack enterScope;
+
 		o2Application.SetWindowCaption("o2 Editor");
-		Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
 
 		mUIRoot = mnew UIRoot();
 
@@ -174,8 +177,6 @@ namespace Editor
 		}
 
 		OnResizing();
-
-		Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 	}
 
 	void EditorApplication::OnClosing()
