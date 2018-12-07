@@ -808,18 +808,12 @@ namespace o2
 
 		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
 		closeBtn->name = "closeButton";
-		closeBtn->layout->anchorMin = Vec2F(1, 1);
-		closeBtn->layout->anchorMax = Vec2F(1, 1);
-		closeBtn->layout->offsetMin = Vec2F(-19, -15);
-		closeBtn->layout->offsetMax = Vec2F(1, 3);
+		*closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 20));
 		sample->AddInternalWidget(closeBtn);
 
 		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
 		optionsBtn->name = "optionsButton";
-		optionsBtn->layout->anchorMin = Vec2F(1, 1);
-		optionsBtn->layout->anchorMax = Vec2F(1, 1);
-		optionsBtn->layout->offsetMin = Vec2F(-34, -15);
-		optionsBtn->layout->offsetMax = Vec2F(-16, 3);
+		*optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 20));
 		sample->AddInternalWidget(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head

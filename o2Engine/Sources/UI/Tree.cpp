@@ -1357,10 +1357,12 @@ namespace o2
 	void UITree::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
 		auto node = GetTreeNodeUnderPoint(cursor.position);
-		if (mSelectedNodes.Count() < 2 && node)
+		if (mSelectedNodes.Count() < 2)
 		{
 			DeselectAllObjects();
-			SelectObject(node->GetObject());
+
+			if (node)
+				SelectObject(node->GetObject());
 		}
 
 		Focus();

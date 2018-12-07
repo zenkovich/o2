@@ -206,6 +206,8 @@ namespace Editor
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
+		PushScopeEnterOnStack scope;
+
 		Vector<FieldInfo*> regularFields = fields.FindAll(
 			[&](FieldInfo* x) { return IsPropertyVisible(x, false); });
 
