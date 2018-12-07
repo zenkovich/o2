@@ -122,6 +122,9 @@ namespace Editor
 		SceneEditableObjectsVec mTopSelectedObjects;       // Current selected objects most top in hierarchy
 		bool                    mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
 
+
+		SceneEditableObjectsVec mDrawnEditableObjects;     // Ordered list of draw on last frame editable object
+
 		ToolsVec   mTools;				   // Available tools
 		IEditTool* mEnabledTool = nullptr; // Current enabled tool
 
@@ -273,6 +276,7 @@ CLASS_FIELDS_META(Editor::SceneEditScreen)
 	PROTECTED_FIELD(mSelectedObjects);
 	PROTECTED_FIELD(mTopSelectedObjects);
 	PROTECTED_FIELD(mSelectedFromThis);
+	PROTECTED_FIELD(mDrawnEditableObjects);
 	PROTECTED_FIELD(mTools);
 	PROTECTED_FIELD(mEnabledTool);
 	PROTECTED_FIELD(mDragHandles);

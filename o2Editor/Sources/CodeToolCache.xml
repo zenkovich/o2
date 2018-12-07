@@ -2993,44 +2993,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditScreen.h">
-		<date year="2018" month="10" day="16" hour="10" minute="16" second="22" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SceneEditScreen" fullname="Editor::SceneEditScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;SceneEditableObject*&gt;" newDef="SceneEditableObjectsVec" />
-								<typedef what="Vector&lt;DrawableComponent*&gt;" newDef="DrawableComponentsVec" />
-								<typedef what="Vector&lt;SceneDragHandle*&gt;" newDef="DragHandlesVec" />
-								<typedef what="Vector&lt;IEditTool*&gt;" newDef="ToolsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="DragDropArea" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-								<class name="Singleton&lt;SceneEditScreen&gt;" protection="1" />
-								<class name="UIScrollView" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneWindow.h">
 		<date year="2018" month="10" day="16" hour="10" minute="16" second="22" />
 		<globalNamespace name="" fullname="">
@@ -3205,6 +3167,44 @@
 			</sections>
 			<typedefs />
 			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditScreen.h">
+		<date year="2018" month="12" day="7" hour="20" minute="7" second="23" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="SceneEditScreen" fullname="Editor::SceneEditScreen" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;SceneEditableObject*&gt;" newDef="SceneEditableObjectsVec" />
+								<typedef what="Vector&lt;DrawableComponent*&gt;" newDef="DrawableComponentsVec" />
+								<typedef what="Vector&lt;SceneDragHandle*&gt;" newDef="DragHandlesVec" />
+								<typedef what="Vector&lt;IEditTool*&gt;" newDef="ToolsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="DragDropArea" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+								<class name="Singleton&lt;SceneEditScreen&gt;" protection="1" />
+								<class name="UIScrollView" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
 		</globalNamespace>
 	</file>
 </files>

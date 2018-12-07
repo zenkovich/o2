@@ -145,13 +145,19 @@ namespace Editor
 
 	void SceneEditScreen::DrawObjects()
 	{
+		mDrawnEditableObjects.Clear();
+
 		for (auto layer : o2Scene.GetLayers())
 		{
 			for (auto drw : layer->GetEnabledDrawables())
 			{
 				drw->Draw();
+
+				if (auto obj = dynamic_cast<SceneEditableObject*>(drw))
+					mDrawnEditableObjects.Add(obj);
 			}
 		}
+
 // 		static bool drawing = false;
 // 		if (drawing)
 // 			return;

@@ -36,12 +36,13 @@ namespace o2
 			{
 				o2Scene.mRootActors.Add(this);
 				o2Scene.mAllActors.Add(this);
-#if IS_EDITOR
-				o2Scene.mEditableObjects.Add(this);
-#endif
 				mLayer->mEnabledActors.Add(this);
 
 				mIsOnScene = true;
+
+#if IS_EDITOR
+				o2Scene.mEditableObjects.Add(this);
+#endif
 			}
 
 			mLayer->mActors.Add(this);

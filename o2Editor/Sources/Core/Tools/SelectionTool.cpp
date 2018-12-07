@@ -62,7 +62,7 @@ namespace Editor
 	{
 		for (auto child : object->GetEditablesChildren())
 		{
-			if (child->IsHieararchyOnScene())
+			if (child->IsHieararchyOnScene()) 
 				mSelectableSceneObjects.Add(child);
 
 			CollectSelectableObjects(child);
