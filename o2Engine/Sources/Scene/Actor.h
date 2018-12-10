@@ -275,7 +275,6 @@ namespace o2
 		// Returns the path of create menu category
 		virtual const String& GetCreateMenuCategory() const;
 
-
 		// Sets locking. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
 		void SetLocked(bool locked);
 

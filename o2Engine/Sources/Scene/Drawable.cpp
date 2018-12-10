@@ -83,6 +83,13 @@ namespace o2
 
 		mIsOnScene = true;
 	}
+
+#if IS_EDITOR
+	SceneEditableObject* SceneDrawable::GetEditableOwner()
+	{
+		return nullptr;
+	}
+#endif
 }
 
 DECLARE_CLASS(o2::SceneDrawable);

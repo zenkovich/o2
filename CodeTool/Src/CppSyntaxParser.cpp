@@ -557,7 +557,7 @@ void CppSyntaxParser::ParseInclude(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#include");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseDefine(SyntaxSection& section, int& caret,
@@ -565,7 +565,7 @@ void CppSyntaxParser::ParseDefine(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#define");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseIfdefMacros(SyntaxSection& section, int& caret,
@@ -573,7 +573,7 @@ void CppSyntaxParser::ParseIfdefMacros(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#ifdef");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseIfMacros(SyntaxSection& section, int& caret,
@@ -581,7 +581,7 @@ void CppSyntaxParser::ParseIfMacros(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#if");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseEndIfMacros(SyntaxSection& section, int& caret,
@@ -589,7 +589,7 @@ void CppSyntaxParser::ParseEndIfMacros(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#endif");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseElifMacros(SyntaxSection& section, int& caret,
@@ -597,7 +597,7 @@ void CppSyntaxParser::ParseElifMacros(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#elif");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseElseMacros(SyntaxSection& section, int& caret,
@@ -605,7 +605,7 @@ void CppSyntaxParser::ParseElseMacros(SyntaxSection& section, int& caret,
 {
 	int begin = caret;
 	caret += (int)strlen("#else");
-	ReadWord(section.mData, caret, "\n");
+	ReadWord(section.mData, caret, "\n", "");
 }
 
 void CppSyntaxParser::ParseMetaClass(SyntaxSection& section, int& caret,

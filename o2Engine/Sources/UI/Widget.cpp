@@ -1273,6 +1273,11 @@ namespace o2
 		this->layout->SetOffsetMax(layout.offsetMax);
 	}
 
+	SceneEditableObject* UIWidget::GetEditableOwner()
+	{
+		return this;
+	}
+
 	UIWidget::LayersEditable::LayersEditable()
 	{}
 

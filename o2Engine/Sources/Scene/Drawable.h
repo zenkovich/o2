@@ -4,6 +4,10 @@
 #include "Utils/Property.h"
 #include "Utils/Serialization/Serializable.h"
 
+#if IS_EDITOR
+#include "Utils/Editor/SceneEditableObject.h"
+#endif
+
 namespace o2
 {
 	class SceneLayer;
@@ -62,6 +66,12 @@ namespace o2
 
 		friend class Scene;
 		friend class SceneLayer;
+
+#if IS_EDITOR
+	public:
+		// Returns pointer to owner editable object
+		virtual SceneEditableObject* GetEditableOwner();
+#endif
 	};
 }
 
@@ -89,5 +99,6 @@ CLASS_METHODS_META(o2::SceneDrawable)
 	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
 }
 END_META;

@@ -73,6 +73,13 @@ namespace o2
 			OnTransformUpdated();
 		}
 	}
+
+#if IS_EDITOR
+	SceneEditableObject* DrawableComponent::GetEditableOwner()
+	{
+		return mOwner;
+	}
+#endif
 }
 
 DECLARE_CLASS(o2::DrawableComponent);

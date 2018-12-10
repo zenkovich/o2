@@ -98,6 +98,9 @@ namespace Editor
 		// Returns top selected objects in hierarchy
 		const SceneEditableObjectsVec& GetTopSelectedObjects() const;
 
+		// Returns drawn on last frame editable objects
+		const SceneEditableObjectsVec& GetDrawnEditableObjects() const;
+
 		// Returns color for single selected object
 		const Color4& GetSingleObjectSelectionColor() const;
 
@@ -299,6 +302,7 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(void, ClearSelection);
 	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetSelectedObjects);
 	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetTopSelectedObjects);
+	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetDrawnEditableObjects);
 	PUBLIC_FUNCTION(const Color4&, GetSingleObjectSelectionColor);
 	PUBLIC_FUNCTION(const Color4&, GetManyObjectsSelectionColor);
 	PUBLIC_FUNCTION(void, OnSceneChanged);

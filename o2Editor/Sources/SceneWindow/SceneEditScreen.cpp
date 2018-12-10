@@ -153,7 +153,7 @@ namespace Editor
 			{
 				drw->Draw();
 
-				if (auto obj = dynamic_cast<SceneEditableObject*>(drw))
+				if (auto obj = drw->GetEditableOwner())
 					mDrawnEditableObjects.Add(obj);
 			}
 		}
@@ -258,6 +258,11 @@ namespace Editor
 	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetTopSelectedObjects() const
 	{
 		return mTopSelectedObjects;
+	}
+
+	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetDrawnEditableObjects() const
+	{
+		return mDrawnEditableObjects;
 	}
 
 	const Color4& SceneEditScreen::GetSingleObjectSelectionColor() const
