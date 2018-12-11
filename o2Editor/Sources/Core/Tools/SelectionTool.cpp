@@ -92,8 +92,13 @@ namespace Editor
 		{
 			bool selected = false;
 			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
-			auto& drawnObjects = o2EditorSceneScreen.GetDrawnEditableObjects();
-			for (int i = drawnObjects.Count() - 1; i >= 0; i--)
+			auto& drawnObjects = SceneDrawable::drawnLastFrameEditableObjects;
+
+			int startIdx = drawnObjects.Count() - 1;
+			if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
+				startIdx = drawnObjects.Find(o2EditorSceneScreen.GetSelectedObjects().Last());
+
+			for (int i = startIdx; i >= 0; i--)
 			{
 				auto object = drawnObjects[i];
 				if (!object->IsLockedInHierarchy() && object->GetTransform().IsPointInside(sceneSpaceCursor))

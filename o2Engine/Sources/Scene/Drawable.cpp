@@ -85,9 +85,23 @@ namespace o2
 	}
 
 #if IS_EDITOR
+
+	o2::Vector<SceneEditableObject*> SceneDrawable::drawnLastFrameEditableObjects;
+
 	SceneEditableObject* SceneDrawable::GetEditableOwner()
 	{
 		return nullptr;
+	}
+
+	void SceneDrawable::OnDrawn()
+	{
+		if (auto obj = GetEditableOwner())
+		{
+			if (obj->IsOnScene())
+				drawnLastFrameEditableObjects.Add(obj);
+		}
+
+		IDrawable::OnDrawn();
 	}
 #endif
 }

@@ -98,9 +98,6 @@ namespace Editor
 		// Returns top selected objects in hierarchy
 		const SceneEditableObjectsVec& GetTopSelectedObjects() const;
 
-		// Returns drawn on last frame editable objects
-		const SceneEditableObjectsVec& GetDrawnEditableObjects() const;
-
 		// Returns color for single selected object
 		const Color4& GetSingleObjectSelectionColor() const;
 
@@ -124,9 +121,6 @@ namespace Editor
 		SceneEditableObjectsVec mSelectedObjects;          // Current selected objects
 		SceneEditableObjectsVec mTopSelectedObjects;       // Current selected objects most top in hierarchy
 		bool                    mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
-
-
-		SceneEditableObjectsVec mDrawnEditableObjects;     // Ordered list of draw on last frame editable object
 
 		ToolsVec   mTools;				   // Available tools
 		IEditTool* mEnabledTool = nullptr; // Current enabled tool
@@ -279,7 +273,6 @@ CLASS_FIELDS_META(Editor::SceneEditScreen)
 	PROTECTED_FIELD(mSelectedObjects);
 	PROTECTED_FIELD(mTopSelectedObjects);
 	PROTECTED_FIELD(mSelectedFromThis);
-	PROTECTED_FIELD(mDrawnEditableObjects);
 	PROTECTED_FIELD(mTools);
 	PROTECTED_FIELD(mEnabledTool);
 	PROTECTED_FIELD(mDragHandles);
@@ -302,7 +295,6 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(void, ClearSelection);
 	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetSelectedObjects);
 	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetTopSelectedObjects);
-	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetDrawnEditableObjects);
 	PUBLIC_FUNCTION(const Color4&, GetSingleObjectSelectionColor);
 	PUBLIC_FUNCTION(const Color4&, GetManyObjectsSelectionColor);
 	PUBLIC_FUNCTION(void, OnSceneChanged);

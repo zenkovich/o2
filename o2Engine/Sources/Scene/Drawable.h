@@ -69,8 +69,13 @@ namespace o2
 
 #if IS_EDITOR
 	public:
+		static Vector<SceneEditableObject*> drawnLastFrameEditableObjects; // Ordered list of draw on last frame editable object
+
 		// Returns pointer to owner editable object
 		virtual SceneEditableObject* GetEditableOwner();
+
+		// It is called when drawable was drawn. Storing render scissor rect, calling onDraw callback, adding in drawnEditableObjects
+		void OnDrawn() override;
 #endif
 	};
 }
@@ -100,5 +105,6 @@ CLASS_METHODS_META(o2::SceneDrawable)
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
+	PUBLIC_FUNCTION(void, OnDrawn);
 }
 END_META;

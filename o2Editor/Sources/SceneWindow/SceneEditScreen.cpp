@@ -145,17 +145,12 @@ namespace Editor
 
 	void SceneEditScreen::DrawObjects()
 	{
-		mDrawnEditableObjects.Clear();
+		SceneDrawable::drawnLastFrameEditableObjects.Clear();
 
 		for (auto layer : o2Scene.GetLayers())
 		{
 			for (auto drw : layer->GetEnabledDrawables())
-			{
 				drw->Draw();
-
-				if (auto obj = drw->GetEditableOwner())
-					mDrawnEditableObjects.Add(obj);
-			}
 		}
 
 // 		static bool drawing = false;
@@ -258,11 +253,6 @@ namespace Editor
 	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetTopSelectedObjects() const
 	{
 		return mTopSelectedObjects;
-	}
-
-	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetDrawnEditableObjects() const
-	{
-		return mDrawnEditableObjects;
 	}
 
 	const Color4& SceneEditScreen::GetSingleObjectSelectionColor() const
