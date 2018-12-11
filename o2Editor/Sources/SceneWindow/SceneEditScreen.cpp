@@ -145,13 +145,15 @@ namespace Editor
 
 	void SceneEditScreen::DrawObjects()
 	{
-		SceneDrawable::drawnLastFrameEditableObjects.Clear();
+		o2Scene.BeginDrawingScene();
 
 		for (auto layer : o2Scene.GetLayers())
 		{
 			for (auto drw : layer->GetEnabledDrawables())
 				drw->Draw();
 		}
+
+		o2Scene.EndDrawingScene();
 
 // 		static bool drawing = false;
 // 		if (drawing)

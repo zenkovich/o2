@@ -69,8 +69,6 @@ namespace o2
 
 #if IS_EDITOR
 	public:
-		static Vector<SceneEditableObject*> drawnLastFrameEditableObjects; // Ordered list of draw on last frame editable object
-
 		// Returns pointer to owner editable object
 		virtual SceneEditableObject* GetEditableOwner();
 

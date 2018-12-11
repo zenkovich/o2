@@ -774,14 +774,16 @@ namespace o2
 	void BasicUIStyleBuilder::RebuildWindowStyle()
 	{
 		UIWindow* sample = mnew UIWindow();
-
 		sample->layout->minSize = Vec2F(100, 50);
+		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
+		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
+		sample->SetEnableScrollsHiding(true);
 
 		auto regularBackLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_window_frame_regular.png"),
-												 Layout::BothStretch(-12, -12, -14, -14));
+												 Layout::BothStretch(-13, -13, -13, -11));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
-										  Layout(Vec2F(0.0f, 1.0f), Vec2F(0.0f, 1.0f), Vec2F(3, -14), Vec2F(17, 1)));
+										  Layout::Based(BaseCorner::LeftTop, Vec2F(18, 18), Vec2F(-1, 1)));
 
 		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Window";
@@ -789,11 +791,7 @@ namespace o2
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		auto textLayer = sample->AddLayer("caption", captionText,
-										  Layout(Vec2F(0.0f, 1.0f), Vec2F(1.0f, 1.0f), Vec2F(19, -13), Vec2F(-28, 3)));
-
-		sample->SetClippingLayout(Layout::BothStretch(0, 1, -1, 15));
-		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
-		sample->SetEnableScrollsHiding(true);
+										  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		*horScrollBar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 5, 15, 15, -5);
@@ -808,12 +806,12 @@ namespace o2
 
 		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
 		closeBtn->name = "closeButton";
-		*closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 20));
+		*closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(4, 22));
 		sample->AddInternalWidget(closeBtn);
 
 		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
 		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 20));
+		*optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-12, 22));
 		sample->AddInternalWidget(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head

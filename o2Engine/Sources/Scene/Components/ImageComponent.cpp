@@ -57,6 +57,7 @@ namespace o2
 	void ImageComponent::Draw()
 	{
 		mSprite.Draw();
+		OnDrawn();
 	}
 
 	void ImageComponent::SetTexture(TextureRef texture)

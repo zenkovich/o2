@@ -15,7 +15,6 @@ namespace Editor
 	SelectionTool::SelectionTool()
 	{
 		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
-		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
 	}
 
 	SelectionTool::~SelectionTool()
@@ -47,28 +46,6 @@ namespace Editor
 		mSelectingObjects = false;
 	}
 
-	void SelectionTool::OnSceneObjectsChanged(const SceneEditableObjectsVec& chnaged)
-	{
-		mSelectableSceneObjects.Clear();
-
-		for (auto object : o2Scene.GetRootActors())
-		{
-			mSelectableSceneObjects.Add(object);
-			CollectSelectableObjects(object);
-		}
-	}
-
-	void SelectionTool::CollectSelectableObjects(SceneEditableObject* object)
-	{
-		for (auto child : object->GetEditablesChildren())
-		{
-			if (child->IsHieararchyOnScene()) 
-				mSelectableSceneObjects.Add(child);
-
-			CollectSelectableObjects(child);
-		}
-	}
-
 	void SelectionTool::OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects)
 	{}
 
@@ -92,11 +69,11 @@ namespace Editor
 		{
 			bool selected = false;
 			Vec2F sceneSpaceCursor = o2EditorSceneScreen.ScreenToScenePoint(cursor.position);
-			auto& drawnObjects = SceneDrawable::drawnLastFrameEditableObjects;
+			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
 
 			int startIdx = drawnObjects.Count() - 1;
 			if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-				startIdx = drawnObjects.Find(o2EditorSceneScreen.GetSelectedObjects().Last());
+				startIdx = drawnObjects.Find(o2EditorSceneScreen.GetSelectedObjects().Last()) - 1;
 
 			for (int i = startIdx; i >= 0; i--)
 			{
@@ -159,7 +136,8 @@ namespace Editor
 					mCurrentSelectingObjects.Add(object);
 			}
 
-			for (auto object : mSelectableSceneObjects)
+			auto& drawnObjects = o2Scene.GetDrawnEditableObjects();
+			for (auto object : drawnObjects)
 			{
 				if (mCurrentSelectingObjects.Contains(object))
 					continue;

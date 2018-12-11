@@ -38,6 +38,10 @@ namespace o2
 
 	void Scene::Draw()
 	{
+#if IS_EDITOR
+		BeginDrawingScene();
+#endif
+
 		for (auto layer : mLayers)
 		{
 			for (auto comp : layer->mEnabledDrawables)
@@ -45,6 +49,10 @@ namespace o2
 		}
 
 		DrawCursorDebugInfo();
+
+#if IS_EDITOR
+		EndDrawingScene();
+#endif
 	}
 
 #undef DrawText
@@ -342,12 +350,12 @@ namespace o2
 	}
 
 #if IS_EDITOR
-	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
+	SceneEditableObjectsVec Scene::GetRootEditableObjects()
 	{
 		return mRootActors.Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	Vector<SceneEditableObject*> Scene::GetAllEditableObjects()
+	const SceneEditableObjectsVec& Scene::GetAllEditableObjects()
 	{
 		return mEditableObjects;
 	}
@@ -453,6 +461,12 @@ namespace o2
 			mChangedObjects.Add(object);
 	}
 
+	void Scene::OnObjectDrawn(SceneEditableObject* object)
+	{
+		if (mIsDrawingScene)
+			mDrawnObjects.Add(object);
+	}
+
 	void Scene::CheckChangedObjects()
 	{
 		if (mChangedObjects.Count() > 0)
@@ -465,6 +479,11 @@ namespace o2
 	const SceneEditableObjectsVec& Scene::GetChangedObjects() const
 	{
 		return mChangedObjects;
+	}
+
+	const SceneEditableObjectsVec& Scene::GetDrawnEditableObjects() const
+	{
+		return mDrawnObjects;
 	}
 
 	Scene::ActorsCacheDict& Scene::GetPrototypesLinksCache()
@@ -498,6 +517,17 @@ namespace o2
 			}
 			else kv++;
 		}
+	}
+
+	void Scene::BeginDrawingScene()
+	{
+		mIsDrawingScene = true;
+		mDrawnObjects.Clear();
+	}
+
+	void Scene::EndDrawingScene()
+	{
+		mIsDrawingScene = false;
 	}
 
 #endif

@@ -85,9 +85,6 @@ namespace o2
 	}
 
 #if IS_EDITOR
-
-	o2::Vector<SceneEditableObject*> SceneDrawable::drawnLastFrameEditableObjects;
-
 	SceneEditableObject* SceneDrawable::GetEditableOwner()
 	{
 		return nullptr;
@@ -96,14 +93,12 @@ namespace o2
 	void SceneDrawable::OnDrawn()
 	{
 		if (auto obj = GetEditableOwner())
-		{
-			if (obj->IsOnScene())
-				drawnLastFrameEditableObjects.Add(obj);
-		}
+			o2Scene.OnObjectDrawn(obj);
 
 		IDrawable::OnDrawn();
 	}
 #endif
+
 }
 
 DECLARE_CLASS(o2::SceneDrawable);

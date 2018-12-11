@@ -122,52 +122,7 @@ namespace o2
 		void Save(const String& path);
 
 		// Updates root actors
-		void Update(float dt);
-
-#if IS_EDITOR
-		// Returns root editable objects
-		Vector<SceneEditableObject*> GetRootEditableObjects();
-
-		// Returns all editable objects
-		Vector<SceneEditableObject*> GetAllEditableObjects();
-
-		// Returns actor by id
-		SceneEditableObject* GetEditableObjectByID(SceneUID id) const;
-
-		// Returns object's index in hierarchy
-		int GetObjectHierarchyIdx(SceneEditableObject* object) const;
-
-		// Reparent scene editableobjects to new parent at next of prevActor;
-		void ReparentEditableObjects(const Vector<SceneEditableObject*>& objects,
-									 SceneEditableObject* newParent, SceneEditableObject* prevObject);
-
-		// It is called when object was created
-		void OnObjectCreated(SceneEditableObject* object);
-
-		// It is called when object is destroying
-		void OnObjectDestroyed(SceneEditableObject* object);
-
-		// It is called when object was changed
-		void OnObjectChanged(SceneEditableObject* object);
-
-		// Checks is any actors was changed and calls OnChanged() if changed
-		void CheckChangedObjects();
-
-		// Returns current changed actors
-		const SceneEditableObjectsVec& GetChangedObjects() const;
-
-		// Returns cache of linked to prototypes actors
-		ActorsCacheDict& GetPrototypesLinksCache();
-
-		// It is called when created actor with prototype, updates cache
-		void OnActorWithPrototypeCreated(Actor* actor);
-
-		// It is called when some actor created and linked to prototype, updates linked actors cache
-		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
-
-		// It is called when actor destroying or prototype link broken, updates cache
-		void OnActorPrototypeBroken(Actor* actor);
-#endif       
+		void Update(float dt); 
 
 	protected:
 		ActorsVec       mRootActors;   // Scene root actors		
@@ -176,15 +131,6 @@ namespace o2
 		TagsVec         mTags;         // Scene tags
 		SceneLayer*     mDefaultLayer; // Default scene layer
 		ActorsAssetsVec mCache;        // Cached actors assets
-
-#if IS_EDITOR	  						      
-		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
-
-		SceneEditableObjectsVec mChangedObjects;  // Changed actors array
-		SceneEditableObjectsVec mEditableObjects; // All scene editable objects
-
-		friend class SceneEditableObject;
-#endif
 
 	protected:
 		// Default constructor
@@ -204,6 +150,75 @@ namespace o2
 		friend class DrawableComponent;
 		friend class UIWidget;
 		friend class UIWidgetLayer;
+
+#if IS_EDITOR	  	
+	public:
+		// Returns root editable objects
+		SceneEditableObjectsVec GetRootEditableObjects();
+
+		// Returns all editable objects
+		const SceneEditableObjectsVec& GetAllEditableObjects();
+
+		// Returns current changed actors
+		const SceneEditableObjectsVec& GetChangedObjects() const;
+
+		// Returns drawn on last frame editable objects
+		const SceneEditableObjectsVec& GetDrawnEditableObjects() const;
+
+		// Returns actor by id
+		SceneEditableObject* GetEditableObjectByID(SceneUID id) const;
+
+		// Returns object's index in hierarchy
+		int GetObjectHierarchyIdx(SceneEditableObject* object) const;
+
+		// Reparent scene editableobjects to new parent at next of prevActor;
+		void ReparentEditableObjects(const Vector<SceneEditableObject*>& objects,
+									 SceneEditableObject* newParent, SceneEditableObject* prevObject);
+
+		// Checks is any actors was changed and calls OnChanged() if changed
+		void CheckChangedObjects();
+
+		// Returns cache of linked to prototypes actors
+		ActorsCacheDict& GetPrototypesLinksCache();
+
+		// It is called when object was created
+		void OnObjectCreated(SceneEditableObject* object);
+
+		// It is called when object is destroying
+		void OnObjectDestroyed(SceneEditableObject* object);
+
+		// It is called when object was changed
+		void OnObjectChanged(SceneEditableObject* object);
+
+		// It is called when object was drawn 
+		void OnObjectDrawn(SceneEditableObject* object);
+
+		// It is called when created actor with prototype, updates cache
+		void OnActorWithPrototypeCreated(Actor* actor);
+
+		// It is called when some actor created and linked to prototype, updates linked actors cache
+		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
+
+		// It is called when actor destroying or prototype link broken, updates cache
+		void OnActorPrototypeBroken(Actor* actor);
+
+		// It is called when scene started to draw. When scene draw started, drawn scene objects will be collected
+		void BeginDrawingScene();
+
+		// It is called when scene finished draw. After scene objects will not be collected 
+		void EndDrawingScene();
+
+	protected:
+		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
+
+		SceneEditableObjectsVec mChangedObjects;  // Changed actors array
+		SceneEditableObjectsVec mEditableObjects; // All scene editable objects
+
+		SceneEditableObjectsVec mDrawnObjects;           // List of drawn on last frame editable objects
+		bool                    mIsDrawingScene = false; // Sets true when started drawing scene, and false when not
+
+		friend class SceneEditableObject;
+#endif
 	};
 }
 

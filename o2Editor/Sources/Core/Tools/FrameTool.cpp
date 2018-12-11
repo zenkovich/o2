@@ -424,6 +424,10 @@ namespace Editor
 			mIsDragging = false;
 			SetHandlesEnable(true);
 			HandleReleased();
+
+			const float hasntMovedThreshold = 2.0f;
+			if (o2EditorSceneScreen.SceneToScreenVector(mFrame.origin - mBeginDraggingFrame.origin).Length() < hasntMovedThreshold)
+				SelectionTool::OnCursorReleased(cursor);
 		}
 		else SelectionTool::OnCursorReleased(cursor);
 	}
