@@ -845,7 +845,7 @@ namespace o2
 		return transform->GetWorldPivot();
 	}
 
-	void Actor::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	void Actor::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (Actor* actor = dynamic_cast<Actor*>(object))
 		{
@@ -868,8 +868,7 @@ namespace o2
 
 	void Actor::SetEditableParent(SceneEditableObject* object)
 	{
-		if (Actor* actor = dynamic_cast<Actor*>(object))
-			SetParent(actor);
+		SetParent(dynamic_cast<Actor*>(object));
 	}
 
 	SceneEditableObject* Actor::GetEditableParent() const

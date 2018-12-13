@@ -38,7 +38,7 @@ namespace Editor
 			objectsData.GetValueRaw(objects);
 
 			for (auto object : objects)
-				parent->AddChild(object, insertIdx++);
+				parent->AddEditableChild(object, insertIdx++);
 		}
 		else
 		{

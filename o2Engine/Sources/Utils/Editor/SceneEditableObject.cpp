@@ -50,7 +50,7 @@ namespace o2
 	void SceneEditableObject::SetEditableParent(SceneEditableObject* object)
 	{}
 
-	void SceneEditableObject::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{}
 
 	void SceneEditableObject::SetIndexInSiblings(int idx)

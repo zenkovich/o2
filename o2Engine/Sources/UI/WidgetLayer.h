@@ -178,7 +178,7 @@ namespace o2
 		void SetEditableParent(SceneEditableObject* object) override;
 
 		// Adds child. idx is place in parent children. idx == -1 means last
-		void AddChild(SceneEditableObject* object, int idx = -1) override;
+		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
 
 		// Sets index in siblings - children of parent
 		void SetIndexInSiblings(int idx) override;
@@ -370,7 +370,7 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(bool, CanBeParentedTo, const Type&);
 	PUBLIC_FUNCTION(bool, IsSupportsDisabling);

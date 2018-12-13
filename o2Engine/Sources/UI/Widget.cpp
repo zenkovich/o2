@@ -299,6 +299,13 @@ namespace o2
 		UpdateLayersDrawingSequence();
 		OnLayerAdded(layer);
 
+#if IS_EDITOR
+		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene()) {
+			o2Scene.OnObjectChanged(&layerEditable);
+			o2Scene.onChildrenHierarchyChanged(&layerEditable);
+		}
+#endif
+
 		return layer;
 	}
 
@@ -357,7 +364,9 @@ namespace o2
 	{
 		mLayers.Remove(layer);
 		delete layer;
+
 		UpdateLayersDrawingSequence();
+		OnChildrenChanged();
 	}
 
 	void UIWidget::RemoveLayer(const String& path)
@@ -1240,6 +1249,19 @@ namespace o2
 		return res;
 	}
 
+	void UIWidget::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+	{
+		if (auto actor = dynamic_cast<Actor*>(object))
+		{
+			if (idx < 0)
+				AddChild(actor);
+			else
+				AddChild(actor, idx);
+		}
+		else if (auto layer = dynamic_cast<UIWidgetLayer*>(object))
+			AddLayer(layer);
+	}
+
 	bool UIWidget::IsSupportsTransforming() const
 	{
 		return true;
@@ -1316,7 +1338,7 @@ namespace o2
 	void UIWidget::LayersEditable::SetEditableParent(SceneEditableObject* object)
 	{}
 
-	void UIWidget::LayersEditable::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	void UIWidget::LayersEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
 			mWidget->AddLayer(layer);
@@ -1368,7 +1390,7 @@ namespace o2
 	void UIWidget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object)
 	{}
 
-	void UIWidget::InternalChildrenEditableEditable::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	void UIWidget::InternalChildrenEditableEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (UIWidget* widget = dynamic_cast<UIWidget*>(object))
 			widget->SetInternalParent(mWidget);

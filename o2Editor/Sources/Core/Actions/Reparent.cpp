@@ -68,7 +68,7 @@ namespace Editor
 				SceneEditableObject* object = o2Scene.GetEditableObjectByID(info->objectId);
 
 				object->SetEditableParent(nullptr);
-				parent->AddChild(object, insertIdx++);
+				parent->AddEditableChild(object, insertIdx++);
 				object->SetTransform(info->transform);
 			}
 		}
@@ -105,7 +105,7 @@ namespace Editor
 			if (parent)
 			{
 				int idx = parent->GetEditablesChildren().Find(prevObject) + 1;
-				parent->AddChild(object, idx);
+				parent->AddEditableChild(object, idx);
 				object->SetTransform(info->transform);
 			}
 			else

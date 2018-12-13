@@ -87,7 +87,7 @@ namespace Editor
 
 				SceneEditableObject* newObject;
 				info.objectData.GetValueRaw(newObject);
-				parent->AddChild(newObject, idx);
+				parent->AddEditableChild(newObject, idx);
 
 				o2EditorSceneScreen.SelectObjectWithoutAction(newObject);
 			}

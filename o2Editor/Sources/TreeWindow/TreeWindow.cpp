@@ -227,6 +227,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create/UI layer/Empty", [&]()
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			newLayer->name = "empty";
 			CreateObject(newLayer);
 		});
 
@@ -234,6 +235,7 @@ namespace Editor
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
 			newLayer->drawable = mnew Sprite();
+			newLayer->name = "sprite";
 			CreateObject(newLayer);
 		});
 
@@ -241,6 +243,7 @@ namespace Editor
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
 			newLayer->drawable = mnew Text();
+			newLayer->name = "text";
 			CreateObject(newLayer);
 		});
 	}
@@ -289,13 +292,23 @@ namespace Editor
 	{
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
+		if (newObject->IsSupportsLayout())
+		{
+			if (!selectedObjects.IsEmpty())
+				newObject->SetLayout(Layout::BothStretch());
+			else
+				newObject->SetLayout(Layout::Based(BaseCorner::Center, Vec2F(100, 100)));
+		}
+		else 
+			newObject->SetTransform(Basis(Vec2F(), Vec2F(100, 0), Vec2F(0, 100)));
+
 		if (selectedObjects.Count() > 0)
 		{
 			auto obj = selectedObjects.Last();
 			auto node = mSceneTree->GetNode(obj);
 
 			SceneEditableObject* parentObject = obj;
-			parentObject->AddChild(newObject);
+			parentObject->AddEditableChild(newObject);
 
 			auto parentChilds = parentObject->GetEditablesChildren();
 			auto action = mnew CreateAction({ newObject }, parentObject,
@@ -314,8 +327,8 @@ namespace Editor
 			o2EditorApplication.DoneAction(action);
 		}
 
-		newObject->SetTransform(Basis(Vec2F(), Vec2F(100, 0), Vec2F(0, 100)));
 		newObject->UpdateTransform();
+
 		mSceneTree->SelectObject(newObject);
 		mSceneTree->ScrollTo(newObject);
 	}

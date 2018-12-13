@@ -415,18 +415,20 @@ namespace o2
 
 	void UIWidgetLayer::SetEditableParent(SceneEditableObject* object)
 	{
-		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
+		if (auto layer = dynamic_cast<UIWidgetLayer*>(object))
 			layer->AddChild(this);
-		else if (UIWidget* widget = dynamic_cast<UIWidget*>(object))
+		else if (auto widget = dynamic_cast<UIWidget*>(object))
 			widget->AddLayer(this);
-		else if (UIWidget::LayersEditable* layers = dynamic_cast<UIWidget::LayersEditable*>(object))
-			layers->AddChild(this);
+		else if (auto layers = dynamic_cast<UIWidget::LayersEditable*>(object))
+			layers->AddEditableChild(this);
 	}
 
-	void UIWidgetLayer::AddChild(SceneEditableObject* object, int idx /*= -1*/)
+	void UIWidgetLayer::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
-		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
+		if (auto layer = dynamic_cast<UIWidgetLayer*>(object))
 			AddChild(layer);
+		else if (auto actor = dynamic_cast<Actor*>(object))
+			mOwnerWidget->AddEditableChild(object, idx);
 	}
 
 	void UIWidgetLayer::SetIndexInSiblings(int idx)

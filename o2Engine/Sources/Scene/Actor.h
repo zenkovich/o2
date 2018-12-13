@@ -339,7 +339,7 @@ namespace o2
 		void SetEditableParent(SceneEditableObject* object) override;
 
 		// Adds child. idx is place in parent children. idx == -1 means last
-		void AddChild(SceneEditableObject* object, int idx = -1) override;
+		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
 
 
 		// Returns is that type of object can be enabled and disabled
@@ -838,7 +838,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(bool, IsSupportsDisabling);
 	PUBLIC_FUNCTION(bool, IsSupportsLocking);
 	PUBLIC_FUNCTION(bool, IsSupportsTransforming);

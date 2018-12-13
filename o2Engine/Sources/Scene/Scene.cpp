@@ -397,6 +397,7 @@ namespace o2
 			objectsDefs.Add(def);
 
 			object->SetEditableParent(nullptr);
+			mRootActors.Remove(dynamic_cast<Actor*>(object));
 		}
 
 		objectsDefs.Sort([](auto& a, auto& b) { return a.idx < b.idx; });
@@ -407,7 +408,7 @@ namespace o2
 
 			for (auto def : objectsDefs)
 			{
-				newParent->AddChild(def.object, insertIdx++);
+				newParent->AddEditableChild(def.object, insertIdx++);
 				def.object->SetTransform(def.transform);
 			}
 		}

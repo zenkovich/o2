@@ -52,7 +52,7 @@ namespace o2
 		virtual void SetEditableParent(SceneEditableObject* object);
 
 		// Adds child. idx is place in parent children. idx == -1 means last
-		virtual void AddChild(SceneEditableObject* object, int idx = -1);
+		virtual void AddEditableChild(SceneEditableObject* object, int idx = -1);
 
 		// Sets index in siblings - children of parent
 		virtual void SetIndexInSiblings(int idx);
@@ -157,7 +157,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(bool, CanBeParentedTo, const Type&);
 	PUBLIC_FUNCTION(bool, IsSupportsDisabling);

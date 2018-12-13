@@ -470,7 +470,7 @@ namespace o2
 			void SetEditableParent(SceneEditableObject* object) override;
 
 			// Adds child. idx is place in parent children. idx == -1 means last
-			void AddChild(SceneEditableObject* object, int idx = -1) override;
+			void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
 
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
@@ -521,7 +521,7 @@ namespace o2
 			void SetEditableParent(SceneEditableObject* object) override;
 
 			// Adds child. idx is place in parent children. idx == -1 means last
-			void AddChild(SceneEditableObject* object, int idx = -1) override;
+			void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
 
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
@@ -548,6 +548,9 @@ namespace o2
 	public:
 		// Returns list of object's children
 		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+		// Adds child. idx is place in parent children. idx == -1 means last
+		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
 
 
 		// Returns is that type of object can be transformed
@@ -805,6 +808,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
@@ -836,7 +840,7 @@ CLASS_METHODS_META(o2::UIWidget::LayersEditable)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 }
@@ -863,7 +867,7 @@ CLASS_METHODS_META(o2::UIWidget::InternalChildrenEditableEditable)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, AddChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 }
