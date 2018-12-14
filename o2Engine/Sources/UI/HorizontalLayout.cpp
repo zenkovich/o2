@@ -32,7 +32,7 @@ namespace o2
 	void UIHorizontalLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	BaseCorner UIHorizontalLayout::GetBaseCorner() const
@@ -43,7 +43,7 @@ namespace o2
 	void UIHorizontalLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIHorizontalLayout::GetSpacing() const
@@ -54,7 +54,7 @@ namespace o2
 	void UIHorizontalLayout::SetBorder(const BorderF& border)
 	{
 		mBorder = border;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	BorderF UIHorizontalLayout::GetBorder() const
@@ -65,7 +65,7 @@ namespace o2
 	void UIHorizontalLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIHorizontalLayout::GetBorderLeft() const
@@ -76,7 +76,7 @@ namespace o2
 	void UIHorizontalLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIHorizontalLayout::GetBorderRight() const
@@ -87,7 +87,7 @@ namespace o2
 	void UIHorizontalLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIHorizontalLayout::GetBorderTop() const
@@ -98,7 +98,7 @@ namespace o2
 	void UIHorizontalLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIHorizontalLayout::GetBorderBottom() const
@@ -109,7 +109,7 @@ namespace o2
 	void UIHorizontalLayout::SetWidthExpand(bool expand)
 	{
 		mExpandWidth = expand;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIHorizontalLayout::IsWidthExpand() const
@@ -120,7 +120,7 @@ namespace o2
 	void UIHorizontalLayout::SetHeightExpand(bool expand)
 	{
 		mExpandHeight = expand;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIHorizontalLayout::IsHeightExpand() const
@@ -131,7 +131,7 @@ namespace o2
 	void UIHorizontalLayout::SetFitByChildren(bool fit)
 	{
 		mFitByChildren = fit;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIHorizontalLayout::IsFittingByChildren() const

@@ -33,7 +33,7 @@ namespace o2
 	void UIVerticalLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	BaseCorner UIVerticalLayout::GetBaseCorner() const
@@ -44,7 +44,7 @@ namespace o2
 	void UIVerticalLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIVerticalLayout::GetSpacing() const
@@ -55,7 +55,7 @@ namespace o2
 	void UIVerticalLayout::SetBorder(const BorderF& border)
 	{
 		mBorder = border;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	BorderF UIVerticalLayout::GetBorder() const
@@ -66,7 +66,7 @@ namespace o2
 	void UIVerticalLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIVerticalLayout::GetBorderLeft() const
@@ -77,7 +77,7 @@ namespace o2
 	void UIVerticalLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIVerticalLayout::GetBorderRight() const
@@ -88,7 +88,7 @@ namespace o2
 	void UIVerticalLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIVerticalLayout::GetBorderTop() const
@@ -99,7 +99,7 @@ namespace o2
 	void UIVerticalLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIVerticalLayout::GetBorderBottom() const
@@ -110,7 +110,7 @@ namespace o2
 	void UIVerticalLayout::SetWidthExpand(bool expand)
 	{
 		mExpandWidth = expand;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIVerticalLayout::IsWidthExpand() const
@@ -121,7 +121,7 @@ namespace o2
 	void UIVerticalLayout::SetHeightExpand(bool expand)
 	{
 		mExpandHeight = expand;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIVerticalLayout::IsHeightExpand() const
@@ -132,7 +132,7 @@ namespace o2
 	void UIVerticalLayout::SetFitByChildren(bool fit)
 	{
 		mFitByChildren = fit;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIVerticalLayout::IsFittingByChildren() const

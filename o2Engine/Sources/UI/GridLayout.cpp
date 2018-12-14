@@ -33,7 +33,7 @@ namespace o2
 	void UIGridLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	BaseCorner UIGridLayout::GetBaseCorner() const
@@ -44,7 +44,7 @@ namespace o2
 	void UIGridLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIGridLayout::GetSpacing() const
@@ -55,7 +55,7 @@ namespace o2
 	void UIGridLayout::SetBorder(const RectF& border)
 	{
 		mBorder = border;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	RectF UIGridLayout::GetBorder() const
@@ -66,7 +66,7 @@ namespace o2
 	void UIGridLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIGridLayout::GetBorderLeft() const
@@ -77,7 +77,7 @@ namespace o2
 	void UIGridLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIGridLayout::GetBorderRight() const
@@ -88,7 +88,7 @@ namespace o2
 	void UIGridLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIGridLayout::GetBorderTop() const
@@ -99,7 +99,7 @@ namespace o2
 	void UIGridLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	float UIGridLayout::GetBorderBottom() const
@@ -143,7 +143,7 @@ namespace o2
 	void UIGridLayout::SetFitByChildren(bool fit)
 	{
 		mFitByChildren = fit;
-		RearrangeChilds();
+		layout->SetDirty();
 	}
 
 	bool UIGridLayout::IsFittingByChildren() const
