@@ -318,11 +318,14 @@ namespace Editor
 		// Checks is all anchor handles in same point and enables center anchors handle
 		void CheckAnchorsCenterEnabled();
 
+		// Returns objects' transforms 
+		Vector<Basis> GetObjectsTransforms(const Vector<SceneEditableObject*>& objects) const;
+
 		// Calculates snapping offset for point by parallels lines, offset is on normal
 		Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
 								  const Vector<Vec2F>& xLines, const Vec2F& xNormal,
 								  const Vector<Vec2F>& yLines, const Vec2F& yNormal,
-								  const Vector<SceneEditableObject*>& objects);
+								  Vector<Basis> basises = Vector<Basis>());
 	};
 }
 
@@ -447,6 +450,7 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(bool, IsPointInBottomHandle, const Vec2F&);
 	PROTECTED_FUNCTION(bool, IsPointInAnchorsCenterHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, CheckAnchorsCenterEnabled);
-	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, const Vector<SceneEditableObject*>&);
+	PROTECTED_FUNCTION(Vector<Basis>, GetObjectsTransforms, const Vector<SceneEditableObject*>&);
+	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, Vector<Basis>);
 }
 END_META;

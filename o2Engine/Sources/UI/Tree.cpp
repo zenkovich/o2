@@ -21,7 +21,7 @@ namespace o2
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 	}
 
-	UITreeNode::UITreeNode(const UITreeNode& other):
+	UITreeNode::UITreeNode(const UITreeNode& other) :
 		UIWidget(other)
 	{
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
@@ -86,8 +86,8 @@ namespace o2
 	{
 		const UITreeNode& other = dynamic_cast<const UITreeNode&>(otherActor);
 
-		UIWidget::CopyData(other); 
-		
+		UIWidget::CopyData(other);
+
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 
 		mExpandBtn = (UIButton*)GetChild("expandBtn");
@@ -152,28 +152,28 @@ namespace o2
 		mNodeWidgetSample->layout->minHeight = 20;
 		mNodeWidgetSample->AddLayer("caption", nullptr);
 
-		mFakeDragNode     = mnew UITreeNode();
-		mHoverDrawable    = mnew Sprite();
-		mHightlightSprite = mnew Sprite();
+		mFakeDragNode = mnew UITreeNode();
+		mHoverDrawable = mnew Sprite();
+		mHighlightSprite = mnew Sprite();
 
-		mHightlightAnim.SetTarget(mHightlightSprite);
+		mHighlightAnim.SetTarget(mHighlightSprite);
 	}
 
-	UITree::UITree(const UITree& other):
+	UITree::UITree(const UITree& other) :
 		UIScrollArea(other)
 	{
-		mRearrangeType        = other.mRearrangeType;
+		mRearrangeType = other.mRearrangeType;
 		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample     = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mFakeDragNode         = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mHoverDrawable        = other.mHoverDrawable->CloneAs<Sprite>();
-		mHightlightSprite     = other.mHightlightSprite->CloneAs<Sprite>();
+		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mFakeDragNode = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
-		mHightlightAnim.SetTarget(mHightlightSprite);
+		mHighlightAnim.SetTarget(mHighlightSprite);
 
-		mHoverLayout          = other.mHoverLayout;
-		mHightlightLayout     = other.mHightlightLayout;
-		mHightlightAnim       = other.mHightlightAnim;
+		mHoverLayout = other.mHoverLayout;
+		mHighlightLayout = other.mHighlightLayout;
+		mHighlightAnim = other.mHighlightAnim;
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -191,7 +191,7 @@ namespace o2
 		delete mNodeWidgetSample;
 		delete mFakeDragNode;
 		delete mHoverDrawable;
-		delete mHightlightSprite;
+		delete mHighlightSprite;
 
 		for (auto node : mAllNodes)
 			delete node;
@@ -251,7 +251,7 @@ namespace o2
 		}
 
 		mHoverDrawable->Draw();
-		mHightlightSprite->Draw();
+		mHighlightSprite->Draw();
 
 		o2Render.DisableScissorTest();
 
@@ -269,20 +269,7 @@ namespace o2
 
 	void UITree::Update(float dt)
 	{
-		if (mHightlightAnim.IsPlaying())
-		{
-			if (mHightlighNode && mHightlighNode->widget)
-			{
-				mHightlightSprite->SetScale(Vec2F(1.0f, 1.0f));
-				mHightlightSprite->SetRect(mHightlightLayout.Calculate(mHightlighNode->widget->layout->worldRect));
-			}
-
-			mHightlightAnim.Update(dt);
-
-			if (!mHightlightAnim.IsPlaying())
-				mHightlighNode = nullptr;
-		}
-
+		UpdateHighlighting(dt);
 		UpdateNodeExpanding(dt);
 
 		if (mDragEnded)
@@ -318,6 +305,29 @@ namespace o2
 		UpdatePressedNodeExpand(dt);
 
 		mPressedTime += dt;
+	}
+
+	void UITree::UpdateHighlighting(float dt)
+	{
+		if (mHighlightAnim.IsPlaying())
+		{
+			if (mHighlightObject && !mHighlighNode)
+				mHighlighNode = mAllNodes.FindMatch([=](Node* x) { return x->object == mHighlightObject; });
+
+			if (mHighlighNode && mHighlighNode->widget)
+			{
+				mHighlightSprite->SetScale(Vec2F(1.0f, 1.0f));
+				mHighlightSprite->SetRect(mHighlightLayout.Calculate(mHighlighNode->widget->layout->worldRect));
+			}
+
+			mHighlightAnim.Update(dt);
+
+			if (!mHighlightAnim.IsPlaying())
+			{
+				mHighlighNode = nullptr;
+				mHighlightObject = UnknownPtr();
+			}
+		}
 	}
 
 	void UITree::UpdateChildren(float dt)
@@ -475,7 +485,7 @@ namespace o2
 
 		Vec2F currClickPos = mAbsoluteViewArea.LeftTop() - point + mScrollPos;
 
-		float selectionUp   = Math::Max<float>(currClickPos.y, mLastClickPos.y);
+		float selectionUp = Math::Max<float>(currClickPos.y, mLastClickPos.y);
 		float selectionDown = Math::Min<float>(currClickPos.y, mLastClickPos.y);
 
 		bool someSelected = false;
@@ -637,8 +647,8 @@ namespace o2
 
 	void UITree::SelectAndHightlightObject(UnknownPtr object)
 	{
-		ScrollToAndHightlight(object);
 		SelectObject(object);
+		ScrollToAndHightlight(object);
 	}
 
 	void UITree::DeselectObject(UnknownPtr object)
@@ -700,8 +710,9 @@ namespace o2
 			float scroll = position - layout->height*0.5f;
 			SetScroll(Vec2F(mScrollPos.x, scroll));
 
-			mHightlighNode = mAllNodes[idx];
-			mHightlightAnim.RewindAndPlay();
+			mHighlighNode = mAllNodes[idx];
+			mHighlightObject = object;
+			mHighlightAnim.RewindAndPlay();
 		}
 	}
 
@@ -764,6 +775,8 @@ namespace o2
 	void UITree::UpdateNodesStructure()
 	{
 		mIsNeedUpdateView = false;
+
+		mHighlighNode = nullptr;
 
 		if (mExpandingNodeState != ExpandState::None)
 		{
@@ -853,12 +866,12 @@ namespace o2
 		Node* node = mNodesBuf.IsEmpty() ? mnew Node() : mNodesBuf.PopBack();
 		node->childs.Clear();
 
-		node->parent     = parent;
-		node->object     = object;
-		node->widget     = nullptr;
+		node->parent = parent;
+		node->object = object;
+		node->widget = nullptr;
 		node->isSelected = mSelectedObjects.Contains(object);
 		node->isExpanded = mExpandedObjects.Contains(object);
-		node->level      = parent ? parent->level + 1 : 0;
+		node->level = parent ? parent->level + 1 : 0;
 
 		node->id = GetObjectDebug(object);
 
@@ -880,20 +893,20 @@ namespace o2
 		delete mNodeWidgetSample;
 		delete mHoverDrawable;
 		delete mFakeDragNode;
-		delete mHightlightSprite;
+		delete mHighlightSprite;
 
-		mRearrangeType        = other.mRearrangeType;
+		mRearrangeType = other.mRearrangeType;
 		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample     = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mFakeDragNode         = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mHoverDrawable        = other.mHoverDrawable->CloneAs<Sprite>();
-		mHightlightSprite     = other.mHightlightSprite->CloneAs<Sprite>();
+		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mFakeDragNode = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
-		mHightlightAnim.SetTarget(mHightlightSprite);
+		mHighlightAnim.SetTarget(mHighlightSprite);
 
-		mHoverLayout          = other.mHoverLayout;
-		mHightlightLayout     = other.mHightlightLayout;
-		mHightlightAnim       = other.mHightlightAnim;
+		mHoverLayout = other.mHoverLayout;
+		mHighlightLayout = other.mHighlightLayout;
+		mHighlightAnim = other.mHighlightAnim;
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -1071,7 +1084,7 @@ namespace o2
 			dragModeOffset = mExpandingNodeFunc.Evaluate(node->insertCoef)*nodeHeight;
 
 		node->widget->layout->CopyFrom(UIWidgetLayout::HorStretch(VerAlign::Top, mChildrenOffset*(float)node->level, 0,
-									   nodeHeight, GetNodePosition(idx) + dragModeOffset));
+																  nodeHeight, GetNodePosition(idx) + dragModeOffset));
 	}
 
 	int UITree::GetNodeIndex(float position) const
@@ -1550,9 +1563,9 @@ namespace o2
 		bool first = true;
 		for (auto node : mVisibleNodes)
 		{
-// 			if (node->widget->mDragSizeCoef < 0.95f)
-// 				continue;
-// 				
+			// 			if (node->widget->mDragSizeCoef < 0.95f)
+			// 				continue;
+			// 				
 			if (!node->widget)
 				continue;
 
@@ -1671,7 +1684,7 @@ namespace o2
 	void UITree::OnDeserialized(const DataNode& node)
 	{
 		UIScrollArea::OnDeserialized(node);
-		mHightlightAnim.SetTarget(mHightlightSprite);
+		mHighlightAnim.SetTarget(mHighlightSprite);
 	}
 
 	void UITree::OnSelectionChanged()
@@ -1691,18 +1704,18 @@ namespace o2
 
 	Sprite* UITree::GetHightlightDrawable() const
 	{
-		return mHightlightSprite;
+		return mHighlightSprite;
 	}
 
 	void UITree::SetHightlightAnimation(const Animation& animation)
 	{
-		mHightlightAnim.SetTarget(mHightlightSprite);
-		mHightlightAnim = animation;
+		mHighlightAnim.SetTarget(mHighlightSprite);
+		mHighlightAnim = animation;
 	}
 
 	void UITree::SetHightlightLayout(const Layout& layout)
 	{
-		mHightlightLayout = layout;
+		mHighlightLayout = layout;
 	}
 
 	bool UITree::IsScrollable() const

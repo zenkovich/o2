@@ -274,10 +274,11 @@ namespace o2
 		float          mNodeExpandTime = 2.0f;                  // Node expand time when dragging actors @SERIALIZABLE
 		float          mNodeDragIntoZone = 0.3f;                // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-		Animation      mHightlightAnim;                         // Node hightlight animation @SERIALIZABLE
-		Sprite*        mHightlightSprite = nullptr;             // Node hightlight sprite @SERIALIZABLE
-		Layout         mHightlightLayout;                       // Node hightlight sprite layout @SERIALIZABLE
-		Node*          mHightlighNode = nullptr;                // Hightlighting node
+		Animation      mHighlightAnim;                          // Node highlight animation @SERIALIZABLE
+		Sprite*        mHighlightSprite = nullptr;              // Node highlight sprite @SERIALIZABLE
+		Layout         mHighlightLayout;                        // Node highlight sprite layout @SERIALIZABLE
+		Node*          mHighlighNode = nullptr;                 // Hightlighing node
+		UnknownPtr     mHighlightObject;                        // Highlight object
 
 		VisibleWidgetsDefsVec mVisibleWidgetsCache;             // Visible widgets cache
 
@@ -351,6 +352,9 @@ namespace o2
 
 		// It is called when items selected
 		void OnSelectionChanged();
+
+		// Updates highlight animation
+		void UpdateHighlighting(float dt);
 
 		// Checks and updates pressed node expanding
 		void UpdatePressedNodeExpand(float dt);
@@ -602,10 +606,11 @@ CLASS_FIELDS_META(o2::UITree)
 	PROTECTED_FIELD(mPressedTime);
 	PROTECTED_FIELD(mNodeExpandTime).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mNodeDragIntoZone).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightAnim).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightSprite).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlighNode);
+	PROTECTED_FIELD(mHighlightAnim).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlightSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlightLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlighNode);
+	PROTECTED_FIELD(mHighlightObject);
 	PROTECTED_FIELD(mVisibleWidgetsCache);
 }
 END_META;
@@ -673,6 +678,7 @@ CLASS_METHODS_META(o2::UITree)
 	PROTECTED_FUNCTION(void, OnSelectableObjectBeganDragging, SelectableDragableObject*);
 	PROTECTED_FUNCTION(bool, CheckMultipleSelection, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
+	PROTECTED_FUNCTION(void, UpdateHighlighting, float);
 	PROTECTED_FUNCTION(void, UpdatePressedNodeExpand, float);
 	PROTECTED_FUNCTION(void, UpdateNodesStructure);
 	PROTECTED_FUNCTION(int, InsertNodes, Node*, int, NodesVec*);

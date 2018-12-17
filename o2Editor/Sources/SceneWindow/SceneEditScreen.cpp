@@ -65,6 +65,11 @@ namespace Editor
 			handle->Draw();
 	}
 
+	void SceneEditScreen::NeedRedraw()
+	{
+		mNeedRedraw = true;
+	}
+
 #undef DrawText
 
 	void SceneEditScreen::Update(float dt)

@@ -140,7 +140,7 @@ namespace Editor
 		// Context menu
 		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
 		mTreeContextMenu->AddItems({
-			UIContextMenu::Item("Create new", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true)),
+			UIContextMenu::Item("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true)),
 
 			UIContextMenu::Item("Create", []() {}),
 
@@ -318,8 +318,6 @@ namespace Editor
 		}
 		else
 		{
-			mSceneTree->UpdateNodesView();
-
 			auto sceneObjects = o2Scene.GetRootEditableObjects();
 			auto action = mnew CreateAction({ newObject }, nullptr,
 											sceneObjects.Count() > 1 ? sceneObjects[sceneObjects.Count() - 2] : nullptr);
@@ -329,7 +327,9 @@ namespace Editor
 
 		newObject->UpdateTransform();
 
-		mSceneTree->SelectObject(newObject);
+		mSceneTree->UpdateNodesView();
+		o2EditorSceneScreen.ClearSelection();
+		mSceneTree->SelectAndHightlightObject(newObject);
 		mSceneTree->ScrollTo(newObject);
 	}
 

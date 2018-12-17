@@ -15,9 +15,12 @@ namespace o2
 		inline Basis();
 		inline Basis(const Vec2F& origin, const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
 		inline Basis(const Vec2F& origin, float angle);
+		inline Basis(const RectF& rect);
 
 		inline bool operator==(const Basis& cbasis) const;
 		inline bool operator!=(const Basis& cbasis) const;
+
+		inline Basis& operator=(const RectF& other);
 
 		inline Basis operator*(const Basis& cbasis) const;
 		inline Vec2F operator*(const Vec2F& vec) const;
@@ -77,23 +80,25 @@ namespace o2
 		return basis.Transform(vec);
 	}
 
-	Basis::Basis():
+	Basis::Basis() :
 		xv(1, 0), yv(0, 1), origin()
-	{
-	}
+	{}
 
-	Basis::Basis(const Vec2F& origin, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/):
+	Basis::Basis(const Vec2F& origin, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/) :
 		xv(xvec), yv(yvec), origin(origin)
-	{
-	}
+	{}
 
-	Basis::Basis(const Vec2F& origin, float angle):
+	Basis::Basis(const Vec2F& origin, float angle) :
 		origin(origin)
 	{
 		float cs = cosf(angle), sn = sinf(angle);
 		xv.Set(cs, sn);
 		yv.Set(-sn, cs);
 	}
+
+	Basis::Basis(const RectF& rect) :
+		origin(rect.LeftBottom()), xv(rect.Width(), 0.0f), yv(0.0f, rect.Height())
+	{}
 
 	bool Basis::operator==(const Basis& cbasis) const
 	{
@@ -103,6 +108,14 @@ namespace o2
 	bool Basis::operator!=(const Basis& cbasis) const
 	{
 		return xv != cbasis.xv || yv != cbasis.yv || origin != cbasis.origin;
+	}
+
+	Basis& Basis::operator=(const RectF& other)
+	{
+		origin = other.LeftBottom();
+		xv.Set(other.Width(), 0.0f);
+		yv.Set(0.0f, other.Height());
+		return *this;
 	}
 
 	Basis Basis::operator*(const Basis& cbasis) const
@@ -175,13 +188,13 @@ namespace o2
 		float invdet = 1.0f/(xv.x*yv.y - yv.x*xv.y);
 		Basis res;
 
-		res.xv.x=      yv.y*invdet;
-		res.yv.x=     -yv.x*invdet;
-		res.origin.x=  (yv.x*origin.y - origin.x*yv.y)*invdet;
+		res.xv.x = yv.y*invdet;
+		res.yv.x = -yv.x*invdet;
+		res.origin.x = (yv.x*origin.y - origin.x*yv.y)*invdet;
 
-		res.xv.y=     -xv.y*invdet;
-		res.yv.y=      xv.x*invdet;
-		res.origin.y= -(xv.x*origin.y - origin.x*xv.y)*invdet;
+		res.xv.y = -xv.y*invdet;
+		res.yv.y = xv.x*invdet;
+		res.origin.y = -(xv.x*origin.y - origin.x*xv.y)*invdet;
 
 		return res;
 	}
@@ -277,10 +290,9 @@ namespace o2
 
 
 	BasisDef::BasisDef(const Vec2F& position /*= vec2f()*/, const Vec2F& scale /*= vec2f(1, 1)*/, float angle /*= 0*/,
-					   float shift /*= 0*/):
+					   float shift /*= 0*/) :
 		mPosition(position), mScale(scale), mAngle(angle), mShift(shift)
-	{
-	}
+	{}
 
 	BasisDef::BasisDef(const Basis& bas)
 	{

@@ -55,6 +55,9 @@ namespace Editor
 		// Draws widget
 		void Draw() override;
 
+		// It is called when required to redraw content. Sets flag and redraws at next frame
+		void NeedRedraw();
+
 		// Updates drawables, states and widget
 		void Update(float dt) override;
 
@@ -282,6 +285,7 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, NeedRedraw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(Vec2F, ScreenToScenePoint, const Vec2F&);
