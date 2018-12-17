@@ -410,7 +410,7 @@ namespace o2
 		if (mParent)
 			return dynamic_cast<SceneEditableObject*>(mParent);
 
-		return dynamic_cast<SceneEditableObject*>(mOwnerWidget);
+		return &mOwnerWidget->layersEditable;
 	}
 
 	void UIWidgetLayer::SetEditableParent(SceneEditableObject* object)

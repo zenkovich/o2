@@ -542,10 +542,14 @@ namespace o2
 		static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
 		static bool isEditorInternalChildrenVisible; // Is widgets internal children visible in hierarchy
 
-		LayersEditable layerEditable = LayersEditable(this);
+		LayersEditable layersEditable = LayersEditable(this);
 		InternalChildrenEditableEditable internalChildrenEditable = InternalChildrenEditableEditable(this);
 
 	public:
+		// Returns object's parent object. Return nullptr when it is a root scene object
+		SceneEditableObject* GetEditableParent() const override;
+
+
 		// Returns list of object's children
 		Vector<SceneEditableObject*> GetEditablesChildren() const override;
 
@@ -705,7 +709,7 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(mIsClipped);
 	PROTECTED_FIELD(mBounds);
 	PROTECTED_FIELD(mBoundsWithChilds);
-	PROTECTED_FIELD(layerEditable);
+	PROTECTED_FIELD(layersEditable);
 	PROTECTED_FIELD(internalChildrenEditable);
 }
 END_META;
@@ -807,6 +811,7 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(_tmp3, GetAllStates);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(bool, IsSupportsTransforming);

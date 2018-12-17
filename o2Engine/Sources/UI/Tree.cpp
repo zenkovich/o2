@@ -647,8 +647,10 @@ namespace o2
 
 	void UITree::SelectAndHightlightObject(UnknownPtr object)
 	{
-		SelectObject(object);
+		DeselectAllObjects();
+		UpdateNodesStructure();
 		ScrollToAndHightlight(object);
+		SelectObject(object);
 	}
 
 	void UITree::DeselectObject(UnknownPtr object)

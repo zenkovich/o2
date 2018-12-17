@@ -1134,16 +1134,10 @@ namespace Editor
 		if (objects.Count() > 0 && objects[0]->GetEditableParent())
 		{
 			Basis transformedFrame = GetLeftTopAnchorHandleTransformed(point);
-
-			auto parent = objects[0]->GetEditableParent();
-			Basis parentTransform = parent->GetTransform();
-			if (auto parentWidget = dynamic_cast<UIWidget*>(parent))
-				parentTransform = parentWidget->GetChildrenRect();
-
 			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 												{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
 												{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(),
-												{ parentTransform });
+												{ GetObjectParentAnchorSnapBasis(objects[0]) });
 
 			return snapped;
 		}
@@ -1159,16 +1153,10 @@ namespace Editor
 		if (objects.Count() > 0 && objects[0]->GetEditableParent())
 		{
 			Basis transformedFrame = GetLeftBottomAnchorHandleTransformed(point);
-
-			auto parent = objects[0]->GetEditableParent();
-			Basis parentTransform = parent->GetTransform();
-			if (auto parentWidget = dynamic_cast<UIWidget*>(parent))
-				parentTransform = parentWidget->GetChildrenRect();
-
 			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 												{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
 												{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(),
-												{ parentTransform });
+												{ GetObjectParentAnchorSnapBasis(objects[0]) });
 
 			return snapped;
 		}
@@ -1184,16 +1172,10 @@ namespace Editor
 		if (objects.Count() > 0 && objects[0]->GetEditableParent())
 		{
 			Basis transformedFrame = GetRightTopAnchorHandleTransformed(point);
-
-			auto parent = objects[0]->GetEditableParent();
-			Basis parentTransform = parent->GetTransform();
-			if (auto parentWidget = dynamic_cast<UIWidget*>(parent))
-				parentTransform = parentWidget->GetChildrenRect();
-
 			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 												{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
 												{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(),
-												{ parentTransform });
+												{ GetObjectParentAnchorSnapBasis(objects[0]) });
 
 			return snapped;
 		}
@@ -1209,16 +1191,10 @@ namespace Editor
 		if (objects.Count() > 0 && objects[0]->GetEditableParent())
 		{
 			Basis transformedFrame = GetRightBottomAnchorHandleTransformed(point);
-
-			auto parent = objects[0]->GetEditableParent();
-			Basis parentTransform = parent->GetTransform();
-			if (auto parentWidget = dynamic_cast<UIWidget*>(parent))
-				parentTransform = parentWidget->GetChildrenRect();
-
 			Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 												{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
 												{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), 
-												{ parentTransform });
+												{ GetObjectParentAnchorSnapBasis(objects[0]) });
 
 			return snapped;
 		}
@@ -1231,11 +1207,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetTopHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{}, transformedFrame.xv.Normalized(),
 											{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1245,11 +1220,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetBottomHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{}, transformedFrame.xv.Normalized(),
 											{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(),
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1259,11 +1233,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetLeftHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
 											{}, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1273,11 +1246,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetRightHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
 											{}, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1287,11 +1259,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetLeftTopHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
 											{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1301,11 +1272,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetLeftBottomHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{ Vec2F(0, 0), Vec2F(0, 1) }, transformedFrame.xv.Normalized(),
 											{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1315,11 +1285,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetRightTopHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
 											{ Vec2F(0, 1), Vec2F(1, 1) }, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1329,11 +1298,10 @@ namespace Editor
 		mSnapLines.Clear();
 
 		Basis transformedFrame = GetRightBottomHandleTransformed(point);
-
 		Vec2F snapped = CalculateSnapOffset(point, transformedFrame,
 											{ Vec2F(1, 0), Vec2F(1, 1) }, transformedFrame.xv.Normalized(),
 											{ Vec2F(0, 0), Vec2F(1, 0) }, transformedFrame.yv.Normalized(), 
-											GetObjectsTransforms(o2Scene.GetAllEditableObjects()));
+											GetSnapBasisesForAllObjects());
 
 		return snapped;
 	}
@@ -1416,6 +1384,26 @@ namespace Editor
 		}
 
 		return res;
+	}
+
+	Vector<Basis> FrameTool::GetSnapBasisesForAllObjects() const
+	{
+		auto snapBasises = GetObjectsTransforms(o2Scene.GetAllEditableObjects());
+
+		if (mAnchorsFrameEnabled)
+			snapBasises.Add(mAnchorsFrame);
+
+		return snapBasises;
+	}
+
+	Basis FrameTool::GetObjectParentAnchorSnapBasis(SceneEditableObject* object)
+	{
+		auto parent = object->GetEditableParent();
+		Basis parentTransform = parent->GetTransform();
+		if (auto parentWidget = dynamic_cast<UIWidget*>(parent))
+			parentTransform = parentWidget->GetChildrenRect();
+
+		return parentTransform;
 	}
 
 	Vec2F FrameTool::CalculateSnapOffset(const Vec2F& point, const Basis& frame,

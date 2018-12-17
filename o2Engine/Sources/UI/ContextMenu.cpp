@@ -142,7 +142,7 @@ namespace o2
 		{
 			mSelectSubContextTime -= dt;
 
-			if (mSelectSubContextTime < 0.0f)
+			if (mSelectSubContextTime < 0.0f && GetItemUnderPoint(o2Input.GetCursorPos()) == mSelectedItem)
 			{
 				if (mChildContextMenu)
 					mChildContextMenu->HideWithChild();
@@ -473,6 +473,7 @@ namespace o2
 
 		mParentContextMenu = nullptr;
 		mChildContextMenu = nullptr;
+		mSelectedItem = nullptr;
 	}
 
 	void UIContextMenu::HideWithChild()
@@ -483,6 +484,7 @@ namespace o2
 			mChildContextMenu->HideWithChild();
 
 		mChildContextMenu = nullptr;
+		mSelectedItem = nullptr;
 	}
 
 	Vector<UIContextMenu::Item> UIContextMenu::GetItems() const

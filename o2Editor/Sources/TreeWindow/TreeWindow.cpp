@@ -327,8 +327,6 @@ namespace Editor
 
 		newObject->UpdateTransform();
 
-		mSceneTree->UpdateNodesView();
-		o2EditorSceneScreen.ClearSelection();
 		mSceneTree->SelectAndHightlightObject(newObject);
 		mSceneTree->ScrollTo(newObject);
 	}

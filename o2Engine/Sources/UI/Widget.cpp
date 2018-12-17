@@ -301,8 +301,8 @@ namespace o2
 
 #if IS_EDITOR
 		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene()) {
-			o2Scene.OnObjectChanged(&layerEditable);
-			o2Scene.onChildrenHierarchyChanged(&layerEditable);
+			o2Scene.OnObjectChanged(&layersEditable);
+			o2Scene.onChildrenHierarchyChanged(&layersEditable);
 		}
 #endif
 
@@ -948,7 +948,7 @@ namespace o2
 		SceneDrawable::OnExcludeFromScene();
 
 #if IS_EDITOR
-		o2Scene.mEditableObjects.Remove(&layerEditable);
+		o2Scene.mEditableObjects.Remove(&layersEditable);
 		o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
 #endif
 	}
@@ -964,7 +964,7 @@ namespace o2
 			layer->OnIncludeInScene();
 
 #if IS_EDITOR
-		o2Scene.mEditableObjects.Add(&layerEditable);
+		o2Scene.mEditableObjects.Add(&layersEditable);
 		o2Scene.mEditableObjects.Add(&internalChildrenEditable);
 #endif
 	}
@@ -1236,6 +1236,17 @@ namespace o2
 	bool UIWidget::isEditorLayersVisible = true;
 	bool UIWidget::isEditorInternalChildrenVisible = true;
 
+	SceneEditableObject* UIWidget::GetEditableParent() const
+	{
+		if (mParentWidget && std::find(mParentWidget->mInternalWidgets.begin(),
+									   mParentWidget->mInternalWidgets.end(), this) != mParentWidget->mInternalWidgets.end())
+		{
+			return &mParentWidget->internalChildrenEditable;
+		}
+
+		return Actor::GetEditableParent();
+	}
+
 	Vector<SceneEditableObject*> UIWidget::GetEditablesChildren() const
 	{
 		Vector<SceneEditableObject*> res = Actor::GetEditablesChildren();
@@ -1244,7 +1255,7 @@ namespace o2
 			res.Insert(const_cast<SceneEditableObject*>(dynamic_cast<const SceneEditableObject*>(&internalChildrenEditable)), 0);
 
 		if (isEditorLayersVisible)
-			res.Insert(const_cast<SceneEditableObject*>(dynamic_cast<const SceneEditableObject*>(&layerEditable)), 0);
+			res.Insert(const_cast<SceneEditableObject*>(dynamic_cast<const SceneEditableObject*>(&layersEditable)), 0);
 
 		return res;
 	}

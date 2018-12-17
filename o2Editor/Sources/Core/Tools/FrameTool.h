@@ -321,6 +321,12 @@ namespace Editor
 		// Returns objects' transforms 
 		Vector<Basis> GetObjectsTransforms(const Vector<SceneEditableObject*>& objects) const;
 
+		// Returns all objects' transforms for snapping and including anchors frame when enabled
+		Vector<Basis> GetSnapBasisesForAllObjects() const;
+
+		// Returns object's parent snap basis - world rect or children rect
+		Basis GetObjectParentAnchorSnapBasis(SceneEditableObject* object);
+
 		// Calculates snapping offset for point by parallels lines, offset is on normal
 		Vec2F CalculateSnapOffset(const Vec2F& point, const Basis& frame, 
 								  const Vector<Vec2F>& xLines, const Vec2F& xNormal,
@@ -451,6 +457,8 @@ CLASS_METHODS_META(Editor::FrameTool)
 	PROTECTED_FUNCTION(bool, IsPointInAnchorsCenterHandle, const Vec2F&);
 	PROTECTED_FUNCTION(void, CheckAnchorsCenterEnabled);
 	PROTECTED_FUNCTION(Vector<Basis>, GetObjectsTransforms, const Vector<SceneEditableObject*>&);
+	PROTECTED_FUNCTION(Vector<Basis>, GetSnapBasisesForAllObjects);
+	PROTECTED_FUNCTION(Basis, GetObjectParentAnchorSnapBasis, SceneEditableObject*);
 	PROTECTED_FUNCTION(Vec2F, CalculateSnapOffset, const Vec2F&, const Basis&, const Vector<Vec2F>&, const Vec2F&, const Vector<Vec2F>&, const Vec2F&, Vector<Basis>);
 }
 END_META;
