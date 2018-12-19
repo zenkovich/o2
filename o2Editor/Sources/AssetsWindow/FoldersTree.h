@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/KeyboardEventsListener.h"
+#include "UI/Tree.h"
 #include "UI/Widget.h"
 #include "Utils/Types/UnknownPtr.h"
 
@@ -8,12 +9,13 @@ using namespace o2;
 
 namespace o2
 {
-	class UITree;
 	class UIContextMenu;
 }
 
 namespace Editor
 {
+	class UIFoldersTree;
+
 	// --------------------------
 	// Assets folders tree widget
 	// --------------------------
@@ -116,6 +118,16 @@ namespace Editor
 
 		friend class AssetsWindow;
 	};
+
+	class UIFoldersTree : public UITree
+	{
+	public:
+		SERIALIZABLE(UIFoldersTree);
+
+	protected:
+		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
+		void UpdateVisibleNodes() override;
+	};
 }
 
 CLASS_BASES_META(Editor::UIAssetsFoldersTree)
@@ -159,5 +171,21 @@ CLASS_METHODS_META(Editor::UIAssetsFoldersTree)
 	PROTECTED_FUNCTION(void, OnContextExpandPressed);
 	PROTECTED_FUNCTION(void, OnContextCollapsePressed);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+}
+END_META;
+
+CLASS_BASES_META(Editor::UIFoldersTree)
+{
+	BASE_CLASS(o2::UITree);
+}
+END_META;
+CLASS_FIELDS_META(Editor::UIFoldersTree)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::UIFoldersTree)
+{
+
+	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
 }
 END_META;

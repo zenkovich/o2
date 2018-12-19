@@ -7,11 +7,12 @@
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
 #include "AssetsWindow/UIAssetIcon.h"
-#include "Core/Actions/PropertyChange.h"
 #include "Core/Actions/Enable.h"
 #include "Core/Actions/Lock.h"
+#include "Core/Actions/PropertyChange.h"
 #include "Core/Actions/Reparent.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/ActorProperty.h"
 #include "Core/Properties/Basic/ComponentProperty.h"
 #include "Core/UIRoot.h"
@@ -151,6 +152,12 @@ namespace Editor
 
 		UISceneTreeNode* objectNodeWidgetSample = (UISceneTreeNode*)mNodeWidgetSample;
 		objectNodeWidgetSample->InitializeControls();
+	}
+
+	void UISceneTree::UpdateVisibleNodes()
+	{
+		PushScopeEnterOnStack scope;
+		UITree::UpdateVisibleNodes();
 	}
 
 	UnknownPtr UISceneTree::GetObjectParent(UnknownPtr object)

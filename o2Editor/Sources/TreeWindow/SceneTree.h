@@ -63,7 +63,7 @@ namespace Editor
 		// Selects object
 		void SelectAndHightlightObject(SceneEditableObject* object);
 
-		// Scrolls view to object and hightlights
+		// Scrolls view to object and highlights
 		void ScrollToAndHightlight(SceneEditableObject* object);
 
 		// Deselects object
@@ -94,23 +94,26 @@ namespace Editor
 		// Initializes widget logic
 		void Initialize();
 
+		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
+		void UpdateVisibleNodes() override;
+
 		// Returns object's parent
-		UnknownPtr GetObjectParent(UnknownPtr object);
+		UnknownPtr GetObjectParent(UnknownPtr object) override;
 
 		// Returns object's children
-		Vector<UnknownPtr> GetObjectChilds(UnknownPtr object);
+		Vector<UnknownPtr> GetObjectChilds(UnknownPtr object) override;
 
 		// Returns debugging string for object
-		String GetObjectDebug(UnknownPtr object);
+		String GetObjectDebug(UnknownPtr object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object);
+		void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object) override;
 
 		// It is called when tree node was double clicked
-		void OnNodeDblClick(UITreeNode* nodeWidget);
+		void OnNodeDblClick(UITreeNode* nodeWidget) override;
 
 		// It is called when objects was dragged in new parent in position next of prevObject
-		void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject);
+		void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject) override;
 
 		// It is called when object was created
 		void OnObjectCreated(SceneEditableObject* object);
@@ -137,19 +140,19 @@ namespace Editor
 		void LockObjectsGroupReleased(bool value);
 
 		// It is called when list of selected objects was changed
-		void OnNodesSelectionChanged(UnknownPtrsVec objects);
+		void OnNodesSelectionChanged(UnknownPtrsVec objects) override;
 
 		// It is called when some drag listeners was entered to this area
-		void OnDragEnter(ISelectableDragableObjectsGroup* group);
+		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was exited from this area
-		void OnDragExit(ISelectableDragableObjectsGroup* group);
+		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some drag listeners was dragged above this area
-		void OnDraggedAbove(ISelectableDragableObjectsGroup* group);
+		void OnDraggedAbove(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when some selectable listeners was dropped to this
-		void OnDropped(ISelectableDragableObjectsGroup* group);
+		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		friend class UISceneTreeNode;
 	};
@@ -242,6 +245,7 @@ CLASS_METHODS_META(Editor::UISceneTree)
 	PUBLIC_FUNCTION(void, ScrollTo, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, SetEditorWatching, bool);
 	PROTECTED_FUNCTION(void, Initialize);
+	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);

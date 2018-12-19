@@ -507,8 +507,11 @@ namespace o2
 
 	void UIWidgetLayer::UpdateTransform(bool withChildren /*= true*/)
 	{
-		mOwnerWidget->UpdateTransform();
-		mOwnerWidget->OnChanged();
+		if (mOwnerWidget)
+		{
+			mOwnerWidget->UpdateTransform();
+			mOwnerWidget->OnChanged();
+		}
 	}
 
 	bool UIWidgetLayer::IsSupportsPivot() const

@@ -6,6 +6,7 @@
 #include "Assets/FolderAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
+#include "Core/EditorScope.h"
 #include "Render/Sprite.h"
 #include "UI/ContextMenu.h"
 #include "UI/EditBox.h"
@@ -302,6 +303,14 @@ namespace Editor
 		}
 	}
 
+	void UIFoldersTree::UpdateVisibleNodes()
+	{
+		PushScopeEnterOnStack scope;
+		UITree::UpdateNodesStructure();
+	}
+
 }
 
 DECLARE_CLASS(Editor::UIAssetsFoldersTree);
+
+DECLARE_CLASS(Editor::UIFoldersTree);

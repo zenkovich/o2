@@ -360,7 +360,7 @@ namespace o2
 		void UpdatePressedNodeExpand(float dt);
 
 		// Updates root nodes and their childs if need
-		void UpdateNodesStructure();
+		virtual void UpdateNodesStructure();
 
 		// Inserts node to hierarchy
 		int InsertNodes(Node* parentNode, int position, NodesVec* newNodes = nullptr);
@@ -372,7 +372,7 @@ namespace o2
 		Node* CreateNode(UnknownPtr object, Node* parent);
 
 		// Updates visible nodes (calculates range and initializes nodes)
-		void UpdateVisibleNodes();
+		virtual void UpdateVisibleNodes();
 
 		// Createw UITreeNode for visible node at position i
 		void CreateVisibleNodeWidget(Node* node, int i);

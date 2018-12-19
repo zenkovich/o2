@@ -139,47 +139,103 @@ namespace Editor
 	{
 		// Context menu
 		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
-		mTreeContextMenu->AddItems({
-			UIContextMenu::Item("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true)),
+		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
+								  ShortcutKeys('N', true, true));
 
-			UIContextMenu::Item("Create", []() {}),
+		mTreeContextMenu->AddItem("Create UI/Widget", [&]() { CreateObject<UIWidget>("Widget"); });
 
-			UIContextMenu::Item::Separator(),
+		mTreeContextMenu->AddItem("Create UI/---");
 
-			UIContextMenu::Item("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true)),
-			UIContextMenu::Item("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true)),
-			UIContextMenu::Item("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true)),
-			UIContextMenu::Item("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE)),
-			UIContextMenu::Item("Duplicate", [&]() { OnContextDuplicatePressed(); }, ImageAssetRef(), ShortcutKeys('D', true)),
-
-			UIContextMenu::Item::Separator(),
-
-			UIContextMenu::Item("Collapse all", [&]() { OnContextCollapseAllPressed(); }),
-			UIContextMenu::Item("Expand all", [&]() { OnContextExpandAllPressed(); }),
-
-			UIContextMenu::Item::Separator(),
-
-			UIContextMenu::Item("Enable/disable", [&]() { OnContextEnablePressed(); }, ImageAssetRef(), ShortcutKeys('L', true)),
-			UIContextMenu::Item("Lock/unlock", [&]() { OnContextLockPressed(); }, ImageAssetRef(), ShortcutKeys('O', true)),
-
-			UIContextMenu::Item::Separator(),
-
-			UIContextMenu::Item("Save prototype", [&]() { OnContextCopyPressed(); }),
-			UIContextMenu::Item("Reset to prototype", [&]() { OnContextCopyPressed(); }),
-			UIContextMenu::Item("Break link to prototype", [&]() { OnContextCopyPressed(); }),
-
-			UIContextMenu::Item::Separator(),
-
-			UIContextMenu::Item("View widgets layers", true, THIS_FUNC(OnViewLayersToggled)),
-			UIContextMenu::Item("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled)),
-
-			UIContextMenu::Item::Separator()
+		mTreeContextMenu->AddItem("Create UI/Empty layer", [&]() { CreateObject<UIWidgetLayer>("Layer"); });
+		mTreeContextMenu->AddItem("Create UI/Sprite layer", [&]()
+		{
+			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			newLayer->drawable = mnew Sprite();
+			newLayer->name = "sprite";
+			OnCreateObject(newLayer);
 		});
 
-		CreateUILayersMenu();
-		InitializeCreateMenu();
+		mTreeContextMenu->AddItem("Create UI/Text layer", [&]()
+		{
+			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			newLayer->drawable = mnew Text();
+			newLayer->name = "sprite";
+			OnCreateObject(newLayer);
+		});
 
-		CreateUICreateMenu();
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Horizontal layout", [&]() { CreateObject<UIHorizontalLayout>("Horizontal layout"); });
+		mTreeContextMenu->AddItem("Create UI/Vertical layout", [&]() { CreateObject<UIVerticalLayout>("Vertical layout"); });
+		mTreeContextMenu->AddItem("Create UI/Grid layout", [&]() { CreateObject<UIGridLayout>("Grid layout"); });
+
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Scroll area", [&]() { CreateObject<UIScrollArea>("Scroll area"); });
+		mTreeContextMenu->AddItem("Create UI/Button", [&]() { CreateObject<UIButton>("Button"); });
+		mTreeContextMenu->AddItem("Create UI/Label", [&]() { CreateObject<UILabel>("Label"); });
+		mTreeContextMenu->AddItem("Create UI/Image", [&]() { CreateObject<UIImage>("Image"); });
+		mTreeContextMenu->AddItem("Create UI/Edit box", [&]() { CreateObject<UIEditBox>("Edit box"); });
+		mTreeContextMenu->AddItem("Create UI/Toggle", [&]() { CreateObject<UIToggle>("Toggle"); });
+
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Horizontal progress", [&]() { CreateObject<UIHorizontalProgress>("Progress"); });
+		mTreeContextMenu->AddItem("Create UI/Vertical progress", [&]() { CreateObject<UIVerticalProgress>("Progress"); });
+		mTreeContextMenu->AddItem("Create UI/Horizontal scroll bar", [&]() { CreateObject<UIHorizontalScrollBar>("Scroll bar"); });
+		mTreeContextMenu->AddItem("Create UI/Vertical scroll bar", [&]() { CreateObject<UIVerticalScrollBar>("Scroll bar"); });
+
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Context menu", [&]() { CreateObject<UIContextMenu>("Context menu"); });
+		mTreeContextMenu->AddItem("Create UI/Menu panel", [&]() { CreateObject<UIMenuPanel>("Menu panel"); });
+
+		mTreeContextMenu->AddItem("Create UI/---");
+		mTreeContextMenu->AddItem("Create UI/Custom drop down", [&]() { CreateObject<UICustomDropDown>("Dropdown"); });
+		mTreeContextMenu->AddItem("Create UI/Custom list", [&]() { CreateObject<UICustomList>("List"); });
+		mTreeContextMenu->AddItem("Create UI/Drop down", [&]() { CreateObject<UIDropDown>("Dropdown"); });
+		mTreeContextMenu->AddItem("Create UI/List", [&]() { CreateObject<UIList>("List"); });
+		mTreeContextMenu->AddItem("Create UI/Long list", [&]() { CreateObject<UILongList>("List"); });
+
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Spoiler", [&]() { CreateObject<UISpoiler>("Spoiler"); });
+		mTreeContextMenu->AddItem("Create UI/Tree", [&]() { CreateObject<UITree>("Tree"); });
+
+		InitializeOtherCreateMenu();
+
+		mTreeContextMenu->AddItem("---");
+
+		mTreeContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
+		mTreeContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
+		mTreeContextMenu->AddItem("Paste", [&]() { OnContextPastePressed(); }, ImageAssetRef(), ShortcutKeys('V', true));
+		mTreeContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mTreeContextMenu->AddItem("Duplicate", [&]() { OnContextDuplicatePressed(); }, ImageAssetRef(), ShortcutKeys('D', true));
+
+		mTreeContextMenu->AddItem("---");
+
+		mTreeContextMenu->AddItem("Collapse all", [&]() { OnContextCollapseAllPressed(); });
+		mTreeContextMenu->AddItem("Expand all", [&]() { OnContextExpandAllPressed(); });
+
+		mTreeContextMenu->AddItem("---");
+
+		mTreeContextMenu->AddItem("Enable\\disable", [&]() { OnContextEnablePressed(); }, ImageAssetRef(), ShortcutKeys('L', true));
+		mTreeContextMenu->AddItem("Lock\\unlock", [&]() { OnContextLockPressed(); }, ImageAssetRef(), ShortcutKeys('O', true));
+
+		mTreeContextMenu->AddItem("---");
+
+		mTreeContextMenu->AddItem("Save prototype", [&]() { OnContextCopyPressed(); });
+		mTreeContextMenu->AddItem("Reset to prototype", [&]() { OnContextCopyPressed(); });
+		mTreeContextMenu->AddItem("Break link to prototype", [&]() { OnContextCopyPressed(); });
+
+		mTreeContextMenu->AddItem("---");
+
+		mTreeContextMenu->AddToggleItem("View widgets layers", true, THIS_FUNC(OnViewLayersToggled));
+		mTreeContextMenu->AddToggleItem("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled));
+
+		mTreeContextMenu->AddItem("---");
+
+		InitUIStyleCreateMenu();
 
 		mWindow->AddChild(mTreeContextMenu);
 
@@ -187,23 +243,23 @@ namespace Editor
 		mSceneTree->onUnfocused = [&]() { mTreeContextMenu->SetItemsMinPriority(); };
 	}
 
-	void TreeWindow::InitializeCreateMenu()
+	void TreeWindow::InitializeOtherCreateMenu()
 	{
 		auto subTypes = TypeOf(Actor).GetDerivedTypes();
 
 		for (auto subType : subTypes)
 		{
 			String path = subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/");
-			mTreeContextMenu->AddItem("Create/" + path, [=]() {
+			mTreeContextMenu->AddItem("Create other/" + path, [=]() {
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
 				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
 				newActor->name = path;
-				CreateObject(newActor);
+				OnCreateObject(newActor);
 			});
 		}
 	}
 
-	void TreeWindow::CreateUICreateMenu()
+	void TreeWindow::InitUIStyleCreateMenu()
 	{
 		auto styleWidgets = o2UI.GetWidgetStyles();
 
@@ -217,18 +273,18 @@ namespace Editor
 			{
 				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
 				newWidget->SetEnableForcible(true);
-				CreateObject(newWidget);
+				OnCreateObject(newWidget);
 			});
 		}
 	}
 
-	void TreeWindow::CreateUILayersMenu()
+	void TreeWindow::InitUILayersCreateMenu()
 	{
 		mTreeContextMenu->AddItem("Create/UI layer/Empty", [&]()
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
 			newLayer->name = "empty";
-			CreateObject(newLayer);
+			OnCreateObject(newLayer);
 		});
 
 		mTreeContextMenu->AddItem("Create/UI layer/Sprite", [&]()
@@ -236,7 +292,7 @@ namespace Editor
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
 			newLayer->drawable = mnew Sprite();
 			newLayer->name = "sprite";
-			CreateObject(newLayer);
+			OnCreateObject(newLayer);
 		});
 
 		mTreeContextMenu->AddItem("Create/UI layer/Text", [&]()
@@ -244,7 +300,7 @@ namespace Editor
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
 			newLayer->drawable = mnew Text();
 			newLayer->name = "text";
-			CreateObject(newLayer);
+			OnCreateObject(newLayer);
 		});
 	}
 
@@ -288,7 +344,7 @@ namespace Editor
 		mTreeContextMenu->Show();
 	}
 
-	void TreeWindow::CreateObject(SceneEditableObject* newObject)
+	void TreeWindow::OnCreateObject(SceneEditableObject* newObject)
 	{
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
@@ -299,7 +355,7 @@ namespace Editor
 			else
 				newObject->SetLayout(Layout::Based(BaseCorner::Center, Vec2F(100, 100)));
 		}
-		else 
+		else
 			newObject->SetTransform(Basis(Vec2F(), Vec2F(100, 0), Vec2F(0, 100)));
 
 		if (selectedObjects.Count() > 0)
@@ -338,7 +394,7 @@ namespace Editor
 
 		Actor* newActor = mnew Actor();
 		newActor->name = "Empty";
-		CreateObject(newActor);
+		OnCreateObject(newActor);
 	}
 
 	void TreeWindow::OnContextCreateSprite()
@@ -349,7 +405,7 @@ namespace Editor
 		Actor* newActor = mnew Actor({ mnew ImageComponent() });
 		newActor->name = "Sprite";
 		newActor->transform->size = Vec2F(10, 10);
-		CreateObject(newActor);
+		OnCreateObject(newActor);
 	}
 
 	void TreeWindow::OnContextCreateButton()

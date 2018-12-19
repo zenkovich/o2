@@ -84,13 +84,13 @@ namespace Editor
 		void InitializeContextMenu();
 
 		// Gets all actor types and creates create sub menu
-		void InitializeCreateMenu();
+		void InitializeOtherCreateMenu();
 
 		// Creates creation menu items for UI style
-		void CreateUICreateMenu();
+		void InitUIStyleCreateMenu();
 
 		// Creates creation menu for UI layers
-		void CreateUILayersMenu();
+		void InitUILayersCreateMenu();
 
 		// It is called after that all windows was created
 		void PostInitializeWindow();
@@ -110,8 +110,11 @@ namespace Editor
 		// It is called when tree node clicked by right button (For tree widget)
 		void OnTreeRBPressed(UITreeNode* node);
 
+		template<typename _type>
+		void CreateObject(const String& name);
+
 		// It is called when some object needs to be created and registers object insert action
-		void CreateObject(SceneEditableObject* newObject);
+		void OnCreateObject(SceneEditableObject* newObject);
 
 		// It is called when pressed "Create new" in context menu
 		void OnContextCreateNewPressed();
@@ -163,6 +166,15 @@ namespace Editor
 
 		friend class SceneEditWidget;
 	};
+
+	template<typename _type>
+	void TreeWindow::CreateObject(const String& name)
+	{
+		SceneEditableObject* object = new _type();
+		object->SetName(name);
+		OnCreateObject(object);
+	}
+
 }
 
 CLASS_BASES_META(Editor::TreeWindow)
@@ -195,16 +207,16 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, InitializeSceneTree);
 	PROTECTED_FUNCTION(void, InitializeTopPanel);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
-	PROTECTED_FUNCTION(void, InitializeCreateMenu);
-	PROTECTED_FUNCTION(void, CreateUICreateMenu);
-	PROTECTED_FUNCTION(void, CreateUILayersMenu);
+	PROTECTED_FUNCTION(void, InitializeOtherCreateMenu);
+	PROTECTED_FUNCTION(void, InitUIStyleCreateMenu);
+	PROTECTED_FUNCTION(void, InitUILayersCreateMenu);
 	PROTECTED_FUNCTION(void, PostInitializeWindow);
 	PROTECTED_FUNCTION(void, OnSearchPressed);
 	PROTECTED_FUNCTION(void, OnListTreeToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, SearchObjectsRecursive, SceneEditableObject*, const String&);
 	PROTECTED_FUNCTION(void, OnTreeRBPressed, UITreeNode*);
-	PROTECTED_FUNCTION(void, CreateObject, SceneEditableObject*);
+	PROTECTED_FUNCTION(void, OnCreateObject, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnContextCreateNewPressed);
 	PROTECTED_FUNCTION(void, OnContextCreateSprite);
 	PROTECTED_FUNCTION(void, OnContextCreateButton);
