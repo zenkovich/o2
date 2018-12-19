@@ -176,7 +176,6 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-
 	}
 
 	void UIGridLayout::OnChildAdded(UIWidget* child)
