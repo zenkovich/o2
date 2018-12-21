@@ -846,7 +846,7 @@ namespace o2
 		separatorSample->AddLayer("line", mnew Sprite("ui/UI_Separator.png"),
 								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
 
-		UIWidget* itemSample = sample->GetItemSample();
+		UIContextMenuItem* itemSample = sample->GetItemSample();
 
 		UIWidgetLayer* captionLayer = itemSample->FindLayer("caption");
 		Text* captionLayerText = mnew Text("stdFont.ttf");
@@ -869,6 +869,10 @@ namespace o2
 
 		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"), 
 							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
+
+		UIWidgetLayer* basicLayer = itemSample->FindLayer("basic");
+
+		itemSample->AddState("enabled", Animation::EaseInOut(itemSample, &basicLayer->transparency, 0.5f, 1.0f, 0.2f));
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);

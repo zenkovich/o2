@@ -55,10 +55,11 @@ namespace o2
 		mItemSample = mnew UIContextMenuItem();
 		mItemSample->ExcludeFromScene();
 		mItemSample->layout->minHeight = 20.0f;
-		mItemSample->AddLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
-		mItemSample->AddLayer("subIcon", nullptr, Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-10, 0), Vec2F(-10, 0)));
-		mItemSample->AddLayer("caption", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
-		mItemSample->AddLayer("shortcut", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
+		auto basicLayer = mItemSample->AddLayer("basic", nullptr);
+		basicLayer->AddChildLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
+		basicLayer->AddChildLayer("subIcon", nullptr, Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-10, 0), Vec2F(-10, 0)));
+		basicLayer->AddChildLayer("caption", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
+		basicLayer->AddChildLayer("shortcut", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
 
 		mSeparatorSample = mnew UIWidget();
 		mSeparatorSample->ExcludeFromScene();
@@ -189,7 +190,7 @@ namespace o2
 		Show(nullptr, position);
 	}
 
-	UIWidget* UIContextMenu::AddItem(const Item& item)
+	UIContextMenuItem* UIContextMenu::AddItem(const Item& item)
 	{
 		if (item.text == "---")
 		{
@@ -197,7 +198,7 @@ namespace o2
 			newItem->name = "Separator";
 			mItemsLayout->AddChild(newItem);
 
-			return newItem;
+			return nullptr;
 		}
 
 		UIContextMenuItem* newItem = CreateItem(item);
@@ -210,7 +211,7 @@ namespace o2
 		return newItem;
 	}
 
-	UIWidget* UIContextMenu::AddItem(const WString& path, 
+	UIContextMenuItem* UIContextMenu::AddItem(const WString& path,
 									 const Function<void()>& clickFunc /*= Function<void()>()*/,
 									 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 									 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
@@ -220,7 +221,7 @@ namespace o2
 		return targetContext->AddItem(Item(targetPath, clickFunc, icon, shortcut));
 	}
 
-	UIWidget* UIContextMenu::AddToggleItem(const WString& path, bool value,
+	UIContextMenuItem* UIContextMenu::AddToggleItem(const WString& path, bool value,
 										  const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
 										  const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 										  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
@@ -269,7 +270,7 @@ namespace o2
 		return resultContext;
 	}
 
-	UIWidget* UIContextMenu::InsertItem(const Item& item, int position)
+	UIContextMenuItem* UIContextMenu::InsertItem(const Item& item, int position)
 	{
 		if (item.text == "---")
 		{
@@ -277,7 +278,7 @@ namespace o2
 			newItem->name = "Separator";
 			mItemsLayout->AddChild(newItem, position);
 
-			return newItem;
+			return nullptr;
 		}
 
 		UIContextMenuItem* newItem = CreateItem(item);
@@ -316,6 +317,14 @@ namespace o2
 		return Item();
 	}
 
+	UIContextMenuItem* UIContextMenu::GetItemWidget(int position)
+	{
+		if (position > 0 && position < mItemsLayout->GetChildren().Count())
+			return dynamic_cast<UIContextMenu*>(mItemsLayout->GetChildren[position]);
+
+		return nullptr;
+	}
+
 	int UIContextMenu::FindItem(const WString& text) const
 	{
 		int idx = 0;
@@ -329,6 +338,26 @@ namespace o2
 		}
 
 		return -1;
+	}
+
+	UIContextMenuItem* UIContextMenu::FindItemWidget(const WString& path) const
+	{
+		int delPos = path.Find("/");
+		WString pathPart = path.SubStr(0, delPos);
+
+		for (auto child : mItemsLayout->mChildren)
+		{
+			auto item = dynamic_cast<UIContextMenuItem*>(child);
+			if (item && item->GetText() == pathPart)
+			{
+				if (delPos == -1)
+					return item;
+				else if (auto subContext = item->GetSubMenu())
+					return subContext->FindItemWidget(path.SubStr(delPos + 1));
+			}
+		}
+
+		return nullptr;
 	}
 
 	void UIContextMenu::SetItem(int position, const Item& item)
@@ -408,6 +437,9 @@ namespace o2
 	void UIContextMenu::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		UIContextMenuItem* itemUnderCursor = GetItemUnderPoint(cursor.position);
+
+		if (!itemUnderCursor->IsEnabled())
+			return;
 
 		if (itemUnderCursor)
 		{
@@ -964,6 +996,26 @@ namespace o2
 	void UIContextMenuItem::SetShortcut(const ShortcutKeys& shortcut)
 	{
 		ShortcutKeysListener::SetShortcut(shortcut);
+	}
+
+	void UIContextMenuItem::SetEnabled(bool enabled)
+	{
+		SetState("enabled", enabled);
+	}
+
+	bool UIContextMenuItem::IsEnabled() const
+	{
+		return GetState("enabled");
+	}
+
+	void UIContextMenuItem::Enable()
+	{
+		SetEnabled(true);
+	}
+
+	void UIContextMenuItem::Disable()
+	{
+		SetEnabled(false);
 	}
 
 	void UIContextMenuItem::CopyData(const Actor& otherActor)

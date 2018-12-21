@@ -63,6 +63,18 @@ namespace o2
 		// Sets shortcut keys 
 		void SetShortcut(const ShortcutKeys& shortcut);
 
+		// Sets item enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is item enabled
+		bool IsEnabled() const;
+
+		// Enables item
+		void Enable();
+
+		// DIsables item
+		void Disable();
+
 		SERIALIZABLE(UIContextMenuItem);
 
 	protected:
@@ -155,20 +167,20 @@ namespace o2
 		void Show(const Vec2F& position = o2Input.GetCursorPos());
 
 		// Add item
-		UIWidget* AddItem(const Item& item);
+		UIContextMenuItem* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+		UIContextMenuItem* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
 						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddToggleItem(const WString& path, bool value, 
+		UIContextMenuItem* AddToggleItem(const WString& path, bool value,
 								const Function<void(bool)>& clickFunc = Function<void(bool)>(),
 								const ImageAssetRef& icon = ImageAssetRef(), 
 								const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
-		UIWidget* InsertItem(const Item& item, int position);
+		UIContextMenuItem* InsertItem(const Item& item, int position);
 
 		// Adds array of items
 		void AddItems(Vector<Item> items);
@@ -179,8 +191,14 @@ namespace o2
 		// Returns item at position
 		Item GetItem(int position);
 
-		// Returns index of item with text
+		// Returns item's widget at position
+		UIContextMenuItem* GetItemWidget(int position);
+
+		// Returns index of item by path
 		int FindItem(const WString& text) const;
+
+		// Returns item's widget by path
+		UIContextMenuItem* FindItemWidget(const WString& path) const;
 
 		// Sets item at position
 		void SetItem(int position, const Item& item);
@@ -356,6 +374,10 @@ CLASS_METHODS_META(o2::UIContextMenuItem)
 	PUBLIC_FUNCTION(void, SetCheckable, bool);
 	PUBLIC_FUNCTION(bool, IsCheckable);
 	PUBLIC_FUNCTION(void, SetShortcut, const ShortcutKeys&);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PUBLIC_FUNCTION(void, Enable);
+	PUBLIC_FUNCTION(void, Disable);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
 	PROTECTED_FUNCTION(void, OnShortcutPressed);
@@ -396,14 +418,16 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Show, UIContextMenu*, const Vec2F&);
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIWidget*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
+	PUBLIC_FUNCTION(UIContextMenuItem*, AddItem, const Item&);
+	PUBLIC_FUNCTION(UIContextMenuItem*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIContextMenuItem*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(UIContextMenuItem*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
 	PUBLIC_FUNCTION(Item, GetItem, int);
+	PUBLIC_FUNCTION(UIContextMenuItem*, GetItemWidget, int);
 	PUBLIC_FUNCTION(int, FindItem, const WString&);
+	PUBLIC_FUNCTION(UIContextMenuItem*, FindItemWidget, const WString&);
 	PUBLIC_FUNCTION(void, SetItem, int, const Item&);
 	PUBLIC_FUNCTION(Vector<Item>, GetItems);
 	PUBLIC_FUNCTION(void, RemoveItem, int);
