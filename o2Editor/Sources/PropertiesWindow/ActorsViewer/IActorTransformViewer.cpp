@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IActorTransformViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "Render/Sprite.h"
 #include "Scene/Actor.h"
@@ -17,6 +18,8 @@ namespace Editor
 {
 	IActorTransformViewer::IActorTransformViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
 
 		mSpoiler->borderBottom = 5;

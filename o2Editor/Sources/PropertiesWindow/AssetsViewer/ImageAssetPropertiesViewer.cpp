@@ -2,11 +2,12 @@
 #include "ImageAssetPropertiesViewer.h"
 
 #include "Assets/ImageAsset.h"
-#include "Core/Properties/Properties.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/BorderIntProperty.h"
 #include "Core/Properties/Basic/EnumProperty.h"
 #include "Core/Properties/Basic/ObjectProperty.h"
 #include "Core/Properties/Basic/RectangleIntProperty.h"
+#include "Core/Properties/Properties.h"
 #include "UI/Image.h"
 #include "UI/Label.h"
 #include "UI/Spoiler.h"
@@ -21,6 +22,8 @@ namespace Editor
 {
 	ImageAssetPropertiesViewer::ImageAssetPropertiesViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mContent = mnew UIVerticalLayout();
 		mContent->spacing = 5.0f;
 		mContent->border = BorderF(5, 5, 12, 5);

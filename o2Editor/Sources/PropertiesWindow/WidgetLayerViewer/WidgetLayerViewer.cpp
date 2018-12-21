@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "WidgetLayerViewer.h"
 
+#include "Core/EditorScope.h"
+#include "Core/Properties/Properties.h"
 #include "DefaultWidgetLayerHeadViewer.h"
 #include "DefaultWidgetLayerLayoutViewer.h"
 #include "DefaultWidgetLayerPropertiesViewer.h"
@@ -10,13 +12,13 @@
 #include "UI/UIManager.h"
 #include "UI/VerticalLayout.h"
 #include "UI/WidgetLayout.h"
-#include "Core/Properties/Properties.h"
 
 namespace Editor
 {
-
 	WidgetLayerViewer::WidgetLayerViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mHeaderViewer = mnew DefaultWidgetLayerHeaderViewer();
 		mLayoutViewer = mnew DefaultWidgetLayerLayoutViewer();
 		mPropertiesViewer = mnew DefaultWidgetLayerPropertiesViewer();
@@ -96,6 +98,8 @@ namespace Editor
 
 	void WidgetLayerViewer::SetTargets(const Vector<IObject*> targets)
 	{
+		PushScopeEnterOnStack scope;
+
 		mTargetLayers = targets.Select<UIWidgetLayer*>([](auto x) { return dynamic_cast<UIWidgetLayer*>(x); });
 
 		// rebuild

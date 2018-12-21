@@ -3,6 +3,7 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/AssetProperty.h"
 #include "Core/Properties/Basic/BooleanProperty.h"
 #include "Core/Properties/Basic/LayerProperty.h"
@@ -25,6 +26,8 @@ namespace Editor
 {
 	DefaultActorHeaderViewer::DefaultActorHeaderViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mDataView = mnew UIWidget();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 42;

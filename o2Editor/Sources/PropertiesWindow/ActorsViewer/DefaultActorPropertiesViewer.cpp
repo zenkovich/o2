@@ -3,9 +3,10 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
-#include "Core/Properties/Properties.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/ObjectProperty.h"
 #include "Core/Properties/Basic/ObjectPtrProperty.h"
+#include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -53,6 +54,8 @@ namespace Editor
 
 	void DefaultActorPropertiesViewer::Rebuild()
 	{
+		PushScopeEnterOnStack scope;
+
 		static Vector<String> hiddenFields ={
 			"prototype", "parent", "name", "layer", "layerName", "enabled", "locked", "tags", "transform",
 			"parentWidget", "layout", "drawDepth"

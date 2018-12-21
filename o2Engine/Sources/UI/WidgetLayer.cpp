@@ -213,11 +213,11 @@ namespace o2
 		for (auto child : mChildren)
 		{
 			if (child->name == name)
-			{
-				UIWidgetLayer* layer = child->FindChild(name);
-				if (layer)
-					return layer;
-			}
+				return child;
+
+			UIWidgetLayer* layer = child->FindChild(name);
+			if (layer)
+				return layer;			
 		}
 
 		return nullptr;

@@ -3,6 +3,7 @@
 
 #include "Assets/Assets.h"
 #include "AssetsWindow/AssetsWindow.h"
+#include "Core/EditorScope.h"
 #include "PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 #include "Render/Sprite.h"
@@ -21,6 +22,8 @@ namespace Editor
 
 	AssetsPropertiesViewer::AssetsPropertiesViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		auto viewersTypes = TypeOf(IAssetPropertiesViewer).GetDerivedTypes();
 		for (auto type : viewersTypes)
 		{
@@ -49,6 +52,8 @@ namespace Editor
 
 	void AssetsPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 	{
+		PushScopeEnterOnStack scope;
+
 		mTargetAssets = targets.Cast<AssetRef*>();
 
 		if (mTargetAssets.IsEmpty())

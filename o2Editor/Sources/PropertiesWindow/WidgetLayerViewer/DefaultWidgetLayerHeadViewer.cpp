@@ -3,6 +3,7 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/BooleanProperty.h"
 #include "Core/Properties/Basic/StringProperty.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -14,6 +15,8 @@ namespace Editor
 {
 	DefaultWidgetLayerHeaderViewer::DefaultWidgetLayerHeaderViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mDataView = mnew UIWidget();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 21;

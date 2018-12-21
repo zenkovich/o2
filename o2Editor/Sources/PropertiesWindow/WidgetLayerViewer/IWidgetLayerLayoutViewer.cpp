@@ -1,14 +1,17 @@
 #include "stdafx.h"
 #include "IWidgetLayerLayoutViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/UI/SpoilerWithHead.h"
-#include "UI/UIManager.h"
 #include "UI/Image.h"
+#include "UI/UIManager.h"
 
 namespace Editor
 {
 	IWidgetLayerLayoutViewer::IWidgetLayerLayoutViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
 
 		mSpoiler->borderBottom = 5;

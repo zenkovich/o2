@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultWidgetLayerPropertiesViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
 
@@ -33,6 +34,8 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::Rebuild()
 	{
+		PushScopeEnterOnStack scope;
+
 		static Vector<String> hiddenFields = {
 			"name", "enabled", "locked", "layout"
 		};

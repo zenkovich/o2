@@ -3,6 +3,7 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/Vector2FloatProperty.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "SceneWindow/SceneEditScreen.h"
@@ -18,6 +19,8 @@ namespace Editor
 
 	DefaultWidgetLayerLayoutViewer::DefaultWidgetLayerLayoutViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		auto rightTopAnchorPropertyContainer = mnew UIWidget();
 		rightTopAnchorPropertyContainer->name = "right top anchor";
 		rightTopAnchorPropertyContainer->layout->minHeight = 20;

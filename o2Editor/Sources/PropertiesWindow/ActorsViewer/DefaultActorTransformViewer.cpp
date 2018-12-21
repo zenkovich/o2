@@ -3,6 +3,7 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/FloatProperty.h"
 #include "Core/Properties/Basic/Vector2FloatProperty.h"
 #include "Core/UI/SpoilerWithHead.h"
@@ -21,6 +22,8 @@ namespace Editor
 {
 	DefaultActorTransformViewer::DefaultActorTransformViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		// Position
 		auto positionPropertyContainer = mnew UIWidget();
 		positionPropertyContainer->name = "position";

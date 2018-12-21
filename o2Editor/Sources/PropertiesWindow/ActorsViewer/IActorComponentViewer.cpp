@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "IActorComponentViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "UI/Image.h"
 #include "UI/UIManager.h"
@@ -9,6 +10,8 @@ namespace Editor
 {
 	IActorComponentViewer::IActorComponentViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
 
 		mSpoiler->expandHeight = false;

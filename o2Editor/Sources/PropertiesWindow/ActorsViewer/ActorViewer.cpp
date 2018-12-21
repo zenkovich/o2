@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ActorViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h"
@@ -21,6 +22,8 @@ namespace Editor
 {
 	ActorViewer::ActorViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
 		mTransformViewer = mnew DefaultActorTransformViewer();
 		mDefaultComponentViewer = mnew DefaultActorComponentViewer();

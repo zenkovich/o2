@@ -202,6 +202,10 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create UI/Spoiler", [&]() { CreateObject<UISpoiler>("Spoiler"); });
 		mTreeContextMenu->AddItem("Create UI/Tree", [&]() { CreateObject<UITree>("Tree"); });
 
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Window", [&]() { CreateObject<UIWindow>("Window"); });
+
 		InitializeOtherCreateMenu();
 
 		mTreeContextMenu->AddItem("---");
@@ -341,6 +345,19 @@ namespace Editor
 
 	void TreeWindow::OnTreeRBPressed(UITreeNode* node)
 	{
+		bool canCreateUILayers = false;		
+		if (node) 
+		{
+			SceneEditableObject* object = node->GetObject();
+			canCreateUILayers = dynamic_cast<UIWidgetLayer*>(object) != nullptr ||
+				dynamic_cast<UIWidget::LayersEditable*>(object) != nullptr ||
+				dynamic_cast<UIWidget*>(object) != nullptr;
+		}
+
+		mTreeContextMenu->FindItemWidget("Create UI/Empty layer")->SetEnabled(canCreateUILayers);
+		mTreeContextMenu->FindItemWidget("Create UI/Sprite layer")->SetEnabled(canCreateUILayers);
+		mTreeContextMenu->FindItemWidget("Create UI/Text layer")->SetEnabled(canCreateUILayers);
+
 		mTreeContextMenu->Show();
 	}
 

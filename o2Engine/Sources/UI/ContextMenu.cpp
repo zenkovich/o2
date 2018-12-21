@@ -244,7 +244,7 @@ namespace o2
 			WString subMenu = path.SubStr(0, slashPos);
 
 			UIWidget* subChild = resultContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
-				if (auto text = x->template GetLayerDrawable<Text>("caption"))
+				if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
 					return text->text == subMenu;
 
 				return false;
@@ -320,7 +320,7 @@ namespace o2
 	UIContextMenuItem* UIContextMenu::GetItemWidget(int position)
 	{
 		if (position > 0 && position < mItemsLayout->GetChildren().Count())
-			return dynamic_cast<UIContextMenu*>(mItemsLayout->GetChildren[position]);
+			return dynamic_cast<UIContextMenuItem*>(mItemsLayout->GetChildren()[position]);
 
 		return nullptr;
 	}
@@ -548,7 +548,7 @@ namespace o2
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
 			UIWidget* subChild = targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
-				if (auto text = x->template GetLayerDrawable<Text>("caption"))
+				if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
 					return text->text == subMenu;
 
 				return false;
@@ -572,7 +572,7 @@ namespace o2
 		}
 
 		UIWidget* removingItem = targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
-			if (auto text = x->template GetLayerDrawable<Text>("caption"))
+			if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
 				return text->text == targetPath;
 
 			return false;
@@ -751,10 +751,10 @@ namespace o2
 		int i = 0;
 		for (auto child : mItemsLayout->GetChildWidgets())
 		{
-			if (auto childCaption = child->GetLayerDrawable<Text>("caption"))
+			if (auto childCaption = child->GetLayerDrawable<Text>("basic/caption"))
 				maxCaption = Math::Max(childCaption->GetRealSize().x, maxCaption);
 
-			if (auto shortcutCaption = child->GetLayerDrawable<Text>("shortcut"))
+			if (auto shortcutCaption = child->GetLayerDrawable<Text>("basic/shortcut"))
 				maxShortcut = Math::Max(shortcutCaption->GetRealSize().x, maxShortcut);
 
 			size.y += child->layout->minHeight;
@@ -865,10 +865,10 @@ namespace o2
 			}
 		}
 
-		if (auto textLayer = widget->GetLayerDrawable<Text>("caption"))
+		if (auto textLayer = widget->GetLayerDrawable<Text>("basic/caption"))
 			textLayer->text = item.text;
 
-		if (auto shortcutLayer = widget->GetLayerDrawable<Text>("shortcut"))
+		if (auto shortcutLayer = widget->GetLayerDrawable<Text>("basic/shortcut"))
 			shortcutLayer->text = item.shortcut.AsString();
 
 		if (auto subIconLayer = widget->FindLayer("subIcon"))
@@ -905,13 +905,13 @@ namespace o2
 		else
 		{
 			auto contextItem = (UIContextMenuItem*)item;
-			if (auto iconLayer = contextItem->GetLayerDrawable<Sprite>("icon"))
+			if (auto iconLayer = contextItem->GetLayerDrawable<Sprite>("basic/icon"))
 				res.icon = iconLayer->GetImageAsset();
 
-			if (auto textLayer = contextItem->GetLayerDrawable<Text>("caption"))
+			if (auto textLayer = contextItem->GetLayerDrawable<Text>("basic/caption"))
 				res.text = textLayer->text;
 
-			if (auto shortcutLayer = contextItem->GetLayerDrawable<Text>("shortcut"))
+			if (auto shortcutLayer = contextItem->GetLayerDrawable<Text>("basic/shortcut"))
 				res.shortcut = contextItem->GetShortcut();
 
 			if (auto subMenu = contextItem->FindChildByType<UIContextMenu>())
@@ -945,14 +945,14 @@ namespace o2
 
 	void UIContextMenuItem::SetText(const WString& text)
 	{
-		auto textLayer = GetLayerDrawable<Text>("caption");
+		auto textLayer = GetLayerDrawable<Text>("basic/caption");
 		if (textLayer)
 			textLayer->text = text;
 	}
 
 	WString UIContextMenuItem::GetText() const
 	{
-		auto textLayer = GetLayerDrawable<Text>("caption");
+		auto textLayer = GetLayerDrawable<Text>("basic/caption");
 		if (textLayer)
 			return textLayer->text;
 

@@ -873,6 +873,7 @@ namespace o2
 		UIWidgetLayer* basicLayer = itemSample->FindLayer("basic");
 
 		itemSample->AddState("enabled", Animation::EaseInOut(itemSample, &basicLayer->transparency, 0.5f, 1.0f, 0.2f));
+		itemSample->SetStateForcible("enabled", true);
 
 		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);

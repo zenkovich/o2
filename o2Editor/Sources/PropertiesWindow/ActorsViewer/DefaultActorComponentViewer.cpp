@@ -3,9 +3,10 @@
 
 #include "Core/Actions/PropertyChange.h"
 #include "Core/EditorApplication.h"
-#include "Core/Properties/Properties.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/ObjectProperty.h"
 #include "Core/Properties/Basic/ObjectPtrProperty.h"
+#include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Component.h"
@@ -61,6 +62,8 @@ namespace Editor
 
 	void DefaultActorComponentViewer::Rebuild()
 	{
+		PushScopeEnterOnStack scope;
+
 		mSpoiler->name = "component " + mComponentType->GetName();
 
 		o2EditorProperties.FreeProperties(mFieldProperties);
