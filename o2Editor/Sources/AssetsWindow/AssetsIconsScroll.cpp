@@ -11,6 +11,7 @@
 #include "AssetsWindow.h"
 #include "Core/Actions/Create.h"
 #include "Core/EditorApplication.h"
+#include "Core/EditorScope.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
@@ -30,6 +31,8 @@ namespace Editor
 	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea():
 		UIScrollArea()
 	{
+		PushScopeEnterOnStack scope;
+
 		mGrid = mnew UIGridLayout();
 		*mGrid->layout = UIWidgetLayout::BothStretch();
 		mGrid->baseCorner = BaseCorner::LeftTop;
@@ -54,6 +57,8 @@ namespace Editor
 		mHightlightSprite(other.mHightlightSprite->CloneAs<Sprite>()), mHightlightLayout(other.mHightlightLayout),
 		mHightlightAnim(other.mHightlightAnim), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
 	{
+		PushScopeEnterOnStack scope;
+
 		RemoveAllChildren();
 
 		mGrid = mnew UIGridLayout();
@@ -178,6 +183,8 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::UpdateAssetsPath()
 	{
+		PushScopeEnterOnStack scope;
+
 		DeselectAllAssets();
 
 		auto prevIcons = mGrid->GetChildWidgets().Select<UIAssetIcon*>([](auto x) { return (UIAssetIcon*)x; });

@@ -524,6 +524,7 @@ namespace o2
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
 		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
+		mChildrenWorldRect = mAbsoluteViewArea;
 
 		if (withChildren)
 			UpdateChildrenTransforms();

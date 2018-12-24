@@ -343,7 +343,10 @@ namespace Editor
 	{
 		Basis transform = Basis::Rotated(-angleDelta);
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
-			object->SetTransform(object->GetTransform()*transform);
+		{
+			object->SetTransform(object->GetTransform()*transform);			
+			object->UpdateTransform();
+		}
 	}
 
 	void RotateTool::RotateObjectsWithAction(float angleDelta)

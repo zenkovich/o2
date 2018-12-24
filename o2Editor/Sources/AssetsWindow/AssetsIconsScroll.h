@@ -119,7 +119,7 @@ namespace Editor
 		AssetsIconsVec          mSelectedAssetsIcons;        // Selected assets icons
 		AssetsVec               mSelectedPreloadedAssets;    // Preloaded selected assets
 						        
-		UIAssetIcon*            mHightlightIcon = nullptr;  // Current hightlighting asset icon
+		UIAssetIcon*            mHightlightIcon = nullptr;   // Current hightlighting asset icon
 		Animation               mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
 		Sprite*                 mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
 		Layout                  mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE

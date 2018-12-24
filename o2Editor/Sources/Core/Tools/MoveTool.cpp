@@ -262,7 +262,10 @@ namespace Editor
 			Basis basis = object->GetTransform();
 			basis.origin += delta;
 			object->SetTransform(basis);
+			object->UpdateTransform();
 		}
+
+		UpdateHandlesPosition();
 	}
 
 	void MoveTool::MoveSelectedObjectsWithAction(const Vec2F& delta)
