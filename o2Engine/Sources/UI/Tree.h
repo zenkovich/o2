@@ -428,8 +428,8 @@ namespace o2
 		// Updates hover target rect and visibility
 		void UpdateHover(UITreeNode* itemUnderCursor);
 
-		// Gets tree node from pool
-		UITreeNode* CreateTreeNodeWidget();
+		// Gets tree node from pool or creates new
+		virtual UITreeNode* CreateTreeNodeWidget();
 
 // DragDropArea implementation
 

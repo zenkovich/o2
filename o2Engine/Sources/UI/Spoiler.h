@@ -71,14 +71,14 @@ namespace o2
 		// Invokes required function for childs arranging
 		void RearrangeChilds() override;
 
-		// Updates expanding
-		void UpdateExpanding(float dt);
-
 		// Returns layout height
 		float GetMinHeightWithChildren() const override;
 
-		// Expands size by children
-		//virtual void ExpandSizeByChilds();
+		// Updates expanding
+		void UpdateExpanding(float dt);
+
+		// Creates expanding animation
+		void CreateExpandAnimation();
 
 		// Updates layout's weight and minimal size
 		virtual void UpdateLayoutParametres();
@@ -128,8 +128,9 @@ CLASS_METHODS_META(o2::UISpoiler)
 	PUBLIC_FUNCTION(float, GetHeadHeight);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
-	PROTECTED_FUNCTION(void, UpdateExpanding, float);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
+	PROTECTED_FUNCTION(void, UpdateExpanding, float);
+	PROTECTED_FUNCTION(void, CreateExpandAnimation);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(UIButton*, FindExpandButton);

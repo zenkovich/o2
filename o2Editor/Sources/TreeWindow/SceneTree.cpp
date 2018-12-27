@@ -160,6 +160,12 @@ namespace Editor
 		UITree::UpdateVisibleNodes();
 	}
 
+	UITreeNode* UISceneTree::CreateTreeNodeWidget()
+	{
+		PushScopeEnterOnStack scope;
+		return UITree::CreateTreeNodeWidget();
+	}
+
 	UnknownPtr UISceneTree::GetObjectParent(UnknownPtr object)
 	{
 		SceneEditableObject* sceneObject = object;

@@ -18,7 +18,8 @@ namespace o2
 		mExpandWidth = true;
 		mExpandHeight = false;
 
-		mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
+		//Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 0.6f);
+		CreateExpandAnimation();
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 		UpdateExpanding(0);
@@ -29,7 +30,7 @@ namespace o2
 	{
 		mExpandState = GetStateObject("expand");
 		if (!mExpandState)
-			mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
+			CreateExpandAnimation();
 
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
@@ -142,7 +143,7 @@ namespace o2
 
 		mExpandState = GetStateObject("expand");
 		if (!mExpandState)
-			mExpandState = AddState("expand", Animation::EaseInOut(this, &mExpandCoef, 0.0f, 1.0f, 0.2f));
+			CreateExpandAnimation();
 
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
@@ -166,6 +167,11 @@ namespace o2
 	void UISpoiler::UpdateExpanding(float dt)
 	{
 		layout->SetDirty(false);
+	}
+
+	void UISpoiler::CreateExpandAnimation()
+	{
+		mExpandState = AddState("expand", Animation::Parametric(this, &mExpandCoef, 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
 	}
 
 	float UISpoiler::GetMinHeightWithChildren() const

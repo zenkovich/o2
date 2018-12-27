@@ -97,6 +97,9 @@ namespace Editor
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
+		// Gets tree node from pool or creates new, enables editor mode
+		UITreeNode* CreateTreeNodeWidget() override;
+
 		// Returns object's parent
 		UnknownPtr GetObjectParent(UnknownPtr object) override;
 
@@ -246,6 +249,7 @@ CLASS_METHODS_META(Editor::UISceneTree)
 	PUBLIC_FUNCTION(void, SetEditorWatching, bool);
 	PROTECTED_FUNCTION(void, Initialize);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
+	PROTECTED_FUNCTION(UITreeNode*, CreateTreeNodeWidget);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
