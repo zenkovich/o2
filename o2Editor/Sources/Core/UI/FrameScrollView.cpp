@@ -83,15 +83,15 @@ namespace Editor
 		mVerScrollbar->Update(dt);
 	}
 
-	void UIFrameScrollView::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIScrollView::UpdateTransform(withChildren);
+	void UIFrameScrollView::UpdateSelfTransform()
+{
+		UIScrollView::UpdateSelfTransform();
 
 		if (!mReady)
 			return;
 
-		mHorScrollbar->UpdateTransform(withChildren);
-		mVerScrollbar->UpdateTransform(withChildren);
+		mHorScrollbar->UpdateSelfTransform();
+		mVerScrollbar->UpdateSelfTransform();
 	}
 
 	void UIFrameScrollView::SetHorScrollbar(UIHorizontalScrollBar* scrollbar)

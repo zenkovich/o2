@@ -165,7 +165,7 @@ namespace o2
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		SERIALIZABLE(UITree);
 
@@ -655,7 +655,7 @@ CLASS_METHODS_META(o2::UITree)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);

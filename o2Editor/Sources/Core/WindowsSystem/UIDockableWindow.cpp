@@ -283,9 +283,9 @@ namespace Editor
 		return mAutoCalculateTabWidth;
 	}
 
-	void UIDockableWindow::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIWindow::UpdateTransform(withChildren);
+	void UIDockableWindow::UpdateSelfTransform()
+{
+		UIWindow::UpdateSelfTransform();
 
 		if (auto tabLayer = GetLayer(mTabLayerPath))
 			mHeadDragAreaRect = mHeadDragAreaLayout.Calculate(tabLayer->GetRect());

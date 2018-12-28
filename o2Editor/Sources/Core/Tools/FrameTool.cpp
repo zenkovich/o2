@@ -261,7 +261,7 @@ namespace Editor
 			// 			else
 			// 				actor->transform->SetWorldNonSizedBasis(actor->transform->GetWorldNonSizedBasis()*transform);
 
-			object->UpdateTransform();
+			object->UpdateSelfTransform();
 		}
 
 		mChangedFromThis = true;
@@ -308,10 +308,10 @@ namespace Editor
 					layout.anchorMin = (anchorsFrame.LeftBottom() - parentWorldRect.LeftBottom())/parentWorldRect.Size();
 					layout.anchorMax = (anchorsFrame.RightTop() - parentWorldRect.LeftBottom())/parentWorldRect.Size();
 					object->SetLayout(layout);
-					object->UpdateTransform();
+					object->UpdateSelfTransform();
 
 					object->SetTransform(prevTransform);
-					object->UpdateTransform();
+					object->UpdateSelfTransform();
 				}
 			}
 		}

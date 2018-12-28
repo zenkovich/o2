@@ -387,11 +387,11 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsIconsScrollArea::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIAssetsIconsScrollArea::UpdateSelfTransform()
+{
 		Vec2F localPressPoint = mPressedPoint - mChildrenWorldRect.LeftBottom();
 
-		UIScrollArea::UpdateTransform(withChildren);
+		UIScrollArea::UpdateSelfTransform();
 
 		mPressedPoint = localPressPoint + mChildrenWorldRect.LeftBottom();
 
@@ -533,7 +533,7 @@ namespace Editor
 		mDragIcon->layout->SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
 								  o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
 
-		mDragIcon->UpdateTransform();
+		mDragIcon->UpdateSelfTransform();
 	}
 
 	void UIAssetsIconsScrollArea::OnDragEnter(ISelectableDragableObjectsGroup* group)

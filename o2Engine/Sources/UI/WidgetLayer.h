@@ -214,7 +214,7 @@ namespace o2
 		void SetTransform(const Basis& transform) override;
 
 		// Updates transform immediately
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 
 		// Returns is object supports pivot 
@@ -381,7 +381,7 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsSupportsPivot);
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetPivot);

@@ -25,7 +25,7 @@ namespace o2
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
-		mItemSample->UpdateTransform();
+		mItemSample->UpdateSelfTransform();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -178,7 +178,7 @@ namespace o2
 		{
 			auto countFunc = getItemsCountFunc;
 			getItemsCountFunc = []() { return 0; };
-			UpdateTransform();
+			UpdateSelfTransform();
 			getItemsCountFunc = countFunc;
 		}
 
@@ -203,11 +203,11 @@ namespace o2
 	void UILongList::UpdateControls(float dt)
 	{}
 
-	void UILongList::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UILongList::UpdateSelfTransform()
+{
 		UpdateVisibleItems();
 
-		UIScrollArea::UpdateTransform(withChildren);
+		UIScrollArea::UpdateSelfTransform();
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -232,7 +232,7 @@ namespace o2
 
 		for (auto child : mChildWidgets)
 		{
-			child->UpdateTransform();
+			child->UpdateSelfTransform();
 			child->mIsClipped = false;
 		}
 
@@ -429,7 +429,7 @@ namespace o2
 		UIScrollArea::CopyData(other);
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
-		mItemSample->UpdateTransform(true);
+		mItemSample->UpdateSelfTransform();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

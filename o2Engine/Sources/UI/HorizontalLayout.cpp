@@ -139,14 +139,14 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIHorizontalLayout::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIHorizontalLayout::UpdateSelfTransform()
+{
 		UpdateLayoutParametres();
 
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		UIWidget::UpdateTransform(withChildren);
+		UIWidget::UpdateSelfTransform();
 
 		RearrangeChilds();
 	}

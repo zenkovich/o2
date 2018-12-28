@@ -932,13 +932,9 @@ namespace o2
 		onUnfocused();
 	}
 
-	void UITree::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIScrollArea::UpdateTransform(false);
-
-		if (withChildren)
-			UpdateVisibleNodes();
-
+	void UITree::UpdateSelfTransform()
+{
+		UIScrollArea::UpdateSelfTransform();
 		mIsNeedUdateLayout = false;
 	}
 
@@ -1007,7 +1003,7 @@ namespace o2
 		{
 			if (node->widget)
 			{
-				node->widget->UpdateTransform(true);
+				node->widget->UpdateSelfTransform();
 				node->widget->CheckClipping(mAbsoluteClipArea);
 			}
 		}

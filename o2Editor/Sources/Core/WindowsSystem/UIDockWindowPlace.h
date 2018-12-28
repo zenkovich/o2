@@ -50,7 +50,7 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		SERIALIZABLE(UIDockWindowPlace);
 
@@ -116,7 +116,7 @@ CLASS_METHODS_META(Editor::UIDockWindowPlace)
 	PUBLIC_FUNCTION(void, ArrangeChildWindows);
 	PUBLIC_FUNCTION(void, SetActiveTab, UIDockableWindow*);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);

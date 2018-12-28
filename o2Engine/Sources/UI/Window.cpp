@@ -175,9 +175,9 @@ namespace o2
 		return mBackCursorArea.IsInteractable();
 	}
 
-	void UIWindow::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIScrollArea::UpdateTransform(withChildren);
+	void UIWindow::UpdateSelfTransform()
+{
+		UIScrollArea::UpdateSelfTransform();
 
 		RectF _mChildrenAbsRect = mChildrenWorldRect;
 		mChildrenWorldRect = layout->mData->worldRectangle;

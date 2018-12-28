@@ -518,16 +518,13 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIScrollArea::UpdateSelfTransform()
+{
 		layout->Update();
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
 		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
 		mChildrenWorldRect = mAbsoluteViewArea;
-
-		if (withChildren)
-			UpdateChildrenTransforms();
 	}
 
 	void UIScrollArea::UpdateChildren(float dt)
@@ -591,7 +588,7 @@ namespace o2
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
 		if (!mIsClipped)
-			UpdateTransform(false);
+			UpdateSelfTransform();
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;

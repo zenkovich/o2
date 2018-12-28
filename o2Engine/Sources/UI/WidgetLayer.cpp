@@ -505,11 +505,11 @@ namespace o2
 				  transform.yv.Length() - thisTransform.yv.Length());
 	}
 
-	void UIWidgetLayer::UpdateTransform(bool withChildren /*= true*/)
+	void UIWidgetLayer::UpdateSelfTransform()
 	{
 		if (mOwnerWidget)
 		{
-			mOwnerWidget->UpdateTransform();
+			mOwnerWidget->UpdateSelfTransform();
 			mOwnerWidget->OnChanged();
 		}
 	}

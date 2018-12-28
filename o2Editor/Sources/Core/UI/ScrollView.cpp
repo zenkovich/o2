@@ -77,9 +77,9 @@ namespace Editor
 		mGridColor = color;
 	}
 
-	void UIScrollView::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIWidget::UpdateTransform(withChildren);
+	void UIScrollView::UpdateSelfTransform()
+{
+		UIWidget::UpdateSelfTransform();
 	}
 
 	bool UIScrollView::IsUnderPoint(const Vec2F& point)

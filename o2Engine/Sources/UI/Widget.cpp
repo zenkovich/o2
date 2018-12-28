@@ -166,7 +166,7 @@ namespace o2
 				for (auto child : mInternalWidgets)
 					child->transform->SetDirty(true);
 
-				UpdateTransform(false);
+				UpdateSelfTransform();
 			}
 
 			if (!mIsClipped)
@@ -198,12 +198,22 @@ namespace o2
 			child->UpdateChildren(dt);
 	}
 
+	void UIWidget::UpdateTransform()
+	{
+		if (layout->mData->drivenByParent && mParentWidget) {
+			mParentWidget->UpdateTransform();
+		}
+
+		UpdateSelfTransform();
+		UpdateChildrenTransforms();
+	}
+
 	void UIWidget::UpdateChildrenTransforms()
 	{
 		Actor::UpdateChildrenTransforms();
 
 		for (auto child : mInternalWidgets)
-			child->UpdateTransform(false);
+			child->UpdateSelfTransform();
 
 		for (auto child : mInternalWidgets)
 			child->UpdateChildrenTransforms();
@@ -1019,7 +1029,7 @@ namespace o2
 		mIsClipped = false;
 		mResEnabledInHierarchy = true;
 
-		UIWidget::UpdateTransform(true);
+		UIWidget::UpdateSelfTransform();
 		UpdateTransparency();
 
 		Draw();
@@ -1032,7 +1042,7 @@ namespace o2
 		mIsClipped = false;
 		mResEnabledInHierarchy = oldResEnabledInHierarchy;
 
-		UIWidget::UpdateTransform(true);
+		UIWidget::UpdateSelfTransform();
 		layout->mData->dirtyFrame = o2Time.GetCurrentFrame();
 		UpdateBounds();
 		UpdateBoundsWithChilds();
@@ -1222,7 +1232,7 @@ namespace o2
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
 		if (!mIsClipped)
-			UpdateTransform(false);
+			UpdateSelfTransform();
 
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);

@@ -80,7 +80,7 @@ namespace o2
 		bool IsScrollable() const override;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		SERIALIZABLE(UILongList);
 
@@ -216,7 +216,7 @@ CLASS_METHODS_META(o2::UILongList)
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
 	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);

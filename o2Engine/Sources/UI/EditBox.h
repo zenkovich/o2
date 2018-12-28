@@ -144,7 +144,7 @@ namespace o2
 		bool IsFocusable() const override;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -361,7 +361,7 @@ CLASS_METHODS_META(o2::UIEditBox)
 	PUBLIC_FUNCTION(float, GetCaretBlinkingDelay);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);

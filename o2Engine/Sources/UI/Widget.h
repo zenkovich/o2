@@ -75,6 +75,10 @@ namespace o2
 		// Updates childs
 		void UpdateChildren(float dt) override;
 
+
+		// Updates self transform, dependent parents and children transforms
+		void UpdateTransform() override;
+
 		// Updates children and internal children transforms
 		void UpdateChildrenTransforms() override;
 
@@ -722,6 +726,7 @@ CLASS_METHODS_META(o2::UIWidget)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
+	PUBLIC_FUNCTION(void, UpdateTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);

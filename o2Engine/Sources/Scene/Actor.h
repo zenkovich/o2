@@ -100,8 +100,11 @@ namespace o2
 		// Updates childs
 		virtual void UpdateChildren(float dt);
 
+		// Updtates self transform, dependent parents and children transforms
+		virtual void UpdateTransform();
+
 		// Updates transform
-		virtual void UpdateTransform(bool withChildren = true);
+		virtual void UpdateSelfTransform();
 
 		// Updates children transforms
 		virtual void UpdateChildrenTransforms();
@@ -776,7 +779,8 @@ CLASS_METHODS_META(o2::Actor)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateTransform);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(String, GetName);

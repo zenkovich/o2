@@ -111,8 +111,8 @@ namespace o2
 	void SceneEditableObject::SetTransform(const Basis& transform)
 	{}
 
-	void SceneEditableObject::UpdateTransform(bool withChildren /*= true*/)
-	{}
+	void SceneEditableObject::UpdateSelfTransform()
+{}
 
 	bool SceneEditableObject::IsSupportsPivot() const
 	{

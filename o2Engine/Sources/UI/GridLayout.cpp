@@ -151,12 +151,12 @@ namespace o2
 		return mFitByChildren;
 	}
 
-	void UIGridLayout::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIGridLayout::UpdateSelfTransform()
+{
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		UIWidget::UpdateTransform(withChildren);
+		UIWidget::UpdateSelfTransform();
 
 		RearrangeChilds();
 	}

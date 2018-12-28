@@ -345,7 +345,7 @@ namespace Editor
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
 			object->SetTransform(object->GetTransform()*transform);			
-			object->UpdateTransform();
+			object->UpdateSelfTransform();
 		}
 	}
 

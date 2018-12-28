@@ -77,7 +77,7 @@ namespace o2
 			*openedState = true;
 
 		mItemsList->SetEnabled(true);
-		mItemsList->UpdateTransform(true);
+		mItemsList->UpdateSelfTransform();
 
 		SetLayoutDirty();
 	}
@@ -232,7 +232,7 @@ namespace o2
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
 		if (!mIsClipped)
-			UpdateTransform(false);
+			UpdateSelfTransform();
 
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
@@ -293,15 +293,12 @@ namespace o2
 		interactable = mResEnabled;
 	}
 
-	void UICustomDropDown::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UICustomDropDown::UpdateSelfTransform()
+{
 		layout->Update();
 
 		mChildrenWorldRect = layout->mData->worldRectangle;
 		mAbsoluteClip = mClipLayout.Calculate(layout->mData->worldRectangle);
-
-		if (withChildren)
-			UpdateChildrenTransforms();
 	}
 
 	void UICustomDropDown::OnItemSelected()

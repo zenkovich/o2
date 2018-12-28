@@ -104,7 +104,7 @@ namespace o2
 		Layout GetViewLayout() const;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		// Updates children transforms, calculates scroll rectangle and updates scrollbars
 		void UpdateChildrenTransforms() override;
@@ -260,7 +260,7 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

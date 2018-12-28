@@ -191,9 +191,9 @@ namespace Editor
 
 	}
 
-	void UICurveEditor::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIFrameScrollView::UpdateTransform(withChildren);
+	void UICurveEditor::UpdateSelfTransform()
+{
+		UIFrameScrollView::UpdateSelfTransform();
 
 		UpdateLocalScreenTransforms();
 		OnCameraTransformChanged();

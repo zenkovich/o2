@@ -99,7 +99,7 @@ namespace o2
 		bool IsFittingByChildren() const;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		SERIALIZABLE(UIVerticalLayout);
 
@@ -204,7 +204,7 @@ CLASS_METHODS_META(o2::UIVerticalLayout)
 	PUBLIC_FUNCTION(bool, IsHeightExpand);
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);

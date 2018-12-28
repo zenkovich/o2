@@ -239,8 +239,8 @@ namespace o2
 		return 0;
 	}
 
-	void UILabel::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UILabel::UpdateSelfTransform()
+{
 		if (mTextLayer)
 		{
 			if (mHorOverflow == HorOverflow::Expand)
@@ -298,9 +298,6 @@ namespace o2
 		}
 
 		layout->Update();
-
-		if (withChildren)
-			UpdateChildrenTransforms();
 	}
 
 	void UILabel::CopyData(const Actor& otherActor)

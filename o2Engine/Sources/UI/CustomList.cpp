@@ -45,7 +45,7 @@ namespace o2
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->ExcludeFromScene();
-		mItemSample->UpdateTransform(true);
+		mItemSample->UpdateSelfTransform();
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
@@ -384,9 +384,9 @@ namespace o2
 		UpdateSelectionSprites();
 	}
 
-	void UICustomList::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIScrollArea::UpdateTransform(withChildren);
+	void UICustomList::UpdateSelfTransform()
+{
+		UIScrollArea::UpdateSelfTransform();
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);

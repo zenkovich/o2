@@ -232,7 +232,7 @@ namespace o2
 			for (auto child : mChildren)
 				child->transform->SetDirty(true);
 
-			UpdateTransform(false);
+			UpdateSelfTransform();
 		}
 
 		for (auto comp : mComponents)
@@ -248,18 +248,21 @@ namespace o2
 			child->UpdateChildren(dt);
 	}
 
-	void Actor::UpdateTransform(bool withChildren /*= true*/)
+	void Actor::UpdateTransform()
+	{
+		UpdateSelfTransform();
+		UpdateChildrenTransforms();
+	}
+
+	void Actor::UpdateSelfTransform()
 	{
 		transform->Update();
-
-		if (withChildren)
-			UpdateChildrenTransforms();
 	}
 
 	void Actor::UpdateChildrenTransforms()
 	{
 		for (auto child : mChildren)
-			child->UpdateTransform(false);
+			child->UpdateSelfTransform();
 
 		for (auto child : mChildren)
 			child->UpdateChildrenTransforms();

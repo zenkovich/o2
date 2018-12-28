@@ -22,7 +22,7 @@ namespace o2
 		mBackLayer = FindLayer("back");
 
 		RetargetStatesAnimations();
-		UpdateTransform();
+		UpdateSelfTransform();
 	}
 
 	UIHorizontalScrollBar::~UIHorizontalScrollBar()

@@ -700,8 +700,8 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIEditBox::UpdateSelfTransform()
+{
 		layout->Update();
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
@@ -711,9 +711,6 @@ namespace o2
 		mTextDrawable->SetRect(mAbsoluteViewArea + roundedScrollPos);
 
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
-		if (withChildren)
-			UpdateChildrenTransforms();
 
 		UpdateScrollParams();
 		UpdateSelectionAndCaret();

@@ -39,7 +39,7 @@ namespace o2
 		mLayout            = FindChildByType<UIHorizontalLayout>();
 
 		RetargetStatesAnimations();
-		UpdateTransform();
+		UpdateSelfTransform();
 	}
 
 	UIMenuPanel::~UIMenuPanel()

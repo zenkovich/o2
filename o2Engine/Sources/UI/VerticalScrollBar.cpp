@@ -276,12 +276,9 @@ namespace o2
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIVerticalScrollBar::UpdateSelfTransform()
+{
 		layout->Update();
-
-		if (withChildren)
-			UpdateChildrenTransforms();
 	}
 
 	void UIVerticalScrollBar::UpdateProgressLayersLayouts()

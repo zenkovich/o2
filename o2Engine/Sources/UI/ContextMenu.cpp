@@ -179,7 +179,7 @@ namespace o2
 		else mSelectionDrawable->SetEnabled(false);
 
 		FitSizeAndPosition(position);
-		UpdateTransform();
+		UpdateSelfTransform();
 		UIWidget::Show();
 
 		mShownAtFrame = true;
@@ -679,8 +679,8 @@ namespace o2
 
 	UIContextMenu* UIContextMenu::mVisibleContextMenu = nullptr;
 
-	void UIContextMenu::UpdateTransform(bool withChildren /*= true*/)
-	{
+	void UIContextMenu::UpdateSelfTransform()
+{
 		layout->Update();
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
@@ -688,20 +688,17 @@ namespace o2
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
-		if (withChildren)
-			UpdateChildrenTransforms();
-
+		
 		UpdateScrollParams();
 
 		RectF _mChildrenAbsRect = mChildrenWorldRect;
 		mChildrenWorldRect = layout->mData->worldRectangle;
 
 		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateTransform(true);
+			mHorScrollBar->UpdateSelfTransform();
 
 		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateTransform(true);
+			mVerScrollBar->UpdateSelfTransform();
 
 		mChildrenWorldRect = _mChildrenAbsRect;
 	}

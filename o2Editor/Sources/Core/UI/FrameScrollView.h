@@ -35,7 +35,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Updates layout
-		void UpdateTransform(bool withChildren = true) override;
+		void UpdateSelfTransform() override;
 
 		// Sets horizontal scrollbar
 		void SetHorScrollbar(UIHorizontalScrollBar* scrollbar);
@@ -91,7 +91,7 @@ CLASS_METHODS_META(Editor::UIFrameScrollView)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, UpdateTransform, bool);
+	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, SetHorScrollbar, UIHorizontalScrollBar*);
 	PUBLIC_FUNCTION(void, SetVerScrollbar, UIVerticalScrollBar*);
 	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);

@@ -186,9 +186,9 @@ namespace Editor
 		}
 	}
 
-	void UIDockWindowPlace::UpdateTransform(bool withChildren /*= true*/)
-	{
-		UIWidget::UpdateTransform(withChildren);
+	void UIDockWindowPlace::UpdateSelfTransform()
+{
+		UIWidget::UpdateSelfTransform();
 		mDragHandleAreaMin = mDragHandleLayoutMin.Calculate(layout->GetWorldRect());
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
 	}
