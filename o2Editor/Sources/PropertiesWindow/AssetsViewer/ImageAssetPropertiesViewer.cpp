@@ -53,7 +53,7 @@ namespace Editor
 
 		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(
 			mTargetAssets,
-			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode); });
+			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode);});
 
 		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(
 			mTargetAssets,
@@ -246,6 +246,8 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::FitImage()
 	{
+		mContent->UpdateTransform();
+
 		Vec2F maxSize = mPreviewImageContent->layout->size;
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 

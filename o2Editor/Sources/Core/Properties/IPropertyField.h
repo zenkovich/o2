@@ -410,7 +410,7 @@ namespace Editor
 			[&](_object_type* target)
 		{
 			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew VariableValueProxy<_type>(getter(target)), nullptr);
+				TypeOf(_type).GetValueProxy(getter(target)), nullptr);
 		}));
 	}
 
