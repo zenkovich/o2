@@ -534,6 +534,7 @@ namespace Editor
 								  o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
 
 		mDragIcon->UpdateSelfTransform();
+		mDragIcon->UpdateChildrenTransforms();
 	}
 
 	void UIAssetsIconsScrollArea::OnDragEnter(ISelectableDragableObjectsGroup* group)

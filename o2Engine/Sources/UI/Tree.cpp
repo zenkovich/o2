@@ -1004,6 +1004,7 @@ namespace o2
 			if (node->widget)
 			{
 				node->widget->UpdateSelfTransform();
+				node->widget->UpdateChildrenTransforms();
 				node->widget->CheckClipping(mAbsoluteClipArea);
 			}
 		}

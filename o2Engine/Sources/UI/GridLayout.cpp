@@ -131,6 +131,9 @@ namespace o2
 
 	void UIGridLayout::SetArrangeAxisMaxCells(int count)
 	{
+		if (mArrangeAxisMaxCells == count)
+			return;
+
 		mArrangeAxisMaxCells = count;
 		SetLayoutDirty();
 	}

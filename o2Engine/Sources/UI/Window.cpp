@@ -176,13 +176,8 @@ namespace o2
 	}
 
 	void UIWindow::UpdateSelfTransform()
-{
+	{
 		UIScrollArea::UpdateSelfTransform();
-
-		RectF _mChildrenAbsRect = mChildrenWorldRect;
-		mChildrenWorldRect = layout->mData->worldRectangle;
-
-		mChildrenWorldRect = _mChildrenAbsRect;
 
 		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout->mData->worldRectangle);
 		mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout->mData->worldRectangle);

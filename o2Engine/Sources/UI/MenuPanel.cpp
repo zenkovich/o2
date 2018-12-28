@@ -40,6 +40,7 @@ namespace o2
 
 		RetargetStatesAnimations();
 		UpdateSelfTransform();
+		UpdateChildrenTransforms();
 	}
 
 	UIMenuPanel::~UIMenuPanel()

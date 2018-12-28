@@ -284,7 +284,7 @@ namespace Editor
 	}
 
 	void UIDockableWindow::UpdateSelfTransform()
-{
+	{
 		UIWindow::UpdateSelfTransform();
 
 		if (auto tabLayer = GetLayer(mTabLayerPath))

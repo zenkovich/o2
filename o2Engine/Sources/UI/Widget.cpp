@@ -1029,7 +1029,8 @@ namespace o2
 		mIsClipped = false;
 		mResEnabledInHierarchy = true;
 
-		UIWidget::UpdateSelfTransform();
+		UpdateSelfTransform();
+		UpdateChildrenTransforms();
 		UpdateTransparency();
 
 		Draw();
@@ -1042,8 +1043,11 @@ namespace o2
 		mIsClipped = false;
 		mResEnabledInHierarchy = oldResEnabledInHierarchy;
 
-		UIWidget::UpdateSelfTransform();
+		UpdateSelfTransform();
+		UpdateChildrenTransforms();
+
 		layout->mData->dirtyFrame = o2Time.GetCurrentFrame();
+
 		UpdateBounds();
 		UpdateBoundsWithChilds();
 		UpdateTransparency();
@@ -1232,7 +1236,10 @@ namespace o2
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
 		if (!mIsClipped)
+		{
 			UpdateSelfTransform();
+			UpdateChildrenTransforms();
+		}
 
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);

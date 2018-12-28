@@ -180,6 +180,7 @@ namespace o2
 
 		FitSizeAndPosition(position);
 		UpdateSelfTransform();
+		UpdateChildrenTransforms();
 		UIWidget::Show();
 
 		mShownAtFrame = true;

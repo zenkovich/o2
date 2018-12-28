@@ -519,7 +519,7 @@ namespace o2
 	}
 
 	void UIScrollArea::UpdateSelfTransform()
-{
+	{
 		layout->Update();
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);

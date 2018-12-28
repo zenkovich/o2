@@ -25,7 +25,7 @@ namespace o2
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
-		mItemSample->UpdateSelfTransform();
+		mItemSample->UpdateTransform();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -179,6 +179,7 @@ namespace o2
 			auto countFunc = getItemsCountFunc;
 			getItemsCountFunc = []() { return 0; };
 			UpdateSelfTransform();
+			UpdateChildrenTransforms();
 			getItemsCountFunc = countFunc;
 		}
 
@@ -233,6 +234,7 @@ namespace o2
 		for (auto child : mChildWidgets)
 		{
 			child->UpdateSelfTransform();
+			child->UpdateChildrenTransforms();
 			child->mIsClipped = false;
 		}
 
@@ -430,6 +432,7 @@ namespace o2
 
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->UpdateSelfTransform();
+		mItemSample->UpdateChildrenTransforms();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

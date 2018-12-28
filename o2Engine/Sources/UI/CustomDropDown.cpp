@@ -78,6 +78,7 @@ namespace o2
 
 		mItemsList->SetEnabled(true);
 		mItemsList->UpdateSelfTransform();
+		mItemsList->UpdateChildrenTransforms();
 
 		SetLayoutDirty();
 	}

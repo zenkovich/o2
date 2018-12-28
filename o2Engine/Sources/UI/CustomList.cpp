@@ -46,6 +46,7 @@ namespace o2
 		mItemSample = other.mItemSample->CloneAs<UIWidget>();
 		mItemSample->ExcludeFromScene();
 		mItemSample->UpdateSelfTransform();
+		mItemSample->UpdateChildrenTransforms();
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
