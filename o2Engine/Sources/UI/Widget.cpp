@@ -1236,10 +1236,7 @@ namespace o2
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
 		if (!mIsClipped)
-		{
 			UpdateSelfTransform();
-			UpdateChildrenTransforms();
-		}
 
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
