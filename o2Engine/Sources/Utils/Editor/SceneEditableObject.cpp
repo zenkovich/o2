@@ -6,10 +6,10 @@
 namespace o2
 {
 	SceneEditableObject::SceneEditableObject()
-	{}
+	{ }
 
 	SceneEditableObject::~SceneEditableObject()
-	{}
+	{ }
 
 	bool SceneEditableObject::IsOnScene() const
 	{
@@ -27,7 +27,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::GenerateNewID(bool childs /*= true*/)
-	{}
+	{ }
 
 	String SceneEditableObject::GetName() const
 	{
@@ -35,7 +35,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetName(const String& name)
-	{}
+	{ }
 
 	Vector<SceneEditableObject*> SceneEditableObject::GetEditablesChildren() const
 	{
@@ -48,13 +48,13 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetEditableParent(SceneEditableObject* object)
-	{}
+	{ }
 
 	void SceneEditableObject::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
-	{}
+	{ }
 
 	void SceneEditableObject::SetIndexInSiblings(int idx)
-	{}
+	{ }
 
 	bool SceneEditableObject::CanBeParentedTo(const Type& parentType)
 	{
@@ -78,7 +78,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetEnabled(bool enabled)
-	{}
+	{ }
 
 	bool SceneEditableObject::IsSupportsLocking() const
 	{
@@ -96,7 +96,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetLocked(bool locked)
-	{}
+	{ }
 
 	bool SceneEditableObject::IsSupportsTransforming() const
 	{
@@ -109,10 +109,10 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetTransform(const Basis& transform)
-	{}
+	{ }
 
-	void SceneEditableObject::UpdateSelfTransform()
-{}
+	void SceneEditableObject::UpdateTransform()
+	{ }
 
 	bool SceneEditableObject::IsSupportsPivot() const
 	{
@@ -120,7 +120,7 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetPivot(const Vec2F& pivot)
-	{}
+	{ }
 
 	Vec2F SceneEditableObject::GetPivot() const
 	{
@@ -138,19 +138,19 @@ namespace o2
 	}
 
 	void SceneEditableObject::SetLayout(const Layout& layout)
-	{}
+	{ }
 
 	void SceneEditableObject::OnChanged()
-	{}
+	{ }
 
 	void SceneEditableObject::OnLockChanged()
-	{}
+	{ }
 
 	void SceneEditableObject::OnNameChanged()
-	{}
+	{ }
 
 	void SceneEditableObject::OnChildrenChanged()
-	{}
+	{ }
 
 }
 

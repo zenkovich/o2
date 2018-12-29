@@ -514,7 +514,7 @@ namespace o2
 		mChildren.Add(actor);
 		actor->mParent = this;
 
-		actor->transform->SetDirty();
+		actor->transform->SetDirty(false);
 		actor->UpdateResEnabledInHierarchy();
 
 		OnChildAdded(actor);

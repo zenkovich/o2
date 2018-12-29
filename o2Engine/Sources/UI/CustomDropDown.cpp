@@ -64,13 +64,9 @@ namespace o2
 	{
 		float itemHeight   = mItemsList->GetItemSample()->layout->minHeight;
 		int itemsVisible   = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
-		RectF listViewArea = mItemsList->mAbsoluteViewArea;
-		RectF listAbsRect  = mItemsList->layout->worldRect;
 
-		RectF border(listViewArea.left - listAbsRect.left, listViewArea.bottom - listAbsRect.bottom,
-					 listAbsRect.right - listViewArea.right, listAbsRect.top - listViewArea.top);
-
-		mItemsList->layout->height = itemHeight*(float)itemsVisible + border.bottom + border.top;
+		mItemsList->layout->minHeight = itemHeight*(float)itemsVisible +
+			mItemsList->mViewAreaLayout.offsetMin.y - mItemsList->mViewAreaLayout.offsetMax.y;
 
 		auto openedState = state["opened"];
 		if (openedState)

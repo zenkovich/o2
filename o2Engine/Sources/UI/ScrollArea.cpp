@@ -620,21 +620,32 @@ namespace o2
 
 	void UIScrollArea::CalculateScrollArea()
 	{
-		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
-
-		Vec2F offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() -
-			mChildrenWorldRect.Size()*layout->pivot;
+		Vec2F offset;
+		InitializeScrollAreaRectCalculation(offset);
 
 		for (auto child : mChildWidgets)
 		{
 			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(UIContextMenu))
 				continue;
 
-			mScrollArea.left   = Math::Min(mScrollArea.left, child->layout->mData->rectangle.left - offset.x);
-			mScrollArea.bottom = Math::Min(mScrollArea.bottom, child->layout->mData->rectangle.bottom - offset.y);
-			mScrollArea.right  = Math::Max(mScrollArea.right, child->layout->mData->rectangle.right - offset.x);
-			mScrollArea.top    = Math::Max(mScrollArea.top, child->layout->mData->rectangle.top - offset.y);
+			RecalculateScrollAreaRect(child->layout->mData->rectangle, offset);
 		}
+	}
+
+	void UIScrollArea::RecalculateScrollAreaRect(const RectF &childRect, const Vec2F &offset)
+	{
+		mScrollArea.left = Math::Min(mScrollArea.left, childRect.left - offset.x);
+		mScrollArea.bottom = Math::Min(mScrollArea.bottom, childRect.bottom - offset.y);
+		mScrollArea.right = Math::Max(mScrollArea.right, childRect.right - offset.x);
+		mScrollArea.top = Math::Max(mScrollArea.top, childRect.top - offset.y);
+	}
+
+	void UIScrollArea::InitializeScrollAreaRectCalculation(Vec2F& offset)
+	{
+		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
+
+		offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() - mChildrenWorldRect.Size()*layout->pivot + 
+			Vec2F(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 	}
 
 	void UIScrollArea::UpdateScrollParams()
@@ -644,11 +655,11 @@ namespace o2
 
 		CalculateScrollArea();
 
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mScrollRange = RectF(mScrollArea.left - localViewArea.left - roundedScrollPos.x,
-							 localViewArea.Height() - mScrollArea.top + localViewArea.bottom + roundedScrollPos.y,
-							 -(localViewArea.Width() - mScrollArea.right + localViewArea.left + roundedScrollPos.x),
-							 -mScrollArea.bottom + localViewArea.bottom + roundedScrollPos.y);
+		mScrollRange.left = localViewArea.left + mScrollArea.left;
+		mScrollRange.right = mScrollArea.right - localViewArea.right;
+
+		mScrollRange.bottom = localViewArea.top - mScrollArea.top;
+		mScrollRange.top = localViewArea.bottom - mScrollArea.bottom;
 
 // 		o2Debug.Log(mName + " area: " + (String)mScrollArea + ", range: " + (String)mScrollRange + 
 // 					", scroll: " + (String)mScrollPos);

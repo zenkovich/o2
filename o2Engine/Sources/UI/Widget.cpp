@@ -909,7 +909,7 @@ namespace o2
 
 	void UIWidget::OnChildAdded(Actor* child)
 	{
-		layout->SetDirty();
+		layout->SetDirty(false);
 
 		UIWidget* widget = dynamic_cast<UIWidget*>(child);
 		if (widget)

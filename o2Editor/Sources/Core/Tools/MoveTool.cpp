@@ -262,7 +262,7 @@ namespace Editor
 			Basis basis = object->GetTransform();
 			basis.origin += delta;
 			object->SetTransform(basis);
-			object->UpdateSelfTransform();
+			object->UpdateTransform();
 		}
 
 		UpdateHandlesPosition();

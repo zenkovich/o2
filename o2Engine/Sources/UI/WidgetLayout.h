@@ -72,6 +72,12 @@ namespace o2
 		// Sets size
 		void SetSize(const Vec2F& size) override;
 
+		// Sets width
+		void SetWidth(float value) override;
+
+		// Sets height
+		void SetHeight(float value) override;
+
 		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		void SetPivot(const Vec2F& pivot) override;
 
@@ -347,6 +353,8 @@ CLASS_METHODS_META(o2::UIWidgetLayout)
 	PUBLIC_FUNCTION(void, Update);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetWidth, float);
+	PUBLIC_FUNCTION(void, SetHeight, float);
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
 	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);

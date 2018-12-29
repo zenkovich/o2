@@ -116,19 +116,19 @@ namespace o2
 		virtual void SetSize(const Vec2F& size);
 
 		// Return size
-		Vec2F GetSize() const;
+		virtual Vec2F GetSize() const;
 
 		// Sets width
-		void SetWidth(float value);
+		virtual void SetWidth(float value);
 
 		// Return width
-		float GetWidth() const;
+		virtual float GetWidth() const;
 
 		// Sets height
-		void SetHeight(float value);
+		virtual void SetHeight(float value);
 
 		// Return height
-		float GetHeight() const;
+		virtual float GetHeight() const;
 
 		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		virtual void SetPivot(const Vec2F& pivot);

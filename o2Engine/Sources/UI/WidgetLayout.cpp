@@ -96,6 +96,32 @@ namespace o2
 		SetDirty();
 	}
 
+	void UIWidgetLayout::SetWidth(float value)
+	{
+		RectF parentRect = GetParentRectangle();
+		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
+						mData->offsetMax + mData->anchorMax*parentRect.Size());
+
+		float szDelta = value - rectangle.Width();
+		mData->offsetMax.x += szDelta*(1.0f - mData->pivot.x);
+		mData->offsetMin.x -= szDelta*mData->pivot.x;
+
+		SetDirty();
+	}
+
+	void UIWidgetLayout::SetHeight(float value)
+	{
+		RectF parentRect = GetParentRectangle();
+		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
+						mData->offsetMax + mData->anchorMax*parentRect.Size());
+
+		float szDelta = value - rectangle.Height();
+		mData->offsetMax.y += szDelta*(1.0f - mData->pivot.y);
+		mData->offsetMin.y -= szDelta*mData->pivot.y;
+
+		SetDirty();
+	}
+
 	void UIWidgetLayout::SetRect(const RectF& rect)
 	{
 		RectF parentRect = GetParentRectangle();
@@ -569,8 +595,6 @@ namespace o2
 
 	void UIWidgetLayout::Update()
 	{
-		RectF lastWorldRect = mData->worldRectangle;
-
 		RectF parentWorldRect; 
 		Vec2F parentWorldPosition;
 

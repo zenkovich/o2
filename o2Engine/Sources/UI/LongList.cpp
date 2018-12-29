@@ -188,17 +188,11 @@ namespace o2
 
 	void UILongList::CalculateScrollArea()
 	{
-		Vec2F offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() -
-			mChildrenWorldRect.Size()*layout->pivot;
+		Vec2F offset;
+		InitializeScrollAreaRectCalculation(offset);
 
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		float itemsHeight = (float)getItemsCountFunc()*mItemSample->layout->GetMinimalHeight();
-
-		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
-
-		mScrollArea.top = mAbsoluteViewArea.Height() + roundedScrollPos.y - offset.y;
-		mScrollArea.bottom = Math::Min(mScrollArea.bottom,
-									   mAbsoluteViewArea.Height() + roundedScrollPos.y - itemsHeight - offset.y);
+		RecalculateScrollAreaRect(RectF(0, mAbsoluteViewArea.Height(), mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height() - itemsHeight), Vec2F());
 	}
 
 	void UILongList::UpdateControls(float dt)

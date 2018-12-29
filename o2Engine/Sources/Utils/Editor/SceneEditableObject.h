@@ -97,7 +97,7 @@ namespace o2
 		virtual void SetTransform(const Basis& transform);
 
 		// Updates transform immediately
-		virtual void UpdateSelfTransform();
+		virtual void UpdateTransform();
 
 
 		// Returns is object supports pivot 
@@ -171,7 +171,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
-	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_FUNCTION(void, UpdateTransform);
 	PUBLIC_FUNCTION(bool, IsSupportsPivot);
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetPivot);

@@ -398,7 +398,7 @@ namespace Editor
 			o2EditorApplication.DoneAction(action);
 		}
 
-		newObject->UpdateSelfTransform();
+		newObject->UpdateTransform();
 
 		mSceneTree->SelectAndHightlightObject(newObject);
 		mSceneTree->ScrollTo(newObject);

@@ -173,6 +173,12 @@ namespace o2
 		// Calculates scroll area
 		virtual void CalculateScrollArea();
 
+		// Calculates mScrollArea bounds by new childrenRectangle
+		void RecalculateScrollAreaRect(const RectF& childRect, const Vec2F& offset);
+
+		// Initializes mScrollArea by default rectangle and calculates offset
+		void InitializeScrollAreaRectCalculation(Vec2F& offset);
+
 		// Updates scroll parameters: clip area, scroll size
 		virtual void UpdateScrollParams();
 
@@ -271,6 +277,8 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);
+	PROTECTED_FUNCTION(void, RecalculateScrollAreaRect, const RectF&, const Vec2F&);
+	PROTECTED_FUNCTION(void, InitializeScrollAreaRectCalculation, Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateScrollParams);
 	PROTECTED_FUNCTION(void, OnScrolled);
 	PROTECTED_FUNCTION(void, CheckScrollBarsVisibility);
