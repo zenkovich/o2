@@ -160,12 +160,12 @@ namespace o2
 		if (mHorScrollBar)
 			mHorScrollBar->SetValue(newScrollPos.x);
 		else
-			scrollDelta.x = newScrollPos.x;
+			scrollDelta.x = newScrollPos.x - mScrollPos.x;
 
 		if (mVerScrollBar)
 			mVerScrollBar->SetValue(newScrollPos.y);
 		else
-			scrollDelta.y = newScrollPos.y;
+			scrollDelta.y = newScrollPos.y - mScrollPos.y;
 
 		if (!mVerScrollBar || !mHorScrollBar)
 			MoveScrollPosition(scrollDelta);
@@ -184,12 +184,12 @@ namespace o2
 		if (mHorScrollBar)
 			mHorScrollBar->SetValueForcible(newScrollPos.x);
 		else
-			scrollDelta.x = newScrollPos.x;
+			scrollDelta.x = newScrollPos.x - mScrollPos.x;
 
 		if (mVerScrollBar)
 			mVerScrollBar->SetValueForcible(newScrollPos.y);
 		else
-			scrollDelta.y = newScrollPos.y;
+			scrollDelta.y = newScrollPos.y - mScrollPos.y;
 
 		if (!mVerScrollBar || !mHorScrollBar)
 			MoveScrollPosition(scrollDelta);

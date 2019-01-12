@@ -399,12 +399,10 @@ namespace Editor
 
 	}
 
-	void AssetsWindow::CreateFolderAsset(const String& targetPath)
+	void AssetsWindow::CreateFolderAsset(const String& targetPath, const String& name)
 	{
 		FolderAssetRef folderAsset = FolderAssetRef::CreateAsset();
-		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New folder"));
-
-		o2Assets.RebuildAssets();
+		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/" + name));
 	}
 
 	void AssetsWindow::CreatePrefabAsset(const String& targetPath)
@@ -465,7 +463,9 @@ namespace Editor
 	void AssetsWindow::OnAssetsRebuilded(const Vector<UID>& changedAssets)
 	{
 		mFoldersTree->UpdateView();
-		mAssetsGridScroll->UpdateAssetsPath();
+		mFoldersTree->SelectAndExpandFolder(mAssetsGridScroll->GetViewingPath());
+
+		mAssetsGridScroll->UpdateAssetsGridByCurrentPath();
 	}
 }
 

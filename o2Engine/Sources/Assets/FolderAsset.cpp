@@ -79,8 +79,10 @@ namespace o2
 	{
 		auto folderAssetInfo = o2Assets.mAssetsTree.FindAsset(mPath);
 		if (folderAssetInfo)
+		{
 			mContainingAssetsInfos = folderAssetInfo->children.Select<AssetInfo>(
 				[&](AssetTree::AssetNode* asset) { return (AssetInfo)(*asset); });
+		}
 	}
 
 	void FolderAsset::SaveData(const String& path)

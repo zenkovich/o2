@@ -394,7 +394,7 @@ namespace Editor
 		if (!assetsScroll)
 			return;
 
-		assetsScroll->RegObjectssCreationAction();
+		assetsScroll->RegObjectsCreationAction();
 		
 		o2UI.FocusWidget(o2EditorTree.GetSceneTree());
 		o2EditorTree.GetSceneTree()->SetSelectedObjects(assetsScroll->mInstSceneDragObjects);

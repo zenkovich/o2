@@ -267,8 +267,9 @@ namespace Editor
 	void EditorApplication::OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);
-		o2Application.windowCaption = String::Format("o2 Editor. FPS: %i DC: %i (%vi)", (int)o2Time.GetFPS(),
-													 mDrawCalls, (Vec2I)o2Input.GetCursorPos());
+		o2Application.windowCaption = String("o2 Editor. FPS: ") + (String)((int)o2Time.GetFPS()) +
+			" DC: " + (String)mDrawCalls +
+			" Cursor: " + (String)o2Input.GetCursorPos();
 
 		if (o2Input.IsKeyPressed('K'))
 			o2Memory.DumpInfo();

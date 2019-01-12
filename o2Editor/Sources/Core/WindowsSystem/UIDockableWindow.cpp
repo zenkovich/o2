@@ -110,12 +110,6 @@ namespace Editor
 
 			for (auto layer : mTopDrawingLayers)
 				layer->Draw();
-
-			if (mOwnHorScrollBar)
-				mHorScrollBar->Draw();
-
-			if (mOwnVerScrollBar)
-				mVerScrollBar->Draw();
 		}
 		else
 			mHeadDragHandle.OnDrawn();

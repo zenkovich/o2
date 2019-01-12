@@ -78,7 +78,7 @@ namespace Editor
 	void UIAssetIcon::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
 		if (mOwner)
-			mOwner->OnIconDblClicked(this);
+			mOwner->OnAssetDblClick(this);
 	}
 
 	void UIAssetIcon::OnCursorRightMouseReleased(const Input::Cursor& cursor)

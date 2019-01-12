@@ -1240,7 +1240,7 @@ namespace Editor
 		// name label
 		UILabel* nameLabel = o2UI.CreateLabel("file name");
 		nameLabel->name = "nameLabel";
-		*nameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 22, 0);
+		*nameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 25, 0);
 		nameLabel->height = 8;
 		nameLabel->linesDistanceCoef = 0.7f;
 		nameLabel->horAlign = HorAlign::Middle;

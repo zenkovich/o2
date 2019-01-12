@@ -74,6 +74,12 @@ namespace o2
 		// Rebuilds tree for current folder
 		void RebuildTree();
 
+		// Sorts all assets by path depth
+		void Sort();
+
+		// Sorts inverted all assets by depth
+		void SortInverse();
+
 		// Returns asset by path. (nullptr if not asset with path)
 		AssetNode* FindAsset(const String& path) const;
 
@@ -127,6 +133,8 @@ CLASS_METHODS_META(o2::AssetTree)
 
 	PUBLIC_FUNCTION(void, BuildTree, const String&);
 	PUBLIC_FUNCTION(void, RebuildTree);
+	PUBLIC_FUNCTION(void, Sort);
+	PUBLIC_FUNCTION(void, SortInverse);
 	PUBLIC_FUNCTION(AssetNode*, FindAsset, const String&);
 	PUBLIC_FUNCTION(AssetNode*, FindAsset, UID);
 	PUBLIC_FUNCTION(AssetInfo, FindAssetInfo, const String&);

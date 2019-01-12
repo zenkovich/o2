@@ -53,11 +53,14 @@ namespace o2
 
 		if (mFocusedWidget)
 		{
-			mFocusedWidget->mIsFocused = false;
-			mFocusedWidget->OnUnfocused();
+			auto lastFocusedWidget = mFocusedWidget;
+			mFocusedWidget = nullptr;
 
-			if (mFocusedWidget->mFocusedState)
-				mFocusedWidget->mFocusedState->SetState(false);
+			lastFocusedWidget->mIsFocused = false;
+			lastFocusedWidget->OnUnfocused();
+
+			if (lastFocusedWidget->mFocusedState)
+				lastFocusedWidget->mFocusedState->SetState(false);
 		}
 
 		mFocusedWidget = widget;

@@ -99,7 +99,7 @@ namespace Editor
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Create/Folder", [&]() { OnContextCreateFolderPressed(); });
+		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
 		mContextMenu->AddItem("Create/Prefab", [&]() { OnContextCreatePrefabPressed(); });
 		mContextMenu->AddItem("Create/Script", [&]() { OnContextCreateScriptPressed(); });
 		mContextMenu->AddItem("Create/Animation", [&]() { OnContextCreateAnimationPressed(); });
@@ -180,7 +180,7 @@ namespace Editor
 			node->SetState("edit", false);
 			//node->UpdateView(false);
 
-			o2EditorAssets.OpenFolder(newPathAsset);
+			o2EditorAssets.OpenFolder(newPathAsset.Trimed(" /\\"));
 		};
 	}
 
@@ -248,7 +248,7 @@ namespace Editor
 
 	void UIAssetsFoldersTree::OnContextCreateFolderPressed()
 	{
-		o2EditorAssets.CreateFolderAsset(mCurrentPath);
+		o2EditorAssets.CreateFolderAsset(mCurrentPath, "New folder");
 	}
 
 	void UIAssetsFoldersTree::OnContextCreatePrefabPressed()

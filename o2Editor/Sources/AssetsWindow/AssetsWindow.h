@@ -102,7 +102,7 @@ namespace Editor
 		void ImportAssets(const String& targetPath);
 
 		// It is called when context create folder pressed
-		void CreateFolderAsset(const String& targetPath);
+		void CreateFolderAsset(const String& targetPath, const String& name);
 
 		// It is called when context create prefab pressed
 		void CreatePrefabAsset(const String& targetPath);
@@ -224,7 +224,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PUBLIC_FUNCTION(void, PasteAssets, const String&);
 	PUBLIC_FUNCTION(void, DeleteAssets, const Vector<String>&);
 	PUBLIC_FUNCTION(void, ImportAssets, const String&);
-	PUBLIC_FUNCTION(void, CreateFolderAsset, const String&);
+	PUBLIC_FUNCTION(void, CreateFolderAsset, const String&, const String&);
 	PUBLIC_FUNCTION(void, CreatePrefabAsset, const String&);
 	PUBLIC_FUNCTION(void, CreateScriptAsset, const String&);
 	PUBLIC_FUNCTION(void, CreateAnimationAsset, const String&);

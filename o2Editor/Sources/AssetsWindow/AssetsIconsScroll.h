@@ -61,7 +61,7 @@ namespace Editor
 		String GetViewingPath() const;
 
 		// Updates assets path contents
-		void UpdateAssetsPath();
+		void UpdateAssetsGridByCurrentPath();
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
@@ -190,7 +190,7 @@ namespace Editor
 		void CompleteSelecting();
 
 		// Registers objects creation undo action
-		void RegObjectssCreationAction();
+		void RegObjectsCreationAction();
 
 		// Initializes assets context menu
 		void InitializeContext();
@@ -198,7 +198,7 @@ namespace Editor
 		// Prepares icons pools
 		void PrepareIconsPools();
 
-		// Returns asset icon from pool
+		// Returns asset icon from pool or creates new by style name
 		UIAssetIcon* GetAssetIconFromPool(const String& style);
 
 		// Frees icon to pool
@@ -210,8 +210,11 @@ namespace Editor
 		// Updates assets grid size
 		void UpdateAssetsGridSize();
 
-		// It is called when asset icon double clicked
-		void OnIconDblClicked(UIAssetIcon* icon);
+		// It is called when asset icon double clicked, starting editing name
+		void OnAssetDblClick(UIAssetIcon* icon);
+
+		// Starts asset icon renaming, calls onCompletedwhen completed
+		void StartAssetRenaming(UIAssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
 
 		// It is called when context copy pressed
 		void OnContextCopyPressed();
@@ -381,7 +384,7 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetViewingPath, const String&);
 	PUBLIC_FUNCTION(String, GetViewingPath);
-	PUBLIC_FUNCTION(void, UpdateAssetsPath);
+	PUBLIC_FUNCTION(void, UpdateAssetsGridByCurrentPath);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, HightlightAsset, UID);
 	PUBLIC_FUNCTION(void, SelectAsset, UID, bool);
@@ -409,14 +412,15 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, BeginSelecting);
 	PROTECTED_FUNCTION(void, UpdateSelection, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CompleteSelecting);
-	PROTECTED_FUNCTION(void, RegObjectssCreationAction);
+	PROTECTED_FUNCTION(void, RegObjectsCreationAction);
 	PROTECTED_FUNCTION(void, InitializeContext);
 	PROTECTED_FUNCTION(void, PrepareIconsPools);
 	PROTECTED_FUNCTION(UIAssetIcon*, GetAssetIconFromPool, const String&);
 	PROTECTED_FUNCTION(void, FreeAssetIconToPool, UIAssetIcon*);
 	PROTECTED_FUNCTION(UIAssetIcon*, GetImageAssetIcon, const AssetInfo&);
 	PROTECTED_FUNCTION(void, UpdateAssetsGridSize);
-	PROTECTED_FUNCTION(void, OnIconDblClicked, UIAssetIcon*);
+	PROTECTED_FUNCTION(void, OnAssetDblClick, UIAssetIcon*);
+	PROTECTED_FUNCTION(void, StartAssetRenaming, UIAssetIcon*, const String&, const Function<void(const String&)>&);
 	PROTECTED_FUNCTION(void, OnContextCopyPressed);
 	PROTECTED_FUNCTION(void, OnContextCutPressed);
 	PROTECTED_FUNCTION(void, OnContextPastePressed);

@@ -674,13 +674,17 @@ namespace o2
 	template<typename T>
 	TString<T> TString<T>::ToLowerCase() const
 	{
-		return *this;
+		TString<T> res(*this);
+		std::transform(res.begin(), res.end(), res.begin(), ::tolower);
+		return res;
 	}
 
 	template<typename T>
 	TString<T> TString<T>::ToUpperCase() const
 	{
-		return *this;
+		TString<T> res(*this);
+		std::transform(res.begin(), res.end(), res.begin(), ::toupper);
+		return res;
 	}
 
 	template<typename T>

@@ -100,10 +100,10 @@ namespace o2
 
 		UpdateCaretBlinking(dt);
 
-		if (mIsFocused && o2Input.IsCursorReleased() && !UIWidget::IsUnderPoint(o2Input.GetCursorPos()))
+		if (mIsFocused && o2Input.IsCursorReleased() && !UIWidget::IsUnderPoint(o2Input.GetCursorPos()) && !mJustFocused)
 			UIWidget::Unfocus();
 
-		mJustSelected = false;
+		mJustFocused = false;
 	}
 
 	void UIEditBox::SetText(const WString& text)
@@ -371,9 +371,10 @@ namespace o2
 		if (!mMultiLine)
 			SelectAll();
 
-		mJustSelected = true;
+		mJustFocused = true;
 
-		o2Application.SetCursor(CursorType::IBeam);
+		if (IsUnderPoint(o2Input.GetCursorPos()))
+			o2Application.SetCursor(CursorType::IBeam);
 
 		UIWidget::OnFocused();
 	}
@@ -408,7 +409,7 @@ namespace o2
 		}
 		else
 		{
-			if ((mMultiLine || mIsFocused) && !mJustSelected)
+			if ((mMultiLine || mIsFocused) && !mJustFocused)
 				mSelectionBegin = mSelectionEnd = GetTextCaretPosition(cursor.position);
 
 			mSelectingByWords = false;
@@ -975,6 +976,9 @@ namespace o2
 		if (!font)
 			return;
 
+		UpdateScrollParams();
+		UpdateSelectionAndCaret();
+
 		Vec2F caretPos = mCaretDrawable->GetPosition();
 		RectF clipRect = mAbsoluteViewArea;
 
@@ -985,6 +989,9 @@ namespace o2
 		float topOffs = Math::Max(clipRect.bottom - caretPos.y, 0.0f);
 
 		float horOffs = rightOffs - leftOffs;
+
+// 		o2Debug.Log(String("caretPos: ") + (String)caretPos + ", clipRect: " + (String)mAbsoluteViewArea + 
+// 					", horOffs: " + (String)horOffs + ", scrollPos: " + (String)mScrollPos);
 
 		if (!Math::Equals(horOffs, 0.0f))
 		{

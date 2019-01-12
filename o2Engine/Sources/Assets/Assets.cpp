@@ -389,6 +389,7 @@ namespace o2
 		DataNode data;
 		data.LoadFromFile(GetDataAssetsTreePath());
 
+		mAssetsTree.Clear();
 		mAssetsTree = data;
 	}
 
@@ -447,8 +448,6 @@ namespace o2
 		{
 			if (cache->referencesCount == 0)
 				delete cache->asset;
-			else
-				mCachedAssets.Add(cache);
 		}
 	}
 

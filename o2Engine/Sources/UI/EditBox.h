@@ -176,7 +176,7 @@ namespace o2
 		int     mMaxLineChars = INT_MAX;   // Count of maximum characters in line @SERIALIZABLE
 		int     mMaxLinesCount = INT_MAX;  // Count of maximum lines count @SERIALIZABLE
 
-		bool    mJustSelected = false;     // Is edit box selected at current frame
+		bool    mJustFocused = false;     // Is edit box selected at current frame
 		float   mLastClickTime = -1.0f;    // Time of last clicking
 		Vec2F   mLastCursorPos;            // Last pressed cursor position
 
@@ -318,7 +318,7 @@ CLASS_FIELDS_META(o2::UIEditBox)
 	PROTECTED_FIELD(mWordWrap).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMaxLineChars).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMaxLinesCount).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mJustSelected);
+	PROTECTED_FIELD(mJustFocused);
 	PROTECTED_FIELD(mLastClickTime);
 	PROTECTED_FIELD(mLastCursorPos);
 }

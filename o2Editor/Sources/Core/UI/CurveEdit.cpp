@@ -109,6 +109,8 @@ namespace Editor
 
 	void UICurveEditor::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
 	{
+		UpdateSelfTransform();
+
 		CurveInfo* info = mnew CurveInfo();
 		info->curveId = id;
 		info->curve = curve;
@@ -1844,8 +1846,8 @@ namespace Editor
 		for (int i = 1; i < keys.Count(); i++)
 		{
 			const Vec2F* keyPoints = keys[i].GetApproximatedPoints();
-			for (int i = 0; i < keys[i].GetApproximatedPointsCount(); i++)
-				approximatedPoints.Add(keyPoints[i]);
+			for (int j = 0; j < keys[i].GetApproximatedPointsCount(); j++)
+				approximatedPoints.Add(keyPoints[j]);
 		}
 	}
 

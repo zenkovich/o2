@@ -35,8 +35,8 @@ namespace o2
 
 		String               mSourceAssetsPath;    // Source assets path
 		AssetTree            mSourceAssetsTree;    // Source assets tree
-		String               mBuildedAssetsPath;   // Builded assets path
-		AssetTree            mBuildedAssetsTree;   // Builded assets tree
+		String               mBuiltAssetsPath;   // Builded assets path
+		AssetTree            mBuiltAssetsTree;   // Builded assets tree
 
 		AssetTree::AssetsVec mModifiedAssets;      // Modified assets infos
 
@@ -48,7 +48,7 @@ namespace o2
 		void InitializeConverters();
 
 		// Removes all builded assets
-		void RemoveBuildedAssets();
+		void RemoveBuiltAssets();
 
 		// Checks basic atlas exist
 		void CheckBasicAtlas();

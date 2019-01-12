@@ -308,7 +308,7 @@ namespace Editor
 		{
 			UITree::OnDropped(this);
 
-			assetsScroll->RegObjectssCreationAction();
+			assetsScroll->RegObjectsCreationAction();
 			assetsScroll->mInstSceneDragObjects.Clear();
 		}
 		else UITree::OnDropped(group);

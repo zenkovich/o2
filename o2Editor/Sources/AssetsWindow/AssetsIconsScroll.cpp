@@ -28,7 +28,7 @@
 
 namespace Editor
 {
-	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea():
+	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea() :
 		UIScrollArea()
 	{
 		PushScopeEnterOnStack scope;
@@ -47,12 +47,12 @@ namespace Editor
 		mDragIcon = mnew UIAssetIcon();
 
 		mHightlightSprite = mnew Sprite();
-		mSelectionSprite  = mnew Sprite();
+		mSelectionSprite = mnew Sprite();
 
 		mHightlightAnim.SetTarget(mHightlightSprite);
 	}
 
-	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other):
+	UIAssetsIconsScrollArea::UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other) :
 		UIScrollArea(other),
 		mHightlightSprite(other.mHightlightSprite->CloneAs<Sprite>()), mHightlightLayout(other.mHightlightLayout),
 		mHightlightAnim(other.mHightlightAnim), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
@@ -172,7 +172,7 @@ namespace Editor
 			return;
 
 		mCurrentPath = path;
-		UpdateAssetsPath();
+		UpdateAssetsGridByCurrentPath();
 		ResetScroll();
 	}
 
@@ -181,10 +181,11 @@ namespace Editor
 		return mCurrentPath;
 	}
 
-	void UIAssetsIconsScrollArea::UpdateAssetsPath()
+	void UIAssetsIconsScrollArea::UpdateAssetsGridByCurrentPath()
 	{
 		PushScopeEnterOnStack scope;
 
+		Focus();
 		DeselectAllAssets();
 
 		auto prevIcons = mGrid->GetChildWidgets().Select<UIAssetIcon*>([](auto x) { return (UIAssetIcon*)x; });
@@ -216,7 +217,7 @@ namespace Editor
 		folderAssetsInfos.Sort([&](const AssetInfo& a, const AssetInfo& b) {
 			int wa = getAssetTypeSortWeight(a), wb = getAssetTypeSortWeight(b);
 			if (wa == wb)
-				return a.path > b.path;
+				return a.path.ToLowerCase() < b.path.ToLowerCase();
 
 			return wa < wb;
 		});
@@ -224,8 +225,8 @@ namespace Editor
 		Vector<UIWidget*> addingIcons;
 		for (auto asset : folderAssetsInfos)
 		{
-			UIAssetIcon* assetIcon;
-
+			UIAssetIcon* assetIcon; 
+			
 			if (asset.assetType == &TypeOf(FolderAsset))
 			{
 				assetIcon = GetAssetIconFromPool("folder");
@@ -256,7 +257,7 @@ namespace Editor
 				assetIcon = GetAssetIconFromPool("standard");
 				assetIcon->name = "standard";
 			}
-
+			
 			assetIcon->SetAssetInfo(asset);
 			assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.first == asset.id; }));
 			assetIcon->SetSelectionGroup(this);
@@ -377,7 +378,7 @@ namespace Editor
 			}
 			else if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
 				targets.Clear();
-			else 
+			else
 				targets = mSelectedPreloadedAssets.Cast<IObject*>();
 
 			if (!targets.IsEmpty())
@@ -388,7 +389,7 @@ namespace Editor
 	}
 
 	void UIAssetsIconsScrollArea::UpdateSelfTransform()
-{
+	{
 		Vec2F localPressPoint = mPressedPoint - mChildrenWorldRect.LeftBottom();
 
 		UIScrollArea::UpdateSelfTransform();
@@ -449,7 +450,7 @@ namespace Editor
 		for (auto icon : mGrid->GetChildWidgets())
 			icon->SetState("focused", false);
 
-		UIWidget::OnFocused();
+		UIWidget::OnUnfocused();
 	}
 
 	void UIAssetsIconsScrollArea::OnCursorPressed(const Input::Cursor& cursor)
@@ -531,7 +532,7 @@ namespace Editor
 	{
 		mDragIcon->SetEditableParent(nullptr);
 		mDragIcon->layout->SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
-								  o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
+										 o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
 
 		mDragIcon->UpdateSelfTransform();
 		mDragIcon->UpdateChildrenTransforms();
@@ -600,7 +601,7 @@ namespace Editor
 		o2EditorAssets.SelectAssets(newAssets);
 	}
 
-	void UIAssetsIconsScrollArea::RegObjectssCreationAction()
+	void UIAssetsIconsScrollArea::RegObjectsCreationAction()
 	{
 		auto firstInstObject = mInstSceneDragObjects[0];
 		auto parent = firstInstObject->GetEditableParent();
@@ -706,7 +707,7 @@ namespace Editor
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Create/Folder", [&]() { OnContextCreateFolderPressed(); });
+		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
 		mContextMenu->AddItem("Create/Prefab", [&]() { OnContextCreatePrefabPressed(); });
 		mContextMenu->AddItem("Create/Script", [&]() { OnContextCreateScriptPressed(); });
 		mContextMenu->AddItem("Create/Animation", [&]() { OnContextCreateAnimationPressed(); });
@@ -717,7 +718,8 @@ namespace Editor
 		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 
 		onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
-		onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
+		onUnfocused = [&]() { 
+			mContextMenu->SetItemsMinPriority(); };
 
 		AddChild(mContextMenu);
 	}
@@ -725,7 +727,7 @@ namespace Editor
 	void UIAssetsIconsScrollArea::PrepareIconsPools()
 	{
 		int poolSize = 10;
-		String iconsStyles[] ={ "standard", "folder", "prototype", "prototype preview", "image preview", "text", "animation" };
+		String iconsStyles[] = { "standard", "folder", "prototype", "prototype preview", "image preview", "text", "animation" };
 
 		for (auto style : iconsStyles)
 		{
@@ -805,40 +807,29 @@ namespace Editor
 		mGrid->arrangeAxisMaxCells = Math::Max(1, Math::FloorToInt(availableWidth/mAssetIconSize.x));
 	}
 
-	void UIAssetsIconsScrollArea::OnIconDblClicked(UIAssetIcon* icon)
+	void UIAssetsIconsScrollArea::OnAssetDblClick(UIAssetIcon* icon)
 	{
 		AssetInfo iconAssetInfo = icon->GetAssetInfo();
 		auto assetNameLabel = icon->GetChildWidget("nameLabel");
 		if (assetNameLabel && assetNameLabel->IsUnderPoint(o2Input.cursorPos))
 		{
-			icon->SetState("edit", true);
-
-			auto editBox = (UIEditBox*)icon->GetChild("nameEditBox");
-
-			editBox->text = o2FileSystem.GetFileNameWithoutExtension(
-				o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.path));
-
-			editBox->SelectAll();
-			editBox->UIWidget::Focus();
-			editBox->ResetScroll();
-
-			editBox->onChangeCompleted = [=](const WString& text) {
-				icon->SetState("edit", false);
+			auto name = o2FileSystem.GetFileNameWithoutExtension(o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.path));
+			StartAssetRenaming(icon, name, [=](const String& name)
+			{
 				String ext = o2FileSystem.GetFileExtension(iconAssetInfo.path);
 				if (ext.IsEmpty())
-					o2Assets.RenameAsset(iconAssetInfo, text, false);
+					o2Assets.RenameAsset(iconAssetInfo, name);
 				else
-					o2Assets.RenameAsset(iconAssetInfo, text + "." + o2FileSystem.GetFileExtension(iconAssetInfo.path), false);
-				mNeedRebuildAssets = true;
-			};
-
-			return;
+					o2Assets.RenameAsset(iconAssetInfo, name + "." + o2FileSystem.GetFileExtension(iconAssetInfo.path));
+			});
 		}
-
-		if (iconAssetInfo.assetType == &TypeOf(FolderAsset))
-			o2EditorAssets.OpenFolder(iconAssetInfo.path);
 		else
-			o2EditorAssets.OpenAndEditAsset(iconAssetInfo.id);
+		{
+			if (iconAssetInfo.assetType == &TypeOf(FolderAsset))
+				o2EditorAssets.OpenFolder(iconAssetInfo.path);
+			else
+				o2EditorAssets.OpenAndEditAsset(iconAssetInfo.id);
+		}
 	}
 
 	UIAssetIcon* UIAssetsIconsScrollArea::GetIconUnderPoint(const Vec2F& point) const
@@ -931,7 +922,19 @@ namespace Editor
 
 	void UIAssetsIconsScrollArea::OnContextCreateFolderPressed()
 	{
-		o2EditorAssets.CreateFolderAsset(mCurrentPath);
+		UIAssetIcon* assetIcon = GetAssetIconFromPool("folder");
+
+		assetIcon->SetState("halfHide", false);
+		assetIcon->SetSelectionGroup(this);
+		assetIcon->mOwner = this;
+
+		mGrid->AddChild(assetIcon, 0);
+
+		StartAssetRenaming(assetIcon, "New folder", [&](const String& name) 
+		{
+			o2EditorAssets.CreateFolderAsset(mCurrentPath, name);
+			o2EditorAssets.SelectAsset(mCurrentPath + "/" + name);
+		});
 	}
 
 	void UIAssetsIconsScrollArea::OnContextCreatePrefabPressed()
@@ -1052,6 +1055,25 @@ namespace Editor
 	{
 		Select(object, true);
 	}
+
+	void UIAssetsIconsScrollArea::StartAssetRenaming(UIAssetIcon* icon, const String& name, 
+													 const Function<void(const String&)>& onCompleted)
+	{
+		icon->SetState("edit", true);
+
+		auto editBox = (UIEditBox*)icon->GetChild("nameEditBox");
+		editBox->text = name;
+
+		editBox->SelectAll();
+		editBox->Focus();
+		editBox->ResetScroll();
+
+		editBox->onChangeCompleted = [=](const WString& text) {
+			icon->SetState("edit", false);
+			onCompleted(text);
+		};
+	}
+
 }
 
 DECLARE_CLASS(Editor::UIAssetsIconsScrollArea);
