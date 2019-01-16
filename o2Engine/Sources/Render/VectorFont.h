@@ -114,6 +114,7 @@ namespace o2
 		typedef Vector<PackLine*> PackLinesVec;
 
 		typedef Vector<Effect*> EffectsVec;
+		typedef Dictionary<int, float> HeightsDict;
 
 	protected:
 		String        mFileName;     // Source file name
@@ -123,6 +124,8 @@ namespace o2
 
 		PackLinesVec  mPackLines;           // Packed symbols lines
 		int           mLastPackLinePos = 0; // Last packed line bottom pos
+
+		mutable HeightsDict mHeights; // Cached line heights
 
 	protected:
 		// Updates characters set

@@ -113,20 +113,24 @@ namespace o2
 
 	float VectorFont::GetHeightPx(int height) const
 	{
+		float res = 0;
+		if (mHeights.TryGetValue(height, res))
+			return res;
+
 		Vec2I dpi = o2Render.GetDPI();
 		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, height*64, dpi.x, dpi.y);
 
 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
-		return mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+
+		res = mFreeTypeFace->glyph->metrics.horiBearingY/64.0f;
+		mHeights.Add(height, res);
+
+		return res;
 	}
 
 	float VectorFont::GetLineHeightPx(int height) const
 	{
-		Vec2I dpi = o2Render.GetDPI();
-		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
-
-		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
-		return (mFreeTypeFace->glyph->metrics.horiBearingY / 64.0f)*2.0f;
+		return GetHeightPx(height)*2.0f;
 	}
 
 	void VectorFont::CheckCharacters(const WString& needChararacters, int height)

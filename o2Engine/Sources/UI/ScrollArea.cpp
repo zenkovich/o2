@@ -664,6 +664,9 @@ namespace o2
 // 		o2Debug.Log(mName + " area: " + (String)mScrollArea + ", range: " + (String)mScrollRange + 
 // 					", scroll: " + (String)mScrollPos);
 
+// 		mScrollPos.x = Math::Clamp(mScrollPos.x, mScrollRange.left, mScrollRange.right);
+// 		mScrollPos.y = Math::Clamp(mScrollPos.y, mScrollRange.bottom, mScrollRange.top);
+
 		if (mHorScrollBar)
 		{
 			if (Math::Equals(mScrollRange.left, mScrollRange.right, 1.2f))
@@ -675,8 +678,9 @@ namespace o2
 						*enableHorBarState = false;
 
 					mHorScrollBar->Hide();
-					mHorScrollBar->SetValueRange(0, 0);
 				}
+
+				mHorScrollBar->SetValueRange(0, 0);
 
 				mEnableHorScroll = false;
 			}
@@ -709,8 +713,9 @@ namespace o2
 						*enableVerBarState = false;
 
 					mVerScrollBar->Hide();
-					mVerScrollBar->SetValueRange(0, 0);
 				}
+
+				mVerScrollBar->SetValueRange(0, 0);
 
 				mEnableVerScroll = false;
 			}
