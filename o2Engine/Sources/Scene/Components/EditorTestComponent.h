@@ -30,6 +30,16 @@ namespace o2
 			SERIALIZABLE(TestInside);
 		};
 
+		void SetSprite(Sprite* sprite) { mSprite = sprite; }
+		Sprite* GetSprite() const { return mSprite; }
+
+		void SetArray(const Vector<Vec2I>& arr) { mVecs = arr; }
+		const Vector<Vec2I>& GetArray() const { return mVecs; }
+
+		PROPERTIES(EditorTestComponent);
+		PROPERTY(Sprite*, spriteProp, SetSprite, GetSprite);
+		PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
+
 		int mInteger;					           // @SERIALIZABLE
 		float mFloat;					           // @SERIALIZABLE
 		String mString;					           // @SERIALIZABLE
@@ -84,6 +94,8 @@ CLASS_BASES_META(o2::EditorTestComponent)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent)
 {
+	PUBLIC_FIELD(spriteProp);
+	PUBLIC_FIELD(arr);
 	PUBLIC_FIELD(mInteger).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mFloat).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mString).SERIALIZABLE_ATTRIBUTE();
@@ -128,6 +140,11 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 END_META;
 CLASS_METHODS_META(o2::EditorTestComponent)
 {
+
+	PUBLIC_FUNCTION(void, SetSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetSprite);
+	PUBLIC_FUNCTION(void, SetArray, const Vector<Vec2I>&);
+	PUBLIC_FUNCTION(const Vector<Vec2I>&, GetArray);
 }
 END_META;
 

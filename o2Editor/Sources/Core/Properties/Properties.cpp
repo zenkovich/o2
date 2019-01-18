@@ -269,13 +269,7 @@ namespace Editor
 		if (type->GetUsage() == Type::Usage::Property)
 		{
 			auto valueType = ((const PropertyType*)type)->GetValueType();
-
-			if (valueType->GetUsage() == Type::Usage::Enumeration)
-				return CreateRegularField(&TypeOf(EnumProperty), name, onChangeCompleted, onChanged);
-
-			fieldSample = GetFieldPropertyPrototype(valueType);
-			if (fieldSample)
-				return CreateRegularField(&fieldSample->GetType(), name, onChangeCompleted, onChanged);
+			return CreateFieldProperty(valueType, name, onChangeCompleted, onChanged);
 		}
 
 		return nullptr;
