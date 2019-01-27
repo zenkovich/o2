@@ -150,12 +150,12 @@ namespace Editor
 
 	IObject* ObjectProperty::GetProxyPtr(IAbstractValueProxy* proxy) const
 	{
-		IIObjectPointerValueProxy* objProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
+		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
 
-		if (objProxy)
-			return objProxy->GetObjectPtr();
+		void* valuePtr;
+		proxy->GetValuePtr(&valuePtr);
 
-		return nullptr;
+		return objectType.DynamicCastToIObject(valuePtr);
 	}
 
 }

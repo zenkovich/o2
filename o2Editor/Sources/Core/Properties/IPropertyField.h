@@ -436,8 +436,8 @@ namespace Editor
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
 			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew VariableValueProxy<_type>(getter(targets[i])),
-				prototypes[i] ? mnew VariableValueProxy<_type>(getter(prototypes[i])) : nullptr
+				mnew PointerValueProxy<_type>(getter(targets[i])),
+				prototypes[i] ? mnew PointerValueProxy<_type>(getter(prototypes[i])) : nullptr
 				));
 		}
 

@@ -2,6 +2,7 @@
 
 #include "Assets/ImageAsset.h"
 #include "Render/Particle.h"
+#include "Render/ParticlesEmitterShapes.h"
 #include "Render/RectDrawable.h"
 #include "Utils/Math/Curve.h"
 
@@ -9,7 +10,6 @@ namespace o2
 {
 	class Mesh;
 	class ParticlesEffect;
-	class ParticlesEmitterShape;
 
 	// ------------------------------------------------------
 	// Particles emitter. Emits, updates and manage particles

@@ -273,22 +273,35 @@ namespace Editor
 
 	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy)
 	{
-		auto pointerProxy = dynamic_cast<IVariablePointerValueProxy*>(proxy);
-		if (!pointerProxy)
+		const Type& proxyType = proxy->GetType();
+		if (proxyType.GetUsage() != Type::Usage::Pointer)
 			return nullptr;
 
-		auto objectProxy = dynamic_cast<IIObjectPointerValueProxy*>(pointerProxy->GetUnptrValueProxy());
-		if (objectProxy)
-			return objectProxy->GetObjectPtr();
+		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetUnpointedType();
+		if (!unptrType.IsBasedOn(TypeOf(IObject)))
+			return nullptr;
 
-		return nullptr;
+		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
+
+		void* valuePtr;
+		proxy->GetValuePtr(&valuePtr);
+
+		return objectType.DynamicCastToIObject(valuePtr);
 	}
 
 	void ObjectPtrProperty::SetProxy(IAbstractValueProxy* proxy, IObject* object)
 	{
-		auto objectProxy = dynamic_cast<IIObjectPointerValueProxy*>(proxy);
-		if (objectProxy)
-			objectProxy->SetObjectPtr(object);
+		const Type& proxyType = proxy->GetType();
+		if (proxyType.GetUsage() != Type::Usage::Pointer)
+			return;
+
+		const Type& unptrType = *dynamic_cast<const PointerType&>(proxyType).GetUnpointedType();
+		if (!unptrType.IsBasedOn(TypeOf(IObject)))
+			return;
+
+		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
+
+		proxy->SetValuePtr(objectType.DynamicCastFromIObject(object));
 	}
 
 }

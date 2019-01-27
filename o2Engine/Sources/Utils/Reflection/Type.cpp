@@ -426,7 +426,7 @@ namespace o2
 		if (auto objectUnptrType = dynamic_cast<const ObjectType*>(mUnptrType))
 			return objectUnptrType->GetValueProxy(*(void**)object);
 
-		return mnew VariableValueProxy<void*>((void**)object);
+		return mnew PointerValueProxy<void*>((void**)object);
 	}
 
 	PropertyType::PropertyType(const String& name, int size):
