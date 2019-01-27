@@ -69,10 +69,23 @@ namespace Editor
 		IOBJECT(ObjectProperty);
 
 	protected:
+		struct TargetObjectData
+		{
+			IAbstractValueProxy* proxy = nullptr;
+			IObject* data = nullptr;
+			bool isCreated = false;
+
+			bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
+
+			void Refresh();
+			void SetValue();
+		};
+		typedef Vector<Pair<TargetObjectData, TargetObjectData>> TargetObjectsVec;
+
 		const Type*              mObjectType = nullptr;             // Type of target objects
 							     								    
 		bool                     mPropertiesInitialized = false;    // True when properties were built and initialized
-		TargetsVec               mTargetObjects;                    // Target objects
+		TargetObjectsVec         mTargetObjects;                    // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
 		UISpoiler*               mSpoiler = nullptr;                // Properties spoiler
@@ -87,8 +100,11 @@ namespace Editor
 		// It is called when expanding spoiler, initializes properties
 		void OnExpand();
 
-		// Returns object proxy pointer
-		IObject* GetProxyPtr(IAbstractValueProxy* proxy) const;
+		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
+		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
+
+		// It is called when some property changed, sets value via proxy
+		void OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
 	};
 }
 
@@ -124,6 +140,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnExpand);
-	PROTECTED_FUNCTION(IObject*, GetProxyPtr, IAbstractValueProxy*);
+	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

@@ -290,6 +290,20 @@ namespace o2
 		return mSlices;
 	}
 
+	bool Sprite::operator==(const Sprite& other) const
+	{
+		return IRectDrawable::operator==(other) && mTextureSrcRect == other.mTextureSrcRect && 
+			mCornersColors[0] == other.mCornersColors[0] && mCornersColors[1] == other.mCornersColors[1] &&
+			mCornersColors[2] == other.mCornersColors[2] && mCornersColors[3] == other.mCornersColors[3] &&
+			mImageAsset == other.mImageAsset && mMode == other.mMode && mSlices == other.mSlices &&
+			Math::Equals(mTileScale, other.mTileScale) && Math::Equals(mFill, other.mFill);
+	}
+
+	bool Sprite::operator!=(const Sprite& other) const
+	{
+		return !operator==(other);
+	}
+
 	void Sprite::LoadFromImage(const ImageAssetRef& image)
 	{
 		if (!image)

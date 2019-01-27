@@ -59,10 +59,15 @@ namespace o2
 			mSize == other.mSize &&
 			mScale == other.mScale &&
 			mPivot == other.mPivot &&
-			mAngle == other.mAngle &&
-			mShear == other.mShear &&
+			Math::Equals(mAngle, other.mAngle) &&
+			Math::Equals(mShear, other.mShear) &&
 			mTransform == other.mTransform &&
 			mNonSizedTransform == other.mNonSizedTransform;
+	}
+
+	bool Transform::operator!=(const Transform& other) const
+	{
+		return !operator==(other);
 	}
 
 	void Transform::SetPosition(const Vec2F& position)

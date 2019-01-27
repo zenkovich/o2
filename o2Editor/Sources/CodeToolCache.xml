@@ -1014,36 +1014,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectProperty.h">
-		<date year="2018" month="10" day="26" hour="8" minute="53" second="33" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ObjectProperty" fullname="Editor::ObjectProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectPtrProperty.h">
 		<date year="2018" month="11" day="7" hour="21" minute="11" second="27" />
 		<globalNamespace name="" fullname="">
@@ -2297,29 +2267,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultActorComponentViewer" fullname="Editor::DefaultActorComponentViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IActorComponentViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
 		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
 		<globalNamespace name="" fullname="">
@@ -3199,6 +3146,68 @@
 						<section name="TPropertyField" fullname="Editor::TPropertyField" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections />
 							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
+		<date year="2019" month="1" day="27" hour="23" minute="46" second="4" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorComponentViewer" fullname="Editor::DefaultActorComponentViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorComponentViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectProperty.h">
+		<date year="2019" month="1" day="28" hour="0" minute="7" second="17" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ObjectProperty" fullname="Editor::ObjectProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="TargetObjectData" fullname="Editor::ObjectProperty::TargetObjectData" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;Pair&lt;TargetObjectData, TargetObjectData&gt;&gt;" newDef="TargetObjectsVec" />
+							</typedefs>
 							<usings />
 							<baseClasses>
 								<class name="IPropertyField" protection="0" />

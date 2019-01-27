@@ -58,11 +58,36 @@ namespace o2
 		// Destructor
 		~Sprite();
 
+
 		// Assign operator
 		Sprite& operator=(const Sprite& other);
 
+		// Equals operator
+		bool operator==(const Sprite& other) const;
+
+		// Not equals operator
+		bool operator!=(const Sprite& other) const;
+
+
+		// Loads sprite from image asset
+		void LoadFromImage(const ImageAssetRef& image);
+
+		// Loads sprite from image asset by path
+		void LoadFromImage(const String& imagePath);
+
+		// Loads sprite from image asset by id
+		void LoadFromImage(UID imageId);
+
+		// Loads sprite from mono color
+		void LoadMonoColor(const Color4& color);
+
+		// Loads sprite from bitmap
+		void LoadFromBitmap(Bitmap* bitmap);
+
+
 		// Draws sprite 
 		void Draw() override;
+
 
 		// Sets using texture
 		void SetTexture(TextureRef texture);
@@ -76,8 +101,10 @@ namespace o2
 		// Returns texture source rectangle
 		RectI GetTextureSrcRect() const;
 
+
 		// Returns original or texture source size
 		Vec2I GetOriginalSize() const;
+
 
 		// Sets corner color
 		void SetCornerColor(Corner corner, const Color4& color);
@@ -109,11 +136,13 @@ namespace o2
 		// Returns left bottom corner color
 		Color4 GetLeftBottomCorner() const;
 
+
 		// Sets sprite fill value (0 ... 1)
 		void SetFill(float fill);
 
 		// Returns sprite fill
 		float GetFill() const;
+
 
 		// Sets tile scale. 1.0f is default
 		void SetTileScale(float scale);
@@ -121,11 +150,13 @@ namespace o2
 		// Returns tile scale
 		float GetTileScale() const;
 
+
 		// Sets sprite drawing mode
 		void SetMode(SpriteMode mode);
 
 		// Returns sprite drawing mode
 		SpriteMode GetMode() const;
+
 
 		// Sets sprite slice border
 		void SetSliceBorder(const BorderI& border);
@@ -133,20 +164,6 @@ namespace o2
 		// Returns sprite slice border
 		BorderI GetSliceBorder() const;
 
-		// Loads sprite from image asset
-		void LoadFromImage(const ImageAssetRef& image);
-
-		// Loads sprite from image asset by path
-		void LoadFromImage(const String& imagePath);
-
-		// Loads sprite from image asset by id
-		void LoadFromImage(UID imageId);
-
-		// Loads sprite from mono color
-		void LoadMonoColor(const Color4& color);
-
-		// Loads sprite from bitmap
-		void LoadFromBitmap(Bitmap* bitmap);
 
 		// Sets asset
 		void SetImageAsset(const ImageAssetRef& asset);
@@ -157,8 +174,10 @@ namespace o2
 		// Returns image asset name
 		String GetImageName() const;
 
+
 		// Returns atlas asset id (returns 0 when sprite is not from atlas)
 		UID GetAtlasAssetId() const;
+
 
 		// Sets size by texture source rectangle size
 		void NormalizeSize();
@@ -171,6 +190,7 @@ namespace o2
 
 		// Sets size with equal aspect as texture source rectangle by nearest value
 		void NormalizeAspect();
+
 
 		// Calling when serializing
 		void OnSerialize(DataNode& node) const override;
@@ -270,6 +290,11 @@ END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
+	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
+	PUBLIC_FUNCTION(void, LoadFromImage, UID);
+	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
+	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
 	PUBLIC_FUNCTION(TextureRef, GetTexture);
@@ -294,11 +319,6 @@ CLASS_METHODS_META(o2::Sprite)
 	PUBLIC_FUNCTION(SpriteMode, GetMode);
 	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
 	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
-	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
-	PUBLIC_FUNCTION(void, LoadFromImage, UID);
-	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
-	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
 	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
 	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
 	PUBLIC_FUNCTION(String, GetImageName);

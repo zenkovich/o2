@@ -52,7 +52,20 @@ namespace Editor
 
 	void ObjectProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		mTargetObjects = targets;
+		for (auto& pair : mTargetObjects)
+		{
+			if (pair.first.isCreated)
+				delete pair.first.data;
+
+			if (pair.second.isCreated)
+				delete pair.second.data;
+		}
+
+		mTargetObjects.Clear();
+
+		for (auto& pair : targets)
+			mTargetObjects.Add({ GetObjectFromProxy(pair.first), GetObjectFromProxy(pair.second) });
+
 		Refresh();
 	}
 
@@ -62,12 +75,16 @@ namespace Editor
 		{
 			if (mObjectPropertiesViewer)
 			{
-				mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
-					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				for (auto& pair : mTargetObjects)
 				{
-					auto target = GetProxyPtr(x.first);
-					auto prototype = x.second ? GetProxyPtr(x.second) : nullptr;
-					return Pair<IObject*, IObject*>(target, prototype);
+					pair.first.Refresh();
+					pair.second.Refresh();
+				}
+
+				mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+					[&](const Pair<TargetObjectData, TargetObjectData>& x)
+				{
+					return Pair<IObject*, IObject*>(x.first.data, x.second.data);
 				}));
 			}
 		}
@@ -80,7 +97,10 @@ namespace Editor
 
 	void ObjectProperty::SpecializeType(const Type* type)
 	{
-		mObjectType = type;
+		if (type->GetUsage() == Type::Usage::Property)
+			mObjectType = dynamic_cast<const PropertyType*>(type)->GetValueType();
+		else
+			mObjectType = type;
 	}
 
 	void ObjectProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
@@ -131,15 +151,9 @@ namespace Editor
 		if (mPropertiesInitialized)
 			return;
 
-		auto onChangeCompletedFunc =
-			[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
-		{
-			onChangeCompleted(mValuesPath + "/" + path, before, after);
-		};
-
 		if (!mObjectPropertiesViewer)
 		{
-			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompleted, onChanged);
+			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, THIS_FUNC(OnPropertyChanged), onChanged);
 			mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 		}
 
@@ -148,14 +162,57 @@ namespace Editor
 		mPropertiesInitialized = true;
 	}
 
-	IObject* ObjectProperty::GetProxyPtr(IAbstractValueProxy* proxy) const
+	ObjectProperty::TargetObjectData ObjectProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)
 	{
+		TargetObjectData res;
+
+		if (!proxy)
+			return res;
+
+		res.proxy = proxy;
+
 		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
+		if (auto pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy))
+		{
+			res.data = objectType.DynamicCastToIObject(pointerProxy->GetValueVoidPointer());
+			res.isCreated = false;
+		}
+		else
+		{
+			void* sample = objectType.CreateSample();
+			proxy->GetValuePtr(sample);
 
-		void* valuePtr;
-		proxy->GetValuePtr(&valuePtr);
+			res.data = objectType.DynamicCastToIObject(sample);
+			res.isCreated = true;
+		}
 
-		return objectType.DynamicCastToIObject(valuePtr);
+		return res;
+	}
+
+	void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	{
+		for (auto& pair : mTargetObjects)
+			pair.first.SetValue();
+
+		onChangeCompleted(path, before, after);
+	}
+
+	void ObjectProperty::TargetObjectData::Refresh()
+	{
+		if (!isCreated)
+			return;
+
+		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
+		proxy->GetValuePtr(objectType.DynamicCastFromIObject(data));
+	}
+
+	void ObjectProperty::TargetObjectData::SetValue()
+	{
+		if (!isCreated)
+			return;
+
+		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
+		proxy->SetValuePtr(objectType.DynamicCastFromIObject(data));
 	}
 
 }

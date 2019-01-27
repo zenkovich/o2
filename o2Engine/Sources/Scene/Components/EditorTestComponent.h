@@ -30,14 +30,18 @@ namespace o2
 			SERIALIZABLE(TestInside);
 		};
 
-		void SetSprite(Sprite* sprite) { mSprite = sprite; }
-		Sprite* GetSprite() const { return mSprite; }
+		void SetSpritePtr(Sprite* sprite) { mSprite = sprite; }
+		Sprite* GetSpritePtr() const { return mSprite; }
+
+		void SetSprite(const Sprite& sprite) { *mSprite = sprite; }
+		Sprite GetSprite() const { return *mSprite; }
 
 		void SetArray(const Vector<Vec2I>& arr) { mVecs = arr; }
 		const Vector<Vec2I>& GetArray() const { return mVecs; }
 
 		PROPERTIES(EditorTestComponent);
-		PROPERTY(Sprite*, spriteProp, SetSprite, GetSprite);
+		PROPERTY(Sprite*, spritePropPtr, SetSpritePtr, GetSpritePtr);
+		PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
 		PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
 
 		int mInteger;					           // @SERIALIZABLE
@@ -94,6 +98,7 @@ CLASS_BASES_META(o2::EditorTestComponent)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent)
 {
+	PUBLIC_FIELD(spritePropPtr);
 	PUBLIC_FIELD(spriteProp);
 	PUBLIC_FIELD(arr);
 	PUBLIC_FIELD(mInteger).SERIALIZABLE_ATTRIBUTE();
@@ -141,8 +146,10 @@ END_META;
 CLASS_METHODS_META(o2::EditorTestComponent)
 {
 
-	PUBLIC_FUNCTION(void, SetSprite, Sprite*);
-	PUBLIC_FUNCTION(Sprite*, GetSprite);
+	PUBLIC_FUNCTION(void, SetSpritePtr, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetSpritePtr);
+	PUBLIC_FUNCTION(void, SetSprite, const Sprite&);
+	PUBLIC_FUNCTION(Sprite, GetSprite);
 	PUBLIC_FUNCTION(void, SetArray, const Vector<Vec2I>&);
 	PUBLIC_FUNCTION(const Vector<Vec2I>&, GetArray);
 }

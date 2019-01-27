@@ -44,11 +44,13 @@ namespace Editor
 		if (propertyPath.StartsWith("component:"))
 		{
 			int c = ((String)"component:").Length();
-			String typeName = propertyPath.SubStr(c, propertyPath.Find('/', c));
-			componentType = o2Reflection.GetType(typeName);
 
-			if (componentType)
-				finalPropertyPath.Erase(0, c);
+			String typeName = propertyPath.SubStr(c, propertyPath.Find('/', c));
+
+			c += typeName.Length() + 1;
+			finalPropertyPath.Erase(0, c);
+
+			componentType = o2Reflection.GetType(typeName);
 		}
 
 		int i = 0;

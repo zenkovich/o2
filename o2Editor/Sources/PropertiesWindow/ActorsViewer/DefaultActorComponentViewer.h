@@ -43,6 +43,10 @@ namespace Editor
 		FieldPropertiesInfo mFieldProperties;         // Field properties information
 		bool                mBuiltWithHidden;         // True when properties was built with hidden fields
 		const Type*         mComponentType = nullptr; // Target component type
+
+	protected:
+		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
+		void OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
 	};
 }
 
@@ -68,5 +72,6 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

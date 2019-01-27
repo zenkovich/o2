@@ -124,14 +124,7 @@ namespace Editor
 			if (mObjectPtrType)
 			{
 				mObjectType = ((PointerType*)mObjectPtrType)->GetUnpointedType();
-
-				auto onChangeCompletedFunc =
-					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
-				{
-					onChangeCompleted(mValuesPath + "/" + path, before, after);
-				};
-
-				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompletedFunc, onChanged);
+				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompleted, onChanged);
 				mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 			}
 

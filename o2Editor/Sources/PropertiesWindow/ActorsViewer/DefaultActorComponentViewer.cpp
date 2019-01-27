@@ -68,7 +68,7 @@ namespace Editor
 
 		o2EditorProperties.FreeProperties(mFieldProperties);
 		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mSpoiler, mComponentType, mFieldProperties,
-			(String)"component:" + mComponentType->GetName() + "/");
+			(String)"component:" + mComponentType->GetName() + "/", THIS_FUNC(OnPropertyChanged));
 
 		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
 	}
@@ -76,6 +76,14 @@ namespace Editor
 	bool DefaultActorComponentViewer::IsBuiltWithEmpty() const
 	{
 		return mBuiltWithHidden;
+	}
+
+	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	{
+		for (auto component : mTargetComponents)
+			component->GetOwnerActor()->OnChanged();
+
+		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
 	}
 
 }

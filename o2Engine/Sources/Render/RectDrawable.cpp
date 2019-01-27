@@ -27,6 +27,16 @@ namespace o2
 		return *this;
 	}
 
+	bool IRectDrawable::operator==(const IRectDrawable& other) const
+	{
+		return Transform::operator==(other) && mColor == other.mColor && mEnabled == other.mEnabled;
+	}
+
+	bool IRectDrawable::operator!=(const IRectDrawable& other) const
+	{
+		return !operator==(other);
+	}
+
 	void IRectDrawable::SetColor(const Color4& color)
 	{
 		mColor = color;
