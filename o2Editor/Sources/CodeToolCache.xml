@@ -1,7 +1,80 @@
 <?xml version="1.0"?>
 <files>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsIconsScroll.h">
+		<date year="2019" month="1" day="18" hour="18" minute="46" second="19" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="UIAssetsIconsScrollArea" fullname="Editor::UIAssetsIconsScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;UIAssetIcon*&gt;" newDef="AssetsIconsVec" />
+								<typedef what="Vector&lt;Sprite*&gt;" newDef="SpritesVec" />
+								<typedef what="Dictionary&lt;String, AssetsIconsVec&gt;" newDef="IconArrsDict" />
+								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
+								<typedef what="Vector&lt;SceneEditableObject*&gt;" newDef="SceneEditableObjectsVec" />
+								<typedef what="Vector&lt;AssetRef*&gt;" newDef="AssetsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIScrollArea" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+								<class name="ISelectableDragableObjectsGroup" protection="1" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsWindow.h">
+		<date year="2019" month="1" day="18" hour="18" minute="46" second="19" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="AssetsWindow" fullname="Editor::AssetsWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="IEditorWindow" protection="0" />
+								<class name="Singleton&lt;AssetsWindow&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/FoldersTree.h">
-		<date year="2018" month="12" day="19" hour="0" minute="6" second="31" />
+		<date year="2018" month="12" day="20" hour="13" minute="5" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -40,7 +113,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/UIAssetIcon.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -72,7 +145,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Create.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -102,7 +175,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Delete.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -141,7 +214,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Enable.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -171,7 +244,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/IAction.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -196,7 +269,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Lock.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -226,7 +299,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/PropertyChange.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -256,7 +329,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Reparent.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -293,7 +366,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Select.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -323,7 +396,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Actions/Transform.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -360,7 +433,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Dialogs/ColorPickerDlg.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -391,7 +464,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Dialogs/CurveEditorDlg.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -422,7 +495,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Dialogs/EditNameDlg.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -453,7 +526,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorApplication.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -485,7 +558,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorConfig.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -535,7 +608,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/EditorScope.h">
-		<date year="2018" month="12" day="7" hour="8" minute="52" second="13" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -564,7 +637,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/MenuPanel.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="10" day="3" hour="10" minute="27" second="49" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -589,7 +662,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ActorProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -619,7 +692,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/AssetProperty.h">
-		<date year="2018" month="10" day="29" hour="1" minute="15" second="8" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -653,7 +726,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/BooleanProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -683,7 +756,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/BorderFloatProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -741,7 +814,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/BorderIntProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -799,7 +872,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ColorProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -829,7 +902,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ComponentProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -859,7 +932,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/CurveProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -889,7 +962,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/EnumMaskProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -897,7 +970,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/EnumProperty.h">
-		<date year="2018" month="10" day="18" hour="0" minute="12" second="7" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -925,7 +998,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/FloatProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -956,7 +1029,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/IntegerProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -987,7 +1060,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/LayerProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1014,8 +1087,47 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectProperty.h">
+		<date year="2019" month="1" day="28" hour="9" minute="32" second="12" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ObjectProperty" fullname="Editor::ObjectProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="TargetObjectData" fullname="Editor::ObjectProperty::TargetObjectData" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;Pair&lt;TargetObjectData, TargetObjectData&gt;&gt;" newDef="TargetObjectsVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectPtrProperty.h">
-		<date year="2018" month="11" day="7" hour="21" minute="11" second="27" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1045,7 +1157,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/RectangleFloatProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1103,7 +1215,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/RectangleIntProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1161,7 +1273,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/StringProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1191,7 +1303,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/TagProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1219,7 +1331,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/Vector2FloatProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1261,7 +1373,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/Vector2IntProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1303,7 +1415,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/WStringProperty.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1333,7 +1445,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/FieldPropertiesInfo.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1361,7 +1473,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/IObjectPropertiesViewer.h">
-		<date year="2018" month="10" day="22" hour="0" minute="7" second="9" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1394,8 +1506,51 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/IPropertyField.h">
+		<date year="2019" month="1" day="21" hour="9" minute="36" second="3" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IPropertyField" fullname="Editor::IPropertyField" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;" newDef="TargetPair" />
+								<typedef what="Vector&lt;Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;&gt;" newDef="TargetsVec" />
+								<typedef what="Function&lt;void(IPropertyField*)&gt;" newDef="OnChangedFunc" />
+								<typedef what="Function&lt;void(const String&amp;, const Vector&lt;DataNode&gt;&amp;, const Vector&lt;DataNode&gt;&amp;)&gt;" newDef="OnChangeCompletedFunc" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="UIHorizontalLayout" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="TPropertyField" fullname="Editor::TPropertyField" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/ObjectViewers/DefaultObjectViewer.h">
-		<date year="2018" month="10" day="22" hour="0" minute="7" second="9" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1418,7 +1573,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/ObjectViewers/SpriteViewer.h">
-		<date year="2018" month="10" day="23" hour="0" minute="58" second="50" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1450,7 +1605,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/ObjectViewers/TextViewer.h">
-		<date year="2018" month="10" day="24" hour="1" minute="2" second="16" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1482,7 +1637,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Properties.h">
-		<date year="2018" month="10" day="22" hour="0" minute="7" second="3" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1517,7 +1672,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/FrameTool.h">
-		<date year="2018" month="12" day="18" hour="0" minute="25" second="33" />
+		<date year="2018" month="12" day="18" hour="11" minute="52" second="51" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1557,7 +1712,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/IEditorTool.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1587,7 +1742,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/MoveTool.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1617,7 +1772,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/RotateTool.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1649,7 +1804,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/ScaleTool.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1674,7 +1829,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Tools/SelectionTool.h">
-		<date year="2018" month="12" day="11" hour="23" minute="27" second="17" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1706,7 +1861,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/ToolsPanel.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1736,7 +1891,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/CurveEdit.h">
-		<date year="2018" month="12" day="29" hour="9" minute="43" second="0" />
+		<date year="2018" month="12" day="28" hour="12" minute="49" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1849,7 +2004,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/CurvePreview.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1879,7 +2034,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/FrameScrollView.h">
-		<date year="2018" month="12" day="29" hour="9" minute="43" second="0" />
+		<date year="2018" month="12" day="28" hour="12" minute="49" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1907,7 +2062,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/ScrollView.h">
-		<date year="2018" month="12" day="29" hour="9" minute="43" second="0" />
+		<date year="2018" month="12" day="28" hour="12" minute="49" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1938,7 +2093,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UI/SpoilerWithHead.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1968,7 +2123,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIRoot.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1999,7 +2154,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/BasicUIStyle.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2022,7 +2177,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/UIStyle/EditorUIStyle.h">
-		<date year="2018" month="10" day="24" hour="1" minute="4" second="52" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2047,7 +2202,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/IEditorWindow.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2072,7 +2227,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/UIDockWindowPlace.h">
-		<date year="2018" month="12" day="29" hour="9" minute="43" second="0" />
+		<date year="2018" month="12" day="28" hour="12" minute="49" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2098,7 +2253,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/UIDockableWindow.h">
-		<date year="2018" month="12" day="29" hour="9" minute="43" second="0" />
+		<date year="2018" month="12" day="28" hour="12" minute="49" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2123,7 +2278,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/WindowsLayout.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2162,7 +2317,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/WindowsSystem/WindowsManager.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2195,7 +2350,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/LogWindow/LogWindow.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2235,7 +2390,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/ActorViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2267,8 +2422,31 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
+		<date year="2019" month="1" day="28" hour="9" minute="32" second="12" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorComponentViewer" fullname="Editor::DefaultActorComponentViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorComponentViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2298,7 +2476,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2321,7 +2499,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorTransformViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2344,7 +2522,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorComponentViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2374,7 +2552,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorHeaderViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2404,7 +2582,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2434,7 +2612,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/IActorTransformViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2464,7 +2642,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/AssetsPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2498,7 +2676,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2526,7 +2704,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2556,7 +2734,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2586,7 +2764,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/IPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2616,7 +2794,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/PropertiesWindow.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2649,7 +2827,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerHeadViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2679,7 +2857,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerLayoutViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2702,7 +2880,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2725,7 +2903,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/IWidgetLayerHeadViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2755,7 +2933,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/IWidgetLayerLayoutViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2785,7 +2963,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2815,7 +2993,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/WidgetLayerViewer.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2845,7 +3023,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneDragHandle.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2870,7 +3048,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneEditScreen.h">
-		<date year="2018" month="12" day="15" hour="12" minute="4" second="17" />
+		<date year="2018" month="12" day="17" hour="8" minute="43" second="59" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2908,7 +3086,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/SceneWindow/SceneWindow.h">
-		<date year="2018" month="10" day="16" hour="8" minute="25" second="58" />
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2936,7 +3114,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/SceneTree.h">
-		<date year="2018" month="12" day="27" hour="22" minute="8" second="56" />
+		<date year="2018" month="12" day="27" hour="17" minute="52" second="6" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2976,7 +3154,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/TreeWindow/TreeWindow.h">
-		<date year="2018" month="12" day="20" hour="0" minute="6" second="25" />
+		<date year="2018" month="12" day="20" hour="13" minute="5" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3006,81 +3184,16 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsIconsScroll.h">
-		<date year="2019" month="1" day="1" hour="19" minute="39" second="54" />
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/stdafx.h">
+		<date year="2018" month="12" day="13" hour="10" minute="42" second="39" />
 		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="UIAssetsIconsScrollArea" fullname="Editor::UIAssetsIconsScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;UIAssetIcon*&gt;" newDef="AssetsIconsVec" />
-								<typedef what="Vector&lt;Sprite*&gt;" newDef="SpritesVec" />
-								<typedef what="Dictionary&lt;String, AssetsIconsVec&gt;" newDef="IconArrsDict" />
-								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
-								<typedef what="Vector&lt;SceneEditableObject*&gt;" newDef="SceneEditableObjectsVec" />
-								<typedef what="Vector&lt;AssetRef*&gt;" newDef="AssetsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UIScrollArea" protection="0" />
-								<class name="DragDropArea" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-								<class name="ISelectableDragableObjectsGroup" protection="1" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
+			<sections />
 			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/AssetsWindow/AssetsWindow.h">
-		<date year="2019" month="1" day="9" hour="8" minute="3" second="0" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="AssetsWindow" fullname="Editor::AssetsWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;Pair&lt;UID, String&gt;&gt;" newDef="AssetIdPathVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="IEditorWindow" protection="0" />
-								<class name="Singleton&lt;AssetsWindow&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
+			<usings />
 		</globalNamespace>
 	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/VectorProperty.h">
-		<date year="2019" month="1" day="27" hour="10" minute="19" second="47" />
+		<date year="2019" month="1" day="28" hour="16" minute="13" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3091,114 +3204,8 @@
 				<section name="Editor" fullname="Editor">
 					<sections>
 						<section name="VectorProperty" fullname="Editor::VectorProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Vector&lt;IPropertyField*&gt;" newDef="PropertyFieldsVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/stdafx.h">
-		<date year="2019" month="1" day="27" hour="10" minute="19" second="47" />
-		<globalNamespace name="" fullname="">
-			<sections />
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/IPropertyField.h">
-		<date year="2019" month="1" day="27" hour="11" minute="16" second="40" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IPropertyField" fullname="Editor::IPropertyField" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;" newDef="TargetPair" />
-								<typedef what="Vector&lt;Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;&gt;" newDef="TargetsVec" />
-								<typedef what="Function&lt;void(IPropertyField*)&gt;" newDef="OnChangedFunc" />
-								<typedef what="Function&lt;void(const String&amp;, const Vector&lt;DataNode&gt;&amp;, const Vector&lt;DataNode&gt;&amp;)&gt;" newDef="OnChangeCompletedFunc" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="UIHorizontalLayout" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="TPropertyField" fullname="Editor::TPropertyField" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
-		<date year="2019" month="1" day="27" hour="23" minute="46" second="4" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultActorComponentViewer" fullname="Editor::DefaultActorComponentViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IActorComponentViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectProperty.h">
-		<date year="2019" month="1" day="28" hour="0" minute="7" second="17" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ObjectProperty" fullname="Editor::ObjectProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
 							<sections>
-								<section name="TargetObjectData" fullname="Editor::ObjectProperty::TargetObjectData" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+								<section name="TargetObjectData" fullname="Editor::VectorProperty::TargetObjectData" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
 									<sections />
 									<typedefs />
 									<usings />
@@ -3207,6 +3214,7 @@
 							</sections>
 							<typedefs>
 								<typedef what="Vector&lt;Pair&lt;TargetObjectData, TargetObjectData&gt;&gt;" newDef="TargetObjectsVec" />
+								<typedef what="Vector&lt;IPropertyField*&gt;" newDef="PropertyFieldsVec" />
 							</typedefs>
 							<usings />
 							<baseClasses>

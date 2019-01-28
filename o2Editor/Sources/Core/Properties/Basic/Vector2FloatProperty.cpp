@@ -29,7 +29,18 @@ namespace Editor
 	void Vec2FProperty::InitializeControls()
 	{
 		mXProperty = GetChildByType<FloatProperty>("layout/properties/x");
+		mXProperty->SetValuePath("x");
+		mXProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mYProperty = GetChildByType<FloatProperty>("layout/properties/y");
+		mYProperty->SetValuePath("x");
+		mYProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
 	}
 
 	void Vec2FProperty::SetValue(const Vec2F& value)

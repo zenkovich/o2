@@ -57,6 +57,7 @@ namespace Editor
 			if (mSpoiler)
 				mSpoiler->AddChild(mCountProperty);
 
+			mCountProperty->SetValue(0);
 			mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
 		}
 
@@ -73,29 +74,46 @@ namespace Editor
 
 	void VectorProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		mValuesProxies = targets;
+		for (auto& pair : mTargetObjects) {
+			if (pair.first.isCreated)
+				delete pair.first.data;
+
+			if (pair.second.isCreated)
+				delete pair.second.data;
+		}
+
+		mTargetObjects.Clear();
+
+		for (auto& pair : targets)
+			mTargetObjects.Add({ GetObjectFromProxy(pair.first), GetObjectFromProxy(pair.second) });
+
 		Refresh();
 	}
 
 	void VectorProperty::Refresh()
 	{
-		if (mValuesProxies.IsEmpty())
+		if (mTargetObjects.IsEmpty())
 			return;
 
 		if (!IsExpanded())
 			return;
-
+		
 		mIsRefreshing = true;
+
+		for (auto& pair : mTargetObjects) {
+			pair.first.Refresh();
+			pair.second.Refresh();
+		}
 
 		auto lastCount = mCountOfElements;
 		auto lastDifferent = mCountDifferents;
 
-		mCountOfElements = mType->GetObjectVectorSize(GetProxyValuePointer(mValuesProxies[0].first));
+		mCountOfElements = mType->GetObjectVectorSize(mTargetObjects[0].first.data);
 		mCountDifferents = false;
 
-		for (auto target : mValuesProxies)
+		for (auto target : mTargetObjects)
 		{
-			int targetCount = mType->GetObjectVectorSize(GetProxyValuePointer(target.first));
+			int targetCount = mType->GetObjectVectorSize(target.first.data);
 			if (targetCount != mCountOfElements)
 			{
 				mCountDifferents = true;
@@ -128,12 +146,12 @@ namespace Editor
 			int i = 0;
 			for (; i < mCountOfElements; i++)
 			{
-				auto itemTargetValues = mValuesProxies.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				auto itemTargetValues = mTargetObjects.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+					[&](const Pair<TargetObjectData, TargetObjectData>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.first), i),
-						x.second ? mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.second), i) : nullptr);
+						mType->GetObjectVectorElementProxy(x.first.data, i),
+						x.second.data ? mType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
 				});
 
 				IPropertyField* propertyDef;
@@ -152,7 +170,7 @@ namespace Editor
 				propertyDef->onChangeCompleted =
 					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
 				{
-					onChangeCompleted(mValuesPath + "/" + path, before, after);
+					OnPropertyChanged(mValuesPath + "/" + path, before, after);
 				};
 			}
 
@@ -171,12 +189,12 @@ namespace Editor
 		{
 			for (int i = 0; i < mCountOfElements; i++)
 			{
-				auto itemTargetValues = mValuesProxies.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-					[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+				auto itemTargetValues = mTargetObjects.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+					[&](const Pair<TargetObjectData, TargetObjectData>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.first), i),
-						x.second ? mType->GetObjectVectorElementProxy(GetProxyValuePointer(x.second), i) : nullptr);
+						mType->GetObjectVectorElementProxy(x.first.data, i),
+						x.second.data ? mType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
 				});
 
 				IPropertyField* propertyDef = mValueProperties[i];
@@ -194,7 +212,17 @@ namespace Editor
 
 	void VectorProperty::SpecializeType(const Type* type)
 	{
-		mType = (VectorType*)type;
+		mType = nullptr;
+
+		if (type->GetUsage() == Type::Usage::Vector)
+			mType = dynamic_cast<const VectorType*>(type);
+		else if (type->GetUsage() == Type::Usage::Property) 
+		{
+			auto propertyType = dynamic_cast<const PropertyType*>(type);
+
+			if (propertyType->GetValueType()->GetUsage() == Type::Usage::Vector)
+				mType = dynamic_cast<const VectorType*>(propertyType->GetValueType());
+		}
 	}
 
 	const Type* VectorProperty::GetSpecializedType() const
@@ -311,6 +339,54 @@ namespace Editor
 	void VectorProperty::OnExpand()
 	{
 		Refresh();
+	}
+
+	VectorProperty::TargetObjectData VectorProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)
+	{
+		TargetObjectData res;
+
+		if (!proxy)
+			return res;
+
+		res.proxy = proxy;
+
+		if (auto pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy)) {
+			res.data = pointerProxy->GetValueVoidPointer();
+			res.isCreated = false;
+		}
+		else {
+			void* sample = proxy->GetType().CreateSample();
+			proxy->GetValuePtr(sample);
+
+			res.data = sample;
+			res.isCreated = true;
+		}
+
+		return res;
+	}
+
+	void VectorProperty::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	{
+		for (auto& pair : mTargetObjects)
+			pair.first.SetValue();
+
+		onChangeCompleted(path, before, after);
+	}
+
+	void VectorProperty::TargetObjectData::Refresh()
+	{
+		if (!isCreated)
+			return;
+
+		proxy->GetValuePtr(data);
+	}
+
+	void VectorProperty::TargetObjectData::SetValue()
+	{
+		if (!isCreated)
+			return;
+
+		proxy->SetValuePtr(data);
 	}
 
 }

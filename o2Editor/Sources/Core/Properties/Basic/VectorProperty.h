@@ -69,17 +69,32 @@ namespace Editor
 		IOBJECT(VectorProperty);
 
 	protected:
+		struct TargetObjectData
+		{
+			IAbstractValueProxy* proxy = nullptr;
+			void* data = nullptr;
+			bool isCreated = false;
+
+			bool operator==(const TargetObjectData& other) const { return proxy == other.proxy; }
+
+			void Refresh();
+			void SetValue();
+		};
+		typedef Vector<Pair<TargetObjectData, TargetObjectData>> TargetObjectsVec;
+
 		typedef Vector<IPropertyField*> PropertyFieldsVec;
 
 		const VectorType* mType = nullptr;             // Vector type
 
 		UISpoiler*        mSpoiler;                    // Properties spoiler
+
+		TargetObjectsVec  mTargetObjects;              // Target objects
 						 						    
 		PropertyFieldsVec mValueProperties;            // Values properties
 		PropertyFieldsVec mValuePropertiesPool;        // Unused value properties pool
 		IntegerProperty*  mCountProperty = nullptr;    // Vector count property
 		bool              mCountDifferents = false;    // Is targets counts of elements differents
-		int               mCountOfElements;            // Common count of elements
+		int               mCountOfElements = 0;        // Common count of elements
 
 		bool              mIsRefreshing = false;       // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -104,6 +119,12 @@ namespace Editor
 
 		// It is called when expanding spoiler, refreshing array properties
 		void OnExpand();
+
+		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
+		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
+
+		// It is called when some property changed, sets value via proxy
+		void OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
 	};
 }
 
@@ -116,6 +137,7 @@ CLASS_FIELDS_META(Editor::VectorProperty)
 {
 	PROTECTED_FIELD(mType);
 	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mValueProperties);
 	PROTECTED_FIELD(mValuePropertiesPool);
 	PROTECTED_FIELD(mCountProperty);
@@ -145,5 +167,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PROTECTED_FUNCTION(void, FreeValueProperty, IPropertyField*);
 	PROTECTED_FUNCTION(void, OnCountChanged, IPropertyField*);
 	PROTECTED_FUNCTION(void, OnExpand);
+	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

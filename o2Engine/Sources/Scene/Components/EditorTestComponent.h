@@ -72,7 +72,7 @@ namespace o2
 		TestEnum mTestEnum;                        // @SERIALIZABLE
 		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE
 
-		Vector<Vec2I> mVecs;                       // @SERIALIZABLE
+		Vector<Vec2I> mVecs = { Vec2I(0, 1), Vec2I(2, 3), Vec2I(4, 5) }; // @SERIALIZABLE
 		Vector<int> mIntVector ={ 1, 2, 3, 4, 5 }; // @SERIALIZABLE
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
