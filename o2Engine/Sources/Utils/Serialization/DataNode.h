@@ -43,6 +43,40 @@ namespace o2
 		typedef DataNodesVec::Iterator Iterator;
 		typedef DataNodesVec::ConstIterator ConstIterator;
 
+		// Is DataNode supporting type trait
+		template<typename T>
+		struct IsSupportBasic :
+			std::integral_constant<bool,
+			std::is_fundamental<T>::value ||
+			 std::is_enum<T>::value ||
+			 std::is_base_of<ISerializable, T>::value ||
+			 std::is_base_of<ISerializable, typename std::remove_pointer<T>::type>::value ||
+			 std::is_same<Color4, T>::value ||
+			 std::is_same<RectI, T>::value ||
+			 std::is_same<RectF, T>::value ||
+			 std::is_same<BorderI, T>::value ||
+			 std::is_same<BorderF, T>::value ||
+			 std::is_same<Vec2I, T>::value ||
+			 std::is_same<Vec2F, T>::value ||
+			 std::is_same<String, T>::value ||
+			 std::is_same<WString, T>::value ||
+			 std::is_same<UID, T>::value ||
+			 std::is_same<DataNode, T>::value>
+		{};
+
+		template<typename T>
+		struct IsSupport :
+			std::integral_constant<bool,
+			(IsSupportBasic<T>::value || (IsProperty<T>::value && IsSupportBasic<typename ExtractPropertyValueType<T>::type>::value)) 
+			&& !std::is_const<T>::value && !std::is_const<typename std::remove_pointer<T>::type>::value>
+		{};
+
+		template<typename T2>
+		struct IsSupport<Vector<T2>> : IsSupport<T2> {};
+
+		template<typename T2, typename T3>
+		struct IsSupport<Dictionary<T2, T3>> : std::integral_constant<bool, IsSupport<T2>::value && IsSupport<T3>::value> {};
+
 	protected:
 		// --------------------
 		// Enums data converter
@@ -65,6 +99,35 @@ namespace o2
 			static void ToData(const _type& object, DataNode& data);
 			static void FromData(_type& object, const DataNode& data);
 		};
+
+		// ----------------------------
+		// Property types data converter
+		// ----------------------------
+		template<typename _type>
+		class PropertyDataConverter
+		{
+		public:
+			static void ToData(const _type& object, DataNode& data);
+			static void FromData(_type& object, const DataNode& data);
+		};
+
+		// -------------------------------
+		// Returns data converter by _type
+		// -------------------------------
+		template<typename _type>
+		struct ConverterSelector
+		{
+			typedef typename std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>,
+				typename std::conditional<(IsProperty<_type>::value && IsSupport<typename ExtractPropertyValueType<_type>::type>::value), PropertyDataConverter<_type>, ObjectDataConverter<_type>>::type
+			>::type type;
+		};
+
+		// --------------------------------------------------
+		// Returns when _type is supported by data converters
+		// --------------------------------------------------
+		template<typename _type>
+		struct IsSupportsConverter : std::integral_constant<bool, std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value || (IsProperty<_type>::value && IsSupport<typename ExtractPropertyValueType<_type>::type>::value)>
+		{};
 
 	public:
 		// Default constructor
@@ -168,9 +231,8 @@ namespace o2
 		DataNode& SetValueRaw(const _type* value);
 
 		// Sets value from vector value
-		template<typename _type, typename X = typename std::enable_if<std::is_base_of<IObject, _type>::value ||
-			std::is_base_of<IObject, typename std::remove_pointer<_type>::type>::value>::type>
-			DataNode& SetValueRaw(const Vector<_type>& value);
+		template<typename _type, typename X = typename std::enable_if<std::is_base_of<IObject, _type>::value || std::is_base_of<IObject, typename std::remove_pointer<_type>::type>::value>::type>
+		DataNode& SetValueRaw(const Vector<_type>& value);
 
 		// Sets value from vector value
 		template<typename _type>
@@ -181,10 +243,8 @@ namespace o2
 		DataNode& SetValue(const Dictionary<_key, _value>& value);
 
 		// Sets value from enum class or IObject based value
-		template<typename _type,
-			typename _conv = typename std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, ObjectDataConverter<_type>>::type,
-			typename X = typename std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
-			DataNode& SetValue(const _type& value);
+		template<typename _type, typename _conv = typename ConverterSelector<_type>::type, typename X = typename std::enable_if<IsSupportsConverter<_type>::value>::type>
+		DataNode& SetValue(const _type& value);
 
 		// Gets value
 		void GetValue(DataNode& other) const;
@@ -262,14 +322,12 @@ namespace o2
 		void GetValue(long long int& value) const;
 
 		// Gets value as pointer, only for objects, based on ISerializable
-		template<typename _type,
-			typename X = typename std::enable_if<std::is_base_of<IObject, _type>::value>::type>
-			void GetValue(_type*& value) const;
+		template<typename _type, typename X = typename std::enable_if<std::is_base_of<IObject, _type>::value>::type>
+		void GetValue(_type*& value) const;
 
 		// Gets value as pointer, only for objects, based on ISerializable
-		template<typename _type,
-			typename X = typename std::enable_if<std::is_base_of<IObject, _type>::value>::type>
-			void GetValueRaw(_type*& value) const;
+		template<typename _type, typename X = typename std::enable_if<std::is_base_of<IObject, _type>::value>::type>
+		void GetValueRaw(_type*& value) const;
 
 		// Gets value as vector
 		template<typename _type>
@@ -284,10 +342,8 @@ namespace o2
 		void GetValue(Dictionary<_key, _value>& value) const;
 
 		// Gets value as enum class or IObject
-		template<typename _type,
-			typename _conv = typename std::conditional<std::is_enum<_type>::value, EnumDataConverter<_type>, ObjectDataConverter<_type>>::type,
-			typename X = typename std::enable_if<std::is_enum<_type>::value || std::is_base_of<IObject, _type>::value>::type>
-			void GetValue(_type& value) const;
+		template<typename _type, typename _conv = typename ConverterSelector<_type>::type, typename X = typename std::enable_if<IsSupportsConverter<_type>::value>::type>
+		void GetValue(_type& value) const;
 
 		// Gets objects with delta from source object
 		void GetValueDelta(IObject& object, const IObject& source) const;
@@ -384,33 +440,6 @@ namespace o2
 
 		// Registers data converter
 		static void RegDataConverter(IDataNodeTypeConverter* converter);
-
-		// Is DataNode supporting type trait
-		template<typename T>
-		struct IsSupport :
-			std::integral_constant<bool,
-			(std::is_fundamental<T>::value ||
-			 std::is_enum<T>::value ||
-			 std::is_base_of<ISerializable, T>::value ||
-			 std::is_base_of<ISerializable, typename std::remove_pointer<T>::type>::value ||
-			 std::is_same<Color4, T>::value ||
-			 std::is_same<RectI, T>::value ||
-			 std::is_same<RectF, T>::value ||
-			 std::is_same<BorderI, T>::value ||
-			 std::is_same<BorderF, T>::value ||
-			 std::is_same<Vec2I, T>::value ||
-			 std::is_same<Vec2F, T>::value ||
-			 std::is_same<String, T>::value ||
-			 std::is_same<WString, T>::value ||
-			 std::is_same<UID, T>::value ||
-			 std::is_same<DataNode, T>::value) && !std::is_const<T>::value && !std::is_const<typename std::remove_pointer<T>::type>::value>
-		{};
-
-		template<typename T2>
-		struct IsSupport<Vector<T2>> : IsSupport<T2> {};
-
-		template<typename T2, typename T3>
-		struct IsSupport<Dictionary<T2, T3>> : std::integral_constant<bool, IsSupport<T2>::value && IsSupport<T3>::value> {};
 
 	protected:
 		static Vector<IDataNodeTypeConverter*> mDataConverters; // Data converters
@@ -658,5 +687,17 @@ namespace o2
 		}
 
 		data.SetValueRaw(object);
+	}
+
+	template<typename _type>
+	void DataNode::PropertyDataConverter<_type>::FromData(_type& object, const DataNode& data)
+	{
+		object.Set((_type::valueType)data);
+	}
+
+	template<typename _type>
+	void DataNode::PropertyDataConverter<_type>::ToData(const _type& object, DataNode& data)
+	{
+		data.SetValue(object.Get());
 	}
 }

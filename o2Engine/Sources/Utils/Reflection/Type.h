@@ -316,6 +316,9 @@ namespace o2
 	template<typename _value_type, typename _property_type>
 	class TPropertyType: public PropertyType
 	{
+		class RealFieldGetter;
+		class NullFieldGetter;
+
 	public:
 		// Constructor
 		TPropertyType();
@@ -328,6 +331,20 @@ namespace o2
 
 		// Returns pointer of type (type -> type*)
 		const Type* GetPointerType() const override;
+
+		// Returns filed pointer by path
+		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
+
+	private:
+		struct RealFieldGetter
+		{
+			static void* GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo);
+		};
+
+		struct NullFieldGetter
+		{
+			static void* GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo);
+		};
 	};
 
 	// ----------------------
@@ -885,6 +902,29 @@ namespace o2
 
 		return mPtrType;
 	}
+
+	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::NullFieldGetter::GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo)
+	{
+		return nullptr;
+	}
+
+	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::RealFieldGetter::GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo)
+	{
+		_property_type* prop = (_property_type*)object;
+		_value_type valuePtr = prop->Get();
+		return type.mValueType->GetFieldPtr(valuePtr, path, fieldInfo);
+	}
+
+	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		typedef std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
+
+		return getter::GetFieldPtr(*this, object, path, fieldInfo);
+	}
+
 
 	// --------------------------
 	// TVectorType implementation
