@@ -583,6 +583,9 @@ namespace o2
 			}
 		}
 
+		if (value)
+			delete value;
+
 		value = nullptr;
 	}
 

@@ -225,7 +225,7 @@ namespace o2
 				if (delPos == -1)
 				{
 					fieldInfo = field;
-					return field->GetValuePtr(object);
+					return field->GetValuePtrStrong(object);
 				}
 				else
 				{
