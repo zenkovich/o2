@@ -73,8 +73,8 @@ namespace Editor
 		IOBJECT(ObjectPtrProperty);
 
 	protected:
-		const Type* mObjectType = nullptr;    // Type of target objects
-		const Type* mObjectPtrType = nullptr; // Type of target object pointer
+		const ObjectType* mObjectType = nullptr;    // Type of target objects
+		const Type*       mObjectPtrType = nullptr; // Type of target object pointer
 
 		TargetsVec               mTargetObjects;   // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
@@ -105,10 +105,13 @@ namespace Editor
 		void OnCreateOrDeletePressed();
 
 		// Creates object by type
-		void CreateObject(const Type* type);
+		void CreateObject(const ObjectType* type);
+
+		// Stores values to data
+		void StoreValues(Vector<DataNode>& data) const override;
 
 		// Converts proxy to IObject property, gets value and returns
-		IObject* GetProxy(IAbstractValueProxy* proxy);
+		IObject* GetProxy(IAbstractValueProxy* proxy) const;
 
 		// Converts proxy to IObject proxy, then sets value thru proxy
 		void SetProxy(IAbstractValueProxy* proxy, IObject* object);
@@ -154,7 +157,8 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);
-	PROTECTED_FUNCTION(void, CreateObject, const Type*);
+	PROTECTED_FUNCTION(void, CreateObject, const ObjectType*);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(IObject*, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, IObject*);
 }

@@ -29,9 +29,32 @@ namespace Editor
 	void BorderFProperty::InitializeControls()
 	{
 		mLeftProperty = GetChildByType<FloatProperty>("layout/properties/left");
+		mLeftProperty->SetValuePath("left");
+		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mBottomProperty = GetChildByType<FloatProperty>("layout/properties/bottom");
+		mBottomProperty->SetValuePath("bottom");
+		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mRightProperty = GetChildByType<FloatProperty>("layout/properties/right");
+		mRightProperty->SetValuePath("right");
+		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mTopProperty = GetChildByType<FloatProperty>("layout/properties/top");
+		mTopProperty->SetValuePath("top");
+		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
 	}
 
 	void BorderFProperty::SetValue(const BorderF& value)

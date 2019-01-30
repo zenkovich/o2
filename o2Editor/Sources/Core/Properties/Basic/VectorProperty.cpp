@@ -300,31 +300,23 @@ namespace Editor
 		auto availableTypes = elementFieldInfo->GetType()->GetDerivedTypes();
 		auto elementCreateType = availableTypes.IsEmpty() ? elementFieldInfo->GetType() : availableTypes.First();
 
-		for (auto target : mValuesProxies)
+		for (auto& obj : mTargetObjects)
 		{
-			void* targetPtr = GetProxyValuePointer(target.first);
-
 			prevValues.Add(DataNode());
-			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(targetPtr));
+			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(obj.first.data));
 			DataNode& elementsData = prevValues.Last()["Elements"];
 
-			int lastCount = mType->GetObjectVectorSize(targetPtr);
+			int lastCount = mType->GetObjectVectorSize(obj.first.data);
 			for (int i = newCount; i < lastCount; i++)
 			{
-				elementFieldInfo->Serialize(mType->GetObjectVectorElementPtr(targetPtr, i),
+				elementFieldInfo->Serialize(mType->GetObjectVectorElementPtr(obj.first.data, i),
 								   *elementsData.AddNode("Element" + (String)i));
 			}
 
 			newValues.Add(DataNode());
 			newValues.Last()["Size"].SetValue(newCount);
 
-			mType->SetObjectVectorSize(targetPtr, newCount);
-
-			if (lastCount < newCount)
-			{
-				for (int i = lastCount; i < newCount; i++)
-					*((void**)mType->GetObjectVectorElementPtr(targetPtr, i)) = elementCreateType->CreateSample();
-			}
+			mType->SetObjectVectorSize(obj.first.data, newCount);
 		}
 
 		Refresh();

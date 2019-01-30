@@ -123,7 +123,7 @@ namespace Editor
 
 			if (mObjectPtrType)
 			{
-				mObjectType = ((PointerType*)mObjectPtrType)->GetUnpointedType();
+				mObjectType = dynamic_cast<const ObjectType*>(dynamic_cast<const PointerType*>(mObjectPtrType)->GetUnpointedType());
 				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompleted, onChanged);
 				mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
 			}
@@ -152,7 +152,7 @@ namespace Editor
 		if (type->GetUsage() != Type::Usage::Pointer)
 			return;
 
-		mObjectType = ((PointerType*)type)->GetUnpointedType();
+		mObjectType = dynamic_cast<const ObjectType*>(dynamic_cast<const PointerType*>(type)->GetUnpointedType());
 		mContextInitialized = false;
 	}
 
@@ -239,7 +239,7 @@ namespace Editor
 
 				mCreateMenu->AddItems(availableTypes.Select<UIContextMenu::Item>([&](const Type* type)
 				{
-					return UIContextMenu::Item(type->GetName(), [=]() { CreateObject(type); });
+					return UIContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
 				}));
 
 				mContextInitialized = true;
@@ -252,19 +252,32 @@ namespace Editor
 		}
 	}
 
-	void ObjectPtrProperty::CreateObject(const Type* type)
+	void ObjectPtrProperty::CreateObject(const ObjectType* type)
 	{
+		StoreValues(mBeforeChangeValues);
 		for (auto targetObj : mTargetObjects)
 		{
 			if (GetProxy(targetObj.first) == nullptr)
-				SetProxy(targetObj.first, (IObject*)type->CreateSample());
+				SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
 		}
+
+		CheckValueChangeCompleted();
 
 		Refresh();
 		mSpoiler->SetLayoutDirty();
 	}
 
-	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy)
+	void ObjectPtrProperty::StoreValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto targetObj : mTargetObjects)
+		{
+			data.Add(DataNode());
+			data.Last() = GetProxy(targetObj.first);
+		}
+	}
+
+	IObject* ObjectPtrProperty::GetProxy(IAbstractValueProxy* proxy) const
 	{
 		const Type& proxyType = proxy->GetType();
 		if (proxyType.GetUsage() != Type::Usage::Pointer)
@@ -294,7 +307,8 @@ namespace Editor
 
 		const ObjectType& objectType = dynamic_cast<const ObjectType&>(unptrType);
 
-		proxy->SetValuePtr(objectType.DynamicCastFromIObject(object));
+		void* valuePtr = objectType.DynamicCastFromIObject(object);
+		proxy->SetValuePtr(&valuePtr);
 	}
 
 }

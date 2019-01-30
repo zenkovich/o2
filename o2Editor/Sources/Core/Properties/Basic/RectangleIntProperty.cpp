@@ -29,9 +29,32 @@ namespace Editor
 	void RectIProperty::InitializeControls()
 	{
 		mLeftProperty = GetChildByType<IntegerProperty>("layout/properties/left");
+		mLeftProperty->SetValuePath("left");
+		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mBottomProperty = GetChildByType<IntegerProperty>("layout/properties/bottom");
+		mBottomProperty->SetValuePath("bottom");
+		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mRightProperty = GetChildByType<IntegerProperty>("layout/properties/right");
+		mRightProperty->SetValuePath("right");
+		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
+
 		mTopProperty = GetChildByType<IntegerProperty>("layout/properties/top");
+		mTopProperty->SetValuePath("top");
+		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		{
+			onChangeCompleted(mValuesPath + "/" + path, before, after);
+		};
 	}
 
 	void RectIProperty::SetValue(const RectI& value)

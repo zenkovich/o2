@@ -914,7 +914,7 @@ namespace o2
 	{
 		_property_type* prop = (_property_type*)object;
 		_value_type valuePtr = prop->Get();
-		return type.mValueType->GetFieldPtr(valuePtr, path, fieldInfo);
+		return type.mValueType->GetFieldPtr(&valuePtr, path, fieldInfo);
 	}
 
 	template<typename _value_type, typename _property_type>
