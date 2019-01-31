@@ -191,9 +191,7 @@ namespace Editor
 		if (iconLayer)
 		{
 			if (iconLayer->GetDrawable())
-				delete iconLayer->GetDrawable();
-
-			return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
+				return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
 		}
 
 		return nullptr;
