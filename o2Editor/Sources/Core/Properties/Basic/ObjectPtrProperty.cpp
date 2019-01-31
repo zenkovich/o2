@@ -149,6 +149,9 @@ namespace Editor
 
 	void ObjectPtrProperty::SpecializeType(const Type* type)
 	{
+		if (type->GetUsage() == Type::Usage::Property)
+			type = dynamic_cast<const PropertyType*>(type)->GetValueType();
+
 		if (type->GetUsage() != Type::Usage::Pointer)
 			return;
 
