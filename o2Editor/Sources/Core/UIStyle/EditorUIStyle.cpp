@@ -341,7 +341,7 @@ namespace Editor
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -697,7 +697,7 @@ namespace Editor
 
 		auto nameLayer = itemSample->layer["name"];
 		nameLayer->layout = Layout::BothStretch(10, 0, 55, 0);
-		((Text*)nameLayer->drawable)->dotsEngings = true;
+		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
 		auto actorNodeEnableToggle = o2UI.CreateWidget<UIToggle>("actor node enable");
 		actorNodeEnableToggle->name = "enableToggle";
@@ -756,13 +756,13 @@ namespace Editor
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
@@ -1123,7 +1123,7 @@ namespace Editor
 
 		auto nameLayer = itemSample->layer["name"];
 		nameLayer->layout = Layout::BothStretch(30, 0, 5, 0);
-		((Text*)nameLayer->drawable)->dotsEngings = true;
+		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
 		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
@@ -1167,13 +1167,13 @@ namespace Editor
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
@@ -1292,7 +1292,7 @@ namespace Editor
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_big_folder_icon.png");
+		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_big_folder_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "folder");
 	}
@@ -1302,7 +1302,7 @@ namespace Editor
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_actor_icon.png");
+		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_actor_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "prototype");
 	}
@@ -1312,7 +1312,7 @@ namespace Editor
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_image_asset_back.png");
+		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_image_asset_back.png");
 
 		sample->AddLayer("preview", mnew Sprite(),
 						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
@@ -1336,7 +1336,7 @@ namespace Editor
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_big_text_file_icon.png");
+		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_big_text_file_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "text");
 	}
@@ -1346,7 +1346,7 @@ namespace Editor
 		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->drawable)->LoadFromImage("ui/UI2_anim_file_icon.png");
+		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_anim_file_icon.png");
 
 		o2UI.AddWidgetStyle(sample, "animation");
 	}
@@ -1441,8 +1441,8 @@ namespace Editor
 		auto list = dropdown->GetListView();
 		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		delete list->layer["back"]->drawable;
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+		delete list->layer["back"]->GetDrawable();
+		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
 		list->layout->anchorMax = Vec2F(1, 0);
@@ -1466,7 +1466,7 @@ namespace Editor
 		dropdown->AddState("pressed", Animation::EaseInOut(dropdown, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		dropdown->AddState("opened", Animation::EaseInOut(dropdown, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		dropdown->AddState("opened", Animation::EaseInOut(dropdown, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		dropdown->AddState("undefined", Animation::EaseInOut(dropdown, &undefinedLayer->transparency, 0.0f, 1.0f, 0.05f));
 
@@ -1822,8 +1822,8 @@ namespace Editor
 		auto list = sample->GetListView();
 		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		delete list->layer["back"]->drawable;
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+		delete list->layer["back"]->GetDrawable();
+		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
 		list->layout->anchorMax = Vec2F(1, 0);
@@ -1847,7 +1847,7 @@ namespace Editor
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("undefined", Animation::EaseInOut(sample, &undefinedLayer->transparency, 0.0f, 1.0f, 0.05f));
 

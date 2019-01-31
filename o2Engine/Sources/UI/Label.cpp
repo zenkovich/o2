@@ -317,8 +317,8 @@ namespace o2
 
 	void UILabel::OnLayerAdded(UIWidgetLayer* layer)
 	{
-		if (layer->name == "text" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
-			mTextLayer = (Text*)layer->drawable;
+		if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
+			mTextLayer = (Text*)layer->GetDrawable();
 	}
 }
 

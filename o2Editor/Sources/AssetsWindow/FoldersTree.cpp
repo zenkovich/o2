@@ -156,7 +156,7 @@ namespace Editor
 
 		auto nameLayer = node->layer["name"];
 		if (nameLayer)
-			((Text*)nameLayer->drawable)->text = pathName;
+			((Text*)nameLayer->GetDrawable())->text = pathName;
 	}
 
 	void UIAssetsFoldersTree::OnFoldersTreeNodeDblClick(UITreeNode* node)

@@ -150,7 +150,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create UI/Sprite layer", [&]()
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
-			newLayer->drawable = mnew Sprite();
+			newLayer->SetDrawable(mnew Sprite());
 			newLayer->name = "sprite";
 			OnCreateObject(newLayer);
 		});
@@ -158,7 +158,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create UI/Text layer", [&]()
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
-			newLayer->drawable = mnew Text();
+			newLayer->SetDrawable(mnew Text());
 			newLayer->name = "sprite";
 			OnCreateObject(newLayer);
 		});
@@ -294,7 +294,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create/UI layer/Sprite", [&]()
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
-			newLayer->drawable = mnew Sprite();
+			newLayer->SetDrawable(mnew Sprite());
 			newLayer->name = "sprite";
 			OnCreateObject(newLayer);
 		});
@@ -302,7 +302,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create/UI layer/Text", [&]()
 		{
 			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
-			newLayer->drawable = mnew Text();
+			newLayer->SetDrawable(mnew Text());
 			newLayer->name = "text";
 			OnCreateObject(newLayer);
 		});

@@ -700,8 +700,8 @@ namespace o2
 		auto list = sample->GetListView();
 		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		delete list->layer["back"]->drawable;
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+		delete list->layer["back"]->GetDrawable();
+		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
 		list->layout->anchorMax = Vec2F(1, 0);
@@ -714,7 +714,7 @@ namespace o2
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -743,8 +743,8 @@ namespace o2
 		auto list = sample->GetListView();
 		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
-		delete list->layer["back"]->drawable;
-		list->layer["back"]->drawable = mnew Sprite("ui/UI_Box_regular.png");
+		delete list->layer["back"]->GetDrawable();
+		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
 		list->layout->anchorMax = Vec2F(1, 0);
@@ -761,7 +761,7 @@ namespace o2
 		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -850,7 +850,7 @@ namespace o2
 
 		UIWidgetLayer* captionLayer = itemSample->FindLayer("caption");
 		Text* captionLayerText = mnew Text("stdFont.ttf");
-		captionLayer->drawable = captionLayerText;
+		captionLayer->SetDrawable(captionLayerText);
 		captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
@@ -858,13 +858,13 @@ namespace o2
 		UIWidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
 		Text* shortcutLayerText = mnew Text("stdFont.ttf");
 		shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
-		shortcutLayer->drawable = shortcutLayerText;
+		shortcutLayer->SetDrawable(shortcutLayerText);
 		shortcutLayerText->horAlign = HorAlign::Right;
 		shortcutLayerText->verAlign = VerAlign::Middle;
 		shortcutLayer->transparency = 0.7f;
 
 		UIWidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
-		subIconLayer->drawable = mnew Sprite("ui/UI_Right_icn.png");
+		subIconLayer->SetDrawable(mnew Sprite("ui/UI_Right_icn.png"));
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
 
 		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"), 
@@ -983,11 +983,11 @@ namespace o2
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddAnimationValue(&hoverLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&hoverLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
@@ -1055,7 +1055,7 @@ namespace o2
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->drawable->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -1178,13 +1178,13 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation expandedStateAnim(sample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->drawable->angle) =
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;

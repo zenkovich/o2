@@ -143,7 +143,7 @@ namespace Editor
 		float expand = 15;
 		if (auto textLayer = GetLayer(mTabCaptionLayerPath))
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(textLayer->drawable))
+			if (auto textDrawable = dynamic_cast<Text*>(textLayer->GetDrawable()))
 			{
 				Text::SymbolsSet symbolsSet;
 				symbolsSet.Initialize(textDrawable->GetFont(), textDrawable->GetText(), textDrawable->GetHeight(),
@@ -169,19 +169,19 @@ namespace Editor
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
 		{
-			if (iconLayer->drawable)
-				delete iconLayer->drawable;
+			if (iconLayer->GetDrawable())
+				delete iconLayer->GetDrawable();
 
-			iconLayer->drawable = icon;
+			iconLayer->SetDrawable(icon);
 		}
 
 		auto tabIconLayer = GetLayer(mTabIconLayerPath);
 		if (tabIconLayer)
 		{
-			if (tabIconLayer->drawable)
-				delete tabIconLayer->drawable;
+			if (tabIconLayer->GetDrawable())
+				delete tabIconLayer->GetDrawable();
 
-			tabIconLayer->drawable = icon->CloneAs<Sprite>();
+			tabIconLayer->SetDrawable(icon->CloneAs<Sprite>());
 		}
 	}
 
@@ -190,10 +190,10 @@ namespace Editor
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
 		{
-			if (iconLayer->drawable)
-				delete iconLayer->drawable;
+			if (iconLayer->GetDrawable())
+				delete iconLayer->GetDrawable();
 
-			return dynamic_cast<Sprite*>(iconLayer->drawable);
+			return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
 		}
 
 		return nullptr;
@@ -224,14 +224,14 @@ namespace Editor
 		auto captionLayer = GetLayer(mCaptionLayerPath);
 		if (captionLayer)
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
 				textDrawable->SetText(caption);
 		}
 
 		auto tabCaptionLayer = GetLayer(mTabCaptionLayerPath);
 		if (tabCaptionLayer)
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(tabCaptionLayer->drawable))
+			if (auto textDrawable = dynamic_cast<Text*>(tabCaptionLayer->GetDrawable()))
 				textDrawable->SetText(caption);
 		}
 
@@ -244,7 +244,7 @@ namespace Editor
 		auto captionLayer = GetLayer(mCaptionLayerPath);
 		if (captionLayer)
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
 				return textDrawable->GetText();
 		}
 

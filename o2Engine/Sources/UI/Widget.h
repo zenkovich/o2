@@ -600,8 +600,8 @@ namespace o2
 	{
 		for (auto layer : mLayers)
 		{
-			if (layer->drawable && layer->drawable->GetType() == TypeOf(_type))
-				return (_type*)layer->drawable;
+			if (layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(_type))
+				return (_type*)layer->GetDrawable();
 		}
 
 		for (auto layer : mLayers)
@@ -618,8 +618,8 @@ namespace o2
 	_type* UIWidget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
-		if (layer && layer->drawable && layer->drawable->GetType() == TypeOf(_type))
-			return (_type*)layer->drawable;
+		if (layer && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(_type))
+			return (_type*)layer->GetDrawable();
 
 		return nullptr;
 	}

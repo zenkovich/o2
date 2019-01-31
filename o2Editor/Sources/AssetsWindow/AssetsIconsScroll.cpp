@@ -774,7 +774,7 @@ namespace Editor
 		UIAssetIcon* assetIcon = GetAssetIconFromPool("image preview");
 
 		auto previewLayer = assetIcon->layer["preview"];
-		Sprite* previewSprite = (Sprite*)previewLayer->drawable;
+		Sprite* previewSprite = (Sprite*)previewLayer->GetDrawable();
 
 		ImageAssetRef previewSpriteAsset(asset.path);
 		float previewMaxSize = 30;

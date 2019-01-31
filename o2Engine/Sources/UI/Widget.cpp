@@ -328,7 +328,7 @@ namespace o2
 		UIWidgetLayer* layer = mnew UIWidgetLayer();
 		layer->depth = depth;
 		layer->name = name;
-		layer->drawable = drawable;
+		layer->SetDrawable(drawable);
 		layer->layout = layout;
 
 		AddLayer(layer);
@@ -792,7 +792,7 @@ namespace o2
 
 		for (auto layer : mLayers)
 		{
-			if (layer->drawable)
+			if (layer->GetDrawable())
 			{
 				if (layer->mDepth < topLayersDepth)
 					mDrawingLayers.Add(layer);
@@ -803,7 +803,7 @@ namespace o2
 			auto childLayers = layer->GetAllChilds();
 			for (auto childLayer : childLayers)
 			{
-				if (childLayer->drawable)
+				if (childLayer->GetDrawable())
 				{
 					if (childLayer->mDepth < topLayersDepth)
 						mDrawingLayers.Add(childLayer);

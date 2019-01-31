@@ -9,16 +9,16 @@ namespace o2
 {
 	UIWidgetLayer::UIWidgetLayer() :
 		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
-		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), drawable(nullptr)
+		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mDrawable(nullptr)
 	{}
 
 	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other) :
 		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency),
 		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
-		drawable(nullptr), depth(this), transparency(this)
+		mDrawable(nullptr), depth(this), transparency(this)
 	{
-		if (other.drawable)
-			drawable = other.drawable->CloneAs<IRectDrawable>();
+		if (other.mDrawable)
+			mDrawable = other.mDrawable->CloneAs<IRectDrawable>();
 
 		for (auto child : other.mChildren)
 			AddChild(child->CloneAs<UIWidgetLayer>());
@@ -26,7 +26,7 @@ namespace o2
 
 	UIWidgetLayer::~UIWidgetLayer()
 	{
-		delete drawable;
+		delete mDrawable;
 
 		for (auto child : mChildren)
 			delete child;
@@ -34,18 +34,18 @@ namespace o2
 
 	UIWidgetLayer& UIWidgetLayer::operator=(const UIWidgetLayer& other)
 	{
-		delete drawable;
+		delete mDrawable;
 		for (auto child : mChildren)
 			delete child;
 
 		mChildren.Clear();
-		drawable = nullptr;
+		mDrawable = nullptr;
 
 		mDepth = other.mDepth;
 		name = other.name;
 
-		if (other.drawable)
-			drawable = other.drawable->CloneAs<IRectDrawable>();
+		if (other.mDrawable)
+			mDrawable = other.mDrawable->CloneAs<IRectDrawable>();
 
 		for (auto child : other.mChildren)
 			AddChild(child->CloneAs<UIWidgetLayer>());
@@ -66,10 +66,23 @@ namespace o2
 		return mParent->GetOwnerWidget();
 	}
 
+	void UIWidgetLayer::SetDrawable(IRectDrawable* drawable)
+	{
+		mDrawable = drawable;
+
+		if (mOwnerWidget)
+			mOwnerWidget->UpdateLayersDrawingSequence();
+	}
+
+	IRectDrawable* UIWidgetLayer::GetDrawable() const
+	{
+		return mDrawable;
+	}
+
 	void UIWidgetLayer::Draw()
 	{
 		if (mEnabled)
-			drawable->Draw();
+			mDrawable->Draw();
 	}
 
 	void UIWidgetLayer::Update(float dt)
@@ -170,7 +183,7 @@ namespace o2
 		UIWidgetLayer* layer = mnew UIWidgetLayer();
 		layer->depth = depth;
 		layer->name = name;
-		layer->drawable = drawable;
+		layer->mDrawable = drawable;
 		layer->layout = layout;
 
 		return AddChild(layer);
@@ -311,8 +324,8 @@ namespace o2
 
 		mInteractableArea = interactableLayout.Calculate(mAbsolutePosition);
 
-		if (drawable)
-			drawable->SetRect(mAbsolutePosition);
+		if (mDrawable)
+			mDrawable->SetRect(mAbsolutePosition);
 
 		for (auto child : mChildren)
 			child->UpdateLayout();
@@ -325,8 +338,8 @@ namespace o2
 		else
 			mResTransparency = transparency*mOwnerWidget->mResTransparency;
 
-		if (drawable)
-			drawable->SetTransparency(mResTransparency);
+		if (mDrawable)
+			mDrawable->SetTransparency(mResTransparency);
 
 		for (auto child : mChildren)
 			child->UpdateResTransparency();

@@ -86,10 +86,10 @@ namespace o2
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
 		{
-			if (iconLayer->drawable)
-				delete iconLayer->drawable;
+			if (iconLayer->GetDrawable())
+				delete iconLayer->GetDrawable();
 
-			iconLayer->drawable = icon;
+			iconLayer->SetDrawable(icon);
 		}
 	}
 
@@ -97,7 +97,7 @@ namespace o2
 	{
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
-			return dynamic_cast<Sprite*>(iconLayer->drawable);
+			return dynamic_cast<Sprite*>(iconLayer->GetDrawable());
 
 		return nullptr;
 	}
@@ -123,7 +123,7 @@ namespace o2
 		auto captionLayer = GetLayer(mCaptionLayerPath);
 		if (captionLayer)
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
 				textDrawable->SetText(caption);
 		}
 	}
@@ -133,7 +133,7 @@ namespace o2
 		auto captionLayer = GetLayer(mCaptionLayerPath);
 		if (captionLayer)
 		{
-			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->drawable))
+			if (auto textDrawable = dynamic_cast<Text*>(captionLayer->GetDrawable()))
 				return textDrawable->GetText();
 		}
 

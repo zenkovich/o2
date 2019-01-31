@@ -153,11 +153,11 @@ namespace o2
 
 	void UIButton::OnLayerAdded(UIWidgetLayer* layer)
 	{
-		if (layer->name == "caption" && layer->drawable && layer->drawable->GetType() == TypeOf(Text))
-			mCaptionText = (Text*)layer->drawable;
+		if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
+			mCaptionText = (Text*)layer->GetDrawable();
 
-		if (layer->name == "icon" && layer->drawable && layer->drawable->GetType() == TypeOf(Sprite))
-			mIconSprite = (Sprite*)layer->drawable;
+		if (layer->name == "icon" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Sprite))
+			mIconSprite = (Sprite*)layer->GetDrawable();
 	}
 
 	void UIButton::OnResEnableInHierarchyChanged()

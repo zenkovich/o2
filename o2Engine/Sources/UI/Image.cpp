@@ -9,7 +9,7 @@ namespace o2
 	UIImage::UIImage():
 		UIWidget()
 	{
-		mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
+		mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
 
 	UIImage::UIImage(const UIImage& other):
@@ -17,7 +17,7 @@ namespace o2
 	{
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)
-			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
+			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
 
 	UIImage& UIImage::operator=(const UIImage& other)
@@ -33,7 +33,7 @@ namespace o2
 
 		if (auto layer = FindLayer("image"))
 		{
-			layer->drawable = sprite;
+			layer->SetDrawable(sprite);
 			mImage = sprite;
 		}
 	}
@@ -49,7 +49,7 @@ namespace o2
 			mImage = GetLayerDrawable<Sprite>("image");
 
 		if (!mImage)
-			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
+			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 
 		mImage->LoadFromImage(asset);
 	}
@@ -84,7 +84,7 @@ namespace o2
 
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)
-			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->drawable);
+			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
 }
 

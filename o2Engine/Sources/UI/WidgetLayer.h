@@ -33,6 +33,7 @@ namespace o2
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                       // Enable property
 		PROPERTY(float, depth, SetDepth, GetDepth);                           // Drawing depth (higher depths will draw later)
 		PROPERTY(float, transparency, SetTransparency, GetTransparency);      // Drawable transparency property
+		PROPERTY(IRectDrawable*, drawable, SetDrawable, GetDrawable);        // Drawable property @EXPANDED_BY_DEFAULT
 
 		ACCESSOR(UIWidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
@@ -45,8 +46,6 @@ namespace o2
 					    
 		Layout          layout;             // Drawable layout @SERIALIZABLE
 		Layout          interactableLayout; // Interactable area layout @SERIALIZABLE
-					    
-		IRectDrawable*  drawable;           // Drawable @SERIALIZABLE @EXPANDED_BY_DEFAULT
 
 	public:
 		// Default constructor
@@ -64,6 +63,12 @@ namespace o2
 
 		// Returns pointer to owner widget
 		UIWidget* GetOwnerWidget() const;
+
+		// Sets layer drawable
+		void SetDrawable(IRectDrawable* drawable);
+
+		// Returns layer drawable
+		IRectDrawable* GetDrawable() const;
 
 
 		// Draws drawable
@@ -243,6 +248,7 @@ namespace o2
 #endif // IS_EDITOR
 
 	protected:
+		IRectDrawable* mDrawable;               // Drawable @SERIALIZABLE
 		bool           mEnabled = true;         // Is layer enabled
 		float          mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
@@ -290,8 +296,8 @@ namespace o2
 	_type* UIWidgetLayer::FindChild() const
 	{
 		for (auto child : mChildren)
-			if (child->drawable && child->drawable->GetType() == TypeOf(_type))
-				return (_type*)(child->drawable);
+			if (child->mDrawable && child->mDrawable->GetType() == TypeOf(_type))
+				return (_type*)(child->mDrawable);
 
 		for (auto child : mChildren)
 		{
@@ -314,12 +320,13 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PUBLIC_FIELD(enabled);
 	PUBLIC_FIELD(depth);
 	PUBLIC_FIELD(transparency);
+	PUBLIC_FIELD(drawable).EXPANDED_BY_DEFAULT_ATTRIBUTE();
 	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(locked);
 	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(layout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(interactableLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(drawable).EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mDrawable).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
@@ -339,6 +346,8 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
 
 	PUBLIC_FUNCTION(UIWidget*, GetOwnerWidget);
+	PUBLIC_FUNCTION(void, SetDrawable, IRectDrawable*);
+	PUBLIC_FUNCTION(IRectDrawable*, GetDrawable);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);

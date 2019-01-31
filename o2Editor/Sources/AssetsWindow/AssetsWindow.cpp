@@ -63,7 +63,7 @@ namespace Editor
 		auto separatorLayer = mFoldersTree->FindLayer("separator");
 
 		mSeparatorHandle.isUnderPoint = [=](const Vec2F& point) {
-			RectF rt = separatorLayer->drawable->GetRect();
+			RectF rt = separatorLayer->GetDrawable()->GetRect();
 			rt.left -= 2; rt.right += 2;
 			return rt.IsInside(point);
 		};

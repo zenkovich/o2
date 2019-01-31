@@ -192,9 +192,9 @@ namespace Editor
 	{
 		LogMessage* message = (LogMessage*)(void*)object;
 
-		item->layer["warning"]->drawable->enabled = message->type == LogMessage::Type::Warning;
-		item->layer["error"]->drawable->enabled = message->type == LogMessage::Type::Error;
-		item->layer["back"]->drawable->enabled = message->idx % 2 == 1;
+		item->layer["warning"]->GetDrawable()->enabled = message->type == LogMessage::Type::Warning;
+		item->layer["error"]->GetDrawable()->enabled = message->type == LogMessage::Type::Error;
+		item->layer["back"]->GetDrawable()->enabled = message->idx % 2 == 1;
 
 		Text* text = item->GetLayerDrawable<Text>("caption");
 		text->text = message->message.SubStr(0, message->message.Find("\n"));
