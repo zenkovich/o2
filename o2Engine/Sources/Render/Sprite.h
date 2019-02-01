@@ -70,19 +70,19 @@ namespace o2
 
 
 		// Loads sprite from image asset
-		void LoadFromImage(const ImageAssetRef& image);
+		void LoadFromImage(const ImageAssetRef& image, bool setSizeByImage = true);
 
 		// Loads sprite from image asset by path
-		void LoadFromImage(const String& imagePath);
+		void LoadFromImage(const String& imagePath, bool setSizeByImage = true);
 
 		// Loads sprite from image asset by id
-		void LoadFromImage(UID imageId);
+		void LoadFromImage(UID imageId, bool setSizeByImage = true);
 
 		// Loads sprite from mono color
 		void LoadMonoColor(const Color4& color);
 
 		// Loads sprite from bitmap
-		void LoadFromBitmap(Bitmap* bitmap);
+		void LoadFromBitmap(Bitmap* bitmap, bool setSizeByImage = true);
 
 
 		// Draws sprite 
@@ -290,11 +290,11 @@ END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
-	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, LoadFromImage, const String&);
-	PUBLIC_FUNCTION(void, LoadFromImage, UID);
+	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&, bool);
+	PUBLIC_FUNCTION(void, LoadFromImage, const String&, bool);
+	PUBLIC_FUNCTION(void, LoadFromImage, UID, bool);
 	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
-	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*);
+	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*, bool);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
 	PUBLIC_FUNCTION(TextureRef, GetTexture);

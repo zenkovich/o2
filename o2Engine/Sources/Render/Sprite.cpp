@@ -304,7 +304,7 @@ namespace o2
 		return !operator==(other);
 	}
 
-	void Sprite::LoadFromImage(const ImageAssetRef& image)
+	void Sprite::LoadFromImage(const ImageAssetRef& image, bool setSizeByImage /*= true*/)
 	{
 		if (!image)
 		{
@@ -318,23 +318,27 @@ namespace o2
 		mSlices         = image->GetMeta()->mSliceBorder;
 
 		SetMode(image->GetMeta()->mDefaultMode);
-		SetSize(mTextureSrcRect.Size());
+
+		if (setSizeByImage)
+			SetSize(mTextureSrcRect.Size());
+		else
+			UpdateMesh();
 	}
 
-	void Sprite::LoadFromImage(const String& imagePath)
+	void Sprite::LoadFromImage(const String& imagePath, bool setSizeByImage /*= true*/)
 	{
 		ImageAssetRef assetRef = o2Assets.GetAssetRef(imagePath);
 		if (assetRef)
-			LoadFromImage(assetRef);
+			LoadFromImage(assetRef, setSizeByImage);
 		else 
 			o2Debug.LogWarning("Can't load sprite from image by path (" + imagePath + "): image isn't exist");
 	}
 
-	void Sprite::LoadFromImage(UID imageId)
+	void Sprite::LoadFromImage(UID imageId, bool setSizeByImage /*= true*/)
 	{
 		ImageAssetRef assetRef = o2Assets.GetAssetRef(imageId);
 		if (assetRef)
-			LoadFromImage(assetRef);
+			LoadFromImage(assetRef, setSizeByImage);
 		else 
 			o2Debug.LogWarning("Can't create sprite from image by id (" + imageId.ToString() + "): image isn't exist");
 	}
@@ -352,7 +356,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	void Sprite::LoadFromBitmap(Bitmap* bitmap)
+	void Sprite::LoadFromBitmap(Bitmap* bitmap, bool setSizeByImage /*= true*/)
 	{
 		if (bitmap)
 		{
@@ -360,14 +364,15 @@ namespace o2
 			mMesh->mTexture = TextureRef(bitmap);
 			mTextureSrcRect.Set(Vec2F(), mMesh->mTexture->GetSize());
 
-			SetSize(mMesh->mTexture->GetSize());
+			if (setSizeByImage)
+				SetSize(mMesh->mTexture->GetSize());
 		}
 		else o2Debug.LogWarningStr("Can't create sprite from bitmap: bitmap is null");
 	}
 
 	void Sprite::SetImageAsset(const ImageAssetRef& asset)
 	{
-		LoadFromImage(asset);
+		LoadFromImage(asset, false);
 	}
 
 	ImageAssetRef Sprite::GetImageAsset() const

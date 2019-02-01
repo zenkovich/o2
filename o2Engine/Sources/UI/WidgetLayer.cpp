@@ -70,8 +70,11 @@ namespace o2
 	{
 		mDrawable = drawable;
 
-		if (mOwnerWidget)
+		if (mOwnerWidget) 
+		{
 			mOwnerWidget->UpdateLayersDrawingSequence();
+			mOwnerWidget->UpdateTransform();
+		}
 	}
 
 	IRectDrawable* UIWidgetLayer::GetDrawable() const
