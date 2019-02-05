@@ -313,7 +313,7 @@ namespace o2
 		}
 	}
 
-	void Actor::ExcludeFromScene()
+	void Actor::ExcludeFromScene(bool keepEditorObjects /*= false*/)
 	{
 		if (!mIsOnScene)
 			return;
@@ -327,7 +327,8 @@ namespace o2
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
 #if IS_EDITOR
-		o2Scene.mEditableObjects.Remove(this);
+		if (!keepEditorObjects)
+			o2Scene.mEditableObjects.Remove(this);
 #endif
 
 		OnExcludeFromScene();

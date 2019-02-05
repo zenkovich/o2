@@ -20,7 +20,7 @@ namespace Editor
 		Refresh();
 	}
 
-	const o2::Type* DefaultWidgetLayerPropertiesViewer::GetDrawableType() const
+	const Type* DefaultWidgetLayerPropertiesViewer::GetDrawableType() const
 	{
 		return mDrawableType;
 	}

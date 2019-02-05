@@ -36,8 +36,8 @@ namespace Editor
 
 	void PropertyChangeAction::SetProperties(Vector<DataNode>& values)
 	{
-		Vector<SceneEditableObject*> objects =
-			objectsIds.Select<SceneEditableObject*>([](SceneUID id) { return o2Scene.GetEditableObjectByID(id); });
+		Vector<SceneEditableObject*> objects = objectsIds.Select<SceneEditableObject*>([](SceneUID id) { 
+			return o2Scene.GetEditableObjectByID(id); });
 
 		const Type* componentType = nullptr;
 		String finalPropertyPath = propertyPath;

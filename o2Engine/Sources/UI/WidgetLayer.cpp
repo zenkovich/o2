@@ -10,7 +10,8 @@ namespace o2
 	UIWidgetLayer::UIWidgetLayer() :
 		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mDrawable(nullptr)
-	{}
+	{
+	}
 
 	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other) :
 		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency),
@@ -70,10 +71,15 @@ namespace o2
 	{
 		mDrawable = drawable;
 
-		if (mOwnerWidget) 
+		if (mOwnerWidget)
 		{
 			mOwnerWidget->UpdateLayersDrawingSequence();
 			mOwnerWidget->UpdateTransform();
+
+#if IS_EDITOR
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.mEditableObjects.Add(this);
+#endif
 		}
 	}
 
@@ -233,7 +239,7 @@ namespace o2
 
 			UIWidgetLayer* layer = child->FindChild(name);
 			if (layer)
-				return layer;			
+				return layer;
 		}
 
 		return nullptr;
@@ -516,7 +522,7 @@ namespace o2
 	{
 		Basis thisTransform = GetTransform();
 		layout.offsetMin += transform.origin - thisTransform.origin;
-		layout.offsetMax += transform.origin - thisTransform.origin + 
+		layout.offsetMax += transform.origin - thisTransform.origin +
 			Vec2F(transform.xv.Length() - thisTransform.xv.Length(),
 				  transform.yv.Length() - thisTransform.yv.Length());
 	}

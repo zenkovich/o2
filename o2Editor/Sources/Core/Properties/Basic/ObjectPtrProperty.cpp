@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "ObjectPtrProperty.h"
 
+#include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
 #include "UI/Button.h"
@@ -38,6 +39,8 @@ namespace Editor
 
 	void ObjectPtrProperty::InitializeControls()
 	{
+		PushScopeEnterOnStack scope;
+
 		mSpoiler = FindChildByType<UISpoiler>(false);
 		if (!mSpoiler)
 		{
@@ -82,6 +85,8 @@ namespace Editor
 
 	void ObjectPtrProperty::Refresh()
 	{
+		PushScopeEnterOnStack scope;
+
 		if (!mTargetObjects.IsEmpty())
 		{
 			auto object = GetProxy(mTargetObjects[0].first);
@@ -211,6 +216,8 @@ namespace Editor
 
 	void ObjectPtrProperty::OnCreateOrDeletePressed()
 	{
+		PushScopeEnterOnStack scope;
+
 		bool hasObject = !mTargetObjects.IsEmpty() && GetProxy(mTargetObjects[0].first) != nullptr;
 		if (hasObject)
 		{
@@ -257,6 +264,8 @@ namespace Editor
 
 	void ObjectPtrProperty::CreateObject(const ObjectType* type)
 	{
+		PushScopeEnterOnStack scope;
+
 		StoreValues(mBeforeChangeValues);
 		for (auto targetObj : mTargetObjects)
 		{

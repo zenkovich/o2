@@ -902,7 +902,7 @@ namespace o2
 			if (mOverrideDepth)
 				IncludeInScene();
 			else
-				ExcludeFromScene();
+				ExcludeFromScene(true);
 		}
 		else if (mParent && mParent->IsOnScene()) IncludeInScene();
 	}

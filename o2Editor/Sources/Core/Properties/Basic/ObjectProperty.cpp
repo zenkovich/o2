@@ -1,10 +1,11 @@
 #include "stdafx.h"
 #include "ObjectProperty.h"
 
+#include "Core/EditorScope.h"
+#include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
 #include "UI/Spoiler.h"
 #include "UI/UIManager.h"
-#include "Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;
 
@@ -35,6 +36,8 @@ namespace Editor
 
 	void ObjectProperty::InitializeControls()
 	{
+		PushScopeEnterOnStack scope;
+
 		mSpoiler = FindChildByType<UISpoiler>(false);
 		if (!mSpoiler)
 		{
@@ -71,6 +74,8 @@ namespace Editor
 
 	void ObjectProperty::Refresh()
 	{
+		PushScopeEnterOnStack scope;
+
 		if (mSpoiler->IsExpanded())
 		{
 			if (mObjectPropertiesViewer)
@@ -148,6 +153,8 @@ namespace Editor
 
 	void ObjectProperty::OnExpand()
 	{
+		PushScopeEnterOnStack scope;
+
 		if (mPropertiesInitialized)
 			return;
 

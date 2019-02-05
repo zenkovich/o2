@@ -135,7 +135,7 @@ namespace o2
 
 
 		// Excludes from scene and will not be update and draw automatically from scene
-		void ExcludeFromScene();
+		void ExcludeFromScene(bool keepEditorObjects = false);
 
 		// Includes to scene and now will be update and draw automatically from scene
 		void IncludeInScene();
@@ -789,7 +789,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(UID, GetAssetID);
 	PUBLIC_FUNCTION(bool, IsAsset);
-	PUBLIC_FUNCTION(void, ExcludeFromScene);
+	PUBLIC_FUNCTION(void, ExcludeFromScene, bool);
 	PUBLIC_FUNCTION(void, IncludeInScene);
 	PUBLIC_FUNCTION(bool, IsOnScene);
 	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);

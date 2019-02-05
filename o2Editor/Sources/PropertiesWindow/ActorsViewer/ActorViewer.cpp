@@ -138,6 +138,8 @@ namespace Editor
 
 	void ActorViewer::SetTargets(const Vector<IObject*> targets)
 	{
+		PushScopeEnterOnStack scope;
+
 		mTargetActors = targets.Select<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
 
 		// clear 

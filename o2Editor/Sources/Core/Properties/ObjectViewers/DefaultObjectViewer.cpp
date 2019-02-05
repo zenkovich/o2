@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "DefaultObjectViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "UI/VerticalLayout.h"
 
@@ -8,6 +9,8 @@ namespace Editor
 {
 	DefaultObjectViewer::DefaultObjectViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		auto layout = mnew UIVerticalLayout();
 		layout->spacing = 5;
 		layout->borderTop = 5;
@@ -20,6 +23,8 @@ namespace Editor
 
 	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
 	{
+		PushScopeEnterOnStack scope;
+
 		if (targetObjets.IsEmpty())
 			return;
 
