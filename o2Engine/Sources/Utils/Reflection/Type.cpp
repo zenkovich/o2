@@ -241,7 +241,7 @@ namespace o2
 
 		for (auto baseType : mBaseTypes)
 		{
-			if (auto res = baseType.type->GetFieldPtr((*baseType.dynamicCastUpFunc)(object), path, fieldInfo))
+			if (auto res = baseType.type->Type::GetFieldPtr((*baseType.dynamicCastUpFunc)(object), path, fieldInfo))
 				return res;
 		}
 
@@ -462,6 +462,17 @@ namespace o2
 	{
 		return (IObject*)(*mCastToFunc)(object);
 	}
+
+	void* ObjectType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	{
+		IObject* iobject = DynamicCastToIObject(object);
+		const Type* realType = &iobject->GetType();
+		if (realType == this)
+			return Type::GetFieldPtr(object, path, fieldInfo);
+
+		return realType->GetFieldPtr(dynamic_cast<const ObjectType*>(realType)->DynamicCastFromIObject(iobject), path, fieldInfo);
+	}
+
 }
 
 ENUM_META_(o2::Type::Usage, Usage)

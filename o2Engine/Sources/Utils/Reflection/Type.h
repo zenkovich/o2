@@ -202,6 +202,9 @@ namespace o2
 		// Dynamically casts from IObject* to type pointer
 		IObject* DynamicCastToIObject(void* object) const;
 
+		// Returns filed pointer by path
+		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
+
 	protected:
 		void*(*mCastFromFunc)(void*); // Dynamic cast function from IObject
 		void*(*mCastToFunc)(void*); // Dynamic cast function from IObject
