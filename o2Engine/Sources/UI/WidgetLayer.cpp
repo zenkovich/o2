@@ -75,11 +75,6 @@ namespace o2
 		{
 			mOwnerWidget->UpdateLayersDrawingSequence();
 			mOwnerWidget->UpdateTransform();
-
-#if IS_EDITOR
-			if (Scene::IsSingletonInitialzed())
-				o2Scene.mEditableObjects.Add(this);
-#endif
 		}
 	}
 
@@ -311,6 +306,11 @@ namespace o2
 			child->SetOwnerWidget(owner);
 
 		UpdateResTransparency();
+
+#if IS_EDITOR
+		if (Scene::IsSingletonInitialzed() && mOwnerWidget && mOwnerWidget->IsHieararchyOnScene())
+			o2Scene.mEditableObjects.Add(this);
+#endif
 	}
 
 	void UIWidgetLayer::OnChildAdded(UIWidgetLayer* child)

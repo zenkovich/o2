@@ -76,7 +76,12 @@ namespace Editor
 			}
 			else
 			{
-				ptr = object->GetType().GetFieldPtr(object, finalPropertyPath, fi);
+				auto objectType = dynamic_cast<const ObjectType*>(&object->GetType());
+				if (objectType)
+				{
+					void* realTypeObject = objectType->DynamicCastFromIObject(dynamic_cast<IObject*>(object));
+					ptr = objectType->GetFieldPtr(realTypeObject, finalPropertyPath, fi);
+				}
 			}
 
 			if (fi && ptr)
