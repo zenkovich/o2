@@ -27,10 +27,20 @@ namespace o2
 
 	UIWidgetLayer::~UIWidgetLayer()
 	{
+		if (mParent)
+			mParent->RemoveChild(this, false);
+		else if (mOwnerWidget)
+			mOwnerWidget->RemoveLayer(this, false);
+
 		delete mDrawable;
 
-		for (auto child : mChildren)
+		for (auto child : mChildren) 
+		{
+			child->mParent = nullptr;
+			child->mOwnerWidget = nullptr;
+
 			delete child;
+		}
 	}
 
 	UIWidgetLayer& UIWidgetLayer::operator=(const UIWidgetLayer& other)
@@ -126,12 +136,17 @@ namespace o2
 	bool UIWidgetLayer::RemoveChild(UIWidgetLayer* node, bool release /*= true*/)
 	{
 		node->mParent = nullptr;
+
+		auto lastOwnerWidget = node->mOwnerWidget;
 		node->mOwnerWidget = nullptr;
 
 		mChildren.Remove(node);
 
 		if (release && node)
 			delete node;
+
+		if (lastOwnerWidget)
+			lastOwnerWidget->UpdateLayersDrawingSequence();
 
 		return true;
 	}

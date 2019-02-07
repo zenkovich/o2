@@ -37,8 +37,12 @@ namespace Editor
 	{
 		auto& selScreen = o2EditorSceneScreen;
 
-		selScreen.mSelectedObjects = prevSelectedObjectsIds.Select<SceneEditableObject*>(
-			[&](SceneUID id) { return o2Scene.GetEditableObjectByID(id); });
+		selScreen.mSelectedObjects.Clear();
+		
+		prevSelectedObjectsIds.ForEach([&](SceneUID id) { 
+			if (auto obj = o2Scene.GetEditableObjectByID(id))
+				selScreen.mSelectedObjects.Add(obj);
+		});
 
 		selScreen.UpdateTopSelectedObjects();
 		selScreen.OnObjectsSelectedFromThis();

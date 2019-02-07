@@ -128,7 +128,10 @@ namespace o2
 			mParent->OnChildRemoved(this);
 
 		for (auto layer : mLayers)
+		{
+			layer->mOwnerWidget = nullptr;
 			delete layer;
+		}
 
 		for (auto state : mStates)
 			delete state;
@@ -304,6 +307,9 @@ namespace o2
 
 	UIWidgetLayer* UIWidget::AddLayer(UIWidgetLayer* layer)
 	{
+		if (layer->mParent)
+			layer->mParent->RemoveChild(layer, false);
+
 		mLayers.Add(layer);
 		layer->SetOwnerWidget(this);
 		UpdateLayersDrawingSequence();
@@ -370,10 +376,14 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIWidget::RemoveLayer(UIWidgetLayer* layer)
+	void UIWidget::RemoveLayer(UIWidgetLayer* layer, bool release /*= true*/)
 	{
+		layer->mOwnerWidget = nullptr;
+
 		mLayers.Remove(layer);
-		delete layer;
+
+		if (release)
+			delete layer;
 
 		UpdateLayersDrawingSequence();
 		OnChildrenChanged();

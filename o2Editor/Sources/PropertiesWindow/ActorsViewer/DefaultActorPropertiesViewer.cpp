@@ -62,7 +62,7 @@ namespace Editor
 		};
 
 		static Vector<String> additionalFields ={
-			"mLayers", "mStates"
+			"mStates"
 		};
 
 		o2EditorProperties.FreeProperties(mFieldProperties);
