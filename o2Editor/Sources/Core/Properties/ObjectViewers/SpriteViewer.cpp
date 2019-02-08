@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "SpriteViewer.h"
 
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/AssetProperty.h"
 #include "Core/Properties/Basic/BorderIntProperty.h"
 #include "Core/Properties/Basic/ColorProperty.h"
@@ -14,6 +15,8 @@ namespace Editor
 {
 	SpriteViewer::SpriteViewer()
 	{
+		PushScopeEnterOnStack scope;
+
 		auto layout = mnew UIVerticalLayout();
 		layout->borderTop = 5;
 		layout->expandWidth = true;

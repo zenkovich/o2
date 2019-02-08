@@ -135,6 +135,7 @@ namespace Editor
 		contentWidget->fitByChildren = true;
 		contentWidget->baseCorner    = BaseCorner::Top;
 		*contentWidget->layout       = UIWidgetLayout::BothStretch();
+
 		mContentWidget = contentWidget;
 	}
 

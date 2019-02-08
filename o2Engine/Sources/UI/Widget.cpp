@@ -178,7 +178,10 @@ namespace o2
 					layer->Update(dt);
 
 				for (auto state : mStates)
-					state->Update(dt);
+				{
+					if (state)
+						state->Update(dt);
+				}
 			}
 
 			for (auto comp : mComponents)

@@ -62,8 +62,10 @@ namespace o2
 		mRects.Sort([](auto a, auto b) { return a->mSize.y > b->mSize.y; });
 
 		for (auto rt : mRects)
+		{
 			if (!InsertRect(*rt))
 				return false;
+		}
 
 		return true;
 	}
