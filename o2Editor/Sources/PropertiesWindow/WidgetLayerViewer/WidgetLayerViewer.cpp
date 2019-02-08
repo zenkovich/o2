@@ -86,6 +86,9 @@ namespace Editor
 
 	void WidgetLayerViewer::Refresh()
 	{
+		if (mTargetLayers.IsEmpty())
+			return;
+
 		mHeaderViewer->Refresh();
 		mLayoutViewer->Refresh();
 		mPropertiesViewer->Refresh();

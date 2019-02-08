@@ -35,7 +35,8 @@ namespace Editor
 		mAnchorRightTopProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "R";
 		mAnchorRightTopProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "T";
 		mAnchorRightTopProperty->SetValuePath("layout/anchorMax");
-		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mAnchorRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
+		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rightTopAnchorPropertyContainer->AddChild(mAnchorRightTopProperty);
 
 		// Left bottom
@@ -49,7 +50,8 @@ namespace Editor
 		mAnchorLeftBottomProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "L";
 		mAnchorLeftBottomProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "B";
 		mAnchorLeftBottomProperty->SetValuePath("layout/anchorMin");
-		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mAnchorLeftBottomProperty->onChanged = THIS_FUNC(OnPropertyChanged);
+		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		leftBottomAnchorPropertyContainer->AddChild(mAnchorLeftBottomProperty);
 
 		// Offsets
@@ -68,7 +70,8 @@ namespace Editor
 		mOffsetRightTopProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "R";
 		mOffsetRightTopProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "T";
 		mOffsetRightTopProperty->SetValuePath("layout/offsetMax");
-		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mOffsetRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
+		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rightTopOffsetPropertyContainer->AddChild(mOffsetRightTopProperty);
 
 		// Left bottom
@@ -82,7 +85,8 @@ namespace Editor
 		mOffsetLeftBottomProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "L";
 		mOffsetLeftBottomProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "B";
 		mOffsetLeftBottomProperty->SetValuePath("layout/offsetMin");
-		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mOffsetLeftBottomProperty->onChanged = THIS_FUNC(OnPropertyChanged);
+		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		leftBottomOffsetPropertyContainer->AddChild(mOffsetLeftBottomProperty);
 	}
 
@@ -118,13 +122,21 @@ namespace Editor
 		mOffsetLeftBottomProperty->Refresh();
 	}
 
-	void DefaultWidgetLayerLayoutViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, 
+	void DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataNode>& prevValue, 
 														   const Vector<DataNode>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);
 
 		o2EditorApplication.DoneAction(action);
+	}
+
+	void DefaultWidgetLayerLayoutViewer::OnPropertyChanged(IPropertyField* field)
+	{
+		for (auto layer : mLayers) {
+			layer->GetOwnerWidget()->UpdateTransform();
+			layer->GetOwnerWidget()->OnChanged();
+		}
 	}
 
 }

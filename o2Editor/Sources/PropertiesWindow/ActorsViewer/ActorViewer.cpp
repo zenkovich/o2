@@ -118,6 +118,8 @@ namespace Editor
 
 	void ActorViewer::Refresh()
 	{
+		PushScopeEnterOnStack scope;
+
 		if (mTargetActors.IsEmpty())
 			return;
 
@@ -166,6 +168,8 @@ namespace Editor
 
 	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)
 	{
+		PushScopeEnterOnStack scope;
+
 		const Type* type = &mTargetActors[0]->GetType();
 		bool isAllSameType = mTargetActors.All([&](Actor* x) { return &x->GetType() == type; });
 
@@ -212,6 +216,8 @@ namespace Editor
 
 	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)
 	{
+		PushScopeEnterOnStack scope;
+
 		auto commonComponentsTypes = mTargetActors[0]->GetComponents().Select<const Type*>([](auto x) {
 			return &x->GetType(); });
 

@@ -30,6 +30,7 @@ namespace Editor
 	{
 		mXProperty = GetChildByType<IntegerProperty>("layout/properties/x");
 		mXProperty->SetValuePath("x");
+		mXProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mXProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
@@ -37,6 +38,7 @@ namespace Editor
 
 		mYProperty = GetChildByType<IntegerProperty>("layout/properties/y");
 		mYProperty->SetValuePath("y");
+		mYProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mYProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);

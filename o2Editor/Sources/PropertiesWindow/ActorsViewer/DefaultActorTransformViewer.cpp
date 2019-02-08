@@ -37,7 +37,7 @@ namespace Editor
 		mPositionProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mPositionProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mPositionProperty->SetValuePath("transform/position");
-		mPositionProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mPositionProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		positionPropertyContainer->AddChild(mPositionProperty);
 
 		// Pivot
@@ -53,7 +53,7 @@ namespace Editor
 		mPivotProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mPivotProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mPivotProperty->SetValuePath("transform/pivot");
-		mPivotProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mPivotProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		pivotPropertyContainer->AddChild(mPivotProperty);
 
 		// Size
@@ -69,7 +69,7 @@ namespace Editor
 		mSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mSizeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mSizeProperty->SetValuePath("transform/size");
-		mSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		sizePropertyContainer->AddChild(mSizeProperty);
 
 		// Scale
@@ -85,7 +85,7 @@ namespace Editor
 		mScaleProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mScaleProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mScaleProperty->SetValuePath("transform/scale");
-		mScaleProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mScaleProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		scalePropertyContainer->AddChild(mScaleProperty);
 
 		// Rotation
@@ -101,7 +101,7 @@ namespace Editor
 		mRotationProperty = o2UI.CreateWidget<FloatProperty>();
 		*mRotationProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(40, 0), Vec2F(10, 0));
 		mRotationProperty->SetValuePath("transform/angleDegree");
-		mRotationProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mRotationProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rotationAndDepthPropertyContainer->AddChild(mRotationProperty);
 
 		// Depth
@@ -112,7 +112,7 @@ namespace Editor
 		mDepthProperty = o2UI.CreateWidget<FloatProperty>();
 		*mDepthProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(30, 0), Vec2F());
 		mDepthProperty->SetValuePath("drawDepth");
-		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rotationAndDepthPropertyContainer->AddChild(mDepthProperty);
 
 		// Layout
@@ -141,7 +141,7 @@ namespace Editor
 		mAnchorRightTopProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "R";
 		mAnchorRightTopProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "T";
 		mAnchorRightTopProperty->SetValuePath("layout/anchorMax");
-		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rightTopAnchorPropertyContainer->AddChild(mAnchorRightTopProperty);
 
 		// Left bottom
@@ -155,7 +155,7 @@ namespace Editor
 		mAnchorLeftBottomProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "L";
 		mAnchorLeftBottomProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "B";
 		mAnchorLeftBottomProperty->SetValuePath("layout/anchorMin");
-		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		leftBottomAnchorPropertyContainer->AddChild(mAnchorLeftBottomProperty);
 
 		// Offsets
@@ -174,7 +174,7 @@ namespace Editor
 		mOffsetRightTopProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "R";
 		mOffsetRightTopProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "T";
 		mOffsetRightTopProperty->SetValuePath("layout/offsetMax");
-		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rightTopOffsetPropertyContainer->AddChild(mOffsetRightTopProperty);
 
 		// Left bottom
@@ -188,7 +188,7 @@ namespace Editor
 		mOffsetLeftBottomProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "L";
 		mOffsetLeftBottomProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "B";
 		mOffsetLeftBottomProperty->SetValuePath("layout/offsetMin");
-		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		leftBottomOffsetPropertyContainer->AddChild(mOffsetLeftBottomProperty);
 
 		// Min size
@@ -204,7 +204,7 @@ namespace Editor
 		mMinSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mMinSizeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mMinSizeProperty->SetValuePath("layout/minSize");
-		mMinSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mMinSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		minSizePropertyContainer->AddChild(mMinSizeProperty);
 
 		// Max size
@@ -220,7 +220,7 @@ namespace Editor
 		mMaxSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mMaxSizeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mMaxSizeProperty->SetValuePath("layout/maxSize");
-		mMaxSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mMaxSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		maxSizePropertyContainer->AddChild(mMaxSizeProperty);
 
 		// Weight
@@ -236,7 +236,7 @@ namespace Editor
 		mWeightProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mWeightProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mWeightProperty->SetValuePath("layout/weight");
-		mWeightProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
+		mWeightProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		weightPropertyContainer->AddChild(mWeightProperty);
 	}
 
@@ -336,7 +336,7 @@ namespace Editor
 		}
 	}
 
-	void DefaultActorTransformViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
+	void DefaultActorTransformViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);

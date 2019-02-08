@@ -4,6 +4,7 @@
 
 namespace Editor
 {
+    class IPropertyField;
 	class Vec2FProperty;
 	class FloatProperty;
 
@@ -36,8 +37,11 @@ namespace Editor
 		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
 
 	protected:
-		// It is called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
+		// It is called when some property change completed, stores action for undo
+		void OnPropertyChangeCompleted(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
+
+		// it is called when some property changed, updates owner widgets
+		void OnPropertyChanged(IPropertyField* field);
 	};
 }
 
@@ -60,6 +64,7 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;

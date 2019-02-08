@@ -42,10 +42,40 @@ namespace o2
 #endif 
 
 	public:
-		String          name;               // Name of layer @SERIALIZABLE
-					    
-		Layout          layout;             // Drawable layout @SERIALIZABLE
-		Layout          interactableLayout; // Interactable area layout @SERIALIZABLE
+		String name;               // Name of layer @SERIALIZABLE
+
+		class Layout
+		{
+		public: 
+			PROPERTIES(Layout); 
+			PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin);          // Left bottom anchor property
+			PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax);          // Right top anchor property
+																	         
+			PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin);          // Left bottom corner offset property
+			PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax);          // Right top corner offset property
+
+			PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
+			PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
+			PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
+			PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
+
+			PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
+			PROPERTY(float, offsetRight, SetOffsetRight, GetOffsetRight);    // Right offset property
+			PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
+			PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
+
+		public:
+			Layout(UIWidgetLayer* widgetLayer);
+
+
+
+		private:
+			UIWidgetLayer* mWidgetLayer;
+			o2::Layout mData;
+		};
+		Layout layout;             // Drawable layout @SERIALIZABLE
+
+		o2::Layout interactableLayout; // Interactable area layout @SERIALIZABLE
 
 	public:
 		// Default constructor
