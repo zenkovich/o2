@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "CurveProperty.h"
 
-#include "UI/Widget.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Core/UI/CurvePreview.h"
 #include "Core/Dialogs/CurveEditorDlg.h"
 

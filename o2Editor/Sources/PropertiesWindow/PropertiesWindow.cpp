@@ -3,8 +3,8 @@
 
 #include "Core/Properties/Properties.h"
 #include "IPropertiesViewer.h"
-#include "UI/ContextMenu.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/ContextMenu.h"
+#include "Scene/UI/WidgetLayout.h"
 
 
 DECLARE_SINGLETON(Editor::PropertiesWindow);

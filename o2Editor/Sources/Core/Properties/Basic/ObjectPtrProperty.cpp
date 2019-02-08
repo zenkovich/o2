@@ -4,11 +4,11 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
-#include "UI/Button.h"
-#include "UI/ContextMenu.h"
-#include "UI/Label.h"
-#include "UI/Spoiler.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/Button.h"
+#include "Scene/UI/ContextMenu.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/UIManager.h"
 
 using namespace o2;
 

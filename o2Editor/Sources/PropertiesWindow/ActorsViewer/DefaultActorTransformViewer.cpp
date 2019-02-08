@@ -10,13 +10,13 @@
 #include "Scene/Actor.h"
 #include "Scene/DrawableComponent.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/Image.h"
-#include "UI/Label.h"
-#include "UI/Spoiler.h"
-#include "UI/UIManager.h"
-#include "UI/VerticalLayout.h"
-#include "UI/Widget.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Image.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

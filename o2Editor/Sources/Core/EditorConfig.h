@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/WindowsSystem/WindowsLayout.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Serialization/Serializable.h"
 #include "Utils/Singleton.h"

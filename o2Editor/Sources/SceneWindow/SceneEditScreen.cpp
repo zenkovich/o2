@@ -19,8 +19,8 @@
 #include "SceneWindow/SceneDragHandle.h"
 #include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
-#include "UI/Tree.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/Tree.h"
+#include "Scene/UI/UIManager.h"
 #include "Utils/Math/Math.h"
 
 DECLARE_SINGLETON(Editor::SceneEditScreen);

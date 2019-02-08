@@ -5,7 +5,7 @@
 #include "Core/Properties/IPropertyField.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Text.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragAndDrop.h"
 #include "Utils/FileSystem/FileSystem.h"
 

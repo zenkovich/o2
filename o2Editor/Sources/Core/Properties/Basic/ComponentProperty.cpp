@@ -9,9 +9,9 @@
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
-#include "UI/UIManager.h"
-#include "UI/Widget.h"
-#include "UI/WidgetLayer.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayer.h"
 
 
 namespace Editor

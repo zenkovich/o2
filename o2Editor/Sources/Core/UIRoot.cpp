@@ -2,8 +2,8 @@
 #include "UIRoot.h"
 
 #include "Application/Application.h"
-#include "UI/Widget.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayout.h"
 
 DECLARE_SINGLETON(Editor::UIRoot);
 

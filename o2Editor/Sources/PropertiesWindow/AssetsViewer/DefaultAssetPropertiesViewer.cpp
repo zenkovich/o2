@@ -3,8 +3,8 @@
 
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
-#include "UI/VerticalLayout.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

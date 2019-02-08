@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "FrameScrollView.h"
 
-#include "UI/HorizontalScrollBar.h"
-#include "UI/VerticalScrollBar.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/HorizontalScrollBar.h"
+#include "Scene/UI/VerticalScrollBar.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

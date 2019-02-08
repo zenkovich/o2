@@ -3,7 +3,7 @@
 #include "Events/CursorEventsListener.h"
 #include "Render/Camera.h"
 #include "Render/TextureRef.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Widget.h"
 
 using namespace o2;
 

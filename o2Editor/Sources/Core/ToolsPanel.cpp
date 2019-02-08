@@ -12,12 +12,12 @@
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Dialogs/EditNameDlg.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/Button.h"
-#include "UI/DropDown.h"
-#include "UI/HorizontalLayout.h"
-#include "UI/Toggle.h"
-#include "UI/UIManager.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Button.h"
+#include "Scene/UI/DropDown.h"
+#include "Scene/UI/HorizontalLayout.h"
+#include "Scene/UI/Toggle.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widget.h"
 
 
 namespace Editor

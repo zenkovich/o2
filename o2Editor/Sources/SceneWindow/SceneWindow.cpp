@@ -2,10 +2,10 @@
 #include "SceneWindow.h"
 
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/Button.h"
-#include "UI/CustomDropDown.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Button.h"
+#include "Scene/UI/CustomDropDown.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

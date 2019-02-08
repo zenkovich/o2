@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "StringProperty.h"
 
-#include "UI/EditBox.h"
+#include "Scene/UI/EditBox.h"
 
 namespace Editor
 {

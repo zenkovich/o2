@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Events/DrawableCursorEventsListener.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Widget.h"
 #include "Events/CursorEventsArea.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Math/Rect.h"

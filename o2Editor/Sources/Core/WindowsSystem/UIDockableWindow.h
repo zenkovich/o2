@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UI/Window.h"
+#include "Scene/UI/Window.h"
 
 using namespace o2;
 

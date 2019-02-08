@@ -5,7 +5,7 @@
 #include "Assets/ImageAsset.h"
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
-#include "UI/ScrollArea.h"
+#include "Scene/UI/ScrollArea.h"
 #include "Utils/Types/Containers/Pair.h"
 #include "Utils/Editor/DragAndDrop.h"
 

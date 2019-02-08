@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "IActorHeaderViewer.h"
 
-#include "UI/Widget.h"
+#include "Scene/UI/Widget.h"
 
 DECLARE_CLASS(Editor::IActorHeaderViewer);

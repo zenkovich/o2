@@ -2,14 +2,14 @@
 #include "LogWindow.h"
 
 #include "Render/Sprite.h"
-#include "UI/Button.h"
-#include "UI/Label.h"
-#include "UI/List.h"
-#include "UI/LongList.h"
-#include "UI/Toggle.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Button.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/List.h"
+#include "Scene/UI/LongList.h"
+#include "Scene/UI/Toggle.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Utils/System/Time/Time.h"
 
 namespace Editor

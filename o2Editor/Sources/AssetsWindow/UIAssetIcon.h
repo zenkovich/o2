@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Assets/AssetInfo.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragAndDrop.h"
 
 using namespace o2;

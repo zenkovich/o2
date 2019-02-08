@@ -4,8 +4,8 @@
 #include "Application/Application.h"
 #include "Core/UIRoot.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

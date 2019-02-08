@@ -8,7 +8,7 @@
 #include "Scene/DrawableComponent.h"
 #include "Scene/SceneLayer.h"
 #include "Scene/Tags.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace o2
 {

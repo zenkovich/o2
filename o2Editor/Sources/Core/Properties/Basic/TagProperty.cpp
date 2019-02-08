@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "TagProperty.h"
 
-#include "UI/EditBox.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/EditBox.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayout.h"
 
 
 namespace Editor

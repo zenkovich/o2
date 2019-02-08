@@ -3,8 +3,8 @@
 
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "Render/Text.h"
-#include "UI/Label.h"
-#include "UI/WidgetState.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/WidgetState.h"
 #include "Utils/FileSystem/FileSystem.h"
 
 namespace Editor

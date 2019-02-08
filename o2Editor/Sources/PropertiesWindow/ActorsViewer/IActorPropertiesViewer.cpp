@@ -3,8 +3,8 @@
 
 #include "Core/EditorScope.h"
 #include "Core/UI/SpoilerWithHead.h"
-#include "UI/Image.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/Image.h"
+#include "Scene/UI/UIManager.h"
 
 namespace Editor
 {

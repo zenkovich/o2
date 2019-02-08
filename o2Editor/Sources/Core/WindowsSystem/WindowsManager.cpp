@@ -11,8 +11,8 @@
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Render.h"
-#include "UI/MenuPanel.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/MenuPanel.h"
+#include "Scene/UI/UIManager.h"
 
 namespace Editor
 {

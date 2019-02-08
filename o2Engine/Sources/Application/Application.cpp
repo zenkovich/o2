@@ -9,7 +9,7 @@
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
 #include "Scene/Scene.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/UIManager.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/Debug/Log/ConsoleLogStream.h"
 #include "Utils/Debug/Log/FileLogStream.h"

@@ -8,12 +8,12 @@
 #include "AssetsWindow/AssetsWindow.h"
 #include "Core/EditorScope.h"
 #include "Render/Sprite.h"
-#include "UI/ContextMenu.h"
-#include "UI/EditBox.h"
-#include "UI/Tree.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/ContextMenu.h"
+#include "Scene/UI/EditBox.h"
+#include "Scene/UI/Tree.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Utils/FileSystem/FileSystem.h"
 
 namespace Editor

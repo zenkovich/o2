@@ -3,10 +3,10 @@
 
 #include "Core/UI/CurveEdit.h"
 #include "Core/UIRoot.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
-#include "UI/Window.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Window.h"
 
 DECLARE_SINGLETON(Editor::CurveEditorDlg);
 

@@ -12,7 +12,6 @@
     <Filter Include="Sources\Render\Windows" />
     <Filter Include="Sources\Scene" />
     <Filter Include="Sources\Scene\Components" />
-    <Filter Include="Sources\UI" />
     <Filter Include="Sources\Utils" />
     <Filter Include="Sources\Utils\FileSystem" />
     <Filter Include="Sources\Utils\Math" />
@@ -37,6 +36,8 @@
     <Filter Include="Sources\Utils\Editor\Attributes">
       <UniqueIdentifier>{f31df98b-2178-4cf0-add7-bc0c3380ec41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Scene\UI" />
+    <Filter Include="Sources\Scene\UI\Widgets" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Sources\Animation\Animatable.h">
@@ -159,6 +160,9 @@
     <ClInclude Include="..\Sources\Events\EventSystem.h">
       <Filter>Sources\Events</Filter>
     </ClInclude>
+    <ClInclude Include="..\Sources\Events\IEventsListener.h">
+      <Filter>Sources\Events</Filter>
+    </ClInclude>
     <ClInclude Include="..\Sources\Events\KeyboardEventsListener.h">
       <Filter>Sources\Events</Filter>
     </ClInclude>
@@ -276,89 +280,89 @@
     <ClInclude Include="..\Sources\Scene\Tags.h">
       <Filter>Sources\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Button.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\UIManager.h">
+      <Filter>Sources\Scene\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\ContextMenu.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widget.h">
+      <Filter>Sources\Scene\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\CustomDropDown.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\WidgetLayer.h">
+      <Filter>Sources\Scene\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\CustomList.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\WidgetLayout.h">
+      <Filter>Sources\Scene\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\DropDown.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\WidgetState.h">
+      <Filter>Sources\Scene\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\EditBox.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Button.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\GridLayout.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\ContextMenu.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\HorizontalLayout.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\CustomDropDown.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\HorizontalProgress.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\CustomList.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\HorizontalScrollBar.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\DropDown.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Image.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\EditBox.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Label.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\GridLayout.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\List.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\HorizontalLayout.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\LongList.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\HorizontalProgress.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\MenuPanel.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\HorizontalScrollBar.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\ScrollArea.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Image.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Spoiler.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Label.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Toggle.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\List.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Tree.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\LongList.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\UIManager.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\MenuPanel.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\VerticalLayout.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\ScrollArea.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\VerticalProgress.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Spoiler.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\VerticalScrollBar.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Toggle.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Widget.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Tree.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\WidgetLayer.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\VerticalLayout.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\WidgetLayout.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\VerticalProgress.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\WidgetState.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\VerticalScrollBar.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\UI\Window.h">
-      <Filter>Sources\UI</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\Widgets\Window.h">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClInclude>
     <ClInclude Include="..\Sources\Utils\Basic\IDynamic.h">
       <Filter>Sources\Utils\Basic</Filter>
@@ -582,8 +586,8 @@
     <ClInclude Include="..\Sources\stdafx.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Events\IEventsListener.h">
-      <Filter>Sources\Events</Filter>
+    <ClInclude Include="..\Sources\Scene\UI\WidgetLayerLayout.h">
+      <Filter>Sources\Scene\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -704,6 +708,9 @@
     <ClCompile Include="..\Sources\Events\EventSystem.cpp">
       <Filter>Sources\Events</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Events\IEventsListener.cpp">
+      <Filter>Sources\Events</Filter>
+    </ClCompile>
     <ClCompile Include="..\Sources\Events\KeyboardEventsListener.cpp">
       <Filter>Sources\Events</Filter>
     </ClCompile>
@@ -815,89 +822,89 @@
     <ClCompile Include="..\Sources\Scene\Tags.cpp">
       <Filter>Sources\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Button.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\UIManager.cpp">
+      <Filter>Sources\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\ContextMenu.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widget.cpp">
+      <Filter>Sources\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\CustomDropDown.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\WidgetLayer.cpp">
+      <Filter>Sources\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\CustomList.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\WidgetLayout.cpp">
+      <Filter>Sources\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\DropDown.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\WidgetState.cpp">
+      <Filter>Sources\Scene\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\EditBox.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Button.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\GridLayout.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\ContextMenu.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\HorizontalLayout.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\CustomDropDown.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\HorizontalProgress.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\CustomList.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\HorizontalScrollBar.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\DropDown.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Image.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\EditBox.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Label.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\GridLayout.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\List.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\HorizontalLayout.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\LongList.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\HorizontalProgress.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\MenuPanel.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\HorizontalScrollBar.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\ScrollArea.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Image.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Spoiler.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Label.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Toggle.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\List.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Tree.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\LongList.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\UIManager.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\MenuPanel.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\VerticalLayout.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\ScrollArea.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\VerticalProgress.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Spoiler.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\VerticalScrollBar.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Toggle.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Widget.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Tree.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\WidgetLayer.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\VerticalLayout.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\WidgetLayout.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\VerticalProgress.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\WidgetState.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\VerticalScrollBar.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
-    <ClCompile Include="..\Sources\UI\Window.cpp">
-      <Filter>Sources\UI</Filter>
+    <ClCompile Include="..\Sources\Scene\UI\Widgets\Window.cpp">
+      <Filter>Sources\Scene\UI\Widgets</Filter>
     </ClCompile>
     <ClCompile Include="..\Sources\Utils\Bitmap\Bitmap.cpp">
       <Filter>Sources\Utils\Bitmap</Filter>
@@ -1027,9 +1034,6 @@
     </ClCompile>
     <ClCompile Include="..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Sources\Events\IEventsListener.cpp">
-      <Filter>Sources\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

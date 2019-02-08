@@ -3,8 +3,8 @@
 
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Render/Render.h"
-#include "UI/WidgetLayout.h"
-#include "UI/WidgetState.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/WidgetState.h"
 
 namespace Editor
 {

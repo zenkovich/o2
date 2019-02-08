@@ -9,8 +9,8 @@
 #include "Core/Properties/Basic/FloatProperty.h"
 #include "Core/Properties/Basic/WStringProperty.h"
 #include "Core/Properties/Properties.h"
-#include "UI/Spoiler.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/UIManager.h"
 
 namespace Editor
 {

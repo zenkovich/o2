@@ -3,7 +3,7 @@
 
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
-#include "UI/VerticalLayout.h"
+#include "Scene/UI/VerticalLayout.h"
 
 namespace Editor
 {

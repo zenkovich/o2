@@ -5,8 +5,8 @@
 #include "Core/WindowsSystem/UIDockWindowPlace.h"
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Core/WindowsSystem/WindowsManager.h"
-#include "UI/Widget.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

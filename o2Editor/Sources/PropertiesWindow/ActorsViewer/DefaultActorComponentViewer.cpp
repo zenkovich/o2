@@ -11,10 +11,10 @@
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Component.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/Label.h"
-#include "UI/Spoiler.h"
-#include "UI/VerticalLayout.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widget.h"
 
 namespace Editor
 {

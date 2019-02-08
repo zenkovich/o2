@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Utils/Serialization/Serializable.h"
 
 using namespace o2;

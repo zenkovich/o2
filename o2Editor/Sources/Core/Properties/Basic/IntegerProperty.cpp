@@ -2,8 +2,8 @@
 #include "IntegerProperty.h"
 
 #include "Application/Application.h"
-#include "UI/EditBox.h"
-#include "UI/WidgetLayer.h"
+#include "Scene/UI/EditBox.h"
+#include "Scene/UI/WidgetLayer.h"
 
 namespace Editor
 {

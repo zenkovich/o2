@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Events/KeyboardEventsListener.h"
-#include "UI/Tree.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Tree.h"
+#include "Scene/UI/Widget.h"
 #include "Utils/Types/UnknownPtr.h"
 
 using namespace o2;

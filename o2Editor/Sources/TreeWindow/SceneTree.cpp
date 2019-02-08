@@ -19,13 +19,13 @@
 #include "Events/EventSystem.h"
 #include "Scene/Actor.h"
 #include "Scene/Scene.h"
-#include "UI/Button.h"
-#include "UI/EditBox.h"
-#include "UI/Toggle.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
-#include "UI/WidgetState.h"
+#include "Scene/UI/Button.h"
+#include "Scene/UI/EditBox.h"
+#include "Scene/UI/Toggle.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/WidgetState.h"
 
 namespace Editor
 {

@@ -7,9 +7,9 @@
 #include "Core/Properties/Basic/BooleanProperty.h"
 #include "Core/Properties/Basic/StringProperty.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

@@ -2,10 +2,10 @@
 #include "IPropertyField.h"
 
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/Button.h"
-#include "UI/Label.h"
-#include "UI/Widget.h"
-#include "UI/WidgetState.h"
+#include "Scene/UI/Button.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetState.h"
 
 namespace Editor
 {

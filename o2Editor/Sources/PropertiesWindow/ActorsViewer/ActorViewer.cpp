@@ -13,10 +13,10 @@
 #include "PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
-#include "UI/ScrollArea.h"
-#include "UI/UIManager.h"
-#include "UI/VerticalLayout.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/ScrollArea.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

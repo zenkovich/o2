@@ -7,11 +7,11 @@
 #include "Core/Properties/Basic/Vector2FloatProperty.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "UI/Image.h"
-#include "UI/Label.h"
-#include "UI/UIManager.h"
-#include "UI/WidgetLayer.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Image.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Utils/Math/Layout.h"
 
 namespace Editor

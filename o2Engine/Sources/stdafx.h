@@ -8,7 +8,7 @@
 #include "Render/Text.h"
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
-#include "UI/Widget.h"
+#include "Scene/UI/Widget.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/Delegates.h"

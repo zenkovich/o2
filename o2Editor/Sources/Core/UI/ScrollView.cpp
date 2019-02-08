@@ -4,7 +4,7 @@
 #include "Application/Application.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

@@ -4,8 +4,8 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
-#include "UI/Spoiler.h"
-#include "UI/UIManager.h"
+#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/UIManager.h"
 
 using namespace o2;
 

@@ -1,9 +1,9 @@
 #include "stdafx.h"
 #include "BooleanProperty.h"
 
-#include "UI/Toggle.h"
-#include "UI/Widget.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Toggle.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayout.h"
 
 
 namespace Editor

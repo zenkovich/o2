@@ -10,11 +10,11 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/ObjectViewers/DefaultObjectViewer.h"
-#include "UI/Label.h"
-#include "UI/Spoiler.h"
-#include "UI/UIManager.h"
-#include "UI/VerticalLayout.h"
-#include "UI/WidgetLayout.h"
+#include "Scene/UI/Label.h"
+#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/WidgetLayout.h"
 #include "Utils/System/Time/Timer.h"
 
 DECLARE_SINGLETON(Editor::Properties);
