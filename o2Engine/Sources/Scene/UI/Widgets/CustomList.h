@@ -10,29 +10,29 @@ namespace o2
 	// -------------------------------
 	// List view widget with selection
 	// -------------------------------
-	class UICustomList: public UIScrollArea, public DrawableCursorEventsListener
+	class CustomList: public ScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTIES(UICustomList);
+		PROPERTIES(CustomList);
 		PROPERTY(Vector<int>, selectedItems, SetSelectedItems, GetSelectedItems); // Selected item widget property
-		PROPERTY(UIWidget*, selectedItem, SelectItem, GetSelectedItem);           // Selected item widget
+		PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);           // Selected item widget
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPos);         // Selected item position property
 		GETTER(int, itemsCount, GetItemsCount);                                   // All items count getter
 
 		Function<void(int)>       onSelectedPos;   // Select item position event
-		Function<void(UIWidget*)> onSelectedItem;  // Select item event
+		Function<void(Widget*)> onSelectedItem;  // Select item event
 
 		// Default constructor
-		UICustomList();
+		CustomList();
 
 		// Copy-constructor
-		UICustomList(const UICustomList& other);
+		CustomList(const CustomList& other);
 
 		// Destructor
-		~UICustomList();
+		~CustomList();
 
 		// Copy-operator
-		UICustomList& operator=(const UICustomList& other);
+		CustomList& operator=(const CustomList& other);
 
 		// Updates drawables, states and widget
 		void Update(float dt) override;
@@ -41,22 +41,22 @@ namespace o2
 		void Draw() override;
 
 		// Sets item sample widget. WARNING: Removing all old items!
-		void SetItemSample(UIWidget* sample);
+		void SetItemSample(Widget* sample);
 
 		// Returns item sample widget
-		UIWidget* GetItemSample() const;
+		Widget* GetItemSample() const;
 
 		// Returns layout of items
-		UIVerticalLayout* GetItemsLayout() const;
+		VerticalLayout* GetItemsLayout() const;
 
 		// Adds new item and returns it
-		UIWidget* AddItem();
+		Widget* AddItem();
 
 		// Adds new item at position and returns it
-		UIWidget* AddItem(int position);
+		Widget* AddItem(int position);
 
 		// Removes item
-		void RemoveItem(UIWidget* item);
+		void RemoveItem(Widget* item);
 
 		// Removes item in position
 		void RemoveItem(int position);
@@ -65,25 +65,25 @@ namespace o2
 		void MoveItem(int position, int newPosition);
 
 		// Moves item to new position
-		void MoveItem(UIWidget* item, int newPosition);
+		void MoveItem(Widget* item, int newPosition);
 
 		// Returns item position
-		int GetItemPosition(UIWidget* item);
+		int GetItemPosition(Widget* item);
 
 		// Returns item by position
-		UIWidget* GetItem(int position) const;
+		Widget* GetItem(int position) const;
 
 		// Removes all items
 		void RemoveAllItems();
 
 		// Sorts items
-		void SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc);
+		void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
 
 		// Returns items count
 		int GetItemsCount() const;
 
 		// Selects item
-		void SelectItem(UIWidget* item);
+		void SelectItem(Widget* item);
 
 		// Selects item at position
 		void SelectItemAt(int position);
@@ -101,7 +101,7 @@ namespace o2
 		int GetSelectedItemPos() const;
 
 		// Returns selected item widget
-		UIWidget* GetSelectedItem() const;
+		Widget* GetSelectedItem() const;
 
 		// Sets multi selection
 		void SetMultiselectionAvailable(bool available);
@@ -133,7 +133,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UICustomList);
+		SERIALIZABLE(CustomList);
 
 	protected:
 		// ------------------
@@ -151,8 +151,8 @@ namespace o2
 		typedef Vector<Selection> SelectionsVec;
 		typedef Vector<Sprite*> SpritesVec;
 
-		UIVerticalLayout* mVerLayout = nullptr;                     // Child vertical layout
-		UIWidget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+		VerticalLayout* mVerLayout = nullptr;                     // Child vertical layout
+		Widget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
 
 		bool              mMultiSelection = true;                   // Is multi selection available @SERIALIZABLE
 		SelectionsVec     mSelectedItems;                           // Current selected items
@@ -221,7 +221,7 @@ namespace o2
 		void OnScrolled(float scroll) override;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
-		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+		Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
@@ -229,18 +229,18 @@ namespace o2
 		// Returns selection sprite
 		Sprite* GetSelectionSprite();
 
-		friend class UIDropDown;
-		friend class UICustomDropDown;
+		friend class DropDown;
+		friend class CustomDropDown;
 	};
 }
 
-CLASS_BASES_META(o2::UICustomList)
+CLASS_BASES_META(o2::CustomList)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UICustomList)
+CLASS_FIELDS_META(o2::CustomList)
 {
 	PUBLIC_FIELD(selectedItems);
 	PUBLIC_FIELD(selectedItem);
@@ -263,34 +263,34 @@ CLASS_FIELDS_META(o2::UICustomList)
 	PROTECTED_FIELD(mSelectionSpritesPool);
 }
 END_META;
-CLASS_METHODS_META(o2::UICustomList)
+CLASS_METHODS_META(o2::CustomList)
 {
 
-	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
+	typedef const Function<bool(Widget*, Widget*)>& _tmp1;
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(UIWidget*, AddItem);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, int);
-	PUBLIC_FUNCTION(void, RemoveItem, UIWidget*);
+	PUBLIC_FUNCTION(void, SetItemSample, Widget*);
+	PUBLIC_FUNCTION(Widget*, GetItemSample);
+	PUBLIC_FUNCTION(VerticalLayout*, GetItemsLayout);
+	PUBLIC_FUNCTION(Widget*, AddItem);
+	PUBLIC_FUNCTION(Widget*, AddItem, int);
+	PUBLIC_FUNCTION(void, RemoveItem, Widget*);
 	PUBLIC_FUNCTION(void, RemoveItem, int);
 	PUBLIC_FUNCTION(void, MoveItem, int, int);
-	PUBLIC_FUNCTION(void, MoveItem, UIWidget*, int);
-	PUBLIC_FUNCTION(int, GetItemPosition, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItem, int);
+	PUBLIC_FUNCTION(void, MoveItem, Widget*, int);
+	PUBLIC_FUNCTION(int, GetItemPosition, Widget*);
+	PUBLIC_FUNCTION(Widget*, GetItem, int);
 	PUBLIC_FUNCTION(void, RemoveAllItems);
 	PUBLIC_FUNCTION(void, SortItems, _tmp1);
 	PUBLIC_FUNCTION(int, GetItemsCount);
-	PUBLIC_FUNCTION(void, SelectItem, UIWidget*);
+	PUBLIC_FUNCTION(void, SelectItem, Widget*);
 	PUBLIC_FUNCTION(void, SelectItemAt, int);
 	PUBLIC_FUNCTION(void, SetSelectedItems, const Vector<int>&);
 	PUBLIC_FUNCTION(void, ClearSelection);
 	PUBLIC_FUNCTION(Vector<int>, GetSelectedItems);
 	PUBLIC_FUNCTION(int, GetSelectedItemPos);
-	PUBLIC_FUNCTION(UIWidget*, GetSelectedItem);
+	PUBLIC_FUNCTION(Widget*, GetSelectedItem);
 	PUBLIC_FUNCTION(void, SetMultiselectionAvailable, bool);
 	PUBLIC_FUNCTION(bool, IsMultiselectionAvailable);
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
@@ -317,7 +317,7 @@ CLASS_METHODS_META(o2::UICustomList)
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
+	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(Sprite*, GetSelectionSprite);
 }

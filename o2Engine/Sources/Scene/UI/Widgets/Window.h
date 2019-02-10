@@ -13,24 +13,24 @@ namespace o2
 	// ----------------------------------------------------
 	// Window with caption, icon, options and close buttons
 	// ----------------------------------------------------
-	class UIWindow: public UIScrollArea, public DrawableCursorEventsListener
+	class Window: public ScrollArea, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTIES(UIWindow);
+		PROPERTIES(Window);
 		PROPERTY(WString, caption, SetCaption, GetCaption); // Window caption property
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Window icon sprite property
 
 		// Default constructor
-		UIWindow();
+		Window();
 
 		// Copy-constructor
-		UIWindow(const UIWindow& other);
+		Window(const Window& other);
 
 		// Destructor
-		~UIWindow();
+		~Window();
 
 		// Copy-operator
-		UIWindow& operator=(const UIWindow& other);
+		Window& operator=(const Window& other);
 
 		// Draws widget
 		void Draw() override;
@@ -79,7 +79,7 @@ namespace o2
 		// Returns back cursor events listener
 		CursorEventsArea& GetBackCursorListener();
 
-		SERIALIZABLE(UIWindow);
+		SERIALIZABLE(Window);
 
 	protected:
 		const char* mIconLayerPath = "icon";
@@ -133,7 +133,7 @@ namespace o2
 		void OnFocused() override;
 
 		// It is called when widget state was added
-		void OnStateAdded(UIWidgetState* state) override;
+		void OnStateAdded(WidgetState* state) override;
 
 		// It is called when visible was changed
 		void OnResEnableInHierarchyChanged() override;
@@ -157,20 +157,20 @@ namespace o2
 		void BindHandlesInteractableToVisibility();
 
 		// It is called when child widget was selected
-		void OnChildFocused(UIWidget* child) override;
+		void OnChildFocused(Widget* child) override;
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 	};
 }
 
-CLASS_BASES_META(o2::UIWindow)
+CLASS_BASES_META(o2::Window)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWindow)
+CLASS_FIELDS_META(o2::Window)
 {
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
@@ -207,7 +207,7 @@ CLASS_FIELDS_META(o2::UIWindow)
 	PROTECTED_FIELD(mRightBottomDragAreaRect);
 }
 END_META;
-CLASS_METHODS_META(o2::UIWindow)
+CLASS_METHODS_META(o2::Window)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -227,7 +227,7 @@ CLASS_METHODS_META(o2::UIWindow)
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
-	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
+	PROTECTED_FUNCTION(void, OnStateAdded, WidgetState*);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeContextItems);
@@ -235,7 +235,7 @@ CLASS_METHODS_META(o2::UIWindow)
 	PROTECTED_FUNCTION(void, InitializeHandles);
 	PROTECTED_FUNCTION(void, SetHandlesInteractable, bool);
 	PROTECTED_FUNCTION(void, BindHandlesInteractableToVisibility);
-	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildFocused, Widget*);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 }
 END_META;

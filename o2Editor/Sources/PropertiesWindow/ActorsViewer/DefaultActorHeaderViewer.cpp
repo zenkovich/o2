@@ -28,74 +28,74 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mDataView = mnew UIWidget();
+		mDataView = mnew Widget();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 42;
 
 		mEnableProperty = o2UI.CreateWidget<BooleanProperty>("actor head enable");
-		*mEnableProperty->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
+		*mEnableProperty->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
 		mEnableProperty->SetValuePath("enabled");
 		mEnableProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mEnableProperty);
 
 		mNameProperty = o2UI.CreateWidget<StringProperty>("actor head name");
-		*mNameProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
+		*mNameProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
 		mNameProperty->SetValuePath("name");
 		mNameProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mNameProperty);
 
 		mLockProperty = o2UI.CreateWidget<BooleanProperty>("actor head lock");
-		*mLockProperty->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
+		*mLockProperty->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
 		mLockProperty->SetValuePath("locked");
 		mLockProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLockProperty);
 
 
-		auto prototypeRoot = mDataView->AddChildWidget(mnew UIWidget());
+		auto prototypeRoot = mDataView->AddChildWidget(mnew Widget());
 		prototypeRoot->name = "prototype";
-		*prototypeRoot->layout = UIWidgetLayout::BothStretch();
+		*prototypeRoot->layout = WidgetLayout::BothStretch();
 
 		prototypeRoot->AddState("visible", Animation::EaseInOut(prototypeRoot, &prototypeRoot->transparency, 0.0f, 1.0f, 0.1f));
 
 		auto linkImg = o2UI.CreateImage("ui/UI2_prefab_link_big.png");
-		*linkImg->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
+		*linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
 		mPrototypeProperty = o2UI.CreateWidget<AssetProperty<ActorAssetRef>>("actor head asset property");
-		*mPrototypeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
+		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
 		prototypeRoot->AddChild(mPrototypeProperty);
 
-		mPrototypeApplyBtn = o2UI.CreateWidget<UIButton>("accept prototype");
-		*mPrototypeApplyBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
+		mPrototypeApplyBtn = o2UI.CreateWidget<Button>("accept prototype");
+		*mPrototypeApplyBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
 		mPrototypeApplyBtn->onClick = THIS_FUNC(OnApplyPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeApplyBtn);
 
-		mPrototypeRevertBtn = o2UI.CreateWidget<UIButton>("revert prototype");
-		*mPrototypeRevertBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-20, -18));
+		mPrototypeRevertBtn = o2UI.CreateWidget<Button>("revert prototype");
+		*mPrototypeRevertBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-20, -18));
 		mPrototypeRevertBtn->onClick = THIS_FUNC(OnRevertPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeRevertBtn);
 
-		mPrototypeBreakBtn = o2UI.CreateWidget<UIButton>("break prototype");
-		*mPrototypeBreakBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(0, -18));
+		mPrototypeBreakBtn = o2UI.CreateWidget<Button>("break prototype");
+		*mPrototypeBreakBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(0, -18));
 		mPrototypeBreakBtn->onClick = THIS_FUNC(OnBreakPrototypePressed);
 		prototypeRoot->AddChild(mPrototypeBreakBtn);
 
 		auto tagsImg = o2UI.CreateImage("ui/UI2_tag_big.png");
-		*tagsImg->layout = UIWidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 1));
+		*tagsImg->layout = WidgetLayout::Based(BaseCorner::LeftBottom, Vec2F(20, 20), Vec2F(1, 1));
 		mDataView->AddChild(tagsImg);
 
 		mTagsProperty = o2UI.CreateWidget<TagsProperty>("actor head tags");
-		*mTagsProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 21, 129, 17, 3);
+		*mTagsProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 129, 17, 3);
 		mTagsProperty->SetValuePath("tags");
 		mTagsProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mTagsProperty);
 
 		auto layerImg = o2UI.CreateImage("ui/UI2_layer_big.png");
-		*layerImg->layout = UIWidgetLayout::Based(BaseCorner::RightBottom, Vec2F(20, 20), Vec2F(-109, 1));
+		*layerImg->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(20, 20), Vec2F(-109, 1));
 		mDataView->AddChild(layerImg);
 
 		mLayerProperty = o2UI.CreateWidget<LayerProperty>("actor head layer");
-		*mLayerProperty->layout = UIWidgetLayout::Based(BaseCorner::RightBottom, Vec2F(106, 17), Vec2F(-4, 3));
+		*mLayerProperty->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(106, 17), Vec2F(-4, 3));
 		mLayerProperty->SetValuePath("layer");
 		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLayerProperty);
@@ -156,7 +156,7 @@ namespace Editor
 		//mLayerProperty->Setup(tagsTargets, true);
 	}
 
-	UIWidget* DefaultActorHeaderViewer::GetWidget() const
+	Widget* DefaultActorHeaderViewer::GetWidget() const
 	{
 		return mDataView;
 	}

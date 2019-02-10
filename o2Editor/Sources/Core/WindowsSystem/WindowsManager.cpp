@@ -8,8 +8,8 @@
 #include "Core/UIRoot.h"
 #include "Core/UIStyle/EditorUIStyle.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
-#include "Core/WindowsSystem/UIDockWindowPlace.h"
-#include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Core/WindowsSystem/DockWindowPlace.h"
+#include "Core/WindowsSystem/DockableWindow.h"
 #include "Render/Render.h"
 #include "Scene/UI/Widgets/MenuPanel.h"
 #include "Scene/UI/UIManager.h"
@@ -61,9 +61,9 @@ namespace Editor
 
 	void WindowsManager::InitializeDock()
 	{
-		mMainDockPlace = mnew UIDockWindowPlace();
+		mMainDockPlace = mnew DockWindowPlace();
 		mMainDockPlace->name = "main dock";
-		*mMainDockPlace->layout = UIWidgetLayout::BothStretch(0, 0, 0, 48);
+		*mMainDockPlace->layout = WidgetLayout::BothStretch(0, 0, 0, 48);
 		mMainDockPlace->SetResizibleDir(TwoDirection::Horizontal, 0, nullptr, nullptr);
 		EditorUIRoot.AddWidget(mMainDockPlace);
 	}
@@ -74,7 +74,7 @@ namespace Editor
 			wnd->Update(dt);
 	}
 
-	void ProcHierarchy(String& hierarchy, UIWidget* widget, int level)
+	void ProcHierarchy(String& hierarchy, Widget* widget, int level)
 	{
 		String sideNames[] = { "Hor", "Ver" };
 
@@ -83,12 +83,12 @@ namespace Editor
 
 		hierarchy += widget->GetName();
 
-		if (widget->GetType() == TypeOf(UIDockWindowPlace))
+		if (widget->GetType() == TypeOf(DockWindowPlace))
 		{
 			hierarchy += ": ";
-			hierarchy += (String)(bool)((UIDockWindowPlace*)widget)->interactable;
+			hierarchy += (String)(bool)((DockWindowPlace*)widget)->interactable;
 			hierarchy += " ";
-			hierarchy += sideNames[(int)((UIDockWindowPlace*)widget)->GetResizibleDir()];
+			hierarchy += sideNames[(int)((DockWindowPlace*)widget)->GetResizibleDir()];
 			RectF rt = widget->layout->GetWorldRect();
 			hierarchy += (String)rt.left + " " + (String)rt.bottom + " " + (String)rt.right + " " + (String)rt.top;
 		}
@@ -125,7 +125,7 @@ namespace Editor
 
 		for (auto widget : EditorUIRoot.GetRootWidget()->GetChildWidgets())
 		{
-			if (widget->GetType() == TypeOf(UIDockableWindow))
+			if (widget->GetType() == TypeOf(DockableWindow))
 				res.windows.Add(widget->name, *widget->layout);
 		}
 
@@ -146,7 +146,7 @@ namespace Editor
 				continue;
 			}
 
-			if (UIDockableWindow* dockWnd = editorWindow->mWindow)
+			if (DockableWindow* dockWnd = editorWindow->mWindow)
 			{
 				editorWindow->Show();
 				*dockWnd->layout = wnd.Value();
@@ -158,7 +158,7 @@ namespace Editor
 		for (auto wnd : o2EditorWindows.mEditorWindows)
 		{
 			bool hide = !layout.windows.ContainsKey(wnd->mWindow->GetName()) && 
-				wnd->mWindow->GetParent()->GetType() != TypeOf(UIDockWindowPlace);
+				wnd->mWindow->GetParent()->GetType() != TypeOf(DockWindowPlace);
 
 			if (hide)
 				wnd->Hide();

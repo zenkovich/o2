@@ -8,7 +8,7 @@
 
 namespace Editor
 {
-	UIScrollView::UIScrollView()
+	ScrollView::ScrollView()
 	{
 		mRenderTarget = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
@@ -19,8 +19,8 @@ namespace Editor
 		mReady = true;
 	}
 
-	UIScrollView::UIScrollView(const UIScrollView& other):
-		UIWidget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
+	ScrollView::ScrollView(const ScrollView& other):
+		Widget(other), mBackColor(other.mBackColor), mGridColor(other.mGridColor)
 	{
 		mRenderTarget = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
@@ -30,21 +30,21 @@ namespace Editor
 		mReady = true;
 	}
 
-	UIScrollView::~UIScrollView()
+	ScrollView::~ScrollView()
 	{
 		if (mRenderTargetSprite)
 			delete mRenderTargetSprite;
 	}
 
-	UIScrollView& UIScrollView::operator=(const UIScrollView& other)
+	ScrollView& ScrollView::operator=(const ScrollView& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIScrollView::Draw()
+	void ScrollView::Draw()
 	{
-		UIWidget::Draw();
+		Widget::Draw();
 
 		if (!mReady)
 			return;
@@ -57,9 +57,9 @@ namespace Editor
 		CursorAreaEventsListener::OnDrawn();
 	}
 
-	void UIScrollView::Update(float dt)
+	void ScrollView::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		if (!mReady)
 			return;
@@ -67,41 +67,41 @@ namespace Editor
 		UpdateCamera(dt);
 	}
 
-	void UIScrollView::SetBackColor(const Color4& color)
+	void ScrollView::SetBackColor(const Color4& color)
 	{
 		mBackColor = color;
 	}
 
-	void UIScrollView::SetGridColor(const Color4& color)
+	void ScrollView::SetGridColor(const Color4& color)
 	{
 		mGridColor = color;
 	}
 
-	void UIScrollView::UpdateSelfTransform()
+	void ScrollView::UpdateSelfTransform()
 {
-		UIWidget::UpdateSelfTransform();
+		Widget::UpdateSelfTransform();
 	}
 
-	bool UIScrollView::IsUnderPoint(const Vec2F& point)
+	bool ScrollView::IsUnderPoint(const Vec2F& point)
 	{
-		return UIWidget::IsUnderPoint(point);
+		return Widget::IsUnderPoint(point);
 	}
 
-	bool UIScrollView::IsScrollable() const
-	{
-		return true;
-	}
-
-	bool UIScrollView::IsFocusable() const
+	bool ScrollView::IsScrollable() const
 	{
 		return true;
 	}
 
-	void UIScrollView::CopyData(const Actor& otherActor)
+	bool ScrollView::IsFocusable() const
 	{
-		const UIScrollView& other = dynamic_cast<const UIScrollView&>(otherActor);
+		return true;
+	}
 
-		UIWidget::CopyData(other);
+	void ScrollView::CopyData(const Actor& otherActor)
+	{
+		const ScrollView& other = dynamic_cast<const ScrollView&>(otherActor);
+
+		Widget::CopyData(other);
 
 		mReady = false;
 
@@ -117,7 +117,7 @@ namespace Editor
 		mReady = true;
 	}
 
-	void UIScrollView::OnTransformUpdated()
+	void ScrollView::OnTransformUpdated()
 	{
 		if (!mReady)
 			return;
@@ -134,13 +134,13 @@ namespace Editor
 		mViewCamera.size = size;
 	}
 
-	void UIScrollView::UpdateTransparency()
+	void ScrollView::UpdateTransparency()
 	{
-		UIWidget::UpdateTransparency();
+		Widget::UpdateTransparency();
 		mRenderTargetSprite->SetTransparency(mResTransparency);
 	}
 
-	void UIScrollView::UpdateCamera(float dt)
+	void ScrollView::UpdateCamera(float dt)
 	{
 		bool transformed = false;
 
@@ -198,7 +198,7 @@ namespace Editor
 		}
 	}
 
-	void UIScrollView::UpdateLocalScreenTransforms()
+	void ScrollView::UpdateLocalScreenTransforms()
 	{
 		RectF rectangle = layout->worldRect;
 		Basis identityCamTransform = Transform(rectangle.Size()).basis;
@@ -211,27 +211,27 @@ namespace Editor
 		mLocalToScreenTransform = mScreenToLocalTransform.Inverted();
 	}
 
-	Vec2F UIScrollView::ScreenToLocalPoint(const Vec2F& point)
+	Vec2F ScrollView::ScreenToLocalPoint(const Vec2F& point)
 	{
 		return point*mScreenToLocalTransform;
 	}
 
-	Vec2F UIScrollView::LocalToScreenPoint(const Vec2F& point)
+	Vec2F ScrollView::LocalToScreenPoint(const Vec2F& point)
 	{
 		return point*mLocalToScreenTransform;
 	}
 
-	Vec2F UIScrollView::GetCameraScale() const
+	Vec2F ScrollView::GetCameraScale() const
 	{
 		return Vec2F(mScreenToLocalTransform.xv.Length(), mScreenToLocalTransform.yv.Length());
 	}
 
-	const Camera& UIScrollView::GetCamera() const
+	const Camera& ScrollView::GetCamera() const
 	{
 		return mViewCamera;
 	}
 
-	void UIScrollView::RedrawRenderTarget()
+	void ScrollView::RedrawRenderTarget()
 	{
 		mNeedRedraw = false;
 		UpdateLocalScreenTransforms();
@@ -246,12 +246,12 @@ namespace Editor
 		o2Render.SetCamera(Camera());
 	}
 
-	void UIScrollView::RedrawContent()
+	void ScrollView::RedrawContent()
 	{
 		DrawGrid();
 	}
 
-	void UIScrollView::DrawGrid()
+	void ScrollView::DrawGrid()
 
 	{
 		float cameraMaxSize = Math::Max(mViewCamera.GetSize().x*mViewCamera.GetScale().x,
@@ -298,21 +298,21 @@ namespace Editor
 		}
 	}
 
-	void UIScrollView::OnCameraTransformChanged()
+	void ScrollView::OnCameraTransformChanged()
 	{
 	}
 
-	void UIScrollView::OnScrolled(float scroll)
+	void ScrollView::OnScrolled(float scroll)
 	{
 		mViewCameraTargetScale *= 1.0f - (scroll*mViewCameraScaleSence);
 	}
 
-	void UIScrollView::OnCursorRightMousePressed(const Input::Cursor& cursor)
+	void ScrollView::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(true);
 	}
 
-	void UIScrollView::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+	void ScrollView::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{
 		if (cursor.delta.Length() > 0.5f)
 		{
@@ -323,10 +323,10 @@ namespace Editor
 		}
 	}
 
-	void UIScrollView::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+	void ScrollView::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
 		o2Application.SetCursorInfiniteMode(false);
 	}
 }
 
-DECLARE_CLASS(Editor::UIScrollView);
+DECLARE_CLASS(Editor::ScrollView);

@@ -4,18 +4,18 @@
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 
 	// ----------------------------------------------------------------------------------------------------------------
-	// Widget layout. Represents the UIWidget transformation layout. The position and size sets by anchors and offsets. 
+	// Widget layout. Represents the Widget transformation layout. The position and size sets by anchors and offsets. 
 	// Anchor is a vector value from (0, 0) to (1, 1), where (0, 0) is left bottom corner of parent and (1, 1) is right 
 	// top corner. Offsets represents the position and size relative to anchor points. 
 	// Also layout has minimal, maximum size and layout weight, used in grouped layouts.
 	// ----------------------------------------------------------------------------------------------------------------
-	class UIWidgetLayout: public ActorTransform
+	class WidgetLayout: public ActorTransform
 	{
 	public:
-		PROPERTIES(UIWidgetLayout);
+		PROPERTIES(WidgetLayout);
 		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property
 		PROPERTY(Vec2F, anchorMax, SetAnchorMax,GetAnchorMax);  // Right top anchor property
 
@@ -45,23 +45,23 @@ namespace o2
 		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property
 
 		// Default constructor, creates both stretching layout  
-		UIWidgetLayout();
+		WidgetLayout();
 
 		// Constructor with parameters
-		UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax, const Vec2F& offsetMin, const Vec2F& offsetMax);
+		WidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax, const Vec2F& offsetMin, const Vec2F& offsetMax);
 
 		// Constructor with parameters
-		UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
+		WidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
 					   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom);
 
 		// Copy-constructor
-		UIWidgetLayout(const UIWidgetLayout& other);
+		WidgetLayout(const WidgetLayout& other);
 
 		// Copy-operator
-		UIWidgetLayout& operator=(const UIWidgetLayout& other);
+		WidgetLayout& operator=(const WidgetLayout& other);
 
 		// Equals operator
-		bool operator==(const UIWidgetLayout& other) const;
+		bool operator==(const WidgetLayout& other) const;
 
 		// Updates layout and transformation
 		void Update() override;
@@ -226,19 +226,19 @@ namespace o2
 		float GetHeightWeight();
 
 		// Returns both axis stretching by parent layout with border offsets
-		static UIWidgetLayout BothStretch(float borderLeft = 0, float borderBottom = 0, 
+		static WidgetLayout BothStretch(float borderLeft = 0, float borderBottom = 0, 
 										  float borderRight = 0, float borderTop = 0);
 
 		// Returns fixed by size layout, positioned relative to corner with offset 
-		static UIWidgetLayout Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset = Vec2F());
+		static WidgetLayout Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset = Vec2F());
 
 		// Returns horizontal stretching by parent layout, anchored by height with offsets and left and right border
-		static UIWidgetLayout HorStretch(VerAlign align, float left, float right, float height, float offsY = 0.0f);
+		static WidgetLayout HorStretch(VerAlign align, float left, float right, float height, float offsY = 0.0f);
 
 		// Returns vertical stretching by parent layout, anchored by width with offsets and left and right border
-		static UIWidgetLayout VerStretch(HorAlign align, float top, float bottom, float width, float offsX = 0.0f);
+		static WidgetLayout VerStretch(HorAlign align, float top, float bottom, float width, float offsX = 0.0f);
 
-		SERIALIZABLE(UIWidgetLayout);
+		SERIALIZABLE(WidgetLayout);
 
 	protected:
 		class Data: public ActorTransform::Data
@@ -257,12 +257,12 @@ namespace o2
 
 			bool  drivenByParent = false;          // Is layout controlling by parent
 
-			UIWidget* owner = nullptr;             // owner widget pointer @EXCLUDE_POINTER_SEARCH
+			Widget* owner = nullptr;             // owner widget pointer @EXCLUDE_POINTER_SEARCH
 
 			SERIALIZABLE(Data);
 		};
 
-		void(UIWidgetLayout::*mCheckMinMaxFunc)(); // Check minimum and maximum of layout delegate
+		void(WidgetLayout::*mCheckMinMaxFunc)(); // Check minimum and maximum of layout delegate
 		Data* mData;
 
 	protected:
@@ -291,36 +291,36 @@ namespace o2
 		void DontCheckMinMax();
 
 		friend class UIContextMenu;
-		friend class UICustomDropDown;
-		friend class UICustomList;
-		friend class UIEditBox;
-		friend class UIGridLayout;
-		friend class UIHorizontalLayout;
-		friend class UIHorizontalProgress;
-		friend class UIHorizontalScrollBar;
-		friend class UILabel;
-		friend class UILongList;
-		friend class UIMenuPanel;
-		friend class UIScrollArea;
-		friend class UISpoiler;
+		friend class CustomDropDown;
+		friend class CustomList;
+		friend class EditBox;
+		friend class GridLayout;
+		friend class HorizontalLayout;
+		friend class HorizontalProgress;
+		friend class HorizontalScrollBar;
+		friend class Label;
+		friend class LongList;
+		friend class MenuPanel;
+		friend class ScrollArea;
+		friend class Spoiler;
 		friend class UIToggle;
-		friend class UITree;
+		friend class Tree;
 		friend class UITreeNode;
-		friend class UIVerticalLayout;
-		friend class UIVerticalProgress;
-		friend class UIVerticalScrollBar;
-		friend class UIWidget;
-		friend class UIWidgetLayer;
-		friend class UIWindow;
+		friend class VerticalLayout;
+		friend class VerticalProgress;
+		friend class VerticalScrollBar;
+		friend class Widget;
+		friend class WidgetLayer;
+		friend class Window;
 	};
 }
 
-CLASS_BASES_META(o2::UIWidgetLayout)
+CLASS_BASES_META(o2::WidgetLayout)
 {
 	BASE_CLASS(o2::ActorTransform);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidgetLayout)
+CLASS_FIELDS_META(o2::WidgetLayout)
 {
 	PUBLIC_FIELD(anchorMin);
 	PUBLIC_FIELD(anchorMax);
@@ -347,7 +347,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayout)
 	PROTECTED_FIELD(mData);
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidgetLayout)
+CLASS_METHODS_META(o2::WidgetLayout)
 {
 
 	PUBLIC_FUNCTION(void, Update);
@@ -415,12 +415,12 @@ CLASS_METHODS_META(o2::UIWidgetLayout)
 }
 END_META;
 
-CLASS_BASES_META(o2::UIWidgetLayout::Data)
+CLASS_BASES_META(o2::WidgetLayout::Data)
 {
 	BASE_CLASS(o2::ActorTransform::Data);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidgetLayout::Data)
+CLASS_FIELDS_META(o2::WidgetLayout::Data)
 {
 	PUBLIC_FIELD(anchorMin).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(anchorMax).SERIALIZABLE_ATTRIBUTE();
@@ -433,7 +433,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayout::Data)
 	PUBLIC_FIELD(owner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidgetLayout::Data)
+CLASS_METHODS_META(o2::WidgetLayout::Data)
 {
 }
 END_META;

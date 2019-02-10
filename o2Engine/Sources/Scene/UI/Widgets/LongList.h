@@ -10,32 +10,32 @@ namespace o2
 	// ---------------------------------------------
 	// List view widget with selection and many data
 	// ---------------------------------------------
-	class UILongList: public UIScrollArea, public DrawableCursorEventsListener
+	class LongList: public ScrollArea, public DrawableCursorEventsListener
 	{
 	public:
 		typedef Vector<UnknownType*> UnknownsVec;
 
 	public:
-		PROPERTIES(UILongList);
+		PROPERTIES(LongList);
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property	
 
 		Function<void(int)>                     onFocused;         // Select item position event
 
 		Function<int()>                         getItemsCountFunc; // Items count getting function
 		Function<UnknownsVec(int, int)>         getItemsRangeFunc; // Items getting in range function
-		Function<void(UIWidget*, UnknownType*)> setupItemFunc;     // Setup item widget function
+		Function<void(Widget*, UnknownType*)> setupItemFunc;     // Setup item widget function
 
 	    // Default constructor
-		UILongList();
+		LongList();
 
 		// Copy-constructor
-		UILongList(const UILongList& other);
+		LongList(const LongList& other);
 
 		// Destructor
-		~UILongList();
+		~LongList();
 
 		// Copy-operator
-		UILongList& operator=(const UILongList& other);
+		LongList& operator=(const LongList& other);
 
 		// Updates drawables, states and widget
 		void Update(float dt) override;
@@ -44,10 +44,10 @@ namespace o2
 		void Draw() override;
 
 		// Sets item sample widget. WARNING: Removing all old items!
-		void SetItemSample(UIWidget* sample);
+		void SetItemSample(Widget* sample);
 
 		// Returns item sample widget
-		UIWidget* GetItemSample() const;
+		Widget* GetItemSample() const;
 
 		// Selects item at position
 		void SelectItemAt(int position);
@@ -82,10 +82,10 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UILongList);
+		SERIALIZABLE(LongList);
 
 	protected:
-		UIWidget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+		Widget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
 
 		Sprite*           mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
 		Sprite*           mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
@@ -153,7 +153,7 @@ namespace o2
 		void OnScrolled(float scroll) override;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
-		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+		Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
@@ -164,18 +164,18 @@ namespace o2
 		// It is called when selected item index was changed
 		void OnSelectionChanged();
 
-		friend class UIDropDown;
-		friend class UICustomDropDown;
+		friend class DropDown;
+		friend class CustomDropDown;
 	};
 }
 
-CLASS_BASES_META(o2::UILongList)
+CLASS_BASES_META(o2::LongList)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UILongList)
+CLASS_FIELDS_META(o2::LongList)
 {
 	PUBLIC_FIELD(selectedItemPos);
 	PUBLIC_FIELD(onFocused);
@@ -199,13 +199,13 @@ CLASS_FIELDS_META(o2::UILongList)
 	PROTECTED_FIELD(mItemsPool);
 }
 END_META;
-CLASS_METHODS_META(o2::UILongList)
+CLASS_METHODS_META(o2::LongList)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
+	PUBLIC_FUNCTION(void, SetItemSample, Widget*);
+	PUBLIC_FUNCTION(Widget*, GetItemSample);
 	PUBLIC_FUNCTION(void, SelectItemAt, int);
 	PUBLIC_FUNCTION(int, GetSelectedItemPosition);
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
@@ -232,7 +232,7 @@ CLASS_METHODS_META(o2::UILongList)
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
+	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelection, int);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);

@@ -4,15 +4,15 @@
 
 namespace o2
 {
-	class UIButton;
+	class Button;
 
 	// -------------------------------------
 	// UI Spoiler. Can hide children widgets
 	// -------------------------------------
-	class UISpoiler: public UIVerticalLayout
+	class Spoiler: public VerticalLayout
 	{
 	public:
-		PROPERTIES(UISpoiler);
+		PROPERTIES(Spoiler);
 		PROPERTY(WString, caption, SetCaption, GetCaption);        // Head caption property
 		PROPERTY(float, headHeight, SetHeadHeight, GetHeadHeight); // Head height property
 		PROPERTY(bool, expanded, SetExpanded, IsExpanded);         // Expanded state property
@@ -20,13 +20,13 @@ namespace o2
 		Function<void()> onExpand;    // Expand starting event
 
 		// Default constructor
-		UISpoiler();
+		Spoiler();
 
 		// Copy-constructor
-		UISpoiler(const UISpoiler& other);
+		Spoiler(const Spoiler& other);
 
 		// Copy-operator
-		UISpoiler& operator=(const UISpoiler& other);
+		Spoiler& operator=(const Spoiler& other);
 
 		// Expands spoiler
 		void Expand();
@@ -55,12 +55,12 @@ namespace o2
 		// Returns head's height
 		float GetHeadHeight() const;
 
-		SERIALIZABLE(UISpoiler);
+		SERIALIZABLE(Spoiler);
 
 	protected:
 		float          mHeadHeight = 0.0f;     // Spoiler head height @SERIALIZABLE
 
-		UIWidgetState* mExpandState = nullptr; // Expanding state
+		WidgetState* mExpandState = nullptr; // Expanding state
 		float          mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
 		float          mTargetHeight = 0.0f;   // target expanding height
 
@@ -87,7 +87,7 @@ namespace o2
 		void InitializeControls();
 
 		// Searches expand button by name and type
-		UIButton* FindExpandButton() const;
+		Button* FindExpandButton() const;
 
 		// Returns is spoiler fully expanded and not animating
 		bool IsFullyExpanded() const;
@@ -97,12 +97,12 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UISpoiler)
+CLASS_BASES_META(o2::Spoiler)
 {
-	BASE_CLASS(o2::UIVerticalLayout);
+	BASE_CLASS(o2::VerticalLayout);
 }
 END_META;
-CLASS_FIELDS_META(o2::UISpoiler)
+CLASS_FIELDS_META(o2::Spoiler)
 {
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(headHeight);
@@ -114,7 +114,7 @@ CLASS_FIELDS_META(o2::UISpoiler)
 	PROTECTED_FIELD(mTargetHeight);
 }
 END_META;
-CLASS_METHODS_META(o2::UISpoiler)
+CLASS_METHODS_META(o2::Spoiler)
 {
 
 	PUBLIC_FUNCTION(void, Expand);
@@ -133,7 +133,7 @@ CLASS_METHODS_META(o2::UISpoiler)
 	PROTECTED_FUNCTION(void, CreateExpandAnimation);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
 	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(UIButton*, FindExpandButton);
+	PROTECTED_FUNCTION(Button*, FindExpandButton);
 	PROTECTED_FUNCTION(bool, IsFullyExpanded);
 	PROTECTED_FUNCTION(bool, IsFullyCollapsed);
 }

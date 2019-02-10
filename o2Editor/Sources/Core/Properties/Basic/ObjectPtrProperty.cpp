@@ -41,23 +41,23 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mSpoiler = FindChildByType<UISpoiler>(false);
+		mSpoiler = FindChildByType<Spoiler>(false);
 		if (!mSpoiler)
 		{
-			mSpoiler = o2UI.CreateWidget<UISpoiler>("expand with caption");
+			mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 			AddChild(mSpoiler);
 		}
 
 		if (mSpoiler)
 			mSpoiler->onExpand = THIS_FUNC(Refresh);
 
-		mTypeContainer = mnew UIWidget();
-		*mTypeContainer->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
+		mTypeContainer = mnew Widget();
+		*mTypeContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
 		mTypeContainer->SetInternalParent(mSpoiler, false);
 
 		mTypeCaption = o2UI.CreateLabel("nullptr");
-		*mTypeCaption->layout = UIWidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
-		mTypeCaption->horOverflow = UILabel::HorOverflow::Dots;
+		*mTypeCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
+		mTypeCaption->horOverflow = Label::HorOverflow::Dots;
 		mTypeCaption->horAlign = HorAlign::Left;
 		mTypeCaption->verAlign = VerAlign::Bottom;
 		mTypeCaption->height = 8;
@@ -65,7 +65,7 @@ namespace Editor
 		mTypeContainer->AddChild(mTypeCaption);
 
 		mCreateDeleteButton = o2UI.CreateButton("Create");
-		*mCreateDeleteButton->layout = UIWidgetLayout(1, 1, 1, 0, -75, 0, 0, -3);
+		*mCreateDeleteButton->layout = WidgetLayout(1, 1, 1, 0, -75, 0, 0, -3);
 		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
 		mTypeContainer->AddChild(mCreateDeleteButton);
 
@@ -185,7 +185,7 @@ namespace Editor
 		if (spoilerCaptionLayer)
 		{
 			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
-			*mTypeContainer->layout = UIWidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+			*mTypeContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}
 

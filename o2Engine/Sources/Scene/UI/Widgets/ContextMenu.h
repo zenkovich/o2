@@ -11,33 +11,33 @@
 namespace o2
 {
 	class Sprite;
-	class UIButton;
+	class Button;
 	class UIContextMenu;
-	class UIVerticalLayout;
+	class VerticalLayout;
 
 	// -----------------
 	// Context menu item
 	// -----------------
-	class UIContextMenuItem: public UIWidget, private ShortcutKeysListener
+	class ContextMenuItem: public Widget, private ShortcutKeysListener
 	{
 	public:
-		PROPERTIES(UIContextMenuItem);
+		PROPERTIES(ContextMenuItem);
 		PROPERTY(WString, text, SetText, GetText); // Text
 
 		Function<void()>     onClick;   // Click function
 		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable
 
 		// Default constructor
-		UIContextMenuItem();
+		ContextMenuItem();
 
 		// Copy-constructor
-		UIContextMenuItem(const UIContextMenuItem& other);
+		ContextMenuItem(const ContextMenuItem& other);
 
 		// Destructor
-		~UIContextMenuItem();
+		~ContextMenuItem();
 
 		// Copy-operator
-		UIContextMenuItem& operator=(const UIContextMenuItem& other);
+		ContextMenuItem& operator=(const ContextMenuItem& other);
 
 		// Sets text
 		void SetText(const WString& text);
@@ -75,7 +75,7 @@ namespace o2
 		// DIsables item
 		void Disable();
 
-		SERIALIZABLE(UIContextMenuItem);
+		SERIALIZABLE(ContextMenuItem);
 
 	protected:
 		UIContextMenu* mSubMenu;           // Context sub menu
@@ -87,7 +87,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child);
+		void OnChildAdded(Widget* child);
 
 		// This event calling when shortcut hit and this listener has max priority. Calls click callback
 		void OnShortcutPressed();
@@ -98,7 +98,7 @@ namespace o2
 	// -----------------------
 	// Context menu ui element
 	// -----------------------
-	class UIContextMenu: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class UIContextMenu: public ScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		// ---------
@@ -167,20 +167,20 @@ namespace o2
 		void Show(const Vec2F& position = o2Input.GetCursorPos());
 
 		// Add item
-		UIContextMenuItem* AddItem(const Item& item);
+		ContextMenuItem* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIContextMenuItem* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+		ContextMenuItem* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
 						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Adds item by path ("node/sub node/target")
-		UIContextMenuItem* AddToggleItem(const WString& path, bool value,
+		ContextMenuItem* AddToggleItem(const WString& path, bool value,
 								const Function<void(bool)>& clickFunc = Function<void(bool)>(),
 								const ImageAssetRef& icon = ImageAssetRef(), 
 								const ShortcutKeys& shortcut = ShortcutKeys());
 
         // Inserts item at position
-		UIContextMenuItem* InsertItem(const Item& item, int position);
+		ContextMenuItem* InsertItem(const Item& item, int position);
 
 		// Adds array of items
 		void AddItems(Vector<Item> items);
@@ -192,13 +192,13 @@ namespace o2
 		Item GetItem(int position);
 
 		// Returns item's widget at position
-		UIContextMenuItem* GetItemWidget(int position);
+		ContextMenuItem* GetItemWidget(int position);
 
 		// Returns index of item by path
 		int FindItem(const WString& text) const;
 
 		// Returns item's widget by path
-		UIContextMenuItem* FindItemWidget(const WString& path) const;
+		ContextMenuItem* FindItemWidget(const WString& path) const;
 
 		// Sets item at position
 		void SetItem(int position, const Item& item);
@@ -222,13 +222,13 @@ namespace o2
 		bool IsItemChecked(int position) const;
 
 		// Returns items vertical layout
-		UIVerticalLayout* GetItemsLayout() const;
+		VerticalLayout* GetItemsLayout() const;
 
 		// Returns item sample
-		UIContextMenuItem* GetItemSample() const;
+		ContextMenuItem* GetItemSample() const;
 
 		// Returns items separator sample
-		UIWidget* GetSeparatorSample() const;
+		Widget* GetSeparatorSample() const;
 
 		// Returns selection drawable
 		Sprite* GetSelectionDrawable() const;
@@ -269,9 +269,9 @@ namespace o2
 		UIContextMenu*        mParentContextMenu = nullptr;  // Parent visible context menu
 		UIContextMenu*        mChildContextMenu = nullptr;	 // Child visible context menu
 
-		UIVerticalLayout*     mItemsLayout = nullptr;        // Items layout
-		UIContextMenuItem*    mItemSample = nullptr;         // Item sample @SERIALIZABLE
-		UIWidget*             mSeparatorSample = nullptr;    // Items separator sample @SERIALIZABLE
+		VerticalLayout*     mItemsLayout = nullptr;        // Items layout
+		ContextMenuItem*    mItemSample = nullptr;         // Item sample @SERIALIZABLE
+		Widget*             mSeparatorSample = nullptr;    // Items separator sample @SERIALIZABLE
 		Sprite*               mSelectionDrawable = nullptr;  // Selection sprite @SERIALIZABLE
 		Layout                mSelectionLayout;              // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
@@ -279,7 +279,7 @@ namespace o2
 		RectF                 mTargetSelectionRect;          // Target selection rectangle (over selected item)
 		Vec2F                 mLastSelectCheckCursor;        // Last cursor position on selection check
 
-		UIContextMenuItem*    mSelectedItem = nullptr;       // Index of selected item
+		ContextMenuItem*    mSelectedItem = nullptr;       // Index of selected item
 		float                 mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
 		bool                  mShownAtFrame = false;         // Is context was shown at current frame
@@ -310,16 +310,16 @@ namespace o2
 		void SpecialDraw();
 
 		// Creates item widget
-		UIContextMenuItem* CreateItem(const Item& item);
+		ContextMenuItem* CreateItem(const Item& item);
 
 		// Sets item widget data and parameters
-		void SetupItem(UIContextMenuItem* widget, const Item& item);
+		void SetupItem(ContextMenuItem* widget, const Item& item);
 
 		// Returns item info
 		Item GetItemDef(int idx) const;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
-		UIContextMenuItem* GetItemUnderPoint(const Vec2F& point);
+		ContextMenuItem* GetItemUnderPoint(const Vec2F& point);
 
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
@@ -343,17 +343,17 @@ namespace o2
 		void OnKeyPressed(const Input::Key& key) override;
 
 		friend class UIManager;
-		friend class UIMenuPanel;
+		friend class MenuPanel;
 	};
 }
 
-CLASS_BASES_META(o2::UIContextMenuItem)
+CLASS_BASES_META(o2::ContextMenuItem)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::ShortcutKeysListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIContextMenuItem)
+CLASS_FIELDS_META(o2::ContextMenuItem)
 {
 	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(onClick);
@@ -363,7 +363,7 @@ CLASS_FIELDS_META(o2::UIContextMenuItem)
 	PROTECTED_FIELD(mCheckable);
 }
 END_META;
-CLASS_METHODS_META(o2::UIContextMenuItem)
+CLASS_METHODS_META(o2::ContextMenuItem)
 {
 
 	PUBLIC_FUNCTION(void, SetText, const WString&);
@@ -379,14 +379,14 @@ CLASS_METHODS_META(o2::UIContextMenuItem)
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnShortcutPressed);
 }
 END_META;
 
 CLASS_BASES_META(o2::UIContextMenu)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
@@ -418,16 +418,16 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Show, UIContextMenu*, const Vec2F&);
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
-	PUBLIC_FUNCTION(UIContextMenuItem*, AddItem, const Item&);
-	PUBLIC_FUNCTION(UIContextMenuItem*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIContextMenuItem*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIContextMenuItem*, InsertItem, const Item&, int);
+	PUBLIC_FUNCTION(ContextMenuItem*, AddItem, const Item&);
+	PUBLIC_FUNCTION(ContextMenuItem*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(ContextMenuItem*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(ContextMenuItem*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
 	PUBLIC_FUNCTION(Item, GetItem, int);
-	PUBLIC_FUNCTION(UIContextMenuItem*, GetItemWidget, int);
+	PUBLIC_FUNCTION(ContextMenuItem*, GetItemWidget, int);
 	PUBLIC_FUNCTION(int, FindItem, const WString&);
-	PUBLIC_FUNCTION(UIContextMenuItem*, FindItemWidget, const WString&);
+	PUBLIC_FUNCTION(ContextMenuItem*, FindItemWidget, const WString&);
 	PUBLIC_FUNCTION(void, SetItem, int, const Item&);
 	PUBLIC_FUNCTION(Vector<Item>, GetItems);
 	PUBLIC_FUNCTION(void, RemoveItem, int);
@@ -435,9 +435,9 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PUBLIC_FUNCTION(void, RemoveAllItems);
 	PUBLIC_FUNCTION(void, SetItemChecked, int, bool);
 	PUBLIC_FUNCTION(bool, IsItemChecked, int);
-	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(UIContextMenuItem*, GetItemSample);
-	PUBLIC_FUNCTION(UIWidget*, GetSeparatorSample);
+	PUBLIC_FUNCTION(VerticalLayout*, GetItemsLayout);
+	PUBLIC_FUNCTION(ContextMenuItem*, GetItemSample);
+	PUBLIC_FUNCTION(Widget*, GetSeparatorSample);
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
@@ -455,10 +455,10 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PROTECTED_FUNCTION(void, HideWithParent);
 	PROTECTED_FUNCTION(void, HideWithChild);
 	PROTECTED_FUNCTION(void, SpecialDraw);
-	PROTECTED_FUNCTION(UIContextMenuItem*, CreateItem, const Item&);
-	PROTECTED_FUNCTION(void, SetupItem, UIContextMenuItem*, const Item&);
+	PROTECTED_FUNCTION(ContextMenuItem*, CreateItem, const Item&);
+	PROTECTED_FUNCTION(void, SetupItem, ContextMenuItem*, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
-	PROTECTED_FUNCTION(UIContextMenuItem*, GetItemUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(ContextMenuItem*, GetItemUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);

@@ -211,7 +211,7 @@
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h" />
-    <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h" />
+    <ClInclude Include="..\..\Sources\AssetsWindow\AssetIcon.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Create.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Delete.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Enable.h" />
@@ -274,8 +274,8 @@
     <ClInclude Include="..\..\Sources\Core\UIStyle\BasicUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\UIStyle\EditorUIStyle.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h" />
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\DockWindowPlace.h" />
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\DockableWindow.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.h" />
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsManager.h" />
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
@@ -312,7 +312,7 @@
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp" />
-    <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp" />
+    <ClCompile Include="..\..\Sources\AssetsWindow\AssetIcon.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Create.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Delete.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Enable.cpp" />
@@ -374,8 +374,8 @@
     <ClCompile Include="..\..\Sources\Core\UIStyle\BasicUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\UIStyle\EditorUIStyle.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp" />
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\DockWindowPlace.cpp" />
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\DockableWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.cpp" />
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsManager.cpp" />
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />

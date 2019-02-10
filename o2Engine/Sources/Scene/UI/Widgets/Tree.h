@@ -9,13 +9,13 @@
 namespace o2
 {
 	class Sprite;
-	class UIButton;
+	class Button;
 	class UITreeNode;
 
 	// -------
 	// UI Tree
 	// -------
-	class UITree: public UIScrollArea, public DragDropArea, public ISelectableDragableObjectsGroup
+	class Tree: public ScrollArea, public DragDropArea, public ISelectableDragableObjectsGroup
 	{
 	public:
 		// Tree nodes rearrange available types
@@ -39,16 +39,16 @@ namespace o2
 		Function<void(UnknownPtrsVec, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
 
 		// Default constructor
-		UITree();
+		Tree();
 
 		// Copy-constructor
-		UITree(const UITree& other);
+		Tree(const Tree& other);
 
 		// Destructor
-		~UITree();
+		~Tree();
 
 		// Copy-operator
-		UITree& operator=(const UITree& other);
+		Tree& operator=(const Tree& other);
 
 		// Creates tree node for object
 		void OnObjectCreated(UnknownPtr object, UnknownPtr parent);
@@ -167,7 +167,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UITree);
+		SERIALIZABLE(Tree);
 
 	protected:
 		struct Node;
@@ -471,7 +471,7 @@ namespace o2
 	// ------------
 	// UI Tree node
 	// ------------
-	class UITreeNode: public UIWidget, public SelectableDragableObject
+	class UITreeNode: public Widget, public SelectableDragableObject
 	{
 	public:
 		// Default constructor
@@ -507,9 +507,9 @@ namespace o2
 		SERIALIZABLE(UITreeNode);
 
 	protected:
-		UITree::Node* mNodeDef = nullptr;       // Node definition
-		UITree*       mOwnerTree = nullptr;     // Owner tree
-		UIButton*     mExpandBtn = nullptr;     // Node expanding button
+		Tree::Node* mNodeDef = nullptr;       // Node definition
+		Tree*       mOwnerTree = nullptr;     // Owner tree
+		Button*     mExpandBtn = nullptr;     // Node expanding button
 
 	protected:
 		// Copies data of actor from other to this
@@ -542,18 +542,18 @@ namespace o2
 		// It is called when this was unselected
 		void OnDeselected();
 
-		friend class UITree;
+		friend class Tree;
 	};
 }
 
-CLASS_BASES_META(o2::UITree)
+CLASS_BASES_META(o2::Tree)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::ISelectableDragableObjectsGroup);
 }
 END_META;
-CLASS_FIELDS_META(o2::UITree)
+CLASS_FIELDS_META(o2::Tree)
 {
 	PUBLIC_FIELD(getObjectParentDelegate);
 	PUBLIC_FIELD(getObjectChildrenDelegate);
@@ -614,7 +614,7 @@ CLASS_FIELDS_META(o2::UITree)
 	PROTECTED_FIELD(mVisibleWidgetsCache);
 }
 END_META;
-CLASS_METHODS_META(o2::UITree)
+CLASS_METHODS_META(o2::Tree)
 {
 
 	PUBLIC_FUNCTION(void, OnObjectCreated, UnknownPtr, UnknownPtr);
@@ -719,7 +719,7 @@ END_META;
 
 CLASS_BASES_META(o2::UITreeNode)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::SelectableDragableObject);
 }
 END_META;

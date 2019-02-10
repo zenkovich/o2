@@ -6,7 +6,7 @@
 
 namespace o2
 {
-	class UIVerticalLayout;
+	class VerticalLayout;
 }
 
 namespace Editor
@@ -30,7 +30,7 @@ namespace Editor
 		const Type* GetAssetType() const;
 
 		// Returns data widget
-		UIWidget* GetWidget() const;
+		Widget* GetWidget() const;
 
 		// Specialize viewing component type. Creates all using properties
 		void SpecializeAssetType(const Type* type);
@@ -38,7 +38,7 @@ namespace Editor
 		IOBJECT(DefaultAssetPropertiesViewer);
 
 	protected:
-		UIVerticalLayout*   mPropertiesLayout;    // Properties layout
+		VerticalLayout*   mPropertiesLayout;    // Properties layout
 		Vector<AssetRef*>   mTargetAssets;        // Target assets
 		FieldPropertiesInfo mFieldProperties;     // Field properties information
 		const Type*         mAssetType = nullptr; // Target asset type
@@ -63,7 +63,7 @@ CLASS_METHODS_META(Editor::DefaultAssetPropertiesViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, SpecializeAssetType, const Type*);
 }
 END_META;

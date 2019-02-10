@@ -6,10 +6,10 @@ namespace o2
 {
 	class Actor;
 	class SceneEditableObject;
-	class UIButton;
-	class UIEditBox;
+	class Button;
+	class EditBox;
 	class UIToggle;
-	class UIToggleGroup;
+	class ToggleGroup;
 }
 
 using namespace o2;
@@ -22,7 +22,7 @@ namespace Editor
 	// -----------------
 	// Scene tree widget
 	// -----------------
-	class UISceneTree: public UITree
+	class SceneTree: public Tree
 	{
 	public:
 		typedef Vector<SceneEditableObject*> SceneEditableObjsVec;
@@ -31,16 +31,16 @@ namespace Editor
 		Function<void(SceneEditableObjsVec)> onObjectsSelectionChanged;
 
 		// Default constructor
-		UISceneTree();
+		SceneTree();
 
 		// Copy-constructor
-		UISceneTree(const UISceneTree& other);
+		SceneTree(const SceneTree& other);
 
 		// Destructor
-		~UISceneTree();
+		~SceneTree();
 
 		// Copy-operator
-		UISceneTree& operator=(const UISceneTree& other);
+		SceneTree& operator=(const SceneTree& other);
 
 		// Attaches to scene events
 		void AttachToSceneEvents();
@@ -78,11 +78,11 @@ namespace Editor
 		// Sets watching editor UI state
 		void SetEditorWatching(bool watching);
 
-		SERIALIZABLE(UISceneTree);
+		SERIALIZABLE(SceneTree);
 
 	protected:
-		UIToggleGroup*     mEnableTogglesGroup;    // Enable objects toggles group
-		UIToggleGroup*     mLockTogglesGroup;	   // Lock objects toggles group
+		ToggleGroup*     mEnableTogglesGroup;    // Enable objects toggles group
+		ToggleGroup*     mLockTogglesGroup;	   // Lock objects toggles group
 		bool               mAttachedToSceneEvents; // Is tree attached to scene events
 						    						    
 		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
@@ -189,9 +189,9 @@ namespace Editor
 		Text*                mNameDrawable = nullptr; // Object name drawable
 		UIToggle*            mLockToggle = nullptr;   // Lock toggle
 		UIToggle*            mEnableToggle = nullptr; // Enable toggle
-		UIButton*            mLinkBtn = nullptr;      // View link button
-		UIEditBox*           mNameEditBox = nullptr;  // Object's name edit box
-		UIWidgetState*       mEditState = nullptr;    // Object's name edit state
+		Button*            mLinkBtn = nullptr;      // View link button
+		EditBox*           mNameEditBox = nullptr;  // Object's name edit box
+		WidgetState*       mEditState = nullptr;    // Object's name edit state
 
 	protected:
 		// Copies data of actor from other to this
@@ -212,16 +212,16 @@ namespace Editor
 		// It is called when object name edit box changed
 		void OnObjectNameChanged(const WString& text);
 
-		friend class UISceneTree;
+		friend class SceneTree;
 	};
 }
 
-CLASS_BASES_META(Editor::UISceneTree)
+CLASS_BASES_META(Editor::SceneTree)
 {
-	BASE_CLASS(o2::UITree);
+	BASE_CLASS(o2::Tree);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UISceneTree)
+CLASS_FIELDS_META(Editor::SceneTree)
 {
 	PUBLIC_FIELD(onObjectsSelectionChanged);
 	PROTECTED_FIELD(mEnableTogglesGroup);
@@ -232,7 +232,7 @@ CLASS_FIELDS_META(Editor::UISceneTree)
 	PROTECTED_FIELD(mWatchEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::UISceneTree)
+CLASS_METHODS_META(Editor::SceneTree)
 {
 
 	PUBLIC_FUNCTION(void, AttachToSceneEvents);

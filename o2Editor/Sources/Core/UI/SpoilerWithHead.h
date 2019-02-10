@@ -6,8 +6,8 @@ using namespace o2;
 
 namespace o2
 {
-	class UIButton;
-	class UIImage;
+	class Button;
+	class Image;
 }
 
 namespace Editor
@@ -15,30 +15,30 @@ namespace Editor
 	// -----------------------------------------------
 	// Editor properties spoiler with head and caption
 	// -----------------------------------------------
-	class UISpoilerWithHead : public UISpoiler
+	class SpoilerWithHead : public Spoiler
 	{
 	public:
 		Function<void()> onOptionsPressed; // Options button pressed event
 		Function<void()> onSavePressed;    // Save button pressed event
 
 		// Default constructor
-		UISpoilerWithHead();
+		SpoilerWithHead();
 
 		// Copy constructor
-		UISpoilerWithHead(const UISpoilerWithHead& other);
+		SpoilerWithHead(const SpoilerWithHead& other);
 
 		// Copy operator
-		UISpoilerWithHead& operator=(const UISpoilerWithHead& other);
+		SpoilerWithHead& operator=(const SpoilerWithHead& other);
 
 		// Returns icon
-		UIImage* GetIcon() const;
+		Image* GetIcon() const;
 
-		IOBJECT(UISpoilerWithHead);
+		IOBJECT(SpoilerWithHead);
 
 	private:
-		UIButton* mOptionsBtn = nullptr; // Component option button
-		UIButton* mSaveBtn = nullptr;    // Save prototype button
-		UIImage*  mIcon = nullptr;       // Component icon
+		Button* mOptionsBtn = nullptr; // Component option button
+		Button* mSaveBtn = nullptr;    // Save prototype button
+		Image*  mIcon = nullptr;       // Component icon
 
 	private:
 		// Initializes controls: options, save button and icon
@@ -49,12 +49,12 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::UISpoilerWithHead)
+CLASS_BASES_META(Editor::SpoilerWithHead)
 {
-	BASE_CLASS(o2::UISpoiler);
+	BASE_CLASS(o2::Spoiler);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UISpoilerWithHead)
+CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
 	PUBLIC_FIELD(onOptionsPressed);
 	PUBLIC_FIELD(onSavePressed);
@@ -63,10 +63,10 @@ CLASS_FIELDS_META(Editor::UISpoilerWithHead)
 	PRIVATE_FIELD(mIcon);
 }
 END_META;
-CLASS_METHODS_META(Editor::UISpoilerWithHead)
+CLASS_METHODS_META(Editor::SpoilerWithHead)
 {
 
-	PUBLIC_FUNCTION(UIImage*, GetIcon);
+	PUBLIC_FUNCTION(Image*, GetIcon);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 }

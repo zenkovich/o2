@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
@@ -19,8 +19,8 @@ namespace Editor
 
 	protected:
 		SceneEditScreen* mEditWidget;
-		UIWidget*        mLayersView;
-		UIWidget*        mGizomsView;
+		Widget*        mLayersView;
+		Widget*        mGizomsView;
 
 	public:
 		SceneWindow();

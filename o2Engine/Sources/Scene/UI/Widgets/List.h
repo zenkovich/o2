@@ -7,26 +7,26 @@ namespace o2
 	// --------------------
 	// Text items list view
 	// --------------------
-	class UIList: public UICustomList
+	class List: public CustomList
 	{
 	public:
-		PROPERTIES(UIList);
+		PROPERTIES(List);
 		PROPERTY(WString, value, SelectItemText, GetSelectedItemText);             // Current selected item text
 		PROPERTY(Vector<WString>, values, SetSelectedItems, GetSelectedItemsText); // Current selected items texts
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event
 
 		// Default constructor
-		UIList();
+		List();
 
 		// Copy-constructor
-		UIList(const UIList& other);
+		List(const List& other);
 
 		// Destructor
-		~UIList();
+		~List();
 
 		// Copy operator
-		UIList& operator=(const UIList& other);
+		List& operator=(const List& other);
 
 		// Adds new text item and returns position
 		int AddItem(const WString& text);
@@ -61,7 +61,7 @@ namespace o2
 		// Returns selected items texts
 		Vector<WString> GetSelectedItemsText() const;
 
-		SERIALIZABLE(UIList);
+		SERIALIZABLE(List);
 
 	protected:
 		// Copies data of actor from other to this
@@ -72,19 +72,19 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIList)
+CLASS_BASES_META(o2::List)
 {
-	BASE_CLASS(o2::UICustomList);
+	BASE_CLASS(o2::CustomList);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIList)
+CLASS_FIELDS_META(o2::List)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(values);
 	PUBLIC_FIELD(onSelectedText);
 }
 END_META;
-CLASS_METHODS_META(o2::UIList)
+CLASS_METHODS_META(o2::List)
 {
 
 	PUBLIC_FUNCTION(int, AddItem, const WString&);

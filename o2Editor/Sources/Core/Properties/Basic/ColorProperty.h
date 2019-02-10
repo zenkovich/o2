@@ -8,8 +8,8 @@ using namespace o2;
 
 namespace o2
 {
-	class UIImage;
-	class UIWidget;
+	class Image;
+	class Widget;
 }
 
 namespace Editor
@@ -32,8 +32,8 @@ namespace Editor
 		IOBJECT(ColorProperty);
 
 	protected:
-		UIWidget*        mEditBox = nullptr;     // Edit box 
-		UIImage*         mColorSprite = nullptr; // Color preview sprite
+		Widget*        mEditBox = nullptr;     // Edit box 
+		Image*         mColorSprite = nullptr; // Color preview sprite
 		CursorEventsArea mClickArea;             // Box click area
 
 	protected:

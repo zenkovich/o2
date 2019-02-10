@@ -8,7 +8,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
@@ -28,7 +28,7 @@ namespace Editor
 		IOBJECT(IPropertiesViewer);
 
 	protected:
-		UIWidget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
+		Widget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
 
 	protected:
 		// Sets target objects

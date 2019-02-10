@@ -10,12 +10,12 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWindow;
+	class Window;
 }
 
 namespace Editor
 {
-	class UICurveEditor;
+	class CurveEditor;
 
 	// --------------------
 	// Curve editing dialog
@@ -54,8 +54,8 @@ namespace Editor
 		Function<void()> mOnChangedCallback;
 		Function<void()> mOnChangeCompletedCallback;
 
-		UIWindow*      mWindow = nullptr;
-		UICurveEditor* mEditorWidget = nullptr;
+		Window*      mWindow = nullptr;
+		CurveEditor* mEditorWidget = nullptr;
 
 	protected:
 		// It is called when hiding, calls completed callback

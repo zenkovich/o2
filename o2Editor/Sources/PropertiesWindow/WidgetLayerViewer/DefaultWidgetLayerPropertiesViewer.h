@@ -19,7 +19,7 @@ namespace Editor
 		~DefaultWidgetLayerPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetLayers(const Vector<UIWidgetLayer*>& layers) override;
+		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
 		// Returns viewing layer drawable type 
 		const Type* GetDrawableType() const override;
@@ -39,7 +39,7 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<UIWidgetLayer*> mLayers;                 // Target widget layers
+		Vector<WidgetLayer*> mLayers;                 // Target widget layers
 		FieldPropertiesInfo    mFieldProperties;        // Field properties information
 		bool                   mBuiltWithHidden;        // True when properties was built with hidden fields
 		const Type*            mDrawableType = nullptr; // Target actor type
@@ -62,7 +62,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
+	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	PUBLIC_FUNCTION(const Type*, GetDrawableType);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);

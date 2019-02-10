@@ -9,7 +9,7 @@ using namespace o2;
 namespace o2
 {
 	class Text;
-	class UISpoiler;
+	class Spoiler;
 }
 
 namespace Editor

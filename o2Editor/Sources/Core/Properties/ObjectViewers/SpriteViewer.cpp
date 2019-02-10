@@ -17,7 +17,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		auto layout = mnew UIVerticalLayout();
+		auto layout = mnew VerticalLayout();
 		layout->borderTop = 5;
 		layout->expandWidth = true;
 		layout->expandHeight = false;
@@ -25,7 +25,7 @@ namespace Editor
 
 		mViewWidget = layout;
 
-		auto commonFieldsLayout = mnew UIVerticalLayout();
+		auto commonFieldsLayout = mnew VerticalLayout();
 		commonFieldsLayout->spacing = 5;
 		commonFieldsLayout->expandWidth = true;
 		commonFieldsLayout->expandHeight = false;
@@ -48,17 +48,17 @@ namespace Editor
 
 		mModeProperty->onChanged += [&](IPropertyField* x) { OnModeSelected(); };
 
-		mHiddenProperties = o2UI.CreateWidget<UIVerticalLayout>();
+		mHiddenProperties = o2UI.CreateWidget<VerticalLayout>();
 		mHiddenProperties->expandWidth = true;
 		mHiddenProperties->expandHeight = false;
 		mHiddenProperties->fitByChildren = true;
 		layout->AddChild(mHiddenProperties);
 
 		// Fill properties
-		mFillPropertiesSpoiler = o2UI.CreateWidget<UISpoiler>();
+		mFillPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mFillPropertiesSpoiler);
 
-		auto fillSpace = mnew UIWidget();
+		auto fillSpace = mnew Widget();
 		fillSpace->layout->minHeight = 5;
 		mFillPropertiesSpoiler->AddChildWidget(fillSpace);
 
@@ -66,10 +66,10 @@ namespace Editor
 			o2EditorProperties.BuildField(mFillPropertiesSpoiler, spriteType, "fill", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		// Slice properties
-		mSlicedPropertiesSpoiler = o2UI.CreateWidget<UISpoiler>();
+		mSlicedPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mSlicedPropertiesSpoiler);
 
-		auto sliceSpace = mnew UIWidget();
+		auto sliceSpace = mnew Widget();
 		sliceSpace->layout->minHeight = 5;
 		mSlicedPropertiesSpoiler->AddChildWidget(sliceSpace);
 
@@ -77,10 +77,10 @@ namespace Editor
 			o2EditorProperties.BuildField(mSlicedPropertiesSpoiler, spriteType, "sliceBorder", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		// Slice properties
-		mTiledPropertiesSpoiler = o2UI.CreateWidget<UISpoiler>();
+		mTiledPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mTiledPropertiesSpoiler);
 
-		auto tiledSpace = mnew UIWidget();
+		auto tiledSpace = mnew Widget();
 		tiledSpace->layout->minHeight = 5;
 		mTiledPropertiesSpoiler->AddChildWidget(tiledSpace);
 

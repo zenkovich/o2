@@ -6,27 +6,27 @@
 
 namespace o2
 {
-	UIImage::UIImage():
-		UIWidget()
+	Image::Image():
+		Widget()
 	{
 		mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
 
-	UIImage::UIImage(const UIImage& other):
-		UIWidget(other), image(this), imageAsset(this), imageName(this)
+	Image::Image(const Image& other):
+		Widget(other), image(this), imageAsset(this), imageName(this)
 	{
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)
 			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
 
-	UIImage& UIImage::operator=(const UIImage& other)
+	Image& Image::operator=(const Image& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIImage::SetImage(Sprite* sprite)
+	void Image::SetImage(Sprite* sprite)
 	{
 		if (mImage)
 			delete mImage;
@@ -38,12 +38,12 @@ namespace o2
 		}
 	}
 
-	Sprite* UIImage::GetImage()
+	Sprite* Image::GetImage()
 	{
 		return mImage;
 	}
 
-	void UIImage::SetImageAsset(const ImageAssetRef& asset)
+	void Image::SetImageAsset(const ImageAssetRef& asset)
 	{
 		if (!mImage)
 			mImage = GetLayerDrawable<Sprite>("image");
@@ -54,7 +54,7 @@ namespace o2
 		mImage->LoadFromImage(asset);
 	}
 
-	ImageAssetRef UIImage::GetImageAsset() const
+	ImageAssetRef Image::GetImageAsset() const
 	{
 		if (mImage)
 			return mImage->GetImageAsset();
@@ -62,12 +62,12 @@ namespace o2
 		return ImageAssetRef();
 	}
 
-	void UIImage::SetImageName(const String& name)
+	void Image::SetImageName(const String& name)
 	{
 		SetImageAsset(ImageAssetRef(name));
 	}
 
-	String UIImage::GetImageName() const
+	String Image::GetImageName() const
 	{
 		auto imageAsset = GetImageAsset();
 		if (imageAsset.IsValid())
@@ -76,11 +76,11 @@ namespace o2
 		return "";
 	}
 
-	void UIImage::CopyData(const Actor& otherActor)
+	void Image::CopyData(const Actor& otherActor)
 	{
-		const UIImage& other = dynamic_cast<const UIImage&>(otherActor);
+		const Image& other = dynamic_cast<const Image&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mImage = GetLayerDrawable<Sprite>("image");
 		if (!mImage)
@@ -88,4 +88,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIImage);
+DECLARE_CLASS(o2::Image);

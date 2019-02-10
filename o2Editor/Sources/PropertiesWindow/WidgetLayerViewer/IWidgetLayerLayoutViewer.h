@@ -9,13 +9,13 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
-	class UIWidgetLayer;
+	class Widget;
+	class WidgetLayer;
 }
 
 namespace Editor
 {
-	class UISpoilerWithHead;
+	class SpoilerWithHead;
 
 	// -------------------------------------------
 	// Editor widget layer layout viewer interface
@@ -30,10 +30,10 @@ namespace Editor
 		virtual ~IWidgetLayerLayoutViewer();
 
 		// Sets target actors
-		virtual void SetTargetLayers(const Vector<UIWidgetLayer*>& layers) {}
+		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
 		// Returns data widget
-		virtual UIWidget* GetWidget() const;
+		virtual Widget* GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -47,7 +47,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerLayoutViewer);
 
 	protected:
-		UISpoilerWithHead* mSpoiler;
+		SpoilerWithHead* mSpoiler;
 	};
 }
 
@@ -64,8 +64,8 @@ END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerLayoutViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);

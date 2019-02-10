@@ -6,7 +6,7 @@
 #include "Assets/FolderAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/AssetsWindow.h"
-#include "AssetsWindow/UIAssetIcon.h"
+#include "AssetsWindow/AssetIcon.h"
 #include "Core/Actions/Enable.h"
 #include "Core/Actions/Lock.h"
 #include "Core/Actions/PropertyChange.h"
@@ -29,8 +29,8 @@
 
 namespace Editor
 {
-	UISceneTree::UISceneTree() :
-		UITree(), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+	SceneTree::SceneTree() :
+		Tree(), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		delete mNodeWidgetSample;
 		mNodeWidgetSample = mnew UISceneTreeNode();
@@ -40,24 +40,24 @@ namespace Editor
 		Initialize();
 	}
 
-	UISceneTree::UISceneTree(const UISceneTree& other) :
-		UITree(other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
+	SceneTree::SceneTree(const SceneTree& other) :
+		Tree(other), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		Initialize();
 	}
 
-	UISceneTree::~UISceneTree()
+	SceneTree::~SceneTree()
 	{
 		DeattachFromSceneEvents();
 	}
 
-	UISceneTree& UISceneTree::operator=(const UISceneTree& other)
+	SceneTree& SceneTree::operator=(const SceneTree& other)
 	{
-		UITree::operator=(other);
+		Tree::operator=(other);
 		return *this;
 	}
 
-	void UISceneTree::AttachToSceneEvents()
+	void SceneTree::AttachToSceneEvents()
 	{
 		o2Scene.onObjectsChanged += THIS_FUNC(OnObjectsChanged);
 
@@ -73,7 +73,7 @@ namespace Editor
 		mAttachedToSceneEvents = true;
 	}
 
-	void UISceneTree::DeattachFromSceneEvents()
+	void SceneTree::DeattachFromSceneEvents()
 	{
 		if (Scene::IsSingletonInitialzed() && mAttachedToSceneEvents)
 		{
@@ -90,89 +90,89 @@ namespace Editor
 		}
 	}
 
-	UITreeNode* UISceneTree::GetNode(SceneEditableObject* object)
+	UITreeNode* SceneTree::GetNode(SceneEditableObject* object)
 	{
-		return UITree::GetNode((UnknownPtr)(void*)object);
+		return Tree::GetNode((UnknownPtr)(void*)object);
 	}
 
-	UISceneTree::SceneEditableObjsVec UISceneTree::GetSelectedObjects() const
+	SceneTree::SceneEditableObjsVec SceneTree::GetSelectedObjects() const
 	{
-		return UITree::GetSelectedObjects().Select<SceneEditableObject*>([](auto x) { return (SceneEditableObject*)(void*)x; });
+		return Tree::GetSelectedObjects().Select<SceneEditableObject*>([](auto x) { return (SceneEditableObject*)(void*)x; });
 	}
 
-	void UISceneTree::SetSelectedObjects(const SceneEditableObjsVec& objects)
+	void SceneTree::SetSelectedObjects(const SceneEditableObjsVec& objects)
 	{
-		UITree::SetSelectedObjects(objects.Select<UnknownPtr>([](auto x) { return (UnknownPtr)(void*)x; }));
+		Tree::SetSelectedObjects(objects.Select<UnknownPtr>([](auto x) { return (UnknownPtr)(void*)x; }));
 	}
 
-	void UISceneTree::SelectObject(SceneEditableObject* object)
+	void SceneTree::SelectObject(SceneEditableObject* object)
 	{
-		UITree::SelectObject((UnknownPtr)(void*)object);
+		Tree::SelectObject((UnknownPtr)(void*)object);
 	}
 
-	void UISceneTree::SelectAndHightlightObject(SceneEditableObject* object)
+	void SceneTree::SelectAndHightlightObject(SceneEditableObject* object)
 	{
-		UITree::SelectAndHightlightObject((UnknownPtr)(void*)object);
+		Tree::SelectAndHightlightObject((UnknownPtr)(void*)object);
 	}
 
-	void UISceneTree::ScrollToAndHightlight(SceneEditableObject* object)
+	void SceneTree::ScrollToAndHightlight(SceneEditableObject* object)
 	{
-		UITree::ScrollToAndHightlight(object);
+		Tree::ScrollToAndHightlight(object);
 	}
 
-	void UISceneTree::DeselectObject(SceneEditableObject* object)
+	void SceneTree::DeselectObject(SceneEditableObject* object)
 	{
-		UITree::DeselectObject((UnknownPtr)(void*)object);
+		Tree::DeselectObject((UnknownPtr)(void*)object);
 	}
 
-	void UISceneTree::DeselectAllObjects()
+	void SceneTree::DeselectAllObjects()
 	{
-		UITree::DeselectAllObjects();
+		Tree::DeselectAllObjects();
 	}
 
-	void UISceneTree::ScrollTo(SceneEditableObject* object)
+	void SceneTree::ScrollTo(SceneEditableObject* object)
 	{
-		UITree::ScrollTo((UnknownPtr)(void*)object);
+		Tree::ScrollTo((UnknownPtr)(void*)object);
 	}
 
-	void UISceneTree::SetEditorWatching(bool watching)
+	void SceneTree::SetEditorWatching(bool watching)
 	{
 		mWatchEditor = watching;
 
 		UpdateNodesView();
 	}
 
-	void UISceneTree::Initialize()
+	void SceneTree::Initialize()
 	{
-		mEnableTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
+		mEnableTogglesGroup = mnew ToggleGroup(ToggleGroup::Type::VerOneClick);
 		mEnableTogglesGroup->onReleased = THIS_FUNC(EnableObjectsGroupReleased);
 
-		mLockTogglesGroup = mnew UIToggleGroup(UIToggleGroup::Type::VerOneClick);
+		mLockTogglesGroup = mnew ToggleGroup(ToggleGroup::Type::VerOneClick);
 		mLockTogglesGroup->onReleased = THIS_FUNC(LockObjectsGroupReleased);
 
 		UISceneTreeNode* objectNodeWidgetSample = (UISceneTreeNode*)mNodeWidgetSample;
 		objectNodeWidgetSample->InitializeControls();
 	}
 
-	void UISceneTree::UpdateVisibleNodes()
+	void SceneTree::UpdateVisibleNodes()
 	{
 		PushScopeEnterOnStack scope;
-		UITree::UpdateVisibleNodes();
+		Tree::UpdateVisibleNodes();
 	}
 
-	UITreeNode* UISceneTree::CreateTreeNodeWidget()
+	UITreeNode* SceneTree::CreateTreeNodeWidget()
 	{
 		PushScopeEnterOnStack scope;
-		return UITree::CreateTreeNodeWidget();
+		return Tree::CreateTreeNodeWidget();
 	}
 
-	UnknownPtr UISceneTree::GetObjectParent(UnknownPtr object)
+	UnknownPtr SceneTree::GetObjectParent(UnknownPtr object)
 	{
 		SceneEditableObject* sceneObject = object;
 		return sceneObject->GetEditableParent();
 	}
 
-	Vector<UnknownPtr> UISceneTree::GetObjectChilds(UnknownPtr object)
+	Vector<UnknownPtr> SceneTree::GetObjectChilds(UnknownPtr object)
 	{
 		if (object)
 		{
@@ -186,12 +186,12 @@ namespace Editor
 		return o2Scene.GetRootActors().Select<UnknownPtr>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	String UISceneTree::GetObjectDebug(UnknownPtr object)
+	String SceneTree::GetObjectDebug(UnknownPtr object)
 	{
 		return object ? ((SceneEditableObject*)object)->GetName() : "null";
 	}
 
-	void UISceneTree::FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object)
+	void SceneTree::FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object)
 	{
 		UISceneTreeNode* node = (UISceneTreeNode*)nodeWidget;
 		node->SetSceneObject(object);
@@ -199,12 +199,12 @@ namespace Editor
 		node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
 	}
 
-	void UISceneTree::OnNodeDblClick(UITreeNode* nodeWidget)
+	void SceneTree::OnNodeDblClick(UITreeNode* nodeWidget)
 	{
 		((UISceneTreeNode*)nodeWidget)->EnableEditName();
 	}
 
-	void UISceneTree::OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject)
+	void SceneTree::OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject)
 	{
 		SceneEditableObject* newParentEditableObject = (SceneEditableObject*)newParent;
 		SceneEditableObject* prevEditableObject = prevObject;
@@ -217,13 +217,13 @@ namespace Editor
 		action->ObjectsReparented(parent, prevEditableObject);
 		o2EditorApplication.DoneAction(action);
 
-		UITree::OnDraggedObjects(objects, newParent, prevObject);
+		Tree::OnDraggedObjects(objects, newParent, prevObject);
 	}
 
-	void UISceneTree::EnableObjectsGroupPressed(bool value)
+	void SceneTree::EnableObjectsGroupPressed(bool value)
 	{}
 
-	void UISceneTree::EnableObjectsGroupReleased(bool value)
+	void SceneTree::EnableObjectsGroupReleased(bool value)
 	{
 		SceneEditableObjsVec objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
 			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
@@ -232,10 +232,10 @@ namespace Editor
 		o2EditorApplication.DoneAction(action);
 	}
 
-	void UISceneTree::LockObjectsGroupPressed(bool value)
+	void SceneTree::LockObjectsGroupPressed(bool value)
 	{}
 
-	void UISceneTree::LockObjectsGroupReleased(bool value)
+	void SceneTree::LockObjectsGroupReleased(bool value)
 	{
 		SceneEditableObjsVec objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
 			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
@@ -244,15 +244,15 @@ namespace Editor
 		o2EditorApplication.DoneAction(action);
 	}
 
-	void UISceneTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	void SceneTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
 	{
 		onObjectsSelectionChanged(objects.Cast<SceneEditableObject*>());
-		UITree::OnNodesSelectionChanged(objects);
+		Tree::OnNodesSelectionChanged(objects);
 	}
 
-	void UISceneTree::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	void SceneTree::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
 		{
 			assetsScroll->InstantiateDraggingAssets();
@@ -274,12 +274,12 @@ namespace Editor
 				mDragOffset = Vec2F();
 			}
 		}
-		else UITree::OnDragEnter(group);
+		else Tree::OnDragEnter(group);
 	}
 
-	void UISceneTree::OnDragExit(ISelectableDragableObjectsGroup* group)
+	void SceneTree::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
 		{
 			DeselectAllObjects();
@@ -287,51 +287,51 @@ namespace Editor
 			assetsScroll->ClearInstantiatedDraggingAssets();
 			assetsScroll->Focus();
 		}
-		else UITree::OnDragExit(group);
+		else Tree::OnDragExit(group);
 	}
 
-	void UISceneTree::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
+	void SceneTree::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
 		{
 			UpdateDraggingGraphics();
-			UITree::OnDraggedAbove(this);
+			Tree::OnDraggedAbove(this);
 		}
-		else UITree::OnDraggedAbove(group);
+		else Tree::OnDraggedAbove(group);
 	}
 
-	void UISceneTree::OnDropped(ISelectableDragableObjectsGroup* group)
+	void SceneTree::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (assetsScroll)
 		{
-			UITree::OnDropped(this);
+			Tree::OnDropped(this);
 
 			assetsScroll->RegObjectsCreationAction();
 			assetsScroll->mInstSceneDragObjects.Clear();
 		}
-		else UITree::OnDropped(group);
+		else Tree::OnDropped(group);
 	}
 
-	void UISceneTree::OnObjectCreated(SceneEditableObject* object)
+	void SceneTree::OnObjectCreated(SceneEditableObject* object)
 	{
-		UITree::OnObjectCreated(object, object->GetEditableParent());
+		Tree::OnObjectCreated(object, object->GetEditableParent());
 	}
 
-	void UISceneTree::OnObjectDestroing(SceneEditableObject* object)
+	void SceneTree::OnObjectDestroing(SceneEditableObject* object)
 	{
-		UITree::OnObjectRemoved(object);
+		Tree::OnObjectRemoved(object);
 	}
 
-	void UISceneTree::OnObjectsChanged(const SceneEditableObjsVec& objects)
+	void SceneTree::OnObjectsChanged(const SceneEditableObjsVec& objects)
 	{
-		UITree::OnObjectsChanged(objects.Cast<UnknownPtr>());
+		Tree::OnObjectsChanged(objects.Cast<UnknownPtr>());
 	}
 
-	void UISceneTree::OnObjectChanged(SceneEditableObject* object)
+	void SceneTree::OnObjectChanged(SceneEditableObject* object)
 	{
-		UITree::OnObjectsChanged({ object });
+		Tree::OnObjectsChanged({ object });
 	}
 
 	UISceneTreeNode::UISceneTreeNode() :
@@ -371,8 +371,8 @@ namespace Editor
 		mNameDrawable = GetLayerDrawable<Text>("name");
 		mLockToggle = (UIToggle*)GetChild("lockToggle");
 		mEnableToggle = (UIToggle*)GetChild("enableToggle");
-		mLinkBtn = (UIButton*)GetChild("linkBtn");
-		mNameEditBox = (UIEditBox*)GetChild("nameEditBox");
+		mLinkBtn = (Button*)GetChild("linkBtn");
+		mNameEditBox = (EditBox*)GetChild("nameEditBox");
 		mEditState = GetStateObject("edit");
 
 		if (mLockToggle)
@@ -433,7 +433,7 @@ namespace Editor
 
 		mNameEditBox->text = mTargetObject->GetName();
 		mNameEditBox->SelectAll();
-		mNameEditBox->UIWidget::Focus();
+		mNameEditBox->Widget::Focus();
 		mNameEditBox->ResetScroll();
 	}
 
@@ -453,7 +453,7 @@ namespace Editor
 
 		mTargetObject->SetName(text);
 		mEditState->SetState(false);
-		((UISceneTree*)mOwnerTree)->OnObjectChanged(mTargetObject);
+		((SceneTree*)mOwnerTree)->OnObjectChanged(mTargetObject);
 
 
 		DataNode prevData; prevData = prevName;
@@ -465,6 +465,6 @@ namespace Editor
 
 }
 
-DECLARE_CLASS(Editor::UISceneTree);
+DECLARE_CLASS(Editor::SceneTree);
 
 DECLARE_CLASS(Editor::UISceneTreeNode);

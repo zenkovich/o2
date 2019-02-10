@@ -2,29 +2,29 @@
 #include "WindowsLayout.h"
 
 #include "Core/WindowsSystem/IEditorWindow.h"
-#include "Core/WindowsSystem/UIDockWindowPlace.h"
-#include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Core/WindowsSystem/DockWindowPlace.h"
+#include "Core/WindowsSystem/DockableWindow.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Scene/UI/Widget.h"
 #include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {
-	void WindowsLayout::WindowDockPlace::RetrieveLayout(UIWidget* widget)
+	void WindowsLayout::WindowDockPlace::RetrieveLayout(Widget* widget)
 	{
-		if (widget->GetType() == TypeOf(UIDockWindowPlace))
+		if (widget->GetType() == TypeOf(DockWindowPlace))
 		{
 			anchors.Set(widget->layout->GetAnchorLeft(), widget->layout->GetAnchorTop(),
 						widget->layout->GetAnchorRight(), widget->layout->GetAnchorBottom());
 
 			for (auto child : widget->GetChildWidgets())
 			{
-				if (child->GetType() == TypeOf(UIDockWindowPlace))
+				if (child->GetType() == TypeOf(DockWindowPlace))
 				{
 					childs.Add(WindowDockPlace());
 					childs[childs.Count() - 1].RetrieveLayout(child);
 				}
-				else if (child->GetType() == TypeOf(UIDockableWindow) && child->IsEnabled())
+				else if (child->GetType() == TypeOf(DockableWindow) && child->IsEnabled())
 				{
 					windows.Add(child->name);
 				}
@@ -42,18 +42,18 @@ namespace Editor
 		return mainDock == other.mainDock && windows == other.windows;
 	}
 
-	void WindowsLayout::RestoreDock(WindowDockPlace* dockDef, UIDockWindowPlace* dockWidget)
+	void WindowsLayout::RestoreDock(WindowDockPlace* dockDef, DockWindowPlace* dockWidget)
 	{
-		Vector<UIDockWindowPlace*> childDockWidgets;
+		Vector<DockWindowPlace*> childDockWidgets;
 		for (auto child : dockDef->childs)
 		{
 			dockWidget->interactable = false;
 
-			UIDockWindowPlace* newDock = mnew UIDockWindowPlace();
+			DockWindowPlace* newDock = mnew DockWindowPlace();
 			newDock->name = "dock place";
 			dockWidget->AddChild(newDock);
 
-			*newDock->layout = UIWidgetLayout::BothStretch();
+			*newDock->layout = WidgetLayout::BothStretch();
 			newDock->layout->anchorMin = child.anchors.LeftBottom();
 			newDock->layout->anchorMax = child.anchors.RightTop();
 			childDockWidgets.Add(newDock);
@@ -62,16 +62,16 @@ namespace Editor
 		int idx = 0;
 		for (auto child : dockDef->childs)
 		{
-			UIDockWindowPlace* newDock = childDockWidgets[idx++];
+			DockWindowPlace* newDock = childDockWidgets[idx++];
 
 			if ((child.anchors.left < 1.0f && child.anchors.left > 0.0f) ||
 				(child.anchors.right < 1.0f && child.anchors.right > 0.0f))
 			{
-				UIDockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
+				DockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorRight(), newDock->layout->GetAnchorLeft()) && x != newDock;
 				});
 
-				UIDockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
+				DockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorLeft(), newDock->layout->GetAnchorRight()) && x != newDock;
 				});
 
@@ -87,11 +87,11 @@ namespace Editor
 			if ((child.anchors.top < 1.0f && child.anchors.top > 0.0f) ||
 				(child.anchors.bottom < 1.0f && child.anchors.bottom > 0.0f))
 			{
-				UIDockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
+				DockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorTop(), newDock->layout->GetAnchorBottom()) && x != newDock;
 				});
 
-				UIDockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](UIDockWindowPlace* x) {
+				DockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorBottom(), newDock->layout->GetAnchorTop()) && x != newDock;
 				});
 
@@ -108,7 +108,7 @@ namespace Editor
 		idx = 0;
 		for (auto child : dockDef->childs)
 		{
-			UIDockWindowPlace* newDock = childDockWidgets[idx++];
+			DockWindowPlace* newDock = childDockWidgets[idx++];
 			RestoreDock(&child, newDock);
 		}
 
@@ -119,11 +119,11 @@ namespace Editor
 
 			if (window)
 			{
-				UIDockableWindow* dockWnd = (UIDockableWindow*)window->mWindow;
+				DockableWindow* dockWnd = (DockableWindow*)window->mWindow;
 
 				dockWnd->mNonDockSize = dockWnd->layout->size;
 				dockWidget->AddChild(dockWnd);
-				*dockWnd->layout = UIWidgetLayout::BothStretch();
+				*dockWnd->layout = WidgetLayout::BothStretch();
 				dockWnd->SetDocked(true);
 				dockWnd->Show();
 			}
@@ -134,12 +134,12 @@ namespace Editor
 		CleanEmptyDocks(dockWidget);
 	}
 
-	void WindowsLayout::CleanEmptyDocks(UIDockWindowPlace* dockPlace)
+	void WindowsLayout::CleanEmptyDocks(DockWindowPlace* dockPlace)
 	{
 		auto childs = dockPlace->GetChildWidgets();
 		for (auto child : childs)
 		{
-			if (auto dockChild = dynamic_cast<UIDockWindowPlace*>(child))
+			if (auto dockChild = dynamic_cast<DockWindowPlace*>(child))
 			{
 				CleanEmptyDocks(dockChild);
 

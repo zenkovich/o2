@@ -12,8 +12,8 @@
 
 namespace o2
 {
-	UIWidget::UIWidget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(mnew UIWidgetLayout(), mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
+	Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+		Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
@@ -30,8 +30,8 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	UIWidget::UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(mnew UIWidgetLayout(), prototype, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
+	Widget::Widget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+		Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 
@@ -47,8 +47,8 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	UIWidget::UIWidget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(mnew UIWidgetLayout(), components, mode), layout(dynamic_cast<UIWidgetLayout*>(transform))
+	Widget::Widget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+		Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
@@ -65,8 +65,8 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	UIWidget::UIWidget(const UIWidget& other) :
-		Actor(mnew UIWidgetLayout(*other.layout), other), layout(dynamic_cast<UIWidgetLayout*>(transform)),
+	Widget::Widget(const Widget& other) :
+		Actor(mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
 		mTransparency(other.mTransparency), transparency(this), resTransparency(this), parentWidget(this),
 		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
@@ -76,7 +76,7 @@ namespace o2
 
 		for (auto layer : other.mLayers)
 		{
-			auto newLayer = mnew UIWidgetLayer(*layer);
+			auto newLayer = mnew WidgetLayer(*layer);
 			newLayer->SetOwnerWidget(this);
 			mLayers.Add(newLayer);
 			OnLayerAdded(newLayer);
@@ -85,7 +85,7 @@ namespace o2
 		mChildWidgets.Clear();
 		for (auto child : mChildren)
 		{
-			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
+			Widget* childWidget = dynamic_cast<Widget*>(child);
 			if (childWidget)
 			{
 				childWidget->mParentWidget = this;
@@ -100,14 +100,14 @@ namespace o2
 
 		for (auto child : other.mInternalWidgets)
 		{
-			auto newChild = child->CloneAs<UIWidget>();
+			auto newChild = child->CloneAs<Widget>();
 			newChild->ExcludeFromScene();
 			newChild->SetInternalParent(this, false);
 		}
 
 		for (auto state : other.mStates)
 		{
-			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
+			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
 			AddState(newState);
 		}
 
@@ -122,7 +122,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	UIWidget::~UIWidget()
+	Widget::~Widget()
 	{
 		if (mParent)
 			mParent->OnChildRemoved(this);
@@ -151,13 +151,13 @@ namespace o2
 			o2UI.mFocusableWidgets.Remove(this);
 	}
 
-	UIWidget& UIWidget::operator=(const UIWidget& other)
+	Widget& Widget::operator=(const Widget& other)
 	{
 		Actor::operator=(other);
 		return *this;
 	}
 
-	void UIWidget::Update(float dt)
+	void Widget::Update(float dt)
 	{
 		if (mResEnabledInHierarchy)
 		{
@@ -189,7 +189,7 @@ namespace o2
 		}
 	}
 
-	void UIWidget::UpdateChildren(float dt)
+	void Widget::UpdateChildren(float dt)
 	{
 		for (auto child : mChildren)
 			child->Update(dt);
@@ -204,7 +204,7 @@ namespace o2
 			child->UpdateChildren(dt);
 	}
 
-	void UIWidget::UpdateTransform()
+	void Widget::UpdateTransform()
 	{
 		if (layout->mData->drivenByParent && mParentWidget) {
 			mParentWidget->UpdateTransform();
@@ -214,7 +214,7 @@ namespace o2
 		UpdateChildrenTransforms();
 	}
 
-	void UIWidget::UpdateChildrenTransforms()
+	void Widget::UpdateChildrenTransforms()
 	{
 		Actor::UpdateChildrenTransforms();
 
@@ -225,12 +225,12 @@ namespace o2
 			child->UpdateChildrenTransforms();
 	}
 
-	void UIWidget::SetLayoutDirty()
+	void Widget::SetLayoutDirty()
 	{
 		layout->SetDirty(false);
 	}
 
-	void UIWidget::Draw()
+	void Widget::Draw()
 	{
 		DrawDebugFrame();
 
@@ -259,7 +259,7 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UIWidget::DrawDebugFrame()
+	void Widget::DrawDebugFrame()
 	{
 		if (!IsUIDebugEnabled() && !o2Input.IsKeyDown(VK_F2))
 			return;
@@ -275,7 +275,7 @@ namespace o2
 		o2Render.DrawRectFrame(mBoundsWithChilds, Color4::SomeColor(colr++));
 	}
 
-	void UIWidget::OnTransformUpdated()
+	void Widget::OnTransformUpdated()
 	{
 		mIsClipped = false;
 		Actor::OnTransformUpdated();
@@ -283,32 +283,32 @@ namespace o2
 		onLayoutUpdated();
 	}
 
-	void UIWidget::OnFocused()
+	void Widget::OnFocused()
 	{
 		onFocused();
 	}
 
-	void UIWidget::OnUnfocused()
+	void Widget::OnUnfocused()
 	{
 		onUnfocused();
 	}
 
-	UIWidget* UIWidget::GetParentWidget() const
+	Widget* Widget::GetParentWidget() const
 	{
 		return mParentWidget;
 	}
 
-	RectF UIWidget::GetChildrenRect() const
+	RectF Widget::GetChildrenRect() const
 	{
 		return mChildrenWorldRect;
 	}
 
-	const UIWidget::WidgetsVec& UIWidget::GetChildWidgets() const
+	const Widget::WidgetsVec& Widget::GetChildWidgets() const
 	{
 		return mChildWidgets;
 	}
 
-	UIWidgetLayer* UIWidget::AddLayer(UIWidgetLayer* layer)
+	WidgetLayer* Widget::AddLayer(WidgetLayer* layer)
 	{
 		if (layer->mParent)
 			layer->mParent->RemoveChild(layer, false);
@@ -328,13 +328,13 @@ namespace o2
 		return layer;
 	}
 
-	UIWidgetLayer* UIWidget::AddLayer(const String& name, IRectDrawable* drawable,
+	WidgetLayer* Widget::AddLayer(const String& name, IRectDrawable* drawable,
 									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mDrawingLayers.Count();
 
-		UIWidgetLayer* layer = mnew UIWidgetLayer();
+		WidgetLayer* layer = mnew WidgetLayer();
 		layer->depth = depth;
 		layer->name = name;
 		layer->SetDrawable(drawable);
@@ -345,7 +345,7 @@ namespace o2
 		return layer;
 	}
 
-	UIWidgetLayer* UIWidget::GetLayer(const String& path) const
+	WidgetLayer* Widget::GetLayer(const String& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -364,14 +364,14 @@ namespace o2
 		return nullptr;
 	}
 
-	UIWidgetLayer* UIWidget::FindLayer(const String& name) const
+	WidgetLayer* Widget::FindLayer(const String& name) const
 	{
 		for (auto childLayer : mLayers)
 		{
 			if (childLayer->name == name)
 				return childLayer;
 
-			UIWidgetLayer* layer = childLayer->FindChild(name);
+			WidgetLayer* layer = childLayer->FindChild(name);
 			if (layer)
 				return layer;
 		}
@@ -379,7 +379,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIWidget::RemoveLayer(UIWidgetLayer* layer, bool release /*= true*/)
+	void Widget::RemoveLayer(WidgetLayer* layer, bool release /*= true*/)
 	{
 		layer->mOwnerWidget = nullptr;
 
@@ -392,7 +392,7 @@ namespace o2
 		OnChildrenChanged();
 	}
 
-	void UIWidget::RemoveLayer(const String& path)
+	void Widget::RemoveLayer(const String& path)
 	{
 		auto layer = GetLayer(path);
 
@@ -409,7 +409,7 @@ namespace o2
 		UpdateLayersDrawingSequence();
 	}
 
-	void UIWidget::RemoveAllLayers()
+	void Widget::RemoveAllLayers()
 	{
 		for (auto layer : mLayers)
 			delete layer;
@@ -419,23 +419,23 @@ namespace o2
 		mLayers.Clear();
 	}
 
-	const LayersVec& UIWidget::GetLayers() const
+	const LayersVec& Widget::GetLayers() const
 	{
 		return mLayers;
 	}
 
-	UIWidgetState* UIWidget::AddState(const String& name)
+	WidgetState* Widget::AddState(const String& name)
 	{
-		UIWidgetState* newState = mnew UIWidgetState();
+		WidgetState* newState = mnew WidgetState();
 		newState->name = name;
 		newState->animation.SetTarget(this);
 
 		return AddState(newState);
 	}
 
-	UIWidgetState* UIWidget::AddState(const String& name, const Animation& animation)
+	WidgetState* Widget::AddState(const String& name, const Animation& animation)
 	{
-		UIWidgetState* newState = mnew UIWidgetState();
+		WidgetState* newState = mnew WidgetState();
 		newState->name = name;
 		newState->animation = animation;
 		newState->animation.SetTarget(this);
@@ -444,7 +444,7 @@ namespace o2
 		return AddState(newState);
 	}
 
-	UIWidgetState* UIWidget::AddState(UIWidgetState* state)
+	WidgetState* Widget::AddState(WidgetState* state)
 	{
 		mStates.Add(state);
 
@@ -476,9 +476,9 @@ namespace o2
 		return state;
 	}
 
-	bool UIWidget::RemoveState(const String& name)
+	bool Widget::RemoveState(const String& name)
 	{
-		int idx = mStates.FindIdx([&](UIWidgetState* state) { return state->name == name; });
+		int idx = mStates.FindIdx([&](WidgetState* state) { return state->name == name; });
 		if (idx < 0)
 			return false;
 
@@ -494,7 +494,7 @@ namespace o2
 		return true;
 	}
 
-	bool UIWidget::RemoveState(UIWidgetState* state)
+	bool Widget::RemoveState(WidgetState* state)
 	{
 		int idx = mStates.Find(state);
 		if (idx < 0)
@@ -509,7 +509,7 @@ namespace o2
 		return true;
 	}
 
-	void UIWidget::RemoveAllStates()
+	void Widget::RemoveAllStates()
 	{
 		for (auto state : mStates)
 			delete state;
@@ -520,7 +520,7 @@ namespace o2
 		mStates.Clear();
 	}
 
-	void UIWidget::SetState(const String& name, bool state)
+	void Widget::SetState(const String& name, bool state)
 	{
 		auto stateObj = GetStateObject(name);
 
@@ -528,7 +528,7 @@ namespace o2
 			stateObj->SetState(state);
 	}
 
-	void UIWidget::SetStateForcible(const String& name, bool state)
+	void Widget::SetStateForcible(const String& name, bool state)
 	{
 		auto stateObj = GetStateObject(name);
 
@@ -536,7 +536,7 @@ namespace o2
 			stateObj->SetStateForcible(state);
 	}
 
-	bool UIWidget::GetState(const String& name) const
+	bool Widget::GetState(const String& name) const
 	{
 		auto state = GetStateObject(name);
 
@@ -546,17 +546,17 @@ namespace o2
 		return false;
 	}
 
-	UIWidgetState* UIWidget::GetStateObject(const String& name) const
+	WidgetState* Widget::GetStateObject(const String& name) const
 	{
 		return mStates.FindMatch([&](auto state) { return state->name == name; });
 	}
 
-	const UIWidget::StatesVec& UIWidget::GetStates() const
+	const Widget::StatesVec& Widget::GetStates() const
 	{
 		return mStates;
 	}
 
-	void UIWidget::SetDepthOverridden(bool overrideDepth)
+	void Widget::SetDepthOverridden(bool overrideDepth)
 	{
 		if (mOverrideDepth == overrideDepth)
 			return;
@@ -582,37 +582,37 @@ namespace o2
 		}
 	}
 
-	bool UIWidget::IsDepthOverriden() const
+	bool Widget::IsDepthOverriden() const
 	{
 		return mOverrideDepth;
 	}
 
-	void UIWidget::SetTransparency(float transparency)
+	void Widget::SetTransparency(float transparency)
 	{
 		mTransparency = transparency;
 		UpdateTransparency();
 	}
 
-	float UIWidget::GetTransparency() const
+	float Widget::GetTransparency() const
 	{
 		return mTransparency;
 	}
 
-	float UIWidget::GetResTransparency() const
+	float Widget::GetResTransparency() const
 	{
 		return mResTransparency;
 	}
 
-	void UIWidget::SetEnableForcible(bool visible)
+	void Widget::SetEnableForcible(bool visible)
 	{
 		if (mVisibleState)
 			mVisibleState->SetStateForcible(visible);
 
 		mEnabled = visible;
-		UIWidget::UpdateResEnabled();
+		Widget::UpdateResEnabled();
 	}
 
-	void UIWidget::Show(bool forcible /*= false*/)
+	void Widget::Show(bool forcible /*= false*/)
 	{
 		if (forcible)
 			SetEnableForcible(true);
@@ -620,7 +620,7 @@ namespace o2
 			SetEnabled(true);
 	}
 
-	void UIWidget::Hide(bool forcible /*= false*/)
+	void Widget::Hide(bool forcible /*= false*/)
 	{
 		if (forcible)
 			SetEnableForcible(false);
@@ -628,37 +628,37 @@ namespace o2
 			SetEnabled(false);
 	}
 
-	void UIWidget::Focus()
+	void Widget::Focus()
 	{
 		o2UI.FocusWidget(this);
 	}
 
-	void UIWidget::Unfocus()
+	void Widget::Unfocus()
 	{
 		o2UI.FocusWidget(nullptr);
 	}
 
-	bool UIWidget::IsFocused() const
+	bool Widget::IsFocused() const
 	{
 		return mIsFocused;
 	}
 
-	bool UIWidget::IsFocusable() const
+	bool Widget::IsFocusable() const
 	{
 		return mIsFocusable;
 	}
 
-	void UIWidget::SetFocusable(bool selectable)
+	void Widget::SetFocusable(bool selectable)
 	{
 		mIsFocusable = selectable;
 	}
 
-	bool UIWidget::IsUnderPoint(const Vec2F& point)
+	bool Widget::IsUnderPoint(const Vec2F& point)
 	{
 		return mDrawingScissorRect.IsInside(point) && layout->IsPointInside(point);
 	}
 
-	void UIWidget::SetIndexInSiblings(int index)
+	void Widget::SetIndexInSiblings(int index)
 	{
 		Actor::SetIndexInSiblings(index);
 
@@ -667,7 +667,7 @@ namespace o2
 			mParentWidget->mChildWidgets.Clear();
 			for (auto child : mParentWidget->mChildren)
 			{
-				UIWidget* widget = dynamic_cast<UIWidget*>(child);
+				Widget* widget = dynamic_cast<Widget*>(child);
 				if (widget)
 					mParentWidget->mChildWidgets.Add(widget);
 			}
@@ -676,27 +676,27 @@ namespace o2
 		}
 	}
 
-	float UIWidget::GetMinWidthWithChildren() const
+	float Widget::GetMinWidthWithChildren() const
 	{
 		return layout->mData->minSize.x;
 	}
 
-	float UIWidget::GetMinHeightWithChildren() const
+	float Widget::GetMinHeightWithChildren() const
 	{
 		return layout->mData->minSize.y;
 	}
 
-	float UIWidget::GetWidthWeightWithChildren() const
+	float Widget::GetWidthWeightWithChildren() const
 	{
 		return layout->mData->weight.x;
 	}
 
-	float UIWidget::GetHeightWeightWithChildren() const
+	float Widget::GetHeightWeightWithChildren() const
 	{
 		return layout->mData->weight.y;
 	}
 
-	void UIWidget::UpdateBoundsWithChilds()
+	void Widget::UpdateBoundsWithChilds()
 	{
 		if ((!mResEnabledInHierarchy || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
 			return;
@@ -710,7 +710,7 @@ namespace o2
 			mParentWidget->UpdateBoundsWithChilds();
 	}
 
-	void UIWidget::CheckClipping(const RectF& clipArea)
+	void Widget::CheckClipping(const RectF& clipArea)
 	{
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
@@ -718,7 +718,7 @@ namespace o2
 			child->CheckClipping(clipArea);
 	}
 
-	void UIWidget::UpdateTransparency()
+	void Widget::UpdateTransparency()
 	{
 		if (mParentWidget)
 			mResTransparency = mTransparency*mParentWidget->mResTransparency;
@@ -735,16 +735,16 @@ namespace o2
 			child->UpdateTransparency();
 	}
 
-	void UIWidget::UpdateVisibility(bool updateLayout /*= true*/)
+	void Widget::UpdateVisibility(bool updateLayout /*= true*/)
 	{}
 
-	void UIWidget::OnChildFocused(UIWidget* child)
+	void Widget::OnChildFocused(Widget* child)
 	{
 		if (mParentWidget)
 			mParentWidget->OnChildFocused(child);
 	}
 
-	void UIWidget::RetargetStatesAnimations()
+	void Widget::RetargetStatesAnimations()
 	{
 		for (auto state : mStates)
 		{
@@ -753,7 +753,7 @@ namespace o2
 		}
 	}
 
-	void UIWidget::UpdateLayersLayouts()
+	void Widget::UpdateLayersLayouts()
 	{
 		for (auto layer : mLayers)
 			layer->UpdateLayout();
@@ -761,7 +761,7 @@ namespace o2
 		UpdateBounds();
 	}
 
-	void UIWidget::UpdateDrawingChildren()
+	void Widget::UpdateDrawingChildren()
 	{
 		mDrawingChildren.Clear();
 
@@ -772,7 +772,7 @@ namespace o2
 		}
 	}
 
-	void UIWidget::UpdateBounds()
+	void Widget::UpdateBounds()
 	{
 		if ((!mResEnabledInHierarchy || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
 			return;
@@ -796,7 +796,7 @@ namespace o2
 			UpdateBoundsWithChilds();
 	}
 
-	void UIWidget::UpdateLayersDrawingSequence()
+	void Widget::UpdateLayersDrawingSequence()
 	{
 		const float topLayersDepth = 1000.0f;
 
@@ -830,85 +830,85 @@ namespace o2
 		mTopDrawingLayers.Sort([](auto a, auto b) { return a->mDepth < b->mDepth; });
 	}
 
-	void UIWidget::SetParentWidget(UIWidget* widget)
+	void Widget::SetParentWidget(Widget* widget)
 	{
 		SetParent(widget);
 	}
 
-	UIWidget* UIWidget::GetChildWidget(const String& path) const
+	Widget* Widget::GetChildWidget(const String& path) const
 	{
 		Actor* actor = GetChild(path);
-		return dynamic_cast<UIWidget*>(actor);
+		return dynamic_cast<Widget*>(actor);
 	}
 
-	UIWidget* UIWidget::AddChildWidget(UIWidget* widget)
+	Widget* Widget::AddChildWidget(Widget* widget)
 	{
-		return dynamic_cast<UIWidget*>(AddChild(widget));
+		return dynamic_cast<Widget*>(AddChild(widget));
 	}
 
-	UIWidget* UIWidget::AddChildWidget(UIWidget* widget, int position)
+	Widget* Widget::AddChildWidget(Widget* widget, int position)
 	{
-		return dynamic_cast<UIWidget*>(AddChild(widget, position));
+		return dynamic_cast<Widget*>(AddChild(widget, position));
 	}
 
-	UIWidget::WidgetsVec UIWidget::GetChildrenNonConst()
+	Widget::WidgetsVec Widget::GetChildrenNonConst()
 	{
 		return mChildWidgets;
 	}
 
-	LayersVec UIWidget::GetLayersNonConst()
+	LayersVec Widget::GetLayersNonConst()
 	{
 		return mLayers;
 	}
 
-	StatesVec UIWidget::GetStatesNonConst()
+	StatesVec Widget::GetStatesNonConst()
 	{
 		return mStates;
 	}
 
-	Dictionary<String, UIWidgetLayer*> UIWidget::GetAllLayers()
+	Dictionary<String, WidgetLayer*> Widget::GetAllLayers()
 	{
-		Dictionary<String, UIWidgetLayer*> res;
+		Dictionary<String, WidgetLayer*> res;
 		for (auto layer : mLayers)
 			res.Add(layer->name, layer);
 
 		return res;
 	}
 
-	Dictionary<String, UIWidget*> UIWidget::GetAllChilds()
+	Dictionary<String, Widget*> Widget::GetAllChilds()
 	{
-		Dictionary<String, UIWidget*> res;
+		Dictionary<String, Widget*> res;
 		for (auto child : mChildWidgets)
 			res.Add(child->GetName(), child);
 
 		return res;
 	}
 
-	Dictionary<String, UIWidgetState*> UIWidget::GetAllStates()
+	Dictionary<String, WidgetState*> Widget::GetAllStates()
 	{
-		Dictionary<String, UIWidgetState*> res;
+		Dictionary<String, WidgetState*> res;
 		for (auto state : mStates)
 			res.Add(state->name, state);
 
 		return res;
 	}
 
-	void UIWidget::OnSerialize(DataNode& node) const
+	void Widget::OnSerialize(DataNode& node) const
 	{
 		Actor::OnSerialize(node);
 	}
 
-	void UIWidget::OnLayerAdded(UIWidgetLayer* layer)
+	void Widget::OnLayerAdded(WidgetLayer* layer)
 	{}
 
-	void UIWidget::OnStateAdded(UIWidgetState* state)
+	void Widget::OnStateAdded(WidgetState* state)
 	{}
 
-	void UIWidget::OnParentChanged(Actor* oldParent)
+	void Widget::OnParentChanged(Actor* oldParent)
 	{
 		layout->SetDirty();
 
-		mParentWidget = dynamic_cast<UIWidget*>(mParent);
+		mParentWidget = dynamic_cast<Widget*>(mParent);
 
 		if (mParentWidget)
 		{
@@ -920,11 +920,11 @@ namespace o2
 		else if (mParent && mParent->IsOnScene()) IncludeInScene();
 	}
 
-	void UIWidget::OnChildAdded(Actor* child)
+	void Widget::OnChildAdded(Actor* child)
 	{
 		layout->SetDirty(false);
 
-		UIWidget* widget = dynamic_cast<UIWidget*>(child);
+		Widget* widget = dynamic_cast<Widget*>(child);
 		if (widget)
 		{
 			mChildWidgets.Add(widget);
@@ -934,14 +934,14 @@ namespace o2
 		}
 	}
 
-	void UIWidget::OnChildAdded(UIWidget* child)
+	void Widget::OnChildAdded(Widget* child)
 	{}
 
-	void UIWidget::OnChildRemoved(Actor* child)
+	void Widget::OnChildRemoved(Actor* child)
 	{
 		layout->SetDirty();
 
-		UIWidget* widget = dynamic_cast<UIWidget*>(child);
+		Widget* widget = dynamic_cast<Widget*>(child);
 		if (widget)
 		{
 			mChildWidgets.Remove(widget);
@@ -952,15 +952,15 @@ namespace o2
 		}
 	}
 
-	void UIWidget::OnChildRemoved(UIWidget* child)
+	void Widget::OnChildRemoved(Widget* child)
 	{}
 
-	void UIWidget::OnLayerChanged(SceneLayer* oldLayer)
+	void Widget::OnLayerChanged(SceneLayer* oldLayer)
 	{
 		SceneDrawable::SetLayer(mLayer);
 	}
 
-	void UIWidget::OnExcludeFromScene()
+	void Widget::OnExcludeFromScene()
 	{
 		for (auto child : mInternalWidgets)
 			child->ExcludeFromScene();
@@ -976,7 +976,7 @@ namespace o2
 #endif
 	}
 
-	void UIWidget::OnIncludeToScene()
+	void Widget::OnIncludeToScene()
 	{
 		SceneDrawable::OnIncludeToScene();
 
@@ -992,7 +992,7 @@ namespace o2
 #endif
 	}
 
-	void UIWidget::OnDeserialized(const DataNode& node)
+	void Widget::OnDeserialized(const DataNode& node)
 	{
 		Actor::OnDeserialized(node);
 
@@ -1005,7 +1005,7 @@ namespace o2
 		mChildWidgets.Clear();
 		for (auto child : mChildren)
 		{
-			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
+			Widget* childWidget = dynamic_cast<Widget*>(child);
 			if (childWidget)
 			{
 				childWidget->mParentWidget = this;
@@ -1024,7 +1024,7 @@ namespace o2
 		UpdateLayersDrawingSequence();
 	}
 
-	void UIWidget::ForceDraw(const RectF& area, float transparency)
+	void Widget::ForceDraw(const RectF& area, float transparency)
 	{
 		Vec2F oldLayoutOffsetMin = layout->mData->offsetMin;
 		Vec2F oldLayoutOffsetMax = layout->mData->offsetMax;
@@ -1066,7 +1066,7 @@ namespace o2
 		UpdateTransparency();
 	}
 
-	void UIWidget::UpdateResEnabled()
+	void Widget::UpdateResEnabled()
 	{
 		if (mVisibleState)
 			mVisibleState->SetState(mEnabled);
@@ -1074,7 +1074,7 @@ namespace o2
 			Actor::UpdateResEnabled();
 	}
 
-	void UIWidget::UpdateResEnabledInHierarchy()
+	void Widget::UpdateResEnabledInHierarchy()
 	{
 		bool lastResEnabledInHierarchy = mResEnabledInHierarchy;
 
@@ -1116,9 +1116,9 @@ namespace o2
 			child->UpdateResEnabledInHierarchy();
 	}
 
-	void UIWidget::CopyData(const Actor& otherActor)
+	void Widget::CopyData(const Actor& otherActor)
 	{
-		const UIWidget& other = dynamic_cast<const UIWidget&>(otherActor);
+		const Widget& other = dynamic_cast<const Widget&>(otherActor);
 
 		Actor::CopyData(other);
 
@@ -1149,7 +1149,7 @@ namespace o2
 
 		for (auto layer : other.mLayers)
 		{
-			auto newLayer = mnew UIWidgetLayer(*layer);
+			auto newLayer = mnew WidgetLayer(*layer);
 			newLayer->SetOwnerWidget(this);
 			mLayers.Add(newLayer);
 			OnLayerAdded(newLayer);
@@ -1158,21 +1158,21 @@ namespace o2
 		mChildWidgets.Clear();
 		for (auto child : mChildren)
 		{
-			UIWidget* childWidget = dynamic_cast<UIWidget*>(child);
+			Widget* childWidget = dynamic_cast<Widget*>(child);
 			if (childWidget)
 				mChildWidgets.Add(childWidget);
 		}
 
 		for (auto child : other.mInternalWidgets)
 		{
-			auto newChild = child->CloneAs<UIWidget>();
+			auto newChild = child->CloneAs<Widget>();
 			newChild->ExcludeFromScene();
 			newChild->SetInternalParent(this, false);
 		}
 
 		for (auto state : other.mStates)
 		{
-			UIWidgetState* newState = dynamic_cast<UIWidgetState*>(state->Clone());
+			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
 			AddState(newState);
 		}
 
@@ -1180,7 +1180,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIWidget::SetInternalParent(UIWidget* parent, bool worldPositionStays /*= false*/)
+	void Widget::SetInternalParent(Widget* parent, bool worldPositionStays /*= false*/)
 	{
 		SetParent(parent, worldPositionStays);
 
@@ -1190,12 +1190,12 @@ namespace o2
 		parent->mInternalWidgets.Add(this);
 	}
 
-	void UIWidget::AddInternalWidget(UIWidget* widget, bool worldPositionStays /*= false*/)
+	void Widget::AddInternalWidget(Widget* widget, bool worldPositionStays /*= false*/)
 	{
 		widget->SetInternalParent(this, worldPositionStays);
 	}
 
-	UIWidget* UIWidget::GetInternalWidget(const String& path) const
+	Widget* Widget::GetInternalWidget(const String& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -1207,7 +1207,7 @@ namespace o2
 				if (delPos == -1)
 					return mParentWidget;
 				else
-					return mParent->GetChildByType<UIWidget>(path.SubStr(delPos + 1));
+					return mParent->GetChildByType<Widget>(path.SubStr(delPos + 1));
 			}
 
 			return nullptr;
@@ -1220,28 +1220,28 @@ namespace o2
 				if (delPos == -1)
 					return child;
 				else
-					return child->GetChildByType<UIWidget>(path.SubStr(delPos + 1));
+					return child->GetChildByType<Widget>(path.SubStr(delPos + 1));
 			}
 		}
 
 		return nullptr;
 	}
 
-	UIWidget* UIWidget::FindInternalWidget(const String& name) const
+	Widget* Widget::FindInternalWidget(const String& name) const
 	{
 		for (auto widget : mInternalWidgets)
 		{
 			if (widget->GetName() == name)
 				return widget;
 
-			if (UIWidget* res = widget->FindChildByTypeAndName<UIWidget>(name))
+			if (Widget* res = widget->FindChildByTypeAndName<Widget>(name))
 				return res;
 		}
 
 		return nullptr;
 	}
 
-	void UIWidget::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
+	void Widget::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
 	{
 		RectF last = mBoundsWithChilds;
 
@@ -1260,10 +1260,10 @@ namespace o2
 
 #if IS_EDITOR
 
-	bool UIWidget::isEditorLayersVisible = true;
-	bool UIWidget::isEditorInternalChildrenVisible = true;
+	bool Widget::isEditorLayersVisible = true;
+	bool Widget::isEditorInternalChildrenVisible = true;
 
-	SceneEditableObject* UIWidget::GetEditableParent() const
+	SceneEditableObject* Widget::GetEditableParent() const
 	{
 		if (mParentWidget && std::find(mParentWidget->mInternalWidgets.begin(),
 									   mParentWidget->mInternalWidgets.end(), this) != mParentWidget->mInternalWidgets.end())
@@ -1274,7 +1274,7 @@ namespace o2
 		return Actor::GetEditableParent();
 	}
 
-	Vector<SceneEditableObject*> UIWidget::GetEditablesChildren() const
+	Vector<SceneEditableObject*> Widget::GetEditablesChildren() const
 	{
 		Vector<SceneEditableObject*> res = Actor::GetEditablesChildren();
 
@@ -1287,7 +1287,7 @@ namespace o2
 		return res;
 	}
 
-	void UIWidget::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+	void Widget::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (auto actor = dynamic_cast<Actor*>(object))
 		{
@@ -1296,36 +1296,36 @@ namespace o2
 			else
 				AddChild(actor, idx);
 		}
-		else if (auto layer = dynamic_cast<UIWidgetLayer*>(object))
+		else if (auto layer = dynamic_cast<WidgetLayer*>(object))
 			AddLayer(layer);
 	}
 
-	bool UIWidget::IsSupportsTransforming() const
+	bool Widget::IsSupportsTransforming() const
 	{
 		return true;
 	}
 
-	Basis UIWidget::GetTransform() const
+	Basis Widget::GetTransform() const
 	{
 		return layout->GetWorldBasis();
 	}
 
-	void UIWidget::SetTransform(const Basis& transform)
+	void Widget::SetTransform(const Basis& transform)
 	{
 		layout->SetWorldBasis(transform);
 	}
 
-	bool UIWidget::IsSupportsLayout() const
+	bool Widget::IsSupportsLayout() const
 	{
 		return true;
 	}
 
-	Layout UIWidget::GetLayout() const
+	Layout Widget::GetLayout() const
 	{
 		return Layout(layout->GetAnchorMin(), layout->GetAnchorMax(), layout->GetOffsetMin(), layout->GetOffsetMax());
 	}
 
-	void UIWidget::SetLayout(const Layout& layout)
+	void Widget::SetLayout(const Layout& layout)
 	{
 		this->layout->SetAnchorMin(layout.anchorMin);
 		this->layout->SetAnchorMax(layout.anchorMax);
@@ -1333,111 +1333,111 @@ namespace o2
 		this->layout->SetOffsetMax(layout.offsetMax);
 	}
 
-	SceneEditableObject* UIWidget::GetEditableOwner()
+	SceneEditableObject* Widget::GetEditableOwner()
 	{
 		return this;
 	}
 
-	UIWidget::LayersEditable::LayersEditable()
+	Widget::LayersEditable::LayersEditable()
 	{}
 
-	UIWidget::LayersEditable::LayersEditable(UIWidget* widget) :
+	Widget::LayersEditable::LayersEditable(Widget* widget) :
 		mWidget(widget)
 	{}
 
-	SceneUID UIWidget::LayersEditable::GetID() const
+	SceneUID Widget::LayersEditable::GetID() const
 	{
 		return mUID;
 	}
 
-	void UIWidget::LayersEditable::GenerateNewID(bool childs /*= true*/)
+	void Widget::LayersEditable::GenerateNewID(bool childs /*= true*/)
 	{
 		mUID = Math::Random();
 	}
 
-	String UIWidget::LayersEditable::GetName() const
+	String Widget::LayersEditable::GetName() const
 	{
 		return "layers";
 	}
 
-	void UIWidget::LayersEditable::SetName(const String& name)
+	void Widget::LayersEditable::SetName(const String& name)
 	{}
 
-	Vector<SceneEditableObject*> UIWidget::LayersEditable::GetEditablesChildren() const
+	Vector<SceneEditableObject*> Widget::LayersEditable::GetEditablesChildren() const
 	{
-		return mWidget->mLayers.Select<SceneEditableObject*>([](UIWidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mWidget->mLayers.Select<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	o2::SceneEditableObject* UIWidget::LayersEditable::GetEditableParent() const
+	o2::SceneEditableObject* Widget::LayersEditable::GetEditableParent() const
 {
 		return dynamic_cast<SceneEditableObject*>(mWidget);
 	}
 
-	void UIWidget::LayersEditable::SetEditableParent(SceneEditableObject* object)
+	void Widget::LayersEditable::SetEditableParent(SceneEditableObject* object)
 	{}
 
-	void UIWidget::LayersEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+	void Widget::LayersEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
-		if (UIWidgetLayer* layer = dynamic_cast<UIWidgetLayer*>(object))
+		if (WidgetLayer* layer = dynamic_cast<WidgetLayer*>(object))
 			mWidget->AddLayer(layer);
 	}
 
-	void UIWidget::LayersEditable::SetIndexInSiblings(int idx)
+	void Widget::LayersEditable::SetIndexInSiblings(int idx)
 	{}
 
-	Basis UIWidget::LayersEditable::GetTransform() const
+	Basis Widget::LayersEditable::GetTransform() const
 	{
 		return mWidget->GetTransform();
 	}
 
-	UIWidget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
+	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
 	{}
 
-	UIWidget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(UIWidget* widget) :
+	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(Widget* widget) :
 		mWidget(widget)
 	{}
 
-	SceneUID UIWidget::InternalChildrenEditableEditable::GetID() const
+	SceneUID Widget::InternalChildrenEditableEditable::GetID() const
 	{
 		return mUID;
 	}
 
-	void UIWidget::InternalChildrenEditableEditable::GenerateNewID(bool childs /*= true*/)
+	void Widget::InternalChildrenEditableEditable::GenerateNewID(bool childs /*= true*/)
 	{
 		mUID = Math::Random();
 	}
 
-	String UIWidget::InternalChildrenEditableEditable::GetName() const
+	String Widget::InternalChildrenEditableEditable::GetName() const
 	{
 		return "internal children";
 	}
 
-	void UIWidget::InternalChildrenEditableEditable::SetName(const String& name)
+	void Widget::InternalChildrenEditableEditable::SetName(const String& name)
 	{}
 
-	Vector<SceneEditableObject*> UIWidget::InternalChildrenEditableEditable::GetEditablesChildren() const
+	Vector<SceneEditableObject*> Widget::InternalChildrenEditableEditable::GetEditablesChildren() const
 	{
-		return mWidget->mInternalWidgets.Select<SceneEditableObject*>([](UIWidget* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mWidget->mInternalWidgets.Select<SceneEditableObject*>([](Widget* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	o2::SceneEditableObject* UIWidget::InternalChildrenEditableEditable::GetEditableParent() const
+	o2::SceneEditableObject* Widget::InternalChildrenEditableEditable::GetEditableParent() const
 {
 		return dynamic_cast<SceneEditableObject*>(mWidget);
 	}
 
-	void UIWidget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object)
+	void Widget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object)
 	{}
 
-	void UIWidget::InternalChildrenEditableEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
+	void Widget::InternalChildrenEditableEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
-		if (UIWidget* widget = dynamic_cast<UIWidget*>(object))
+		if (Widget* widget = dynamic_cast<Widget*>(object))
 			widget->SetInternalParent(mWidget);
 	}
 
-	void UIWidget::InternalChildrenEditableEditable::SetIndexInSiblings(int idx)
+	void Widget::InternalChildrenEditableEditable::SetIndexInSiblings(int idx)
 	{}
 
-	Basis UIWidget::InternalChildrenEditableEditable::GetTransform() const
+	Basis Widget::InternalChildrenEditableEditable::GetTransform() const
 	{
 		return mWidget->GetTransform();
 	}
@@ -1445,8 +1445,8 @@ namespace o2
 #endif // IS_EDITOR
 }
 
-DECLARE_CLASS(o2::UIWidget);
+DECLARE_CLASS(o2::Widget);
 
-DECLARE_CLASS(o2::UIWidget::LayersEditable);
+DECLARE_CLASS(o2::Widget::LayersEditable);
 
-DECLARE_CLASS(o2::UIWidget::InternalChildrenEditableEditable);
+DECLARE_CLASS(o2::Widget::InternalChildrenEditableEditable);

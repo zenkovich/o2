@@ -8,10 +8,10 @@ namespace o2
 	// ---------------------
 	// Vertical progress bar
 	// ---------------------
-	class UIVerticalScrollBar: public UIWidget, public DrawableCursorEventsListener
+	class VerticalScrollBar: public Widget, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTIES(UIVerticalScrollBar);
+		PROPERTIES(VerticalScrollBar);
 		PROPERTY(float, value, SetValue, GetValue); // Current value property
 
 		PROPERTY(float, minValue, SetMinValue, GetMinValue); // Minimal value property
@@ -25,16 +25,16 @@ namespace o2
 		Function<void(float)> onSmoothChange; // On smooth value changing event
 
 		// Constructor
-		UIVerticalScrollBar();
+		VerticalScrollBar();
 
 		// Copy-constructor
-		UIVerticalScrollBar(const UIVerticalScrollBar& other);
+		VerticalScrollBar(const VerticalScrollBar& other);
 
 		// Destructor
-		~UIVerticalScrollBar();
+		~VerticalScrollBar();
 
 		// Copy-operator
-		UIVerticalScrollBar& operator=(const UIVerticalScrollBar& other);
+		VerticalScrollBar& operator=(const VerticalScrollBar& other);
 
 		// Updates widget and smooth value changing
 		void Update(float dt) override;
@@ -90,7 +90,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UIVerticalScrollBar);
+		SERIALIZABLE(VerticalScrollBar);
 
 	protected:
 		float          mValue = 0.0f;                 // Current value @SERIALIZABLE
@@ -106,8 +106,8 @@ namespace o2
 		float          mPressHandleOffset = 0.0f;     // Value offset when handle was pressed
 		bool           mHandlePressed = false;        // True, when handle was pressed
 
-		UIWidgetLayer* mHandleLayer = nullptr;        // Handle layer
-		UIWidgetLayer* mBackLayer = nullptr;          // Background layer
+		WidgetLayer* mHandleLayer = nullptr;        // Handle layer
+		WidgetLayer* mBackLayer = nullptr;          // Background layer
 
 	protected:
 		// Copies data of actor from other to this
@@ -117,7 +117,7 @@ namespace o2
 		void UpdateLayersLayouts() override;
 
 		// It is called when new layer was added. Here searching bar, back and handle layers
-		void OnLayerAdded(UIWidgetLayer* layer) override;
+		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// It is called when deserialized
 		void OnDeserialized(const DataNode& node) override;
@@ -156,21 +156,21 @@ namespace o2
 		void OnScrolled(float scroll) override;
 
 		friend class UIContextMenu;
-		friend class UICustomList;
-		friend class UIEditBox;
-		friend class UILongList;
-		friend class UIScrollArea;
-		friend class UITree;
+		friend class CustomList;
+		friend class EditBox;
+		friend class LongList;
+		friend class ScrollArea;
+		friend class Tree;
 	};
 }
 
-CLASS_BASES_META(o2::UIVerticalScrollBar)
+CLASS_BASES_META(o2::VerticalScrollBar)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIVerticalScrollBar)
+CLASS_FIELDS_META(o2::VerticalScrollBar)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(minValue);
@@ -193,7 +193,7 @@ CLASS_FIELDS_META(o2::UIVerticalScrollBar)
 	PROTECTED_FIELD(mBackLayer);
 }
 END_META;
-CLASS_METHODS_META(o2::UIVerticalScrollBar)
+CLASS_METHODS_META(o2::VerticalScrollBar)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
@@ -216,7 +216,7 @@ CLASS_METHODS_META(o2::UIVerticalScrollBar)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);

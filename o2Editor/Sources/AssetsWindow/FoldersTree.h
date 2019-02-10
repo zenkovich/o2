@@ -14,30 +14,30 @@ namespace o2
 
 namespace Editor
 {
-	class UIFoldersTree;
+	class FoldersTree;
 
 	// --------------------------
 	// Assets folders tree widget
 	// --------------------------
-	class UIAssetsFoldersTree: public UIWidget, public KeyboardEventsListener
+	class AssetsFoldersTree: public Widget, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
-		UIAssetsFoldersTree();
+		AssetsFoldersTree();
 
 		// Copy-constructor
-		UIAssetsFoldersTree(const UIAssetsFoldersTree& other);
+		AssetsFoldersTree(const AssetsFoldersTree& other);
 
 		// Destructor
-		~UIAssetsFoldersTree();
+		~AssetsFoldersTree();
 
 		// Copy-operator
-		UIAssetsFoldersTree& operator=(const UIAssetsFoldersTree& other);
+		AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
 
-		SERIALIZABLE(UIAssetsFoldersTree);
+		SERIALIZABLE(AssetsFoldersTree);
 
 	protected:
-		UITree*        mFoldersTree; // Folders tree
+		Tree*        mFoldersTree; // Folders tree
 		UIContextMenu* mContextMenu; // Context menu
 		String         mCurrentPath; // Current viewing path
 
@@ -119,10 +119,10 @@ namespace Editor
 		friend class AssetsWindow;
 	};
 
-	class UIFoldersTree : public UITree
+	class FoldersTree : public Tree
 	{
 	public:
-		SERIALIZABLE(UIFoldersTree);
+		SERIALIZABLE(FoldersTree);
 
 	protected:
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
@@ -130,13 +130,13 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::UIAssetsFoldersTree)
+CLASS_BASES_META(Editor::AssetsFoldersTree)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UIAssetsFoldersTree)
+CLASS_FIELDS_META(Editor::AssetsFoldersTree)
 {
 	PROTECTED_FIELD(mFoldersTree);
 	PROTECTED_FIELD(mContextMenu);
@@ -144,7 +144,7 @@ CLASS_FIELDS_META(Editor::UIAssetsFoldersTree)
 	PROTECTED_FIELD(mOpengingFolderFromThis);
 }
 END_META;
-CLASS_METHODS_META(Editor::UIAssetsFoldersTree)
+CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
@@ -174,16 +174,16 @@ CLASS_METHODS_META(Editor::UIAssetsFoldersTree)
 }
 END_META;
 
-CLASS_BASES_META(Editor::UIFoldersTree)
+CLASS_BASES_META(Editor::FoldersTree)
 {
-	BASE_CLASS(o2::UITree);
+	BASE_CLASS(o2::Tree);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UIFoldersTree)
+CLASS_FIELDS_META(Editor::FoldersTree)
 {
 }
 END_META;
-CLASS_METHODS_META(Editor::UIFoldersTree)
+CLASS_METHODS_META(Editor::FoldersTree)
 {
 
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);

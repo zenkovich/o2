@@ -8,7 +8,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIEditBox;
+	class EditBox;
 }
 
 namespace Editor
@@ -31,7 +31,7 @@ namespace Editor
 		IOBJECT(FloatProperty);
 
 	protected:
-		UIEditBox*       mEditBox = nullptr;        // Edit box 
+		EditBox*       mEditBox = nullptr;        // Edit box 
 		CursorEventsArea mDragHangle;               // Value changing drag handle
 
 	protected:

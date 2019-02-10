@@ -15,7 +15,7 @@ namespace Editor
 		if (WindowsManager::IsSingletonInitialzed())
 		{
 			o2EditorSceneScreen.mDragHandles.Add(this);
-			messageFallDownListener = (UIScrollView*)SceneEditScreen::InstancePtr();
+			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
 		}
 	}
 
@@ -25,7 +25,7 @@ namespace Editor
 		if (WindowsManager::IsSingletonInitialzed())
 		{
 			o2EditorSceneScreen.mDragHandles.Add(this);
-			messageFallDownListener = (UIScrollView*)SceneEditScreen::InstancePtr();
+			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
 		}
 	}
 
@@ -35,7 +35,7 @@ namespace Editor
 		if (WindowsManager::IsSingletonInitialzed())
 		{
 			o2EditorSceneScreen.mDragHandles.Add(this);
-			messageFallDownListener = (UIScrollView*)SceneEditScreen::InstancePtr();
+			messageFallDownListener = (ScrollView*)SceneEditScreen::InstancePtr();
 		}
 	}
 

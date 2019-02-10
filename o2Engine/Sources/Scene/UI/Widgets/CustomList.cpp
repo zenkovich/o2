@@ -13,16 +13,16 @@
 
 namespace o2
 {
-	UICustomList::UICustomList():
-		UIScrollArea(), DrawableCursorEventsListener(this)
+	CustomList::CustomList():
+		ScrollArea(), DrawableCursorEventsListener(this)
 	{
-		mItemSample = mnew UIWidget();
+		mItemSample = mnew Widget();
 		mItemSample->ExcludeFromScene();
 
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable     = mnew Sprite();
 
-		mVerLayout                    = mnew UIVerticalLayout();
+		mVerLayout                    = mnew VerticalLayout();
 		mVerLayout->baseCorner        = BaseCorner::LeftTop;
 		mVerLayout->name              = "layout";
 		mVerLayout->expandHeight      = false;
@@ -36,14 +36,14 @@ namespace o2
 		AddChild(mVerLayout);
 	}
 
-	UICustomList::UICustomList(const UICustomList& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
+	CustomList::CustomList(const CustomList& other):
+		ScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
 		selectedItemPos(this), itemsCount(this)
 	{
-		mVerLayout = FindChildByType<UIVerticalLayout>();
+		mVerLayout = FindChildByType<VerticalLayout>();
 
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
 		mItemSample->ExcludeFromScene();
 		mItemSample->UpdateSelfTransform();
 		mItemSample->UpdateChildrenTransforms();
@@ -55,22 +55,22 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UICustomList::~UICustomList()
+	CustomList::~CustomList()
 	{
 		delete mItemSample;
 		delete mSelectionDrawable;
 		delete mHoverDrawable;
 	}
 
-	UICustomList& UICustomList::operator=(const UICustomList& other)
+	CustomList& CustomList::operator=(const CustomList& other)
 	{
-		UIScrollArea::operator=(other);
+		ScrollArea::operator=(other);
 		return *this;
 	}
 
-	void UICustomList::Update(float dt)
+	void CustomList::Update(float dt)
 	{
-		UIScrollArea::Update(dt);
+		ScrollArea::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -84,7 +84,7 @@ namespace o2
 		}
 	}
 
-	void UICustomList::Draw()
+	void CustomList::Draw()
 	{
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -118,7 +118,7 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UICustomList::SetItemSample(UIWidget* sample)
+	void CustomList::SetItemSample(Widget* sample)
 	{
 		RemoveAllItems();
 
@@ -130,37 +130,37 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIWidget* UICustomList::GetItemSample() const
+	Widget* CustomList::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	UIVerticalLayout* UICustomList::GetItemsLayout() const
+	VerticalLayout* CustomList::GetItemsLayout() const
 	{
 		return mVerLayout;
 	}
 
-	UIWidget* UICustomList::AddItem()
+	Widget* CustomList::AddItem()
 	{
-		return mVerLayout->AddChildWidget(mItemSample->CloneAs<UIWidget>());
+		return mVerLayout->AddChildWidget(mItemSample->CloneAs<Widget>());
 	}
 
-	UIWidget* UICustomList::AddItem(int position)
+	Widget* CustomList::AddItem(int position)
 	{
 		position = Math::Max(0, position);
 
 		for (int i = mVerLayout->GetChildren().Count(); i < position; i++)
 			AddItem();
 
-		return mVerLayout->AddChildWidget(mItemSample->CloneAs<UIWidget>(), position);
+		return mVerLayout->AddChildWidget(mItemSample->CloneAs<Widget>(), position);
 	}
 
-	void UICustomList::RemoveItem(UIWidget* item)
+	void CustomList::RemoveItem(Widget* item)
 	{
 		mVerLayout->RemoveChild(item);
 	}
 
-	void UICustomList::RemoveItem(int position)
+	void CustomList::RemoveItem(int position)
 	{
 		if (position < 0 || position >= mVerLayout->GetChildren().Count())
 		{
@@ -171,7 +171,7 @@ namespace o2
 		mVerLayout->RemoveChild(mVerLayout->GetChildren().Get(position));
 	}
 
-	void UICustomList::MoveItem(int position, int newPosition)
+	void CustomList::MoveItem(int position, int newPosition)
 	{
 		if (position < 0 || position >= mVerLayout->GetChildren().Count())
 		{
@@ -180,18 +180,18 @@ namespace o2
 			return;
 		}
 
-		UIWidget* item = mVerLayout->GetChildWidgets().Get(position);
+		Widget* item = mVerLayout->GetChildWidgets().Get(position);
 		mVerLayout->RemoveChild(item, false);
 		mVerLayout->AddChild(item, newPosition);
 	}
 
-	void UICustomList::MoveItem(UIWidget* item, int newPosition)
+	void CustomList::MoveItem(Widget* item, int newPosition)
 	{
 		mVerLayout->RemoveChild(item, false);
 		mVerLayout->AddChild(item, newPosition);
 	}
 
-	int UICustomList::GetItemPosition(UIWidget* item)
+	int CustomList::GetItemPosition(Widget* item)
 	{
 		int i = 0;
 		for (auto child : mVerLayout->GetChildWidgets())
@@ -205,7 +205,7 @@ namespace o2
 		return -1;
 	}
 
-	UIWidget* UICustomList::GetItem(int position) const
+	Widget* CustomList::GetItem(int position) const
 	{
 		if (position < 0 || position >= mVerLayout->GetChildWidgets().Count())
 			return nullptr;
@@ -213,22 +213,22 @@ namespace o2
 		return mVerLayout->GetChildWidgets().Get(position);
 	}
 
-	void UICustomList::RemoveAllItems()
+	void CustomList::RemoveAllItems()
 	{
 		mVerLayout->RemoveAllChildren();
 	}
 
-	void UICustomList::SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc)
+	void CustomList::SortItems(const Function<bool(Widget*, Widget*)>& sortFunc)
 	{
 		mVerLayout->mChildWidgets.Sort(sortFunc);
 	}
 
-	int UICustomList::GetItemsCount() const
+	int CustomList::GetItemsCount() const
 	{
 		return mVerLayout->GetChildWidgets().Count();
 	}
 
-	void UICustomList::SelectItem(UIWidget* item)
+	void CustomList::SelectItem(Widget* item)
 	{
 		int itemPos = GetItemPosition(item);
 
@@ -249,7 +249,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UICustomList::SelectItemAt(int position)
+	void CustomList::SelectItemAt(int position)
 	{
 		if (!mMultiSelection)
 			ClearSelection();
@@ -278,13 +278,13 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UICustomList::SetSelectedItems(const Vector<int>& items)
+	void CustomList::SetSelectedItems(const Vector<int>& items)
 	{
 		for (auto x : items)
 			SelectItemAt(x);
 	}
 
-	void UICustomList::ClearSelection()
+	void CustomList::ClearSelection()
 	{
 		for (auto& sel : mSelectedItems)
 			mSelectionSpritesPool.Add(sel.selection);
@@ -292,12 +292,12 @@ namespace o2
 		mSelectedItems.Clear();
 	}
 
-	Vector<int> UICustomList::GetSelectedItems() const
+	Vector<int> CustomList::GetSelectedItems() const
 	{
 		return mSelectedItems.Select<int>([](auto x) { return x.idx; });
 	}
 
-	int UICustomList::GetSelectedItemPos() const
+	int CustomList::GetSelectedItemPos() const
 	{
 		if (mSelectedItems.IsEmpty())
 			return -1;
@@ -305,7 +305,7 @@ namespace o2
 		return mSelectedItems.Last().idx;
 	}
 
-	UIWidget* UICustomList::GetSelectedItem() const
+	Widget* CustomList::GetSelectedItem() const
 	{
 		if (mSelectedItems.IsEmpty())
 			return nullptr;
@@ -313,7 +313,7 @@ namespace o2
 		return GetItem(mSelectedItems.Last().idx);
 	}
 
-	void UICustomList::SetMultiselectionAvailable(bool available)
+	void CustomList::SetMultiselectionAvailable(bool available)
 	{
 		mMultiSelection = available;
 
@@ -328,66 +328,66 @@ namespace o2
 		}
 	}
 
-	bool UICustomList::IsMultiselectionAvailable() const
+	bool CustomList::IsMultiselectionAvailable() const
 	{
 		return mMultiSelection;
 	}
 
-	Sprite* UICustomList::GetSelectionDrawable() const
+	Sprite* CustomList::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
 
-	Sprite* UICustomList::GetHoverDrawable() const
+	Sprite* CustomList::GetHoverDrawable() const
 	{
 		return mHoverDrawable;
 	}
 
-	void UICustomList::SetSelectionDrawableLayout(const Layout& layout)
+	void CustomList::SetSelectionDrawableLayout(const Layout& layout)
 	{
 		mSelectionLayout = layout;
 	}
 
-	Layout UICustomList::GetSelectionDrawableLayout() const
+	Layout CustomList::GetSelectionDrawableLayout() const
 	{
 		return mSelectionLayout;
 	}
 
-	void UICustomList::SetHoverDrawableLayout(const Layout& layout)
+	void CustomList::SetHoverDrawableLayout(const Layout& layout)
 	{
 		mHoverLayout = layout;
 	}
 
-	Layout UICustomList::GetHoverDrawableLayout() const
+	Layout CustomList::GetHoverDrawableLayout() const
 	{
 		return mHoverLayout;
 	}
 
-	bool UICustomList::IsScrollable() const
+	bool CustomList::IsScrollable() const
 	{
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
-	void UICustomList::MoveScrollPosition(const Vec2F& delta)
+	void CustomList::MoveScrollPosition(const Vec2F& delta)
 	{
-		UIScrollArea::MoveScrollPosition(delta);
+		ScrollArea::MoveScrollPosition(delta);
 		UpdateHover(o2Input.GetCursorPos());
 		UpdateSelectionSprites();
 	}
 
-	void UICustomList::UpdateControls(float dt)
+	void CustomList::UpdateControls(float dt)
 	{}
 
-	void UICustomList::OnTransformUpdated()
+	void CustomList::OnTransformUpdated()
 	{
-		UIScrollArea::OnTransformUpdated();
+		ScrollArea::OnTransformUpdated();
 		UpdateHover(o2Input.GetCursorPos());
 		UpdateSelectionSprites();
 	}
 
-	void UICustomList::UpdateSelfTransform()
+	void CustomList::UpdateSelfTransform()
 {
-		UIScrollArea::UpdateSelfTransform();
+		ScrollArea::UpdateSelfTransform();
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -396,24 +396,24 @@ namespace o2
 		mHoverDrawable->SetRect(mCurrentHoverRect);
 	}
 
-	void UICustomList::UpdateSelectionSprites()
+	void CustomList::UpdateSelectionSprites()
 	{
 		for (auto& sel : mSelectedItems)
 		{
-			UIWidget* item = GetItem(sel.idx);
+			Widget* item = GetItem(sel.idx);
 			sel.selection->SetRect(mSelectionLayout.Calculate(item->layout->worldRect));
 			sel.selection->SetEnabled(item->mResEnabledInHierarchy && !item->mIsClipped);
 		}
 	}
 
-	void UICustomList::OnCursorPressed(const Input::Cursor& cursor)
+	void CustomList::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = true;
 	}
 
-	void UICustomList::OnCursorStillDown(const Input::Cursor& cursor)
+	void CustomList::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
 		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
@@ -422,7 +422,7 @@ namespace o2
 		mLastSelectCheckCursor = cursor.position;
 	}
 
-	void UICustomList::OnCursorReleased(const Input::Cursor& cursor)
+	void CustomList::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -432,20 +432,20 @@ namespace o2
 			ClearSelection();
 
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
+		Widget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 		SelectItemAt(itemIdx);
 
 		OnSelectionChanged();
 	}
 
-	void UICustomList::OnCursorPressBreak(const Input::Cursor& cursor)
+	void CustomList::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UICustomList::OnCursorExit(const Input::Cursor& cursor)
+	void CustomList::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto hoverState = state["hover"];
 		if (hoverState)
@@ -454,7 +454,7 @@ namespace o2
 			mHoverDrawable->SetEnabled(false);
 	}
 
-	void UICustomList::OnCursorMoved(const Input::Cursor& cursor)
+	void CustomList::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
 		if ((cursor.position - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
@@ -465,7 +465,7 @@ namespace o2
 		UpdateHover(cursor.position);
 	}
 
-	UIWidget* UICustomList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+	Widget* CustomList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		if (!mVerLayout)
 			return nullptr;
@@ -490,9 +490,9 @@ namespace o2
 		return nullptr;
 	}
 
-	void UICustomList::CopyData(const Actor& otherActor)
+	void CustomList::CopyData(const Actor& otherActor)
 	{
-		const UICustomList& other = dynamic_cast<const UICustomList&>(otherActor);
+		const CustomList& other = dynamic_cast<const CustomList&>(otherActor);
 
 		delete mItemSample;
 		delete mSelectionDrawable;
@@ -505,10 +505,10 @@ namespace o2
 		mSelectionLayout = other.mSelectionLayout;
 		mHoverLayout = other.mHoverLayout;
 
-		UIScrollArea::CopyData(other);
+		ScrollArea::CopyData(other);
 
-		mVerLayout = FindChildByType<UIVerticalLayout>();
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mVerLayout = FindChildByType<VerticalLayout>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
 		mItemSample->ExcludeFromScene();
 		mItemSample->SetLayoutDirty();
 
@@ -516,15 +516,15 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UICustomList::OnDeserialized(const DataNode& node)
+	void CustomList::OnDeserialized(const DataNode& node)
 	{
-		UIScrollArea::OnDeserialized(node);
+		ScrollArea::OnDeserialized(node);
 		RetargetStatesAnimations();
 	}
 
-	void UICustomList::UpdateTransparency()
+	void CustomList::UpdateTransparency()
 	{
-		UIWidget::UpdateTransparency();
+		Widget::UpdateTransparency();
 
 		if (mHorScrollBar)
 			mHorScrollBar->UpdateTransparency();
@@ -539,10 +539,10 @@ namespace o2
 			sel.selection->transparency = mResTransparency;
 	}
 
-	void UICustomList::UpdateHover(const Vec2F& point)
+	void CustomList::UpdateHover(const Vec2F& point)
 	{
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+		Widget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
 		if (itemIdx < 0)
 		{
@@ -568,7 +568,7 @@ namespace o2
 		}
 	}
 
-	Sprite* UICustomList::GetSelectionSprite()
+	Sprite* CustomList::GetSelectionSprite()
 	{
 		if (mSelectionSpritesPool.IsEmpty())
 		{
@@ -583,7 +583,7 @@ namespace o2
 		return sprite;
 	}
 
-	void UICustomList::OnScrolled(float scroll)
+	void CustomList::OnScrolled(float scroll)
 	{
 		if (mVerScrollBar && mEnableVerScroll)
 			mVerScrollBar->OnScrolled(scroll);
@@ -591,18 +591,18 @@ namespace o2
 			mHorScrollBar->OnScrolled(scroll);
 	}
 
-	void UICustomList::OnSelectionChanged()
+	void CustomList::OnSelectionChanged()
 	{}
 
-	void UICustomList::OnResEnableInHierarchyChanged()
+	void CustomList::OnResEnableInHierarchyChanged()
 	{
 		SetInteractable(mResEnabled);
 	}
 
-	bool UICustomList::Selection::operator==(const Selection& other) const
+	bool CustomList::Selection::operator==(const Selection& other) const
 	{
 		return idx == other.idx;
 	}
 }
 
-DECLARE_CLASS(o2::UICustomList);
+DECLARE_CLASS(o2::CustomList);

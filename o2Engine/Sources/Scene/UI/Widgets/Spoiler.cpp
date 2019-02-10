@@ -10,8 +10,8 @@
 
 namespace o2
 {
-	UISpoiler::UISpoiler():
-		UIVerticalLayout()
+	Spoiler::Spoiler():
+		VerticalLayout()
 	{
 		mBaseCorner = BaseCorner::Top;
 		mFitByChildren = true;
@@ -25,8 +25,8 @@ namespace o2
 		UpdateExpanding(0);
 	}
 
-	UISpoiler::UISpoiler(const UISpoiler& other):
-		UIVerticalLayout(other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
+	Spoiler::Spoiler(const Spoiler& other):
+		VerticalLayout(other), caption(this), headHeight(this), expanded(this), mHeadHeight(other.mHeadHeight)
 	{
 		mExpandState = GetStateObject("expand");
 		if (!mExpandState)
@@ -40,23 +40,23 @@ namespace o2
 		UpdateExpanding(0);
 	}
 
-	UISpoiler& UISpoiler::operator=(const UISpoiler& other)
+	Spoiler& Spoiler::operator=(const Spoiler& other)
 	{
-		UIVerticalLayout::operator=(other);
+		VerticalLayout::operator=(other);
 		return *this;
 	}
 
-	void UISpoiler::Expand()
+	void Spoiler::Expand()
 	{
 		SetExpanded(true);
 	}
 
-	void UISpoiler::Collapse()
+	void Spoiler::Collapse()
 	{
 		SetExpanded(false);
 	}
 
-	void UISpoiler::SetExpanded(bool expand)
+	void Spoiler::SetExpanded(bool expand)
 	{
 		if (mExpandState)
 			mExpandState->SetState(expand);
@@ -68,16 +68,16 @@ namespace o2
 		if (expandBtn)
 			expandBtn->SetState("expanded", expand);
 
-		mTargetHeight = UIVerticalLayout::GetMinHeightWithChildren();
+		mTargetHeight = VerticalLayout::GetMinHeightWithChildren();
 	}
 
-	bool UISpoiler::IsExpanded() const
+	bool Spoiler::IsExpanded() const
 	{
 		return mExpandState ? mExpandState->GetState() : false;
 	}
 
 #undef DrawText
-	void UISpoiler::Draw()
+	void Spoiler::Draw()
 	{
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -109,14 +109,14 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UISpoiler::SetCaption(const WString& caption)
+	void Spoiler::SetCaption(const WString& caption)
 	{
 		auto textLayer = GetLayerDrawable<Text>("caption");
 		if (textLayer)
 			textLayer->text = caption;
 	}
 
-	WString UISpoiler::GetCaption() const
+	WString Spoiler::GetCaption() const
 	{
 		auto textLayer = GetLayerDrawable<Text>("caption");
 		if (textLayer)
@@ -125,21 +125,21 @@ namespace o2
 		return "";
 	}
 
-	void UISpoiler::SetHeadHeight(float height)
+	void Spoiler::SetHeadHeight(float height)
 	{
 		mHeadHeight = height;
 	}
 
-	float UISpoiler::GetHeadHeight() const
+	float Spoiler::GetHeadHeight() const
 	{
 		return mHeadHeight;
 	}
 
-	void UISpoiler::CopyData(const Actor& otherActor)
+	void Spoiler::CopyData(const Actor& otherActor)
 	{
-		const UISpoiler& other = dynamic_cast<const UISpoiler&>(otherActor);
+		const Spoiler& other = dynamic_cast<const Spoiler&>(otherActor);
 
-		UIVerticalLayout::CopyData(other);
+		VerticalLayout::CopyData(other);
 
 		mExpandState = GetStateObject("expand");
 		if (!mExpandState)
@@ -154,30 +154,30 @@ namespace o2
 		UpdateExpanding(0);
 	}
 
-	void UISpoiler::RearrangeChilds()
+	void Spoiler::RearrangeChilds()
 	{
 		float borderTop = mBorder.top;
 		mBorder.top = borderTop + mHeadHeight;
 
-		UIVerticalLayout::RearrangeChilds();
+		VerticalLayout::RearrangeChilds();
 
 		mBorder.top = borderTop;
 	}
 
-	void UISpoiler::UpdateExpanding(float dt)
+	void Spoiler::UpdateExpanding(float dt)
 	{
 		layout->SetDirty(false);
 	}
 
-	void UISpoiler::CreateExpandAnimation()
+	void Spoiler::CreateExpandAnimation()
 	{
 		mExpandState = AddState("expand", Animation::Parametric(this, &mExpandCoef, 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
 	}
 
-	float UISpoiler::GetMinHeightWithChildren() const
+	float Spoiler::GetMinHeightWithChildren() const
 	{
 		if (!mFitByChildren)
-			return UIWidget::GetMinHeightWithChildren();
+			return Widget::GetMinHeightWithChildren();
 
 		float res = Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing + mBorder.top + mBorder.bottom;
 		for (auto child : mChildWidgets)
@@ -192,10 +192,10 @@ namespace o2
 		return res;
 	}
 
-	void UISpoiler::UpdateLayoutParametres()
+	void Spoiler::UpdateLayoutParametres()
 	{
 		if (IsFullyExpanded())
-			UIVerticalLayout::UpdateLayoutParametres();
+			VerticalLayout::UpdateLayoutParametres();
 		else
 		{
 			layout->mData->weight.y = 1;
@@ -203,7 +203,7 @@ namespace o2
 		}
 	}
 
-	void UISpoiler::InitializeControls()
+	void Spoiler::InitializeControls()
 	{
 		auto textLayer = GetLayerDrawable<Text>("caption");
 		auto expandBtn = FindExpandButton();
@@ -217,18 +217,18 @@ namespace o2
 		}
 	}
 
-	UIButton* UISpoiler::FindExpandButton() const
+	Button* Spoiler::FindExpandButton() const
 	{
 		auto expandBtn = mInternalWidgets.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "expand" && x->GetType() == TypeOf(UIButton); });
+			[](Widget* x) { return x->GetName() == "expand" && x->GetType() == TypeOf(Button); });
 
 		if (expandBtn)
-			return dynamic_cast<UIButton*>(expandBtn);
+			return dynamic_cast<Button*>(expandBtn);
 
 		return nullptr;
 	}
 
-	bool UISpoiler::IsFullyExpanded() const
+	bool Spoiler::IsFullyExpanded() const
 	{
 		if (!mExpandState)
 			return true;
@@ -236,7 +236,7 @@ namespace o2
 		return mExpandState->GetState() && !mExpandState->animation.IsPlaying();
 	}
 
-	bool UISpoiler::IsFullyCollapsed() const
+	bool Spoiler::IsFullyCollapsed() const
 	{
 		if (!mExpandState)
 			return false;
@@ -245,4 +245,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UISpoiler);
+DECLARE_CLASS(o2::Spoiler);

@@ -8,12 +8,12 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
 {
-	class UICurvePreview;
+	class CurvePreview;
 
 	// ------------------------------
 	// Editor curve property edit box
@@ -33,8 +33,8 @@ namespace Editor
 		IOBJECT(CurveProperty);
 
 	protected:
-		UIWidget*        mEditBox = nullptr;         // Edit box 
-		UICurvePreview*  mPreviewImage = nullptr;    // Curve preview image
+		Widget*        mEditBox = nullptr;         // Edit box 
+		CurvePreview*  mPreviewImage = nullptr;    // Curve preview image
 		CursorEventsArea mClickArea;                 // Box click area
 
 	protected:

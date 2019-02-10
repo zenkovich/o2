@@ -6,8 +6,8 @@
 namespace o2
 {
 	class UIToggle;
-	class UIEditBox;
-	class UIButton;
+	class EditBox;
+	class Button;
 }
 
 namespace Editor
@@ -38,7 +38,7 @@ namespace Editor
 		void SetTargetActors(const Vector<Actor*>& actors);
 
 		// Returns data widget
-		UIWidget* GetWidget() const;
+		Widget* GetWidget() const;
 
 		// Updates properties values
 		void Refresh();
@@ -48,14 +48,14 @@ namespace Editor
 	public:
 		Vector<Actor*>                mActors;
 
-		UIWidget*                     mDataView = nullptr;
+		Widget*                     mDataView = nullptr;
 		BooleanProperty*              mEnableProperty = nullptr;
 		StringProperty*               mNameProperty = nullptr;
 		BooleanProperty*              mLockProperty = nullptr;
 		AssetProperty<ActorAssetRef>* mPrototypeProperty = nullptr;
-		UIButton*                     mPrototypeApplyBtn = nullptr;
-		UIButton*                     mPrototypeRevertBtn = nullptr;
-		UIButton*                     mPrototypeBreakBtn = nullptr;
+		Button*                     mPrototypeApplyBtn = nullptr;
+		Button*                     mPrototypeRevertBtn = nullptr;
+		Button*                     mPrototypeBreakBtn = nullptr;
 		TagsProperty*                 mTagsProperty = nullptr;
 		LayerProperty*                mLayerProperty = nullptr;
 
@@ -102,7 +102,7 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 {
 
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, OnApplyPrototypePressed);
 	PROTECTED_FUNCTION(void, OnRevertPrototypePressed);

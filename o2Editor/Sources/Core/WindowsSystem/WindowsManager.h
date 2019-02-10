@@ -9,8 +9,8 @@ using namespace o2;
 
 namespace o2
 {
-	class UIMenuPanel;
-	class UIWindow;
+	class MenuPanel;
+	class Window;
 }
 
 // Editor windows accessor macros
@@ -22,7 +22,7 @@ namespace Editor
 	class CurveEditorDlg;
 	class IEditorWindow;
 	class NameEditDlg;
-	class UIDockWindowPlace;
+	class DockWindowPlace;
 
 	// ----------------------
 	// Editor windows manager
@@ -58,7 +58,7 @@ namespace Editor
 
 	protected:
 		EditorWindowsVec   mEditorWindows;            // Editors windows list
-		UIDockWindowPlace* mMainDockPlace = nullptr;  // Main windows dock place
+		DockWindowPlace* mMainDockPlace = nullptr;  // Main windows dock place
 		WndLayoutsDict     mAvailableLayouts;         // Available layouts
 
 		ColorPickerDlg*    mColorPickerDlg = nullptr; // Shared color picker dialog

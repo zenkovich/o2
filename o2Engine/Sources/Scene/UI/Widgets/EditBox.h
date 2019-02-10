@@ -13,10 +13,10 @@ namespace o2
 	// --------------------
 	// Text edit box widget
 	// --------------------
-	class UIEditBox: public UIScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class EditBox: public ScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		PROPERTIES(UIEditBox);
+		PROPERTIES(EditBox);
 		PROPERTY(WString, text, SetText, GetText);			      // Text property
 		PROPERTY(int, caret, SetCaretPosition, GetCaretPosition); // Caret position property
 
@@ -27,16 +27,16 @@ namespace o2
 		Function<void(const WString&)> onChangeCompleted; // Text changing completed event
 
 		// Default constructor
-		UIEditBox();
+		EditBox();
 
 		// Copy-constructor
-		UIEditBox(const UIEditBox& other);
+		EditBox(const EditBox& other);
 
 		// Destructor
-		~UIEditBox();
+		~EditBox();
 
 		// Copy-operator
-		UIEditBox& operator=(const UIEditBox& other);
+		EditBox& operator=(const EditBox& other);
 
 		// Draws widget
 		void Draw() override;
@@ -149,7 +149,7 @@ namespace o2
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		SERIALIZABLE(UIEditBox);
+		SERIALIZABLE(EditBox);
 
 	protected:
 		Color4  mSelectionColor = Color4(0.1f, 0.2f, 0.6f, 0.3f); // Text selection color @SERIALIZABLE
@@ -285,14 +285,14 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIEditBox)
+CLASS_BASES_META(o2::EditBox)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIEditBox)
+CLASS_FIELDS_META(o2::EditBox)
 {
 	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(caret);
@@ -323,7 +323,7 @@ CLASS_FIELDS_META(o2::UIEditBox)
 	PROTECTED_FIELD(mLastCursorPos);
 }
 END_META;
-CLASS_METHODS_META(o2::UIEditBox)
+CLASS_METHODS_META(o2::EditBox)
 {
 
 	PUBLIC_FUNCTION(void, Draw);

@@ -8,13 +8,13 @@ namespace o2
 	// -----------------------
 	// Horizontal progress bar
 	// -----------------------
-	class UIHorizontalProgress: public UIWidget, public DrawableCursorEventsListener
+	class HorizontalProgress: public Widget, public DrawableCursorEventsListener
 	{
 	public:
 		enum class Orientation { Right, Left };
 
 	public:
-		PROPERTIES(UIHorizontalProgress);
+		PROPERTIES(HorizontalProgress);
 		PROPERTY(float, value, SetValue, GetValue);          // Current value property
 
 		PROPERTY(float, minValue, SetMinValue, GetMinValue); // Minimal value property
@@ -25,16 +25,16 @@ namespace o2
 		Function<void(float)> onChange;    // On Value changing event
 
 		// Constructor
-		UIHorizontalProgress();
+		HorizontalProgress();
 
 		// Copy-constructor
-		UIHorizontalProgress(const UIHorizontalProgress& other);
+		HorizontalProgress(const HorizontalProgress& other);
 
 		// Destructor
-		~UIHorizontalProgress();
+		~HorizontalProgress();
 
 		// Copy-operator
-		UIHorizontalProgress& operator=(const UIHorizontalProgress& other);
+		HorizontalProgress& operator=(const HorizontalProgress& other);
 
 		// Updates widget and smooth value changing
 		void Update(float dt) override;
@@ -81,7 +81,7 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
-		SERIALIZABLE(UIHorizontalProgress);
+		SERIALIZABLE(HorizontalProgress);
 
 	protected:
 		float          mValue = 0.0f;                     // Current value @SERIALIZABLE
@@ -90,15 +90,15 @@ namespace o2
 		float          mMaxValue = 1.0f;                  // Maximal value @SERIALIZABLE
 		float          mScrollSense = 1.0f;               // Scroll sense coefficient @SERIALIZABLE
 		Orientation    mOrientation = Orientation::Right; // Bar orientation @SERIALIZABLE
-		UIWidgetLayer* mBarLayer = nullptr;               // Bar layer
-		UIWidgetLayer* mBackLayer = nullptr;              // background layer
+		WidgetLayer* mBarLayer = nullptr;               // Bar layer
+		WidgetLayer* mBackLayer = nullptr;              // background layer
 
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when new layer was added. Here searching bar, back and handle layers
-		void OnLayerAdded(UIWidgetLayer* layer) override;
+		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// It is called when deserialized
 		void OnDeserialized(const DataNode& node) override;
@@ -138,13 +138,13 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIHorizontalProgress)
+CLASS_BASES_META(o2::HorizontalProgress)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIHorizontalProgress)
+CLASS_FIELDS_META(o2::HorizontalProgress)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(minValue);
@@ -161,7 +161,7 @@ CLASS_FIELDS_META(o2::UIHorizontalProgress)
 	PROTECTED_FIELD(mBackLayer);
 }
 END_META;
-CLASS_METHODS_META(o2::UIHorizontalProgress)
+CLASS_METHODS_META(o2::HorizontalProgress)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
@@ -180,7 +180,7 @@ CLASS_METHODS_META(o2::UIHorizontalProgress)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);

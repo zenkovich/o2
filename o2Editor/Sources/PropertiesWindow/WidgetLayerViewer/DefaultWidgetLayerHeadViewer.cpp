@@ -17,24 +17,24 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mDataView = mnew UIWidget();
+		mDataView = mnew Widget();
 		mDataView->name = "actor head";
 		mDataView->layout->minHeight = 21;
 
 		mEnableProperty = o2UI.CreateWidget<BooleanProperty>("actor head enable");
-		*mEnableProperty->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
+		*mEnableProperty->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
 		mEnableProperty->SetValuePath("enabled");
 		mEnableProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mEnableProperty);
 
 		mNameProperty = o2UI.CreateWidget<StringProperty>("actor head name");
-		*mNameProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
+		*mNameProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 15, 17, 2);
 		mNameProperty->SetValuePath("name");
 		mNameProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mNameProperty);
 
 		mLockProperty = o2UI.CreateWidget<BooleanProperty>("actor head lock");
-		*mLockProperty->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
+		*mLockProperty->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, -1));
 		mLockProperty->SetValuePath("locked");
 		mLockProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLockProperty);
@@ -55,25 +55,25 @@ namespace Editor
 			delete mDataView;
 	}
 
-	void DefaultWidgetLayerHeaderViewer::SetTargetLayers(const Vector<UIWidgetLayer*>& layers)
+	void DefaultWidgetLayerHeaderViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
 	{
 		mLayers = layers;
 
-		Vector<UIWidgetLayer*> prototypes = layers.Select<UIWidgetLayer*>([](UIWidgetLayer* x) { return nullptr; });
-// 		auto prototypes = layers.Select<UIWidgetLayer*>([](UIWidgetLayer* x) { 
+		Vector<WidgetLayer*> prototypes = layers.Select<WidgetLayer*>([](WidgetLayer* x) { return nullptr; });
+// 		auto prototypes = layers.Select<WidgetLayer*>([](WidgetLayer* x) { 
 // 			return x->GetOwnerWidget()->GetPrototypeLink().Get(); });
 
-		mEnableProperty->SelectValueAndPrototypeProperties<UIWidgetLayer, decltype(UIWidgetLayer::enabled)>(
-			layers, prototypes, [](UIWidgetLayer* x) { return &x->enabled; });
+		mEnableProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayer::enabled)>(
+			layers, prototypes, [](WidgetLayer* x) { return &x->enabled; });
 
-		mNameProperty->SelectValueAndPrototypePointers<String, UIWidgetLayer>(
-			layers, prototypes, [](UIWidgetLayer* x) { return &x->name; });
+		mNameProperty->SelectValueAndPrototypePointers<String, WidgetLayer>(
+			layers, prototypes, [](WidgetLayer* x) { return &x->name; });
 
-		mLockProperty->SelectValueAndPrototypeProperties<UIWidgetLayer, decltype(UIWidgetLayer::locked)>(
-			layers, prototypes, [](UIWidgetLayer* x) { return &x->locked; });
+		mLockProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayer::locked)>(
+			layers, prototypes, [](WidgetLayer* x) { return &x->locked; });
 	}
 
-	UIWidget* DefaultWidgetLayerHeaderViewer::GetWidget() const
+	Widget* DefaultWidgetLayerHeaderViewer::GetWidget() const
 	{
 		return mDataView;
 	}

@@ -6,14 +6,14 @@
 
 namespace o2
 {
-	UIVerticalLayout::UIVerticalLayout(): UIWidget()
+	VerticalLayout::VerticalLayout(): Widget()
 	{
 		SetLayoutDirty();
 	}
 
-	UIVerticalLayout::UIVerticalLayout(const UIVerticalLayout& other):
+	VerticalLayout::VerticalLayout(const VerticalLayout& other):
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren), baseCorner(this),
+		mExpandHeight(other.mExpandHeight), Widget(other), mFitByChildren(other.mFitByChildren), baseCorner(this),
 		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
 		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
@@ -21,140 +21,140 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIVerticalLayout::~UIVerticalLayout()
+	VerticalLayout::~VerticalLayout()
 	{}
 
-	UIVerticalLayout& UIVerticalLayout::operator=(const UIVerticalLayout& other)
+	VerticalLayout& VerticalLayout::operator=(const VerticalLayout& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIVerticalLayout::SetBaseCorner(BaseCorner baseCorner)
+	void VerticalLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
 		layout->SetDirty();
 	}
 
-	BaseCorner UIVerticalLayout::GetBaseCorner() const
+	BaseCorner VerticalLayout::GetBaseCorner() const
 	{
 		return mBaseCorner;
 	}
 
-	void UIVerticalLayout::SetSpacing(float spacing)
+	void VerticalLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
 		layout->SetDirty();
 	}
 
-	float UIVerticalLayout::GetSpacing() const
+	float VerticalLayout::GetSpacing() const
 	{
 		return mSpacing;
 	}
 
-	void UIVerticalLayout::SetBorder(const BorderF& border)
+	void VerticalLayout::SetBorder(const BorderF& border)
 	{
 		mBorder = border;
 		layout->SetDirty();
 	}
 
-	BorderF UIVerticalLayout::GetBorder() const
+	BorderF VerticalLayout::GetBorder() const
 	{
 		return mBorder;
 	}
 
-	void UIVerticalLayout::SetBorderLeft(float value)
+	void VerticalLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
 		layout->SetDirty();
 	}
 
-	float UIVerticalLayout::GetBorderLeft() const
+	float VerticalLayout::GetBorderLeft() const
 	{
 		return mBorder.left;
 	}
 
-	void UIVerticalLayout::SetBorderRight(float value)
+	void VerticalLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
 		layout->SetDirty();
 	}
 
-	float UIVerticalLayout::GetBorderRight() const
+	float VerticalLayout::GetBorderRight() const
 	{
 		return mBorder.right;
 	}
 
-	void UIVerticalLayout::SetBorderTop(float value)
+	void VerticalLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
 		layout->SetDirty();
 	}
 
-	float UIVerticalLayout::GetBorderTop() const
+	float VerticalLayout::GetBorderTop() const
 	{
 		return mBorder.top;
 	}
 
-	void UIVerticalLayout::SetBorderBottom(float value)
+	void VerticalLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
 		layout->SetDirty();
 	}
 
-	float UIVerticalLayout::GetBorderBottom() const
+	float VerticalLayout::GetBorderBottom() const
 	{
 		return mBorder.bottom;
 	}
 
-	void UIVerticalLayout::SetWidthExpand(bool expand)
+	void VerticalLayout::SetWidthExpand(bool expand)
 	{
 		mExpandWidth = expand;
 		layout->SetDirty();
 	}
 
-	bool UIVerticalLayout::IsWidthExpand() const
+	bool VerticalLayout::IsWidthExpand() const
 	{
 		return mExpandWidth;
 	}
 
-	void UIVerticalLayout::SetHeightExpand(bool expand)
+	void VerticalLayout::SetHeightExpand(bool expand)
 	{
 		mExpandHeight = expand;
 		layout->SetDirty();
 	}
 
-	bool UIVerticalLayout::IsHeightExpand() const
+	bool VerticalLayout::IsHeightExpand() const
 	{
 		return mExpandHeight;
 	}
 
-	void UIVerticalLayout::SetFitByChildren(bool fit)
+	void VerticalLayout::SetFitByChildren(bool fit)
 	{
 		mFitByChildren = fit;
 		layout->SetDirty();
 	}
 
-	bool UIVerticalLayout::IsFittingByChildren() const
+	bool VerticalLayout::IsFittingByChildren() const
 	{
 		return mFitByChildren;
 	}
 
-	void UIVerticalLayout::UpdateSelfTransform()
+	void VerticalLayout::UpdateSelfTransform()
 {
 		UpdateLayoutParametres();
 
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		UIWidget::UpdateSelfTransform();
+		Widget::UpdateSelfTransform();
 
 		RearrangeChilds();
 	}
 
-	void UIVerticalLayout::CopyData(const Actor& otherActor)
+	void VerticalLayout::CopyData(const Actor& otherActor)
 	{
-		const UIVerticalLayout& other = dynamic_cast<const UIVerticalLayout&>(otherActor);
+		const VerticalLayout& other = dynamic_cast<const VerticalLayout&>(otherActor);
 
 		mBaseCorner    = other.mBaseCorner;
 		mSpacing       = other.mSpacing;
@@ -163,16 +163,16 @@ namespace o2
 		mExpandHeight  = other.mExpandHeight;
 		mFitByChildren = other.mFitByChildren;
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
 
-	float UIVerticalLayout::GetMinWidthWithChildren() const
+	float VerticalLayout::GetMinWidthWithChildren() const
 	{
 		if (!mFitByChildren)
-			return UIWidget::GetMinWidthWithChildren();
+			return Widget::GetMinWidthWithChildren();
 
 		float res = 0;
 		for (auto child : mChildWidgets)
@@ -186,10 +186,10 @@ namespace o2
 		return res;
 	}
 
-	float UIVerticalLayout::GetMinHeightWithChildren() const
+	float VerticalLayout::GetMinHeightWithChildren() const
 	{
 		if (!mFitByChildren)
-			return UIWidget::GetMinHeightWithChildren();
+			return Widget::GetMinHeightWithChildren();
 
 		float res = mBorder.top + mBorder.bottom + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
 		for (auto child : mChildWidgets)
@@ -203,7 +203,7 @@ namespace o2
 		return res;
 	}
 
-	float UIVerticalLayout::GetHeightWeightWithChildren() const
+	float VerticalLayout::GetHeightWeightWithChildren() const
 	{
 		float res = 0;
 		for (auto child : mChildWidgets)
@@ -215,17 +215,17 @@ namespace o2
 		return res;
 	}
 
-	void UIVerticalLayout::OnChildAdded(UIWidget* child)
+	void VerticalLayout::OnChildAdded(Widget* child)
 	{
 		child->layout->mData->drivenByParent = true;
 	}
 
-	void UIVerticalLayout::OnChildRemoved(UIWidget* child)
+	void VerticalLayout::OnChildRemoved(Widget* child)
 	{
 		child->layout->mData->drivenByParent = false;
 	}
 
-	void UIVerticalLayout::RearrangeChilds()
+	void VerticalLayout::RearrangeChilds()
 	{
 		switch (mBaseCorner)
 		{
@@ -250,7 +250,7 @@ namespace o2
 
 	}
 
-	void UIVerticalLayout::UpdateLayoutParametres()
+	void VerticalLayout::UpdateLayoutParametres()
 	{
 		layout->mData->weight.y = 0;
 		for (auto child : mChildWidgets)
@@ -262,10 +262,10 @@ namespace o2
 		if (layout->mData->weight.y < FLT_EPSILON)
 			layout->mData->weight.y = 1.0f;
 
-		layout->mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		layout->mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 	}
 
-	void UIVerticalLayout::ArrangeFromCenter()
+	void VerticalLayout::ArrangeFromCenter()
 	{
 		if (mExpandHeight)
 		{
@@ -291,7 +291,7 @@ namespace o2
 		}
 		else
 		{
-			float totalHeight = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->GetMinHeightWithChildren(); });
+			float totalHeight = mChildWidgets.Sum<float>([&](Widget* child) { return child->GetMinHeightWithChildren(); });
 			totalHeight += (mChildWidgets.Count() - 1)*mSpacing;
 			float position = -totalHeight*0.5f;
 			for (auto child : mChildWidgets)
@@ -310,7 +310,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalLayout::ArrangeFromBottomToTop()
+	void VerticalLayout::ArrangeFromBottomToTop()
 	{
 		if (mExpandHeight)
 		{
@@ -351,7 +351,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalLayout::ArrangeFromTopToBottom()
+	void VerticalLayout::ArrangeFromTopToBottom()
 	{
 		if (mExpandHeight)
 		{
@@ -392,7 +392,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalLayout::AlignWidgetByWidth(UIWidget* child, float heightAnchor)
+	void VerticalLayout::AlignWidgetByWidth(Widget* child, float heightAnchor)
 	{
 		if (mExpandWidth)
 		{
@@ -428,7 +428,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalLayout::ExpandSizeByChilds()
+	void VerticalLayout::ExpandSizeByChilds()
 	{
 		const static Vec2F relativePivots[] ={
 			Vec2F(0.0f, 0.5f), // Left
@@ -458,16 +458,16 @@ namespace o2
 		layout->mData->offsetMin -= szDelta*relativePivot;
 	}
 
-	Vector<float> UIVerticalLayout::CalculateExpandedHeights()
+	Vector<float> VerticalLayout::CalculateExpandedHeights()
 	{
 		int ichildCount = mChildWidgets.Count();
 		float childCount = (float)ichildCount;
 		float availableHeight = mChildrenWorldRect.Height() - mBorder.bottom - mBorder.top;
-		float minHeightSum = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetMinimalHeight(); });
+		float minHeightSum = mChildWidgets.Sum<float>([&](Widget* child) { return child->layout->GetMinimalHeight(); });
 		float expandValue = Math::Max(availableHeight - minHeightSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> heights(ichildCount + 1);
-		mChildWidgets.ForEach([&](UIWidget* child) { heights.Add(child->layout->GetMinimalHeight()); });
+		mChildWidgets.ForEach([&](Widget* child) { heights.Add(child->layout->GetMinimalHeight()); });
 
 		while (expandValue > 0)
 		{
@@ -527,4 +527,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIVerticalLayout);
+DECLARE_CLASS(o2::VerticalLayout);

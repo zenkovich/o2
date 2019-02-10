@@ -24,7 +24,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mContent = mnew UIVerticalLayout();
+		mContent = mnew VerticalLayout();
 		mContent->spacing = 5.0f;
 		mContent->border = BorderF(5, 5, 12, 5);
 		mContent->expandHeight = false;
@@ -83,27 +83,27 @@ namespace Editor
 		return &TypeOf(ImageAsset);
 	}
 
-	UIWidget* ImageAssetPropertiesViewer::GetWidget() const
+	Widget* ImageAssetPropertiesViewer::GetWidget() const
 	{
 		return mContent;
 	}
 
 	void ImageAssetPropertiesViewer::InitializeImagePreview()
 	{
-		mPreviewImageContent = mnew UIWidget();
+		mPreviewImageContent = mnew Widget();
 		mPreviewImageContent->layout->minHeight = 200;
 
 		auto separatorImg = o2UI.CreateImage("ui/UI_Separator.png");
-		*separatorImg->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
+		*separatorImg->layout = WidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
 		mPreviewImageContent->AddChild(separatorImg);
 
-		mPreviewImageBack = mnew UIImage();
+		mPreviewImageBack = mnew Image();
 		mPreviewImageBack->SetImage(CreateGridSprite());
-		*mPreviewImageBack->layout = UIWidgetLayout::BothStretch();
+		*mPreviewImageBack->layout = WidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImageBack);
 
-		mPreviewImage = mnew UIImage();
-		*mPreviewImage->layout = UIWidgetLayout::BothStretch();
+		mPreviewImage = mnew Image();
+		*mPreviewImage->layout = WidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImage);
 
 		InitializeLeftHandle();
@@ -116,7 +116,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeLeftHandle()
 	{
-		mBorderLeftHandleWidget = mnew UIImage();
+		mBorderLeftHandleWidget = mnew Image();
 		mBorderLeftHandleWidget->SetImage(mnew Sprite(Color4::Green()));
 		mPreviewImage->AddChild(mBorderLeftHandleWidget);
 
@@ -139,7 +139,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeRightHandle()
 	{
-		mBorderRightHandleWidget = mnew UIImage();
+		mBorderRightHandleWidget = mnew Image();
 		mBorderRightHandleWidget->SetImage(mnew Sprite(Color4::Green()));
 		mPreviewImage->AddChild(mBorderRightHandleWidget);
 
@@ -162,7 +162,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeTopHandle()
 	{
-		mBorderTopHandleWidget = mnew UIImage();
+		mBorderTopHandleWidget = mnew Image();
 		mBorderTopHandleWidget->SetImage(mnew Sprite(Color4::Green()));
 		mPreviewImage->AddChild(mBorderTopHandleWidget);
 
@@ -185,7 +185,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeBottomHandle()
 	{
-		mBorderBottomHandleWidget = mnew UIImage();
+		mBorderBottomHandleWidget = mnew Image();
 		mBorderBottomHandleWidget->SetImage(mnew Sprite(Color4::Green()));
 		mPreviewImage->AddChild(mBorderBottomHandleWidget);
 
@@ -271,12 +271,12 @@ namespace Editor
 		if (fitByHeight)
 		{
 			float d = imageSizeAspect*0.5f/contentAspect;
-			*mPreviewImage->layout = UIWidgetLayout(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f), Vec2F(), Vec2F());
+			*mPreviewImage->layout = WidgetLayout(Vec2F(0.5f - d, 0.0f), Vec2F(0.5f + d, 1.0f), Vec2F(), Vec2F());
 		}
 		else
 		{
 			float d = 1.0f/imageSizeAspect*0.5f*contentAspect;
-			*mPreviewImage->layout = UIWidgetLayout(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d), Vec2F(), Vec2F());
+			*mPreviewImage->layout = WidgetLayout(Vec2F(0.0f, 0.5f - d), Vec2F(1.0f, 0.5f + d), Vec2F(), Vec2F());
 		}
 
 		*mPreviewImageBack->layout = *mPreviewImage->layout;
@@ -292,10 +292,10 @@ namespace Editor
 		BorderF bordersAnchors((float)borders.left/imageSize.x, (float)borders.top/imageSize.y,
 							   1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.bottom/imageSize.y);
 
-		*mBorderLeftHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
-		*mBorderRightHandleWidget->layout = UIWidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
-		*mBorderTopHandleWidget->layout = UIWidgetLayout(Vec2F(0.0f, bordersAnchors.top), Vec2F(1.0f, bordersAnchors.top), Vec2F(0, 0), Vec2F(0, 1));
-		*mBorderBottomHandleWidget->layout = UIWidgetLayout(Vec2F(0.0f, bordersAnchors.bottom), Vec2F(1.0f, bordersAnchors.bottom), Vec2F(0, 0), Vec2F(0, 1));
+		*mBorderLeftHandleWidget->layout = WidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
+		*mBorderRightHandleWidget->layout = WidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
+		*mBorderTopHandleWidget->layout = WidgetLayout(Vec2F(0.0f, bordersAnchors.top), Vec2F(1.0f, bordersAnchors.top), Vec2F(0, 0), Vec2F(0, 1));
+		*mBorderBottomHandleWidget->layout = WidgetLayout(Vec2F(0.0f, bordersAnchors.bottom), Vec2F(1.0f, bordersAnchors.bottom), Vec2F(0, 0), Vec2F(0, 1));
 	}
 
 	void ImageAssetPropertiesViewer::UpdateBordersValue()

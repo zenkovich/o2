@@ -12,11 +12,11 @@
 namespace o2
 {
 	UIToggle::UIToggle():
-		UIWidget(), DrawableCursorEventsListener(this)
+		Widget(), DrawableCursorEventsListener(this)
 	{}
 
 	UIToggle::UIToggle(const UIToggle& other) :
-		UIWidget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr), value(this), caption(this),
+		Widget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr), value(this), caption(this),
 		toggleGroup(this)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
@@ -33,7 +33,7 @@ namespace o2
 
 	UIToggle& UIToggle::operator=(const UIToggle& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
@@ -45,18 +45,18 @@ namespace o2
 
 	void UIToggle::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		if (mToggleGroup && mToggleGroup->mPressed && mToggleGroup->mPressedValue != mValue &&
-			(mToggleGroup->mType == UIToggleGroup::Type::VerOneClick || mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+			(mToggleGroup->mType == ToggleGroup::Type::VerOneClick || mToggleGroup->mType == ToggleGroup::Type::HorOneClick))
 		{
 			Vec2F cursor = o2Input.GetCursorPos();
 			bool underPoint = false;
 
-			if (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick)
+			if (mToggleGroup->mType == ToggleGroup::Type::VerOneClick)
 				underPoint = cursor.y > layout->worldBottom && cursor.y < layout->worldTop;
 			else
 				underPoint = cursor.x > layout->worldLeft && cursor.x < layout->worldRight;
@@ -135,7 +135,7 @@ namespace o2
 		return true;
 	}
 
-	void UIToggle::SetToggleGroup(UIToggleGroup* toggleGroup)
+	void UIToggle::SetToggleGroup(ToggleGroup* toggleGroup)
 	{
 		if (mToggleGroup == toggleGroup)
 			return;
@@ -165,12 +165,12 @@ namespace o2
 		{
 			mToggleGroup->mOwner = this;
 
-			if (mToggleGroup->mType == UIToggleGroup::Type::OnlySingleTrue)
+			if (mToggleGroup->mType == ToggleGroup::Type::OnlySingleTrue)
 				SetValue(true);
 		}
 	}
 
-	UIToggleGroup* UIToggle::GetToggleGroup() const
+	ToggleGroup* UIToggle::GetToggleGroup() const
 	{
 		return mToggleGroup;
 	}
@@ -202,9 +202,9 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (UIWidget::IsUnderPoint(cursor.position) &&
-			!(mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
-			mToggleGroup->mType == UIToggleGroup::Type::HorOneClick) &&
+		if (Widget::IsUnderPoint(cursor.position) &&
+			!(mToggleGroup && (mToggleGroup->mType == ToggleGroup::Type::VerOneClick ||
+			mToggleGroup->mType == ToggleGroup::Type::HorOneClick) &&
 			mToggleGroup->mPressed))
 		{
 			SetValue(!mValue);
@@ -212,8 +212,8 @@ namespace o2
 			onToggleByUser(mValue);
 		}
 
-		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
-			mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+		if (mToggleGroup && (mToggleGroup->mType == ToggleGroup::Type::VerOneClick ||
+			mToggleGroup->mType == ToggleGroup::Type::HorOneClick))
 		{
 			mToggleGroup->mPressed = false;
 			mToggleGroup->onReleased(mValue);
@@ -226,8 +226,8 @@ namespace o2
 		if (pressedState)
 			*pressedState = false;
 
-		if (mToggleGroup && (mToggleGroup->mType == UIToggleGroup::Type::VerOneClick ||
-			mToggleGroup->mType == UIToggleGroup::Type::HorOneClick))
+		if (mToggleGroup && (mToggleGroup->mType == ToggleGroup::Type::VerOneClick ||
+			mToggleGroup->mType == ToggleGroup::Type::HorOneClick))
 		{
 			mToggleGroup->mPressed = false;
 			mToggleGroup->onReleased(mValue);
@@ -257,7 +257,7 @@ namespace o2
 				*pressedState = true;
 		}
 
-		bool isFocusedEditBox = o2UI.GetFocusedWidget() && o2UI.GetFocusedWidget()->GetType() == TypeOf(UIEditBox);
+		bool isFocusedEditBox = o2UI.GetFocusedWidget() && o2UI.GetFocusedWidget()->GetType() == TypeOf(EditBox);
 		if (shortcut.IsPressed() && !isFocusedEditBox)
 		{
 			SetValue(!mValue);
@@ -283,7 +283,7 @@ namespace o2
 
 	void UIToggle::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
+		Widget::OnDeserialized(node);
 
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = FindLayer("back");
@@ -295,7 +295,7 @@ namespace o2
 	{
 		const UIToggle& other = dynamic_cast<const UIToggle&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = FindLayer("back");
@@ -309,7 +309,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIToggle::OnLayerAdded(UIWidgetLayer* layer)
+	void UIToggle::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
 			mCaptionText = (Text*)layer->GetDrawable();
@@ -323,40 +323,40 @@ namespace o2
 		interactable = mResEnabled;
 	}
 
-	UIToggleGroup::UIToggleGroup(Type type):
+	ToggleGroup::ToggleGroup(Type type):
 		mType(type), mPressed(false)
 	{}
 
-	UIToggleGroup::~UIToggleGroup()
+	ToggleGroup::~ToggleGroup()
 	{
 		for (auto toggle : mToggles)
 			toggle->mToggleGroup = nullptr;
 	}
 
-	void UIToggleGroup::AddToggle(UIToggle* toggle)
+	void ToggleGroup::AddToggle(UIToggle* toggle)
 	{
 		mToggles.Add(toggle);
 		toggle->mToggleGroup = this;
 		toggle->SetValue(true);
 	}
 
-	void UIToggleGroup::RemoveToggle(UIToggle* toggle)
+	void ToggleGroup::RemoveToggle(UIToggle* toggle)
 	{
 		mToggles.Remove(toggle);
 		toggle->mToggleGroup = nullptr;
 	}
 
-	const UIToggleGroup::TogglesVec& UIToggleGroup::GetToggles() const
+	const ToggleGroup::TogglesVec& ToggleGroup::GetToggles() const
 	{
 		return mToggles;
 	}
 
-	const UIToggleGroup::TogglesVec& UIToggleGroup::GetToggled() const
+	const ToggleGroup::TogglesVec& ToggleGroup::GetToggled() const
 	{
 		return mToggled;
 	}
 
-	void UIToggleGroup::OnToggled(UIToggle* toggle)
+	void ToggleGroup::OnToggled(UIToggle* toggle)
 	{
 		if (mType == Type::OnlySingleTrue)
 		{
@@ -381,7 +381,7 @@ namespace o2
 
 DECLARE_CLASS(o2::UIToggle);
 
-ENUM_META_(o2::UIToggleGroup::Type, Type)
+ENUM_META_(o2::ToggleGroup::Type, Type)
 {
 	ENUM_ENTRY(HorOneClick);
 	ENUM_ENTRY(OnlySingleTrue);

@@ -4,7 +4,7 @@
 
 namespace o2
 {
-	class UIDropDown;
+	class DropDown;
 }
 
 namespace Editor
@@ -36,7 +36,7 @@ namespace Editor
 		const EnumType* mEnumType;               // Type of enumeration															      
 		const Dictionary<int, String>* mEntries; // Enum entries
 
-		UIDropDown* mDropDown = nullptr;       // Layer name dropdown
+		DropDown* mDropDown = nullptr;       // Layer name dropdown
 		bool        mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
 
 	protected:

@@ -7,39 +7,39 @@
 namespace o2
 {
 	class IRectDrawable;
-	class UIWidgetLayer;
-	class UIWidgetLayout;
-	class UIWidgetState;
+	class WidgetLayer;
+	class WidgetLayout;
+	class WidgetState;
 
 	// ------------------------------------------------------
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class UIWidget : public Actor, public SceneDrawable
+	class Widget : public Actor, public SceneDrawable
 	{
 	public:
-		typedef Vector<UIWidget*> WidgetsVec;
-		typedef Vector<UIWidgetLayer*> LayersVec;
-		typedef Vector<UIWidgetState*> StatesVec;
+		typedef Vector<Widget*> WidgetsVec;
+		typedef Vector<WidgetLayer*> LayersVec;
+		typedef Vector<WidgetState*> StatesVec;
 
 	public:
-		PROPERTIES(UIWidget);
+		PROPERTIES(Widget);
 
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
 
-		PROPERTY(UIWidget*, parentWidget, SetParentWidget, GetParentWidget); // Parent widget property
+		PROPERTY(Widget*, parentWidget, SetParentWidget, GetParentWidget); // Parent widget property
 		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst);            // Widget children getter
 
 		GETTER(LayersVec, layers, GetLayers); // Layers getter
 		GETTER(StatesVec, states, GetStates); // States getter
 
-		ACCESSOR(UIWidget*, childWidget, String, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
-		ACCESSOR(UIWidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
-		ACCESSOR(UIWidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
+		ACCESSOR(Widget*, childWidget, String, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
+		ACCESSOR(WidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
+		ACCESSOR(WidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
 
 	public:
-		UIWidgetLayout* const layout;     // Widget layout
+		WidgetLayout* const layout;     // Widget layout
 
 	public:
 		Function<void()> onLayoutUpdated; // Layout change event
@@ -50,23 +50,23 @@ namespace o2
 
 	public:
 		// Default constructor
-		UIWidget(ActorCreateMode mode = ActorCreateMode::Default);
+		Widget(ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Widget constructor from prototype
-		UIWidget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
+		Widget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Widget constructor with components
-		UIWidget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
+		Widget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor
-		UIWidget(const UIWidget& other);
+		Widget(const Widget& other);
 
 		// Virtual destructor
-		virtual ~UIWidget();
+		virtual ~Widget();
 
 
 		// Copy-operator
-		UIWidget& operator=(const UIWidget& other);
+		Widget& operator=(const Widget& other);
 
 
 		// Updates layers, states and widget
@@ -95,19 +95,19 @@ namespace o2
 
 
 		// Returns parent widget
-		UIWidget* GetParentWidget() const;
+		Widget* GetParentWidget() const;
 
 		// Returns children rectangle layout
 		RectF GetChildrenRect() const;
 
 		// Returns child widget by path (like "root/some node/other node/target node")
-		UIWidget* GetChildWidget(const String& path) const;
+		Widget* GetChildWidget(const String& path) const;
 
 		// Adds child widget and returns them
-		UIWidget* AddChildWidget(UIWidget* widget);
+		Widget* AddChildWidget(Widget* widget);
 
 		// Adds child widget at position and returns them
-		UIWidget* AddChildWidget(UIWidget* widget, int position);
+		Widget* AddChildWidget(Widget* widget, int position);
 
 		// Returns constant children widgets vector
 		const WidgetsVec& GetChildWidgets() const;
@@ -117,14 +117,14 @@ namespace o2
 
 
 		// Adds layer
-		UIWidgetLayer* AddLayer(UIWidgetLayer* layer);
+		WidgetLayer* AddLayer(WidgetLayer* layer);
 
 		// Adds layer
-		UIWidgetLayer* AddLayer(const String& name, IRectDrawable* drawable,
+		WidgetLayer* AddLayer(const String& name, IRectDrawable* drawable,
 								const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
 		// Removes layer
-		void RemoveLayer(UIWidgetLayer* layer, bool release = true);
+		void RemoveLayer(WidgetLayer* layer, bool release = true);
 
 		// Removes layer
 		void RemoveLayer(const String& path);
@@ -133,10 +133,10 @@ namespace o2
 		void RemoveAllLayers();
 
 		// Returns layer by path. Returns null if layer isn't exist
-		UIWidgetLayer* GetLayer(const String& path) const;
+		WidgetLayer* GetLayer(const String& path) const;
 
 		// Returns layer by name in layers hierarchy. Returns null if layer isn't exist
-		UIWidgetLayer* FindLayer(const String& name) const;
+		WidgetLayer* FindLayer(const String& name) const;
 
 		// Searches layer with drawable with specified type
 		template<typename _type>
@@ -151,19 +151,19 @@ namespace o2
 
 
 		// Adds new state with name
-		UIWidgetState* AddState(const String& name);
+		WidgetState* AddState(const String& name);
 
 		// Adds new state with name and animation
-		UIWidgetState* AddState(const String& name, const Animation& animation);
+		WidgetState* AddState(const String& name, const Animation& animation);
 
 		// Adds state
-		UIWidgetState* AddState(UIWidgetState* state);
+		WidgetState* AddState(WidgetState* state);
 
 		// Removes state by name
 		bool RemoveState(const String& name);
 
 		// Removes state
-		bool RemoveState(UIWidgetState* state);
+		bool RemoveState(WidgetState* state);
 
 		// Removes all states
 		void RemoveAllStates();
@@ -178,7 +178,7 @@ namespace o2
 		bool GetState(const String& name) const;
 
 		// Returns state object by name
-		UIWidgetState* GetStateObject(const String& name) const;
+		WidgetState* GetStateObject(const String& name) const;
 
 		// Returns all states
 		const StatesVec& GetStates() const;
@@ -232,20 +232,20 @@ namespace o2
 
 
 		// Sets parent,  doesn't adds to parent's children but adds to internal children
-		void SetInternalParent(UIWidget* parent, bool worldPositionStays = false);
+		void SetInternalParent(Widget* parent, bool worldPositionStays = false);
 
 		// Adds widget to internal children
-		void AddInternalWidget(UIWidget* widget, bool worldPositionStays = false);
+		void AddInternalWidget(Widget* widget, bool worldPositionStays = false);
 
 		// Returns internal child widget by path (like "root/some node/other node/target node")
-		UIWidget* GetInternalWidget(const String& path) const;
+		Widget* GetInternalWidget(const String& path) const;
 
 		// Returns internal child widget by path (like "root/some node/other node/target node")
 		template<typename _type>
 		_type* GetInternalWidgetByType(const String& path) const;
 
 		// Searches widget with name in internal widgets hierarchy
-		UIWidget* FindInternalWidget(const String& name) const;
+		Widget* FindInternalWidget(const String& name) const;
 
 		// Searches widget with type and name in internal widgets hierarchy
 		template<typename _type>
@@ -255,7 +255,7 @@ namespace o2
 		template<typename _type>
 		_type* FindInternalWidgetByType() const;
 
-		SERIALIZABLE(UIWidget);
+		SERIALIZABLE(Widget);
 
 	protected:
 		using Actor::mLayer;
@@ -264,7 +264,7 @@ namespace o2
 		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
 		StatesVec      mStates;                 // States array @SERIALIZABLE
 
-		UIWidget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
+		Widget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
 		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
 		WidgetsVec     mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
 		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
@@ -279,11 +279,11 @@ namespace o2
 		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
 		LayersVec      mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
 
-		UIWidgetState* mFocusedState = nullptr; // Focused widget state
+		WidgetState* mFocusedState = nullptr; // Focused widget state
 		bool           mIsFocused = false;      // Is widget focused
 		bool           mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
 
-		UIWidgetState* mVisibleState = nullptr; // Widget visibility state
+		WidgetState* mVisibleState = nullptr; // Widget visibility state
 
 		bool           mIsClipped = false;      // Is widget fully clipped by some scissors
 
@@ -325,10 +325,10 @@ namespace o2
 		virtual void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea);
 
 		// It is called when child widget was added
-		virtual void OnChildAdded(UIWidget* child);
+		virtual void OnChildAdded(Widget* child);
 
 		// It is called when child widget was removed
-		virtual void OnChildRemoved(UIWidget* child);
+		virtual void OnChildRemoved(Widget* child);
 
 		// It is called when widget was selected
 		virtual void OnFocused();
@@ -367,13 +367,13 @@ namespace o2
 		virtual void UpdateLayersLayouts();
 
 		// It is called when child widget was selected
-		virtual void OnChildFocused(UIWidget* child);
+		virtual void OnChildFocused(Widget* child);
 
 		// It is called when layer added and updates drawing sequence
-		virtual void OnLayerAdded(UIWidgetLayer* layer);
+		virtual void OnLayerAdded(WidgetLayer* layer);
 
 		// It is called when widget state was added
-		virtual void OnStateAdded(UIWidgetState* state);
+		virtual void OnStateAdded(WidgetState* state);
 
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
@@ -388,7 +388,7 @@ namespace o2
 		void RetargetStatesAnimations();
 
 		// Sets parent widget, used for property
-		void SetParentWidget(UIWidget* widget);
+		void SetParentWidget(Widget* widget);
 
 		// Returns children widgets (for property)
 		WidgetsVec GetChildrenNonConst();
@@ -400,13 +400,13 @@ namespace o2
 		StatesVec GetStatesNonConst();
 
 		// Returns dictionary of all layers by names
-		Dictionary<String, UIWidgetLayer*> GetAllLayers();
+		Dictionary<String, WidgetLayer*> GetAllLayers();
 
 		// Returns dictionary of all children by names
-		Dictionary<String, UIWidget*> GetAllChilds();
+		Dictionary<String, Widget*> GetAllChilds();
 
 		// Returns dictionary of all states by names
-		Dictionary<String, UIWidgetState*> GetAllStates();
+		Dictionary<String, WidgetState*> GetAllStates();
 
 		// Beginning serialization callback
 		void OnSerialize(DataNode& node) const override;
@@ -416,29 +416,29 @@ namespace o2
 
 		friend class Scene;
 		friend class UIContextMenu;
-		friend class UICustomDropDown;
-		friend class UICustomList;
-		friend class UIDropDown;
-		friend class UIEditBox;
-		friend class UIGridLayout;
-		friend class UIHorizontalLayout;
-		friend class UIHorizontalProgress;
-		friend class UIHorizontalScrollBar;
-		friend class UILabel;
-		friend class UIList;
-		friend class UILongList;
+		friend class CustomDropDown;
+		friend class CustomList;
+		friend class DropDown;
+		friend class EditBox;
+		friend class GridLayout;
+		friend class HorizontalLayout;
+		friend class HorizontalProgress;
+		friend class HorizontalScrollBar;
+		friend class Label;
+		friend class List;
+		friend class LongList;
 		friend class UIManager;
-		friend class UIMenuPanel;
-		friend class UIScrollArea;
-		friend class UISpoiler;
-		friend class UITree;
+		friend class MenuPanel;
+		friend class ScrollArea;
+		friend class Spoiler;
+		friend class Tree;
 		friend class UITreeNode;
-		friend class UIVerticalLayout;
-		friend class UIVerticalProgress;
-		friend class UIVerticalScrollBar;
-		friend class UIWidgetLayer;
-		friend class UIWidgetLayout;
-		friend class UIWindow;
+		friend class VerticalLayout;
+		friend class VerticalProgress;
+		friend class VerticalScrollBar;
+		friend class WidgetLayer;
+		friend class WidgetLayout;
+		friend class Window;
 
 #if IS_EDITOR
 		class LayersEditable : public SceneEditableObject
@@ -448,7 +448,7 @@ namespace o2
 			LayersEditable();
 
 			// Constructor with widget
-			LayersEditable(UIWidget* widget);
+			LayersEditable(Widget* widget);
 
 			// Returns unique id
 			SceneUID GetID() const override;
@@ -486,10 +486,10 @@ namespace o2
 			SERIALIZABLE(LayersEditable);
 
 		private:
-			UIWidget* mWidget = nullptr;
+			Widget* mWidget = nullptr;
 			SceneUID  mUID = Math::Random();
 
-			friend class UIWidget;
+			friend class Widget;
 		};
 
 		class InternalChildrenEditableEditable : public SceneEditableObject
@@ -499,7 +499,7 @@ namespace o2
 			InternalChildrenEditableEditable();
 
 			// Constructor with widget
-			InternalChildrenEditableEditable(UIWidget* widget);
+			InternalChildrenEditableEditable(Widget* widget);
 
 			// Returns unique id
 			SceneUID GetID() const override;
@@ -537,10 +537,10 @@ namespace o2
 			SERIALIZABLE(InternalChildrenEditableEditable);
 
 		private:
-			UIWidget* mWidget = nullptr;
+			Widget* mWidget = nullptr;
 			SceneUID  mUID = Math::Random();
 
-			friend class UIWidget;
+			friend class Widget;
 		};
 
 		static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
@@ -596,7 +596,7 @@ namespace o2
 namespace o2
 {
 	template<typename _type>
-	_type* UIWidget::GetLayerDrawableByType()
+	_type* Widget::GetLayerDrawableByType()
 	{
 		for (auto layer : mLayers)
 		{
@@ -615,7 +615,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type* UIWidget::GetLayerDrawable(const String& path) const
+	_type* Widget::GetLayerDrawable(const String& path) const
 	{
 		auto layer = GetLayer(path);
 		if (layer && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(_type))
@@ -625,13 +625,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type* UIWidget::GetInternalWidgetByType(const String& path) const
+	_type* Widget::GetInternalWidgetByType(const String& path) const
 	{
 		return dynamic_cast<_type*>(GetInternalWidget(path));
 	}
 
 	template<typename _type>
-	_type* UIWidget::FindInternalWidgetByType(const String& name) const
+	_type* Widget::FindInternalWidgetByType(const String& name) const
 	{
 		for (auto widget : mInternalWidgets)
 		{
@@ -653,7 +653,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type* UIWidget::FindInternalWidgetByType() const
+	_type* Widget::FindInternalWidgetByType() const
 	{
 		for (auto widget : mInternalWidgets)
 		{
@@ -672,13 +672,13 @@ namespace o2
 
 }
 
-CLASS_BASES_META(o2::UIWidget)
+CLASS_BASES_META(o2::Widget)
 {
 	BASE_CLASS(o2::Actor);
 	BASE_CLASS(o2::SceneDrawable);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidget)
+CLASS_FIELDS_META(o2::Widget)
 {
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(resTransparency);
@@ -717,12 +717,12 @@ CLASS_FIELDS_META(o2::UIWidget)
 	PROTECTED_FIELD(internalChildrenEditable);
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidget)
+CLASS_METHODS_META(o2::Widget)
 {
 
-	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
-	typedef Dictionary<String, UIWidget*> _tmp2;
-	typedef Dictionary<String, UIWidgetState*> _tmp3;
+	typedef Dictionary<String, WidgetLayer*> _tmp1;
+	typedef Dictionary<String, Widget*> _tmp2;
+	typedef Dictionary<String, WidgetState*> _tmp3;
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
@@ -731,31 +731,31 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
 	PUBLIC_FUNCTION(void, SetLayoutDirty);
-	PUBLIC_FUNCTION(UIWidget*, GetParentWidget);
+	PUBLIC_FUNCTION(Widget*, GetParentWidget);
 	PUBLIC_FUNCTION(RectF, GetChildrenRect);
-	PUBLIC_FUNCTION(UIWidget*, GetChildWidget, const String&);
-	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, AddChildWidget, UIWidget*, int);
+	PUBLIC_FUNCTION(Widget*, GetChildWidget, const String&);
+	PUBLIC_FUNCTION(Widget*, AddChildWidget, Widget*);
+	PUBLIC_FUNCTION(Widget*, AddChildWidget, Widget*, int);
 	PUBLIC_FUNCTION(const WidgetsVec&, GetChildWidgets);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
-	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, UIWidgetLayer*);
-	PUBLIC_FUNCTION(UIWidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
-	PUBLIC_FUNCTION(void, RemoveLayer, UIWidgetLayer*, bool);
+	PUBLIC_FUNCTION(WidgetLayer*, AddLayer, WidgetLayer*);
+	PUBLIC_FUNCTION(WidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
+	PUBLIC_FUNCTION(void, RemoveLayer, WidgetLayer*, bool);
 	PUBLIC_FUNCTION(void, RemoveLayer, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllLayers);
-	PUBLIC_FUNCTION(UIWidgetLayer*, GetLayer, const String&);
-	PUBLIC_FUNCTION(UIWidgetLayer*, FindLayer, const String&);
+	PUBLIC_FUNCTION(WidgetLayer*, GetLayer, const String&);
+	PUBLIC_FUNCTION(WidgetLayer*, FindLayer, const String&);
 	PUBLIC_FUNCTION(const LayersVec&, GetLayers);
-	PUBLIC_FUNCTION(UIWidgetState*, AddState, const String&);
-	PUBLIC_FUNCTION(UIWidgetState*, AddState, const String&, const Animation&);
-	PUBLIC_FUNCTION(UIWidgetState*, AddState, UIWidgetState*);
+	PUBLIC_FUNCTION(WidgetState*, AddState, const String&);
+	PUBLIC_FUNCTION(WidgetState*, AddState, const String&, const Animation&);
+	PUBLIC_FUNCTION(WidgetState*, AddState, WidgetState*);
 	PUBLIC_FUNCTION(bool, RemoveState, const String&);
-	PUBLIC_FUNCTION(bool, RemoveState, UIWidgetState*);
+	PUBLIC_FUNCTION(bool, RemoveState, WidgetState*);
 	PUBLIC_FUNCTION(void, RemoveAllStates);
 	PUBLIC_FUNCTION(void, SetState, const String&, bool);
 	PUBLIC_FUNCTION(void, SetStateForcible, const String&, bool);
 	PUBLIC_FUNCTION(bool, GetState, const String&);
-	PUBLIC_FUNCTION(UIWidgetState*, GetStateObject, const String&);
+	PUBLIC_FUNCTION(WidgetState*, GetStateObject, const String&);
 	PUBLIC_FUNCTION(const StatesVec&, GetStates);
 	PUBLIC_FUNCTION(void, SetDepthOverridden, bool);
 	PUBLIC_FUNCTION(bool, IsDepthOverriden);
@@ -771,10 +771,10 @@ CLASS_METHODS_META(o2::UIWidget)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, SetFocusable, bool);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetInternalParent, UIWidget*, bool);
-	PUBLIC_FUNCTION(void, AddInternalWidget, UIWidget*, bool);
-	PUBLIC_FUNCTION(UIWidget*, GetInternalWidget, const String&);
-	PUBLIC_FUNCTION(UIWidget*, FindInternalWidget, const String&);
+	PUBLIC_FUNCTION(void, SetInternalParent, Widget*, bool);
+	PUBLIC_FUNCTION(void, AddInternalWidget, Widget*, bool);
+	PUBLIC_FUNCTION(Widget*, GetInternalWidget, const String&);
+	PUBLIC_FUNCTION(Widget*, FindInternalWidget, const String&);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
@@ -786,8 +786,8 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
@@ -800,14 +800,14 @@ CLASS_METHODS_META(o2::UIWidget)
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateVisibility, bool);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, OnChildFocused, UIWidget*);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
-	PROTECTED_FUNCTION(void, OnStateAdded, UIWidgetState*);
+	PROTECTED_FUNCTION(void, OnChildFocused, Widget*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
+	PROTECTED_FUNCTION(void, OnStateAdded, WidgetState*);
 	PROTECTED_FUNCTION(void, DrawDebugFrame);
 	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
 	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
 	PROTECTED_FUNCTION(void, RetargetStatesAnimations);
-	PROTECTED_FUNCTION(void, SetParentWidget, UIWidget*);
+	PROTECTED_FUNCTION(void, SetParentWidget, Widget*);
 	PROTECTED_FUNCTION(WidgetsVec, GetChildrenNonConst);
 	PROTECTED_FUNCTION(LayersVec, GetLayersNonConst);
 	PROTECTED_FUNCTION(StatesVec, GetStatesNonConst);
@@ -829,18 +829,18 @@ CLASS_METHODS_META(o2::UIWidget)
 }
 END_META;
 
-CLASS_BASES_META(o2::UIWidget::LayersEditable)
+CLASS_BASES_META(o2::Widget::LayersEditable)
 {
 	BASE_CLASS(o2::SceneEditableObject);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidget::LayersEditable)
+CLASS_FIELDS_META(o2::Widget::LayersEditable)
 {
 	PRIVATE_FIELD(mWidget);
 	PRIVATE_FIELD(mUID);
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidget::LayersEditable)
+CLASS_METHODS_META(o2::Widget::LayersEditable)
 {
 
 	PUBLIC_FUNCTION(SceneUID, GetID);
@@ -856,18 +856,18 @@ CLASS_METHODS_META(o2::UIWidget::LayersEditable)
 }
 END_META;
 
-CLASS_BASES_META(o2::UIWidget::InternalChildrenEditableEditable)
+CLASS_BASES_META(o2::Widget::InternalChildrenEditableEditable)
 {
 	BASE_CLASS(o2::SceneEditableObject);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidget::InternalChildrenEditableEditable)
+CLASS_FIELDS_META(o2::Widget::InternalChildrenEditableEditable)
 {
 	PRIVATE_FIELD(mWidget);
 	PRIVATE_FIELD(mUID);
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidget::InternalChildrenEditableEditable)
+CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 {
 
 	PUBLIC_FUNCTION(SceneUID, GetID);

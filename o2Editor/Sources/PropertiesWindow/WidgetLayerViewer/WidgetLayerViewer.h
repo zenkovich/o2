@@ -7,8 +7,8 @@ using namespace o2;
 namespace o2
 {
 	class SceneEditableObject;
-	class UIVerticalLayout;
-	class UIWidgetLayer;
+	class VerticalLayout;
+	class WidgetLayer;
 }
 
 namespace Editor
@@ -46,13 +46,13 @@ namespace Editor
 		IOBJECT(WidgetLayerViewer);
 
 	protected:
-		Vector<UIWidgetLayer*>         mTargetLayers;               // Current target layers
+		Vector<WidgetLayer*>         mTargetLayers;               // Current target layers
 
 		IWidgetLayerHeaderViewer*      mHeaderViewer = nullptr;     // Layer header viewer
 		IWidgetLayerLayoutViewer*      mLayoutViewer = nullptr;     // Layer layout viewer
 		IWidgetLayerPropertiesViewer*  mPropertiesViewer = nullptr; // Layer properties viewer
 
-		UIVerticalLayout*              mViewersLayout = nullptr;    // Viewers layout
+		VerticalLayout*              mViewersLayout = nullptr;    // Viewers layout
 
 	protected:
 		// It is called when some actors on scene were changed

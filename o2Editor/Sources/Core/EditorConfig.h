@@ -10,7 +10,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 // Editor configuration access macros
@@ -18,7 +18,7 @@ namespace o2
 
 namespace Editor
 {
-	class UIDockWindowPlace;
+	class DockWindowPlace;
 
 	// -------------------------
 	// Application configuration

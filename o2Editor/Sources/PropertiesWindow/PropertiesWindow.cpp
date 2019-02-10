@@ -108,7 +108,7 @@ namespace Editor
 			if (mCurrentViewer)
 			{
 				mCurrentViewer->mContentWidget->SetParent(mWindow);
-				*mCurrentViewer->mContentWidget->layout = UIWidgetLayout::BothStretch();
+				*mCurrentViewer->mContentWidget->layout = WidgetLayout::BothStretch();
 				mCurrentViewer->mContentWidget->Show(true);
 				mCurrentViewer->OnEnabled();
 			}

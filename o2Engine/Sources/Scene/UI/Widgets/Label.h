@@ -8,14 +8,14 @@ namespace o2
 	// -----------------
 	// Text label widget
 	// -----------------
-	class UILabel: public UIWidget
+	class Label: public Widget
 	{
 	public:
 		enum class HorOverflow { Cut, Dots, Expand, Wrap, None };
 		enum class VerOverflow { Cut, None, Expand };
 
 	public:
-		PROPERTIES(UILabel);
+		PROPERTIES(Label);
 		PROPERTY(WString, text, SetText, GetText);   // Text property, wstring
 
 		PROPERTY(FontRef, font, SetFont, GetFont);   // Font pointer property
@@ -34,13 +34,13 @@ namespace o2
 		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
 
 		// Default constructor
-		UILabel();
+		Label();
 
 		// Copy-constructor
-		UILabel(const UILabel& other);
+		Label(const Label& other);
 
 		// Assign operator
-		UILabel& operator=(const UILabel& other);
+		Label& operator=(const Label& other);
 
 		// Draws widget
 		void Draw() override;
@@ -114,7 +114,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform();
 
-		SERIALIZABLE(UILabel);
+		SERIALIZABLE(Label);
 
 	protected:
 		Text*       mTextLayer = nullptr;             // Text layer drawable. Getting from layer "text"
@@ -127,16 +127,16 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when layer added and updates drawing sequence
-		void OnLayerAdded(UIWidgetLayer* layer) override;
+		void OnLayerAdded(WidgetLayer* layer) override;
 	};
 }
 
-CLASS_BASES_META(o2::UILabel)
+CLASS_BASES_META(o2::Label)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(o2::UILabel)
+CLASS_FIELDS_META(o2::Label)
 {
 	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(font);
@@ -155,7 +155,7 @@ CLASS_FIELDS_META(o2::UILabel)
 	PROTECTED_FIELD(mExpandBorder).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UILabel)
+CLASS_METHODS_META(o2::Label)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -183,6 +183,6 @@ CLASS_METHODS_META(o2::UILabel)
 	PUBLIC_FUNCTION(int, GetHeight);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 }
 END_META;

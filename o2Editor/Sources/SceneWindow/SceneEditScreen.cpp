@@ -46,7 +46,7 @@ namespace Editor
 
 	void SceneEditScreen::Draw()
 	{
-		UIWidget::Draw();
+		Widget::Draw();
 
 		if (!mReady)
 			return;
@@ -74,7 +74,7 @@ namespace Editor
 
 	void SceneEditScreen::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		UpdateCamera(dt);
 		o2Scene.CheckChangedObjects();
@@ -274,7 +274,7 @@ namespace Editor
 
 	bool SceneEditScreen::IsUnderPoint(const Vec2F& point)
 	{
-		return UIWidget::IsUnderPoint(point);
+		return Widget::IsUnderPoint(point);
 	}
 
 	void SceneEditScreen::BindSceneTree()
@@ -390,7 +390,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
 			return;
 
@@ -406,7 +406,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
 			return;
 
@@ -417,7 +417,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDraggedAbove(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
 			return;
 
@@ -431,7 +431,7 @@ namespace Editor
 
 	void SceneEditScreen::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetsScroll)
 			return;
 
@@ -443,7 +443,7 @@ namespace Editor
 
 	void SceneEditScreen::OnScrolled(float scroll)
 	{
-		UIScrollView::OnScrolled(scroll);
+		ScrollView::OnScrolled(scroll);
 
 		if (mEnabledTool)
 			mEnabledTool->OnScrolled(scroll);
@@ -518,12 +518,12 @@ namespace Editor
 		if (mEnabledTool && !IsHandleWorking(cursor))
 			mEnabledTool->OnCursorRightMousePressed(cursor);
 
-		UIScrollView::OnCursorRightMousePressed(cursor);
+		ScrollView::OnCursorRightMousePressed(cursor);
 	}
 
 	void SceneEditScreen::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{
-		UIScrollView::OnCursorRightMouseStayDown(cursor);
+		ScrollView::OnCursorRightMouseStayDown(cursor);
 
 		if (mEnabledTool)
 			mEnabledTool->OnCursorRightMouseStayDown(cursor);
@@ -534,7 +534,7 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnCursorRightMouseReleased(cursor);
 
-		UIScrollView::OnCursorRightMouseReleased(cursor);
+		ScrollView::OnCursorRightMouseReleased(cursor);
 	}
 
 	void SceneEditScreen::OnCursorMiddleMousePressed(const Input::Cursor& cursor)

@@ -16,7 +16,7 @@ namespace o2
 	class SceneEditableObject;
 	class Sprite;
 	class UIContextMenu;
-	class UIGridLayout;
+	class GridLayout;
 }
 
 namespace Editor
@@ -24,29 +24,29 @@ namespace Editor
 	class ActorProperty;
 	class ComponentProperty;
 	class IAssetProperty;
-	class UISceneTree;
-	class UIAssetIcon;
+	class SceneTree;
+	class AssetIcon;
 
 	// ------------------------
 	// Assets icons scroll area
 	// ------------------------
-	class UIAssetsIconsScrollArea: public UIScrollArea, public DragDropArea, public KeyboardEventsListener, 
+	class AssetsIconsScrollArea: public ScrollArea, public DragDropArea, public KeyboardEventsListener, 
 		public ISelectableDragableObjectsGroup
 	{
 	public:
 		Function<void(const Vector<String>&)> onAssetsSelected; // Assets selected event
 
 		// Default constructor
-		UIAssetsIconsScrollArea();
+		AssetsIconsScrollArea();
 
 		// Copy-constructor
-		UIAssetsIconsScrollArea(const UIAssetsIconsScrollArea& other);
+		AssetsIconsScrollArea(const AssetsIconsScrollArea& other);
 
 		// Destructor
-		~UIAssetsIconsScrollArea();
+		~AssetsIconsScrollArea();
 
 		// Copy-operator
-		UIAssetsIconsScrollArea& operator=(const UIAssetsIconsScrollArea& other);
+		AssetsIconsScrollArea& operator=(const AssetsIconsScrollArea& other);
 
 		// Draws widget
 		void Draw() override;
@@ -79,7 +79,7 @@ namespace Editor
 		Vector<AssetInfo> GetSelectedAssets() const;
 
 		// Return asset icon under point
-		UIAssetIcon* GetIconUnderPoint(const Vec2F& point) const;
+		AssetIcon* GetIconUnderPoint(const Vec2F& point) const;
 
 		// Returns node hightlight drawable
 		Sprite* GetHightlightDrawable() const;
@@ -99,10 +99,10 @@ namespace Editor
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UIAssetsIconsScrollArea);
+		SERIALIZABLE(AssetsIconsScrollArea);
 
 	protected:
-		typedef Vector<UIAssetIcon*> AssetsIconsVec;
+		typedef Vector<AssetIcon*> AssetsIconsVec;
 		typedef Vector<Sprite*> SpritesVec;
 		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
@@ -113,13 +113,13 @@ namespace Editor
 						        
 		String                  mCurrentPath = "_";          // Current viewing path
 						        
-		UIGridLayout*           mGrid = nullptr;             // Assets icons grid
+		GridLayout*           mGrid = nullptr;             // Assets icons grid
 		UIContextMenu*          mContextMenu = nullptr;      // Assets Context menu
 						        
 		AssetsIconsVec          mSelectedAssetsIcons;        // Selected assets icons
 		AssetsVec               mSelectedPreloadedAssets;    // Preloaded selected assets
 						        
-		UIAssetIcon*            mHightlightIcon = nullptr;   // Current hightlighting asset icon
+		AssetIcon*            mHightlightIcon = nullptr;   // Current hightlighting asset icon
 		Animation               mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
 		Sprite*                 mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
 		Layout                  mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
@@ -133,7 +133,7 @@ namespace Editor
 						        
 		bool                    mIsDraggingIcons = false;    // Is dragging icons
 		bool                    mDragEnded = false;          // Is dragging ended
-		UIAssetIcon*            mDragIcon = nullptr;         // Dragging icon
+		AssetIcon*            mDragIcon = nullptr;         // Dragging icon
 		Vec2F                   mDragOffset;                 // Dragging offset from cursor to icon center
 		SceneEditableObjectsVec mInstSceneDragObjects;       // Instantiated objects when dragging asset above scene
 
@@ -199,22 +199,22 @@ namespace Editor
 		void PrepareIconsPools();
 
 		// Returns asset icon from pool or creates new by style name
-		UIAssetIcon* GetAssetIconFromPool(const String& style);
+		AssetIcon* GetAssetIconFromPool(const String& style);
 
 		// Frees icon to pool
-		void FreeAssetIconToPool(UIAssetIcon* icon);
+		void FreeAssetIconToPool(AssetIcon* icon);
 
 		// Returns image asset icon for asset
-		UIAssetIcon* GetImageAssetIcon(const AssetInfo& asset);
+		AssetIcon* GetImageAssetIcon(const AssetInfo& asset);
 
 		// Updates assets grid size
 		void UpdateAssetsGridSize();
 
 		// It is called when asset icon double clicked, starting editing name
-		void OnAssetDblClick(UIAssetIcon* icon);
+		void OnAssetDblClick(AssetIcon* icon);
 
 		// Starts asset icon renaming, calls onCompletedwhen completed
-		void StartAssetRenaming(UIAssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
+		void StartAssetRenaming(AssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
 
 		// It is called when context copy pressed
 		void OnContextCopyPressed();
@@ -314,13 +314,13 @@ namespace Editor
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
 		// It is called when dropped dragged scene tree nodes selected and started dragging from scene tree
-		void OnDroppedFromSceneTree(UISceneTree* sceneTree);
+		void OnDroppedFromSceneTree(SceneTree* sceneTree);
 
 		// It is called when dropped dragged assets icons selected and started dragging from this
 		void OnDroppedFromThis();
 
 		// Begins dragging selected items
-		void BeginDragging(UIAssetIcon* icon);
+		void BeginDragging(AssetIcon* icon);
 
 		// Ends dragging items
 		void EndDragging(bool droppedToThis = false);
@@ -330,26 +330,26 @@ namespace Editor
 
 		friend class AssetsWindow;
 		friend class SceneEditScreen;
-		friend class UISceneTree;
-		friend class UIAssetIcon;
+		friend class SceneTree;
+		friend class AssetIcon;
 	};
 
 	template<typename _type>
-	Actor* UIAssetsIconsScrollArea::InstantiateAsset(const _type& asset)
+	Actor* AssetsIconsScrollArea::InstantiateAsset(const _type& asset)
 	{
 		return nullptr;
 	}
 }
 
-CLASS_BASES_META(Editor::UIAssetsIconsScrollArea)
+CLASS_BASES_META(Editor::AssetsIconsScrollArea)
 {
-	BASE_CLASS(o2::UIScrollArea);
+	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::ISelectableDragableObjectsGroup);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UIAssetsIconsScrollArea)
+CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 {
 	PUBLIC_FIELD(onAssetsSelected);
 	PROTECTED_FIELD(mAssetIconSize);
@@ -377,7 +377,7 @@ CLASS_FIELDS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FIELD(mChangePropertiesTargetsFromThis);
 }
 END_META;
-CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
+CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -390,7 +390,7 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PUBLIC_FUNCTION(void, SelectAsset, UID, bool);
 	PUBLIC_FUNCTION(void, DeselectAllAssets);
 	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
-	PUBLIC_FUNCTION(UIAssetIcon*, GetIconUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(AssetIcon*, GetIconUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Sprite*, GetHightlightDrawable);
 	PUBLIC_FUNCTION(void, SetHightlightAnimation, const Animation&);
 	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
@@ -415,12 +415,12 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, RegObjectsCreationAction);
 	PROTECTED_FUNCTION(void, InitializeContext);
 	PROTECTED_FUNCTION(void, PrepareIconsPools);
-	PROTECTED_FUNCTION(UIAssetIcon*, GetAssetIconFromPool, const String&);
-	PROTECTED_FUNCTION(void, FreeAssetIconToPool, UIAssetIcon*);
-	PROTECTED_FUNCTION(UIAssetIcon*, GetImageAssetIcon, const AssetInfo&);
+	PROTECTED_FUNCTION(AssetIcon*, GetAssetIconFromPool, const String&);
+	PROTECTED_FUNCTION(void, FreeAssetIconToPool, AssetIcon*);
+	PROTECTED_FUNCTION(AssetIcon*, GetImageAssetIcon, const AssetInfo&);
 	PROTECTED_FUNCTION(void, UpdateAssetsGridSize);
-	PROTECTED_FUNCTION(void, OnAssetDblClick, UIAssetIcon*);
-	PROTECTED_FUNCTION(void, StartAssetRenaming, UIAssetIcon*, const String&, const Function<void(const String&)>&);
+	PROTECTED_FUNCTION(void, OnAssetDblClick, AssetIcon*);
+	PROTECTED_FUNCTION(void, StartAssetRenaming, AssetIcon*, const String&, const Function<void(const String&)>&);
 	PROTECTED_FUNCTION(void, OnContextCopyPressed);
 	PROTECTED_FUNCTION(void, OnContextCutPressed);
 	PROTECTED_FUNCTION(void, OnContextPastePressed);
@@ -451,9 +451,9 @@ CLASS_METHODS_META(Editor::UIAssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDroppedFromSceneTree, UISceneTree*);
+	PROTECTED_FUNCTION(void, OnDroppedFromSceneTree, SceneTree*);
 	PROTECTED_FUNCTION(void, OnDroppedFromThis);
-	PROTECTED_FUNCTION(void, BeginDragging, UIAssetIcon*);
+	PROTECTED_FUNCTION(void, BeginDragging, AssetIcon*);
 	PROTECTED_FUNCTION(void, EndDragging, bool);
 	PROTECTED_FUNCTION(void, UpdateDraggingGraphics);
 }

@@ -11,14 +11,14 @@ using namespace o2;
 namespace o2
 {
 	class Sprite;
-	class UIButton;
-	class UIEditBox;
-	class UIGridLayout;
-	class UILabel;
-	class UIScrollArea;
-	class UITree;
+	class Button;
+	class EditBox;
+	class GridLayout;
+	class Label;
+	class ScrollArea;
+	class Tree;
 	class UITreeNode;
-	class UIWidget;
+	class Widget;
 }
 
 // Editor assets window accessor macros
@@ -26,8 +26,8 @@ namespace o2
 
 namespace Editor
 {
-	class UIAssetsIconsScrollArea;
-	class UIAssetsFoldersTree;
+	class AssetsIconsScrollArea;
+	class AssetsFoldersTree;
 
 	// -------------
 	// Assets window
@@ -123,17 +123,17 @@ namespace Editor
 
 		float                    mFoldersTreeShowCoef;    // Animating show folders tree coefficient (0...1)
 
-		UIButton*                mFilterButton;           // Search filter button
-		UIEditBox*               mSearchEditBox;          // Search edit box
-		UILabel*                 mSelectedAssetPathLabel; // Selected asset path label
+		Button*                mFilterButton;           // Search filter button
+		EditBox*               mSearchEditBox;          // Search edit box
+		Label*                 mSelectedAssetPathLabel; // Selected asset path label
 
-		UIAssetsFoldersTree*     mFoldersTree;            // Folders tree			
+		AssetsFoldersTree*     mFoldersTree;            // Folders tree			
 		Animation                mFoldersTreeShowAnim;    // Folders tree visible animation
 		bool                     mFoldersTreeVisible;     // Is folders tree visible
 
-		UIAssetsIconsScrollArea* mAssetsGridScroll;       // Assets grid scroll
+		AssetsIconsScrollArea* mAssetsGridScroll;       // Assets grid scroll
 
-		UITree*                  mAssetsTree;             // Assets tree
+		Tree*                  mAssetsTree;             // Assets tree
 
 		CursorEventsArea         mSeparatorHandle;        // Folders tree and assets tree/grid separator handle
 		float                    mSeparatorCoef;          // Separator coefficient, means anchors for tree nad assets scroll
@@ -174,8 +174,8 @@ namespace Editor
 		// Copies asset folder recursively
 		void CopyAssetFolder(const String& src, const String& dst);
 
-		friend class UIAssetsFoldersTree;
-		friend class UIAssetsIconsScrollArea;
+		friend class AssetsFoldersTree;
+		friend class AssetsIconsScrollArea;
 	};
 }
 

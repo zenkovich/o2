@@ -9,7 +9,7 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
@@ -27,7 +27,7 @@ namespace Editor
 		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
 		// Returns data widget
-		virtual UIWidget* GetWidget() const { return nullptr; }
+		virtual Widget* GetWidget() const { return nullptr; }
 
 		// Updates properties values
 		virtual void Refresh() {}
@@ -49,7 +49,7 @@ CLASS_METHODS_META(Editor::IActorHeaderViewer)
 {
 
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
 }
 END_META;

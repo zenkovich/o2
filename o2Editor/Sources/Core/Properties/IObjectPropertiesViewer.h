@@ -9,7 +9,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIVerticalLayout;
+	class VerticalLayout;
 }
 
 namespace Editor
@@ -45,12 +45,12 @@ namespace Editor
 		virtual const Type* GetViewingObjectType() const;
 
 		// Returns view widget
-		UIWidget* GetViewWidget() const;
+		Widget* GetViewWidget() const;
 
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
-		UIWidget* mViewWidget = nullptr; // View layout
+		Widget* mViewWidget = nullptr; // View layout
 
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
 		                                                    // inChangeCompleted from this with full combined path
@@ -80,7 +80,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(UIWidget*, GetViewWidget);
+	PUBLIC_FUNCTION(Widget*, GetViewWidget);
 	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

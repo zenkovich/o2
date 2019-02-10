@@ -6,47 +6,47 @@
 namespace Editor
 {
 
-	UISpoilerWithHead::UISpoilerWithHead() :
-		UISpoiler()
+	SpoilerWithHead::SpoilerWithHead() :
+		Spoiler()
 	{}
 
-	UISpoilerWithHead::UISpoilerWithHead(const UISpoilerWithHead& other) :
-		UISpoiler(other)
+	SpoilerWithHead::SpoilerWithHead(const SpoilerWithHead& other) :
+		Spoiler(other)
 	{
 		InitializeControls();
 		RetargetStatesAnimations();
 	}
 
-	UISpoilerWithHead& UISpoilerWithHead::operator=(const UISpoilerWithHead& other)
+	SpoilerWithHead& SpoilerWithHead::operator=(const SpoilerWithHead& other)
 	{
-		UISpoiler::operator=(other);
+		Spoiler::operator=(other);
 		return *this;
 	}
 
-	UIImage* UISpoilerWithHead::GetIcon() const
+	Image* SpoilerWithHead::GetIcon() const
 	{
 		return mIcon;
 	}
 
-	void UISpoilerWithHead::InitializeControls()
+	void SpoilerWithHead::InitializeControls()
 	{
-		mOptionsBtn = FindInternalWidgetByType<UIButton>("options");
+		mOptionsBtn = FindInternalWidgetByType<Button>("options");
 		if (mOptionsBtn)
 			mOptionsBtn->onClick = [&]() { onOptionsPressed(); };
 
-		mSaveBtn = FindInternalWidgetByType<UIButton>("save");
+		mSaveBtn = FindInternalWidgetByType<Button>("save");
 		if (mSaveBtn)
 			mSaveBtn->onClick = [&]() { onSavePressed(); };
 
-		mIcon = FindInternalWidgetByType<UIImage>("icon");
+		mIcon = FindInternalWidgetByType<Image>("icon");
 	}
 
-	void UISpoilerWithHead::CopyData(const Actor& otherActor)
+	void SpoilerWithHead::CopyData(const Actor& otherActor)
 	{
-		UISpoiler::CopyData(otherActor);
+		Spoiler::CopyData(otherActor);
 		InitializeControls();
 
 	}
 }
 
-DECLARE_CLASS(Editor::UISpoilerWithHead);
+DECLARE_CLASS(Editor::SpoilerWithHead);

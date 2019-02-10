@@ -8,10 +8,10 @@ namespace o2
 	// -----------------------
 	// Horizontal progress bar
 	// -----------------------
-	class UIHorizontalScrollBar: public UIWidget, public DrawableCursorEventsListener
+	class HorizontalScrollBar: public Widget, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTIES(UIHorizontalScrollBar);
+		PROPERTIES(HorizontalScrollBar);
 		PROPERTY(float, value, SetValue, GetValue);          // Current value property
 
 		PROPERTY(float, minValue, SetMinValue, GetMinValue); // Minimal value property
@@ -25,16 +25,16 @@ namespace o2
 		Function<void(float)> onSmoothChange; // On smooth value changing event
 
 		// Constructor
-		UIHorizontalScrollBar();
+		HorizontalScrollBar();
 
 		// Copy-constructor
-		UIHorizontalScrollBar(const UIHorizontalScrollBar& other);
+		HorizontalScrollBar(const HorizontalScrollBar& other);
 
 		// Destructor
-		~UIHorizontalScrollBar();
+		~HorizontalScrollBar();
 
 		// Copy-operator
-		UIHorizontalScrollBar& operator=(const UIHorizontalScrollBar& other);
+		HorizontalScrollBar& operator=(const HorizontalScrollBar& other);
 
 		// Updates widget and smooth value changing
 		void Update(float dt) override;
@@ -87,7 +87,7 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
-		SERIALIZABLE(UIHorizontalScrollBar);
+		SERIALIZABLE(HorizontalScrollBar);
 
 	protected:
 		float          mValue = 0.0f;                 // Current value @SERIALIZABLE
@@ -99,8 +99,8 @@ namespace o2
 		float          mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
 		float          mPressHandleOffset = 0.0f;     // Value offset when handle was pressed
 		bool           mHandlePressed = false;        // True, when handle was pressed
-		UIWidgetLayer* mHandleLayer = nullptr;        // Handle layer
-		UIWidgetLayer* mBackLayer = nullptr;          // Background layer
+		WidgetLayer* mHandleLayer = nullptr;        // Handle layer
+		WidgetLayer* mBackLayer = nullptr;          // Background layer
 
 	protected:
 		// Copies data of actor from other to this
@@ -116,7 +116,7 @@ namespace o2
 		void UpdateLayersLayouts() override;
 
 		// It is called when new layer was added. Here searching bar, back and handle layers
-		void OnLayerAdded(UIWidgetLayer* layer) override;
+		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// Updates bar, back and handle layers layout by value
 		void UpdateProgressLayersLayouts();
@@ -149,21 +149,21 @@ namespace o2
 		void OnScrolled(float scroll) override;
 
 		friend class UIContextMenu;
-		friend class UICustomList;
-		friend class UIEditBox;
-		friend class UILongList;
-		friend class UIScrollArea;
-		friend class UITree;
+		friend class CustomList;
+		friend class EditBox;
+		friend class LongList;
+		friend class ScrollArea;
+		friend class Tree;
 	};
 }
 
-CLASS_BASES_META(o2::UIHorizontalScrollBar)
+CLASS_BASES_META(o2::HorizontalScrollBar)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIHorizontalScrollBar)
+CLASS_FIELDS_META(o2::HorizontalScrollBar)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(minValue);
@@ -186,7 +186,7 @@ CLASS_FIELDS_META(o2::UIHorizontalScrollBar)
 	PROTECTED_FIELD(mBackLayer);
 }
 END_META;
-CLASS_METHODS_META(o2::UIHorizontalScrollBar)
+CLASS_METHODS_META(o2::HorizontalScrollBar)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
@@ -210,7 +210,7 @@ CLASS_METHODS_META(o2::UIHorizontalScrollBar)
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(float, GetValueFromCursor, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, SetValueFromUser, float);

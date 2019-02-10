@@ -8,9 +8,9 @@ using namespace o2;
 
 namespace o2
 {
-	class UIHorizontalLayout;
-	class UILabel;
-	class UIVerticalLayout;
+	class HorizontalLayout;
+	class Label;
+	class VerticalLayout;
 }
 
 // Editor properties window accessor macros

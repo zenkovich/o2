@@ -33,23 +33,23 @@ namespace Editor
 		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		mEditWidget = mnew SceneEditScreen();
-		*mEditWidget->layout = UIWidgetLayout::BothStretch(0, 0, 0, 19);
+		*mEditWidget->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
 		mWindow->AddChild(mEditWidget);
 
-		UIWidget* upPanel = mnew UIWidget();
+		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
-		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
 		mWindow->AddChild(upPanel);
 
-		auto layersButton = o2UI.CreateWidget<UIButton>("panel down");
+		auto layersButton = o2UI.CreateWidget<Button>("panel down");
 		layersButton->caption = "Layers";
-		*layersButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 0);
+		*layersButton->layout = WidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 0);
 		upPanel->AddChild(layersButton);
 
-		auto gizmosButton = o2UI.CreateWidget<UIButton>("panel down");
+		auto gizmosButton = o2UI.CreateWidget<Button>("panel down");
 		gizmosButton->caption = "Gizmos";
-		*gizmosButton->layout = UIWidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
+		*gizmosButton->layout = WidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
 		upPanel->AddChild(gizmosButton);
 	}
 

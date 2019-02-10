@@ -7,12 +7,12 @@
 
 namespace o2
 {
-	class UIHorizontalLayout;
+	class HorizontalLayout;
 
 	// -------------
 	// UI Menu panel
 	// -------------
-	class UIMenuPanel: public UIWidget, public DrawableCursorEventsListener
+	class MenuPanel: public Widget, public DrawableCursorEventsListener
 	{
 	public:
 		class Item: public ISerializable
@@ -34,16 +34,16 @@ namespace o2
 
 	public:
 		// Default constructor
-		UIMenuPanel();
+		MenuPanel();
 
 		// Copy-constructor
-		UIMenuPanel(const UIMenuPanel& other);
+		MenuPanel(const MenuPanel& other);
 
 		// Destructor
-		~UIMenuPanel();
+		~MenuPanel();
 
 		// Copy-operator
-		UIMenuPanel& operator=(const UIMenuPanel& other);
+		MenuPanel& operator=(const MenuPanel& other);
 
 		// Updates drawables, states and widget
 		void Update(float dt) override;
@@ -52,22 +52,22 @@ namespace o2
 		void Draw() override;
 
 		// Add item
-		UIWidget* AddItem(const Item& item);
+		Widget* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddItem(const WString& path, const Function<void()>& 
+		Widget* AddItem(const WString& path, const Function<void()>& 
 						  clickFunc = Function<void()>(),
 						  const ImageAssetRef& icon = ImageAssetRef(), 
 						  const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Adds toggle item by path ("node/sub node/target")
-		UIWidget* AddToggleItem(const WString& path, bool value, 
+		Widget* AddToggleItem(const WString& path, bool value, 
 								const Function<void(bool)>& clickFunc = Function<void(bool)>(),
 								const ImageAssetRef& icon = ImageAssetRef(), 
 								const ShortcutKeys& shortcut = ShortcutKeys());
 
 			  // Inserts item at position
-		UIWidget* InsertItem(const Item& item, int position);
+		Widget* InsertItem(const Item& item, int position);
 
 		// Adds array of items
 		void AddItems(Vector<Item> items);
@@ -91,13 +91,13 @@ namespace o2
 		void RemoveAllItems();
 
 		// Returns items vertical layout
-		UIHorizontalLayout* GetItemsLayout() const;
+		HorizontalLayout* GetItemsLayout() const;
 
 		// Returns item sample
-		UIWidget* GetItemSample() const;
+		Widget* GetItemSample() const;
 
 		// Sets item sample
-		void SetItemSample(UIWidget* sample);
+		void SetItemSample(Widget* sample);
 
 		// Returns selection drawable
 		Sprite* GetSelectionDrawable() const;
@@ -108,12 +108,12 @@ namespace o2
 		// Returns selection drawable layout
 		Layout GetSelectionDrawableLayout() const;
 
-		SERIALIZABLE(UIMenuPanel);
+		SERIALIZABLE(MenuPanel);
 
 	protected:
-		UIHorizontalLayout*      mLayout = nullptr;             // Items layout
+		HorizontalLayout*      mLayout = nullptr;             // Items layout
 
-		UIWidget*                mItemSample = nullptr;         // Item sample @SERIALIZABLE
+		Widget*                mItemSample = nullptr;         // Item sample @SERIALIZABLE
 
 		Vector<Function<void()>> mClickFunctions;               // Items click functions
 
@@ -139,13 +139,13 @@ namespace o2
 		UIContextMenu* CreateSubContext(WString& path);
 
 		// Creates item widget
-		UIWidget* CreateItem(const Item& item);
+		Widget* CreateItem(const Item& item);
 
 		// Returns item info
 		Item GetItemDef(int idx) const;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
-		UIWidget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
+		Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
 
 		// Updates hover
 		void UpdateHover(const Vec2F& point);
@@ -170,13 +170,13 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIMenuPanel)
+CLASS_BASES_META(o2::MenuPanel)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIMenuPanel)
+CLASS_FIELDS_META(o2::MenuPanel)
 {
 	PROTECTED_FIELD(mLayout);
 	PROTECTED_FIELD(mItemSample).SERIALIZABLE_ATTRIBUTE();
@@ -191,15 +191,15 @@ CLASS_FIELDS_META(o2::UIMenuPanel)
 	PROTECTED_FIELD(mOpenedContext);
 }
 END_META;
-CLASS_METHODS_META(o2::UIMenuPanel)
+CLASS_METHODS_META(o2::MenuPanel)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIWidget*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(UIWidget*, InsertItem, const Item&, int);
+	PUBLIC_FUNCTION(Widget*, AddItem, const Item&);
+	PUBLIC_FUNCTION(Widget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(Widget*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(Widget*, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
 	PUBLIC_FUNCTION(Item, GetItem, int);
@@ -207,18 +207,18 @@ CLASS_METHODS_META(o2::UIMenuPanel)
 	PUBLIC_FUNCTION(void, RemoveItem, int);
 	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
 	PUBLIC_FUNCTION(void, RemoveAllItems);
-	PUBLIC_FUNCTION(UIHorizontalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
+	PUBLIC_FUNCTION(HorizontalLayout*, GetItemsLayout);
+	PUBLIC_FUNCTION(Widget*, GetItemSample);
+	PUBLIC_FUNCTION(void, SetItemSample, Widget*);
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(UIContextMenu*, CreateSubContext, WString&);
-	PROTECTED_FUNCTION(UIWidget*, CreateItem, const Item&);
+	PROTECTED_FUNCTION(Widget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
-	PROTECTED_FUNCTION(UIWidget*, GetItemUnderPoint, const Vec2F&, int*);
+	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
@@ -229,19 +229,19 @@ CLASS_METHODS_META(o2::UIMenuPanel)
 }
 END_META;
 
-CLASS_BASES_META(o2::UIMenuPanel::Item)
+CLASS_BASES_META(o2::MenuPanel::Item)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIMenuPanel::Item)
+CLASS_FIELDS_META(o2::MenuPanel::Item)
 {
 	PUBLIC_FIELD(text).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(subItems).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(onClick);
 }
 END_META;
-CLASS_METHODS_META(o2::UIMenuPanel::Item)
+CLASS_METHODS_META(o2::MenuPanel::Item)
 {
 }
 END_META;

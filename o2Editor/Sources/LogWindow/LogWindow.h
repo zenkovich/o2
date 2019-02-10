@@ -7,8 +7,8 @@ using namespace o2;
 
 namespace o2
 {
-	class UILabel;
-	class UILongList;
+	class Label;
+	class LongList;
 	class Text;
 }
 
@@ -36,8 +36,8 @@ namespace Editor
 		void Update(float dt) override;
 
 	protected:
-		UILongList* mList = nullptr;
-		UIWidget*   mLastMessageView = nullptr;
+		LongList* mList = nullptr;
+		Widget*   mLastMessageView = nullptr;
 		Text*       mMessagesCountLabel = nullptr;
 		Text*       mWarningsCountLabel = nullptr;
 		Text*       mErrorsCountLabel = nullptr;
@@ -86,7 +86,7 @@ namespace Editor
 		Vector<UnknownType*> GetVisibleMessagesRange(int min, int max);
 
 		// Sets list item by message
-		void SetupListMessage(UIWidget* item, UnknownType* object);
+		void SetupListMessage(Widget* item, UnknownType* object);
 
 		// Outs string to stream
 		void OutStrEx(const WString& str);
@@ -137,7 +137,7 @@ CLASS_METHODS_META(Editor::LogWindow)
 	PROTECTED_FUNCTION(void, UpdateVisibleMessages);
 	PROTECTED_FUNCTION(int, GetVisibleMessagesCount);
 	PROTECTED_FUNCTION(Vector<UnknownType*>, GetVisibleMessagesRange, int, int);
-	PROTECTED_FUNCTION(void, SetupListMessage, UIWidget*, UnknownType*);
+	PROTECTED_FUNCTION(void, SetupListMessage, Widget*, UnknownType*);
 	PROTECTED_FUNCTION(void, OutStrEx, const WString&);
 	PROTECTED_FUNCTION(void, OutErrorEx, const WString&);
 	PROTECTED_FUNCTION(void, OutWarningEx, const WString&);

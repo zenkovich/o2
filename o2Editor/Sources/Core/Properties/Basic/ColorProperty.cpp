@@ -43,17 +43,17 @@ namespace Editor
 			backLayerBitmap.FillRect(0, 10, 10, 0, color2);
 			backLayerBitmap.FillRect(10, 20, 20, 10, color2);
 
-			UIImage* backImage = mnew UIImage();
+			Image* backImage = mnew Image();
 			backImage->image = mnew Sprite(&backLayerBitmap);
 			backImage->GetImage()->mode = SpriteMode::Tiled;
-			*backImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+			*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(backImage);
 
 			Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 			colorLayerBitmap.Fill(color1);
-			mColorSprite = mnew UIImage();
+			mColorSprite = mnew Image();
 			mColorSprite->image = mnew Sprite(&colorLayerBitmap);
-			*mColorSprite->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+			*mColorSprite->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mEditBox->AddChild(mColorSprite);
 
 			mEditBox->onDraw += [&]() { mClickArea.OnDrawn(); };

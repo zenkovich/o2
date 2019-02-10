@@ -7,12 +7,12 @@
 
 namespace o2
 {
-	UIVerticalProgress::UIVerticalProgress():
-		UIWidget(), DrawableCursorEventsListener(this)
+	VerticalProgress::VerticalProgress():
+		Widget(), DrawableCursorEventsListener(this)
 	{}
 
-	UIVerticalProgress::UIVerticalProgress(const UIVerticalProgress& other) :
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+	VerticalProgress::VerticalProgress(const VerticalProgress& other) :
+		Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
 		minValue(this), maxValue(this), scrollSense(this)
 	{
@@ -22,18 +22,18 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	UIVerticalProgress::~UIVerticalProgress()
+	VerticalProgress::~VerticalProgress()
 	{}
 
-	UIVerticalProgress& UIVerticalProgress::operator=(const UIVerticalProgress& other)
+	VerticalProgress& VerticalProgress::operator=(const VerticalProgress& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIVerticalProgress::Update(float dt)
+	void VerticalProgress::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -52,7 +52,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalProgress::SetValue(float value)
+	void VerticalProgress::SetValue(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
@@ -60,7 +60,7 @@ namespace o2
 		onChange(mValue);
 	}
 
-	void UIVerticalProgress::SetValueForcible(float value)
+	void VerticalProgress::SetValueForcible(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		mSmoothValue = mValue;
@@ -69,12 +69,12 @@ namespace o2
 		onChange(mValue);
 	}
 
-	float UIVerticalProgress::GetValue() const
+	float VerticalProgress::GetValue() const
 	{
 		return mValue;
 	}
 
-	void UIVerticalProgress::SetMinValue(float minValue)
+	void VerticalProgress::SetMinValue(float minValue)
 	{
 		mMinValue = minValue;
 		mValue = Math::Max(mMinValue, mValue);
@@ -83,12 +83,12 @@ namespace o2
 		onChange(mValue);
 	}
 
-	float UIVerticalProgress::GetMinValue() const
+	float VerticalProgress::GetMinValue() const
 	{
 		return mMinValue;
 	}
 
-	void UIVerticalProgress::SetMaxValue(float maxValue)
+	void VerticalProgress::SetMaxValue(float maxValue)
 	{
 		mMaxValue = maxValue;
 		mValue = Math::Min(mMaxValue, mValue);
@@ -97,12 +97,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIVerticalProgress::GetMaxValue() const
+	float VerticalProgress::GetMaxValue() const
 	{
 		return mMaxValue;
 	}
 
-	void UIVerticalProgress::SetValueRange(float minValue, float maxValue)
+	void VerticalProgress::SetValueRange(float minValue, float maxValue)
 	{
 		mMaxValue = maxValue;
 		mValue = Math::Clamp(mValue, mMinValue, mMaxValue);
@@ -111,28 +111,28 @@ namespace o2
 		onChange(value);
 	}
 
-	void UIVerticalProgress::SetScrollSense(float coef)
+	void VerticalProgress::SetScrollSense(float coef)
 	{
 		mScrollSense = coef;
 	}
 
-	float UIVerticalProgress::GetScrollSense() const
+	float VerticalProgress::GetScrollSense() const
 	{
 		return mScrollSense;
 	}
 
-	void UIVerticalProgress::SetOrientation(Orientation orientation)
+	void VerticalProgress::SetOrientation(Orientation orientation)
 	{
 		mOrientation = orientation;
 		UpdateLayersLayouts();
 	}
 
-	UIVerticalProgress::Orientation UIVerticalProgress::GetOrientation() const
+	VerticalProgress::Orientation VerticalProgress::GetOrientation() const
 	{
 		return mOrientation;
 	}
 
-	bool UIVerticalProgress::IsUnderPoint(const Vec2F& point)
+	bool VerticalProgress::IsUnderPoint(const Vec2F& point)
 	{
 		if (mBackLayer)
 			return mDrawingScissorRect.IsInside(point) && mBackLayer->IsUnderPoint(point);
@@ -140,12 +140,12 @@ namespace o2
 		return false;
 	}
 
-	bool UIVerticalProgress::IsScrollable() const
+	bool VerticalProgress::IsScrollable() const
 	{
 		return true;
 	}
 
-	void UIVerticalProgress::OnCursorPressed(const Input::Cursor& cursor)
+	void VerticalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -154,58 +154,58 @@ namespace o2
 		GetValueFromCursor(cursor);
 	}
 
-	void UIVerticalProgress::OnCursorReleased(const Input::Cursor& cursor)
+	void VerticalProgress::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UIVerticalProgress::OnCursorPressBreak(const Input::Cursor& cursor)
+	void VerticalProgress::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UIVerticalProgress::OnCursorStillDown(const Input::Cursor& cursor)
+	void VerticalProgress::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		GetValueFromCursor(cursor);
 	}
 
-	void UIVerticalProgress::GetValueFromCursor(const Input::Cursor &cursor)
+	void VerticalProgress::GetValueFromCursor(const Input::Cursor &cursor)
 	{
 		float height = layout->height;
 		float d = mMaxValue - mMinValue;
-		if (mOrientation == UIVerticalProgress::Orientation::Up)
+		if (mOrientation == VerticalProgress::Orientation::Up)
 
 			SetValue((cursor.position.y - layout->worldBottom)/height*d + mMinValue);
 		else
 			SetValue((height - (cursor.position.y - layout->worldBottom))/height*d + mMinValue);
 	}
 
-	void UIVerticalProgress::OnCursorEnter(const Input::Cursor& cursor)
+	void VerticalProgress::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void UIVerticalProgress::OnCursorExit(const Input::Cursor& cursor)
+	void VerticalProgress::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	void UIVerticalProgress::OnScrolled(float scroll)
+	void VerticalProgress::OnScrolled(float scroll)
 	{
 		SetValue(mValue + scroll*mScrollSense);
 	}
 
-	void UIVerticalProgress::OnDeserialized(const DataNode& node)
+	void VerticalProgress::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
+		Widget::OnDeserialized(node);
 
 		mBarLayer = FindLayer("bar");
 		mBackLayer = FindLayer("back");
@@ -213,17 +213,17 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIVerticalProgress::OnResEnableInHierarchyChanged()
+	void VerticalProgress::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	void UIVerticalProgress::UpdateLayersLayouts()
+	void VerticalProgress::UpdateLayersLayouts()
 	{
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalProgress::UpdateProgressLayersLayouts()
+	void VerticalProgress::UpdateProgressLayersLayouts()
 	{
 		if (mBarLayer)
 		{
@@ -245,14 +245,14 @@ namespace o2
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
 
-		UIWidget::UpdateLayersLayouts();
+		Widget::UpdateLayersLayouts();
 	}
 
-	void UIVerticalProgress::CopyData(const Actor& otherActor)
+	void VerticalProgress::CopyData(const Actor& otherActor)
 	{
-		const UIVerticalProgress& other = dynamic_cast<const UIVerticalProgress&>(otherActor);
+		const VerticalProgress& other = dynamic_cast<const VerticalProgress&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mValue       = other.mValue;
 		mMinValue    = other.mMinValue;
@@ -266,7 +266,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIVerticalProgress::OnLayerAdded(UIWidgetLayer* layer)
+	void VerticalProgress::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "back")
 			mBackLayer = layer;
@@ -277,9 +277,9 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIVerticalProgress);
+DECLARE_CLASS(o2::VerticalProgress);
 
-ENUM_META_(o2::UIVerticalProgress::Orientation, Orientation)
+ENUM_META_(o2::VerticalProgress::Orientation, Orientation)
 {
 	ENUM_ENTRY(Down);
 	ENUM_ENTRY(Up);

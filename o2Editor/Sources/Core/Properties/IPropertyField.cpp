@@ -12,20 +12,20 @@ namespace Editor
 
 	IPropertyField::IPropertyField()
 	{
-		mRevertBtn = FindChildByType<UIButton>("revert");
+		mRevertBtn = FindChildByType<Button>("revert");
 		if (mRevertBtn)
 			mRevertBtn->onClick = THIS_FUNC(Revert);
 
-		mCaption = FindChildByType<UILabel>("caption");
+		mCaption = FindChildByType<Label>("caption");
 	}
 
 	IPropertyField::IPropertyField(const IPropertyField& other) :
-		UIHorizontalLayout(other)
+		HorizontalLayout(other)
 	{}
 
 	IPropertyField& IPropertyField::operator=(const IPropertyField& other)
 	{
-		UIHorizontalLayout::operator=(other);
+		HorizontalLayout::operator=(other);
 		return *this;
 	}
 
@@ -48,7 +48,7 @@ namespace Editor
 		if (mCaption)
 			mCaption->text = text;
 
-		auto captionWidget = dynamic_cast<UILabel*>(FindChild("propertyName"));
+		auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName"));
 		if (captionWidget)
 			captionWidget->text = text;
 		else
@@ -64,7 +64,7 @@ namespace Editor
 		if (mCaption)
 			return mCaption->text;
 
-		auto captionWidget = dynamic_cast<UILabel*>(FindChild("propertyName"));
+		auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName"));
 		if (captionWidget)
 			return captionWidget->text;
 		else
@@ -92,12 +92,12 @@ namespace Editor
 		return mValuesPath;
 	}
 
-	void IPropertyField::SetCaptionLabel(UILabel* label)
+	void IPropertyField::SetCaptionLabel(Label* label)
 	{
 		mCaption = label;
 	}
 
-	UILabel* IPropertyField::GetCaptionLabel() const
+	Label* IPropertyField::GetCaptionLabel() const
 	{
 		return mCaption;
 	}

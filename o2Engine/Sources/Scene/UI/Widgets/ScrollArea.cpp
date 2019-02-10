@@ -14,18 +14,18 @@
 
 namespace o2
 {
-	UIScrollArea::UIScrollArea(): UIWidget()
+	ScrollArea::ScrollArea(): Widget()
 	{}
 
-	UIScrollArea::UIScrollArea(const UIScrollArea& other) :
-		UIWidget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
+	ScrollArea::ScrollArea(const ScrollArea& other) :
+		Widget(other), mOwnHorScrollBar(other.mOwnHorScrollBar), mOwnVerScrollBar(other.mOwnVerScrollBar),
 		mClipAreaLayout(other.mClipAreaLayout), mScrollPos(other.mScrollPos), mScrollSpeedDamp(other.mScrollSpeedDamp),
 		mViewAreaLayout(other.mViewAreaLayout), mEnableScrollsHiding(other.mEnableScrollsHiding), scroll(this),
 		horScroll(this), verScroll(this)
 	{
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = GetInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+			mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->layout->mData->drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
@@ -35,7 +35,7 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = GetInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+			mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
 			mVerScrollBar->layout->mData->drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
@@ -47,7 +47,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIScrollArea::~UIScrollArea()
+	ScrollArea::~ScrollArea()
 	{
 		if (mHorScrollBar)
 		{
@@ -62,13 +62,13 @@ namespace o2
 		}
 	}
 
-	UIScrollArea& UIScrollArea::operator=(const UIScrollArea& other)
+	ScrollArea& ScrollArea::operator=(const ScrollArea& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIScrollArea::Draw()
+	void ScrollArea::Draw()
 	{
 		if (!mResEnabledInHierarchy || mIsClipped) {
 			for (auto child : mDrawingChildren)
@@ -98,11 +98,11 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UIScrollArea::Update(float dt)
+	void ScrollArea::Update(float dt)
 	{
 		mLayoutUpdated = layout->IsDirty();
 
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -150,7 +150,7 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::SetScroll(const Vec2F& scroll)
+	void ScrollArea::SetScroll(const Vec2F& scroll)
 	{
 		Vec2F newScrollPos(Math::Clamp(scroll.x, mScrollRange.left, mScrollRange.right),
 						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
@@ -174,7 +174,7 @@ namespace o2
 		OnScrolled();
 	}
 
-	void UIScrollArea::SetScrollForcible(const Vec2F& scroll)
+	void ScrollArea::SetScrollForcible(const Vec2F& scroll)
 	{
 		Vec2F newScrollPos(Math::Clamp(scroll.x, mScrollRange.left, mScrollRange.right),
 						   Math::Clamp(scroll.y, mScrollRange.bottom, mScrollRange.top));
@@ -198,42 +198,42 @@ namespace o2
 		OnScrolled();
 	}
 
-	Vec2F UIScrollArea::GetScroll() const
+	Vec2F ScrollArea::GetScroll() const
 	{
 		return mScrollPos;
 	}
 
-	RectF UIScrollArea::GetScrollRange() const
+	RectF ScrollArea::GetScrollRange() const
 	{
 		return mScrollRange;
 	}
 
-	void UIScrollArea::ResetScroll()
+	void ScrollArea::ResetScroll()
 	{
 		SetScroll(mScrollArea.LeftBottom());
 	}
 
-	void UIScrollArea::SetHorizontalScroll(float scroll)
+	void ScrollArea::SetHorizontalScroll(float scroll)
 	{
 		SetScroll(Vec2F(scroll, mScrollPos.y));
 	}
 
-	float UIScrollArea::GetHorizontalScroll() const
+	float ScrollArea::GetHorizontalScroll() const
 	{
 		return mScrollPos.x;
 	}
 
-	void UIScrollArea::SetVerticalScroll(float scroll)
+	void ScrollArea::SetVerticalScroll(float scroll)
 	{
 		SetScroll(Vec2F(mScrollPos.x, scroll));
 	}
 
-	float UIScrollArea::GetVerticalScroll() const
+	float ScrollArea::GetVerticalScroll() const
 	{
 		return mScrollPos.y;
 	}
 
-	void UIScrollArea::SetHorizontalScrollBar(UIHorizontalScrollBar* scrollbar, bool owner /*= true*/)
+	void ScrollArea::SetHorizontalScrollBar(HorizontalScrollBar* scrollbar, bool owner /*= true*/)
 	{
 		if (mHorScrollBar)
 		{
@@ -256,12 +256,12 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIHorizontalScrollBar* UIScrollArea::GetHorizontalScrollbar() const
+	HorizontalScrollBar* ScrollArea::GetHorizontalScrollbar() const
 	{
 		return mHorScrollBar;
 	}
 
-	void UIScrollArea::SetVerticalScrollBar(UIVerticalScrollBar* scrollbar, bool owner /*= true*/)
+	void ScrollArea::SetVerticalScrollBar(VerticalScrollBar* scrollbar, bool owner /*= true*/)
 	{
 		if (mVerScrollBar)
 		{
@@ -284,12 +284,12 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIVerticalScrollBar* UIScrollArea::GetVerticalScrollbar() const
+	VerticalScrollBar* ScrollArea::GetVerticalScrollbar() const
 	{
 		return mVerScrollBar;
 	}
 
-	void UIScrollArea::SetEnableScrollsHiding(bool hideScrolls)
+	void ScrollArea::SetEnableScrollsHiding(bool hideScrolls)
 	{
 		mEnableScrollsHiding = hideScrolls;
 
@@ -315,54 +315,54 @@ namespace o2
 		}
 	}
 
-	bool UIScrollArea::IsScrollsHiding()
+	bool ScrollArea::IsScrollsHiding()
 	{
 		return mEnableScrollsHiding;
 	}
 
-	void UIScrollArea::SetScrollBarsShowingByCursor(bool showByCursor)
+	void ScrollArea::SetScrollBarsShowingByCursor(bool showByCursor)
 	{
 		mShowScrollBarsByCursor = showByCursor;
 	}
 
-	bool UIScrollArea::IsScrollBarsShowingByCursor()
+	bool ScrollArea::IsScrollBarsShowingByCursor()
 	{
 		return mShowScrollBarsByCursor;
 	}
 
-	void UIScrollArea::SetClippingLayout(const Layout& clipLayout)
+	void ScrollArea::SetClippingLayout(const Layout& clipLayout)
 	{
 		mClipAreaLayout = clipLayout;
 		SetLayoutDirty();
 	}
 
-	Layout UIScrollArea::GetClippingLayout() const
+	Layout ScrollArea::GetClippingLayout() const
 	{
 		return mClipAreaLayout;
 	}
 
-	void UIScrollArea::SetViewLayout(const Layout& viewLayout)
+	void ScrollArea::SetViewLayout(const Layout& viewLayout)
 	{
 		mViewAreaLayout = viewLayout;
 		SetLayoutDirty();
 	}
 
-	Layout UIScrollArea::GetViewLayout() const
+	Layout ScrollArea::GetViewLayout() const
 	{
 		return mViewAreaLayout;
 	}
 
-	void UIScrollArea::OnChildAdded(UIWidget* child)
+	void ScrollArea::OnChildAdded(Widget* child)
 	{
 		child->layout->mData->drivenByParent = true;
 	}
 
-	void UIScrollArea::OnChildRemoved(UIWidget* child)
+	void ScrollArea::OnChildRemoved(Widget* child)
 	{
 		child->layout->mData->drivenByParent = false;
 	}
 
-	void UIScrollArea::UpdateControls(float dt)
+	void ScrollArea::UpdateControls(float dt)
 	{
 		auto cursor = o2Input.GetCursor(0);
 		if (cursor)
@@ -420,7 +420,7 @@ namespace o2
                 CursorAreaEventsListener *listenerunderCursor = nullptr;
                 for (auto x : o2Events.GetAllCursorListenersUnderCursor(0))
                 {
-                    auto scrollArea = dynamic_cast<UIScrollArea *>(x);
+                    auto scrollArea = dynamic_cast<ScrollArea *>(x);
                     if (scrollArea)
                     {
                         if (scrollArea != this)
@@ -477,7 +477,7 @@ namespace o2
         }
 	}
 
-	void UIScrollArea::CheckScrollBarsVisibility()
+	void ScrollArea::CheckScrollBarsVisibility()
 	{
 		if (mEnableScrollsHiding && mShowScrollBarsByCursor)
 		{
@@ -518,7 +518,7 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::UpdateSelfTransform()
+	void ScrollArea::UpdateSelfTransform()
 	{
 		layout->Update();
 
@@ -527,7 +527,7 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea;
 	}
 
-	void UIScrollArea::UpdateChildren(float dt)
+	void ScrollArea::UpdateChildren(float dt)
 	{
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
@@ -553,12 +553,12 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::UpdateChildrenTransforms()
+	void ScrollArea::UpdateChildrenTransforms()
 	{
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
-		UIWidget::UpdateChildrenTransforms();
+		Widget::UpdateChildrenTransforms();
 
 		mChildrenWorldRect = mAbsoluteViewArea;
 
@@ -566,7 +566,7 @@ namespace o2
 		UpdateScrollParams();
 	}
 
-	void UIScrollArea::MoveScrollPosition(const Vec2F& delta)
+	void ScrollArea::MoveScrollPosition(const Vec2F& delta)
 	{
 		mScrollPos += delta;
 
@@ -582,7 +582,7 @@ namespace o2
 		UpdateScrollParams();
 	}
 
-	void UIScrollArea::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
+	void ScrollArea::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
 	{
 		mBoundsWithChilds += delta;
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
@@ -602,13 +602,13 @@ namespace o2
 			child->MoveAndCheckClipping(delta, clipArea);
 	}
 
-	void UIScrollArea::CheckChildrenClipping()
+	void ScrollArea::CheckChildrenClipping()
 	{
 		for (auto child : mChildWidgets)
 			child->CheckClipping(mAbsoluteClipArea);
 	}
 
-	void UIScrollArea::CheckClipping(const RectF& clipArea)
+	void ScrollArea::CheckClipping(const RectF& clipArea)
 	{
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
@@ -618,7 +618,7 @@ namespace o2
 			child->CheckClipping(newClipArea);
 	}
 
-	void UIScrollArea::CalculateScrollArea()
+	void ScrollArea::CalculateScrollArea()
 	{
 		Vec2F offset;
 		InitializeScrollAreaRectCalculation(offset);
@@ -632,7 +632,7 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::RecalculateScrollAreaRect(const RectF &childRect, const Vec2F &offset)
+	void ScrollArea::RecalculateScrollAreaRect(const RectF &childRect, const Vec2F &offset)
 	{
 		mScrollArea.left = Math::Min(mScrollArea.left, childRect.left - offset.x);
 		mScrollArea.bottom = Math::Min(mScrollArea.bottom, childRect.bottom - offset.y);
@@ -640,7 +640,7 @@ namespace o2
 		mScrollArea.top = Math::Max(mScrollArea.top, childRect.top - offset.y);
 	}
 
-	void UIScrollArea::InitializeScrollAreaRectCalculation(Vec2F& offset)
+	void ScrollArea::InitializeScrollAreaRectCalculation(Vec2F& offset)
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
@@ -648,7 +648,7 @@ namespace o2
 			Vec2F(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 	}
 
-	void UIScrollArea::UpdateScrollParams()
+	void ScrollArea::UpdateScrollParams()
 	{
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
@@ -738,7 +738,7 @@ namespace o2
 		}
 	}
 
-	void UIScrollArea::OnHorScrollChanged(float value)
+	void ScrollArea::OnHorScrollChanged(float value)
 	{
 		if (!mHorScrollBar->IsEnabled() && mEnableHorScroll)
 		{
@@ -758,7 +758,7 @@ namespace o2
 		OnScrolled();
 	}
 
-	void UIScrollArea::OnVerScrollChanged(float value)
+	void ScrollArea::OnVerScrollChanged(float value)
 	{
 		if (!mVerScrollBar->IsEnabled() && mEnableVerScroll)
 		{
@@ -778,9 +778,9 @@ namespace o2
 		OnScrolled();
 	}
 
-	void UIScrollArea::CopyData(const Actor& otherActor)
+	void ScrollArea::CopyData(const Actor& otherActor)
 	{
-		const UIScrollArea& other = dynamic_cast<const UIScrollArea&>(otherActor);
+		const ScrollArea& other = dynamic_cast<const ScrollArea&>(otherActor);
 
 		if (mHorScrollBar)
 		{
@@ -794,7 +794,7 @@ namespace o2
 				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mClipAreaLayout      = other.mClipAreaLayout;
 		mViewAreaLayout      = other.mViewAreaLayout;
@@ -806,7 +806,7 @@ namespace o2
 
 		if (mOwnHorScrollBar)
 		{
-			mHorScrollBar = GetInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+			mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 			mHorScrollBar->layout->mData->drivenByParent = true;
 
@@ -816,7 +816,7 @@ namespace o2
 
 		if (mOwnVerScrollBar)
 		{
-			mVerScrollBar = GetInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+			mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 			mVerScrollBar->layout->mData->drivenByParent = true;
 
@@ -829,9 +829,9 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIScrollArea::OnDeserialized(const DataNode& node)
+	void ScrollArea::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
+		Widget::OnDeserialized(node);
 
 		if (mHorScrollBar)
 		{
@@ -849,12 +849,12 @@ namespace o2
 			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 
-		mHorScrollBar = GetInternalWidgetByType<UIHorizontalScrollBar>("horScrollBar");
+		mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
 		mOwnHorScrollBar = mHorScrollBar != nullptr;
 		if (mOwnHorScrollBar)
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
-		mVerScrollBar = GetInternalWidgetByType<UIVerticalScrollBar>("verScrollBar");
+		mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
 		mOwnVerScrollBar = mVerScrollBar != nullptr;
 		if (mOwnVerScrollBar)
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
@@ -865,8 +865,8 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIScrollArea::OnScrolled()
+	void ScrollArea::OnScrolled()
 	{}
 }
 
-DECLARE_CLASS(o2::UIScrollArea);
+DECLARE_CLASS(o2::ScrollArea);

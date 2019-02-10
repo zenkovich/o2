@@ -29,7 +29,7 @@ namespace Editor
 
 	void EnumProperty::InitializeControls()
 	{
-		mDropDown = FindChildByType<UIDropDown>();
+		mDropDown = FindChildByType<DropDown>();
 		if (mDropDown)
 		{
 			mDropDown->onSelectedText = THIS_FUNC(OnSelectedItem);

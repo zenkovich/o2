@@ -9,13 +9,13 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
-	class UIWidgetLayer;
+	class Widget;
+	class WidgetLayer;
 }
 
 namespace Editor
 {
-	class UISpoilerWithHead;
+	class SpoilerWithHead;
 
 	// -----------------------------------------------
 	// Editor widget layer properties viewer interface
@@ -30,13 +30,13 @@ namespace Editor
 		virtual ~IWidgetLayerPropertiesViewer();
 
 		// Sets target actors
-		virtual void SetTargetLayers(const Vector<UIWidgetLayer*>& layers) {}
+		virtual void SetTargetLayers(const Vector<WidgetLayer*>& layers) {}
 
 		// Returns viewing layer drawable type 
 		virtual const Type* GetDrawableType() const { return nullptr; }
 
 		// Returns data widget
-		virtual UIWidget* GetWidget() const;
+		virtual Widget* GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -59,7 +59,7 @@ namespace Editor
 		IOBJECT(IWidgetLayerPropertiesViewer);
 
 	protected:
-		UISpoilerWithHead* mSpoiler = nullptr;
+		SpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 
@@ -76,9 +76,9 @@ END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
+	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	PUBLIC_FUNCTION(const Type*, GetDrawableType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);

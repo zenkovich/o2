@@ -18,16 +18,16 @@
 
 namespace o2
 {
-	UIEditBox::UIEditBox():
-		UIScrollArea(), DrawableCursorEventsListener(this)
+	EditBox::EditBox():
+		ScrollArea(), DrawableCursorEventsListener(this)
 	{
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable  = mnew Text();
 		mCaretDrawable = mnew Sprite();
 	}
 
-	UIEditBox::UIEditBox(const UIEditBox& other):
-		UIScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
+	EditBox::EditBox(const EditBox& other):
+		ScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
 		mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
 		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
 		mCaretBlinkDelay(other.mCaretBlinkDelay), DrawableCursorEventsListener(this), text(this), caret(this),
@@ -43,20 +43,20 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIEditBox::~UIEditBox()
+	EditBox::~EditBox()
 	{
 		delete mSelectionMesh;
 		delete mTextDrawable;
 		delete mCaretDrawable;
 	}
 
-	UIEditBox& UIEditBox::operator=(const UIEditBox& other)
+	EditBox& EditBox::operator=(const EditBox& other)
 	{
-		UIScrollArea::operator=(other);
+		ScrollArea::operator=(other);
 		return *this;
 	}
 
-	void UIEditBox::Draw()
+	void EditBox::Draw()
 	{
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -91,22 +91,22 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UIEditBox::Update(float dt)
+	void EditBox::Update(float dt)
 	{
-		UIScrollArea::Update(dt);
+		ScrollArea::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
 
 		UpdateCaretBlinking(dt);
 
-		if (mIsFocused && o2Input.IsCursorReleased() && !UIWidget::IsUnderPoint(o2Input.GetCursorPos()) && !mJustFocused)
-			UIWidget::Unfocus();
+		if (mIsFocused && o2Input.IsCursorReleased() && !Widget::IsUnderPoint(o2Input.GetCursorPos()) && !mJustFocused)
+			Widget::Unfocus();
 
 		mJustFocused = false;
 	}
 
-	void UIEditBox::SetText(const WString& text)
+	void EditBox::SetText(const WString& text)
 	{
 		mText = GetFilteredText(text);
 		mTextDrawable->SetText(mText);
@@ -119,58 +119,58 @@ namespace o2
 		mLastText = mText;
 	}
 
-	WString UIEditBox::GetText() const
+	WString EditBox::GetText() const
 	{
 		return mText;
 	}
 
-	void UIEditBox::SetCaretPosition(int caretPosition)
+	void EditBox::SetCaretPosition(int caretPosition)
 	{
 		mSelectionBegin = mSelectionEnd = caretPosition;
 		UpdateSelectionAndCaret();
 	}
 
-	int UIEditBox::GetCaretPosition()
+	int EditBox::GetCaretPosition()
 	{
 		return mSelectionEnd;
 	}
 
-	void UIEditBox::Select(int begin, int end)
+	void EditBox::Select(int begin, int end)
 	{
 		mSelectionBegin = begin;
 		mSelectionEnd = end;
 		UpdateSelectionAndCaret();
 	}
 
-	void UIEditBox::SetSelectionBegin(int position)
+	void EditBox::SetSelectionBegin(int position)
 	{
 		mSelectionBegin = position;
 		UpdateSelectionAndCaret();
 	}
 
-	int UIEditBox::GetSelectionBegin() const
+	int EditBox::GetSelectionBegin() const
 	{
 		return mSelectionBegin;
 	}
 
-	void UIEditBox::SetSelectionEnd(int position)
+	void EditBox::SetSelectionEnd(int position)
 	{
 		mSelectionEnd = position;
 		UpdateSelectionAndCaret();
 	}
 
-	int UIEditBox::GetSelectionEnd() const
+	int EditBox::GetSelectionEnd() const
 	{
 		return mSelectionEnd;
 	}
 
-	void UIEditBox::Deselect()
+	void EditBox::Deselect()
 	{
 		mSelectionBegin = mSelectionEnd;
 		UpdateSelectionAndCaret();
 	}
 
-	void UIEditBox::SelectAll()
+	void EditBox::SelectAll()
 	{
 		mSelectionBegin = 0;
 		mSelectionEnd = mText.Length();
@@ -179,43 +179,43 @@ namespace o2
 		CheckScrollingToCaret();
 	}
 
-	Text* UIEditBox::GetTextDrawable()
+	Text* EditBox::GetTextDrawable()
 	{
 		return mTextDrawable;
 	}
 
-	Sprite* UIEditBox::GetCaretDrawable()
+	Sprite* EditBox::GetCaretDrawable()
 	{
 		return mCaretDrawable;
 	}
 
-	void UIEditBox::SetSelectionColor(const Color4& color)
+	void EditBox::SetSelectionColor(const Color4& color)
 	{
 		mSelectionColor = color;
 		UpdateSelectionAndCaret();
 	}
 
-	Color4 UIEditBox::GetSelectionColor() const
+	Color4 EditBox::GetSelectionColor() const
 	{
 		return mSelectionColor;
 	}
 
-	void UIEditBox::SetFilterInteger()
+	void EditBox::SetFilterInteger()
 	{
 		SetAvailableSymbols("1234567890-");
 	}
 
-	void UIEditBox::SetFilterFloat()
+	void EditBox::SetFilterFloat()
 	{
 		SetAvailableSymbols("-1234567890.,");
 	}
 
-	void UIEditBox::SetFilterNames()
+	void EditBox::SetFilterNames()
 	{
 		SetAvailableSymbols("1234567890qwertyuioplkjhgfdsazxcvbnm_ QWERTYUIOPLKJHGFDSAZXCVBNM.,");
 	}
 
-	void UIEditBox::SetAvailableSymbols(const WString& availableSymbols)
+	void EditBox::SetAvailableSymbols(const WString& availableSymbols)
 	{
 		mAvailableSymbols = availableSymbols;
 
@@ -230,12 +230,12 @@ namespace o2
 		onChanged(mText);
 	}
 
-	WString UIEditBox::GetAvailableSymbols() const
+	WString EditBox::GetAvailableSymbols() const
 	{
 		return mAvailableSymbols;
 	}
 
-	void UIEditBox::SetMaxSizes(int maxLineCharactersCount, int maxLinesCount)
+	void EditBox::SetMaxSizes(int maxLineCharactersCount, int maxLinesCount)
 	{
 		mMaxLineChars = maxLineCharactersCount;
 		mMaxLinesCount = maxLinesCount;
@@ -243,7 +243,7 @@ namespace o2
 		CheckCharactersAndLinesBounds();
 	}
 
-	void UIEditBox::CheckCharactersAndLinesBounds()
+	void EditBox::CheckCharactersAndLinesBounds()
 	{
 		int lines = 0;
 		int lineChars = 0;
@@ -274,29 +274,29 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIEditBox::SetMaxLineCharactersCount(int count)
+	void EditBox::SetMaxLineCharactersCount(int count)
 	{
 		mMaxLineChars = count;
 		CheckCharactersAndLinesBounds();
 	}
 
-	int UIEditBox::GetMaxLineCharactersCount() const
+	int EditBox::GetMaxLineCharactersCount() const
 	{
 		return mMaxLineChars;
 	}
 
-	void UIEditBox::SetMaxLinesCount(int count)
+	void EditBox::SetMaxLinesCount(int count)
 	{
 		mMaxLinesCount = count;
 		CheckCharactersAndLinesBounds();
 	}
 
-	int UIEditBox::GetMaxLinesCount() const
+	int EditBox::GetMaxLinesCount() const
 	{
 		return mMaxLinesCount;
 	}
 
-	void UIEditBox::SetMultiLine(bool multiline)
+	void EditBox::SetMultiLine(bool multiline)
 	{
 		mMultiLine = multiline;
 
@@ -322,51 +322,51 @@ namespace o2
 		onChanged(mText);
 	}
 
-	bool UIEditBox::IsMultiLine() const
+	bool EditBox::IsMultiLine() const
 	{
 		return mMultiLine;
 	}
 
-	void UIEditBox::SetWordWrap(bool wordWrap)
+	void EditBox::SetWordWrap(bool wordWrap)
 	{
 		mWordWrap = wordWrap;
 		mTextDrawable->SetWordWrap(mWordWrap);
 	}
 
-	bool UIEditBox::IsWordWrap() const
+	bool EditBox::IsWordWrap() const
 	{
 		return mWordWrap;
 	}
 
-	void UIEditBox::SetCaretBlinkingDelay(float delay)
+	void EditBox::SetCaretBlinkingDelay(float delay)
 	{
 		mCaretBlinkDelay = delay;
 	}
 
-	float UIEditBox::GetCaretBlinkingDelay() const
+	float EditBox::GetCaretBlinkingDelay() const
 	{
 		return mCaretBlinkDelay;
 	}
 
-	bool UIEditBox::IsScrollable() const
+	bool EditBox::IsScrollable() const
 	{
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
-	bool UIEditBox::IsFocusable() const
+	bool EditBox::IsFocusable() const
 	{
 		return true;
 	}
 
-	void UIEditBox::UpdateControls(float dt)
+	void EditBox::UpdateControls(float dt)
 	{}
 
-	void UIEditBox::OnResEnableInHierarchyChanged()
+	void EditBox::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	void UIEditBox::OnFocused()
+	void EditBox::OnFocused()
 	{
 		if (!mMultiLine)
 			SelectAll();
@@ -376,10 +376,10 @@ namespace o2
 		if (IsUnderPoint(o2Input.GetCursorPos()))
 			o2Application.SetCursor(CursorType::IBeam);
 
-		UIWidget::OnFocused();
+		Widget::OnFocused();
 	}
 
-	void UIEditBox::OnUnfocused()
+	void EditBox::OnUnfocused()
 	{
 		mLastText = mText;
 		onChangeCompleted(mText);
@@ -388,7 +388,7 @@ namespace o2
 			Deselect();
 	}
 
-	void UIEditBox::OnCursorPressed(const Input::Cursor& cursor)
+	void EditBox::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(this);
 
@@ -423,30 +423,30 @@ namespace o2
 		mLastCursorPos = cursor.position;
 	}
 
-	void UIEditBox::OnCursorReleased(const Input::Cursor& cursor)
+	void EditBox::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 
-		if (!UIWidget::IsUnderPoint(cursor.position))
+		if (!Widget::IsUnderPoint(cursor.position))
 		{
 			o2Application.SetCursor(CursorType::Arrow);
-			UIWidget::Unfocus();
+			Widget::Unfocus();
 		}
 	}
 
-	void UIEditBox::OnCursorPressBreak(const Input::Cursor& cursor)
+	void EditBox::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 
-		if (!UIWidget::IsUnderPoint(cursor.position))
+		if (!Widget::IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
-	void UIEditBox::OnCursorStillDown(const Input::Cursor& cursor)
+	void EditBox::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		if ((cursor.position - mLastCursorPos).Length() < 3.0f)
 			return;
@@ -487,7 +487,7 @@ namespace o2
 		mLastCursorPos = cursor.position;
 	}
 
-	void UIEditBox::OnCursorEnter(const Input::Cursor& cursor)
+	void EditBox::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
@@ -497,7 +497,7 @@ namespace o2
 			o2Application.SetCursor(CursorType::IBeam);
 	}
 
-	void UIEditBox::OnCursorExit(const Input::Cursor& cursor)
+	void EditBox::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
@@ -507,16 +507,16 @@ namespace o2
 			o2Application.SetCursor(CursorType::Arrow);
 	}
 
-	void UIEditBox::OnCursorRightMousePressed(const Input::Cursor& cursor)
+	void EditBox::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{}
 
-	void UIEditBox::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+	void EditBox::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{}
 
-	void UIEditBox::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+	void EditBox::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{}
 
-	void UIEditBox::OnScrolled(float scroll)
+	void EditBox::OnScrolled(float scroll)
 	{
 		if (mVerScrollBar && mEnableVerScroll)
 			mVerScrollBar->OnScrolled(scroll);
@@ -524,7 +524,7 @@ namespace o2
 			mHorScrollBar->OnScrolled(scroll);
 	}
 
-	void UIEditBox::OnKeyPressed(const Input::Key& key)
+	void EditBox::OnKeyPressed(const Input::Key& key)
 	{
 		if (!mIsFocused)
 			return;
@@ -535,7 +535,7 @@ namespace o2
 		CheckClipboard(key.keyCode);
 	}
 
-	void UIEditBox::OnKeyReleased(const Input::Key& key)
+	void EditBox::OnKeyReleased(const Input::Key& key)
 	{
 		if (mIsFocused)
 		{
@@ -544,7 +544,7 @@ namespace o2
 				if (!mMultiLine)
 					SetText(mLastText);
 
-				UIWidget::Unfocus();
+				Widget::Unfocus();
 			}
 
 			if (!mMultiLine)
@@ -552,13 +552,13 @@ namespace o2
 				if (key.keyCode == VK_RETURN)
 				{
 					mLastText = mText;
-					UIWidget::Unfocus();
+					Widget::Unfocus();
 				}
 			}
 		}
 	}
 
-	void UIEditBox::OnKeyStayDown(const Input::Key& key)
+	void EditBox::OnKeyStayDown(const Input::Key& key)
 	{
 		if (!mIsFocused)
 			return;
@@ -572,7 +572,7 @@ namespace o2
 		CheckClipboard(key.keyCode);
 	}
 
-	WString UIEditBox::GetFilteredText(const WString& text)
+	WString EditBox::GetFilteredText(const WString& text)
 	{
 		if (mAvailableSymbols.Length() == 0)
 			return text;
@@ -600,7 +600,7 @@ namespace o2
 		return filteredText;
 	}
 
-	void UIEditBox::UpdateScrollParams()
+	void EditBox::UpdateScrollParams()
 	{
 		auto fontRef = mTextDrawable->GetFont();
 		if (fontRef)
@@ -701,7 +701,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::UpdateSelfTransform()
+	void EditBox::UpdateSelfTransform()
 {
 		layout->Update();
 
@@ -717,16 +717,16 @@ namespace o2
 		UpdateSelectionAndCaret();
 	}
 
-	bool UIEditBox::IsUnderPoint(const Vec2F& point)
+	bool EditBox::IsUnderPoint(const Vec2F& point)
 	{
 		return mDrawingScissorRect.IsInside(point) && mAbsoluteViewArea.IsInside(point);
 	}
 
-	void UIEditBox::CopyData(const Actor& otherActor)
+	void EditBox::CopyData(const Actor& otherActor)
 	{
-		const UIEditBox& other = dynamic_cast<const UIEditBox&>(otherActor);
+		const EditBox& other = dynamic_cast<const EditBox&>(otherActor);
 
-		UIScrollArea::CopyData(other);
+		ScrollArea::CopyData(other);
 
 		delete mTextDrawable;
 		delete mCaretDrawable;
@@ -755,9 +755,9 @@ namespace o2
 		onChanged(mText);
 	}
 
-	void UIEditBox::UpdateTransparency()
+	void EditBox::UpdateTransparency()
 	{
-		UIScrollArea::UpdateTransparency();
+		ScrollArea::UpdateTransparency();
 
 		mTextDrawable->transparency = mResTransparency;
 
@@ -769,7 +769,7 @@ namespace o2
 			mSelectionMesh->vertices[i].color = selectionClr;
 	}
 
-	void UIEditBox::UpdateSelectionAndCaret()
+	void EditBox::UpdateSelectionAndCaret()
 	{
 		Vec2F caretPosition = GetTextCaretPosition(mSelectionEnd);
 		mCaretDrawable->SetPosition(caretPosition);
@@ -831,7 +831,7 @@ namespace o2
 		}
 	}
 
-	Vec2F UIEditBox::GetTextCaretPosition(int position)
+	Vec2F EditBox::GetTextCaretPosition(int position)
 	{
 		bool fakeSymbols = false;
 		if (mText.Length() == 0)
@@ -882,7 +882,7 @@ namespace o2
 		return Vec2F();
 	}
 
-	int UIEditBox::GetTextCaretPosition(const Vec2F& point)
+	int EditBox::GetTextCaretPosition(const Vec2F& point)
 	{
 		auto& symbolsSet = mTextDrawable->GetSymbolsSet();
 		auto font = mTextDrawable->GetFont();
@@ -933,7 +933,7 @@ namespace o2
 		return 0;
 	}
 
-	void UIEditBox::UpdateCaretBlinking(float dt)
+	void EditBox::UpdateCaretBlinking(float dt)
 	{
 		mCaretBlinkTime += dt;
 
@@ -944,7 +944,7 @@ namespace o2
 			mCaretBlinkTime -= mCaretBlinkDelay;
 	}
 
-	void UIEditBox::AddSelectionRect(const RectF& rect)
+	void EditBox::AddSelectionRect(const RectF& rect)
 	{
 		if (mSelectionMesh->GetMaxPolyCount() < mSelectionMesh->polyCount + 6)
 		{
@@ -970,7 +970,7 @@ namespace o2
 		mSelectionMesh->polyCount++;
 	}
 
-	void UIEditBox::CheckScrollingToCaret()
+	void EditBox::CheckScrollingToCaret()
 	{
 		auto font = mTextDrawable->GetFont();
 		if (!font)
@@ -1021,7 +1021,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::JumpSelection(bool forward, bool selecting)
+	void EditBox::JumpSelection(bool forward, bool selecting)
 	{
 		static char jumpSymbols[] = " \n()-=_+\\|/**&^%$#@!~,.?";
 		int jumpSymbolsCount = strlen(jumpSymbols);
@@ -1101,7 +1101,7 @@ namespace o2
 		return 0;
 	}
 
-	void UIEditBox::CheckCharacterTyping(KeyboardKey key)
+	void EditBox::CheckCharacterTyping(KeyboardKey key)
 	{
 		if (o2Input.IsKeyDown(VK_CONTROL))
 			return;
@@ -1161,7 +1161,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::CheckCharactersErasing(KeyboardKey key)
+	void EditBox::CheckCharactersErasing(KeyboardKey key)
 	{
 		if (key == VK_BACK)
 		{
@@ -1203,7 +1203,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::CheckCaretMoving(KeyboardKey key)
+	void EditBox::CheckCaretMoving(KeyboardKey key)
 	{
 		bool selecting = o2Input.IsKeyDown(VK_SHIFT);
 		bool control = o2Input.IsKeyDown(VK_CONTROL);
@@ -1266,7 +1266,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::CheckClipboard(KeyboardKey key)
+	void EditBox::CheckClipboard(KeyboardKey key)
 	{
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 			return;
@@ -1313,7 +1313,7 @@ namespace o2
 		}
 	}
 
-	void UIEditBox::MoveCaret(int newPosition, bool selecting)
+	void EditBox::MoveCaret(int newPosition, bool selecting)
 	{
 		mSelectionEnd = Math::Clamp(newPosition, 0, mText.Length());
 		if (!selecting)
@@ -1325,4 +1325,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIEditBox);
+DECLARE_CLASS(o2::EditBox);

@@ -12,7 +12,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mPropertiesLayout = mnew UIVerticalLayout();
+		mPropertiesLayout = mnew VerticalLayout();
 		mPropertiesLayout->name = "properties";
 		mPropertiesLayout->spacing = 5.0f;
 		mPropertiesLayout->border = BorderF(5, 5, 5, 5);
@@ -20,7 +20,7 @@ namespace Editor
 		mPropertiesLayout->expandWidth = true;
 		mPropertiesLayout->fitByChildren = true;
 		mPropertiesLayout->baseCorner = BaseCorner::Top;
-		*mPropertiesLayout->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 10);
+		*mPropertiesLayout->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 10);
 	}
 
 	DefaultAssetPropertiesViewer::~DefaultAssetPropertiesViewer()
@@ -39,7 +39,7 @@ namespace Editor
 		return mAssetType;
 	}
 
-	UIWidget* DefaultAssetPropertiesViewer::GetWidget() const
+	Widget* DefaultAssetPropertiesViewer::GetWidget() const
 	{
 		return mPropertiesLayout;
 	}
@@ -49,7 +49,7 @@ namespace Editor
 		PushScopeEnterOnStack scope;
 
 		mAssetType = type;
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mPropertiesLayout, type, mFieldProperties, "");
+		o2EditorProperties.BuildObjectProperties((VerticalLayout*)mPropertiesLayout, type, mFieldProperties, "");
 
 		mPropertiesLayout->name = "asset properties " + type->GetName();
 	}

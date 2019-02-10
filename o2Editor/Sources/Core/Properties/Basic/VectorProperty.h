@@ -8,7 +8,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UISpoiler;
+	class Spoiler;
 }
 
 namespace Editor
@@ -86,7 +86,7 @@ namespace Editor
 
 		const VectorType* mType = nullptr;             // Vector type
 
-		UISpoiler*        mSpoiler;                    // Properties spoiler
+		Spoiler*        mSpoiler;                    // Properties spoiler
 
 		TargetObjectsVec  mTargetObjects;              // Target objects
 						 						    

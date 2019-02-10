@@ -45,7 +45,7 @@ namespace Editor
 	TreeWindow::~TreeWindow()
 	{}
 
-	UISceneTree* TreeWindow::GetSceneTree() const
+	SceneTree* TreeWindow::GetSceneTree() const
 	{
 		return mSceneTree;
 	}
@@ -57,24 +57,24 @@ namespace Editor
 
 	void TreeWindow::SetWidgetsLayersVisible(bool visible)
 	{
-		UIWidget::isEditorLayersVisible = visible;
+		Widget::isEditorLayersVisible = visible;
 		mSceneTree->UpdateNodesView();
 	}
 
 	bool TreeWindow::IsWidgetsLayersVisible() const
 	{
-		return UIWidget::isEditorLayersVisible;
+		return Widget::isEditorLayersVisible;
 	}
 
 	void TreeWindow::SetWidgetsInternalChildrenVisible(bool visible)
 	{
-		UIWidget::isEditorInternalChildrenVisible = visible;
+		Widget::isEditorInternalChildrenVisible = visible;
 		mSceneTree->UpdateNodesView();
 	}
 
 	bool TreeWindow::IsWidgetsInternalChildrenVisible() const
 	{
-		return UIWidget::isEditorInternalChildrenVisible;
+		return Widget::isEditorInternalChildrenVisible;
 	}
 
 	void TreeWindow::InitializeWindow()
@@ -127,8 +127,8 @@ namespace Editor
 
 	void TreeWindow::InitializeSceneTree()
 	{
-		mSceneTree = o2UI.CreateWidget<UISceneTree>("standard");
-		*mSceneTree->layout = UIWidgetLayout::BothStretch(2, 0, 0, 18);
+		mSceneTree = o2UI.CreateWidget<SceneTree>("standard");
+		*mSceneTree->layout = WidgetLayout::BothStretch(2, 0, 0, 18);
 
 		mSceneTree->onNodeRightButtonClicked = THIS_FUNC(OnTreeRBPressed);
 
@@ -142,69 +142,69 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
 								  ShortcutKeys('N', true, true));
 
-		mTreeContextMenu->AddItem("Create UI/Widget", [&]() { CreateObject<UIWidget>("Widget"); });
+		mTreeContextMenu->AddItem("Create UI/Widget", [&]() { CreateObject<Widget>("Widget"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
-		mTreeContextMenu->AddItem("Create UI/Empty layer", [&]() { CreateObject<UIWidgetLayer>("Layer"); });
+		mTreeContextMenu->AddItem("Create UI/Empty layer", [&]() { CreateObject<WidgetLayer>("Layer"); });
 		mTreeContextMenu->AddItem("Create UI/Sprite layer", [&]()
 		{
-			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->SetDrawable(mnew Sprite());
-			newLayer->name = "sprite";
+			newLayer->name = "Sprite";
 			OnCreateObject(newLayer);
 		});
 
 		mTreeContextMenu->AddItem("Create UI/Text layer", [&]()
 		{
-			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->SetDrawable(mnew Text());
-			newLayer->name = "sprite";
+			newLayer->name = "Text";
 			OnCreateObject(newLayer);
 		});
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
-		mTreeContextMenu->AddItem("Create UI/Horizontal layout", [&]() { CreateObject<UIHorizontalLayout>("Horizontal layout"); });
-		mTreeContextMenu->AddItem("Create UI/Vertical layout", [&]() { CreateObject<UIVerticalLayout>("Vertical layout"); });
-		mTreeContextMenu->AddItem("Create UI/Grid layout", [&]() { CreateObject<UIGridLayout>("Grid layout"); });
+		mTreeContextMenu->AddItem("Create UI/Horizontal layout", [&]() { CreateObject<HorizontalLayout>("Horizontal layout"); });
+		mTreeContextMenu->AddItem("Create UI/Vertical layout", [&]() { CreateObject<VerticalLayout>("Vertical layout"); });
+		mTreeContextMenu->AddItem("Create UI/Grid layout", [&]() { CreateObject<GridLayout>("Grid layout"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
-		mTreeContextMenu->AddItem("Create UI/Scroll area", [&]() { CreateObject<UIScrollArea>("Scroll area"); });
-		mTreeContextMenu->AddItem("Create UI/Button", [&]() { CreateObject<UIButton>("Button"); });
-		mTreeContextMenu->AddItem("Create UI/Label", [&]() { CreateObject<UILabel>("Label"); });
-		mTreeContextMenu->AddItem("Create UI/Image", [&]() { CreateObject<UIImage>("Image"); });
-		mTreeContextMenu->AddItem("Create UI/Edit box", [&]() { CreateObject<UIEditBox>("Edit box"); });
+		mTreeContextMenu->AddItem("Create UI/Scroll area", [&]() { CreateObject<ScrollArea>("Scroll area"); });
+		mTreeContextMenu->AddItem("Create UI/Button", [&]() { CreateObject<Button>("Button"); });
+		mTreeContextMenu->AddItem("Create UI/Label", [&]() { CreateObject<Label>("Label"); });
+		mTreeContextMenu->AddItem("Create UI/Image", [&]() { CreateObject<Image>("Image"); });
+		mTreeContextMenu->AddItem("Create UI/Edit box", [&]() { CreateObject<EditBox>("Edit box"); });
 		mTreeContextMenu->AddItem("Create UI/Toggle", [&]() { CreateObject<UIToggle>("Toggle"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
-		mTreeContextMenu->AddItem("Create UI/Horizontal progress", [&]() { CreateObject<UIHorizontalProgress>("Progress"); });
-		mTreeContextMenu->AddItem("Create UI/Vertical progress", [&]() { CreateObject<UIVerticalProgress>("Progress"); });
-		mTreeContextMenu->AddItem("Create UI/Horizontal scroll bar", [&]() { CreateObject<UIHorizontalScrollBar>("Scroll bar"); });
-		mTreeContextMenu->AddItem("Create UI/Vertical scroll bar", [&]() { CreateObject<UIVerticalScrollBar>("Scroll bar"); });
+		mTreeContextMenu->AddItem("Create UI/Horizontal progress", [&]() { CreateObject<HorizontalProgress>("Progress"); });
+		mTreeContextMenu->AddItem("Create UI/Vertical progress", [&]() { CreateObject<VerticalProgress>("Progress"); });
+		mTreeContextMenu->AddItem("Create UI/Horizontal scroll bar", [&]() { CreateObject<HorizontalScrollBar>("Scroll bar"); });
+		mTreeContextMenu->AddItem("Create UI/Vertical scroll bar", [&]() { CreateObject<VerticalScrollBar>("Scroll bar"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
 		mTreeContextMenu->AddItem("Create UI/Context menu", [&]() { CreateObject<UIContextMenu>("Context menu"); });
-		mTreeContextMenu->AddItem("Create UI/Menu panel", [&]() { CreateObject<UIMenuPanel>("Menu panel"); });
+		mTreeContextMenu->AddItem("Create UI/Menu panel", [&]() { CreateObject<o2::MenuPanel>("Menu panel"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
-		mTreeContextMenu->AddItem("Create UI/Custom drop down", [&]() { CreateObject<UICustomDropDown>("Dropdown"); });
-		mTreeContextMenu->AddItem("Create UI/Custom list", [&]() { CreateObject<UICustomList>("List"); });
-		mTreeContextMenu->AddItem("Create UI/Drop down", [&]() { CreateObject<UIDropDown>("Dropdown"); });
-		mTreeContextMenu->AddItem("Create UI/List", [&]() { CreateObject<UIList>("List"); });
-		mTreeContextMenu->AddItem("Create UI/Long list", [&]() { CreateObject<UILongList>("List"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Spoiler", [&]() { CreateObject<UISpoiler>("Spoiler"); });
-		mTreeContextMenu->AddItem("Create UI/Tree", [&]() { CreateObject<UITree>("Tree"); });
+		mTreeContextMenu->AddItem("Create UI/Custom drop down", [&]() { CreateObject<CustomDropDown>("Dropdown"); });
+		mTreeContextMenu->AddItem("Create UI/Custom list", [&]() { CreateObject<CustomList>("List"); });
+		mTreeContextMenu->AddItem("Create UI/Drop down", [&]() { CreateObject<DropDown>("Dropdown"); });
+		mTreeContextMenu->AddItem("Create UI/List", [&]() { CreateObject<List>("List"); });
+		mTreeContextMenu->AddItem("Create UI/Long list", [&]() { CreateObject<LongList>("List"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
-		mTreeContextMenu->AddItem("Create UI/Window", [&]() { CreateObject<UIWindow>("Window"); });
+		mTreeContextMenu->AddItem("Create UI/Spoiler", [&]() { CreateObject<Spoiler>("Spoiler"); });
+		mTreeContextMenu->AddItem("Create UI/Tree", [&]() { CreateObject<Tree>("Tree"); });
+
+		mTreeContextMenu->AddItem("Create UI/---");
+
+		mTreeContextMenu->AddItem("Create UI/Window", [&]() { CreateObject<Window>("Window"); });
 
 		InitializeOtherCreateMenu();
 
@@ -275,7 +275,7 @@ namespace Editor
 
 			mTreeContextMenu->AddItem(String("Create UI style/") + path, [=]()
 			{
-				UIWidget* newWidget = styleWidget->CloneAs<UIWidget>();
+				Widget* newWidget = styleWidget->CloneAs<Widget>();
 				newWidget->SetEnableForcible(true);
 				OnCreateObject(newWidget);
 			});
@@ -286,14 +286,14 @@ namespace Editor
 	{
 		mTreeContextMenu->AddItem("Create/UI layer/Empty", [&]()
 		{
-			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->name = "empty";
 			OnCreateObject(newLayer);
 		});
 
 		mTreeContextMenu->AddItem("Create/UI layer/Sprite", [&]()
 		{
-			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->SetDrawable(mnew Sprite());
 			newLayer->name = "sprite";
 			OnCreateObject(newLayer);
@@ -301,7 +301,7 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("Create/UI layer/Text", [&]()
 		{
-			UIWidgetLayer* newLayer = mnew UIWidgetLayer();
+			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->SetDrawable(mnew Text());
 			newLayer->name = "text";
 			OnCreateObject(newLayer);
@@ -349,9 +349,9 @@ namespace Editor
 		if (node) 
 		{
 			SceneEditableObject* object = node->GetObject();
-			canCreateUILayers = dynamic_cast<UIWidgetLayer*>(object) != nullptr ||
-				dynamic_cast<UIWidget::LayersEditable*>(object) != nullptr ||
-				dynamic_cast<UIWidget*>(object) != nullptr;
+			canCreateUILayers = dynamic_cast<WidgetLayer*>(object) != nullptr ||
+				dynamic_cast<Widget::LayersEditable*>(object) != nullptr ||
+				dynamic_cast<Widget*>(object) != nullptr;
 		}
 
 		mTreeContextMenu->FindItemWidget("Create UI/Empty layer")->SetEnabled(canCreateUILayers);
@@ -621,23 +621,23 @@ namespace Editor
 
 	void TreeWindow::InitializeTopPanel()
 	{
-		UIWidget* upPanel = mnew UIWidget();
+		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
-		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
-		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
-		*searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
+		Button* searchButton = o2UI.CreateWidget<Button>("search");
+		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		searchButton->onClick += THIS_FUNC(OnSearchPressed);
 		upPanel->AddChild(searchButton);
 
 		mListTreeToggle = o2UI.CreateWidget<UIToggle>("list-tree");
-		*mListTreeToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		*mListTreeToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
 		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
 		upPanel->AddChild(mListTreeToggle);
 
-		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
-		*mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
+		mSearchEditBox = o2UI.CreateWidget<EditBox>("backless");
+		*mSearchEditBox->layout = WidgetLayout::BothStretch(19, 2, 21, -2);
 		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mSearchEditBox);
 

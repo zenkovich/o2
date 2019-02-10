@@ -14,7 +14,7 @@ namespace Editor
 	DefaultWidgetLayerPropertiesViewer::~DefaultWidgetLayerPropertiesViewer()
 	{}
 
-	void DefaultWidgetLayerPropertiesViewer::SetTargetLayers(const Vector<UIWidgetLayer*>& layers)
+	void DefaultWidgetLayerPropertiesViewer::SetTargetLayers(const Vector<WidgetLayer*>& layers)
 	{
 		mLayers = layers;
 		Refresh();
@@ -27,7 +27,7 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::Refresh()
 	{
-		mFieldProperties.Set(mLayers.Select<Pair<IObject*, IObject*>>([](UIWidgetLayer* x) {
+		mFieldProperties.Set(mLayers.Select<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
 			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
 		}));
 	}
@@ -42,7 +42,7 @@ namespace Editor
 
 		o2EditorProperties.FreeProperties(mFieldProperties);
 
-		auto fields = TypeOf(UIWidgetLayer).GetFieldsWithBaseClasses();
+		auto fields = TypeOf(WidgetLayer).GetFieldsWithBaseClasses();
 		if (!o2EditorProperties.IsPrivateFieldsVisible())
 			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
 

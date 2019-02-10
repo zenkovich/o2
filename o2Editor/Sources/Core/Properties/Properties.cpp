@@ -68,7 +68,7 @@ namespace Editor
 		}
 	}
 
-	IPropertyField* Properties::BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo,
+	IPropertyField* Properties::BuildField(VerticalLayout* layout, FieldInfo* fieldInfo,
 										   FieldPropertiesInfo& propertiesInfo, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -94,7 +94,7 @@ namespace Editor
 		return fieldWidget;
 	}
 
-	IPropertyField* Properties::BuildField(UIVerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path,
+	IPropertyField* Properties::BuildField(VerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path,
 										   FieldPropertiesInfo& propertiesInfo, 
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/, 
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -102,7 +102,7 @@ namespace Editor
 		return BuildField(layout, objectType.GetField(fieldName), propertiesInfo, path, onChangeCompleted, onChanged);
 	}
 
-	void Properties::BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields,
+	void Properties::BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields,
 								 FieldPropertiesInfo& propertiesInfo, const String& path,
 								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -193,7 +193,7 @@ namespace Editor
 		return IsPropertyVisible(info, mPrivateVisible);
 	}
 
-	void Properties::BuildObjectProperties(UIVerticalLayout* layout, const Type* type,
+	void Properties::BuildObjectProperties(VerticalLayout* layout, const Type* type,
 										   FieldPropertiesInfo& propertiesInfo, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -201,7 +201,7 @@ namespace Editor
 		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), propertiesInfo, path, onChangeCompleted, onChanged);
 	}
 
-	void Properties::BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields,
+	void Properties::BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields,
 										   FieldPropertiesInfo& propertiesInfo, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -220,14 +220,14 @@ namespace Editor
 
 			if (!privateFields.IsEmpty())
 			{
-				UISpoiler* privates = propertiesInfo.privatePropertiesSpoiler;
+				Spoiler* privates = propertiesInfo.privatePropertiesSpoiler;
 
 				if (!privates)
-					privates = layout->GetChildByType<UISpoiler>("privates");
+					privates = layout->GetChildByType<Spoiler>("privates");
 
 				if (!privates)
 				{
-					privates = o2UI.CreateWidget<UISpoiler>("expand with caption");
+					privates = o2UI.CreateWidget<Spoiler>("expand with caption");
 					privates->name = "privates";
 					privates->SetCaption("Private");
 					layout->AddChild(privates);

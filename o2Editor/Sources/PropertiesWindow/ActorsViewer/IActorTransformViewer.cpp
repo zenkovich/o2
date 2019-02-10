@@ -20,7 +20,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
+		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
 		mSpoiler->borderBottom = 5;
 		mSpoiler->borderRight = 5;
@@ -33,7 +33,7 @@ namespace Editor
 	IActorTransformViewer::~IActorTransformViewer()
 	{}
 
-	UIWidget* IActorTransformViewer::GetWidget() const
+	Widget* IActorTransformViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

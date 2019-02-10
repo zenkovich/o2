@@ -5,10 +5,10 @@
 
 namespace o2
 {
-	UIWidgetState::UIWidgetState()
+	WidgetState::WidgetState()
 	{}
 
-	UIWidgetState::UIWidgetState(const UIWidgetState& state):
+	WidgetState::WidgetState(const WidgetState& state):
 		name(state.name), mState(state.mState), mOwner(state.mOwner),
 		offStateAnimationSpeed(state.offStateAnimationSpeed), state(this)
 	{
@@ -17,15 +17,15 @@ namespace o2
 		animation.relTime = mState ? 1.0f:0.0f;
 	}
 
-	UIWidgetState::~UIWidgetState()
+	WidgetState::~WidgetState()
 	{}
 
-	UIWidgetState::operator bool()
+	WidgetState::operator bool()
 	{
 		return GetState();
 	}
 
-	void UIWidgetState::SetState(bool state)
+	void WidgetState::SetState(bool state)
 	{
  		if (mState == state && !animation.IsPlaying())
  			return;
@@ -48,7 +48,7 @@ namespace o2
 		}
 	}
 
-	void UIWidgetState::SetStateForcible(bool state)
+	void WidgetState::SetStateForcible(bool state)
 	{
 		if (mState == state)
 		{
@@ -77,12 +77,12 @@ namespace o2
 		}
 	}
 
-	bool UIWidgetState::GetState() const
+	bool WidgetState::GetState() const
 	{
 		return mState;
 	}
 
-	void UIWidgetState::Update(float dt)
+	void WidgetState::Update(float dt)
 	{
 		if (animation.IsPlaying())
 		{
@@ -96,11 +96,11 @@ namespace o2
 		}
 	}
 
-	UIWidgetState& UIWidgetState::operator=(bool state)
+	WidgetState& WidgetState::operator=(bool state)
 	{
 		SetState(state);
 		return *this;
 	}
 }
 
-DECLARE_CLASS(o2::UIWidgetState);
+DECLARE_CLASS(o2::WidgetState);

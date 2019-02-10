@@ -9,7 +9,8 @@
 #include "Assets/DataAsset.h"
 #include "Assets/FolderAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
-#include "AssetsWindow/UIAssetIcon.h"
+#include "AssetsWindow/AssetIcon.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/ActorProperty.h"
 #include "Core/Properties/Basic/AssetProperty.h"
 #include "Core/Properties/Basic/BooleanProperty.h"
@@ -31,10 +32,13 @@
 #include "Core/Properties/Basic/WStringProperty.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "Core/UIStyle/BasicUIStyle.h"
-#include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Core/WindowsSystem/DockableWindow.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
-#include "TreeWindow/SceneTree.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/WidgetState.h"
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/Widgets/CustomDropDown.h"
@@ -51,13 +55,10 @@
 #include "Scene/UI/Widgets/ScrollArea.h"
 #include "Scene/UI/Widgets/Toggle.h"
 #include "Scene/UI/Widgets/Tree.h"
-#include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/VerticalProgress.h"
 #include "Scene/UI/Widgets/VerticalScrollBar.h"
-#include "Scene/UI/WidgetLayer.h"
-#include "Scene/UI/WidgetLayout.h"
-#include "Scene/UI/WidgetState.h"
 #include "Scene/UI/Widgets/Window.h"
+#include "TreeWindow/SceneTree.h"
 #include "Utils/FileSystem/FileSystem.h"
 #include "Utils/System/Time/Timer.h"
 
@@ -67,7 +68,7 @@ namespace Editor
 {
 	void EditorUIStyleBuilder::RebuildDockableWndStyle()
 	{
-		UIDockableWindow* sample = mnew UIDockableWindow();
+		DockableWindow* sample = mnew DockableWindow();
 		sample->layout->minSize = Vec2F(100, 50);
 		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
@@ -126,14 +127,14 @@ namespace Editor
 
 
 		   // scroll bars
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -173,14 +174,14 @@ namespace Editor
 			->offStateAnimationSpeed = 2.0f;
 
 		// additional elements
-		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
+		Button* closeBtn = o2UI.CreateWidget<Button>("close");
 		closeBtn->name = "closeButton";
-		*closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 20));
+		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 20));
 		sample->AddInternalWidget(closeBtn);
 
-		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
+		Button* optionsBtn = o2UI.CreateWidget<Button>("arrow");
 		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 20));
+		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 20));
 		sample->AddInternalWidget(optionsBtn);
 
 		// drag handles
@@ -273,7 +274,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildStepButtonStyle()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->name = "step button";
 		auto stepIconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_step_btn_regular.png"),
 											  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
@@ -300,7 +301,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRoundDropDown()
 	{
-		UIDropDown* sample = mnew UIDropDown();
+		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_panel_subpanel_bk.png"),
 										  Layout::BothStretch(-7, -5, -5, -5));
@@ -317,7 +318,7 @@ namespace Editor
 		sample->SetClippingLayout(Layout::BothStretch(10, 3, 20, 1));
 
 		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
@@ -331,7 +332,7 @@ namespace Editor
 		list->layout->offsetMin = Vec2F(0, -60);
 		list->layout->offsetMax = Vec2F(0, 0);
 
-		UILabel* itemSample = o2UI.CreateLabel("empty");
+		Label* itemSample = o2UI.CreateLabel("empty");
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
@@ -501,7 +502,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildSearchButton()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(5, 5);
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_search_regular.png"),
@@ -568,7 +569,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRevertBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -637,7 +638,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorsTreeLinkBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 
 		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
 		auto selectLayer = halfHideLayer->AddChildLayer("hover", nullptr);
@@ -657,7 +658,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildActorsTree()
 	{
 		// basics
-		UISceneTree* sample = mnew UISceneTree();
+		SceneTree* sample = mnew SceneTree();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));
@@ -701,22 +702,22 @@ namespace Editor
 
 		auto actorNodeEnableToggle = o2UI.CreateWidget<UIToggle>("actor node enable");
 		actorNodeEnableToggle->name = "enableToggle";
-		*actorNodeEnableToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-5, 0));
+		*actorNodeEnableToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-5, 0));
 		itemSample->AddChild(actorNodeEnableToggle);
 
 		auto actorNodeLockToggle = o2UI.CreateWidget<UIToggle>("actor node lock");
 		actorNodeLockToggle->name = "lockToggle";
-		*actorNodeLockToggle->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-20, 0));
+		*actorNodeLockToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-20, 0));
 		itemSample->AddChild(actorNodeLockToggle);
 
-		auto actorNodeLinkButton = o2UI.CreateWidget<UIButton>("actor node link");
+		auto actorNodeLinkButton = o2UI.CreateWidget<Button>("actor node link");
 		actorNodeLinkButton->name = "linkBtn";
-		*actorNodeLinkButton->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-35, 0));
+		*actorNodeLinkButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-35, 0));
 		itemSample->AddChild(actorNodeLinkButton);
 
-		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
+		auto actorNodeEditBox = o2UI.CreateWidget<EditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
-		*actorNodeEditBox->layout = UIWidgetLayout::BothStretch(10, 0, 55, 0);
+		*actorNodeEditBox->layout = WidgetLayout::BothStretch(10, 0, 55, 0);
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
@@ -725,7 +726,7 @@ namespace Editor
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
-		UIButton* itemSampleExpandBtn = mnew UIButton();
+		Button* itemSampleExpandBtn = mnew Button();
 		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
 
@@ -774,14 +775,14 @@ namespace Editor
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -807,7 +808,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildPanelDownButton()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -4, -5, -5));
@@ -848,7 +849,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildTrashDownPanelButton()
 	{
-		auto sample = mnew UIButton();
+		auto sample = mnew Button();
 
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -5, -5, -5));
@@ -1018,7 +1019,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildFilterMenuButton()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -4, -5, -5));
 
@@ -1049,7 +1050,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildTreeMenuButton()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -5, -5, -5));
 
@@ -1081,7 +1082,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildFoldersTree()
 	{
 		// basics
-		UITree* sample = mnew UITree();
+		Tree* sample = mnew Tree();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 0, 1));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 1, 0));
@@ -1125,9 +1126,9 @@ namespace Editor
 		nameLayer->layout = Layout::BothStretch(30, 0, 5, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
-		auto actorNodeEditBox = o2UI.CreateWidget<UIEditBox>("backless");
+		auto actorNodeEditBox = o2UI.CreateWidget<EditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
-		*actorNodeEditBox->layout = UIWidgetLayout::BothStretch(30, 0, 5, 0);
+		*actorNodeEditBox->layout = WidgetLayout::BothStretch(30, 0, 5, 0);
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
@@ -1136,7 +1137,7 @@ namespace Editor
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
-		UIButton* itemSampleExpandBtn = mnew UIButton();
+		Button* itemSampleExpandBtn = mnew Button();
 		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
 
@@ -1185,14 +1186,14 @@ namespace Editor
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -1218,7 +1219,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRegularAssetIcon()
 	{
-		UIAssetIcon* sample = mnew UIAssetIcon();
+		AssetIcon* sample = mnew AssetIcon();
 
 		// selection layer
 		auto itemSelectionLayer = sample->AddLayer("select", nullptr);
@@ -1238,19 +1239,19 @@ namespace Editor
 										   Layout::BothStretch(-10, -16, -10, -16));
 
 		// name label
-		UILabel* nameLabel = o2UI.CreateLabel("file name");
+		Label* nameLabel = o2UI.CreateLabel("file name");
 		nameLabel->name = "nameLabel";
-		*nameLabel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 25, 0);
+		*nameLabel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 25, 0);
 		nameLabel->height = 8;
 		nameLabel->linesDistanceCoef = 0.7f;
 		nameLabel->horAlign = HorAlign::Middle;
 		nameLabel->verAlign = VerAlign::Top;
-		nameLabel->horOverflow = UILabel::HorOverflow::Wrap;
-		nameLabel->verOverflow = UILabel::VerOverflow::Cut;
+		nameLabel->horOverflow = Label::HorOverflow::Wrap;
+		nameLabel->verOverflow = Label::VerOverflow::Cut;
 		sample->AddChild(nameLabel);
 
 		// edit box
-		UIEditBox* nameEditBox = mnew UIEditBox();
+		EditBox* nameEditBox = mnew EditBox();
 		nameEditBox->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 		nameEditBox->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
 		nameEditBox->SetCaretBlinkingDelay(0.85f);
@@ -1267,7 +1268,7 @@ namespace Editor
 		caretDrawable->color = Color4::Black();
 
 		nameEditBox->name = "nameEditBox";
-		*nameEditBox->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 22, 0);
+		*nameEditBox->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 22, 0);
 		sample->AddChild(nameEditBox);
 
 		// edit state
@@ -1289,7 +1290,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildFolderAssetIcon()
 	{
-		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
+		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
 		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_big_folder_icon.png");
@@ -1299,7 +1300,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildPrototypeAssetIcon()
 	{
-		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
+		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
 		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_actor_icon.png");
@@ -1309,7 +1310,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildPrefabPreviewAssetIcon()
 	{
-		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
+		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
 		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_image_asset_back.png");
@@ -1322,7 +1323,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildImagePreviewAssetIcon()
 	{
-		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
+		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
 
 		sample->RemoveLayer("icon");
 		sample->AddLayer("preview", mnew Sprite(),
@@ -1333,7 +1334,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildTextAssetIcon()
 	{
-		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
+		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
 		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_big_text_file_icon.png");
@@ -1343,7 +1344,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildAnimationAssetIcon()
 	{
-		UIAssetIcon* sample = o2UI.CreateWidget<UIAssetIcon>();
+		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
 
 		auto iconLayer = sample->layer["icon"];
 		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI2_anim_file_icon.png");
@@ -1353,7 +1354,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildAssetsGridScroll()
 	{
-		UIAssetsIconsScrollArea* sample = mnew UIAssetsIconsScrollArea();
+		AssetsIconsScrollArea* sample = mnew AssetsIconsScrollArea();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
@@ -1373,14 +1374,14 @@ namespace Editor
 		// selection
 		*sample->GetSelectingDrawable() = Sprite("ui/UI_Window_place.png");
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -1395,7 +1396,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildLinkBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 
 		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
 		auto selectLayer = halfHideLayer->AddChildLayer("hover", nullptr);
@@ -1414,7 +1415,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildSinglelineEditboxProperty()
 	{
-		UIEditBox* sample = o2UI.CreateWidget<UIEditBox>("singleline");
+		EditBox* sample = o2UI.CreateWidget<EditBox>("singleline");
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
 
@@ -1426,10 +1427,10 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildEditorDropdown()
 	{
-		auto sample = mnew UIWidget();
+		auto sample = mnew Widget();
 
-		UIDropDown* dropdown = mnew UIDropDown();
-		*dropdown->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		DropDown* dropdown = mnew DropDown();
+		*dropdown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		auto backLayer = dropdown->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto selectLayer = dropdown->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto pressedLayer = dropdown->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -1439,7 +1440,7 @@ namespace Editor
 		dropdown->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
 
 		auto list = dropdown->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		delete list->layer["back"]->GetDrawable();
 		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
@@ -1456,7 +1457,7 @@ namespace Editor
 		undefinedText->dotsEngings = true;
 		auto undefinedLayer = dropdown->AddLayer("undefined", undefinedText, Layout::BothStretch(3, 0, 3, 0));
 
-		UILabel* itemSample = o2UI.CreateLabel("empty");
+		Label* itemSample = o2UI.CreateLabel("empty");
 		itemSample->horAlign = HorAlign::Left;
 		dropdown->SetItemSample(itemSample);
 
@@ -1473,8 +1474,8 @@ namespace Editor
 		dropdown->AddState("visible", Animation::EaseInOut(dropdown, &dropdown->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		sample->AddChild(dropdown);
 		sample->AddChild(revertBtn);
@@ -1536,14 +1537,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
 		UIToggle* toggle = o2UI.CreateToggle("empty", "actor head enable");
-		*toggle->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
@@ -1557,7 +1558,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadName()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
 		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
 		sample->SetCaretBlinkingDelay(0.85f);
@@ -1602,15 +1603,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIEditBox* editBox = o2UI.CreateEditBox("actor head name");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		EditBox* editBox = o2UI.CreateEditBox("actor head name");
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(editBox);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -1665,14 +1666,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
 		UIToggle* toggle = o2UI.CreateToggle("empty", "actor head lock");
-		*toggle->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
@@ -1691,14 +1692,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto box = mnew UIWidget();
+		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI2_round_field_gray.png"),
 									   Layout::BothStretch(-4, -4, -5, -4));
@@ -1724,8 +1725,8 @@ namespace Editor
 
 		box->SetFocusable(true);
 
-		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
-		*linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		auto linkBtn = o2UI.CreateWidget<Button>("asset link");
+		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		box->AddChild(linkBtn);
 
 		layout->AddChild(box);
@@ -1735,7 +1736,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadTags()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
 		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
 		sample->SetCaretBlinkingDelay(0.85f);
@@ -1780,15 +1781,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIEditBox* editBox = o2UI.CreateEditBox("actor head tags");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		EditBox* editBox = o2UI.CreateEditBox("actor head tags");
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(editBox);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -1802,7 +1803,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadLayer()
 	{
-		UIDropDown* sample = mnew UIDropDown();
+		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_round_field_gray.png"),
@@ -1820,7 +1821,7 @@ namespace Editor
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
 
 		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		delete list->layer["back"]->GetDrawable();
 		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
@@ -1837,7 +1838,7 @@ namespace Editor
 		undefinedText->dotsEngings = true;
 		auto undefinedLayer = sample->AddLayer("undefined", undefinedText, Layout::BothStretch(3, 0, 3, 0));
 
-		UILabel* itemSample = o2UI.CreateLabel("empty");
+		Label* itemSample = o2UI.CreateLabel("empty");
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
@@ -1864,15 +1865,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIDropDown* dropDown = o2UI.CreateDropdown("actor head layer");
-		*dropDown->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		DropDown* dropDown = o2UI.CreateDropdown("actor head layer");
+		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(dropDown);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(dropDown);
 		layout->AddChild(revertBtn);
@@ -1886,7 +1887,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildAcceptPrototypeBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_accept_prefab.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
@@ -1908,7 +1909,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRevertPrototypeBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_revert_prefab.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
@@ -1930,7 +1931,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildBreakPrototypeBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_break_prefab.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
@@ -1952,7 +1953,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildComponentOptionsBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_gray_options.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
@@ -1974,7 +1975,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildComponentSaveBtn()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI2_save_gray.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
@@ -1996,7 +1997,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildHorWideScrollbar()
 	{
-		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
+		HorizontalScrollBar* sample = mnew HorizontalScrollBar();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
 		sample->SetMinimalScrollHandleSize(10);
@@ -2019,7 +2020,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildVerWideScrollbar()
 	{
-		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
+		VerticalScrollBar* sample = mnew VerticalScrollBar();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
 		sample->SetMinimalScrollHandleSize(10);
@@ -2042,7 +2043,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildHorWideProgressbar()
 	{
-		UIHorizontalProgress* sample = mnew UIHorizontalProgress();
+		HorizontalProgress* sample = mnew HorizontalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
 
@@ -2062,7 +2063,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildVerWideProgressbar()
 	{
-		UIVerticalProgress* sample = mnew UIVerticalProgress();
+		VerticalProgress* sample = mnew VerticalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
 
@@ -2082,7 +2083,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRedEditBoxStyle()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
 		sample->SetCaretBlinkingDelay(0.85f);
@@ -2119,7 +2120,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildGreenEditBoxStyle()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
 		sample->SetCaretBlinkingDelay(0.85f);
@@ -2156,7 +2157,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildSpoilerWithHead()
 	{
-		auto sample = mnew UISpoilerWithHead();
+		auto sample = mnew SpoilerWithHead();
 		sample->SetHeadHeight(18);
 		sample->spacing = 5.0f;
 		sample->borderLeft = 10;
@@ -2180,23 +2181,23 @@ namespace Editor
 		captionText->wordWrap = true;
 		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 30, 0, 20, -1));
 
-		auto expandBtn = o2UI.CreateWidget<UIButton>("expand");
-		*expandBtn->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 0));
+		auto expandBtn = o2UI.CreateWidget<Button>("expand");
+		*expandBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 0));
 		sample->AddInternalWidget(expandBtn);
 
 		auto icon = o2UI.CreateImage("ui/UI2_transform_icon.png");
 		icon->name = "icon";
-		*icon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(12, 0));
+		*icon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(12, 0));
 		sample->AddInternalWidget(icon);
 
-		auto saveBtn = o2UI.CreateWidget<UIButton>("component save");
+		auto saveBtn = o2UI.CreateWidget<Button>("component save");
 		saveBtn->name = "save";
-		*saveBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 0));
+		*saveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 0));
 		sample->AddInternalWidget(saveBtn);
 
-		auto optionBtn = o2UI.CreateWidget<UIButton>("component options");
+		auto optionBtn = o2UI.CreateWidget<Button>("component options");
 		optionBtn->name = "options";
-		*optionBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 0));
+		*optionBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 0));
 		sample->AddInternalWidget(optionBtn);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2210,15 +2211,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2238,15 +2239,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("red singleline");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2266,15 +2267,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("green singleline");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2294,15 +2295,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2322,14 +2323,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto box = mnew UIWidget();
+		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -2355,12 +2356,12 @@ namespace Editor
 
 		box->SetFocusable(true);
 
-		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
-		*linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		auto linkBtn = o2UI.CreateWidget<Button>("asset link");
+		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		box->AddChild(linkBtn);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(box);
 		layout->AddChild(revertBtn);
@@ -2394,14 +2395,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 		
 		UIToggle* toggle = o2UI.CreateToggle("", "without caption");
-		*toggle->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
@@ -2421,62 +2422,62 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
 		leftLabel->name = "left label";
-		leftLabel->horOverflow = UILabel::HorOverflow::None;
-		*leftLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
+		leftLabel->horOverflow = Label::HorOverflow::None;
+		*leftLabel->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(leftLabel);
 
 		auto leftProperty = o2UI.CreateWidget<FloatProperty>();
 		leftProperty->name = "left";
-		*leftProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*leftProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(leftProperty);
 
 		auto topLabel = o2UI.CreateLabel("T");
 		topLabel->name = "top label";
-		topLabel->horOverflow = UILabel::HorOverflow::None;
-		*topLabel->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		topLabel->horOverflow = Label::HorOverflow::None;
+		*topLabel->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(topLabel);
 
 		auto topProperty = o2UI.CreateWidget<FloatProperty>();
 		topProperty->name = "top";
-		*topProperty->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*topProperty->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(topProperty);
 
 		auto rightLabel = o2UI.CreateLabel("R");
 		rightLabel->name = "right label";
-		rightLabel->horOverflow = UILabel::HorOverflow::None;
-		*rightLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		rightLabel->horOverflow = Label::HorOverflow::None;
+		*rightLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(rightLabel);
 
 		auto rightProperty = o2UI.CreateWidget<FloatProperty>();
 		rightProperty->name = "right";
-		*rightProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*rightProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(rightProperty);
 
 		auto bottomLabel = o2UI.CreateLabel("B");
 		bottomLabel->name = "bottom label";
-		bottomLabel->horOverflow = UILabel::HorOverflow::None;
-		*bottomLabel->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		bottomLabel->horOverflow = Label::HorOverflow::None;
+		*bottomLabel->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(bottomLabel);
 
 		auto bottomProperty = o2UI.CreateWidget<FloatProperty>();
 		bottomProperty->name = "bottom";
-		*bottomProperty->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -2496,62 +2497,62 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
 		leftLabel->name = "left label";
-		leftLabel->horOverflow = UILabel::HorOverflow::None;
-		*leftLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
+		leftLabel->horOverflow = Label::HorOverflow::None;
+		*leftLabel->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(leftLabel);
 
 		auto leftProperty = o2UI.CreateWidget<IntegerProperty>();
 		leftProperty->name = "left";
-		*leftProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*leftProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(leftProperty);
 
 		auto topLabel = o2UI.CreateLabel("T");
 		topLabel->name = "top label";
-		topLabel->horOverflow = UILabel::HorOverflow::None;
-		*topLabel->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		topLabel->horOverflow = Label::HorOverflow::None;
+		*topLabel->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(topLabel);
 
 		auto topProperty = o2UI.CreateWidget<IntegerProperty>();
 		topProperty->name = "top";
-		*topProperty->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*topProperty->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(topProperty);
 
 		auto rightLabel = o2UI.CreateLabel("R");
 		rightLabel->name = "right label";
-		rightLabel->horOverflow = UILabel::HorOverflow::None;
-		*rightLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		rightLabel->horOverflow = Label::HorOverflow::None;
+		*rightLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(rightLabel);
 
 		auto rightProperty = o2UI.CreateWidget<IntegerProperty>();
 		rightProperty->name = "right";
-		*rightProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*rightProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(rightProperty);
 
 		auto bottomLabel = o2UI.CreateLabel("B");
 		bottomLabel->name = "bottom label";
-		bottomLabel->horOverflow = UILabel::HorOverflow::None;
-		*bottomLabel->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		bottomLabel->horOverflow = Label::HorOverflow::None;
+		*bottomLabel->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(bottomLabel);
 
 		auto bottomProperty = o2UI.CreateWidget<IntegerProperty>();
 		bottomProperty->name = "bottom";
-		*bottomProperty->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -2571,16 +2572,16 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto box = mnew UIWidget();
+		auto box = mnew Widget();
 		box->name = "box";
-		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -2604,14 +2605,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto box = mnew UIWidget();
+		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -2635,8 +2636,8 @@ namespace Editor
 		nameText->dotsEngings = true;
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(box);
 		layout->AddChild(revertBtn);
@@ -2656,14 +2657,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto box = mnew UIWidget();
+		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -2680,8 +2681,8 @@ namespace Editor
 		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(box);
 		layout->AddChild(revertBtn);
@@ -2701,15 +2702,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIDropDown* dropDown = o2UI.CreateDropdown();
-		*dropDown->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		DropDown* dropDown = o2UI.CreateDropdown();
+		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(dropDown);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(dropDown);
 		layout->AddChild(revertBtn);
@@ -2729,15 +2730,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIDropDown* dropDown = o2UI.CreateDropdown();
-		*dropDown->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		DropDown* dropDown = o2UI.CreateDropdown();
+		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(dropDown);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(dropDown);
 		layout->AddChild(revertBtn);
@@ -2757,63 +2758,63 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
 
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
 		leftLabel->name = "left label";
-		leftLabel->horOverflow = UILabel::HorOverflow::None;
-		*leftLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
+		leftLabel->horOverflow = Label::HorOverflow::None;
+		*leftLabel->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(leftLabel);
 
 		auto leftProperty = o2UI.CreateWidget<FloatProperty>();
 		leftProperty->name = "left";
-		*leftProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*leftProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(leftProperty);
 
 		auto topLabel = o2UI.CreateLabel("T");
 		topLabel->name = "top label";
-		topLabel->horOverflow = UILabel::HorOverflow::None;
-		*topLabel->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		topLabel->horOverflow = Label::HorOverflow::None;
+		*topLabel->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(topLabel);
 
 		auto topProperty = o2UI.CreateWidget<FloatProperty>();
 		topProperty->name = "top";
-		*topProperty->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*topProperty->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(topProperty);
 
 		auto rightLabel = o2UI.CreateLabel("R");
 		rightLabel->name = "right label";
-		rightLabel->horOverflow = UILabel::HorOverflow::None;
-		*rightLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		rightLabel->horOverflow = Label::HorOverflow::None;
+		*rightLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(rightLabel);
 
 		auto rightProperty = o2UI.CreateWidget<FloatProperty>();
 		rightProperty->name = "right";
-		*rightProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*rightProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(rightProperty);
 
 		auto bottomLabel = o2UI.CreateLabel("B");
 		bottomLabel->name = "bottom label";
-		bottomLabel->horOverflow = UILabel::HorOverflow::None;
-		*bottomLabel->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		bottomLabel->horOverflow = Label::HorOverflow::None;
+		*bottomLabel->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(bottomLabel);
 
 		auto bottomProperty = o2UI.CreateWidget<FloatProperty>();
 		bottomProperty->name = "bottom";
-		*bottomProperty->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -2833,62 +2834,62 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
 		leftLabel->name = "left label";
-		leftLabel->horOverflow = UILabel::HorOverflow::None;
-		*leftLabel->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
+		leftLabel->horOverflow = Label::HorOverflow::None;
+		*leftLabel->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(leftLabel);
 
 		auto leftProperty = o2UI.CreateWidget<IntegerProperty>();
 		leftProperty->name = "left";
-		*leftProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*leftProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.25f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(leftProperty);
 
 		auto topLabel = o2UI.CreateLabel("T");
 		topLabel->name = "top label";
-		topLabel->horOverflow = UILabel::HorOverflow::None;
-		*topLabel->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		topLabel->horOverflow = Label::HorOverflow::None;
+		*topLabel->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.25f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(topLabel);
 
 		auto topProperty = o2UI.CreateWidget<IntegerProperty>();
 		topProperty->name = "top";
-		*topProperty->layout = UIWidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*topProperty->layout = WidgetLayout(Vec2F(0.25f, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(topProperty);
 
 		auto rightLabel = o2UI.CreateLabel("R");
 		rightLabel->name = "right label";
-		rightLabel->horOverflow = UILabel::HorOverflow::None;
-		*rightLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		rightLabel->horOverflow = Label::HorOverflow::None;
+		*rightLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(rightLabel);
 
 		auto rightProperty = o2UI.CreateWidget<IntegerProperty>();
 		rightProperty->name = "right";
-		*rightProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*rightProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.75f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(rightProperty);
 
 		auto bottomLabel = o2UI.CreateLabel("B");
 		bottomLabel->name = "bottom label";
-		bottomLabel->horOverflow = UILabel::HorOverflow::None;
-		*bottomLabel->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		bottomLabel->horOverflow = Label::HorOverflow::None;
+		*bottomLabel->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(0.75f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(bottomLabel);
 
 		auto bottomProperty = o2UI.CreateWidget<IntegerProperty>();
 		bottomProperty->name = "bottom";
-		*bottomProperty->layout = UIWidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -2908,15 +2909,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIEditBox* editBox = o2UI.CreateEditBox("singleline");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		EditBox* editBox = o2UI.CreateEditBox("singleline");
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(editBox);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2936,15 +2937,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIEditBox* editBox = o2UI.CreateEditBox("singleline");
-		*editBox->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		EditBox* editBox = o2UI.CreateEditBox("singleline");
+		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(editBox);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2964,14 +2965,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIEditBox* editBox = o2UI.CreateEditBox("singleline");
+		EditBox* editBox = o2UI.CreateEditBox("singleline");
 		layout->AddChild(editBox);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
@@ -2991,40 +2992,40 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto xLabel = o2UI.CreateLabel("X");
 		xLabel->name = "x label";
-		xLabel->horOverflow = UILabel::HorOverflow::None;
-		*xLabel->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F());
+		xLabel->horOverflow = Label::HorOverflow::None;
+		*xLabel->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F());
 		propertiesLayout->AddChild(xLabel);
 
 		auto xProperty = o2UI.CreateWidget<FloatProperty>();
 		xProperty->name = "x";
-		*xProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*xProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(xProperty);
 
 		auto yLabel = o2UI.CreateLabel("Y");
 		yLabel->name = "y label";
-		yLabel->horOverflow = UILabel::HorOverflow::None;
-		*yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		yLabel->horOverflow = Label::HorOverflow::None;
+		*yLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(yLabel);
 
 		auto yProperty = o2UI.CreateWidget<FloatProperty>();
 		yProperty->name = "y";
-		*yProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*yProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(yProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -3044,40 +3045,40 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto xLabel = o2UI.CreateLabel("X");
 		xLabel->name = "x label";
-		xLabel->horOverflow = UILabel::HorOverflow::None;
-		*xLabel->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F());
+		xLabel->horOverflow = Label::HorOverflow::None;
+		*xLabel->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F());
 		propertiesLayout->AddChild(xLabel);
 
 		auto xProperty = o2UI.CreateWidget<IntegerProperty>();
 		xProperty->name = "x";
-		*xProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*xProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(xProperty);
 
 		auto yLabel = o2UI.CreateLabel("Y");
 		yLabel->name = "y label";
-		yLabel->horOverflow = UILabel::HorOverflow::None;
-		*yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		yLabel->horOverflow = Label::HorOverflow::None;
+		*yLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(yLabel);
 
 		auto yProperty = o2UI.CreateWidget<IntegerProperty>();
 		yProperty->name = "y";
-		*yProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*yProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(yProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -3097,40 +3098,40 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 		
-		auto propertiesLayout = mnew UIWidget();
+		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(propertiesLayout);
 
 		auto xLabel = o2UI.CreateLabel("X");
 		xLabel->name = "x label";
-		xLabel->horOverflow = UILabel::HorOverflow::None;
-		*xLabel->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F());
+		xLabel->horOverflow = Label::HorOverflow::None;
+		*xLabel->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F());
 		propertiesLayout->AddChild(xLabel);
 
 		auto xProperty = o2UI.CreateWidget<FloatProperty>("red");
 		xProperty->name = "x";
-		*xProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*xProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(xProperty);
 
 		auto yLabel = o2UI.CreateLabel("Y");
 		yLabel->name = "y label";
-		yLabel->horOverflow = UILabel::HorOverflow::None;
-		*yLabel->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
+		yLabel->horOverflow = Label::HorOverflow::None;
+		*yLabel->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 0), Vec2F(0, 0), Vec2F(20, 20));
 		propertiesLayout->AddChild(yLabel);
 
 		auto yProperty = o2UI.CreateWidget<FloatProperty>("green");
 		yProperty->name = "y";
-		*yProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
+		*yProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(yProperty);
 
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(layout);
 		layout->AddChild(revertBtn);
@@ -3179,6 +3180,8 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildEditorUIManager()
 	{
+		PushScopeEnterOnStack scope;
+
 		String generateDateCachePath = "uiGeneratedDate.xml";
 
 		String thisSourcePath = "../../../Sources/Core/UIStyle/EditorUIStyle.cpp";

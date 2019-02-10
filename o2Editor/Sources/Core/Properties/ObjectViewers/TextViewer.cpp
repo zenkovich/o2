@@ -18,7 +18,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		auto layout = mnew UIVerticalLayout();
+		auto layout = mnew VerticalLayout();
 		layout->borderTop = 5;
 		layout->expandWidth = true;
 		layout->expandHeight = false;
@@ -26,7 +26,7 @@ namespace Editor
 
 		mViewWidget = layout;
 
-		auto commonFieldsLayout = mnew UIVerticalLayout();
+		auto commonFieldsLayout = mnew VerticalLayout();
 		commonFieldsLayout->spacing = 5;
 		commonFieldsLayout->expandWidth = true;
 		commonFieldsLayout->expandHeight = false;

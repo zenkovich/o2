@@ -17,20 +17,20 @@ namespace Editor
 	// ----------------------------
 	// Scrollable and zoomable view
 	// ----------------------------
-	class UIScrollView: public UIWidget, public CursorAreaEventsListener
+	class ScrollView: public Widget, public CursorAreaEventsListener
 	{
 	public:
 		// Default constructor
-		UIScrollView();
+		ScrollView();
 
 		// Copy-constructor
-		UIScrollView(const UIScrollView& other);
+		ScrollView(const ScrollView& other);
 
 		// Destructor
-		~UIScrollView();
+		~ScrollView();
 
 		// Copy-operator
-		UIScrollView& operator=(const UIScrollView& other);
+		ScrollView& operator=(const ScrollView& other);
 
 		// Draws widget, updates render target 
 		void Draw() override;
@@ -68,7 +68,7 @@ namespace Editor
 		// Returns is this widget can be focused
 		bool IsFocusable() const override;
 
-		SERIALIZABLE(UIScrollView);
+		SERIALIZABLE(ScrollView);
 
 	protected:
 		bool       mReady = false;                         // Is widget initialized and ready to use
@@ -137,13 +137,13 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::UIScrollView)
+CLASS_BASES_META(Editor::ScrollView)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UIScrollView)
+CLASS_FIELDS_META(Editor::ScrollView)
 {
 	PROTECTED_FIELD(mReady);
 	PROTECTED_FIELD(mRenderTargetSprite);
@@ -166,7 +166,7 @@ CLASS_FIELDS_META(Editor::UIScrollView)
 	PROTECTED_FIELD(mScreenToLocalTransform);
 }
 END_META;
-CLASS_METHODS_META(Editor::UIScrollView)
+CLASS_METHODS_META(Editor::ScrollView)
 {
 
 	PUBLIC_FUNCTION(void, Draw);

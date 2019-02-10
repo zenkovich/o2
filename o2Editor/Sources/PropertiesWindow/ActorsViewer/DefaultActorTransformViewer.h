@@ -38,7 +38,7 @@ namespace Editor
 		FloatProperty* mDepthProperty = nullptr;
 
 		bool           mLayoutEnabled = false;
-		UISpoiler*     mLayoutSpoiler = nullptr;
+		Spoiler*     mLayoutSpoiler = nullptr;
 		Vec2FProperty* mAnchorRightTopProperty = nullptr;
 		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
 		Vec2FProperty* mOffsetRightTopProperty = nullptr;

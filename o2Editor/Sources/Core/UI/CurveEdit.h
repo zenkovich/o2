@@ -15,8 +15,8 @@ using namespace o2;
 namespace o2
 {
 	class UIContextMenu;
-	class UIEditBox;
-	class UIWindow;
+	class EditBox;
+	class Window;
 }
 
 namespace Editor
@@ -24,20 +24,20 @@ namespace Editor
 	// ---------------------
 	// Curves editing widget
 	// ---------------------
-	class UICurveEditor: public UIFrameScrollView, public SelectableDragHandlesGroup
+	class CurveEditor: public FrameScrollView, public SelectableDragHandlesGroup
 	{
 	public:
 		// Default constructor
-		UICurveEditor();
+		CurveEditor();
 
 		// Copy-constructor
-		UICurveEditor(const UICurveEditor& other);
+		CurveEditor(const CurveEditor& other);
 
 		// Destructor
-		~UICurveEditor();
+		~CurveEditor();
 
 		// Copy-operator
-		UICurveEditor& operator=(const UICurveEditor& other);
+		CurveEditor& operator=(const CurveEditor& other);
 
 		// Draws widget, updates render target 
 		void Draw() override;
@@ -86,7 +86,7 @@ namespace Editor
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UICurveEditor);
+		SERIALIZABLE(CurveEditor);
 
 	protected:
 		typedef Vector<Vec2F> PointsVec;
@@ -95,7 +95,7 @@ namespace Editor
 
 		struct KeyHandles
 		{
-			UICurveEditor*       curveEditor = nullptr;
+			CurveEditor*       curveEditor = nullptr;
 			SelectableDragHandle mainHandle;
 			SelectableDragHandle leftSupportHandle;
 			SelectableDragHandle rightSupportHandle;
@@ -103,7 +103,7 @@ namespace Editor
 			int                  curveKeyIdx;
 
 			KeyHandles() {}
-			KeyHandles(const SelectableDragHandle& mainSample, const SelectableDragHandle& supportSample, UICurveEditor* editor);
+			KeyHandles(const SelectableDragHandle& mainSample, const SelectableDragHandle& supportSample, CurveEditor* editor);
 
 			void Draw(const RectF& camRect);
 			bool IsSomeHandleSelected() const;
@@ -199,9 +199,9 @@ namespace Editor
 								 							   	    
 		bool                    mIsViewScrolling = false;           // Is scrolling view at this time
 							    
-		UIWindow*               mEditValueWindow = nullptr;         // Key position and value editing window
-		UIEditBox*              mEditValueWindowValue = nullptr;    // Key value editing box
-		UIEditBox*              mEditValueWindowPosition = nullptr; // Key position editing box
+		Window*               mEditValueWindow = nullptr;         // Key position and value editing window
+		EditBox*              mEditValueWindowValue = nullptr;    // Key value editing box
+		EditBox*              mEditValueWindowPosition = nullptr; // Key position editing box
 							    
 		CurveKeysInfosVec       mBeforeTransformKeys;               // Stored selected keys before handles transformed
 															       
@@ -380,7 +380,7 @@ namespace Editor
 		{
 		public:
 			AddKeysAction();
-			AddKeysAction(const CurveKeysInfosVec& infos, UICurveEditor* editor);
+			AddKeysAction(const CurveKeysInfosVec& infos, CurveEditor* editor);
 
 			String GetName();
 			void Redo();
@@ -390,14 +390,14 @@ namespace Editor
 
 		protected:
 			CurveKeysInfosVec mInfos;
-			UICurveEditor*    mEditor;
+			CurveEditor*    mEditor;
 		};
 
 		class DeleteKeysAction: public IAction
 		{
 		public:
 			DeleteKeysAction();
-			DeleteKeysAction(const CurveKeysInfosVec& infos, UICurveEditor* editor);
+			DeleteKeysAction(const CurveKeysInfosVec& infos, CurveEditor* editor);
 
 			String GetName();
 			void Redo();
@@ -407,7 +407,7 @@ namespace Editor
 
 		protected:
 			CurveKeysInfosVec mInfos;
-			UICurveEditor*    mEditor;
+			CurveEditor*    mEditor;
 		};
 
 		class KeysChangeAction: public IAction
@@ -426,7 +426,7 @@ namespace Editor
 
 		public:
 			KeysChangeAction();
-			KeysChangeAction(const KeysInfosVec& infos, UICurveEditor* editor);
+			KeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor);
 
 			String GetName();
 			void Redo();
@@ -436,18 +436,18 @@ namespace Editor
 
 		protected:
 			KeysInfosVec   mInfos;
-			UICurveEditor* mEditor;
+			CurveEditor* mEditor;
 		};
 	};
 }
 
-CLASS_BASES_META(Editor::UICurveEditor)
+CLASS_BASES_META(Editor::CurveEditor)
 {
-	BASE_CLASS(Editor::UIFrameScrollView);
+	BASE_CLASS(Editor::FrameScrollView);
 	BASE_CLASS(o2::SelectableDragHandlesGroup);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UICurveEditor)
+CLASS_FIELDS_META(Editor::CurveEditor)
 {
 	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
@@ -475,7 +475,7 @@ CLASS_FIELDS_META(Editor::UICurveEditor)
 	PROTECTED_FIELD(mRedoActions);
 }
 END_META;
-CLASS_METHODS_META(Editor::UICurveEditor)
+CLASS_METHODS_META(Editor::CurveEditor)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -551,34 +551,34 @@ CLASS_METHODS_META(Editor::UICurveEditor)
 }
 END_META;
 
-CLASS_BASES_META(Editor::UICurveEditor::CurveCopyInfo)
+CLASS_BASES_META(Editor::CurveEditor::CurveCopyInfo)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UICurveEditor::CurveCopyInfo)
+CLASS_FIELDS_META(Editor::CurveEditor::CurveCopyInfo)
 {
 	PUBLIC_FIELD(curveId).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(keys).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(Editor::UICurveEditor::CurveCopyInfo)
+CLASS_METHODS_META(Editor::CurveEditor::CurveCopyInfo)
 {
 }
 END_META;
 
-CLASS_BASES_META(Editor::UICurveEditor::AddKeysAction)
+CLASS_BASES_META(Editor::CurveEditor::AddKeysAction)
 {
 	BASE_CLASS(Editor::IAction);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UICurveEditor::AddKeysAction)
+CLASS_FIELDS_META(Editor::CurveEditor::AddKeysAction)
 {
 	PROTECTED_FIELD(mInfos);
 	PROTECTED_FIELD(mEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::UICurveEditor::AddKeysAction)
+CLASS_METHODS_META(Editor::CurveEditor::AddKeysAction)
 {
 
 	PUBLIC_FUNCTION(String, GetName);
@@ -587,18 +587,18 @@ CLASS_METHODS_META(Editor::UICurveEditor::AddKeysAction)
 }
 END_META;
 
-CLASS_BASES_META(Editor::UICurveEditor::DeleteKeysAction)
+CLASS_BASES_META(Editor::CurveEditor::DeleteKeysAction)
 {
 	BASE_CLASS(Editor::IAction);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UICurveEditor::DeleteKeysAction)
+CLASS_FIELDS_META(Editor::CurveEditor::DeleteKeysAction)
 {
 	PROTECTED_FIELD(mInfos);
 	PROTECTED_FIELD(mEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::UICurveEditor::DeleteKeysAction)
+CLASS_METHODS_META(Editor::CurveEditor::DeleteKeysAction)
 {
 
 	PUBLIC_FUNCTION(String, GetName);
@@ -607,18 +607,18 @@ CLASS_METHODS_META(Editor::UICurveEditor::DeleteKeysAction)
 }
 END_META;
 
-CLASS_BASES_META(Editor::UICurveEditor::KeysChangeAction)
+CLASS_BASES_META(Editor::CurveEditor::KeysChangeAction)
 {
 	BASE_CLASS(Editor::IAction);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UICurveEditor::KeysChangeAction)
+CLASS_FIELDS_META(Editor::CurveEditor::KeysChangeAction)
 {
 	PROTECTED_FIELD(mInfos);
 	PROTECTED_FIELD(mEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::UICurveEditor::KeysChangeAction)
+CLASS_METHODS_META(Editor::CurveEditor::KeysChangeAction)
 {
 
 	PUBLIC_FUNCTION(String, GetName);

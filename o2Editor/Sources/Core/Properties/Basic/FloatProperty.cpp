@@ -31,7 +31,7 @@ namespace Editor
 
 	void FloatProperty::InitializeControls()
 	{
-		mEditBox = FindChildByType<UIEditBox>();
+		mEditBox = FindChildByType<EditBox>();
 		if (mEditBox)
 		{
 			mEditBox->onChangeCompleted = THIS_FUNC(OnEdited);

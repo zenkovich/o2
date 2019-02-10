@@ -108,7 +108,7 @@ namespace o2
 		virtual void OnIncludeToScene() {}
 
 		friend class Actor;
-		friend class UIWidget;
+		friend class Widget;
 	};
 
 	// ------------------------

@@ -16,7 +16,7 @@ namespace o2
 	class Sprite;
 	class SceneEditableObject;
 	class DrawableComponent;
-	class UITree;
+	class Tree;
 }
 
 // Editor scene screen accessor macros
@@ -26,13 +26,13 @@ namespace Editor
 {
 	class SceneDragHandle;
 	class IEditTool;
-	class UISceneTree;
+	class SceneTree;
 
 	// --------------------
 	// Scene editing screen
 	// --------------------
 	class SceneEditScreen: public DragDropArea, public KeyboardEventsListener,
-		public Singleton<SceneEditScreen>, public UIScrollView
+		public Singleton<SceneEditScreen>, public ScrollView
 	{
 	public:
 		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
@@ -120,7 +120,7 @@ namespace Editor
 		Color4 mMultiSelectedObjectColor = Color4(220, 220, 220, 100); // Selected object color
 		float  mObjectMinimalSelectionSize = 10.0f;                    // Minimal object size on pixels
 
-		UISceneTree*            mSceneTree;				   // Pointer to object tree widget
+		SceneTree*            mSceneTree;				   // Pointer to object tree widget
 		SceneEditableObjectsVec mSelectedObjects;          // Current selected objects
 		SceneEditableObjectsVec mTopSelectedObjects;       // Current selected objects most top in hierarchy
 		bool                    mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
@@ -263,7 +263,7 @@ CLASS_BASES_META(Editor::SceneEditScreen)
 	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::Singleton<SceneEditScreen>);
-	BASE_CLASS(Editor::UIScrollView);
+	BASE_CLASS(Editor::ScrollView);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SceneEditScreen)

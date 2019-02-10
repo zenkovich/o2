@@ -6,62 +6,62 @@
 
 namespace o2
 {
-	UIList::UIList():
-		UICustomList()
+	List::List():
+		CustomList()
 	{
-		UILabel* itemSample = mnew UILabel();
-		itemSample->horOverflow = UILabel::HorOverflow::Dots;
+		Label* itemSample = mnew Label();
+		itemSample->horOverflow = Label::HorOverflow::Dots;
 		SetItemSample(itemSample);
 	}
 
-	UIList::UIList(const UIList& other):
-		UICustomList(other), value(this), values(this)
+	List::List(const List& other):
+		CustomList(other), value(this), values(this)
 	{
 		RetargetStatesAnimations();
 	}
 
-	UIList::~UIList()
+	List::~List()
 	{}
 
-	UIList& UIList::operator=(const UIList& other)
+	List& List::operator=(const List& other)
 	{
-		UICustomList::operator=(other);
+		CustomList::operator=(other);
 		return *this;
 	}
 
-	int UIList::AddItem(const WString& text)
+	int List::AddItem(const WString& text)
 	{
-		auto item = (UILabel*)UICustomList::AddItem();
+		auto item = (Label*)CustomList::AddItem();
 		item->text = text;
 		return GetItemsCount() - 1;
 	}
 
-	int UIList::AddItem(const WString& text, int position)
+	int List::AddItem(const WString& text, int position)
 	{
-		auto item = (UILabel*)UICustomList::AddItem(position);
+		auto item = (Label*)CustomList::AddItem(position);
 		item->text = text;
 		return position;
 	}
 
-	void UIList::AddItems(const Vector<WString>& data)
+	void List::AddItems(const Vector<WString>& data)
 	{
 		for (auto text : data)
 			AddItem(text);
 	}
 
-	void UIList::RemoveItem(const WString& text)
+	void List::RemoveItem(const WString& text)
 	{
 		int position = FindItem(text);
 		if (position >= 0)
-			UICustomList::RemoveItem(position);
+			CustomList::RemoveItem(position);
 	}
 
-	int UIList::FindItem(const WString& text)
+	int List::FindItem(const WString& text)
 	{
 		int i = 0;
 		for (auto child : mVerLayout->mChildren)
 		{
-			if (((UILabel*)child)->GetText() == text)
+			if (((Label*)child)->GetText() == text)
 				return i;
 
 			i++;
@@ -70,61 +70,61 @@ namespace o2
 		return -1;
 	}
 
-	WString UIList::GetItemText(int position) const
+	WString List::GetItemText(int position) const
 	{
-		auto item = (UILabel*)GetItem(position);
+		auto item = (Label*)GetItem(position);
 		if (item)
 			return item->GetText();
 
 		return WString();
 	}
 
-	Vector<WString> UIList::GetAllItemsText() const
+	Vector<WString> List::GetAllItemsText() const
 	{
 		Vector<WString> res;
 		for (auto child : mVerLayout->mChildren)
-			res.Add(((UILabel*)child)->GetText());
+			res.Add(((Label*)child)->GetText());
 
 		return res;
 	}
 
-	WString UIList::GetSelectedItemText()
+	WString List::GetSelectedItemText()
 	{
-		auto selectedItem = dynamic_cast<UILabel*>(GetSelectedItem());
+		auto selectedItem = dynamic_cast<Label*>(GetSelectedItem());
 		if (selectedItem)
 			return selectedItem->GetText();
 
 		return WString();
 	}
 
-	void UIList::SelectItemText(const WString& text)
+	void List::SelectItemText(const WString& text)
 	{
 		int idx = FindItem(text);
 		SelectItemAt(idx);
 	}
 
-	void UIList::SetSelectedItems(const Vector<WString>& items)
+	void List::SetSelectedItems(const Vector<WString>& items)
 	{
 		for (auto& x : items)
 			SelectItemText(x);
 	}
 
-	Vector<WString> UIList::GetSelectedItemsText() const
+	Vector<WString> List::GetSelectedItemsText() const
 	{
 		return mSelectedItems.Select<WString>([&](auto x) { return GetItemText(x.idx); });
 	}
 
-	void UIList::CopyData(const Actor& otherActor)
+	void List::CopyData(const Actor& otherActor)
 	{
-		const UIList& other = dynamic_cast<const UIList&>(otherActor);
-		UICustomList::CopyData(other);
+		const List& other = dynamic_cast<const List&>(otherActor);
+		CustomList::CopyData(other);
 		RetargetStatesAnimations();
 	}
 
-	void UIList::OnSelectionChanged()
+	void List::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
 	}
 }
 
-DECLARE_CLASS(o2::UIList);
+DECLARE_CLASS(o2::List);

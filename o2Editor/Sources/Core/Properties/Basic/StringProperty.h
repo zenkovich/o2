@@ -6,9 +6,9 @@ using namespace o2;
 
 namespace o2
 {
-	class UIButton;
-	class UIEditBox;
-	class UIWidget;
+	class Button;
+	class EditBox;
+	class Widget;
 }
 
 namespace Editor
@@ -31,7 +31,7 @@ namespace Editor
 		IOBJECT(StringProperty);
 
 	protected:
-		UIEditBox* mEditBox = nullptr; // Edit box 
+		EditBox* mEditBox = nullptr; // Edit box 
 
 	protected:
 		// Copies data of actor from other to this

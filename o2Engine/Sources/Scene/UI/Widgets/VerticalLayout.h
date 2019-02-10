@@ -7,10 +7,10 @@ namespace o2
 	// ----------------------
 	// Vertical layout widget
 	// ----------------------
-	class UIVerticalLayout: public UIWidget
+	class VerticalLayout: public Widget
 	{
 	public:
-		PROPERTIES(UIVerticalLayout);
+		PROPERTIES(VerticalLayout);
 		PROPERTY(BaseCorner, baseCorner, SetBaseCorner, GetBaseCorner); // Base corder property
 
 		PROPERTY(float, spacing, SetSpacing, GetSpacing); // Space between widgets property
@@ -27,16 +27,16 @@ namespace o2
 		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 
 		// Default constructor
-		UIVerticalLayout();
+		VerticalLayout();
 
 		// Copy-constructor
-		UIVerticalLayout(const UIVerticalLayout& other);
+		VerticalLayout(const VerticalLayout& other);
 
 		// Destructor
-		~UIVerticalLayout();
+		~VerticalLayout();
 
 		// Copy operator
-		UIVerticalLayout& operator=(const UIVerticalLayout& other);
+		VerticalLayout& operator=(const VerticalLayout& other);
 
 		// Sets base corner
 		void SetBaseCorner(BaseCorner baseCorner);
@@ -101,7 +101,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UIVerticalLayout);
+		SERIALIZABLE(VerticalLayout);
 
 	protected:
 		BaseCorner mBaseCorner = BaseCorner::Top;  // Base corner of widgets arranging @SERIALIZABLE
@@ -125,10 +125,10 @@ namespace o2
 		float GetHeightWeightWithChildren() const override;
 
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child) override;
+		void OnChildAdded(Widget* child) override;
 
 		// It is called when child widget was removed
-		void OnChildRemoved(UIWidget* child) override;
+		void OnChildRemoved(Widget* child) override;
 
 		// Invokes required function for childs arranging
 		virtual void RearrangeChilds();
@@ -149,19 +149,19 @@ namespace o2
 		Vector<float> CalculateExpandedHeights();
 
 		// Aligns widget by height with base corner
-		void AlignWidgetByWidth(UIWidget* child, float heightAnchor);
+		void AlignWidgetByWidth(Widget* child, float heightAnchor);
 
 		// Updates layout's weight and minimal size
 		virtual void UpdateLayoutParametres();
 	};
 }
 
-CLASS_BASES_META(o2::UIVerticalLayout)
+CLASS_BASES_META(o2::VerticalLayout)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIVerticalLayout)
+CLASS_FIELDS_META(o2::VerticalLayout)
 {
 	PUBLIC_FIELD(baseCorner);
 	PUBLIC_FIELD(spacing);
@@ -181,7 +181,7 @@ CLASS_FIELDS_META(o2::UIVerticalLayout)
 	PROTECTED_FIELD(mFitByChildren).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UIVerticalLayout)
+CLASS_METHODS_META(o2::VerticalLayout)
 {
 
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
@@ -209,15 +209,15 @@ CLASS_METHODS_META(o2::UIVerticalLayout)
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(float, GetHeightWeightWithChildren);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(void, ArrangeFromTopToBottom);
 	PROTECTED_FUNCTION(void, ArrangeFromBottomToTop);
 	PROTECTED_FUNCTION(void, ArrangeFromCenter);
 	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
 	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedHeights);
-	PROTECTED_FUNCTION(void, AlignWidgetByWidth, UIWidget*, float);
+	PROTECTED_FUNCTION(void, AlignWidgetByWidth, Widget*, float);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
 }
 END_META;

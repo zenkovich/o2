@@ -10,60 +10,60 @@
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 
-	class UIWidgetLayer;
-	typedef Vector<UIWidgetLayer*>  LayersVec;
+	class WidgetLayer;
+	typedef Vector<WidgetLayer*>  LayersVec;
 
 #if IS_EDITOR
-	typedef SceneEditableObject UIWidgetLayerBase;
+	typedef SceneEditableObject WidgetLayerBase;
 #else
-	typedef ISerializable UIWidgetLayerBase;
+	typedef ISerializable WidgetLayerBase;
 #endif
 
 	// ---------------------
 	// Widget drawable layer
 	// ---------------------
-	class UIWidgetLayer: public UIWidgetLayerBase
+	class WidgetLayer: public WidgetLayerBase
 	{
 	public:
-		typedef Vector<UIWidgetLayer*> ChildrenVec;
+		typedef Vector<WidgetLayer*> ChildrenVec;
 
 	public:
-		PROPERTIES(UIWidgetLayer);
+		PROPERTIES(WidgetLayer);
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                       // Enable property
 		PROPERTY(float, depth, SetDepth, GetDepth);                           // Drawing depth (higher depths will draw later)
 		PROPERTY(float, transparency, SetTransparency, GetTransparency);      // Drawable transparency property
 		PROPERTY(IRectDrawable*, drawable, SetDrawable, GetDrawable);        // Drawable property @EXPANDED_BY_DEFAULT
 
-		ACCESSOR(UIWidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
+		ACCESSOR(WidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
 #if IS_EDITOR
 		PROPERTY(bool, locked, SetLocked, IsLocked);                          // Is locked property
 #endif 
 
 	public:
-		UIWidgetLayerLayout layout; // Drawable layout @SERIALIZABLE
+		WidgetLayerLayout layout; // Drawable layout @SERIALIZABLE
 
 		String name;                // Name of layer @SERIALIZABLE
 		Layout interactableLayout;  // Interactable area layout @SERIALIZABLE
 
 	public:
 		// Default constructor
-		UIWidgetLayer();
+		WidgetLayer();
 
 		// Copy-constructor
-		UIWidgetLayer(const UIWidgetLayer& other);
+		WidgetLayer(const WidgetLayer& other);
 
 		// Destructor
-		~UIWidgetLayer();
+		~WidgetLayer();
 
 		// Copy-operator
-		UIWidgetLayer& operator=(const UIWidgetLayer& other);
+		WidgetLayer& operator=(const WidgetLayer& other);
 
 
 		// Returns pointer to owner widget
-		UIWidget* GetOwnerWidget() const;
+		Widget* GetOwnerWidget() const;
 
 		// Sets layer drawable
 		void SetDrawable(IRectDrawable* drawable);
@@ -91,17 +91,17 @@ namespace o2
 
 
 		// Sets parent layer
-		void SetParent(UIWidgetLayer* parent);
+		void SetParent(WidgetLayer* parent);
 
 		// Returns parent layer
-		UIWidgetLayer* GetParent() const;
+		WidgetLayer* GetParent() const;
 
 
 		// Adds new child layer and returns him
-		UIWidgetLayer* AddChild(UIWidgetLayer* node);
+		WidgetLayer* AddChild(WidgetLayer* node);
 
 		// Remove child layer and releases him if needs
-		bool RemoveChild(UIWidgetLayer* node, bool release = true);
+		bool RemoveChild(WidgetLayer* node, bool release = true);
 
 		// Removes and releases all children nodes
 		void RemoveAllChilds();
@@ -113,14 +113,14 @@ namespace o2
 		const ChildrenVec& GetChilds() const;
 
 		// Adds child layer
-		UIWidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
+		WidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
 									 float depth = 0.0f);
 
 		// Returns child layer by path
-		UIWidgetLayer* GetChild(const String& path);
+		WidgetLayer* GetChild(const String& path);
 
 		// Returns child layer by name
-		UIWidgetLayer* FindChild(const String& name);
+		WidgetLayer* FindChild(const String& name);
 
 		// Returns child layer with type
 		template<typename _type>
@@ -154,7 +154,7 @@ namespace o2
 		const RectF& GetRect() const;
 
 
-		SERIALIZABLE(UIWidgetLayer);
+		SERIALIZABLE(WidgetLayer);
 
 #if IS_EDITOR
 		// Returns true when object is on scene
@@ -261,9 +261,9 @@ namespace o2
 		RectF          mAbsolutePosition;       // Result absolute drawable position
 		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
 
-		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
+		Widget*      mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 
-		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
+		WidgetLayer* mParent = nullptr;       // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
 		ChildrenVec    mChildren;               // Children layers @SERIALIZABLE
 
 		bool           mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
@@ -278,10 +278,10 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		// Sets owner widget for this and children
-		void SetOwnerWidget(UIWidget* owner);
+		void SetOwnerWidget(Widget* owner);
 
 		// It is called when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
-		void OnChildAdded(UIWidgetLayer* child);
+		void OnChildAdded(WidgetLayer* child);
 
 		// It is called when layout was changed, calls onwer widget layout updating
 		void OnLayoutChanged();
@@ -299,14 +299,14 @@ namespace o2
 		void OnExcludeFromScene();
 
 		// Returns dictionary with all child layers
-		Dictionary<String, UIWidgetLayer*> GetAllChildLayers();
+		Dictionary<String, WidgetLayer*> GetAllChildLayers();
 
-		friend class UIWidget;
-		friend class UIWidgetLayerLayout;
+		friend class Widget;
+		friend class WidgetLayerLayout;
 	};
 
 	template<typename _type>
-	_type* UIWidgetLayer::FindChild() const
+	_type* WidgetLayer::FindChild() const
 	{
 		for (auto child : mChildren)
 			if (child->mDrawable && child->mDrawable->GetType() == TypeOf(_type))
@@ -323,12 +323,12 @@ namespace o2
 	}
 }
 
-CLASS_BASES_META(o2::UIWidgetLayer)
+CLASS_BASES_META(o2::WidgetLayer)
 {
 	BASE_CLASS(o2::SceneEditableObject);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidgetLayer)
+CLASS_FIELDS_META(o2::WidgetLayer)
 {
 	PUBLIC_FIELD(enabled);
 	PUBLIC_FIELD(depth);
@@ -354,12 +354,12 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PROTECTED_FIELD(mUID);
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidgetLayer)
+CLASS_METHODS_META(o2::WidgetLayer)
 {
 
-	typedef Dictionary<String, UIWidgetLayer*> _tmp1;
+	typedef Dictionary<String, WidgetLayer*> _tmp1;
 
-	PUBLIC_FUNCTION(UIWidget*, GetOwnerWidget);
+	PUBLIC_FUNCTION(Widget*, GetOwnerWidget);
 	PUBLIC_FUNCTION(void, SetDrawable, IRectDrawable*);
 	PUBLIC_FUNCTION(IRectDrawable*, GetDrawable);
 	PUBLIC_FUNCTION(void, Draw);
@@ -367,16 +367,16 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetParent, UIWidgetLayer*);
-	PUBLIC_FUNCTION(UIWidgetLayer*, GetParent);
-	PUBLIC_FUNCTION(UIWidgetLayer*, AddChild, UIWidgetLayer*);
-	PUBLIC_FUNCTION(bool, RemoveChild, UIWidgetLayer*, bool);
+	PUBLIC_FUNCTION(void, SetParent, WidgetLayer*);
+	PUBLIC_FUNCTION(WidgetLayer*, GetParent);
+	PUBLIC_FUNCTION(WidgetLayer*, AddChild, WidgetLayer*);
+	PUBLIC_FUNCTION(bool, RemoveChild, WidgetLayer*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChilds);
 	PUBLIC_FUNCTION(ChildrenVec&, GetChilds);
 	PUBLIC_FUNCTION(const ChildrenVec&, GetChilds);
-	PUBLIC_FUNCTION(UIWidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
-	PUBLIC_FUNCTION(UIWidgetLayer*, GetChild, const String&);
-	PUBLIC_FUNCTION(UIWidgetLayer*, FindChild, const String&);
+	PUBLIC_FUNCTION(WidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
+	PUBLIC_FUNCTION(WidgetLayer*, GetChild, const String&);
+	PUBLIC_FUNCTION(WidgetLayer*, FindChild, const String&);
 	PUBLIC_FUNCTION(LayersVec, GetAllChilds);
 	PUBLIC_FUNCTION(void, SetDepth, float);
 	PUBLIC_FUNCTION(float, GetDepth);
@@ -413,8 +413,8 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PUBLIC_FUNCTION(void, SetLayout, const Layout&);
 	PUBLIC_FUNCTION(void, OnChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, SetOwnerWidget, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, SetOwnerWidget, Widget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnLayoutChanged);
 	PROTECTED_FUNCTION(void, UpdateLayout);
 	PROTECTED_FUNCTION(void, UpdateResTransparency);

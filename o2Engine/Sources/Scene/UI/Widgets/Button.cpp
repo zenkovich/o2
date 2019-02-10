@@ -9,12 +9,12 @@
 
 namespace o2
 {
-	UIButton::UIButton():
-		UIWidget(), CursorAreaEventsListener()
+	Button::Button():
+		Widget(), CursorAreaEventsListener()
 	{}
 
-	UIButton::UIButton(const UIButton& other) :
-		UIWidget(other), caption(this), icon(this)
+	Button::Button(const Button& other) :
+		Widget(other), caption(this), icon(this)
 	{
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
@@ -22,25 +22,25 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	UIButton& UIButton::operator=(const UIButton& other)
+	Button& Button::operator=(const Button& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIButton::Draw()
+	void Button::Draw()
 	{
-		UIWidget::Draw();
+		Widget::Draw();
 		CursorAreaEventsListener::OnDrawn();
 	}
 
-	void UIButton::SetCaption(const WString& text)
+	void Button::SetCaption(const WString& text)
 	{
 		if (mCaptionText)
 			mCaptionText->SetText(text);
 	}
 
-	WString UIButton::GetCaption() const
+	WString Button::GetCaption() const
 	{
 		if (mCaptionText)
 			return mCaptionText->GetText();
@@ -48,13 +48,13 @@ namespace o2
 		return WString();
 	}
 
-	void UIButton::SetIcon(Sprite* sprite)
+	void Button::SetIcon(Sprite* sprite)
 	{
 		if (mIconSprite)
 			mIconSprite = sprite;
 	}
 
-	Sprite* UIButton::GetIcon() const
+	Sprite* Button::GetIcon() const
 	{
 		if (mIconSprite)
 			return mIconSprite;
@@ -62,31 +62,31 @@ namespace o2
 		return nullptr;
 	}
 
-	bool UIButton::IsFocusable() const
+	bool Button::IsFocusable() const
 	{
 		return true;
 	}
 
-	bool UIButton::IsUnderPoint(const Vec2F& point)
+	bool Button::IsUnderPoint(const Vec2F& point)
 	{
 		if (isPointInside.IsEmpty())
-			return UIWidget::IsUnderPoint(point);
+			return Widget::IsUnderPoint(point);
 		
 		return mDrawingScissorRect.IsInside(point) && isPointInside(point);
 	}
 
-	void UIButton::CopyData(const Actor& otherActor)
+	void Button::CopyData(const Actor& otherActor)
 	{
-		const UIButton& other = dynamic_cast<const UIButton&>(otherActor);
+		const Button& other = dynamic_cast<const Button&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 		RetargetStatesAnimations();
 	}
 
-	void UIButton::OnCursorPressed(const Input::Cursor& cursor)
+	void Button::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -95,7 +95,7 @@ namespace o2
 		o2UI.FocusWidget(this);
 	}
 
-	void UIButton::OnCursorReleased(const Input::Cursor& cursor)
+	void Button::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -105,28 +105,28 @@ namespace o2
 			onClick();
 	}
 
-	void UIButton::OnCursorPressBreak(const Input::Cursor& cursor)
+	void Button::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UIButton::OnCursorEnter(const Input::Cursor& cursor)
+	void Button::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void UIButton::OnCursorExit(const Input::Cursor& cursor)
+	void Button::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	void UIButton::OnKeyPressed(const Input::Key& key)
+	void Button::OnKeyPressed(const Input::Key& key)
 	{
 		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
@@ -139,7 +139,7 @@ namespace o2
 			onClick();
 	}
 
-	void UIButton::OnKeyReleased(const Input::Key& key)
+	void Button::OnKeyReleased(const Input::Key& key)
 	{
 		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
@@ -151,7 +151,7 @@ namespace o2
 		}
 	}
 
-	void UIButton::OnLayerAdded(UIWidgetLayer* layer)
+	void Button::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
 			mCaptionText = (Text*)layer->GetDrawable();
@@ -160,10 +160,10 @@ namespace o2
 			mIconSprite = (Sprite*)layer->GetDrawable();
 	}
 
-	void UIButton::OnResEnableInHierarchyChanged()
+	void Button::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 }
 
-DECLARE_CLASS(o2::UIButton);
+DECLARE_CLASS(o2::Button);

@@ -30,8 +30,8 @@ namespace Editor
 {
 	MenuPanel::MenuPanel()
 	{
-		mMenuPanel = o2UI.CreateWidget<UIMenuPanel>();
-		*mMenuPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		mMenuPanel = o2UI.CreateWidget<o2::MenuPanel>();
+		*mMenuPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		EditorUIRoot.AddWidget(mMenuPanel);
 
 		// FILE
@@ -105,39 +105,39 @@ namespace Editor
 	MenuPanel::~MenuPanel()
 	{}
 
-	UIWidget* MenuPanel::AddItem(const UIMenuPanel::Item& item)
+	Widget* MenuPanel::AddItem(const o2::MenuPanel::Item& item)
 	{
 		return mMenuPanel->AddItem(item);
 	}
 
-	UIWidget* MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
+	Widget* MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
 								 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 								 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		return mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
 	}
 
-	UIWidget* MenuPanel::InsertItem(const UIMenuPanel::Item& item, int position)
+	Widget* MenuPanel::InsertItem(const o2::MenuPanel::Item& item, int position)
 	{
 		return mMenuPanel->InsertItem(item, position);
 	}
 
-	void MenuPanel::AddItems(Vector<UIMenuPanel::Item> items)
+	void MenuPanel::AddItems(Vector<o2::MenuPanel::Item> items)
 	{
 		mMenuPanel->AddItems(items);
 	}
 
-	void MenuPanel::InsertItems(Vector<UIMenuPanel::Item> items, int position)
+	void MenuPanel::InsertItems(Vector<o2::MenuPanel::Item> items, int position)
 	{
 		mMenuPanel->InsertItems(items, position);
 	}
 
-	UIMenuPanel::Item MenuPanel::GetItem(int position)
+	o2::MenuPanel::Item MenuPanel::GetItem(int position)
 	{
 		return mMenuPanel->GetItem(position);
 	}
 
-	Vector<UIMenuPanel::Item> MenuPanel::GetItems() const
+	Vector<o2::MenuPanel::Item> MenuPanel::GetItems() const
 	{
 		return mMenuPanel->GetItems();
 	}
@@ -165,21 +165,21 @@ namespace Editor
 		if (o2EditorApplication.IsSceneChanged())
 		{
 			auto wnd = EditorUIRoot.AddWidget(o2UI.CreateWindow("Save scene?"));
-			*wnd->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(300, 200));
+			*wnd->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(300, 200));
 
 			auto verLayout = o2UI.CreateVerLayout();
 			wnd->AddChild(verLayout);
-			*verLayout->layout = UIWidgetLayout::BothStretch();
+			*verLayout->layout = WidgetLayout::BothStretch();
 			verLayout->baseCorner = BaseCorner::Top;
 
 			auto text = o2UI.CreateLabel("Current scene was modified and not saved. Do you want to save it?");
-			text->horOverflow = UILabel::HorOverflow::Wrap;
+			text->horOverflow = Label::HorOverflow::Wrap;
 			verLayout->AddChild(text);
 
 			auto horLayout = o2UI.CreateHorLayout();
 			verLayout->AddChild(horLayout);
 
-			*horLayout->layout = UIWidgetLayout::BothStretch();
+			*horLayout->layout = WidgetLayout::BothStretch();
 			horLayout->border = BorderF(20, 20, 20, 20);
 			horLayout->spacing = 20;
 			horLayout->AddChild(o2UI.CreateButton("Save"));

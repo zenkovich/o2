@@ -99,7 +99,7 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::UIWidget">
+  <Type Name="o2::Widget">
     <DisplayString>name={ mName } rect=({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
@@ -188,7 +188,7 @@
     </Expand>
   </Type>
   
-  <Type Name="o2::UIWidgetLayer">
+  <Type Name="o2::WidgetLayer">
     <DisplayString>name={ name } rect=({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">name</Item>
@@ -292,7 +292,7 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::UIWidgetLayout">
+  <Type Name="o2::WidgetLayout">
     <DisplayString>({ (int)mData->worldRectangle.left }, { (int)mData->worldRectangle.bottom }, { (int)mData->worldRectangle.right }, { (int)mData->worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>

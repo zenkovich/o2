@@ -8,11 +8,11 @@
 
 namespace o2
 {
-	UILabel::UILabel()
+	Label::Label()
 	{}
 
-	UILabel::UILabel(const UILabel& other):
-		UIWidget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
+	Label::Label(const Label& other):
+		Widget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
 		mExpandBorder(other.mExpandBorder), text(this), font(this), height(this), verAlign(this), horAlign(this),
 		horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
 		color(this)
@@ -23,13 +23,13 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UILabel& UILabel::operator=(const UILabel& other)
+	Label& Label::operator=(const Label& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UILabel::Draw()
+	void Label::Draw()
 	{
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -74,7 +74,7 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UILabel::SetFont(FontRef font)
+	void Label::SetFont(FontRef font)
 	{
 		if (mTextLayer)
 			mTextLayer->SetFont(font);
@@ -82,7 +82,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	FontRef UILabel::GetFont() const
+	FontRef Label::GetFont() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetFont();
@@ -90,7 +90,7 @@ namespace o2
 		return FontRef();
 	}
 
-	void UILabel::SetText(const WString& text)
+	void Label::SetText(const WString& text)
 	{
 		if (mTextLayer)
 			mTextLayer->SetText(text);
@@ -99,7 +99,7 @@ namespace o2
 			SetLayoutDirty();
 	}
 
-	WString UILabel::GetText() const
+	WString Label::GetText() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetText();
@@ -107,13 +107,13 @@ namespace o2
 		return WString();
 	}
 
-	void UILabel::SetColor(const Color4& color)
+	void Label::SetColor(const Color4& color)
 	{
 		if (mTextLayer)
 			mTextLayer->SetColor(color);
 	}
 
-	Color4 UILabel::GetColor() const
+	Color4 Label::GetColor() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetColor();
@@ -121,7 +121,7 @@ namespace o2
 		return Color4();
 	}
 
-	void UILabel::SetHorAlign(HorAlign align)
+	void Label::SetHorAlign(HorAlign align)
 	{
 		if (mTextLayer)
 			mTextLayer->SetHorAlign(align);
@@ -129,7 +129,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	HorAlign UILabel::GetHorAlign() const
+	HorAlign Label::GetHorAlign() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetHorAlign();
@@ -137,7 +137,7 @@ namespace o2
 		return HorAlign::Left;
 	}
 
-	void UILabel::SetVerAlign(VerAlign align)
+	void Label::SetVerAlign(VerAlign align)
 	{
 		if (mTextLayer)
 			mTextLayer->SetVerAlign(align);
@@ -145,7 +145,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	VerAlign UILabel::GetVerAlign() const
+	VerAlign Label::GetVerAlign() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetVerAlign();
@@ -153,7 +153,7 @@ namespace o2
 		return VerAlign::Top;
 	}
 
-	void UILabel::SetHorOverflow(HorOverflow overflow)
+	void Label::SetHorOverflow(HorOverflow overflow)
 	{
 		mHorOverflow = overflow;
 
@@ -166,23 +166,23 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UILabel::HorOverflow UILabel::GetHorOverflow()
+	Label::HorOverflow Label::GetHorOverflow()
 	{
 		return mHorOverflow;
 	}
 
-	void UILabel::SetVerOverflow(VerOverflow overflow)
+	void Label::SetVerOverflow(VerOverflow overflow)
 	{
 		mVerOverflow = overflow;
 		SetLayoutDirty();
 	}
 
-	UILabel::VerOverflow UILabel::GetVerOverflow()
+	Label::VerOverflow Label::GetVerOverflow()
 	{
 		return mVerOverflow;
 	}
 
-	void UILabel::SetSymbolsDistanceCoef(float coef /*= 1*/)
+	void Label::SetSymbolsDistanceCoef(float coef /*= 1*/)
 	{
 		if (mTextLayer)
 			mTextLayer->SetSymbolsDistanceCoef(coef);
@@ -190,7 +190,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	float UILabel::GetSymbolsDistanceCoef() const
+	float Label::GetSymbolsDistanceCoef() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetSymbolsDistanceCoef();
@@ -198,7 +198,7 @@ namespace o2
 		return 1.0f;
 	}
 
-	void UILabel::SetLinesDistanceCoef(float coef /*= 1*/)
+	void Label::SetLinesDistanceCoef(float coef /*= 1*/)
 	{
 		if (mTextLayer)
 			mTextLayer->SetLinesDistanceCoef(coef);
@@ -206,7 +206,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	float UILabel::GetLinesDistanceCoef() const
+	float Label::GetLinesDistanceCoef() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetLinesDistanceCoef();
@@ -214,24 +214,24 @@ namespace o2
 		return 1.0f;
 	}
 
-	void UILabel::SetExpandBorder(const Vec2F& border)
+	void Label::SetExpandBorder(const Vec2F& border)
 	{
 		mExpandBorder = border;
 		SetLayoutDirty();
 	}
 
-	Vec2F UILabel::GetExpandBorder() const
+	Vec2F Label::GetExpandBorder() const
 	{
 		return mExpandBorder;
 	}
 
-	void UILabel::SetHeight(int height)
+	void Label::SetHeight(int height)
 	{
 		if (mTextLayer)
 			mTextLayer->SetHeight(height);
 	}
 
-	int UILabel::GetHeight() const
+	int Label::GetHeight() const
 	{
 		if (mTextLayer)
 			return mTextLayer->GetHeight();
@@ -239,7 +239,7 @@ namespace o2
 		return 0;
 	}
 
-	void UILabel::UpdateSelfTransform()
+	void Label::UpdateSelfTransform()
 {
 		if (mTextLayer)
 		{
@@ -300,11 +300,11 @@ namespace o2
 		layout->Update();
 	}
 
-	void UILabel::CopyData(const Actor& otherActor)
+	void Label::CopyData(const Actor& otherActor)
 	{
-		const UILabel& other = dynamic_cast<const UILabel&>(otherActor);
+		const Label& other = dynamic_cast<const Label&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mTextLayer    = GetLayerDrawable<Text>("text");
 		mHorOverflow  = other.mHorOverflow;
@@ -315,16 +315,16 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UILabel::OnLayerAdded(UIWidgetLayer* layer)
+	void Label::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
 			mTextLayer = (Text*)layer->GetDrawable();
 	}
 }
 
-DECLARE_CLASS(o2::UILabel);
+DECLARE_CLASS(o2::Label);
 
-ENUM_META_(o2::UILabel::HorOverflow, HorOverflow)
+ENUM_META_(o2::Label::HorOverflow, HorOverflow)
 {
 	ENUM_ENTRY(Cut);
 	ENUM_ENTRY(Dots);
@@ -334,7 +334,7 @@ ENUM_META_(o2::UILabel::HorOverflow, HorOverflow)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::UILabel::VerOverflow, VerOverflow)
+ENUM_META_(o2::Label::VerOverflow, VerOverflow)
 {
 	ENUM_ENTRY(Cut);
 	ENUM_ENTRY(Expand);

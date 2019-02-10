@@ -21,7 +21,7 @@ namespace Editor
 		~DefaultWidgetLayerLayoutViewer();
 
 		// Sets target actors
-		void SetTargetLayers(const Vector<UIWidgetLayer*>& layers) override;
+		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
 		// Updates properties values
 		void Refresh();
@@ -29,8 +29,10 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerLayoutViewer);
 
 	protected:
-		Vector<UIWidgetLayer*> mLayers;
+		Vector<WidgetLayer*> mLayers;
 
+		Vec2FProperty* mPositionProperty = nullptr;
+		Vec2FProperty* mSizeProperty = nullptr;
 		Vec2FProperty* mAnchorRightTopProperty = nullptr;
 		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
 		Vec2FProperty* mOffsetRightTopProperty = nullptr;
@@ -53,6 +55,8 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
 	PROTECTED_FIELD(mLayers);
+	PROTECTED_FIELD(mPositionProperty);
+	PROTECTED_FIELD(mSizeProperty);
 	PROTECTED_FIELD(mAnchorRightTopProperty);
 	PROTECTED_FIELD(mAnchorLeftBottomProperty);
 	PROTECTED_FIELD(mOffsetRightTopProperty);
@@ -62,7 +66,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
+	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);

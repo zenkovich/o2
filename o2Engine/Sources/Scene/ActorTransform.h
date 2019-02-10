@@ -483,7 +483,7 @@ namespace o2
 		Vec2F GetParentPosition() const;
 
 		friend class Actor;
-		friend class UIWidgetLayout;
+		friend class WidgetLayout;
 	};
 }
 

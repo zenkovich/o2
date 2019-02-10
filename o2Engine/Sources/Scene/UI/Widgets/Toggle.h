@@ -14,7 +14,7 @@ namespace o2
 	// ------------
 	// Toggle group
 	// ------------
-	class UIToggleGroup
+	class ToggleGroup
 	{
 	public:
 		typedef Vector<UIToggle*> TogglesVec;
@@ -25,10 +25,10 @@ namespace o2
 		Function<void(bool)> onReleased; // Toggle group release event
 
 		// Contructor by type
-		UIToggleGroup(Type type);
+		ToggleGroup(Type type);
 
 		// Destructor
-		~UIToggleGroup();
+		~ToggleGroup();
 
 		// Adds toggle to group
 		void AddToggle(UIToggle* toggle);
@@ -57,13 +57,13 @@ namespace o2
 		friend class UIToggle;
 	};
 
-	class UIToggle: public UIWidget, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class UIToggle: public Widget, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		PROPERTIES(UIToggle);
 		PROPERTY(bool, value, SetValue, GetValue);                             // Current state value property
 		PROPERTY(WString, caption, SetCaption, GetCaption);                    // Caption property. Searches text layer with name "caption" or creates them if he's not exist
-		PROPERTY(UIToggleGroup*, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
+		PROPERTY(ToggleGroup*, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
 
 		ShortcutKeys             shortcut;       // Shortcut keys
 
@@ -105,10 +105,10 @@ namespace o2
 		bool GetValue() const;
 
 		// Sets toggle group
-		void SetToggleGroup(UIToggleGroup* toggleGroup);
+		void SetToggleGroup(ToggleGroup* toggleGroup);
 
 		// Returns toggle group
-		UIToggleGroup* GetToggleGroup() const;
+		ToggleGroup* GetToggleGroup() const;
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
@@ -119,8 +119,8 @@ namespace o2
 		bool           mValue = false;          // Current value @SERIALIZABLE
 		bool           mValueUnknown = false;   // Is value unknown @SERIALIZABLE
 		Text*          mCaptionText = nullptr;  // Caption layer text
-		UIWidgetLayer* mBackLayer = nullptr;    // Background layer
-		UIToggleGroup* mToggleGroup = nullptr;  // Toggle group
+		WidgetLayer* mBackLayer = nullptr;    // Background layer
+		ToggleGroup* mToggleGroup = nullptr;  // Toggle group
 
 	protected:
 		// It is called when deserialized
@@ -130,7 +130,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when layer added and updates drawing sequence
-		void OnLayerAdded(UIWidgetLayer* layer) override;
+		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// It is called when visible was changed
 		void OnResEnableInHierarchyChanged() override;
@@ -157,13 +157,13 @@ namespace o2
 		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
-		friend class UIToggleGroup;
+		friend class ToggleGroup;
 	};
 }
 
 CLASS_BASES_META(o2::UIToggle)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
@@ -194,12 +194,12 @@ CLASS_METHODS_META(o2::UIToggle)
 	PUBLIC_FUNCTION(void, SetValueUnknown);
 	PUBLIC_FUNCTION(bool, IsValueUnknown);
 	PUBLIC_FUNCTION(bool, GetValue);
-	PUBLIC_FUNCTION(void, SetToggleGroup, UIToggleGroup*);
-	PUBLIC_FUNCTION(UIToggleGroup*, GetToggleGroup);
+	PUBLIC_FUNCTION(void, SetToggleGroup, ToggleGroup*);
+	PUBLIC_FUNCTION(ToggleGroup*, GetToggleGroup);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

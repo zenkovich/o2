@@ -19,7 +19,7 @@ namespace Editor
 		return nullptr;
 	}
 
-	UIWidget* IObjectPropertiesViewer::GetViewWidget() const
+	Widget* IObjectPropertiesViewer::GetViewWidget() const
 	{
 		return mViewWidget;
 	}

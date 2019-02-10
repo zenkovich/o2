@@ -8,9 +8,9 @@ namespace o2
 	class SceneEditableObject;
 	class UIButtonGroup;
 	class UIContextMenu;
-	class UIEditBox;
+	class EditBox;
 	class UIToggle;
-	class UIToggleGroup;
+	class ToggleGroup;
 }
 
 using namespace o2;
@@ -20,7 +20,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class UISceneTree;
+	class SceneTree;
 
 	// ------------------
 	// Actors tree window
@@ -31,7 +31,7 @@ namespace Editor
 
 	public:
 		// Returns actors tree widget
-		UISceneTree* GetSceneTree() const;
+		SceneTree* GetSceneTree() const;
 
 		// Expands all actor's parents nodes in tree and hightlights actor
 		void HightlightObjectTreeNode(SceneEditableObject* targetObject);
@@ -50,8 +50,8 @@ namespace Editor
 
 	protected:
 		UIToggle*      mListTreeToggle;		// TOggle between list and tree views
-		UIEditBox*     mSearchEditBox;		// Search actors edit box
-		UISceneTree*   mSceneTree;			// Main actors tree
+		EditBox*     mSearchEditBox;		// Search actors edit box
+		SceneTree*   mSceneTree;			// Main actors tree
 		UIContextMenu* mTreeContextMenu;	// Context menu
 
 		Vector<SceneEditableObject*> mSearchObjects;    // Array of searched objects
@@ -196,7 +196,7 @@ END_META;
 CLASS_METHODS_META(Editor::TreeWindow)
 {
 
-	PUBLIC_FUNCTION(UISceneTree*, GetSceneTree);
+	PUBLIC_FUNCTION(SceneTree*, GetSceneTree);
 	PUBLIC_FUNCTION(void, HightlightObjectTreeNode, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, SetWidgetsLayersVisible, bool);
 	PUBLIC_FUNCTION(bool, IsWidgetsLayersVisible);

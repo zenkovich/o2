@@ -3,7 +3,7 @@
 
 #include "Application/Application.h"
 #include "Core/UIRoot.h"
-#include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Core/WindowsSystem/DockableWindow.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
 
@@ -11,13 +11,13 @@ namespace Editor
 {
 	IEditorWindow::IEditorWindow()
 	{
-		mWindow = o2UI.CreateWidget<UIDockableWindow>();
+		mWindow = o2UI.CreateWidget<DockableWindow>();
 		mWindow->layout->size = Vec2F(200, 200);
 		EditorUIRoot.AddWidget(mWindow);
 	}
 
 	IEditorWindow::IEditorWindow(const IEditorWindow& other):
-		mWindow(other.mWindow->CloneAs<UIDockableWindow>())
+		mWindow(other.mWindow->CloneAs<DockableWindow>())
 	{
 		if (mWindow)
 			EditorUIRoot.AddWidget(mWindow);

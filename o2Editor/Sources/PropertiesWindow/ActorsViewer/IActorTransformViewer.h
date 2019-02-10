@@ -11,12 +11,12 @@ namespace o2
 {
 	class Actor;
 	class Component;
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
 {
-	class UISpoilerWithHead;
+	class SpoilerWithHead;
 
 	// ---------------------------------------
 	// Editor actor transform viewer interface
@@ -34,7 +34,7 @@ namespace Editor
 		virtual void SetTargetActors(const Vector<Actor*>& actors) {}
 
 		// Returns data widget
-		virtual UIWidget* GetWidget() const;
+		virtual Widget* GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -48,7 +48,7 @@ namespace Editor
 		IOBJECT(IActorTransformViewer);
 
 	protected:
-		UISpoilerWithHead* mSpoiler = nullptr;
+		SpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 
@@ -66,7 +66,7 @@ CLASS_METHODS_META(Editor::IActorTransformViewer)
 {
 
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);

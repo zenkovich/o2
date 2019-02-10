@@ -292,7 +292,7 @@ namespace Editor
 			if (object->IsSupportsLayout())
 			{
 				auto parent = object->GetEditableParent();
-				auto parentWidget = dynamic_cast<UIWidget*>(parent);
+				auto parentWidget = dynamic_cast<Widget*>(parent);
 
 				if (parent)
 				{
@@ -342,7 +342,7 @@ namespace Editor
 			if (mAnchorsFrameEnabled)
 			{
 				auto parent = object->GetEditableParent();
-				auto parentWidget = dynamic_cast<UIWidget*>(parent);
+				auto parentWidget = dynamic_cast<Widget*>(parent);
 
 				RectF parentWorldRect;
 
@@ -1400,7 +1400,7 @@ namespace Editor
 	{
 		auto parent = object->GetEditableParent();
 		Basis parentTransform = parent->GetTransform();
-		if (auto parentWidget = dynamic_cast<UIWidget*>(parent))
+		if (auto parentWidget = dynamic_cast<Widget*>(parent))
 			parentTransform = parentWidget->GetChildrenRect();
 
 		return parentTransform;

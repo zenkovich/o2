@@ -5,13 +5,13 @@
 
 namespace o2
 {
-	UIGridLayout::UIGridLayout(): UIWidget()
+	GridLayout::GridLayout(): Widget()
 	{
 		SetLayoutDirty();
 	}
 
-	UIGridLayout::UIGridLayout(const UIGridLayout& other):
-		UIWidget(other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
+	GridLayout::GridLayout(const GridLayout& other):
+		Widget(other), mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder),
 		mFitByChildren(other.mFitByChildren), mCellSize(other.mCellSize), mArrangeAxis(other.mArrangeAxis),
 		mArrangeAxisMaxCells(other.mArrangeAxisMaxCells), baseCorner(this), cellSize(this), arrangeAxisMaxCells(this),
 		arrangeAxis(this), spacing(this), border(this), borderLeft(this), borderRight(this),
@@ -21,115 +21,115 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIGridLayout::~UIGridLayout()
+	GridLayout::~GridLayout()
 	{}
 
-	UIGridLayout& UIGridLayout::operator=(const UIGridLayout& other)
+	GridLayout& GridLayout::operator=(const GridLayout& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIGridLayout::SetBaseCorner(BaseCorner baseCorner)
+	void GridLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
 		layout->SetDirty();
 	}
 
-	BaseCorner UIGridLayout::GetBaseCorner() const
+	BaseCorner GridLayout::GetBaseCorner() const
 	{
 		return mBaseCorner;
 	}
 
-	void UIGridLayout::SetSpacing(float spacing)
+	void GridLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
 		layout->SetDirty();
 	}
 
-	float UIGridLayout::GetSpacing() const
+	float GridLayout::GetSpacing() const
 	{
 		return mSpacing;
 	}
 
-	void UIGridLayout::SetBorder(const RectF& border)
+	void GridLayout::SetBorder(const RectF& border)
 	{
 		mBorder = border;
 		layout->SetDirty();
 	}
 
-	RectF UIGridLayout::GetBorder() const
+	RectF GridLayout::GetBorder() const
 	{
 		return mBorder;
 	}
 
-	void UIGridLayout::SetBorderLeft(float value)
+	void GridLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
 		layout->SetDirty();
 	}
 
-	float UIGridLayout::GetBorderLeft() const
+	float GridLayout::GetBorderLeft() const
 	{
 		return mBorder.left;
 	}
 
-	void UIGridLayout::SetBorderRight(float value)
+	void GridLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
 		layout->SetDirty();
 	}
 
-	float UIGridLayout::GetBorderRight() const
+	float GridLayout::GetBorderRight() const
 	{
 		return mBorder.right;
 	}
 
-	void UIGridLayout::SetBorderTop(float value)
+	void GridLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
 		layout->SetDirty();
 	}
 
-	float UIGridLayout::GetBorderTop() const
+	float GridLayout::GetBorderTop() const
 	{
 		return mBorder.top;
 	}
 
-	void UIGridLayout::SetBorderBottom(float value)
+	void GridLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
 		layout->SetDirty();
 	}
 
-	float UIGridLayout::GetBorderBottom() const
+	float GridLayout::GetBorderBottom() const
 	{
 		return mBorder.bottom;
 	}
 
-	void UIGridLayout::SetCellSize(const Vec2F& size)
+	void GridLayout::SetCellSize(const Vec2F& size)
 	{
 		mCellSize = size;
 		SetLayoutDirty();
 	}
 
-	Vec2F UIGridLayout::GetCellSize() const
+	Vec2F GridLayout::GetCellSize() const
 	{
 		return mCellSize;
 	}
 
-	void UIGridLayout::SetArrangeAxis(TwoDirection type)
+	void GridLayout::SetArrangeAxis(TwoDirection type)
 	{
 		mArrangeAxis = type;
 		SetLayoutDirty();
 	}
 
-	TwoDirection UIGridLayout::GetArrangeAxis() const
+	TwoDirection GridLayout::GetArrangeAxis() const
 	{
 		return mArrangeAxis;
 	}
 
-	void UIGridLayout::SetArrangeAxisMaxCells(int count)
+	void GridLayout::SetArrangeAxisMaxCells(int count)
 	{
 		if (mArrangeAxisMaxCells == count)
 			return;
@@ -138,35 +138,35 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	int UIGridLayout::GetArrangeAxisMaxCells() const
+	int GridLayout::GetArrangeAxisMaxCells() const
 	{
 		return mArrangeAxisMaxCells;
 	}
 
-	void UIGridLayout::SetFitByChildren(bool fit)
+	void GridLayout::SetFitByChildren(bool fit)
 	{
 		mFitByChildren = fit;
 		layout->SetDirty();
 	}
 
-	bool UIGridLayout::IsFittingByChildren() const
+	bool GridLayout::IsFittingByChildren() const
 	{
 		return mFitByChildren;
 	}
 
-	void UIGridLayout::UpdateSelfTransform()
+	void GridLayout::UpdateSelfTransform()
 {
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		UIWidget::UpdateSelfTransform();
+		Widget::UpdateSelfTransform();
 
 		RearrangeChilds();
 	}
 
-	void UIGridLayout::CopyData(const Actor& otherActor)
+	void GridLayout::CopyData(const Actor& otherActor)
 	{
-		const UIGridLayout& other = dynamic_cast<const UIGridLayout&>(otherActor);
+		const GridLayout& other = dynamic_cast<const GridLayout&>(otherActor);
 
 		mBaseCorner          = other.mBaseCorner;
 		mSpacing             = other.mSpacing;
@@ -175,23 +175,23 @@ namespace o2
 		mArrangeAxis         = other.mArrangeAxis;
 		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
 
-	void UIGridLayout::OnChildAdded(UIWidget* child)
+	void GridLayout::OnChildAdded(Widget* child)
 	{
 		child->layout->mData->drivenByParent = true;
 	}
 
-	void UIGridLayout::OnChildRemoved(UIWidget* child)
+	void GridLayout::OnChildRemoved(Widget* child)
 	{
 		child->layout->mData->drivenByParent = false;
 	}
 
-	void UIGridLayout::RearrangeChilds()
+	void GridLayout::RearrangeChilds()
 	{
 		switch (mBaseCorner)
 		{
@@ -207,7 +207,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromLeftTop()
+	void GridLayout::ArrangeFromLeftTop()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -221,7 +221,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -248,7 +248,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -269,7 +269,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromTop()
+	void GridLayout::ArrangeFromTop()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -285,7 +285,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -322,7 +322,7 @@ namespace o2
 			int colIdx = upColCells > 0 ? mArrangeAxisMaxCells - upColCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -343,7 +343,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromRightTop()
+	void GridLayout::ArrangeFromRightTop()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -357,7 +357,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -384,7 +384,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -405,7 +405,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromLeft()
+	void GridLayout::ArrangeFromLeft()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -428,7 +428,7 @@ namespace o2
 			int rowIdx = upRowCells > 0 ? mArrangeAxisMaxCells - upRowCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -460,7 +460,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -483,7 +483,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromCenter()
+	void GridLayout::ArrangeFromCenter()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -514,7 +514,7 @@ namespace o2
 
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -559,7 +559,7 @@ namespace o2
 
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -581,7 +581,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromRight()
+	void GridLayout::ArrangeFromRight()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -604,7 +604,7 @@ namespace o2
 			int rowIdx = upRowCells > 0 ? mArrangeAxisMaxCells - upRowCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -636,7 +636,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -659,7 +659,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromLeftBottom()
+	void GridLayout::ArrangeFromLeftBottom()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -676,7 +676,7 @@ namespace o2
 			int rowIdx = rem != 0 ? mArrangeAxisMaxCells - rem : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -703,7 +703,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -724,7 +724,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromBottom()
+	void GridLayout::ArrangeFromBottom()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -750,7 +750,7 @@ namespace o2
 
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -788,7 +788,7 @@ namespace o2
 			int colIdx = upColCells > 0 ? mArrangeAxisMaxCells - upColCells : 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -810,7 +810,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ArrangeFromRightBottom()
+	void GridLayout::ArrangeFromRightBottom()
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
@@ -827,7 +827,7 @@ namespace o2
 			int rowIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (rowIdx == mArrangeAxisMaxCells)
 				{
@@ -854,7 +854,7 @@ namespace o2
 			int colIdx = 0;
 			for (int i = 0; i < cellsCount; i++)
 			{
-				UIWidget* child = mChildWidgets[i];
+				Widget* child = mChildWidgets[i];
 
 				if (colIdx == mArrangeAxisMaxCells)
 				{
@@ -875,7 +875,7 @@ namespace o2
 		}
 	}
 
-	void UIGridLayout::ExpandSizeByChilds()
+	void GridLayout::ExpandSizeByChilds()
 	{
 		const static Vec2F relativePivots[] = {
 			Vec2F(0.0f, 0.5f), // Left
@@ -915,4 +915,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIGridLayout);
+DECLARE_CLASS(o2::GridLayout);

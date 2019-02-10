@@ -33,7 +33,7 @@ namespace Editor
 	{
 		mCommonValue = nullptr;
 
-		mDropDown = FindChildByType<UIDropDown>();
+		mDropDown = FindChildByType<DropDown>();
 		if (mDropDown)
 		{
 			mDropDown->onSelectedText = THIS_FUNC(SelectLayer);

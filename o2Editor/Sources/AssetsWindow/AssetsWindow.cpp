@@ -11,7 +11,7 @@
 #include "Assets/ImageAsset.h"
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "AssetsWindow/FoldersTree.h"
-#include "AssetsWindow/UIAssetIcon.h"
+#include "AssetsWindow/AssetIcon.h"
 #include "Core/EditorConfig.h"
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/EditBox.h"
@@ -114,8 +114,8 @@ namespace Editor
 
 	void AssetsWindow::InitializeFoldersTree()
 	{
-		mFoldersTree = mnew UIAssetsFoldersTree();
-		*mFoldersTree->layout = UIWidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+		mFoldersTree = mnew AssetsFoldersTree();
+		*mFoldersTree->layout = WidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
 
 		auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI_Ver_separator.png"),
 													 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
@@ -123,8 +123,8 @@ namespace Editor
 		mWindow->AddChild(mFoldersTree);
 
 		// assets scroll & grid
-		mAssetsGridScroll = o2UI.CreateWidget<UIAssetsIconsScrollArea>();
-		*mAssetsGridScroll->layout = UIWidgetLayout(0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+		mAssetsGridScroll = o2UI.CreateWidget<AssetsIconsScrollArea>();
+		*mAssetsGridScroll->layout = WidgetLayout(0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
 		mWindow->AddChild(mAssetsGridScroll);
 
 		mAssetsGridScroll->onAssetsSelected = [&](const Vector<String>& assetsPaths) {
@@ -137,20 +137,20 @@ namespace Editor
 
 	void AssetsWindow::InitializeDownPanel()
 	{
-		UIWidget* downPanel = mnew UIWidget();
+		Widget* downPanel = mnew Widget();
 		downPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
-		*downPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
+		*downPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
 
-		auto showTreeBtn = o2UI.CreateWidget<UIButton>("menu tree");
-		*showTreeBtn->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
+		auto showTreeBtn = o2UI.CreateWidget<Button>("menu tree");
+		*showTreeBtn->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0));
 		showTreeBtn->onClick += THIS_FUNC(OnShowTreePressed);
 		downPanel->AddChild(showTreeBtn);
 
-		mSelectedAssetPathLabel = o2UI.CreateWidget<UILabel>();
-		*mSelectedAssetPathLabel->layout = UIWidgetLayout::BothStretch(20, 0, 0, 0);
+		mSelectedAssetPathLabel = o2UI.CreateWidget<Label>();
+		*mSelectedAssetPathLabel->layout = WidgetLayout::BothStretch(20, 0, 0, 0);
 		mSelectedAssetPathLabel->text = "Assets/Folder/Image.png";
-		mSelectedAssetPathLabel->horOverflow = UILabel::HorOverflow::Dots;
+		mSelectedAssetPathLabel->horOverflow = Label::HorOverflow::Dots;
 		mSelectedAssetPathLabel->horAlign = HorAlign::Left;
 		downPanel->AddChild(mSelectedAssetPathLabel);
 
@@ -159,22 +159,22 @@ namespace Editor
 
 	void AssetsWindow::InitializeUpPanel()
 	{
-		UIWidget* upPanel = mnew UIWidget();
+		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
-		*upPanel->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
-		UIButton* searchButton = o2UI.CreateWidget<UIButton>("search");
-		*searchButton->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
+		Button* searchButton = o2UI.CreateWidget<Button>("search");
+		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		upPanel->AddChild(searchButton);
 
-		mFilterButton = o2UI.CreateWidget<UIButton>("menu filter");
-		*mFilterButton->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		mFilterButton = o2UI.CreateWidget<Button>("menu filter");
+		*mFilterButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
 		mFilterButton->onClick += THIS_FUNC(OnMenuFilterPressed);
 		upPanel->AddChild(mFilterButton);
 
-		mSearchEditBox = o2UI.CreateWidget<UIEditBox>("backless");
-		*mSearchEditBox->layout = UIWidgetLayout::BothStretch(19, 2, 21, -2);
+		mSearchEditBox = o2UI.CreateWidget<EditBox>("backless");
+		*mSearchEditBox->layout = WidgetLayout::BothStretch(19, 2, 21, -2);
 		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mSearchEditBox);
 

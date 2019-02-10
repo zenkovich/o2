@@ -7,7 +7,7 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
-	class UIVerticalLayout;
+	class VerticalLayout;
 }
 
 namespace Editor
@@ -69,7 +69,7 @@ namespace Editor
 		Vector<IActorComponentViewer*>  mAvailableComponentsViewers;       // Available components' viewers										 							      
 		TypeCompViewersDict             mComponentViewersPool;             // Components viewers pool
 									    
-		UIVerticalLayout*               mViewersLayout = nullptr;          // Viewers layout
+		VerticalLayout*               mViewersLayout = nullptr;          // Viewers layout
 
 	protected:
 		// It is called when some actors on scene were changed
@@ -79,10 +79,10 @@ namespace Editor
 		void SetTargets(const Vector<IObject*> targets);
 
 		// Sets target actor properties
-		void SetTargetsActorProperties(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets);
+		void SetTargetsActorProperties(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
 
 		// Sets target components: gets common components and initializes them
-		void SetTargetsComponents(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets);
+		void SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
 
 		// Enable viewer event function
 		void OnEnabled();
@@ -131,8 +131,8 @@ CLASS_METHODS_META(Editor::ActorViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
 	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<UIWidget*>&);
-	PROTECTED_FUNCTION(void, SetTargetsComponents, const Vector<IObject*>, Vector<UIWidget*>&);
+	PROTECTED_FUNCTION(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<Widget*>&);
+	PROTECTED_FUNCTION(void, SetTargetsComponents, const Vector<IObject*>, Vector<Widget*>&);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(void, Update, float);

@@ -7,7 +7,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIEditBox;
+	class EditBox;
 }
 
 namespace Editor
@@ -30,7 +30,7 @@ namespace Editor
 		IOBJECT(WStringProperty);
 
 	protected:
-		UIEditBox* mEditBox = nullptr; // Edit box 
+		EditBox* mEditBox = nullptr; // Edit box 
 
 	protected:
 		// Copies data of actor from other to this

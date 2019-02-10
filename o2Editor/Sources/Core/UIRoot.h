@@ -7,7 +7,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 // Editor UI root accessor macros
@@ -22,19 +22,19 @@ namespace Editor
 	{
 	public:
 		// Adds widget to root
-		UIWidget* AddWidget(UIWidget* widget);
+		Widget* AddWidget(Widget* widget);
 
 		// Removes widget from root
-		void RemoveWidget(UIWidget* widget);
+		void RemoveWidget(Widget* widget);
 
 		// Removes all widgets from root
 		void RemoveAllWidgets();
 
 		// Returns root widget
-		UIWidget* GetRootWidget();
+		Widget* GetRootWidget();
 
 	private:
-		UIWidget* mRootWidget = nullptr;
+		Widget* mRootWidget = nullptr;
 
 	private:
 		// Default constructor, creates root widget

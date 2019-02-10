@@ -34,8 +34,8 @@ namespace Editor
 		mEditBox = GetChildWidget("layout/box");
 		if (mEditBox)
 		{
-			mPreviewImage = mnew UICurvePreview();
-			*mPreviewImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+			mPreviewImage = mnew CurvePreview();
+			*mPreviewImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 			mPreviewImage->SetCurve(&mCommonValue);
 
 			mEditBox->layout->minHeight = 10;

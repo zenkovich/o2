@@ -11,8 +11,8 @@ using namespace o2;
 namespace o2
 {
 	class Sprite;
-	class UIImage;
-	class UIVerticalLayout;
+	class Image;
+	class VerticalLayout;
 }
 
 namespace Editor
@@ -37,23 +37,23 @@ namespace Editor
 		const Type* GetAssetType() const;
 
 		// Returns data widget
-		UIWidget* GetWidget() const;
+		Widget* GetWidget() const;
 
 		IOBJECT(ImageAssetPropertiesViewer);
 
 	protected:
 		Vector<ImageAssetRef*>        mTargetAssets;
 								      
-		UIVerticalLayout*             mContent = nullptr;
+		VerticalLayout*             mContent = nullptr;
 								      
-		UIWidget*                     mPreviewImageContent;
-		UIImage*                      mPreviewImage = nullptr;
-		UIImage*                      mPreviewImageBack = nullptr;
+		Widget*                     mPreviewImageContent;
+		Image*                      mPreviewImage = nullptr;
+		Image*                      mPreviewImageBack = nullptr;
 								      
-		UIImage*                      mBorderLeftHandleWidget = nullptr;
-		UIImage*                      mBorderRightHandleWidget = nullptr;
-		UIImage*                      mBorderTopHandleWidget = nullptr;
-		UIImage*                      mBorderBottomHandleWidget = nullptr;
+		Image*                      mBorderLeftHandleWidget = nullptr;
+		Image*                      mBorderRightHandleWidget = nullptr;
+		Image*                      mBorderTopHandleWidget = nullptr;
+		Image*                      mBorderBottomHandleWidget = nullptr;
 								      
 		CursorEventsArea              mBorderLeftHandle;
 		CursorEventsArea              mBorderRightHandle;
@@ -143,7 +143,7 @@ CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);
 	PROTECTED_FUNCTION(void, InitializeLeftHandle);
 	PROTECTED_FUNCTION(void, InitializeRightHandle);

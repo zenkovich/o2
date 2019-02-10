@@ -11,8 +11,8 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
-	class UIButton;
+	class Widget;
+	class Button;
 }
 
 namespace Editor
@@ -20,7 +20,7 @@ namespace Editor
 	// -------------------------------
 	// Editor property field interface
 	// -------------------------------
-	class IPropertyField : public UIHorizontalLayout
+	class IPropertyField : public HorizontalLayout
 	{
 	public:
 		typedef Pair<IAbstractValueProxy*, IAbstractValueProxy*> TargetPair;
@@ -76,10 +76,10 @@ namespace Editor
 		const String& GetValuePath() const;
 
 		// Sets caption
-		void SetCaptionLabel(UILabel* label);
+		void SetCaptionLabel(Label* label);
 
 		// Returns caption
-		UILabel* GetCaptionLabel() const;
+		Label* GetCaptionLabel() const;
 
 		// Sets is property revertable - it's able to check difference between origin value and prototype
 		void SetRevertable(bool revertable);
@@ -133,8 +133,8 @@ namespace Editor
 		TargetsVec       mValuesProxies;          // Target values proxies
 		bool             mValuesDifferent = true; // Are values different
 
-		UIButton*        mRevertBtn = nullptr;    // Revert to source prototype button
-		UILabel*         mCaption = nullptr;      // Caption label, null by default   
+		Button*        mRevertBtn = nullptr;    // Revert to source prototype button
+		Label*         mCaption = nullptr;      // Caption label, null by default   
 
 		String           mValuesPath;             // Reflection path of target values
 		Vector<DataNode> mBeforeChangeValues;     // Serialized value data before changes started
@@ -466,7 +466,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::IPropertyField)
 {
-	BASE_CLASS(o2::UIHorizontalLayout);
+	BASE_CLASS(o2::HorizontalLayout);
 }
 END_META;
 CLASS_FIELDS_META(Editor::IPropertyField)
@@ -495,8 +495,8 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(void, SetValuePath, const String&);
 	PUBLIC_FUNCTION(const String&, GetValuePath);
-	PUBLIC_FUNCTION(void, SetCaptionLabel, UILabel*);
-	PUBLIC_FUNCTION(UILabel*, GetCaptionLabel);
+	PUBLIC_FUNCTION(void, SetCaptionLabel, Label*);
+	PUBLIC_FUNCTION(Label*, GetCaptionLabel);
 	PUBLIC_FUNCTION(void, SetRevertable, bool);
 	PUBLIC_FUNCTION(bool, IsRevertable);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);

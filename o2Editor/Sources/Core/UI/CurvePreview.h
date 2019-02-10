@@ -15,17 +15,17 @@ namespace Editor
 	// -------------------
 	// Curve preview image
 	// -------------------
-	class UICurvePreview: public UIWidget
+	class CurvePreview: public Widget
 	{
 	public:
 		// Default constructor. Initializes image
-		UICurvePreview();
+		CurvePreview();
 
 		// Default copy-constructor
-		UICurvePreview(const UICurvePreview& other);
+		CurvePreview(const CurvePreview& other);
 
 		// Copy operator
-		UICurvePreview& operator=(const UICurvePreview& other);
+		CurvePreview& operator=(const CurvePreview& other);
 
 		// Sets viewing curve
 		void SetCurve(Curve* curve);
@@ -45,7 +45,7 @@ namespace Editor
 		// Returns curve color on image
 		Color4 GetCurveColor() const;
 
-		SERIALIZABLE(UICurvePreview);
+		SERIALIZABLE(CurvePreview);
 
 	protected:
 		Curve*  mCurve = nullptr;
@@ -70,12 +70,12 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::UICurvePreview)
+CLASS_BASES_META(Editor::CurvePreview)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UICurvePreview)
+CLASS_FIELDS_META(Editor::CurvePreview)
 {
 	PROTECTED_FIELD(mCurve);
 	PROTECTED_FIELD(mNeedRedraw);
@@ -84,7 +84,7 @@ CLASS_FIELDS_META(Editor::UICurvePreview)
 	PROTECTED_FIELD(mCurveColor);
 }
 END_META;
-CLASS_METHODS_META(Editor::UICurvePreview)
+CLASS_METHODS_META(Editor::CurvePreview)
 {
 
 	PUBLIC_FUNCTION(void, SetCurve, Curve*);

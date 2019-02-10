@@ -148,8 +148,8 @@ namespace o2
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
-		friend class UIWidget;
-		friend class UIWidgetLayer;
+		friend class Widget;
+		friend class WidgetLayer;
 
 #if IS_EDITOR	  	
 	public:

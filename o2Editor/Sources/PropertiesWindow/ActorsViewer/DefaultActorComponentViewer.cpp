@@ -67,7 +67,7 @@ namespace Editor
 		mSpoiler->name = "component " + mComponentType->GetName();
 
 		o2EditorProperties.FreeProperties(mFieldProperties);
-		o2EditorProperties.BuildObjectProperties((UIVerticalLayout*)mSpoiler, mComponentType, mFieldProperties,
+		o2EditorProperties.BuildObjectProperties((VerticalLayout*)mSpoiler, mComponentType, mFieldProperties,
 			(String)"component:" + mComponentType->GetName() + "/", THIS_FUNC(OnPropertyChanged));
 
 		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();

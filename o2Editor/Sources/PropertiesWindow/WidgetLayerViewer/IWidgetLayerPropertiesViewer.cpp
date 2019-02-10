@@ -13,7 +13,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
+		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
 		mSpoiler->expandHeight = false;
 		mSpoiler->expandWidth = true;
@@ -29,7 +29,7 @@ namespace Editor
 	IWidgetLayerPropertiesViewer::~IWidgetLayerPropertiesViewer()
 	{}
 
-	UIWidget* IWidgetLayerPropertiesViewer::GetWidget() const
+	Widget* IWidgetLayerPropertiesViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

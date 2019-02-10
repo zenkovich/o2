@@ -5,12 +5,15 @@
 
 namespace o2
 {
-	class UIWidgetLayer;
+	class WidgetLayer;
 
-	class UIWidgetLayerLayout : public ISerializable
+	class WidgetLayerLayout : public ISerializable
 	{
 	public:
-		PROPERTIES(UIWidgetLayerLayout);
+		PROPERTIES(WidgetLayerLayout);
+		PROPERTY(Vec2F, position, SetPosition, GetPosition);             // Left bottom anchor property
+		PROPERTY(Vec2F, size, SetSize, GetSize);                         // Left bottom anchor property
+
 		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin);          // Left bottom anchor property
 		PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax);          // Right top anchor property
 
@@ -29,34 +32,34 @@ namespace o2
 
 	public:
 		// Default unused constructor, required for IObject
-		UIWidgetLayerLayout();
+		WidgetLayerLayout();
 
 		// Default constructor
-		UIWidgetLayerLayout(UIWidgetLayer* widgetLayer);
+		WidgetLayerLayout(WidgetLayer* widgetLayer);
 
 		// Copy constructor
-		UIWidgetLayerLayout(UIWidgetLayer* widgetLayer, const UIWidgetLayerLayout& other);
+		WidgetLayerLayout(WidgetLayer* widgetLayer, const WidgetLayerLayout& other);
 
 
 		// Cast to Layout operator
 		operator Layout() const;
 
 		// Copy operator from layout
-		UIWidgetLayerLayout& operator=(const Layout& other);
+		WidgetLayerLayout& operator=(const Layout& other);
 
 
 		// Copy operator 
-		UIWidgetLayerLayout& operator=(const UIWidgetLayerLayout& other);
+		WidgetLayerLayout& operator=(const WidgetLayerLayout& other);
 
 
 		// Check equals operator
-		bool operator==(const UIWidgetLayerLayout& other) const;
+		bool operator==(const WidgetLayerLayout& other) const;
 
 		// Check equals operator
 		bool operator==(const Layout& other) const;
 
 		// Check not equals operator
-		bool operator!=(const UIWidgetLayerLayout& other) const;
+		bool operator!=(const WidgetLayerLayout& other) const;
 
 		// Check not equals operator
 		bool operator!=(const Layout& other) const;
@@ -141,10 +144,24 @@ namespace o2
 		// Returns top offset
 		float GetOffsetTop() const;
 
-		SERIALIZABLE(UIWidgetLayerLayout);
+
+		// Sets position of left bottom corner
+		void SetPosition(const Vec2F& position);
+
+		// Returns position of left bottom corner
+		Vec2F GetPosition() const;
+
+		// Sets size
+		void SetSize(const Vec2F& size);
+
+		// Returns size
+		Vec2F GetSize() const;
+
+
+		SERIALIZABLE(WidgetLayerLayout);
 
 	private:
-		UIWidgetLayer* mWidgetLayer = nullptr; // @EXCLUDE_POINTER_SEARCH
+		WidgetLayer* mWidgetLayer = nullptr; // @EXCLUDE_POINTER_SEARCH
 
 		Vec2F mAnchorMin = Vec2F(0, 0); // @SERIALIZABLE
 		Vec2F mAnchorMax = Vec2F(1, 1); // @SERIALIZABLE
@@ -153,13 +170,15 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIWidgetLayerLayout)
+CLASS_BASES_META(o2::WidgetLayerLayout)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidgetLayerLayout)
+CLASS_FIELDS_META(o2::WidgetLayerLayout)
 {
+	PUBLIC_FIELD(position);
+	PUBLIC_FIELD(size);
 	PUBLIC_FIELD(anchorMin);
 	PUBLIC_FIELD(anchorMax);
 	PUBLIC_FIELD(offsetMin);
@@ -179,7 +198,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayerLayout)
 	PRIVATE_FIELD(mOffsetMax).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidgetLayerLayout)
+CLASS_METHODS_META(o2::WidgetLayerLayout)
 {
 
 	PUBLIC_FUNCTION(RectF, Calculate, const RectF&);
@@ -207,5 +226,9 @@ CLASS_METHODS_META(o2::UIWidgetLayerLayout)
 	PUBLIC_FUNCTION(float, GetOffsetBottom);
 	PUBLIC_FUNCTION(void, SetOffsetTop, float);
 	PUBLIC_FUNCTION(float, GetOffsetTop);
+	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPosition);
+	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetSize);
 }
 END_META;

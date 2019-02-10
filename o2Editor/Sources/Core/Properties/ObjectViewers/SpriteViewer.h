@@ -9,7 +9,7 @@ using namespace o2;
 namespace o2
 {
 	class Sprite;
-	class UISpoiler;
+	class Spoiler;
 }
 
 namespace Editor
@@ -44,20 +44,20 @@ namespace Editor
 
 		FieldPropertiesInfo mFieldProperties; // Field properties information
 
-		UIVerticalLayout*   mHiddenProperties = nullptr; // Hidden properties
+		VerticalLayout*   mHiddenProperties = nullptr; // Hidden properties
 
 		ImageAssetProperty* mImageProperty = nullptr;
 		ColorProperty*      mColorProperty = nullptr;
 		FloatProperty*      mAlphaProperty = nullptr;
 		EnumProperty*       mModeProperty = nullptr;
 
-		UISpoiler*          mFillPropertiesSpoiler = nullptr;
+		Spoiler*          mFillPropertiesSpoiler = nullptr;
 		FloatProperty*      mFillProperty = nullptr;
 
-		UISpoiler*          mSlicedPropertiesSpoiler = nullptr;
+		Spoiler*          mSlicedPropertiesSpoiler = nullptr;
 		BorderIProperty*    mSliceBorderProperty = nullptr;
 
-		UISpoiler*          mTiledPropertiesSpoiler = nullptr;
+		Spoiler*          mTiledPropertiesSpoiler = nullptr;
 		FloatProperty*      mTileScaleProperty = nullptr;
 
 	protected:

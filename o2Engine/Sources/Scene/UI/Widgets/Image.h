@@ -10,22 +10,22 @@ namespace o2
 	// ------------
 	// Image widget
 	// ------------
-	class UIImage: public UIWidget
+	class Image: public Widget
 	{
 	public:
-		PROPERTIES(UIImage);
+		PROPERTIES(Image);
 		PROPERTY(Sprite*, image, SetImage, GetImage);                      // Image sprite
 		PROPERTY(ImageAssetRef, imageAsset, SetImageAsset, GetImageAsset); // Image asset
 		PROPERTY(String, imageName, SetImageName, GetImageName);           // Image asset name
 
 		// Default constructor
-		UIImage();
+		Image();
 
 		// Copy-constructor
-		UIImage(const UIImage& other);
+		Image(const Image& other);
 
 		// Assign operator
-		UIImage& operator=(const UIImage& other);
+		Image& operator=(const Image& other);
 
 		// Sets image
 		void SetImage(Sprite* sprite);
@@ -45,7 +45,7 @@ namespace o2
 		// Returns asset image name
 		String GetImageName() const;
 
-		SERIALIZABLE(UIImage);
+		SERIALIZABLE(Image);
 
 	protected:
 		Sprite* mImage = nullptr; // Image layer drawable
@@ -58,12 +58,12 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIImage)
+CLASS_BASES_META(o2::Image)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIImage)
+CLASS_FIELDS_META(o2::Image)
 {
 	PUBLIC_FIELD(image);
 	PUBLIC_FIELD(imageAsset);
@@ -71,7 +71,7 @@ CLASS_FIELDS_META(o2::UIImage)
 	PROTECTED_FIELD(mImage);
 }
 END_META;
-CLASS_METHODS_META(o2::UIImage)
+CLASS_METHODS_META(o2::Image)
 {
 
 	PUBLIC_FUNCTION(void, SetImage, Sprite*);

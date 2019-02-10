@@ -8,11 +8,11 @@ using namespace o2;
 
 namespace o2
 {
-	class UIButton;
+	class Button;
 	class UIContextMenu;
-	class UILabel;
-	class UISpoiler;
-	class UIWidget;
+	class Label;
+	class Spoiler;
+	class Widget;
 }
 
 namespace Editor
@@ -79,10 +79,10 @@ namespace Editor
 		TargetsVec               mTargetObjects;   // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
-		UIWidget*      mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
-		UISpoiler*     mSpoiler = nullptr;            // Properties spoiler
-		UILabel*       mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
-		UIButton*      mCreateDeleteButton = nullptr; // CReate and delete button. Create - when value is nullptr, delete - when not
+		Widget*      mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
+		Spoiler*     mSpoiler = nullptr;            // Properties spoiler
+		Label*       mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
+		Button*      mCreateDeleteButton = nullptr; // CReate and delete button. Create - when value is nullptr, delete - when not
 		UIContextMenu* mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
 													  // when this type changing and create button were pressed
 

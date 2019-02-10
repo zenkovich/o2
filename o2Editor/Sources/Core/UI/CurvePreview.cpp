@@ -10,26 +10,26 @@
 
 namespace Editor
 {
-	UICurvePreview::UICurvePreview()
+	CurvePreview::CurvePreview()
 	{
 		mSprite = mnew Sprite();
 		AddLayer("image", mSprite);
 	}
 
-	UICurvePreview::UICurvePreview(const UICurvePreview& other):
+	CurvePreview::CurvePreview(const CurvePreview& other):
 		mBackColor(other.mBackColor), mCurveColor(other.mCurveColor)
 	{
 		mSprite = GetLayerDrawable<Sprite>("image");
 		RetargetStatesAnimations();
 	}
 
-	UICurvePreview& UICurvePreview::operator=(const UICurvePreview& other)
+	CurvePreview& CurvePreview::operator=(const CurvePreview& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UICurvePreview::SetCurve(Curve* curve)
+	void CurvePreview::SetCurve(Curve* curve)
 	{
 		if (mCurve)
 			mCurve->onKeysChanged -= THIS_FUNC(OnCurveChanged);
@@ -40,41 +40,41 @@ namespace Editor
 			mCurve->onKeysChanged += THIS_FUNC(OnCurveChanged);
 	}
 
-	void UICurvePreview::Draw()
+	void CurvePreview::Draw()
 	{
 		if (mNeedRedraw)
 			Redraw();
 
-		UIWidget::Draw();
+		Widget::Draw();
 	}
 
-	void UICurvePreview::SetBackColor(const Color4& color)
+	void CurvePreview::SetBackColor(const Color4& color)
 	{
 		mBackColor = color;
 		mNeedRedraw = true;
 	}
 
-	Color4 UICurvePreview::GetBackColor() const
+	Color4 CurvePreview::GetBackColor() const
 	{
 		return mBackColor;
 	}
 
-	void UICurvePreview::SetCurveColor(const Color4& color)
+	void CurvePreview::SetCurveColor(const Color4& color)
 	{
 		mCurveColor = color;
 		mNeedRedraw = true;
 	}
 
-	Color4 UICurvePreview::GetCurveColor() const
+	Color4 CurvePreview::GetCurveColor() const
 	{
 		return mCurveColor;
 	}
 
-	void UICurvePreview::CopyData(const Actor& otherActor)
+	void CurvePreview::CopyData(const Actor& otherActor)
 	{
-		const UICurvePreview& other = dynamic_cast<const UICurvePreview&>(otherActor);
+		const CurvePreview& other = dynamic_cast<const CurvePreview&>(otherActor);
 
-		UIWidget::CopyData(otherActor);
+		Widget::CopyData(otherActor);
 
 		mBackColor = other.mBackColor;
 		mCurveColor = other.mCurveColor;
@@ -85,13 +85,13 @@ namespace Editor
 		mNeedRedraw = true;
 	}
 
-	void UICurvePreview::UpdateLayersLayouts()
+	void CurvePreview::UpdateLayersLayouts()
 	{
 		mNeedRedraw = true;
-		UIWidget::UpdateLayersLayouts();
+		Widget::UpdateLayersLayouts();
 	}
 
-	void UICurvePreview::Redraw()
+	void CurvePreview::Redraw()
 	{
 		if (!mCurve)
 			return;
@@ -136,11 +136,11 @@ namespace Editor
 		o2Render.SetCamera(prevCamera);
 	}
 
-	void UICurvePreview::OnCurveChanged()
+	void CurvePreview::OnCurveChanged()
 	{
 		mNeedRedraw = true;
 	}
 
 }
 
-DECLARE_CLASS(Editor::UICurvePreview);
+DECLARE_CLASS(Editor::CurvePreview);

@@ -8,12 +8,12 @@
 
 namespace o2
 {
-	UIVerticalScrollBar::UIVerticalScrollBar():
-		UIWidget(), DrawableCursorEventsListener(this)
+	VerticalScrollBar::VerticalScrollBar():
+		Widget(), DrawableCursorEventsListener(this)
 	{}
 
-	UIVerticalScrollBar::UIVerticalScrollBar(const UIVerticalScrollBar& other) :
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+	VerticalScrollBar::VerticalScrollBar(const VerticalScrollBar& other) :
+		Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
 		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue),
 		value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)
@@ -25,18 +25,18 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIVerticalScrollBar::~UIVerticalScrollBar()
+	VerticalScrollBar::~VerticalScrollBar()
 	{}
 
-	UIVerticalScrollBar& UIVerticalScrollBar::operator=(const UIVerticalScrollBar& other)
+	VerticalScrollBar& VerticalScrollBar::operator=(const VerticalScrollBar& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIVerticalScrollBar::Update(float dt)
+	void VerticalScrollBar::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		const float threshold = 0.01f;
 		const float smoothCoef = 30.0f;
@@ -54,7 +54,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalScrollBar::SetValue(float value)
+	void VerticalScrollBar::SetValue(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
@@ -62,7 +62,7 @@ namespace o2
 		onChange(value);
 	}
 
-	void UIVerticalScrollBar::SetValueForcible(float value)
+	void VerticalScrollBar::SetValueForcible(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		mSmoothValue = mValue;
@@ -72,12 +72,12 @@ namespace o2
 		onSmoothChange(mSmoothValue);
 	}
 
-	float UIVerticalScrollBar::GetValue() const
+	float VerticalScrollBar::GetValue() const
 	{
 		return mValue;
 	}
 
-	void UIVerticalScrollBar::SetMinValue(float minValue)
+	void VerticalScrollBar::SetMinValue(float minValue)
 	{
 		mMinValue = minValue;
 		mValue = Math::Max(mMinValue, mValue);
@@ -86,12 +86,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIVerticalScrollBar::GetMinValue() const
+	float VerticalScrollBar::GetMinValue() const
 	{
 		return mMinValue;
 	}
 
-	void UIVerticalScrollBar::SetMaxValue(float maxValue)
+	void VerticalScrollBar::SetMaxValue(float maxValue)
 	{
 		mMaxValue = maxValue;
 		mValue = Math::Min(mMaxValue, mValue);
@@ -100,12 +100,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIVerticalScrollBar::GetMaxValue() const
+	float VerticalScrollBar::GetMaxValue() const
 	{
 		return mMaxValue;
 	}
 
-	void UIVerticalScrollBar::SetValueRange(float minValue, float maxValue)
+	void VerticalScrollBar::SetValueRange(float minValue, float maxValue)
 	{
 		mMinValue = Math::Min(maxValue, minValue);
 		mMaxValue = Math::Max(maxValue, minValue);
@@ -115,28 +115,28 @@ namespace o2
 		onChange(value);
 	}
 
-	void UIVerticalScrollBar::SetScrollSense(float coef)
+	void VerticalScrollBar::SetScrollSense(float coef)
 	{
 		mScrollSense = coef;
 	}
 
-	float UIVerticalScrollBar::GetScrollSense() const
+	float VerticalScrollBar::GetScrollSense() const
 	{
 		return mScrollSense;
 	}
 
-	void UIVerticalScrollBar::SetScrollHandleSize(float size)
+	void VerticalScrollBar::SetScrollHandleSize(float size)
 	{
 		mScrollHandleSize = size;
 		UpdateProgressLayersLayouts();
 	}
 
-	float UIVerticalScrollBar::GetScrollHandleSize() const
+	float VerticalScrollBar::GetScrollHandleSize() const
 	{
 		return mScrollHandleSize;
 	}
 
-	bool UIVerticalScrollBar::IsUnderPoint(const Vec2F& point)
+	bool VerticalScrollBar::IsUnderPoint(const Vec2F& point)
 	{
 		if (!mDrawingScissorRect.IsInside(point))
 			return false;
@@ -150,12 +150,12 @@ namespace o2
 		return false;
 	}
 
-	bool UIVerticalScrollBar::IsScrollable() const
+	bool VerticalScrollBar::IsScrollable() const
 	{
 		return !Math::Equals(mMinValue, mMaxValue);
 	}
 
-	void UIVerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
+	void VerticalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position))
 		{
@@ -177,7 +177,7 @@ namespace o2
 		}
 	}
 
-	void UIVerticalScrollBar::OnCursorReleased(const Input::Cursor& cursor)
+	void VerticalScrollBar::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -186,7 +186,7 @@ namespace o2
 		mHandlePressed = false;
 	}
 
-	void UIVerticalScrollBar::OnCursorPressBreak(const Input::Cursor& cursor)
+	void VerticalScrollBar::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -195,7 +195,7 @@ namespace o2
 		mHandlePressed = false;
 	}
 
-	void UIVerticalScrollBar::OnCursorStillDown(const Input::Cursor& cursor)
+	void VerticalScrollBar::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		if (mHandlePressed)
 			SetValueFromUser(GetValueFromCursor(cursor) + mPressHandleOffset);
@@ -215,7 +215,7 @@ namespace o2
 		}
 	}
 
-	float UIVerticalScrollBar::GetValueFromCursor(const Input::Cursor &cursor)
+	float VerticalScrollBar::GetValueFromCursor(const Input::Cursor &cursor)
 	{
 		float range = mMaxValue - mMinValue;
 
@@ -230,34 +230,34 @@ namespace o2
 		return (height - (cursor.position.y - layout->GetWorldRect().bottom))/height*range/(1.0f - szCoef) + mMinValue;
 	}
 
-	void UIVerticalScrollBar::SetValueFromUser(float value)
+	void VerticalScrollBar::SetValueFromUser(float value)
 	{
 		SetValue(value);
 		onUserChange(mValue);
 	}
 
-	void UIVerticalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
+	void VerticalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void UIVerticalScrollBar::OnCursorExit(const Input::Cursor& cursor)
+	void VerticalScrollBar::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	void UIVerticalScrollBar::OnScrolled(float scroll)
+	void VerticalScrollBar::OnScrolled(float scroll)
 	{
 		SetValue(mValue - scroll*mScrollSense);
 	}
 
-	void UIVerticalScrollBar::OnDeserialized(const DataNode& node)
+	void VerticalScrollBar::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
+		Widget::OnDeserialized(node);
 
 		mHandleLayer = FindLayer("handle");
 		mBackLayer = FindLayer("back");
@@ -265,23 +265,23 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIVerticalScrollBar::OnResEnableInHierarchyChanged()
+	void VerticalScrollBar::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	void UIVerticalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
+	void VerticalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
 	{
 		mScrollhandleMinPxSize = pixelSize;
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::UpdateSelfTransform()
+	void VerticalScrollBar::UpdateSelfTransform()
 {
 		layout->Update();
 	}
 
-	void UIVerticalScrollBar::UpdateProgressLayersLayouts()
+	void VerticalScrollBar::UpdateProgressLayersLayouts()
 	{
 		if (mHandleLayer)
 		{
@@ -307,14 +307,14 @@ namespace o2
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
 
-		UIWidget::UpdateLayersLayouts();
+		Widget::UpdateLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::CopyData(const Actor& otherActor)
+	void VerticalScrollBar::CopyData(const Actor& otherActor)
 	{
-		const UIVerticalScrollBar& other = dynamic_cast<const UIVerticalScrollBar&>(otherActor);
+		const VerticalScrollBar& other = dynamic_cast<const VerticalScrollBar&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mValue                 = other.mValue;
 		mMinValue              = other.mMinValue;
@@ -331,12 +331,12 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIVerticalScrollBar::UpdateLayersLayouts()
+	void VerticalScrollBar::UpdateLayersLayouts()
 	{
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIVerticalScrollBar::OnLayerAdded(UIWidgetLayer* layer)
+	void VerticalScrollBar::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "back")
 			mBackLayer = layer;
@@ -346,10 +346,10 @@ namespace o2
 		UpdateProgressLayersLayouts();
 	}
 
-	float UIVerticalScrollBar::GetSmoothValue() const
+	float VerticalScrollBar::GetSmoothValue() const
 	{
 		return mSmoothValue;
 	}
 }
 
-DECLARE_CLASS(o2::UIVerticalScrollBar);
+DECLARE_CLASS(o2::VerticalScrollBar);

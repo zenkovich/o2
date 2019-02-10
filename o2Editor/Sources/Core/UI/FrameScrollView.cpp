@@ -8,28 +8,28 @@
 namespace Editor
 {
 
-	UIFrameScrollView::UIFrameScrollView():
-		UIScrollView()
+	FrameScrollView::FrameScrollView():
+		ScrollView()
 	{
 		mReady = false;
 
-		mHorScrollbar = mnew UIHorizontalScrollBar();
-		*mHorScrollbar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
+		mHorScrollbar = mnew HorizontalScrollBar();
+		*mHorScrollbar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
 		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
-		mVerScrollbar = mnew UIVerticalScrollBar();
-		*mVerScrollbar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
+		mVerScrollbar = mnew VerticalScrollBar();
+		*mVerScrollbar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
 		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 
 		mReady = true;
 	}
 
-	UIFrameScrollView::UIFrameScrollView(const UIFrameScrollView& other):
-		UIScrollView(other), 
-		mHorScrollbar(other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>()), 
-		mVerScrollbar(other.mVerScrollbar->CloneAs<UIVerticalScrollBar>())
+	FrameScrollView::FrameScrollView(const FrameScrollView& other):
+		ScrollView(other), 
+		mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()), 
+		mVerScrollbar(other.mVerScrollbar->CloneAs<VerticalScrollBar>())
 	{
 		mReady = false;
 
@@ -44,7 +44,7 @@ namespace Editor
 		mReady = true;
 	}
 
-	UIFrameScrollView::~UIFrameScrollView()
+	FrameScrollView::~FrameScrollView()
 	{
 		if (mHorScrollbar)
 			delete mHorScrollbar;
@@ -53,15 +53,15 @@ namespace Editor
 			delete mVerScrollbar;
 	}
 
-	UIFrameScrollView& UIFrameScrollView::operator=(const UIFrameScrollView& other)
+	FrameScrollView& FrameScrollView::operator=(const FrameScrollView& other)
 	{
-		UIScrollView::operator=(other);
+		ScrollView::operator=(other);
 		return *this;
 	}
 
-	void UIFrameScrollView::Draw()
+	void FrameScrollView::Draw()
 	{
-		UIScrollView::Draw();
+		ScrollView::Draw();
 
 		if (!mReady)
 			return;
@@ -70,9 +70,9 @@ namespace Editor
 		mVerScrollbar->Draw();
 	}
 
-	void UIFrameScrollView::Update(float dt)
+	void FrameScrollView::Update(float dt)
 	{
-		UIScrollView::Update(dt);
+		ScrollView::Update(dt);
 
 		if (!mReady)
 			return;
@@ -83,9 +83,9 @@ namespace Editor
 		mVerScrollbar->Update(dt);
 	}
 
-	void UIFrameScrollView::UpdateSelfTransform()
+	void FrameScrollView::UpdateSelfTransform()
 {
-		UIScrollView::UpdateSelfTransform();
+		ScrollView::UpdateSelfTransform();
 
 		if (!mReady)
 			return;
@@ -94,7 +94,7 @@ namespace Editor
 		mVerScrollbar->UpdateSelfTransform();
 	}
 
-	void UIFrameScrollView::SetHorScrollbar(UIHorizontalScrollBar* scrollbar)
+	void FrameScrollView::SetHorScrollbar(HorizontalScrollBar* scrollbar)
 	{
 		delete mHorScrollbar;
 		mHorScrollbar = scrollbar;
@@ -104,7 +104,7 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	void UIFrameScrollView::SetVerScrollbar(UIVerticalScrollBar* scrollbar)
+	void FrameScrollView::SetVerScrollbar(VerticalScrollBar* scrollbar)
 	{
 		delete mVerScrollbar;
 		mVerScrollbar = scrollbar;
@@ -114,35 +114,35 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	void UIFrameScrollView::SetViewArea(const RectF& area)
+	void FrameScrollView::SetViewArea(const RectF& area)
 	{
 		mAvailableArea = area;
 	}
 
-	RectF UIFrameScrollView::GetViewArea() const
+	RectF FrameScrollView::GetViewArea() const
 	{
 		return mAvailableArea;
 	}
 
-	void UIFrameScrollView::CopyData(const Actor& otherActor)
+	void FrameScrollView::CopyData(const Actor& otherActor)
 	{
-		const UIFrameScrollView& other = dynamic_cast<const UIFrameScrollView&>(otherActor);
+		const FrameScrollView& other = dynamic_cast<const FrameScrollView&>(otherActor);
 
-		UIScrollView::CopyData(other);
+		ScrollView::CopyData(other);
 
 		delete mHorScrollbar;
 		delete mVerScrollbar;
 
-		mHorScrollbar = other.mHorScrollbar->CloneAs<UIHorizontalScrollBar>();
+		mHorScrollbar = other.mHorScrollbar->CloneAs<HorizontalScrollBar>();
 		mHorScrollbar->SetInternalParent(this);
 		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
 
-		mVerScrollbar = other.mVerScrollbar->CloneAs<UIVerticalScrollBar>();
+		mVerScrollbar = other.mVerScrollbar->CloneAs<VerticalScrollBar>();
 		mVerScrollbar->SetInternalParent(this);
 		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
 	}
 
-	void UIFrameScrollView::UpdateCameraLimits(float dt)
+	void FrameScrollView::UpdateCameraLimits(float dt)
 	{
 		if (o2Input.IsCursorDown())
 			return;
@@ -160,14 +160,14 @@ namespace Editor
 		mVerScrollbar->SetScrollHandleSize(camRect.Height());
 	}
 
-	void UIFrameScrollView::OnHorScrollScrolled(float value)
+	void FrameScrollView::OnHorScrollScrolled(float value)
 	{
 		mViewCamera.SetPosition(Vec2F(value, mViewCamera.GetPosition().y));
 		mViewCameraTargetPos = mViewCamera.GetPosition();
 		mNeedRedraw = true;
 	}
 
-	void UIFrameScrollView::OnVerScrollScrolled(float value)
+	void FrameScrollView::OnVerScrollScrolled(float value)
 	{
 		float min = mVerScrollbar->GetMinValue();
 		float max = mVerScrollbar->GetMaxValue();
@@ -178,7 +178,7 @@ namespace Editor
 		mNeedRedraw = true;
 	}
 
-	void UIFrameScrollView::OnCameraTransformChanged()
+	void FrameScrollView::OnCameraTransformChanged()
 	{
 		mHorScrollbar->SetValue(mViewCamera.GetPosition().x);
 
@@ -188,4 +188,4 @@ namespace Editor
 	}
 }
 
-DECLARE_CLASS(Editor::UIFrameScrollView);
+DECLARE_CLASS(Editor::FrameScrollView);

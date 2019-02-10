@@ -7,12 +7,12 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
 {
-	class UIDockWindowPlace;
+	class DockWindowPlace;
 
 	class WindowsLayout: public ISerializable
 	{
@@ -24,7 +24,7 @@ namespace Editor
 			Vector<String>          windows; // @SERIALIZABLE
 			Vector<WindowDockPlace> childs;	 // @SERIALIZABLE
 
-			void RetrieveLayout(UIWidget* widget);
+			void RetrieveLayout(Widget* widget);
 
 			bool operator==(const WindowDockPlace& other) const;
 
@@ -33,7 +33,7 @@ namespace Editor
 
 	public:
 		WindowDockPlace                    mainDock; // @SERIALIZABLE
-		Dictionary<String, UIWidgetLayout> windows;  // @SERIALIZABLE
+		Dictionary<String, WidgetLayout> windows;  // @SERIALIZABLE
 
 		bool operator==(const WindowsLayout& other) const;
 
@@ -41,10 +41,10 @@ namespace Editor
 
 	protected:
 		// Restores dock recursively
-		void RestoreDock(WindowDockPlace* dockDef, UIDockWindowPlace* dockWidget);
+		void RestoreDock(WindowDockPlace* dockDef, DockWindowPlace* dockWidget);
 
 		// Removes all children empty dock places
-		void CleanEmptyDocks(UIDockWindowPlace* dockPlace);
+		void CleanEmptyDocks(DockWindowPlace* dockPlace);
 
 		friend class WindowsManager;
 	};
@@ -65,8 +65,8 @@ END_META;
 CLASS_METHODS_META(Editor::WindowsLayout)
 {
 
-	PROTECTED_FUNCTION(void, RestoreDock, WindowDockPlace*, UIDockWindowPlace*);
-	PROTECTED_FUNCTION(void, CleanEmptyDocks, UIDockWindowPlace*);
+	PROTECTED_FUNCTION(void, RestoreDock, WindowDockPlace*, DockWindowPlace*);
+	PROTECTED_FUNCTION(void, CleanEmptyDocks, DockWindowPlace*);
 }
 END_META;
 
@@ -85,6 +85,6 @@ END_META;
 CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlace)
 {
 
-	PUBLIC_FUNCTION(void, RetrieveLayout, UIWidget*);
+	PUBLIC_FUNCTION(void, RetrieveLayout, Widget*);
 }
 END_META;

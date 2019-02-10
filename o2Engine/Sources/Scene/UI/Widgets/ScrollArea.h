@@ -9,10 +9,10 @@ namespace o2
 	// -----------------------------------------------------
 	// Scrolling area with scrollbars and clipping rectangle
 	// -----------------------------------------------------
-	class UIScrollArea: public UIWidget
+	class ScrollArea: public Widget
 	{
 	public:
-		PROPERTIES(UIScrollArea);
+		PROPERTIES(ScrollArea);
 		PROPERTY(Vec2F, scroll, SetScroll, GetScroll);                        // Scroll position property
 		PROPERTY(float, horScroll, SetHorizontalScroll, GetHorizontalScroll); // Horizontal scroll position property
 		PROPERTY(float, verScroll, SetVerticalScroll, GetVerticalScroll);     // Vertical scroll position property
@@ -20,16 +20,16 @@ namespace o2
 		Function<void(const Vec2F&)> onScrolled; // Scrolling event. Scroll position is parameter
 
 		// Default constructor
-		UIScrollArea();
+		ScrollArea();
 
 		// Copy-constructor
-		UIScrollArea(const UIScrollArea& other);
+		ScrollArea(const ScrollArea& other);
 
 		// Destructor
-		~UIScrollArea();
+		~ScrollArea();
 
 		// Copy-operator
-		UIScrollArea& operator=(const UIScrollArea& other);
+		ScrollArea& operator=(const ScrollArea& other);
 
 		// Draws widget
 		void Draw() override;
@@ -68,16 +68,16 @@ namespace o2
 		float GetVerticalScroll() const;
 
 		// Sets horizontal scroll bar
-		void SetHorizontalScrollBar(UIHorizontalScrollBar* scrollbar, bool owner = true);
+		void SetHorizontalScrollBar(HorizontalScrollBar* scrollbar, bool owner = true);
 
 		// Returns horizontal scroll bar
-		UIHorizontalScrollBar* GetHorizontalScrollbar() const;
+		HorizontalScrollBar* GetHorizontalScrollbar() const;
 
 		// Sets Vertical scroll bar
-		void SetVerticalScrollBar(UIVerticalScrollBar* scrollbar, bool owner = true);
+		void SetVerticalScrollBar(VerticalScrollBar* scrollbar, bool owner = true);
 
 		// Returns Vertical scroll bar
-		UIVerticalScrollBar* GetVerticalScrollbar() const;
+		VerticalScrollBar* GetVerticalScrollbar() const;
 
 		// Sets scroll bars hiding
 		void SetEnableScrollsHiding(bool hideScrolls);
@@ -109,11 +109,11 @@ namespace o2
 		// Updates children transforms, calculates scroll rectangle and updates scrollbars
 		void UpdateChildrenTransforms() override;
 
-		SERIALIZABLE(UIScrollArea);
+		SERIALIZABLE(ScrollArea);
 
 	protected:
-		UIHorizontalScrollBar* mHorScrollBar = nullptr;                 // horizontal scroll bar
-		UIVerticalScrollBar*   mVerScrollBar = nullptr;                 // Vertical scroll bar
+		HorizontalScrollBar* mHorScrollBar = nullptr;                 // horizontal scroll bar
+		VerticalScrollBar*   mVerScrollBar = nullptr;                 // Vertical scroll bar
 		bool                   mOwnHorScrollBar = false;                // True, if this widget is owner of mHorScrollBar
 		bool                   mOwnVerScrollBar = false;                // True, if this widget is owner of mVerScrollBar
 
@@ -153,10 +153,10 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child) override;
+		void OnChildAdded(Widget* child) override;
 
 		// It is called when child widget was removed
-		void OnChildRemoved(UIWidget* child) override;
+		void OnChildRemoved(Widget* child) override;
 
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
@@ -197,16 +197,16 @@ namespace o2
 		// It is called when vertical scroll bar value was changed
 		void OnVerScrollChanged(float value);
 
-		friend class UICustomDropDown;
+		friend class CustomDropDown;
 	};
 }
 
-CLASS_BASES_META(o2::UIScrollArea)
+CLASS_BASES_META(o2::ScrollArea)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIScrollArea)
+CLASS_FIELDS_META(o2::ScrollArea)
 {
 	PUBLIC_FIELD(scroll);
 	PUBLIC_FIELD(horScroll);
@@ -239,7 +239,7 @@ CLASS_FIELDS_META(o2::UIScrollArea)
 	PROTECTED_FIELD(mLastVerScrollChangeTime);
 }
 END_META;
-CLASS_METHODS_META(o2::UIScrollArea)
+CLASS_METHODS_META(o2::ScrollArea)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -254,10 +254,10 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(float, GetHorizontalScroll);
 	PUBLIC_FUNCTION(void, SetVerticalScroll, float);
 	PUBLIC_FUNCTION(float, GetVerticalScroll);
-	PUBLIC_FUNCTION(void, SetHorizontalScrollBar, UIHorizontalScrollBar*, bool);
-	PUBLIC_FUNCTION(UIHorizontalScrollBar*, GetHorizontalScrollbar);
-	PUBLIC_FUNCTION(void, SetVerticalScrollBar, UIVerticalScrollBar*, bool);
-	PUBLIC_FUNCTION(UIVerticalScrollBar*, GetVerticalScrollbar);
+	PUBLIC_FUNCTION(void, SetHorizontalScrollBar, HorizontalScrollBar*, bool);
+	PUBLIC_FUNCTION(HorizontalScrollBar*, GetHorizontalScrollbar);
+	PUBLIC_FUNCTION(void, SetVerticalScrollBar, VerticalScrollBar*, bool);
+	PUBLIC_FUNCTION(VerticalScrollBar*, GetVerticalScrollbar);
 	PUBLIC_FUNCTION(void, SetEnableScrollsHiding, bool);
 	PUBLIC_FUNCTION(bool, IsScrollsHiding);
 	PUBLIC_FUNCTION(void, SetScrollBarsShowingByCursor, bool);
@@ -270,8 +270,8 @@ CLASS_METHODS_META(o2::UIScrollArea)
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, UpdateControls, float);

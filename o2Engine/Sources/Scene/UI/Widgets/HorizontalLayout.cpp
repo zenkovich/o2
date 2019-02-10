@@ -5,14 +5,14 @@
 
 namespace o2
 {
-	UIHorizontalLayout::UIHorizontalLayout(): UIWidget()
+	HorizontalLayout::HorizontalLayout(): Widget()
 	{
 		SetLayoutDirty();
 	}
 
-	UIHorizontalLayout::UIHorizontalLayout(const UIHorizontalLayout& other):
+	HorizontalLayout::HorizontalLayout(const HorizontalLayout& other):
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-		mExpandHeight(other.mExpandHeight), UIWidget(other), mFitByChildren(other.mFitByChildren), baseCorner(this), 
+		mExpandHeight(other.mExpandHeight), Widget(other), mFitByChildren(other.mFitByChildren), baseCorner(this), 
 		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
 		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
@@ -20,140 +20,140 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIHorizontalLayout::~UIHorizontalLayout()
+	HorizontalLayout::~HorizontalLayout()
 	{}
 
-	UIHorizontalLayout& UIHorizontalLayout::operator=(const UIHorizontalLayout& other)
+	HorizontalLayout& HorizontalLayout::operator=(const HorizontalLayout& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIHorizontalLayout::SetBaseCorner(BaseCorner baseCorner)
+	void HorizontalLayout::SetBaseCorner(BaseCorner baseCorner)
 	{
 		mBaseCorner = baseCorner;
 		layout->SetDirty();
 	}
 
-	BaseCorner UIHorizontalLayout::GetBaseCorner() const
+	BaseCorner HorizontalLayout::GetBaseCorner() const
 	{
 		return mBaseCorner;
 	}
 
-	void UIHorizontalLayout::SetSpacing(float spacing)
+	void HorizontalLayout::SetSpacing(float spacing)
 	{
 		mSpacing = spacing;
 		layout->SetDirty();
 	}
 
-	float UIHorizontalLayout::GetSpacing() const
+	float HorizontalLayout::GetSpacing() const
 	{
 		return mSpacing;
 	}
 
-	void UIHorizontalLayout::SetBorder(const BorderF& border)
+	void HorizontalLayout::SetBorder(const BorderF& border)
 	{
 		mBorder = border;
 		layout->SetDirty();
 	}
 
-	BorderF UIHorizontalLayout::GetBorder() const
+	BorderF HorizontalLayout::GetBorder() const
 	{
 		return mBorder;
 	}
 
-	void UIHorizontalLayout::SetBorderLeft(float value)
+	void HorizontalLayout::SetBorderLeft(float value)
 	{
 		mBorder.left = value;
 		layout->SetDirty();
 	}
 
-	float UIHorizontalLayout::GetBorderLeft() const
+	float HorizontalLayout::GetBorderLeft() const
 	{
 		return mBorder.left;
 	}
 
-	void UIHorizontalLayout::SetBorderRight(float value)
+	void HorizontalLayout::SetBorderRight(float value)
 	{
 		mBorder.right = value;
 		layout->SetDirty();
 	}
 
-	float UIHorizontalLayout::GetBorderRight() const
+	float HorizontalLayout::GetBorderRight() const
 	{
 		return mBorder.right;
 	}
 
-	void UIHorizontalLayout::SetBorderTop(float value)
+	void HorizontalLayout::SetBorderTop(float value)
 	{
 		mBorder.top = value;
 		layout->SetDirty();
 	}
 
-	float UIHorizontalLayout::GetBorderTop() const
+	float HorizontalLayout::GetBorderTop() const
 	{
 		return mBorder.top;
 	}
 
-	void UIHorizontalLayout::SetBorderBottom(float value)
+	void HorizontalLayout::SetBorderBottom(float value)
 	{
 		mBorder.bottom = value;
 		layout->SetDirty();
 	}
 
-	float UIHorizontalLayout::GetBorderBottom() const
+	float HorizontalLayout::GetBorderBottom() const
 	{
 		return mBorder.bottom;
 	}
 
-	void UIHorizontalLayout::SetWidthExpand(bool expand)
+	void HorizontalLayout::SetWidthExpand(bool expand)
 	{
 		mExpandWidth = expand;
 		layout->SetDirty();
 	}
 
-	bool UIHorizontalLayout::IsWidthExpand() const
+	bool HorizontalLayout::IsWidthExpand() const
 	{
 		return mExpandWidth;
 	}
 
-	void UIHorizontalLayout::SetHeightExpand(bool expand)
+	void HorizontalLayout::SetHeightExpand(bool expand)
 	{
 		mExpandHeight = expand;
 		layout->SetDirty();
 	}
 
-	bool UIHorizontalLayout::IsHeightExpand() const
+	bool HorizontalLayout::IsHeightExpand() const
 	{
 		return mExpandHeight;
 	}
 
-	void UIHorizontalLayout::SetFitByChildren(bool fit)
+	void HorizontalLayout::SetFitByChildren(bool fit)
 	{
 		mFitByChildren = fit;
 		layout->SetDirty();
 	}
 
-	bool UIHorizontalLayout::IsFittingByChildren() const
+	bool HorizontalLayout::IsFittingByChildren() const
 	{
 		return mFitByChildren;
 	}
 
-	void UIHorizontalLayout::UpdateSelfTransform()
+	void HorizontalLayout::UpdateSelfTransform()
 {
 		UpdateLayoutParametres();
 
 		if (mFitByChildren)
 			ExpandSizeByChilds();
 
-		UIWidget::UpdateSelfTransform();
+		Widget::UpdateSelfTransform();
 
 		RearrangeChilds();
 	}
 
-	void UIHorizontalLayout::CopyData(const Actor& otherActor)
+	void HorizontalLayout::CopyData(const Actor& otherActor)
 	{
-		const UIHorizontalLayout& other = dynamic_cast<const UIHorizontalLayout&>(otherActor);
+		const HorizontalLayout& other = dynamic_cast<const HorizontalLayout&>(otherActor);
 
 		mBaseCorner   = other.mBaseCorner;
 		mSpacing      = other.mSpacing;
@@ -161,16 +161,16 @@ namespace o2
 		mExpandWidth  = other.mExpandWidth;
 		mExpandHeight = other.mExpandHeight;
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
 
-	float UIHorizontalLayout::GetMinWidthWithChildren() const
+	float HorizontalLayout::GetMinWidthWithChildren() const
 	{
 		if (!mFitByChildren)
-			return UIWidget::GetMinWidthWithChildren();
+			return Widget::GetMinWidthWithChildren();
 
 		float res = mBorder.left + mBorder.right + Math::Max(mChildWidgets.Count() - 1, 0)*mSpacing;
 		for (auto child : mChildWidgets)
@@ -184,10 +184,10 @@ namespace o2
 		return res;
 	}
 
-	float UIHorizontalLayout::GetMinHeightWithChildren() const
+	float HorizontalLayout::GetMinHeightWithChildren() const
 	{
 		if (!mFitByChildren)
-			return UIWidget::GetMinHeightWithChildren();
+			return Widget::GetMinHeightWithChildren();
 
 		float res = 0;
 		for (auto child : mChildWidgets)
@@ -201,7 +201,7 @@ namespace o2
 		return res;
 	}
 
-	float UIHorizontalLayout::GetWidthWeightWithChildren() const
+	float HorizontalLayout::GetWidthWeightWithChildren() const
 	{
 		float res = 0;
 		for (auto child : mChildWidgets)
@@ -213,17 +213,17 @@ namespace o2
 		return res;
 	}
 
-	void UIHorizontalLayout::OnChildAdded(UIWidget* child)
+	void HorizontalLayout::OnChildAdded(Widget* child)
 	{
 		child->layout->mData->drivenByParent = true;
 	}
 
-	void UIHorizontalLayout::OnChildRemoved(UIWidget* child)
+	void HorizontalLayout::OnChildRemoved(Widget* child)
 	{
 		child->layout->mData->drivenByParent = false;
 	}
 
-	void UIHorizontalLayout::RearrangeChilds()
+	void HorizontalLayout::RearrangeChilds()
 	{
 		UpdateLayoutParametres();
 
@@ -250,7 +250,7 @@ namespace o2
 
 	}
 
-	void UIHorizontalLayout::UpdateLayoutParametres()
+	void HorizontalLayout::UpdateLayoutParametres()
 	{
 		layout->mData->weight.x = 0;
 
@@ -263,10 +263,10 @@ namespace o2
 		if (layout->mData->weight.x < FLT_EPSILON)
 			layout->mData->weight.x = 1.0f;
 
-		layout->mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		layout->mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 	}
 
-	void UIHorizontalLayout::ArrangeFromCenter()
+	void HorizontalLayout::ArrangeFromCenter()
 	{
 		if (mExpandWidth)
 		{
@@ -292,7 +292,7 @@ namespace o2
 		}
 		else
 		{
-			float totalWidth = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->GetMinWidthWithChildren(); });
+			float totalWidth = mChildWidgets.Sum<float>([&](Widget* child) { return child->GetMinWidthWithChildren(); });
 			totalWidth += (mChildWidgets.Count() - 1)*mSpacing;
 			float position = -totalWidth*0.5f;
 			for (auto child : mChildWidgets)
@@ -311,7 +311,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalLayout::ArrangeFromLeftToRight()
+	void HorizontalLayout::ArrangeFromLeftToRight()
 	{
 		if (mExpandWidth)
 		{
@@ -352,7 +352,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalLayout::ArrangeFromRightToLeft()
+	void HorizontalLayout::ArrangeFromRightToLeft()
 	{
 		if (mExpandWidth)
 		{
@@ -393,7 +393,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalLayout::AlignWidgetByHeight(UIWidget* child, float widthAnchor)
+	void HorizontalLayout::AlignWidgetByHeight(Widget* child, float widthAnchor)
 	{
 		if (mExpandHeight)
 		{
@@ -429,7 +429,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalLayout::ExpandSizeByChilds()
+	void HorizontalLayout::ExpandSizeByChilds()
 	{
 		const static Vec2F relativePivots[] ={
 			Vec2F(0.0f, 0.5f), // Left
@@ -459,12 +459,12 @@ namespace o2
 		layout->mData->offsetMin -= szDelta*relativePivot;
 	}
 
-	Vector<float> UIHorizontalLayout::CalculateExpandedWidths()
+	Vector<float> HorizontalLayout::CalculateExpandedWidths()
 	{
 		int ichildCount = mChildWidgets.Count();
 		float childCount = (float)ichildCount;
 		float availableWidth = mChildrenWorldRect.Width() - mBorder.left - mBorder.right;
-		float minWidthSum = mChildWidgets.Sum<float>([&](UIWidget* child) { return child->layout->GetMinimalWidth(); });
+		float minWidthSum = mChildWidgets.Sum<float>([&](Widget* child) { return child->layout->GetMinimalWidth(); });
 		float expandValue = Math::Max(availableWidth - minWidthSum - (childCount - 1.0f)*mSpacing, 0.0f);
 
 		Vector<float> widths(ichildCount + 1);
@@ -528,4 +528,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIHorizontalLayout);
+DECLARE_CLASS(o2::HorizontalLayout);

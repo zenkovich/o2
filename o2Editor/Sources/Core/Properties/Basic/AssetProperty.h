@@ -49,7 +49,7 @@ namespace Editor
 		IOBJECT(AssetProperty);
 
 	protected:
-		UIWidget* mBox = nullptr;      // Property edit box
+		Widget* mBox = nullptr;      // Property edit box
 		Text*     mNameText = nullptr; // Asset name text
 
 	protected:
@@ -229,7 +229,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetIconsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
 			return;
 
@@ -244,7 +244,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		auto assetIconsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group);
+		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
 		if (!assetIconsScroll)
 			return;
 

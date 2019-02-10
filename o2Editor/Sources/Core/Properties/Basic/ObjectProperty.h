@@ -8,7 +8,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UISpoiler;
+	class Spoiler;
 }
 
 namespace Editor
@@ -88,7 +88,7 @@ namespace Editor
 		TargetObjectsVec         mTargetObjects;                    // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
-		UISpoiler*               mSpoiler = nullptr;                // Properties spoiler
+		Spoiler*               mSpoiler = nullptr;                // Properties spoiler
 
 	protected:
 		// Copies data of actor from other to this

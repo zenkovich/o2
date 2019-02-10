@@ -8,12 +8,12 @@
 
 namespace o2
 {
-	UIHorizontalScrollBar::UIHorizontalScrollBar():
-		UIWidget(), DrawableCursorEventsListener(this)
+	HorizontalScrollBar::HorizontalScrollBar():
+		Widget(), DrawableCursorEventsListener(this)
 	{}
 
-	UIHorizontalScrollBar::UIHorizontalScrollBar(const UIHorizontalScrollBar& other) :
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+	HorizontalScrollBar::HorizontalScrollBar(const HorizontalScrollBar& other) :
+		Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mScrollSense(other.mScrollSense), mScrollHandleSize(other.mScrollHandleSize),
 		mHandlePressed(false), mScrollhandleMinPxSize(other.mScrollhandleMinPxSize), mSmoothValue(other.mValue), 
 		value(this), minValue(this), maxValue(this), scrollSense(this), scrollSize(this)
@@ -25,18 +25,18 @@ namespace o2
 		UpdateSelfTransform();
 	}
 
-	UIHorizontalScrollBar::~UIHorizontalScrollBar()
+	HorizontalScrollBar::~HorizontalScrollBar()
 	{}
 
-	UIHorizontalScrollBar& UIHorizontalScrollBar::operator=(const UIHorizontalScrollBar& other)
+	HorizontalScrollBar& HorizontalScrollBar::operator=(const HorizontalScrollBar& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIHorizontalScrollBar::Update(float dt)
+	void HorizontalScrollBar::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		const float threshold = 0.01f;
 		const float smoothCoef = 30.0f;
@@ -54,7 +54,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalScrollBar::SetValue(float value)
+	void HorizontalScrollBar::SetValue(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
@@ -62,7 +62,7 @@ namespace o2
 		onChange(value);
 	}
 
-	void UIHorizontalScrollBar::SetValueForcible(float value)
+	void HorizontalScrollBar::SetValueForcible(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		mSmoothValue = mValue;
@@ -72,17 +72,17 @@ namespace o2
 		onSmoothChange(mSmoothValue);
 	}
 
-	float UIHorizontalScrollBar::GetValue() const
+	float HorizontalScrollBar::GetValue() const
 	{
 		return mValue;
 	}
 
-	float UIHorizontalScrollBar::GetSmoothValue() const
+	float HorizontalScrollBar::GetSmoothValue() const
 	{
 		return mSmoothValue;
 	}
 
-	void UIHorizontalScrollBar::SetMinValue(float minValue)
+	void HorizontalScrollBar::SetMinValue(float minValue)
 	{
 		mMinValue = minValue;
 		mValue = Math::Max(mMinValue, mValue);
@@ -91,12 +91,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIHorizontalScrollBar::GetMinValue() const
+	float HorizontalScrollBar::GetMinValue() const
 	{
 		return mMinValue;
 	}
 
-	void UIHorizontalScrollBar::SetMaxValue(float maxValue)
+	void HorizontalScrollBar::SetMaxValue(float maxValue)
 	{
 		mMaxValue = maxValue;
 		mValue = Math::Min(mMaxValue, mValue);
@@ -105,12 +105,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIHorizontalScrollBar::GetMaxValue() const
+	float HorizontalScrollBar::GetMaxValue() const
 	{
 		return mMaxValue;
 	}
 
-	void UIHorizontalScrollBar::SetValueRange(float minValue, float maxValue)
+	void HorizontalScrollBar::SetValueRange(float minValue, float maxValue)
 	{
 		mMinValue = Math::Min(maxValue, minValue);
 		mMaxValue = Math::Max(maxValue, minValue);
@@ -120,28 +120,28 @@ namespace o2
 		onChange(value);
 	}
 
-	void UIHorizontalScrollBar::SetScrollSense(float coef)
+	void HorizontalScrollBar::SetScrollSense(float coef)
 	{
 		mScrollSense = coef;
 	}
 
-	float UIHorizontalScrollBar::GetScrollSense() const
+	float HorizontalScrollBar::GetScrollSense() const
 	{
 		return mScrollSense;
 	}
 
-	void UIHorizontalScrollBar::SetScrollHandleSize(float size)
+	void HorizontalScrollBar::SetScrollHandleSize(float size)
 	{
 		mScrollHandleSize = size;
 		UpdateProgressLayersLayouts();
 	}
 
-	float UIHorizontalScrollBar::GetScrollHandleSize() const
+	float HorizontalScrollBar::GetScrollHandleSize() const
 	{
 		return mScrollHandleSize;
 	}
 
-	bool UIHorizontalScrollBar::IsUnderPoint(const Vec2F& point)
+	bool HorizontalScrollBar::IsUnderPoint(const Vec2F& point)
 	{
 		if (!mDrawingScissorRect.IsInside(point))
 			return false;
@@ -155,12 +155,12 @@ namespace o2
 		return false;
 	}
 
-	bool UIHorizontalScrollBar::IsScrollable() const
+	bool HorizontalScrollBar::IsScrollable() const
 	{
 		return !Math::Equals(mMinValue, mMaxValue);
 	}
 
-	void UIHorizontalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
+	void HorizontalScrollBar::OnCursorPressed(const Input::Cursor& cursor)
 	{
 
 		if (mHandleLayer && mHandleLayer->IsUnderPoint(cursor.position))
@@ -183,7 +183,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalScrollBar::OnCursorReleased(const Input::Cursor& cursor)
+	void HorizontalScrollBar::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -192,7 +192,7 @@ namespace o2
 		mHandlePressed = false;
 	}
 
-	void UIHorizontalScrollBar::OnCursorPressBreak(const Input::Cursor& cursor)
+	void HorizontalScrollBar::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -201,7 +201,7 @@ namespace o2
 		mHandlePressed = false;
 	}
 
-	void UIHorizontalScrollBar::OnCursorStillDown(const Input::Cursor& cursor)
+	void HorizontalScrollBar::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		if (mHandlePressed)
 			SetValueFromUser(GetValueFromCursor(cursor) + mPressHandleOffset);
@@ -221,7 +221,7 @@ namespace o2
 		}
 	}
 
-	float UIHorizontalScrollBar::GetValueFromCursor(const Input::Cursor &cursor)
+	float HorizontalScrollBar::GetValueFromCursor(const Input::Cursor &cursor)
 	{
 		float range = mMaxValue - mMinValue;
 
@@ -236,36 +236,36 @@ namespace o2
 		return (cursor.position.x - layout->worldLeft)/width*range/(1.0f - szCoef) + mMinValue;
 	}
 
-	void UIHorizontalScrollBar::SetValueFromUser(float value)
+	void HorizontalScrollBar::SetValueFromUser(float value)
 	{
 		SetValue(value);
 		onUserChange(mValue);
 	}
 
-	void UIHorizontalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
+	void HorizontalScrollBar::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void UIHorizontalScrollBar::OnCursorExit(const Input::Cursor& cursor)
+	void HorizontalScrollBar::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	void UIHorizontalScrollBar::OnScrolled(float scroll)
+	void HorizontalScrollBar::OnScrolled(float scroll)
 	{
 		SetValue(mValue - scroll*mScrollSense);
 	}
 
-	void UIHorizontalScrollBar::CopyData(const Actor& otherActor)
+	void HorizontalScrollBar::CopyData(const Actor& otherActor)
 	{
-		const UIHorizontalScrollBar& other = dynamic_cast<const UIHorizontalScrollBar&>(otherActor);
+		const HorizontalScrollBar& other = dynamic_cast<const HorizontalScrollBar&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mValue                 = other.mValue;
 		mMinValue              = other.mMinValue;
@@ -283,9 +283,9 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIHorizontalScrollBar::OnDeserialized(const DataNode& node)
+	void HorizontalScrollBar::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
+		Widget::OnDeserialized(node);
 
 		mHandleLayer = FindLayer("handle");
 		mBackLayer = FindLayer("back");
@@ -293,23 +293,23 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIHorizontalScrollBar::OnResEnableInHierarchyChanged()
+	void HorizontalScrollBar::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	void UIHorizontalScrollBar::UpdateLayersLayouts()
+	void HorizontalScrollBar::UpdateLayersLayouts()
 	{
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIHorizontalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
+	void HorizontalScrollBar::SetMinimalScrollHandleSize(float pixelSize)
 	{
 		mScrollhandleMinPxSize = pixelSize;
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIHorizontalScrollBar::UpdateProgressLayersLayouts()
+	void HorizontalScrollBar::UpdateProgressLayersLayouts()
 	{
 		if (mHandleLayer)
 		{
@@ -335,10 +335,10 @@ namespace o2
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
 
-		UIWidget::UpdateLayersLayouts();
+		Widget::UpdateLayersLayouts();
 	}
 
-	void UIHorizontalScrollBar::OnLayerAdded(UIWidgetLayer* layer)
+	void HorizontalScrollBar::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "back")
 			mBackLayer = layer;
@@ -349,4 +349,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIHorizontalScrollBar);
+DECLARE_CLASS(o2::HorizontalScrollBar);

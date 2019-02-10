@@ -11,24 +11,24 @@
 
 namespace o2
 {
-	class UIButton;
-	class UICustomDropDown;
-	class UICustomList;
-	class UIDropDown;
-	class UIEditBox;
-	class UIHorizontalLayout;
-	class UIHorizontalProgress;
-	class UIHorizontalScrollBar;
-	class UIImage;
-	class UILabel;
-	class UIList;
-	class UIScrollArea;
+	class Button;
+	class CustomDropDown;
+	class CustomList;
+	class DropDown;
+	class EditBox;
+	class HorizontalLayout;
+	class HorizontalProgress;
+	class HorizontalScrollBar;
+	class Image;
+	class Label;
+	class List;
+	class ScrollArea;
 	class UIToggle;
-	class UIVerticalLayout;
-	class UIVerticalProgress;
-	class UIVerticalScrollBar;
-	class UIWidget;
-	class UIWindow;
+	class VerticalLayout;
+	class VerticalProgress;
+	class VerticalScrollBar;
+	class Widget;
+	class Window;
 
 #undef CreateWindow
 
@@ -38,7 +38,7 @@ namespace o2
 	class UIManager : public Singleton<UIManager>
 	{
 	public:
-		typedef Vector<UIWidget*> WidgetsVec;
+		typedef Vector<Widget*> WidgetsVec;
 
 	public:
 		// Loads widgets style
@@ -51,13 +51,13 @@ namespace o2
 		void ClearStyle();
 
 		// Adds widget style
-		void AddWidgetStyle(UIWidget* widget, const String& style);
+		void AddWidgetStyle(Widget* widget, const String& style);
 
 		// Creates widget by style
-		UIWidget* CreateWidget(const Type& type, const String& style = "standard");
+		Widget* CreateWidget(const Type& type, const String& style = "standard");
 
 		// Returns widget style by name
-		UIWidget* GetWidgetStyle(const Type& type, const String& style);
+		Widget* GetWidgetStyle(const Type& type, const String& style);
 
 		// Returns widget style by name
 		template<typename _type>
@@ -72,62 +72,62 @@ namespace o2
 		_type* CreateWidget(const String& style = "standard");
 
 		// Creates button by style
-		UIButton* CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
+		Button* CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
 							   const String& style = "standard");
 
 		// Creates button by style
-		UIWindow* CreateWindow(const WString& caption, const String& style = "standard");
+		Window* CreateWindow(const WString& caption, const String& style = "standard");
 
 		// Creates label by style
-		UILabel* CreateLabel(const WString& text, const String& style = "standard");
+		Label* CreateLabel(const WString& text, const String& style = "standard");
 
 		// Creates horizontal layout
-		UIHorizontalLayout* CreateHorLayout();
+		HorizontalLayout* CreateHorLayout();
 
 		// Creates vertical layout
-		UIVerticalLayout* CreateVerLayout();
+		VerticalLayout* CreateVerLayout();
 
 		// Creates horizontal progress bar by style
-		UIHorizontalProgress* CreateHorProgress(const String& style = "standard");
+		HorizontalProgress* CreateHorProgress(const String& style = "standard");
 
 		// CreatesCreates vertical progress bar by style
-		UIVerticalProgress* CreateVerProgress(const String& style = "standard");
+		VerticalProgress* CreateVerProgress(const String& style = "standard");
 
 		// Creates horizontal scroll bar by style
-		UIHorizontalScrollBar* CreateHorScrollBar(const String& style = "standard");
+		HorizontalScrollBar* CreateHorScrollBar(const String& style = "standard");
 
 		// Creates vertical scroll bar by style
-		UIVerticalScrollBar* CreateVerScrollBar(const String& style = "standard");
+		VerticalScrollBar* CreateVerScrollBar(const String& style = "standard");
 
 		// Creates scroll area
-		UIScrollArea* CreateScrollArea(const String& style = "standard");
+		ScrollArea* CreateScrollArea(const String& style = "standard");
 
 		// Creates edit box
-		UIEditBox* CreateEditBox(const String& style = "standard");
+		EditBox* CreateEditBox(const String& style = "standard");
 
 		// Creates list view
-		UICustomList* CreateCustomList(const String& style = "standard");
+		CustomList* CreateCustomList(const String& style = "standard");
 
 		// Creates text list
-		UIList* CreateList(const String& style = "standard");
+		List* CreateList(const String& style = "standard");
 
 		// Creates custom dropdown
-		UICustomDropDown* CreateCustomDropdown(const String& style = "standard");
+		CustomDropDown* CreateCustomDropdown(const String& style = "standard");
 
 		// Creates text dropdown
-		UIDropDown* CreateDropdown(const String& style = "standard");
+		DropDown* CreateDropdown(const String& style = "standard");
 
 		// Creates toggle
 		UIToggle* CreateToggle(const WString& caption, const String& style = "standard");
 
 		// Creates image
-		UIImage* CreateImage(const String& name);
+		Image* CreateImage(const String& name);
 
 		// Sets widget as focused
-		void FocusWidget(UIWidget* widget);
+		void FocusWidget(Widget* widget);
 
 		// Returns current focused widget
-		UIWidget* GetFocusedWidget() const;
+		Widget* GetFocusedWidget() const;
 
 		// Sets next widget focused
 		void FocusNextWidget();
@@ -136,14 +136,14 @@ namespace o2
 		void Draw();
 
 		// Registering widget for drawing at top of all regular widgets
-		void DrawWidgetAtTop(UIWidget* widget);
+		void DrawWidgetAtTop(Widget* widget);
 
 		// Returns all styles widgets
 		const WidgetsVec& GetWidgetStyles() const;
 
 	protected:
 		LogStream * mLog = nullptr;           // UI Log stream
-		UIWidget*  mFocusedWidget = nullptr; // Current selected widget
+		Widget*  mFocusedWidget = nullptr; // Current selected widget
 		WidgetsVec mFocusableWidgets;        // List of selectable widgets
 		WidgetsVec mTopWidgets;              // Top widgets, drawing after mScreenWidget 
 
@@ -161,9 +161,9 @@ namespace o2
 
 		friend class Application;
 		friend class BaseApplication;
-		friend class UICustomDropDown;
-		friend class UITree;
-		friend class UIWidget;
+		friend class CustomDropDown;
+		friend class Tree;
+		friend class Widget;
 	};
 
 	template<typename _type>

@@ -79,7 +79,7 @@ namespace o2
 					debugInfo += " -- " + path + " - " + actor->GetType().GetName() + "\n";
 					debugInfo += "Rect: " + (String)actor->transform->worldRect + "\n";
 
-					UIWidget* widget = dynamic_cast<UIWidget*>(actor);
+					Widget* widget = dynamic_cast<Widget*>(actor);
 					if (widget)
 					{
 						debugInfo += "layout - " +

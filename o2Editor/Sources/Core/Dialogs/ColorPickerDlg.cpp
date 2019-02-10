@@ -21,7 +21,7 @@ namespace Editor
 {
 	ColorPickerDlg::ColorPickerDlg()
 	{
-		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
+		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Color picker")));
 
 		InitializeControls();
 
@@ -62,11 +62,11 @@ namespace Editor
 
 	void ColorPickerDlg::InitializeColorPreview()
 	{
-		UIWidget* colorPreviewContainer = mnew UIWidget();
-		*colorPreviewContainer->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, 30, 0);
+		Widget* colorPreviewContainer = mnew Widget();
+		*colorPreviewContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 30, 0);
 
-		UIWidget* colorPreview = o2UI.CreateWidget<UIWidget>("colorProperty");
-		*colorPreview->layout = UIWidgetLayout::BothStretch(5, 5, 5, 5);
+		Widget* colorPreview = o2UI.CreateWidget<Widget>("colorProperty");
+		*colorPreview->layout = WidgetLayout::BothStretch(5, 5, 5, 5);
 
 		Color4 color1(1.0f, 1.0f, 1.0f, 1.0f), color2(0.7f, 0.7f, 0.7f, 1.0f);
 		Bitmap backLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
@@ -75,17 +75,17 @@ namespace Editor
 		backLayerBitmap.FillRect(10, 20, 20, 10, color2);
 		mChessBackTexture = TextureRef(&backLayerBitmap);
 
-		UIImage* backImage = mnew UIImage();
+		Image* backImage = mnew Image();
 		backImage->image = mnew Sprite(mChessBackTexture, RectI(0, 0, 20, 20));
 		backImage->GetImage()->mode = SpriteMode::Tiled;
-		*backImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+		*backImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 		colorPreview->AddChild(backImage);
 
 		Bitmap colorLayerBitmap(PixelFormat::R8G8B8A8, Vec2I(20, 20));
 		colorLayerBitmap.Fill(color1);
-		mColorSampleImage = mnew UIImage();
+		mColorSampleImage = mnew Image();
 		mColorSampleImage->image = mnew Sprite(&colorLayerBitmap);
-		*mColorSampleImage->layout = UIWidgetLayout::BothStretch(1, 1, 1, 1);
+		*mColorSampleImage->layout = WidgetLayout::BothStretch(1, 1, 1, 1);
 		colorPreview->AddChild(mColorSampleImage);
 		colorPreviewContainer->AddChild(colorPreview);
 
@@ -94,11 +94,11 @@ namespace Editor
 
 	void ColorPickerDlg::InitializePickArea()
 	{
-		UIWidget* pickAreaContainer = mnew UIWidget();
-		*pickAreaContainer->layout = UIWidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 1.0f), Vec2F(0, 0), Vec2F(0, -30));
+		Widget* pickAreaContainer = mnew Widget();
+		*pickAreaContainer->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 1.0f), Vec2F(0, 0), Vec2F(0, -30));
 
-		UIWidget* pickArea = mnew UIWidget();
-		*pickArea->layout = UIWidgetLayout::BothStretch(5, 5, 30, 5);
+		Widget* pickArea = mnew Widget();
+		*pickArea->layout = WidgetLayout::BothStretch(5, 5, 30, 5);
 
 		pickArea->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 						   Layout::BothStretch(-9, -9, -9, -9));
@@ -110,13 +110,13 @@ namespace Editor
 												 Layout::BothStretch(1, 1, 1, 1));
 
 		mColorPickAreaHandle = o2UI.CreateImage("ui/circle_hole_handle.png");
-		*mColorPickAreaHandle->layout = UIWidgetLayout::Based(BaseCorner::Center, Vec2F(15, 15));
+		*mColorPickAreaHandle->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(15, 15));
 		pickArea->AddChild(mColorPickAreaHandle);
 
 		pickAreaContainer->AddChild(pickArea);
 
-		mHUEBar = o2UI.CreateWidget<UIVerticalProgress>("wide");
-		*mHUEBar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 5, 5, 20, 5);
+		mHUEBar = o2UI.CreateWidget<VerticalProgress>("wide");
+		*mHUEBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 5, 5, 20, 5);
 
 		mHUEBarBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(20, 256));
 		InitHUEBarBitmap();
@@ -138,7 +138,7 @@ namespace Editor
 	void ColorPickerDlg::InitializeColorParams()
 	{
 		mTypeDropdown = o2UI.CreateDropdown();
-		*mTypeDropdown->layout = UIWidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -20), Vec2F(0, 0));
+		*mTypeDropdown->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -20), Vec2F(0, 0));
 
 		Vector<WString> colorTypes;
 		for (auto kv : EnumTypeContainer<ColorType>::GetEntries())
@@ -149,8 +149,8 @@ namespace Editor
 
 		mWindow->AddChild(mTypeDropdown);
 
-		auto colorParamsArea = mnew UIVerticalLayout();
-		*colorParamsArea->layout = UIWidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
+		auto colorParamsArea = mnew VerticalLayout();
+		*colorParamsArea->layout = WidgetLayout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 0.5f), Vec2F(0, 0), Vec2F(0, -20));
 		colorParamsArea->border = BorderF(5, 5, 5, 5);
 
 		colorParamsArea->AddChild(InitializeColorParameter(mColor1ParamName, mColor1ParamBar,
@@ -175,18 +175,18 @@ namespace Editor
 	mTypeDropdown->value = "RGB";
 }
 
-UIWidget* ColorPickerDlg::InitializeColorParameter(UILabel*& name, UIHorizontalProgress*& bar,
-												   UIEditBox*& edit, Bitmap*& bitmap, TextureRef& texture,
+Widget* ColorPickerDlg::InitializeColorParameter(Label*& name, HorizontalProgress*& bar,
+												   EditBox*& edit, Bitmap*& bitmap, TextureRef& texture,
 												   const Function<void(float)>& changeCallback)
 {
-	auto resLayout = mnew UIWidget();
+	auto resLayout = mnew Widget();
 	name = o2UI.CreateLabel("R");
-	*name->layout = UIWidgetLayout::Based(BaseCorner::Left, Vec2F(30, 20));
+	*name->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(30, 20));
 	name->horAlign = HorAlign::Left;
 	resLayout->AddChild(name);
 
-	bar = o2UI.CreateWidget<UIHorizontalProgress>("wide");
-	*bar->layout = UIWidgetLayout::HorStretch(VerAlign::Middle, 30, 50, 20);
+	bar = o2UI.CreateWidget<HorizontalProgress>("wide");
+	*bar->layout = WidgetLayout::HorStretch(VerAlign::Middle, 30, 50, 20);
 	bar->onChange = changeCallback;
 
 	bitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2F(256, 256));
@@ -200,7 +200,7 @@ UIWidget* ColorPickerDlg::InitializeColorParameter(UILabel*& name, UIHorizontalP
 	resLayout->AddChild(bar);
 
 	edit = o2UI.CreateEditBox("singleline");
-	*edit->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(45, 20));
+	*edit->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(45, 20));
 	edit->SetFilterInteger();
 
 	edit->onChangeCompleted = [&](const WString& text) { bar->SetValue(((float)text/255.0f)); };

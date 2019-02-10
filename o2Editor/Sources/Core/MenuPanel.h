@@ -23,26 +23,26 @@ namespace Editor
 		~MenuPanel();
 
 		// Add item
-		UIWidget* AddItem(const UIMenuPanel::Item& item);
+		Widget* AddItem(const o2::MenuPanel::Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		UIWidget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+		Widget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
 						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
-		UIWidget* InsertItem(const UIMenuPanel::Item& item, int position);
+		Widget* InsertItem(const o2::MenuPanel::Item& item, int position);
 
 		// Adds array of items
-		void AddItems(Vector<UIMenuPanel::Item> items);
+		void AddItems(Vector<o2::MenuPanel::Item> items);
 
 		// Inserts array of items at position
-		void InsertItems(Vector<UIMenuPanel::Item> items, int position);
+		void InsertItems(Vector<o2::MenuPanel::Item> items, int position);
 
 		// Returns item at position
-		UIMenuPanel::Item GetItem(int position);
+		o2::MenuPanel::Item GetItem(int position);
 
 		// Returns array of all items
-		Vector<UIMenuPanel::Item> GetItems() const;
+		Vector<o2::MenuPanel::Item> GetItems() const;
 
 		// Removes item at position
 		void RemoveItem(int position);
@@ -51,7 +51,7 @@ namespace Editor
 		void RemoveItem(const WString& path);
 
 	protected:
-		UIMenuPanel* mMenuPanel; // Menu panel
+		o2::MenuPanel* mMenuPanel; // Menu panel
 
 	protected:
 		// On File/New scene pressed in menu

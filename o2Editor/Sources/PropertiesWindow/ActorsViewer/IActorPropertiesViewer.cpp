@@ -12,7 +12,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mSpoiler = o2UI.CreateWidget<UISpoilerWithHead>();
+		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
 		mSpoiler->expandHeight = false;
 		mSpoiler->expandWidth = true;
@@ -31,7 +31,7 @@ namespace Editor
 			delete mSpoiler;
 	}
 
-	UIWidget* IActorPropertiesViewer::GetWidget() const
+	Widget* IActorPropertiesViewer::GetWidget() const
 	{
 		return mSpoiler;
 	}

@@ -11,7 +11,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		auto layout = mnew UIVerticalLayout();
+		auto layout = mnew VerticalLayout();
 		layout->spacing = 5;
 		layout->borderTop = 5;
 		layout->expandHeight = false;
@@ -40,7 +40,7 @@ namespace Editor
 
 		if (mRealObjectType)
 		{
-			o2EditorProperties.BuildObjectProperties(dynamic_cast<UIVerticalLayout*>(mViewWidget), mRealObjectType, 
+			o2EditorProperties.BuildObjectProperties(dynamic_cast<VerticalLayout*>(mViewWidget), mRealObjectType, 
 													 mFieldProperties, "", mOnChildFieldChangeCompleted, onChanged);
 
 			mFieldProperties.Set(targetObjets);

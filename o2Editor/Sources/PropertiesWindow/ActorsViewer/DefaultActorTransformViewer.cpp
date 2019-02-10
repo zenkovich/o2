@@ -25,98 +25,98 @@ namespace Editor
 		PushScopeEnterOnStack scope;
 
 		// Position
-		auto positionPropertyContainer = mnew UIWidget();
+		auto positionPropertyContainer = mnew Widget();
 		positionPropertyContainer->name = "position";
 		positionPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(positionPropertyContainer);
 
 		auto positionIcon = o2UI.CreateImage("ui/UI2_position_icon.png");
-		*positionIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*positionIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		positionPropertyContainer->AddChild(positionIcon);
 
 		mPositionProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mPositionProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mPositionProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mPositionProperty->SetValuePath("transform/position");
 		mPositionProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		positionPropertyContainer->AddChild(mPositionProperty);
 
 		// Pivot
-		auto pivotPropertyContainer = mnew UIWidget();
+		auto pivotPropertyContainer = mnew Widget();
 		pivotPropertyContainer->name = "pivot";
 		pivotPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(pivotPropertyContainer);
 
 		auto pivotIcon = o2UI.CreateImage("ui/UI2_pivot_icon.png");
-		*pivotIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*pivotIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		pivotPropertyContainer->AddChild(pivotIcon);
 
 		mPivotProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mPivotProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mPivotProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mPivotProperty->SetValuePath("transform/pivot");
 		mPivotProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		pivotPropertyContainer->AddChild(mPivotProperty);
 
 		// Size
-		auto sizePropertyContainer = mnew UIWidget();
+		auto sizePropertyContainer = mnew Widget();
 		sizePropertyContainer->name = "size";
 		sizePropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(sizePropertyContainer);
 
 		auto sizeIcon = o2UI.CreateImage("ui/UI3_icon_size.png");
-		*sizeIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 0));
+		*sizeIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 0));
 		sizePropertyContainer->AddChild(sizeIcon);
 
 		mSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mSizeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mSizeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mSizeProperty->SetValuePath("transform/size");
 		mSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		sizePropertyContainer->AddChild(mSizeProperty);
 
 		// Scale
-		auto scalePropertyContainer = mnew UIWidget();
+		auto scalePropertyContainer = mnew Widget();
 		scalePropertyContainer->name = "scale";
 		scalePropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(scalePropertyContainer);
 
 		auto scaleIcon = o2UI.CreateImage("ui/UI2_scale_icon.png");
-		*scaleIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*scaleIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		scalePropertyContainer->AddChild(scaleIcon);
 
 		mScaleProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mScaleProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mScaleProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mScaleProperty->SetValuePath("transform/scale");
 		mScaleProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		scalePropertyContainer->AddChild(mScaleProperty);
 
 		// Rotation
-		auto rotationAndDepthPropertyContainer = mnew UIWidget();
+		auto rotationAndDepthPropertyContainer = mnew Widget();
 		rotationAndDepthPropertyContainer->name = "rotation and depth";
 		rotationAndDepthPropertyContainer->layout->minHeight = 20;
 		mSpoiler->AddChild(rotationAndDepthPropertyContainer);
 
 		auto rotateIcon = o2UI.CreateImage("ui/UI2_rotate_icon.png");
-		*rotateIcon->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
+		*rotateIcon->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.0f, 1.0f), Vec2F(0, 0), Vec2F(20, 0));
 		rotationAndDepthPropertyContainer->AddChild(rotateIcon);
 
 		mRotationProperty = o2UI.CreateWidget<FloatProperty>();
-		*mRotationProperty->layout = UIWidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(40, 0), Vec2F(10, 0));
+		*mRotationProperty->layout = WidgetLayout(Vec2F(0, 0), Vec2F(0.5f, 1.0f), Vec2F(40, 0), Vec2F(10, 0));
 		mRotationProperty->SetValuePath("transform/angleDegree");
 		mRotationProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rotationAndDepthPropertyContainer->AddChild(mRotationProperty);
 
 		// Depth
 		auto depthIcon = o2UI.CreateImage("ui/UI2_layer_icon_t.png");
-		*depthIcon->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(10, 0), Vec2F(30, 0));
+		*depthIcon->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(0.5f, 1.0f), Vec2F(10, 0), Vec2F(30, 0));
 		rotationAndDepthPropertyContainer->AddChild(depthIcon);
 
 		mDepthProperty = o2UI.CreateWidget<FloatProperty>();
-		*mDepthProperty->layout = UIWidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(30, 0), Vec2F());
+		*mDepthProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1, 1.0f), Vec2F(30, 0), Vec2F());
 		mDepthProperty->SetValuePath("drawDepth");
 		mDepthProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rotationAndDepthPropertyContainer->AddChild(mDepthProperty);
 
 		// Layout
-		mLayoutSpoiler = o2UI.CreateWidget<UISpoiler>("expand with caption");
+		mLayoutSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 		mLayoutSpoiler->name = "Layout";
 		mLayoutSpoiler->caption = "Layout";
 		mLayoutSpoiler->spacing = 5;
@@ -127,114 +127,114 @@ namespace Editor
 
 		// Anchors
 		// Right top
-		auto rightTopAnchorPropertyContainer = mnew UIWidget();
+		auto rightTopAnchorPropertyContainer = mnew Widget();
 		rightTopAnchorPropertyContainer->name = "right top anchor";
 		rightTopAnchorPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(rightTopAnchorPropertyContainer);
 
 		auto anchorIcon = o2UI.CreateImage("ui/UI3_icon_anchor.png");
-		*anchorIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*anchorIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		rightTopAnchorPropertyContainer->AddChild(anchorIcon);
 
 		mAnchorRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mAnchorRightTopProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mAnchorRightTopProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "R";
-		mAnchorRightTopProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "T";
+		*mAnchorRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		mAnchorRightTopProperty->GetChildByType<Label>("layout/properties/x label")->text = "R";
+		mAnchorRightTopProperty->GetChildByType<Label>("layout/properties/y label")->text = "T";
 		mAnchorRightTopProperty->SetValuePath("layout/anchorMax");
 		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rightTopAnchorPropertyContainer->AddChild(mAnchorRightTopProperty);
 
 		// Left bottom
-		auto leftBottomAnchorPropertyContainer = mnew UIWidget();
+		auto leftBottomAnchorPropertyContainer = mnew Widget();
 		leftBottomAnchorPropertyContainer->name = "left bottom anchor";
 		leftBottomAnchorPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(leftBottomAnchorPropertyContainer);
 
 		mAnchorLeftBottomProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mAnchorLeftBottomProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mAnchorLeftBottomProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "L";
-		mAnchorLeftBottomProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "B";
+		*mAnchorLeftBottomProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		mAnchorLeftBottomProperty->GetChildByType<Label>("layout/properties/x label")->text = "L";
+		mAnchorLeftBottomProperty->GetChildByType<Label>("layout/properties/y label")->text = "B";
 		mAnchorLeftBottomProperty->SetValuePath("layout/anchorMin");
 		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		leftBottomAnchorPropertyContainer->AddChild(mAnchorLeftBottomProperty);
 
 		// Offsets
 		// Right top
-		auto rightTopOffsetPropertyContainer = mnew UIWidget();
+		auto rightTopOffsetPropertyContainer = mnew Widget();
 		rightTopOffsetPropertyContainer->name = "right top offset";
 		rightTopOffsetPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(rightTopOffsetPropertyContainer);
 
 		auto offsetIcon = o2UI.CreateImage("ui/UI3_icon_offsets.png");
-		*offsetIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*offsetIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		rightTopOffsetPropertyContainer->AddChild(offsetIcon);
 
 		mOffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mOffsetRightTopProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mOffsetRightTopProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "R";
-		mOffsetRightTopProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "T";
+		*mOffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		mOffsetRightTopProperty->GetChildByType<Label>("layout/properties/x label")->text = "R";
+		mOffsetRightTopProperty->GetChildByType<Label>("layout/properties/y label")->text = "T";
 		mOffsetRightTopProperty->SetValuePath("layout/offsetMax");
 		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		rightTopOffsetPropertyContainer->AddChild(mOffsetRightTopProperty);
 
 		// Left bottom
-		auto leftBottomOffsetPropertyContainer = mnew UIWidget();
+		auto leftBottomOffsetPropertyContainer = mnew Widget();
 		leftBottomOffsetPropertyContainer->name = "left bottom offset";
 		leftBottomOffsetPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(leftBottomOffsetPropertyContainer);
 
 		mOffsetLeftBottomProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mOffsetLeftBottomProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mOffsetLeftBottomProperty->GetChildByType<UILabel>("layout/properties/x label")->text = "L";
-		mOffsetLeftBottomProperty->GetChildByType<UILabel>("layout/properties/y label")->text = "B";
+		*mOffsetLeftBottomProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		mOffsetLeftBottomProperty->GetChildByType<Label>("layout/properties/x label")->text = "L";
+		mOffsetLeftBottomProperty->GetChildByType<Label>("layout/properties/y label")->text = "B";
 		mOffsetLeftBottomProperty->SetValuePath("layout/offsetMin");
 		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		leftBottomOffsetPropertyContainer->AddChild(mOffsetLeftBottomProperty);
 
 		// Min size
-		auto minSizePropertyContainer = mnew UIWidget();
+		auto minSizePropertyContainer = mnew Widget();
 		minSizePropertyContainer->name = "right top anchor";
 		minSizePropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(minSizePropertyContainer);
 
 		auto minSizeIcon = o2UI.CreateImage("ui/UI3_icon_min_size.png");
-		*minSizeIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*minSizeIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		minSizePropertyContainer->AddChild(minSizeIcon);
 
 		mMinSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mMinSizeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mMinSizeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mMinSizeProperty->SetValuePath("layout/minSize");
 		mMinSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		minSizePropertyContainer->AddChild(mMinSizeProperty);
 
 		// Max size
-		auto maxSizePropertyContainer = mnew UIWidget();
+		auto maxSizePropertyContainer = mnew Widget();
 		maxSizePropertyContainer->name = "right top anchor";
 		maxSizePropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(maxSizePropertyContainer);
 
 		auto maxSizeIcon = o2UI.CreateImage("ui/UI3_icon_max_size.png");
-		*maxSizeIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*maxSizeIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		maxSizePropertyContainer->AddChild(maxSizeIcon);
 
 		mMaxSizeProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mMaxSizeProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mMaxSizeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mMaxSizeProperty->SetValuePath("layout/maxSize");
 		mMaxSizeProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		maxSizePropertyContainer->AddChild(mMaxSizeProperty);
 
 		// Weight
-		auto weightPropertyContainer = mnew UIWidget();
+		auto weightPropertyContainer = mnew Widget();
 		weightPropertyContainer->name = "right top anchor";
 		weightPropertyContainer->layout->minHeight = 20;
 		mLayoutSpoiler->AddChild(weightPropertyContainer);
 
 		auto weightIcon = o2UI.CreateImage("ui/UI3_icon_weight.png");
-		*weightIcon->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
+		*weightIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		weightPropertyContainer->AddChild(weightIcon);
 
 		mWeightProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mWeightProperty->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		*mWeightProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
 		mWeightProperty->SetValuePath("layout/weight");
 		mWeightProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
 		weightPropertyContainer->AddChild(mWeightProperty);
@@ -280,38 +280,38 @@ namespace Editor
 
 		mDepthProperty->SetValueAndPrototypeProxy(depthTargets);
 
-		Vector<UIWidget*> targetWidgets = mTargetActors
-			.FindAll([](Actor* x) { return dynamic_cast<UIWidget*>(x) != nullptr; })
-			.Select<UIWidget*>([](Actor* x) { return dynamic_cast<UIWidget*>(x); });
+		Vector<Widget*> targetWidgets = mTargetActors
+			.FindAll([](Actor* x) { return dynamic_cast<Widget*>(x) != nullptr; })
+			.Select<Widget*>([](Actor* x) { return dynamic_cast<Widget*>(x); });
 
 		mLayoutEnabled = !targetWidgets.IsEmpty();
 		mLayoutSpoiler->enabled = mLayoutEnabled;
 
 		if (mLayoutEnabled)
 		{
-			auto widgetPrototypes = targetWidgets.Select<UIWidget*>(
-				[](Actor* x) { return dynamic_cast<UIWidget*>(x->GetPrototypeLink().Get()); });
+			auto widgetPrototypes = targetWidgets.Select<Widget*>(
+				[](Actor* x) { return dynamic_cast<Widget*>(x->GetPrototypeLink().Get()); });
 
-			mAnchorRightTopProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::anchorMax)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->anchorMax; });
+			mAnchorRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::anchorMax)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->anchorMax; });
 
-			mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::anchorMin)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->anchorMin; });
+			mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::anchorMin)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->anchorMin; });
 
-			mOffsetRightTopProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::offsetMax)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->offsetMax; });
+			mOffsetRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMax)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->offsetMax; });
 
-			mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::offsetMin)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->offsetMin; });
+			mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMin)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->offsetMin; });
 
-			mMinSizeProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::minSize)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->minSize; });
+			mMinSizeProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::minSize)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->minSize; });
 
-			mMaxSizeProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::maxSize)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->maxSize; });
+			mMaxSizeProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::maxSize)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->maxSize; });
 
-			mWeightProperty->SelectValueAndPrototypeProperties<UIWidget, decltype(UIWidgetLayout::weight)>(
-				targetWidgets, widgetPrototypes, [](UIWidget* x) { return &x->layout->weight; });
+			mWeightProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::weight)>(
+				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->weight; });
 		}
 	}
 

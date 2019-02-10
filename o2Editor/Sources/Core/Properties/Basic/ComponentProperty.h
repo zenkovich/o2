@@ -9,13 +9,13 @@ namespace o2
 {
 	class Component;
 	class Text;
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
 {
-	class UISceneTree;
-	class UIAssetsIconsScrollArea;
+	class SceneTree;
+	class AssetsIconsScrollArea;
 
 	// -----------------------------------
 	// Editor actor component property box
@@ -49,7 +49,7 @@ namespace Editor
 	protected:
 		const Type* mComponentType = nullptr;  // Component value type
 
-		UIWidget*   mBox = nullptr;            // Edit box 
+		Widget*   mBox = nullptr;            // Edit box 
 		Text*       mNameText = nullptr;       // Component name text
 
 	protected:
@@ -90,22 +90,22 @@ namespace Editor
 		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
 		// It is called when actors tree nodes was dragged and dropped to this
-		void OnDroppedFromActorsTree(UISceneTree* actorsTree);
+		void OnDroppedFromActorsTree(SceneTree* actorsTree);
 
 		// It is called when actors tree nodes was dragged and entered to this
-		void OnDragEnterFromActorsTree(UISceneTree* actorsTree);
+		void OnDragEnterFromActorsTree(SceneTree* actorsTree);
 
 		// It is called when actors tree nodes was dragged and exited from this
-		void OnDragExitFromActorsTree(UISceneTree* actorsTree);
+		void OnDragExitFromActorsTree(SceneTree* actorsTree);
 
 		// It is called when assets scroll icons was dragged and dropped to this
-		void OnDroppedFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
+		void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 
 		// It is called when assets scroll icons was dragged and entered to this
-		void OnDragEnterFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
+		void OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 
 		// It is called when assets scroll icons was dragged and exited from this
-		void OnDragExitFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll);
+		void OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 	};
 }
 
@@ -142,11 +142,11 @@ CLASS_METHODS_META(Editor::ComponentProperty)
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
-	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, UISceneTree*);
-	PROTECTED_FUNCTION(void, OnDragEnterFromActorsTree, UISceneTree*);
-	PROTECTED_FUNCTION(void, OnDragExitFromActorsTree, UISceneTree*);
-	PROTECTED_FUNCTION(void, OnDroppedFromAssetsScroll, UIAssetsIconsScrollArea*);
-	PROTECTED_FUNCTION(void, OnDragEnterFromAssetsScroll, UIAssetsIconsScrollArea*);
-	PROTECTED_FUNCTION(void, OnDragExitFromAssetsScroll, UIAssetsIconsScrollArea*);
+	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, SceneTree*);
+	PROTECTED_FUNCTION(void, OnDragEnterFromActorsTree, SceneTree*);
+	PROTECTED_FUNCTION(void, OnDragExitFromActorsTree, SceneTree*);
+	PROTECTED_FUNCTION(void, OnDroppedFromAssetsScroll, AssetsIconsScrollArea*);
+	PROTECTED_FUNCTION(void, OnDragEnterFromAssetsScroll, AssetsIconsScrollArea*);
+	PROTECTED_FUNCTION(void, OnDragExitFromAssetsScroll, AssetsIconsScrollArea*);
 }
 END_META;

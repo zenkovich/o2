@@ -6,14 +6,14 @@
 
 namespace o2
 {
-	UIWidgetLayout::UIWidgetLayout():
+	WidgetLayout::WidgetLayout():
 		ActorTransform(mnew Data())
 	{
 		mData = static_cast<Data*>(ActorTransform::mData);
-		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::DontCheckMinMax;
 	}
 
-	UIWidgetLayout::UIWidgetLayout(const UIWidgetLayout& other):
+	WidgetLayout::WidgetLayout(const WidgetLayout& other):
 		ActorTransform(mnew Data()), anchorMin(this), anchorMax(this), offsetMin(this), offsetMax(this),
 		anchorLeft(this), anchorRight(this), anchorBottom(this), anchorTop(this), offsetLeft(this),
 		offsetBottom(this), offsetTop(this), minSize(this), minWidth(this), minHeight(this),
@@ -26,7 +26,7 @@ namespace o2
 		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
 	}
 
-	UIWidgetLayout::UIWidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
+	WidgetLayout::WidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
 								   const Vec2F& offsetMin, const Vec2F& offsetMax):
 		ActorTransform(mnew Data())
 	{
@@ -37,10 +37,10 @@ namespace o2
 		mData->offsetMin = offsetMin;
 		mData->offsetMax = offsetMax;
 
-		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::DontCheckMinMax;
 	}
 
-	UIWidgetLayout::UIWidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
+	WidgetLayout::WidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
 								   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom):
 		ActorTransform(mnew Data())
 	{
@@ -51,10 +51,10 @@ namespace o2
 		mData->offsetMin.Set(offsetLeft, offsetBottom);
 		mData->offsetMax.Set(offsetRight, offsetTop);
 
-		mCheckMinMaxFunc = &UIWidgetLayout::DontCheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::DontCheckMinMax;
 	}
 
-	UIWidgetLayout& UIWidgetLayout::operator=(const UIWidgetLayout& other)
+	WidgetLayout& WidgetLayout::operator=(const WidgetLayout& other)
 	{
 		CopyFrom(other);
 		SetDirty();
@@ -62,7 +62,7 @@ namespace o2
 		return *this;
 	}
 
-	bool UIWidgetLayout::operator==(const UIWidgetLayout& other) const
+	bool WidgetLayout::operator==(const WidgetLayout& other) const
 	{
 		return mData->anchorMin == other.mData->anchorMin &&
 			mData->anchorMax == other.mData->anchorMax &&
@@ -70,7 +70,7 @@ namespace o2
 			mData->offsetMax == other.mData->offsetMax;
 	}
 
-	void UIWidgetLayout::SetPosition(const Vec2F& position)
+	void WidgetLayout::SetPosition(const Vec2F& position)
 	{
 		RectF parentRect = GetParentRectangle();
 		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
@@ -83,7 +83,7 @@ namespace o2
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetSize(const Vec2F& size)
+	void WidgetLayout::SetSize(const Vec2F& size)
 	{
 		RectF parentRect = GetParentRectangle();
 		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
@@ -96,7 +96,7 @@ namespace o2
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetWidth(float value)
+	void WidgetLayout::SetWidth(float value)
 	{
 		RectF parentRect = GetParentRectangle();
 		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
@@ -109,7 +109,7 @@ namespace o2
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetHeight(float value)
+	void WidgetLayout::SetHeight(float value)
 	{
 		RectF parentRect = GetParentRectangle();
 		RectF rectangle(mData->offsetMin + mData->anchorMin*parentRect.Size(),
@@ -122,7 +122,7 @@ namespace o2
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetRect(const RectF& rect)
+	void WidgetLayout::SetRect(const RectF& rect)
 	{
 		RectF parentRect = GetParentRectangle();
 		RectF parentAnchoredRect(parentRect.Size()*mData->anchorMin,
@@ -134,31 +134,31 @@ namespace o2
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetAxisAlignedRect(const RectF& rect)
+	void WidgetLayout::SetAxisAlignedRect(const RectF& rect)
 	{
 		ActorTransform::SetAxisAlignedRect(rect);
 		UpdateOffsetsByCurrentTransform();
 	}
 
-	void UIWidgetLayout::SetPivot(const Vec2F& pivot)
+	void WidgetLayout::SetPivot(const Vec2F& pivot)
 	{
 		mData->pivot = pivot;
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetBasis(const Basis& basis)
+	void WidgetLayout::SetBasis(const Basis& basis)
 	{
 		ActorTransform::SetBasis(basis);
 		UpdateOffsetsByCurrentTransform();
 	}
 
-	void UIWidgetLayout::SetNonSizedBasis(const Basis& basis)
+	void WidgetLayout::SetNonSizedBasis(const Basis& basis)
 	{
 		ActorTransform::SetNonSizedBasis(basis);
 		UpdateOffsetsByCurrentTransform();
 	}
 
-	RectF UIWidgetLayout::GetRect() const
+	RectF WidgetLayout::GetRect() const
 	{
 		RectF parentRect = GetParentRectangle();
 
@@ -168,252 +168,252 @@ namespace o2
 		return rectangle;
 	}
 
-	void UIWidgetLayout::SetAnchorMin(const Vec2F& min)
+	void WidgetLayout::SetAnchorMin(const Vec2F& min)
 	{
 		mData->anchorMin = min;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetAnchorMin() const
+	Vec2F WidgetLayout::GetAnchorMin() const
 	{
 		return mData->anchorMin;
 	}
 
-	void UIWidgetLayout::SetAnchorMax(const Vec2F& max)
+	void WidgetLayout::SetAnchorMax(const Vec2F& max)
 	{
 		mData->anchorMax = max;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetAnchorMax() const
+	Vec2F WidgetLayout::GetAnchorMax() const
 	{
 		return mData->anchorMax;
 	}
 
-	void UIWidgetLayout::SetAnchorLeft(float value)
+	void WidgetLayout::SetAnchorLeft(float value)
 	{
 		mData->anchorMin.x = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetAnchorLeft() const
+	float WidgetLayout::GetAnchorLeft() const
 	{
 		return mData->anchorMin.x;
 	}
 
-	void UIWidgetLayout::SetAnchorRight(float value)
+	void WidgetLayout::SetAnchorRight(float value)
 	{
 		mData->anchorMax.x = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetAnchorRight() const
+	float WidgetLayout::GetAnchorRight() const
 	{
 		return mData->anchorMax.x;
 	}
 
-	void UIWidgetLayout::SetAnchorBottom(float value)
+	void WidgetLayout::SetAnchorBottom(float value)
 	{
 		mData->anchorMin.y = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetAnchorBottom() const
+	float WidgetLayout::GetAnchorBottom() const
 	{
 		return mData->anchorMin.y;
 	}
 
-	void UIWidgetLayout::SetAnchorTop(float value)
+	void WidgetLayout::SetAnchorTop(float value)
 	{
 		mData->anchorMax.y = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetAnchorTop() const
+	float WidgetLayout::GetAnchorTop() const
 	{
 		return mData->anchorMax.y;
 	}
 
-	void UIWidgetLayout::SetOffsetMin(const Vec2F& min)
+	void WidgetLayout::SetOffsetMin(const Vec2F& min)
 	{
 		mData->offsetMin = min;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetOffsetMin() const
+	Vec2F WidgetLayout::GetOffsetMin() const
 	{
 		return mData->offsetMin;
 	}
 
-	void UIWidgetLayout::SetOffsetMax(const Vec2F& max)
+	void WidgetLayout::SetOffsetMax(const Vec2F& max)
 	{
 		mData->offsetMax = max;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetOffsetMax() const
+	Vec2F WidgetLayout::GetOffsetMax() const
 	{
 		return mData->offsetMax;
 	}
 
-	void UIWidgetLayout::SetOffsetLeft(float value)
+	void WidgetLayout::SetOffsetLeft(float value)
 	{
 		mData->offsetMin.x = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetOffsetLeft() const
+	float WidgetLayout::GetOffsetLeft() const
 	{
 		return mData->offsetMin.x;
 	}
 
-	void UIWidgetLayout::SetOffsetRight(float value)
+	void WidgetLayout::SetOffsetRight(float value)
 	{
 		mData->offsetMax.x = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetOffsetRight() const
+	float WidgetLayout::GetOffsetRight() const
 	{
 		return mData->offsetMax.x;
 	}
 
-	void UIWidgetLayout::SetOffsetBottom(float value)
+	void WidgetLayout::SetOffsetBottom(float value)
 	{
 		mData->offsetMin.y = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetOffsetBottom() const
+	float WidgetLayout::GetOffsetBottom() const
 	{
 		return mData->offsetMin.y;
 	}
 
-	void UIWidgetLayout::SetOffsetTop(float value)
+	void WidgetLayout::SetOffsetTop(float value)
 	{
 		mData->offsetMax.y = value;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetOffsetTop() const
+	float WidgetLayout::GetOffsetTop() const
 	{
 		return mData->offsetMax.y;
 	}
 
-	void UIWidgetLayout::SetMinimalSize(const Vec2F& minSize)
+	void WidgetLayout::SetMinimalSize(const Vec2F& minSize)
 	{
 		mData->minSize = minSize;
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetMinimalSize() const
+	Vec2F WidgetLayout::GetMinimalSize() const
 	{
 		return mData->minSize;
 	}
 
-	void UIWidgetLayout::SetMinimalWidth(float value)
+	void WidgetLayout::SetMinimalWidth(float value)
 	{
 		mData->minSize.x = value;
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetMinimalWidth() const
+	float WidgetLayout::GetMinimalWidth() const
 	{
 		return mData->minSize.x;
 	}
 
-	void UIWidgetLayout::SetMinimalHeight(float value)
+	void WidgetLayout::SetMinimalHeight(float value)
 	{
 		mData->minSize.y = value;
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetMinimalHeight() const
+	float WidgetLayout::GetMinimalHeight() const
 	{
 		return mData->minSize.y;
 	}
 
-	void UIWidgetLayout::SetMaximalSize(const Vec2F& maxSize)
+	void WidgetLayout::SetMaximalSize(const Vec2F& maxSize)
 	{
 		mData->maxSize = maxSize;
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetMaximalSize() const
+	Vec2F WidgetLayout::GetMaximalSize() const
 	{
 		return mData->maxSize;
 	}
 
-	void UIWidgetLayout::SetMaximalWidth(float value)
+	void WidgetLayout::SetMaximalWidth(float value)
 	{
 		mData->maxSize.x = value;
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetMaximalWidth() const
+	float WidgetLayout::GetMaximalWidth() const
 	{
 		return mData->maxSize.x;
 	}
 
-	void UIWidgetLayout::SetMaximalHeight(float value)
+	void WidgetLayout::SetMaximalHeight(float value)
 	{
 		mData->maxSize.y = value;
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetMaximalHeight() const
+	float WidgetLayout::GetMaximalHeight() const
 	{
 		return mData->maxSize.y;
 	}
 
-	void UIWidgetLayout::DisableMinMaxSizes()
+	void WidgetLayout::DisableMinMaxSizes()
 	{
-		mCheckMinMaxFunc = &UIWidgetLayout::CheckMinMax;
+		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetWeight(const Vec2F& weight)
+	void WidgetLayout::SetWeight(const Vec2F& weight)
 	{
 		mData->weight = weight;
 		SetDirty();
 	}
 
-	Vec2F UIWidgetLayout::GetWeight() const
+	Vec2F WidgetLayout::GetWeight() const
 	{
 		return mData->weight;
 	}
 
-	void UIWidgetLayout::SetWidthWeight(float widthWeigth)
+	void WidgetLayout::SetWidthWeight(float widthWeigth)
 	{
 		mData->weight.x = widthWeigth;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetWidthWeight()
+	float WidgetLayout::GetWidthWeight()
 	{
 		return mData->weight.x;
 	}
 
-	void UIWidgetLayout::SetHeightWeight(float heigthWeigth)
+	void WidgetLayout::SetHeightWeight(float heigthWeigth)
 	{
 		mData->weight.y = heigthWeigth;
 		SetDirty();
 	}
 
-	float UIWidgetLayout::GetHeightWeight()
+	float WidgetLayout::GetHeightWeight()
 	{
 		return mData->weight.y;
 	}
 
-	UIWidgetLayout UIWidgetLayout::BothStretch(float borderLeft, float borderBottom, float borderRight, float borderTop)
+	WidgetLayout WidgetLayout::BothStretch(float borderLeft, float borderBottom, float borderRight, float borderTop)
 	{
-		UIWidgetLayout res;
+		WidgetLayout res;
 		res.mData->anchorMin = Vec2F(0, 0);
 		res.mData->anchorMax = Vec2F(1, 1);
 		res.mData->offsetMin = Vec2F(borderLeft, borderBottom);
@@ -421,9 +421,9 @@ namespace o2
 		return res;
 	}
 
-	UIWidgetLayout UIWidgetLayout::Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset)
+	WidgetLayout WidgetLayout::Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset)
 	{
-		UIWidgetLayout res;
+		WidgetLayout res;
 		switch (corner)
 		{
 			case BaseCorner::Left:
@@ -492,9 +492,9 @@ namespace o2
 		return res;
 	}
 
-	UIWidgetLayout UIWidgetLayout::VerStretch(HorAlign align, float top, float bottom, float width, float offsX)
+	WidgetLayout WidgetLayout::VerStretch(HorAlign align, float top, float bottom, float width, float offsX)
 	{
-		UIWidgetLayout res;
+		WidgetLayout res;
 		res.mData->anchorMin.y = 0.0f;
 		res.mData->anchorMax.y = 1.0f;
 		res.mData->offsetMin.y = bottom;
@@ -530,9 +530,9 @@ namespace o2
 		return res;
 	}
 
-	UIWidgetLayout UIWidgetLayout::HorStretch(VerAlign align, float left, float right, float height, float offsY)
+	WidgetLayout WidgetLayout::HorStretch(VerAlign align, float left, float right, float height, float offsY)
 	{
-		UIWidgetLayout res;
+		WidgetLayout res;
 		res.mData->anchorMin.x = 0.0f;
 		res.mData->anchorMax.x = 1.0f;
 		res.mData->offsetMin.x = left;
@@ -568,14 +568,14 @@ namespace o2
 		return res;
 	}
 
-	void UIWidgetLayout::SetOwner(Actor* actor)
+	void WidgetLayout::SetOwner(Actor* actor)
 	{
 		ActorTransform::SetOwner(actor);
-		mData->owner = (UIWidget*)actor;
+		mData->owner = (Widget*)actor;
 		SetDirty();
 	}
 
-	void UIWidgetLayout::SetDirty(bool fromParent /*= true*/)
+	void WidgetLayout::SetDirty(bool fromParent /*= true*/)
 	{
 		if (!fromParent && mData->drivenByParent && mData->owner && mData->owner->mParent)
 			mData->owner->mParent->transform->SetDirty(fromParent);
@@ -583,7 +583,7 @@ namespace o2
 		ActorTransform::SetDirty(fromParent);
 	}
 
-	RectF UIWidgetLayout::GetParentRectangle() const
+	RectF WidgetLayout::GetParentRectangle() const
 	{
 		if (mData->owner->mParentWidget)
 			return mData->owner->mParentWidget->mChildrenWorldRect;
@@ -593,7 +593,7 @@ namespace o2
 		return RectF();
 	}
 
-	void UIWidgetLayout::Update()
+	void WidgetLayout::Update()
 	{
 		RectF parentWorldRect; 
 		Vec2F parentWorldPosition;
@@ -636,7 +636,7 @@ namespace o2
 		}
 	}
 
-	void UIWidgetLayout::FloorRectangle()
+	void WidgetLayout::FloorRectangle()
 	{
 		mData->size.x     = Math::Round(mData->size.x);
 		mData->size.y     = Math::Round(mData->size.y);
@@ -644,7 +644,7 @@ namespace o2
 		mData->position.y = Math::Round(mData->position.y);
 	}
 
-	void UIWidgetLayout::UpdateOffsetsByCurrentTransform()
+	void WidgetLayout::UpdateOffsetsByCurrentTransform()
 	{
 		Vec2F offs;
 		
@@ -657,9 +657,9 @@ namespace o2
 		SetRect(ActorTransform::GetRect() - offs);
 	}
 
-	void UIWidgetLayout::CopyFrom(const ActorTransform& other)
+	void WidgetLayout::CopyFrom(const ActorTransform& other)
 	{
-		const UIWidgetLayout* otherLayout = dynamic_cast<const UIWidgetLayout*>(&other);
+		const WidgetLayout* otherLayout = dynamic_cast<const WidgetLayout*>(&other);
 
 		if (otherLayout)
 		{
@@ -678,7 +678,7 @@ namespace o2
 		ActorTransform::CopyFrom(other);
 	}
 
-	void UIWidgetLayout::CheckMinMax()
+	void WidgetLayout::CheckMinMax()
 	{
 		Vec2F resSize = mData->size;
 		Vec2F minSizeWithChildren(mData->owner->GetMinWidthWithChildren(), mData->owner->GetMinHeightWithChildren());
@@ -692,10 +692,10 @@ namespace o2
 			mData->size += szDelta;
 	}
 
-	void UIWidgetLayout::DontCheckMinMax()
+	void WidgetLayout::DontCheckMinMax()
 	{}
 }
 
-DECLARE_CLASS(o2::UIWidgetLayout);
+DECLARE_CLASS(o2::WidgetLayout);
 
-DECLARE_CLASS(o2::UIWidgetLayout::Data);
+DECLARE_CLASS(o2::WidgetLayout::Data);

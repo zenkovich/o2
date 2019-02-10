@@ -33,7 +33,7 @@ namespace o2
 {
 	void BasicUIStyleBuilder::RebuildButtonStyle()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(20, 20);
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_button_regular.png"), 
@@ -73,7 +73,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCloseButtonStyle()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(5, 5);
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Close_button_regular.png"),
@@ -100,7 +100,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildArrowButtonStyle()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(5, 5);
 
 		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Options_button_regular.png"),
@@ -127,7 +127,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildHorProgressBarStyle()
 	{
-		UIHorizontalProgress* sample = mnew UIHorizontalProgress();
+		HorizontalProgress* sample = mnew HorizontalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
 		auto backLayer = sample->AddLayer("back", nullptr);
 		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Hor_scrollbar_bk.png"),
@@ -158,7 +158,7 @@ namespace o2
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->SetOrientation(UIHorizontalProgress::Orientation::Right);
+		sample->SetOrientation(HorizontalProgress::Orientation::Right);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -166,7 +166,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildVerProgressBarStyle()
 	{
-		UIVerticalProgress* sample = mnew UIVerticalProgress();
+		VerticalProgress* sample = mnew VerticalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
 		auto backLayer = sample->AddLayer("back", nullptr);
 		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Ver_scrollbar_bk.png"),
@@ -202,7 +202,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildHorScrollBarStyle()
 	{
-		UIHorizontalScrollBar* sample = mnew UIHorizontalScrollBar();
+		HorizontalScrollBar* sample = mnew HorizontalScrollBar();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
 		sample->SetMinimalScrollHandleSize(10);
@@ -241,7 +241,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildVerScrollBarStyle()
 	{
-		UIVerticalScrollBar* sample = mnew UIVerticalScrollBar();
+		VerticalScrollBar* sample = mnew VerticalScrollBar();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->SetScrollSense(0.25f);
 		sample->SetMinimalScrollHandleSize(10);
@@ -374,21 +374,21 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildScrollAreaStraightBarsStyle()
 	{
-		UIScrollArea* sample = mnew UIScrollArea();
+		ScrollArea* sample = mnew ScrollArea();
 		sample->layout->minSize = Vec2F(30, 30);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(false);
 		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -421,21 +421,21 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildScrollAreaStyle()
 	{
-		UIScrollArea* sample = mnew UIScrollArea();
+		ScrollArea* sample = mnew ScrollArea();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
 		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -450,10 +450,10 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildLabelStyle()
 	{
-		UILabel* sample = mnew UILabel();
+		Label* sample = mnew Label();
 		sample->layout->minSize = Vec2F(20, 20);
-		sample->horOverflow = UILabel::HorOverflow::Dots;
-		sample->verOverflow = UILabel::VerOverflow::None;
+		sample->horOverflow = Label::HorOverflow::Dots;
+		sample->verOverflow = Label::VerOverflow::None;
 
 		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Checkbox";
@@ -469,7 +469,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildEditBoxStyle()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(false);
@@ -480,14 +480,14 @@ namespace o2
 		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -534,7 +534,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCustomListStyle()
 	{
-		UICustomList* sample = mnew UICustomList();
+		CustomList* sample = mnew CustomList();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
@@ -549,14 +549,14 @@ namespace o2
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -580,7 +580,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildLongListStyle()
 	{
-		UILongList* sample = mnew UILongList();
+		LongList* sample = mnew LongList();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
@@ -594,14 +594,14 @@ namespace o2
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -628,7 +628,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildListStyle()
 	{
-		UIList* sample = mnew UIList();
+		List* sample = mnew List();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
@@ -643,20 +643,20 @@ namespace o2
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
-		UILabel* itemSample = o2UI.CreateLabel("empty");
+		Label* itemSample = o2UI.CreateLabel("empty");
 		itemSample->layout->size = Vec2F(20, 0);
 		itemSample->horAlign = HorAlign::Left;
 		itemSample->verAlign = VerAlign::Middle;
 		sample->SetItemSample(itemSample);
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -683,7 +683,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCustomDropDownStyle()
 	{
-		UICustomDropDown* sample = mnew UICustomDropDown();
+		CustomDropDown* sample = mnew CustomDropDown();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -693,12 +693,12 @@ namespace o2
 
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
 
-		UIWidget* itemSample = mnew UIWidget();
+		Widget* itemSample = mnew Widget();
 		itemSample->layout->size = Vec2F(20, 20);
 		sample->SetItemSample(itemSample);
 
 		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		delete list->layer["back"]->GetDrawable();
 		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
@@ -724,7 +724,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildDropDownStyle()
 	{
-		UIDropDown* sample = mnew UIDropDown();
+		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
 										  Layout::BothStretch(-9, -9, -9, -9));
@@ -741,7 +741,7 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
 
 		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		delete list->layer["back"]->GetDrawable();
 		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
@@ -751,7 +751,7 @@ namespace o2
 		list->layout->offsetMin = Vec2F(2, -60);
 		list->layout->offsetMax = Vec2F(0, 3);
 
-		UILabel* itemSample = o2UI.CreateLabel("empty");
+		Label* itemSample = o2UI.CreateLabel("empty");
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
@@ -773,7 +773,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildWindowStyle()
 	{
-		UIWindow* sample = mnew UIWindow();
+		Window* sample = mnew Window();
 		sample->layout->minSize = Vec2F(100, 50);
 		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
@@ -793,25 +793,25 @@ namespace o2
 		auto textLayer = sample->AddLayer("caption", captionText,
 										  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
-		*horScrollBar->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 5, 15, 15, -5);
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		*horScrollBar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 5, 15, 15, -5);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
-		*verScrollBar->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 15, 15, -5);
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		*verScrollBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 15, 15, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 2.0f;
 
-		UIButton* closeBtn = o2UI.CreateWidget<UIButton>("close");
+		Button* closeBtn = o2UI.CreateWidget<Button>("close");
 		closeBtn->name = "closeButton";
-		*closeBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(4, 22));
+		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(4, 22));
 		sample->AddInternalWidget(closeBtn);
 
-		UIButton* optionsBtn = o2UI.CreateWidget<UIButton>("arrow");
+		Button* optionsBtn = o2UI.CreateWidget<Button>("arrow");
 		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = UIWidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-12, 22));
+		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-12, 22));
 		sample->AddInternalWidget(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head
@@ -842,20 +842,20 @@ namespace o2
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
-		UIWidget* separatorSample = sample->GetSeparatorSample();
+		Widget* separatorSample = sample->GetSeparatorSample();
 		separatorSample->AddLayer("line", mnew Sprite("ui/UI_Separator.png"),
 								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
 
-		UIContextMenuItem* itemSample = sample->GetItemSample();
+		ContextMenuItem* itemSample = sample->GetItemSample();
 
-		UIWidgetLayer* captionLayer = itemSample->FindLayer("caption");
+		WidgetLayer* captionLayer = itemSample->FindLayer("caption");
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayer->SetDrawable(captionLayerText);
 		captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 
-		UIWidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
+		WidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
 		Text* shortcutLayerText = mnew Text("stdFont.ttf");
 		shortcutLayer->layout = Layout::BothStretch(20, 1, 10, -1);
 		shortcutLayer->SetDrawable(shortcutLayerText);
@@ -863,26 +863,26 @@ namespace o2
 		shortcutLayerText->verAlign = VerAlign::Middle;
 		shortcutLayer->transparency = 0.7f;
 
-		UIWidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
+		WidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
 		subIconLayer->SetDrawable(mnew Sprite("ui/UI_Right_icn.png"));
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
 
 		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"), 
 							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
 
-		UIWidgetLayer* basicLayer = itemSample->FindLayer("basic");
+		WidgetLayer* basicLayer = itemSample->FindLayer("basic");
 
 		itemSample->AddState("enabled", Animation::EaseInOut(itemSample, &basicLayer->transparency, 0.5f, 1.0f, 0.2f));
 		itemSample->SetStateForcible("enabled", true);
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -905,7 +905,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildMenuPanelStyle()
 	{
-		UIMenuPanel* sample = mnew UIMenuPanel();
+		MenuPanel* sample = mnew MenuPanel();
 
 		sample->AddLayer("back", mnew Sprite("ui/UI_Up_Menu.png"), Layout::BothStretch(-15, -15, -15, -17));
 
@@ -914,7 +914,7 @@ namespace o2
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemSample = o2UI.CreateLabel("unknown");
-		itemSample->horOverflow = UILabel::HorOverflow::Expand;
+		itemSample->horOverflow = Label::HorOverflow::Expand;
 		itemSample->expandBorder = Vec2F(10, 0);
 		sample->SetItemSample(itemSample);
 
@@ -928,7 +928,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildTreeStyle()
 	{
-		UITree* sample = mnew UITree();
+		Tree* sample = mnew Tree();
 		sample->layout->minSize = Vec2F(20, 20);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
@@ -952,7 +952,7 @@ namespace o2
 		captionLayerText->verAlign = VerAlign::Middle;
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
 
-		UIButton* itemSampleExpandBtn = mnew UIButton();
+		Button* itemSampleExpandBtn = mnew Button();
 		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
 
@@ -998,14 +998,14 @@ namespace o2
 		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -1029,7 +1029,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildBacklessDropdown()
 	{
-		UIDropDown* sample = mnew UIDropDown();
+		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, -1)));
@@ -1037,7 +1037,7 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
 
 		auto list = sample->GetListView();
-		*list = *o2UI.GetWidgetStyle<UICustomList>("standard");
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
@@ -1051,7 +1051,7 @@ namespace o2
 		list->layout->offsetMin = Vec2F(0, -60);
 		list->layout->offsetMax = Vec2F(0, 0);
 
-		UILabel* itemSample = o2UI.CreateLabel("empty");
+		Label* itemSample = o2UI.CreateLabel("empty");
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
@@ -1065,7 +1065,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildBacklessEditbox()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
 		sample->SetCaretBlinkingDelay(0.85f);
@@ -1091,7 +1091,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildSinglelineEditbox()
 	{
-		UIEditBox* sample = mnew UIEditBox();
+		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 3, -1));
 		sample->SetCaretBlinkingDelay(0.85f);
@@ -1126,20 +1126,20 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildBacklessScrollarea()
 	{
-		UIScrollArea* sample = mnew UIScrollArea();
+		ScrollArea* sample = mnew ScrollArea();
 		sample->layout->minSize = Vec2F(10, 10);
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
 
-		UIHorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
 		horScrollBar->layout->offsetMin = Vec2F(5, 0);
 		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
 		sample->SetHorizontalScrollBar(horScrollBar);
 
-		UIVerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
 		verScrollBar->layout->anchorMin = Vec2F(1, 0);
 		verScrollBar->layout->anchorMax = Vec2F(1, 1);
 		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
@@ -1154,7 +1154,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildExpandButton()
 	{
-		UIButton* sample = mnew UIButton();
+		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->name = "expandBtn";
 
@@ -1194,7 +1194,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildSpoiler()
 	{
-		UISpoiler* sample = mnew UISpoiler();
+		Spoiler* sample = mnew Spoiler();
 		sample->spacing = 5.0f;
 		sample->borderLeft = 10;
 		sample->expandHeight = false;
@@ -1210,8 +1210,8 @@ namespace o2
 		captionText->wordWrap    = true;
 		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 10, 0, 20));
 
-		auto expandBtn = o2UI.CreateWidget<UIButton>("expand");
-		*expandBtn->layout = UIWidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-7, 0));
+		auto expandBtn = o2UI.CreateWidget<Button>("expand");
+		*expandBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-7, 0));
 		expandBtn->SetInternalParent(sample, false);
 
 		sample->SetHeadHeight(20);

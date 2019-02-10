@@ -7,11 +7,11 @@ using namespace o2;
 
 namespace o2
 {
-	class UIButton;
-	class UIEditBox;
-	class UIImage;
-	class UILabel;
-	class UIWidget;
+	class Button;
+	class EditBox;
+	class Image;
+	class Label;
+	class Widget;
 }
 
 namespace Editor

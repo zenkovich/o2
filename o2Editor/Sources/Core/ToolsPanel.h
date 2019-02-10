@@ -7,12 +7,12 @@ using namespace o2;
 
 namespace o2
 {
-	class UIButton;
-	class UICustomDropDown;
-	class UIDropDown;
-	class UIHorizontalLayout;
+	class Button;
+	class CustomDropDown;
+	class DropDown;
+	class HorizontalLayout;
 	class UIToggle;
-	class UIWidget;
+	class Widget;
 }
 
 // Editor tools panel accessor macros
@@ -27,27 +27,27 @@ namespace Editor
 	{
 	public:
 		// Returns panel's widgets
-		UIWidget* GetPanelWidget() const;
+		Widget* GetPanelWidget() const;
 
 		// Returns play panel's widget
-		UIWidget* GetPlayPanel() const;
+		Widget* GetPlayPanel() const;
 
 		// Returns tools' panel widget 
-		UIHorizontalLayout* GetToolsPanel() const;
+		HorizontalLayout* GetToolsPanel() const;
 
 	protected:
 		const String        mDefaultSchemeName = "Default";
 		const String        mSaveAsSchemeName = "Save as ...";
 
-		UIWidget*           mPanelRoot;			// Root panel widget
+		Widget*           mPanelRoot;			// Root panel widget
 
-		UIWidget*           mPlayPanel;			// Play panel widget
+		Widget*           mPlayPanel;			// Play panel widget
 		UIToggle*           mPlayToggle;		// Play toggle
 		UIToggle*           mPauseToggle;		// Pause toggle
-		UIButton*           mStepButton;		// Step button
-		UIDropDown*         mDevicesList;		// Devices list dropdown
+		Button*           mStepButton;		// Step button
+		DropDown*         mDevicesList;		// Devices list dropdown
 
-		UIHorizontalLayout* mEditToolsPanel;	// Tools panel layout
+		HorizontalLayout* mEditToolsPanel;	// Tools panel layout
 		UIToggle*           mArrowToolToggle;	// Arrow tool
 		UIToggle*           mBrushToolToggle;	// Brush tool
 		UIToggle*           mMoveToolToggle;	// Move tool
@@ -55,7 +55,7 @@ namespace Editor
 		UIToggle*           mScaleToolToggle;	// Scale tool
 		UIToggle*           mFrameToolToggle;	// Frame tool
 
-		UIDropDown*         mLayoutSchemesList; // Layouts schemes list
+		DropDown*         mLayoutSchemesList; // Layouts schemes list
 
 	protected:
 		// Default constructor. Initializes all panel

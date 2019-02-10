@@ -18,16 +18,16 @@
 
 namespace Editor
 {
-	UIAssetsFoldersTree::UIAssetsFoldersTree():
-		UIWidget()
+	AssetsFoldersTree::AssetsFoldersTree():
+		Widget()
 	{
 		if (!UIManager::IsSingletonInitialzed())
 			return;
 
-		mFoldersTree = o2UI.CreateWidget<UITree>("folders");
-		*mFoldersTree->layout = UIWidgetLayout::BothStretch();
+		mFoldersTree = o2UI.CreateWidget<Tree>("folders");
+		*mFoldersTree->layout = WidgetLayout::BothStretch();
 
-		mFoldersTree->SetRearrangeType(UITree::RearrangeType::OnlyReparent);
+		mFoldersTree->SetRearrangeType(Tree::RearrangeType::OnlyReparent);
 		mFoldersTree->SetMultipleSelectionAvailable(false);
 
 		mFoldersTree->getObjectParentDelegate = THIS_FUNC(GetFoldersTreeNodeParent);
@@ -43,10 +43,10 @@ namespace Editor
 		InitializeContext();
 	}
 
-	UIAssetsFoldersTree::UIAssetsFoldersTree(const UIAssetsFoldersTree& other):
-		UIWidget(other)
+	AssetsFoldersTree::AssetsFoldersTree(const AssetsFoldersTree& other):
+		Widget(other)
 	{
-		mFoldersTree = FindChildByType<UITree>();
+		mFoldersTree = FindChildByType<Tree>();
 		RemoveChild(FindChildByType<UIContextMenu>());
 
 		InitializeContext();
@@ -55,22 +55,22 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	UIAssetsFoldersTree::~UIAssetsFoldersTree()
+	AssetsFoldersTree::~AssetsFoldersTree()
 	{}
 
-	UIAssetsFoldersTree& UIAssetsFoldersTree::operator=(const UIAssetsFoldersTree& other)
+	AssetsFoldersTree& AssetsFoldersTree::operator=(const AssetsFoldersTree& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIAssetsFoldersTree::CopyData(const Actor& otherActor)
+	void AssetsFoldersTree::CopyData(const Actor& otherActor)
 	{
-		const UIAssetsFoldersTree& other = dynamic_cast<const UIAssetsFoldersTree&>(otherActor);
+		const AssetsFoldersTree& other = dynamic_cast<const AssetsFoldersTree&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
-		mFoldersTree = FindChildByType<UITree>();
+		mFoldersTree = FindChildByType<Tree>();
 		RemoveChild(FindChildByType<UIContextMenu>());
 
 		InitializeContext();
@@ -79,18 +79,18 @@ namespace Editor
 		SetLayoutDirty();
 	}
 
-	void UIAssetsFoldersTree::SelectAndExpandFolder(const String& path)
+	void AssetsFoldersTree::SelectAndExpandFolder(const String& path)
 	{
 		mFoldersTree->SelectAndHightlightObject(o2Assets.GetAssetsTree().FindAsset(path));
 		mCurrentPath = path;
 	}
 
-	void UIAssetsFoldersTree::UpdateView()
+	void AssetsFoldersTree::UpdateView()
 	{
 		mFoldersTree->UpdateNodesView();
 	}
 
-	void UIAssetsFoldersTree::InitializeContext()
+	void AssetsFoldersTree::InitializeContext()
 	{
 		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
 
@@ -118,7 +118,7 @@ namespace Editor
 		AddChild(mContextMenu);
 	}
 
-	UnknownPtr UIAssetsFoldersTree::GetFoldersTreeNodeParent(UnknownPtr object)
+	UnknownPtr AssetsFoldersTree::GetFoldersTreeNodeParent(UnknownPtr object)
 	{
 		if (!object)
 			return UnknownPtr();
@@ -127,7 +127,7 @@ namespace Editor
 		return (UnknownPtr)(void*)(assetTreeNode->parent);
 	}
 
-	Vector<UnknownPtr> UIAssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
+	Vector<UnknownPtr> AssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
 	{
 		AssetTree::AssetNode* assetTreeNode = object;
 
@@ -147,7 +147,7 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsFoldersTree::SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object)
+	void AssetsFoldersTree::SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
@@ -159,17 +159,17 @@ namespace Editor
 			((Text*)nameLayer->GetDrawable())->text = pathName;
 	}
 
-	void UIAssetsFoldersTree::OnFoldersTreeNodeDblClick(UITreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(UITreeNode* node)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->SetState("edit", true);
 
-		auto editBox = (UIEditBox*)node->GetChild("nameEditBox");
+		auto editBox = (EditBox*)node->GetChild("nameEditBox");
 		editBox->text = (String)pathName;
 		editBox->SelectAll();
-		editBox->UIWidget::Focus();
+		editBox->Widget::Focus();
 		editBox->ResetScroll();
 
 		editBox->onChangeCompleted = [=](const WString& text) {
@@ -184,7 +184,7 @@ namespace Editor
 		};
 	}
 
-	void UIAssetsFoldersTree::OnFoldersTreeSelect(Vector<UnknownPtr> nodes)
+	void AssetsFoldersTree::OnFoldersTreeSelect(Vector<UnknownPtr> nodes)
 	{
 		if (mOpengingFolderFromThis)
 			return;
@@ -202,71 +202,71 @@ namespace Editor
 		mOpengingFolderFromThis = false;
 	}
 
-	void UIAssetsFoldersTree::OnFoldersTreeRightClick(UITreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeRightClick(UITreeNode* node)
 	{
 		o2UI.FocusWidget(this);
 		mContextMenu->Show();
 	}
 
-	void UIAssetsFoldersTree::OnContextCopyPressed()
+	void AssetsFoldersTree::OnContextCopyPressed()
 	{
 		if (!mCurrentPath.IsEmpty())
 			o2EditorAssets.CopyAssets({ mCurrentPath });
 	}
 
-	void UIAssetsFoldersTree::OnContextCutPressed()
+	void AssetsFoldersTree::OnContextCutPressed()
 	{
 		if (!mCurrentPath.IsEmpty())
 			o2EditorAssets.CutAssets({ mCurrentPath });
 	}
 
-	void UIAssetsFoldersTree::OnContextPastePressed()
+	void AssetsFoldersTree::OnContextPastePressed()
 	{
 		o2EditorAssets.PasteAssets(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextDeletePressed()
+	void AssetsFoldersTree::OnContextDeletePressed()
 	{
 		if (!mCurrentPath.IsEmpty())
 			o2EditorAssets.DeleteAssets({ mCurrentPath });
 	}
 
-	void UIAssetsFoldersTree::OnContextOpenPressed()
+	void AssetsFoldersTree::OnContextOpenPressed()
 	{
 		o2EditorAssets.OpenAsset(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextShowInExplorerPressed()
+	void AssetsFoldersTree::OnContextShowInExplorerPressed()
 	{
 		o2EditorAssets.OpenAsset(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextImportPressed()
+	void AssetsFoldersTree::OnContextImportPressed()
 	{
 		o2EditorAssets.ImportAssets(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextCreateFolderPressed()
+	void AssetsFoldersTree::OnContextCreateFolderPressed()
 	{
 		o2EditorAssets.CreateFolderAsset(mCurrentPath, "New folder");
 	}
 
-	void UIAssetsFoldersTree::OnContextCreatePrefabPressed()
+	void AssetsFoldersTree::OnContextCreatePrefabPressed()
 	{
 		o2EditorAssets.CreatePrefabAsset(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextCreateScriptPressed()
+	void AssetsFoldersTree::OnContextCreateScriptPressed()
 	{
 		o2EditorAssets.CreateScriptAsset(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextCreateAnimationPressed()
+	void AssetsFoldersTree::OnContextCreateAnimationPressed()
 	{
 		o2EditorAssets.CreateAnimationAsset(mCurrentPath);
 	}
 
-	void UIAssetsFoldersTree::OnContextExpandPressed()
+	void AssetsFoldersTree::OnContextExpandPressed()
 	{
 		auto selectedObjects = mFoldersTree->GetSelectedObjects();
 
@@ -279,7 +279,7 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsFoldersTree::OnContextCollapsePressed()
+	void AssetsFoldersTree::OnContextCollapsePressed()
 	{
 		auto selectedObjects = mFoldersTree->GetSelectedObjects();
 
@@ -292,7 +292,7 @@ namespace Editor
 		}
 	}
 
-	void UIAssetsFoldersTree::OnKeyReleased(const Input::Key& key)
+	void AssetsFoldersTree::OnKeyReleased(const Input::Key& key)
 	{
 		if (o2UI.GetFocusedWidget() == mFoldersTree && key == VK_BACK)
 		{
@@ -303,14 +303,14 @@ namespace Editor
 		}
 	}
 
-	void UIFoldersTree::UpdateVisibleNodes()
+	void FoldersTree::UpdateVisibleNodes()
 	{
 		PushScopeEnterOnStack scope;
-		UITree::UpdateNodesStructure();
+		Tree::UpdateNodesStructure();
 	}
 
 }
 
-DECLARE_CLASS(Editor::UIAssetsFoldersTree);
+DECLARE_CLASS(Editor::AssetsFoldersTree);
 
-DECLARE_CLASS(Editor::UIFoldersTree);
+DECLARE_CLASS(Editor::FoldersTree);

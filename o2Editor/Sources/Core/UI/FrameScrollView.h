@@ -4,8 +4,8 @@
 
 namespace o2
 {
-	class UIHorizontalScrollBar;
-	class UIVerticalScrollBar;
+	class HorizontalScrollBar;
+	class VerticalScrollBar;
 }
 
 namespace Editor
@@ -13,20 +13,20 @@ namespace Editor
 	// ----------------------------------------
 	// Scroll view, where view limited by frame
 	// ----------------------------------------
-	class UIFrameScrollView: public UIScrollView
+	class FrameScrollView: public ScrollView
 	{
 	public:
 		// Default constructor
-		UIFrameScrollView();
+		FrameScrollView();
 
 		// Copy-constructor
-		UIFrameScrollView(const UIFrameScrollView& other);
+		FrameScrollView(const FrameScrollView& other);
 
 		// Destructor
-		~UIFrameScrollView();
+		~FrameScrollView();
 
 		// Copy-operator
-		UIFrameScrollView& operator=(const UIFrameScrollView& other);
+		FrameScrollView& operator=(const FrameScrollView& other);
 
 		// Draws widget, updates render target 
 		void Draw() override;
@@ -38,10 +38,10 @@ namespace Editor
 		void UpdateSelfTransform() override;
 
 		// Sets horizontal scrollbar
-		void SetHorScrollbar(UIHorizontalScrollBar* scrollbar);
+		void SetHorScrollbar(HorizontalScrollBar* scrollbar);
 
 		// Sets vertical scrollbar
-		void SetVerScrollbar(UIVerticalScrollBar* scrollbar);
+		void SetVerScrollbar(VerticalScrollBar* scrollbar);
 
 		// Sets view area
 		void SetViewArea(const RectF& area);
@@ -49,11 +49,11 @@ namespace Editor
 		// Returns view area
 		RectF GetViewArea() const;
 
-		SERIALIZABLE(UIFrameScrollView);
+		SERIALIZABLE(FrameScrollView);
 
 	protected:
-		UIHorizontalScrollBar* mHorScrollbar = nullptr; // Horizontal view scrollbar @SERIALIZABLE
-		UIVerticalScrollBar*   mVerScrollbar = nullptr; // Vertical view scrollbar @SERIALIZABLE
+		HorizontalScrollBar* mHorScrollbar = nullptr; // Horizontal view scrollbar @SERIALIZABLE
+		VerticalScrollBar*   mVerScrollbar = nullptr; // Vertical view scrollbar @SERIALIZABLE
 		RectF                  mAvailableArea;          // Available viewing area @SERIALIZABLE
 
 	protected:
@@ -74,26 +74,26 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::UIFrameScrollView)
+CLASS_BASES_META(Editor::FrameScrollView)
 {
-	BASE_CLASS(Editor::UIScrollView);
+	BASE_CLASS(Editor::ScrollView);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UIFrameScrollView)
+CLASS_FIELDS_META(Editor::FrameScrollView)
 {
 	PROTECTED_FIELD(mHorScrollbar).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mVerScrollbar).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAvailableArea).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(Editor::UIFrameScrollView)
+CLASS_METHODS_META(Editor::FrameScrollView)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
-	PUBLIC_FUNCTION(void, SetHorScrollbar, UIHorizontalScrollBar*);
-	PUBLIC_FUNCTION(void, SetVerScrollbar, UIVerticalScrollBar*);
+	PUBLIC_FUNCTION(void, SetHorScrollbar, HorizontalScrollBar*);
+	PUBLIC_FUNCTION(void, SetVerScrollbar, VerticalScrollBar*);
 	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);
 	PUBLIC_FUNCTION(RectF, GetViewArea);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);

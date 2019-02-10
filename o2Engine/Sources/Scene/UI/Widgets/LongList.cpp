@@ -8,20 +8,20 @@
 
 namespace o2
 {
-	UILongList::UILongList():
-		UIScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()),
+	LongList::LongList():
+		ScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()),
 		mSelectionLayout(Layout::BothStretch())
 	{
-		mItemSample = mnew UIWidget();
+		mItemSample = mnew Widget();
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable = mnew Sprite();
 	}
 
-	UILongList::UILongList(const UILongList& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
+	LongList::LongList(const LongList& other):
+		ScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout), selectedItemPos(this)
 	{
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 
@@ -31,22 +31,22 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UILongList::~UILongList()
+	LongList::~LongList()
 	{
 		delete mItemSample;
 		delete mSelectionDrawable;
 		delete mHoverDrawable;
 	}
 
-	UILongList& UILongList::operator=(const UILongList& other)
+	LongList& LongList::operator=(const LongList& other)
 	{
-		UIScrollArea::operator=(other);
+		ScrollArea::operator=(other);
 		return *this;
 	}
 
-	void UILongList::Update(float dt)
+	void LongList::Update(float dt)
 	{
-		UIScrollArea::Update(dt);
+		ScrollArea::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -66,7 +66,7 @@ namespace o2
 		}
 	}
 
-	void UILongList::Draw()
+	void LongList::Draw()
 	{
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -98,7 +98,7 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	void UILongList::SetItemSample(UIWidget* sample)
+	void LongList::SetItemSample(Widget* sample)
 	{
 		delete mItemSample;
 		mItemSample = sample;
@@ -106,12 +106,12 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UIWidget* UILongList::GetItemSample() const
+	Widget* LongList::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	void UILongList::SelectItemAt(int position)
+	void LongList::SelectItemAt(int position)
 	{
 		int lastSelected = mSelectedItem;
 
@@ -132,47 +132,47 @@ namespace o2
 		}
 	}
 
-	int UILongList::GetSelectedItemPosition() const
+	int LongList::GetSelectedItemPosition() const
 	{
 		return mSelectedItem;
 	}
 
-	Sprite* UILongList::GetSelectionDrawable() const
+	Sprite* LongList::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
 
-	Sprite* UILongList::GetHoverDrawable() const
+	Sprite* LongList::GetHoverDrawable() const
 	{
 		return mHoverDrawable;
 	}
 
-	void UILongList::SetSelectionDrawableLayout(const Layout& layout)
+	void LongList::SetSelectionDrawableLayout(const Layout& layout)
 	{
 		mSelectionLayout = layout;
 	}
 
-	Layout UILongList::GetSelectionDrawableLayout() const
+	Layout LongList::GetSelectionDrawableLayout() const
 	{
 		return mSelectionLayout;
 	}
 
-	void UILongList::SetHoverDrawableLayout(const Layout& layout)
+	void LongList::SetHoverDrawableLayout(const Layout& layout)
 	{
 		mHoverLayout = layout;
 	}
 
-	Layout UILongList::GetHoverDrawableLayout() const
+	Layout LongList::GetHoverDrawableLayout() const
 	{
 		return mHoverLayout;
 	}
 
-	bool UILongList::IsScrollable() const
+	bool LongList::IsScrollable() const
 	{
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
-	void UILongList::OnItemsUpdated(bool itemsRearranged /*= false*/)
+	void LongList::OnItemsUpdated(bool itemsRearranged /*= false*/)
 	{
 		if (itemsRearranged)
 		{
@@ -186,7 +186,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UILongList::CalculateScrollArea()
+	void LongList::CalculateScrollArea()
 	{
 		Vec2F offset;
 		InitializeScrollAreaRectCalculation(offset);
@@ -195,14 +195,14 @@ namespace o2
 		RecalculateScrollAreaRect(RectF(0, mAbsoluteViewArea.Height(), mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height() - itemsHeight), Vec2F());
 	}
 
-	void UILongList::UpdateControls(float dt)
+	void LongList::UpdateControls(float dt)
 	{}
 
-	void UILongList::UpdateSelfTransform()
+	void LongList::UpdateSelfTransform()
 {
 		UpdateVisibleItems();
 
-		UIScrollArea::UpdateSelfTransform();
+		ScrollArea::UpdateSelfTransform();
 
 		if (Input::IsSingletonInitialzed())
 			UpdateHover(o2Input.cursorPos);
@@ -216,7 +216,7 @@ namespace o2
 		mHoverDrawable->SetRect(mCurrentHoverRect);
 	}
 
-	void UILongList::MoveScrollPosition(const Vec2F& delta)
+	void LongList::MoveScrollPosition(const Vec2F& delta)
 	{
 		mScrollPos += delta;
 
@@ -246,7 +246,7 @@ namespace o2
 		UpdateScrollParams();
 	}
 
-	void UILongList::UpdateVisibleItems()
+	void LongList::UpdateVisibleItems()
 	{
 		int lastMinItemIdx = mMinVisibleItemIdx;
 		int lastMaxItemIdx = mMaxVisibleItemIdx;
@@ -261,7 +261,7 @@ namespace o2
 		mMaxVisibleItemIdx = Math::Min(mMaxVisibleItemIdx, getItemsCountFunc() - 1);
 
 		auto itemsInRange = getItemsRangeFunc(mMinVisibleItemIdx, mMaxVisibleItemIdx + 1);
-		Vector<UIWidget*> itemsWidgets;
+		Vector<Widget*> itemsWidgets;
 		itemsWidgets.Resize(mMaxVisibleItemIdx - mMinVisibleItemIdx + 1);
 
 		WidgetsVec removingItems;
@@ -295,17 +295,17 @@ namespace o2
 			{
 				for (int j = 0; j < 10; j++)
 				{
-					UIWidget* newItem = mItemSample->CloneAs<UIWidget>();
+					Widget* newItem = mItemSample->CloneAs<Widget>();
 					newItem->ExcludeFromScene();
 					mItemsPool.Add(newItem);
 				}
 			}
 
-			UIWidget* newItem = mItemsPool.PopBack();
+			Widget* newItem = mItemsPool.PopBack();
 
 			setupItemFunc(newItem, itemsInRange[i - mMinVisibleItemIdx]);
 
-			*newItem->layout = UIWidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)i);
+			*newItem->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, itemHeight, itemHeight*(float)i);
 
 			newItem->mParent = this;
 			newItem->mParentWidget = this;
@@ -318,14 +318,14 @@ namespace o2
 		mDrawingChildren.Add(itemsWidgets);
 	}
 
-	void UILongList::OnCursorPressed(const Input::Cursor& cursor)
+	void LongList::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = true;
 	}
 
-	void UILongList::OnCursorStillDown(const Input::Cursor& cursor)
+	void LongList::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
 		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
@@ -338,7 +338,7 @@ namespace o2
 		UpdateSelection(itemIdx);
 	}
 
-	void UILongList::OnCursorMoved(const Input::Cursor& cursor)
+	void LongList::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
 		if ((cursor.position - mLastHoverCheckCursor).Length() < checkDeltaThreshold)
@@ -349,27 +349,27 @@ namespace o2
 		UpdateHover(cursor.position);
 	}
 
-	void UILongList::OnCursorReleased(const Input::Cursor& cursor)
+	void LongList::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
+		Widget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 
 		onFocused(itemIdx);
 		OnSelectionChanged();
 	}
 
-	void UILongList::OnCursorPressBreak(const Input::Cursor& cursor)
+	void LongList::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UILongList::OnCursorExit(const Input::Cursor& cursor)
+	void LongList::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto hoverState = state["hover"];
 		if (hoverState)
@@ -378,7 +378,7 @@ namespace o2
 			mHoverDrawable->SetEnabled(false);
 	}
 
-	void UILongList::OnScrolled(float scroll)
+	void LongList::OnScrolled(float scroll)
 	{
 		if (mVerScrollBar && mEnableVerScroll)
 			mVerScrollBar->OnScrolled(scroll);
@@ -386,7 +386,7 @@ namespace o2
 			mHorScrollBar->OnScrolled(scroll);
 	}
 
-	UIWidget* UILongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+	Widget* LongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		int idx = mMinVisibleItemIdx;
 		for (auto child : mChildWidgets)
@@ -408,9 +408,9 @@ namespace o2
 		return nullptr;
 	}
 
-	void UILongList::CopyData(const Actor& otherActor)
+	void LongList::CopyData(const Actor& otherActor)
 	{
-		const UILongList& other = dynamic_cast<const UILongList&>(otherActor);
+		const LongList& other = dynamic_cast<const LongList&>(otherActor);
 
 		delete mItemSample;
 		delete mSelectionDrawable;
@@ -422,9 +422,9 @@ namespace o2
 		mSelectionLayout = other.mSelectionLayout;
 		mHoverLayout = other.mHoverLayout;
 
-		UIScrollArea::CopyData(other);
+		ScrollArea::CopyData(other);
 
-		mItemSample = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
 		mItemSample->UpdateSelfTransform();
 		mItemSample->UpdateChildrenTransforms();
 
@@ -432,15 +432,15 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UILongList::OnDeserialized(const DataNode& node)
+	void LongList::OnDeserialized(const DataNode& node)
 	{
-		UIScrollArea::OnDeserialized(node);
+		ScrollArea::OnDeserialized(node);
 		RetargetStatesAnimations();
 	}
 
-	void UILongList::UpdateTransparency()
+	void LongList::UpdateTransparency()
 	{
-		UIWidget::UpdateTransparency();
+		Widget::UpdateTransparency();
 
 		if (mHorScrollBar)
 			mHorScrollBar->UpdateTransparency();
@@ -455,10 +455,10 @@ namespace o2
 			mHoverDrawable->transparency = mResTransparency;
 	}
 
-	void UILongList::UpdateHover(const Vec2F& point)
+	void LongList::UpdateHover(const Vec2F& point)
 	{
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+		Widget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
 		if (itemIdx < 0)
 		{
@@ -486,10 +486,10 @@ namespace o2
 		}
 	}
 
-	void UILongList::UpdateSelection(int position)
+	void LongList::UpdateSelection(int position)
 	{
 		mSelectedItem = position;
-		UIWidget* item = nullptr;
+		Widget* item = nullptr;
 		if (position < mMaxVisibleItemIdx && position >= mMinVisibleItemIdx)
 			item = mChildWidgets[position - mMinVisibleItemIdx];
 
@@ -527,13 +527,13 @@ namespace o2
 		}
 	}
 
-	void UILongList::OnSelectionChanged()
+	void LongList::OnSelectionChanged()
 	{}
 
-	void UILongList::OnResEnableInHierarchyChanged()
+	void LongList::OnResEnableInHierarchyChanged()
 	{
 		SetInteractable(mResEnabled);
 	}
 }
 
-DECLARE_CLASS(o2::UILongList);
+DECLARE_CLASS(o2::LongList);

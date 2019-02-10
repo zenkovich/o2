@@ -120,11 +120,11 @@ namespace Editor
 	{
 		_property_type* property = o2UI.CreateWidget<_property_type>(propertyStyle);
 
-		UILabel* label = o2UI.CreateWidget<UILabel>();
+		Label* label = o2UI.CreateWidget<Label>();
 		label->name = "propertyName";
 		label->horAlign = HorAlign::Left;
 		label->layout->widthWeight = 1.0f;
-		label->horOverflow = UILabel::HorOverflow::Dots;
+		label->horOverflow = Label::HorOverflow::Dots;
 
 		property->AddChild(label, 0);
 		property->borderLeft = 10;
@@ -141,14 +141,14 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew UIWidget();
+		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-		auto box = mnew UIWidget();
+		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = UIWidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -174,12 +174,12 @@ namespace Editor
 
 		box->SetFocusable(true);
 
-		auto linkBtn = o2UI.CreateWidget<UIButton>("asset link");
-		*linkBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		auto linkBtn = o2UI.CreateWidget<Button>("asset link");
+		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		box->AddChild(linkBtn);
 
-		UIButton* revertBtn = o2UI.CreateWidget<UIButton>("revert");
-		*revertBtn->layout = UIWidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(box);
 		layout->AddChild(revertBtn);

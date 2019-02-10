@@ -31,7 +31,7 @@ namespace Editor
 
 	void TagsProperty::InitializeControls()
 	{
-		mEditBox = FindChildByType<UIEditBox>();
+		mEditBox = FindChildByType<EditBox>();
 		if (mEditBox)
 		{
 			mTagsContext = FindChildByType<UIContextMenu>();

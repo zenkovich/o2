@@ -40,9 +40,6 @@
     <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h">
       <Filter>Sources\AssetsWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\AssetsWindow\UIAssetIcon.h">
-      <Filter>Sources\AssetsWindow</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Actions\Create.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
@@ -226,12 +223,6 @@
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.h">
       <Filter>Sources\Core\WindowsSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.h">
-      <Filter>Sources\Core\WindowsSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.h">
-      <Filter>Sources\Core\WindowsSystem</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.h">
       <Filter>Sources\Core\WindowsSystem</Filter>
     </ClInclude>
@@ -328,6 +319,15 @@
     <ClInclude Include="..\..\Sources\Core\EditorScope.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\AssetsWindow\AssetIcon.h">
+      <Filter>Sources\AssetsWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\DockableWindow.h">
+      <Filter>Sources\Core\WindowsSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\WindowsSystem\DockWindowPlace.h">
+      <Filter>Sources\Core\WindowsSystem</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp">
@@ -337,9 +337,6 @@
       <Filter>Sources\AssetsWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp">
-      <Filter>Sources\AssetsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\AssetsWindow\UIAssetIcon.cpp">
       <Filter>Sources\AssetsWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\Create.cpp">
@@ -522,12 +519,6 @@
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\IEditorWindow.cpp">
       <Filter>Sources\Core\WindowsSystem</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockWindowPlace.cpp">
-      <Filter>Sources\Core\WindowsSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\WindowsSystem\UIDockableWindow.cpp">
-      <Filter>Sources\Core\WindowsSystem</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\WindowsSystem\WindowsLayout.cpp">
       <Filter>Sources\Core\WindowsSystem</Filter>
     </ClCompile>
@@ -626,6 +617,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\EditorScope.cpp">
       <Filter>Sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AssetsWindow\AssetIcon.cpp">
+      <Filter>Sources\AssetsWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\DockableWindow.cpp">
+      <Filter>Sources\Core\WindowsSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\WindowsSystem\DockWindowPlace.cpp">
+      <Filter>Sources\Core\WindowsSystem</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

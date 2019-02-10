@@ -7,10 +7,10 @@ namespace o2
 	// ------------------
 	// Grid layout widget
 	// ------------------
-	class UIGridLayout: public UIWidget
+	class GridLayout: public Widget
 	{
 	public:
-		PROPERTIES(UIGridLayout);
+		PROPERTIES(GridLayout);
 		PROPERTY(BaseCorner, baseCorner, SetBaseCorner, GetBaseCorner);                     // Base corder property
 		PROPERTY(Vec2F, cellSize, SetCellSize, GetCellSize);                                // Grid cell size
 		PROPERTY(int, arrangeAxisMaxCells, SetArrangeAxisMaxCells, GetArrangeAxisMaxCells); // Maximum cells at arranging axis
@@ -26,16 +26,16 @@ namespace o2
 		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 
 		// Default constructor
-		UIGridLayout();
+		GridLayout();
 
 		// Copy-constructor
-		UIGridLayout(const UIGridLayout& other);
+		GridLayout(const GridLayout& other);
 
 		// Destructor
-		~UIGridLayout();
+		~GridLayout();
 
 		// Copy operator
-		UIGridLayout& operator=(const UIGridLayout& other);
+		GridLayout& operator=(const GridLayout& other);
 
 		// Sets base corner
 		void SetBaseCorner(BaseCorner baseCorner);
@@ -106,7 +106,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UIGridLayout);
+		SERIALIZABLE(GridLayout);
 
 	protected:
 		BaseCorner   mBaseCorner = BaseCorner::Left;          // Base corner of widgets arranging @SERIALIZABLE
@@ -122,10 +122,10 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child) override;
+		void OnChildAdded(Widget* child) override;
 
 		// It is called when child widget was removed
-		void OnChildRemoved(UIWidget* child) override;
+		void OnChildRemoved(Widget* child) override;
 
 		// Invokes required function for childs arranging
 		void RearrangeChilds();
@@ -162,12 +162,12 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIGridLayout)
+CLASS_BASES_META(o2::GridLayout)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIGridLayout)
+CLASS_FIELDS_META(o2::GridLayout)
 {
 	PUBLIC_FIELD(baseCorner);
 	PUBLIC_FIELD(cellSize);
@@ -189,7 +189,7 @@ CLASS_FIELDS_META(o2::UIGridLayout)
 	PROTECTED_FIELD(mFitByChildren).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UIGridLayout)
+CLASS_METHODS_META(o2::GridLayout)
 {
 
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
@@ -216,8 +216,8 @@ CLASS_METHODS_META(o2::UIGridLayout)
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(void, ArrangeFromLeftTop);
 	PROTECTED_FUNCTION(void, ArrangeFromTop);

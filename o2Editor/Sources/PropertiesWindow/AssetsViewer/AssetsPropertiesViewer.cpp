@@ -134,7 +134,7 @@ namespace Editor
 		contentWidget->expandWidth   = true;
 		contentWidget->fitByChildren = true;
 		contentWidget->baseCorner    = BaseCorner::Top;
-		*contentWidget->layout       = UIWidgetLayout::BothStretch();
+		*contentWidget->layout       = WidgetLayout::BothStretch();
 
 		mContentWidget = contentWidget;
 	}

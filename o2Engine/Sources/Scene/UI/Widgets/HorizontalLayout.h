@@ -7,10 +7,10 @@ namespace o2
 	// ------------------------
 	// Horizontal layout widget
 	// ------------------------
-	class UIHorizontalLayout: public UIWidget
+	class HorizontalLayout: public Widget
 	{
 	public:
-		PROPERTIES(UIHorizontalLayout);
+		PROPERTIES(HorizontalLayout);
 		PROPERTY(BaseCorner, baseCorner, SetBaseCorner, GetBaseCorner);  // Base corder property
 
 		PROPERTY(float, spacing, SetSpacing, GetSpacing);                // Space between widgets property
@@ -26,16 +26,16 @@ namespace o2
 		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 
 		// Default constructor
-		UIHorizontalLayout();
+		HorizontalLayout();
 
 		// Copy-constructor
-		UIHorizontalLayout(const UIHorizontalLayout& other);
+		HorizontalLayout(const HorizontalLayout& other);
 
 		// Destructor
-		~UIHorizontalLayout();
+		~HorizontalLayout();
 
 		// Copy operator
-		UIHorizontalLayout& operator=(const UIHorizontalLayout& other);
+		HorizontalLayout& operator=(const HorizontalLayout& other);
 
 		// Sets base corner
 		void SetBaseCorner(BaseCorner baseCorner);
@@ -100,7 +100,7 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UIHorizontalLayout);
+		SERIALIZABLE(HorizontalLayout);
 
 	protected:
 		BaseCorner mBaseCorner = BaseCorner::Left; // Base corner of widgets arranging @SERIALIZABLE
@@ -124,10 +124,10 @@ namespace o2
 		float GetWidthWeightWithChildren() const override;
 
 		// It is called when child widget was added
-		void OnChildAdded(UIWidget* child) override;
+		void OnChildAdded(Widget* child) override;
 
 		// It is called when child widget was removed
-		void OnChildRemoved(UIWidget* child) override;
+		void OnChildRemoved(Widget* child) override;
 
 		// Invokes required function for childs arranging
 		void RearrangeChilds();
@@ -148,19 +148,19 @@ namespace o2
 		Vector<float> CalculateExpandedWidths();
 
 		// Aligns widget by height with base corner
-		void AlignWidgetByHeight(UIWidget* child, float widthAnchor);
+		void AlignWidgetByHeight(Widget* child, float widthAnchor);
 
 		// Updates layout's weight and minimal size
 		void UpdateLayoutParametres();
 	};
 }
 
-CLASS_BASES_META(o2::UIHorizontalLayout)
+CLASS_BASES_META(o2::HorizontalLayout)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIHorizontalLayout)
+CLASS_FIELDS_META(o2::HorizontalLayout)
 {
 	PUBLIC_FIELD(baseCorner);
 	PUBLIC_FIELD(spacing);
@@ -180,7 +180,7 @@ CLASS_FIELDS_META(o2::UIHorizontalLayout)
 	PROTECTED_FIELD(mFitByChildren).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UIHorizontalLayout)
+CLASS_METHODS_META(o2::HorizontalLayout)
 {
 
 	PUBLIC_FUNCTION(void, SetBaseCorner, BaseCorner);
@@ -208,15 +208,15 @@ CLASS_METHODS_META(o2::UIHorizontalLayout)
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(float, GetWidthWeightWithChildren);
-	PROTECTED_FUNCTION(void, OnChildAdded, UIWidget*);
-	PROTECTED_FUNCTION(void, OnChildRemoved, UIWidget*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(void, ArrangeFromLeftToRight);
 	PROTECTED_FUNCTION(void, ArrangeFromRightToLeft);
 	PROTECTED_FUNCTION(void, ArrangeFromCenter);
 	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
 	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedWidths);
-	PROTECTED_FUNCTION(void, AlignWidgetByHeight, UIWidget*, float);
+	PROTECTED_FUNCTION(void, AlignWidgetByHeight, Widget*, float);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
 }
 END_META;

@@ -14,15 +14,15 @@
 
 namespace o2
 {
-	UIWindow::UIWindow():
-		UIScrollArea(), DrawableCursorEventsListener(this)
+	Window::Window():
+		ScrollArea(), DrawableCursorEventsListener(this)
 	{
 		InitializeHandles();
 		InitializeContextMenu();
 	}
 
-	UIWindow::UIWindow(const UIWindow& other):
-		UIScrollArea(other), DrawableCursorEventsListener(this), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
+	Window::Window(const Window& other):
+		ScrollArea(other), DrawableCursorEventsListener(this), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
 		mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
 		mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
 		mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),
@@ -35,23 +35,23 @@ namespace o2
 		InitializeHandles();
 	}
 
-	UIWindow::~UIWindow()
+	Window::~Window()
 	{}
 
-	UIWindow& UIWindow::operator=(const UIWindow& other)
+	Window& Window::operator=(const Window& other)
 	{
-		UIScrollArea::operator=(other);
+		ScrollArea::operator=(other);
 		return *this;
 	}
 
-	void UIWindow::Draw()
+	void Window::Draw()
 	{
 		if (!mResEnabledInHierarchy)
 			return;
 
 		mBackCursorArea.OnDrawn();
 
-		UIScrollArea::Draw();
+		ScrollArea::Draw();
 
 		mHeadDragHandle.OnDrawn();
 		mTopDragHandle.OnDrawn();
@@ -75,13 +75,13 @@ namespace o2
 //  		o2Render.DrawRectFrame(mRightBottomDragAreaRect, Color4::SomeColor(clr++));
 	}
 
-	void UIWindow::ShowModal()
+	void Window::ShowModal()
 	{
 		Show();
 		SetModal(true);
 	}
 
-	void UIWindow::SetIcon(Sprite* icon)
+	void Window::SetIcon(Sprite* icon)
 	{
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
@@ -93,7 +93,7 @@ namespace o2
 		}
 	}
 
-	Sprite* UIWindow::GetIcon() const
+	Sprite* Window::GetIcon() const
 	{
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
@@ -102,14 +102,14 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIWindow::SetIconLayout(const Layout& layout)
+	void Window::SetIconLayout(const Layout& layout)
 	{
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
 			iconLayer->layout = layout;
 	}
 
-	Layout UIWindow::GetIconLayout() const
+	Layout Window::GetIconLayout() const
 	{
 		auto iconLayer = GetLayer(mIconLayerPath);
 		if (iconLayer)
@@ -118,7 +118,7 @@ namespace o2
 		return Layout();
 	}
 
-	void UIWindow::SetCaption(const WString& caption)
+	void Window::SetCaption(const WString& caption)
 	{
 		auto captionLayer = GetLayer(mCaptionLayerPath);
 		if (captionLayer)
@@ -128,7 +128,7 @@ namespace o2
 		}
 	}
 
-	WString UIWindow::GetCaption() const
+	WString Window::GetCaption() const
 	{
 		auto captionLayer = GetLayer(mCaptionLayerPath);
 		if (captionLayer)
@@ -140,12 +140,12 @@ namespace o2
 		return WString();
 	}
 
-	UIContextMenu* UIWindow::GetOptionsMenu() const
+	UIContextMenu* Window::GetOptionsMenu() const
 	{
 		return mOptionsMenu;
 	}
 
-	void UIWindow::SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
+	void Window::SetDragAreaLayouts(const Layout& head, const Layout& top, const Layout&bottom, const Layout&left,
 									  const Layout& right, const Layout& leftTop, const Layout& rightTop,
 									  const Layout& leftBottom, const Layout& rightBottom)
 	{
@@ -160,24 +160,24 @@ namespace o2
 		mRightBottomDragAreaLayout = rightBottom;
 	}
 
-	bool UIWindow::IsFocusable() const
+	bool Window::IsFocusable() const
 	{
 		return true;
 	}
 
-	void UIWindow::SetModal(bool isModal)
+	void Window::SetModal(bool isModal)
 	{
 		mBackCursorArea.interactable = isModal;
 	}
 
-	bool UIWindow::IsModal() const
+	bool Window::IsModal() const
 	{
 		return mBackCursorArea.IsInteractable();
 	}
 
-	void UIWindow::UpdateSelfTransform()
+	void Window::UpdateSelfTransform()
 	{
-		UIScrollArea::UpdateSelfTransform();
+		ScrollArea::UpdateSelfTransform();
 
 		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout->mData->worldRectangle);
 		mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout->mData->worldRectangle);
@@ -190,16 +190,16 @@ namespace o2
 		mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(layout->mData->worldRectangle);
 	}
 
-	CursorEventsArea& UIWindow::GetBackCursorListener()
+	CursorEventsArea& Window::GetBackCursorListener()
 	{
 		return mBackCursorArea;
 	}
 
-	void UIWindow::CopyData(const Actor& otherActor)
+	void Window::CopyData(const Actor& otherActor)
 	{
-		const UIWindow& other = dynamic_cast<const UIWindow&>(otherActor);
+		const Window& other = dynamic_cast<const Window&>(otherActor);
 
-		UIScrollArea::CopyData(other);
+		ScrollArea::CopyData(other);
 
 		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
 		mTopDragAreaLayout         = other.mTopDragAreaLayout;
@@ -217,7 +217,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIWindow::InitializeHandles()
+	void Window::InitializeHandles()
 	{
 		mBackCursorArea.isUnderPoint = [&](const Vec2F& point) { return true; };
 		mBackCursorArea.interactable = false;
@@ -269,7 +269,7 @@ namespace o2
 		BindHandlesInteractableToVisibility();
 	}
 
-	void UIWindow::SetHandlesInteractable(bool interactable)
+	void Window::SetHandlesInteractable(bool interactable)
 	{
 		mHeadDragHandle.interactable        = interactable;
 		mTopDragHandle.interactable         = interactable;
@@ -282,7 +282,7 @@ namespace o2
 		mRightBottomDragHandle.interactable = interactable;
 	}
 
-	void UIWindow::BindHandlesInteractableToVisibility()
+	void Window::BindHandlesInteractableToVisibility()
 	{
 		if (mVisibleState)
 		{
@@ -291,7 +291,7 @@ namespace o2
 		}
 	}
 
-	void UIWindow::OnFocused()
+	void Window::OnFocused()
 	{
 		if (mParent)
 			SetIndexInSiblings(mParent->GetChildren().Count() - 1);
@@ -301,22 +301,22 @@ namespace o2
 		onFocused();
 	}
 
-	void UIWindow::OnChildFocused(UIWidget* child)
+	void Window::OnChildFocused(Widget* child)
 	{
 		OnFocused();
 	}
 
-	void UIWindow::OnCursorPressed(const Input::Cursor& cursor)
+	void Window::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(this);
 	}
 
-	void UIWindow::OnStateAdded(UIWidgetState* state)
+	void Window::OnStateAdded(WidgetState* state)
 	{
 		BindHandlesInteractableToVisibility();
 	}
 
-	void UIWindow::OnResEnableInHierarchyChanged()
+	void Window::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 
@@ -324,7 +324,7 @@ namespace o2
 			Focus();
 	}
 
-	void UIWindow::InitializeContextMenu()
+	void Window::InitializeContextMenu()
 	{
 		mOptionsMenu = o2UI.CreateWidget<UIContextMenu>("standard");
 
@@ -335,22 +335,22 @@ namespace o2
 		InitializeContextItems();
 		AddInternalWidget(mOptionsMenu);
 
-		UIButton* optionsBtn = dynamic_cast<UIButton*>(mInternalWidgets.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(UIButton); }));
+		Button* optionsBtn = dynamic_cast<Button*>(mInternalWidgets.FindMatch(
+			[](Widget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(Button); }));
 
 		if (optionsBtn)
 			optionsBtn->onClick += [=]() { mOptionsMenu->Show(optionsBtn->transform->worldCenter); };
 	}
 
-	void UIWindow::InitializeContextItems()
+	void Window::InitializeContextItems()
 	{
 		mOptionsMenu->AddItem("Close", [&]() { Hide(); });
 	}
 
-	void UIWindow::RestoreControls()
+	void Window::RestoreControls()
 	{
-		UIButton* closeBtn = dynamic_cast<UIButton*>(mInternalWidgets.FindMatch(
-			[](UIWidget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(UIButton); }));
+		Button* closeBtn = dynamic_cast<Button*>(mInternalWidgets.FindMatch(
+			[](Widget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
 
 		if (closeBtn)
 			closeBtn->onClick += [&]() { Hide(); };
@@ -369,4 +369,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIWindow);
+DECLARE_CLASS(o2::Window);

@@ -14,7 +14,7 @@ namespace Editor
 {
 	CurveEditorDlg::CurveEditorDlg()
 	{
-		mWindow = dynamic_cast<UIWindow*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
+		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Curve editor")));
 
 		InitializeControls();
 
@@ -39,15 +39,15 @@ namespace Editor
 
 	void CurveEditorDlg::InitializeControls()
 	{
-		mEditorWidget = mnew UICurveEditor();
-		*mEditorWidget->layout = UIWidgetLayout::BothStretch(0, 5, 5, 0);
+		mEditorWidget = mnew CurveEditor();
+		*mEditorWidget->layout = WidgetLayout::BothStretch(0, 5, 5, 0);
 
 		auto horScroll = o2UI.CreateHorScrollBar();
-		*horScroll->layout = UIWidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 10, -10);
+		*horScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 10, -10);
 		mEditorWidget->SetHorScrollbar(horScroll);
 
 		auto verScroll = o2UI.CreateVerScrollBar();
-		*verScroll->layout = UIWidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, -10);
+		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, -10);
 		mEditorWidget->SetVerScrollbar(verScroll);
 
 		mEditorWidget->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),

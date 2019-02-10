@@ -9,12 +9,12 @@ using namespace o2;
 
 namespace o2
 {
-	class UIEditBox;
-	class UILabel;
-	class UIVerticalProgress;
-	class UIWidget;
-	class UIWidgetLayer;
-	class UIWindow;
+	class EditBox;
+	class Label;
+	class VerticalProgress;
+	class Widget;
+	class WidgetLayer;
+	class Window;
 }
 
 namespace Editor
@@ -41,8 +41,8 @@ namespace Editor
 		Function<void()>              mOnCancelledCallback;
 
 
-		UIWindow*  mWindow = nullptr;
-		UIEditBox* mNameEditBox = nullptr;
+		Window*  mWindow = nullptr;
+		EditBox* mNameEditBox = nullptr;
 
 	protected:
 		// Calls when hiding dialog

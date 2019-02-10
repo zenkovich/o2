@@ -3,8 +3,8 @@
 
 #include "Application/Application.h"
 #include "Config/ProjectConfig.h"
-#include "Core/WindowsSystem/UIDockWindowPlace.h"
-#include "Core/WindowsSystem/UIDockableWindow.h"
+#include "Core/WindowsSystem/DockWindowPlace.h"
+#include "Core/WindowsSystem/DockableWindow.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Window.h"

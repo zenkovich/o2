@@ -5,62 +5,62 @@
 
 namespace o2
 {
-	UIDropDown::UIDropDown():
-		UICustomDropDown()
+	DropDown::DropDown():
+		CustomDropDown()
 	{
-		UILabel* itemSample = mnew UILabel();
-		itemSample->horOverflow = UILabel::HorOverflow::Dots;
+		Label* itemSample = mnew Label();
+		itemSample->horOverflow = Label::HorOverflow::Dots;
 		SetItemSample(itemSample);
 	}
 
-	UIDropDown::UIDropDown(const UIDropDown& other):
-		UICustomDropDown(other), value(this)
+	DropDown::DropDown(const DropDown& other):
+		CustomDropDown(other), value(this)
 	{
 		RetargetStatesAnimations();
 	}
 
-	UIDropDown::~UIDropDown()
+	DropDown::~DropDown()
 	{}
 
-	UIDropDown& UIDropDown::operator=(const UIDropDown& other)
+	DropDown& DropDown::operator=(const DropDown& other)
 	{
-		UICustomDropDown::operator=(other);
+		CustomDropDown::operator=(other);
 		return *this;
 	}
 
-	int UIDropDown::AddItem(const WString& text)
+	int DropDown::AddItem(const WString& text)
 	{
-		auto item = (UILabel*)UICustomDropDown::AddItem();
+		auto item = (Label*)CustomDropDown::AddItem();
 		item->text = text;
 		return GetItemsCount() - 1;
 	}
 
-	int UIDropDown::AddItem(const WString& text, int position)
+	int DropDown::AddItem(const WString& text, int position)
 	{
-		auto item = (UILabel*)UICustomDropDown::AddItem(position);
+		auto item = (Label*)CustomDropDown::AddItem(position);
 		item->text = text;
 		return position;
 	}
 
-	void UIDropDown::AddItems(const Vector<WString>& data)
+	void DropDown::AddItems(const Vector<WString>& data)
 	{
 		for (auto text : data)
 			AddItem(text);
 	}
 
-	void UIDropDown::RemoveItem(const WString& text)
+	void DropDown::RemoveItem(const WString& text)
 	{
 		int position = FindItem(text);
 		if (position >= 0)
-			UICustomDropDown::RemoveItem(position);
+			CustomDropDown::RemoveItem(position);
 	}
 
-	int UIDropDown::FindItem(const WString& text)
+	int DropDown::FindItem(const WString& text)
 	{
 		int i = 0;
 		for (auto child : mItemsList->mVerLayout->mChildWidgets)
 		{
-			UILabel* childLabel = dynamic_cast<UILabel*>(child);
+			Label* childLabel = dynamic_cast<Label*>(child);
 			if (childLabel && childLabel->GetText() == text)
 				return i;
 
@@ -70,21 +70,21 @@ namespace o2
 		return -1;
 	}
 
-	WString UIDropDown::GetItemText(int position)
+	WString DropDown::GetItemText(int position)
 	{
-		auto item = (UILabel*)GetItem(position);
+		auto item = (Label*)GetItem(position);
 		if (item)
 			return item->GetText();
 
 		return WString();
 	}
 
-	Vector<WString> UIDropDown::GetAllItemsText() const
+	Vector<WString> DropDown::GetAllItemsText() const
 	{
 		Vector<WString> res;
 		for (auto child : mItemsList->mVerLayout->mChildWidgets)
 		{
-			UILabel* childLabel = dynamic_cast<UILabel*>(child);
+			Label* childLabel = dynamic_cast<Label*>(child);
 
 			if (childLabel)
 				res.Add(childLabel->GetText());
@@ -93,32 +93,32 @@ namespace o2
 		return res;
 	}
 
-	WString UIDropDown::GetSelectedItemText()
+	WString DropDown::GetSelectedItemText()
 	{
-		auto selectedItem = (UILabel*)GetSelectedItem();
+		auto selectedItem = (Label*)GetSelectedItem();
 		if (selectedItem)
 			return selectedItem->GetText();
 
 		return WString();
 	}
 
-	void UIDropDown::SelectItemText(const WString& text)
+	void DropDown::SelectItemText(const WString& text)
 	{
 		int idx = FindItem(text);
 		mItemsList->SelectItemAt(idx);
 	}
 
-	void UIDropDown::CopyData(const Actor& otherActor)
+	void DropDown::CopyData(const Actor& otherActor)
 	{
-		const UIDropDown& other = dynamic_cast<const UIDropDown&>(otherActor);
-		UICustomDropDown::CopyData(other);
+		const DropDown& other = dynamic_cast<const DropDown&>(otherActor);
+		CustomDropDown::CopyData(other);
 		RetargetStatesAnimations();
 	}
 
-	void UIDropDown::OnSelectionChanged()
+	void DropDown::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
 	}
 }
 
-DECLARE_CLASS(o2::UIDropDown);
+DECLARE_CLASS(o2::DropDown);

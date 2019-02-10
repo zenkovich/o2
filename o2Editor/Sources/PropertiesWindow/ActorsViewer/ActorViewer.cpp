@@ -51,7 +51,7 @@ namespace Editor
 		mViewersLayout->expandWidth   = true;
 		mViewersLayout->fitByChildren = true;
 		mViewersLayout->baseCorner    = BaseCorner::Top;
-		*mViewersLayout->layout       = UIWidgetLayout::BothStretch();
+		*mViewersLayout->layout       = WidgetLayout::BothStretch();
 		mContentWidget->AddChild(mViewersLayout);
 
 		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
@@ -153,7 +153,7 @@ namespace Editor
 		mComponentsViewers.Clear();
 
 		// rebuild
-		Vector<UIWidget*> viewersWidgets;
+		Vector<Widget*> viewersWidgets;
 		viewersWidgets.Add(mHeaderViewer->GetWidget());
 		mHeaderViewer->SetTargetActors(mTargetActors);
 
@@ -166,7 +166,7 @@ namespace Editor
 		mViewersLayout->AddChildren(viewersWidgets.Cast<Actor*>());
 	}
 
-	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)
+	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
 	{
 		PushScopeEnterOnStack scope;
 
@@ -214,7 +214,7 @@ namespace Editor
 		mActorPropertiesViewer = propertiesViewer;
 	}
 
-	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<UIWidget*>& viewersWidgets)
+	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
 	{
 		PushScopeEnterOnStack scope;
 

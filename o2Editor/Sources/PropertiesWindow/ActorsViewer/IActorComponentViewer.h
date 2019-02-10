@@ -11,12 +11,12 @@ namespace o2
 {
 	class Actor;
 	class Component;
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
 {
-	class UISpoilerWithHead;
+	class SpoilerWithHead;
 
 	// ---------------------------------------
 	// Editor actor component viewer interface
@@ -37,7 +37,7 @@ namespace Editor
 		virtual const Type* GetComponentType() const { return nullptr; }
 
 		// Returns data widget
-		virtual UIWidget* GetWidget() const;
+		virtual Widget* GetWidget() const;
 
 		// Expands view
 		void Expand();
@@ -57,7 +57,7 @@ namespace Editor
 		IOBJECT(IActorComponentViewer);
 
 	protected:
-		UISpoilerWithHead* mSpoiler = nullptr;
+		SpoilerWithHead* mSpoiler = nullptr;
 	};
 }
 
@@ -76,7 +76,7 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);

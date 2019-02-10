@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UIDockableWindow.h"
+#include "DockableWindow.h"
 #include "Utils/Serialization/Serializable.h"
 
 using namespace o2;
@@ -43,7 +43,7 @@ namespace Editor
 		IOBJECT(IEditorWindow);
 
 	protected:
-		UIDockableWindow* mWindow = nullptr; // Dockable UI window 
+		DockableWindow* mWindow = nullptr; // Dockable UI window 
 
 	protected:
 		// It is called after that all windows was created

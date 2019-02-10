@@ -6,25 +6,25 @@
 namespace o2
 {
 
-	UIWidgetLayerLayout::UIWidgetLayerLayout(UIWidgetLayer* widgetLayer) :
+	WidgetLayerLayout::WidgetLayerLayout(WidgetLayer* widgetLayer) :
 		mWidgetLayer(widgetLayer)
 	{}
 
-	UIWidgetLayerLayout::UIWidgetLayerLayout(UIWidgetLayer* widgetLayer, const UIWidgetLayerLayout& other) :
+	WidgetLayerLayout::WidgetLayerLayout(WidgetLayer* widgetLayer, const WidgetLayerLayout& other) :
 		mWidgetLayer(widgetLayer), mAnchorMin(other.mAnchorMin), mAnchorMax(other.mAnchorMax), mOffsetMin(other.mOffsetMin),
 		mOffsetMax(other.mOffsetMax)
 	{}
 
-	UIWidgetLayerLayout::UIWidgetLayerLayout() :
+	WidgetLayerLayout::WidgetLayerLayout() :
 		mWidgetLayer(nullptr)
 	{}
 
-	UIWidgetLayerLayout::operator Layout() const
+	WidgetLayerLayout::operator Layout() const
 	{
 		return Layout(mAnchorMin, mAnchorMax, mOffsetMin, mOffsetMax);
 	}
 
-	UIWidgetLayerLayout& UIWidgetLayerLayout::operator=(const UIWidgetLayerLayout& other)
+	WidgetLayerLayout& WidgetLayerLayout::operator=(const WidgetLayerLayout& other)
 	{
 		mAnchorMax = other.mAnchorMax;
 		mAnchorMin = other.mAnchorMin;
@@ -34,31 +34,31 @@ namespace o2
 		return *this;
 	}
 
-	bool UIWidgetLayerLayout::operator!=(const Layout& other) const
+	bool WidgetLayerLayout::operator!=(const Layout& other) const
 	{
 		return mAnchorMin != other.anchorMin || mAnchorMax != other.anchorMax ||
 			mOffsetMin != other.offsetMin || mOffsetMax != other.offsetMax;
 	}
 
-	bool UIWidgetLayerLayout::operator!=(const UIWidgetLayerLayout& other) const
+	bool WidgetLayerLayout::operator!=(const WidgetLayerLayout& other) const
 	{
 		return mAnchorMin != other.mAnchorMin || mAnchorMax != other.mAnchorMax ||
 			mOffsetMin != other.mOffsetMin || mOffsetMax != other.mOffsetMax;
 	}
 
-	bool UIWidgetLayerLayout::operator==(const Layout& other) const
+	bool WidgetLayerLayout::operator==(const Layout& other) const
 	{
 		return mAnchorMin == other.anchorMin && mAnchorMax == other.anchorMax &&
 			mOffsetMin == other.offsetMin && mOffsetMax == other.offsetMax;
 	}
 
-	bool UIWidgetLayerLayout::operator==(const UIWidgetLayerLayout& other) const
+	bool WidgetLayerLayout::operator==(const WidgetLayerLayout& other) const
 	{
 		return mAnchorMin == other.mAnchorMin && mAnchorMax == other.mAnchorMax &&
 			mOffsetMin == other.mOffsetMin && mOffsetMax == other.mOffsetMax;
 	}
 
-	UIWidgetLayerLayout& UIWidgetLayerLayout::operator=(const Layout& other)
+	WidgetLayerLayout& WidgetLayerLayout::operator=(const Layout& other)
 	{
 		mAnchorMin = other.anchorMin;
 		mAnchorMax = other.anchorMax;
@@ -68,7 +68,7 @@ namespace o2
 		return *this;
 	}
 
-	RectF UIWidgetLayerLayout::Calculate(const RectF& source)
+	RectF WidgetLayerLayout::Calculate(const RectF& source)
 	{
 		Vec2F srcSize = source.Size();
 		return RectF(source.left + srcSize.x*mAnchorMin.x + mOffsetMin.x,
@@ -77,138 +77,166 @@ namespace o2
 					 source.bottom + srcSize.y*mAnchorMax.y + mOffsetMax.y);
 	}
 
-	void UIWidgetLayerLayout::SetAnchorMin(const Vec2F& min)
+	void WidgetLayerLayout::SetAnchorMin(const Vec2F& min)
 	{
 		mAnchorMin = min;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	Vec2F UIWidgetLayerLayout::GetAnchorMin() const
+	Vec2F WidgetLayerLayout::GetAnchorMin() const
 	{
 		return mAnchorMin;
 	}
 
-	void UIWidgetLayerLayout::SetAnchorMax(const Vec2F& max)
+	void WidgetLayerLayout::SetAnchorMax(const Vec2F& max)
 	{
 		mAnchorMax = max;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	Vec2F UIWidgetLayerLayout::GetAnchorMax() const
+	Vec2F WidgetLayerLayout::GetAnchorMax() const
 	{
 		return mAnchorMax;
 	}
 
-	void UIWidgetLayerLayout::SetAnchorLeft(float value)
+	void WidgetLayerLayout::SetAnchorLeft(float value)
 	{
 		mAnchorMin.x = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetAnchorLeft() const
+	float WidgetLayerLayout::GetAnchorLeft() const
 	{
 		return mAnchorMin.x;
 	}
 
-	void UIWidgetLayerLayout::SetAnchorRight(float value)
+	void WidgetLayerLayout::SetAnchorRight(float value)
 	{
 		mAnchorMax.x = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetAnchorRight() const
+	float WidgetLayerLayout::GetAnchorRight() const
 	{
 		return mAnchorMax.x;
 	}
 
-	void UIWidgetLayerLayout::SetAnchorBottom(float value)
+	void WidgetLayerLayout::SetAnchorBottom(float value)
 	{
 		mAnchorMin.y = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetAnchorBottom() const
+	float WidgetLayerLayout::GetAnchorBottom() const
 	{
 		return mAnchorMin.y;
 	}
 
-	void UIWidgetLayerLayout::SetAnchorTop(float value)
+	void WidgetLayerLayout::SetAnchorTop(float value)
 	{
 		mAnchorMax.y = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetAnchorTop() const
+	float WidgetLayerLayout::GetAnchorTop() const
 	{
 		return mAnchorMax.y;
 	}
 
-	void UIWidgetLayerLayout::SetOffsetMin(const Vec2F& min)
+	void WidgetLayerLayout::SetOffsetMin(const Vec2F& min)
 	{
 		mOffsetMin = min;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	Vec2F UIWidgetLayerLayout::GetOffsetMin() const
+	Vec2F WidgetLayerLayout::GetOffsetMin() const
 	{
 		return mOffsetMin;
 	}
 
-	void UIWidgetLayerLayout::SetOffsetMax(const Vec2F& max)
+	void WidgetLayerLayout::SetOffsetMax(const Vec2F& max)
 	{
 		mOffsetMax = max;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	Vec2F UIWidgetLayerLayout::GetOffsetMax() const
+	Vec2F WidgetLayerLayout::GetOffsetMax() const
 	{
 		return mOffsetMax;
 	}
 
-	void UIWidgetLayerLayout::SetOffsetLeft(float value)
+	void WidgetLayerLayout::SetOffsetLeft(float value)
 	{
 		mOffsetMin.x = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetOffsetLeft() const
+	float WidgetLayerLayout::GetOffsetLeft() const
 	{
 		return mAnchorMin.x;
 	}
 
-	void UIWidgetLayerLayout::SetOffsetRight(float value)
+	void WidgetLayerLayout::SetOffsetRight(float value)
 	{
 		mOffsetMax.x = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetOffsetRight() const
+	float WidgetLayerLayout::GetOffsetRight() const
 	{
 		return mOffsetMax.x;
 	}
 
-	void UIWidgetLayerLayout::SetOffsetBottom(float value)
+	void WidgetLayerLayout::SetOffsetBottom(float value)
 	{
 		mOffsetMin.y = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetOffsetBottom() const
+	float WidgetLayerLayout::GetOffsetBottom() const
 	{
 		return mAnchorMin.y;
 	}
 
-	void UIWidgetLayerLayout::SetOffsetTop(float value)
+	void WidgetLayerLayout::SetOffsetTop(float value)
 	{
 		mOffsetMax.y = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float UIWidgetLayerLayout::GetOffsetTop() const
+	float WidgetLayerLayout::GetOffsetTop() const
 	{
 		return mOffsetMax.y;
 	}
 
+	void WidgetLayerLayout::SetPosition(const Vec2F& position)
+	{
+		Vec2F delta = position - mWidgetLayer->mAbsolutePosition.LeftBottom();
+		mOffsetMin += delta;
+		mOffsetMax += delta;
+
+		mWidgetLayer->OnLayoutChanged();
+	}
+
+	Vec2F WidgetLayerLayout::GetPosition() const
+	{
+		return mWidgetLayer->mAbsolutePosition.LeftBottom();
+	}
+
+	void WidgetLayerLayout::SetSize(const Vec2F& size)
+	{
+		Vec2F delta = size - mWidgetLayer->mAbsolutePosition.Size();
+		mOffsetMin -= delta*0.5f;
+		mOffsetMax += delta*0.5f;
+
+		mWidgetLayer->OnLayoutChanged();
+	}
+
+	Vec2F WidgetLayerLayout::GetSize() const
+	{
+		return mWidgetLayer->mAbsolutePosition.Size();
+	}
+
 }
 
-DECLARE_CLASS(o2::UIWidgetLayerLayout);
+DECLARE_CLASS(o2::WidgetLayerLayout);

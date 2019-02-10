@@ -5,8 +5,8 @@
 namespace o2
 {
 	class UIToggle;
-	class UIEditBox;
-	class UIButton;
+	class EditBox;
+	class Button;
 }
 
 namespace Editor
@@ -29,10 +29,10 @@ namespace Editor
 		~DefaultWidgetLayerHeaderViewer();
 
 		// Sets target actors
-		void SetTargetLayers(const Vector<UIWidgetLayer*>& layers) override;
+		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
 		// Returns data widget
-		UIWidget* GetWidget() const override;
+		Widget* GetWidget() const override;
 
 		// Updates properties values
 		void Refresh();
@@ -40,9 +40,9 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerHeaderViewer);
 
 	public:
-		Vector<UIWidgetLayer*> mLayers;
+		Vector<WidgetLayer*> mLayers;
 
-		UIWidget*              mDataView = nullptr;
+		Widget*              mDataView = nullptr;
 
 		BooleanProperty*       mEnableProperty = nullptr;
 		StringProperty*        mNameProperty = nullptr;
@@ -71,8 +71,8 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<UIWidgetLayer*>&);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }

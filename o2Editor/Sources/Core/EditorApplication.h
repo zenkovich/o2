@@ -9,7 +9,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIMenuPanel;
+	class MenuPanel;
 }
 
 // Editor application access macros

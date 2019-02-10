@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 }
 
 namespace Editor
@@ -27,7 +27,7 @@ namespace Editor
 		virtual const Type* GetAssetType() const { return nullptr; }
 
 		// Returns data widget
-		virtual UIWidget* GetWidget() const { return nullptr; }
+		virtual Widget* GetWidget() const { return nullptr; }
 
 		IOBJECT(IAssetPropertiesViewer);
 	};
@@ -47,6 +47,6 @@ CLASS_METHODS_META(Editor::IAssetPropertiesViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(UIWidget*, GetWidget);
+	PUBLIC_FUNCTION(Widget*, GetWidget);
 }
 END_META;

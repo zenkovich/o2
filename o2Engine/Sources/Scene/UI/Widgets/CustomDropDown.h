@@ -8,28 +8,28 @@ namespace o2
 	// ---------------------------------
 	// Custom items drop down ui element
 	// ---------------------------------
-	class UICustomDropDown: public UIWidget, public DrawableCursorEventsListener
+	class CustomDropDown: public Widget, public DrawableCursorEventsListener
 	{
 	public:
-		PROPERTIES(UICustomDropDown);
-		PROPERTY(UIWidget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
+		PROPERTIES(CustomDropDown);
+		PROPERTY(Widget*, selectedItem, SelectItem, GetSelectedItem);       // Selected item widget property
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
 		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
 		Function<void(int)>       onSelectedPos;   // Select item position event
-		Function<void(UIWidget*)> onSelectedItem;  // Select item event
+		Function<void(Widget*)> onSelectedItem;  // Select item event
 
 		// Default constructor
-		UICustomDropDown();
+		CustomDropDown();
 
 		// Copy-constructor
-		UICustomDropDown(const UICustomDropDown& other);
+		CustomDropDown(const CustomDropDown& other);
 
 		// Destructor
-		~UICustomDropDown();
+		~CustomDropDown();
 
 		// Copy operator
-		UICustomDropDown& operator=(const UICustomDropDown& other);
+		CustomDropDown& operator=(const CustomDropDown& other);
 
 		// Draws widget
 		void Draw() override;
@@ -44,22 +44,22 @@ namespace o2
 		bool IsExpanded() const;
 
 		// Sets item sample widget. WARNING: Removing all old items!
-		void SetItemSample(UIWidget* sample);
+		void SetItemSample(Widget* sample);
 
 		// Returns item sample widget
-		UIWidget* GetItemSample() const;
+		Widget* GetItemSample() const;
 
 		// Returns layout of items
-		UIVerticalLayout* GetItemsLayout() const;
+		VerticalLayout* GetItemsLayout() const;
 
 		// Adds new item and returns it
-		UIWidget* AddItem();
+		Widget* AddItem();
 
 		// Adds new item at position and returns it
-		UIWidget* AddItem(int position);
+		Widget* AddItem(int position);
 
 		// Removes item
-		void RemoveItem(UIWidget* item);
+		void RemoveItem(Widget* item);
 
 		// Removes item in position
 		void RemoveItem(int position);
@@ -68,37 +68,37 @@ namespace o2
 		void MoveItem(int position, int newPosition);
 
 		// Moves item to new position
-		void MoveItem(UIWidget* item, int newPosition);
+		void MoveItem(Widget* item, int newPosition);
 
 		// Returns item position
-		int GetItemPosition(UIWidget* item);
+		int GetItemPosition(Widget* item);
 
 		// Returns item by position
-		UIWidget* GetItem(int position) const;
+		Widget* GetItem(int position) const;
 
 		// Removes all items
 		void RemoveAllItems();
 
 		// Sorts items
-		void SortItems(const Function<bool(UIWidget*, UIWidget*)>& sortFunc);
+		void SortItems(const Function<bool(Widget*, Widget*)>& sortFunc);
 
 		// Returns items count
 		int GetItemsCount() const;
 
 		// Selects item
-		void SelectItem(UIWidget* item);
+		void SelectItem(Widget* item);
 
 		// Selects item at position
 		void SelectItemAt(int position);
 
 		// Returns selected item
-		UIWidget* GetSelectedItem() const;
+		Widget* GetSelectedItem() const;
 
 		// Returns selected item position
 		int GetSelectedItemPosition() const;
 
 		// Returns list view 
-		UICustomList* GetListView() const;
+		CustomList* GetListView() const;
 
 		// Sets list view size by items size
 		void SetMaxListSizeInItems(int itemsCount);
@@ -112,10 +112,10 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UICustomDropDown);
+		SERIALIZABLE(CustomDropDown);
 
 	protected:
-		UICustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
+		CustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
 		Layout        mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
 		RectF         mAbsoluteClip;                       // Absolute clipping rectangle
 		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
@@ -157,13 +157,13 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UICustomDropDown)
+CLASS_BASES_META(o2::CustomDropDown)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UICustomDropDown)
+CLASS_FIELDS_META(o2::CustomDropDown)
 {
 	PUBLIC_FIELD(selectedItem);
 	PUBLIC_FIELD(selectedItemPos);
@@ -176,34 +176,34 @@ CLASS_FIELDS_META(o2::UICustomDropDown)
 	PROTECTED_FIELD(mMaxListItems).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UICustomDropDown)
+CLASS_METHODS_META(o2::CustomDropDown)
 {
 
-	typedef const Function<bool(UIWidget*, UIWidget*)>& _tmp1;
+	typedef const Function<bool(Widget*, Widget*)>& _tmp1;
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(void, SetItemSample, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItemSample);
-	PUBLIC_FUNCTION(UIVerticalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(UIWidget*, AddItem);
-	PUBLIC_FUNCTION(UIWidget*, AddItem, int);
-	PUBLIC_FUNCTION(void, RemoveItem, UIWidget*);
+	PUBLIC_FUNCTION(void, SetItemSample, Widget*);
+	PUBLIC_FUNCTION(Widget*, GetItemSample);
+	PUBLIC_FUNCTION(VerticalLayout*, GetItemsLayout);
+	PUBLIC_FUNCTION(Widget*, AddItem);
+	PUBLIC_FUNCTION(Widget*, AddItem, int);
+	PUBLIC_FUNCTION(void, RemoveItem, Widget*);
 	PUBLIC_FUNCTION(void, RemoveItem, int);
 	PUBLIC_FUNCTION(void, MoveItem, int, int);
-	PUBLIC_FUNCTION(void, MoveItem, UIWidget*, int);
-	PUBLIC_FUNCTION(int, GetItemPosition, UIWidget*);
-	PUBLIC_FUNCTION(UIWidget*, GetItem, int);
+	PUBLIC_FUNCTION(void, MoveItem, Widget*, int);
+	PUBLIC_FUNCTION(int, GetItemPosition, Widget*);
+	PUBLIC_FUNCTION(Widget*, GetItem, int);
 	PUBLIC_FUNCTION(void, RemoveAllItems);
 	PUBLIC_FUNCTION(void, SortItems, _tmp1);
 	PUBLIC_FUNCTION(int, GetItemsCount);
-	PUBLIC_FUNCTION(void, SelectItem, UIWidget*);
+	PUBLIC_FUNCTION(void, SelectItem, Widget*);
 	PUBLIC_FUNCTION(void, SelectItemAt, int);
-	PUBLIC_FUNCTION(UIWidget*, GetSelectedItem);
+	PUBLIC_FUNCTION(Widget*, GetSelectedItem);
 	PUBLIC_FUNCTION(int, GetSelectedItemPosition);
-	PUBLIC_FUNCTION(UICustomList*, GetListView);
+	PUBLIC_FUNCTION(CustomList*, GetListView);
 	PUBLIC_FUNCTION(void, SetMaxListSizeInItems, int);
 	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);

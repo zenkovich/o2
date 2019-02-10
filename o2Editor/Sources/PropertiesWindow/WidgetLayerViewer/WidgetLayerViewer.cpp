@@ -37,7 +37,7 @@ namespace Editor
 		mViewersLayout->expandWidth = true;
 		mViewersLayout->fitByChildren = true;
 		mViewersLayout->baseCorner = BaseCorner::Top;
-		*mViewersLayout->layout = UIWidgetLayout::BothStretch();
+		*mViewersLayout->layout = WidgetLayout::BothStretch();
 		mContentWidget->AddChild(mViewersLayout);
 
 		mViewersLayout->AddChild(mHeaderViewer->GetWidget());
@@ -63,7 +63,7 @@ namespace Editor
 
 	const Type* WidgetLayerViewer::GetViewingObjectType() const
 	{
-		return &TypeOf(UIWidgetLayer);
+		return &TypeOf(WidgetLayer);
 	}
 
 	void WidgetLayerViewer::SetHeaderViewer(IWidgetLayerHeaderViewer* viewer)
@@ -103,7 +103,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mTargetLayers = targets.Select<UIWidgetLayer*>([](auto x) { return dynamic_cast<UIWidgetLayer*>(x); });
+		mTargetLayers = targets.Select<WidgetLayer*>([](auto x) { return dynamic_cast<WidgetLayer*>(x); });
 
 		// rebuild
 		mHeaderViewer->SetTargetLayers(mTargetLayers);

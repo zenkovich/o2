@@ -11,8 +11,8 @@ using namespace o2;
 
 namespace o2
 {
-	class UIVerticalLayout;
-	class UIWidget;
+	class VerticalLayout;
+	class Widget;
 }
 
 // Editor properties window accessor macros
@@ -49,22 +49,22 @@ namespace Editor
 		void FreeProperty(IPropertyField* field);
 
 		// Builds layout viewer by type for objects
-		void BuildObjectProperties(UIVerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Builds layout viewer by fields
-		void BuildObjectProperties(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
-		IPropertyField* BuildField(UIVerticalLayout* layout, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, const String& path,
+		IPropertyField* BuildField(VerticalLayout* layout, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
-		IPropertyField* BuildField(UIVerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path, 
+		IPropertyField* BuildField(VerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path, 
 								   FieldPropertiesInfo& propertiesInfo,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
@@ -146,7 +146,7 @@ namespace Editor
 		void InitializeAvailableObjectPropertiesViewers();
 
 		// Builds layout viewer by fields without filtering
-		void BuildFields(UIVerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
+		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
 						 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 						 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 	};

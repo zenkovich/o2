@@ -5,10 +5,10 @@
 
 namespace o2
 {
-	class UIButton;
+	class Button;
 	class UIContextMenu;
-	class UIEditBox;
-	class UIWidget;
+	class EditBox;
+	class Widget;
 }
 
 namespace Editor
@@ -31,7 +31,7 @@ namespace Editor
 		IOBJECT(TagsProperty);
 
 	protected:
-		UIEditBox*     mEditBox = nullptr;        // Edit box 
+		EditBox*     mEditBox = nullptr;        // Edit box 
 		UIContextMenu* mTagsContext = nullptr;    // tags context
 		bool           mPushingTag = false;       // Is pushing tag and we don't need to check edit text
 

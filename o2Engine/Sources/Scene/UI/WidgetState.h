@@ -7,19 +7,19 @@
 
 namespace o2
 {
-	class UIWidget;
+	class Widget;
 
 	// -----------------------------------------------------------------------
-	// UIWidget state. Could be true or false, and animates widget by this state
+	// Widget state. Could be true or false, and animates widget by this state
 	// -----------------------------------------------------------------------
-	class UIWidgetState: public ISerializable
+	class WidgetState: public ISerializable
 	{
 	public:
 		String    name;                          // State name @SERIALIZABLE
-		Animation animation;                     // UIWidget animation @SERIALIZABLE
+		Animation animation;                     // Widget animation @SERIALIZABLE
 		float     offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE
 
-		PROPERTIES(UIWidgetState);
+		PROPERTIES(WidgetState);
 		PROPERTY(bool, state, SetState, GetState); // State flag property
 
 		Function<void()> onStateFullyTrue;	  // This event calls when state is completely true (at the end of animation)
@@ -28,19 +28,19 @@ namespace o2
 		Function<void()> onStateBecomesFalse; // This event calls when state becomes to true
 
 		// Default constructor
-		UIWidgetState();
+		WidgetState();
 
 		// Copy-constructor
-		UIWidgetState(const UIWidgetState& state);
+		WidgetState(const WidgetState& state);
 
 		// Destructor
-		~UIWidgetState();
+		~WidgetState();
 
 		// Boolean cast operator
 		operator bool();
 
 		// Assign from boolean operator
-		UIWidgetState& operator=(bool state);
+		WidgetState& operator=(bool state);
 
 		// Sets current state
 		void SetState(bool state);
@@ -54,23 +54,23 @@ namespace o2
 		// Updates animation
 		void Update(float dt);
 
-		SERIALIZABLE(UIWidgetState);
+		SERIALIZABLE(WidgetState);
 
 	protected:
 		bool      mState = false; // Current state @SERIALIZABLE
-		UIWidget* mOwner = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
+		Widget* mOwner = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 
-		friend class UIWidget;
+		friend class Widget;
 	};
-	typedef Vector<UIWidgetState*>  StatesVec;
+	typedef Vector<WidgetState*>  StatesVec;
 }
 
-CLASS_BASES_META(o2::UIWidgetState)
+CLASS_BASES_META(o2::WidgetState)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIWidgetState)
+CLASS_FIELDS_META(o2::WidgetState)
 {
 	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(animation).SERIALIZABLE_ATTRIBUTE();
@@ -84,7 +84,7 @@ CLASS_FIELDS_META(o2::UIWidgetState)
 	PROTECTED_FIELD(mOwner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::UIWidgetState)
+CLASS_METHODS_META(o2::WidgetState)
 {
 
 	PUBLIC_FUNCTION(void, SetState, bool);

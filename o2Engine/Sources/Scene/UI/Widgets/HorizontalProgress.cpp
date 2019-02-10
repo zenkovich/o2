@@ -7,12 +7,12 @@
 
 namespace o2
 {
-	UIHorizontalProgress::UIHorizontalProgress():
-		UIWidget(), DrawableCursorEventsListener(this)
+	HorizontalProgress::HorizontalProgress():
+		Widget(), DrawableCursorEventsListener(this)
 	{}
 
-	UIHorizontalProgress::UIHorizontalProgress(const UIHorizontalProgress& other) :
-		UIWidget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
+	HorizontalProgress::HorizontalProgress(const HorizontalProgress& other) :
+		Widget(other), DrawableCursorEventsListener(this), mValue(other.mValue), mMinValue(other.mMinValue),
 		mMaxValue(other.mMaxValue), mOrientation(other.mOrientation), mScrollSense(other.mScrollSense), value(this),
 		minValue(this), maxValue(this), scrollSense(this)
 	{
@@ -22,18 +22,18 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	UIHorizontalProgress::~UIHorizontalProgress()
+	HorizontalProgress::~HorizontalProgress()
 	{}
 
-	UIHorizontalProgress& UIHorizontalProgress::operator=(const UIHorizontalProgress& other)
+	HorizontalProgress& HorizontalProgress::operator=(const HorizontalProgress& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIHorizontalProgress::Update(float dt)
+	void HorizontalProgress::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -52,7 +52,7 @@ namespace o2
 		}
 	}
 
-	void UIHorizontalProgress::SetValue(float value)
+	void HorizontalProgress::SetValue(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
@@ -60,7 +60,7 @@ namespace o2
 		onChange(mValue);
 	}
 
-	void UIHorizontalProgress::SetValueForcible(float value)
+	void HorizontalProgress::SetValueForcible(float value)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		mSmoothValue = mValue;
@@ -69,12 +69,12 @@ namespace o2
 		onChange(mValue);
 	}
 
-	float UIHorizontalProgress::GetValue() const
+	float HorizontalProgress::GetValue() const
 	{
 		return mValue;
 	}
 
-	void UIHorizontalProgress::SetMinValue(float minValue)
+	void HorizontalProgress::SetMinValue(float minValue)
 	{
 		mMinValue = minValue;
 		mValue = Math::Max(mMinValue, mValue);
@@ -83,12 +83,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIHorizontalProgress::GetMinValue() const
+	float HorizontalProgress::GetMinValue() const
 	{
 		return mMinValue;
 	}
 
-	void UIHorizontalProgress::SetMaxValue(float maxValue)
+	void HorizontalProgress::SetMaxValue(float maxValue)
 	{
 		mMaxValue = maxValue;
 		mValue = Math::Min(mMaxValue, mValue);
@@ -97,12 +97,12 @@ namespace o2
 		onChange(value);
 	}
 
-	float UIHorizontalProgress::GetMaxValue() const
+	float HorizontalProgress::GetMaxValue() const
 	{
 		return mMaxValue;
 	}
 
-	void UIHorizontalProgress::SetValueRange(float minValue, float maxValue)
+	void HorizontalProgress::SetValueRange(float minValue, float maxValue)
 	{
 		mMaxValue = maxValue;
 		mValue = Math::Clamp(mValue, mMinValue, mMaxValue);
@@ -111,28 +111,28 @@ namespace o2
 		onChange(value);
 	}
 
-	void UIHorizontalProgress::SetScrollSense(float coef)
+	void HorizontalProgress::SetScrollSense(float coef)
 	{
 		mScrollSense = coef;
 	}
 
-	float UIHorizontalProgress::GetScrollSense() const
+	float HorizontalProgress::GetScrollSense() const
 	{
 		return mScrollSense;
 	}
 
-	void UIHorizontalProgress::SetOrientation(Orientation orientation)
+	void HorizontalProgress::SetOrientation(Orientation orientation)
 	{
 		mOrientation = orientation;
 		UpdateLayersLayouts();
 	}
 
-	UIHorizontalProgress::Orientation UIHorizontalProgress::GetOrientation() const
+	HorizontalProgress::Orientation HorizontalProgress::GetOrientation() const
 	{
 		return mOrientation;
 	}
 
-	bool UIHorizontalProgress::IsUnderPoint(const Vec2F& point)
+	bool HorizontalProgress::IsUnderPoint(const Vec2F& point)
 	{
 		if (mBackLayer)
 			return mDrawingScissorRect.IsInside(point) && mBackLayer->IsUnderPoint(point);
@@ -140,12 +140,12 @@ namespace o2
 		return false;
 	}
 
-	bool UIHorizontalProgress::IsScrollable() const
+	bool HorizontalProgress::IsScrollable() const
 	{
 		return true;
 	}
 
-	void UIHorizontalProgress::OnCursorPressed(const Input::Cursor& cursor)
+	void HorizontalProgress::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -154,26 +154,26 @@ namespace o2
 		GetValueFromCursor(cursor);
 	}
 
-	void UIHorizontalProgress::OnCursorReleased(const Input::Cursor& cursor)
+	void HorizontalProgress::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UIHorizontalProgress::OnCursorPressBreak(const Input::Cursor& cursor)
+	void HorizontalProgress::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
 			*pressedState = false;
 	}
 
-	void UIHorizontalProgress::OnCursorStillDown(const Input::Cursor& cursor)
+	void HorizontalProgress::OnCursorStillDown(const Input::Cursor& cursor)
 	{
 		GetValueFromCursor(cursor);
 	}
 
-	void UIHorizontalProgress::GetValueFromCursor(const Input::Cursor &cursor)
+	void HorizontalProgress::GetValueFromCursor(const Input::Cursor &cursor)
 	{
 		float width = layout->width;
 		float d = mMaxValue - mMinValue;
@@ -183,28 +183,28 @@ namespace o2
 			SetValue((width - (cursor.position.x - layout->worldLeft))/width*d + mMinValue);
 	}
 
-	void UIHorizontalProgress::OnCursorEnter(const Input::Cursor& cursor)
+	void HorizontalProgress::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void UIHorizontalProgress::OnCursorExit(const Input::Cursor& cursor)
+	void HorizontalProgress::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	void UIHorizontalProgress::OnScrolled(float scroll)
+	void HorizontalProgress::OnScrolled(float scroll)
 	{
 		SetValue(mValue + scroll*mScrollSense);
 	}
 
-	void UIHorizontalProgress::OnDeserialized(const DataNode& node)
+	void HorizontalProgress::OnDeserialized(const DataNode& node)
 	{
-		UIWidget::OnDeserialized(node);
+		Widget::OnDeserialized(node);
 
 		mBarLayer = FindLayer("bar");
 		mBackLayer = FindLayer("back");
@@ -212,17 +212,17 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIHorizontalProgress::OnResEnableInHierarchyChanged()
+	void HorizontalProgress::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	void UIHorizontalProgress::UpdateLayersLayouts()
+	void HorizontalProgress::UpdateLayersLayouts()
 	{
 		UpdateProgressLayersLayouts();
 	}
 
-	void UIHorizontalProgress::UpdateProgressLayersLayouts()
+	void HorizontalProgress::UpdateProgressLayersLayouts()
 	{
 		if (mBarLayer)
 		{
@@ -244,14 +244,14 @@ namespace o2
 		if (mBackLayer)
 			mBackLayer->layout = Layout::BothStretch();
 
-		UIWidget::UpdateLayersLayouts();
+		Widget::UpdateLayersLayouts();
 	}
 
-	void UIHorizontalProgress::CopyData(const Actor& otherActor)
+	void HorizontalProgress::CopyData(const Actor& otherActor)
 	{
-		const UIHorizontalProgress& other = dynamic_cast<const UIHorizontalProgress&>(otherActor);
+		const HorizontalProgress& other = dynamic_cast<const HorizontalProgress&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		mValue       = other.mValue;
 		mMinValue    = other.mMinValue;
@@ -266,7 +266,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIHorizontalProgress::OnLayerAdded(UIWidgetLayer* layer)
+	void HorizontalProgress::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "back")
 			mBackLayer = layer;
@@ -277,9 +277,9 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIHorizontalProgress);
+DECLARE_CLASS(o2::HorizontalProgress);
 
-ENUM_META_(o2::UIHorizontalProgress::Orientation, Orientation)
+ENUM_META_(o2::HorizontalProgress::Orientation, Orientation)
 {
 	ENUM_ENTRY(Left);
 	ENUM_ENTRY(Right);

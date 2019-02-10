@@ -101,7 +101,7 @@ namespace o2
 			{
 				String name = "unknown";
 
-				if (auto widget = dynamic_cast<UIWidget*>(listener))
+				if (auto widget = dynamic_cast<Widget*>(listener))
 				{
 					String path;
 					auto parent = widget;

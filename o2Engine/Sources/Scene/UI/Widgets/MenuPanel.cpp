@@ -12,52 +12,52 @@
 namespace o2
 {
 
-	UIMenuPanel::UIMenuPanel():
-		UIWidget(), DrawableCursorEventsListener(this)
+	MenuPanel::MenuPanel():
+		Widget(), DrawableCursorEventsListener(this)
 	{
-		mItemSample = mnew UIWidget();
+		mItemSample = mnew Widget();
 		mItemSample->AddLayer("text", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
 
 		mSelectionDrawable = mnew Sprite();
 
-		mLayout = mnew UIHorizontalLayout();
+		mLayout = mnew HorizontalLayout();
 		AddChild(mLayout);
 
 		mLayout->expandHeight  = true;
 		mLayout->expandWidth   = false;
 		mLayout->baseCorner    = BaseCorner::LeftTop;
 		mLayout->fitByChildren = true;
-		*mLayout->layout       = UIWidgetLayout::BothStretch();
+		*mLayout->layout       = WidgetLayout::BothStretch();
 	}
 
-	UIMenuPanel::UIMenuPanel(const UIMenuPanel& other):
-		UIWidget(other), DrawableCursorEventsListener(this)
+	MenuPanel::MenuPanel(const MenuPanel& other):
+		Widget(other), DrawableCursorEventsListener(this)
 	{
-		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample        = other.mItemSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = FindChildByType<UIHorizontalLayout>();
+		mLayout            = FindChildByType<HorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateSelfTransform();
 		UpdateChildrenTransforms();
 	}
 
-	UIMenuPanel::~UIMenuPanel()
+	MenuPanel::~MenuPanel()
 	{
 		delete mItemSample;
 		delete mSelectionDrawable;
 	}
 
-	UIMenuPanel& UIMenuPanel::operator=(const UIMenuPanel& other)
+	MenuPanel& MenuPanel::operator=(const MenuPanel& other)
 	{
-		UIWidget::operator=(other);
+		Widget::operator=(other);
 		return *this;
 	}
 
-	void UIMenuPanel::Update(float dt)
+	void MenuPanel::Update(float dt)
 	{
-		UIWidget::Update(dt);
+		Widget::Update(dt);
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 			return;
@@ -92,7 +92,7 @@ namespace o2
 		}
 	}
 
-	void UIMenuPanel::Draw()
+	void MenuPanel::Draw()
 	{
 		if (!mResEnabledInHierarchy)
 			return;
@@ -113,16 +113,16 @@ namespace o2
 		DrawDebugFrame();
 	}
 
-	UIWidget* UIMenuPanel::AddItem(const Item& item)
+	Widget* MenuPanel::AddItem(const Item& item)
 	{
-		UIWidget* newItem = CreateItem(item);
+		Widget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem);
 		mClickFunctions.Add(item.onClick);
 
 		return newItem;
 	}
 
-	UIContextMenu* UIMenuPanel::CreateSubContext(WString& path)
+	UIContextMenu* MenuPanel::CreateSubContext(WString& path)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
@@ -130,7 +130,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		UIWidget* subChild = mLayout->mChildWidgets.FindMatch([&](auto x) {
+		Widget* subChild = mLayout->mChildWidgets.FindMatch([&](auto x) {
 			if (auto text = x->template GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -152,7 +152,7 @@ namespace o2
 		return subContext;
 	}
 
-	UIWidget* UIMenuPanel::AddItem(const WString& path, 
+	Widget* MenuPanel::AddItem(const WString& path, 
 								   const Function<void()>& clickFunc /*= Function<void()>()*/,
 								   const ImageAssetRef& icon /*= ImageAssetRef()*/,
 								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
@@ -165,7 +165,7 @@ namespace o2
 		return subContext->AddItem(itemPath, clickFunc, icon, shortcut);
 	}
 
-	UIWidget* UIMenuPanel::AddToggleItem(const WString& path, bool value,
+	Widget* MenuPanel::AddToggleItem(const WString& path, bool value,
 										 const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/, 
 										 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 										 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
@@ -178,9 +178,9 @@ namespace o2
 		return subContext->AddToggleItem(itemPath, value, clickFunc, icon, shortcut);
 	}
 
-	UIWidget* UIMenuPanel::InsertItem(const Item& item, int position)
+	Widget* MenuPanel::InsertItem(const Item& item, int position)
 	{
-		UIWidget* newItem = CreateItem(item);
+		Widget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem, position);
 
 		if (item.subItems.Count() > 0)
@@ -195,13 +195,13 @@ namespace o2
 		return newItem;
 	}
 
-	void UIMenuPanel::AddItems(Vector<Item> items)
+	void MenuPanel::AddItems(Vector<Item> items)
 	{
 		for (auto item : items)
 			AddItem(item);
 	}
 
-	void UIMenuPanel::InsertItems(Vector<Item> items, int position)
+	void MenuPanel::InsertItems(Vector<Item> items, int position)
 	{
 		int i = 0;
 		for (auto item : items)
@@ -211,7 +211,7 @@ namespace o2
 		}
 	}
 
-	UIMenuPanel::Item UIMenuPanel::GetItem(int position)
+	MenuPanel::Item MenuPanel::GetItem(int position)
 	{
 		if (position > 0 && position < mLayout->GetChildren().Count())
 			return GetItemDef(position);
@@ -219,7 +219,7 @@ namespace o2
 		return Item();
 	}
 
-	Vector<UIMenuPanel::Item> UIMenuPanel::GetItems() const
+	Vector<MenuPanel::Item> MenuPanel::GetItems() const
 	{
 		Vector<Item> res;
 		for (int i = 0; i < mLayout->GetChildren().Count(); i++)
@@ -228,18 +228,18 @@ namespace o2
 		return res;
 	}
 
-	void UIMenuPanel::RemoveItem(int position)
+	void MenuPanel::RemoveItem(int position)
 	{
 		if (position > 0 && position < mLayout->GetChildren().Count())
 			mLayout->RemoveChild(mLayout->GetChildren()[position]);
 	}
 
-	void UIMenuPanel::RemoveItem(const WString& path)
+	void MenuPanel::RemoveItem(const WString& path)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
 		{
-			UIWidget* removingItem = mLayout->mChildWidgets.FindMatch([&](auto x) {
+			Widget* removingItem = mLayout->mChildWidgets.FindMatch([&](auto x) {
 				if (auto text = x->template GetLayerDrawable<Text>("text"))
 					return text->text == path;
 
@@ -259,7 +259,7 @@ namespace o2
 
 		WString subMenu = path.SubStr(0, slashPos);
 
-		UIWidget* subChild = mLayout->mChildWidgets.FindMatch([&](auto x) {
+		Widget* subChild = mLayout->mChildWidgets.FindMatch([&](auto x) {
 			if (auto text = x->template GetLayerDrawable<Text>("text"))
 				return text->text == subMenu;
 
@@ -282,45 +282,45 @@ namespace o2
 		subContext->RemoveItem(path.SubStr(slashPos + 1));
 	}
 
-	void UIMenuPanel::RemoveAllItems()
+	void MenuPanel::RemoveAllItems()
 	{
 		mLayout->RemoveAllChildren();
 	}
 
-	UIHorizontalLayout* UIMenuPanel::GetItemsLayout() const
+	HorizontalLayout* MenuPanel::GetItemsLayout() const
 	{
 		return mLayout;
 	}
 
-	UIWidget* UIMenuPanel::GetItemSample() const
+	Widget* MenuPanel::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	void UIMenuPanel::SetItemSample(UIWidget* sample)
+	void MenuPanel::SetItemSample(Widget* sample)
 	{
 		delete mItemSample;
 		mItemSample = sample;
 	}
 
-	Sprite* UIMenuPanel::GetSelectionDrawable() const
+	Sprite* MenuPanel::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
 
-	void UIMenuPanel::SetSelectionDrawableLayout(const Layout& layout)
+	void MenuPanel::SetSelectionDrawableLayout(const Layout& layout)
 	{
 		mSelectionLayout = layout;
 	}
 
-	Layout UIMenuPanel::GetSelectionDrawableLayout() const
+	Layout MenuPanel::GetSelectionDrawableLayout() const
 	{
 		return mSelectionLayout;
 	}
 
-	UIWidget* UIMenuPanel::CreateItem(const Item& item)
+	Widget* MenuPanel::CreateItem(const Item& item)
 	{
-		UIWidget* newItem = mItemSample->CloneAs<UIWidget>();
+		Widget* newItem = mItemSample->CloneAs<Widget>();
 		newItem->name = (WString)"Menu Item:" + item.text;
 
 		if (auto textLayer = newItem->GetLayerDrawable<Text>("text"))
@@ -336,7 +336,7 @@ namespace o2
 		return newItem;
 	}
 
-	UIMenuPanel::Item UIMenuPanel::GetItemDef(int idx) const
+	MenuPanel::Item MenuPanel::GetItemDef(int idx) const
 	{
 		Item res;
 		auto item = mLayout->mChildWidgets[idx];
@@ -352,30 +352,30 @@ namespace o2
 		return res;
 	}
 
-	void UIMenuPanel::CopyData(const Actor& otherActor)
+	void MenuPanel::CopyData(const Actor& otherActor)
 	{
-		const UIMenuPanel& other = dynamic_cast<const UIMenuPanel&>(otherActor);
+		const MenuPanel& other = dynamic_cast<const MenuPanel&>(otherActor);
 
-		UIWidget::CopyData(other);
+		Widget::CopyData(other);
 
 		delete mItemSample;
 		delete mSelectionDrawable;
 
-		mItemSample        = other.mItemSample->CloneAs<UIWidget>();
+		mItemSample        = other.mItemSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = FindChildByType<UIHorizontalLayout>();
+		mLayout            = FindChildByType<HorizontalLayout>();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
 
-	void UIMenuPanel::OnResEnableInHierarchyChanged()
+	void MenuPanel::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	UIWidget* UIMenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
+	Widget* MenuPanel::GetItemUnderPoint(const Vec2F& point, int* idxPtr)
 	{
 		if (!mLayout)
 			return nullptr;
@@ -400,10 +400,10 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIMenuPanel::UpdateHover(const Vec2F& point)
+	void MenuPanel::UpdateHover(const Vec2F& point)
 	{
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
+		Widget* itemUnderCursor = GetItemUnderPoint(point, &itemIdx);
 
 		if (itemIdx < 0)
 		{
@@ -439,16 +439,16 @@ namespace o2
 		}
 	}
 
-	void UIMenuPanel::OnCursorPressed(const Input::Cursor& cursor)
+	void MenuPanel::OnCursorPressed(const Input::Cursor& cursor)
 	{}
 
-	void UIMenuPanel::OnCursorStillDown(const Input::Cursor& cursor)
+	void MenuPanel::OnCursorStillDown(const Input::Cursor& cursor)
 	{}
 
-	void UIMenuPanel::OnCursorReleased(const Input::Cursor& cursor)
+	void MenuPanel::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		int itemIdx = -1;
-		UIWidget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
+		Widget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
 
 		if (itemIdx >= 0)
 		{
@@ -465,10 +465,10 @@ namespace o2
 		}
 	}
 
-	void UIMenuPanel::OnCursorPressBreak(const Input::Cursor& cursor)
+	void MenuPanel::OnCursorPressBreak(const Input::Cursor& cursor)
 	{}
 
-	void UIMenuPanel::OnCursorMoved(const Input::Cursor& cursor)
+	void MenuPanel::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
 		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
@@ -479,28 +479,28 @@ namespace o2
 		UpdateHover(cursor.position);
 	}
 
-	void UIMenuPanel::OnCursorExit(const Input::Cursor& cursor)
+	void MenuPanel::OnCursorExit(const Input::Cursor& cursor)
 	{
 		UpdateHover(cursor.position);
 	}
 
-	UIMenuPanel::Item::Item()
+	MenuPanel::Item::Item()
 	{}
 
-	UIMenuPanel::Item::Item(const WString& text, Vector<UIContextMenu::Item> subItems):
+	MenuPanel::Item::Item(const WString& text, Vector<UIContextMenu::Item> subItems):
 		text(text), subItems(subItems)
 	{}
 
-	UIMenuPanel::Item::Item(const WString& text, const Function<void()> onClick) :
+	MenuPanel::Item::Item(const WString& text, const Function<void()> onClick) :
 		text(text), onClick(onClick)
 	{}
 
-	bool UIMenuPanel::Item::operator==(const Item& other) const
+	bool MenuPanel::Item::operator==(const Item& other) const
 	{
 		return text == other.text;
 	}
 }
 
-DECLARE_CLASS(o2::UIMenuPanel);
+DECLARE_CLASS(o2::MenuPanel);
 
-DECLARE_CLASS(o2::UIMenuPanel::Item);
+DECLARE_CLASS(o2::MenuPanel::Item);

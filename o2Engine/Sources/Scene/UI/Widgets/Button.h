@@ -13,10 +13,10 @@ namespace o2
 	// -------------
 	// Button widget
 	// -------------
-	class UIButton: public UIWidget, public CursorAreaEventsListener, public KeyboardEventsListener
+	class Button: public Widget, public CursorAreaEventsListener, public KeyboardEventsListener
 	{
 	public:
-		PROPERTIES(UIButton);
+		PROPERTIES(Button);
 		PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
@@ -26,13 +26,13 @@ namespace o2
 		ShortcutKeys shortcut; // Shortcut keys
 
 		// Default constructor
-		UIButton();
+		Button();
 
 		// Copy-constructor
-		UIButton(const UIButton& other);
+		Button(const Button& other);
 
 		// Assign operator
-		UIButton& operator=(const UIButton& other);
+		Button& operator=(const Button& other);
 
 		// Draws widget
 		void Draw() override;
@@ -55,7 +55,7 @@ namespace o2
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		SERIALIZABLE(UIButton);
+		SERIALIZABLE(Button);
 
 	protected:
 		Text*   mCaptionText = nullptr; // Caption layer text
@@ -88,21 +88,21 @@ namespace o2
 		void OnKeyReleased(const Input::Key& key) override;
 
 		// It is called when layer added and updates drawing sequence
-		void OnLayerAdded(UIWidgetLayer* layer) override;
+		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// It is called when visible was changed
 		void OnResEnableInHierarchyChanged() override;
 	};
 }
 
-CLASS_BASES_META(o2::UIButton)
+CLASS_BASES_META(o2::Button)
 {
-	BASE_CLASS(o2::UIWidget);
+	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::CursorAreaEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIButton)
+CLASS_FIELDS_META(o2::Button)
 {
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
@@ -113,7 +113,7 @@ CLASS_FIELDS_META(o2::UIButton)
 	PROTECTED_FIELD(mIconSprite);
 }
 END_META;
-CLASS_METHODS_META(o2::UIButton)
+CLASS_METHODS_META(o2::Button)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
@@ -131,7 +131,7 @@ CLASS_METHODS_META(o2::UIButton)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 }
 END_META;

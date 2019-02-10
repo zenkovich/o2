@@ -38,10 +38,10 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		mSpoiler = FindChildByType<UISpoiler>(false);
+		mSpoiler = FindChildByType<Spoiler>(false);
 		if (!mSpoiler)
 		{
-			mSpoiler = o2UI.CreateWidget<UISpoiler>("expand with caption");
+			mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 			AddChild(mSpoiler);
 		}
 

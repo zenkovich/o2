@@ -46,7 +46,7 @@ namespace o2
 		ClearStyle();
 	}
 
-	void UIManager::FocusWidget(UIWidget* widget)
+	void UIManager::FocusWidget(Widget* widget)
 	{
 		if (widget == mFocusedWidget || (widget && !widget->IsFocusable()))
 			return;
@@ -79,7 +79,7 @@ namespace o2
 		}
 	}
 
-	UIWidget* UIManager::GetFocusedWidget() const
+	Widget* UIManager::GetFocusedWidget() const
 	{
 		return mFocusedWidget;
 	}
@@ -87,7 +87,7 @@ namespace o2
 	void UIManager::FocusNextWidget()
 	{
 		bool fnd = mFocusedWidget == nullptr;
-		UIWidget* nextFocusingWidget = nullptr;
+		Widget* nextFocusingWidget = nullptr;
 		for (auto widget : mFocusableWidgets)
 		{
 			if (!fnd)
@@ -147,25 +147,25 @@ namespace o2
 		mStyleSamples.Clear();
 	}
 
-	void UIManager::AddWidgetStyle(UIWidget* widget, const String& style)
+	void UIManager::AddWidgetStyle(Widget* widget, const String& style)
 	{
 		widget->Hide(true);
 		widget->SetName(style);
 		mStyleSamples.Add(widget);
 	}
 
-	UIWidget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)
+	Widget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)
 	{
-		UIWidget* sample = GetWidgetStyle(type, style);
+		Widget* sample = GetWidgetStyle(type, style);
 		if (!sample)
 			sample = GetWidgetStyle(type, "standard");
 
-		UIWidget* res = nullptr;
+		Widget* res = nullptr;
 
 		if (sample)
-			res = sample->CloneAs<UIWidget>();
+			res = sample->CloneAs<Widget>();
 		else
-			res = (UIWidget*)type.CreateSample();
+			res = (Widget*)type.CreateSample();
 
 		if (type != TypeOf(UIContextMenu))
 			res->SetEnableForcible(true);
@@ -173,7 +173,7 @@ namespace o2
 		return res;
 	}
 
-	UIWidget* UIManager::GetWidgetStyle(const Type& type, const String& style)
+	Widget* UIManager::GetWidgetStyle(const Type& type, const String& style)
 	{
 		for (auto styleWidget : mStyleSamples)
 		{
@@ -187,115 +187,115 @@ namespace o2
 		return nullptr;
 	}
 
-	UIButton* UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
+	Button* UIManager::CreateButton(const WString& caption, const Function<void()>& onClick /*= Function<void()>()*/,
 									  const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIButton>(style);
+		auto res = CreateWidget<Button>(style);
 		res->caption = caption;
 		res->name = caption + " button";
 		res->onClick = onClick;
 		return res;
 	}
 
-	UIWindow* UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
+	Window* UIManager::CreateWindow(const WString& caption, const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIWindow>(style);
+		auto res = CreateWidget<Window>(style);
 		res->caption = caption;
 		res->name = caption + " window";
 		return res;
 	}
 
-	UILabel* UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
+	Label* UIManager::CreateLabel(const WString& text, const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UILabel>(style);
+		auto res = CreateWidget<Label>(style);
 		res->text = text;
 		res->name = text + " label";
-		res->horOverflow = UILabel::HorOverflow::Dots;
+		res->horOverflow = Label::HorOverflow::Dots;
 		return res;
 	}
 
-	UIHorizontalLayout* UIManager::CreateHorLayout()
+	HorizontalLayout* UIManager::CreateHorLayout()
 	{
-		auto res = mnew UIHorizontalLayout();
+		auto res = mnew HorizontalLayout();
 		res->name = "horizontal layout";
-		*res->layout = UIWidgetLayout::BothStretch();
+		*res->layout = WidgetLayout::BothStretch();
 		return res;
 	}
 
-	UIVerticalLayout* UIManager::CreateVerLayout()
+	VerticalLayout* UIManager::CreateVerLayout()
 	{
-		auto res = mnew UIVerticalLayout();
+		auto res = mnew VerticalLayout();
 		res->name = "vertical layout";
-		*res->layout = UIWidgetLayout::BothStretch();
+		*res->layout = WidgetLayout::BothStretch();
 		return res;
 	}
 
-	UIHorizontalProgress* UIManager::CreateHorProgress(const String& style /*= "standard"*/)
+	HorizontalProgress* UIManager::CreateHorProgress(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIHorizontalProgress>(style);
+		auto res = CreateWidget<HorizontalProgress>(style);
 		res->name = "horizontal progress";
 		return res;
 	}
 
-	UIVerticalProgress* UIManager::CreateVerProgress(const String& style /*= "standard"*/)
+	VerticalProgress* UIManager::CreateVerProgress(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIVerticalProgress>(style);
+		auto res = CreateWidget<VerticalProgress>(style);
 		res->name = "vertical progress";
 		return res;
 	}
 
-	UIHorizontalScrollBar* UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
+	HorizontalScrollBar* UIManager::CreateHorScrollBar(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIHorizontalScrollBar>(style);
+		auto res = CreateWidget<HorizontalScrollBar>(style);
 		res->name = "horizontal scroll bar";
 		return res;
 	}
 
-	UIVerticalScrollBar* UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
+	VerticalScrollBar* UIManager::CreateVerScrollBar(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIVerticalScrollBar>(style);
+		auto res = CreateWidget<VerticalScrollBar>(style);
 		res->name = "vertical scroll bar";
 		return res;
 	}
 
-	UIScrollArea* UIManager::CreateScrollArea(const String& style /*= "standard"*/)
+	ScrollArea* UIManager::CreateScrollArea(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIScrollArea>(style);
+		auto res = CreateWidget<ScrollArea>(style);
 		res->name = "scroll area";
 		return res;
 	}
 
-	UIEditBox* UIManager::CreateEditBox(const String& style /*= "standard"*/)
+	EditBox* UIManager::CreateEditBox(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIEditBox>(style);
+		auto res = CreateWidget<EditBox>(style);
 		res->name = "edit box";
 		return res;
 	}
 
-	UICustomList* UIManager::CreateCustomList(const String& style /*= "standard"*/)
+	CustomList* UIManager::CreateCustomList(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UICustomList>(style);
+		auto res = CreateWidget<CustomList>(style);
 		res->name = "custom list";
 		return res;
 	}
 
-	UIList* UIManager::CreateList(const String& style /*= "standard"*/)
+	List* UIManager::CreateList(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIList>(style);
+		auto res = CreateWidget<List>(style);
 		res->name = "list";
 		return res;
 	}
 
-	UICustomDropDown* UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
+	CustomDropDown* UIManager::CreateCustomDropdown(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UICustomDropDown>(style);
+		auto res = CreateWidget<CustomDropDown>(style);
 		res->name = "custom dropdown";
 		return res;
 	}
 
-	UIDropDown* UIManager::CreateDropdown(const String& style /*= "standard"*/)
+	DropDown* UIManager::CreateDropdown(const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIDropDown>(style);
+		auto res = CreateWidget<DropDown>(style);
 		res->name = "dropdown";
 		return res;
 	}
@@ -308,9 +308,9 @@ namespace o2
 		return res;
 	}
 
-	UIImage* UIManager::CreateImage(const String& name)
+	Image* UIManager::CreateImage(const String& name)
 	{
-		auto res = mnew UIImage();
+		auto res = mnew Image();
 		res->name = name;
 		res->SetImageName(name);
 		return res;
@@ -327,7 +327,7 @@ namespace o2
 			UIContextMenu::mVisibleContextMenu->SpecialDraw();
 	}
 
-	void UIManager::DrawWidgetAtTop(UIWidget* widget)
+	void UIManager::DrawWidgetAtTop(Widget* widget)
 	{
 		mTopWidgets.Add(widget);
 	}

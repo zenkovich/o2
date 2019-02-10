@@ -7,25 +7,25 @@ namespace o2
 	// --------------
 	// Text drop down
 	// --------------
-	class UIDropDown: public UICustomDropDown
+	class DropDown: public CustomDropDown
 	{
 	public:
-		PROPERTIES(UIDropDown);
+		PROPERTIES(DropDown);
 		PROPERTY(WString, value, SelectItemText, GetSelectedItemText); // Current selected item text
 
 		Function<void(const WString&)> onSelectedText; // Change text selected event
 
 		// Default constructor
-		UIDropDown();
+		DropDown();
 
 		// Copy-constructor
-		UIDropDown(const UIDropDown& other);
+		DropDown(const DropDown& other);
 
 		// Destructor
-		~UIDropDown();
+		~DropDown();
 
 		// Copy operator
-		UIDropDown& operator=(const UIDropDown& other);
+		DropDown& operator=(const DropDown& other);
 
 		// Adds new text item and returns position
 		int AddItem(const WString& text);
@@ -54,7 +54,7 @@ namespace o2
 		// Selects item text
 		void SelectItemText(const WString& text);
 
-		SERIALIZABLE(UIDropDown);
+		SERIALIZABLE(DropDown);
 
 	protected:
 		// Copies data of actor from other to this
@@ -65,18 +65,18 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIDropDown)
+CLASS_BASES_META(o2::DropDown)
 {
-	BASE_CLASS(o2::UICustomDropDown);
+	BASE_CLASS(o2::CustomDropDown);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIDropDown)
+CLASS_FIELDS_META(o2::DropDown)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(onSelectedText);
 }
 END_META;
-CLASS_METHODS_META(o2::UIDropDown)
+CLASS_METHODS_META(o2::DropDown)
 {
 
 	PUBLIC_FUNCTION(int, AddItem, const WString&);

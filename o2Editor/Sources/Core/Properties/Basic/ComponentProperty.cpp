@@ -204,29 +204,29 @@ namespace Editor
 
 	void ComponentProperty::OnDropped(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<UISceneTree*>(group))
+		if (auto* actorsTree = dynamic_cast<SceneTree*>(group))
 			OnDroppedFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group))
+		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDroppedFromAssetsScroll(assetsScroll);
 	}
 
 	void ComponentProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<UISceneTree*>(group))
+		if (auto* actorsTree = dynamic_cast<SceneTree*>(group))
 			OnDragEnterFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group))
+		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDragEnterFromAssetsScroll(assetsScroll);
 	}
 
 	void ComponentProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
 	{
-		if (auto* actorsTree = dynamic_cast<UISceneTree*>(group))
+		if (auto* actorsTree = dynamic_cast<SceneTree*>(group))
 			OnDragExitFromActorsTree(actorsTree);
-		else if (auto* assetsScroll = dynamic_cast<UIAssetsIconsScrollArea*>(group))
+		else if (auto* assetsScroll = dynamic_cast<AssetsIconsScrollArea*>(group))
 			OnDragExitFromAssetsScroll(assetsScroll);
 	}
 
-	void ComponentProperty::OnDroppedFromActorsTree(UISceneTree* actorsTree)
+	void ComponentProperty::OnDroppedFromActorsTree(SceneTree* actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
 			return;
@@ -240,7 +240,7 @@ namespace Editor
 		mBox->Focus();
 	}
 
-	void ComponentProperty::OnDragEnterFromActorsTree(UISceneTree* actorsTree)
+	void ComponentProperty::OnDragEnterFromActorsTree(SceneTree* actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() != 1)
 			return;
@@ -256,13 +256,13 @@ namespace Editor
 		mBox->SetState("focused", true);
 	}
 
-	void ComponentProperty::OnDragExitFromActorsTree(UISceneTree* actorsTree)
+	void ComponentProperty::OnDragExitFromActorsTree(SceneTree* actorsTree)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
 	}
 
-	void ComponentProperty::OnDroppedFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll)
+	void ComponentProperty::OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
@@ -274,7 +274,7 @@ namespace Editor
 		mBox->Focus();
 	}
 
-	void ComponentProperty::OnDragEnterFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll)
+	void ComponentProperty::OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
 	{
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
@@ -292,7 +292,7 @@ namespace Editor
 		}
 	}
 
-	void ComponentProperty::OnDragExitFromAssetsScroll(UIAssetsIconsScrollArea* assetsIconsScroll)
+	void ComponentProperty::OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll)
 	{
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->SetState("focused", false);
