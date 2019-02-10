@@ -439,6 +439,9 @@ namespace o2
 	{
 		ContextMenuItem* itemUnderCursor = GetItemUnderPoint(cursor.position);
 
+		if (!itemUnderCursor)
+			return;
+
 		if (!itemUnderCursor->IsEnabled())
 			return;
 

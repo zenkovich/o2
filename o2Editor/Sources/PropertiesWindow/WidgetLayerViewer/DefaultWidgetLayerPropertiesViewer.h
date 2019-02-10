@@ -4,6 +4,11 @@
 #include "Core/Properties/IPropertyField.h"
 #include "PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h"
 
+namespace o2
+{
+	class Button;
+}
+
 namespace Editor
 {
 	// --------------------------------------
@@ -39,10 +44,17 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<WidgetLayer*> mLayers;                 // Target widget layers
-		FieldPropertiesInfo    mFieldProperties;        // Field properties information
-		bool                   mBuiltWithHidden;        // True when properties was built with hidden fields
-		const Type*            mDrawableType = nullptr; // Target actor type
+		Vector<WidgetLayer*> mLayers;                  // Target widget layers
+
+		FieldPropertiesInfo  mFieldProperties;         // Field properties information
+		Button*              mFitSizeButton = nullptr; // Fit size of layer by drawable size
+
+		bool                 mBuiltWithHidden = false; // True when properties was built with hidden fields
+		const Type*          mDrawableType = nullptr;  // Target actor type
+
+	protected:
+		// Fits layer size by drawable size, it is called when mFitSizeButton were pressed
+		void FitLayerByDrawable();
 	};
 }
 
@@ -55,6 +67,7 @@ CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
 	PROTECTED_FIELD(mLayers);
 	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mFitSizeButton);
 	PROTECTED_FIELD(mBuiltWithHidden);
 	PROTECTED_FIELD(mDrawableType);
 }
@@ -68,5 +81,6 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PUBLIC_FUNCTION(bool, IsBuiltWithHiddenFields);
+	PROTECTED_FUNCTION(void, FitLayerByDrawable);
 }
 END_META;

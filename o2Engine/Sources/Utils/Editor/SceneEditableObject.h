@@ -120,6 +120,10 @@ namespace o2
 		virtual void SetLayout(const Layout& layout);
 
 
+		// Returns is that type of object can be deleted from editor
+		virtual bool IsSupportsDeleting() const;
+
+
 		// It is called when something changed in this object
 		virtual void OnChanged();
 
@@ -178,6 +182,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	PUBLIC_FUNCTION(bool, IsSupportsLayout);
 	PUBLIC_FUNCTION(Layout, GetLayout);
 	PUBLIC_FUNCTION(void, SetLayout, const Layout&);
+	PUBLIC_FUNCTION(bool, IsSupportsDeleting);
 	PUBLIC_FUNCTION(void, OnChanged);
 	PUBLIC_FUNCTION(void, OnLockChanged);
 	PUBLIC_FUNCTION(void, OnNameChanged);

@@ -1385,6 +1385,11 @@ namespace o2
 	void Widget::LayersEditable::SetIndexInSiblings(int idx)
 	{}
 
+	bool Widget::LayersEditable::IsSupportsDeleting() const
+	{
+		return false;
+	}
+
 	Basis Widget::LayersEditable::GetTransform() const
 	{
 		return mWidget->GetTransform();
@@ -1436,6 +1441,11 @@ namespace o2
 
 	void Widget::InternalChildrenEditableEditable::SetIndexInSiblings(int idx)
 	{}
+
+	bool Widget::InternalChildrenEditableEditable::IsSupportsDeleting() const
+	{
+		return false;
+	}
 
 	Basis Widget::InternalChildrenEditableEditable::GetTransform() const
 	{

@@ -40,6 +40,11 @@ namespace o2
 
 			delete child;
 		}
+
+#if IS_EDITOR
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.mEditableObjects.Remove(this);
+#endif
 	}
 
 	WidgetLayer& WidgetLayer::operator=(const WidgetLayer& other)
@@ -346,7 +351,10 @@ namespace o2
 		mUpdatingLayout = true;
 
 		if (mOwnerWidget)
+		{
 			mOwnerWidget->UpdateLayersLayouts();
+			mOwnerWidget->OnChanged();
+		}
 
 		mUpdatingLayout = false;
 	}

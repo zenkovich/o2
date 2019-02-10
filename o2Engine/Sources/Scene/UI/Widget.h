@@ -480,6 +480,10 @@ namespace o2
 			void SetIndexInSiblings(int idx) override;
 
 
+			// Returns is that type of object can be deleted from editor
+			bool IsSupportsDeleting() const override;
+
+
 			// Returns transform, override when it's supports
 			Basis GetTransform() const override;
 
@@ -529,6 +533,10 @@ namespace o2
 
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
+
+
+			// Returns is that type of object can be deleted from editor
+			bool IsSupportsDeleting() const override;
 
 
 			// Returns transform, override when it's supports
@@ -852,6 +860,7 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
+	PUBLIC_FUNCTION(bool, IsSupportsDeleting);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 }
 END_META;
@@ -879,6 +888,7 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
+	PUBLIC_FUNCTION(bool, IsSupportsDeleting);
 	PUBLIC_FUNCTION(Basis, GetTransform);
 }
 END_META;

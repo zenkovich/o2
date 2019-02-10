@@ -4,12 +4,17 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widgets/Button.h"
 
 namespace Editor
 {
 
 	DefaultWidgetLayerPropertiesViewer::DefaultWidgetLayerPropertiesViewer()
-	{}
+	{
+		PushScopeEnterOnStack scope;
+		mFitSizeButton = o2UI.CreateButton("Fit size by drawable", THIS_FUNC(FitLayerByDrawable));
+	}
 
 	DefaultWidgetLayerPropertiesViewer::~DefaultWidgetLayerPropertiesViewer()
 	{}
@@ -49,6 +54,9 @@ namespace Editor
 		o2EditorProperties.BuildObjectProperties(mSpoiler,
 												 fields, mFieldProperties, "");
 
+		mFitSizeButton->SetParent(nullptr);
+		mFitSizeButton->SetParent(mSpoiler);
+
 		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
 	}
 
@@ -60,6 +68,18 @@ namespace Editor
 	bool DefaultWidgetLayerPropertiesViewer::IsBuiltWithHiddenFields() const
 	{
 		return mBuiltWithHidden;
+	}
+
+	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
+	{
+		for (auto layer : mLayers)
+		{
+			if (Sprite* sprite = dynamic_cast<Sprite*>(layer->GetDrawable()))
+				layer->layout.size = sprite->GetImageAsset()->GetSize();
+
+			if (Text* text = dynamic_cast<Text*>(layer->GetDrawable()))
+				layer->layout.size = text->GetRealSize();
+		}
 	}
 
 }

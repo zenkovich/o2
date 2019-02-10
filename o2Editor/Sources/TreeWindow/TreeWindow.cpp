@@ -502,8 +502,11 @@ namespace Editor
 		auto action = mnew DeleteAction(selectedObjects);
 		o2EditorApplication.DoneAction(action);
 
-		for (auto actor : selectedObjects)
-			delete actor;
+		for (auto object : selectedObjects)
+		{
+			if (object->IsSupportsDeleting())
+				delete object;
+		}
 
 		mSceneTree->UpdateNodesView();
 	}

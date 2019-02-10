@@ -45,7 +45,7 @@ namespace o2
 	public:
 		enum class Usage
 		{
-			Regular, Vector, Dictionary, StringAccessor, Enumeration, Pointer, Property
+			Regular, Object, Vector, Dictionary, StringAccessor, Enumeration, Pointer, Property
 		};
 
 		struct BaseType

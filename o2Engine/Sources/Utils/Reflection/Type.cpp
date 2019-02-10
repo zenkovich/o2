@@ -450,7 +450,7 @@ namespace o2
 
 	Type::Usage ObjectType::GetUsage() const
 	{
-		return Usage::Regular;
+		return Usage::Object;
 	}
 
 	void* ObjectType::DynamicCastFromIObject(IObject* object) const

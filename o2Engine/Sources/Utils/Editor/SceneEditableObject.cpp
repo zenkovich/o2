@@ -140,6 +140,11 @@ namespace o2
 	void SceneEditableObject::SetLayout(const Layout& layout)
 	{ }
 
+	bool SceneEditableObject::IsSupportsDeleting() const
+	{
+		return true;
+	}
+
 	void SceneEditableObject::OnChanged()
 	{ }
 

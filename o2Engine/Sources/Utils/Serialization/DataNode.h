@@ -571,11 +571,20 @@ namespace o2
 	{
 		if (auto typeNode = GetNode("Type"))
 		{
-			String type = *typeNode;
+			String typeName = *typeNode;
 
 			if (auto valueNode = GetNode("Value"))
 			{
-				value = static_cast<_type*>(Reflection::CreateTypeSample(type));
+				auto type = Reflection::GetType(typeName);
+				void* sample = type->CreateSample();
+				if (type->GetUsage() == Type::Usage::Object)
+				{
+					auto objectType = dynamic_cast<const ObjectType*>(type);
+					value = dynamic_cast<_type*>(objectType->DynamicCastToIObject(sample));
+				}
+				else 
+					value = static_cast<_type*>(sample);
+
 				if (value)
 					valueNode->GetValueRaw(*value);
 

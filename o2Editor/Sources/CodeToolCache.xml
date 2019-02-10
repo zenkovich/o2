@@ -1129,29 +1129,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerPropertiesViewer.h">
-		<date year="2019" month="2" day="10" hour="15" minute="26" second="25" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultWidgetLayerPropertiesViewer" fullname="Editor::DefaultWidgetLayerPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IWidgetLayerPropertiesViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/IWidgetLayerHeadViewer.h">
 		<date year="2019" month="2" day="10" hour="15" minute="26" second="25" />
 		<globalNamespace name="" fullname="">
@@ -3230,6 +3207,34 @@
 			<usings>
 				<typedef name="o2" />
 			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerPropertiesViewer.h">
+		<date year="2019" month="2" day="10" hour="22" minute="49" second="34" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultWidgetLayerPropertiesViewer" fullname="Editor::DefaultWidgetLayerPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IWidgetLayerPropertiesViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
 		</globalNamespace>
 	</file>
 </files>
