@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Scene/UI/ScrollArea.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/ScrollArea.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Utils/Editor/DragAndDrop.h"
 #include "Utils/Math/Curve.h"
 #include "Utils/Types/UnknownPtr.h"

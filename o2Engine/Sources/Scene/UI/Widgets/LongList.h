@@ -3,7 +3,7 @@
 #include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "ScrollArea.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 
 namespace o2
 {

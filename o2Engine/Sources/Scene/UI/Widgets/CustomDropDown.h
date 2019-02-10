@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Events/DrawableCursorEventsListener.h"
-#include "Scene/UI/CustomList.h"
+#include "Scene/UI/Widgets/CustomList.h"
 
 namespace o2
 {

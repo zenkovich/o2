@@ -4,7 +4,7 @@
 #include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Events/ShortcutKeysListener.h"
-#include "Scene/UI/ScrollArea.h"
+#include "Scene/UI/Widgets/ScrollArea.h"
 #include "Utils/Delegates.h"
 #include "Utils/System/ShortcutKeys.h"
 

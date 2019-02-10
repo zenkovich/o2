@@ -19,7 +19,7 @@
 #include "SceneWindow/SceneDragHandle.h"
 #include "TreeWindow/SceneTree.h"
 #include "TreeWindow/TreeWindow.h"
-#include "Scene/UI/Tree.h"
+#include "Scene/UI/Widgets/Tree.h"
 #include "Scene/UI/UIManager.h"
 #include "Utils/Math/Math.h"
 

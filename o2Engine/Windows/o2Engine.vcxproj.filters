@@ -1035,6 +1035,9 @@
     <ClCompile Include="..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\Sources\Scene\UI\WidgetLayerLayout.cpp">
+      <Filter>Sources\Scene\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="o2.natvis" />

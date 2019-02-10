@@ -2,7 +2,7 @@
 
 #include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
-#include "Scene/UI/ScrollArea.h"
+#include "Scene/UI/Widgets/ScrollArea.h"
 #include "Events/CursorEventsArea.h"
 
 namespace o2

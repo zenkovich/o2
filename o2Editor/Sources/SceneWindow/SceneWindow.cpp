@@ -2,8 +2,8 @@
 #include "SceneWindow.h"
 
 #include "SceneWindow/SceneEditScreen.h"
-#include "Scene/UI/Button.h"
-#include "Scene/UI/CustomDropDown.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/CustomDropDown.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
 

@@ -10,7 +10,7 @@
 #include "PropertiesWindow/WidgetLayerViewer/IWidgetLayerLayoutViewer.h"
 #include "PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h"
 #include "Scene/UI/UIManager.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/WidgetLayout.h"
 
 namespace Editor

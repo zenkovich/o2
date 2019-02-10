@@ -3,7 +3,7 @@
 
 #include "Core/Properties/Properties.h"
 #include "IPropertiesViewer.h"
-#include "Scene/UI/ContextMenu.h"
+#include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/WidgetLayout.h"
 
 

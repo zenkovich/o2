@@ -2,7 +2,7 @@
 #include "VectorProperty.h"
 
 #include "Scene/UI/UIManager.h"
-#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/Widgets/Spoiler.h"
 #include "Core/Properties/Properties.h"
 #include "Core/Properties/Basic/IntegerProperty.h"
 #include "SceneWindow/SceneEditScreen.h"

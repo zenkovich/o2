@@ -7,7 +7,7 @@
 #include "Core/WindowsSystem/UIDockableWindow.h"
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Scene/UI/UIManager.h"
-#include "Scene/UI/Window.h"
+#include "Scene/UI/Widgets/Window.h"
 #include "WindowsSystem/IEditorWindow.h"
 #include "MenuPanel.h"
 #include "ToolsPanel.h"

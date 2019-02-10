@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene/UI/HorizontalLayout.h"
+#include "Scene/UI/Widgets/HorizontalLayout.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Serialization/DataNode.h"

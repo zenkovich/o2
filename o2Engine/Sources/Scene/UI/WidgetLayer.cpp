@@ -8,13 +8,12 @@
 namespace o2
 {
 	UIWidgetLayer::UIWidgetLayer() :
-		mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
+		layout(this), mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mDrawable(nullptr)
-	{
-	}
+	{}
 
 	UIWidgetLayer::UIWidgetLayer(const UIWidgetLayer& other) :
-		mDepth(other.mDepth), name(other.name), layout(other.layout), mTransparency(other.mTransparency),
+		mDepth(other.mDepth), name(other.name), layout(this, other.layout), mTransparency(other.mTransparency),
 		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
 		mDrawable(nullptr), depth(this), transparency(this)
 	{
@@ -34,7 +33,7 @@ namespace o2
 
 		delete mDrawable;
 
-		for (auto child : mChildren) 
+		for (auto child : mChildren)
 		{
 			child->mParent = nullptr;
 			child->mOwnerWidget = nullptr;
@@ -339,6 +338,19 @@ namespace o2
 		}
 	}
 
+	void UIWidgetLayer::OnLayoutChanged()
+	{
+		if (mUpdatingLayout)
+			return;
+
+		mUpdatingLayout = true;
+
+		if (mOwnerWidget)
+			mOwnerWidget->UpdateLayersLayouts();
+
+		mUpdatingLayout = false;
+	}
+
 	void UIWidgetLayer::UpdateLayout()
 	{
 		if (mParent)
@@ -590,5 +602,3 @@ namespace o2
 }
 
 DECLARE_CLASS(o2::UIWidgetLayer);
-
-DECLARE_CLASS(o2::UIWidgetLayer::Layout);

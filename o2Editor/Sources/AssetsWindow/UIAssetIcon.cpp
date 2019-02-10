@@ -3,7 +3,7 @@
 
 #include "AssetsWindow/AssetsIconsScroll.h"
 #include "Render/Text.h"
-#include "Scene/UI/Label.h"
+#include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/WidgetState.h"
 #include "Utils/FileSystem/FileSystem.h"
 

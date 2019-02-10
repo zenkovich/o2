@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "Scene/UI/HorizontalProgress.h"
+#include "Scene/UI/Widgets/HorizontalProgress.h"
 
 #include "Scene/UI/WidgetLayer.h"
 #include "Scene/UI/WidgetLayout.h"

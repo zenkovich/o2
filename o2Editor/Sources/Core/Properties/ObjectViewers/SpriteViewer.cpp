@@ -8,7 +8,7 @@
 #include "Core/Properties/Basic/EnumProperty.h"
 #include "Core/Properties/Basic/FloatProperty.h"
 #include "Core/Properties/Properties.h"
-#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/Widgets/Spoiler.h"
 #include "Scene/UI/UIManager.h"
 
 namespace Editor

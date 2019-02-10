@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Events/DrawableCursorEventsListener.h"
-#include "Scene/UI/ContextMenu.h"
+#include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/Delegates.h"
 

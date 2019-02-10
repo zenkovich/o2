@@ -6,7 +6,7 @@
 #include "Render/Mesh.h"
 #include "Render/Sprite.h"
 #include "Render/Text.h"
-#include "Scene/UI/ScrollArea.h"
+#include "Scene/UI/Widgets/ScrollArea.h"
 
 namespace o2
 {

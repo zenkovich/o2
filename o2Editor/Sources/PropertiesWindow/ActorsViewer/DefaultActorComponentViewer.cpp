@@ -11,9 +11,9 @@
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Component.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "Scene/UI/Label.h"
-#include "Scene/UI/Spoiler.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/Label.h"
+#include "Scene/UI/Widgets/Spoiler.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/Widget.h"
 
 namespace Editor

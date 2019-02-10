@@ -397,6 +397,7 @@
     <ClCompile Include="..\Sources\Scene\UI\UIManager.cpp" />
     <ClCompile Include="..\Sources\Scene\UI\Widget.cpp" />
     <ClCompile Include="..\Sources\Scene\UI\WidgetLayer.cpp" />
+    <ClCompile Include="..\Sources\Scene\UI\WidgetLayerLayout.cpp" />
     <ClCompile Include="..\Sources\Scene\UI\WidgetLayout.cpp" />
     <ClCompile Include="..\Sources\Scene\UI\WidgetState.cpp" />
     <ClCompile Include="..\Sources\Scene\UI\Widgets\Button.cpp" />

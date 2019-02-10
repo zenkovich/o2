@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "BooleanProperty.h"
 
-#include "Scene/UI/Toggle.h"
+#include "Scene/UI/Widgets/Toggle.h"
 #include "Scene/UI/Widget.h"
 #include "Scene/UI/WidgetLayout.h"
 

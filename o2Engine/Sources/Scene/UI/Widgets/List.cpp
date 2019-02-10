@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "List.h"
 
-#include "Scene/UI/Label.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/Label.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 
 namespace o2
 {

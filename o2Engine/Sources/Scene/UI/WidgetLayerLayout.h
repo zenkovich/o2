@@ -1,116 +1,211 @@
 #pragma once
 
+#include "Utils/Serialization/Serializable.h"
+#include "Utils/Math/Layout.h"
+
 namespace o2
 {
+	class UIWidgetLayer;
 
-class Layout : public ISerializable
-{
-public:
-	PROPERTIES(Layout);
-	PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin);          // Left bottom anchor property
-	PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax);          // Right top anchor property
+	class UIWidgetLayerLayout : public ISerializable
+	{
+	public:
+		PROPERTIES(UIWidgetLayerLayout);
+		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin);          // Left bottom anchor property
+		PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax);          // Right top anchor property
 
-	PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin);          // Left bottom corner offset property
-	PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax);          // Right top corner offset property
+		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin);          // Left bottom corner offset property
+		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax);          // Right top corner offset property
 
-	PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
-	PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
-	PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
-	PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
+		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
+		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
+		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
+		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
 
-	PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
-	PROPERTY(float, offsetRight, SetOffsetRight, GetOffsetRight);    // Right offset property
-	PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
-	PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
+		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
+		PROPERTY(float, offsetRight, SetOffsetRight, GetOffsetRight);    // Right offset property
+		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
+		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
 
-public:
-	Layout(UIWidgetLayer* widgetLayer);
+	public:
+		// Default unused constructor, required for IObject
+		UIWidgetLayerLayout();
 
-	RectF Calculate(const RectF& source);
+		// Default constructor
+		UIWidgetLayerLayout(UIWidgetLayer* widgetLayer);
 
-	bool operator==(const Layout& other) const;
-	bool operator!=(const Layout& other) const;
+		// Copy constructor
+		UIWidgetLayerLayout(UIWidgetLayer* widgetLayer, const UIWidgetLayerLayout& other);
 
-	// Sets left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
-	void SetAnchorMin(const Vec2F& min);
 
-	// Returns left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
-	Vec2F GetAnchorMin() const;
+		// Cast to Layout operator
+		operator Layout() const;
 
-	// Sets right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
-	void SetAnchorMax(const Vec2F& max);
+		// Copy operator from layout
+		UIWidgetLayerLayout& operator=(const Layout& other);
 
-	// Returns right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
-	Vec2F GetAnchorMax() const;
 
-	// Sets left anchor. 0 - left parent border, 1 - right
-	void SetAnchorLeft(float value);
+		// Copy operator 
+		UIWidgetLayerLayout& operator=(const UIWidgetLayerLayout& other);
 
-	// Returns left anchor. 0 - left parent border, 1 - right
-	float GetAnchorLeft() const;
 
-	// Sets right anchor. 0 - left parent border, 1 - right
-	void SetAnchorRight(float value);
+		// Check equals operator
+		bool operator==(const UIWidgetLayerLayout& other) const;
 
-	// Returns right anchor. 0 - left parent border, 1 - right
-	float GetAnchorRight() const;
+		// Check equals operator
+		bool operator==(const Layout& other) const;
 
-	// Sets bottom anchor. 0 - bottom parent border, 1 - top
-	void SetAnchorBottom(float value);
+		// Check not equals operator
+		bool operator!=(const UIWidgetLayerLayout& other) const;
 
-	// Returns bottom anchor. 0 - bottom parent border, 1 - top
-	float GetAnchorBottom() const;
+		// Check not equals operator
+		bool operator!=(const Layout& other) const;
 
-	// Sets top anchor. 0 - bottom parent border, 1 - top
-	void SetAnchorTop(float value);
 
-	// Returns top anchor. 0 - bottom parent border, 1 - top
-	float GetAnchorTop() const;
+		// Returns calculated rectangle by anchors and offsets relative to source
+		RectF Calculate(const RectF& source);
 
-	// Sets left bottom offset
-	void SetOffsetMin(const Vec2F& min);
 
-	// Returns left bottom offset
-	Vec2F GetOffsetMin() const;
+		// Sets left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		void SetAnchorMin(const Vec2F& min);
 
-	// Sets right top offset
-	void SetOffsetMax(const Vec2F& max);
+		// Returns left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		Vec2F GetAnchorMin() const;
 
-	// Returns right top offset
-	Vec2F GetOffsetMax() const;
+		// Sets right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		void SetAnchorMax(const Vec2F& max);
 
-	// Sets left offset
-	void SetOffsetLeft(float value);
+		// Returns right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
+		Vec2F GetAnchorMax() const;
 
-	// Returns left offset
-	float GetOffsetLeft() const;
 
-	// Sets right offset
-	void SetOffsetRight(float value);
+		// Sets left anchor. 0 - left parent border, 1 - right
+		void SetAnchorLeft(float value);
 
-	// Returns right offset
-	float GetOffsetRight() const;
+		// Returns left anchor. 0 - left parent border, 1 - right
+		float GetAnchorLeft() const;
 
-	// Sets bottom offset
-	void SetOffsetBottom(float value);
+		// Sets right anchor. 0 - left parent border, 1 - right
+		void SetAnchorRight(float value);
 
-	// Returns bottom offset
-	float GetOffsetBottom() const;
+		// Returns right anchor. 0 - left parent border, 1 - right
+		float GetAnchorRight() const;
 
-	// Sets top offset
-	void SetOffsetTop(float value);
+		// Sets bottom anchor. 0 - bottom parent border, 1 - top
+		void SetAnchorBottom(float value);
 
-	// Returns top offset
-	float GetOffsetTop() const;
+		// Returns bottom anchor. 0 - bottom parent border, 1 - top
+		float GetAnchorBottom() const;
 
-private:
-	UIWidgetLayer * mWidgetLayer;
+		// Sets top anchor. 0 - bottom parent border, 1 - top
+		void SetAnchorTop(float value);
 
-	Vec2F mAnchorMin; // @SERIALIZABLE
-	Vec2F mAnchorMax; // @SERIALIZABLE
-	Vec2F mOffsetMin; // @SERIALIZABLE
-	Vec2F mOffsetMax; // @SERIALIZABLE
+		// Returns top anchor. 0 - bottom parent border, 1 - top
+		float GetAnchorTop() const;
 
-	SERIALIZABLE(Layout);
-};
+
+		// Sets left bottom offset
+		void SetOffsetMin(const Vec2F& min);
+
+		// Returns left bottom offset
+		Vec2F GetOffsetMin() const;
+
+		// Sets right top offset
+		void SetOffsetMax(const Vec2F& max);
+
+		// Returns right top offset
+		Vec2F GetOffsetMax() const;
+
+
+		// Sets left offset
+		void SetOffsetLeft(float value);
+
+		// Returns left offset
+		float GetOffsetLeft() const;
+
+		// Sets right offset
+		void SetOffsetRight(float value);
+
+		// Returns right offset
+		float GetOffsetRight() const;
+
+		// Sets bottom offset
+		void SetOffsetBottom(float value);
+
+		// Returns bottom offset
+		float GetOffsetBottom() const;
+
+		// Sets top offset
+		void SetOffsetTop(float value);
+
+		// Returns top offset
+		float GetOffsetTop() const;
+
+		SERIALIZABLE(UIWidgetLayerLayout);
+
+	private:
+		UIWidgetLayer* mWidgetLayer = nullptr; // @EXCLUDE_POINTER_SEARCH
+
+		Vec2F mAnchorMin = Vec2F(0, 0); // @SERIALIZABLE
+		Vec2F mAnchorMax = Vec2F(1, 1); // @SERIALIZABLE
+		Vec2F mOffsetMin = Vec2F(0, 0); // @SERIALIZABLE
+		Vec2F mOffsetMax = Vec2F(0, 0); // @SERIALIZABLE
+	};
 }
+
+CLASS_BASES_META(o2::UIWidgetLayerLayout)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::UIWidgetLayerLayout)
+{
+	PUBLIC_FIELD(anchorMin);
+	PUBLIC_FIELD(anchorMax);
+	PUBLIC_FIELD(offsetMin);
+	PUBLIC_FIELD(offsetMax);
+	PUBLIC_FIELD(anchorLeft);
+	PUBLIC_FIELD(anchorRight);
+	PUBLIC_FIELD(anchorBottom);
+	PUBLIC_FIELD(anchorTop);
+	PUBLIC_FIELD(offsetLeft);
+	PUBLIC_FIELD(offsetRight);
+	PUBLIC_FIELD(offsetBottom);
+	PUBLIC_FIELD(offsetTop);
+	PRIVATE_FIELD(mWidgetLayer).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PRIVATE_FIELD(mAnchorMin).SERIALIZABLE_ATTRIBUTE();
+	PRIVATE_FIELD(mAnchorMax).SERIALIZABLE_ATTRIBUTE();
+	PRIVATE_FIELD(mOffsetMin).SERIALIZABLE_ATTRIBUTE();
+	PRIVATE_FIELD(mOffsetMax).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::UIWidgetLayerLayout)
+{
+
+	PUBLIC_FUNCTION(RectF, Calculate, const RectF&);
+	PUBLIC_FUNCTION(void, SetAnchorMin, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetAnchorMin);
+	PUBLIC_FUNCTION(void, SetAnchorMax, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetAnchorMax);
+	PUBLIC_FUNCTION(void, SetAnchorLeft, float);
+	PUBLIC_FUNCTION(float, GetAnchorLeft);
+	PUBLIC_FUNCTION(void, SetAnchorRight, float);
+	PUBLIC_FUNCTION(float, GetAnchorRight);
+	PUBLIC_FUNCTION(void, SetAnchorBottom, float);
+	PUBLIC_FUNCTION(float, GetAnchorBottom);
+	PUBLIC_FUNCTION(void, SetAnchorTop, float);
+	PUBLIC_FUNCTION(float, GetAnchorTop);
+	PUBLIC_FUNCTION(void, SetOffsetMin, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetOffsetMin);
+	PUBLIC_FUNCTION(void, SetOffsetMax, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetOffsetMax);
+	PUBLIC_FUNCTION(void, SetOffsetLeft, float);
+	PUBLIC_FUNCTION(float, GetOffsetLeft);
+	PUBLIC_FUNCTION(void, SetOffsetRight, float);
+	PUBLIC_FUNCTION(float, GetOffsetRight);
+	PUBLIC_FUNCTION(void, SetOffsetBottom, float);
+	PUBLIC_FUNCTION(float, GetOffsetBottom);
+	PUBLIC_FUNCTION(void, SetOffsetTop, float);
+	PUBLIC_FUNCTION(float, GetOffsetTop);
+}
+END_META;

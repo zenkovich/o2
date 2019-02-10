@@ -2,8 +2,8 @@
 #include "IPropertyField.h"
 
 #include "SceneWindow/SceneEditScreen.h"
-#include "Scene/UI/Button.h"
-#include "Scene/UI/Label.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widget.h"
 #include "Scene/UI/WidgetState.h"
 

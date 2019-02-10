@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TagProperty.h"
 
-#include "Scene/UI/EditBox.h"
+#include "Scene/UI/Widgets/EditBox.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
 

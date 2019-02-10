@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "SpoilerWithHead.h"
 
-#include "Scene/UI/Button.h"
+#include "Scene/UI/Widgets/Button.h"
 
 namespace Editor
 {

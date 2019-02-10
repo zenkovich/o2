@@ -317,7 +317,7 @@ namespace o2
 
 CLASS_BASES_META(o2::UIWidgetLayout)
 {
-	BASE_CLASS(ActorTransform);
+	BASE_CLASS(o2::ActorTransform);
 }
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayout)
@@ -417,7 +417,7 @@ END_META;
 
 CLASS_BASES_META(o2::UIWidgetLayout::Data)
 {
-	BASE_CLASS(ActorTransform::Data);
+	BASE_CLASS(o2::ActorTransform::Data);
 }
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayout::Data)

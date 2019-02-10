@@ -149,7 +149,7 @@ namespace Editor
 				symbolsSet.Initialize(textDrawable->GetFont(), textDrawable->GetText(), textDrawable->GetHeight(),
 									  Vec2F(), Vec2F(), HorAlign::Left, VerAlign::Bottom, false, false, 1.0f, 1.0f);
 
-				SetTabWidth(symbolsSet.mRealSize.x + textLayer->layout.offsetMin.x - textLayer->layout.offsetMax.x + expand);
+				SetTabWidth(symbolsSet.mRealSize.x + textLayer->layout.offsetLeft - textLayer->layout.offsetRight + expand);
 			}
 		}
 	}
@@ -254,7 +254,7 @@ namespace Editor
 		mTabWidth = width;
 
 		if (auto tabLayer = GetLayer(mTabLayerPath))
-			tabLayer->layout.offsetMax.x = tabLayer->layout.offsetMin.x + width;
+			tabLayer->layout.offsetRight = tabLayer->layout.offsetLeft + width;
 	}
 
 	float UIDockableWindow::GetTabWidth() const
@@ -673,10 +673,10 @@ namespace Editor
 
 		if (auto tabMainLayer = GetLayer(mTabLayerPath))
 		{
-			tabMainLayer->layout.offsetMin.x = offset;
-			tabMainLayer->layout.offsetMax.x = offset + mTabWidth;
-			tabMainLayer->layout.anchorMin.x = 0;
-			tabMainLayer->layout.anchorMax.x = 0;
+			tabMainLayer->layout.offsetLeft = offset;
+			tabMainLayer->layout.offsetRight = offset + mTabWidth;
+			tabMainLayer->layout.anchorLeft = 0;
+			tabMainLayer->layout.anchorRight = 0;
 		}
 
 		mTabState = true;
@@ -693,10 +693,10 @@ namespace Editor
 
 		if (auto tabMainLayer = GetLayer(mTabLayerPath))
 		{
-			tabMainLayer->layout.offsetMin.x = 0;
-			tabMainLayer->layout.offsetMax.x = 0;
-			tabMainLayer->layout.anchorMin.x = 0;
-			tabMainLayer->layout.anchorMax.x = 1;
+			tabMainLayer->layout.offsetLeft = 0;
+			tabMainLayer->layout.offsetRight = 0;
+			tabMainLayer->layout.anchorLeft = 0;
+			tabMainLayer->layout.anchorRight = 1;
 		}
 
 		mTabState = false;

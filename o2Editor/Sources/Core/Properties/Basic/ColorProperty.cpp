@@ -4,7 +4,7 @@
 #include "Application/Application.h"
 #include "Core/Dialogs/ColorPickerDlg.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "Scene/UI/Image.h"
+#include "Scene/UI/Widgets/Image.h"
 #include "Scene/UI/WidgetLayout.h"
 
 namespace Editor

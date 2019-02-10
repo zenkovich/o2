@@ -3,9 +3,9 @@
 
 #include "Render/Render.h"
 #include "Render/Sprite.h"
-#include "Scene/UI/HorizontalScrollBar.h"
-#include "Scene/UI/VerticalLayout.h"
-#include "Scene/UI/VerticalScrollBar.h"
+#include "Scene/UI/Widgets/HorizontalScrollBar.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
+#include "Scene/UI/Widgets/VerticalScrollBar.h"
 #include "Scene/UI/WidgetLayer.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Scene/UI/WidgetState.h"

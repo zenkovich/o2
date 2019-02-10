@@ -3,9 +3,9 @@
 
 #include "Events/EventSystem.h"
 #include "Render/Render.h"
-#include "Scene/UI/ContextMenu.h"
-#include "Scene/UI/HorizontalScrollBar.h"
-#include "Scene/UI/VerticalScrollBar.h"
+#include "Scene/UI/Widgets/ContextMenu.h"
+#include "Scene/UI/Widgets/HorizontalScrollBar.h"
+#include "Scene/UI/Widgets/VerticalScrollBar.h"
 #include "Scene/UI/WidgetLayer.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Scene/UI/WidgetState.h"

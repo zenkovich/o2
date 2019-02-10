@@ -10,10 +10,10 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/ObjectViewers/DefaultObjectViewer.h"
-#include "Scene/UI/Label.h"
-#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/Widgets/Label.h"
+#include "Scene/UI/Widgets/Spoiler.h"
 #include "Scene/UI/UIManager.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Utils/System/Time/Timer.h"
 

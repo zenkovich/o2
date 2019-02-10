@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene/UI/Spoiler.h"
+#include "Scene/UI/Widgets/Spoiler.h"
 
 using namespace o2;
 

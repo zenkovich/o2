@@ -13,9 +13,9 @@
 #include "PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
-#include "Scene/UI/ScrollArea.h"
+#include "Scene/UI/Widgets/ScrollArea.h"
 #include "Scene/UI/UIManager.h"
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/WidgetLayout.h"
 
 namespace Editor

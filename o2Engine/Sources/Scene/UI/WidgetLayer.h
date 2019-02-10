@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Render/RectDrawable.h"
+#include "Scene/UI/WidgetLayerLayout.h"
 #include "Utils/Basic/ITree.h"
 #include "Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
 #include "Utils/Math/Layout.h"
@@ -42,10 +43,10 @@ namespace o2
 #endif 
 
 	public:
-		Layout     layout;             // Drawable layout @SERIALIZABLE
+		UIWidgetLayerLayout layout; // Drawable layout @SERIALIZABLE
 
-		String     name;               // Name of layer @SERIALIZABLE
-		Layout interactableLayout; // Interactable area layout @SERIALIZABLE
+		String name;                // Name of layer @SERIALIZABLE
+		Layout interactableLayout;  // Interactable area layout @SERIALIZABLE
 
 	public:
 		// Default constructor
@@ -249,15 +250,23 @@ namespace o2
 
 	protected:
 		IRectDrawable* mDrawable;               // Drawable @SERIALIZABLE
+
 		bool           mEnabled = true;         // Is layer enabled
+
 		float          mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
 		float          mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
+
 		float          mDepth = 0.0f;           // Depth of drawable @SERIALIZABLE
+
 		RectF          mAbsolutePosition;       // Result absolute drawable position
 		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
+
 		UIWidget*      mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
+
 		UIWidgetLayer* mParent = nullptr;       // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
 		ChildrenVec    mChildren;               // Children layers @SERIALIZABLE
+
+		bool           mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
 #if IS_EDITOR
 		bool           mIsLocked = false;       // Is locked
@@ -273,6 +282,9 @@ namespace o2
 
 		// It is called when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
 		void OnChildAdded(UIWidgetLayer* child);
+
+		// It is called when layout was changed, calls onwer widget layout updating
+		void OnLayoutChanged();
 
 		// Updates drawable rect, calling when widget's layout was changed
 		void UpdateLayout();
@@ -290,6 +302,7 @@ namespace o2
 		Dictionary<String, UIWidgetLayer*> GetAllChildLayers();
 
 		friend class UIWidget;
+		friend class UIWidgetLayerLayout;
 	};
 
 	template<typename _type>
@@ -312,7 +325,7 @@ namespace o2
 
 CLASS_BASES_META(o2::UIWidgetLayer)
 {
-	BASE_CLASS(UIWidgetLayerBase);
+	BASE_CLASS(o2::SceneEditableObject);
 }
 END_META;
 CLASS_FIELDS_META(o2::UIWidgetLayer)
@@ -336,6 +349,7 @@ CLASS_FIELDS_META(o2::UIWidgetLayer)
 	PROTECTED_FIELD(mOwnerWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mParent).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mUpdatingLayout);
 	PROTECTED_FIELD(mIsLocked);
 	PROTECTED_FIELD(mUID);
 }
@@ -401,67 +415,11 @@ CLASS_METHODS_META(o2::UIWidgetLayer)
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetOwnerWidget, UIWidget*);
 	PROTECTED_FUNCTION(void, OnChildAdded, UIWidgetLayer*);
+	PROTECTED_FUNCTION(void, OnLayoutChanged);
 	PROTECTED_FUNCTION(void, UpdateLayout);
 	PROTECTED_FUNCTION(void, UpdateResTransparency);
 	PROTECTED_FUNCTION(void, OnIncludeInScene);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(_tmp1, GetAllChildLayers);
-}
-END_META;
-
-CLASS_BASES_META(o2::UIWidgetLayer::Layout)
-{
-	BASE_CLASS(o2::ISerializable);
-}
-END_META;
-CLASS_FIELDS_META(o2::UIWidgetLayer::Layout)
-{
-	PUBLIC_FIELD(anchorMin);
-	PUBLIC_FIELD(anchorMax);
-	PUBLIC_FIELD(offsetMin);
-	PUBLIC_FIELD(offsetMax);
-	PUBLIC_FIELD(anchorLeft);
-	PUBLIC_FIELD(anchorRight);
-	PUBLIC_FIELD(anchorBottom);
-	PUBLIC_FIELD(anchorTop);
-	PUBLIC_FIELD(offsetLeft);
-	PUBLIC_FIELD(offsetRight);
-	PUBLIC_FIELD(offsetBottom);
-	PUBLIC_FIELD(offsetTop);
-	PRIVATE_FIELD(*);
-	PRIVATE_FIELD(mAnchorMin).SERIALIZABLE_ATTRIBUTE();
-	PRIVATE_FIELD(mAnchorMax).SERIALIZABLE_ATTRIBUTE();
-	PRIVATE_FIELD(mOffsetMin).SERIALIZABLE_ATTRIBUTE();
-	PRIVATE_FIELD(mOffsetMax).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-CLASS_METHODS_META(o2::UIWidgetLayer::Layout)
-{
-
-	PUBLIC_FUNCTION(RectF, Calculate, const RectF&);
-	PUBLIC_FUNCTION(void, SetAnchorMin, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAnchorMin);
-	PUBLIC_FUNCTION(void, SetAnchorMax, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetAnchorMax);
-	PUBLIC_FUNCTION(void, SetAnchorLeft, float);
-	PUBLIC_FUNCTION(float, GetAnchorLeft);
-	PUBLIC_FUNCTION(void, SetAnchorRight, float);
-	PUBLIC_FUNCTION(float, GetAnchorRight);
-	PUBLIC_FUNCTION(void, SetAnchorBottom, float);
-	PUBLIC_FUNCTION(float, GetAnchorBottom);
-	PUBLIC_FUNCTION(void, SetAnchorTop, float);
-	PUBLIC_FUNCTION(float, GetAnchorTop);
-	PUBLIC_FUNCTION(void, SetOffsetMin, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetOffsetMin);
-	PUBLIC_FUNCTION(void, SetOffsetMax, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetOffsetMax);
-	PUBLIC_FUNCTION(void, SetOffsetLeft, float);
-	PUBLIC_FUNCTION(float, GetOffsetLeft);
-	PUBLIC_FUNCTION(void, SetOffsetRight, float);
-	PUBLIC_FUNCTION(float, GetOffsetRight);
-	PUBLIC_FUNCTION(void, SetOffsetBottom, float);
-	PUBLIC_FUNCTION(float, GetOffsetBottom);
-	PUBLIC_FUNCTION(void, SetOffsetTop, float);
-	PUBLIC_FUNCTION(float, GetOffsetTop);
 }
 END_META;

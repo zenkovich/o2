@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Scene/UI/HorizontalScrollBar.h"
-#include "Scene/UI/VerticalScrollBar.h"
+#include "Scene/UI/Widgets/HorizontalScrollBar.h"
+#include "Scene/UI/Widgets/VerticalScrollBar.h"
 #include "Scene/UI/Widget.h"
 
 namespace o2

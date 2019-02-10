@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene/UI/MenuPanel.h"
+#include "Scene/UI/Widgets/MenuPanel.h"
 #include "Utils/Singleton.h"
 
 using namespace o2;

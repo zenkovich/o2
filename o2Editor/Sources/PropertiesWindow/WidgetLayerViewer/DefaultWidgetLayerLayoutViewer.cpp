@@ -6,12 +6,13 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/Basic/Vector2FloatProperty.h"
 #include "Core/UI/SpoilerWithHead.h"
-#include "SceneWindow/SceneEditScreen.h"
-#include "Scene/UI/Image.h"
-#include "Scene/UI/Label.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayerLayout.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widgets/Image.h"
+#include "Scene/UI/Widgets/Label.h"
+#include "SceneWindow/SceneEditScreen.h"
 #include "Utils/Math/Layout.h"
 
 namespace Editor
@@ -101,16 +102,16 @@ namespace Editor
 
 		auto prototypes = layers.Select<UIWidgetLayer*>([](UIWidgetLayer* x) { return nullptr; });
 
-		mAnchorRightTopProperty->SelectValueAndPrototypePointers<Vec2F, UIWidgetLayer>(
+		mAnchorRightTopProperty->SelectValueAndPrototypeProperties<UIWidgetLayer, decltype(UIWidgetLayerLayout::anchorMax)>(
 			layers, prototypes, [](UIWidgetLayer* x) { return &x->layout.anchorMax; });
 
-		mAnchorLeftBottomProperty->SelectValueAndPrototypePointers<Vec2F, UIWidgetLayer>(
+		mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<UIWidgetLayer, decltype(UIWidgetLayerLayout::anchorMin)>(
 			layers, prototypes, [](UIWidgetLayer* x) { return &x->layout.anchorMin; });
 
-		mOffsetRightTopProperty->SelectValueAndPrototypePointers<Vec2F, UIWidgetLayer>(
+		mOffsetRightTopProperty->SelectValueAndPrototypeProperties<UIWidgetLayer, decltype(UIWidgetLayerLayout::offsetMax)>(
 			layers, prototypes, [](UIWidgetLayer* x) { return &x->layout.offsetMax; });
 
-		mOffsetLeftBottomProperty->SelectValueAndPrototypePointers<Vec2F, UIWidgetLayer>(
+		mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<UIWidgetLayer, decltype(UIWidgetLayerLayout::offsetMin)>(
 			layers, prototypes, [](UIWidgetLayer* x) { return &x->layout.offsetMin; });
 	}
 

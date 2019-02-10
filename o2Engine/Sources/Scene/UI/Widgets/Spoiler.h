@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene/UI/VerticalLayout.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 
 namespace o2
 {

@@ -6,7 +6,7 @@
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayer.h"
 #include "Scene/UI/WidgetLayout.h"
-#include "Scene/UI/Window.h"
+#include "Scene/UI/Widgets/Window.h"
 
 DECLARE_SINGLETON(Editor::CurveEditorDlg);
 
