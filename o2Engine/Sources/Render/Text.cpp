@@ -147,13 +147,19 @@ namespace o2
 		if (mFont)
 			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
 
-		mFont = asset->GetFont();
-		mFontAssetId = asset->GetAssetId();
+		if (asset)
+		{
+			mFont = asset->GetFont();
+			mFontAssetId = asset->GetAssetId();
+		}
+		else
+			mFont = FontRef();
 
 		if (mFont)
+		{
 			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
+			mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
+		}
 	}
 
 	FontAssetRef Text::GetFontAsset() const

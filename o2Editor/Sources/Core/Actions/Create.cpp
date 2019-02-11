@@ -3,6 +3,7 @@
 
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "TreeWindow/TreeWindow.h"
 
 namespace Editor
 {
@@ -49,6 +50,9 @@ namespace Editor
 			for (auto object : objects)
 				object->SetIndexInSiblings(insertIdx++);
 		}
+
+		o2EditorTree.HightlightObjectTreeNode(objects.Last());
+		o2EditorSceneScreen.SelectObjectsWithoutAction(objects, false);
 	}
 
 	void CreateAction::Undo()

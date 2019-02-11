@@ -390,7 +390,11 @@ namespace o2
 		UpdateResEnabled();
 
 		onEnableChanged(mEnabled);
-		o2Scene.onEnableChanged(this);
+
+#if IS_EDITOR
+		if (IsHieararchyOnScene())
+			o2Scene.onEnableChanged(this);
+#endif
 
 		OnChanged();
 	}
@@ -819,7 +823,10 @@ namespace o2
 			else
 				mLayer->mEnabledActors.Remove(this);
 
-			o2Scene.onEnableChanged(this);
+#if IS_EDITOR
+			if (IsHieararchyOnScene())
+				o2Scene.onEnableChanged(this);
+#endif
 			OnResEnableInHierarchyChanged();
 			OnChanged();
 		}

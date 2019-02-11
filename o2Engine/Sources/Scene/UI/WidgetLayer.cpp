@@ -44,6 +44,8 @@ namespace o2
 #if IS_EDITOR
 		if (Scene::IsSingletonInitialzed())
 			o2Scene.mEditableObjects.Remove(this);
+
+		o2Scene.OnObjectDestroyed(this);
 #endif
 	}
 
@@ -134,6 +136,11 @@ namespace o2
 
 		OnChildAdded(node);
 
+#if IS_EDITOR
+		o2Scene.OnObjectChanged(this);
+		o2Scene.OnObjectChanged(node);
+#endif
+
 		return node;
 	}
 
@@ -152,6 +159,10 @@ namespace o2
 		if (lastOwnerWidget)
 			lastOwnerWidget->UpdateLayersDrawingSequence();
 
+#if IS_EDITOR
+		o2Scene.OnObjectChanged(this);
+#endif
+
 		return true;
 	}
 
@@ -164,6 +175,10 @@ namespace o2
 		}
 
 		mChildren.Clear();
+
+#if IS_EDITOR
+		o2Scene.OnObjectChanged(this);
+#endif
 	}
 
 	void WidgetLayer::SetParent(WidgetLayer* parent)

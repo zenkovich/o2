@@ -1100,7 +1100,10 @@ namespace o2
 
 			layout->SetDirty(true);
 
-			o2Scene.onEnableChanged(this);
+#if IS_EDITOR
+			if (IsHieararchyOnScene())
+				o2Scene.onEnableChanged(this);
+#endif
 
 			OnResEnableInHierarchyChanged();
 			OnChanged();

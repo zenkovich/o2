@@ -400,8 +400,8 @@ namespace Editor
 
 		newObject->UpdateTransform();
 
-		mSceneTree->SelectAndHightlightObject(newObject);
-		mSceneTree->ScrollTo(newObject);
+		mSceneTree->ScrollToAndHightlight(newObject);
+		o2EditorSceneScreen.SelectObjectWithoutAction(newObject, false);
 	}
 
 	void TreeWindow::OnContextCreateNewPressed()

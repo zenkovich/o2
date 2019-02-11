@@ -77,6 +77,7 @@ namespace Editor
 
 	void DeleteAction::Undo()
 	{
+		SceneEditableObject* lastRestored = nullptr;
 		for (auto info : objectsInfos)
 		{
 			SceneEditableObject* parent = o2Scene.GetEditableObjectByID(info.parentId);
@@ -90,6 +91,7 @@ namespace Editor
 				parent->AddEditableChild(newObject, idx);
 
 				o2EditorSceneScreen.SelectObjectWithoutAction(newObject);
+				lastRestored = newObject;
 			}
 			else
 			{
@@ -100,9 +102,11 @@ namespace Editor
 				newObject->SetIndexInSiblings(idx);
 
 				o2EditorSceneScreen.SelectObjectWithoutAction(newObject);
+				lastRestored = newObject;
 			}
 		}
 
+		o2EditorTree.HightlightObjectTreeNode(lastRestored);
 		o2EditorTree.GetSceneTree()->UpdateNodesView();
 	}
 

@@ -140,7 +140,7 @@ namespace Editor
 	void DockableWindow::RecalculateTabWidth()
 	{
 		float width = 0;
-		float expand = 15;
+		float expand = 35;
 		if (auto textLayer = GetLayer(mTabCaptionLayerPath))
 		{
 			if (auto textDrawable = dynamic_cast<Text*>(textLayer->GetDrawable()))

@@ -1365,10 +1365,16 @@ namespace o2
 		auto node = GetTreeNodeUnderPoint(cursor.position);
 		if (mSelectedNodes.Count() < 2)
 		{
-			DeselectAllObjects();
+			for (auto sel : mSelectedNodes)
+				sel->SetSelected(false);
+
+			mSelectedNodes.Clear();
+			mSelectedObjects.Clear();
 
 			if (node)
 				SelectObject(node->GetObject());
+			else
+				OnSelectionChanged();
 		}
 
 		Focus();
