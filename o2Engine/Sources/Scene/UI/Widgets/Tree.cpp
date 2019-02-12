@@ -630,12 +630,8 @@ namespace o2
 		}
 
 		auto node = mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
-
 		if (!node)
-		{
-			o2Debug.Log("Node not found");
 			return;
-		}
 
 		node->SetSelected(true);
 		mSelectedNodes.Add(node);

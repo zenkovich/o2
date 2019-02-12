@@ -89,7 +89,7 @@ namespace Editor
 
 		propertiesInfo.properties.Add(fieldInfo, fieldWidget);
 
-		o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)timer.GetDeltaTime());
+		//o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)timer.GetDeltaTime());
 
 		return fieldWidget;
 	}
