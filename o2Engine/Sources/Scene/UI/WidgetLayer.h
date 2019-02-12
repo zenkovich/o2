@@ -270,8 +270,8 @@ namespace o2
 
 #if IS_EDITOR
 		bool           mIsLocked = false;       // Is locked
-		SceneUID       mUID = Math::Random();   // Scene editor uid
-#endif // IS_EDITOR
+		SceneUID       mUID = Math::Random();   // Scene editor uid // @SERIALIZABLE
+#endif 
 
 	protected:
 		// Completion deserialization callback
@@ -351,7 +351,7 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	PROTECTED_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mUpdatingLayout);
 	PROTECTED_FIELD(mIsLocked);
-	PROTECTED_FIELD(mUID);
+	PROTECTED_FIELD(mUID).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetLayer)
