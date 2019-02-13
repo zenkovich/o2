@@ -1017,6 +1017,8 @@ namespace o2
 		{
 			child->mParent = this;
 			child->mParentWidget = this;
+
+			child->ExcludeFromScene();
 		}
 
 		RetargetStatesAnimations();

@@ -107,11 +107,12 @@ namespace Editor
 								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		Timer t; // tags, layer, enum
+		Timer timer; 
+
 		for (auto fieldInfo : fields)
 			BuildField(layout, fieldInfo, propertiesInfo, path, onChangeCompleted, onChanged);
 
-		o2Debug.Log(">>> Fields created for " + (String)t.GetDeltaTime());
+		//o2Debug.Log(">>> Fields created for " + (String)timer.GetDeltaTime());
 	}
 
 	void Properties::SetPrivateFieldsVisible(bool visible)

@@ -6,6 +6,7 @@
 #include "Core/UI/SpoilerWithHead.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
+#include "Core/Actions/Transform.h"
 
 namespace Editor
 {
@@ -72,6 +73,8 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
 	{
+		TransformAction* action = new TransformAction(mLayers.Select<SceneEditableObject*>([](WidgetLayer* layer) { return dynamic_cast<SceneEditableObject*>(layer); }));
+
 		for (auto layer : mLayers)
 		{
 			if (Sprite* sprite = dynamic_cast<Sprite*>(layer->GetDrawable()))
@@ -80,6 +83,9 @@ namespace Editor
 			if (Text* text = dynamic_cast<Text*>(layer->GetDrawable()))
 				layer->layout.size = text->GetRealSize();
 		}
+
+		action->Completed();
+		o2EditorApplication.DoneAction(action);
 	}
 
 }

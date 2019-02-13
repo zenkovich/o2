@@ -139,6 +139,10 @@ namespace Editor
 	{
 		// Context menu
 		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
+		mTreeContextMenu->AddItem("Debug update view", [&]() { mSceneTree->UpdateNodesView(); });
+
+		mTreeContextMenu->AddItem("---");
+
 		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
 								  ShortcutKeys('N', true, true));
 
