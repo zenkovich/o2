@@ -156,6 +156,12 @@ namespace o2
 		// Returns root editable objects
 		SceneEditableObjectsVec GetRootEditableObjects();
 
+		// Registers editable object
+		static void RegEditableObject(SceneEditableObject* object);
+
+		// Removes object from registered list
+		static void UnregEditableObject(SceneEditableObject* object);
+
 		// Returns all editable objects
 		const SceneEditableObjectsVec& GetAllEditableObjects();
 

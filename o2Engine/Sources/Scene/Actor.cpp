@@ -175,14 +175,10 @@ namespace o2
 		if (Scene::IsSingletonInitialzed())
 		{
 			if (mIsOnScene)
-			{
 				o2Scene.mAllActors.Remove(this);
-#if IS_EDITOR
-				o2Scene.mEditableObjects.Remove(this);
-#endif
-			}
 
 #if IS_EDITOR
+			Scene::UnregEditableObject(this);
 			o2Scene.OnObjectDestroyed(this);
 #endif
 

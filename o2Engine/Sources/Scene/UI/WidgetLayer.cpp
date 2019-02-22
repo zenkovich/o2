@@ -42,9 +42,7 @@ namespace o2
 		}
 
 #if IS_EDITOR
-		if (Scene::IsSingletonInitialzed())
-			o2Scene.mEditableObjects.Remove(this);
-
+		Scene::UnregEditableObject(this);
 		o2Scene.OnObjectDestroyed(this);
 #endif
 	}
@@ -417,7 +415,7 @@ namespace o2
 	void WidgetLayer::OnExcludeFromScene()
 	{
 #if IS_EDITOR
-		o2Scene.mEditableObjects.Remove(this);
+		Scene::UnregEditableObject(this);
 #endif
 
 		for (auto layer : mChildren)

@@ -355,6 +355,18 @@ namespace o2
 		return mRootActors.Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
+	void Scene::RegEditableObject(SceneEditableObject* object)
+	{
+		if (IsSingletonInitialzed())
+			Instance().mEditableObjects.Add(object);
+	}
+
+	void Scene::UnregEditableObject(SceneEditableObject* object)
+	{
+		if (IsSingletonInitialzed())
+			Instance().mEditableObjects.Remove(object);
+	}
+
 	const SceneEditableObjectsVec& Scene::GetAllEditableObjects()
 	{
 		return mEditableObjects;

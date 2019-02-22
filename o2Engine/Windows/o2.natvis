@@ -100,7 +100,7 @@
   </Type>
 
   <Type Name="o2::Widget">
-    <DisplayString>name={ mName } rect=({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
+    <DisplayString>Widget "{ mName }" ({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
@@ -112,6 +112,8 @@
       <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
       <Item Name="children rect" ExcludeView="simple">mChildrenWorldRect</Item>
+
+      <Item Name="layout" ExcludeView="simple">layout</Item>
       
       <Synthetic Name="layout">
         <DisplayString>({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
@@ -187,43 +189,9 @@
 
     </Expand>
   </Type>
-  
-  <Type Name="o2::WidgetLayer">
-    <DisplayString>name={ name } rect=({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
-    <Expand>
-      <Item Name="name" ExcludeView="simple">name</Item>
-      <Item Name="drawable" ExcludeView="simple">drawable</Item>
-      <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
-      <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
-      <Item Name="depth" ExcludeView="simple">mDepth</Item>
-      <Item Name="parent" ExcludeView="simple">mParent</Item>
-      <Item Name="widget" ExcludeView="simple">mOwnerWidget</Item>
-      <Synthetic Name="layout">
-        <DisplayString>({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
-        <Expand>
-          <ExpandedItem>layout->mData</ExpandedItem>
-        </Expand>
-      </Synthetic>
-      
-      <Synthetic Name="interactableLayout">
-        <DisplayString>({ (int)mInteractableArea.left }, { (int)mInteractableArea.bottom }, { (int)mInteractableArea.right }, { (int)mInteractableArea.top })</DisplayString>
-        <Expand>
-          <ExpandedItem>interactableLayout</ExpandedItem>
-        </Expand>
-      </Synthetic>
-      
-      <Item Name="rect" ExcludeView="simple">mAbsolutePosition</Item>
-
-      <ArrayItems>
-        <Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
-        <ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
-      </ArrayItems>
-
-    </Expand>
-  </Type>
 
   <Type Name="o2::Actor">
-    <DisplayString>{ mName }:{ mId }</DisplayString>
+    <DisplayString>Actor "{ mName }":{ mId }</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="id" ExcludeView="simple">mId</Item>
@@ -293,7 +261,7 @@
   </Type>
 
   <Type Name="o2::WidgetLayout">
-    <DisplayString>({ (int)mData->worldRectangle.left }, { (int)mData->worldRectangle.bottom }, { (int)mData->worldRectangle.right }, { (int)mData->worldRectangle.top })</DisplayString>
+    <DisplayString>Widget layout ({ (int)mData->worldRectangle.left }, { (int)mData->worldRectangle.bottom }, { (int)mData->worldRectangle.right }, { (int)mData->worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
       <Item Name="anchor min" ExcludeView="simple">mData->anchorMin</Item>
@@ -303,7 +271,7 @@
       <Item Name="min size" ExcludeView="simple">mData->minSize</Item>
       <Item Name="max size" ExcludeView="simple">mData->maxSize</Item>
       <Item Name="weight" ExcludeView="simple">mData->weight</Item>
-      <Item Name="driven by parent" ExcludeView="simple">mData->drivenByParent</Item>      
+      <Item Name="driven by parent" ExcludeView="simple">mData->drivenByParent</Item>
       <Item Name="position" ExcludeView="simple">mData->position</Item>
       <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
       <Item Name="size" ExcludeView="simple">mData->size</Item>
@@ -325,27 +293,45 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::Transform">
-    <DisplayString>(positon={ mData->position }, size={ mData->size }, scale={ mData->scale }, pivot={ mData->pivot }, angle={ mData->angle })</DisplayString>
+  <Type Name="o2::WidgetLayerLayout">
+    <DisplayString>({ mAnchorMin }, { mAnchorMax }, { mOffsetMin }, { mOffsetMax })</DisplayString>
     <Expand>
-      <Item Name="position" ExcludeView="simple">mData->position</Item>
-      <Item Name="pivot" ExcludeView="simple">mData->pivot</Item>
-      <Item Name="size" ExcludeView="simple">mData->size</Item>
-      <Item Name="scale" ExcludeView="simple">mData->scale</Item>
-      <Item Name="angle" ExcludeView="simple">mData->angle</Item>
-      <Item Name="shear" ExcludeView="simple">mData->shear</Item>
-      <Item Name="rectangle" ExcludeView="simple">mData->rectangle</Item>
-      <Item Name="parent rectangle" ExcludeView="simple">mData->parentRectangle</Item>
-      <Item Name="parent rectange position" ExcludeView="simple">mData->parentRectangePosition</Item>
-      <Item Name="world rectangle" ExcludeView="simple">mData->worldRectangle</Item>
-      <Item Name="transform" ExcludeView="simple">mData->transform</Item>
-      <Item Name="non sized transform" ExcludeView="simple">mData->nonSizedTransform</Item>
-      <Item Name="world non sized transform" ExcludeView="simple">mData->worldNonSizedTransform</Item>
-      <Item Name="world transform" ExcludeView="simple">mData->worldTransform</Item>
-      <Item Name="parent inverted transform" ExcludeView="simple">mData->parentInvertedTransform</Item>
-      <Item Name="parent transform" ExcludeView="simple">mData->parentTransform</Item>
-      <Item Name="is parent inv transform actual" ExcludeView="simple">mData->isParentInvTransformActual</Item>
-      <Item Name="owner" ExcludeView="simple">mData->owner</Item>
+      <Item Name="anchor min" ExcludeView="simple">mAnchorMin</Item>
+      <Item Name="anchor max" ExcludeView="simple">mAnchorMax</Item>
+      <Item Name="offset min" ExcludeView="simple">mOffsetMin</Item>
+      <Item Name="offset max" ExcludeView="simple">mOffsetMax</Item>
+      <Item Name="owner" ExcludeView="simple">mWidgetLayer</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::WidgetLayer">
+    <DisplayString>Widget Layer "{ name }" ({ (int)mAbsolutePosition.left }, { (int)mAbsolutePosition.bottom }, { (int)mAbsolutePosition.right }, { (int)mAbsolutePosition.top })</DisplayString>
+    <Expand>
+      <Item Name="layout" ExcludeView="simple">layout</Item>
+      <Item Name="name" ExcludeView="simple">name</Item>
+      <Item Name="drawable" ExcludeView="simple">mDrawable</Item>
+      <Item Name="transparency" ExcludeView="simple">mTransparency</Item>
+      <Item Name="absolute rect" ExcludeView="simple">mAbsolutePosition</Item>
+      <Item Name="owner" ExcludeView="simple">mOwnerWidget</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="children" ExcludeView="simple">mChildren</Item>
+      <Item Name="interactable layout" ExcludeView="simple">interactableLayout</Item>
+      <Item Name="res transparency" ExcludeView="simple">mResTransparency</Item>
+      <Item Name="depth" ExcludeView="simple">mDepth</Item>
+    </Expand>
+  </Type>
+
+  <Type Name="o2::Transform">
+    <DisplayString>(positon={ mPosition }, size={ mSize }, scale={ mScale }, pivot={ mPivot }, angle={ mAngle })</DisplayString>
+    <Expand>
+      <Item Name="position" ExcludeView="simple">mPosition</Item>
+      <Item Name="pivot" ExcludeView="simple">mPivot</Item>
+      <Item Name="size" ExcludeView="simple">mSize</Item>
+      <Item Name="scale" ExcludeView="simple">mScale</Item>
+      <Item Name="angle" ExcludeView="simple">mAngle</Item>
+      <Item Name="shear" ExcludeView="simple">mShear</Item>
+      <Item Name="transform" ExcludeView="simple">mTransform</Item>
+      <Item Name="non sized transform" ExcludeView="simple">mNonSizedTransform</Item>
     </Expand>
   </Type>
 
