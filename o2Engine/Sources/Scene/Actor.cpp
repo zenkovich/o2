@@ -75,6 +75,7 @@ namespace o2
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
+		Scene::OnActorCreated(this);
 		if (Scene::IsSingletonInitialzed())
 		{
 			if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
@@ -121,22 +122,7 @@ namespace o2
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (mDefaultCreationMode == ActorCreateMode::InScene)
-			{
-				o2Scene.mRootActors.Add(this);
-				o2Scene.mAllActors.Add(this);
-#if IS_EDITOR
-				o2Scene.mEditableObjects.Add(this);
-#endif
-			}
-
-#if IS_EDITOR
-			o2Scene.OnObjectCreated(this);
-#endif
-		}
-
+		Scene::OnActorCreated(this);
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
@@ -166,24 +152,8 @@ namespace o2
 
 		if (mParent)
 			mParent->RemoveChild(this, false);
-		else
-		{
-			if (Scene::IsSingletonInitialzed())
-				o2Scene.mRootActors.Remove(this);
-		}
-
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (mIsOnScene)
-				o2Scene.mAllActors.Remove(this);
-
-#if IS_EDITOR
-			Scene::UnregEditableObject(this);
-			o2Scene.OnObjectDestroyed(this);
-#endif
-
-			o2Scene.OnActorPrototypeBroken(this);
-		}
+		
+		Scene::OnActorDestroying(this);
 
 		RemoveAllChildren();
 		RemoveAllComponents();

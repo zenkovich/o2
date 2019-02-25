@@ -114,6 +114,40 @@ namespace o2
 		o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX())*0.5f, debugInfo);
 	}
 
+	void Scene::OnActorCreated(Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (Actor::mDefaultCreationMode == ActorCreateMode::InScene) 
+		{
+			Instance().mRootActors.Add(actor);
+			Instance().mAllActors.Add(actor);
+
+#if IS_EDITOR
+			RegEditableObject(actor);
+#endif
+		}
+
+#if IS_EDITOR
+		OnObjectCreated(actor);
+#endif
+	}
+
+	void Scene::OnActorDestroying(Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().mRootActors.Remove(actor);
+		Instance().mAllActors.Remove(actor);
+
+#if IS_EDITOR
+		OnObjectDestroyed(actor);
+		OnActorPrototypeBroken(actor);
+#endif
+	}
+
 	SceneLayer* Scene::GetLayer(const String& name)
 	{
 		if (auto layer = mLayers.FindMatch([&](auto x) { return x->name == name; }))
@@ -456,34 +490,9 @@ namespace o2
 			OnObjectChanged(prevObject);
 	}
 
-	void Scene::OnObjectCreated(SceneEditableObject* object)
-	{
-		onCreated(object);
-		OnObjectChanged(object);
-	}
-
-	void Scene::OnObjectDestroyed(SceneEditableObject* object)
-	{
-		onDestroying(object);
-		OnObjectChanged(nullptr);
-	}
-
-	void Scene::OnObjectChanged(SceneEditableObject* object)
-	{
-		if (!mChangedObjects.Contains(object))
-			mChangedObjects.Add(object);
-	}
-
-	void Scene::OnObjectDrawn(SceneEditableObject* object)
-	{
-		if (mIsDrawingScene)
-			mDrawnObjects.Add(object);
-	}
-
 	void Scene::CheckChangedObjects()
 	{
-		if (mChangedObjects.Count() > 0)
-		{
+		if (mChangedObjects.Count() > 0) {
 			onObjectsChanged(mChangedObjects);
 			mChangedObjects.Clear();
 		}
@@ -504,34 +513,6 @@ namespace o2
 		return mPrototypeLinksCache;
 	}
 
-	void Scene::OnActorWithPrototypeCreated(Actor* actor)
-	{
-		auto proto = actor->GetPrototype();
-		OnActorLinkedToPrototype(proto, actor);
-	}
-
-	void Scene::OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor)
-	{
-		if (!mPrototypeLinksCache.ContainsKey(assetRef))
-			mPrototypeLinksCache.Add(assetRef, ActorsVec());
-
-		mPrototypeLinksCache[assetRef].Add(actor);
-	}
-
-	void Scene::OnActorPrototypeBroken(Actor* actor)
-	{
-		for (auto kv = mPrototypeLinksCache.Begin(); kv != mPrototypeLinksCache.End();)
-		{
-			kv.Value().Remove(actor);
-			if (kv.Value().IsEmpty())
-			{
-				mPrototypeLinksCache.Remove(kv.Key());
-				kv = mPrototypeLinksCache.Begin();
-			}
-			else kv++;
-		}
-	}
-
 	void Scene::BeginDrawingScene()
 	{
 		mIsDrawingScene = true;
@@ -541,6 +522,77 @@ namespace o2
 	void Scene::EndDrawingScene()
 	{
 		mIsDrawingScene = false;
+	}
+
+	void Scene::OnObjectCreated(SceneEditableObject* object)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().onCreated(object);
+		OnObjectChanged(object);
+	}
+
+	void Scene::OnObjectDestroyed(SceneEditableObject* object)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		Instance().onDestroying(object);
+		UnregEditableObject(object);
+		OnObjectChanged(nullptr);
+	}
+
+	void Scene::OnObjectChanged(SceneEditableObject* object)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (!Instance().mChangedObjects.Contains(object))
+			Instance().mChangedObjects.Add(object);
+	}
+
+	void Scene::OnObjectDrawn(SceneEditableObject* object)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (Instance().mIsDrawingScene)
+			Instance().mDrawnObjects.Add(object);
+	}
+
+	void Scene::OnActorWithPrototypeCreated(Actor* actor)
+	{
+		auto proto = actor->GetPrototype();
+		OnActorLinkedToPrototype(proto, actor);
+	}
+
+	void Scene::OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		if (!Instance().mPrototypeLinksCache.ContainsKey(assetRef))
+			Instance().mPrototypeLinksCache.Add(assetRef, ActorsVec());
+
+		Instance().mPrototypeLinksCache[assetRef].Add(actor);
+	}
+
+	void Scene::OnActorPrototypeBroken(Actor* actor)
+	{
+		if (!IsSingletonInitialzed())
+			return;
+
+		for (auto kv = Instance().mPrototypeLinksCache.Begin(); kv != Instance().mPrototypeLinksCache.End();)
+		{
+			kv.Value().Remove(actor);
+			if (kv.Value().IsEmpty())
+			{
+				Instance().mPrototypeLinksCache.Remove(kv.Key());
+				kv = Instance().mPrototypeLinksCache.Begin();
+			}
+			else kv++;
+		}
 	}
 
 #endif

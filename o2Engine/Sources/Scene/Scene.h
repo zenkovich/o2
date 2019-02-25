@@ -145,6 +145,12 @@ namespace o2
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
+		// It is called when actor created, adds in root and all actors list, registers for editor tools
+		static void OnActorCreated(Actor* actor);
+
+		// It is called when actor is destroying - removes from root and all actors lists, unregisters in editor tools
+		static void OnActorDestroying(Actor* actor);
+
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
@@ -187,32 +193,32 @@ namespace o2
 		// Returns cache of linked to prototypes actors
 		ActorsCacheDict& GetPrototypesLinksCache();
 
-		// It is called when object was created
-		void OnObjectCreated(SceneEditableObject* object);
-
-		// It is called when object is destroying
-		void OnObjectDestroyed(SceneEditableObject* object);
-
-		// It is called when object was changed
-		void OnObjectChanged(SceneEditableObject* object);
-
-		// It is called when object was drawn 
-		void OnObjectDrawn(SceneEditableObject* object);
-
-		// It is called when created actor with prototype, updates cache
-		void OnActorWithPrototypeCreated(Actor* actor);
-
-		// It is called when some actor created and linked to prototype, updates linked actors cache
-		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
-
-		// It is called when actor destroying or prototype link broken, updates cache
-		void OnActorPrototypeBroken(Actor* actor);
-
 		// It is called when scene started to draw. When scene draw started, drawn scene objects will be collected
 		void BeginDrawingScene();
 
 		// It is called when scene finished draw. After scene objects will not be collected 
 		void EndDrawingScene();
+
+		// It is called when object was created
+		static void OnObjectCreated(SceneEditableObject* object);
+
+		// It is called when object is destroying
+		static void OnObjectDestroyed(SceneEditableObject* object);
+
+		// It is called when object was changed
+		static void OnObjectChanged(SceneEditableObject* object);
+
+		// It is called when object was drawn 
+		static void OnObjectDrawn(SceneEditableObject* object);
+
+		// It is called when created actor with prototype, updates cache
+		static void OnActorWithPrototypeCreated(Actor* actor);
+
+		// It is called when some actor created and linked to prototype, updates linked actors cache
+		static void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
+
+		// It is called when actor destroying or prototype link broken, updates cache
+		static void OnActorPrototypeBroken(Actor* actor);
 
 	protected:
 		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
