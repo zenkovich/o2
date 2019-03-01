@@ -114,12 +114,12 @@ namespace o2
 		o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX())*0.5f, debugInfo);
 	}
 
-	void Scene::OnActorCreated(Actor* actor)
+	void Scene::OnActorCreated(Actor* actor, bool isOnScene)
 	{
 		if (!IsSingletonInitialzed())
 			return;
 
-		if (Actor::mDefaultCreationMode == ActorCreateMode::InScene) 
+		if (isOnScene)
 		{
 			Instance().mRootActors.Add(actor);
 			Instance().mAllActors.Add(actor);

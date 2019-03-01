@@ -17,46 +17,26 @@ namespace o2
 	{}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default &&
-															  mDefaultCreationMode == ActorCreateMode::InScene))
+		Actor(transform, IsModeOnScene(mode))
 	{
-		mIsOnScene = false;
-
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
 		transform->SetOwner(this);
 
 		if (Scene::IsSingletonInitialzed())
-		{
 			mLayer = o2Scene.GetDefaultLayer();
 
-			if (mode == ActorCreateMode::InScene ||
-				(mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
-			{
-				o2Scene.mRootActors.Add(this);
-				o2Scene.mAllActors.Add(this);
-				mLayer->mEnabledActors.Add(this);
-
-				mIsOnScene = true;
-
-#if IS_EDITOR
-				o2Scene.mEditableObjects.Add(this);
-#endif
-			}
-
+		mIsOnScene = IsModeOnScene(mode);
+		if (mIsOnScene)
 			mLayer->mActors.Add(this);
 
-#if IS_EDITOR
-			o2Scene.OnObjectCreated(this);
-#endif
-		}
-
+		Scene::OnActorCreated(this, mIsOnScene);
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
-		Actor(transform, mode == ActorCreateMode::InScene, prototype->GetActor()->mName,
+		Actor(transform, IsModeOnScene(mode), prototype->GetActor()->mName,
 			  prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled, prototype->GetActor()->mLocked,
 			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayer, Math::Random(), 0)
 	{
@@ -74,24 +54,10 @@ namespace o2
 
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
+		if (mIsOnScene)
+			mLayer->mActors.Add(this);
 
-		Scene::OnActorCreated(this);
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode == ActorCreateMode::InScene))
-			{
-				o2Scene.mRootActors.Add(this);
-				o2Scene.mAllActors.Add(this);
-#if IS_EDITOR
-				o2Scene.mEditableObjects.Add(this);
-#endif
-			}
-
-#if IS_EDITOR
-			o2Scene.OnObjectCreated(this);
-#endif
-		}
-
+		Scene::OnActorCreated(this, mIsOnScene);
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
@@ -122,7 +88,10 @@ namespace o2
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
-		Scene::OnActorCreated(this);
+		if (mIsOnScene)
+			mLayer->mActors.Add(this);
+
+		Scene::OnActorCreated(this, mIsOnScene);
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
@@ -745,12 +714,20 @@ namespace o2
 		if (mode == ActorCreateMode::Default)
 			mode = ActorCreateMode::InScene;
 
+		if (mode != mDefaultCreationMode)
+			mode = mode;
+
 		mDefaultCreationMode = mode;
 	}
 
 	ActorCreateMode Actor::GetDefaultCreationMode()
 	{
 		return mDefaultCreationMode;
+	}
+
+	bool Actor::IsModeOnScene(ActorCreateMode mode)
+	{
+		return mode == ActorCreateMode::InScene || (mode == ActorCreateMode::Default && mDefaultCreationMode != ActorCreateMode::NotInScene);
 	}
 
 	void Actor::SetProtytypeDummy(ActorAssetRef asset)

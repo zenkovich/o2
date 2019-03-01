@@ -274,6 +274,9 @@ namespace o2
 		// Return default actors creation mode
 		static ActorCreateMode GetDefaultCreationMode();
 
+		// Returns is current mode means mode on scene. For InScene always returns true. For returns true only when default creation mode is onscene.
+		static bool IsModeOnScene(ActorCreateMode mode);
+
 #if IS_EDITOR
 		// Returns the path of create menu category
 		virtual const String& GetCreateMenuCategory() const;

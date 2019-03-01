@@ -8,11 +8,8 @@ namespace Editor
 {
 	void Scope::Enter()
 	{
-		if (mDepth == 0)
-		{
-			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
-			EventSystem::eventsListenersEnabledByDefault = true;
-		}
+		Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+		EventSystem::eventsListenersEnabledByDefault = true;
 
 		mDepth++;
 	}
@@ -25,6 +22,11 @@ namespace Editor
 		{
 			Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 			EventSystem::eventsListenersEnabledByDefault = false;
+		}
+		else 
+		{
+			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+			EventSystem::eventsListenersEnabledByDefault = true;
 		}
 
 		Assert(mDepth >= 0, "Editor scope Enter/Exit mismatch");

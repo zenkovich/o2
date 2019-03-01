@@ -146,7 +146,7 @@ namespace o2
 		void DrawCursorDebugInfo();
 
 		// It is called when actor created, adds in root and all actors list, registers for editor tools
-		static void OnActorCreated(Actor* actor);
+		static void OnActorCreated(Actor* actor, bool isOnScene);
 
 		// It is called when actor is destroying - removes from root and all actors lists, unregisters in editor tools
 		static void OnActorDestroying(Actor* actor);

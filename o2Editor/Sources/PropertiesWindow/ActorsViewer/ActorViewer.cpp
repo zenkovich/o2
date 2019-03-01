@@ -189,7 +189,7 @@ namespace Editor
 
 		if (!mActorPropertiesViewersPool.ContainsKey(type))
 		{
-			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+			PushScopeEnterOnStack scope;
 
 			auto newViewer = (IActorPropertiesViewer*)(viewerSample->GetType().CreateSample());
 
@@ -197,8 +197,6 @@ namespace Editor
 				((DefaultActorPropertiesViewer*)newViewer)->SpecializeActorType(type);
 
 			mActorPropertiesViewersPool.Add(type, newViewer);
-
-			Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
 		}
 
 		auto propertiesViewer = mActorPropertiesViewersPool[type];
