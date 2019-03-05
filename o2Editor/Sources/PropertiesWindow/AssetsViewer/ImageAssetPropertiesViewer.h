@@ -44,16 +44,16 @@ namespace Editor
 	protected:
 		Vector<ImageAssetRef*>        mTargetAssets;
 								      
-		VerticalLayout*             mContent = nullptr;
+		VerticalLayout*               mContent = nullptr;
 								      
-		Widget*                     mPreviewImageContent;
-		Image*                      mPreviewImage = nullptr;
-		Image*                      mPreviewImageBack = nullptr;
-								      
-		Image*                      mBorderLeftHandleWidget = nullptr;
-		Image*                      mBorderRightHandleWidget = nullptr;
-		Image*                      mBorderTopHandleWidget = nullptr;
-		Image*                      mBorderBottomHandleWidget = nullptr;
+		Widget*                       mPreviewImageContent;
+		Image*                        mPreviewImage = nullptr;
+		Image*                        mPreviewImageBack = nullptr;
+
+		Image*                        mBorderLeftHandleWidget = nullptr;
+		Image*                        mBorderRightHandleWidget = nullptr;
+		Image*                        mBorderTopHandleWidget = nullptr;
+		Image*                        mBorderBottomHandleWidget = nullptr;
 								      
 		CursorEventsArea              mBorderLeftHandle;
 		CursorEventsArea              mBorderRightHandle;

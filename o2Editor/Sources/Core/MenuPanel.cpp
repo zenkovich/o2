@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MenuPanel.h"
 
+#include "AnimationWindow/AnimationWindow.h"
 #include "Application/Application.h"
 #include "Assets/Assets.h"
 #include "AssetsWindow/AssetsWindow.h"
@@ -12,15 +13,15 @@
 #include "LogWindow/LogWindow.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Scene.h"
-#include "SceneWindow/SceneWindow.h"
-#include "TreeWindow/SceneTree.h"
-#include "TreeWindow/TreeWindow.h"
+#include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/HorizontalLayout.h"
 #include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widgets/MenuPanel.h"
-#include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/VerticalLayout.h"
+#include "SceneWindow/SceneWindow.h"
+#include "TreeWindow/SceneTree.h"
+#include "TreeWindow/TreeWindow.h"
 #include "UIStyle/EditorUIStyle.h"
 #include "Utils/Math/Curve.h"
 
@@ -252,42 +253,44 @@ namespace Editor
 
 	void MenuPanel::OnShowTreePressed()
 	{
-		auto treeWindow = o2EditorWindows.GetWindow<TreeWindow>();
-		if (treeWindow)
-			treeWindow->Show();
+		auto window = o2EditorWindows.GetWindow<TreeWindow>();
+		if (window)
+			window->Show();
 	}
 
 	void MenuPanel::OnShowScenePressed()
 	{
-		auto sceneWindow = o2EditorWindows.GetWindow<SceneWindow>();
-		if (sceneWindow)
-			sceneWindow->Show();
+		auto window = o2EditorWindows.GetWindow<SceneWindow>();
+		if (window)
+			window->Show();
 	}
 
 	void MenuPanel::OnShowAssetsPressed()
 	{
-		auto sceneWindow = o2EditorWindows.GetWindow<AssetsWindow>();
-		if (sceneWindow)
-			sceneWindow->Show();
+		auto window = o2EditorWindows.GetWindow<AssetsWindow>();
+		if (window)
+			window->Show();
 	}
 
 	void MenuPanel::OnShowPropertiesPressed()
 	{
-		auto sceneWindow = o2EditorWindows.GetWindow<PropertiesWindow>();
-		if (sceneWindow)
-			sceneWindow->Show();
+		auto window = o2EditorWindows.GetWindow<PropertiesWindow>();
+		if (window)
+			window->Show();
 	}
 
 	void MenuPanel::OnShowAnimationPressed()
 	{
-
+		auto window = o2EditorWindows.GetWindow<AnimationWindow>();
+		if (window)
+			window->Show();
 	}
 
 	void MenuPanel::OnShowLogPressed()
 	{
-		auto sceneWindow = o2EditorWindows.GetWindow<LogWindow>();
-		if (sceneWindow)
-			sceneWindow->Show();
+		auto window = o2EditorWindows.GetWindow<LogWindow>();
+		if (window)
+			window->Show();
 	}
 
 	void MenuPanel::OnResetLayoutPressed()

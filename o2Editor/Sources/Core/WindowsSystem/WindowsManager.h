@@ -58,7 +58,7 @@ namespace Editor
 
 	protected:
 		EditorWindowsVec   mEditorWindows;            // Editors windows list
-		DockWindowPlace* mMainDockPlace = nullptr;  // Main windows dock place
+		DockWindowPlace*   mMainDockPlace = nullptr;  // Main windows dock place
 		WndLayoutsDict     mAvailableLayouts;         // Available layouts
 
 		ColorPickerDlg*    mColorPickerDlg = nullptr; // Shared color picker dialog

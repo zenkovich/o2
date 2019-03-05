@@ -210,7 +210,7 @@ namespace Editor
 	{
 		auto borderProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI), "Slice border");
 		mBorderProperty = (BorderIProperty*)borderProperty;
-		mBorderProperty->onChanged += [&](auto x) { UpdateBordersAnchors(); /*mBordersSmoothValue = mBorderProperty->GetCommonValue();*/ };
+		mBorderProperty->onChanged += [&](auto x) { UpdateBordersAnchors(); mBordersSmoothValue = mBorderProperty->GetCommonValue(); };
 		mContent->AddChild(borderProperty);
 
 		auto modeProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(SpriteMode), "Default mode");
@@ -289,8 +289,8 @@ namespace Editor
 	{
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 		BorderI borders = mBorderProperty->GetCommonValue();
-		BorderF bordersAnchors((float)borders.left/imageSize.x, (float)borders.top/imageSize.y,
-							   1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.bottom/imageSize.y);
+		BorderF bordersAnchors((float)borders.left/imageSize.x, (float)borders.bottom/imageSize.y,
+							   1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.top/imageSize.y);
 
 		*mBorderLeftHandleWidget->layout = WidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
 		*mBorderRightHandleWidget->layout = WidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
