@@ -17,6 +17,8 @@
 #include "Scene/UI/WidgetLayout.h"
 #include "Utils/Bitmap/Bitmap.h"
 #include "Utils/Reflection/Reflection.h"
+#include "Render/Sprite.h"
+#include "Render/Texture.h"
 
 namespace Editor
 {
@@ -102,7 +104,7 @@ namespace Editor
 		*mPreviewImageBack->layout = WidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImageBack);
 
-		mPreviewImage = mnew Image();
+		mPreviewImage = mnew PreviewImage();
 		*mPreviewImage->layout = WidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImage);
 
@@ -353,6 +355,18 @@ namespace Editor
 		return res;
 	}
 
+	void ImageAssetPropertiesViewer::PreviewImage::Draw()
+	{
+		auto prevFilter = mImage->GetTexture()->GetFilter();
+		mImage->GetTexture()->SetFilter(Texture::Filter::Nearest);
+
+		Image::Draw();
+
+		mImage->GetTexture()->SetFilter(prevFilter);
+	}
+
 }
 
 DECLARE_CLASS(Editor::ImageAssetPropertiesViewer);
+
+DECLARE_CLASS(Editor::ImageAssetPropertiesViewer::PreviewImage);

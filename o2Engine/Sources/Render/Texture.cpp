@@ -144,3 +144,10 @@ ENUM_META_(o2::Texture::Usage, Usage)
 	ENUM_ENTRY(RenderTarget);
 }
 END_ENUM_META;
+
+ENUM_META_(o2::Texture::Filter, Filter)
+{
+	ENUM_ENTRY(Linear);
+	ENUM_ENTRY(Nearest);
+}
+END_ENUM_META;

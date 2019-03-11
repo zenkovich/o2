@@ -172,6 +172,30 @@ namespace o2
 
 		return bitmap;
 	}
+
+	void Texture::SetFilter(Filter filter)
+	{
+		mFilter = filter;
+
+		GLint type = GL_LINEAR;
+		if (mFilter == Filter::Nearest)
+			type = GL_NEAREST;
+
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+
+		glBindTexture(GL_TEXTURE_2D, mHandle);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, type);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, type);
+
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
+
+		GL_CHECK_ERROR();
+	}
+
+	Texture::Filter Texture::GetFilter() const
+	{
+		return mFilter;
+	}
 }
 
 #endif //PLATFORM_WINDOWS

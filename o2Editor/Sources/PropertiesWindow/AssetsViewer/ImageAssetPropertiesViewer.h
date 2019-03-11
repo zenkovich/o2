@@ -5,13 +5,13 @@
 #include "Core/Properties/Basic/AssetProperty.h"
 #include "Events/CursorEventsArea.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
+#include "Scene/UI/Widgets/Image.h"
 
 using namespace o2;
 
 namespace o2
 {
 	class Sprite;
-	class Image;
 	class VerticalLayout;
 }
 
@@ -42,12 +42,22 @@ namespace Editor
 		IOBJECT(ImageAssetPropertiesViewer);
 
 	protected:
+		class PreviewImage : public Image
+		{
+		public:
+			// Sets texture filter to nearest and draws it
+			void Draw() override;
+
+			SERIALIZABLE(PreviewImage);
+		};
+
+	protected:
 		Vector<ImageAssetRef*>        mTargetAssets;
 								      
 		VerticalLayout*               mContent = nullptr;
 								      
 		Widget*                       mPreviewImageContent;
-		Image*                        mPreviewImage = nullptr;
+		PreviewImage*                 mPreviewImage = nullptr;
 		Image*                        mPreviewImageBack = nullptr;
 
 		Image*                        mBorderLeftHandleWidget = nullptr;
@@ -156,5 +166,21 @@ CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FUNCTION(void, SetupAtlasProperty);
 	PROTECTED_FUNCTION(void, OnAtlasPropertyChanged, IPropertyField*);
 	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
+}
+END_META;
+
+CLASS_BASES_META(Editor::ImageAssetPropertiesViewer::PreviewImage)
+{
+	BASE_CLASS(o2::Image);
+}
+END_META;
+CLASS_FIELDS_META(Editor::ImageAssetPropertiesViewer::PreviewImage)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer::PreviewImage)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
 }
 END_META;

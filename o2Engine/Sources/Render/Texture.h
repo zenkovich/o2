@@ -25,6 +25,9 @@ namespace o2
 		// Texture usage
 		enum class Usage { Default, RenderTarget };
 
+		// Texture filter
+		enum class Filter { Linear, Nearest };
+
 	public:
 		PROPERTIES(Texture);
 		GETTER(Vec2I,  size, GetSize);         // Size of texture getter
@@ -95,6 +98,12 @@ namespace o2
 		// Returns texture file name
 		String GetFileName() const;
 
+		// Sets texture filter
+		void SetFilter(Filter filter);
+
+		// Returns texture filter
+		Filter GetFilter() const;
+
 		// Returns true when texture ready to use
 		bool IsReady() const;
 
@@ -110,14 +119,15 @@ namespace o2
 	protected:
 		typedef Vector<TextureRef*> TextureRefsVec;
 
-		Vec2I          mSize;         // Size of texture
-		PixelFormat         mFormat;       // Texture format
-		Usage          mUsage;        // Texture usage
-		String         mFileName;     // Source file name
-		UID            mAtlasAssetId; // Atlas asset id. Equals 0 if it isn't atlas texture
-		int            mAtlasPage;    // Atlas page
-		bool           mReady;        // Is texture ready to use
-		TextureRefsVec mRefs;         // Texture references
+		Vec2I          mSize;                    // Size of texture
+		Filter         mFilter = Filter::Linear; // Min/Mag filter
+		PixelFormat    mFormat;                  // Texture format
+		Usage          mUsage;                   // Texture usage
+		String         mFileName;                // Source file name
+		UID            mAtlasAssetId;            // Atlas asset id. Equals 0 if it isn't atlas texture
+		int            mAtlasPage;               // Atlas page
+		bool           mReady;                   // Is texture ready to use
+		TextureRefsVec mRefs;                    // Texture references
 
 		friend class Render;
 		friend class TextureRef;

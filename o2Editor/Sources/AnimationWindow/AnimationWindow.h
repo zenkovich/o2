@@ -53,12 +53,19 @@ CLASS_BASES_META(Editor::AnimationWindow)
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)
-{}
+{
+	PROTECTED_FIELD(mTreeViewWidth);
+	PROTECTED_FIELD(mFilterButton);
+	PROTECTED_FIELD(mSearchEditBox);
+}
 END_META;
 CLASS_METHODS_META(Editor::AnimationWindow)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeUpPanel);
+	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
+	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
 }
 END_META;
