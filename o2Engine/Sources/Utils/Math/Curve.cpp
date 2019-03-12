@@ -629,7 +629,7 @@ namespace o2
 
 		if (idx == 0)
 		{
-			Key& nextKey = mKeys[Math::Min(idx + 1, mKeys.Count())];
+			Key& nextKey = mKeys[Math::Min(idx + 1, mKeys.Count() - 1)];
 
 			Vec2F nextKeyPoint(nextKey.position, nextKey.value);
 			Vec2F supportVec = (nextKeyPoint - thisKeyPoint)*baseSmoothCoef*smoothCoef;

@@ -40,8 +40,13 @@ void AnimationWindow::InitializeUpPanel()
 {
 	Widget* upPanel = mnew Widget();
 	upPanel->name = "up panel";
-	*upPanel->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(mTreeViewWidth, 20.0f));
+	*upPanel->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(mTreeViewWidth, 20.0f));
 	upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+
+	mRecordButton = o2UI.CreateWidget<Button>("menu filter");
+	*mRecordButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+	mRecordButton->onClick += THIS_FUNC(OnMenuRecordPressed);
+	upPanel->AddChild(mRecordButton);
 
 	Button* searchButton = o2UI.CreateWidget<Button>("search");
 	*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
@@ -66,6 +71,11 @@ void AnimationWindow::OnSearchEdited(const WString& search)
 }
 
 void AnimationWindow::OnMenuFilterPressed()
+{
+
+}
+
+void AnimationWindow::OnMenuRecordPressed()
 {
 
 }

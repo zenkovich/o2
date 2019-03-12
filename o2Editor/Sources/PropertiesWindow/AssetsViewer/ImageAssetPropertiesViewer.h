@@ -6,6 +6,7 @@
 #include "Events/CursorEventsArea.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 #include "Scene/UI/Widgets/Image.h"
+#include "Utils/Editor/DragHandle.h"
 
 using namespace o2;
 
@@ -65,6 +66,7 @@ namespace Editor
 		Image*                        mBorderTopHandleWidget = nullptr;
 		Image*                        mBorderBottomHandleWidget = nullptr;
 								      
+		DragHandle                    mBorderLeftHandlex;
 		CursorEventsArea              mBorderLeftHandle;
 		CursorEventsArea              mBorderRightHandle;
 		CursorEventsArea              mBorderTopHandle;

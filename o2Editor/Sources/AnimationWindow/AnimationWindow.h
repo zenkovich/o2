@@ -29,6 +29,7 @@ namespace Editor
 	protected:
 		float mTreeViewWidth = 250.0f;
 
+		Button* mRecordButton = nullptr;
 		Button* mFilterButton = nullptr;
 		EditBox* mSearchEditBox = nullptr;
 
@@ -44,6 +45,9 @@ namespace Editor
 
 		// It is called when menu filter button was pressed
 		void OnMenuFilterPressed();
+
+		// It is called when menu record button was pressed
+		void OnMenuRecordPressed();
 	};
 }
 
@@ -55,6 +59,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)
 {
 	PROTECTED_FIELD(mTreeViewWidth);
+	PROTECTED_FIELD(mRecordButton);
 	PROTECTED_FIELD(mFilterButton);
 	PROTECTED_FIELD(mSearchEditBox);
 }
@@ -67,5 +72,6 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PROTECTED_FUNCTION(void, InitializeUpPanel);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
+	PROTECTED_FUNCTION(void, OnMenuRecordPressed);
 }
 END_META;

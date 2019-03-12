@@ -46,12 +46,26 @@ namespace o2
 
 	void Window::Draw()
 	{
-		if (!mResEnabledInHierarchy)
+		if (!mResEnabledInHierarchy || mIsClipped) {
+			for (auto child : mDrawingChildren)
+				child->Draw();
+
 			return;
+		}
 
 		mBackCursorArea.OnDrawn();
 
-		ScrollArea::Draw();
+		for (auto layer : mDrawingLayers)
+			layer->Draw();
+
+		ScrollArea::OnDrawn();
+
+		o2Render.EnableScissorTest(mAbsoluteClipArea);
+
+		for (auto child : mDrawingChildren)
+			child->Draw();
+
+		o2Render.DisableScissorTest();
 
 		mHeadDragHandle.OnDrawn();
 		mTopDragHandle.OnDrawn();
@@ -63,16 +77,13 @@ namespace o2
 		mLeftBottomDragHandle.OnDrawn();
 		mRightBottomDragHandle.OnDrawn();
 
-//  		int clr = 0;
-//  		o2Render.DrawRectFrame(mHeadDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mTopDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mBottomDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mLeftDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mRightDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mLeftTopDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mRightTopDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mLeftBottomDragAreaRect, Color4::SomeColor(clr++));
-//  		o2Render.DrawRectFrame(mRightBottomDragAreaRect, Color4::SomeColor(clr++));
+		for (auto child : mInternalWidgets)
+			child->Draw();
+
+		for (auto layer : mTopDrawingLayers)
+			layer->Draw();
+
+		DrawDebugFrame();
 	}
 
 	void Window::ShowModal()
