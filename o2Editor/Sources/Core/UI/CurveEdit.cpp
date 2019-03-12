@@ -1,24 +1,25 @@
 #include "stdafx.h"
 #include "CurveEdit.h"
 
-#include "../UIRoot.h"
 #include "Application/Application.h"
+#include "Core/EditorScope.h"
+#include "Core/UIRoot.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/WidgetLayer.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/WidgetState.h"
 #include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/Widgets/EditBox.h"
 #include "Scene/UI/Widgets/HorizontalLayout.h"
 #include "Scene/UI/Widgets/HorizontalScrollBar.h"
 #include "Scene/UI/Widgets/Label.h"
-#include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/Widgets/VerticalScrollBar.h"
-#include "Scene/UI/WidgetLayer.h"
-#include "Scene/UI/WidgetLayout.h"
-#include "Scene/UI/WidgetState.h"
 #include "Scene/UI/Widgets/Window.h"
 #include "Utils/System/Clipboard.h"
-
+ 
 namespace Editor
 {
 	CurveEditor::CurveEditor():
@@ -593,6 +594,8 @@ namespace Editor
 
 	void CurveEditor::AddCurveKeyHandles(CurveInfo* info, int keyId)
 	{
+		PushScopeEnterOnStack scope;
+
 		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this);
 		keyHandles->curveKeyIdx = keyId;
 
