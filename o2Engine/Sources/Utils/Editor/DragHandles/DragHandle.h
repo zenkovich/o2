@@ -2,8 +2,7 @@
 
 #include "Events/CursorEventsListener.h"
 #include "Render/IDrawable.h"
-#include "Utils/Delegates.h"
-#include "Utils/Property.h"
+#include "Utils/Editor/DragHandles/IDragHandle.h"
 #include "Utils/Serialization/Serializable.h"
 
 namespace o2
@@ -13,12 +12,11 @@ namespace o2
 	// -----------
 	// Drag handle
 	// -----------
-	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
+	class DragHandle: public IDragHandle, public IDrawable, public CursorAreaEventsListener, public ISerializable
 	{
 	public:
 		PROPERTIES(DragHandle);
 		PROPERTY(float, angle, SetAngle, GetAngle);          // Handle angle in radians property
-		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Current position property
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
 
 		CursorType  cursorType;               // Cursor type when hovering and dragging

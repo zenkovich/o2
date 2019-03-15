@@ -3,7 +3,6 @@
 #include "Application/Input.h"
 #include "Utils/Delegates.h"
 #include "Utils/Property.h"
-#include "Utils/Serialization/Serializable.h"
 
 namespace o2
 {
@@ -46,7 +45,7 @@ namespace o2
 		IDragHandle& operator=(const IDragHandle& other);
 
 		// Sets position
-		void SetPosition(const Vec2F& position);
+		virtual void SetPosition(const Vec2F& position);
 
 		// Sets drag position of handle, updates handle final position after position checking
 		void SetDragPosition(const Vec2F& position);
@@ -59,8 +58,6 @@ namespace o2
 
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
-
-		SERIALIZABLE(IDragHandle);
 
 	protected:
 		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
