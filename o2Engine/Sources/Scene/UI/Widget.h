@@ -261,34 +261,34 @@ namespace o2
 		using Actor::mLayer;
 		using Actor::mIsOnScene;
 
-		LayersVec      mLayers;                 // Layers array @SERIALIZABLE
-		StatesVec      mStates;                 // States array @SERIALIZABLE
+		LayersVec    mLayers;                 // Layers array @SERIALIZABLE
+		StatesVec    mStates;                 // States array @SERIALIZABLE
 
 		Widget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null  @EXCLUDE_POINTER_SEARCH
-		WidgetsVec     mChildWidgets;           // Children widgets, a part of all children
-		WidgetsVec     mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
-		WidgetsVec     mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
+		WidgetsVec   mChildWidgets;           // Children widgets, a part of all children
+		WidgetsVec   mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
+		WidgetsVec   mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
-		RectF          mChildrenWorldRect;      // World rectangle for children arranging
+		RectF        mChildrenWorldRect;      // World rectangle for children arranging
 
-		bool           mOverrideDepth = false;  // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
+		bool         mOverrideDepth = false;  // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 
-		float          mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
-		float          mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
+		float        mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
+		float        mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
-		LayersVec      mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
-		LayersVec      mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
+		LayersVec    mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
+		LayersVec    mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
 
 		WidgetState* mFocusedState = nullptr; // Focused widget state
-		bool           mIsFocused = false;      // Is widget focused
-		bool           mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
+		bool         mIsFocused = false;      // Is widget focused
+		bool         mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
 
 		WidgetState* mVisibleState = nullptr; // Widget visibility state
 
-		bool           mIsClipped = false;      // Is widget fully clipped by some scissors
+		bool         mIsClipped = false;      // Is widget fully clipped by some scissors
 
-		RectF          mBounds;                 // Widget bounds by drawing layers
-		RectF          mBoundsWithChilds;       // Widget with childs bounds
+		RectF        mBounds;                 // Widget bounds by drawing layers
+		RectF        mBoundsWithChilds;       // Widget with childs bounds
 
 	protected:
 		// Updates result read enable flag

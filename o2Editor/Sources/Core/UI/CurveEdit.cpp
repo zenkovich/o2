@@ -96,6 +96,9 @@ namespace Editor
 
 	void CurveEditor::Draw()
 	{
+		if (!mResEnabledInHierarchy || mIsClipped)
+			return;
+
 		FrameScrollView::Draw();
 
 		DrawTransformFrame();

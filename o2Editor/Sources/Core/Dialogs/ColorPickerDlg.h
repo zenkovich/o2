@@ -44,49 +44,49 @@ namespace Editor
 		Function<void(const Color4&)> mOnChangedCallback;
 		Function<void()>              mOnCompletedCallback;
 
-		Color4                mColorValue;
-		ColorType             mColorType = ColorType::RGB;
+		Color4              mColorValue;
+		ColorType           mColorType = ColorType::RGB;
 
 		Window*             mWindow = nullptr;
 		Image*              mColorSampleImage = nullptr;
 
-		TextureRef            mChessBackTexture;
+		TextureRef          mChessBackTexture;
 
 		Image*              mColorPickAreaHandle = nullptr;
-		Bitmap*               mColorPickAreaBitmap = nullptr;
+		Bitmap*             mColorPickAreaBitmap = nullptr;
 		WidgetLayer*        mColorPickAreaColor = nullptr;
-		TextureRef            mColorPickAreaTexture;
-		CursorEventsArea      mColorPickHandle;
+		TextureRef          mColorPickAreaTexture;
+		CursorEventsArea    mColorPickHandle;
 
 		VerticalProgress*   mHUEBar = nullptr;
-		Bitmap*               mHUEBarBitmap = nullptr;
-		TextureRef            mHUEBarTexture;
+		Bitmap*             mHUEBarBitmap = nullptr;
+		TextureRef          mHUEBarTexture;
 
 		DropDown*           mTypeDropdown = nullptr;
 
 		Label*              mColor1ParamName = nullptr;
 		HorizontalProgress* mColor1ParamBar = nullptr;
 		EditBox*            mColor1ParamEdit = nullptr;
-		Bitmap*               mColor1ParamBarBitmap = nullptr;
-		TextureRef            mColor1ParamBarTexture;
+		Bitmap*             mColor1ParamBarBitmap = nullptr;
+		TextureRef          mColor1ParamBarTexture;
 
 		Label*              mColor2ParamName = nullptr;
 		HorizontalProgress* mColor2ParamBar;
 		EditBox*            mColor2ParamEdit = nullptr;
-		Bitmap*               mColor2ParamBarBitmap = nullptr;
-		TextureRef            mColor2ParamBarTexture;
+		Bitmap*             mColor2ParamBarBitmap = nullptr;
+		TextureRef          mColor2ParamBarTexture;
 
 		Label*              mColor3ParamName = nullptr;
 		HorizontalProgress* mColor3ParamBar;
 		EditBox*            mColor3ParamEdit = nullptr;
-		Bitmap*               mColor3ParamBarBitmap = nullptr;
-		TextureRef            mColor3ParamBarTexture;
+		Bitmap*             mColor3ParamBarBitmap = nullptr;
+		TextureRef          mColor3ParamBarTexture;
 
 		Label*              mColorAParamName = nullptr;
 		HorizontalProgress* mColorAParamBar;
 		EditBox*            mColorAParamEdit = nullptr;
-		Bitmap*               mColorAParamBarBitmap = nullptr;
-		TextureRef            mColorAParamBarTexture;
+		Bitmap*             mColorAParamBarBitmap = nullptr;
+		TextureRef          mColorAParamBarTexture;
 
 
 	protected:

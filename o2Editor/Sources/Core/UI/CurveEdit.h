@@ -95,13 +95,14 @@ namespace Editor
 
 		struct KeyHandles
 		{
-			CurveEditor*       curveEditor = nullptr;
-			DragHandle mainHandle;
-			DragHandle leftSupportHandle;
-			DragHandle rightSupportHandle;
+			CurveEditor* curveEditor = nullptr;
+			DragHandle   mainHandle;
+			DragHandle   leftSupportHandle;
+			DragHandle   rightSupportHandle;
 				           
-			int                  curveKeyIdx;
+			int          curveKeyIdx;
 
+		public:
 			KeyHandles() {}
 			KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample, CurveEditor* editor);
 

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "DragHandle.h"
 
+#include "Application/Application.h"
 #include "Events/EventSystem.h"
 #include "Render/Sprite.h"
-#include "Application/Application.h"
+#include "Scene/UI/WidgetLayout.h"
 
 namespace o2
 {
@@ -471,7 +472,81 @@ namespace o2
 	void DragHandle::OnDeselected()
 	{}
 
+	WidgetDragHandle::WidgetDragHandle():
+		DragHandle(), Widget()
+	{
+		widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
+		localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
+	}
 
+	WidgetDragHandle::WidgetDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, Sprite* selected /*= nullptr*/):
+		DragHandle(regular, hover, pressed, selected), Widget()
+	{
+		widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
+		localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
+	}
+
+	WidgetDragHandle::WidgetDragHandle(const WidgetDragHandle& other):
+		DragHandle(other), Widget(other)
+	{
+		widgetOffsetToLocalTransformFunc = other.widgetOffsetToLocalTransformFunc;
+		localToWidgetOffsetTransformFunc = other.localToWidgetOffsetTransformFunc;
+
+		SetPosition(mPosition);
+	}
+
+	WidgetDragHandle::~WidgetDragHandle()
+	{}
+
+	WidgetDragHandle& WidgetDragHandle::operator=(const WidgetDragHandle& other)
+	{
+		Widget::operator=(other);
+		DragHandle::operator=(other);
+
+		widgetOffsetToLocalTransformFunc = other.widgetOffsetToLocalTransformFunc;
+		localToWidgetOffsetTransformFunc = other.localToWidgetOffsetTransformFunc;
+
+		SetPosition(mPosition);
+
+		return *this;
+	}
+
+	void WidgetDragHandle::Draw()
+	{
+		Widget::Draw();
+		DragHandle::Draw();
+	}
+
+	Vec2F WidgetDragHandle::ScreenToLocal(const Vec2F& point)
+	{
+		if (mParentWidget)
+			return widgetOffsetToLocalTransformFunc(point - mParentWidget->layout->GetWorldLeftBottom());
+
+		return DragHandle::ScreenToLocal(point);
+	}
+
+	Vec2F WidgetDragHandle::LocalToScreen(const Vec2F& point)
+	{
+		if (mParentWidget)
+			return localToWidgetOffsetTransformFunc(point) + mParentWidget->layout->GetWorldLeftBottom();
+
+		return DragHandle::ScreenToLocal(point);
+	}
+
+	void WidgetDragHandle::UpdateLayersLayouts()
+	{
+		UpdateScreenPosition();
+	}
+
+	void WidgetDragHandle::OnSerialize(DataNode& node) const
+	{
+		Widget::OnSerialize(node);
+	}
+
+	void WidgetDragHandle::OnDeserialized(const DataNode& node)
+	{
+		Widget::OnDeserialized(node);
+	}
 
 	void ISelectableDragHandlesGroup::DeselectAll()
 	{
@@ -586,3 +661,5 @@ namespace o2
 }
 
 DECLARE_CLASS(o2::DragHandle);
+
+DECLARE_CLASS(o2::WidgetDragHandle);

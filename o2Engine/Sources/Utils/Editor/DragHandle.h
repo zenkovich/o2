@@ -2,6 +2,7 @@
 
 #include "Events/CursorEventsListener.h"
 #include "Render/IDrawable.h"
+#include "Scene/UI/Widget.h"
 #include "Utils/Delegates.h"
 #include "Utils/Property.h"
 #include "Utils/Serialization/Serializable.h"
@@ -14,29 +15,30 @@ namespace o2
 	// -----------
 	// Drag handle
 	// -----------
-	class DragHandle: public IDrawable, public CursorAreaEventsListener, public ISerializable
+	class DragHandle : public IDrawable, public CursorAreaEventsListener, virtual public ISerializable
 	{
 	public:
 		PROPERTIES(DragHandle);
 		PROPERTY(float, angle, SetAngle, GetAngle);          // Handle angle in radians property
 		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Current position property
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
+		PROPERTY(bool, selected, SetSelected, IsSelected);   // Is handle selected property
 
 		CursorType  cursorType = CursorType::Arrow; // Cursor type when hovering and dragging
 		bool        pixelPerfect = true;            // Is handle draws pixel perfect
 		KeyboardKey snappingKey = VK_CONTROL;       // Snapping key, when it pressed handle uses checkSnappingFunc to correct position
 
-		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
-		Function<void()>             onPressed;           // Pressed cursor on handle event
-		Function<void()>             onReleased;          // Released cursor event
-		Function<void()>             onChangeCompleted;   // Change completed event
+		Function<void(const Vec2F&)> onChangedPos;      // On position changed event
+		Function<void()>             onPressed;         // Pressed cursor on handle event
+		Function<void()>             onReleased;        // Released cursor event
+		Function<void()>             onChangeCompleted; // Change completed event
 
 		Function<bool(const Vec2F&)> isPointInside; // Checking point inside function. When this is empty, using sprite inside checking function
 
-		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc;  // Screen position to local transformation function
-		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc;  // Local position to screen transformation function
-		Function<Vec2F(const Vec2F&)> checkPositionFunc;           // Position constraints checking function
-		Function<Vec2F(const Vec2F&)> checkSnappingFunc;           // Checking snapping positiong when dragging with pressed snapping key
+		Function<Vec2F(const Vec2F&)> screenToLocalTransformFunc; // Screen position to local transformation function
+		Function<Vec2F(const Vec2F&)> localToScreenTransformFunc; // Local position to screen transformation function
+		Function<Vec2F(const Vec2F&)> checkPositionFunc;          // Position constraints checking function
+		Function<Vec2F(const Vec2F&)> checkSnappingFunc;          // Checking snapping position when dragging with pressed snapping key
 
 		Function<void(const Input::Cursor&)> onRightButtonPressed;  // Right mouse button pressed event
 		Function<void(const Input::Cursor&)> onRightButtonReleased; // Right mouse button released event
@@ -81,11 +83,11 @@ namespace o2
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
 
-		// Returns is this selected
-		bool IsSelected() const;
-
 		// Sets is this selected
 		virtual void SetSelected(bool selected);
+
+		// Returns is this selected
+		bool IsSelected() const;
 
 		// Selects this
 		void Select();
@@ -132,24 +134,25 @@ namespace o2
 		SERIALIZABLE(DragHandle);
 
 	protected:
-		bool    mEnabled = true;           // Is handle enabled. Disabled handle don't drawn and interact
-
 		Sprite* mRegularSprite = nullptr;  // Regular view sprite @SERIALIZABLE
 		Sprite* mHoverSprite = nullptr;    // Hovered view sprite @SERIALIZABLE
 		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
 		Sprite* mSelectedSprite = nullptr; // Selected view sprite @SERIALIZABLE
 
-		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
-		Vec2F  mScreenPosition;            // Handle screen position, transformed from mPosition with localToScreenTransformFunc
-		float  mAngle = 0.0f;              // Handle rotation angle in radians
-		Vec2F  mDragOffset;                // Dragging offset from cursor in local space to center
-		Vec2F  mDragPosition;              // Current drag handle position
-		Vec2F  mDragBeginPosition;         // Position at beginning dragging
+		bool   mEnabled = true; // Is handle enabled. Disabled handle don't drawn and interact
 
-		int    mPressedCursorId;           // Id of pressed cursor
-		Vec2F  mPressedCursorPos;          // Cursor pressed position
-		bool   mIsDragging = false;        // Is handle in dragging mode
-		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
+		Vec2F  mPosition;       // Current handle position, checked by checkPositionFunc
+		Vec2F  mScreenPosition; // Handle screen position, transformed from mPosition with localToScreenTransformFunc
+		float  mAngle = 0.0f;   // Handle rotation angle in radians
+
+		Vec2F  mDragOffset;        // Dragging offset from cursor in local space to center
+		Vec2F  mDragPosition;      // Current drag handle position
+		Vec2F  mDragBeginPosition; // Position at beginning dragging
+
+		int    mPressedCursorId;    // Id of pressed cursor
+		Vec2F  mPressedCursorPos;   // Cursor pressed position
+		bool   mIsDragging = false; // Is handle in dragging mode
+		bool   mIsHovered = false;  // Is handle under cursor, used for hover sprite appearing
 
 		bool                         mIsSelected = false;    // Is this selected
 		ISelectableDragHandlesGroup* mSelectGroup = nullptr; // Selection group
@@ -203,6 +206,57 @@ namespace o2
 		friend class SelectableDragHandlesGroup;
 	};
 
+	// ---------------------------------------------------------
+	// Widget drag handle. Can be attached to widget as children
+	// ---------------------------------------------------------
+	class WidgetDragHandle : public DragHandle, public Widget
+	{
+	public:
+		Function<Vec2F(const Vec2F&)> widgetOffsetToLocalTransformFunc; // Widget offset relative to parent to local transformation function
+		Function<Vec2F(const Vec2F&)> localToWidgetOffsetTransformFunc; // Local position to widget offset relative to parent transformation function
+
+		// Default constructor
+		WidgetDragHandle();
+
+		// Constructor with views
+		WidgetDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
+				         Sprite* selected = nullptr);
+
+		// Copy-constructor
+		WidgetDragHandle(const WidgetDragHandle& other);
+
+		// Destructor
+		~WidgetDragHandle();
+
+		// Copy-operator
+		WidgetDragHandle& operator=(const WidgetDragHandle& other);
+
+		// Draws handle
+		void Draw() override;
+
+		SERIALIZABLE(WidgetDragHandle);
+
+	private:
+		// Hide public functions
+		using DragHandle::screenToLocalTransformFunc; 
+		using DragHandle::localToScreenTransformFunc;
+
+		// Converts point from screen to local space
+		Vec2F ScreenToLocal(const Vec2F& point) override;
+
+		// Converts point from local to screen space
+		Vec2F LocalToScreen(const Vec2F& point) override;
+
+		// Updates layers layouts, calls after updating widget layout
+		void UpdateLayersLayouts() override;
+
+		// Beginning serialization callback
+		void OnSerialize(DataNode& node) const override;
+
+		// It is called when deserialized
+		void OnDeserialized(const DataNode& node) override;
+	};
+
 	// --------------------------------------------
 	// Selectable draggable handles group interface
 	// --------------------------------------------
@@ -238,19 +292,19 @@ namespace o2
 
 	protected:
 		// It is called when selectable draggable handle was pressed
-		virtual void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) { }
 
 		// It is called when selectable draggable handle was released
-		virtual void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) { }
 
 		// It is called when selectable handle was began to drag
-		virtual void OnHandleBeganDragging(DragHandle* handle) {}
+		virtual void OnHandleBeganDragging(DragHandle* handle) { }
 
 		// It is called when selectable handle moved, moves all selected handles position
-		virtual void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) { }
 
 		// It is called when selectable handle completed changing
-		virtual void OnHandleCompletedChange(DragHandle* handle) {}
+		virtual void OnHandleCompletedChange(DragHandle* handle) { }
 
 		// Sets handle selected state without adding to selected handles array
 		void SetHandleSelectedState(DragHandle* handle, bool selected);
@@ -262,7 +316,7 @@ namespace o2
 	// ----------------------------------
 	// Selectable draggable handles group
 	// ----------------------------------
-	class SelectableDragHandlesGroup: public ISelectableDragHandlesGroup
+	class SelectableDragHandlesGroup : public ISelectableDragHandlesGroup
 	{
 	public:
 		typedef Vector<DragHandle*> SelectableDragHandlesVec;
@@ -322,6 +376,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PUBLIC_FIELD(angle);
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(selected);
 	PUBLIC_FIELD(cursorType);
 	PUBLIC_FIELD(pixelPerfect);
 	PUBLIC_FIELD(snappingKey);
@@ -336,11 +391,11 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PUBLIC_FIELD(checkSnappingFunc);
 	PUBLIC_FIELD(onRightButtonPressed);
 	PUBLIC_FIELD(onRightButtonReleased);
-	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mRegularSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHoverSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPressedSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSelectedSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mPosition);
 	PROTECTED_FIELD(mScreenPosition);
 	PROTECTED_FIELD(mAngle);
@@ -367,8 +422,8 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingOffset);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingBeginPosition);
-	PUBLIC_FUNCTION(bool, IsSelected);
 	PUBLIC_FUNCTION(void, SetSelected, bool);
+	PUBLIC_FUNCTION(bool, IsSelected);
 	PUBLIC_FUNCTION(void, Select);
 	PUBLIC_FUNCTION(void, Deselect);
 	PUBLIC_FUNCTION(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
@@ -397,5 +452,29 @@ CLASS_METHODS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(void, UpdateScreenPosition);
 	PROTECTED_FUNCTION(void, OnSelected);
 	PROTECTED_FUNCTION(void, OnDeselected);
+}
+END_META;
+
+CLASS_BASES_META(o2::WidgetDragHandle)
+{
+	BASE_CLASS(o2::DragHandle);
+	BASE_CLASS(o2::Widget);
+}
+END_META;
+CLASS_FIELDS_META(o2::WidgetDragHandle)
+{
+	PUBLIC_FIELD(widgetOffsetToLocalTransformFunc);
+	PUBLIC_FIELD(localToWidgetOffsetTransformFunc);
+}
+END_META;
+CLASS_METHODS_META(o2::WidgetDragHandle)
+{
+
+	PUBLIC_FUNCTION(void, Draw);
+	PRIVATE_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PRIVATE_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
+	PRIVATE_FUNCTION(void, UpdateLayersLayouts);
+	PRIVATE_FUNCTION(void, OnSerialize, DataNode&);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;
