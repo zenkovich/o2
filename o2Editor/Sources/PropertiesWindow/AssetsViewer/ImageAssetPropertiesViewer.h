@@ -136,6 +136,7 @@ CLASS_FIELDS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FIELD(mBorderRightHandleWidget);
 	PROTECTED_FIELD(mBorderTopHandleWidget);
 	PROTECTED_FIELD(mBorderBottomHandleWidget);
+	PROTECTED_FIELD(mBorderLeftHandlex);
 	PROTECTED_FIELD(mBorderLeftHandle);
 	PROTECTED_FIELD(mBorderRightHandle);
 	PROTECTED_FIELD(mBorderTopHandle);
