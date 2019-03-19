@@ -219,13 +219,13 @@ namespace Editor
 	void CurveEditor::SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover,
 											const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
-		mMainHandleSample = SelectableDragHandle(mnew Sprite(regular), mnew Sprite(hover),
+		mMainHandleSample = DragHandle(mnew Sprite(regular), mnew Sprite(hover),
 												 mnew Sprite(pressed), mnew Sprite(selected));
 	}
 
 	void CurveEditor::SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
-		mSupportHandleSample = SelectableDragHandle(mnew Sprite(regular), mnew Sprite(hover),
+		mSupportHandleSample = DragHandle(mnew Sprite(regular), mnew Sprite(hover),
 													mnew Sprite(pressed), mnew Sprite(selected));
 	}
 
@@ -1258,14 +1258,14 @@ namespace Editor
 		return selectedMainHandles > 1;
 	}
 
-	void CurveEditor::OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	void CurveEditor::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
 	{
 		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
 		UpdateTransformFrame();
 		CheckHandlesVisible();
 	}
 
-	void CurveEditor::OnHandleBeganDragging(SelectableDragHandle* handle)
+	void CurveEditor::OnHandleBeganDragging(DragHandle* handle)
 	{
 		if (mSupportHandles.Contains(handle))
 			return;
@@ -1273,7 +1273,7 @@ namespace Editor
 		SelectableDragHandlesGroup::OnHandleBeganDragging(handle);
 	}
 
-	void CurveEditor::OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor)
+	void CurveEditor::OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor)
 	{
 		if (mSupportHandles.Contains(handle))
 		{
@@ -1295,7 +1295,7 @@ namespace Editor
 		SelectableDragHandlesGroup::OnHandleMoved(handle, cursor);
 	}
 
-	void CurveEditor::OnHandleCompletedChange(SelectableDragHandle* handle)
+	void CurveEditor::OnHandleCompletedChange(DragHandle* handle)
 	{
 		OnTransformCompleted();
 	}
@@ -1869,7 +1869,7 @@ namespace Editor
 
 	}
 
-	CurveEditor::KeyHandles::KeyHandles(const SelectableDragHandle& mainSample, const SelectableDragHandle& supportSample,
+	CurveEditor::KeyHandles::KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample,
 										  CurveEditor* editor):
 		mainHandle(mainSample), leftSupportHandle(supportSample), rightSupportHandle(supportSample), curveEditor(editor)
 	{}

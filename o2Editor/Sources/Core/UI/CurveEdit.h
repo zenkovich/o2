@@ -90,20 +90,20 @@ namespace Editor
 
 	protected:
 		typedef Vector<Vec2F> PointsVec;
-		typedef Vector<SelectableDragHandle*> SelectableHandlesVec;
+		typedef Vector<DragHandle*> SelectableHandlesVec;
 		typedef Vector<IAction*> ActionsVec;
 
 		struct KeyHandles
 		{
 			CurveEditor*       curveEditor = nullptr;
-			SelectableDragHandle mainHandle;
-			SelectableDragHandle leftSupportHandle;
-			SelectableDragHandle rightSupportHandle;
+			DragHandle mainHandle;
+			DragHandle leftSupportHandle;
+			DragHandle rightSupportHandle;
 				           
 			int                  curveKeyIdx;
 
 			KeyHandles() {}
-			KeyHandles(const SelectableDragHandle& mainSample, const SelectableDragHandle& supportSample, CurveEditor* editor);
+			KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample, CurveEditor* editor);
 
 			void Draw(const RectF& camRect);
 			bool IsSomeHandleSelected() const;
@@ -175,8 +175,8 @@ namespace Editor
 	protected:
 		UIContextMenu*          mContextMenu = nullptr;             // Context menu for editing keys properties, copying, pasting and other
 							    								    
-		SelectableDragHandle    mMainHandleSample;                  // Main handle sample, uses to copy sprites @SERIALIZABLE
-		SelectableDragHandle    mSupportHandleSample;               // Support handle sample, uses to copy sprites @SERIALIZABLE
+		DragHandle    mMainHandleSample;                  // Main handle sample, uses to copy sprites @SERIALIZABLE
+		DragHandle    mSupportHandleSample;               // Support handle sample, uses to copy sprites @SERIALIZABLE
 							    								    
 		CurveInfosVec           mCurves;                            // Editing curves infos list 
 		RangeInfosVec           mRanges;                            // Curves ranges list
@@ -303,16 +303,16 @@ namespace Editor
 		bool IsTransformFrameVisible() const;
 
 		// It is called when selectable draggable handle was released
-		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor);
 
 		// It is called when selectable handle was began to drag
-		void OnHandleBeganDragging(SelectableDragHandle* handle);
+		void OnHandleBeganDragging(DragHandle* handle);
 
 		// It is called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor);
 
 		// It is called when selectable handle completed changing
-		void OnHandleCompletedChange(SelectableDragHandle* handle);
+		void OnHandleCompletedChange(DragHandle* handle);
 
 		// Sets all selected keys supports type
 		void SetSelectedKeysSupportsType(Curve::Key::Type type);
@@ -524,10 +524,10 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, CheckHandlesVisible);
 	PROTECTED_FUNCTION(void, UpdateTransformFrame);
 	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);
-	PROTECTED_FUNCTION(void, OnHandleCursorReleased, SelectableDragHandle*, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnHandleBeganDragging, SelectableDragHandle*);
-	PROTECTED_FUNCTION(void, OnHandleMoved, SelectableDragHandle*, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnHandleCompletedChange, SelectableDragHandle*);
+	PROTECTED_FUNCTION(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnHandleBeganDragging, DragHandle*);
+	PROTECTED_FUNCTION(void, OnHandleMoved, DragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnHandleCompletedChange, DragHandle*);
 	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
 	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
 	PROTECTED_FUNCTION(void, OnTransformBegin);

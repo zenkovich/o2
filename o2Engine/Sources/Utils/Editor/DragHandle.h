@@ -9,6 +9,7 @@
 namespace o2
 {
 	class Sprite;
+	class ISelectableDragHandlesGroup;
 
 	// -----------
 	// Drag handle
@@ -21,9 +22,9 @@ namespace o2
 		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Current position property
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
 
-		CursorType  cursorType;               // Cursor type when hovering and dragging
-		bool        pixelPerfect = true;      // Is handle draws pixel perfect
-		KeyboardKey snappingKey = VK_CONTROL; // Snapping key, when it pressed handle uses checkSnappingFunc to correct position
+		CursorType  cursorType = CursorType::Arrow; // Cursor type when hovering and dragging
+		bool        pixelPerfect = true;            // Is handle draws pixel perfect
+		KeyboardKey snappingKey = VK_CONTROL;       // Snapping key, when it pressed handle uses checkSnappingFunc to correct position
 
 		Function<void(const Vec2F&)> onChangedPos;        // On position changed event
 		Function<void()>             onPressed;           // Pressed cursor on handle event
@@ -44,7 +45,8 @@ namespace o2
 		DragHandle();
 
 		// Constructor with views
-		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr);
+		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
+				   Sprite* selected = nullptr);
 
 		// Copy-constructor
 		DragHandle(const DragHandle& other);
@@ -78,6 +80,24 @@ namespace o2
 
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
+
+		// Returns is this selected
+		bool IsSelected() const;
+
+		// Sets is this selected
+		virtual void SetSelected(bool selected);
+
+		// Selects this
+		void Select();
+
+		// Deselects this
+		void Deselect();
+
+		// Sets selection group
+		void SetSelectionGroup(ISelectableDragHandlesGroup* group);
+
+		// Returns selection group
+		ISelectableDragHandlesGroup* GetSelectionGroup() const;
 
 		// Set handle enabled. Disabled handle don't drawn and interact
 		virtual void SetEnabled(bool enabled);
@@ -117,6 +137,7 @@ namespace o2
 		Sprite* mRegularSprite = nullptr;  // Regular view sprite @SERIALIZABLE
 		Sprite* mHoverSprite = nullptr;    // Hovered view sprite @SERIALIZABLE
 		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
+		Sprite* mSelectedSprite = nullptr; // Selected view sprite @SERIALIZABLE
 
 		Vec2F  mPosition;                  // Current handle position, checked by checkPositionFunc
 		Vec2F  mScreenPosition;            // Handle screen position, transformed from mPosition with localToScreenTransformFunc
@@ -126,8 +147,14 @@ namespace o2
 		Vec2F  mDragBeginPosition;         // Position at beginning dragging
 
 		int    mPressedCursorId;           // Id of pressed cursor
+		Vec2F  mPressedCursorPos;          // Cursor pressed position
 		bool   mIsDragging = false;        // Is handle in dragging mode
 		bool   mIsHovered = false;         // Is handle under cursor, used for hover sprite appearing
+
+		bool                         mIsSelected = false;    // Is this selected
+		ISelectableDragHandlesGroup* mSelectGroup = nullptr; // Selection group
+
+		float  mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
 
 	protected:
 		// Converts point from screen to local space
@@ -137,34 +164,44 @@ namespace o2
 		virtual Vec2F LocalToScreen(const Vec2F& point);
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
+
+		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor enters this object
-		void OnCursorEnter(const Input::Cursor& cursor);
+		void OnCursorEnter(const Input::Cursor& cursor) override;
 
 		// It is called when cursor exits this object
-		void OnCursorExit(const Input::Cursor& cursor);
+		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was pressed on this, calls onRightButtonPressed event
-		void OnCursorRightMousePressed(const Input::Cursor& cursor);
+		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
-		void OnCursorRightMouseReleased(const Input::Cursor& cursor);
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
 		// Updates screen position from position with localToScreenTransformFunc
-		void UpdateScreenPosition();
-	};
+		virtual void UpdateScreenPosition();
 
-	class SelectableDragHandle;
+		// It is called when this was selected
+		virtual void OnSelected();
+
+		// It is called when this was unselected
+		virtual void OnDeselected();
+
+		friend class ISelectableDragHandlesGroup;
+		friend class SelectableDragHandlesGroup;
+	};
 
 	// --------------------------------------------
 	// Selectable draggable handles group interface
@@ -172,7 +209,7 @@ namespace o2
 	class ISelectableDragHandlesGroup
 	{
 	public:
-		typedef Vector<SelectableDragHandle*> SelectableDragHandlesVec;
+		typedef Vector<DragHandle*> SelectableDragHandlesVec;
 
 	public:
 		// Returns selected handles in group
@@ -182,16 +219,16 @@ namespace o2
 		virtual SelectableDragHandlesVec GetAllHandles() const = 0;
 
 		// Selects handle
-		virtual void SelectHandle(SelectableDragHandle* handle) = 0;
+		virtual void SelectHandle(DragHandle* handle) = 0;
 
 		// Deselects handle
-		virtual void DeselectHandle(SelectableDragHandle* handle) = 0;
+		virtual void DeselectHandle(DragHandle* handle) = 0;
 
 		// Adds selectable handle to group
-		virtual void AddHandle(SelectableDragHandle* handle) = 0;
+		virtual void AddHandle(DragHandle* handle) = 0;
 
 		// Removes selectable handle from group
-		virtual void RemoveHandle(SelectableDragHandle* handle) = 0;
+		virtual void RemoveHandle(DragHandle* handle) = 0;
 
 		// Deselects all in group
 		void DeselectAll();
@@ -201,24 +238,24 @@ namespace o2
 
 	protected:
 		// It is called when selectable draggable handle was pressed
-		virtual void OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) {}
 
 		// It is called when selectable draggable handle was released
-		virtual void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) {}
 
 		// It is called when selectable handle was began to drag
-		virtual void OnHandleBeganDragging(SelectableDragHandle* handle) {}
+		virtual void OnHandleBeganDragging(DragHandle* handle) {}
 
 		// It is called when selectable handle moved, moves all selected handles position
-		virtual void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor) {}
+		virtual void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) {}
 
 		// It is called when selectable handle completed changing
-		virtual void OnHandleCompletedChange(SelectableDragHandle* handle) {}
+		virtual void OnHandleCompletedChange(DragHandle* handle) {}
 
 		// Sets handle selected state without adding to selected handles array
-		void SetHandleSelectedState(SelectableDragHandle* handle, bool selected);
+		void SetHandleSelectedState(DragHandle* handle, bool selected);
 
-		friend class SelectableDragHandle;
+		friend class DragHandle;
 	};
 
 
@@ -228,7 +265,7 @@ namespace o2
 	class SelectableDragHandlesGroup: public ISelectableDragHandlesGroup
 	{
 	public:
-		typedef Vector<SelectableDragHandle*> SelectableDragHandlesVec;
+		typedef Vector<DragHandle*> SelectableDragHandlesVec;
 
 	public:
 		// Destructor
@@ -241,16 +278,16 @@ namespace o2
 		SelectableDragHandlesVec GetAllHandles() const;
 
 		// Selects handle
-		void SelectHandle(SelectableDragHandle* handle);
+		void SelectHandle(DragHandle* handle);
 
 		// Deselects handle
-		void DeselectHandle(SelectableDragHandle* handle);
+		void DeselectHandle(DragHandle* handle);
 
 		// Adds selectable handle to group
-		void AddHandle(SelectableDragHandle* handle);
+		void AddHandle(DragHandle* handle);
 
 		// Removes selectable handle from group
-		void RemoveHandle(SelectableDragHandle* handle);
+		void RemoveHandle(DragHandle* handle);
 
 	protected:
 		SelectableDragHandlesVec mSelectedHandles;
@@ -258,98 +295,18 @@ namespace o2
 
 	protected:
 		// It is called when selectable draggable handle was pressed
-		void OnHandleCursorPressed(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor);
 
 		// It is called when selectable draggable handle was released
-		void OnHandleCursorReleased(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor);
 
 		// It is called when selectable handle was began to drag
-		void OnHandleBeganDragging(SelectableDragHandle* handle);
+		void OnHandleBeganDragging(DragHandle* handle);
 
 		// It is called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(SelectableDragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor);
 
-		friend class SelectableDragHandle;
-	};
-
-	// -------------------------------------
-	// Selectable draggable handle interface
-	// -------------------------------------
-	class SelectableDragHandle: public DragHandle
-	{
-	public:
-		// Default constructor
-		SelectableDragHandle();
-
-		// Constructor with views
-		SelectableDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-							 Sprite* selected = nullptr);
-
-		// Copy-constructor
-		SelectableDragHandle(const SelectableDragHandle& other);
-
-		// Virtual destructor. Removes himself from selectable group, if need
-		virtual ~SelectableDragHandle();
-
-		// Copy-operator
-		SelectableDragHandle& operator=(const SelectableDragHandle& other);
-
-		// Returns is this selected
-		bool IsSelected() const;
-
-		// Sets is this selected
-		virtual void SetSelected(bool selected);
-
-		// Draws handle with selection
-		void Draw();
-
-		// Selects this
-		void Select();
-
-		// Deselects this
-		void Deselect();
-
-		// Sets selection group
-		void SetSelectionGroup(ISelectableDragHandlesGroup* group);
-
-		// Returns selection group
-		ISelectableDragHandlesGroup* GetSelectionGroup() const;
-
-		// Sets handle rotation angle in radians
-		void SetAngle(float rad);
-
-		SERIALIZABLE(SelectableDragHandle);
-
-	protected:
-		Sprite*                      mSelectedSprite = nullptr; // Selected view sprite @SERIALIZABLE
-
-		bool                         mIsSelected  = false;      // Is this selected
-		ISelectableDragHandlesGroup* mSelectGroup = nullptr;    // Selection group
-
-		float                        mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
-		Vec2F                        mPressedCursorPos;             // Cursor pressed position
-
-	protected:
-		// It is called when cursor pressed on this
-		virtual void OnCursorPressed(const Input::Cursor& cursor);
-
-		// It is called when cursor moved on this (or moved outside when this was pressed)
-		virtual void OnCursorStillDown(const Input::Cursor& cursor);
-
-		// It is called when cursor released (only when cursor pressed this at previous time)
-		virtual void OnCursorReleased(const Input::Cursor& cursor);
-
-		// It is called when cursor released outside this(only when cursor pressed this at previous time)
-		virtual void OnCursorReleasedOutside(const Input::Cursor& cursor);
-
-		// It is called when this was selected
-		virtual void OnSelected();
-
-		// It is called when this was unselected
-		virtual void OnDeselected();
-
-		friend class ISelectableDragHandlesGroup;
-		friend class SelectableDragHandlesGroup;
+		friend class DragHandle;
 	};
 }
 
@@ -383,6 +340,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PROTECTED_FIELD(mRegularSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHoverSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPressedSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectedSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPosition);
 	PROTECTED_FIELD(mScreenPosition);
 	PROTECTED_FIELD(mAngle);
@@ -390,8 +348,12 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PROTECTED_FIELD(mDragPosition);
 	PROTECTED_FIELD(mDragBeginPosition);
 	PROTECTED_FIELD(mPressedCursorId);
+	PROTECTED_FIELD(mPressedCursorPos);
 	PROTECTED_FIELD(mIsDragging);
 	PROTECTED_FIELD(mIsHovered);
+	PROTECTED_FIELD(mIsSelected);
+	PROTECTED_FIELD(mSelectGroup);
+	PROTECTED_FIELD(mDragDistanceThreshold);
 }
 END_META;
 CLASS_METHODS_META(o2::DragHandle)
@@ -405,6 +367,12 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingOffset);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingBeginPosition);
+	PUBLIC_FUNCTION(bool, IsSelected);
+	PUBLIC_FUNCTION(void, SetSelected, bool);
+	PUBLIC_FUNCTION(void, Select);
+	PUBLIC_FUNCTION(void, Deselect);
+	PUBLIC_FUNCTION(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
+	PUBLIC_FUNCTION(ISelectableDragHandlesGroup*, GetSelectionGroup);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(void, SetAngle, float);
@@ -419,6 +387,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
@@ -426,37 +395,6 @@ CLASS_METHODS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, UpdateScreenPosition);
-}
-END_META;
-
-CLASS_BASES_META(o2::SelectableDragHandle)
-{
-	BASE_CLASS(o2::DragHandle);
-}
-END_META;
-CLASS_FIELDS_META(o2::SelectableDragHandle)
-{
-	PROTECTED_FIELD(mSelectedSprite).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mIsSelected);
-	PROTECTED_FIELD(mSelectGroup);
-	PROTECTED_FIELD(mDragDistanceThreshold);
-	PROTECTED_FIELD(mPressedCursorPos);
-}
-END_META;
-CLASS_METHODS_META(o2::SelectableDragHandle)
-{
-
-	PUBLIC_FUNCTION(bool, IsSelected);
-	PUBLIC_FUNCTION(void, SetSelected, bool);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Deselect);
-	PUBLIC_FUNCTION(void, SetSelectionGroup, ISelectableDragHandlesGroup*);
-	PUBLIC_FUNCTION(ISelectableDragHandlesGroup*, GetSelectionGroup);
-	PUBLIC_FUNCTION(void, SetAngle, float);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnSelected);
 	PROTECTED_FUNCTION(void, OnDeselected);
 }
