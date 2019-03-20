@@ -60,17 +60,11 @@ namespace Editor
 		Widget*                       mPreviewImageContent;
 		PreviewImage*                 mPreviewImage = nullptr;
 		Image*                        mPreviewImageBack = nullptr;
-
-		Image*                        mBorderLeftHandleWidget = nullptr;
-		Image*                        mBorderRightHandleWidget = nullptr;
-		Image*                        mBorderTopHandleWidget = nullptr;
-		Image*                        mBorderBottomHandleWidget = nullptr;
 								      
-		DragHandle                    mBorderLeftHandlex;
-		CursorEventsArea              mBorderLeftHandle;
-		CursorEventsArea              mBorderRightHandle;
-		CursorEventsArea              mBorderTopHandle;
-		CursorEventsArea              mBorderBottomHandle;
+		WidgetDragHandle*             mBorderLeftHandle;
+		WidgetDragHandle*             mBorderRightHandle;
+		WidgetDragHandle*             mBorderTopHandle;
+		WidgetDragHandle*             mBorderBottomHandle;
 		BorderF                       mBordersSmoothValue;
 								      
 		BorderIProperty*              mBorderProperty = nullptr;
@@ -132,11 +126,6 @@ CLASS_FIELDS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FIELD(mPreviewImageContent);
 	PROTECTED_FIELD(mPreviewImage);
 	PROTECTED_FIELD(mPreviewImageBack);
-	PROTECTED_FIELD(mBorderLeftHandleWidget);
-	PROTECTED_FIELD(mBorderRightHandleWidget);
-	PROTECTED_FIELD(mBorderTopHandleWidget);
-	PROTECTED_FIELD(mBorderBottomHandleWidget);
-	PROTECTED_FIELD(mBorderLeftHandlex);
 	PROTECTED_FIELD(mBorderLeftHandle);
 	PROTECTED_FIELD(mBorderRightHandle);
 	PROTECTED_FIELD(mBorderTopHandle);

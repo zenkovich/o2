@@ -1548,8 +1548,8 @@ namespace Editor
 
 	void CurveEditor::OnFlatChecked(bool checked)
 	{
-		mContextMenu->SetItemChecked(0, false);  // auto smooth
-		mContextMenu->SetItemChecked(1, true); // flat
+		mContextMenu->SetItemChecked(0, false); // auto smooth
+		mContextMenu->SetItemChecked(1, true);  // flat
 		mContextMenu->SetItemChecked(2, false); // free
 		mContextMenu->SetItemChecked(3, false); // broken
 		mContextMenu->SetItemChecked(4, false); // discrete

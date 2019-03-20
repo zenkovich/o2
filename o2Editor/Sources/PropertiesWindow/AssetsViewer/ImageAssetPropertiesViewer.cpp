@@ -118,94 +118,114 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeLeftHandle()
 	{
-		mBorderLeftHandleWidget = mnew Image();
-		mBorderLeftHandleWidget->SetImage(mnew Sprite(Color4::Green()));
-		mPreviewImage->AddChild(mBorderLeftHandleWidget);
+		mBorderLeftHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)), 
+												 mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)), 
+												 mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
 
-		mBorderLeftHandle.cursorType = CursorType::SizeWE;
-		mBorderLeftHandleWidget->onDraw += [&]() { mBorderLeftHandle.OnDrawn(); };
-		mBorderLeftHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderLeftHandleWidget->layout->GetWorldRect();
-			rt.left -= 2; rt.right += 2;
-			return rt.IsInside(p);
+		mBorderLeftHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
 		};
 
-		mBorderLeftHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout->GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
-			mBordersSmoothValue.left += cursor.delta.x/px;
-
-			if (mBorderProperty->GetCommonValue().left != (int)Math::Round(mBordersSmoothValue.left))
-				UpdateBordersValue();
+		mBorderLeftHandle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->layout->GetSize() * mPreviewImage->GetImage()->GetOriginalSize();
 		};
+
+		mBorderLeftHandle->checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(Math::Clamp(point.x, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().x), mPreviewImage->GetImage()->GetOriginalSize().y*0.5f); 
+		};
+		
+		mBorderLeftHandle->onChangedPos = [&](const Vec2F& point) {
+			mBordersSmoothValue.left = point.x;
+			UpdateBordersValue();
+		};
+
+		mBorderLeftHandle->cursorType = CursorType::SizeWE;
+
+		mPreviewImage->AddChild(mBorderLeftHandle);
 	}
 
 	void ImageAssetPropertiesViewer::InitializeRightHandle()
 	{
-		mBorderRightHandleWidget = mnew Image();
-		mBorderRightHandleWidget->SetImage(mnew Sprite(Color4::Green()));
-		mPreviewImage->AddChild(mBorderRightHandleWidget);
+		mBorderRightHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)),
+												  mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)),
+												  mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
 
-		mBorderRightHandle.cursorType = CursorType::SizeWE;
-		mBorderRightHandleWidget->onDraw += [&]() { mBorderRightHandle.OnDrawn(); };
-		mBorderRightHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderRightHandleWidget->layout->GetWorldRect();
-			rt.left -= 2; rt.right += 2;
-			return rt.IsInside(p);
+		mBorderRightHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
 		};
 
-		mBorderRightHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout->GetWidth()/mPreviewImage->GetImage()->GetOriginalSize().x;
-			mBordersSmoothValue.right -= cursor.delta.x/px;
-
-			if (mBorderProperty->GetCommonValue().right != (int)Math::Round(mBordersSmoothValue.right))
-				UpdateBordersValue();
+		mBorderRightHandle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->layout->GetSize() * mPreviewImage->GetImage()->GetOriginalSize();
 		};
+
+		mBorderRightHandle->checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(Math::Clamp(point.x, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().x), mPreviewImage->GetImage()->GetOriginalSize().y*0.5f);
+		};
+
+		mBorderRightHandle->onChangedPos = [&](const Vec2F& point) {
+			mBordersSmoothValue.right = (float)mPreviewImage->GetImage()->GetOriginalSize().x - point.x;
+			UpdateBordersValue();
+		};
+
+		mBorderRightHandle->cursorType = CursorType::SizeWE;
+
+		mPreviewImage->AddChild(mBorderRightHandle);
 	}
 
 	void ImageAssetPropertiesViewer::InitializeTopHandle()
 	{
-		mBorderTopHandleWidget = mnew Image();
-		mBorderTopHandleWidget->SetImage(mnew Sprite(Color4::Green()));
-		mPreviewImage->AddChild(mBorderTopHandleWidget);
+		mBorderTopHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)),
+												mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)),
+												mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
 
-		mBorderTopHandle.cursorType = CursorType::SizeNS;
-		mBorderTopHandleWidget->onDraw += [&]() { mBorderTopHandle.OnDrawn(); };
-		mBorderTopHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderBottomHandleWidget->layout->GetWorldRect();
-			rt.bottom -= 2; rt.top += 2;
-			return rt.IsInside(p);
+		mBorderTopHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
 		};
 
-		mBorderTopHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout->GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
-			mBordersSmoothValue.top += cursor.delta.y/px;
-
-			if (mBorderProperty->GetCommonValue().top != (int)Math::Round(mBordersSmoothValue.top))
-				UpdateBordersValue();
+		mBorderTopHandle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->layout->GetSize() * mPreviewImage->GetImage()->GetOriginalSize();
 		};
+
+		mBorderTopHandle->checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(mPreviewImage->GetImage()->GetOriginalSize().x*0.5f, Math::Clamp(point.y, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().y));
+		};
+
+		mBorderTopHandle->onChangedPos = [&](const Vec2F& point) {
+			mBordersSmoothValue.top = (float)mPreviewImage->GetImage()->GetOriginalSize().y - point.y;
+			UpdateBordersValue();
+		};
+
+		mBorderTopHandle->cursorType = CursorType::SizeNS;
+
+		mPreviewImage->AddChild(mBorderTopHandle);
 	}
 
 	void ImageAssetPropertiesViewer::InitializeBottomHandle()
 	{
-		mBorderBottomHandleWidget = mnew Image();
-		mBorderBottomHandleWidget->SetImage(mnew Sprite(Color4::Green()));
-		mPreviewImage->AddChild(mBorderBottomHandleWidget);
+		mBorderBottomHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)),
+												   mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)),
+												   mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
 
-		mBorderBottomHandle.cursorType = CursorType::SizeNS;
-		mBorderBottomHandleWidget->onDraw += [&]() { mBorderBottomHandle.OnDrawn(); };
-		mBorderBottomHandle.isUnderPoint = [&](const Vec2F& p) {
-			auto rt = mBorderTopHandleWidget->layout->GetWorldRect();
-			rt.bottom -= 2; rt.top += 2;
-			return rt.IsInside(p);
+		mBorderBottomHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
 		};
 
-		mBorderBottomHandle.onMoved = [&](const Input::Cursor& cursor) {
-			float px = mPreviewImage->layout->GetHeight()/mPreviewImage->GetImage()->GetOriginalSize().y;
-			mBordersSmoothValue.bottom -= cursor.delta.y/px;
-
-			if (mBorderProperty->GetCommonValue().bottom != (int)Math::Round(mBordersSmoothValue.bottom))
-				UpdateBordersValue();
+		mBorderBottomHandle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& point) {
+			return point / mPreviewImage->layout->GetSize() * mPreviewImage->GetImage()->GetOriginalSize();
 		};
+
+		mBorderBottomHandle->checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(mPreviewImage->GetImage()->GetOriginalSize().x*0.5f, Math::Clamp(point.y, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().y));
+		};
+
+		mBorderBottomHandle->onChangedPos = [&](const Vec2F& point) {
+			mBordersSmoothValue.bottom = point.y;
+			UpdateBordersValue();
+		};
+
+		mBorderBottomHandle->cursorType = CursorType::SizeNS;
+
+		mPreviewImage->AddChild(mBorderBottomHandle);
 	}
 
 	void ImageAssetPropertiesViewer::InitializeProperties()
@@ -289,15 +309,24 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::UpdateBordersAnchors()
 	{
-		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 		BorderI borders = mBorderProperty->GetCommonValue();
-		BorderF bordersAnchors((float)borders.left/imageSize.x, (float)borders.bottom/imageSize.y,
-							   1.0f - (float)borders.right/imageSize.x, 1.0f - (float)borders.top/imageSize.y);
+		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 
-		*mBorderLeftHandleWidget->layout = WidgetLayout(Vec2F(bordersAnchors.left, 0.0f), Vec2F(bordersAnchors.left, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
-		*mBorderRightHandleWidget->layout = WidgetLayout(Vec2F(bordersAnchors.right, 0.0f), Vec2F(bordersAnchors.right, 1.0f), Vec2F(0, 0), Vec2F(1, 0));
-		*mBorderTopHandleWidget->layout = WidgetLayout(Vec2F(0.0f, bordersAnchors.top), Vec2F(1.0f, bordersAnchors.top), Vec2F(0, 0), Vec2F(0, 1));
-		*mBorderBottomHandleWidget->layout = WidgetLayout(Vec2F(0.0f, bordersAnchors.bottom), Vec2F(1.0f, bordersAnchors.bottom), Vec2F(0, 0), Vec2F(0, 1));
+		auto setHandleSize = [](WidgetDragHandle& handle, const Vec2F& size) {
+			handle.GetRegularSprite()->SetSize(size);
+			handle.GetHoverSprite()->SetSize(size);
+			handle.GetPressedSprite()->SetSize(size);
+		};
+
+		setHandleSize(*mBorderLeftHandle, Vec2F(3.0f, mPreviewImage->layout->GetHeight()));
+		setHandleSize(*mBorderRightHandle, Vec2F(3.0f, mPreviewImage->layout->GetHeight()));
+		setHandleSize(*mBorderTopHandle, Vec2F(mPreviewImage->layout->GetWidth(), 3.0f));
+		setHandleSize(*mBorderBottomHandle, Vec2F(mPreviewImage->layout->GetWidth(), 3.0f));
+
+		mBorderLeftHandle->SetPosition(Vec2F((float)borders.left, 0));
+		mBorderRightHandle->SetPosition(Vec2F(imageSize.x - (float)borders.right, 0));
+		mBorderTopHandle->SetPosition(Vec2F(0, imageSize.y - (float)borders.top));
+		mBorderBottomHandle->SetPosition(Vec2F((float)borders.bottom, 0));
 	}
 
 	void ImageAssetPropertiesViewer::UpdateBordersValue()
