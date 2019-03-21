@@ -49,28 +49,22 @@ namespace Editor
 	{
 		mTargetAssets = assets.Cast<ImageAssetRef*>();
 
-		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(
-			mTargetAssets,
+		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
 
-		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(
-			mTargetAssets,
+		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode);});
 
-		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(
-			mTargetAssets,
+		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
 
-		mOSXProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(
-			mTargetAssets,
+		mOSXProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
 
-		mAndroidProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(
-			mTargetAssets,
+		mAndroidProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
 
-		mIOSProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(
-			mTargetAssets,
+		mIOSProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
 
 		mPreviewImage->imageAsset = *mTargetAssets.Last();
@@ -230,7 +224,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::InitializeProperties()
 	{
-		auto borderProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(RectI), "Slice border");
+		auto borderProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(BorderI), "Slice border");
 		mBorderProperty = (BorderIProperty*)borderProperty;
 		mBorderProperty->onChanged += [&](auto x) { UpdateBordersAnchors(); mBordersSmoothValue = mBorderProperty->GetCommonValue(); };
 		mContent->AddChild(borderProperty);
@@ -318,6 +312,7 @@ namespace Editor
 			handle.GetPressedSprite()->SetSize(size);
 		};
 
+		mPreviewImage->UpdateTransform();
 		setHandleSize(*mBorderLeftHandle, Vec2F(3.0f, mPreviewImage->layout->GetHeight()));
 		setHandleSize(*mBorderRightHandle, Vec2F(3.0f, mPreviewImage->layout->GetHeight()));
 		setHandleSize(*mBorderTopHandle, Vec2F(mPreviewImage->layout->GetWidth(), 3.0f));
@@ -326,7 +321,7 @@ namespace Editor
 		mBorderLeftHandle->SetPosition(Vec2F((float)borders.left, 0));
 		mBorderRightHandle->SetPosition(Vec2F(imageSize.x - (float)borders.right, 0));
 		mBorderTopHandle->SetPosition(Vec2F(0, imageSize.y - (float)borders.top));
-		mBorderBottomHandle->SetPosition(Vec2F((float)borders.bottom, 0));
+		mBorderBottomHandle->SetPosition(Vec2F(0, (float)borders.bottom));
 	}
 
 	void ImageAssetPropertiesViewer::UpdateBordersValue()
