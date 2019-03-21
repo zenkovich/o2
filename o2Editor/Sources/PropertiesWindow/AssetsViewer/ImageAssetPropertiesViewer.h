@@ -79,17 +79,8 @@ namespace Editor
 		// Initializes image preview widgets and border handles
 		void InitializeImagePreview();
 
-		// Initializes left border handle
-		void InitializeLeftHandle();
-
-		// Initializes right border handle
-		void InitializeRightHandle();
-
-		// Initializes top border handle
-		void InitializeTopHandle();
-
-		// Initializes bottom border handle
-		void InitializeBottomHandle();
+		// Initializes image slices handles
+		void InitializeSliceHandles();
 
 		// Initializes other properties
 		void InitializeProperties();
@@ -147,10 +138,7 @@ CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);
-	PROTECTED_FUNCTION(void, InitializeLeftHandle);
-	PROTECTED_FUNCTION(void, InitializeRightHandle);
-	PROTECTED_FUNCTION(void, InitializeTopHandle);
-	PROTECTED_FUNCTION(void, InitializeBottomHandle);
+	PROTECTED_FUNCTION(void, InitializeSliceHandles);
 	PROTECTED_FUNCTION(void, InitializeProperties);
 	PROTECTED_FUNCTION(void, FitImage);
 	PROTECTED_FUNCTION(void, UpdateBordersAnchors);

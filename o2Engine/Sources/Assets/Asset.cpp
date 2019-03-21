@@ -186,7 +186,7 @@ namespace o2
 
 	String Asset::GetMetaFullPath() const
 	{
-		return GetDataFullPath() + ".meta";
+		return GetFullPath() + ".meta";
 	}
 
 	LogStream* Asset::GetAssetsLogStream() const

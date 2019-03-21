@@ -2803,45 +2803,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
-		<date year="2019" month="3" day="20" hour="21" minute="55" second="17" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="PreviewImage" fullname="Editor::ImageAssetPropertiesViewer::PreviewImage" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="Image" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetPropertiesViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/IPropertiesViewer.h">
 		<date year="2019" month="2" day="10" hour="15" minute="26" second="25" />
 		<globalNamespace name="" fullname="">
@@ -3274,6 +3235,45 @@
 			<sections />
 			<typedefs />
 			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2\o2Editor\Platforms\Windows\..\..\Sources/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
+		<date year="2019" month="3" day="22" hour="0" minute="18" second="0" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="PreviewImage" fullname="Editor::ImageAssetPropertiesViewer::PreviewImage" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="Image" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetPropertiesViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
 		</globalNamespace>
 	</file>
 </files>

@@ -45,45 +45,6 @@ namespace Editor
 		delete mContent;
 	}
 
-	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
-	{
-		mTargetAssets = assets.Cast<ImageAssetRef*>();
-
-		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
-
-		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode);});
-
-		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
-
-		mOSXProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
-
-		mAndroidProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
-
-		mIOSProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
-
-		mPreviewImage->imageAsset = *mTargetAssets.Last();
-		mPreviewImage->GetImage()->mode = SpriteMode::Default;
-
-		FitImage();
-		SetupAtlasProperty();
-	}
-
-	const Type* ImageAssetPropertiesViewer::GetAssetType() const
-	{
-		return &TypeOf(ImageAsset);
-	}
-
-	Widget* ImageAssetPropertiesViewer::GetWidget() const
-	{
-		return mContent;
-	}
-
 	void ImageAssetPropertiesViewer::InitializeImagePreview()
 	{
 		mPreviewImageContent = mnew Widget();
@@ -102,19 +63,15 @@ namespace Editor
 		*mPreviewImage->layout = WidgetLayout::BothStretch();
 		mPreviewImageContent->AddChild(mPreviewImage);
 
-		InitializeLeftHandle();
-		InitializeRightHandle();
-		InitializeTopHandle();
-		InitializeBottomHandle();
+		InitializeSliceHandles();
 
 		mContent->AddChild(mPreviewImageContent);
 	}
 
-	void ImageAssetPropertiesViewer::InitializeLeftHandle()
+	void ImageAssetPropertiesViewer::InitializeSliceHandles()
 	{
-		mBorderLeftHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)), 
-												 mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)), 
-												 mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
+		// Left handle
+		mBorderLeftHandle = mnew WidgetDragHandle(mnew Sprite("ui/ver_slice_line.png"));
 
 		mBorderLeftHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
 			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
@@ -125,9 +82,9 @@ namespace Editor
 		};
 
 		mBorderLeftHandle->checkPositionFunc = [&](const Vec2F& point) {
-			return Vec2F(Math::Clamp(point.x, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().x), mPreviewImage->GetImage()->GetOriginalSize().y*0.5f); 
+			return Vec2F(Math::Clamp(point.x, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().x), mPreviewImage->GetImage()->GetOriginalSize().y*0.5f);
 		};
-		
+
 		mBorderLeftHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.left = point.x;
 			UpdateBordersValue();
@@ -135,42 +92,19 @@ namespace Editor
 
 		mBorderLeftHandle->cursorType = CursorType::SizeWE;
 
-		mPreviewImage->AddChild(mBorderLeftHandle);
-	}
-
-	void ImageAssetPropertiesViewer::InitializeRightHandle()
-	{
-		mBorderRightHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)),
-												  mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)),
-												  mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
-
-		mBorderRightHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
-			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
-		};
-
-		mBorderRightHandle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& point) {
-			return point / mPreviewImage->layout->GetSize() * mPreviewImage->GetImage()->GetOriginalSize();
-		};
-
-		mBorderRightHandle->checkPositionFunc = [&](const Vec2F& point) {
-			return Vec2F(Math::Clamp(point.x, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().x), mPreviewImage->GetImage()->GetOriginalSize().y*0.5f);
-		};
+		// Right handle
+		mBorderRightHandle = mnew WidgetDragHandle(*mBorderLeftHandle);
 
 		mBorderRightHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.right = (float)mPreviewImage->GetImage()->GetOriginalSize().x - point.x;
 			UpdateBordersValue();
 		};
 
-		mBorderRightHandle->cursorType = CursorType::SizeWE;
-
+		mPreviewImage->AddChild(mBorderLeftHandle);
 		mPreviewImage->AddChild(mBorderRightHandle);
-	}
 
-	void ImageAssetPropertiesViewer::InitializeTopHandle()
-	{
-		mBorderTopHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)),
-												mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)),
-												mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
+		// Top handle
+		mBorderTopHandle = mnew WidgetDragHandle(mnew Sprite("ui/hor_slice_line.png"));
 
 		mBorderTopHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
 			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
@@ -191,34 +125,15 @@ namespace Editor
 
 		mBorderTopHandle->cursorType = CursorType::SizeNS;
 
-		mPreviewImage->AddChild(mBorderTopHandle);
-	}
-
-	void ImageAssetPropertiesViewer::InitializeBottomHandle()
-	{
-		mBorderBottomHandle = new WidgetDragHandle(mnew Sprite(Color4(0.0f, 1.0f, 0.0f, 1.0f)),
-												   mnew Sprite(Color4(0.5f, 1.0f, 0.5f, 1.0f)),
-												   mnew Sprite(Color4(0.0f, 0.6f, 0.0f, 1.0f)));
-
-		mBorderBottomHandle->localToWidgetOffsetTransformFunc = [&](const Vec2F& point) {
-			return point / mPreviewImage->GetImage()->GetOriginalSize() * mPreviewImage->layout->GetSize();
-		};
-
-		mBorderBottomHandle->widgetOffsetToLocalTransformFunc = [&](const Vec2F& point) {
-			return point / mPreviewImage->layout->GetSize() * mPreviewImage->GetImage()->GetOriginalSize();
-		};
-
-		mBorderBottomHandle->checkPositionFunc = [&](const Vec2F& point) {
-			return Vec2F(mPreviewImage->GetImage()->GetOriginalSize().x*0.5f, Math::Clamp(point.y, 0.0f, (float)mPreviewImage->GetImage()->GetOriginalSize().y));
-		};
+		// Bottom handle
+		mBorderBottomHandle = mnew WidgetDragHandle(*mBorderTopHandle);
 
 		mBorderBottomHandle->onChangedPos = [&](const Vec2F& point) {
 			mBordersSmoothValue.bottom = point.y;
 			UpdateBordersValue();
 		};
 
-		mBorderBottomHandle->cursorType = CursorType::SizeNS;
-
+		mPreviewImage->AddChild(mBorderTopHandle);
 		mPreviewImage->AddChild(mBorderBottomHandle);
 	}
 
@@ -258,6 +173,45 @@ namespace Editor
 		mIOSProperties = (ObjectProperty*)iosProperty;
 		mIOSProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(iosProperty);
+	}
+
+	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
+	{
+		mTargetAssets = assets.Cast<ImageAssetRef*>();
+
+		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
+
+		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(mTargetAssets,
+			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode);});
+
+		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
+
+		mOSXProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
+
+		mAndroidProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
+
+		mIOSProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
+
+		mPreviewImage->imageAsset = *mTargetAssets.Last();
+		mPreviewImage->GetImage()->mode = SpriteMode::Default;
+
+		FitImage();
+		SetupAtlasProperty();
+	}
+
+	const Type* ImageAssetPropertiesViewer::GetAssetType() const
+	{
+		return &TypeOf(ImageAsset);
+	}
+
+	Widget* ImageAssetPropertiesViewer::GetWidget() const
+	{
+		return mContent;
 	}
 
 	void ImageAssetPropertiesViewer::FitImage()
@@ -306,17 +260,11 @@ namespace Editor
 		BorderI borders = mBorderProperty->GetCommonValue();
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 
-		auto setHandleSize = [](WidgetDragHandle& handle, const Vec2F& size) {
-			handle.GetRegularSprite()->SetSize(size);
-			handle.GetHoverSprite()->SetSize(size);
-			handle.GetPressedSprite()->SetSize(size);
-		};
-
 		mPreviewImage->UpdateTransform();
-		setHandleSize(*mBorderLeftHandle, Vec2F(3.0f, mPreviewImage->layout->GetHeight()));
-		setHandleSize(*mBorderRightHandle, Vec2F(3.0f, mPreviewImage->layout->GetHeight()));
-		setHandleSize(*mBorderTopHandle, Vec2F(mPreviewImage->layout->GetWidth(), 3.0f));
-		setHandleSize(*mBorderBottomHandle, Vec2F(mPreviewImage->layout->GetWidth(), 3.0f));
+		mBorderLeftHandle->GetRegularSprite()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
+		mBorderRightHandle->GetRegularSprite()->SetSize(Vec2F(10.0f, mPreviewImage->layout->GetHeight()));
+		mBorderTopHandle->GetRegularSprite()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
+		mBorderBottomHandle->GetRegularSprite()->SetSize(Vec2F(mPreviewImage->layout->GetWidth(), 10.0f));
 
 		mBorderLeftHandle->SetPosition(Vec2F((float)borders.left, 0));
 		mBorderRightHandle->SetPosition(Vec2F(imageSize.x - (float)borders.right, 0));

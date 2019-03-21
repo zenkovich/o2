@@ -182,6 +182,7 @@ namespace o2
 			type = GL_NEAREST;
 
 		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+		o2Render.DrawPrimitives();
 
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, type);
