@@ -319,8 +319,8 @@ namespace o2
 	template<typename _value_type, typename _property_type>
 	class TPropertyType: public PropertyType
 	{
-		class RealFieldGetter;
-		class NullFieldGetter;
+		struct RealFieldGetter;
+		struct NullFieldGetter;
 
 	public:
 		// Constructor
@@ -923,7 +923,7 @@ namespace o2
 	template<typename _value_type, typename _property_type>
 	void* TPropertyType<_value_type, _property_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
-		typedef std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
+		typedef typename std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
 
 		return getter::GetFieldPtr(*this, object, path, fieldInfo);
 	}

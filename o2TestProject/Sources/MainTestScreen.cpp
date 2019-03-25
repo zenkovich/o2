@@ -1,9 +1,9 @@
 #include "MainTestScreen.h"
 
 #include "TestApplication.h"
-#include "UI\Button.h"
-#include "UI\UIManager.h"
-#include "UI\Widget.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widget.h"
 
 MainTestScreen::MainTestScreen(TestApplication* application):
 	ITestScreen(application)

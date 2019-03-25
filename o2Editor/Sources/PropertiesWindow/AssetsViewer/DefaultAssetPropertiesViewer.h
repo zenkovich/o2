@@ -38,7 +38,7 @@ namespace Editor
 		IOBJECT(DefaultAssetPropertiesViewer);
 
 	protected:
-		VerticalLayout*   mPropertiesLayout;    // Properties layout
+		VerticalLayout*     mPropertiesLayout;    // Properties layout
 		Vector<AssetRef*>   mTargetAssets;        // Target assets
 		FieldPropertiesInfo mFieldProperties;     // Field properties information
 		const Type*         mAssetType = nullptr; // Target asset type

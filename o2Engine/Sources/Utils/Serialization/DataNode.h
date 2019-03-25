@@ -704,7 +704,7 @@ namespace o2
 	template<typename _type>
 	void DataNode::PropertyDataConverter<_type>::FromData(_type& object, const DataNode& data)
 	{
-		object.Set((_type::valueType)data);
+		object.Set((typename _type::valueType)data);
 	}
 
 	template<typename _type>

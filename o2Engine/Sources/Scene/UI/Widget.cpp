@@ -227,8 +227,11 @@ namespace o2
 
 		if (!mResEnabledInHierarchy || mIsClipped)
 		{
-			for (auto child : mDrawingChildren)
-				child->Draw();
+			if (mIsClipped) 
+			{
+				for (auto child : mDrawingChildren)
+					child->Draw();
+			}
 
 			return;
 		}
