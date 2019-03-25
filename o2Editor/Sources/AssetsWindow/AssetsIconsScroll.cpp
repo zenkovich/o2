@@ -516,8 +516,8 @@ namespace Editor
 		mDragIcon->ExcludeFromScene();
 		mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
-		if (mSelectedAssetsIcons.Count() > 1)
-			mDragIcon->GetLayerDrawableByType<Label>()->text = (String)mSelectedAssetsIcons.Count() + " items";
+		if (mSelectedAssetsIcons.Count() > 1) 
+			mDragIcon->assetName = (String)mSelectedAssetsIcons.Count() + " items";
 	}
 
 	void AssetsIconsScrollArea::EndDragging(bool droppedToThis /*= false*/)

@@ -423,8 +423,9 @@ namespace Editor
 
 		for (auto object : assetsScroll->mInstSceneDragObjects)
 		{
+			object->UpdateTransform();
 			Basis transform = object->GetTransform();
-			transform.origin += ScreenToScenePoint(o2Input.cursorPos) - (transform.xv + transform.yv)*0.5f;
+			transform.origin = ScreenToScenePoint(o2Input.cursorPos) - (transform.xv + transform.yv)*0.5f;
 			object->SetTransform(transform);
 		}
 	}

@@ -302,7 +302,7 @@ namespace o2
 	void AtlasAssetConverter::SaveImageAsset(ImagePackDef& imgDef)
 	{
 		DataNode imgData;
-		imgData["mAtlasPage"] = 0;
+		imgData["mAtlasPage"] = imgDef.mPackRect->mPage;
 		imgData["mAtlasRect"] = (RectI)(imgDef.mPackRect->mRect);
 		String imageFullPath = mAssetsBuilder->mBuiltAssetsPath + imgDef.mAssetInfo->path;
 		imgData.SaveToFile(imageFullPath);

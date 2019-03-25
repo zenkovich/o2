@@ -21,6 +21,9 @@ namespace Editor
 	class AssetIcon: public Widget, public SelectableDragableObject, public DragDropArea
 	{
 	public:
+		PROPERTIES(AssetIcon);
+		PROPERTY(WString, assetName, SetAssetName, GetAssetName); // Asset name label text property
+
 		// Default constructor
 		AssetIcon();
 
@@ -39,6 +42,12 @@ namespace Editor
 		// Returns asset info
 		const AssetInfo& GetAssetInfo() const;
 
+		// Sets name label text
+		void SetAssetName(const WString& name);
+
+		// Returns name label text
+		WString GetAssetName() const;
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
@@ -46,7 +55,7 @@ namespace Editor
 
 	protected:
 		Label*                 mNameText = nullptr;      // Asset name text
-		AssetInfo                mAssetInfo;               // Asset information
+		AssetInfo              mAssetInfo;               // Asset information
 		WidgetState*           mSelectedState = nullptr; // Node selected state
 		AssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
 
@@ -100,6 +109,7 @@ CLASS_BASES_META(Editor::AssetIcon)
 END_META;
 CLASS_FIELDS_META(Editor::AssetIcon)
 {
+	PUBLIC_FIELD(assetName);
 	PROTECTED_FIELD(mNameText);
 	PROTECTED_FIELD(mAssetInfo);
 	PROTECTED_FIELD(mSelectedState);
@@ -111,6 +121,8 @@ CLASS_METHODS_META(Editor::AssetIcon)
 
 	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo&);
 	PUBLIC_FUNCTION(const AssetInfo&, GetAssetInfo);
+	PUBLIC_FUNCTION(void, SetAssetName, const WString&);
+	PUBLIC_FUNCTION(WString, GetAssetName);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, SetSelected, bool);

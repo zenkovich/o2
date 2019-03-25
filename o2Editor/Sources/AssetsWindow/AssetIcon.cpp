@@ -17,7 +17,7 @@ namespace Editor
 	}
 
 	AssetIcon::AssetIcon(const AssetIcon& other):
-		Widget(other)
+		Widget(other), assetName(this)
 	{
 		mNameText = FindChildByType<Label>();
 
@@ -46,6 +46,20 @@ namespace Editor
 	const AssetInfo& AssetIcon::GetAssetInfo() const
 	{
 		return mAssetInfo;
+	}
+
+	void AssetIcon::SetAssetName(const WString& name)
+	{
+		if (mNameText)
+			mNameText->SetText(name);
+	}
+
+	WString AssetIcon::GetAssetName() const
+	{
+		if (mNameText)
+			return mNameText->GetText();
+
+		return WString();
 	}
 
 	bool AssetIcon::IsUnderPoint(const Vec2F& point)

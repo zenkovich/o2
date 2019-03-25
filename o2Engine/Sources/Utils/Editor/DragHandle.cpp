@@ -514,6 +514,10 @@ namespace o2
 	void WidgetDragHandle::Draw()
 	{
 		Widget::Draw();
+
+		if (!mResEnabledInHierarchy || mIsClipped)
+			return;
+
 		DragHandle::Draw();
 	}
 
