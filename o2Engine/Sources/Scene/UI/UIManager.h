@@ -23,7 +23,7 @@ namespace o2
 	class Label;
 	class List;
 	class ScrollArea;
-	class UIToggle;
+	class Toggle;
 	class VerticalLayout;
 	class VerticalProgress;
 	class VerticalScrollBar;
@@ -118,7 +118,7 @@ namespace o2
 		DropDown* CreateDropdown(const String& style = "standard");
 
 		// Creates toggle
-		UIToggle* CreateToggle(const WString& caption, const String& style = "standard");
+		Toggle* CreateToggle(const WString& caption, const String& style = "standard");
 
 		// Creates image
 		Image* CreateImage(const String& name);

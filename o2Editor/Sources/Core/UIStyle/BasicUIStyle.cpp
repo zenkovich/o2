@@ -281,7 +281,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCheckboxStyle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
 										  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
@@ -331,7 +331,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildCheckboxWithoutCaptionStyle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
 										  Layout::Based(BaseCorner::Right, Vec2F(20, 20)));

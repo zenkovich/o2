@@ -7,7 +7,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIToggle;
+	class Toggle;
 }
 
 namespace Editor
@@ -30,7 +30,7 @@ namespace Editor
 		IOBJECT(BooleanProperty);
 
 	protected:
-		UIToggle*  mToggle = nullptr; // Toggle 
+		Toggle*  mToggle = nullptr; // Toggle 
 
 	protected:
 		// Copies data of actor from other to this

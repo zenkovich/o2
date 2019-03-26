@@ -11,7 +11,7 @@ namespace o2
 	class CustomDropDown;
 	class DropDown;
 	class HorizontalLayout;
-	class UIToggle;
+	class Toggle;
 	class Widget;
 }
 
@@ -42,18 +42,18 @@ namespace Editor
 		Widget*           mPanelRoot;			// Root panel widget
 
 		Widget*           mPlayPanel;			// Play panel widget
-		UIToggle*           mPlayToggle;		// Play toggle
-		UIToggle*           mPauseToggle;		// Pause toggle
+		Toggle*           mPlayToggle;		// Play toggle
+		Toggle*           mPauseToggle;		// Pause toggle
 		Button*           mStepButton;		// Step button
 		DropDown*         mDevicesList;		// Devices list dropdown
 
 		HorizontalLayout* mEditToolsPanel;	// Tools panel layout
-		UIToggle*           mArrowToolToggle;	// Arrow tool
-		UIToggle*           mBrushToolToggle;	// Brush tool
-		UIToggle*           mMoveToolToggle;	// Move tool
-		UIToggle*           mRotateToolToggle;	// Rotate tool
-		UIToggle*           mScaleToolToggle;	// Scale tool
-		UIToggle*           mFrameToolToggle;	// Frame tool
+		Toggle*           mArrowToolToggle;	// Arrow tool
+		Toggle*           mBrushToolToggle;	// Brush tool
+		Toggle*           mMoveToolToggle;	// Move tool
+		Toggle*           mRotateToolToggle;	// Rotate tool
+		Toggle*           mScaleToolToggle;	// Scale tool
+		Toggle*           mFrameToolToggle;	// Frame tool
 
 		DropDown*         mLayoutSchemesList; // Layouts schemes list
 

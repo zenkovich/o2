@@ -180,7 +180,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create UI/Label", [&]() { CreateObject<Label>("Label"); });
 		mTreeContextMenu->AddItem("Create UI/Image", [&]() { CreateObject<Image>("Image"); });
 		mTreeContextMenu->AddItem("Create UI/Edit box", [&]() { CreateObject<EditBox>("Edit box"); });
-		mTreeContextMenu->AddItem("Create UI/Toggle", [&]() { CreateObject<UIToggle>("Toggle"); });
+		mTreeContextMenu->AddItem("Create UI/Toggle", [&]() { CreateObject<Toggle>("Toggle"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
@@ -638,7 +638,7 @@ namespace Editor
 		searchButton->onClick += THIS_FUNC(OnSearchPressed);
 		upPanel->AddChild(searchButton);
 
-		mListTreeToggle = o2UI.CreateWidget<UIToggle>("list-tree");
+		mListTreeToggle = o2UI.CreateWidget<Toggle>("list-tree");
 		*mListTreeToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
 		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
 		upPanel->AddChild(mListTreeToggle);

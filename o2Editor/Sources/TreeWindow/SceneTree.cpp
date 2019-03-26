@@ -226,7 +226,7 @@ namespace Editor
 	void SceneTree::EnableObjectsGroupReleased(bool value)
 	{
 		SceneEditableObjsVec objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
-			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
+			[](Toggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew EnableAction(objects, value);
 		o2EditorApplication.DoneAction(action);
@@ -238,7 +238,7 @@ namespace Editor
 	void SceneTree::LockObjectsGroupReleased(bool value)
 	{
 		SceneEditableObjsVec objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
-			[](UIToggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
+			[](Toggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew LockAction(objects, value);
 		o2EditorApplication.DoneAction(action);
@@ -369,8 +369,8 @@ namespace Editor
 	void UISceneTreeNode::InitializeControls()
 	{
 		mNameDrawable = GetLayerDrawable<Text>("name");
-		mLockToggle = (UIToggle*)GetChild("lockToggle");
-		mEnableToggle = (UIToggle*)GetChild("enableToggle");
+		mLockToggle = (Toggle*)GetChild("lockToggle");
+		mEnableToggle = (Toggle*)GetChild("enableToggle");
 		mLinkBtn = (Button*)GetChild("linkBtn");
 		mNameEditBox = (EditBox*)GetChild("nameEditBox");
 		mEditState = GetStateObject("edit");

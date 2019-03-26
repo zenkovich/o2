@@ -31,7 +31,7 @@ namespace Editor
 
 	void BooleanProperty::InitializeControls()
 	{
-		mToggle = FindChildByType<UIToggle>();
+		mToggle = FindChildByType<Toggle>();
 		if (mToggle)
 		{
 			mToggle->layout->minHeight = 10;

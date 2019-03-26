@@ -303,7 +303,7 @@ namespace o2
 		friend class MenuPanel;
 		friend class ScrollArea;
 		friend class Spoiler;
-		friend class UIToggle;
+		friend class Toggle;
 		friend class Tree;
 		friend class UITreeNode;
 		friend class VerticalLayout;

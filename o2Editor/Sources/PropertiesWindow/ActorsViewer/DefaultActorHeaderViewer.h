@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	class UIToggle;
+	class Toggle;
 	class EditBox;
 	class Button;
 }

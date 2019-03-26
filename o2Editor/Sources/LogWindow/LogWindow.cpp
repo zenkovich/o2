@@ -83,7 +83,7 @@ namespace Editor
 		clearBtn->onClick = [&]() { OnClearPressed(); };
 		downPanel->AddChild(clearBtn);
 
-		auto messagesToggle = o2UI.CreateWidget<UIToggle>("log messages");
+		auto messagesToggle = o2UI.CreateWidget<Toggle>("log messages");
 		*messagesToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(20, 0));
 		mMessagesCountLabel = messagesToggle->GetLayerDrawable<Text>("caption");
 		mMessagesCountLabel->text = "0";
@@ -91,7 +91,7 @@ namespace Editor
 		messagesToggle->onToggle = [&](bool value) { OnRegularMessagesToggled(value); };
 		downPanel->AddChild(messagesToggle);
 
-		auto warningsToggle = o2UI.CreateWidget<UIToggle>("log warnings");
+		auto warningsToggle = o2UI.CreateWidget<Toggle>("log warnings");
 		*warningsToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(80, 0));
 		mWarningsCountLabel = warningsToggle->GetLayerDrawable<Text>("caption");
 		mWarningsCountLabel->text = "0";
@@ -99,7 +99,7 @@ namespace Editor
 		warningsToggle->onToggle = [&](bool value) { OnWarningMessagesToggled(value); };
 		downPanel->AddChild(warningsToggle);
 
-		auto errorsToggle = o2UI.CreateWidget<UIToggle>("log errors");
+		auto errorsToggle = o2UI.CreateWidget<Toggle>("log errors");
 		*errorsToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(60, 20), Vec2F(140, 0));
 		mErrorsCountLabel = errorsToggle->GetLayerDrawable<Text>("caption");
 		mErrorsCountLabel->text = "0";

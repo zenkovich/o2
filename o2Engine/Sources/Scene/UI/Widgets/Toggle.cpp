@@ -11,11 +11,11 @@
 
 namespace o2
 {
-	UIToggle::UIToggle():
+	Toggle::Toggle():
 		Widget(), DrawableCursorEventsListener(this)
 	{}
 
-	UIToggle::UIToggle(const UIToggle& other) :
+	Toggle::Toggle(const Toggle& other) :
 		Widget(other), DrawableCursorEventsListener(this), mToggleGroup(nullptr), value(this), caption(this),
 		toggleGroup(this)
 	{
@@ -31,19 +31,19 @@ namespace o2
 			SetValueUnknown();
 	}
 
-	UIToggle& UIToggle::operator=(const UIToggle& other)
+	Toggle& Toggle::operator=(const Toggle& other)
 	{
 		Widget::operator=(other);
 		return *this;
 	}
 
-	UIToggle::~UIToggle()
+	Toggle::~Toggle()
 	{
 		if (mToggleGroup && mToggleGroup->mOwner == this)
 			delete mToggleGroup;
 	}
 
-	void UIToggle::Update(float dt)
+	void Toggle::Update(float dt)
 	{
 		Widget::Update(dt);
 
@@ -71,13 +71,13 @@ namespace o2
 		}
 	}
 
-	void UIToggle::SetCaption(const WString& text)
+	void Toggle::SetCaption(const WString& text)
 	{
 		if (mCaptionText)
 			mCaptionText->SetText(text);
 	}
 
-	WString UIToggle::GetCaption() const
+	WString Toggle::GetCaption() const
 	{
 		if (mCaptionText)
 			return mCaptionText->GetText();
@@ -85,7 +85,7 @@ namespace o2
 		return WString();
 	}
 
-	void UIToggle::SetValue(bool value)
+	void Toggle::SetValue(bool value)
 	{
 		if (mValue == value && !mValueUnknown)
 			return;
@@ -107,7 +107,7 @@ namespace o2
 			mToggleGroup->OnToggled(this);
 	}
 
-	void UIToggle::SetValueUnknown()
+	void Toggle::SetValueUnknown()
 	{
 		mValueUnknown = true;
 
@@ -120,22 +120,22 @@ namespace o2
 			*valueState = false;
 	}
 
-	bool UIToggle::IsValueUnknown() const
+	bool Toggle::IsValueUnknown() const
 	{
 		return mValueUnknown;
 	}
 
-	bool UIToggle::GetValue() const
+	bool Toggle::GetValue() const
 	{
 		return mValue;
 	}
 
-	bool UIToggle::IsFocusable() const
+	bool Toggle::IsFocusable() const
 	{
 		return true;
 	}
 
-	void UIToggle::SetToggleGroup(ToggleGroup* toggleGroup)
+	void Toggle::SetToggleGroup(ToggleGroup* toggleGroup)
 	{
 		if (mToggleGroup == toggleGroup)
 			return;
@@ -170,12 +170,12 @@ namespace o2
 		}
 	}
 
-	ToggleGroup* UIToggle::GetToggleGroup() const
+	ToggleGroup* Toggle::GetToggleGroup() const
 	{
 		return mToggleGroup;
 	}
 
-	void UIToggle::OnCursorPressed(const Input::Cursor& cursor)
+	void Toggle::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -196,7 +196,7 @@ namespace o2
 		}
 	}
 
-	void UIToggle::OnCursorReleased(const Input::Cursor& cursor)
+	void Toggle::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -220,7 +220,7 @@ namespace o2
 		}
 	}
 
-	void UIToggle::OnCursorPressBreak(const Input::Cursor& cursor)
+	void Toggle::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		auto pressedState = state["pressed"];
 		if (pressedState)
@@ -234,21 +234,21 @@ namespace o2
 		}
 	}
 
-	void UIToggle::OnCursorEnter(const Input::Cursor& cursor)
+	void Toggle::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = true;
 	}
 
-	void UIToggle::OnCursorExit(const Input::Cursor& cursor)
+	void Toggle::OnCursorExit(const Input::Cursor& cursor)
 	{
 		auto selectState = state["hover"];
 		if (selectState)
 			*selectState = false;
 	}
 
-	void UIToggle::OnKeyPressed(const Input::Key& key)
+	void Toggle::OnKeyPressed(const Input::Key& key)
 	{
 		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
@@ -266,7 +266,7 @@ namespace o2
 		}
 	}
 
-	void UIToggle::OnKeyReleased(const Input::Key& key)
+	void Toggle::OnKeyReleased(const Input::Key& key)
 	{
 		if (mIsFocused && (key.keyCode == VK_SPACE || key.keyCode == VK_RETURN))
 		{
@@ -281,7 +281,7 @@ namespace o2
 
 	}
 
-	void UIToggle::OnDeserialized(const DataNode& node)
+	void Toggle::OnDeserialized(const DataNode& node)
 	{
 		Widget::OnDeserialized(node);
 
@@ -291,9 +291,9 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIToggle::CopyData(const Actor& otherActor)
+	void Toggle::CopyData(const Actor& otherActor)
 	{
-		const UIToggle& other = dynamic_cast<const UIToggle&>(otherActor);
+		const Toggle& other = dynamic_cast<const Toggle&>(otherActor);
 
 		Widget::CopyData(other);
 
@@ -309,7 +309,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void UIToggle::OnLayerAdded(WidgetLayer* layer)
+	void Toggle::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "caption" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
 			mCaptionText = (Text*)layer->GetDrawable();
@@ -318,7 +318,7 @@ namespace o2
 			mBackLayer = layer;
 	}
 
-	void UIToggle::OnResEnableInHierarchyChanged()
+	void Toggle::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
@@ -333,14 +333,14 @@ namespace o2
 			toggle->mToggleGroup = nullptr;
 	}
 
-	void ToggleGroup::AddToggle(UIToggle* toggle)
+	void ToggleGroup::AddToggle(Toggle* toggle)
 	{
 		mToggles.Add(toggle);
 		toggle->mToggleGroup = this;
 		toggle->SetValue(true);
 	}
 
-	void ToggleGroup::RemoveToggle(UIToggle* toggle)
+	void ToggleGroup::RemoveToggle(Toggle* toggle)
 	{
 		mToggles.Remove(toggle);
 		toggle->mToggleGroup = nullptr;
@@ -356,7 +356,7 @@ namespace o2
 		return mToggled;
 	}
 
-	void ToggleGroup::OnToggled(UIToggle* toggle)
+	void ToggleGroup::OnToggled(Toggle* toggle)
 	{
 		if (mType == Type::OnlySingleTrue)
 		{
@@ -379,7 +379,7 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::UIToggle);
+DECLARE_CLASS(o2::Toggle);
 
 ENUM_META_(o2::ToggleGroup::Type, Type)
 {

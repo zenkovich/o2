@@ -65,11 +65,11 @@ namespace Editor
 		*mPlayPanel->layout = WidgetLayout::VerStretch(HorAlign::Left, 3, 2, 200, 10);
 		mPanelRoot->AddChild(mPlayPanel);
 
-		mPlayToggle = o2UI.CreateWidget<UIToggle>("play-stop");
+		mPlayToggle = o2UI.CreateWidget<Toggle>("play-stop");
 		*mPlayToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(5, 1));
 		mPlayPanel->AddChild(mPlayToggle);
 
-		mPauseToggle = o2UI.CreateWidget<UIToggle>("pause");
+		mPauseToggle = o2UI.CreateWidget<Toggle>("pause");
 		*mPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1));
 		mPauseToggle->shortcut = ShortcutKeys(VK_F11);
 		mPlayPanel->AddChild(mPauseToggle);
@@ -133,12 +133,12 @@ namespace Editor
 		mEditToolsPanel->baseCorner = BaseCorner::Center;
 		mPanelRoot->AddChild(mEditToolsPanel);
 
-		mArrowToolToggle = o2UI.CreateWidget<UIToggle>("arrow");
-		mBrushToolToggle = o2UI.CreateWidget<UIToggle>("brush");
-		mMoveToolToggle = o2UI.CreateWidget<UIToggle>("move");
-		mRotateToolToggle = o2UI.CreateWidget<UIToggle>("rotate");
-		mScaleToolToggle = o2UI.CreateWidget<UIToggle>("scale");
-		mFrameToolToggle = o2UI.CreateWidget<UIToggle>("frame");
+		mArrowToolToggle = o2UI.CreateWidget<Toggle>("arrow");
+		mBrushToolToggle = o2UI.CreateWidget<Toggle>("brush");
+		mMoveToolToggle = o2UI.CreateWidget<Toggle>("move");
+		mRotateToolToggle = o2UI.CreateWidget<Toggle>("rotate");
+		mScaleToolToggle = o2UI.CreateWidget<Toggle>("scale");
+		mFrameToolToggle = o2UI.CreateWidget<Toggle>("frame");
 
 		mEditToolsPanel->AddChild(mArrowToolToggle);
 		mEditToolsPanel->AddChild(mBrushToolToggle);

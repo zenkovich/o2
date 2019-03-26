@@ -300,9 +300,9 @@ namespace o2
 		return res;
 	}
 
-	UIToggle* UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
+	Toggle* UIManager::CreateToggle(const WString& caption, const String& style /*= "standard"*/)
 	{
-		auto res = CreateWidget<UIToggle>(style);
+		auto res = CreateWidget<Toggle>(style);
 		res->caption = caption;
 		res->name = caption + " toggle";
 		return res;

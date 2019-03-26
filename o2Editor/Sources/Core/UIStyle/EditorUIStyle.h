@@ -49,6 +49,11 @@ namespace Editor
 		void RebuildRedEditBoxStyle();
 		void RebuildGreenEditBoxStyle();
 
+		void RebuildRecordMenuToggle();
+		void RebuildPlayStopMenuToggle();
+		void RebuildLoopMenuToggle();
+		void RebuildAddKeyMenuButton();
+
 		void RebuildFloatProperty();
 		void RebuildRedFloatProperty();
 		void RebuildGreenFloatProperty();
@@ -244,6 +249,10 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildEditorDropdown);
 	PUBLIC_FUNCTION(void, RebuildRedEditBoxStyle);
 	PUBLIC_FUNCTION(void, RebuildGreenEditBoxStyle);
+	PUBLIC_FUNCTION(void, RebuildRecordMenuToggle);
+	PUBLIC_FUNCTION(void, RebuildPlayStopMenuToggle);
+	PUBLIC_FUNCTION(void, RebuildLoopMenuToggle);
+	PUBLIC_FUNCTION(void, RebuildAddKeyMenuButton);
 	PUBLIC_FUNCTION(void, RebuildFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildRedFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);

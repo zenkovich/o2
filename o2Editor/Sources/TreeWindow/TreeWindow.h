@@ -9,7 +9,7 @@ namespace o2
 	class UIButtonGroup;
 	class UIContextMenu;
 	class EditBox;
-	class UIToggle;
+	class Toggle;
 	class ToggleGroup;
 }
 
@@ -49,7 +49,7 @@ namespace Editor
 		bool IsWidgetsInternalChildrenVisible() const;
 
 	protected:
-		UIToggle*      mListTreeToggle;		// TOggle between list and tree views
+		Toggle*      mListTreeToggle;		// TOggle between list and tree views
 		EditBox*     mSearchEditBox;		// Search actors edit box
 		SceneTree*   mSceneTree;			// Main actors tree
 		UIContextMenu* mTreeContextMenu;	// Context menu

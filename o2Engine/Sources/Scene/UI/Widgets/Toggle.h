@@ -9,7 +9,7 @@ namespace o2
 {
 	class Text;
 	class Sprite;
-	class UIToggle;
+	class Toggle;
 
 	// ------------
 	// Toggle group
@@ -17,7 +17,7 @@ namespace o2
 	class ToggleGroup
 	{
 	public:
-		typedef Vector<UIToggle*> TogglesVec;
+		typedef Vector<Toggle*> TogglesVec;
 		enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };
 
 	public:
@@ -31,10 +31,10 @@ namespace o2
 		~ToggleGroup();
 
 		// Adds toggle to group
-		void AddToggle(UIToggle* toggle);
+		void AddToggle(Toggle* toggle);
 
 		// Removes toggle from group
-		void RemoveToggle(UIToggle* toggle);
+		void RemoveToggle(Toggle* toggle);
 
 		// Returns all toggles in group
 		const TogglesVec& GetToggles() const;
@@ -47,20 +47,20 @@ namespace o2
 		bool       mPressedValue = false; // Group pressed value
 		TogglesVec mToggles;              // All toggles in group
 		TogglesVec mToggled;              // Toggled toggles in group
-		UIToggle*  mOwner = nullptr;      // Owner toggle
+		Toggle*  mOwner = nullptr;      // Owner toggle
 		Type       mType;                 // Toggle group type
 
 	protected:
 		// It is called when some toggle was toggled, 
-		void OnToggled(UIToggle* toggle);
+		void OnToggled(Toggle* toggle);
 
-		friend class UIToggle;
+		friend class Toggle;
 	};
 
-	class UIToggle: public Widget, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class Toggle: public Widget, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
-		PROPERTIES(UIToggle);
+		PROPERTIES(Toggle);
 		PROPERTY(bool, value, SetValue, GetValue);                             // Current state value property
 		PROPERTY(WString, caption, SetCaption, GetCaption);                    // Caption property. Searches text layer with name "caption" or creates them if he's not exist
 		PROPERTY(ToggleGroup*, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
@@ -72,16 +72,16 @@ namespace o2
 		Function<void(bool)>     onToggleByUser; // Toggle by user event 
 
 		// Default constructor
-		UIToggle();
+		Toggle();
 
 		// Copy-constructor
-		UIToggle(const UIToggle& other);
+		Toggle(const Toggle& other);
 
 		// Assign operator
-		UIToggle& operator=(const UIToggle& other);
+		Toggle& operator=(const Toggle& other);
 
 		// Destructor
-		~UIToggle();
+		~Toggle();
 
 		// Updates drawables, states and widget
 		void Update(float dt) override;
@@ -113,7 +113,7 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
 
-		SERIALIZABLE(UIToggle);
+		SERIALIZABLE(Toggle);
 
 	protected:
 		bool           mValue = false;          // Current value @SERIALIZABLE
@@ -161,14 +161,14 @@ namespace o2
 	};
 }
 
-CLASS_BASES_META(o2::UIToggle)
+CLASS_BASES_META(o2::Toggle)
 {
 	BASE_CLASS(o2::Widget);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIToggle)
+CLASS_FIELDS_META(o2::Toggle)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(caption);
@@ -184,7 +184,7 @@ CLASS_FIELDS_META(o2::UIToggle)
 	PROTECTED_FIELD(mToggleGroup);
 }
 END_META;
-CLASS_METHODS_META(o2::UIToggle)
+CLASS_METHODS_META(o2::Toggle)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);

@@ -8,7 +8,7 @@ namespace o2
 	class SceneEditableObject;
 	class Button;
 	class EditBox;
-	class UIToggle;
+	class Toggle;
 	class ToggleGroup;
 }
 
@@ -187,8 +187,8 @@ namespace Editor
 		SceneEditableObject* mTargetObject = nullptr; // Target object
 
 		Text*                mNameDrawable = nullptr; // Object name drawable
-		UIToggle*            mLockToggle = nullptr;   // Lock toggle
-		UIToggle*            mEnableToggle = nullptr; // Enable toggle
+		Toggle*            mLockToggle = nullptr;   // Lock toggle
+		Toggle*            mEnableToggle = nullptr; // Enable toggle
 		Button*            mLinkBtn = nullptr;      // View link button
 		EditBox*           mNameEditBox = nullptr;  // Object's name edit box
 		WidgetState*       mEditState = nullptr;    // Object's name edit state

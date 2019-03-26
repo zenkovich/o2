@@ -54,6 +54,9 @@ namespace Editor
 
 	void FloatProperty::UpdateValueView()
 	{
+		if (!mEditBox)
+			return;
+
 		if (mValuesDifferent)
 			mEditBox->text = "--";
 		else

@@ -200,7 +200,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildPlayStopButtonStyle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
 		auto stopRootIconLayer = sample->AddLayer("stopRootIcon", nullptr);
 
@@ -245,7 +245,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildPauseButtonStyle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		auto pauseIconRootLayer = sample->AddLayer("regular", nullptr);
 		auto pauseIconLayer = pauseIconRootLayer->AddChildLayer("icon", mnew Sprite("ui/UI_pause_btn_regular.png"),
 																Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
@@ -352,7 +352,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildArrowToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -377,7 +377,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildBrushToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -402,7 +402,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildMoveToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -427,7 +427,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRotateToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -452,7 +452,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildScaleToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -477,7 +477,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildFrameToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
@@ -529,7 +529,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildListTreeToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -4, -5, -5));
 
@@ -592,7 +592,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorsTreeNodeEnableToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 
 		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
 
@@ -615,7 +615,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorsTreeLockToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 
 		auto halfHideLayer = sample->AddLayer("halfHide", nullptr);
 
@@ -700,12 +700,12 @@ namespace Editor
 		nameLayer->layout = Layout::BothStretch(10, 0, 55, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
-		auto actorNodeEnableToggle = o2UI.CreateWidget<UIToggle>("actor node enable");
+		auto actorNodeEnableToggle = o2UI.CreateWidget<Toggle>("actor node enable");
 		actorNodeEnableToggle->name = "enableToggle";
 		*actorNodeEnableToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-5, 0));
 		itemSample->AddChild(actorNodeEnableToggle);
 
-		auto actorNodeLockToggle = o2UI.CreateWidget<UIToggle>("actor node lock");
+		auto actorNodeLockToggle = o2UI.CreateWidget<Toggle>("actor node lock");
 		actorNodeLockToggle->name = "lockToggle";
 		*actorNodeLockToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-20, 0));
 		itemSample->AddChild(actorNodeLockToggle);
@@ -881,7 +881,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildMessagesDownPanelToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -5, -5, -5));
 
@@ -927,7 +927,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildWarningsDownPanelToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -5, -5, -5));
 
@@ -973,7 +973,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildErrorsDownPanelToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
 										  Layout::BothStretch(-4, -5, -5, -5));
 
@@ -1489,7 +1489,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadEnableToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI2_enable_toggle_big.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
@@ -1540,7 +1540,7 @@ namespace Editor
 		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIToggle* toggle = o2UI.CreateToggle("empty", "actor head enable");
+		Toggle* toggle = o2UI.CreateToggle("empty", "actor head enable");
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
@@ -1625,7 +1625,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadLockToggle()
 	{
-		UIToggle* sample = mnew UIToggle();
+		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
 
 		auto rootLayer = sample->AddLayer("root", nullptr);
@@ -1669,7 +1669,7 @@ namespace Editor
 		auto layout = mnew Widget();
 		sample->AddChild(layout);
 
-		UIToggle* toggle = o2UI.CreateToggle("empty", "actor head lock");
+		Toggle* toggle = o2UI.CreateToggle("empty", "actor head lock");
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
@@ -2155,6 +2155,176 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "green singleline");
 	}
 
+	void EditorUIStyleBuilder::RebuildRecordMenuToggle()
+	{
+
+		Toggle* sample = mnew Toggle();
+
+		auto regular = sample->AddLayer("regular", nullptr);
+
+		auto regularBackLayer = regular->AddChildLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+													   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto regularSelectLayer = regular->AddChildLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+														 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto regularPressedLayer = regular->AddChildLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+														  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto toggled = sample->AddLayer("toggled", nullptr);
+
+		auto toggledBackLayer = toggled->AddChildLayer("regularBack", mnew Sprite("ui/UI4_menu_toggled.png"),
+													   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto toggledSelectLayer = toggled->AddChildLayer("selectBack", mnew Sprite("ui/UI4_menu_toggled_hover.png"),
+														 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto toggledPressedLayer = toggled->AddChildLayer("pressedBack", mnew Sprite("ui/UI4_menu_toggled_pressed.png"),
+														  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto recordIcon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_Record_icon.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		// hover
+		Animation hoverAnim = Animation::EaseInOut(sample, &regularSelectLayer->transparency, 0.0f, 1.0f, 0.1f);
+		*hoverAnim.AddAnimationValue(&toggledSelectLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		// pressed
+		Animation pressedAnim = Animation::EaseInOut(sample, &regularPressedLayer->transparency, 0.0f, 1.0f, 0.1f);
+		*pressedAnim.AddAnimationValue(&toggledPressedLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		// focused
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		// value
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &regular->transparency, 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&toggled->transparency) =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "menu record");
+	}
+
+	void EditorUIStyleBuilder::RebuildPlayStopMenuToggle()
+	{
+		Toggle* sample = mnew Toggle();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto playLayer = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_anim_play.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto pauseLayer = sample->AddLayer("pauseIcon", mnew Sprite("ui/UI4_anim_pause.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &pauseLayer->transparency, 0.0f, 1.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&playLayer->transparency) =
+			AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "menu play-stop");
+	}
+
+	void EditorUIStyleBuilder::RebuildLoopMenuToggle()
+	{
+		Toggle* sample = mnew Toggle();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto loopLayer = sample->AddLayer("listIcon", mnew Sprite("ui/UI4_anim_loop.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
+
+		auto nonLoopLayer = sample->AddLayer("treeIcon", mnew Sprite("ui/UI4_anim_not_loop.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnAnim = Animation::EaseInOut(sample, &nonLoopLayer->transparency, 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue(&loopLayer->transparency) =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "menu loop-nonloop");
+	}
+
+	void EditorUIStyleBuilder::RebuildAddKeyMenuButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_add_key.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu add key");
+	}
+
 	void EditorUIStyleBuilder::RebuildSpoilerWithHead()
 	{
 		auto sample = mnew SpoilerWithHead();
@@ -2398,7 +2568,7 @@ namespace Editor
 		auto layout = mnew Widget();
 		sample->AddChild(layout);
 		
-		UIToggle* toggle = o2UI.CreateToggle("", "without caption");
+		Toggle* toggle = o2UI.CreateToggle("", "without caption");
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
