@@ -262,6 +262,20 @@ namespace Editor
 		return mTabWidth;
 	}
 
+	void DockableWindow::SetTabActive()
+	{
+		if (mTabState)
+		{
+			if (auto parentDock = dynamic_cast<DockWindowPlace*>(mParent))
+				parentDock->SetActiveTab(this);
+		}
+	}
+
+	bool DockableWindow::IsTabActive() const
+	{
+		return mDocked && mTabActive;
+	}
+
 	void DockableWindow::SetAutoCalcuclatingTabWidth(bool enable)
 	{
 		mAutoCalculateTabWidth = enable;
@@ -311,12 +325,7 @@ namespace Editor
 	void DockableWindow::OnFocused()
 	{
 		Window::OnFocused();
-
-		if (mTabState)
-		{
-			if (auto parentDock = dynamic_cast<DockWindowPlace*>(mParent))
-				parentDock->SetActiveTab(this);
-		}
+		SetTabActive();
 	}
 
 	void DockableWindow::InitializeDockFrameAppearanceAnim()

@@ -22,6 +22,7 @@ namespace Editor
 		public:
 			RectF                   anchors; // @SERIALIZABLE
 			Vector<String>          windows; // @SERIALIZABLE
+			String                  active;  // @SERIALIZABLE
 			Vector<WindowDockPlace> childs;	 // @SERIALIZABLE
 
 			void RetrieveLayout(Widget* widget);
@@ -79,6 +80,7 @@ CLASS_FIELDS_META(Editor::WindowsLayout::WindowDockPlace)
 {
 	PUBLIC_FIELD(anchors).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(active).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(childs).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;

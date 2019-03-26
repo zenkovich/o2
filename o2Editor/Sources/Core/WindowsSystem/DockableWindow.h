@@ -62,6 +62,12 @@ namespace Editor
 		// Sets tab width
 		float GetTabWidth() const;
 
+		// Sets current window tab as active tab
+		void SetTabActive();
+
+		// Returns is this window active and tabbed and tab is active
+		bool IsTabActive() const;
+
 		// Sets Automatically calculating tab width when changing caption
 		void SetAutoCalcuclatingTabWidth(bool enable);
 
@@ -201,6 +207,8 @@ CLASS_METHODS_META(Editor::DockableWindow)
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, SetTabWidth, float);
 	PUBLIC_FUNCTION(float, GetTabWidth);
+	PUBLIC_FUNCTION(void, SetTabActive);
+	PUBLIC_FUNCTION(bool, IsTabActive);
 	PUBLIC_FUNCTION(void, SetAutoCalcuclatingTabWidth, bool);
 	PUBLIC_FUNCTION(bool, IsAutoCalcuclatingTabWidth);
 	PUBLIC_FUNCTION(void, PlaceDock, DockWindowPlace*);

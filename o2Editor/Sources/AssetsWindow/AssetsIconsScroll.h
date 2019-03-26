@@ -113,13 +113,13 @@ namespace Editor
 						        
 		String                  mCurrentPath = "_";          // Current viewing path
 						        
-		GridLayout*           mGrid = nullptr;             // Assets icons grid
+		GridLayout*             mGrid = nullptr;             // Assets icons grid
 		UIContextMenu*          mContextMenu = nullptr;      // Assets Context menu
 						        
 		AssetsIconsVec          mSelectedAssetsIcons;        // Selected assets icons
 		AssetsVec               mSelectedPreloadedAssets;    // Preloaded selected assets
 						        
-		AssetIcon*            mHightlightIcon = nullptr;   // Current hightlighting asset icon
+		AssetIcon*              mHightlightIcon = nullptr;   // Current hightlighting asset icon
 		Animation               mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
 		Sprite*                 mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
 		Layout                  mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
@@ -133,7 +133,7 @@ namespace Editor
 						        
 		bool                    mIsDraggingIcons = false;    // Is dragging icons
 		bool                    mDragEnded = false;          // Is dragging ended
-		AssetIcon*            mDragIcon = nullptr;         // Dragging icon
+		AssetIcon*              mDragIcon = nullptr;         // Dragging icon
 		Vec2F                   mDragOffset;                 // Dragging offset from cursor to icon center
 		SceneEditableObjectsVec mInstSceneDragObjects;       // Instantiated objects when dragging asset above scene
 

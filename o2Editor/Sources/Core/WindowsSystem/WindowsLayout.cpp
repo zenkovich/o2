@@ -27,6 +27,9 @@ namespace Editor
 				else if (child->GetType() == TypeOf(DockableWindow) && child->IsEnabled())
 				{
 					windows.Add(child->name);
+
+					if (dynamic_cast<DockableWindow*>(child)->IsTabActive())
+						active = child->name;
 				}
 			}
 		}
@@ -112,6 +115,7 @@ namespace Editor
 			RestoreDock(&child, newDock);
 		}
 
+		DockableWindow* activeTabWindow = nullptr;
 		for (auto wnd : dockDef->windows)
 		{
 			auto window =
@@ -126,10 +130,16 @@ namespace Editor
 				*dockWnd->layout = WidgetLayout::BothStretch();
 				dockWnd->SetDocked(true);
 				dockWnd->Show();
+
+				if (dockDef->active == wnd)
+					activeTabWindow = dockWnd;
 			}
 		}
 
 		dockWidget->ArrangeChildWindows();
+
+		if (activeTabWindow)
+			activeTabWindow->SetTabActive();
 
 		CleanEmptyDocks(dockWidget);
 	}

@@ -225,8 +225,8 @@ namespace Editor
 		Vector<Widget*> addingIcons;
 		for (auto asset : folderAssetsInfos)
 		{
-			AssetIcon* assetIcon; 
-			
+			AssetIcon* assetIcon;
+
 			if (asset.assetType == &TypeOf(FolderAsset))
 			{
 				assetIcon = GetAssetIconFromPool("folder");
@@ -257,7 +257,7 @@ namespace Editor
 				assetIcon = GetAssetIconFromPool("standard");
 				assetIcon->name = "standard";
 			}
-			
+
 			assetIcon->SetAssetInfo(asset);
 			assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.first == asset.id; }));
 			assetIcon->SetSelectionGroup(this);
@@ -488,16 +488,6 @@ namespace Editor
 		{
 			if (!o2Input.IsKeyDown(VK_CONTROL))
 				DeselectAllAssets();
-
-			AssetIcon* iconUnderCursor = GetIconUnderPoint(cursor.position);
-			if (iconUnderCursor && !mSelectedAssetsIcons.ContainsPred([=](auto x) { return x == iconUnderCursor; }))
-			{
-				iconUnderCursor->SetState("assetSelection", true);
-				iconUnderCursor->SetSelected(true);
-				mSelectedAssetsIcons.Add(iconUnderCursor);
-
-				OnAssetsSelected();
-			}
 		}
 	}
 
@@ -516,7 +506,7 @@ namespace Editor
 		mDragIcon->ExcludeFromScene();
 		mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
-		if (mSelectedAssetsIcons.Count() > 1) 
+		if (mSelectedAssetsIcons.Count() > 1)
 			mDragIcon->assetName = (String)mSelectedAssetsIcons.Count() + " items";
 	}
 
@@ -718,7 +708,7 @@ namespace Editor
 		mContextMenu->AddItem("Delete", [&]() { OnContextDeletePressed(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 
 		onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
-		onUnfocused = [&]() { 
+		onUnfocused = [&]() {
 			mContextMenu->SetItemsMinPriority(); };
 
 		AddChild(mContextMenu);
@@ -838,7 +828,7 @@ namespace Editor
 		{
 			if (child->layout->IsPointInside(point))
 			{
-				AssetIcon* icon = (AssetIcon*)child;
+				AssetIcon* icon = dynamic_cast<AssetIcon*>(child);
 				return icon;
 			}
 		}
@@ -930,7 +920,7 @@ namespace Editor
 
 		mGrid->AddChild(assetIcon, 0);
 
-		StartAssetRenaming(assetIcon, "New folder", [&](const String& name) 
+		StartAssetRenaming(assetIcon, "New folder", [&](const String& name)
 		{
 			o2EditorAssets.CreateFolderAsset(mCurrentPath, name);
 			o2EditorAssets.SelectAsset(mCurrentPath + "/" + name);
@@ -1011,8 +1001,21 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor)
 	{
-		if (!o2Input.IsKeyDown(VK_CONTROL))
+		if (!o2Input.IsKeyDown(VK_CONTROL) && !o2Input.IsKeyDown(VK_SHIFT))
 			DeselectAllAssets();
+
+		if (o2Input.IsKeyDown(VK_SHIFT) && !mSelectedAssetsIcons.IsEmpty())
+		{
+			auto selectIcon = dynamic_cast<AssetIcon*>(object);
+			int iconUnderCursorIdx = mGrid->GetChildWidgets().Find(dynamic_cast<Widget*>(selectIcon));
+			int lastSelectedIdx = mGrid->GetChildWidgets().Find(dynamic_cast<Widget*>(mSelectedAssetsIcons.Last()));
+
+			int begin = Math::Min(iconUnderCursorIdx, lastSelectedIdx);
+			int end = Math::Max(iconUnderCursorIdx, lastSelectedIdx);
+
+			for (int i = begin; i <= end; i++)
+				Select(dynamic_cast<AssetIcon*>(mGrid->GetChildWidgets()[i]), i == end);
+		}
 
 		Select(object);
 	}
@@ -1056,8 +1059,8 @@ namespace Editor
 		Select(object, true);
 	}
 
-	void AssetsIconsScrollArea::StartAssetRenaming(AssetIcon* icon, const String& name, 
-													 const Function<void(const String&)>& onCompleted)
+	void AssetsIconsScrollArea::StartAssetRenaming(AssetIcon* icon, const String& name,
+												   const Function<void(const String&)>& onCompleted)
 	{
 		icon->SetState("edit", true);
 
