@@ -157,23 +157,23 @@ namespace Editor
 
 	void DockWindowPlace::SetActiveTab(DockableWindow* window)
 	{
-		Vector<DockableWindow*> windows;
+		Vector<DockableWindow*> tabWindows;
 		for (auto child : mChildren)
 		{
 			if (child->GetType() == TypeOf(DockableWindow))
-				windows.Add(dynamic_cast<DockableWindow*>(child));
+				tabWindows.Add(dynamic_cast<DockableWindow*>(child));
 		}
 
-		for (auto window : windows)
+		mDrawingChildren.SortBy<int>([](Actor* child) { return dynamic_cast<DockableWindow*>(child)->mTabPosition; });
+
+		for (auto tabWindow : tabWindows)
 		{
-			if (window->mTabActive)
+			if (tabWindow->mTabActive)
 			{
-				window->mTabActive = false;
+				tabWindow->mTabActive = false;
 
-				if (auto state = window->GetStateObject("tabActive"))
+				if (auto state = tabWindow->GetStateObject("tabActive"))
 					state->SetState(false);
-
-				break;
 			}
 		}
 
