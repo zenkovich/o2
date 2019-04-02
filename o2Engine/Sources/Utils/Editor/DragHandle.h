@@ -131,6 +131,9 @@ namespace o2
 		// Returns pressed sprite
 		Sprite* GetPressedSprite() const;
 
+		// Sets size to all available sprites
+		void SetSpritesSize(const Vec2F& size);
+
 		SERIALIZABLE(DragHandle);
 
 	protected:
@@ -214,6 +217,7 @@ namespace o2
 	public:
 		Function<Vec2F(const Vec2F&)> widgetOffsetToLocalTransformFunc; // Widget offset relative to parent to local transformation function
 		Function<Vec2F(const Vec2F&)> localToWidgetOffsetTransformFunc; // Local position to widget offset relative to parent transformation function
+		Function<void()> onLayoutUpdated; // It is called when this layout were updated
 
 		// Default constructor
 		WidgetDragHandle();
@@ -438,6 +442,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Sprite*, GetHoverSprite);
 	PUBLIC_FUNCTION(void, SetPressedSprite, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetPressedSprite);
+	PUBLIC_FUNCTION(void, SetSpritesSize, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -465,6 +470,7 @@ CLASS_FIELDS_META(o2::WidgetDragHandle)
 {
 	PUBLIC_FIELD(widgetOffsetToLocalTransformFunc);
 	PUBLIC_FIELD(localToWidgetOffsetTransformFunc);
+	PUBLIC_FIELD(onLayoutUpdated);
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetDragHandle)

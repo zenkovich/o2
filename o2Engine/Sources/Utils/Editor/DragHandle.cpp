@@ -444,6 +444,21 @@ namespace o2
 		return mPressedSprite;
 	}
 
+	void DragHandle::SetSpritesSize(const Vec2F& size)
+	{
+		if (mRegularSprite)
+			mRegularSprite->SetSize(size);
+
+		if (mHoverSprite)
+			mHoverSprite->SetSize(size);
+
+		if (mPressedSprite)
+			mPressedSprite->SetSize(size);
+
+		if (mSelectedSprite)
+			mSelectedSprite->SetSize(size);
+	}
+
 	void DragHandle::SetSelectionGroup(ISelectableDragHandlesGroup* group)
 	{
 		if (mSelectGroup)
@@ -539,6 +554,7 @@ namespace o2
 
 	void WidgetDragHandle::UpdateLayersLayouts()
 	{
+		onLayoutUpdated();
 		UpdateScreenPosition();
 	}
 

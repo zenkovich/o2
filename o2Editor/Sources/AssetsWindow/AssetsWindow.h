@@ -123,17 +123,17 @@ namespace Editor
 
 		float                    mFoldersTreeShowCoef;    // Animating show folders tree coefficient (0...1)
 
-		Button*                mFilterButton;           // Search filter button
-		EditBox*               mSearchEditBox;          // Search edit box
-		Label*                 mSelectedAssetPathLabel; // Selected asset path label
+		Button*                  mFilterButton;           // Search filter button
+		EditBox*                 mSearchEditBox;          // Search edit box
+		Label*                   mSelectedAssetPathLabel; // Selected asset path label
 
-		AssetsFoldersTree*     mFoldersTree;            // Folders tree			
+		AssetsFoldersTree*       mFoldersTree;            // Folders tree			
 		Animation                mFoldersTreeShowAnim;    // Folders tree visible animation
 		bool                     mFoldersTreeVisible;     // Is folders tree visible
 
-		AssetsIconsScrollArea* mAssetsGridScroll;       // Assets grid scroll
+		AssetsIconsScrollArea*   mAssetsGridScroll;       // Assets grid scroll
 
-		Tree*                  mAssetsTree;             // Assets tree
+		Tree*                    mAssetsTree;             // Assets tree
 
 		CursorEventsArea         mSeparatorHandle;        // Folders tree and assets tree/grid separator handle
 		float                    mSeparatorCoef;          // Separator coefficient, means anchors for tree nad assets scroll
