@@ -7,6 +7,7 @@
 #include "Core/Properties/Basic/ColorProperty.h"
 #include "Core/Properties/Basic/EnumProperty.h"
 #include "Core/Properties/Basic/FloatProperty.h"
+#include "Core/Properties/Basic/Vector2FloatProperty.h"
 #include "Core/Properties/Properties.h"
 #include "Scene/UI/Widgets/Spoiler.h"
 #include "Scene/UI/UIManager.h"
@@ -36,6 +37,12 @@ namespace Editor
 
 		mImageProperty = dynamic_cast<ImageAssetProperty*>(
 			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "image", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+
+		mSizePivotProperty = dynamic_cast<Vec2FProperty*>(
+			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "szPivot", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
+
+		mPivotProperty = dynamic_cast<Vec2FProperty*>(
+			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "pivot", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 
 		mColorProperty = dynamic_cast<ColorProperty*>(
 			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "color", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));

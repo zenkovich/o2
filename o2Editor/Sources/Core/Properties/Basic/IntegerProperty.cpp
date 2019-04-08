@@ -74,6 +74,9 @@ namespace Editor
 
 	void IntegerProperty::OnKeyReleased(const Input::Key& key)
 	{
+		if (!mEditBox)
+			return;
+
 		if (mEditBox && !mEditBox->IsFocused())
 			return;
 

@@ -21,6 +21,7 @@ namespace Editor
 	class ColorProperty;
 	class EnumProperty;
 	class BorderIProperty;
+	class Vec2FProperty;
 
 	// ----------------------
 	// Editor sprite property
@@ -44,20 +45,22 @@ namespace Editor
 
 		FieldPropertiesInfo mFieldProperties; // Field properties information
 
-		VerticalLayout*   mHiddenProperties = nullptr; // Hidden properties
+		VerticalLayout*     mHiddenProperties = nullptr; // Hidden properties
 
 		ImageAssetProperty* mImageProperty = nullptr;
 		ColorProperty*      mColorProperty = nullptr;
 		FloatProperty*      mAlphaProperty = nullptr;
+		Vec2FProperty*      mSizePivotProperty = nullptr;
+		Vec2FProperty*      mPivotProperty = nullptr;
 		EnumProperty*       mModeProperty = nullptr;
 
-		Spoiler*          mFillPropertiesSpoiler = nullptr;
+		Spoiler*            mFillPropertiesSpoiler = nullptr;
 		FloatProperty*      mFillProperty = nullptr;
 
-		Spoiler*          mSlicedPropertiesSpoiler = nullptr;
+		Spoiler*            mSlicedPropertiesSpoiler = nullptr;
 		BorderIProperty*    mSliceBorderProperty = nullptr;
 
-		Spoiler*          mTiledPropertiesSpoiler = nullptr;
+		Spoiler*            mTiledPropertiesSpoiler = nullptr;
 		FloatProperty*      mTileScaleProperty = nullptr;
 
 	protected:
@@ -78,6 +81,8 @@ CLASS_FIELDS_META(Editor::SpriteViewer)
 	PROTECTED_FIELD(mImageProperty);
 	PROTECTED_FIELD(mColorProperty);
 	PROTECTED_FIELD(mAlphaProperty);
+	PROTECTED_FIELD(mSizePivotProperty);
+	PROTECTED_FIELD(mPivotProperty);
 	PROTECTED_FIELD(mModeProperty);
 	PROTECTED_FIELD(mFillPropertiesSpoiler);
 	PROTECTED_FIELD(mFillProperty);
