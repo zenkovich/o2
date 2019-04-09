@@ -48,6 +48,19 @@ void AnimationWindow::InitializeWindow()
 
 	InitializeUpPanel();
 	InitializeSeparatorHandle();
+
+	mTimeline = mnew AnimationTimeline();
+	*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
+
+	mTimeScroll = o2UI.CreateHorScrollBar();
+	*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 5, 5, 20, 0);
+	mTimeline->AddChild(mTimeScroll);
+
+	mTimeScroll->minValue = 0.0f;
+	mTimeScroll->maxValue = 100.0f;
+	mTimeScroll->onSmoothChange = [&](float value) { mTimeline->SetScroll(value); };
+
+	mWindow->AddChild(mTimeline);
 }
 
 void AnimationWindow::InitializeUpPanel()
@@ -107,6 +120,7 @@ void AnimationWindow::InitializeSeparatorHandle()
 	mTreeSeparatorHandle->onChangedPos = [&](const Vec2F& point) {
 		mTreeViewWidth = point.x;
 		mControlsPanel->layout->right = mTreeViewWidth;
+		mTimeline->layout->left = mTreeViewWidth;
 	};
 
 	mTreeSeparatorHandle->checkPositionFunc = [&](const Vec2F& point) {

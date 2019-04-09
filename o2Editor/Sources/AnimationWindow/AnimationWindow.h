@@ -8,6 +8,7 @@ namespace o2
 {
 	class Button;
 	class EditBox;
+	class HorizontalScrollBar;
 	class Toggle;
 	class WidgetDragHandle;
 }
@@ -46,6 +47,7 @@ namespace Editor
 		EditBox* mSearchEditBox = nullptr;
 
 		AnimationTimeline* mTimeline = nullptr;
+		HorizontalScrollBar* mTimeScroll = nullptr;
 
 		AnimationTree* mTree = nullptr;
 
@@ -90,6 +92,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mFilterButton);
 	PROTECTED_FIELD(mSearchEditBox);
 	PROTECTED_FIELD(mTimeline);
+	PROTECTED_FIELD(mTimeScroll);
 	PROTECTED_FIELD(mTree);
 	PROTECTED_FIELD(mTreeSeparatorHandle);
 }
