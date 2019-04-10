@@ -53,12 +53,10 @@ void AnimationWindow::InitializeWindow()
 	*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
 
 	mTimeScroll = o2UI.CreateHorScrollBar();
-	*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 5, 5, 20, 0);
-	mTimeline->AddChild(mTimeScroll);
+	*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 20, 0);
 
-	mTimeScroll->minValue = 0.0f;
-	mTimeScroll->maxValue = 100.0f;
-	mTimeScroll->onSmoothChange = [&](float value) { mTimeline->SetScroll(value); };
+	mTimeline->SetScrollBar(mTimeScroll);
+	mTimeline->SetDuration(100.0f);
 
 	mWindow->AddChild(mTimeline);
 }

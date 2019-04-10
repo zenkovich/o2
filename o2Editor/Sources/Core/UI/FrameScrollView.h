@@ -54,7 +54,7 @@ namespace Editor
 	protected:
 		HorizontalScrollBar* mHorScrollbar = nullptr; // Horizontal view scrollbar @SERIALIZABLE
 		VerticalScrollBar*   mVerScrollbar = nullptr; // Vertical view scrollbar @SERIALIZABLE
-		RectF                  mAvailableArea;          // Available viewing area @SERIALIZABLE
+		RectF                mAvailableArea;          // Available viewing area @SERIALIZABLE
 
 	protected:
 		// Copies data of actor from other to this

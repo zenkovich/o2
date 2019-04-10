@@ -3,11 +3,12 @@
 
 #include "Application/Input.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widgets/HorizontalScrollBar.h"
 
 namespace Editor
 {
 
-	AnimationTimeline::AnimationTimeline():
+	AnimationTimeline::AnimationTimeline() :
 		Widget()
 	{
 		mTextFont = FontRef("stdFont.ttf");
@@ -19,7 +20,7 @@ namespace Editor
 		mText->height = 8;
 	}
 
-	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other):
+	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
 		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>())
 	{}
 
@@ -44,14 +45,14 @@ namespace Editor
 	{
 		Widget::Draw();
 
-		float beginPos = mScaleOffset - mScroll*mOneSecondDefaultSize*mSmoothScale;
-		float posDelta = mOneSecondDefaultSize*mSmoothScale/10.0f;
+		float beginPos = mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom;
+		float posDelta = mOneSecondDefaultSize*mSmoothViewZoom/10.0f;
 
-		int bigLinePeriod = 10.0f;
+		int bigLinePeriod = 10;
 		float bigLineTimeAmount = 0.1f;
 		if (posDelta < 5.0f)
 		{
-			bigLinePeriod = 5.0f;
+			bigLinePeriod = 5;
 			bigLineTimeAmount = 1.0f;
 			posDelta *= 10.0f;
 		}
@@ -88,37 +89,157 @@ namespace Editor
 	{
 		Widget::Update(dt);
 
-		if (!Math::Equals(mSmoothScale, mScale))
-			mSmoothScale = Math::Lerp(mSmoothScale, mScale, dt*mScaleSmoothLerpCoef);
+		UpdateZooming(dt);
+		UpdateScrolling(dt);
+	}
+
+	void AnimationTimeline::UpdateZooming(float dt)
+	{
+		if (!Math::Equals(mSmoothViewZoom, mViewZoom))
+		{
+			mSmoothViewZoom = Math::Lerp(mSmoothViewZoom, mViewZoom, dt*mScaleSmoothLerpCoef);
+			UpdateScrollBarHandleSize();
+		}
 
 		if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()))
-			mScale = Math::Clamp(mScale/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
+			mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
+	}
+
+	void AnimationTimeline::UpdateScrollBarHandleSize()
+	{
+		if (mScrollBar)
+			mScrollBar->SetScrollHandleSize(layout->GetWidth()/mOneSecondDefaultSize/mSmoothViewZoom);
+	}
+
+	float AnimationTimeline::LocalToWorld(float pos) const
+	{
+		return (pos - mSmoothViewScroll)*(mOneSecondDefaultSize*mSmoothViewZoom) + mScaleOffset + layout->GetWorldLeft();
+	}
+
+	float AnimationTimeline::WorldToLocal(float pos) const
+	{
+		return (pos - layout->GetWorldLeft() - mScaleOffset)/(mOneSecondDefaultSize*mSmoothViewZoom) + mSmoothViewScroll;
+	}
+
+	void AnimationTimeline::OnTransformUpdated()
+	{
+		UpdateScrollBarHandleSize();
+		Widget::OnTransformUpdated();
+	}
+
+	void AnimationTimeline::UpdateScrolling(float dt)
+	{
+		if (IsUnderPoint(o2Input.GetCursorPos()) && o2Input.IsRightMousePressed())
+		{
+			mBeginDragViewScrollOffset = WorldToLocal(o2Input.GetCursorPos().x);
+			mDragViewScroll = true;
+		}
+
+		if (o2Input.IsRightMouseReleased() && mDragViewScroll)
+		{
+			mViewScrollSpeed = -o2Input.GetCursorDelta().x/dt/(mOneSecondDefaultSize*mSmoothViewZoom);
+			mDragViewScroll = false;
+		}
+
+		if (mDragViewScroll)
+		{
+			mViewScroll -= WorldToLocal(o2Input.GetCursorPos().x) - mBeginDragViewScrollOffset;
+
+			if (mViewScroll < 0.0f)
+				mViewScroll = mViewScroll/2.0f;
+
+			if (mViewScroll > mDuration)
+				mViewScroll = Math::Lerp(mDuration, mViewScroll, 0.5f);
+
+			mSmoothViewScroll = mViewScroll;
+
+			if (mScrollBar)
+				mScrollBar->SetValueForcible(mSmoothViewScroll);
+		}
+
+		if (!mDragViewScroll && Math::Abs(mViewScrollSpeed) > 0.01f)
+		{
+			mViewScroll += mViewScrollSpeed*dt;
+			mSmoothViewScroll = mViewScroll;
+			mViewScrollSpeed = Math::Lerp(mViewScrollSpeed, 0.0f, dt*mScrollSpeedDecreaseCoef);
+
+			if (mScrollBar)
+				mScrollBar->SetValueForcible(mSmoothViewScroll);
+		}
+
+		if (!mDragViewScroll)
+		{
+			if (mViewScroll < 0.0f)
+				mViewScroll = Math::Lerp(mViewScroll, 0.0f, dt*mScrollBorderBounceCoef);
+
+			if (mViewScroll > mDuration)
+				mViewScroll = Math::Lerp(mSmoothViewScroll, mDuration, dt*mScrollBorderBounceCoef);
+		}
+
+		if (!Math::Equals(mViewScroll, mSmoothViewScroll, 0.01f))
+		{
+			mSmoothViewScroll = Math::Lerp(mSmoothViewScroll, mViewScroll, dt*mScrollSmoothCoef);
+
+			if (mScrollBar)
+				mScrollBar->SetValueForcible(mSmoothViewScroll);
+		}
+	}
+
+	void AnimationTimeline::SetDuration(float duration)
+	{
+		mDuration = duration;
+
+		if (mScrollBar)
+		{
+			mScrollBar->minValue = 0.0f;
+			mScrollBar->maxValue = mDuration;
+			UpdateScrollBarHandleSize();
+		}
+	}
+
+	float AnimationTimeline::GetDuration() const
+	{
+		return mDuration;
 	}
 
 	void AnimationTimeline::SetScroll(float scroll)
 	{
-		mScroll = scroll;
+		mSmoothViewScroll = scroll;
 	}
 
 	float AnimationTimeline::GetScroll() const
 	{
-		return mScroll;
+		return mSmoothViewScroll;
 	}
 
 	void AnimationTimeline::SetScale(float scale)
 	{
-		mScale = scale;
+		mViewZoom = scale;
 	}
 
 	float AnimationTimeline::GetScale() const
 	{
-		return mScale;
+		return mViewZoom;
 	}
 
 	Text* AnimationTimeline::GetText() const
 	{
 		return mText;
 	}
+
+	void AnimationTimeline::SetScrollBar(HorizontalScrollBar* scrollBar)
+	{
+		mScrollBar = scrollBar;
+		mScrollBar->onUserChange = [&](float value) { mViewScroll = value; };
+
+		AddChild(scrollBar);
+	}
+
+	HorizontalScrollBar* AnimationTimeline::GetScrollBar() const
+	{
+		return mScrollBar;
+	}
+
 }
 
 DECLARE_CLASS(Editor::AnimationTimeline);
