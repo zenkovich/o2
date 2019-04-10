@@ -264,7 +264,7 @@ namespace o2
 		float          mExpandingNodeCurrCoef = 0.0f;           // Current expanding node coefficient of expanding
 		float          mExpandingNodeCurrHeight = 0.0f;         // Current expanding node current height
 		float          mExpandingNodeTargetHeight = 0.0f;       // Current expanding node target height
-		float          mExpandNodeTime = 0.25f;                 // Node expanding time
+		float          mExpandNodeTime = 0.4f;                  // Node expanding time
 		Curve          mExpandingNodeFunc = Curve::EaseInOut(); // Expanding easing node curve
 
 		UITreeNode*    mExpandNodeCandidate = nullptr;          // Expand node candidate when dragging

@@ -1265,12 +1265,18 @@ namespace o2
 
 		float lastExpandBottom = mExpandingNodeBottomPosition;
 		mExpandingNodeCurrHeight = mExpandingNodeFunc.Evaluate(mExpandingNodeCurrCoef)*mExpandingNodeTargetHeight;
+		String gg;
+		for (int i = 0; i < (int)(mExpandingNodeFunc.Evaluate(mExpandingNodeCurrCoef)*100.0f); i++)
+			gg += " ";
+
+		gg += "|";
+
+		o2Debug.Log(gg);
 		mExpandingNodeBottomPosition = mExpandingNodePosition + mExpandingNodeCurrHeight;
 
 		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
 		float offs = mExpandingNodeBottomPosition - lastExpandBottom;
-		for (int i = Math::Max(mExpandingNodeIdx + mExpandingNodeChildsCount + 1, mMinVisibleNodeIdx);
-			 i <= mMaxVisibleNodeIdx && i < mAllNodes.Count(); i++)
+		for (int i = Math::Max(mExpandingNodeIdx + mExpandingNodeChildsCount + 1, mMinVisibleNodeIdx); i <= mMaxVisibleNodeIdx && i < mAllNodes.Count(); i++)
 		{
 			Node* node = mAllNodes[i];
 

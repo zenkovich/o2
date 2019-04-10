@@ -26,6 +26,11 @@ namespace o2
 
 	WidgetLayer::~WidgetLayer()
 	{
+#if IS_EDITOR
+		Scene::UnregEditableObject(this);
+		o2Scene.OnObjectDestroyed(this);
+#endif
+
 		if (mParent)
 			mParent->RemoveChild(this, false);
 		else if (mOwnerWidget)
@@ -40,11 +45,6 @@ namespace o2
 
 			delete child;
 		}
-
-#if IS_EDITOR
-		Scene::UnregEditableObject(this);
-		o2Scene.OnObjectDestroyed(this);
-#endif
 	}
 
 	WidgetLayer& WidgetLayer::operator=(const WidgetLayer& other)
@@ -441,7 +441,7 @@ namespace o2
 		if (mOwnerWidget)
 			return mOwnerWidget->IsOnScene();
 
-		return true;
+		return false;
 	}
 
 	SceneUID WidgetLayer::GetID() const

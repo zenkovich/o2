@@ -10,8 +10,8 @@ namespace o2
 
 	Curve::Curve(float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
 	{
-		mKeys.Add(Key(0.0f, 0.0f, 0.0f, 0.0f, beginCoef, Math::Clamp01(beginCoefPosition)));
-		mKeys.Add(Key(1.0f, 1.0f, 1.0f - endCoef, -(1.0f - Math::Clamp01(endCoefPosition)), 0.0f, 0.0f));
+		mKeys.Add(Key(0.0f, 0.0f, 0.0f, 0.0f, beginCoef, beginCoefPosition));
+		mKeys.Add(Key(1.0f, 1.0f, endCoef - 1.0f, -endCoefPosition, 0.0f, 0.0f));
 		UpdateApproximation();
 	}
 
@@ -556,7 +556,7 @@ namespace o2
 
 	Curve Curve::EaseInOut()
 	{
-		return Curve(0.0f, 0.4f, 1.0f, 0.6f);
+		return Curve(0.0f, 0.4f, 1.0f, 1.0f);
 	}
 
 	Curve Curve::Linear()

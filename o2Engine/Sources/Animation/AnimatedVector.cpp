@@ -427,7 +427,7 @@ namespace o2
 
 	AnimatedValue<Vec2F> AnimatedValue<Vec2F>::EaseInOut(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)
 	{
-		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 0.6f);
+		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 1.0f);
 	}
 
 	AnimatedValue<Vec2F> AnimatedValue<Vec2F>::Linear(const Vec2F& begin, const Vec2F& end, float duration /*= 1.0f*/)

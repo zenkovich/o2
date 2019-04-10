@@ -640,7 +640,7 @@ namespace o2
 	template<typename _type>
 	AnimatedValue<_type> AnimatedValue<_type>::EaseInOut(const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
-		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 0.6f);
+		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 1.0f);
 	}
 
 	template<typename _type>

@@ -18,7 +18,6 @@ namespace o2
 		mExpandWidth = true;
 		mExpandHeight = false;
 
-		//Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 0.6f);
 		CreateExpandAnimation();
 		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);

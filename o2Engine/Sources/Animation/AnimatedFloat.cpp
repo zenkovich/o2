@@ -298,7 +298,7 @@ namespace o2
 
 	AnimatedValue<float> AnimatedValue<float>::EaseInOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
 	{
-		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 0.6f);
+		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 1.0f);
 	}
 
 	AnimatedValue<float> AnimatedValue<float>::Linear(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
