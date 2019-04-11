@@ -72,11 +72,12 @@ namespace Editor
 		SERIALIZABLE(AnimationTimeline);
 
 	private:
-		const float mTextOffset = 12.0f;            // Text position offset from top border
-		const float mBigLineOffset = 13.0f;         // Big scale line offset from top border
-		const float mSmallLineOffset = 15.0f;       // Small scale line offset from top border
-		const float mOneSecondDefaultSize = 100.0f; // One second with scale == 1 size in pixels
-		const float mScaleOffset = 10.0f;           // First scale line offset from left border
+		const float mTextOffset = 12.0f;              // Text position offset from top border
+		const float mBigLineOffset = 13.0f;           // Big scale line offset from top border
+		const float mSmallLineOffset = 15.0f;         // Small scale line offset from top border
+		const float mOneSecondDefaultSize = 100.0f;   // One second with scale == 1 size in pixels
+		const float mPerfectScaleSegmentSize = 10.0f; // The perfect size of scale segment in pixels. Scale period and segment size will be chosen more suitable
+		const float mScaleOffset = 10.0f;             // First scale line offset from left border
 
 		const Color4 mBigLineColor = Color4(16, 20, 23, 64);   // Big scale line color
 		const Color4 mSmallLineColor = Color4(16, 20, 23, 38); // Small scale line color
@@ -108,6 +109,9 @@ namespace Editor
 		HorizontalScrollBar* mScrollBar = nullptr; // Scroll bar. Limited by animation duration
 
 	private:
+		// Chooses well view of time scale by zoom
+		void ChooseScaleParams(int& bigLinePeriod, float& bigLineTimeAmount);
+
 		// Tracks user's right mouse button and updates scroll by speed
 		void UpdateScrolling(float dt);
 
@@ -139,6 +143,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mBigLineOffset);
 	PRIVATE_FIELD(mSmallLineOffset);
 	PRIVATE_FIELD(mOneSecondDefaultSize);
+	PRIVATE_FIELD(mPerfectScaleSegmentSize);
 	PRIVATE_FIELD(mScaleOffset);
 	PRIVATE_FIELD(mBigLineColor);
 	PRIVATE_FIELD(mSmallLineColor);
@@ -176,6 +181,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(Text*, GetText);
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
+	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, float&);
 	PRIVATE_FUNCTION(void, UpdateScrolling, float);
 	PRIVATE_FUNCTION(void, UpdateZooming, float);
 	PRIVATE_FUNCTION(void, UpdateScrollBarHandleSize);

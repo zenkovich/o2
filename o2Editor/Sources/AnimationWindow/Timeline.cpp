@@ -46,16 +46,12 @@ namespace Editor
 		Widget::Draw();
 
 		float beginPos = mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom;
-		float posDelta = mOneSecondDefaultSize*mSmoothViewZoom/10.0f;
 
-		int bigLinePeriod = 10;
-		float bigLineTimeAmount = 0.1f;
-		if (posDelta < 5.0f)
-		{
-			bigLinePeriod = 5;
-			bigLineTimeAmount = 1.0f;
-			posDelta *= 10.0f;
-		}
+		int bigLinePeriod;
+		float bigLineTimeAmount;
+		ChooseScaleParams(bigLinePeriod, bigLineTimeAmount);
+
+		float posDelta = bigLineTimeAmount * mOneSecondDefaultSize*mSmoothViewZoom;
 
 		int lineIdx = 0;
 		while (beginPos < 0)
@@ -125,6 +121,36 @@ namespace Editor
 	{
 		UpdateScrollBarHandleSize();
 		Widget::OnTransformUpdated();
+	}
+
+	void AnimationTimeline::ChooseScaleParams(int& bigLinePeriod, float& bigLineTimeAmount)
+	{
+		struct Cfg
+		{
+			int chunkSegments;
+			float chunkDuration;
+		};
+
+		Cfg configs[] = { { 10, 0.1f }, { 5, 0.1f }, { 2, 0.1f }, { 5, 0.5f }, { 10, 1.0f }, { 5, 1.0f }, { 2, 1.0f }, { 5, 5.0f }, { 6, 30.0f } };
+
+		Cfg nearestCfg;
+		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
+		for (auto cfg : configs) 
+		{
+			float screenChunkSegmentSize = cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
+			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;
+			if (screenChunkSegmentSizeDiff > 0.0f)
+				screenChunkSegmentSizeDiff *= 2.0f;
+
+			if (Math::Abs(screenChunkSegmentSizeDiff) < nearestCfgScreenChunkSegmentSizeDiff)
+			{
+				nearestCfgScreenChunkSegmentSizeDiff = screenChunkSegmentSizeDiff;
+				nearestCfg = cfg;
+			}
+		}
+
+		bigLinePeriod = nearestCfg.chunkSegments;
+		bigLineTimeAmount = nearestCfg.chunkDuration/(float)nearestCfg.chunkSegments;
 	}
 
 	void AnimationTimeline::UpdateScrolling(float dt)
