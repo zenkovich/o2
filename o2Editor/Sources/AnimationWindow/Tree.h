@@ -48,6 +48,9 @@ namespace Editor
 		Vector<TreeNode*> mRootValues;
 
 	private:
+		// Rebuilds animation values tree - mRootValues
+		void RebuildAnimationTree();
+
 		// Returns object's parent
 		UnknownPtr GetObjectParent(UnknownPtr object) override;
 
@@ -69,9 +72,18 @@ CLASS_BASES_META(Editor::AnimationTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
+	PRIVATE_FIELD(mAnimation);
+	PRIVATE_FIELD(mRootValues);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
+
+	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PRIVATE_FUNCTION(void, RebuildAnimationTree);
+	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
+	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
+	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
+	PRIVATE_FUNCTION(void, FillNodeDataByObject, UITreeNode*, UnknownPtr);
 }
 END_META;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/WindowsSystem/IEditorWindow.h"
+#include "Utils/Singleton.h"
 
 using namespace o2;
 
@@ -15,12 +16,15 @@ namespace o2
 	class Animation;
 }
 
+// Editor animation window accessor macros
+#define o2EditorAnimationWindow AnimationWindow::Instance()
+
 namespace Editor
 {
 	class AnimationTimeline;
 	class AnimationTree;
 
-	class AnimationWindow : public IEditorWindow
+	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{
 		IOBJECT(AnimationWindow);
 
@@ -86,11 +90,13 @@ namespace Editor
 CLASS_BASES_META(Editor::AnimationWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);
+	BASE_CLASS(o2::Singleton<AnimationWindow>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)
 {
 	PROTECTED_FIELD(mTreeViewWidth);
+	PROTECTED_FIELD(mAnimation);
 	PROTECTED_FIELD(mUpPanel);
 	PROTECTED_FIELD(mWorkArea);
 	PROTECTED_FIELD(mControlsPanel);
@@ -110,6 +116,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeUpPanel);
 	PROTECTED_FUNCTION(void, InitializeSeparatorHandle);

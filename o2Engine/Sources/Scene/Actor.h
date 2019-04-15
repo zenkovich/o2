@@ -401,7 +401,7 @@ namespace o2
 
 		SceneLayer*     mLayer = nullptr;              // Scene layer @EXCLUDE_POINTER_SEARCH
 
-		Actor*          mParent = nullptr;             // Parent actor
+		Actor*          mParent = nullptr;             // Parent actor @EXCLUDE_POINTER_SEARCH
 		ActorsVec       mChildren;                     // Children actors 
 
 		ComponentsVec   mComponents;                   // Components vector 
@@ -750,7 +750,7 @@ CLASS_FIELDS_META(o2::Actor)
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
 	PROTECTED_FIELD(mLayer).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
-	PROTECTED_FIELD(mParent);
+	PROTECTED_FIELD(mParent).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
 	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
 	PROTECTED_FIELD(mEnabled);
