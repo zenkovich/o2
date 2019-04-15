@@ -110,7 +110,7 @@ namespace Editor
 
 	private:
 		// Chooses well view of time scale by zoom
-		void ChooseScaleParams(int& bigLinePeriod, float& bigLineTimeAmount);
+		void ChooseScaleParams(int& bigLinePeriod, double& bigLineTimeAmount);
 
 		// Tracks user's right mouse button and updates scroll by speed
 		void UpdateScrolling(float dt);
@@ -181,7 +181,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(Text*, GetText);
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
-	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, float&);
+	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);
 	PRIVATE_FUNCTION(void, UpdateScrolling, float);
 	PRIVATE_FUNCTION(void, UpdateZooming, float);
 	PRIVATE_FUNCTION(void, UpdateScrollBarHandleSize);

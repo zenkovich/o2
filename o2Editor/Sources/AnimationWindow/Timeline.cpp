@@ -4,6 +4,7 @@
 #include "Application/Input.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Scene/UI/Widgets/HorizontalScrollBar.h"
+#include <string>
 
 namespace Editor
 {
@@ -45,13 +46,13 @@ namespace Editor
 	{
 		Widget::Draw();
 
-		float beginPos = mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom;
+		double beginPos = (double)(mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom);
 
 		int bigLinePeriod;
-		float bigLineTimeAmount;
+		double bigLineTimeAmount;
 		ChooseScaleParams(bigLinePeriod, bigLineTimeAmount);
 
-		float posDelta = bigLineTimeAmount * mOneSecondDefaultSize*mSmoothViewZoom;
+		double posDelta = bigLineTimeAmount * mOneSecondDefaultSize*mSmoothViewZoom;
 
 		int lineIdx = 0;
 		while (beginPos < 0)
@@ -60,12 +61,12 @@ namespace Editor
 			beginPos += posDelta;
 		}
 
-		float endPos = layout->GetWidth();
+		double endPos = (double)layout->GetWidth();
 
 		RectF worldRect = layout->GetWorldRect();
-		for (float pos = beginPos; pos < endPos; pos += posDelta, lineIdx++)
+		for (double pos = beginPos; pos < endPos; pos += posDelta, lineIdx++)
 		{
-			float screenPos = pos + worldRect.left;
+			float screenPos = (float)pos + worldRect.left;
 			bool isBigLine = lineIdx%bigLinePeriod == 0;
 
 			o2Render.DrawAALine(Vec2F(screenPos, worldRect.top - (isBigLine ? mBigLineOffset : mSmallLineOffset)),
@@ -74,7 +75,7 @@ namespace Editor
 
 			if (isBigLine)
 			{
-				mText->SetText((String)((float)lineIdx*bigLineTimeAmount));
+				mText->SetText((String)((double)lineIdx*bigLineTimeAmount));
 				mText->SetPosition(Vec2F(screenPos, worldRect.top - mTextOffset));
 				mText->Draw();
 			}
@@ -123,21 +124,21 @@ namespace Editor
 		Widget::OnTransformUpdated();
 	}
 
-	void AnimationTimeline::ChooseScaleParams(int& bigLinePeriod, float& bigLineTimeAmount)
+	void AnimationTimeline::ChooseScaleParams(int& bigLinePeriod, double& bigLineTimeAmount)
 	{
 		struct Cfg
 		{
 			int chunkSegments;
-			float chunkDuration;
+			double chunkDuration;
 		};
 
-		Cfg configs[] = { { 10, 0.1f }, { 5, 0.1f }, { 2, 0.1f }, { 5, 0.5f }, { 10, 1.0f }, { 5, 1.0f }, { 2, 1.0f }, { 5, 5.0f }, { 6, 30.0f } };
+		Cfg configs[] = { { 10, 0.1 }, { 5, 0.1 }, { 2, 0.1 }, { 5, 0.5 }, { 10, 1.0 }, { 5, 1.0 }, { 2, 1.0 }, { 5, 5.0 }, { 6, 30.0 } };
 
 		Cfg nearestCfg;
 		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
 		for (auto cfg : configs) 
 		{
-			float screenChunkSegmentSize = cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
+			float screenChunkSegmentSize = (float)cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
 			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;
 			if (screenChunkSegmentSizeDiff > 0.0f)
 				screenChunkSegmentSizeDiff *= 2.0f;
@@ -150,7 +151,7 @@ namespace Editor
 		}
 
 		bigLinePeriod = nearestCfg.chunkSegments;
-		bigLineTimeAmount = nearestCfg.chunkDuration/(float)nearestCfg.chunkSegments;
+		bigLineTimeAmount = nearestCfg.chunkDuration/(double)nearestCfg.chunkSegments;
 	}
 
 	void AnimationTimeline::UpdateScrolling(float dt)
@@ -183,7 +184,7 @@ namespace Editor
 				mScrollBar->SetValueForcible(mSmoothViewScroll);
 		}
 
-		if (!mDragViewScroll && Math::Abs(mViewScrollSpeed) > 0.01f)
+		if (!mDragViewScroll && Math::Abs(mViewScrollSpeed) > 0.0001f)
 		{
 			mViewScroll += mViewScrollSpeed*dt;
 			mSmoothViewScroll = mViewScroll;
@@ -202,7 +203,7 @@ namespace Editor
 				mViewScroll = Math::Lerp(mSmoothViewScroll, mDuration, dt*mScrollBorderBounceCoef);
 		}
 
-		if (!Math::Equals(mViewScroll, mSmoothViewScroll, 0.01f))
+		if (!Math::Equals(mViewScroll, mSmoothViewScroll, 0.0001f))
 		{
 			mSmoothViewScroll = Math::Lerp(mSmoothViewScroll, mViewScroll, dt*mScrollSmoothCoef);
 

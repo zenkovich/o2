@@ -11,6 +11,8 @@ namespace o2
 	class HorizontalScrollBar;
 	class Toggle;
 	class WidgetDragHandle;
+
+	class Animation;
 }
 
 namespace Editor
@@ -29,11 +31,18 @@ namespace Editor
 		// Destructor
 		~AnimationWindow();
 
+
 		// Updates window logic
 		void Update(float dt) override;
 
+
+		// Sets editing animation
+		void SetAnimation(Animation* animation);
+
 	protected:
 		float mTreeViewWidth = 250.0f;
+
+		Animation* mAnimation = nullptr;
 
 		Widget* mUpPanel = nullptr;
 		Widget* mWorkArea = nullptr;

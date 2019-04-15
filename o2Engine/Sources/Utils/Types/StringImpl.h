@@ -109,6 +109,14 @@ namespace o2
 	}
 
 	template<typename T>
+	TString<T>::TString(double value)
+	{
+		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
+		erase(std::basic_string<T>::find_last_not_of('0') + 1, std::string::npos);
+		erase(std::basic_string<T>::find_last_not_of('.') + 1, std::string::npos);
+	}
+
+	template<typename T>
 	TString<T>::TString(const Vec2F& value)
 	{
 		Append((TString)value.x);

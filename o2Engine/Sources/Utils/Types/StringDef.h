@@ -76,6 +76,9 @@ namespace o2
 		// Explicit constructor from float value
 		explicit TString(float value);
 
+		// Explicit constructor from double value
+		explicit TString(double value);
+
 		// Explicit constructor from float vector value
 		explicit TString(const Vec2F& value);
 

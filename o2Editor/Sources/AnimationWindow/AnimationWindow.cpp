@@ -2,6 +2,7 @@
 #include "AnimationWindow.h"
 
 #include "AnimationWindow/Timeline.h"
+#include "Animation/Animation.h"
 #include "AnimationWindow/Tree.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
@@ -26,6 +27,11 @@ AnimationWindow::~AnimationWindow()
 void AnimationWindow::Update(float dt)
 {
 
+}
+
+void AnimationWindow::SetAnimation(Animation* animation)
+{
+	mAnimation = animation;
 }
 
 void AnimationWindow::InitializeWindow()
