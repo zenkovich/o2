@@ -45,17 +45,21 @@ namespace Editor
 		// Destructor
 		~ReparentAction();
 
+
 		// It is called when object are reparented, stores all required data to restore old objects' parents
 		void ObjectsReparented(SceneEditableObject* newParent, SceneEditableObject* prevObject);
 
+
 		// Returns name of action
 		String GetName() const override;
+
 
 		// Sets new parents again
 		void Redo() override;
 
 		// Sets previous stored parents and index in children
 		void Undo() override;
+
 
 		SERIALIZABLE(ReparentAction);
 	};

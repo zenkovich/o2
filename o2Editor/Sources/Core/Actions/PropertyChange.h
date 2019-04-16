@@ -32,14 +32,17 @@ namespace Editor
 								   const String& propertyPath, const Vector<DataNode>& beforeValues,
 								   const Vector<DataNode>& afterValues);
 
+
 		// Returns name of action
 		String GetName() const;
+
 
 		// Sets object's properties value as after change
 		void Redo();
 
 		// Sets object's properties value as before change
 		void Undo();
+
 
 		SERIALIZABLE(PropertyChangeAction);
 

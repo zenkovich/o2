@@ -31,21 +31,24 @@ namespace Editor
 		// Destructor
 		~AssetsFoldersTree();
 
+
 		// Copy-operator
 		AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
+
 
 		SERIALIZABLE(AssetsFoldersTree);
 
 	protected:
-		Tree*        mFoldersTree; // Folders tree
+		Tree*          mFoldersTree; // Folders tree
 		UIContextMenu* mContextMenu; // Context menu
 		String         mCurrentPath; // Current viewing path
 
-		bool           mOpengingFolderFromThis = false;
+		bool mOpengingFolderFromThis = false;
 
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
+
 
 		// Selects and expands folder
 		void SelectAndExpandFolder(const String& path);
@@ -56,6 +59,7 @@ namespace Editor
 		// Initializes assets context menu
 		void InitializeContext();
 
+
 		// Returns folder parent (for folders tree)
 		UnknownPtr GetFoldersTreeNodeParent(UnknownPtr object);
 
@@ -65,6 +69,7 @@ namespace Editor
 		// Setups tree node by folder (for folders tree)
 		void SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object);
 
+
 		// It is called when folder item double clicked (for folders tree)
 		void OnFoldersTreeNodeDblClick(UITreeNode* node);
 
@@ -73,6 +78,7 @@ namespace Editor
 
 		// It is called when folders tree clicked by right button
 		void OnFoldersTreeRightClick(UITreeNode* node);
+
 
 		// It is called when context copy pressed
 		void OnContextCopyPressed();
@@ -112,6 +118,7 @@ namespace Editor
 
 		// It is called when context expand pressed
 		void OnContextCollapsePressed();
+
 
 		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key) override;

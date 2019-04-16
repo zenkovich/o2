@@ -28,14 +28,17 @@ namespace Editor
 		// CUnstructor with new and previous selected objects
 		SelectAction(const Vector<SceneEditableObject*>& selectedObjects, const Vector<SceneEditableObject*>& prevSelectedObjects);
 
+
 		// Returns name of action
 		String GetName() const;
+
 
 		// Selects objects again
 		void Redo();
 
 		// Selects previous selected objects
 		void Undo();
+
 
 		SERIALIZABLE(SelectAction);
 	};

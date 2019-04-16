@@ -38,17 +38,21 @@ namespace Editor
 		// Constructor with objects, stores theirs before changing transforms
 		TransformAction(const Vector<SceneEditableObject*>& objects);
 
+
 		// It is called when transform completed, stores changed transforms
 		void Completed();
 
+
 		// Returns name of action
 		String GetName() const;
+
 
 		// Sets new transforms again
 		void Redo();
 
 		// Sets transformations before transform
 		void Undo();
+
 
 		SERIALIZABLE(TransformAction);
 

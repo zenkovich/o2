@@ -44,25 +44,25 @@ namespace Editor
 		Function<void(const Color4&)> mOnChangedCallback;
 		Function<void()>              mOnCompletedCallback;
 
-		Color4              mColorValue;
-		ColorType           mColorType = ColorType::RGB;
+		Color4    mColorValue;
+		ColorType mColorType = ColorType::RGB;
 
-		Window*             mWindow = nullptr;
-		Image*              mColorSampleImage = nullptr;
+		Window* mWindow = nullptr;
+		Image*  mColorSampleImage = nullptr;
 
-		TextureRef          mChessBackTexture;
+		TextureRef mChessBackTexture;
 
-		Image*              mColorPickAreaHandle = nullptr;
-		Bitmap*             mColorPickAreaBitmap = nullptr;
-		WidgetLayer*        mColorPickAreaColor = nullptr;
-		TextureRef          mColorPickAreaTexture;
-		CursorEventsArea    mColorPickHandle;
+		Image*           mColorPickAreaHandle = nullptr;
+		Bitmap*          mColorPickAreaBitmap = nullptr;
+		WidgetLayer*     mColorPickAreaColor = nullptr;
+		TextureRef       mColorPickAreaTexture;
+		CursorEventsArea mColorPickHandle;
 
-		VerticalProgress*   mHUEBar = nullptr;
-		Bitmap*             mHUEBarBitmap = nullptr;
-		TextureRef          mHUEBarTexture;
+		VerticalProgress* mHUEBar = nullptr;
+		Bitmap*           mHUEBarBitmap = nullptr;
+		TextureRef        mHUEBarTexture;
 
-		DropDown*           mTypeDropdown = nullptr;
+		DropDown* mTypeDropdown = nullptr;
 
 		Label*              mColor1ParamName = nullptr;
 		HorizontalProgress* mColor1ParamBar = nullptr;

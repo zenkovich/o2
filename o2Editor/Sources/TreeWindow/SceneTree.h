@@ -186,12 +186,12 @@ namespace Editor
 	protected:
 		SceneEditableObject* mTargetObject = nullptr; // Target object
 
-		Text*                mNameDrawable = nullptr; // Object name drawable
-		Toggle*            mLockToggle = nullptr;   // Lock toggle
-		Toggle*            mEnableToggle = nullptr; // Enable toggle
-		Button*            mLinkBtn = nullptr;      // View link button
-		EditBox*           mNameEditBox = nullptr;  // Object's name edit box
-		WidgetState*       mEditState = nullptr;    // Object's name edit state
+		Text*        mNameDrawable = nullptr; // Object name drawable
+		Toggle*      mLockToggle = nullptr;   // Lock toggle
+		Toggle*      mEnableToggle = nullptr; // Enable toggle
+		Button*      mLinkBtn = nullptr;      // View link button
+		EditBox*     mNameEditBox = nullptr;  // Object's name edit box
+		WidgetState* mEditState = nullptr;    // Object's name edit state
 
 	protected:
 		// Copies data of actor from other to this

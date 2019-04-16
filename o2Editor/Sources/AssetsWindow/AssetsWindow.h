@@ -41,8 +41,10 @@ namespace Editor
 		// Destructor
 		~AssetsWindow();
 
+
 		// Updates window logic
 		void Update(float dt) override;
+
 
 		// Selects asset with id
 		void SelectAsset(UID id);
@@ -56,6 +58,7 @@ namespace Editor
 		// Selects assets by paths
 		void SelectAssets(const Vector<String>& paths);
 
+
 		// Opens asset in folder
 		void OpenAsset(UID id);
 
@@ -68,11 +71,13 @@ namespace Editor
 		// Opens asset for editing 
 		void OpenAndEditAsset(const String& path);
 
+
 		// Deselects all assets
 		void DeselectAssets();
 
 		// Returns selected assets infos
 		Vector<AssetInfo> GetSelectedAssets() const;
+
 
 		// Returns opened folder path
 		String GetOpenedFolderPath() const;
@@ -80,11 +85,13 @@ namespace Editor
 		// Opens folder
 		void OpenFolder(const String& path);
 
+
 		// Shows asset
 		void ShowAssetIcon(UID id);
 
 		// Shows asset
 		void ShowAssetIcon(const String& path);
+
 
 		// Copy assets in clipboard
 		void CopyAssets(const Vector<String>& assetsPaths);
@@ -101,6 +108,7 @@ namespace Editor
 		// It is called when context import pressed
 		void ImportAssets(const String& targetPath);
 
+
 		// It is called when context create folder pressed
 		void CreateFolderAsset(const String& targetPath, const String& name);
 
@@ -113,6 +121,7 @@ namespace Editor
 		// It is called when context create animation pressed
 		void CreateAnimationAsset(const String& targetPath);
 
+
 		// Creates and returns icon sprite for asset
 		static Sprite* GetAssetIconSprite(const AssetRef& asset);
 		 
@@ -121,24 +130,24 @@ namespace Editor
 	protected:
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 
-		float                    mFoldersTreeShowCoef;    // Animating show folders tree coefficient (0...1)
+		float mFoldersTreeShowCoef; // Animating show folders tree coefficient (0...1)
 
-		Button*                  mFilterButton;           // Search filter button
-		EditBox*                 mSearchEditBox;          // Search edit box
-		Label*                   mSelectedAssetPathLabel; // Selected asset path label
+		Button*  mFilterButton;           // Search filter button
+		EditBox* mSearchEditBox;          // Search edit box
+		Label*   mSelectedAssetPathLabel; // Selected asset path label
 
-		AssetsFoldersTree*       mFoldersTree;            // Folders tree			
-		Animation                mFoldersTreeShowAnim;    // Folders tree visible animation
-		bool                     mFoldersTreeVisible;     // Is folders tree visible
+		AssetsFoldersTree*  mFoldersTree;         // Folders tree			
+		Animation           mFoldersTreeShowAnim; // Folders tree visible animation
+		bool                mFoldersTreeVisible;  // Is folders tree visible
 
-		AssetsIconsScrollArea*   mAssetsGridScroll;       // Assets grid scroll
+		AssetsIconsScrollArea* mAssetsGridScroll; // Assets grid scroll
 
-		Tree*                    mAssetsTree;             // Assets tree
+		Tree* mAssetsTree; // Assets tree
 
-		CursorEventsArea         mSeparatorHandle;        // Folders tree and assets tree/grid separator handle
-		float                    mSeparatorCoef;          // Separator coefficient, means anchors for tree nad assets scroll
+		CursorEventsArea mSeparatorHandle; // Folders tree and assets tree/grid separator handle
+		float            mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
 
-		AssetIdPathVec           mCuttingAssets;          // Current cutted assets
+		AssetIdPathVec mCuttingAssets; // Current cutted assets
 
 	protected:
 		// Initializes window

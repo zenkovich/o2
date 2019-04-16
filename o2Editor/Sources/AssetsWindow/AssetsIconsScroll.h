@@ -36,6 +36,7 @@ namespace Editor
 	public:
 		Function<void(const Vector<String>&)> onAssetsSelected; // Assets selected event
 
+
 		// Default constructor
 		AssetsIconsScrollArea();
 
@@ -45,14 +46,18 @@ namespace Editor
 		// Destructor
 		~AssetsIconsScrollArea();
 
+
 		// Copy-operator
 		AssetsIconsScrollArea& operator=(const AssetsIconsScrollArea& other);
+
 
 		// Draws widget
 		void Draw() override;
 
+
 		// Updates widget
 		void Update(float dt) override;
+
 
 		// Sets current assets viewing path
 		void SetViewingPath(const String& path);
@@ -60,14 +65,18 @@ namespace Editor
 		// Returns viewing path
 		String GetViewingPath() const;
 
+
 		// Updates assets path contents
 		void UpdateAssetsGridByCurrentPath();
+
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
 
+
 		// Hightlights asset
 		void HightlightAsset(UID id);
+
 
 		// Selects asset
 		void SelectAsset(UID id, bool scroll = true);
@@ -78,8 +87,10 @@ namespace Editor
 		// Returns selected assets infos
 		Vector<AssetInfo> GetSelectedAssets() const;
 
+
 		// Return asset icon under point
 		AssetIcon* GetIconUnderPoint(const Vec2F& point) const;
+
 
 		// Returns node hightlight drawable
 		Sprite* GetHightlightDrawable() const;
@@ -90,11 +101,14 @@ namespace Editor
 		// Sets hightlight layout
 		void SetHightlightLayout(const Layout& layout);
 
+
 		// Returns selecting rectangle drawable
 		Sprite* GetSelectingDrawable() const;
 
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
+
 
 		// Updates layout
 		void UpdateSelfTransform() override;
@@ -109,49 +123,51 @@ namespace Editor
 		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
 		typedef Vector<AssetRef*> AssetsVec;
 
-		const Vec2F             mAssetIconSize = Vec2F(50, 60);
+		const Vec2F mAssetIconSize = Vec2F(50, 60);
 						        
-		String                  mCurrentPath = "_";          // Current viewing path
+		String mCurrentPath = "_"; // Current viewing path
 						        
-		GridLayout*             mGrid = nullptr;             // Assets icons grid
-		UIContextMenu*          mContextMenu = nullptr;      // Assets Context menu
+		GridLayout*    mGrid = nullptr;        // Assets icons grid
+		UIContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
-		AssetsIconsVec          mSelectedAssetsIcons;        // Selected assets icons
-		AssetsVec               mSelectedPreloadedAssets;    // Preloaded selected assets
+		AssetsIconsVec mSelectedAssetsIcons;     // Selected assets icons
+		AssetsVec      mSelectedPreloadedAssets; // Preloaded selected assets
 						        
-		AssetIcon*              mHightlightIcon = nullptr;   // Current hightlighting asset icon
-		Animation               mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
-		Sprite*                 mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
-		Layout                  mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
+		AssetIcon* mHightlightIcon = nullptr;   // Current hightlighting asset icon
+		Animation  mHightlightAnim;             // Icon hightlight animation @SERIALIZABLE
+		Sprite*    mHightlightSprite = nullptr; // Icon hightlight sprite @SERIALIZABLE
+		Layout     mHightlightLayout;           // Icon hightlight sprite layout @SERIALIZABLE
 						        
-		IconArrsDict            mIconsPool;                  // Assets icons pool
+		IconArrsDict mIconsPool; // Assets icons pool
 						        
-		Sprite*                 mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
-		bool                    mSelecting = false;          // Is selecting icons 
-		Vec2F                   mPressedPoint;               // Pressed point
-		AssetsIconsVec          mCurrentSelectingIcons;      // Selecting icons at current selection
+		Sprite*        mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
+		bool           mSelecting = false;          // Is selecting icons 
+		Vec2F          mPressedPoint;               // Pressed point
+		AssetsIconsVec mCurrentSelectingIcons;      // Selecting icons at current selection
 						        
-		bool                    mIsDraggingIcons = false;    // Is dragging icons
-		bool                    mDragEnded = false;          // Is dragging ended
-		AssetIcon*              mDragIcon = nullptr;         // Dragging icon
-		Vec2F                   mDragOffset;                 // Dragging offset from cursor to icon center
-		SceneEditableObjectsVec mInstSceneDragObjects;       // Instantiated objects when dragging asset above scene
+		bool                    mIsDraggingIcons = false; // Is dragging icons
+		bool                    mDragEnded = false;       // Is dragging ended
+		AssetIcon*              mDragIcon = nullptr;      // Dragging icon
+		Vec2F                   mDragOffset;              // Dragging offset from cursor to icon center
+		SceneEditableObjectsVec mInstSceneDragObjects;    // Instantiated objects when dragging asset above scene
 
-		AssetIdPathVec          mCuttingAssets;              // Current cutted assets
+		AssetIdPathVec mCuttingAssets; // Current cutted assets
 						        
-		bool                    mNeedRebuildAssets = false;  // Is assets needs to rebuild
+		bool mNeedRebuildAssets = false; // Is assets needs to rebuild
 						        
-		bool                    mChangePropertiesTargetsFromThis = false;
+		bool mChangePropertiesTargetsFromThis = false;
 
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
+
 
 		// It is called when widget was selected
 		void OnFocused() override;
 
 		// It is called when widget was deselected
 		void OnUnfocused() override;
+
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -171,14 +187,18 @@ namespace Editor
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
+
 		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
+
 
 		// It is called when assets selection was changed
 		void OnAssetsSelected();
 
+
 		// Updates cutting assets
 		void UpdateCuttingAssets();
+
 
 		// Begins selecting icons
 		void BeginSelecting();
@@ -189,11 +209,14 @@ namespace Editor
 		// Completes selecting
 		void CompleteSelecting();
 
+
 		// Registers objects creation undo action
 		void RegObjectsCreationAction();
 
+
 		// Initializes assets context menu
 		void InitializeContext();
+
 
 		// Prepares icons pools
 		void PrepareIconsPools();
@@ -207,14 +230,18 @@ namespace Editor
 		// Returns image asset icon for asset
 		AssetIcon* GetImageAssetIcon(const AssetInfo& asset);
 
+
 		// Updates assets grid size
 		void UpdateAssetsGridSize();
+
 
 		// It is called when asset icon double clicked, starting editing name
 		void OnAssetDblClick(AssetIcon* icon);
 
+
 		// Starts asset icon renaming, calls onCompletedwhen completed
 		void StartAssetRenaming(AssetIcon* icon, const String& name, const Function<void(const String&)>& onCompleted);
+
 
 		// It is called when context copy pressed
 		void OnContextCopyPressed();
@@ -249,6 +276,7 @@ namespace Editor
 		// It is called when context create animation pressed
 		void OnContextCreateAnimationPressed();
 
+
 		// Instantiates dragging assets
 		void InstantiateDraggingAssets();
 
@@ -267,6 +295,7 @@ namespace Editor
 
 		// Instantiate actor from actor asset
 		Actor* InstantiateAsset(const ActorAssetRef& asset);
+
 
 		// Checks preloaded assets for saving
 		void CheckPreloadedAssetsSaving();

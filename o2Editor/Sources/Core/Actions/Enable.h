@@ -28,14 +28,17 @@ namespace Editor
 		// COnstructor with enabled or disabled objects
 		EnableAction(const Vector<SceneEditableObject*>& objects, bool enable);
 
+
 		// Returns name of action
 		String GetName() const;
+
 
 		// Enable or disable again
 		void Redo();
 
 		// Reverts objects to previous state
 		void Undo();
+
 
 		SERIALIZABLE(EnableAction);
 	};

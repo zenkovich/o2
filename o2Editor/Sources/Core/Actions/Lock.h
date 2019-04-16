@@ -28,14 +28,17 @@ namespace Editor
 		// Constructor with list of objects
 		LockAction(const Vector<SceneEditableObject*>& object, bool lock);
 
+
 		// Return name of action
 		String GetName() const;
+
 
 		// Sets stored lock
 		void Redo();
 
 		// Sets previous lock 
 		void Undo();
+
 
 		SERIALIZABLE(LockAction);
 	};
