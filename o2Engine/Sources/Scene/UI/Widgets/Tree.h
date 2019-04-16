@@ -47,8 +47,10 @@ namespace o2
 		// Destructor
 		~Tree();
 
+
 		// Copy-operator
 		Tree& operator=(const Tree& other);
+
 
 		// Creates tree node for object
 		void OnObjectCreated(UnknownPtr object, UnknownPtr parent);
@@ -59,8 +61,10 @@ namespace o2
 		// Updates tree for changed objects
 		void OnObjectsChanged(const UnknownPtrsVec& objects);
 
+
 		// Draws widget
 		void Draw() override;
+
 
 		// Updates widget
 		void Update(float dt) override;
@@ -68,20 +72,25 @@ namespace o2
 		// Updates childs
 		void UpdateChildren(float dt) override;
 
+
 		// Updates children and internal children transforms
 		void UpdateChildrenTransforms() override;
+
 
 		// Rebuilds all tree
 		void UpdateNodesView(bool immediately = true);
 
+
 		// Returns ui node for object
 		UITreeNode* GetNode(UnknownPtr object);
+
 
 		// Expands all nodes
 		void ExpandAll();
 
 		// Collapses all nodes
 		void CollapseAll();
+
 
 		// Returns selected objects vector
 		Vector<UnknownPtr> GetSelectedObjects() const;
@@ -101,17 +110,21 @@ namespace o2
 		// Deselects all objects
 		void DeselectAllObjects();
 
+
 		// Scrolls view to object
 		void ScrollTo(UnknownPtr object);
 
 		// Scrolls view to object and hightlights
 		void ScrollToAndHightlight(UnknownPtr object);
 
+
 		// Expands all parent objects for specified object
 		void ExpandParentObjects(UnknownPtr object);
 
+
 		// Returns item widget under point
 		UITreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
+
 
 		// Sets rearrange type
 		void SetRearrangeType(RearrangeType type);
@@ -119,20 +132,24 @@ namespace o2
 		// Returns available rearrange type 
 		RearrangeType GetRearrangeType() const;
 
+
 		// Sets available multi selection
 		void SetMultipleSelectionAvailable(bool available);
 
 		// Returns is multi selection available
 		bool IsMultiSelectionAvailable() const;
 
+
 		// Returns item sample
 		UITreeNode* GetNodeSample() const;
+
 
 		// Returns hover drawable
 		Sprite* GetHoverDrawable() const;
 
 		// Sets hover layout
 		void SetHoverLayout(const Layout& layout);
+
 
 		// Returns node hightlight drawable
 		Sprite* GetHightlightDrawable() const;
@@ -143,11 +160,13 @@ namespace o2
 		// Sets hightlight layout
 		void SetHightlightLayout(const Layout& layout);
 
+
 		// Sets node pressing and expanding time
 		void SetNodeExpandTimer(float time);
 
 		// Returns node pressing and expanding time
 		float GetNodeExpandTimer() const;
+
 
 		// Sets children nodes horizontal offset from parent
 		void SetChildsNodesOffset(float offset);
@@ -155,14 +174,17 @@ namespace o2
 		// Returns childs nodes horizontal offset
 		float GetChildsNodesOffset() const;
 
+
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
 
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
+
 
 		// Updates layout
 		void UpdateSelfTransform() override;

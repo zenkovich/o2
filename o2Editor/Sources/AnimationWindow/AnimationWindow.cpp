@@ -33,6 +33,9 @@ namespace Editor
 	void AnimationWindow::SetAnimation(Animation* animation)
 	{
 		mAnimation = animation;
+
+		mTimeline->SetDuration(animation->GetDuration());
+		mTree->SetAnimation(animation);
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -66,6 +69,10 @@ namespace Editor
 		mTimeline->SetDuration(100.0f);
 
 		mWindow->AddChild(mTimeline);
+
+		mTree = o2UI.CreateWidget<AnimationTree>();
+		*mTree->layout = WidgetLayout::BothStretch();
+		mWorkArea->AddChild(mTree);
 	}
 
 	void AnimationWindow::InitializeUpPanel()

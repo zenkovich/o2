@@ -31,6 +31,9 @@ namespace Editor
 	void AnimationTree::SetAnimation(Animation* animation)
 	{
 		mAnimation = animation;
+
+		RebuildAnimationTree();
+		UpdateNodesView();
 	}
 
 	void AnimationTree::RebuildAnimationTree()
@@ -45,12 +48,33 @@ namespace Editor
 
 		for (auto& value : mAnimation->GetAnimationsValues()) 
 		{
+			TreeNode* current = nullptr;
+
 			int lastDel = 0;
-			int del = value.mTargetPath.Find('/');
-			while (del >= 0) 
+			while (lastDel >= 0) 
 			{
+				int del = value.mTargetPath.Find('/', lastDel);
 				String subPath = value.mTargetPath.SubStr(lastDel, del);
+				TreeNode* next = (current ? current->children : mRootValues).FindMatch([&](TreeNode* x) { return x->name == subPath; });
+
+				if (!next)
+				{
+					next = mnew TreeNode();
+					next->name = subPath;
+
+					if (current)
+					{
+						next->parent = current;
+						current->children.Add(next);
+					}
+					else mRootValues.Add(next);
+				}
+
+				current = next;
+				lastDel = del >= 0 ? del + 1 : -1;
 			}
+
+			current->animatedValue = value.mAnimatedValue;
 		}
 	}
 
@@ -81,6 +105,11 @@ namespace Editor
 	void AnimationTree::FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object)
 	{
 		auto treeNode = (TreeNode*)object;
+		nodeWidget->name = treeNode->name;
+
+		auto nameLayer = nodeWidget->layer["name"];
+		if (nameLayer)
+			((Text*)nameLayer->GetDrawable())->text = treeNode->name;
 	}
 
 }

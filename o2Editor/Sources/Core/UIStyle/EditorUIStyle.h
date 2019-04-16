@@ -106,6 +106,8 @@ namespace Editor
 		void RebuildHorWideProgressbar();
 		void RebuildVerWideProgressbar();
 
+		void RebuildAnimationTree();
+
 		void RebuildSpoilerWithHead();
 
 		void RebuildEditorUIManager();
@@ -296,6 +298,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildVerWideScrollbar);
 	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
+	PUBLIC_FUNCTION(void, RebuildAnimationTree);
 	PUBLIC_FUNCTION(void, RebuildSpoilerWithHead);
 	PUBLIC_FUNCTION(void, RebuildEditorUIManager);
 }
