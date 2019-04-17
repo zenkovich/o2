@@ -937,7 +937,7 @@ namespace o2
 
 		*sample->GetHoverDrawable() = Sprite("ui/UI_Context_menu_white.png");
 
-		UITreeNode* itemSample = sample->GetNodeSample();
+		TreeNode* itemSample = sample->GetNodeSample();
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 

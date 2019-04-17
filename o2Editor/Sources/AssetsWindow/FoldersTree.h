@@ -67,17 +67,17 @@ namespace Editor
 		Vector<UnknownPtr> GetFoldersTreeNodeChilds(UnknownPtr object);
 
 		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object);
+		void SetupFoldersTreeNode(TreeNode* node, UnknownPtr object);
 
 
 		// It is called when folder item double clicked (for folders tree)
-		void OnFoldersTreeNodeDblClick(UITreeNode* node);
+		void OnFoldersTreeNodeDblClick(TreeNode* node);
 
 		// It is called when folder item clicked (for folders tree)
 		void OnFoldersTreeSelect(Vector<UnknownPtr> nodes);
 
 		// It is called when folders tree clicked by right button
-		void OnFoldersTreeRightClick(UITreeNode* node);
+		void OnFoldersTreeRightClick(TreeNode* node);
 
 
 		// It is called when context copy pressed
@@ -160,10 +160,10 @@ CLASS_METHODS_META(Editor::AssetsFoldersTree)
 	PROTECTED_FUNCTION(void, InitializeContext);
 	PROTECTED_FUNCTION(UnknownPtr, GetFoldersTreeNodeParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetFoldersTreeNodeChilds, UnknownPtr);
-	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, UITreeNode*, UnknownPtr);
-	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, TreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<UnknownPtr>);
-	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnContextCopyPressed);
 	PROTECTED_FUNCTION(void, OnContextCutPressed);
 	PROTECTED_FUNCTION(void, OnContextPastePressed);

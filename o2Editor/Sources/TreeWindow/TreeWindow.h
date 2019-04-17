@@ -108,7 +108,7 @@ namespace Editor
 		void SearchObjectsRecursive(SceneEditableObject* object, const String& searchStr);
 
 		// It is called when tree node clicked by right button (For tree widget)
-		void OnTreeRBPressed(UITreeNode* node);
+		void OnTreeRBPressed(TreeNode* node);
 
 		template<typename _type>
 		void CreateObject(const String& name);
@@ -215,7 +215,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, OnListTreeToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, SearchObjectsRecursive, SceneEditableObject*, const String&);
-	PROTECTED_FUNCTION(void, OnTreeRBPressed, UITreeNode*);
+	PROTECTED_FUNCTION(void, OnTreeRBPressed, TreeNode*);
 	PROTECTED_FUNCTION(void, OnCreateObject, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnContextCreateNewPressed);
 	PROTECTED_FUNCTION(void, OnContextCreateSprite);

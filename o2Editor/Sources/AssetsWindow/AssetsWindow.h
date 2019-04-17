@@ -17,7 +17,7 @@ namespace o2
 	class Label;
 	class ScrollArea;
 	class Tree;
-	class UITreeNode;
+	class TreeNode;
 	class Widget;
 }
 

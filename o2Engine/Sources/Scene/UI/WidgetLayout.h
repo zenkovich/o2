@@ -305,7 +305,7 @@ namespace o2
 		friend class Spoiler;
 		friend class Toggle;
 		friend class Tree;
-		friend class UITreeNode;
+		friend class TreeNode;
 		friend class VerticalLayout;
 		friend class VerticalProgress;
 		friend class VerticalScrollBar;

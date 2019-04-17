@@ -33,7 +33,7 @@ namespace Editor
 		Tree(), mAttachedToSceneEvents(false), mDragActorPropertyField(nullptr), mDragComponentPropertyField(nullptr)
 	{
 		delete mNodeWidgetSample;
-		mNodeWidgetSample = mnew UISceneTreeNode();
+		mNodeWidgetSample = mnew SceneTreeNode();
 		mNodeWidgetSample->layout->minHeight = 20;
 		mNodeWidgetSample->AddLayer("caption", nullptr);
 
@@ -90,7 +90,7 @@ namespace Editor
 		}
 	}
 
-	UITreeNode* SceneTree::GetNode(SceneEditableObject* object)
+	TreeNode* SceneTree::GetNode(SceneEditableObject* object)
 	{
 		return Tree::GetNode((UnknownPtr)(void*)object);
 	}
@@ -150,7 +150,7 @@ namespace Editor
 		mLockTogglesGroup = mnew ToggleGroup(ToggleGroup::Type::VerOneClick);
 		mLockTogglesGroup->onReleased = THIS_FUNC(LockObjectsGroupReleased);
 
-		UISceneTreeNode* objectNodeWidgetSample = (UISceneTreeNode*)mNodeWidgetSample;
+		SceneTreeNode* objectNodeWidgetSample = (SceneTreeNode*)mNodeWidgetSample;
 		objectNodeWidgetSample->InitializeControls();
 	}
 
@@ -160,7 +160,7 @@ namespace Editor
 		Tree::UpdateVisibleNodes();
 	}
 
-	UITreeNode* SceneTree::CreateTreeNodeWidget()
+	TreeNode* SceneTree::CreateTreeNodeWidget()
 	{
 		PushScopeEnterOnStack scope;
 		return Tree::CreateTreeNodeWidget();
@@ -191,17 +191,17 @@ namespace Editor
 		return object ? ((SceneEditableObject*)object)->GetName() : "null";
 	}
 
-	void SceneTree::FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object)
+	void SceneTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
 	{
-		UISceneTreeNode* node = (UISceneTreeNode*)nodeWidget;
+		SceneTreeNode* node = (SceneTreeNode*)nodeWidget;
 		node->SetSceneObject(object);
 		node->mLockToggle->SetToggleGroup(mLockTogglesGroup);
 		node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
 	}
 
-	void SceneTree::OnNodeDblClick(UITreeNode* nodeWidget)
+	void SceneTree::OnNodeDblClick(TreeNode* nodeWidget)
 	{
-		((UISceneTreeNode*)nodeWidget)->EnableEditName();
+		((SceneTreeNode*)nodeWidget)->EnableEditName();
 	}
 
 	void SceneTree::OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject)
@@ -226,7 +226,7 @@ namespace Editor
 	void SceneTree::EnableObjectsGroupReleased(bool value)
 	{
 		SceneEditableObjsVec objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
-			[](Toggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
+			[](Toggle* x) { return ((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew EnableAction(objects, value);
 		o2EditorApplication.DoneAction(action);
@@ -238,7 +238,7 @@ namespace Editor
 	void SceneTree::LockObjectsGroupReleased(bool value)
 	{
 		SceneEditableObjsVec objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
-			[](Toggle* x) { return ((UITreeNode*)x->GetParent())->GetObject(); });
+			[](Toggle* x) { return ((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew LockAction(objects, value);
 		o2EditorApplication.DoneAction(action);
@@ -334,39 +334,36 @@ namespace Editor
 		Tree::OnObjectsChanged({ object });
 	}
 
-	UISceneTreeNode::UISceneTreeNode() :
-		UITreeNode()
+	SceneTreeNode::SceneTreeNode() :
+		TreeNode()
 	{}
 
-	UISceneTreeNode::UISceneTreeNode(const UISceneTreeNode& other) :
-		UITreeNode(other)
+	SceneTreeNode::SceneTreeNode(const SceneTreeNode& other) :
+		TreeNode(other)
 	{
 		CopyData(other);
 		InitializeControls();
 	}
 
-	Editor::UISceneTreeNode& UISceneTreeNode::operator=(const UISceneTreeNode& other)
+	Editor::SceneTreeNode& SceneTreeNode::operator=(const SceneTreeNode& other)
 	{
 		CopyData(other);
 		return *this;
 	}
 
-	void UISceneTreeNode::CopyData(const Actor& otherActor)
+	void SceneTreeNode::CopyData(const Actor& otherActor)
 	{
-		const UISceneTreeNode& other = dynamic_cast<const UISceneTreeNode&>(otherActor);
-
-		UITreeNode::CopyData(other);
-
+		TreeNode::CopyData(otherActor);
 		InitializeControls();
 	}
 
-	void UISceneTreeNode::OnDeserialized(const DataNode& node)
+	void SceneTreeNode::OnDeserialized(const DataNode& node)
 	{
-		UITreeNode::OnDeserialized(node);
+		TreeNode::OnDeserialized(node);
 		InitializeControls();
 	}
 
-	void UISceneTreeNode::InitializeControls()
+	void SceneTreeNode::InitializeControls()
 	{
 		mNameDrawable = GetLayerDrawable<Text>("name");
 		mLockToggle = (Toggle*)GetChild("lockToggle");
@@ -385,7 +382,7 @@ namespace Editor
 			mNameEditBox->onChangeCompleted = THIS_FUNC(OnObjectNameChanged);
 	}
 
-	void UISceneTreeNode::SetSceneObject(SceneEditableObject* object)
+	void SceneTreeNode::SetSceneObject(SceneEditableObject* object)
 	{
 		mTargetObject = object;
 		mName = object->GetName();
@@ -427,7 +424,7 @@ namespace Editor
 		mLockToggle->SetStateForcible("halfHide", object->IsLockedInHierarchy() && !object->IsLocked());
 	}
 
-	void UISceneTreeNode::EnableEditName()
+	void SceneTreeNode::EnableEditName()
 	{
 		mEditState->SetState(true);
 
@@ -437,17 +434,17 @@ namespace Editor
 		mNameEditBox->ResetScroll();
 	}
 
-	void UISceneTreeNode::OnLockClicked()
+	void SceneTreeNode::OnLockClicked()
 	{
 		mTargetObject->SetLocked(mLockToggle->GetValue());
 	}
 
-	void UISceneTreeNode::OnEnableCkicked()
+	void SceneTreeNode::OnEnableCkicked()
 	{
 		mTargetObject->SetEnabled(mEnableToggle->GetValue());
 	}
 
-	void UISceneTreeNode::OnObjectNameChanged(const WString& text)
+	void SceneTreeNode::OnObjectNameChanged(const WString& text)
 	{
 		String prevName = mTargetObject->GetName();
 
@@ -467,4 +464,4 @@ namespace Editor
 
 DECLARE_CLASS(Editor::SceneTree);
 
-DECLARE_CLASS(Editor::UISceneTreeNode);
+DECLARE_CLASS(Editor::SceneTreeNode);

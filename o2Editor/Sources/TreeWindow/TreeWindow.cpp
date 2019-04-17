@@ -347,7 +347,7 @@ namespace Editor
 			SearchObjectsRecursive(child, searchStr);
 	}
 
-	void TreeWindow::OnTreeRBPressed(UITreeNode* node)
+	void TreeWindow::OnTreeRBPressed(TreeNode* node)
 	{
 		bool canCreateUILayers = false;		
 		if (node) 

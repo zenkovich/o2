@@ -49,7 +49,7 @@ namespace Editor
 		void DeattachFromSceneEvents();
 
 		// Returns ui node for object
-		UITreeNode* GetNode(SceneEditableObject* object);
+		TreeNode* GetNode(SceneEditableObject* object);
 
 		// Returns selected objects vector
 		SceneEditableObjsVec GetSelectedObjects() const;
@@ -98,7 +98,7 @@ namespace Editor
 		void UpdateVisibleNodes() override;
 
 		// Gets tree node from pool or creates new, enables editor mode
-		UITreeNode* CreateTreeNodeWidget() override;
+		TreeNode* CreateTreeNodeWidget() override;
 
 		// Returns object's parent
 		UnknownPtr GetObjectParent(UnknownPtr object) override;
@@ -110,10 +110,10 @@ namespace Editor
 		String GetObjectDebug(UnknownPtr object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object) override;
+		void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object) override;
 
 		// It is called when tree node was double clicked
-		void OnNodeDblClick(UITreeNode* nodeWidget) override;
+		void OnNodeDblClick(TreeNode* nodeWidget) override;
 
 		// It is called when objects was dragged in new parent in position next of prevObject
 		void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject) override;
@@ -157,23 +157,23 @@ namespace Editor
 		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		friend class UISceneTreeNode;
+		friend class SceneTreeNode;
 	};
 
 	// ---------------
 	// Scene tree node
 	// ---------------
-	class UISceneTreeNode: public UITreeNode
+	class SceneTreeNode: public TreeNode
 	{
 	public:
 		// Default constructor
-		UISceneTreeNode();
+		SceneTreeNode();
 
 		// Copy-constructor
-		UISceneTreeNode(const UISceneTreeNode& other);
+		SceneTreeNode(const SceneTreeNode& other);
 
 		// Copy operator
-		UISceneTreeNode& operator=(const UISceneTreeNode& other);
+		SceneTreeNode& operator=(const SceneTreeNode& other);
 
 		// Sets object and updates content
 		void SetSceneObject(SceneEditableObject* object);
@@ -181,7 +181,7 @@ namespace Editor
 		// Enables edit name edit box
 		void EnableEditName();
 
-		SERIALIZABLE(UISceneTreeNode);
+		SERIALIZABLE(SceneTreeNode);
 
 	protected:
 		SceneEditableObject* mTargetObject = nullptr; // Target object
@@ -237,7 +237,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 
 	PUBLIC_FUNCTION(void, AttachToSceneEvents);
 	PUBLIC_FUNCTION(void, DeattachFromSceneEvents);
-	PUBLIC_FUNCTION(UITreeNode*, GetNode, SceneEditableObject*);
+	PUBLIC_FUNCTION(TreeNode*, GetNode, SceneEditableObject*);
 	PUBLIC_FUNCTION(SceneEditableObjsVec, GetSelectedObjects);
 	PUBLIC_FUNCTION(void, SetSelectedObjects, const SceneEditableObjsVec&);
 	PUBLIC_FUNCTION(void, SelectObject, SceneEditableObject*);
@@ -249,12 +249,12 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PUBLIC_FUNCTION(void, SetEditorWatching, bool);
 	PROTECTED_FUNCTION(void, Initialize);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
-	PROTECTED_FUNCTION(UITreeNode*, CreateTreeNodeWidget);
+	PROTECTED_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
-	PROTECTED_FUNCTION(void, FillNodeDataByObject, UITreeNode*, UnknownPtr);
-	PROTECTED_FUNCTION(void, OnNodeDblClick, UITreeNode*);
+	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnNodeDblClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnDraggedObjects, UnknownPtrsVec, UnknownPtr, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectDestroing, SceneEditableObject*);
@@ -272,12 +272,12 @@ CLASS_METHODS_META(Editor::SceneTree)
 }
 END_META;
 
-CLASS_BASES_META(Editor::UISceneTreeNode)
+CLASS_BASES_META(Editor::SceneTreeNode)
 {
-	BASE_CLASS(o2::UITreeNode);
+	BASE_CLASS(o2::TreeNode);
 }
 END_META;
-CLASS_FIELDS_META(Editor::UISceneTreeNode)
+CLASS_FIELDS_META(Editor::SceneTreeNode)
 {
 	PROTECTED_FIELD(mTargetObject);
 	PROTECTED_FIELD(mNameDrawable);
@@ -288,7 +288,7 @@ CLASS_FIELDS_META(Editor::UISceneTreeNode)
 	PROTECTED_FIELD(mEditState);
 }
 END_META;
-CLASS_METHODS_META(Editor::UISceneTreeNode)
+CLASS_METHODS_META(Editor::SceneTreeNode)
 {
 
 	PUBLIC_FUNCTION(void, SetSceneObject, SceneEditableObject*);

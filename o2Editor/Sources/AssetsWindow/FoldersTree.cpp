@@ -147,7 +147,7 @@ namespace Editor
 		}
 	}
 
-	void AssetsFoldersTree::SetupFoldersTreeNode(UITreeNode* node, UnknownPtr object)
+	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, UnknownPtr object)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
@@ -159,7 +159,7 @@ namespace Editor
 			((Text*)nameLayer->GetDrawable())->text = pathName;
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(UITreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(TreeNode* node)
 	{
 		AssetTree::AssetNode* assetTreeNode = (AssetTree::AssetNode*)(void*)node->GetObject();
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
@@ -202,7 +202,7 @@ namespace Editor
 		mOpengingFolderFromThis = false;
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeRightClick(UITreeNode* node)
+	void AssetsFoldersTree::OnFoldersTreeRightClick(TreeNode* node)
 	{
 		o2UI.FocusWidget(this);
 		mContextMenu->Show();

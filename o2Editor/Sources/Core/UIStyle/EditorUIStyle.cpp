@@ -682,7 +682,7 @@ namespace Editor
 									   Hide().For(0.2f));
 
 		// node sample
-		UITreeNode* itemSample = sample->GetNodeSample();
+		TreeNode* itemSample = sample->GetNodeSample();
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
@@ -1106,7 +1106,7 @@ namespace Editor
 									   Hide().For(0.2f));
 
 		// node sample
-		UITreeNode* itemSample = sample->GetNodeSample();
+		TreeNode* itemSample = sample->GetNodeSample();
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
@@ -2096,6 +2096,9 @@ namespace Editor
 		*sample->GetHoverDrawable() = Sprite("ui/UI_ListBox_selection_hover.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
+		// zebra back
+		*sample->GetZebraBackLine() = Sprite(Color4(0, 0, 0, 20));
+
 		// hightlight
 		*sample->GetHightlightDrawable() = Sprite("ui/UI_Window_place.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
@@ -2108,7 +2111,8 @@ namespace Editor
 									   Hide().For(0.2f));
 
 		// node sample
-		UITreeNode* itemSample = sample->GetNodeSample();
+		AnimationTreeNode* itemSample = mnew AnimationTreeNode();
+		sample->SetNodeSample(itemSample);
 		itemSample->layout->minHeight = 25;
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);

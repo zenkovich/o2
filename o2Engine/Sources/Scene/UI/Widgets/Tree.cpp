@@ -16,12 +16,12 @@
 
 namespace o2
 {
-	UITreeNode::UITreeNode()
+	TreeNode::TreeNode()
 	{
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 	}
 
-	UITreeNode::UITreeNode(const UITreeNode& other) :
+	TreeNode::TreeNode(const TreeNode& other) :
 		Widget(other)
 	{
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
@@ -36,16 +36,16 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	UITreeNode::~UITreeNode()
+	TreeNode::~TreeNode()
 	{}
 
-	UITreeNode& UITreeNode::operator=(const UITreeNode& other)
+	TreeNode& TreeNode::operator=(const TreeNode& other)
 	{
 		Widget::operator=(other);
 		return *this;
 	}
 
-	void UITreeNode::SetExpanded(bool expanded, bool forcible /*= false*/)
+	void TreeNode::SetExpanded(bool expanded, bool forcible /*= false*/)
 	{
 		if (expanded == IsExpanded())
 			return;
@@ -57,34 +57,34 @@ namespace o2
 		mNodeDef->isExpanded = expanded;
 	}
 
-	bool UITreeNode::IsExpanded() const
+	bool TreeNode::IsExpanded() const
 	{
 		return mNodeDef->isExpanded;
 	}
 
-	void UITreeNode::Expand(bool forcible /*= false*/)
+	void TreeNode::Expand(bool forcible /*= false*/)
 	{
 		SetExpanded(true, forcible);
 	}
 
-	void UITreeNode::Collapse(bool forcible /*= false*/)
+	void TreeNode::Collapse(bool forcible /*= false*/)
 	{
 		SetExpanded(false, forcible);
 	}
 
-	UnknownPtr UITreeNode::GetObject() const
+	UnknownPtr TreeNode::GetObject() const
 	{
 		return mNodeDef->object;
 	}
 
-	bool UITreeNode::IsUnderPoint(const Vec2F& point)
+	bool TreeNode::IsUnderPoint(const Vec2F& point)
 	{
 		return Widget::IsUnderPoint(point);
 	}
 
-	void UITreeNode::CopyData(const Actor& otherActor)
+	void TreeNode::CopyData(const Actor& otherActor)
 	{
-		const UITreeNode& other = dynamic_cast<const UITreeNode&>(otherActor);
+		const TreeNode& other = dynamic_cast<const TreeNode&>(otherActor);
 
 		Widget::CopyData(other);
 
@@ -100,59 +100,59 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UITreeNode::UpdateTreeLayout(float dt)
+	void TreeNode::UpdateTreeLayout(float dt)
 	{
 		mOwnerTree->mIsNeedUdateLayout = true;
 	}
 
-	void UITreeNode::OnCursorDblClicked(const Input::Cursor& cursor)
+	void TreeNode::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
 		if (mOwnerTree)
 			mOwnerTree->OnNodeDblClick(this);
 	}
 
-	void UITreeNode::OnCursorEnter(const Input::Cursor& cursor)
+	void TreeNode::OnCursorEnter(const Input::Cursor& cursor)
 	{
 		if (mOwnerTree)
 			mOwnerTree->UpdateHover(this);
 	}
 
-	void UITreeNode::OnCursorExit(const Input::Cursor& cursor)
+	void TreeNode::OnCursorExit(const Input::Cursor& cursor)
 	{
 		if (mOwnerTree)
 			mOwnerTree->UpdateHover(nullptr);
 	}
 
-	void UITreeNode::OnDragStart(const Input::Cursor& cursor)
+	void TreeNode::OnDragStart(const Input::Cursor& cursor)
 	{
 		mOwnerTree->BeginDragging(this);
 	}
 
-	void UITreeNode::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
+	void TreeNode::OnDragged(const Input::Cursor& cursor, DragDropArea* area)
 	{
 		mOwnerTree->UpdateDraggingGraphics();
 	}
 
-	void UITreeNode::OnDragEnd(const Input::Cursor& cursor)
+	void TreeNode::OnDragEnd(const Input::Cursor& cursor)
 	{
 		mOwnerTree->mDragEnded = true;
 	}
 
-	void UITreeNode::OnSelected()
+	void TreeNode::OnSelected()
 	{
 		mOwnerTree->Focus();
 	}
 
-	void UITreeNode::OnDeselected()
+	void TreeNode::OnDeselected()
 	{}
 
 	Tree::Tree()
 	{
-		mNodeWidgetSample = mnew UITreeNode();
+		mNodeWidgetSample = mnew TreeNode();
 		mNodeWidgetSample->layout->minHeight = 20;
 		mNodeWidgetSample->AddLayer("caption", nullptr);
 
-		mFakeDragNode = mnew UITreeNode();
+		mFakeDragNode = mnew TreeNode();
 		mHoverDrawable = mnew Sprite();
 		mHighlightSprite = mnew Sprite();
 
@@ -164,8 +164,8 @@ namespace o2
 	{
 		mRearrangeType = other.mRearrangeType;
 		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mFakeDragNode = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<TreeNode>();
+		mFakeDragNode = other.mNodeWidgetSample->CloneAs<TreeNode>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
@@ -359,17 +359,17 @@ namespace o2
 		return getDebugForObject(object);
 	}
 
-	void Tree::FillNodeDataByObject(UITreeNode* nodeWidget, UnknownPtr object)
+	void Tree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
 	{
 		fillNodeDataByObjectDelegate(nodeWidget, object);
 	}
 
-	void Tree::OnNodeDblClick(UITreeNode* nodeWidget)
+	void Tree::OnNodeDblClick(TreeNode* nodeWidget)
 	{
 		onNodeDoubleClicked(nodeWidget);
 	}
 
-	void Tree::OnNodeRBClick(UITreeNode* nodeWidget)
+	void Tree::OnNodeRBClick(TreeNode* nodeWidget)
 	{
 		onNodeRightButtonClicked(nodeWidget);
 	}
@@ -397,7 +397,7 @@ namespace o2
 	void Tree::Select(SelectableDragableObject* object, bool sendOnSelectionChanged)
 	{
 		bool someSelected = false;
-		UITreeNode* uiNode = (UITreeNode*)object;
+		TreeNode* uiNode = (TreeNode*)object;
 
 		if (o2Input.IsKeyDown(VK_SHIFT) && mSelectedNodes.Count() > 0)
 		{
@@ -437,7 +437,7 @@ namespace o2
 
 	void Tree::Deselect(SelectableDragableObject* object)
 	{
-		UITreeNode* uiNode = (UITreeNode*)object;
+		TreeNode* uiNode = (TreeNode*)object;
 		uiNode->mIsSelected = false;
 
 		int idx = mSelectedNodes.FindIdx([&](auto x) { return x->widget == uiNode; });
@@ -561,7 +561,7 @@ namespace o2
 		else mIsNeedUpdateView = true;
 	}
 
-	UITreeNode* Tree::GetNode(UnknownPtr object)
+	TreeNode* Tree::GetNode(UnknownPtr object)
 	{
 		Node* fnd = mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
 		if (fnd)
@@ -574,7 +574,7 @@ namespace o2
 	{
 		for (auto child : mAllNodes)
 		{
-			UITreeNode* childNode = (UITreeNode*)child;
+			TreeNode* childNode = (TreeNode*)child;
 			childNode->Expand();
 		}
 	}
@@ -583,7 +583,7 @@ namespace o2
 	{
 		for (auto child : mAllNodes)
 		{
-			UITreeNode* childNode = (UITreeNode*)child;
+			TreeNode* childNode = (TreeNode*)child;
 			childNode->Collapse();
 		}
 	}
@@ -895,8 +895,8 @@ namespace o2
 
 		mRearrangeType = other.mRearrangeType;
 		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<UITreeNode>();
-		mFakeDragNode = other.mNodeWidgetSample->CloneAs<UITreeNode>();
+		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<TreeNode>();
+		mFakeDragNode = other.mNodeWidgetSample->CloneAs<TreeNode>();
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
@@ -1006,7 +1006,7 @@ namespace o2
 		}
 
 		mNodeWidgetsBuf.Add(mVisibleWidgetsCache.FindAll([](const VisibleWidgetDef& x) { return x.widget != nullptr; })
-							.Select<UITreeNode*>([](const VisibleWidgetDef& x) { return x.widget; }));
+							.Select<TreeNode*>([](const VisibleWidgetDef& x) { return x.widget; }));
 		mVisibleWidgetsCache.Clear();
 
 		if (mIsDraggingNodes)
@@ -1020,7 +1020,7 @@ namespace o2
 		int cacheIdx = mVisibleWidgetsCache.FindIdx([=](const VisibleWidgetDef& x) {
 			return x.object == node->object && x.position == i; });
 
-		UITreeNode* widget;
+		TreeNode* widget;
 
 		if (cacheIdx < 0)
 		{
@@ -1044,7 +1044,7 @@ namespace o2
 		mDrawingChildren.Add(widget);
 	}
 
-	void Tree::UpdateNodeView(Node* node, UITreeNode* widget, int idx)
+	void Tree::UpdateNodeView(Node* node, TreeNode* widget, int idx)
 	{
 		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
 		node->widget = widget;
@@ -1145,7 +1145,7 @@ namespace o2
 					if (position > bottomViewBorder)
 						break;
 
-					UITreeNode* nodeWidget = mNodesBuf.IsEmpty() ? CreateTreeNodeWidget() : mNodeWidgetsBuf.PopBack();
+					TreeNode* nodeWidget = mNodesBuf.IsEmpty() ? CreateTreeNodeWidget() : mNodeWidgetsBuf.PopBack();
 
 					node->widget = nodeWidget;
 					nodeWidget->mNodeDef = node;
@@ -1311,7 +1311,7 @@ namespace o2
 	void Tree::OnCursorPressed(const Input::Cursor& cursor)
 	{}
 
-	void Tree::UpdateHover(UITreeNode* itemUnderCursor)
+	void Tree::UpdateHover(TreeNode* itemUnderCursor)
 	{
 		bool hoverVisible = false;
 		if (itemUnderCursor)
@@ -1388,7 +1388,7 @@ namespace o2
 			mHoverDrawable->SetEnabled(false);
 	}
 
-	UITreeNode* Tree::GetTreeNodeUnderPoint(const Vec2F& point)
+	TreeNode* Tree::GetTreeNodeUnderPoint(const Vec2F& point)
 	{
 		for (auto node : mVisibleNodes)
 		{
@@ -1399,13 +1399,13 @@ namespace o2
 		return nullptr;
 	}
 
-	UITreeNode* Tree::CreateTreeNodeWidget()
+	TreeNode* Tree::CreateTreeNodeWidget()
 	{
-		UITreeNode* res;
+		TreeNode* res;
 
 		if (mNodeWidgetsBuf.IsEmpty())
 		{
-			res = mNodeWidgetSample->CloneAs<UITreeNode>();
+			res = mNodeWidgetSample->CloneAs<TreeNode>();
 			res->ExcludeFromScene();
 			res->Show(true);
 			res->SetSelectionGroup(this);
@@ -1421,7 +1421,7 @@ namespace o2
 		return res;
 	}
 
-	void Tree::BeginDragging(UITreeNode* node)
+	void Tree::BeginDragging(TreeNode* node)
 	{
 		if (mRearrangeType == RearrangeType::Disabled)
 			return;
@@ -1552,7 +1552,7 @@ namespace o2
 	{
 		const Input::Cursor& cursor = *o2Input.GetCursor(0);
 
-		UITreeNode* currentInsertCandidate = nullptr;
+		TreeNode* currentInsertCandidate = nullptr;
 		float nodeDst = FLT_MAX;
 		bool first = true;
 		for (auto node : mVisibleNodes)
@@ -1686,9 +1686,15 @@ namespace o2
 		OnNodesSelectionChanged(mSelectedObjects);
 	}
 
-	UITreeNode* Tree::GetNodeSample() const
+	TreeNode* Tree::GetNodeSample() const
 	{
 		return mNodeWidgetSample;
+	}
+
+	void Tree::SetNodeSample(TreeNode* sample)
+	{
+		delete mNodeWidgetSample;
+		mNodeWidgetSample = sample;
 	}
 
 	Sprite* Tree::GetHoverDrawable() const
@@ -1818,7 +1824,7 @@ namespace o2
 
 DECLARE_CLASS(o2::Tree);
 
-DECLARE_CLASS(o2::UITreeNode);
+DECLARE_CLASS(o2::TreeNode);
 
 ENUM_META_(o2::Tree::RearrangeType, RearrangeType)
 {
