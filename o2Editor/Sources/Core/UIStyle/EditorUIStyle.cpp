@@ -2168,7 +2168,7 @@ namespace Editor
 
 		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
 		itemSampleExpandBtn->layout->anchorMax = Vec2F(0, 1);
-		itemSampleExpandBtn->layout->offsetMin = Vec2F(0, -20);
+		itemSampleExpandBtn->layout->offsetMin = Vec2F(0, -25);
 		itemSampleExpandBtn->layout->offsetMax = Vec2F(10, 0);
 
 		itemSample->AddChild(itemSampleExpandBtn);
