@@ -18,6 +18,9 @@ namespace Editor
 	class AnimationTimeline : public Widget
 	{
 	public:
+		Function<void()> onViewChanged; // it is called when scroll or zoom were changed
+
+	public:
 		// Default constructor
 		AnimationTimeline();
 
@@ -57,6 +60,13 @@ namespace Editor
 
 		// Returns time scale zoom
 		float GetScale() const;
+
+
+		// Converts local time to world x position
+		float LocalToWorld(float pos) const;
+
+		// Converts world x position to local time
+		float WorldToLocal(float pos) const;
 
 
 		// Returns captions text drawable
@@ -106,9 +116,18 @@ namespace Editor
 		FontRef mTextFont;       // Captions font
 		Text*   mText = nullptr; // Captions text
 
+		Sprite* mBeginMark = nullptr; // Begin animation mark sprite. Begin is always at zero
+		Sprite* mEndMark = nullptr;   // End animation mark sprite, at duration
+
+		Layout mBeginMarkLayout = Layout(Vec2F(0, 1), Vec2F(0, 1), Vec2F(-6.0f, 3.0f), Vec2F(6.0f, -21.0f));
+		Layout mEndMarkLayout = Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(-4.0f, 3.0f), Vec2F(6.0f, -21.0f));
+
 		HorizontalScrollBar* mScrollBar = nullptr; // Scroll bar. Limited by animation duration
 
 	private:
+		// Draws time scale with scroll and zoom
+		void DrawTimeScale();
+
 		// Chooses well view of time scale by zoom
 		void ChooseScaleParams(int& bigLinePeriod, double& bigLineTimeAmount);
 
@@ -120,12 +139,6 @@ namespace Editor
 
 		// Updates scroll bar handle size by view width
 		void UpdateScrollBarHandleSize();
-
-		// Converts local time to world x position
-		float LocalToWorld(float pos) const;
-
-		// Converts world x position to local time
-		float WorldToLocal(float pos) const;
 
 		// It is called when transformation was changed and updated. Updates scroll bar handle size
 		void OnTransformUpdated() override;
@@ -139,6 +152,7 @@ CLASS_BASES_META(Editor::AnimationTimeline)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTimeline)
 {
+	PUBLIC_FIELD(onViewChanged);
 	PRIVATE_FIELD(mTextOffset);
 	PRIVATE_FIELD(mBigLineOffset);
 	PRIVATE_FIELD(mSmallLineOffset);
@@ -164,6 +178,10 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mDuration);
 	PRIVATE_FIELD(mTextFont);
 	PRIVATE_FIELD(mText);
+	PRIVATE_FIELD(mBeginMark);
+	PRIVATE_FIELD(mEndMark);
+	PRIVATE_FIELD(mBeginMarkLayout);
+	PRIVATE_FIELD(mEndMarkLayout);
 	PRIVATE_FIELD(mScrollBar);
 }
 END_META;
@@ -178,15 +196,16 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(float, GetScroll);
 	PUBLIC_FUNCTION(void, SetScale, float);
 	PUBLIC_FUNCTION(float, GetScale);
+	PUBLIC_FUNCTION(float, LocalToWorld, float);
+	PUBLIC_FUNCTION(float, WorldToLocal, float);
 	PUBLIC_FUNCTION(Text*, GetText);
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
+	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);
 	PRIVATE_FUNCTION(void, UpdateScrolling, float);
 	PRIVATE_FUNCTION(void, UpdateZooming, float);
 	PRIVATE_FUNCTION(void, UpdateScrollBarHandleSize);
-	PRIVATE_FUNCTION(float, LocalToWorld, float);
-	PRIVATE_FUNCTION(float, WorldToLocal, float);
 	PRIVATE_FUNCTION(void, OnTransformUpdated);
 }
 END_META;

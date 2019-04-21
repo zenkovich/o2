@@ -24,10 +24,12 @@ namespace o2
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);      // Is handle enabled property. Disabled handle don't drawn and interact
 		PROPERTY(bool, selected, SetSelected, IsSelected);   // Is handle selected property
 
+	public:
 		CursorType  cursorType = CursorType::Arrow; // Cursor type when hovering and dragging
 		bool        pixelPerfect = true;            // Is handle draws pixel perfect
 		KeyboardKey snappingKey = VK_CONTROL;       // Snapping key, when it pressed handle uses checkSnappingFunc to correct position
 
+	public:
 		Function<void(const Vec2F&)> onChangedPos;      // On position changed event
 		Function<void()>             onPressed;         // Pressed cursor on handle event
 		Function<void()>             onReleased;        // Released cursor event
@@ -43,12 +45,13 @@ namespace o2
 		Function<void(const Input::Cursor&)> onRightButtonPressed;  // Right mouse button pressed event
 		Function<void(const Input::Cursor&)> onRightButtonReleased; // Right mouse button released event
 
+	public:
 		// Default constructor
 		DragHandle();
 
 		// Constructor with views
 		DragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-				   Sprite* selected = nullptr);
+				   Sprite* selected = nullptr, Sprite* selectedHovered = nullptr, Sprite* selectedPressed = nullptr);
 
 		// Copy-constructor
 		DragHandle(const DragHandle& other);
@@ -56,14 +59,18 @@ namespace o2
 		// Destructor
 		virtual ~DragHandle();
 
+
 		// Copy-operator
 		DragHandle& operator=(const DragHandle& other);
+
 
 		// Draws handle
 		void Draw();
 
+
 		// Returns true if point is above this
 		bool IsUnderPoint(const Vec2F& point);
+
 
 		// Sets position
 		void SetPosition(const Vec2F& position);
@@ -77,11 +84,13 @@ namespace o2
 		// Returns position
 		Vec2F GetPosition() const;
 
+
 		// Returns handle dragging offset to cursor
 		Vec2F GetDraggingOffset() const;
 
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
+
 
 		// Sets is this selected
 		virtual void SetSelected(bool selected);
@@ -101,17 +110,20 @@ namespace o2
 		// Returns selection group
 		ISelectableDragHandlesGroup* GetSelectionGroup() const;
 
+
 		// Set handle enabled. Disabled handle don't drawn and interact
 		virtual void SetEnabled(bool enabled);
 
 		// Returns is handle enabled. Disabled handle don't drawn and interact
 		bool IsEnabled() const;
 
+
 		// Sets handle rotation angle in radians
 		virtual void SetAngle(float rad);
 
 		// Return handle rotation angle in radians
 		float GetAngle() const;
+
 
 		// Sets regular sprite
 		void SetRegularSprite(Sprite* sprite);
@@ -131,8 +143,31 @@ namespace o2
 		// Returns pressed sprite
 		Sprite* GetPressedSprite() const;
 
+
+		// Sets selected sprite
+		void SetSelectedSprite(Sprite* sprite);
+
+		// Returns selected sprite
+		Sprite* GetSelectedSprite() const;
+
+		// Sets selected hovered sprite
+		void SetSelectedHoveredSprite(Sprite* sprite);
+
+		// Returns selected hovered sprite
+		Sprite* GetSelectedHoveredSprite() const;
+
+		// Sets selected pressed sprite
+		void SetSelectedPressedSprite(Sprite* sprite);
+
+		// Returns selected pressed sprite
+		Sprite* GetSelectedPressedSprite() const;
+
+
 		// Sets size to all available sprites
 		void SetSpritesSize(const Vec2F& size);
+
+		// Sets size to all available sprites
+		void SetSpritesSizePivot(const Vec2F& pivot);
 
 		SERIALIZABLE(DragHandle);
 
@@ -140,7 +175,10 @@ namespace o2
 		Sprite* mRegularSprite = nullptr;  // Regular view sprite @SERIALIZABLE
 		Sprite* mHoverSprite = nullptr;    // Hovered view sprite @SERIALIZABLE
 		Sprite* mPressedSprite = nullptr;  // Pressed view sprite @SERIALIZABLE
-		Sprite* mSelectedSprite = nullptr; // Selected view sprite @SERIALIZABLE
+
+		Sprite* mSelectedSprite = nullptr;        // Selected view sprite @SERIALIZABLE
+		Sprite* mSelectedHoverSprite = nullptr;   // Selected hovered view sprite @SERIALIZABLE
+		Sprite* mSelectedPressedSprite = nullptr; // Selected pressed view sprite @SERIALIZABLE
 
 		bool   mEnabled = true; // Is handle enabled. Disabled handle don't drawn and interact
 
@@ -219,12 +257,14 @@ namespace o2
 		Function<Vec2F(const Vec2F&)> localToWidgetOffsetTransformFunc; // Local position to widget offset relative to parent transformation function
 		Function<void()> onLayoutUpdated; // It is called when this layout were updated
 
+	public:
 		// Default constructor
 		WidgetDragHandle();
 
 		// Constructor with views
 		WidgetDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-				         Sprite* selected = nullptr);
+				         Sprite* selected = nullptr, Sprite* selectedHovered = nullptr, 
+						 Sprite* selectedPressed = nullptr);
 
 		// Copy-constructor
 		WidgetDragHandle(const WidgetDragHandle& other);
@@ -232,8 +272,10 @@ namespace o2
 		// Destructor
 		~WidgetDragHandle();
 
+
 		// Copy-operator
 		WidgetDragHandle& operator=(const WidgetDragHandle& other);
+
 
 		// Draws handle
 		void Draw() override;
@@ -244,6 +286,7 @@ namespace o2
 		// Hide public functions
 		using DragHandle::screenToLocalTransformFunc; 
 		using DragHandle::localToScreenTransformFunc;
+
 
 		// Converts point from screen to local space
 		Vec2F ScreenToLocal(const Vec2F& point) override;
@@ -399,6 +442,8 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PROTECTED_FIELD(mHoverSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPressedSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSelectedSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectedHoverSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mSelectedPressedSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mPosition);
 	PROTECTED_FIELD(mScreenPosition);
@@ -442,7 +487,14 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Sprite*, GetHoverSprite);
 	PUBLIC_FUNCTION(void, SetPressedSprite, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetPressedSprite);
+	PUBLIC_FUNCTION(void, SetSelectedSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetSelectedSprite);
+	PUBLIC_FUNCTION(void, SetSelectedHoveredSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetSelectedHoveredSprite);
+	PUBLIC_FUNCTION(void, SetSelectedPressedSprite, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetSelectedPressedSprite);
 	PUBLIC_FUNCTION(void, SetSpritesSize, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetSpritesSizePivot, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

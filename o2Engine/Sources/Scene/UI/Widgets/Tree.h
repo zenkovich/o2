@@ -38,6 +38,7 @@ namespace o2
 
 		Function<void(UnknownPtrsVec, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
 
+	public:
 		// Default constructor
 		Tree();
 
@@ -242,70 +243,70 @@ namespace o2
 		typedef Vector<VisibleWidgetDef> VisibleWidgetsDefsVec;
 
 	protected:
-		RearrangeType  mRearrangeType = RearrangeType::Enabled; // Current available rearrange type @SERIALIZABLE
-		bool           mMultiSelectAvailable = true;            // Is multi selection available @SERIALIZABLE
+		RearrangeType mRearrangeType = RearrangeType::Enabled; // Current available rearrange type @SERIALIZABLE
+		bool          mMultiSelectAvailable = true;            // Is multi selection available @SERIALIZABLE
 
-		TreeNode*    mNodeWidgetSample = nullptr;             // Item sample @SERIALIZABLE
-		float          mChildrenOffset = 10.0f;                 // Children nodes offset from parent @SERIALIZABLE
+		TreeNode* mNodeWidgetSample = nullptr; // Item sample @SERIALIZABLE
+		float     mChildrenOffset = 10.0f;     // Children nodes offset from parent @SERIALIZABLE
 
-		bool           mIsNeedUpdateView = false;               // Is tree needs to be rebuild
-		bool           mIsNeedUdateLayout = false;              // Is layout needs to rebuild
-		bool           mIsNeedUpdateVisibleNodes = false;       // In need to update visible nodes
+		bool mIsNeedUpdateView = false;         // Is tree needs to be rebuild
+		bool mIsNeedUdateLayout = false;        // Is layout needs to rebuild
+		bool mIsNeedUpdateVisibleNodes = false; // In need to update visible nodes
 
-		NodesVec       mAllNodes;                               // All expanded nodes definitions
+		NodesVec mAllNodes; // All expanded nodes definitions
 
-		UnknownPtrsVec mSelectedObjects;                        // Selected objects
-		NodesVec       mSelectedNodes;                          // Selected nodes definitions
+		UnknownPtrsVec mSelectedObjects; // Selected objects
+		NodesVec       mSelectedNodes;   // Selected nodes definitions
 
-		TreeNodesVec   mNodeWidgetsBuf;                         // Nodes widgets buffer
-		NodesVec       mNodesBuf;                               // Nodes buffer
+		TreeNodesVec mNodeWidgetsBuf; // Nodes widgets buffer
+		NodesVec     mNodesBuf;       // Nodes buffer
 
-		NodesVec       mVisibleNodes;                           // Visible nodes
-		int            mMinVisibleNodeIdx = 0;                  // Minimal visible node index
-		int            mMaxVisibleNodeIdx = -1;                 // Maximum visible node index
+		NodesVec mVisibleNodes;           // Visible nodes
+		int      mMinVisibleNodeIdx = 0;  // Minimal visible node index
+		int      mMaxVisibleNodeIdx = -1; // Maximum visible node index
 
-		Vec2F          mLastClickPos;                           // Last click position in scroll space (depends on scroll position)
+		Vec2F mLastClickPos; // Last click position in scroll space (depends on scroll position)
 
-		TreeNode*    mHoveredItem = nullptr;                  // Current hovered tree node item
-		Sprite*        mHoverDrawable = nullptr;                // Selection sprite @SERIALIZABLE
-		Layout         mHoverLayout;                            // Selection layout, result selection area depends on selected item @SERIALIZABLE						  										   
-		RectF          mCurrentHoverRect;                       // Current selection rectangle (for smoothing)
-		RectF          mTargetHoverRect;                        // Target selection rectangle (over selected item)	
+		TreeNode* mHoveredItem = nullptr;   // Current hovered tree node item
+		Sprite*   mHoverDrawable = nullptr; // Selection sprite @SERIALIZABLE
+		Layout    mHoverLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE						  										   
+		RectF     mCurrentHoverRect;        // Current selection rectangle (for smoothing)
+		RectF     mTargetHoverRect;         // Target selection rectangle (over selected item)	
 
-		bool           mIsDraggingNodes = false;                // Is nodes moving by cursor
-		TreeNode*    mFakeDragNode = nullptr;                 // Dragging node
-		Vec2F          mDragOffset;                             // Offset from cursor to dragging node's center
-		TreeNode*    mInsertNodeCandidate = nullptr;          // Insertion node candidate when dragging nodes
-		UnknownPtrsVec mBeforeDragSelectedItems;                // Before drag begin selection
-		bool           mDragEnded = false;                      // Is dragging ended and it needs to call EndDragging
+		bool           mIsDraggingNodes = false;       // Is nodes moving by cursor
+		TreeNode*      mFakeDragNode = nullptr;        // Dragging node
+		Vec2F          mDragOffset;                    // Offset from cursor to dragging node's center
+		TreeNode*      mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
+		UnknownPtrsVec mBeforeDragSelectedItems;       // Before drag begin selection
+		bool           mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
 
-		UnknownPtrsVec mExpandedObjects;                        // Expanded objects
+		UnknownPtrsVec mExpandedObjects; // Expanded objects
 
-		ExpandState    mExpandingNodeState = ExpandState::None; // Expanding node state
-		int            mExpandingNodeIdx = -1;                  // Current expanding node index. -1 if no expanding node
-		int            mExpandingNodeChildsCount = 0;           // Current expanding node children count
-		float          mExpandingNodePosition = 0.0f;           // Current expanding node position in this local coordinates
-		float          mExpandingNodeBottomPosition = 0.0f;     // Current expanding node position of bottom
-		float          mExpandingNodeCurrCoef = 0.0f;           // Current expanding node coefficient of expanding
-		float          mExpandingNodeCurrHeight = 0.0f;         // Current expanding node current height
-		float          mExpandingNodeTargetHeight = 0.0f;       // Current expanding node target height
-		float          mExpandNodeTime = 0.4f;                  // Node expanding time
-		Curve          mExpandingNodeFunc = Curve::EaseInOut(); // Expanding easing node curve
+		ExpandState mExpandingNodeState = ExpandState::None; // Expanding node state
+		int         mExpandingNodeIdx = -1;                  // Current expanding node index. -1 if no expanding node
+		int         mExpandingNodeChildsCount = 0;           // Current expanding node children count
+		float       mExpandingNodePosition = 0.0f;           // Current expanding node position in this local coordinates
+		float       mExpandingNodeBottomPosition = 0.0f;     // Current expanding node position of bottom
+		float       mExpandingNodeCurrCoef = 0.0f;           // Current expanding node coefficient of expanding
+		float       mExpandingNodeCurrHeight = 0.0f;         // Current expanding node current height
+		float       mExpandingNodeTargetHeight = 0.0f;       // Current expanding node target height
+		float       mExpandNodeTime = 0.4f;                  // Node expanding time
+		Curve       mExpandingNodeFunc = Curve::EaseInOut(); // Expanding easing node curve
 
-		TreeNode*    mExpandNodeCandidate = nullptr;          // Expand node candidate when dragging
-		float          mExpandInsertTime = -1.0f;               // Remaining time to expanding item under cursor when dragging nodes
-		float          mPressedTime = 10.0f;                    // Time from last item pressing
+		TreeNode* mExpandNodeCandidate = nullptr; // Expand node candidate when dragging
+		float     mExpandInsertTime = -1.0f;      // Remaining time to expanding item under cursor when dragging nodes
+		float     mPressedTime = 10.0f;           // Time from last item pressing
 
-		float          mNodeExpandTime = 2.0f;                  // Node expand time when dragging actors @SERIALIZABLE
-		float          mNodeDragIntoZone = 0.3f;                // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
+		float mNodeExpandTime = 2.0f;   // Node expand time when dragging actors @SERIALIZABLE
+		float mNodeDragIntoZone = 0.3f; // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-		Animation      mHighlightAnim;                          // Node highlight animation @SERIALIZABLE
-		Sprite*        mHighlightSprite = nullptr;              // Node highlight sprite @SERIALIZABLE
-		Layout         mHighlightLayout;                        // Node highlight sprite layout @SERIALIZABLE
-		Node*          mHighlighNode = nullptr;                 // Hightlighing node
-		UnknownPtr     mHighlightObject;                        // Highlight object
+		Animation  mHighlightAnim;             // Node highlight animation @SERIALIZABLE
+		Sprite*    mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
+		Layout     mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
+		Node*      mHighlighNode = nullptr;    // Hightlighing node
+		UnknownPtr mHighlightObject;           // Highlight object
 
-		VisibleWidgetsDefsVec mVisibleWidgetsCache;             // Visible widgets cache
+		VisibleWidgetsDefsVec mVisibleWidgetsCache; // Visible widgets cache
 
 	protected:
 		// Copies data of actor from other to this
@@ -532,9 +533,9 @@ namespace o2
 		SERIALIZABLE(TreeNode);
 
 	protected:
-		Tree::Node* mNodeDef = nullptr;       // Node definition
-		Tree*       mOwnerTree = nullptr;     // Owner tree
-		Button*     mExpandBtn = nullptr;     // Node expanding button
+		Tree::Node* mNodeDef = nullptr;   // Node definition
+		Tree*       mOwnerTree = nullptr; // Owner tree
+		Button*     mExpandBtn = nullptr; // Node expanding button
 
 	protected:
 		// Copies data of actor from other to this

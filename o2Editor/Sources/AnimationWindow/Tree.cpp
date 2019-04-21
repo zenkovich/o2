@@ -1,10 +1,12 @@
 #include "stdafx.h"
-#include "Tree.h"
+
 #include "Scene/UI/WidgetLayout.h"
+#include "TrackControls/KeyFramesTrackControl.h"
+#include "Tree.h"
+#include "Core/EditorScope.h"
 
 namespace Editor
 {
-
 	AnimationTree::AnimationTree() :
 		Tree()
 	{
@@ -40,12 +42,21 @@ namespace Editor
 		Tree::Draw();
 	}
 
-	void AnimationTree::SetAnimation(Animation* animation)
+	void AnimationTree::SetAnimation(Animation* animation, AnimationTimeline* timeline)
 	{
+		mTimeline = timeline;
 		mAnimation = animation;
 
 		RebuildAnimationTree();
 		UpdateNodesView();
+
+		SetRearrangeType(Tree::RearrangeType::Disabled);
+	}
+
+	void AnimationTree::SetTreeWidth(float width)
+	{
+		mTreeWidth = width;
+		UpdateTreeWidth();
 	}
 
 	Sprite* AnimationTree::GetZebraBackLine() const
@@ -120,6 +131,15 @@ namespace Editor
 		o2Render.DisableScissorTest();
 	}
 
+	void AnimationTree::UpdateTreeWidth()
+	{
+		for (auto node : mVisibleNodes)
+		{
+			if (auto trackNode = dynamic_cast<AnimationTreeNode*>(node->widget))
+				trackNode->SetTreeWidth(mTreeWidth);
+		}
+	}
+
 	UnknownPtr AnimationTree::GetObjectParent(UnknownPtr object)
 	{
 		if (!object)
@@ -141,13 +161,25 @@ namespace Editor
 	String AnimationTree::GetObjectDebug(UnknownPtr object)
 	{
 		auto treeNode = (AnimationValueNode*)object;
-		return treeNode->name;
+		return treeNode ? treeNode->name : "Empty";
 	}
 
 	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
 	{
 		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
-		node->Setup((AnimationValueNode*)object);
+		node->Setup((AnimationValueNode*)object, mTimeline);
+	}
+
+	void AnimationTree::UpdateVisibleNodes()
+	{
+		Tree::UpdateVisibleNodes();
+		UpdateTreeWidth();
+	}
+
+	TreeNode* AnimationTree::CreateTreeNodeWidget()
+	{
+		PushScopeEnterOnStack scope;
+		return Tree::CreateTreeNodeWidget();
 	}
 
 	AnimationTreeNode::AnimationTreeNode() :
@@ -168,10 +200,23 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationTreeNode::Setup(AnimationTree::AnimationValueNode* node)
+	void AnimationTreeNode::Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline)
 	{
+		mTimeline = timeline;
+
+		mTimeline->onViewChanged -= THIS_FUNC(UpdateTrackControlView);
+		mTimeline->onViewChanged += THIS_FUNC(UpdateTrackControlView);
+
 		mData = node;
 		mNameDrawable->text = node->name;
+
+		InitilizeTrackControl();
+	}
+
+	void AnimationTreeNode::SetTreeWidth(float width)
+	{
+		if (mTrackControl)
+			*mTrackControl->layout = WidgetLayout::BothStretch(width, 0, 0, 0);
 	}
 
 	void AnimationTreeNode::CopyData(const Actor& otherActor)
@@ -189,6 +234,61 @@ namespace Editor
 	void AnimationTreeNode::InitializeControls()
 	{
 		mNameDrawable = GetLayerDrawable<Text>("name");
+	}
+
+	void AnimationTreeNode::InitilizeTrackControl()
+	{
+		PushScopeEnterOnStack scope;
+
+		static Dictionary<const Type*, const Type*> animatedValueToControlTrackTypes = 
+		{
+			{ &TypeOf(AnimatedValue<float>), &TypeOf(KeyFramesTrackControl<AnimatedValue<float>>) },
+			{ &TypeOf(AnimatedValue<bool>), &TypeOf(KeyFramesTrackControl<AnimatedValue<bool>>) },
+			{ &TypeOf(AnimatedValue<Vec2F>), &TypeOf(KeyFramesTrackControl<AnimatedValue<Vec2F>>) },
+			{ &TypeOf(AnimatedValue<Color4>), &TypeOf(KeyFramesTrackControl<AnimatedValue<Color4>>) }
+		};
+
+		static Dictionary<const Type*, Vector<ITrackControl*>> trackControlsCache;
+
+		if (mTrackControl)
+		{
+			auto trackType = &mTrackControl->GetType();
+			if (!trackControlsCache.ContainsKey(trackType))
+				trackControlsCache.Add(trackType, Vector<ITrackControl*>());
+
+			trackControlsCache[trackType].Add(mTrackControl);
+
+			RemoveChild(mTrackControl, false);
+		}
+
+		mTrackControl = nullptr;
+
+		if (!mData->animatedValue)
+			return;
+
+		auto animatedValueType = &mData->animatedValue->GetType();
+		if (!animatedValueToControlTrackTypes.ContainsKey(animatedValueType))
+		{
+			o2Debug.LogWarning("Can't create control track for type:" + animatedValueType->GetName());
+			return;
+		}
+
+		auto trackControlType = dynamic_cast<const ObjectType*>(animatedValueToControlTrackTypes[animatedValueType]);
+		if (trackControlsCache.ContainsKey(trackControlType) && !trackControlsCache[trackControlType].IsEmpty())
+			mTrackControl = trackControlsCache[trackControlType].PopBack();
+		else
+			mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
+
+		mTrackControl->SetTimeline(mTimeline);
+		mTrackControl->SetAnimatedValue(mData->animatedValue);
+
+		AddChild(mTrackControl);
+	}
+
+	void AnimationTreeNode::UpdateTrackControlView()
+	{
+		if (mTrackControl)
+			mTrackControl->UpdateView();
 	}
 
 }

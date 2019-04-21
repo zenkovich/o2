@@ -19,10 +19,16 @@ namespace Editor
 		mText->horAlign = HorAlign::Middle;
 		mText->verAlign = VerAlign::Bottom;
 		mText->height = 8;
+
+		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14));
+
+		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
+		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");
 	}
 
 	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
-		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>())
+		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()), 
+		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>())
 	{}
 
 	AnimationTimeline::~AnimationTimeline()
@@ -33,11 +39,16 @@ namespace Editor
 	AnimationTimeline& AnimationTimeline::operator=(const AnimationTimeline& other)
 	{
 		delete mText;
+		delete mBeginMark;
+		delete mEndMark;
 
 		Widget::operator=(other);
 
 		mTextFont = other.mTextFont;
 		mText = other.mText->CloneAs<Text>();
+
+		mBeginMark = other.mBeginMark->CloneAs<Sprite>();
+		mEndMark = other.mEndMark->CloneAs<Sprite>();
 
 		return *this;
 	}
@@ -45,8 +56,27 @@ namespace Editor
 	void AnimationTimeline::Draw()
 	{
 		Widget::Draw();
+		DrawTimeScale();
+	}
+
+	void AnimationTimeline::DrawTimeScale()
+	{
+		o2Render.EnableScissorTest(mChildrenWorldRect);
 
 		double beginPos = (double)(mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom);
+		double endPos = beginPos + mDuration*mOneSecondDefaultSize*mSmoothViewZoom;
+
+		Layout beginLayout = mBeginMarkLayout;
+		beginLayout.offsetMax.x += (float)beginPos;
+
+		Layout endLayout = mEndMarkLayout;
+		endLayout.offsetMin.x += (float)endPos;
+
+		mBeginMark->SetRect(beginLayout.Calculate(mChildrenWorldRect));
+		mBeginMark->Draw();
+
+		mEndMark->SetRect(endLayout.Calculate(mChildrenWorldRect));
+		mEndMark->Draw();
 
 		int bigLinePeriod;
 		double bigLineTimeAmount;
@@ -61,7 +91,7 @@ namespace Editor
 			beginPos += posDelta;
 		}
 
-		double endPos = (double)layout->GetWidth();
+		endPos = (double)layout->GetWidth();
 
 		RectF worldRect = layout->GetWorldRect();
 		for (double pos = beginPos; pos < endPos; pos += posDelta, lineIdx++)
@@ -80,6 +110,8 @@ namespace Editor
 				mText->Draw();
 			}
 		}
+
+		o2Render.DisableScissorTest();
 	}
 
 	void AnimationTimeline::Update(float dt)
@@ -96,6 +128,8 @@ namespace Editor
 		{
 			mSmoothViewZoom = Math::Lerp(mSmoothViewZoom, mViewZoom, dt*mScaleSmoothLerpCoef);
 			UpdateScrollBarHandleSize();
+
+			onViewChanged();
 		}
 
 		if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()) && o2Input.IsKeyDown(VK_CONTROL))
@@ -156,6 +190,8 @@ namespace Editor
 
 	void AnimationTimeline::UpdateScrolling(float dt)
 	{
+		float prevViewScroll = mSmoothViewScroll;
+
 		if (IsUnderPoint(o2Input.GetCursorPos()) && o2Input.IsRightMousePressed())
 		{
 			mBeginDragViewScrollOffset = WorldToLocal(o2Input.GetCursorPos().x);
@@ -210,6 +246,9 @@ namespace Editor
 			if (mScrollBar)
 				mScrollBar->SetValueForcible(mSmoothViewScroll);
 		}
+
+		if (!Math::Equals(prevViewScroll, mSmoothViewScroll))
+			onViewChanged();
 	}
 
 	void AnimationTimeline::SetDuration(float duration)

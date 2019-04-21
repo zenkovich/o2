@@ -16,9 +16,11 @@ namespace o2
 		checkSnappingFunc = [](const Vec2F& point) { return point; };
 	}
 
-	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, 
-						   Sprite* selected /*= nullptr*/):
-		mRegularSprite(regular), mHoverSprite(hover), mPressedSprite(pressed), mSelectedSprite(selected)
+	DragHandle::DragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/,
+						   Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, 
+						   Sprite* selectedPressed /*= nullptr*/) :
+		mRegularSprite(regular), mHoverSprite(hover), mPressedSprite(pressed), mSelectedSprite(selected),
+		mSelectedHoverSprite(selectedHovered), mSelectedPressedSprite(selectedPressed)
 	{
 		screenToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToScreenTransformFunc = [](const Vec2F& point) { return point; };
@@ -26,7 +28,7 @@ namespace o2
 		checkSnappingFunc = [](const Vec2F& point) { return point; };
 	}
 
-	DragHandle::DragHandle(const DragHandle& other):
+	DragHandle::DragHandle(const DragHandle& other) :
 		angle(this), position(this), enabled(this)
 	{
 		if (other.mRegularSprite)
@@ -40,6 +42,12 @@ namespace o2
 
 		if (other.mSelectedSprite)
 			mSelectedSprite = other.mSelectedSprite->CloneAs<Sprite>();
+
+		if (other.mSelectedHoverSprite)
+			mSelectedHoverSprite = other.mSelectedHoverSprite->CloneAs<Sprite>();
+
+		if (other.mSelectedPressedSprite)
+			mSelectedPressedSprite = other.mSelectedPressedSprite->CloneAs<Sprite>();
 
 		onChangedPos = other.onChangedPos;
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -67,16 +75,35 @@ namespace o2
 		if (mSelectedSprite)
 			delete mSelectedSprite;
 
+		if (mSelectedHoverSprite)
+			delete mSelectedHoverSprite;
+
+		if (mSelectedPressedSprite)
+			delete mSelectedPressedSprite;
+
 		if (mSelectGroup)
 			mSelectGroup->RemoveHandle(this);
 	}
 
 	DragHandle& DragHandle::operator=(const DragHandle& other)
 	{
-		delete mRegularSprite;
-		delete mHoverSprite;
-		delete mPressedSprite;
-		delete mSelectedSprite;
+		if (mRegularSprite)
+			delete mRegularSprite;
+
+		if (mHoverSprite)
+			delete mHoverSprite;
+
+		if (mPressedSprite)
+			delete mPressedSprite;
+
+		if (mSelectedSprite)
+			delete mSelectedSprite;
+
+		if (mSelectedHoverSprite)
+			delete mSelectedHoverSprite;
+
+		if (mSelectedPressedSprite)
+			delete mSelectedPressedSprite;
 
 		if (other.mRegularSprite)
 			mRegularSprite = other.mRegularSprite->CloneAs<Sprite>();
@@ -97,6 +124,16 @@ namespace o2
 			mSelectedSprite = other.mSelectedSprite->CloneAs<Sprite>();
 		else
 			mSelectedSprite = nullptr;
+
+		if (other.mSelectedHoverSprite)
+			mSelectedHoverSprite = other.mSelectedHoverSprite->CloneAs<Sprite>();
+		else
+			mSelectedHoverSprite = nullptr;
+
+		if (other.mSelectedPressedSprite)
+			mSelectedPressedSprite = other.mSelectedPressedSprite->CloneAs<Sprite>();
+		else
+			mSelectedPressedSprite = nullptr;
 
 		onChangedPos = other.onChangedPos;
 		screenToLocalTransformFunc = other.screenToLocalTransformFunc;
@@ -122,13 +159,15 @@ namespace o2
 		if (mIsSelected == selected)
 			return;
 
-		if (mSelectGroup) {
+		if (mSelectGroup)
+		{
 			if (selected)
 				mSelectGroup->SelectHandle(this);
 			else
 				mSelectGroup->DeselectHandle(this);
 		}
-		else {
+		else
+		{
 			mIsSelected = selected;
 
 			if (mIsSelected)
@@ -160,23 +199,38 @@ namespace o2
 		if (mRegularSprite)
 			mRegularSprite->Draw();
 
-		if (mHoverSprite)
+		if (mIsSelected && mSelectedHoverSprite)
+		{
+			mSelectedHoverSprite->SetTransparency(Math::Lerp(mSelectedHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
+															 o2Time.GetDeltaTime()*alphaChangeCoef));
+
+			mSelectedHoverSprite->Draw();
+		}
+		else if (mHoverSprite)
 		{
 			mHoverSprite->SetTransparency(Math::Lerp(mHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
-										  o2Time.GetDeltaTime()*alphaChangeCoef));
+													 o2Time.GetDeltaTime()*alphaChangeCoef));
 
 			mHoverSprite->Draw();
 		}
 
-		if (mPressedSprite)
+		if (mIsSelected && mSelectedPressedSprite)
+		{
+			mSelectedPressedSprite->SetTransparency(Math::Lerp(mSelectedPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
+															   o2Time.GetDeltaTime()*alphaChangeCoef));
+
+			mSelectedPressedSprite->Draw();
+		}
+		else if (mPressedSprite)
 		{
 			mPressedSprite->SetTransparency(Math::Lerp(mPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
-											o2Time.GetDeltaTime()*alphaChangeCoef));
+													   o2Time.GetDeltaTime()*alphaChangeCoef));
 
 			mPressedSprite->Draw();
 		}
 
-		if (mSelectedSprite) {
+		if (mSelectedSprite)
+		{
 			mSelectedSprite->SetTransparency(Math::Lerp(mSelectedSprite->GetTransparency(), mIsSelected ? 1.0f : 0.0f,
 														o2Time.GetDeltaTime()*alphaChangeCoef));
 
@@ -224,17 +278,20 @@ namespace o2
 
 	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		if (mIsDragging) {
+		if (mIsDragging)
+		{
 			mIsDragging = false;
 
-			if (mDragBeginPosition != mPosition) {
+			if (mDragBeginPosition != mPosition)
+			{
 				if (mSelectGroup)
 					mSelectGroup->OnHandleCompletedChange(this);
 				else
 					onChangeCompleted();
 			}
 		}
-		else {
+		else
+		{
 			if (mSelectGroup)
 				mSelectGroup->OnHandleCursorReleased(this, cursor);
 			else
@@ -266,9 +323,11 @@ namespace o2
 		if (cursor.delta.Length() < 0.5f)
 			return;
 
-		if (!mIsDragging) {
+		if (!mIsDragging)
+		{
 			float delta = (cursor.position - mPressedCursorPos).Length();
-			if (delta > mDragDistanceThreshold) {
+			if (delta > mDragDistanceThreshold)
+			{
 				mIsDragging = true;
 				mDragBeginPosition = mPosition;
 
@@ -279,7 +338,8 @@ namespace o2
 			}
 		}
 
-		if (mIsDragging) {
+		if (mIsDragging)
+		{
 			mDragPosition = ScreenToLocal(cursor.position) + mDragOffset;
 
 			SetPosition(mDragPosition);
@@ -350,6 +410,12 @@ namespace o2
 
 		if (mSelectedSprite)
 			mSelectedSprite->SetPosition(mScreenPosition);
+
+		if (mSelectedHoverSprite)
+			mSelectedHoverSprite->SetPosition(mScreenPosition);
+
+		if (mSelectedPressedSprite)
+			mSelectedPressedSprite->SetPosition(mScreenPosition);
 	}
 
 	void DragHandle::SetDragPosition(const Vec2F& position)
@@ -398,6 +464,12 @@ namespace o2
 
 		if (mSelectedSprite)
 			mSelectedSprite->angle = rad;
+
+		if (mSelectedHoverSprite)
+			mSelectedHoverSprite->angle = rad;
+
+		if (mSelectedPressedSprite)
+			mSelectedPressedSprite->angle = rad;
 	}
 
 	float DragHandle::GetAngle() const
@@ -444,6 +516,45 @@ namespace o2
 		return mPressedSprite;
 	}
 
+	void DragHandle::SetSelectedSprite(Sprite* sprite)
+	{
+		if (mSelectedSprite)
+			delete mSelectedSprite;
+
+		mSelectedSprite = sprite;
+	}
+
+	Sprite* DragHandle::GetSelectedSprite() const
+	{
+		return mSelectedSprite;
+	}
+
+	void DragHandle::SetSelectedHoveredSprite(Sprite* sprite)
+	{
+		if (mSelectedHoverSprite)
+			delete mSelectedHoverSprite;
+
+		mSelectedHoverSprite = sprite;
+	}
+
+	Sprite* DragHandle::GetSelectedHoveredSprite() const
+	{
+		return mSelectedHoverSprite;
+	}
+
+	void DragHandle::SetSelectedPressedSprite(Sprite* sprite)
+	{
+		if (mSelectedPressedSprite)
+			delete mSelectedPressedSprite;
+
+		mSelectedPressedSprite = sprite;
+	}
+
+	Sprite* DragHandle::GetSelectedPressedSprite() const
+	{
+		return mSelectedPressedSprite;
+	}
+
 	void DragHandle::SetSpritesSize(const Vec2F& size)
 	{
 		if (mRegularSprite)
@@ -457,6 +568,33 @@ namespace o2
 
 		if (mSelectedSprite)
 			mSelectedSprite->SetSize(size);
+
+		if (mSelectedHoverSprite)
+			mSelectedHoverSprite->SetSize(size);
+
+		if (mSelectedPressedSprite)
+			mSelectedPressedSprite->SetSize(size);
+	}
+
+	void DragHandle::SetSpritesSizePivot(const Vec2F& pivot)
+	{
+		if (mRegularSprite)
+			mRegularSprite->SetSizePivot(pivot);
+
+		if (mHoverSprite)
+			mHoverSprite->SetSizePivot(pivot);
+
+		if (mPressedSprite)
+			mPressedSprite->SetSizePivot(pivot);
+
+		if (mSelectedSprite)
+			mSelectedSprite->SetSizePivot(pivot);
+
+		if (mSelectedHoverSprite)
+			mSelectedHoverSprite->SetSizePivot(pivot);
+
+		if (mSelectedPressedSprite)
+			mSelectedPressedSprite->SetSizePivot(pivot);
 	}
 
 	void DragHandle::SetSelectionGroup(ISelectableDragHandlesGroup* group)
@@ -474,7 +612,7 @@ namespace o2
 	{
 		return mSelectGroup;
 	}
-	
+
 	void DragHandle::OnCursorReleasedOutside(const Input::Cursor& cursor)
 	{
 		if (!mSelectGroup)
@@ -487,21 +625,23 @@ namespace o2
 	void DragHandle::OnDeselected()
 	{}
 
-	WidgetDragHandle::WidgetDragHandle():
+	WidgetDragHandle::WidgetDragHandle() :
 		DragHandle(), Widget()
 	{
 		widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
 	}
 
-	WidgetDragHandle::WidgetDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, Sprite* selected /*= nullptr*/):
-		DragHandle(regular, hover, pressed, selected), Widget()
+	WidgetDragHandle::WidgetDragHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/, 
+									   Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, 
+									   Sprite* selectedPressed /*= nullptr*/) :
+		DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed), Widget()
 	{
 		widgetOffsetToLocalTransformFunc = [](const Vec2F& point) { return point; };
 		localToWidgetOffsetTransformFunc = [](const Vec2F& point) { return point; };
 	}
 
-	WidgetDragHandle::WidgetDragHandle(const WidgetDragHandle& other):
+	WidgetDragHandle::WidgetDragHandle(const WidgetDragHandle& other) :
 		DragHandle(other), Widget(other)
 	{
 		widgetOffsetToLocalTransformFunc = other.widgetOffsetToLocalTransformFunc;
@@ -589,11 +729,11 @@ namespace o2
 
 	SelectableDragHandlesGroup::~SelectableDragHandlesGroup()
 	{
-// 		for (auto handle : mHandles)
-// 		{
-// 			handle->mSelectGroup = nullptr;
-// 			delete handle;
-// 		}
+		// 		for (auto handle : mHandles)
+		// 		{
+		// 			handle->mSelectGroup = nullptr;
+		// 			delete handle;
+		// 		}
 	}
 
 	SelectableDragHandlesGroup::SelectableDragHandlesVec SelectableDragHandlesGroup::GetSelectedHandles() const

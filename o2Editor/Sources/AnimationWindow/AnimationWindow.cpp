@@ -1,9 +1,10 @@
 #include "stdafx.h"
 #include "AnimationWindow.h"
 
-#include "AnimationWindow/Timeline.h"
 #include "Animation/Animation.h"
+#include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/Tree.h"
+#include "Core/EditorScope.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Scene/UI/Widgets/Button.h"
@@ -35,11 +36,13 @@ namespace Editor
 		mAnimation = animation;
 
 		mTimeline->SetDuration(animation->GetDuration());
-		mTree->SetAnimation(animation);
+		mTree->SetAnimation(animation, mTimeline);
 	}
 
 	void AnimationWindow::InitializeWindow()
 	{
+		PushScopeEnterOnStack scope;
+
 		mWindow->caption = "Animation";
 		mWindow->name = "animation window";
 		mWindow->SetIcon(mnew Sprite("ui/UI4_animation_icon.png"));
@@ -53,11 +56,10 @@ namespace Editor
 		mWindow->AddChild(mUpPanel);
 
 		mWorkArea = mnew Widget();
-		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 20);
+		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 18);
 		mWindow->AddChild(mWorkArea);
 
 		InitializeUpPanel();
-		InitializeSeparatorHandle();
 
 		mTimeline = mnew AnimationTimeline();
 		*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
@@ -72,7 +74,10 @@ namespace Editor
 
 		mTree = o2UI.CreateWidget<AnimationTree>();
 		*mTree->layout = WidgetLayout::BothStretch();
+		mTree->SetTreeWidth(mTreeViewWidth);
 		mWorkArea->AddChild(mTree);
+
+		InitializeSeparatorHandle();
 	}
 
 	void AnimationWindow::InitializeUpPanel()
@@ -133,6 +138,7 @@ namespace Editor
 			mTreeViewWidth = point.x;
 			mControlsPanel->layout->right = mTreeViewWidth;
 			mTimeline->layout->left = mTreeViewWidth;
+			mTree->SetTreeWidth(mTreeViewWidth);
 		};
 
 		mTreeSeparatorHandle->checkPositionFunc = [&](const Vec2F& point) {
