@@ -98,27 +98,27 @@ namespace o2
 		curve.AppendKeys(values, smooth);
 	}
 
-	void AnimatedValue<float>::AddKey(const Key& key)
+	int AnimatedValue<float>::AddKey(const Key& key)
 	{
-		curve.InsertKey(key);
+		return curve.InsertKey(key);
 	}
 
-	void AnimatedValue<float>::AddKey(const Key& key, float position)
+	int AnimatedValue<float>::AddKey(const Key& key, float position)
 	{
 		Key newKey = key;
 		newKey.position = position;
-		curve.InsertKey(newKey);
+		return curve.InsertKey(newKey);
 	}
 
-	void AnimatedValue<float>::AddKey(float position, float value, float leftCoef, float leftCoefPosition,
+	int AnimatedValue<float>::AddKey(float position, float value, float leftCoef, float leftCoefPosition,
 									  float rightCoef, float rightCoefPosition)
 	{
-		curve.InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
+		return curve.InsertKey(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition);
 	}
 
-	void AnimatedValue<float>::AddKey(float position, float value, float smooth /*= 1.0f*/)
+	int AnimatedValue<float>::AddKey(float position, float value, float smooth /*= 1.0f*/)
 	{
-		curve.InsertKey(position, value, smooth);
+		return curve.InsertKey(position, value, smooth);
 	}
 
 	AnimatedValue<float>::Key AnimatedValue<float>::GetKey(float position)
@@ -130,6 +130,12 @@ namespace o2
 	{
 		return curve.RemoveKey(position);
 	}
+
+	bool AnimatedValue<float>::RemoveKeyAt(int idx)
+	{
+		return curve.RemoveKeyAt(idx);
+	}
+
 
 	void AnimatedValue<float>::RemoveAllKeys()
 	{

@@ -44,7 +44,7 @@ namespace o2
 		{
 			AnimatedValueDef def(val);
 			def.mAnimatedValue = val.mAnimatedValue->CloneAs<IAnimatedValue>();
-			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
+			def.mAnimatedValue->onKeysChanged = THIS_FUNC(RecalculateDuration);
 
 			if (mTarget)
 			{
@@ -122,8 +122,11 @@ namespace o2
 
 	void Animation::Clear()
 	{
-		for (auto& val : mAnimatedValues)
+		for (auto& val : mAnimatedValues) 
+		{
+			val.mAnimatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
 			delete val.mAnimatedValue;
+		}
 
 		mAnimatedValues.Clear();
 	}

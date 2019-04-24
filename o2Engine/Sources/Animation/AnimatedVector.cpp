@@ -81,7 +81,7 @@ namespace o2
 		UpdateApproximation();
 	}
 
-	void AnimatedValue<Vec2F>::AddKey(const Key& key)
+	int AnimatedValue<Vec2F>::AddKey(const Key& key)
 	{
 		int pos = mKeys.Count();
 		for (int i = 0; i < mKeys.Count(); i++)
@@ -97,16 +97,18 @@ namespace o2
 		mKeys.Insert(key, pos);
 
 		UpdateApproximation();
+
+		return pos;
 	}
 
-	void AnimatedValue<Vec2F>::AddKey(const Key& key, float position)
+	int AnimatedValue<Vec2F>::AddKey(const Key& key, float position)
 	{
 		Key newkey = key;
 		newkey.position = position;
-		AddKey(newkey);
+		return AddKey(newkey);
 	}
 
-	void AnimatedValue<Vec2F>::AddSmoothKey(const Key& key, float smooth)
+	int AnimatedValue<Vec2F>::AddSmoothKey(const Key& key, float smooth)
 	{
 		int pos = mKeys.Count();
 		for (int i = 0; i < mKeys.Count(); i++)
@@ -122,18 +124,20 @@ namespace o2
 		mKeys.Insert(key, pos);
 
 		SmoothKey(key.position, smooth);
+
+		return pos;
 	}
 
-	void AnimatedValue<Vec2F>::AddKey(float position, const Vec2F& value,
+	int AnimatedValue<Vec2F>::AddKey(float position, const Vec2F& value,
 									  const Vec2F& prevSupport, const Vec2F& nextSupport,
 									  float leftCoef, float leftCoefPosition, float rightCoef, float rightCoefPosition)
 	{
-		AddKey(Key(position, value, prevSupport, nextSupport, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
+		return AddKey(Key(position, value, prevSupport, nextSupport, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
 	}
 
-	void AnimatedValue<Vec2F>::AddKey(float position, const Vec2F& value, float smooth /*= 1.0f*/)
+	int AnimatedValue<Vec2F>::AddKey(float position, const Vec2F& value, float smooth /*= 1.0f*/)
 	{
-		AddKey(Key(position, value, value, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
+		return AddKey(Key(position, value, value, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
 	}
 
 	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::GetKey(float position)
@@ -147,10 +151,8 @@ namespace o2
 
 	bool AnimatedValue<Vec2F>::RemoveKey(float position)
 	{
-		for (int i = 0; i < mKeys.Count(); i++)
-		{
-			if (Math::Equals(mKeys[i].position, position))
-			{
+		for (int i = 0; i < mKeys.Count(); i++) {
+			if (Math::Equals(mKeys[i].position, position)) {
 				mKeys.RemoveAt(i);
 				UpdateApproximation();
 				return true;
@@ -158,6 +160,17 @@ namespace o2
 		}
 
 		return false;
+	}
+
+	bool AnimatedValue<Vec2F>::RemoveKeyAt(int idx)
+	{
+		if (idx < 0 || idx > mKeys.Count() - 1)
+			return false;
+
+		mKeys.RemoveAt(idx);
+		UpdateApproximation();
+
+		return true;
 	}
 
 	void AnimatedValue<Vec2F>::RemoveAllKeys()

@@ -124,7 +124,7 @@ namespace Editor
 
 	void AnimationTimeline::UpdateZooming(float dt)
 	{
-		if (!Math::Equals(mSmoothViewZoom, mViewZoom))
+		if (!Math::Equals(mSmoothViewZoom, mViewZoom, 0.001f))
 		{
 			mSmoothViewZoom = Math::Lerp(mSmoothViewZoom, mViewZoom, dt*mScaleSmoothLerpCoef);
 			UpdateScrollBarHandleSize();

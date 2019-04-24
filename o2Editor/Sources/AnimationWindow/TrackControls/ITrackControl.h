@@ -17,9 +17,12 @@ namespace Editor
 			int keyIdx = 0;
 			WidgetDragHandle* handle = nullptr;
 
+			KeyHandle() { }
+			KeyHandle(int keyIdx, WidgetDragHandle* handle): keyIdx(keyIdx), handle(handle) { }
+
 			bool operator==(const KeyHandle& other) const;
 		};
-		typedef Vector<KeyHandle> KeyHandlesVec;
+		typedef Vector<KeyHandle*> KeyHandlesVec;
 
 	public:
 		virtual void SetAnimatedValue(IAnimatedValue* animatedValue);

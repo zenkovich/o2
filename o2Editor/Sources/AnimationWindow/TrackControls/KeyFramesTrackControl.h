@@ -67,6 +67,8 @@ namespace Editor
 		void InitializeHandles();
 
 		WidgetDragHandle* CreateHandle();
+
+		void ChangeHandleIndex(int oldIndex, int newIndex);
 	};
 
 	template<typename AnimatedValueType>
@@ -81,7 +83,10 @@ namespace Editor
 
 	template<typename AnimatedValueType>
 	KeyFramesTrackControl<AnimatedValueType>::~KeyFramesTrackControl()
-	{}
+	{
+		for (auto handle : mHandles)
+			delete handle;
+	}
 
 	template<typename AnimatedValueType>
 	KeyFramesTrackControl<AnimatedValueType>& KeyFramesTrackControl<AnimatedValueType>::operator=(const KeyFramesTrackControl& other)
@@ -138,14 +143,17 @@ namespace Editor
 	template<typename AnimatedValueType>
 	float KeyFramesTrackControl<AnimatedValueType>::GetKeyPosition(int idx) const
 	{
-		return mHandles[idx].handle->GetPosition().x;
+		return mHandles[idx]->handle->GetPosition().x;
 	}
 
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
 	{
 		Vector<WidgetDragHandle*> handles = mHandles.Select<WidgetDragHandle*>(
-			[](const KeyHandle& x) { return x.handle; });
+			[](const KeyHandle* x) { return x->handle; });
+
+		for (auto keyHandle : mHandles)
+			delete keyHandle;
 
 		mHandles.Clear();
 
@@ -160,11 +168,37 @@ namespace Editor
 				handle = CreateHandle();
 
 			handle->SetPosition(Vec2F(key.position, 0.0f));
-
-			mHandles.Add({ idx++, handle });
-
 			AddChild(handle);
+
+			KeyHandle* keyhandle = mnew KeyHandle(idx++, handle);
+			mHandles.Add(keyhandle);
+
+			handle->onChangedPos = [=](const Vec2F& pos) {
+				auto key = mAnimatedValue->GetKeys()[keyhandle->keyIdx];
+
+				key.position = pos.x;
+				mAnimatedValue->RemoveKeyAt(keyhandle->keyIdx);
+				auto newIdx = mAnimatedValue->AddKey(key);
+
+				if (newIdx != keyhandle->keyIdx) {
+					ChangeHandleIndex(keyhandle->keyIdx, newIdx);
+					keyhandle->keyIdx = newIdx;
+				}
+			};
+
 		}
+	}
+
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::ChangeHandleIndex(int oldIndex, int newIndex)
+	{
+		KeyHandle* editingHandle = mHandles[oldIndex];
+		mHandles.RemoveAt(oldIndex);
+		mHandles.Insert(editingHandle, newIndex);
+
+		for (int i = 0; i < mHandles.Count(); i++)
+			mHandles[i]->keyIdx = i;
 	}
 
 	template<typename AnimatedValueType>
@@ -176,10 +210,8 @@ namespace Editor
 		int idx = 0;
 		for (auto& key : mAnimatedValue->GetKeys())
 		{			
-			auto& handle = mHandles.FindMatch([&](const KeyHandle& x) { return x.keyIdx == idx; });
-			handle.handle->SetPosition(Vec2F(key.position, 0.0f));
-
-			idx++;
+			auto keyHandle = mHandles[idx++];
+			keyHandle->handle->SetPosition(Vec2F(key.position, 0.0f));
 		}
 	}
 
@@ -197,7 +229,13 @@ namespace Editor
 		handle->cursorType = CursorType::SizeWE;
 		handle->SetSpritesSizePivot(Vec2F(7, 1));
 
-		handle->checkPositionFunc = [&](const Vec2F& pos) { return Vec2F(pos.x, layout->GetHeight()*0.5f); };
+		handle->checkPositionFunc = [&](const Vec2F& pos) { 
+			float position = pos.x;
+			if (position < 0.0f)
+				position = 0.0f;
+
+			return Vec2F(position, layout->GetHeight()*0.5f);
+		};
 
 		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos) {
 			float worldXPos = mTimeline->LocalToWorld(pos.x);
@@ -244,5 +282,6 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
+	PRIVATE_FUNCTION(void, ChangeHandleIndex, int, int);
 }
 END_META;

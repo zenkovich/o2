@@ -57,26 +57,29 @@ namespace o2
 		void AddKeys(Vector<Key> keys, float smooth = 1.0f);
 
 		// Adds single key
-		void AddKey(const Key& key);
+		int AddKey(const Key& key);
 
 		// Adds key at position
-		void AddKey(const Key& key, float position);
+		int AddKey(const Key& key, float position);
 
 		// Adds and smooths key
-		void AddSmoothKey(const Key& key, float smooth);
+		int AddSmoothKey(const Key& key, float smooth);
 
 		// Adds key
-		void AddKey(float position, const Vec2F& value, const Vec2F& prevSupport, const Vec2F& nextSupport,
+		int AddKey(float position, const Vec2F& value, const Vec2F& prevSupport, const Vec2F& nextSupport,
 					float leftCoef, float leftCoefPosition, float rightCoef, float rightCoefPosition);
 
 		// Adds key at position with value and smoothing
-		void AddKey(float position, const Vec2F& value, float smooth = 1.0f);
+		int AddKey(float position, const Vec2F& value, float smooth = 1.0f);
 
 		// Returns key at position
 		Key GetKey(float position);
 
 		// Removes key at position
 		bool RemoveKey(float position);
+
+		// Removes key by index
+		bool RemoveKeyAt(int idx);
 
 		// Removes all keys
 		void RemoveAllKeys();
@@ -238,13 +241,14 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(Vec2F, GetValue);
 	PUBLIC_FUNCTION(Vec2F, GetValue, float);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
-	PUBLIC_FUNCTION(void, AddKey, const Key&);
-	PUBLIC_FUNCTION(void, AddKey, const Key&, float);
-	PUBLIC_FUNCTION(void, AddSmoothKey, const Key&, float);
-	PUBLIC_FUNCTION(void, AddKey, float, const Vec2F&, const Vec2F&, const Vec2F&, float, float, float, float);
-	PUBLIC_FUNCTION(void, AddKey, float, const Vec2F&, float);
+	PUBLIC_FUNCTION(int, AddKey, const Key&);
+	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
+	PUBLIC_FUNCTION(int, AddSmoothKey, const Key&, float);
+	PUBLIC_FUNCTION(int, AddKey, float, const Vec2F&, const Vec2F&, const Vec2F&, float, float, float, float);
+	PUBLIC_FUNCTION(int, AddKey, float, const Vec2F&, float);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);

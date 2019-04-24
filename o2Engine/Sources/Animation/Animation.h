@@ -374,6 +374,7 @@ namespace o2
 		{
 			if (val.mTargetPtr == target)
 			{
+				def.mAnimatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
 				delete val.mAnimatedValue;
 				mAnimatedValues.Remove(val);
 				return true;

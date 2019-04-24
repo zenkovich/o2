@@ -65,23 +65,26 @@ namespace o2
 		void AddKeys(Vector<Vec2F> values, float smooth = 1.0f);
 
 		// Adds single key
-		void AddKey(const Key& key);
+		int AddKey(const Key& key);
 
 		// Adds key at position
-		void AddKey(const Key& key, float position);
+		int AddKey(const Key& key, float position);
 
 		// Adds key
-		void AddKey(float position, float value, float leftCoef, float leftCoefPosition,
+		int AddKey(float position, float value, float leftCoef, float leftCoefPosition,
 					float rightCoef, float rightCoefPosition);
 
 		// Adds key at position with value and smoothing
-		void AddKey(float position, float value, float smooth = 1.0f);
+		int AddKey(float position, float value, float smooth = 1.0f);
 
 		// Returns key at position
 		Key GetKey(float position);
 
 		// Removes key at position
 		bool RemoveKey(float position);
+
+		// Removes key by index
+		bool RemoveKeyAt(int idx);
 
 		// Removes all keys
 		void RemoveAllKeys();
@@ -184,12 +187,13 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(float, GetValue);
 	PUBLIC_FUNCTION(float, GetValue, float);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
-	PUBLIC_FUNCTION(void, AddKey, const Key&);
-	PUBLIC_FUNCTION(void, AddKey, const Key&, float);
-	PUBLIC_FUNCTION(void, AddKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(void, AddKey, float, float, float);
+	PUBLIC_FUNCTION(int, AddKey, const Key&);
+	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
+	PUBLIC_FUNCTION(int, AddKey, float, float, float, float, float, float);
+	PUBLIC_FUNCTION(int, AddKey, float, float, float);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);

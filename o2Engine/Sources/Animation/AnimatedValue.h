@@ -98,26 +98,29 @@ namespace o2
 		void AddKeys(Vector<Key> keys, float smooth = 1.0f);
 
 		// Adds single key
-		void AddKey(const Key& key);
+		int AddKey(const Key& key);
 
 		// Adds key at position
-		void AddKey(const Key& key, float position);
+		int AddKey(const Key& key, float position);
 
 		// Adds and smooths key
-		void AddSmoothKey(const Key& key, float smooth);
+		int AddSmoothKey(const Key& key, float smooth);
 
 		// Adds key
-		void AddKey(float position, const _type& value, float leftCoef, float leftCoefPosition,
+		int AddKey(float position, const _type& value, float leftCoef, float leftCoefPosition,
 					float rightCoef, float rightCoefPosition);
 
 		// Adds key at position with value and smoothing
-		void AddKey(float position, const _type& value, float smooth = 1.0f);
+		int AddKey(float position, const _type& value, float smooth = 1.0f);
 
 		// Returns key at position
 		Key GetKey(float position);
 
 		// Removes key at position
 		bool RemoveKey(float position);
+
+		// Removes key by index
+		bool RemoveKeyAt(int idx);
 
 		// Removes all keys
 		void RemoveAllKeys();
@@ -335,7 +338,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::AddKey(const Key& key)
+	int AnimatedValue<_type>::AddKey(const Key& key)
 	{
 		int pos = mKeys.Count();
 		for (int i = 0; i < mKeys.Count(); i++)
@@ -351,18 +354,20 @@ namespace o2
 		mKeys.Insert(key, pos);
 
 		UpdateApproximation();
+
+		return pos;
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::AddKey(const Key& key, float position)
+	int AnimatedValue<_type>::AddKey(const Key& key, float position)
 	{
 		Key newkey = key;
 		newkey.position = position;
-		AddKey(newkey);
+		return AddKey(newkey);
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::AddSmoothKey(const Key& key, float smooth)
+	int AnimatedValue<_type>::AddSmoothKey(const Key& key, float smooth)
 	{
 		int pos = mKeys.Count();
 		for (int i = 0; i < mKeys.Count(); i++)
@@ -378,20 +383,22 @@ namespace o2
 		mKeys.Insert(key, pos);
 
 		SmoothKey(key.position, smooth);
+
+		return pos;
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::AddKey(float position, const _type& value,
+	int AnimatedValue<_type>::AddKey(float position, const _type& value,
 									  float leftCoef, float leftCoefPosition,
 									  float rightCoef, float rightCoefPosition)
 	{
-		AddKey(Key(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
+		return AddKey(Key(position, value, leftCoef, leftCoefPosition, rightCoef, rightCoefPosition));
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::AddKey(float position, const _type& value, float smooth /*= 1.0f*/)
+	int AnimatedValue<_type>::AddKey(float position, const _type& value, float smooth /*= 1.0f*/)
 	{
-		AddSmoothKey(Key(position, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
+		return AddSmoothKey(Key(position, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
 	}
 
 	template<typename _type>
@@ -419,6 +426,19 @@ namespace o2
 
 		return false;
 	}
+
+	template<typename _type>
+	bool AnimatedValue<_type>::RemoveKeyAt(int idx)
+	{
+		if (idx < 0 || idx > mKeys.Count() - 1)
+			return false;
+
+		mKeys.RemoveAt(idx);
+		UpdateApproximation();
+
+		return true;
+	}
+
 
 	template<typename _type>
 	void AnimatedValue<_type>::RemoveAllKeys()
@@ -771,13 +791,14 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FUNCTION(_type, GetValue);
 	PUBLIC_FUNCTION(_type, GetValue, float);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
-	PUBLIC_FUNCTION(void, AddKey, const Key&);
-	PUBLIC_FUNCTION(void, AddKey, const Key&, float);
-	PUBLIC_FUNCTION(void, AddSmoothKey, const Key&, float);
-	PUBLIC_FUNCTION(void, AddKey, float, const _type&, float, float, float, float);
-	PUBLIC_FUNCTION(void, AddKey, float, const _type&, float);
+	PUBLIC_FUNCTION(int, AddKey, const Key&);
+	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
+	PUBLIC_FUNCTION(int, AddSmoothKey, const Key&, float);
+	PUBLIC_FUNCTION(int, AddKey, float, const _type&, float, float, float, float);
+	PUBLIC_FUNCTION(int, AddKey, float, const _type&, float);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
+	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
