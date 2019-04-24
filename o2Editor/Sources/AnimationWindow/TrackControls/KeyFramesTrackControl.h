@@ -45,17 +45,18 @@ namespace Editor
 		// Sets timeline for calculating handles positions
 		void SetTimeline(AnimationTimeline* timeline) override;
 
+
+		// Updates handles position on timeline
+		void UpdateHandles();
+
+
+		// Returns key handles list
+		KeyHandlesVec GetKeyHandles() const override;
+
+		// Returns key handle position
+		float GetKeyPosition(int idx) const override;
+
 		SERIALIZABLE(KeyFramesTrackControl<AnimatedValueType>);
-
-	private:
-		struct KeyHandle
-		{
-			int keyIdx = 0;
-			WidgetDragHandle* handle = nullptr;
-
-			bool operator==(const KeyHandle& other) const { return handle == other.handle; }
-		};
-		typedef Vector<KeyHandle> KeyHandlesVec;
 
 	private:
 		KeyHandlesVec      mHandles;                 // List of handles, each for keys
@@ -63,8 +64,7 @@ namespace Editor
 		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
 
 	private:
-		void UpdateKeysHandles();
-		void UpdateView();
+		void InitializeHandles();
 
 		WidgetDragHandle* CreateHandle();
 	};
@@ -114,7 +114,7 @@ namespace Editor
 	void KeyFramesTrackControl<AnimatedValueType>::SetAnimatedValue(IAnimatedValue* animatedValue)
 	{
 		mAnimatedValue = dynamic_cast<AnimatedValueType*>(animatedValue);
-		UpdateKeysHandles();
+		InitializeHandles();
 	}
 
 	template<typename AnimatedValueType>
@@ -130,7 +130,19 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::UpdateKeysHandles()
+	ITrackControl::KeyHandlesVec KeyFramesTrackControl<AnimatedValueType>::GetKeyHandles() const
+	{
+		return mHandles;
+	}
+
+	template<typename AnimatedValueType>
+	float KeyFramesTrackControl<AnimatedValueType>::GetKeyPosition(int idx) const
+	{
+		return mHandles[idx].handle->GetPosition().x;
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
 	{
 		Vector<WidgetDragHandle*> handles = mHandles.Select<WidgetDragHandle*>(
 			[](const KeyHandle& x) { return x.handle; });
@@ -156,7 +168,7 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::UpdateView()
+	void KeyFramesTrackControl<AnimatedValueType>::UpdateHandles()
 	{
 		if (!mAnimatedValue)
 			return;
@@ -183,7 +195,7 @@ namespace Editor
 														 mnew Sprite("ui/UI4_selected_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
-		handle->SetSpritesSizePivot(Vec2F(7, 0));
+		handle->SetSpritesSizePivot(Vec2F(7, 1));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) { return Vec2F(pos.x, layout->GetHeight()*0.5f); };
 
@@ -227,8 +239,10 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
 	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
-	PRIVATE_FUNCTION(void, UpdateKeysHandles);
-	PRIVATE_FUNCTION(void, UpdateView);
+	PUBLIC_FUNCTION(void, UpdateHandles);
+	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
+	PUBLIC_FUNCTION(float, GetKeyPosition, int);
+	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
 }
 END_META;

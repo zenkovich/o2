@@ -1,9 +1,10 @@
 #include "stdafx.h"
 
+#include "Core/EditorScope.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "TrackControls/KeyFramesTrackControl.h"
+#include "TrackControls/MapKeyFramesTrackControl.h"
 #include "Tree.h"
-#include "Core/EditorScope.h"
 
 namespace Editor
 {
@@ -264,31 +265,47 @@ namespace Editor
 		mTrackControl = nullptr;
 
 		if (!mData->animatedValue)
-			return;
-
-		auto animatedValueType = &mData->animatedValue->GetType();
-		if (!animatedValueToControlTrackTypes.ContainsKey(animatedValueType))
 		{
-			o2Debug.LogWarning("Can't create control track for type:" + animatedValueType->GetName());
-			return;
+			MapKeyFramesTrackControl* trackControl = nullptr;
+			auto trackControlType = &TypeOf(MapKeyFramesTrackControl);
+			if (trackControlsCache.ContainsKey(trackControlType) && !trackControlsCache[trackControlType].IsEmpty())
+				trackControl = dynamic_cast<MapKeyFramesTrackControl*>(trackControlsCache[trackControlType].PopBack());
+			else
+				trackControl = mnew MapKeyFramesTrackControl();
+
+			mTrackControl = trackControl;
+
+			trackControl->SetTimeline(mTimeline);
+			trackControl->SetMappedTracks(*mData);
+
+			AddChild(mTrackControl);
 		}
-
-		auto trackControlType = dynamic_cast<const ObjectType*>(animatedValueToControlTrackTypes[animatedValueType]);
-		if (trackControlsCache.ContainsKey(trackControlType) && !trackControlsCache[trackControlType].IsEmpty())
-			mTrackControl = trackControlsCache[trackControlType].PopBack();
 		else
-			mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
+		{
+			auto animatedValueType = &mData->animatedValue->GetType();
+			if (!animatedValueToControlTrackTypes.ContainsKey(animatedValueType))
+			{
+				o2Debug.LogWarning("Can't create control track for type:" + animatedValueType->GetName());
+				return;
+			}
 
-		mTrackControl->SetTimeline(mTimeline);
-		mTrackControl->SetAnimatedValue(mData->animatedValue);
+			auto trackControlType = dynamic_cast<const ObjectType*>(animatedValueToControlTrackTypes[animatedValueType]);
+			if (trackControlsCache.ContainsKey(trackControlType) && !trackControlsCache[trackControlType].IsEmpty())
+				mTrackControl = trackControlsCache[trackControlType].PopBack();
+			else
+				mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
 
-		AddChild(mTrackControl);
+			mTrackControl->SetTimeline(mTimeline);
+			mTrackControl->SetAnimatedValue(mData->animatedValue);
+
+			AddChild(mTrackControl);
+		}
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()
 	{
 		if (mTrackControl)
-			mTrackControl->UpdateView();
+			mTrackControl->UpdateHandles();
 	}
 
 }

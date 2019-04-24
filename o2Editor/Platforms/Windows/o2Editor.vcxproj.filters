@@ -670,5 +670,8 @@
     <ClCompile Include="..\..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp">
+      <Filter>Sources\AnimationWindow\TrackControls</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

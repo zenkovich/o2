@@ -48,7 +48,7 @@ namespace Editor
 
 		SERIALIZABLE(AnimationTree);
 
-	private:
+	public:
 		struct AnimationValueNode
 		{
 			String name;

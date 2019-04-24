@@ -20,7 +20,7 @@ namespace Editor
 		mText->verAlign = VerAlign::Bottom;
 		mText->height = 8;
 
-		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14));
+		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
 
 		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
 		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");

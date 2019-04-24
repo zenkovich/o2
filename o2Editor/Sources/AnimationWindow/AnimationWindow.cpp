@@ -57,7 +57,6 @@ namespace Editor
 
 		mWorkArea = mnew Widget();
 		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 18);
-		mWindow->AddChild(mWorkArea);
 
 		InitializeUpPanel();
 
@@ -76,6 +75,8 @@ namespace Editor
 		*mTree->layout = WidgetLayout::BothStretch();
 		mTree->SetTreeWidth(mTreeViewWidth);
 		mWorkArea->AddChild(mTree);
+
+		mWindow->AddChild(mWorkArea);
 
 		InitializeSeparatorHandle();
 	}

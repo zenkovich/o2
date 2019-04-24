@@ -318,6 +318,7 @@
     <ClCompile Include="..\..\Sources\AnimationWindow\Timeline.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\Tree.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetIcon.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
