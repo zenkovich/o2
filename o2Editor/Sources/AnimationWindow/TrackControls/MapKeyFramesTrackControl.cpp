@@ -8,14 +8,19 @@ namespace Editor
 {
 	MapKeyFramesTrackControl::MapKeyFramesTrackControl() :
 		ITrackControl()
-	{}
+	{ }
 
 	MapKeyFramesTrackControl::MapKeyFramesTrackControl(const MapKeyFramesTrackControl& other) :
 		ITrackControl(other)
-	{}
+	{ }
 
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()
-	{}
+	{ 
+		for (auto kv : mHandles) {
+			for (auto keyHandle : kv.Value())
+				delete keyHandle;
+		}
+	}
 
 	MapKeyFramesTrackControl& MapKeyFramesTrackControl::operator=(const MapKeyFramesTrackControl& other)
 	{
@@ -23,6 +28,7 @@ namespace Editor
 		return *this;
 	}
 
+#undef DrawText
 	void MapKeyFramesTrackControl::Draw()
 	{
 		DrawDebugFrame();
@@ -61,14 +67,20 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::CacheHandles()
 	{
-		mHandlesCache.Add(mHandles.Select<WidgetDragHandle*>([](const KeyHandle& x) { return x.handle; }));
+		for (auto kv : mHandles)
+		{
+			for (auto keyHandle : kv.Value()) {
+				mHandlesCache.Add(keyHandle->handle);
+				delete keyHandle;
+			}
+		}
+
 		mHandles.Clear();
 	}
 
 	void MapKeyFramesTrackControl::InitializeNodeHandles(const AnimationTree::AnimationValueNode& valueNode)
 	{
-		if (valueNode.animatedValue)
-		{
+		if (valueNode.animatedValue) {
 			if (auto animatedValue = dynamic_cast<AnimatedValue<float>*>(valueNode.animatedValue))
 				InitializeAnimatedValueHandles(animatedValue);
 			else if (auto animatedValue = dynamic_cast<AnimatedValue<bool>*>(valueNode.animatedValue))
@@ -85,8 +97,16 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::UpdateHandles()
 	{
-		for (auto& keyHandle : mHandles)
-			keyHandle.updateFunc(keyHandle);
+		for (auto kv : mHandles) {
+			for (auto keyHandle : kv.Value())
+				keyHandle->updateFunc(*keyHandle);
+		}
+	}
+
+	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)
+	{
+		for (auto keyHandle : mHandles[animatedValue])
+			keyHandle->updateFunc(*keyHandle);
 	}
 
 	WidgetDragHandle* MapKeyFramesTrackControl::CreateHandle()
@@ -101,7 +121,13 @@ namespace Editor
 		handle->cursorType = CursorType::SizeWE;
 		handle->SetSpritesSizePivot(Vec2F(7, 2));
 
-		handle->checkPositionFunc = [&](const Vec2F& pos) { return Vec2F(pos.x, layout->GetHeight()*0.5f); };
+		handle->checkPositionFunc = [&](const Vec2F& pos) {
+			float position = pos.x;
+			if (position < 0.0f)
+				position = 0.0f;
+
+			return Vec2F(position, layout->GetHeight()*0.5f);
+		};
 
 		handle->localToWidgetOffsetTransformFunc = [&](const Vec2F& pos) {
 			float worldXPos = mTimeline->LocalToWorld(pos.x);
@@ -119,6 +145,19 @@ namespace Editor
 
 		return handle;
 	}
+
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle()
+	{}
+
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle(int keyIdx, WidgetDragHandle* handle, IAnimatedValue* animatedValue, const Function<void(KeyHandle& keyHandle)>& updateFunc) :
+		keyIdx(keyIdx), handle(handle), animatedValue(animatedValue), updateFunc(updateFunc)
+	{}
+
+	bool MapKeyFramesTrackControl::KeyHandle::operator==(const KeyHandle& other) const
+	{
+		return handle == other.handle;
+	}
+
 }
 
 DECLARE_CLASS(Editor::MapKeyFramesTrackControl);

@@ -41,6 +41,9 @@ namespace Editor
 		// Updates handles position on timeline
 		void UpdateHandles() override;
 
+		// Updates handles positions for specified animated value
+		void UpdateHandlesForValue(IAnimatedValue* animatedValue);
+
 
 		// Sets timeline for calculating handles positions
 		void SetTimeline(AnimationTimeline* timeline) override;
@@ -56,16 +59,21 @@ namespace Editor
 
 			Function<void(KeyHandle& keyHandle)> updateFunc;
 
-			bool operator==(const KeyHandle& other) const { return handle == other.handle; }
+		public:
+			KeyHandle();
+			KeyHandle(int keyIdx, WidgetDragHandle* handle, IAnimatedValue* animatedValue, const Function<void(KeyHandle& keyHandle)>& updateFunc);
+
+			bool operator==(const KeyHandle& other) const;
 		};
-		typedef Vector<KeyHandle> KeyHandlesVec;
+		typedef Vector<KeyHandle*> KeyHandlesVec;
+		typedef Dictionary<IAnimatedValue*, KeyHandlesVec> AnimatedValueKeyHandlesDict;
 
 	private:
-		KeyHandlesVec           mHandles;            // List of handles, each for keys
-		Vector<IAnimatedValue*> mAnimatedValues;     // Editing animated values
-		AnimationTimeline*      mTimeline = nullptr; // Timeline used for calculating handles positions
+		AnimatedValueKeyHandlesDict mHandles;            // List of handles, each for keys
+		Vector<IAnimatedValue*>     mAnimatedValues;     // Editing animated values
+		AnimationTimeline*          mTimeline = nullptr; // Timeline used for calculating handles positions
 													 
-		Vector<WidgetDragHandle*> mHandlesCache;     // Cached drag handles, can be reused
+		Vector<WidgetDragHandle*> mHandlesCache;         // Cached drag handles, can be reused
 
 	private:
 		void CacheHandles();
@@ -75,6 +83,9 @@ namespace Editor
 
 		template<typename _animatedValueType>
 		void InitializeAnimatedValueHandles(_animatedValueType* animatedValue);
+
+		template<typename _animatedValueType>
+		void ChangeHandleIndex(_animatedValueType* animatedValue, int oldIndex, int newIndex);
 	};
 
 	template<typename _animatedValueType>
@@ -96,15 +107,51 @@ namespace Editor
 
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 
-			mHandles.Add({ idx++, handle, animatedValue, [=](KeyHandle& keyHandle) { 
+			auto updatePosFunc = [=](KeyHandle& keyHandle) {
 				auto& keys = animatedValue->GetKeys();
 				if (keyHandle.keyIdx < keys.Count())
 					keyHandle.handle->SetPosition(Vec2F(keys[keyHandle.keyIdx].position, 0.0f));
-			} });
+			};
+
+			KeyHandle* keyHandle = mnew KeyHandle(idx++, handle, animatedValue, updatePosFunc);
+
+			IAnimatedValue* animatedValueBasic = animatedValue;
+			if (!mHandles.ContainsKey(animatedValueBasic))
+				mHandles.Add(animatedValueBasic, KeyHandlesVec());
+
+			mHandles[animatedValueBasic].Add(keyHandle);
+
+			handle->onChangedPos = [=](const Vec2F& pos) {
+				auto key = animatedValue->GetKeys()[keyHandle->keyIdx];
+
+				key.position = pos.x;
+				animatedValue->RemoveKeyAt(keyHandle->keyIdx);
+				auto newIdx = animatedValue->AddKey(key);
+
+				if (newIdx != keyHandle->keyIdx) {
+					ChangeHandleIndex<_animatedValueType>(animatedValue, keyHandle->keyIdx, newIdx);
+					keyHandle->keyIdx = newIdx;
+				}
+			};
 
 			AddChild(handle);
 		}
 	}
+
+	template<typename _animatedValueType>
+	void MapKeyFramesTrackControl::ChangeHandleIndex(_animatedValueType* animatedValue, int oldIndex, int newIndex)
+	{
+		IAnimatedValue* animatedValueBasic = animatedValue;
+		auto& handles = mHandles[animatedValueBasic];
+
+		KeyHandle* editingHandle = handles[oldIndex];
+		handles.RemoveAt(oldIndex);
+		handles.Insert(editingHandle, newIndex);
+
+		for (int i = 0; i < handles.Count(); i++)
+			handles[i]->keyIdx = i;
+	}
+
 }
 
 CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
@@ -126,6 +173,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
+	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
 	PRIVATE_FUNCTION(void, CacheHandles);
 	PRIVATE_FUNCTION(void, InitializeNodeHandles, const AnimationTree::AnimationValueNode&);
