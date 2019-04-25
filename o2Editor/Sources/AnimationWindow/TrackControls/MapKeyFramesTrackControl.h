@@ -61,11 +61,11 @@ namespace Editor
 		typedef Vector<KeyHandle> KeyHandlesVec;
 
 	private:
-		KeyHandlesVec           mHandles;                  // List of handles, each for keys
-		Vector<IAnimatedValue*> mAnimatedValues; // Editing animated values
-		AnimationTimeline*      mTimeline = nullptr;       // Timeline used for calculating handles positions
-
-		Vector<WidgetDragHandle*> mHandlesCache;           // Cached drag handles, can be reused
+		KeyHandlesVec           mHandles;            // List of handles, each for keys
+		Vector<IAnimatedValue*> mAnimatedValues;     // Editing animated values
+		AnimationTimeline*      mTimeline = nullptr; // Timeline used for calculating handles positions
+													 
+		Vector<WidgetDragHandle*> mHandlesCache;     // Cached drag handles, can be reused
 
 	private:
 		void CacheHandles();
@@ -80,6 +80,8 @@ namespace Editor
 	template<typename _animatedValueType>
 	void MapKeyFramesTrackControl::InitializeAnimatedValueHandles(_animatedValueType* animatedValue)
 	{
+		animatedValue->onKeysChanged += THIS_FUNC(UpdateHandles);
+
 		mAnimatedValues.Add(animatedValue);
 
 		int idx = 0;

@@ -118,7 +118,14 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::SetAnimatedValue(IAnimatedValue* animatedValue)
 	{
+		if (mAnimatedValue)
+			mAnimatedValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
+
 		mAnimatedValue = dynamic_cast<AnimatedValueType*>(animatedValue);
+
+		if (mAnimatedValue)
+			mAnimatedValue->onKeysChanged += THIS_FUNC(UpdateHandles);
+
 		InitializeHandles();
 	}
 

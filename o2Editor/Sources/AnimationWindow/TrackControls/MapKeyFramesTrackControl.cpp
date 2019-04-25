@@ -45,7 +45,12 @@ namespace Editor
 	void MapKeyFramesTrackControl::SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode)
 	{
 		CacheHandles();
+
+		for (auto animValue : mAnimatedValues)
+			animValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
+
 		mAnimatedValues.Clear();
+
 		InitializeNodeHandles(valueNode);
 	}
 
