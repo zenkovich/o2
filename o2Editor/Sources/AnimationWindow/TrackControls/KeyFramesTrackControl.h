@@ -235,6 +235,7 @@ namespace Editor
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->SetSpritesSizePivot(Vec2F(7, 1));
+		handle->SetSelectionGroup(mTimeline);
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) { 
 			float position = pos.x;

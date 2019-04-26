@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Scene/UI/Widget.h"
 #include "Render/FontRef.h"
+#include "Scene/UI/Widget.h"
+#include "Utils/Editor/DragHandle.h"
 
 using namespace o2;
 
@@ -15,7 +16,7 @@ namespace Editor
 	// ------------------------------------
 	// Draws time scale in animation window
 	// ------------------------------------
-	class AnimationTimeline : public Widget
+	class AnimationTimeline : public Widget, public SelectableDragHandlesGroup
 	{
 	public:
 		Function<void()> onViewChanged; // it is called when scroll or zoom were changed
@@ -148,6 +149,7 @@ namespace Editor
 CLASS_BASES_META(Editor::AnimationTimeline)
 {
 	BASE_CLASS(o2::Widget);
+	BASE_CLASS(o2::SelectableDragHandlesGroup);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTimeline)
