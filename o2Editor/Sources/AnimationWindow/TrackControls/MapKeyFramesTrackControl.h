@@ -57,11 +57,15 @@ namespace Editor
 			WidgetDragHandle* handle = nullptr;
 			IAnimatedValue* animatedValue = nullptr;
 
+			Vector<KeyHandle*> combinedHandles;
+			bool combining = true;
+
 			Function<void(KeyHandle& keyHandle)> updateFunc;
 
 		public:
 			KeyHandle();
-			KeyHandle(int keyIdx, WidgetDragHandle* handle, IAnimatedValue* animatedValue, const Function<void(KeyHandle& keyHandle)>& updateFunc);
+			KeyHandle(int keyIdx, WidgetDragHandle* handle, IAnimatedValue* animatedValue, 
+					  const Function<void(KeyHandle& keyHandle)>& updateFunc);
 
 			bool operator==(const KeyHandle& other) const;
 		};
@@ -86,6 +90,12 @@ namespace Editor
 
 		template<typename _animatedValueType>
 		void ChangeHandleIndex(_animatedValueType* animatedValue, int oldIndex, int newIndex);
+
+		template<typename _animatedValueType>
+		void OnHandleChangedPos(_animatedValueType* animatedValue, KeyHandle* keyHandle, const Vec2F& pos);
+
+		void UpdateHandlesCombine();
+		Vector<KeyHandle*> FindHandlesAtPosition(float position) const;
 	};
 
 	template<typename _animatedValueType>
@@ -121,20 +131,38 @@ namespace Editor
 
 			mHandles[animatedValueBasic].Add(keyHandle);
 
-			handle->onChangedPos = [=](const Vec2F& pos) {
-				auto key = animatedValue->GetKeys()[keyHandle->keyIdx];
-
-				key.position = pos.x;
-				animatedValue->RemoveKeyAt(keyHandle->keyIdx);
-				auto newIdx = animatedValue->AddKey(key);
-
-				if (newIdx != keyHandle->keyIdx) {
-					ChangeHandleIndex<_animatedValueType>(animatedValue, keyHandle->keyIdx, newIdx);
-					keyHandle->keyIdx = newIdx;
-				}
-			};
+			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos<_animatedValueType>(animatedValue, keyHandle, pos); };
 
 			AddChild(handle);
+		}
+	}
+	
+	template<typename _animatedValueType>
+	void MapKeyFramesTrackControl::OnHandleChangedPos(_animatedValueType* animatedValue, KeyHandle* keyHandle, const Vec2F& pos)
+	{
+		auto key = animatedValue->GetKeys()[keyHandle->keyIdx];
+
+		key.position = pos.x;
+		animatedValue->RemoveKeyAt(keyHandle->keyIdx);
+		auto newIdx = animatedValue->AddKey(key);
+
+		if (newIdx != keyHandle->keyIdx)
+		{
+			ChangeHandleIndex<_animatedValueType>(animatedValue, keyHandle->keyIdx, newIdx);
+			keyHandle->keyIdx = newIdx;
+		}
+
+		if (keyHandle->combining)
+		{
+			for (auto attachedHandle : keyHandle->combinedHandles)
+			{
+				attachedHandle->combining = false;
+
+				attachedHandle->handle->SetPosition(pos);
+				attachedHandle->handle->onChangedPos(pos);
+
+				attachedHandle->combining = true;
+			}
 		}
 	}
 
@@ -178,5 +206,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PRIVATE_FUNCTION(void, CacheHandles);
 	PRIVATE_FUNCTION(void, InitializeNodeHandles, const AnimationTree::AnimationValueNode&);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
+	PRIVATE_FUNCTION(void, UpdateHandlesCombine);
+	PRIVATE_FUNCTION(Vector<KeyHandle*>, FindHandlesAtPosition, float);
 }
 END_META;

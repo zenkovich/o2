@@ -8,15 +8,16 @@ namespace Editor
 {
 	MapKeyFramesTrackControl::MapKeyFramesTrackControl() :
 		ITrackControl()
-	{ }
+	{}
 
 	MapKeyFramesTrackControl::MapKeyFramesTrackControl(const MapKeyFramesTrackControl& other) :
 		ITrackControl(other)
-	{ }
+	{}
 
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()
-	{ 
-		for (auto kv : mHandles) {
+	{
+		for (auto kv : mHandles)
+		{
 			for (auto keyHandle : kv.Value())
 				delete keyHandle;
 		}
@@ -58,6 +59,7 @@ namespace Editor
 		mAnimatedValues.Clear();
 
 		InitializeNodeHandles(valueNode);
+		UpdateHandlesCombine();
 	}
 
 	void MapKeyFramesTrackControl::SetTimeline(AnimationTimeline* timeline)
@@ -69,7 +71,8 @@ namespace Editor
 	{
 		for (auto kv : mHandles)
 		{
-			for (auto keyHandle : kv.Value()) {
+			for (auto keyHandle : kv.Value())
+			{
 				mHandlesCache.Add(keyHandle->handle);
 				delete keyHandle;
 			}
@@ -80,7 +83,8 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::InitializeNodeHandles(const AnimationTree::AnimationValueNode& valueNode)
 	{
-		if (valueNode.animatedValue) {
+		if (valueNode.animatedValue)
+		{
 			if (auto animatedValue = dynamic_cast<AnimatedValue<float>*>(valueNode.animatedValue))
 				InitializeAnimatedValueHandles(animatedValue);
 			else if (auto animatedValue = dynamic_cast<AnimatedValue<bool>*>(valueNode.animatedValue))
@@ -97,16 +101,21 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::UpdateHandles()
 	{
-		for (auto kv : mHandles) {
+		for (auto kv : mHandles)
+		{
 			for (auto keyHandle : kv.Value())
 				keyHandle->updateFunc(*keyHandle);
 		}
+
+		UpdateHandlesCombine();
 	}
 
 	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)
 	{
 		for (auto keyHandle : mHandles[animatedValue])
 			keyHandle->updateFunc(*keyHandle);
+
+		UpdateHandlesCombine();
 	}
 
 	WidgetDragHandle* MapKeyFramesTrackControl::CreateHandle()
@@ -144,6 +153,49 @@ namespace Editor
 		};
 
 		return handle;
+	}
+
+	void MapKeyFramesTrackControl::UpdateHandlesCombine()
+	{
+		auto handlesCopy = mHandles;
+		mHandles.Clear();
+
+		for (auto kv : handlesCopy)
+		{
+			for (auto keyHandle : kv.Value())
+				keyHandle->combinedHandles.Clear();
+		}
+
+		for (auto kv : handlesCopy)
+		{
+			mHandles.Add(kv.Key(), KeyHandlesVec());
+
+			for (auto keyHandle : kv.Value())
+			{
+				keyHandle->combinedHandles = FindHandlesAtPosition(keyHandle->handle->GetPosition().x);
+
+				for (auto combinedHandle : keyHandle->combinedHandles)
+					combinedHandle->combinedHandles.Add(keyHandle);
+
+				mHandles[kv.Key()].Add(keyHandle);
+			}
+		}
+	}
+
+	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
+	{
+		Vector<KeyHandle*> res;
+
+		for (auto kv : mHandles)
+		{
+			for (auto keyHandle : kv.Value())
+			{
+				if (Math::Equals(keyHandle->handle->GetPosition().x, position))
+					res.Add(keyHandle);
+			}
+		}
+
+		return res;
 	}
 
 	MapKeyFramesTrackControl::KeyHandle::KeyHandle()
