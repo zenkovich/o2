@@ -101,6 +101,9 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::UpdateHandles()
 	{
+		if (mDisableHandlesUpdate)
+			return;
+
 		for (auto kv : mHandles)
 		{
 			for (auto keyHandle : kv.Value())
@@ -187,11 +190,13 @@ namespace Editor
 	{
 		Vector<KeyHandle*> res;
 
+		float delta = mTimeline->WorldToLocal(1.5f) - mTimeline->WorldToLocal(0);
+
 		for (auto kv : mHandles)
 		{
 			for (auto keyHandle : kv.Value())
 			{
-				if (Math::Equals(keyHandle->handle->GetPosition().x, position))
+				if (Math::Equals(keyHandle->handle->GetPosition().x, position, delta))
 					res.Add(keyHandle);
 			}
 		}

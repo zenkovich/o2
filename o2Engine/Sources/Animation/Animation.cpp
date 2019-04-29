@@ -172,6 +172,9 @@ namespace o2
 
 		if (Math::Equals(lastDuration, mEndTime))
 			mEndTime = mDuration;
+
+		if (!Math::Equals(lastDuration, mDuration))
+			onDurationChange();
 	}
 
 	void Animation::OnDeserialized(const DataNode& node)

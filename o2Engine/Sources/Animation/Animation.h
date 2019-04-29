@@ -27,6 +27,9 @@ namespace o2
 		typedef Vector<AnimatedValueDef> AnimatedValuesVec;
 
 	public:
+		Function<void()> onDurationChange; // It is called whe duration changing
+
+	public:
 		// Default constructor
 		Animation(IObject* target = nullptr);
 
@@ -489,6 +492,7 @@ CLASS_BASES_META(o2::Animation)
 END_META;
 CLASS_FIELDS_META(o2::Animation)
 {
+	PUBLIC_FIELD(onDurationChange);
 	PROTECTED_FIELD(mAnimatedValues).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTarget);
 	PROTECTED_FIELD(mAnimationState);

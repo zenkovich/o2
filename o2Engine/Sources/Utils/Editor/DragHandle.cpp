@@ -301,6 +301,8 @@ namespace o2
 
 		if (!IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
+
+		onReleased();
 	}
 
 	void DragHandle::OnCursorPressBreak(const Input::Cursor& cursor)

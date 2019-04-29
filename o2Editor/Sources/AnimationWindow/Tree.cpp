@@ -20,8 +20,8 @@ namespace Editor
 
 	AnimationTree::~AnimationTree()
 	{
-		for (auto& val : mRootValues)
-			delete val;
+		if (mRootValue)
+			delete mRootValue;
 
 		delete mZebraBackLine;
 	}
@@ -67,13 +67,14 @@ namespace Editor
 
 	void AnimationTree::RebuildAnimationTree()
 	{
-		for (auto& val : mRootValues)
-			delete val;
-
-		mRootValues.clear();
+		if (mRootValue)
+			delete mRootValue;
 
 		if (!mAnimation)
 			return;
+
+		mRootValue = mnew AnimationValueNode();
+		mRootValue->name = "Track name";
 
 		for (auto& value : mAnimation->GetAnimationsValues())
 			AddAnimatedValue(value);
@@ -88,7 +89,7 @@ namespace Editor
 		{
 			int del = value.mTargetPath.Find('/', lastDel);
 			String subPath = value.mTargetPath.SubStr(lastDel, del);
-			AnimationValueNode* next = (current ? current->children : mRootValues)
+			AnimationValueNode* next = (current ? current->children : mRootValue->children)
 				.FindMatch([&](AnimationValueNode* x) { return x->name == subPath; });
 
 			if (!next)
@@ -101,7 +102,7 @@ namespace Editor
 					next->parent = current;
 					current->children.Add(next);
 				}
-				else mRootValues.Add(next);
+				else mRootValue->children.Add(next);
 			}
 
 			current = next;
@@ -153,7 +154,7 @@ namespace Editor
 	Vector<UnknownPtr> AnimationTree::GetObjectChilds(UnknownPtr object)
 	{
 		if (!object)
-			return mRootValues.Cast<UnknownPtr>();
+			return { (UnknownPtr)mRootValue };
 
 		auto treeNode = (AnimationValueNode*)object;
 		return treeNode->children.Cast<UnknownPtr>();

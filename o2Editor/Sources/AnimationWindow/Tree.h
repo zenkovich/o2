@@ -52,7 +52,7 @@ namespace Editor
 		struct AnimationValueNode
 		{
 			String name;
-			IAnimatedValue* animatedValue;
+			IAnimatedValue* animatedValue = nullptr;
 
 			AnimationValueNode* parent = nullptr;
 			Vector<AnimationValueNode*> children;
@@ -60,8 +60,7 @@ namespace Editor
 
 	private:
 		Animation* mAnimation = nullptr;
-		Vector<AnimationValueNode*> mRootValues;
-
+		AnimationValueNode* mRootValue = nullptr;
 		AnimationTimeline* mTimeline = nullptr;
 
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite @SERIALIZABLE
@@ -163,7 +162,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
 	PRIVATE_FIELD(mAnimation);
-	PRIVATE_FIELD(mRootValues);
+	PRIVATE_FIELD(mRootValue);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mZebraBackLine).SERIALIZABLE_ATTRIBUTE();
 	PRIVATE_FIELD(mTreeWidth);

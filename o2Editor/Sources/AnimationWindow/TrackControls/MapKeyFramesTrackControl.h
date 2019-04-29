@@ -77,7 +77,9 @@ namespace Editor
 		Vector<IAnimatedValue*>     mAnimatedValues;     // Editing animated values
 		AnimationTimeline*          mTimeline = nullptr; // Timeline used for calculating handles positions
 													 
-		Vector<WidgetDragHandle*> mHandlesCache;         // Cached drag handles, can be reused
+		Vector<WidgetDragHandle*> mHandlesCache; // Cached drag handles, can be reused
+
+		bool mDisableHandlesUpdate = false; // It is true when handles are changing and combining or updating is not available
 
 	private:
 		void CacheHandles();
@@ -132,6 +134,7 @@ namespace Editor
 			mHandles[animatedValueBasic].Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos<_animatedValueType>(animatedValue, keyHandle, pos); };
+			handle->onReleased = [&]() { UpdateHandles(); };
 
 			AddChild(handle);
 		}
@@ -140,6 +143,8 @@ namespace Editor
 	template<typename _animatedValueType>
 	void MapKeyFramesTrackControl::OnHandleChangedPos(_animatedValueType* animatedValue, KeyHandle* keyHandle, const Vec2F& pos)
 	{
+		mDisableHandlesUpdate = true;
+
 		auto key = animatedValue->GetKeys()[keyHandle->keyIdx];
 
 		key.position = pos.x;
@@ -164,6 +169,8 @@ namespace Editor
 				attachedHandle->combining = true;
 			}
 		}
+
+		mDisableHandlesUpdate = false;
 	}
 
 	template<typename _animatedValueType>
@@ -193,6 +200,7 @@ CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 	PRIVATE_FIELD(mAnimatedValues);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mHandlesCache);
+	PRIVATE_FIELD(mDisableHandlesUpdate);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)

@@ -42,11 +42,8 @@ namespace Editor
 		void Update(float dt) override;
 
 
-		// Sets scale length in seconds
-		void SetDuration(float duration);
-
-		// Returns scale length in seconds
-		float GetDuration() const;
+		// Sets animation. Subscribes on animachin duration change, controls playing time
+		void SetAnimation(Animation* animation);
 
 
 		// Sets current time scroll in seconds
@@ -103,6 +100,8 @@ namespace Editor
 		const float mScrollBorderBounceCoef = 10.0f;  // Smooth scroll bounds bounce coefficient
 
 	private:
+		Animation* mAnimation = nullptr; // Editing animation
+
 		float mSmoothViewScroll = 0.0f;          // Time scroll in seconds smoothed, tends to target value mViewScroll
 		float mViewScroll = 0.0f;                // Time scroll in seconds
 		bool  mDragViewScroll = false;           // It is true when user is dragging view with right button
@@ -125,7 +124,12 @@ namespace Editor
 
 		HorizontalScrollBar* mScrollBar = nullptr; // Scroll bar. Limited by animation duration
 
+		DragHandle* mTimeDragHandle = nullptr; // Red line time drag handle
+
 	private:
+		// Updates duration and scrollbars
+		void UpdateDuration();
+
 		// Draws time scale with scroll and zoom
 		void DrawTimeScale();
 
@@ -170,6 +174,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mScrollSmoothCoef);
 	PRIVATE_FIELD(mScrollSpeedDecreaseCoef);
 	PRIVATE_FIELD(mScrollBorderBounceCoef);
+	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mSmoothViewScroll);
 	PRIVATE_FIELD(mViewScroll);
 	PRIVATE_FIELD(mDragViewScroll);
@@ -185,6 +190,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mBeginMarkLayout);
 	PRIVATE_FIELD(mEndMarkLayout);
 	PRIVATE_FIELD(mScrollBar);
+	PRIVATE_FIELD(mTimeDragHandle);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTimeline)
@@ -192,8 +198,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetDuration, float);
-	PUBLIC_FUNCTION(float, GetDuration);
+	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetScroll, float);
 	PUBLIC_FUNCTION(float, GetScroll);
 	PUBLIC_FUNCTION(void, SetScale, float);
@@ -203,6 +208,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(Text*, GetText);
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
+	PRIVATE_FUNCTION(void, UpdateDuration);
 	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);
 	PRIVATE_FUNCTION(void, UpdateScrolling, float);

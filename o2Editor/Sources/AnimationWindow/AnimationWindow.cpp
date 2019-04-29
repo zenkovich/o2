@@ -35,7 +35,7 @@ namespace Editor
 	{
 		mAnimation = animation;
 
-		mTimeline->SetDuration(animation->GetDuration());
+		mTimeline->SetAnimation(animation);
 		mTree->SetAnimation(animation, mTimeline);
 	}
 
@@ -67,7 +67,6 @@ namespace Editor
 		*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 20, 0);
 
 		mTimeline->SetScrollBar(mTimeScroll);
-		mTimeline->SetDuration(100.0f);
 
 		mWindow->AddChild(mTimeline);
 

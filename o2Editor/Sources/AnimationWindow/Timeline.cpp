@@ -24,16 +24,29 @@ namespace Editor
 
 		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
 		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");
+
+		mTimeDragHandle = mnew DragHandle(mnew Sprite("ui/UI4_time_line.png"), mnew Sprite("ui/UI4_time_line_hover.png"),
+										  mnew Sprite("ui/UI4_time_line_pressed.png"));
+
+		mTimeDragHandle->SetSpritesSizePivot(Vec2F(4.5f, 25));
+		mTimeDragHandle->cursorType = CursorType::SizeWE;
+
+		mTimeDragHandle->checkPositionFunc = [](const Vec2F& pos) { return Vec2F(Math::Max(0.0f, pos.x), 0.0f); };
+		mTimeDragHandle->onChangedPos = [&](const Vec2F& pos) { if (mAnimation) mAnimation->SetTime(pos.x); };
+		mTimeDragHandle->screenToLocalTransformFunc = [&](const Vec2F& pos) { return Vec2F(WorldToLocal(pos.x), 0.0f); };
+		mTimeDragHandle->localToScreenTransformFunc = [&](const Vec2F& pos) { return Vec2F(LocalToWorld(pos.x), layout->GetWorldTop()); };
 	}
 
 	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
-		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()), 
-		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>())
+		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
+		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>()),
+		mTimeDragHandle(other.mTimeDragHandle->CloneAs<DragHandle>())
 	{}
 
 	AnimationTimeline::~AnimationTimeline()
 	{
 		delete mText;
+		delete mTimeDragHandle;
 	}
 
 	AnimationTimeline& AnimationTimeline::operator=(const AnimationTimeline& other)
@@ -50,6 +63,8 @@ namespace Editor
 		mBeginMark = other.mBeginMark->CloneAs<Sprite>();
 		mEndMark = other.mEndMark->CloneAs<Sprite>();
 
+		mTimeDragHandle = other.mTimeDragHandle->CloneAs<DragHandle>();
+
 		return *this;
 	}
 
@@ -57,6 +72,12 @@ namespace Editor
 	{
 		Widget::Draw();
 		DrawTimeScale();
+
+		if (mAnimation)
+			mTimeDragHandle->SetPosition(Vec2F(LocalToWorld(mAnimation->GetTime()), layout->GetWorldTop()));
+
+		mTimeDragHandle->SetSpritesSize(Vec2F(10, layout->GetHeight()));
+		mTimeDragHandle->Draw();
 	}
 
 	void AnimationTimeline::DrawTimeScale()
@@ -170,7 +191,7 @@ namespace Editor
 
 		Cfg nearestCfg;
 		float nearestCfgScreenChunkSegmentSizeDiff = FLT_MAX;
-		for (auto cfg : configs) 
+		for (auto cfg : configs)
 		{
 			float screenChunkSegmentSize = (float)cfg.chunkDuration/(float)cfg.chunkSegments*mOneSecondDefaultSize*mSmoothViewZoom;
 			float screenChunkSegmentSizeDiff = mPerfectScaleSegmentSize - screenChunkSegmentSize;
@@ -251,9 +272,22 @@ namespace Editor
 			onViewChanged();
 	}
 
-	void AnimationTimeline::SetDuration(float duration)
+	void AnimationTimeline::SetAnimation(Animation* animation)
 	{
-		mDuration = duration;
+		if (mAnimation)
+			mAnimation->onDurationChange -= THIS_FUNC(UpdateDuration);
+
+		mAnimation = animation;
+
+		if (mAnimation)
+			mAnimation->onDurationChange += THIS_FUNC(UpdateDuration);
+
+		UpdateDuration();
+	}
+
+	void AnimationTimeline::UpdateDuration()
+	{
+		mDuration = mAnimation->GetDuration();
 
 		if (mScrollBar)
 		{
@@ -261,11 +295,6 @@ namespace Editor
 			mScrollBar->maxValue = mDuration;
 			UpdateScrollBarHandleSize();
 		}
-	}
-
-	float AnimationTimeline::GetDuration() const
-	{
-		return mDuration;
 	}
 
 	void AnimationTimeline::SetScroll(float scroll)
