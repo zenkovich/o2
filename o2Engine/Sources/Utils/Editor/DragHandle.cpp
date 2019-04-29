@@ -199,29 +199,16 @@ namespace o2
 		if (mRegularSprite)
 			mRegularSprite->Draw();
 
-		if (mIsSelected && mSelectedHoverSprite)
-		{
-			mSelectedHoverSprite->SetTransparency(Math::Lerp(mSelectedHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
-															 o2Time.GetDeltaTime()*alphaChangeCoef));
-
-			mSelectedHoverSprite->Draw();
-		}
-		else if (mHoverSprite)
+		
+		if (mHoverSprite && !(mIsSelected && mSelectedHoverSprite))
 		{
 			mHoverSprite->SetTransparency(Math::Lerp(mHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
 													 o2Time.GetDeltaTime()*alphaChangeCoef));
 
 			mHoverSprite->Draw();
 		}
-
-		if (mIsSelected && mSelectedPressedSprite)
-		{
-			mSelectedPressedSprite->SetTransparency(Math::Lerp(mSelectedPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
-															   o2Time.GetDeltaTime()*alphaChangeCoef));
-
-			mSelectedPressedSprite->Draw();
-		}
-		else if (mPressedSprite)
+		
+		if (mPressedSprite && !(mIsSelected && mSelectedPressedSprite))
 		{
 			mPressedSprite->SetTransparency(Math::Lerp(mPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
 													   o2Time.GetDeltaTime()*alphaChangeCoef));
@@ -235,6 +222,20 @@ namespace o2
 														o2Time.GetDeltaTime()*alphaChangeCoef));
 
 			mSelectedSprite->Draw();
+		}
+		
+		if (mIsSelected && mSelectedHoverSprite) {
+			mSelectedHoverSprite->SetTransparency(Math::Lerp(mSelectedHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
+															 o2Time.GetDeltaTime()*alphaChangeCoef));
+
+			mSelectedHoverSprite->Draw();
+		}
+		
+		if (mIsSelected && mSelectedPressedSprite) {
+			mSelectedPressedSprite->SetTransparency(Math::Lerp(mSelectedPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
+															   o2Time.GetDeltaTime()*alphaChangeCoef));
+
+			mSelectedPressedSprite->Draw();
 		}
 
 		CursorAreaEventsListener::OnDrawn();
@@ -729,11 +730,8 @@ namespace o2
 
 	SelectableDragHandlesGroup::~SelectableDragHandlesGroup()
 	{
-		// 		for (auto handle : mHandles)
-		// 		{
-		// 			handle->mSelectGroup = nullptr;
-		// 			delete handle;
-		// 		}
+		for (auto handle : mHandles)
+			handle->mSelectGroup = nullptr;
 	}
 
 	SelectableDragHandlesGroup::SelectableDragHandlesVec SelectableDragHandlesGroup::GetSelectedHandles() const
