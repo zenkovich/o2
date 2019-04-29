@@ -572,10 +572,23 @@ namespace o2
 
 	void Tree::ExpandAll()
 	{
-		for (auto child : mAllNodes)
+		bool isAllExpanded = false;
+		while (!isAllExpanded) 
 		{
-			TreeNode* childNode = (TreeNode*)child;
-			childNode->Expand();
+			UpdateNodesView(true);
+			UpdateVisibleNodes();
+			isAllExpanded = true;
+
+			auto nodes = mAllNodes;
+			for (auto child : nodes)
+			{
+				TreeNode* childNode = child->widget;
+				if (childNode && !childNode->IsExpanded())
+				{
+					childNode->Expand();
+					isAllExpanded = false;
+				}
+			}
 		}
 	}
 

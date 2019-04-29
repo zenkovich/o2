@@ -3,6 +3,7 @@
 #include "Render/FontRef.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragHandle.h"
+#include "Events/CursorEventsArea.h"
 
 using namespace o2;
 
@@ -124,7 +125,8 @@ namespace Editor
 
 		HorizontalScrollBar* mScrollBar = nullptr; // Scroll bar. Limited by animation duration
 
-		DragHandle* mTimeDragHandle = nullptr; // Red line time drag handle
+		Sprite*          mTimeLine = nullptr; // Red time line
+		CursorEventsArea mTimeLineEventsArea; // Top area events listeners, used for moving red line of time
 
 	private:
 		// Updates duration and scrollbars
@@ -190,7 +192,8 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mBeginMarkLayout);
 	PRIVATE_FIELD(mEndMarkLayout);
 	PRIVATE_FIELD(mScrollBar);
-	PRIVATE_FIELD(mTimeDragHandle);
+	PRIVATE_FIELD(mTimeLine);
+	PRIVATE_FIELD(mTimeLineEventsArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTimeline)

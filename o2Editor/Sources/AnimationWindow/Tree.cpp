@@ -46,11 +46,14 @@ namespace Editor
 	void AnimationTree::SetAnimation(Animation* animation, AnimationTimeline* timeline)
 	{
 		mTimeline = timeline;
-		mAnimation = animation;
 
+		mAnimation = nullptr;
 		RebuildAnimationTree();
-		UpdateNodesView();
 
+		mAnimation = animation;
+		RebuildAnimationTree();
+
+		ExpandAll();
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 	}
 
@@ -69,6 +72,8 @@ namespace Editor
 	{
 		if (mRootValue)
 			delete mRootValue;
+
+		mRootValue = nullptr;
 
 		if (!mAnimation)
 			return;

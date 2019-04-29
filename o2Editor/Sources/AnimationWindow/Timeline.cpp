@@ -25,28 +25,32 @@ namespace Editor
 		mBeginMark = mnew Sprite("ui/UI4_time_line_left.png");
 		mEndMark = mnew Sprite("ui/UI4_time_line_right.png");
 
-		mTimeDragHandle = mnew DragHandle(mnew Sprite("ui/UI4_time_line.png"), mnew Sprite("ui/UI4_time_line_hover.png"),
-										  mnew Sprite("ui/UI4_time_line_pressed.png"));
+		mTimeLine = mnew Sprite("ui/UI4_time_line.png");
 
-		mTimeDragHandle->SetSpritesSizePivot(Vec2F(4.5f, 25));
-		mTimeDragHandle->cursorType = CursorType::SizeWE;
+		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) { 
+			auto rect = layout->GetWorldRect();
+			rect.bottom = rect.top - 20.0f;
 
-		mTimeDragHandle->checkPositionFunc = [](const Vec2F& pos) { return Vec2F(Math::Max(0.0f, pos.x), 0.0f); };
-		mTimeDragHandle->onChangedPos = [&](const Vec2F& pos) { if (mAnimation) mAnimation->SetTime(pos.x); };
-		mTimeDragHandle->screenToLocalTransformFunc = [&](const Vec2F& pos) { return Vec2F(WorldToLocal(pos.x), 0.0f); };
-		mTimeDragHandle->localToScreenTransformFunc = [&](const Vec2F& pos) { return Vec2F(LocalToWorld(pos.x), layout->GetWorldTop()); };
+			return rect.IsInside(pos);
+		};
+
+		mTimeLineEventsArea.onMoved = [&](const Input::Cursor& cursor) {
+			if (cursor.isPressed && mAnimation) {
+				mAnimation->SetTime(WorldToLocal(cursor.position.x));
+			}
+		};
 	}
 
 	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
 		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
 		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>()),
-		mTimeDragHandle(other.mTimeDragHandle->CloneAs<DragHandle>())
+		mTimeLine(other.mTimeLine->CloneAs<Sprite>())
 	{}
 
 	AnimationTimeline::~AnimationTimeline()
 	{
 		delete mText;
-		delete mTimeDragHandle;
+		delete mTimeLine;
 	}
 
 	AnimationTimeline& AnimationTimeline::operator=(const AnimationTimeline& other)
@@ -63,7 +67,7 @@ namespace Editor
 		mBeginMark = other.mBeginMark->CloneAs<Sprite>();
 		mEndMark = other.mEndMark->CloneAs<Sprite>();
 
-		mTimeDragHandle = other.mTimeDragHandle->CloneAs<DragHandle>();
+		mTimeLine = other.mTimeLine->CloneAs<Sprite>();
 
 		return *this;
 	}
@@ -73,11 +77,12 @@ namespace Editor
 		Widget::Draw();
 		DrawTimeScale();
 
-		if (mAnimation)
-			mTimeDragHandle->SetPosition(Vec2F(LocalToWorld(mAnimation->GetTime()), layout->GetWorldTop()));
+		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimation ? mAnimation->GetTime() : 0.0f), layout->GetWorldTop()));
+		mTimeLine->SetSize(Vec2F(10.0f, layout->GetHeight() + 5.0f));
+		mTimeLine->SetSizePivot(Vec2F(6.5f, layout->GetHeight() + 4.0f));
+		mTimeLine->Draw();
 
-		mTimeDragHandle->SetSpritesSize(Vec2F(10, layout->GetHeight()));
-		mTimeDragHandle->Draw();
+		mTimeLineEventsArea.OnDrawn();
 	}
 
 	void AnimationTimeline::DrawTimeScale()
