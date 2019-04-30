@@ -73,6 +73,7 @@ namespace Editor
 		{
 			for (auto keyHandle : kv.Value())
 			{
+				keyHandle->handle->SetParent(nullptr);
 				mHandlesCache.Add(keyHandle->handle);
 				delete keyHandle;
 			}

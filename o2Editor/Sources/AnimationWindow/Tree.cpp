@@ -12,11 +12,14 @@ namespace Editor
 		Tree()
 	{
 		mZebraBackLine = mnew Sprite();
+		SetRearrangeType(Tree::RearrangeType::Disabled);
 	}
 
 	AnimationTree::AnimationTree(const AnimationTree& other) :
 		Tree(other), mZebraBackLine(other.mZebraBackLine->CloneAs<Sprite>())
-	{}
+	{
+		SetRearrangeType(Tree::RearrangeType::Disabled);
+	}
 
 	AnimationTree::~AnimationTree()
 	{
@@ -47,14 +50,12 @@ namespace Editor
 	{
 		mTimeline = timeline;
 
-		mAnimation = nullptr;
-		RebuildAnimationTree();
-
 		mAnimation = animation;
 		RebuildAnimationTree();
 
 		ExpandAll();
-		SetRearrangeType(Tree::RearrangeType::Disabled);
+
+		OnObjectsChanged({ (UnknownPtr)mRootValue });
 	}
 
 	void AnimationTree::SetTreeWidth(float width)

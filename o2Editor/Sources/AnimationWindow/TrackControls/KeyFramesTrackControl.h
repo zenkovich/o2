@@ -156,8 +156,8 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
 	{
-		Vector<WidgetDragHandle*> handles = mHandles.Select<WidgetDragHandle*>(
-			[](const KeyHandle* x) { return x->handle; });
+		Vector<WidgetDragHandle*> handlesCache = mHandles.Select<WidgetDragHandle*>(
+			[&](const KeyHandle* x) { x->handle->SetParent(nullptr); return x->handle; });
 
 		for (auto keyHandle : mHandles)
 			delete keyHandle;
@@ -169,8 +169,8 @@ namespace Editor
 		{
 			WidgetDragHandle* handle = nullptr;
 
-			if (!handles.IsEmpty())
-				handle = handles.PopBack();
+			if (!handlesCache.IsEmpty())
+				handle = handlesCache.PopBack();
 			else
 				handle = CreateHandle();
 
