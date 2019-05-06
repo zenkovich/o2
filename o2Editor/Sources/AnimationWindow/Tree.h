@@ -48,6 +48,13 @@ namespace Editor
 		// Return zebra back line sprite
 		Sprite* GetZebraBackLine() const;
 
+
+		// Returns animated value line number by world position, dependent on scroll
+		float GetLineNumber(float worldPosition) const;
+
+		// Returns world positionof animated value line
+		float GetLineWorldPosition(float lineNumber) const;
+
 		SERIALIZABLE(AnimationTree);
 
 	public:
@@ -180,6 +187,8 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
+	PUBLIC_FUNCTION(float, GetLineNumber, float);
+	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
 	PRIVATE_FUNCTION(void, DrawZebraBack);

@@ -3,6 +3,7 @@
 
 #include "Scene/UI/WidgetLayout.h"
 #include "Timeline.h"
+#include "Tree.h"
 
 namespace Editor
 {
@@ -49,6 +50,14 @@ namespace Editor
 
 		o2Render.EnableScissorTest(layout->GetWorldRect());
 
+		if (mSelectionFrame->enabled) {
+			mSelectionFrame->SetRect(RectF(mTimeline->LocalToWorld(mSelectionRect.left) + mSelectionFrameOffsets.left,
+										   mTree->GetLineWorldPosition(mSelectionRect.top) + mSelectionFrameOffsets.top,
+										   mTimeline->LocalToWorld(mSelectionRect.right) + mSelectionFrameOffsets.right,
+										   mTree->GetLineWorldPosition(mSelectionRect.bottom) + mSelectionFrameOffsets.bottom));
+			mSelectionFrame->Draw();
+		}
+
 		for (auto child : mHandles)
 			child->Draw();
 
@@ -62,13 +71,32 @@ namespace Editor
 		mTimeline = timeline;
 	}
 
+	void KeyHandlesSheet::SetTree(AnimationTree* tree)
+	{
+		mTree = tree;
+	}
+
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
-		if (!mSelectedHandles.IsEmpty())
+		if (mSelectedHandles.Count() > 1)
 		{
 			mSelectionFrame->enabled = true;
 
-			//RectF rect(mSelectedHandles.First().GetScreenPosition
+			mSelectionRect.left = mSelectedHandles.First()->GetPosition().x;
+			mSelectionRect.bottom = mTree->GetLineNumber(mSelectedHandles.First()->GetScreenPosition().y);
+			mSelectionRect.right = mSelectionRect.left;
+			mSelectionRect.top = mSelectionRect.bottom;
+
+			for (auto handle : mSelectedHandles) {
+				float localPos = handle->GetPosition().x;
+				float lineNumber = mTree->GetLineNumber(handle->GetScreenPosition().y);
+
+				mSelectionRect.left = Math::Min(mSelectionRect.left, localPos);
+				mSelectionRect.right = Math::Max(mSelectionRect.right, localPos);
+
+				mSelectionRect.bottom = Math::Max(mSelectionRect.bottom, Math::Ceil(lineNumber));
+				mSelectionRect.top = Math::Min(mSelectionRect.top, Math::Floor(lineNumber - 0.5f));
+			}
 		}
 		else mSelectionFrame->enabled = false;
 	}

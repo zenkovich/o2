@@ -13,6 +13,7 @@ using namespace o2;
 namespace Editor
 {
 	class AnimationTimeline;
+	class AnimationTree;
 
 	// -------------------------------------------
 	// Handles sheet, manages selection of handles
@@ -44,12 +45,19 @@ namespace Editor
 		// Sets timeline
 		void SetTimeline(AnimationTimeline* timeline);
 
+		// Sets animation tree
+		void SetTree(AnimationTree* tree);
+
 		SERIALIZABLE(KeyHandlesSheet);
 
 	private:
-		AnimationTimeline* mTimeline = nullptr;
+		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
 
-		Sprite* mSelectionFrame = nullptr;
+		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
+		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
+
+		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
+		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
 	private:
 		// It is called when selection is changed - some handle was added or removed from selection
@@ -115,7 +123,11 @@ CLASS_BASES_META(Editor::KeyHandlesSheet)
 END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
+	PRIVATE_FIELD(mSelectionFrameOffsets);
+	PRIVATE_FIELD(mTimeline);
+	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mSelectionFrame);
+	PRIVATE_FIELD(mSelectionRect);
 }
 END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
@@ -123,6 +135,9 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
+	PUBLIC_FUNCTION(void, SetTree, AnimationTree*);
+	PRIVATE_FUNCTION(void, OnSelectionChanged);
 	PRIVATE_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);

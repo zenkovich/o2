@@ -75,9 +75,10 @@ namespace Editor
 	void AnimationWindow::InitializeHandlesSheet()
 	{
 		mHandlesSheet = mnew KeyHandlesSheet();
-		*mHandlesSheet->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
+		*mHandlesSheet->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 18);
 		mHandlesSheet->SetTimeline(mTimeline);
-		mWorkArea->AddChild(mHandlesSheet);
+		mHandlesSheet->SetTree(mTree);
+		mWindow->AddChild(mHandlesSheet);
 	}
 
 	void AnimationWindow::InitializeTree()

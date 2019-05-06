@@ -70,6 +70,16 @@ namespace Editor
 		return mZebraBackLine;
 	}
 
+	float AnimationTree::GetLineNumber(float worldPosition) const
+	{
+		return (layout->GetWorldTop() - worldPosition + mScrollPos.y) / mNodeWidgetSample->layout->GetMinimalHeight();
+	}
+
+	float AnimationTree::GetLineWorldPosition(float lineNumber) const
+	{
+		return -(lineNumber * mNodeWidgetSample->layout->GetMinimalHeight() - mScrollPos.y - layout->GetWorldTop());
+	}
+
 	void AnimationTree::RebuildAnimationTree()
 	{
 		if (mRootValue)

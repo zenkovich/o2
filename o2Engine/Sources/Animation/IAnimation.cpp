@@ -222,7 +222,7 @@ namespace o2
 
 	float IAnimation::GetLoopTime() const
 	{
-		return fmodf(mTime, GetDuration());
+		return fmodf(mTime + 0.001f, GetDuration());
 	}
 
 	float IAnimation::GetDuration() const
