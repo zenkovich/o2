@@ -2,6 +2,7 @@
 #include "AnimationWindow.h"
 
 #include "Animation/Animation.h"
+#include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/Tree.h"
 #include "Core/EditorScope.h"
@@ -22,21 +23,31 @@ namespace Editor
 	}
 
 	AnimationWindow::~AnimationWindow()
-	{
-
-	}
+	{}
 
 	void AnimationWindow::Update(float dt)
 	{
-
+		if (mAnimation)
+		{
+			if (mAnimation->IsPlaying() != mPlayPauseToggle->GetValue())
+				mPlayPauseToggle->SetValue(mAnimation->IsPlaying());
+		}
 	}
 
 	void AnimationWindow::SetAnimation(Animation* animation)
 	{
 		mAnimation = animation;
 
+		if (mAnimation)
+		{
+			mAnimation->Stop();
+			mLoopToggle->SetValue(mAnimation->GetLoop() == Loop::Repeat);
+		}
+
+		mPlayPauseToggle->SetValue(false);
+
 		mTimeline->SetAnimation(animation);
-		mTree->SetAnimation(animation, mTimeline);
+		mTree->SetAnimation(animation, mTimeline, mHandlesSheet);
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -50,16 +61,35 @@ namespace Editor
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
-		mUpPanel = mnew Widget();
-		*mUpPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20);
-		mUpPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
-		mWindow->AddChild(mUpPanel);
-
 		mWorkArea = mnew Widget();
 		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 18);
+		mWindow->AddChild(mWorkArea);
 
 		InitializeUpPanel();
+		InitializeTimeline();
+		InitializeTree();
+		InitializeHandlesSheet();
+		InitializeSeparatorHandle();
+	}
 
+	void AnimationWindow::InitializeHandlesSheet()
+	{
+		mHandlesSheet = mnew KeyHandlesSheet();
+		*mHandlesSheet->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
+		mHandlesSheet->SetTimeline(mTimeline);
+		mWorkArea->AddChild(mHandlesSheet);
+	}
+
+	void AnimationWindow::InitializeTree()
+	{
+		mTree = o2UI.CreateWidget<AnimationTree>();
+		*mTree->layout = WidgetLayout::BothStretch();
+		mTree->SetTreeWidth(mTreeViewWidth);
+		mWorkArea->AddChild(mTree);
+	}
+
+	void AnimationWindow::InitializeTimeline()
+	{
 		mTimeline = mnew AnimationTimeline();
 		*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
 
@@ -69,19 +99,15 @@ namespace Editor
 		mTimeline->SetScrollBar(mTimeScroll);
 
 		mWindow->AddChild(mTimeline);
-
-		mTree = o2UI.CreateWidget<AnimationTree>();
-		*mTree->layout = WidgetLayout::BothStretch();
-		mTree->SetTreeWidth(mTreeViewWidth);
-		mWorkArea->AddChild(mTree);
-
-		mWindow->AddChild(mWorkArea);
-
-		InitializeSeparatorHandle();
 	}
 
 	void AnimationWindow::InitializeUpPanel()
 	{
+		mUpPanel = mnew Widget();
+		*mUpPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20);
+		mUpPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
+		mWindow->AddChild(mUpPanel);
+
 		mControlsPanel = mnew Widget();
 		mControlsPanel->name = "controls panel";
 		*mControlsPanel->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(mTreeViewWidth, 20.0f));
@@ -94,11 +120,13 @@ namespace Editor
 		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("menu play-stop");
 		*mPlayPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(21, 1));
 		mPlayPauseToggle->SetValue(false);
+		mPlayPauseToggle->onToggleByUser = THIS_FUNC(OnPlayPauseToggled);
 		mControlsPanel->AddChild(mPlayPauseToggle);
 
 		mLoopToggle = o2UI.CreateWidget<Toggle>("menu loop-nonloop");
 		*mLoopToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(41, 1));
 		mLoopToggle->SetValue(true);
+		mLoopToggle->onToggleByUser = THIS_FUNC(OnLoopToggled);
 		mControlsPanel->AddChild(mLoopToggle);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("menu add key");
@@ -138,6 +166,7 @@ namespace Editor
 			mTreeViewWidth = point.x;
 			mControlsPanel->layout->right = mTreeViewWidth;
 			mTimeline->layout->left = mTreeViewWidth;
+			mHandlesSheet->layout->left = mTreeViewWidth;
 			mTree->SetTreeWidth(mTreeViewWidth);
 		};
 
@@ -153,6 +182,18 @@ namespace Editor
 		mTreeSeparatorHandle->cursorType = CursorType::SizeWE;
 
 		mWorkArea->AddChild(mTreeSeparatorHandle);
+	}
+
+	void AnimationWindow::OnPlayPauseToggled(bool play)
+	{
+		if (mAnimation)
+			mAnimation->SetPlaying(play);
+	}
+
+	void AnimationWindow::OnLoopToggled(bool loop)
+	{
+		if (mAnimation)
+			mAnimation->SetLoop(loop ? Loop::Repeat : Loop::None);
 	}
 
 	void AnimationWindow::OnSearchEdited(const WString& search)

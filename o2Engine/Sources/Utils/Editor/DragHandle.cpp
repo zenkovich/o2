@@ -754,6 +754,8 @@ namespace o2
 		handle->mIsSelected = true;
 		mSelectedHandles.Add(handle);
 		handle->OnSelected();
+
+		OnSelectionChanged();
 	}
 
 	void SelectableDragHandlesGroup::DeselectHandle(DragHandle* handle)
@@ -764,6 +766,8 @@ namespace o2
 		handle->mIsSelected = false;
 		mSelectedHandles.Remove(handle);
 		handle->OnDeselected();
+
+		OnSelectionChanged();
 	}
 
 	void SelectableDragHandlesGroup::AddHandle(DragHandle* handle)
@@ -779,6 +783,9 @@ namespace o2
 		mHandles.Remove(handle);
 		mSelectedHandles.Remove(handle);
 	}
+
+	void SelectableDragHandlesGroup::OnSelectionChanged()
+	{}
 
 	void SelectableDragHandlesGroup::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
 	{

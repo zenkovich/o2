@@ -100,6 +100,9 @@ namespace o2
 		// Returns time
 		virtual float GetTime() const;
 
+		// Returns time in loop
+		virtual float GetLoopTime() const;
+
 		// Returns duration
 		virtual float GetDuration() const;
 
@@ -228,6 +231,7 @@ CLASS_METHODS_META(o2::IAnimation)
 	PUBLIC_FUNCTION(bool, IsPlaying);
 	PUBLIC_FUNCTION(void, SetTime, float);
 	PUBLIC_FUNCTION(float, GetTime);
+	PUBLIC_FUNCTION(float, GetLoopTime);
 	PUBLIC_FUNCTION(float, GetDuration);
 	PUBLIC_FUNCTION(void, SetRelTime, float);
 	PUBLIC_FUNCTION(float, GetRelTime);

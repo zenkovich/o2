@@ -40,6 +40,7 @@ namespace Editor
 	ToolsPanel::ToolsPanel()
 	{
 		mPanelRoot = mnew Widget();
+		mPanelRoot->name = "tools panel";
 		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI_ToolsPanel_bk.png"), Layout::BothStretch(-2, -3, -2, -2));
 
 		mPanelRoot->layout->anchorMin = Vec2F(0, 1);

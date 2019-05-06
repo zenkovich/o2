@@ -36,7 +36,8 @@ namespace Editor
 
 		mTimeLineEventsArea.onMoved = [&](const Input::Cursor& cursor) {
 			if (cursor.isPressed && mAnimation) {
-				mAnimation->SetTime(WorldToLocal(cursor.position.x));
+				mAnimation->Stop();
+				mAnimation->SetTime(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
 			}
 		};
 	}
@@ -75,20 +76,23 @@ namespace Editor
 	void AnimationTimeline::Draw()
 	{
 		Widget::Draw();
+
+		o2Render.EnableScissorTest(mChildrenWorldRect);
+
 		DrawTimeScale();
 
-		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimation ? mAnimation->GetTime() : 0.0f), layout->GetWorldTop()));
+		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimation ? mAnimation->GetLoopTime() : 0.0f), layout->GetWorldTop()));
 		mTimeLine->SetSize(Vec2F(10.0f, layout->GetHeight() + 5.0f));
 		mTimeLine->SetSizePivot(Vec2F(6.5f, layout->GetHeight() + 4.0f));
 		mTimeLine->Draw();
+
+		o2Render.DisableScissorTest();
 
 		mTimeLineEventsArea.OnDrawn();
 	}
 
 	void AnimationTimeline::DrawTimeScale()
 	{
-		o2Render.EnableScissorTest(mChildrenWorldRect);
-
 		double beginPos = (double)(mScaleOffset - mSmoothViewScroll*mOneSecondDefaultSize*mSmoothViewZoom);
 		double endPos = beginPos + mDuration*mOneSecondDefaultSize*mSmoothViewZoom;
 
@@ -136,8 +140,6 @@ namespace Editor
 				mText->Draw();
 			}
 		}
-
-		o2Render.DisableScissorTest();
 	}
 
 	void AnimationTimeline::Update(float dt)

@@ -46,9 +46,10 @@ namespace Editor
 		Tree::Draw();
 	}
 
-	void AnimationTree::SetAnimation(Animation* animation, AnimationTimeline* timeline)
+	void AnimationTree::SetAnimation(Animation* animation, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
+		mHandlesSheet = handlesSheet;
 
 		mAnimation = animation;
 		RebuildAnimationTree();
@@ -175,7 +176,7 @@ namespace Editor
 	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
 	{
 		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
-		node->Setup((AnimationValueNode*)object, mTimeline);
+		node->Setup((AnimationValueNode*)object, mTimeline, mHandlesSheet);
 	}
 
 	void AnimationTree::UpdateVisibleNodes()
@@ -208,9 +209,10 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationTreeNode::Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline)
+	void AnimationTreeNode::Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
+		mHandlesSheet = handlesSheet;
 
 		mTimeline->onViewChanged -= THIS_FUNC(UpdateTrackControlView);
 		mTimeline->onViewChanged += THIS_FUNC(UpdateTrackControlView);
@@ -283,6 +285,7 @@ namespace Editor
 			mTrackControl = trackControl;
 
 			trackControl->SetTimeline(mTimeline);
+			trackControl->SetKeyHandlesSheet(mHandlesSheet);
 			trackControl->SetMappedTracks(*mData);
 
 			AddChild(mTrackControl);
@@ -303,6 +306,7 @@ namespace Editor
 				mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
 
 			mTrackControl->SetTimeline(mTimeline);
+			mTrackControl->SetKeyHandlesSheet(mHandlesSheet);
 			mTrackControl->SetAnimatedValue(mData->animatedValue);
 
 			AddChild(mTrackControl);

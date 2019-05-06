@@ -48,6 +48,10 @@ namespace Editor
 		// Sets timeline for calculating handles positions
 		void SetTimeline(AnimationTimeline* timeline) override;
 
+		// Sets handles sheet
+		void SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet) override;
+
+
 		SERIALIZABLE(MapKeyFramesTrackControl);
 
 	private:
@@ -73,9 +77,10 @@ namespace Editor
 		typedef Dictionary<IAnimatedValue*, KeyHandlesVec> AnimatedValueKeyHandlesDict;
 
 	private:
-		AnimatedValueKeyHandlesDict mHandles;            // List of handles, each for keys
-		Vector<IAnimatedValue*>     mAnimatedValues;     // Editing animated values
-		AnimationTimeline*          mTimeline = nullptr; // Timeline used for calculating handles positions
+		AnimatedValueKeyHandlesDict mHandles;                // List of handles, each for keys
+		Vector<IAnimatedValue*>     mAnimatedValues;         // Editing animated values
+		AnimationTimeline*          mTimeline = nullptr;     // Timeline used for calculating handles positions
+		KeyHandlesSheet*               mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
 													 
 		Vector<WidgetDragHandle*> mHandlesCache; // Cached drag handles, can be reused
 
@@ -199,6 +204,7 @@ CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 	PRIVATE_FIELD(mHandles);
 	PRIVATE_FIELD(mAnimatedValues);
 	PRIVATE_FIELD(mTimeline);
+	PRIVATE_FIELD(mHandlesSheet);
 	PRIVATE_FIELD(mHandlesCache);
 	PRIVATE_FIELD(mDisableHandlesUpdate);
 }
@@ -211,6 +217,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
+	PUBLIC_FUNCTION(void, SetKeyHandlesSheet, KeyHandlesSheet*);
 	PRIVATE_FUNCTION(void, CacheHandles);
 	PRIVATE_FUNCTION(void, InitializeNodeHandles, const AnimationTree::AnimationValueNode&);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);

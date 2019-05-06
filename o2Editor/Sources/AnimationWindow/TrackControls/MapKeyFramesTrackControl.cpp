@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "MapKeyFramesTrackControl.h"
 
+#include "AnimationWindow/KeyHandlesSheet.h"
 #include "Scene/ActorTransform.h"
 #include "Scene/UI/WidgetLayout.h"
 
@@ -33,20 +34,6 @@ namespace Editor
 	void MapKeyFramesTrackControl::Draw()
 	{
 		DrawDebugFrame();
-
-		if (!mResEnabledInHierarchy)
-			return;
-
-		OnDrawn();
-
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
-
-		for (auto child : mDrawingChildren)
-			child->Draw();
-
-		o2Render.DisableScissorTest();
-
-		DrawDebugFrame();
 	}
 
 	void MapKeyFramesTrackControl::SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode)
@@ -65,6 +52,11 @@ namespace Editor
 	void MapKeyFramesTrackControl::SetTimeline(AnimationTimeline* timeline)
 	{
 		mTimeline = timeline;
+	}
+
+	void MapKeyFramesTrackControl::SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet)
+	{
+		mHandlesSheet = handlesSheet;
 	}
 
 	void MapKeyFramesTrackControl::CacheHandles()
@@ -132,8 +124,9 @@ namespace Editor
 														 mnew Sprite("ui/UI4_selected_map_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
+		handle->pixelPerfect = true;
 		handle->SetSpritesSizePivot(Vec2F(7, 2));
-		handle->SetSelectionGroup(mTimeline);
+		handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) {
 			float position = pos.x;

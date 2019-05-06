@@ -7,13 +7,12 @@ using namespace o2;
 
 namespace o2
 {
+	class Animation;
 	class Button;
 	class EditBox;
 	class HorizontalScrollBar;
 	class Toggle;
 	class WidgetDragHandle;
-
-	class Animation;
 }
 
 // Editor animation window accessor macros
@@ -23,6 +22,7 @@ namespace Editor
 {
 	class AnimationTimeline;
 	class AnimationTree;
+	class KeyHandlesSheet;
 
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{
@@ -59,10 +59,10 @@ namespace Editor
 		Button*  mFilterButton = nullptr;
 		EditBox* mSearchEditBox = nullptr;
 
-		AnimationTimeline* mTimeline = nullptr;
+		AnimationTimeline*   mTimeline = nullptr;
 		HorizontalScrollBar* mTimeScroll = nullptr;
-
-		AnimationTree* mTree = nullptr;
+		AnimationTree*       mTree = nullptr;
+		KeyHandlesSheet*     mHandlesSheet = nullptr;
 
 		WidgetDragHandle* mTreeSeparatorHandle = nullptr;
 
@@ -70,11 +70,26 @@ namespace Editor
 		// Initializes window
 		void InitializeWindow();
 
+		// Initializes handles sheet
+		void InitializeHandlesSheet();
+
+		// Initializes nodes tree
+		void InitializeTree();
+
+		// Initializes timeline and scrollbar
+		void InitializeTimeline();
+
 		// Initializes up control panel
 		void InitializeUpPanel();
 
 		// Initializes separator handle view and events
 		void InitializeSeparatorHandle();
+
+		// It is called when play/pause button was pressed
+		void OnPlayPauseToggled(bool play);
+
+		// It is called when loop button was pressed
+		void OnLoopToggled(bool loop);
 
 		// It is called when search edit box text was changed
 		void OnSearchEdited(const WString& search);
@@ -109,6 +124,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mTimeline);
 	PROTECTED_FIELD(mTimeScroll);
 	PROTECTED_FIELD(mTree);
+	PROTECTED_FIELD(mHandlesSheet);
 	PROTECTED_FIELD(mTreeSeparatorHandle);
 }
 END_META;
@@ -118,8 +134,13 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PROTECTED_FUNCTION(void, InitializeWindow);
+	PROTECTED_FUNCTION(void, InitializeHandlesSheet);
+	PROTECTED_FUNCTION(void, InitializeTree);
+	PROTECTED_FUNCTION(void, InitializeTimeline);
 	PROTECTED_FUNCTION(void, InitializeUpPanel);
 	PROTECTED_FUNCTION(void, InitializeSeparatorHandle);
+	PROTECTED_FUNCTION(void, OnPlayPauseToggled, bool);
+	PROTECTED_FUNCTION(void, OnLoopToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
 	PROTECTED_FUNCTION(void, OnMenuRecordPressed);

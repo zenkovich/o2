@@ -12,6 +12,8 @@ namespace o2
 
 namespace Editor
 {
+	class KeyHandlesSheet;
+
 	// ---------------------
 	// Animation values tree
 	// ---------------------
@@ -36,7 +38,7 @@ namespace Editor
 
 
 		// Sets animation and updates tree structure
-		void SetAnimation(Animation* animation, AnimationTimeline* timeline);
+		void SetAnimation(Animation* animation, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
 
 		// Sets width of tree part
@@ -62,6 +64,7 @@ namespace Editor
 		Animation* mAnimation = nullptr;
 		AnimationValueNode* mRootValue = nullptr;
 		AnimationTimeline* mTimeline = nullptr;
+		KeyHandlesSheet* mHandlesSheet = nullptr;
 
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite @SERIALIZABLE
 
@@ -118,7 +121,7 @@ namespace Editor
 
 
 		// Sets object and updates content
-		void Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline);
+		void Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
 
 		// Sets width of tree part and control part
@@ -129,6 +132,7 @@ namespace Editor
 	protected:
 		AnimationTree::AnimationValueNode* mData = nullptr;
 		AnimationTimeline* mTimeline = nullptr;
+		KeyHandlesSheet* mHandlesSheet = nullptr;
 
 		Text* mNameDrawable = nullptr; // Object name drawable
 
@@ -164,6 +168,7 @@ CLASS_FIELDS_META(Editor::AnimationTree)
 	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mRootValue);
 	PRIVATE_FIELD(mTimeline);
+	PRIVATE_FIELD(mHandlesSheet);
 	PRIVATE_FIELD(mZebraBackLine).SERIALIZABLE_ATTRIBUTE();
 	PRIVATE_FIELD(mTreeWidth);
 }
@@ -172,7 +177,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*, AnimationTimeline*);
+	PUBLIC_FUNCTION(void, SetAnimation, Animation*, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
@@ -197,6 +202,7 @@ CLASS_FIELDS_META(Editor::AnimationTreeNode)
 {
 	PROTECTED_FIELD(mData);
 	PROTECTED_FIELD(mTimeline);
+	PROTECTED_FIELD(mHandlesSheet);
 	PROTECTED_FIELD(mNameDrawable);
 	PROTECTED_FIELD(mTrackControl);
 }
@@ -204,7 +210,7 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
-	PUBLIC_FUNCTION(void, Setup, AnimationTree::AnimationValueNode*, AnimationTimeline*);
+	PUBLIC_FUNCTION(void, Setup, AnimationTree::AnimationValueNode*, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

@@ -9,6 +9,9 @@ namespace Editor
 	void ITrackControl::SetTimeline(AnimationTimeline* timeline)
 	{}
 
+	void ITrackControl::SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet)
+	{}
+
 	void ITrackControl::UpdateHandles()
 	{}
 

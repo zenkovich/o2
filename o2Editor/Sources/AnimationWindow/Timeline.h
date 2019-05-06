@@ -17,7 +17,7 @@ namespace Editor
 	// ------------------------------------
 	// Draws time scale in animation window
 	// ------------------------------------
-	class AnimationTimeline : public Widget, public SelectableDragHandlesGroup
+	class AnimationTimeline : public Widget
 	{
 	public:
 		Function<void()> onViewChanged; // it is called when scroll or zoom were changed
@@ -155,7 +155,6 @@ namespace Editor
 CLASS_BASES_META(Editor::AnimationTimeline)
 {
 	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::SelectableDragHandlesGroup);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTimeline)

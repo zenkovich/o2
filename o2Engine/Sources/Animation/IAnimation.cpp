@@ -200,7 +200,7 @@ namespace o2
 
 	void IAnimation::SetPlaying(bool playing)
 	{
-		mPlaying = true;
+		mPlaying = playing;
 		Evaluate();
 	}
 
@@ -218,6 +218,11 @@ namespace o2
 	float IAnimation::GetTime() const
 	{
 		return mTime;
+	}
+
+	float IAnimation::GetLoopTime() const
+	{
+		return fmodf(mTime, GetDuration());
 	}
 
 	float IAnimation::GetDuration() const

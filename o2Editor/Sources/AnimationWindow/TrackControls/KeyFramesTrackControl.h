@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/TrackControls/ITrackControl.h"
 #include "Scene/UI/Widget.h"
@@ -45,6 +46,9 @@ namespace Editor
 		// Sets timeline for calculating handles positions
 		void SetTimeline(AnimationTimeline* timeline) override;
 
+		// Sets handles sheet
+		void SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet) override;
+
 
 		// Updates handles position on timeline
 		void UpdateHandles();
@@ -62,6 +66,7 @@ namespace Editor
 		KeyHandlesVec      mHandles;                 // List of handles, each for keys
 		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
 		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
+		KeyHandlesSheet*      mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
 
 	private:
 		void InitializeHandles();
@@ -99,20 +104,6 @@ namespace Editor
 	void KeyFramesTrackControl<AnimatedValueType>::Draw()
 	{
 		DrawDebugFrame();
-
-		if (!mResEnabledInHierarchy)
-			return;
-
-		OnDrawn();
-
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
-
-		for (auto child : mDrawingChildren)
-			child->Draw();
-
-		o2Render.DisableScissorTest();
-
-		DrawDebugFrame();
 	}
 
 	template<typename AnimatedValueType>
@@ -139,6 +130,12 @@ namespace Editor
 	void KeyFramesTrackControl<AnimatedValueType>::SetTimeline(AnimationTimeline* timeline)
 	{
 		mTimeline = timeline;
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet)
+	{
+		mHandlesSheet = handlesSheet;
 	}
 
 	template<typename AnimatedValueType>
@@ -234,8 +231,9 @@ namespace Editor
 														 mnew Sprite("ui/UI4_selected_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
+		handle->pixelPerfect = true;
 		handle->SetSpritesSizePivot(Vec2F(7, 1));
-		handle->SetSelectionGroup(mTimeline);
+		handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) { 
 			float position = pos.x;
@@ -275,6 +273,7 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PRIVATE_FIELD(mHandles);
 	PRIVATE_FIELD(mAnimatedValue);
 	PRIVATE_FIELD(mTimeline);
+	PRIVATE_FIELD(mHandlesSheet);
 }
 END_META;
 META_TEMPLATES(typename AnimatedValueType)
@@ -285,6 +284,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
 	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
+	PUBLIC_FUNCTION(void, SetKeyHandlesSheet, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);

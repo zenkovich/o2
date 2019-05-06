@@ -395,6 +395,9 @@ namespace o2
 		SelectableDragHandlesVec mHandles;
 
 	protected:
+		// It is called when selection is changed - some handle was added or removed from selection
+		virtual void OnSelectionChanged();
+
 		// It is called when selectable draggable handle was pressed
 		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor);
 
