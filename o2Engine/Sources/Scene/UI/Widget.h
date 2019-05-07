@@ -29,7 +29,7 @@ namespace o2
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
 
 		PROPERTY(Widget*, parentWidget, SetParentWidget, GetParentWidget); // Parent widget property
-		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst);            // Widget children getter
+		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst);          // Widget children getter
 
 		GETTER(LayersVec, layers, GetLayers); // Layers getter
 		GETTER(StatesVec, states, GetStates); // States getter
@@ -39,7 +39,7 @@ namespace o2
 		ACCESSOR(WidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
 
 	public:
-		WidgetLayout* const layout;     // Widget layout
+		WidgetLayout* const layout; // Widget layout
 
 	public:
 		Function<void()> onLayoutUpdated; // Layout change event

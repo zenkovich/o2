@@ -40,6 +40,7 @@ namespace Editor
 		Widget::Update(dt);
 	}
 
+#undef DrawText
 	void KeyHandlesSheet::Draw()
 	{
 		if (!mResEnabledInHierarchy)
@@ -51,10 +52,11 @@ namespace Editor
 		o2Render.EnableScissorTest(layout->GetWorldRect());
 
 		if (mSelectionFrame->enabled) {
-			mSelectionFrame->SetRect(RectF(mTimeline->LocalToWorld(mSelectionRect.left) + mSelectionFrameOffsets.left,
-										   mTree->GetLineWorldPosition(mSelectionRect.top) + mSelectionFrameOffsets.top,
-										   mTimeline->LocalToWorld(mSelectionRect.right) + mSelectionFrameOffsets.right,
-										   mTree->GetLineWorldPosition(mSelectionRect.bottom) + mSelectionFrameOffsets.bottom));
+			auto offsets = mIsFrameSelecting ? mSelectionFrameCursorOffsets : mSelectionFrameOffsets;
+			mSelectionFrame->SetRect(RectF(mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
+										   mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
+										   mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
+										   mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom));
 			mSelectionFrame->Draw();
 		}
 
@@ -76,10 +78,23 @@ namespace Editor
 		mTree = tree;
 	}
 
+	bool KeyHandlesSheet::IsUnderPoint(const Vec2F& point)
+	{
+		return Widget::IsUnderPoint(point);
+	}
+
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
-		if (mSelectedHandles.Count() > 1)
-		{
+		UpdateSelectionFrame();
+
+	}
+
+	void KeyHandlesSheet::UpdateSelectionFrame()
+	{
+		if (mIsFrameSelecting)
+			return;
+
+		if (mSelectedHandles.Count() > 1) {
 			mSelectionFrame->enabled = true;
 
 			mSelectionRect.left = mSelectedHandles.First()->GetPosition().x;
@@ -103,17 +118,25 @@ namespace Editor
 
 	void KeyHandlesSheet::OnCursorPressed(const Input::Cursor& cursor)
 	{
+		if (!o2Input.IsKeyDown(VK_CONTROL)) 
+			DeselectAll();
 
+		mBeginSelectHandles = mSelectedHandles;
+
+		mBeginSelectPoint.x = mTimeline->WorldToLocal(cursor.position.x);
+		mBeginSelectPoint.y = mTree->GetLineNumber(cursor.position.y);
 	}
 
 	void KeyHandlesSheet::OnCursorReleased(const Input::Cursor& cursor)
 	{
-
+		mIsFrameSelecting = false;
+		UpdateSelectionFrame();
 	}
 
 	void KeyHandlesSheet::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
-
+		mIsFrameSelecting = false;
+		UpdateSelectionFrame();
 	}
 
 	void KeyHandlesSheet::OnCursorPressedOutside(const Input::Cursor& cursor)
@@ -128,12 +151,41 @@ namespace Editor
 
 	void KeyHandlesSheet::OnCursorStillDown(const Input::Cursor& cursor)
 	{
+		if (cursor.isPressed) {
+			if (!mIsFrameSelecting) 
+			{
+				if (cursor.delta != Vec2F())
+					mIsFrameSelecting = true;
+			}
+			
 
+			if (mIsFrameSelecting)
+			{
+				mSelectionFrame->enabled = true;
+
+				Vec2F current(mTimeline->WorldToLocal(cursor.position.x), mTree->GetLineNumber(cursor.position.y));
+				mSelectionRect.left = Math::Min(mBeginSelectPoint.x, current.x);
+				mSelectionRect.right = Math::Max(mBeginSelectPoint.x, current.x);
+				mSelectionRect.top = Math::Floor(Math::Min(mBeginSelectPoint.y, current.y));
+				mSelectionRect.bottom = Math::Ceil(Math::Max(mBeginSelectPoint.y, current.y));
+
+				DeselectAll();
+
+				for (auto handle : mBeginSelectHandles)
+					SelectHandle(handle);
+
+				for (auto handle : mHandles) {
+					Vec2F handlePos(handle->GetPosition().x, mTree->GetLineNumber(handle->GetScreenPosition().y));
+					if (handlePos.x > mSelectionRect.left && handlePos.x < mSelectionRect.right && handlePos.y > mSelectionRect.top && handlePos.y < mSelectionRect.bottom + 0.5f) {
+						SelectHandle(handle);
+					}
+				}
+			}
+		}
 	}
 
 	void KeyHandlesSheet::OnCursorMoved(const Input::Cursor& cursor)
 	{
-
 	}
 
 	void KeyHandlesSheet::OnCursorEnter(const Input::Cursor& cursor)

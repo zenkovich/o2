@@ -784,6 +784,29 @@ namespace o2
 		mSelectedHandles.Remove(handle);
 	}
 
+	void SelectableDragHandlesGroup::DeselectAll()
+	{
+		for (auto handle : mSelectedHandles)
+		{
+			handle->mIsSelected = false;
+			handle->OnDeselected();
+		}
+
+		mSelectedHandles.Clear();
+		OnSelectionChanged();
+	}
+
+	void SelectableDragHandlesGroup::SelectAll()
+	{
+		for (auto handle : mHandles) {
+			handle->mIsSelected = true;
+			handle->OnSelected();
+		}
+
+		mSelectedHandles = mHandles;
+		OnSelectionChanged();
+	}
+
 	void SelectableDragHandlesGroup::OnSelectionChanged()
 	{}
 

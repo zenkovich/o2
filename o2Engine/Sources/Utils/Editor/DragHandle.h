@@ -332,10 +332,10 @@ namespace o2
 		virtual void RemoveHandle(DragHandle* handle) = 0;
 
 		// Deselects all in group
-		void DeselectAll();
+		virtual void DeselectAll();
 
 		// Selects all in group
-		void SelectAll();
+		virtual void SelectAll();
 
 	protected:
 		// It is called when selectable draggable handle was pressed
@@ -389,6 +389,12 @@ namespace o2
 
 		// Removes selectable handle from group
 		void RemoveHandle(DragHandle* handle);
+
+		// Deselects all in group
+		void DeselectAll() override;
+
+		// Selects all in group
+		void SelectAll() override;
 
 	protected:
 		SelectableDragHandlesVec mSelectedHandles;

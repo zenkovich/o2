@@ -48,10 +48,15 @@ namespace Editor
 		// Sets animation tree
 		void SetTree(AnimationTree* tree);
 
+
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point) override;
+
 		SERIALIZABLE(KeyHandlesSheet);
 
 	private:
 		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
+		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
 
 		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
 		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
@@ -59,10 +64,18 @@ namespace Editor
 		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
 		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
+		Vec2F   mBeginSelectPoint;         // Begin frame selection point, where x is position on timeline, y is line number
+		bool    mIsFrameSelecting = false; // It is true when user selection by frame now
+
+		SelectableDragHandlesVec mBeginSelectHandles; // handles list, that were selected before frame selecting
+
 	private:
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
 		void OnSelectionChanged() override;
+
+		// Updates selection rectangle and drawing sprite
+		void UpdateSelectionFrame();
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -124,10 +137,14 @@ END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
 	PRIVATE_FIELD(mSelectionFrameOffsets);
+	PRIVATE_FIELD(mSelectionFrameCursorOffsets);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);
+	PRIVATE_FIELD(mBeginSelectPoint);
+	PRIVATE_FIELD(mIsFrameSelecting);
+	PRIVATE_FIELD(mBeginSelectHandles);
 }
 END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
@@ -137,7 +154,9 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
 	PUBLIC_FUNCTION(void, SetTree, AnimationTree*);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
+	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
 	PRIVATE_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
