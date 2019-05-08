@@ -69,6 +69,10 @@ namespace Editor
 
 		SelectableDragHandlesVec mBeginSelectHandles; // handles list, that were selected before frame selecting
 
+		DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
+		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
+		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
+
 	private:
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
