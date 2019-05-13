@@ -11,6 +11,8 @@ namespace o2
 	class AnimatedValue<float>: public IAnimatedValue
 	{
 	public:
+		typedef float ValueType;
+
 		typedef Curve::Key Key;
 		typedef Vector<Key> KeysVec;
 

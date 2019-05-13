@@ -54,12 +54,18 @@ namespace Editor
 		SERIALIZABLE(KeyFramesTrackControl<AnimatedValueType>);
 
 	private:
-		KeyHandlesVec      mHandles;                 // List of handles, each for keys
+		KeyHandlesVec mHandles; // List of handles, each for keys
+
+		IPropertyField* mPropertyField; 
+		AnimatedValueType::ValueType mPropertyValue = AnimatedValueType::ValueType();
+
+
 		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
 		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
-		KeyHandlesSheet*      mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
+		KeyHandlesSheet*   mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
 
 	private:
+		void InitializeProperty();
 		void InitializeHandles();
 
 		WidgetDragHandle* CreateHandle();
@@ -146,6 +152,12 @@ namespace Editor
 	float KeyFramesTrackControl<AnimatedValueType>::GetKeyPosition(int idx) const
 	{
 		return mHandles[idx]->handle->GetPosition().x;
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::InitializeProperty()
+	{
+		mPropertyField = o2EditorProperties.BuildField();
 	}
 
 	template<typename AnimatedValueType>

@@ -57,6 +57,8 @@ namespace o2
 	class AnimatedValue: public IAnimatedValue
 	{
 	public:
+		typedef _type ValueType;
+
 		class Key;
 		typedef Vector<Key> KeysVec;
 

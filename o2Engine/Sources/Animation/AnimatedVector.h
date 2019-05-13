@@ -12,6 +12,8 @@ namespace o2
 	class AnimatedValue<o2::Vec2F>: public IAnimatedValue
 	{
 	public:
+		typedef o2::Vec2F ValueType;
+
 		class Key;
 		typedef Vector<Key> KeysVec;
 
