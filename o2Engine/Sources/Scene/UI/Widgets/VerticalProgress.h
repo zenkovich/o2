@@ -22,8 +22,10 @@ namespace o2
 
 		PROPERTY(float, scrollSense, SetScrollSense, GetScrollSense); // Scroll sense coefficient
 
+	public:
 		Function<void(float)> onChange; // On Value changing event
 
+	public:
 		// Constructor
 		VerticalProgress();
 
@@ -84,12 +86,12 @@ namespace o2
 		SERIALIZABLE(VerticalProgress);
 
 	protected:
-		float          mValue = 0.0f;                    // Current value @SERIALIZABLE
-		float          mSmoothValue = 0.0f;              // Current smoothed value
-		float          mMinValue = 0.0f;                 // Minimal value @SERIALIZABLE
-		float          mMaxValue = 1.0f;                 // Maximal value @SERIALIZABLE
-		float          mScrollSense = 1.0f;              // Scroll sense coefficient @SERIALIZABLE
-		Orientation    mOrientation = Orientation::Down; // Bar orientation @SERIALIZABLE
+		float        mValue = 0.0f;                    // Current value @SERIALIZABLE
+		float        mSmoothValue = 0.0f;              // Current smoothed value
+		float        mMinValue = 0.0f;                 // Minimal value @SERIALIZABLE
+		float        mMaxValue = 1.0f;                 // Maximal value @SERIALIZABLE
+		float        mScrollSense = 1.0f;              // Scroll sense coefficient @SERIALIZABLE
+		Orientation  mOrientation = Orientation::Down; // Bar orientation @SERIALIZABLE
 		WidgetLayer* mBarLayer = nullptr;              // Bar layer
 		WidgetLayer* mBackLayer = nullptr;             // Background layer
 

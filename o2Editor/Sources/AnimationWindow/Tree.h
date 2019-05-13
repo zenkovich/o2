@@ -32,22 +32,20 @@ namespace Editor
 		// Copy-operator
 		AnimationTree& operator=(const AnimationTree& other);
 
+		// Initializes tree with timeline and handles sheet
+		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
 		// Draws widget
 		void Draw() override;
 
-
 		// Sets animation and updates tree structure
-		void SetAnimation(Animation* animation, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
-
+		void SetAnimation(Animation* animation);
 
 		// Sets width of tree part
 		void SetTreeWidth(float width);
 
-
 		// Return zebra back line sprite
 		Sprite* GetZebraBackLine() const;
-
 
 		// Returns animated value line number by world position, dependent on scroll
 		float GetLineNumber(float worldPosition) const;
@@ -63,15 +61,17 @@ namespace Editor
 			String name;
 			IAnimatedValue* animatedValue = nullptr;
 
+			ITrackControl* trackControl = nullptr; 
+
 			AnimationValueNode* parent = nullptr;
 			Vector<AnimationValueNode*> children;
 		};
 
 	private:
-		Animation* mAnimation = nullptr;
+		Animation*          mAnimation = nullptr;
 		AnimationValueNode* mRootValue = nullptr;
-		AnimationTimeline* mTimeline = nullptr;
-		KeyHandlesSheet* mHandlesSheet = nullptr;
+		AnimationTimeline*  mTimeline = nullptr;
+		KeyHandlesSheet*    mHandlesSheet = nullptr;
 
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite @SERIALIZABLE
 
@@ -183,8 +183,9 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
 
+	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*, AnimationTimeline*, KeyHandlesSheet*);
+	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
 	PUBLIC_FUNCTION(float, GetLineNumber, float);

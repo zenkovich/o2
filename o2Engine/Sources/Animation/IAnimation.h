@@ -32,11 +32,13 @@ namespace o2
 		PROPERTY(Loop, loop, SetLoop, GetLoop);                    // Loop animation property
 		GETTER(float, duration, GetDuration);                      // Animation duration property
 
+	public:
 		Function<void()>      onPlayEvent;   // Event calling when starting playing
 		Function<void()>      onStopEvent;   // Event calling when stopping playing
 		Function<void()>      onPlayedEvent; // Event calling when finishing playing
 		Function<void(float)> onUpdate;      // Event calling on animation update
 
+	public:
 		// Default constructor
 		IAnimation();
 

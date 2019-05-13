@@ -39,17 +39,14 @@ namespace Editor
 		// Constructor with objects, that will be deleted
 		DeleteAction(const Vector<SceneEditableObject*>& objects);
 
-
 		// Returns name of action
 		String GetName() const;
-
 
 		// Deletes objects again
 		void Redo();
 
 		// Reverting deleted objects
 		void Undo();
-
 
 		SERIALIZABLE(DeleteAction);
 	};

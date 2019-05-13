@@ -33,6 +33,18 @@ namespace Editor
 #undef DrawText
 	void MapKeyFramesTrackControl::Draw()
 	{
+		if (!mResEnabledInHierarchy)
+			return;
+
+		OnDrawn();
+
+		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+
+		for (auto child : mDrawingChildren)
+			child->Draw();
+
+		o2Render.DisableScissorTest();
+
 		DrawDebugFrame();
 	}
 
@@ -49,13 +61,9 @@ namespace Editor
 		UpdateHandlesCombine();
 	}
 
-	void MapKeyFramesTrackControl::SetTimeline(AnimationTimeline* timeline)
+	void MapKeyFramesTrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
-	}
-
-	void MapKeyFramesTrackControl::SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet)
-	{
 		mHandlesSheet = handlesSheet;
 	}
 
@@ -66,6 +74,7 @@ namespace Editor
 			for (auto keyHandle : kv.Value())
 			{
 				keyHandle->handle->SetParent(nullptr);
+				keyHandle->handle->SetEnabled(false);
 				mHandlesCache.Add(keyHandle->handle);
 				delete keyHandle;
 			}

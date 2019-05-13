@@ -9,7 +9,7 @@ using namespace o2;
 namespace o2
 {
 	class Button;
-	class UIContextMenu;
+	class ContextMenu;
 	class Label;
 	class Spoiler;
 	class Widget;
@@ -79,11 +79,11 @@ namespace Editor
 		TargetsVec               mTargetObjects;   // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
-		Widget*      mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
-		Spoiler*     mSpoiler = nullptr;            // Properties spoiler
-		Label*       mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
-		Button*      mCreateDeleteButton = nullptr; // CReate and delete button. Create - when value is nullptr, delete - when not
-		UIContextMenu* mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
+		Widget*        mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
+		Spoiler*       mSpoiler = nullptr;            // Properties spoiler
+		Label*         mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
+		Button*        mCreateDeleteButton = nullptr; // CReate and delete button. Create - when value is nullptr, delete - when not
+		ContextMenu* mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
 													  // when this type changing and create button were pressed
 
 		bool mPropertiesInitialized = false; // True when properties were built and initialized. 

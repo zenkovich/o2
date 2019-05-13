@@ -50,15 +50,15 @@ namespace o2
 		friend class Application;
 		friend class BaseApplication;
 
-		float  mApplicationTime;     // Application working time, seconds
-		float  mLocalTime;           // Local timer working, seconds. Controlling by user
-		UInt64 mCurrentFrame;        // Current frame index
-		float  mDeltaTime;           // Frame delta time
-		float  mFPS;                 // Average frames per second
+		float  mApplicationTime; // Application working time, seconds
+		float  mLocalTime;       // Local timer working, seconds. Controlling by user
+		UInt64 mCurrentFrame;    // Current frame index
+		float  mDeltaTime;       // Frame delta time
+		float  mFPS;             // Average frames per second
 
-		float  mFPSSum;              // Summary of fps
-		float  mFramesSum;           // Frames summary
-		float  mLastFPSCheckingTime; // Last average fps checking time
+		float mFPSSum;              // Summary of fps
+		float mFramesSum;           // Frames summary
+		float mLastFPSCheckingTime; // Last average fps checking time
 
 	protected:
 		// Default constructor

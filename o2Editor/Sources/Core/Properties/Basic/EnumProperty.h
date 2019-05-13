@@ -37,7 +37,7 @@ namespace Editor
 		const Dictionary<int, String>* mEntries; // Enum entries
 
 		DropDown* mDropDown = nullptr;       // Layer name dropdown
-		bool        mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
 
 	protected:
 		// Copies data of actor from other to this

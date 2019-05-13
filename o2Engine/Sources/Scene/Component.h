@@ -18,6 +18,7 @@ namespace o2
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
 
+	public:
 		// Default constructor
 		Component();
 

@@ -17,6 +17,7 @@ namespace o2
 		Function<void()>             onReleased;        // Some handle released event
 		Function<void()>             onChangeCompleted; // Basis changing completed, all handles released and transform was changed
 
+	public:
 		// Default constructor. Initializes handles
 		FrameHandles();
 
@@ -58,29 +59,29 @@ namespace o2
 		const float  mFrameHandlesSize = 9.0f;	               // Frame corners handles size
 		const float  mHandlesRotateSize = 17.0f;	           // Rotation frame handles size
 
-		DragHandle   mLeftTopRotateHandle;		  // Left top rotation handle
-		DragHandle   mLeftBottomRotateHandle;	  // Left bottom rotation handle
-		DragHandle   mRightTopRotateHandle;		  // Right top rotation handle
-		DragHandle   mRightBottomRotateHandle;	  // Right bottom rotation handle
-		DragHandle   mLeftTopHandle;			  // Left top corner frame handle
-		DragHandle   mLeftHandle;				  // Left corner frame handle
-		DragHandle   mLeftBottomHandle;			  // Left bottom corner frame handle
-		DragHandle   mTopHandle;				  // Top corner frame handle
-		DragHandle   mBottomHandle;				  // Bottom corner frame handle
-		DragHandle   mRightTopHandle;			  // Right top corner frame handle
-		DragHandle   mRightHandle;				  // Right corner frame handle
-		DragHandle   mRightBottomHandle;		  // Right bottom corner frame handle
-		DragHandle   mPivotHandle;				  // Frame pivot handle
+		DragHandle   mLeftTopRotateHandle;		// Left top rotation handle
+		DragHandle   mLeftBottomRotateHandle;	// Left bottom rotation handle
+		DragHandle   mRightTopRotateHandle;		// Right top rotation handle
+		DragHandle   mRightBottomRotateHandle;	// Right bottom rotation handle
+		DragHandle   mLeftTopHandle;			// Left top corner frame handle
+		DragHandle   mLeftHandle;				// Left corner frame handle
+		DragHandle   mLeftBottomHandle;			// Left bottom corner frame handle
+		DragHandle   mTopHandle;				// Top corner frame handle
+		DragHandle   mBottomHandle;				// Bottom corner frame handle
+		DragHandle   mRightTopHandle;			// Right top corner frame handle
+		DragHandle   mRightHandle;				// Right corner frame handle
+		DragHandle   mRightBottomHandle;		// Right bottom corner frame handle
+		DragHandle   mPivotHandle;				// Frame pivot handle
 
-		Basis        mFrame;					  // Frame basis
-		Basis        mBeginDraggingFrame;         // Frame before dragging any handle
-		Vec2F        mBeginDraggingOffset;        // Offset at beginning dragging from frame origin to cursor
+		Basis mFrame;				 // Frame basis
+		Basis mBeginDraggingFrame;   // Frame before dragging any handle
+		Vec2F mBeginDraggingOffset;  // Offset at beginning dragging from frame origin to cursor
 
-		bool         mIsPivotAvailable = true;    // Is pivot editing available
-		bool         mIsRotationAvailable = true; // Is rotation editing available
+		bool mIsPivotAvailable = true;    // Is pivot editing available
+		bool mIsRotationAvailable = true; // Is rotation editing available
 
-		bool         mIsDragging = false;		  // Is frame dragging
-		bool         mChangedFromThis = false;	  // Is actors changed from this, needs to break circular updating
+		bool mIsDragging = false;	   // Is frame dragging
+		bool mChangedFromThis = false; // Is actors changed from this, needs to break circular updating
 
 	protected:
 		// It is called when cursor pressed on this

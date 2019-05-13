@@ -19,9 +19,9 @@ namespace o2
 		// -----------------
 		struct Rect
 		{
-			int   mPage; // Page index
-			RectF mRect; // Rectangle on page
-			Vec2F mSize; // Size of rectangle
+			int   page; // Page index
+			RectF rect; // Rectangle on page
+			Vec2F size; // Size of rectangle
 
 		public:
 			// Constructor
@@ -64,9 +64,9 @@ namespace o2
 		// ---------
 		struct QuadNode: public ITreeNode<QuadNode>
 		{
-			RectF mRect; // Quad rectangle on page
-			int   mPage; // Page index
-			bool  mFree; // Is quad free
+			RectF rect; // Quad rectangle on page
+			int   page; // Page index
+			bool  free; // Is quad free
 
 		public:
 			// Constructor

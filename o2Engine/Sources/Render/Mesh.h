@@ -20,11 +20,12 @@ namespace o2
 		PROPERTY(UInt, maxVertexCount, SetMaxVertexCount, GetMaxVertexCount); // Max vertex count property
 		PROPERTY(UInt, maxPolyCount, SetMaxPolyCount, GetMaxPolyCount);       // Max polygons count property
 
-		Vertex2*             vertices;    // Vertex buffer
-		UInt16*              indexes;     // Index buffer
+	public:
+		Vertex2* vertices; // Vertex buffer
+		UInt16*  indexes;  // Index buffer
 										  
-		UInt                 vertexCount; // Current vertices count
-		UInt                 polyCount;   // Current polygons in mesh
+		UInt vertexCount; // Current vertices count
+		UInt polyCount;   // Current polygons in mesh
 
 	public:
 		// Constructor
@@ -64,10 +65,10 @@ namespace o2
 		UInt GetMaxPolyCount() const;
 
 	protected:
-		TextureRef mTexture;        // Texture
+		TextureRef mTexture; // Texture
 
-		UInt       mMaxVertexCount; // Max size of vertex buffer
-		UInt       mMaxPolyCount;   // Max polygons count, mMaxPolyCount*3 - is index buffer max size
+		UInt mMaxVertexCount; // Max size of vertex buffer
+		UInt mMaxPolyCount;   // Max polygons count, mMaxPolyCount*3 - is index buffer max size
 
 		friend class Render;
 		friend class Sprite;

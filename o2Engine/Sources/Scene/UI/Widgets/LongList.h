@@ -19,12 +19,14 @@ namespace o2
 		PROPERTIES(LongList);
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property	
 
-		Function<void(int)>                     onFocused;         // Select item position event
+	public:
+		Function<void(int)> onFocused;         // Select item position event
 
-		Function<int()>                         getItemsCountFunc; // Items count getting function
-		Function<UnknownsVec(int, int)>         getItemsRangeFunc; // Items getting in range function
+		Function<int()>                       getItemsCountFunc; // Items count getting function
+		Function<UnknownsVec(int, int)>       getItemsRangeFunc; // Items getting in range function
 		Function<void(Widget*, UnknownType*)> setupItemFunc;     // Setup item widget function
 
+	public:
 	    // Default constructor
 		LongList();
 

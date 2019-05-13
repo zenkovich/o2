@@ -32,20 +32,17 @@ namespace Editor
 		// Copy operator
 		ActorProperty& operator=(const ActorProperty& other);
 
-
 		// Reverts value to prototype value
 		void Revert() override;
 
-
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
-
 
 		IOBJECT(ActorProperty);
 
 	protected:
 		Widget* mBox = nullptr;      // Property edit box
-		Text*     mNameText = nullptr; // Asset name text
+		Text*   mNameText = nullptr; // Asset name text
 
 	protected:
 		// Copies data of actor from other to this
@@ -62,7 +59,6 @@ namespace Editor
 
 		// Reverts target value to source
 		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
-
 
 		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
@@ -85,7 +81,6 @@ namespace Editor
 		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
-
 		// It is called when actors tree nodes was dragged and dropped to this
 		void OnDroppedFromActorsTree(SceneTree* actorsTree);
 
@@ -94,7 +89,6 @@ namespace Editor
 
 		// It is called when actors tree nodes was dragged and exited from this
 		void OnDragExitFromActorsTree(SceneTree* actorsTree);
-
 
 		// It is called when assets scroll icons was dragged and dropped to this
 		void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);

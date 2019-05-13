@@ -33,6 +33,7 @@ namespace o2
 		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard
 		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
 
+	public:
 		// Default constructor
 		Text();
 
@@ -224,23 +225,23 @@ namespace o2
 		static const char* mBasicSymbolsPreset;
 		const UInt mMeshMaxPolyCount = 4096;
 
-		WString    mText;              // Wide char string, containing rendering text @SERIALIZABLE
-		UID        mFontAssetId;       // Font asset id @SERIALIZABLE
-		FontRef    mFont;              // Using font
-		int        mHeight;            // Text height @SERIALIZABLE
-		float      mSymbolsDistCoef;   // Characters distance coef, 1 is standard @SERIALIZABLE
-		float      mLinesDistanceCoef; // Lines distance coef, 1 is standard @SERIALIZABLE
-		VerAlign   mVerAlign;          // Vertical align @SERIALIZABLE
-		HorAlign   mHorAlign;          // Horizontal align @SERIALIZABLE
-		bool       mWordWrap;          // True, when words wrapping @SERIALIZABLE
-		bool       mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
+		WString  mText;              // Wide char string, containing rendering text @SERIALIZABLE
+		UID      mFontAssetId;       // Font asset id @SERIALIZABLE
+		FontRef  mFont;              // Using font
+		int      mHeight;            // Text height @SERIALIZABLE
+		float    mSymbolsDistCoef;   // Characters distance coef, 1 is standard @SERIALIZABLE
+		float    mLinesDistanceCoef; // Lines distance coef, 1 is standard @SERIALIZABLE
+		VerAlign mVerAlign;          // Vertical align @SERIALIZABLE
+		HorAlign mHorAlign;          // Horizontal align @SERIALIZABLE
+		bool     mWordWrap;          // True, when words wrapping @SERIALIZABLE
+		bool     mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
 
-		MeshesVec  mMeshes;            // Meshes vector
-		Basis      mLastTransform;     // Last mesh update transformation
+		MeshesVec mMeshes;        // Meshes vector
+		Basis     mLastTransform; // Last mesh update transformation
 
-		SymbolsSet mSymbolsSet;        // Symbols set definition
+		SymbolsSet mSymbolsSet; // Symbols set definition
 
-		bool       mUpdatingMesh;      // True, when mesh is already updating
+		bool mUpdatingMesh; // True, when mesh is already updating
 
 	protected:
 		// Updating meshes

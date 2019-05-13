@@ -9,7 +9,7 @@ namespace o2
 	// ----------------------------------------
 	class FileLogStream:public LogStream
 	{
-		String mFilename; // Target file
+		String filename; // Target file
 
 	public:
 		// Constructor with file name

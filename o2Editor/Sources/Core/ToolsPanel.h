@@ -36,26 +36,27 @@ namespace Editor
 		HorizontalLayout* GetToolsPanel() const;
 
 	protected:
-		const String        mDefaultSchemeName = "Default";
-		const String        mSaveAsSchemeName = "Save as ...";
+		const String mDefaultSchemeName = "Default";
+		const String mSaveAsSchemeName = "Save as ...";
 
-		Widget*           mPanelRoot;			// Root panel widget
+		Widget* mPanelRoot; // Root panel widget
 
-		Widget*           mPlayPanel;			// Play panel widget
-		Toggle*           mPlayToggle;		// Play toggle
-		Toggle*           mPauseToggle;		// Pause toggle
-		Button*           mStepButton;		// Step button
-		DropDown*         mDevicesList;		// Devices list dropdown
+		Widget*   mPlayPanel;	// Play panel widget
+		Toggle*   mPlayToggle;	// Play toggle
+		Toggle*   mPauseToggle;	// Pause toggle
+		Button*   mStepButton;	// Step button
+		DropDown* mDevicesList;	// Devices list dropdown
 
 		HorizontalLayout* mEditToolsPanel;	// Tools panel layout
-		Toggle*           mArrowToolToggle;	// Arrow tool
-		Toggle*           mBrushToolToggle;	// Brush tool
-		Toggle*           mMoveToolToggle;	// Move tool
-		Toggle*           mRotateToolToggle;	// Rotate tool
-		Toggle*           mScaleToolToggle;	// Scale tool
-		Toggle*           mFrameToolToggle;	// Frame tool
 
-		DropDown*         mLayoutSchemesList; // Layouts schemes list
+		Toggle* mArrowToolToggle;  // Arrow tool
+		Toggle* mBrushToolToggle;  // Brush tool
+		Toggle* mMoveToolToggle;   // Move tool
+		Toggle* mRotateToolToggle; // Rotate tool
+		Toggle* mScaleToolToggle;  // Scale tool
+		Toggle* mFrameToolToggle;  // Frame tool
+
+		DropDown* mLayoutSchemesList; // Layouts schemes list
 
 	protected:
 		// Default constructor. Initializes all panel

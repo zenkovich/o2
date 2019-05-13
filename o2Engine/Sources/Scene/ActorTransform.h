@@ -79,6 +79,7 @@ namespace o2
 		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                       // World rectangle property. Sets the position and size
 		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect); // World direction aligned rectangle
 
+	public:
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 					   const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
 
@@ -415,32 +416,32 @@ namespace o2
 		class Data: public ISerializable
 		{
 		public:
-			int    dirtyFrame = 1;                     // Frame index, when layout was marked as dirty
-			int    updateFrame = 1;                    // Frame index, when layout was updated
+			int dirtyFrame = 1;  // Frame index, when layout was marked as dirty
+			int updateFrame = 1; // Frame index, when layout was updated
 
-			Vec2F  position;                           // Position @SERIALIZABLE
-			Vec2F  size;                               // Size @SERIALIZABLE
-			Vec2F  scale = Vec2F(1, 1);                // Scale, (1; 1) is default @SERIALIZABLE
-			Vec2F  pivot;                              // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-			float  angle = 0;                          // Rotation angle in radians @SERIALIZABLE
-			float  shear = 0;                          // Shear @SERIALIZABLE
+			Vec2F position;            // Position @SERIALIZABLE
+			Vec2F size;                // Size @SERIALIZABLE
+			Vec2F scale = Vec2F(1, 1); // Scale, (1; 1) is default @SERIALIZABLE
+			Vec2F pivot;               // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
+			float angle = 0;           // Rotation angle in radians @SERIALIZABLE
+			float shear = 0;           // Shear @SERIALIZABLE
 
-			RectF  rectangle;                          // The rectangle in local space
-			RectF  parentRectangle;                    // The parent rectangle
-			Vec2F  parentRectangePosition;             // The parent rectangle pivot position
-			RectF  worldRectangle;                     // The rectangle in world space
+			RectF rectangle;              // The rectangle in local space
+			RectF parentRectangle;        // The parent rectangle
+			Vec2F parentRectangePosition; // The parent rectangle pivot position
+			RectF worldRectangle;         // The rectangle in world space
 
-			Basis  transform;                          // Final transform basis
-			Basis  nonSizedTransform;                  // Final transform basis without size
+			Basis transform;         // Final transform basis
+			Basis nonSizedTransform; // Final transform basis without size
 
-			Basis  worldNonSizedTransform;             // World transform without size
-			Basis  worldTransform;                     // Result world basis
+			Basis worldNonSizedTransform; // World transform without size
+			Basis worldTransform;         // Result world basis
 
-			Basis  parentInvertedTransform;            // Parent world transform inverted
-			Basis  parentTransform;                    // Parent world transform
-			int    parentInvTransformActualFrame;      // last mParentInvertedTransform actual frame index
+			Basis parentInvertedTransform;       // Parent world transform inverted
+			Basis parentTransform;               // Parent world transform
+			int   parentInvTransformActualFrame; // last mParentInvertedTransform actual frame index
 
-			Actor* owner = nullptr;                    // Owner actor @EXCLUDE_POINTER_SEARCH
+			Actor* owner = nullptr; // Owner actor @EXCLUDE_POINTER_SEARCH
 
 			SERIALIZABLE(Data);
 		};

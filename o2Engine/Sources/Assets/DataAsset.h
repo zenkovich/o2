@@ -17,8 +17,10 @@ namespace o2
 		PROPERTIES(DataAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
 
+	public:
 		DataNode data; // Asset data
 
+	public:
 		// Destructor
 		~DataAsset();
 

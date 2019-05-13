@@ -41,6 +41,7 @@ namespace o2
 		GETTER(Vec2F, cursorPos, GetCursorPos);                  // Cursor position getter
 		GETTER(Vec2F, cursorDelta, GetCursorDelta);              // Cursor position delta getter
 
+	public:
 		// Default constructor
 		Input();
 
@@ -257,18 +258,18 @@ namespace o2
 		};
 
 	protected:
-		InputMsgsVec mInputQueue;          // Input messages queue
+		InputMsgsVec mInputQueue; // Input messages queue
 
-		KeysVec      mPressedKeys;         // Pressed keys at current frame
-		KeysVec      mDownKeys;            // Held down at current frame keys
-		KeysVec      mReleasedKeys;        // Released at current frame keys
+		KeysVec mPressedKeys;  // Pressed keys at current frame
+		KeysVec mDownKeys;     // Held down at current frame keys
+		KeysVec mReleasedKeys; // Released at current frame keys
 
-		CursorsVec   mCursors;             // Cursors. First - main cursor
-		CursorsVec   mReleasedCursors;     // Released cursors. First - main cursor
-		Vec2F        mMainCursorPos;       // Main cursor position
-		Vec2F        mMainCursorDelta;     // Main cursor delta
+		CursorsVec mCursors;         // Cursors. First - main cursor
+		CursorsVec mReleasedCursors; // Released cursors. First - main cursor
+		Vec2F      mMainCursorPos;   // Main cursor position
+		Vec2F      mMainCursorDelta; // Main cursor delta
 
-		float        mMouseWheelDelta = 0; // Mouse wheel delta at current frame
+		float mMouseWheelDelta = 0; // Mouse wheel delta at current frame
 
 	protected:
 		// Returns true, when cursor pressed at current frame

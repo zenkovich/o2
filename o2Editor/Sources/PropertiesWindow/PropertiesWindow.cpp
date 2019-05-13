@@ -50,8 +50,8 @@ namespace Editor
 			return;
 		}
 
-		context->AddItem(UIContextMenu::Item::Separator());
-		context->AddItem(UIContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
+		context->AddItem(ContextMenu::Item::Separator());
+		context->AddItem(ContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
 	}
 
 	void PropertiesWindow::InitializeViewers()

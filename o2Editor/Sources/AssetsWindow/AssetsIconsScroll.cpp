@@ -425,7 +425,7 @@ namespace Editor
 		mDragIcon = other.mDragIcon->CloneAs<AssetIcon>();
 
 		mGrid = FindChildByType<GridLayout>();
-		mContextMenu = FindChildByType<UIContextMenu>();
+		mContextMenu = FindChildByType<ContextMenu>();
 
 		mHightlightLayout = other.mHightlightLayout;
 		mHightlightSprite = other.mHightlightSprite->CloneAs<Sprite>();
@@ -690,7 +690,7 @@ namespace Editor
 
 	void AssetsIconsScrollArea::InitializeContext()
 	{
-		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
+		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
 		mContextMenu->AddItem("Import", [&]() { OnContextImportPressed(); });
 		mContextMenu->AddItem("---");

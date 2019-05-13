@@ -19,12 +19,12 @@ namespace o2
 		{
 		public:
 			WString                     text;     // @SERIALIZABLE
-			Vector<UIContextMenu::Item> subItems; // @SERIALIZABLE
+			Vector<ContextMenu::Item> subItems; // @SERIALIZABLE
 
 			Function<void()>            onClick;
 
 			Item();
-			Item(const WString& text, Vector<UIContextMenu::Item> subItems);
+			Item(const WString& text, Vector<ContextMenu::Item> subItems);
 			Item(const WString& text, const Function<void()> onClick);
 
 			bool operator==(const Item& other) const;
@@ -126,7 +126,7 @@ namespace o2
 
 		int                      mSelectedItem = -1;            // Index of selected item
 		float                    mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
-		UIContextMenu*           mOpenedContext = nullptr;      // Last opened context in menu
+		ContextMenu*           mOpenedContext = nullptr;      // Last opened context in menu
 
 	protected:
 		// Copies data of actor from other to this
@@ -136,7 +136,7 @@ namespace o2
 		void OnResEnableInHierarchyChanged() override;
 
 		// Creates sub context menus by path
-		UIContextMenu* CreateSubContext(WString& path);
+		ContextMenu* CreateSubContext(WString& path);
 
 		// Creates item widget
 		Widget* CreateItem(const Item& item);
@@ -215,7 +215,7 @@ CLASS_METHODS_META(o2::MenuPanel)
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(UIContextMenu*, CreateSubContext, WString&);
+	PROTECTED_FUNCTION(ContextMenu*, CreateSubContext, WString&);
 	PROTECTED_FUNCTION(Widget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);
 	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);

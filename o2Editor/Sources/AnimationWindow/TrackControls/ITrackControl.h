@@ -27,9 +27,8 @@ namespace Editor
 		typedef Vector<KeyHandle*> KeyHandlesVec;
 
 	public:
+		virtual void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 		virtual void SetAnimatedValue(IAnimatedValue* animatedValue);
-		virtual void SetTimeline(AnimationTimeline* timeline);
-		virtual void SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet);
 
 		virtual void UpdateHandles();
 
@@ -52,9 +51,8 @@ END_META;
 CLASS_METHODS_META(Editor::ITrackControl)
 {
 
+	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
-	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
-	PUBLIC_FUNCTION(void, SetKeyHandlesSheet, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);

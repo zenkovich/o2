@@ -11,13 +11,6 @@ namespace o2
 	// ---------------------------------------------------------------------------------
 	class LogStream
 	{
-	protected:
-		typedef Vector<LogStream*> LogSteamsVec;
-
-		LogStream*   mParentStream; // Parent stream. NULL if no parent
-		WString      mId;           // Name of log stream
-		LogSteamsVec mChildStreams; // Child streams
-
 	public:
 		// Default constructor
 		LogStream();
@@ -63,6 +56,13 @@ namespace o2
 
 		// Outs warning to current stream and parent stream
 		void WarningStr(const WString& str);
+
+	protected:
+		typedef Vector<LogStream*> LogSteamsVec;
+
+		LogStream*   mParentStream; // Parent stream. NULL if no parent
+		WString      mId;           // Name of log stream
+		LogSteamsVec mChildStreams; // Child streams
 
 	protected:
 		// Outs string to stream

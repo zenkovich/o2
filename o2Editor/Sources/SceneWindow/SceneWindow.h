@@ -19,8 +19,8 @@ namespace Editor
 
 	protected:
 		SceneEditScreen* mEditWidget;
-		Widget*        mLayersView;
-		Widget*        mGizomsView;
+		Widget*          mLayersView;
+		Widget*          mGizomsView;
 
 	public:
 		SceneWindow();

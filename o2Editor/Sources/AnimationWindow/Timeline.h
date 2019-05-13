@@ -35,17 +35,14 @@ namespace Editor
 		// Copy-operator
 		AnimationTimeline& operator=(const AnimationTimeline& other);
 
-
 		// Draws time scale and captions
 		void Draw() override;
 
 		// Updates as regular widget and changes zoom by mouse wheel
 		void Update(float dt) override;
 
-
 		// Sets animation. Subscribes on animachin duration change, controls playing time
 		void SetAnimation(Animation* animation);
-
 
 		// Sets current time scroll in seconds
 		void SetScroll(float scroll);
@@ -53,13 +50,11 @@ namespace Editor
 		// Returns current time scroll in seconds
 		float GetScroll() const;
 
-
 		// Sets time scale zoom
 		void SetScale(float scale);
 
 		// Returns time scale zoom
 		float GetScale() const;
-
 
 		// Converts local time to world x position
 		float LocalToWorld(float pos) const;
@@ -67,10 +62,8 @@ namespace Editor
 		// Converts world x position to local time
 		float WorldToLocal(float pos) const;
 
-
 		// Returns captions text drawable
 		Text* GetText() const;
-
 
 		// Sets scrollbar widget, used for view scroll
 		void SetScrollBar(HorizontalScrollBar* scrollBar);

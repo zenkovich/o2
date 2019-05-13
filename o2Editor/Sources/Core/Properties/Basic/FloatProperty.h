@@ -31,7 +31,7 @@ namespace Editor
 		IOBJECT(FloatProperty);
 
 	protected:
-		EditBox*       mEditBox = nullptr;        // Edit box 
+		EditBox*         mEditBox = nullptr;        // Edit box 
 		CursorEventsArea mDragHangle;               // Value changing drag handle
 
 	protected:

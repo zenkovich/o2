@@ -3,13 +3,11 @@
 
 namespace Editor
 {
+
+	void ITrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	{}
+
 	void ITrackControl::SetAnimatedValue(IAnimatedValue* animatedValue)
-	{}
-
-	void ITrackControl::SetTimeline(AnimationTimeline* timeline)
-	{}
-
-	void ITrackControl::SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet)
 	{}
 
 	void ITrackControl::UpdateHandles()

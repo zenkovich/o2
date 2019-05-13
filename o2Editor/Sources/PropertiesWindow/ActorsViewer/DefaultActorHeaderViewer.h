@@ -45,19 +45,21 @@ namespace Editor
 
 		IOBJECT(DefaultActorHeaderViewer);
 
-	public:
-		Vector<Actor*>                mActors;
+	public: 
+		Vector<Actor*> mActors;
 
-		Widget*                     mDataView = nullptr;
+		Widget* mDataView = nullptr;
+
 		BooleanProperty*              mEnableProperty = nullptr;
 		StringProperty*               mNameProperty = nullptr;
 		BooleanProperty*              mLockProperty = nullptr;
 		AssetProperty<ActorAssetRef>* mPrototypeProperty = nullptr;
-		Button*                     mPrototypeApplyBtn = nullptr;
-		Button*                     mPrototypeRevertBtn = nullptr;
-		Button*                     mPrototypeBreakBtn = nullptr;
 		TagsProperty*                 mTagsProperty = nullptr;
 		LayerProperty*                mLayerProperty = nullptr;
+
+		Button* mPrototypeApplyBtn = nullptr;
+		Button* mPrototypeRevertBtn = nullptr;
+		Button* mPrototypeBreakBtn = nullptr;
 
 
 	protected:
@@ -91,11 +93,11 @@ CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 	PUBLIC_FIELD(mNameProperty);
 	PUBLIC_FIELD(mLockProperty);
 	PUBLIC_FIELD(mPrototypeProperty);
+	PUBLIC_FIELD(mTagsProperty);
+	PUBLIC_FIELD(mLayerProperty);
 	PUBLIC_FIELD(mPrototypeApplyBtn);
 	PUBLIC_FIELD(mPrototypeRevertBtn);
 	PUBLIC_FIELD(mPrototypeBreakBtn);
-	PUBLIC_FIELD(mTagsProperty);
-	PUBLIC_FIELD(mLayerProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)

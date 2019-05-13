@@ -24,6 +24,7 @@ namespace o2
 		Function<void(bool)> onPressed;  // Toggle group press event
 		Function<void(bool)> onReleased; // Toggle group release event
 
+	public:
 		// Contructor by type
 		ToggleGroup(Type type);
 
@@ -47,7 +48,7 @@ namespace o2
 		bool       mPressedValue = false; // Group pressed value
 		TogglesVec mToggles;              // All toggles in group
 		TogglesVec mToggled;              // Toggled toggles in group
-		Toggle*  mOwner = nullptr;      // Owner toggle
+		Toggle*    mOwner = nullptr;      // Owner toggle
 		Type       mType;                 // Toggle group type
 
 	protected:

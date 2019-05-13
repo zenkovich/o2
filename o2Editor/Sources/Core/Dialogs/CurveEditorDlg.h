@@ -29,10 +29,8 @@ namespace Editor
 		// Destructor
 		~CurveEditorDlg();
 
-
 		// Shows editor dialog
 		static void Show(Function<void()> onChanged, Function<void()> onCompleted = Function<void()>());
-
 
 		// Adds editing curve with color. If color is default it will be randomized
 		static void AddEditingCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
@@ -45,7 +43,6 @@ namespace Editor
 
 		// Removes all editing curves
 		static void RemoveAllEditingCurves();
-
 
 		// Adds curves range with color. It can't be edited, just a solid color between curves
 		static void AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color = Color4::Green());

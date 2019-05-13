@@ -7,7 +7,7 @@ namespace o2
 {
 	class SceneEditableObject;
 	class UIButtonGroup;
-	class UIContextMenu;
+	class ContextMenu;
 	class EditBox;
 	class Toggle;
 	class ToggleGroup;
@@ -49,10 +49,10 @@ namespace Editor
 		bool IsWidgetsInternalChildrenVisible() const;
 
 	protected:
-		Toggle*      mListTreeToggle;		// TOggle between list and tree views
-		EditBox*     mSearchEditBox;		// Search actors edit box
-		SceneTree*   mSceneTree;			// Main actors tree
-		UIContextMenu* mTreeContextMenu;	// Context menu
+		Toggle*        mListTreeToggle;		// TOggle between list and tree views
+		EditBox*       mSearchEditBox;		// Search actors edit box
+		SceneTree*     mSceneTree;			// Main actors tree
+		ContextMenu*   mTreeContextMenu;	// Context menu
 
 		Vector<SceneEditableObject*> mSearchObjects;    // Array of searched objects
 		bool                         mInSearch = false;	// True when searching objects (mSearchEditBox isn't empty)

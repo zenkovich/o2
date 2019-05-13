@@ -18,10 +18,11 @@ namespace o2
 
 	public:
 		PROPERTIES(Bitmap);
-		GETTER(UInt8*, data, GetData);     // Data getter
-		GETTER(Vec2I, size, GetSize);      // Image size getter
+		GETTER(UInt8*, data, GetData);          // Data getter
+		GETTER(Vec2I, size, GetSize);           // Image size getter
 		GETTER(PixelFormat, format, GetFormat); // Data format getter
 
+	public:
 		// Default constructor
 		Bitmap();
 

@@ -35,6 +35,7 @@ namespace o2
 		GETTER(Usage,  usage, GetUsage);       // Texture usage getter
 		GETTER(String, fileName, GetFileName); // Texture file name getter
 
+	public:
 		// Default constructor
 		Texture();
 

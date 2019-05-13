@@ -21,6 +21,7 @@ namespace Editor
 		Function<void()> onOptionsPressed; // Options button pressed event
 		Function<void()> onSavePressed;    // Save button pressed event
 
+	public:
 		// Default constructor
 		SpoilerWithHead();
 

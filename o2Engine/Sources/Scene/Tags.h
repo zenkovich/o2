@@ -69,6 +69,7 @@ namespace o2
 		Function<void(Tag*)> onTagAdded;
 		Function<void(Tag*)> onTagRemoved;
 
+	public:
 		// Default constructor
 		TagGroup();
 

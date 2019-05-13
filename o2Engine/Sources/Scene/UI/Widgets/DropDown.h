@@ -13,8 +13,10 @@ namespace o2
 		PROPERTIES(DropDown);
 		PROPERTY(WString, value, SelectItemText, GetSelectedItemText); // Current selected item text
 
+	public:
 		Function<void(const WString&)> onSelectedText; // Change text selected event
 
+	public:
 		// Default constructor
 		DropDown();
 

@@ -16,9 +16,11 @@ namespace o2
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property
 		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
+	public:
 		Function<void(int)>       onSelectedPos;   // Select item position event
 		Function<void(Widget*)> onSelectedItem;  // Select item event
 
+	public:
 		// Default constructor
 		CustomDropDown();
 
@@ -115,7 +117,7 @@ namespace o2
 		SERIALIZABLE(CustomDropDown);
 
 	protected:
-		CustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
+		CustomList*   mItemsList = nullptr;                // List view @SERIALIZABLE
 		Layout        mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
 		RectF         mAbsoluteClip;                       // Absolute clipping rectangle
 		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE

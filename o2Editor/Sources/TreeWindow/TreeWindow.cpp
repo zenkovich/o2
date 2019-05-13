@@ -138,7 +138,7 @@ namespace Editor
 	void TreeWindow::InitializeContextMenu()
 	{
 		// Context menu
-		mTreeContextMenu = o2UI.CreateWidget<UIContextMenu>("standard");
+		mTreeContextMenu = o2UI.CreateWidget<ContextMenu>("standard");
 		mTreeContextMenu->AddItem("Debug update view", [&]() { mSceneTree->UpdateNodesView(); });
 
 		mTreeContextMenu->AddItem("---");
@@ -191,7 +191,7 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("Create UI/---");
 
-		mTreeContextMenu->AddItem("Create UI/Context menu", [&]() { CreateObject<UIContextMenu>("Context menu"); });
+		mTreeContextMenu->AddItem("Create UI/Context menu", [&]() { CreateObject<ContextMenu>("Context menu"); });
 		mTreeContextMenu->AddItem("Create UI/Menu panel", [&]() { CreateObject<o2::MenuPanel>("Menu panel"); });
 
 		mTreeContextMenu->AddItem("Create UI/---");

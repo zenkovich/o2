@@ -18,6 +18,7 @@ namespace o2
 		PROPERTY(ImageAssetRef, imageAsset, SetImageAsset, GetImageAsset); // Image asset
 		PROPERTY(String, imageName, SetImageName, GetImageName);           // Image asset name
 
+	public:
 		// Default constructor
 		Image();
 

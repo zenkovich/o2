@@ -26,10 +26,6 @@ namespace o2
 		typedef Vector<String> StringsVec;
 		typedef Dictionary<FileType, StringsVec> ExtnsionsDict;
 
-		LogStream*     mLog;           // File system log stream
-		ExtnsionsDict  mExtensions;    // Extensions arrays dictionary
-		String         mResourcesPath; // Basic application resources path
-
 	public:
 		// Default constructor
 		FileSystem();
@@ -101,5 +97,10 @@ namespace o2
 
 		// Writes file data
 		static void WriteFile(const String& path, const String& data);
+
+	private:
+		LogStream*     mLog;           // File system log stream
+		ExtnsionsDict  mExtensions;    // Extensions arrays dictionary
+		String         mResourcesPath; // Basic application resources path
 	};
 }

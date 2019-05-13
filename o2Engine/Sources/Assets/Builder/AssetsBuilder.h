@@ -31,17 +31,17 @@ namespace o2
 	protected:
 		typedef Dictionary<const Type*, IAssetConverter*> ConvertersDict;
 
-		LogStream*           mLog;                 // Asset builder log stream
+		LogStream* mLog; // Asset builder log stream
 
-		String               mSourceAssetsPath;    // Source assets path
-		AssetTree            mSourceAssetsTree;    // Source assets tree
-		String               mBuiltAssetsPath;   // Builded assets path
-		AssetTree            mBuiltAssetsTree;   // Builded assets tree
+		String    mSourceAssetsPath; // Source assets path
+		AssetTree mSourceAssetsTree; // Source assets tree
+		String    mBuiltAssetsPath;  // Builded assets path
+		AssetTree mBuiltAssetsTree;  // Builded assets tree
 
-		AssetTree::AssetsVec mModifiedAssets;      // Modified assets infos
+		AssetTree::AssetsVec mModifiedAssets; // Modified assets infos
 
-		ConvertersDict       mAssetConverters;     // Assets converters by type
-		StdAssetConverter    mStdAssetConverter;   // Standard assets converter
+		ConvertersDict    mAssetConverters;   // Assets converters by type
+		StdAssetConverter mStdAssetConverter; // Standard assets converter
 
 	protected:
 		// Initializes converters

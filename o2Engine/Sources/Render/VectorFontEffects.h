@@ -14,6 +14,7 @@ namespace o2
 		int    alphaThreshold; // Stroke alpha threshold @SERIALIZABLE
 		Color4 color;          // Color @SERIALIZABLE
 
+	public:
 		// Constructor
 		FontStrokeEffect(float radius = 1.0f, const Color4& color = Color4(0, 0, 0, 150), int alphaThreshold = 100);
 
@@ -41,6 +42,7 @@ namespace o2
 		float  length; // Length. 0 means maximum size @SERIALIZABLE
 		Vec2F  origin; // Relative origin @SERIALIZABLE
 		
+	public:
 		// Constructor
 		FontGradientEffect(const Color4& color1 = Color4(200, 200, 200, 255),
 						   const Color4& color2 = Color4(255, 255, 255, 255),
@@ -63,6 +65,7 @@ namespace o2
 	public:
 		Color4 color; // @SERIALIZABLE
 
+	public:
 		// Constructor
 		FontColorEffect(const Color4& color = Color4::White());
 
@@ -85,6 +88,7 @@ namespace o2
 		Vec2I  offset;     // Offset @SERIALIZABLE
 		Color4 color;      // Shadow color @SERIALIZABLE
 
+	public:
 		// Constructor
 		FontShadowEffect(float blurRadius = 2.0f, const Vec2I offset = Vec2I(2, 2), 
 						 const Color4& color = Color4(0, 0, 0, 100));

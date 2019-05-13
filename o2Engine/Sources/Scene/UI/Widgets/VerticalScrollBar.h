@@ -20,10 +20,12 @@ namespace o2
 		PROPERTY(float, scrollSense, SetScrollSense, GetScrollSense);          // Scroll sense coefficient
 		PROPERTY(float, scrollSize, SetScrollHandleSize, GetScrollHandleSize); // Scroll handle size
 
+	public:
 		Function<void(float)> onChange;       // On value changing event
 		Function<void(float)> onUserChange;   // On Value changing from user event
 		Function<void(float)> onSmoothChange; // On smooth value changing event
 
+	public:
 		// Constructor
 		VerticalScrollBar();
 
@@ -93,21 +95,21 @@ namespace o2
 		SERIALIZABLE(VerticalScrollBar);
 
 	protected:
-		float          mValue = 0.0f;                 // Current value @SERIALIZABLE
-		float          mSmoothValue = 0.0f;           // Smooth value
+		float mValue = 0.0f;       // Current value @SERIALIZABLE
+		float mSmoothValue = 0.0f; // Smooth value
 
-		float          mMinValue = 0.0f;              // Minimum value @SERIALIZABLE
-		float          mMaxValue = 1.0f;              // Maximum value @SERIALIZABLE
+		float mMinValue = 0.0f; // Minimum value @SERIALIZABLE
+		float mMaxValue = 1.0f; // Maximum value @SERIALIZABLE
 
-		float          mScrollSense = 1.0f;           // Scroll sense coefficient @SERIALIZABLE
-		float          mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
-		float          mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
+		float mScrollSense = 1.0f;           // Scroll sense coefficient @SERIALIZABLE
+		float mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
+		float mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
 
-		float          mPressHandleOffset = 0.0f;     // Value offset when handle was pressed
-		bool           mHandlePressed = false;        // True, when handle was pressed
+		float mPressHandleOffset = 0.0f; // Value offset when handle was pressed
+		bool  mHandlePressed = false;    // True, when handle was pressed
 
-		WidgetLayer* mHandleLayer = nullptr;        // Handle layer
-		WidgetLayer* mBackLayer = nullptr;          // Background layer
+		WidgetLayer* mHandleLayer = nullptr; // Handle layer
+		WidgetLayer* mBackLayer = nullptr;   // Background layer
 
 	protected:
 		// Copies data of actor from other to this
@@ -155,7 +157,7 @@ namespace o2
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
 
-		friend class UIContextMenu;
+		friend class ContextMenu;
 		friend class CustomList;
 		friend class EditBox;
 		friend class LongList;

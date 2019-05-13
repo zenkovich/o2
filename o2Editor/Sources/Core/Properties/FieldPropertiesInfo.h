@@ -22,6 +22,7 @@ namespace Editor
 		Dictionary<const FieldInfo*, IPropertyField*> properties;
 		Spoiler* privatePropertiesSpoiler = nullptr;
 
+	public:
 		void Set(const Vector<IObject*>& targets);
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);
 	};

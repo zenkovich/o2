@@ -117,13 +117,13 @@ namespace o2
 		typedef Dictionary<int, float> HeightsDict;
 
 	protected:
-		String        mFileName;     // Source file name
-		FT_Face       mFreeTypeFace; // Free Type font face
+		String  mFileName;     // Source file name
+		FT_Face mFreeTypeFace; // Free Type font face
 
-		EffectsVec    mEffects; // Font effects
+		EffectsVec mEffects; // Font effects
 
-		PackLinesVec  mPackLines;           // Packed symbols lines
-		int           mLastPackLinePos = 0; // Last packed line bottom pos
+		PackLinesVec mPackLines;           // Packed symbols lines
+		int          mLastPackLinePos = 0; // Last packed line bottom pos
 
 		mutable HeightsDict mHeights; // Cached line heights
 

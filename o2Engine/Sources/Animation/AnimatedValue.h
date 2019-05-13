@@ -20,6 +20,13 @@ namespace o2
 		// Sets target changing delegate
 		virtual void SetTargetDelegate(const Function<void()>& changeEvent) {}
 
+		// It is called when beginning keys batch change. After this call all keys modifications will not be update approximation
+		// Used for optimizing many keys change
+		virtual void BeginKeysBatchChange() {}
+
+		// It is called when keys batch change completed. Updates approximation
+		virtual void CompleteKeysBatchingChange() {}
+
 		SERIALIZABLE(IAnimatedValue);
 
 	protected:
@@ -61,6 +68,7 @@ namespace o2
 		SETTER(IValueProxy<_type>*, targetProxy, SetTargetProxy);     // Bind proxy setter
 		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
+	public:
 		// Default constructor
 		AnimatedValue();
 
@@ -94,6 +102,13 @@ namespace o2
 		// Returns value at time
 		_type GetValue(float time);
 
+		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+		// Used for optimizing many keys change
+		void BeginKeysBatchChange() override;
+
+		// It is called when keys batch change completed. Updates approximation
+		void CompleteKeysBatchingChange() override;
+
 		// Adds key with smoothing
 		void AddKeys(Vector<Key> keys, float smooth = 1.0f);
 
@@ -113,9 +128,6 @@ namespace o2
 		// Adds key at position with value and smoothing
 		int AddKey(float position, const _type& value, float smooth = 1.0f);
 
-		// Returns key at position
-		Key GetKey(float position);
-
 		// Removes key at position
 		bool RemoveKey(float position);
 
@@ -130,6 +142,9 @@ namespace o2
 
 		// Returns keys array
 		const KeysVec& GetKeys() const;
+
+		// Returns key at position
+		Key GetKey(float position);
 
 		// Sets keys
 		void SetKeys(const KeysVec& keys);
@@ -212,8 +227,13 @@ namespace o2
 		};
 
 	protected:
-		KeysVec             mKeys;                  // Animation keys @SERIALIZABLE
-		_type               mValue;                 // Current animation value
+		bool mBatchChange = false; // It is true when began batch change
+		bool mChangedKeys = false; // It is true when some keys changed during batch change
+
+		KeysVec mKeys; // Animation keys @SERIALIZABLE
+
+		_type mValue; // Current animation value
+
 		_type*              mTarget = nullptr;      // Animation target value pointer
 		Function<void()>    mTargetDelegate;        // Animation target value change event
 		IValueProxy<_type>* mTargetProxy = nullptr; // Animation target proxy pointer
@@ -326,6 +346,20 @@ namespace o2
 	}
 
 	template<typename _type>
+	void AnimatedValue<_type>::BeginKeysBatchChange()
+	{
+		mBatchChange = true;
+	}
+
+	template<typename _type>
+	void AnimatedValue<_type>::CompleteKeysBatchingChange()
+	{
+		UpdateApproximation();
+		mBatchChange = false;
+		mChangedKeys = false;
+	}
+
+	template<typename _type>
 	void AnimatedValue<_type>::AddKeys(Vector<Key> keys, float smooth /*= 1.0f*/)
 	{
 		for (auto key : keys)
@@ -334,7 +368,10 @@ namespace o2
 		for (auto key : keys)
 			SmoothKey(key.position, smooth);
 
-		UpdateApproximation();
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	template<typename _type>
@@ -353,7 +390,10 @@ namespace o2
 		pos = Math::Clamp(pos, 0, mKeys.Count());
 		mKeys.Insert(key, pos);
 
-		UpdateApproximation();
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return pos;
 	}
@@ -419,7 +459,12 @@ namespace o2
 			if (Math::Equals(mKeys[i].position, position))
 			{
 				mKeys.RemoveAt(i);
-				UpdateApproximation();
+
+				if (mBatchChange)
+					mChangedKeys = true;
+				else
+					UpdateApproximation();
+
 				return true;
 			}
 		}
@@ -434,7 +479,11 @@ namespace o2
 			return false;
 
 		mKeys.RemoveAt(idx);
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return true;
 	}
@@ -451,8 +500,10 @@ namespace o2
 	bool AnimatedValue<_type>::ContainsKey(float position)
 	{
 		for (auto& key : mKeys)
+		{
 			if (Math::Equals(key.position, position))
 				return true;
+		}
 
 		return false;
 	}
@@ -467,7 +518,11 @@ namespace o2
 	void AnimatedValue<_type>::SetKeys(const KeysVec& keys)
 	{
 		mKeys = keys;
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	template<typename _type>
@@ -493,7 +548,10 @@ namespace o2
 		mKeys[pos].curveNextCoef = 0.0f;
 		mKeys[pos].curveNextCoefPos = resSmooth;
 
-		UpdateApproximation();
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	template<typename _type>
@@ -751,6 +809,8 @@ CLASS_METHODS_META(o2::IAnimatedValue)
 {
 
 	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
+	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
+	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
 	PROTECTED_FUNCTION(void, SetTargetProxyVoid, void*);
@@ -773,6 +833,8 @@ CLASS_FIELDS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FIELD(targetDelegate);
 	PUBLIC_FIELD(targetProxy);
 	PUBLIC_FIELD(keys);
+	PROTECTED_FIELD(mBatchChange);
+	PROTECTED_FIELD(mChangedKeys);
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValue);
 	PROTECTED_FIELD(mTarget);
@@ -790,18 +852,20 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<_type>*);
 	PUBLIC_FUNCTION(_type, GetValue);
 	PUBLIC_FUNCTION(_type, GetValue, float);
+	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
+	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
 	PUBLIC_FUNCTION(int, AddKey, const Key&);
 	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
 	PUBLIC_FUNCTION(int, AddSmoothKey, const Key&, float);
 	PUBLIC_FUNCTION(int, AddKey, float, const _type&, float, float, float, float);
 	PUBLIC_FUNCTION(int, AddKey, float, const _type&, float);
-	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PROTECTED_FUNCTION(void, Evaluate);

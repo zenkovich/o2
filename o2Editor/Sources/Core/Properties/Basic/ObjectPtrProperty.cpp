@@ -69,7 +69,7 @@ namespace Editor
 		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
 		mTypeContainer->AddChild(mCreateDeleteButton);
 
-		mCreateMenu = o2UI.CreateWidget<UIContextMenu>();
+		mCreateMenu = o2UI.CreateWidget<ContextMenu>();
 		mCreateDeleteButton->AddChild(mCreateMenu);
 
 		expandHeight = true;
@@ -247,9 +247,9 @@ namespace Editor
 
 				mImmediateCreateObject = availableTypes.Count() == 1;
 
-				mCreateMenu->AddItems(availableTypes.Select<UIContextMenu::Item>([&](const Type* type)
+				mCreateMenu->AddItems(availableTypes.Select<ContextMenu::Item>([&](const Type* type)
 				{
-					return UIContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+					return ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
 				}));
 
 				mContextInitialized = true;

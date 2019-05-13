@@ -21,11 +21,11 @@ namespace o2
 		PROPERTIES(Curve);
 		PROPERTY(KeysVec, keys, SetKeys, GetKeys); // Keys property
 		GETTER(float, length, Length);             // Max position getter
-// 		Accessor<float, float> value;         // Value accessor by position
-// 		Accessor<Key, float>   key;           // Key accessor by position
 
-		Function<void()>       onKeysChanged; // Keys changed event
+	public:
+		Function<void()> onKeysChanged; // Keys changed event
 
+	public:
 		// Default constructor
 		Curve();
 
@@ -52,6 +52,13 @@ namespace o2
 
 		// Returns value by position
 		float Evaluate(float position);
+
+		// It is called when beginning keys batch change. After this call all keys modifications will not be update approximation
+		// Used for optimizing many keys change
+		void BeginKeysBatchChange();
+
+		// It is called when keys batch change completed. Updates approximation
+		void CompleteKeysBatchingChange();
 
 		// Moves all keys positions to offset
 		void MoveKeys(float offset);
@@ -241,6 +248,9 @@ namespace o2
 		};
 
 	protected:
+		bool mBatchChange = false; // It is true when began batch change
+		bool mChangedKeys = false; // It is true when some keys changed during batch change
+
 		KeysVec mKeys; // Curve keys @SERIALIZABLE
 
 	protected:
@@ -274,6 +284,8 @@ CLASS_FIELDS_META(o2::Curve)
 	PUBLIC_FIELD(keys);
 	PUBLIC_FIELD(length);
 	PUBLIC_FIELD(onKeysChanged);
+	PROTECTED_FIELD(mBatchChange);
+	PROTECTED_FIELD(mChangedKeys);
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
@@ -281,6 +293,8 @@ CLASS_METHODS_META(o2::Curve)
 {
 
 	PUBLIC_FUNCTION(float, Evaluate, float);
+	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
+	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(void, MoveKeys, float);
 	PUBLIC_FUNCTION(void, MoveKeysFrom, float, float);
 	PUBLIC_FUNCTION(void, AppendCurve, const Curve&);

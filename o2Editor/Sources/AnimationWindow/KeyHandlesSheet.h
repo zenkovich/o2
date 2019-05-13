@@ -5,6 +5,7 @@
 
 namespace o2
 {
+	class Animation;
 	class Sprite;
 }
 
@@ -30,10 +31,14 @@ namespace Editor
 		// Destructor
 		~KeyHandlesSheet();
 
-
 		// Copy-operator
 		KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
 
+		// Sets timeline and tree
+		void Initialize(AnimationTimeline* timeline, AnimationTree* tree);
+
+		// Sets animation. Used for batch change of keys
+		void SetAnimation(Animation* animation);
 
 		// Updates selection frame
 		void Update(float dt) override;
@@ -41,13 +46,8 @@ namespace Editor
 		// Draws selection
 		void Draw() override;
 
-
-		// Sets timeline
-		void SetTimeline(AnimationTimeline* timeline);
-
-		// Sets animation tree
-		void SetTree(AnimationTree* tree);
-
+		// Updates draw order for correct handles and sheet input processing
+		void UpdateInputDrawOrder();
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -57,6 +57,8 @@ namespace Editor
 	private:
 		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
 		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
+
+		Animation* mAnimation = nullptr; // Editing animation
 
 		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
 		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
@@ -77,6 +79,10 @@ namespace Editor
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
 		void OnSelectionChanged() override;
+
+		// It is called when selectable handle moved, moves all selected handles position
+		// Enables keys batch change
+		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) override;
 
 		// Updates selection rectangle and drawing sprite
 		void UpdateSelectionFrame();
@@ -142,6 +148,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
 	PRIVATE_FIELD(mSelectionFrameOffsets);
 	PRIVATE_FIELD(mSelectionFrameCursorOffsets);
+	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mSelectionFrame);
@@ -149,17 +156,22 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mBeginSelectPoint);
 	PRIVATE_FIELD(mIsFrameSelecting);
 	PRIVATE_FIELD(mBeginSelectHandles);
+	PRIVATE_FIELD(mLeftFrameDragHandle);
+	PRIVATE_FIELD(mRightFrameDragHandle);
+	PRIVATE_FIELD(mCenterFrameDragHandle);
 }
 END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
 {
 
+	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, AnimationTree*);
+	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
-	PUBLIC_FUNCTION(void, SetTree, AnimationTree*);
+	PUBLIC_FUNCTION(void, UpdateInputDrawOrder);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
+	PRIVATE_FUNCTION(void, OnHandleMoved, DragHandle*, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
 	PRIVATE_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

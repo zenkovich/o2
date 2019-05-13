@@ -13,12 +13,12 @@ namespace o2
 	class FileInfo
 	{
 	public:
-		String    mPath;
-		FileType  mFileType;
-		TimeStamp mCreatedDate;
-		TimeStamp mAccessDate;
-		TimeStamp mEditDate;
-		UInt      mSize;
+		String    path;
+		FileType  fileType;
+		TimeStamp createdDate;
+		TimeStamp accessDate;
+		TimeStamp editDate;
+		UInt      size;
 
 		bool operator==(const FileInfo& other) const;
 	};
@@ -32,9 +32,9 @@ namespace o2
 		typedef Vector<FileInfo> FilesVec;
 		typedef Vector<FolderInfo> PathsVec;
 
-		String   mPath;  // Path of this 
-		FilesVec mFiles; // Files vector
-		PathsVec mFolders; // Paths vector
+		String   path;  // Path of this 
+		FilesVec files; // Files vector
+		PathsVec folders; // Paths vector
 
 	public:
 		// Equal operator

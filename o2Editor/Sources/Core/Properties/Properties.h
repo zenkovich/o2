@@ -30,6 +30,7 @@ namespace Editor
 	public:
 		Function<void(IPropertyField*)> onFieldChanged; // Some field changed event
 
+	public:
 		// Default constructor. Initializes properties samples and fills pools
 		Properties();
 

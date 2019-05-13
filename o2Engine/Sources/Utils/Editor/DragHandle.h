@@ -59,18 +59,14 @@ namespace o2
 		// Destructor
 		virtual ~DragHandle();
 
-
 		// Copy-operator
 		DragHandle& operator=(const DragHandle& other);
-
 
 		// Draws handle
 		void Draw();
 
-
 		// Returns true if point is above this
 		bool IsUnderPoint(const Vec2F& point);
-
 
 		// Sets position
 		void SetPosition(const Vec2F& position);
@@ -84,13 +80,11 @@ namespace o2
 		// Returns position
 		Vec2F GetPosition() const;
 
-
 		// Returns handle dragging offset to cursor
 		Vec2F GetDraggingOffset() const;
 
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
-
 
 		// Sets is this selected
 		virtual void SetSelected(bool selected);
@@ -110,20 +104,17 @@ namespace o2
 		// Returns selection group
 		ISelectableDragHandlesGroup* GetSelectionGroup() const;
 
-
 		// Set handle enabled. Disabled handle don't drawn and interact
 		virtual void SetEnabled(bool enabled);
 
 		// Returns is handle enabled. Disabled handle don't drawn and interact
 		bool IsEnabled() const;
 
-
 		// Sets handle rotation angle in radians
 		virtual void SetAngle(float rad);
 
 		// Return handle rotation angle in radians
 		float GetAngle() const;
-
 
 		// Sets regular sprite
 		void SetRegularSprite(Sprite* sprite);
@@ -143,7 +134,6 @@ namespace o2
 		// Returns pressed sprite
 		Sprite* GetPressedSprite() const;
 
-
 		// Sets selected sprite
 		void SetSelectedSprite(Sprite* sprite);
 
@@ -161,7 +151,6 @@ namespace o2
 
 		// Returns selected pressed sprite
 		Sprite* GetSelectedPressedSprite() const;
-
 
 		// Sets size to all available sprites
 		void SetSpritesSize(const Vec2F& size);
@@ -255,6 +244,7 @@ namespace o2
 	public:
 		Function<Vec2F(const Vec2F&)> widgetOffsetToLocalTransformFunc; // Widget offset relative to parent to local transformation function
 		Function<Vec2F(const Vec2F&)> localToWidgetOffsetTransformFunc; // Local position to widget offset relative to parent transformation function
+		
 		Function<void()> onLayoutUpdated; // It is called when this layout were updated
 
 	public:
@@ -272,13 +262,17 @@ namespace o2
 		// Destructor
 		~WidgetDragHandle();
 
-
 		// Copy-operator
 		WidgetDragHandle& operator=(const WidgetDragHandle& other);
 
-
 		// Draws handle
 		void Draw() override;
+
+		// Set handle enabled. Disabled handle don't drawn and interact
+		void SetEnabled(bool enabled);
+
+		// Returns is handle enabled. Disabled handle don't drawn and interact
+		bool IsEnabled() const;
 
 		SERIALIZABLE(WidgetDragHandle);
 
@@ -405,16 +399,16 @@ namespace o2
 		virtual void OnSelectionChanged();
 
 		// It is called when selectable draggable handle was pressed
-		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
 
 		// It is called when selectable draggable handle was released
-		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
 
 		// It is called when selectable handle was began to drag
-		void OnHandleBeganDragging(DragHandle* handle);
+		void OnHandleBeganDragging(DragHandle* handle) override;
 
 		// It is called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) override;
 
 		friend class DragHandle;
 	};
@@ -538,6 +532,8 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
 	PRIVATE_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PRIVATE_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PRIVATE_FUNCTION(void, UpdateLayersLayouts);

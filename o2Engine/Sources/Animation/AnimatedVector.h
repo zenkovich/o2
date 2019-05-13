@@ -23,6 +23,7 @@ namespace o2
 		SETTER(IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
 		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
 
+	public:
         // Default constructor
 		AnimatedValue();
 
@@ -52,6 +53,13 @@ namespace o2
 
 		// Returns value at time
 		Vec2F GetValue(float time);
+
+		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+		// Used for optimizing many keys change
+		void BeginKeysBatchChange() override;
+
+		// It is called when keys batch change completed. Updates approximation
+		void CompleteKeysBatchingChange() override;
 
 		// Adds key with smoothing
 		void AddKeys(Vector<Key> keys, float smooth = 1.0f);
@@ -176,8 +184,13 @@ namespace o2
 		};
 
 	protected:
-		KeysVec             mKeys;			        // Animation keys @SERIALIZABLE
-		Vec2F               mValue;		            // Current animation value
+		bool mBatchChange = false; // It is true when began batch change
+		bool mChangedKeys = false; // It is true when some keys changed during batch change
+
+		KeysVec mKeys; // Animation keys @SERIALIZABLE
+
+		Vec2F mValue; // Current animation value
+
 		Vec2F*              mTarget = nullptr;		// Animation target value pointer
 		Function<void()>    mTargetDelegate;        // Animation target value change event
 		IValueProxy<Vec2F>* mTargetProxy = nullptr; // Animation target property pointer
@@ -224,6 +237,8 @@ CLASS_FIELDS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FIELD(targetDelegate);
 	PUBLIC_FIELD(targetProxy);
 	PUBLIC_FIELD(keys);
+	PROTECTED_FIELD(mBatchChange);
+	PROTECTED_FIELD(mChangedKeys);
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValue);
 	PROTECTED_FIELD(mTarget);
@@ -240,6 +255,8 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<Vec2F>*);
 	PUBLIC_FUNCTION(Vec2F, GetValue);
 	PUBLIC_FUNCTION(Vec2F, GetValue, float);
+	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
+	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
 	PUBLIC_FUNCTION(int, AddKey, const Key&);
 	PUBLIC_FUNCTION(int, AddKey, const Key&, float);

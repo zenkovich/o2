@@ -49,8 +49,8 @@ namespace Editor
 	protected:
 		const Type* mComponentType = nullptr;  // Component value type
 
-		Widget*   mBox = nullptr;            // Edit box 
-		Text*       mNameText = nullptr;       // Component name text
+		Widget* mBox = nullptr;            // Edit box 
+		Text*   mNameText = nullptr;       // Component name text
 
 	protected:
 		// Copies data of actor from other to this

@@ -54,22 +54,22 @@ namespace Editor
 		typedef Dictionary<const Type*, Vector<IActorComponentViewer*>> TypeCompViewersDict;
 		typedef Dictionary<const Type*, IActorPropertiesViewer*> TypeActorViewersDict;
 
-		Vector<Actor*>                  mTargetActors;                     // Current target actors
+		Vector<Actor*> mTargetActors; // Current target actors
 									    
-		IActorHeaderViewer*             mHeaderViewer = nullptr;           // Actor header viewer
-		IActorTransformViewer*          mTransformViewer = nullptr;        // Actor transform viewer
+		IActorHeaderViewer*    mHeaderViewer = nullptr;    // Actor header viewer
+		IActorTransformViewer* mTransformViewer = nullptr; // Actor transform viewer
 
 		IActorPropertiesViewer*         mActorPropertiesViewer = nullptr;        // Actor properties viewer
 		DefaultActorPropertiesViewer*   mDefaultActorPropertiesViewer = nullptr; // Default actor properties viewer sample
 		Vector<IActorPropertiesViewer*> mAvailableActorPropertiesViewers;        // Available actor properties viewers										 							      
 		TypeActorViewersDict            mActorPropertiesViewersPool;             // Actor properties viewers pool
 
-		Vector<IActorComponentViewer*>  mComponentsViewers;                // Components viewers
-		DefaultActorComponentViewer*    mDefaultComponentViewer = nullptr; // Default component viewer sample
-		Vector<IActorComponentViewer*>  mAvailableComponentsViewers;       // Available components' viewers										 							      
-		TypeCompViewersDict             mComponentViewersPool;             // Components viewers pool
+		Vector<IActorComponentViewer*> mComponentsViewers;                // Components viewers
+		DefaultActorComponentViewer*   mDefaultComponentViewer = nullptr; // Default component viewer sample
+		Vector<IActorComponentViewer*> mAvailableComponentsViewers;       // Available components' viewers										 							      
+		TypeCompViewersDict            mComponentViewersPool;             // Components viewers pool
 									    
-		VerticalLayout*               mViewersLayout = nullptr;          // Viewers layout
+		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
 
 	protected:
 		// It is called when some actors on scene were changed

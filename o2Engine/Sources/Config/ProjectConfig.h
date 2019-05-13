@@ -24,6 +24,7 @@ namespace o2
 		PROPERTY(Platform, currentPlatform, SetPlatform, GetPlatform); // Project platform property
 		GETTER(String, projectPath, GetProjectPath);                   // Project path location
 
+	public:
 		// Default constructor
 		ProjectConfig();
 

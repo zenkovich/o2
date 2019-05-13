@@ -39,18 +39,19 @@ namespace o2
 		PROPERTY(Vec2F, emitParticlesSizeRange, SetEmitParticlesSizeRange, GetEmitParticlesSizeRange);    // Emitting particle size range property
 		PROPERTY(float, emitParticlesSpeed, SetEmitParticlesSpeed, GetEmitParticlesSpeed);                // Emitting particle angle speed property in degrees/sec
 
-		PROPERTY(float, emitParticlesAngleSpeedRange, SetEmitParticlesSpeedRange, GetEmitParticlesSpeedRange);               // Emitting particle angle speed range in degrees/sec
-		PROPERTY(float, emitParticlesAngleSpeed, SetEmitParticlesAngleSpeed, GetEmitParticlesAngleSpeed);                    // Emitting particle speed property
-		PROPERTY(float, emitParticlesSpeedRange, SetEmitParticlesAngleSpeedRange, GetEmitParticlesAngleSpeedRange);          // Emitting particle speed range
-		PROPERTY(float, emitParticlesMoveDir, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                 // Emitting particle moving direction in degrees property
+		PROPERTY(float, emitParticlesAngleSpeedRange, SetEmitParticlesSpeedRange, GetEmitParticlesSpeedRange);              // Emitting particle angle speed range in degrees/sec
+		PROPERTY(float, emitParticlesAngleSpeed, SetEmitParticlesAngleSpeed, GetEmitParticlesAngleSpeed);                   // Emitting particle speed property
+		PROPERTY(float, emitParticlesSpeedRange, SetEmitParticlesAngleSpeedRange, GetEmitParticlesAngleSpeedRange);         // Emitting particle speed range
+		PROPERTY(float, emitParticlesMoveDir, SetEmitParticlesMoveDirection, GetEmitParticlesMoveDirection);                // Emitting particle moving direction in degrees property
 		PROPERTY(float, emitParticlesMoveDirRange, SetEmitParticlesMoveDirectionRange, GetEmitParticlesMoveDirectionRange); // Emitting particle moving direction range in degrees property
 
-		PROPERTY(Color4, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA);            // Emitting particle color A property
-		PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB);            // Emitting particle color B property													   
+		PROPERTY(Color4, emitParticlesColorA, SetEmitParticlesColorA, GetEmitParticlesColorA); // Emitting particle color A property
+		PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB); // Emitting particle color B property													   
 
 		PROPERTY(ImageAssetRef, image, SetImage, GetImage);          // Particle image property
 		PROPERTY(ParticlesEmitterShape*, shape, SetShape, GetShape); // Emitting shape property
 
+	public:
 		// Default constructor
 		ParticlesEmitter();
 
@@ -239,47 +240,47 @@ namespace o2
 		void SetEmitParticlesColor(const Color4& colorA, const Color4& colorB);
 
 	protected:
-		ImageAssetRef          mImageAsset;                    // Particle sprite image @SERIALIZABLE
-		ParticlesEmitterShape* mShape = nullptr;               // Particles emitting shape @SERIALIZABLE
-		ParticleEffectsVec     mEffects;                       // Particles effect @SERIALIZABLE
+		ImageAssetRef          mImageAsset;      // Particle sprite image @SERIALIZABLE
+		ParticlesEmitterShape* mShape = nullptr; // Particles emitting shape @SERIALIZABLE
+		ParticleEffectsVec     mEffects;         // Particles effect @SERIALIZABLE
 														                 
-		int          mParticlesNumLimit = 100;                 // Max available visible particles @SERIALIZABLE
+		int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
 					           		
-		bool         mPlaying = true;                          // Is playing @SERIALIZABLE
-		float        mEmittingCoefficient = 1.0f;              // Emitting particles number coefficient (0...1) @SERIALIZABLE
-		bool         mIsParticlesRelative = true;              // Is particles relative to emitter or global @SERIALIZABLE
-		bool         mIsLooped = false;                        // Is emitter looped @SERIALIZABLE
+		bool  mPlaying = true;             // Is playing @SERIALIZABLE
+		float mEmittingCoefficient = 1.0f; // Emitting particles number coefficient (0...1) @SERIALIZABLE
+		bool  mIsParticlesRelative = true; // Is particles relative to emitter or global @SERIALIZABLE
+		bool  mIsLooped = false;           // Is emitter looped @SERIALIZABLE
 					 							                 
-		float        mDuration = 1;                            // Duration of working time @SERIALIZABLE
+		float mDuration = 1;                            // Duration of working time @SERIALIZABLE
 					 							                 
-		float        mParticlesLifetime = 0.5f;                // Particles lifetime in seconds @SERIALIZABLE
-		float        mEmitParticlesPerSecond = 10;             // Number of particles emitting in one second @SERIALIZABLE
-					 							                 
-		float        mEmitParticlesAngle = 0;                  // Emitting particles angle in radians @SERIALIZABLE
-		float        mEmitParticlesAngleRange = 45.0f;         // Emitting particles angle in radians randomize range @SERIALIZABLE
-					 							               
-		Vec2F        mEmitParticlesSize = Vec2F(10, 10);       // Emitting particles size @SERIALIZABLE
-		Vec2F        mEmitParticlesSizeRange;                  // Emitting particles size randomize range @SERIALIZABLE
-					 						                   
-		float        mEmitParticlesSpeed = 10;                 // Emitting particles speed @SERIALIZABLE
-		float        mEmitParticlesSpeedRangle = 5;            // Emitting particles speed range @SERIALIZABLE
-					 								           
-		float        mEmitParticlesMoveDirection = 0;          // Emitting particles direction in radians @SERIALIZABLE
-		float        mEmitParticlesMoveDirectionRange = 45.0f; // Emitting particles direction range in radians @SERIALIZABLE
-
-		float        mEmitParticlesAngleSpeed = 0;             // Emitting particles angle speed in radians/sec
-		float        mEmitParticlesAngleSpeedRange = 0;        // Emitting particles angle speed range in radians/sec
+		float mParticlesLifetime = 0.5f;    // Particles lifetime in seconds @SERIALIZABLE
+		float mEmitParticlesPerSecond = 10; // Number of particles emitting in one second @SERIALIZABLE
+			 							                 
+		float mEmitParticlesAngle = 0;          // Emitting particles angle in radians @SERIALIZABLE
+		float mEmitParticlesAngleRange = 45.0f; // Emitting particles angle in radians randomize range @SERIALIZABLE
+			 							               
+		Vec2F mEmitParticlesSize = Vec2F(10, 10); // Emitting particles size @SERIALIZABLE
+		Vec2F mEmitParticlesSizeRange;            // Emitting particles size randomize range @SERIALIZABLE
+			 						                   
+		float mEmitParticlesSpeed = 10;      // Emitting particles speed @SERIALIZABLE
+		float mEmitParticlesSpeedRangle = 5; // Emitting particles speed range @SERIALIZABLE
+			 								           
+		float mEmitParticlesMoveDirection = 0;          // Emitting particles direction in radians @SERIALIZABLE
+		float mEmitParticlesMoveDirectionRange = 45.0f; // Emitting particles direction range in radians @SERIALIZABLE
+			  
+		float mEmitParticlesAngleSpeed = 0;      // Emitting particles angle speed in radians/sec
+		float mEmitParticlesAngleSpeedRange = 0; // Emitting particles angle speed range in radians/sec
 					 
-		Color4       mEmitParticlesColorA;                     // Emitting particles color A (particle emitting with color in range from this and ColorB)  @SERIALIZABLE
-		Color4       mEmitParticlesColorB;                     // Emitting particles color B (particle emitting with color in range from this and ColorA) @SERIALIZABLE
+		Color4 mEmitParticlesColorA; // Emitting particles color A (particle emitting with color in range from this and ColorB)  @SERIALIZABLE
+		Color4 mEmitParticlesColorB; // Emitting particles color B (particle emitting with color in range from this and ColorA) @SERIALIZABLE
 
-		float        mCurrentTime = 0;                         // Current working time in seconds
-		float        mEmitTimeBuffer = 0;                      // Emitting next particle time buffer
-		Mesh*        mParticlesMesh = nullptr;                 // Particles mesh
-		ParticlesVec mParticles;                               // Working particles
-		Vector<int>  mDeadParticles;                           // Dead particles indexes
-		int          mNumAliveParticles = 0;                   // Count of current alive particles
-		Basis        mLastTransform;                           // Last transformation
+		float        mCurrentTime = 0;         // Current working time in seconds
+		float        mEmitTimeBuffer = 0;      // Emitting next particle time buffer
+		Mesh*        mParticlesMesh = nullptr; // Particles mesh
+		ParticlesVec mParticles;               // Working particles
+		Vector<int>  mDeadParticles;           // Dead particles indexes
+		int          mNumAliveParticles = 0;   // Count of current alive particles
+		Basis        mLastTransform;           // Last transformation
 
 	protected:
 		// Emits particles hen updating

@@ -20,11 +20,14 @@ namespace o2
 		PROPERTY(WString, caption, SetCaption, GetCaption); // Caption property. Searches "caption" layer and sets text
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
+	public:
 		Function<void()>             onClick;       // Click event
 		Function<bool(const Vec2F&)> isPointInside; // Checking pointer function. When this empty using default widget pointer check
 
+	public:
 		ShortcutKeys shortcut; // Shortcut keys
 
+	public:
 		// Default constructor
 		Button();
 

@@ -64,10 +64,8 @@ namespace o2
 		// Virtual destructor
 		virtual ~Widget();
 
-
 		// Copy-operator
 		Widget& operator=(const Widget& other);
-
 
 		// Updates layers, states and widget
 		void Update(float dt) override;
@@ -75,13 +73,11 @@ namespace o2
 		// Updates childs
 		void UpdateChildren(float dt) override;
 
-
 		// Updates self transform, dependent parents and children transforms
 		void UpdateTransform() override;
 
 		// Updates children and internal children transforms
 		void UpdateChildrenTransforms() override;
-
 
 		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
@@ -89,10 +85,8 @@ namespace o2
 		// Forcible drawing in area with transparency
 		void ForceDraw(const RectF& area, float transparency);
 
-
 		// Sets layout dirty, and update it in update loop
 		void SetLayoutDirty();
-
 
 		// Returns parent widget
 		Widget* GetParentWidget() const;
@@ -115,13 +109,12 @@ namespace o2
 		// Sets index position in parent or scene
 		void SetIndexInSiblings(int index) override;
 
-
 		// Adds layer
 		WidgetLayer* AddLayer(WidgetLayer* layer);
 
 		// Adds layer
 		WidgetLayer* AddLayer(const String& name, IRectDrawable* drawable,
-								const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
+							  const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
 		// Removes layer
 		void RemoveLayer(WidgetLayer* layer, bool release = true);
@@ -183,13 +176,11 @@ namespace o2
 		// Returns all states
 		const StatesVec& GetStates() const;
 
-
 		// Sets depth overriding
 		void SetDepthOverridden(bool overrideDepth);
 
 		// Is sorting depth overridden
 		bool IsDepthOverriden() const;
-
 
 		// Sets widget's transparency
 		void SetTransparency(float transparency);
@@ -200,7 +191,6 @@ namespace o2
 		// Returns widget's result transparency (depends on parent's result transparency)
 		float GetResTransparency() const;
 
-
 		// Sets visibility
 		void SetEnableForcible(bool visible);
 
@@ -209,7 +199,6 @@ namespace o2
 
 		// Sets visibility to false
 		void Hide(bool forcible = false);
-
 
 		// Focus this widget
 		void Focus();
@@ -226,10 +215,8 @@ namespace o2
 		// Sets widget can be focused
 		void SetFocusable(bool focusable);
 
-
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point);
-
 
 		// Sets parent,  doesn't adds to parent's children but adds to internal children
 		void SetInternalParent(Widget* parent, bool worldPositionStays = false);
@@ -261,23 +248,23 @@ namespace o2
 		using Actor::mLayer;
 		using Actor::mIsOnScene;
 
-		LayersVec    mLayers;                 // Layers array @SERIALIZABLE
-		StatesVec    mStates;                 // States array @SERIALIZABLE
+		LayersVec mLayers; // Layers array @SERIALIZABLE
+		StatesVec mStates; // States array @SERIALIZABLE
 
-		Widget*      mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
-		WidgetsVec   mChildWidgets;           // Children widgets, a part of all children
-		WidgetsVec   mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
-		WidgetsVec   mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
+		Widget*    mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
+		WidgetsVec mChildWidgets;           // Children widgets, a part of all children
+		WidgetsVec mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
+		WidgetsVec mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
-		RectF        mChildrenWorldRect;      // World rectangle for children arranging
+		RectF mChildrenWorldRect; // World rectangle for children arranging
 
-		bool         mOverrideDepth = false;  // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
+		bool mOverrideDepth = false; // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 
-		float        mTransparency = 1.0f;	// Widget transparency @SERIALIZABLE
-		float        mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
+		float mTransparency = 1.0f;	   // Widget transparency @SERIALIZABLE
+		float mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
-		LayersVec    mDrawingLayers;          // Layers ordered by depth, which drawing before children (depth < 1000)
-		LayersVec    mTopDrawingLayers;       // Layers ordered by depth, which drawing after children (depth > 1000)
+		LayersVec mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
+		LayersVec mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
 
 		WidgetState* mFocusedState = nullptr; // Focused widget state
 		bool         mIsFocused = false;      // Is widget focused
@@ -285,10 +272,10 @@ namespace o2
 
 		WidgetState* mVisibleState = nullptr; // Widget visibility state
 
-		bool         mIsClipped = false;      // Is widget fully clipped by some scissors
+		bool mIsClipped = false; // Is widget fully clipped by some scissors
 
-		RectF        mBounds;                 // Widget bounds by drawing layers
-		RectF        mBoundsWithChilds;       // Widget with childs bounds
+		RectF mBounds;           // Widget bounds by drawing layers
+		RectF mBoundsWithChilds; // Widget with childs bounds
 
 	protected:
 		// Updates result read enable flag
@@ -415,7 +402,7 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		friend class Scene;
-		friend class UIContextMenu;
+		friend class ContextMenu;
 		friend class CustomDropDown;
 		friend class CustomList;
 		friend class DropDown;

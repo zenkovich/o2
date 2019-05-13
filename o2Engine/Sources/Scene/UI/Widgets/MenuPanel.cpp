@@ -81,7 +81,7 @@ namespace o2
 
 					if (mSelectedItem >= 0)
 					{
-						if (auto contextMenu = mLayout->mChildWidgets[mSelectedItem]->FindChildByType<UIContextMenu>())
+						if (auto contextMenu = mLayout->mChildWidgets[mSelectedItem]->FindChildByType<ContextMenu>())
 						{
 							contextMenu->Show(mLayout->mChildWidgets[mSelectedItem]->layout->worldLeftBottom);
 							mOpenedContext = contextMenu;
@@ -122,7 +122,7 @@ namespace o2
 		return newItem;
 	}
 
-	UIContextMenu* MenuPanel::CreateSubContext(WString& path)
+	ContextMenu* MenuPanel::CreateSubContext(WString& path)
 	{
 		int slashPos = path.Find("/");
 		if (slashPos < 0)
@@ -140,10 +140,10 @@ namespace o2
 		if (!subChild)
 			subChild = AddItem(subMenu);
 
-		UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
+		ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
 		if (!subContext)
 		{
-			subContext = o2UI.CreateWidget<UIContextMenu>();
+			subContext = o2UI.CreateWidget<ContextMenu>();
 			subChild->AddChild(subContext);
 		}
 
@@ -158,7 +158,7 @@ namespace o2
 								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString itemPath = path;
-		UIContextMenu* subContext = CreateSubContext(itemPath);
+		ContextMenu* subContext = CreateSubContext(itemPath);
 		if (!subContext)
 			return AddItem(Item(path, clickFunc));
 
@@ -171,7 +171,7 @@ namespace o2
 										 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString itemPath = path;
-		UIContextMenu* subContext = CreateSubContext(itemPath);
+		ContextMenu* subContext = CreateSubContext(itemPath);
 		if (!subContext)
 			return nullptr;
 
@@ -187,7 +187,7 @@ namespace o2
 		{
 			mClickFunctions.Insert([=]()
 			{
-				newItem->FindChildByType<UIContextMenu>()->Show(newItem->layout->worldRightBottom);
+				newItem->FindChildByType<ContextMenu>()->Show(newItem->layout->worldRightBottom);
 			}, position);
 		}
 		else mClickFunctions.Insert(item.onClick, position);
@@ -272,7 +272,7 @@ namespace o2
 			return;
 		}
 
-		UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
+		ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
 		if (!subContext)
 		{
 			o2Debug.LogError("Failed to remove menu item " + path);
@@ -328,7 +328,7 @@ namespace o2
 
 		if (item.subItems.Count() > 0)
 		{
-			UIContextMenu* subMenu = o2UI.CreateWidget<UIContextMenu>();
+			ContextMenu* subMenu = o2UI.CreateWidget<ContextMenu>();
 			subMenu->AddItems(item.subItems);
 			newItem->AddChild(subMenu);
 		}
@@ -344,7 +344,7 @@ namespace o2
 		if (auto textLayer = item->GetLayerDrawable<Text>("text"))
 			res.text = textLayer->text;
 
-		if (auto subMenu = item->FindChildByType<UIContextMenu>())
+		if (auto subMenu = item->FindChildByType<ContextMenu>())
 			res.subItems = subMenu->GetItems();
 
 		res.onClick = mClickFunctions[idx];
@@ -457,7 +457,7 @@ namespace o2
 			if (mOpenedContext)
 				mOpenedContext->HideWithChild();
 
-			if (auto context = itemUnderCursor->FindChildByType<UIContextMenu>())
+			if (auto context = itemUnderCursor->FindChildByType<ContextMenu>())
 			{
 				context->Show(itemUnderCursor->layout->worldLeftBottom);
 				mOpenedContext = context;
@@ -487,7 +487,7 @@ namespace o2
 	MenuPanel::Item::Item()
 	{}
 
-	MenuPanel::Item::Item(const WString& text, Vector<UIContextMenu::Item> subItems):
+	MenuPanel::Item::Item(const WString& text, Vector<ContextMenu::Item> subItems):
 		text(text), subItems(subItems)
 	{}
 

@@ -51,10 +51,8 @@ namespace o2
 		// Destructor
 		~Tree();
 
-
 		// Copy-operator
 		Tree& operator=(const Tree& other);
-
 
 		// Creates tree node for object
 		void OnObjectCreated(UnknownPtr object, UnknownPtr parent);
@@ -65,10 +63,8 @@ namespace o2
 		// Updates tree for changed objects
 		void OnObjectsChanged(const UnknownPtrsVec& objects);
 
-
 		// Draws widget
 		void Draw() override;
-
 
 		// Updates widget
 		void Update(float dt) override;
@@ -76,25 +72,20 @@ namespace o2
 		// Updates childs
 		void UpdateChildren(float dt) override;
 
-
 		// Updates children and internal children transforms
 		void UpdateChildrenTransforms() override;
-
 
 		// Rebuilds all tree
 		void UpdateNodesView(bool immediately = true);
 
-
 		// Returns ui node for object
 		TreeNode* GetNode(UnknownPtr object);
-
 
 		// Expands all nodes
 		void ExpandAll();
 
 		// Collapses all nodes
 		void CollapseAll();
-
 
 		// Returns selected objects vector
 		Vector<UnknownPtr> GetSelectedObjects() const;
@@ -114,21 +105,17 @@ namespace o2
 		// Deselects all objects
 		void DeselectAllObjects();
 
-
 		// Scrolls view to object
 		void ScrollTo(UnknownPtr object);
 
 		// Scrolls view to object and hightlights
 		void ScrollToAndHightlight(UnknownPtr object);
 
-
 		// Expands all parent objects for specified object
 		void ExpandParentObjects(UnknownPtr object);
 
-
 		// Returns item widget under point
 		TreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
-
 
 		// Sets rearrange type
 		void SetRearrangeType(RearrangeType type);
@@ -136,13 +123,11 @@ namespace o2
 		// Returns available rearrange type 
 		RearrangeType GetRearrangeType() const;
 
-
 		// Sets available multi selection
 		void SetMultipleSelectionAvailable(bool available);
 
 		// Returns is multi selection available
 		bool IsMultiSelectionAvailable() const;
-
 
 		// Returns item sample
 		TreeNode* GetNodeSample() const;
@@ -150,13 +135,11 @@ namespace o2
 		// Sets item sample
 		void SetNodeSample(TreeNode* sample);
 
-
 		// Returns hover drawable
 		Sprite* GetHoverDrawable() const;
 
 		// Sets hover layout
 		void SetHoverLayout(const Layout& layout);
-
 
 		// Returns node hightlight drawable
 		Sprite* GetHightlightDrawable() const;
@@ -167,13 +150,11 @@ namespace o2
 		// Sets hightlight layout
 		void SetHightlightLayout(const Layout& layout);
 
-
 		// Sets node pressing and expanding time
 		void SetNodeExpandTimer(float time);
 
 		// Returns node pressing and expanding time
 		float GetNodeExpandTimer() const;
-
 
 		// Sets children nodes horizontal offset from parent
 		void SetChildsNodesOffset(float offset);
@@ -181,17 +162,14 @@ namespace o2
 		// Returns childs nodes horizontal offset
 		float GetChildsNodesOffset() const;
 
-
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
 
-
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
-
 
 		// Updates layout
 		void UpdateSelfTransform() override;
@@ -207,18 +185,18 @@ namespace o2
 		// --------------------
 		struct Node
 		{
-			String      id;
-			UnknownPtr  object;             // Pointer to object
-			TreeNode* widget = nullptr;   // Node widget
-			int         level = 0;          // Hierarchy depth level
-			bool        isSelected = false; // Is node selected
-			bool        isExpanded = false; // Is node expanded
+			String     id;
+			UnknownPtr object;             // Pointer to object
+			TreeNode*  widget = nullptr;   // Node widget
+			int        level = 0;          // Hierarchy depth level
+			bool       isSelected = false; // Is node selected
+			bool       isExpanded = false; // Is node expanded
 
-			Node*       parent = nullptr;   // Parent node definition
-			NodesVec    childs;             // Children nodes definitions
+			Node*    parent = nullptr; // Parent node definition
+			NodesVec childs;           // Children nodes definitions
 
-			bool        inserting = false;  // Node insertion flag
-			float       insertCoef = 0.0f;  // Inserting coefficient (0...1)
+			bool  inserting = false; // Node insertion flag
+			float insertCoef = 0.0f; // Inserting coefficient (0...1)
 
 		public:
 			// Returns height of node with children and coefficients
@@ -237,9 +215,10 @@ namespace o2
 		// -----------------------------------
 		struct VisibleWidgetDef
 		{
-			UnknownPtr  object;
-			TreeNode* widget;
-			int         position;
+			UnknownPtr object;
+			TreeNode*  widget;
+			int        position;
+		public:
 
 			bool operator==(const VisibleWidgetDef& other) const;
 		};

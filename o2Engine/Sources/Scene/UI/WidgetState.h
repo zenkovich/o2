@@ -19,14 +19,17 @@ namespace o2
 		Animation animation;                     // Widget animation @SERIALIZABLE
 		float     offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE
 
+	public:
 		PROPERTIES(WidgetState);
 		PROPERTY(bool, state, SetState, GetState); // State flag property
 
+	public:
 		Function<void()> onStateFullyTrue;	  // This event calls when state is completely true (at the end of animation)
 		Function<void()> onStateFullyFalse;   // This event calls when state is completely false (at the end of animation)
 		Function<void()> onStateBecomesTrue;  // This event calls when state becomes to true
 		Function<void()> onStateBecomesFalse; // This event calls when state becomes to true
 
+	public:
 		// Default constructor
 		WidgetState();
 
@@ -57,7 +60,7 @@ namespace o2
 		SERIALIZABLE(WidgetState);
 
 	protected:
-		bool      mState = false; // Current state @SERIALIZABLE
+		bool    mState = false;   // Current state @SERIALIZABLE
 		Widget* mOwner = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 
 		friend class Widget;

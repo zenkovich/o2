@@ -306,14 +306,14 @@ namespace Editor
 		FolderInfo info = o2FileSystem.GetFolderInfo(src);
 		info.ClampPathNames();
 
-		for (auto& file : info.mFiles)
+		for (auto& file : info.files)
 		{
-			if (!file.mPath.EndsWith(".meta"))
-				o2FileSystem.FileCopy(src + "/" + file.mPath, dst + "/" + file.mPath);
+			if (!file.path.EndsWith(".meta"))
+				o2FileSystem.FileCopy(src + "/" + file.path, dst + "/" + file.path);
 		}
 
-		for (auto& folder : info.mFolders)
-			CopyAssetFolder(src + "/" + folder.mPath, dst + "/" + folder.mPath);
+		for (auto& folder : info.folders)
+			CopyAssetFolder(src + "/" + folder.path, dst + "/" + folder.path);
 	}
 
 	void AssetsWindow::CutAssets(const Vector<String>& assetsPaths)

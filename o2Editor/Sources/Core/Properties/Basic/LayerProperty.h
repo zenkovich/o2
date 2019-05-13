@@ -29,8 +29,8 @@ namespace Editor
 		IOBJECT(LayerProperty);
 
 	protected:		       
-		DropDown*    mDropDown = nullptr;       // Layer name dropdown
-		bool           mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
+		DropDown* mDropDown = nullptr;       // Layer name dropdown
+		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
 
 	protected:
 		// Copies data of actor from other to this

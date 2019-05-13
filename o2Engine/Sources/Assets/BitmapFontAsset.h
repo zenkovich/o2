@@ -18,6 +18,7 @@ namespace o2
 		PROPERTIES(BitmapFontAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
 
+	public:
 		// Destructor
 		~BitmapFontAsset();
 

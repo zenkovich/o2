@@ -9,6 +9,7 @@ namespace o2
 		void* object = nullptr;
 		const Type* type = nullptr;
 
+	public:
 		SearchPassedObject() {}
 
 		SearchPassedObject(void* object, const Type* type): object(object), type(type) {}

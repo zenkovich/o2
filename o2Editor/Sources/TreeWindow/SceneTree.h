@@ -81,14 +81,14 @@ namespace Editor
 		SERIALIZABLE(SceneTree);
 
 	protected:
-		ToggleGroup*     mEnableTogglesGroup;    // Enable objects toggles group
-		ToggleGroup*     mLockTogglesGroup;	   // Lock objects toggles group
-		bool               mAttachedToSceneEvents; // Is tree attached to scene events
+		ToggleGroup* mEnableTogglesGroup;    // Enable objects toggles group
+		ToggleGroup* mLockTogglesGroup;	     // Lock objects toggles group
+		bool         mAttachedToSceneEvents; // Is tree attached to scene events
 						    						    
 		ActorProperty*     mDragActorPropertyField;     // Actor property field under cursor when dragging actor
 		ComponentProperty* mDragComponentPropertyField; // Component property field under cursor when dragging actor
 
-		bool               mWatchEditor = false;
+		bool mWatchEditor = false;
 
 	protected:
 		// Initializes widget logic

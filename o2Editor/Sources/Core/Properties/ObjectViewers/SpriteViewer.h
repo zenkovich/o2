@@ -45,7 +45,7 @@ namespace Editor
 
 		FieldPropertiesInfo mFieldProperties; // Field properties information
 
-		VerticalLayout*     mHiddenProperties = nullptr; // Hidden properties
+		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
 
 		ImageAssetProperty* mImageProperty = nullptr;
 		ColorProperty*      mColorProperty = nullptr;
@@ -54,14 +54,14 @@ namespace Editor
 		Vec2FProperty*      mPivotProperty = nullptr;
 		EnumProperty*       mModeProperty = nullptr;
 
-		Spoiler*            mFillPropertiesSpoiler = nullptr;
-		FloatProperty*      mFillProperty = nullptr;
+		Spoiler*       mFillPropertiesSpoiler = nullptr;
+		FloatProperty* mFillProperty = nullptr;
 
-		Spoiler*            mSlicedPropertiesSpoiler = nullptr;
-		BorderIProperty*    mSliceBorderProperty = nullptr;
+		Spoiler*         mSlicedPropertiesSpoiler = nullptr;
+		BorderIProperty* mSliceBorderProperty = nullptr;
 
-		Spoiler*            mTiledPropertiesSpoiler = nullptr;
-		FloatProperty*      mTileScaleProperty = nullptr;
+		Spoiler*       mTiledPropertiesSpoiler = nullptr;
+		FloatProperty* mTileScaleProperty = nullptr;
 
 	protected:
 		// It is called when type enum selected, shows required property spoiler

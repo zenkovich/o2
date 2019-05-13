@@ -17,8 +17,10 @@ namespace o2
 		PROPERTY(float, horScroll, SetHorizontalScroll, GetHorizontalScroll); // Horizontal scroll position property
 		PROPERTY(float, verScroll, SetVerticalScroll, GetVerticalScroll);     // Vertical scroll position property
 
+	public:
 		Function<void(const Vec2F&)> onScrolled; // Scrolling event. Scroll position is parameter
 
+	public:
 		// Default constructor
 		ScrollArea();
 
@@ -112,38 +114,39 @@ namespace o2
 		SERIALIZABLE(ScrollArea);
 
 	protected:
-		HorizontalScrollBar* mHorScrollBar = nullptr;                 // horizontal scroll bar
-		VerticalScrollBar*   mVerScrollBar = nullptr;                 // Vertical scroll bar
-		bool                   mOwnHorScrollBar = false;                // True, if this widget is owner of mHorScrollBar
-		bool                   mOwnVerScrollBar = false;                // True, if this widget is owner of mVerScrollBar
+		HorizontalScrollBar*   mHorScrollBar = nullptr; // horizontal scroll bar
+		VerticalScrollBar*     mVerScrollBar = nullptr; // Vertical scroll bar
 
-		bool                   mLayoutUpdated = false;                  // Is is true when layout was updated on current frame
+		bool mOwnHorScrollBar = false; // True, if this widget is owner of mHorScrollBar
+		bool mOwnVerScrollBar = false; // True, if this widget is owner of mVerScrollBar
 
-		Layout                 mViewAreaLayout = Layout::BothStretch(); // Children view area layout with disabled bars @SERIALIZABLE
-		RectF                  mAbsoluteViewArea;                       // View area
+		bool mLayoutUpdated = false; // Is is true when layout was updated on current frame
 
-		Layout                 mClipAreaLayout = Layout::BothStretch(); // Clipping area layout (relative to this widget layout) @SERIALIZABLE
-		RectF                  mAbsoluteClipArea;                       // Clipping area
+		Layout mViewAreaLayout = Layout::BothStretch(); // Children view area layout with disabled bars @SERIALIZABLE
+		RectF  mAbsoluteViewArea;                       // View area
 
-		Vec2F                  mScrollPos;                              // Scroll position @SERIALIZABLE
-		Vec2F                  mScrollSpeed;                            // Scrolling speed
-		float                  mScrollSpeedDamp = 7.0f;                 // Scroll speed damping  @SERIALIZABLE
-		RectF                  mScrollArea;                             // Maximum scroll area size
-		RectF                  mScrollRange;                            // Scroll range by width and height
-		bool                   mEnableHorScroll = false;                // Is horizontal scroll enabled (range > 0)
-		bool                   mEnableVerScroll = false;                // Is vertical scroll enabled (range > 0)
+		Layout mClipAreaLayout = Layout::BothStretch(); // Clipping area layout (relative to this widget layout) @SERIALIZABLE
+		RectF  mAbsoluteClipArea;                       // Clipping area
 
-		bool                   mUnderCursor = false;                    // True, when widget is under cursor
-		bool                   mPressedCursor = false;                  // True, when widget was pressed by cursor
-		Vec2F                  mPressedScroll;                          // Scroll position when cursor was pressed
-		Vec2F                  mPressedCursorPos;                       // Cursor position, when was pressed
+		Vec2F mScrollPos;               // Scroll position @SERIALIZABLE
+		Vec2F mScrollSpeed;             // Scrolling speed
+		float mScrollSpeedDamp = 7.0f;  // Scroll speed damping  @SERIALIZABLE
+		RectF mScrollArea;              // Maximum scroll area size
+		RectF mScrollRange;             // Scroll range by width and height
+		bool  mEnableHorScroll = false; // Is horizontal scroll enabled (range > 0)
+		bool  mEnableVerScroll = false; // Is vertical scroll enabled (range > 0)
 
-		float                  mSpeedUpdTime = 0.0f;                    // Elapsed time from last scroll speed updating
+		bool  mUnderCursor = false;   // True, when widget is under cursor
+		bool  mPressedCursor = false; // True, when widget was pressed by cursor
+		Vec2F mPressedScroll;         // Scroll position when cursor was pressed
+		Vec2F mPressedCursorPos;      // Cursor position, when was pressed
 
-		bool                   mEnableScrollsHiding = true;             // Enables scroll hiding when they are stopped @SERIALIZABLE
-		bool                   mShowScrollBarsByCursor = false;         // Enables showing scroll bars when cursor hovers them @SERIALIZABLE
-		float                  mLastHorScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
-		float                  mLastVerScrollChangeTime = -1.0f;        // Last time when horizontal scroll bar was changed
+		float mSpeedUpdTime = 0.0f; // Elapsed time from last scroll speed updating
+
+		bool  mEnableScrollsHiding = true;      // Enables scroll hiding when they are stopped @SERIALIZABLE
+		bool  mShowScrollBarsByCursor = false;  // Enables showing scroll bars when cursor hovers them @SERIALIZABLE
+		float mLastHorScrollChangeTime = -1.0f; // Last time when horizontal scroll bar was changed
+		float mLastVerScrollChangeTime = -1.0f; // Last time when horizontal scroll bar was changed
 
 	protected:
 		// Copies data of actor from other to this

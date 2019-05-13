@@ -20,6 +20,7 @@ namespace o2
 	public:
 		String name; // Name of layer @SERIALIZABLE
 
+	public:
 		// Returns all actors in layer
 		const ActorsVec& GetActors() const;
 

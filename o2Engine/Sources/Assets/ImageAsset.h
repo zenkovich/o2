@@ -28,6 +28,7 @@ namespace o2
 		GETTER(float, height, GetHeight);                               // Image height getter
 		GETTER(MetaInfo*, meta, GetMeta);                               // Meta information getter
 
+	public:
 		// Destructor
 		~ImageAsset();
 

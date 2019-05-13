@@ -85,23 +85,23 @@ namespace Editor
 	protected:
 		const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
 
-		Sprite*            mBackground;     // Background sprite
-		Sprite*            mBackSign;       // Background o2 signature
+		Sprite* mBackground; // Background sprite
+		Sprite* mBackSign;   // Background o2 signature
 
-		UIRoot*            mUIRoot;         // Root editor UI
-		WindowsManager*    mWindowsManager; // Windows manager
-		EditorConfig*      mConfig;         // Application configuration
-		ToolsPanel*        mToolsPanel;     // Tools panel
-		MenuPanel*         mMenuPanel;      // Menu panel
+		UIRoot*         mUIRoot;         // Root editor UI
+		WindowsManager* mWindowsManager; // Windows manager
+		EditorConfig*   mConfig;         // Application configuration
+		ToolsPanel*     mToolsPanel;     // Tools panel
+		MenuPanel*      mMenuPanel;      // Menu panel
 
-		Properties*        mProperties;     // Properties manager
+		Properties* mProperties; // Properties manager
 
-		EditorActionsVec   mActions;        // Done actions
-		EditorActionsVec   mForwardActions; // Forward actions, what you can redo
+		EditorActionsVec mActions;        // Done actions
+		EditorActionsVec mForwardActions; // Forward actions, what you can redo
 
-		String             mLoadedScene;    // Current loaded scene
+		String mLoadedScene; // Current loaded scene
 
-		int                mDrawCalls;      // Draw calls count, stored before beginning rendering
+		int mDrawCalls; // Draw calls count, stored before beginning rendering
 
 	protected:
 		// Check style rebuilding and loads editor UI style

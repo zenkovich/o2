@@ -33,13 +33,13 @@ namespace Editor
 		IOBJECT(MoveTool);
 
 	protected:
-		SceneDragHandle  mHorDragHandle;       // Horizontal arrow handle
-		SceneDragHandle  mVerDragHandle;       // Vertical arrow handle
-		SceneDragHandle  mBothDragHandle;      // Both arrow handle
+		SceneDragHandle  mHorDragHandle;  // Horizontal arrow handle
+		SceneDragHandle  mVerDragHandle;  // Vertical arrow handle
+		SceneDragHandle  mBothDragHandle; // Both arrow handle
 						 
-		Vec2F            mLastSceneHandlesPos; // Last scene handles position 
-		Vec2F            mSnapPosition;        // Snapping handles position
-		float            mHandlesAngle = 0.0f; // Handles angle, in radians
+		Vec2F mLastSceneHandlesPos; // Last scene handles position 
+		Vec2F mSnapPosition;        // Snapping handles position
+		float mHandlesAngle = 0.0f; // Handles angle, in radians
 						 
 		BasisVec         mBeforeTransforms;          // Before transformation transforms
 		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started

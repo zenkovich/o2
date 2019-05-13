@@ -17,8 +17,11 @@ namespace o2
 		Function<void(const Input::Cursor&)> onCursorEnter;	   // Event when cursor was entered to handle
 		Function<void(const Input::Cursor&)> onCursorExit;	   // Event when cursor was exited to handle
 		Function<void(const Input::Cursor&)> onDblClicked;     // Event when cursor double clicked on this
+
+	public:
 		CursorType                           cursorType;       // Cursor type when hovering and dragging
 
+	public:
 		// Default constructor
 		CursorEventsArea();
 

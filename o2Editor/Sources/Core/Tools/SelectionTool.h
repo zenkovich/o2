@@ -35,8 +35,8 @@ namespace Editor
 		SceneEditableObjectsVec mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
 		SceneEditableObjectsVec mBeforeSelectingObjects;  // Before selection objects array
 
-		Vec2F mPressPoint;				  // Press point before selecting
-		bool  mSelectingObjects = false;  // Is selecting objects now
+		Vec2F mPressPoint;				 // Press point before selecting
+		bool  mSelectingObjects = false; // Is selecting objects now
 
 	protected:
 		// Draws tool

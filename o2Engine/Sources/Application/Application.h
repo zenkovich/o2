@@ -46,6 +46,7 @@ namespace o2
 		PROPERTY(Vec2I, windowPosition, SetWindowPosition, GetWindowPosition); // Window position on screen property
 		PROPERTY(String, windowCaption, SetWindowCaption, GetWindowCaption);   // Window caption property
 
+	public:
 		Function<void()> onActivated;   // On Activated event callbacks
 		Function<void()> onDeactivated; // On deactivated event callbacks
 		Function<void()> onStarted;     // On started event callbacks
@@ -53,6 +54,7 @@ namespace o2
 		Function<void()> onResizing;    // On resized app window callbacks. Ignoring on mobiles/tables
 		Function<void()> onMoving;      // On moving app window callbacks. Ignoring on mobiles/tables
 
+	public:
 		// Default constructor
 		Application();
 

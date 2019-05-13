@@ -14,42 +14,42 @@
 
 namespace o2
 {
-	bool UIContextMenu::Item::operator==(const Item& other) const
+	bool ContextMenu::Item::operator==(const Item& other) const
 	{
 		return text == other.text && shortcut == other.shortcut && icon == other.icon;
 	}
 
-	UIContextMenu::Item::Item():
+	ContextMenu::Item::Item():
 		checked(false), checkable(false)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, const Function<void()> onClick, 
+	ContextMenu::Item::Item(const WString& text, const Function<void()> onClick, 
 							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), onClick(onClick), shortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, Vector<Item> subItems, 
+	ContextMenu::Item::Item(const WString& text, Vector<Item> subItems, 
 							  const ImageAssetRef& icon /*= ImageAssetRef()*/) :
 		text(text), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
-	UIContextMenu::Item::Item(const WString& text, bool checked, 
+	ContextMenu::Item::Item(const WString& text, bool checked, 
 							  Function<void(bool)> onChecked /*= Function<void(bool)>()*/, 
 							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
 							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), checked(checked), onChecked(onChecked), checkable(true), shortcut(shortcut), icon(icon)
 	{}
 
-	UIContextMenu::Item::~Item()
+	ContextMenu::Item::~Item()
 	{}
 
-	UIContextMenu::Item UIContextMenu::Item::Separator()
+	ContextMenu::Item ContextMenu::Item::Separator()
 	{
 		return Item("---", Function<void()>());
 	}
 
-	UIContextMenu::UIContextMenu():
+	ContextMenu::ContextMenu():
 		ScrollArea(), DrawableCursorEventsListener(this)
 	{
 		mItemSample = mnew ContextMenuItem();
@@ -80,13 +80,13 @@ namespace o2
 		SetEnableForcible(false);
 	}
 
-	UIContextMenu::UIContextMenu(Vector<Item> items):
-		UIContextMenu()
+	ContextMenu::ContextMenu(Vector<Item> items):
+		ContextMenu()
 	{
 		AddItems(items);
 	}
 
-	UIContextMenu::UIContextMenu(const UIContextMenu& other):
+	ContextMenu::ContextMenu(const ContextMenu& other):
 		ScrollArea(other), DrawableCursorEventsListener(this), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample        = other.mItemSample->CloneAs<ContextMenuItem>();
@@ -103,20 +103,20 @@ namespace o2
 		SetEnableForcible(false);
 	}
 
-	UIContextMenu::~UIContextMenu()
+	ContextMenu::~ContextMenu()
 	{
 		delete mItemSample;
 		delete mSelectionDrawable;
 		delete mSeparatorSample;
 	}
 
-	UIContextMenu& UIContextMenu::operator=(const UIContextMenu& other)
+	ContextMenu& ContextMenu::operator=(const ContextMenu& other)
 	{
 		ScrollArea::operator=(other);
 		return *this;
 	}
 
-	void UIContextMenu::Update(float dt)
+	void ContextMenu::Update(float dt)
 	{
 		if (!mResEnabledInHierarchy)
 			return;
@@ -158,10 +158,10 @@ namespace o2
 		mShownAtFrame = false;
 	}
 
-	void UIContextMenu::Draw()
+	void ContextMenu::Draw()
 	{}
 
-	void UIContextMenu::Show(UIContextMenu* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
+	void ContextMenu::Show(ContextMenu* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
 		if (parent)
 		{
@@ -186,12 +186,12 @@ namespace o2
 		mShownAtFrame = true;
 	}
 
-	void UIContextMenu::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
+	void ContextMenu::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
 		Show(nullptr, position);
 	}
 
-	ContextMenuItem* UIContextMenu::AddItem(const Item& item)
+	ContextMenuItem* ContextMenu::AddItem(const Item& item)
 	{
 		if (item.text == "---")
 		{
@@ -212,29 +212,29 @@ namespace o2
 		return newItem;
 	}
 
-	ContextMenuItem* UIContextMenu::AddItem(const WString& path,
+	ContextMenuItem* ContextMenu::AddItem(const WString& path,
 									 const Function<void()>& clickFunc /*= Function<void()>()*/,
 									 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 									 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
-		UIContextMenu* targetContext = CreateItemsByPath(targetPath);
+		ContextMenu* targetContext = CreateItemsByPath(targetPath);
 		return targetContext->AddItem(Item(targetPath, clickFunc, icon, shortcut));
 	}
 
-	ContextMenuItem* UIContextMenu::AddToggleItem(const WString& path, bool value,
+	ContextMenuItem* ContextMenu::AddToggleItem(const WString& path, bool value,
 										  const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
 										  const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 										  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
-		UIContextMenu* targetContext = CreateItemsByPath(targetPath);
+		ContextMenu* targetContext = CreateItemsByPath(targetPath);
 		return targetContext->AddItem(Item(targetPath, value, clickFunc, icon, shortcut));
 	}
 
-	UIContextMenu* UIContextMenu::CreateItemsByPath(WString& path)
+	ContextMenu* ContextMenu::CreateItemsByPath(WString& path)
 	{
-		UIContextMenu* resultContext = this;
+		ContextMenu* resultContext = this;
 
 		while (true)
 		{
@@ -254,10 +254,10 @@ namespace o2
 			if (!subChild)
 				subChild = resultContext->AddItem(subMenu);
 
-			UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
+			ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
 			if (!subContext)
 			{
-				subContext = o2UI.CreateWidget<UIContextMenu>();
+				subContext = o2UI.CreateWidget<ContextMenu>();
 				subChild->AddChild(subContext);
 
 				if (auto subIconLayer = subChild->FindLayer("subIcon"))
@@ -271,7 +271,7 @@ namespace o2
 		return resultContext;
 	}
 
-	ContextMenuItem* UIContextMenu::InsertItem(const Item& item, int position)
+	ContextMenuItem* ContextMenu::InsertItem(const Item& item, int position)
 	{
 		if (item.text == "---")
 		{
@@ -294,13 +294,13 @@ namespace o2
 		return newItem;
 	}
 
-	void UIContextMenu::AddItems(Vector<Item> items)
+	void ContextMenu::AddItems(Vector<Item> items)
 	{
 		for (auto item : items)
 			AddItem(item);
 	}
 
-	void UIContextMenu::InsertItems(Vector<Item> items, int position)
+	void ContextMenu::InsertItems(Vector<Item> items, int position)
 	{
 		int i = 0;
 		for (auto item : items)
@@ -310,7 +310,7 @@ namespace o2
 		}
 	}
 
-	UIContextMenu::Item UIContextMenu::GetItem(int position)
+	ContextMenu::Item ContextMenu::GetItem(int position)
 	{
 		if (position > 0 && position < mItemsLayout->GetChildren().Count())
 			return GetItemDef(position);
@@ -318,7 +318,7 @@ namespace o2
 		return Item();
 	}
 
-	ContextMenuItem* UIContextMenu::GetItemWidget(int position)
+	ContextMenuItem* ContextMenu::GetItemWidget(int position)
 	{
 		if (position > 0 && position < mItemsLayout->GetChildren().Count())
 			return dynamic_cast<ContextMenuItem*>(mItemsLayout->GetChildren()[position]);
@@ -326,7 +326,7 @@ namespace o2
 		return nullptr;
 	}
 
-	int UIContextMenu::FindItem(const WString& text) const
+	int ContextMenu::FindItem(const WString& text) const
 	{
 		int idx = 0;
 		for (auto child : mItemsLayout->GetChildWidgets())
@@ -341,7 +341,7 @@ namespace o2
 		return -1;
 	}
 
-	ContextMenuItem* UIContextMenu::FindItemWidget(const WString& path) const
+	ContextMenuItem* ContextMenu::FindItemWidget(const WString& path) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
@@ -361,7 +361,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIContextMenu::SetItem(int position, const Item& item)
+	void ContextMenu::SetItem(int position, const Item& item)
 	{
 		if (position < 0 || position >= mItemsLayout->mChildren.Count())
 			return;
@@ -370,12 +370,12 @@ namespace o2
 		SetupItem(itemWidget, item);
 	}
 
-	void UIContextMenu::OnResEnableInHierarchyChanged()
+	void ContextMenu::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}
 
-	ContextMenuItem* UIContextMenu::GetItemUnderPoint(const Vec2F& point)
+	ContextMenuItem* ContextMenu::GetItemUnderPoint(const Vec2F& point)
 	{
 		if (!mItemsLayout)
 			return nullptr;
@@ -389,7 +389,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void UIContextMenu::UpdateHover(const Vec2F& point)
+	void ContextMenu::UpdateHover(const Vec2F& point)
 	{
 		ContextMenuItem* itemUnderCursor = GetItemUnderPoint(point);
 
@@ -429,13 +429,13 @@ namespace o2
 		}
 	}
 
-	void UIContextMenu::OnCursorPressed(const Input::Cursor& cursor)
+	void ContextMenu::OnCursorPressed(const Input::Cursor& cursor)
 	{}
 
-	void UIContextMenu::OnCursorStillDown(const Input::Cursor& cursor)
+	void ContextMenu::OnCursorStillDown(const Input::Cursor& cursor)
 	{}
 
-	void UIContextMenu::OnCursorReleased(const Input::Cursor& cursor)
+	void ContextMenu::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		ContextMenuItem* itemUnderCursor = GetItemUnderPoint(cursor.position);
 
@@ -456,20 +456,20 @@ namespace o2
 			}
 		}
 
-		if (itemUnderCursor && itemUnderCursor->FindChildByType<UIContextMenu>() == nullptr)
+		if (itemUnderCursor && itemUnderCursor->FindChildByType<ContextMenu>() == nullptr)
 		{
 			HideWithParent();
 			HideWithChild();
 		}
 	}
 
-	void UIContextMenu::OnCursorPressBreak(const Input::Cursor& cursor)
+	void ContextMenu::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		HideWithParent();
 		HideWithChild();
 	}
 
-	void UIContextMenu::OnCursorMoved(const Input::Cursor& cursor)
+	void ContextMenu::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
 		if ((cursor.position - mLastSelectCheckCursor).Length() < checkDeltaThreshold)
@@ -480,7 +480,7 @@ namespace o2
 		UpdateHover(cursor.position);
 	}
 
-	void UIContextMenu::OnKeyPressed(const Input::Key& key)
+	void ContextMenu::OnKeyPressed(const Input::Key& key)
 	{
 // 		if (mVisibleContextMenu && mVisibleContextMenu->IsVisible() && mVisibleContextMenu != this)
 // 			return;
@@ -500,7 +500,7 @@ namespace o2
 // 		}
 	}
 
-	void UIContextMenu::HideWithParent()
+	void ContextMenu::HideWithParent()
 	{
 		Hide();
 
@@ -512,7 +512,7 @@ namespace o2
 		mSelectedItem = nullptr;
 	}
 
-	void UIContextMenu::HideWithChild()
+	void ContextMenu::HideWithChild()
 	{
 		Hide();
 
@@ -523,7 +523,7 @@ namespace o2
 		mSelectedItem = nullptr;
 	}
 
-	Vector<UIContextMenu::Item> UIContextMenu::GetItems() const
+	Vector<ContextMenu::Item> ContextMenu::GetItems() const
 	{
 		Vector<Item> res;
 		for (int i = 0; i < mItemsLayout->GetChildren().Count(); i++)
@@ -532,15 +532,15 @@ namespace o2
 		return res;
 	}
 
-	void UIContextMenu::RemoveItem(int position)
+	void ContextMenu::RemoveItem(int position)
 	{
 		if (position > 0 && position < mItemsLayout->GetChildren().Count())
 			mItemsLayout->RemoveChild(mItemsLayout->GetChildren()[position]);
 	}
 
-	void UIContextMenu::RemoveItem(const WString& path)
+	void ContextMenu::RemoveItem(const WString& path)
 	{
-		UIContextMenu* targetContext = this;
+		ContextMenu* targetContext = this;
 		WString targetPath = path;
 
 		while (true)
@@ -564,7 +564,7 @@ namespace o2
 				return;
 			}
 
-			UIContextMenu* subContext = subChild->FindChildByType<UIContextMenu>();
+			ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
 			if (!subContext)
 			{
 				o2Debug.LogError("Failed to remove context item " + path);
@@ -591,13 +591,13 @@ namespace o2
 		targetContext->mItemsLayout->RemoveChild(removingItem);
 	}
 
-	void UIContextMenu::RemoveAllItems()
+	void ContextMenu::RemoveAllItems()
 	{
 		mItemsLayout->RemoveAllChildren();
 		mSelectedItem = nullptr;
 	}
 
-	void UIContextMenu::SetItemChecked(int position, bool checked)
+	void ContextMenu::SetItemChecked(int position, bool checked)
 	{
 		if (position < 0 || position >= mItemsLayout->mChildren.Count())
 			return;
@@ -607,7 +607,7 @@ namespace o2
 			item->SetChecked(checked);
 	}
 
-	bool UIContextMenu::IsItemChecked(int position) const
+	bool ContextMenu::IsItemChecked(int position) const
 	{
 		if (position < 0 || position >= mItemsLayout->mChildren.Count())
 			return false;
@@ -616,47 +616,47 @@ namespace o2
 		return item->IsChecked();
 	}
 
-	VerticalLayout* UIContextMenu::GetItemsLayout() const
+	VerticalLayout* ContextMenu::GetItemsLayout() const
 	{
 		return mItemsLayout;
 	}
 
-	ContextMenuItem* UIContextMenu::GetItemSample() const
+	ContextMenuItem* ContextMenu::GetItemSample() const
 	{
 		return mItemSample;
 	}
 
-	Widget* UIContextMenu::GetSeparatorSample() const
+	Widget* ContextMenu::GetSeparatorSample() const
 	{
 		return mSeparatorSample;
 	}
 
-	Sprite* UIContextMenu::GetSelectionDrawable() const
+	Sprite* ContextMenu::GetSelectionDrawable() const
 	{
 		return mSelectionDrawable;
 	}
 
-	void UIContextMenu::SetSelectionDrawableLayout(const Layout& layout)
+	void ContextMenu::SetSelectionDrawableLayout(const Layout& layout)
 	{
 		mSelectionLayout = layout;
 	}
 
-	Layout UIContextMenu::GetSelectionDrawableLayout() const
+	Layout ContextMenu::GetSelectionDrawableLayout() const
 	{
 		return mSelectionLayout;
 	}
 
-	void UIContextMenu::SetMinFitSize(float size)
+	void ContextMenu::SetMinFitSize(float size)
 	{
 		mFitSizeMin = size;
 	}
 
-	void UIContextMenu::SetMaxItemsVisible(int count)
+	void ContextMenu::SetMaxItemsVisible(int count)
 	{
 		mMaxVisibleItems = count;
 	}
 
-	void UIContextMenu::SetItemsMaxPriority()
+	void ContextMenu::SetItemsMaxPriority()
 	{
 		for (auto child : mItemsLayout->mChildren)
 		{
@@ -666,7 +666,7 @@ namespace o2
 		}
 	}
 
-	void UIContextMenu::SetItemsMinPriority()
+	void ContextMenu::SetItemsMinPriority()
 	{
 		for (auto child : mItemsLayout->mChildren)
 		{
@@ -676,14 +676,14 @@ namespace o2
 		}
 	}
 
-	bool UIContextMenu::IsScrollable() const
+	bool ContextMenu::IsScrollable() const
 	{
 		return true;
 	}
 
-	UIContextMenu* UIContextMenu::mVisibleContextMenu = nullptr;
+	ContextMenu* ContextMenu::mVisibleContextMenu = nullptr;
 
-	void UIContextMenu::UpdateSelfTransform()
+	void ContextMenu::UpdateSelfTransform()
 {
 		layout->Update();
 
@@ -707,9 +707,9 @@ namespace o2
 		mChildrenWorldRect = _mChildrenAbsRect;
 	}
 
-	void UIContextMenu::CopyData(const Actor& otherActor)
+	void ContextMenu::CopyData(const Actor& otherActor)
 	{
-		const UIContextMenu& other = dynamic_cast<const UIContextMenu&>(otherActor);
+		const ContextMenu& other = dynamic_cast<const ContextMenu&>(otherActor);
 
 		ScrollArea::CopyData(other);
 
@@ -733,7 +733,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void UIContextMenu::CheckClipping(const RectF& clipArea)
+	void ContextMenu::CheckClipping(const RectF& clipArea)
 	{
 		mIsClipped = false;
 
@@ -743,7 +743,7 @@ namespace o2
 			child->CheckClipping(fullScreenRect);
 	}
 
-	void UIContextMenu::FitSizeAndPosition(const Vec2F& position)
+	void ContextMenu::FitSizeAndPosition(const Vec2F& position)
 	{
 		Vec2F size;
 		float maxCaption = 0.0f;
@@ -795,7 +795,7 @@ namespace o2
 		layout->worldRect = thisRect;
 	}
 
-	void UIContextMenu::SpecialDraw()
+	void ContextMenu::SpecialDraw()
 	{
 		if (!mResEnabledInHierarchy)
 			return;
@@ -829,14 +829,14 @@ namespace o2
 			mChildContextMenu->SpecialDraw();
 	}
 
-	ContextMenuItem* UIContextMenu::CreateItem(const Item& item)
+	ContextMenuItem* ContextMenu::CreateItem(const Item& item)
 	{
 		ContextMenuItem* itemWidget = mItemSample->CloneAs<ContextMenuItem>();
 		SetupItem(itemWidget, item);
 		return itemWidget;
 	}
 
-	void UIContextMenu::SetupItem(ContextMenuItem* widget, const Item& item)
+	void ContextMenu::SetupItem(ContextMenuItem* widget, const Item& item)
 	{
 		widget->name = (WString)"Context Item " + item.text;
 
@@ -886,7 +886,7 @@ namespace o2
 		widget->RemoveAllChildren();
 		if (item.subItems.Count() > 0)
 		{
-			UIContextMenu* subMenu = mnew UIContextMenu(*this);
+			ContextMenu* subMenu = mnew ContextMenu(*this);
 			subMenu->RemoveAllItems();
 			subMenu->AddItems(item.subItems);
 
@@ -894,7 +894,7 @@ namespace o2
 		}
 	}
 
-	UIContextMenu::Item UIContextMenu::GetItemDef(int idx) const
+	ContextMenu::Item ContextMenu::GetItemDef(int idx) const
 	{
 		Item res;
 		auto item = mItemsLayout->mChildren[idx];
@@ -915,7 +915,7 @@ namespace o2
 			if (auto shortcutLayer = contextItem->GetLayerDrawable<Text>("basic/shortcut"))
 				res.shortcut = contextItem->GetShortcut();
 
-			if (auto subMenu = contextItem->FindChildByType<UIContextMenu>())
+			if (auto subMenu = contextItem->FindChildByType<ContextMenu>())
 				res.subItems = subMenu->GetItems();
 
 			res.checked = contextItem->IsChecked();
@@ -934,7 +934,7 @@ namespace o2
 	ContextMenuItem::ContextMenuItem(const ContextMenuItem& other):
 		Widget(other), text(this)
 	{
-		mSubMenu = FindChildByType<UIContextMenu>();
+		mSubMenu = FindChildByType<ContextMenu>();
 		if (mSubMenu)
 			mSubMenu->Hide(true);
 
@@ -966,7 +966,7 @@ namespace o2
 		return *this;
 	}
 
-	UIContextMenu* ContextMenuItem::GetSubMenu() const
+	ContextMenu* ContextMenuItem::GetSubMenu() const
 	{
 		return mSubMenu;
 	}
@@ -1025,15 +1025,15 @@ namespace o2
 
 		Widget::CopyData(other);
 
-		mSubMenu = FindChildByType<UIContextMenu>();
+		mSubMenu = FindChildByType<ContextMenu>();
 		if (mSubMenu)
 			mSubMenu->Hide(true);
 	}
 
 	void ContextMenuItem::OnChildAdded(Widget* child)
 	{
-		if (child->GetType() == TypeOf(UIContextMenu))
-			mSubMenu = (UIContextMenu*)child;
+		if (child->GetType() == TypeOf(ContextMenu))
+			mSubMenu = (ContextMenu*)child;
 	}
 
 	void ContextMenuItem::OnShortcutPressed()
@@ -1045,6 +1045,6 @@ namespace o2
 
 DECLARE_CLASS(o2::ContextMenuItem);
 
-DECLARE_CLASS(o2::UIContextMenu);
+DECLARE_CLASS(o2::ContextMenu);
 
-DECLARE_CLASS(o2::UIContextMenu::Item);
+DECLARE_CLASS(o2::ContextMenu::Item);

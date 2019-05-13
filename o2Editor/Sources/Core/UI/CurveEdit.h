@@ -14,7 +14,7 @@ using namespace o2;
 
 namespace o2
 {
-	class UIContextMenu;
+	class ContextMenu;
 	class EditBox;
 	class Window;
 }
@@ -120,6 +120,7 @@ namespace Editor
 			Color4         color;
 			Vec2F          viewScale;
 
+		public:
 			CurveInfo();
 			~CurveInfo();
 
@@ -174,40 +175,40 @@ namespace Editor
 		typedef Vector<CurveKeysInfo> CurveKeysInfosVec;
 
 	protected:
-		UIContextMenu*          mContextMenu = nullptr;             // Context menu for editing keys properties, copying, pasting and other
+		ContextMenu* mContextMenu = nullptr; // Context menu for editing keys properties, copying, pasting and other
 							    								    
-		DragHandle    mMainHandleSample;                  // Main handle sample, uses to copy sprites @SERIALIZABLE
-		DragHandle    mSupportHandleSample;               // Support handle sample, uses to copy sprites @SERIALIZABLE
+		DragHandle mMainHandleSample;    // Main handle sample, uses to copy sprites @SERIALIZABLE
+		DragHandle mSupportHandleSample; // Support handle sample, uses to copy sprites @SERIALIZABLE
 							    								    
-		CurveInfosVec           mCurves;                            // Editing curves infos list 
-		RangeInfosVec           mRanges;                            // Curves ranges list
+		CurveInfosVec mCurves; // Editing curves infos list 
+		RangeInfosVec mRanges; // Curves ranges list
 							    								    
-		SelectableHandlesVec    mSupportHandles;                    // Support points handles list
-		SelectableHandlesVec    mSelectingHandlesBuf;               // Potentially selecting handles while selecting
+		SelectableHandlesVec mSupportHandles;      // Support points handles list
+		SelectableHandlesVec mSelectingHandlesBuf; // Potentially selecting handles while selecting
 							    								    
-		Sprite*                 mSelectionSprite = nullptr;         // Selection sprite @SERIALIZABLE
-		FontRef                 mTextFont;                          // Captions text font @SERIALIZABLE
-		Text*                   mTextLeft = nullptr;                // Captions text drawable at left border
-		Text*                   mTextRight = nullptr;               // Captions text drawable at right border
-		Text*                   mTextTop = nullptr;                 // Captions text drawable at top border
-		Text*                   mTextBottom = nullptr;              // Captions text drawable at bottom border
+		Sprite* mSelectionSprite = nullptr; // Selection sprite @SERIALIZABLE
+		FontRef mTextFont;                  // Captions text font @SERIALIZABLE
+		Text*   mTextLeft = nullptr;        // Captions text drawable at left border
+		Text*   mTextRight = nullptr;       // Captions text drawable at right border
+		Text*   mTextTop = nullptr;         // Captions text drawable at top border
+		Text*   mTextBottom = nullptr;      // Captions text drawable at bottom border
 							    								    
-		Vec2F                   mSelectingPressedPoint;             // Point, where cursor was pressed, selection starts here, in local space
+		Vec2F mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 							    								    
-		FrameHandles            mTransformFrame;                    // Keys transformation frame
-		bool                    mTransformFrameVisible = false;     // Is transform frame visible. it visible when 2 or more main handles was selected
-		Basis                   mTransformFrameBasis;               // Basis of transform frame in local space
+		FrameHandles mTransformFrame;                // Keys transformation frame
+		bool         mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
+		Basis        mTransformFrameBasis;           // Basis of transform frame in local space
 								 							   	    
-		bool                    mIsViewScrolling = false;           // Is scrolling view at this time
+		bool mIsViewScrolling = false; // Is scrolling view at this time
 							    
-		Window*               mEditValueWindow = nullptr;         // Key position and value editing window
-		EditBox*              mEditValueWindowValue = nullptr;    // Key value editing box
-		EditBox*              mEditValueWindowPosition = nullptr; // Key position editing box
+		Window*  mEditValueWindow = nullptr;         // Key position and value editing window
+		EditBox* mEditValueWindowValue = nullptr;    // Key value editing box
+		EditBox* mEditValueWindowPosition = nullptr; // Key position editing box
 							    
-		CurveKeysInfosVec       mBeforeTransformKeys;               // Stored selected keys before handles transformed
+		CurveKeysInfosVec mBeforeTransformKeys; // Stored selected keys before handles transformed
 															       
-		ActionsVec              mUndoActions;                       // Actions that can be undo
-		ActionsVec              mRedoActions;                       // Actions that can be redo
+		ActionsVec mUndoActions; // Actions that can be undo
+		ActionsVec mRedoActions; // Actions that can be redo
 
 	protected:
 		// Copies data of actor from other to this

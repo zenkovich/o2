@@ -829,7 +829,7 @@ namespace o2
 
 	void BasicUIStyleBuilder::RebuildContextMenuStyle()
 	{
-		UIContextMenu* sample = mnew UIContextMenu();
+		ContextMenu* sample = mnew ContextMenu();
 
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));

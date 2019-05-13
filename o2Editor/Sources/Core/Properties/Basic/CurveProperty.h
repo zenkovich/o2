@@ -33,8 +33,8 @@ namespace Editor
 		IOBJECT(CurveProperty);
 
 	protected:
-		Widget*        mEditBox = nullptr;         // Edit box 
-		CurvePreview*  mPreviewImage = nullptr;    // Curve preview image
+		Widget*          mEditBox = nullptr;         // Edit box 
+		CurvePreview*    mPreviewImage = nullptr;    // Curve preview image
 		CursorEventsArea mClickArea;                 // Box click area
 
 	protected:

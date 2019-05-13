@@ -151,7 +151,7 @@ namespace o2
 		return WString();
 	}
 
-	UIContextMenu* Window::GetOptionsMenu() const
+	ContextMenu* Window::GetOptionsMenu() const
 	{
 		return mOptionsMenu;
 	}
@@ -337,7 +337,7 @@ namespace o2
 
 	void Window::InitializeContextMenu()
 	{
-		mOptionsMenu = o2UI.CreateWidget<UIContextMenu>("standard");
+		mOptionsMenu = o2UI.CreateWidget<ContextMenu>("standard");
 
 		if (!mOptionsMenu)
 			return;
@@ -368,7 +368,7 @@ namespace o2
 
 		for (auto element : mInternalWidgets)
 		{
-			if (element->GetName() == "options context" && element->GetType() == TypeOf(UIContextMenu))
+			if (element->GetName() == "options context" && element->GetType() == TypeOf(ContextMenu))
 			{
 				mInternalWidgets.Remove(element);
 				delete element;

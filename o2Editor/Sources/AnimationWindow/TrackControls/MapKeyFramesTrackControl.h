@@ -25,32 +25,23 @@ namespace Editor
 		// Destructor
 		~MapKeyFramesTrackControl();
 
-
 		// Copy-operator
 		MapKeyFramesTrackControl& operator=(const MapKeyFramesTrackControl& other);
 
+		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
+		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
 
-		// Draws handles with scissor rect
-		void Draw() override;
-
+		// Draws handles with clipping
+		void Draw() override;		
 
 		// Sets mapped animated values. Creates handles
 		void SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode);
-
 
 		// Updates handles position on timeline
 		void UpdateHandles() override;
 
 		// Updates handles positions for specified animated value
 		void UpdateHandlesForValue(IAnimatedValue* animatedValue);
-
-
-		// Sets timeline for calculating handles positions
-		void SetTimeline(AnimationTimeline* timeline) override;
-
-		// Sets handles sheet
-		void SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet) override;
-
 
 		SERIALIZABLE(MapKeyFramesTrackControl);
 
@@ -80,7 +71,7 @@ namespace Editor
 		AnimatedValueKeyHandlesDict mHandles;                // List of handles, each for keys
 		Vector<IAnimatedValue*>     mAnimatedValues;         // Editing animated values
 		AnimationTimeline*          mTimeline = nullptr;     // Timeline used for calculating handles positions
-		KeyHandlesSheet*               mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
+		KeyHandlesSheet*            mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
 													 
 		Vector<WidgetDragHandle*> mHandlesCache; // Cached drag handles, can be reused
 
@@ -122,6 +113,7 @@ namespace Editor
 			else
 				handle = CreateHandle();
 
+			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
@@ -212,12 +204,11 @@ END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 {
 
+	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
-	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
-	PUBLIC_FUNCTION(void, SetKeyHandlesSheet, KeyHandlesSheet*);
 	PRIVATE_FUNCTION(void, CacheHandles);
 	PRIVATE_FUNCTION(void, InitializeNodeHandles, const AnimationTree::AnimationValueNode&);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);

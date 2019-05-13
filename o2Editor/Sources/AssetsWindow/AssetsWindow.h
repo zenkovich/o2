@@ -41,10 +41,8 @@ namespace Editor
 		// Destructor
 		~AssetsWindow();
 
-
 		// Updates window logic
 		void Update(float dt) override;
-
 
 		// Selects asset with id
 		void SelectAsset(UID id);
@@ -58,7 +56,6 @@ namespace Editor
 		// Selects assets by paths
 		void SelectAssets(const Vector<String>& paths);
 
-
 		// Opens asset in folder
 		void OpenAsset(UID id);
 
@@ -71,13 +68,11 @@ namespace Editor
 		// Opens asset for editing 
 		void OpenAndEditAsset(const String& path);
 
-
 		// Deselects all assets
 		void DeselectAssets();
 
 		// Returns selected assets infos
 		Vector<AssetInfo> GetSelectedAssets() const;
-
 
 		// Returns opened folder path
 		String GetOpenedFolderPath() const;
@@ -85,13 +80,11 @@ namespace Editor
 		// Opens folder
 		void OpenFolder(const String& path);
 
-
 		// Shows asset
 		void ShowAssetIcon(UID id);
 
 		// Shows asset
 		void ShowAssetIcon(const String& path);
-
 
 		// Copy assets in clipboard
 		void CopyAssets(const Vector<String>& assetsPaths);
@@ -108,7 +101,6 @@ namespace Editor
 		// It is called when context import pressed
 		void ImportAssets(const String& targetPath);
 
-
 		// It is called when context create folder pressed
 		void CreateFolderAsset(const String& targetPath, const String& name);
 
@@ -120,7 +112,6 @@ namespace Editor
 
 		// It is called when context create animation pressed
 		void CreateAnimationAsset(const String& targetPath);
-
 
 		// Creates and returns icon sprite for asset
 		static Sprite* GetAssetIconSprite(const AssetRef& asset);

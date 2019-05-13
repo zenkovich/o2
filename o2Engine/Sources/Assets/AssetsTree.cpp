@@ -197,9 +197,9 @@ namespace o2
 			bool exist = false;
 
 			if (assetNode->assetType == &TypeOf(FolderAsset))
-				exist = folder.mFolders.ContainsPred([=](const FolderInfo& x) { return x.mPath == assetNode->path; });
+				exist = folder.folders.ContainsPred([=](const FolderInfo& x) { return x.path == assetNode->path; });
 			else
-				exist = folder.mFiles.ContainsPred([=](const FileInfo& x) { return x.mPath == assetNode->path; });
+				exist = folder.files.ContainsPred([=](const FileInfo& x) { return x.path == assetNode->path; });
 
 			if (!exist)
 				missingAssetNodes.Add(assetNode);
@@ -208,47 +208,47 @@ namespace o2
 		for (auto assetNode : missingAssetNodes)
 			RemoveAsset(assetNode);
 
-		for (auto fileInfo : folder.mFiles)
+		for (auto fileInfo : folder.files)
 		{
-			if (parentChilds.ContainsPred([&](AssetNode* x) { return x->path == fileInfo.mPath; }))
+			if (parentChilds.ContainsPred([&](AssetNode* x) { return x->path == fileInfo.path; }))
 				continue;
 
-			String extension = o2FileSystem.GetFileExtension(fileInfo.mPath);
+			String extension = o2FileSystem.GetFileExtension(fileInfo.path);
 
 			if (extension != "meta")
 			{
-				String assetFullPath = mPath + fileInfo.mPath;
+				String assetFullPath = mPath + fileInfo.path;
 				String metaFullPath = assetFullPath + ".meta";
 
 				bool isExistMetaForAsset = o2FileSystem.IsFileExist(metaFullPath);
 				if (!isExistMetaForAsset)
 					continue;
 
-				LoadAsset(fileInfo.mPath, parentAsset, fileInfo.mEditDate);
+				LoadAsset(fileInfo.path, parentAsset, fileInfo.editDate);
 			}
 		}
 
-		for (auto subFolder : folder.mFolders)
+		for (auto subFolder : folder.folders)
 		{
 			AssetNode* asset = nullptr;
 
-			if (!parentChilds.ContainsPred([&](AssetNode* x) { return x->path == subFolder.mPath; }))
+			if (!parentChilds.ContainsPred([&](AssetNode* x) { return x->path == subFolder.path; }))
 			{
-				String folderFullPath = mPath + subFolder.mPath;
+				String folderFullPath = mPath + subFolder.path;
 				String metaFullPath = folderFullPath + ".meta";
 
 				bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 				if (!isExistMetaForFolder)
 				{
 					if (mLog)
-						mLog->Warning("Can't load asset info for " + subFolder.mPath + " - missing meta file");
+						mLog->Warning("Can't load asset info for " + subFolder.path + " - missing meta file");
 
 					continue;
 				}
 
-				asset = LoadAsset(subFolder.mPath, parentAsset, TimeStamp());
+				asset = LoadAsset(subFolder.path, parentAsset, TimeStamp());
 			}
-			else asset = parentChilds.FindMatch([&](AssetNode* x) { return x->path == subFolder.mPath; });
+			else asset = parentChilds.FindMatch([&](AssetNode* x) { return x->path == subFolder.path; });
 
 			LoadFolder(subFolder, asset);
 		}

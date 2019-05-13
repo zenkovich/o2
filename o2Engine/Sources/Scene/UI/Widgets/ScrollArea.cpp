@@ -625,7 +625,7 @@ namespace o2
 
 		for (auto child : mChildWidgets)
 		{
-			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(UIContextMenu))
+			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(ContextMenu))
 				continue;
 
 			RecalculateScrollAreaRect(child->layout->mData->rectangle, offset);

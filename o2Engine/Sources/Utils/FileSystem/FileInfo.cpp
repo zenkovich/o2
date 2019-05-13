@@ -7,25 +7,25 @@ namespace o2
 {
 	bool FileInfo::operator==(const FileInfo& other) const
 	{
-		return mPath == other.mPath && mFileType == other.mFileType && mCreatedDate == other.mCreatedDate &&
-			mAccessDate == other.mAccessDate && mEditDate == other.mEditDate && mSize == other.mSize;
+		return path == other.path && fileType == other.fileType && createdDate == other.createdDate &&
+			accessDate == other.accessDate && editDate == other.editDate && size == other.size;
 	}
 
 
 	bool FolderInfo::operator==(const FolderInfo& other) const
 	{
-		return mPath == other.mPath;
+		return path == other.path;
 	}
 
 	bool FolderInfo::IsFileExist(const String& filePath)
 	{
-		for (auto file:mFiles)
+		for (auto file:files)
 		{
-			if (file.mPath == filePath)
+			if (file.path == filePath)
 				return true;
 		}
 
-		for (auto path:mFolders)
+		for (auto path:folders)
 		{
 			if (path.IsFileExist(filePath))
 				return true;
@@ -36,19 +36,19 @@ namespace o2
 
 	void FolderInfo::ClampPathNames()
 	{
-		ProcessPathNamesClamping(mPath.Length() + 1);
+		ProcessPathNamesClamping(path.Length() + 1);
 	}
 
 	void FolderInfo::ProcessPathNamesClamping(int charCount)
 	{
-		mPath = mPath.SubStr(Math::Min(charCount, (int)mPath.Length()));
+		path = path.SubStr(Math::Min(charCount, (int)path.Length()));
 
-		for (FileInfo& file:mFiles)
+		for (FileInfo& file:files)
 		{
-			file.mPath = file.mPath.SubStr(Math::Min(charCount, file.mPath.Length()));
+			file.path = file.path.SubStr(Math::Min(charCount, file.path.Length()));
 		}
 
-		for (FolderInfo& path:mFolders)
+		for (FolderInfo& path:folders)
 			path.ProcessPathNamesClamping(charCount);
 	}
 }

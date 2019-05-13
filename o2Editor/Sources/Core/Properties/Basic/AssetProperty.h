@@ -50,7 +50,7 @@ namespace Editor
 
 	protected:
 		Widget* mBox = nullptr;      // Property edit box
-		Text*     mNameText = nullptr; // Asset name text
+		Text*   mNameText = nullptr; // Asset name text
 
 	protected:
 		// Copies data of actor from other to this

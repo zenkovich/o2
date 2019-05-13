@@ -20,6 +20,7 @@ namespace o2
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
 		GETTER(FontRef, font, GetFont);   // Font getter
 
+	public:
         // Destructor
 		~FontAsset();
 

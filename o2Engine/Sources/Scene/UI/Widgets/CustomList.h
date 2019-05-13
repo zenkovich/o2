@@ -10,7 +10,7 @@ namespace o2
 	// -------------------------------
 	// List view widget with selection
 	// -------------------------------
-	class CustomList: public ScrollArea, public DrawableCursorEventsListener
+	class CustomList : public ScrollArea, public DrawableCursorEventsListener
 	{
 	public:
 		PROPERTIES(CustomList);
@@ -19,9 +19,11 @@ namespace o2
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPos);         // Selected item position property
 		GETTER(int, itemsCount, GetItemsCount);                                   // All items count getter
 
+	public:
 		Function<void(int)>       onSelectedPos;   // Select item position event
 		Function<void(Widget*)> onSelectedItem;  // Select item event
 
+	public:
 		// Default constructor
 		CustomList();
 
@@ -151,25 +153,26 @@ namespace o2
 		typedef Vector<Selection> SelectionsVec;
 		typedef Vector<Sprite*> SpritesVec;
 
-		VerticalLayout* mVerLayout = nullptr;                     // Child vertical layout
-		Widget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+	protected:
+		VerticalLayout* mVerLayout = nullptr;  // Child vertical layout
+		Widget*         mItemSample = nullptr; // Item sample widget @SERIALIZABLE
 
-		bool              mMultiSelection = true;                   // Is multi selection available @SERIALIZABLE
-		SelectionsVec     mSelectedItems;                           // Current selected items
+		bool          mMultiSelection = true; // Is multi selection available @SERIALIZABLE
+		SelectionsVec mSelectedItems;         // Current selected items
 
-		Sprite*           mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
-		Sprite*           mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
+		Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
+		Sprite* mHoverDrawable = nullptr;     // Item hover drawable @SERIALIZABLE
 
-		Layout            mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
-		Layout            mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
+		Layout mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Layout mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
 
-		RectF             mCurrentHoverRect;                        // Current hover rectangle (for smoothing)
-		RectF             mTargetHoverRect;                         // Target hover rectangle (over selected item)
+		RectF mCurrentHoverRect; // Current hover rectangle (for smoothing)
+		RectF mTargetHoverRect;  // Target hover rectangle (over selected item)
 
-		Vec2F             mLastHoverCheckCursor;                    // Last cursor position on hover check
-		Vec2F             mLastSelectCheckCursor;                   // Last cursor position on selection check
+		Vec2F mLastHoverCheckCursor;  // Last cursor position on hover check
+		Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-		SpritesVec        mSelectionSpritesPool;                    // Selection sprites pool
+		SpritesVec mSelectionSpritesPool; // Selection sprites pool
 
 	protected:
 		// Copies data of actor from other to this

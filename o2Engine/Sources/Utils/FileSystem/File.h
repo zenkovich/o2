@@ -17,14 +17,6 @@ namespace o2
 	// ----------
 	class InFile
 	{
-		std::ifstream mIfstream; // Input stream
-		String        mFilename; // File name
-		bool          mOpened;   // True, if file was opened
-
-#ifdef PLATFORM_ANDROID
-        AAsset* mAsset = nullptr;
-#endif
-
 	public:
 		// Default constructor
 		InFile();
@@ -64,6 +56,15 @@ namespace o2
 
 		// Return file name
 		const String& GetFilename() const;
+
+	private:
+		std::ifstream mIfstream; // Input stream
+		String        mFilename; // File name
+		bool          mOpened;   // True, if file was opened
+
+#ifdef PLATFORM_ANDROID
+		AAsset* mAsset = nullptr;
+#endif
 	};
 
 	// -----------
@@ -71,10 +72,6 @@ namespace o2
 	// -----------
 	class OutFile
 	{
-		std::ofstream mOfstream; // Output stream
-		String        mFilename; // File name
-		bool          mOpened;   // True, if file was opened
-
 	public:
 		// Default constructor
 		OutFile();
@@ -99,5 +96,10 @@ namespace o2
 
 		// Returns file name
 		const String& GetFilename() const;
+
+	private:
+		std::ofstream mOfstream; // Output stream
+		String        mFilename; // File name
+		bool          mOpened;   // True, if file was opened
 	};
 }

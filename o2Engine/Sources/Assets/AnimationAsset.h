@@ -20,8 +20,10 @@ namespace o2
 		PROPERTIES(AnimationAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
 
+	public:
 		Animation animation; // Asset data
 
+	public:
 		// Destructor
 		~AnimationAsset();
 

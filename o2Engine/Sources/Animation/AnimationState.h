@@ -21,6 +21,7 @@ namespace o2
 		float         weight;     // State weight @SERIALIZABLE
 		float         workWeight; // State working weight, using for blendings
 
+	public:
 		// Default constructor
 		AnimationState();
 

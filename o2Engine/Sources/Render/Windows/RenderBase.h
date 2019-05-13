@@ -14,8 +14,8 @@ namespace o2
 	class RenderBase
 	{
 	protected:
-		HGLRC   mGLContext;                // OpenGL context
-		HDC     mHDC;                      // Windows frame device context
+		HGLRC mGLContext; // OpenGL context
+		HDC   mHDC;       // Windows frame device context
 
 		UInt8*  mVertexData;               // Vertex data buffer
 		UInt16* mVertexIndexData;          // Index data buffer

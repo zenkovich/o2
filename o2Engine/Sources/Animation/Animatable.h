@@ -79,6 +79,7 @@ namespace o2
 		// Stops all states
 		void StopAll();
 
+
 		SERIALIZABLE(Animatable);
 
 	protected:
@@ -87,10 +88,11 @@ namespace o2
 		// -------------------------------
 		struct IValueAgent
 		{
-			virtual ~IValueAgent() {}
-
 			// Value path
 			String path;
+
+		public:
+			virtual ~IValueAgent() {}
 
 			// Updates value and blend
 			virtual void Update() = 0;
@@ -111,9 +113,11 @@ namespace o2
 		{
 			typedef Dictionary<AnimationState*, AnimatedValue<_type>*> AnimatedValuesDict;
 
+		public:
 			AnimatedValuesDict  animValues; // Animated values associated with animation states
 			IValueProxy<_type>* target;     // Target value proxy
 
+		public:
 			// Updates value and blend
 			void Update();
 
@@ -153,6 +157,7 @@ namespace o2
 		// Registers value by path and state
 		template<typename _type>
 		void RegAnimatedValue(AnimatedValue< _type >* value, const String& path, AnimationState* state);
+
 
 		friend class Animation;
 		friend class IAnimatedValue;

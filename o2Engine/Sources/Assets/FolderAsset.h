@@ -17,6 +17,7 @@ namespace o2
 		GETTER(MetaInfo*, meta, GetMeta);                              // Meta information getter
 		GETTER(AssetInfosVec, insideAssets, GetContainingAssetsInfos); // Inside assets infos getter
 
+	public:
 		// Destructor
 		~FolderAsset();
 

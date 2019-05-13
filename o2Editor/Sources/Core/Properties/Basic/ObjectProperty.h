@@ -82,13 +82,14 @@ namespace Editor
 		};
 		typedef Vector<Pair<TargetObjectData, TargetObjectData>> TargetObjectsVec;
 
-		const Type*              mObjectType = nullptr;             // Type of target objects
+	protected:
+		const Type* mObjectType = nullptr; // Type of target objects
 							     								    
 		bool                     mPropertiesInitialized = false;    // True when properties were built and initialized
 		TargetObjectsVec         mTargetObjects;                    // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
-		Spoiler*               mSpoiler = nullptr;                // Properties spoiler
+		Spoiler* mSpoiler = nullptr; // Properties spoiler
 
 	protected:
 		// Copies data of actor from other to this

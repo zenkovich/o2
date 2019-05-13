@@ -102,12 +102,27 @@ namespace o2
 		return Math::Lerp(begs.y, ends.y, coef);
 	}
 
+	void Curve::BeginKeysBatchChange()
+	{
+		mBatchChange = true;
+	}
+
+	void Curve::CompleteKeysBatchingChange()
+	{
+		UpdateApproximation();
+		mBatchChange = false;
+		mChangedKeys = false;
+	}
+
 	void Curve::MoveKeys(float offset)
 	{
 		for (auto& key : mKeys)
 			key.position += offset;
 
-		UpdateApproximation();
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	void Curve::MoveKeysFrom(float begin, float offset)
@@ -118,7 +133,10 @@ namespace o2
 				key.position += offset;
 		}
 
-		UpdateApproximation();
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	void Curve::AppendCurve(const Curve& curve)
@@ -159,7 +177,11 @@ namespace o2
 		}
 
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	void Curve::PrependKeys(Vector<Vec2F> values, bool smooth /*= true*/)
@@ -185,7 +207,11 @@ namespace o2
 		mKeys.Insert(keys, 0);
 
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	void Curve::InsertKeys(Vector<Vec2F> values, float position, bool smooth /*= true*/)
@@ -223,7 +249,11 @@ namespace o2
 			mKeys[i].position += offset;
 
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	int Curve::InsertKey(const Key& key)
@@ -242,7 +272,11 @@ namespace o2
 		mKeys.Insert(key, pos);
 
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return pos;
 	}
@@ -269,7 +303,10 @@ namespace o2
 		mKeys.Insert(Key(position, value, value, 1.0f, value, 0.0f), pos);
 		SmoothKey(position, smooth);
 
-		UpdateApproximation();
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return pos;
 	}
@@ -299,7 +336,11 @@ namespace o2
 		mKeys.Insert(Key(position, value, value, leftSupport, value, rightSupport), pos);
 
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return pos;
 	}
@@ -314,7 +355,11 @@ namespace o2
 
 		mKeys.Add(newKey);
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return mKeys.Count() - 1;
 	}
@@ -326,7 +371,11 @@ namespace o2
 
 		mKeys.Add(newKey);
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return mKeys.Count() - 1;
 	}
@@ -338,7 +387,11 @@ namespace o2
 
 		mKeys.Add(newKey);
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return mKeys.Count() - 1;
 	}
@@ -358,7 +411,11 @@ namespace o2
 
 		mKeys.Add(newKey);
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return 0;
 	}
@@ -375,7 +432,11 @@ namespace o2
 
 		mKeys.Add(newKey);
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return 0;
 	}
@@ -392,7 +453,11 @@ namespace o2
 
 		mKeys.Add(newKey);
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 
 		return 0;
 	}
@@ -421,7 +486,12 @@ namespace o2
 			if (Math::Equals(mKeys[i].position, position))
 			{
 				mKeys.RemoveAt(i);
-				UpdateApproximation();
+
+				if (mBatchChange)
+					mChangedKeys = true;
+				else
+					UpdateApproximation();
+
 				return true;
 			}
 		}
@@ -435,7 +505,12 @@ namespace o2
 			return false;
 
 		mKeys.RemoveAt(idx);
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
+
 		return true;
 	}
 
@@ -463,7 +538,11 @@ namespace o2
 	{
 		mKeys = keys;
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	void Curve::SetKey(const Key& key, int position)
@@ -473,7 +552,11 @@ namespace o2
 
 		mKeys[position] = key;
 		CheckSmoothKeys();
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	void Curve::SmoothKey(float position, float smoothCoef)
@@ -495,7 +578,11 @@ namespace o2
 	void Curve::SmoothKeyAt(int idx, float smoothCoef)
 	{
 		InternalSmoothKeyAt(idx, smoothCoef);
-		UpdateApproximation();
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	float Curve::Length() const

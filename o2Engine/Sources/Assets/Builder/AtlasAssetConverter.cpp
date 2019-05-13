@@ -263,18 +263,18 @@ namespace o2
 		AssetInfosVec atlasImagesInfos;
 		for (auto imgDef : packImages)
 		{
-			imgDef.mPackRect->mRect.left += imagesBorder;
-			imgDef.mPackRect->mRect.right -= imagesBorder;
-			imgDef.mPackRect->mRect.top -= imagesBorder;
-			imgDef.mPackRect->mRect.bottom += imagesBorder;
+			imgDef.mPackRect->rect.left += imagesBorder;
+			imgDef.mPackRect->rect.right -= imagesBorder;
+			imgDef.mPackRect->rect.top -= imagesBorder;
+			imgDef.mPackRect->rect.bottom += imagesBorder;
 
 			atlasImagesInfos.Add(AssetInfo(imgDef.mAssetInfo->path, imgDef.mAssetInfo->meta->ID(), &TypeOf(ImageAsset)));
 
-			resAtlasBitmaps[imgDef.mPackRect->mPage]->CopyImage(imgDef.mBitmap,
-																imgDef.mPackRect->mRect.LeftBottom());
+			resAtlasBitmaps[imgDef.mPackRect->page]->CopyImage(imgDef.mBitmap,
+																imgDef.mPackRect->rect.LeftBottom());
 
-			resAtlasPages[imgDef.mPackRect->mPage].mImagesRects.Add(imgDef.mAssetInfo->meta->ID(),
-																	imgDef.mPackRect->mRect);
+			resAtlasPages[imgDef.mPackRect->page].mImagesRects.Add(imgDef.mAssetInfo->meta->ID(),
+																	imgDef.mPackRect->rect);
 
 			SaveImageAsset(imgDef);
 		}
@@ -302,8 +302,8 @@ namespace o2
 	void AtlasAssetConverter::SaveImageAsset(ImagePackDef& imgDef)
 	{
 		DataNode imgData;
-		imgData["mAtlasPage"] = imgDef.mPackRect->mPage;
-		imgData["mAtlasRect"] = (RectI)(imgDef.mPackRect->mRect);
+		imgData["mAtlasPage"] = imgDef.mPackRect->page;
+		imgData["mAtlasRect"] = (RectI)(imgDef.mPackRect->rect);
 		String imageFullPath = mAssetsBuilder->mBuiltAssetsPath + imgDef.mAssetInfo->path;
 		imgData.SaveToFile(imageFullPath);
 		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.mAssetInfo->time);

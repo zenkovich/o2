@@ -20,7 +20,7 @@ namespace o2
 		for (auto& val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
-			def.mAnimatedValue = val.mAnimatedValue->CloneAs<IAnimatedValue>();
+			def.animatedValue = val.animatedValue->CloneAs<IAnimatedValue>();
 			mAnimatedValues.Add(def);
 
 			OnAnimatedValueAdded(def);
@@ -43,8 +43,8 @@ namespace o2
 		for (auto& val : other.mAnimatedValues)
 		{
 			AnimatedValueDef def(val);
-			def.mAnimatedValue = val.mAnimatedValue->CloneAs<IAnimatedValue>();
-			def.mAnimatedValue->onKeysChanged = THIS_FUNC(RecalculateDuration);
+			def.animatedValue = val.animatedValue->CloneAs<IAnimatedValue>();
+			def.animatedValue->onKeysChanged = THIS_FUNC(RecalculateDuration);
 
 			if (mTarget)
 			{
@@ -54,16 +54,16 @@ namespace o2
 					FieldInfo* fieldInfo = nullptr;
 					const ObjectType* type = dynamic_cast<const ObjectType*>(&targetObj->GetType());
 					void* castedTarget = type->DynamicCastFromIObject(targetObj);
-					def.mTargetPtr = type->GetFieldPtr(castedTarget, def.mTargetPath, fieldInfo);
+					def.targetPtr = type->GetFieldPtr(castedTarget, def.targetPath, fieldInfo);
 
 					if (!fieldInfo)
-						o2Debug.LogWarning("Can't find object " + def.mTargetPath + "for animating");
+						o2Debug.LogWarning("Can't find object " + def.targetPath + "for animating");
 					else
 					{
 						if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-							def.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.mTargetPtr));
+							def.animatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.targetPtr));
 						else
-							def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
+							def.animatedValue->SetTargetVoid(def.targetPtr);
 					}
 				}
 			}
@@ -89,19 +89,19 @@ namespace o2
 				FieldInfo* fieldInfo = nullptr;
 				const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
 				void* castedTarget = type->DynamicCastFromIObject(mTarget);
-				val.mTargetPtr = type->GetFieldPtr(castedTarget, val.mTargetPath, fieldInfo);
+				val.targetPtr = type->GetFieldPtr(castedTarget, val.targetPath, fieldInfo);
 
 				if (!fieldInfo)
 				{
 					if (errors)
-						o2Debug.LogWarning("Can't find object " + val.mTargetPath + "for animating");
+						o2Debug.LogWarning("Can't find object " + val.targetPath + "for animating");
 				}
 				else
 				{
 					if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-						val.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(val.mTargetPtr));
+						val.animatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(val.targetPtr));
 					else
-						val.mAnimatedValue->SetTargetVoid(val.mTargetPtr);
+						val.animatedValue->SetTargetVoid(val.targetPtr);
 				}
 			}
 		}
@@ -109,8 +109,8 @@ namespace o2
 		{
 			for (auto& val : mAnimatedValues)
 			{
-				val.mTargetPtr = nullptr;
-				val.mAnimatedValue->SetTargetVoid(val.mTargetPtr);
+				val.targetPtr = nullptr;
+				val.animatedValue->SetTargetVoid(val.targetPtr);
 			}
 		}
 	}
@@ -124,8 +124,8 @@ namespace o2
 	{
 		for (auto& val : mAnimatedValues) 
 		{
-			val.mAnimatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
-			delete val.mAnimatedValue;
+			val.animatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
+			delete val.animatedValue;
 		}
 
 		mAnimatedValues.Clear();
@@ -145,9 +145,9 @@ namespace o2
 	{
 		for (auto& val : mAnimatedValues)
 		{
-			if (val.mTargetPath == path)
+			if (val.targetPath == path)
 			{
-				delete val.mAnimatedValue;
+				delete val.animatedValue;
 				mAnimatedValues.Remove(val);
 				return true;
 			}
@@ -159,7 +159,7 @@ namespace o2
 	void Animation::Evaluate()
 	{
 		for (auto& val : mAnimatedValues)
-			val.mAnimatedValue->ForceSetTime(mInDurationTime, mDuration);
+			val.animatedValue->ForceSetTime(mInDurationTime, mDuration);
 	}
 
 	void Animation::RecalculateDuration()
@@ -168,7 +168,7 @@ namespace o2
 		mDuration = 0.0f;
 
 		for (auto& val : mAnimatedValues)
-			mDuration = Math::Max(mDuration, val.mAnimatedValue->mDuration);
+			mDuration = Math::Max(mDuration, val.animatedValue->mDuration);
 
 		if (Math::Equals(lastDuration, mEndTime))
 			mEndTime = mDuration;
@@ -180,7 +180,7 @@ namespace o2
 	void Animation::OnDeserialized(const DataNode& node)
 	{
 		for (auto& val : mAnimatedValues)
-			val.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
+			val.animatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 		RecalculateDuration();
 		mEndTime = mDuration;
@@ -189,12 +189,12 @@ namespace o2
 	void Animation::OnAnimatedValueAdded(AnimatedValueDef& valueDef)
 	{
 		if (mAnimationState)
-			valueDef.mAnimatedValue->RegInAnimatable(mAnimationState, valueDef.mTargetPath);
+			valueDef.animatedValue->RegInAnimatable(mAnimationState, valueDef.targetPath);
 	}
 
 	bool Animation::AnimatedValueDef::operator==(const AnimatedValueDef& other) const
 	{
-		return mAnimatedValue == other.mAnimatedValue;
+		return animatedValue == other.animatedValue;
 	}
 }
 

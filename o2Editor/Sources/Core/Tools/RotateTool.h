@@ -28,6 +28,7 @@ namespace Editor
 	public:
 		float angleSnapStep = 15.0f; // Rotation angle step in degree
 
+	public:
 		// Default constructor
 		RotateTool();
 
@@ -39,27 +40,27 @@ namespace Editor
 		IOBJECT(RotateTool);
 
 	protected:
-		const float      mRotateRingInsideRadius = 60;						   // Rotate ring inside radius in pixels
-		const float      mRotateRingOutsideRadius = 100;						   // Rotate ring outside radius in pixels
-		const int        mRotateRingSegs = 50;								   // Rotate ring segments
-		const Color4     mRotateRingsColor = Color4(220, 220, 220, 255);		   // Rotate ring border color
-		const Color4     mRotateRingsFillColor = Color4(220, 220, 220, 50);	   // Rotate ring color 1
-		const Color4     mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
-		const Color4     mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
-		const Color4     mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
+		const float  mRotateRingInsideRadius = 60;						   // Rotate ring inside radius in pixels
+		const float  mRotateRingOutsideRadius = 100;						   // Rotate ring outside radius in pixels
+		const int    mRotateRingSegs = 50;								   // Rotate ring segments
+		const Color4 mRotateRingsColor = Color4(220, 220, 220, 255);		   // Rotate ring border color
+		const Color4 mRotateRingsFillColor = Color4(220, 220, 220, 50);	   // Rotate ring color 1
+		const Color4 mRotateRingsFillColor2 = Color4(220, 220, 220, 100);   // Rotate ring color 2
+		const Color4 mRotateMeshClockwiseColor = Color4(211, 87, 40, 100);  // Rotate angle clockwise rotation color
+		const Color4 mRotateMeshCClockwiseColor = Color4(87, 211, 40, 100); // Rotate angle counter clockwise rotation color
 						 
-		Mesh*            mRotateRingFillMesh = nullptr; // Rotate ring mesh
-		Mesh*            mAngleMesh = nullptr;          // Rotation angle mesh
-		Vec2F            mScenePivot;				    // Rotation pivot in scene space
+		Mesh* mRotateRingFillMesh = nullptr; // Rotate ring mesh
+		Mesh* mAngleMesh = nullptr;          // Rotation angle mesh
+		Vec2F mScenePivot;				    // Rotation pivot in scene space
 						 							   
-		SceneDragHandle  mPivotDragHandle;			    // Pivot drag handle
-		float            mPressAngle;				    // Angle at cursor pressing
-		float            mCurrentRotateAngle;		    // Current rotation angle
-		bool             mRingPressed = false;		    // Is rotate ring was pressed
-		float            mSnapAngleAccumulated = 0.0f;  // Snapping angle accumulated
+		SceneDragHandle  mPivotDragHandle;			   // Pivot drag handle
+		float            mPressAngle;				   // Angle at cursor pressing
+		float            mCurrentRotateAngle;		   // Current rotation angle
+		bool             mRingPressed = false;		   // Is rotate ring was pressed
+		float            mSnapAngleAccumulated = 0.0f; // Snapping angle accumulated
 						 
-		BasisVec         mBeforeTransforms;  		    // Array of objects' transformations before changing
-		TransformAction* mTransformAction = nullptr;    // Current transform action. Creates when transform started
+		BasisVec         mBeforeTransforms;  		 // Array of objects' transformations before changing
+		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
 	public:
 		// Updates tool

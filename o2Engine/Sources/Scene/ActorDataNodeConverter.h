@@ -28,6 +28,7 @@ namespace o2
 			UInt64  actorId;
 			UID     assetId;
 
+		public:
 			ActorDef() {}
 
 			ActorDef(Actor** target, UInt64 id) :

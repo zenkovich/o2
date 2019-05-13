@@ -63,12 +63,12 @@ namespace o2
 		Vec2F GetCursorPressedPoint() const;
 
 	protected:
-		bool          mIsDragging = false;           // True when dragging
-		float         mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
-		Vec2F         mPressedCursorPos;             // Cursor pressed position
-		int           mPressedCursorId;              // Id of pressed cursor
+		bool  mIsDragging = false;           // True when dragging
+		float mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
+		Vec2F mPressedCursorPos;             // Cursor pressed position
+		int   mPressedCursorId;              // Id of pressed cursor
 
-		DragDropArea* mDragDropArea = nullptr;       // Drag drop area under this when dragging
+		DragDropArea* mDragDropArea = nullptr; // Drag drop area under this when dragging
 
 	protected:
 		// It is called when cursor pressed on this

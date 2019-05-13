@@ -14,6 +14,7 @@ namespace o2
 	public:
 		Dictionary<String, float> weights; // Masked nodes weights @SERIALIZABLE
 
+	public:
 		// Returns node masked weight. 1.0f is default
 		float GetNodeWeight(const String& node) const;
 

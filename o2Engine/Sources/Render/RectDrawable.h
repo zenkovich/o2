@@ -18,6 +18,7 @@ namespace o2
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property
 
+	public:
 		// Constructor
 		IRectDrawable(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f, 
 					  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Color4& color = Color4::White(), 
@@ -29,7 +30,6 @@ namespace o2
 		// Virtual destructor
 		virtual ~IRectDrawable() {}
 
-
 		// Assign operator
 		IRectDrawable& operator=(const IRectDrawable& other);
 
@@ -39,10 +39,8 @@ namespace o2
 		// Not equals operator
 		bool operator!=(const IRectDrawable& other) const;
 
-
 		// Drawing
 		virtual void Draw() override {}
-
 
 		// Sets color
 		virtual void SetColor(const Color4& color);
@@ -50,13 +48,11 @@ namespace o2
 		// Returns color
 		virtual Color4 GetColor() const;
 
-
 		// Sets transparency. Changing color alpha
 		virtual void SetTransparency(float transparency);
 
 		// Returns transparency(color alpha)
 		virtual float GetTransparency() const;
-
 
 		// Sets enabled
 		virtual void SetEnabled(bool enabled);
@@ -64,10 +60,8 @@ namespace o2
 		// Returns enabled
 		virtual bool IsEnabled() const;
 
-
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
-
 
 		SERIALIZABLE(IRectDrawable);
 

@@ -26,6 +26,7 @@ namespace o2
 		GETTER(Vector<AssetRef>, images, GetImagesAssets); // Images assets getter
 		GETTER(PagesVec, pages, GetPages);                 // Pages getter
 
+	public:
 		// Destructor
 		~AtlasAsset();
 

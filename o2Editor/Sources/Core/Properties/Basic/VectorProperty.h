@@ -84,11 +84,12 @@ namespace Editor
 
 		typedef Vector<IPropertyField*> PropertyFieldsVec;
 
-		const VectorType* mType = nullptr;             // Vector type
+	protected:
+		const VectorType* mType = nullptr; // Vector type
 
-		Spoiler*        mSpoiler;                    // Properties spoiler
+		Spoiler* mSpoiler; // Properties spoiler
 
-		TargetObjectsVec  mTargetObjects;              // Target objects
+		TargetObjectsVec  mTargetObjects; // Target objects
 						 						    
 		PropertyFieldsVec mValueProperties;            // Values properties
 		PropertyFieldsVec mValuePropertiesPool;        // Unused value properties pool

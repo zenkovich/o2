@@ -53,27 +53,28 @@ namespace Editor
 		};
 
 	protected:
-		Vector<ImageAssetRef*>        mTargetAssets;
+		Vector<ImageAssetRef*> mTargetAssets;
 								      
-		VerticalLayout*               mContent = nullptr;
+		VerticalLayout* mContent = nullptr;
 								      
-		Widget*                       mPreviewImageContent;
-		PreviewImage*                 mPreviewImage = nullptr;
-		Image*                        mPreviewImageBack = nullptr;
+		Widget*       mPreviewImageContent;
+		PreviewImage* mPreviewImage = nullptr;
+		Image*        mPreviewImageBack = nullptr;
 								      
-		WidgetDragHandle*             mBorderLeftHandle;
-		WidgetDragHandle*             mBorderRightHandle;
-		WidgetDragHandle*             mBorderTopHandle;
-		WidgetDragHandle*             mBorderBottomHandle;
-		BorderF                       mBordersSmoothValue;
-								      
-		BorderIProperty*              mBorderProperty = nullptr;
-		EnumProperty*                 mDefaultTypeProperty = nullptr;
+		WidgetDragHandle* mBorderLeftHandle;
+		WidgetDragHandle* mBorderRightHandle;
+		WidgetDragHandle* mBorderTopHandle;
+		WidgetDragHandle* mBorderBottomHandle;
+		BorderF           mBordersSmoothValue;
+
 		AssetProperty<AtlasAssetRef>* mAtlasProperty = nullptr;
-		ObjectProperty*               mWindowsProperties = nullptr;
-		ObjectProperty*               mOSXProperties = nullptr;
-		ObjectProperty*               mAndroidProperties = nullptr;
-		ObjectProperty*               mIOSProperties = nullptr;
+
+		BorderIProperty* mBorderProperty = nullptr;
+		EnumProperty*    mDefaultTypeProperty = nullptr;
+		ObjectProperty*  mWindowsProperties = nullptr;
+		ObjectProperty*  mOSXProperties = nullptr;
+		ObjectProperty*  mAndroidProperties = nullptr;
+		ObjectProperty*  mIOSProperties = nullptr;
 
 	protected:
 		// Initializes image preview widgets and border handles
@@ -122,9 +123,9 @@ CLASS_FIELDS_META(Editor::ImageAssetPropertiesViewer)
 	PROTECTED_FIELD(mBorderTopHandle);
 	PROTECTED_FIELD(mBorderBottomHandle);
 	PROTECTED_FIELD(mBordersSmoothValue);
+	PROTECTED_FIELD(mAtlasProperty);
 	PROTECTED_FIELD(mBorderProperty);
 	PROTECTED_FIELD(mDefaultTypeProperty);
-	PROTECTED_FIELD(mAtlasProperty);
 	PROTECTED_FIELD(mWindowsProperties);
 	PROTECTED_FIELD(mOSXProperties);
 	PROTECTED_FIELD(mAndroidProperties);

@@ -61,7 +61,6 @@ namespace o2
 		// Copy-operator
 		WidgetLayer& operator=(const WidgetLayer& other);
 
-
 		// Returns pointer to owner widget
 		Widget* GetOwnerWidget() const;
 
@@ -71,10 +70,8 @@ namespace o2
 		// Returns layer drawable
 		IRectDrawable* GetDrawable() const;
 
-
 		// Draws drawable
 		void Draw();
-
 
 		// Returns is layer enabled
 		bool IsEnabled() const override;
@@ -85,17 +82,14 @@ namespace o2
 		// Sets enabling of layer
 		void SetEnabled(bool enabled) override;
 
-
 		// Updates drawable and layout
 		void Update(float dt);
-
 
 		// Sets parent layer
 		void SetParent(WidgetLayer* parent);
 
 		// Returns parent layer
 		WidgetLayer* GetParent() const;
-
 
 		// Adds new child layer and returns him
 		WidgetLayer* AddChild(WidgetLayer* node);
@@ -129,13 +123,11 @@ namespace o2
 		// Returns all child layers
 		LayersVec GetAllChilds() const;
 
-
 		// Sets depth
 		void SetDepth(float depth);
 
 		// Returns depth
 		float GetDepth() const;
-
 
 		// Sets transparency and updates this and children result transparencies
 		void SetTransparency(float transparency);
@@ -146,13 +138,11 @@ namespace o2
 		// Returns result transparency
 		float GetResTransparency() const;
 
-
 		// Returns true if layer is under point
 		bool IsUnderPoint(const Vec2F& point);
 
 		// Returns layout rectangle
 		const RectF& GetRect() const;
-
 
 		SERIALIZABLE(WidgetLayer);
 
@@ -166,13 +156,11 @@ namespace o2
 		// Generates new random id 
 		void GenerateNewID(bool childs = true) override;
 
-
 		// Returns name of object
 		String GetName() const override;
 
 		// Sets name of object
 		void SetName(const String& name) override;
-
 
 		// Returns list of object's children
 		Vector<SceneEditableObject*> GetEditablesChildren() const override;
@@ -192,10 +180,8 @@ namespace o2
 		// Checks that this object can be added as child to another object
 		bool CanBeParentedTo(const Type& parentType) override;
 
-
 		// Returns is that type of object can be enabled and disabled
 		bool IsSupportsDisabling() const override;
-
 
 		// Returns is that type of object can be locked
 		bool IsSupportsLocking() const override;
@@ -209,7 +195,6 @@ namespace o2
 		// Sets locking of object, override when it's supports
 		void SetLocked(bool locked) override;
 
-
 		// Returns is that type of object can be transformed
 		bool IsSupportsTransforming() const override;
 
@@ -222,7 +207,6 @@ namespace o2
 		// Updates transform immediately
 		void UpdateTransform();
 
-
 		// Returns is object supports pivot 
 		bool IsSupportsPivot() const override;
 
@@ -231,7 +215,6 @@ namespace o2
 
 		// Returns transform pivot
 		Vec2F GetPivot() const override;
-
 
 		// Returns is that type of object can be transformed with layout
 		bool IsSupportsLayout() const override;
@@ -242,35 +225,34 @@ namespace o2
 		// Sets layout of object, override when it's supports
 		void SetLayout(const Layout& layout) override;
 
-
 		// It is called when something changed in this object
 		void OnChanged() override;
 
 #endif // IS_EDITOR
 
 	protected:
-		IRectDrawable* mDrawable;               // Drawable @SERIALIZABLE
+		IRectDrawable* mDrawable; // Drawable @SERIALIZABLE
 
-		bool           mEnabled = true;         // Is layer enabled
+		bool mEnabled = true; // Is layer enabled
 
-		float          mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
-		float          mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
+		float mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
+		float mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
 
-		float          mDepth = 0.0f;           // Depth of drawable @SERIALIZABLE
+		float mDepth = 0.0f; // Depth of drawable @SERIALIZABLE
 
-		RectF          mAbsolutePosition;       // Result absolute drawable position
-		RectF          mInteractableArea;       // Interactable area, depends on interactableLayout
+		RectF mAbsolutePosition; // Result absolute drawable position
+		RectF mInteractableArea; // Interactable area, depends on interactableLayout
 
-		Widget*        mOwnerWidget = nullptr;  // Owner widget pointer @EXCLUDE_POINTER_SEARCH
+		Widget* mOwnerWidget = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 
-		WidgetLayer*   mParent = nullptr;       // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
-		ChildrenVec    mChildren;               // Children layers @SERIALIZABLE
+		WidgetLayer*  mParent = nullptr; // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
+		ChildrenVec   mChildren;         // Children layers @SERIALIZABLE
 
-		bool           mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
+		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
 #if IS_EDITOR
-		bool           mIsLocked = false;       // Is locked
-		SceneUID       mUID = Math::Random();   // Scene editor uid // @SERIALIZABLE
+		bool     mIsLocked = false;     // Is locked
+		SceneUID mUID = Math::Random(); // Scene editor uid // @SERIALIZABLE
 #endif 
 
 	protected:

@@ -59,12 +59,12 @@ namespace Editor
 	protected:
 		typedef Vector<IPropertiesViewer*> PropViewersVec;
 
-		Vector<IObject*>         mTargets;                    // Target objects
-		IPropertiesViewer* mCurrentViewer = nullptr;    // Current properties viewer
-		PropViewersVec           mViewers;                    // All available object types viewers
+		Vector<IObject*>   mTargets;                 // Target objects
+		IPropertiesViewer* mCurrentViewer = nullptr; // Current properties viewer
+		PropViewersVec     mViewers;                 // All available object types viewers
 
-		Function<void()>         mOnTargetsChangedDelegate;   // It is called when targets array changing
-		bool                     mTargetsChanged = false;     // True when targets was changed    
+		Function<void()> mOnTargetsChangedDelegate; // It is called when targets array changing
+		bool             mTargetsChanged = false;   // True when targets was changed    
 
 	protected:
 		// Initializes window

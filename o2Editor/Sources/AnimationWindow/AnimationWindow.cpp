@@ -46,8 +46,9 @@ namespace Editor
 
 		mPlayPauseToggle->SetValue(false);
 
+		mHandlesSheet->SetAnimation(animation);
 		mTimeline->SetAnimation(animation);
-		mTree->SetAnimation(animation, mTimeline, mHandlesSheet);
+		mTree->SetAnimation(animation);
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -61,24 +62,26 @@ namespace Editor
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
+		InitializeUpPanel();
+		InitializeTimeline();
+
 		mWorkArea = mnew Widget();
 		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 18);
 		mWindow->AddChild(mWorkArea);
 
-		InitializeUpPanel();
-		InitializeTimeline();
-		InitializeTree();
 		InitializeHandlesSheet();
+		InitializeTree();
 		InitializeSeparatorHandle();
+
+		mHandlesSheet->Initialize(mTimeline, mTree);
+		mTree->Initialize(mTimeline, mHandlesSheet);
 	}
 
 	void AnimationWindow::InitializeHandlesSheet()
 	{
 		mHandlesSheet = mnew KeyHandlesSheet();
-		*mHandlesSheet->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 18);
-		mHandlesSheet->SetTimeline(mTimeline);
-		mHandlesSheet->SetTree(mTree);
-		mWindow->AddChild(mHandlesSheet);
+		*mHandlesSheet->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
+		mWorkArea->AddChild(mHandlesSheet);
 	}
 
 	void AnimationWindow::InitializeTree()

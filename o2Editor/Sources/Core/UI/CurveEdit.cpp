@@ -52,7 +52,7 @@ namespace Editor
 	{
 		mReady = false;
 
-		mContextMenu = FindChildByType<UIContextMenu>();
+		mContextMenu = FindChildByType<ContextMenu>();
 		if (mContextMenu)
 			delete mContextMenu;
 
@@ -290,31 +290,31 @@ namespace Editor
 
 	void CurveEditor::InitializeContextMenu()
 	{
-		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
+		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
 		mContextMenu->AddItems({
-			UIContextMenu::Item("Edit", THIS_FUNC(OnEditPressed), ImageAssetRef()),
+			ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed), ImageAssetRef()),
 
-			UIContextMenu::Item::Separator(),
+			ContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
-			UIContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
-			UIContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
-			UIContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
-			UIContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
+			ContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
+			ContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
+			ContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
+			ContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
+			ContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
 
-			UIContextMenu::Item::Separator(),
+			ContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), ImageAssetRef(), ShortcutKeys('C', true)),
-			UIContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), ImageAssetRef(), ShortcutKeys('X', true)),
-			UIContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), ImageAssetRef(), ShortcutKeys('V', true)),
-			UIContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), ImageAssetRef(), ShortcutKeys(VK_DELETE)),
-			UIContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed), ImageAssetRef()),
+			ContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), ImageAssetRef(), ShortcutKeys('C', true)),
+			ContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), ImageAssetRef(), ShortcutKeys('X', true)),
+			ContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), ImageAssetRef(), ShortcutKeys('V', true)),
+			ContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			ContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed), ImageAssetRef()),
 
-			UIContextMenu::Item::Separator(),
+			ContextMenu::Item::Separator(),
 
-			UIContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), ImageAssetRef(), ShortcutKeys('Z', true)),
-			UIContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), ImageAssetRef(), ShortcutKeys('Z', true, true))
+			ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), ImageAssetRef(), ShortcutKeys('Z', true)),
+			ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), ImageAssetRef(), ShortcutKeys('Z', true, true))
 		});
 
 		onShow = [&]() { mContextMenu->SetItemsMaxPriority(); };

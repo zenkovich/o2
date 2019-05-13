@@ -23,6 +23,7 @@ namespace o2
 		GETTER(UID, id, GetAssetId);              // Asset id getter
 		GETTER(IMetaInfo*, meta, GetMeta);        // Asset meta information pointer getter
 
+	public:
 		// Virtual destructor
 		virtual ~Asset();
 

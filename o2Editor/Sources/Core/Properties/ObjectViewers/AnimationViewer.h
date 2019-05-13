@@ -29,7 +29,7 @@ namespace Editor
 		IOBJECT(AnimationViewer);
 
 	private:
-		Button* mEditButton = nullptr;
+		Button*    mEditButton = nullptr;
 		Animation* mCurrentAnimation = nullptr;
 
 	private:

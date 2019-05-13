@@ -18,6 +18,7 @@ namespace o2
 		PROPERTIES(ActorAsset);
 		GETTER(MetaInfo*, meta, GetMeta);  // Meta information getter
 
+	public:
 		// Destructor
 		~ActorAsset();
 

@@ -66,7 +66,6 @@ namespace Editor
 			SERIALIZABLE(ProjectConfig);
 		};
 	protected:
-
 		String mConfigPath = "EditorConfig.xml";
 		String mGlobalConfigPath = "Config.xml";
 

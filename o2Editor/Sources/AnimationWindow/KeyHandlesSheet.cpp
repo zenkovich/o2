@@ -4,6 +4,8 @@
 #include "Scene/UI/WidgetLayout.h"
 #include "Timeline.h"
 #include "Tree.h"
+#include "Animation/AnimatedValue.h"
+#include "Animation/Animation.h"
 
 namespace Editor
 {
@@ -58,24 +60,37 @@ namespace Editor
 										   mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
 										   mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom));
 			mSelectionFrame->Draw();
-		}
 
-		for (auto child : mHandles)
-			child->Draw();
+			mCenterFrameDragHandle.Draw();
+			mLeftFrameDragHandle.Draw();
+			mRightFrameDragHandle.Draw();
+		}
 
 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
 	}
 
-	void KeyHandlesSheet::SetTimeline(AnimationTimeline* timeline)
+	void KeyHandlesSheet::UpdateInputDrawOrder()
 	{
-		mTimeline = timeline;
+		CursorAreaEventsListener::OnDrawn();
+
+		for (auto handle : mHandles)
+		{
+			if (handle->IsEnabled())
+				handle->CursorAreaEventsListener::OnDrawn();
+		}
 	}
 
-	void KeyHandlesSheet::SetTree(AnimationTree* tree)
+	void KeyHandlesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree)
 	{
+		mTimeline = timeline;
 		mTree = tree;
+	}
+
+	void KeyHandlesSheet::SetAnimation(Animation* animation)
+	{
+		mAnimation = animation;
 	}
 
 	bool KeyHandlesSheet::IsUnderPoint(const Vec2F& point)
@@ -86,7 +101,19 @@ namespace Editor
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		UpdateSelectionFrame();
+	}
 
+	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor)
+	{
+		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->BeginKeysBatchChange();
+
+		SelectableDragHandlesGroup::OnHandleMoved(handle, cursor);
+
+		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+
+		UpdateSelectionFrame();
 	}
 
 	void KeyHandlesSheet::UpdateSelectionFrame()

@@ -30,6 +30,7 @@ namespace o2
 		PROPERTY(float, tileScale, SetTileScale, GetTileScale);                        // Sprite tile scale property, 1.0f is default
 		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);                // Slice border property
 
+	public:
 		// Default constructor
 		ImageComponent();
 

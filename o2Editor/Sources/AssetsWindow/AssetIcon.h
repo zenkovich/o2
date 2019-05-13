@@ -24,7 +24,7 @@ namespace Editor
 		PROPERTIES(AssetIcon);
 		PROPERTY(WString, assetName, SetAssetName, GetAssetName); // Asset name label text property
 
-
+	public:
 		// Default constructor
 		AssetIcon();
 
@@ -34,10 +34,8 @@ namespace Editor
 		// Destructor
 		~AssetIcon();
 
-
 		// Copy operator
 		AssetIcon& operator=(const AssetIcon& other);
-
 
 		// Sets asset info
 		void SetAssetInfo(const AssetInfo& info);
@@ -45,13 +43,11 @@ namespace Editor
 		// Returns asset info
 		const AssetInfo& GetAssetInfo() const;
 
-
 		// Sets name label text
 		void SetAssetName(const WString& name);
 
 		// Returns name label text
 		WString GetAssetName() const;
-
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -72,7 +68,6 @@ namespace Editor
 		// Sets is this selected
 		void SetSelected(bool selected);
 
-
 		// It is called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;
 
@@ -85,7 +80,6 @@ namespace Editor
 		// It is called when cursor exits this object, moving hover of tree to this
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-
 		// It is called when started dragging
 		void OnDragStart(const Input::Cursor& cursor) override;
 
@@ -95,13 +89,11 @@ namespace Editor
 		// It is called when dragging completed
 		void OnDragEnd(const Input::Cursor& cursor) override;
 
-
 		// It is called when this was selected
 		void OnSelected() override;
 
 		// It is called when this was unselected
 		void OnDeselected() override;
-
 
 		// It is called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;

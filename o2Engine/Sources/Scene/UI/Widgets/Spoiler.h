@@ -17,8 +17,10 @@ namespace o2
 		PROPERTY(float, headHeight, SetHeadHeight, GetHeadHeight); // Head height property
 		PROPERTY(bool, expanded, SetExpanded, IsExpanded);         // Expanded state property
 
+	public:
 		Function<void()> onExpand;    // Expand starting event
 
+	public:
 		// Default constructor
 		Spoiler();
 
@@ -58,11 +60,11 @@ namespace o2
 		SERIALIZABLE(Spoiler);
 
 	protected:
-		float          mHeadHeight = 0.0f;     // Spoiler head height @SERIALIZABLE
+		float mHeadHeight = 0.0f; // Spoiler head height @SERIALIZABLE
 
 		WidgetState* mExpandState = nullptr; // Expanding state
-		float          mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
-		float          mTargetHeight = 0.0f;   // target expanding height
+		float        mExpandCoef = 0.0f;     // Expanding animation coefficient 0...1 
+		float        mTargetHeight = 0.0f;   // target expanding height
 
 	protected:
 		// Copies data of actor from other to this

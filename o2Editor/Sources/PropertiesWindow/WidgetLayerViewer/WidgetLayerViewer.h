@@ -46,13 +46,13 @@ namespace Editor
 		IOBJECT(WidgetLayerViewer);
 
 	protected:
-		Vector<WidgetLayer*>         mTargetLayers;               // Current target layers
+		Vector<WidgetLayer*> mTargetLayers; // Current target layers
 
-		IWidgetLayerHeaderViewer*      mHeaderViewer = nullptr;     // Layer header viewer
-		IWidgetLayerLayoutViewer*      mLayoutViewer = nullptr;     // Layer layout viewer
-		IWidgetLayerPropertiesViewer*  mPropertiesViewer = nullptr; // Layer properties viewer
+		IWidgetLayerHeaderViewer*     mHeaderViewer = nullptr;     // Layer header viewer
+		IWidgetLayerLayoutViewer*     mLayoutViewer = nullptr;     // Layer layout viewer
+		IWidgetLayerPropertiesViewer* mPropertiesViewer = nullptr; // Layer properties viewer
 
-		VerticalLayout*              mViewersLayout = nullptr;    // Viewers layout
+		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
 
 	protected:
 		// It is called when some actors on scene were changed

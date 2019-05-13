@@ -39,7 +39,7 @@ namespace Editor
 		typedef Vector<AssetRef*> AssetsVec;
 		typedef Dictionary<const Type*, AssetPropertiesViewersVec> TypeAssetViewersDict;
 
-		AssetsVec                 mTargetAssets;                 // Current target assets
+		AssetsVec mTargetAssets; // Current target assets
 
 		IAssetPropertiesViewer*   mCurrentViewer = nullptr;      // Current asset viewer
 		AssetPropertiesViewersVec mAvailableAssetViewers;        // Available asset viewers

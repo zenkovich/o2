@@ -14,6 +14,7 @@ namespace o2
 		bool        alt;	 // @SERIALIZABLE
 		KeyboardKey key;	 // @SERIALIZABLE
 
+	public:
 		ShortcutKeys();
 
 		ShortcutKeys(KeyboardKey key, bool control = false, bool shift = false, bool alt = false);

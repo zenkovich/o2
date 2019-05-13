@@ -32,7 +32,7 @@ namespace Editor
 		OnChangedFunc         onChanged;         // Immediate change value by user event
 		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
 
-		String                path;              // Path to viewing object fields
+		String path; // Path to viewing object fields
 
 	public:
 		// Default constructor

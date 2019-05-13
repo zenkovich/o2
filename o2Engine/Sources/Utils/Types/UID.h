@@ -14,6 +14,7 @@ namespace o2
 	public:
 		char data[16];
 
+	public:
 		UID()
 		{ 
 			Randomize(); 

@@ -25,7 +25,8 @@ namespace o2
 		PROPERTY(bool, expandHeight, SetHeightExpand, IsHeightExpand); // Expand children by height property
 
 		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
-
+	public:
+		
 		// Default constructor
 		VerticalLayout();
 

@@ -21,6 +21,7 @@ namespace o2
 		PROPERTIES(VectorFontAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
 
+	public:
 		// Destructor
 		~VectorFontAsset();
 

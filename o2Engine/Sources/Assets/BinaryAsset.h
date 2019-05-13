@@ -18,6 +18,7 @@ namespace o2
 		GETTER(UInt, dataSize, GetDataSize); // Data size getter
 		GETTER(MetaInfo*, meta, GetMeta);    // Meta information getter
 
+	public:
 		// Destructor
 		~BinaryAsset();
 

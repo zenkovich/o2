@@ -14,8 +14,10 @@ namespace o2
 		PROPERTY(WString, value, SelectItemText, GetSelectedItemText);             // Current selected item text
 		PROPERTY(Vector<WString>, values, SetSelectedItems, GetSelectedItemsText); // Current selected items texts
 
+	public:
 		Function<void(const WString&)> onSelectedText; // Change text selected event
 
+	public:
 		// Default constructor
 		List();
 

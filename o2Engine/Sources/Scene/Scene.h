@@ -47,6 +47,7 @@ namespace o2
 		Function<void(const SceneEditableObjectsVec&)> onObjectsChanged;           // Actors some change event
 #endif
 
+	public:
 		// Returns layer by name
 		SceneLayer* GetLayer(const String& name);
 

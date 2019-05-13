@@ -27,14 +27,11 @@ namespace Editor
 		// Destructor
 		~KeyFramesTrackControl();
 
-
 		// Copy-operator
 		KeyFramesTrackControl& operator=(const KeyFramesTrackControl& other);
 
-
-		// Draws handles with scissor rect
+		// Draws handles with clipping
 		void Draw() override;
-
 
 		// Sets animated value, updates and creates key handles
 		void SetAnimatedValue(IAnimatedValue* animatedValue) override;
@@ -42,17 +39,11 @@ namespace Editor
 		// Returns animated value
 		AnimatedValueType* GetAnimatedValue() const;
 
-
-		// Sets timeline for calculating handles positions
-		void SetTimeline(AnimationTimeline* timeline) override;
-
-		// Sets handles sheet
-		void SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet) override;
-
+		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
+		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
 
 		// Updates handles position on timeline
 		void UpdateHandles();
-
 
 		// Returns key handles list
 		KeyHandlesVec GetKeyHandles() const override;
@@ -103,6 +94,18 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::Draw()
 	{
+		if (!mResEnabledInHierarchy)
+			return;
+
+		OnDrawn();
+
+		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+
+		for (auto child : mDrawingChildren)
+			child->Draw();
+
+		o2Render.DisableScissorTest();
+
 		DrawDebugFrame();
 	}
 
@@ -127,14 +130,9 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SetTimeline(AnimationTimeline* timeline)
+	void KeyFramesTrackControl<AnimatedValueType>::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
-	}
-
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SetKeyHandlesSheet(KeyHandlesSheet* handlesSheet)
-	{
 		mHandlesSheet = handlesSheet;
 	}
 
@@ -154,7 +152,7 @@ namespace Editor
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
 	{
 		Vector<WidgetDragHandle*> handlesCache = mHandles.Select<WidgetDragHandle*>(
-			[&](const KeyHandle* x) { x->handle->SetParent(nullptr); return x->handle; });
+			[&](const KeyHandle* x) { x->handle->SetParent(nullptr); x->handle->SetEnabled(false); return x->handle; });
 
 		for (auto keyHandle : mHandles)
 			delete keyHandle;
@@ -171,6 +169,7 @@ namespace Editor
 			else
 				handle = CreateHandle();
 
+			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			AddChild(handle);
 
@@ -283,8 +282,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
-	PUBLIC_FUNCTION(void, SetTimeline, AnimationTimeline*);
-	PUBLIC_FUNCTION(void, SetKeyHandlesSheet, KeyHandlesSheet*);
+	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);

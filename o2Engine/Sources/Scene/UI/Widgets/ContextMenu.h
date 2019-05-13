@@ -12,7 +12,7 @@ namespace o2
 {
 	class Sprite;
 	class Button;
-	class UIContextMenu;
+	class ContextMenu;
 	class VerticalLayout;
 
 	// -----------------
@@ -24,9 +24,11 @@ namespace o2
 		PROPERTIES(ContextMenuItem);
 		PROPERTY(WString, text, SetText, GetText); // Text
 
+	public:
 		Function<void()>     onClick;   // Click function
 		Function<void(bool)> onChecked; // Checked function, calls when check was changed and item is checkable
 
+	public:
 		// Default constructor
 		ContextMenuItem();
 
@@ -46,7 +48,7 @@ namespace o2
 		WString GetText() const;
 
 		// Returns sub context menu
-		UIContextMenu* GetSubMenu() const;
+		ContextMenu* GetSubMenu() const;
 
 		// Sets checked icon
 		void SetChecked(bool checked);
@@ -78,9 +80,10 @@ namespace o2
 		SERIALIZABLE(ContextMenuItem);
 
 	protected:
-		UIContextMenu* mSubMenu;           // Context sub menu
-		bool           mChecked = false;   // Is menu item checked
-		bool           mCheckable = false; // Is menu item can be checked
+		ContextMenu* mSubMenu; // Context sub menu
+
+		bool mChecked = false;   // Is menu item checked
+		bool mCheckable = false; // Is menu item can be checked
 
 	protected:
 		// Copies data of actor from other to this
@@ -92,13 +95,13 @@ namespace o2
 		// This event calling when shortcut hit and this listener has max priority. Calls click callback
 		void OnShortcutPressed();
 
-		friend class UIContextMenu;
+		friend class ContextMenu;
 	};
 
 	// -----------------------
 	// Context menu ui element
 	// -----------------------
-	class UIContextMenu: public ScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class ContextMenu: public ScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
 	{
 	public:
 		// ---------
@@ -140,19 +143,19 @@ namespace o2
 
 	public:
 		// Default constructor
-		UIContextMenu();
+		ContextMenu();
 
 		// Constructor from items
-		UIContextMenu(Vector<Item> items);
+		ContextMenu(Vector<Item> items);
 
 		// Copy-constructor
-		UIContextMenu(const UIContextMenu& other);
+		ContextMenu(const ContextMenu& other);
 
 		// Destructor
-		~UIContextMenu();
+		~ContextMenu();
 
 		// Copy operator
-		UIContextMenu& operator=(const UIContextMenu& other);
+		ContextMenu& operator=(const ContextMenu& other);
 
 		// Updates drawables, states and widget
 		void Update(float dt) override;
@@ -161,7 +164,7 @@ namespace o2
 		void Draw() override;
 
 		// Show from parent context
-		void Show(UIContextMenu* parent, const Vec2F& position = o2Input.GetCursorPos());
+		void Show(ContextMenu* parent, const Vec2F& position = o2Input.GetCursorPos());
 
 		// Shows context
 		void Show(const Vec2F& position = o2Input.GetCursorPos());
@@ -257,17 +260,17 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
-		SERIALIZABLE(UIContextMenu);
+		SERIALIZABLE(ContextMenu);
 
 	protected:
-		static UIContextMenu* mVisibleContextMenu;           // Current visible context menu
+		static ContextMenu* mVisibleContextMenu;           // Current visible context menu
 		const float           mOpenSubMenuDelay = 0.8f;      // Sub menu opengin delay whe cursor hover it
 
 		float                 mFitSizeMin = 40.0f;           // Minimal fitting size @SERIALIZABLE
 		int                   mMaxVisibleItems = 100;        // Maximum visible items @SERIALIZABLE
 
-		UIContextMenu*        mParentContextMenu = nullptr;  // Parent visible context menu
-		UIContextMenu*        mChildContextMenu = nullptr;	 // Child visible context menu
+		ContextMenu*        mParentContextMenu = nullptr;  // Parent visible context menu
+		ContextMenu*        mChildContextMenu = nullptr;	 // Child visible context menu
 
 		VerticalLayout*     mItemsLayout = nullptr;        // Items layout
 		ContextMenuItem*    mItemSample = nullptr;         // Item sample @SERIALIZABLE
@@ -295,7 +298,7 @@ namespace o2
 		void OnResEnableInHierarchyChanged() override;
 
 		// Creates context items by path ("node/sub node/target")
-		UIContextMenu* CreateItemsByPath(WString& path);
+		ContextMenu* CreateItemsByPath(WString& path);
 
 		// Fits size by items
 		void FitSizeAndPosition(const Vec2F& position);
@@ -368,7 +371,7 @@ CLASS_METHODS_META(o2::ContextMenuItem)
 
 	PUBLIC_FUNCTION(void, SetText, const WString&);
 	PUBLIC_FUNCTION(WString, GetText);
-	PUBLIC_FUNCTION(UIContextMenu*, GetSubMenu);
+	PUBLIC_FUNCTION(ContextMenu*, GetSubMenu);
 	PUBLIC_FUNCTION(void, SetChecked, bool);
 	PUBLIC_FUNCTION(bool, IsChecked);
 	PUBLIC_FUNCTION(void, SetCheckable, bool);
@@ -384,14 +387,14 @@ CLASS_METHODS_META(o2::ContextMenuItem)
 }
 END_META;
 
-CLASS_BASES_META(o2::UIContextMenu)
+CLASS_BASES_META(o2::ContextMenu)
 {
 	BASE_CLASS(o2::ScrollArea);
 	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIContextMenu)
+CLASS_FIELDS_META(o2::ContextMenu)
 {
 	PROTECTED_FIELD(mOpenSubMenuDelay);
 	PROTECTED_FIELD(mFitSizeMin).SERIALIZABLE_ATTRIBUTE();
@@ -411,12 +414,12 @@ CLASS_FIELDS_META(o2::UIContextMenu)
 	PROTECTED_FIELD(mShownAtFrame);
 }
 END_META;
-CLASS_METHODS_META(o2::UIContextMenu)
+CLASS_METHODS_META(o2::ContextMenu)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Show, UIContextMenu*, const Vec2F&);
+	PUBLIC_FUNCTION(void, Show, ContextMenu*, const Vec2F&);
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
 	PUBLIC_FUNCTION(ContextMenuItem*, AddItem, const Item&);
 	PUBLIC_FUNCTION(ContextMenuItem*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
@@ -450,7 +453,7 @@ CLASS_METHODS_META(o2::UIContextMenu)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(UIContextMenu*, CreateItemsByPath, WString&);
+	PROTECTED_FUNCTION(ContextMenu*, CreateItemsByPath, WString&);
 	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);
 	PROTECTED_FUNCTION(void, HideWithChild);
@@ -469,12 +472,12 @@ CLASS_METHODS_META(o2::UIContextMenu)
 }
 END_META;
 
-CLASS_BASES_META(o2::UIContextMenu::Item)
+CLASS_BASES_META(o2::ContextMenu::Item)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::UIContextMenu::Item)
+CLASS_FIELDS_META(o2::ContextMenu::Item)
 {
 	PUBLIC_FIELD(text).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(icon).SERIALIZABLE_ATTRIBUTE();
@@ -486,7 +489,7 @@ CLASS_FIELDS_META(o2::UIContextMenu::Item)
 	PUBLIC_FIELD(onChecked);
 }
 END_META;
-CLASS_METHODS_META(o2::UIContextMenu::Item)
+CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 }
 END_META;

@@ -21,7 +21,7 @@ namespace o2
 	FolderInfo FileSystem::GetFolderInfo(const String& path) const
 	{
 		FolderInfo res;
-		res.mPath = path;
+		res.path = path;
 
 		WIN32_FIND_DATA f;
 		HANDLE h = FindFirstFile(path + "/*", &f);
@@ -33,9 +33,9 @@ namespace o2
 					continue;
 
 				if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
-					res.mFolders.Add(GetFolderInfo(path + "/" + f.cFileName));
+					res.folders.Add(GetFolderInfo(path + "/" + f.cFileName));
 				else
-					res.mFiles.Add(GetFileInfo(path + "/" + f.cFileName));
+					res.files.Add(GetFileInfo(path + "/" + f.cFileName));
 			} while (FindNextFile(h, &f));
 		}
 		else
@@ -71,7 +71,7 @@ namespace o2
 	FileInfo FileSystem::GetFileInfo(const String& path) const
 	{
 		FileInfo res;
-		res.mPath = "invalid_file";
+		res.path = "invalid_file";
 
 		FILETIME creationTime, lastAccessTime, lastWriteTime;
 		HANDLE hFile = CreateFileA(path.Data(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_FLAG_OVERLAPPED, NULL);
@@ -91,32 +91,32 @@ namespace o2
 
 		FileTimeToSystemTime(&creationTime, &stUTC);
 		SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-		res.mCreatedDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
+		res.createdDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
 
 		FileTimeToSystemTime(&lastAccessTime, &stUTC);
 		SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-		res.mAccessDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
+		res.accessDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
 
 		FileTimeToSystemTime(&lastWriteTime, &stUTC);
 		SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-		res.mEditDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
+		res.editDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
 
-		res.mPath = path;
+		res.path = path;
 		String extension = path.SubStr(path.FindLast(".") + 1);
-		res.mFileType = FileType::File;
+		res.fileType = FileType::File;
 
 		for (auto iext : mInstance->mExtensions)
 		{
 			if (iext.Value().Contains(extension))
 			{
-				res.mFileType = iext.Key();
+				res.fileType = iext.Key();
 				break;
 			}
 		}
 
 		DWORD dwSizeHigh = 0, dwSizeLow = 0;
 		dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
-		res.mSize = (dwSizeHigh * (MAXDWORD+1)) + dwSizeLow;
+		res.size = (dwSizeHigh * (MAXDWORD+1)) + dwSizeLow;
 
 		CloseHandle(hFile);
 

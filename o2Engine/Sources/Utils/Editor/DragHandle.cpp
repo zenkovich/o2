@@ -679,6 +679,16 @@ namespace o2
 		DragHandle::Draw();
 	}
 
+	void WidgetDragHandle::SetEnabled(bool enabled)
+	{
+		DragHandle::SetEnabled(enabled);
+	}
+
+	bool WidgetDragHandle::IsEnabled() const
+	{
+		return DragHandle::IsEnabled();
+	}
+
 	Vec2F WidgetDragHandle::ScreenToLocal(const Vec2F& point)
 	{
 		if (mParentWidget)

@@ -11,14 +11,14 @@ namespace o2
 	{
 	public:
 		PROPERTIES(WidgetLayerLayout);
-		PROPERTY(Vec2F, position, SetPosition, GetPosition);             // Left bottom anchor property
-		PROPERTY(Vec2F, size, SetSize, GetSize);                         // Left bottom anchor property
+		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Left bottom anchor property
+		PROPERTY(Vec2F, size, SetSize, GetSize);             // Left bottom anchor property
 
-		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin);          // Left bottom anchor property
-		PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax);          // Right top anchor property
+		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property
+		PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax); // Right top anchor property
 
-		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin);          // Left bottom corner offset property
-		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax);          // Right top corner offset property
+		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property
+		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property
 
 		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
 		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
@@ -40,17 +40,14 @@ namespace o2
 		// Copy constructor
 		WidgetLayerLayout(WidgetLayer* widgetLayer, const WidgetLayerLayout& other);
 
-
 		// Cast to Layout operator
 		operator Layout() const;
 
 		// Copy operator from layout
 		WidgetLayerLayout& operator=(const Layout& other);
 
-
 		// Copy operator 
 		WidgetLayerLayout& operator=(const WidgetLayerLayout& other);
-
 
 		// Check equals operator
 		bool operator==(const WidgetLayerLayout& other) const;
@@ -64,10 +61,8 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const Layout& other) const;
 
-
 		// Returns calculated rectangle by anchors and offsets relative to source
 		RectF Calculate(const RectF& source);
-
 
 		// Sets left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
 		void SetAnchorMin(const Vec2F& min);
@@ -80,7 +75,6 @@ namespace o2
 
 		// Returns right top anchor. (0, 0) - left bottom of parent, (1, 1) - right top
 		Vec2F GetAnchorMax() const;
-
 
 		// Sets left anchor. 0 - left parent border, 1 - right
 		void SetAnchorLeft(float value);
@@ -106,7 +100,6 @@ namespace o2
 		// Returns top anchor. 0 - bottom parent border, 1 - top
 		float GetAnchorTop() const;
 
-
 		// Sets left bottom offset
 		void SetOffsetMin(const Vec2F& min);
 
@@ -118,7 +111,6 @@ namespace o2
 
 		// Returns right top offset
 		Vec2F GetOffsetMax() const;
-
 
 		// Sets left offset
 		void SetOffsetLeft(float value);
@@ -144,7 +136,6 @@ namespace o2
 		// Returns top offset
 		float GetOffsetTop() const;
 
-
 		// Sets position of left bottom corner
 		void SetPosition(const Vec2F& position);
 
@@ -156,7 +147,6 @@ namespace o2
 
 		// Returns size
 		Vec2F GetSize() const;
-
 
 		SERIALIZABLE(WidgetLayerLayout);
 

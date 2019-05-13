@@ -35,10 +35,8 @@ namespace Editor
 		// Destructor
 		~AnimationWindow();
 
-
 		// Updates window logic
 		void Update(float dt) override;
-
 
 		// Sets editing animation
 		void SetAnimation(Animation* animation);

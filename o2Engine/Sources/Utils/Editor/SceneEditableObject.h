@@ -20,13 +20,11 @@ namespace o2
 		// Destructor, unregisters from scene editable objects list
 		virtual ~SceneEditableObject();
 
-
 		// Returns true when object is on scene
 		virtual bool IsOnScene() const;
 
 		// Returns true when object's hierarchy is on scene. This is on scene or one of parent is on scene
 		virtual bool IsHieararchyOnScene() const;
-
 
 		// Returns unique id
 		virtual SceneUID GetID() const;
@@ -34,13 +32,11 @@ namespace o2
 		// Generates new random id 
 		virtual void GenerateNewID(bool childs = true);
 
-
 		// Returns name of object
 		virtual String GetName() const;
 
 		// Sets name of object
 		virtual void SetName(const String& name);
-
 
 		// Returns list of object's children
 		virtual Vector<SceneEditableObject*> GetEditablesChildren() const;
@@ -60,7 +56,6 @@ namespace o2
 		// Checks that this object can be added as child to another object
 		virtual bool CanBeParentedTo(const Type& parentType);
 
-
 		// Returns is that type of object can be enabled and disabled
 		virtual bool IsSupportsDisabling() const;
 
@@ -71,8 +66,7 @@ namespace o2
 		virtual bool IsEnabledInHierarchy() const;
 
 		// Sets enabling of object, override when it's supports
-		virtual void SetEnabled(bool enabled);
-		
+		virtual void SetEnabled(bool enabled);		
 
 		// Returns is that type of object can be locked
 		virtual bool IsSupportsLocking() const;
@@ -86,7 +80,6 @@ namespace o2
 		// Sets locking of object, override when it's supports
 		virtual void SetLocked(bool locked);
 
-
 		// Returns is that type of object can be transformed
 		virtual bool IsSupportsTransforming() const;
 
@@ -99,7 +92,6 @@ namespace o2
 		// Updates transform immediately
 		virtual void UpdateTransform();
 
-
 		// Returns is object supports pivot 
 		virtual bool IsSupportsPivot() const;
 
@@ -108,7 +100,6 @@ namespace o2
 
 		// Returns transform pivot
 		virtual Vec2F GetPivot() const;
-
 
 		// Returns is that type of object can be transformed with layout
 		virtual bool IsSupportsLayout() const;
@@ -119,10 +110,8 @@ namespace o2
 		// Sets layout of object, override when it's supports
 		virtual void SetLayout(const Layout& layout);
 
-
 		// Returns is that type of object can be deleted from editor
 		virtual bool IsSupportsDeleting() const;
-
 
 		// It is called when something changed in this object
 		virtual void OnChanged();

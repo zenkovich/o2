@@ -34,10 +34,10 @@ namespace Editor
 		mEditBox = FindChildByType<EditBox>();
 		if (mEditBox)
 		{
-			mTagsContext = FindChildByType<UIContextMenu>();
+			mTagsContext = FindChildByType<ContextMenu>();
 			if (!mTagsContext)
 			{
-				mTagsContext = o2UI.CreateWidget<UIContextMenu>();
+				mTagsContext = o2UI.CreateWidget<ContextMenu>();
 				AddChild(mTagsContext);
 			}
 

@@ -23,8 +23,8 @@ namespace Editor
 		IOBJECT(DefaultObjectViewer);
 
 	private:
-		const Type*           mRealObjectType = nullptr; // Specialized viewing object type
-		FieldPropertiesInfo   mFieldProperties; // Field properties information
+		const Type*         mRealObjectType = nullptr; // Specialized viewing object type
+		FieldPropertiesInfo mFieldProperties; // Field properties information
 	};
 }
 

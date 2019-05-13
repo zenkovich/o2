@@ -47,7 +47,7 @@ namespace Editor
 		Widget(other)
 	{
 		mFoldersTree = FindChildByType<Tree>();
-		RemoveChild(FindChildByType<UIContextMenu>());
+		RemoveChild(FindChildByType<ContextMenu>());
 
 		InitializeContext();
 
@@ -71,7 +71,7 @@ namespace Editor
 		Widget::CopyData(other);
 
 		mFoldersTree = FindChildByType<Tree>();
-		RemoveChild(FindChildByType<UIContextMenu>());
+		RemoveChild(FindChildByType<ContextMenu>());
 
 		InitializeContext();
 
@@ -92,7 +92,7 @@ namespace Editor
 
 	void AssetsFoldersTree::InitializeContext()
 	{
-		mContextMenu = o2UI.CreateWidget<UIContextMenu>();
+		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
 		mContextMenu->AddItem("Import", [&]() { OnContextImportPressed(); });
 		mContextMenu->AddItem("---");

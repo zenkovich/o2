@@ -13,6 +13,7 @@ namespace o2
 		PROPERTIES(DrawableCursorEventsListener);
 		PROPERTY(IDrawable*, eventHandleDrawable, SetEventHandleDrawable, GetEventHandleDrawable); // Target event handling drawable property
 
+	public:
 		// Default constructor
 		DrawableCursorEventsListener(IDrawable* drawable = nullptr);
 

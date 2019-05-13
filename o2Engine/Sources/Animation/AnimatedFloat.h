@@ -59,6 +59,13 @@ namespace o2
 		// Returns value at time
 		float GetValue(float time);
 
+		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
+		// Used for optimizing many keys change
+		void BeginKeysBatchChange() override;
+
+		// It is called when keys batch change completed. Updates approximation
+		void CompleteKeysBatchingChange() override;
+
 		//void Insert(const AnimatedValue<float>& other);
 
 		// Adds key with smoothing
@@ -77,9 +84,6 @@ namespace o2
 		// Adds key at position with value and smoothing
 		int AddKey(float position, float value, float smooth = 1.0f);
 
-		// Returns key at position
-		Key GetKey(float position);
-
 		// Removes key at position
 		bool RemoveKey(float position);
 
@@ -91,6 +95,9 @@ namespace o2
 
 		// Returns true if animation contains key at position
 		bool ContainsKey(float position);
+
+		// Returns key at position
+		Key GetKey(float position);
 
 		// Returns keys array
 		const KeysVec& GetKeys() const;
@@ -126,7 +133,8 @@ namespace o2
 		SERIALIZABLE(AnimatedValue<float>);
 
 	protected:
-		float               mValue;		            // Current animation value
+		float mValue; // Current animation value
+
 		float*              mTarget = nullptr;		// Animation target value pointer
 		Function<void()>    mTargetDelegate;        // Animation target value change event
 		IValueProxy<float>* mTargetProxy = nullptr; // Animation target proxy pointer
@@ -134,7 +142,7 @@ namespace o2
 	protected:
 		// Evaluates value
 		void Evaluate() override;
-
+		
 		// Returns keys (for property)
 		KeysVec GetKeysNonContant();
 
@@ -186,16 +194,18 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<float>*);
 	PUBLIC_FUNCTION(float, GetValue);
 	PUBLIC_FUNCTION(float, GetValue, float);
+	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
+	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
 	PUBLIC_FUNCTION(int, AddKey, const Key&);
 	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
 	PUBLIC_FUNCTION(int, AddKey, float, float, float, float, float, float);
 	PUBLIC_FUNCTION(int, AddKey, float, float, float);
-	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
+	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);

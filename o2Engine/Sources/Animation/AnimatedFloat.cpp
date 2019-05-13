@@ -93,6 +93,16 @@ namespace o2
 			mTargetProxy->SetValue(mValue);
 	}
 
+	void AnimatedValue<float>::BeginKeysBatchChange()
+	{
+		curve.BeginKeysBatchChange();
+	}
+
+	void AnimatedValue<float>::CompleteKeysBatchingChange()
+	{
+		curve.CompleteKeysBatchingChange();
+	}
+
 	void AnimatedValue<float>::AddKeys(Vector<Vec2F> values, float smooth /*= 1.0f*/)
 	{
 		curve.AppendKeys(values, smooth);

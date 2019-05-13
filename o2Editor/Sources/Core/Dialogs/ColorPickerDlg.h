@@ -28,7 +28,7 @@ namespace Editor
 	// --------------------
 	// Color picking dialog
 	// --------------------
-	class ColorPickerDlg: public Singleton<ColorPickerDlg>, public CursorEventsListener
+	class ColorPickerDlg : public Singleton<ColorPickerDlg>, public CursorEventsListener
 	{
 	public:
 		enum  class ColorType { RGB, HSL };
@@ -37,7 +37,7 @@ namespace Editor
 		ColorPickerDlg();
 		~ColorPickerDlg();
 
-		static void Show(const Color4& color, Function<void(const Color4&)> onChanged, 
+		static void Show(const Color4& color, Function<void(const Color4&)> onChanged,
 						 Function<void()> onCompleted = Function<void()>());
 
 	protected:
@@ -95,9 +95,10 @@ namespace Editor
 		void InitializeColorPreview();
 		void InitializePickArea();
 		void InitializeColorParams();
-		Widget* InitializeColorParameter(Label*& name, HorizontalProgress*& bar, EditBox*& edit, 
-										   Bitmap*& bitmap, TextureRef& texture, 
-										   const Function<void(float)>& onChanged);
+
+		Widget* InitializeColorParameter(Label*& name, HorizontalProgress*& bar, EditBox*& edit,
+										 Bitmap*& bitmap, TextureRef& texture,
+										 const Function<void(float)>& onChanged);
 
 		void InitHUEBarBitmap();
 

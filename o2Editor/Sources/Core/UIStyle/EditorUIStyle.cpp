@@ -3497,7 +3497,7 @@ namespace Editor
 		String generateDateCachePath = "uiGeneratedDate.xml";
 
 		String thisSourcePath = "../../../Sources/Core/UIStyle/EditorUIStyle.cpp";
-		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).mEditDate;
+		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
 
 		DataNode data;
 		if (data.LoadFromFile(generateDateCachePath))

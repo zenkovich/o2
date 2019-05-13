@@ -73,7 +73,7 @@ namespace o2
 
 		// Creates button by style
 		Button* CreateButton(const WString& caption, const Function<void()>& onClick = Function<void()>(),
-							   const String& style = "standard");
+							 const String& style = "standard");
 
 		// Creates button by style
 		Window* CreateWindow(const WString& caption, const String& style = "standard");
@@ -142,12 +142,12 @@ namespace o2
 		const WidgetsVec& GetWidgetStyles() const;
 
 	protected:
-		LogStream * mLog = nullptr;           // UI Log stream
-		Widget*  mFocusedWidget = nullptr; // Current selected widget
+		LogStream * mLog = nullptr;          // UI Log stream
+		Widget*    mFocusedWidget = nullptr; // Current selected widget
 		WidgetsVec mFocusableWidgets;        // List of selectable widgets
 		WidgetsVec mTopWidgets;              // Top widgets, drawing after mScreenWidget 
 
-		WidgetsVec mStyleSamples;            // Style widgets
+		WidgetsVec mStyleSamples; // Style widgets
 
 	protected:
 		// Default constructor
@@ -200,13 +200,13 @@ namespace o2
 			sample = GetWidgetStyle<_type>("standard");
 
 		_type* res = nullptr;
-		
+
 		if (sample)
 			res = sample->template CloneAs<_type>();
 		else
 			res = mnew _type();
 
-		if (TypeOf(_type) != TypeOf(UIContextMenu))
+		if (TypeOf(_type) != TypeOf(ContextMenu))
 			res->SetEnableForcible(true);
 
 		return res;

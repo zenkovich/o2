@@ -160,9 +160,9 @@ namespace o2
 		// -----------------------------------
 		struct AnimatedValueDef : public ISerializable
 		{
-			String          mTargetPath;              // Target path @SERIALIZABLE
-			void*           mTargetPtr = nullptr;     // Target pointer
-			IAnimatedValue* mAnimatedValue = nullptr; // Animated value @SERIALIZABLE
+			String          targetPath;              // Target path @SERIALIZABLE
+			void*           targetPtr = nullptr;     // Target pointer
+			IAnimatedValue* animatedValue = nullptr; // Animated value @SERIALIZABLE
 
 			// Check equals operator
 			bool operator==(const AnimatedValueDef& other) const;
@@ -171,9 +171,9 @@ namespace o2
 		};
 
 	protected:
-		AnimatedValuesVec mAnimatedValues;   // Animated value @SERIALIZABLE
-		IObject*          mTarget;           // Target object
-		AnimationState*   mAnimationState;   // Animation state owner
+		AnimatedValuesVec mAnimatedValues; // Animated value @SERIALIZABLE
+		IObject*          mTarget;         // Target object
+		AnimationState*   mAnimationState; // Animation state owner
 
 	protected:
 		// Evaluates all animated values by time
@@ -209,8 +209,8 @@ namespace o2
 	AnimatedValue<_type>* Animation::FindValue(_type* target)
 	{
 		for (auto val : mAnimatedValues)
-			if (val.mTargetPtr == target)
-				return (AnimatedValue<_type>*)val.mAnimatedValue;
+			if (val.targetPtr == target)
+				return (AnimatedValue<_type>*)val.animatedValue;
 
 		return nullptr;
 	}
@@ -219,8 +219,8 @@ namespace o2
 	AnimatedValue<_type>* Animation::FindValue(const String& path)
 	{
 		for (auto val : mAnimatedValues)
-			if (val.mTargetPath == path)
-				return (AnimatedValue<_type>*)val.mAnimatedValue;
+			if (val.targetPath == path)
+				return (AnimatedValue<_type>*)val.animatedValue;
 
 		return nullptr;
 	}
@@ -375,10 +375,10 @@ namespace o2
 	{
 		for (auto& val : mAnimatedValues)
 		{
-			if (val.mTargetPtr == target)
+			if (val.targetPtr == target)
 			{
 				def.mAnimatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
-				delete val.mAnimatedValue;
+				delete val.animatedValue;
 				mAnimatedValues.Remove(val);
 				return true;
 			}
@@ -406,21 +406,21 @@ namespace o2
 
 			AnimatedValueDef def;
 
-			def.mAnimatedValue = mnew AnimatedValue<_anim_val_type>();
-			def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
+			def.animatedValue = mnew AnimatedValue<_anim_val_type>();
+			def.animatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(target));
+				def.animatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(target));
 			else
-				def.mAnimatedValue->SetTargetVoid(target);
+				def.animatedValue->SetTargetVoid(target);
 
-			def.mTargetPath = path;
-			def.mTargetPtr = target;
+			def.targetPath = path;
+			def.targetPtr = target;
 			mAnimatedValues.Add(def);
 
 			OnAnimatedValueAdded(def);
 
-			return (AnimatedValue<_anim_val_type>*)def.mAnimatedValue;
+			return (AnimatedValue<_anim_val_type>*)def.animatedValue;
 		}
 
 		return nullptr;
@@ -430,15 +430,15 @@ namespace o2
 	AnimatedValue<_type>* Animation::AddAnimationValue(const String& path)
 	{
 		AnimatedValueDef def;
-		def.mAnimatedValue = mnew AnimatedValue<_type>();
-		def.mAnimatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
+		def.animatedValue = mnew AnimatedValue<_type>();
+		def.animatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
 
 		if (mTarget)
 		{
 			FieldInfo* fieldInfo = nullptr;
 			const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
 			void* castedTarget = type->DynamicCastFromIObject(mTarget);
-			def.mTargetPtr = (_type*)mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
+			def.targetPtr = (_type*)mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
 
 			if (!fieldInfo)
 			{
@@ -447,17 +447,17 @@ namespace o2
 			}
 
 			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
-				def.mAnimatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.mTargetPtr));
+				def.animatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.targetPtr));
 			else
-				def.mAnimatedValue->SetTargetVoid(def.mTargetPtr);
+				def.animatedValue->SetTargetVoid(def.targetPtr);
 		}
 
-		def.mTargetPath = path;
+		def.targetPath = path;
 		mAnimatedValues.Add(def);
 
 		OnAnimatedValueAdded(def);
 
-		return (AnimatedValue<_type>*)def.mAnimatedValue;
+		return (AnimatedValue<_type>*)def.animatedValue;
 	}
 
 	template<typename _type, typename _anim_val_type>
@@ -465,8 +465,8 @@ namespace o2
 	{
 		for (auto& val : mAnimatedValues)
 		{
-			if (val.mTargetPtr == target)
-				return val.mAnimatedValue;
+			if (val.targetPtr == target)
+				return val.animatedValue;
 		}
 
 		return nullptr;
@@ -477,8 +477,8 @@ namespace o2
 	{
 		for (auto& val : mAnimatedValues)
 		{
-			if (val.mTargetPath == path)
-				return val.mAnimatedValue;
+			if (val.targetPath == path)
+				return val.animatedValue;
 		}
 
 		return nullptr;
@@ -521,9 +521,9 @@ CLASS_BASES_META(o2::Animation::AnimatedValueDef)
 END_META;
 CLASS_FIELDS_META(o2::Animation::AnimatedValueDef)
 {
-	PUBLIC_FIELD(mTargetPath).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mTargetPtr);
-	PUBLIC_FIELD(mAnimatedValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(targetPath).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(targetPtr);
+	PUBLIC_FIELD(animatedValue).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::Animation::AnimatedValueDef)

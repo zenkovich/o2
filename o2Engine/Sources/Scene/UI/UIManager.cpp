@@ -167,7 +167,7 @@ namespace o2
 		else
 			res = (Widget*)type.CreateSample();
 
-		if (type != TypeOf(UIContextMenu))
+		if (type != TypeOf(ContextMenu))
 			res->SetEnableForcible(true);
 
 		return res;
@@ -323,8 +323,8 @@ namespace o2
 
 		mTopWidgets.Clear();
 
-		if (UIContextMenu::mVisibleContextMenu)
-			UIContextMenu::mVisibleContextMenu->SpecialDraw();
+		if (ContextMenu::mVisibleContextMenu)
+			ContextMenu::mVisibleContextMenu->SpecialDraw();
 	}
 
 	void UIManager::DrawWidgetAtTop(Widget* widget)

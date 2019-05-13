@@ -29,8 +29,10 @@ namespace o2
 		PROPERTIES(Assets);
 		GETTER(String, assetsPath, GetAssetsPath); // Assets path getter
 
+	public:
 		Function<void(const Vector<UID>&)> onAssetsRebuilded; // Assets rebuilding event
 
+	public:
 		// Default constructor
 		Assets();
 
@@ -156,16 +158,16 @@ namespace o2
 		};
 		typedef Vector<AssetCache*> AssetsCachesVec;
 
-		String          mAssetsFolderPath; // Project assets path
-		String          mDataFolderPath;   // Project data (builded assets) path
+		String mAssetsFolderPath; // Project assets path
+		String mDataFolderPath;   // Project data (builded assets) path
 
-		AssetTree       mAssetsTree;       // Assets information tree
-		LogStream*      mLog;              // Log stream
-		AssetsBuilder*  mAssetsBuilder;    // Assets builder
-		TypesExtsDict   mAssetsTypes;      // Assets types and extensions dictionary
-		const Type*     mStdAssetType;     // Standard asset type
+		AssetTree      mAssetsTree;    // Assets information tree
+		LogStream*     mLog;           // Log stream
+		AssetsBuilder* mAssetsBuilder; // Assets builder
+		TypesExtsDict  mAssetsTypes;   // Assets types and extensions dictionary
+		const Type*    mStdAssetType;  // Standard asset type
 
-		AssetsCachesVec mCachedAssets;     // Current cached assets
+		AssetsCachesVec mCachedAssets; // Current cached assets
 
 	protected:
 		// Loads asset infos

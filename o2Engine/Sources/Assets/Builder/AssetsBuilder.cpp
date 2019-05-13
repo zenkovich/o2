@@ -102,25 +102,25 @@ namespace o2
 
 	void AssetsBuilder::ProcessMissingMetasCreation(FolderInfo& folder)
 	{
-		for (auto fileInfo : folder.mFiles)
+		for (auto fileInfo : folder.files)
 		{
-			String extension = o2FileSystem.GetFileExtension(fileInfo.mPath);
+			String extension = o2FileSystem.GetFileExtension(fileInfo.path);
 
 			if (extension == "meta")
 			{
-				String metaFullPath = mSourceAssetsPath + fileInfo.mPath;
+				String metaFullPath = mSourceAssetsPath + fileInfo.path;
 				String assetForMeta = o2FileSystem.GetFileNameWithoutExtension(metaFullPath);
 				bool isExistAssetForMeta = o2FileSystem.IsFileExist(assetForMeta) ||
 					o2FileSystem.IsFolderExist(assetForMeta);
 				if (!isExistAssetForMeta)
 				{
-					mLog->Warning("Missing asset for meta: " + fileInfo.mPath + " - removing meta");
+					mLog->Warning("Missing asset for meta: " + fileInfo.path + " - removing meta");
 					o2FileSystem.FileDelete(metaFullPath);
 				}
 			}
 			else
 			{
-				String assetFullPath = mSourceAssetsPath + fileInfo.mPath;
+				String assetFullPath = mSourceAssetsPath + fileInfo.path;
 				String metaFullPath = assetFullPath + ".meta";
 				bool isExistMetaForAsset = o2FileSystem.IsFileExist(metaFullPath);
 				if (!isExistMetaForAsset)
@@ -131,9 +131,9 @@ namespace o2
 			}
 		}
 
-		for (auto subFolder : folder.mFolders)
+		for (auto subFolder : folder.folders)
 		{
-			String folderFullPath = mSourceAssetsPath + subFolder.mPath;
+			String folderFullPath = mSourceAssetsPath + subFolder.path;
 			String metaFullPath = folderFullPath + ".meta";
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 			if (!isExistMetaForFolder)

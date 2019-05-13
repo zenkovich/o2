@@ -25,6 +25,7 @@ namespace Editor
 			String                  active;  // @SERIALIZABLE
 			Vector<WindowDockPlace> childs;	 // @SERIALIZABLE
 
+		public:
 			void RetrieveLayout(Widget* widget);
 
 			bool operator==(const WindowDockPlace& other) const;
@@ -33,7 +34,7 @@ namespace Editor
 		};
 
 	public:
-		WindowDockPlace                    mainDock; // @SERIALIZABLE
+		WindowDockPlace                  mainDock; // @SERIALIZABLE
 		Dictionary<String, WidgetLayout> windows;  // @SERIALIZABLE
 
 		bool operator==(const WindowsLayout& other) const;

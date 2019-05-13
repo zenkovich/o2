@@ -57,13 +57,13 @@ namespace Editor
 		void SaveCurrentWindowsLayout(const String& name);
 
 	protected:
-		EditorWindowsVec   mEditorWindows;            // Editors windows list
-		DockWindowPlace*   mMainDockPlace = nullptr;  // Main windows dock place
-		WndLayoutsDict     mAvailableLayouts;         // Available layouts
+		EditorWindowsVec mEditorWindows;           // Editors windows list
+		DockWindowPlace* mMainDockPlace = nullptr; // Main windows dock place
+		WndLayoutsDict   mAvailableLayouts;        // Available layouts
 
-		ColorPickerDlg*    mColorPickerDlg = nullptr; // Shared color picker dialog
-		CurveEditorDlg*    mCurveEditorDlg = nullptr; // Shared curves editing dialog
-		NameEditDlg*       mNameEditDlg = nullptr;    // Name editing dialog
+		ColorPickerDlg* mColorPickerDlg = nullptr; // Shared color picker dialog
+		CurveEditorDlg* mCurveEditorDlg = nullptr; // Shared curves editing dialog
+		NameEditDlg*    mNameEditDlg = nullptr;    // Name editing dialog
 
 	protected:
 		// Default constructor

@@ -33,6 +33,7 @@ namespace Editor
 		OnChangedFunc         onChanged;         // Immediate change value by user event
 		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
 
+	public:
 		// Default constructor. Searches revert button and sets click action
 		IPropertyField();
 
@@ -128,16 +129,16 @@ namespace Editor
 		IOBJECT(IPropertyField);
 
 	protected:
-		bool             mRevertable = true;      // Is property can be reverted
+		bool mRevertable = true; // Is property can be reverted
 
-		TargetsVec       mValuesProxies;          // Target values proxies
-		bool             mValuesDifferent = true; // Are values different
+		TargetsVec mValuesProxies;          // Target values proxies
+		bool       mValuesDifferent = true; // Are values different
 
-		Button*        mRevertBtn = nullptr;    // Revert to source prototype button
-		Label*         mCaption = nullptr;      // Caption label, null by default   
+		Button* mRevertBtn = nullptr; // Revert to source prototype button
+		Label*  mCaption = nullptr;   // Caption label, null by default   
 
-		String           mValuesPath;             // Reflection path of target values
-		Vector<DataNode> mBeforeChangeValues;     // Serialized value data before changes started
+		String           mValuesPath;         // Reflection path of target values
+		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
 		// Stores values to data

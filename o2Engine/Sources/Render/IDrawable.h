@@ -14,6 +14,7 @@ namespace o2
 	public:
 		Function<void()> onDraw; // Draw event
 
+	public:
 		virtual ~IDrawable() {}
 
 		// Draws drawable

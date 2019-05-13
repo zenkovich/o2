@@ -40,22 +40,26 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationTree::Draw()
-	{
-		DrawZebraBack();
-		Tree::Draw();
-	}
-
-	void AnimationTree::SetAnimation(Animation* animation, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	void AnimationTree::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
 		mHandlesSheet = handlesSheet;
+	}
 
+	void AnimationTree::Draw()
+	{
+		DrawZebraBack();
+		mHandlesSheet->Draw();
+		Tree::Draw();
+		mHandlesSheet->UpdateInputDrawOrder();
+	}
+
+	void AnimationTree::SetAnimation(Animation* animation)
+	{
 		mAnimation = animation;
+
 		RebuildAnimationTree();
-
 		ExpandAll();
-
 		OnObjectsChanged({ (UnknownPtr)mRootValue });
 	}
 
@@ -104,8 +108,8 @@ namespace Editor
 		int lastDel = 0;
 		while (lastDel >= 0)
 		{
-			int del = value.mTargetPath.Find('/', lastDel);
-			String subPath = value.mTargetPath.SubStr(lastDel, del);
+			int del = value.targetPath.Find('/', lastDel);
+			String subPath = value.targetPath.SubStr(lastDel, del);
 			AnimationValueNode* next = (current ? current->children : mRootValue->children)
 				.FindMatch([&](AnimationValueNode* x) { return x->name == subPath; });
 
@@ -126,7 +130,7 @@ namespace Editor
 			lastDel = del >= 0 ? del + 1 : -1;
 		}
 
-		current->animatedValue = value.mAnimatedValue;
+		current->animatedValue = value.animatedValue;
 	}
 
 #undef DrawText
@@ -231,6 +235,8 @@ namespace Editor
 		mNameDrawable->text = node->name;
 
 		InitilizeTrackControl();
+
+		mData->trackControl = mTrackControl;
 	}
 
 	void AnimationTreeNode::SetTreeWidth(float width)
@@ -294,8 +300,7 @@ namespace Editor
 
 			mTrackControl = trackControl;
 
-			trackControl->SetTimeline(mTimeline);
-			trackControl->SetKeyHandlesSheet(mHandlesSheet);
+			trackControl->Initialize(mTimeline, mHandlesSheet);
 			trackControl->SetMappedTracks(*mData);
 
 			AddChild(mTrackControl);
@@ -315,8 +320,7 @@ namespace Editor
 			else
 				mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
 
-			mTrackControl->SetTimeline(mTimeline);
-			mTrackControl->SetKeyHandlesSheet(mHandlesSheet);
+			mTrackControl->Initialize(mTimeline, mHandlesSheet);
 			mTrackControl->SetAnimatedValue(mData->animatedValue);
 
 			AddChild(mTrackControl);

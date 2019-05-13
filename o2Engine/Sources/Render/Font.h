@@ -28,6 +28,7 @@ namespace o2
 	public:
 		Function<void()> onCharactersRebuild;
 
+	public:
 		// Default constructor
 		Font();
 

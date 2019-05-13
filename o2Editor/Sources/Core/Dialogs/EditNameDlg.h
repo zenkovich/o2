@@ -31,7 +31,6 @@ namespace Editor
 		// Destructor
 		~NameEditDlg();
 
-
 		// Shows name editing window. Delegate onCompleted is called when ok pressed and onCancelled when cancel
 		static void Show(const String& name, 
 						 Function<void(const String&)> onCompleted,

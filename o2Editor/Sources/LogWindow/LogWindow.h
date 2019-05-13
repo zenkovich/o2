@@ -38,20 +38,20 @@ namespace Editor
 	protected:
 		LongList* mList = nullptr;
 		Widget*   mLastMessageView = nullptr;
-		Text*       mMessagesCountLabel = nullptr;
-		Text*       mWarningsCountLabel = nullptr;
-		Text*       mErrorsCountLabel = nullptr;
+		Text*     mMessagesCountLabel = nullptr;
+		Text*     mWarningsCountLabel = nullptr;
+		Text*     mErrorsCountLabel = nullptr;
 
 		MessagesVec mAllMessages;
 		MessagesVec mVisibleMessages;
 
-		bool        mRegularMessagesEnabled;
-		bool        mWarningMessagesEnabled;
-		bool        mErrorMessagesEnabled;
+		bool mRegularMessagesEnabled;
+		bool mWarningMessagesEnabled;
+		bool mErrorMessagesEnabled;
 
-		int         mRegularMessagesCount;
-		int         mWarningMessagesCount;
-		int         mErrorMessagesCount;
+		int mRegularMessagesCount;
+		int mWarningMessagesCount;
+		int mErrorMessagesCount;
 
 	public:
 		// Default constructor

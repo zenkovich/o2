@@ -16,8 +16,8 @@ namespace o2
 	RectsPacker::Rect* RectsPacker::AddRect(const Vec2F& size)
 	{
 		Rect* newRect = mRectsPool.Take();
-		newRect->mSize = size;
-		newRect->mRect = RectF();
+		newRect->size = size;
+		newRect->rect = RectF();
 		mRects.Add(newRect);
 		return newRect;
 	}
@@ -48,7 +48,7 @@ namespace o2
 
 	int RectsPacker::GetPagesCount() const
 	{
-		return mRects.Max<int>([&](Rect* rt) { return rt->mPage; })->mPage + 1;
+		return mRects.Max<int>([&](Rect* rt) { return rt->page; })->page + 1;
 	}
 
 	bool RectsPacker::Pack()
@@ -58,8 +58,8 @@ namespace o2
 
 		mQuadNodes.Clear();
 
-		mRects.ForEach([](Rect* rt) { rt->mPage = -1; rt->mRect = RectI(); });
-		mRects.Sort([](auto a, auto b) { return a->mSize.y > b->mSize.y; });
+		mRects.ForEach([](Rect* rt) { rt->page = -1; rt->rect = RectI(); });
+		mRects.Sort([](auto a, auto b) { return a->size.y > b->size.y; });
 
 		for (auto rt : mRects)
 		{
@@ -75,7 +75,7 @@ namespace o2
 	{
 		int maxPage = -1;
 		for (auto rt : mRects)
-			maxPage = Math::Max(maxPage, rt->mPage);
+			maxPage = Math::Max(maxPage, rt->page);
 
 		mQuadNodes.Add(mnew QuadNode(maxPage + 1, RectF(Vec2F(), mMaxSize)));
 	}
@@ -113,19 +113,19 @@ namespace o2
 
 	bool RectsPacker::TryInsertRect(Rect& rt, QuadNode* node)
 	{
-		if (node->mFree && node->mRect.Width() >= rt.mSize.x &&
-			node->mRect.Height() >= rt.mSize.y)
+		if (node->free && node->rect.Width() >= rt.size.x &&
+			node->rect.Height() >= rt.size.y)
 		{
-			Vec2F leftDown = node->mRect.LeftBottom();
-			Vec2F center = leftDown + rt.mSize;
-			Vec2F rightTop = node->mRect.RightTop();
+			Vec2F leftDown = node->rect.LeftBottom();
+			Vec2F center = leftDown + rt.size;
+			Vec2F rightTop = node->rect.RightTop();
 
-			node->mFree = false;
-			node->AddChild(mnew QuadNode(node->mPage, RectF(leftDown.x, rightTop.y, rightTop.x, center.y)));
-			node->AddChild(mnew QuadNode(node->mPage, RectF(center.x, center.y, rightTop.x, leftDown.y)));
+			node->free = false;
+			node->AddChild(mnew QuadNode(node->page, RectF(leftDown.x, rightTop.y, rightTop.x, center.y)));
+			node->AddChild(mnew QuadNode(node->page, RectF(center.x, center.y, rightTop.x, leftDown.y)));
 
-			rt.mPage = node->mPage;
-			rt.mRect = RectF(leftDown, center);
+			rt.page = node->page;
+			rt.rect = RectF(leftDown, center);
 
 			return true;
 		}
@@ -152,21 +152,21 @@ namespace o2
 	}
 
 	RectsPacker::QuadNode::QuadNode(int page /*= 0*/, const RectF& rect /*= RectF()*/):
-		mPage(page), mRect(rect), mFree(true)
+		page(page), rect(rect), free(true)
 	{}
 
 	void RectsPacker::QuadNode::OnChildAdded(QuadNode* child)
 	{
-		child->mPage = mPage;
+		child->page = page;
 	}
 
 	bool RectsPacker::QuadNode::operator==(const QuadNode& other)
 	{
-		return mRect == other.mRect && mPage == other.mPage && mFree == other.mFree;
+		return rect == other.rect && page == other.page && free == other.free;
 	}
 
 	RectsPacker::Rect::Rect(const Vec2F& size /*= Vec2F()*/):
-		mSize(size), mPage(-1)
+		size(size), page(-1)
 	{}
 
 }

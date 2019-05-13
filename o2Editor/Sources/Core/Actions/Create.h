@@ -30,17 +30,14 @@ namespace Editor
 		// Constructor wit created actors and their places in their parents
 		CreateAction(const Vector<SceneEditableObject*>& objects, SceneEditableObject* parent, SceneEditableObject* prevObject);
 
-
 		// Returns name of action
 		String GetName() const;
-
 
 		// Creates all objects again
 		void Redo();
 
 		// Removes created objects
 		void Undo();
-
 
 		SERIALIZABLE(CreateAction);
 	};

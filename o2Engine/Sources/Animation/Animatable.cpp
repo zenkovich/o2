@@ -56,7 +56,7 @@ namespace o2
 		state->mOwner = this;
 
 		for (auto& val : state->animation.mAnimatedValues)
-			val.mAnimatedValue->RegInAnimatable(state, val.mTargetPath);
+			val.animatedValue->RegInAnimatable(state, val.targetPath);
 
 		return state;
 	}
@@ -80,7 +80,7 @@ namespace o2
 	void Animatable::RemoveState(AnimationState* state)
 	{
 		for (auto& val : state->animation.mAnimatedValues)
-			UnregAnimatedValue(val.mAnimatedValue, val.mTargetPath);
+			UnregAnimatedValue(val.animatedValue, val.targetPath);
 
 		mStates.Remove(state);
 		delete state;

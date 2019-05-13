@@ -25,6 +25,7 @@ namespace o2
 
 		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 
+	public:
 		// Default constructor
 		HorizontalLayout();
 

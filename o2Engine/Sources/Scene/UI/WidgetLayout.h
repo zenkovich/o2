@@ -290,7 +290,7 @@ namespace o2
 		// Doesn't checks size, dummy function
 		void DontCheckMinMax();
 
-		friend class UIContextMenu;
+		friend class ContextMenu;
 		friend class CustomDropDown;
 		friend class CustomList;
 		friend class EditBox;

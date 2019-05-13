@@ -42,11 +42,11 @@ namespace Editor
 	public:
 		Vector<WidgetLayer*> mLayers;
 
-		Widget*              mDataView = nullptr;
+		Widget* mDataView = nullptr;
 
-		BooleanProperty*       mEnableProperty = nullptr;
-		StringProperty*        mNameProperty = nullptr;
-		BooleanProperty*       mLockProperty = nullptr;
+		BooleanProperty* mEnableProperty = nullptr;
+		StringProperty*  mNameProperty = nullptr;
+		BooleanProperty* mLockProperty = nullptr;
 
 	protected:
 		// It is called when some property changed, stores action for undo
