@@ -3,6 +3,7 @@
 #include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/TrackControls/ITrackControl.h"
+#include "Core/Properties/Properties.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragHandle.h"
 
@@ -51,14 +52,19 @@ namespace Editor
 		// Returns key handle position
 		float GetKeyPosition(int idx) const override;
 
+		// Returns value property
+		IPropertyField* GetPropertyField() const;
+
 		SERIALIZABLE(KeyFramesTrackControl<AnimatedValueType>);
 
 	private:
+		typedef typename AnimatedValueType::ValueType AnimatedValueTypeValueType;
+
 		KeyHandlesVec mHandles; // List of handles, each for keys
 
 		IPropertyField* mPropertyField; 
-		AnimatedValueType::ValueType mPropertyValue = AnimatedValueType::ValueType();
-
+		AnimatedValueTypeValueType mPropertyValue = AnimatedValueTypeValueType();
+		PointerValueProxy<AnimatedValueTypeValueType> mPropertyValueProxy;
 
 		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
 		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
@@ -76,12 +82,16 @@ namespace Editor
 	template<typename AnimatedValueType>
 	KeyFramesTrackControl<AnimatedValueType>::KeyFramesTrackControl():
 		ITrackControl()
-	{}
+	{
+		InitializeProperty();
+	}
 
 	template<typename AnimatedValueType>
 	KeyFramesTrackControl<AnimatedValueType>::KeyFramesTrackControl(const KeyFramesTrackControl& other) :
 		ITrackControl(other)
-	{}
+	{
+		InitializeProperty();
+	}
 
 	template<typename AnimatedValueType>
 	KeyFramesTrackControl<AnimatedValueType>::~KeyFramesTrackControl()
@@ -155,9 +165,18 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
+	IPropertyField* KeyFramesTrackControl<AnimatedValueType>::GetPropertyField() const
+	{
+		return mPropertyField;
+	}
+
+	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeProperty()
 	{
-		mPropertyField = o2EditorProperties.BuildField();
+		auto fieldProto = o2EditorProperties.GetFieldPropertyPrototype(&TypeOf(AnimatedValueType::ValueType));
+		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(fieldProto->GetType(), "standard"));
+		mPropertyValueProxy = PointerValueProxy<AnimatedValueTypeValueType>(&mPropertyValue);
+		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
 	}
 
 	template<typename AnimatedValueType>
@@ -282,6 +301,9 @@ META_TEMPLATES(typename AnimatedValueType)
 CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 {
 	PRIVATE_FIELD(mHandles);
+	PRIVATE_FIELD(mPropertyField);
+	PRIVATE_FIELD(mPropertyValue);
+	PRIVATE_FIELD(mPropertyValueProxy);
 	PRIVATE_FIELD(mAnimatedValue);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mHandlesSheet);
@@ -298,6 +320,8 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
+	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
+	PRIVATE_FUNCTION(void, InitializeProperty);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
 	PRIVATE_FUNCTION(void, ChangeHandleIndex, int, int);

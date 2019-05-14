@@ -23,6 +23,11 @@ namespace Editor
 		return 0.0f;
 	}
 
+	IPropertyField* ITrackControl::GetPropertyField() const
+	{
+		return nullptr;
+	}
+
 	bool ITrackControl::KeyHandle::operator==(const KeyHandle& other) const
 	{
 		return handle == other.handle;

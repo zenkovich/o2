@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Animation/AnimatedValue.h"
+#include "Core/Properties/IPropertyField.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragHandle.h"
 
@@ -35,6 +36,8 @@ namespace Editor
 		virtual KeyHandlesVec GetKeyHandles() const;
 		virtual float GetKeyPosition(int idx) const;
 
+		virtual IPropertyField* GetPropertyField() const;
+
 		SERIALIZABLE(ITrackControl);
 	};
 }
@@ -56,5 +59,6 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
+	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
 }
 END_META;

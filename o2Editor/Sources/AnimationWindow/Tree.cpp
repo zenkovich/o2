@@ -241,8 +241,13 @@ namespace Editor
 
 	void AnimationTreeNode::SetTreeWidth(float width)
 	{
-		if (mTrackControl)
+		if (mTrackControl) 
+		{
 			*mTrackControl->layout = WidgetLayout::BothStretch(width, 0, 0, 0);
+
+			if (auto prop = mTrackControl->GetPropertyField())
+				*prop->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(50, 25), Vec2F(width - 50, 0));
+		}
 	}
 
 	void AnimationTreeNode::CopyData(const Actor& otherActor)
@@ -285,6 +290,9 @@ namespace Editor
 			trackControlsCache[trackType].Add(mTrackControl);
 
 			RemoveChild(mTrackControl, false);
+
+			if (auto prop = mTrackControl->GetPropertyField())
+				RemoveChild(prop, false);
 		}
 
 		mTrackControl = nullptr;
@@ -325,6 +333,9 @@ namespace Editor
 
 			AddChild(mTrackControl);
 		}
+
+		if (auto prop = mTrackControl->GetPropertyField())
+			AddChild(prop);
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()
