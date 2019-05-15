@@ -5,6 +5,8 @@
 #include "TrackControls/KeyFramesTrackControl.h"
 #include "TrackControls/MapKeyFramesTrackControl.h"
 #include "Tree.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/UIManager.h"
 
 namespace Editor
 {
@@ -241,12 +243,19 @@ namespace Editor
 
 	void AnimationTreeNode::SetTreeWidth(float width)
 	{
-		if (mTrackControl) 
+		if (mTrackControl)
 		{
 			*mTrackControl->layout = WidgetLayout::BothStretch(width, 0, 0, 0);
 
+			float right = width - layout->GetOffsetLeft();
+			*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(mAddKeyButtonSize, mAddKeyButtonSize), 
+														 Vec2F(right - mAddKeyButtonSize, 0.0f));
+
 			if (auto prop = mTrackControl->GetPropertyField())
-				*prop->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(50, 25), Vec2F(width - 50, 0));
+			{
+				*prop->layout = WidgetLayout::VerStretch(HorAlign::Left, mPropertyBorder, mPropertyBorder, mPropertySize,
+														 right - mPropertySize - mPropertyBorder - mAddKeyButtonSize);
+			}
 		}
 	}
 
@@ -265,13 +274,17 @@ namespace Editor
 	void AnimationTreeNode::InitializeControls()
 	{
 		mNameDrawable = GetLayerDrawable<Text>("name");
+
+		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
+		AddChild(mAddKeyButton);
+		mAddKeyButton->enabled = false;
 	}
 
 	void AnimationTreeNode::InitilizeTrackControl()
 	{
 		PushScopeEnterOnStack scope;
 
-		static Dictionary<const Type*, const Type*> animatedValueToControlTrackTypes = 
+		static Dictionary<const Type*, const Type*> animatedValueToControlTrackTypes =
 		{
 			{ &TypeOf(AnimatedValue<float>), &TypeOf(KeyFramesTrackControl<AnimatedValue<float>>) },
 			{ &TypeOf(AnimatedValue<bool>), &TypeOf(KeyFramesTrackControl<AnimatedValue<bool>>) },
@@ -290,6 +303,8 @@ namespace Editor
 			trackControlsCache[trackType].Add(mTrackControl);
 
 			RemoveChild(mTrackControl, false);
+
+			mAddKeyButton->enabled = false;
 
 			if (auto prop = mTrackControl->GetPropertyField())
 				RemoveChild(prop, false);
@@ -335,7 +350,10 @@ namespace Editor
 		}
 
 		if (auto prop = mTrackControl->GetPropertyField())
+		{
 			AddChild(prop);
+			mAddKeyButton->enabled = true;
+		}
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()

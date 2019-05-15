@@ -137,11 +137,17 @@ namespace Editor
 		SERIALIZABLE(AnimationTreeNode);
 
 	protected:
-		AnimationTree::AnimationValueNode* mData = nullptr;
-		AnimationTimeline* mTimeline = nullptr;
-		KeyHandlesSheet* mHandlesSheet = nullptr;
+		float mPropertyBorder = 2.0f;
+		float mAddKeyButtonSize = 20.0f;
+		float mPropertySize = 60.0f;
 
-		Text* mNameDrawable = nullptr; // Object name drawable
+		AnimationTree::AnimationValueNode* mData = nullptr; // Editing animated value data
+
+		AnimationTimeline* mTimeline = nullptr;     // Animation timeline pointer, passes into track controller
+		KeyHandlesSheet*   mHandlesSheet = nullptr; // Handles sheet group, passes into track controller
+
+		Text*   mNameDrawable = nullptr; // Object name drawable
+		Button* mAddKeyButton = nullptr; // Add key button, enables when property field from track controller is available
 
 		ITrackControl* mTrackControl = nullptr; // Animated value editor
 
@@ -210,10 +216,14 @@ CLASS_BASES_META(Editor::AnimationTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTreeNode)
 {
+	PROTECTED_FIELD(mPropertyBorder);
+	PROTECTED_FIELD(mAddKeyButtonSize);
+	PROTECTED_FIELD(mPropertySize);
 	PROTECTED_FIELD(mData);
 	PROTECTED_FIELD(mTimeline);
 	PROTECTED_FIELD(mHandlesSheet);
 	PROTECTED_FIELD(mNameDrawable);
+	PROTECTED_FIELD(mAddKeyButton);
 	PROTECTED_FIELD(mTrackControl);
 }
 END_META;

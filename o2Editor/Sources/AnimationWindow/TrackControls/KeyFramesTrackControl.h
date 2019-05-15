@@ -34,6 +34,9 @@ namespace Editor
 		// Draws handles with clipping
 		void Draw() override;
 
+		// Updates widget, checks value change
+		void Update(float dt) override;
+
 		// Sets animated value, updates and creates key handles
 		void SetAnimatedValue(IAnimatedValue* animatedValue) override;
 
@@ -62,8 +65,8 @@ namespace Editor
 
 		KeyHandlesVec mHandles; // List of handles, each for keys
 
-		IPropertyField* mPropertyField; 
-		AnimatedValueTypeValueType mPropertyValue = AnimatedValueTypeValueType();
+		IPropertyField*                               mPropertyField; 
+		AnimatedValueTypeValueType                    mPropertyValue = AnimatedValueTypeValueType();
 		PointerValueProxy<AnimatedValueTypeValueType> mPropertyValueProxy;
 
 		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
@@ -123,6 +126,18 @@ namespace Editor
 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::Update(float dt)
+	{
+		Widget::Update(dt);
+
+		if (!Math::Equals(mPropertyValue, mAnimatedValue->GetValue()))
+		{
+			mPropertyValue = mAnimatedValue->GetValue();
+			mPropertyField->Refresh();
+		}
 	}
 
 	template<typename AnimatedValueType>
@@ -314,6 +329,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);

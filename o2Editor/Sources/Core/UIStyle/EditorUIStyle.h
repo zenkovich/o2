@@ -53,6 +53,7 @@ namespace Editor
 		void RebuildPlayStopMenuToggle();
 		void RebuildLoopMenuToggle();
 		void RebuildAddKeyMenuButton();
+		void RebuildAddKeyButton();
 
 		void RebuildFloatProperty();
 		void RebuildRedFloatProperty();
@@ -255,6 +256,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildPlayStopMenuToggle);
 	PUBLIC_FUNCTION(void, RebuildLoopMenuToggle);
 	PUBLIC_FUNCTION(void, RebuildAddKeyMenuButton);
+	PUBLIC_FUNCTION(void, RebuildAddKeyButton);
 	PUBLIC_FUNCTION(void, RebuildFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildRedFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);

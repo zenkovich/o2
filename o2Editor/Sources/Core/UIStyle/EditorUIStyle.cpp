@@ -2467,6 +2467,28 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "menu add key");
 	}
 
+	void EditorUIStyleBuilder::RebuildAddKeyButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_add_key.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI4_add_key_hover.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI4_add_key_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "add key");
+	}
+
 	void EditorUIStyleBuilder::RebuildSpoilerWithHead()
 	{
 		auto sample = mnew SpoilerWithHead();
