@@ -15,11 +15,15 @@ namespace Editor
 	{
 		mSelectionFrame = mnew Sprite("ui/UI4_keys_select.png");
 		mSelectionFrame->enabled = false;
+
+		InitializeHandles();
 	}
 
 	KeyHandlesSheet::KeyHandlesSheet(const KeyHandlesSheet& other) :
 		Widget(other), mSelectionFrame(other.mSelectionFrame->CloneAs<Sprite>())
-	{}
+	{
+		InitializeHandles();
+	}
 
 	KeyHandlesSheet::~KeyHandlesSheet()
 	{
@@ -80,6 +84,10 @@ namespace Editor
 			if (handle->IsEnabled())
 				handle->CursorAreaEventsListener::OnDrawn();
 		}
+
+		mCenterFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+		mLeftFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+		mRightFrameDragHandle.CursorAreaEventsListener::OnDrawn();
 	}
 
 	void KeyHandlesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree)
@@ -116,6 +124,130 @@ namespace Editor
 		UpdateSelectionFrame();
 	}
 
+	void KeyHandlesSheet::InitializeHandles()
+	{
+		InitializeCenterHandle();
+		InitializeLeftHandle();
+		InitializeRightHandle();
+	}
+
+	void KeyHandlesSheet::InitializeCenterHandle()
+	{
+		mCenterFrameDragHandle.localToScreenTransformFunc = [&](const Vec2F& point) {
+			return Vec2F(mTimeline->LocalToWorld(point.x), mTree->GetLineWorldPosition(point.y));
+		};
+
+		mCenterFrameDragHandle.screenToLocalTransformFunc = [&](const Vec2F& point) {
+			return Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+		};
+
+		mCenterFrameDragHandle.isPointInside = [&](const Vec2F& point) {
+			auto local = Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+			return local.x > mSelectionRect.left && local.x < mSelectionRect.right && local.y > mSelectionRect.top && local.y < mSelectionRect.bottom;
+		};
+
+		mCenterFrameDragHandle.checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(point.x, mSelectionRect.Center().y);
+		};
+
+		mCenterFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
+			Vec2F delta(point.x - mSelectionRect.Center().x, mSelectionRect.Center().y);
+
+			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+				animatedValueDef.animatedValue->BeginKeysBatchChange();
+
+			for (auto handle : GetSelectedHandles()) {
+				handle->SetPosition(handle->GetPosition() + delta);
+				handle->onChangedPos(handle->GetPosition());
+			}
+
+			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+
+			UpdateSelectionFrame();
+		};
+
+		mCenterFrameDragHandle.cursorType = CursorType::SizeWE;
+	}
+
+	void KeyHandlesSheet::InitializeLeftHandle()
+	{
+		mLeftFrameDragHandle.localToScreenTransformFunc = [&](const Vec2F& point) {
+			return Vec2F(mTimeline->LocalToWorld(point.x), mTree->GetLineWorldPosition(point.y));
+		};
+
+		mLeftFrameDragHandle.screenToLocalTransformFunc = [&](const Vec2F& point) {
+			return Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+		};
+
+		mLeftFrameDragHandle.isPointInside = [&](const Vec2F& point) {
+			auto r = mSelectionFrame->GetRect();
+			return RectF(r.left - 5, r.bottom, r.left + 5, r.top).IsInside(point);
+		};
+
+		mLeftFrameDragHandle.checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(point.x, mSelectionRect.Center().y);
+		};
+
+		mLeftFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
+			float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
+
+			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+				animatedValueDef.animatedValue->BeginKeysBatchChange();
+
+			for (auto handle : GetSelectedHandles()) {
+				handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.right)*scale + mSelectionRect.right, handle->GetPosition().y));
+				handle->onChangedPos(handle->GetPosition());
+			}
+
+			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+
+			UpdateSelectionFrame();
+		};
+
+		mLeftFrameDragHandle.cursorType = CursorType::SizeWE;
+	}
+
+	void KeyHandlesSheet::InitializeRightHandle()
+	{
+		mRightFrameDragHandle.localToScreenTransformFunc = [&](const Vec2F& point) {
+			return Vec2F(mTimeline->LocalToWorld(point.x), mTree->GetLineWorldPosition(point.y));
+		};
+
+		mRightFrameDragHandle.screenToLocalTransformFunc = [&](const Vec2F& point) {
+			return Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+		};
+
+		mRightFrameDragHandle.isPointInside = [&](const Vec2F& point) {
+			auto r = mSelectionFrame->GetRect();
+			return RectF(r.right - 5, r.bottom, r.right + 5, r.top).IsInside(point);
+		};
+
+		mRightFrameDragHandle.checkPositionFunc = [&](const Vec2F& point) {
+			return Vec2F(point.x, mSelectionRect.Center().y);
+		};
+
+		mRightFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
+			float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
+
+			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+				animatedValueDef.animatedValue->BeginKeysBatchChange();
+
+			for (auto handle : GetSelectedHandles()) {
+				handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.left)*scale + mSelectionRect.left, handle->GetPosition().y));
+				handle->onChangedPos(handle->GetPosition());
+			}
+
+			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+
+			UpdateSelectionFrame();
+		};
+
+		mRightFrameDragHandle.cursorType = CursorType::SizeWE;
+	}
+
 	void KeyHandlesSheet::UpdateSelectionFrame()
 	{
 		if (mIsFrameSelecting)
@@ -139,6 +271,10 @@ namespace Editor
 				mSelectionRect.bottom = Math::Max(mSelectionRect.bottom, Math::Ceil(lineNumber));
 				mSelectionRect.top = Math::Min(mSelectionRect.top, Math::Floor(lineNumber - 0.5f));
 			}
+
+			mCenterFrameDragHandle.position = mSelectionRect.Center();
+			mLeftFrameDragHandle.position = Vec2F(mSelectionRect.left, mSelectionRect.Center().y);
+			mRightFrameDragHandle.position = Vec2F(mSelectionRect.right, mSelectionRect.Center().y);
 		}
 		else mSelectionFrame->enabled = false;
 	}

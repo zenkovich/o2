@@ -76,6 +76,21 @@ namespace Editor
 		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
 	private:
+		// Initializes frame handles
+		void InitializeHandles();
+
+		// Initializes center handle, that moves selected keys on timeline
+		void InitializeCenterHandle();
+
+		// Initializes left handle, that moves selected keys on timeline relative to right selection rect position
+		void InitializeLeftHandle();
+
+		// Initializes right handle, that moves selected keys on timeline relative to left selection rect position
+		void InitializeRightHandle();
+
+		// Updates selection rectangle and drawing sprite
+		void UpdateSelectionFrame();
+
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
 		void OnSelectionChanged() override;
@@ -83,9 +98,6 @@ namespace Editor
 		// It is called when selectable handle moved, moves all selected handles position
 		// Enables keys batch change
 		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) override;
-
-		// Updates selection rectangle and drawing sprite
-		void UpdateSelectionFrame();
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -170,9 +182,13 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateInputDrawOrder);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PRIVATE_FUNCTION(void, InitializeHandles);
+	PRIVATE_FUNCTION(void, InitializeCenterHandle);
+	PRIVATE_FUNCTION(void, InitializeLeftHandle);
+	PRIVATE_FUNCTION(void, InitializeRightHandle);
+	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
 	PRIVATE_FUNCTION(void, OnHandleMoved, DragHandle*, const Input::Cursor&);
-	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
 	PRIVATE_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
