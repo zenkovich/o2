@@ -38,6 +38,8 @@ namespace Editor
 
 		virtual IPropertyField* GetPropertyField() const;
 
+		virtual void InsertNewKey(float time);
+
 		SERIALIZABLE(ITrackControl);
 	};
 }
@@ -60,5 +62,6 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
+	PUBLIC_FUNCTION(void, InsertNewKey, float);
 }
 END_META;

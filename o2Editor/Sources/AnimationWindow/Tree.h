@@ -126,13 +126,14 @@ namespace Editor
 		// Copy operator
 		AnimationTreeNode& operator=(const AnimationTreeNode& other);
 
-
 		// Sets object and updates content
 		void Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
-
 		// Sets width of tree part and control part
 		void SetTreeWidth(float width);
+
+		// it is called from handles sheet, when user double clicked, creates new key under cursor
+		void OnDoubleClicked(const Input::Cursor& cursor);
 
 		SERIALIZABLE(AnimationTreeNode);
 
@@ -232,6 +233,7 @@ CLASS_METHODS_META(Editor::AnimationTreeNode)
 
 	PUBLIC_FUNCTION(void, Setup, AnimationTree::AnimationValueNode*, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
+	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeControls);

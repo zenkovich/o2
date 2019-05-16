@@ -259,6 +259,12 @@ namespace Editor
 		}
 	}
 
+	void AnimationTreeNode::OnDoubleClicked(const Input::Cursor& cursor)
+	{
+		if (mTrackControl)
+			mTrackControl->InsertNewKey(mTimeline->WorldToLocal(cursor.position.x));
+	}
+
 	void AnimationTreeNode::CopyData(const Actor& otherActor)
 	{
 		TreeNode::CopyData(otherActor);

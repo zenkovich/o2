@@ -85,9 +85,11 @@ namespace Editor
 				handle->CursorAreaEventsListener::OnDrawn();
 		}
 
-		mCenterFrameDragHandle.CursorAreaEventsListener::OnDrawn();
-		mLeftFrameDragHandle.CursorAreaEventsListener::OnDrawn();
-		mRightFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+		if (mSelectionFrame->enabled) {
+			mCenterFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+			mLeftFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+			mRightFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+		}
 	}
 
 	void KeyHandlesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree)
@@ -363,7 +365,12 @@ namespace Editor
 
 	void KeyHandlesSheet::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
+		auto treeNode = mTree->GetTreeNodeUnderPoint(cursor.position);
+		if (!treeNode)
+			return;
 
+		auto animTreeNode = dynamic_cast<AnimationTreeNode*>(treeNode);
+		animTreeNode->OnDoubleClicked(cursor);
 	}
 
 	void KeyHandlesSheet::OnCursorRightMousePressed(const Input::Cursor& cursor)

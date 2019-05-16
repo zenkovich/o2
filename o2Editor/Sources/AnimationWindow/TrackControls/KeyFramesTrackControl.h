@@ -56,7 +56,10 @@ namespace Editor
 		float GetKeyPosition(int idx) const override;
 
 		// Returns value property
-		IPropertyField* GetPropertyField() const;
+		IPropertyField* GetPropertyField() const override;
+
+		// Inserts new key at time
+		void InsertNewKey(float time);
 
 		SERIALIZABLE(KeyFramesTrackControl<AnimatedValueType>);
 
@@ -259,11 +262,15 @@ namespace Editor
 		int idx = 0;
 		for (auto& key : mAnimatedValue->GetKeys())
 		{			
-			auto keyHandle = mHandles[idx++];
-			keyHandle->handle->SetPosition(Vec2F(key.position, 0.0f));
+			if (idx < mHandles.Count()) 
+			{
+				auto keyHandle = mHandles[idx];
+				keyHandle->handle->SetPosition(Vec2F(key.position, 0.0f));
+			}
+
+			idx++;
 		}
 	}
-
 
 	template<typename AnimatedValueType>
 	WidgetDragHandle* KeyFramesTrackControl<AnimatedValueType>::CreateHandle()
@@ -304,6 +311,14 @@ namespace Editor
 
 		return handle;
 	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::InsertNewKey(float time)
+	{
+		mAnimatedValue->AddKey(time, mAnimatedValue->GetValue(time));
+		InitializeHandles();
+	}
+
 }
 
 META_TEMPLATES(typename AnimatedValueType)
@@ -337,6 +352,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
+	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeProperty);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);

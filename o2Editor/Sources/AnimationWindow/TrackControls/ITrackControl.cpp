@@ -28,6 +28,9 @@ namespace Editor
 		return nullptr;
 	}
 
+	void ITrackControl::InsertNewKey(float time)
+	{}
+
 	bool ITrackControl::KeyHandle::operator==(const KeyHandle& other) const
 	{
 		return handle == other.handle;

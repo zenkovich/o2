@@ -34,6 +34,11 @@ namespace o2
 			return roundf(value);
 		}
 
+		inline float Mod(float val, float x)
+		{ 
+			return fmodf(val, x);
+		}
+
 		Vec2F Round(const Vec2F& value);
 
 		RectF Round(const RectF& value);
