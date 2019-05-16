@@ -191,7 +191,12 @@ namespace Editor
 	void AnimationWindow::OnPlayPauseToggled(bool play)
 	{
 		if (mAnimation)
+		{
+			if (mAnimation->GetLoop() != Loop::Repeat && Math::Equals(mAnimation->GetTime(), mAnimation->GetDuration()))
+				mAnimation->SetTime(0.0f);
+
 			mAnimation->SetPlaying(play);
+		}
 	}
 
 	void AnimationWindow::OnLoopToggled(bool loop)
