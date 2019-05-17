@@ -71,6 +71,9 @@ namespace Editor
 		// Returns scrollbar widget, used for view scroll
 		HorizontalScrollBar* GetScrollBar() const;
 
+		// Checks is this timeA and timeB are same on screen. Dependent on zoom, thershold - max pixels distance on screen
+		bool IsSameTime(float timeA, float timeB, float threshold = 1.7f) const;
+
 		SERIALIZABLE(AnimationTimeline);
 
 	private:
@@ -203,6 +206,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(Text*, GetText);
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
+	PUBLIC_FUNCTION(bool, IsSameTime, float, float);
 	PRIVATE_FUNCTION(void, UpdateDuration);
 	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);

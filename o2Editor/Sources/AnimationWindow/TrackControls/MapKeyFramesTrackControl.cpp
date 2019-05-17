@@ -199,7 +199,7 @@ namespace Editor
 		{
 			for (auto keyHandle : kv.Value())
 			{
-				if (Math::Equals(keyHandle->handle->GetPosition().x, position, delta))
+				if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
 					res.Add(keyHandle);
 			}
 		}

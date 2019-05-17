@@ -342,6 +342,11 @@ namespace Editor
 		return mScrollBar;
 	}
 
+	bool AnimationTimeline::IsSameTime(float timeA, float timeB, float threshold /*= 1.7f*/) const
+	{
+		return Math::Abs(LocalToWorld(timeA) - LocalToWorld(timeB)) < threshold;
+	}
+
 }
 
 DECLARE_CLASS(Editor::AnimationTimeline);

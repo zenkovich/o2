@@ -3,6 +3,7 @@
 #include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/TrackControls/ITrackControl.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragHandle.h"
@@ -72,6 +73,8 @@ namespace Editor
 		AnimatedValueTypeValueType                    mPropertyValue = AnimatedValueTypeValueType();
 		PointerValueProxy<AnimatedValueTypeValueType> mPropertyValueProxy;
 
+		AnimatedValueTypeValueType mLastAnimatedValue = AnimatedValueTypeValueType();
+
 		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
 		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
 		KeyHandlesSheet*   mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
@@ -83,6 +86,8 @@ namespace Editor
 		WidgetDragHandle* CreateHandle();
 
 		void ChangeHandleIndex(int oldIndex, int newIndex);
+
+		void OnPropertyChanged();
 	};
 
 	template<typename AnimatedValueType>
@@ -136,9 +141,10 @@ namespace Editor
 	{
 		Widget::Update(dt);
 
-		if (!Math::Equals(mPropertyValue, mAnimatedValue->GetValue()))
+		if (!Math::Equals(mLastAnimatedValue, mAnimatedValue->GetValue()))
 		{
 			mPropertyValue = mAnimatedValue->GetValue();
+			mLastAnimatedValue = mPropertyValue;
 			mPropertyField->Refresh();
 		}
 	}
@@ -195,11 +201,14 @@ namespace Editor
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(fieldProto->GetType(), "standard"));
 		mPropertyValueProxy = PointerValueProxy<AnimatedValueTypeValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
+		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataNode>&, const Vector<DataNode>&) { OnPropertyChanged(); };
 	}
 
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
 	{
+		PushScopeEnterOnStack scope;
+
 		Vector<WidgetDragHandle*> handlesCache = mHandles.Select<WidgetDragHandle*>(
 			[&](const KeyHandle* x) { x->handle->SetParent(nullptr); x->handle->SetEnabled(false); return x->handle; });
 
@@ -319,6 +328,35 @@ namespace Editor
 		InitializeHandles();
 	}
 
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::OnPropertyChanged()
+	{
+		auto time = mAnimatedValue->GetTime();
+		int keyIdx = -1;
+		int i = 0;
+		for (auto& key : mAnimatedValue->GetKeys()) 
+		{
+			if (mTimeline->IsSameTime(key.position, time)) 
+			{
+				keyIdx = i;
+				break;
+			}
+			i++;
+		}
+
+		if (keyIdx >= 0)
+		{
+			auto key = mAnimatedValue->GetKeys()[keyIdx];
+			mAnimatedValue->RemoveKeyAt(time);
+			key.value = mPropertyValue;
+			mAnimatedValue->AddKey(key);
+		}
+		else 
+		{
+			mAnimatedValue->AddKey(time, mPropertyValue);
+			InitializeHandles();
+		}
+	}
 }
 
 META_TEMPLATES(typename AnimatedValueType)
@@ -334,6 +372,7 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PRIVATE_FIELD(mPropertyField);
 	PRIVATE_FIELD(mPropertyValue);
 	PRIVATE_FIELD(mPropertyValueProxy);
+	PRIVATE_FIELD(mLastAnimatedValue);
 	PRIVATE_FIELD(mAnimatedValue);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mHandlesSheet);
@@ -357,5 +396,6 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
 	PRIVATE_FUNCTION(void, ChangeHandleIndex, int, int);
+	PRIVATE_FUNCTION(void, OnPropertyChanged);
 }
 END_META;
