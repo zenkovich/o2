@@ -206,7 +206,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(Text*, GetText);
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
-	PUBLIC_FUNCTION(bool, IsSameTime, float, float);
+	PUBLIC_FUNCTION(bool, IsSameTime, float, float, float);
 	PRIVATE_FUNCTION(void, UpdateDuration);
 	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);

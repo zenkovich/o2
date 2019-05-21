@@ -48,12 +48,12 @@ namespace Editor
 	private:
 		struct KeyHandle
 		{
-			int keyIdx = 0;
+			int               keyIdx = 0;
 			WidgetDragHandle* handle = nullptr;
-			IAnimatedValue* animatedValue = nullptr;
+			IAnimatedValue*   animatedValue = nullptr;
 
 			Vector<KeyHandle*> combinedHandles;
-			bool combining = true;
+			bool               combining = true;
 
 			Function<void(KeyHandle& keyHandle)> updateFunc;
 
@@ -65,6 +65,30 @@ namespace Editor
 			bool operator==(const KeyHandle& other) const;
 		};
 		typedef Vector<KeyHandle*> KeyHandlesVec;
+
+		struct IHandlesGroup
+		{ 
+			KeyHandlesVec handles;
+
+		public:
+			virtual void InitializeHandles(IAnimatedValue* animatedValue) = 0;
+			virtual void ChangeHandleIndex(int oldIndex, int newIndex) = 0;
+			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
+			virtual void CheckHandlesCount() = 0;
+		};
+
+		template<typename AnimationValueType>
+		struct HandlesGroup
+		{
+			AnimationValueType* animatedValue;
+
+		public:
+			void InitializeHandles(IAnimatedValue* animatedValue);
+			void ChangeHandleIndex(int oldIndex, int newIndex);
+			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos);
+			void CheckHandlesCount();
+		};
+
 		typedef Dictionary<IAnimatedValue*, KeyHandlesVec> AnimatedValueKeyHandlesDict;
 
 	private:
