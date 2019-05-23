@@ -18,10 +18,7 @@ namespace Editor
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()
 	{
 		for (auto kv : mHandles)
-		{
-			for (auto keyHandle : kv.Value())
-				delete keyHandle;
-		}
+			delete kv.Value();
 	}
 
 	MapKeyFramesTrackControl& MapKeyFramesTrackControl::operator=(const MapKeyFramesTrackControl& other)
@@ -51,10 +48,6 @@ namespace Editor
 	void MapKeyFramesTrackControl::SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode)
 	{
 		CacheHandles();
-
-		for (auto animValue : mAnimatedValues)
-			animValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
-
 		mAnimatedValues.Clear();
 
 		InitializeNodeHandles(valueNode);
@@ -71,13 +64,16 @@ namespace Editor
 	{
 		for (auto kv : mHandles)
 		{
-			for (auto keyHandle : kv.Value())
+			for (auto keyHandle : kv.Value()->handles)
 			{
 				keyHandle->handle->SetParent(nullptr);
 				keyHandle->handle->SetEnabled(false);
 				mHandlesCache.Add(keyHandle->handle);
 				delete keyHandle;
 			}
+			kv.Value()->handles.clear();
+
+			delete kv.Value();
 		}
 
 		mHandles.Clear();
@@ -87,14 +83,19 @@ namespace Editor
 	{
 		if (valueNode.animatedValue)
 		{
+			IHandlesGroup* newGroup = nullptr;
+
 			if (auto animatedValue = dynamic_cast<AnimatedValue<float>*>(valueNode.animatedValue))
-				InitializeAnimatedValueHandles(animatedValue);
+				newGroup = mnew HandlesGroup<AnimatedValue<float>>();
 			else if (auto animatedValue = dynamic_cast<AnimatedValue<bool>*>(valueNode.animatedValue))
-				InitializeAnimatedValueHandles(animatedValue);
+				newGroup = mnew HandlesGroup<AnimatedValue<bool>>();
 			else if (auto animatedValue = dynamic_cast<AnimatedValue<Vec2F>*>(valueNode.animatedValue))
-				InitializeAnimatedValueHandles(animatedValue);
+				newGroup = mnew HandlesGroup<AnimatedValue<Vec2F>>();
 			else if (auto animatedValue = dynamic_cast<AnimatedValue<Color4>*>(valueNode.animatedValue))
-				InitializeAnimatedValueHandles(animatedValue);
+				newGroup = mnew HandlesGroup<AnimatedValue<Color4>>();
+
+			if (newGroup)
+				newGroup->InitializeHandles(valueNode.animatedValue);
 		}
 
 		for (auto childNode : valueNode.children)
@@ -107,18 +108,15 @@ namespace Editor
 			return;
 
 		for (auto kv : mHandles)
-		{
-			for (auto keyHandle : kv.Value())
-				keyHandle->updateFunc(*keyHandle);
-		}
+			kv.Value()->UpdateHandles();
 
 		UpdateHandlesCombine();
 	}
 
 	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)
 	{
-		for (auto keyHandle : mHandles[animatedValue])
-			keyHandle->updateFunc(*keyHandle);
+		if (mHandles.ContainsKey(animatedValue))
+			mHandles[animatedValue]->UpdateHandles();
 
 		UpdateHandlesCombine();
 	}
@@ -169,7 +167,7 @@ namespace Editor
 
 		for (auto kv : handlesCopy)
 		{
-			for (auto keyHandle : kv.Value())
+			for (auto keyHandle : kv.Value()->handles)
 				keyHandle->combinedHandles.Clear();
 		}
 
@@ -193,11 +191,9 @@ namespace Editor
 	{
 		Vector<KeyHandle*> res;
 
-		float delta = mTimeline->WorldToLocal(1.5f) - mTimeline->WorldToLocal(0);
-
 		for (auto kv : mHandles)
 		{
-			for (auto keyHandle : kv.Value())
+			for (auto keyHandle : kv.Value()->handles)
 			{
 				if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
 					res.Add(keyHandle);
@@ -217,6 +213,12 @@ namespace Editor
 	bool MapKeyFramesTrackControl::KeyHandle::operator==(const KeyHandle& other) const
 	{
 		return handle == other.handle;
+	}
+
+	MapKeyFramesTrackControl::IHandlesGroup::~IHandlesGroup()
+	{
+		for (auto handle : handles)
+			delete handle;
 	}
 
 }
