@@ -28,6 +28,11 @@ namespace Editor
 		return nullptr;
 	}
 
+	Button* ITrackControl::GetAddKeyButton() const
+	{
+		return nullptr;
+	}
+
 	void ITrackControl::InsertNewKey(float time)
 	{}
 

@@ -2,6 +2,7 @@
 
 #include "../Tree.h"
 #include "AnimationWindow/Timeline.h"
+#include "Core/EditorScope.h"
 #include "ITrackControl.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragHandle.h"
@@ -75,9 +76,9 @@ namespace Editor
 			virtual ~IHandlesGroup();
 
 			virtual void InitializeHandles(IAnimatedValue* ianimatedValue) = 0;
+			virtual void CreateHandles() = 0;
 			virtual void ChangeHandleIndex(int oldIndex, int newIndex) = 0;
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
-			virtual void CheckHandlesCount() = 0;
 			virtual void UpdateHandles() = 0;
 			void CacheHandles();
 		};
@@ -91,9 +92,9 @@ namespace Editor
 			~HandlesGroup();
 
 			void InitializeHandles(IAnimatedValue* ianimatedValue) override;
+			void CreateHandles() override;
 			void ChangeHandleIndex(int oldIndex, int newIndex) override;
 			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
-			void CheckHandlesCount() override;
 			void UpdateHandles() override;
 		};
 
@@ -133,6 +134,14 @@ namespace Editor
 
 		trackControl->mAnimatedValues.Add(animatedValue);
 
+		CreateHandles();
+	}
+
+	template<typename AnimationValueType>
+	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::CreateHandles()
+	{
+		PushScopeEnterOnStack scope;
+
 		int idx = 0;
 		for (auto& key : animatedValue->GetKeys()) {
 			WidgetDragHandle* handle = nullptr;
@@ -167,18 +176,17 @@ namespace Editor
 		if (trackControl->mDisableHandlesUpdate)
 			return;
 
-		CheckHandlesCount();
-
-		for (auto keyHandle : handles) 
-			keyHandle->updateFunc(*keyHandle);
+		if (animatedValue->GetKeys().Count() != handles.Count()) 
+		{
+			CacheHandles();
+			CreateHandles();
+		}
+		else {
+			for (auto keyHandle : handles)
+				keyHandle->updateFunc(*keyHandle);
+		}
 
 		trackControl->UpdateHandlesCombine();
-	}
-
-	template<typename AnimationValueType>
-	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::CheckHandlesCount()
-	{
-
 	}
 
 	template<typename AnimationValueType>

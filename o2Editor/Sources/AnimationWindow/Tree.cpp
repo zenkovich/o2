@@ -248,8 +248,11 @@ namespace Editor
 			*mTrackControl->layout = WidgetLayout::BothStretch(width, 0, 0, 0);
 
 			float right = width - layout->GetOffsetLeft();
-			*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(mAddKeyButtonSize, mAddKeyButtonSize), 
-														 Vec2F(right - mAddKeyButtonSize, 0.0f));
+			if (auto addKeyButton = mTrackControl->GetAddKeyButton()) 
+			{
+				*addKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(mAddKeyButtonSize, mAddKeyButtonSize),
+															Vec2F(right - mAddKeyButtonSize, 0.0f));
+			}
 
 			if (auto prop = mTrackControl->GetPropertyField())
 			{
@@ -280,10 +283,6 @@ namespace Editor
 	void AnimationTreeNode::InitializeControls()
 	{
 		mNameDrawable = GetLayerDrawable<Text>("name");
-
-		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
-		AddChild(mAddKeyButton);
-		mAddKeyButton->enabled = false;
 	}
 
 	void AnimationTreeNode::InitilizeTrackControl()
@@ -310,10 +309,11 @@ namespace Editor
 
 			RemoveChild(mTrackControl, false);
 
-			mAddKeyButton->enabled = false;
-
 			if (auto prop = mTrackControl->GetPropertyField())
 				RemoveChild(prop, false);
+
+			if (auto addKey = mTrackControl->GetAddKeyButton())
+				RemoveChild(addKey, false);
 		}
 
 		mTrackControl = nullptr;
@@ -356,10 +356,10 @@ namespace Editor
 		}
 
 		if (auto prop = mTrackControl->GetPropertyField())
-		{
 			AddChild(prop);
-			mAddKeyButton->enabled = true;
-		}
+
+		if (auto addKey = mTrackControl->GetAddKeyButton())
+			AddChild(addKey);
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()

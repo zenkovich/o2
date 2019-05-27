@@ -5,6 +5,11 @@
 #include "Scene/UI/Widget.h"
 #include "Utils/Editor/DragHandle.h"
 
+namespace o2
+{
+	class Button;
+}
+
 using namespace o2;
 
 namespace Editor
@@ -37,6 +42,7 @@ namespace Editor
 		virtual float GetKeyPosition(int idx) const;
 
 		virtual IPropertyField* GetPropertyField() const;
+		virtual Button* GetAddKeyButton() const;
 
 		virtual void InsertNewKey(float time);
 
@@ -62,6 +68,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
+	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 }
 END_META;

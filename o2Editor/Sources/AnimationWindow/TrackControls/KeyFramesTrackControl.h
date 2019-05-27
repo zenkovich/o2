@@ -59,6 +59,9 @@ namespace Editor
 		// Returns value property
 		IPropertyField* GetPropertyField() const override;
 
+		// Returns add button
+		Button* GetAddKeyButton() const override;
+
 		// Inserts new key at time
 		void InsertNewKey(float time);
 
@@ -73,6 +76,8 @@ namespace Editor
 		AnimatedValueTypeValueType                    mPropertyValue = AnimatedValueTypeValueType();
 		PointerValueProxy<AnimatedValueTypeValueType> mPropertyValueProxy;
 
+		Button* mAddKeyButton = nullptr; // Add key button, enables when available to add new key
+
 		AnimatedValueTypeValueType mLastAnimatedValue = AnimatedValueTypeValueType();
 
 		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
@@ -80,12 +85,13 @@ namespace Editor
 		KeyHandlesSheet*   mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
 
 	private:
-		void InitializeProperty();
+		void InitializeControls();
 		void InitializeHandles();
 
 		WidgetDragHandle* CreateHandle();
-
 		void ChangeHandleIndex(int oldIndex, int newIndex);
+
+		void CheckCanCreateKey(float time);
 
 		void OnPropertyChanged();
 	};
@@ -94,14 +100,14 @@ namespace Editor
 	KeyFramesTrackControl<AnimatedValueType>::KeyFramesTrackControl():
 		ITrackControl()
 	{
-		InitializeProperty();
+		InitializeControls();
 	}
 
 	template<typename AnimatedValueType>
 	KeyFramesTrackControl<AnimatedValueType>::KeyFramesTrackControl(const KeyFramesTrackControl& other) :
 		ITrackControl(other)
 	{
-		InitializeProperty();
+		InitializeControls();
 	}
 
 	template<typename AnimatedValueType>
@@ -152,13 +158,19 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::SetAnimatedValue(IAnimatedValue* animatedValue)
 	{
-		if (mAnimatedValue)
+		if (mAnimatedValue) 
+		{
 			mAnimatedValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
+			mAnimatedValue->onUpdate -= THIS_FUNC(CheckCanCreateKey);
+		}
 
 		mAnimatedValue = dynamic_cast<AnimatedValueType*>(animatedValue);
 
 		if (mAnimatedValue)
+		{
 			mAnimatedValue->onKeysChanged += THIS_FUNC(UpdateHandles);
+			mAnimatedValue->onUpdate += THIS_FUNC(CheckCanCreateKey);
+		}
 
 		InitializeHandles();
 	}
@@ -195,13 +207,22 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::InitializeProperty()
+	Button* KeyFramesTrackControl<AnimatedValueType>::GetAddKeyButton() const
+	{
+		return mAddKeyButton;
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::InitializeControls()
 	{
 		auto fieldProto = o2EditorProperties.GetFieldPropertyPrototype(&TypeOf(AnimatedValueType::ValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(fieldProto->GetType(), "standard"));
 		mPropertyValueProxy = PointerValueProxy<AnimatedValueTypeValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
 		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataNode>&, const Vector<DataNode>&) { OnPropertyChanged(); };
+
+		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
+		mAddKeyButton->onClick = [&]() { InsertNewKey(mAnimatedValue->GetTime()); };
 	}
 
 	template<typename AnimatedValueType>
@@ -279,6 +300,12 @@ namespace Editor
 
 			idx++;
 		}
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::CheckCanCreateKey(float time)
+	{
+		mAddKeyButton->interactable = !mAnimatedValue->ContainsKey(time);
 	}
 
 	template<typename AnimatedValueType>
@@ -372,6 +399,7 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PRIVATE_FIELD(mPropertyField);
 	PRIVATE_FIELD(mPropertyValue);
 	PRIVATE_FIELD(mPropertyValueProxy);
+	PRIVATE_FIELD(mAddKeyButton);
 	PRIVATE_FIELD(mLastAnimatedValue);
 	PRIVATE_FIELD(mAnimatedValue);
 	PRIVATE_FIELD(mTimeline);
@@ -391,11 +419,13 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
+	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
-	PRIVATE_FUNCTION(void, InitializeProperty);
+	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
 	PRIVATE_FUNCTION(void, ChangeHandleIndex, int, int);
+	PRIVATE_FUNCTION(void, CheckCanCreateKey, float);
 	PRIVATE_FUNCTION(void, OnPropertyChanged);
 }
 END_META;

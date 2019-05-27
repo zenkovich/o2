@@ -148,7 +148,6 @@ namespace Editor
 		KeyHandlesSheet*   mHandlesSheet = nullptr; // Handles sheet group, passes into track controller
 
 		Text*   mNameDrawable = nullptr; // Object name drawable
-		Button* mAddKeyButton = nullptr; // Add key button, enables when property field from track controller is available
 
 		ITrackControl* mTrackControl = nullptr; // Animated value editor
 
@@ -224,7 +223,6 @@ CLASS_FIELDS_META(Editor::AnimationTreeNode)
 	PROTECTED_FIELD(mTimeline);
 	PROTECTED_FIELD(mHandlesSheet);
 	PROTECTED_FIELD(mNameDrawable);
-	PROTECTED_FIELD(mAddKeyButton);
 	PROTECTED_FIELD(mTrackControl);
 }
 END_META;

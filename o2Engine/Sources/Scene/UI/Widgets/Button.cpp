@@ -164,6 +164,19 @@ namespace o2
 	{
 		interactable = mResEnabled;
 	}
+
+	void Button::OnBecomeInteractable()
+	{
+		if (auto inactiveState = state["inactive"])
+			*inactiveState = false;
+	}
+
+	void Button::OnBecomeNotInteractable()
+	{
+		if (auto inactiveState = state["inactive"])
+			*inactiveState = true;
+	}
+
 }
 
 DECLARE_CLASS(o2::Button);
