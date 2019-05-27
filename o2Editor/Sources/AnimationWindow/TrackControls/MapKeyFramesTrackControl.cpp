@@ -64,15 +64,7 @@ namespace Editor
 	{
 		for (auto kv : mHandles)
 		{
-			for (auto keyHandle : kv.Value()->handles)
-			{
-				keyHandle->handle->SetParent(nullptr);
-				keyHandle->handle->SetEnabled(false);
-				mHandlesCache.Add(keyHandle->handle);
-				delete keyHandle;
-			}
-			kv.Value()->handles.clear();
-
+			kv.Value()->CacheHandles();
 			delete kv.Value();
 		}
 
@@ -95,7 +87,12 @@ namespace Editor
 				newGroup = mnew HandlesGroup<AnimatedValue<Color4>>();
 
 			if (newGroup)
+			{
+				newGroup->trackControl = this;
 				newGroup->InitializeHandles(valueNode.animatedValue);
+
+				mHandles.Add(valueNode.animatedValue, newGroup);
+			}
 		}
 
 		for (auto childNode : valueNode.children)
@@ -162,27 +159,14 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::UpdateHandlesCombine()
 	{
-		auto handlesCopy = mHandles;
-		mHandles.Clear();
-
-		for (auto kv : handlesCopy)
+		for (auto kv : mHandles)
 		{
 			for (auto keyHandle : kv.Value()->handles)
-				keyHandle->combinedHandles.Clear();
-		}
-
-		for (auto kv : handlesCopy)
-		{
-			mHandles.Add(kv.Key(), KeyHandlesVec());
-
-			for (auto keyHandle : kv.Value())
 			{
-				keyHandle->combinedHandles = FindHandlesAtPosition(keyHandle->handle->GetPosition().x);
+				auto handlesAtPos = FindHandlesAtPosition(keyHandle->handle->GetPosition().x);
+				handlesAtPos.Remove(keyHandle);
 
-				for (auto combinedHandle : keyHandle->combinedHandles)
-					combinedHandle->combinedHandles.Add(keyHandle);
-
-				mHandles[kv.Key()].Add(keyHandle);
+				keyHandle->combinedHandles = handlesAtPos;
 			}
 		}
 	}
@@ -219,6 +203,18 @@ namespace Editor
 	{
 		for (auto handle : handles)
 			delete handle;
+	}
+
+	void MapKeyFramesTrackControl::IHandlesGroup::CacheHandles()
+	{
+		for (auto keyHandle : handles)
+		{
+			keyHandle->handle->SetParent(nullptr);
+			keyHandle->handle->SetEnabled(false);
+			trackControl->mHandlesCache.Add(keyHandle->handle);
+			delete keyHandle;
+		}
+		handles.clear();
 	}
 
 }

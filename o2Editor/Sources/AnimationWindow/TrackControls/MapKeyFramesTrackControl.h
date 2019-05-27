@@ -67,8 +67,9 @@ namespace Editor
 		typedef Vector<KeyHandle*> KeyHandlesVec;
 
 		struct IHandlesGroup
-		{ 
-			KeyHandlesVec handles;
+		{
+			MapKeyFramesTrackControl* trackControl;
+			KeyHandlesVec             handles;
 
 		public:
 			virtual ~IHandlesGroup();
@@ -78,13 +79,13 @@ namespace Editor
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
 			virtual void CheckHandlesCount() = 0;
 			virtual void UpdateHandles() = 0;
+			void CacheHandles();
 		};
 
 		template<typename AnimationValueType>
 		struct HandlesGroup: public IHandlesGroup
 		{
-			MapKeyFramesTrackControl* trackControl;
-			AnimationValueType*       animatedValue;
+			AnimationValueType* animatedValue;
 
 		public:
 			~HandlesGroup();
@@ -121,14 +122,14 @@ namespace Editor
 	template<typename AnimationValueType>
 	MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::~HandlesGroup()
 	{
-		animatedValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
+		animatedValue->onKeysChanged -= THIS_FUNC(HandlesGroup<AnimationValueType>::UpdateHandles);
 	}
 
 	template<typename AnimationValueType>
 	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::InitializeHandles(IAnimatedValue* ianimatedValue)
 	{
 		animatedValue = dynamic_cast<AnimationValueType*>(ianimatedValue);
-		animatedValue->onKeysChanged += THIS_FUNC(UpdateHandles);
+		animatedValue->onKeysChanged += THIS_FUNC(HandlesGroup<AnimationValueType>::UpdateHandles);
 
 		trackControl->mAnimatedValues.Add(animatedValue);
 
@@ -136,10 +137,10 @@ namespace Editor
 		for (auto& key : animatedValue->GetKeys()) {
 			WidgetDragHandle* handle = nullptr;
 
-			if (!mHandlesCache.IsEmpty())
+			if (!trackControl->mHandlesCache.IsEmpty())
 				handle = trackControl->mHandlesCache.PopBack();
 			else
-				handle = CreateHandle();
+				handle = trackControl->CreateHandle();
 
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
@@ -151,17 +152,12 @@ namespace Editor
 			};
 
 			KeyHandle* keyHandle = mnew KeyHandle(idx++, handle, animatedValue, updatePosFunc);
+			handles.Add(keyHandle);
 
-			IAnimatedValue* animatedValueBasic = animatedValue;
-			if (!trackControl->mHandles.ContainsKey(animatedValueBasic))
-				trackControl->mHandles.Add(animatedValueBasic, KeyHandlesVec());
-
-			trackControl->mHandles[animatedValueBasic].Add(keyHandle);
-
-			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos<_animatedValueType>(animatedValue, keyHandle, pos); };
+			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
 			handle->onReleased = [&]() { UpdateHandles(); };
 
-			AddChild(handle);
+			trackControl->AddChild(handle);
 		}
 	}
 
@@ -171,10 +167,12 @@ namespace Editor
 		if (trackControl->mDisableHandlesUpdate)
 			return;
 
+		CheckHandlesCount();
+
 		for (auto keyHandle : handles) 
 			keyHandle->updateFunc(*keyHandle);
 
-		UpdateHandlesCombine();
+		trackControl->UpdateHandlesCombine();
 	}
 
 	template<typename AnimationValueType>
@@ -195,7 +193,7 @@ namespace Editor
 		auto newIdx = animatedValue->AddKey(key);
 
 		if (newIdx != keyHandle->keyIdx) {
-			ChangeHandleIndex(animatedValue, keyHandle->keyIdx, newIdx);
+			ChangeHandleIndex(keyHandle->keyIdx, newIdx);
 			keyHandle->keyIdx = newIdx;
 		}
 
@@ -217,8 +215,6 @@ namespace Editor
 	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::ChangeHandleIndex(int oldIndex, int newIndex)
 	{
 		IAnimatedValue* animatedValueBasic = animatedValue;
-		auto& handles = trackControl->mHandles[animatedValueBasic];
-
 		KeyHandle* editingHandle = handles[oldIndex];
 		handles.RemoveAt(oldIndex);
 		handles.Insert(editingHandle, newIndex);

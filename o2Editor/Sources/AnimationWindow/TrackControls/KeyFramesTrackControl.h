@@ -347,7 +347,7 @@ namespace Editor
 		if (keyIdx >= 0)
 		{
 			auto key = mAnimatedValue->GetKeys()[keyIdx];
-			mAnimatedValue->RemoveKeyAt(time);
+			mAnimatedValue->RemoveKeyAt(keyIdx);
 			key.value = mPropertyValue;
 			mAnimatedValue->AddKey(key);
 		}
