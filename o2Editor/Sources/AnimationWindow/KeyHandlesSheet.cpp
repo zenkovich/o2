@@ -113,12 +113,12 @@ namespace Editor
 		UpdateSelectionFrame();
 	}
 
-	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor)
+	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
 	{
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
-		SelectableDragHandlesGroup::OnHandleMoved(handle, cursor);
+		SelectableDragHandlesGroup::OnHandleMoved(handle, cursorPos);
 
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
@@ -152,16 +152,17 @@ namespace Editor
 			return Vec2F(point.x, mSelectionRect.Center().y);
 		};
 
+		mCenterFrameDragHandle.onPressed = [&]() {
+			SelectableDragHandlesGroup::OnHandleCursorPressed(&mCenterFrameDragHandle, *o2Input.GetCursor());
+		};
+
 		mCenterFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
 			Vec2F delta(point.x - mSelectionRect.Center().x, mSelectionRect.Center().y);
 
 			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->BeginKeysBatchChange();
 
-			for (auto handle : GetSelectedHandles()) {
-				handle->SetPosition(handle->GetPosition() + delta);
-				handle->onChangedPos(handle->GetPosition());
-			}
+			SelectableDragHandlesGroup::OnHandleMoved(&mCenterFrameDragHandle, o2Input.GetCursorPos());
 
 			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
@@ -192,6 +193,9 @@ namespace Editor
 		};
 
 		mLeftFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
+			if (Math::Equals(mSelectionRect.Width(), 0.0f))
+				return;
+
 			float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
 
 			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
@@ -231,6 +235,9 @@ namespace Editor
 		};
 
 		mRightFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
+			if (Math::Equals(mSelectionRect.Width(), 0.0f))
+				return;
+
 			float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
 
 			for (auto animatedValueDef : mAnimation->GetAnimationsValues())

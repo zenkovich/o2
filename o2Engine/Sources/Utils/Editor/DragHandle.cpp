@@ -349,7 +349,7 @@ namespace o2
 			onChangedPos(mPosition);
 
 			if (mSelectGroup)
-				mSelectGroup->OnHandleMoved(this, cursor);
+				mSelectGroup->OnHandleMoved(this, cursor.position);
 		}
 	}
 
@@ -848,11 +848,11 @@ namespace o2
 		SelectHandle(handle);
 	}
 
-	void SelectableDragHandlesGroup::OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor)
+	void SelectableDragHandlesGroup::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
 	{
 		for (auto handle : GetSelectedHandles())
 		{
-			handle->mDragPosition = handle->ScreenToLocal(cursor.position) + handle->mDragOffset;
+			handle->mDragPosition = handle->ScreenToLocal(cursorPos) + handle->mDragOffset;
 			handle->SetPosition(handle->mDragPosition);
 			handle->onChangedPos(handle->GetPosition());
 		}

@@ -1276,7 +1276,7 @@ namespace Editor
 		SelectableDragHandlesGroup::OnHandleBeganDragging(handle);
 	}
 
-	void CurveEditor::OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor)
+	void CurveEditor::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
 	{
 		if (mSupportHandles.Contains(handle))
 		{
@@ -1288,14 +1288,14 @@ namespace Editor
 				if (!handle->IsSelected())
 					continue;
 
-				handle->SetDragPosition(handle->screenToLocalTransformFunc(cursor.position) + handle->GetDraggingOffset());
+				handle->SetDragPosition(handle->screenToLocalTransformFunc(cursorPos) + handle->GetDraggingOffset());
 				handle->onChangedPos(handle->GetPosition());
 			}
 
 			return;
 		}
 
-		SelectableDragHandlesGroup::OnHandleMoved(handle, cursor);
+		SelectableDragHandlesGroup::OnHandleMoved(handle, cursorPos);
 	}
 
 	void CurveEditor::OnHandleCompletedChange(DragHandle* handle)

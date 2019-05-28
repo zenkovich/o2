@@ -342,7 +342,7 @@ namespace o2
 		virtual void OnHandleBeganDragging(DragHandle* handle) { }
 
 		// It is called when selectable handle moved, moves all selected handles position
-		virtual void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) { }
+		virtual void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) { }
 
 		// It is called when selectable handle completed changing
 		virtual void OnHandleCompletedChange(DragHandle* handle) { }
@@ -408,7 +408,7 @@ namespace o2
 		void OnHandleBeganDragging(DragHandle* handle) override;
 
 		// It is called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
 
 		friend class DragHandle;
 	};

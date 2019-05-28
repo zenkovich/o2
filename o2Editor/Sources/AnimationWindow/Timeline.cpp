@@ -83,7 +83,7 @@ namespace Editor
 
 		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimation ? mAnimation->GetLoopTime() : 0.0f), layout->GetWorldTop()));
 		mTimeLine->SetSize(Vec2F(10.0f, layout->GetHeight() + 5.0f));
-		mTimeLine->SetSizePivot(Vec2F(6.5f, layout->GetHeight() + 4.0f));
+		mTimeLine->SetSizePivot(Vec2F(7.5f, layout->GetHeight() + 4.0f));
 		mTimeLine->Draw();
 
 		o2Render.DisableScissorTest();

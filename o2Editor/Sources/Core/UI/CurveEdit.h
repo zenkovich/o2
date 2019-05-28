@@ -311,7 +311,7 @@ namespace Editor
 		void OnHandleBeganDragging(DragHandle* handle);
 
 		// It is called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor);
+		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos);
 
 		// It is called when selectable handle completed changing
 		void OnHandleCompletedChange(DragHandle* handle);
@@ -528,7 +528,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);
 	PROTECTED_FUNCTION(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnHandleBeganDragging, DragHandle*);
-	PROTECTED_FUNCTION(void, OnHandleMoved, DragHandle*, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnHandleMoved, DragHandle*, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnHandleCompletedChange, DragHandle*);
 	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
 	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);

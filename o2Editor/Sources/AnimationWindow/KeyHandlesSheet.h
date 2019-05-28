@@ -97,7 +97,7 @@ namespace Editor
 
 		// It is called when selectable handle moved, moves all selected handles position
 		// Enables keys batch change
-		void OnHandleMoved(DragHandle* handle, const Input::Cursor& cursor) override;
+		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
@@ -188,7 +188,7 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FUNCTION(void, InitializeRightHandle);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
-	PRIVATE_FUNCTION(void, OnHandleMoved, DragHandle*, const Input::Cursor&);
+	PRIVATE_FUNCTION(void, OnHandleMoved, DragHandle*, const Vec2F&);
 	PRIVATE_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);

@@ -169,6 +169,8 @@ namespace Editor
 				keyHandle->combinedHandles = handlesAtPos;
 			}
 		}
+
+		o2Debug.Log("Combine");
 	}
 
 	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
