@@ -211,6 +211,7 @@
     <ClInclude Include="..\..\Sources\AnimationWindow\Timeline.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
+    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\KeyHandles.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\Tree.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetIcon.h" />
@@ -320,6 +321,7 @@
     <ClCompile Include="..\..\Sources\AnimationWindow\Timeline.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyHandles.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\Tree.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetIcon.cpp" />

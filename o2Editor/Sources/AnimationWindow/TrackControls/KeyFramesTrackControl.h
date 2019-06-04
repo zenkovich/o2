@@ -6,7 +6,7 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Scene/UI/Widget.h"
-#include "Utils/Editor/DragHandle.h"
+#include "KeyHandles.h"
 
 using namespace o2;
 
@@ -88,7 +88,7 @@ namespace Editor
 		void InitializeControls();
 		void InitializeHandles();
 
-		WidgetDragHandle* CreateHandle();
+		AnimationKeyDragHandle* CreateHandle();
 		void ChangeHandleIndex(int oldIndex, int newIndex);
 
 		void CheckCanCreateKey(float time);
@@ -230,7 +230,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		Vector<WidgetDragHandle*> handlesCache = mHandles.Select<WidgetDragHandle*>(
+		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>(
 			[&](const KeyHandle* x) { x->handle->SetParent(nullptr); x->handle->SetEnabled(false); return x->handle; });
 
 		for (auto keyHandle : mHandles)
@@ -241,7 +241,7 @@ namespace Editor
 		int idx = 0;
 		for (auto& key : mAnimatedValue->GetKeys())
 		{
-			WidgetDragHandle* handle = nullptr;
+			AnimationKeyDragHandle* handle = nullptr;
 
 			if (!handlesCache.IsEmpty())
 				handle = handlesCache.PopBack();
@@ -250,6 +250,7 @@ namespace Editor
 
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
+			handle->animatedValue = mAnimatedValue;
 			AddChild(handle);
 
 			KeyHandle* keyhandle = mnew KeyHandle(idx++, handle);
@@ -309,14 +310,14 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	WidgetDragHandle* KeyFramesTrackControl<AnimatedValueType>::CreateHandle()
+	AnimationKeyDragHandle* KeyFramesTrackControl<AnimatedValueType>::CreateHandle()
 	{
-		WidgetDragHandle* handle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_key.png"), 
-														 mnew Sprite("ui/UI4_key_hover.png"),
-														 mnew Sprite("ui/UI4_key_pressed.png"),
-														 mnew Sprite("ui/UI4_selected_key.png"),
-														 mnew Sprite("ui/UI4_selected_key_hover.png"),
-														 mnew Sprite("ui/UI4_selected_key_pressed.png"));
+		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_key.png"),
+																	 mnew Sprite("ui/UI4_key_hover.png"),
+																	 mnew Sprite("ui/UI4_key_pressed.png"),
+																	 mnew Sprite("ui/UI4_selected_key.png"),
+																	 mnew Sprite("ui/UI4_selected_key_hover.png"),
+																	 mnew Sprite("ui/UI4_selected_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
@@ -423,7 +424,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);
-	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
+	PRIVATE_FUNCTION(AnimationKeyDragHandle*, CreateHandle);
 	PRIVATE_FUNCTION(void, ChangeHandleIndex, int, int);
 	PRIVATE_FUNCTION(void, CheckCanCreateKey, float);
 	PRIVATE_FUNCTION(void, OnPropertyChanged);

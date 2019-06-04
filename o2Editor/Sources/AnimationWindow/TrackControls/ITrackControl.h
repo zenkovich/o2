@@ -3,7 +3,7 @@
 #include "Animation/AnimatedValue.h"
 #include "Core/Properties/IPropertyField.h"
 #include "Scene/UI/Widget.h"
-#include "Utils/Editor/DragHandle.h"
+#include "KeyHandles.h"
 
 namespace o2
 {
@@ -23,10 +23,10 @@ namespace Editor
 		struct KeyHandle
 		{
 			int keyIdx = 0;
-			WidgetDragHandle* handle = nullptr;
+			AnimationKeyDragHandle* handle = nullptr;
 
 			KeyHandle() { }
-			KeyHandle(int keyIdx, WidgetDragHandle* handle): keyIdx(keyIdx), handle(handle) { }
+			KeyHandle(int keyIdx, AnimationKeyDragHandle* handle): keyIdx(keyIdx), handle(handle) { }
 
 			bool operator==(const KeyHandle& other) const;
 		};
