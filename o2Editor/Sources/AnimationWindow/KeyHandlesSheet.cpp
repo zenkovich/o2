@@ -1,11 +1,12 @@
 #include "stdafx.h"
 #include "KeyHandlesSheet.h"
 
-#include "Scene/UI/WidgetLayout.h"
-#include "Timeline.h"
-#include "Tree.h"
 #include "Animation/AnimatedValue.h"
 #include "Animation/Animation.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Timeline.h"
+#include "TrackControls/ITrackControl.h"
+#include "Tree.h"
 
 namespace Editor
 {
@@ -108,9 +109,40 @@ namespace Editor
 		return Widget::IsUnderPoint(point);
 	}
 
+	void KeyHandlesSheet::RegTrackControl(ITrackControl* trackControl)
+	{
+		mTrackControls.Add(trackControl);
+	}
+
+	void KeyHandlesSheet::UnregTrackControl(ITrackControl* trackControl)
+	{
+		mTrackControls.Remove(trackControl);
+	}
+
+	void KeyHandlesSheet::UnregAllTrackControls()
+	{
+		mTrackControls.Clear();
+	}
+
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		UpdateSelectionFrame();
+	}
+
+	void KeyHandlesSheet::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
+	{
+		for (auto trackControl : mTrackControls)
+			trackControl->BeginKeysDrag();
+
+		SelectableDragHandlesGroup::OnHandleCursorPressed(handle, cursor);
+	}
+
+	void KeyHandlesSheet::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
+	{
+		SelectableDragHandlesGroup::OnHandleCursorReleased(handle, cursor);
+
+		for (auto trackControl : mTrackControls)
+			trackControl->EndKeysDrag();
 	}
 
 	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
@@ -153,21 +185,15 @@ namespace Editor
 		};
 
 		mCenterFrameDragHandle.onPressed = [&]() {
-			SelectableDragHandlesGroup::OnHandleCursorPressed(&mCenterFrameDragHandle, *o2Input.GetCursor());
+			OnHandleCursorPressed(&mCenterFrameDragHandle, *o2Input.GetCursor());
+		};
+
+		mCenterFrameDragHandle.onReleased = [&]() {
+			OnHandleCursorReleased(&mCenterFrameDragHandle, *o2Input.GetCursor());
 		};
 
 		mCenterFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
-			Vec2F delta(point.x - mSelectionRect.Center().x, mSelectionRect.Center().y);
-
-			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
-				animatedValueDef.animatedValue->BeginKeysBatchChange();
-
-			SelectableDragHandlesGroup::OnHandleMoved(&mCenterFrameDragHandle, o2Input.GetCursorPos());
-
-			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
-				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
-
-			UpdateSelectionFrame();
+			OnHandleMoved(&mCenterFrameDragHandle, o2Input.GetCursorPos());
 		};
 
 		mCenterFrameDragHandle.cursorType = CursorType::SizeWE;
@@ -190,6 +216,14 @@ namespace Editor
 
 		mLeftFrameDragHandle.checkPositionFunc = [&](const Vec2F& point) {
 			return Vec2F(point.x, mSelectionRect.Center().y);
+		};
+
+		mLeftFrameDragHandle.onPressed = [&]() {
+			OnHandleCursorPressed(&mCenterFrameDragHandle, *o2Input.GetCursor());
+		};
+
+		mLeftFrameDragHandle.onReleased = [&]() {
+			OnHandleCursorReleased(&mCenterFrameDragHandle, *o2Input.GetCursor());
 		};
 
 		mLeftFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
@@ -232,6 +266,14 @@ namespace Editor
 
 		mRightFrameDragHandle.checkPositionFunc = [&](const Vec2F& point) {
 			return Vec2F(point.x, mSelectionRect.Center().y);
+		};
+
+		mRightFrameDragHandle.onPressed = [&]() {
+			OnHandleCursorPressed(&mCenterFrameDragHandle, *o2Input.GetCursor());
+		};
+
+		mRightFrameDragHandle.onReleased = [&]() {
+			OnHandleCursorReleased(&mCenterFrameDragHandle, *o2Input.GetCursor());
 		};
 
 		mRightFrameDragHandle.onChangedPos = [&](const Vec2F& point) {
@@ -409,7 +451,6 @@ namespace Editor
 	{
 
 	}
-
 }
 
 DECLARE_CLASS(Editor::KeyHandlesSheet);

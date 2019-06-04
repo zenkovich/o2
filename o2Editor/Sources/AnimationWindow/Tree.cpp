@@ -314,6 +314,8 @@ namespace Editor
 
 			if (auto addKey = mTrackControl->GetAddKeyButton())
 				RemoveChild(addKey, false);
+
+			mHandlesSheet->UnregTrackControl(mTrackControl);
 		}
 
 		mTrackControl = nullptr;
@@ -360,6 +362,8 @@ namespace Editor
 
 		if (auto addKey = mTrackControl->GetAddKeyButton())
 			AddChild(addKey);
+
+		mHandlesSheet->RegTrackControl(mTrackControl);
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()

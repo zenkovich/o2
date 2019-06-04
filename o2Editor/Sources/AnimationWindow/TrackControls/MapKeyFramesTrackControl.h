@@ -44,6 +44,12 @@ namespace Editor
 		// Updates handles positions for specified animated value
 		void UpdateHandlesForValue(IAnimatedValue* animatedValue);
 
+		// It is called when group of keys began dragged, disables keys combining
+		void BeginKeysDrag();
+
+		// It is called when group of keys completed drag, enables keys combining
+		void EndKeysDrag();
+
 		SERIALIZABLE(MapKeyFramesTrackControl);
 
 	private:
@@ -108,7 +114,8 @@ namespace Editor
 													 
 		Vector<WidgetDragHandle*> mHandlesCache; // Cached drag handles, can be reused
 
-		bool mDisableHandlesUpdate = false; // It is true when handles are changing and combining or updating is not available
+		bool mDisableHandlesUpdate = false;  // It is true when handles are changing and combining or updating is not available
+		bool mDisableHandlesCombine = false; // It is true when handles are changing and combining is not available
 
 	private:
 		void CacheHandles();
@@ -245,6 +252,7 @@ CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 	PRIVATE_FIELD(mHandlesSheet);
 	PRIVATE_FIELD(mHandlesCache);
 	PRIVATE_FIELD(mDisableHandlesUpdate);
+	PRIVATE_FIELD(mDisableHandlesCombine);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
@@ -255,6 +263,8 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
+	PUBLIC_FUNCTION(void, BeginKeysDrag);
+	PUBLIC_FUNCTION(void, EndKeysDrag);
 	PRIVATE_FUNCTION(void, CacheHandles);
 	PRIVATE_FUNCTION(void, InitializeNodeHandles, const AnimationTree::AnimationValueNode&);
 	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);

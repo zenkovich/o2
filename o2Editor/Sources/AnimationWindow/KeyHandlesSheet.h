@@ -15,6 +15,7 @@ namespace Editor
 {
 	class AnimationTimeline;
 	class AnimationTree;
+	class ITrackControl;
 
 	// -------------------------------------------
 	// Handles sheet, manages selection of handles
@@ -52,6 +53,15 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Registers animation value track control
+		void RegTrackControl(ITrackControl* trackControl);
+
+		// Unregisters animation value track control
+		void UnregTrackControl(ITrackControl* trackControl);
+
+		// Unregisters all tracks controls
+		void UnregAllTrackControls();
+
 		SERIALIZABLE(KeyHandlesSheet);
 
 	private:
@@ -62,6 +72,8 @@ namespace Editor
 
 		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
 		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
+
+		Vector<ITrackControl*> mTrackControls; // List of actual track controls
 
 		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
 		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
@@ -94,6 +106,12 @@ namespace Editor
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
 		void OnSelectionChanged() override;
+
+		// It is called when selectable draggable handle was pressed, sends to track control that drag has began
+		void OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor) override;
+
+		// It is called when selectable draggable handle was released, sends to track control that drag has completed
+		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
 
 		// It is called when selectable handle moved, moves all selected handles position
 		// Enables keys batch change
@@ -163,6 +181,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mTrackControls);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);
 	PRIVATE_FIELD(mBeginSelectPoint);
@@ -182,12 +201,17 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateInputDrawOrder);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, RegTrackControl, ITrackControl*);
+	PUBLIC_FUNCTION(void, UnregTrackControl, ITrackControl*);
+	PUBLIC_FUNCTION(void, UnregAllTrackControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(void, InitializeCenterHandle);
 	PRIVATE_FUNCTION(void, InitializeLeftHandle);
 	PRIVATE_FUNCTION(void, InitializeRightHandle);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
+	PRIVATE_FUNCTION(void, OnHandleCursorPressed, DragHandle*, const Input::Cursor&);
+	PRIVATE_FUNCTION(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnHandleMoved, DragHandle*, const Vec2F&);
 	PRIVATE_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

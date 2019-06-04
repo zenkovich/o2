@@ -33,18 +33,35 @@ namespace Editor
 		typedef Vector<KeyHandle*> KeyHandlesVec;
 
 	public:
+		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
 		virtual void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
+
+		// Sets animated value, updates and creates key handles
 		virtual void SetAnimatedValue(IAnimatedValue* animatedValue);
 
+		// Updates handles position on timeline
 		virtual void UpdateHandles();
 
+		// Returns key handles list
 		virtual KeyHandlesVec GetKeyHandles() const;
+
+		// Returns key handle position
 		virtual float GetKeyPosition(int idx) const;
 
+		// Returns value property
 		virtual IPropertyField* GetPropertyField() const;
+
+		// Returns add button
 		virtual Button* GetAddKeyButton() const;
 
+		// Inserts new key at time
 		virtual void InsertNewKey(float time);
+
+		// It is called when group of keys began drag
+		virtual void BeginKeysDrag();
+
+		// It is called when group of keys completed drag
+		virtual void EndKeysDrag();
 
 		SERIALIZABLE(ITrackControl);
 	};
@@ -70,5 +87,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
 	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
+	PUBLIC_FUNCTION(void, BeginKeysDrag);
+	PUBLIC_FUNCTION(void, EndKeysDrag);
 }
 END_META;

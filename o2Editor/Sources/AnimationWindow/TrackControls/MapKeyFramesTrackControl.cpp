@@ -118,6 +118,16 @@ namespace Editor
 		UpdateHandlesCombine();
 	}
 
+	void MapKeyFramesTrackControl::BeginKeysDrag()
+	{
+		mDisableHandlesCombine = true;
+	}
+
+	void MapKeyFramesTrackControl::EndKeysDrag()
+	{
+		mDisableHandlesCombine = false;
+	}
+
 	WidgetDragHandle* MapKeyFramesTrackControl::CreateHandle()
 	{
 		WidgetDragHandle* handle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_map_key.png"),
@@ -159,6 +169,9 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::UpdateHandlesCombine()
 	{
+		if (mDisableHandlesCombine)
+			return;
+
 		for (auto kv : mHandles)
 		{
 			for (auto keyHandle : kv.Value()->handles)
@@ -170,7 +183,7 @@ namespace Editor
 			}
 		}
 
-		o2Debug.Log("Combine");
+		//o2Debug.Log("Combine");
 	}
 
 	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const

@@ -147,7 +147,7 @@ namespace Editor
 		AnimationTimeline* mTimeline = nullptr;     // Animation timeline pointer, passes into track controller
 		KeyHandlesSheet*   mHandlesSheet = nullptr; // Handles sheet group, passes into track controller
 
-		Text*   mNameDrawable = nullptr; // Object name drawable
+		Text* mNameDrawable = nullptr; // Object name drawable
 
 		ITrackControl* mTrackControl = nullptr; // Animated value editor
 
