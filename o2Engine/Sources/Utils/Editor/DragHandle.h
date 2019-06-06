@@ -33,6 +33,7 @@ namespace o2
 		Function<void(const Vec2F&)> onChangedPos;      // On position changed event
 		Function<void()>             onPressed;         // Pressed cursor on handle event
 		Function<void()>             onReleased;        // Released cursor event
+		Function<void()>             onBeganDragging;   // Drag begin event
 		Function<void()>             onChangeCompleted; // Change completed event
 
 		Function<bool(const Vec2F&)> isPointInside; // Checking point inside function. When this is empty, using sprite inside checking function
@@ -433,6 +434,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PUBLIC_FIELD(onChangedPos);
 	PUBLIC_FIELD(onPressed);
 	PUBLIC_FIELD(onReleased);
+	PUBLIC_FIELD(onBeganDragging);
 	PUBLIC_FIELD(onChangeCompleted);
 	PUBLIC_FIELD(isPointInside);
 	PUBLIC_FIELD(screenToLocalTransformFunc);

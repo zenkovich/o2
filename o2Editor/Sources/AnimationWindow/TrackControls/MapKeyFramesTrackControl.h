@@ -170,7 +170,13 @@ namespace Editor
 			handles.Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
-			handle->onPressed = [&]() { FindHandlesAtPosition(key.position).ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); }); };
+			handle->onPressed = [&]()
+			{ 
+				if (!o2Input.IsKeyDown(VK_CONTROL))
+					handle->GetSelectionGroup()->DeselectAll();
+
+				trackControl->FindHandlesAtPosition(key.position).ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); });
+			};
 			handle->onReleased = [&]() { UpdateHandles(); };
 
 			trackControl->AddChild(handle);
@@ -193,11 +199,6 @@ namespace Editor
 			for (auto keyHandle : handles)
 				keyHandle->updateFunc(*keyHandle);
 		}
-
-		for (auto keyHandle : handles)
-			keyHandle->combinedHandles.Clear();
-
-		trackControl->mNeedCombine = true;
 	}
 
 	template<typename AnimationValueType>
@@ -216,19 +217,6 @@ namespace Editor
 			ChangeHandleIndex(keyHandle->keyIdx, newIdx);
 			keyHandle->keyIdx = newIdx;
 			keyHandle->handle->keyIdx = newIdx;
-		}
-
-		if (keyHandle->combining)
-		{
-			for (auto attachedHandle : keyHandle->combinedHandles)
-			{
-				attachedHandle->combining = false;
-
-				attachedHandle->handle->SetPosition(pos);
-				attachedHandle->handle->onChangedPos(pos);
-
-				attachedHandle->combining = true;
-			}
 		}
 
 		trackControl->mDisableHandlesUpdate = false;

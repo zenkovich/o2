@@ -265,6 +265,8 @@ namespace o2
 
 	void DragHandle::OnCursorPressed(const Input::Cursor& cursor)
 	{
+		onPressed();
+
 		mDragOffset = mPosition - ScreenToLocal(cursor.position);
 		mDragPosition = mPosition;
 		mPressedCursorId = cursor.id;
@@ -273,8 +275,6 @@ namespace o2
 			mSelectGroup->OnHandleCursorPressed(this, cursor);
 
 		mPressedCursorPos = cursor.position;
-
-		onPressed();
 	}
 
 	void DragHandle::OnCursorReleased(const Input::Cursor& cursor)
@@ -331,6 +331,8 @@ namespace o2
 			float delta = (cursor.position - mPressedCursorPos).Length();
 			if (delta > mDragDistanceThreshold)
 			{
+				onBeganDragging();
+
 				mIsDragging = true;
 				mDragBeginPosition = mPosition;
 
@@ -822,6 +824,14 @@ namespace o2
 
 	void SelectableDragHandlesGroup::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
 	{
+		if (!GetSelectedHandles().Contains(handle))
+		{
+			if (!o2Input.IsKeyDown(VK_CONTROL))
+				DeselectAll();
+
+			SelectHandle(handle);
+		}
+
 		for (auto handle : GetSelectedHandles())
 		{
 			handle->mDragOffset = handle->mPosition - handle->ScreenToLocal(cursor.position);
@@ -830,12 +840,7 @@ namespace o2
 	}
 
 	void SelectableDragHandlesGroup::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
-	{
-		if (!o2Input.IsKeyDown(VK_CONTROL))
-			DeselectAll();
-
-		SelectHandle(handle);
-	}
+	{}
 
 	void SelectableDragHandlesGroup::OnHandleBeganDragging(DragHandle* handle)
 	{
