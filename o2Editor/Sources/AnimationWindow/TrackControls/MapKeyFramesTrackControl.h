@@ -33,7 +33,7 @@ namespace Editor
 		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
 
 		// Draws handles with clipping
-		void Draw() override;		
+		void Draw() override;
 
 		// Sets mapped animated values. Creates handles
 		void SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode);
@@ -55,18 +55,15 @@ namespace Editor
 	private:
 		struct KeyHandle
 		{
-			int               keyIdx = 0;
-			WidgetDragHandle* handle = nullptr;
-			IAnimatedValue*   animatedValue = nullptr;
-
-			Vector<KeyHandle*> combinedHandles;
-			bool               combining = true;
+			int                     keyIdx = 0;
+			AnimationKeyDragHandle* handle = nullptr;
+			IAnimatedValue*         animatedValue = nullptr;
 
 			Function<void(KeyHandle& keyHandle)> updateFunc;
 
 		public:
 			KeyHandle();
-			KeyHandle(int keyIdx, WidgetDragHandle* handle, IAnimatedValue* animatedValue, 
+			KeyHandle(int keyIdx, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
 					  const Function<void(KeyHandle& keyHandle)>& updateFunc);
 
 			bool operator==(const KeyHandle& other) const;
@@ -90,7 +87,7 @@ namespace Editor
 		};
 
 		template<typename AnimationValueType>
-		struct HandlesGroup: public IHandlesGroup
+		struct HandlesGroup : public IHandlesGroup
 		{
 			AnimationValueType* animatedValue;
 
@@ -111,19 +108,17 @@ namespace Editor
 		Vector<IAnimatedValue*>     mAnimatedValues;         // Editing animated values
 		AnimationTimeline*          mTimeline = nullptr;     // Timeline used for calculating handles positions
 		KeyHandlesSheet*            mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
-													 
-		Vector<WidgetDragHandle*> mHandlesCache; // Cached drag handles, can be reused
+
+		Vector<AnimationKeyDragHandle*> mHandlesCache; // Cached drag handles, can be reused
 
 		bool mDisableHandlesUpdate = false;  // It is true when handles are changing and combining or updating is not available
-		bool mDisableHandlesCombine = false; // It is true when handles are changing and combining is not available
 
 	private:
 		void CacheHandles();
 		void InitializeNodeHandles(const AnimationTree::AnimationValueNode& valueNode);
 
-		WidgetDragHandle* CreateHandle();
+		AnimationKeyDragHandle* CreateHandle();
 
-		void UpdateHandlesCombine();
 		Vector<KeyHandle*> FindHandlesAtPosition(float position) const;
 	};
 
@@ -150,8 +145,9 @@ namespace Editor
 		PushScopeEnterOnStack scope;
 
 		int idx = 0;
-		for (auto& key : animatedValue->GetKeys()) {
-			WidgetDragHandle* handle = nullptr;
+		for (auto& key : animatedValue->GetKeys())
+		{
+			AnimationKeyDragHandle* handle = nullptr;
 
 			if (!trackControl->mHandlesCache.IsEmpty())
 				handle = trackControl->mHandlesCache.PopBack();
@@ -160,6 +156,9 @@ namespace Editor
 
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
+			handle->animatedValue = animatedValue;
+			handle->keyIdx = idx;
+			handle->isMapping = true;
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
 				auto& keys = animatedValue->GetKeys();
@@ -171,6 +170,7 @@ namespace Editor
 			handles.Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
+			handle->onPressed = [&]() { FindHandlesAtPosition(key.position).ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); }); };
 			handle->onReleased = [&]() { UpdateHandles(); };
 
 			trackControl->AddChild(handle);
@@ -183,17 +183,21 @@ namespace Editor
 		if (trackControl->mDisableHandlesUpdate)
 			return;
 
-		if (animatedValue->GetKeys().Count() != handles.Count()) 
+		if (animatedValue->GetKeys().Count() != handles.Count())
 		{
 			CacheHandles();
 			CreateHandles();
 		}
-		else {
+		else
+		{
 			for (auto keyHandle : handles)
 				keyHandle->updateFunc(*keyHandle);
 		}
 
-		trackControl->UpdateHandlesCombine();
+		for (auto keyHandle : handles)
+			keyHandle->combinedHandles.Clear();
+
+		trackControl->mNeedCombine = true;
 	}
 
 	template<typename AnimationValueType>
@@ -207,13 +211,17 @@ namespace Editor
 		animatedValue->RemoveKeyAt(keyHandle->keyIdx);
 		auto newIdx = animatedValue->AddKey(key);
 
-		if (newIdx != keyHandle->keyIdx) {
+		if (newIdx != keyHandle->keyIdx)
+		{
 			ChangeHandleIndex(keyHandle->keyIdx, newIdx);
 			keyHandle->keyIdx = newIdx;
+			keyHandle->handle->keyIdx = newIdx;
 		}
 
-		if (keyHandle->combining) {
-			for (auto attachedHandle : keyHandle->combinedHandles) {
+		if (keyHandle->combining)
+		{
+			for (auto attachedHandle : keyHandle->combinedHandles)
+			{
 				attachedHandle->combining = false;
 
 				attachedHandle->handle->SetPosition(pos);
@@ -235,7 +243,10 @@ namespace Editor
 		handles.Insert(editingHandle, newIndex);
 
 		for (int i = 0; i < handles.Count(); i++)
+		{
 			handles[i]->keyIdx = i;
+			handles[i]->handle->keyIdx = i;
+		}
 	}
 }
 
@@ -252,7 +263,6 @@ CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 	PRIVATE_FIELD(mHandlesSheet);
 	PRIVATE_FIELD(mHandlesCache);
 	PRIVATE_FIELD(mDisableHandlesUpdate);
-	PRIVATE_FIELD(mDisableHandlesCombine);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
@@ -267,8 +277,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, EndKeysDrag);
 	PRIVATE_FUNCTION(void, CacheHandles);
 	PRIVATE_FUNCTION(void, InitializeNodeHandles, const AnimationTree::AnimationValueNode&);
-	PRIVATE_FUNCTION(WidgetDragHandle*, CreateHandle);
-	PRIVATE_FUNCTION(void, UpdateHandlesCombine);
+	PRIVATE_FUNCTION(AnimationKeyDragHandle*, CreateHandle);
 	PRIVATE_FUNCTION(Vector<KeyHandle*>, FindHandlesAtPosition, float);
 }
 END_META;

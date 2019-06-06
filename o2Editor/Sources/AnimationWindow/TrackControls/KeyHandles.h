@@ -31,6 +31,9 @@ namespace Editor
 		// Copy-operator
 		AnimationKeyDragHandle& operator=(const AnimationKeyDragHandle& other);
 
+		// Draws handle
+		void Draw() override;
+
 		SERIALIZABLE(AnimationKeyDragHandle);
 	};
 }
@@ -49,5 +52,7 @@ CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeyDragHandle)
 {
+
+	PUBLIC_FUNCTION(void, Draw);
 }
 END_META;

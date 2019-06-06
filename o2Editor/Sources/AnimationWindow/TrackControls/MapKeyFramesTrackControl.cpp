@@ -51,7 +51,6 @@ namespace Editor
 		mAnimatedValues.Clear();
 
 		InitializeNodeHandles(valueNode);
-		UpdateHandlesCombine();
 	}
 
 	void MapKeyFramesTrackControl::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
@@ -106,36 +105,28 @@ namespace Editor
 
 		for (auto kv : mHandles)
 			kv.Value()->UpdateHandles();
-
-		UpdateHandlesCombine();
 	}
 
 	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)
 	{
 		if (mHandles.ContainsKey(animatedValue))
 			mHandles[animatedValue]->UpdateHandles();
-
-		UpdateHandlesCombine();
 	}
 
 	void MapKeyFramesTrackControl::BeginKeysDrag()
-	{
-		mDisableHandlesCombine = true;
-	}
+	{}
 
 	void MapKeyFramesTrackControl::EndKeysDrag()
-	{
-		mDisableHandlesCombine = false;
-	}
+	{}
 
-	WidgetDragHandle* MapKeyFramesTrackControl::CreateHandle()
+	AnimationKeyDragHandle* MapKeyFramesTrackControl::CreateHandle()
 	{
-		WidgetDragHandle* handle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_map_key.png"),
-														 mnew Sprite("ui/UI4_map_key_hover.png"),
-														 mnew Sprite("ui/UI4_map_key_pressed.png"),
-														 mnew Sprite("ui/UI4_selected_map_key.png"),
-														 mnew Sprite("ui/UI4_selected_map_key_hover.png"),
-														 mnew Sprite("ui/UI4_selected_map_key_pressed.png"));
+		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_map_key.png"),
+																	 mnew Sprite("ui/UI4_map_key_hover.png"),
+																	 mnew Sprite("ui/UI4_map_key_pressed.png"),
+																	 mnew Sprite("ui/UI4_selected_map_key.png"),
+																	 mnew Sprite("ui/UI4_selected_map_key_hover.png"),
+																	 mnew Sprite("ui/UI4_selected_map_key_pressed.png"));
 
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
@@ -167,23 +158,6 @@ namespace Editor
 		return handle;
 	}
 
-	void MapKeyFramesTrackControl::UpdateHandlesCombine()
-	{
-		if (mDisableHandlesCombine)
-			return;
-
-		for (auto kv : mHandles)
-		{
-			for (auto keyHandle : kv.Value()->handles)
-			{
-				auto handlesAtPos = FindHandlesAtPosition(keyHandle->handle->GetPosition().x);
-				handlesAtPos.Remove(keyHandle);
-
-				keyHandle->combinedHandles = handlesAtPos;
-			}
-		}
-	}
-
 	Vector<MapKeyFramesTrackControl::KeyHandle*> MapKeyFramesTrackControl::FindHandlesAtPosition(float position) const
 	{
 		Vector<KeyHandle*> res;
@@ -203,7 +177,8 @@ namespace Editor
 	MapKeyFramesTrackControl::KeyHandle::KeyHandle()
 	{}
 
-	MapKeyFramesTrackControl::KeyHandle::KeyHandle(int keyIdx, WidgetDragHandle* handle, IAnimatedValue* animatedValue, const Function<void(KeyHandle& keyHandle)>& updateFunc) :
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle(int keyIdx, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
+												   const Function<void(KeyHandle& keyHandle)>& updateFunc) :
 		keyIdx(keyIdx), handle(handle), animatedValue(animatedValue), updateFunc(updateFunc)
 	{}
 

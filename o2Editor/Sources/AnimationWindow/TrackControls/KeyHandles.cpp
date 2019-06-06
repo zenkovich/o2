@@ -19,6 +19,14 @@ namespace Editor
 	AnimationKeyDragHandle::~AnimationKeyDragHandle()
 	{}
 
+#undef DrawText
+	void AnimationKeyDragHandle::Draw()
+	{
+		WidgetDragHandle::Draw();
+
+		o2Debug.DrawText(GetScreenPosition(), String(keyIdx));
+	}
+
 	Editor::AnimationKeyDragHandle& AnimationKeyDragHandle::operator=(const AnimationKeyDragHandle& other)
 	{
 		WidgetDragHandle::operator=(other);
