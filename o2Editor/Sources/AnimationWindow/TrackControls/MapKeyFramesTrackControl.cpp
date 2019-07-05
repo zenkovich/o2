@@ -131,7 +131,6 @@ namespace Editor
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
 		handle->SetSpritesSizePivot(Vec2F(7, 2));
-		handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) {
 			float position = pos.x;
@@ -199,9 +198,11 @@ namespace Editor
 		{
 			keyHandle->handle->SetParent(nullptr);
 			keyHandle->handle->SetEnabled(false);
+			keyHandle->handle->SetSelectionGroup(nullptr);
 			trackControl->mHandlesCache.Add(keyHandle->handle);
 			delete keyHandle;
 		}
+
 		handles.clear();
 	}
 

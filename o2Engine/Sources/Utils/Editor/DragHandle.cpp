@@ -429,6 +429,11 @@ namespace o2
 		SetPosition(position);
 	}
 
+	Vec2F DragHandle::GetDragPosition() const
+	{
+		return mDragPosition;
+	}
+
 	Vec2F DragHandle::GetPosition() const
 	{
 		return mPosition;
@@ -442,6 +447,12 @@ namespace o2
 	Vec2F DragHandle::GetDraggingBeginPosition() const
 	{
 		return mDragBeginPosition;
+	}
+
+	void DragHandle::BeginDrag(const Vec2F& cursor)
+	{
+		mDragOffset = mPosition - ScreenToLocal(cursor);
+		mDragPosition = mPosition;
 	}
 
 	void DragHandle::SetEnabled(bool enabled)
@@ -833,10 +844,7 @@ namespace o2
 		}
 
 		for (auto handle : GetSelectedHandles())
-		{
-			handle->mDragOffset = handle->mPosition - handle->ScreenToLocal(cursor.position);
-			handle->mDragPosition = handle->mPosition;
-		}
+			handle->BeginDrag(cursor.position);
 	}
 
 	void SelectableDragHandlesGroup::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)

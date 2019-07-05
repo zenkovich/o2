@@ -99,10 +99,10 @@ namespace o2
 		void SetTargetProxy(IValueProxy<_type>* proxy);
 
 		// Returns current value
-		_type GetValue();
+		_type GetValue() const;
 
 		// Returns value at time
-		_type GetValue(float time);
+		_type GetValue(float time) const;
 
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
@@ -140,13 +140,19 @@ namespace o2
 		void RemoveAllKeys();
 
 		// Returns true if animation contains key at position
-		bool ContainsKey(float position);
+		bool ContainsKey(float position) const;
 
 		// Returns keys array
 		const KeysVec& GetKeys() const;
 
 		// Returns key at position
-		Key GetKey(float position);
+		Key GetKey(float position) const;
+
+		// Returns key by uid
+		Key FindKey(UInt64 uid) const;
+
+		// Returns key index by uid
+		int FindKeyIdx(UInt64 uid) const;
 
 		// Sets keys
 		void SetKeys(const KeysVec& keys);
@@ -155,7 +161,7 @@ namespace o2
 		void SmoothKey(float position, float smooth);
 
 		// Returns key by position
-		Key operator[](float position);
+		Key operator[](float position) const;
 
 		// Returns parametric specified animated value
 		// Sample: Parametric(someBegin, someEnd, 1.0f, 0.0f, 0.4f, 1.0f, 0.6f) 
@@ -185,12 +191,13 @@ namespace o2
 		class Key: public ISerializable
 		{
 		public:
-			float position;         // Position on time line, in seconds @SERIALIZABLE
-			_type value;            // Value @SERIALIZABLE
-			float curvePrevCoef;    // Transition curve coefficient for previous animation segment @SERIALIZABLE
-			float curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
-			float curveNextCoef;    // Transition curve coefficient for next animation segment @SERIALIZABLE
-			float curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1)@SERIALIZABLE
+			UInt64 uid;              // Random unique id @SERIALIZABLE
+			float  position;         // Position on time line, in seconds @SERIALIZABLE
+			_type  value;            // Value @SERIALIZABLE
+			float  curvePrevCoef;    // Transition curve coefficient for previous animation segment @SERIALIZABLE
+			float  curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
+			float  curveNextCoef;    // Transition curve coefficient for next animation segment @SERIALIZABLE
+			float  curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1)@SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -245,7 +252,7 @@ namespace o2
 		void Evaluate() override;
 
 		// Returns value for specified time
-		_type Evaluate(float position);
+		_type Evaluate(float position) const;
 
 		// Returns keys (for property)
 		KeysVec GetKeysNonContant();
@@ -276,7 +283,7 @@ namespace o2
 	template<typename _type>
 	AnimatedValue<_type>::AnimatedValue(const AnimatedValue<_type>& other):
 		mKeys(other.mKeys), mValue(other.mValue), mTargetDelegate(), IAnimatedValue(other),
-		value(this), target(this), targetDelegate(this), targetProxy(this), keys(this)
+		value(this), target(this), targetDelegate(this), targetProxy(this), keys(this)		
 	{}
 
 	template<typename _type>
@@ -289,7 +296,7 @@ namespace o2
 	template<typename _type>
 	AnimatedValue<_type>& AnimatedValue<_type>::operator=(const AnimatedValue<_type>& other)
 	{
-		IAnimation::operator =(other);
+		IAnimation::operator=(other);
 
 		mKeys = other.mKeys;
 		mValue = other.mValue;
@@ -336,13 +343,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type AnimatedValue<_type>::GetValue()
+	_type AnimatedValue<_type>::GetValue() const
 	{
 		return mValue;
 	}
 
 	template<typename _type>
-	_type AnimatedValue<_type>::GetValue(float time)
+	_type AnimatedValue<_type>::GetValue(float time) const
 	{
 		return Evaluate(time);
 	}
@@ -444,13 +451,40 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename AnimatedValue<_type>::Key AnimatedValue<_type>::GetKey(float position)
+	typename AnimatedValue<_type>::Key AnimatedValue<_type>::GetKey(float position) const
 	{
 		for (auto& key : mKeys)
+		{
 			if (Math::Equals(key.position, position))
 				return key;
+		}
 
 		return Key();
+	}
+
+	template<typename _type>
+	typename AnimatedValue<_type>::Key AnimatedValue<_type>::FindKey(UInt64 uid) const
+	{
+		for (auto& key : mKeys)
+		{
+			if (key.uid == uid)
+				return key;
+		}
+
+		return Key();
+	}
+
+	template<typename _type>
+	int AnimatedValue<_type>::FindKeyIdx(UInt64 uid) const
+	{
+		int idx = 0;
+		for (auto& key : mKeys)
+		{
+			if (key.uid == uid)
+				return idx;
+		}
+
+		return -1;
 	}
 
 	template<typename _type>
@@ -499,7 +533,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool AnimatedValue<_type>::ContainsKey(float position)
+	bool AnimatedValue<_type>::ContainsKey(float position) const
 	{
 		for (auto& key : mKeys)
 		{
@@ -557,7 +591,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename AnimatedValue<_type>::Key AnimatedValue<_type>::operator[](float position)
+	typename AnimatedValue<_type>::Key AnimatedValue<_type>::operator[](float position) const
 	{
 		return GetKey(position);
 	}
@@ -580,7 +614,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type AnimatedValue<_type>::Evaluate(float position)
+	_type AnimatedValue<_type>::Evaluate(float position) const
 	{
 		int count = mKeys.Count();
 
@@ -603,8 +637,8 @@ namespace o2
 		if (begi < 0)
 			return _type();
 
-		Key& beginKey = mKeys[begi];
-		Key& endKey = mKeys[endi];
+		const Key& beginKey = mKeys[begi];
+		const Key& endKey = mKeys[endi];
 
 		int segBeg = 0;
 		int segEnd = 1;
@@ -731,14 +765,36 @@ namespace o2
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key():
-		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f)
+		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f)
 	{}
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key(const _type& value) :
-		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		value(value)
 	{}
+
+	template<typename _type>
+	AnimatedValue<_type>::Key::Key(float position, const _type& value):
+		uid(Math::Random()), position(position), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		value(value)
+	{}
+
+	template<typename _type>
+	AnimatedValue<_type>::Key::Key(float position, const _type& value,
+								   float curvePrevCoef, float curvePrevCoefPos,
+								   float curveNextCoef, float curveNextCoefPos):
+		uid(Math::Random()), position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
+		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value)
+	{}
+
+	template<typename _type>
+	AnimatedValue<_type>::Key::Key(const Key& other):
+		uid(other.uid), position(other.position), curvePrevCoef(other.curvePrevCoef), curvePrevCoefPos(other.curvePrevCoefPos),
+		curveNextCoef(other.curveNextCoef), curveNextCoefPos(other.curveNextCoefPos), value(other.value)
+	{
+		memcpy(mCurveApproxValues, other.mCurveApproxValues, mApproxValuesCount*sizeof(Vec2F));
+	}
 
 	template<typename _type>
 	typename AnimatedValue<_type>::Key& AnimatedValue<_type>::Key::operator=(const _type& value)
@@ -754,30 +810,9 @@ namespace o2
 	}
 
 	template<typename _type>
-	AnimatedValue<_type>::Key::Key(float position, const _type& value):
-		position(position), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
-		value(value)
-	{}
-
-	template<typename _type>
-	AnimatedValue<_type>::Key::Key(float position, const _type& value,
-								   float curvePrevCoef, float curvePrevCoefPos,
-								   float curveNextCoef, float curveNextCoefPos):
-		position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
-		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value)
-	{}
-
-	template<typename _type>
-	AnimatedValue<_type>::Key::Key(const Key& other):
-		position(other.position), curvePrevCoef(other.curvePrevCoef), curvePrevCoefPos(other.curvePrevCoefPos),
-		curveNextCoef(other.curveNextCoef), curveNextCoefPos(other.curveNextCoefPos), value(other.value)
-	{
-		memcpy(mCurveApproxValues, other.mCurveApproxValues, mApproxValuesCount*sizeof(Vec2F));
-	}
-
-	template<typename _type>
 	typename AnimatedValue<_type>::Key& AnimatedValue<_type>::Key::operator=(const Key& other)
 	{
+		uid = other.uid;
 		position = other.position;
 		value = other.value;
 		curvePrevCoef = other.curvePrevCoef;
@@ -793,7 +828,7 @@ namespace o2
 	template<typename _type>
 	bool AnimatedValue<_type>::Key::operator==(const Key& other) const
 	{
-		return position == other.position && value == other.value;
+		return Math::Equals(position, other.position) && Math::Equals(value, other.value);
 	}
 };
 
@@ -868,6 +903,7 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PROTECTED_FUNCTION(void, Evaluate);
@@ -891,6 +927,7 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(o2::AnimatedValue<_type>::Key)
 {
+	PUBLIC_FIELD(uid).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(curvePrevCoef).SERIALIZABLE_ATTRIBUTE();

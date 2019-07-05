@@ -2,6 +2,7 @@
 
 #include "Utils/Editor/DragHandle.h"
 #include "Events/CursorEventsListener.h"
+#include "TrackControls/KeyHandles.h"
 
 namespace o2
 {
@@ -62,6 +63,12 @@ namespace Editor
 		// Unregisters all tracks controls
 		void UnregAllTrackControls();
 
+		// Adds selectable handle to group
+		void AddHandle(DragHandle* handle) override;
+
+		// Removes selectable handle from group
+		void RemoveHandle(DragHandle* handle) override;
+
 		SERIALIZABLE(KeyHandlesSheet);
 
 	private:
@@ -74,6 +81,8 @@ namespace Editor
 		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
 
 		Vector<ITrackControl*> mTrackControls; // List of actual track controls
+
+		Dictionary<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 
 		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
 		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
@@ -182,6 +191,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mTrackControls);
+	PRIVATE_FIELD(mHandlesGroups);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);
 	PRIVATE_FIELD(mBeginSelectPoint);
@@ -204,6 +214,8 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, RegTrackControl, ITrackControl*);
 	PUBLIC_FUNCTION(void, UnregTrackControl, ITrackControl*);
 	PUBLIC_FUNCTION(void, UnregAllTrackControls);
+	PUBLIC_FUNCTION(void, AddHandle, DragHandle*);
+	PUBLIC_FUNCTION(void, RemoveHandle, DragHandle*);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(void, InitializeCenterHandle);
 	PRIVATE_FUNCTION(void, InitializeLeftHandle);

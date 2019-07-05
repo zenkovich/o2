@@ -30,15 +30,15 @@ namespace Editor
 		// Set handle enabled. Disabled handle don't drawn and interact
 		void SetEnabled(bool enabled);
 
-		SERIALIZABLE(SceneDragHandle);
-
-	protected:
 		// Converts point from screen to local space
 		Vec2F ScreenToLocal(const Vec2F& point);
 
 		// Converts point from local to screen space
 		Vec2F LocalToScreen(const Vec2F& point);
 
+		SERIALIZABLE(SceneDragHandle);
+
+	protected:
 		friend class SceneEditScreen;
 	};
 }
@@ -56,7 +56,7 @@ CLASS_METHODS_META(Editor::SceneDragHandle)
 {
 
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
-	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 }
 END_META;

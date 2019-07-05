@@ -51,10 +51,10 @@ namespace o2
 		void SetTargetProxy(IValueProxy<Vec2F>* setter);
 
 		// Returns current value
-		Vec2F GetValue();
+		Vec2F GetValue() const;
 
 		// Returns value at time
-		Vec2F GetValue(float time);
+		Vec2F GetValue(float time) const;
 
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
@@ -82,9 +82,6 @@ namespace o2
 		// Adds key at position with value and smoothing
 		int AddKey(float position, const Vec2F& value, float smooth = 1.0f);
 
-		// Returns key at position
-		Key GetKey(float position);
-
 		// Removes key at position
 		bool RemoveKey(float position);
 
@@ -95,10 +92,19 @@ namespace o2
 		void RemoveAllKeys();
 
 		// Returns true if animation contains key at position
-		bool ContainsKey(float position);
+		bool ContainsKey(float position) const;
 
 		// Returns keys array
 		const KeysVec& GetKeys() const;
+
+		// Returns key at position
+		Key GetKey(float position) const;
+
+		// Returns key by uid
+		Key FindKey(UInt64 uid) const;
+
+		// Returns key index by uid
+		int FindKeyIdx(UInt64 uid) const;
 
 		// Sets keys
 		void SetKeys(const KeysVec& keys);
@@ -107,7 +113,7 @@ namespace o2
 		void SmoothKey(float position, float smooth);
 
 		// Returns key by position
-		Key operator[](float position);
+		Key operator[](float position) const;
 
 		// Returns parametric specified animated value
 		// Sample: Parametric(someBegin, someEnd, 1.0f, 0.0f, 0.4f, 1.0f, 0.6f) 
@@ -137,14 +143,15 @@ namespace o2
 		class Key: public ISerializable
 		{
 		public:
-			float position;			// Position on time line, in seconds @SERIALIZABLE
-			Vec2F value;			// Value @SERIALIZABLE
-			Vec2F prevSupportValue;	// Previous animation segment support value @SERIALIZABLE
-			Vec2F nextSupportValue;	// Next animation segment support value @SERIALIZABLE
-			float curvePrevCoef;	// Transition curve coefficient for previous animation segment @SERIALIZABLE
-			float curvePrevCoefPos;	// Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
-			float curveNextCoef;	// Transition curve coefficient for next animation segment @SERIALIZABLE
-			float curveNextCoefPos;	// Transition curve coefficient position for next animation segment (must be in 0...1) @SERIALIZABLE
+			UInt64 uid;              // Random unique id @SERIALIZABLE
+			float  position;		 // Position on time line, in seconds @SERIALIZABLE
+			Vec2F  value;			 // Value @SERIALIZABLE
+			Vec2F  prevSupportValue; // Previous animation segment support value @SERIALIZABLE
+			Vec2F  nextSupportValue; // Next animation segment support value @SERIALIZABLE
+			float  curvePrevCoef;	 // Transition curve coefficient for previous animation segment @SERIALIZABLE
+			float  curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
+			float  curveNextCoef;	 // Transition curve coefficient for next animation segment @SERIALIZABLE
+			float  curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1) @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -202,7 +209,7 @@ namespace o2
 		void Evaluate() override;
 
 		// Returns value for specified time
-		Vec2F Evaluate(float position);
+		Vec2F Evaluate(float position) const;
 
 		// Returns keys (for property)
 		KeysVec GetKeysNonContant();
@@ -265,12 +272,13 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(int, AddSmoothKey, const Key&, float);
 	PUBLIC_FUNCTION(int, AddKey, float, const Vec2F&, const Vec2F&, const Vec2F&, float, float, float, float);
 	PUBLIC_FUNCTION(int, AddKey, float, const Vec2F&, float);
-	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PROTECTED_FUNCTION(void, Evaluate);
@@ -292,6 +300,7 @@ CLASS_BASES_META(o2::AnimatedValue<o2::Vec2F>::Key)
 END_META;
 CLASS_FIELDS_META(o2::AnimatedValue<o2::Vec2F>::Key)
 {
+	PUBLIC_FIELD(uid).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(prevSupportValue).SERIALIZABLE_ATTRIBUTE();

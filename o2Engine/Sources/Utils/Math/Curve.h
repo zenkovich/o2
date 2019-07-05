@@ -51,7 +51,7 @@ namespace o2
 		Curve& operator+=(const Curve& other);
 
 		// Returns value by position
-		float Evaluate(float position);
+		float Evaluate(float position) const;
 
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update approximation
 		// Used for optimizing many keys change
@@ -126,12 +126,6 @@ namespace o2
 		// Prepends flat key at beginning with offset
 		int PrependKey(float offset, float value);
 
-		// Returns key at position
-		Key GetKey(float position);
-
-		// Returns key at index
-		Key GetKeyAt(int idx);
-
 		// Removes key at position
 		bool RemoveKey(float position);
 
@@ -142,10 +136,22 @@ namespace o2
 		void RemoveAllKeys();
 
 		// Returns true if contains key at position
-		bool ContainsKey(float position);
+		bool ContainsKey(float position) const;
 
 		// Returns keys array
 		const KeysVec& GetKeys() const;
+
+		// Returns key at position
+		Key GetKey(float position) const;
+
+		// Returns key at index
+		Key GetKeyAt(int idx) const;
+
+		// Returns key by uid
+		Key FindKey(UInt64 uid) const;
+
+		// Returns key index by uid
+		int FindKeyIdx(UInt64 uid) const;
 
 		// Sets keys
 		void SetKeys(const KeysVec& keys);
@@ -169,7 +175,7 @@ namespace o2
 		RectF GetRect() const;
 
 		// Key access operator by position
-		Key operator[](float position);
+		Key operator[](float position) const;
 
 		// Returns ease in curve
 		static Curve EaseIn();
@@ -195,13 +201,14 @@ namespace o2
 			enum class Type { Smooth, Flat, Free, Broken, Discrete };
 
 		public:
-			float value;                // Value @SERIALIZABLE
-			float position;             // Position @SERIALIZABLE
-			float leftSupportValue;     // Left bezier support value, relative to key value @SERIALIZABLE
-			float leftSupportPosition;  // Left bezier support position, relative to key position @SERIALIZABLE
-			float rightSupportValue;    // Right bezier support value, relative to key value @SERIALIZABLE
-			float rightSupportPosition; // Right bezier support position, relative to key position @SERIALIZABLE
-			Type  supportsType;         // Support points type @SERIALIZABLE
+			UInt64 uid;                  // Random unique id @SERIALIZABLE
+			float  value;                // Value @SERIALIZABLE
+			float  position;             // Position @SERIALIZABLE
+			float  leftSupportValue;     // Left bezier support value, relative to key value @SERIALIZABLE
+			float  leftSupportPosition;  // Left bezier support position, relative to key position @SERIALIZABLE
+			float  rightSupportValue;    // Right bezier support value, relative to key value @SERIALIZABLE
+			float  rightSupportPosition; // Right bezier support position, relative to key position @SERIALIZABLE
+			Type   supportsType;         // Support points type @SERIALIZABLE
 
 		public:
 			//Default constructor
@@ -251,7 +258,7 @@ namespace o2
 		bool mBatchChange = false; // It is true when began batch change
 		bool mChangedKeys = false; // It is true when some keys changed during batch change
 
-		KeysVec mKeys; // Curve keys @SERIALIZABLE
+		KeysVec mKeys;           // Curve keys @SERIALIZABLE
 
 	protected:
 		// Checks all smooth keys and updates supports points
@@ -316,13 +323,14 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(int, PrependKey, float, float, float, float, float, float);
 	PUBLIC_FUNCTION(int, PrependKey, float, float, float);
 	PUBLIC_FUNCTION(int, PrependKey, float, float);
-	PUBLIC_FUNCTION(Key, GetKey, float);
-	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(bool, RemoveKey, float);
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, GetKeyAt, int);
+	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
@@ -346,6 +354,7 @@ CLASS_BASES_META(o2::Curve::Key)
 END_META;
 CLASS_FIELDS_META(o2::Curve::Key)
 {
+	PUBLIC_FIELD(uid).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(leftSupportValue).SERIALIZABLE_ATTRIBUTE();

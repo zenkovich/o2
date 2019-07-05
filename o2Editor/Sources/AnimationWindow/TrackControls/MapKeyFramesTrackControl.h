@@ -157,8 +157,9 @@ namespace Editor
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			handle->animatedValue = animatedValue;
-			handle->keyIdx = idx;
+			handle->keyUid = idx;
 			handle->isMapping = true;
+			handle->SetSelectionGroup(trackControl->mHandlesSheet);
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
 				auto& keys = animatedValue->GetKeys();
@@ -170,12 +171,13 @@ namespace Editor
 			handles.Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
-			handle->onPressed = [&]()
+			handle->onPressed = [=]()
 			{ 
 				if (!o2Input.IsKeyDown(VK_CONTROL))
 					handle->GetSelectionGroup()->DeselectAll();
 
-				trackControl->FindHandlesAtPosition(key.position).ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); });
+				trackControl->FindHandlesAtPosition(keyHandle->handle->GetPosition().x)
+					.ForEach([](KeyHandle* keyHandle) { keyHandle->handle->SetSelected(true); });
 			};
 			handle->onReleased = [&]() { UpdateHandles(); };
 
@@ -216,7 +218,7 @@ namespace Editor
 		{
 			ChangeHandleIndex(keyHandle->keyIdx, newIdx);
 			keyHandle->keyIdx = newIdx;
-			keyHandle->handle->keyIdx = newIdx;
+			keyHandle->handle->keyUid = newIdx;
 		}
 
 		trackControl->mDisableHandlesUpdate = false;
@@ -232,8 +234,8 @@ namespace Editor
 
 		for (int i = 0; i < handles.Count(); i++)
 		{
-			handles[i]->keyIdx = i;
-			handles[i]->handle->keyIdx = i;
+			handles[i]->keyUid = i;
+			handles[i]->handle->keyUid = i;
 		}
 	}
 }

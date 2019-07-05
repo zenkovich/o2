@@ -10,7 +10,7 @@ namespace Editor
 	{ 
 	public:
 		IAnimatedValue* animatedValue = nullptr;
-		int             keyIdx = 0;
+		UInt64          keyUid = 0;
 		bool            isMapping = false;
 
 	public:
@@ -46,7 +46,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
 	PUBLIC_FIELD(animatedValue);
-	PUBLIC_FIELD(keyIdx);
+	PUBLIC_FIELD(keyUid);
 	PUBLIC_FIELD(isMapping);
 }
 END_META;

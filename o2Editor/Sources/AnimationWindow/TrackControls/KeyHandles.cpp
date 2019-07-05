@@ -24,7 +24,7 @@ namespace Editor
 	{
 		WidgetDragHandle::Draw();
 
-		o2Debug.DrawText(GetScreenPosition(), String(keyIdx));
+		o2Debug.DrawText(GetScreenPosition(), String(keyUid));
 	}
 
 	Editor::AnimationKeyDragHandle& AnimationKeyDragHandle::operator=(const AnimationKeyDragHandle& other)

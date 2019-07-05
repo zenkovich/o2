@@ -67,12 +67,12 @@ namespace o2
 		mTargetProxy = proxy;
 	}
 
-	float AnimatedValue<float>::GetValue()
+	float AnimatedValue<float>::GetValue() const
 	{
 		return mValue;
 	}
 
-	float AnimatedValue<float>::GetValue(float time)
+	float AnimatedValue<float>::GetValue(float time) const
 	{
 		return curve.Evaluate(time);
 	}
@@ -131,9 +131,19 @@ namespace o2
 		return curve.InsertKey(position, value, smooth);
 	}
 
-	AnimatedValue<float>::Key AnimatedValue<float>::GetKey(float position)
+	AnimatedValue<float>::Key AnimatedValue<float>::GetKey(float position) const
 	{
 		return curve.GetKey(position);
+	}
+
+	AnimatedValue<float>::Key AnimatedValue<float>::FindKey(UInt64 uid) const
+	{
+		return curve.FindKey(uid);
+	}
+
+	int AnimatedValue<float>::FindKeyIdx(UInt64 uid) const
+	{
+		return curve.FindKeyIdx(uid);
 	}
 
 	bool AnimatedValue<float>::RemoveKey(float position)
@@ -152,7 +162,7 @@ namespace o2
 		curve.RemoveAllKeys();
 	}
 
-	bool AnimatedValue<float>::ContainsKey(float position)
+	bool AnimatedValue<float>::ContainsKey(float position) const
 	{
 		return curve.ContainsKey(position);
 	}
@@ -172,7 +182,7 @@ namespace o2
 		curve.SmoothKey(position, smooth);
 	}
 
-	AnimatedValue<float>::Key AnimatedValue<float>::operator[](float position)
+	AnimatedValue<float>::Key AnimatedValue<float>::operator[](float position) const
 	{
 		return curve.GetKey(position);
 	}

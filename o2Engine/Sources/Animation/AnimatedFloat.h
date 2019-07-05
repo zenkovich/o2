@@ -8,7 +8,7 @@ namespace o2
 	// Animated float value interface
 	// ------------------------------
 	template<>
-	class AnimatedValue<float>: public IAnimatedValue
+	class AnimatedValue<float> : public IAnimatedValue
 	{
 	public:
 		typedef float ValueType;
@@ -56,10 +56,10 @@ namespace o2
 		void SetTargetProxy(IValueProxy<float>* proxy);
 
 		// Returns current value
-		float GetValue();
+		float GetValue() const;
 
 		// Returns value at time
-		float GetValue(float time);
+		float GetValue(float time) const;
 
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
@@ -81,7 +81,7 @@ namespace o2
 
 		// Adds key
 		int AddKey(float position, float value, float leftCoef, float leftCoefPosition,
-					float rightCoef, float rightCoefPosition);
+				   float rightCoef, float rightCoefPosition);
 
 		// Adds key at position with value and smoothing
 		int AddKey(float position, float value, float smooth = 1.0f);
@@ -96,10 +96,16 @@ namespace o2
 		void RemoveAllKeys();
 
 		// Returns true if animation contains key at position
-		bool ContainsKey(float position);
+		bool ContainsKey(float position) const;
 
 		// Returns key at position
-		Key GetKey(float position);
+		Key GetKey(float position) const;
+
+		// Returns key by uid
+		Key FindKey(UInt64 uid) const;
+
+		// Returns key index by uid
+		int FindKeyIdx(UInt64 uid) const;
 
 		// Returns keys array
 		const KeysVec& GetKeys() const;
@@ -111,7 +117,7 @@ namespace o2
 		void SmoothKey(float position, float smooth);
 
 		// Returns key by position
-		Key operator[](float position);
+		Key operator[](float position) const;
 
 		// Returns parametric specified animated value
 		// Sample: Parametric(someBegin, someEnd, 1.0f, 0.0f, 0.4f, 1.0f, 0.6f) 
@@ -122,13 +128,13 @@ namespace o2
 
 		// Returns tweening animation from begin to end in duration with ease in
 		static AnimatedValue<float> EaseIn(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
-		
+
 		// Returns tweening animation from begin to end in duration with ease out
 		static AnimatedValue<float> EaseOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
-		
+
 		// Returns tweening animation from begin to end in duration with ease in-out
 		static AnimatedValue<float> EaseInOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
-		
+
 		// Returns tweening animation from begin to end in duration with linear transition
 		static AnimatedValue<float> Linear(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
 
@@ -144,7 +150,7 @@ namespace o2
 	protected:
 		// Evaluates value
 		void Evaluate() override;
-		
+
 		// Returns keys (for property)
 		KeysVec GetKeysNonContant();
 
@@ -208,6 +214,7 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);

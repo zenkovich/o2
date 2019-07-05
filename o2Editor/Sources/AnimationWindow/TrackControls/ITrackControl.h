@@ -22,11 +22,11 @@ namespace Editor
 	public:
 		struct KeyHandle
 		{
-			int keyIdx = 0;
+			UInt64 keyUid = 0;
 			AnimationKeyDragHandle* handle = nullptr;
 
 			KeyHandle() { }
-			KeyHandle(int keyIdx, AnimationKeyDragHandle* handle): keyIdx(keyIdx), handle(handle) { }
+			KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle): keyUid(keyUid), handle(handle) { }
 
 			bool operator==(const KeyHandle& other) const;
 		};
@@ -44,9 +44,6 @@ namespace Editor
 
 		// Returns key handles list
 		virtual KeyHandlesVec GetKeyHandles() const;
-
-		// Returns key handle position
-		virtual float GetKeyPosition(int idx) const;
 
 		// Returns value property
 		virtual IPropertyField* GetPropertyField() const;

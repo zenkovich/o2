@@ -18,11 +18,6 @@ namespace Editor
 		return KeyHandlesVec();
 	}
 
-	float ITrackControl::GetKeyPosition(int idx) const
-	{
-		return 0.0f;
-	}
-
 	IPropertyField* ITrackControl::GetPropertyField() const
 	{
 		return nullptr;

@@ -20,7 +20,7 @@ namespace o2
 		AppendKeys(values, smooth);
 	}
 
-	Curve::Curve(const Curve& other):
+	Curve::Curve(const Curve& other) :
 		mKeys(other.mKeys), keys(this), length(this)
 	{}
 
@@ -35,8 +35,10 @@ namespace o2
 			return false;
 
 		for (int i = 0; i < mKeys.Count(); i++)
+		{
 			if (mKeys[i] != other.mKeys[i])
 				return false;
+		}
 
 		return true;
 	}
@@ -44,8 +46,11 @@ namespace o2
 	Curve& Curve::operator=(const Curve& other)
 	{
 		mKeys = other.mKeys;
+
 		UpdateApproximation();
+
 		onKeysChanged();
+
 		return *this;
 	}
 
@@ -55,7 +60,7 @@ namespace o2
 		return *this;
 	}
 
-	float Curve::Evaluate(float position)
+	float Curve::Evaluate(float position) const
 	{
 		int count = mKeys.Count();
 
@@ -78,8 +83,8 @@ namespace o2
 		if (begi < 0)
 			return 0.0f;
 
-		Key& beginKey = mKeys[begi];
-		Key& endKey = mKeys[endi];
+		const Key& beginKey = mKeys[begi];
+		const Key& endKey = mKeys[endi];
 
 		int segBeg = 0;
 		int segEnd = 1;
@@ -462,21 +467,46 @@ namespace o2
 		return 0;
 	}
 
-	Curve::Key Curve::GetKey(float position)
+	Curve::Key Curve::GetKey(float position) const
 	{
 		for (auto& key : mKeys)
+		{
 			if (Math::Equals(key.position, position))
 				return key;
+		}
 
 		return Key();
 	}
 
-	Curve::Key Curve::GetKeyAt(int idx)
+	Curve::Key Curve::GetKeyAt(int idx) const
 	{
 		if (idx < 0 || idx > mKeys.Count() - 1)
 			return Key();
 
 		return mKeys[idx];
+	}
+
+	Curve::Key Curve::FindKey(UInt64 uid) const
+	{
+		for (auto& key : mKeys)
+		{
+			if (key.uid == uid)
+				return key;
+		}
+
+		return Key();
+	}
+
+	int Curve::FindKeyIdx(UInt64 uid) const
+	{
+		int idx = 0;
+		for (auto& key : mKeys)
+		{
+			if (key.uid == uid)
+				return idx;
+		}
+
+		return -1;
 	}
 
 	bool Curve::RemoveKey(float position)
@@ -520,11 +550,13 @@ namespace o2
 		onKeysChanged();
 	}
 
-	bool Curve::ContainsKey(float position)
+	bool Curve::ContainsKey(float position) const
 	{
 		for (auto& key : mKeys)
+		{
 			if (Math::Equals(key.position, position))
 				return true;
+		}
 
 		return false;
 	}
@@ -622,11 +654,13 @@ namespace o2
 		return res;
 	}
 
-	Curve::Key Curve::operator[](float position)
+	Curve::Key Curve::operator[](float position) const
 	{
 		for (auto& key : mKeys)
+		{
 			if (Math::Equals(key.position, position))
 				return key;
+		}
 
 		return Key();
 	}
@@ -770,27 +804,27 @@ namespace o2
 		InternalSmoothKeyAt(pos, smoothCoef);
 	}
 
-	Curve::Key::Key():
-		value(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
+	Curve::Key::Key() :
+		uid(Math::Random()), value(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
 		supportsType(Type::Smooth)
 	{}
 
 	Curve::Key::Key(float position, float value, float leftSupportValue, float leftSupportPosition,
 					float rightSupportValue, float rightSupportPosition) :
-		value(value), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
+		uid(Math::Random()), value(value), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
 		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), supportsType(Type::Broken)
 	{}
 
 	Curve::Key::Key(const Key& other) :
-		value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
+		uid(other.uid), value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
 		leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
 		rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType)
 	{
 		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
 	}
 
-	Curve::Key::Key(float value):
-		value(value), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
+	Curve::Key::Key(float value) :
+		uid(Math::Random()), value(value), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
 		rightSupportPosition(0), supportsType(Type::Smooth)
 	{}
 
@@ -817,6 +851,7 @@ namespace o2
 
 	Curve::Key& Curve::Key::operator=(const Key& other)
 	{
+		uid = other.uid;
 		value = other.value;
 		position = other.position;
 		leftSupportValue = other.leftSupportValue;

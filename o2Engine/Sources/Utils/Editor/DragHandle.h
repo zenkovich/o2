@@ -78,6 +78,9 @@ namespace o2
 		// Sets drag position of handle, updates handle final position after position checking
 		void SetDragPosition(const Vec2F& position);
 
+		// Returns drag position
+		Vec2F GetDragPosition() const;
+
 		// Returns position
 		Vec2F GetPosition() const;
 
@@ -86,6 +89,9 @@ namespace o2
 
 		// Returns position at beginning of dragging
 		Vec2F GetDraggingBeginPosition() const;
+
+		// It is called when handle beginning to drag from outside, for example from selection group. Updates drag position and drag offset
+		void BeginDrag(const Vec2F& cursor);
 
 		// Sets is this selected
 		virtual void SetSelected(bool selected);
@@ -116,6 +122,12 @@ namespace o2
 
 		// Return handle rotation angle in radians
 		float GetAngle() const;
+
+		// Converts point from screen to local space
+		virtual Vec2F ScreenToLocal(const Vec2F& point);
+
+		// Converts point from local to screen space
+		virtual Vec2F LocalToScreen(const Vec2F& point);
 
 		// Sets regular sprite
 		void SetRegularSprite(Sprite* sprite);
@@ -191,12 +203,6 @@ namespace o2
 		float  mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
 
 	protected:
-		// Converts point from screen to local space
-		virtual Vec2F ScreenToLocal(const Vec2F& point);
-
-		// Converts point from local to screen space
-		virtual Vec2F LocalToScreen(const Vec2F& point);
-
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
@@ -275,19 +281,18 @@ namespace o2
 		// Returns is handle enabled. Disabled handle don't drawn and interact
 		bool IsEnabled() const;
 
+		// Converts point from screen to local space
+		Vec2F ScreenToLocal(const Vec2F& point) override;
+
+		// Converts point from local to screen space
+		Vec2F LocalToScreen(const Vec2F& point) override;
+
 		SERIALIZABLE(WidgetDragHandle);
 
 	private:
 		// Hide public functions
 		using DragHandle::screenToLocalTransformFunc; 
 		using DragHandle::localToScreenTransformFunc;
-
-
-		// Converts point from screen to local space
-		Vec2F ScreenToLocal(const Vec2F& point) override;
-
-		// Converts point from local to screen space
-		Vec2F LocalToScreen(const Vec2F& point) override;
 
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
@@ -374,16 +379,16 @@ namespace o2
 		SelectableDragHandlesVec GetAllHandles() const;
 
 		// Selects handle
-		void SelectHandle(DragHandle* handle);
+		void SelectHandle(DragHandle* handle) override;
 
 		// Deselects handle
-		void DeselectHandle(DragHandle* handle);
+		void DeselectHandle(DragHandle* handle) override;
 
 		// Adds selectable handle to group
-		void AddHandle(DragHandle* handle);
+		void AddHandle(DragHandle* handle) override;
 
 		// Removes selectable handle from group
-		void RemoveHandle(DragHandle* handle);
+		void RemoveHandle(DragHandle* handle) override;
 
 		// Deselects all in group
 		void DeselectAll() override;
@@ -473,9 +478,11 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(const Vec2F&, GetScreenPosition);
 	PUBLIC_FUNCTION(void, SetDragPosition, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetDragPosition);
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingOffset);
 	PUBLIC_FUNCTION(Vec2F, GetDraggingBeginPosition);
+	PUBLIC_FUNCTION(void, BeginDrag, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSelected, bool);
 	PUBLIC_FUNCTION(bool, IsSelected);
 	PUBLIC_FUNCTION(void, Select);
@@ -486,6 +493,8 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(void, SetAngle, float);
 	PUBLIC_FUNCTION(float, GetAngle);
+	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetRegularSprite, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetRegularSprite);
 	PUBLIC_FUNCTION(void, SetHoverSprite, Sprite*);
@@ -500,8 +509,6 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(Sprite*, GetSelectedPressedSprite);
 	PUBLIC_FUNCTION(void, SetSpritesSize, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSpritesSizePivot, const Vec2F&);
-	PROTECTED_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
-	PROTECTED_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
@@ -536,8 +543,8 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(bool, IsEnabled);
-	PRIVATE_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
-	PRIVATE_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PRIVATE_FUNCTION(void, UpdateLayersLayouts);
 	PRIVATE_FUNCTION(void, OnSerialize, DataNode&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);

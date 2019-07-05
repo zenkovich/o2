@@ -53,9 +53,6 @@ namespace Editor
 		// Returns key handles list
 		KeyHandlesVec GetKeyHandles() const override;
 
-		// Returns key handle position
-		float GetKeyPosition(int idx) const override;
-
 		// Returns value property
 		IPropertyField* GetPropertyField() const override;
 
@@ -89,7 +86,6 @@ namespace Editor
 		void InitializeHandles();
 
 		AnimationKeyDragHandle* CreateHandle();
-		void ChangeHandleIndex(int oldIndex, int newIndex);
 
 		void CheckCanCreateKey(float time);
 
@@ -195,12 +191,6 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	float KeyFramesTrackControl<AnimatedValueType>::GetKeyPosition(int idx) const
-	{
-		return mHandles[idx]->handle->GetPosition().x;
-	}
-
-	template<typename AnimatedValueType>
 	IPropertyField* KeyFramesTrackControl<AnimatedValueType>::GetPropertyField() const
 	{
 		return mPropertyField;
@@ -230,15 +220,18 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>(
-			[&](const KeyHandle* x) { x->handle->SetParent(nullptr); x->handle->SetEnabled(false); return x->handle; });
+		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>([&](const KeyHandle* x) { 
+			x->handle->SetParent(nullptr);
+			x->handle->SetEnabled(false); 
+			x->handle->SetSelectionGroup(nullptr);
+			return x->handle; 
+		});
 
 		for (auto keyHandle : mHandles)
 			delete keyHandle;
 
 		mHandles.Clear();
 
-		int idx = 0;
 		for (auto& key : mAnimatedValue->GetKeys())
 		{
 			AnimationKeyDragHandle* handle = nullptr;
@@ -251,39 +244,24 @@ namespace Editor
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			handle->animatedValue = mAnimatedValue;
-			handle->keyIdx = idx;
+			handle->keyUid = key.uid;
 			handle->isMapping = false;
+			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
+
 			AddChild(handle);
 
-			KeyHandle* keyhandle = mnew KeyHandle(idx++, handle);
+			KeyHandle* keyhandle = mnew KeyHandle(key.uid, handle);
 			mHandles.Add(keyhandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) {
-				auto key = mAnimatedValue->GetKeys()[keyhandle->keyIdx];
-
+				int keyIdx = mAnimatedValue->FindKeyIdx(keyhandle->keyUid);
+				auto key = mAnimatedValue->GetKeys()[keyIdx];
 				key.position = pos.x;
-				mAnimatedValue->RemoveKeyAt(keyhandle->keyIdx);
-				auto newIdx = mAnimatedValue->AddKey(key);
 
-				if (newIdx != keyhandle->keyIdx)
-					ChangeHandleIndex(keyhandle->keyIdx, newIdx);
+				mAnimatedValue->RemoveKeyAt(keyIdx);
+				mAnimatedValue->AddKey(key);
 			};
 
-		}
-	}
-
-
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::ChangeHandleIndex(int oldIndex, int newIndex)
-	{
-		KeyHandle* editingHandle = mHandles[oldIndex];
-		mHandles.RemoveAt(oldIndex);
-		mHandles.Insert(editingHandle, newIndex);
-
-		for (int i = 0; i < mHandles.Count(); i++)
-		{
-			mHandles[i]->keyIdx = i;
-			mHandles[i]->handle->keyIdx = i;
 		}
 	}
 
@@ -293,17 +271,8 @@ namespace Editor
 		if (!mAnimatedValue)
 			return;
 
-		int idx = 0;
-		for (auto& key : mAnimatedValue->GetKeys())
-		{
-			if (idx < mHandles.Count())
-			{
-				auto keyHandle = mHandles[idx];
-				keyHandle->handle->SetPosition(Vec2F(key.position, 0.0f));
-			}
-
-			idx++;
-		}
+		for (auto keyHandle : mHandles)
+			keyHandle->handle->SetPosition(Vec2F(mAnimatedValue->FindKey(keyHandle->keyUid).position, 0.0f));
 	}
 
 	template<typename AnimatedValueType>
@@ -325,7 +294,6 @@ namespace Editor
 		handle->cursorType = CursorType::SizeWE;
 		handle->pixelPerfect = true;
 		handle->SetSpritesSizePivot(Vec2F(7, 1));
-		handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
 
 		handle->checkPositionFunc = [&](const Vec2F& pos) {
 			float position = pos.x;

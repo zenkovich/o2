@@ -60,12 +60,12 @@ namespace o2
 		mTargetProxy = proxy;
 	}
 
-	Vec2F AnimatedValue<Vec2F>::GetValue()
+	Vec2F AnimatedValue<Vec2F>::GetValue() const
 	{
 		return mValue;
 	}
 
-	Vec2F AnimatedValue<Vec2F>::GetValue(float time)
+	Vec2F AnimatedValue<Vec2F>::GetValue(float time) const
 	{
 		return Evaluate(time);
 	}
@@ -158,13 +158,38 @@ namespace o2
 		return AddKey(Key(position, value, value, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
 	}
 
-	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::GetKey(float position)
+	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::GetKey(float position) const
 	{
 		for (auto& key : mKeys)
+		{
 			if (Math::Equals(key.position, position))
 				return key;
+		}
 
 		return Key();
+	}
+
+	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::FindKey(UInt64 uid) const
+	{
+		for (auto& key : mKeys)
+		{
+			if (key.uid == uid)
+				return key;
+		}
+
+		return Key();
+	}
+
+	int AnimatedValue<o2::Vec2F>::FindKeyIdx(UInt64 uid) const
+	{
+		int idx = 0;
+		for (auto& key : mKeys)
+		{
+			if (key.uid == uid)
+				return idx;
+		}
+
+		return -1;
 	}
 
 	bool AnimatedValue<Vec2F>::RemoveKey(float position)
@@ -208,7 +233,7 @@ namespace o2
 		onKeysChanged();
 	}
 
-	bool AnimatedValue<Vec2F>::ContainsKey(float position)
+	bool AnimatedValue<Vec2F>::ContainsKey(float position) const
 	{
 		for (auto& key : mKeys)
 		{
@@ -277,7 +302,7 @@ namespace o2
 			UpdateApproximation();
 	}
 
-	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::operator[](float position)
+	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::operator[](float position) const
 	{
 		return GetKey(position);
 	}
@@ -298,7 +323,7 @@ namespace o2
 			mTargetProxy->SetValue(mValue);
 	}
 
-	Vec2F AnimatedValue<Vec2F>::Evaluate(float position)
+	Vec2F AnimatedValue<Vec2F>::Evaluate(float position) const
 	{
 		int count = mKeys.Count();
 
@@ -321,8 +346,8 @@ namespace o2
 		if (begi < 0)
 			return Vec2F();
 
-		Key& beginKey = mKeys[begi];
-		Key& endKey = mKeys[endi];
+		const Key& beginKey = mKeys[begi];
+		const Key& endKey = mKeys[endi];
 
 		if (Math::Equals(endKey.mApproxTotalLength, 0.0f, 0.001f))
 			return endKey.value;
@@ -487,12 +512,12 @@ namespace o2
 	}
 
 	AnimatedValue<Vec2F>::Key::Key() :
-		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		mApproxTotalLength(0)
 	{}
 
 	AnimatedValue<Vec2F>::Key::Key(const Vec2F& value) :
-		position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		mApproxTotalLength(0), value(value)
 	{}
 
@@ -508,7 +533,7 @@ namespace o2
 	}
 
 	AnimatedValue<Vec2F>::Key::Key(float position, const Vec2F& value) :
-		position(position), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(position), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
 		value(value), prevSupportValue(value), nextSupportValue(value), mApproxTotalLength(0)
 	{}
 
@@ -516,13 +541,13 @@ namespace o2
 								   const Vec2F& prevSupportValue, const Vec2F& nextSupportValue,
 								   float curvePrevCoef, float curvePrevCoefPos,
 								   float curveNextCoef, float curveNextCoefPos) :
-		position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
+		uid(Math::Random()), position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
 		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value),
 		prevSupportValue(prevSupportValue), nextSupportValue(nextSupportValue), mApproxTotalLength(0)
 	{}
 
 	AnimatedValue<Vec2F>::Key::Key(const Key& other) :
-		position(other.position), curvePrevCoef(other.curvePrevCoef), curvePrevCoefPos(other.curvePrevCoefPos),
+		uid(other.uid), position(other.position), curvePrevCoef(other.curvePrevCoef), curvePrevCoefPos(other.curvePrevCoefPos),
 		curveNextCoef(other.curveNextCoef), curveNextCoefPos(other.curveNextCoefPos), value(other.value),
 		prevSupportValue(other.prevSupportValue), nextSupportValue(other.nextSupportValue),
 		mApproxTotalLength(other.mApproxTotalLength)
@@ -534,6 +559,7 @@ namespace o2
 
 	AnimatedValue<Vec2F>::Key& AnimatedValue<Vec2F>::Key::operator=(const Key& other)
 	{
+		uid = other.uid;
 		position = other.position;
 		value = other.value;
 		prevSupportValue = other.prevSupportValue;

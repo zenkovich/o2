@@ -124,6 +124,27 @@ namespace Editor
 		mTrackControls.Clear();
 	}
 
+	void KeyHandlesSheet::AddHandle(DragHandle* handle)
+	{
+		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
+		{
+			if (!mHandlesGroups.ContainsKey(animHandle->animatedValue))
+				mHandlesGroups.Add(animHandle->animatedValue, {});
+
+			mHandlesGroups[animHandle->animatedValue].Add(animHandle);
+		}
+
+		SelectableDragHandlesGroup::AddHandle(handle);
+	}
+
+	void KeyHandlesSheet::RemoveHandle(DragHandle* handle)
+	{
+		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
+			mHandlesGroups[animHandle->animatedValue].Remove(animHandle);
+
+		SelectableDragHandlesGroup::RemoveHandle(handle);
+	}
+
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		UpdateSelectionFrame();
@@ -134,7 +155,17 @@ namespace Editor
 		for (auto trackControl : mTrackControls)
 			trackControl->BeginKeysDrag();
 
-		SelectableDragHandlesGroup::OnHandleCursorPressed(handle, cursor);
+		if (!GetSelectedHandles().Contains(handle) && handle != &mCenterFrameDragHandle && 
+			handle != &mLeftFrameDragHandle && handle != &mRightFrameDragHandle)
+		{
+			if (!o2Input.IsKeyDown(VK_CONTROL))
+				DeselectAll();
+
+			SelectHandle(handle);
+		}
+
+		for (auto handle : GetSelectedHandles())
+			handle->BeginDrag(cursor.position);
 	}
 
 	void KeyHandlesSheet::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
@@ -150,7 +181,20 @@ namespace Editor
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
-		SelectableDragHandlesGroup::OnHandleMoved(handle, cursorPos);
+		for (auto kv : mHandlesGroups)
+		{
+			for (auto handle : kv.Value())
+			{
+				if (!mSelectedHandles.Contains(handle))
+					continue;
+
+				if (handle->isMapping && kv.Value().ContainsPred([=](auto x) { return !x->isMapping && x->id == handle->id; }))
+					continue;
+
+				handle->SetDragPosition(handle->ScreenToLocal(cursorPos) + handle->GetDraggingOffset());
+				handle->onChangedPos(handle->GetPosition());
+			}
+		}
 
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
