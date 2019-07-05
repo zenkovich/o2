@@ -504,6 +504,8 @@ namespace o2
 		{
 			if (key.uid == uid)
 				return idx;
+
+			idx++;
 		}
 
 		return -1;

@@ -215,6 +215,7 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
+	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);

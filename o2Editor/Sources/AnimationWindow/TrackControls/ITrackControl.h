@@ -80,7 +80,6 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
-	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
 	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);

@@ -220,6 +220,13 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
+		Vector<UInt64> selectedHandles;
+		for (auto keyHandle : mHandles)
+		{
+			if (keyHandle->handle->IsSelected())
+				selectedHandles.Add(keyHandle->keyUid);
+		}
+
 		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>([&](const KeyHandle* x) { 
 			x->handle->SetParent(nullptr);
 			x->handle->SetEnabled(false); 
@@ -247,6 +254,7 @@ namespace Editor
 			handle->keyUid = key.uid;
 			handle->isMapping = false;
 			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
+			handle->SetSelected(selectedHandles.Contains(key.uid));
 
 			AddChild(handle);
 
@@ -389,14 +397,12 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
-	PUBLIC_FUNCTION(float, GetKeyPosition, int);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
 	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(AnimationKeyDragHandle*, CreateHandle);
-	PRIVATE_FUNCTION(void, ChangeHandleIndex, int, int);
 	PRIVATE_FUNCTION(void, CheckCanCreateKey, float);
 	PRIVATE_FUNCTION(void, OnPropertyChanged);
 }

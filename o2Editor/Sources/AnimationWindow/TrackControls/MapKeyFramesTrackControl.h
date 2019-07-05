@@ -55,7 +55,7 @@ namespace Editor
 	private:
 		struct KeyHandle
 		{
-			int                     keyIdx = 0;
+			UInt64                  keyUid = 0;
 			AnimationKeyDragHandle* handle = nullptr;
 			IAnimatedValue*         animatedValue = nullptr;
 
@@ -63,7 +63,7 @@ namespace Editor
 
 		public:
 			KeyHandle();
-			KeyHandle(int keyIdx, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
+			KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
 					  const Function<void(KeyHandle& keyHandle)>& updateFunc);
 
 			bool operator==(const KeyHandle& other) const;
@@ -80,7 +80,6 @@ namespace Editor
 
 			virtual void InitializeHandles(IAnimatedValue* ianimatedValue) = 0;
 			virtual void CreateHandles() = 0;
-			virtual void ChangeHandleIndex(int oldIndex, int newIndex) = 0;
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
 			virtual void UpdateHandles() = 0;
 			void CacheHandles();
@@ -96,7 +95,6 @@ namespace Editor
 
 			void InitializeHandles(IAnimatedValue* ianimatedValue) override;
 			void CreateHandles() override;
-			void ChangeHandleIndex(int oldIndex, int newIndex) override;
 			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
 			void UpdateHandles() override;
 		};
@@ -144,7 +142,6 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		int idx = 0;
 		for (auto& key : animatedValue->GetKeys())
 		{
 			AnimationKeyDragHandle* handle = nullptr;
@@ -157,17 +154,16 @@ namespace Editor
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			handle->animatedValue = animatedValue;
-			handle->keyUid = idx;
+			handle->keyUid = key.uid;
 			handle->isMapping = true;
 			handle->SetSelectionGroup(trackControl->mHandlesSheet);
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
 				auto& keys = animatedValue->GetKeys();
-				if (keyHandle.keyIdx < keys.Count())
-					keyHandle.handle->SetPosition(Vec2F(keys[keyHandle.keyIdx].position, 0.0f));
+				keyHandle.handle->SetPosition(Vec2F(animatedValue->FindKey(handle->keyUid).position, 0.0f));
 			};
 
-			KeyHandle* keyHandle = mnew KeyHandle(idx++, handle, animatedValue, updatePosFunc);
+			KeyHandle* keyHandle = mnew KeyHandle(key.uid, handle, animatedValue, updatePosFunc);
 			handles.Add(keyHandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) { OnHandleChangedPos(keyHandle, pos); };
@@ -193,8 +189,18 @@ namespace Editor
 
 		if (animatedValue->GetKeys().Count() != handles.Count())
 		{
+			Vector<UInt64> selectedHandles;
+			for (auto keyHandle : handles)
+			{
+				if (keyHandle->handle->IsSelected())
+					selectedHandles.Add(keyHandle->keyUid);
+			}
+
 			CacheHandles();
 			CreateHandles();
+
+			for (auto keyHandle : handles)
+				keyHandle->handle->SetSelected(selectedHandles.Contains(keyHandle->keyUid));
 		}
 		else
 		{
@@ -208,35 +214,14 @@ namespace Editor
 	{
 		trackControl->mDisableHandlesUpdate = true;
 
-		auto key = animatedValue->GetKeys()[keyHandle->keyIdx];
+		int keyIdx = animatedValue->FindKeyIdx(keyHandle->keyUid);
+		auto key = animatedValue->GetKeys()[keyIdx];
 
 		key.position = pos.x;
-		animatedValue->RemoveKeyAt(keyHandle->keyIdx);
+		animatedValue->RemoveKeyAt(keyIdx);
 		auto newIdx = animatedValue->AddKey(key);
 
-		if (newIdx != keyHandle->keyIdx)
-		{
-			ChangeHandleIndex(keyHandle->keyIdx, newIdx);
-			keyHandle->keyIdx = newIdx;
-			keyHandle->handle->keyUid = newIdx;
-		}
-
 		trackControl->mDisableHandlesUpdate = false;
-	}
-
-	template<typename AnimationValueType>
-	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::ChangeHandleIndex(int oldIndex, int newIndex)
-	{
-		IAnimatedValue* animatedValueBasic = animatedValue;
-		KeyHandle* editingHandle = handles[oldIndex];
-		handles.RemoveAt(oldIndex);
-		handles.Insert(editingHandle, newIndex);
-
-		for (int i = 0; i < handles.Count(); i++)
-		{
-			handles[i]->keyUid = i;
-			handles[i]->handle->keyUid = i;
-		}
 	}
 }
 

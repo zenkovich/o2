@@ -176,9 +176,9 @@ namespace Editor
 	MapKeyFramesTrackControl::KeyHandle::KeyHandle()
 	{}
 
-	MapKeyFramesTrackControl::KeyHandle::KeyHandle(int keyIdx, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
+	MapKeyFramesTrackControl::KeyHandle::KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
 												   const Function<void(KeyHandle& keyHandle)>& updateFunc) :
-		keyIdx(keyIdx), handle(handle), animatedValue(animatedValue), updateFunc(updateFunc)
+		keyUid(keyUid), handle(handle), animatedValue(animatedValue), updateFunc(updateFunc)
 	{}
 
 	bool MapKeyFramesTrackControl::KeyHandle::operator==(const KeyHandle& other) const

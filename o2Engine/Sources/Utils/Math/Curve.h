@@ -331,6 +331,7 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
+	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
