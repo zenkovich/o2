@@ -84,6 +84,8 @@ namespace Editor
 
 		Dictionary<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 
+		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
+
 		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
 		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
@@ -192,6 +194,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mTrackControls);
 	PRIVATE_FIELD(mHandlesGroups);
+	PRIVATE_FIELD(mNeedUpdateSelectionFrame);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);
 	PRIVATE_FIELD(mBeginSelectPoint);

@@ -231,6 +231,7 @@ namespace Editor
 			x->handle->SetParent(nullptr);
 			x->handle->SetEnabled(false); 
 			x->handle->SetSelectionGroup(nullptr);
+			x->handle->SetSelected(false);
 			return x->handle; 
 		});
 

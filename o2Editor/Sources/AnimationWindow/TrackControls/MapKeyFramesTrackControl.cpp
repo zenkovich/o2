@@ -198,6 +198,7 @@ namespace Editor
 		{
 			keyHandle->handle->SetParent(nullptr);
 			keyHandle->handle->SetEnabled(false);
+			keyHandle->handle->SetSelected(false);
 			keyHandle->handle->SetSelectionGroup(nullptr);
 			trackControl->mHandlesCache.Add(keyHandle->handle);
 			delete keyHandle;

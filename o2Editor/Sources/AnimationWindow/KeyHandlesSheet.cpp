@@ -74,6 +74,9 @@ namespace Editor
 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
+
+		if (mNeedUpdateSelectionFrame)
+			UpdateSelectionFrame();
 	}
 
 	void KeyHandlesSheet::UpdateInputDrawOrder()
@@ -147,7 +150,7 @@ namespace Editor
 
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
-		UpdateSelectionFrame();
+		mNeedUpdateSelectionFrame = true;
 	}
 
 	void KeyHandlesSheet::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
@@ -199,7 +202,7 @@ namespace Editor
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
-		UpdateSelectionFrame();
+		mNeedUpdateSelectionFrame = true;
 	}
 
 	void KeyHandlesSheet::InitializeHandles()
@@ -287,7 +290,7 @@ namespace Editor
 			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
-			UpdateSelectionFrame();
+			mNeedUpdateSelectionFrame = true;
 		};
 
 		mLeftFrameDragHandle.cursorType = CursorType::SizeWE;
@@ -337,7 +340,7 @@ namespace Editor
 			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
-			UpdateSelectionFrame();
+			mNeedUpdateSelectionFrame = true;
 		};
 
 		mRightFrameDragHandle.cursorType = CursorType::SizeWE;
@@ -345,6 +348,8 @@ namespace Editor
 
 	void KeyHandlesSheet::UpdateSelectionFrame()
 	{
+		mNeedUpdateSelectionFrame = false;
+
 		if (mIsFrameSelecting)
 			return;
 
@@ -388,13 +393,13 @@ namespace Editor
 	void KeyHandlesSheet::OnCursorReleased(const Input::Cursor& cursor)
 	{
 		mIsFrameSelecting = false;
-		UpdateSelectionFrame();
+		mNeedUpdateSelectionFrame = true;
 	}
 
 	void KeyHandlesSheet::OnCursorPressBreak(const Input::Cursor& cursor)
 	{
 		mIsFrameSelecting = false;
-		UpdateSelectionFrame();
+		mNeedUpdateSelectionFrame = true;
 	}
 
 	void KeyHandlesSheet::OnCursorPressedOutside(const Input::Cursor& cursor)
