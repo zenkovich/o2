@@ -36,16 +36,16 @@ namespace o2
 		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(20, 20);
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_button_regular.png"), 
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_button_regular.png"), 
 											 Layout::BothStretch(-9, -9, -10, -10));
 
-		auto hoverLayer   = sample->AddLayer("hover", mnew Sprite("ui/UI_button_select.png"),
+		auto hoverLayer   = sample->AddLayer("hover", mnew Sprite("ui/UI4_button_select.png"),
 											 Layout::BothStretch(-9, -9, -10, -10));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_button_pressed.png"), 
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_button_pressed.png"), 
 											 Layout::BothStretch(-9, -9, -10, -10));
 
-		auto focusLayer   = sample->AddLayer("focus", mnew Sprite("ui/UI_button_focus.png"), 
+		auto focusLayer   = sample->AddLayer("focus", mnew Sprite("ui/UI4_button_focus.png"), 
 											 Layout::BothStretch(-9, -9, -10, -10));
 
 		Text* captionText        = mnew Text("stdFont.ttf");
@@ -76,13 +76,13 @@ namespace o2
 		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(5, 5);
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Close_button_regular.png"),
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Close_button_regular.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Close_button_select.png"),
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Close_button_select.png"),
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Close_button_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Close_button_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
@@ -103,13 +103,13 @@ namespace o2
 		Button* sample = mnew Button();
 		sample->layout->minSize = Vec2F(5, 5);
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Options_button_regular.png"),
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Options_button_regular.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Options_button_select.png"),
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Options_button_select.png"),
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Options_button_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Options_button_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
@@ -130,22 +130,22 @@ namespace o2
 		HorizontalProgress* sample = mnew HorizontalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
 		auto backLayer = sample->AddLayer("back", nullptr);
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Hor_scrollbar_bk.png"),
+		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Hor_scrollbar_bk.png"),
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
 		backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
 
 		auto barLayer = sample->AddLayer("bar", nullptr);
-		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite("ui/UI_Hor_scrollhandle_regular.png"),
+		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Hor_scrollhandle_regular.png"),
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
-		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Hor_scrollhandle_select.png"),
+		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Hor_scrollhandle_select.png"),
 													   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															  Vec2F(-2, -4), Vec2F(2, 5)));
 
-		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_Hor_scrollhandle_pressed.png"),
+		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Hor_scrollhandle_pressed.png"),
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
@@ -169,21 +169,21 @@ namespace o2
 		VerticalProgress* sample = mnew VerticalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
 		auto backLayer = sample->AddLayer("back", nullptr);
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Ver_scrollbar_bk.png"),
+		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Ver_scrollbar_bk.png"),
 														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 		backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
 
 		auto barLayer = sample->AddLayer("bar", nullptr);
-		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite("ui/UI_Ver_scrollhandle_regular.png"),
+		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Ver_scrollhandle_regular.png"),
 														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 
-		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Ver_scrollhandle_select.png"),
+		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Ver_scrollhandle_select.png"),
 													   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															  Vec2F(-4, -2), Vec2F(5, 2)));
 
-		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_Ver_scrollhandle_pressed.png"),
+		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Ver_scrollhandle_pressed.png"),
 														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 
@@ -209,21 +209,21 @@ namespace o2
 
 		auto backLayer = sample->AddLayer("back", nullptr);
 		backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Hor_scrollbar_bk.png"),
+		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Hor_scrollbar_bk.png"),
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
 		auto handleLayer = sample->AddLayer("handle", nullptr);
 		handleLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
-		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/UI_Hor_scrollhandle_regular.png"),
+		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Hor_scrollhandle_regular.png"),
 														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																  Vec2F(-2, -4), Vec2F(2, 5)));
 
-		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Hor_scrollhandle_select.png"),
+		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Hor_scrollhandle_select.png"),
 														  Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																 Vec2F(-2, -4), Vec2F(2, 5)));
 
-		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_Hor_scrollhandle_pressed.png"),
+		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Hor_scrollhandle_pressed.png"),
 														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																  Vec2F(-2, -4), Vec2F(2, 5)));
 
@@ -249,21 +249,21 @@ namespace o2
 
 		auto backLayer = sample->AddLayer("back", nullptr);
 		backLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
-		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI_Ver_scrollbar_bk.png"),
+		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite("ui/UI4_Ver_scrollbar_bk.png"),
 														Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 
 		auto handleLayer = sample->AddLayer("handle", nullptr);
 		handleLayer->interactableLayout = Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f), Vec2F(-4, 0), Vec2F(4, 0));
-		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/UI_Ver_scrollhandle_regular.png"),
+		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_Ver_scrollhandle_regular.png"),
 														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																  Vec2F(-4, -2), Vec2F(5, 2)));
 
-		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI_Ver_scrollhandle_select.png"),
+		auto barSelectSprite = handleLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_Ver_scrollhandle_select.png"),
 														  Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																 Vec2F(-4, -2), Vec2F(5, 2)));
 
-		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI_Ver_scrollhandle_pressed.png"),
+		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Ver_scrollhandle_pressed.png"),
 														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																  Vec2F(-4, -2), Vec2F(5, 2)));
 
@@ -283,22 +283,22 @@ namespace o2
 	{
 		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Check_bk.png"),
 										  Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
-		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
+		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI4_Check_bk_select.png"),
 											Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
-		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
+		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI4_Check_bk_pressed.png"),
 											 Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
-		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI_Check_bk_focus.png"),
+		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI4_Check_bk_focus.png"),
 										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(0, -10), Vec2F(20, 10)));
 
-		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
+		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI4_Ckeck.png"),
 										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
-		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI_Check_unknown.png"),
+		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_Check_unknown.png"),
 										   Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(1, -11), Vec2F(21, 10)));
 
 		Text* captionText = mnew Text("stdFont.ttf");
@@ -333,22 +333,22 @@ namespace o2
 	{
 		Toggle* sample = mnew Toggle();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Check_bk.png"),
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Check_bk.png"),
 										  Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI_Check_bk_select.png"),
+		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI4_Check_bk_select.png"),
 											Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI_Check_bk_pressed.png"),
+		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI4_Check_bk_pressed.png"),
 											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI_Check_bk_focus.png"),
+		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI4_Check_bk_focus.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"),
+		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI4_Ckeck.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI_Check_unknown.png"),
+		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_Check_unknown.png"),
 											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -379,7 +379,7 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(false);
-		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
@@ -426,7 +426,7 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
-		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
@@ -476,9 +476,9 @@ namespace o2
 		sample->SetCaretBlinkingDelay(0.85f);
 		sample->layout->minSize = Vec2F(30, 40);
 
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
@@ -539,13 +539,13 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
-		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		Sprite* selection = mnew Sprite("ui/UI_Context_menu_select.png");
+		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
-		Sprite* hover = mnew Sprite("ui/UI_ListBox_selection_hover.png");
+		Sprite* hover = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
@@ -586,11 +586,11 @@ namespace o2
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
 
-		Sprite* selection = mnew Sprite("ui/UI_Context_menu_select.png");
+		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
-		Sprite* hover = mnew Sprite("ui/UI_ListBox_selection_hover.png");
+		Sprite* hover = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
@@ -633,13 +633,13 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
-		sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		Sprite* selection = mnew Sprite("ui/UI_Context_menu_select.png");
+		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
-		Sprite* hover = mnew Sprite("ui/UI_ListBox_selection_hover.png");
+		Sprite* hover = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
@@ -685,10 +685,10 @@ namespace o2
 	{
 		CustomDropDown* sample = mnew CustomDropDown();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
 
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
@@ -701,7 +701,7 @@ namespace o2
 		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		delete list->layer["back"]->GetDrawable();
-		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
+		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI4_Box_regular.png"));
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
 		list->layout->anchorMax = Vec2F(1, 0);
@@ -726,16 +726,16 @@ namespace o2
 	{
 		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), 
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), 
 										  Layout::BothStretch(-9, -9, -9, -9));
 
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), 
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), 
 										   Layout::BothStretch(-9, -9, -9, -9));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Editbox_pressed.png"), 
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Editbox_pressed.png"), 
 											 Layout::BothStretch(-9, -9, -9, -9));
 
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
 										   Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-20, -10), Vec2F(0, 10)));
 
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
@@ -744,7 +744,7 @@ namespace o2
 		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
 		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
 		delete list->layer["back"]->GetDrawable();
-		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI_Box_regular.png"));
+		list->layer["back"]->SetDrawable(mnew Sprite("ui/UI4_Box_regular.png"));
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
 		list->layout->anchorMax = Vec2F(1, 0);
@@ -779,10 +779,10 @@ namespace o2
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
 		sample->SetEnableScrollsHiding(true);
 
-		auto regularBackLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI_window_frame_regular.png"),
+		auto regularBackLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_window_frame_regular.png"),
 												 Layout::BothStretch(-13, -13, -13, -11));
 
-		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI_o2_sign.png"),
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_o2_sign.png"),
 										  Layout::Based(BaseCorner::LeftTop, Vec2F(18, 18), Vec2F(-1, 1)));
 
 		Text* captionText = mnew Text("stdFont.ttf");
@@ -836,14 +836,14 @@ namespace o2
 		sample->SetEnableScrollsHiding(true);
 		sample->SetMinFitSize(50);
 
-		sample->AddLayer("back", mnew Sprite("ui/UI_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
 
-		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_hover.png");
+		Sprite* selection = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		Widget* separatorSample = sample->GetSeparatorSample();
-		separatorSample->AddLayer("line", mnew Sprite("ui/UI_Separator.png"),
+		separatorSample->AddLayer("line", mnew Sprite("ui/UI4_Separator.png"),
 								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
 
 		ContextMenuItem* itemSample = sample->GetItemSample();
@@ -864,10 +864,10 @@ namespace o2
 		shortcutLayer->transparency = 0.7f;
 
 		WidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
-		subIconLayer->SetDrawable(mnew Sprite("ui/UI_Right_icn.png"));
+		subIconLayer->SetDrawable(mnew Sprite("ui/UI4_Right_icn.png"));
 		subIconLayer->layout = Layout(Vec2F(1.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(-15, 10), Vec2F(5, -10));
 
-		itemSample->AddLayer("check", mnew Sprite("ui/UI_Ckeck.png"), 
+		itemSample->AddLayer("check", mnew Sprite("ui/UI4_Ckeck.png"), 
 							 Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(0, 0)));
 
 		WidgetLayer* basicLayer = itemSample->FindLayer("basic");
@@ -907,9 +907,9 @@ namespace o2
 	{
 		MenuPanel* sample = mnew MenuPanel();
 
-		sample->AddLayer("back", mnew Sprite("ui/UI_Up_Menu.png"), Layout::BothStretch(-15, -15, -15, -17));
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Up_Menu.png"), Layout::BothStretch(-15, -15, -15, -17));
 
-		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_hover.png");
+		Sprite* selection = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
@@ -935,16 +935,16 @@ namespace o2
 		sample->SetEnableScrollsHiding(true);
 		sample->SetChildsNodesOffset(10.0f);
 
-		*sample->GetHoverDrawable() = Sprite("ui/UI_Context_menu_white.png");
+		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 
 		TreeNode* itemSample = sample->GetNodeSample();
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
-		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI_Context_menu_select.png"),
+		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI_ListBox_selection_hover.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_ListBox_selection_hover.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
@@ -956,13 +956,13 @@ namespace o2
 		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
 
-		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
+		auto regularLayer = itemSampleExpandBtn->AddLayer("regular", mnew Sprite("ui/UI4_Right_icn.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto hoverLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
+		auto hoverLayer = itemSampleExpandBtn->AddLayer("hover", mnew Sprite("ui/UI4_Right_icn_select.png"),
 														 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
+		auto pressedLayer = itemSampleExpandBtn->AddLayer("pressed", mnew Sprite("ui/UI4_Right_icn_pressed.png"),
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
@@ -1031,7 +1031,7 @@ namespace o2
 	{
 		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI_Down_icn.png"),
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, -1)));
 
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
@@ -1043,7 +1043,7 @@ namespace o2
 		list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 
 		list->RemoveLayer("back");
-		list->AddLayer("back", mnew Sprite("ui/UI_Context_menu.png"), Layout::BothStretch(-22, -19, -19, -19));
+		list->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-22, -19, -19, -19));
 
 		list->layout->pivot = Vec2F(0.5f, 1.0f);
 		list->layout->anchorMin = Vec2F(0, 0);
@@ -1098,9 +1098,9 @@ namespace o2
 		sample->SetMultiLine(false);
 		sample->layout->minSize = Vec2F(10, 10);
 
-		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
-		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
+		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -1158,13 +1158,13 @@ namespace o2
 		sample->layout->minSize = Vec2F(5, 5);
 		sample->name = "expandBtn";
 
-		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI_Right_icn.png"),
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Right_icn.png"),
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI_Right_icn_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Right_icn_select.png"),
 											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
-		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI_Right_icn_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Right_icn_pressed.png"),
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 

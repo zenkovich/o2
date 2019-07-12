@@ -15,9 +15,9 @@ namespace Editor
 {
 	RotateTool::RotateTool()
 	{
-		mPivotDragHandle = SceneDragHandle(mnew Sprite("ui/UI2_pivot.png"),
-										   mnew Sprite("ui/UI2_pivot_select.png"),
-										   mnew Sprite("ui/UI2_pivot_pressed.png"));
+		mPivotDragHandle = SceneDragHandle(mnew Sprite("ui/UI4_pivot.png"),
+										   mnew Sprite("ui/UI4_pivot_select.png"),
+										   mnew Sprite("ui/UI4_pivot_pressed.png"));
 
 		mRotateRingFillMesh = mnew Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);
 		mAngleMesh = mnew Mesh(TextureRef::Null(), mRotateRingSegs * 4, mRotateRingSegs * 2);

@@ -100,7 +100,7 @@ namespace Editor
 		Widget* pickArea = mnew Widget();
 		*pickArea->layout = WidgetLayout::BothStretch(5, 5, 30, 5);
 
-		pickArea->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
+		pickArea->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
 						   Layout::BothStretch(-9, -9, -9, -9));
 
 		mColorPickAreaBitmap = mnew Bitmap(PixelFormat::R8G8B8A8, Vec2I(80, 80));

@@ -50,7 +50,7 @@ namespace Editor
 		mPreviewImageContent = mnew Widget();
 		mPreviewImageContent->layout->minHeight = 200;
 
-		auto separatorImg = o2UI.CreateImage("ui/UI_Separator.png");
+		auto separatorImg = o2UI.CreateImage("ui/UI4_Separator.png");
 		*separatorImg->layout = WidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
 		mPreviewImageContent->AddChild(separatorImg);
 

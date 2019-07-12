@@ -28,7 +28,7 @@ namespace Editor
 	{
 		mWindow->caption = "Scene";
 		mWindow->name = "scene window";
-		mWindow->SetIcon(mnew Sprite("ui/UI2_scene_icon.png"));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_scene_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 2)));
 		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
@@ -39,7 +39,7 @@ namespace Editor
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
+		upPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
 		mWindow->AddChild(upPanel);
 
 		auto layersButton = o2UI.CreateWidget<Button>("panel down");

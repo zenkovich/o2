@@ -14,7 +14,7 @@ namespace Editor
 {
 	SelectionTool::SelectionTool()
 	{
-		mSelectionSprite = mnew Sprite("ui/UI_Window_place.png");
+		mSelectionSprite = mnew Sprite("ui/UI4_Window_place.png");
 	}
 
 	SelectionTool::~SelectionTool()

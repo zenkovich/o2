@@ -17,7 +17,7 @@ namespace Editor
 		mSpoiler->borderBottom = 5;
 		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
-		mSpoiler->GetIcon()->SetImageName("ui/UI2_transform_icon.png");
+		mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon.png");
 
 		mSpoiler->SetExpanded(true);
 	}

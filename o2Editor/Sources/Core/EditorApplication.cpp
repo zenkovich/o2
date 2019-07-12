@@ -151,8 +151,8 @@ namespace Editor
 
 		mUIRoot = mnew UIRoot();
 
-		mBackground = mnew Sprite("ui/UI_Background.png");
-		mBackSign = mnew Sprite("ui/UI_o2_sign.png");
+		mBackground = mnew Sprite("ui/UI4_Background.png");
+		mBackSign = mnew Sprite("ui/UI4_o2_sign.png");
 
 		mConfig = mnew EditorConfig();
 		mConfig->LoadConfigs();

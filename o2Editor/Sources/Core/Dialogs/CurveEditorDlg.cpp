@@ -60,7 +60,7 @@ namespace Editor
 											  ImageAssetRef("ui/CurveSupportHandlePressed.png"),
 											  ImageAssetRef("ui/CurveSupportHandleSelected.png"));
 
-		mEditorWidget->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
+		mEditorWidget->SetSelectionSpriteImage(ImageAssetRef("ui/UI4_Window_place.png"));
 
 		mWindow->AddChild(mEditorWidget);
 	}

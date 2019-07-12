@@ -109,13 +109,13 @@ namespace Editor
 	{
 		mUpPanel = mnew Widget();
 		*mUpPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20);
-		mUpPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
+		mUpPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-4, -4, -5, -5));
 		mWindow->AddChild(mUpPanel);
 
 		mControlsPanel = mnew Widget();
 		mControlsPanel->name = "controls panel";
 		*mControlsPanel->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(mTreeViewWidth, 20.0f));
-		mControlsPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		mControlsPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		mRecordToggle = o2UI.CreateWidget<Toggle>("menu record");
 		*mRecordToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 1));
@@ -162,7 +162,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeSeparatorHandle()
 	{
-		mTreeSeparatorHandle = mnew WidgetDragHandle(mnew Sprite("ui/UI_Ver_separator.png"));
+		mTreeSeparatorHandle = mnew WidgetDragHandle(mnew Sprite("ui/UI4_Ver_separator.png"));
 		mTreeSeparatorHandle->GetRegularSprite()->pivot = Vec2F(0.5f, 0.5f);
 		mTreeSeparatorHandle->GetRegularSprite()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularSprite()->szPivot.Get().y);
 

@@ -81,7 +81,7 @@ namespace Editor
 	{
 		mWindow->caption = "Tree";
 		mWindow->name = "tree window";
-		mWindow->SetIcon(mnew Sprite("ui/UI_tree_icon.png"));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(0, -2, 0, 18));
 
@@ -113,7 +113,7 @@ namespace Editor
 
 				for (int k = 0; k < 1; k++)
 				{
-					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI_Background.png"),
+					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI4_Background.png"),
 													  mnew EditorTestComponent(),
 													  mnew ParticlesEmitterComponent() }, ActorCreateMode::InScene);
 					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
@@ -631,7 +631,7 @@ namespace Editor
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
 		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
+		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));

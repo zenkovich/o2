@@ -15,9 +15,9 @@ namespace Editor
 {
 	FrameTool::FrameTool()
 	{
-		mLeftTopRotateHandle.SetRegularSprite(mnew Sprite("ui/UI3_rotate_regular.png"));
-		mLeftTopRotateHandle.SetHoverSprite(mnew Sprite("ui/UI3_rotate_hover.png"));
-		mLeftTopRotateHandle.SetPressedSprite(mnew Sprite("ui/UI3_rotate_pressed.png"));
+		mLeftTopRotateHandle.SetRegularSprite(mnew Sprite("ui/UI4_rotate_regular.png"));
+		mLeftTopRotateHandle.SetHoverSprite(mnew Sprite("ui/UI4_rotate_hover.png"));
+		mLeftTopRotateHandle.SetPressedSprite(mnew Sprite("ui/UI4_rotate_pressed.png"));
 		mLeftTopRotateHandle.GetRegularSprite()->pivot = Vec2F(0, 0);
 		mLeftTopRotateHandle.GetHoverSprite()->pivot = Vec2F(0, 0);
 		mLeftTopRotateHandle.GetPressedSprite()->pivot = Vec2F(0, 0);
@@ -27,32 +27,32 @@ namespace Editor
 		mRightTopRotateHandle = mLeftTopRotateHandle;
 		mRightBottomRotateHandle = mLeftTopRotateHandle;
 
-		mLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI2_handle_regular.png"));
-		mLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI2_handle_select.png"));
-		mLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI2_handle_pressed.png"));
+		mLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI4_handle_regular.png"));
+		mLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI4_handle_select.png"));
+		mLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI4_handle_pressed.png"));
 		mLeftTopHandle.pixelPerfect = false;
 
 		mLeftBottomHandle = mLeftTopHandle;
 		mRightTopHandle = mLeftTopHandle;
 		mRightBottomHandle = mLeftTopHandle;
 
-		mLeftHandle.SetRegularSprite(mnew Sprite("ui/UI2_handle_side_regular.png"));
-		mLeftHandle.SetHoverSprite(mnew Sprite("ui/UI2_handle_side_select.png"));
-		mLeftHandle.SetPressedSprite(mnew Sprite("ui/UI2_handle_side_pressed.png"));
+		mLeftHandle.SetRegularSprite(mnew Sprite("ui/UI4_handle_side_regular.png"));
+		mLeftHandle.SetHoverSprite(mnew Sprite("ui/UI4_handle_side_select.png"));
+		mLeftHandle.SetPressedSprite(mnew Sprite("ui/UI4_handle_side_pressed.png"));
 		mLeftHandle.pixelPerfect = false;
 
 		mTopHandle = mLeftHandle;
 		mBottomHandle = mLeftHandle;
 		mRightHandle = mLeftHandle;
 
-		mPivotHandle.SetRegularSprite(mnew Sprite("ui/UI2_pivot.png"));
-		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI2_pivot_select.png"));
-		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI2_pivot_pressed.png"));
+		mPivotHandle.SetRegularSprite(mnew Sprite("ui/UI4_pivot.png"));
+		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI4_pivot_select.png"));
+		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI4_pivot_pressed.png"));
 		mPivotHandle.checkSnappingFunc = THIS_FUNC(CheckPivotSnapping);
 
-		mAnchorsLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI3_anchor_pressed.png"));
-		mAnchorsLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI3_anchor_hover.png"));
-		mAnchorsLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI3_anchor_regular.png"));
+		mAnchorsLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI4_anchor_pressed.png"));
+		mAnchorsLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI4_anchor_hover.png"));
+		mAnchorsLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI4_anchor_regular.png"));
 		mAnchorsLeftTopHandle.GetRegularSprite()->pivot = Vec2F(1, 0);
 		mAnchorsLeftTopHandle.GetHoverSprite()->pivot = Vec2F(1, 0);
 		mAnchorsLeftTopHandle.GetPressedSprite()->pivot = Vec2F(1, 0);
@@ -64,8 +64,8 @@ namespace Editor
 		auto centerAnchorsRegularSprite = mnew Sprite();
 		centerAnchorsRegularSprite->SetSize(Vec2F(0, 0));
 		mAnchorsCenter.SetRegularSprite(centerAnchorsRegularSprite);
-		mAnchorsCenter.SetHoverSprite(mnew Sprite("ui/UI3_anchors_hover.png"));
-		mAnchorsCenter.SetPressedSprite(mnew Sprite("ui/UI3_anchors_pressed.png"));
+		mAnchorsCenter.SetHoverSprite(mnew Sprite("ui/UI4_anchors_hover.png"));
+		mAnchorsCenter.SetPressedSprite(mnew Sprite("ui/UI4_anchors_pressed.png"));
 
 		mLeftTopHandle.onChangedPos = THIS_FUNC(OnLeftTopHandle);
 		mLeftHandle.onChangedPos = THIS_FUNC(OnLeftHandle);

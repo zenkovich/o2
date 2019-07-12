@@ -41,7 +41,7 @@ namespace Editor
 	{
 		mPanelRoot = mnew Widget();
 		mPanelRoot->name = "tools panel";
-		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI_ToolsPanel_bk.png"), Layout::BothStretch(-2, -3, -2, -2));
+		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI4_ToolsPanel_bk.png"), Layout::BothStretch(-2, -3, -2, -2));
 
 		mPanelRoot->layout->anchorMin = Vec2F(0, 1);
 		mPanelRoot->layout->anchorMax = Vec2F(1, 1);
@@ -62,7 +62,7 @@ namespace Editor
 	{
 		mPlayPanel = mnew Widget();
 		mPlayPanel->name = "play panel";
-		mPlayPanel->AddLayer("back", mnew Sprite("ui/UI_play_panel_bk.png"), Layout::BothStretch(-7, -5, -5, -5));
+		mPlayPanel->AddLayer("back", mnew Sprite("ui/UI4_play_panel_bk.png"), Layout::BothStretch(-7, -5, -5, -5));
 		*mPlayPanel->layout = WidgetLayout::VerStretch(HorAlign::Left, 3, 2, 200, 10);
 		mPanelRoot->AddChild(mPlayPanel);
 
@@ -126,7 +126,7 @@ namespace Editor
 	{
 		mEditToolsPanel = mnew HorizontalLayout();
 		mEditToolsPanel->name = "edit tools";
-		mEditToolsPanel->AddLayer("back", mnew Sprite("ui/UI_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
+		mEditToolsPanel->AddLayer("back", mnew Sprite("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
 		*mEditToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
 		mEditToolsPanel->expandHeight = true;
 		mEditToolsPanel->expandWidth = false;

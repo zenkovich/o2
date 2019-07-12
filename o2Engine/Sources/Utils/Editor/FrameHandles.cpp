@@ -25,25 +25,25 @@ namespace o2
 		mRightTopRotateHandle = mLeftTopRotateHandle;
 		mRightBottomRotateHandle = mLeftTopRotateHandle;
 
-		mLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI2_handle_regular.png"));
-		mLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI2_handle_select.png"));
-		mLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI2_handle_pressed.png"));
+		mLeftTopHandle.SetRegularSprite(mnew Sprite("ui/UI4_handle_regular.png"));
+		mLeftTopHandle.SetHoverSprite(mnew Sprite("ui/UI4_handle_select.png"));
+		mLeftTopHandle.SetPressedSprite(mnew Sprite("ui/UI4_handle_pressed.png"));
 
 		mLeftBottomHandle = mLeftTopHandle;
 		mRightTopHandle = mLeftTopHandle;
 		mRightBottomHandle = mLeftTopHandle;
 
-		mLeftHandle.SetRegularSprite(mnew Sprite("ui/UI2_handle_side_regular.png"));
-		mLeftHandle.SetHoverSprite(mnew Sprite("ui/UI2_handle_side_select.png"));
-		mLeftHandle.SetPressedSprite(mnew Sprite("ui/UI2_handle_side_pressed.png"));
+		mLeftHandle.SetRegularSprite(mnew Sprite("ui/UI4_handle_side_regular.png"));
+		mLeftHandle.SetHoverSprite(mnew Sprite("ui/UI4_handle_side_select.png"));
+		mLeftHandle.SetPressedSprite(mnew Sprite("ui/UI4_handle_side_pressed.png"));
 
 		mTopHandle = mLeftHandle;
 		mBottomHandle = mLeftHandle;
 		mRightHandle = mLeftHandle;
 
-		mPivotHandle.SetRegularSprite(mnew Sprite("ui/UI2_pivot.png"));
-		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI2_pivot_select.png"));
-		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI2_pivot_pressed.png"));
+		mPivotHandle.SetRegularSprite(mnew Sprite("ui/UI4_pivot.png"));
+		mPivotHandle.SetHoverSprite(mnew Sprite("ui/UI4_pivot_select.png"));
+		mPivotHandle.SetPressedSprite(mnew Sprite("ui/UI4_pivot_pressed.png"));
 
 		mLeftTopHandle.onChangedPos = Func(this, &FrameHandles::OnLeftTopHandle);
 		mLeftHandle.onChangedPos = Func(this, &FrameHandles::OnLeftHandle);

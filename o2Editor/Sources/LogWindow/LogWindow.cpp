@@ -41,7 +41,7 @@ namespace Editor
 	{
 		mWindow->caption = "Log";
 		mWindow->name = "log window";
-		mWindow->SetIcon(mnew Sprite("ui/UI_list_icon.png"));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_list_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
@@ -73,7 +73,7 @@ namespace Editor
 		mWindow->AddChild(mList);
 
 		Widget* downPanel = mnew Widget();
-		downPanel->AddLayer("back", mnew Sprite("ui/UI2_small_panel_down_back.png"),
+		downPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_down_back.png"),
 							Layout::BothStretch(-4, -5, -4, -5));
 		*downPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20, 0);
 		mWindow->AddChild(downPanel);

@@ -158,13 +158,13 @@ namespace Editor
 		box->SetFocusable(true);
 		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
-		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI_Editbox_regular.png"),
+		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
 
-		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI_Editbox_select.png"),
+		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"),
 										 Layout::BothStretch(-9, -9, -9, -9));
 
-		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI_Editbox_focus.png"),
+		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
 										Layout::BothStretch(-9, -9, -9, -9));
 
 		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
