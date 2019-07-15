@@ -831,6 +831,7 @@ namespace Editor
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(0, 0, 15, 0));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -906,6 +907,7 @@ namespace Editor
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -952,6 +954,7 @@ namespace Editor
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -998,6 +1001,7 @@ namespace Editor
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -1121,6 +1125,7 @@ namespace Editor
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
+		captionLayerText->color = Color4(96, 125, 139);
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
 
 		auto nameLayer = itemSample->layer["name"];
@@ -1261,6 +1266,7 @@ namespace Editor
 		Text* textDrawable = nameEditBox->GetTextDrawable();
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 		textDrawable->height = 8;
+		textDrawable->color = Color4(96, 125, 139);
 
 		Sprite* caretDrawable = nameEditBox->GetCaretDrawable();
 		*caretDrawable = Sprite();
@@ -1456,6 +1462,7 @@ namespace Editor
 		undefinedText->horAlign = HorAlign::Left;
 		undefinedText->verAlign = VerAlign::Middle;
 		undefinedText->dotsEngings = true;
+		undefinedText->color = Color4(96, 125, 139);
 		auto undefinedLayer = dropdown->AddLayer("undefined", undefinedText, Layout::BothStretch(3, 0, 3, 0));
 
 		Label* itemSample = o2UI.CreateLabel("empty");
@@ -1586,6 +1593,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -1722,6 +1730,7 @@ namespace Editor
 		nameText->horAlign = HorAlign::Left;
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
+		nameText->color = Color4(96, 125, 139);
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
 
 		box->SetFocusable(true);
@@ -1764,6 +1773,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -1837,6 +1847,7 @@ namespace Editor
 		undefinedText->horAlign = HorAlign::Left;
 		undefinedText->verAlign = VerAlign::Middle;
 		undefinedText->dotsEngings = true;
+		undefinedText->color = Color4(96, 125, 139);
 		auto undefinedLayer = sample->AddLayer("undefined", undefinedText, Layout::BothStretch(3, 0, 3, 0));
 
 		Label* itemSample = o2UI.CreateLabel("empty");
@@ -2124,6 +2135,7 @@ namespace Editor
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
+		captionLayerText->color = Color4(96, 125, 139);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, -20), Vec2F(0, 0)));
@@ -2249,6 +2261,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -2286,6 +2299,7 @@ namespace Editor
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -2517,6 +2531,7 @@ namespace Editor
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		captionText->wordWrap = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 30, 0, 20, -1));
 
 		auto expandBtn = o2UI.CreateWidget<Button>("expand");
@@ -2690,6 +2705,7 @@ namespace Editor
 		nameText->horAlign = HorAlign::Left;
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
+		nameText->color = Color4(96, 125, 139);
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
 
 		box->SetFocusable(true);
@@ -2972,6 +2988,7 @@ namespace Editor
 		nameText->horAlign = HorAlign::Left;
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
+		nameText->color = Color4(96, 125, 139);
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");

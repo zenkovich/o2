@@ -54,6 +54,7 @@ namespace o2
 		captionText->verAlign    = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		captionText->wordWrap    = true;
+		captionText->color       = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText);
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -306,6 +307,7 @@ namespace o2
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
@@ -459,6 +461,7 @@ namespace o2
 		captionText->text = "Checkbox";
 		captionText->horAlign = HorAlign::Middle;
 		captionText->verAlign = VerAlign::Middle;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("text", captionText);
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
@@ -521,6 +524,7 @@ namespace o2
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Top;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -854,6 +858,7 @@ namespace o2
 		captionLayer->layout = Layout::BothStretch(20, 1, 0, -1);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
+		captionLayerText->color = Color4(96, 125, 139);
 
 		WidgetLayer* shortcutLayer = itemSample->FindLayer("shortcut");
 		Text* shortcutLayerText = mnew Text("stdFont.ttf");
@@ -861,6 +866,7 @@ namespace o2
 		shortcutLayer->SetDrawable(shortcutLayerText);
 		shortcutLayerText->horAlign = HorAlign::Right;
 		shortcutLayerText->verAlign = VerAlign::Middle;
+		shortcutLayerText->color = Color4(96, 125, 139);
 		shortcutLayer->transparency = 0.7f;
 
 		WidgetLayer* subIconLayer = itemSample->FindLayer("subIcon");
@@ -909,13 +915,14 @@ namespace o2
 
 		sample->AddLayer("back", mnew Sprite("ui/UI4_Up_Menu.png"), Layout::BothStretch(-15, -15, -15, -17));
 
-		Sprite* selection = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
+		Sprite* selection = mnew Sprite("ui/UI_ListBox_selection_hover.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		auto itemSample = o2UI.CreateLabel("unknown");
 		itemSample->horOverflow = Label::HorOverflow::Expand;
 		itemSample->expandBorder = Vec2F(10, 0);
+		itemSample->color = Color4(235, 255, 253);
 		sample->SetItemSample(itemSample);
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
@@ -950,6 +957,7 @@ namespace o2
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
+		captionLayerText->color = Color4(96, 125, 139);
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
 
 		Button* itemSampleExpandBtn = mnew Button();
@@ -1078,6 +1086,7 @@ namespace o2
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -1113,6 +1122,7 @@ namespace o2
 		Text* textDrawable = sample->GetTextDrawable();
 		textDrawable->verAlign = VerAlign::Middle;
 		textDrawable->horAlign = HorAlign::Left;
+		textDrawable->color = Color4(96, 125, 139);
 		textDrawable->SetFontAsset(FontAssetRef("stdFont.ttf"));
 
 		Sprite* caretDrawable = sample->GetCaretDrawable();
@@ -1207,7 +1217,8 @@ namespace o2
 		captionText->horAlign    = HorAlign::Left;
 		captionText->verAlign    = VerAlign::Middle;
 		captionText->dotsEngings = true;
-		captionText->wordWrap    = true;
+		captionText->wordWrap = true;
+		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 10, 0, 20));
 
 		auto expandBtn = o2UI.CreateWidget<Button>("expand");

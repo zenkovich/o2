@@ -41,7 +41,7 @@ namespace Editor
 	{
 		mPanelRoot = mnew Widget();
 		mPanelRoot->name = "tools panel";
-		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI4_ToolsPanel_bk.png"), Layout::BothStretch(-2, -3, -2, -2));
+		mPanelRoot->AddLayer("back", mnew Sprite("ui/UI4_ToolsPanel_bk.png"), Layout::BothStretch(-2, 0, -2, -8));
 
 		mPanelRoot->layout->anchorMin = Vec2F(0, 1);
 		mPanelRoot->layout->anchorMax = Vec2F(1, 1);
