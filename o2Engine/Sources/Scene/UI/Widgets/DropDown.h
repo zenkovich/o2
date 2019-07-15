@@ -4,6 +4,8 @@
 
 namespace o2
 {
+	class Text;
+
 	// --------------
 	// Text drop down
 	// --------------
@@ -28,6 +30,9 @@ namespace o2
 
 		// Copy operator
 		DropDown& operator=(const DropDown& other);
+
+		// Draws widget
+		void Draw() override;
 
 		// Adds new text item and returns position
 		int AddItem(const WString& text);
@@ -59,11 +64,17 @@ namespace o2
 		SERIALIZABLE(DropDown);
 
 	protected:
+		Text* mSelectedText = nullptr; // Selected text label, draws separately
+
+	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
+
+		// It is called when layer added and updates drawing sequence, searches selected text drawable
+		void OnLayerAdded(WidgetLayer* layer) override;
 	};
 }
 
@@ -76,11 +87,13 @@ CLASS_FIELDS_META(o2::DropDown)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(onSelectedText);
+	PROTECTED_FIELD(mSelectedText);
 }
 END_META;
 CLASS_METHODS_META(o2::DropDown)
 {
 
+	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(int, AddItem, const WString&);
 	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
 	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);
@@ -92,5 +105,6 @@ CLASS_METHODS_META(o2::DropDown)
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
+	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 }
 END_META;

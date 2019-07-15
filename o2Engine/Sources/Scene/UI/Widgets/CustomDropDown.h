@@ -17,7 +17,7 @@ namespace o2
 		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
 	public:
-		Function<void(int)>       onSelectedPos;   // Select item position event
+		Function<void(int)>     onSelectedPos;   // Select item position event
 		Function<void(Widget*)> onSelectedItem;  // Select item event
 
 	public:

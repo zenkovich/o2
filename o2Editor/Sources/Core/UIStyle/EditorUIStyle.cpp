@@ -211,7 +211,7 @@ namespace Editor
 		auto playSelectIconLayer = playRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_play_btn_select.png"),
 																	Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto playPressedIconLayer = playRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_play_btn_select copy.png"),
+		auto playPressedIconLayer = playRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_play_btn_pressed.png"),
 																	 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto stopIconLayer = stopRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_stop_btn_regular.png"),
@@ -3533,7 +3533,7 @@ namespace Editor
 		BuildPropertyWithCaption<WStringProperty>("standard", "with caption");
 	}
 
-	void EditorUIStyleBuilder::RebuildEditorUIManager()
+	void EditorUIStyleBuilder::RebuildEditorUIManager(bool checkEditedDate /*= true*/)
 	{
 		PushScopeEnterOnStack scope;
 
@@ -3547,7 +3547,7 @@ namespace Editor
 		{
 			TimeStamp cachedDate = data;
 
-			if (thisSourceEditedDate == cachedDate)
+			if (thisSourceEditedDate == cachedDate && checkEditedDate)
 				return;
 		}
 

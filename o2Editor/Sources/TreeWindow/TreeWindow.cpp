@@ -81,7 +81,7 @@ namespace Editor
 	{
 		mWindow->caption = "Tree";
 		mWindow->name = "tree window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_icon.png"));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(0, -2, 0, 18));
 

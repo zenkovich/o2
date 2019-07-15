@@ -1039,7 +1039,7 @@ namespace o2
 	{
 		DropDown* sample = mnew DropDown();
 		sample->layout->minSize = Vec2F(20, 20);
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn_white.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, -1)));
 
 		sample->SetClippingLayout(Layout::BothStretch(4, 2, 20, 2));
@@ -1063,6 +1063,16 @@ namespace o2
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
+		// Selected text
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->horAlign = HorAlign::Left;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = false;
+		captionText->color = Color4(235, 255, 253);
+		sample->AddLayer("selectedText", captionText, Layout::BothStretch(4, 0, 0, 0));
+
+		// States
 		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))

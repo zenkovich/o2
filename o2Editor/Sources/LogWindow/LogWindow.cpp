@@ -41,7 +41,7 @@ namespace Editor
 	{
 		mWindow->caption = "Log";
 		mWindow->name = "log window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_list_icon.png"));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_log_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 1)));
 		mWindow->SetViewLayout(Layout::BothStretch(-2, 0, 0, 18));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));

@@ -2,6 +2,7 @@
 #include "DropDown.h"
 
 #include "Scene/UI/Widgets/Label.h"
+#include "../UIManager.h"
 
 namespace o2
 {
@@ -17,6 +18,7 @@ namespace o2
 		CustomDropDown(other), value(this)
 	{
 		RetargetStatesAnimations();
+		mSelectedText = GetLayerDrawable<Text>("selectedText");
 	}
 
 	DropDown::~DropDown()
@@ -25,7 +27,33 @@ namespace o2
 	DropDown& DropDown::operator=(const DropDown& other)
 	{
 		CustomDropDown::operator=(other);
+
+		mSelectedText = GetLayerDrawable<Text>("selectedText");
+
 		return *this;
+	}
+
+	void DropDown::Draw()
+	{
+		if (!mResEnabledInHierarchy)
+			return;
+
+		Widget::Draw();
+
+		o2UI.DrawWidgetAtTop(mItemsList);
+
+		if (!mSelectedText)
+		{
+			Label* selectedItem = (Label*)(mItemsList->GetItem(mItemsList->GetSelectedItemPos()));
+			if (selectedItem)
+			{
+				o2Render.EnableScissorTest(mAbsoluteClip);
+				selectedItem->ForceDraw(mAbsoluteClip, mResTransparency);
+				o2Render.DisableScissorTest();
+			}
+		}
+
+		DrawDebugFrame();
 	}
 
 	int DropDown::AddItem(const WString& text)
@@ -118,7 +146,17 @@ namespace o2
 	void DropDown::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());
+
+		if (mSelectedText)
+			mSelectedText->SetText(GetSelectedItemText());
 	}
+
+	void DropDown::OnLayerAdded(WidgetLayer* layer)
+	{
+		if (layer->name == "selectedText" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
+			mSelectedText = (Text*)layer->GetDrawable();
+	}
+
 }
 
 DECLARE_CLASS(o2::DropDown);
