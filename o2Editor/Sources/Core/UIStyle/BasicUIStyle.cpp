@@ -476,7 +476,8 @@ namespace o2
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(false);
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->layout->minSize = Vec2F(30, 40);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -549,7 +550,7 @@ namespace o2
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
-		Sprite* hover = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
+		Sprite* hover = mnew Sprite("ui/UI4_Context_menu_white.png");
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
@@ -594,7 +595,7 @@ namespace o2
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
-		Sprite* hover = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
+		Sprite* hover = mnew Sprite("ui/UI4_Context_menu_white.png");
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-12, -16, -10, -16));
 
@@ -643,7 +644,7 @@ namespace o2
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
-		Sprite* hover = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
+		Sprite* hover = mnew Sprite("ui/UI4_Context_menu_white.png");
 		*sample->GetHoverDrawable() = *hover;
 		sample->SetHoverDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
@@ -842,7 +843,7 @@ namespace o2
 
 		sample->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
 
-		Sprite* selection = mnew Sprite("ui/UI4_ListBox_selection_hover.png");
+		Sprite* selection = mnew Sprite("ui/UI4_Context_menu_select.png");
 		*sample->GetSelectionDrawable() = *selection;
 		sample->SetSelectionDrawableLayout(Layout::BothStretch(-10, -16, -10, -16));
 
@@ -951,7 +952,7 @@ namespace o2
 		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_ListBox_selection_hover.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
@@ -1086,7 +1087,8 @@ namespace o2
 		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->SetMultiLine(false);
 		sample->layout->minSize = Vec2F(30, 40);
 
@@ -1113,8 +1115,9 @@ namespace o2
 		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 3, -1));
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
 		sample->SetMultiLine(false);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->layout->minSize = Vec2F(10, 10);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -1212,6 +1215,46 @@ namespace o2
 		o2UI.AddWidgetStyle(sample, "expand");
 	}
 
+	void BasicUIStyleBuilder::RebuildExpandWhiteButton()
+	{
+		Button* sample = mnew Button();
+		sample->layout->minSize = Vec2F(5, 5);
+		sample->name = "expandBtn";
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_Right_icn_white.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Right_icn_white_select.png"),
+											Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_Right_icn_white_pressed.png"),
+											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		Animation expandedStateAnim(sample);
+		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
+			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
+
+		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
+
+		o2UI.AddWidgetStyle(sample, "expand white");
+	}
+
 	void BasicUIStyleBuilder::RebuildSpoiler()
 	{
 		Spoiler* sample = mnew Spoiler();
@@ -1229,7 +1272,7 @@ namespace o2
 		captionText->dotsEngings = true;
 		captionText->wordWrap = true;
 		captionText->color = Color4(96, 125, 139);
-		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 10, 0, 20));
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 11, 0, 20));
 
 		auto expandBtn = o2UI.CreateWidget<Button>("expand");
 		*expandBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-7, 0));

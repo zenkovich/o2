@@ -35,6 +35,7 @@ namespace o2
 		void RebuildSinglelineEditbox();
 		void RebuildBacklessScrollarea();
 		void RebuildExpandButton();
+		void RebuildExpandWhiteButton();
 		void RebuildSpoiler();
 
 		void RebuildBasicUIManager();
@@ -82,6 +83,7 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildSinglelineEditbox);
 	PUBLIC_FUNCTION(void, RebuildBacklessScrollarea);
 	PUBLIC_FUNCTION(void, RebuildExpandButton);
+	PUBLIC_FUNCTION(void, RebuildExpandWhiteButton);
 	PUBLIC_FUNCTION(void, RebuildSpoiler);
 	PUBLIC_FUNCTION(void, RebuildBasicUIManager);
 }

@@ -71,7 +71,7 @@ namespace Editor
 	{
 		DockableWindow* sample = mnew DockableWindow();
 		sample->layout->minSize = Vec2F(100, 50);
-		sample->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 17));
+		sample->SetClippingLayout(Layout::BothStretch(-1, 0, -2, 17));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 20));
 		sample->SetEnableScrollsHiding(true);
 
@@ -313,7 +313,7 @@ namespace Editor
 		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_subpanel_pressed.png"),
 											 Layout::BothStretch(-7, -5, -5, -5));
 
-		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn_white.png"),
 										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-5, 0)));
 
 		sample->SetClippingLayout(Layout::BothStretch(10, 3, 20, 1));
@@ -337,6 +337,17 @@ namespace Editor
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
+
+		// Selected text
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->horAlign = HorAlign::Left;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = false;
+		captionText->color = Color4(235, 255, 253);
+		sample->AddLayer("selectedText", captionText, Layout::BothStretch(7, 0, 0, 0));
+
+		// States
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
@@ -360,7 +371,7 @@ namespace Editor
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_select_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_select_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_select_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
@@ -385,7 +396,7 @@ namespace Editor
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_brush_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_brush_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_brush_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
@@ -410,7 +421,7 @@ namespace Editor
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_move_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_move_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_move_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
@@ -435,7 +446,7 @@ namespace Editor
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_rotate_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_rotate_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_rotate_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
@@ -460,7 +471,7 @@ namespace Editor
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_scale_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_scale_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_scale_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
@@ -485,7 +496,7 @@ namespace Editor
 		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_frame_tool.png"),
 													Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_frame_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_frame_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
@@ -667,7 +678,7 @@ namespace Editor
 		sample->SetChildsNodesOffset(10);
 
 		// hover
-		*sample->GetHoverDrawable() = Sprite("ui/UI4_ListBox_selection_hover.png");
+		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		// hightlight
@@ -689,16 +700,17 @@ namespace Editor
 		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_ListBox_selection_pressed.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
-		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(12, -20), Vec2F(0, 0)));
+		captionLayerText->color = Color4(96, 125, 139);
+		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(14, -20), Vec2F(0, 0)));
 
 		auto nameLayer = itemSample->layer["name"];
-		nameLayer->layout = Layout::BothStretch(10, 0, 55, 0);
+		nameLayer->layout = Layout::BothStretch(15, 0, 55, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
 		auto actorNodeEnableToggle = o2UI.CreateWidget<Toggle>("actor node enable");
@@ -718,7 +730,7 @@ namespace Editor
 
 		auto actorNodeEditBox = o2UI.CreateWidget<EditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
-		*actorNodeEditBox->layout = WidgetLayout::BothStretch(10, 0, 55, 0);
+		*actorNodeEditBox->layout = WidgetLayout::BothStretch(15, 0, 55, 0);
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
@@ -752,8 +764,8 @@ namespace Editor
 
 		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
 		itemSampleExpandBtn->layout->anchorMax = Vec2F(0, 1);
-		itemSampleExpandBtn->layout->offsetMin = Vec2F(0, -20);
-		itemSampleExpandBtn->layout->offsetMax = Vec2F(10, 0);
+		itemSampleExpandBtn->layout->offsetMin = Vec2F(2, -20);
+		itemSampleExpandBtn->layout->offsetMax = Vec2F(12, 0);
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
@@ -1095,7 +1107,7 @@ namespace Editor
 		sample->SetChildsNodesOffset(10);
 
 		// hover
-		*sample->GetHoverDrawable() = Sprite("ui/UI4_ListBox_selection_hover.png");
+		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		// hightlight
@@ -1117,7 +1129,7 @@ namespace Editor
 		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_ListBox_selection_pressed.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, 0)));
@@ -1233,7 +1245,7 @@ namespace Editor
 		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_ListBox_selection_pressed.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		// icon
@@ -1241,7 +1253,7 @@ namespace Editor
 						 Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10)));
 
 		// hover
-		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_ListBox_selection_hover.png"),
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Context_menu_white.png"),
 										   Layout::BothStretch(-10, -16, -10, -16));
 
 		// name label
@@ -1260,7 +1272,8 @@ namespace Editor
 		EditBox* nameEditBox = mnew EditBox();
 		nameEditBox->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
 		nameEditBox->SetViewLayout(Layout::BothStretch(0, 0, 2, 0));
-		nameEditBox->SetCaretBlinkingDelay(0.85f);
+		nameEditBox->SetCaretBlinkingDelay(1.15f);
+		nameEditBox->SetSelectionColor(Color4(0, 156, 141, 120));
 		nameEditBox->SetMultiLine(false);
 
 		Text* textDrawable = nameEditBox->GetTextDrawable();
@@ -1569,8 +1582,9 @@ namespace Editor
 		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
 		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
 		sample->SetMultiLine(false);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->layout->minSize = Vec2F(50, 17);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_round_field.png"),
@@ -1749,8 +1763,9 @@ namespace Editor
 		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(5, 0, 5, 0));
 		sample->SetViewLayout(Layout::BothStretch(7, 0, 7, 0));
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
 		sample->SetMultiLine(false);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->layout->minSize = Vec2F(50, 17);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_round_field_gray.png"),
@@ -2104,11 +2119,11 @@ namespace Editor
 		sample->SetChildsNodesOffset(10);
 
 		// hover
-		*sample->GetHoverDrawable() = Sprite("ui/UI4_ListBox_selection_hover.png");
+		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		// zebra back
-		*sample->GetZebraBackLine() = Sprite(Color4(0, 0, 0, 20));
+		*sample->GetZebraBackLine() = Sprite(Color4(0, 0, 0, 13));
 
 		// hightlight
 		*sample->GetHightlightDrawable() = Sprite("ui/UI4_Window_place.png");
@@ -2131,7 +2146,7 @@ namespace Editor
 		auto itemFocusedLayer = itemSelectionLayer->AddChildLayer("focused", mnew Sprite("ui/UI4_Context_menu_select.png"),
 																  Layout::BothStretch(-10, -16, -10, -16));
 
-		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_ListBox_selection_pressed.png"),
+		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
@@ -2240,8 +2255,9 @@ namespace Editor
 		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
 		sample->SetMultiLine(false);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->layout->minSize = Vec2F(10, 10);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_red_edit_box.png"), Layout::BothStretch(-4, -4, -4, -4));
@@ -2278,8 +2294,9 @@ namespace Editor
 		EditBox* sample = mnew EditBox();
 		sample->SetClippingLayout(Layout::BothStretch(0, 0, 10, 0));
 		sample->SetViewLayout(Layout::BothStretch(3, 1, 8, -1));
-		sample->SetCaretBlinkingDelay(0.85f);
+		sample->SetCaretBlinkingDelay(1.15f);
 		sample->SetMultiLine(false);
+		sample->SetSelectionColor(Color4(0, 156, 141, 120));
 		sample->layout->minSize = Vec2F(10, 10);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_green_edit_box.png"), Layout::BothStretch(-4, -4, -4, -4));
@@ -2520,7 +2537,7 @@ namespace Editor
 		sample->baseCorner = BaseCorner::RightTop;
 
 		sample->AddLayer("back", mnew Sprite("ui/UI4_component_head.png"),
-								Layout::HorStretch(VerAlign::Top, -2, -2, 22, -2));
+								Layout::HorStretch(VerAlign::Top, -1, -3, 25, -2));
 
 		sample->AddLayer("separator", mnew Sprite("ui/UI4_Separator.png"), 
 						 Layout::HorStretch(VerAlign::Top, -1, -1, 5, -2));
@@ -2531,16 +2548,17 @@ namespace Editor
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
 		captionText->wordWrap = true;
-		captionText->color = Color4(96, 125, 139);
-		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 30, 0, 20, -1));
+		captionText->color = Color4(235, 255, 253);
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 36, 0, 20, -1));
 
-		auto expandBtn = o2UI.CreateWidget<Button>("expand");
-		*expandBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 0));
+		auto expandBtn = o2UI.CreateWidget<Button>("expand white");
+		expandBtn->name = "expand";
+		*expandBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
 		sample->AddInternalWidget(expandBtn);
 
 		auto icon = o2UI.CreateImage("ui/UI4_transform_icon.png");
 		icon->name = "icon";
-		*icon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(12, 0));
+		*icon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(18, 0));
 		sample->AddInternalWidget(icon);
 
 		auto saveBtn = o2UI.CreateWidget<Button>("component save");

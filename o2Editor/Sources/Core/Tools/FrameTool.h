@@ -49,11 +49,11 @@ namespace Editor
         typedef Vector<SnapLine> LinesVec;
 
     protected:
-        const Color4 mFrameColor = Color4(220, 220, 220, 255);        // Objects frame color
-        const Color4 mObjectColor = Color4(220, 220, 220, 150);       // Object color
-        const Color4 mParentColor = Color4(220, 220, 220, 100);       // Object parent color
-        const Color4 mAnchorsFrameColor = Color4(100, 100, 255, 255); // Widgets anchors frame color
-        const Color4 mSnapLinesColor = Color4(100, 255, 100, 255);    // Widgets anchors frame color
+        const Color4 mFrameColor = Color4(44, 62, 80, 255);           // Objects frame color
+        const Color4 mObjectColor = Color4(44, 62, 80, 150);          // Object color
+        const Color4 mParentColor = Color4(44, 62, 80, 100);          // Object parent color
+        const Color4 mAnchorsFrameColor = Color4(20, 100, 255, 255);  // Widgets anchors frame color
+        const Color4 mSnapLinesColor = Color4(40, 255, 100, 255);     // Widgets anchors frame color
 
         const float mFrameMinimalSize = 0.001f;   // Minimal size of transforming frame
 
