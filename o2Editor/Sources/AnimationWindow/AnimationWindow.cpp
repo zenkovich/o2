@@ -137,26 +137,6 @@ namespace Editor
 		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(61, 0));
 		mControlsPanel->AddChild(mAddKeyButton);
 
-		auto searchPanel = mnew Widget();
-		searchPanel->name = "search";
-		*searchPanel->layout = WidgetLayout::BothStretch(82, -1, 0, 0);
-
-		Button* searchButton = o2UI.CreateWidget<Button>("search");
-		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
-		searchPanel->AddChild(searchButton);
-
-		mFilterButton = o2UI.CreateWidget<Button>("menu filter");
-		*mFilterButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
-		mFilterButton->onClick += THIS_FUNC(OnMenuFilterPressed);
-		searchPanel->AddChild(mFilterButton);
-
-		mSearchEditBox = o2UI.CreateWidget<EditBox>("backless");
-		*mSearchEditBox->layout = WidgetLayout::BothStretch(19, 2, 21, -2);
-		mSearchEditBox->onChanged += THIS_FUNC(OnSearchEdited);
-		searchPanel->AddChild(mSearchEditBox);
-
-		mControlsPanel->AddChild(searchPanel);
-
 		mUpPanel->AddChild(mControlsPanel);
 	}
 

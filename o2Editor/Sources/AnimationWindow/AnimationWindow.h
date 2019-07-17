@@ -54,8 +54,6 @@ namespace Editor
 		Toggle*  mPlayPauseToggle = nullptr;
 		Toggle*  mLoopToggle = nullptr;
 		Button*  mAddKeyButton = nullptr;
-		Button*  mFilterButton = nullptr;
-		EditBox* mSearchEditBox = nullptr;
 
 		AnimationTimeline*   mTimeline = nullptr;
 		HorizontalScrollBar* mTimeScroll = nullptr;
@@ -117,8 +115,6 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mPlayPauseToggle);
 	PROTECTED_FIELD(mLoopToggle);
 	PROTECTED_FIELD(mAddKeyButton);
-	PROTECTED_FIELD(mFilterButton);
-	PROTECTED_FIELD(mSearchEditBox);
 	PROTECTED_FIELD(mTimeline);
 	PROTECTED_FIELD(mTimeScroll);
 	PROTECTED_FIELD(mTree);

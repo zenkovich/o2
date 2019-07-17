@@ -66,6 +66,7 @@ namespace Editor
 		captionText->horAlign = HorAlign::Left;
 		captionText->verAlign = VerAlign::Middle;
 		captionText->dotsEngings = true;
+		captionText->color = Color4(96, 125, 139);
 		listItemSample->AddLayer("caption", captionText, Layout::BothStretch(15, 0, 0, 0));
 
 		mList->SetItemSample(listItemSample);
