@@ -118,35 +118,35 @@ namespace Editor
 		mControlsPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		mRecordToggle = o2UI.CreateWidget<Toggle>("menu record");
-		*mRecordToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 1));
+		*mRecordToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 0));
 		mControlsPanel->AddChild(mRecordToggle);
 
 		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("menu play-stop");
-		*mPlayPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(21, 1));
+		*mPlayPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(21, 0));
 		mPlayPauseToggle->SetValue(false);
 		mPlayPauseToggle->onToggleByUser = THIS_FUNC(OnPlayPauseToggled);
 		mControlsPanel->AddChild(mPlayPauseToggle);
 
 		mLoopToggle = o2UI.CreateWidget<Toggle>("menu loop-nonloop");
-		*mLoopToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(41, 1));
+		*mLoopToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(41, 0));
 		mLoopToggle->SetValue(true);
 		mLoopToggle->onToggleByUser = THIS_FUNC(OnLoopToggled);
 		mControlsPanel->AddChild(mLoopToggle);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("menu add key");
-		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(61, 1));
+		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(61, 0));
 		mControlsPanel->AddChild(mAddKeyButton);
 
 		auto searchPanel = mnew Widget();
 		searchPanel->name = "search";
-		*searchPanel->layout = WidgetLayout::BothStretch(82, 0, 0, 0);
+		*searchPanel->layout = WidgetLayout::BothStretch(82, -1, 0, 0);
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
 		searchPanel->AddChild(searchButton);
 
 		mFilterButton = o2UI.CreateWidget<Button>("menu filter");
-		*mFilterButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		*mFilterButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		mFilterButton->onClick += THIS_FUNC(OnMenuFilterPressed);
 		searchPanel->AddChild(mFilterButton);
 

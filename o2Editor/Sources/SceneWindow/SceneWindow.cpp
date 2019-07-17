@@ -44,12 +44,12 @@ namespace Editor
 
 		auto layersButton = o2UI.CreateWidget<Button>("panel down");
 		layersButton->caption = "Layers";
-		*layersButton->layout = WidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 0);
+		*layersButton->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 100, 0);
 		upPanel->AddChild(layersButton);
 
 		auto gizmosButton = o2UI.CreateWidget<Button>("panel down");
 		gizmosButton->caption = "Gizmos";
-		*gizmosButton->layout = WidgetLayout::VerStretch(HorAlign::Right, -1, 1, 100, 100);
+		*gizmosButton->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 100, 100);
 		upPanel->AddChild(gizmosButton);
 	}
 

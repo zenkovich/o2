@@ -165,11 +165,11 @@ namespace Editor
 		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
-		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
+		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 1));
 		upPanel->AddChild(searchButton);
 
 		mFilterButton = o2UI.CreateWidget<Button>("menu filter");
-		*mFilterButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		*mFilterButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		mFilterButton->onClick += THIS_FUNC(OnMenuFilterPressed);
 		upPanel->AddChild(mFilterButton);
 

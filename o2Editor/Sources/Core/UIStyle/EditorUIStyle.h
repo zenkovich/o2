@@ -178,6 +178,7 @@ namespace Editor
 		nameText->horAlign = HorAlign::Left;
 		nameText->verAlign = VerAlign::Middle;
 		nameText->dotsEngings = true;
+		nameText->color = Color4(96, 125, 139);;
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
 
 		box->SetFocusable(true);

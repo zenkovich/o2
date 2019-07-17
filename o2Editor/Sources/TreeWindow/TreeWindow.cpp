@@ -639,7 +639,7 @@ namespace Editor
 		upPanel->AddChild(searchButton);
 
 		mListTreeToggle = o2UI.CreateWidget<Toggle>("list-tree");
-		*mListTreeToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 1));
+		*mListTreeToggle->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		mListTreeToggle->onToggle += THIS_FUNC(OnListTreeToggled);
 		upPanel->AddChild(mListTreeToggle);
 

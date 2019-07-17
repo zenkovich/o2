@@ -682,7 +682,7 @@ namespace Editor
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_Window_place.png");
+		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		sample->SetHightlightLayout(Layout::BothStretch());
 		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
@@ -1111,7 +1111,7 @@ namespace Editor
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_Window_place.png");
+		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		sample->SetHightlightLayout(Layout::BothStretch());
 		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
@@ -1381,7 +1381,7 @@ namespace Editor
 		sample->SetEnableScrollsHiding(true);
 
 		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_Window_place.png");
+		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		sample->SetHightlightLayout(Layout::BothStretch());
 		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
@@ -1392,7 +1392,7 @@ namespace Editor
 									   Hide().For(0.2f));
 
 		// selection
-		*sample->GetSelectingDrawable() = Sprite("ui/UI4_Window_place.png");
+		*sample->GetSelectingDrawable() = Sprite("ui/UI4_selection_frame.png");
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
@@ -2126,7 +2126,7 @@ namespace Editor
 		*sample->GetZebraBackLine() = Sprite(Color4(0, 0, 0, 13));
 
 		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_Window_place.png");
+		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		sample->SetHightlightLayout(Layout::BothStretch());
 		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
@@ -2156,12 +2156,12 @@ namespace Editor
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, -20), Vec2F(0, 0)));
 
 		auto nameLayer = itemSample->layer["name"];
-		nameLayer->layout = Layout::BothStretch(10, 0, 5, 0);
+		nameLayer->layout = Layout::BothStretch(15, 0, 5, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
 		auto actorNodeEditBox = o2UI.CreateWidget<EditBox>("backless");
 		actorNodeEditBox->name = "nameEditBox";
-		*actorNodeEditBox->layout = WidgetLayout::BothStretch(10, 0, 5, 0);
+		*actorNodeEditBox->layout = WidgetLayout::BothStretch(15, 0, 5, 0);
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
