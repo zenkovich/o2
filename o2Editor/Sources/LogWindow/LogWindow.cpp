@@ -55,10 +55,10 @@ namespace Editor
 
 		Widget* listItemSample = mnew Widget();
 		listItemSample->layout->minHeight = 25;
-		listItemSample->AddLayer("back", mnew Sprite(Color4(212, 216, 224, 255)));
-		listItemSample->AddLayer("warning", mnew Sprite(Color4(239, 196, 25, 255)),
+		listItemSample->AddLayer("back", mnew Sprite(Color4(212, 216, 224, 100)));
+		listItemSample->AddLayer("warning", mnew Sprite(Color4(226, 198, 83, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
-		listItemSample->AddLayer("error", mnew Sprite(Color4(211, 87, 40, 255)),
+		listItemSample->AddLayer("error", mnew Sprite(Color4(248, 94, 72, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
 
 		Text* captionText = mnew Text("stdFont.ttf");
