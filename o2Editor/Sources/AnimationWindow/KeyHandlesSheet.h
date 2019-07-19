@@ -7,6 +7,7 @@
 namespace o2
 {
 	class Animation;
+	class ContextMenu;
 	class Sprite;
 }
 
@@ -84,6 +85,8 @@ namespace Editor
 
 		Dictionary<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 
+		ContextMenu* mContextMenu = nullptr; // Keys context menu
+
 		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
 
 		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
@@ -111,8 +114,20 @@ namespace Editor
 		// Initializes right handle, that moves selected keys on timeline relative to left selection rect position
 		void InitializeRightHandle();
 
+		// Initializes context menu with copy, paste, delete etc
+		void InitializeContextMenu();
+
 		// Updates selection rectangle and drawing sprite
 		void UpdateSelectionFrame();
+
+		// Copies selected keys into buffer
+		void CopyKeys();
+
+		// Inserts keys from buffer under cursor
+		void PasteKeys();
+
+		// Removes selected keys
+		void DeleteKeys();
 
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame
@@ -194,6 +209,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mTrackControls);
 	PRIVATE_FIELD(mHandlesGroups);
+	PRIVATE_FIELD(mContextMenu);
 	PRIVATE_FIELD(mNeedUpdateSelectionFrame);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);
@@ -223,7 +239,11 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FUNCTION(void, InitializeCenterHandle);
 	PRIVATE_FUNCTION(void, InitializeLeftHandle);
 	PRIVATE_FUNCTION(void, InitializeRightHandle);
+	PRIVATE_FUNCTION(void, InitializeContextMenu);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
+	PRIVATE_FUNCTION(void, CopyKeys);
+	PRIVATE_FUNCTION(void, PasteKeys);
+	PRIVATE_FUNCTION(void, DeleteKeys);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
 	PRIVATE_FUNCTION(void, OnHandleCursorPressed, DragHandle*, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);

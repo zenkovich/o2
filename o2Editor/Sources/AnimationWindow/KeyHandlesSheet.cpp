@@ -3,7 +3,9 @@
 
 #include "Animation/AnimatedValue.h"
 #include "Animation/Animation.h"
+#include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widgets/ContextMenu.h"
 #include "Timeline.h"
 #include "TrackControls/ITrackControl.h"
 #include "Tree.h"
@@ -18,12 +20,14 @@ namespace Editor
 		mSelectionFrame->enabled = false;
 
 		InitializeHandles();
+		InitializeContextMenu();
 	}
 
 	KeyHandlesSheet::KeyHandlesSheet(const KeyHandlesSheet& other) :
 		Widget(other), mSelectionFrame(other.mSelectionFrame->CloneAs<Sprite>())
 	{
 		InitializeHandles();
+		InitializeContextMenu();
 	}
 
 	KeyHandlesSheet::~KeyHandlesSheet()
@@ -346,6 +350,21 @@ namespace Editor
 		mRightFrameDragHandle.cursorType = CursorType::SizeWE;
 	}
 
+	void KeyHandlesSheet::InitializeContextMenu()
+	{
+		mContextMenu = o2UI.CreateWidget<ContextMenu>();
+
+		mContextMenu->AddItem("Copy", [&]() { CopyKeys(); }, ImageAssetRef(), ShortcutKeys('C', true));
+		mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(); }, ImageAssetRef(), ShortcutKeys('X', true));
+		mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, ImageAssetRef(), ShortcutKeys('V', true));
+		mContextMenu->AddItem("---");
+		mContextMenu->AddItem("Delete", [&]() { CopyKeys(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+
+		AddChild(mContextMenu);
+
+		mIsFocusable = true;
+	}
+
 	void KeyHandlesSheet::UpdateSelectionFrame()
 	{
 		mNeedUpdateSelectionFrame = false;
@@ -379,6 +398,21 @@ namespace Editor
 		else mSelectionFrame->enabled = false;
 	}
 
+	void KeyHandlesSheet::CopyKeys()
+	{
+
+	}
+
+	void KeyHandlesSheet::PasteKeys()
+	{
+
+	}
+
+	void KeyHandlesSheet::DeleteKeys()
+	{
+
+	}
+
 	void KeyHandlesSheet::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		if (!o2Input.IsKeyDown(VK_CONTROL)) 
@@ -388,6 +422,8 @@ namespace Editor
 
 		mBeginSelectPoint.x = mTimeline->WorldToLocal(cursor.position.x);
 		mBeginSelectPoint.y = mTree->GetLineNumber(cursor.position.y);
+
+		Focus();
 	}
 
 	void KeyHandlesSheet::OnCursorReleased(const Input::Cursor& cursor)
@@ -473,7 +509,7 @@ namespace Editor
 
 	void KeyHandlesSheet::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
-
+		Focus();
 	}
 
 	void KeyHandlesSheet::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
@@ -483,7 +519,7 @@ namespace Editor
 
 	void KeyHandlesSheet::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
-
+		mContextMenu->Show();
 	}
 
 	void KeyHandlesSheet::OnCursorMiddleMousePressed(const Input::Cursor& cursor)
