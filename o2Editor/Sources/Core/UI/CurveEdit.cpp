@@ -42,7 +42,7 @@ namespace Editor
 		mTransformFrame.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
 		mTransformFrame.messageFallDownListener = this;
 
-		mBackColor = Color4(130, 130, 130, 255);
+		mBackColor = Color4(225, 232, 232, 255);
 
 		mReady = true;
 	}
@@ -329,23 +329,30 @@ namespace Editor
 		mTextLeft->SetHeight(10);
 		mTextLeft->SetHorAlign(HorAlign::Left);
 		mTextLeft->SetVerAlign(VerAlign::Bottom);
+		mTextLeft->color = Color4(96, 125, 139);
 
 		mTextRight = mnew Text(mTextFont);
 		mTextRight->SetHeight(10);
 		mTextRight->SetHorAlign(HorAlign::Right);
 		mTextRight->SetVerAlign(VerAlign::Bottom);
+		mTextRight->color = Color4(96, 125, 139);
+
 
 		mTextTop = mnew Text(mTextFont);
 		mTextTop->SetHeight(10);
 		mTextTop->SetHorAlign(HorAlign::Left);
 		mTextTop->SetVerAlign(VerAlign::Bottom);
 		mTextTop->SetAngleDegrees(-90.0f);
+		mTextTop->color = Color4(96, 125, 139);
+
 
 		mTextBottom = mnew Text(mTextFont);
 		mTextBottom->SetHeight(10);
 		mTextBottom->SetHorAlign(HorAlign::Right);
 		mTextBottom->SetVerAlign(VerAlign::Bottom);
 		mTextBottom->SetAngleDegrees(-90.0f);
+		mTextBottom->color = Color4(96, 125, 139);
+
 	}
 
 	void CurveEditor::InitializeEditValueWindow()
