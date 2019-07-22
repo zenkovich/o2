@@ -17,6 +17,10 @@ namespace o2
 		mParent(nullptr)
 	{}
 
+	DataNode::DataNode(const WString& name) :
+		mName(name), mParent(nullptr)
+	{ }
+
 	DataNode::DataNode(const DataNode& other) :
 		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
@@ -28,10 +32,6 @@ namespace o2
 		}
 	}
 
-	DataNode::DataNode(const WString& name):
-		mName(name), mParent(nullptr)
-	{}
-
 	DataNode::~DataNode()
 	{
 		Clear();
@@ -40,185 +40,6 @@ namespace o2
 	DataNode& DataNode::operator=(const DataNode& value)
 	{
 		return SetValue(value);
-	}
-
-	DataNode& DataNode::SetValue(const DataNode& other)
-	{
-		for (auto child : mChildNodes)
-			delete child;
-
-		mChildNodes.Clear();
-
-		for (auto child : other.mChildNodes)
-			mChildNodes.Add(mnew DataNode(*child));
-
-		//mName = other.mName;
-		mData = other.mData;
-
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(char* value)
-	{
-		mData = value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(wchar_t* value)
-	{
-		mData = value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(int value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(unsigned long value)
-	{
-		mData = (WString)(unsigned int)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(long long int value)
-	{
-		mData = (WString)(int)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(UInt64 value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(float value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(double value)
-	{
-		mData = (WString)(float)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(UInt value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-
-	DataNode& DataNode::SetValue(bool value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const String& value)
-	{
-		mData = value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const WString& value)
-	{
-		mData = value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const Vec2F& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const Vec2I& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const RectF& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const RectI& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const BorderF& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const BorderI& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValue(const Color4& value)
-	{
-		mData = (WString)value;
-		return *this;
-	}
-
-// 	DataNode& DataNode::SetValue(IObject& other)
-// 	{
-// 		ObjectDataConverter<IObject>::ToData(other, *this);
-// 		return *this;
-// 	}
-
-	DataNode& DataNode::SetValue(const UID& value)
-	{
-		mData = (String)value;
-		return *this;
-	}
-
-	DataNode& DataNode::SetValueRaw(const IObject& object)
-	{
-		struct helper
-		{
-			static void WriteObject(void* object, const ObjectType& type, DataNode& node)
-			{
-				for (auto baseType : type.GetBaseTypes())
-				{
-					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
-					if (!baseObjectType)
-						continue;
-
-					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
-					WriteObject(baseObject, *baseObjectType, node);
-				}
-
-				for (auto field : type.GetFields())
-				{
-					auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
-					if (srlzAttribute)
-						field->SerializeFromObject(object, *node.AddNode(field->GetName()));
-				}
-			}
-		};
-
-		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
-			((const ISerializable&)object).OnSerialize(*this);
-
-		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
-		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
-
-		helper::WriteObject(objectPtr, type, *this);
-
-		return *this;
 	}
 
 	DataNode& DataNode::SetValueDelta(const IObject& object, const IObject& source)
@@ -245,23 +66,6 @@ namespace o2
 
 					if (field->GetType()->IsBasedOn(TypeOf(IObject)))
 					{
-						bool usedConverter = false;
-						for (auto conv : mDataConverters)
-						{
-							if (conv->IsConvertsType(&type))
-							{
-								if (!field->IsValueEquals(object, source))
-									conv->ToData(&object, *node.AddNode(field->GetName()));
-
-								usedConverter = true;
-
-								break;
-							}
-						}
-
-						if (usedConverter)
-							continue;
-
 						DataNode* newFieldNode = mnew DataNode();
 						newFieldNode->SetName(field->GetName());
 
@@ -307,131 +111,6 @@ namespace o2
 		return *this;
 	}
 
-	void DataNode::DataNode::GetValue(wchar_t*& value) const
-	{
-		memcpy(value, mData.Data(), sizeof(wchar_t)*mData.Length() + 1);
-	}
-
-	void DataNode::GetValue(bool& value) const
-	{
-		value = (bool)mData;
-	}
-
-	void DataNode::GetValue(int& value) const
-	{
-		value = (int)mData;
-	}
-
-	void DataNode::GetValue(float& value) const
-	{
-		value = (float)mData;
-	}
-
-	void DataNode::GetValue(UInt& value) const
-	{
-		value = (UInt)mData;
-	}
-
-	void DataNode::GetValue(UInt64& value) const
-	{
-		value = (UInt64)mData;
-	}
-
-	void DataNode::GetValue(String& value) const
-	{
-		value = mData;
-	}
-
-	void DataNode::GetValue(WString& value) const
-	{
-		value = mData;
-	}
-
-	void DataNode::GetValue(Vec2F& value) const
-	{
-		value = (Vec2F)mData;
-	}
-
-	void DataNode::GetValue(Vec2I& value) const
-	{
-		value = (Vec2I)mData;
-	}
-
-	void DataNode::GetValue(RectF& value) const
-	{
-		value = (RectF)mData;
-	}
-
-	void DataNode::GetValue(RectI& value) const
-	{
-		value = (RectI)mData;
-	}
-
-	void DataNode::GetValue(BorderF& value) const
-	{
-		value = (BorderF)mData;
-	}
-
-	void DataNode::GetValue(BorderI& value) const
-	{
-		value = (BorderI)mData;
-	}
-
-	void DataNode::GetValue(Color4& value) const
-	{
-		value = (Color4)mData;
-	}
-
-	void DataNode::GetValue(char& value) const
-	{
-		value = (char)(int)mData;
-	}
-
-	void DataNode::GetValue(unsigned char& value) const
-	{
-		value = (unsigned char)(unsigned int)mData;
-	}
-
-	void DataNode::GetValue(wchar_t& value) const
-	{
-		value = (wchar_t)(int)mData;
-	}
-
-	void DataNode::GetValue(short& value) const
-	{
-		value = (short)(int)mData;
-	}
-
-	void DataNode::GetValue(unsigned short& value) const
-	{
-		value = (unsigned short)(unsigned int)mData;
-	}
-
-	void DataNode::GetValue(long& value) const
-	{
-		value = (long)(int)mData;
-	}
-
-	void DataNode::GetValue(unsigned long& value) const
-	{
-		value = (unsigned long)(unsigned int)mData;
-	}
-
-	void DataNode::GetValue(long long int& value) const
-	{
-		value = (long long int)(int)mData;
-	}
-
-	void DataNode::GetValue(DataNode& other) const
-	{
-		other = *this;
-	}
-
-	void DataNode::GetValue(UID& value) const
-	{
-		value = mData;
-	}
-
 	void DataNode::GetValueDelta(IObject& object, const IObject& source) const
 	{
 		struct helper
@@ -459,20 +138,6 @@ namespace o2
 					{
 						if (field->GetType()->IsBasedOn(TypeOf(IObject)))
 						{
-							bool usedConverter = false;
-							for (auto conv : mDataConverters)
-							{
-								if (conv->IsConvertsType(field->GetType()))
-								{
-									conv->FromData(field->GetValuePtr(object), node);
-									usedConverter = true;
-									break;
-								}
-							}
-
-							if (usedConverter)
-								continue;
-
 							fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(object),
 												   *(IObject*)field->GetValuePtr(source));
 						}
@@ -493,44 +158,6 @@ namespace o2
 		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
 		void* sourcePtr = type.DynamicCastFromIObject(const_cast<IObject*>(&source));
 		helper::ReadObject(objectPtr, sourcePtr, type, *this);
-
-		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
-			((ISerializable&)object).OnDeserialized(*this);
-	}
-
-	void DataNode::GetValueRaw(IObject& object) const
-	{
-
-		struct helper
-		{
-			static void ReadObject(void* object, const ObjectType& type, const DataNode& node)
-			{
-				for (auto baseType : type.GetBaseTypes())
-				{
-					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
-					if (!baseObjectType)
-						continue;
-
-					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
-					ReadObject(baseObject, *baseObjectType, node);
-				}
-
-				for (auto field : type.GetFields())
-				{
-					auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
-					if (srlzAttribute)
-					{
-						auto fldNode = node.GetNode(field->GetName());
-						if (fldNode)
-							field->DeserializeFromObject(object, *fldNode);
-					}
-				}
-			}
-		};
-
-		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
-		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
-		helper::ReadObject(objectPtr, type, *this);
 
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
 			((ISerializable&)object).OnDeserialized(*this);
@@ -718,11 +345,6 @@ namespace o2
 		return mChildNodes.End();
 	}
 
-	void DataNode::RegDataConverter(IDataNodeTypeConverter* converter)
-	{
-		mDataConverters.Add(converter);
-	}
-
 	WString& DataNode::Data()
 	{
 		return mData;
@@ -788,16 +410,6 @@ namespace o2
 	{
 		return XmlDataFormat::SaveDataDoc(*this);
 	}
-
-	void DataNode::RegBasicConverters()
-	{
-		RegDataConverter(new ActorDataNodeConverter());
-		RegDataConverter(new ComponentDataNodeConverter());
-		RegDataConverter(new LayerDataNodeConverter());
-		RegDataConverter(new TagDataNodeConverter());
-	}
-
-	Vector<IDataNodeTypeConverter*> DataNode::mDataConverters;
 }
 
 ENUM_META_(o2::DataNode::Format, Format)

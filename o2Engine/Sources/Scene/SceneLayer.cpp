@@ -103,25 +103,25 @@ namespace o2
 	}
 
 
-	void LayerDataNodeConverter::ToData(void* object, DataNode& data)
-	{
-		if (object)
-		{
-			SceneLayer* value = (SceneLayer*)object;
-			data = value->name;
-		}
-	}
-
-	void LayerDataNodeConverter::FromData(void* object, const DataNode& data)
-	{
-		SceneLayer*& value = *(SceneLayer**)object;
-		value = o2Scene.GetLayer(data);
-	}
-
-	bool LayerDataNodeConverter::IsConvertsType(const Type* type) const
-	{
-		return type->IsBasedOn(*TypeOf(SceneLayer).GetPointerType());
-	}
+// 	void LayerDataNodeConverter::ToData(void* object, DataNode& data)
+// 	{
+// 		if (object)
+// 		{
+// 			SceneLayer* value = (SceneLayer*)object;
+// 			data = value->name;
+// 		}
+// 	}
+// 
+// 	void LayerDataNodeConverter::FromData(void* object, const DataNode& data)
+// 	{
+// 		SceneLayer*& value = *(SceneLayer**)object;
+// 		value = o2Scene.GetLayer(data);
+// 	}
+// 
+// 	bool LayerDataNodeConverter::IsConvertsType(const Type* type) const
+// 	{
+// 		return type->IsBasedOn(*TypeOf(SceneLayer).GetPointerType());
+// 	}
 }
 
 DECLARE_CLASS(o2::SceneLayer);

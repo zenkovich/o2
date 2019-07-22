@@ -115,18 +115,18 @@ namespace o2
 	// ------------------------
 	// Component data converter
 	// ------------------------
-	class ComponentDataNodeConverter: public IDataNodeTypeConverter
-	{
-	public:
-		// Converts component pointer to data
-		void ToData(void* object, DataNode& data);
-
-		// Converts from data to component pointer
-		void FromData(void* object, const DataNode& data);
-
-		// Checks that type is based on Component type
-		bool IsConvertsType(const Type* type) const;
-	};
+// 	class ComponentDataNodeConverter: public IDataNodeTypeConverter
+// 	{
+// 	public:
+// 		// Converts component pointer to data
+// 		void ToData(void* object, DataNode& data);
+// 
+// 		// Converts from data to component pointer
+// 		void FromData(void* object, const DataNode& data);
+// 
+// 		// Checks that type is based on Component type
+// 		bool IsConvertsType(const Type* type) const;
+// 	};
 
 	template<typename _type>
 	Vector<_type*> Component::GetComponentsInChildren() const

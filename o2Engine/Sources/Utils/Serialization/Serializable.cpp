@@ -5,12 +5,12 @@ namespace o2
 {
 	void ISerializable::SerializeBasic(const IObject* thisObject, DataNode& node) const
 	{
-		node.SetValueRaw(*thisObject);
+		node.SetValue(thisObject);
 	}
 
 	void ISerializable::DeserializeBasic(IObject* thisObject, const DataNode& node)
 	{
-		node.GetValueRaw(*thisObject);
+		node.GetValue(thisObject);
 	}
 }
 

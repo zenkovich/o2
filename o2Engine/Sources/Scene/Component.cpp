@@ -135,70 +135,70 @@ namespace o2
 		}
 	}
 
-	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)
-	{
-		Component* value = *(Component**)object;
-
-		if (value)
-		{
-			if (auto ownerActor = value->GetOwnerActor())
-			{
-				if (ownerActor->IsAsset())
-				{
-					*data.AddNode("AssetId") = ownerActor->GetAssetID();
-					*data.AddNode("ComponentId") = value->GetID();
-				}
-				else if (ownerActor->IsOnScene())
-				{
-					*data.AddNode("SceneId") = ownerActor->GetID();
-					*data.AddNode("ComponentId") = value->GetID();
-				}
-				else
-				{
-					*data.AddNode("Data") = value->Serialize();
-					*data.AddNode("Type") = value->GetType().GetName();
-				}
-			}
-			else
-			{
-				*data.AddNode("Data") = value->Serialize();
-				*data.AddNode("Type") = value->GetType().GetName();
-			}
-		}
-	}
-
-	void ComponentDataNodeConverter::FromData(void* object, const DataNode& data)
-	{
-		Component*& component = *(Component**)object;
-
-		if (auto assetIdNode = data.GetNode("AssetId"))
-		{
-			UID assetId = *assetIdNode;
-			auto actor = o2Scene.GetAssetActorByID(assetId);
-
-			UInt64 componentId = *data.GetNode("ComponentId");
-			component = actor->GetComponent(componentId);
-		}
-		else if (auto sceneIdNode = data.GetNode("SceneId"))
-		{
-			auto actor = o2Scene.GetActorByID(*sceneIdNode);
-
-			UInt64 componentId = *data.GetNode("ComponentId");
-			component = actor->GetComponent(componentId);
-		}
-		else if (auto dataNode = data.GetNode("Data"))
-		{
-			String type = *data.GetNode("Type");
-			component = (Component*)o2Reflection.CreateTypeSample(type);
-			component->Deserialize(*dataNode);
-		}
-		else component = nullptr;
-	}
-
-	bool ComponentDataNodeConverter::IsConvertsType(const Type* type) const
-	{
-		return type->IsBasedOn(TypeOf(Component));
-	}
+// 	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)
+// 	{
+// 		Component* value = *(Component**)object;
+// 
+// 		if (value)
+// 		{
+// 			if (auto ownerActor = value->GetOwnerActor())
+// 			{
+// 				if (ownerActor->IsAsset())
+// 				{
+// 					*data.AddNode("AssetId") = ownerActor->GetAssetID();
+// 					*data.AddNode("ComponentId") = value->GetID();
+// 				}
+// 				else if (ownerActor->IsOnScene())
+// 				{
+// 					*data.AddNode("SceneId") = ownerActor->GetID();
+// 					*data.AddNode("ComponentId") = value->GetID();
+// 				}
+// 				else
+// 				{
+// 					*data.AddNode("Data") = value->Serialize();
+// 					*data.AddNode("Type") = value->GetType().GetName();
+// 				}
+// 			}
+// 			else
+// 			{
+// 				*data.AddNode("Data") = value->Serialize();
+// 				*data.AddNode("Type") = value->GetType().GetName();
+// 			}
+// 		}
+// 	}
+// 
+// 	void ComponentDataNodeConverter::FromData(void* object, const DataNode& data)
+// 	{
+// 		Component*& component = *(Component**)object;
+// 
+// 		if (auto assetIdNode = data.GetNode("AssetId"))
+// 		{
+// 			UID assetId = *assetIdNode;
+// 			auto actor = o2Scene.GetAssetActorByID(assetId);
+// 
+// 			UInt64 componentId = *data.GetNode("ComponentId");
+// 			component = actor->GetComponent(componentId);
+// 		}
+// 		else if (auto sceneIdNode = data.GetNode("SceneId"))
+// 		{
+// 			auto actor = o2Scene.GetActorByID(*sceneIdNode);
+// 
+// 			UInt64 componentId = *data.GetNode("ComponentId");
+// 			component = actor->GetComponent(componentId);
+// 		}
+// 		else if (auto dataNode = data.GetNode("Data"))
+// 		{
+// 			String type = *data.GetNode("Type");
+// 			component = (Component*)o2Reflection.CreateTypeSample(type);
+// 			component->Deserialize(*dataNode);
+// 		}
+// 		else component = nullptr;
+// 	}
+// 
+// 	bool ComponentDataNodeConverter::IsConvertsType(const Type* type) const
+// 	{
+// 		return type->IsBasedOn(TypeOf(Component));
+// 	}
 }
 
 DECLARE_CLASS(o2::Component);
