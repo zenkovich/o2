@@ -211,12 +211,7 @@ namespace o2
 		SetValue(value);
 		return *this;
 	}
-}
 
-#include "Utils/Reflection/Reflection.h"
-
-namespace o2
-{
 	template<>
 	struct DataNode::Converter<DataNode>
 	{
@@ -502,40 +497,18 @@ namespace o2
 	};
 
 	template<typename T>
-	struct DataNode::Converter<T*>
+	struct DataNode::Converter<T, typename std::enable_if<std::is_pointer<T>::value>::type>
 	{
-		static constexpr bool isSupported = true;
+		static constexpr bool isSupported = DataNode::Converter<std::remove_pointer<T>::type>::isSupported;
 
-		static void Write(const T*& value, DataNode& data)
+		static void Write(const T& value, DataNode& data)
 		{
-			if (value)
-			{
-				data.AddNode("Type")->SetValue(value->GetType().GetName());
-				data.AddNode("Value")->SetValue(*value);
-			}
+			DataNode::Converter<std::remove_pointer<T>::type>::Write(*value, data);
 		}
 
-		static void Read(T*& value, const DataNode& data)
+		static void Read(T& value, const DataNode& data)
 		{
-			if (value)
-				delete value;
-
-			value = nullptr;
-
-			if (auto typeNode = data.GetNode("Type"))
-			{
-				if (auto valueNode = GetNode("Value"))
-				{
-					auto type = Reflection::GetType((String)*typeNode);
-					void* sample = type->CreateSample();
-					value = static_cast<_type*>(sample);
-
-					if (value)
-						valueNode->GetValue(*value);
-
-					return;
-				}
-			}
+			DataNode::Converter<std::remove_pointer<T>::type>::Read(*value, data);
 		}
 	};
 
