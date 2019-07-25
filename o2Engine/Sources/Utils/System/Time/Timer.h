@@ -8,6 +8,8 @@
 #include <sys/time.h>
 #endif
 
+#include <stdio.h>
+
 namespace o2
 {
 	// ------------------------------------

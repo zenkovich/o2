@@ -4,6 +4,7 @@
 #include "Scene/Actor.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
+#include "Scene/Scene.h"
 
 namespace Editor
 {
@@ -15,7 +16,7 @@ namespace Editor
 	{
 		objectsIds = objects.Select<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
 
-		objectsData.SetValueRaw(objects);
+		objectsData.SetValue(objects);
 
 		insertParentId = parent ? parent->GetID() : 0;
 		insertPrevObjectId = prevObject ? prevObject->GetID() : 0;
@@ -36,7 +37,7 @@ namespace Editor
 		{
 			int insertIdx = parent->GetEditablesChildren().Find(prevObject) + 1;
 
-			objectsData.GetValueRaw(objects);
+			objectsData.GetValue(objects);
 
 			for (auto object : objects)
 				parent->AddEditableChild(object, insertIdx++);
@@ -45,7 +46,7 @@ namespace Editor
 		{
 			int insertIdx = o2Scene.GetRootEditableObjects().Find(prevObject) + 1;
 
-			objectsData.GetValueRaw(objects);
+			objectsData.GetValue(objects);
 
 			for (auto object : objects)
 				object->SetIndexInSiblings(insertIdx++);

@@ -26,16 +26,10 @@ namespace o2
 		struct Converter
 		{
 			static constexpr bool isSupported = false;
+			using __type = typename std::conditional<std::is_same<void, _type>::value, int, _type>::type;
 
-			static void Write(const _type& value, DataNode& data)
-			{
-				static_assert(false, "Unsupported value type");
-			}
-
-			static void Read(_type& value, const DataNode& data)
-			{
-				static_assert(false, "Unsupported value type");
-			}
+			static void Write(const __type& value, DataNode& data) {}
+			static void Read(__type& value, const DataNode& data) {}
 		};
 
 	public:
@@ -183,7 +177,12 @@ namespace o2
 		DataNode*    mParent;     // Node parent
 		DataNodesVec mChildNodes; // Children nodes
 	};
+}
 
+#include "Utils/Reflection/Reflection.h"
+
+namespace o2
+{
 	template<typename _type>
 	void DataNode::GetValue(_type& value) const
 	{
@@ -531,7 +530,7 @@ namespace o2
 
 			for (auto childNode : data.mChildNodes)
 			{
-				_type v = _type();
+				T v = T();
 				childNode->GetValue(v);
 				value.Add(v);
 			}
@@ -593,9 +592,9 @@ namespace o2
 	};
 
 	template<typename T>
-	struct DataNode::Converter<T, typename std::enable_if<IsProperty<T>::value && DataNode::IsSupport<typename ExtractPropertyValueType<T>::type>::value>::type>
+	struct DataNode::Converter<T, typename std::enable_if<IsProperty<T>::value>::type>
 	{
-		static constexpr bool isSupported = true;
+		static constexpr bool isSupported = DataNode::IsSupport<T::valueType>::value;
 
 		static void Write(const T& value, DataNode& data)
 		{
