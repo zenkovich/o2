@@ -6,7 +6,7 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ActorDataNodeConverter);
+	CREATE_SINGLETON(ActorDataNodeConverter);
 
 	void ActorDataNodeConverter::ToData(const Actor* object, DataNode& data)
 	{

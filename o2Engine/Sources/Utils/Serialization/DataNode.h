@@ -384,6 +384,22 @@ namespace o2
 	};
 
 	template<>
+	struct DataNode::Converter<UID>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const UID& value, DataNode& data)
+		{
+			data.mData = (String)value;
+		}
+
+		static void Read(UID& value, const DataNode& data)
+		{
+			value = data.mData;
+		}
+	};
+
+	template<>
 	struct DataNode::Converter<Vec2F>
 	{
 		static constexpr bool isSupported = true;
@@ -496,9 +512,10 @@ namespace o2
 	};
 
 	template<typename T>
-	struct DataNode::Converter<T, typename std::enable_if<std::is_pointer<T>::value && std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
+	struct DataNode::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value &&
+		std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
 	{
-		static constexpr bool isSupported = DataNode::Converter<std::remove_pointer<T>::type>::isSupported;
+		static constexpr bool isSupported = true;
 
 		static void Write(const T& value, DataNode& data)
 		{
@@ -535,7 +552,8 @@ namespace o2
 	};
 
 	template<typename T>
-	struct DataNode::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
+	struct DataNode::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value && 
+		!std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
 	{
 		static constexpr bool isSupported = DataNode::Converter<std::remove_pointer<T>::type>::isSupported;
 
@@ -546,7 +564,6 @@ namespace o2
 
 		static void Read(T& value, const DataNode& data)
 		{
-			auto ff = std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value;
 			DataNode::Converter<std::remove_pointer<T>::type>::Read(*value, data);
 		}
 	};

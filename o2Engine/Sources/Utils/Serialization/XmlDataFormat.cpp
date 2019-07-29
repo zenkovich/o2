@@ -29,12 +29,12 @@ namespace o2
 		void XmlDataFormat::LoadDataNode(const pugi::xml_node& xmlNode, DataNode& dataNode)
 		{
 			dataNode.SetName(xmlNode.name());
-			dataNode = (wchar_t*)xmlNode.child_value();
+			dataNode.Data() = (wchar_t*)xmlNode.child_value();
 
 			for (pugi::xml_attribute_iterator it = xmlNode.attributes_begin(); it != xmlNode.attributes_end(); ++it)
 			{
 				DataNode* newNode = mnew DataNode(it->name());
-				*newNode = (wchar_t*)it->value();
+				newNode->Data() = (wchar_t*)it->value();
 				dataNode.AddNode(newNode);
 			}
 
