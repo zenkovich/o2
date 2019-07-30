@@ -8,6 +8,8 @@
 
 #ifdef PLATFORM_ANDROID
 #include "Application/Android/VKCodes.h"
+#elif PLATFORM_WINDOWS
+#include <windows.h>
 #endif
 
 // Input access macros

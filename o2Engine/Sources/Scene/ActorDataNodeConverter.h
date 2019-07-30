@@ -8,17 +8,14 @@ namespace o2
 	// -------------------------
 	// Actor data node converter
 	// -------------------------
-	class ActorDataNodeConverter : public IDataNodeTypeConverter, public Singleton<ActorDataNodeConverter>
+	class ActorDataNodeConverter : public Singleton<ActorDataNodeConverter>
 	{
 	public:
 		// Converts actor pointer to data 
-		void ToData(const void* object, DataNode& data);
+		void ToData(const Actor* object, DataNode& data);
 
 		// Gets actor pointer from data
-		void FromData(void* object, const DataNode& data);
-
-		// Checks that type is based on Actor's type
-		bool IsConvertsType(const Type* type) const;
+		void FromData(Actor*& object, const DataNode& data);
 
 	protected:
 		struct ActorDef
@@ -68,5 +65,23 @@ namespace o2
 
 		friend class Actor;
 		friend class Scene;
+	};
+
+	template<>
+	struct DataNode::Converter<Actor*>
+	{
+		static constexpr bool isSupported = true;
+
+		using ActorPtr = Actor *;
+
+		static void Write(const ActorPtr& value, DataNode& data)
+		{
+			ActorDataNodeConverter::Instance().ToData(value, data);
+		}
+
+		static void Read(ActorPtr& value, const DataNode& data)
+		{
+			ActorDataNodeConverter::Instance().FromData(value, data);
+		}
 	};
 }

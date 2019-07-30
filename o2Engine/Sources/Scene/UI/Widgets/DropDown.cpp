@@ -3,6 +3,7 @@
 
 #include "Scene/UI/Widgets/Label.h"
 #include "../UIManager.h"
+#include "Render/Render.h"
 
 namespace o2
 {

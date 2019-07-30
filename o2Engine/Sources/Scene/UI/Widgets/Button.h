@@ -2,12 +2,12 @@
 
 #include "Events/CursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
+#include "Render/Sprite.h"
 #include "Scene/UI/Widget.h"
 #include "Utils/System/ShortcutKeys.h"
 
 namespace o2
 {
-	class Sprite;
 	class Text;
 
 	// -------------

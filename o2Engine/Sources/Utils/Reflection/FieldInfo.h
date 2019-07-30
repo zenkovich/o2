@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/IFieldSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Reflection/TypeTraits.h"
 #include "Utils/Serialization/DataNode.h"
@@ -21,17 +22,6 @@ namespace o2
 	{
 	public:
 		typedef Vector<IAttribute*> AttributesVec;
-
-		struct IFieldSerializer
-		{
-			virtual ~IFieldSerializer() {}
-
-			virtual void Serialize(void* object, DataNode& data) const {}
-			virtual void Deserialize(void* object, DataNode& data) const {}
-			virtual bool Equals(void* objectA, void* objectB) const { return false; }
-			virtual void Copy(void* objectA, void* objectB) const {}
-			virtual IFieldSerializer* Clone() const { return mnew IFieldSerializer(); }
-		};
 
 		template<typename T> struct RealEquals { static bool Check(const T& a, const T& b) { return Math::Equals(a, b); } };
 		template<typename T> struct FakeEquals { static bool Check(const T& a, const T& b) { return false; } };
@@ -236,7 +226,7 @@ namespace o2
 	}
 
 	template<typename _type, typename _checker, typename _copier>
-	FieldInfo::IFieldSerializer* FieldInfo::FieldSerializer<_type, _checker, _copier>::Clone() const
+	IFieldSerializer* FieldInfo::FieldSerializer<_type, _checker, _copier>::Clone() const
 	{
 		return mnew FieldSerializer();
 	}

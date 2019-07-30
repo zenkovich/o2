@@ -9,6 +9,8 @@
 #include "Scene/SceneLayer.h"
 #include "Scene/Tags.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widget.h"
+#include "Render/Render.h"
 
 namespace o2
 {

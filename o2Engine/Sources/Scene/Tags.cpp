@@ -202,25 +202,25 @@ namespace o2
 		return *this;
 	}
 
-	void TagDataNodeConverter::ToData(void* object, DataNode& data)
-	{
-		if (object)
-		{
-			Tag* value = (Tag*)object;
-			data = value->GetName();
-		}
-	}
-
-	void TagDataNodeConverter::FromData(void* object, const DataNode& data)
-	{
-		Tag*& value = *(Tag**)object;
-		value = o2Scene.GetTag(data);
-	}
-
-	bool TagDataNodeConverter::IsConvertsType(const Type* type) const
-	{
-		return type == &TypeOf(Tag);
-	}
+// 	void TagDataNodeConverter::ToData(void* object, DataNode& data)
+// 	{
+// 		if (object)
+// 		{
+// 			Tag* value = (Tag*)object;
+// 			data = value->GetName();
+// 		}
+// 	}
+// 
+// 	void TagDataNodeConverter::FromData(void* object, const DataNode& data)
+// 	{
+// 		Tag*& value = *(Tag**)object;
+// 		value = o2Scene.GetTag(data);
+// 	}
+// 
+// 	bool TagDataNodeConverter::IsConvertsType(const Type* type) const
+// 	{
+// 		return type == &TypeOf(Tag);
+// 	}
 
 }
 

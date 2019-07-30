@@ -38,10 +38,10 @@ namespace o2
 
 	protected:
 		// Serializing object into data node
-		void SerializeBasic(const IObject* thisObject, DataNode& node) const;
+		void SerializeBasic(const IObject& thisObject, DataNode& node) const;
 
 		// Deserializing object from data node
-		void DeserializeBasic(IObject* thisObject, const DataNode& node);
+		void DeserializeBasic(IObject& thisObject, const DataNode& node);
 	};
 
 	// ----------------------------
@@ -97,12 +97,12 @@ public:                                                                         
     o2::DataNode Serialize() const override                                                                     \
     {												                                                            \
         o2::DataNode res;                                                                                       \
-        SerializeBasic(this, res);                                                                              \
+        SerializeBasic(*this, res);                                                                             \
         return res;                                                                                             \
 	}												                                                            \
     void Deserialize(const o2::DataNode& node) override                                                         \
     {												                                                            \
-        DeserializeBasic(this, node);                                                                           \
+        DeserializeBasic(*this, node);                                                                          \
 	}												                                                            \
 	CLASS& operator=(const o2::DataNode& node) 		                                                            \
 	{												                                                            \
@@ -133,7 +133,7 @@ CLASS_METHODS_META(o2::ISerializable)
 	PUBLIC_FUNCTION(void, Deserialize, const DataNode&);
 	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
 	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, SerializeBasic, const IObject*, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeBasic, IObject*, const DataNode&);
+	PROTECTED_FUNCTION(void, SerializeBasic, const IObject&, DataNode&);
+	PROTECTED_FUNCTION(void, DeserializeBasic, IObject&, const DataNode&);
 }
 END_META;

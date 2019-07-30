@@ -6,6 +6,8 @@
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
+#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/UID.h"
 
 namespace o2
@@ -27,51 +29,29 @@ namespace o2
 	template<class T, class T2> struct DictionaryValueTypeGetterHelper { typedef T2 type; };
 	template<class T, class T2> struct DictionaryValueTypeGetterHelper<Dictionary<T, T2>, void> { typedef T2 type; };
 	template<class T> struct ExtractDictionaryValueType : DictionaryValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
-
-
-	template <typename T>
-	class IsAccessor
-	{
-		typedef char one;
-		typedef long two;
-
-		template <typename C> static one test(decltype(&C::IsAccessor));
-		template <typename C> static two test(...);
-
-	public:
-		enum { value = sizeof(test<T>(0)) == sizeof(char) };
-	};
-
-	template<class T>
-	struct IsStringAccessorHelper
-	{
-		typedef char one;
-		typedef long two;
-
-		template <typename C> static one test(typename C::keyType*);
-		template <typename C> static two test(...);
-
-	public:
-		enum { value = sizeof(test<T>(0)) == sizeof(char) && IsAccessor<T>::value };
-	};
-
-	template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> {};
-
-	template <typename T>
-	class IsProperty
-	{
-		typedef char one;
-		typedef long two;
-
-		template <typename C> static one test(decltype(&C::IsProperty));
-		template <typename C> static two test(...);
-
-	public:
-		enum { value = sizeof(test<T>(0)) == sizeof(char) };
-	};
-
+	
 	template<typename... Ts> struct make_void { typedef void type; };
 	template<typename... Ts> using void_t = typename make_void<Ts...>::type;
+
+	template<class T, class = void_t<>>
+	struct IsAccessor : std::false_type { };
+
+	template<class T>
+	struct IsAccessor<T, void_t<decltype(&T::IsAccessor)>> : std::true_type { };
+
+	template<class T, class = void_t<>>
+	struct IsStringAccessorHelper : std::false_type { };
+
+	template<class T>
+	struct IsStringAccessorHelper<T, void_t<decltype(T::keyType)>> : std::true_type { };
+
+	template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> { };
+
+	template<class T, class = void_t<>>
+	struct IsProperty : std::false_type { };
+
+	template<class T>
+	struct IsProperty<T, void_t<decltype(&T::IsProperty)>> : std::true_type { };
 
 	template<class T, class = void_t<>>
 	struct SupportsPlus : std::false_type {};
