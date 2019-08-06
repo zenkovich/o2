@@ -4,6 +4,7 @@
 
 #include "Utils/Delegates.h"
 #include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/IFieldSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Types/CommonTypes.h"
 #include "Utils/Types/Containers/Dictionary.h"
@@ -414,6 +415,16 @@ namespace o2
 		const Type* GetPointerType() const override;
 	};
 
+	template<typename _element_type>
+	struct VectorCountFieldSerializer : public IFieldSerializer
+	{
+		VectorCountFieldSerializer() { }
+		void Serialize(void* object, DataNode& data) const;
+		void Deserialize(void* object, DataNode& data) const;
+		bool Equals(void* objectA, void* objectB) const;
+		void Copy(void* objectA, void* objectB) const;
+		IFieldSerializer* Clone() const;
+	};
 
 	// --------------------------
 	// Type of Dictionary<> value
@@ -906,17 +917,6 @@ namespace o2
 	// --------------------------
 
 	template<typename _element_type>
-	struct VectorCountFieldSerializer: public FieldInfo::IFieldSerializer
-	{
-		VectorCountFieldSerializer() {}
-		void Serialize(void* object, DataNode& data) const;
-		void Deserialize(void* object, DataNode& data) const;
-		bool Equals(void* objectA, void* objectB) const;
-		void Copy(void* objectA, void* objectB) const;
-		FieldInfo::IFieldSerializer* Clone() const;
-	};
-
-	template<typename _element_type>
 	void* TVectorType<_element_type>::GetObjectVectorElementPtr(void* object, int idx) const
 	{
 		return &((Vector<_element_type>*)object)->Get(idx);
@@ -965,7 +965,7 @@ namespace o2
 
 		typedef typename std::conditional<DataNode::IsSupport<_element_type>::value,
 			                              FieldInfo::FieldSerializer<_element_type>,
-			                              FieldInfo::IFieldSerializer>::type serializerType;
+			                              IFieldSerializer>::type serializerType;
 
 		mElementFieldInfo = mnew FieldInfo("element", 0, mElementType, ProtectSection::Private, mnew serializerType());
 		mCountFieldInfo = mnew FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
@@ -1033,7 +1033,7 @@ namespace o2
 	}
 
 	template<typename _element_type>
-	FieldInfo::IFieldSerializer* VectorCountFieldSerializer<_element_type>::Clone() const
+	IFieldSerializer* VectorCountFieldSerializer<_element_type>::Clone() const
 	{
 		return mnew VectorCountFieldSerializer();
 	}
@@ -1195,7 +1195,7 @@ namespace o2
 
 		typedef typename std::conditional<DataNode::IsSupport<_type>::value,
 			FieldInfo::FieldSerializer<_type>,
-			FieldInfo::IFieldSerializer>::type serializerType;
+			IFieldSerializer>::type serializerType;
 
 		auto fieldInfo = mnew FieldInfo(name, pointerGetter, valType, section, mnew serializerType());
 		fieldInfo->mOwnerType = type;

@@ -4,6 +4,7 @@
 #include "Scene/UI/WidgetLayerLayout.h"
 #include "Utils/Basic/ITree.h"
 #include "Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
+#include "Utils/Editor/SceneEditableObject.h"
 #include "Utils/Math/Layout.h"
 #include "Utils/Serialization/Serializable.h"
 #include "Utils/Types/String.h"

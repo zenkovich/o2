@@ -37,8 +37,6 @@ namespace o2
 
 	void Application::BasicInitialize()
 	{
-		DataNode::RegBasicConverters();
-
 		InitalizeSystems();
 		InitializePlatform();
 

@@ -138,18 +138,18 @@ namespace o2
 	// -----------------------
 	// Tag data node converter
 	// -----------------------
-	class TagDataNodeConverter: public IDataNodeTypeConverter
-	{
-	public:
-		// Converts tag pointer to data 
-		void ToData(void* object, DataNode& data);
-
-		// Gets tag pointer from data
-		void FromData(void* object, const DataNode& data);
-
-		// Checks that type is tag's type
-		bool IsConvertsType(const Type* type) const;
-	};
+// 	class TagDataNodeConverter: public IDataNodeTypeConverter
+// 	{
+// 	public:
+// 		// Converts tag pointer to data 
+// 		void ToData(void* object, DataNode& data);
+// 
+// 		// Gets tag pointer from data
+// 		void FromData(void* object, const DataNode& data);
+// 
+// 		// Checks that type is tag's type
+// 		bool IsConvertsType(const Type* type) const;
+// 	};
 }
 
 CLASS_BASES_META(o2::Tag)

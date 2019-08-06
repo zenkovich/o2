@@ -6,59 +6,50 @@
 
 namespace o2
 {
-	DECLARE_SINGLETON(ActorDataNodeConverter);
+	CREATE_SINGLETON(ActorDataNodeConverter);
 
-	void ActorDataNodeConverter::ToData(const void* object, DataNode& data)
+	void ActorDataNodeConverter::ToData(const Actor* object, DataNode& data)
 	{
-		const Actor* value = *(const Actor**)object;
-
-		if (value)
+		if (object)
 		{
-			if (value->mIsAsset)
-				*data.AddNode("AssetId") = value->GetAssetID();
-			else if (value->IsOnScene() || value->IsAsset())
-				*data.AddNode("ID") = value->GetID();
+			if (object->mIsAsset)
+				*data.AddNode("AssetId") = object->GetAssetID();
+			else if (object->IsOnScene() || object->IsAsset())
+				*data.AddNode("ID") = object->GetID();
 			else
-				*data.AddNode("Data") = value ? value->Serialize() : (String)"null";
+				*data.AddNode("Data") = object ? object->Serialize() : (String)"null";
 		}
 	}
 
-	void ActorDataNodeConverter::FromData(void* object, const DataNode& data)
+	void ActorDataNodeConverter::FromData(Actor*& object, const DataNode& data)
 	{
-		Actor*& actor = *(Actor**)object;
-
 		if (auto assetIdNode = data.GetNode("AssetId"))
 		{
 			UID assetId = *assetIdNode;
-			actor = o2Scene.GetAssetActorByID(assetId);
+			object = o2Scene.GetAssetActorByID(assetId);
 
-			if (!actor)
-				mUnresolvedActors.Add(ActorDef(&actor, assetId));
+			if (!object)
+				mUnresolvedActors.Add(ActorDef(&object, assetId));
 		}
 		else if (auto sceneIdNode = data.GetNode("ID"))
 		{
 			if (mLockDepth == 0)
-				actor = o2Scene.GetActorByID(*sceneIdNode);
+				object = o2Scene.GetActorByID(*sceneIdNode);
 
-			if (!actor)
-				mUnresolvedActors.Add(ActorDef(&actor, (SceneUID)*sceneIdNode));
+			if (!object)
+				mUnresolvedActors.Add(ActorDef(&object, (SceneUID)*sceneIdNode));
 		}
 		else if (auto dataNode = data.GetNode("Data"))
 		{
 			if (dataNode->Data() == "null")
-				actor = nullptr;
+				object = nullptr;
 			else
 			{
-				actor = mnew Actor(ActorCreateMode::NotInScene);
-				actor->Deserialize(*dataNode);
+				object = mnew Actor(ActorCreateMode::NotInScene);
+				object->Deserialize(*dataNode);
 			}
 		}
-		else actor = nullptr;
-	}
-
-	bool ActorDataNodeConverter::IsConvertsType(const Type* type) const
-	{
-		return type->IsBasedOn(*TypeOf(Actor).GetPointerType());
+		else object = nullptr;
 	}
 
 	void ActorDataNodeConverter::LockPointersResolving()
