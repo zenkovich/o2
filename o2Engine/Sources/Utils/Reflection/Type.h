@@ -127,9 +127,6 @@ namespace o2
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
 
-		// Returns field path by pointer from source object
-		String GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const;
-
 		// Returns abstract value proxy for object value
 		virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
 
@@ -147,11 +144,6 @@ namespace o2
 		FunctionsInfosVec mFunctions;         // Functions informations
 		mutable Type*     mPtrType = nullptr; // Pointer type from this
 		int               mSize;              // Size of type in bytes
-
-	protected:
-		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<SearchPassedObject>& passedObjects) const;
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
@@ -267,11 +259,6 @@ namespace o2
 
 	protected:
 		const Type* mUnptrType;
-
-	protected:
-		// Searches field recursively by pointer
-		FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-								   Vector<SearchPassedObject>& passedObjects) const override;
 	};
 
 	// ------------------------
@@ -391,11 +378,6 @@ namespace o2
 		FieldInfo*  mElementFieldInfo;
 		FieldInfo*  mCountFieldInfo;
 
-	protected:
-		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<SearchPassedObject>& passedObjects) const;
-
 		template<typename _element_type>
 		friend struct VectorCountFieldSerializer;
 	};
@@ -474,11 +456,6 @@ namespace o2
 		SharedLambda<void(void*, int)>  mSetDictionaryObjectSizeFunc;
 		SharedLambda<void*(void*, int)> mGetObjectDictionaryKeyPtrFunc;
 		SharedLambda<void*(void*, int)> mGetObjectDictionaryValuePtrFunc;
-
-	protected:
-		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<SearchPassedObject>& passedObjects) const;
 	};
 
 	template<typename _key_type, typename _value_type>
@@ -524,11 +501,6 @@ namespace o2
 
 	protected:
 		const Type* mReturnType;
-
-	protected:
-		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<SearchPassedObject>& passedObjects) const;
 	};
 
 	// ----------------
@@ -1153,25 +1125,6 @@ namespace o2
 				_return_type value = kv.Value();
 				return mReturnType->GetFieldPtr(&value, path.SubStr(delPos + 1), fieldInfo);
 			}
-		}
-
-		return nullptr;
-	}
-
-	template<typename _return_type, typename _accessor_type>
-	FieldInfo* StringPointerAccessorType<_return_type, _accessor_type>::SearchFieldPath(void* obj, void* target, const String& path,
-																		String& res, Vector<SearchPassedObject>& passedObjects) const
-	{
-		_accessor_type* accessor = (_accessor_type*)obj;
-
-		auto allFromAccessor = accessor->GetAll();
-		for (auto kv : allFromAccessor)
-		{
-			String newPath = path + "/" + kv.Key();
-			_return_type value = kv.Value();
-			FieldInfo* fieldInfo = mReturnType->SearchFieldPath(&value, target, newPath, res, passedObjects);
-			if (fieldInfo)
-				return fieldInfo;
 		}
 
 		return nullptr;

@@ -150,69 +150,6 @@ namespace o2
 		return res;
 	}
 
-	String Type::GetFieldPath(void* object, void *targetObject, FieldInfo*& fieldInfo) const
-	{
-		if (object == targetObject)
-			return "";
-
-		String res;
-		Vector<SearchPassedObject> passedObjects;
-
-		Timer t;
-
-		FieldInfo* info = SearchFieldPath(object, targetObject, "", res, passedObjects);
-		if (info)
-		{
-			fieldInfo = info;
-			res.Erase(0, 1);
-		}
-
-		return res;
-	}
-
-	FieldInfo* Type::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-									 Vector<SearchPassedObject>& passedObjects) const
-	{
-		if (!mFields.IsEmpty() && IsBasedOn(TypeOf(IObject)))
-		{
-			auto thisSearchObject = SearchPassedObject(obj, this);
-			if (passedObjects.Contains(thisSearchObject))
-				return nullptr;
-
-			passedObjects.Add(thisSearchObject);
-		}
-
-		for (auto field : mFields)
-		{
-			if (field->HasAttribute<ExcludePointerSearchAttribute>())
-				continue;
-
-			void* fieldObj = field->GetValuePtr(obj);
-
-			if (fieldObj == nullptr)
-				continue;
-
-			if (fieldObj == target)
-			{
-				res = path + "/" + field->mName;
-				return field;
-			}
-
-			FieldInfo* childField = field->SearchFieldPath(fieldObj, target, path + "/" + field->mName, res, passedObjects);
-			if (childField)
-				return childField;
-		}
-
-		for (auto baseType : mBaseTypes)
-		{
-			auto baseRes = baseType.type->SearchFieldPath((*baseType.dynamicCastUpFunc)(obj), target, path, res, passedObjects);
-			if (baseRes)
-				return baseRes;
-		}
-
-		return nullptr;
-	}
-
 	void* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
@@ -298,22 +235,6 @@ namespace o2
 		return mCountFieldInfo;
 	}
 
-	FieldInfo* VectorType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<SearchPassedObject>& passedObjects) const
-	{
-		int count = GetObjectVectorSize(obj);
-
-		for (int i = 0; i < count; i++)
-		{
-			void* elementPtr = GetObjectVectorElementPtr(obj, i);
-			FieldInfo* fieldInfo = mElementType->SearchFieldPath(elementPtr, target, path + "/" + (String)i, res, passedObjects);
-			if (fieldInfo)
-				return fieldInfo;
-		}
-
-		return nullptr;
-	}
-
 	DictionaryType::DictionaryType(const Type* keyType, const Type* valueType, int size):
 		Type((String)"o2::Dictionary<" + keyType->GetName() + ", " + valueType->GetName() + ">", size),
 		mKeyType(keyType), mValueType(valueType)
@@ -370,12 +291,6 @@ namespace o2
 		return nullptr;
 	}
 
-	FieldInfo* DictionaryType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-											   Vector<SearchPassedObject>& passedObjects) const
-	{
-		return nullptr;
-	}
-
 	EnumType::EnumType(const String& name, int size):
 		Type(name, size)
 	{}
@@ -403,12 +318,6 @@ namespace o2
 	const Type* PointerType::GetUnpointedType() const
 	{
 		return mUnptrType;
-	}
-
-	FieldInfo* PointerType::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-											Vector<SearchPassedObject>& passedObjects) const
-	{
-		return mUnptrType->SearchFieldPath(*(void**)obj, target, path, res, passedObjects);
 	}
 
 	void* PointerType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const

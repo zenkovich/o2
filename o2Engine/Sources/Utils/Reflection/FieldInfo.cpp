@@ -90,16 +90,6 @@ namespace o2
 		mSerializer->Copy(GetValuePtrStrong(objectA), GetValuePtrStrong(objectB));
 	}
 
-	FieldInfo* FieldInfo::SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										  Vector<SearchPassedObject>& passedObjects)
-	{
-		if (!mType)
-			return nullptr;
-
-		auto type = mType->GetUsage() == Type::Usage::Pointer ? ((PointerType*)mType)->GetUnpointedType() : mType;
-		return type->SearchFieldPath(obj, target, path, res, passedObjects);
-	}
-
 	void* FieldInfo::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
 	{
 		if (!mType)

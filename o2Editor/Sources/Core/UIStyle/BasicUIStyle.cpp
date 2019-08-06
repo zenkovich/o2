@@ -57,16 +57,16 @@ namespace o2
 		captionText->color       = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText);
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -87,13 +87,13 @@ namespace o2
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "close");
@@ -114,13 +114,13 @@ namespace o2
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "arrow");
@@ -150,13 +150,13 @@ namespace o2
 														Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 															   Vec2F(-2, -4), Vec2F(2, 5)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->SetOrientation(HorizontalProgress::Orientation::Right);
@@ -189,13 +189,13 @@ namespace o2
 															   Vec2F(-4, -2), Vec2F(5, 2)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -227,14 +227,14 @@ namespace o2
 		auto barPressedSprite = handleLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_Hor_scrollhandle_pressed.png"),
 														   Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f),
 																  Vec2F(-2, -4), Vec2F(2, 5)));
-
-		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+											
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/handle/child/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/handle/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -268,13 +268,14 @@ namespace o2
 														   Layout(Vec2F(0.5f, 0.0f), Vec2F(0.5f, 1.0f),
 																  Vec2F(-4, -2), Vec2F(5, 2)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &barSelectSprite->transparency, 0.0f, 1.0f, 0.1f))
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/handle/child/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &barPressedSprite->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/handle/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -310,22 +311,22 @@ namespace o2
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/check/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("unknown", Animation::EaseInOut(sample, &unknownLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("unknown", Animation::EaseInOut(sample, "layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -353,22 +354,22 @@ namespace o2
 		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_Check_unknown.png"),
 											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/check/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("unknown", Animation::EaseInOut(sample, &unknownLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("unknown", Animation::EaseInOut(sample, "layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "without caption");
@@ -399,8 +400,9 @@ namespace o2
 
 		Animation enableHorScrollAnim;
 		enableHorScrollAnim.SetTarget(sample);
-		*enableHorScrollAnim.AddAnimationValue(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
+		*enableHorScrollAnim.AddAnimationValue<float>("mVerScrollBar/layout/offsetBottom") =
 			AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
+
 		*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
 
@@ -408,14 +410,15 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
+		*enableVerScrollAnim.AddAnimationValue<float>("mHorScrollBar/layout/offsetRight") =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
+
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
 
 		auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "straight bars");
@@ -444,7 +447,7 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -464,7 +467,7 @@ namespace o2
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("text", captionText);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -500,8 +503,9 @@ namespace o2
 
 		Animation enableHorScrollAnim;
 		enableHorScrollAnim.SetTarget(sample);
-		*enableHorScrollAnim.AddAnimationValue(&sample->GetVerticalScrollbar()->layout->offsetBottom) =
+		*enableHorScrollAnim.AddAnimationValue<float>("mVerScrollBar/layout/offsetBottom") =
 			AnimatedValue<float>::EaseInOut(5, 15, 0.2f);
+
 		*enableHorScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMin") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(5, 5), Vec2F(5, 15), 0.2f);
 
@@ -509,17 +513,18 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue(&sample->GetHorizontalScrollbar()->layout->offsetRight) =
+		*enableVerScrollAnim.AddAnimationValue<float>("mHorScrollBar/layout/offsetRIght") =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
+
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
 			AnimatedValue<Vec2F>::EaseInOut(Vec2F(-5, -5), Vec2F(-15, -5), 0.2f);
 
 		auto enableVerScrollState = sample->AddState("enableVerBar", enableVerScrollAnim);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Text* textDrawable = sample->GetTextDrawable();
@@ -568,16 +573,16 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
 															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -613,19 +618,19 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
 															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -668,19 +673,19 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
 															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -713,15 +718,15 @@ namespace o2
 		list->layout->offsetMin = Vec2F(-1, -60);
 		list->layout->offsetMax = Vec2F(0, 3);
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/drawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -760,15 +765,15 @@ namespace o2
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/drawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -806,7 +811,7 @@ namespace o2
 		*verScrollBar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 15, 15, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 2.0f;
 
 		Button* closeBtn = o2UI.CreateWidget<Button>("close");
@@ -879,7 +884,7 @@ namespace o2
 
 		WidgetLayer* basicLayer = itemSample->FindLayer("basic");
 
-		itemSample->AddState("enabled", Animation::EaseInOut(itemSample, &basicLayer->transparency, 0.5f, 1.0f, 0.2f));
+		itemSample->AddState("enabled", Animation::EaseInOut(itemSample, "layer/basic/transparency", 0.5f, 1.0f, 0.2f));
 		itemSample->SetStateForcible("enabled", true);
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
@@ -896,16 +901,16 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
 															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -926,10 +931,10 @@ namespace o2
 		itemSample->color = Color4(235, 255, 253);
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetSelectionDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mSelectionDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -975,13 +980,13 @@ namespace o2
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, &itemSampleExpandBtn->transparency, 0.0f, 1.0f, 0.2f))
+		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
@@ -992,7 +997,7 @@ namespace o2
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue(""&regularLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 		*expandedStateAnim.AddAnimationValue(&hoverLayer->GetDrawable()->angle) =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
@@ -1001,10 +1006,10 @@ namespace o2
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
-		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
+		itemSample->AddState("selected", Animation::EaseInOut(itemSample, "layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
+		Animation focusedItemAnim = Animation::EaseInOut(itemSample, "layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue<float>("layer/select/child/unfocused/transparency") = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
@@ -1021,16 +1026,16 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
 															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
 															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -1076,7 +1081,7 @@ namespace o2
 		// States
 		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "backless");
@@ -1092,7 +1097,7 @@ namespace o2
 		sample->SetMultiLine(false);
 		sample->layout->minSize = Vec2F(30, 40);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Text* textDrawable = sample->GetTextDrawable();
@@ -1124,10 +1129,10 @@ namespace o2
 		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"), Layout::BothStretch(-9, -9, -9, -9));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f);
 		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
@@ -1169,7 +1174,7 @@ namespace o2
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "backless");
@@ -1194,10 +1199,10 @@ namespace o2
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation expandedStateAnim(sample);
@@ -1234,10 +1239,10 @@ namespace o2
 		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation expandedStateAnim(sample);

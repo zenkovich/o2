@@ -142,10 +142,6 @@ namespace o2
 		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function
 
 	protected:
-		// Searches field recursively by pointer
-		virtual FieldInfo* SearchFieldPath(void* obj, void* target, const String& path, String& res,
-										   Vector<SearchPassedObject>& passedObjects);
-
 		// Searches field recursively by path
 		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
 
