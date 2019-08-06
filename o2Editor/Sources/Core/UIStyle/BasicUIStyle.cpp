@@ -724,7 +724,7 @@ namespace o2
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/drawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -771,7 +771,7 @@ namespace o2
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/drawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -997,11 +997,11 @@ namespace o2
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(""&regularLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddAnimationValue(&hoverLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/pressed/mDrawable/angle") = 
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
@@ -1079,7 +1079,7 @@ namespace o2
 		sample->AddLayer("selectedText", captionText, Layout::BothStretch(4, 0, 0, 0));
 
 		// States
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
@@ -1133,7 +1133,7 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation focusAnim = Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue<float>("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1196,7 +1196,7 @@ namespace o2
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
@@ -1206,13 +1206,13 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation expandedStateAnim(sample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("layer/regular/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("layer/hover/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("layer/pressed/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
@@ -1236,7 +1236,7 @@ namespace o2
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
@@ -1246,13 +1246,13 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation expandedStateAnim(sample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("layer/regular/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("layer/hover/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("layer/pressed/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		sample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;

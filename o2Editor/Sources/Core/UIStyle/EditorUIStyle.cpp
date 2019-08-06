@@ -145,33 +145,33 @@ namespace Editor
 		//states
 		Animation dockedStateAnim;
 		dockedStateAnim.SetTarget(sample);
-		*dockedStateAnim.AddAnimationValue(&dockedBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
-		*dockedStateAnim.AddAnimationValue(&regularBackLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*dockedStateAnim.AddAnimationValue<float>("layer/back/child/dockedBack/transparency") = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*dockedStateAnim.AddAnimationValue<float>("layer/back/child/regularBack/transparency") = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
 
 		auto dockedState = sample->AddState("docked", dockedStateAnim);
 
 
 		Animation tabStateAnim;
 		tabStateAnim.SetTarget(sample);
-		*tabStateAnim.AddAnimationValue(&tabBackLayer->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
-		*tabStateAnim.AddAnimationValue(&backLayer->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*tabStateAnim.AddAnimationValue<float>("layer/tab/transparency") = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabStateAnim.AddAnimationValue<float>("layer/back/transparency") = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
 
 		auto tabbedState = sample->AddState("tab", tabStateAnim);
 
 
 		Animation tabActiveStateAnim;
 		tabActiveStateAnim.SetTarget(sample);
-		*tabActiveStateAnim.AddAnimationValue(&tabMainActiveBack->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
-		*tabActiveStateAnim.AddAnimationValue(&tabMainInactiveBack->transparency) = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
-		*tabActiveStateAnim.AddAnimationValue(&tabBackDown->transparency) = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue<float>("layer/tab/child/main/child/active/transparency") = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue<float>("layer/tab/child/main/child/inactive/transparency") = AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
+		*tabActiveStateAnim.AddAnimationValue<float>("layer/tab/child/back/transparency") = AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
 
 		auto tabActiveState = sample->AddState("tabActive", tabActiveStateAnim);
 
 
-		sample->AddState("tabFirst", Animation::EaseInOut(sample, &tabBack->transparency, 0.0f, 1.0f, 0.2f));
+		sample->AddState("tabFirst", Animation::EaseInOut(sample, "layer/tab/child/back/transparency", 0.0f, 1.0f, 0.2f));
 
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 2.0f;
 
 		// additional elements
@@ -223,20 +223,20 @@ namespace Editor
 		auto stopPressedIconLayer = stopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_stop_btn_pressed.png"),
 																	 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		Animation playBtnSelectAnim = Animation::EaseInOut(sample, &playSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f);
-		*playBtnSelectAnim.AddAnimationValue(&stopSelectIconLayer->transparency) =
+		Animation playBtnSelectAnim = Animation::EaseInOut(sample, "layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnSelectAnim.AddAnimationValue<float>("layer/stopRootIcon/child/hover/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("hover", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
 
-		Animation playBtnPressAnim = Animation::EaseInOut(sample, &playPressedIconLayer->transparency, 0.0f, 1.0f, 0.1f);
-		*playBtnPressAnim.AddAnimationValue(&stopPressedIconLayer->transparency) =
+		Animation playBtnPressAnim = Animation::EaseInOut(sample, "layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnPressAnim.AddAnimationValue<float>("layer/stopRootIcon/child/pressed/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 
 		sample->AddState("pressed", playBtnPressAnim)->offStateAnimationSpeed = 0.5f;
 
-		Animation valueBtnPressAnim = Animation::EaseInOut(sample, &playRootIconLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*valueBtnPressAnim.AddAnimationValue(&stopRootIconLayer->transparency) =
+		Animation valueBtnPressAnim = Animation::EaseInOut(sample, "layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnPressAnim.AddAnimationValue<float>("layer/stopRootIcon/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnPressAnim);
@@ -260,15 +260,15 @@ namespace Editor
 																	   Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
 																	   Vec2F(-10, 10), Vec2F(10, -10)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &pauseSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/regular/child/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pausePressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/regular/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &pauseIconRootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/regular/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "pause");
 	}
@@ -289,13 +289,13 @@ namespace Editor
 													 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
 													 Vec2F(-10, 10), Vec2F(10, -10)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &stepSelectIconLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &stepPressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "step");
 	}
@@ -348,15 +348,15 @@ namespace Editor
 		sample->AddLayer("selectedText", captionText, Layout::BothStretch(7, 0, 0, 0));
 
 		// States
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "round");
@@ -374,15 +374,15 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_select_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample,"layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "arrow");
 	}
@@ -399,15 +399,15 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_brush_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "brush");
 	}
@@ -424,15 +424,15 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_move_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "move");
 	}
@@ -449,15 +449,15 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_rotate_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "rotate");
 	}
@@ -474,15 +474,15 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_scale_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "scale");
 	}
@@ -499,15 +499,15 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_frame_tool.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		sample->AddState("value", Animation::EaseInOut(sample, &rootLayer->transparency, 0.3f, 1.0f, 0.1f));
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/root/transparency", 0.3f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "frame");
 	}
@@ -527,13 +527,13 @@ namespace Editor
 											 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "search");
@@ -561,17 +561,17 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation valueBtnAnim = Animation::EaseInOut(sample, &treeLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddAnimationValue(&listLayer->transparency) =
+		Animation valueBtnAnim = Animation::EaseInOut(sample, "layer/treeIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue<float>("layer/listIcon/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -591,13 +591,13 @@ namespace Editor
 		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_rotate_tool_pressed.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedIconLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressedIconLayer/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "revert");
 	}
@@ -614,13 +614,13 @@ namespace Editor
 		auto dot = halfHideLayer->AddChildLayer("dot", mnew Sprite("ui/UI4_on_dot.png"),
 												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		Animation valueAnim = Animation::EaseInOut(sample, &dot->transparency, 0.0f, 1.0f, 0.1f);
-		*valueAnim.AddAnimationValue(&back->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		Animation valueAnim = Animation::EaseInOut(sample, "layer/halfHide/child/dot/transparency", 0.0f, 1.0f, 0.1f);
+		*valueAnim.AddAnimationValue<float>("layer/halfHide/child/back/transparency") = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 		sample->AddState("value", valueAnim);
 
-		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, "layer/halfHide/transparency", 1.0f, 0.5f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "actor node enable");
 	}
@@ -637,13 +637,13 @@ namespace Editor
 		auto unlocked = halfHideLayer->AddChildLayer("unlocked", mnew Sprite("ui/UI4_unlock_icon.png"),
 													 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
 
-		Animation valueStateAnim = Animation::EaseInOut(sample, &locked->transparency, 0.0f, 1.0f, 0.1f);
-		*valueStateAnim.AddAnimationValue(&unlocked->transparency) = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
+		Animation valueStateAnim = Animation::EaseInOut(sample, "layer/halfHide/child/locked/transparency", 0.0f, 1.0f, 0.1f);
+		*valueStateAnim.AddAnimationValue<float>("layer/halfHide/child/unlocked/transparency") = AnimatedValue<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 		sample->AddState("locked", valueStateAnim);
 
-		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, "layer/halfHide/transparency", 1.0f, 0.5f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "actor node lock");
 	}
@@ -659,10 +659,10 @@ namespace Editor
 												Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
-		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.8f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, "layer/halfHide/transparency", 1.0f, 0.5f, 0.1f));
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/halfHide/child/hover/transparency", 1.0f, 0.5f, 0.1f));
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/halfHide/child/pressed/transparency", 0.8f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "actor node link");
 	}
@@ -734,8 +734,8 @@ namespace Editor
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
-		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->enabled) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, "layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim.AddAnimationValue<bool>("child/nameEditBox/enabled") = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -753,13 +753,13 @@ namespace Editor
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, &itemSampleExpandBtn->transparency, 0.0f, 1.0f, 0.2f))
+		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
@@ -770,21 +770,21 @@ namespace Editor
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
-		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
+		itemSample->AddState("selected", Animation::EaseInOut(itemSample, "layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		Animation focusedItemAnim = Animation::EaseInOut(itemSample, "layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue<float>("layer/select/child/unfocused/transparency") = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -802,18 +802,18 @@ namespace Editor
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
-						 5.0f, 15.0f, 0.2f));
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
+															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
-						 -5.0f, -15.0f, 0.2f));
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
+															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 0.8f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->SetStateForcible("hover", false);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -846,16 +846,16 @@ namespace Editor
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(0, 0, 15, 0));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "panel down");
@@ -881,13 +881,13 @@ namespace Editor
 											   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "down panel trash");
@@ -922,17 +922,17 @@ namespace Editor
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation valueBtnAnim = Animation::EaseInOut(sample, &offLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddAnimationValue(&onLayer->transparency) =
+		Animation valueBtnAnim = Animation::EaseInOut(sample, "layer/off/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue<float>("layer/on/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -969,17 +969,17 @@ namespace Editor
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation valueBtnAnim = Animation::EaseInOut(sample, &offLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddAnimationValue(&onLayer->transparency) =
+		Animation valueBtnAnim = Animation::EaseInOut(sample, "layer/off/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue<float>("layer/on/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -1016,17 +1016,17 @@ namespace Editor
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout::BothStretch(13, 0, 0, 0));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation valueBtnAnim = Animation::EaseInOut(sample, &offLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*valueBtnAnim.AddAnimationValue(&onLayer->transparency) =
+		Animation valueBtnAnim = Animation::EaseInOut(sample, "layer/off/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue<float>("layer/on/transparency") =
 			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueBtnAnim);
@@ -1053,13 +1053,13 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(1, 0)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "menu filter");
@@ -1084,13 +1084,13 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "menu tree");
@@ -1150,8 +1150,8 @@ namespace Editor
 		actorNodeEditBox->Hide(true);
 		itemSample->AddChild(actorNodeEditBox);
 
-		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, &nameLayer->transparency, 1.0f, 0.0f, 0.15f);
-		*itemEditStateAnim.AddAnimationValue(&actorNodeEditBox->enabled) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		Animation itemEditStateAnim = Animation::EaseInOut(itemSample, "layer/name/transparency", 1.0f, 0.0f, 0.15f);
+		*itemEditStateAnim.AddAnimationValue<bool>("child/nameEditBox/enabled") = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		itemSample->AddState("edit", itemEditStateAnim);
 
 		// node sample button
@@ -1169,13 +1169,13 @@ namespace Editor
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, &itemSampleExpandBtn->transparency, 0.0f, 1.0f, 0.2f))
+		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
@@ -1186,21 +1186,21 @@ namespace Editor
 		itemSample->AddChild(itemSampleExpandBtn);
 
 		Animation expandedStateAnim(itemSample);
-		*expandedStateAnim.AddAnimationValue(&regularLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/regular/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&selectLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/hover/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
-		*expandedStateAnim.AddAnimationValue(&pressedLayer->GetDrawable()->angle) =
+		*expandedStateAnim.AddAnimationValue<float>("child/expandBtn/layer/pressed/mDrawable/angle") =
 			AnimatedValue<float>::EaseInOut(Math::Deg2rad(0.0f), Math::Deg2rad(-90.0f), 0.1f);
 
 		itemSample->AddState("expanded", expandedStateAnim)->offStateAnimationSpeed = 2.5f;
 
-		itemSample->AddState("selected", Animation::EaseInOut(itemSample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
+		itemSample->AddState("selected", Animation::EaseInOut(itemSample, "layer/select/transparency", 0.0f, 1.0f, 0.2f));
 
-		Animation focusedItemAnim = Animation::EaseInOut(itemSample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		Animation focusedItemAnim = Animation::EaseInOut(itemSample, "layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue<float>("layer/select/child/unfocused/transparency") = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		itemSample->AddState("focused", focusedItemAnim);
 
 		// scrollbars
@@ -1218,18 +1218,18 @@ namespace Editor
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("enableHorBar", Animation::EaseInOut(sample, &sample->GetVerticalScrollbar()->layout->offsetBottom,
-						 5.0f, 15.0f, 0.2f));
+		sample->AddState("enableHorBar", Animation::EaseInOut(sample, "mVerScrollBar/layout/offsetBottom",
+															  5.0f, 15.0f, 0.2f));
 
-		sample->AddState("enableVerBar", Animation::EaseInOut(sample, &sample->GetHorizontalScrollbar()->layout->offsetRight,
-						 -5.0f, -15.0f, 0.2f));
+		sample->AddState("enableVerBar", Animation::EaseInOut(sample, "mHorScrollBar/layout/offsetRight",
+															  -5.0f, -15.0f, 0.2f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &sample->GetHoverDrawable()->transparency, 0.0f, 0.8f, 0.2f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "mHoverDrawable/transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->SetStateForcible("hover", false);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "folders");
@@ -1292,18 +1292,18 @@ namespace Editor
 		sample->AddChild(nameEditBox);
 
 		// edit state
-		Animation itemEditStateAnim = Animation::EaseInOut(sample, &nameLabel->enabled, true, false, 0.15f);
-		*itemEditStateAnim.AddAnimationValue(&nameEditBox->enabled) = AnimatedValue<bool>::Linear(false, true, 0.15f);
+		Animation itemEditStateAnim = Animation::EaseInOut(sample, "child/nameLabel/enabled", true, false, 0.15f);
+		*itemEditStateAnim.AddAnimationValue<bool>("child/nameEditBox/enabled") = AnimatedValue<bool>::Linear(false, true, 0.15f);
 		sample->AddState("edit", itemEditStateAnim);
 
 		// focused state
-		Animation focusedItemAnim = Animation::EaseInOut(sample, &itemFocusedLayer->transparency, 0.0f, 1.0f, 0.2f);
-		*focusedItemAnim.AddAnimationValue(&itemUnfocusedLayer->transparency) = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
+		Animation focusedItemAnim = Animation::EaseInOut(sample, "layer/select/child/focused/transparency", 0.0f, 1.0f, 0.2f);
+		*focusedItemAnim.AddAnimationValue<float>("layer/select/child/unfocused/transparency") = AnimatedValue<float>::EaseInOut(0.3f, 0.0f, 0.2f);
 		sample->AddState("focused", focusedItemAnim);
 
-		sample->AddState("halfHide", Animation::EaseInOut(sample, &sample->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("selected", Animation::EaseInOut(sample, &itemSelectionLayer->transparency, 0.0f, 1.0f, 0.2f));
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, "transparency", 1.0f, 0.5f, 0.1f));
+		sample->AddState("selected", Animation::EaseInOut(sample, "layer/select/transparency", 0.0f, 1.0f, 0.2f));
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -1408,7 +1408,7 @@ namespace Editor
 		verScrollBar->layout->offsetMax = Vec2F(0, -5);
 		sample->SetVerticalScrollBar(verScrollBar);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -1425,10 +1425,10 @@ namespace Editor
 												Layout::Based(BaseCorner::Center, Vec2F(15, 15), Vec2F(0, 0)));
 
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.1f));
-		sample->AddState("halfHide", Animation::EaseInOut(sample, &halfHideLayer->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 1.0f, 0.5f, 0.1f));
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.8f, 1.0f, 0.1f));
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
+		sample->AddState("halfHide", Animation::EaseInOut(sample, "layer/halfHide/transparency", 1.0f, 0.5f, 0.1f));
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 1.0f, 0.5f, 0.1f));
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.8f, 1.0f, 0.1f));
 
 		o2UI.AddWidgetStyle(sample, "asset link");
 	}
@@ -1451,6 +1451,7 @@ namespace Editor
 
 		DropDown* dropdown = mnew DropDown();
 		*dropdown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		dropdown->name = "dropdown";
 		auto backLayer = dropdown->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto selectLayer = dropdown->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto pressedLayer = dropdown->AddLayer("pressed", mnew Sprite("ui/UI4_Editbox_pressed.png"), Layout::BothStretch(-9, -9, -9, -9));
@@ -1482,17 +1483,17 @@ namespace Editor
 		itemSample->horAlign = HorAlign::Left;
 		dropdown->SetItemSample(itemSample);
 
-		dropdown->AddState("hover", Animation::EaseInOut(dropdown, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		dropdown->AddState("hover", Animation::EaseInOut(dropdown, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		dropdown->AddState("pressed", Animation::EaseInOut(dropdown, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		dropdown->AddState("pressed", Animation::EaseInOut(dropdown, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		dropdown->AddState("opened", Animation::EaseInOut(dropdown, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		dropdown->AddState("opened", Animation::EaseInOut(dropdown, "layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
-		dropdown->AddState("undefined", Animation::EaseInOut(dropdown, &undefinedLayer->transparency, 0.0f, 1.0f, 0.05f));
+		dropdown->AddState("undefined", Animation::EaseInOut(dropdown, "layer/undefined/transparency", 0.0f, 1.0f, 0.05f));
 
-		dropdown->AddState("visible", Animation::EaseInOut(dropdown, &dropdown->transparency, 0.0f, 1.0f, 0.2f))
+		dropdown->AddState("visible", Animation::EaseInOut(dropdown, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
@@ -1501,8 +1502,8 @@ namespace Editor
 		sample->AddChild(dropdown);
 		sample->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &dropdown->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/dropdown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "enum property");
@@ -1530,22 +1531,22 @@ namespace Editor
 		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_enable_dot_big_unknown.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(10, 10)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/backSelect/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("value", Animation::EaseInOut(sample, &checkLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("value", Animation::EaseInOut(sample, "layer/check/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("unknown", Animation::EaseInOut(sample, &unknownLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("unknown", Animation::EaseInOut(sample, "layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "actor head enable");
@@ -1570,8 +1571,8 @@ namespace Editor
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &toggle->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head enable/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<float>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head enable");
@@ -1596,11 +1597,11 @@ namespace Editor
 		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_round_field_select.png"),
 										   Layout::BothStretch(-4, -4, -5, -4));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue<float>("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1639,8 +1640,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head name/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<float>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head name");
@@ -1663,20 +1664,20 @@ namespace Editor
 		auto unknownLayer = rootLayer->AddChildLayer("unknown", mnew Sprite("ui/UI4_big_lock_unknown.png"),
 													 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &rootLayer->transparency, 1.0f, 0.7f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/transparency", 1.0f, 0.7f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		auto valueAnim = Animation::EaseInOut(sample, &unlockLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*valueAnim.AddAnimationValue(&lockLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto valueAnim = Animation::EaseInOut(sample, "layer/value/child/unlock/transparency", 1.0f, 0.0f, 0.1f);
+		*valueAnim.AddAnimationValue<float>("layer/value/child/lock/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueAnim)->offStateAnimationSpeed = 0.5f;
 
-		auto unknownAnim = Animation::EaseInOut(sample, &valueLayer->transparency, 1.0f, 0.0f, 0.1f);
-		*unknownAnim.AddAnimationValue(&unknownLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto unknownAnim = Animation::EaseInOut(sample, "layer/value/transparency", 1.0f, 0.0f, 0.1f);
+		*unknownAnim.AddAnimationValue<float>("layer/value/child/unknown/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("unknown", unknownAnim)->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "actor head lock");
@@ -1701,8 +1702,8 @@ namespace Editor
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &toggle->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head lock/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head lock");
@@ -1733,10 +1734,10 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_round_field_focused.png"),
 										Layout::BothStretch(-4, -4, -5, -4));
 
-		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		auto nameText = mnew Text("stdFont.ttf");
@@ -1777,11 +1778,11 @@ namespace Editor
 		auto focusLayer = sample->AddLayer("focus", mnew Sprite("ui/UI4_round_field_select.png"),
 										   Layout::BothStretch(-4, -4, -5, -4));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue<float>("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -1820,8 +1821,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head tags");
@@ -1869,17 +1870,17 @@ namespace Editor
 		itemSample->horAlign = HorAlign::Left;
 		sample->SetItemSample(itemSample);
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &hoverLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("opened", Animation::EaseInOut(sample, &arrowLayer->GetDrawable()->scale, Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+		sample->AddState("opened", Animation::EaseInOut(sample, "layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
 
-		sample->AddState("undefined", Animation::EaseInOut(sample, &undefinedLayer->transparency, 0.0f, 1.0f, 0.05f));
+		sample->AddState("undefined", Animation::EaseInOut(sample, "layer/undefined/transparency", 0.0f, 1.0f, 0.05f));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "actor head layer");
@@ -1905,8 +1906,8 @@ namespace Editor
 		layout->AddChild(dropDown);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &dropDown->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head layer/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head layer");
@@ -1925,10 +1926,10 @@ namespace Editor
 											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "accept prototype");
@@ -1947,10 +1948,10 @@ namespace Editor
 											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "revert prototype");
@@ -1969,10 +1970,10 @@ namespace Editor
 											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "break prototype");
@@ -1991,10 +1992,10 @@ namespace Editor
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "component options");
@@ -2013,10 +2014,10 @@ namespace Editor
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "component save");
@@ -2039,7 +2040,7 @@ namespace Editor
 		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/ver_hole_handle.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(8, 30)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "wide");
@@ -2062,7 +2063,7 @@ namespace Editor
 		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/hor_hole_handle.png"),
 														   Layout::Based(BaseCorner::Center, Vec2F(30, 8)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "wide");
@@ -2082,7 +2083,7 @@ namespace Editor
 		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/ver_hole_handle.png"),
 														   Layout::Based(BaseCorner::Right, Vec2F(8, 30), Vec2F(4, 0)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "wide");
@@ -2102,7 +2103,7 @@ namespace Editor
 		auto barRegularSprite = handleLayer->AddChildLayer("regular", mnew Sprite("ui/hor_hole_handle.png"),
 														   Layout::Based(BaseCorner::Bottom, Vec2F(30, 8), Vec2F(0, -4)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "wide");
@@ -2184,10 +2185,10 @@ namespace Editor
 														  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f), Vec2F(-10, -10), Vec2F(10, 10)));
 
 
-		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		itemSampleExpandBtn->AddState("hover", Animation::EaseInOut(itemSampleExpandBtn, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		itemSampleExpandBtn->AddState("pressed", Animation::EaseInOut(itemSampleExpandBtn, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, &itemSampleExpandBtn->transparency, 0.0f, 1.0f, 0.2f))
@@ -2244,7 +2245,7 @@ namespace Editor
 
 		sample->SetStateForcible("hover", false);
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2266,11 +2267,11 @@ namespace Editor
 		sample->AddLayer("arrows", mnew Sprite("ui/UI4_ch_arrows.png"),
 						 Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(0, 0)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -2305,11 +2306,11 @@ namespace Editor
 		sample->AddLayer("arrows", mnew Sprite("ui/UI4_ch_arrows.png"),
 						 Layout::Based(BaseCorner::Right, Vec2F(10, 20), Vec2F(0, 0)));
 
-		sample->AddState("visible", Animation::EaseInOut(sample, &sample->transparency, 0.0f, 1.0f, 0.2f))
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f);
-		*focusAnim.AddAnimationValue(&hoverLayer->transparency) = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f);
+		*focusAnim.AddAnimationValue("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
 
@@ -2374,7 +2375,7 @@ namespace Editor
 		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		// focused
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		// value
@@ -2409,13 +2410,13 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation valueBtnAnim = Animation::EaseInOut(sample, &pauseLayer->transparency, 0.0f, 1.0f, 0.1f);
@@ -2449,13 +2450,13 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Animation valueBtnAnim = Animation::EaseInOut(sample, &nonLoopLayer->transparency, 1.0f, 0.0f, 0.1f);
@@ -2486,13 +2487,13 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
 
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "menu add key");
@@ -2515,10 +2516,10 @@ namespace Editor
 
 		sample->AddState("inactive", Animation::EaseInOut(sample, &basicLayer->transparency, 1.0f, 0.5f, 0.01f));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, &selectLayer->transparency, 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, &pressedLayer->transparency, 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "add key");
@@ -2595,8 +2596,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2623,8 +2624,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "red");
@@ -2651,8 +2652,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "green");
@@ -2679,8 +2680,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2712,10 +2713,10 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
 										Layout::BothStretch(-9, -9, -9, -9));
 
-		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		auto nameText = mnew Text("stdFont.ttf");
@@ -2739,7 +2740,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2780,7 +2781,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &toggle->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2855,7 +2856,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2930,7 +2931,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -2962,7 +2963,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 
@@ -2995,10 +2996,10 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
 										Layout::BothStretch(-9, -9, -9, -9));
 
-		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		auto nameText = mnew Text("stdFont.ttf");
@@ -3016,7 +3017,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3048,10 +3049,10 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
 										Layout::BothStretch(-9, -9, -9, -9));
 
-		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
@@ -3061,7 +3062,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3089,7 +3090,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &dropDown->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3117,7 +3118,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &dropDown->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3193,7 +3194,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3268,7 +3269,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3295,8 +3296,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3323,8 +3324,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3350,8 +3351,8 @@ namespace Editor
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &editBox->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3404,7 +3405,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3457,7 +3458,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -3510,7 +3511,7 @@ namespace Editor
 		layout->AddChild(revertBtn);
 
 		Animation revertStateAnim = Animation::EaseInOut(sample, &propertiesLayout->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		*revertStateAnim.AddAnimationValue("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "colored");
