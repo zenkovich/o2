@@ -26,7 +26,7 @@ namespace o2
 		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
 
 		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
-		PROPERTY(float, offsetRight, SetOffsetRight, GetOffsetRight);    // Right offset property
+		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property
 		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
 		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
 
@@ -119,10 +119,10 @@ namespace o2
 		float GetOffsetLeft() const;
 
 		// Sets right offset
-		void SetOffsetRight(float value);
+		void SetoffsetRight(float value);
 
 		// Returns right offset
-		float GetOffsetRight() const;
+		float GetoffsetRight() const;
 
 		// Sets bottom offset
 		void SetOffsetBottom(float value);
@@ -210,8 +210,8 @@ CLASS_METHODS_META(o2::WidgetLayerLayout)
 	PUBLIC_FUNCTION(Vec2F, GetOffsetMax);
 	PUBLIC_FUNCTION(void, SetOffsetLeft, float);
 	PUBLIC_FUNCTION(float, GetOffsetLeft);
-	PUBLIC_FUNCTION(void, SetOffsetRight, float);
-	PUBLIC_FUNCTION(float, GetOffsetRight);
+	PUBLIC_FUNCTION(void, SetoffsetRight, float);
+	PUBLIC_FUNCTION(float, GetoffsetRight);
 	PUBLIC_FUNCTION(void, SetOffsetBottom, float);
 	PUBLIC_FUNCTION(float, GetOffsetBottom);
 	PUBLIC_FUNCTION(void, SetOffsetTop, float);

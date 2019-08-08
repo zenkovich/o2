@@ -176,13 +176,13 @@ namespace o2
 		return mAnchorMin.x;
 	}
 
-	void WidgetLayerLayout::SetOffsetRight(float value)
+	void WidgetLayerLayout::SetoffsetRight(float value)
 	{
 		mOffsetMax.x = value;
 		mWidgetLayer->OnLayoutChanged();
 	}
 
-	float WidgetLayerLayout::GetOffsetRight() const
+	float WidgetLayerLayout::GetoffsetRight() const
 	{
 		return mOffsetMax.x;
 	}

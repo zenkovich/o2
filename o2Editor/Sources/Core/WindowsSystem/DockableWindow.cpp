@@ -331,10 +331,10 @@ namespace Editor
 	void DockableWindow::InitializeDockFrameAppearanceAnim()
 	{
 		mDockingFrameAppearance.SetTarget(this);
-		*mDockingFrameAppearance.AddAnimationValue(&mDockingFrameSample->transparency) =
+		*mDockingFrameAppearance.AddAnimationValue<float>("mDockingFrameSample/transparency") =
 			AnimatedValue<float>::EaseInOut(0, 1, 0.3f);
 
-		*mDockingFrameAppearance.AddAnimationValue(&transparency) =
+		*mDockingFrameAppearance.AddAnimationValue<float>("transparency") =
 			AnimatedValue<float>::EaseInOut(1, 0, 0.15f);
 
 		mDockingFrameAppearance.GoToBegin();

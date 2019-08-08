@@ -41,7 +41,7 @@ namespace Editor
 		Spoiler*       mLayoutSpoiler = nullptr;
 		Vec2FProperty* mAnchorRightTopProperty = nullptr;
 		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
-		Vec2FProperty* mOffsetRightTopProperty = nullptr;
+		Vec2FProperty* moffsetRightTopProperty = nullptr;
 		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
 		Vec2FProperty* mMinSizeProperty = nullptr;
 		Vec2FProperty* mMaxSizeProperty = nullptr;
@@ -71,7 +71,7 @@ CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 	PROTECTED_FIELD(mLayoutSpoiler);
 	PROTECTED_FIELD(mAnchorRightTopProperty);
 	PROTECTED_FIELD(mAnchorLeftBottomProperty);
-	PROTECTED_FIELD(mOffsetRightTopProperty);
+	PROTECTED_FIELD(moffsetRightTopProperty);
 	PROTECTED_FIELD(mOffsetLeftBottomProperty);
 	PROTECTED_FIELD(mMinSizeProperty);
 	PROTECTED_FIELD(mMaxSizeProperty);

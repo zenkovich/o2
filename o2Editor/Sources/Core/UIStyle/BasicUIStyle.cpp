@@ -311,7 +311,7 @@ namespace o2
 		captionText->color = Color4(96, 125, 139);
 		sample->AddLayer("caption", captionText, Layout(Vec2F(0, 0), Vec2F(1, 1), Vec2F(20, 0), Vec2F(0, 0)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/backSelect/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("value", Animation::EaseInOut(sample, "layer/check/transparency", 0.0f, 1.0f, 0.1f))
@@ -320,10 +320,10 @@ namespace o2
 		sample->AddState("unknown", Animation::EaseInOut(sample, "layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/backPressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/backFocus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
@@ -354,7 +354,7 @@ namespace o2
 		auto unknownLayer = sample->AddLayer("unknown", mnew Sprite("ui/UI4_Check_unknown.png"),
 											 Layout::Based(BaseCorner::Right, Vec2F(20, 20)));
 
-		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/backSelect/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
 		sample->AddState("value", Animation::EaseInOut(sample, "layer/check/transparency", 0.0f, 1.0f, 0.1f))
@@ -363,10 +363,10 @@ namespace o2
 		sample->AddState("unknown", Animation::EaseInOut(sample, "layer/unknown/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/backPressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/backFocus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
@@ -513,7 +513,7 @@ namespace o2
 
 		Animation enableVerScrollAnim;
 		enableVerScrollAnim.SetTarget(sample);
-		*enableVerScrollAnim.AddAnimationValue<float>("mHorScrollBar/layout/offsetRIght") =
+		*enableVerScrollAnim.AddAnimationValue<float>("mHorScrollBar/layout/offsetRight") =
 			AnimatedValue<float>::EaseInOut(-5, -15, 0.2f);
 
 		*enableVerScrollAnim.AddAnimationValue<Vec2F>("mViewAreaLayout/offsetMax") =
@@ -524,7 +524,7 @@ namespace o2
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		Text* textDrawable = sample->GetTextDrawable();

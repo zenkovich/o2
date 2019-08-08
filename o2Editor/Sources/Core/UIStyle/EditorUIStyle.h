@@ -167,10 +167,10 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
 										Layout::BothStretch(-9, -9, -9, -9));
 
-		box->AddState("focused", Animation::EaseInOut(box, &focusLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		box->AddState("hover", Animation::EaseInOut(box, &selectLayer->transparency, 0.0f, 1.0f, 0.05f))
+		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		auto nameText = mnew Text("stdFont.ttf");
@@ -188,13 +188,14 @@ namespace Editor
 		box->AddChild(linkBtn);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		revertBtn->name = "revertBtn";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(box);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, &box->layout->offsetRight, 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue(&revertBtn->enabled) = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/box/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revertBtn/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");

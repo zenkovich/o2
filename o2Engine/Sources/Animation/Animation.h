@@ -64,7 +64,7 @@ namespace o2
 
 		// Returns animated value by value pointer
 		template<typename _type>
-		AnimatedValue<_type>* Animation::GetAnimationValue(_type* target);
+		AnimatedValue<_type>* GetAnimationValue(_type* target);
 
 		// Adds animation value with specified path
 		template<typename _type>
@@ -276,7 +276,7 @@ namespace o2
 								   const _type& begin, const _type& end, float duration /*= 1.0f*/)
 	{
 		Animation res(target);
-		*res.AddAnimationValue(animatingValuePath) = AnimatedValue<_type>::EaseInOut(begin, end, duration);
+		*res.AddAnimationValue<_type>(animatingValuePath) = AnimatedValue<_type>::EaseInOut(begin, end, duration);
 		return res;
 	}
 
@@ -402,7 +402,8 @@ namespace o2
 
 			if (!fieldInfo)
 			{
-				o2Debug.LogWarning("Can't create animated value: field info not found");
+				o2Debug.LogWarning("Can't create animated value: field info not found " + path);
+				def.targetPtr = (_type*)mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
 				return nullptr;
 			}
 
@@ -487,5 +488,6 @@ CLASS_FIELDS_META(o2::Animation::AnimatedValueDef)
 }
 END_META;
 CLASS_METHODS_META(o2::Animation::AnimatedValueDef)
-{}
+{
+}
 END_META;

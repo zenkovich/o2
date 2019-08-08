@@ -55,7 +55,7 @@ namespace Editor
 		prototypeRoot->name = "prototype";
 		*prototypeRoot->layout = WidgetLayout::BothStretch();
 
-		prototypeRoot->AddState("visible", Animation::EaseInOut(prototypeRoot, &prototypeRoot->transparency, 0.0f, 1.0f, 0.1f));
+		prototypeRoot->AddState("visible", Animation::EaseInOut(prototypeRoot, "transparency", 0.0f, 1.0f, 0.1f));
 
 		auto linkImg = o2UI.CreateImage("ui/UI4_prefab_link_big.png");
 		*linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
@@ -100,8 +100,8 @@ namespace Editor
 		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLayerProperty);
 
-		Animation protoStateAnim = Animation::EaseInOut(mDataView, &mDataView->layout->minHeight, 42.0f, 62.0f, 0.1f);
-		*protoStateAnim.AddAnimationValue(&prototypeRoot->enabled) = AnimatedValue<bool>::Linear(false, true, 0.1f);
+		Animation protoStateAnim = Animation::EaseInOut(mDataView, "layout/minHeight", 42.0f, 62.0f, 0.1f);
+		*protoStateAnim.AddAnimationValue<bool>("child/prototype/enabled") = AnimatedValue<bool>::Linear(false, true, 0.1f);
 		mDataView->AddState("prototype", protoStateAnim);
 	}
 

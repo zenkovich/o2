@@ -43,7 +43,7 @@ namespace o2
 	struct IsStringAccessorHelper : std::false_type { };
 
 	template<class T>
-	struct IsStringAccessorHelper<T, void_t<decltype(T::keyType)>> : std::true_type { };
+	struct IsStringAccessorHelper<T, typename std::enable_if<IsAccessor<T>::value && std::is_same<typename T::keyType, String>::value>::type> : std::true_type { };
 
 	template<class T> struct IsStringAccessor : IsStringAccessorHelper<typename std::remove_cv<T>::type> { };
 

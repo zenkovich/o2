@@ -3065,7 +3065,7 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
 										Layout::BothStretch(-9, -9, -9, -9));
 
-		box->AddState("focused", Animation::EaseInOut(box, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))

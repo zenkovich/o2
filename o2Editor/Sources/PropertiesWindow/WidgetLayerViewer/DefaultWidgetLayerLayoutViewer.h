@@ -35,7 +35,7 @@ namespace Editor
 		Vec2FProperty* mSizeProperty = nullptr;
 		Vec2FProperty* mAnchorRightTopProperty = nullptr;
 		Vec2FProperty* mAnchorLeftBottomProperty = nullptr;
-		Vec2FProperty* mOffsetRightTopProperty = nullptr;
+		Vec2FProperty* moffsetRightTopProperty = nullptr;
 		Vec2FProperty* mOffsetLeftBottomProperty = nullptr;
 
 	protected:
@@ -59,7 +59,7 @@ CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 	PROTECTED_FIELD(mSizeProperty);
 	PROTECTED_FIELD(mAnchorRightTopProperty);
 	PROTECTED_FIELD(mAnchorLeftBottomProperty);
-	PROTECTED_FIELD(mOffsetRightTopProperty);
+	PROTECTED_FIELD(moffsetRightTopProperty);
 	PROTECTED_FIELD(mOffsetLeftBottomProperty);
 }
 END_META;

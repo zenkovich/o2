@@ -169,13 +169,13 @@ namespace Editor
 		*offsetIcon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 0));
 		rightTopOffsetPropertyContainer->AddChild(offsetIcon);
 
-		mOffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
-		*mOffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mOffsetRightTopProperty->GetChildByType<Label>("layout/properties/x label")->text = "R";
-		mOffsetRightTopProperty->GetChildByType<Label>("layout/properties/y label")->text = "T";
-		mOffsetRightTopProperty->SetValuePath("layout/offsetMax");
-		mOffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
-		rightTopOffsetPropertyContainer->AddChild(mOffsetRightTopProperty);
+		moffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
+		*moffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
+		moffsetRightTopProperty->GetChildByType<Label>("layout/properties/x label")->text = "R";
+		moffsetRightTopProperty->GetChildByType<Label>("layout/properties/y label")->text = "T";
+		moffsetRightTopProperty->SetValuePath("layout/offsetMax");
+		moffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
+		rightTopOffsetPropertyContainer->AddChild(moffsetRightTopProperty);
 
 		// Left bottom
 		auto leftBottomOffsetPropertyContainer = mnew Widget();
@@ -298,7 +298,7 @@ namespace Editor
 			mAnchorLeftBottomProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::anchorMin)>(
 				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->anchorMin; });
 
-			mOffsetRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMax)>(
+			moffsetRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMax)>(
 				targetWidgets, widgetPrototypes, [](Widget* x) { return &x->layout->offsetMax; });
 
 			mOffsetLeftBottomProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::offsetMin)>(
@@ -328,7 +328,7 @@ namespace Editor
 		{
 			mAnchorRightTopProperty->Refresh();
 			mAnchorLeftBottomProperty->Refresh();
-			mOffsetRightTopProperty->Refresh();
+			moffsetRightTopProperty->Refresh();
 			mOffsetLeftBottomProperty->Refresh();
 			mMinSizeProperty->Refresh();
 			mMaxSizeProperty->Refresh();

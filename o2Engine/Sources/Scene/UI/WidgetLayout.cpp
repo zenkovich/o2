@@ -267,13 +267,13 @@ namespace o2
 		return mData->offsetMin.x;
 	}
 
-	void WidgetLayout::SetOffsetRight(float value)
+	void WidgetLayout::SetoffsetRight(float value)
 	{
 		mData->offsetMax.x = value;
 		SetDirty();
 	}
 
-	float WidgetLayout::GetOffsetRight() const
+	float WidgetLayout::GetoffsetRight() const
 	{
 		return mData->offsetMax.x;
 	}

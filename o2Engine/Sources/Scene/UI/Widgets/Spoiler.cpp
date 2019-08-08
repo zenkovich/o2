@@ -171,7 +171,7 @@ namespace o2
 
 	void Spoiler::CreateExpandAnimation()
 	{
-		mExpandState = AddState("expand", Animation::Parametric(this, &mExpandCoef, 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
+		mExpandState = AddState("expand", Animation::Parametric(this, "mExpandCoef", 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
 	}
 
 	float Spoiler::GetMinHeightWithChildren() const
