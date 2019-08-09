@@ -168,7 +168,7 @@ namespace Editor
 		auto tabActiveState = sample->AddState("tabActive", tabActiveStateAnim);
 
 
-		sample->AddState("tabFirst", Animation::EaseInOut(sample, "layer/tab/child/back/transparency", 0.0f, 1.0f, 0.2f));
+		sample->AddState("tabFirst", Animation::EaseInOut(sample, "layer/tab/child/tabBack/transparency", 0.0f, 1.0f, 0.2f));
 
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
@@ -2565,7 +2565,7 @@ namespace Editor
 		captionText->dotsEngings = true;
 		captionText->wordWrap = true;
 		captionText->color = Color4(235, 255, 253);
-		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 36, 0, 20, -1));
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 36, 0, 20, 0));
 
 		auto expandBtn = o2UI.CreateWidget<Button>("expand white");
 		expandBtn->name = "expand";
