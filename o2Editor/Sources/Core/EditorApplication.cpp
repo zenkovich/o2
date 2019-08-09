@@ -258,10 +258,10 @@ namespace Editor
 		if (mNeedRebuildWndStyle)
 		{
 			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIManager();
+			builder.RebuildEditorUIManager(false, false);
 		}
 
-		o2UI.LoadStyle("editor_ui_style.xml");
+		//o2UI.LoadStyle("editor_ui_style.xml");
 	}
 
 	void EditorApplication::OnUpdate(float dt)

@@ -111,7 +111,7 @@ namespace Editor
 
 		void RebuildSpoilerWithHead();
 
-		void RebuildEditorUIManager(bool checkEditedDate = true);
+		void RebuildEditorUIManager(bool saveStyle = true, bool checkEditedDate = true);
 
 		IOBJECT(EditorUIStyleBuilder);
 
@@ -304,6 +304,6 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildAnimationTree);
 	PUBLIC_FUNCTION(void, RebuildSpoilerWithHead);
-	PUBLIC_FUNCTION(void, RebuildEditorUIManager, bool);
+	PUBLIC_FUNCTION(void, RebuildEditorUIManager, bool, bool);
 }
 END_META;

@@ -1519,10 +1519,10 @@ namespace Editor
 		auto hoverLayer = sample->AddLayer("backSelect", mnew Sprite("ui/UI4_enable_toggle_big_select.png"),
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedLayer = sample->AddLayer("backPressed", mnew Sprite("ui/UI4_enable_toggle_big_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_enable_toggle_big_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto focusLayer = sample->AddLayer("backFocus", mnew Sprite("ui/UI4_enable_toggle_big_focused.png"),
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_enable_toggle_big_focused.png"),
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		auto checkLayer = sample->AddLayer("check", mnew Sprite("ui/UI4_enable_dot_big.png"),
@@ -1560,19 +1560,22 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		Toggle* toggle = o2UI.CreateToggle("empty", "actor head enable");
+		toggle->name = "toggle";
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		revertBtn->name = "revert";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head enable/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<float>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/toggle/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<float>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head enable");
@@ -1600,7 +1603,7 @@ namespace Editor
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f);
 		*focusAnim.AddAnimationValue<float>("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
@@ -1628,20 +1631,23 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("actor head name");
 		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		editBox->name = "editBox";
 		layout->AddChild(editBox);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		revertBtn->name = "revert";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head name/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<float>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<float>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head name");
@@ -1667,13 +1673,13 @@ namespace Editor
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/transparency", 1.0f, 0.7f, 0.1f))
 			->offStateAnimationSpeed = 1.0f / 4.0f;
 
-		auto valueAnim = Animation::EaseInOut(sample, "layer/value/child/unlock/transparency", 1.0f, 0.0f, 0.1f);
-		*valueAnim.AddAnimationValue<float>("layer/value/child/lock/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto valueAnim = Animation::EaseInOut(sample, "layer/root/child/value/child/unlock/transparency", 1.0f, 0.0f, 0.1f);
+		*valueAnim.AddAnimationValue<float>("layer/root/child/value/child/lock/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("value", valueAnim)->offStateAnimationSpeed = 0.5f;
 
-		auto unknownAnim = Animation::EaseInOut(sample, "layer/value/transparency", 1.0f, 0.0f, 0.1f);
-		*unknownAnim.AddAnimationValue<float>("layer/value/child/unknown/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+		auto unknownAnim = Animation::EaseInOut(sample, "layer/root/child/value/transparency", 1.0f, 0.0f, 0.1f);
+		*unknownAnim.AddAnimationValue<float>("layer/root/child/unknown/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
 
 		sample->AddState("unknown", unknownAnim)->offStateAnimationSpeed = 0.5f;
 
@@ -1691,19 +1697,22 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		Toggle* toggle = o2UI.CreateToggle("empty", "actor head lock");
+		toggle->name = "toggle";
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		revertBtn->name = "revert";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(toggle);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head lock/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/toggle/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head lock");
@@ -1734,7 +1743,7 @@ namespace Editor
 		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_round_field_focused.png"),
 										Layout::BothStretch(-4, -4, -5, -4));
 
-		box->AddState("focused", Animation::EaseInOut(box, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
@@ -1781,7 +1790,7 @@ namespace Editor
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Animation focusAnim = Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f);
+		Animation focusAnim = Animation::EaseInOut(sample, "layer/focus/transparency", 0.0f, 1.0f, 0.05f);
 		*focusAnim.AddAnimationValue<float>("layer/hover/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
 		sample->AddState("focused", focusAnim)
 			->offStateAnimationSpeed = 0.5f;
@@ -1809,20 +1818,23 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("actor head tags");
+		editBox->name = "editBox";
 		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(editBox);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		revertBtn->name = "revert";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(editBox);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head tags/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head tags");
@@ -1894,20 +1906,23 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		DropDown* dropDown = o2UI.CreateDropdown("actor head layer");
+		dropDown->name = "dropDown";
 		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(dropDown);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
+		revertBtn->name = "revert";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 
 		layout->AddChild(dropDown);
 		layout->AddChild(revertBtn);
 
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/actor head layer/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/dropDown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
+		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head layer");
@@ -1919,10 +1934,10 @@ namespace Editor
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_accept_prefab.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
-		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI4_accept_prefab_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_accept_prefab_select.png"),
 											Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
-		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI4_accept_prefab_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_accept_prefab_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
 
@@ -1941,10 +1956,10 @@ namespace Editor
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_revert_prefab.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
-		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI4_revert_prefab_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_revert_prefab_select.png"),
 											Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
-		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI4_revert_prefab_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_revert_prefab_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
 
@@ -1963,10 +1978,10 @@ namespace Editor
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_break_prefab.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
-		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI4_break_prefab_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_break_prefab_select.png"),
 											Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
-		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI4_break_prefab_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_break_prefab_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(25, 25)));
 
 
@@ -1985,10 +2000,10 @@ namespace Editor
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_gray_options.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI4_gray_options_select.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_gray_options_select.png"),
 											Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI4_gray_options_pressed.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_gray_options_pressed.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
@@ -2007,10 +2022,10 @@ namespace Editor
 		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_save_gray.png"),
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto selectLayer = sample->AddLayer("selectBack", mnew Sprite("ui/UI4_save_gray copy.png"),
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_save_gray copy.png"),
 											Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedLayer = sample->AddLayer("pressedBack", mnew Sprite("ui/UI4_save_gray.png"),
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_save_gray.png"),
 											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 
@@ -3094,6 +3109,7 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		DropDown* dropDown = o2UI.CreateDropdown();
@@ -3124,6 +3140,7 @@ namespace Editor
 		sample->fitByChildren = false;
 
 		auto layout = mnew Widget();
+		layout->name = "layout";
 		sample->AddChild(layout);
 
 		DropDown* dropDown = o2UI.CreateDropdown();
@@ -3584,7 +3601,7 @@ namespace Editor
 		BuildPropertyWithCaption<WStringProperty>("standard", "with caption");
 	}
 
-	void EditorUIStyleBuilder::RebuildEditorUIManager(bool checkEditedDate /*= true*/)
+	void EditorUIStyleBuilder::RebuildEditorUIManager(bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)
 	{
 		PushScopeEnterOnStack scope;
 
@@ -3618,14 +3635,18 @@ namespace Editor
 			timer.Reset();
 			func->Invoke<void>(this);
 
-			o2Debug.Log(func->GetName() + " for " + (String)timer.GetDeltaTime() + " sec");
+			auto time = timer.GetDeltaTime();
+			o2Debug.Log(func->GetName() + " for " + (String)time + " sec");
 		}
 
-		o2UI.SaveStyle("editor_ui_style.xml");
+		if (saveStyle)
+		{
+			o2UI.SaveStyle("editor_ui_style.xml");
 
-		data.Clear();
-		data = thisSourceEditedDate;
-		data.SaveToFile(generateDateCachePath);
+			data.Clear();
+			data = thisSourceEditedDate;
+			data.SaveToFile(generateDateCachePath);
+		}
 	}
 }
 
