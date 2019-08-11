@@ -72,13 +72,14 @@ namespace Editor
 
 		struct IHandlesGroup
 		{
+			String                    animatedValuePath;
 			MapKeyFramesTrackControl* trackControl;
 			KeyHandlesVec             handles;
 
 		public:
 			virtual ~IHandlesGroup();
 
-			virtual void InitializeHandles(IAnimatedValue* ianimatedValue) = 0;
+			virtual void InitializeHandles(IAnimatedValue* ianimatedValue, const String& animatedValuePath) = 0;
 			virtual void CreateHandles() = 0;
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
 			virtual void UpdateHandles() = 0;
@@ -93,7 +94,7 @@ namespace Editor
 		public:
 			~HandlesGroup();
 
-			void InitializeHandles(IAnimatedValue* ianimatedValue) override;
+			void InitializeHandles(IAnimatedValue* ianimatedValue, const String& animatedValuePath) override;
 			void CreateHandles() override;
 			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
 			void UpdateHandles() override;
@@ -127,8 +128,11 @@ namespace Editor
 	}
 
 	template<typename AnimationValueType>
-	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::InitializeHandles(IAnimatedValue* ianimatedValue)
+	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::InitializeHandles(IAnimatedValue* ianimatedValue, 
+																					   const String& animatedValuePath)
 	{
+		this->animatedValuePath = animatedValuePath;
+
 		animatedValue = dynamic_cast<AnimationValueType*>(ianimatedValue);
 		animatedValue->onKeysChanged += THIS_FUNC(HandlesGroup<AnimationValueType>::UpdateHandles);
 
@@ -154,6 +158,8 @@ namespace Editor
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			handle->animatedValue = animatedValue;
+			handle->animatedValuePath = animatedValuePath;
+			handle->trackControl = trackControl;
 			handle->keyUid = key.uid;
 			handle->isMapping = true;
 			handle->SetSelectionGroup(trackControl->mHandlesSheet);

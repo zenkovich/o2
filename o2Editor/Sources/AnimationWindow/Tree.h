@@ -59,6 +59,7 @@ namespace Editor
 		struct AnimationValueNode
 		{
 			String name;
+			String path;
 			IAnimatedValue* animatedValue = nullptr;
 
 			ITrackControl* trackControl = nullptr; 

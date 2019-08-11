@@ -130,9 +130,10 @@ namespace o2
 			mSelectionDrawable->SetRect(mCurrentSelectionRect);
 		}
 
-		if (o2Input.IsCursorPressed())
+		bool cursorPressed = o2Input.IsCursorPressed() || o2Input.IsRightMousePressed();
+		if (cursorPressed)
 		{
-			if (!mChildContextMenu && (o2Input.IsCursorPressed() || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
+			if (!mChildContextMenu && (cursorPressed || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
 				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mEnabled)
 			{
 				HideWithParent();

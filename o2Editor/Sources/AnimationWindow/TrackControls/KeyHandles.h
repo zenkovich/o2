@@ -6,10 +6,14 @@ using namespace o2;
 
 namespace Editor
 {
+	class ITrackControl;
+
 	class AnimationKeyDragHandle : public WidgetDragHandle
 	{ 
 	public:
+		String          animatedValuePath;
 		IAnimatedValue* animatedValue = nullptr;
+		ITrackControl*  trackControl = nullptr;
 		UInt64          keyUid = 0;
 		bool            isMapping = false;
 
@@ -45,7 +49,9 @@ CLASS_BASES_META(Editor::AnimationKeyDragHandle)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
+	PUBLIC_FIELD(animatedValuePath);
 	PUBLIC_FIELD(animatedValue);
+	PUBLIC_FIELD(trackControl);
 	PUBLIC_FIELD(keyUid);
 	PUBLIC_FIELD(isMapping);
 }

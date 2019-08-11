@@ -39,7 +39,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets animated value, updates and creates key handles
-		void SetAnimatedValue(IAnimatedValue* animatedValue) override;
+		void SetAnimatedValue(IAnimatedValue* animatedValue, const String& path) override;
 
 		// Returns animated value
 		AnimatedValueType* GetAnimatedValue() const;
@@ -68,6 +68,8 @@ namespace Editor
 		typedef typename AnimatedValueType::ValueType AnimatedValueTypeValueType;
 
 		KeyHandlesVec mHandles; // List of handles, each for keys
+
+		String mAnimatedValuePath; // Path to animated value in animation
 
 		IPropertyField*                               mPropertyField;
 		AnimatedValueTypeValueType                    mPropertyValue = AnimatedValueTypeValueType();
@@ -152,8 +154,10 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SetAnimatedValue(IAnimatedValue* animatedValue)
+	void KeyFramesTrackControl<AnimatedValueType>::SetAnimatedValue(IAnimatedValue* animatedValue, const String& path)
 	{
+		mAnimatedValuePath = path;
+
 		if (mAnimatedValue)
 		{
 			mAnimatedValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
@@ -252,6 +256,8 @@ namespace Editor
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
 			handle->animatedValue = mAnimatedValue;
+			handle->animatedValuePath = mAnimatedValuePath;
+			handle->trackControl = this;
 			handle->keyUid = key.uid;
 			handle->isMapping = false;
 			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(mHandlesSheet));
@@ -377,6 +383,7 @@ META_TEMPLATES(typename AnimatedValueType)
 CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 {
 	PRIVATE_FIELD(mHandles);
+	PRIVATE_FIELD(mAnimatedValuePath);
 	PRIVATE_FIELD(mPropertyField);
 	PRIVATE_FIELD(mPropertyValue);
 	PRIVATE_FIELD(mPropertyValueProxy);
@@ -393,7 +400,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
+	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*, const String&);
 	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);

@@ -1,5 +1,7 @@
 #include "stdafx.h"
+
 #include "KeyHandles.h"
+#include "ITrackControl.h"
 
 namespace Editor
 {

@@ -86,6 +86,7 @@ namespace Editor
 		Dictionary<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 
 		ContextMenu* mContextMenu = nullptr; // Keys context menu
+		Vec2F        mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
 
 		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
 
@@ -210,6 +211,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mTrackControls);
 	PRIVATE_FIELD(mHandlesGroups);
 	PRIVATE_FIELD(mContextMenu);
+	PRIVATE_FIELD(mContextMenuPressPoint);
 	PRIVATE_FIELD(mNeedUpdateSelectionFrame);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);

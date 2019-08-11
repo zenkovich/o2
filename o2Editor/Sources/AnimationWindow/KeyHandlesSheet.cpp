@@ -510,16 +510,18 @@ namespace Editor
 	void KeyHandlesSheet::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
 		Focus();
+		mContextMenuPressPoint = cursor.position;
 	}
 
 	void KeyHandlesSheet::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{
-
 	}
 
 	void KeyHandlesSheet::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{
-		mContextMenu->Show();
+		const float threshold = 5.0f;
+		if ((cursor.position - mContextMenuPressPoint).Length() < threshold) 
+			mContextMenu->Show();
 	}
 
 	void KeyHandlesSheet::OnCursorMiddleMousePressed(const Input::Cursor& cursor)

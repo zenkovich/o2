@@ -37,7 +37,7 @@ namespace Editor
 		virtual void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
 		// Sets animated value, updates and creates key handles
-		virtual void SetAnimatedValue(IAnimatedValue* animatedValue);
+		virtual void SetAnimatedValue(IAnimatedValue* animatedValue, const String& path);
 
 		// Updates handles position on timeline
 		virtual void UpdateHandles();
@@ -77,7 +77,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 {
 
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*);
+	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*, const String&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);

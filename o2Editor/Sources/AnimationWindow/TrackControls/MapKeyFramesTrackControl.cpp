@@ -88,7 +88,7 @@ namespace Editor
 			if (newGroup)
 			{
 				newGroup->trackControl = this;
-				newGroup->InitializeHandles(valueNode.animatedValue);
+				newGroup->InitializeHandles(valueNode.animatedValue, valueNode.path);
 
 				mHandles.Add(valueNode.animatedValue, newGroup);
 			}

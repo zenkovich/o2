@@ -42,20 +42,20 @@ namespace Editor
 		void SetAnimation(Animation* animation);
 
 	protected:
-		float mTreeViewWidth = 250.0f;
+		float mTreeViewWidth = 250.0f; // Width of tree area. Changed by dragable separator
 
-		Animation* mAnimation = nullptr;
+		Animation* mAnimation = nullptr; // Editing animation
 
-		Widget* mUpPanel = nullptr;
-		Widget* mWorkArea = nullptr;
+		Widget* mUpPanel = nullptr;  // Up panel with control buttons
+		Widget* mWorkArea = nullptr; // Working area with tree and timeline
 
-		Widget*  mControlsPanel = nullptr;
-		Toggle*  mRecordToggle = nullptr;
-		Toggle*  mPlayPauseToggle = nullptr;
-		Toggle*  mLoopToggle = nullptr;
-		Button*  mAddKeyButton = nullptr;
+		Widget*  mControlsPanel = nullptr;   // Panel with buttons described below
+		Toggle*  mRecordToggle = nullptr;    // Record toggle
+		Toggle*  mPlayPauseToggle = nullptr; // Play - pause toggle
+		Toggle*  mLoopToggle = nullptr;      // Animation loop toggle
+		Button*  mAddKeyButton = nullptr;    // Add key on current time button
 
-		AnimationTimeline*   mTimeline = nullptr;
+		AnimationTimeline*   mTimeline = nullptr;     // ANimation timeline
 		HorizontalScrollBar* mTimeScroll = nullptr;
 		AnimationTree*       mTree = nullptr;
 		KeyHandlesSheet*     mHandlesSheet = nullptr;

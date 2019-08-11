@@ -119,6 +119,7 @@ namespace Editor
 			{
 				next = mnew AnimationValueNode();
 				next->name = subPath;
+				next->path = value.targetPath;
 
 				if (current)
 				{
@@ -352,7 +353,7 @@ namespace Editor
 				mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
 
 			mTrackControl->Initialize(mTimeline, mHandlesSheet);
-			mTrackControl->SetAnimatedValue(mData->animatedValue);
+			mTrackControl->SetAnimatedValue(mData->animatedValue, mData->path);
 
 			AddChild(mTrackControl);
 		}

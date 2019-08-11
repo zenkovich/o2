@@ -8,7 +8,6 @@
 
 namespace Editor
 {
-
 	AnimationTimeline::AnimationTimeline() :
 		Widget()
 	{
