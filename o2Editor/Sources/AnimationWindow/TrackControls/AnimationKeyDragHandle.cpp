@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "KeyHandles.h"
+#include "AnimationKeyDragHandle.h"
 #include "ITrackControl.h"
 
 namespace Editor

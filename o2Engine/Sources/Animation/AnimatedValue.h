@@ -148,6 +148,9 @@ namespace o2
 		// Returns key at position
 		Key GetKey(float position) const;
 
+		// Returns key at index
+		Key GetKeyAt(int idx) const;
+
 		// Returns key by uid
 		Key FindKey(UInt64 uid) const;
 
@@ -460,6 +463,12 @@ namespace o2
 		}
 
 		return Key();
+	}
+
+	template<typename _type>
+	typename AnimatedValue<_type>::Key AnimatedValue<_type>::GetKeyAt(int idx) const
+	{
+		return mKeys[idx];
 	}
 
 	template<typename _type>
@@ -905,6 +914,7 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);

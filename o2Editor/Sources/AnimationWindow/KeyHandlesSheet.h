@@ -2,7 +2,7 @@
 
 #include "Utils/Editor/DragHandle.h"
 #include "Events/CursorEventsListener.h"
-#include "TrackControls/KeyHandles.h"
+#include "TrackControls/AnimationKeyDragHandle.h"
 
 namespace o2
 {
@@ -56,7 +56,7 @@ namespace Editor
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Registers animation value track control
-		void RegTrackControl(ITrackControl* trackControl);
+		void RegTrackControl(ITrackControl* trackControl, const std::string& path);
 
 		// Unregisters animation value track control
 		void UnregTrackControl(ITrackControl* trackControl);
@@ -81,7 +81,8 @@ namespace Editor
 		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
 		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
 
-		Vector<ITrackControl*> mTrackControls; // List of actual track controls
+		Vector<ITrackControl*> mTrackControls;                // List of actual track controls
+		Dictionary<String, ITrackControl*> mTrackControlsMap; // Map of actial track controls, key is animated value path
 
 		Dictionary<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 
@@ -209,6 +210,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
 	PRIVATE_FIELD(mTrackControls);
+	PRIVATE_FIELD(mTrackControlsMap);
 	PRIVATE_FIELD(mHandlesGroups);
 	PRIVATE_FIELD(mContextMenu);
 	PRIVATE_FIELD(mContextMenuPressPoint);
@@ -232,7 +234,7 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateInputDrawOrder);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, RegTrackControl, ITrackControl*);
+	PUBLIC_FUNCTION(void, RegTrackControl, ITrackControl*, const std::string&);
 	PUBLIC_FUNCTION(void, UnregTrackControl, ITrackControl*);
 	PUBLIC_FUNCTION(void, UnregAllTrackControls);
 	PUBLIC_FUNCTION(void, AddHandle, DragHandle*);

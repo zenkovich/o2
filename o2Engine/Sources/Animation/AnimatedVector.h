@@ -100,6 +100,9 @@ namespace o2
 		// Returns key at position
 		Key GetKey(float position) const;
 
+		// Returns key at index
+		Key GetKeyAt(int idx) const;
+
 		// Returns key by uid
 		Key FindKey(UInt64 uid) const;
 
@@ -278,6 +281,7 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(Key, GetKey, float);
+	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);

@@ -9,6 +9,7 @@
 #include "Timeline.h"
 #include "TrackControls/ITrackControl.h"
 #include "Tree.h"
+#include "Utils/System/Clipboard.h"
 
 namespace Editor
 {
@@ -116,19 +117,22 @@ namespace Editor
 		return Widget::IsUnderPoint(point);
 	}
 
-	void KeyHandlesSheet::RegTrackControl(ITrackControl* trackControl)
+	void KeyHandlesSheet::RegTrackControl(ITrackControl* trackControl, const std::string& path)
 	{
 		mTrackControls.Add(trackControl);
+		mTrackControlsMap.Add(path, trackControl);
 	}
 
 	void KeyHandlesSheet::UnregTrackControl(ITrackControl* trackControl)
 	{
-		mTrackControls.Remove(trackControl);
+		mTrackControls.Remove(trackControl);		
+		mTrackControlsMap.RemoveAll([=](auto kv) { return kv.Value() == trackControl; });
 	}
 
 	void KeyHandlesSheet::UnregAllTrackControls()
 	{
 		mTrackControls.Clear();
+		mTrackControlsMap.Clear();
 	}
 
 	void KeyHandlesSheet::AddHandle(DragHandle* handle)
@@ -400,12 +404,55 @@ namespace Editor
 
 	void KeyHandlesSheet::CopyKeys()
 	{
+		DataNode data;
 
+		Dictionary<String, Pair<DataNode*, Vector<UInt64>>> serializedKeysUids;
+		for (auto handle : mSelectedHandles)
+		{
+			if (auto keyHandle = dynamic_cast<AnimationKeyDragHandle*>(handle)) 
+			{
+				if (!serializedKeysUids.ContainsKey(keyHandle->animatedValuePath))
+				{
+					auto pathNode = data.AddNode("KeysGroup");
+					*pathNode->AddNode("Path") = keyHandle->animatedValuePath;
+					serializedKeysUids.Add(keyHandle->animatedValuePath, { pathNode->AddNode("Keys"), {} });
+				}
+
+				if (serializedKeysUids[keyHandle->animatedValuePath].second.Contains(keyHandle->keyUid))
+					continue;
+
+				auto& pair = serializedKeysUids[keyHandle->animatedValuePath];
+
+				auto node = pair.first->AddNode("key");
+				keyHandle->trackControl->SerializeKey(keyHandle->keyUid, *node, mAnimation->GetTime());
+				
+				serializedKeysUids[keyHandle->animatedValuePath].second.Add(keyHandle->keyUid);
+			}
+		}
+
+		Clipboard::SetText(data.SaveAsWString());
 	}
 
 	void KeyHandlesSheet::PasteKeys()
 	{
+		DataNode data;
+		data.LoadFromData(Clipboard::GetText());
 
+		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->BeginKeysBatchChange();
+
+		for (auto pathNode : data) 
+		{
+			String path = *pathNode->GetNode("Path");
+			if (mTrackControlsMap.ContainsKey(path)) 
+			{
+				for (auto keyNode : *pathNode->GetNode("Keys"))
+					mTrackControlsMap[path]->DeserializeKey(data, mAnimation->GetTime());
+			}
+		}		
+
+		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 	}
 
 	void KeyHandlesSheet::DeleteKeys()

@@ -41,6 +41,9 @@ namespace Editor
 		// Updates handles position on timeline
 		void UpdateHandles() override;
 
+		// Serialize key with specified uid into data node
+		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
+
 		// Updates handles positions for specified animated value
 		void UpdateHandlesForValue(IAnimatedValue* animatedValue);
 
@@ -83,6 +86,7 @@ namespace Editor
 			virtual void CreateHandles() = 0;
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
 			virtual void UpdateHandles() = 0;
+			virtual bool SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) = 0;
 			void CacheHandles();
 		};
 
@@ -98,12 +102,13 @@ namespace Editor
 			void CreateHandles() override;
 			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
 			void UpdateHandles() override;
+			bool SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
 		};
 
 		typedef Dictionary<IAnimatedValue*, IHandlesGroup*> AnimatedValueKeyHandlesDict;
 
 	private:
-		AnimatedValueKeyHandlesDict mHandles;                // List of handles, each for keys
+		AnimatedValueKeyHandlesDict mHandlesGroups;          // List of handles, each for keys
 		Vector<IAnimatedValue*>     mAnimatedValues;         // Editing animated values
 		AnimationTimeline*          mTimeline = nullptr;     // Timeline used for calculating handles positions
 		KeyHandlesSheet*            mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
@@ -229,6 +234,20 @@ namespace Editor
 
 		trackControl->mDisableHandlesUpdate = false;
 	}
+
+	template<typename AnimationValueType>
+	bool MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	{
+		int idx = animatedValue->FindKeyIdx(keyUid);
+		if (idx < 0)
+			return false;
+
+		auto key = animatedValue->GetKeyAt(idx);
+		key.position -= relativeTime;
+		data.SetValue(key);
+
+		return true;
+	}
 }
 
 CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
@@ -238,7 +257,7 @@ CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
 END_META;
 CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 {
-	PRIVATE_FIELD(mHandles);
+	PRIVATE_FIELD(mHandlesGroups);
 	PRIVATE_FIELD(mAnimatedValues);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mHandlesSheet);
@@ -253,6 +272,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
+	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);

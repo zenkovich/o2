@@ -94,13 +94,13 @@ namespace Editor
 		*playPanelPlayStateAnim.AddAnimationValue<float>("layout/offsetRight") =
 			AnimatedValue<float>::EaseInOut(149.0f, 183.0f, 0.3f);
 
-		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddAnimationValue<float>("child/pause/enabled");
+		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddAnimationValue<bool>("child/pause/enabled");
 		visiblePauseBtnAnim->AddKey(0.0f, false);
 		visiblePauseBtnAnim->AddKey(0.1f, false);
 		visiblePauseBtnAnim->AddKey(0.11f, true);
 		visiblePauseBtnAnim->AddKey(0.3f, true);
 
-		auto visibleStepBtnAnim = playPanelPlayStateAnim.AddAnimationValue<float>("child/step/enabled");
+		auto visibleStepBtnAnim = playPanelPlayStateAnim.AddAnimationValue<bool>("child/step/enabled");
 		visibleStepBtnAnim->AddKey(0.0f, false);
 		visibleStepBtnAnim->AddKey(0.25f, false);
 		visibleStepBtnAnim->AddKey(0.26f, true);

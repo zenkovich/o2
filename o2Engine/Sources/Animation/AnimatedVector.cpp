@@ -169,6 +169,11 @@ namespace o2
 		return Key();
 	}
 
+	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::GetKeyAt(int idx) const
+	{
+		return mKeys[idx];
+	}
+
 	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::FindKey(UInt64 uid) const
 	{
 		for (auto& key : mKeys)

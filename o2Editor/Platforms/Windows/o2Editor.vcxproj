@@ -151,7 +151,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>Disabled</Optimization>
+      <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -159,9 +159,13 @@
       <OmitFramePointers>true</OmitFramePointers>
       <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <MinimalRebuild>false</MinimalRebuild>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <ExceptionHandling>false</ExceptionHandling>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -211,7 +215,7 @@
     <ClInclude Include="..\..\Sources\AnimationWindow\Timeline.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
-    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\KeyHandles.h" />
+    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\Tree.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetIcon.h" />
@@ -321,7 +325,7 @@
     <ClCompile Include="..\..\Sources\AnimationWindow\Timeline.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
-    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyHandles.cpp" />
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\Tree.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetIcon.cpp" />

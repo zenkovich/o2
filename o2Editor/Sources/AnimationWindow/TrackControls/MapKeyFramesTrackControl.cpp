@@ -17,7 +17,7 @@ namespace Editor
 
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()
 	{
-		for (auto kv : mHandles)
+		for (auto kv : mHandlesGroups)
 			delete kv.Value();
 	}
 
@@ -61,13 +61,13 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::CacheHandles()
 	{
-		for (auto kv : mHandles)
+		for (auto kv : mHandlesGroups)
 		{
 			kv.Value()->CacheHandles();
 			delete kv.Value();
 		}
 
-		mHandles.Clear();
+		mHandlesGroups.Clear();
 	}
 
 	void MapKeyFramesTrackControl::InitializeNodeHandles(const AnimationTree::AnimationValueNode& valueNode)
@@ -90,7 +90,7 @@ namespace Editor
 				newGroup->trackControl = this;
 				newGroup->InitializeHandles(valueNode.animatedValue, valueNode.path);
 
-				mHandles.Add(valueNode.animatedValue, newGroup);
+				mHandlesGroups.Add(valueNode.animatedValue, newGroup);
 			}
 		}
 
@@ -103,14 +103,23 @@ namespace Editor
 		if (mDisableHandlesUpdate)
 			return;
 
-		for (auto kv : mHandles)
+		for (auto kv : mHandlesGroups)
 			kv.Value()->UpdateHandles();
+	}
+
+	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	{
+		for (auto kv : mHandlesGroups)
+		{
+			if (kv.Value()->SerializeKey(keyUid, data, relativeTime))
+				break;
+		}
 	}
 
 	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)
 	{
-		if (mHandles.ContainsKey(animatedValue))
-			mHandles[animatedValue]->UpdateHandles();
+		if (mHandlesGroups.ContainsKey(animatedValue))
+			mHandlesGroups[animatedValue]->UpdateHandles();
 	}
 
 	void MapKeyFramesTrackControl::BeginKeysDrag()
@@ -161,7 +170,7 @@ namespace Editor
 	{
 		Vector<KeyHandle*> res;
 
-		for (auto kv : mHandles)
+		for (auto kv : mHandlesGroups)
 		{
 			for (auto keyHandle : kv.Value()->handles)
 			{

@@ -3,7 +3,7 @@
 #include "Animation/AnimatedValue.h"
 #include "Core/Properties/IPropertyField.h"
 #include "Scene/UI/Widget.h"
-#include "KeyHandles.h"
+#include "AnimationKeyDragHandle.h"
 
 namespace o2
 {
@@ -60,6 +60,12 @@ namespace Editor
 		// It is called when group of keys completed drag
 		virtual void EndKeysDrag();
 
+		// Serialize key with specified uid into data node
+		virtual void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime);
+
+		// Deserialize key from data node and paste on track
+		virtual void DeserializeKey(const DataNode& data, float relativeTime);
+
 		SERIALIZABLE(ITrackControl);
 	};
 }
@@ -85,5 +91,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);
+	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
+	PUBLIC_FUNCTION(void, DeserializeKey, const DataNode&, float);
 }
 END_META;

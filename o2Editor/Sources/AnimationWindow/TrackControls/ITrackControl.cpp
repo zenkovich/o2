@@ -37,6 +37,12 @@ namespace Editor
 	void ITrackControl::EndKeysDrag()
 	{}
 
+	void ITrackControl::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	{}
+
+	void ITrackControl::DeserializeKey(const DataNode& data, float relativeTime)
+	{}
+
 	bool ITrackControl::KeyHandle::operator==(const KeyHandle& other) const
 	{
 		return handle == other.handle;

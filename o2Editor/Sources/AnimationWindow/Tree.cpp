@@ -58,6 +58,8 @@ namespace Editor
 
 	void AnimationTree::SetAnimation(Animation* animation)
 	{
+		mHandlesSheet->UnregAllTrackControls();
+
 		mAnimation = animation;
 
 		RebuildAnimationTree();
@@ -364,7 +366,7 @@ namespace Editor
 		if (auto addKey = mTrackControl->GetAddKeyButton())
 			AddChild(addKey);
 
-		mHandlesSheet->RegTrackControl(mTrackControl);
+		mHandlesSheet->RegTrackControl(mTrackControl, mData->path);
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()

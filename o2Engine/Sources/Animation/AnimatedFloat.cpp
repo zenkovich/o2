@@ -136,6 +136,11 @@ namespace o2
 		return curve.GetKey(position);
 	}
 
+	AnimatedValue<float>::Key AnimatedValue<float>::GetKeyAt(int idx) const
+	{
+		return curve.GetKeyAt(idx);
+	}
+
 	AnimatedValue<float>::Key AnimatedValue<float>::FindKey(UInt64 uid) const
 	{
 		return curve.FindKey(uid);
@@ -291,7 +296,7 @@ namespace o2
 		float eventCheckEnd = Math::Max(lastInDurationTime, mInDurationTime);
 		for (auto& kv : mTimeEvents)
 		{
-			if (kv.Key() > eventCheckBeg && kv.Key() <= eventCheckEnd)
+			if (kv.Key() > eventCheckBeg && kv.Value() <= eventCheckEnd)
 				kv.Value().Invoke();
 		}
 	}

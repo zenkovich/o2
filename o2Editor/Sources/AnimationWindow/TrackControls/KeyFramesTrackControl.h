@@ -6,7 +6,7 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Scene/UI/Widget.h"
-#include "KeyHandles.h"
+#include "AnimationKeyDragHandle.h"
 
 using namespace o2;
 
@@ -58,6 +58,12 @@ namespace Editor
 
 		// Returns add button
 		Button* GetAddKeyButton() const override;
+
+		// Serialize key with specified uid into data node
+		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
+
+		// Deserialize key from data node and paste on track
+		void DeserializeKey(const DataNode& data, float relativeTime) override;
 
 		// Inserts new key at time
 		void InsertNewKey(float time);
@@ -371,6 +377,23 @@ namespace Editor
 			InitializeHandles();
 		}
 	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	{
+		auto key = mAnimatedValue->FindKey(keyUid);
+		key.position -= relativeTime;
+		data.SetValue(key);
+	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::DeserializeKey(const DataNode& data, float relativeTime)
+	{
+		AnimatedValueType::Key key;
+		data.GetValue(key);
+		key.position += relativeTime;
+		mAnimatedValue->AddKey(key);
+	}
 }
 
 META_TEMPLATES(typename AnimatedValueType)
@@ -407,6 +430,8 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
 	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
+	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
+	PUBLIC_FUNCTION(void, DeserializeKey, const DataNode&, float);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);
