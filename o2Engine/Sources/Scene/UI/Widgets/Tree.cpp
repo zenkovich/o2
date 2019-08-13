@@ -364,6 +364,11 @@ namespace o2
 		fillNodeDataByObjectDelegate(nodeWidget, object);
 	}
 
+	void Tree::FreeNodeData(TreeNode* nodeWidget, UnknownPtr object)
+	{
+		freeNodeDataDelegate(nodeWidget, object);
+	}
+
 	void Tree::OnNodeDblClick(TreeNode* nodeWidget)
 	{
 		onNodeDoubleClicked(nodeWidget);
@@ -977,6 +982,8 @@ namespace o2
 
 				if (node->widget)
 				{
+					FreeNodeData(node->widget, node->object);
+
 					mNodeWidgetsBuf.Add(node->widget);
 					mChildren.Remove(node->widget);
 					mChildWidgets.Remove(node->widget);

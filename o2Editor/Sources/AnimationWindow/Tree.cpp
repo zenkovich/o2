@@ -198,6 +198,12 @@ namespace Editor
 		node->Setup((AnimationValueNode*)object, mTimeline, mHandlesSheet);
 	}
 
+	void AnimationTree::FreeNodeData(TreeNode* nodeWidget, UnknownPtr object)
+	{
+		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
+		node->Free();
+	}
+
 	void AnimationTree::UpdateVisibleNodes()
 	{
 		Tree::UpdateVisibleNodes();
@@ -244,6 +250,11 @@ namespace Editor
 		mData->trackControl = mTrackControl;
 	}
 
+	void AnimationTreeNode::Free()
+	{
+		FreeTrackControl();
+	}
+
 	void AnimationTreeNode::SetTreeWidth(float width)
 	{
 		if (mTrackControl)
@@ -288,6 +299,8 @@ namespace Editor
 		mNameDrawable = GetLayerDrawable<Text>("name");
 	}
 
+	Dictionary<const Type*, o2::Vector<ITrackControl*>> AnimationTreeNode::mTrackControlsCache;
+
 	void AnimationTreeNode::InitilizeTrackControl()
 	{
 		PushScopeEnterOnStack scope;
@@ -300,35 +313,14 @@ namespace Editor
 			{ &TypeOf(AnimatedValue<Color4>), &TypeOf(KeyFramesTrackControl<AnimatedValue<Color4>>) }
 		};
 
-		static Dictionary<const Type*, Vector<ITrackControl*>> trackControlsCache;
-
-		if (mTrackControl)
-		{
-			auto trackType = &mTrackControl->GetType();
-			if (!trackControlsCache.ContainsKey(trackType))
-				trackControlsCache.Add(trackType, Vector<ITrackControl*>());
-
-			trackControlsCache[trackType].Add(mTrackControl);
-
-			RemoveChild(mTrackControl, false);
-
-			if (auto prop = mTrackControl->GetPropertyField())
-				RemoveChild(prop, false);
-
-			if (auto addKey = mTrackControl->GetAddKeyButton())
-				RemoveChild(addKey, false);
-
-			mHandlesSheet->UnregTrackControl(mTrackControl);
-		}
-
-		mTrackControl = nullptr;
+		FreeTrackControl();
 
 		if (!mData->animatedValue)
 		{
 			MapKeyFramesTrackControl* trackControl = nullptr;
 			auto trackControlType = &TypeOf(MapKeyFramesTrackControl);
-			if (trackControlsCache.ContainsKey(trackControlType) && !trackControlsCache[trackControlType].IsEmpty())
-				trackControl = dynamic_cast<MapKeyFramesTrackControl*>(trackControlsCache[trackControlType].PopBack());
+			if (mTrackControlsCache.ContainsKey(trackControlType) && !mTrackControlsCache[trackControlType].IsEmpty())
+				trackControl = dynamic_cast<MapKeyFramesTrackControl*>(mTrackControlsCache[trackControlType].PopBack());
 			else
 				trackControl = mnew MapKeyFramesTrackControl();
 
@@ -349,8 +341,8 @@ namespace Editor
 			}
 
 			auto trackControlType = dynamic_cast<const ObjectType*>(animatedValueToControlTrackTypes[animatedValueType]);
-			if (trackControlsCache.ContainsKey(trackControlType) && !trackControlsCache[trackControlType].IsEmpty())
-				mTrackControl = trackControlsCache[trackControlType].PopBack();
+			if (mTrackControlsCache.ContainsKey(trackControlType) && !mTrackControlsCache[trackControlType].IsEmpty())
+				mTrackControl = mTrackControlsCache[trackControlType].PopBack();
 			else
 				mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
 
@@ -367,6 +359,30 @@ namespace Editor
 			AddChild(addKey);
 
 		mHandlesSheet->RegTrackControl(mTrackControl, mData->path);
+	}
+
+	void AnimationTreeNode::FreeTrackControl()
+	{
+		if (mTrackControl)
+		{
+			auto trackType = &mTrackControl->GetType();
+			if (!mTrackControlsCache.ContainsKey(trackType))
+				mTrackControlsCache.Add(trackType, Vector<ITrackControl*>());
+
+			mTrackControlsCache[trackType].Add(mTrackControl);
+
+			RemoveChild(mTrackControl, false);
+
+			if (auto prop = mTrackControl->GetPropertyField())
+				RemoveChild(prop, false);
+
+			if (auto addKey = mTrackControl->GetAddKeyButton())
+				RemoveChild(addKey, false);
+
+			mHandlesSheet->UnregTrackControl(mTrackControl);
+		}
+
+		mTrackControl = nullptr;
 	}
 
 	void AnimationTreeNode::UpdateTrackControlView()

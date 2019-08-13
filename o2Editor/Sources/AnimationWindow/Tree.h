@@ -103,6 +103,9 @@ namespace Editor
 		// Sets nodeWidget data by object
 		void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object) override;
 
+		// Free node data
+		void FreeNodeData(TreeNode* nodeWidget, UnknownPtr object) override;
+
 		// Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
 		void UpdateVisibleNodes() override;
 
@@ -127,8 +130,11 @@ namespace Editor
 		// Copy operator
 		AnimationTreeNode& operator=(const AnimationTreeNode& other);
 
-		// Sets object and updates content
+		// Sets object and updates track control
 		void Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
+
+		// Free node, unregister track control
+		void Free();
 
 		// Sets width of tree part and control part
 		void SetTreeWidth(float width);
@@ -152,6 +158,8 @@ namespace Editor
 
 		ITrackControl* mTrackControl = nullptr; // Animated value editor
 
+		static Dictionary<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
+
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
@@ -164,6 +172,9 @@ namespace Editor
 
 		// Initializes suitable track control for animated value by type. Caching track controls
 		void InitilizeTrackControl();
+
+		// Free track control and put it unto buffer
+		void FreeTrackControl();
 
 		// Updates drag handles positions on timeline
 		void UpdateTrackControlView();
@@ -205,6 +216,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
 	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
+	PRIVATE_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 }
@@ -231,12 +243,14 @@ CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
 	PUBLIC_FUNCTION(void, Setup, AnimationTree::AnimationValueNode*, AnimationTimeline*, KeyHandlesSheet*);
+	PUBLIC_FUNCTION(void, Free);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, InitilizeTrackControl);
+	PROTECTED_FUNCTION(void, FreeTrackControl);
 	PROTECTED_FUNCTION(void, UpdateTrackControlView);
 }
 END_META;

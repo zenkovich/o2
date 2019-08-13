@@ -31,6 +31,7 @@ namespace o2
 		Function<UnknownPtr(UnknownPtr)>         getObjectParentDelegate;        // Getting objects' parent delegate
 		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;      // Getting objects' childs count delegate 
 		Function<void(TreeNode*, UnknownPtr)>    fillNodeDataByObjectDelegate;   // Setup tree node item delegate
+		Function<void(TreeNode*, UnknownPtr)>    freeNodeDataDelegate;           // Free tree node data delegate
 
 		Function<String(UnknownPtr)> getDebugForObject;              // Getting debug string for object delegate
 
@@ -312,6 +313,9 @@ namespace o2
 		// Sets nodeWidget data by object
 		virtual void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object);
 
+		// Free node data
+		virtual void FreeNodeData(TreeNode* nodeWidget, UnknownPtr object);
+
 		// It is called when tree node was double clicked
 		virtual void OnNodeDblClick(TreeNode* nodeWidget);
 
@@ -566,6 +570,7 @@ CLASS_FIELDS_META(o2::Tree)
 	PUBLIC_FIELD(getObjectParentDelegate);
 	PUBLIC_FIELD(getObjectChildrenDelegate);
 	PUBLIC_FIELD(fillNodeDataByObjectDelegate);
+	PUBLIC_FIELD(freeNodeDataDelegate);
 	PUBLIC_FIELD(getDebugForObject);
 	PUBLIC_FIELD(onNodeDoubleClicked);
 	PUBLIC_FIELD(onNodeRightButtonClicked);
@@ -672,6 +677,7 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
 	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnNodeDblClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnNodeRBClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
