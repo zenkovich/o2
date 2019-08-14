@@ -1261,6 +1261,8 @@ namespace o2
 					Node* node = mAllNodes[i];
 					if (node->widget)
 					{
+						FreeNodeData(node->widget, node->object);
+
 						mNodeWidgetsBuf.Add(node->widget);
 						mChildren.Remove(node->widget);
 						mChildWidgets.Remove(node->widget);
