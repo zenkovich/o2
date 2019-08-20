@@ -444,10 +444,13 @@ namespace Editor
 		for (auto pathNode : data) 
 		{
 			String path = *pathNode->GetNode("Path");
-			if (mTrackControlsMap.ContainsKey(path)) 
+			for (auto kv : mTrackControlsMap)
 			{
+				if (kv.Key() != path) 
+					continue;
+
 				for (auto keyNode : *pathNode->GetNode("Keys"))
-					mTrackControlsMap[path]->DeserializeKey(data, mAnimation->GetTime());
+					kv.Value()->DeserializeKey(*keyNode, mAnimation->GetTime());
 			}
 		}		
 

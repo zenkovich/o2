@@ -89,6 +89,8 @@ namespace Editor
 		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
 		KeyHandlesSheet*   mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
 
+		bool mDisableHandlesUpdate = false;  // It is true when handles are changing and combining or updating is not available
+
 	private:
 		void InitializeControls();
 		void InitializeHandles();
@@ -136,10 +138,14 @@ namespace Editor
 
 		OnDrawn();
 
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+		RectF clipRect = mTimeline->layout->GetWorldRect();
+		o2Render.EnableScissorTest();
 
 		for (auto child : mDrawingChildren)
-			child->Draw();
+		{
+			if (child->layout->GetWorldRect().IsIntersects(mTimeline->layout->GetWorldRect()))
+				child->Draw();
+		}
 
 		o2Render.DisableScissorTest();
 
@@ -242,6 +248,7 @@ namespace Editor
 			x->handle->SetEnabled(false); 
 			x->handle->SetSelectionGroup(nullptr);
 			x->handle->SetSelected(false);
+			x->handle->onChangedPos.Clear();
 			return x->handle; 
 		});
 
@@ -275,12 +282,16 @@ namespace Editor
 			mHandles.Add(keyhandle);
 
 			handle->onChangedPos = [=](const Vec2F& pos) {
+				mDisableHandlesUpdate = true;
+
 				int keyIdx = mAnimatedValue->FindKeyIdx(keyhandle->keyUid);
 				auto key = mAnimatedValue->GetKeys()[keyIdx];
 				key.position = pos.x;
 
 				mAnimatedValue->RemoveKeyAt(keyIdx);
 				mAnimatedValue->AddKey(key);
+
+				mDisableHandlesUpdate = false;
 			};
 
 		}
@@ -292,8 +303,18 @@ namespace Editor
 		if (!mAnimatedValue)
 			return;
 
-		for (auto keyHandle : mHandles)
-			keyHandle->handle->SetPosition(Vec2F(mAnimatedValue->FindKey(keyHandle->keyUid).position, 0.0f));
+		if (mDisableHandlesUpdate)
+			return;
+
+		if (mAnimatedValue->GetKeys().Count() != mHandles.Count())
+		{
+			InitializeHandles();
+		}
+		else
+		{
+			for (auto keyHandle : mHandles)
+				keyHandle->handle->SetPosition(Vec2F(mAnimatedValue->FindKey(keyHandle->keyUid).position, 0.0f));
+		}
 	}
 
 	template<typename AnimatedValueType>
@@ -392,6 +413,7 @@ namespace Editor
 		AnimatedValueType::Key key;
 		data.GetValue(key);
 		key.position += relativeTime;
+		key.uid = Math::Random();
 		mAnimatedValue->AddKey(key);
 	}
 }
@@ -415,6 +437,7 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PRIVATE_FIELD(mAnimatedValue);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mHandlesSheet);
+	PRIVATE_FIELD(mDisableHandlesUpdate);
 }
 END_META;
 META_TEMPLATES(typename AnimatedValueType)
