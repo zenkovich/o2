@@ -63,7 +63,10 @@ namespace Editor
 		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
 
 		// Deserialize key from data node and paste on track
-		void DeserializeKey(const DataNode& data, float relativeTime) override;
+		UInt64 DeserializeKey(const DataNode& data, float relativeTime) override;
+
+		// Removes key from track
+		void DeleteKey(UInt64 keyUid) override;
 
 		// Inserts new key at time
 		void InsertNewKey(float time);
@@ -138,16 +141,15 @@ namespace Editor
 
 		OnDrawn();
 
-		RectF clipRect = mTimeline->layout->GetWorldRect();
-		o2Render.EnableScissorTest();
-
-		for (auto child : mDrawingChildren)
-		{
-			if (child->layout->GetWorldRect().IsIntersects(mTimeline->layout->GetWorldRect()))
-				child->Draw();
-		}
-
-		o2Render.DisableScissorTest();
+// 		RectF clipRect = mTimeline->layout->GetWorldRect();
+// 		o2Render.EnableScissorTest(clipRect);
+// 
+// 		for (auto child : mDrawingChildren)
+// 		{
+// 			child->Draw();
+// 		}
+// 
+// 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
 	}
@@ -408,14 +410,25 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::DeserializeKey(const DataNode& data, float relativeTime)
+	UInt64 KeyFramesTrackControl<AnimatedValueType>::DeserializeKey(const DataNode& data, float relativeTime)
 	{
 		AnimatedValueType::Key key;
 		data.GetValue(key);
 		key.position += relativeTime;
 		key.uid = Math::Random();
 		mAnimatedValue->AddKey(key);
+
+		return key.uid;
 	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::DeleteKey(UInt64 keyUid)
+	{
+		int idx = mAnimatedValue->FindKeyIdx(keyUid);
+		if (idx >= 0)
+			mAnimatedValue->RemoveKeyAt(idx);
+	}
+
 }
 
 META_TEMPLATES(typename AnimatedValueType)
@@ -454,7 +467,8 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
 	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
-	PUBLIC_FUNCTION(void, DeserializeKey, const DataNode&, float);
+	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float);
+	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);

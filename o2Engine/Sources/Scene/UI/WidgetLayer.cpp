@@ -99,7 +99,7 @@ namespace o2
 
 	void WidgetLayer::Draw()
 	{
-		if (mEnabled)
+		if (mEnabled && mResTransparency > FLT_EPSILON)
 			mDrawable->Draw();
 	}
 

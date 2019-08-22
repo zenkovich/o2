@@ -24,7 +24,7 @@ namespace o2
 		inline Rect(T left, T top, T right, T bottom);
 
 		template<typename RT>
-		inline operator Rect<RT>();
+		inline operator Rect<RT>() const;
 
 		inline bool    operator==(const Rect<T>& rt) const;
 		inline bool    operator!=(const Rect<T>& rt) const;
@@ -119,7 +119,7 @@ namespace o2
 
 	template<typename T>
 	template<typename RT>
-	Rect<T>::operator Rect<RT>()
+	Rect<T>::operator Rect<RT>() const
 	{
 		return Rect<RT>((RT)left, (RT)top, (RT)right, (RT)bottom);
 	}

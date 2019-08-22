@@ -35,12 +35,12 @@ namespace Editor
 
 		OnDrawn();
 
-		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
-
-		for (auto child : mDrawingChildren)
-			child->Draw();
-
-		o2Render.DisableScissorTest();
+// 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+// 
+// 		for (auto child : mDrawingChildren)
+// 			child->Draw();
+// 
+// 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
 	}
@@ -114,6 +114,12 @@ namespace Editor
 			if (kv.Value()->SerializeKey(keyUid, data, relativeTime))
 				break;
 		}
+	}
+
+	void MapKeyFramesTrackControl::DeleteKey(UInt64 keyUid)
+	{
+		for (auto kv : mHandlesGroups)
+			kv.Value()->DeleteKey(keyUid);
 	}
 
 	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)

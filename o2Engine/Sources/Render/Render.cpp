@@ -453,6 +453,16 @@ namespace o2
 		return !mStackScissors.IsEmpty();
 	}
 
+	bool Render::IsClippedByScissor(const RectF& rect) const
+	{
+		return !GetScissorRect().IsIntersects(rect);
+	}
+
+	bool Render::IsClippedByScissor(const Vec2F& point) const
+	{
+		return !GetScissorRect().IsInside(point);
+	}
+
 	void Render::DrawMesh(Mesh* mesh)
 	{
 		DrawBuffer(PrimitiveType::Polygon, mesh->vertices, mesh->vertexCount,

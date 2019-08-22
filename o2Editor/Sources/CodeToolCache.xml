@@ -63,36 +63,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/Timeline.h">
-		<date year="2019" month="8" day="9" hour="14" minute="55" second="48" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="AnimationTimeline" fullname="Editor::AnimationTimeline" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Widget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/AnimationKeyDragHandle.h">
 		<date year="2019" month="8" day="12" hour="8" minute="42" second="55" />
 		<globalNamespace name="" fullname="">
@@ -105,94 +75,6 @@
 							<usings />
 							<baseClasses>
 								<class name="WidgetDragHandle" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/ITrackControl.h">
-		<date year="2019" month="8" day="12" hour="15" minute="51" second="40" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ITrackControl" fullname="Editor::ITrackControl" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="KeyHandle" fullname="Editor::ITrackControl::KeyHandle" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;KeyHandle*&gt;" newDef="KeyHandlesVec" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="Widget" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h">
-		<date year="2019" month="8" day="12" hour="15" minute="51" second="40" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="MapKeyFramesTrackControl" fullname="Editor::MapKeyFramesTrackControl" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="KeyHandle" fullname="Editor::MapKeyFramesTrackControl::KeyHandle" isClass="true" isMeta="false" templates="" protection="1" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="IHandlesGroup" fullname="Editor::MapKeyFramesTrackControl::IHandlesGroup" isClass="true" isMeta="false" templates="" protection="1" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="HandlesGroup" fullname="Editor::MapKeyFramesTrackControl::HandlesGroup" isClass="true" isMeta="false" templates="typename AnimationValueType" protection="1" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="IHandlesGroup" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;KeyHandle*&gt;" newDef="KeyHandlesVec" />
-								<typedef what="Dictionary&lt;IAnimatedValue*, IHandlesGroup*&gt;" newDef="AnimatedValueKeyHandlesDict" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ITrackControl" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -3527,8 +3409,47 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/ITrackControl.h">
+		<date year="2019" month="8" day="22" hour="14" minute="48" second="42" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ITrackControl" fullname="Editor::ITrackControl" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="KeyHandle" fullname="Editor::ITrackControl::KeyHandle" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;KeyHandle*&gt;" newDef="KeyHandlesVec" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="Widget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/KeyFramesTrackControl.h">
-		<date year="2019" month="8" day="20" hour="18" minute="48" second="25" />
+		<date year="2019" month="8" day="22" hour="14" minute="48" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -3541,6 +3462,85 @@
 							<usings />
 							<baseClasses>
 								<class name="ITrackControl" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h">
+		<date year="2019" month="8" day="22" hour="14" minute="48" second="42" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="MapKeyFramesTrackControl" fullname="Editor::MapKeyFramesTrackControl" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="KeyHandle" fullname="Editor::MapKeyFramesTrackControl::KeyHandle" isClass="true" isMeta="false" templates="" protection="1" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IHandlesGroup" fullname="Editor::MapKeyFramesTrackControl::IHandlesGroup" isClass="true" isMeta="false" templates="" protection="1" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="HandlesGroup" fullname="Editor::MapKeyFramesTrackControl::HandlesGroup" isClass="true" isMeta="false" templates="typename AnimationValueType" protection="1" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="IHandlesGroup" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;KeyHandle*&gt;" newDef="KeyHandlesVec" />
+								<typedef what="Dictionary&lt;IAnimatedValue*, IHandlesGroup*&gt;" newDef="AnimatedValueKeyHandlesDict" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ITrackControl" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/Timeline.h">
+		<date year="2019" month="8" day="22" hour="16" minute="25" second="5" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="AnimationTimeline" fullname="Editor::AnimationTimeline" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Widget" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

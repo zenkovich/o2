@@ -34,12 +34,8 @@ namespace Editor
 			return rect.IsInside(pos);
 		};
 
-		mTimeLineEventsArea.onMoved = [&](const Input::Cursor& cursor) {
-			if (cursor.isPressed && mAnimation) {
-				mAnimation->Stop();
-				mAnimation->SetTime(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
-			}
-		};
+		mTimeLineEventsArea.onMoved = THIS_FUNC(SetAnimationTimeByCursor);
+		mTimeLineEventsArea.onCursorPressed = THIS_FUNC(SetAnimationTimeByCursor);
 	}
 
 	AnimationTimeline::AnimationTimeline(const AnimationTimeline& other) :
@@ -184,6 +180,14 @@ namespace Editor
 	{
 		UpdateScrollBarHandleSize();
 		Widget::OnTransformUpdated();
+	}
+
+	void AnimationTimeline::SetAnimationTimeByCursor(const Input::Cursor& cursor)
+	{
+		if (cursor.isPressed && mAnimation) {
+			mAnimation->Stop();
+			mAnimation->SetTime(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
+		}
 	}
 
 	void AnimationTimeline::ChooseScaleParams(int& bigLinePeriod, double& bigLineTimeAmount)

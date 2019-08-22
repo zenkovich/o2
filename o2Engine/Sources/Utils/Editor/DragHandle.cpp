@@ -193,47 +193,65 @@ namespace o2
 			return;
 
 		UpdateScreenPosition();
+		UpdateSpritesPositions();
 
 		float alphaChangeCoef = 15.0f;
 
 		if (mRegularSprite)
 			mRegularSprite->Draw();
-
 		
 		if (mHoverSprite && !(mIsSelected && mSelectedHoverSprite))
 		{
-			mHoverSprite->SetTransparency(Math::Lerp(mHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
-													 o2Time.GetDeltaTime()*alphaChangeCoef));
+			float transparency = Math::Lerp(mHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
+											o2Time.GetDeltaTime()*alphaChangeCoef);
+
+			if (!Math::Equals(transparency, mHoverSprite->GetTransparency()))
+				mHoverSprite->SetTransparency(transparency);
 
 			mHoverSprite->Draw();
 		}
 		
 		if (mPressedSprite && !(mIsSelected && mSelectedPressedSprite))
 		{
-			mPressedSprite->SetTransparency(Math::Lerp(mPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
-													   o2Time.GetDeltaTime()*alphaChangeCoef));
+			float transparency = Math::Lerp(mPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
+											o2Time.GetDeltaTime()*alphaChangeCoef);
+
+			if (!Math::Equals(transparency, mPressedSprite->GetTransparency()))
+				mPressedSprite->SetTransparency(transparency);
 
 			mPressedSprite->Draw();
 		}
 
 		if (mSelectedSprite)
 		{
-			mSelectedSprite->SetTransparency(Math::Lerp(mSelectedSprite->GetTransparency(), mIsSelected ? 1.0f : 0.0f,
-														o2Time.GetDeltaTime()*alphaChangeCoef));
+			float transparency = Math::Lerp(mSelectedSprite->GetTransparency(), mIsSelected ? 1.0f : 0.0f,
+											o2Time.GetDeltaTime()*alphaChangeCoef);
+
+			if (!Math::Equals(transparency, mSelectedSprite->GetTransparency()))
+				mSelectedSprite->SetTransparency(transparency);
 
 			mSelectedSprite->Draw();
 		}
 		
-		if (mIsSelected && mSelectedHoverSprite) {
-			mSelectedHoverSprite->SetTransparency(Math::Lerp(mSelectedHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
-															 o2Time.GetDeltaTime()*alphaChangeCoef));
+		if (mIsSelected && mSelectedHoverSprite)
+		{
+			float transparency = Math::Lerp(mSelectedHoverSprite->GetTransparency(), mIsHovered ? 1.0f : 0.0f,
+											o2Time.GetDeltaTime()*alphaChangeCoef);
+
+			if (!Math::Equals(transparency, mSelectedHoverSprite->GetTransparency()))
+				mSelectedHoverSprite->SetTransparency(transparency);
 
 			mSelectedHoverSprite->Draw();
 		}
 		
-		if (mIsSelected && mSelectedPressedSprite) {
-			mSelectedPressedSprite->SetTransparency(Math::Lerp(mSelectedPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
-															   o2Time.GetDeltaTime()*alphaChangeCoef));
+		if (mIsSelected && mSelectedPressedSprite) 
+		{
+
+			float transparency = Math::Lerp(mSelectedPressedSprite->GetTransparency(), mIsPressed ? 1.0f : 0.0f,
+											o2Time.GetDeltaTime()*alphaChangeCoef);
+
+			if (!Math::Equals(transparency, mSelectedPressedSprite->GetTransparency()))
+				mSelectedPressedSprite->SetTransparency(transparency);
 
 			mSelectedPressedSprite->Draw();
 		}
@@ -403,6 +421,14 @@ namespace o2
 			mScreenPosition.x = Math::Round(mScreenPosition.x);
 			mScreenPosition.y = Math::Round(mScreenPosition.y);
 		}
+	}
+
+	void DragHandle::UpdateSpritesPositions()
+	{
+		if (mLastDrawnScreenPosition == mScreenPosition)
+			return;
+
+		mLastDrawnScreenPosition = mScreenPosition;
 
 		if (mRegularSprite)
 			mRegularSprite->SetPosition(mScreenPosition);
@@ -684,8 +710,6 @@ namespace o2
 
 	void WidgetDragHandle::Draw()
 	{
-		Widget::Draw();
-
 		if (!mResEnabledInHierarchy)
 			return;
 

@@ -26,7 +26,7 @@ namespace Editor
 	{
 		WidgetDragHandle::Draw();
 
-		o2Debug.DrawText(GetScreenPosition(), String(mIsClipped));
+		//o2Debug.DrawText(GetScreenPosition(), String(mIsClipped));
 	}
 
 	Editor::AnimationKeyDragHandle& AnimationKeyDragHandle::operator=(const AnimationKeyDragHandle& other)

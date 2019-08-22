@@ -145,6 +145,9 @@ namespace Editor
 
 		// It is called when transformation was changed and updated. Updates scroll bar handle size
 		void OnTransformUpdated() override;
+
+		// Sets animation time by cursor screen position
+		void SetAnimationTimeByCursor(const Input::Cursor& cursor);
 	};
 }
 
@@ -214,5 +217,6 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PRIVATE_FUNCTION(void, UpdateZooming, float);
 	PRIVATE_FUNCTION(void, UpdateScrollBarHandleSize);
 	PRIVATE_FUNCTION(void, OnTransformUpdated);
+	PRIVATE_FUNCTION(void, SetAnimationTimeByCursor, const Input::Cursor&);
 }
 END_META;

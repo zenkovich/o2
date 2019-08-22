@@ -184,9 +184,10 @@ namespace o2
 
 		bool   mEnabled = true; // Is handle enabled. Disabled handle don't drawn and interact
 
-		Vec2F  mPosition;       // Current handle position, checked by checkPositionFunc
-		Vec2F  mScreenPosition; // Handle screen position, transformed from mPosition with localToScreenTransformFunc
-		float  mAngle = 0.0f;   // Handle rotation angle in radians
+		Vec2F  mPosition;                // Current handle position, checked by checkPositionFunc
+		Vec2F  mScreenPosition;          // Handle screen position, transformed from mPosition with localToScreenTransformFunc
+		Vec2F  mLastDrawnScreenPosition; // Handle screen position on last draw
+		float  mAngle = 0.0f;            // Handle rotation angle in radians
 
 		Vec2F  mDragOffset;        // Dragging offset from cursor in local space to center
 		Vec2F  mDragPosition;      // Current drag handle position
@@ -232,6 +233,9 @@ namespace o2
 
 		// Updates screen position from position with localToScreenTransformFunc
 		virtual void UpdateScreenPosition();
+
+		// Updates sprites positions by handle screen position
+		virtual void UpdateSpritesPositions();
 
 		// It is called when this was selected
 		virtual void OnSelected();
@@ -457,6 +461,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mPosition);
 	PROTECTED_FIELD(mScreenPosition);
+	PROTECTED_FIELD(mLastDrawnScreenPosition);
 	PROTECTED_FIELD(mAngle);
 	PROTECTED_FIELD(mDragOffset);
 	PROTECTED_FIELD(mDragPosition);
@@ -519,6 +524,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, UpdateScreenPosition);
+	PROTECTED_FUNCTION(void, UpdateSpritesPositions);
 	PROTECTED_FUNCTION(void, OnSelected);
 	PROTECTED_FUNCTION(void, OnDeselected);
 }

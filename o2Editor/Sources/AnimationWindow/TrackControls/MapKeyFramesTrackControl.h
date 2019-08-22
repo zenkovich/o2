@@ -44,6 +44,9 @@ namespace Editor
 		// Serialize key with specified uid into data node
 		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
 
+		// Removes key from track
+		void DeleteKey(UInt64 keyUid) override;
+
 		// Updates handles positions for specified animated value
 		void UpdateHandlesForValue(IAnimatedValue* animatedValue);
 
@@ -87,6 +90,7 @@ namespace Editor
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
 			virtual void UpdateHandles() = 0;
 			virtual bool SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) = 0;
+			virtual void DeleteKey(UInt64 keyUid)  = 0;
 			void CacheHandles();
 		};
 
@@ -103,6 +107,7 @@ namespace Editor
 			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
 			void UpdateHandles() override;
 			bool SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
+			void DeleteKey(UInt64 keyUid) override;
 		};
 
 		typedef Dictionary<IAnimatedValue*, IHandlesGroup*> AnimatedValueKeyHandlesDict;
@@ -248,6 +253,14 @@ namespace Editor
 
 		return true;
 	}
+
+	template<typename AnimationValueType>
+	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::DeleteKey(UInt64 keyUid)
+	{
+		int idx = animatedValue->FindKeyIdx(keyUid);
+		if (idx >= 0)
+			animatedValue->RemoveKeyAt(idx);
+	}
 }
 
 CLASS_BASES_META(Editor::MapKeyFramesTrackControl)
@@ -273,6 +286,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
+	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);

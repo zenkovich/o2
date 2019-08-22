@@ -222,6 +222,12 @@ namespace o2
 		// Returns true, if scissor test enabled
 		bool IsScissorTestEnabled() const;
 
+		// Returns true when specified rectangle is fully clipped by current scissor test
+		bool IsClippedByScissor(const RectF& rect) const;
+
+		// Returns true when specified point is clipped by current scissor test
+		bool IsClippedByScissor(const Vec2F& point) const;
+
 		// Draws mesh
 		void DrawMesh(Mesh* mesh);
 

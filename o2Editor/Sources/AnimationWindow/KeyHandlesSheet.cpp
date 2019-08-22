@@ -76,6 +76,10 @@ namespace Editor
 			mRightFrameDragHandle.Draw();
 		}
 
+		for (auto handle : mHandles) {
+			handle->Draw();
+		}
+
 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
@@ -251,6 +255,7 @@ namespace Editor
 			OnHandleMoved(&mCenterFrameDragHandle, o2Input.GetCursorPos());
 		};
 
+		mCenterFrameDragHandle.onRightButtonReleased = [&](auto& x) { mContextMenu->Show(); };
 		mCenterFrameDragHandle.cursorType = CursorType::SizeWE;
 	}
 
@@ -301,6 +306,7 @@ namespace Editor
 			mNeedUpdateSelectionFrame = true;
 		};
 
+		mLeftFrameDragHandle.onRightButtonReleased = [&](auto& x) { mContextMenu->Show(); };
 		mLeftFrameDragHandle.cursorType = CursorType::SizeWE;
 	}
 
@@ -351,6 +357,7 @@ namespace Editor
 			mNeedUpdateSelectionFrame = true;
 		};
 
+		mRightFrameDragHandle.onRightButtonReleased = [&](auto& x) { mContextMenu->Show(); };
 		mRightFrameDragHandle.cursorType = CursorType::SizeWE;
 	}
 
@@ -362,7 +369,10 @@ namespace Editor
 		mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(); }, ImageAssetRef(), ShortcutKeys('X', true));
 		mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, ImageAssetRef(), ShortcutKeys('V', true));
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Delete", [&]() { CopyKeys(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("Delete", [&]() { DeleteKeys(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("---");
+		mContextMenu->AddItem("Select all", [&]() { SelectAll(); }, ImageAssetRef(), ShortcutKeys('A', true));
+		mContextMenu->AddItem("Deselect all", [&]() { DeselectAll(); });
 
 		AddChild(mContextMenu);
 
@@ -405,8 +415,10 @@ namespace Editor
 	void KeyHandlesSheet::CopyKeys()
 	{
 		DataNode data;
-
 		Dictionary<String, Pair<DataNode*, Vector<UInt64>>> serializedKeysUids;
+
+		float relativeTime = mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
+
 		for (auto handle : mSelectedHandles)
 		{
 			if (auto keyHandle = dynamic_cast<AnimationKeyDragHandle*>(handle)) 
@@ -424,7 +436,7 @@ namespace Editor
 				auto& pair = serializedKeysUids[keyHandle->animatedValuePath];
 
 				auto node = pair.first->AddNode("key");
-				keyHandle->trackControl->SerializeKey(keyHandle->keyUid, *node, mAnimation->GetTime());
+				keyHandle->trackControl->SerializeKey(keyHandle->keyUid, *node, relativeTime);
 				
 				serializedKeysUids[keyHandle->animatedValuePath].second.Add(keyHandle->keyUid);
 			}
@@ -435,8 +447,13 @@ namespace Editor
 
 	void KeyHandlesSheet::PasteKeys()
 	{
+		DeselectAll();
+		Vector<UInt64> newKeys;
+
 		DataNode data;
 		data.LoadFromData(Clipboard::GetText());
+
+		float relativeTime = mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
 
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
@@ -450,17 +467,43 @@ namespace Editor
 					continue;
 
 				for (auto keyNode : *pathNode->GetNode("Keys"))
-					kv.Value()->DeserializeKey(*keyNode, mAnimation->GetTime());
+				{
+					UInt64 uid = kv.Value()->DeserializeKey(*keyNode, relativeTime);
+					if (uid != 0)
+						newKeys.Add(uid);
+				}
 			}
 		}		
 
 		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+
+		for (auto& handlesGroup : mHandlesGroups)
+		{
+			for (auto& handle : handlesGroup.Value())
+			{
+				if (newKeys.Contains(handle->keyUid))
+					SelectHandle(handle);
+			}
+		}
 	}
 
 	void KeyHandlesSheet::DeleteKeys()
 	{
+		auto selected = mSelectedHandles;
+		DeselectAll();
 
+		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->BeginKeysBatchChange();
+
+		for (auto handle : selected)
+		{
+			if (auto keyHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
+				keyHandle->trackControl->DeleteKey(keyHandle->keyUid);
+		}
+
+		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 	}
 
 	void KeyHandlesSheet::OnCursorPressed(const Input::Cursor& cursor)
@@ -474,6 +517,7 @@ namespace Editor
 		mBeginSelectPoint.y = mTree->GetLineNumber(cursor.position.y);
 
 		Focus();
+		mContextMenu->SetItemsMaxPriority();
 	}
 
 	void KeyHandlesSheet::OnCursorReleased(const Input::Cursor& cursor)
@@ -560,6 +604,7 @@ namespace Editor
 	void KeyHandlesSheet::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
 		Focus();
+		mContextMenu->SetItemsMaxPriority();
 		mContextMenuPressPoint = cursor.position;
 	}
 
