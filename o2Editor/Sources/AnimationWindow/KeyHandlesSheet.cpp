@@ -100,8 +100,12 @@ namespace Editor
 
 		if (mSelectionFrame->enabled) {
 			mCenterFrameDragHandle.CursorAreaEventsListener::OnDrawn();
-			mLeftFrameDragHandle.CursorAreaEventsListener::OnDrawn();
-			mRightFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+
+			if (!Math::Equals(mSelectionRect.left, mSelectionRect.right))
+			{
+				mLeftFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+				mRightFrameDragHandle.CursorAreaEventsListener::OnDrawn();
+			}
 		}
 	}
 
@@ -386,7 +390,7 @@ namespace Editor
 		if (mIsFrameSelecting)
 			return;
 
-		if (mSelectedHandles.Count() > 1) {
+		if (mSelectedHandles.Count() > 0) {
 			mSelectionFrame->enabled = true;
 
 			mSelectionRect.left = mSelectedHandles.First()->GetPosition().x;
