@@ -194,13 +194,13 @@ namespace o2
 		class Key: public ISerializable
 		{
 		public:
-			UInt64 uid;              // Random unique id @SERIALIZABLE
-			float  position;         // Position on time line, in seconds @SERIALIZABLE
-			_type  value;            // Value @SERIALIZABLE
-			float  curvePrevCoef;    // Transition curve coefficient for previous animation segment @SERIALIZABLE
-			float  curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
-			float  curveNextCoef;    // Transition curve coefficient for next animation segment @SERIALIZABLE
-			float  curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1)@SERIALIZABLE
+			UInt64 uid;                  // Random unique id @SERIALIZABLE
+			float  position;             // Position on time line, in seconds @SERIALIZABLE
+			_type  value;                // Value @SERIALIZABLE
+			float  leftSupportValue;     // Transition curve coefficient for previous animation segment @SERIALIZABLE
+			float  leftSupportPosition;  // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
+			float  rightSupportValue;    // Transition curve coefficient for next animation segment @SERIALIZABLE
+			float  rightSupportPosition; // Transition curve coefficient position for next animation segment (must be in 0...1)@SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -213,8 +213,8 @@ namespace o2
 			Key(float position, const _type& value);
 
 			// Constructor
-			Key(float position, const _type& value, float curvePrevCoef, float curvePrevCoefPos,
-				float curveNextCoef, float curveNextCoefPos);
+			Key(float position, const _type& value, float leftSupportValue, float leftSupportPosition,
+				float rightSupportValue, float rightSupportPosition);
 
 			// Copy-constructor
 			Key(const Key& other);
@@ -589,11 +589,11 @@ namespace o2
 		float baseSmooth = 0.4f;
 		float resSmooth = baseSmooth*smooth;
 
-		mKeys[pos].curvePrevCoef = 1.0f;
-		mKeys[pos].curvePrevCoefPos = 1.0f - resSmooth;
+		mKeys[pos].leftSupportValue = 1.0f;
+		mKeys[pos].leftSupportPosition = 1.0f - resSmooth;
 
-		mKeys[pos].curveNextCoef = 0.0f;
-		mKeys[pos].curveNextCoefPos = resSmooth;
+		mKeys[pos].rightSupportValue = 0.0f;
+		mKeys[pos].rightSupportPosition = resSmooth;
 
 		if (mBatchChange)
 			mChangedKeys = true;
@@ -688,14 +688,14 @@ namespace o2
 			Key& beginKey = mKeys[i - 1];
 			Key& endKey = mKeys[i];
 
-			beginKey.curvePrevCoefPos = Math::Clamp01(beginKey.curvePrevCoefPos);
-			endKey.curveNextCoefPos = Math::Clamp01(endKey.curveNextCoefPos);
+			beginKey.leftSupportPosition = Math::Clamp01(beginKey.leftSupportPosition);
+			endKey.rightSupportPosition = Math::Clamp01(endKey.rightSupportPosition);
 
 			float dist = endKey.position - beginKey.position;
 
 			Vec2F curvea(beginKey.position, 0.0f);
-			Vec2F curveb(Math::Lerp(beginKey.position, endKey.position, beginKey.curveNextCoefPos), beginKey.curveNextCoef);
-			Vec2F curvec(Math::Lerp(beginKey.position, endKey.position, endKey.curvePrevCoefPos), endKey.curvePrevCoef);
+			Vec2F curveb(Math::Lerp(beginKey.position, endKey.position, beginKey.rightSupportPosition), beginKey.rightSupportValue);
+			Vec2F curvec(Math::Lerp(beginKey.position, endKey.position, endKey.leftSupportPosition), endKey.leftSupportValue);
 			Vec2F curved(endKey.position, 1.0f);
 
 			for (int j = 0; j < Key::mApproxValuesCount; j++)
@@ -776,33 +776,33 @@ namespace o2
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key():
-		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f)
+		uid(Math::Random()), position(0), leftSupportValue(1.0f), leftSupportPosition(1.0f), rightSupportValue(0.0f), rightSupportPosition(0.0f)
 	{}
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key(const _type& value) :
-		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(0), leftSupportValue(1.0f), leftSupportPosition(1.0f), rightSupportValue(0.0f), rightSupportPosition(0.0f),
 		value(value)
 	{}
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key(float position, const _type& value):
-		uid(Math::Random()), position(position), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(position), leftSupportValue(1.0f), leftSupportPosition(1.0f), rightSupportValue(0.0f), rightSupportPosition(0.0f),
 		value(value)
 	{}
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key(float position, const _type& value,
-								   float curvePrevCoef, float curvePrevCoefPos,
-								   float curveNextCoef, float curveNextCoefPos):
-		uid(Math::Random()), position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
-		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value)
+								   float leftSupportValue, float leftSupportPosition,
+								   float rightSupportValue, float rightSupportPosition):
+		uid(Math::Random()), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
+		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), value(value)
 	{}
 
 	template<typename _type>
 	AnimatedValue<_type>::Key::Key(const Key& other):
-		uid(other.uid), position(other.position), curvePrevCoef(other.curvePrevCoef), curvePrevCoefPos(other.curvePrevCoefPos),
-		curveNextCoef(other.curveNextCoef), curveNextCoefPos(other.curveNextCoefPos), value(other.value)
+		uid(other.uid), position(other.position), leftSupportValue(other.leftSupportValue), leftSupportPosition(other.leftSupportPosition),
+		rightSupportValue(other.rightSupportValue), rightSupportPosition(other.rightSupportPosition), value(other.value)
 	{
 		memcpy(mCurveApproxValues, other.mCurveApproxValues, mApproxValuesCount*sizeof(Vec2F));
 	}
@@ -826,10 +826,10 @@ namespace o2
 		uid = other.uid;
 		position = other.position;
 		value = other.value;
-		curvePrevCoef = other.curvePrevCoef;
-		curvePrevCoefPos = other.curvePrevCoefPos;
-		curveNextCoef = other.curveNextCoef;
-		curveNextCoefPos = other.curveNextCoefPos;
+		leftSupportValue = other.leftSupportValue;
+		leftSupportPosition = other.leftSupportPosition;
+		rightSupportValue = other.rightSupportValue;
+		rightSupportPosition = other.rightSupportPosition;
 
 		memcpy(mCurveApproxValues, other.mCurveApproxValues, mApproxValuesCount*sizeof(Vec2F));
 
@@ -943,10 +943,10 @@ CLASS_FIELDS_META(o2::AnimatedValue<_type>::Key)
 	PUBLIC_FIELD(uid).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curvePrevCoef).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curvePrevCoefPos).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curveNextCoef).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curveNextCoefPos).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftSupportValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftSupportPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightSupportValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightSupportPosition).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mCurveApproxValues);
 }
 END_META;

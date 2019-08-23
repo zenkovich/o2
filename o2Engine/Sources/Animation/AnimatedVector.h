@@ -151,10 +151,10 @@ namespace o2
 			Vec2F  value;			 // Value @SERIALIZABLE
 			Vec2F  prevSupportValue; // Previous animation segment support value @SERIALIZABLE
 			Vec2F  nextSupportValue; // Next animation segment support value @SERIALIZABLE
-			float  curvePrevCoef;	 // Transition curve coefficient for previous animation segment @SERIALIZABLE
-			float  curvePrevCoefPos; // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
-			float  curveNextCoef;	 // Transition curve coefficient for next animation segment @SERIALIZABLE
-			float  curveNextCoefPos; // Transition curve coefficient position for next animation segment (must be in 0...1) @SERIALIZABLE
+			float  leftSupportValue;	 // Transition curve coefficient for previous animation segment @SERIALIZABLE
+			float  leftSupportPosition;  // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
+			float  rightSupportValue;	 // Transition curve coefficient for next animation segment @SERIALIZABLE
+			float  rightSupportPosition; // Transition curve coefficient position for next animation segment (must be in 0...1) @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -168,7 +168,7 @@ namespace o2
 
 			// Constructor
 			Key(float position, const Vec2F& value, const Vec2F& prevSupportValue, const Vec2F& nextSupportValue, 
-				float curvePrevCoef, float curvePrevCoefPos, float curveNextCoef, float curveNextCoefPos);
+				float leftSupportValue, float leftSupportPosition, float rightSupportValue, float rightSupportPosition);
 
 			// Copy-constructor
 			Key(const Key& other);
@@ -310,10 +310,10 @@ CLASS_FIELDS_META(o2::AnimatedValue<o2::Vec2F>::Key)
 	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(prevSupportValue).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(nextSupportValue).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curvePrevCoef).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curvePrevCoefPos).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curveNextCoef).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(curveNextCoefPos).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftSupportValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftSupportPosition).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightSupportValue).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightSupportPosition).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mApproxValues);
 	PUBLIC_FIELD(mCurveApproxValues);
 	PUBLIC_FIELD(mApproxLengths);

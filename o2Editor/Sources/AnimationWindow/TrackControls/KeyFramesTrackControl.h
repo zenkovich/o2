@@ -141,15 +141,57 @@ namespace Editor
 
 		OnDrawn();
 
-// 		RectF clipRect = mTimeline->layout->GetWorldRect();
-// 		o2Render.EnableScissorTest(clipRect);
-// 
-// 		for (auto child : mDrawingChildren)
-// 		{
-// 			child->Draw();
-// 		}
-// 
-// 		o2Render.DisableScissorTest();
+		RectF clipRect = mTimeline->layout->GetWorldRect();
+		o2Render.EnableScissorTest(clipRect);
+
+		float center = layout->GetWorldCenter().y;
+		float halfHeight = layout->GetHeight()*0.5f;
+		auto& keys = mAnimatedValue->GetKeys();
+		for (int i = 1; i < keys.Count(); i++)
+		{
+			auto& beginKey = keys[i - 1];
+			auto& endKey = keys[i];
+
+			Vec2F rightSupport(beginKey.rightSupportPosition, beginKey.rightSupportValue);
+			Vec2F leftSupport(endKey.leftSupportPosition, endKey.leftSupportValue);
+
+			if (rightSupport.x < 0.0f)
+				rightSupport.x = 0;
+
+			if (rightSupport.x > endKey.position - beginKey.position && rightSupport.x != 0.0f)
+				rightSupport *= (endKey.position - beginKey.position) / rightSupport.x;
+
+			if (leftSupport.x > 0.0f)
+				leftSupport.x = 0;
+
+			if (leftSupport.x < beginKey.position - endKey.position && leftSupport.x != 0.0f)
+				leftSupport *= (beginKey.position - endKey.position) / leftSupport.x;
+
+			Vec2F a(beginKey.position, 0.0f);
+			Vec2F d(endKey.position, 1.0f);
+			Vec2F b = a + rightSupport;
+			Vec2F c = d + leftSupport;
+
+			a.x = mTimeline->LocalToWorld(a.x); a.y = center - halfHeight + a.y*halfHeight*2.0f;
+			b.x = mTimeline->LocalToWorld(b.x); b.y = center - halfHeight + b.y*halfHeight*2.0f;
+			c.x = mTimeline->LocalToWorld(c.x); c.y = center - halfHeight + c.y*halfHeight*2.0f;
+			d.x = mTimeline->LocalToWorld(d.x); d.y = center - halfHeight + d.y*halfHeight*2.0f;
+
+			Vertex2 points[20];
+			Vec2F p = a;
+			for (int j = 0; j < 20; j++)
+			{
+				float coef = (float)j / (float)(20 - 1);
+				Vec2F n = Bezier(a, b, c, d, coef);
+
+				points[j] = Vertex2(n.x, p.y - n.y + center, Color4(44, 62, 80).ABGR(), 0.0f, 0.0f);
+				p = n;
+			}
+
+			o2Render.DrawAAPolyLine(points, 20, 1.0f, LineType::Solid, false);
+		}
+
+		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
 	}
@@ -245,13 +287,13 @@ namespace Editor
 				selectedHandles.Add(keyHandle->keyUid);
 		}
 
-		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>([&](const KeyHandle* x) { 
+		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>([&](const KeyHandle* x) {
 			x->handle->SetParent(nullptr);
-			x->handle->SetEnabled(false); 
+			x->handle->SetEnabled(false);
 			x->handle->SetSelectionGroup(nullptr);
 			x->handle->SetSelected(false);
 			x->handle->onChangedPos.Clear();
-			return x->handle; 
+			return x->handle;
 		});
 
 		for (auto keyHandle : mHandles)

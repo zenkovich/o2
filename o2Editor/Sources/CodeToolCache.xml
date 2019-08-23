@@ -3448,33 +3448,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/KeyFramesTrackControl.h">
-		<date year="2019" month="8" day="22" hour="14" minute="48" second="42" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="KeyFramesTrackControl" fullname="Editor::KeyFramesTrackControl" isClass="true" isMeta="false" templates="typename AnimatedValueType" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="AnimatedValueType::ValueType" newDef="AnimatedValueTypeValueType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ITrackControl" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h">
 		<date year="2019" month="8" day="22" hour="14" minute="48" second="42" />
 		<globalNamespace name="" fullname="">
@@ -3541,6 +3514,33 @@
 							<usings />
 							<baseClasses>
 								<class name="Widget" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/AnimationWindow/TrackControls/KeyFramesTrackControl.h">
+		<date year="2019" month="8" day="23" hour="18" minute="52" second="59" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="KeyFramesTrackControl" fullname="Editor::KeyFramesTrackControl" isClass="true" isMeta="false" templates="typename AnimatedValueType" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="AnimatedValueType::ValueType" newDef="AnimatedValueTypeValueType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ITrackControl" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>

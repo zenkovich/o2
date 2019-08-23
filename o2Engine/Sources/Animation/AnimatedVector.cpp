@@ -420,14 +420,14 @@ namespace o2
 			Key& beginKey = mKeys[i - 1];
 			Key& endKey = mKeys[i];
 
-			beginKey.curvePrevCoefPos = Math::Clamp01(beginKey.curvePrevCoefPos);
-			endKey.curveNextCoefPos = Math::Clamp01(endKey.curveNextCoefPos);
+			beginKey.leftSupportPosition = Math::Clamp01(beginKey.leftSupportPosition);
+			endKey.rightSupportPosition = Math::Clamp01(endKey.rightSupportPosition);
 
 			float dist = endKey.position - beginKey.position;
 
 			Vec2F curvea(beginKey.position, 0.0f);
-			Vec2F curveb(Math::Lerp(beginKey.position, endKey.position, beginKey.curveNextCoefPos), beginKey.curveNextCoef);
-			Vec2F curvec(Math::Lerp(beginKey.position, endKey.position, endKey.curvePrevCoefPos), endKey.curvePrevCoef);
+			Vec2F curveb(Math::Lerp(beginKey.position, endKey.position, beginKey.rightSupportPosition), beginKey.rightSupportValue);
+			Vec2F curvec(Math::Lerp(beginKey.position, endKey.position, endKey.leftSupportPosition), endKey.leftSupportValue);
 			Vec2F curved(endKey.position, 1.0f);
 
 			Vec2F lastApproxPoint = beginKey.value;
@@ -519,12 +519,12 @@ namespace o2
 	}
 
 	AnimatedValue<Vec2F>::Key::Key() :
-		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(0), leftSupportValue(1.0f), leftSupportPosition(1.0f), rightSupportValue(0.0f), rightSupportPosition(0.0f),
 		mApproxTotalLength(0)
 	{}
 
 	AnimatedValue<Vec2F>::Key::Key(const Vec2F& value) :
-		uid(Math::Random()), position(0), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(0), leftSupportValue(1.0f), leftSupportPosition(1.0f), rightSupportValue(0.0f), rightSupportPosition(0.0f),
 		mApproxTotalLength(0), value(value)
 	{}
 
@@ -540,22 +540,22 @@ namespace o2
 	}
 
 	AnimatedValue<Vec2F>::Key::Key(float position, const Vec2F& value) :
-		uid(Math::Random()), position(position), curvePrevCoef(1.0f), curvePrevCoefPos(1.0f), curveNextCoef(0.0f), curveNextCoefPos(0.0f),
+		uid(Math::Random()), position(position), leftSupportValue(1.0f), leftSupportPosition(1.0f), rightSupportValue(0.0f), rightSupportPosition(0.0f),
 		value(value), prevSupportValue(value), nextSupportValue(value), mApproxTotalLength(0)
 	{}
 
 	AnimatedValue<Vec2F>::Key::Key(float position, const Vec2F& value,
 								   const Vec2F& prevSupportValue, const Vec2F& nextSupportValue,
-								   float curvePrevCoef, float curvePrevCoefPos,
-								   float curveNextCoef, float curveNextCoefPos) :
-		uid(Math::Random()), position(position), curvePrevCoef(curvePrevCoef), curvePrevCoefPos(curvePrevCoefPos),
-		curveNextCoef(curveNextCoef), curveNextCoefPos(curveNextCoefPos), value(value),
+								   float leftSupportValue, float leftSupportPosition,
+								   float rightSupportValue, float rightSupportPosition) :
+		uid(Math::Random()), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
+		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), value(value),
 		prevSupportValue(prevSupportValue), nextSupportValue(nextSupportValue), mApproxTotalLength(0)
 	{}
 
 	AnimatedValue<Vec2F>::Key::Key(const Key& other) :
-		uid(other.uid), position(other.position), curvePrevCoef(other.curvePrevCoef), curvePrevCoefPos(other.curvePrevCoefPos),
-		curveNextCoef(other.curveNextCoef), curveNextCoefPos(other.curveNextCoefPos), value(other.value),
+		uid(other.uid), position(other.position), leftSupportValue(other.leftSupportValue), leftSupportPosition(other.leftSupportPosition),
+		rightSupportValue(other.rightSupportValue), rightSupportPosition(other.rightSupportPosition), value(other.value),
 		prevSupportValue(other.prevSupportValue), nextSupportValue(other.nextSupportValue),
 		mApproxTotalLength(other.mApproxTotalLength)
 	{
@@ -571,10 +571,10 @@ namespace o2
 		value = other.value;
 		prevSupportValue = other.prevSupportValue;
 		nextSupportValue = other.nextSupportValue;
-		curvePrevCoef = other.curvePrevCoef;
-		curvePrevCoefPos = other.curvePrevCoefPos;
-		curveNextCoef = other.curveNextCoef;
-		curveNextCoefPos = other.curveNextCoefPos;
+		leftSupportValue = other.leftSupportValue;
+		leftSupportPosition = other.leftSupportPosition;
+		rightSupportValue = other.rightSupportValue;
+		rightSupportPosition = other.rightSupportPosition;
 		mApproxTotalLength = other.mApproxTotalLength;
 
 		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
