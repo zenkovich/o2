@@ -140,66 +140,6 @@ namespace Editor
 			return;
 
 		OnDrawn();
-
-		RectF clipRect = mTimeline->layout->GetWorldRect();
-		o2Render.EnableScissorTest(clipRect);
-
-		float center = layout->GetWorldCenter().y;
-		float halfHeight = layout->GetHeight()*0.5f;
-		auto& keys = mAnimatedValue->GetKeys();
-		for (int i = 1; i < keys.Count(); i++)
-		{
-			auto& beginKey = keys[i - 1];
-			auto& endKey = keys[i];
-
-			Vec2F rightSupport(beginKey.rightSupportPosition, beginKey.rightSupportValue);
-			Vec2F leftSupport(endKey.leftSupportPosition, endKey.leftSupportValue);
-
-			if (rightSupport.x < 0.0f)
-				rightSupport.x = 0;
-
-			if (rightSupport.x > 1.0f && rightSupport.x != 0.0f)
-				rightSupport *= 1.0f/rightSupport.x;
-
-			if (leftSupport.x > 0.0f)
-				leftSupport.x = 0;
-
-			if (leftSupport.x < -1.0f && leftSupport.x != 0.0f)
-				leftSupport *= -1.0f/leftSupport.x;
-
-			Vec2F a(0.0f, 0.0f);
-			Vec2F d(1.0f, 1.0f);
-			Vec2F b = a + rightSupport;
-			Vec2F c = d + leftSupport;
-
-			const int pointsCount = 20;
-			Vertex2 points[pointsCount];
-
-			float maxDelta = 0.0f;
-			for (int j = 0; j < pointsCount; j++)
-			{
-				float coef = (float)j / (float)(pointsCount - 1);
-				Vec2F currentPoint = Bezier(a, b, c, d, coef);
-
-				points[j] = Vertex2(currentPoint.x, currentPoint.y - coef, Color4(44, 62, 80).ABGR(), 0.0f, 0.0f);
-
-				maxDelta = Math::Max(Math::Abs(points[j].y), maxDelta);
-			}
-
-			Vec2F origin(mTimeline->LocalToWorld(beginKey.position), center);
-			Vec2F axis(mTimeline->LocalToWorld(endKey.position) - origin.x, halfHeight/maxDelta);
-
-			for (int j = 0; j < pointsCount; j++)
-			{
-				points[j].x = origin.x + axis.x*points[j].x;
-				points[j].y = origin.y + axis.y*points[j].y;
-			}
-
-			o2Render.DrawAAPolyLine(points, pointsCount, 1.0f, LineType::Solid, false);
-		}
-
-		o2Render.DisableScissorTest();
-
 		DrawDebugFrame();
 	}
 

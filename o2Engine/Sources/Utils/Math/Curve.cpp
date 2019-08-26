@@ -6,7 +6,7 @@
 namespace o2
 {
 	Curve::Curve()
-	{}
+	{ }
 
 	Curve::Curve(float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
 	{
@@ -22,7 +22,7 @@ namespace o2
 
 	Curve::Curve(const Curve& other) :
 		mKeys(other.mKeys), keys(this), length(this)
-	{}
+	{ }
 
 	bool Curve::operator!=(const Curve& other) const
 	{
@@ -102,7 +102,7 @@ namespace o2
 		Vec2F ends = endKey.mApproxValues[segEnd];
 
 		float dist = ends.x - begs.x;
-		float coef = (position - begs.x)/dist;
+		float coef = (position - begs.x) / dist;
 
 		return Math::Lerp(begs.y, ends.y, coef);
 	}
@@ -710,23 +710,29 @@ namespace o2
 				rightSupport.x = 0;
 
 			if (rightSupport.x > endKey.position - beginKey.position && rightSupport.x != 0.0f)
-				rightSupport *= (endKey.position - beginKey.position)/rightSupport.x;
+				rightSupport *= (endKey.position - beginKey.position) / rightSupport.x;
 
 			if (leftSupport.x > 0.0f)
 				leftSupport.x = 0;
 
 			if (leftSupport.x < beginKey.position - endKey.position && leftSupport.x != 0.0f)
-				leftSupport *= (beginKey.position - endKey.position)/leftSupport.x;
+				leftSupport *= (beginKey.position - endKey.position) / leftSupport.x;
 
 			Vec2F a(beginKey.position, beginKey.value);
 			Vec2F d(endKey.position, endKey.value);
 			Vec2F b = a + rightSupport;
 			Vec2F c = d + leftSupport;
 
+			endKey.mApproxValuesBounds.Set(a, a);
 			for (int j = 0; j < Key::mApproxValuesCount; j++)
 			{
-				float coef = (float)j/(float)(Key::mApproxValuesCount - 1);
-				endKey.mApproxValues[j] = Bezier(a, b, c, d, coef);
+				float coef = (float)j / (float)(Key::mApproxValuesCount - 1);
+				Vec2F p = Bezier(a, b, c, d, coef);
+				endKey.mApproxValues[j] = p;
+				endKey.mApproxValuesBounds.left = Math::Min(endKey.mApproxValuesBounds.left, p.x);
+				endKey.mApproxValuesBounds.right = Math::Max(endKey.mApproxValuesBounds.right, p.x);
+				endKey.mApproxValuesBounds.top = Math::Max(endKey.mApproxValuesBounds.top, p.y);
+				endKey.mApproxValuesBounds.bottom = Math::Min(endKey.mApproxValuesBounds.bottom, p.y);
 			}
 		}
 
@@ -809,26 +815,26 @@ namespace o2
 	Curve::Key::Key() :
 		uid(Math::Random()), value(0), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0), rightSupportPosition(0),
 		supportsType(Type::Smooth)
-	{}
+	{ }
 
 	Curve::Key::Key(float position, float value, float leftSupportValue, float leftSupportPosition,
 					float rightSupportValue, float rightSupportPosition) :
 		uid(Math::Random()), value(value), position(position), leftSupportValue(leftSupportValue), leftSupportPosition(leftSupportPosition),
 		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), supportsType(Type::Broken)
-	{}
+	{ }
 
 	Curve::Key::Key(const Key& other) :
 		uid(other.uid), value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
 		leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
-		rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType)
+		rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType), mApproxValuesBounds(other.mApproxValuesBounds)
 	{
-		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
+		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(Vec2F));
 	}
 
 	Curve::Key::Key(float value) :
 		uid(Math::Random()), value(value), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
 		rightSupportPosition(0), supportsType(Type::Smooth)
-	{}
+	{ }
 
 	Curve::Key::operator float() const
 	{
@@ -843,6 +849,11 @@ namespace o2
 	int Curve::Key::GetApproximatedPointsCount() const
 	{
 		return mApproxValuesCount;
+	}
+
+	const RectF& Curve::Key::GetGetApproximatedPointsBounds() const
+	{
+		return mApproxValuesBounds;
 	}
 
 	Curve::Key& Curve::Key::operator=(float value)
@@ -861,7 +872,8 @@ namespace o2
 		rightSupportValue = other.rightSupportValue;
 		rightSupportPosition = other.rightSupportPosition;
 		supportsType = other.supportsType;
-		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount*sizeof(Vec2F));
+		mApproxValuesBounds = other.mApproxValuesBounds;
+		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(Vec2F));
 
 		return *this;
 	}

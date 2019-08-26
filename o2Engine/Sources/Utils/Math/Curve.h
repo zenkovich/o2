@@ -245,11 +245,15 @@ namespace o2
 			// Returns approximated points count
 			int GetApproximatedPointsCount() const;
 
+			// Returns bounds of approximation values
+			const RectF& GetGetApproximatedPointsBounds() const;
+
 			SERIALIZABLE(Key);
 
 		public:
 			static const int mApproxValuesCount = 20; // Approximation values count
 			Vec2F mApproxValues[mApproxValuesCount];  // Approximation values (x - position, y - value)
+			RectF mApproxValuesBounds;                // Bounds of approximation values
 
 			friend class Curve;
 		};
@@ -364,6 +368,7 @@ CLASS_FIELDS_META(o2::Curve::Key)
 	PUBLIC_FIELD(rightSupportPosition).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(supportsType).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mApproxValues);
+	PUBLIC_FIELD(mApproxValuesBounds);
 }
 END_META;
 CLASS_METHODS_META(o2::Curve::Key)
@@ -371,5 +376,6 @@ CLASS_METHODS_META(o2::Curve::Key)
 
 	PUBLIC_FUNCTION(const Vec2F*, GetApproximatedPoints);
 	PUBLIC_FUNCTION(int, GetApproximatedPointsCount);
+	PUBLIC_FUNCTION(const RectF&, GetGetApproximatedPointsBounds);
 }
 END_META;
