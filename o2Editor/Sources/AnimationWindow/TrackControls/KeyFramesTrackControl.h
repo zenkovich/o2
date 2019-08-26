@@ -158,37 +158,44 @@ namespace Editor
 			if (rightSupport.x < 0.0f)
 				rightSupport.x = 0;
 
-			if (rightSupport.x > endKey.position - beginKey.position && rightSupport.x != 0.0f)
-				rightSupport *= (endKey.position - beginKey.position) / rightSupport.x;
+			if (rightSupport.x > 1.0f && rightSupport.x != 0.0f)
+				rightSupport *= 1.0f/rightSupport.x;
 
 			if (leftSupport.x > 0.0f)
 				leftSupport.x = 0;
 
-			if (leftSupport.x < beginKey.position - endKey.position && leftSupport.x != 0.0f)
-				leftSupport *= (beginKey.position - endKey.position) / leftSupport.x;
+			if (leftSupport.x < -1.0f && leftSupport.x != 0.0f)
+				leftSupport *= -1.0f/leftSupport.x;
 
-			Vec2F a(beginKey.position, 0.0f);
-			Vec2F d(endKey.position, 1.0f);
+			Vec2F a(0.0f, 0.0f);
+			Vec2F d(1.0f, 1.0f);
 			Vec2F b = a + rightSupport;
 			Vec2F c = d + leftSupport;
 
-			a.x = mTimeline->LocalToWorld(a.x); a.y = center - halfHeight + a.y*halfHeight*2.0f;
-			b.x = mTimeline->LocalToWorld(b.x); b.y = center - halfHeight + b.y*halfHeight*2.0f;
-			c.x = mTimeline->LocalToWorld(c.x); c.y = center - halfHeight + c.y*halfHeight*2.0f;
-			d.x = mTimeline->LocalToWorld(d.x); d.y = center - halfHeight + d.y*halfHeight*2.0f;
+			const int pointsCount = 20;
+			Vertex2 points[pointsCount];
 
-			Vertex2 points[20];
-			Vec2F p = a;
-			for (int j = 0; j < 20; j++)
+			float maxDelta = 0.0f;
+			for (int j = 0; j < pointsCount; j++)
 			{
-				float coef = (float)j / (float)(20 - 1);
-				Vec2F n = Bezier(a, b, c, d, coef);
+				float coef = (float)j / (float)(pointsCount - 1);
+				Vec2F currentPoint = Bezier(a, b, c, d, coef);
 
-				points[j] = Vertex2(n.x, p.y - n.y + center, Color4(44, 62, 80).ABGR(), 0.0f, 0.0f);
-				p = n;
+				points[j] = Vertex2(currentPoint.x, currentPoint.y - coef, Color4(44, 62, 80).ABGR(), 0.0f, 0.0f);
+
+				maxDelta = Math::Max(Math::Abs(points[j].y), maxDelta);
 			}
 
-			o2Render.DrawAAPolyLine(points, 20, 1.0f, LineType::Solid, false);
+			Vec2F origin(mTimeline->LocalToWorld(beginKey.position), center);
+			Vec2F axis(mTimeline->LocalToWorld(endKey.position) - origin.x, halfHeight/maxDelta);
+
+			for (int j = 0; j < pointsCount; j++)
+			{
+				points[j].x = origin.x + axis.x*points[j].x;
+				points[j].y = origin.y + axis.y*points[j].y;
+			}
+
+			o2Render.DrawAAPolyLine(points, pointsCount, 1.0f, LineType::Solid, false);
 		}
 
 		o2Render.DisableScissorTest();
