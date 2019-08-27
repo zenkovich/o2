@@ -76,10 +76,6 @@ namespace Editor
 			mRightFrameDragHandle.Draw();
 		}
 
-		for (auto handle : mHandles) {
-			handle->Draw();
-		}
-
 		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();

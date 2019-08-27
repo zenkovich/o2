@@ -35,12 +35,12 @@ namespace Editor
 
 		OnDrawn();
 
-// 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
-// 
-// 		for (auto child : mDrawingChildren)
-// 			child->Draw();
-// 
-// 		o2Render.DisableScissorTest();
+		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+
+		for (auto child : mDrawingChildren)
+			child->Draw();
+
+		o2Render.DisableScissorTest();
 
 		DrawDebugFrame();
 	}

@@ -139,6 +139,13 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
+		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
+
+		for (auto handle : mHandles)
+			handle->handle->Draw();
+
+		o2Render.DisableScissorTest();
+
 		OnDrawn();
 		DrawDebugFrame();
 	}
