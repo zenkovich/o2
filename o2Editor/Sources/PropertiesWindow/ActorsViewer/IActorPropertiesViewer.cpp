@@ -20,7 +20,8 @@ namespace Editor
 		mSpoiler->borderBottom = 5;
 		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
-		mSpoiler->GetIcon()->SetImageName("ui/UI4_big_file_icon.png");
+		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
+		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
 
 		mSpoiler->SetExpanded(true);
 	}

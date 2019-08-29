@@ -163,6 +163,9 @@ namespace Editor
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		mNeedUpdateSelectionFrame = true;
+
+		if (mSelectedHandles.Count() == 1)
+			mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
 	}
 
 	void KeyHandlesSheet::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
