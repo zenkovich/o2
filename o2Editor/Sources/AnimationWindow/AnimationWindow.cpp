@@ -2,6 +2,7 @@
 #include "AnimationWindow.h"
 
 #include "Animation/Animation.h"
+#include "AnimationWindow/CurvesSheet.h"
 #include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/Tree.h"
@@ -47,8 +48,21 @@ namespace Editor
 		mPlayPauseToggle->SetValue(false);
 
 		mHandlesSheet->SetAnimation(animation);
+		mCurves->SetAnimation(animation);
 		mTimeline->SetAnimation(animation);
 		mTree->SetAnimation(animation);
+	}
+
+	void AnimationWindow::ShowKeyHandlesVisible()
+	{
+		mCurves->Hide();
+		mHandlesSheet->Show();
+	}
+
+	void AnimationWindow::ShowCurvesSheet()
+	{
+		mCurves->Show();
+		mHandlesSheet->Hide();
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -72,9 +86,13 @@ namespace Editor
 		InitializeHandlesSheet();
 		InitializeTree();
 		InitializeSeparatorHandle();
+		InitializeCurvesSheet();
 
 		mHandlesSheet->Initialize(mTimeline, mTree);
 		mTree->Initialize(mTimeline, mHandlesSheet);
+		mCurves->Initialize(mTimeline, mTree);
+
+		ShowKeyHandlesVisible();
 	}
 
 	void AnimationWindow::InitializeHandlesSheet()
@@ -105,6 +123,13 @@ namespace Editor
 		mWindow->AddChild(mTimeline);
 	}
 
+	void AnimationWindow::InitializeCurvesSheet()
+	{
+		mCurves = mnew CurvesSheet();
+		*mCurves->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
+		mWorkArea->AddChild(mCurves);
+	}
+
 	void AnimationWindow::InitializeUpPanel()
 	{
 		mUpPanel = mnew Widget();
@@ -119,6 +144,7 @@ namespace Editor
 
 		mRecordToggle = o2UI.CreateWidget<Toggle>("menu record");
 		*mRecordToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 0));
+		mRecordToggle->onToggle = [&](bool value) { if (!value) ShowKeyHandlesVisible(); else ShowCurvesSheet(); };
 		mControlsPanel->AddChild(mRecordToggle);
 
 		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("menu play-stop");
@@ -151,6 +177,7 @@ namespace Editor
 			mControlsPanel->layout->right = mTreeViewWidth;
 			mTimeline->layout->left = mTreeViewWidth;
 			mHandlesSheet->layout->left = mTreeViewWidth;
+			mCurves->layout->left = mTreeViewWidth;
 			mTree->SetTreeWidth(mTreeViewWidth);
 		};
 

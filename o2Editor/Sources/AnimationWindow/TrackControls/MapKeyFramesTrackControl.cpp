@@ -33,6 +33,9 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
+		if (!mHandlesSheet->enabled)
+			return;
+
 		OnDrawn();
 
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());

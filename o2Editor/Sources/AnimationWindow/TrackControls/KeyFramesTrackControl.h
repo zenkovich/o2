@@ -139,6 +139,9 @@ namespace Editor
 		if (!mResEnabledInHierarchy)
 			return;
 
+		if (!mHandlesSheet->enabled)
+			return;
+
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
 
 		for (auto handle : mHandles)

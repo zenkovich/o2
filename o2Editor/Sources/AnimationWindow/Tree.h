@@ -156,7 +156,7 @@ namespace Editor
 
 		Text* mNameDrawable = nullptr; // Object name drawable
 
-		ITrackControl* mTrackControl = nullptr; // Animated value editor
+		ITrackControl* mTrackControl = nullptr;     // Animated value editor
 
 		static Dictionary<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
 

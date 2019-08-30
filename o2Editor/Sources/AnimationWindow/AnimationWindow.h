@@ -22,6 +22,7 @@ namespace Editor
 {
 	class AnimationTimeline;
 	class AnimationTree;
+	class CurvesSheet;
 	class KeyHandlesSheet;
 
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
@@ -41,6 +42,12 @@ namespace Editor
 		// Sets editing animation
 		void SetAnimation(Animation* animation);
 
+		// Shows key handles sheet, hides curves
+		void ShowKeyHandlesVisible();
+
+		// Shows curves sheet, hides key handles
+		void ShowCurvesSheet();
+
 	protected:
 		float mTreeViewWidth = 250.0f; // Width of tree area. Changed by dragable separator
 
@@ -55,10 +62,11 @@ namespace Editor
 		Toggle*  mLoopToggle = nullptr;      // Animation loop toggle
 		Button*  mAddKeyButton = nullptr;    // Add key on current time button
 
-		AnimationTimeline*   mTimeline = nullptr;     // ANimation timeline
-		HorizontalScrollBar* mTimeScroll = nullptr;
-		AnimationTree*       mTree = nullptr;
-		KeyHandlesSheet*     mHandlesSheet = nullptr;
+		AnimationTimeline*   mTimeline = nullptr;     // Animation timeline
+		HorizontalScrollBar* mTimeScroll = nullptr;   // Timeline horizontal scrollbar
+		AnimationTree*       mTree = nullptr;         // Animation values tree
+		KeyHandlesSheet*     mHandlesSheet = nullptr; // Animation keys handles sheet
+		CurvesSheet*         mCurves = nullptr;       // Animation curves sheet
 
 		WidgetDragHandle* mTreeSeparatorHandle = nullptr;
 
@@ -74,6 +82,9 @@ namespace Editor
 
 		// Initializes timeline and scrollbar
 		void InitializeTimeline();
+
+		// Initializes curves sheet widget
+		void InitializeCurvesSheet();
 
 		// Initializes up control panel
 		void InitializeUpPanel();
@@ -119,6 +130,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mTimeScroll);
 	PROTECTED_FIELD(mTree);
 	PROTECTED_FIELD(mHandlesSheet);
+	PROTECTED_FIELD(mCurves);
 	PROTECTED_FIELD(mTreeSeparatorHandle);
 }
 END_META;
@@ -127,10 +139,13 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, ShowKeyHandlesVisible);
+	PUBLIC_FUNCTION(void, ShowCurvesSheet);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeHandlesSheet);
 	PROTECTED_FUNCTION(void, InitializeTree);
 	PROTECTED_FUNCTION(void, InitializeTimeline);
+	PROTECTED_FUNCTION(void, InitializeCurvesSheet);
 	PROTECTED_FUNCTION(void, InitializeUpPanel);
 	PROTECTED_FUNCTION(void, InitializeSeparatorHandle);
 	PROTECTED_FUNCTION(void, OnPlayPauseToggled, bool);

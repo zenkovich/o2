@@ -359,6 +359,9 @@
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h">
       <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h">
+      <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp">
@@ -684,6 +687,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp">
       <Filter>Sources\AnimationWindow\TrackControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp">
+      <Filter>Sources\AnimationWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
