@@ -141,7 +141,7 @@ namespace Editor
 	void AnimationTimeline::Update(float dt)
 	{
 		Widget::Update(dt);
-
+		
 		UpdateZooming(dt);
 		UpdateScrolling(dt);
 	}
@@ -156,8 +156,11 @@ namespace Editor
 			onViewChanged();
 		}
 
-		if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()) && o2Input.IsKeyDown(VK_CONTROL))
-			mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
+		if (!mViewMoveDisabled)
+		{
+			if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()) && o2Input.IsKeyDown(VK_CONTROL))
+				mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
+		}
 	}
 
 	void AnimationTimeline::UpdateScrollBarHandleSize()
@@ -224,7 +227,7 @@ namespace Editor
 	{
 		float prevViewScroll = mSmoothViewScroll;
 
-		if (IsUnderPoint(o2Input.GetCursorPos()) && o2Input.IsRightMousePressed())
+		if (!mViewMoveDisabled && IsUnderPoint(o2Input.GetCursorPos()) && o2Input.IsRightMousePressed())
 		{
 			mBeginDragViewScrollOffset = WorldToLocal(o2Input.GetCursorPos().x);
 			mDragViewScroll = true;
@@ -313,6 +316,12 @@ namespace Editor
 		mSmoothViewScroll = scroll;
 	}
 
+	void AnimationTimeline::SetViewRange(float value)
+	{
+		mViewScroll += value - WorldToLocal(layout->worldLeft);
+		mSmoothViewScroll = mViewScroll;
+	}
+
 	float AnimationTimeline::GetScroll() const
 	{
 		return mSmoothViewScroll;
@@ -326,6 +335,11 @@ namespace Editor
 	float AnimationTimeline::GetScale() const
 	{
 		return mViewZoom;
+	}
+
+	void AnimationTimeline::SetViewMoveDisabled(bool disabled)
+	{
+		mViewMoveDisabled = disabled;
 	}
 
 	Text* AnimationTimeline::GetText() const

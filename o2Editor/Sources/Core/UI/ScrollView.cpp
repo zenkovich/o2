@@ -198,16 +198,21 @@ namespace Editor
 		}
 	}
 
-	void ScrollView::UpdateLocalScreenTransforms()
+	Basis ScrollView::GetCameraScreenToLocalTransform(const Camera& camera) const
 	{
 		RectF rectangle = layout->worldRect;
 		Basis identityCamTransform = Transform(rectangle.Size()).basis;
-		Basis cameraTransform = mViewCamera.basis;
+		Basis cameraTransform = camera.basis;
 
 		Basis sceneToCamTransform = identityCamTransform.Inverted()*cameraTransform;
 		Basis drawRectTransform = Transform(rectangle.Size(), rectangle.Center()).basis;
 
-		mScreenToLocalTransform = Basis::Translated(rectangle.Center()*-1.0f)*sceneToCamTransform;
+		return Basis::Translated(rectangle.Center()*-1.0f)*sceneToCamTransform;
+	}
+
+	void ScrollView::UpdateLocalScreenTransforms()
+	{
+		mScreenToLocalTransform = GetCameraScreenToLocalTransform(mViewCamera);
 		mLocalToScreenTransform = mScreenToLocalTransform.Inverted();
 	}
 
@@ -224,6 +229,13 @@ namespace Editor
 	Vec2F ScrollView::GetCameraScale() const
 	{
 		return Vec2F(mScreenToLocalTransform.xv.Length(), mScreenToLocalTransform.yv.Length());
+	}
+
+	void ScrollView::SetCamera(const Camera& camera)
+	{
+		mViewCamera = camera;
+		mViewCameraTargetPos = mViewCamera.position;
+		mViewCameraTargetScale = mViewCamera.scale;
 	}
 
 	const Camera& ScrollView::GetCamera() const
@@ -304,7 +316,20 @@ namespace Editor
 
 	void ScrollView::OnScrolled(float scroll)
 	{
-		mViewCameraTargetScale *= 1.0f - (scroll*mViewCameraScaleSence);
+		// This works little bit wrong TODO: Fix it
+
+		Vec2F newScale = mViewCameraTargetScale*(1.0f - (scroll*mViewCameraScaleSence));
+		Vec2F prevCursor = o2Input.GetCursorPos()*mScreenToLocalTransform;
+		mViewCameraTargetScale = newScale;
+
+		Camera targetValuesCamera = mViewCamera;
+		targetValuesCamera.scale = mViewCameraTargetScale;
+		targetValuesCamera.position = mViewCameraTargetPos;
+
+		Basis screenToLocalTarget = GetCameraScreenToLocalTransform(targetValuesCamera);
+
+		Vec2F newCursor = o2Input.GetCursorPos()*screenToLocalTarget;
+		mViewCameraTargetPos -= newCursor - prevCursor;
 	}
 
 	void ScrollView::OnCursorRightMousePressed(const Input::Cursor& cursor)

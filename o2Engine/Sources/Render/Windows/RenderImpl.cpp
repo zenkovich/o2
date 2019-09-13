@@ -242,12 +242,15 @@ namespace o2
 	void Render::SetupViewMatrix(const Vec2I& viewSize)
 	{
 		mCurrentResolution = viewSize;
+		mCamera = Camera();
+
 		float projMat[16];
 		Math::OrthoProjMatrix(projMat, 0.0f, (float)viewSize.x, (float)viewSize.y, 0.0f, 0.0f, 10.0f);
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glViewport(0, 0, viewSize.x, viewSize.y);
 		glLoadMatrixf(projMat);
+
 		UpdateCameraTransforms();
 	}
 

@@ -524,6 +524,10 @@ namespace Editor
 
 	void CurveEditor::DrawCurves()
 	{
+		o2Render.camera = Camera();
+
+		Basis transform = mViewCamera.GetBasis().Inverted()*Camera().GetBasis();
+
 		for (auto curve : mCurves)
 		{
 			if (curve->approximatedPoints.IsEmpty())
@@ -544,7 +548,7 @@ namespace Editor
 				if (a.x > cameraRightPos)
 					break;
 
-				o2Render.DrawAALine(a, b, curve->color);
+				o2Render.DrawAALine(a*transform, b*transform, curve->color);
 			}
 
 // 			int idx = 0;
@@ -557,6 +561,8 @@ namespace Editor
 // 				idx++;
 // 			}
 		}
+
+		o2Render.camera = mViewCamera;
 	}
 
 	void CurveEditor::DrawHandles()

@@ -123,9 +123,13 @@ namespace o2
 		return mPivot*mSize;
 	}
 
-	void Transform::SetRect(const RectF& rect)
+	void Transform::SetRect(const RectF& rect, bool bySize /*= true*/)
 	{
-		mSize = rect.Size();
+		if (bySize)
+			mSize = rect.Size()/mScale;
+		else
+			mScale = rect.Size()/mSize;
+
 		mPosition = rect.LeftBottom() + Vec2F(mSize.x*mScale.x, mSize.y*mScale.y)*mPivot;
 
 		UpdateTransform();

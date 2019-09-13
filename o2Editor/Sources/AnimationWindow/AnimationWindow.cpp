@@ -57,12 +57,14 @@ namespace Editor
 	{
 		mCurves->Hide();
 		mHandlesSheet->Show();
+		mTimeline->SetViewMoveDisabled(false);
 	}
 
 	void AnimationWindow::ShowCurvesSheet()
 	{
 		mCurves->Show();
 		mHandlesSheet->Hide();
+		mTimeline->SetViewMoveDisabled(true);
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -77,7 +79,6 @@ namespace Editor
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		InitializeUpPanel();
-		InitializeTimeline();
 
 		mWorkArea = mnew Widget();
 		*mWorkArea->layout = WidgetLayout::BothStretch(0, 0, 0, 18);
@@ -87,6 +88,7 @@ namespace Editor
 		InitializeTree();
 		InitializeSeparatorHandle();
 		InitializeCurvesSheet();
+		InitializeTimeline();
 
 		mHandlesSheet->Initialize(mTimeline, mTree);
 		mTree->Initialize(mTimeline, mHandlesSheet);
@@ -127,6 +129,7 @@ namespace Editor
 	{
 		mCurves = mnew CurvesSheet();
 		*mCurves->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0, 0, 0);
+		mCurves->Disable();
 		mWorkArea->AddChild(mCurves);
 	}
 

@@ -16,6 +16,9 @@ namespace Editor
 	class FrameScrollView: public ScrollView
 	{
 	public:
+		Function<void()> onViewChanged; // Camera move or zoom event
+
+	public:
 		// Default constructor
 		FrameScrollView();
 
@@ -81,6 +84,7 @@ CLASS_BASES_META(Editor::FrameScrollView)
 END_META;
 CLASS_FIELDS_META(Editor::FrameScrollView)
 {
+	PUBLIC_FIELD(onViewChanged);
 	PROTECTED_FIELD(mHorScrollbar).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mVerScrollbar).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAvailableArea).SERIALIZABLE_ATTRIBUTE();

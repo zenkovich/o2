@@ -61,7 +61,7 @@ namespace Editor
 							 Func<IPropertyField, void>(this, &CurveProperty::CheckValueChangeCompleted));
 
 		CurveEditorDlg::RemoveAllEditingCurves();
-		CurveEditorDlg::AddEditingCurve("property", &mCommonValue);
+		CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));
 	}
 }
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::Curve>);

@@ -4,6 +4,7 @@
 #include "Actions/PropertyChange.h"
 #include "Animation/AnimatedFloat.h"
 #include "Animation/AnimatedVector.h"
+#include "AnimationWindow/AnimationWindow.h"
 #include "Application/Input.h"
 #include "Assets/Assets.h"
 #include "Core/Actions/IAction.h"
@@ -18,11 +19,13 @@
 #include "Scene/Actor.h"
 #include "Scene/Components/ImageComponent.h"
 #include "Scene/Scene.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetState.h"
+#include "Scene/UI/Widgets/MenuPanel.h"
+#include "Scene/UI/Widgets/MenuPanel.h"
 #include "SceneWindow/SceneEditScreen.h"
 #include "TreeWindow/TreeWindow.h"
-#include "Scene/UI/Widgets/MenuPanel.h"
-#include "Scene/UI/Widgets/MenuPanel.h"
-#include "Scene/UI/UIManager.h"
 #include "UIStyle/EditorUIStyle.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/System/Time/Time.h"
@@ -177,6 +180,9 @@ namespace Editor
 		}
 
 		OnResizing();
+
+		o2EditorAnimationWindow.SetAnimation(&EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel")->
+											 GetStateObject("playing")->animation);
 	}
 
 	void EditorApplication::OnClosing()

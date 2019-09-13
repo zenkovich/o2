@@ -41,11 +41,14 @@ namespace Editor
 		// Updates as regular widget and changes zoom by mouse wheel
 		void Update(float dt) override;
 
-		// Sets animation. Subscribes on animachin duration change, controls playing time
+		// Sets animation. Subscribes on animation duration change, controls playing time
 		void SetAnimation(Animation* animation);
 
 		// Sets current time scroll in seconds
 		void SetScroll(float scroll);
+
+		// Sets view range, left view border by left, and right border by right
+		void SetViewRange(float left, float right);
 
 		// Returns current time scroll in seconds
 		float GetScroll() const;
@@ -55,6 +58,9 @@ namespace Editor
 
 		// Returns time scale zoom
 		float GetScale() const;
+
+		// Sets lock on zoom and scroll
+		void SetViewMoveDisabled(bool disabled);
 
 		// Converts local time to world x position
 		float LocalToWorld(float pos) const;
@@ -107,6 +113,8 @@ namespace Editor
 
 		float mViewZoom = 1.0f;       // Time scale zoom
 		float mSmoothViewZoom = 1.0f; // Smoothed and animated time scale zoom
+
+		bool mViewMoveDisabled = false; // Is moving and zooming view disabled. It is disabling when editor has switched to curves edit mode
 
 		float mDuration = 0.0f; // Scale length in seconds
 
@@ -182,6 +190,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mViewScrollSpeed);
 	PRIVATE_FIELD(mViewZoom);
 	PRIVATE_FIELD(mSmoothViewZoom);
+	PRIVATE_FIELD(mViewMoveDisabled);
 	PRIVATE_FIELD(mDuration);
 	PRIVATE_FIELD(mTextFont);
 	PRIVATE_FIELD(mText);
@@ -201,9 +210,11 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetScroll, float);
+	PUBLIC_FUNCTION(void, SetViewRange, float);
 	PUBLIC_FUNCTION(float, GetScroll);
 	PUBLIC_FUNCTION(void, SetScale, float);
 	PUBLIC_FUNCTION(float, GetScale);
+	PUBLIC_FUNCTION(void, SetViewMoveDisabled, bool);
 	PUBLIC_FUNCTION(float, LocalToWorld, float);
 	PUBLIC_FUNCTION(float, WorldToLocal, float);
 	PUBLIC_FUNCTION(Text*, GetText);

@@ -52,7 +52,6 @@ namespace o2
 		// Virtual destructor
 		virtual ~Transform() {}
 
-
 		// Assign operator
 		Transform& operator=(const Transform& other);
 
@@ -62,20 +61,17 @@ namespace o2
 		// Not equals operator
 		bool operator!=(const Transform& other) const;
 
-
 		// Sets position
 		virtual void SetPosition(const Vec2F& position);
 
 		// Returns position
 		virtual Vec2F GetPosition() const;
 
-
 		// Sets size
 		virtual void SetSize(const Vec2F& size);
 
 		// Return size
 		virtual Vec2F GetSize() const;
-
 
 		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		virtual void SetPivot(const Vec2F& pivot);
@@ -95,20 +91,17 @@ namespace o2
 		// Returns size pivot, in local space, where (0, 0) - left down corner, (mSize.x, mSize.y) - right top
 		virtual Vec2F GetSizePivot() const;
 
-
-		// Sets rect
-		virtual void SetRect(const RectF& rect);
+		// Sets rect. If bySIze is true, rectangle adjusting by transform's size, overwise by scale
+		virtual void SetRect(const RectF& rect, bool bySize = true);
 
 		// Returns rect
 		virtual RectF GetRect() const;
-
 
 		// Sets scale
 		virtual void SetScale(const Vec2F& scale);
 
 		// Returns scale
 		virtual Vec2F GetScale() const;
-
 
 		// Sets rotation angle, in radians
 		virtual void SetAngle(float rad);
@@ -122,13 +115,11 @@ namespace o2
 		// Returns rotation angle in degrees
 		virtual float GetAngleDegrees() const;
 
-
 		// Sets shear
 		virtual void SetShear(float shear);
 
 		// Returns shear
 		virtual float GetShear() const;
-
 
 		// Sets basis
 		virtual void SetBasis(const Basis& basis);
@@ -142,13 +133,11 @@ namespace o2
 		// Returns basis without size
 		virtual Basis GetNonSizedBasis() const;
 
-
 		// Sets axis aligned rectangle transformation
 		virtual void SetAxisAlignedRect(const RectF& rect);
 
 		// Returns axis aligned rectangle transformation
 		virtual RectF GetAxisAlignedRect() const;
-
 
 		// Sets left top corner position
 		virtual void SetLeftTop(const Vec2F& position);
@@ -207,7 +196,6 @@ namespace o2
 		// Sets x axis directed to worldPoint
 		virtual void LookAt(const Vec2F& worldPoint);
 
-
 		// Transforms point from world space into local
 		virtual Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
 
@@ -219,7 +207,6 @@ namespace o2
 
 		// Transforms direction from local space into world
 		virtual Vec2F Local2WorldDir(const Vec2F& localDir) const;
-
 
 		// Returns true when point inside this
 		virtual bool IsPointInside(const Vec2F& point) const;
@@ -301,7 +288,7 @@ CLASS_METHODS_META(o2::Transform)
 	PUBLIC_FUNCTION(Vec2F, GetWorldPivot);
 	PUBLIC_FUNCTION(void, SetSizePivot, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetSizePivot);
-	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(void, SetRect, const RectF&, bool);
 	PUBLIC_FUNCTION(RectF, GetRect);
 	PUBLIC_FUNCTION(void, SetScale, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetScale);

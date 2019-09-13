@@ -52,8 +52,8 @@ namespace Editor
 
 		bool    mNeedRedraw = false;
 		Sprite* mSprite = nullptr;
-		Color4  mBackColor = Color4(120, 120, 120, 255);
-		Color4  mCurveColor = Color4(0, 255, 0, 255);
+		Color4  mBackColor = Color4(225, 232, 232);
+		Color4  mCurveColor = Color4(44, 62, 80);
 
 	protected:
 		// Copies data of actor from other to this

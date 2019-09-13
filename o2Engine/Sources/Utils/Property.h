@@ -30,7 +30,7 @@ namespace o2
         typedef TYPE valueType;                                                                                                               \
 		NAME##_PROPERTY(_propertiesClassType* _this):_this(_this) {}												                          \
 																										                                      \
-		operator valueType() { return _this->GETTER(); }												                                      \
+		operator valueType() const { return _this->GETTER(); }												                                      \
 		NAME##_PROPERTY& operator=(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); return *this; }	                  \
                                                                                                                                               \
 		NAME##_PROPERTY& operator=(const NAME##_PROPERTY& value) { _this->SETTER(value.Get()); return *this; }	                              \

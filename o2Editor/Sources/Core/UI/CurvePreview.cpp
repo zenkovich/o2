@@ -104,43 +104,40 @@ namespace Editor
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}
 
-		const Color4 backColor(120, 120, 120, 255);
-		const Color4 curveColor(0, 255, 0, 255);
-
-		Camera prevCamera = o2Render.GetCamera();
-		Camera currCamera; currCamera.SetRect(mCurve->GetRect());
-		currCamera.SetScale(currCamera.GetScale().InvertedY());
-
 		o2Render.SetRenderTexture(texture);
-		o2Render.SetCamera(currCamera);
-		o2Render.Clear(backColor);
+		o2Render.Clear(mBackColor);
 
-		static Vector<Vertex2> buffer;
-		buffer.Clear();
+		RectF rect(mCurve->GetRect());
+		Camera camera; camera.SetRect(mCurve->GetRect());
+		camera.SetScale(camera.GetScale().InvertedY());
 
-		auto curveColorHex = curveColor.ARGB();
+		Camera defaultCamera = o2Render.GetCamera();
+		defaultCamera.leftBottom += Vec2F(0.0f, 1.0f);
+		defaultCamera.rightTop   -= Vec2F(0.0f, 1.0f);
 
-		auto& keys = mCurve->GetKeys();
-		for (auto& key : keys)
+		Basis transform = camera.GetBasis().Inverted()*defaultCamera.GetBasis();
+
+		for (auto& key : mCurve->GetKeys())
 		{
-			buffer.Add(Vertex2(key.position, key.value, curveColorHex, 0, 0));
-
 			auto points = key.GetApproximatedPoints();
-			for (int i = 0; i < key.GetApproximatedPointsCount(); i++)
-				buffer.Add(Vertex2(points[i], curveColorHex, 0, 0));
-
-			o2Render.DrawAAPolyLine(buffer.Data(), buffer.Count(), 2);
+			auto lastPoint = points[0]*transform;
+			for (int i = 1; i < key.GetApproximatedPointsCount(); i++)
+			{
+				auto point = points[i]*transform;
+				o2Render.DrawAALine(lastPoint, point, mCurveColor, 1.5f);
+				lastPoint = point;
+			}
 		}
 
 		o2Render.UnbindRenderTexture();
-		o2Render.SetCamera(prevCamera);
+
+		mNeedRedraw = false;
 	}
 
 	void CurvePreview::OnCurveChanged()
 	{
 		mNeedRedraw = true;
 	}
-
 }
 
 DECLARE_CLASS(Editor::CurvePreview);

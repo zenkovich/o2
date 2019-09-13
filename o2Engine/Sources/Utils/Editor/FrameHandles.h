@@ -55,7 +55,7 @@ namespace o2
 		const Color4& GetFrameColor() const;
 
 	protected:
-		const Color4 mFrameColor = Color4(220, 220, 220, 255); // Regular handle color
+		const Color4 mFrameColor = Color4(44, 62, 80, 255); // Regular handle color
 		const float  mFrameHandlesSize = 9.0f;	               // Frame corners handles size
 		const float  mHandlesRotateSize = 17.0f;	           // Rotation frame handles size
 

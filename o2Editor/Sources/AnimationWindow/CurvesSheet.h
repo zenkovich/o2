@@ -32,8 +32,21 @@ namespace Editor
 		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
 		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
 
+		bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
+
 	private:
+		// Initializes curves edit widget
 		void InitializeControls();
+
+		// It is called when timeline view has changed, updates horizontal view position and scale
+		void SetCameraAsTimelineView();
+
+		// It is called when curve editor view has changed, updates timeline scroll position
+		void OnEditorViewChanged(); 
+
+		// It is called when result enable was changed
+		// When curves mode has enabled, curves editor camera moves to timeline view
+		void OnResEnableInHierarchyChanged() override;
 	};
 }
 
@@ -47,6 +60,7 @@ CLASS_FIELDS_META(Editor::CurvesSheet)
 	PRIVATE_FIELD(mEditor);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mEditorViewLock);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
@@ -55,5 +69,8 @@ CLASS_METHODS_META(Editor::CurvesSheet)
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, AnimationTree*);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PRIVATE_FUNCTION(void, InitializeControls);
+	PRIVATE_FUNCTION(void, SetCameraAsTimelineView);
+	PRIVATE_FUNCTION(void, OnEditorViewChanged);
+	PRIVATE_FUNCTION(void, OnResEnableInHierarchyChanged);
 }
 END_META;

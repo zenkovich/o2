@@ -47,6 +47,9 @@ namespace Editor
 		// Returns camera scale
 		Vec2F GetCameraScale() const;
 
+		// Sets view camera
+		void SetCamera(const Camera& camera);
+
 		// Returns view camera
 		const Camera& GetCamera() const;
 
@@ -107,6 +110,9 @@ namespace Editor
 
 		// Updates camera
 		void UpdateCamera(float dt);
+
+		// Returns transformation basis from screen to local for camera
+		Basis GetCameraScreenToLocalTransform(const Camera& camera) const;
 
 		// Updates scene to screen and screen and scene transformations
 		void UpdateLocalScreenTransforms();
@@ -174,6 +180,7 @@ CLASS_METHODS_META(Editor::ScrollView)
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocalPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreenPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetCameraScale);
+	PUBLIC_FUNCTION(void, SetCamera, const Camera&);
 	PUBLIC_FUNCTION(const Camera&, GetCamera);
 	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetGridColor, const Color4&);
@@ -185,6 +192,7 @@ CLASS_METHODS_META(Editor::ScrollView)
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateCamera, float);
+	PROTECTED_FUNCTION(Basis, GetCameraScreenToLocalTransform, const Camera&);
 	PROTECTED_FUNCTION(void, UpdateLocalScreenTransforms);
 	PROTECTED_FUNCTION(void, RedrawRenderTarget);
 	PROTECTED_FUNCTION(void, RedrawContent);

@@ -185,6 +185,8 @@ namespace Editor
 		float min = mVerScrollbar->GetMinValue();
 		float max = mVerScrollbar->GetMaxValue();
 		mVerScrollbar->SetValue(min + (max - min - (mViewCamera.GetPosition().y - min)));
+
+		onViewChanged();
 	}
 }
 

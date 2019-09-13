@@ -16,7 +16,8 @@ DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimatedValue<Vec2F>>);
 
 namespace Editor
 {
-	void DrawCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis, const Color4& color)
+	void DrawCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis, 
+						   const Color4& color)
 	{
 		const int bufferSize = 50;
 		static Vertex2 buffer[bufferSize];
@@ -30,7 +31,8 @@ namespace Editor
 		o2Render.DrawAAPolyLine(buffer, pointsCount, 1.0f, LineType::Solid, false);
 	}
 
-	void DrawCenterCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis, const Color4& color)
+	void DrawCenterCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis, 
+								 const Color4& color)
 	{
 		const int bufferSize = 50;
 		static Vertex2 buffer[bufferSize];
@@ -67,8 +69,13 @@ namespace Editor
 			auto& key = mAnimatedValue->GetKeys()[i];
 			auto& prevKey = mAnimatedValue->GetKeys()[i - 1];
 
-			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3, layout->GetWorldTop() - 5, mTimeline->LocalToWorld(key.position) - 3, layout->GetWorldBottom() + 5));
-			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(), key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
+			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3, 
+								   layout->GetWorldTop() - 5, 
+								   mTimeline->LocalToWorld(key.position) - 3, 
+								   layout->GetWorldBottom() + 5));
+
+			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(), 
+							  key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
 		}
 
 		for (auto handle : mHandles)
