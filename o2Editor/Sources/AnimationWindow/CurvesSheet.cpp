@@ -92,7 +92,7 @@ namespace Editor
 		if (mEditorViewLock || !IsEnabled())
 			return;
 
-		mTimeline->SetViewRange(mEditor->GetCamera().GetRect().left);
+		mTimeline->SetViewRange(mEditor->GetCamera().GetRect().left, mEditor->GetCamera().GetRect().right);
 	}
 
 	void CurvesSheet::OnResEnableInHierarchyChanged()

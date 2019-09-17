@@ -210,7 +210,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetScroll, float);
-	PUBLIC_FUNCTION(void, SetViewRange, float);
+	PUBLIC_FUNCTION(void, SetViewRange, float, float);
 	PUBLIC_FUNCTION(float, GetScroll);
 	PUBLIC_FUNCTION(void, SetScale, float);
 	PUBLIC_FUNCTION(float, GetScale);

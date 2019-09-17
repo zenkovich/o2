@@ -265,7 +265,7 @@ namespace Editor
 				mScrollBar->SetValueForcible(mSmoothViewScroll);
 		}
 
-		if (!mDragViewScroll)
+		if (!mDragViewScroll && !mViewMoveDisabled)
 		{
 			if (mViewScroll < 0.0f)
 				mViewScroll = Math::Lerp(mViewScroll, 0.0f, dt*mScrollBorderBounceCoef);
@@ -316,10 +316,17 @@ namespace Editor
 		mSmoothViewScroll = scroll;
 	}
 
-	void AnimationTimeline::SetViewRange(float value)
+	void AnimationTimeline::SetViewRange(float left, float right)
 	{
-		mViewScroll += value - WorldToLocal(layout->worldLeft);
+		mViewZoom = (layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize / (right - left);
+		mViewScroll = left + mScaleOffset / mOneSecondDefaultSize / mViewZoom;
+
 		mSmoothViewScroll = mViewScroll;
+		mSmoothViewZoom = mViewZoom;
+
+		o2Debug.Log("Left: " + String(-mScaleOffset / mOneSecondDefaultSize / mSmoothViewZoom + mSmoothViewScroll) + "[" + String(left) + "]" + 
+					", Right: " + String((layout->worldRight - layout->worldLeft - mScaleOffset) / mOneSecondDefaultSize / mSmoothViewZoom + mSmoothViewScroll) + "[" + String(right) + "]" + 
+		", Zoom: " + String(mSmoothViewZoom));
 	}
 
 	float AnimationTimeline::GetScroll() const
