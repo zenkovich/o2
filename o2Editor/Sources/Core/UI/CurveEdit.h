@@ -101,6 +101,7 @@ namespace Editor
 			DragHandle   rightSupportHandle;
 				           
 			int          curveKeyIdx;
+			UInt64       curveKeyUid;
 
 		public:
 			KeyHandles() {}
@@ -113,12 +114,19 @@ namespace Editor
 
 		struct CurveInfo
 		{
-			String         curveId;
-			Curve*         curve = nullptr;
-			KeyHandlesVec  handles;
-			PointsVec      approximatedPoints;
-			Color4         color;
-			Vec2F          viewScale;
+			CurveEditor*   curveEditor = nullptr;
+
+			String curveId;
+			Curve* curve = nullptr;
+
+			KeyHandlesVec handles;
+
+			PointsVec approximatedPoints;
+
+			Color4 color;
+			Vec2F viewScale;
+
+			bool disableChangesHandling = false;
 
 		public:
 			CurveInfo();
@@ -126,6 +134,10 @@ namespace Editor
 
 			void UpdateHandles();
 			void UpdateApproximatedPoints();
+			void OnCurveChanged();
+
+			void BeginCurveManualChange();
+			void CompleteCurveManualChange();
 		};
 		typedef Vector<CurveInfo*> CurveInfosVec;
 

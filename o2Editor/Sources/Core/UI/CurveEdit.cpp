@@ -116,10 +116,12 @@ namespace Editor
 		UpdateSelfTransform();
 
 		CurveInfo* info = mnew CurveInfo();
+		info->curveEditor = this;
 		info->curveId = id;
 		info->curve = curve;
 		info->viewScale = Vec2F();
 		info->UpdateApproximatedPoints();
+		info->curve->onKeysChanged += Func(info, &CurveInfo::OnCurveChanged);
 
 		if (color == Color4::Green())
 		{
@@ -151,6 +153,10 @@ namespace Editor
 					mHandles.Remove(&handle->mainHandle);
 					mHandles.Remove(&handle->leftSupportHandle);
 					mHandles.Remove(&handle->rightSupportHandle);
+
+					mSupportHandles.Remove(&handle->leftSupportHandle);
+					mSupportHandles.Remove(&handle->rightSupportHandle);
+
 					mSelectedHandles.Remove(&handle->mainHandle);
 					mSelectedHandles.Remove(&handle->leftSupportHandle);
 					mSelectedHandles.Remove(&handle->rightSupportHandle);
@@ -293,15 +299,16 @@ namespace Editor
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
 		mContextMenu->AddItems({
-			ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed), ImageAssetRef()),
-
-			ContextMenu::Item::Separator(),
 
 			ContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
 			ContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
 			ContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
 			ContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
 			ContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
+
+			ContextMenu::Item::Separator(),
+
+			ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed), ImageAssetRef()),
 
 			ContextMenu::Item::Separator(),
 
@@ -359,26 +366,111 @@ namespace Editor
 	{
 		mEditValueWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
 
-		auto horLayout = o2UI.CreateHorLayout();
-		horLayout->spacing = 10;
+		auto verLayout = o2UI.CreateVerLayout();
+		verLayout->spacing = 10;
+		verLayout->expandHeight = false;
+		verLayout->fitByChildren = true;
 
-		auto positionVerLayout = o2UI.CreateVerLayout();
-		positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+		// Position and value
+		{
+			auto horLayout = o2UI.CreateHorLayout();
+			horLayout->spacing = 10;
+			horLayout->expandHeight = false;
+			horLayout->fitByChildren = true;
 
-		mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
-		mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
-		positionVerLayout->AddChild(mEditValueWindowPosition);
-		horLayout->AddChild(positionVerLayout);
+			auto positionVerLayout = o2UI.CreateVerLayout();
+			positionVerLayout->expandHeight = false;
+			positionVerLayout->fitByChildren = true;
+			positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
 
-		auto valueVerLayout = o2UI.CreateVerLayout();
-		valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+			mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
+			mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
+			positionVerLayout->AddChild(mEditValueWindowPosition);
+			horLayout->AddChild(positionVerLayout);
 
-		mEditValueWindowValue = o2UI.CreateEditBox("singleline");
-		mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
-		valueVerLayout->AddChild(mEditValueWindowValue);
-		horLayout->AddChild(valueVerLayout);
+			auto valueVerLayout = o2UI.CreateVerLayout();
+			valueVerLayout->expandHeight = false;
+			valueVerLayout->fitByChildren = true;
+			valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
 
-		mEditValueWindow->AddChild(horLayout);
+			mEditValueWindowValue = o2UI.CreateEditBox("singleline");
+			mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
+			valueVerLayout->AddChild(mEditValueWindowValue);
+			horLayout->AddChild(valueVerLayout);
+
+			verLayout->AddChild(horLayout);
+		}
+
+// 		float  leftSupportValue;     // Left bezier support value, relative to key value @SERIALIZABLE
+// 		float  leftSupportPosition;  // Left bezier support position, relative to key position @SERIALIZABLE
+// 		float  rightSupportValue;    // Right bezier support value, relative to key value @SERIALIZABLE
+// 		float  rightSupportPosition; // Right bezier support position, relative to key position @SERIALIZABLE
+
+		// left support
+		{
+			auto label = o2UI.CreateLabel("Left support:");
+			auto horLayout = o2UI.CreateHorLayout();
+			horLayout->spacing = 10;
+			horLayout->expandHeight = false;
+			horLayout->fitByChildren = true;
+
+			auto positionVerLayout = o2UI.CreateVerLayout();
+			positionVerLayout->expandHeight = false;
+			positionVerLayout->fitByChildren = true;
+			positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+
+			mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
+			mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
+			positionVerLayout->AddChild(mEditValueWindowPosition);
+			horLayout->AddChild(positionVerLayout);
+
+			auto valueVerLayout = o2UI.CreateVerLayout();
+			valueVerLayout->expandHeight = false;
+			valueVerLayout->fitByChildren = true;
+			valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+
+			mEditValueWindowValue = o2UI.CreateEditBox("singleline");
+			mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
+			valueVerLayout->AddChild(mEditValueWindowValue);
+			horLayout->AddChild(valueVerLayout);
+
+			verLayout->AddChild(label);
+			verLayout->AddChild(horLayout);
+		}
+
+		// right support
+		{
+			auto label = o2UI.CreateLabel("Right support:");
+			auto horLayout = o2UI.CreateHorLayout();
+			horLayout->spacing = 10;
+			horLayout->expandHeight = false;
+			horLayout->fitByChildren = true;
+
+			auto positionVerLayout = o2UI.CreateVerLayout();
+			positionVerLayout->expandHeight = false;
+			positionVerLayout->fitByChildren = true;
+			positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
+
+			mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
+			mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
+			positionVerLayout->AddChild(mEditValueWindowPosition);
+			horLayout->AddChild(positionVerLayout);
+
+			auto valueVerLayout = o2UI.CreateVerLayout();
+			valueVerLayout->expandHeight = false;
+			valueVerLayout->fitByChildren = true;
+			valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
+
+			mEditValueWindowValue = o2UI.CreateEditBox("singleline");
+			mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
+			valueVerLayout->AddChild(mEditValueWindowValue);
+			horLayout->AddChild(valueVerLayout);
+
+			verLayout->AddChild(label);
+			verLayout->AddChild(horLayout);
+		}
+
+		mEditValueWindow->AddChild(verLayout);
 		mEditValueWindow->layout->size = Vec2F(200, 80);
 		mEditValueWindow->Hide(true);
 	}
@@ -614,6 +706,7 @@ namespace Editor
 
 		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this);
 		keyHandles->curveKeyIdx = keyId;
+		keyHandles->curveKeyUid = info->curve->GetKeyAt(keyId).uid;
 
 		Curve::Key curveKey = info->curve->GetKeyAt(keyId);
 		Curve::Key lastCurveKey = info->curve->GetKeyAt(Math::Max(0, keyId - 1));
@@ -707,6 +800,8 @@ namespace Editor
 
 	void CurveEditor::OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
 	{
+		info->BeginCurveManualChange();
+
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 
 		Vec2F initialDragPoint = handles->mainHandle.GetDraggingBeginPosition();
@@ -761,7 +856,10 @@ namespace Editor
 			info->handles.Insert(handles, newKeyIdx);
 
 			for (int i = 0; i < info->handles.Count(); i++)
+			{
 				info->handles[i]->curveKeyIdx = i;
+				info->handles[i]->curveKeyUid = key.uid;
+			}
 		}
 
 		info->curve->SetKey(key, handles->curveKeyIdx);
@@ -773,10 +871,14 @@ namespace Editor
 		UpdateTransformFrame();
 		RecalculateViewArea();
 		mNeedRedraw = true;
+
+		info->CompleteCurveManualChange();
 	}
 
 	void CurveEditor::OnCurveKeyLeftSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
 	{
+		info->BeginCurveManualChange();
+
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 		Curve::Key prevKey = info->curve->GetKeyAt(Math::Max(handles->curveKeyIdx - 1, 0));
 
@@ -832,10 +934,14 @@ namespace Editor
 		CheckHandlesVisible();
 		RecalculateViewArea();
 		mNeedRedraw = true;
+
+		info->CompleteCurveManualChange();
 	}
 
 	void CurveEditor::OnCurveKeyRightSupportHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
 	{
+		info->BeginCurveManualChange();
+
 		Curve::Key key = info->curve->GetKeyAt(handles->curveKeyIdx);
 		Curve::Key nextKey = info->curve->GetKeyAt(Math::Min(handles->curveKeyIdx + 1, info->curve->GetKeys().Count() - 1));
 
@@ -896,6 +1002,8 @@ namespace Editor
 		CheckHandlesVisible();
 		RecalculateViewArea();
 		mNeedRedraw = true;
+
+		info->CompleteCurveManualChange();
 	}
 
 	Vec2F CurveEditor::CheckLeftSupportHandlePosition(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
@@ -1344,9 +1452,13 @@ namespace Editor
 				}
 			}
 
+			info->BeginCurveManualChange();
+
 			info->curve->SetKeys(keys);
 			info->UpdateHandles();
 			info->UpdateApproximatedPoints();
+
+			info->CompleteCurveManualChange();
 		}
 
 		CheckHandlesVisible();
@@ -1672,6 +1784,8 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			keyInfos.Add(CurveKeysInfo());
 			keyInfos.Last().curveId = curveInfo->curveId;
 
@@ -1679,6 +1793,7 @@ namespace Editor
 			for (auto& key : curve->keys)
 			{
 				key.position += positionDelta;
+				key.uid = Math::Random();
 
 				int position = curveInfo->curve->InsertKey(key);
 				AddCurveKeyHandles(curveInfo, position);
@@ -1691,6 +1806,8 @@ namespace Editor
 			curveInfo->UpdateApproximatedPoints();
 			curveInfo->UpdateHandles();
 			mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		if (!keyInfos.IsEmpty())
@@ -1709,6 +1826,8 @@ namespace Editor
 
 		for (auto curveInfo : mCurves)
 		{
+			curveInfo->BeginCurveManualChange();
+
 			CurveCopyInfo* copyInfo = mnew CurveCopyInfo();
 			copyInfo->curveId = curveInfo->curveId;
 
@@ -1738,6 +1857,8 @@ namespace Editor
 			curveInfo->UpdateApproximatedPoints();
 			curveInfo->UpdateHandles();
 			mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mSelectedHandles.Clear();
@@ -1826,6 +1947,8 @@ namespace Editor
 
 			delete x;
 		}
+
+		curve->onKeysChanged -= Func(this, &CurveInfo::OnCurveChanged);
 	}
 
 	void CurveEditor::CurveInfo::UpdateHandles()
@@ -1868,6 +1991,78 @@ namespace Editor
 			for (int j = 0; j < keys[i].GetApproximatedPointsCount(); j++)
 				approximatedPoints.Add(keyPoints[j]);
 		}
+	}
+
+	void CurveEditor::CurveInfo::OnCurveChanged()
+	{
+		if (disableChangesHandling)
+			return;
+
+		if (handles.Count() != curve->GetKeys().Count())
+		{
+			Vector<UInt64> selectedMain, selectedLeft, selectedRight;
+
+			for (auto handle : handles)
+			{
+				if (handle->leftSupportHandle.IsSelected())
+				{
+					selectedLeft.Add(handle->curveKeyUid);
+					handle->leftSupportHandle.SetSelected(false);
+				}
+
+				curveEditor->mHandles.Remove(&handle->leftSupportHandle);
+				curveEditor->mSupportHandles.Remove(&handle->leftSupportHandle);				
+
+				if (handle->rightSupportHandle.IsSelected())
+				{
+					selectedRight.Add(handle->curveKeyUid);
+					handle->rightSupportHandle.SetSelected(false);
+				}
+
+				curveEditor->mHandles.Remove(&handle->rightSupportHandle);
+				curveEditor->mSupportHandles.Remove(&handle->rightSupportHandle);
+
+				if (handle->mainHandle.IsSelected())
+				{
+					selectedMain.Add(handle->curveKeyUid);
+					handle->mainHandle.SetSelected(false);
+				}
+
+				curveEditor->mHandles.Remove(&handle->mainHandle);
+
+				delete handle;
+			}
+
+			handles.clear();
+
+			for (int i = 0; i < curve->GetKeys().Count(); i++)
+				curveEditor->AddCurveKeyHandles(this, i);
+
+			for (auto handle : handles)
+			{
+				if (selectedMain.Contains(handle->curveKeyUid))
+					handle->mainHandle.Select();
+
+				if (selectedLeft.Contains(handle->curveKeyUid))
+					handle->leftSupportHandle.Select();
+
+				if (selectedRight.Contains(handle->curveKeyUid))
+					handle->rightSupportHandle.Select();
+			}
+		}
+
+		UpdateApproximatedPoints();
+		UpdateHandles();
+	}
+
+	void CurveEditor::CurveInfo::BeginCurveManualChange()
+	{
+		disableChangesHandling = true;
+	}
+
+	void CurveEditor::CurveInfo::CompleteCurveManualChange()
+	{
+		disableChangesHandling = false;
 	}
 
 	CurveEditor::RangeInfo::RangeInfo()
@@ -1953,6 +2148,8 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			Vector<int> indexes;
 
 			for (auto& key : info.keys)
@@ -1965,6 +2162,8 @@ namespace Editor
 				curveInfo->handles[idx]->mainHandle.SetSelected(true);
 
 			mEditor->mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mEditor->UpdateTransformFrame();
@@ -1981,12 +2180,16 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			for (auto& key : info.keys)
 				curveInfo->curve->RemoveKey(key.position);
 
 			curveInfo->UpdateApproximatedPoints();
 			curveInfo->UpdateHandles();
 			mEditor->mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mEditor->DeselectAll();
@@ -2022,12 +2225,16 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			for (auto& key : info.keys)
 				curveInfo->curve->RemoveKey(key.position);
 
 			curveInfo->UpdateApproximatedPoints();
 			curveInfo->UpdateHandles();
 			mEditor->mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mEditor->DeselectAll();
@@ -2049,6 +2256,8 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			Vector<int> indexes;
 
 			for (auto& key : info.keys)
@@ -2061,6 +2270,8 @@ namespace Editor
 				curveInfo->handles[idx]->mainHandle.SetSelected(true);
 
 			mEditor->mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mEditor->UpdateTransformFrame();
@@ -2092,6 +2303,8 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			for (auto& key : info.beforeKeys)
 				curveInfo->curve->RemoveKey(key.position);
 
@@ -2115,6 +2328,8 @@ namespace Editor
 			curveInfo->UpdateApproximatedPoints();
 			curveInfo->UpdateHandles();
 			mEditor->mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mEditor->UpdateTransformFrame();
@@ -2134,6 +2349,8 @@ namespace Editor
 			if (!curveInfo)
 				continue;
 
+			curveInfo->BeginCurveManualChange();
+
 			for (auto& key : info.afterKeys)
 				curveInfo->curve->RemoveKey(key.position);
 
@@ -2157,6 +2374,8 @@ namespace Editor
 			curveInfo->UpdateApproximatedPoints();
 			curveInfo->UpdateHandles();
 			mEditor->mNeedRedraw = true;
+
+			curveInfo->CompleteCurveManualChange();
 		}
 
 		mEditor->UpdateTransformFrame();

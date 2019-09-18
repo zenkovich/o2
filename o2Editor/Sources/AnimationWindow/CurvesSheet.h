@@ -43,10 +43,6 @@ namespace Editor
 
 		// It is called when curve editor view has changed, updates timeline scroll position
 		void OnEditorViewChanged(); 
-
-		// It is called when result enable was changed
-		// When curves mode has enabled, curves editor camera moves to timeline view
-		void OnResEnableInHierarchyChanged() override;
 	};
 }
 
@@ -71,6 +67,5 @@ CLASS_METHODS_META(Editor::CurvesSheet)
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, SetCameraAsTimelineView);
 	PRIVATE_FUNCTION(void, OnEditorViewChanged);
-	PRIVATE_FUNCTION(void, OnResEnableInHierarchyChanged);
 }
 END_META;

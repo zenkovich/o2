@@ -1123,7 +1123,7 @@ namespace o2
 		sample->SetCaretBlinkingDelay(1.15f);
 		sample->SetMultiLine(false);
 		sample->SetSelectionColor(Color4(0, 156, 141, 120));
-		sample->layout->minSize = Vec2F(10, 10);
+		sample->layout->minSize = Vec2F(25, 25);
 
 		auto backLayer = sample->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"), Layout::BothStretch(-9, -9, -9, -9));
 		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"), Layout::BothStretch(-9, -9, -9, -9));

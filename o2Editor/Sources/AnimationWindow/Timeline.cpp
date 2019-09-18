@@ -318,15 +318,11 @@ namespace Editor
 
 	void AnimationTimeline::SetViewRange(float left, float right)
 	{
-		mViewZoom = (layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize / (right - left);
-		mViewScroll = left + mScaleOffset / mOneSecondDefaultSize / mViewZoom;
+		mViewZoom = (layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/(right - left);
+		mViewScroll = left + mScaleOffset/mOneSecondDefaultSize/mViewZoom;
 
 		mSmoothViewScroll = mViewScroll;
 		mSmoothViewZoom = mViewZoom;
-
-		o2Debug.Log("Left: " + String(-mScaleOffset / mOneSecondDefaultSize / mSmoothViewZoom + mSmoothViewScroll) + "[" + String(left) + "]" + 
-					", Right: " + String((layout->worldRight - layout->worldLeft - mScaleOffset) / mOneSecondDefaultSize / mSmoothViewZoom + mSmoothViewScroll) + "[" + String(right) + "]" + 
-		", Zoom: " + String(mSmoothViewZoom));
 	}
 
 	float AnimationTimeline::GetScroll() const

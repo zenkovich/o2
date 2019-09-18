@@ -95,14 +95,6 @@ namespace Editor
 		mTimeline->SetViewRange(mEditor->GetCamera().GetRect().left, mEditor->GetCamera().GetRect().right);
 	}
 
-	void CurvesSheet::OnResEnableInHierarchyChanged()
-	{
-		Widget::OnResEnableInHierarchyChanged();
-
-		if (mResEnabledInHierarchy)
-			SetCameraAsTimelineView();
-	}
-
 }
 
 DECLARE_CLASS(Editor::CurvesSheet);
