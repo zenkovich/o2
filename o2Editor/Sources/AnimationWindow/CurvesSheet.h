@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/UI/CurveEdit.h"
+#include "Core/UI/CurveEditor/CurveEditor.h"
 
 using namespace o2;
 

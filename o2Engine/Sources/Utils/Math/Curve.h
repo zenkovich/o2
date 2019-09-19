@@ -214,8 +214,8 @@ namespace o2
 			//Default constructor
 			Key();
 
-			// Constructor from value
-			Key(float value);
+			// Constructor from value and position
+			Key(float value, float position);
 
 			// Constructor
 			Key(float position, float value, float leftSupportValue, float leftSupportPosition,

@@ -33,6 +33,9 @@
     <Filter Include="Sources\AnimationWindow\TrackControls">
       <UniqueIdentifier>{3c58b323-d599-4b92-bf48-dca8cdea2fd8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Core\UI\CurveEditor">
+      <UniqueIdentifier>{e85dc53e-2443-4638-9c9c-cb08ece29777}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h">
@@ -224,9 +227,6 @@
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEdit.h">
-      <Filter>Sources\Core\UI</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h">
       <Filter>Sources\Core\UI</Filter>
     </ClInclude>
@@ -361,6 +361,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h">
       <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\KeyEditWindow.h">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -550,9 +556,6 @@
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEdit.cpp">
-      <Filter>Sources\Core\UI</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp">
       <Filter>Sources\Core\UI</Filter>
     </ClCompile>
@@ -690,6 +693,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp">
       <Filter>Sources\AnimationWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\KeyEditWindow.cpp">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

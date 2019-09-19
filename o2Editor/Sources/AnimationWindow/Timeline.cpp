@@ -18,7 +18,7 @@ namespace Editor
 		mText->horAlign = HorAlign::Middle;
 		mText->verAlign = VerAlign::Bottom;
 		mText->height = 8;
-		mText->color = Color4(96, 125, 139);
+		mText->color = Color4(44, 62, 80);
 
 		AddLayer("back", mnew Sprite("ui/UI4_dopesheet_back.png"), Layout::BothStretch(-3, -3, -3, -14))->transparency = 0.5f;
 

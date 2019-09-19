@@ -305,7 +305,7 @@ namespace o2
 		}
 
 		pos = Math::Clamp(pos, 0, mKeys.Count());
-		mKeys.Insert(Key(position, value, value, 1.0f, value, 0.0f), pos);
+		mKeys.Insert(Key(value, position), pos);
 		SmoothKey(position, smooth);
 
 		if (mBatchChange)
@@ -823,6 +823,11 @@ namespace o2
 		rightSupportValue(rightSupportValue), rightSupportPosition(rightSupportPosition), supportsType(Type::Broken)
 	{ }
 
+	Curve::Key::Key(float value, float position) :
+		uid(Math::Random()), value(value), position(position), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
+		rightSupportPosition(0), supportsType(Type::Smooth)
+	{ }
+
 	Curve::Key::Key(const Key& other) :
 		uid(other.uid), value(other.value), position(other.position), leftSupportValue(other.leftSupportValue),
 		leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
@@ -830,11 +835,6 @@ namespace o2
 	{
 		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(Vec2F));
 	}
-
-	Curve::Key::Key(float value) :
-		uid(Math::Random()), value(value), position(0), leftSupportValue(0), leftSupportPosition(0), rightSupportValue(0),
-		rightSupportPosition(0), supportsType(Type::Smooth)
-	{ }
 
 	Curve::Key::operator float() const
 	{

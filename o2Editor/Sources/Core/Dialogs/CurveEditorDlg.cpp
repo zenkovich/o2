@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CurveEditorDlg.h"
 
-#include "Core/UI/CurveEdit.h"
+#include "Core/UI/CurveEditor/CurveEditor.h"
 #include "Core/UIRoot.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayer.h"
