@@ -4,6 +4,11 @@
 
 using namespace o2;
 
+namespace o2
+{
+	class EditBox;
+}
+
 namespace Editor
 {
 	class KeyEditWindow : public Window
@@ -16,8 +21,26 @@ namespace Editor
 		void Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed);
 
 		SERIALIZABLE(KeyEditWindow);
+
 	private:
-		
+		EditBox* mPosition;
+		EditBox* mValue;
+		EditBox* mLeftSupportPosition;
+		EditBox* mLeftSupportValue;
+		EditBox* mRightSupportPosition;
+		EditBox* mRightSupportValue;
+
+		Function<void(const Curve::Key& key)> mOnClosed;
+
+	private:
+		// Initializes layout and controls
+		void InitializeControls();
+
+		// Searches controls in layout
+		void FindControls();
+
+		// It is called when Ok button pressed, calls onClosed function with new key parameters
+		void OnOkPressed();
 	};
 }
 

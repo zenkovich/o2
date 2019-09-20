@@ -275,12 +275,16 @@ namespace Editor
 
 	void CurveEditor::OnScrolled(float scroll)
 	{
+		Vec2F newScale = mViewCameraTargetScale;
+
 		if (o2Input.IsKeyDown(VK_CONTROL))
-			mViewCameraTargetScale.x *= 1.0f - (scroll*mViewCameraScaleSence);
+			newScale.x *= 1.0f - (scroll*mViewCameraScaleSence);
 		else if (o2Input.IsKeyDown(VK_SHIFT))
-			mViewCameraTargetScale.y *= 1.0f - (scroll*mViewCameraScaleSence);
+			newScale.y *= 1.0f - (scroll*mViewCameraScaleSence);
 		else
-			mViewCameraTargetScale *= 1.0f - (scroll*mViewCameraScaleSence);
+			newScale *= 1.0f - (scroll*mViewCameraScaleSence);
+
+		ChangeCameraScaleRelativeToCursor(newScale);
 	}
 
 	Curve* CurveEditor::FindCurve(const String& id)

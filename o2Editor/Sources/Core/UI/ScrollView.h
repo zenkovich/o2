@@ -132,6 +132,9 @@ namespace Editor
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
 
+		// Updates camera's scale and position
+		void ChangeCameraScaleRelativeToCursor(const Vec2F& newScale);
+
 		// It is called when right mouse button was pressed on this
 		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
 
@@ -199,6 +202,7 @@ CLASS_METHODS_META(Editor::ScrollView)
 	PROTECTED_FUNCTION(void, DrawGrid);
 	PROTECTED_FUNCTION(void, OnCameraTransformChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
+	PROTECTED_FUNCTION(void, ChangeCameraScaleRelativeToCursor, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
