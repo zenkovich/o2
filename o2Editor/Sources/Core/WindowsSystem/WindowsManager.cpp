@@ -4,23 +4,25 @@
 #include "Core/Dialogs/ColorPickerDlg.h"
 #include "Core/Dialogs/CurveEditorDlg.h"
 #include "Core/Dialogs/EditNameDlg.h"
+#include "Core/Dialogs/KeyEditDlg.h"
 #include "Core/EditorConfig.h"
 #include "Core/UIRoot.h"
 #include "Core/UIStyle/EditorUIStyle.h"
-#include "Core/WindowsSystem/IEditorWindow.h"
 #include "Core/WindowsSystem/DockWindowPlace.h"
 #include "Core/WindowsSystem/DockableWindow.h"
+#include "Core/WindowsSystem/IEditorWindow.h"
 #include "Render/Render.h"
-#include "Scene/UI/Widgets/MenuPanel.h"
 #include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widgets/MenuPanel.h"
 
 namespace Editor
 {
 	WindowsManager::WindowsManager()
 	{
-		mColorPickerDlg = mnew ColorPickerDlg();
-		mCurveEditorDlg = mnew CurveEditorDlg();
-		mNameEditDlg = mnew NameEditDlg();
+		mnew ColorPickerDlg();
+		mnew CurveEditorDlg();
+		mnew NameEditDlg();
+		mnew KeyEditDlg();
 
 		InitializeDock();
 		InitializeWindows();
@@ -34,15 +36,6 @@ namespace Editor
 	{
 		for (auto wnd : mEditorWindows)
 			delete wnd;
-
-		if (mColorPickerDlg)
-			delete mColorPickerDlg;
-
-		if (mCurveEditorDlg)
-			delete mCurveEditorDlg;
-
-		if (mNameEditDlg)
-			delete mNameEditDlg;
 	}
 
 	void WindowsManager::InitializeWindows()

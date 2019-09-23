@@ -2,7 +2,9 @@
 #include "CurveEditor.h"
 
 #include "Application/Application.h"
+#include "Core/Dialogs/KeyEditDlg.h"
 #include "Core/EditorScope.h"
+#include "Core/UI/CurveEditor/Actions.h"
 #include "Core/UIRoot.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
@@ -33,7 +35,6 @@ namespace Editor
 
 		InitializeTextDrawables();
 		InitializeContextMenu();
-		InitializeEditValueWindow();
 
 		mTransformFrame.SetPivotEnabled(false);
 		mTransformFrame.SetRotationEnabled(false);
@@ -58,7 +59,6 @@ namespace Editor
 
 		InitializeTextDrawables();
 		InitializeContextMenu();
-		InitializeEditValueWindow();
 		RetargetStatesAnimations();
 
 		mReady = true;
@@ -68,9 +68,6 @@ namespace Editor
 	{
 		for (auto curve : mCurves)
 			delete curve;
-
-		if (mEditValueWindow)
-			delete mEditValueWindow;
 
 		if (mSelectionSprite)
 			delete mSelectionSprite;
@@ -259,7 +256,6 @@ namespace Editor
 		mSupportHandleSample = other.mSupportHandleSample;
 
 		InitializeTextDrawables();
-		InitializeEditValueWindow();
 		RetargetStatesAnimations();
 
 		mReady = true;
@@ -363,120 +359,6 @@ namespace Editor
 		mTextBottom->SetVerAlign(VerAlign::Bottom);
 		mTextBottom->SetAngleDegrees(-90.0f);
 		mTextBottom->color = Color4(96, 125, 139);
-
-	}
-
-	void CurveEditor::InitializeEditValueWindow()
-	{
-		mEditValueWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
-
-		auto verLayout = o2UI.CreateVerLayout();
-		verLayout->spacing = 10;
-		verLayout->expandHeight = false;
-		verLayout->fitByChildren = true;
-
-		// Position and value
-		{
-			auto horLayout = o2UI.CreateHorLayout();
-			horLayout->spacing = 10;
-			horLayout->expandHeight = false;
-			horLayout->fitByChildren = true;
-
-			auto positionVerLayout = o2UI.CreateVerLayout();
-			positionVerLayout->expandHeight = false;
-			positionVerLayout->fitByChildren = true;
-			positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
-
-			mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
-			mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
-			positionVerLayout->AddChild(mEditValueWindowPosition);
-			horLayout->AddChild(positionVerLayout);
-
-			auto valueVerLayout = o2UI.CreateVerLayout();
-			valueVerLayout->expandHeight = false;
-			valueVerLayout->fitByChildren = true;
-			valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
-
-			mEditValueWindowValue = o2UI.CreateEditBox("singleline");
-			mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
-			valueVerLayout->AddChild(mEditValueWindowValue);
-			horLayout->AddChild(valueVerLayout);
-
-			verLayout->AddChild(horLayout);
-		}
-
-// 		float  leftSupportValue;     // Left bezier support value, relative to key value @SERIALIZABLE
-// 		float  leftSupportPosition;  // Left bezier support position, relative to key position @SERIALIZABLE
-// 		float  rightSupportValue;    // Right bezier support value, relative to key value @SERIALIZABLE
-// 		float  rightSupportPosition; // Right bezier support position, relative to key position @SERIALIZABLE
-
-		// left support
-		{
-			auto label = o2UI.CreateLabel("Left support:");
-			auto horLayout = o2UI.CreateHorLayout();
-			horLayout->spacing = 10;
-			horLayout->expandHeight = false;
-			horLayout->fitByChildren = true;
-
-			auto positionVerLayout = o2UI.CreateVerLayout();
-			positionVerLayout->expandHeight = false;
-			positionVerLayout->fitByChildren = true;
-			positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
-
-			mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
-			mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
-			positionVerLayout->AddChild(mEditValueWindowPosition);
-			horLayout->AddChild(positionVerLayout);
-
-			auto valueVerLayout = o2UI.CreateVerLayout();
-			valueVerLayout->expandHeight = false;
-			valueVerLayout->fitByChildren = true;
-			valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
-
-			mEditValueWindowValue = o2UI.CreateEditBox("singleline");
-			mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
-			valueVerLayout->AddChild(mEditValueWindowValue);
-			horLayout->AddChild(valueVerLayout);
-
-			verLayout->AddChild(label);
-			verLayout->AddChild(horLayout);
-		}
-
-		// right support
-		{
-			auto label = o2UI.CreateLabel("Right support:");
-			auto horLayout = o2UI.CreateHorLayout();
-			horLayout->spacing = 10;
-			horLayout->expandHeight = false;
-			horLayout->fitByChildren = true;
-
-			auto positionVerLayout = o2UI.CreateVerLayout();
-			positionVerLayout->expandHeight = false;
-			positionVerLayout->fitByChildren = true;
-			positionVerLayout->AddChild(o2UI.CreateLabel("Position"));
-
-			mEditValueWindowPosition = o2UI.CreateEditBox("singleline");
-			mEditValueWindowPosition->onChangeCompleted = THIS_FUNC(OnEditKeyPositionChanged);
-			positionVerLayout->AddChild(mEditValueWindowPosition);
-			horLayout->AddChild(positionVerLayout);
-
-			auto valueVerLayout = o2UI.CreateVerLayout();
-			valueVerLayout->expandHeight = false;
-			valueVerLayout->fitByChildren = true;
-			valueVerLayout->AddChild(o2UI.CreateLabel("Value"));
-
-			mEditValueWindowValue = o2UI.CreateEditBox("singleline");
-			mEditValueWindowValue->onChangeCompleted = THIS_FUNC(OnEditKeyValueChanged);
-			valueVerLayout->AddChild(mEditValueWindowValue);
-			horLayout->AddChild(valueVerLayout);
-
-			verLayout->AddChild(label);
-			verLayout->AddChild(horLayout);
-		}
-
-		mEditValueWindow->AddChild(verLayout);
-		mEditValueWindow->layout->size = Vec2F(200, 80);
-		mEditValueWindow->Hide(true);
 	}
 
 	void CurveEditor::RecalculateViewArea()
@@ -1607,34 +1489,6 @@ namespace Editor
 		}
 	}
 
-	void CurveEditor::OnEditKeyPositionChanged(const WString& str)
-	{
-		for (auto handle : mSelectedHandles)
-		{
-			if (mSupportHandles.Contains(handle))
-				continue;
-
-			handle->SetPosition(Vec2F((float)str, handle->GetPosition().y));
-			handle->onChangedPos(handle->position);
-		}
-
-		UpdateTransformFrame();
-	}
-
-	void CurveEditor::OnEditKeyValueChanged(const WString& str)
-	{
-		for (auto handle : mSelectedHandles)
-		{
-			if (mSupportHandles.Contains(handle))
-				continue;
-
-			handle->SetPosition(Vec2F(handle->GetPosition().x, (float)str));
-			handle->onChangedPos(handle->position);
-		}
-
-		UpdateTransformFrame();
-	}
-
 	void CurveEditor::DoneAction(IAction* action)
 	{
 		mUndoActions.Add(action);
@@ -1647,21 +1501,34 @@ namespace Editor
 
 	void CurveEditor::OnEditPressed()
 	{
-		Vec2F key;
-		bool someSelected = false;
-		for (auto handle : mSelectedHandles)
+		Curve::Key key;
+		CurveInfo* curveInfo = nullptr;
+		int keyIdx = 0;
+
+		for (auto info : mCurves)
 		{
-			if (mSupportHandles.Contains(handle))
-				continue;
+			for (auto handles : info->handles)
+			{
+				if (handles->mainHandle.IsSelected())
+				{
+					curveInfo = info;
+					keyIdx = handles->curveKeyIdx;
+					key = info->curve->GetKeys()[keyIdx];
 
-			someSelected = true;
+					break;
+				}
+			}
 
-			key = handle->position;
+			if (curveInfo)
+				break;
 		}
 
-		mEditValueWindowPosition->text = (WString)key.x;
-		mEditValueWindowValue->text = (WString)key.y;
-		mEditValueWindow->ShowModal();
+		if (!curveInfo)
+			return;
+
+		KeyEditDlg::Show(key, [=](const Curve::Key& newKey) {
+			curveInfo->curve->SetKey(newKey, keyIdx);
+		});
 	}
 
 	void CurveEditor::OnAutoSmoothChecked(bool checked)
@@ -2122,278 +1989,9 @@ namespace Editor
 		return mainHandle.IsSelected() || leftSupportHandle.IsSelected() || rightSupportHandle.IsSelected();
 	}
 
-	CurveEditor::AddKeysAction::AddKeysAction(const CurveKeysInfosVec& infos, CurveEditor* editor):
-		mInfos(infos), mEditor(editor)
-	{
-		for (auto& info : mInfos)
-		{
-			info.keys.Sort([](const Curve::Key& a, const Curve::Key& b) { return a.position < b.position; });
-		}
-	}
-
-	CurveEditor::AddKeysAction::AddKeysAction()
-	{}
-
-	String CurveEditor::AddKeysAction::GetName()
-	{
-		return "add keys";
-	}
-
-	void CurveEditor::AddKeysAction::Redo()
-	{
-		mEditor->DeselectAll();
-		mEditor->mSelectedHandles.Clear();
-
-		for (auto& info : mInfos)
-		{
-			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
-
-			if (!curveInfo)
-				continue;
-
-			curveInfo->BeginCurveManualChange();
-
-			Vector<int> indexes;
-
-			for (auto& key : info.keys)
-				indexes.Add(curveInfo->curve->InsertKey(key));
-
-			curveInfo->UpdateApproximatedPoints();
-			curveInfo->UpdateHandles();
-
-			for (int idx : indexes)
-				curveInfo->handles[idx]->mainHandle.SetSelected(true);
-
-			mEditor->mNeedRedraw = true;
-
-			curveInfo->CompleteCurveManualChange();
-		}
-
-		mEditor->UpdateTransformFrame();
-		mEditor->CheckHandlesVisible();
-	}
-
-	void CurveEditor::AddKeysAction::Undo()
-	{
-		for (auto& info : mInfos)
-		{
-			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
-
-			if (!curveInfo)
-				continue;
-
-			curveInfo->BeginCurveManualChange();
-
-			for (auto& key : info.keys)
-				curveInfo->curve->RemoveKey(key.position);
-
-			curveInfo->UpdateApproximatedPoints();
-			curveInfo->UpdateHandles();
-			mEditor->mNeedRedraw = true;
-
-			curveInfo->CompleteCurveManualChange();
-		}
-
-		mEditor->DeselectAll();
-		mEditor->mSelectedHandles.Clear();
-		mEditor->UpdateTransformFrame();
-		mEditor->CheckHandlesVisible();
-	}
-
-	CurveEditor::DeleteKeysAction::DeleteKeysAction(const CurveKeysInfosVec& infos, CurveEditor* editor):
-		mInfos(infos), mEditor(editor)
-	{
-		for (auto& info : mInfos)
-		{
-			info.keys.Sort([](const Curve::Key& a, const Curve::Key& b) { return a.position < b.position; });
-		}
-	}
-
-	CurveEditor::DeleteKeysAction::DeleteKeysAction()
-	{}
-
-	String CurveEditor::DeleteKeysAction::GetName()
-	{
-		return "remove keys";
-	}
-
-	void CurveEditor::DeleteKeysAction::Redo()
-	{
-		for (auto& info : mInfos)
-		{
-			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
-
-			if (!curveInfo)
-				continue;
-
-			curveInfo->BeginCurveManualChange();
-
-			for (auto& key : info.keys)
-				curveInfo->curve->RemoveKey(key.position);
-
-			curveInfo->UpdateApproximatedPoints();
-			curveInfo->UpdateHandles();
-			mEditor->mNeedRedraw = true;
-
-			curveInfo->CompleteCurveManualChange();
-		}
-
-		mEditor->DeselectAll();
-		mEditor->mSelectedHandles.Clear();
-		mEditor->UpdateTransformFrame();
-		mEditor->CheckHandlesVisible();
-	}
-
-	void CurveEditor::DeleteKeysAction::Undo()
-	{
-		mEditor->DeselectAll();
-		mEditor->mSelectedHandles.Clear();
-
-		for (auto& info : mInfos)
-		{
-			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
-
-			if (!curveInfo)
-				continue;
-
-			curveInfo->BeginCurveManualChange();
-
-			Vector<int> indexes;
-
-			for (auto& key : info.keys)
-				indexes.Add(curveInfo->curve->InsertKey(key));
-
-			curveInfo->UpdateApproximatedPoints();
-			curveInfo->UpdateHandles();
-
-			for (int idx : indexes)
-				curveInfo->handles[idx]->mainHandle.SetSelected(true);
-
-			mEditor->mNeedRedraw = true;
-
-			curveInfo->CompleteCurveManualChange();
-		}
-
-		mEditor->UpdateTransformFrame();
-		mEditor->CheckHandlesVisible();
-	}
-
-	CurveEditor::KeysChangeAction::KeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor):
-		mInfos(infos), mEditor(editor)
-	{}
-
-	CurveEditor::KeysChangeAction::KeysChangeAction()
-	{}
-
-	String CurveEditor::KeysChangeAction::GetName()
-	{
-		return "change keys";
-	}
-
-	void CurveEditor::KeysChangeAction::Redo()
-	{
-		mEditor->DeselectAll();
-		mEditor->mSelectedHandles.Clear();
-
-		for (auto& info : mInfos)
-		{
-			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
-
-			if (!curveInfo)
-				continue;
-
-			curveInfo->BeginCurveManualChange();
-
-			for (auto& key : info.beforeKeys)
-				curveInfo->curve->RemoveKey(key.position);
-
-			for (auto& key : info.afterKeys)
-				curveInfo->curve->InsertKey(key);
-
-			for (auto& selectedHandles : info.selectedHandles)
-			{
-				auto handles = curveInfo->handles[selectedHandles.index];
-
-				if (selectedHandles.mainHandle)
-					handles->mainHandle.Select();
-
-				if (selectedHandles.leftSupportHandle)
-					handles->leftSupportHandle.Select();
-
-				if (selectedHandles.rightSupportHandle)
-					handles->rightSupportHandle.Select();
-			}
-
-			curveInfo->UpdateApproximatedPoints();
-			curveInfo->UpdateHandles();
-			mEditor->mNeedRedraw = true;
-
-			curveInfo->CompleteCurveManualChange();
-		}
-
-		mEditor->UpdateTransformFrame();
-		mEditor->CheckHandlesVisible();
-	}
-
-	void CurveEditor::KeysChangeAction::Undo()
-	{
-		mEditor->DeselectAll();
-		mEditor->mSelectedHandles.Clear();
-
-		for (auto& info : mInfos)
-		{
-			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
-
-			if (!curveInfo)
-				continue;
-
-			curveInfo->BeginCurveManualChange();
-
-			for (auto& key : info.afterKeys)
-				curveInfo->curve->RemoveKey(key.position);
-
-			for (auto& key : info.beforeKeys)
-				curveInfo->curve->InsertKey(key);
-
-			for (auto& selectedHandles : info.selectedHandles)
-			{
-				auto handles = curveInfo->handles[selectedHandles.index];
-
-				if (selectedHandles.mainHandle)
-					handles->mainHandle.Select();
-
-				if (selectedHandles.leftSupportHandle)
-					handles->leftSupportHandle.Select();
-
-				if (selectedHandles.rightSupportHandle)
-					handles->rightSupportHandle.Select();
-			}
-
-			curveInfo->UpdateApproximatedPoints();
-			curveInfo->UpdateHandles();
-			mEditor->mNeedRedraw = true;
-
-			curveInfo->CompleteCurveManualChange();
-		}
-
-		mEditor->UpdateTransformFrame();
-		mEditor->CheckHandlesVisible();
-	}
-
 	bool CurveEditor::CurveKeysInfo::operator==(const CurveKeysInfo& other) const
 	{
 		return curveId == other.curveId && keys == other.keys;
-	}
-
-	bool CurveEditor::KeysChangeAction::KeysInfo::operator==(const KeysInfo& other) const
-	{
-		return curveId == other.curveId && beforeKeys == other.beforeKeys && afterKeys == other.afterKeys;
 	}
 
 	bool CurveEditor::SelectedHandlesInfo::operator==(const SelectedHandlesInfo& other) const
@@ -2407,9 +2005,3 @@ namespace Editor
 DECLARE_CLASS(Editor::CurveEditor);
 
 DECLARE_CLASS(Editor::CurveEditor::CurveCopyInfo);
-
-DECLARE_CLASS(Editor::CurveEditor::AddKeysAction);
-
-DECLARE_CLASS(Editor::CurveEditor::DeleteKeysAction);
-
-DECLARE_CLASS(Editor::CurveEditor::KeysChangeAction);

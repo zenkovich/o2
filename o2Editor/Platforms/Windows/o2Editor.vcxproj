@@ -214,9 +214,9 @@
     <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\Timeline.h" />
+    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
-    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\Tree.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetIcon.h" />
@@ -235,6 +235,7 @@
     <ClInclude Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.h" />
     <ClInclude Include="..\..\Sources\Core\Dialogs\CurveEditorDlg.h" />
     <ClInclude Include="..\..\Sources\Core\Dialogs\EditNameDlg.h" />
+    <ClInclude Include="..\..\Sources\Core\Dialogs\KeyEditDlg.h" />
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\Core\EditorConfig.h" />
     <ClInclude Include="..\..\Sources\Core\EditorScope.h" />
@@ -277,8 +278,8 @@
     <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\Actions.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h" />
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\KeyEditWindow.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h" />
     <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h" />
     <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h" />
@@ -326,9 +327,9 @@
     <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\Timeline.cpp" />
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
-    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\Tree.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetIcon.cpp" />
@@ -347,6 +348,7 @@
     <ClCompile Include="..\..\Sources\Core\Dialogs\ColorPickerDlg.cpp" />
     <ClCompile Include="..\..\Sources\Core\Dialogs\CurveEditorDlg.cpp" />
     <ClCompile Include="..\..\Sources\Core\Dialogs\EditNameDlg.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Dialogs\KeyEditDlg.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorConfig.cpp" />
     <ClCompile Include="..\..\Sources\Core\EditorScope.cpp" />
@@ -388,8 +390,8 @@
     <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\Actions.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\KeyEditWindow.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp" />

@@ -1,53 +1,31 @@
 #include "stdafx.h"
-#include "KeyEditWindow.h"
+#include "KeyEditDlg.h"
 
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/EditBox.h"
 #include "Scene/UI/Widgets/HorizontalLayout.h"
 #include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widgets/VerticalLayout.h"
-#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/Window.h"
+#include "Core/UIRoot.h"
+
+DECLARE_SINGLETON(Editor::KeyEditDlg);
 
 namespace Editor
 {
 
-	KeyEditWindow::KeyEditWindow()
+	KeyEditDlg::KeyEditDlg()
 	{
-		InitializeControls();
-	}
+		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Edit key")));
 
-	KeyEditWindow::KeyEditWindow(const KeyEditWindow& other):
-		Window(other)
-	{
-		InitializeControls();
-	}
-
-	KeyEditWindow& KeyEditWindow::operator=(const KeyEditWindow& other)
-	{
-		Window::operator=(other);
-		InitializeControls();
-		return *this;
-	}
-
-	void KeyEditWindow::Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed)
-	{
-		mPosition->SetText(String(key.position));
-		mValue->SetText(String(key.value));
-		mLeftSupportPosition->SetText(String(key.leftSupportPosition));
-		mLeftSupportValue->SetText(String(key.leftSupportValue));
-		mRightSupportPosition->SetText(String(key.rightSupportPosition));
-		mRightSupportValue->SetText(String(key.rightSupportValue));
-
-		mOnClosed = onClosed;
-	}
-
-	void KeyEditWindow::InitializeControls()
-	{
 		auto verLayout = o2UI.CreateVerLayout();
 		verLayout->spacing = 10;
 		verLayout->expandHeight = false;
-		verLayout->fitByChildren = true;
+		verLayout->fitByChildren = false;
+		*verLayout->layout = WidgetLayout::BothStretch(0, 30, 0, 0);
+		mWindow->AddChild(verLayout);
 
 		// Position and value
 		{
@@ -164,33 +142,44 @@ namespace Editor
 		{
 			auto horLayout = o2UI.CreateHorLayout();
 			horLayout->spacing = 10;
-			horLayout->expandHeight = false;
-			horLayout->fitByChildren = true;
+			horLayout->expandHeight = true;
+			*horLayout->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 25);
 
-			auto okButton = o2UI.CreateButton("Ok", THIS_FUNC(OnOkPressed));
+			auto okButton = o2UI.CreateButton("Ok", Func(this, &KeyEditDlg::OnOkPressed));
 			horLayout->AddChild(okButton);
 
-			auto cancelButton = o2UI.CreateButton("Cancel", [&]() { Hide(); });
+			auto cancelButton = o2UI.CreateButton("Cancel", [&]() { mWindow->Hide(); });
 			horLayout->AddChild(cancelButton);
 
-			verLayout->AddChild(horLayout);
+			mWindow->AddChild(horLayout);
 		}
 
-		AddChild(verLayout);
-		layout->size = Vec2F(200, 50);
+		mWindow->Hide(true);
+		mWindow->layout->size = Vec2F(200, 300);
+
+		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { mWindow->Hide(); };
 	}
 
-	void KeyEditWindow::FindControls()
+	KeyEditDlg::~KeyEditDlg()
 	{
-		mPosition = FindChildByTypeAndName<EditBox>("position");
-		mValue = FindChildByTypeAndName<EditBox>("value");
-		mLeftSupportPosition = FindChildByTypeAndName<EditBox>("leftSupportPosition");
-		mLeftSupportValue = FindChildByTypeAndName<EditBox>("leftSupportValue");
-		mRightSupportPosition = FindChildByTypeAndName<EditBox>("rightSupportPosition");
-		mRightSupportValue = FindChildByTypeAndName<EditBox>("rightSupportValue");
+		delete mWindow;
 	}
 
-	void KeyEditWindow::OnOkPressed()
+	void KeyEditDlg::Show(const Curve::Key& key, const Function<void(const Curve::Key& key)>& onClosed)
+	{
+		Instance().mPosition->SetText(String(key.position));
+		Instance().mValue->SetText(String(key.value));
+		Instance().mLeftSupportPosition->SetText(String(key.leftSupportPosition));
+		Instance().mLeftSupportValue->SetText(String(key.leftSupportValue));
+		Instance().mRightSupportPosition->SetText(String(key.rightSupportPosition));
+		Instance().mRightSupportValue->SetText(String(key.rightSupportValue));
+
+		Instance().mOnClosed = onClosed;
+
+		Instance().mWindow->ShowModal();
+	}
+
+	void KeyEditDlg::OnOkPressed()
 	{
 		Curve::Key key;
 		key.position = (float)mPosition->GetText();
@@ -201,9 +190,7 @@ namespace Editor
 		key.rightSupportValue = (float)mRightSupportValue->GetText();
 
 		mOnClosed(key);
-		Hide();
+		mWindow->Hide();
 	}
 
 }
-
-DECLARE_CLASS(Editor::KeyEditWindow);

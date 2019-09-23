@@ -321,8 +321,6 @@ namespace Editor
 
 	void ScrollView::ChangeCameraScaleRelativeToCursor(const Vec2F& newScale)
 	{
-		// This works little bit wrong TODO: Fix it
-
 		Vec2F prevCursor = o2Input.GetCursorPos()*mScreenToLocalTransform;
 		mViewCameraTargetScale = newScale;
 

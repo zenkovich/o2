@@ -213,10 +213,6 @@ namespace Editor
 								 							   	    
 		bool mIsViewScrolling = false; // Is scrolling view at this time
 							    
-		Window*  mEditValueWindow = nullptr;         // Key position and value editing window
-		EditBox* mEditValueWindowValue = nullptr;    // Key value editing box
-		EditBox* mEditValueWindowPosition = nullptr; // Key position editing box
-							    
 		CurveKeysInfosVec mBeforeTransformKeys; // Stored selected keys before handles transformed
 															       
 		ActionsVec mUndoActions; // Actions that can be undo
@@ -240,9 +236,6 @@ namespace Editor
 
 		// Initializes text drawables by font and sets aligning
 		void InitializeTextDrawables();
-
-		// Initializes edit window controls
-		void InitializeEditValueWindow();
 
 		// Recalculates view area by curves approximated points
 		void RecalculateViewArea();
@@ -340,12 +333,6 @@ namespace Editor
 		// It is called when transform completed. Checks that selected keys changed, creates action for undo/redo
 		void OnTransformCompleted();
 
-		// It is called when edit key window position edit box was changed
-		void OnEditKeyPositionChanged(const WString& str);
-
-		// It is called when edit key window value edit box was changed
-		void OnEditKeyValueChanged(const WString& str);
-
 		// Stores undo action, clears redo actions
 		void DoneAction(IAction* action);
 
@@ -389,69 +376,9 @@ namespace Editor
 		// On context menu redo pressed. Restores action from stack
 		void OnRedoPressed();
 
-	protected:
-		class AddKeysAction: public IAction
-		{
-		public:
-			AddKeysAction();
-			AddKeysAction(const CurveKeysInfosVec& infos, CurveEditor* editor);
-
-			String GetName();
-			void Redo();
-			void Undo();
-
-			SERIALIZABLE(AddKeysAction);
-
-		protected:
-			CurveKeysInfosVec mInfos;
-			CurveEditor*    mEditor;
-		};
-
-		class DeleteKeysAction: public IAction
-		{
-		public:
-			DeleteKeysAction();
-			DeleteKeysAction(const CurveKeysInfosVec& infos, CurveEditor* editor);
-
-			String GetName();
-			void Redo();
-			void Undo();
-
-			SERIALIZABLE(DeleteKeysAction);
-
-		protected:
-			CurveKeysInfosVec mInfos;
-			CurveEditor*    mEditor;
-		};
-
-		class KeysChangeAction: public IAction
-		{
-		public:
-			struct KeysInfo
-			{
-				String                  curveId;
-				Curve::KeysVec          beforeKeys;
-				Curve::KeysVec          afterKeys;
-				SelectedHandlesInfosVec selectedHandles;
-
-				bool operator==(const KeysInfo& other) const;
-			};
-			typedef Vector<KeysInfo> KeysInfosVec;
-
-		public:
-			KeysChangeAction();
-			KeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor);
-
-			String GetName();
-			void Redo();
-			void Undo();
-
-			SERIALIZABLE(KeysChangeAction);
-
-		protected:
-			KeysInfosVec   mInfos;
-			CurveEditor* mEditor;
-		};
+		friend class AddKeysAction;
+		friend class DeleteKeysAction;
+		friend class KeysChangeAction;
 	};
 }
 
@@ -481,9 +408,6 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mTransformFrameVisible);
 	PROTECTED_FIELD(mTransformFrameBasis);
 	PROTECTED_FIELD(mIsViewScrolling);
-	PROTECTED_FIELD(mEditValueWindow);
-	PROTECTED_FIELD(mEditValueWindowValue);
-	PROTECTED_FIELD(mEditValueWindowPosition);
 	PROTECTED_FIELD(mBeforeTransformKeys);
 	PROTECTED_FIELD(mUndoActions);
 	PROTECTED_FIELD(mRedoActions);
@@ -513,7 +437,6 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
 	PROTECTED_FUNCTION(void, InitializeTextDrawables);
-	PROTECTED_FUNCTION(void, InitializeEditValueWindow);
 	PROTECTED_FUNCTION(void, RecalculateViewArea);
 	PROTECTED_FUNCTION(void, RedrawContent);
 	PROTECTED_FUNCTION(void, DrawGrid);
@@ -546,8 +469,6 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
 	PROTECTED_FUNCTION(void, OnTransformBegin);
 	PROTECTED_FUNCTION(void, OnTransformCompleted);
-	PROTECTED_FUNCTION(void, OnEditKeyPositionChanged, const WString&);
-	PROTECTED_FUNCTION(void, OnEditKeyValueChanged, const WString&);
 	PROTECTED_FUNCTION(void, DoneAction, IAction*);
 	PROTECTED_FUNCTION(void, OnEditPressed);
 	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
@@ -567,7 +488,7 @@ END_META;
 
 CLASS_BASES_META(Editor::CurveEditor::CurveCopyInfo)
 {
-	BASE_CLASS(ISerializable);
+	BASE_CLASS(o2::ISerializable);
 }
 END_META;
 CLASS_FIELDS_META(Editor::CurveEditor::CurveCopyInfo)
@@ -578,65 +499,5 @@ CLASS_FIELDS_META(Editor::CurveEditor::CurveCopyInfo)
 END_META;
 CLASS_METHODS_META(Editor::CurveEditor::CurveCopyInfo)
 {
-}
-END_META;
-
-CLASS_BASES_META(Editor::CurveEditor::AddKeysAction)
-{
-	BASE_CLASS(IAction);
-}
-END_META;
-CLASS_FIELDS_META(Editor::CurveEditor::AddKeysAction)
-{
-	PROTECTED_FIELD(mInfos);
-	PROTECTED_FIELD(mEditor);
-}
-END_META;
-CLASS_METHODS_META(Editor::CurveEditor::AddKeysAction)
-{
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
-
-CLASS_BASES_META(Editor::CurveEditor::DeleteKeysAction)
-{
-	BASE_CLASS(IAction);
-}
-END_META;
-CLASS_FIELDS_META(Editor::CurveEditor::DeleteKeysAction)
-{
-	PROTECTED_FIELD(mInfos);
-	PROTECTED_FIELD(mEditor);
-}
-END_META;
-CLASS_METHODS_META(Editor::CurveEditor::DeleteKeysAction)
-{
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-}
-END_META;
-
-CLASS_BASES_META(Editor::CurveEditor::KeysChangeAction)
-{
-	BASE_CLASS(IAction);
-}
-END_META;
-CLASS_FIELDS_META(Editor::CurveEditor::KeysChangeAction)
-{
-	PROTECTED_FIELD(mInfos);
-	PROTECTED_FIELD(mEditor);
-}
-END_META;
-CLASS_METHODS_META(Editor::CurveEditor::KeysChangeAction)
-{
-
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
 }
 END_META;

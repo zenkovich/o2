@@ -158,7 +158,7 @@ namespace Editor
 
 		if (!mViewMoveDisabled)
 		{
-			if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()) && o2Input.IsKeyDown(VK_CONTROL))
+			if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()))
 				mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
 		}
 	}

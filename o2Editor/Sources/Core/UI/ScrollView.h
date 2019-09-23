@@ -90,7 +90,7 @@ namespace Editor
 		float  mViewCameraScaleElasticyCoef = 30.0f;   // Scale smoothing coefficient
 		Vec2F  mViewCameraTargetPos;				   // Target camera position
 		Vec2F  mViewCameraVelocity;					   // Camera velocity
-		float  mViewCameraPosElasticyCoef = 40.0f;	   // Camera dragging smoothing coefficient
+		float  mViewCameraPosElasticyCoef = 30.0f;	   // Camera dragging smoothing coefficient
 		float  mViewCameraVelocityDampingCoef = 10.0f; // Camera velocity damping coefficient
 		float  mViewCameraMinScale = 0.001f;		   // Minimal camera scale
 		float  mViewCameraMaxScale = 10000.0f;		   // Maximal camera scale

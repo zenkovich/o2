@@ -41,13 +41,25 @@
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h">
       <Filter>Sources\AnimationWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h">
+      <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.h">
+      <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\AnimationWindow\Timeline.h">
       <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h">
+      <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.h">
       <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.h">
+      <Filter>Sources\AnimationWindow\TrackControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h">
       <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\AnimationWindow\Tree.h">
@@ -99,6 +111,9 @@
       <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Dialogs\EditNameDlg.h">
+      <Filter>Sources\Core\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Dialogs\KeyEditDlg.h">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\EditorApplication.h">
@@ -227,6 +242,9 @@
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h">
       <Filter>Sources\Core\UI</Filter>
     </ClInclude>
@@ -350,22 +368,7 @@
     <ClInclude Include="..\..\Sources\stdafx.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h">
-      <Filter>Sources\AnimationWindow\TrackControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.h">
-      <Filter>Sources\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h">
-      <Filter>Sources\AnimationWindow\TrackControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h">
-      <Filter>Sources\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h">
-      <Filter>Sources\Core\UI\CurveEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\KeyEditWindow.h">
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\Actions.h">
       <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClInclude>
   </ItemGroup>
@@ -373,13 +376,25 @@
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp">
       <Filter>Sources\AnimationWindow</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp">
+      <Filter>Sources\AnimationWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.cpp">
+      <Filter>Sources\AnimationWindow</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\Timeline.cpp">
       <Filter>Sources\AnimationWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp">
+      <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.cpp">
       <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp">
+      <Filter>Sources\AnimationWindow\TrackControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp">
       <Filter>Sources\AnimationWindow\TrackControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\Tree.cpp">
@@ -431,6 +446,9 @@
       <Filter>Sources\Core\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Dialogs\EditNameDlg.cpp">
+      <Filter>Sources\Core\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Dialogs\KeyEditDlg.cpp">
       <Filter>Sources\Core\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\EditorApplication.cpp">
@@ -555,6 +573,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp">
       <Filter>Sources\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp">
       <Filter>Sources\Core\UI</Filter>
@@ -682,22 +703,7 @@
     <ClCompile Include="..\..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp">
-      <Filter>Sources\AnimationWindow\TrackControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.cpp">
-      <Filter>Sources\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp">
-      <Filter>Sources\AnimationWindow\TrackControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp">
-      <Filter>Sources\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp">
-      <Filter>Sources\Core\UI\CurveEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\KeyEditWindow.cpp">
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\Actions.cpp">
       <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClCompile>
   </ItemGroup>
