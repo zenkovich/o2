@@ -195,7 +195,9 @@ namespace Editor
 		CurveInfosVec mCurves; // Editing curves infos list 
 		RangeInfosVec mRanges; // Curves ranges list
 							    								    
-		SelectableHandlesVec mSupportHandles;      // Support points handles list
+		SelectableHandlesVec       mSupportHandles;      // Support points handles list
+		SelectableDragHandlesGroup mSupportHandlesGroup; // Support points handles selection group. They are must be selectable separately from main handles
+		
 		SelectableHandlesVec mSelectingHandlesBuf; // Potentially selecting handles while selecting
 							    								    
 		Sprite* mSelectionSprite = nullptr; // Selection sprite @SERIALIZABLE
@@ -396,6 +398,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mCurves);
 	PROTECTED_FIELD(mRanges);
 	PROTECTED_FIELD(mSupportHandles);
+	PROTECTED_FIELD(mSupportHandlesGroup);
 	PROTECTED_FIELD(mSelectingHandlesBuf);
 	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();

@@ -166,6 +166,21 @@ namespace o2
 		mDbgDrawables.Add(mnew DbgText(position, text, mFont, Color4::White(), delay));
 	}
 
+	void Debug::DrawArrow(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay)
+	{
+		mDbgDrawables.Add(mnew DbgArrow(begin, end, color, delay));
+	}
+
+	void Debug::DrawArrow(const Vec2F& begin, const Vec2F& end, const Color4& color /*= Color4::White()*/)
+	{
+		mDbgDrawables.Add(mnew DbgArrow(begin, end, color, -1.0f));
+	}
+
+	void Debug::DrawArrow(const Vec2F& begin, const Vec2F& end, float delay)
+	{
+		mDbgDrawables.Add(mnew DbgArrow(begin, end, Color4::White(), delay));
+	}
+
 	void Debug::DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color, float delay)
 	{
 		mDbgDrawables.Add(mnew DbgLine(begin, begin + dir, color, delay));
@@ -287,4 +302,17 @@ namespace o2
 			textDrawable->Draw();
 		}
 	}
+
+	Debug::DbgArrow::DbgArrow()
+	{ }
+
+	Debug::DbgArrow::DbgArrow(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay /*= -1.0f*/) :
+		begin(begin), end(end), IDbgDrawable(color, delay)
+	{ }
+
+	void Debug::DbgArrow::Draw()
+	{
+		o2Render.DrawAAArrow(begin, end, color);
+	}
+
 }

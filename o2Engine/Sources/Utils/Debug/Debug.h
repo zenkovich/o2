@@ -50,6 +50,15 @@ namespace o2
 		// Draws white debug line from begin to end with disappearing delay
 		void DrawLine(const Vec2F& begin, const Vec2F& end, float delay);
 
+		// Draws debug arrow from begin to end with color and disappearing delay
+		void DrawArrow(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay);
+
+		// Draws debug arrow from begin to end with color at one frame
+		void DrawArrow(const Vec2F& begin, const Vec2F& end, const Color4& color = Color4::White());
+
+		// Draws white debug arrow from begin to end with disappearing delay
+		void DrawArrow(const Vec2F& begin, const Vec2F& end, float delay);
+
 		// Draws debug ray from begin to dir with color and disappearing delay
 		void DrawRay(const Vec2F& begin, const Vec2F& dir, const Color4& color, float delay);
 
@@ -121,13 +130,26 @@ namespace o2
 		// --------------------------------------------
 		// Debug line with color and disappearing delay
 		// --------------------------------------------
-		struct DbgLine: public IDbgDrawable
+		struct DbgLine : public IDbgDrawable
 		{
 			Vec2F begin;
 			Vec2F end;
 
 			DbgLine();
 			DbgLine(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay = -1.0f);
+			void Draw();
+		};
+
+		// --------------------------------------------
+		// Debug arrow with color and disappearing delay
+		// --------------------------------------------
+		struct DbgArrow : public IDbgDrawable
+		{
+			Vec2F begin;
+			Vec2F end;
+
+			DbgArrow();
+			DbgArrow(const Vec2F& begin, const Vec2F& end, const Color4& color, float delay = -1.0f);
 			void Draw();
 		};
 

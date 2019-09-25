@@ -790,6 +790,8 @@ namespace o2
 
 			float supportLength = Math::Min(thisToNext.Length(), thisToLast.Length())*baseSmoothCoef*smoothCoef;
 			Vec2F supportVec = Math::CalculateEllipseTangent(lastKeyPoint, thisKeyPoint, nextKeyPoint)*supportLength;
+			
+			o2Debug.Log("#" + String(idx) + ": " + String(supportVec));
 
 			key.leftSupportPosition = -supportVec.x; key.leftSupportValue = -supportVec.y;
 			key.rightSupportPosition = supportVec.x; key.rightSupportValue = supportVec.y;

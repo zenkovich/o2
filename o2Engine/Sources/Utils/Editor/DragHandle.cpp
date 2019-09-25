@@ -828,7 +828,13 @@ namespace o2
 	void SelectableDragHandlesGroup::RemoveHandle(DragHandle* handle)
 	{
 		mHandles.Remove(handle);
-		mSelectedHandles.Remove(handle);
+
+		int idx = mSelectedHandles.Find(handle);
+		if (idx >= 0)
+		{
+			mSelectedHandles.Remove(handle);
+			OnSelectionChanged();
+		}
 	}
 
 	void SelectableDragHandlesGroup::DeselectAll()

@@ -147,16 +147,13 @@ namespace Editor
 			{
 				for (auto handle : info->handles)
 				{
-					mHandles.Remove(&handle->mainHandle);
-					mHandles.Remove(&handle->leftSupportHandle);
-					mHandles.Remove(&handle->rightSupportHandle);
+					handle->mainHandle.SetSelectionGroup(nullptr);
 
+					handle->leftSupportHandle.SetSelectionGroup(nullptr);
 					mSupportHandles.Remove(&handle->leftSupportHandle);
-					mSupportHandles.Remove(&handle->rightSupportHandle);
 
-					mSelectedHandles.Remove(&handle->mainHandle);
-					mSelectedHandles.Remove(&handle->leftSupportHandle);
-					mSelectedHandles.Remove(&handle->rightSupportHandle);
+					handle->rightSupportHandle.SetSelectionGroup(nullptr);
+					mSupportHandles.Remove(&handle->rightSupportHandle);
 				}
 
 				delete info;
@@ -654,18 +651,15 @@ namespace Editor
 		for (int i = keyId; i < info->handles.Count(); i++)
 			info->handles[i]->curveKeyIdx++;
 
+		// Register handles
 		info->handles.Insert(keyHandles, keyId);
-
-		mHandles.Add(&keyHandles->mainHandle);
-		mHandles.Add(&keyHandles->leftSupportHandle);
-		mHandles.Add(&keyHandles->rightSupportHandle);
 
 		mSupportHandles.Add(&keyHandles->leftSupportHandle);
 		mSupportHandles.Add(&keyHandles->rightSupportHandle);
 
 		keyHandles->mainHandle.SetSelectionGroup(this);
-		keyHandles->leftSupportHandle.SetSelectionGroup(this);
-		keyHandles->rightSupportHandle.SetSelectionGroup(this);
+		keyHandles->leftSupportHandle.SetSelectionGroup(&mSupportHandlesGroup);
+		keyHandles->rightSupportHandle.SetSelectionGroup(&mSupportHandlesGroup);
 	}
 
 	void CurveEditor::RemoveCurveKeyHandles(CurveInfo* info, int keyId)
@@ -673,9 +667,9 @@ namespace Editor
 		for (int i = keyId + 1; i < info->handles.Count(); i++)
 			info->handles[i]->curveKeyIdx--;
 
-		mHandles.Remove(&info->handles[keyId]->mainHandle);
-		mHandles.Remove(&info->handles[keyId]->leftSupportHandle);
-		mHandles.Remove(&info->handles[keyId]->rightSupportHandle);
+		info->handles[keyId]->mainHandle.SetSelectionGroup(nullptr);
+		info->handles[keyId]->leftSupportHandle.SetSelectionGroup(nullptr);
+		info->handles[keyId]->rightSupportHandle.SetSelectionGroup(nullptr);
 
 		mSupportHandles.Remove(&info->handles[keyId]->leftSupportHandle);
 		mSupportHandles.Remove(&info->handles[keyId]->rightSupportHandle);
@@ -1117,17 +1111,19 @@ namespace Editor
 
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 		{
-			auto handles = mSelectedHandles;
-			for (auto handle : handles)
-				handle->SetSelected(false);
-
-			mSelectedHandles.Clear();
+			DeselectAll();
+			mSupportHandlesGroup.DeselectAll();
 		}
 	}
 
 	void CurveEditor::OnCursorReleased(const Input::Cursor& cursor)
 	{
-		mSelectedHandles.Add(mSelectingHandlesBuf);
+		for (auto handle : mSelectingHandlesBuf)
+		{
+			SetHandleSelectedState(handle, false);
+			handle->SetSelected(true);
+		}
+
 		mSelectingHandlesBuf.Clear();
 		UpdateTransformFrame();
 		CheckHandlesVisible();
@@ -1146,6 +1142,16 @@ namespace Editor
 		{
 			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
 				!mSelectedHandles.Contains(handle))
+			{
+				mSelectingHandlesBuf.Add(handle);
+				SetHandleSelectedState(handle, true);
+			}
+		}
+
+		for (auto handle : mSupportHandlesGroup.GetAllHandles())
+		{
+			if (handle->IsEnabled() && selectionLocalRect.IsInside(handle->GetPosition()) &&
+				!mSupportHandlesGroup.GetSelectedHandles().Contains(handle))
 			{
 				mSelectingHandlesBuf.Add(handle);
 				SetHandleSelectedState(handle, true);
@@ -1244,9 +1250,6 @@ namespace Editor
 
 		for (auto handle : mSelectedHandles)
 		{
-			if (mSupportHandles.Contains(handle))
-				continue;
-
 			aabb.left   = Math::Min(handle->GetPosition().x, aabb.left);
 			aabb.right  = Math::Max(handle->GetPosition().x, aabb.right);
 			aabb.top    = Math::Max(handle->GetPosition().y, aabb.top);
@@ -1366,9 +1369,6 @@ namespace Editor
 		{
 			for (auto handle : mSelectedHandles)
 			{
-				if (mSupportHandles.Contains(handle))
-					continue;
-
 				handle->position = handle->position*delta;
 				handle->onChangedPos(handle->GetPosition());
 			}
@@ -1381,12 +1381,12 @@ namespace Editor
 				float rightOffset = localBasis.origin.x + localBasis.xv.x - right;
 				float leftOffset = localBasis.origin.x - left;
 
-				bool rightChanged = !Math::Equals(rightOffset, 0.0f);
-				bool leftChanged = !Math::Equals(leftOffset, 0.0f);
+				bool rightChanged = !Math::Equals(rightOffset, 0.0f) && rightOffset > FLT_EPSILON;
+				bool leftChanged = !Math::Equals(leftOffset, 0.0f) && leftOffset < FLT_EPSILON;
 
 				for (auto handle : mHandles)
 				{
-					if (mSelectedHandles.Contains(handle) || mSupportHandles.Contains(handle))
+					if (mSelectedHandles.Contains(handle))
 						continue;
 
 					if (handle->GetPosition().x >= right && rightChanged)
@@ -1733,6 +1733,7 @@ namespace Editor
 		}
 
 		mSelectedHandles.Clear();
+		mSupportHandlesGroup.DeselectAll();
 		UpdateTransformFrame();
 
 		if (!keyInfos.IsEmpty())
@@ -1878,19 +1879,17 @@ namespace Editor
 				if (handle->leftSupportHandle.IsSelected())
 				{
 					selectedLeft.Add(handle->curveKeyUid);
-					handle->leftSupportHandle.SetSelected(false);
+					handle->leftSupportHandle.SetSelectionGroup(nullptr);
 				}
 
-				curveEditor->mHandles.Remove(&handle->leftSupportHandle);
 				curveEditor->mSupportHandles.Remove(&handle->leftSupportHandle);				
 
 				if (handle->rightSupportHandle.IsSelected())
 				{
 					selectedRight.Add(handle->curveKeyUid);
-					handle->rightSupportHandle.SetSelected(false);
+					handle->rightSupportHandle.SetSelectionGroup(nullptr);
 				}
 
-				curveEditor->mHandles.Remove(&handle->rightSupportHandle);
 				curveEditor->mSupportHandles.Remove(&handle->rightSupportHandle);
 
 				if (handle->mainHandle.IsSelected())
