@@ -44,14 +44,21 @@ namespace o2
 
 		Vec2F CalculateEllipseTangent(const Vec2F& begin, const Vec2F& middle, const Vec2F& end)
 		{
-			Vec2F axis = end - begin;
+			Vec2F origin = begin;
+			Vec2F size = end - begin;
+
+			Vec2F tbegin(0, 0);
+			Vec2F tend(1, 1);
+			Vec2F tmiddle = (middle - origin)/size;
+
+			Vec2F axis = tend - tbegin;
 			float axisLength = axis.Length();
 			Vec2F axisNorm = axis/axisLength;
 			Vec2F axisNormPerpendicular = axisNorm.Perpendicular();
 
-			Vec2F centerToMiddle = middle - (begin + end)*0.5f;
+			Vec2F centerToMiddle = tmiddle - (tbegin + tend)*0.5f;
 
-			float xProjection = axisNorm.Dot(centerToMiddle + (begin + end)*0.5f - begin);
+			float xProjection = axisNorm.Dot(centerToMiddle + (tbegin + tend)*0.5f - tbegin);
 			float xProjectionFromCenter = xProjection - axisLength*0.5f;
 
 			float ssq = axisLength*axisLength*0.25f - xProjectionFromCenter*xProjectionFromCenter;
@@ -64,13 +71,14 @@ namespace o2
 
 			Vec2F decomposedCircleTangent(axisNorm.Dot(circleTangent), axisNormPerpendicular.Dot(circleTangent));
 			float circleToEllipseScale = (yc/circleYProjection);
-			Vec2F ellipseTangent = (axisNorm*decomposedCircleTangent.x + axisNormPerpendicular*decomposedCircleTangent.y*circleToEllipseScale).Normalized();
+			Vec2F tellipseTangent = (axisNorm*decomposedCircleTangent.x + axisNormPerpendicular*decomposedCircleTangent.y*circleToEllipseScale).Normalized();
+			Vec2F ellipseTangent = (tellipseTangent*size).Normalized();
 
-			Basis dbg(Vec2F(), Vec2F(1.0f/(end.x - begin.x)*50.0f, 0), Vec2F(0, 1.0f/(end.y - begin.y)*50.0f));
+			Basis dbg(Vec2F(), Vec2F(1.0f/(tend.x - tbegin.x)*50.0f, 0), Vec2F(0, 1.0f/(tend.y - tbegin.y)*50.0f));
 			dbg = Basis::Identity();
 			dbg.Scale(Vec2F(50, 50));
 
-			o2Debug.DrawCircle((middle - begin)*dbg, 2, Color4::Green(), 0.1f);
+			o2Debug.DrawCircle((tmiddle - begin)*dbg, 2, Color4::Green(), 0.1f);
 			o2Debug.DrawLine(Vec2F()*dbg, (axis)*dbg, 0.1f);
 			o2Debug.DrawLine(Vec2F()*dbg, (axisNorm)*dbg, Color4::Red(), 0.1f);
 			o2Debug.DrawLine(Vec2F()*dbg, (axisNormPerpendicular)*dbg, Color4::Blue(), 0.1f);
@@ -79,7 +87,7 @@ namespace o2
 			int segs = 20;
 			Vector<Vec2F> points;
 
-			Vec2F center = (end - begin)*0.5f;
+			Vec2F center = (tend - tbegin)*0.5f;
 			for (int i = 0; i < segs; i++) {
 				float c = (float)i/(float)(segs - 1);
 				Vec2F localCircle = Vec2F(axisLength*0.5f, 0).Rotate(Math::PI()*2.0f*c);
