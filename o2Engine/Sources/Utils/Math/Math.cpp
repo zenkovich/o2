@@ -74,30 +74,6 @@ namespace o2
 			Vec2F tellipseTangent = (axisNorm*decomposedCircleTangent.x + axisNormPerpendicular*decomposedCircleTangent.y*circleToEllipseScale).Normalized();
 			Vec2F ellipseTangent = (tellipseTangent*size).Normalized();
 
-			Basis dbg(Vec2F(), Vec2F(1.0f/(tend.x - tbegin.x)*50.0f, 0), Vec2F(0, 1.0f/(tend.y - tbegin.y)*50.0f));
-			dbg = Basis::Identity();
-			dbg.Scale(Vec2F(50, 50));
-
-			o2Debug.DrawCircle((tmiddle - begin)*dbg, 2, Color4::Green(), 0.1f);
-			o2Debug.DrawLine(Vec2F()*dbg, (axis)*dbg, 0.1f);
-			o2Debug.DrawLine(Vec2F()*dbg, (axisNorm)*dbg, Color4::Red(), 0.1f);
-			o2Debug.DrawLine(Vec2F()*dbg, (axisNormPerpendicular)*dbg, Color4::Blue(), 0.1f);
-			o2Debug.DrawCircle((axisNormPerpendicular)*dbg, 2, Color4::Blue(), 0.1f);
-
-			int segs = 20;
-			Vector<Vec2F> points;
-
-			Vec2F center = (tend - tbegin)*0.5f;
-			for (int i = 0; i < segs; i++) {
-				float c = (float)i/(float)(segs - 1);
-				Vec2F localCircle = Vec2F(axisLength*0.5f, 0).Rotate(Math::PI()*2.0f*c);
-				Vec2F localEllipse(localCircle.x, localCircle.y*circleToEllipseScale);
-
-				points.Add((axisNorm*localEllipse.x + axisNormPerpendicular*localEllipse.y + center)*dbg);
-			}
-
-			o2Debug.DrawLine(points, Color4::Red(), 0.1f);
-
 			return ellipseTangent;
 		}
 	}
