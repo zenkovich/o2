@@ -223,6 +223,7 @@
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\AssetsWindow.h" />
     <ClInclude Include="..\..\Sources\AssetsWindow\FoldersTree.h" />
+    <ClInclude Include="..\..\Sources\Core\Actions\ActionsList.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Create.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Delete.h" />
     <ClInclude Include="..\..\Sources\Core\Actions\Enable.h" />
@@ -336,6 +337,7 @@
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsIconsScroll.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\AssetsWindow.cpp" />
     <ClCompile Include="..\..\Sources\AssetsWindow\FoldersTree.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Actions\ActionsList.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Create.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Delete.cpp" />
     <ClCompile Include="..\..\Sources\Core\Actions\Enable.cpp" />

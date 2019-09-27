@@ -371,6 +371,9 @@
     <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\Actions.h">
       <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Actions\ActionsList.h">
+      <Filter>Sources\Core\Actions</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp">
@@ -705,6 +708,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\Actions.cpp">
       <Filter>Sources\Core\UI\CurveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Actions\ActionsList.cpp">
+      <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

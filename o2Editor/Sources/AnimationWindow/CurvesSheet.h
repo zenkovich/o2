@@ -19,7 +19,7 @@ namespace Editor
 		CurvesSheet& operator=(const CurvesSheet& other);
 
 		// Sets timeline and tree
-		void Initialize(AnimationTimeline* timeline, AnimationTree* tree);
+		void Initialize(AnimationTimeline* timeline, AnimationTree* tree, ActionsList* actionsList);
 
 		// Sets animation and updates tree structure
 		void SetAnimation(Animation* animation);
@@ -29,8 +29,9 @@ namespace Editor
 	private:
 		CurveEditor* mEditor;
 
-		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
-		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
+		AnimationTimeline* mTimeline = nullptr;    // Timeline pointer, used for calculation world and local timeline positions
+		AnimationTree*     mTree = nullptr;        // Animated values tree pointer, used for calculation handles lines numbers
+		ActionsList*       mActionsList = nullptr; // Actions list from window
 
 		bool mEditorViewLock = false; // It is used to prevent handling editor's camera, when timeline view changing 
 
@@ -56,13 +57,14 @@ CLASS_FIELDS_META(Editor::CurvesSheet)
 	PRIVATE_FIELD(mEditor);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mActionsList);
 	PRIVATE_FIELD(mEditorViewLock);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
-	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, AnimationTree*);
+	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, AnimationTree*, ActionsList*);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, SetCameraAsTimelineView);

@@ -33,10 +33,11 @@ namespace Editor
 		return *this;
 	}
 
-	void CurvesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree)
+	void CurvesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree, ActionsList* actionsList)
 	{
 		mTimeline = timeline;
 		mTree = tree;
+		mActionsList = actionsList;
 
 		mEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
 	}
@@ -68,6 +69,9 @@ namespace Editor
 											  ImageAssetRef("ui/CurveSupportHandleSelected.png"));
 
 		mEditor->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
+
+		mEditor->verGridEnabled = false;
+		mEditor->actionsListDelegate = mActionsList;
 
 		AddChild(mEditor);
 	}
