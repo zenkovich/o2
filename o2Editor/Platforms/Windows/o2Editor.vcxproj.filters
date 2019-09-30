@@ -374,6 +374,9 @@
     <ClInclude Include="..\..\Sources\Core\Actions\ActionsList.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\AnimationWindow\PropertiesListDlg.h">
+      <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp">
@@ -711,6 +714,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\ActionsList.cpp">
       <Filter>Sources\Core\Actions</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\AnimationWindow\PropertiesListDlg.cpp">
+      <Filter>Sources\AnimationWindow</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

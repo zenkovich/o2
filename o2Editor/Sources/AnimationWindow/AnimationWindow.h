@@ -26,6 +26,18 @@ namespace Editor
 	class CurvesSheet;
 	class KeyHandlesSheet;
 
+	// TODO
+	// - Сделать цвет хэндлов таким же как и кривой
+	// - Сделать адаптивный масштаб кривых
+	// - Починить фокусировку на кривых
+	// - Сделать отображение цвета кривой напротив пропертей
+	// - Добавить вывод трека цвета, булевого, вектора
+	// - Добавить иконки кривых
+	// - Добавить assign акторов
+	// - Добавить добавление полей
+	// - Добавить удаление полей
+	// - Добавить "запись" изменения полей
+
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{
 		IOBJECT(AnimationWindow);
@@ -127,6 +139,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 {
 	PROTECTED_FIELD(mTreeViewWidth);
 	PROTECTED_FIELD(mAnimation);
+	PROTECTED_FIELD(mTargetActor);
 	PROTECTED_FIELD(mUpPanel);
 	PROTECTED_FIELD(mWorkArea);
 	PROTECTED_FIELD(mControlsPanel);
@@ -148,6 +161,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetTarget, ActorRef);
 	PUBLIC_FUNCTION(void, ShowKeyHandlesVisible);
 	PUBLIC_FUNCTION(void, ShowCurvesSheet);
 	PROTECTED_FUNCTION(void, InitializeWindow);

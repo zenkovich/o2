@@ -213,6 +213,7 @@
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.h" />
+    <ClInclude Include="..\..\Sources\AnimationWindow\PropertiesListDlg.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\Timeline.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.h" />
@@ -327,6 +328,7 @@
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.cpp" />
+    <ClCompile Include="..\..\Sources\AnimationWindow\PropertiesListDlg.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\Timeline.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\TrackControls\ITrackControl.cpp" />
