@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Actions/ActionsList.h"
 #include "Core/WindowsSystem/IEditorWindow.h"
 #include "Utils/Singleton.h"
 
@@ -25,6 +26,18 @@ namespace Editor
 	class CurvesSheet;
 	class KeyHandlesSheet;
 
+	// TODO
+	// - Сделать цвет хэндлов таким же как и кривой
+	// - Сделать адаптивный масштаб кривых
+	// - Починить фокусировку на кривых
+	// - Сделать отображение цвета кривой напротив пропертей
+	// - Добавить вывод трека цвета, булевого, вектора
+	// - Добавить иконки кривых
+	// - Добавить assign акторов
+	// - Добавить добавление полей
+	// - Добавить удаление полей
+	// - Добавить "запись" изменения полей
+
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{
 		IOBJECT(AnimationWindow);
@@ -42,6 +55,9 @@ namespace Editor
 		// Sets editing animation
 		void SetAnimation(Animation* animation);
 
+		// Sets target actor
+		void SetTarget(ActorRef actor);
+
 		// Shows key handles sheet, hides curves
 		void ShowKeyHandlesVisible();
 
@@ -52,6 +68,8 @@ namespace Editor
 		float mTreeViewWidth = 250.0f; // Width of tree area. Changed by dragable separator
 
 		Animation* mAnimation = nullptr; // Editing animation
+
+		ActorRef mTargetActor; // Target actor on animation
 
 		Widget* mUpPanel = nullptr;  // Up panel with control buttons
 		Widget* mWorkArea = nullptr; // Working area with tree and timeline
@@ -68,7 +86,9 @@ namespace Editor
 		KeyHandlesSheet*     mHandlesSheet = nullptr; // Animation keys handles sheet
 		CurvesSheet*         mCurves = nullptr;       // Animation curves sheet
 
-		WidgetDragHandle* mTreeSeparatorHandle = nullptr;
+		WidgetDragHandle* mTreeSeparatorHandle = nullptr; // Tree separator handle. When it moves, it changes size of all dependent widgets
+
+		ActionsList mActionsList; // List of actions in animation editor, also injecting into curves editor
 
 	protected:
 		// Initializes window
@@ -119,6 +139,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 {
 	PROTECTED_FIELD(mTreeViewWidth);
 	PROTECTED_FIELD(mAnimation);
+	PROTECTED_FIELD(mTargetActor);
 	PROTECTED_FIELD(mUpPanel);
 	PROTECTED_FIELD(mWorkArea);
 	PROTECTED_FIELD(mControlsPanel);
@@ -132,6 +153,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mHandlesSheet);
 	PROTECTED_FIELD(mCurves);
 	PROTECTED_FIELD(mTreeSeparatorHandle);
+	PROTECTED_FIELD(mActionsList);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationWindow)
@@ -139,6 +161,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetTarget, ActorRef);
 	PUBLIC_FUNCTION(void, ShowKeyHandlesVisible);
 	PUBLIC_FUNCTION(void, ShowCurvesSheet);
 	PROTECTED_FUNCTION(void, InitializeWindow);

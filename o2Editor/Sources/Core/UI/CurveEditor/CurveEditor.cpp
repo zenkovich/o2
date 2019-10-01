@@ -463,8 +463,11 @@ namespace Editor
 			Vec2F yBegin = Vec2F(d, -cameraMaxSize) + gridOrigin;
 			Vec2F yEnd = Vec2F(d, cameraMaxSize) + gridOrigin;
 
-			o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
-			o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
+			if (horGridEnabled)
+				o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
+
+			if (verGridEnabled) 
+				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
 		}
 
 		char buf[255];
@@ -479,21 +482,27 @@ namespace Editor
 			sprintf(buf, "%.1f", (Math::Round(y*10.0f)/10.0f));
 			String yCaption = buf;
 
-			mTextLeft->SetText(yCaption);
-			mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left, y));
-			mTextLeft->Draw();
+			if (horGridEnabled)
+			{
+				mTextLeft->SetText(yCaption);
+				mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left, y));
+				mTextLeft->Draw();
 
-			mTextRight->SetText(yCaption);
-			mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right, y));
-			mTextRight->Draw();
+				mTextRight->SetText(yCaption);
+				mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right, y));
+				mTextRight->Draw();
+			}
 
-			mTextTop->SetText(xCaption);
-			mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top));
-			mTextTop->Draw();
+			if (verGridEnabled)
+			{
+				mTextTop->SetText(xCaption);
+				mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top));
+				mTextTop->Draw();
 
-			mTextBottom->SetText(xCaption);
-			mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom));
-			mTextBottom->Draw();
+				mTextBottom->SetText(xCaption);
+				mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom));
+				mTextBottom->Draw();
+			}
 		}
 	}
 
@@ -1492,12 +1501,12 @@ namespace Editor
 
 	void CurveEditor::DoneAction(IAction* action)
 	{
-		mUndoActions.Add(action);
+		if (actionsListDelegate) {
+			actionsListDelegate->DoneAction(action);
+			return;
+		}
 
-		for (auto action : mRedoActions)
-			delete action;
-
-		mRedoActions.Clear();
+		mActionsList.DoneAction(action);
 	}
 
 	void CurveEditor::OnEditPressed()
@@ -1787,24 +1796,18 @@ namespace Editor
 
 	void CurveEditor::OnUndoPressed()
 	{
-		if (mUndoActions.IsEmpty())
-			return;
-
-		IAction* action = mUndoActions.PopBack();
-		action->Undo();
-
-		mRedoActions.Add(action);
+		if (actionsListDelegate)
+			actionsListDelegate->UndoAction();
+		else
+			mActionsList.UndoAction();
 	}
 
 	void CurveEditor::OnRedoPressed()
 	{
-		if (mRedoActions.IsEmpty())
-			return;
-
-		IAction* action = mRedoActions.PopBack();
-		action->Redo();
-
-		mUndoActions.Add(action);
+		if (actionsListDelegate)
+			actionsListDelegate->RedoAction();
+		else
+			mActionsList.RedoAction();
 	}
 
 	CurveEditor::CurveInfo::CurveInfo()

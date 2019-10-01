@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Assets/ImageAsset.h"
+#include "Core/Actions/ActionsList.h"
 #include "Core/Actions/IAction.h"
 #include "Core/UI/FrameScrollView.h"
 #include "Render/Camera.h"
@@ -26,6 +27,9 @@ namespace Editor
 	// ---------------------
 	class CurveEditor: public FrameScrollView, public SelectableDragHandlesGroup
 	{
+	public:
+		ActionsList* actionsListDelegate = nullptr; // Actions fall down list. When it is null, editor uses local actions list
+
 	public:
 		// Default constructor
 		CurveEditor();
@@ -216,9 +220,8 @@ namespace Editor
 		bool mIsViewScrolling = false; // Is scrolling view at this time
 							    
 		CurveKeysInfosVec mBeforeTransformKeys; // Stored selected keys before handles transformed
-															       
-		ActionsVec mUndoActions; // Actions that can be undo
-		ActionsVec mRedoActions; // Actions that can be redo
+
+		ActionsList mActionsList; // Local actions list. It uses when actionFallDown is null 
 
 	protected:
 		// Copies data of actor from other to this
@@ -392,6 +395,7 @@ CLASS_BASES_META(Editor::CurveEditor)
 END_META;
 CLASS_FIELDS_META(Editor::CurveEditor)
 {
+	PUBLIC_FIELD(actionsListDelegate);
 	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
@@ -412,8 +416,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mTransformFrameBasis);
 	PROTECTED_FIELD(mIsViewScrolling);
 	PROTECTED_FIELD(mBeforeTransformKeys);
-	PROTECTED_FIELD(mUndoActions);
-	PROTECTED_FIELD(mRedoActions);
+	PROTECTED_FIELD(mActionsList);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveEditor)

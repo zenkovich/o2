@@ -53,6 +53,11 @@ namespace Editor
 		mTree->SetAnimation(animation);
 	}
 
+	void AnimationWindow::SetTarget(ActorRef actor)
+	{
+		mTargetActor = actor;
+	}
+
 	void AnimationWindow::ShowKeyHandlesVisible()
 	{
 		mCurves->Hide();
@@ -92,7 +97,7 @@ namespace Editor
 
 		mHandlesSheet->Initialize(mTimeline, mTree);
 		mTree->Initialize(mTimeline, mHandlesSheet);
-		mCurves->Initialize(mTimeline, mTree);
+		mCurves->Initialize(mTimeline, mTree, &mActionsList);
 
 		ShowKeyHandlesVisible();
 	}

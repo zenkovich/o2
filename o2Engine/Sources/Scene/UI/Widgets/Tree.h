@@ -28,17 +28,17 @@ namespace o2
 		typedef Vector<TreeNode*> TreeNodesVec;
 
 	public:
-		Function<UnknownPtr(UnknownPtr)>         getObjectParentDelegate;        // Getting objects' parent delegate
-		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;      // Getting objects' childs count delegate 
-		Function<void(TreeNode*, UnknownPtr)>    fillNodeDataByObjectDelegate;   // Setup tree node item delegate
-		Function<void(TreeNode*, UnknownPtr)>    freeNodeDataDelegate;           // Free tree node data delegate
+		Function<UnknownPtr(UnknownPtr)>         getObjectParentDelegate;      // Getting objects' parent delegate
+		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;    // Getting objects' childs count delegate 
+		Function<void(TreeNode*, UnknownPtr)>    fillNodeDataByObjectDelegate; // Setup tree node item delegate
+		Function<void(TreeNode*, UnknownPtr)>    freeNodeDataDelegate;         // Free tree node data delegate
 
-		Function<String(UnknownPtr)> getDebugForObject;              // Getting debug string for object delegate
+		Function<String(UnknownPtr)> getDebugForObject; // Getting debug string for object delegate
 
-		Function<void(TreeNode*)> onNodeDoubleClicked;            // Node double clicked event
-		Function<void(TreeNode*)> onNodeRightButtonClicked;       // Node right button click event
+		Function<void(TreeNode*)> onNodeDoubleClicked;      // Node double clicked event
+		Function<void(TreeNode*)> onNodeRightButtonClicked; // Node right button click event
 
-		Function<void(UnknownPtrsVec)> onObjectsSelectionChanged;      // Objects selected event
+		Function<void(UnknownPtrsVec)> onObjectsSelectionChanged; // Objects selected event
 
 		Function<void(UnknownPtrsVec, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
 

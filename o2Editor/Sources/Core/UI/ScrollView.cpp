@@ -300,13 +300,19 @@ namespace Editor
 			bool xTen = rdx < 0.05f || rdx > 0.95f;
 			bool yTen = rdy < 0.05f || rdy > 0.95f;
 
-			o2Render.DrawLine(Vec2F(-cameraMaxSize, d) + gridOrigin,
-							  Vec2F(cameraMaxSize, d) + gridOrigin,
-							  yTen ? mGridColor : cellColorSmoothed);
+			if (verGridEnabled)
+			{
+				o2Render.DrawLine(Vec2F(-cameraMaxSize, d) + gridOrigin,
+								  Vec2F(cameraMaxSize, d) + gridOrigin,
+								  yTen ? mGridColor : cellColorSmoothed);
+			}
 
-			o2Render.DrawLine(Vec2F(d, -cameraMaxSize) + gridOrigin,
-							  Vec2F(d, cameraMaxSize) + gridOrigin,
-							  xTen ? mGridColor : cellColorSmoothed);
+			if (horGridEnabled)
+			{
+				o2Render.DrawLine(Vec2F(d, -cameraMaxSize) + gridOrigin,
+								  Vec2F(d, cameraMaxSize) + gridOrigin,
+								  xTen ? mGridColor : cellColorSmoothed);
+			}
 		}
 	}
 

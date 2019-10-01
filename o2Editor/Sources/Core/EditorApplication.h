@@ -2,6 +2,7 @@
 
 #include "Animation/Animatable.h"
 #include "Application/Application.h"
+#include "Core/Actions/ActionsList.h"
 #include "EditorConfig.h"
 #include "Render/Sprite.h"
 
@@ -28,44 +29,14 @@ namespace Editor
 	// ------------------
 	// Editor application
 	// ------------------
-	class EditorApplication: public Application
+	class EditorApplication: public Application, public ActionsList
 	{
-	public:
-		typedef Vector<IAction*> EditorActionsVec;
-
 	public:
 		// Default constructor. Initializes all editor components
 		EditorApplication();
 
 		// Destructor
 		~EditorApplication();
-
-		// Returns count of undo actions
-		int GetUndoActionsCount() const;
-
-		// Returns count of redo actions
-		int GetRedoActionsCount() const;
-
-		// Returns last action name
-		String GetLastActionName() const;
-
-		// Returns next forward action name
-		String GetNextForwardActionName() const;
-
-		// Undo last action
-		void UndoAction();
-
-		// Redo next action
-		void RedoAction();
-
-		// It is called when action was done
-		void DoneAction(IAction* action);
-
-		// It is called when some property changed, stores action for undo
-		void DoneActorPropertyChangeAction(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
-
-		// Resets undo and redo actions
-		void ResetUndoActions();
 
 		// Returns current scene name
 		const String& GetLoadedSceneName() const;
@@ -95,9 +66,6 @@ namespace Editor
 		MenuPanel*      mMenuPanel;      // Menu panel
 
 		Properties* mProperties; // Properties manager
-
-		EditorActionsVec mActions;        // Done actions
-		EditorActionsVec mForwardActions; // Forward actions, what you can redo
 
 		String mLoadedScene; // Current loaded scene
 

@@ -20,6 +20,10 @@ namespace Editor
 	class ScrollView: public Widget, public CursorAreaEventsListener
 	{
 	public:
+		bool horGridEnabled = true; // Is horizontal lines of grid are enabled
+		bool verGridEnabled = true; // Is vertical lines of grid are enabled
+
+	public:
 		// Default constructor
 		ScrollView();
 
@@ -154,6 +158,8 @@ CLASS_BASES_META(Editor::ScrollView)
 END_META;
 CLASS_FIELDS_META(Editor::ScrollView)
 {
+	PUBLIC_FIELD(horGridEnabled);
+	PUBLIC_FIELD(verGridEnabled);
 	PROTECTED_FIELD(mReady);
 	PROTECTED_FIELD(mRenderTargetSprite);
 	PROTECTED_FIELD(mRenderTarget);
