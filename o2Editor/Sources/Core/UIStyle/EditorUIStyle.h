@@ -108,6 +108,7 @@ namespace Editor
 		void RebuildVerWideProgressbar();
 
 		void RebuildAnimationTree();
+		void RebuildAnimationPropertiesTree();
 
 		void RebuildSpoilerWithHead();
 

@@ -5,8 +5,11 @@
 
 namespace o2
 {
-	class Window;
+	class Button;
 	class EditBox;
+	class Sprite;
+	class Text;
+	class Window;
 }
 
 using namespace o2;
@@ -18,12 +21,20 @@ namespace Editor
 	class PropertiesListDlg : public Singleton<PropertiesListDlg>
 	{
 	public:
+		PropertiesListDlg();
+		~PropertiesListDlg();
+
+		// Shows animation properties window for actor and animation
 		void Show(Animation* animation, ActorRef actor);
 
 	private:
 		Window* mWindow = nullptr;
 		EditBox* mFilter = nullptr;
 		AnimationPropertiesTree* mPropertiesTree = nullptr;
+
+	private:
+		// Initializes window and controls
+		void InitializeWindow();
 	};
 
 	class AnimationPropertiesTree : public Tree
@@ -38,6 +49,12 @@ namespace Editor
 			String path;
 			const Type* type;
 			bool used = false;
+
+		public:
+			~NodeData();
+
+			void Clear();
+			NodeData* AddChild(const String& name, const Type* type);
 		};
 
 	public:
@@ -46,12 +63,21 @@ namespace Editor
 
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
-		void Initialize(ActorRef actor);
+		// Initializes properties
+		void Initialize(Animation* animation, ActorRef actor);
+
+		SERIALIZABLE(AnimationPropertiesTree);
 
 	private:
 		NodeData mRoot; // Root properties data node
 
 	private:
+		// Initializes parameters tree node by object properties
+		void InitializeTreeNode(NodeData* node, IObject* object);
+
+		// Initializes children node for object property
+		void InitializeSubTreeNode(FieldInfo* fieldInfo, const ObjectType* type, IObject* object, NodeData* node);
+
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
@@ -84,6 +110,17 @@ namespace Editor
 		AnimationPropertiesTreeNode(const AnimationPropertiesTreeNode& other);
 
 		AnimationPropertiesTreeNode& operator=(const AnimationPropertiesTreeNode& other);
+
+		// Initializes node by data
+		void Setup(const AnimationPropertiesTree::NodeData& data);
+
+		SERIALIZABLE(AnimationPropertiesTreeNode);
+
+	private:
+		Text*   mName;
+		Sprite* mIcon;
+		Button* mAddButton;
+		Button* mRemoveButton;
 
 	private:
 		// Copies data of actor from other to this
