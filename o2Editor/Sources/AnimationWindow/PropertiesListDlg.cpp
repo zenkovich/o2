@@ -9,6 +9,7 @@
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/EditBox.h"
 #include "Scene/UI/Widgets/Window.h"
+#include "Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::PropertiesListDlg);
 
@@ -27,13 +28,13 @@ namespace Editor
 
 	void PropertiesListDlg::Show(Animation* animation, ActorRef actor)
 	{
-		mPropertiesTree->Initialize(animation, actor);
-		mWindow->ShowModal();
+		Instance().mPropertiesTree->Initialize(animation, actor);
+		Instance().mWindow->ShowModal();
 	}
 
 	void PropertiesListDlg::InitializeWindow()
 	{
-		mWindow = o2UI.CreateWindow("Animation properties");
+		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
 
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
@@ -56,6 +57,11 @@ namespace Editor
 		*mPropertiesTree->layout = WidgetLayout::BothStretch(0, 0, 0, 20);
 
 		mWindow->AddChild(mPropertiesTree);
+
+		mWindow->Hide(true);
+		mWindow->layout->size = Vec2F(200, 300);
+
+		mWindow->GetBackCursorListener().onCursorReleased = [=](const Input::Cursor& c) { mWindow->Hide(); };
 	}
 
 	AnimationPropertiesTree::AnimationPropertiesTree():
@@ -74,26 +80,48 @@ namespace Editor
 
 	void AnimationPropertiesTree::Initialize(Animation* animation, ActorRef actor)
 	{
-		mRoot.children.Clear();
+		mRoot.Clear();
+		mPassedObject.Clear();
 
 		InitializeTreeNode(&mRoot, actor.Get());
+		UpdateNodesStructure();
+		UpdateVisibleNodes();
 	}
 
 	void AnimationPropertiesTree::InitializeTreeNode(NodeData* node, IObject* object)
 	{
 		static Vector<const Type*> availableTypes({ &TypeOf(float), &TypeOf(Color4), &TypeOf(Vec2F), &TypeOf(bool), &TypeOf(RectF) });
 
-		for (auto field : object->GetType().GetFields()) 
+		if (!object)
+			return;
+
+		if (mPassedObject.Contains(object))
+			return;
+
+		mPassedObject.Add(object);
+
+		auto objectType = dynamic_cast<const ObjectType*>(&object->GetType());
+		auto rawObject = objectType->DynamicCastFromIObject(object);
+		for (auto field : objectType->GetFields())
 		{
 			if (field->GetType()->GetUsage() == Type::Usage::Object)
 			{
-				InitializeSubTreeNode(field, dynamic_cast<const ObjectType*>(field->GetType()), object, node);
+				auto fieldObjectType = dynamic_cast<const ObjectType*>(field->GetType());
+				auto fieldObject = fieldObjectType->DynamicCastToIObject(field->GetValuePtr(rawObject));
+				auto newNode = node->AddChild(field->GetName(), fieldObjectType);
+				InitializeTreeNode(newNode, fieldObject);
 			}
 			else if (field->GetType()->GetUsage() == Type::Usage::Pointer)
 			{
 				auto pointerType = dynamic_cast<const PointerType*>(field->GetType());
-				if (pointerType->GetUnpointedType()->GetUsage() == Type::Usage::Object)
-					InitializeSubTreeNode(field, dynamic_cast<const ObjectType*>(field->GetType()), object, node);
+				auto unpointedType = pointerType->GetUnpointedType();
+				if (unpointedType->GetUsage() == Type::Usage::Object)
+				{
+					auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);
+					auto fieldObject = fieldObjectType->DynamicCastToIObject(field->GetValuePtr(rawObject));
+					auto newNode = node->AddChild(field->GetName(), fieldObjectType);
+					InitializeTreeNode(newNode, fieldObject);
+				}
 			}
 			else if (availableTypes.Contains(field->GetType()))
 			{
@@ -149,15 +177,6 @@ namespace Editor
 	void AnimationPropertiesTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
 	{
 
-	}
-
-	void AnimationPropertiesTree::InitializeSubTreeNode(FieldInfo* fieldInfo, const ObjectType* type, IObject* object, NodeData* node)
-	{
-		if (auto fieldAsObject = type->DynamicCastToIObject(fieldInfo->GetValuePtr(object)))
-		{
-			auto newNode = node->AddChild(fieldInfo->GetName(), fieldInfo->GetType());
-			InitializeTreeNode(newNode, fieldAsObject);
-		}
 	}
 
 	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode():
@@ -233,3 +252,7 @@ namespace Editor
 	}
 
 }
+
+DECLARE_CLASS(Editor::AnimationPropertiesTree);
+
+DECLARE_CLASS(Editor::AnimationPropertiesTreeNode);

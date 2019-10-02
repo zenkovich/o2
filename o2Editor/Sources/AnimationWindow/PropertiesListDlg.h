@@ -25,7 +25,7 @@ namespace Editor
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation
-		void Show(Animation* animation, ActorRef actor);
+		static void Show(Animation* animation, ActorRef actor);
 
 	private:
 		Window* mWindow = nullptr;
@@ -47,7 +47,7 @@ namespace Editor
 
 			String name;
 			String path;
-			const Type* type;
+			const Type* type = nullptr;
 			bool used = false;
 
 		public:
@@ -70,13 +70,11 @@ namespace Editor
 
 	private:
 		NodeData mRoot; // Root properties data node
+		Vector<IObject*> mPassedObject;
 
 	private:
 		// Initializes parameters tree node by object properties
 		void InitializeTreeNode(NodeData* node, IObject* object);
-
-		// Initializes children node for object property
-		void InitializeSubTreeNode(FieldInfo* fieldInfo, const ObjectType* type, IObject* object, NodeData* node);
 
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
@@ -133,3 +131,53 @@ namespace Editor
 		void InitializeControls();
 	};
 }
+
+CLASS_BASES_META(Editor::AnimationPropertiesTree)
+{
+	BASE_CLASS(o2::Tree);
+}
+END_META;
+CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
+{
+	PRIVATE_FIELD(mRoot);
+	PRIVATE_FIELD(mPassedObject);
+}
+END_META;
+CLASS_METHODS_META(Editor::AnimationPropertiesTree)
+{
+
+	PUBLIC_FUNCTION(void, Initialize, Animation*, ActorRef);
+	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
+	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
+	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
+	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
+	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
+	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
+	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
+	PRIVATE_FUNCTION(void, OnNodeDblClick, TreeNode*);
+	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
+}
+END_META;
+
+CLASS_BASES_META(Editor::AnimationPropertiesTreeNode)
+{
+	BASE_CLASS(o2::TreeNode);
+}
+END_META;
+CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
+{
+	PRIVATE_FIELD(mName);
+	PRIVATE_FIELD(mIcon);
+	PRIVATE_FIELD(mAddButton);
+	PRIVATE_FIELD(mRemoveButton);
+}
+END_META;
+CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
+{
+
+	PUBLIC_FUNCTION(void, Setup, const AnimationPropertiesTree::NodeData&);
+	PRIVATE_FUNCTION(void, CopyData, const Actor&);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
+	PRIVATE_FUNCTION(void, InitializeControls);
+}
+END_META;

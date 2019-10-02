@@ -3,6 +3,7 @@
 #include "AnimationWindow/CurvesSheet.h"
 
 #include "Animation/AnimatedFloat.h"
+#include "AnimationWindow/AnimationWindow.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/Tree.h"
 #include "Scene/UI/WidgetLayout.h"
@@ -31,15 +32,6 @@ namespace Editor
 		InitializeControls();
 
 		return *this;
-	}
-
-	void CurvesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree, ActionsList* actionsList)
-	{
-		mTimeline = timeline;
-		mTree = tree;
-		mActionsList = actionsList;
-
-		mEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
 	}
 
 	void CurvesSheet::SetAnimation(Animation* animation)
@@ -71,7 +63,8 @@ namespace Editor
 		mEditor->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
 
 		mEditor->verGridEnabled = false;
-		mEditor->actionsListDelegate = mActionsList;
+		mEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
+		mEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
 
 		AddChild(mEditor);
 	}
@@ -80,8 +73,8 @@ namespace Editor
 	{
 		Camera camera = mEditor->GetCamera();
 		RectF camRect = camera.GetRect();
-		camRect.left = mTimeline->WorldToLocal(mTimeline->layout->worldLeft);
-		camRect.right = mTimeline->WorldToLocal(mTimeline->layout->worldRight);
+		camRect.left = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldLeft);
+		camRect.right = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldRight);
 
 		camera.SetRect(camRect, false);
 		RectF checkRect = camera.GetRect();
@@ -96,7 +89,7 @@ namespace Editor
 		if (mEditorViewLock || !IsEnabled())
 			return;
 
-		mTimeline->SetViewRange(mEditor->GetCamera().GetRect().left, mEditor->GetCamera().GetRect().right);
+		mAnimationWindow->mTimeline->SetViewRange(mEditor->GetCamera().GetRect().left, mEditor->GetCamera().GetRect().right);
 	}
 
 }

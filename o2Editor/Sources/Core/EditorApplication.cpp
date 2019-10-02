@@ -107,8 +107,9 @@ namespace Editor
 
 		OnResizing();
 
-		o2EditorAnimationWindow.SetAnimation(&EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel")->
-											 GetStateObject("playing")->animation);
+		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
+		o2EditorAnimationWindow.SetAnimation(&widget->GetStateObject("playing")->animation);
+		o2EditorAnimationWindow.SetTarget(widget);
 	}
 
 	void EditorApplication::OnClosing()

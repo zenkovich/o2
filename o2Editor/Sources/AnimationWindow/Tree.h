@@ -12,6 +12,7 @@ namespace o2
 
 namespace Editor
 {
+	class AnimationWindow;
 	class KeyHandlesSheet;
 
 	// ---------------------
@@ -31,9 +32,6 @@ namespace Editor
 
 		// Copy-operator
 		AnimationTree& operator=(const AnimationTree& other);
-
-		// Initializes tree with timeline and handles sheet
-		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
 		// Draws widget
 		void Draw() override;
@@ -69,16 +67,18 @@ namespace Editor
 		};
 
 	private:
-		Animation*          mAnimation = nullptr;
-		AnimationValueNode* mRootValue = nullptr;
-		AnimationTimeline*  mTimeline = nullptr;
-		KeyHandlesSheet*    mHandlesSheet = nullptr;
+		AnimationWindow*    mAnimationWindow = nullptr; // Animation window
+		AnimationValueNode* mRootValue = nullptr;       // Root animation properties tree node
+		ContextMenu*        mContextMenu;               // Context menu
 
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite @SERIALIZABLE
 
 		float mTreeWidth = 100.0f; // Tree - part width
 
 	private:
+		// Initializes context menu
+		void InitializeContext();
+
 		// Rebuilds animation values tree - mRootValues
 		void RebuildAnimationTree();
 
@@ -109,10 +109,14 @@ namespace Editor
 		// Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
 		void UpdateVisibleNodes() override;
 
+		// It is called when tree node clicked by right button, opening context menu
+		void OnNodeRBClick(TreeNode* node) override;
+
 		// Gets tree node from pool or creates new, in editor scope
 		TreeNode* CreateTreeNodeWidget();
 
 		friend class AnimationTreeNode;
+		friend class AnimationWindow;
 	};
 
 	// -------------------
@@ -190,10 +194,9 @@ CLASS_BASES_META(Editor::AnimationTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
-	PRIVATE_FIELD(mAnimation);
+	PRIVATE_FIELD(mAnimationWindow);
 	PRIVATE_FIELD(mRootValue);
-	PRIVATE_FIELD(mTimeline);
-	PRIVATE_FIELD(mHandlesSheet);
+	PRIVATE_FIELD(mContextMenu);
 	PRIVATE_FIELD(mZebraBackLine).SERIALIZABLE_ATTRIBUTE();
 	PRIVATE_FIELD(mTreeWidth);
 }
@@ -201,13 +204,13 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
 
-	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
 	PUBLIC_FUNCTION(float, GetLineNumber, float);
 	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
+	PRIVATE_FUNCTION(void, InitializeContext);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
 	PRIVATE_FUNCTION(void, DrawZebraBack);
@@ -218,6 +221,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
 	PRIVATE_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
+	PRIVATE_FUNCTION(void, OnNodeRBClick, TreeNode*);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 }
 END_META;

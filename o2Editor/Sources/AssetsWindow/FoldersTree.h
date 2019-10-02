@@ -37,9 +37,9 @@ namespace Editor
 		SERIALIZABLE(AssetsFoldersTree);
 
 	protected:
-		Tree*          mFoldersTree; // Folders tree
+		Tree*        mFoldersTree; // Folders tree
 		ContextMenu* mContextMenu; // Context menu
-		String         mCurrentPath; // Current viewing path
+		String       mCurrentPath; // Current viewing path
 
 		bool mOpengingFolderFromThis = false;
 

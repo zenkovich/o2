@@ -1,12 +1,14 @@
 #include "stdafx.h"
 
+#include "AnimationWindow/AnimationWindow.h"
 #include "Core/EditorScope.h"
+#include "PropertiesListDlg.h"
+#include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widgets/Button.h"
 #include "TrackControls/KeyFramesTrackControl.h"
 #include "TrackControls/MapKeyFramesTrackControl.h"
 #include "Tree.h"
-#include "Scene/UI/Widgets/Button.h"
-#include "Scene/UI/UIManager.h"
 
 namespace Editor
 {
@@ -15,12 +17,14 @@ namespace Editor
 	{
 		mZebraBackLine = mnew Sprite();
 		SetRearrangeType(Tree::RearrangeType::Disabled);
+		InitializeContext();
 	}
 
 	AnimationTree::AnimationTree(const AnimationTree& other) :
 		Tree(other), mZebraBackLine(other.mZebraBackLine->CloneAs<Sprite>())
 	{
 		SetRearrangeType(Tree::RearrangeType::Disabled);
+		InitializeContext();
 	}
 
 	AnimationTree::~AnimationTree()
@@ -38,29 +42,22 @@ namespace Editor
 		Tree::operator=(other);
 
 		mZebraBackLine = other.mZebraBackLine->CloneAs<Sprite>();
+		InitializeContext();
 
 		return *this;
-	}
-
-	void AnimationTree::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
-	{
-		mTimeline = timeline;
-		mHandlesSheet = handlesSheet;
 	}
 
 	void AnimationTree::Draw()
 	{
 		DrawZebraBack();
-		mHandlesSheet->Draw();
+		mAnimationWindow->mHandlesSheet->Draw();
 		Tree::Draw();
-		mHandlesSheet->UpdateInputDrawOrder();
+		mAnimationWindow->mHandlesSheet->UpdateInputDrawOrder();
 	}
 
 	void AnimationTree::SetAnimation(Animation* animation)
 	{
-		mHandlesSheet->UnregAllTrackControls();
-
-		mAnimation = animation;
+		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
 
 		RebuildAnimationTree();
 		ExpandAll();
@@ -88,6 +85,22 @@ namespace Editor
 		return -(lineNumber * mNodeWidgetSample->layout->GetMinimalHeight() - mScrollPos.y - layout->GetWorldTop());
 	}
 
+	void AnimationTree::InitializeContext()
+	{
+		mContextMenu = o2UI.CreateWidget<ContextMenu>();
+
+		mContextMenu->AddItem("New", [&]() { });
+		mContextMenu->AddItem("Save", [&]() { }, ImageAssetRef(), ShortcutKeys('S', true));
+		mContextMenu->AddItem("Save as...", [&]() { }, ImageAssetRef(), ShortcutKeys('S', true, true));
+		mContextMenu->AddItem("---");
+		mContextMenu->AddItem("Edit properties", [&]() { PropertiesListDlg::Show(mAnimationWindow->mAnimation, mAnimationWindow->mTargetActor); });
+
+		onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
+		onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
+
+		AddInternalWidget(mContextMenu);
+	}
+
 	void AnimationTree::RebuildAnimationTree()
 	{
 		if (mRootValue)
@@ -95,13 +108,13 @@ namespace Editor
 
 		mRootValue = nullptr;
 
-		if (!mAnimation)
+		if (!mAnimationWindow->mAnimation)
 			return;
 
 		mRootValue = mnew AnimationValueNode();
 		mRootValue->name = "Track name";
 
-		for (auto& value : mAnimation->GetAnimationsValues())
+		for (auto& value : mAnimationWindow->mAnimation->GetAnimationsValues())
 			AddAnimatedValue(value);
 	}
 
@@ -195,7 +208,7 @@ namespace Editor
 	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
 	{
 		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
-		node->Setup((AnimationValueNode*)object, mTimeline, mHandlesSheet);
+		node->Setup((AnimationValueNode*)object, mAnimationWindow->mTimeline, mAnimationWindow->mHandlesSheet);
 	}
 
 	void AnimationTree::FreeNodeData(TreeNode* nodeWidget, UnknownPtr object)
@@ -208,6 +221,12 @@ namespace Editor
 	{
 		Tree::UpdateVisibleNodes();
 		UpdateTreeWidth();
+	}
+
+	void AnimationTree::OnNodeRBClick(TreeNode* node)
+	{
+		o2UI.FocusWidget(this);
+		mContextMenu->Show();
 	}
 
 	TreeNode* AnimationTree::CreateTreeNodeWidget()

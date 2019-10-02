@@ -14,6 +14,8 @@ namespace o2
 
 namespace Editor
 {
+	class AnimationWindow;
+
 	// ------------------------------------
 	// Draws time scale in animation window
 	// ------------------------------------
@@ -103,7 +105,9 @@ namespace Editor
 		const float mScrollBorderBounceCoef = 10.0f;  // Smooth scroll bounds bounce coefficient
 
 	private:
-		Animation* mAnimation = nullptr; // Editing animation
+		AnimationWindow* mAnimationWindow = nullptr; // Animation window
+
+		Animation* mAnimation = nullptr; // Animation, used for sibscribing on duration change
 
 		float mSmoothViewScroll = 0.0f;          // Time scroll in seconds smoothed, tends to target value mViewScroll
 		float mViewScroll = 0.0f;                // Time scroll in seconds
@@ -156,6 +160,8 @@ namespace Editor
 
 		// Sets animation time by cursor screen position
 		void SetAnimationTimeByCursor(const Input::Cursor& cursor);
+
+		friend class AnimationWindow;
 	};
 }
 
@@ -182,6 +188,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mScrollSmoothCoef);
 	PRIVATE_FIELD(mScrollSpeedDecreaseCoef);
 	PRIVATE_FIELD(mScrollBorderBounceCoef);
+	PRIVATE_FIELD(mAnimationWindow);
 	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mSmoothViewScroll);
 	PRIVATE_FIELD(mViewScroll);

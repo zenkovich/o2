@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Timeline.h"
 
+#include "AnimationWindow/AnimationWindow.h"
 #include "Application/Input.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Scene/UI/Widgets/HorizontalScrollBar.h"
@@ -77,7 +78,7 @@ namespace Editor
 
 		DrawTimeScale();
 
-		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimation ? mAnimation->GetLoopTime() : 0.0f), layout->GetWorldTop()));
+		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimationWindow->mAnimation ? mAnimationWindow->mAnimation->GetLoopTime() : 0.0f), layout->GetWorldTop()));
 		mTimeLine->SetSize(Vec2F(10.0f, layout->GetHeight() + 5.0f));
 		mTimeLine->SetSizePivot(Vec2F(7.5f, layout->GetHeight() + 4.0f));
 		mTimeLine->Draw();
@@ -187,7 +188,7 @@ namespace Editor
 
 	void AnimationTimeline::SetAnimationTimeByCursor(const Input::Cursor& cursor)
 	{
-		if (cursor.isPressed && mAnimation) {
+		if (cursor.isPressed && mAnimationWindow->mAnimation) {
 			mAnimation->Stop();
 			mAnimation->SetTime(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
 		}
@@ -301,7 +302,7 @@ namespace Editor
 
 	void AnimationTimeline::UpdateDuration()
 	{
-		mDuration = mAnimation->GetDuration();
+		mDuration = mAnimationWindow->mAnimation->GetDuration();
 
 		if (mScrollBar)
 		{

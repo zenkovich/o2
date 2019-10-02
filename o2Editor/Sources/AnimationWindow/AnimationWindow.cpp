@@ -4,6 +4,7 @@
 #include "Animation/Animation.h"
 #include "AnimationWindow/CurvesSheet.h"
 #include "AnimationWindow/KeyHandlesSheet.h"
+#include "AnimationWindow/PropertiesListDlg.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/Tree.h"
 #include "Core/EditorScope.h"
@@ -95,11 +96,14 @@ namespace Editor
 		InitializeCurvesSheet();
 		InitializeTimeline();
 
-		mHandlesSheet->Initialize(mTimeline, mTree);
-		mTree->Initialize(mTimeline, mHandlesSheet);
-		mCurves->Initialize(mTimeline, mTree, &mActionsList);
+		mCurves->mAnimationWindow = this;
+		mHandlesSheet->mAnimationWindow = this;
+		mTimeline->mAnimationWindow = this;
+		mTree->mAnimationWindow = this;
 
 		ShowKeyHandlesVisible();
+
+		 PropertiesListDlg::InitializeSingleton();
 	}
 
 	void AnimationWindow::InitializeHandlesSheet()

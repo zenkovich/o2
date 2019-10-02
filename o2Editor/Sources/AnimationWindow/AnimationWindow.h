@@ -126,6 +126,11 @@ namespace Editor
 
 		// It is called when menu record button was pressed
 		void OnMenuRecordPressed();
+
+		friend class AnimationTimeline;
+		friend class AnimationTree;
+		friend class CurvesSheet;
+		friend class KeyHandlesSheet;
 	};
 }
 

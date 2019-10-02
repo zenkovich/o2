@@ -55,6 +55,9 @@ namespace Editor
 		void RebuildAddKeyMenuButton();
 		void RebuildAddKeyButton();
 
+		void RebuildAddSmallBtn();
+		void RebuildRemoveSmallBtn();
+
 		void RebuildFloatProperty();
 		void RebuildRedFloatProperty();
 		void RebuildGreenFloatProperty();
@@ -260,6 +263,8 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildLoopMenuToggle);
 	PUBLIC_FUNCTION(void, RebuildAddKeyMenuButton);
 	PUBLIC_FUNCTION(void, RebuildAddKeyButton);
+	PUBLIC_FUNCTION(void, RebuildAddSmallBtn);
+	PUBLIC_FUNCTION(void, RebuildRemoveSmallBtn);
 	PUBLIC_FUNCTION(void, RebuildFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildRedFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);
@@ -304,6 +309,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildHorWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildVerWideProgressbar);
 	PUBLIC_FUNCTION(void, RebuildAnimationTree);
+	PUBLIC_FUNCTION(void, RebuildAnimationPropertiesTree);
 	PUBLIC_FUNCTION(void, RebuildSpoilerWithHead);
 	PUBLIC_FUNCTION(void, RebuildEditorUIManager, bool, bool);
 }

@@ -15,8 +15,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class AnimationTimeline;
-	class AnimationTree;
+	class AnimationWindow;
 	class ITrackControl;
 
 	// -------------------------------------------
@@ -36,9 +35,6 @@ namespace Editor
 
 		// Copy-operator
 		KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
-
-		// Sets timeline and tree
-		void Initialize(AnimationTimeline* timeline, AnimationTree* tree);
 
 		// Sets animation. Used for batch change of keys
 		void SetAnimation(Animation* animation);
@@ -76,10 +72,7 @@ namespace Editor
 		RectF mSelectionFrameOffsets = RectF(-9, -3, 5, 2);
 		RectF mSelectionFrameCursorOffsets = RectF(-2, -3, 2, 2);
 
-		Animation* mAnimation = nullptr; // Editing animation
-
-		AnimationTimeline* mTimeline = nullptr; // Timeline pointer, used for calculation world and local timeline positions
-		AnimationTree*     mTree = nullptr;     // Animated values tree pointer, used for calculation handles lines numbers
+		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
 		Vector<ITrackControl*> mTrackControls;                // List of actual track controls
 		Dictionary<String, ITrackControl*> mTrackControlsMap; // Map of actial track controls, key is animated value path
@@ -192,6 +185,8 @@ namespace Editor
 
 		// It is called when middle mouse button was released (only when middle mouse button pressed this at previous time)
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
+
+		friend class AnimationWindow;
 	};
 }
 
@@ -206,9 +201,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
 	PRIVATE_FIELD(mSelectionFrameOffsets);
 	PRIVATE_FIELD(mSelectionFrameCursorOffsets);
-	PRIVATE_FIELD(mAnimation);
-	PRIVATE_FIELD(mTimeline);
-	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mAnimationWindow);
 	PRIVATE_FIELD(mTrackControls);
 	PRIVATE_FIELD(mTrackControlsMap);
 	PRIVATE_FIELD(mHandlesGroups);
@@ -228,7 +221,6 @@ END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
 {
 
-	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, AnimationTree*);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);

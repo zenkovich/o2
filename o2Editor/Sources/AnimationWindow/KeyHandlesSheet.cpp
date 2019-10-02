@@ -3,6 +3,7 @@
 
 #include "Animation/AnimatedValue.h"
 #include "Animation/Animation.h"
+#include "AnimationWindow/AnimationWindow.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Scene/UI/Widgets/ContextMenu.h"
@@ -65,10 +66,10 @@ namespace Editor
 
 		if (mSelectionFrame->enabled) {
 			auto offsets = mIsFrameSelecting ? mSelectionFrameCursorOffsets : mSelectionFrameOffsets;
-			mSelectionFrame->SetRect(RectF(mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
-										   mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
-										   mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
-										   mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom));
+			mSelectionFrame->SetRect(RectF(mAnimationWindow->mTimeline->LocalToWorld(mSelectionRect.left) + offsets.left,
+										   mAnimationWindow->mTree->GetLineWorldPosition(mSelectionRect.top) + offsets.top,
+										   mAnimationWindow->mTimeline->LocalToWorld(mSelectionRect.right) + offsets.right,
+										   mAnimationWindow->mTree->GetLineWorldPosition(mSelectionRect.bottom) + offsets.bottom));
 			mSelectionFrame->Draw();
 
 			mCenterFrameDragHandle.Draw();
@@ -105,15 +106,8 @@ namespace Editor
 		}
 	}
 
-	void KeyHandlesSheet::Initialize(AnimationTimeline* timeline, AnimationTree* tree)
-	{
-		mTimeline = timeline;
-		mTree = tree;
-	}
-
 	void KeyHandlesSheet::SetAnimation(Animation* animation)
 	{
-		mAnimation = animation;
 	}
 
 	bool KeyHandlesSheet::IsUnderPoint(const Vec2F& point)
@@ -165,7 +159,7 @@ namespace Editor
 		mNeedUpdateSelectionFrame = true;
 
 		if (mSelectedHandles.Count() == 1)
-			mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
+			mAnimationWindow->mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
 	}
 
 	void KeyHandlesSheet::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
@@ -196,7 +190,7 @@ namespace Editor
 
 	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
 	{
-		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
 		for (auto kv : mHandlesGroups)
@@ -214,7 +208,7 @@ namespace Editor
 			}
 		}
 
-		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
 		mNeedUpdateSelectionFrame = true;
@@ -230,15 +224,15 @@ namespace Editor
 	void KeyHandlesSheet::InitializeCenterHandle()
 	{
 		mCenterFrameDragHandle.localToScreenTransformFunc = [&](const Vec2F& point) {
-			return Vec2F(mTimeline->LocalToWorld(point.x), mTree->GetLineWorldPosition(point.y));
+			return Vec2F(mAnimationWindow->mTimeline->LocalToWorld(point.x), mAnimationWindow->mTree->GetLineWorldPosition(point.y));
 		};
 
 		mCenterFrameDragHandle.screenToLocalTransformFunc = [&](const Vec2F& point) {
-			return Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+			return Vec2F(mAnimationWindow->mTimeline->WorldToLocal(point.x), mAnimationWindow->mTree->GetLineNumber(point.y));
 		};
 
 		mCenterFrameDragHandle.isPointInside = [&](const Vec2F& point) {
-			auto local = Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+			auto local = Vec2F(mAnimationWindow->mTimeline->WorldToLocal(point.x), mAnimationWindow->mTree->GetLineNumber(point.y));
 			return local.x > mSelectionRect.left && local.x < mSelectionRect.right && local.y > mSelectionRect.top && local.y < mSelectionRect.bottom;
 		};
 
@@ -265,11 +259,11 @@ namespace Editor
 	void KeyHandlesSheet::InitializeLeftHandle()
 	{
 		mLeftFrameDragHandle.localToScreenTransformFunc = [&](const Vec2F& point) {
-			return Vec2F(mTimeline->LocalToWorld(point.x), mTree->GetLineWorldPosition(point.y));
+			return Vec2F(mAnimationWindow->mTimeline->LocalToWorld(point.x), mAnimationWindow->mTree->GetLineWorldPosition(point.y));
 		};
 
 		mLeftFrameDragHandle.screenToLocalTransformFunc = [&](const Vec2F& point) {
-			return Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+			return Vec2F(mAnimationWindow->mTimeline->WorldToLocal(point.x), mAnimationWindow->mTree->GetLineNumber(point.y));
 		};
 
 		mLeftFrameDragHandle.isPointInside = [&](const Vec2F& point) {
@@ -295,7 +289,7 @@ namespace Editor
 
 			float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
 
-			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->BeginKeysBatchChange();
 
 			for (auto handle : GetSelectedHandles()) {
@@ -303,7 +297,7 @@ namespace Editor
 				handle->onChangedPos(handle->GetPosition());
 			}
 
-			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
 			mNeedUpdateSelectionFrame = true;
@@ -316,11 +310,11 @@ namespace Editor
 	void KeyHandlesSheet::InitializeRightHandle()
 	{
 		mRightFrameDragHandle.localToScreenTransformFunc = [&](const Vec2F& point) {
-			return Vec2F(mTimeline->LocalToWorld(point.x), mTree->GetLineWorldPosition(point.y));
+			return Vec2F(mAnimationWindow->mTimeline->LocalToWorld(point.x), mAnimationWindow->mTree->GetLineWorldPosition(point.y));
 		};
 
 		mRightFrameDragHandle.screenToLocalTransformFunc = [&](const Vec2F& point) {
-			return Vec2F(mTimeline->WorldToLocal(point.x), mTree->GetLineNumber(point.y));
+			return Vec2F(mAnimationWindow->mTimeline->WorldToLocal(point.x), mAnimationWindow->mTree->GetLineNumber(point.y));
 		};
 
 		mRightFrameDragHandle.isPointInside = [&](const Vec2F& point) {
@@ -346,7 +340,7 @@ namespace Editor
 
 			float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
 
-			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->BeginKeysBatchChange();
 
 			for (auto handle : GetSelectedHandles()) {
@@ -354,7 +348,7 @@ namespace Editor
 				handle->onChangedPos(handle->GetPosition());
 			}
 
-			for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
 			mNeedUpdateSelectionFrame = true;
@@ -393,13 +387,13 @@ namespace Editor
 			mSelectionFrame->enabled = true;
 
 			mSelectionRect.left = mSelectedHandles.First()->GetPosition().x;
-			mSelectionRect.bottom = mTree->GetLineNumber(mSelectedHandles.First()->GetScreenPosition().y);
+			mSelectionRect.bottom = mAnimationWindow->mTree->GetLineNumber(mSelectedHandles.First()->GetScreenPosition().y);
 			mSelectionRect.right = mSelectionRect.left;
 			mSelectionRect.top = mSelectionRect.bottom;
 
 			for (auto handle : mSelectedHandles) {
 				float localPos = handle->GetPosition().x;
-				float lineNumber = mTree->GetLineNumber(handle->GetScreenPosition().y);
+				float lineNumber = mAnimationWindow->mTree->GetLineNumber(handle->GetScreenPosition().y);
 
 				mSelectionRect.left = Math::Min(mSelectionRect.left, localPos);
 				mSelectionRect.right = Math::Max(mSelectionRect.right, localPos);
@@ -420,7 +414,7 @@ namespace Editor
 		DataNode data;
 		Dictionary<String, Pair<DataNode*, Vector<UInt64>>> serializedKeysUids;
 
-		float relativeTime = mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
+		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
 
 		for (auto handle : mSelectedHandles)
 		{
@@ -456,9 +450,9 @@ namespace Editor
 		DataNode data;
 		data.LoadFromData(Clipboard::GetText());
 
-		float relativeTime = mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
+		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
 
-		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
 		for (auto pathNode : data) 
@@ -478,7 +472,7 @@ namespace Editor
 			}
 		}		
 
-		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
 		for (auto& handlesGroup : mHandlesGroups)
@@ -496,7 +490,7 @@ namespace Editor
 		auto selected = mSelectedHandles;
 		DeselectAll();
 
-		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
 		for (auto handle : selected)
@@ -505,7 +499,7 @@ namespace Editor
 				keyHandle->trackControl->DeleteKey(keyHandle->keyUid);
 		}
 
-		for (auto animatedValueDef : mAnimation->GetAnimationsValues())
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 	}
 
@@ -516,8 +510,8 @@ namespace Editor
 
 		mBeginSelectHandles = mSelectedHandles;
 
-		mBeginSelectPoint.x = mTimeline->WorldToLocal(cursor.position.x);
-		mBeginSelectPoint.y = mTree->GetLineNumber(cursor.position.y);
+		mBeginSelectPoint.x = mAnimationWindow->mTimeline->WorldToLocal(cursor.position.x);
+		mBeginSelectPoint.y = mAnimationWindow->mTree->GetLineNumber(cursor.position.y);
 
 		Focus();
 		mContextMenu->SetItemsMaxPriority();
@@ -559,7 +553,7 @@ namespace Editor
 			{
 				mSelectionFrame->enabled = true;
 
-				Vec2F current(mTimeline->WorldToLocal(cursor.position.x), mTree->GetLineNumber(cursor.position.y));
+				Vec2F current(mAnimationWindow->mTimeline->WorldToLocal(cursor.position.x), mAnimationWindow->mTree->GetLineNumber(cursor.position.y));
 				mSelectionRect.left = Math::Min(mBeginSelectPoint.x, current.x);
 				mSelectionRect.right = Math::Max(mBeginSelectPoint.x, current.x);
 				mSelectionRect.top = Math::Floor(Math::Min(mBeginSelectPoint.y, current.y));
@@ -571,7 +565,7 @@ namespace Editor
 					SelectHandle(handle);
 
 				for (auto handle : mHandles) {
-					Vec2F handlePos(handle->GetPosition().x, mTree->GetLineNumber(handle->GetScreenPosition().y));
+					Vec2F handlePos(handle->GetPosition().x, mAnimationWindow->mTree->GetLineNumber(handle->GetScreenPosition().y));
 					if (handlePos.x > mSelectionRect.left && handlePos.x < mSelectionRect.right && handlePos.y > mSelectionRect.top && handlePos.y < mSelectionRect.bottom + 0.5f) {
 						SelectHandle(handle);
 					}
@@ -596,7 +590,7 @@ namespace Editor
 
 	void KeyHandlesSheet::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
-		auto treeNode = mTree->GetTreeNodeUnderPoint(cursor.position);
+		auto treeNode = mAnimationWindow->mTree->GetTreeNodeUnderPoint(cursor.position);
 		if (!treeNode)
 			return;
 

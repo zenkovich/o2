@@ -2317,11 +2317,13 @@ namespace Editor
 		nameLayer->layout = Layout::BothStretch(15, 0, 5, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
-		auto addButton = o2UI.CreateWidget<Button>("plus");
+		auto addButton = o2UI.CreateWidget<Button>("add small");
+		addButton->name = "addButton";
 		*addButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 		itemSample->AddChild(addButton);
 
-		auto removeButton = o2UI.CreateWidget<Button>("remove");
+		auto removeButton = o2UI.CreateWidget<Button>("remove small");
+		removeButton->name = "removeButton";
 		*removeButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 		itemSample->AddChild(removeButton);
 
@@ -2678,6 +2680,60 @@ namespace Editor
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "add key");
+	}
+
+	void EditorUIStyleBuilder::RebuildAddSmallBtn()
+	{
+		Button* sample = mnew Button();
+		sample->layout->minSize = Vec2F(5, 5);
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_plus_small_regular.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_plus_small_hover.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_plus_small_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "add small");
+	}
+
+	void EditorUIStyleBuilder::RebuildRemoveSmallBtn()
+	{
+		Button* sample = mnew Button();
+		sample->layout->minSize = Vec2F(5, 5);
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_minus_small_regular.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_minus_small_hover.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_minus_small_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "remove small");
 	}
 
 	void EditorUIStyleBuilder::RebuildSpoilerWithHead()
