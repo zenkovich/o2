@@ -42,9 +42,6 @@ namespace Editor
 		// Sets width of tree part
 		void SetTreeWidth(float width);
 
-		// Return zebra back line sprite
-		Sprite* GetZebraBackLine() const;
-
 		// Returns animated value line number by world position, dependent on scroll
 		float GetLineNumber(float worldPosition) const;
 
@@ -71,8 +68,6 @@ namespace Editor
 		AnimationValueNode* mRootValue = nullptr;       // Root animation properties tree node
 		ContextMenu*        mContextMenu;               // Context menu
 
-		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite @SERIALIZABLE
-
 		float mTreeWidth = 100.0f; // Tree - part width
 
 	private:
@@ -84,9 +79,6 @@ namespace Editor
 
 		// Adds animated value to tree. Creates intermediate nodes when required
 		void AddAnimatedValue(Animation::AnimatedValueDef& value);
-
-		// Draws zebra back with scroll offset
-		void DrawZebraBack();
 
 		//Updates tree node width
 		void UpdateTreeWidth();
@@ -197,7 +189,6 @@ CLASS_FIELDS_META(Editor::AnimationTree)
 	PRIVATE_FIELD(mAnimationWindow);
 	PRIVATE_FIELD(mRootValue);
 	PRIVATE_FIELD(mContextMenu);
-	PRIVATE_FIELD(mZebraBackLine).SERIALIZABLE_ATTRIBUTE();
 	PRIVATE_FIELD(mTreeWidth);
 }
 END_META;
@@ -207,13 +198,11 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
-	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
 	PUBLIC_FUNCTION(float, GetLineNumber, float);
 	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
 	PRIVATE_FUNCTION(void, InitializeContext);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
-	PRIVATE_FUNCTION(void, DrawZebraBack);
 	PRIVATE_FUNCTION(void, UpdateTreeWidth);
 	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);

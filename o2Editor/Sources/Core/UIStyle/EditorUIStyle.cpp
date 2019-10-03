@@ -98,17 +98,17 @@ namespace Editor
 		auto textLayer = backLayer->AddChildLayer("caption", captionText,
 												  Layout::HorStretch(VerAlign::Top, 20, 35, 20, -2));
 
- // tab head
+		// tab head
 		auto tabBackLayer = sample->AddLayer("tab", nullptr);
 
 		auto tabBackDown = tabBackLayer->AddChildLayer("back", mnew Sprite("ui/UI4_window_frame_docked_tab.png"),
-											  Layout::BothStretch(-13, -13, -13, -11));
+													   Layout::BothStretch(-13, -13, -13, -11));
 
 		auto tabBack = tabBackLayer->AddChildLayer("tabBack", mnew Sprite("ui/UI4_window_frame_docked_tab_back.png"),
-											  Layout::HorStretch(VerAlign::Top, -13, -13, 40, -11));
+												   Layout::HorStretch(VerAlign::Top, -13, -13, 40, -11));
 
 		auto tabMain = tabBackLayer->AddChildLayer("main", nullptr,
-											  Layout::HorStretch(VerAlign::Top, 0, 0, 19));
+												   Layout::HorStretch(VerAlign::Top, 0, 0, 19));
 
 		auto tabMainInactiveBack = tabMain->AddChildLayer("inactive", mnew Sprite("ui/UI4_window_frame_docked_tab_inactive.png"),
 														  Layout::HorStretch(VerAlign::Top, -13, -11, 40, -11));
@@ -128,7 +128,7 @@ namespace Editor
 												   Layout::HorStretch(VerAlign::Top, 20, 10, 20, -2));
 
 
-		   // scroll bars
+		// scroll bars
 		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
 		horScrollBar->layout->anchorMin = Vec2F(0, 0);
 		horScrollBar->layout->anchorMax = Vec2F(1, 0);
@@ -251,15 +251,15 @@ namespace Editor
 		auto pauseIconRootLayer = sample->AddLayer("regular", nullptr);
 		auto pauseIconLayer = pauseIconRootLayer->AddChildLayer("icon", mnew Sprite("ui/UI4_pause_btn_regular.png"),
 																Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-																Vec2F(-10, 10), Vec2F(10, -10)));
+																	   Vec2F(-10, 10), Vec2F(10, -10)));
 
 		auto pauseSelectIconLayer = pauseIconRootLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_pause_btn_select.png"),
 																	  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-																	  Vec2F(-10, 10), Vec2F(10, -10)));
+																			 Vec2F(-10, 10), Vec2F(10, -10)));
 
 		auto pausePressedIconLayer = pauseIconRootLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_pause_btn_pressed.png"),
 																	   Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-																	   Vec2F(-10, 10), Vec2F(10, -10)));
+																			  Vec2F(-10, 10), Vec2F(10, -10)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/regular/child/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
@@ -280,15 +280,15 @@ namespace Editor
 		sample->name = "step button";
 		auto stepIconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_step_btn_regular.png"),
 											  Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-											  Vec2F(-10, 10), Vec2F(10, -10)));
+													 Vec2F(-10, 10), Vec2F(10, -10)));
 
 		auto stepSelectIconLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_step_btn_select.png"),
 													Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-													Vec2F(-10, 10), Vec2F(10, -10)));
+														   Vec2F(-10, 10), Vec2F(10, -10)));
 
 		auto stepPressedIconLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_step_btn_pressed.png"),
 													 Layout(Vec2F(0.5f, 0.5f), Vec2F(0.5f, 0.5f),
-													 Vec2F(-10, 10), Vec2F(10, -10)));
+															Vec2F(-10, 10), Vec2F(10, -10)));
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
@@ -378,7 +378,7 @@ namespace Editor
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))
 			->offStateAnimationSpeed = 0.25f;
 
-		sample->AddState("pressed", Animation::EaseInOut(sample,"layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/root/child/hover/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
 		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.1f));
@@ -2140,7 +2140,7 @@ namespace Editor
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
 		// zebra back
-		*sample->GetZebraBackLine() = Sprite(Color4(0, 0, 0, 13));
+		sample->SetZebraBackLine(new Sprite(Color4(0, 0, 0, 13)));
 
 		// hightlight
 		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
@@ -2281,6 +2281,9 @@ namespace Editor
 		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
+		// zebra back
+		sample->SetZebraBackLine(mnew Sprite(Color4(0, 0, 0, 13)));
+
 		// hightlight
 		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
 		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
@@ -2295,7 +2298,7 @@ namespace Editor
 		// node sample
 		AnimationPropertiesTreeNode* itemSample = mnew AnimationPropertiesTreeNode();
 		sample->SetNodeSample(itemSample);
-		itemSample->layout->minHeight = 25;
+		itemSample->layout->minHeight = 20;
 
 		auto itemSelectionLayer = itemSample->AddLayer("select", nullptr);
 
@@ -2305,7 +2308,7 @@ namespace Editor
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
-		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, 0)));
+		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, -1)));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->color = Color4(96, 125, 139);
@@ -2314,7 +2317,7 @@ namespace Editor
 		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, -20), Vec2F(0, 0)));
 
 		auto nameLayer = itemSample->layer["name"];
-		nameLayer->layout = Layout::BothStretch(15, 0, 5, 0);
+		nameLayer->layout = Layout::BothStretch(35, 0, 5, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
 		auto addButton = o2UI.CreateWidget<Button>("add small");
@@ -2329,6 +2332,7 @@ namespace Editor
 
 		// node sample button
 		Button* itemSampleExpandBtn = mnew Button();
+		*itemSampleExpandBtn->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(15, 15), Vec2F(0, 0));
 		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
 
@@ -2350,11 +2354,6 @@ namespace Editor
 
 		itemSampleExpandBtn->AddState("visible", Animation::EaseInOut(itemSampleExpandBtn, "transparency", 0.0f, 1.0f, 0.2f))
 			->offStateAnimationSpeed = 0.5f;
-
-		itemSampleExpandBtn->layout->anchorMin = Vec2F(0, 1);
-		itemSampleExpandBtn->layout->anchorMax = Vec2F(0, 1);
-		itemSampleExpandBtn->layout->offsetMin = Vec2F(0, -25);
-		itemSampleExpandBtn->layout->offsetMax = Vec2F(10, 0);
 
 		itemSample->AddChild(itemSampleExpandBtn);
 
@@ -2488,7 +2487,6 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildRecordMenuToggle()
 	{
-
 		Toggle* sample = mnew Toggle();
 
 		auto regular = sample->AddLayer("regular", nullptr);
@@ -2545,6 +2543,68 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "menu record");
 	}
 
+	void EditorUIStyleBuilder::RebuildRewindLeftMenuButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_rewind_left.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu rewind left");
+	}
+
+	void EditorUIStyleBuilder::RebuildMoveLeftMenuButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_move_left.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu move left");
+	}
+
 	void EditorUIStyleBuilder::RebuildPlayStopMenuToggle()
 	{
 		Toggle* sample = mnew Toggle();
@@ -2564,7 +2624,7 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 		auto pauseLayer = sample->AddLayer("pauseIcon", mnew Sprite("ui/UI4_anim_pause.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2583,6 +2643,68 @@ namespace Editor
 		sample->AddState("value", valueBtnAnim);
 
 		o2UI.AddWidgetStyle(sample, "menu play-stop");
+	}
+
+	void EditorUIStyleBuilder::RebuildRewindRightMenuButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_rewind_right.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu rewind right");
+	}
+
+	void EditorUIStyleBuilder::RebuildMoveRightMenuButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_move_right.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu move right");
 	}
 
 	void EditorUIStyleBuilder::RebuildLoopMenuToggle()
@@ -2604,7 +2726,7 @@ namespace Editor
 										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
 		auto nonLoopLayer = sample->AddLayer("nonLoop", mnew Sprite("ui/UI4_anim_not_loop.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2656,6 +2778,95 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "menu add key");
 	}
 
+	void EditorUIStyleBuilder::RebuildCurvesMenuToggle()
+	{
+		Toggle* sample = mnew Toggle();
+
+		auto regular = sample->AddLayer("regular", nullptr);
+
+		auto regularBackLayer = regular->AddChildLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+													   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto regularSelectLayer = regular->AddChildLayer("selectBack", mnew Sprite("ui/UI4_panel_button_select.png"),
+														 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto regularPressedLayer = regular->AddChildLayer("pressedBack", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+														  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto toggled = sample->AddLayer("toggled", nullptr);
+
+		auto toggledBackLayer = toggled->AddChildLayer("regularBack", mnew Sprite("ui/UI4_menu_toggled.png"),
+													   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto toggledSelectLayer = toggled->AddChildLayer("selectBack", mnew Sprite("ui/UI4_menu_toggled_hover.png"),
+														 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto toggledPressedLayer = toggled->AddChildLayer("pressedBack", mnew Sprite("ui/UI4_menu_toggled_pressed.png"),
+														  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto icon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_curves_mode.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		// hover
+		Animation hoverAnim = Animation::EaseInOut(sample, "layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
+		*hoverAnim.AddAnimationValue<float>("layer/toggled/child/selectBack/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		// pressed
+		Animation pressedAnim = Animation::EaseInOut(sample, "layer/regular/child/pressedBack/transparency", 0.0f, 1.0f, 0.1f);
+		*pressedAnim.AddAnimationValue<float>("layer/toggled/child/pressedBack/transparency") = AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		// focused
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		// value
+		Animation valueBtnAnim = Animation::EaseInOut(sample, "layer/regular/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnAnim.AddAnimationValue<float>("layer/toggled/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnAnim);
+
+		o2UI.AddWidgetStyle(sample, "menu curves");
+	}
+
+	void EditorUIStyleBuilder::RebuildPropertiesMenuButton()
+	{
+		Button* sample = mnew Button();
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -4, -5, -5));
+
+		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_anim_properties_icon.png"),
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("focused", Animation::EaseInOut(sample, "layer/focused/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu properties");
+	}
+
 	void EditorUIStyleBuilder::RebuildAddKeyButton()
 	{
 		Button* sample = mnew Button();
@@ -2663,13 +2874,13 @@ namespace Editor
 		auto basicLayer = sample->AddLayer("basic", nullptr);
 
 		auto backLayer = basicLayer->AddChildLayer("regularBack", mnew Sprite("ui/UI4_add_key.png"),
-										           Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+												   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
 
 		auto selectLayer = basicLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_add_key_hover.png"),
-											         Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+													 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
 
 		auto pressedLayer = basicLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_add_key_pressed.png"),
-											          Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+													  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
 
 		sample->AddState("inactive", Animation::EaseInOut(sample, "layer/basic/transparency", 1.0f, 0.5f, 0.01f));
 
@@ -2749,9 +2960,9 @@ namespace Editor
 		sample->baseCorner = BaseCorner::RightTop;
 
 		sample->AddLayer("back", mnew Sprite("ui/UI4_component_head.png"),
-								Layout::HorStretch(VerAlign::Top, -1, -3, 25, -2));
+						 Layout::HorStretch(VerAlign::Top, -1, -3, 25, -2));
 
-		sample->AddLayer("separator", mnew Sprite("ui/UI4_Separator.png"), 
+		sample->AddLayer("separator", mnew Sprite("ui/UI4_Separator.png"),
 						 Layout::HorStretch(VerAlign::Top, -1, -1, 5, -2));
 
 		Text* captionText = mnew Text("stdFont.ttf");
@@ -2991,7 +3202,7 @@ namespace Editor
 		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
-		
+
 		Toggle* toggle = o2UI.CreateToggle("", "without caption");
 		toggle->name = "toggle";
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
@@ -3719,7 +3930,7 @@ namespace Editor
 		auto layout = mnew Widget();
 		layout->name = "layout";
 		sample->AddChild(layout);
-		
+
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
 		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);

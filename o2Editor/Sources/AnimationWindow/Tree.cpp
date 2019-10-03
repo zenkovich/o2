@@ -15,13 +15,12 @@ namespace Editor
 	AnimationTree::AnimationTree() :
 		Tree()
 	{
-		mZebraBackLine = mnew Sprite();
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 		InitializeContext();
 	}
 
 	AnimationTree::AnimationTree(const AnimationTree& other) :
-		Tree(other), mZebraBackLine(other.mZebraBackLine->CloneAs<Sprite>())
+		Tree(other)
 	{
 		SetRearrangeType(Tree::RearrangeType::Disabled);
 		InitializeContext();
@@ -31,8 +30,6 @@ namespace Editor
 	{
 		if (mRootValue)
 			delete mRootValue;
-
-		delete mZebraBackLine;
 	}
 
 	AnimationTree& AnimationTree::operator=(const AnimationTree& other)
@@ -49,9 +46,21 @@ namespace Editor
 
 	void AnimationTree::Draw()
 	{
+		o2Render.EnableScissorTest(mAbsoluteClipArea);
 		DrawZebraBack();
+		o2Render.DisableScissorTest();
+
 		mAnimationWindow->mHandlesSheet->Draw();
+
+		// Disable zebra
+		auto buf = mZebraBackLine;
+		mZebraBackLine = nullptr;
+
 		Tree::Draw();
+
+		// Enable
+		mZebraBackLine = buf;
+
 		mAnimationWindow->mHandlesSheet->UpdateInputDrawOrder();
 	}
 
@@ -68,11 +77,6 @@ namespace Editor
 	{
 		mTreeWidth = width;
 		UpdateTreeWidth();
-	}
-
-	Sprite* AnimationTree::GetZebraBackLine() const
-	{
-		return mZebraBackLine;
 	}
 
 	float AnimationTree::GetLineNumber(float worldPosition) const
@@ -152,25 +156,6 @@ namespace Editor
 	}
 
 #undef DrawText
-	void AnimationTree::DrawZebraBack()
-	{
-		o2Render.EnableScissorTest(mAbsoluteClipArea);
-
-		float pos = -mScrollPos.y;
-		float lineSize = mNodeWidgetSample->layout->GetMinimalHeight();
-		while (pos < -lineSize)
-			pos += lineSize*2.0f;
-
-		RectF layoutRect = layout->GetWorldRect();
-		while (pos < layoutRect.Height())
-		{
-			mZebraBackLine->SetRect(RectF(layoutRect.left, layoutRect.top - pos, layoutRect.right, layoutRect.top - pos - lineSize));
-			mZebraBackLine->Draw();
-			pos += lineSize*2.0f;
-		}
-
-		o2Render.DisableScissorTest();
-	}
 
 	void AnimationTree::UpdateTreeWidth()
 	{

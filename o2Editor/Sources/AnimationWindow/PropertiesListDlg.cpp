@@ -35,10 +35,11 @@ namespace Editor
 	void PropertiesListDlg::InitializeWindow()
 	{
 		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
+		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 17));
 
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
-		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, -5, -5, 20, -1);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
@@ -47,14 +48,15 @@ namespace Editor
 		upPanel->AddChild(searchButton);
 
 		mFilter = o2UI.CreateWidget<EditBox>("backless");
-		*mFilter->layout = WidgetLayout::BothStretch(19, 2, 0, -2);
+		*mFilter->layout = WidgetLayout::BothStretch(19, 2, 0, -4);
 		//mFilter->onChanged += THIS_FUNC(OnSearchEdited);
 		upPanel->AddChild(mFilter);
 
 		mWindow->AddChild(upPanel);
 
 		mPropertiesTree = o2UI.CreateWidget<AnimationPropertiesTree>();
-		*mPropertiesTree->layout = WidgetLayout::BothStretch(0, 0, 0, 20);
+		*mPropertiesTree->layout = WidgetLayout::BothStretch(-7, -7, -5, 17);
+		mPropertiesTree->SetRearrangeType(Tree::RearrangeType::Disabled);
 
 		mWindow->AddChild(mPropertiesTree);
 
@@ -104,12 +106,14 @@ namespace Editor
 		auto rawObject = objectType->DynamicCastFromIObject(object);
 		for (auto field : objectType->GetFields())
 		{
+			if (field->GetProtectionSection() != ProtectSection::Public)
+				continue;
+
 			if (field->GetType()->GetUsage() == Type::Usage::Object)
 			{
 				auto fieldObjectType = dynamic_cast<const ObjectType*>(field->GetType());
-				auto fieldObject = fieldObjectType->DynamicCastToIObject(field->GetValuePtr(rawObject));
-				auto newNode = node->AddChild(field->GetName(), fieldObjectType);
-				InitializeTreeNode(newNode, fieldObject);
+				InitializeObjectTreeNode(fieldObjectType, field, rawObject, node);
+
 			}
 			else if (field->GetType()->GetUsage() == Type::Usage::Pointer)
 			{
@@ -118,16 +122,28 @@ namespace Editor
 				if (unpointedType->GetUsage() == Type::Usage::Object)
 				{
 					auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);
-					auto fieldObject = fieldObjectType->DynamicCastToIObject(field->GetValuePtr(rawObject));
-					auto newNode = node->AddChild(field->GetName(), fieldObjectType);
-					InitializeTreeNode(newNode, fieldObject);
+					InitializeObjectTreeNode(fieldObjectType, field, rawObject, node);
 				}
+			}
+			else if (field->GetType()->GetUsage() == Type::Usage::Property)
+			{
+				auto propertyType = dynamic_cast<const PropertyType*>(field->GetType()); 
+				if (availableTypes.Contains(propertyType->GetValueType()))
+					InitializePropertyNode(node, field, propertyType->GetValueType());
+			}
+			else if (field->GetType()->GetUsage() == Type::Usage::StringAccessor)
+			{
 			}
 			else if (availableTypes.Contains(field->GetType()))
 			{
-				auto newNode = node->AddChild(field->GetName(), field->GetType());
+				InitializePropertyNode(node, field, field->GetType());
 			}
 		}
+	}
+
+	void AnimationPropertiesTree::InitializePropertyNode(NodeData* node, FieldInfo* field, const Type* type)
+	{
+		auto newNode = node->AddChild(field->GetName(), type);
 	}
 
 	void AnimationPropertiesTree::UpdateVisibleNodes()
@@ -152,7 +168,7 @@ namespace Editor
 		if (object)
 			return ((NodeData*)object)->children.Cast<UnknownPtr>();
 
-		return { &mRoot };
+		return mRoot.children.Cast<UnknownPtr>();
 	}
 
 	String AnimationPropertiesTree::GetObjectDebug(UnknownPtr object)
@@ -179,6 +195,19 @@ namespace Editor
 
 	}
 
+	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, FieldInfo* field, void* rawObject, NodeData* node)
+	{
+		auto fieldObject = fieldObjectType->DynamicCastToIObject(field->GetValuePtr(rawObject));
+		auto newNode = node->AddChild(field->GetName(), fieldObjectType);
+		InitializeTreeNode(newNode, fieldObject);
+
+		if (newNode->children.IsEmpty())
+		{
+			node->children.Remove(newNode);
+			delete newNode;
+		}
+	}
+
 	AnimationPropertiesTreeNode::AnimationPropertiesTreeNode():
 		TreeNode()
 	{
@@ -200,10 +229,26 @@ namespace Editor
 
 	void AnimationPropertiesTreeNode::Setup(const AnimationPropertiesTree::NodeData& data)
 	{
+		static Dictionary<const Type*, String> icons = 
+		{ 
+			{ &TypeOf(float), "ui/UI4_float_type.png" },
+			{ &TypeOf(Vec2F), "ui/UI4_vector_type.png" },
+			{ &TypeOf(Color4), "ui/UI4_color_type.png" },
+			{ &TypeOf(bool), "ui/UI4_bool_type.png" }
+		};
+
+		static String otherIcon = "ui/UI4_other_type.png";
+
 		mName->text = data.name;
-		//mIcon
-		mAddButton->enabled = !data.used;
-		mRemoveButton->enabled = data.used;
+
+		String iconPath;
+		if (!icons.TryGetValue(data.type, iconPath))
+			iconPath = otherIcon;
+
+		*mIcon = Sprite(iconPath);
+
+		mAddButton->enabled = !data.used && data.children.IsEmpty();
+		mRemoveButton->enabled = data.used && data.children.IsEmpty();
 	}
 
 	void AnimationPropertiesTreeNode::CopyData(const Actor& otherActor)
@@ -220,7 +265,7 @@ namespace Editor
 	void AnimationPropertiesTreeNode::InitializeControls()
 	{
 		mName = GetLayerDrawable<Text>("name");
-		mIcon = GetLayerDrawable<Sprite>("name");
+		mIcon = GetLayerDrawable<Sprite>("icon");
 		mAddButton = GetChildByType<Button>("addButton");
 		mRemoveButton = GetChildByType<Button>("removeButton");
 	}

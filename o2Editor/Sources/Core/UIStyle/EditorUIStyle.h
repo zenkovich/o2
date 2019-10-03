@@ -50,9 +50,16 @@ namespace Editor
 		void RebuildGreenEditBoxStyle();
 
 		void RebuildRecordMenuToggle();
+		void RebuildRewindLeftMenuButton();
+		void RebuildMoveLeftMenuButton();
 		void RebuildPlayStopMenuToggle();
+		void RebuildRewindRightMenuButton();
+		void RebuildMoveRightMenuButton();
 		void RebuildLoopMenuToggle();
 		void RebuildAddKeyMenuButton();
+		void RebuildCurvesMenuToggle();
+		void RebuildPropertiesMenuButton();
+
 		void RebuildAddKeyButton();
 
 		void RebuildAddSmallBtn();
@@ -259,9 +266,15 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildRedEditBoxStyle);
 	PUBLIC_FUNCTION(void, RebuildGreenEditBoxStyle);
 	PUBLIC_FUNCTION(void, RebuildRecordMenuToggle);
+	PUBLIC_FUNCTION(void, RebuildRewindLeftMenuButton);
+	PUBLIC_FUNCTION(void, RebuildMoveLeftMenuButton);
 	PUBLIC_FUNCTION(void, RebuildPlayStopMenuToggle);
+	PUBLIC_FUNCTION(void, RebuildRewindRightMenuButton);
+	PUBLIC_FUNCTION(void, RebuildMoveRightMenuButton);
 	PUBLIC_FUNCTION(void, RebuildLoopMenuToggle);
 	PUBLIC_FUNCTION(void, RebuildAddKeyMenuButton);
+	PUBLIC_FUNCTION(void, RebuildCurvesMenuToggle);
+	PUBLIC_FUNCTION(void, RebuildPropertiesMenuButton);
 	PUBLIC_FUNCTION(void, RebuildAddKeyButton);
 	PUBLIC_FUNCTION(void, RebuildAddSmallBtn);
 	PUBLIC_FUNCTION(void, RebuildRemoveSmallBtn);

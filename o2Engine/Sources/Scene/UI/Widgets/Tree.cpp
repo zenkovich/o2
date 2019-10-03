@@ -169,6 +169,9 @@ namespace o2
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
+		if (other.mZebraBackLine)
+			mZebraBackLine = other.mZebraBackLine->CloneAs<Sprite>();
+
 		mHighlightAnim.SetTarget(mHighlightSprite);
 
 		mHoverLayout = other.mHoverLayout;
@@ -192,6 +195,9 @@ namespace o2
 		delete mFakeDragNode;
 		delete mHoverDrawable;
 		delete mHighlightSprite;
+
+		if (mZebraBackLine)
+			delete mZebraBackLine;
 
 		for (auto node : mAllNodes)
 			delete node;
@@ -218,6 +224,9 @@ namespace o2
 		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
+
+		if (mZebraBackLine)
+			DrawZebraBack();
 
 		if (mExpandingNodeState == ExpandState::None)
 		{
@@ -328,6 +337,7 @@ namespace o2
 				mHighlightObject = UnknownPtr();
 			}
 		}
+		else mHighlightSprite->transparency = 0.0f;
 	}
 
 	void Tree::UpdateChildren(float dt)
@@ -946,6 +956,22 @@ namespace o2
 		onUnfocused();
 	}
 
+	void Tree::DrawZebraBack()
+	{
+		float pos = -mScrollPos.y;
+		float lineSize = mNodeWidgetSample->layout->GetMinimalHeight();
+		while (pos < -lineSize)
+			pos += lineSize*2.0f;
+
+		RectF layoutRect = layout->GetWorldRect();
+		while (pos < layoutRect.Height())
+		{
+			mZebraBackLine->SetRect(RectF(layoutRect.left, layoutRect.top - pos, layoutRect.right, layoutRect.top - pos - lineSize));
+			mZebraBackLine->Draw();
+			pos += lineSize*2.0f;
+		}
+	}
+
 	void Tree::UpdateSelfTransform()
 {
 		ScrollArea::UpdateSelfTransform();
@@ -1330,6 +1356,9 @@ namespace o2
 		mChildrenWorldRect = mAbsoluteViewArea;
 
 		UpdateScrollParams();
+
+		mTargetHoverRect += delta;
+		mCurrentHoverRect += delta;
 	}
 
 	void Tree::OnCursorPressed(const Input::Cursor& cursor)
@@ -1740,6 +1769,16 @@ namespace o2
 	void Tree::SetHightlightLayout(const Layout& layout)
 	{
 		mHighlightLayout = layout;
+	}
+
+	void Tree::SetZebraBackLine(Sprite* sprite)
+	{
+		mZebraBackLine = sprite;
+	}
+
+	Sprite* Tree::GetZebraBackLine() const
+	{
+		return mZebraBackLine;
 	}
 
 	bool Tree::IsScrollable() const

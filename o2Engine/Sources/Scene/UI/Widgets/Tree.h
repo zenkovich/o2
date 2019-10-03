@@ -151,6 +151,12 @@ namespace o2
 		// Sets hightlight layout
 		void SetHightlightLayout(const Layout& layout);
 
+		// Sets zebra back line sprite drawable. When it is null no zebra back isn't drawing
+		void SetZebraBackLine(Sprite* sprite);
+
+		// Return zebra back line sprite
+		Sprite* GetZebraBackLine() const;
+
 		// Sets node pressing and expanding time
 		void SetNodeExpandTimer(float time);
 
@@ -288,6 +294,8 @@ namespace o2
 		Layout     mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
 		Node*      mHighlighNode = nullptr;    // Hightlighing node
 		UnknownPtr mHighlightObject;           // Highlight object
+		
+		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
 		VisibleWidgetsDefsVec mVisibleWidgetsCache; // Visible widgets cache
 
@@ -300,6 +308,9 @@ namespace o2
 
 		// It is called when widget was deselected
 		void OnUnfocused() override;
+
+		// Draws zebra back with scroll offset
+		void DrawZebraBack();
 
 		// Returns object's parent
 		virtual UnknownPtr GetObjectParent(UnknownPtr object);
@@ -624,6 +635,7 @@ CLASS_FIELDS_META(o2::Tree)
 	PROTECTED_FIELD(mHighlightLayout).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHighlighNode);
 	PROTECTED_FIELD(mHighlightObject);
+	PROTECTED_FIELD(mZebraBackLine).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mVisibleWidgetsCache);
 }
 END_META;
@@ -662,6 +674,8 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(Sprite*, GetHightlightDrawable);
 	PUBLIC_FUNCTION(void, SetHightlightAnimation, const Animation&);
 	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
+	PUBLIC_FUNCTION(void, SetZebraBackLine, Sprite*);
+	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
 	PUBLIC_FUNCTION(void, SetNodeExpandTimer, float);
 	PUBLIC_FUNCTION(float, GetNodeExpandTimer);
 	PUBLIC_FUNCTION(void, SetChildsNodesOffset, float);
@@ -673,6 +687,7 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
+	PROTECTED_FUNCTION(void, DrawZebraBack);
 	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);

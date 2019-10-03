@@ -74,11 +74,17 @@ namespace Editor
 		Widget* mUpPanel = nullptr;  // Up panel with control buttons
 		Widget* mWorkArea = nullptr; // Working area with tree and timeline
 
-		Widget*  mControlsPanel = nullptr;   // Panel with buttons described below
-		Toggle*  mRecordToggle = nullptr;    // Record toggle
-		Toggle*  mPlayPauseToggle = nullptr; // Play - pause toggle
-		Toggle*  mLoopToggle = nullptr;      // Animation loop toggle
-		Button*  mAddKeyButton = nullptr;    // Add key on current time button
+		Widget*  mControlsPanel = nullptr;    // Panel with buttons described below
+		Toggle*  mRecordToggle = nullptr;     // Record toggle
+		Button*  mRewindLeft = nullptr;       // Rewind animation to start button
+		Button*  mMoveLeft = nullptr;         // Move time one frame left
+		Toggle*  mPlayPauseToggle = nullptr;  // Play - pause toggle
+		Button*  mMoveRight = nullptr;        // Move time one frame right
+		Button*  mRewindRight = nullptr;      // Rewind enimation to end
+		Toggle*  mLoopToggle = nullptr;       // Animation loop toggle
+		Toggle*  mCurvesToggle = nullptr;     // Toggle curves view
+		Button*  mAddKeyButton = nullptr;     // Add key on current time button
+		Button*  mPropertiesButton = nullptr; // Open properties window
 
 		AnimationTimeline*   mTimeline = nullptr;     // Animation timeline
 		HorizontalScrollBar* mTimeScroll = nullptr;   // Timeline horizontal scrollbar
@@ -149,9 +155,15 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mWorkArea);
 	PROTECTED_FIELD(mControlsPanel);
 	PROTECTED_FIELD(mRecordToggle);
+	PROTECTED_FIELD(mRewindLeft);
+	PROTECTED_FIELD(mMoveLeft);
 	PROTECTED_FIELD(mPlayPauseToggle);
+	PROTECTED_FIELD(mMoveRight);
+	PROTECTED_FIELD(mRewindRight);
 	PROTECTED_FIELD(mLoopToggle);
+	PROTECTED_FIELD(mCurvesToggle);
 	PROTECTED_FIELD(mAddKeyButton);
+	PROTECTED_FIELD(mPropertiesButton);
 	PROTECTED_FIELD(mTimeline);
 	PROTECTED_FIELD(mTimeScroll);
 	PROTECTED_FIELD(mTree);

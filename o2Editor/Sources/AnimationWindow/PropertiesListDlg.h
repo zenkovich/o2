@@ -76,6 +76,12 @@ namespace Editor
 		// Initializes parameters tree node by object properties
 		void InitializeTreeNode(NodeData* node, IObject* object);
 
+		// initializes single property node
+		void InitializePropertyNode(NodeData* node, FieldInfo* field, const Type* type);
+
+		// Initializes sub tree for object
+		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, FieldInfo* field, void* rawObject, NodeData* node);
+
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
 
@@ -148,6 +154,8 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 
 	PUBLIC_FUNCTION(void, Initialize, Animation*, ActorRef);
 	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
+	PRIVATE_FUNCTION(void, InitializePropertyNode, NodeData*, FieldInfo*, const Type*);
+	PRIVATE_FUNCTION(void, InitializeObjectTreeNode, const ObjectType*, FieldInfo*, void*, NodeData*);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);

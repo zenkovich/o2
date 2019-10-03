@@ -156,23 +156,49 @@ namespace Editor
 
 		mRecordToggle = o2UI.CreateWidget<Toggle>("menu record");
 		*mRecordToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(1, 0));
-		mRecordToggle->onToggle = [&](bool value) { if (!value) ShowKeyHandlesVisible(); else ShowCurvesSheet(); };
+		//mRecordToggle->onToggle = 
 		mControlsPanel->AddChild(mRecordToggle);
 
+		mRewindLeft = o2UI.CreateWidget<Button>("menu rewind left");
+		*mRewindLeft->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(21, 0));
+		mControlsPanel->AddChild(mRewindLeft);
+
+		mMoveLeft = o2UI.CreateWidget<Button>("menu move left");
+		*mMoveLeft->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(41, 0));
+		mControlsPanel->AddChild(mMoveLeft);
+
 		mPlayPauseToggle = o2UI.CreateWidget<Toggle>("menu play-stop");
-		*mPlayPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(21, 0));
+		*mPlayPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(61, 0));
 		mPlayPauseToggle->SetValue(false);
 		mPlayPauseToggle->onToggleByUser = THIS_FUNC(OnPlayPauseToggled);
 		mControlsPanel->AddChild(mPlayPauseToggle);
 
+		mMoveRight = o2UI.CreateWidget<Button>("menu move right");
+		*mMoveRight->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(81, 0));
+		mControlsPanel->AddChild(mMoveRight);
+
+		mRewindRight = o2UI.CreateWidget<Button>("menu rewind right");
+		*mRewindRight->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(101, 0));
+		mControlsPanel->AddChild(mRewindRight);
+
 		mLoopToggle = o2UI.CreateWidget<Toggle>("menu loop-nonloop");
-		*mLoopToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(41, 0));
+		*mLoopToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(121, 0));
 		mLoopToggle->SetValue(true);
 		mLoopToggle->onToggleByUser = THIS_FUNC(OnLoopToggled);
 		mControlsPanel->AddChild(mLoopToggle);
 
+		mCurvesToggle = o2UI.CreateWidget<Toggle>("menu curves");
+		*mCurvesToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(141, 0));
+		mCurvesToggle->SetValue(true);
+		mCurvesToggle->onToggleByUser = [&](bool value) { if (!value) ShowKeyHandlesVisible(); else ShowCurvesSheet(); };
+		mControlsPanel->AddChild(mCurvesToggle);
+
+		mPropertiesButton = o2UI.CreateWidget<Button>("menu properties");
+		*mPropertiesButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(161, 0));
+		mControlsPanel->AddChild(mPropertiesButton);
+
 		mAddKeyButton = o2UI.CreateWidget<Button>("menu add key");
-		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(61, 0));
+		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(181, 0));
 		mControlsPanel->AddChild(mAddKeyButton);
 
 		mUpPanel->AddChild(mControlsPanel);
