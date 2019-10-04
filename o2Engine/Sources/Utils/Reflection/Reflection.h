@@ -18,7 +18,7 @@ namespace o2
 	class DictionaryType;
 
 	template<typename _return_type, typename _accessor_type>
-	class StringPointerAccessorType;
+	class TStringPointerAccessorType;
 
 	class ReflectionInitializationTypeProcessor;
 	class FieldInfo;
@@ -92,7 +92,7 @@ namespace o2
 
 		// Initializes accessor type
 		template<typename _return_type, typename _accessor_type>
-		static const StringPointerAccessorType<_return_type, _accessor_type>* InitializeAccessorType();
+		static const TStringPointerAccessorType<_return_type, _accessor_type>* InitializeAccessorType();
 
 		// Type dynamic casting function template
 		template<typename _source_type, typename _target_type>
@@ -312,15 +312,15 @@ namespace o2
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	const StringPointerAccessorType<_return_type, _accessor_type>* Reflection::InitializeAccessorType()
+	const TStringPointerAccessorType<_return_type, _accessor_type>* Reflection::InitializeAccessorType()
 	{
 		const Type* type = &TypeOf(_return_type);
 		String typeName = (String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return dynamic_cast<StringPointerAccessorType<_return_type, _accessor_type>*>(fnd);
+			return dynamic_cast<TStringPointerAccessorType<_return_type, _accessor_type>*>(fnd);
 
-		StringPointerAccessorType<_return_type, _accessor_type>* newType = mnew StringPointerAccessorType<_return_type, _accessor_type>();
+		TStringPointerAccessorType<_return_type, _accessor_type>* newType = mnew TStringPointerAccessorType<_return_type, _accessor_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);

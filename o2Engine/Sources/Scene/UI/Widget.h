@@ -28,8 +28,7 @@ namespace o2
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
 
-		PROPERTY(Widget*, parentWidget, SetParentWidget, GetParentWidget); // Parent widget property
-		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst);          // Widget children getter
+		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst); // Widget children getter
 
 		GETTER(LayersVec, layers, GetLayers); // Layers getter
 		GETTER(StatesVec, states, GetStates); // States getter
@@ -677,7 +676,6 @@ CLASS_FIELDS_META(o2::Widget)
 {
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(resTransparency);
-	PUBLIC_FIELD(parentWidget);
 	PUBLIC_FIELD(childrenWidgets);
 	PUBLIC_FIELD(layers);
 	PUBLIC_FIELD(states);
@@ -692,7 +690,7 @@ CLASS_FIELDS_META(o2::Widget)
 	PUBLIC_FIELD(onHide);
 	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mParentWidget).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PROTECTED_FIELD(mParentWidget);
 	PROTECTED_FIELD(mChildWidgets);
 	PROTECTED_FIELD(mInternalWidgets).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mDrawingChildren);

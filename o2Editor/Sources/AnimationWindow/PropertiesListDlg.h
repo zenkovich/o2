@@ -69,18 +69,27 @@ namespace Editor
 		SERIALIZABLE(AnimationPropertiesTree);
 
 	private:
-		NodeData mRoot; // Root properties data node
-		Vector<IObject*> mPassedObject;
+		Animation* mAnimation = nullptr; // Looking animation
+		ActorRef   mActor;               // Looking actor
+
+		NodeData         mRoot;         // Root properties data node
+		Vector<IObject*> mPassedObject; // Tree processing passed objects
 
 	private:
 		// Initializes parameters tree node by object properties
 		void InitializeTreeNode(NodeData* node, IObject* object);
 
+		// Processes object base types and fields
+		void ProcessObject(void* object, const ObjectType* type, NodeData* node);
+
+		// Processes tree node property. Checks type
+		void ProcessTreeNode(void* object, const Type* type, const String& name, NodeData* node);
+
 		// initializes single property node
-		void InitializePropertyNode(NodeData* node, FieldInfo* field, const Type* type);
+		void InitializePropertyNode(NodeData* node, const String& name, const Type* type);
 
 		// Initializes sub tree for object
-		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, FieldInfo* field, void* rawObject, NodeData* node);
+		void InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, NodeData* node);
 
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
@@ -105,6 +114,8 @@ namespace Editor
 
 		// It is called when list of selected objects was changed
 		void OnNodesSelectionChanged(UnknownPtrsVec objects) override;
+
+		friend class AnimationPropertiesTreeNode;
 	};
 
 	class AnimationPropertiesTreeNode : public TreeNode
@@ -116,7 +127,7 @@ namespace Editor
 		AnimationPropertiesTreeNode& operator=(const AnimationPropertiesTreeNode& other);
 
 		// Initializes node by data
-		void Setup(const AnimationPropertiesTree::NodeData& data);
+		void Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree);
 
 		SERIALIZABLE(AnimationPropertiesTreeNode);
 
@@ -125,6 +136,10 @@ namespace Editor
 		Sprite* mIcon;
 		Button* mAddButton;
 		Button* mRemoveButton;
+
+		AnimationPropertiesTree::NodeData* mData = nullptr;
+
+		AnimationPropertiesTree* mTree = nullptr;
 
 	private:
 		// Copies data of actor from other to this
@@ -135,6 +150,8 @@ namespace Editor
 
 		// initializes controls and widgets
 		void InitializeControls();
+
+		friend class AnimationPropertiesTree;
 	};
 }
 
@@ -145,6 +162,8 @@ CLASS_BASES_META(Editor::AnimationPropertiesTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
+	PRIVATE_FIELD(mAnimation);
+	PRIVATE_FIELD(mActor);
 	PRIVATE_FIELD(mRoot);
 	PRIVATE_FIELD(mPassedObject);
 }
@@ -154,8 +173,10 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 
 	PUBLIC_FUNCTION(void, Initialize, Animation*, ActorRef);
 	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
-	PRIVATE_FUNCTION(void, InitializePropertyNode, NodeData*, FieldInfo*, const Type*);
-	PRIVATE_FUNCTION(void, InitializeObjectTreeNode, const ObjectType*, FieldInfo*, void*, NodeData*);
+	PRIVATE_FUNCTION(void, ProcessObject, void*, const ObjectType*, NodeData*);
+	PRIVATE_FUNCTION(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);
+	PRIVATE_FUNCTION(void, InitializePropertyNode, NodeData*, const String&, const Type*);
+	PRIVATE_FUNCTION(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, NodeData*);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
@@ -178,12 +199,14 @@ CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
 	PRIVATE_FIELD(mIcon);
 	PRIVATE_FIELD(mAddButton);
 	PRIVATE_FIELD(mRemoveButton);
+	PRIVATE_FIELD(mData);
+	PRIVATE_FIELD(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 {
 
-	PUBLIC_FUNCTION(void, Setup, const AnimationPropertiesTree::NodeData&);
+	PUBLIC_FUNCTION(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
 	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
 	PRIVATE_FUNCTION(void, InitializeControls);

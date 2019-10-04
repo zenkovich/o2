@@ -366,7 +366,10 @@ namespace Editor
 			return;
 		}
 
-		Vec2F firstPoint = mCurves.Last()->approximatedPoints.Last();
+		Vec2F firstPoint;
+		if (!mCurves.Last()->approximatedPoints.IsEmpty())
+			firstPoint = mCurves.Last()->approximatedPoints.Last();
+
 		mAvailableArea = RectF(firstPoint, firstPoint);
 
 		for (auto curve : mCurves)

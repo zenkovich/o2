@@ -66,7 +66,14 @@ namespace Editor
 
 	void AnimationTree::SetAnimation(Animation* animation)
 	{
+		if (mAnimation)
+			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
+
 		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
+
+		mAnimation = animation;
+		if (mAnimation)
+			mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
 
 		RebuildAnimationTree();
 		ExpandAll();
@@ -164,6 +171,11 @@ namespace Editor
 			if (auto trackNode = dynamic_cast<AnimationTreeNode*>(node->widget))
 				trackNode->SetTreeWidth(mTreeWidth);
 		}
+	}
+
+	void AnimationTree::OnAnimationChanged()
+	{
+		RebuildAnimationTree();
 	}
 
 	UnknownPtr AnimationTree::GetObjectParent(UnknownPtr object)

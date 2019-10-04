@@ -280,7 +280,7 @@
     <ClInclude Include="..\Sources\Utils\Math\Vertex2.h" />
     <ClInclude Include="..\Sources\Utils\Memory\MemoryManager.h" />
     <ClInclude Include="..\Sources\Utils\Property.h" />
-    <ClInclude Include="..\Sources\Utils\Reflection\Attribute.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\Attributes.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\IFieldSerializer.h" />

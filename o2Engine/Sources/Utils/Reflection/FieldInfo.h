@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/Attributes.h"
 #include "Utils/Reflection/IFieldSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Reflection/TypeTraits.h"
@@ -148,7 +148,7 @@ namespace o2
 		friend class TypeInitializer;
 
 		template<typename _type, typename _accessor_type>
-		friend class StringPointerAccessorType;
+		friend class TStringPointerAccessorType;
 	};
 
 	template<typename _attr_type>
@@ -227,15 +227,3 @@ namespace o2
 		return mnew FieldSerializer();
 	}
 }
-
-#define ATTRIBUTE_COMMENT_DEFINITION(X)
-#define ATTRIBUTE_SHORT_DEFINITION(X)
-
-class ExcludePointerSearchAttribute: public o2::IAttribute
-{
-	ATTRIBUTE_COMMENT_DEFINITION("EXCLUDE_POINTER_SEARCH");
-	ATTRIBUTE_SHORT_DEFINITION("EXCLUDE_POINTER_SEARCH_ATTRIBUTE()");
-};
-
-#define EXCLUDE_POINTER_SEARCH_ATTRIBUTE() \
-    AddAttribute(new ExcludePointerSearchAttribute())

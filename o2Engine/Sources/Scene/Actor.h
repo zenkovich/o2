@@ -38,8 +38,6 @@ namespace o2
 		PROPERTIES(Actor);
 		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property
 
-		PROPERTY(Actor*, parent, SetParent, GetParent); // Parent actor property
-
 		GETTER(SceneUID, id, GetID);              // Actor unique id
 		PROPERTY(String, name, SetName, GetName); // Actor name property
 
@@ -699,7 +697,6 @@ END_META;
 CLASS_FIELDS_META(o2::Actor)
 {
 	PUBLIC_FIELD(prototype);
-	PUBLIC_FIELD(parent);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(name);
 	PUBLIC_FIELD(layer);
@@ -722,8 +719,8 @@ CLASS_FIELDS_META(o2::Actor)
 	PUBLIC_FIELD(onNameChanged);
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
-	PROTECTED_FIELD(mLayer).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
-	PROTECTED_FIELD(mParent).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PROTECTED_FIELD(mLayer);
+	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
 	PROTECTED_FIELD(mEnabled);

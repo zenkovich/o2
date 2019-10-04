@@ -495,7 +495,7 @@ CLASS_BASES_META(o2::ActorTransform)
 END_META;
 CLASS_FIELDS_META(o2::ActorTransform)
 {
-	PUBLIC_FIELD(actor).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PUBLIC_FIELD(actor);
 	PUBLIC_FIELD(position);
 	PUBLIC_FIELD(size);
 	PUBLIC_FIELD(width);
@@ -694,7 +694,7 @@ CLASS_FIELDS_META(o2::ActorTransform::Data)
 	PUBLIC_FIELD(parentInvertedTransform);
 	PUBLIC_FIELD(parentTransform);
 	PUBLIC_FIELD(parentInvTransformActualFrame);
-	PUBLIC_FIELD(owner).EXCLUDE_POINTER_SEARCH_ATTRIBUTE();
+	PUBLIC_FIELD(owner);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform::Data)

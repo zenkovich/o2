@@ -75,7 +75,7 @@ namespace o2
 					while (parent)
 					{
 						path = parent->GetName() + "/" + path;
-						parent = parent->parent;
+						parent = parent->GetParent();
 					}
 
 					debugInfo += " -- " + path + " - " + actor->GetType().GetName() + "\n";

@@ -5,6 +5,7 @@
 #include "Core/EditorScope.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
+#include "SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {
@@ -34,6 +35,7 @@ namespace Editor
 	void AnimationViewer::OnEditPressed()
 	{
 		o2EditorAnimationWindow.SetAnimation(mCurrentAnimation);
+		o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 	}
 
 }

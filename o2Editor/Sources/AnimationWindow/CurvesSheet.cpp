@@ -43,6 +43,8 @@ namespace Editor
 			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
 				mEditor->AddEditingCurve(animValue.targetPath, &floatAnimValue->curve, Color4(44, 62, 80));
 		}
+
+		mEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
 	}
 
 	void CurvesSheet::InitializeControls()
@@ -63,7 +65,6 @@ namespace Editor
 		mEditor->SetSelectionSpriteImage(ImageAssetRef("ui/UI_Window_place.png"));
 
 		mEditor->verGridEnabled = false;
-		mEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
 		mEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
 
 		AddChild(mEditor);

@@ -382,6 +382,15 @@ namespace o2
 		return realType->GetFieldPtr(dynamic_cast<const ObjectType*>(realType)->DynamicCastFromIObject(iobject), path, fieldInfo);
 	}
 
+	StringPointerAccessorType::StringPointerAccessorType(const String& name, int size) :
+		Type(name, size)
+	{}
+
+	Type::Usage StringPointerAccessorType::GetUsage() const
+	{
+		return Usage::StringAccessor;
+	}
+
 }
 
 ENUM_META_(o2::Type::Usage, Usage)
