@@ -2308,16 +2308,16 @@ namespace Editor
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
-		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, -1)));
+		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(15, -1)));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->color = Color4(96, 125, 139);
 		captionLayerText->horAlign = HorAlign::Left;
 		captionLayerText->verAlign = VerAlign::Middle;
-		itemSample->AddLayer("name", captionLayerText, Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(0, -20), Vec2F(0, 0)));
+		itemSample->AddLayer("name", captionLayerText);
 
 		auto nameLayer = itemSample->layer["name"];
-		nameLayer->layout = Layout::BothStretch(35, 0, 5, 0);
+		nameLayer->layout = Layout::BothStretch(33, 0, 5, 0);
 		((Text*)nameLayer->GetDrawable())->dotsEngings = true;
 
 		auto addButton = o2UI.CreateWidget<Button>("add small");
@@ -2332,7 +2332,7 @@ namespace Editor
 
 		// node sample button
 		Button* itemSampleExpandBtn = mnew Button();
-		*itemSampleExpandBtn->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(15, 15), Vec2F(0, 0));
+		*itemSampleExpandBtn->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(15, 15), Vec2F(2, -1));
 		itemSampleExpandBtn->layout->minSize = Vec2F(5, 5);
 		itemSampleExpandBtn->name = "expandBtn";
 
@@ -2515,7 +2515,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto recordIcon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_Record_icon.png"),
-										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
 		Animation hoverAnim = Animation::EaseInOut(sample, "layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
@@ -2559,7 +2559,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_rewind_left.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2590,7 +2590,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_move_left.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2621,10 +2621,10 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto playLayer = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_anim_play.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		auto pauseLayer = sample->AddLayer("pauseIcon", mnew Sprite("ui/UI4_anim_pause.png"),
-										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2661,7 +2661,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_rewind_right.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2692,7 +2692,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_move_right.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2723,10 +2723,10 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto loopLayer = sample->AddLayer("loop", mnew Sprite("ui/UI4_anim_loop.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 		auto nonLoopLayer = sample->AddLayer("nonLoop", mnew Sprite("ui/UI4_anim_not_loop.png"),
-											 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2763,7 +2763,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_add_key.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -2808,7 +2808,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto icon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_curves_mode.png"),
-										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
 		Animation hoverAnim = Animation::EaseInOut(sample, "layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
@@ -2852,7 +2852,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto iconLayer = sample->AddLayer("icon", mnew Sprite("ui/UI4_anim_properties_icon.png"),
-										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 0)));
+										  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(-1, 1)));
 
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/hover/transparency", 0.0f, 1.0f, 0.1f))

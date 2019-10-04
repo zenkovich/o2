@@ -189,12 +189,13 @@ namespace Editor
 
 		mCurvesToggle = o2UI.CreateWidget<Toggle>("menu curves");
 		*mCurvesToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(141, 0));
-		mCurvesToggle->SetValue(true);
+		mCurvesToggle->SetValue(false);
 		mCurvesToggle->onToggleByUser = [&](bool value) { if (!value) ShowKeyHandlesVisible(); else ShowCurvesSheet(); };
 		mControlsPanel->AddChild(mCurvesToggle);
 
 		mPropertiesButton = o2UI.CreateWidget<Button>("menu properties");
 		*mPropertiesButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(161, 0));
+		mPropertiesButton->onClick = [&]() { PropertiesListDlg::Show(mAnimation, mTargetActor); };
 		mControlsPanel->AddChild(mPropertiesButton);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("menu add key");
