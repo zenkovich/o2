@@ -3,7 +3,7 @@
 #include "Animation/IAnimation.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/Property.h"
-#include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/Attributes.h"
 #include "Utils/Types/String.h"
 
 namespace o2
@@ -27,7 +27,8 @@ namespace o2
 		typedef Vector<AnimatedValueDef> AnimatedValuesVec;
 
 	public:
-		Function<void()> onDurationChange; // It is called whe duration changing
+		Function<void()> onChanged;        // It is called when some animated value has changed
+		Function<void()> onDurationChange; // It is called when duration has changed
 
 	public:
 		// Default constructor
@@ -58,6 +59,9 @@ namespace o2
 		// Returns animation values
 		const AnimatedValuesVec& GetAnimationsValues() const;
 
+		// Returns is contains animated value by path (some like "path/abc/cde")
+		bool ContainsAnimationValue(const String& path) const;
+
 		// Returns animated value by path (some like "path/abc/cde")
 		template<typename _type>
 		AnimatedValue<_type>* GetAnimationValue(const String& path);
@@ -69,6 +73,9 @@ namespace o2
 		// Adds animation value with specified path
 		template<typename _type>
 		AnimatedValue<_type>* AddAnimationValue(const String& path);
+
+		// Add animation value with specified path
+		IAnimatedValue* AddAnimationValueNoType(const String& path);
 
 		// Removes animated value for target
 		template<typename _type>
@@ -182,6 +189,9 @@ namespace o2
 		// Returns animated value by target
 		template<typename _type>
 		AnimatedValue<_type>* FindValue(_type* target);
+
+		// It is called when some animated value has changed
+		void OnAnimatedValueChanged();
 
 		// Recalculates maximum duration by animated values
 		void RecalculateDuration();
@@ -376,7 +386,7 @@ namespace o2
 		{
 			if (val.targetPtr == target)
 			{
-				def.mAnimatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
+				def.mAnimatedValue->onKeysChanged -= THIS_FUNC(OnAnimatedValueChanged);
 				delete val.animatedValue;
 				mAnimatedValues.Remove(val);
 				return true;
@@ -391,7 +401,7 @@ namespace o2
 	{
 		AnimatedValueDef def;
 		def.animatedValue = mnew AnimatedValue<_type>();
-		def.animatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
+		def.animatedValue->onKeysChanged += THIS_FUNC(OnAnimatedValueChanged);
 
 		if (mTarget)
 		{
@@ -453,6 +463,7 @@ CLASS_BASES_META(o2::Animation)
 END_META;
 CLASS_FIELDS_META(o2::Animation)
 {
+	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onDurationChange);
 	PROTECTED_FIELD(mAnimatedValues).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTarget);
@@ -467,8 +478,11 @@ CLASS_METHODS_META(o2::Animation)
 	PUBLIC_FUNCTION(void, Clear);
 	PUBLIC_FUNCTION(AnimatedValuesVec&, GetAnimationsValues);
 	PUBLIC_FUNCTION(const AnimatedValuesVec&, GetAnimationsValues);
+	PUBLIC_FUNCTION(bool, ContainsAnimationValue, const String&);
+	PUBLIC_FUNCTION(IAnimatedValue*, AddAnimationValueNoType, const String&);
 	PUBLIC_FUNCTION(bool, RemoveAnimationValue, const String&);
 	PROTECTED_FUNCTION(void, Evaluate);
+	PROTECTED_FUNCTION(void, OnAnimatedValueChanged);
 	PROTECTED_FUNCTION(void, RecalculateDuration);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnAnimatedValueAdded, AnimatedValueDef&);

@@ -65,6 +65,7 @@ namespace Editor
 
 	private:
 		AnimationWindow*    mAnimationWindow = nullptr; // Animation window
+		Animation*          mAnimation = nullptr;       // Current editing animation
 		AnimationValueNode* mRootValue = nullptr;       // Root animation properties tree node
 		ContextMenu*        mContextMenu;               // Context menu
 
@@ -82,6 +83,9 @@ namespace Editor
 
 		//Updates tree node width
 		void UpdateTreeWidth();
+
+		// it is called when editing animation has changed, updates tree
+		void OnAnimationChanged();
 
 		// Returns object's parent
 		UnknownPtr GetObjectParent(UnknownPtr object) override;
@@ -187,6 +191,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
 	PRIVATE_FIELD(mAnimationWindow);
+	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mRootValue);
 	PRIVATE_FIELD(mContextMenu);
 	PRIVATE_FIELD(mTreeWidth);
@@ -204,6 +209,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
 	PRIVATE_FUNCTION(void, UpdateTreeWidth);
+	PRIVATE_FUNCTION(void, OnAnimationChanged);
 	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);

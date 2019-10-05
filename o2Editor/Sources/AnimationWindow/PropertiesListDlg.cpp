@@ -36,6 +36,8 @@ namespace Editor
 	{
 		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 17));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
+		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
@@ -85,6 +87,9 @@ namespace Editor
 		mRoot.Clear();
 		mPassedObject.Clear();
 
+		mAnimation = animation;
+		mActor = actor;
+
 		InitializeTreeNode(&mRoot, actor.Get());
 		UpdateNodesStructure();
 		UpdateVisibleNodes();
@@ -92,8 +97,6 @@ namespace Editor
 
 	void AnimationPropertiesTree::InitializeTreeNode(NodeData* node, IObject* object)
 	{
-		static Vector<const Type*> availableTypes({ &TypeOf(float), &TypeOf(Color4), &TypeOf(Vec2F), &TypeOf(bool), &TypeOf(RectF) });
-
 		if (!object)
 			return;
 
@@ -104,46 +107,78 @@ namespace Editor
 
 		auto objectType = dynamic_cast<const ObjectType*>(&object->GetType());
 		auto rawObject = objectType->DynamicCastFromIObject(object);
-		for (auto field : objectType->GetFields())
+		ProcessObject(rawObject, objectType, node);
+	}
+
+	void AnimationPropertiesTree::ProcessObject(void* object, const ObjectType* type, NodeData* node)
+	{
+		for (auto field : type->GetFields())
 		{
 			if (field->GetProtectionSection() != ProtectSection::Public)
 				continue;
 
-			if (field->GetType()->GetUsage() == Type::Usage::Object)
-			{
-				auto fieldObjectType = dynamic_cast<const ObjectType*>(field->GetType());
-				InitializeObjectTreeNode(fieldObjectType, field, rawObject, node);
+			ProcessTreeNode(field->GetValuePtr(object), field->GetType(), field->GetName(), node);
+		}
 
-			}
-			else if (field->GetType()->GetUsage() == Type::Usage::Pointer)
-			{
-				auto pointerType = dynamic_cast<const PointerType*>(field->GetType());
-				auto unpointedType = pointerType->GetUnpointedType();
-				if (unpointedType->GetUsage() == Type::Usage::Object)
-				{
-					auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);
-					InitializeObjectTreeNode(fieldObjectType, field, rawObject, node);
-				}
-			}
-			else if (field->GetType()->GetUsage() == Type::Usage::Property)
-			{
-				auto propertyType = dynamic_cast<const PropertyType*>(field->GetType()); 
-				if (availableTypes.Contains(propertyType->GetValueType()))
-					InitializePropertyNode(node, field, propertyType->GetValueType());
-			}
-			else if (field->GetType()->GetUsage() == Type::Usage::StringAccessor)
-			{
-			}
-			else if (availableTypes.Contains(field->GetType()))
-			{
-				InitializePropertyNode(node, field, field->GetType());
-			}
+		for (auto base : type->GetBaseTypes())
+		{
+			if (base.type->GetUsage() != Type::Usage::Object)
+				continue;
+
+			ProcessObject(base.dynamicCastUpFunc(object), dynamic_cast<const ObjectType*>(base.type), node);
 		}
 	}
 
-	void AnimationPropertiesTree::InitializePropertyNode(NodeData* node, FieldInfo* field, const Type* type)
+	void AnimationPropertiesTree::ProcessTreeNode(void* object, const Type* type, const String& name, NodeData* node)
 	{
-		auto newNode = node->AddChild(field->GetName(), type);
+		static Vector<const Type*> availableTypes({ &TypeOf(float), &TypeOf(Color4), &TypeOf(Vec2F), &TypeOf(bool) });
+
+		if (type->GetUsage() == Type::Usage::Object)
+		{
+			auto fieldObjectType = dynamic_cast<const ObjectType*>(type);
+			InitializeObjectTreeNode(fieldObjectType, object, name, node);
+
+		}
+		else if (type->GetUsage() == Type::Usage::Pointer)
+		{
+			auto pointerType = dynamic_cast<const PointerType*>(type);
+			auto unpointedType = pointerType->GetUnpointedType();
+			if (unpointedType->GetUsage() == Type::Usage::Object)
+			{
+				auto fieldObjectType = dynamic_cast<const ObjectType*>(unpointedType);
+				InitializeObjectTreeNode(fieldObjectType, object, name, node);
+			}
+		}
+		else if (type->GetUsage() == Type::Usage::Property)
+		{
+			auto propertyType = dynamic_cast<const PropertyType*>(type);
+			ProcessTreeNode(propertyType->GetValueAsPtr(object), propertyType->GetValueType(), name, node);
+		}
+		else if (type->GetUsage() == Type::Usage::StringAccessor)
+		{
+			auto accessorType = dynamic_cast<const StringPointerAccessorType*>(type);
+			auto newNode = node->AddChild(name, type);
+			auto allValues = accessorType->GetAllValues(object);
+
+			for (auto kv : allValues)
+				ProcessTreeNode(kv.Value(), accessorType->GetReturnType(), kv.Key(), newNode);
+
+
+			if (newNode->children.empty()) {
+				node->children.Remove(newNode);
+				delete newNode;
+			}
+		}
+		else if (availableTypes.Contains(type))
+		{
+			InitializePropertyNode(node, name, type);
+		}
+	}
+
+	void AnimationPropertiesTree::InitializePropertyNode(NodeData* node, const String& name, const Type* type)
+	{
+		auto newNode = node->AddChild(name, type);
+		newNode->used = mAnimation->ContainsAnimationValue(newNode->path);
 	}
 
 	void AnimationPropertiesTree::UpdateVisibleNodes()
@@ -182,12 +217,19 @@ namespace Editor
 	void AnimationPropertiesTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
 	{
 		auto propertyNode = dynamic_cast<AnimationPropertiesTreeNode*>(nodeWidget);
-		propertyNode->Setup(*((NodeData*)object));
+		propertyNode->Setup((NodeData*)object, this);
 	}
 
 	void AnimationPropertiesTree::OnNodeDblClick(TreeNode* nodeWidget)
 	{
+		if (!nodeWidget)
+			return;
 
+		auto propertyNode = dynamic_cast<AnimationPropertiesTreeNode*>(nodeWidget);
+		if (propertyNode->mData->used)
+			mAnimation->RemoveAnimationValue(propertyNode->mData->path);
+		else
+			mAnimation->AddAnimationValueNoType(propertyNode->mData->path);
 	}
 
 	void AnimationPropertiesTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
@@ -195,10 +237,10 @@ namespace Editor
 
 	}
 
-	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, FieldInfo* field, void* rawObject, NodeData* node)
+	void AnimationPropertiesTree::InitializeObjectTreeNode(const ObjectType* fieldObjectType, void* object, const String& name, NodeData* node)
 	{
-		auto fieldObject = fieldObjectType->DynamicCastToIObject(field->GetValuePtr(rawObject));
-		auto newNode = node->AddChild(field->GetName(), fieldObjectType);
+		auto fieldObject = fieldObjectType->DynamicCastToIObject(object);
+		auto newNode = node->AddChild(name, fieldObjectType);
 		InitializeTreeNode(newNode, fieldObject);
 
 		if (newNode->children.IsEmpty())
@@ -227,7 +269,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTreeNode::Setup(const AnimationPropertiesTree::NodeData& data)
+	void AnimationPropertiesTreeNode::Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree)
 	{
 		static Dictionary<const Type*, String> icons = 
 		{ 
@@ -239,16 +281,19 @@ namespace Editor
 
 		static String otherIcon = "ui/UI4_other_type.png";
 
-		mName->text = data.name;
+		mName->text = data->name;
 
 		String iconPath;
-		if (!icons.TryGetValue(data.type, iconPath))
+		if (!icons.TryGetValue(data->type, iconPath))
 			iconPath = otherIcon;
 
 		*mIcon = Sprite(iconPath);
 
-		mAddButton->enabled = !data.used && data.children.IsEmpty();
-		mRemoveButton->enabled = data.used && data.children.IsEmpty();
+		mData = data;
+		mTree = tree;
+
+		mAddButton->enabled = !data->used && data->children.IsEmpty();
+		mRemoveButton->enabled = data->used && data->children.IsEmpty();
 	}
 
 	void AnimationPropertiesTreeNode::CopyData(const Actor& otherActor)
@@ -266,8 +311,14 @@ namespace Editor
 	{
 		mName = GetLayerDrawable<Text>("name");
 		mIcon = GetLayerDrawable<Sprite>("icon");
+
 		mAddButton = GetChildByType<Button>("addButton");
+		if (mAddButton)
+			mAddButton->onClick = [&]() { mTree->mAnimation->AddAnimationValueNoType(mData->path); };
+
 		mRemoveButton = GetChildByType<Button>("removeButton");
+		if (mRemoveButton)
+			mRemoveButton->onClick = [&]() { mTree->mAnimation->RemoveAnimationValue(mData->path); };
 	}
 
 	AnimationPropertiesTree::NodeData::~NodeData()

@@ -8,13 +8,13 @@
 
 namespace o2
 {
-	Animation::Animation(IObject* target /*= nullptr*/):
+	Animation::Animation(IObject* target /*= nullptr*/) :
 		mTarget(nullptr), mAnimationState(nullptr)
 	{
 		SetTarget(target);
 	}
 
-	Animation::Animation(const Animation& other):
+	Animation::Animation(const Animation& other) :
 		mTarget(nullptr), IAnimation(other), mAnimationState(nullptr)
 	{
 		for (auto& val : other.mAnimatedValues)
@@ -44,7 +44,7 @@ namespace o2
 		{
 			AnimatedValueDef def(val);
 			def.animatedValue = val.animatedValue->CloneAs<IAnimatedValue>();
-			def.animatedValue->onKeysChanged = THIS_FUNC(RecalculateDuration);
+			def.animatedValue->onKeysChanged = THIS_FUNC(OnAnimatedValueChanged);
 
 			if (mTarget)
 			{
@@ -122,9 +122,9 @@ namespace o2
 
 	void Animation::Clear()
 	{
-		for (auto& val : mAnimatedValues) 
+		for (auto& val : mAnimatedValues)
 		{
-			val.animatedValue->onKeysChanged -= THIS_FUNC(RecalculateDuration);
+			val.animatedValue->onKeysChanged -= THIS_FUNC(OnAnimatedValueChanged);
 			delete val.animatedValue;
 		}
 
@@ -139,6 +139,63 @@ namespace o2
 	const Animation::AnimatedValuesVec& Animation::GetAnimationsValues() const
 	{
 		return mAnimatedValues;
+	}
+
+	bool Animation::ContainsAnimationValue(const String& path) const
+	{
+		for (auto& val : mAnimatedValues)
+		{
+			if (val.targetPath == path)
+				return true;
+		}
+
+		return false;
+	}
+
+	IAnimatedValue* Animation::AddAnimationValueNoType(const String& path)
+	{
+		if (!mTarget)
+			return nullptr;
+
+		AnimatedValueDef def;
+
+		FieldInfo* fieldInfo = nullptr;
+		const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+		void* castedTarget = type->DynamicCastFromIObject(mTarget);
+		def.targetPtr = mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
+
+		if (!fieldInfo)
+		{
+			o2Debug.LogWarning("Can't create animated value: field info not found " + path);
+			return nullptr;
+		}
+
+		auto fieldType = fieldInfo->GetType();
+		if (fieldType->GetUsage() == Type::Usage::Property)
+			fieldType = dynamic_cast<const PropertyType*>(fieldType)->GetValueType();
+
+		if (fieldType == &TypeOf(float))
+			def.animatedValue = mnew AnimatedValue<float>();
+		else if (fieldType == &TypeOf(Color4))
+			def.animatedValue = mnew AnimatedValue<Color4>();
+		else if (fieldType == &TypeOf(Vec2F))
+			def.animatedValue = mnew AnimatedValue<Vec2F>();
+		else if (fieldType == &TypeOf(bool))
+			def.animatedValue = mnew AnimatedValue<bool>();
+
+		def.animatedValue->onKeysChanged += THIS_FUNC(OnAnimatedValueChanged);
+
+		if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
+			def.animatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.targetPtr));
+		else
+			def.animatedValue->SetTargetVoid(def.targetPtr);
+
+		def.targetPath = path;
+		mAnimatedValues.Add(def);
+
+		OnAnimatedValueAdded(def);
+
+		return def.animatedValue;
 	}
 
 	bool Animation::RemoveAnimationValue(const String& path)
@@ -162,6 +219,13 @@ namespace o2
 			val.animatedValue->ForceSetTime(mInDurationTime, mDuration);
 	}
 
+	void Animation::OnAnimatedValueChanged()
+	{
+		RecalculateDuration();
+
+		onChanged();
+	}
+
 	void Animation::RecalculateDuration()
 	{
 		float lastDuration = mDuration;
@@ -180,9 +244,9 @@ namespace o2
 	void Animation::OnDeserialized(const DataNode& node)
 	{
 		for (auto& val : mAnimatedValues)
-			val.animatedValue->onKeysChanged += THIS_FUNC(RecalculateDuration);
+			val.animatedValue->onKeysChanged += THIS_FUNC(OnAnimatedValueChanged);
 
-		RecalculateDuration();
+		OnAnimatedValueChanged();
 		mEndTime = mDuration;
 	}
 

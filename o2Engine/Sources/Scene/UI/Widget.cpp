@@ -58,7 +58,7 @@ namespace o2
 
 	Widget::Widget(const Widget& other) :
 		Actor(mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
-		mTransparency(other.mTransparency), transparency(this), resTransparency(this), parentWidget(this),
+		mTransparency(other.mTransparency), transparency(this), resTransparency(this), 
 		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
 		SceneDrawable::mLayer = Actor::mLayer;

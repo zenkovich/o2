@@ -214,7 +214,7 @@ namespace Editor
 
 		o2Scene.ReparentEditableObjects(editableObjects, newParentEditableObject, prevEditableObject);
 
-		action->ObjectsReparented(parent, prevEditableObject);
+		action->ObjectsReparented(mParent, prevEditableObject);
 		o2EditorApplication.DoneAction(action);
 
 		Tree::OnDraggedObjects(objects, newParent, prevObject);

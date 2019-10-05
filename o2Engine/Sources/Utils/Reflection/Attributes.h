@@ -21,4 +21,16 @@ namespace o2
 
 		friend class FieldInfo;
 	};
+
+#define ATTRIBUTE_COMMENT_DEFINITION(X)
+#define ATTRIBUTE_SHORT_DEFINITION(X)
+
+	class ExcludePointerSearchAttribute : public o2::IAttribute
+	{
+		ATTRIBUTE_COMMENT_DEFINITION("EXCLUDE_POINTER_SEARCH");
+		ATTRIBUTE_SHORT_DEFINITION("EXCLUDE_POINTER_SEARCH_ATTRIBUTE()");
+	};
+
+#define EXCLUDE_POINTER_SEARCH_ATTRIBUTE() \
+    AddAttribute(new ExcludePointerSearchAttribute())
 }

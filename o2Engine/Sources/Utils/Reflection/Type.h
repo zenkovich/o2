@@ -3,7 +3,7 @@
 #pragma once
 
 #include "Utils/Delegates.h"
-#include "Utils/Reflection/Attribute.h"
+#include "Utils/Reflection/Attributes.h"
 #include "Utils/Reflection/IFieldSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Types/CommonTypes.h"
@@ -154,7 +154,7 @@ namespace o2
 		friend class VectorType;
 
 		template<typename _type, typename _accessor_type>
-		friend class StringPointerAccessorType;
+		friend class TStringPointerAccessorType;
 	};
 
 	// -------------------
@@ -297,6 +297,9 @@ namespace o2
 		// Returns type of value
 		const Type* GetValueType() const;
 
+		// Returns value from property casted to void*
+		virtual void* GetValueAsPtr(void* propertyPtr) const = 0;
+
 	protected:
 		const Type* mValueType;
 	};
@@ -326,15 +329,23 @@ namespace o2
 		// Returns filed pointer by path
 		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
 
+		// Returns value from property casted to void*
+		void* GetValueAsPtr(void* propertyPtr) const override;
+
+		// Returns value from property
+		_value_type GetValue(void* propertyPtr) const;
+
 	private:
 		struct RealFieldGetter
 		{
 			static void* GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo);
+			static void* GetValuePtr(void* object);
 		};
 
 		struct NullFieldGetter
 		{
 			static void* GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo);
+			static void* GetValuePtr(void* object);
 		};
 	};
 
@@ -489,14 +500,30 @@ namespace o2
 	// -------------------------------------------
 	// Accessor<_return_type*, const String&> type
 	// -------------------------------------------
-	template<typename _return_type, typename _accessor_type>
-	class StringPointerAccessorType: public Type
+	class StringPointerAccessorType : public Type
 	{
 	public:
-		StringPointerAccessorType();
+		// Default constructor
+		StringPointerAccessorType(const String& name, int size);
 
 		// Returns type usage
-		virtual Usage GetUsage() const;
+		Usage GetUsage() const override;
+
+		// Returns value pointer by key
+		virtual void* GetValue(void* object, const String& key) const = 0;
+
+		// Returns all values with keys
+		virtual Dictionary<String, void*> GetAllValues(void* object) const = 0;
+
+		// Returns type of return values
+		virtual const Type* GetReturnType() const = 0;
+	};
+
+	template<typename _return_type, typename _accessor_type>
+	class TStringPointerAccessorType: public StringPointerAccessorType
+	{
+	public:
+		TStringPointerAccessorType();
 
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
@@ -509,6 +536,15 @@ namespace o2
 
 		// Returns pointer of type (type -> type*)
 		const Type* GetPointerType() const override;
+
+		// Returns value pointer by key
+		void* GetValue(void* object, const String& key) const override;
+
+		// Returns all values with keys
+		Dictionary<String, void*> GetAllValues(void* object) const override;
+
+		// Returns type of return values
+		const Type* GetReturnType() const override;
 
 	protected:
 		const Type* mReturnType;
@@ -717,10 +753,6 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 
 #define ATTRIBUTES(...)
 
-#define ATTRIBUTE_COMMENT_DEFINITION(X)
-
-#define ATTRIBUTE_SHORT_DEFINITION(X)
-
 #define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
     processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
 
@@ -896,6 +928,12 @@ namespace o2
 	}
 
 	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::NullFieldGetter::GetValuePtr(void* object)
+	{
+		return nullptr;
+	}
+
+	template<typename _value_type, typename _property_type>
 	void* TPropertyType<_value_type, _property_type>::RealFieldGetter::GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo)
 	{
 		_property_type* prop = (_property_type*)object;
@@ -904,11 +942,33 @@ namespace o2
 	}
 
 	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::RealFieldGetter::GetValuePtr(void* object)
+	{
+		_property_type* prop = (_property_type*)object;
+		return prop->Get();
+	}
+
+	template<typename _value_type, typename _property_type>
 	void* TPropertyType<_value_type, _property_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
 		typedef typename std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
 
 		return getter::GetFieldPtr(*this, object, path, fieldInfo);
+	}
+
+	template<typename _value_type, typename _property_type>
+	void* TPropertyType<_value_type, _property_type>::GetValueAsPtr(void* propertyPtr) const
+	{
+		typedef typename std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
+
+		return getter::GetValuePtr(propertyPtr);
+	}
+
+	template<typename _value_type, typename _property_type>
+	_value_type TPropertyType<_value_type, _property_type>::GetValue(void* propertyPtr) const
+	{
+		_property_type* prop = (_property_type*)propertyPtr;
+		return prop->Get();
 	}
 
 
@@ -1084,59 +1144,70 @@ namespace o2
 	// ----------------------------------------
 
 	template<typename _return_type, typename _accessor_type>
-	StringPointerAccessorType<_return_type, _accessor_type>::StringPointerAccessorType():
-		Type((String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">",
+	TStringPointerAccessorType<_return_type, _accessor_type>::TStringPointerAccessorType():
+		StringPointerAccessorType((String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">",
 			 sizeof(_accessor_type))
 	{
 		mReturnType = &GetTypeOf<_return_type>();
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	Type::Usage StringPointerAccessorType<_return_type, _accessor_type>::GetUsage() const
-	{
-		return Usage::StringAccessor;
-	}
-
-	template<typename _return_type, typename _accessor_type>
-	void* StringPointerAccessorType<_return_type, _accessor_type>::CreateSample() const
+	void* TStringPointerAccessorType<_return_type, _accessor_type>::CreateSample() const
 	{
 		return nullptr;
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	IAbstractValueProxy* StringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
+	IAbstractValueProxy* TStringPointerAccessorType<_return_type, _accessor_type>::GetValueProxy(void* object) const
 	{
 		return mnew PointerValueProxy<_accessor_type>((_accessor_type*)object);
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	void* StringPointerAccessorType<_return_type, _accessor_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* TStringPointerAccessorType<_return_type, _accessor_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
 		String pathPart = path.SubStr(0, delPos);
 
 		_accessor_type* accessor = (_accessor_type*)object;
-
-		auto allFromAccessor = accessor->GetAll();
-		for (auto kv : allFromAccessor)
-		{
-			if (kv.Key() == pathPart)
-			{
-				_return_type value = kv.Value();
-				return mReturnType->GetFieldPtr(&value, path.SubStr(delPos + 1), fieldInfo);
-			}
-		}
+		if (_return_type value = accessor->Get(pathPart))
+			return mReturnType->GetFieldPtr(&value, path.SubStr(delPos + 1), fieldInfo);
 
 		return nullptr;
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	const Type* StringPointerAccessorType<_return_type, _accessor_type>::GetPointerType() const
+	const Type* TStringPointerAccessorType<_return_type, _accessor_type>::GetPointerType() const
 	{
 		if (!mPtrType)
 			Reflection::InitializePointerType<_accessor_type>(this);
 
 		return mPtrType;
+	}
+
+	template<typename _return_type, typename _accessor_type>
+	void* TStringPointerAccessorType<_return_type, _accessor_type>::GetValue(void* object, const String& key) const
+	{
+		_accessor_type* accessor = (_accessor_type*)object;
+		return (void*)(accessor->Get(key));
+	}
+
+	template<typename _return_type, typename _accessor_type>
+	Dictionary<String, void*> TStringPointerAccessorType<_return_type, _accessor_type>::GetAllValues(void* object) const
+	{
+		_accessor_type* accessor = (_accessor_type*)object;
+		auto all = accessor->GetAll();
+		Dictionary<String, void*> res;
+		for (auto kv : all)
+			res.Add(kv.Key(), (void*)(kv.Value()));
+
+		return res;
+	}
+
+	template<typename _return_type, typename _accessor_type>
+	const Type* TStringPointerAccessorType<_return_type, _accessor_type>::GetReturnType() const
+	{
+		return mReturnType;
 	}
 
 	// ------------------------
