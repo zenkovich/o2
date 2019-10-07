@@ -302,7 +302,7 @@ namespace Editor
 
 	void AnimationTimeline::UpdateDuration()
 	{
-		mDuration = mAnimationWindow->mAnimation->GetDuration();
+		mDuration = mAnimationWindow->mAnimation->GetEndBound();
 
 		if (mScrollBar)
 		{

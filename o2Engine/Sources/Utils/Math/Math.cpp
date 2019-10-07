@@ -44,21 +44,14 @@ namespace o2
 
 		Vec2F CalculateEllipseTangent(const Vec2F& begin, const Vec2F& middle, const Vec2F& end)
 		{
-			Vec2F origin = begin;
-			Vec2F size = end - begin;
-
-			Vec2F tbegin(0, 0);
-			Vec2F tend(1, 1);
-			Vec2F tmiddle = (middle - origin)/size;
-
-			Vec2F axis = tend - tbegin;
+			Vec2F axis = end - begin;
 			float axisLength = axis.Length();
 			Vec2F axisNorm = axis/axisLength;
 			Vec2F axisNormPerpendicular = axisNorm.Perpendicular();
 
-			Vec2F centerToMiddle = tmiddle - (tbegin + tend)*0.5f;
+			Vec2F centerToMiddle = middle - (begin + end)*0.5f;
 
-			float xProjection = axisNorm.Dot(centerToMiddle + (tbegin + tend)*0.5f - tbegin);
+			float xProjection = axisNorm.Dot(centerToMiddle + (begin + end)*0.5f - begin);
 			float xProjectionFromCenter = xProjection - axisLength*0.5f;
 
 			float ssq = axisLength*axisLength*0.25f - xProjectionFromCenter*xProjectionFromCenter;
@@ -71,8 +64,7 @@ namespace o2
 
 			Vec2F decomposedCircleTangent(axisNorm.Dot(circleTangent), axisNormPerpendicular.Dot(circleTangent));
 			float circleToEllipseScale = (yc/circleYProjection);
-			Vec2F tellipseTangent = (axisNorm*decomposedCircleTangent.x + axisNormPerpendicular*decomposedCircleTangent.y*circleToEllipseScale).Normalized();
-			Vec2F ellipseTangent = (tellipseTangent*size).Normalized();
+			Vec2F ellipseTangent = (axisNorm*decomposedCircleTangent.x + axisNormPerpendicular*decomposedCircleTangent.y*circleToEllipseScale).Normalized();
 
 			return ellipseTangent;
 		}

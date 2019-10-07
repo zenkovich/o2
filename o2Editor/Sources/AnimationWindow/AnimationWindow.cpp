@@ -38,12 +38,18 @@ namespace Editor
 
 	void AnimationWindow::SetAnimation(Animation* animation)
 	{
+		if (mAnimation)
+			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
+
 		mAnimation = animation;
 
 		if (mAnimation)
 		{
 			mAnimation->Stop();
 			mLoopToggle->SetValue(mAnimation->GetLoop() == Loop::Repeat);
+
+			if (mAnimation)
+				mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
 		}
 
 		mPlayPauseToggle->SetValue(false);
@@ -232,6 +238,12 @@ namespace Editor
 		mTreeSeparatorHandle->cursorType = CursorType::SizeWE;
 
 		mWorkArea->AddChild(mTreeSeparatorHandle);
+	}
+
+	void AnimationWindow::OnAnimationChanged()
+	{
+		mTree->OnAnimationChanged();
+		mCurves->OnAnimationChanged();
 	}
 
 	void AnimationWindow::OnPlayPauseToggled(bool play)

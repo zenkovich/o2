@@ -118,6 +118,9 @@ namespace Editor
 		// Initializes separator handle view and events
 		void InitializeSeparatorHandle();
 
+		// it is called when editing animation changed. Invokes change methods in tree, curves etc
+		void OnAnimationChanged();
+
 		// It is called when play/pause button was pressed
 		void OnPlayPauseToggled(bool play);
 
@@ -188,6 +191,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PROTECTED_FUNCTION(void, InitializeCurvesSheet);
 	PROTECTED_FUNCTION(void, InitializeUpPanel);
 	PROTECTED_FUNCTION(void, InitializeSeparatorHandle);
+	PROTECTED_FUNCTION(void, OnAnimationChanged);
 	PROTECTED_FUNCTION(void, OnPlayPauseToggled, bool);
 	PROTECTED_FUNCTION(void, OnLoopToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);

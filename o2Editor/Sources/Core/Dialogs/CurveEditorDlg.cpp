@@ -70,27 +70,27 @@ namespace Editor
 		mInstance->mWindow->ShowModal();
 		mInstance->mOnChangedCallback = onChanged;
 		mInstance->mOnChangeCompletedCallback = onCompleted;
-		mInstance->mEditorWidget->RemoveAllEditingCurves();
+		mInstance->mEditorWidget->RemoveAllCurves();
 	}
 
 	void CurveEditorDlg::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
 	{
-		mInstance->mEditorWidget->AddEditingCurve(id, curve, color);
+		mInstance->mEditorWidget->AddCurve(id, curve, color);
 	}
 
 	void CurveEditorDlg::RemoveEditingCurve(Curve* curve)
 	{
-		mInstance->mEditorWidget->RemoveEditingCurve(curve);
+		mInstance->mEditorWidget->RemoveCurve(curve);
 	}
 
 	void CurveEditorDlg::RemoveEditingCurve(const String& id)
 	{
-		mInstance->mEditorWidget->RemoveEditingCurve(id);
+		mInstance->mEditorWidget->RemoveCurve(id);
 	}
 
 	void CurveEditorDlg::RemoveAllEditingCurves()
 	{
-		mInstance->mEditorWidget->RemoveAllEditingCurves();
+		mInstance->mEditorWidget->RemoveAllCurves();
 	}
 
 	void CurveEditorDlg::AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color /*= Color4::Green()*/)

@@ -108,7 +108,16 @@ namespace Editor
 		FrameScrollView::Update(dt);
 	}
 
-	void CurveEditor::AddEditingCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
+	Dictionary<String, Curve*> CurveEditor::GetCurves() const
+	{
+		Dictionary<String, Curve*> res;
+		for (auto curveInfo : mCurves)
+			res.Add(curveInfo->curveId, curveInfo->curve);
+
+		return res;
+	}
+
+	void CurveEditor::AddCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
 	{
 		UpdateSelfTransform();
 
@@ -139,7 +148,7 @@ namespace Editor
 			mViewCameraTargetScale = mAvailableArea.Size()/mViewCamera.GetSize();
 	}
 
-	void CurveEditor::RemoveEditingCurve(Curve* curve)
+	void CurveEditor::RemoveCurve(Curve* curve)
 	{
 		for (auto info : mCurves)
 		{
@@ -163,18 +172,18 @@ namespace Editor
 		}
 	}
 
-	void CurveEditor::RemoveEditingCurve(const String& id)
+	void CurveEditor::RemoveCurve(const String& id)
 	{
 		Curve* curve = FindCurve(id);
 		if (curve)
-			RemoveEditingCurve(curve);
+			RemoveCurve(curve);
 	}
 
-	void CurveEditor::RemoveAllEditingCurves()
+	void CurveEditor::RemoveAllCurves()
 	{
 		auto curves = mCurves;
 		for (auto info : curves)
-			RemoveEditingCurve(info->curve);
+			RemoveCurve(info->curve);
 	}
 
 	void CurveEditor::AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color /*= Color4(-1, -1, -1, -1)*/)
@@ -1077,8 +1086,7 @@ namespace Editor
 			Vec2F thisToNext = nextKeyPoint - thisKeyPoint;
 
 			Vec2F lengthNorm = (nextKeyPoint - lastKeyPoint).Normalized();
-			float supportLength = Math::Min(Math::Abs(thisToNext.Dot(lengthNorm)), 
-											Math::Abs(thisToLast.Dot(lengthNorm)))*autoSmoothCoef;
+			float supportLength = Math::Min(thisToNext.Length(), thisToLast.Length())*autoSmoothCoef;
 			Vec2F supportVec = Math::CalculateEllipseTangent(lastKeyPoint, thisKeyPoint, nextKeyPoint)*supportLength;
 
 			key.leftSupportPosition = -supportVec.x; key.leftSupportValue = -supportVec.y;

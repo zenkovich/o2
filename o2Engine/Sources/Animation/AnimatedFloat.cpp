@@ -79,7 +79,7 @@ namespace o2
 
 	void AnimatedValue<float>::Evaluate()
 	{
-		mValue = curve.IsEmpty() ? curve.Evaluate(mInDurationTime) : 0.0f;
+		mValue = curve.Evaluate(mInDurationTime);
 
 		if (mTarget)
 		{

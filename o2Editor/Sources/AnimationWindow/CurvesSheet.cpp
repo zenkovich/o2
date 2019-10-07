@@ -36,15 +36,38 @@ namespace Editor
 
 	void CurvesSheet::SetAnimation(Animation* animation)
 	{
-		mEditor->RemoveAllEditingCurves();
+		mEditor->RemoveAllCurves();
 
 		for (auto animValue : animation->GetAnimationsValues())
 		{
 			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
-				mEditor->AddEditingCurve(animValue.targetPath, &floatAnimValue->curve, Color4(44, 62, 80));
+				mEditor->AddCurve(animValue.targetPath, &floatAnimValue->curve, Color4(44, 62, 80));
 		}
 
 		mEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
+	}
+
+	void CurvesSheet::OnAnimationChanged()
+	{
+		// Check new curves
+		auto currentCurves = mEditor->GetCurves();
+		Vector<Curve*> animCurves;
+		for (auto animValue : mAnimationWindow->mAnimation->GetAnimationsValues())
+		{
+			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
+			{
+				animCurves.Add(&floatAnimValue->curve);
+				if (!currentCurves.ContainsValue(&floatAnimValue->curve))
+					mEditor->AddCurve(animValue.targetPath, &floatAnimValue->curve, Color4(44, 62, 80));
+			}
+		}
+
+		// Check removed curves
+		for (auto curve : mEditor->GetCurves())
+		{
+			if (!animCurves.Contains(curve.Value()))
+				mEditor->RemoveCurve(curve.Value());
+		}
 	}
 
 	void CurvesSheet::InitializeControls()

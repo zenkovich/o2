@@ -66,14 +66,7 @@ namespace Editor
 
 	void AnimationTree::SetAnimation(Animation* animation)
 	{
-		if (mAnimation)
-			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
-
 		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
-
-		mAnimation = animation;
-		if (mAnimation)
-			mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
 
 		RebuildAnimationTree();
 		ExpandAll();
@@ -121,6 +114,8 @@ namespace Editor
 
 		if (!mAnimationWindow->mAnimation)
 			return;
+
+		mAnimationValuesCount = mAnimationWindow->mAnimation->GetAnimationsValues().Count();
 
 		mRootValue = mnew AnimationValueNode();
 		mRootValue->name = "Track name";
@@ -175,11 +170,14 @@ namespace Editor
 
 	void AnimationTree::OnAnimationChanged()
 	{
-		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
+		if (mAnimationWindow->mAnimation->GetAnimationsValues().Count() != mAnimationValuesCount)
+		{
+			mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
 
-		RebuildAnimationTree();
-		ExpandAll();
-		OnObjectsChanged({ (UnknownPtr)mRootValue });
+			RebuildAnimationTree();
+			ExpandAll();
+			OnObjectsChanged({ (UnknownPtr)mRootValue });
+		}
 	}
 
 	UnknownPtr AnimationTree::GetObjectParent(UnknownPtr object)

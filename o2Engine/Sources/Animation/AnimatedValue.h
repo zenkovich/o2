@@ -703,7 +703,7 @@ namespace o2
 		}
 
 		float lastDuration = mDuration;
-		mDuration = mKeys.Last().position;
+		mDuration = !mKeys.IsEmpty() ? mKeys.Last().position : 0.0f;
 
 		if (Math::Equals(lastDuration, mEndTime))
 			mEndTime = mDuration;

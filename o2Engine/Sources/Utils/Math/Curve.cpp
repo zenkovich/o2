@@ -788,9 +788,8 @@ namespace o2
 			Vec2F thisToLast = lastKeyPoint - thisKeyPoint;
 			Vec2F thisToNext = nextKeyPoint - thisKeyPoint;
 
-			Vec2F lengthNorm = (nextKeyPoint - lastKeyPoint).Normalized();
-			float supportLength = Math::Min(Math::Abs(thisToNext.Dot(lengthNorm)),
-											Math::Abs(thisToLast.Dot(lengthNorm)))*baseSmoothCoef*smoothCoef;
+			Vec2F lengthNorm = (nextKeyPoint - lastKeyPoint).Normalized(); 
+			float supportLength = Math::Min(thisToNext.Length(), thisToLast.Length())*baseSmoothCoef*smoothCoef;
 			Vec2F supportVec = Math::CalculateEllipseTangent(lastKeyPoint, thisKeyPoint, nextKeyPoint)*supportLength;
 
 			key.leftSupportPosition = -supportVec.x; key.leftSupportValue = -supportVec.y;

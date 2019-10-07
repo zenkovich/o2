@@ -20,6 +20,9 @@ namespace Editor
 		// Sets animation and updates tree structure
 		void SetAnimation(Animation* animation);
 
+		// It is called when animation changed, checks count of animation values, updates curves
+		void OnAnimationChanged();
+
 		SERIALIZABLE(CurvesSheet);
 
 	private:
@@ -59,6 +62,7 @@ CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, OnAnimationChanged);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, SetCameraAsTimelineView);
 	PRIVATE_FUNCTION(void, OnEditorViewChanged);

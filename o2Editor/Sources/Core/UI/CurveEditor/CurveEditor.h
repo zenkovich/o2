@@ -49,17 +49,20 @@ namespace Editor
 		// Updates drawables, states and widget
 		void Update(float dt) override;
 
+		// Returns list of curves
+		Dictionary<String, Curve*> GetCurves() const;
+
 		// Adds editing curve with color. If color is default it will be randomized
-		void AddEditingCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
+		void AddCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
 
 		// Removed curve from editing
-		void RemoveEditingCurve(Curve* curve);
+		void RemoveCurve(Curve* curve);
 
 		// Removed curve from editing
-		void RemoveEditingCurve(const String& id);
+		void RemoveCurve(const String& id);
 
 		// Removes all editing curves
-		void RemoveAllEditingCurves();
+		void RemoveAllCurves();
 
 		// Adds curves range with color. It can't be edited, just a solid color between curves
 		void AddCurvesRange(Curve* curveA, Curve* curveB, const Color4& color = Color4::Green());
@@ -422,12 +425,15 @@ END_META;
 CLASS_METHODS_META(Editor::CurveEditor)
 {
 
+	typedef Dictionary<String, Curve*> _tmp1;
+
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, AddEditingCurve, const String&, Curve*, const Color4&);
-	PUBLIC_FUNCTION(void, RemoveEditingCurve, Curve*);
-	PUBLIC_FUNCTION(void, RemoveEditingCurve, const String&);
-	PUBLIC_FUNCTION(void, RemoveAllEditingCurves);
+	PUBLIC_FUNCTION(_tmp1, GetCurves);
+	PUBLIC_FUNCTION(void, AddCurve, const String&, Curve*, const Color4&);
+	PUBLIC_FUNCTION(void, RemoveCurve, Curve*);
+	PUBLIC_FUNCTION(void, RemoveCurve, const String&);
+	PUBLIC_FUNCTION(void, RemoveAllCurves);
 	PUBLIC_FUNCTION(void, AddCurvesRange, Curve*, Curve*, const Color4&);
 	PUBLIC_FUNCTION(void, RemoveCurvesRange, Curve*, Curve*);
 	PUBLIC_FUNCTION(void, AddCurvesRange, const String&, const String&, const Color4&);

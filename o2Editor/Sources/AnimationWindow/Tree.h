@@ -39,6 +39,9 @@ namespace Editor
 		// Sets animation and updates tree structure
 		void SetAnimation(Animation* animation);
 
+		// It is called when animation changed, checks count of animation values, updates tree structure if needed
+		void OnAnimationChanged();
+
 		// Sets width of tree part
 		void SetTreeWidth(float width);
 
@@ -65,7 +68,9 @@ namespace Editor
 
 	private:
 		AnimationWindow*    mAnimationWindow = nullptr; // Animation window
-		Animation*          mAnimation = nullptr;       // Current editing animation
+
+		int mAnimationValuesCount = 0; // Last stored animation values count. Used in checking of animation changes for tracking new values
+
 		AnimationValueNode* mRootValue = nullptr;       // Root animation properties tree node
 		ContextMenu*        mContextMenu;               // Context menu
 
@@ -83,9 +88,6 @@ namespace Editor
 
 		//Updates tree node width
 		void UpdateTreeWidth();
-
-		// it is called when editing animation has changed, updates tree
-		void OnAnimationChanged();
 
 		// Returns object's parent
 		UnknownPtr GetObjectParent(UnknownPtr object) override;
@@ -191,7 +193,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
 	PRIVATE_FIELD(mAnimationWindow);
-	PRIVATE_FIELD(mAnimation);
+	PRIVATE_FIELD(mAnimationValuesCount);
 	PRIVATE_FIELD(mRootValue);
 	PRIVATE_FIELD(mContextMenu);
 	PRIVATE_FIELD(mTreeWidth);
@@ -202,6 +204,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, OnAnimationChanged);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(float, GetLineNumber, float);
 	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
@@ -209,7 +212,6 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
 	PRIVATE_FUNCTION(void, UpdateTreeWidth);
-	PRIVATE_FUNCTION(void, OnAnimationChanged);
 	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
