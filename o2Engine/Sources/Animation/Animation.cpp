@@ -206,6 +206,8 @@ namespace o2
 			{
 				delete val.animatedValue;
 				mAnimatedValues.Remove(val);
+				onChanged();
+
 				return true;
 			}
 		}
@@ -254,6 +256,8 @@ namespace o2
 	{
 		if (mAnimationState)
 			valueDef.animatedValue->RegInAnimatable(mAnimationState, valueDef.targetPath);
+
+		onChanged();
 	}
 
 	bool Animation::AnimatedValueDef::operator==(const AnimatedValueDef& other) const

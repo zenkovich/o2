@@ -389,6 +389,8 @@ namespace o2
 				def.mAnimatedValue->onKeysChanged -= THIS_FUNC(OnAnimatedValueChanged);
 				delete val.animatedValue;
 				mAnimatedValues.Remove(val);
+				onChanged();
+
 				return true;
 			}
 		}

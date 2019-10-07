@@ -316,9 +316,6 @@ namespace o2
 
 	void AnimatedValue<Vec2F>::Evaluate()
 	{
-		if (mKeys.Count() == 0)
-			return;
-
 		mValue = Evaluate(mInDurationTime);
 
 		if (mTarget)

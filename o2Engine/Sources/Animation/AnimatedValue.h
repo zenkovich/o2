@@ -610,9 +610,6 @@ namespace o2
 	template<typename _type>
 	void AnimatedValue<_type>::Evaluate()
 	{
-		if (mKeys.Count() == 0)
-			return;
-
 		mValue = Evaluate(mInDurationTime);
 
 		if (mTarget)

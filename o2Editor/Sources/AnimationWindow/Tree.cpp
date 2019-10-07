@@ -175,7 +175,11 @@ namespace Editor
 
 	void AnimationTree::OnAnimationChanged()
 	{
+		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
+
 		RebuildAnimationTree();
+		ExpandAll();
+		OnObjectsChanged({ (UnknownPtr)mRootValue });
 	}
 
 	UnknownPtr AnimationTree::GetObjectParent(UnknownPtr object)
