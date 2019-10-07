@@ -155,7 +155,7 @@ namespace o2
 
 	int AnimatedValue<Vec2F>::AddKey(float position, const Vec2F& value, float smooth /*= 1.0f*/)
 	{
-		return AddKey(Key(position, value, value, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
+		return AddSmoothKey(Key(position, value, value, value, 0.0f, 0.0f, 1.0f, 1.0f), smooth);
 	}
 
 	AnimatedValue<Vec2F>::Key AnimatedValue<Vec2F>::GetKey(float position) const
@@ -451,7 +451,7 @@ namespace o2
 		}
 
 		float lastDuration = mDuration;
-		mDuration = mKeys.Last().position;
+		mDuration = !mKeys.IsEmpty() ? mKeys.Last().position : 0.0f;
 
 		if (Math::Equals(lastDuration, mEndTime))
 			mEndTime = mDuration;

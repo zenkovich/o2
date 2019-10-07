@@ -2322,12 +2322,12 @@ namespace Editor
 
 		auto addButton = o2UI.CreateWidget<Button>("add small");
 		addButton->name = "addButton";
-		*addButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		*addButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-10, 0));
 		itemSample->AddChild(addButton);
 
 		auto removeButton = o2UI.CreateWidget<Button>("remove small");
 		removeButton->name = "removeButton";
-		*removeButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		*removeButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(-10, 0));
 		itemSample->AddChild(removeButton);
 
 		// node sample button

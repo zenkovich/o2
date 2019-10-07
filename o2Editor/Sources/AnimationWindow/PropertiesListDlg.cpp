@@ -63,7 +63,7 @@ namespace Editor
 		mWindow->AddChild(mPropertiesTree);
 
 		mWindow->Hide(true);
-		mWindow->layout->size = Vec2F(200, 300);
+		mWindow->layout->size = Vec2F(400, 600);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [=](const Input::Cursor& c) { mWindow->Hide(); };
 	}
