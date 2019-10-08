@@ -624,6 +624,7 @@ namespace Editor
 		keyHandles->mainHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
 		keyHandles->mainHandle.onPressed = THIS_FUNC(OnTransformBegin);
 		keyHandles->mainHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		keyHandles->mainHandle.messageFallDownListener = this;
 
 
 		// left support handle
@@ -646,6 +647,7 @@ namespace Editor
 		keyHandles->leftSupportHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
 		keyHandles->leftSupportHandle.onPressed = THIS_FUNC(OnTransformBegin);
 		keyHandles->leftSupportHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		keyHandles->leftSupportHandle.messageFallDownListener = this;
 
 
 		// right support handle
@@ -668,6 +670,7 @@ namespace Editor
 		keyHandles->rightSupportHandle.onRightButtonReleased = THIS_FUNC(OnCursorRightMouseReleased);
 		keyHandles->rightSupportHandle.onPressed = THIS_FUNC(OnTransformBegin);
 		keyHandles->rightSupportHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
+		keyHandles->rightSupportHandle.messageFallDownListener = this;
 
 		for (int i = keyId; i < info->handles.Count(); i++)
 			info->handles[i]->curveKeyIdx++;
