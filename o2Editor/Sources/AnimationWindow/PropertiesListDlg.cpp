@@ -314,11 +314,24 @@ namespace Editor
 
 		mAddButton = GetChildByType<Button>("addButton");
 		if (mAddButton)
-			mAddButton->onClick = [&]() { mTree->mAnimation->AddAnimationValueNoType(mData->path); };
+		{
+			mAddButton->onClick = [&]()
+			{
+				mTree->mAnimation->AddAnimationValueNoType(mData->path); 
+				mData->used = true; 
+				mTree->OnObjectsChanged({ (UnknownPtr)mData }); 
+			};
+		}
 
 		mRemoveButton = GetChildByType<Button>("removeButton");
 		if (mRemoveButton)
-			mRemoveButton->onClick = [&]() { mTree->mAnimation->RemoveAnimationValue(mData->path); };
+		{
+			mRemoveButton->onClick = [&]() { 
+				mTree->mAnimation->RemoveAnimationValue(mData->path);
+				mData->used = false;
+				mTree->OnObjectsChanged({ (UnknownPtr)mData });
+			};
+		}
 	}
 
 	AnimationPropertiesTree::NodeData::~NodeData()

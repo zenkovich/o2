@@ -65,7 +65,8 @@ namespace Editor
 		void ShowCurvesSheet();
 
 	protected:
-		float mTreeViewWidth = 250.0f; // Width of tree area. Changed by dragable separator
+		float mTreeViewWidth = 250.0f;    // Width of tree area. Changed by dragable separator
+		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
 		Animation* mAnimation = nullptr; // Editing animation
 
@@ -152,6 +153,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)
 {
 	PROTECTED_FIELD(mTreeViewWidth);
+	PROTECTED_FIELD(mMinTreeViewWidth);
 	PROTECTED_FIELD(mAnimation);
 	PROTECTED_FIELD(mTargetActor);
 	PROTECTED_FIELD(mUpPanel);

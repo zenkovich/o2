@@ -149,7 +149,7 @@ namespace Editor
 	protected:
 		float mPropertyBorder = 2.0f;
 		float mAddKeyButtonSize = 25.0f;
-		float mPropertySize = 100.0f;
+		float mPropertySize = 130.0f;
 
 		AnimationTree::AnimationValueNode* mData = nullptr; // Editing animated value data
 

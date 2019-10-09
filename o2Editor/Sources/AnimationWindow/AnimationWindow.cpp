@@ -218,7 +218,7 @@ namespace Editor
 		mTreeSeparatorHandle->GetRegularSprite()->szPivot = Vec2F(4, mTreeSeparatorHandle->GetRegularSprite()->szPivot.Get().y);
 
 		mTreeSeparatorHandle->onChangedPos = [&](const Vec2F& point) {
-			mTreeViewWidth = point.x;
+			mTreeViewWidth = Math::Max(point.x, mMinTreeViewWidth);
 			mControlsPanel->layout->right = mTreeViewWidth;
 			mTimeline->layout->left = mTreeViewWidth;
 			mHandlesSheet->layout->left = mTreeViewWidth;
@@ -227,7 +227,7 @@ namespace Editor
 		};
 
 		mTreeSeparatorHandle->checkPositionFunc = [&](const Vec2F& point) {
-			return Vec2F(point.x, mWorkArea->layout->GetHeight()*0.5f);
+			return Vec2F(Math::Max(point.x, mMinTreeViewWidth), mWorkArea->layout->GetHeight()*0.5f);
 		};
 
 		mTreeSeparatorHandle->onLayoutUpdated = [&]() {
