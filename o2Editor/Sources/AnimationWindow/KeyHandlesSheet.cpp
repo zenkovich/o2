@@ -211,6 +211,9 @@ namespace Editor
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
 
+		if (mSelectedHandles.Count() == 1)
+			mAnimationWindow->mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
+
 		mNeedUpdateSelectionFrame = true;
 	}
 

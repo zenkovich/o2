@@ -244,6 +244,8 @@ namespace Editor
 	{
 		mTree->OnAnimationChanged();
 		mCurves->OnAnimationChanged();
+
+		mAnimation->Update(0.0f);
 	}
 
 	void AnimationWindow::OnPlayPauseToggled(bool play)

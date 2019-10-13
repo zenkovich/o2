@@ -134,7 +134,8 @@ namespace Editor
 	template<typename AnimationValueType>
 	MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::~HandlesGroup()
 	{
-		animatedValue->onKeysChanged -= THIS_FUNC(HandlesGroup<AnimationValueType>::UpdateHandles);
+		if (animatedValue)
+			animatedValue->onKeysChanged -= THIS_SUBSCRIPTION(HandlesGroup<AnimationValueType>::UpdateHandles, [&]() {});
 	}
 
 	template<typename AnimationValueType>
@@ -144,7 +145,8 @@ namespace Editor
 		this->animatedValuePath = animatedValuePath;
 
 		animatedValue = dynamic_cast<AnimationValueType*>(ianimatedValue);
-		animatedValue->onKeysChanged += THIS_FUNC(HandlesGroup<AnimationValueType>::UpdateHandles);
+		animatedValue->onKeysChanged += THIS_SUBSCRIPTION(HandlesGroup<AnimationValueType>::UpdateHandles,
+														  [&]() { animatedValue = nullptr; });
 
 		trackControl->mAnimatedValues.Add(animatedValue);
 

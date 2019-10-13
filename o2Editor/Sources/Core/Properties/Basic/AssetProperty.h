@@ -122,7 +122,7 @@ namespace Editor
 		if (mBox)
 		{
 			mBox->SetFocusable(true);
-			mBox->onDraw += Func<DragDropArea, void>(this, &DragDropArea::OnDrawn);
+			mBox->onDraw += MakeFunction<DragDropArea, void>(this, &DragDropArea::OnDrawn);
 
 			mNameText = mBox->GetLayerDrawable<Text>("caption");
 			if (mNameText)

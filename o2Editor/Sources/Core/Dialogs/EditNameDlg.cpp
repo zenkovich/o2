@@ -25,7 +25,7 @@ namespace Editor
 		mWindow->layout->size = Vec2F(300, 100);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
-		mWindow->onHide = Func(this, &NameEditDlg::OnHide);
+		mWindow->onHide = MakeFunction(this, &NameEditDlg::OnHide);
 	}
 
 	NameEditDlg::~NameEditDlg()
@@ -59,10 +59,10 @@ namespace Editor
 		auto horLayout =  o2UI.CreateHorLayout();
 		horLayout->spacing = 10;
 		
-		auto okButton = o2UI.CreateButton("Ok", Func(this, &NameEditDlg::OnOkPressed));
+		auto okButton = o2UI.CreateButton("Ok", MakeFunction(this, &NameEditDlg::OnOkPressed));
 		horLayout->AddChild(okButton);
 
-		auto cancelButton = o2UI.CreateButton("Cancel", Func(this, &NameEditDlg::OnCancelPressed));
+		auto cancelButton = o2UI.CreateButton("Cancel", MakeFunction(this, &NameEditDlg::OnCancelPressed));
 		horLayout->AddChild(cancelButton);
 
 		verLayout->AddChild(horLayout);

@@ -173,16 +173,16 @@ namespace Editor
 
 		if (mAnimatedValue)
 		{
-			mAnimatedValue->onKeysChanged -= THIS_FUNC(UpdateHandles);
-			mAnimatedValue->onUpdate -= THIS_FUNC(CheckCanCreateKey);
+			mAnimatedValue->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
+			mAnimatedValue->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 		}
 
 		mAnimatedValue = dynamic_cast<AnimatedValueType*>(animatedValue);
 
 		if (mAnimatedValue)
 		{
-			mAnimatedValue->onKeysChanged += THIS_FUNC(UpdateHandles);
-			mAnimatedValue->onUpdate += THIS_FUNC(CheckCanCreateKey);
+			mAnimatedValue->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, [&]() { mAnimatedValue = nullptr; });
+			mAnimatedValue->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, [&]() { mAnimatedValue = nullptr; });
 		}
 
 		InitializeHandles();

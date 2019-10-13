@@ -145,7 +145,7 @@ namespace Editor
 			horLayout->expandHeight = true;
 			*horLayout->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 25);
 
-			auto okButton = o2UI.CreateButton("Ok", Func(this, &KeyEditDlg::OnOkPressed));
+			auto okButton = o2UI.CreateButton("Ok", MakeFunction(this, &KeyEditDlg::OnOkPressed));
 			horLayout->AddChild(okButton);
 
 			auto cancelButton = o2UI.CreateButton("Cancel", [&]() { mWindow->Hide(); });

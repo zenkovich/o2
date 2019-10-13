@@ -43,18 +43,18 @@ namespace o2
 	// Static function delegate
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class FunctionPtr <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
+	class FunctionPtr <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
 		_res_type(*mFunctionPtr)(_args ... args); // Pointer to static function
 
 	public:
 		// Constructor
-		FunctionPtr(_res_type(*functionPtr)(_args ... args)):
+		FunctionPtr(_res_type(*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr)
 		{}
 
 		// Copy-constructor
-		FunctionPtr(const FunctionPtr& other):
+		FunctionPtr(const FunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr)
 		{}
 
@@ -104,19 +104,19 @@ namespace o2
 	// Object function delegate
 	// ------------------------
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjFunctionPtr: public IFunction<_res_type(_args ...)>
+	class ObjFunctionPtr : public IFunction<_res_type(_args ...)>
 	{
 		_res_type(_class_type::*mFunctionPtr)(_args ... args); // Pointer to function
 		_class_type* mObject;                                  // Pointer to function's owner object
 
 	public:
 		// Constructor
-		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)):
+		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
 		// Copy-constructor
-		ObjFunctionPtr(const ObjFunctionPtr& other):
+		ObjFunctionPtr(const ObjFunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
@@ -167,19 +167,19 @@ namespace o2
 	// Object constant function delegate
 	// ---------------------------------
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjConstFunctionPtr: public IFunction<_res_type(_args ...)>
+	class ObjConstFunctionPtr : public IFunction<_res_type(_args ...)>
 	{
 		_res_type(_class_type::*mFunctionPtr)(_args ... args) const; // Pointer to const function
 		_class_type* mObject;                                        // Pointer to function's owner object
 
 	public:
 		// Constructor
-		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
+		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const) :
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
 		// Copy-constructor
-		ObjConstFunctionPtr(const ObjConstFunctionPtr& other):
+		ObjConstFunctionPtr(const ObjConstFunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
@@ -233,7 +233,7 @@ namespace o2
 	// Shared lambda delegate
 	// ----------------------
 	template<typename _res_type, typename ... _args>
-	class SharedLambda <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
+	class SharedLambda <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
 		// ------------------------
 		// Lambda invoker interface
@@ -251,13 +251,13 @@ namespace o2
 		// Template lambda invoker
 		// -----------------------
 		template<typename _lambda_type>
-		struct LambdaInvoker: ILambdaInvoker
+		struct LambdaInvoker : ILambdaInvoker
 		{
 			_lambda_type mLambda;     // Lambda object (anonymous functor)
 			int          mReferences; // References count to this
 
 			// Constructor
-			LambdaInvoker(const _lambda_type& lambda):
+			LambdaInvoker(const _lambda_type& lambda) :
 				mLambda(lambda), mReferences(1)
 			{}
 
@@ -289,16 +289,16 @@ namespace o2
 		ILambdaInvoker* mInvokerPtr; // Lambda invoker pinter
 
 	public:
-		SharedLambda():mInvokerPtr(nullptr) {}
+		SharedLambda() :mInvokerPtr(nullptr) {}
 
 		// Constructor
 		template<typename _lambda_type>
-		SharedLambda(const _lambda_type& lambda):
+		SharedLambda(const _lambda_type& lambda) :
 			mInvokerPtr(new LambdaInvoker<_lambda_type>(lambda))
 		{}
 
 		// Copy-constructor
-		SharedLambda(const SharedLambda& other):
+		SharedLambda(const SharedLambda& other) :
 			mInvokerPtr(other.mInvokerPtr)
 		{
 			mInvokerPtr->IncRef();
@@ -373,7 +373,7 @@ namespace o2
 	// Combined delegate. Can contain many other functors
 	// --------------------------------------------------
 	template<typename _res_type, typename ... _args>
-	class Function <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
+	class Function <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
 		typedef std::vector<IFunction<_res_type(_args ...)>*> FunctionsVec;
 
@@ -712,10 +712,112 @@ namespace o2
 	const Function<_res_type(_args ...)> Function<_res_type(_args ...)>::empty;
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	Function<_res_type(_args ...)> Func(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+	Function<_res_type(_args ...)> MakeFunction(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 	{
 		return Function<_res_type(_args ...)>(object, functionPtr);
 	}
 
-#define THIS_FUNC(NAME) Func(this, &thisclass::NAME)
+#define THIS_FUNC(NAME) MakeFunction(this, &thisclass::NAME)
+
+	template <typename UnusedType>
+	class Subscription;
+
+	// ------------------------
+	// Function holder delegate
+	// ------------------------
+	template<typename _res_type, typename ... _args>
+	class Subscription <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	{
+		Function<_res_type(_args ...)> mFunction;
+		Function<void()> mOnDestroy;
+		int* mRefs = mnew int;
+
+	public:
+		// Constructor
+		Subscription(const Function<_res_type(_args ...)>& function, const Function<void()>& onDestroy) :
+			mFunction(function), mOnDestroy(onDestroy)
+		{
+			(*mRefs) = 1;
+		}
+
+		// Copy-constructor
+		Subscription(const Subscription& other) :
+			mFunction(other.mFunction), mOnDestroy(other.mOnDestroy), mRefs(other.mRefs)
+		{
+			(*mRefs)++;
+		}
+
+		~Subscription()
+		{
+			DecreaseRefs();
+		}
+
+		// Copy-operator
+		Subscription& operator=(const Subscription& other)
+		{
+			DecreaseRefs();
+
+			mFunction = other.mFunction;
+			mOnDestroy = other.mOnDestroy;
+			mRefs = other.mRefs;
+			(*mRefs)++;
+
+			return *this;
+		}
+
+		// Equal operator
+		bool operator==(const Subscription& other) const
+		{
+			return mFunction == other.mFunction;
+		}
+
+		// Not equal operator
+		bool operator!=(const Subscription& other) const
+		{
+			return mFunction != other.mFunction;
+		}
+
+		// Returns cloned copy of this
+		IFunction<_res_type(_args ...)>* Clone() const
+		{
+			return mnew Subscription(*this);
+		}
+
+		// Invokes function with arguments as functor
+		_res_type Invoke(_args ... args) const
+		{
+			return mFunction.Invoke(args ...);
+		}
+
+		// Returns true if functions is equal
+		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		{
+			Subscription* otherFuncPtr = dynamic_cast<Subscription*>(other);
+			if (otherFuncPtr)
+				return *otherFuncPtr == *this;
+
+			return false;
+		}
+
+	protected:
+		void DecreaseRefs()
+		{
+			(*mRefs)--;
+			if ((*mRefs) == 0)
+			{
+				mOnDestroy.Invoke();
+				delete mRefs;
+			}
+		}
+	};
+
+	template<typename _class_type, typename _res_type, typename ... _args>
+	Subscription<_res_type(_args ...)> MakeSubscription(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args),
+														const Function<void()>& onDestroy)
+	{
+		return Subscription<_res_type(_args ...)>(MakeFunction(object, functionPtr), onDestroy);
+	}
+
+#define THIS_SUBSCRIPTION(NAME, ON_DESTROY) MakeSubscription(this, &thisclass::NAME, ON_DESTROY)
+
 }

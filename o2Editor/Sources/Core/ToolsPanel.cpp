@@ -119,7 +119,7 @@ namespace Editor
 		*mLayoutSchemesList->layout = WidgetLayout::VerStretch(HorAlign::Right, 3, 2, 150, 10);
 		mPanelRoot->AddChild(mLayoutSchemesList);
 		UpdateWndLayoutSchemas();
-		mLayoutSchemesList->onSelectedText = Func(this, &ToolsPanel::OnSchemeSelected);
+		mLayoutSchemesList->onSelectedText = MakeFunction(this, &ToolsPanel::OnSchemeSelected);
 	}
 
 	void ToolsPanel::InitializeToolsPanel()

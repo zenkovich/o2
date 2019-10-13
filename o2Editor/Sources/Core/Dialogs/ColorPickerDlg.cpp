@@ -29,7 +29,7 @@ namespace Editor
 		mWindow->layout->size = Vec2F(200, 300);
 
 		mWindow->GetBackCursorListener().onCursorReleased = [&](const Input::Cursor& c) { OnCursorPressedOutside(); };
-		mWindow->onHide = Func(this, &ColorPickerDlg::OnHide);
+		mWindow->onHide = MakeFunction(this, &ColorPickerDlg::OnHide);
 	}
 
 	ColorPickerDlg::~ColorPickerDlg()
@@ -124,7 +124,7 @@ namespace Editor
 		mHUEBar->AddLayer("color", mnew Sprite(mHUEBarTexture, RectI(0, 0, 20, 256)), Layout::BothStretch(1, 1, 1, 1),
 						  0.5f);
 
-		mHUEBar->onChange = Func(this, &ColorPickerDlg::OnHUEEdited);
+		mHUEBar->onChange = MakeFunction(this, &ColorPickerDlg::OnHUEEdited);
 
 		pickAreaContainer->AddChild(mHUEBar);
 
@@ -132,7 +132,7 @@ namespace Editor
 
 		mColorPickAreaHandle->onDraw += [&]() { mColorPickHandle.OnDrawn(); };
 		mColorPickHandle.isUnderPoint = [&](const Vec2F& point) { return mColorPickAreaColor->IsUnderPoint(point); };
-		mColorPickHandle.onMoved = Func(this, &ColorPickerDlg::OnColorPickHandleMoved);
+		mColorPickHandle.onMoved = MakeFunction(this, &ColorPickerDlg::OnColorPickHandleMoved);
 	}
 
 	void ColorPickerDlg::InitializeColorParams()
@@ -145,7 +145,7 @@ namespace Editor
 			colorTypes.Add(kv.Value());
 
 		mTypeDropdown->AddItems(colorTypes);
-		mTypeDropdown->onSelectedText = Func(this, &ColorPickerDlg::OnColorTypeSelected);
+		mTypeDropdown->onSelectedText = MakeFunction(this, &ColorPickerDlg::OnColorTypeSelected);
 
 		mWindow->AddChild(mTypeDropdown);
 
@@ -155,19 +155,19 @@ namespace Editor
 
 		colorParamsArea->AddChild(InitializeColorParameter(mColor1ParamName, mColor1ParamBar,
 								  mColor1ParamEdit, mColor1ParamBarBitmap, mColor1ParamBarTexture, 
-								  Func(this, &ColorPickerDlg::OnColor1ParameterEdited)));
+								  MakeFunction(this, &ColorPickerDlg::OnColor1ParameterEdited)));
 
 		colorParamsArea->AddChild(InitializeColorParameter(mColor2ParamName, mColor2ParamBar, 
 								  mColor2ParamEdit, mColor2ParamBarBitmap, mColor2ParamBarTexture, 
-								  Func(this, &ColorPickerDlg::OnColor2ParameterEdited)));
+								  MakeFunction(this, &ColorPickerDlg::OnColor2ParameterEdited)));
 
 		colorParamsArea->AddChild(InitializeColorParameter(mColor3ParamName, mColor3ParamBar, 
 								  mColor3ParamEdit, mColor3ParamBarBitmap, mColor3ParamBarTexture, 
-								  Func(this, &ColorPickerDlg::OnColor3ParameterEdited)));
+								  MakeFunction(this, &ColorPickerDlg::OnColor3ParameterEdited)));
 
 		colorParamsArea->AddChild(InitializeColorParameter(mColorAParamName, mColorAParamBar, 
 								  mColorAParamEdit, mColorAParamBarBitmap, mColorAParamBarTexture, 
-								  Func(this, &ColorPickerDlg::OnColorAParameterEdited)));
+								  MakeFunction(this, &ColorPickerDlg::OnColorAParameterEdited)));
 
 	mWindow->AddChild(colorParamsArea);
 

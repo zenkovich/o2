@@ -58,7 +58,7 @@ namespace Editor
 		StoreValues(mBeforeChangeValues);
 
 		CurveEditorDlg::Show(THIS_FUNC(OnValueChanged),
-							 Func<IPropertyField, void>(this, &CurveProperty::CheckValueChangeCompleted));
+							 MakeFunction<IPropertyField, void>(this, &CurveProperty::CheckValueChangeCompleted));
 
 		CurveEditorDlg::RemoveAllEditingCurves();
 		CurveEditorDlg::AddEditingCurve("property", &mCommonValue, Color4(44, 62, 80));

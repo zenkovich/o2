@@ -7,7 +7,7 @@ namespace Editor
 	IObjectPropertiesViewer::IObjectPropertiesViewer()
 	{
 		mOnChildFieldChangeCompleted =
-			Func<IObjectPropertiesViewer, void, const String&,
+			MakeFunction<IObjectPropertiesViewer, void, const String&,
 			const Vector<DataNode>&, const Vector<DataNode>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
 	}
 

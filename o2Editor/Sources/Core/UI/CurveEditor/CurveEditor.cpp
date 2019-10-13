@@ -127,7 +127,7 @@ namespace Editor
 		info->curve = curve;
 		info->viewScale = Vec2F();
 		info->UpdateApproximatedPoints();
-		info->curve->onKeysChanged += Func(info, &CurveInfo::OnCurveChanged);
+		info->curve->onKeysChanged += MakeSubscription(info, &CurveInfo::OnCurveChanged, [=]() { info->curve = nullptr; });
 
 		if (color == Color4::Green())
 		{
@@ -1838,7 +1838,8 @@ namespace Editor
 			delete x;
 		}
 
-		curve->onKeysChanged -= Func(this, &CurveInfo::OnCurveChanged);
+		if (curve)
+			curve->onKeysChanged -= MakeSubscription(this, &CurveInfo::OnCurveChanged, []() {});
 	}
 
 	void CurveEditor::CurveInfo::UpdateHandles()
