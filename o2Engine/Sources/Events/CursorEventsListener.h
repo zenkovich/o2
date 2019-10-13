@@ -45,6 +45,9 @@ namespace o2
 		// Returns interactable flag
 		virtual bool IsInteractable() const;
 
+		// Returns true when input events can be handled by down listeners
+		virtual bool IsInputTransparent() const;
+
 		// Returns true if this was pressed by some cursor
 		bool IsPressed() const;
 

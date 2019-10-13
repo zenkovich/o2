@@ -18,8 +18,7 @@ namespace o2
 
 	DECLARE_SINGLETON(EventSystem);
 
-	EventSystem::EventSystem():
-		mRightButtonPressedListener(nullptr), mMiddleButtonPressedListener(nullptr)
+	EventSystem::EventSystem()
 	{
 		mShortcutEventsManager = mnew ShortcutKeysListenersManager();
 	}
@@ -184,32 +183,38 @@ namespace o2
 			if (drag && drag->IsDragging())
 				continue;
 
-			mUnderCursorListeners.Add(cursor.id, listener);
+			if (!mUnderCursorListeners.ContainsKey(cursor.id))
+				mUnderCursorListeners.Add(cursor.id, {});
 
-			return;
+			mUnderCursorListeners[cursor.id].Add(listener);
+
+			if (!listener->IsInputTransparent())
+				return;
 		}
 	}
 
 	void EventSystem::ProcessCursorEnter()
 	{
-		for (auto underCursor : mUnderCursorListeners)
+		for (auto underCursorListeners : mUnderCursorListeners)
 		{
-			if (!(mLastUnderCursorListeners.ContainsKey(underCursor.Key()) &&
-				  mLastUnderCursorListeners[underCursor.Key()] == underCursor.Value()))
+			bool lastListenersHasSameCursor = mLastUnderCursorListeners.ContainsKey(underCursorListeners.Key());
+			for (auto listener : underCursorListeners.Value())
 			{
-				underCursor.Value()->OnCursorEnter(*o2Input.GetCursor(underCursor.Key()));
+				if (!lastListenersHasSameCursor || !mLastUnderCursorListeners[underCursorListeners.Key()].Contains(listener))
+					listener->OnCursorEnter(*o2Input.GetCursor(underCursorListeners.Key()));
 			}
 		}
 	}
 
 	void EventSystem::ProcessCursorExit()
 	{
-		for (auto lastUnderCursor : mLastUnderCursorListeners)
+		for (auto lastUnderCursorListeners : mLastUnderCursorListeners)
 		{
-			if (!(mUnderCursorListeners.ContainsKey(lastUnderCursor.Key()) &&
-				  mUnderCursorListeners[lastUnderCursor.Key()] == lastUnderCursor.Value()))
+			bool listenersHasSameCursor = mUnderCursorListeners.ContainsKey(lastUnderCursorListeners.Key());
+			for (auto listener : lastUnderCursorListeners.Value())
 			{
-				lastUnderCursor.Value()->OnCursorExit(*o2Input.GetCursor(lastUnderCursor.Key()));
+				if (!listenersHasSameCursor || !mUnderCursorListeners[lastUnderCursorListeners.Key()].Contains(listener))
+					listener->OnCursorExit(*o2Input.GetCursor(lastUnderCursorListeners.Key()));
 			}
 		}
 	}
@@ -219,7 +224,7 @@ namespace o2
 	CursorAreaEventsListener* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
 	{
 		if (mUnderCursorListeners.ContainsKey(cursorId))
-			return mUnderCursorListeners[cursorId];
+			return mUnderCursorListeners[cursorId].First();
 
 		return nullptr;
 	}
@@ -243,8 +248,11 @@ namespace o2
 	{
 		for (auto kv : mPressedListeners)
 		{
-			kv.Value()->OnCursorPressBreak(*o2Input.GetCursor(kv.Key()));
-			kv.Value()->mIsPressed = false;
+			for (auto listener : kv.Value())
+			{
+				listener->OnCursorPressBreak(*o2Input.GetCursor(kv.Key()));
+				listener->mIsPressed = false;
+			}
 		}
 
 		mPressedListeners.Clear();
@@ -262,17 +270,21 @@ namespace o2
 		if (!mUnderCursorListeners.ContainsKey(cursor.id))
 			return;
 
-		auto listener = mUnderCursorListeners[cursor.id];
-
-		float time = o2Time.GetApplicationTime();
-		if (time - listener->mLastPressedTime < mDblClickTime)
-			listener->OnCursorDblClicked(cursor);
-		else
+		for (auto listener : mUnderCursorListeners[cursor.id])
 		{
-			mPressedListeners.Add(cursor.id, listener);
-			listener->OnCursorPressed(cursor);
-			listener->mIsPressed = true;
-			listener->mLastPressedTime = time;
+			float time = o2Time.GetApplicationTime();
+			if (time - listener->mLastPressedTime < mDblClickTime)
+				listener->OnCursorDblClicked(cursor);
+			else
+			{
+				if (!mPressedListeners.ContainsKey(cursor.id))
+					mPressedListeners.Add(cursor.id, {});
+
+				mPressedListeners[cursor.id].Add(listener);
+				listener->OnCursorPressed(cursor);
+				listener->mIsPressed = true;
+				listener->mLastPressedTime = time;
+			}
 		}
 	}
 
@@ -282,12 +294,36 @@ namespace o2
 			listener->OnCursorStillDown(cursor);
 
 		if (mPressedListeners.ContainsKey(cursor.id))
-			mPressedListeners[cursor.id]->OnCursorStillDown(cursor);
+		{
+			bool broken = false;
+			for (auto it = mPressedListeners[cursor.id].begin(); it != mPressedListeners[cursor.id].begin();)
+			{
+				if (!broken)
+				{
+					(*it)->OnCursorStillDown(cursor);
+
+					if (!(*it)->IsInputTransparent())
+						broken = true;
+
+					++it;
+				}
+				else
+				{
+					(*it)->OnCursorPressBreak(*o2Input.GetCursor(cursor.id));
+					(*it)->mIsPressed = false;
+
+					it = mPressedListeners[cursor.id].Remove(it);
+				}
+			}
+		}
 
 		if (cursor.delta.Length() > FLT_EPSILON)
 		{
 			if (mUnderCursorListeners.ContainsKey(cursor.id))
-				mUnderCursorListeners[cursor.id]->OnCursorMoved(cursor);
+			{
+				for (auto listener : mUnderCursorListeners[cursor.id])
+					listener->OnCursorMoved(cursor);
+			}
 		}
 	}
 
@@ -297,13 +333,19 @@ namespace o2
 			listener->OnCursorReleased(cursor);
 
 		for (auto listener : mAreaCursorListeners)
+		{
 			if (!listener->IsUnderPoint(cursor.position))
 				listener->OnCursorReleasedOutside(cursor);
+		}
 
 		if (mPressedListeners.ContainsKey(cursor.id))
 		{
-			mPressedListeners[cursor.id]->mIsPressed = false;
-			mPressedListeners[cursor.id]->OnCursorReleased(cursor);
+			for (auto listener : mPressedListeners[cursor.id])
+			{
+				listener->mIsPressed = false;
+				listener->OnCursorReleased(cursor);
+			}
+
 			mPressedListeners.Remove(cursor.id);
 		}
 	}
@@ -318,12 +360,19 @@ namespace o2
 		if (!mUnderCursorListeners.ContainsKey(cursor.id))
 			return;
 
-		auto listener = mUnderCursorListeners[cursor.id];
+		mRightButtonPressedListeners.Clear();
 
-		mRightButtonPressedListener = listener;
+		auto listeners = mUnderCursorListeners[cursor.id];
+		for (auto listener : listeners)
+		{
+			mRightButtonPressedListeners.Add(listener);
 
-		listener->OnCursorRightMousePressed(cursor);
-		listener->mIsRightMousePressed = true;
+			listener->OnCursorRightMousePressed(cursor);
+			listener->mIsRightMousePressed = true;
+
+			if (!listener->IsInputTransparent())
+				break;
+		}
 	}
 
 	void EventSystem::ProcessRBDown()
@@ -333,8 +382,26 @@ namespace o2
 		for (auto listener : mCursorListeners)
 			listener->OnCursorRightMouseStillDown(cursor);
 
-		if (mRightButtonPressedListener)
-			mRightButtonPressedListener->OnCursorRightMouseStayDown(cursor);
+		bool broken = false;
+		for (auto it = mRightButtonPressedListeners.begin(); it != mRightButtonPressedListeners.begin();)
+		{
+			if (!broken)
+			{
+				(*it)->OnCursorRightMouseStayDown(cursor);
+
+				if (!(*it)->IsInputTransparent())
+					broken = true;
+
+				++it;
+			}
+			else
+			{
+				(*it)->OnCursorPressBreak(*o2Input.GetCursor(cursor.id));
+				(*it)->mIsPressed = false;
+
+				it = mRightButtonPressedListeners.Remove(it);
+			}
+		}
 	}
 
 	void EventSystem::ProcessRBReleased()
@@ -344,10 +411,10 @@ namespace o2
 		for (auto listener : mCursorListeners)
 			listener->OnCursorRightMouseReleased(cursor);
 
-		if (mRightButtonPressedListener)
+		for (auto listener : mRightButtonPressedListeners)
 		{
-			mRightButtonPressedListener->OnCursorRightMouseReleased(cursor);
-			mRightButtonPressedListener->mIsRightMousePressed = false;
+			listener->OnCursorRightMouseReleased(cursor);
+			listener->mIsRightMousePressed = false;
 		}
 	}
 
@@ -361,12 +428,19 @@ namespace o2
 		if (!mUnderCursorListeners.ContainsKey(cursor.id))
 			return;
 
-		auto listener = mUnderCursorListeners[cursor.id];
+		mMiddleButtonPressedListeners.Clear();
 
-		mMiddleButtonPressedListener = listener;
+		auto listeners = mUnderCursorListeners[cursor.id];
+		for (auto listener : listeners)
+		{
+			mMiddleButtonPressedListeners.Add(listener);
 
-		listener->OnCursorMiddleMousePressed(cursor);
-		listener->mIsMiddleMousePressed = true;
+			listener->OnCursorMiddleMousePressed(cursor);
+			listener->mIsMiddleMousePressed = true;
+
+			if (!listener->IsInputTransparent())
+				break;
+		}
 	}
 
 	void EventSystem::ProcessMBDown()
@@ -376,8 +450,26 @@ namespace o2
 		for (auto listener : mCursorListeners)
 			listener->OnCursorMiddleMouseStillDown(cursor);
 
-		if (mMiddleButtonPressedListener)
-			mMiddleButtonPressedListener->OnCursorMiddleMouseStayDown(cursor);
+		bool broken = false;
+		for (auto it = mMiddleButtonPressedListeners.begin(); it != mMiddleButtonPressedListeners.begin();)
+		{
+			if (!broken)
+			{
+				(*it)->OnCursorMiddleMouseStayDown(cursor);
+
+				if (!(*it)->IsInputTransparent())
+					broken = true;
+
+				++it;
+			}
+			else
+			{
+				(*it)->OnCursorPressBreak(*o2Input.GetCursor(cursor.id));
+				(*it)->mIsMiddleMousePressed = false;
+
+				it = mMiddleButtonPressedListeners.Remove(it);
+			}
+		}
 	}
 
 	void EventSystem::ProcessMBReleased()
@@ -387,10 +479,10 @@ namespace o2
 		for (auto listener : mCursorListeners)
 			listener->OnCursorMiddleMouseReleased(cursor);
 
-		if (mMiddleButtonPressedListener)
+		for (auto listener : mMiddleButtonPressedListeners)
 		{
-			mMiddleButtonPressedListener->OnCursorMiddleMouseReleased(cursor);
-			mMiddleButtonPressedListener->mIsMiddleMousePressed = false;
+			listener->OnCursorRightMouseReleased(cursor);
+			listener->mIsMiddleMousePressed = false;
 		}
 	}
 
@@ -400,7 +492,15 @@ namespace o2
 		if (!Math::Equals(scroll, 0.0f))
 		{
 			for (auto kv : mUnderCursorListeners)
-				kv.Value()->OnScrolled(scroll);
+			{
+				for (auto listener : kv.Value())
+				{
+					listener->OnScrolled(scroll);
+
+					if (!listener->IsInputTransparent())
+						break;
+				}
+			}
 
 			for (auto listener : mCursorListeners)
 				listener->OnScrolled(scroll);
@@ -451,16 +551,17 @@ namespace o2
 	void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)
 	{
 		mInstance->mAreaCursorListeners.Remove(listener);
-		mInstance->mPressedListeners.RemoveAll([&](auto x) { return x.Value() == listener; });
+		mInstance->mRightButtonPressedListeners.Remove(listener);
+		mInstance->mMiddleButtonPressedListeners.Remove(listener);
 
-		if (mInstance->mRightButtonPressedListener == listener)
-			mInstance->mRightButtonPressedListener = nullptr;
+		for (auto kv : mInstance->mPressedListeners)
+			kv.Value().Remove(listener);
 
-		if (mInstance->mMiddleButtonPressedListener == listener)
-			mInstance->mMiddleButtonPressedListener = nullptr;
+		for (auto kv : mInstance->mUnderCursorListeners)
+			kv.Value().Remove(listener);
 
-		mInstance->mUnderCursorListeners.RemoveAll([&](auto x) { return x.Value() == listener; });
-		mInstance->mLastUnderCursorListeners.RemoveAll([&](auto x) { return x.Value() == listener; });
+		for (auto kv : mInstance->mLastUnderCursorListeners)
+			kv.Value().Remove(listener);
 	}
 
 	void EventSystem::RegCursorListener(CursorEventsListener* listener)

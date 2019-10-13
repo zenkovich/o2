@@ -48,6 +48,11 @@ namespace o2
 		return mInteractable;
 	}
 
+	bool CursorAreaEventsListener::IsInputTransparent() const
+	{
+		return false;
+	}
+
 	void CursorAreaEventsListener::OnDrawn()
 	{
 		if (!mInteractable)

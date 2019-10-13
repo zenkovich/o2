@@ -89,6 +89,9 @@ namespace o2
 		// Returns first element
 		virtual _type& First();
 
+		// Returns first element
+		virtual const _type& First() const;
+
 		// Returns first element that pass function
 		virtual _type First(const Function<bool(const _type&)>& match) const;
 
@@ -145,6 +148,12 @@ namespace o2
 
 	template<typename _type>
 	_type& IArray<_type>::First()
+	{
+		return Get(0);
+	}
+
+	template<typename _type>
+	const _type& IArray<_type>::First() const
 	{
 		return Get(0);
 	}
