@@ -296,7 +296,7 @@ namespace o2
 		if (mPressedListeners.ContainsKey(cursor.id))
 		{
 			bool broken = false;
-			for (auto it = mPressedListeners[cursor.id].begin(); it != mPressedListeners[cursor.id].begin();)
+			for (auto it = mPressedListeners[cursor.id].begin(); it != mPressedListeners[cursor.id].end();)
 			{
 				if (!broken)
 				{
@@ -383,7 +383,7 @@ namespace o2
 			listener->OnCursorRightMouseStillDown(cursor);
 
 		bool broken = false;
-		for (auto it = mRightButtonPressedListeners.begin(); it != mRightButtonPressedListeners.begin();)
+		for (auto it = mRightButtonPressedListeners.begin(); it != mRightButtonPressedListeners.end();)
 		{
 			if (!broken)
 			{
@@ -451,7 +451,7 @@ namespace o2
 			listener->OnCursorMiddleMouseStillDown(cursor);
 
 		bool broken = false;
-		for (auto it = mMiddleButtonPressedListeners.begin(); it != mMiddleButtonPressedListeners.begin();)
+		for (auto it = mMiddleButtonPressedListeners.begin(); it != mMiddleButtonPressedListeners.end();)
 		{
 			if (!broken)
 			{

@@ -27,7 +27,7 @@ namespace o2
 		virtual _res_type Invoke(_args ... args) const = 0;
 
 		// Returns true if other functions is equal
-		virtual bool Equals(IFunction<_res_type(_args ...)>* other) const = 0;
+		virtual bool Equals(const IFunction<_res_type(_args ...)>* other) const = 0;
 
 		// Invokes function with arguments as functor
 		_res_type operator()(_args ... args) const
@@ -90,9 +90,9 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const
 		{
-			FunctionPtr* otherFuncPtr = dynamic_cast<FunctionPtr*>(other);
+			const FunctionPtr* otherFuncPtr = dynamic_cast<const FunctionPtr*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 
@@ -153,9 +153,9 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const
 		{
-			ObjFunctionPtr* otherFuncPtr = dynamic_cast<ObjFunctionPtr*>(other);
+			const ObjFunctionPtr* otherFuncPtr = dynamic_cast<const ObjFunctionPtr*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 
@@ -216,9 +216,9 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const
 		{
-			ObjConstFunctionPtr* otherFuncPtr = dynamic_cast<ObjConstFunctionPtr*>(other);
+			const ObjConstFunctionPtr* otherFuncPtr = dynamic_cast<const ObjConstFunctionPtr*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 
@@ -356,9 +356,9 @@ namespace o2
 		}
 
 		// Returns true if functions is equals
-		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const
 		{
-			SharedLambda* otherFuncPtr = dynamic_cast<SharedLambda*>(other);
+			const SharedLambda* otherFuncPtr = dynamic_cast<const SharedLambda*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 
@@ -490,7 +490,7 @@ namespace o2
 		}
 
 		// Add delegate to inside list
-		void Remove(IFunction<_res_type(_args ...)>& func)
+		void Remove(const IFunction<_res_type(_args ...)>& func)
 		{
 			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
 			{
@@ -638,9 +638,9 @@ namespace o2
 		}
 
 		// Returns true when functions is equal
-		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const
 		{
-			Function* otherFuncPtr = dynamic_cast<Function*>(other);
+			const Function* otherFuncPtr = dynamic_cast<const Function*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 
@@ -686,7 +686,7 @@ namespace o2
 		}
 
 		// Removes delegate from list
-		Function<_res_type(_args ...)>& operator-=(IFunction<_res_type(_args ...)>& func)
+		Function<_res_type(_args ...)>& operator-=(const IFunction<_res_type(_args ...)>& func)
 		{
 			Remove(func);
 			return *this;
@@ -790,9 +790,9 @@ namespace o2
 		}
 
 		// Returns true if functions is equal
-		bool Equals(IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const
 		{
-			Subscription* otherFuncPtr = dynamic_cast<Subscription*>(other);
+			const Subscription* otherFuncPtr = dynamic_cast<const Subscription*>(other);
 			if (otherFuncPtr)
 				return *otherFuncPtr == *this;
 

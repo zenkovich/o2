@@ -173,8 +173,9 @@ namespace Editor
 
 		if (mAnimatedValue)
 		{
-			mAnimatedValue->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
-			mAnimatedValue->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
+			auto animVal = mAnimatedValue;
+			animVal->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
+			animVal->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 		}
 
 		mAnimatedValue = dynamic_cast<AnimatedValueType*>(animatedValue);
