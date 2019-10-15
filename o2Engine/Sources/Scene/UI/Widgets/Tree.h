@@ -181,6 +181,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 		SERIALIZABLE(Tree);
 
 	protected:
@@ -448,6 +451,9 @@ namespace o2
 		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
+		// It is called when scrolling
+		void OnScrolled(float scroll) override;
+
 		// Updates hover target rect and visibility
 		void UpdateHover(TreeNode* itemUnderCursor);
 
@@ -684,6 +690,7 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
@@ -732,6 +739,7 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, UpdateHover, TreeNode*);
 	PROTECTED_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PROTECTED_FUNCTION(void, BeginDragging, TreeNode*);

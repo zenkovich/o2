@@ -80,7 +80,7 @@
     <Lib>
       <Verbose>true</Verbose>
       <AdditionalDependencies>$(ProjectDir)..\Dependencies\Dependencies_$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>/WHOLEARCHIVE %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </Lib>
     <PreBuildEvent>
       <Command>$(ProjectDir)../../CodeTool/Bin/CodeTool.exe -sources "$(ProjectDir)..\Sources" -msvs_project "$(ProjectPath)"</Command>

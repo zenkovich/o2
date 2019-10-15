@@ -20,7 +20,7 @@ namespace o2
 
 	public:
 		CursorAreaEventsListener* messageFallDownListener = nullptr; // Messages fall down listener. 
-		                                                             // All messaged received in this object 
+		                                                             // All messages received in this object 
 		                                                             // will be delivered to messageFallDownListener
 
 	public:

@@ -9,7 +9,7 @@
 namespace o2
 {
 	LongList::LongList():
-		ScrollArea(), DrawableCursorEventsListener(this), mHoverLayout(Layout::BothStretch()),
+		ScrollArea(), mHoverLayout(Layout::BothStretch()),
 		mSelectionLayout(Layout::BothStretch())
 	{
 		mItemSample = mnew Widget();
@@ -18,7 +18,7 @@ namespace o2
 	}
 
 	LongList::LongList(const LongList& other):
-		ScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
+		ScrollArea(other), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout), selectedItemPos(this)
 	{
 		mItemSample = other.mItemSample->CloneAs<Widget>();
@@ -75,6 +75,7 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 

@@ -80,7 +80,7 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
-		OnDrawn();
+		IDrawable::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -88,6 +88,8 @@ namespace o2
 			child->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		for (auto child : mInternalWidgets)
 			child->Draw();
@@ -364,6 +366,8 @@ namespace o2
 
 	void ScrollArea::UpdateControls(float dt)
 	{
+		return;
+
 		auto cursor = o2Input.GetCursor(0);
 		if (cursor)
         {
@@ -564,6 +568,21 @@ namespace o2
 
 		CheckChildrenClipping();
 		UpdateScrollParams();
+	}
+
+	bool ScrollArea::IsUnderPoint(const Vec2F& point)
+	{
+		return Widget::IsUnderPoint(point);
+	}
+
+	bool ScrollArea::IsScrollable() const
+	{
+		return true;
+	}
+
+	bool ScrollArea::IsInputTransparent() const
+	{
+		return true;
 	}
 
 	void ScrollArea::MoveScrollPosition(const Vec2F& delta)
@@ -867,6 +886,17 @@ namespace o2
 
 	void ScrollArea::OnScrolled()
 	{}
+
+	void ScrollArea::OnScrolled(float scroll)
+	{
+		mScrollSpeed = Vec2F();
+
+		if (mVerScrollBar && mEnableVerScroll)
+			mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+		else if (mHorScrollBar && mEnableHorScroll)
+			mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+	}
+
 }
 
 DECLARE_CLASS(o2::ScrollArea);

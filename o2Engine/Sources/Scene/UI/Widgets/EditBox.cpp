@@ -19,7 +19,7 @@
 namespace o2
 {
 	EditBox::EditBox():
-		ScrollArea(), DrawableCursorEventsListener(this)
+		ScrollArea()
 	{
 		mSelectionMesh = mnew Mesh();
 		mTextDrawable  = mnew Text();
@@ -30,7 +30,7 @@ namespace o2
 		ScrollArea(other), mMultiLine(other.mMultiLine), mWordWrap(other.mWordWrap), mMaxLineChars(other.mMaxLineChars),
 		mMaxLinesCount(other.mMaxLinesCount), mText(other.mText), mLastText(other.mText),
 		mAvailableSymbols(other.mAvailableSymbols), mSelectionColor(other.mSelectionColor),
-		mCaretBlinkDelay(other.mCaretBlinkDelay), DrawableCursorEventsListener(this), text(this), caret(this),
+		mCaretBlinkDelay(other.mCaretBlinkDelay), text(this), caret(this),
 		selectionBegin(this), selectionEnd(this)
 	{
 		mSelectionMesh = mnew Mesh();
@@ -65,6 +65,7 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 

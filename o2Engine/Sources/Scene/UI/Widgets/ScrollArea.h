@@ -9,7 +9,7 @@ namespace o2
 	// -----------------------------------------------------
 	// Scrolling area with scrollbars and clipping rectangle
 	// -----------------------------------------------------
-	class ScrollArea: public Widget
+	class ScrollArea: public Widget, virtual public CursorAreaEventsListener
 	{
 	public:
 		PROPERTIES(ScrollArea);
@@ -111,6 +111,15 @@ namespace o2
 		// Updates children transforms, calculates scroll rectangle and updates scrollbars
 		void UpdateChildrenTransforms() override;
 
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point) override;
+
+		// Returns is listener scrollable
+		bool IsScrollable() const override;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 		SERIALIZABLE(ScrollArea);
 
 	protected:
@@ -167,6 +176,9 @@ namespace o2
 		// Moves widget's to delta and checks for clipping
 		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
 
+		// It is called when scrolling
+		void OnScrolled(float scroll) override;
+
 		// Updates mouse control
 		virtual void UpdateControls(float dt);
 
@@ -207,6 +219,7 @@ namespace o2
 CLASS_BASES_META(o2::ScrollArea)
 {
 	BASE_CLASS(o2::Widget);
+	BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(o2::ScrollArea)
@@ -271,12 +284,16 @@ CLASS_METHODS_META(o2::ScrollArea)
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);

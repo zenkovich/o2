@@ -84,7 +84,7 @@ namespace Editor
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
-		ScrollArea::OnDrawn();
+		IDrawable::OnDrawn();
 
 		if (!mTabState || mTabActive)
 		{
@@ -104,6 +104,8 @@ namespace Editor
 			mLeftBottomDragHandle.OnDrawn();
 			mRightBottomDragHandle.OnDrawn();
 			mHeadDragHandle.OnDrawn();
+
+			CursorAreaEventsListener::OnDrawn();
 
 			for (auto child : mInternalWidgets)
 				child->Draw();

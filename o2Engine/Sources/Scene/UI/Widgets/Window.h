@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "Scene/UI/Widgets/ScrollArea.h"
 #include "Events/CursorEventsArea.h"
@@ -13,7 +12,7 @@ namespace o2
 	// ----------------------------------------------------
 	// Window with caption, icon, options and close buttons
 	// ----------------------------------------------------
-	class Window: public ScrollArea, public DrawableCursorEventsListener
+	class Window: public ScrollArea
 	{
 	public:
 		PROPERTIES(Window);
@@ -168,7 +167,6 @@ namespace o2
 CLASS_BASES_META(o2::Window)
 {
 	BASE_CLASS(o2::ScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(o2::Window)

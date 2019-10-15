@@ -100,6 +100,12 @@ namespace Editor
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns is listener scrollable
+		bool IsScrollable() const override;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 		SERIALIZABLE(AssetsIconsScrollArea);
 
 	protected:
@@ -171,6 +177,9 @@ namespace Editor
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+
+		// It is called when scrolling
+		void OnScrolled(float scroll) override;
 
 		// It is called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
@@ -398,6 +407,8 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FUNCTION(Sprite*, GetSelectingDrawable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
@@ -407,6 +418,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnAssetsSelected);
 	PROTECTED_FUNCTION(void, UpdateCuttingAssets);

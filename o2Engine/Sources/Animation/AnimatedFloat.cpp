@@ -293,7 +293,7 @@ namespace o2
 		float eventCheckEnd = Math::Max(lastInDurationTime, mInDurationTime);
 		for (auto& kv : mTimeEvents)
 		{
-			if (kv.Key() > eventCheckBeg && kv.Value() <= eventCheckEnd)
+			if (kv.Key() > eventCheckBeg && kv.Key() <= eventCheckEnd)
 				kv.Value().Invoke();
 		}
 	}

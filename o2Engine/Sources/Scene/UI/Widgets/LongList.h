@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Events/DrawableCursorEventsListener.h"
 #include "Render/Sprite.h"
 #include "ScrollArea.h"
 #include "Scene/UI/Widgets/VerticalLayout.h"
@@ -10,7 +9,7 @@ namespace o2
 	// ---------------------------------------------
 	// List view widget with selection and many data
 	// ---------------------------------------------
-	class LongList: public ScrollArea, public DrawableCursorEventsListener
+	class LongList: public ScrollArea
 	{
 	public:
 		typedef Vector<UnknownType*> UnknownsVec;
@@ -174,7 +173,6 @@ namespace o2
 CLASS_BASES_META(o2::LongList)
 {
 	BASE_CLASS(o2::ScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(o2::LongList)

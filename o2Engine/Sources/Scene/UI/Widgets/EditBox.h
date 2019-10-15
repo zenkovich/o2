@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Events/CursorEventsListener.h"
-#include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Render/Mesh.h"
 #include "Render/Sprite.h"
@@ -13,7 +12,7 @@ namespace o2
 	// --------------------
 	// Text edit box widget
 	// --------------------
-	class EditBox: public ScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class EditBox: public ScrollArea, public KeyboardEventsListener
 	{
 	public:
 		PROPERTIES(EditBox);
@@ -290,7 +289,6 @@ namespace o2
 CLASS_BASES_META(o2::EditBox)
 {
 	BASE_CLASS(o2::ScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;

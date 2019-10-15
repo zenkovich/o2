@@ -402,6 +402,16 @@ namespace Editor
 		UpdateAssetsGridSize();
 	}
 
+	bool AssetsIconsScrollArea::IsScrollable() const
+	{
+		return ScrollArea::IsScrollable();
+	}
+
+	bool AssetsIconsScrollArea::IsInputTransparent() const
+	{
+		return ScrollArea::IsInputTransparent();
+	}
+
 	void AssetsIconsScrollArea::UpdateCuttingAssets()
 	{
 		for (auto child : mGrid->GetChildWidgets())
@@ -675,6 +685,11 @@ namespace Editor
 
 		o2UI.FocusWidget(this);
 		mContextMenu->Show();
+	}
+
+	void AssetsIconsScrollArea::OnScrolled(float scroll)
+	{
+		ScrollArea::OnScrolled(scroll);
 	}
 
 	void AssetsIconsScrollArea::OnKeyReleased(const Input::Key& key)

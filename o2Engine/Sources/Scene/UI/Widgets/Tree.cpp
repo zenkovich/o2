@@ -978,6 +978,11 @@ namespace o2
 		mIsNeedUdateLayout = false;
 	}
 
+	bool Tree::IsInputTransparent() const
+	{
+		return ScrollArea::IsInputTransparent();
+	}
+
 	void Tree::UpdateVisibleNodes()
 	{
 		mIsNeedUpdateVisibleNodes = false;
@@ -1439,6 +1444,11 @@ namespace o2
 			hoverState->SetState(false);
 		else
 			mHoverDrawable->SetEnabled(false);
+	}
+
+	void Tree::OnScrolled(float scroll)
+	{
+		ScrollArea::OnScrolled(scroll);
 	}
 
 	TreeNode* Tree::GetTreeNodeUnderPoint(const Vec2F& point)

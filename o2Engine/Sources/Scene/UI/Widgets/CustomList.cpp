@@ -14,7 +14,7 @@
 namespace o2
 {
 	CustomList::CustomList():
-		ScrollArea(), DrawableCursorEventsListener(this)
+		ScrollArea()
 	{
 		mItemSample = mnew Widget();
 		mItemSample->ExcludeFromScene();
@@ -37,7 +37,7 @@ namespace o2
 	}
 
 	CustomList::CustomList(const CustomList& other):
-		ScrollArea(other), DrawableCursorEventsListener(this), mHoverLayout(other.mHoverLayout),
+		ScrollArea(other), mHoverLayout(other.mHoverLayout),
 		mSelectionLayout(other.mSelectionLayout), selectedItem(this), selectedItems(this),
 		selectedItemPos(this), itemsCount(this)
 	{
@@ -93,6 +93,7 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 

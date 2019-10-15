@@ -15,14 +15,14 @@
 namespace o2
 {
 	Window::Window():
-		ScrollArea(), DrawableCursorEventsListener(this)
+		ScrollArea()
 	{
 		InitializeHandles();
 		InitializeContextMenu();
 	}
 
 	Window::Window(const Window& other):
-		ScrollArea(other), DrawableCursorEventsListener(this), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
+		ScrollArea(other), mHeadDragAreaLayout(other.mHeadDragAreaLayout),
 		mTopDragAreaLayout(other.mTopDragAreaLayout), mBottomDragAreaLayout(other.mBottomDragAreaLayout),
 		mLeftDragAreaLayout(other.mLeftDragAreaLayout), mRightDragAreaLayout(other.mRightDragAreaLayout),
 		mLeftTopDragAreaLayout(other.mLeftTopDragAreaLayout), mRightTopDragAreaLayout(other.mRightTopDragAreaLayout),
@@ -58,7 +58,8 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
-		ScrollArea::OnDrawn();
+		IDrawable::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 

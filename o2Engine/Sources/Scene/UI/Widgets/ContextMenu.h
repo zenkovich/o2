@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Assets/ImageAsset.h"
-#include "Events/DrawableCursorEventsListener.h"
 #include "Events/KeyboardEventsListener.h"
 #include "Events/ShortcutKeysListener.h"
 #include "Scene/UI/Widgets/ScrollArea.h"
@@ -101,7 +100,7 @@ namespace o2
 	// -----------------------
 	// Context menu ui element
 	// -----------------------
-	class ContextMenu: public ScrollArea, public DrawableCursorEventsListener, public KeyboardEventsListener
+	class ContextMenu: public ScrollArea, public KeyboardEventsListener
 	{
 	public:
 		// ---------
@@ -263,29 +262,29 @@ namespace o2
 		SERIALIZABLE(ContextMenu);
 
 	protected:
-		static ContextMenu* mVisibleContextMenu;           // Current visible context menu
-		const float           mOpenSubMenuDelay = 0.8f;      // Sub menu opengin delay whe cursor hover it
+		static ContextMenu* mVisibleContextMenu;      // Current visible context menu
+		const float         mOpenSubMenuDelay = 0.8f; // Sub menu opengin delay whe cursor hover it
 
-		float                 mFitSizeMin = 40.0f;           // Minimal fitting size @SERIALIZABLE
-		int                   mMaxVisibleItems = 100;        // Maximum visible items @SERIALIZABLE
+		float mFitSizeMin = 40.0f;    // Minimal fitting size @SERIALIZABLE
+		int   mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
 
-		ContextMenu*        mParentContextMenu = nullptr;  // Parent visible context menu
-		ContextMenu*        mChildContextMenu = nullptr;	 // Child visible context menu
+		ContextMenu* mParentContextMenu = nullptr; // Parent visible context menu
+		ContextMenu* mChildContextMenu = nullptr;  // Child visible context menu
 
-		VerticalLayout*     mItemsLayout = nullptr;        // Items layout
-		ContextMenuItem*    mItemSample = nullptr;         // Item sample @SERIALIZABLE
-		Widget*             mSeparatorSample = nullptr;    // Items separator sample @SERIALIZABLE
-		Sprite*               mSelectionDrawable = nullptr;  // Selection sprite @SERIALIZABLE
-		Layout                mSelectionLayout;              // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		VerticalLayout*  mItemsLayout = nullptr;       // Items layout
+		ContextMenuItem* mItemSample = nullptr;        // Item sample @SERIALIZABLE
+		Widget*          mSeparatorSample = nullptr;   // Items separator sample @SERIALIZABLE
+		Sprite*          mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
+		Layout           mSelectionLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
-		RectF                 mCurrentSelectionRect;         // Current selection rectangle (for smoothing)
-		RectF                 mTargetSelectionRect;          // Target selection rectangle (over selected item)
-		Vec2F                 mLastSelectCheckCursor;        // Last cursor position on selection check
+		RectF mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
+		RectF mTargetSelectionRect;   // Target selection rectangle (over selected item)
+		Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-		ContextMenuItem*    mSelectedItem = nullptr;       // Index of selected item
-		float                 mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
+		ContextMenuItem* mSelectedItem = nullptr;       // Index of selected item
+		float            mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
-		bool                  mShownAtFrame = false;         // Is context was shown at current frame
+		bool mShownAtFrame = false; // Is context was shown at current frame
 
 	protected:
 		// Copies data of actor from other to this
@@ -390,7 +389,6 @@ END_META;
 CLASS_BASES_META(o2::ContextMenu)
 {
 	BASE_CLASS(o2::ScrollArea);
-	BASE_CLASS(o2::DrawableCursorEventsListener);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;

@@ -50,7 +50,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu():
-		ScrollArea(), DrawableCursorEventsListener(this)
+		ScrollArea()
 	{
 		mItemSample = mnew ContextMenuItem();
 		mItemSample->ExcludeFromScene();
@@ -87,7 +87,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(const ContextMenu& other):
-		ScrollArea(other), DrawableCursorEventsListener(this), mMaxVisibleItems(other.mMaxVisibleItems)
+		ScrollArea(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample        = other.mItemSample->CloneAs<ContextMenuItem>();
 		mItemSample->ExcludeFromScene();
@@ -805,6 +805,7 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
