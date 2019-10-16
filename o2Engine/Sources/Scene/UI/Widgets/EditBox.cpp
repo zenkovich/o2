@@ -65,7 +65,6 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -79,6 +78,8 @@ namespace o2
 			child->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
@@ -359,9 +360,6 @@ namespace o2
 		return true;
 	}
 
-	void EditBox::UpdateControls(float dt)
-	{}
-
 	void EditBox::OnResEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
@@ -516,14 +514,6 @@ namespace o2
 
 	void EditBox::OnCursorRightMouseReleased(const Input::Cursor& cursor)
 	{}
-
-	void EditBox::OnScrolled(float scroll)
-	{
-		if (mVerScrollBar && mEnableVerScroll)
-			mVerScrollBar->OnScrolled(scroll);
-		else if (mHorScrollBar && mEnableVerScroll)
-			mHorScrollBar->OnScrolled(scroll);
-	}
 
 	void EditBox::OnKeyPressed(const Input::Key& key)
 	{

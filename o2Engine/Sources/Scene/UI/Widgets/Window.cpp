@@ -59,7 +59,6 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -67,6 +66,8 @@ namespace o2
 			child->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		mHeadDragHandle.OnDrawn();
 		mTopDragHandle.OnDrawn();

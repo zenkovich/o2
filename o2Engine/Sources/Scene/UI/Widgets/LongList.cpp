@@ -75,7 +75,6 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -86,6 +85,8 @@ namespace o2
 		mHoverDrawable->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
@@ -195,9 +196,6 @@ namespace o2
 		float itemsHeight = (float)getItemsCountFunc()*mItemSample->layout->GetMinimalHeight();
 		RecalculateScrollAreaRect(RectF(0, mAbsoluteViewArea.Height(), mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height() - itemsHeight), Vec2F());
 	}
-
-	void LongList::UpdateControls(float dt)
-	{}
 
 	void LongList::UpdateSelfTransform()
 {
@@ -377,14 +375,6 @@ namespace o2
 			*hoverState = false;
 		else
 			mHoverDrawable->SetEnabled(false);
-	}
-
-	void LongList::OnScrolled(float scroll)
-	{
-		if (mVerScrollBar && mEnableVerScroll)
-			mVerScrollBar->OnScrolled(scroll);
-		else if (mHorScrollBar && mEnableVerScroll)
-			mHorScrollBar->OnScrolled(scroll);
 	}
 
 	Widget* LongList::GetItemUnderPoint(const Vec2F& point, int* idxPtr)

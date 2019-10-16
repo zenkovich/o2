@@ -131,6 +131,9 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 		// Updates layout
 		void UpdateSelfTransform() override;
 
@@ -186,9 +189,6 @@ namespace o2
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
 
-		// Updates mouse control
-		void UpdateControls(float dt) override;
-
 		// It is called when transformation was changed and updated
 		void OnTransformUpdated() override;
 
@@ -218,9 +218,6 @@ namespace o2
 
 		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
-
-		// It is called when scrolling
-		void OnScrolled(float scroll) override;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
 		Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
@@ -301,12 +298,12 @@ CLASS_METHODS_META(o2::CustomList)
 	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
@@ -317,7 +314,6 @@ CLASS_METHODS_META(o2::CustomList)
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(Sprite*, GetSelectionSprite);

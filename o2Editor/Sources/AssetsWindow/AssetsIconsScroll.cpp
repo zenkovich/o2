@@ -107,7 +107,6 @@ namespace Editor
 			layer->Draw();
 
 		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -121,6 +120,8 @@ namespace Editor
 			mHightlightSprite->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();

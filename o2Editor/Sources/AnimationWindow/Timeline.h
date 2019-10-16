@@ -19,7 +19,7 @@ namespace Editor
 	// ------------------------------------
 	// Draws time scale in animation window
 	// ------------------------------------
-	class AnimationTimeline : public Widget
+	class AnimationTimeline : public Widget, public CursorAreaEventsListener
 	{
 	public:
 		Function<void()> onViewChanged; // it is called when scroll or zoom were changed
@@ -82,6 +82,15 @@ namespace Editor
 		// Checks is this timeA and timeB are same on screen. Dependent on zoom, thershold - max pixels distance on screen
 		bool IsSameTime(float timeA, float timeB, float threshold = 1.7f) const;
 
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point) override;
+
+		// Returns is listener scrollable
+		bool IsScrollable() const override;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 		SERIALIZABLE(AnimationTimeline);
 
 	private:
@@ -117,6 +126,7 @@ namespace Editor
 
 		float mViewZoom = 1.0f;       // Time scale zoom
 		float mSmoothViewZoom = 1.0f; // Smoothed and animated time scale zoom
+		bool  mViewHasZoomed = false;          // True when area has scrolled at this frame, resets to false on update
 
 		bool mViewMoveDisabled = false; // Is moving and zooming view disabled. It is disabling when editor has switched to curves edit mode
 
@@ -161,6 +171,18 @@ namespace Editor
 		// Sets animation time by cursor screen position
 		void SetAnimationTimeByCursor(const Input::Cursor& cursor);
 
+		// It is called when right mouse button was pressed on this, begin scrolling
+		void OnCursorRightMousePressed(const Input::Cursor& cursor) override;
+
+		// It is called when right mouse button stay down on this, scrolling
+		void OnCursorRightMouseStayDown(const Input::Cursor& cursor) override;
+
+		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), ends scrolling
+		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
+
+		// It is called when scrolling
+		void OnScrolled(float scroll) override;
+
 		friend class AnimationWindow;
 	};
 }
@@ -168,6 +190,7 @@ namespace Editor
 CLASS_BASES_META(Editor::AnimationTimeline)
 {
 	BASE_CLASS(o2::Widget);
+	BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTimeline)
@@ -197,6 +220,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mViewScrollSpeed);
 	PRIVATE_FIELD(mViewZoom);
 	PRIVATE_FIELD(mSmoothViewZoom);
+	PRIVATE_FIELD(mViewHasZoomed);
 	PRIVATE_FIELD(mViewMoveDisabled);
 	PRIVATE_FIELD(mDuration);
 	PRIVATE_FIELD(mTextFont);
@@ -228,6 +252,9 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(void, SetScrollBar, HorizontalScrollBar*);
 	PUBLIC_FUNCTION(HorizontalScrollBar*, GetScrollBar);
 	PUBLIC_FUNCTION(bool, IsSameTime, float, float, float);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PRIVATE_FUNCTION(void, UpdateDuration);
 	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);
@@ -236,5 +263,9 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PRIVATE_FUNCTION(void, UpdateScrollBarHandleSize);
 	PRIVATE_FUNCTION(void, OnTransformUpdated);
 	PRIVATE_FUNCTION(void, SetAnimationTimeByCursor, const Input::Cursor&);
+	PRIVATE_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
+	PRIVATE_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
+	PRIVATE_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	PRIVATE_FUNCTION(void, OnScrolled, float);
 }
 END_META;

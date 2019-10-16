@@ -180,9 +180,6 @@ namespace o2
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
 
-		// Updates mouse control
-		virtual void UpdateControls(float dt);
-
 		// Moves scroll position and updates children widgets clipping and layout
 		virtual void MoveScrollPosition(const Vec2F& delta);
 
@@ -296,7 +293,6 @@ CLASS_METHODS_META(o2::ScrollArea)
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);
 	PROTECTED_FUNCTION(void, RecalculateScrollAreaRect, const RectF&, const Vec2F&);

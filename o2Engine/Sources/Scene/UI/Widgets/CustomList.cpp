@@ -93,7 +93,6 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
-		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -106,6 +105,8 @@ namespace o2
 		mHoverDrawable->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		for (auto layer : mTopDrawingLayers)
 			layer->Draw();
@@ -369,15 +370,17 @@ namespace o2
 		return mEnableHorScroll || mEnableVerScroll;
 	}
 
+	bool CustomList::IsInputTransparent() const
+	{
+		return false;
+	}
+
 	void CustomList::MoveScrollPosition(const Vec2F& delta)
 	{
 		ScrollArea::MoveScrollPosition(delta);
 		UpdateHover(o2Input.GetCursorPos());
 		UpdateSelectionSprites();
 	}
-
-	void CustomList::UpdateControls(float dt)
-	{}
 
 	void CustomList::OnTransformUpdated()
 	{
@@ -582,14 +585,6 @@ namespace o2
 		sprite->SetTransparency(1.0f);
 
 		return sprite;
-	}
-
-	void CustomList::OnScrolled(float scroll)
-	{
-		if (mVerScrollBar && mEnableVerScroll)
-			mVerScrollBar->OnScrolled(scroll);
-		else if (mHorScrollBar && mEnableVerScroll)
-			mHorScrollBar->OnScrolled(scroll);
 	}
 
 	void CustomList::OnSelectionChanged()

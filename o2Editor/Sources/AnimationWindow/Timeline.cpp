@@ -28,7 +28,7 @@ namespace Editor
 
 		mTimeLine = mnew Sprite("ui/UI4_time_line.png");
 
-		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) { 
+		mTimeLineEventsArea.isUnderPoint = [&](const Vec2F& pos) {
 			auto rect = layout->GetWorldRect();
 			rect.bottom = rect.top - 20.0f;
 
@@ -43,7 +43,7 @@ namespace Editor
 		Widget(other), mTextFont(other.mTextFont), mText(other.mText->CloneAs<Text>()),
 		mBeginMark(other.mBeginMark->CloneAs<Sprite>()), mEndMark(other.mEndMark->CloneAs<Sprite>()),
 		mTimeLine(other.mTimeLine->CloneAs<Sprite>())
-	{}
+	{ }
 
 	AnimationTimeline::~AnimationTimeline()
 	{
@@ -84,6 +84,8 @@ namespace Editor
 		mTimeLine->Draw();
 
 		o2Render.DisableScissorTest();
+
+		CursorAreaEventsListener::OnDrawn();
 
 		mTimeLineEventsArea.OnDrawn();
 	}
@@ -142,7 +144,7 @@ namespace Editor
 	void AnimationTimeline::Update(float dt)
 	{
 		Widget::Update(dt);
-		
+
 		UpdateZooming(dt);
 		UpdateScrolling(dt);
 	}
@@ -157,11 +159,7 @@ namespace Editor
 			onViewChanged();
 		}
 
-		if (!mViewMoveDisabled)
-		{
-			if (IsUnderPoint(o2Input.GetCursorPos()) && !Math::Equals(0.0f, o2Input.GetMouseWheelDelta()) && o2Input.IsKeyDown(VK_CONTROL))
-				mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
-		}
+		mViewHasZoomed = false;
 	}
 
 	void AnimationTimeline::UpdateScrollBarHandleSize()
@@ -191,6 +189,52 @@ namespace Editor
 		if (cursor.isPressed && mAnimationWindow->mAnimation) {
 			mAnimation->Stop();
 			mAnimation->SetTime(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
+		}
+	}
+
+	void AnimationTimeline::OnCursorRightMousePressed(const Input::Cursor& cursor)
+	{
+		if (!mViewMoveDisabled)
+		{
+			mBeginDragViewScrollOffset = WorldToLocal(cursor.position.x);
+			mDragViewScroll = true;
+		}
+	}
+
+	void AnimationTimeline::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
+	{
+		if (mDragViewScroll)
+		{
+			mViewScroll -= WorldToLocal(cursor.position.x) - mBeginDragViewScrollOffset;
+
+			if (mViewScroll < 0.0f)
+				mViewScroll = mViewScroll/2.0f;
+
+			if (mViewScroll > mDuration)
+				mViewScroll = Math::Lerp(mDuration, mViewScroll, 0.5f);
+
+			mSmoothViewScroll = mViewScroll;
+
+			if (mScrollBar)
+				mScrollBar->SetValueForcible(mSmoothViewScroll);
+		}
+	}
+
+	void AnimationTimeline::OnCursorRightMouseReleased(const Input::Cursor& cursor)
+	{
+		if (mDragViewScroll)
+		{
+			mViewScrollSpeed = -cursor.delta.x/o2Time.GetDeltaTime()/(mOneSecondDefaultSize*mSmoothViewZoom);
+			mDragViewScroll = false;
+		}
+	}
+
+	void AnimationTimeline::OnScrolled(float scroll)
+	{
+		if (!mViewMoveDisabled)
+		{
+			mViewZoom = Math::Clamp(mViewZoom/(1.0f - o2Input.GetMouseWheelDelta()*mScaleSense), mMinScale, mMaxScale);
+			mViewHasZoomed = true;
 		}
 	}
 
@@ -227,34 +271,6 @@ namespace Editor
 	void AnimationTimeline::UpdateScrolling(float dt)
 	{
 		float prevViewScroll = mSmoothViewScroll;
-
-		if (!mViewMoveDisabled && IsUnderPoint(o2Input.GetCursorPos()) && o2Input.IsRightMousePressed())
-		{
-			mBeginDragViewScrollOffset = WorldToLocal(o2Input.GetCursorPos().x);
-			mDragViewScroll = true;
-		}
-
-		if (o2Input.IsRightMouseReleased() && mDragViewScroll)
-		{
-			mViewScrollSpeed = -o2Input.GetCursorDelta().x/dt/(mOneSecondDefaultSize*mSmoothViewZoom);
-			mDragViewScroll = false;
-		}
-
-		if (mDragViewScroll)
-		{
-			mViewScroll -= WorldToLocal(o2Input.GetCursorPos().x) - mBeginDragViewScrollOffset;
-
-			if (mViewScroll < 0.0f)
-				mViewScroll = mViewScroll/2.0f;
-
-			if (mViewScroll > mDuration)
-				mViewScroll = Math::Lerp(mDuration, mViewScroll, 0.5f);
-
-			mSmoothViewScroll = mViewScroll;
-
-			if (mScrollBar)
-				mScrollBar->SetValueForcible(mSmoothViewScroll);
-		}
 
 		if (!mDragViewScroll && Math::Abs(mViewScrollSpeed) > 0.0001f)
 		{
@@ -367,6 +383,21 @@ namespace Editor
 	bool AnimationTimeline::IsSameTime(float timeA, float timeB, float threshold /*= 1.7f*/) const
 	{
 		return Math::Abs(LocalToWorld(timeA) - LocalToWorld(timeB)) < threshold;
+	}
+
+	bool AnimationTimeline::IsUnderPoint(const Vec2F& point)
+	{
+		return Widget::IsUnderPoint(point);
+	}
+
+	bool AnimationTimeline::IsScrollable() const
+	{
+		return true;
+	}
+
+	bool AnimationTimeline::IsInputTransparent() const
+	{
+		return !mViewHasZoomed && !mDragViewScroll;
 	}
 
 }

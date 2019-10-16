@@ -34,6 +34,7 @@ namespace o2
 	void Debug::InitializeFont()
 	{
 		mFont = mnew VectorFont(o2Assets.GetDataPath() + "debugFont.ttf");
+		mFont->AddEffect<FontStrokeEffect>();
 		mText = mnew Text(FontRef(mFont));
 	}
 

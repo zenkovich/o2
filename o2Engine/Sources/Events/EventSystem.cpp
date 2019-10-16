@@ -186,7 +186,7 @@ namespace o2
 			if (!mUnderCursorListeners.ContainsKey(cursor.id))
 				mUnderCursorListeners.Add(cursor.id, {});
 
-			mUnderCursorListeners[cursor.id].Insert(listener, 0);
+			mUnderCursorListeners[cursor.id].Add(listener);
 
 			if (!listener->IsInputTransparent())
 				return;

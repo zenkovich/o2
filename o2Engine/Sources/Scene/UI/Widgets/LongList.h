@@ -123,9 +123,6 @@ namespace o2
 		// Calculates scroll area
 		void CalculateScrollArea() override;
 
-		// Updates mouse control
-		void UpdateControls(float dt) override;
-
 		// Moves scroll position and updates children widgets clipping and layout
 		void MoveScrollPosition(const Vec2F& delta) override;
 
@@ -149,9 +146,6 @@ namespace o2
 
 		// It is called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
-
-		// It is called when scrolling
-		void OnScrolled(float scroll) override;
 
 		// Returns item widget under point and stores index in idxPtr, if not null
 		Widget* GetItemUnderPoint(const Vec2F& point, int* idxPtr);
@@ -222,7 +216,6 @@ CLASS_METHODS_META(o2::LongList)
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateVisibleItems);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -231,7 +224,6 @@ CLASS_METHODS_META(o2::LongList)
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
 	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
 	PROTECTED_FUNCTION(void, UpdateSelection, int);

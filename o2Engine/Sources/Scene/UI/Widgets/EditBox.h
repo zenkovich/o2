@@ -197,9 +197,6 @@ namespace o2
 		// It is called when widget was deselected
 		void OnUnfocused() override;
 
-		// Updates mouse control
-		void UpdateControls(float dt) override;
-
 		// Updates scroll parameters: clip area, scroll size
 		void UpdateScrollParams() override;
 
@@ -229,9 +226,6 @@ namespace o2
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time)
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
-
-		// It is called when scrolling
-		void OnScrolled(float scroll) override;
 
 		// It is called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
@@ -368,7 +362,6 @@ CLASS_METHODS_META(o2::EditBox)
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
-	PROTECTED_FUNCTION(void, UpdateControls, float);
 	PROTECTED_FUNCTION(void, UpdateScrollParams);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
@@ -379,7 +372,6 @@ CLASS_METHODS_META(o2::EditBox)
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);

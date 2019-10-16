@@ -36,12 +36,16 @@ namespace Editor
 	{
 		mWindow = dynamic_cast<Window*>(EditorUIRoot.AddWidget(o2UI.CreateWindow("Animation properties")));
 		mWindow->SetClippingLayout(Layout::BothStretch(-1, -2, 0, 17));
+		mWindow->SetViewLayout(Layout::BothStretch(-2, -2, 0, 20));
 		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 
+		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
+		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
+
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";
-		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, -5, -5, 20, -1);
+		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, -1);
 		upPanel->AddLayer("back", mnew Sprite("ui/UI4_square_field.png"), Layout::BothStretch(-4, -4, -5, -5));
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
@@ -57,7 +61,7 @@ namespace Editor
 		mWindow->AddChild(upPanel);
 
 		mPropertiesTree = o2UI.CreateWidget<AnimationPropertiesTree>();
-		*mPropertiesTree->layout = WidgetLayout::BothStretch(-7, -7, -5, 17);
+		*mPropertiesTree->layout = WidgetLayout::BothStretch(0, 0, 0, 17);
 		mPropertiesTree->SetRearrangeType(Tree::RearrangeType::Disabled);
 
 		mWindow->AddChild(mPropertiesTree);
@@ -292,8 +296,8 @@ namespace Editor
 		mData = data;
 		mTree = tree;
 
-		mAddButton->enabled = !data->used && data->children.IsEmpty();
-		mRemoveButton->enabled = data->used && data->children.IsEmpty();
+		mAddButton->SetEnableForcible(!data->used && data->children.IsEmpty());
+		mRemoveButton->SetEnableForcible(data->used && data->children.IsEmpty());
 	}
 
 	void AnimationPropertiesTreeNode::CopyData(const Actor& otherActor)
