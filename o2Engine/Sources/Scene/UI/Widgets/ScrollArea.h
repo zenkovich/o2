@@ -138,6 +138,7 @@ namespace o2
 		RectF  mAbsoluteClipArea;                       // Clipping area
 
 		Vec2F mScrollPos;               // Scroll position @SERIALIZABLE
+		bool  mHasScrolled = false;     // True when area has scrolled at this frame, resets to false on update
 		Vec2F mScrollSpeed;             // Scrolling speed
 		float mScrollSpeedDamp = 7.0f;  // Scroll speed damping  @SERIALIZABLE
 		RectF mScrollArea;              // Maximum scroll area size
@@ -238,6 +239,7 @@ CLASS_FIELDS_META(o2::ScrollArea)
 	PROTECTED_FIELD(mClipAreaLayout).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAbsoluteClipArea);
 	PROTECTED_FIELD(mScrollPos).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHasScrolled);
 	PROTECTED_FIELD(mScrollSpeed);
 	PROTECTED_FIELD(mScrollSpeedDamp).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mScrollArea);

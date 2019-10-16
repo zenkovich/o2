@@ -186,7 +186,7 @@ namespace o2
 			if (!mUnderCursorListeners.ContainsKey(cursor.id))
 				mUnderCursorListeners.Add(cursor.id, {});
 
-			mUnderCursorListeners[cursor.id].Add(listener);
+			mUnderCursorListeners[cursor.id].Insert(listener, 0);
 
 			if (!listener->IsInputTransparent())
 				return;
@@ -495,6 +495,9 @@ namespace o2
 			{
 				for (auto listener : kv.Value())
 				{
+					if (!listener->IsScrollable())
+						continue;
+
 					listener->OnScrolled(scroll);
 
 					if (!listener->IsInputTransparent())

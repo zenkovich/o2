@@ -81,6 +81,7 @@ namespace o2
 			layer->Draw();
 
 		IDrawable::OnDrawn();
+		CursorAreaEventsListener::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -88,8 +89,6 @@ namespace o2
 			child->Draw();
 
 		o2Render.DisableScissorTest();
-
-		CursorAreaEventsListener::OnDrawn();
 
 		for (auto child : mInternalWidgets)
 			child->Draw();
@@ -102,6 +101,8 @@ namespace o2
 
 	void ScrollArea::Update(float dt)
 	{
+		mHasScrolled = false;
+
 		mLayoutUpdated = layout->IsDirty();
 
 		Widget::Update(dt);
@@ -582,7 +583,7 @@ namespace o2
 
 	bool ScrollArea::IsInputTransparent() const
 	{
-		return true;
+		return !mHasScrolled;
 	}
 
 	void ScrollArea::MoveScrollPosition(const Vec2F& delta)
@@ -892,9 +893,19 @@ namespace o2
 		mScrollSpeed = Vec2F();
 
 		if (mVerScrollBar && mEnableVerScroll)
+		{
+			float prevScroll = mVerScrollBar->GetValue();
 			mVerScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+
+			mHasScrolled = !Math::Equals(prevScroll, mVerScrollBar->GetValue());
+		}
 		else if (mHorScrollBar && mEnableHorScroll)
+		{
+			float prevScroll = mHorScrollBar->GetValue();
 			mHorScrollBar->OnScrolled(o2Input.GetMouseWheelDelta());
+
+			mHasScrolled = !Math::Equals(prevScroll, mHorScrollBar->GetValue());
+		}
 	}
 
 }
