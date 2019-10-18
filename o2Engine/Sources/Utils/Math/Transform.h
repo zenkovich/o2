@@ -34,6 +34,7 @@ namespace o2
 		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property
 		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Left top corner property
 		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Left top corner property
+		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center property
 
 		PROPERTY(Vec2F, right, SetRight, GetRight); // X Axis direction property
 		PROPERTY(Vec2F, left, SetLeft, GetLeft);    // Negative X Axis direction property
@@ -260,6 +261,7 @@ CLASS_FIELDS_META(o2::Transform)
 	PUBLIC_FIELD(leftBottom);
 	PUBLIC_FIELD(rightTop);
 	PUBLIC_FIELD(rightBottom);
+	PUBLIC_FIELD(center);
 	PUBLIC_FIELD(right);
 	PUBLIC_FIELD(left);
 	PUBLIC_FIELD(up);

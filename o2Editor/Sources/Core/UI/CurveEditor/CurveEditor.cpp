@@ -106,6 +106,13 @@ namespace Editor
 	void CurveEditor::Update(float dt)
 	{
 		FrameScrollView::Update(dt);
+
+		if (mReady && mResEnabledInHierarchy && !mIsClipped && mNeedAdjustView)
+		{
+			mNeedAdjustView = false;
+			mViewCameraTargetScale = mAvailableArea.Size()/mViewCamera.GetSize();
+			mViewCamera.center = mAvailableArea.Center();
+		}
 	}
 
 	Dictionary<String, Curve*> CurveEditor::GetCurves() const
@@ -145,7 +152,7 @@ namespace Editor
 		RecalculateViewArea();
 
 		if (mCurves.Count() == 1)
-			mViewCameraTargetScale = mAvailableArea.Size()/mViewCamera.GetSize();
+			mNeedAdjustView = true;
 	}
 
 	void CurveEditor::RemoveCurve(Curve* curve)

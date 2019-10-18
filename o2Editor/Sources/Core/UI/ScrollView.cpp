@@ -119,6 +119,8 @@ namespace Editor
 
 	void ScrollView::OnTransformUpdated()
 	{
+		Widget::OnTransformUpdated();
+
 		if (!mReady)
 			return;
 

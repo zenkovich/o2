@@ -221,6 +221,8 @@ namespace Editor
 		Basis        mTransformFrameBasis;           // Basis of transform frame in local space
 								 							   	    
 		bool mIsViewScrolling = false; // Is scrolling view at this time
+
+		bool mNeedAdjustView = false; // True when need to adjust view scale. This works in update
 							    
 		CurveKeysInfosVec mBeforeTransformKeys; // Stored selected keys before handles transformed
 
@@ -418,6 +420,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mTransformFrameVisible);
 	PROTECTED_FIELD(mTransformFrameBasis);
 	PROTECTED_FIELD(mIsViewScrolling);
+	PROTECTED_FIELD(mNeedAdjustView);
 	PROTECTED_FIELD(mBeforeTransformKeys);
 	PROTECTED_FIELD(mActionsList);
 }

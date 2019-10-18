@@ -6,6 +6,7 @@
 #include "AnimationWindow/AnimationWindow.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/Tree.h"
+#include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayout.h"
 
 namespace Editor
@@ -74,6 +75,10 @@ namespace Editor
 	{
 		mEditor = mnew CurveEditor();
 		*mEditor->layout = WidgetLayout::BothStretch();
+
+		auto verScroll = o2UI.CreateVerScrollBar();
+		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, 0);
+		mEditor->SetVerScrollbar(verScroll);
 
 		mEditor->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),
 										   ImageAssetRef("ui/CurveHandleHover.png"),
