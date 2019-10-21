@@ -66,6 +66,9 @@ namespace o2
 		// Draws handle
 		void Draw();
 
+		// Draws handle with clipping check
+		void Draw(const RectF& screenClipRect);
+
 		// Returns true if point is above this
 		bool IsUnderPoint(const Vec2F& point);
 
@@ -74,6 +77,9 @@ namespace o2
 
 		// Returns handle screen position, transformed from position with localToScreenTransformFunc
 		const Vec2F& GetScreenPosition() const;
+
+		// Updates screen position from position with localToScreenTransformFunc
+		virtual void UpdateScreenPosition();
 
 		// Sets drag position of handle, updates handle final position after position checking
 		void SetDragPosition(const Vec2F& position);
@@ -187,10 +193,11 @@ namespace o2
 
 		bool   mEnabled = true; // Is handle enabled. Disabled handle don't drawn and interact
 
-		Vec2F  mPosition;                // Current handle position, checked by checkPositionFunc
-		Vec2F  mScreenPosition;          // Handle screen position, transformed from mPosition with localToScreenTransformFunc
-		Vec2F  mLastDrawnScreenPosition; // Handle screen position on last draw
-		float  mAngle = 0.0f;            // Handle rotation angle in radians
+		Vec2F  mPosition;                      // Current handle position, checked by checkPositionFunc
+		Vec2F  mScreenPosition;                // Handle screen position, transformed from mPosition with localToScreenTransformFunc
+		Vec2F  mLastDrawnScreenPosition;       // Handle screen position on last draw
+		int    mLastScreenPosUpdateFrame = -1; // Last screen position update frame index
+		float  mAngle = 0.0f;                  // Handle rotation angle in radians
 
 		Vec2F  mDragOffset;        // Dragging offset from cursor in local space to center
 		Vec2F  mDragPosition;      // Current drag handle position
@@ -207,6 +214,9 @@ namespace o2
 		float  mDragDistanceThreshold = 3.0f; // Drag distance threshold: object starts dragging when cursor moves more tan this distance
 
 	protected:
+		// Draws internal sprites with calculated screen position
+		void DrawInternal();
+
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
@@ -233,9 +243,6 @@ namespace o2
 
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), calls onRightButtonReleased event
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
-
-		// Updates screen position from position with localToScreenTransformFunc
-		virtual void UpdateScreenPosition();
 
 		// Updates sprites positions by handle screen position
 		virtual void UpdateSpritesPositions();
@@ -465,6 +472,7 @@ CLASS_FIELDS_META(o2::DragHandle)
 	PROTECTED_FIELD(mPosition);
 	PROTECTED_FIELD(mScreenPosition);
 	PROTECTED_FIELD(mLastDrawnScreenPosition);
+	PROTECTED_FIELD(mLastScreenPosUpdateFrame);
 	PROTECTED_FIELD(mAngle);
 	PROTECTED_FIELD(mDragOffset);
 	PROTECTED_FIELD(mDragPosition);
@@ -482,9 +490,11 @@ CLASS_METHODS_META(o2::DragHandle)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Draw, const RectF&);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(const Vec2F&, GetScreenPosition);
+	PUBLIC_FUNCTION(void, UpdateScreenPosition);
 	PUBLIC_FUNCTION(void, SetDragPosition, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetDragPosition);
 	PUBLIC_FUNCTION(Vec2F, GetPosition);
@@ -518,6 +528,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(void, SetSpritesSize, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSpritesColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetSpritesSizePivot, const Vec2F&);
+	PROTECTED_FUNCTION(void, DrawInternal);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
@@ -527,7 +538,6 @@ CLASS_METHODS_META(o2::DragHandle)
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMousePressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, UpdateScreenPosition);
 	PROTECTED_FUNCTION(void, UpdateSpritesPositions);
 	PROTECTED_FUNCTION(void, OnSelected);
 	PROTECTED_FUNCTION(void, OnDeselected);

@@ -100,22 +100,64 @@ namespace Editor
 
 	protected:
 		typedef Vector<Vec2F> PointsVec;
-		typedef Vector<DragHandle*> SelectableHandlesVec;
 		typedef Vector<IAction*> ActionsVec;
+
+		struct CurveInfo;
+
+		struct CurveHandle : public DragHandle
+		{
+			CurveInfo* curveInfo = nullptr;
+
+		public:
+			// Default constructor
+			CurveHandle();
+
+			// Constructor with views
+			CurveHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
+					    Sprite* selected = nullptr, Sprite* selectedHovered = nullptr, Sprite* selectedPressed = nullptr);
+
+			// Copy-constructor
+			CurveHandle(const DragHandle& other);
+
+			// Destructor
+			~CurveHandle() override;
+
+			// Copy-operator
+			CurveHandle& operator=(const CurveHandle& other);
+
+			// Returns handle position with curve view transformations
+			Vec2F GetViewPosition() const;
+
+			// Converts local to view position (transformed by curve view)
+			Vec2F LocalToView(const Vec2F& point) const;
+
+			// Converts view position (transformed by curve view) to local
+			Vec2F ViewToLocal(const Vec2F& point) const;
+
+			// Converts point from screen to local space
+			Vec2F ScreenToLocal(const Vec2F& point) override;
+
+			// Converts point from local to screen space
+			Vec2F LocalToScreen(const Vec2F& point) override;
+
+			SERIALIZABLE(CurveHandle);
+		};
+
+		typedef Vector<CurveHandle*> SelectableHandlesVec;
 
 		struct KeyHandles
 		{
 			CurveEditor* curveEditor = nullptr;
-			DragHandle   mainHandle;
-			DragHandle   leftSupportHandle;
-			DragHandle   rightSupportHandle;
+			CurveHandle  mainHandle;
+			CurveHandle  leftSupportHandle;
+			CurveHandle  rightSupportHandle;
 				           
 			int          curveKeyIdx;
 			UInt64       curveKeyUid;
 
 		public:
 			KeyHandles() {}
-			KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample, CurveEditor* editor, const Color4& color);
+			KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample, CurveEditor* editor, const Color4& color);
 
 			void Draw(const RectF& camRect);
 			bool IsSomeHandleSelected() const;
@@ -135,6 +177,7 @@ namespace Editor
 
 			Color4 color;
 			Vec2F viewScale;
+			Vec2F viewOffset;
 
 			bool disableChangesHandling = false;
 
@@ -199,8 +242,9 @@ namespace Editor
 	protected:
 		ContextMenu* mContextMenu = nullptr; // Context menu for editing keys properties, copying, pasting and other
 							    								    
-		DragHandle mMainHandleSample;    // Main handle sample, uses to copy sprites @SERIALIZABLE
-		DragHandle mSupportHandleSample; // Support handle sample, uses to copy sprites @SERIALIZABLE
+		CurveHandle mMainHandleSample;      // Main handle sample, uses to copy sprites @SERIALIZABLE
+		CurveHandle mSupportHandleSample;   // Support handle sample, uses to copy sprites @SERIALIZABLE
+		CurveInfo   mHandleSamplesStubInfo; // Empty curve info, used int handles samples
 							    								    
 		CurveInfosVec mCurves; // Editing curves infos list 
 		RangeInfosVec mRanges; // Curves ranges list
@@ -223,7 +267,7 @@ namespace Editor
 							    								    
 		FrameHandles mTransformFrame;                // Keys transformation frame
 		bool         mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
-		Basis        mTransformFrameBasis;           // Basis of transform frame in local space
+		Basis        mTransformFrameBasis;           // Basis of transform frame in screen space
 								 							   	    
 		bool mIsViewScrolling = false; // Is scrolling view at this time
 
@@ -315,6 +359,18 @@ namespace Editor
 		// It is called when right mouse button was released (only when right mouse button pressed this at previous time), overriding from scroll view to call context menu
 		void OnCursorRightMouseReleased(const Input::Cursor& cursor) override;
 
+		// It is called when selectable draggable handle was released
+		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor) override;
+
+		// It is called when selectable handle was began to drag
+		void OnHandleBeganDragging(DragHandle* handle) override;
+
+		// It is called when selectable handle moved, moves all selected handles position
+		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos) override;
+
+		// It is called when selectable handle completed changing
+		void OnHandleCompletedChange(DragHandle* handle) override;
+
 		// Checks supports handles visibility
 		void CheckHandlesVisible();
 
@@ -323,18 +379,6 @@ namespace Editor
 
 		// Returns is transform frame visible. it will be visible when 2 or more main handles was selected
 		bool IsTransformFrameVisible() const;
-
-		// It is called when selectable draggable handle was released
-		void OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor);
-
-		// It is called when selectable handle was began to drag
-		void OnHandleBeganDragging(DragHandle* handle);
-
-		// It is called when selectable handle moved, moves all selected handles position
-		void OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos);
-
-		// It is called when selectable handle completed changing
-		void OnHandleCompletedChange(DragHandle* handle);
 
 		// Sets all selected keys supports type
 		void SetSelectedKeysSupportsType(Curve::Key::Type type);
@@ -409,6 +453,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHandleSamplesStubInfo);
 	PROTECTED_FIELD(mCurves);
 	PROTECTED_FIELD(mRanges);
 	PROTECTED_FIELD(mSupportHandles);
@@ -480,13 +525,13 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseStayDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, CheckHandlesVisible);
-	PROTECTED_FUNCTION(void, UpdateTransformFrame);
-	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);
 	PROTECTED_FUNCTION(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnHandleBeganDragging, DragHandle*);
 	PROTECTED_FUNCTION(void, OnHandleMoved, DragHandle*, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnHandleCompletedChange, DragHandle*);
+	PROTECTED_FUNCTION(void, CheckHandlesVisible);
+	PROTECTED_FUNCTION(void, UpdateTransformFrame);
+	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);
 	PROTECTED_FUNCTION(void, SetSelectedKeysSupportsType, Curve::Key::Type);
 	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
 	PROTECTED_FUNCTION(void, OnTransformBegin);
@@ -505,6 +550,27 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, OnInsertPressed);
 	PROTECTED_FUNCTION(void, OnUndoPressed);
 	PROTECTED_FUNCTION(void, OnRedoPressed);
+}
+END_META;
+
+CLASS_BASES_META(Editor::CurveEditor::CurveHandle)
+{
+	BASE_CLASS(o2::DragHandle);
+}
+END_META;
+CLASS_FIELDS_META(Editor::CurveEditor::CurveHandle)
+{
+	PROTECTED_FIELD(curveInfo);
+}
+END_META;
+CLASS_METHODS_META(Editor::CurveEditor::CurveHandle)
+{
+
+	PUBLIC_FUNCTION(Vec2F, GetViewPosition);
+	PUBLIC_FUNCTION(Vec2F, LocalToView, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, ViewToLocal, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 }
 END_META;
 
