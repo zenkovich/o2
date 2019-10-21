@@ -53,7 +53,7 @@ namespace Editor
 		Dictionary<String, Curve*> GetCurves() const;
 
 		// Adds editing curve with color. If color is default it will be randomized
-		void AddCurve(const String& id, Curve* curve, const Color4& color = Color4::Green());
+		void AddCurve(const String& id, Curve* curve, const Color4& color = Color4(44, 62, 80));
 
 		// Removed curve from editing
 		void RemoveCurve(Curve* curve);
@@ -81,6 +81,9 @@ namespace Editor
 
 		// Sets captions text font
 		void SetTextFont(const FontRef& font);
+
+		// Sets captions offsets 
+		void SetTextBorder(const BorderF& border);
 
 		// Sets main key handle images
 		void SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
@@ -112,7 +115,7 @@ namespace Editor
 
 		public:
 			KeyHandles() {}
-			KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample, CurveEditor* editor);
+			KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample, CurveEditor* editor, const Color4& color);
 
 			void Draw(const RectF& camRect);
 			bool IsSomeHandleSelected() const;
@@ -121,7 +124,7 @@ namespace Editor
 
 		struct CurveInfo
 		{
-			CurveEditor*   curveEditor = nullptr;
+			CurveEditor* curveEditor = nullptr;
 
 			String curveId;
 			Curve* curve = nullptr;
@@ -208,11 +211,13 @@ namespace Editor
 		SelectableHandlesVec mSelectingHandlesBuf; // Potentially selecting handles while selecting
 							    								    
 		Sprite* mSelectionSprite = nullptr; // Selection sprite @SERIALIZABLE
-		FontRef mTextFont;                  // Captions text font @SERIALIZABLE
-		Text*   mTextLeft = nullptr;        // Captions text drawable at left border
-		Text*   mTextRight = nullptr;       // Captions text drawable at right border
-		Text*   mTextTop = nullptr;         // Captions text drawable at top border
-		Text*   mTextBottom = nullptr;      // Captions text drawable at bottom border
+
+		FontRef mTextFont;             // Captions text font @SERIALIZABLE
+		Text*   mTextLeft = nullptr;   // Captions text drawable at left border
+		Text*   mTextRight = nullptr;  // Captions text drawable at right border
+		Text*   mTextTop = nullptr;    // Captions text drawable at top border
+		Text*   mTextBottom = nullptr; // Captions text drawable at bottom border
+		BorderF mTextBorder;           // Captions offsets from border
 							    								    
 		Vec2F mSelectingPressedPoint; // Point, where cursor was pressed, selection starts here, in local space
 							    								    
@@ -415,6 +420,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mTextRight);
 	PROTECTED_FIELD(mTextTop);
 	PROTECTED_FIELD(mTextBottom);
+	PROTECTED_FIELD(mTextBorder);
 	PROTECTED_FIELD(mSelectingPressedPoint);
 	PROTECTED_FIELD(mTransformFrame);
 	PROTECTED_FIELD(mTransformFrameVisible);
@@ -443,6 +449,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PUBLIC_FUNCTION(void, RemoveCurvesRange, const String&, const String&);
 	PUBLIC_FUNCTION(void, SetSelectionSpriteImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetTextFont, const FontRef&);
+	PUBLIC_FUNCTION(void, SetTextBorder, const BorderF&);
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);

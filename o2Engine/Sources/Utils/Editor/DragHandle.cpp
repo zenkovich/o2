@@ -618,6 +618,27 @@ namespace o2
 			mSelectedPressedSprite->SetSize(size);
 	}
 
+	void DragHandle::SetSpritesColor(const Color4& color)
+	{
+		if (mRegularSprite)
+			mRegularSprite->SetColor(color);
+
+		if (mHoverSprite)
+			mHoverSprite->SetColor(color);
+
+		if (mPressedSprite)
+			mPressedSprite->SetColor(color);
+
+		if (mSelectedSprite)
+			mSelectedSprite->SetColor(color);
+
+		if (mSelectedHoverSprite)
+			mSelectedHoverSprite->SetColor(color);
+
+		if (mSelectedPressedSprite)
+			mSelectedPressedSprite->SetColor(color);
+	}
+
 	void DragHandle::SetSpritesSizePivot(const Vec2F& pivot)
 	{
 		if (mRegularSprite)

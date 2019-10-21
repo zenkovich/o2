@@ -21,10 +21,10 @@
 #include "Scene/UI/Widgets/VerticalScrollBar.h"
 #include "Scene/UI/Widgets/Window.h"
 #include "Utils/System/Clipboard.h"
- 
+
 namespace Editor
 {
-	CurveEditor::CurveEditor():
+	CurveEditor::CurveEditor() :
 		FrameScrollView()
 	{
 		mReady = false;
@@ -48,7 +48,7 @@ namespace Editor
 		mReady = true;
 	}
 
-	CurveEditor::CurveEditor(const CurveEditor& other):
+	CurveEditor::CurveEditor(const CurveEditor& other) :
 		FrameScrollView(other), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
 	{
 		mReady = false;
@@ -112,6 +112,7 @@ namespace Editor
 			mNeedAdjustView = false;
 			mViewCameraTargetScale = mAvailableArea.Size()/mViewCamera.GetSize();
 			mViewCamera.center = mAvailableArea.Center();
+			mViewCameraTargetPos = mViewCamera.position;
 		}
 	}
 
@@ -124,7 +125,7 @@ namespace Editor
 		return res;
 	}
 
-	void CurveEditor::AddCurve(const String& id, Curve* curve, const Color4& color /*= Color4::Green()*/)
+	void CurveEditor::AddCurve(const String& id, Curve* curve, const Color4& color /*= Color4(44, 62, 80)*/)
 	{
 		UpdateSelfTransform();
 
@@ -136,14 +137,10 @@ namespace Editor
 		info->UpdateApproximatedPoints();
 		info->curve->onKeysChanged += MakeSubscription(info, &CurveInfo::OnCurveChanged, [=]() { info->curve = nullptr; });
 
-		if (color == Color4::Green())
-		{
-			if (mCurves.IsEmpty())
-				info->color = Color4::Green();
-			else
-				info->color = Color4::SomeColor(mCurves.Count());
-		}
-		else info->color = color;
+		if (color == Color4(44, 62, 80) && !mCurves.IsEmpty())
+			info->color = Color4::SomeColor(mCurves.Count());
+		else
+			info->color = color;
 
 		for (int i = 0; i < curve->GetKeys().Count(); i++)
 			AddCurveKeyHandles(info, i);
@@ -214,7 +211,7 @@ namespace Editor
 	}
 
 	void CurveEditor::UpdateSelfTransform()
-{
+	{
 		FrameScrollView::UpdateSelfTransform();
 
 		UpdateLocalScreenTransforms();
@@ -235,17 +232,22 @@ namespace Editor
 		mTextBottom->SetFont(mTextFont);
 	}
 
+	void CurveEditor::SetTextBorder(const BorderF& border)
+	{
+		mTextBorder = border;
+	}
+
 	void CurveEditor::SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover,
-											const ImageAssetRef& pressed, const ImageAssetRef& selected)
+										  const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
 		mMainHandleSample = DragHandle(mnew Sprite(regular), mnew Sprite(hover),
-												 mnew Sprite(pressed), mnew Sprite(selected));
+									   mnew Sprite(pressed), mnew Sprite(selected));
 	}
 
 	void CurveEditor::SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
 		mSupportHandleSample = DragHandle(mnew Sprite(regular), mnew Sprite(hover),
-													mnew Sprite(pressed), mnew Sprite(selected));
+										  mnew Sprite(pressed), mnew Sprite(selected));
 	}
 
 	void CurveEditor::CopyData(const Actor& otherActor)
@@ -263,7 +265,7 @@ namespace Editor
 		delete mTextBottom;
 
 		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
-		mTextFont        = other.mTextFont;
+		mTextFont = other.mTextFont;
 
 		mMainHandleSample = other.mMainHandleSample;
 		mSupportHandleSample = other.mSupportHandleSample;
@@ -335,7 +337,7 @@ namespace Editor
 
 			ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), ImageAssetRef(), ShortcutKeys('Z', true)),
 			ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), ImageAssetRef(), ShortcutKeys('Z', true, true))
-		});
+							   });
 
 		onShow = [&]() { mContextMenu->SetItemsMaxPriority(); };
 		onHide = [&]() { mContextMenu->SetItemsMinPriority(); };
@@ -415,23 +417,23 @@ namespace Editor
 		DrawGrid();
 		DrawCurves();
 
-// 		o2Render.DrawRectFrame(mAvailableArea);
-// 
-// 		RectF outside = mAvailableArea;
-// 		outside.left -= mAvailableArea.Width()*0.1f;
-// 		outside.right += mAvailableArea.Width()*0.1f;
-// 		outside.bottom -= mAvailableArea.Height()*0.1f;
-// 		outside.top += mAvailableArea.Height()*0.1f;
-// 
-// 		o2Render.DrawRectFrame(outside, Color4::Green());
-// 
-// 		RectF inside = mAvailableArea;
-// 		inside.left += mAvailableArea.Width()*0.1f;
-// 		inside.right -= mAvailableArea.Width()*0.1f;
-// 		inside.bottom += mAvailableArea.Height()*0.1f;
-// 		inside.top -= mAvailableArea.Height()*0.1f;
-// 
-// 		o2Render.DrawRectFrame(inside, Color4::Red());
+		// 		o2Render.DrawRectFrame(mAvailableArea);
+		// 
+		// 		RectF outside = mAvailableArea;
+		// 		outside.left -= mAvailableArea.Width()*0.1f;
+		// 		outside.right += mAvailableArea.Width()*0.1f;
+		// 		outside.bottom -= mAvailableArea.Height()*0.1f;
+		// 		outside.top += mAvailableArea.Height()*0.1f;
+		// 
+		// 		o2Render.DrawRectFrame(outside, Color4::Green());
+		// 
+		// 		RectF inside = mAvailableArea;
+		// 		inside.left += mAvailableArea.Width()*0.1f;
+		// 		inside.right -= mAvailableArea.Width()*0.1f;
+		// 		inside.bottom += mAvailableArea.Height()*0.1f;
+		// 		inside.top -= mAvailableArea.Height()*0.1f;
+		// 
+		// 		o2Render.DrawRectFrame(inside, Color4::Red());
 	}
 
 	void CurveEditor::DrawGrid()
@@ -460,12 +462,7 @@ namespace Editor
 		float screenCellSize = cellSize / mViewCamera.GetScale().x;
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
-		mTextLeft->SetScale(mViewCamera.GetScale());
-		mTextRight->SetScale(mViewCamera.GetScale());
-
 		Vec2F invScale(mViewCamera.GetScale().y, mViewCamera.GetScale().x);
-		mTextTop->SetScale(invScale);
-		mTextBottom->SetScale(invScale);
 
 		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
 		{
@@ -485,9 +482,17 @@ namespace Editor
 			if (horGridEnabled)
 				o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
 
-			if (verGridEnabled) 
+			if (verGridEnabled)
 				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
 		}
+
+		mTextTop->SetScale(invScale);
+		mTextBottom->SetScale(invScale);
+		mTextLeft->SetScale(mViewCamera.GetScale());
+		mTextRight->SetScale(mViewCamera.GetScale());
+
+		BorderF textBorder(mTextBorder.left*mViewCamera.GetScale().x, mTextBorder.bottom*mViewCamera.GetScale().y,
+						   mTextBorder.right*mViewCamera.GetScale().x, mTextBorder.top*mViewCamera.GetScale().y);
 
 		char buf[255];
 		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
@@ -504,22 +509,22 @@ namespace Editor
 			if (horGridEnabled)
 			{
 				mTextLeft->SetText(yCaption);
-				mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left, y));
+				mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left + textBorder.left, y));
 				mTextLeft->Draw();
 
 				mTextRight->SetText(yCaption);
-				mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right, y));
+				mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right - textBorder.right, y));
 				mTextRight->Draw();
 			}
 
 			if (verGridEnabled)
 			{
 				mTextTop->SetText(xCaption);
-				mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top));
+				mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top - textBorder.top));
 				mTextTop->Draw();
 
 				mTextBottom->SetText(xCaption);
-				mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom));
+				mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom + textBorder.bottom));
 				mTextBottom->Draw();
 			}
 		}
@@ -554,15 +559,15 @@ namespace Editor
 				o2Render.DrawAALine(a*transform, b*transform, curve->color);
 			}
 
-// 			int idx = 0;
-// 			for (auto key : curve->curve->GetKeys())
-// 			{
-// 				mTextLeft->position = Vec2F(key.position, key.value - 0.1f);
-// 				mTextLeft->text = (String)idx + ": \n" + (String)key.leftSupportPosition + ", " + (String)key.leftSupportValue +
-// 					"\n" + (String)key.rightSupportPosition + ", " + (String)key.rightSupportValue;
-// 				mTextLeft->Draw();
-// 				idx++;
-// 			}
+			//int idx = 0;
+			//for (auto key : curve->curve->GetKeys())
+			//{
+			//	mTextLeft->position = Vec2F(key.position, key.value - 0.1f);
+			//	mTextLeft->text = (String)idx + ": \n" + (String)key.leftSupportPosition + ", " + (String)key.leftSupportValue +
+			//		"\n" + (String)key.rightSupportPosition + ", " + (String)key.rightSupportValue;
+			//	mTextLeft->Draw();
+			//	idx++;
+			//}
 		}
 
 		o2Render.camera = mViewCamera;
@@ -595,8 +600,8 @@ namespace Editor
 		Vec2F borders(10, 10);
 
 		mTransformFrame.SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.origin) - borders,
-								 mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
-								 mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
+									   mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
+									   mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
 
 		mTransformFrame.Draw();
 
@@ -615,7 +620,7 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
-		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this);
+		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this, info->color);
 		keyHandles->curveKeyIdx = keyId;
 		keyHandles->curveKeyUid = info->curve->GetKeyAt(keyId).uid;
 
@@ -636,7 +641,7 @@ namespace Editor
 
 		// left support handle
 		keyHandles->leftSupportHandle.SetPosition(Vec2F(curveKey.position + curveKey.leftSupportPosition,
-												  curveKey.value + curveKey.leftSupportValue));
+														curveKey.value + curveKey.leftSupportValue));
 
 		keyHandles->leftSupportHandle.localToScreenTransformFunc =
 			[&](const Vec2F& p) { return LocalToScreenPoint(p); };
@@ -659,7 +664,7 @@ namespace Editor
 
 		// right support handle
 		keyHandles->rightSupportHandle.SetPosition(Vec2F(curveKey.position + curveKey.rightSupportPosition,
-												   curveKey.value + curveKey.rightSupportValue));
+														 curveKey.value + curveKey.rightSupportValue));
 
 		keyHandles->rightSupportHandle.localToScreenTransformFunc =
 			[&](const Vec2F& p) { return LocalToScreenPoint(p); };
@@ -691,6 +696,8 @@ namespace Editor
 		keyHandles->mainHandle.SetSelectionGroup(this);
 		keyHandles->leftSupportHandle.SetSelectionGroup(&mSupportHandlesGroup);
 		keyHandles->rightSupportHandle.SetSelectionGroup(&mSupportHandlesGroup);
+
+		mNeedRedraw = true;
 	}
 
 	void CurveEditor::RemoveCurveKeyHandles(CurveInfo* info, int keyId)
@@ -707,6 +714,8 @@ namespace Editor
 
 		delete info->handles[keyId];
 		info->handles.RemoveAt(keyId);
+
+		mNeedRedraw = true;
 	}
 
 	void CurveEditor::OnCurveKeyMainHandleDragged(CurveInfo* info, KeyHandles* handles, const Vec2F& position)
@@ -831,7 +840,7 @@ namespace Editor
 		if (key.supportsType == Curve::Key::Type::Free && handles->curveKeyIdx < info->curve->GetKeys().Count() - 1)
 		{
 			Curve::Key nextKey = info->curve->GetKeyAt(Math::Min(handles->curveKeyIdx + 1,
-													   info->curve->GetKeys().Count() - 1));
+																 info->curve->GetKeys().Count() - 1));
 
 			key.rightSupportPosition = -key.leftSupportPosition;
 			key.rightSupportValue = -key.leftSupportValue;
@@ -1108,10 +1117,10 @@ namespace Editor
 		info->UpdateApproximatedPoints();
 
 		info->handles[idx]->leftSupportHandle.SetPosition(Vec2F(key.position + key.leftSupportPosition,
-														  key.value + key.leftSupportValue));
+																key.value + key.leftSupportValue));
 
 		info->handles[idx]->rightSupportHandle.SetPosition(Vec2F(key.position + key.rightSupportPosition,
-														   key.value + key.rightSupportValue));
+																 key.value + key.rightSupportValue));
 
 		if (idx > 0)
 		{
@@ -1281,9 +1290,9 @@ namespace Editor
 
 		for (auto handle : mSelectedHandles)
 		{
-			aabb.left   = Math::Min(handle->GetPosition().x, aabb.left);
-			aabb.right  = Math::Max(handle->GetPosition().x, aabb.right);
-			aabb.top    = Math::Max(handle->GetPosition().y, aabb.top);
+			aabb.left = Math::Min(handle->GetPosition().x, aabb.left);
+			aabb.right = Math::Max(handle->GetPosition().x, aabb.right);
+			aabb.top = Math::Max(handle->GetPosition().y, aabb.top);
 			aabb.bottom = Math::Min(handle->GetPosition().y, aabb.bottom);
 		}
 
@@ -1359,15 +1368,15 @@ namespace Editor
 
 					switch (type)
 					{
-						case Curve::Key::Type::Flat:
-						key.leftSupportValue = 0;
-						key.rightSupportValue = 0;
-						break;
+					case Curve::Key::Type::Flat:
+					key.leftSupportValue = 0;
+					key.rightSupportValue = 0;
+					break;
 
-						case Curve::Key::Type::Free:
-						key.rightSupportPosition = -key.leftSupportPosition;
-						key.rightSupportValue = -key.leftSupportValue;
-						break;
+					case Curve::Key::Type::Free:
+					key.rightSupportPosition = -key.leftSupportPosition;
+					key.rightSupportValue = -key.leftSupportValue;
+					break;
 					}
 				}
 			}
@@ -1908,7 +1917,7 @@ namespace Editor
 					handle->leftSupportHandle.SetSelectionGroup(nullptr);
 				}
 
-				curveEditor->mSupportHandles.Remove(&handle->leftSupportHandle);				
+				curveEditor->mSupportHandles.Remove(&handle->leftSupportHandle);
 
 				if (handle->rightSupportHandle.IsSelected())
 				{
@@ -1977,9 +1986,11 @@ namespace Editor
 	}
 
 	CurveEditor::KeyHandles::KeyHandles(const DragHandle& mainSample, const DragHandle& supportSample,
-										  CurveEditor* editor):
+										CurveEditor* editor, const Color4& color) :
 		mainHandle(mainSample), leftSupportHandle(supportSample), rightSupportHandle(supportSample), curveEditor(editor)
-	{}
+	{
+		mainHandle.SetSpritesColor(color);
+	}
 
 	void CurveEditor::KeyHandles::Draw(const RectF& camRect)
 	{

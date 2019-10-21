@@ -42,7 +42,7 @@ namespace Editor
 		for (auto animValue : animation->GetAnimationsValues())
 		{
 			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
-				mEditor->AddCurve(animValue.targetPath, &floatAnimValue->curve, Color4(44, 62, 80));
+				mEditor->AddCurve(animValue.targetPath, &floatAnimValue->curve);
 		}
 
 		mEditor->actionsListDelegate = &mAnimationWindow->mActionsList;
@@ -76,9 +76,15 @@ namespace Editor
 		mEditor = mnew CurveEditor();
 		*mEditor->layout = WidgetLayout::BothStretch();
 
+		auto horScroll = o2UI.CreateHorScrollBar();
+		*horScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 10, 0);
+		mEditor->SetHorScrollbar(horScroll);
+
 		auto verScroll = o2UI.CreateVerScrollBar();
-		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 10, 0);
+		*verScroll->layout = WidgetLayout::VerStretch(HorAlign::Right, 10, 10, 10, 0);
 		mEditor->SetVerScrollbar(verScroll);
+
+		mEditor->SetTextBorder(BorderF(0, 10, 10, 0));
 
 		mEditor->SetMainHandleImages(ImageAssetRef("ui/CurveHandle.png"),
 										   ImageAssetRef("ui/CurveHandleHover.png"),

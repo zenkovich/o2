@@ -168,6 +168,9 @@ namespace o2
 		// Sets size to all available sprites
 		void SetSpritesSize(const Vec2F& size);
 
+		// Sets color to all sprites
+		void SetSpritesColor(const Color4& color);
+
 		// Sets size to all available sprites
 		void SetSpritesSizePivot(const Vec2F& pivot);
 
@@ -513,6 +516,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(void, SetSelectedPressedSprite, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetSelectedPressedSprite);
 	PUBLIC_FUNCTION(void, SetSpritesSize, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetSpritesColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetSpritesSizePivot, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

@@ -70,6 +70,7 @@ namespace Editor
 		mCurves->Hide();
 		mHandlesSheet->Show();
 		mTimeline->SetViewMoveDisabled(false);
+		mTimeScroll->enabled = true;
 	}
 
 	void AnimationWindow::ShowCurvesSheet()
@@ -77,6 +78,7 @@ namespace Editor
 		mCurves->Show();
 		mHandlesSheet->Hide();
 		mTimeline->SetViewMoveDisabled(true);
+		mTimeScroll->enabled = false;
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -133,7 +135,7 @@ namespace Editor
 		*mTimeline->layout = WidgetLayout::BothStretch(mTreeViewWidth, 0.0f, 0.0f, 0.0f);
 
 		mTimeScroll = o2UI.CreateHorScrollBar();
-		*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 20, 0);
+		*mTimeScroll->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 10, 10, 10, 0);
 
 		mTimeline->SetScrollBar(mTimeScroll);
 
