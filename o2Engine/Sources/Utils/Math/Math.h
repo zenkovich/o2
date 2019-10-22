@@ -34,6 +34,11 @@ namespace o2
 			return roundf(value);
 		}
 
+		inline int RoundToInt(float value)
+		{
+			return (int)roundf(value);
+		}
+
 		inline float Mod(float val, float x)
 		{ 
 			return fmodf(val, x);

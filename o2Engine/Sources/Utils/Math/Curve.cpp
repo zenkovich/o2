@@ -636,20 +636,21 @@ namespace o2
 	{
 		RectF res;
 
-		if (mKeys.IsEmpty())
+		if (mKeys.Count() < 2)
 			return res;
 
-		res.left = mKeys[0].position; res.right = mKeys[0].position;
-		res.top = mKeys[0].value; res.bottom = mKeys[0].value;
+		res.left = mKeys[1].mApproxValues[0].x; res.right = mKeys[1].mApproxValues[0].x;
+		res.top = mKeys[1].mApproxValues[0].y; res.bottom = mKeys[1].mApproxValues[0].y;
 
-		for (auto& key : mKeys)
+		for (int k = 1; k < mKeys.Count(); k++)
 		{
+			auto& key = mKeys[k];
 			for (int i = 0; i < Key::mApproxValuesCount; i++)
 			{
 				res.left = Math::Min(key.mApproxValues[i].x, res.left);
 				res.right = Math::Max(key.mApproxValues[i].x, res.right);
-				res.top = Math::Min(key.mApproxValues[i].y, res.top);
-				res.bottom = Math::Max(key.mApproxValues[i].y, res.bottom);
+				res.top = Math::Max(key.mApproxValues[i].y, res.top);
+				res.bottom = Math::Min(key.mApproxValues[i].y, res.bottom);
 			}
 		}
 

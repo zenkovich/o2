@@ -139,8 +139,8 @@ namespace Editor
 		info->curve = curve;
 
 		RectF rect = curve->GetRect();
-		info->viewScale = Vec2F(1, 0.5f); // Vec2F(1, 1.0f/rect.Height());
-		info->viewOffset = Vec2F(0, 0);// Vec2F(0, -rect.bottom);
+		info->viewScale = Vec2F(1, 1.0f/rect.Height());
+		info->viewOffset = Vec2F(0, -rect.bottom);
 		info->UpdateApproximatedPoints();
 
 		info->curve->onKeysChanged += MakeSubscription(info, &CurveInfo::OnCurveChanged, [=]() { info->curve = nullptr; });
@@ -448,54 +448,89 @@ namespace Editor
 
 	void CurveEditor::DrawGrid()
 	{
-		float cameraMaxSize = Math::Max(mViewCamera.GetSize().x*mViewCamera.GetScale().x,
-										mViewCamera.GetSize().y*mViewCamera.GetScale().y);
+		Vec2F gridScale(1, 1);
+		Vec2F gridOffset(0, 0);
+		bool drawText = false;
 
-		float x = cameraMaxSize / 2.0f;
-		float minCellSize = 0.000001f;
-		float maxCellSize = 1000000.0f;
-		float cellSize = minCellSize;
-		while (cellSize < maxCellSize)
-		{
-			float next = cellSize*10.0f;
-			if (x > cellSize && x <= next)
-				break;
-
-			cellSize = next;
+		if (!mSelectedHandles.IsEmpty()) {
+			CurveHandle* curvehandle =  (CurveHandle*)mSelectedHandles[0];
+			gridScale = curvehandle->curveInfo->viewScale;
+			gridOffset = curvehandle->curveInfo->viewOffset;
 		}
 
-		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / cellSize)*cellSize,
-						 Math::Round(mViewCamera.GetPosition().y / cellSize)*cellSize);
+		Vec2F cameraSize = mViewCamera.GetSize()*mViewCamera.GetScale();
 
-		int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
-		float tenCeilsSize = cellSize*10.0f;
-		float screenCellSize = cellSize / mViewCamera.GetScale().x;
+		Vec2F optimalCellSize = cameraSize / 2.0f;
+		float minCellSize = 0.000001f;
+		float maxCellSize = 1000000.0f;
+		Vec2F cellSize(minCellSize, minCellSize);
+
+		//X
+		while (cellSize.x < maxCellSize)
+		{
+			float next = cellSize.x*10.0f;
+			if (optimalCellSize.x > cellSize.x && optimalCellSize.x <= next)
+				break;
+
+			cellSize.x = next;
+		}
+
+		//Y
+		while (cellSize.y < maxCellSize)
+		{
+			float next = cellSize.y*10.0f;
+			if (optimalCellSize.y > cellSize.y && optimalCellSize.y <= next)
+				break;
+
+			cellSize.y = next;
+		}
+
+		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / cellSize.x)*cellSize.x,
+						 Math::Round(mViewCamera.GetPosition().y / cellSize.y)*cellSize.x);
+
+		Vec2I cellsCount(Math::RoundToInt(cameraSize.x/cellSize.x), Math::RoundToInt(cameraSize.y/cellSize.y));
+		Vec2F tenCeilsSize = cellSize*10.0f;
+		Vec2F screenCellSize = cellSize / mViewCamera.GetScale();
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
 		Vec2F invScale(mViewCamera.GetScale().y, mViewCamera.GetScale().x);
 
-		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
+		// Y
+		if (horGridEnabled)
 		{
-			float d = (float)i*cellSize;
-			Vec2F dorigin = gridOrigin + Vec2F(d, d);
+			for (int i = -cellsCount.y/2; i < cellsCount.y/2; i++)
+			{
+				float d = (float)i*cellSize.y;
+				Vec2F dorigin = gridOrigin + Vec2F(d, d);
 
-			float rdx = Math::Abs(dorigin.x / tenCeilsSize - Math::Floor(dorigin.x / tenCeilsSize));
-			float rdy = Math::Abs(dorigin.y / tenCeilsSize - Math::Floor(dorigin.y / tenCeilsSize));
-			bool xTen = rdx < 0.05f || rdx > 0.95f;
-			bool yTen = rdy < 0.05f || rdy > 0.95f;
+				float rdy = Math::Abs(dorigin.y/tenCeilsSize.y - Math::Floor(dorigin.y/tenCeilsSize.y));
+				bool yTen = rdy < 0.05f || rdy > 0.95f;
 
-			Vec2F xBegin = Vec2F(-cameraMaxSize, d) + gridOrigin;
-			Vec2F xEnd = Vec2F(cameraMaxSize, d) + gridOrigin;
-			Vec2F yBegin = Vec2F(d, -cameraMaxSize) + gridOrigin;
-			Vec2F yEnd = Vec2F(d, cameraMaxSize) + gridOrigin;
+				Vec2F xBegin = Vec2F(-cameraSize.x*10.0f, d) + gridOrigin;
+				Vec2F xEnd = Vec2F(cameraSize.x*10.0f, d) + gridOrigin;
 
-			if (horGridEnabled)
 				o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
-
-			if (verGridEnabled)
-				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
+			}
 		}
 
+		// X
+		if (verGridEnabled)
+		{
+			for (int i = -cellsCount.x/2; i < cellsCount.x/2; i++)
+			{
+				float d = (float)i*cellSize.x;
+				Vec2F dorigin = gridOrigin + Vec2F(d, d);
+
+				float rdx = Math::Abs(dorigin.x/tenCeilsSize.x - Math::Floor(dorigin.x/tenCeilsSize.x));
+				bool xTen = rdx < 0.05f || rdx > 0.95f;
+
+				Vec2F yBegin = Vec2F(d, -cameraSize.y*10.0f) + gridOrigin;
+				Vec2F yEnd = Vec2F(d, cameraSize.y*10.0f) + gridOrigin;
+
+				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
+			}
+		}
+		
 		mTextTop->SetScale(invScale);
 		mTextBottom->SetScale(invScale);
 		mTextLeft->SetScale(mViewCamera.GetScale());
@@ -505,37 +540,50 @@ namespace Editor
 						   mTextBorder.right*mViewCamera.GetScale().x, mTextBorder.top*mViewCamera.GetScale().y);
 
 		char buf[255];
-		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)
+
+		// Y
+		if (horGridEnabled)
 		{
-			float x = (float)i*cellSize + gridOrigin.x;
-			float y = (float)i*cellSize + gridOrigin.y;
-
-			sprintf(buf, "%.1f", (Math::Round(x*10.0f)/10.0f));
-			String xCaption = buf;
-
-			sprintf(buf, "%.1f", (Math::Round(y*10.0f)/10.0f));
-			String yCaption = buf;
-
-			if (horGridEnabled)
+			for (int i = -cellsCount.y/2; i < cellsCount.y/2; i++)
 			{
-				mTextLeft->SetText(yCaption);
-				mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left + textBorder.left, y));
-				mTextLeft->Draw();
+				float y = (float)i*cellSize.y + gridOrigin.y;
 
-				mTextRight->SetText(yCaption);
-				mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right - textBorder.right, y));
-				mTextRight->Draw();
+				sprintf(buf, "%.1f", (Math::Round(y*10.0f)/10.0f));
+				String yCaption = buf;
+
+				if (horGridEnabled)
+				{
+					mTextLeft->SetText(yCaption);
+					mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left + textBorder.left, y));
+					mTextLeft->Draw();
+
+					mTextRight->SetText(yCaption);
+					mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right - textBorder.right, y));
+					mTextRight->Draw();
+				}
 			}
+		}
 
-			if (verGridEnabled)
+		// X
+		if (verGridEnabled)
+		{
+			for (int i = -cellsCount.x/2; i < cellsCount.x/2; i++)
 			{
-				mTextTop->SetText(xCaption);
-				mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top - textBorder.top));
-				mTextTop->Draw();
+				float x = (float)i*cellSize.x + gridOrigin.x;
 
-				mTextBottom->SetText(xCaption);
-				mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom + textBorder.bottom));
-				mTextBottom->Draw();
+				sprintf(buf, "%.1f", (Math::Round(x*10.0f)/10.0f));
+				String xCaption = buf;
+				
+				if (verGridEnabled)
+				{
+					mTextTop->SetText(xCaption);
+					mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top - textBorder.top));
+					mTextTop->Draw();
+
+					mTextBottom->SetText(xCaption);
+					mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom + textBorder.bottom));
+					mTextBottom->Draw();
+				}
 			}
 		}
 	}
@@ -1899,7 +1947,7 @@ namespace Editor
 		{
 			const Vec2F* keyPoints = keys[i].GetApproximatedPoints();
 			for (int j = 0; j < keys[i].GetApproximatedPointsCount(); j++)
-				approximatedPoints.Add(keyPoints[j]*viewScale + viewOffset);
+				approximatedPoints.Add((keyPoints[j] + viewOffset)*viewScale);
 		}
 	}
 
