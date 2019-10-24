@@ -126,13 +126,13 @@ namespace Editor
 			CurveHandle& operator=(const CurveHandle& other);
 
 			// Returns handle position with curve view transformations
-			Vec2F GetViewPosition() const;
+			Vec2F GetLocalPosition() const;
 
 			// Converts local to view position (transformed by curve view)
-			Vec2F LocalToView(const Vec2F& point) const;
+			Vec2F LocalToCurveView(const Vec2F& point) const;
 
 			// Converts view position (transformed by curve view) to local
-			Vec2F ViewToLocal(const Vec2F& point) const;
+			Vec2F CurveViewToLocal(const Vec2F& point) const;
 
 			// Converts point from screen to local space
 			Vec2F ScreenToLocal(const Vec2F& point) override;
@@ -392,6 +392,12 @@ namespace Editor
 		// It is called when transform completed. Checks that selected keys changed, creates action for undo/redo
 		void OnTransformCompleted();
 
+		// Transforms point from local to curve view coords
+		Vec2F LocalToCurveView(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const;
+
+		// Transforms point from curve view to local coords
+		Vec2F CurveViewToLocal(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const;
+
 		// Stores undo action, clears redo actions
 		void DoneAction(IAction* action);
 
@@ -536,6 +542,8 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, OnTransformFrameTransformed, const Basis&);
 	PROTECTED_FUNCTION(void, OnTransformBegin);
 	PROTECTED_FUNCTION(void, OnTransformCompleted);
+	PROTECTED_FUNCTION(Vec2F, LocalToCurveView, const Vec2F&, const Vec2F&, const Vec2F&);
+	PROTECTED_FUNCTION(Vec2F, CurveViewToLocal, const Vec2F&, const Vec2F&, const Vec2F&);
 	PROTECTED_FUNCTION(void, DoneAction, IAction*);
 	PROTECTED_FUNCTION(void, OnEditPressed);
 	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
@@ -566,9 +574,9 @@ END_META;
 CLASS_METHODS_META(Editor::CurveEditor::CurveHandle)
 {
 
-	PUBLIC_FUNCTION(Vec2F, GetViewPosition);
-	PUBLIC_FUNCTION(Vec2F, LocalToView, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, ViewToLocal, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLocalPosition);
+	PUBLIC_FUNCTION(Vec2F, LocalToCurveView, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, CurveViewToLocal, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 }

@@ -448,66 +448,106 @@ namespace Editor
 
 	void CurveEditor::DrawGrid()
 	{
+		// Screen -> Local -> Curve View
+
 		Vec2F gridScale(1, 1);
 		Vec2F gridOffset(0, 0);
 		bool drawText = false;
 
 		if (!mSelectedHandles.IsEmpty()) {
-			CurveHandle* curvehandle =  (CurveHandle*)mSelectedHandles[0];
+			CurveHandle* curvehandle = (CurveHandle*)mSelectedHandles[0];
 			gridScale = curvehandle->curveInfo->viewScale;
 			gridOffset = curvehandle->curveInfo->viewOffset;
 		}
 
-		Vec2F cameraSize = mViewCamera.GetSize()*mViewCamera.GetScale();
+		RectF localCameraRect = mViewCamera.GetRect();
+		RectF curveViewCameraRect(LocalToCurveView(localCameraRect.LeftTop(), gridScale, gridOffset),
+								  LocalToCurveView(localCameraRect.RightBottom(), gridScale, gridOffset));
 
-		Vec2F optimalCellSize = cameraSize / 2.0f;
+		Camera screenCamera;
+		RectF screenCameraRect = screenCamera.GetRect();
+
+		auto camTransformBasis = mViewCamera.GetBasis().Inverted()*screenCamera.GetBasis();
+		auto localToScreen = [&](const Vec2F& point) { return point*camTransformBasis; };
+
+		o2Render.SetCamera(screenCamera);
+
 		float minCellSize = 0.000001f;
 		float maxCellSize = 1000000.0f;
-		Vec2F cellSize(minCellSize, minCellSize);
+		Vec2F curveViewCellSize(minCellSize, minCellSize);
+		Vec2F optimalCurveViewCellSize = curveViewCameraRect.Size()/2.0f;
 
-		//X
-		while (cellSize.x < maxCellSize)
+		while (curveViewCellSize.x < maxCellSize)
 		{
-			float next = cellSize.x*10.0f;
-			if (optimalCellSize.x > cellSize.x && optimalCellSize.x <= next)
+			float next = curveViewCellSize.x*10.0f;
+			if (optimalCurveViewCellSize.x > curveViewCellSize.x && optimalCurveViewCellSize.x <= next)
 				break;
 
-			cellSize.x = next;
+			curveViewCellSize.x = next;
 		}
 
-		//Y
-		while (cellSize.y < maxCellSize)
+		while (curveViewCellSize.y < maxCellSize)
 		{
-			float next = cellSize.y*10.0f;
-			if (optimalCellSize.y > cellSize.y && optimalCellSize.y <= next)
+			float next = curveViewCellSize.y*10.0f;
+			if (optimalCurveViewCellSize.y > curveViewCellSize.y && optimalCurveViewCellSize.y <= next)
 				break;
 
-			cellSize.y = next;
+			curveViewCellSize.y = next;
 		}
 
-		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / cellSize.x)*cellSize.x,
-						 Math::Round(mViewCamera.GetPosition().y / cellSize.y)*cellSize.x);
+		Vec2F localCellSize = CurveViewToLocal(curveViewCellSize, gridScale, gridOffset) - CurveViewToLocal(Vec2F(), gridScale, gridOffset);
+		Vec2F screenCellSize = localToScreen(curveViewCellSize) - localToScreen(Vec2F());
 
-		Vec2I cellsCount(Math::RoundToInt(cameraSize.x/cellSize.x), Math::RoundToInt(cameraSize.y/cellSize.y));
-		Vec2F tenCeilsSize = cellSize*10.0f;
-		Vec2F screenCellSize = cellSize / mViewCamera.GetScale();
+		Vec2F gridCurveViewOrigin(Math::Round(curveViewCameraRect.Center().x/curveViewCellSize.x)*curveViewCellSize.x,
+								  Math::Round(curveViewCameraRect.Center().y/curveViewCellSize.y)*curveViewCellSize.y);
+
+		Vec2F gridLocalOrigin = CurveViewToLocal(gridCurveViewOrigin, gridScale, gridOffset);
+		Vec2F gridScreenOrigin = localToScreen(gridLocalOrigin);
+
+		Vec2I cellsCount(Math::RoundToInt(curveViewCameraRect.Width()/curveViewCellSize.x), Math::RoundToInt(curveViewCameraRect.Height()/curveViewCellSize.y));
+		Vec2F screenTenCellsSize = screenCellSize*10.0f;
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
-		Vec2F invScale(mViewCamera.GetScale().y, mViewCamera.GetScale().x);
+		o2Render.DrawCross(gridScreenOrigin, 5, Color4::Red());
+		mTextLeft->SetScale(Vec2F(1, 1));
+		mTextLeft->SetText(String(gridCurveViewOrigin));
+		mTextLeft->SetPosition(gridScreenOrigin);
+		mTextLeft->Draw();
+
+
+		mTextTop->SetScale(Vec2F(1, 1));
+		mTextTop->SetText(String(curveViewCameraRect.top));
+		mTextTop->SetPosition(Vec2F(0, screenCameraRect.top));
+		mTextTop->Draw();
+
+		mTextBottom->SetScale(Vec2F(1, 1));
+		mTextBottom->SetText(String(curveViewCameraRect.bottom));
+		mTextBottom->SetPosition(Vec2F(0, screenCameraRect.bottom));
+		mTextBottom->Draw();
+
+		mTextLeft->SetScale(Vec2F(1, 1));
+		mTextLeft->SetText(String(curveViewCameraRect.left));
+		mTextLeft->SetPosition(Vec2F(screenCameraRect.left, 0));
+		mTextLeft->Draw();
+
+		mTextRight->SetScale(Vec2F(1, 1));
+		mTextRight->SetText(String(curveViewCameraRect.right));
+		mTextRight->SetPosition(Vec2F(screenCameraRect.right, 0));
+		mTextRight->Draw();
 
 		// Y
 		if (horGridEnabled)
 		{
 			for (int i = -cellsCount.y/2; i < cellsCount.y/2; i++)
 			{
-				float d = (float)i*cellSize.y;
-				Vec2F dorigin = gridOrigin + Vec2F(d, d);
+				float d = (float)i*screenCellSize.y;
+				Vec2F dorigin = gridScreenOrigin + Vec2F(d, d);
 
-				float rdy = Math::Abs(dorigin.y/tenCeilsSize.y - Math::Floor(dorigin.y/tenCeilsSize.y));
+				float rdy = Math::Abs(dorigin.y/screenTenCellsSize.y - Math::Floor(dorigin.y/screenTenCellsSize.y));
 				bool yTen = rdy < 0.05f || rdy > 0.95f;
 
-				Vec2F xBegin = Vec2F(-cameraSize.x*10.0f, d) + gridOrigin;
-				Vec2F xEnd = Vec2F(cameraSize.x*10.0f, d) + gridOrigin;
+				Vec2F xBegin = Vec2F(screenCameraRect.left, d) + gridScreenOrigin;
+				Vec2F xEnd = Vec2F(screenCameraRect.right, d) + gridScreenOrigin;
 
 				o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
 			}
@@ -518,26 +558,18 @@ namespace Editor
 		{
 			for (int i = -cellsCount.x/2; i < cellsCount.x/2; i++)
 			{
-				float d = (float)i*cellSize.x;
-				Vec2F dorigin = gridOrigin + Vec2F(d, d);
+				float d = (float)i*screenCellSize.x;
+				Vec2F dorigin = gridScreenOrigin + Vec2F(d, d);
 
-				float rdx = Math::Abs(dorigin.x/tenCeilsSize.x - Math::Floor(dorigin.x/tenCeilsSize.x));
+				float rdx = Math::Abs(dorigin.x/screenTenCellsSize.x - Math::Floor(dorigin.x/screenTenCellsSize.x));
 				bool xTen = rdx < 0.05f || rdx > 0.95f;
 
-				Vec2F yBegin = Vec2F(d, -cameraSize.y*10.0f) + gridOrigin;
-				Vec2F yEnd = Vec2F(d, cameraSize.y*10.0f) + gridOrigin;
+				Vec2F yBegin = Vec2F(d, screenCameraRect.bottom) + gridScreenOrigin;
+				Vec2F yEnd = Vec2F(d, screenCameraRect.top) + gridScreenOrigin;
 
 				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
 			}
 		}
-		
-		mTextTop->SetScale(invScale);
-		mTextBottom->SetScale(invScale);
-		mTextLeft->SetScale(mViewCamera.GetScale());
-		mTextRight->SetScale(mViewCamera.GetScale());
-
-		BorderF textBorder(mTextBorder.left*mViewCamera.GetScale().x, mTextBorder.bottom*mViewCamera.GetScale().y,
-						   mTextBorder.right*mViewCamera.GetScale().x, mTextBorder.top*mViewCamera.GetScale().y);
 
 		char buf[255];
 
@@ -546,7 +578,7 @@ namespace Editor
 		{
 			for (int i = -cellsCount.y/2; i < cellsCount.y/2; i++)
 			{
-				float y = (float)i*cellSize.y + gridOrigin.y;
+				float y = (float)i*screenCellSize.y + gridScreenOrigin.y;
 
 				sprintf(buf, "%.1f", (Math::Round(y*10.0f)/10.0f));
 				String yCaption = buf;
@@ -554,11 +586,11 @@ namespace Editor
 				if (horGridEnabled)
 				{
 					mTextLeft->SetText(yCaption);
-					mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left + textBorder.left, y));
+					mTextLeft->SetPosition(Vec2F(screenCameraRect.left + mTextBorder.left, y));
 					mTextLeft->Draw();
 
 					mTextRight->SetText(yCaption);
-					mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right - textBorder.right, y));
+					mTextRight->SetPosition(Vec2F(screenCameraRect.right - mTextBorder.right, y));
 					mTextRight->Draw();
 				}
 			}
@@ -569,23 +601,159 @@ namespace Editor
 		{
 			for (int i = -cellsCount.x/2; i < cellsCount.x/2; i++)
 			{
-				float x = (float)i*cellSize.x + gridOrigin.x;
+				float x = (float)i*screenCellSize.x + gridScreenOrigin.x;
 
 				sprintf(buf, "%.1f", (Math::Round(x*10.0f)/10.0f));
 				String xCaption = buf;
-				
+
 				if (verGridEnabled)
 				{
 					mTextTop->SetText(xCaption);
-					mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top - textBorder.top));
+					mTextTop->SetPosition(Vec2F(x, screenCameraRect.top - mTextBorder.top));
 					mTextTop->Draw();
 
 					mTextBottom->SetText(xCaption);
-					mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom + textBorder.bottom));
+					mTextBottom->SetPosition(Vec2F(x, screenCameraRect.bottom + mTextBorder.bottom));
 					mTextBottom->Draw();
 				}
 			}
 		}
+
+		o2Render.SetCamera(mViewCamera);
+
+		// 		ShittyTemplate<ShitFloat> tt;
+		// 		tt.GetShit();
+		// 
+		// 		//return;
+		// 
+		// 		Vec2F cameraSize = mViewCamera.GetSize()*mViewCamera.GetScale();
+		// 
+		// 		Vec2F optimalCellSize = cameraSize / 2.0f;
+		// 		float minCellSize = 0.000001f;
+		// 		float maxCellSize = 1000000.0f;
+		// 		Vec2F localCellSize(minCellSize, minCellSize);
+		// 
+		// 		//X
+		// 		while (localCellSize.x < maxCellSize)
+		// 		{
+		// 			float next = localCellSize.x*10.0f;
+		// 			if (optimalCellSize.x > localCellSize.x && optimalCellSize.x <= next)
+		// 				break;
+		// 
+		// 			localCellSize.x = next;
+		// 		}
+		// 
+		// 		//Y
+		// 		while (localCellSize.y < maxCellSize)
+		// 		{
+		// 			float next = localCellSize.y*10.0f;
+		// 			if (optimalCellSize.y > localCellSize.y && optimalCellSize.y <= next)
+		// 				break;
+		// 
+		// 			localCellSize.y = next;
+		// 		}
+		// 
+		// 		Vec2F gridOrigin(Math::Round(mViewCamera.GetPosition().x / localCellSize.x)*localCellSize.x,
+		// 						 Math::Round(mViewCamera.GetPosition().y / localCellSize.y)*localCellSize.x);
+		// 
+		// 		Vec2I cellsCount(Math::RoundToInt(cameraSize.x/localCellSize.x), Math::RoundToInt(cameraSize.y/localCellSize.y));
+		// 		Vec2F tenCeilsSize = localCellSize*10.0f;
+		// 		Vec2F screenCellSize = localCellSize / mViewCamera.GetScale();
+		// 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
+		// 
+		// 		Vec2F invScale(mViewCamera.GetScale().y, mViewCamera.GetScale().x);
+		// 
+		// 		// Y
+		// 		if (horGridEnabled)
+		// 		{
+		// 			for (int i = -cellsCount.y/2; i < cellsCount.y/2; i++)
+		// 			{
+		// 				float d = (float)i*localCellSize.y;
+		// 				Vec2F dorigin = gridOrigin + Vec2F(d, d);
+		// 
+		// 				float rdy = Math::Abs(dorigin.y/tenCeilsSize.y - Math::Floor(dorigin.y/tenCeilsSize.y));
+		// 				bool yTen = rdy < 0.05f || rdy > 0.95f;
+		// 
+		// 				Vec2F xBegin = Vec2F(-cameraSize.x*10.0f, d) + gridOrigin;
+		// 				Vec2F xEnd = Vec2F(cameraSize.x*10.0f, d) + gridOrigin;
+		// 
+		// 				o2Render.DrawAALine(xBegin, xEnd, yTen ? mGridColor : cellColorSmoothed);
+		// 			}
+		// 		}
+		// 
+		// 		// X
+		// 		if (verGridEnabled)
+		// 		{
+		// 			for (int i = -cellsCount.x/2; i < cellsCount.x/2; i++)
+		// 			{
+		// 				float d = (float)i*localCellSize.x;
+		// 				Vec2F dorigin = gridOrigin + Vec2F(d, d);
+		// 
+		// 				float rdx = Math::Abs(dorigin.x/tenCeilsSize.x - Math::Floor(dorigin.x/tenCeilsSize.x));
+		// 				bool xTen = rdx < 0.05f || rdx > 0.95f;
+		// 
+		// 				Vec2F yBegin = Vec2F(d, -cameraSize.y*10.0f) + gridOrigin;
+		// 				Vec2F yEnd = Vec2F(d, cameraSize.y*10.0f) + gridOrigin;
+		// 
+		// 				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
+		// 			}
+		// 		}
+		// 
+		// 		mTextTop->SetScale(invScale);
+		// 		mTextBottom->SetScale(invScale);
+		// 		mTextLeft->SetScale(mViewCamera.GetScale());
+		// 		mTextRight->SetScale(mViewCamera.GetScale());
+		// 
+		// 		BorderF textBorder(mTextBorder.left*mViewCamera.GetScale().x, mTextBorder.bottom*mViewCamera.GetScale().y,
+		// 						   mTextBorder.right*mViewCamera.GetScale().x, mTextBorder.top*mViewCamera.GetScale().y);
+		// 
+		// 		char buf[255];
+		// 
+		// 		// Y
+		// 		if (horGridEnabled)
+		// 		{
+		// 			for (int i = -cellsCount.y/2; i < cellsCount.y/2; i++)
+		// 			{
+		// 				float y = (float)i*localCellSize.y + gridOrigin.y;
+		// 
+		// 				sprintf(buf, "%.1f", (Math::Round(y*10.0f)/10.0f));
+		// 				String yCaption = buf;
+		// 
+		// 				if (horGridEnabled)
+		// 				{
+		// 					mTextLeft->SetText(yCaption);
+		// 					mTextLeft->SetPosition(Vec2F(mViewCamera.GetRect().left + textBorder.left, y));
+		// 					mTextLeft->Draw();
+		// 
+		// 					mTextRight->SetText(yCaption);
+		// 					mTextRight->SetPosition(Vec2F(mViewCamera.GetRect().right - textBorder.right, y));
+		// 					mTextRight->Draw();
+		// 				}
+		// 			}
+		// 		}
+		// 
+		// 		// X
+		// 		if (verGridEnabled)
+		// 		{
+		// 			for (int i = -cellsCount.x/2; i < cellsCount.x/2; i++)
+		// 			{
+		// 				float x = (float)i*localCellSize.x + gridOrigin.x;
+		// 
+		// 				sprintf(buf, "%.1f", (Math::Round(x*10.0f)/10.0f));
+		// 				String xCaption = buf;
+		// 
+		// 				if (verGridEnabled)
+		// 				{
+		// 					mTextTop->SetText(xCaption);
+		// 					mTextTop->SetPosition(Vec2F(x, mViewCamera.GetRect().top - textBorder.top));
+		// 					mTextTop->Draw();
+		// 
+		// 					mTextBottom->SetText(xCaption);
+		// 					mTextBottom->SetPosition(Vec2F(x, mViewCamera.GetRect().bottom + textBorder.bottom));
+		// 					mTextBottom->Draw();
+		// 				}
+		// 			}
+		// 		}
 	}
 
 	void CurveEditor::DrawCurves()
@@ -1227,7 +1395,7 @@ namespace Editor
 		for (auto handle : mHandles)
 		{
 			CurveHandle* curveHandle = (CurveHandle*)handle;
-			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetViewPosition()) &&
+			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetLocalPosition()) &&
 				!mSelectedHandles.Contains(handle))
 			{
 				mSelectingHandlesBuf.Add((CurveHandle*)handle);
@@ -1238,7 +1406,7 @@ namespace Editor
 		for (auto handle : mSupportHandlesGroup.GetAllHandles())
 		{
 			CurveHandle* curveHandle = (CurveHandle*)handle;
-			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetViewPosition()) &&
+			if (handle->IsEnabled() && selectionLocalRect.IsInside(curveHandle->GetLocalPosition()) &&
 				!mSupportHandlesGroup.GetSelectedHandles().Contains(handle))
 			{
 				mSelectingHandlesBuf.Add((CurveHandle*)handle);
@@ -1334,16 +1502,16 @@ namespace Editor
 		if (!mTransformFrameVisible)
 			return;
 
-		RectF aabb(((CurveHandle*)mSelectedHandles[0])->GetViewPosition(), ((CurveHandle*)mSelectedHandles[0])->GetViewPosition());
+		RectF aabb(((CurveHandle*)mSelectedHandles[0])->GetLocalPosition(), ((CurveHandle*)mSelectedHandles[0])->GetLocalPosition());
 
 		for (auto handle : mSelectedHandles)
 		{
 			CurveHandle* curveHandle = (CurveHandle*)handle;
 
-			aabb.left = Math::Min(curveHandle->GetViewPosition().x, aabb.left);
-			aabb.right = Math::Max(curveHandle->GetViewPosition().x, aabb.right);
-			aabb.top = Math::Max(curveHandle->GetViewPosition().y, aabb.top);
-			aabb.bottom = Math::Min(curveHandle->GetViewPosition().y, aabb.bottom);
+			aabb.left = Math::Min(curveHandle->GetLocalPosition().x, aabb.left);
+			aabb.right = Math::Max(curveHandle->GetLocalPosition().x, aabb.right);
+			aabb.top = Math::Max(curveHandle->GetLocalPosition().y, aabb.top);
+			aabb.bottom = Math::Min(curveHandle->GetLocalPosition().y, aabb.bottom);
 		}
 
 		mTransformFrameBasis = Basis(aabb.LeftBottom(), Vec2F::Right()*aabb.Width(), Vec2F::Up()*aabb.Height());
@@ -1460,7 +1628,7 @@ namespace Editor
 			for (auto handle : mSelectedHandles)
 			{
 				CurveHandle* curveHandle = (CurveHandle*)handle;
-				curveHandle->SetPosition(curveHandle->ViewToLocal(curveHandle->GetViewPosition()*delta));
+				curveHandle->SetPosition(curveHandle->CurveViewToLocal(curveHandle->GetLocalPosition()*delta));
 				curveHandle->onChangedPos(handle->GetPosition());
 			}
 
@@ -1578,6 +1746,16 @@ namespace Editor
 			KeysChangeAction* action = mnew KeysChangeAction(actionKeysInfos, this);
 			DoneAction(action);
 		}
+	}
+
+	Vec2F CurveEditor::CurveViewToLocal(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const
+	{
+		return (point + viewOffset)*viewScale;
+	}
+
+	Vec2F CurveEditor::LocalToCurveView(const Vec2F& point, const Vec2F& viewScale, const Vec2F& viewOffset) const
+	{
+		return point/viewScale - viewOffset;
 	}
 
 	void CurveEditor::DoneAction(IAction* action)
@@ -2101,29 +2279,29 @@ namespace Editor
 		return *this;
 	}
 
-	Vec2F CurveEditor::CurveHandle::GetViewPosition() const
+	Vec2F CurveEditor::CurveHandle::GetLocalPosition() const
 	{
-		return LocalToView(GetPosition());
+		return CurveViewToLocal(GetPosition());
 	}
 
-	Vec2F CurveEditor::CurveHandle::LocalToView(const Vec2F& point) const
+	Vec2F CurveEditor::CurveHandle::LocalToCurveView(const Vec2F& point) const
 	{
-		return (point + curveInfo->viewOffset)*curveInfo->viewScale;
+		return curveInfo->curveEditor->LocalToCurveView(point, curveInfo->viewScale, curveInfo->viewOffset);
 	}
 
-	Vec2F CurveEditor::CurveHandle::ViewToLocal(const Vec2F& point) const
+	Vec2F CurveEditor::CurveHandle::CurveViewToLocal(const Vec2F& point) const
 	{
-		return point/curveInfo->viewScale - curveInfo->viewOffset;
+		return curveInfo->curveEditor->CurveViewToLocal(point, curveInfo->viewScale, curveInfo->viewOffset);
 	}
 
 	Vec2F CurveEditor::CurveHandle::ScreenToLocal(const Vec2F& point)
 	{
-		return ViewToLocal(curveInfo->curveEditor->ScreenToLocalPoint(point));
+		return LocalToCurveView(curveInfo->curveEditor->ScreenToLocalPoint(point));
 	}
 
 	Vec2F CurveEditor::CurveHandle::LocalToScreen(const Vec2F& point)
 	{
-		return curveInfo->curveEditor->LocalToScreenPoint(LocalToView(point));
+		return curveInfo->curveEditor->LocalToScreenPoint(CurveViewToLocal(point));
 	}
 
 }
