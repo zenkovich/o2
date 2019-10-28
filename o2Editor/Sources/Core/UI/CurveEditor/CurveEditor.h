@@ -371,6 +371,9 @@ namespace Editor
 		// It is called when selectable handle completed changing
 		void OnHandleCompletedChange(DragHandle* handle) override;
 
+		// It is called when selection is changed - some handle was added or removed from selection
+		void OnSelectionChanged() override;
+
 		// Checks supports handles visibility
 		void CheckHandlesVisible();
 
@@ -535,6 +538,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, OnHandleBeganDragging, DragHandle*);
 	PROTECTED_FUNCTION(void, OnHandleMoved, DragHandle*, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnHandleCompletedChange, DragHandle*);
+	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, CheckHandlesVisible);
 	PROTECTED_FUNCTION(void, UpdateTransformFrame);
 	PROTECTED_FUNCTION(bool, IsTransformFrameVisible);

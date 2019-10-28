@@ -306,6 +306,8 @@ namespace o2
 
 	Color4 Color4::SomeColor(int idx)
 	{
-		return Color4((idx*33)%255, (idx*58)%255, (idx*77)%255, 255);
+		Color4 res = Color4::White();
+		res.SetHSL(Math::Random(0.0f, 1.0f), Math::Random(0.3f, 0.8f), Math::Random(0.3f, 0.8f));
+		return res;
 	}
 }
