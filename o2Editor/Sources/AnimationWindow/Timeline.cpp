@@ -194,15 +194,19 @@ namespace Editor
 
 	void AnimationTimeline::OnCursorRightMousePressed(const Input::Cursor& cursor)
 	{
-		if (!mViewMoveDisabled)
-		{
-			mBeginDragViewScrollOffset = WorldToLocal(cursor.position.x);
-			mDragViewScroll = true;
-		}
+		mBeginDragViewScrollOffset = WorldToLocal(cursor.position.x);
 	}
 
 	void AnimationTimeline::OnCursorRightMouseStayDown(const Input::Cursor& cursor)
 	{
+		const float beginScrollThreshold = 3.0f;
+
+		if (!mDragViewScroll && !mViewMoveDisabled)
+		{
+			if (Math::Abs(LocalToWorld(mBeginDragViewScrollOffset) - cursor.position.x) > beginScrollThreshold)
+				mDragViewScroll = true;
+		}
+
 		if (mDragViewScroll)
 		{
 			mViewScroll -= WorldToLocal(cursor.position.x) - mBeginDragViewScrollOffset;
@@ -311,7 +315,10 @@ namespace Editor
 		mAnimation = animation;
 
 		if (mAnimation)
+		{
 			mAnimation->onDurationChange += THIS_FUNC(UpdateDuration);
+			mViewZoom = Math::Clamp((layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/mAnimation->GetDuration(), mMinScale, mMaxScale);
+		}
 
 		UpdateDuration();
 	}
@@ -333,13 +340,16 @@ namespace Editor
 		mSmoothViewScroll = scroll;
 	}
 
-	void AnimationTimeline::SetViewRange(float left, float right)
+	void AnimationTimeline::SetViewRange(float left, float right, bool force /*= true*/)
 	{
 		mViewZoom = (layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/(right - left);
 		mViewScroll = left + mScaleOffset/mOneSecondDefaultSize/mViewZoom;
 
-		mSmoothViewScroll = mViewScroll;
-		mSmoothViewZoom = mViewZoom;
+		if (force)
+		{
+			mSmoothViewScroll = mViewScroll;
+			mSmoothViewZoom = mViewZoom;
+		}
 	}
 
 	float AnimationTimeline::GetScroll() const

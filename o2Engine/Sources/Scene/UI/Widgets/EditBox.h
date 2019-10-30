@@ -150,6 +150,9 @@ namespace o2
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Returns true when input events can be handled by down listeners, always returns false
+		bool IsInputTransparent() const override;
+
 		SERIALIZABLE(EditBox);
 
 	protected:
@@ -357,6 +360,7 @@ CLASS_METHODS_META(o2::EditBox)
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);

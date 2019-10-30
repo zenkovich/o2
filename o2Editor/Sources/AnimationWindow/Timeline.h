@@ -50,7 +50,7 @@ namespace Editor
 		void SetScroll(float scroll);
 
 		// Sets view range, left view border by left, and right border by right
-		void SetViewRange(float left, float right);
+		void SetViewRange(float left, float right, bool force = true);
 
 		// Returns current time scroll in seconds
 		float GetScroll() const;
@@ -126,7 +126,7 @@ namespace Editor
 
 		float mViewZoom = 1.0f;       // Time scale zoom
 		float mSmoothViewZoom = 1.0f; // Smoothed and animated time scale zoom
-		bool  mViewHasZoomed = false;          // True when area has scrolled at this frame, resets to false on update
+		bool  mViewHasZoomed = false; // True when area has scrolled at this frame, resets to false on update
 
 		bool mViewMoveDisabled = false; // Is moving and zooming view disabled. It is disabling when editor has switched to curves edit mode
 
@@ -241,7 +241,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetScroll, float);
-	PUBLIC_FUNCTION(void, SetViewRange, float, float);
+	PUBLIC_FUNCTION(void, SetViewRange, float, float, bool);
 	PUBLIC_FUNCTION(float, GetScroll);
 	PUBLIC_FUNCTION(void, SetScale, float);
 	PUBLIC_FUNCTION(float, GetScale);

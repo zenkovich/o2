@@ -1524,7 +1524,7 @@ namespace Editor
 			for (auto handle : mSelectedHandles)
 			{
 				CurveHandle* curveHandle = (CurveHandle*)handle;
-				curveHandle->SetPosition(curveHandle->CurveViewToLocal(curveHandle->GetLocalPosition()*delta));
+				curveHandle->SetPosition(curveHandle->LocalToCurveView(curveHandle->GetLocalPosition()*delta));
 				curveHandle->onChangedPos(handle->GetPosition());
 			}
 

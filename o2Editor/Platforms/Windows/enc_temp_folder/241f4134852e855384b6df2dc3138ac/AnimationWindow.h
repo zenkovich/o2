@@ -37,7 +37,6 @@ namespace Editor
 	// - Добавить добавление полей + 
 	// - Добавить удаление полей
 	// - Добавить "запись" изменения полей
-	// - Ставить время на выделяемом ключе только если просто нажали, но не двигали
 
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{

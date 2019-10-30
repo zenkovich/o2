@@ -713,6 +713,11 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && mAbsoluteViewArea.IsInside(point);
 	}
 
+	bool EditBox::IsInputTransparent() const
+	{
+		return false;
+	}
+
 	void EditBox::CopyData(const Actor& otherActor)
 	{
 		const EditBox& other = dynamic_cast<const EditBox&>(otherActor);
