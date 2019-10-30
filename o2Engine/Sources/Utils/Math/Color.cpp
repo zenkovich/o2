@@ -307,7 +307,15 @@ namespace o2
 	Color4 Color4::SomeColor(int idx)
 	{
 		Color4 res = Color4::White();
-		res.SetHSL(Math::Random(0.0f, 1.0f), Math::Random(0.3f, 0.8f), Math::Random(0.3f, 0.8f));
+
+		float fi = (float)idx;
+		float cornersOnCircle = 6;
+		float cycleOffset = 0.33f;
+		float startOffset = 0.25f;
+
+		float currCorner = Math::Mod(fi, cornersOnCircle)/cornersOnCircle;
+		float currCycle = Math::Floor(fi/cornersOnCircle);
+		res.SetHSL(Math::Mod(startOffset + currCorner + currCycle*cycleOffset, 1.0f), 1.0f, 0.5f);
 		return res;
 	}
 }

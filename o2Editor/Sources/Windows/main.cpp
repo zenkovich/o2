@@ -18,6 +18,13 @@ int main()
 {
 	INITIALIZE_O2;
 
+	auto x1 = Color4::SomeColor(0);
+	auto x2 = Color4::SomeColor(1);
+	auto x3 = Color4::SomeColor(2);
+	auto x4 = Color4::SomeColor(3);
+	auto x5 = Color4::SomeColor(4);
+	auto x6 = Color4::SomeColor(5);
+	
 	EditorApplication* app = mnew EditorApplication();
 	app->Initialize();
 	app->Launch();

@@ -93,6 +93,9 @@ namespace Editor
 		void SetSupportHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover, const ImageAssetRef& pressed,
 									const ImageAssetRef& selected);
 
+		// Enables curves scale adjusting. When it is true, all curves adopts their size to be in the same view range
+		void SetAdjustCurvesScale(bool enable);
+
 		// Updates layout
 		void UpdateSelfTransform() override;
 
@@ -166,7 +169,7 @@ namespace Editor
 
 		struct CurveInfo
 		{
-			CurveEditor* curveEditor = nullptr;
+			CurveEditor* editor = nullptr;
 
 			String curveId;
 			Curve* curve = nullptr;
@@ -187,6 +190,7 @@ namespace Editor
 
 			void UpdateHandles();
 			void UpdateApproximatedPoints();
+			void AdjustScale();
 			void OnCurveChanged();
 
 			void BeginCurveManualChange();
@@ -255,6 +259,8 @@ namespace Editor
 		SelectableHandlesVec mSelectingHandlesBuf; // Potentially selecting handles while selecting
 							    								    
 		Sprite* mSelectionSprite = nullptr; // Selection sprite @SERIALIZABLE
+
+		bool mAdjustCurvesScale = true; // When it is true, all curves adopts their size to be in the same view range
 
 		FontRef mTextFont;             // Captions text font @SERIALIZABLE
 		Text*   mTextLeft = nullptr;   // Captions text drawable at left border
@@ -469,6 +475,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mSupportHandlesGroup);
 	PROTECTED_FIELD(mSelectingHandlesBuf);
 	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAdjustCurvesScale);
 	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTextLeft);
 	PROTECTED_FIELD(mTextRight);
@@ -506,6 +513,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PUBLIC_FUNCTION(void, SetTextBorder, const BorderF&);
 	PUBLIC_FUNCTION(void, SetMainHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, SetAdjustCurvesScale, bool);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);

@@ -45,7 +45,7 @@ namespace Editor
 
 		mBackColor = Color4(225, 232, 232, 255);
 
-		mHandleSamplesStubInfo.curveEditor = this;
+		mHandleSamplesStubInfo.editor = this;
 
 		mReady = true;
 	}
@@ -55,7 +55,7 @@ namespace Editor
 	{
 		mReady = false;
 
-		mHandleSamplesStubInfo.curveEditor = this;
+		mHandleSamplesStubInfo.editor = this;
 
 		mContextMenu = FindChildByType<ContextMenu>();
 		if (mContextMenu)
@@ -134,14 +134,11 @@ namespace Editor
 		UpdateSelfTransform();
 
 		CurveInfo* info = mnew CurveInfo();
-		info->curveEditor = this;
+		info->editor = this;
 		info->curveId = id;
 		info->curve = curve;
 
-		RectF rect = curve->GetRect();
-		info->viewScale = Vec2F(1, rect.Height() < FLT_EPSILON ? 1.0f : 1.0f/rect.Height());
-		info->viewOffset = Vec2F(0, -rect.bottom);
-		info->UpdateApproximatedPoints();
+		info->AdjustScale();
 
 		info->curve->onKeysChanged += MakeSubscription(info, &CurveInfo::OnCurveChanged, [=]() { info->curve = nullptr; });
 
@@ -258,6 +255,15 @@ namespace Editor
 		mSupportHandleSample.curveInfo = &mHandleSamplesStubInfo;
 		mSupportHandleSample = CurveHandle(mnew Sprite(regular), mnew Sprite(hover),
 										   mnew Sprite(pressed), mnew Sprite(selected));
+	}
+
+	void CurveEditor::SetAdjustCurvesScale(bool enable)
+	{
+		mAdjustCurvesScale = true;
+
+		for (auto curve : mCurves) {
+
+		}
 	}
 
 	void CurveEditor::CopyData(const Actor& otherActor)
@@ -454,11 +460,18 @@ namespace Editor
 		Vec2F gridOffset(0, 0);
 		bool drawText = false;
 
-		if (!mSelectedHandles.IsEmpty()) {
+		bool allSameCurve = !mSelectedHandles.IsEmpty() && mSelectedHandles.All([&](DragHandle* x) {
+			return ((CurveHandle*)x)->curveInfo == ((CurveHandle*)mSelectedHandles[0])->curveInfo;
+		});
+
+		if (allSameCurve)
+		{
 			CurveHandle* curvehandle = (CurveHandle*)mSelectedHandles[0];
 			gridScale = curvehandle->curveInfo->viewScale;
 			gridOffset = curvehandle->curveInfo->viewOffset;
 		}
+
+		bool unknownScale = mAdjustCurvesScale && !allSameCurve;
 
 		RectF localCameraRect = mViewCamera.GetRect();
 		RectF curveViewCameraRect(LocalToCurveView(localCameraRect.LeftTop(), gridScale, gridOffset),
@@ -514,7 +527,8 @@ namespace Editor
 
 		Vec2F tenCurveViewCellSize = curveViewCellSize*10.0f;
 
-		if (o2Input.IsKeyDown(VK_F1)) {
+		if (o2Input.IsKeyDown(VK_F1))
+		{
 			o2Render.DrawCross(gridScreenOrigin, 5, Color4::Red());
 			mTextLeft->SetScale(Vec2F(1, 1));
 			mTextLeft->SetText(String(gridCurveViewOrigin) + "\n" + String(curveViewCellSize));
@@ -576,6 +590,9 @@ namespace Editor
 				o2Render.DrawAALine(yBegin, yEnd, xTen ? mGridColor : cellColorSmoothed);
 			}
 		}
+
+		if (unknownScale)
+			return;
 
 		char buf[255];
 
@@ -2008,6 +2025,24 @@ namespace Editor
 		}
 	}
 
+	void CurveEditor::CurveInfo::AdjustScale()
+	{
+		if (editor->mAdjustCurvesScale)
+		{
+			RectF rect = curve->GetRect();
+			viewScale = Vec2F(1, rect.Height() < FLT_EPSILON ? 1.0f : 1.0f/rect.Height());
+			viewOffset = Vec2F(0, -rect.bottom);
+		}
+		else
+		{
+			viewScale = Vec2F(1, 1);
+			viewOffset = Vec2F();
+		}
+
+		UpdateApproximatedPoints();
+		UpdateHandles();
+	}
+
 	void CurveEditor::CurveInfo::OnCurveChanged()
 	{
 		if (disableChangesHandling)
@@ -2025,7 +2060,7 @@ namespace Editor
 					handle->leftSupportHandle.SetSelectionGroup(nullptr);
 				}
 
-				curveEditor->mSupportHandles.Remove(&handle->leftSupportHandle);
+				editor->mSupportHandles.Remove(&handle->leftSupportHandle);
 
 				if (handle->rightSupportHandle.IsSelected())
 				{
@@ -2033,7 +2068,7 @@ namespace Editor
 					handle->rightSupportHandle.SetSelectionGroup(nullptr);
 				}
 
-				curveEditor->mSupportHandles.Remove(&handle->rightSupportHandle);
+				editor->mSupportHandles.Remove(&handle->rightSupportHandle);
 
 				if (handle->mainHandle.IsSelected())
 				{
@@ -2041,7 +2076,7 @@ namespace Editor
 					handle->mainHandle.SetSelected(false);
 				}
 
-				curveEditor->mHandles.Remove(&handle->mainHandle);
+				editor->mHandles.Remove(&handle->mainHandle);
 
 				delete handle;
 			}
@@ -2049,7 +2084,7 @@ namespace Editor
 			handles.clear();
 
 			for (int i = 0; i < curve->GetKeys().Count(); i++)
-				curveEditor->AddCurveKeyHandles(this, i);
+				editor->AddCurveKeyHandles(this, i);
 
 			for (auto handle : handles)
 			{
@@ -2064,11 +2099,7 @@ namespace Editor
 			}
 		}
 
-		RectF rect = curve->GetRect();
-		viewScale = Vec2F(1, rect.Height() < FLT_EPSILON ? 1.0f : 1.0f/rect.Height());
-		viewOffset = Vec2F(0, -rect.bottom);
-
-		UpdateApproximatedPoints();
+		AdjustScale();
 		UpdateHandles();
 	}
 
@@ -2169,22 +2200,22 @@ namespace Editor
 
 	Vec2F CurveEditor::CurveHandle::LocalToCurveView(const Vec2F& point) const
 	{
-		return curveInfo->curveEditor->LocalToCurveView(point, curveInfo->viewScale, curveInfo->viewOffset);
+		return curveInfo->editor->LocalToCurveView(point, curveInfo->viewScale, curveInfo->viewOffset);
 	}
 
 	Vec2F CurveEditor::CurveHandle::CurveViewToLocal(const Vec2F& point) const
 	{
-		return curveInfo->curveEditor->CurveViewToLocal(point, curveInfo->viewScale, curveInfo->viewOffset);
+		return curveInfo->editor->CurveViewToLocal(point, curveInfo->viewScale, curveInfo->viewOffset);
 	}
 
 	Vec2F CurveEditor::CurveHandle::ScreenToLocal(const Vec2F& point)
 	{
-		return LocalToCurveView(curveInfo->curveEditor->ScreenToLocalPoint(point));
+		return LocalToCurveView(curveInfo->editor->ScreenToLocalPoint(point));
 	}
 
 	Vec2F CurveEditor::CurveHandle::LocalToScreen(const Vec2F& point)
 	{
-		return curveInfo->curveEditor->LocalToScreenPoint(CurveViewToLocal(point));
+		return curveInfo->editor->LocalToScreenPoint(CurveViewToLocal(point));
 	}
 
 }
