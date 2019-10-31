@@ -101,6 +101,11 @@ namespace Editor
 		mEditor->verGridEnabled = false;
 		mEditor->onViewChanged += THIS_FUNC(OnEditorViewChanged);
 
+		mEditor->GetContextMenu()->AddItem("---");
+		mEditor->GetContextMenu()->AddToggleItem("Normalize curves", true, [&](bool val) { 
+			mEditor->SetAdjustCurvesScale(val);
+		});
+
 		AddChild(mEditor);
 	}
 

@@ -80,7 +80,7 @@ namespace Editor
 		HorizontalScrollBar* GetScrollBar() const;
 
 		// Checks is this timeA and timeB are same on screen. Dependent on zoom, thershold - max pixels distance on screen
-		bool IsSameTime(float timeA, float timeB, float threshold = 1.7f) const;
+		bool IsSameTime(float timeA, float timeB, float threshold = 3.0f) const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;

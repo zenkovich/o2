@@ -102,9 +102,13 @@ namespace Editor
 
 		FrameScrollView::Draw();
 
+		o2Render.EnableScissorTest(layout->GetWorldRect());
+
 		DrawTransformFrame();
 		DrawHandles();
 		DrawSelection();
+
+		o2Render.DisableScissorTest();
 	}
 
 	void CurveEditor::Update(float dt)
@@ -223,6 +227,11 @@ namespace Editor
 		OnCameraTransformChanged();
 	}
 
+	ContextMenu* CurveEditor::GetContextMenu() const
+	{
+		return mContextMenu;
+	}
+
 	void CurveEditor::SetSelectionSpriteImage(const ImageAssetRef& image)
 	{
 		mSelectionSprite->LoadFromImage(image);
@@ -259,11 +268,16 @@ namespace Editor
 
 	void CurveEditor::SetAdjustCurvesScale(bool enable)
 	{
-		mAdjustCurvesScale = true;
+		mAdjustCurvesScale = enable;
 
 		for (auto curve : mCurves) {
-
+			curve->AdjustScale();
 		}
+
+		RecalculateViewArea();
+
+		mNeedRedraw = true;
+		mNeedAdjustView = true;
 	}
 
 	void CurveEditor::CopyData(const Actor& otherActor)
@@ -432,24 +446,6 @@ namespace Editor
 	{
 		DrawGrid();
 		DrawCurves();
-
-		// 		o2Render.DrawRectFrame(mAvailableArea);
-		// 
-		// 		RectF outside = mAvailableArea;
-		// 		outside.left -= mAvailableArea.Width()*0.1f;
-		// 		outside.right += mAvailableArea.Width()*0.1f;
-		// 		outside.bottom -= mAvailableArea.Height()*0.1f;
-		// 		outside.top += mAvailableArea.Height()*0.1f;
-		// 
-		// 		o2Render.DrawRectFrame(outside, Color4::Green());
-		// 
-		// 		RectF inside = mAvailableArea;
-		// 		inside.left += mAvailableArea.Width()*0.1f;
-		// 		inside.right -= mAvailableArea.Width()*0.1f;
-		// 		inside.bottom += mAvailableArea.Height()*0.1f;
-		// 		inside.top -= mAvailableArea.Height()*0.1f;
-		// 
-		// 		o2Render.DrawRectFrame(inside, Color4::Red());
 	}
 
 	void CurveEditor::DrawGrid()
@@ -472,6 +468,12 @@ namespace Editor
 		}
 
 		bool unknownScale = mAdjustCurvesScale && !allSameCurve;
+
+		if (unknownScale && mCurves.Count() == 1) {
+			gridScale = mCurves[0]->viewScale;
+			gridOffset = mCurves[0]->viewOffset;
+			unknownScale = false;
+		}
 
 		RectF localCameraRect = mViewCamera.GetRect();
 		RectF curveViewCameraRect(LocalToCurveView(localCameraRect.LeftTop(), gridScale, gridOffset),
@@ -675,16 +677,6 @@ namespace Editor
 
 				o2Render.DrawAALine(a*transform, b*transform, curve->color);
 			}
-
-			//int idx = 0;
-			//for (auto key : curve->curve->GetKeys())
-			//{
-			//	mTextLeft->position = Vec2F(key.position, key.value - 0.1f);
-			//	mTextLeft->text = (String)idx + ": \n" + (String)key.leftSupportPosition + ", " + (String)key.leftSupportValue +
-			//		"\n" + (String)key.rightSupportPosition + ", " + (String)key.rightSupportValue;
-			//	mTextLeft->Draw();
-			//	idx++;
-			//}
 		}
 
 		o2Render.camera = mViewCamera;
@@ -1143,8 +1135,11 @@ namespace Editor
 		else if (mCurves.Count() == 1)
 		{
 			clickedCurveInfo = mCurves[0];
-			newKey.position = localCursorPos.x;
-			newKey.value = localCursorPos.y;
+
+			Vec2F curveViewCursorPos = LocalToCurveView(localCursorPos, clickedCurveInfo->viewScale, clickedCurveInfo->viewOffset);
+			newKey.position = curveViewCursorPos.x;
+			newKey.value = curveViewCursorPos.y;
+
 			int idx = clickedCurveInfo->curve->InsertKey(newKey);
 
 			AddCurveKeyHandles(mCurves[0], idx);

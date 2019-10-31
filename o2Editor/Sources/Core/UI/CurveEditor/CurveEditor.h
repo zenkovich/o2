@@ -99,6 +99,9 @@ namespace Editor
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns context menu
+		ContextMenu* GetContextMenu() const;
+
 		SERIALIZABLE(CurveEditor);
 
 	protected:
@@ -515,6 +518,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PUBLIC_FUNCTION(void, SetSupportHandleImages, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetAdjustCurvesScale, bool);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_FUNCTION(ContextMenu*, GetContextMenu);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);

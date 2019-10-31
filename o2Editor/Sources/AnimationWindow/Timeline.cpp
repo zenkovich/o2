@@ -390,9 +390,9 @@ namespace Editor
 		return mScrollBar;
 	}
 
-	bool AnimationTimeline::IsSameTime(float timeA, float timeB, float threshold /*= 1.7f*/) const
+	bool AnimationTimeline::IsSameTime(float timeA, float timeB, float threshold /*= 3.0f*/) const
 	{
-		return Math::Abs(LocalToWorld(timeA) - LocalToWorld(timeB)) < threshold;
+		return Math::Abs(LocalToWorld(timeA) - LocalToWorld(timeB)) <= threshold;
 	}
 
 	bool AnimationTimeline::IsUnderPoint(const Vec2F& point)

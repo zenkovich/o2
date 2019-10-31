@@ -84,6 +84,8 @@ namespace Editor
 
 		bool mNeedUpdateSelectionFrame = false; // True when selection frame required to update
 
+		bool mHandleHasMoved = false; // it is true when some handle was selected and moved, resets on handle pressing
+
 		Sprite* mSelectionFrame = nullptr; // Selected handles frame drawing sprite
 		RectF   mSelectionRect;            // Current selected handles rectangle. The right and left is minimum and maximum handles positions, top and bottom is minimum and maximum handles lines
 
@@ -208,6 +210,7 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mContextMenu);
 	PRIVATE_FIELD(mContextMenuPressPoint);
 	PRIVATE_FIELD(mNeedUpdateSelectionFrame);
+	PRIVATE_FIELD(mHandleHasMoved);
 	PRIVATE_FIELD(mSelectionFrame);
 	PRIVATE_FIELD(mSelectionRect);
 	PRIVATE_FIELD(mBeginSelectPoint);

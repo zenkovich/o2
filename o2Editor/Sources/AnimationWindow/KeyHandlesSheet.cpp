@@ -157,9 +157,6 @@ namespace Editor
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		mNeedUpdateSelectionFrame = true;
-
-		if (mSelectedHandles.Count() == 1)
-			mAnimationWindow->mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
 	}
 
 	void KeyHandlesSheet::OnHandleCursorPressed(DragHandle* handle, const Input::Cursor& cursor)
@@ -178,6 +175,8 @@ namespace Editor
 
 		for (auto handle : GetSelectedHandles())
 			handle->BeginDrag(cursor.position);
+
+		mHandleHasMoved = false;
 	}
 
 	void KeyHandlesSheet::OnHandleCursorReleased(DragHandle* handle, const Input::Cursor& cursor)
@@ -186,6 +185,9 @@ namespace Editor
 
 		for (auto trackControl : mTrackControls)
 			trackControl->EndKeysDrag();
+
+		if (mSelectedHandles.Count() == 1 && !mHandleHasMoved)
+			mAnimationWindow->mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
 	}
 
 	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
@@ -210,10 +212,8 @@ namespace Editor
 
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
-
-		if (mSelectedHandles.Count() == 1)
-			mAnimationWindow->mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
-
+		
+		mHandleHasMoved = true;
 		mNeedUpdateSelectionFrame = true;
 	}
 
