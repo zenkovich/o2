@@ -97,7 +97,9 @@ namespace Editor
 		mContextMenu->AddItem("Save", [&]() { }, ImageAssetRef(), ShortcutKeys('S', true));
 		mContextMenu->AddItem("Save as...", [&]() { }, ImageAssetRef(), ShortcutKeys('S', true, true));
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Edit properties", [&]() { PropertiesListDlg::Show(mAnimationWindow->mAnimation, mAnimationWindow->mTargetActor); });
+		mContextMenu->AddItem("Delete property", THIS_FUNC(OnDeletePropertyPressed));
+		mContextMenu->AddItem("---");
+		mContextMenu->AddItem("Add properties", [&]() { PropertiesListDlg::Show(mAnimationWindow->mAnimation, mAnimationWindow->mTargetActor); });
 
 		onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
 		onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
@@ -232,6 +234,16 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 		return Tree::CreateTreeNodeWidget();
+	}
+
+	void AnimationTree::OnDeletePropertyPressed()
+	{
+		auto treeNode = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
+		if (!treeNode) {
+			return;
+		}
+
+
 	}
 
 	AnimationTreeNode::AnimationTreeNode() :

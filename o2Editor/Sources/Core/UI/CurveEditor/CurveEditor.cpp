@@ -724,6 +724,7 @@ namespace Editor
 		}
 	}
 
+#undef DrawText
 	void CurveEditor::AddCurveKeyHandles(CurveInfo* info, int keyId)
 	{
 		PushScopeEnterOnStack scope;
@@ -744,6 +745,11 @@ namespace Editor
 		keyHandles->mainHandle.onPressed = THIS_FUNC(OnTransformBegin);
 		keyHandles->mainHandle.onChangeCompleted = THIS_FUNC(OnTransformCompleted);
 		keyHandles->mainHandle.messageFallDownListener = this;
+
+		keyHandles->mainHandle.onDraw = [=]() {
+			if (o2Input.IsKeyDown(VK_F1))
+				o2Debug.DrawText(keyHandles->mainHandle.GetScreenPosition(), String(keyHandles->curveKeyIdx));
+		};
 
 
 		// left support handle
@@ -1079,7 +1085,9 @@ namespace Editor
 				const Vec2F* points = key.GetApproximatedPoints();
 				for (int i = 1; i < key.GetApproximatedPointsCount(); i++)
 				{
-					Vec2F a = points[i - 1], b = points[i];
+					Vec2F a = CurveViewToLocal(points[i - 1], info->viewScale, info->viewOffset);
+					Vec2F b = CurveViewToLocal(points[i], info->viewScale, info->viewOffset);
+
 					Vec2F ab = b - a;
 					float abl = ab.Length();
 					Vec2F abn = ab/abl;
@@ -1097,8 +1105,9 @@ namespace Editor
 						const Curve::Key& lastKey = keys[keyIdx - 1];
 
 						Vec2F p = abnp*(abnp.Dot(localCursorPos - a)) + localCursorPos;
-						newKey.position = p.x;
-						newKey.value = p.y;
+						Vec2F pc = LocalToCurveView(p, info->viewScale, info->viewOffset);
+						newKey.position = pc.x;
+						newKey.value = pc.y;
 						newKey.supportsType = Curve::Key::Type::Smooth;
 
 						clickedCurveInfo = info;
@@ -1120,7 +1129,11 @@ namespace Editor
 		bool addedKey = false;
 		if (clickedCurveInfo)
 		{
+			clickedCurveInfo->disableChangesHandling = true;
+
 			int idx = clickedCurveInfo->curve->InsertKey(newKey);
+
+			clickedCurveInfo->disableChangesHandling = false;
 
 			AddCurveKeyHandles(clickedCurveInfo, idx);
 			clickedCurveInfo->UpdateApproximatedPoints();
@@ -1140,7 +1153,11 @@ namespace Editor
 			newKey.position = curveViewCursorPos.x;
 			newKey.value = curveViewCursorPos.y;
 
+			clickedCurveInfo->disableChangesHandling = true;
+
 			int idx = clickedCurveInfo->curve->InsertKey(newKey);
+
+			clickedCurveInfo->disableChangesHandling = false;
 
 			AddCurveKeyHandles(mCurves[0], idx);
 			clickedCurveInfo->UpdateApproximatedPoints();
@@ -1477,15 +1494,15 @@ namespace Editor
 
 					switch (type)
 					{
-					case Curve::Key::Type::Flat:
-					key.leftSupportValue = 0;
-					key.rightSupportValue = 0;
-					break;
+						case Curve::Key::Type::Flat:
+						key.leftSupportValue = 0;
+						key.rightSupportValue = 0;
+						break;
 
-					case Curve::Key::Type::Free:
-					key.rightSupportPosition = -key.leftSupportPosition;
-					key.rightSupportValue = -key.leftSupportValue;
-					break;
+						case Curve::Key::Type::Free:
+						key.rightSupportPosition = -key.leftSupportPosition;
+						key.rightSupportValue = -key.leftSupportValue;
+						break;
 					}
 				}
 			}
@@ -1961,7 +1978,7 @@ namespace Editor
 	}
 
 	CurveEditor::CurveInfo::CurveInfo()
-	{}
+	{ }
 
 	CurveEditor::CurveInfo::~CurveInfo()
 	{
@@ -1975,7 +1992,7 @@ namespace Editor
 		}
 
 		if (curve)
-			curve->onKeysChanged -= MakeSubscription(this, &CurveInfo::OnCurveChanged, []() {});
+			curve->onKeysChanged -= MakeSubscription(this, &CurveInfo::OnCurveChanged, []() { });
 	}
 
 	void CurveEditor::CurveInfo::UpdateHandles()
@@ -2168,19 +2185,19 @@ namespace Editor
 	}
 
 	CurveEditor::CurveHandle::CurveHandle()
-	{}
+	{ }
 
 	CurveEditor::CurveHandle::CurveHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/,
 										  Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, Sprite* selectedPressed /*= nullptr*/) :
 		DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
-	{}
+	{ }
 
 	CurveEditor::CurveHandle::CurveHandle(const DragHandle& other) :
 		DragHandle(other)
-	{}
+	{ }
 
 	CurveEditor::CurveHandle::~CurveHandle()
-	{}
+	{ }
 
 	CurveEditor::CurveHandle& CurveEditor::CurveHandle::operator=(const CurveHandle& other)
 	{

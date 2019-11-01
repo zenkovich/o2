@@ -113,6 +113,9 @@ namespace Editor
 		// Gets tree node from pool or creates new, in editor scope
 		TreeNode* CreateTreeNodeWidget();
 
+		// Remoes selected property
+		void OnDeletePropertyPressed();
+
 		friend class AnimationTreeNode;
 		friend class AnimationWindow;
 	};
