@@ -60,14 +60,14 @@ namespace Editor
 		// Sets target actor
 		void SetTarget(ActorRef actor);
 
-		// Shows key handles sheet, hides curves
-		void ShowKeyHandlesVisible();
+		// Sets curves or handles mode
+		void SetCurvesMode(bool enabled);
 
-		// Shows curves sheet, hides key handles
-		void ShowCurvesSheet();
+		// Returns is curves mode enabled
+		bool IsCurvesMode() const;
 
 	protected:
-		float mTreeViewWidth = 250.0f;    // Width of tree area. Changed by dragable separator
+		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
 		Animation* mAnimation = nullptr; // Editing animation
@@ -186,8 +186,8 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetTarget, ActorRef);
-	PUBLIC_FUNCTION(void, ShowKeyHandlesVisible);
-	PUBLIC_FUNCTION(void, ShowCurvesSheet);
+	PUBLIC_FUNCTION(void, SetCurvesMode, bool);
+	PUBLIC_FUNCTION(bool, IsCurvesMode);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeHandlesSheet);
 	PROTECTED_FUNCTION(void, InitializeTree);

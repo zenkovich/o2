@@ -52,6 +52,13 @@ namespace Editor
 	}
 
 	template<>
+	void KeyFramesTrackControl<AnimatedValue<float>>::SetCurveViewEnabled(bool enabled)
+	{
+		mAddKeyDotButton->enabled = enabled;
+		mAddKeyButton->enabled = !enabled;
+	}
+
+	template<>
 	void KeyFramesTrackControl<AnimatedValue<float>>::Draw()
 	{
 		if (!mResEnabledInHierarchy)

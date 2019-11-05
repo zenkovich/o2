@@ -604,6 +604,7 @@ namespace o2
 
 		mEnabled = visible;
 		Widget::UpdateResEnabled();
+		Widget::UpdateTransparency();
 	}
 
 	void Widget::Show(bool forcible /*= false*/)

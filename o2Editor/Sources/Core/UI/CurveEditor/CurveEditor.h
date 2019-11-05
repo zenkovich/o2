@@ -73,6 +73,9 @@ namespace Editor
 		// Adds curves range with color. It can't be edited, just a solid color between curves
 		void AddCurvesRange(const String& idA, const String& idB, const Color4& color = Color4::Green());
 
+		// Sets curve color
+		void SetCurveColor(Curve* curve, const Color4& color);
+
 		// Removes curve range
 		void RemoveCurvesRange(const String& idA, const String& idB);
 
@@ -510,6 +513,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PUBLIC_FUNCTION(void, AddCurvesRange, Curve*, Curve*, const Color4&);
 	PUBLIC_FUNCTION(void, RemoveCurvesRange, Curve*, Curve*);
 	PUBLIC_FUNCTION(void, AddCurvesRange, const String&, const String&, const Color4&);
+	PUBLIC_FUNCTION(void, SetCurveColor, Curve*, const Color4&);
 	PUBLIC_FUNCTION(void, RemoveCurvesRange, const String&, const String&);
 	PUBLIC_FUNCTION(void, SetSelectionSpriteImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(void, SetTextFont, const FontRef&);

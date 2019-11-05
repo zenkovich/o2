@@ -18,15 +18,16 @@ namespace Editor
 		return KeyHandlesVec();
 	}
 
-	IPropertyField* ITrackControl::GetPropertyField() const
+	Widget* ITrackControl::GetTreePartControls() const
 	{
 		return nullptr;
 	}
 
-	Button* ITrackControl::GetAddKeyButton() const
-	{
-		return nullptr;
-	}
+	void ITrackControl::SetCurveViewEnabled(bool enabled)
+	{}
+
+	void ITrackControl::SetCurveViewColor(const Color4& color)
+	{}
 
 	void ITrackControl::InsertNewKey(float time)
 	{}

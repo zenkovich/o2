@@ -2893,6 +2893,32 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "add key");
 	}
 
+	void EditorUIStyleBuilder::RebuildAddKeyDotButton()
+	{
+		Button* sample = mnew Button();
+
+		auto basicLayer = sample->AddLayer("basic", nullptr);
+
+		auto backLayer = basicLayer->AddChildLayer("regularBack", mnew Sprite("ui/UI4_curve_color.png"),
+												   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto selectLayer = basicLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_curve_color.png"),
+													 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		auto pressedLayer = basicLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_curve_color.png"),
+													  Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 0)));
+
+		sample->AddState("inactive", Animation::EaseInOut(sample, "layer/basic/transparency", 1.0f, 0.5f, 0.01f));
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/basic/child/hover/transparency", 0.0f, 0.5f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/basic/child/pressed/transparency", 0.0f, 0.2f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "add dot key");
+	}
+
 	void EditorUIStyleBuilder::RebuildAddSmallBtn()
 	{
 		Button* sample = mnew Button();

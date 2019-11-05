@@ -19,6 +19,11 @@ namespace o2
 		mIconSprite = GetLayerDrawable<Sprite>("icon");
 
 		RetargetStatesAnimations();
+
+		if (mInteractable)
+			OnBecomeInteractable();
+		else
+			OnBecomeNotInteractable();
 	}
 
 	Button& Button::operator=(const Button& other)

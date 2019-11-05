@@ -1,12 +1,13 @@
 #pragma once
 
+#include "AnimationKeyDragHandle.h"
 #include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/TrackControls/ITrackControl.h"
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Scene/UI/Widget.h"
-#include "AnimationKeyDragHandle.h"
+#include "Scene/UI/Widgets/Image.h"
 
 using namespace o2;
 
@@ -53,11 +54,14 @@ namespace Editor
 		// Returns key handles list
 		KeyHandlesVec GetKeyHandles() const override;
 
-		// Returns value property
-		IPropertyField* GetPropertyField() const override;
+		// Returns a container of controllers that are part of a tree
+		Widget* GetTreePartControls() const override;
 
-		// Returns add button
-		Button* GetAddKeyButton() const override;
+		// Sets curves edit view mode
+		void SetCurveViewEnabled(bool enabled) override;
+
+		// Sets curves view mode color
+		void SetCurveViewColor(const Color4& color) override;
 
 		// Serialize key with specified uid into data node
 		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
@@ -80,11 +84,14 @@ namespace Editor
 
 		String mAnimatedValuePath; // Path to animated value in animation
 
+		Widget* mTreeControls = nullptr; // Returns a container of controllers that are part of a tree
+
 		IPropertyField*                               mPropertyField;
 		AnimatedValueTypeValueType                    mPropertyValue = AnimatedValueTypeValueType();
 		PointerValueProxy<AnimatedValueTypeValueType> mPropertyValueProxy;
 
-		Button* mAddKeyButton = nullptr; // Add key button, enables when available to add new key
+		Button* mAddKeyDotButton = nullptr; // Dot add key button colored with curve color
+		Button* mAddKeyButton = nullptr;    // Add key button, enables when available to add new key
 
 		AnimatedValueTypeValueType mLastAnimatedValue = AnimatedValueTypeValueType();
 
@@ -124,6 +131,13 @@ namespace Editor
 	{
 		for (auto handle : mHandles)
 			delete handle;
+
+		if (mAnimatedValue)
+		{
+			auto animVal = mAnimatedValue;
+			animVal->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
+			animVal->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
+		}
 	}
 
 	template<typename AnimatedValueType>
@@ -187,6 +201,7 @@ namespace Editor
 		}
 
 		InitializeHandles();
+		CheckCanCreateKey(animatedValue->GetTime());
 	}
 
 	template<typename AnimatedValueType>
@@ -209,28 +224,44 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	IPropertyField* KeyFramesTrackControl<AnimatedValueType>::GetPropertyField() const
+	Widget* KeyFramesTrackControl<AnimatedValueType>::GetTreePartControls() const
 	{
-		return mPropertyField;
+		return mTreeControls;
 	}
 
 	template<typename AnimatedValueType>
-	Button* KeyFramesTrackControl<AnimatedValueType>::GetAddKeyButton() const
+	void KeyFramesTrackControl<AnimatedValueType>::SetCurveViewColor(const Color4& color)
 	{
-		return mAddKeyButton;
+		mAddKeyDotButton->GetLayerDrawable<Sprite>("basic/regularBack")->SetColor(color);
 	}
+
+	template<typename AnimatedValueType>
+	void KeyFramesTrackControl<AnimatedValueType>::SetCurveViewEnabled(bool enabled)
+	{}
 
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeControls()
 	{
+		mTreeControls = mnew Widget();
+
 		auto fieldProto = o2EditorProperties.GetFieldPropertyPrototype(&TypeOf(AnimatedValueType::ValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(fieldProto->GetType(), "standard"));
 		mPropertyValueProxy = PointerValueProxy<AnimatedValueTypeValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
 		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataNode>&, const Vector<DataNode>&) { OnPropertyChanged(); };
+		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
+		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 		mAddKeyButton->onClick = [&]() { InsertNewKey(mAnimatedValue->GetTime()); };
+
+		mAddKeyDotButton = o2UI.CreateWidget<Button>("add dot key");
+		*mAddKeyDotButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
+		mAddKeyDotButton->GetLayerDrawable<Sprite>("basic/regularBack")->SetColor(Color4::Black());
+		mAddKeyDotButton->onClick = [&]() { InsertNewKey(mAnimatedValue->GetTime()); };
+		mAddKeyDotButton->enabled = false;
+
+		mTreeControls->AddChildren({ mPropertyField, mAddKeyButton, mAddKeyDotButton });
 	}
 
 	template<typename AnimatedValueType>
@@ -322,7 +353,17 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::CheckCanCreateKey(float time)
 	{
-		mAddKeyButton->interactable = !mAnimatedValue->ContainsKey(time);
+		bool hasKeyAtTime = false;
+		for (auto key : mAnimatedValue->GetKeys())
+		{
+			if (mTimeline->IsSameTime(key.position, time))
+			{
+				hasKeyAtTime = true;
+				break;
+			}
+		}
+
+		mAddKeyButton->SetInteractable(!hasKeyAtTime);
 	}
 
 	template<typename AnimatedValueType>
@@ -442,9 +483,11 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 {
 	PRIVATE_FIELD(mHandles);
 	PRIVATE_FIELD(mAnimatedValuePath);
+	PRIVATE_FIELD(mTreeControls);
 	PRIVATE_FIELD(mPropertyField);
 	PRIVATE_FIELD(mPropertyValue);
 	PRIVATE_FIELD(mPropertyValueProxy);
+	PRIVATE_FIELD(mAddKeyDotButton);
 	PRIVATE_FIELD(mAddKeyButton);
 	PRIVATE_FIELD(mLastAnimatedValue);
 	PRIVATE_FIELD(mAnimatedValue);
@@ -464,8 +507,9 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
-	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
-	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
+	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
+	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
+	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
 	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);

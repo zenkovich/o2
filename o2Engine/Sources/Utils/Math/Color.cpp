@@ -309,13 +309,13 @@ namespace o2
 		Color4 res = Color4::White();
 
 		float fi = (float)idx;
-		float cornersOnCircle = 6;
-		float cycleOffset = 0.33f;
+		float cornersOnCircle = 3;
+		float cycleOffset = 0.11f;
 		float startOffset = 0.25f;
 
 		float currCorner = Math::Mod(fi, cornersOnCircle)/cornersOnCircle;
 		float currCycle = Math::Floor(fi/cornersOnCircle);
-		res.SetHSL(Math::Mod(startOffset + currCorner + currCycle*cycleOffset, 1.0f), 1.0f, 0.5f);
+		res.SetHSL(Math::Mod(startOffset + currCorner + currCycle*cycleOffset, 1.0f), 0.7f, 0.6f);
 		return res;
 	}
 }

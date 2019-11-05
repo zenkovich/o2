@@ -259,6 +259,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 		SERIALIZABLE(ContextMenu);
 
 	protected:
@@ -448,6 +451,7 @@ CLASS_METHODS_META(o2::ContextMenu)
 	PUBLIC_FUNCTION(void, SetItemsMinPriority);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);

@@ -61,6 +61,7 @@ namespace Editor
 		void RebuildPropertiesMenuButton();
 
 		void RebuildAddKeyButton();
+		void RebuildAddKeyDotButton();
 
 		void RebuildAddSmallBtn();
 		void RebuildRemoveSmallBtn();
@@ -276,6 +277,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildCurvesMenuToggle);
 	PUBLIC_FUNCTION(void, RebuildPropertiesMenuButton);
 	PUBLIC_FUNCTION(void, RebuildAddKeyButton);
+	PUBLIC_FUNCTION(void, RebuildAddKeyDotButton);
 	PUBLIC_FUNCTION(void, RebuildAddSmallBtn);
 	PUBLIC_FUNCTION(void, RebuildRemoveSmallBtn);
 	PUBLIC_FUNCTION(void, RebuildFloatProperty);

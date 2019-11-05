@@ -708,6 +708,11 @@ namespace o2
 		mChildrenWorldRect = _mChildrenAbsRect;
 	}
 
+	bool ContextMenu::IsInputTransparent() const
+	{
+		return false;
+	}
+
 	void ContextMenu::CopyData(const Actor& otherActor)
 	{
 		const ContextMenu& other = dynamic_cast<const ContextMenu&>(otherActor);

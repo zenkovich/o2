@@ -345,7 +345,7 @@ namespace o2
 	{
 		ScrollArea::UpdateChildren(dt);
 
-		if (mLayoutUpdated)
+		if (mLayoutUpdated && mResEnabledInHierarchy)
 			UpdateVisibleNodes();
 	}
 
@@ -1092,6 +1092,8 @@ namespace o2
 		node->widget = widget;
 		widget->mParent = this;
 		widget->mParentWidget = this;
+		widget->mResEnabledInHierarchy = true;
+		widget->mResEnabled = true;
 
 		mChildren.Add(widget);
 		mChildWidgets.Add(widget);
@@ -1199,7 +1201,7 @@ namespace o2
 					if (position > bottomViewBorder)
 						break;
 
-					TreeNode* nodeWidget = mNodesBuf.IsEmpty() ? CreateTreeNodeWidget() : mNodeWidgetsBuf.PopBack();
+					TreeNode* nodeWidget = CreateTreeNodeWidget();
 
 					node->widget = nodeWidget;
 					nodeWidget->mNodeDef = node;
@@ -1481,6 +1483,8 @@ namespace o2
 		res->SetInteractable(!mIsDraggingNodes);
 		res->mIsSelected = false;
 		res->mIsClipped = false;
+		res->SetEnableForcible(true);
+		Widget::UpdateTransparency();
 
 		return res;
 	}

@@ -55,9 +55,9 @@ namespace Editor
 		mPlayPauseToggle->SetValue(false);
 
 		mHandlesSheet->SetAnimation(animation);
-		mCurves->SetAnimation(animation);
 		mTimeline->SetAnimation(animation);
 		mTree->SetAnimation(animation);
+		mCurves->SetAnimation(animation);
 	}
 
 	void AnimationWindow::SetTarget(ActorRef actor)
@@ -65,20 +65,18 @@ namespace Editor
 		mTargetActor = actor;
 	}
 
-	void AnimationWindow::ShowKeyHandlesVisible()
+	void AnimationWindow::SetCurvesMode(bool enabled)
 	{
-		mCurves->Hide();
-		mHandlesSheet->Show();
-		mTimeline->SetViewMoveDisabled(false);
-		mTimeScroll->enabled = true;
+		mCurves->SetEnabled(enabled);
+		mHandlesSheet->SetEnabled(!enabled);
+		mTimeline->SetViewMoveDisabled(enabled);
+		mTimeScroll->enabled = !enabled;
+		mTree->SetCurveViewMode(enabled);
 	}
 
-	void AnimationWindow::ShowCurvesSheet()
+	bool AnimationWindow::IsCurvesMode() const
 	{
-		mCurves->Show();
-		mHandlesSheet->Hide();
-		mTimeline->SetViewMoveDisabled(true);
-		mTimeScroll->enabled = false;
+		return mCurves->IsEnabled();
 	}
 
 	void AnimationWindow::InitializeWindow()
@@ -109,7 +107,7 @@ namespace Editor
 		mTimeline->mAnimationWindow = this;
 		mTree->mAnimationWindow = this;
 
-		ShowKeyHandlesVisible();
+		SetCurvesMode(false);
 
 		 PropertiesListDlg::InitializeSingleton();
 	}
@@ -198,7 +196,7 @@ namespace Editor
 		mCurvesToggle = o2UI.CreateWidget<Toggle>("menu curves");
 		*mCurvesToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(141, 0));
 		mCurvesToggle->SetValue(false);
-		mCurvesToggle->onToggleByUser = [&](bool value) { if (!value) ShowKeyHandlesVisible(); else ShowCurvesSheet(); };
+		mCurvesToggle->onToggleByUser = [&](bool value) { SetCurvesMode(value); };
 		mControlsPanel->AddChild(mCurvesToggle);
 
 		mPropertiesButton = o2UI.CreateWidget<Button>("menu properties");

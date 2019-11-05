@@ -45,6 +45,9 @@ namespace Editor
 		// Sets width of tree part
 		void SetTreeWidth(float width);
 
+		// Sets color of track by path
+		void SetAnimationValueColor(String path, const Color4& color);
+
 		// Returns animated value line number by world position, dependent on scroll
 		float GetLineNumber(float worldPosition) const;
 
@@ -58,6 +61,9 @@ namespace Editor
 		{
 			String name;
 			String path;
+
+			Color4 color;
+
 			IAnimatedValue* animatedValue = nullptr;
 
 			ITrackControl* trackControl = nullptr; 
@@ -67,7 +73,7 @@ namespace Editor
 		};
 
 	private:
-		AnimationWindow*    mAnimationWindow = nullptr; // Animation window
+		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
 		int mAnimationValuesCount = 0; // Last stored animation values count. Used in checking of animation changes for tracking new values
 
@@ -88,6 +94,9 @@ namespace Editor
 
 		//Updates tree node width
 		void UpdateTreeWidth();
+
+		// Sets curve view mode
+		void SetCurveViewMode(bool enable);
 
 		// Returns object's parent
 		UnknownPtr GetObjectParent(UnknownPtr object) override;
@@ -184,7 +193,7 @@ namespace Editor
 		// Updates drag handles positions on timeline
 		void UpdateTrackControlView();
 
-		friend class SceneTree;
+		friend class AnimationTree;
 	};
 }
 
@@ -209,12 +218,14 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, OnAnimationChanged);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
+	PUBLIC_FUNCTION(void, SetAnimationValueColor, String, const Color4&);
 	PUBLIC_FUNCTION(float, GetLineNumber, float);
 	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
 	PRIVATE_FUNCTION(void, InitializeContext);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
 	PRIVATE_FUNCTION(void, UpdateTreeWidth);
+	PRIVATE_FUNCTION(void, SetCurveViewMode, bool);
 	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
 	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
 	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
@@ -223,6 +234,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(void, OnNodeRBClick, TreeNode*);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
+	PRIVATE_FUNCTION(void, OnDeletePropertyPressed);
 }
 END_META;
 

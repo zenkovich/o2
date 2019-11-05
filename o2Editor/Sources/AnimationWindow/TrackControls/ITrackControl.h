@@ -5,11 +5,6 @@
 #include "Scene/UI/Widget.h"
 #include "AnimationKeyDragHandle.h"
 
-namespace o2
-{
-	class Button;
-}
-
 using namespace o2;
 
 namespace Editor
@@ -45,11 +40,14 @@ namespace Editor
 		// Returns key handles list
 		virtual KeyHandlesVec GetKeyHandles() const;
 
-		// Returns value property
-		virtual IPropertyField* GetPropertyField() const;
+		// Returns a container of controllers that are part of a tree
+		virtual Widget* GetTreePartControls() const;
 
-		// Returns add button
-		virtual Button* GetAddKeyButton() const;
+		// Sets curves edit view mode
+		virtual void SetCurveViewEnabled(bool enabled);
+
+		// Sets curves view mode color
+		virtual void SetCurveViewColor(const Color4& color);
 
 		// Inserts new key at time
 		virtual void InsertNewKey(float time);
@@ -89,8 +87,9 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*, const String&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
-	PUBLIC_FUNCTION(IPropertyField*, GetPropertyField);
-	PUBLIC_FUNCTION(Button*, GetAddKeyButton);
+	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
+	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
+	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);

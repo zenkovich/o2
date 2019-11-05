@@ -95,6 +95,7 @@ namespace Editor
 		mActor = actor;
 
 		InitializeTreeNode(&mRoot, actor.Get());
+		mVisibleWidgetsCache.Clear();
 		UpdateNodesStructure();
 		UpdateVisibleNodes();
 	}

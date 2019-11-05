@@ -79,6 +79,38 @@ namespace Editor
 		UpdateTreeWidth();
 	}
 
+	void AnimationTree::SetAnimationValueColor(String path, const Color4& color)
+	{
+		AnimationValueNode* node = mRootValue;
+		while (!path.IsEmpty())
+		{
+			int fnd = path.Find('/', 0);
+			String pathPart = path.SubStr(0, fnd);
+
+			for (auto child : node->children)
+			{
+				if (child->name == pathPart)
+				{
+					node = child;
+					break;
+				}
+			}
+			
+			if (fnd < 0)
+				break;
+
+			path = path.SubStr(fnd + 1);
+		}
+
+		if (!node)
+			return;
+
+		node->color = color;
+
+		if (node->trackControl)
+			node->trackControl->SetCurveViewColor(color);
+	}
+
 	float AnimationTree::GetLineNumber(float worldPosition) const
 	{
 		return (layout->GetWorldTop() - worldPosition + mScrollPos.y) / mNodeWidgetSample->layout->GetMinimalHeight();
@@ -93,9 +125,9 @@ namespace Editor
 	{
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
-		mContextMenu->AddItem("New", [&]() { });
-		mContextMenu->AddItem("Save", [&]() { }, ImageAssetRef(), ShortcutKeys('S', true));
-		mContextMenu->AddItem("Save as...", [&]() { }, ImageAssetRef(), ShortcutKeys('S', true, true));
+		mContextMenu->AddItem("New", [&]() {});
+		mContextMenu->AddItem("Save", [&]() {}, ImageAssetRef(), ShortcutKeys('S', true));
+		mContextMenu->AddItem("Save as...", [&]() {}, ImageAssetRef(), ShortcutKeys('S', true, true));
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Delete property", THIS_FUNC(OnDeletePropertyPressed));
 		mContextMenu->AddItem("---");
@@ -170,6 +202,15 @@ namespace Editor
 		}
 	}
 
+	void AnimationTree::SetCurveViewMode(bool enable)
+	{
+		for (auto node : mVisibleNodes)
+		{
+			if (auto trackNode = dynamic_cast<AnimationTreeNode*>(node->widget))
+				trackNode->mTrackControl->SetCurveViewEnabled(enable);
+		}
+	}
+
 	void AnimationTree::OnAnimationChanged()
 	{
 		if (mAnimationWindow->mAnimation->GetAnimationsValues().Count() != mAnimationValuesCount)
@@ -238,12 +279,11 @@ namespace Editor
 
 	void AnimationTree::OnDeletePropertyPressed()
 	{
-		auto treeNode = GetTreeNodeUnderPoint(o2Input.GetCursorPos());
-		if (!treeNode) {
-			return;
+		for (auto obj : GetSelectedObjects())
+		{
+			AnimationValueNode* data = (AnimationValueNode*)obj;
+			mAnimationWindow->mAnimation->RemoveAnimationValue(data->path);
 		}
-
-
 	}
 
 	AnimationTreeNode::AnimationTreeNode() :
@@ -292,16 +332,10 @@ namespace Editor
 			*mTrackControl->layout = WidgetLayout::BothStretch(width, 0, 0, 0);
 
 			float right = width - layout->GetOffsetLeft();
-			if (auto addKeyButton = mTrackControl->GetAddKeyButton()) 
+			if (auto controls = mTrackControl->GetTreePartControls())
 			{
-				*addKeyButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(mAddKeyButtonSize, mAddKeyButtonSize),
-															Vec2F(right - mAddKeyButtonSize, 0.0f));
-			}
-
-			if (auto prop = mTrackControl->GetPropertyField())
-			{
-				*prop->layout = WidgetLayout::VerStretch(HorAlign::Left, mPropertyBorder, mPropertyBorder, mPropertySize,
-														 right - mPropertySize - mPropertyBorder - mAddKeyButtonSize);
+				*controls->layout = WidgetLayout::VerStretch(HorAlign::Left, mPropertyBorder, mPropertyBorder, mPropertySize,
+															 right - mPropertySize - mPropertyBorder);
 			}
 		}
 	}
@@ -382,11 +416,12 @@ namespace Editor
 			AddChild(mTrackControl);
 		}
 
-		if (auto prop = mTrackControl->GetPropertyField())
-			AddChild(prop);
+		if (auto controls = mTrackControl->GetTreePartControls())
+			AddChild(controls);
 
-		if (auto addKey = mTrackControl->GetAddKeyButton())
-			AddChild(addKey);
+		auto animTree = dynamic_cast<AnimationTree*>(mOwnerTree);
+		mTrackControl->SetCurveViewEnabled(animTree->mAnimationWindow->IsCurvesMode());
+		mTrackControl->SetCurveViewColor(mData->color);
 
 		mHandlesSheet->RegTrackControl(mTrackControl, mData->path);
 	}
@@ -403,11 +438,8 @@ namespace Editor
 
 			RemoveChild(mTrackControl, false);
 
-			if (auto prop = mTrackControl->GetPropertyField())
-				RemoveChild(prop, false);
-
-			if (auto addKey = mTrackControl->GetAddKeyButton())
-				RemoveChild(addKey, false);
+			if (auto controls = mTrackControl->GetTreePartControls())
+				RemoveChild(controls, false);
 
 			mHandlesSheet->UnregTrackControl(mTrackControl);
 		}

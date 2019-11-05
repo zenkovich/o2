@@ -209,6 +209,22 @@ namespace Editor
 
 	}
 
+	void CurveEditor::SetCurveColor(Curve* curve, const Color4& color)
+	{
+		for (auto info : mCurves)
+		{
+			if (info->curve == curve)
+			{
+				info->color = color;
+
+				for (auto handle : info->handles)
+					handle->mainHandle.SetSpritesColor(color);
+
+				break;
+			}
+		}
+	}
+
 	void CurveEditor::RemoveCurvesRange(Curve* curveA, Curve* curveB)
 	{
 
