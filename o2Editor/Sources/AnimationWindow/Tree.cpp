@@ -133,8 +133,8 @@ namespace Editor
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Add properties", [&]() { PropertiesListDlg::Show(mAnimationWindow->mAnimation, mAnimationWindow->mTargetActor); });
 
-		onFocused = [&]() { mContextMenu->SetItemsMaxPriority(); };
-		onUnfocused = [&]() { mContextMenu->SetItemsMinPriority(); };
+		onFocused = [&]() { mAnimationWindow->mHandlesSheet->GetContextMenu()->SetItemsMaxPriority(); mContextMenu->SetItemsMaxPriority(); };
+		onUnfocused = [&]() { mAnimationWindow->mHandlesSheet->GetContextMenu()->SetItemsMinPriority(); mContextMenu->SetItemsMinPriority(); };
 
 		AddInternalWidget(mContextMenu);
 	}
@@ -269,6 +269,18 @@ namespace Editor
 	{
 		o2UI.FocusWidget(this);
 		mContextMenu->Show();
+	}
+
+	void AnimationTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	{
+		mAnimationWindow->mHandlesSheet->DeselectAll();
+
+		for (auto obj : objects) 
+		{
+			AnimationValueNode* node = (AnimationValueNode*)obj;
+			for (auto handle : node->trackControl->GetKeyHandles())
+				handle->handle->SetSelected(true);
+		}
 	}
 
 	TreeNode* AnimationTree::CreateTreeNodeWidget()

@@ -201,7 +201,7 @@ namespace Editor
 		}
 
 		InitializeHandles();
-		CheckCanCreateKey(animatedValue->GetTime());
+		CheckCanCreateKey(mTimeline->GetTimeCursor());
 	}
 
 	template<typename AnimatedValueType>
@@ -253,12 +253,12 @@ namespace Editor
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
 		*mAddKeyButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-		mAddKeyButton->onClick = [&]() { InsertNewKey(mAnimatedValue->GetTime()); };
+		mAddKeyButton->onClick = [&]() { InsertNewKey(mTimeline->GetTimeCursor()); };
 
 		mAddKeyDotButton = o2UI.CreateWidget<Button>("add dot key");
 		*mAddKeyDotButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
 		mAddKeyDotButton->GetLayerDrawable<Sprite>("basic/regularBack")->SetColor(Color4::Black());
-		mAddKeyDotButton->onClick = [&]() { InsertNewKey(mAnimatedValue->GetTime()); };
+		mAddKeyDotButton->onClick = [&]() { InsertNewKey(mTimeline->GetTimeCursor()); };
 		mAddKeyDotButton->enabled = false;
 
 		mTreeControls->AddChildren({ mPropertyField, mAddKeyButton, mAddKeyDotButton });
@@ -353,6 +353,8 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::CheckCanCreateKey(float time)
 	{
+		time = mTimeline->GetTimeCursor();
+
 		bool hasKeyAtTime = false;
 		for (auto key : mAnimatedValue->GetKeys())
 		{
@@ -410,12 +412,13 @@ namespace Editor
 	{
 		mAnimatedValue->AddKey(time, mAnimatedValue->GetValue(time));
 		InitializeHandles();
+		mTimeline->SetTimeCursor(time);
 	}
 
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::OnPropertyChanged()
 	{
-		auto time = mAnimatedValue->GetTime();
+		auto time = mTimeline->GetTimeCursor();
 		int keyIdx = -1;
 		int i = 0;
 		for (auto& key : mAnimatedValue->GetKeys())

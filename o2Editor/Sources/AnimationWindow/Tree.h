@@ -119,10 +119,13 @@ namespace Editor
 		// It is called when tree node clicked by right button, opening context menu
 		void OnNodeRBClick(TreeNode* node) override;
 
+		// It is called when list of selected objects was changed
+		void OnNodesSelectionChanged(UnknownPtrsVec objects) override;
+
 		// Gets tree node from pool or creates new, in editor scope
 		TreeNode* CreateTreeNodeWidget();
 
-		// Remoes selected property
+		// Removes selected property
 		void OnDeletePropertyPressed();
 
 		friend class AnimationTreeNode;
@@ -233,6 +236,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(void, OnNodeRBClick, TreeNode*);
+	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PRIVATE_FUNCTION(void, OnDeletePropertyPressed);
 }

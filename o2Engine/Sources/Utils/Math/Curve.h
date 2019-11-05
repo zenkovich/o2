@@ -198,7 +198,7 @@ namespace o2
 		class Key: public ISerializable
 		{
 		public:
-			enum class Type { Smooth, Flat, Free, Broken, Discrete };
+			enum class Type { Smooth, Flat, Free, Linear, Broken, Discrete };
 
 		public:
 			UInt64 uid;                  // Random unique id @SERIALIZABLE

@@ -180,6 +180,9 @@ namespace o2
 		// Sets size to all available sprites
 		void SetSpritesSizePivot(const Vec2F& pivot);
 
+		// Returns is listener scrollable
+		bool IsScrollable() const override;
+
 		SERIALIZABLE(DragHandle);
 
 	protected:
@@ -528,6 +531,7 @@ CLASS_METHODS_META(o2::DragHandle)
 	PUBLIC_FUNCTION(void, SetSpritesSize, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSpritesColor, const Color4&);
 	PUBLIC_FUNCTION(void, SetSpritesSizePivot, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsScrollable);
 	PROTECTED_FUNCTION(void, DrawInternal);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

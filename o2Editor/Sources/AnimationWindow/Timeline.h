@@ -52,6 +52,12 @@ namespace Editor
 		// Sets view range, left view border by left, and right border by right
 		void SetViewRange(float left, float right, bool force = true);
 
+		// Sets red time cursor
+		void SetTimeCursor(float time);
+
+		// Returns time of red cursor
+		float GetTimeCursor() const;
+
 		// Returns current time scroll in seconds
 		float GetScroll() const;
 
@@ -117,6 +123,8 @@ namespace Editor
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
 		Animation* mAnimation = nullptr; // Animation, used for sibscribing on duration change
+
+		float mTimeCursor = 0; // Current time of red cursor
 
 		float mSmoothViewScroll = 0.0f;          // Time scroll in seconds smoothed, tends to target value mViewScroll
 		float mViewScroll = 0.0f;                // Time scroll in seconds
@@ -213,6 +221,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mScrollBorderBounceCoef);
 	PRIVATE_FIELD(mAnimationWindow);
 	PRIVATE_FIELD(mAnimation);
+	PRIVATE_FIELD(mTimeCursor);
 	PRIVATE_FIELD(mSmoothViewScroll);
 	PRIVATE_FIELD(mViewScroll);
 	PRIVATE_FIELD(mDragViewScroll);
@@ -242,6 +251,8 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, SetScroll, float);
 	PUBLIC_FUNCTION(void, SetViewRange, float, float, bool);
+	PUBLIC_FUNCTION(void, SetTimeCursor, float);
+	PUBLIC_FUNCTION(float, GetTimeCursor);
 	PUBLIC_FUNCTION(float, GetScroll);
 	PUBLIC_FUNCTION(void, SetScale, float);
 	PUBLIC_FUNCTION(float, GetScale);

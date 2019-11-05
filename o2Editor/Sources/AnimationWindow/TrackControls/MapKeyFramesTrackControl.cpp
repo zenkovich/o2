@@ -119,6 +119,16 @@ namespace Editor
 		}
 	}
 
+	ITrackControl::KeyHandlesVec MapKeyFramesTrackControl::GetKeyHandles() const
+	{
+		ITrackControl::KeyHandlesVec res;
+		for (auto kv : mHandlesGroups) {
+			res.Add(kv.Value()->handles.Cast<ITrackControl::KeyHandle*>());
+		}
+
+		return res;
+	}
+
 	void MapKeyFramesTrackControl::DeleteKey(UInt64 keyUid)
 	{
 		for (auto kv : mHandlesGroups)
@@ -196,7 +206,7 @@ namespace Editor
 
 	MapKeyFramesTrackControl::KeyHandle::KeyHandle(UInt64 keyUid, AnimationKeyDragHandle* handle, IAnimatedValue* animatedValue,
 												   const Function<void(KeyHandle& keyHandle)>& updateFunc) :
-		keyUid(keyUid), handle(handle), animatedValue(animatedValue), updateFunc(updateFunc)
+		ITrackControl::KeyHandle(keyUid, handle), animatedValue(animatedValue), updateFunc(updateFunc)
 	{}
 
 	bool MapKeyFramesTrackControl::KeyHandle::operator==(const KeyHandle& other) const

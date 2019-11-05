@@ -154,6 +154,11 @@ namespace Editor
 		SelectableDragHandlesGroup::RemoveHandle(handle);
 	}
 
+	ContextMenu* KeyHandlesSheet::GetContextMenu() const
+	{
+		return mContextMenu;
+	}
+
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		mNeedUpdateSelectionFrame = true;
@@ -187,7 +192,7 @@ namespace Editor
 			trackControl->EndKeysDrag();
 
 		if (mSelectedHandles.Count() == 1 && !mHandleHasMoved)
-			mAnimationWindow->mAnimation->SetTime(mSelectedHandles[0]->GetPosition().x);
+			mAnimationWindow->mTimeline->SetTimeCursor(mSelectedHandles[0]->GetPosition().x);
 	}
 
 	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
@@ -458,22 +463,35 @@ namespace Editor
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
-		for (auto pathNode : data) 
+		if (data.GetChildNodes().Count() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
 		{
-			String path = *pathNode->GetNode("Path");
-			for (auto kv : mTrackControlsMap)
+			auto dataNode = (AnimationTree::AnimationValueNode*)mAnimationWindow->mTree->GetSelectedObjects()[0]; 
+			for (auto keyNode : *data.GetChildNodes()[0]->GetNode("Keys"))
 			{
-				if (kv.Key() != path) 
-					continue;
-
-				for (auto keyNode : *pathNode->GetNode("Keys"))
+				UInt64 uid = dataNode->trackControl->DeserializeKey(*keyNode, relativeTime);
+				if (uid != 0)
+					newKeys.Add(uid);
+			}
+		}
+		else
+		{
+			for (auto pathNode : data)
+			{
+				String path = *pathNode->GetNode("Path");
+				for (auto kv : mTrackControlsMap)
 				{
-					UInt64 uid = kv.Value()->DeserializeKey(*keyNode, relativeTime);
-					if (uid != 0)
-						newKeys.Add(uid);
+					if (kv.Key() != path)
+						continue;
+
+					for (auto keyNode : *pathNode->GetNode("Keys"))
+					{
+						UInt64 uid = kv.Value()->DeserializeKey(*keyNode, relativeTime);
+						if (uid != 0)
+							newKeys.Add(uid);
+					}
 				}
 			}
-		}		
+		}
 
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();

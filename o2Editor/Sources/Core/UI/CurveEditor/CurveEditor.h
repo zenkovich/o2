@@ -429,6 +429,9 @@ namespace Editor
 		// On context menu free pressed. Free handles transform for selected keys
 		void OnFreeChecked(bool checked);
 
+		// On context menu linear pressed. Free handles transform for selected keys
+		void OnLinearChecked(bool checked);
+
 		// On context menu broken pressed. Breaks connection between left and right supports
 		void OnBrokenChecked(bool checked);
 
@@ -569,6 +572,7 @@ CLASS_METHODS_META(Editor::CurveEditor)
 	PROTECTED_FUNCTION(void, OnAutoSmoothChecked, bool);
 	PROTECTED_FUNCTION(void, OnFlatChecked, bool);
 	PROTECTED_FUNCTION(void, OnFreeChecked, bool);
+	PROTECTED_FUNCTION(void, OnLinearChecked, bool);
 	PROTECTED_FUNCTION(void, OnBrokenChecked, bool);
 	PROTECTED_FUNCTION(void, OnDiscreteChecked, bool);
 	PROTECTED_FUNCTION(void, OnCopyPressed);

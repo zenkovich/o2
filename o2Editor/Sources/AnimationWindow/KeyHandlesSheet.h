@@ -66,6 +66,9 @@ namespace Editor
 		// Removes selectable handle from group
 		void RemoveHandle(DragHandle* handle) override;
 
+		// Returns context menu
+		ContextMenu* GetContextMenu() const;
+
 		SERIALIZABLE(KeyHandlesSheet);
 
 	private:
@@ -234,6 +237,7 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, UnregAllTrackControls);
 	PUBLIC_FUNCTION(void, AddHandle, DragHandle*);
 	PUBLIC_FUNCTION(void, RemoveHandle, DragHandle*);
+	PUBLIC_FUNCTION(ContextMenu*, GetContextMenu);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(void, InitializeCenterHandle);
 	PRIVATE_FUNCTION(void, InitializeLeftHandle);

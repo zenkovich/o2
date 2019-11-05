@@ -907,6 +907,7 @@ ENUM_META_(o2::Curve::Key::Type, Type)
 	ENUM_ENTRY(Discrete);
 	ENUM_ENTRY(Flat);
 	ENUM_ENTRY(Free);
+	ENUM_ENTRY(Linear);
 	ENUM_ENTRY(Smooth);
 }
 END_ENUM_META;

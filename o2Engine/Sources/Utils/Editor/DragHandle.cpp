@@ -611,6 +611,11 @@ namespace o2
 			mSelectedPressedSprite->SetSizePivot(pivot);
 	}
 
+	bool DragHandle::IsScrollable() const
+	{
+		return true;
+	}
+
 	void DragHandle::SetSelectionGroup(ISelectableDragHandlesGroup* group)
 	{
 		if (mSelectGroup)

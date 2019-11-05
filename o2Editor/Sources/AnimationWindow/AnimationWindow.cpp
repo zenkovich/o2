@@ -39,7 +39,10 @@ namespace Editor
 	void AnimationWindow::SetAnimation(Animation* animation)
 	{
 		if (mAnimation)
+		{
 			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
+			mAnimation->onUpdate -= THIS_FUNC(OnAnimationUpdate);
+		}
 
 		mAnimation = animation;
 
@@ -49,7 +52,10 @@ namespace Editor
 			mLoopToggle->SetValue(mAnimation->GetLoop() == Loop::Repeat);
 
 			if (mAnimation)
+			{
 				mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
+				mAnimation->onUpdate += THIS_FUNC(OnAnimationUpdate);
+			}
 		}
 
 		mPlayPauseToggle->SetValue(false);
@@ -98,9 +104,9 @@ namespace Editor
 
 		InitializeHandlesSheet();
 		InitializeTree();
-		InitializeSeparatorHandle();
 		InitializeCurvesSheet();
 		InitializeTimeline();
+		InitializeSeparatorHandle();
 
 		mCurves->mAnimationWindow = this;
 		mHandlesSheet->mAnimationWindow = this;
@@ -246,6 +252,12 @@ namespace Editor
 		mCurves->OnAnimationChanged();
 
 		mAnimation->SetTime(mAnimation->GetTime());
+	}
+
+	void AnimationWindow::OnAnimationUpdate(float time)
+	{
+		if (!mDisableTimeTracking)
+			mTimeline->mTimeCursor = mAnimation->GetLoopTime();
 	}
 
 	void AnimationWindow::OnPlayPauseToggled(bool play)

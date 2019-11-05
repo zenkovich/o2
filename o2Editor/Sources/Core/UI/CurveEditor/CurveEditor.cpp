@@ -364,6 +364,7 @@ namespace Editor
 			ContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
 			ContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
 			ContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
+			ContextMenu::Item("Linear", false, THIS_FUNC(OnLinearChecked)),
 			ContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
 			ContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
 
@@ -1519,6 +1520,13 @@ namespace Editor
 						key.rightSupportPosition = -key.leftSupportPosition;
 						key.rightSupportValue = -key.leftSupportValue;
 						break;
+
+						case Curve::Key::Type::Linear:
+						key.leftSupportPosition = 0;
+						key.rightSupportPosition = 0;
+						key.leftSupportValue = 0;
+						key.rightSupportValue = 0;
+						break;
 					}
 				}
 			}
@@ -1729,19 +1737,21 @@ namespace Editor
 		mContextMenu->SetItemChecked(0, true);  // auto smooth
 		mContextMenu->SetItemChecked(1, false); // flat
 		mContextMenu->SetItemChecked(2, false); // free
-		mContextMenu->SetItemChecked(3, false); // broken
-		mContextMenu->SetItemChecked(4, false); // discrete
+		mContextMenu->SetItemChecked(3, false); // linear
+		mContextMenu->SetItemChecked(4, false); // broken
+		mContextMenu->SetItemChecked(5, false); // discrete
 
 		SetSelectedKeysSupportsType(Curve::Key::Type::Smooth);
 	}
 
 	void CurveEditor::OnFlatChecked(bool checked)
 	{
-		mContextMenu->SetItemChecked(0, false); // auto smooth
-		mContextMenu->SetItemChecked(1, true);  // flat
+		mContextMenu->SetItemChecked(0, false);  // auto smooth
+		mContextMenu->SetItemChecked(1, true); // flat
 		mContextMenu->SetItemChecked(2, false); // free
-		mContextMenu->SetItemChecked(3, false); // broken
-		mContextMenu->SetItemChecked(4, false); // discrete
+		mContextMenu->SetItemChecked(3, false); // linear
+		mContextMenu->SetItemChecked(4, false); // broken
+		mContextMenu->SetItemChecked(5, false); // discrete
 
 		SetSelectedKeysSupportsType(Curve::Key::Type::Flat);
 	}
@@ -1751,10 +1761,23 @@ namespace Editor
 		mContextMenu->SetItemChecked(0, false);  // auto smooth
 		mContextMenu->SetItemChecked(1, false); // flat
 		mContextMenu->SetItemChecked(2, true); // free
-		mContextMenu->SetItemChecked(3, false); // broken
-		mContextMenu->SetItemChecked(4, false); // discrete
+		mContextMenu->SetItemChecked(3, false); // linear
+		mContextMenu->SetItemChecked(4, false); // broken
+		mContextMenu->SetItemChecked(5, false); // discrete
 
 		SetSelectedKeysSupportsType(Curve::Key::Type::Free);
+	}
+
+	void CurveEditor::OnLinearChecked(bool checked)
+	{
+		mContextMenu->SetItemChecked(0, false);  // auto smooth
+		mContextMenu->SetItemChecked(1, false); // flat
+		mContextMenu->SetItemChecked(2, false); // free
+		mContextMenu->SetItemChecked(3, true); // linear
+		mContextMenu->SetItemChecked(4, false); // broken
+		mContextMenu->SetItemChecked(5, false); // discrete
+
+		SetSelectedKeysSupportsType(Curve::Key::Type::Linear);
 	}
 
 	void CurveEditor::OnBrokenChecked(bool checked)
@@ -1762,8 +1785,9 @@ namespace Editor
 		mContextMenu->SetItemChecked(0, false);  // auto smooth
 		mContextMenu->SetItemChecked(1, false); // flat
 		mContextMenu->SetItemChecked(2, false); // free
-		mContextMenu->SetItemChecked(3, true); // broken
-		mContextMenu->SetItemChecked(4, false); // discrete
+		mContextMenu->SetItemChecked(3, false); // linear
+		mContextMenu->SetItemChecked(4, true); // broken
+		mContextMenu->SetItemChecked(5, false); // discrete
 
 		SetSelectedKeysSupportsType(Curve::Key::Type::Broken);
 	}
@@ -1773,8 +1797,9 @@ namespace Editor
 		mContextMenu->SetItemChecked(0, false);  // auto smooth
 		mContextMenu->SetItemChecked(1, false); // flat
 		mContextMenu->SetItemChecked(2, false); // free
-		mContextMenu->SetItemChecked(3, false); // broken
-		mContextMenu->SetItemChecked(4, true); // discrete
+		mContextMenu->SetItemChecked(3, false); // linear
+		mContextMenu->SetItemChecked(4, false); // broken
+		mContextMenu->SetItemChecked(5, true); // discrete
 
 		SetSelectedKeysSupportsType(Curve::Key::Type::Discrete);
 	}

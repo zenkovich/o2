@@ -95,10 +95,10 @@ namespace o2
 		if (o2Input.IsKeyDown(VK_F1))
 		{
 			int line = 0;
-			auto allUnderCursor = GetAllCursorListenersUnderCursor(0);
+			auto allUnderCursor = o2Input.IsKeyDown(VK_CONTROL) ? GetAllCursorListenersUnderCursor(0) : mUnderCursorListeners[0];
 			for (auto listener : allUnderCursor)
 			{
-				String name = "unknown";
+				String name = typeid(listener).name();
 
 				if (auto widget = dynamic_cast<Widget*>(listener))
 				{
@@ -174,6 +174,11 @@ namespace o2
 
 	void EventSystem::ProcessCursorTracing(const Input::Cursor& cursor)
 	{
+		if (o2Input.IsKeyDown(VK_F1)) {
+			int x = 5;
+			x = x;
+		}
+
 		for (auto listener : mAreaCursorListeners)
 		{
 			if (!listener->IsUnderPoint(cursor.position) || !listener->mScissorRect.IsInside(cursor.position))

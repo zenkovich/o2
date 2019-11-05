@@ -72,6 +72,8 @@ namespace Editor
 
 		Animation* mAnimation = nullptr; // Editing animation
 
+		bool mDisableTimeTracking = false; // When true animation time chenges has no effect
+
 		ActorRef mTargetActor; // Target actor on animation
 
 		Widget* mUpPanel = nullptr;  // Up panel with control buttons
@@ -121,8 +123,11 @@ namespace Editor
 		// Initializes separator handle view and events
 		void InitializeSeparatorHandle();
 
-		// it is called when editing animation changed. Invokes change methods in tree, curves etc
+		// It is called when editing animation changed. Invokes change methods in tree, curves etc
 		void OnAnimationChanged();
+
+		// It is called when animation has updated
+		void OnAnimationUpdate(float time);
 
 		// It is called when play/pause button was pressed
 		void OnPlayPauseToggled(bool play);
@@ -157,6 +162,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mTreeViewWidth);
 	PROTECTED_FIELD(mMinTreeViewWidth);
 	PROTECTED_FIELD(mAnimation);
+	PROTECTED_FIELD(mDisableTimeTracking);
 	PROTECTED_FIELD(mTargetActor);
 	PROTECTED_FIELD(mUpPanel);
 	PROTECTED_FIELD(mWorkArea);
@@ -196,6 +202,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PROTECTED_FUNCTION(void, InitializeUpPanel);
 	PROTECTED_FUNCTION(void, InitializeSeparatorHandle);
 	PROTECTED_FUNCTION(void, OnAnimationChanged);
+	PROTECTED_FUNCTION(void, OnAnimationUpdate, float);
 	PROTECTED_FUNCTION(void, OnPlayPauseToggled, bool);
 	PROTECTED_FUNCTION(void, OnLoopToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);

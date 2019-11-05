@@ -78,7 +78,7 @@ namespace Editor
 
 		DrawTimeScale();
 
-		mTimeLine->SetPosition(Vec2F(LocalToWorld(mAnimationWindow->mAnimation ? mAnimationWindow->mAnimation->GetLoopTime() : 0.0f), layout->GetWorldTop()));
+		mTimeLine->SetPosition(Vec2F(LocalToWorld(mTimeCursor), layout->GetWorldTop()));
 		mTimeLine->SetSize(Vec2F(10.0f, layout->GetHeight() + 5.0f));
 		mTimeLine->SetSizePivot(Vec2F(7.5f, layout->GetHeight() + 4.0f));
 		mTimeLine->Draw();
@@ -186,10 +186,8 @@ namespace Editor
 
 	void AnimationTimeline::SetAnimationTimeByCursor(const Input::Cursor& cursor)
 	{
-		if (cursor.isPressed && mAnimationWindow->mAnimation) {
-			mAnimation->Stop();
-			mAnimation->SetTime(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
-		}
+		if (cursor.isPressed && mAnimationWindow->mAnimation) 
+			SetTimeCursor(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
 	}
 
 	void AnimationTimeline::OnCursorRightMousePressed(const Input::Cursor& cursor)
@@ -352,6 +350,20 @@ namespace Editor
 		}
 	}
 
+	void AnimationTimeline::SetTimeCursor(float time)
+	{
+		mAnimationWindow->mDisableTimeTracking = true;
+		mTimeCursor = time;
+		mAnimation->Stop();
+		mAnimation->SetTime(time);
+		mAnimationWindow->mDisableTimeTracking = false;
+	}
+
+	float AnimationTimeline::GetTimeCursor() const
+	{
+		return mTimeCursor;
+	}
+
 	float AnimationTimeline::GetScroll() const
 	{
 		return mSmoothViewScroll;
@@ -409,7 +421,6 @@ namespace Editor
 	{
 		return !mViewHasZoomed && !mDragViewScroll;
 	}
-
 }
 
 DECLARE_CLASS(Editor::AnimationTimeline);

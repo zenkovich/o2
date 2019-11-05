@@ -35,17 +35,20 @@ namespace Editor
 		// Draws handles with clipping
 		void Draw() override;
 
-		// Sets mapped animated values. Creates handles
-		void SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode);
-
 		// Updates handles position on timeline
 		void UpdateHandles() override;
 
 		// Serialize key with specified uid into data node
 		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
 
+		// Returns key handles list
+		ITrackControl::KeyHandlesVec GetKeyHandles() const override;
+
 		// Removes key from track
 		void DeleteKey(UInt64 keyUid) override;
+
+		// Sets mapped animated values. Creates handles
+		void SetMappedTracks(const AnimationTree::AnimationValueNode& valueNode);
 
 		// Updates handles positions for specified animated value
 		void UpdateHandlesForValue(IAnimatedValue* animatedValue);
@@ -59,10 +62,8 @@ namespace Editor
 		SERIALIZABLE(MapKeyFramesTrackControl);
 
 	private:
-		struct KeyHandle
+		struct KeyHandle: public ITrackControl::KeyHandle
 		{
-			UInt64                  keyUid = 0;
-			AnimationKeyDragHandle* handle = nullptr;
 			IAnimatedValue*         animatedValue = nullptr;
 
 			Function<void(KeyHandle& keyHandle)> updateFunc;
@@ -285,10 +286,11 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
+	PUBLIC_FUNCTION(ITrackControl::KeyHandlesVec, GetKeyHandles);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
+	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);
