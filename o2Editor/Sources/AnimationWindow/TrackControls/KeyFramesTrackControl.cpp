@@ -16,11 +16,17 @@ DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimatedValue<Vec2F>>);
 
 namespace Editor
 {
-	void DrawCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis, 
+	void DrawCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis,
 						   const Color4& color)
 	{
 		const int bufferSize = 50;
 		static Vertex2 buffer[bufferSize];
+
+		if (pointsBounds.Height() < 0.001f)
+		{
+			o2Render.DrawAALine(Vec2F(0.0f, 0.5f)*drawBasis, Vec2F(1.0f, 0.5f)*drawBasis, color);
+			return;
+		}
 
 		Basis boundsBasis(pointsBounds);
 		Basis transform = boundsBasis.Inverted() * drawBasis;
@@ -31,7 +37,7 @@ namespace Editor
 		o2Render.DrawAAPolyLine(buffer, pointsCount, 1.0f, LineType::Solid, false);
 	}
 
-	void DrawCenterCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis, 
+	void DrawCenterCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis,
 								 const Color4& color)
 	{
 		const int bufferSize = 50;
@@ -76,12 +82,12 @@ namespace Editor
 			auto& key = mAnimatedValue->GetKeys()[i];
 			auto& prevKey = mAnimatedValue->GetKeys()[i - 1];
 
-			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3, 
-								   layout->GetWorldTop() - 5, 
-								   mTimeline->LocalToWorld(key.position) - 3, 
+			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3,
+								   layout->GetWorldTop() - 5,
+								   mTimeline->LocalToWorld(key.position) - 3,
 								   layout->GetWorldBottom() + 5));
 
-			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(), 
+			DrawCurveInCoords(key.GetApproximatedPoints(), key.GetApproximatedPointsCount(),
 							  key.GetGetApproximatedPointsBounds(), drawCoords, Color4(44, 62, 80));
 		}
 

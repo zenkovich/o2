@@ -492,6 +492,10 @@ namespace Editor
 			unknownScale = false;
 		}
 
+		float maxGridScale = 1000.0f;
+		gridScale.x = Math::Min(maxGridScale, gridScale.x);
+		gridScale.y = Math::Min(maxGridScale, gridScale.y);
+
 		RectF localCameraRect = mViewCamera.GetRect();
 		RectF curveViewCameraRect(LocalToCurveView(localCameraRect.LeftTop(), gridScale, gridOffset),
 								  LocalToCurveView(localCameraRect.RightBottom(), gridScale, gridOffset));
