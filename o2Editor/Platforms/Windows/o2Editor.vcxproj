@@ -212,6 +212,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
   <ItemGroup>
+    <ClInclude Include="..\..\Sources\AnimationWindow\Actions.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.h" />
@@ -327,6 +328,7 @@
     <ClInclude Include="..\..\Sources\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Sources\AnimationWindow\Actions.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.cpp" />

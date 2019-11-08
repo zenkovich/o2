@@ -492,10 +492,6 @@ namespace Editor
 			unknownScale = false;
 		}
 
-		float maxGridScale = 1000.0f;
-		gridScale.x = Math::Min(maxGridScale, gridScale.x);
-		gridScale.y = Math::Min(maxGridScale, gridScale.y);
-
 		RectF localCameraRect = mViewCamera.GetRect();
 		RectF curveViewCameraRect(LocalToCurveView(localCameraRect.LeftTop(), gridScale, gridOffset),
 								  LocalToCurveView(localCameraRect.RightBottom(), gridScale, gridOffset));
@@ -2087,7 +2083,7 @@ namespace Editor
 		if (editor->mAdjustCurvesScale)
 		{
 			RectF rect = curve->GetRect();
-			viewScale = Vec2F(1, rect.Height() < FLT_EPSILON ? 1.0f : 1.0f/rect.Height());
+			viewScale = Vec2F(1, Math::Min(100.0f, rect.Height() < FLT_EPSILON ? 1.0f : 1.0f/rect.Height()));
 			viewOffset = Vec2F(0, -rect.bottom);
 		}
 		else
