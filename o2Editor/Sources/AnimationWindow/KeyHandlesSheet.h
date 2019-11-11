@@ -120,6 +120,12 @@ namespace Editor
 		// Updates selection rectangle and drawing sprite
 		void UpdateSelectionFrame();
 
+		// Serialized selected keys into data
+		void SerializeSelectedKeys(DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime);
+
+		// Deserializes keys from data 
+		void DeserializeKeys(const DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime);
+
 		// Copies selected keys into buffer
 		void CopyKeys();
 
@@ -192,6 +198,9 @@ namespace Editor
 		void OnCursorMiddleMouseReleased(const Input::Cursor& cursor) override;
 
 		friend class AnimationWindow;
+		friend class AnimationAddKeysAction;
+		friend class AnimationDeleteKeysAction;
+		friend class AnimationKeysChangeAction;
 	};
 }
 
@@ -227,6 +236,9 @@ END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
 {
 
+	typedef Dictionary<String, Vector<UInt64>>& _tmp1;
+	typedef Dictionary<String, Vector<UInt64>>& _tmp2;
+
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
@@ -244,6 +256,8 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FUNCTION(void, InitializeRightHandle);
 	PRIVATE_FUNCTION(void, InitializeContextMenu);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
+	PRIVATE_FUNCTION(void, SerializeSelectedKeys, DataNode&, _tmp1, float);
+	PRIVATE_FUNCTION(void, DeserializeKeys, const DataNode&, _tmp2, float);
 	PRIVATE_FUNCTION(void, CopyKeys);
 	PRIVATE_FUNCTION(void, PasteKeys);
 	PRIVATE_FUNCTION(void, DeleteKeys);

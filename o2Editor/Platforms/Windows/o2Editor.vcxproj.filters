@@ -368,17 +368,17 @@
     <ClInclude Include="..\..\Sources\stdafx.h">
       <Filter>Sources</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\Actions.h">
-      <Filter>Sources\Core\UI\CurveEditor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Actions\ActionsList.h">
       <Filter>Sources\Core\Actions</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\AnimationWindow\PropertiesListDlg.h">
       <Filter>Sources\AnimationWindow</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\AnimationWindow\Actions.h">
+    <ClInclude Include="..\..\Sources\AnimationWindow\AnimationKeysActions.h">
       <Filter>Sources\AnimationWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.h">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -712,17 +712,17 @@
     <ClCompile Include="..\..\Sources\stdafx.cpp">
       <Filter>Sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\Actions.cpp">
-      <Filter>Sources\Core\UI\CurveEditor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Actions\ActionsList.cpp">
       <Filter>Sources\Core\Actions</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\AnimationWindow\PropertiesListDlg.cpp">
       <Filter>Sources\AnimationWindow</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\AnimationWindow\Actions.cpp">
+    <ClCompile Include="..\..\Sources\AnimationWindow\AnimationKeysActions.cpp">
       <Filter>Sources\AnimationWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.cpp">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

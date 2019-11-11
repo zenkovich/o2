@@ -1,12 +1,12 @@
 #include "stdafx.h"
-#include "Actions.h"
+#include "AnimationKeysActions.h"
 
 namespace Editor
 {
 	AnimationAddKeysAction::AnimationAddKeysAction()
 	{}
 
-	AnimationAddKeysAction::AnimationAddKeysAction(const Vector<AnimationKeysData>& keysData, KeyHandlesSheet* editor):
+	AnimationAddKeysAction::AnimationAddKeysAction(const DataNode& keysData, KeyHandlesSheet* editor):
 		mKeysData(keysData), mEditor(editor)
 	{}
 
@@ -17,7 +17,8 @@ namespace Editor
 
 	void AnimationAddKeysAction::Redo()
 	{
-
+		Dictionary<String, Vector<UInt64>> keys;
+		mEditor->DeserializeKeys(mKeysData, keys, 0.0f);
 	}
 
 	void AnimationAddKeysAction::Undo()
@@ -28,7 +29,7 @@ namespace Editor
 	AnimationDeleteKeysAction::AnimationDeleteKeysAction()
 	{}
 
-	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const Vector<AnimationKeysData>& keysData, KeyHandlesSheet* editor) :
+	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const DataNode& keysData, KeyHandlesSheet* editor) :
 		mKeysData(keysData), mEditor(editor)
 	{}
 
@@ -50,8 +51,8 @@ namespace Editor
 	AnimationKeysChangeAction::AnimationKeysChangeAction()
 	{}
 
-	AnimationKeysChangeAction::AnimationKeysChangeAction(const Vector<AnimationKeysData>& beforeKeysData, 
-														 const Vector<AnimationKeysData>& afterKeysData, 
+	AnimationKeysChangeAction::AnimationKeysChangeAction(const DataNode& beforeKeysData, 
+														 const DataNode& afterKeysData, 
 														 KeyHandlesSheet* editor):
 		mBeforeKeysData(beforeKeysData), mAfterKeysData(afterKeysData), mEditor(editor)
 	{}
@@ -71,3 +72,9 @@ namespace Editor
 
 	}
 }
+
+DECLARE_CLASS(Editor::AnimationAddKeysAction);
+
+DECLARE_CLASS(Editor::AnimationDeleteKeysAction);
+
+DECLARE_CLASS(Editor::AnimationKeysChangeAction);

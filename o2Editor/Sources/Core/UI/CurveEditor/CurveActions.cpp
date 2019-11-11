@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "Actions.h"
+#include "CurveActions.h"
 
 namespace Editor
 {

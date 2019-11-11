@@ -212,7 +212,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
   <ItemGroup>
-    <ClInclude Include="..\..\Sources\AnimationWindow\Actions.h" />
+    <ClInclude Include="..\..\Sources\AnimationWindow\AnimationKeysActions.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\CurvesSheet.h" />
     <ClInclude Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.h" />
@@ -283,7 +283,7 @@
     <ClInclude Include="..\..\Sources\Core\Tools\ScaleTool.h" />
     <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\Actions.h" />
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h" />
     <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h" />
@@ -328,7 +328,7 @@
     <ClInclude Include="..\..\Sources\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Sources\AnimationWindow\Actions.cpp" />
+    <ClCompile Include="..\..\Sources\AnimationWindow\AnimationKeysActions.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\CurvesSheet.cpp" />
     <ClCompile Include="..\..\Sources\AnimationWindow\KeyHandlesSheet.cpp" />
@@ -398,7 +398,7 @@
     <ClCompile Include="..\..\Sources\Core\Tools\ScaleTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\Actions.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp" />

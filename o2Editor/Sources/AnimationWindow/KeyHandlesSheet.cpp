@@ -417,16 +417,13 @@ namespace Editor
 		else mSelectionFrame->enabled = false;
 	}
 
-	void KeyHandlesSheet::CopyKeys()
+	void KeyHandlesSheet::SerializeSelectedKeys(DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime)
 	{
-		DataNode data;
 		Dictionary<String, Pair<DataNode*, Vector<UInt64>>> serializedKeysUids;
-
-		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
 
 		for (auto handle : mSelectedHandles)
 		{
-			if (auto keyHandle = dynamic_cast<AnimationKeyDragHandle*>(handle)) 
+			if (auto keyHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
 			{
 				if (!serializedKeysUids.ContainsKey(keyHandle->animatedValuePath))
 				{
@@ -438,39 +435,31 @@ namespace Editor
 				if (serializedKeysUids[keyHandle->animatedValuePath].second.Contains(keyHandle->keyUid))
 					continue;
 
+				keys[keyHandle->animatedValuePath].Add(keyHandle->keyUid);
+
 				auto& pair = serializedKeysUids[keyHandle->animatedValuePath];
 
 				auto node = pair.first->AddNode("key");
 				keyHandle->trackControl->SerializeKey(keyHandle->keyUid, *node, relativeTime);
-				
+
 				serializedKeysUids[keyHandle->animatedValuePath].second.Add(keyHandle->keyUid);
 			}
 		}
-
-		Clipboard::SetText(data.SaveAsWString());
 	}
 
-	void KeyHandlesSheet::PasteKeys()
+	void KeyHandlesSheet::DeserializeKeys(const DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime)
 	{
-		DeselectAll();
-		Vector<UInt64> newKeys;
-
-		DataNode data;
-		data.LoadFromData(Clipboard::GetText());
-
-		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
-
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
 		if (data.GetChildNodes().Count() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
 		{
-			auto dataNode = (AnimationTree::AnimationValueNode*)mAnimationWindow->mTree->GetSelectedObjects()[0]; 
+			auto dataNode = (AnimationTree::AnimationValueNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
 			for (auto keyNode : *data.GetChildNodes()[0]->GetNode("Keys"))
 			{
 				UInt64 uid = dataNode->trackControl->DeserializeKey(*keyNode, relativeTime);
 				if (uid != 0)
-					newKeys.Add(uid);
+					keys[dataNode->path].Add(uid);
 			}
 		}
 		else
@@ -487,7 +476,7 @@ namespace Editor
 					{
 						UInt64 uid = kv.Value()->DeserializeKey(*keyNode, relativeTime);
 						if (uid != 0)
-							newKeys.Add(uid);
+							keys[path].Add(uid);
 					}
 				}
 			}
@@ -495,12 +484,34 @@ namespace Editor
 
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+	}
+
+	void KeyHandlesSheet::CopyKeys()
+	{
+		DataNode data;
+		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
+		Dictionary<String, Vector<UInt64>> keys;
+
+		SerializeSelectedKeys(data, keys, relativeTime);
+
+		Clipboard::SetText(data.SaveAsWString());
+	}
+
+	void KeyHandlesSheet::PasteKeys()
+	{
+		DeselectAll();
+		Dictionary<String, Vector<UInt64>> newKeys;
+
+		DataNode data;
+		data.LoadFromData(Clipboard::GetText());
+
+		DeserializeKeys(data, newKeys, mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x));
 
 		for (auto& handlesGroup : mHandlesGroups)
 		{
 			for (auto& handle : handlesGroup.Value())
 			{
-				if (newKeys.Contains(handle->keyUid))
+				if (newKeys.ContainsKey(handle->animatedValuePath) && newKeys[handle->animatedValuePath].Contains(handle->keyUid))
 					SelectHandle(handle);
 			}
 		}

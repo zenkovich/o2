@@ -4,7 +4,7 @@
 #include "Application/Application.h"
 #include "Core/Dialogs/KeyEditDlg.h"
 #include "Core/EditorScope.h"
-#include "Core/UI/CurveEditor/Actions.h"
+#include "Core/UI/CurveEditor/CurveActions.h"
 #include "Core/UIRoot.h"
 #include "Render/Render.h"
 #include "Render/Sprite.h"
