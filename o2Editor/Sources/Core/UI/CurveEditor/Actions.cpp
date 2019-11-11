@@ -4,7 +4,7 @@
 
 namespace Editor
 {
-	AddKeysAction::AddKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor) :
+	CurveAddKeysAction::CurveAddKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -13,15 +13,15 @@ namespace Editor
 		}
 	}
 
-	AddKeysAction::AddKeysAction()
+	CurveAddKeysAction::CurveAddKeysAction()
 	{ }
 
-	String AddKeysAction::GetName()
+	String CurveAddKeysAction::GetName()
 	{
 		return "add keys";
 	}
 
-	void AddKeysAction::Redo()
+	void CurveAddKeysAction::Redo()
 	{
 		mEditor->DeselectAll();
 		mEditor->mSelectedHandles.Clear();
@@ -56,7 +56,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	void AddKeysAction::Undo()
+	void CurveAddKeysAction::Undo()
 	{
 		for (auto& info : mInfos)
 		{
@@ -84,7 +84,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	DeleteKeysAction::DeleteKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor) :
+	CurveDeleteKeysAction::CurveDeleteKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -93,15 +93,15 @@ namespace Editor
 		}
 	}
 
-	DeleteKeysAction::DeleteKeysAction()
+	CurveDeleteKeysAction::CurveDeleteKeysAction()
 	{ }
 
-	String DeleteKeysAction::GetName()
+	String CurveDeleteKeysAction::GetName()
 	{
 		return "remove keys";
 	}
 
-	void DeleteKeysAction::Redo()
+	void CurveDeleteKeysAction::Redo()
 	{
 		for (auto& info : mInfos)
 		{
@@ -129,7 +129,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	void DeleteKeysAction::Undo()
+	void CurveDeleteKeysAction::Undo()
 	{
 		mEditor->DeselectAll();
 		mEditor->mSelectedHandles.Clear();
@@ -164,24 +164,24 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	KeysChangeAction::KeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor) :
+	CurveKeysChangeAction::CurveKeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{ }
 
-	KeysChangeAction::KeysChangeAction()
+	CurveKeysChangeAction::CurveKeysChangeAction()
 	{ }
 
-	bool KeysChangeAction::KeysInfo::operator==(const KeysInfo& other) const
+	bool CurveKeysChangeAction::KeysInfo::operator==(const KeysInfo& other) const
 	{
 		return curveId == other.curveId && beforeKeys == other.beforeKeys && afterKeys == other.afterKeys;
 	}
 
-	String KeysChangeAction::GetName()
+	String CurveKeysChangeAction::GetName()
 	{
 		return "change keys";
 	}
 
-	void KeysChangeAction::Redo()
+	void CurveKeysChangeAction::Redo()
 	{
 		mEditor->DeselectAll();
 		mEditor->mSelectedHandles.Clear();
@@ -227,7 +227,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	void KeysChangeAction::Undo()
+	void CurveKeysChangeAction::Undo()
 	{
 		mEditor->DeselectAll();
 		mEditor->mSelectedHandles.Clear();
@@ -274,8 +274,8 @@ namespace Editor
 	}
 }
 
-DECLARE_CLASS(Editor::AddKeysAction);
+DECLARE_CLASS(Editor::CurveAddKeysAction);
 
-DECLARE_CLASS(Editor::DeleteKeysAction);
+DECLARE_CLASS(Editor::CurveDeleteKeysAction);
 
-DECLARE_CLASS(Editor::KeysChangeAction);
+DECLARE_CLASS(Editor::CurveKeysChangeAction);

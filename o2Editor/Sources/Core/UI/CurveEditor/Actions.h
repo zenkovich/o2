@@ -5,41 +5,41 @@
 
 namespace Editor
 {
-	class AddKeysAction : public IAction
+	class CurveAddKeysAction : public IAction
 	{
 	public:
-		AddKeysAction();
-		AddKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor);
+		CurveAddKeysAction();
+		CurveAddKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor);
 
 		String GetName();
 		void Redo();
 		void Undo();
 
-		SERIALIZABLE(AddKeysAction);
+		SERIALIZABLE(CurveAddKeysAction);
 
 	protected:
 		CurveEditor::CurveKeysInfosVec mInfos;
 		CurveEditor*                   mEditor;
 	};
 
-	class DeleteKeysAction : public IAction
+	class CurveDeleteKeysAction : public IAction
 	{
 	public:
-		DeleteKeysAction();
-		DeleteKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor);
+		CurveDeleteKeysAction();
+		CurveDeleteKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor);
 
 		String GetName();
 		void Redo();
 		void Undo();
 
-		SERIALIZABLE(DeleteKeysAction);
+		SERIALIZABLE(CurveDeleteKeysAction);
 
 	protected:
 		CurveEditor::CurveKeysInfosVec mInfos;
 		CurveEditor*                   mEditor;
 	};
 
-	class KeysChangeAction : public IAction
+	class CurveKeysChangeAction : public IAction
 	{
 	public:
 		struct KeysInfo
@@ -54,14 +54,14 @@ namespace Editor
 		typedef Vector<KeysInfo> KeysInfosVec;
 
 	public:
-		KeysChangeAction();
-		KeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor);
+		CurveKeysChangeAction();
+		CurveKeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor);
 
 		String GetName();
 		void Redo();
 		void Undo();
 
-		SERIALIZABLE(KeysChangeAction);
+		SERIALIZABLE(CurveKeysChangeAction);
 
 	protected:
 		KeysInfosVec   mInfos;
@@ -69,18 +69,18 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::AddKeysAction)
+CLASS_BASES_META(Editor::CurveAddKeysAction)
 {
 	BASE_CLASS(Editor::IAction);
 }
 END_META;
-CLASS_FIELDS_META(Editor::AddKeysAction)
+CLASS_FIELDS_META(Editor::CurveAddKeysAction)
 {
 	PROTECTED_FIELD(mInfos);
 	PROTECTED_FIELD(mEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::AddKeysAction)
+CLASS_METHODS_META(Editor::CurveAddKeysAction)
 {
 
 	PUBLIC_FUNCTION(String, GetName);
@@ -89,18 +89,18 @@ CLASS_METHODS_META(Editor::AddKeysAction)
 }
 END_META;
 
-CLASS_BASES_META(Editor::DeleteKeysAction)
+CLASS_BASES_META(Editor::CurveDeleteKeysAction)
 {
 	BASE_CLASS(Editor::IAction);
 }
 END_META;
-CLASS_FIELDS_META(Editor::DeleteKeysAction)
+CLASS_FIELDS_META(Editor::CurveDeleteKeysAction)
 {
 	PROTECTED_FIELD(mInfos);
 	PROTECTED_FIELD(mEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::DeleteKeysAction)
+CLASS_METHODS_META(Editor::CurveDeleteKeysAction)
 {
 
 	PUBLIC_FUNCTION(String, GetName);
@@ -109,18 +109,18 @@ CLASS_METHODS_META(Editor::DeleteKeysAction)
 }
 END_META;
 
-CLASS_BASES_META(Editor::KeysChangeAction)
+CLASS_BASES_META(Editor::CurveKeysChangeAction)
 {
 	BASE_CLASS(Editor::IAction);
 }
 END_META;
-CLASS_FIELDS_META(Editor::KeysChangeAction)
+CLASS_FIELDS_META(Editor::CurveKeysChangeAction)
 {
 	PROTECTED_FIELD(mInfos);
 	PROTECTED_FIELD(mEditor);
 }
 END_META;
-CLASS_METHODS_META(Editor::KeysChangeAction)
+CLASS_METHODS_META(Editor::CurveKeysChangeAction)
 {
 
 	PUBLIC_FUNCTION(String, GetName);

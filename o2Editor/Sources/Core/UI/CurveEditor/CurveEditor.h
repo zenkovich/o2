@@ -459,9 +459,9 @@ namespace Editor
 		// On context menu redo pressed. Restores action from stack
 		void OnRedoPressed();
 
-		friend class AddKeysAction;
-		friend class DeleteKeysAction;
-		friend class KeysChangeAction;
+		friend class CurveAddKeysAction;
+		friend class CurveDeleteKeysAction;
+		friend class CurveKeysChangeAction;
 	};
 }
 

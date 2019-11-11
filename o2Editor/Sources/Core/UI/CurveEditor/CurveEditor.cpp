@@ -1194,7 +1194,7 @@ namespace Editor
 			keyInfos.Last().curveId = clickedCurveInfo->curveId;
 			keyInfos.Last().keys.Add(newKey);
 
-			AddKeysAction* action = mnew AddKeysAction(keyInfos, this);
+			CurveAddKeysAction* action = mnew CurveAddKeysAction(keyInfos, this);
 			DoneAction(action);
 		}
 	}
@@ -1654,14 +1654,14 @@ namespace Editor
 
 		if (changed)
 		{
-			KeysChangeAction::KeysInfosVec actionKeysInfos;
+			CurveKeysChangeAction::KeysInfosVec actionKeysInfos;
 			for (auto& keysInfo : mBeforeTransformKeys)
 			{
 				CurveInfo* curveInfo = mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
 				if (!curveInfo)
 					continue;
 
-				actionKeysInfos.Add(KeysChangeAction::KeysInfo());
+				actionKeysInfos.Add(CurveKeysChangeAction::KeysInfo());
 				auto& actionCurveKeysInfo = actionKeysInfos.Last();
 
 				actionCurveKeysInfo.curveId = keysInfo.curveId;
@@ -1675,7 +1675,7 @@ namespace Editor
 				}
 			}
 
-			KeysChangeAction* action = mnew KeysChangeAction(actionKeysInfos, this);
+			CurveKeysChangeAction* action = mnew CurveKeysChangeAction(actionKeysInfos, this);
 			DoneAction(action);
 		}
 	}
@@ -1901,7 +1901,7 @@ namespace Editor
 
 		if (!keyInfos.IsEmpty())
 		{
-			AddKeysAction* action = mnew AddKeysAction(keyInfos, this);
+			CurveAddKeysAction* action = mnew CurveAddKeysAction(keyInfos, this);
 			DoneAction(action);
 		}
 	}
@@ -1956,7 +1956,7 @@ namespace Editor
 
 		if (!keyInfos.IsEmpty())
 		{
-			DeleteKeysAction* action = mnew DeleteKeysAction(keyInfos, this);
+			CurveDeleteKeysAction* action = mnew CurveDeleteKeysAction(keyInfos, this);
 			DoneAction(action);
 		}
 	}
