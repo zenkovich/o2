@@ -72,7 +72,7 @@ namespace o2
 		return UID();
 	}
 
-	const Assets::TypesExtsDict Assets::GetAssetsExtensionsTypes() const
+	const Assets::TypesExtsMap Assets::GetAssetsExtensionsTypes() const
 	{
 		return mAssetsTypes;
 	}
@@ -85,7 +85,7 @@ namespace o2
 	const Type* Assets::GetAssetTypeByExtension(const String& extension) const
 	{
 		if (mAssetsTypes.ContainsKey(extension))
-			return mAssetsTypes[extension];
+			return mAssetsTypes.Get(extension);
 
 		return mStdAssetType;
 	}

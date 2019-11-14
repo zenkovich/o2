@@ -3,7 +3,7 @@
 #include <functional>
 #include "Utils/Types/Containers/Pair.h"
 #include "Utils/Types/Containers/Vector.h"
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/StringDef.h"
 
 // Reflection access macros
@@ -15,7 +15,7 @@ namespace o2
 	class EnumType;
 	class PropertyType;
 	class VectorType;
-	class DictionaryType;
+	class MapType;
 
 	template<typename _return_type, typename _accessor_type>
 	class TStringPointerAccessorType;
@@ -72,7 +72,7 @@ namespace o2
 
 		// Initializes enum
 		template<typename _type>
-		static EnumType* InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func);
+		static EnumType* InitializeEnum(const char* name, std::function<Map<int, String>()> func);
 
 		// Initializes pointer type
 		template<typename _type>
@@ -88,7 +88,7 @@ namespace o2
 
 		// Initializes dictionary type
 		template<typename _key_type, typename _value_type>
-		static const DictionaryType* InitializeDictionaryType();
+		static const MapType* InitializeMapType();
 
 		// Initializes accessor type
 		template<typename _return_type, typename _accessor_type>
@@ -164,13 +164,13 @@ namespace o2
     template<>                                                                                           \
     o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
     typedef NAME EnumName;                                                                               \
-    o2::Dictionary<int, o2::String> res;    
+    o2::Map<int, o2::String> res;    
 
 #define ENUM_META_(NAME, U)                                                                              \
     template<>                                                                                           \
     o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
     typedef NAME EnumName;                                                                               \
-    o2::Dictionary<int, o2::String> res;                                        
+    o2::Map<int, o2::String> res;                                        
 
 #define ENUM_ENTRY(NAME) \
     res.Add((int)EnumName::NAME, #NAME)
@@ -189,7 +189,7 @@ namespace o2
 		auto& entries = type->GetEntries();
 
 		if (entries.ContainsValue(name))
-			return (_type)(entries.FindValue(name).Key());
+			return (_type)(entries.FindValue(name).first);
 
 		return (_type)0;
 	}
@@ -252,7 +252,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	EnumType* Reflection::InitializeEnum(const char* name, std::function<Dictionary<int, String>()> func)
+	EnumType* Reflection::InitializeEnum(const char* name, std::function<Map<int, String>()> func)
 	{
 		EnumType* res = mnew TEnumType<_type>(name, sizeof(_type));
 
@@ -296,14 +296,14 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	const DictionaryType* Reflection::InitializeDictionaryType()
+	const MapType* Reflection::InitializeMapType()
 	{
 		String typeName = "o2::Dictionary<" + TypeOf(_key_type).GetName() + ", " + TypeOf(_value_type).GetName() + ">";
 
 		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return dynamic_cast<DictionaryType*>(fnd);
+			return dynamic_cast<MapType*>(fnd);
 
-		auto newType = mnew TDictionaryType<_key_type, _value_type>();
+		auto newType = mnew TMapType<_key_type, _value_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
 		mInstance->mTypes.Add(newType);

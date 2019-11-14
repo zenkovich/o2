@@ -111,11 +111,11 @@ namespace o2
 		template<typename _type>
 		struct ValueAgent: public IValueAgent
 		{
-			typedef Dictionary<AnimationState*, AnimatedValue<_type>*> AnimatedValuesDict;
+			using AnimatedValuesVec = Vector<Pair<AnimationState*, AnimatedValue<_type>*>>;
 
 		public:
-			AnimatedValuesDict  animValues; // Animated values associated with animation states
-			IValueProxy<_type>* target;     // Target value proxy
+			AnimatedValuesVec   animValues; // Animated values associated with animation states
+			IValueProxy<_type>* target;    // Target value proxy
 
 		public:
 			// Updates value and blend
@@ -181,7 +181,7 @@ namespace o2
 					return;
 				}
 
-				agent->animValues.Add(state, value);
+				agent->animValues.Add({ state, value });
 				return;
 			}
 		}
@@ -189,7 +189,7 @@ namespace o2
 		ValueAgent<_type>* newAgent = mnew ValueAgent <_type>();
 		mValues.Add(newAgent);
 		newAgent->path = path;
-		newAgent->animValues.Add(state, value);
+		newAgent->animValues.Add({ state, value });
 
 		FieldInfo* fieldInfo = nullptr;
 		_type* fieldPtr = (_type*)GetType().GetFieldPtr(this, path, fieldInfo);
@@ -212,22 +212,22 @@ namespace o2
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::RemoveValue(IAnimatedValue* value)
 	{
-		animValues.RemoveAll([&](auto x) { return x.Value() == value; });
+		animValues.RemoveAll([&](auto x) { return x.second == value; });
 	}
 
 	template<typename _type>
 	void Animatable::ValueAgent<_type>::Update()
 	{
-		AnimationState* firstValueState = animValues.GetIdx(0).Key();
-		AnimatedValue<_type>* firstValue = animValues.GetIdx(0).Value();
+		AnimationState* firstValueState = animValues[0].first;
+		AnimatedValue<_type>* firstValue = animValues[0].second;
 
 		float weightsSum = firstValueState->weight*firstValueState->workWeight*firstValueState->mask.GetNodeWeight(path);
 		_type valueSum = firstValue->GetValue();
 
 		for (int i = 1; i < animValues.Count(); i++)
 		{
-			AnimationState* valueState = animValues.GetIdx(i).Key();
-			AnimatedValue<_type>* value = animValues.GetIdx(i).Value();
+			AnimationState* valueState = animValues[i].first;
+			AnimatedValue<_type>* value = animValues[i].second;
 
 			weightsSum += valueState->weight*valueState->workWeight*valueState->mask.GetNodeWeight(path);
 			valueSum += value->GetValue();

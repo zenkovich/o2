@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Application/Input.h"
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 
 #include "Utils/Singleton.h"
@@ -24,12 +24,12 @@ namespace o2
 	class EventSystem: public Singleton<EventSystem>
 	{
 	public:
-		typedef Vector<CursorEventsListener*>                      CursorEventsListenersVec;
-		typedef Vector<CursorAreaEventsListener*>                  CursorAreaEventsListenersVec;
-		typedef Vector<DragableObject*>                            DragEventsListenersVec;
-		typedef Vector<KeyboardEventsListener*>                    KeybEventsListenersVec;
-		typedef Vector<ApplicationEventsListener*>                 AppEventsListenersVec;
-		typedef Dictionary<CursorId, CursorAreaEventsListenersVec> CursorListenersDict;
+		typedef Vector<CursorEventsListener*>               CursorEventsListenersVec;
+		typedef Vector<CursorAreaEventsListener*>           CursorAreaEventsListenersVec;
+		typedef Vector<DragableObject*>                     DragEventsListenersVec;
+		typedef Vector<KeyboardEventsListener*>             KeybEventsListenersVec;
+		typedef Vector<ApplicationEventsListener*>          AppEventsListenersVec;
+		typedef Map<CursorId, CursorAreaEventsListenersVec> CursorListenersMap;
 
 	public:
 		static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
@@ -128,11 +128,11 @@ namespace o2
 
 		CursorEventsListenersVec     mCursorListeners;              // All cursor non area listeners
 		CursorAreaEventsListenersVec mAreaCursorListeners;          // All cursor area listeners
-		CursorListenersDict          mPressedListeners;             // Pressed listeners for all pressed cursors
+		CursorListenersMap          mPressedListeners;             // Pressed listeners for all pressed cursors
 		CursorAreaEventsListenersVec mRightButtonPressedListeners;  // Right mouse button pressed listener
 		CursorAreaEventsListenersVec mMiddleButtonPressedListeners; // Middle mouse button pressed listener
-		CursorListenersDict          mUnderCursorListeners;         // Under cursor listeners for each cursor
-		CursorListenersDict          mLastUnderCursorListeners;     // Under cursor listeners for each cursor on last frame
+		CursorListenersMap          mUnderCursorListeners;         // Under cursor listeners for each cursor
+		CursorListenersMap          mLastUnderCursorListeners;     // Under cursor listeners for each cursor on last frame
 		DragEventsListenersVec       mDragListeners;                // Drag events listeners
 
 		KeybEventsListenersVec mKeyboardListeners;    // Keyboard events listeners

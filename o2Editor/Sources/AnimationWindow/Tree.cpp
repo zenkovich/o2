@@ -375,13 +375,13 @@ namespace Editor
 		mNameDrawable = GetLayerDrawable<Text>("name");
 	}
 
-	Dictionary<const Type*, o2::Vector<ITrackControl*>> AnimationTreeNode::mTrackControlsCache;
+	Map<const Type*, o2::Vector<ITrackControl*>> AnimationTreeNode::mTrackControlsCache;
 
 	void AnimationTreeNode::InitilizeTrackControl()
 	{
 		PushScopeEnterOnStack scope;
 
-		static Dictionary<const Type*, const Type*> animatedValueToControlTrackTypes =
+		static Map<const Type*, const Type*> animatedValueToControlTrackTypes =
 		{
 			{ &TypeOf(AnimatedValue<float>), &TypeOf(KeyFramesTrackControl<AnimatedValue<float>>) },
 			{ &TypeOf(AnimatedValue<bool>), &TypeOf(KeyFramesTrackControl<AnimatedValue<bool>>) },

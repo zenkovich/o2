@@ -124,7 +124,7 @@ namespace Editor
 	void KeyHandlesSheet::UnregTrackControl(ITrackControl* trackControl)
 	{
 		mTrackControls.Remove(trackControl);		
-		mTrackControlsMap.RemoveAll([=](auto kv) { return kv.Value() == trackControl; });
+		mTrackControlsMap.RemoveAll([=](const String& k, ITrackControl* v) { return v == trackControl; });
 	}
 
 	void KeyHandlesSheet::UnregAllTrackControls()
@@ -200,14 +200,14 @@ namespace Editor
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
 
-		for (auto kv : mHandlesGroups)
+		for (auto& kv : mHandlesGroups)
 		{
-			for (auto handle : kv.Value())
+			for (auto handle : kv.second)
 			{
 				if (!mSelectedHandles.Contains(handle))
 					continue;
 
-				if (handle->isMapping && kv.Value().ContainsPred([=](auto x) { return !x->isMapping && x->id == handle->id; }))
+				if (handle->isMapping && kv.second.ContainsPred([=](auto x) { return !x->isMapping && x->id == handle->id; }))
 					continue;
 
 				handle->SetDragPosition(handle->ScreenToLocal(cursorPos) + handle->GetDraggingOffset());
@@ -417,9 +417,9 @@ namespace Editor
 		else mSelectionFrame->enabled = false;
 	}
 
-	void KeyHandlesSheet::SerializeSelectedKeys(DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime)
+	void KeyHandlesSheet::SerializeSelectedKeys(DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime)
 	{
-		Dictionary<String, Pair<DataNode*, Vector<UInt64>>> serializedKeysUids;
+		Map<String, Pair<DataNode*, Vector<UInt64>>> serializedKeysUids;
 
 		for (auto handle : mSelectedHandles)
 		{
@@ -447,7 +447,7 @@ namespace Editor
 		}
 	}
 
-	void KeyHandlesSheet::DeserializeKeys(const DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime)
+	void KeyHandlesSheet::DeserializeKeys(const DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime)
 	{
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
 			animatedValueDef.animatedValue->BeginKeysBatchChange();
@@ -467,14 +467,14 @@ namespace Editor
 			for (auto pathNode : data)
 			{
 				String path = *pathNode->GetNode("Path");
-				for (auto kv : mTrackControlsMap)
+				for (auto& kv : mTrackControlsMap)
 				{
-					if (kv.Key() != path)
+					if (kv.first != path)
 						continue;
 
 					for (auto keyNode : *pathNode->GetNode("Keys"))
 					{
-						UInt64 uid = kv.Value()->DeserializeKey(*keyNode, relativeTime);
+						UInt64 uid = kv.second->DeserializeKey(*keyNode, relativeTime);
 						if (uid != 0)
 							keys[path].Add(uid);
 					}
@@ -490,7 +490,7 @@ namespace Editor
 	{
 		DataNode data;
 		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
-		Dictionary<String, Vector<UInt64>> keys;
+		Map<String, Vector<UInt64>> keys;
 
 		SerializeSelectedKeys(data, keys, relativeTime);
 
@@ -500,7 +500,7 @@ namespace Editor
 	void KeyHandlesSheet::PasteKeys()
 	{
 		DeselectAll();
-		Dictionary<String, Vector<UInt64>> newKeys;
+		Map<String, Vector<UInt64>> newKeys;
 
 		DataNode data;
 		data.LoadFromData(Clipboard::GetText());
@@ -509,7 +509,7 @@ namespace Editor
 
 		for (auto& handlesGroup : mHandlesGroups)
 		{
-			for (auto& handle : handlesGroup.Value())
+			for (auto& handle : handlesGroup.second)
 			{
 				if (newKeys.ContainsKey(handle->animatedValuePath) && newKeys[handle->animatedValuePath].Contains(handle->keyUid))
 					SelectHandle(handle);

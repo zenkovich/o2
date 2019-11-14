@@ -44,11 +44,11 @@ namespace Editor
 		class GlobalConfig: public ISerializable
 		{
 		public:
-			typedef Dictionary<String, WindowsLayout> WndLayoutsDict;
+			typedef Map<String, WindowsLayout> WndLayoutsMap;
 		public:
 			String         mLastOpenedProjectpath; // Last opened project path @SERIALIZABLE
 			WindowsLayout  mDefaultLayout;         // Default windows layout, using in resetting @SERIALIZABLE
-			WndLayoutsDict mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
+			WndLayoutsMap mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
 			DataNode       mUserData;              // User data  @SERIALIZABLE
 
 			SERIALIZABLE(GlobalConfig);

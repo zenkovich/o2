@@ -51,8 +51,8 @@ namespace o2
 		float eventCheckEnd = Math::Max(lastInDurationTime, mInDurationTime);
 		for (auto& kv : mTimeEvents)
 		{
-			if (kv.Key() > eventCheckBeg && kv.Key() <= eventCheckEnd)
-				kv.Value().Invoke();
+			if (kv.first > eventCheckBeg && kv.first <= eventCheckEnd)
+				kv.second.Invoke();
 		}
 	}
 
@@ -316,9 +316,9 @@ namespace o2
 		mTimeEvents.Remove(time);
 	}
 
-	void IAnimation::RemoveTimeEvent(const Function<void()> eventFunc)
+	void IAnimation::RemoveTimeEvent(const Function<void()>& eventFunc)
 	{
-		mTimeEvents.RemoveAll([&](auto kv) { return kv.Value() == eventFunc; });
+		mTimeEvents.RemoveAll([=](float t, const Function<void()>& f) { return f == eventFunc; });
 	}
 
 	void IAnimation::RemoveAllTimeEvents()

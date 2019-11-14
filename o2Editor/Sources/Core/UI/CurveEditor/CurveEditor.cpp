@@ -124,9 +124,9 @@ namespace Editor
 		}
 	}
 
-	Dictionary<String, Curve*> CurveEditor::GetCurves() const
+	Map<String, Curve*> CurveEditor::GetCurves() const
 	{
-		Dictionary<String, Curve*> res;
+		Map<String, Curve*> res;
 		for (auto curveInfo : mCurves)
 			res.Add(curveInfo->curveId, curveInfo->curve);
 

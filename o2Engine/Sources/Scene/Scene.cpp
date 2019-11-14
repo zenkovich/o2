@@ -510,7 +510,7 @@ namespace o2
 		return mDrawnObjects;
 	}
 
-	Scene::ActorsCacheDict& Scene::GetPrototypesLinksCache()
+	Scene::ActorsCacheMap& Scene::GetPrototypesLinksCache()
 	{
 		return mPrototypeLinksCache;
 	}
@@ -585,15 +585,15 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		for (auto kv = Instance().mPrototypeLinksCache.Begin(); kv != Instance().mPrototypeLinksCache.End();)
+		for (auto& it = Instance().mPrototypeLinksCache.Begin(); it != Instance().mPrototypeLinksCache.End();)
 		{
-			kv.Value().Remove(actor);
-			if (kv.Value().IsEmpty())
+			it->second.Remove(actor);
+			if (it->second.IsEmpty())
 			{
-				Instance().mPrototypeLinksCache.Remove(kv.Key());
-				kv = Instance().mPrototypeLinksCache.Begin();
+				Instance().mPrototypeLinksCache.Remove(it->first);
+				it = Instance().mPrototypeLinksCache.Begin();
 			}
-			else kv++;
+			else it++;
 		}
 	}
 

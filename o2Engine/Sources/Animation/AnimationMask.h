@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Serialization/Serializable.h"
 #include "Utils/Types/String.h"
 
@@ -12,7 +12,7 @@ namespace o2
 	class AnimationMask: public ISerializable
 	{
 	public:
-		Dictionary<String, float> weights; // Masked nodes weights @SERIALIZABLE
+		Map<String, float> weights; // Masked nodes weights @SERIALIZABLE
 
 	public:
 		// Returns node masked weight. 1.0f is default

@@ -29,7 +29,7 @@ namespace o2
 		AssetsIdsVec BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
 
 	protected:
-		typedef Dictionary<const Type*, IAssetConverter*> ConvertersDict;
+		typedef Map<const Type*, IAssetConverter*> ConvertersMap;
 
 		LogStream* mLog; // Asset builder log stream
 
@@ -40,7 +40,7 @@ namespace o2
 
 		AssetTree::AssetsVec mModifiedAssets; // Modified assets infos
 
-		ConvertersDict    mAssetConverters;   // Assets converters by type
+		ConvertersMap    mAssetConverters;   // Assets converters by type
 		StdAssetConverter mStdAssetConverter; // Standard assets converter
 
 	protected:

@@ -77,7 +77,7 @@ namespace o2
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
 
-		Dictionary<String, String> mDictionary;    // @SERIALIZABLE
+		Map<String, String> mDictionary;    // @SERIALIZABLE
 		float mFloat2;					           // @SERIALIZABLE
 		float mFloat3;					           // @SERIALIZABLE
 		float mFloat4;					           // @SERIALIZABLE

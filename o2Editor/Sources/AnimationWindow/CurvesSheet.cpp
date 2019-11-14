@@ -89,9 +89,9 @@ namespace Editor
 		// Check removed curves
 		for (auto curve : mCurvesEditor->GetCurves())
 		{
-			if (!animCurves.Contains(curve.Value()))
+			if (!animCurves.Contains(curve.second))
 			{
-				mCurvesEditor->RemoveCurve(curve.Value());
+				mCurvesEditor->RemoveCurve(curve.second);
 				changed = true;
 			}
 		}

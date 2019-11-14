@@ -47,19 +47,24 @@ namespace o2
 	{}
 
 	template<typename T>
-	TString<T>::TString(const T* data) :
+	TString<T>::TString(const T* data):
 		std::basic_string<T>(data)
 	{}
 
 	template<typename T>
-	TString<T>::TString(const std::basic_string<T>& data) :
+	TString<T>::TString(const std::basic_string<T>& data):
 		std::basic_string<T>(data)
 	{}
 
 	template<typename T>
-	TString<T>::TString(const TString& other) :
+	TString<T>::TString(const TString& other):
 		std::basic_string<T>(other)
-	{}
+	{ }
+
+	template<typename T>
+	TString<T>::TString(TString&& other) :
+		std::basic_string<T>(other)
+	{ }
 
 	template<typename T>
 	template<typename T2, typename X>

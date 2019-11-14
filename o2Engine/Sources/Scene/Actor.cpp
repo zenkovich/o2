@@ -46,8 +46,8 @@ namespace o2
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
+		Map<const Actor*, Actor*> actorsMap;
+		Map<const Component*, Component*> componentsMap;
 
 		ProcessCopying(this, prototype->GetActor(), actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
@@ -79,8 +79,8 @@ namespace o2
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
+		Map<const Actor*, Actor*> actorsMap;
+		Map<const Component*, Component*> componentsMap;
 
 		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
@@ -146,8 +146,8 @@ namespace o2
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
+		Map<const Actor*, Actor*> actorsMap;
+		Map<const Component*, Component*> componentsMap;
 
 		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
@@ -882,18 +882,18 @@ namespace o2
 		ActorDataNodeConverter::Instance().ResolvePointers();
 	}
 
-	Dictionary<String, Actor*> Actor::GetAllChilds()
+	Map<String, Actor*> Actor::GetAllChilds()
 	{
-		Dictionary<String, Actor*> res;
+		Map<String, Actor*> res;
 		for (auto child : mChildren)
 			res.Add(child->GetName(), child);
 
 		return res;
 	}
 
-	Dictionary<String, Component*> Actor::GetAllComponents()
+	Map<String, Component*> Actor::GetAllComponents()
 	{
-		Dictionary<String, Component*> res;
+		Map<String, Component*> res;
 		for (auto child : mComponents)
 			res.Add(child->GetType().GetName(), child);
 
@@ -932,8 +932,8 @@ namespace o2
 	}
 
 	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers,
-							   Vector<Component**>& componentsPointers, Dictionary<const Actor*, Actor*>& actorsMap,
-							   Dictionary<const Component*, Component*>& componentsMap,
+							   Vector<Component**>& componentsPointers, Map<const Actor*, Actor*>& actorsMap,
+							   Map<const Component*, Component*>& componentsMap,
 							   bool isSourcePrototype)
 	{
 		if (!dest->mPrototype && source->mPrototype)
@@ -1076,8 +1076,8 @@ namespace o2
 
 	void Actor::FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
 										   const Vector<Component**>& componentsPointers,
-										   const Dictionary<const Actor*, Actor*>& actorsMap,
-										   const Dictionary<const Component*, Component*>& componentsMap)
+										   const Map<const Actor*, Actor*>& actorsMap,
+										   const Map<const Component*, Component*>& componentsMap)
 	{
 		for (auto actorPtr : actorsPointers)
 		{

@@ -282,7 +282,7 @@ namespace o2
 		void OnExcludeFromScene();
 
 		// Returns dictionary with all child layers
-		Dictionary<String, WidgetLayer*> GetAllChildLayers();
+		Map<String, WidgetLayer*> GetAllChildLayers();
 
 		friend class Widget;
 		friend class WidgetLayerLayout;
@@ -340,7 +340,7 @@ END_META;
 CLASS_METHODS_META(o2::WidgetLayer)
 {
 
-	typedef Dictionary<String, WidgetLayer*> _tmp1;
+	typedef Map<String, WidgetLayer*> _tmp1;
 
 	PUBLIC_FUNCTION(Widget*, GetOwnerWidget);
 	PUBLIC_FUNCTION(void, SetDrawable, IRectDrawable*);

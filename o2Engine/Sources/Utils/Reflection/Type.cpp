@@ -235,47 +235,42 @@ namespace o2
 		return mCountFieldInfo;
 	}
 
-	DictionaryType::DictionaryType(const Type* keyType, const Type* valueType, int size):
+	MapType::MapType(const Type* keyType, const Type* valueType, int size):
 		Type((String)"o2::Dictionary<" + keyType->GetName() + ", " + valueType->GetName() + ">", size),
 		mKeyType(keyType), mValueType(valueType)
 	{}
 
-	Type::Usage DictionaryType::GetUsage() const
+	Type::Usage MapType::GetUsage() const
 	{
-		return Usage::Dictionary;
+		return Usage::Map;
 	}
 
-	const Type* DictionaryType::GetKeyType() const
+	const Type* MapType::GetKeyType() const
 	{
 		return mKeyType;
 	}
 
-	const Type* DictionaryType::GetValueType() const
+	const Type* MapType::GetValueType() const
 	{
 		return mValueType;
 	}
 
-	int DictionaryType::GetObjectDictionarySize(void* object) const
+	int MapType::GetObjectDictionarySize(void* object) const
 	{
 		return mGetDictionaryObjectSizeFunc(object);
 	}
 
-	void DictionaryType::SetObjectDictionarySize(void* object, int size) const
-	{
-		mSetDictionaryObjectSizeFunc(object, size);
-	}
-
-	void* DictionaryType::GetObjectDictionaryKeyPtr(void* object, int idx) const
+	void* MapType::GetObjectDictionaryKeyPtr(void* object, int idx) const
 	{
 		return mGetObjectDictionaryKeyPtrFunc(object, idx);
 	}
 
-	void* DictionaryType::GetObjectDictionaryValuePtr(void* object, int idx) const
+	void* MapType::GetObjectDictionaryValuePtr(void* object, int idx) const
 	{
 		return mGetObjectDictionaryValuePtrFunc(object, idx);
 	}
 
-	void* DictionaryType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* MapType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
 	{
 // 		int delPos = path.Find("/");
 // 		String pathPart = path.SubStr(0, delPos);
@@ -300,7 +295,7 @@ namespace o2
 		return Usage::Enumeration;
 	}
 
-	const Dictionary<int, String>& EnumType::GetEntries() const
+	const Map<int, String>& EnumType::GetEntries() const
 	{
 		return mEntries;
 	}
@@ -395,7 +390,7 @@ namespace o2
 
 ENUM_META_(o2::Type::Usage, Usage)
 {
-	ENUM_ENTRY(Dictionary);
+	ENUM_ENTRY(Map);
 	ENUM_ENTRY(Enumeration);
 	ENUM_ENTRY(Pointer);
 	ENUM_ENTRY(Property);

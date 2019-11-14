@@ -34,7 +34,7 @@ namespace o2
 	public:
 		typedef Vector<ActorAssetRef> ActorsAssetsVec;
 		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
-		typedef Dictionary<ActorAssetRef, ActorsVec> ActorsCacheDict;
+		typedef Map<ActorAssetRef, ActorsVec> ActorsCacheMap;
 
 	public:
 #if IS_EDITOR
@@ -192,7 +192,7 @@ namespace o2
 		void CheckChangedObjects();
 
 		// Returns cache of linked to prototypes actors
-		ActorsCacheDict& GetPrototypesLinksCache();
+		ActorsCacheMap& GetPrototypesLinksCache();
 
 		// It is called when scene started to draw. When scene draw started, drawn scene objects will be collected
 		void BeginDrawingScene();
@@ -222,7 +222,7 @@ namespace o2
 		static void OnActorPrototypeBroken(Actor* actor);
 
 	protected:
-		ActorsCacheDict mPrototypeLinksCache; // Cache of linked to prototypes actors
+		ActorsCacheMap mPrototypeLinksCache; // Cache of linked to prototypes actors
 
 		SceneEditableObjectsVec mChangedObjects;  // Changed actors array
 		SceneEditableObjectsVec mEditableObjects; // All scene editable objects

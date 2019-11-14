@@ -53,8 +53,8 @@ namespace Editor
 		{
 			mEntries = &mEnumType->GetEntries();
 
-			for (auto kv : *mEntries)
-				mDropDown->AddItem(kv.Value());
+			for (auto& kv : *mEntries)
+				mDropDown->AddItem(kv.second);
 		}
 	}
 
@@ -64,12 +64,12 @@ namespace Editor
 
 		if (mValuesDifferent)
 		{
-			mDropDown->value = (*mEntries)[mCommonValue];
+			mDropDown->value = (*mEntries).Get(mCommonValue);
 			mDropDown->SetState("undefined", true);
 		}
 		else
 		{
-			mDropDown->value = (*mEntries)[mCommonValue];
+			mDropDown->value = (*mEntries).Get(mCommonValue);
 			mDropDown->SetState("undefined", false);
 		}
 
@@ -81,7 +81,7 @@ namespace Editor
 		if (mUpdatingValue)
 			return;
 
-		SetValueByUser(mEntries->FindValue(name).Key());
+		SetValueByUser(mEntries->FindValue(name).first);
 	}
 }
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<int>);

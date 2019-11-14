@@ -13,16 +13,16 @@ namespace Editor
 		if (targets.IsEmpty())
 			return;
 
-		for (auto kv : properties)
+		for (auto& kv : properties)
 		{
 			Vector<IAbstractValueProxy*> fieldPointers = targets.Select<IAbstractValueProxy*>([&](IObject* x) 
 			{ 
-				auto fieldInfo = kv.Key();
+				auto fieldInfo = kv.first;
 				auto type = fieldInfo->GetType();
 				return type->GetValueProxy(fieldInfo->GetValuePtrStrong(x)); 
 			});
 
-			kv.Value()->SetValueProxy(fieldPointers);
+			kv.second->SetValueProxy(fieldPointers);
 		}
 	}
 
@@ -31,12 +31,12 @@ namespace Editor
 		if (targets.IsEmpty())
 			return;
 
-		for (auto kv : properties)
+		for (auto& kv : properties)
 		{
 			auto fieldPointers = targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 				[&](const Pair<IObject*, IObject*>& x)
 			{
-				auto fieldInfo = kv.Key();
+				auto fieldInfo = kv.first;
 				const Type& type = *fieldInfo->GetOwnerType();
 				const ObjectType* objType = dynamic_cast<const ObjectType*>(&type);
 
@@ -56,7 +56,7 @@ namespace Editor
 				return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(firstValuePtr, secondValuePtr);
 			});
 
-			kv.Value()->SetValueAndPrototypeProxy(fieldPointers);
+			kv.second->SetValueAndPrototypeProxy(fieldPointers);
 		}
 	}
 

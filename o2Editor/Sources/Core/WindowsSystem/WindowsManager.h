@@ -31,7 +31,7 @@ namespace Editor
 	{
 	public:
 		typedef Vector<IEditorWindow*> EditorWindowsVec;
-		typedef Dictionary<String, WindowsLayout> WndLayoutsDict;
+		typedef Map<String, WindowsLayout> WndLayoutsMap;
 
 	public:
 		// Adds new window
@@ -59,7 +59,7 @@ namespace Editor
 	protected:
 		EditorWindowsVec mEditorWindows;           // Editors windows list
 		DockWindowPlace* mMainDockPlace = nullptr; // Main windows dock place
-		WndLayoutsDict   mAvailableLayouts;        // Available layouts
+		WndLayoutsMap   mAvailableLayouts;        // Available layouts
 
 	protected:
 		// Default constructor

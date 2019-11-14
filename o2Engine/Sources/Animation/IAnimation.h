@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Delegates.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Property.h"
@@ -151,7 +151,7 @@ namespace o2
 		virtual void RemoveTimeEvent(float time);
 
 		// Removes event
-		virtual void RemoveTimeEvent(const Function<void()> eventFunc);
+		virtual void RemoveTimeEvent(const Function<void()>& eventFunc);
 
 		// Removes all events
 		virtual void RemoveAllTimeEvents();
@@ -159,7 +159,7 @@ namespace o2
 		SERIALIZABLE(IAnimation);
 
 	protected:
-		typedef Dictionary<float, Function<void()>> EventsDict;
+		typedef Map<float, Function<void()>> EventsMap;
 
 		float      mTime;           // Current animation time, can be out of bounds
 		float      mInDurationTime; // In duration time
@@ -170,7 +170,7 @@ namespace o2
 		float      mSpeed;          // Animation speed, 1 is default
 		Loop       mLoop;           // Loop type @SERIALIZABLE
 		bool       mPlaying;        // True if animation playing
-		EventsDict mTimeEvents;     // Animation time events
+		EventsMap mTimeEvents;     // Animation time events
 
 	protected:
 		// Updates mTime and mInDurationTime
@@ -249,7 +249,7 @@ CLASS_METHODS_META(o2::IAnimation)
 	PUBLIC_FUNCTION(Loop, GetLoop);
 	PUBLIC_FUNCTION(void, AddTimeEvent, float, const Function<void()>);
 	PUBLIC_FUNCTION(void, RemoveTimeEvent, float);
-	PUBLIC_FUNCTION(void, RemoveTimeEvent, const Function<void()>);
+	PUBLIC_FUNCTION(void, RemoveTimeEvent, const Function<void()>&);
 	PUBLIC_FUNCTION(void, RemoveAllTimeEvents);
 	PROTECTED_FUNCTION(void, UpdateTime);
 	PROTECTED_FUNCTION(void, Evaluate);

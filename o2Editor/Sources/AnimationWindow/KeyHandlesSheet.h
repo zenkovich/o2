@@ -78,9 +78,9 @@ namespace Editor
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
 		Vector<ITrackControl*> mTrackControls;                // List of actual track controls
-		Dictionary<String, ITrackControl*> mTrackControlsMap; // Map of actial track controls, key is animated value path
+		Map<String, ITrackControl*> mTrackControlsMap; // Map of actial track controls, key is animated value path
 
-		Dictionary<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
+		Map<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 
 		ContextMenu* mContextMenu = nullptr; // Keys context menu
 		Vec2F        mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
@@ -121,10 +121,10 @@ namespace Editor
 		void UpdateSelectionFrame();
 
 		// Serialized selected keys into data
-		void SerializeSelectedKeys(DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime);
+		void SerializeSelectedKeys(DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime);
 
 		// Deserializes keys from data 
-		void DeserializeKeys(const DataNode& data, Dictionary<String, Vector<UInt64>>& keys, float relativeTime);
+		void DeserializeKeys(const DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime);
 
 		// Copies selected keys into buffer
 		void CopyKeys();
@@ -236,8 +236,8 @@ END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
 {
 
-	typedef Dictionary<String, Vector<UInt64>>& _tmp1;
-	typedef Dictionary<String, Vector<UInt64>>& _tmp2;
+	typedef Map<String, Vector<UInt64>>& _tmp1;
+	typedef Map<String, Vector<UInt64>>& _tmp2;
 
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, Update, float);

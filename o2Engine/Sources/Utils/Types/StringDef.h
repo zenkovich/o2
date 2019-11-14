@@ -54,6 +54,9 @@ namespace o2
 		// Copy-constructor
 		TString(const TString& other);
 
+		// Move-constructor
+		TString(TString&& other);
+
 		// Copy-constructor from string with another characters type
 		template<typename T2, CheckCharacterType>
 		TString(const TString<T2>& other);

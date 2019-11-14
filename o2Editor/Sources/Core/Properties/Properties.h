@@ -122,10 +122,10 @@ namespace Editor
 
 	protected:
 		typedef Vector<IPropertyField*> PropertiesFieldsVec;
-		typedef Dictionary<const Type*, PropertiesFieldsVec> TypePropertyDict;
+		typedef Map<const Type*, PropertiesFieldsVec> TypePropertyMap;
 
 		typedef Vector<IObjectPropertiesViewer*> IObjectPropertiesViewersVec;
-		typedef Dictionary<const Type*, IObjectPropertiesViewersVec> TypeObjectPropertiesViewerDict;
+		typedef Map<const Type*, IObjectPropertiesViewersVec> TypeObjectPropertiesViewerMap;
 
 		int  mPropertyFieldsPoolStep = 5; // Field properties pools resize step						    
 		bool mPrivateVisible = false;     // Is private fields visible
@@ -133,9 +133,9 @@ namespace Editor
 		PropertiesFieldsVec         mAvailablePropertiesFields;        // Available properties fields samples
 		IObjectPropertiesViewersVec mAvailableObjectPropertiesViewers; // Available object properties viewers samples
 
-		TypePropertyDict mPropertiesPool; // Pool of properties, grouped by property type
+		TypePropertyMap mPropertiesPool; // Pool of properties, grouped by property type
 
-		TypeObjectPropertiesViewerDict mObjectPropertiesViewersPool; // Pool of object properties viewers, grouped by object type
+		TypeObjectPropertiesViewerMap mObjectPropertiesViewersPool; // Pool of object properties viewers, grouped by object type
 
 		static IPropertyField::OnChangeCompletedFunc mOnPropertyCompletedChangingUndoCreateDelegate;
 

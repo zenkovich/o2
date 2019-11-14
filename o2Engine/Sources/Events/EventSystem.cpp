@@ -202,11 +202,11 @@ namespace o2
 	{
 		for (auto underCursorListeners : mUnderCursorListeners)
 		{
-			bool lastListenersHasSameCursor = mLastUnderCursorListeners.ContainsKey(underCursorListeners.Key());
-			for (auto listener : underCursorListeners.Value())
+			bool lastListenersHasSameCursor = mLastUnderCursorListeners.ContainsKey(underCursorListeners.first);
+			for (auto listener : underCursorListeners.second)
 			{
-				if (!lastListenersHasSameCursor || !mLastUnderCursorListeners[underCursorListeners.Key()].Contains(listener))
-					listener->OnCursorEnter(*o2Input.GetCursor(underCursorListeners.Key()));
+				if (!lastListenersHasSameCursor || !mLastUnderCursorListeners[underCursorListeners.first].Contains(listener))
+					listener->OnCursorEnter(*o2Input.GetCursor(underCursorListeners.first));
 			}
 		}
 	}
@@ -215,11 +215,11 @@ namespace o2
 	{
 		for (auto lastUnderCursorListeners : mLastUnderCursorListeners)
 		{
-			bool listenersHasSameCursor = mUnderCursorListeners.ContainsKey(lastUnderCursorListeners.Key());
-			for (auto listener : lastUnderCursorListeners.Value())
+			bool listenersHasSameCursor = mUnderCursorListeners.ContainsKey(lastUnderCursorListeners.first);
+			for (auto listener : lastUnderCursorListeners.second)
 			{
-				if (!listenersHasSameCursor || !mUnderCursorListeners[lastUnderCursorListeners.Key()].Contains(listener))
-					listener->OnCursorExit(*o2Input.GetCursor(lastUnderCursorListeners.Key()));
+				if (!listenersHasSameCursor || !mUnderCursorListeners[lastUnderCursorListeners.first].Contains(listener))
+					listener->OnCursorExit(*o2Input.GetCursor(lastUnderCursorListeners.first));
 			}
 		}
 	}
@@ -229,7 +229,7 @@ namespace o2
 	CursorAreaEventsListener* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
 	{
 		if (mUnderCursorListeners.ContainsKey(cursorId))
-			return mUnderCursorListeners[cursorId].First();
+			return mUnderCursorListeners.Get(cursorId).First();
 
 		return nullptr;
 	}
@@ -251,11 +251,11 @@ namespace o2
 
 	void EventSystem::BreakCursorEvent()
 	{
-		for (auto kv : mPressedListeners)
+		for (auto& kv : mPressedListeners)
 		{
-			for (auto listener : kv.Value())
+			for (auto listener : kv.second)
 			{
-				listener->OnCursorPressBreak(*o2Input.GetCursor(kv.Key()));
+				listener->OnCursorPressBreak(*o2Input.GetCursor(kv.first));
 				listener->mIsPressed = false;
 			}
 		}
@@ -496,9 +496,9 @@ namespace o2
 		float scroll = o2Input.GetMouseWheelDelta();
 		if (!Math::Equals(scroll, 0.0f))
 		{
-			for (auto kv : mUnderCursorListeners)
+			for (auto& kv : mUnderCursorListeners)
 			{
-				for (auto listener : kv.Value())
+				for (auto listener : kv.second)
 				{
 					if (!listener->IsScrollable())
 						continue;
@@ -562,14 +562,14 @@ namespace o2
 		mInstance->mRightButtonPressedListeners.Remove(listener);
 		mInstance->mMiddleButtonPressedListeners.Remove(listener);
 
-		for (auto kv : mInstance->mPressedListeners)
-			kv.Value().Remove(listener);
+		for (auto& kv : mInstance->mPressedListeners)
+			kv.second.Remove(listener);
 
-		for (auto kv : mInstance->mUnderCursorListeners)
-			kv.Value().Remove(listener);
+		for (auto& kv : mInstance->mUnderCursorListeners)
+			kv.second.Remove(listener);
 
-		for (auto kv : mInstance->mLastUnderCursorListeners)
-			kv.Value().Remove(listener);
+		for (auto& kv : mInstance->mLastUnderCursorListeners)
+			kv.second.Remove(listener);
 	}
 
 	void EventSystem::RegCursorListener(CursorEventsListener* listener)

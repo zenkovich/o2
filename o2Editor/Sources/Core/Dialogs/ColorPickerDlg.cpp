@@ -141,8 +141,8 @@ namespace Editor
 		*mTypeDropdown->layout = WidgetLayout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -20), Vec2F(0, 0));
 
 		Vector<WString> colorTypes;
-		for (auto kv : EnumTypeContainer<ColorType>::GetEntries())
-			colorTypes.Add(kv.Value());
+		for (auto& kv : EnumTypeContainer<ColorType>::GetEntries())
+			colorTypes.Add(kv.second);
 
 		mTypeDropdown->AddItems(colorTypes);
 		mTypeDropdown->onSelectedText = MakeFunction(this, &ColorPickerDlg::OnColorTypeSelected);

@@ -7,7 +7,7 @@
 #include "Utils/Reflection/IFieldSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Types/CommonTypes.h"
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/StringDef.h"
 
@@ -25,7 +25,7 @@ namespace o2
 	class IValueProxy;
 
 	template<typename _key_type, typename _value_type>
-	class Dictionary;
+	class Map;
 
 	template<typename _type, typename _getter>
 	const Type& GetTypeOf();
@@ -46,7 +46,7 @@ namespace o2
 	public:
 		enum class Usage
 		{
-			Regular, Object, Vector, Dictionary, StringAccessor, Enumeration, Pointer, Property
+			Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Property
 		};
 
 		struct BaseType
@@ -440,11 +440,11 @@ namespace o2
 	// --------------------------
 	// Type of Dictionary<> value
 	// --------------------------
-	class DictionaryType: public Type
+	class MapType: public Type
 	{
 	public:
 		// Default constructor
-		DictionaryType(const Type* keyType, const Type* valueType, int size);
+		MapType(const Type* keyType, const Type* valueType, int size);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
@@ -457,9 +457,6 @@ namespace o2
 
 		// Returns size of dictionary by pointer
 		int GetObjectDictionarySize(void* object) const;
-
-		// Sets size of dictionary by pointer
-		void SetObjectDictionarySize(void* object, int size) const;
 
 		// Returns element's key pointer by index
 		void* GetObjectDictionaryKeyPtr(void* object, int idx) const;
@@ -475,17 +472,16 @@ namespace o2
 		const Type* mValueType;
 
 		SharedLambda<int(void*)>        mGetDictionaryObjectSizeFunc;
-		SharedLambda<void(void*, int)>  mSetDictionaryObjectSizeFunc;
 		SharedLambda<void*(void*, int)> mGetObjectDictionaryKeyPtrFunc;
 		SharedLambda<void*(void*, int)> mGetObjectDictionaryValuePtrFunc;
 	};
 
 	template<typename _key_type, typename _value_type>
-	class TDictionaryType: public DictionaryType
+	class TMapType: public MapType
 	{
 	public:
 		// Default constructor
-		TDictionaryType();
+		TMapType();
 
 		// Creates sample copy and returns him
 		void* CreateSample() const override;
@@ -513,7 +509,7 @@ namespace o2
 		virtual void* GetValue(void* object, const String& key) const = 0;
 
 		// Returns all values with keys
-		virtual Dictionary<String, void*> GetAllValues(void* object) const = 0;
+		virtual Map<String, void*> GetAllValues(void* object) const = 0;
 
 		// Returns type of return values
 		virtual const Type* GetReturnType() const = 0;
@@ -541,7 +537,7 @@ namespace o2
 		void* GetValue(void* object, const String& key) const override;
 
 		// Returns all values with keys
-		Dictionary<String, void*> GetAllValues(void* object) const override;
+		Map<String, void*> GetAllValues(void* object) const override;
 
 		// Returns type of return values
 		const Type* GetReturnType() const override;
@@ -563,10 +559,10 @@ namespace o2
 		Usage GetUsage() const;
 
 		// Returns enum entries
-		const Dictionary<int, String>& GetEntries() const;
+		const Map<int, String>& GetEntries() const;
 
 	protected:
-		Dictionary<int, String> mEntries;
+		Map<int, String> mEntries;
 
 		friend class Reflection;
 	};
@@ -623,7 +619,7 @@ namespace o2
 	class EnumTypeContainer
 	{
 	public:
-		static const Dictionary<int, String>& GetEntries() { return type->GetEntries(); }
+		static const Map<int, String>& GetEntries() { return type->GetEntries(); }
 
 	protected:
 		static EnumType* type;
@@ -1103,38 +1099,43 @@ namespace o2
 	// ----------------------------- -
 
 	template<typename _key_type, typename _value_type>
-	TDictionaryType<_key_type, _value_type>::TDictionaryType():
-		DictionaryType(&GetTypeOf<_key_type>(), &GetTypeOf<_value_type>(), sizeof(Dictionary<_key_type, _value_type>))
+	TMapType<_key_type, _value_type>::TMapType():
+		MapType(&GetTypeOf<_key_type>(), &GetTypeOf<_value_type>(), sizeof(Map<_key_type, _value_type>))
 	{
-		mGetDictionaryObjectSizeFunc = [](void* obj) { return ((Dictionary<_key_type, _value_type>*)obj)->Count(); };
-		mSetDictionaryObjectSizeFunc = [](void* obj, int size) { ((Dictionary<_key_type, _value_type>*)obj)->Resize(size); };
+		mGetDictionaryObjectSizeFunc = [](void* obj) { return ((Map<_key_type, _value_type>*)obj)->Count(); };
 
 		mGetObjectDictionaryKeyPtrFunc = [](void* obj, int idx) {
-			return &(((Dictionary<_key_type, _value_type>*)obj)->Begin() + idx).Key();
+			auto it = ((Map<_key_type, _value_type>*)obj)->Begin();
+			while (idx >= 0) it++;
+
+			return (void*)(&it->first);
 		};
 
 		mGetObjectDictionaryValuePtrFunc = [](void* obj, int idx) {
-			return &(((Dictionary<_key_type, _value_type>*)obj)->Begin() + idx).Value();
+			auto it = ((Map<_key_type, _value_type>*)obj)->Begin();
+			while (idx >= 0) it++;
+
+			return (void*)(&it->second);
 		};
 	}
 
 	template<typename _key_type, typename _value_type>
-	void* TDictionaryType<_key_type, _value_type>::CreateSample() const
+	void* TMapType<_key_type, _value_type>::CreateSample() const
 	{
-		return mnew Dictionary<_key_type, _value_type>();
+		return mnew Map<_key_type, _value_type>();
 	}
 
 	template<typename _key_type, typename _value_type>
-	IAbstractValueProxy* TDictionaryType<_key_type, _value_type>::GetValueProxy(void* object) const
+	IAbstractValueProxy* TMapType<_key_type, _value_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<Dictionary<_key_type, _value_type>>((Dictionary<_key_type, _value_type>*)object);
+		return mnew PointerValueProxy<Map<_key_type, _value_type>>((Map<_key_type, _value_type>*)object);
 	}
 
 	template<typename _key_type, typename _value_type>
-	const Type* TDictionaryType<_key_type, _value_type>::GetPointerType() const
+	const Type* TMapType<_key_type, _value_type>::GetPointerType() const
 	{
 		if (!mPtrType)
-			Reflection::InitializePointerType<Dictionary<_key_type, _value_type>>(this);
+			Reflection::InitializePointerType<Map<_key_type, _value_type>>(this);
 
 		return mPtrType;
 	}
@@ -1193,13 +1194,13 @@ namespace o2
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	Dictionary<String, void*> TStringPointerAccessorType<_return_type, _accessor_type>::GetAllValues(void* object) const
+	Map<String, void*> TStringPointerAccessorType<_return_type, _accessor_type>::GetAllValues(void* object) const
 	{
 		_accessor_type* accessor = (_accessor_type*)object;
 		auto all = accessor->GetAll();
-		Dictionary<String, void*> res;
-		for (auto kv : all)
-			res.Add(kv.Key(), (void*)(kv.Value()));
+		Map<String, void*> res;
+		for (auto& kv : all)
+			res.Add(kv.first, (void*)(kv.second));
 
 		return res;
 	}

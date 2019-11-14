@@ -30,7 +30,7 @@ namespace o2
         typedef TYPE valueType;                                                                                                               \
 		NAME##_PROPERTY(_propertiesClassType* _this):_this(_this) {}												                          \
 																										                                      \
-		operator valueType() const { return _this->GETTER(); }												                                      \
+		operator valueType() const { return _this->GETTER(); }												                                  \
 		NAME##_PROPERTY& operator=(const valueType& value) { _this->SETTER(const_cast<valueType&>(value)); return *this; }	                  \
                                                                                                                                               \
 		NAME##_PROPERTY& operator=(const NAME##_PROPERTY& value) { _this->SETTER(value.Get()); return *this; }	                              \
@@ -112,7 +112,7 @@ namespace o2
         typedef KEY_TYPE keyType;                                                                        \
 		NAME##_ACCESSOR(_propertiesClassType* _this):_this(_this) {}									 \
         valueType Get(const keyType& key) const { return _this->GETTER(key); }                           \
-        Dictionary<keyType, TYPE> GetAll() const { return _this->GET_ALL(); }                            \
+        Map<keyType, TYPE> GetAll() const { return _this->GET_ALL(); }                                   \
         valueType operator[](const keyType& key) const { return _this->GETTER(key); }                    \
 																										 \
 		bool IsAccessor() const { return true; }                                                         \

@@ -51,8 +51,8 @@ namespace Editor
 		IOBJECT(ActorViewer);
 
 	protected:
-		typedef Dictionary<const Type*, Vector<IActorComponentViewer*>> TypeCompViewersDict;
-		typedef Dictionary<const Type*, IActorPropertiesViewer*> TypeActorViewersDict;
+		typedef Map<const Type*, Vector<IActorComponentViewer*>> TypeCompViewersMap;
+		typedef Map<const Type*, IActorPropertiesViewer*> TypeActorViewersmap;
 
 		Vector<Actor*> mTargetActors; // Current target actors
 									    
@@ -62,12 +62,12 @@ namespace Editor
 		IActorPropertiesViewer*         mActorPropertiesViewer = nullptr;        // Actor properties viewer
 		DefaultActorPropertiesViewer*   mDefaultActorPropertiesViewer = nullptr; // Default actor properties viewer sample
 		Vector<IActorPropertiesViewer*> mAvailableActorPropertiesViewers;        // Available actor properties viewers										 							      
-		TypeActorViewersDict            mActorPropertiesViewersPool;             // Actor properties viewers pool
+		TypeActorViewersmap             mActorPropertiesViewersPool;             // Actor properties viewers pool
 
 		Vector<IActorComponentViewer*> mComponentsViewers;                // Components viewers
 		DefaultActorComponentViewer*   mDefaultComponentViewer = nullptr; // Default component viewer sample
 		Vector<IActorComponentViewer*> mAvailableComponentsViewers;       // Available components' viewers										 							      
-		TypeCompViewersDict            mComponentViewersPool;             // Components viewers pool
+		TypeCompViewersMap             mComponentViewersPool;             // Components viewers pool
 									    
 		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
 

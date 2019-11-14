@@ -179,12 +179,12 @@ namespace Editor
 
 		auto currentLayout = o2EditorWindows.GetWindowsLayout();
 		String currentLayoutName = mDefaultSchemeName;
-		for (auto availableLayoutKV : o2EditorWindows.mAvailableLayouts)
+		for (auto& availableLayoutKV : o2EditorWindows.mAvailableLayouts)
 		{
-			mLayoutSchemesList->AddItem(availableLayoutKV.Key());
+			mLayoutSchemesList->AddItem(availableLayoutKV.first);
 
-			if (currentLayout == availableLayoutKV.Value())
-				currentLayoutName = availableLayoutKV.Key();
+			if (currentLayout == availableLayoutKV.second)
+				currentLayoutName = availableLayoutKV.first;
 		}
 
 		mLayoutSchemesList->AddItem(mDefaultSchemeName);

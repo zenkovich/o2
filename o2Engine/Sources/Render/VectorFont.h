@@ -7,7 +7,7 @@
 #include "Utils/Property.h"
 #include "Utils/Serialization/Serializable.h"
 #include "Utils/Tools/RectPacker.h"
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 
 namespace o2
 {
@@ -114,7 +114,7 @@ namespace o2
 		typedef Vector<PackLine*> PackLinesVec;
 
 		typedef Vector<Effect*> EffectsVec;
-		typedef Dictionary<int, float> HeightsDict;
+		typedef Map<int, float> HeightsMap;
 
 	protected:
 		String  mFileName;     // Source file name
@@ -125,7 +125,7 @@ namespace o2
 		PackLinesVec mPackLines;           // Packed symbols lines
 		int          mLastPackLinePos = 0; // Last packed line bottom pos
 
-		mutable HeightsDict mHeights; // Cached line heights
+		mutable HeightsMap mHeights; // Cached line heights
 
 	protected:
 		// Updates characters set

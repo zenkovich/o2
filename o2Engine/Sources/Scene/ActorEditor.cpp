@@ -323,8 +323,8 @@ namespace o2
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
+		Map<const Actor*, Actor*> actorsMap;
+		Map<const Component*, Component*> componentsMap;
 		Vector<ISerializable*> serializableObjects;
 
 		ProcessReverting(this, mPrototypeLink.Get(), separatedActors, actorPointersFields, componentPointersFields, actorsMap,
@@ -352,8 +352,8 @@ namespace o2
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
+		Map<const Actor*, Actor*> actorsMap;
+		Map<const Component*, Component*> componentsMap;
 
 		ProcessPrototypeMaking(prototype, this, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
@@ -468,8 +468,8 @@ namespace o2
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;
-		Dictionary<const Actor*, Actor*> actorsMap;
-		Dictionary<const Component*, Component*> componentsMap;
+		Map<const Actor*, Actor*> actorsMap;
+		Map<const Component*, Component*> componentsMap;
 
 		// check new and modified actors
 		for (auto child : allThisChildren)
@@ -952,8 +952,8 @@ namespace o2
 	
 	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers,
 										 Vector<Component**>& componentsPointers,
-										 Dictionary<const Actor*, Actor*>& actorsMap,
-										 Dictionary<const Component*, Component*>& componentsMap,
+										 Map<const Actor*, Actor*>& actorsMap,
+										 Map<const Component*, Component*>& componentsMap,
 										 bool isInsidePrototype)
 	{
 		dest->mName = source->mName;
@@ -994,8 +994,8 @@ namespace o2
 
 	void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
 								 Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-								 Dictionary<const Actor*, Actor*>& actorsMap,
-								 Dictionary<const Component*, Component*>& componentsMap,
+								 Map<const Actor*, Actor*>& actorsMap,
+								 Map<const Component*, Component*>& componentsMap,
 								 Vector<ISerializable*>& serializableObjects)
 	{
 		dest->mName = source->mName;

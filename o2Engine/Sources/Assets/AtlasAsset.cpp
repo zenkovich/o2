@@ -41,7 +41,7 @@ namespace o2
 		return AtlasAsset::GetPageTextureFileName(mOwner->GetAssetId(), mId);
 	}
 
-	const Dictionary<UID, RectI>& AtlasAsset::Page::ImagesRects() const
+	const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
 	{
 		return mImagesRects;
 	}

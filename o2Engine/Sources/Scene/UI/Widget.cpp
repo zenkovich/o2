@@ -861,27 +861,27 @@ namespace o2
 		return mStates;
 	}
 
-	Dictionary<String, WidgetLayer*> Widget::GetAllLayers()
+	Map<String, WidgetLayer*> Widget::GetAllLayers()
 	{
-		Dictionary<String, WidgetLayer*> res;
+		Map<String, WidgetLayer*> res;
 		for (auto layer : mLayers)
 			res.Add(layer->name, layer);
 
 		return res;
 	}
 
-	Dictionary<String, Widget*> Widget::GetAllChilds()
+	Map<String, Widget*> Widget::GetAllChilds()
 	{
-		Dictionary<String, Widget*> res;
+		Map<String, Widget*> res;
 		for (auto child : mChildWidgets)
 			res.Add(child->GetName(), child);
 
 		return res;
 	}
 
-	Dictionary<String, WidgetState*> Widget::GetAllStates()
+	Map<String, WidgetState*> Widget::GetAllStates()
 	{
-		Dictionary<String, WidgetState*> res;
+		Map<String, WidgetState*> res;
 		for (auto state : mStates)
 			res.Add(state->name, state);
 

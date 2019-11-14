@@ -17,7 +17,7 @@ namespace Editor
 
 	void AnimationAddKeysAction::Redo()
 	{
-		Dictionary<String, Vector<UInt64>> keys;
+		Map<String, Vector<UInt64>> keys;
 		mEditor->DeserializeKeys(mKeysData, keys, 0.0f);
 	}
 

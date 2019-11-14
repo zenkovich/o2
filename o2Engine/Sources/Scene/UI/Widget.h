@@ -386,13 +386,13 @@ namespace o2
 		StatesVec GetStatesNonConst();
 
 		// Returns dictionary of all layers by names
-		Dictionary<String, WidgetLayer*> GetAllLayers();
+		Map<String, WidgetLayer*> GetAllLayers();
 
 		// Returns dictionary of all children by names
-		Dictionary<String, Widget*> GetAllChilds();
+		Map<String, Widget*> GetAllChilds();
 
 		// Returns dictionary of all states by names
-		Dictionary<String, WidgetState*> GetAllStates();
+		Map<String, WidgetState*> GetAllStates();
 
 		// Beginning serialization callback
 		void OnSerialize(DataNode& node) const override;
@@ -713,9 +713,9 @@ END_META;
 CLASS_METHODS_META(o2::Widget)
 {
 
-	typedef Dictionary<String, WidgetLayer*> _tmp1;
-	typedef Dictionary<String, Widget*> _tmp2;
-	typedef Dictionary<String, WidgetState*> _tmp3;
+	typedef Map<String, WidgetLayer*> _tmp1;
+	typedef Map<String, Widget*> _tmp2;
+	typedef Map<String, WidgetState*> _tmp3;
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);

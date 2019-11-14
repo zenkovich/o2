@@ -47,7 +47,7 @@ namespace o2
 	class ShortcutKeysListenersManager: public KeyboardEventsListener, public Singleton<ShortcutKeysListenersManager>
 	{
 	protected:
-		Dictionary<ShortcutKeys, Vector<ShortcutKeysListener*>> mListeners;
+		Map<ShortcutKeys, Vector<ShortcutKeysListener*>> mListeners;
 
 	protected:
 		// Registers listener 

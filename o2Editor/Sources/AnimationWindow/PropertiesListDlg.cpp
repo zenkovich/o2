@@ -165,8 +165,8 @@ namespace Editor
 			auto newNode = node->AddChild(name, type);
 			auto allValues = accessorType->GetAllValues(object);
 
-			for (auto kv : allValues)
-				ProcessTreeNode(kv.Value(), accessorType->GetReturnType(), kv.Key(), newNode);
+			for (auto& kv : allValues)
+				ProcessTreeNode(kv.second, accessorType->GetReturnType(), kv.first, newNode);
 
 
 			if (newNode->children.empty()) {
@@ -276,7 +276,7 @@ namespace Editor
 
 	void AnimationPropertiesTreeNode::Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree)
 	{
-		static Dictionary<const Type*, String> icons = 
+		static Map<const Type*, String> icons = 
 		{ 
 			{ &TypeOf(float), "ui/UI4_float_type.png" },
 			{ &TypeOf(Vec2F), "ui/UI4_vector_type.png" },

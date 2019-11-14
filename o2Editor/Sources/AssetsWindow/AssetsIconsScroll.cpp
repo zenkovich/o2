@@ -87,8 +87,8 @@ namespace Editor
 		delete mHightlightSprite;
 		delete mSelectionSprite;
 
-		for (auto kv : mIconsPool)
-			for (auto icon : kv.Value())
+		for (auto& kv : mIconsPool)
+			for (auto icon : kv.second)
 				delete icon;
 	}
 

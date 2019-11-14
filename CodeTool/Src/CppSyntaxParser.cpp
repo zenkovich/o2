@@ -286,10 +286,10 @@ bool CppSyntaxParser::IsFunction(const string& data)
 		if (firstWord == "const")
 			ReadWord(data, locCaret, " \n\r(){}[]");
 
-		string thirdWord = ReadWord(data, locCaret, " \n\r(){}[]");
+		string thirdWord = ReadWord(data, locCaret, " \n\r(){}[]<>");
 
 		if (thirdWord == "operator")
-			thirdWord = ReadWord(data, locCaret, " \n\r(){}");
+			thirdWord = ReadWord(data, locCaret, " \n\r(){}", "\n\r", true, true, false);
 
 		if (GetNextSymbol(data, locCaret, " \n\r\t") == '(')
 			isFunction = true;
@@ -1068,7 +1068,8 @@ void CppSyntaxParser::ParseAccessor(SyntaxSection& section, int& caret, SyntaxPr
 
 string CppSyntaxParser::ReadWord(const string& data, int& caret,
 								 const char* breakSymbols /*= " \n\r(){}.,;+-* /=@!|&*:~\\"*/,
-								 const char* skipSymbols /*= " \n\r"*/)
+								 const char* skipSymbols /*= " \n\r"*/,
+								 bool checkBraces /*= true*/, bool checkFgBraces /*= true*/, bool checkTrBraces /*= true*/)
 {
 	string res = "";
 	int braces = 0, sqBraces = 0, trBraces = 0, fgBraces = 0;
@@ -1101,7 +1102,7 @@ string CppSyntaxParser::ReadWord(const string& data, int& caret,
 		bool stop = false;
 		char s = data[caret];
 
-		if (fgBraces == 0 && braces == 0 && trBraces == 0)
+		if ((fgBraces == 0 || !checkFgBraces) && (braces == 0 || !checkBraces) && (trBraces == 0 || !checkTrBraces))
 		{
 			while (breakSymbols[i] != '\0')
 			{

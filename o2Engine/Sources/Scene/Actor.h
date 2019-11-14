@@ -428,8 +428,8 @@ namespace o2
 		// Processes copying actor
 		void ProcessCopying(Actor* dest, const Actor* source,
 							Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-							Dictionary<const Actor*, Actor*>& actorsMap,
-							Dictionary<const Component*, Component*>& componentsMap,
+							Map<const Actor*, Actor*>& actorsMap,
+							Map<const Component*, Component*>& componentsMap,
 							bool isSourcePrototype);
 
 		// Copies fields from source to dest
@@ -448,8 +448,8 @@ namespace o2
 		// Fixes actors and components pointers by actors map
 		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
 										const Vector<Component**>& componentsPointers,
-										const Dictionary<const Actor*, Actor*>& actorsMap,
-										const Dictionary<const Component*, Component*>& componentsMap);
+										const Map<const Actor*, Actor*>& actorsMap,
+										const Map<const Component*, Component*>& componentsMap);
 
 		// Updates result read enable flag
 		virtual void UpdateResEnabled();
@@ -470,10 +470,10 @@ namespace o2
 		void DeserializeRaw(const DataNode& node);
 
 		// Returns dictionary of all children by names
-		Dictionary<String, Actor*> GetAllChilds();
+		Map<String, Actor*> GetAllChilds();
 
 		// Returns dictionary of all components by type names
-		Dictionary<String, Component*> GetAllComponents();
+		Map<String, Component*> GetAllComponents();
 
 		// Returns all children actors with their children
 		void GetAllChildrenActors(Vector<Actor*>& actors);
@@ -525,8 +525,8 @@ namespace o2
 			Vector<Actor**>     actorPointersFields;
 			Vector<Component**> componentPointersFields;
 
-			Dictionary<const Actor*, Actor*>         actorsMap;
-			Dictionary<const Component*, Component*> componentsMap;
+			Map<const Actor*, Actor*>         actorsMap;
+			Map<const Component*, Component*> componentsMap;
 
 			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
 		};
@@ -540,8 +540,8 @@ namespace o2
 		// Processes making prototype
 		void ProcessPrototypeMaking(Actor* dest, Actor* source,
 									Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-									Dictionary<const Actor*, Actor*>& actorsMap,
-									Dictionary<const Component*, Component*>& componentsMap,
+									Map<const Actor*, Actor*>& actorsMap,
+									Map<const Component*, Component*>& componentsMap,
 									bool isInsidePrototype);
 
 		// Copies changed field from source to dest
@@ -560,8 +560,8 @@ namespace o2
 		// Processes reverting actor
 		void ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
 							  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-							  Dictionary<const Actor*, Actor*>& actorsMap,
-							  Dictionary<const Component*, Component*>& componentsMap,
+							  Map<const Actor*, Actor*>& actorsMap,
+							  Map<const Component*, Component*>& componentsMap,
 							  Vector<ISerializable*>& serializableObjects);
 
 		// Not using prototype setter
@@ -739,16 +739,16 @@ END_META;
 CLASS_METHODS_META(o2::Actor)
 {
 
-	typedef Dictionary<const Actor*, Actor*>& _tmp1;
-	typedef Dictionary<const Component*, Component*>& _tmp2;
-	typedef const Dictionary<const Actor*, Actor*>& _tmp3;
-	typedef const Dictionary<const Component*, Component*>& _tmp4;
-	typedef Dictionary<String, Actor*> _tmp5;
-	typedef Dictionary<String, Component*> _tmp6;
-	typedef Dictionary<const Actor*, Actor*>& _tmp7;
-	typedef Dictionary<const Component*, Component*>& _tmp8;
-	typedef Dictionary<const Actor*, Actor*>& _tmp9;
-	typedef Dictionary<const Component*, Component*>& _tmp10;
+	typedef Map<const Actor*, Actor*>& _tmp1;
+	typedef Map<const Component*, Component*>& _tmp2;
+	typedef const Map<const Actor*, Actor*>& _tmp3;
+	typedef const Map<const Component*, Component*>& _tmp4;
+	typedef Map<String, Actor*> _tmp5;
+	typedef Map<String, Component*> _tmp6;
+	typedef Map<const Actor*, Actor*>& _tmp7;
+	typedef Map<const Component*, Component*>& _tmp8;
+	typedef Map<const Actor*, Actor*>& _tmp9;
+	typedef Map<const Component*, Component*>& _tmp10;
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);

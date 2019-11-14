@@ -35,7 +35,7 @@ namespace Editor
 
 	public:
 		WindowDockPlace                  mainDock; // @SERIALIZABLE
-		Dictionary<String, WidgetLayout> windows;  // @SERIALIZABLE
+		Map<String, WidgetLayout> windows;  // @SERIALIZABLE
 
 		bool operator==(const WindowsLayout& other) const;
 

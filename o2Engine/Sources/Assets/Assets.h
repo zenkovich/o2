@@ -23,7 +23,7 @@ namespace o2
 	class Assets: public Singleton<Assets>
 	{
 	public:
-		typedef Dictionary<String, const Type*> TypesExtsDict;
+		typedef Map<String, const Type*> TypesExtsMap;
 
 	public:
 		PROPERTIES(Assets);
@@ -58,7 +58,7 @@ namespace o2
 		AssetInfo GetAssetInfo(const String& path) const;
 
 		// Returns assets types and extensions dictionary. Key - extension, value - type of asset
-		const TypesExtsDict GetAssetsExtensionsTypes() const;
+		const TypesExtsMap GetAssetsExtensionsTypes() const;
 
 		// Returns standard asset type
 		const Type* GetStdAssetType() const;
@@ -164,7 +164,7 @@ namespace o2
 		AssetTree      mAssetsTree;    // Assets information tree
 		LogStream*     mLog;           // Log stream
 		AssetsBuilder* mAssetsBuilder; // Assets builder
-		TypesExtsDict  mAssetsTypes;   // Assets types and extensions dictionary
+		TypesExtsMap   mAssetsTypes;   // Assets types and extensions dictionary
 		const Type*    mStdAssetType;  // Standard asset type
 
 		AssetsCachesVec mCachedAssets; // Current cached assets

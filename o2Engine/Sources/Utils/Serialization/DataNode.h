@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/String.h"
 #include "Utils/Types/UID.h"
@@ -595,23 +595,23 @@ namespace o2
 	};
 
 	template<typename _key, typename _value>
-	struct DataNode::Converter<Dictionary<_key, _value>>
+	struct DataNode::Converter<Map<_key, _value>>
 	{
 		static constexpr bool isSupported = true;
 
-		static void Write(const Dictionary<_key, _value>& value, DataNode& data)
+		static void Write(const Map<_key, _value>& value, DataNode& data)
 		{
 			data.Clear();
 
-			for (auto kv : value)
+			for (auto& kv : value)
 			{
 				DataNode* child = data.AddNode("Element");
-				child->AddNode("Key")->SetValue(kv.Key());
-				child->AddNode("Value")->SetValue(kv.Value());
+				child->AddNode("Key")->SetValue(kv.first);
+				child->AddNode("Value")->SetValue(kv.second);
 			}
 		}
 
-		static void Read(Dictionary<_key, _value>& value, const DataNode& data)
+		static void Read(Map<_key, _value>& value, const DataNode& data)
 		{
 			value.Clear();
 
@@ -652,6 +652,7 @@ namespace o2
 	struct DataNode::Converter<T, typename std::enable_if<IsProperty<T>::value>::type>
 	{
 		static constexpr bool isSupported = DataNode::IsSupport<T::valueType>::value;
+		using TValueType = typename T::valueType;
 
 		static void Write(const T& value, DataNode& data)
 		{
@@ -660,7 +661,9 @@ namespace o2
 
 		static void Read(T& value, const DataNode& data)
 		{
-			value.Set((typename T::valueType)data);
+			TValueType val;
+			data.GetValue(val);
+			value.Set(val);
 		}
 	};
 

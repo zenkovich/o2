@@ -6,7 +6,7 @@
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
 #include "Utils/Math/Vertex2.h"
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/UID.h"
 
@@ -18,17 +18,17 @@ namespace o2
 	template<class T> struct ExtractVectorElementType { typedef T type; };
 	template<class T> struct ExtractVectorElementType<Vector<T>> { typedef T type; };
 
-	template<class T, class T2> struct IsDictionaryHelper : std::false_type {};
-	template<class T, class T2> struct IsDictionaryHelper<Dictionary<T, T2>, void> : std::true_type {};
-	template<class T> struct IsDictionary : IsDictionaryHelper<typename std::remove_cv<T>::type, void> {};
+	template<class T, class T2> struct IsMapHelper : std::false_type {};
+	template<class T, class T2> struct IsMapHelper<Map<T, T2>, void> : std::true_type {};
+	template<class T> struct IsMap : IsMapHelper<typename std::remove_cv<T>::type, void> {};
 
-	template<class T, class T2> struct DictionaryKeyTypeGetterHelper { typedef T type; };
-	template<class T, class T2> struct DictionaryKeyTypeGetterHelper<Dictionary<T, T2>, void> { typedef T type; };
-	template<class T> struct ExtractDictionaryKeyType : DictionaryKeyTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
+	template<class T, class T2> struct MapKeyTypeGetterHelper { typedef T type; };
+	template<class T, class T2> struct MapKeyTypeGetterHelper<Map<T, T2>, void> { typedef T type; };
+	template<class T> struct ExtractMapKeyType : MapKeyTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
 
-	template<class T, class T2> struct DictionaryValueTypeGetterHelper { typedef T2 type; };
-	template<class T, class T2> struct DictionaryValueTypeGetterHelper<Dictionary<T, T2>, void> { typedef T2 type; };
-	template<class T> struct ExtractDictionaryValueType : DictionaryValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
+	template<class T, class T2> struct MapValueTypeGetterHelper { typedef T2 type; };
+	template<class T, class T2> struct MapValueTypeGetterHelper<Map<T, T2>, void> { typedef T2 type; };
+	template<class T> struct ExtractMapValueType : MapValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
 	
 	template<typename... Ts> struct make_void { typedef void type; };
 	template<typename... Ts> using void_t = typename make_void<Ts...>::type;
@@ -169,11 +169,11 @@ namespace o2
 	};
 
 	template<typename T>
-	struct DictionaryTypeGetter
+	struct MapTypeGetter
 	{
 		static const Type& GetType() 
 		{
-			return *Reflection::InitializeDictionaryType<typename ExtractDictionaryKeyType<T>::type, typename ExtractDictionaryValueType<T>::type>();
+			return *Reflection::InitializeMapType<typename ExtractMapKeyType<T>::type, typename ExtractMapValueType<T>::type>();
 		}
 	};
 
@@ -195,8 +195,8 @@ namespace o2
 		                      /* if */   IsStringAccessor<_type>::value,
 		                      /* then */ AccessorTypeGetter<_type>,
 		                      /* else */ typename std::conditional<
-		                                 /* if */   IsDictionary<_type>::value,
-		                                 /* then */ DictionaryTypeGetter<_type>,
+		                                 /* if */   IsMap<_type>::value,
+		                                 /* then */ MapTypeGetter<_type>,
 		                                            typename std::conditional<
 		                                            /* if */   IsProperty<_type>::value,
 		                                            /* then */ PropertyTypeGetter<_type>,

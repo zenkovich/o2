@@ -93,15 +93,15 @@ namespace o2
 
 	void ShortcutKeysListenersManager::OnKeyPressed(const Input::Key& key)
 	{
-		for (auto kv : mListeners)
+		for (auto& kv : mListeners)
 		{
-			if (kv.Key().IsPressed() && !kv.Value().IsEmpty())
+			if (kv.first.IsPressed() && !kv.second.IsEmpty())
 			{
-				for (int i = kv.Value().Count() - 1; i >= 0; i--)
+				for (int i = kv.second.Count() - 1; i >= 0; i--)
 				{
-					if (kv.Value()[i]->IsListeningEvents())
+					if (kv.second[i]->IsListeningEvents())
 					{
-						kv.Value()[i]->OnShortcutPressed();
+						kv.second[i]->OnShortcutPressed();
 						break;
 					}
 				}

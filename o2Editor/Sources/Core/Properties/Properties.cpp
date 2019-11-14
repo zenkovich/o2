@@ -161,7 +161,7 @@ namespace Editor
 	void Properties::FreeProperties(FieldPropertiesInfo& propertiesInfo)
 	{
 		for (auto prop : propertiesInfo.properties)
-			FreeProperty(prop.Value());
+			FreeProperty(prop.second);
 
 		propertiesInfo.properties.Clear();
 	}

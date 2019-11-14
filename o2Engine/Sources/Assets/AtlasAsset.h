@@ -100,8 +100,6 @@ namespace o2
 		class MetaInfo: public IMetaInfo
 		{
 		public:
-
-		public:
 			PlatformMeta mIOS;     // IOS specified meta @SERIALIZABLE
 			PlatformMeta mAndroid; // Android specified meta @SERIALIZABLE
 			PlatformMeta mMacOS;   // MacOS specified meta @SERIALIZABLE
@@ -123,10 +121,10 @@ namespace o2
 		// ----------
 		class Page: public ISerializable
 		{
-			UInt                   mId;          // Page number @SERIALIZABLE
-			Vec2I                  mSize;        // Size of page @SERIALIZABLE
-			Dictionary<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
-			AtlasAsset*            mOwner;       // Owner atlas
+			UInt            mId;          // Page number @SERIALIZABLE
+			Vec2I           mSize;        // Size of page @SERIALIZABLE
+			Map<UID, RectI> mImagesRects; // Images source rectangles @SERIALIZABLE
+			AtlasAsset*     mOwner;       // Owner atlas
 
 		public:
 			// Returns number
@@ -142,7 +140,7 @@ namespace o2
 			String GetTextureFileName() const;
 
 			// Returns images rectangles
-			const Dictionary<UID, RectI>& ImagesRects() const;
+			const Map<UID, RectI>& ImagesRects() const;
 
 			// Check equal operator
 			bool operator==(const Page& other) const;
@@ -343,7 +341,7 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAsset::Page)
 {
 
-	typedef const Dictionary<UID, RectI>& _tmp1;
+	typedef const Map<UID, RectI>& _tmp1;
 
 	PUBLIC_FUNCTION(UInt, ID);
 	PUBLIC_FUNCTION(Vec2I, Size);

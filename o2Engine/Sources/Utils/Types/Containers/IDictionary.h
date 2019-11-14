@@ -4,28 +4,6 @@
 
 namespace o2
 {
-	// -----------------------
-	// Template key-value pair
-	// -----------------------
-	template<typename _key_type, typename _value_type>
-	class KeyValuePair
-	{
-	public:
-		_key_type   mKey;
-		_value_type mValue;
-
-	public:
-		KeyValuePair();
-		KeyValuePair(const _key_type& key, const _value_type& value);
-		KeyValuePair(const KeyValuePair& otherPair);
-
-		bool operator==(const KeyValuePair& otherPair) const;
-		bool operator!=(const KeyValuePair& otherPair) const;
-
-		_key_type& Key();
-		_value_type& Value();
-	};
-
 	// --------------------------
 	// Basic dictionary interface
 	// --------------------------
@@ -33,19 +11,19 @@ namespace o2
 	class IDictionary
 	{
 	public:
-		typedef KeyValuePair<_key_type, _value_type> TKeyValue;
+		using KeyValuePair = std::pair<_key_type, _value_type>;
 
 		// Adds key value pair
 		virtual void Add(const _key_type& key, const _value_type& value) = 0;
 
 		// Adds key value pair
-		virtual void Add(const TKeyValue& keyValue) = 0;
+		virtual void Add(const KeyValuePair& keyValue) = 0;
 
 		// Removes element by key
 		virtual void Remove(const _key_type& key) = 0;
 
 		// Removes all passing function elements
-		virtual void RemoveAll(const Function<bool(const TKeyValue&)>& match) = 0;
+		virtual void RemoveAll(const Function<bool(const _key_type&, const _value_type&)>& match) = 0;
 
 		// Removes all elements
 		virtual void Clear() = 0;
@@ -57,28 +35,28 @@ namespace o2
 		virtual bool ContainsValue(const _value_type& value) const = 0;
 
 		// Returns true, if dictionary contains equal element
-		virtual bool Contains(const TKeyValue& keyValue) const = 0;
+		virtual bool Contains(const KeyValuePair& keyValue) const = 0;
 
 		// Returns true, if dictionary contains element which pass function
-		virtual bool ContainsPred(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual bool ContainsPred(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
 		// Returns element by key
-		virtual TKeyValue FindKey(const _key_type& key) const = 0;
+		virtual KeyValuePair FindKey(const _key_type& key) const = 0;
 
 		// Returns element by value
-		virtual TKeyValue FindValue(const _value_type& value) const = 0;
+		virtual KeyValuePair FindValue(const _value_type& value) const = 0;
 
 		// Returns first element that pass function
-		virtual TKeyValue Find(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual KeyValuePair Find(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
 		// Returns last element that pass function
-		virtual TKeyValue FindLast(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual KeyValuePair FindLast(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
 		// Returns first element that pass function
-		virtual TKeyValue First(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual KeyValuePair First(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
 		// Returns last element that pass function
-		virtual TKeyValue Last(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual KeyValuePair Last(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
 		// Sets value by specified key
 		virtual void Set(const _key_type& key, const _value_type& value) = 0;
@@ -93,78 +71,18 @@ namespace o2
 		virtual int Count() const = 0;
 
 		// Returns count of elements which pass function
-		virtual int Count(const Function<bool(const TKeyValue&)>& match) const = 0;
+		virtual int Count(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
 		// Returns true if dictionary have no elements
 		virtual bool IsEmpty() const = 0;
 
-		// Access operator
-		_value_type& operator[](const _key_type& key);
+		// Invokes function to all elements
+		virtual void ForEach(const Function<void(const _key_type&, _value_type&)>& match) = 0;
 
-		// Access operator
-		const _value_type& operator[](const _key_type& key) const;
+		// Returns true when all elements pass function
+		virtual bool All(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 
-		// Invokes function fo all elements
-		virtual void ForEach(const Function<void(TKeyValue&)>& func) = 0;
+		// Returns true when any of elements pass function
+		virtual bool Any(const Function<bool(const _key_type&, const _value_type&)>& match) const = 0;
 	};
-
-#pragma region KeyValuePair Implementation
-
-	template<typename _key_type, typename _value_type>
-	KeyValuePair<_key_type, _value_type>::KeyValuePair()
-	{}
-
-	template<typename _key_type, typename _value_type>
-	KeyValuePair<_key_type, _value_type>::KeyValuePair(const _key_type& key, const _value_type& value) :
-		mKey(key), mValue(value)
-	{}
-
-	template<typename _key_type, typename _value_type>
-	KeyValuePair<_key_type, _value_type>::KeyValuePair(const KeyValuePair& otherPair) :
-		mKey(otherPair.mKey), mValue(otherPair.mValue)
-	{}
-
-	template<typename _key_type, typename _value_type>
-	bool KeyValuePair<_key_type, _value_type>::operator==(const KeyValuePair& otherPair) const
-	{
-		return mKey == otherPair.mKey && mValue == otherPair.mValue;
-	}
-
-	template<typename _key_type, typename _value_type>
-	bool KeyValuePair<_key_type, _value_type>::operator!=(const KeyValuePair& otherPair) const
-	{
-		return mKey != otherPair.mKey || mValue != otherPair.mValue;
-	}
-
-	template<typename _key_type, typename _value_type>
-	_key_type& KeyValuePair<_key_type, _value_type>::Key()
-	{
-		return mKey;
-	}
-
-	template<typename _key_type, typename _value_type>
-	_value_type& KeyValuePair<_key_type, _value_type>::Value()
-	{
-		return mValue;
-	}
-
-#pragma endregion KeyValuePair Implementation
-
-#pragma region IDictionary Implementation
-
-	template<typename _key_type, typename _value_type>
-	_value_type& IDictionary<_key_type, _value_type>::operator[](const _key_type& key)
-	{
-		return Get(key);
-	}
-
-	template<typename _key_type, typename _value_type>
-	const _value_type& o2::IDictionary<_key_type, _value_type>::operator[](const _key_type& key) const
-	{
-		return Get(key);
-	}
-
-
-#pragma endregion IDictionary Implementation
-
 }

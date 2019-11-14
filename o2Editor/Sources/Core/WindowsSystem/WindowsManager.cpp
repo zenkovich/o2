@@ -130,19 +130,19 @@ namespace Editor
 		for (auto wnd : layout.windows)
 		{
 			IEditorWindow* editorWindow = o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) {
-				return x->mWindow->GetName() == wnd.Key();
+				return x->mWindow->GetName() == wnd.first;
 			});
 
 			if (!editorWindow)
 			{
-				o2Debug.Log("Can't restore window with name:" + wnd.Key());
+				o2Debug.Log("Can't restore window with name:" + wnd.first);
 				continue;
 			}
 
 			if (DockableWindow* dockWnd = editorWindow->mWindow)
 			{
 				editorWindow->Show();
-				*dockWnd->layout = wnd.Value();
+				*dockWnd->layout = wnd.second;
 			}
 		}
 

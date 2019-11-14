@@ -61,9 +61,9 @@ namespace Editor
 	{
 		o2Scene.onObjectsChanged -= THIS_FUNC(OnSceneObjectsChanged);
 
-		for (auto kv : mComponentViewersPool)
+		for (auto& kv : mComponentViewersPool)
 		{
-			for (auto x : kv.Value())
+			for (auto x : kv.second)
 				delete x;
 		}
 
@@ -73,8 +73,8 @@ namespace Editor
 		if (mDefaultComponentViewer)
 			delete mDefaultComponentViewer;
 
-		for (auto kv : mActorPropertiesViewersPool)
-			delete kv.Value();
+		for (auto& kv : mActorPropertiesViewersPool)
+			delete kv.second;
 
 		for (auto x : mAvailableActorPropertiesViewers)
 			delete x;

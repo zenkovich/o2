@@ -422,9 +422,9 @@ namespace o2
 			layer->OnIncludeInScene();
 	}
 
-	Dictionary<String, WidgetLayer*> WidgetLayer::GetAllChildLayers()
+	Map<String, WidgetLayer*> WidgetLayer::GetAllChildLayers()
 	{
-		Dictionary<String, WidgetLayer*> res;
+		Map<String, WidgetLayer*> res;
 		for (auto layer : mChildren)
 			res.Add(layer->name, layer);
 

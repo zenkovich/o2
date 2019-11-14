@@ -37,7 +37,7 @@ namespace Editor
 	protected:
 		typedef Vector<IAssetPropertiesViewer*> AssetPropertiesViewersVec;
 		typedef Vector<AssetRef*> AssetsVec;
-		typedef Dictionary<const Type*, AssetPropertiesViewersVec> TypeAssetViewersDict;
+		typedef Map<const Type*, AssetPropertiesViewersVec> TypeAssetViewersMap;
 
 		AssetsVec mTargetAssets; // Current target assets
 

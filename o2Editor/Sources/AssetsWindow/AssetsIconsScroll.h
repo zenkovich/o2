@@ -111,7 +111,7 @@ namespace Editor
 	protected:
 		typedef Vector<AssetIcon*> AssetsIconsVec;
 		typedef Vector<Sprite*> SpritesVec;
-		typedef Dictionary<String, AssetsIconsVec> IconArrsDict;
+		typedef Map<String, AssetsIconsVec> IconArrsMap;
 		typedef Vector<Pair<UID, String>> AssetIdPathVec;
 		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
 		typedef Vector<AssetRef*> AssetsVec;
@@ -120,7 +120,7 @@ namespace Editor
 						        
 		String mCurrentPath = "_"; // Current viewing path
 						        
-		GridLayout*    mGrid = nullptr;        // Assets icons grid
+		GridLayout*  mGrid = nullptr;        // Assets icons grid
 		ContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
 		AssetsIconsVec mSelectedAssetsIcons;     // Selected assets icons
@@ -131,7 +131,7 @@ namespace Editor
 		Sprite*    mHightlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
 		Layout     mHightlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
 						        
-		IconArrsDict mIconsPool; // Assets icons pool
+		IconArrsMap mIconsPool; // Assets icons pool
 						        
 		Sprite*        mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
 		bool           mSelecting = false;          // Is selecting icons 

@@ -34,7 +34,7 @@ namespace Editor
 
 	protected:				       						      
 		const EnumType* mEnumType;               // Type of enumeration															      
-		const Dictionary<int, String>* mEntries; // Enum entries
+		const Map<int, String>* mEntries; // Enum entries
 
 		DropDown* mDropDown = nullptr;       // Layer name dropdown
 		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection

@@ -47,6 +47,17 @@ namespace o2
 			return memcmp(data, other.data, 16) != 0;
 		}
 
+		bool operator<(const UID& other) const
+		{
+			for (int i = 0; i < 16; i += 4)
+			{
+				if (*(int*)(data + i) >= *(int*)(other.data + i))
+					return false;
+			}
+
+			return true;
+		}
+
 		void Randomize()
 		{
 			for (int i = 0; i < 16; i += 2)

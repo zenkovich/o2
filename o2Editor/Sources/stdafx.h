@@ -106,6 +106,6 @@
 #include "Utils/Serialization/DataNode.h"
 #include "Utils/Serialization/Serializable.h"
 #include "Utils/Types/CommonTypes.h"
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/String.h"

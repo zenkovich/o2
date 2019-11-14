@@ -61,8 +61,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DEBUG;PLATFORM_WINDOWS</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <MinimalRebuild />
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
       <PrecompiledHeader>Use</PrecompiledHeader>
@@ -105,8 +104,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <MinimalRebuild>
-      </MinimalRebuild>
+      <MinimalRebuild />
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -304,9 +302,9 @@
     <ClInclude Include="..\Sources\Utils\Tasks\TaskManager.h" />
     <ClInclude Include="..\Sources\Utils\Tools\RectPacker.h" />
     <ClInclude Include="..\Sources\Utils\Types\CommonTypes.h" />
-    <ClInclude Include="..\Sources\Utils\Types\Containers\Dictionary.h" />
     <ClInclude Include="..\Sources\Utils\Types\Containers\IArray.h" />
     <ClInclude Include="..\Sources\Utils\Types\Containers\IDictionary.h" />
+    <ClInclude Include="..\Sources\Utils\Types\Containers\Map.h" />
     <ClInclude Include="..\Sources\Utils\Types\Containers\Pair.h" />
     <ClInclude Include="..\Sources\Utils\Types\Containers\Pool.h" />
     <ClInclude Include="..\Sources\Utils\Types\Containers\Vector.h" />

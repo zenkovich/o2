@@ -356,7 +356,7 @@ namespace o2
 		AssetsIdsVec res;
 
 		for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
-			res.Add(it.Value()->AssetsPostProcess());
+			res.Add(it->second->AssetsPostProcess());
 
 		res.Add(mStdAssetConverter.AssetsPostProcess());
 
@@ -400,7 +400,7 @@ namespace o2
 		mBuiltAssetsTree.Clear();
 
 		for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
-			it.Value()->Reset();
+			it->second->Reset();
 
 		mStdAssetConverter.Reset();
 	}

@@ -107,9 +107,9 @@ namespace o2
 
 		for (auto iext : mInstance->mExtensions)
 		{
-			if (iext.Value().Contains(extension))
+			if (iext.second.Contains(extension))
 			{
-				res.fileType = iext.Key();
+				res.fileType = iext.first;
 				break;
 			}
 		}

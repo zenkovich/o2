@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/FileSystem/FileInfo.h"
 
@@ -24,7 +24,7 @@ namespace o2
 	class FileSystem: public Singleton<FileSystem>
 	{
 		typedef Vector<String> StringsVec;
-		typedef Dictionary<FileType, StringsVec> ExtnsionsDict;
+		typedef Map<FileType, StringsVec> ExtnsionsMap;
 
 	public:
 		// Default constructor
@@ -100,7 +100,7 @@ namespace o2
 
 	private:
 		LogStream*     mLog;           // File system log stream
-		ExtnsionsDict  mExtensions;    // Extensions arrays dictionary
+		ExtnsionsMap  mExtensions;    // Extensions arrays dictionary
 		String         mResourcesPath; // Basic application resources path
 	};
 }

@@ -111,13 +111,13 @@ namespace Editor
 			void DeleteKey(UInt64 keyUid) override;
 		};
 
-		typedef Dictionary<IAnimatedValue*, IHandlesGroup*> AnimatedValueKeyHandlesDict;
+		typedef Map<IAnimatedValue*, IHandlesGroup*> AnimatedValueKeyHandlesMap;
 
 	private:
-		AnimatedValueKeyHandlesDict mHandlesGroups;          // List of handles, each for keys
-		Vector<IAnimatedValue*>     mAnimatedValues;         // Editing animated values
-		AnimationTimeline*          mTimeline = nullptr;     // Timeline used for calculating handles positions
-		KeyHandlesSheet*            mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
+		AnimatedValueKeyHandlesMap mHandlesGroups;          // List of handles, each for keys
+		Vector<IAnimatedValue*>    mAnimatedValues;         // Editing animated values
+		AnimationTimeline*         mTimeline = nullptr;     // Timeline used for calculating handles positions
+		KeyHandlesSheet*           mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
 
 		Vector<AnimationKeyDragHandle*> mHandlesCache; // Cached drag handles, can be reused
 

@@ -25,6 +25,7 @@ namespace o2
 		bool IsEmpty() const;
 
 		bool operator==(const ShortcutKeys& other) const;
+		bool operator<(const ShortcutKeys& other) const;
 
 		SERIALIZABLE(ShortcutKeys);
 	};

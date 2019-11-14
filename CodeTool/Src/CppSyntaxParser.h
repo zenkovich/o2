@@ -49,7 +49,8 @@ protected:
 
 	string ReadWord(const string& data, int& caret,
 					const char* breakSymbols = " \n\r(){}.,;+-*/=@!|&*:~\\",
-					const char* skipSymbols = " \n\r");
+					const char* skipSymbols = " \n\r",
+					bool checkBraces = true, bool checkFgBraces = true, bool checkTrBraces = true);
 
 	string ReadBlock(const string& data, int& caret);
 

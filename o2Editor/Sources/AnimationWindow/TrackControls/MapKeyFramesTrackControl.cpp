@@ -17,8 +17,8 @@ namespace Editor
 
 	MapKeyFramesTrackControl::~MapKeyFramesTrackControl()
 	{
-		for (auto kv : mHandlesGroups)
-			delete kv.Value();
+		for (auto& kv : mHandlesGroups)
+			delete kv.second;
 	}
 
 	MapKeyFramesTrackControl& MapKeyFramesTrackControl::operator=(const MapKeyFramesTrackControl& other)
@@ -64,10 +64,10 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::CacheHandles()
 	{
-		for (auto kv : mHandlesGroups)
+		for (auto& kv : mHandlesGroups)
 		{
-			kv.Value()->CacheHandles();
-			delete kv.Value();
+			kv.second->CacheHandles();
+			delete kv.second;
 		}
 
 		mHandlesGroups.Clear();
@@ -106,15 +106,15 @@ namespace Editor
 		if (mDisableHandlesUpdate)
 			return;
 
-		for (auto kv : mHandlesGroups)
-			kv.Value()->UpdateHandles();
+		for (auto& kv : mHandlesGroups)
+			kv.second->UpdateHandles();
 	}
 
 	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
 	{
-		for (auto kv : mHandlesGroups)
+		for (auto& kv : mHandlesGroups)
 		{
-			if (kv.Value()->SerializeKey(keyUid, data, relativeTime))
+			if (kv.second->SerializeKey(keyUid, data, relativeTime))
 				break;
 		}
 	}
@@ -122,8 +122,8 @@ namespace Editor
 	ITrackControl::KeyHandlesVec MapKeyFramesTrackControl::GetKeyHandles() const
 	{
 		ITrackControl::KeyHandlesVec res;
-		for (auto kv : mHandlesGroups) {
-			res.Add(kv.Value()->handles.Cast<ITrackControl::KeyHandle*>());
+		for (auto& kv : mHandlesGroups) {
+			res.Add(kv.second->handles.Cast<ITrackControl::KeyHandle*>());
 		}
 
 		return res;
@@ -131,8 +131,8 @@ namespace Editor
 
 	void MapKeyFramesTrackControl::DeleteKey(UInt64 keyUid)
 	{
-		for (auto kv : mHandlesGroups)
-			kv.Value()->DeleteKey(keyUid);
+		for (auto& kv : mHandlesGroups)
+			kv.second->DeleteKey(keyUid);
 	}
 
 	void MapKeyFramesTrackControl::UpdateHandlesForValue(IAnimatedValue* animatedValue)
@@ -189,9 +189,9 @@ namespace Editor
 	{
 		Vector<KeyHandle*> res;
 
-		for (auto kv : mHandlesGroups)
+		for (auto& kv : mHandlesGroups)
 		{
-			for (auto keyHandle : kv.Value()->handles)
+			for (auto keyHandle : kv.second->handles)
 			{
 				if (mTimeline->IsSameTime(keyHandle->handle->GetPosition().x, position))
 					res.Add(keyHandle);

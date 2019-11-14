@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Utils/Types/Containers/Dictionary.h"
+#include "Utils/Types/Containers/Map.h"
 #include "Utils/Types/Containers/Vector.h"
 #include "Utils/Types/Containers/Pair.h"
 
@@ -19,7 +19,7 @@ namespace Editor
 
 	struct FieldPropertiesInfo
 	{
-		Dictionary<const FieldInfo*, IPropertyField*> properties;
+		Map<const FieldInfo*, IPropertyField*> properties;
 		Spoiler* privatePropertiesSpoiler = nullptr;
 
 	public:

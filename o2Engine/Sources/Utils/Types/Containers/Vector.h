@@ -74,65 +74,65 @@ namespace o2
 		_type* Data();
 
 		// Returns count of elements in vector
-		int Count() const;
+		int Count() const override;
 
 		// Returns capacity of vector
 		int Capacity() const;
 
 		// Changes count of elements in array. If new size less than array size elements will be removed
 		// Otherwise empty elements will be added at end
-		void Resize(int newCount);
+		void Resize(int newCount) override;
 
 		// Changes capacity of vector. New capacity can't be less than current
 		void Reserve(int newCapacity);
 
 		// Returns value at index
-		const _type& Get(int idx) const;
+		const _type& Get(int idx) const override;
 
 		// Returns value at index
-		_type& Get(int idx);
+		_type& Get(int idx) override;
 
 		// Sets value at index
-		void Set(int idx, const _type& value);
+		void Set(int idx, const _type& value) override;
 
 		// Adds new element
-		_type& Add(const _type& value);
+		_type& Add(const _type& value) override;
 
 		// Adds elements from other array
-		void Add(const IArray<_type>& arr);
+		void Add(const IArray<_type>& arr) override;
 
 		// Inserts new value at position
-		_type& Insert(const _type& value, int position);
+		_type& Insert(const _type& value, int position) override;
 
 		// Inserts new values from other array at position
-		void Insert(const IArray<_type>& arr, int position);
+		void Insert(const IArray<_type>& arr, int position) override;
 
 		// Returns index of equal element. Returns -1 when array haven't equal element
-		int Find(const _type& value) const;
+		int Find(const _type& value) const override;
 
 		// Returns true, if array contains the element
-		bool Contains(const _type& value) const;
+		bool Contains(const _type& value) const override;
 
 		// Removes element from back and returns him
-		_type PopBack();
+		_type PopBack() override;
 
 		// Removes element at position
-		void RemoveAt(int idx);
+		void RemoveAt(int idx) override;
 
 		// Removes elements in range
-		void RemoveRange(int begin, int end);
+		void RemoveRange(int begin, int end) override;
 
 		// Removes equal array element
-		void Remove(const _type& value);
+		void Remove(const _type& value) override;
 
 		// Removes element by iterator
 		Iterator Remove(const Iterator& it);
 
 		// Removes all elements
-		void Clear();
+		void Clear() override;
 
 		// Sorts elements in array by predicate
-		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer);
+		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer) override;
 
 		// Return vector of elements which pass function
 		Vector FindAll(const Function<bool(const _type&)>& match) const;

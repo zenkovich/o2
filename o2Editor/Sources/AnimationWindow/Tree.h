@@ -175,7 +175,7 @@ namespace Editor
 
 		ITrackControl* mTrackControl = nullptr;     // Animated value editor
 
-		static Dictionary<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
+		static Map<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
 
 	protected:
 		// Copies data of actor from other to this

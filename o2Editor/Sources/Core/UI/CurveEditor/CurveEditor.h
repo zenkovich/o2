@@ -50,7 +50,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Returns list of curves
-		Dictionary<String, Curve*> GetCurves() const;
+		Map<String, Curve*> GetCurves() const;
 
 		// Adds editing curve with color. If color is default it will be randomized
 		void AddCurve(const String& id, Curve* curve, const Color4& color = Color4(44, 62, 80));
@@ -504,7 +504,7 @@ END_META;
 CLASS_METHODS_META(Editor::CurveEditor)
 {
 
-	typedef Dictionary<String, Curve*> _tmp1;
+	typedef Map<String, Curve*> _tmp1;
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
