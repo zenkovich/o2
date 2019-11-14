@@ -118,13 +118,13 @@ namespace Editor
 	void KeyHandlesSheet::RegTrackControl(ITrackControl* trackControl, const std::string& path)
 	{
 		mTrackControls.Add(trackControl);
-		mTrackControlsMap.Add(path, trackControl);
+		mTrackControlsMap.Add({ path, trackControl });
 	}
 
 	void KeyHandlesSheet::UnregTrackControl(ITrackControl* trackControl)
 	{
 		mTrackControls.Remove(trackControl);		
-		mTrackControlsMap.RemoveAll([=](const String& k, ITrackControl* v) { return v == trackControl; });
+		mTrackControlsMap.RemoveAll([=](auto& p) { return p.second == trackControl; });
 	}
 
 	void KeyHandlesSheet::UnregAllTrackControls()

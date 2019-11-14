@@ -77,8 +77,8 @@ namespace Editor
 
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
-		Vector<ITrackControl*> mTrackControls;                // List of actual track controls
-		Map<String, ITrackControl*> mTrackControlsMap; // Map of actial track controls, key is animated value path
+		Vector<ITrackControl*>               mTrackControls;    // List of actual track controls
+		Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is animated value path
 
 		Map<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
 

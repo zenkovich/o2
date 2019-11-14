@@ -550,13 +550,13 @@
 		<ClInclude Include="..\Sources\Utils\Types\CommonTypes.h">
 			<Filter>Sources\Utils\Types</Filter>
 		</ClInclude>
-		<ClInclude Include="..\Sources\Utils\Types\Containers\Dictionary.h">
-			<Filter>Sources\Utils\Types\Containers</Filter>
-		</ClInclude>
 		<ClInclude Include="..\Sources\Utils\Types\Containers\IArray.h">
 			<Filter>Sources\Utils\Types\Containers</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Utils\Types\Containers\IDictionary.h">
+			<Filter>Sources\Utils\Types\Containers</Filter>
+		</ClInclude>
+		<ClInclude Include="..\Sources\Utils\Types\Containers\Map.h">
 			<Filter>Sources\Utils\Types\Containers</Filter>
 		</ClInclude>
 		<ClInclude Include="..\Sources\Utils\Types\Containers\Pair.h">
