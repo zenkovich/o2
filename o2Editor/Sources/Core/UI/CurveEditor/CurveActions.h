@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Actions/IAction.h"
-#include "Core/UI/CurveEditor/CurveEditor.h"
+#include "Core/UI/CurveEditor/CurvesEditor.h"
 
 namespace Editor
 {
@@ -9,7 +9,7 @@ namespace Editor
 	{
 	public:
 		CurveAddKeysAction();
-		CurveAddKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor);
+		CurveAddKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor);
 
 		String GetName();
 		void Redo();
@@ -18,15 +18,15 @@ namespace Editor
 		SERIALIZABLE(CurveAddKeysAction);
 
 	protected:
-		CurveEditor::CurveKeysInfosVec mInfos;
-		CurveEditor*                   mEditor;
+		CurvesEditor::CurveKeysInfosVec mInfos;
+		CurvesEditor*                   mEditor;
 	};
 
 	class CurveDeleteKeysAction : public IAction
 	{
 	public:
 		CurveDeleteKeysAction();
-		CurveDeleteKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor);
+		CurveDeleteKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor);
 
 		String GetName();
 		void Redo();
@@ -35,8 +35,8 @@ namespace Editor
 		SERIALIZABLE(CurveDeleteKeysAction);
 
 	protected:
-		CurveEditor::CurveKeysInfosVec mInfos;
-		CurveEditor*                   mEditor;
+		CurvesEditor::CurveKeysInfosVec mInfos;
+		CurvesEditor*                   mEditor;
 	};
 
 	class CurveKeysChangeAction : public IAction
@@ -47,7 +47,7 @@ namespace Editor
 			String                               curveId;
 			Curve::KeysVec                       beforeKeys;
 			Curve::KeysVec                       afterKeys;
-			CurveEditor::SelectedHandlesInfosVec selectedHandles;
+			CurvesEditor::SelectedHandlesInfosVec selectedHandles;
 
 			bool operator==(const KeysInfo& other) const;
 		};
@@ -55,7 +55,7 @@ namespace Editor
 
 	public:
 		CurveKeysChangeAction();
-		CurveKeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor);
+		CurveKeysChangeAction(const KeysInfosVec& infos, CurvesEditor* editor);
 
 		String GetName();
 		void Redo();
@@ -65,7 +65,7 @@ namespace Editor
 
 	protected:
 		KeysInfosVec   mInfos;
-		CurveEditor*   mEditor;
+		CurvesEditor*   mEditor;
 	};
 }
 

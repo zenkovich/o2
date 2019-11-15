@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/UI/CurveEditor/CurveEditor.h"
+#include "Core/UI/CurveEditor/CurvesEditor.h"
 
 using namespace o2;
 
@@ -29,7 +29,7 @@ namespace Editor
 		SERIALIZABLE(CurvesSheet);
 
 	private:
-		CurveEditor* mCurvesEditor; // Curves editor
+		CurvesEditor* mCurvesEditor; // Curves editor
 
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 

@@ -15,7 +15,7 @@ namespace o2
 
 namespace Editor
 {
-	class CurveEditor;
+	class CurvesEditor;
 
 	// --------------------
 	// Curve editing dialog
@@ -55,7 +55,7 @@ namespace Editor
 		Function<void()> mOnChangeCompletedCallback;
 
 		Window*      mWindow = nullptr;
-		CurveEditor* mEditorWidget = nullptr;
+		CurvesEditor* mEditorWidget = nullptr;
 
 	protected:
 		// It is called when hiding, calls completed callback

@@ -102,7 +102,7 @@ namespace Editor
 
 	void CurvesSheet::InitializeControls()
 	{
-		mCurvesEditor = mnew CurveEditor();
+		mCurvesEditor = mnew CurvesEditor();
 		*mCurvesEditor->layout = WidgetLayout::BothStretch();
 
 		auto horScroll = o2UI.CreateHorScrollBar();

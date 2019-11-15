@@ -4,7 +4,7 @@
 
 namespace Editor
 {
-	CurveAddKeysAction::CurveAddKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor) :
+	CurveAddKeysAction::CurveAddKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -29,7 +29,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -61,7 +61,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -84,7 +84,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	CurveDeleteKeysAction::CurveDeleteKeysAction(const CurveEditor::CurveKeysInfosVec& infos, CurveEditor* editor) :
+	CurveDeleteKeysAction::CurveDeleteKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -106,7 +106,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -137,7 +137,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -164,7 +164,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	CurveKeysChangeAction::CurveKeysChangeAction(const KeysInfosVec& infos, CurveEditor* editor) :
+	CurveKeysChangeAction::CurveKeysChangeAction(const KeysInfosVec& infos, CurvesEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{ }
 
@@ -189,7 +189,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -235,7 +235,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurveEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;

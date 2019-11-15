@@ -242,9 +242,6 @@
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h">
       <Filter>Sources\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h">
-      <Filter>Sources\Core\UI\CurveEditor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h">
       <Filter>Sources\Core\UI</Filter>
     </ClInclude>
@@ -378,6 +375,9 @@
       <Filter>Sources\AnimationWindow</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.h">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurvesEditor.h">
       <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClInclude>
   </ItemGroup>
@@ -583,9 +583,6 @@
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp">
       <Filter>Sources\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp">
-      <Filter>Sources\Core\UI\CurveEditor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp">
       <Filter>Sources\Core\UI</Filter>
     </ClCompile>
@@ -722,6 +719,9 @@
       <Filter>Sources\AnimationWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.cpp">
+      <Filter>Sources\Core\UI\CurveEditor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurvesEditor.cpp">
       <Filter>Sources\Core\UI\CurveEditor</Filter>
     </ClCompile>
   </ItemGroup>

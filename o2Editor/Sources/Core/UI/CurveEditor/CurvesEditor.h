@@ -25,23 +25,23 @@ namespace Editor
 	// ---------------------
 	// Curves editing widget
 	// ---------------------
-	class CurveEditor: public FrameScrollView, public SelectableDragHandlesGroup
+	class CurvesEditor: public FrameScrollView, public SelectableDragHandlesGroup
 	{
 	public:
 		ActionsList* actionsListDelegate = nullptr; // Actions fall down list. When it is null, editor uses local actions list
 
 	public:
 		// Default constructor
-		CurveEditor();
+		CurvesEditor();
 
 		// Copy-constructor
-		CurveEditor(const CurveEditor& other);
+		CurvesEditor(const CurvesEditor& other);
 
 		// Destructor
-		~CurveEditor();
+		~CurvesEditor();
 
 		// Copy-operator
-		CurveEditor& operator=(const CurveEditor& other);
+		CurvesEditor& operator=(const CurvesEditor& other);
 
 		// Draws widget, updates render target 
 		void Draw() override;
@@ -105,7 +105,7 @@ namespace Editor
 		// Returns context menu
 		ContextMenu* GetContextMenu() const;
 
-		SERIALIZABLE(CurveEditor);
+		SERIALIZABLE(CurvesEditor);
 
 	protected:
 		typedef Vector<Vec2F> PointsVec;
@@ -156,7 +156,7 @@ namespace Editor
 
 		struct KeyHandles
 		{
-			CurveEditor* curveEditor = nullptr;
+			CurvesEditor* curveEditor = nullptr;
 			CurveHandle  mainHandle;
 			CurveHandle  leftSupportHandle;
 			CurveHandle  rightSupportHandle;
@@ -166,7 +166,7 @@ namespace Editor
 
 		public:
 			KeyHandles() {}
-			KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample, CurveEditor* editor, const Color4& color);
+			KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample, CurvesEditor* editor, const Color4& color);
 
 			void Draw(const RectF& camRect);
 			bool IsSomeHandleSelected() const;
@@ -175,7 +175,7 @@ namespace Editor
 
 		struct CurveInfo
 		{
-			CurveEditor* editor = nullptr;
+			CurvesEditor* editor = nullptr;
 
 			String curveId;
 			Curve* curve = nullptr;
@@ -465,13 +465,13 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::CurveEditor)
+CLASS_BASES_META(Editor::CurvesEditor)
 {
 	BASE_CLASS(Editor::FrameScrollView);
 	BASE_CLASS(o2::SelectableDragHandlesGroup);
 }
 END_META;
-CLASS_FIELDS_META(Editor::CurveEditor)
+CLASS_FIELDS_META(Editor::CurvesEditor)
 {
 	PUBLIC_FIELD(actionsListDelegate);
 	PROTECTED_FIELD(mContextMenu);
@@ -501,7 +501,7 @@ CLASS_FIELDS_META(Editor::CurveEditor)
 	PROTECTED_FIELD(mActionsList);
 }
 END_META;
-CLASS_METHODS_META(Editor::CurveEditor)
+CLASS_METHODS_META(Editor::CurvesEditor)
 {
 
 	typedef Map<String, Curve*> _tmp1;
@@ -585,17 +585,17 @@ CLASS_METHODS_META(Editor::CurveEditor)
 }
 END_META;
 
-CLASS_BASES_META(Editor::CurveEditor::CurveHandle)
+CLASS_BASES_META(Editor::CurvesEditor::CurveHandle)
 {
 	BASE_CLASS(o2::DragHandle);
 }
 END_META;
-CLASS_FIELDS_META(Editor::CurveEditor::CurveHandle)
+CLASS_FIELDS_META(Editor::CurvesEditor::CurveHandle)
 {
 	PROTECTED_FIELD(curveInfo);
 }
 END_META;
-CLASS_METHODS_META(Editor::CurveEditor::CurveHandle)
+CLASS_METHODS_META(Editor::CurvesEditor::CurveHandle)
 {
 
 	PUBLIC_FUNCTION(Vec2F, GetLocalPosition);
@@ -606,18 +606,18 @@ CLASS_METHODS_META(Editor::CurveEditor::CurveHandle)
 }
 END_META;
 
-CLASS_BASES_META(Editor::CurveEditor::CurveCopyInfo)
+CLASS_BASES_META(Editor::CurvesEditor::CurveCopyInfo)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(Editor::CurveEditor::CurveCopyInfo)
+CLASS_FIELDS_META(Editor::CurvesEditor::CurveCopyInfo)
 {
 	PUBLIC_FIELD(curveId).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(keys).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(Editor::CurveEditor::CurveCopyInfo)
+CLASS_METHODS_META(Editor::CurvesEditor::CurveCopyInfo)
 {
 }
 END_META;

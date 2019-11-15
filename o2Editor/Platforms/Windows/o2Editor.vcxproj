@@ -284,7 +284,7 @@
     <ClInclude Include="..\..\Sources\Core\Tools\SelectionTool.h" />
     <ClInclude Include="..\..\Sources\Core\ToolsPanel.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.h" />
-    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.h" />
+    <ClInclude Include="..\..\Sources\Core\UI\CurveEditor\CurvesEditor.h" />
     <ClInclude Include="..\..\Sources\Core\UI\CurvePreview.h" />
     <ClInclude Include="..\..\Sources\Core\UI\FrameScrollView.h" />
     <ClInclude Include="..\..\Sources\Core\UI\ScrollView.h" />
@@ -399,7 +399,7 @@
     <ClCompile Include="..\..\Sources\Core\Tools\SelectionTool.cpp" />
     <ClCompile Include="..\..\Sources\Core\ToolsPanel.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveActions.cpp" />
-    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurveEditor.cpp" />
+    <ClCompile Include="..\..\Sources\Core\UI\CurveEditor\CurvesEditor.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\CurvePreview.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\FrameScrollView.cpp" />
     <ClCompile Include="..\..\Sources\Core\UI\ScrollView.cpp" />

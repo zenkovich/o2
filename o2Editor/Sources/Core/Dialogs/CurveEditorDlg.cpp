@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "CurveEditorDlg.h"
 
-#include "Core/UI/CurveEditor/CurveEditor.h"
+#include "Core/UI/CurveEditor/CurvesEditor.h"
 #include "Core/UIRoot.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/WidgetLayer.h"
@@ -39,7 +39,7 @@ namespace Editor
 
 	void CurveEditorDlg::InitializeControls()
 	{
-		mEditorWidget = mnew CurveEditor();
+		mEditorWidget = mnew CurvesEditor();
 		*mEditorWidget->layout = WidgetLayout::BothStretch(0, 5, 5, 0);
 
 		auto horScroll = o2UI.CreateHorScrollBar();

@@ -66,6 +66,15 @@ namespace Editor
 		// Removes selectable handle from group
 		void RemoveHandle(DragHandle* handle) override;
 
+		// Sets selected keys handles
+		void SetSelectedKeys(const Map<String, Vector<UInt64>>& keys);
+
+		// Returns list of selected keys handles
+		Map<String, Vector<UInt64>> GetSelectedKeys() const;
+
+		// Removes keys
+		void DeleteKeys(const Map<String, Vector<UInt64>>& keys);
+
 		// Returns context menu
 		ContextMenu* GetContextMenu() const;
 
@@ -131,9 +140,6 @@ namespace Editor
 
 		// Inserts keys from buffer under cursor
 		void PasteKeys();
-
-		// Removes selected keys
-		void DeleteKeys();
 
 		// It is called when selection is changed - some handle was added or removed from selection
 		// Updating selection frame

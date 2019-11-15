@@ -6,8 +6,8 @@ namespace Editor
 	AnimationAddKeysAction::AnimationAddKeysAction()
 	{}
 
-	AnimationAddKeysAction::AnimationAddKeysAction(const DataNode& keysData, KeyHandlesSheet* editor):
-		mKeysData(keysData), mEditor(editor)
+	AnimationAddKeysAction::AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor):
+		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
 	String AnimationAddKeysAction::GetName()
@@ -19,18 +19,19 @@ namespace Editor
 	{
 		Map<String, Vector<UInt64>> keys;
 		mEditor->DeserializeKeys(mKeysData, keys, 0.0f);
+		mEditor->SetSelectedKeys(keys);
 	}
 
 	void AnimationAddKeysAction::Undo()
 	{
-
+		mEditor->DeleteKeys(mKeys);
 	}
 
 	AnimationDeleteKeysAction::AnimationDeleteKeysAction()
 	{}
 
-	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const DataNode& keysData, KeyHandlesSheet* editor) :
-		mKeysData(keysData), mEditor(editor)
+	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor) :
+		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
 	String AnimationDeleteKeysAction::GetName()
@@ -40,21 +41,22 @@ namespace Editor
 
 	void AnimationDeleteKeysAction::Redo()
 	{
-
+		mEditor->DeleteKeys(mKeys);
 	}
 
 	void AnimationDeleteKeysAction::Undo()
 	{
-
+		Map<String, Vector<UInt64>> keys;
+		mEditor->DeserializeKeys(mKeysData, keys, 0.0f);
+		mEditor->SetSelectedKeys(keys);
 	}
 
 	AnimationKeysChangeAction::AnimationKeysChangeAction()
 	{}
 
-	AnimationKeysChangeAction::AnimationKeysChangeAction(const DataNode& beforeKeysData, 
-														 const DataNode& afterKeysData, 
-														 KeyHandlesSheet* editor):
-		mBeforeKeysData(beforeKeysData), mAfterKeysData(afterKeysData), mEditor(editor)
+	AnimationKeysChangeAction::AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys, const DataNode& beforeKeysData,
+														 const DataNode& afterKeysData, KeyHandlesSheet* editor):
+		mKeys(keys), mBeforeKeysData(beforeKeysData), mAfterKeysData(afterKeysData), mEditor(editor)
 	{}
 
 	String AnimationKeysChangeAction::GetName()

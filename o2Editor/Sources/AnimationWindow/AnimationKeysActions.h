@@ -5,12 +5,11 @@
 
 namespace Editor
 {
-
 	class AnimationAddKeysAction : public IAction
 	{
 	public:
 		AnimationAddKeysAction();
-		AnimationAddKeysAction(const DataNode& keysData, KeyHandlesSheet* editor);
+		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor);
 
 		String GetName();
 		void Redo();
@@ -19,15 +18,16 @@ namespace Editor
 		SERIALIZABLE(AnimationAddKeysAction);
 
 	protected:
-		DataNode         mKeysData;
-		KeyHandlesSheet* mEditor;
+		Map<String, Vector<UInt64>> mKeys;
+		DataNode                    mKeysData;
+		KeyHandlesSheet*            mEditor;
 	};
 
 	class AnimationDeleteKeysAction : public IAction
 	{
 	public:
 		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const DataNode& keysData, KeyHandlesSheet* editor);
+		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor);
 
 		String GetName();
 		void Redo();
@@ -36,15 +36,16 @@ namespace Editor
 		SERIALIZABLE(AnimationDeleteKeysAction);
 
 	protected:
-		DataNode         mKeysData;
-		KeyHandlesSheet* mEditor;
+		Map<String, Vector<UInt64>> mKeys;
+		DataNode                    mKeysData;
+		KeyHandlesSheet*            mEditor;
 	};
 
 	class AnimationKeysChangeAction : public IAction
 	{
 	public:
 		AnimationKeysChangeAction();
-		AnimationKeysChangeAction(const DataNode& beforeKeysData,
+		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,  const DataNode& beforeKeysData,
 								  const DataNode& afterKeysData, KeyHandlesSheet* editor);
 
 		String GetName();
@@ -54,9 +55,10 @@ namespace Editor
 		SERIALIZABLE(AnimationKeysChangeAction);
 
 	protected:
-		DataNode         mBeforeKeysData;
-		DataNode         mAfterKeysData;
-		KeyHandlesSheet* mEditor;
+		Map<String, Vector<UInt64>> mKeys;
+		DataNode                    mBeforeKeysData;
+		DataNode                    mAfterKeysData;
+		KeyHandlesSheet*            mEditor;
 	};
 }
 

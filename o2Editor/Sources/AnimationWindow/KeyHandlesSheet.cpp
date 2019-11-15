@@ -11,6 +11,7 @@
 #include "TrackControls/ITrackControl.h"
 #include "Tree.h"
 #include "Utils/System/Clipboard.h"
+#include "AnimationKeysActions.h"
 
 namespace Editor
 {
@@ -152,6 +153,35 @@ namespace Editor
 			mHandlesGroups[animHandle->animatedValue].Remove(animHandle);
 
 		SelectableDragHandlesGroup::RemoveHandle(handle);
+	}
+
+	void KeyHandlesSheet::SetSelectedKeys(const Map<String, Vector<UInt64>>& keys)
+	{
+		DeselectAll();
+
+		for (auto& handlesGroup : mHandlesGroups)
+		{
+			for (auto& handle : handlesGroup.second)
+			{
+				if (keys.ContainsKey(handle->animatedValuePath) && keys.Get(handle->animatedValuePath).Contains(handle->keyUid))
+					SelectHandle(handle);
+			}
+		}
+	}
+
+	Map<String, Vector<UInt64>> KeyHandlesSheet::GetSelectedKeys() const
+	{
+		Map<String, Vector<UInt64>> res;
+		for (auto& handlesGroup : mHandlesGroups)
+		{
+			for (auto& handle : handlesGroup.second)
+			{
+				if (handle->selected)
+					res[handle->animatedValuePath].Add(handle->keyUid);
+			}
+		}
+
+		return res;
 	}
 
 	ContextMenu* KeyHandlesSheet::GetContextMenu() const
@@ -371,13 +401,16 @@ namespace Editor
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
 		mContextMenu->AddItem("Copy", [&]() { CopyKeys(); }, ImageAssetRef(), ShortcutKeys('C', true));
-		mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(); }, ImageAssetRef(), ShortcutKeys('X', true));
+		mContextMenu->AddItem("Cut", [&]() { CopyKeys(); DeleteKeys(GetSelectedKeys()); }, ImageAssetRef(), ShortcutKeys('X', true));
 		mContextMenu->AddItem("Paste", [&]() { PasteKeys(); }, ImageAssetRef(), ShortcutKeys('V', true));
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("Delete", [&]() { DeleteKeys(); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
+		mContextMenu->AddItem("Delete", [&]() { DeleteKeys(GetSelectedKeys()); }, ImageAssetRef(), ShortcutKeys(VK_DELETE));
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Select all", [&]() { SelectAll(); }, ImageAssetRef(), ShortcutKeys('A', true));
 		mContextMenu->AddItem("Deselect all", [&]() { DeselectAll(); });
+		mContextMenu->AddItem("---");
+		mContextMenu->AddItem("Undo", [&]() { mAnimationWindow->mActionsList.UndoAction(); }, ImageAssetRef(), ShortcutKeys('Z', true));
+		mContextMenu->AddItem("Redo", [&]() { mAnimationWindow->mActionsList.RedoAction(); }, ImageAssetRef(), ShortcutKeys('Y', true));
 
 		AddChild(mContextMenu);
 
@@ -506,29 +539,26 @@ namespace Editor
 		data.LoadFromData(Clipboard::GetText());
 
 		DeserializeKeys(data, newKeys, mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x));
+		SetSelectedKeys(newKeys);
 
+		mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(data, this));
+	}
+
+	void KeyHandlesSheet::DeleteKeys(const Map<String, Vector<UInt64>>& keys)
+	{
+		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
+			animatedValueDef.animatedValue->BeginKeysBatchChange();
+		
 		for (auto& handlesGroup : mHandlesGroups)
 		{
 			for (auto& handle : handlesGroup.second)
 			{
-				if (newKeys.ContainsKey(handle->animatedValuePath) && newKeys[handle->animatedValuePath].Contains(handle->keyUid))
-					SelectHandle(handle);
+				if (keys.ContainsKey(handle->animatedValuePath) && keys.Get(handle->animatedValuePath).Contains(handle->keyUid))
+				{
+					handle->Deselect();
+					handle->trackControl->DeleteKey(handle->keyUid);
+				}
 			}
-		}
-	}
-
-	void KeyHandlesSheet::DeleteKeys()
-	{
-		auto selected = mSelectedHandles;
-		DeselectAll();
-
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->BeginKeysBatchChange();
-
-		for (auto handle : selected)
-		{
-			if (auto keyHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
-				keyHandle->trackControl->DeleteKey(keyHandle->keyUid);
 		}
 
 		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
