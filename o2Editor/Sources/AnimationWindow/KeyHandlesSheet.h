@@ -73,7 +73,7 @@ namespace Editor
 		Map<String, Vector<UInt64>> GetSelectedKeys() const;
 
 		// Removes keys
-		void DeleteKeys(const Map<String, Vector<UInt64>>& keys);
+		void DeleteKeys(const Map<String, Vector<UInt64>>& keys, bool createAction = true);
 
 		// Returns context menu
 		ContextMenu* GetContextMenu() const;
@@ -110,6 +110,8 @@ namespace Editor
 		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
 		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
+		DataNode mBeforeChangeKeysData; // Serialized keys data before change
+
 	private:
 		// Initializes frame handles
 		void InitializeHandles();
@@ -129,11 +131,11 @@ namespace Editor
 		// Updates selection rectangle and drawing sprite
 		void UpdateSelectionFrame();
 
-		// Serialized selected keys into data
-		void SerializeSelectedKeys(DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime);
+		// Serialized keys into data
+		void SerializeKeys(DataNode& data, const Map<String, Vector<UInt64>>& keys, float relativeTime);
 
 		// Deserializes keys from data 
-		void DeserializeKeys(const DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime);
+		void DeserializeKeys(const DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime, bool generateNewUid = true);
 
 		// Copies selected keys into buffer
 		void CopyKeys();
@@ -207,14 +209,17 @@ namespace Editor
 		friend class AnimationAddKeysAction;
 		friend class AnimationDeleteKeysAction;
 		friend class AnimationKeysChangeAction;
+
+		template<typename AnimatedValueType>
+		friend class KeyFramesTrackControl;
 	};
 }
 
 CLASS_BASES_META(Editor::KeyHandlesSheet)
 {
-	BASE_CLASS(o2::Widget);
-	BASE_CLASS(o2::SelectableDragHandlesGroup);
-	BASE_CLASS(o2::CursorAreaEventsListener);
+	BASE_CLASS(Widget);
+	BASE_CLASS(SelectableDragHandlesGroup);
+	BASE_CLASS(CursorAreaEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
@@ -237,13 +242,17 @@ CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FIELD(mLeftFrameDragHandle);
 	PRIVATE_FIELD(mRightFrameDragHandle);
 	PRIVATE_FIELD(mCenterFrameDragHandle);
+	PRIVATE_FIELD(mBeforeChangeKeysData);
 }
 END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)
 {
 
-	typedef Map<String, Vector<UInt64>>& _tmp1;
-	typedef Map<String, Vector<UInt64>>& _tmp2;
+	typedef const Map<String, Vector<UInt64>>& _tmp1;
+	typedef Map<String, Vector<UInt64>> _tmp2;
+	typedef const Map<String, Vector<UInt64>>& _tmp3;
+	typedef const Map<String, Vector<UInt64>>& _tmp4;
+	typedef Map<String, Vector<UInt64>>& _tmp5;
 
 	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
 	PUBLIC_FUNCTION(void, Update, float);
@@ -255,6 +264,9 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(void, UnregAllTrackControls);
 	PUBLIC_FUNCTION(void, AddHandle, DragHandle*);
 	PUBLIC_FUNCTION(void, RemoveHandle, DragHandle*);
+	PUBLIC_FUNCTION(void, SetSelectedKeys, _tmp1);
+	PUBLIC_FUNCTION(_tmp2, GetSelectedKeys);
+	PUBLIC_FUNCTION(void, DeleteKeys, _tmp3, bool);
 	PUBLIC_FUNCTION(ContextMenu*, GetContextMenu);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(void, InitializeCenterHandle);
@@ -262,11 +274,10 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FUNCTION(void, InitializeRightHandle);
 	PRIVATE_FUNCTION(void, InitializeContextMenu);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
-	PRIVATE_FUNCTION(void, SerializeSelectedKeys, DataNode&, _tmp1, float);
-	PRIVATE_FUNCTION(void, DeserializeKeys, const DataNode&, _tmp2, float);
+	PRIVATE_FUNCTION(void, SerializeKeys, DataNode&, _tmp4, float);
+	PRIVATE_FUNCTION(void, DeserializeKeys, const DataNode&, _tmp5, float, bool);
 	PRIVATE_FUNCTION(void, CopyKeys);
 	PRIVATE_FUNCTION(void, PasteKeys);
-	PRIVATE_FUNCTION(void, DeleteKeys);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);
 	PRIVATE_FUNCTION(void, OnHandleCursorPressed, DragHandle*, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnHandleCursorReleased, DragHandle*, const Input::Cursor&);

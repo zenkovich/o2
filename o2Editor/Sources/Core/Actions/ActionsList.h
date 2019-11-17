@@ -40,6 +40,12 @@ namespace Editor
 		// Resets undo and redo actions
 		void ResetUndoActions();
 
+		// Returns done actions
+		const EditorActionsVec GetUndoActions() const;
+
+		// Returns redo actions
+		const EditorActionsVec GetRedoActions() const;
+
 	protected:
 		EditorActionsVec mActions;        // Done actions
 		EditorActionsVec mForwardActions; // Forward actions, what you can redo

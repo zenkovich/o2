@@ -88,4 +88,15 @@ namespace Editor
 		mActions.Clear();
 		mForwardActions.Clear();
 	}
+
+	const ActionsList::EditorActionsVec ActionsList::GetUndoActions() const
+	{
+		return mActions;
+	}
+
+	const ActionsList::EditorActionsVec ActionsList::GetRedoActions() const
+	{
+		return mForwardActions;
+	}
+
 }

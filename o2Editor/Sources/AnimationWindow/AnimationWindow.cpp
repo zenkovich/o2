@@ -27,6 +27,8 @@ namespace Editor
 	AnimationWindow::~AnimationWindow()
 	{}
 
+#undef DrawText
+
 	void AnimationWindow::Update(float dt)
 	{
 		if (mAnimation)
@@ -34,6 +36,13 @@ namespace Editor
 			if (mAnimation->IsPlaying() != mPlayPauseToggle->GetValue())
 				mPlayPauseToggle->SetValue(mAnimation->IsPlaying());
 		}
+
+		int line = 0;
+		for (int i = 0; i < mActionsList.GetUndoActions().Count(); i++, line++)
+			o2Debug.DrawText(Vec2F(0, line*20.0f), mActionsList.GetUndoActions()[i]->GetName());
+
+		for (int i = 0; i < mActionsList.GetRedoActions().Count(); i++, line++)
+			o2Debug.DrawText(Vec2F(0, line*20.0f), mActionsList.GetRedoActions()[i]->GetName(), Color4::Red());
 	}
 
 	void AnimationWindow::SetAnimation(Animation* animation)

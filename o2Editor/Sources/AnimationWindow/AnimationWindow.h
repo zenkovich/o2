@@ -148,13 +148,16 @@ namespace Editor
 		friend class AnimationTree;
 		friend class CurvesSheet;
 		friend class KeyHandlesSheet;
+
+		template<typename AnimatedValueType>
+		friend class KeyFramesTrackControl;
 	};
 }
 
 CLASS_BASES_META(Editor::AnimationWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);
-	BASE_CLASS(o2::Singleton<AnimationWindow>);
+	BASE_CLASS(Singleton<AnimationWindow>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)

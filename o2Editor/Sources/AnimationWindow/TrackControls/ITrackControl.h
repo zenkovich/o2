@@ -62,7 +62,7 @@ namespace Editor
 		virtual void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime);
 
 		// Deserialize key from data node and paste on track, returns key uid
-		virtual UInt64 DeserializeKey(const DataNode& data, float relativeTime);
+		virtual UInt64 DeserializeKey(const DataNode& data, float relativeTime, bool generateNewUid = true);
 
 		// Removes key from track
 		virtual void DeleteKey(UInt64 keyUid);
@@ -73,7 +73,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ITrackControl)
 {
-	BASE_CLASS(o2::Widget);
+	BASE_CLASS(Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ITrackControl)
@@ -94,7 +94,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
-	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float);
+	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float, bool);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 }
 END_META;

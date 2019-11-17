@@ -286,7 +286,7 @@ bool CppSyntaxParser::IsFunction(const string& data)
 		if (firstWord == "const")
 			ReadWord(data, locCaret, " \n\r(){}[]");
 
-		string thirdWord = ReadWord(data, locCaret, " \n\r(){}[]<>");
+		string thirdWord = ReadWord(data, locCaret, " \n\r(){}[]<>-");
 
 		if (thirdWord == "operator")
 			thirdWord = ReadWord(data, locCaret, " \n\r(){}", "\n\r", true, true, false);

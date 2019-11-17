@@ -11,7 +11,7 @@ namespace Editor
 		AnimationAddKeysAction();
 		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor);
 
-		String GetName();
+		String GetName() const override;
 		void Redo();
 		void Undo();
 
@@ -29,7 +29,7 @@ namespace Editor
 		AnimationDeleteKeysAction();
 		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor);
 
-		String GetName();
+		String GetName() const override;
 		void Redo();
 		void Undo();
 
@@ -48,7 +48,7 @@ namespace Editor
 		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,  const DataNode& beforeKeysData,
 								  const DataNode& afterKeysData, KeyHandlesSheet* editor);
 
-		String GetName();
+		String GetName() const override;
 		void Redo();
 		void Undo();
 
@@ -69,6 +69,7 @@ CLASS_BASES_META(Editor::AnimationAddKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationAddKeysAction)
 {
+	PROTECTED_FIELD(mKeys);
 	PROTECTED_FIELD(mKeysData);
 	PROTECTED_FIELD(mEditor);
 }
@@ -89,6 +90,7 @@ CLASS_BASES_META(Editor::AnimationDeleteKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationDeleteKeysAction)
 {
+	PROTECTED_FIELD(mKeys);
 	PROTECTED_FIELD(mKeysData);
 	PROTECTED_FIELD(mEditor);
 }
@@ -109,6 +111,7 @@ CLASS_BASES_META(Editor::AnimationKeysChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeysChangeAction)
 {
+	PROTECTED_FIELD(mKeys);
 	PROTECTED_FIELD(mBeforeKeysData);
 	PROTECTED_FIELD(mAfterKeysData);
 	PROTECTED_FIELD(mEditor);

@@ -1,9 +1,12 @@
 #pragma once
 
 #include "AnimationKeyDragHandle.h"
+#include "AnimationWindow/AnimationKeysActions.h"
+#include "AnimationWindow/AnimationWindow.h"
 #include "AnimationWindow/KeyHandlesSheet.h"
 #include "AnimationWindow/Timeline.h"
 #include "AnimationWindow/TrackControls/ITrackControl.h"
+#include "Core/Actions/ActionsList.h"
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
 #include "Scene/UI/Widget.h"
@@ -67,7 +70,7 @@ namespace Editor
 		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
 
 		// Deserialize key from data node and paste on track
-		UInt64 DeserializeKey(const DataNode& data, float relativeTime) override;
+		UInt64 DeserializeKey(const DataNode& data, float relativeTime, bool generateNewUid = true) override;
 
 		// Removes key from track
 		void DeleteKey(UInt64 keyUid) override;
@@ -410,9 +413,14 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InsertNewKey(float time)
 	{
-		mAnimatedValue->AddKey(time, mAnimatedValue->GetValue(time));
+		int idx = mAnimatedValue->AddKey(time, mAnimatedValue->GetValue(time));
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
+
+		DataNode keyData;
+		Map<String, Vector<UInt64>> keys = { { mAnimatedValuePath, { mAnimatedValue->GetKeyAt(idx).uid } } };
+		mHandlesSheet->SerializeKeys(keyData, keys, 0);
+		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));
 	}
 
 	template<typename AnimatedValueType>
@@ -454,12 +462,16 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	UInt64 KeyFramesTrackControl<AnimatedValueType>::DeserializeKey(const DataNode& data, float relativeTime)
+	UInt64 KeyFramesTrackControl<AnimatedValueType>::DeserializeKey(const DataNode& data, float relativeTime,
+																	bool generateNewUid /*= true*/)
 	{
 		AnimatedValueType::Key key;
 		data.GetValue(key);
 		key.position += relativeTime;
-		key.uid = Math::Random();
+
+		if (generateNewUid)
+			key.uid = Math::Random();
+
 		mAnimatedValue->AddKey(key);
 
 		return key.uid;
@@ -514,7 +526,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
 	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
-	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float);
+	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float, bool);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);

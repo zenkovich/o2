@@ -10,7 +10,7 @@ namespace Editor
 		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
-	String AnimationAddKeysAction::GetName()
+	String AnimationAddKeysAction::GetName() const
 	{
 		return "Add keys";
 	}
@@ -18,13 +18,13 @@ namespace Editor
 	void AnimationAddKeysAction::Redo()
 	{
 		Map<String, Vector<UInt64>> keys;
-		mEditor->DeserializeKeys(mKeysData, keys, 0.0f);
+		mEditor->DeserializeKeys(mKeysData, keys, 0.0f, false);
 		mEditor->SetSelectedKeys(keys);
 	}
 
 	void AnimationAddKeysAction::Undo()
 	{
-		mEditor->DeleteKeys(mKeys);
+		mEditor->DeleteKeys(mKeys, false);
 	}
 
 	AnimationDeleteKeysAction::AnimationDeleteKeysAction()
@@ -34,20 +34,20 @@ namespace Editor
 		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
-	String AnimationDeleteKeysAction::GetName()
+	String AnimationDeleteKeysAction::GetName() const
 	{
 		return "Delete keys";
 	}
 
 	void AnimationDeleteKeysAction::Redo()
 	{
-		mEditor->DeleteKeys(mKeys);
+		mEditor->DeleteKeys(mKeys, false);
 	}
 
 	void AnimationDeleteKeysAction::Undo()
 	{
 		Map<String, Vector<UInt64>> keys;
-		mEditor->DeserializeKeys(mKeysData, keys, 0.0f);
+		mEditor->DeserializeKeys(mKeysData, keys, 0.0f, false);
 		mEditor->SetSelectedKeys(keys);
 	}
 
@@ -59,19 +59,27 @@ namespace Editor
 		mKeys(keys), mBeforeKeysData(beforeKeysData), mAfterKeysData(afterKeysData), mEditor(editor)
 	{}
 
-	String AnimationKeysChangeAction::GetName()
+	String AnimationKeysChangeAction::GetName() const
 	{
 		return "Changed keys";
 	}
 
 	void AnimationKeysChangeAction::Redo()
 	{
+		mEditor->DeleteKeys(mKeys, false);
 
+		Map<String, Vector<UInt64>> keys;
+		mEditor->DeserializeKeys(mAfterKeysData, keys, 0.0f, false);
+		mEditor->SetSelectedKeys(keys);
 	}
 
 	void AnimationKeysChangeAction::Undo()
 	{
+		mEditor->DeleteKeys(mKeys, false);
 
+		Map<String, Vector<UInt64>> keys;
+		mEditor->DeserializeKeys(mBeforeKeysData, keys, 0.0f, false);
+		mEditor->SetSelectedKeys(keys);
 	}
 }
 

@@ -41,7 +41,7 @@ namespace Editor
 	void ITrackControl::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
 	{}
 
-	UInt64 ITrackControl::DeserializeKey(const DataNode& data, float relativeTime)
+	UInt64 ITrackControl::DeserializeKey(const DataNode& data, float relativeTime, bool generateNewUid /*= true*/)
 	{
 		return 0;
 	}
