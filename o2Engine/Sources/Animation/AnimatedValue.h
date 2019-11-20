@@ -46,7 +46,7 @@ namespace o2
 		void ForceSetTime(float time, float duration);
 
 		friend class Animation;
-		friend class Animatable;
+		friend class AnimationComponent;
 	};
 
 	// -----------------------
@@ -867,7 +867,7 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_BASES_META(o2::AnimatedValue<_type>)
 {
-	BASE_CLASS(o2::IAnimatedValue);
+	BASE_CLASS(IAnimatedValue);
 }
 END_META;
 META_TEMPLATES(typename _type)
@@ -931,7 +931,7 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_BASES_META(o2::AnimatedValue<_type>::Key)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(ISerializable);
 }
 END_META;
 META_TEMPLATES(typename _type)

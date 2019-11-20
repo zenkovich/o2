@@ -5,6 +5,16 @@
 
 #include "Scene/SceneLayer.h"
 
+o2::String o2::EditorTestComponent::GetName() const
+{
+	return "Test";
+}
+
+o2::String o2::EditorTestComponent::GetCategory() const
+{
+	return "Debug";
+}
+
 DECLARE_CLASS(o2::EditorTestComponent);
 
 DECLARE_CLASS(o2::EditorTestComponent::TestInside);

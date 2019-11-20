@@ -10,6 +10,7 @@
 #include "Core/EditorApplication.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Actor.h"
+#include "Scene/Components/AnimationComponent.h"
 #include "Scene/Components/EditorTestComponent.h"
 #include "Scene/Components/ImageComponent.h"
 #include "Scene/Components/ParticlesEmitterComponent.h"
@@ -115,6 +116,7 @@ namespace Editor
 				{
 					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI4_Background.png"),
 													  mnew EditorTestComponent(),
+													  mnew AnimationComponent(),
 													  mnew ParticlesEmitterComponent() }, ActorCreateMode::InScene);
 					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
 					//childActor2->transform->position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
@@ -349,8 +351,8 @@ namespace Editor
 
 	void TreeWindow::OnTreeRBPressed(TreeNode* node)
 	{
-		bool canCreateUILayers = false;		
-		if (node) 
+		bool canCreateUILayers = false;
+		if (node)
 		{
 			SceneEditableObject* object = node->GetObject();
 			canCreateUILayers = dynamic_cast<WidgetLayer*>(object) != nullptr ||

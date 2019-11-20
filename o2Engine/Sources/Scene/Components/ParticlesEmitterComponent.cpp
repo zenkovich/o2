@@ -35,7 +35,17 @@ namespace o2
 
 	String ParticlesEmitterComponent::GetName() const
 	{
-		return "Particles";
+		return "Emitter";
+	}
+
+	String ParticlesEmitterComponent::GetCategory() const
+	{
+		return "Render/Particles";
+	}
+
+	String ParticlesEmitterComponent::GetIcon() const
+	{
+		return "ui/UI4_emitter_component.png";
 	}
 
 	void ParticlesEmitterComponent::OnTransformUpdated()

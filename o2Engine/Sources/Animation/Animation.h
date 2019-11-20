@@ -9,7 +9,7 @@
 namespace o2
 {
 	class IObject;
-	class Animatable;
+	class AnimationComponent;
 	class AnimationState;
 
 	template<typename _type>
@@ -202,7 +202,7 @@ namespace o2
 		// It is called when animated value was added. Need to register value agent in animatable target
 		void OnAnimatedValueAdded(AnimatedValueDef& valueDef);
 
-		friend class Animatable;
+		friend class AnimationComponent;
 		friend class Animate;
 	};
 }

@@ -18,6 +18,9 @@ namespace Editor
 {
 	class AnimationPropertiesTree;
 
+	// ---------------------------------------------------------------------------------------
+	// Animation properties list dialog. Shows properties tree with filter for specified actor
+	// ---------------------------------------------------------------------------------------
 	class PropertiesListDlg : public Singleton<PropertiesListDlg>
 	{
 	public:
@@ -28,8 +31,9 @@ namespace Editor
 		static void Show(Animation* animation, ActorRef actor);
 
 	private:
-		Window* mWindow = nullptr;
+		Window*  mWindow = nullptr;
 		EditBox* mFilter = nullptr;
+
 		AnimationPropertiesTree* mPropertiesTree = nullptr;
 
 	private:
@@ -37,17 +41,23 @@ namespace Editor
 		void InitializeWindow();
 	};
 
+	// ------------------------------------------------------------------------------------
+	// Animation properties tree. Builds data tree by actor's properties, showing by filter
+	// Can add or remove animation values
+	// ------------------------------------------------------------------------------------
 	class AnimationPropertiesTree : public Tree
 	{
 	public:
 		struct NodeData
 		{
-			NodeData* parent = nullptr;
+			NodeData*         parent = nullptr;
 			Vector<NodeData*> children;
 
 			String name;
 			String path;
+
 			const Type* type = nullptr;
+
 			bool used = false;
 
 		public:
@@ -58,17 +68,26 @@ namespace Editor
 		};
 
 	public:
+		// Default constructor
 		AnimationPropertiesTree();
+
+		// Copy-constructor
 		AnimationPropertiesTree(const AnimationPropertiesTree& other);
 
+		// Copy operator
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
 		// Initializes properties
 		void Initialize(Animation* animation, ActorRef actor);
 
+		// Sets filter and refreshes tree
+		void SetFilter(const WString& filter);
+
 		SERIALIZABLE(AnimationPropertiesTree);
 
 	private:
+		WString mFilterStr; // Filtering string
+
 		Animation* mAnimation = nullptr; // Looking animation
 		ActorRef   mActor;               // Looking actor
 
@@ -118,12 +137,19 @@ namespace Editor
 		friend class AnimationPropertiesTreeNode;
 	};
 
+	// -------------------------------------------------------------------------
+	// Animation properties tree node. Shows icon, name and add or remove button
+	// -------------------------------------------------------------------------
 	class AnimationPropertiesTreeNode : public TreeNode
 	{
 	public:
+		// Default constructor
 		AnimationPropertiesTreeNode();
+
+		// Copy-constructor
 		AnimationPropertiesTreeNode(const AnimationPropertiesTreeNode& other);
 
+		// Copy operator
 		AnimationPropertiesTreeNode& operator=(const AnimationPropertiesTreeNode& other);
 
 		// Initializes node by data
@@ -132,14 +158,14 @@ namespace Editor
 		SERIALIZABLE(AnimationPropertiesTreeNode);
 
 	private:
-		Text*   mName;
-		Sprite* mIcon;
-		Button* mAddButton;
-		Button* mRemoveButton;
+		Text*   mName;         // Name of property
+		Sprite* mIcon;         // Property icon. Used only for finite properties
+		Button* mAddButton;    // Add button, it is enabled when animation value isn't added to animation, adds this value to animation
+		Button* mRemoveButton; // Remove button, it is enabled when animation value is added to animation, removes this value to animation
 
-		AnimationPropertiesTree::NodeData* mData = nullptr;
+		AnimationPropertiesTree::NodeData* mData = nullptr; // Data node pointer
 
-		AnimationPropertiesTree* mTree = nullptr;
+		AnimationPropertiesTree* mTree = nullptr; // Owner tree
 
 	private:
 		// Copies data of actor from other to this
@@ -162,6 +188,7 @@ CLASS_BASES_META(Editor::AnimationPropertiesTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
+	PRIVATE_FIELD(mFilterStr);
 	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mActor);
 	PRIVATE_FIELD(mRoot);
@@ -172,6 +199,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 {
 
 	PUBLIC_FUNCTION(void, Initialize, Animation*, ActorRef);
+	PUBLIC_FUNCTION(void, SetFilter, const WString&);
 	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
 	PRIVATE_FUNCTION(void, ProcessObject, void*, const ObjectType*, NodeData*);
 	PRIVATE_FUNCTION(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);

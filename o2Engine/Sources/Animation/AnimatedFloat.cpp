@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "AnimatedFloat.h"
 
-#include "Animation/Animatable.h"
 #include "Animation/AnimationState.h"
+#include "Scene/Components/AnimationComponent.h"
 
 namespace o2
 {

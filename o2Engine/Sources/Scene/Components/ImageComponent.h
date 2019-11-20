@@ -65,7 +65,7 @@ namespace o2
 		ImageComponent& operator=(const ImageComponent& other);
 
 		// Draws sprite 
-		void Draw();
+		void Draw() override;
 
 		// Sets using texture
 		void SetTexture(TextureRef texture);
@@ -170,7 +170,13 @@ namespace o2
 		void NormalizeAspect();
 
 		// Returns name of component
-		String GetName() const;
+		String GetName() const override;
+
+		// Returns category of component
+		String GetCategory() const override;
+
+		// Returns name of component icon
+		String GetIcon() const override;
 
 		SERIALIZABLE(ImageComponent);
 
@@ -179,10 +185,10 @@ namespace o2
 
 	protected:
 		// It is called when actor's transform was changed
-		void OnTransformUpdated();
+		void OnTransformUpdated() override;
 
 		// Sets owner actor
-		void SetOwnerActor(Actor* actor);
+		void SetOwnerActor(Actor* actor) override;
 
 		// Calling when deserializing
 		void OnDeserialized(const DataNode& node) override;
@@ -252,6 +258,8 @@ CLASS_METHODS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
 	PUBLIC_FUNCTION(void, NormalizeAspect);
 	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(String, GetCategory);
+	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

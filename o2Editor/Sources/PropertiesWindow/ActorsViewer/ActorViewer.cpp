@@ -3,6 +3,7 @@
 
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
+#include "PropertiesWindow/ActorsViewer/AddComponentPanel.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h"
 #include "PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h"
@@ -13,10 +14,13 @@
 #include "PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
 #include "Scene/Actor.h"
 #include "Scene/Component.h"
-#include "Scene/UI/Widgets/ScrollArea.h"
 #include "Scene/UI/UIManager.h"
-#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/EditBox.h"
+#include "Scene/UI/Widgets/ScrollArea.h"
+#include "Scene/UI/Widgets/Tree.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 
 namespace Editor
 {
@@ -24,11 +28,13 @@ namespace Editor
 	{
 		PushScopeEnterOnStack scope;
 
+		// Create viewers
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
 		mTransformViewer = mnew DefaultActorTransformViewer();
 		mDefaultComponentViewer = mnew DefaultActorComponentViewer();
 		mDefaultActorPropertiesViewer = mnew DefaultActorPropertiesViewer();
 
+		// Create available component and actors viewers
 		auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
 		for (auto type : componentsViewersTypes)
 			mAvailableComponentsViewers.Add((IActorComponentViewer*)type->CreateSample());
@@ -37,22 +43,45 @@ namespace Editor
 		for (auto type : actorPropertiessViewersTypes)
 			mAvailableActorPropertiesViewers.Add((IActorPropertiesViewer*)type->CreateSample());
 
+		// Initialize content widget and viewers layout
+		mContentWidget = mnew Widget();
+		mContentWidget->name = "content";
+		*mContentWidget->layout = WidgetLayout::BothStretch();
+
 		auto scrollArea = o2UI.CreateScrollArea("backless");
 		scrollArea->SetViewLayout(Layout::BothStretch());
 		scrollArea->SetClippingLayout(Layout::BothStretch());
 		scrollArea->name = "actors scroll area";
-		mContentWidget = scrollArea;
+		*scrollArea->layout = WidgetLayout::BothStretch(0, 40, 0, 0);
+		mContentWidget->AddChild(scrollArea);
 
 		mViewersLayout = o2UI.CreateVerLayout();
-		mViewersLayout->name          = "viewers layout";
-		mViewersLayout->spacing       = 0.0f;
-		mViewersLayout->border        = BorderF();
-		mViewersLayout->expandHeight  = false;
-		mViewersLayout->expandWidth   = true;
+		mViewersLayout->name = "viewers layout";
+		mViewersLayout->spacing = 0.0f;
+		mViewersLayout->border = BorderF();
+		mViewersLayout->expandHeight = false;
+		mViewersLayout->expandWidth = true;
 		mViewersLayout->fitByChildren = true;
-		mViewersLayout->baseCorner    = BaseCorner::Top;
-		*mViewersLayout->layout       = WidgetLayout::BothStretch();
-		mContentWidget->AddChild(mViewersLayout);
+		mViewersLayout->baseCorner = BaseCorner::Top;
+		*mViewersLayout->layout = WidgetLayout::BothStretch();
+		scrollArea->AddChild(mViewersLayout);
+
+		// Initialize add component panel
+		mAddComponentPanel = mnew AddComponentPanel(this);
+		mAddComponentPanel->name = "add component";
+		*mAddComponentPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 40, 0);
+		mContentWidget->AddChild(mAddComponentPanel);
+
+		Animation addComponentAnim = Animation::EaseInOut<float>(mContentWidget, "child/add component/layout/offsetTop", 
+																 40, 200, 0.4f);
+
+		*addComponentAnim.AddAnimationValue<float>("child/actors scroll area/layout/offsetBottom") =
+			AnimatedValue<float>::EaseInOut(40, 200, 0.4f);
+
+		mContentWidget->AddState("add component", addComponentAnim);
+
+		mAddComponentPanel->onCursorReleased = [&](auto curs) { mContentWidget->SetState("add component", true); };
+		mAddComponentPanel->onCursorPressedOutside = [&](auto curs) { mContentWidget->SetState("add component", false); };
 
 		o2Scene.onObjectsChanged += THIS_FUNC(OnSceneObjectsChanged);
 	}
@@ -161,7 +190,7 @@ namespace Editor
 		mTransformViewer->SetTargetActors(mTargetActors);
 
 		SetTargetsActorProperties(targets, viewersWidgets);
-		SetTargetsComponents(targets, viewersWidgets);		
+		SetTargetsComponents(targets, viewersWidgets);
 
 		mViewersLayout->AddChildren(viewersWidgets.Cast<Actor*>());
 	}

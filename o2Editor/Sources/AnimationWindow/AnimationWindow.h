@@ -30,15 +30,17 @@ namespace Editor
 	// - Сделать цвет хэндлов таким же как и кривой + 
 	// - Сделать адаптивный масштаб кривых + 
 	// - Починить фокусировку на кривых + 
-	// - Сделать отображение цвета кривой напротив пропертей
+	// - Сделать отображение цвета кривой напротив пропертей +
 	// - Добавить вывод трека цвета, булевого, вектора
-	// - Добавить иконки кривых - 
+	// - Добавить иконки кривых +
 	// - Добавить assign акторов
 	// - Добавить добавление полей + 
-	// - Добавить удаление полей
+	// - Добавить удаление полей +
 	// - Добавить "запись" изменения полей
 	// - Ставить время на выделяемом ключе только если просто нажали, но не двигали + 
 	// - Сделать редактор кривых для Vec2F
+	// - Переименовать Animated Value и разделить на Track и Player
+	// - Ссылки на анимации
 
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{
@@ -157,7 +159,7 @@ namespace Editor
 CLASS_BASES_META(Editor::AnimationWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);
-	BASE_CLASS(Singleton<AnimationWindow>);
+	BASE_CLASS(o2::Singleton<AnimationWindow>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::AnimationWindow)

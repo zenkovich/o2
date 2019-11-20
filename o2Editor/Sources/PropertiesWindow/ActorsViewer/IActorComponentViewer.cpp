@@ -22,7 +22,8 @@ namespace Editor
 		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
-		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
+		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 1);
+		mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
 
 		mSpoiler->SetExpanded(true);
 	}

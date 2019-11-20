@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "AnimatedVector.h"
 
-#include "Animation/Animatable.h"
 #include "Animation/AnimationState.h"
+#include "Scene/Components/AnimationComponent.h"
 #include "Utils/Debug/Debug.h"
 #include "Utils/Math/Interpolation.h"
 #include "Utils/Math/Vector2.h"

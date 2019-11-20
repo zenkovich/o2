@@ -7,7 +7,7 @@
 
 namespace o2
 {
-	class Animatable;
+	class AnimationComponent;
 
 	// ---------------
 	// Animation state
@@ -31,9 +31,9 @@ namespace o2
 		SERIALIZABLE(AnimationState);
 
 	protected:
-		Animatable* mOwner; // Animatable owner
+		AnimationComponent* mOwner; // Animatable owner
 
-		friend class Animatable;
+		friend class AnimationComponent;
 		friend class ANimation;
 
 		template<typename _type>

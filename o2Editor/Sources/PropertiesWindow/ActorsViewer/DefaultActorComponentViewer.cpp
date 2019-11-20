@@ -10,11 +10,12 @@
 #include "Core/UI/SpoilerWithHead.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Component.h"
-#include "SceneWindow/SceneEditScreen.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/Widgets/Image.h"
 #include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widgets/Spoiler.h"
 #include "Scene/UI/Widgets/VerticalLayout.h"
-#include "Scene/UI/Widget.h"
+#include "SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {
@@ -33,6 +34,7 @@ namespace Editor
 				caption = o2EditorProperties.MakeSmartFieldName(mComponentType->GetName());
 				
 			mSpoiler->SetCaption(caption);
+			mSpoiler->GetIcon()->SetImageName(components[0]->GetIcon());
 		}
 
 		mTargetComponents = components;

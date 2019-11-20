@@ -80,14 +80,20 @@ namespace o2
 		// Returns name of component
 		virtual String GetName() const;
 
+		// Returns category of component
+		virtual String GetCategory() const;
+
+		// Returns name of component icon
+		virtual String GetIcon() const;
+
 		SERIALIZABLE(Component);
 
 	protected:
 		Component* mPrototypeLink = nullptr; // Prototype actor component pointer. Null if no actor prototype
-		UInt64 mId;                          // Component id @SERIALIZABLE
-		Actor* mOwner = nullptr;             // Owner actor
-		bool   mEnabled = true;              // Is component enabled @SERIALIZABLE
-		bool   mResEnabled = true;           // Is component enabled in hierarchy
+		UInt64     mId;                      // Component id @SERIALIZABLE
+		Actor*     mOwner = nullptr;         // Owner actor
+		bool       mEnabled = true;          // Is component enabled @SERIALIZABLE
+		bool       mResEnabled = true;       // Is component enabled in hierarchy
 
 	protected:
 		// It is called when actor changed layer
@@ -197,6 +203,8 @@ CLASS_METHODS_META(o2::Component)
 	PUBLIC_FUNCTION(bool, IsLinkedToComponent, Component*);
 	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
 	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(String, GetCategory);
+	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);

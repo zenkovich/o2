@@ -7,17 +7,20 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
+	class Button;
 	class VerticalLayout;
+	class Widget;
 }
 
 namespace Editor
 {
-	class IActorHeaderViewer;
-	class IActorComponentViewer;
-	class IActorTransformViewer;
-	class IActorPropertiesViewer;
+	class AddComponentPanel;
 	class DefaultActorComponentViewer;
 	class DefaultActorPropertiesViewer;
+	class IActorComponentViewer;
+	class IActorHeaderViewer;
+	class IActorPropertiesViewer;
+	class IActorTransformViewer;
 
 	// ------------------------
 	// Actors properties viewer
@@ -68,6 +71,8 @@ namespace Editor
 		DefaultActorComponentViewer*   mDefaultComponentViewer = nullptr; // Default component viewer sample
 		Vector<IActorComponentViewer*> mAvailableComponentsViewers;       // Available components' viewers										 							      
 		TypeCompViewersMap             mComponentViewersPool;             // Components viewers pool
+
+		AddComponentPanel* mAddComponentPanel = nullptr; // Add component panel. Shown by clicking on filter field
 									    
 		VerticalLayout* mViewersLayout = nullptr; // Viewers layout
 
@@ -95,6 +100,8 @@ namespace Editor
 
 		// Draws something
 		void Draw();
+
+		friend class AddComponentPanel;
 	};
 
 }
@@ -117,6 +124,7 @@ CLASS_FIELDS_META(Editor::ActorViewer)
 	PROTECTED_FIELD(mDefaultComponentViewer);
 	PROTECTED_FIELD(mAvailableComponentsViewers);
 	PROTECTED_FIELD(mComponentViewersPool);
+	PROTECTED_FIELD(mAddComponentPanel);
 	PROTECTED_FIELD(mViewersLayout);
 }
 END_META;

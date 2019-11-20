@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "AnimationState.h"
 
-#include "Animation/Animatable.h"
+#include "Scene/Components/AnimationComponent.h"
 
 namespace o2
 {

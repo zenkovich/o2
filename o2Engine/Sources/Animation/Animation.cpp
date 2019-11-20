@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "Animation.h"
 
-#include "Animation/Animatable.h"
 #include "Animation/AnimatedValue.h"
-#include "Utils/Debug/Debug.h"
+#include "Scene/Components/AnimationComponent.h"
 #include "Utils/Basic/IObject.h"
+#include "Utils/Debug/Debug.h"
 
 namespace o2
 {

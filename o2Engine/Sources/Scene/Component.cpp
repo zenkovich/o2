@@ -104,6 +104,16 @@ namespace o2
 		return String();
 	}
 
+	String Component::GetCategory() const
+	{
+		return "";
+	}
+
+	String Component::GetIcon() const
+	{
+		return "ui/UI4_component_icon.png";
+	}
+
 	void Component::UpdateEnabled()
 	{
 		bool lastResEnabled = mResEnabled;

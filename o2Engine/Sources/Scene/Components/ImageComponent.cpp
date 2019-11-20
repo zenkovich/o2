@@ -236,6 +236,16 @@ namespace o2
 		return "Image";
 	}
 
+	String ImageComponent::GetCategory() const
+	{
+		return "Render";
+	}
+
+	String ImageComponent::GetIcon() const
+	{
+		return "ui/UI4_image_component.png";
+	}
+
 	void ImageComponent::OnTransformUpdated()
 	{
 		mSprite.SetBasis(mOwner->transform->GetWorldBasis());

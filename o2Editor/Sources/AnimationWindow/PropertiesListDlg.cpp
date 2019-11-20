@@ -29,6 +29,7 @@ namespace Editor
 	void PropertiesListDlg::Show(Animation* animation, ActorRef actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
+		Instance().mFilter->SetText("");
 		Instance().mWindow->ShowModal();
 	}
 
@@ -50,12 +51,11 @@ namespace Editor
 
 		Button* searchButton = o2UI.CreateWidget<Button>("search");
 		*searchButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(-1, 1));
-		//searchButton->onClick += THIS_FUNC(OnSearchPressed);
 		upPanel->AddChild(searchButton);
 
 		mFilter = o2UI.CreateWidget<EditBox>("backless");
 		*mFilter->layout = WidgetLayout::BothStretch(19, 2, 0, -4);
-		//mFilter->onChanged += THIS_FUNC(OnSearchEdited);
+		mFilter->onChanged += [&](const WString& filter) { mPropertiesTree->SetFilter(filter); };
 		upPanel->AddChild(mFilter);
 
 		mWindow->AddChild(upPanel);
@@ -72,7 +72,7 @@ namespace Editor
 		mWindow->GetBackCursorListener().onCursorReleased = [=](const Input::Cursor& c) { mWindow->Hide(); };
 	}
 
-	AnimationPropertiesTree::AnimationPropertiesTree():
+	AnimationPropertiesTree::AnimationPropertiesTree() :
 		Tree()
 	{}
 
@@ -88,6 +88,7 @@ namespace Editor
 
 	void AnimationPropertiesTree::Initialize(Animation* animation, ActorRef actor)
 	{
+		mFilterStr = "";
 		mRoot.Clear();
 		mPassedObject.Clear();
 
@@ -95,7 +96,18 @@ namespace Editor
 		mActor = actor;
 
 		InitializeTreeNode(&mRoot, actor.Get());
-		mVisibleWidgetsCache.Clear();
+		UpdateNodesStructure();
+		UpdateVisibleNodes();
+	}
+
+	void AnimationPropertiesTree::SetFilter(const WString& filter)
+	{
+		mFilterStr = filter.ToLowerCase();
+
+		mRoot.Clear();
+		mPassedObject.Clear();
+
+		InitializeTreeNode(&mRoot, mActor.Get());
 		UpdateNodesStructure();
 		UpdateVisibleNodes();
 	}
@@ -182,6 +194,9 @@ namespace Editor
 
 	void AnimationPropertiesTree::InitializePropertyNode(NodeData* node, const String& name, const Type* type)
 	{
+		if (!mFilterStr.IsEmpty() && !name.ToLowerCase().Contains(mFilterStr))
+			return;
+
 		auto newNode = node->AddChild(name, type);
 		newNode->used = mAnimation->ContainsAnimationValue(newNode->path);
 	}

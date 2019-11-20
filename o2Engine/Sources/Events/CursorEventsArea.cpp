@@ -60,4 +60,9 @@ namespace o2
 		onDblClicked(cursor);
 	}
 
+	void CursorEventsArea::OnCursorReleasedOutside(const Input::Cursor& cursor)
+	{
+		onCursorPressedOutside(cursor);
+	}
+
 }

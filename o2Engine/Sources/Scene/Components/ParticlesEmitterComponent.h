@@ -18,13 +18,19 @@ namespace o2
 		ParticlesEmitterComponent& operator=(const ParticlesEmitterComponent& other);
 
 		// Draw particle system
-		void Draw();
+		void Draw() override;
 
 		// Updates component
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Returns name of component
-		String GetName() const;
+		String GetName() const override;
+
+		// Returns category of component
+		String GetCategory() const override;
+
+		// Returns name of component icon
+		String GetIcon() const override;
 
 	protected:
 		ParticlesEmitter mEmitter; // @SERIALIZABLE @EDITOR_PROPERTY
@@ -51,6 +57,8 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(String, GetCategory);
+	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 }
 END_META;

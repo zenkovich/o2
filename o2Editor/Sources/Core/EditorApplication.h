@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Animation/Animatable.h"
 #include "Application/Application.h"
 #include "Core/Actions/ActionsList.h"
 #include "EditorConfig.h"
