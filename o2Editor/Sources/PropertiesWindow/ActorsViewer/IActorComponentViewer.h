@@ -10,6 +10,7 @@ using namespace o2;
 namespace o2
 {
 	class Actor;
+	class Button;
 	class Component;
 	class Widget;
 }
@@ -31,7 +32,7 @@ namespace Editor
 		virtual ~IActorComponentViewer();
 
 		// Sets target actors
-		virtual void SetTargetComponents(const Vector<Component*>& components) {}
+		virtual void SetTargetComponents(const Vector<Component*>& components);
 
 		// Returns viewing component type 
 		virtual const Type* GetComponentType() const { return nullptr; }
@@ -57,7 +58,14 @@ namespace Editor
 		IOBJECT(IActorComponentViewer);
 
 	protected:
+		Vector<Component*> mTargetComponents;
+
 		SpoilerWithHead* mSpoiler = nullptr;
+		Button*          mRemoveButton = nullptr;
+
+	protected:
+		// Removes target components
+		void RemoveTargetComponents();
 	};
 }
 
@@ -68,7 +76,9 @@ CLASS_BASES_META(Editor::IActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
+	PROTECTED_FIELD(mTargetComponents);
 	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mRemoveButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)
@@ -82,5 +92,6 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
+	PROTECTED_FUNCTION(void, RemoveTargetComponents);
 }
 END_META;

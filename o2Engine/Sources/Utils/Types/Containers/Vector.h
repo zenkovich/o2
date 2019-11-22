@@ -148,6 +148,10 @@ namespace o2
 		template<typename _sel_type>
 		Vector<_sel_type> Cast() const;
 
+		// Return vector with dynamic casted type
+		template<typename _sel_type>
+		Vector<_sel_type> DynamicCast() const;
+
 		// Returns first specified count elements
 		Vector Take(int count) const;
 
@@ -462,6 +466,7 @@ namespace o2
 			if (match(x))
 				res.Add(x);
 		}
+
 		return res;
 	}
 
@@ -474,17 +479,18 @@ namespace o2
 			if (match(x))
 				res.Add(x);
 		}
+
 		return res;
 	}
 
 	template<typename _type>
 	template<typename _sel_type>
 	Vector<_sel_type> Vector<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
-
 	{
 		Vector<_sel_type> res;
 		for (auto x : *this)
 			res.Add(selector(x));
+
 		return res;
 	}
 
@@ -495,9 +501,20 @@ namespace o2
 		Vector<_sel_type> res;
 		for (auto x : *this)
 			res.Add((_sel_type)x);
+
 		return res;
 	}
 
+	template<typename _type>
+	template<typename _sel_type>
+	Vector<_sel_type> Vector<_type>::DynamicCast() const
+	{
+		Vector<_sel_type> res;
+		for (auto x : *this)
+			res.Add(dynamic_cast<_sel_type>(x));
+
+		return res;
+	}
 
 	template<typename _type>
 	Vector<_type> Vector<_type>::Take(int count) const
@@ -511,6 +528,7 @@ namespace o2
 			if (i == count)
 				break;
 		}
+
 		return res;
 	}
 

@@ -27,6 +27,8 @@ namespace Editor
 
 	void DefaultActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 	{
+		IActorComponentViewer::SetTargetComponents(components);
+
 		if (!components.IsEmpty())
 		{
 			String caption = components[0]->GetName();

@@ -3,9 +3,10 @@
 
 #include "Core/EditorScope.h"
 #include "Core/UI/SpoilerWithHead.h"
-#include "Scene/UI/Widgets/Image.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widget.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/Image.h"
 
 namespace Editor
 {
@@ -22,8 +23,12 @@ namespace Editor
 		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
-		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 1);
+		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
 		mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
+
+		mRemoveButton = o2UI.CreateButton("", THIS_FUNC(RemoveTargetComponents), "close");
+		*mRemoveButton->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 0));
+		mSpoiler->AddInternalWidget(mRemoveButton);
 
 		mSpoiler->SetExpanded(true);
 	}
@@ -32,6 +37,11 @@ namespace Editor
 	{
 		if (mSpoiler)
 			delete mSpoiler;
+	}
+
+	void IActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
+	{
+		mTargetComponents = components;
 	}
 
 	Widget* IActorComponentViewer::GetWidget() const
@@ -58,6 +68,15 @@ namespace Editor
 	bool IActorComponentViewer::IsBuiltWithEmpty() const
 	{
 		return false;
+	}
+
+	void IActorComponentViewer::RemoveTargetComponents()
+	{
+		for (auto comp : mTargetComponents)
+			delete comp;
+
+		mTargetComponents.Clear();
+
 	}
 
 }

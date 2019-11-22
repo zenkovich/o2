@@ -67,6 +67,7 @@ namespace Editor
 		Vector<IActorPropertiesViewer*> mAvailableActorPropertiesViewers;        // Available actor properties viewers										 							      
 		TypeActorViewersmap             mActorPropertiesViewersPool;             // Actor properties viewers pool
 
+		Vector<const Type*>            mCommonComponentsTypes;            // List of common components types for targets
 		Vector<IActorComponentViewer*> mComponentsViewers;                // Components viewers
 		DefaultActorComponentViewer*   mDefaultComponentViewer = nullptr; // Default component viewer sample
 		Vector<IActorComponentViewer*> mAvailableComponentsViewers;       // Available components' viewers										 							      
@@ -88,6 +89,9 @@ namespace Editor
 
 		// Sets target components: gets common components and initializes them
 		void SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
+
+		// Returns list of common components types for targets
+		Vector<const Type*> GetCommonComponentsTypes(const Vector<IObject*> targets) const;
 
 		// Enable viewer event function
 		void OnEnabled();
@@ -120,6 +124,7 @@ CLASS_FIELDS_META(Editor::ActorViewer)
 	PROTECTED_FIELD(mDefaultActorPropertiesViewer);
 	PROTECTED_FIELD(mAvailableActorPropertiesViewers);
 	PROTECTED_FIELD(mActorPropertiesViewersPool);
+	PROTECTED_FIELD(mCommonComponentsTypes);
 	PROTECTED_FIELD(mComponentsViewers);
 	PROTECTED_FIELD(mDefaultComponentViewer);
 	PROTECTED_FIELD(mAvailableComponentsViewers);
@@ -141,6 +146,7 @@ CLASS_METHODS_META(Editor::ActorViewer)
 	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
 	PROTECTED_FUNCTION(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<Widget*>&);
 	PROTECTED_FUNCTION(void, SetTargetsComponents, const Vector<IObject*>, Vector<Widget*>&);
+	PROTECTED_FUNCTION(Vector<const Type*>, GetCommonComponentsTypes, const Vector<IObject*>);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(void, Update, float);

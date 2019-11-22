@@ -2989,9 +2989,6 @@ namespace Editor
 		sample->AddLayer("back", mnew Sprite("ui/UI4_component_head.png"),
 						 Layout::HorStretch(VerAlign::Top, -1, -3, 25, -2));
 
-		sample->AddLayer("separator", mnew Sprite("ui/UI4_Separator.png"),
-						 Layout::HorStretch(VerAlign::Top, -1, -1, 5, -2));
-
 		Text* captionText = mnew Text("stdFont.ttf");
 		captionText->text = "Button";
 		captionText->horAlign = HorAlign::Left;
@@ -3010,16 +3007,6 @@ namespace Editor
 		icon->name = "icon";
 		*icon->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(21, 0));
 		sample->AddInternalWidget(icon);
-
-		auto saveBtn = o2UI.CreateWidget<Button>("component save");
-		saveBtn->name = "save";
-		*saveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 0));
-		sample->AddInternalWidget(saveBtn);
-
-		auto optionBtn = o2UI.CreateWidget<Button>("component options");
-		optionBtn->name = "options";
-		*optionBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 0));
-		sample->AddInternalWidget(optionBtn);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}

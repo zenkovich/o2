@@ -152,6 +152,12 @@ namespace Editor
 		if (mTargetActors.IsEmpty())
 			return;
 
+		if (mCommonComponentsTypes != GetCommonComponentsTypes(mTargetActors.DynamicCast<IObject*>()))
+		{
+			SetTargets(mTargetActors.DynamicCast<IObject*>());
+			return;
+		}
+
 		for (auto viewer : mComponentsViewers)
 			viewer->Refresh();
 
@@ -241,10 +247,8 @@ namespace Editor
 		mActorPropertiesViewer = propertiesViewer;
 	}
 
-	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
+	Vector<const Type*> ActorViewer::GetCommonComponentsTypes(const Vector<IObject*> targets) const
 	{
-		PushScopeEnterOnStack scope;
-
 		auto commonComponentsTypes = mTargetActors[0]->GetComponents().Select<const Type*>([](auto x) {
 			return &x->GetType(); });
 
@@ -261,7 +265,16 @@ namespace Editor
 			}
 		}
 
-		for (const Type* type : commonComponentsTypes)
+		return commonComponentsTypes;
+	}
+
+	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
+	{
+		PushScopeEnterOnStack scope;
+
+		mCommonComponentsTypes = GetCommonComponentsTypes(targets);
+
+		for (const Type* type : mCommonComponentsTypes)
 		{
 			bool usingDefaultComponentViewer = false;
 
