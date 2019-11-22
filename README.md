@@ -9,7 +9,7 @@ Now work in progress.
 [Tutorials](https://github.com/zenkovich/o2/wiki/Tutorials)  
 [Documentation](https://github.com/zenkovich/o2/wiki)  
 
-![](https://github.com/zenkovich/o2/blob/master/new_editor.png)
+![](https://github.com/zenkovich/o2/blob/master/editor.png)
 
 ###Features
 - Assets  
