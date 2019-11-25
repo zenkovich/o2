@@ -5,6 +5,7 @@
 namespace o2
 {
 	class Widget;
+	class WidgetLayoutData;
 
 	// ----------------------------------------------------------------------------------------------------------------
 	// Widget layout. Represents the Widget transformation layout. The position and size sets by anchors and offsets. 
@@ -44,6 +45,7 @@ namespace o2
 		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property
 		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property
 
+	public:
 		// Default constructor, creates both stretching layout  
 		WidgetLayout();
 
@@ -65,6 +67,12 @@ namespace o2
 
 		// Updates layout and transformation
 		void Update() override;
+
+		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too
+		void SetDirty(bool fromParent = true) override;
+
+		// Copies data parameters from other layout
+		void CopyFrom(const ActorTransform& other);
 
 		// Sets position
 		void SetPosition(const Vec2F& position) override;
@@ -92,6 +100,9 @@ namespace o2
 
 		// Sets rect
 		void SetRect(const RectF& rect) override;
+
+		// Return rectangle for children in worlds space 
+		RectF GetChildrenWorldRect() const;
 
 		// Sets direction aligned rectangle transformation
 		void SetAxisAlignedRect(const RectF& rect) override;
@@ -205,7 +216,10 @@ namespace o2
 		float GetMaximalHeight() const;
 
 		// Disables size checking
-		void DisableMinMaxSizes();
+		void DisableSizeChecks();
+
+		// Enables size checking
+		void EnableSizeChecks();
 
 		// Sets layout weight
 		void SetWeight(const Vec2F& weight);
@@ -241,36 +255,12 @@ namespace o2
 		SERIALIZABLE(WidgetLayout);
 
 	protected:
-		class Data: public ActorTransform::Data
-		{
-		public:
-			Vec2F anchorMin = Vec2F(0.0f, 0.0f);   // Left bottom anchor @SERIALIZABLE
-			Vec2F anchorMax = Vec2F(0.0f, 0.0f);   // Right top anchor @SERIALIZABLE
-
-			Vec2F offsetMin = Vec2F(0.0f, 0.0f);   // Left bottom offset @SERIALIZABLE
-			Vec2F offsetMax = Vec2F(10.0f, 10.0f); // Right top offset @SERIALIZABLE
-
-			Vec2F minSize = Vec2F(0.0f, 0.0f);	   // Minimal size @SERIALIZABLE
-			Vec2F maxSize = Vec2F(10000, 10000);   // Maximum size @SERIALIZABLE
-
-			Vec2F weight = Vec2F(1.0f, 1.0f);	   // Layout weight @SERIALIZABLE
-
-			bool  drivenByParent = false;          // Is layout controlling by parent
-
-			Widget* owner = nullptr;             // owner widget pointer @EXCLUDE_POINTER_SEARCH
-
-			SERIALIZABLE(Data);
-		};
-
 		void(WidgetLayout::*mCheckMinMaxFunc)(); // Check minimum and maximum of layout delegate
-		Data* mData;
+		WidgetLayoutData* mData;
 
 	protected:
 		// Sets owner and updates transform
 		void SetOwner(Actor* actor) override;
-
-		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too
-		void SetDirty(bool fromParent = true) override;
 
 		// Returns parent rectange, or zero when no parent
 		RectF GetParentRectangle() const override;
@@ -281,37 +271,37 @@ namespace o2
 		// Updates offsets to match existing rectangle to offsets and anchors rectangle
 		void UpdateOffsetsByCurrentTransform();
 
-		// Copies data parameters from other layout
-		void CopyFrom(const ActorTransform& other);
-
 		// Checks minimum and maximum size
 		void CheckMinMax();
 
 		// Doesn't checks size, dummy function
 		void DontCheckMinMax();
 
-		friend class ContextMenu;
-		friend class CustomDropDown;
-		friend class CustomList;
-		friend class EditBox;
-		friend class GridLayout;
-		friend class HorizontalLayout;
-		friend class HorizontalProgress;
-		friend class HorizontalScrollBar;
-		friend class Label;
-		friend class LongList;
-		friend class MenuPanel;
-		friend class ScrollArea;
-		friend class Spoiler;
-		friend class Toggle;
-		friend class Tree;
-		friend class TreeNode;
-		friend class VerticalLayout;
-		friend class VerticalProgress;
-		friend class VerticalScrollBar;
 		friend class Widget;
 		friend class WidgetLayer;
-		friend class Window;
+	};
+
+	class WidgetLayoutData : public ActorTransformData
+	{
+	public:
+		Vec2F anchorMin = Vec2F(0.0f, 0.0f); // Left bottom anchor @SERIALIZABLE
+		Vec2F anchorMax = Vec2F(0.0f, 0.0f); // Right top anchor @SERIALIZABLE
+
+		Vec2F offsetMin = Vec2F(0.0f, 0.0f);   // Left bottom offset @SERIALIZABLE
+		Vec2F offsetMax = Vec2F(10.0f, 10.0f); // Right top offset @SERIALIZABLE
+
+		Vec2F minSize = Vec2F(0.0f, 0.0f);	 // Minimal size @SERIALIZABLE
+		Vec2F maxSize = Vec2F(10000, 10000); // Maximum size @SERIALIZABLE
+
+		Vec2F weight = Vec2F(1.0f, 1.0f); // Layout weight @SERIALIZABLE
+
+		RectF childrenWorldRect; // World rectangle for children arranging
+
+		bool drivenByParent = false; // Is layout controlling by parent
+
+		Widget* owner = nullptr; // owner widget pointer @EXCLUDE_POINTER_SEARCH
+
+		SERIALIZABLE(WidgetLayoutData);
 	};
 }
 
@@ -351,6 +341,8 @@ CLASS_METHODS_META(o2::WidgetLayout)
 {
 
 	PUBLIC_FUNCTION(void, Update);
+	PUBLIC_FUNCTION(void, SetDirty, bool);
+	PUBLIC_FUNCTION(void, CopyFrom, const ActorTransform&);
 	PUBLIC_FUNCTION(void, SetPosition, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetWidth, float);
@@ -360,6 +352,7 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);
 	PUBLIC_FUNCTION(RectF, GetRect);
 	PUBLIC_FUNCTION(void, SetRect, const RectF&);
+	PUBLIC_FUNCTION(RectF, GetChildrenWorldRect);
 	PUBLIC_FUNCTION(void, SetAxisAlignedRect, const RectF&);
 	PUBLIC_FUNCTION(void, SetAnchorMin, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetAnchorMin);
@@ -397,7 +390,8 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	PUBLIC_FUNCTION(float, GetMaximalWidth);
 	PUBLIC_FUNCTION(void, SetMaximalHeight, float);
 	PUBLIC_FUNCTION(float, GetMaximalHeight);
-	PUBLIC_FUNCTION(void, DisableMinMaxSizes);
+	PUBLIC_FUNCTION(void, DisableSizeChecks);
+	PUBLIC_FUNCTION(void, EnableSizeChecks);
 	PUBLIC_FUNCTION(void, SetWeight, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetWeight);
 	PUBLIC_FUNCTION(void, SetWidthWeight, float);
@@ -405,22 +399,20 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	PUBLIC_FUNCTION(void, SetHeightWeight, float);
 	PUBLIC_FUNCTION(float, GetHeightWeight);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
-	PROTECTED_FUNCTION(void, SetDirty, bool);
 	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 	PROTECTED_FUNCTION(void, FloorRectangle);
 	PROTECTED_FUNCTION(void, UpdateOffsetsByCurrentTransform);
-	PROTECTED_FUNCTION(void, CopyFrom, const ActorTransform&);
 	PROTECTED_FUNCTION(void, CheckMinMax);
 	PROTECTED_FUNCTION(void, DontCheckMinMax);
 }
 END_META;
 
-CLASS_BASES_META(o2::WidgetLayout::Data)
+CLASS_BASES_META(o2::WidgetLayoutData)
 {
-	BASE_CLASS(o2::ActorTransform::Data);
+	BASE_CLASS(o2::ActorTransformData);
 }
 END_META;
-CLASS_FIELDS_META(o2::WidgetLayout::Data)
+CLASS_FIELDS_META(o2::WidgetLayoutData)
 {
 	PUBLIC_FIELD(anchorMin).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(anchorMax).SERIALIZABLE_ATTRIBUTE();
@@ -429,11 +421,12 @@ CLASS_FIELDS_META(o2::WidgetLayout::Data)
 	PUBLIC_FIELD(minSize).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(maxSize).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(weight).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(childrenWorldRect);
 	PUBLIC_FIELD(drivenByParent);
 	PUBLIC_FIELD(owner);
 }
 END_META;
-CLASS_METHODS_META(o2::WidgetLayout::Data)
+CLASS_METHODS_META(o2::WidgetLayoutData)
 {
 }
 END_META;

@@ -187,7 +187,7 @@ namespace o2
 		}
 
 		res = res*Math::Clamp01(mExpandCoef) + mHeadHeight;
-		res = Math::Max(res, layout->mData->minSize.y);
+		res = Math::Max(res, GetLayoutData().minSize.y);
 
 		return res;
 	}
@@ -198,8 +198,8 @@ namespace o2
 			VerticalLayout::UpdateLayoutParametres();
 		else
 		{
-			layout->mData->weight.y = 1;
-			layout->mData->minSize.y = 0;
+			GetLayoutData().weight.y = 1;
+			GetLayoutData().minSize.y = 0;
 		}
 	}
 

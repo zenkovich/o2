@@ -74,7 +74,7 @@ namespace Editor
 	{
 		Widget::Draw();
 
-		o2Render.EnableScissorTest(mChildrenWorldRect);
+		o2Render.EnableScissorTest(GetChildrenWorldRect());
 
 		DrawTimeScale();
 
@@ -101,10 +101,10 @@ namespace Editor
 		Layout endLayout = mEndMarkLayout;
 		endLayout.offsetMin.x += (float)endPos;
 
-		mBeginMark->SetRect(beginLayout.Calculate(mChildrenWorldRect));
+		mBeginMark->SetRect(beginLayout.Calculate(GetChildrenWorldRect()));
 		mBeginMark->Draw();
 
-		mEndMark->SetRect(endLayout.Calculate(mChildrenWorldRect));
+		mEndMark->SetRect(endLayout.Calculate(GetChildrenWorldRect()));
 		mEndMark->Draw();
 
 		int bigLinePeriod;

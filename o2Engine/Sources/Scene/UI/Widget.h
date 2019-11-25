@@ -9,6 +9,7 @@ namespace o2
 	class IRectDrawable;
 	class WidgetLayer;
 	class WidgetLayout;
+	class WidgetLayoutData;
 	class WidgetState;
 
 	// ------------------------------------------------------
@@ -91,7 +92,7 @@ namespace o2
 		Widget* GetParentWidget() const;
 
 		// Returns children rectangle layout
-		RectF GetChildrenRect() const;
+		const RectF& GetChildrenWorldRect() const;
 
 		// Returns child widget by path (like "root/some node/other node/target node")
 		Widget* GetChildWidget(const String& path) const;
@@ -255,8 +256,6 @@ namespace o2
 		WidgetsVec mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
 		WidgetsVec mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
 
-		RectF mChildrenWorldRect; // World rectangle for children arranging
-
 		bool mOverrideDepth = false; // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 
 		float mTransparency = 1.0f;	   // Widget transparency @SERIALIZABLE
@@ -306,6 +305,12 @@ namespace o2
 
 		// It is called when actor including from scene, including this to layer drawables
 		void OnIncludeToScene() override;
+
+		// Returns layout data reference
+		WidgetLayoutData& GetLayoutData();
+
+		// Returns layout data reference
+		const WidgetLayoutData& GetLayoutData() const;
 
 		// Moves widget's to delta and checks for clipping
 		virtual void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea);
@@ -694,7 +699,6 @@ CLASS_FIELDS_META(o2::Widget)
 	PROTECTED_FIELD(mChildWidgets);
 	PROTECTED_FIELD(mInternalWidgets).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mDrawingChildren);
-	PROTECTED_FIELD(mChildrenWorldRect);
 	PROTECTED_FIELD(mOverrideDepth).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
@@ -725,7 +729,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(void, ForceDraw, const RectF&, float);
 	PUBLIC_FUNCTION(void, SetLayoutDirty);
 	PUBLIC_FUNCTION(Widget*, GetParentWidget);
-	PUBLIC_FUNCTION(RectF, GetChildrenRect);
+	PUBLIC_FUNCTION(const RectF&, GetChildrenWorldRect);
 	PUBLIC_FUNCTION(Widget*, GetChildWidget, const String&);
 	PUBLIC_FUNCTION(Widget*, AddChildWidget, Widget*);
 	PUBLIC_FUNCTION(Widget*, AddChildWidget, Widget*, int);
@@ -778,6 +782,8 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PROTECTED_FUNCTION(WidgetLayoutData&, GetLayoutData);
+	PROTECTED_FUNCTION(const WidgetLayoutData&, GetLayoutData);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);

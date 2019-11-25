@@ -7,20 +7,20 @@
 namespace o2
 {
 	WidgetLayout::WidgetLayout():
-		ActorTransform(mnew Data())
+		ActorTransform(mnew WidgetLayoutData())
 	{
-		mData = static_cast<Data*>(ActorTransform::mData);
+		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
 		mCheckMinMaxFunc = &WidgetLayout::DontCheckMinMax;
 	}
 
 	WidgetLayout::WidgetLayout(const WidgetLayout& other):
-		ActorTransform(mnew Data()), anchorMin(this), anchorMax(this), offsetMin(this), offsetMax(this),
+		ActorTransform(mnew WidgetLayoutData()), anchorMin(this), anchorMax(this), offsetMin(this), offsetMax(this),
 		anchorLeft(this), anchorRight(this), anchorBottom(this), anchorTop(this), offsetLeft(this),
 		offsetBottom(this), offsetTop(this), minSize(this), minWidth(this), minHeight(this),
 		maxSize(this), maxWidth(this), maxHeight(this), weight(this), widthWeight(this),
 		heigthWeight(this), offsetRight(this)
 	{
-		mData = (Data*)ActorTransform::mData;
+		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
 
 		CopyFrom(other);
 		mCheckMinMaxFunc = other.mCheckMinMaxFunc;
@@ -28,9 +28,9 @@ namespace o2
 
 	WidgetLayout::WidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
 								   const Vec2F& offsetMin, const Vec2F& offsetMax):
-		ActorTransform(mnew Data())
+		ActorTransform(mnew WidgetLayoutData())
 	{
-		mData = (Data*)ActorTransform::mData;
+		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
 
 		mData->anchorMin = anchorMin;
 		mData->anchorMax = anchorMax;
@@ -42,9 +42,9 @@ namespace o2
 
 	WidgetLayout::WidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
 								   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom):
-		ActorTransform(mnew Data())
+		ActorTransform(mnew WidgetLayoutData())
 	{
-		mData = (Data*)ActorTransform::mData;
+		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
 
 		mData->anchorMin.Set(anchorLeft, anchorBottom);
 		mData->anchorMax.Set(anchorRight, anchorTop);
@@ -132,6 +132,11 @@ namespace o2
 		mData->offsetMax = rect.RightTop() - parentAnchoredRect.RightTop();
 
 		SetDirty();
+	}
+
+	RectF WidgetLayout::GetChildrenWorldRect() const
+	{
+		return mData->childrenWorldRect;
 	}
 
 	void WidgetLayout::SetAxisAlignedRect(const RectF& rect)
@@ -372,10 +377,15 @@ namespace o2
 		return mData->maxSize.y;
 	}
 
-	void WidgetLayout::DisableMinMaxSizes()
+	void WidgetLayout::DisableSizeChecks()
+	{
+		mCheckMinMaxFunc = &WidgetLayout::DontCheckMinMax;
+		SetDirty();
+	}
+
+	void WidgetLayout::EnableSizeChecks()
 	{
 		mCheckMinMaxFunc = &WidgetLayout::CheckMinMax;
-		SetDirty();
 	}
 
 	void WidgetLayout::SetWeight(const Vec2F& weight)
@@ -586,7 +596,7 @@ namespace o2
 	RectF WidgetLayout::GetParentRectangle() const
 	{
 		if (mData->owner->mParentWidget)
-			return mData->owner->mParentWidget->mChildrenWorldRect;
+			return mData->owner->mParentWidget->GetLayoutData().childrenWorldRect;
 		else if (mData->owner->mParent)
 			return mData->owner->mParent->transform->mData->worldRectangle;
 
@@ -600,7 +610,7 @@ namespace o2
 
 		if (mData->owner->mParentWidget)
 		{
-			parentWorldRect = mData->owner->mParentWidget->mChildrenWorldRect;
+			parentWorldRect = mData->owner->mParentWidget->GetLayoutData().childrenWorldRect;
 
 			RectF notWidgetWorldRect = mData->owner->mParentWidget->transform->mData->worldRectangle;
 			parentWorldPosition = notWidgetWorldRect.LeftBottom() +
@@ -631,7 +641,7 @@ namespace o2
 
 		if (mData->owner)
 		{
-			mData->owner->mChildrenWorldRect = mData->worldRectangle;
+			mData->childrenWorldRect = mData->worldRectangle;
 			mData->owner->OnTransformUpdated();
 		}
 	}
@@ -650,8 +660,8 @@ namespace o2
 		
 		if (mData->owner->mParentWidget)
 		{
-			offs = mData->owner->mParentWidget->mChildrenWorldRect.LeftBottom() -
-				mData->owner->mParentWidget->layout->mData->worldRectangle.LeftBottom();
+			offs = mData->owner->mParentWidget->GetLayoutData().childrenWorldRect.LeftBottom() -
+				mData->owner->mParentWidget->GetLayoutData().worldRectangle.LeftBottom();
 		}
 
 		SetRect(ActorTransform::GetRect() - offs);
@@ -698,4 +708,4 @@ namespace o2
 
 DECLARE_CLASS(o2::WidgetLayout);
 
-DECLARE_CLASS(o2::WidgetLayout::Data);
+DECLARE_CLASS(o2::WidgetLayoutData);

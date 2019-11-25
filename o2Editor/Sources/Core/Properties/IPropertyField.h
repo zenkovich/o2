@@ -497,6 +497,7 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
 {
 
+	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
 	PUBLIC_FUNCTION(void, Refresh);

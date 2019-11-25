@@ -391,11 +391,11 @@ namespace Editor
 
 	void AssetsIconsScrollArea::UpdateSelfTransform()
 	{
-		Vec2F localPressPoint = mPressedPoint - mChildrenWorldRect.LeftBottom();
+		Vec2F localPressPoint = mPressedPoint - GetChildrenWorldRect().LeftBottom();
 
 		ScrollArea::UpdateSelfTransform();
 
-		mPressedPoint = localPressPoint + mChildrenWorldRect.LeftBottom();
+		mPressedPoint = localPressPoint + GetChildrenWorldRect().LeftBottom();
 
 		if (mSelecting)
 			UpdateSelection(*o2Input.GetCursor(0));

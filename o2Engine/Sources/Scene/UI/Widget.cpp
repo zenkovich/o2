@@ -152,7 +152,7 @@ namespace o2
 	{
 		if (mResEnabledInHierarchy)
 		{
-			if (layout->mData->updateFrame == 0)
+			if (GetLayoutData().updateFrame == 0)
 			{
 				for (auto child : mChildren)
 					child->transform->SetDirty(true);
@@ -197,7 +197,7 @@ namespace o2
 
 	void Widget::UpdateTransform()
 	{
-		if (layout->mData->drivenByParent && mParentWidget) {
+		if (GetLayoutData().drivenByParent && mParentWidget) {
 			mParentWidget->UpdateTransform();
 		}
 
@@ -292,9 +292,9 @@ namespace o2
 		return mParentWidget;
 	}
 
-	RectF Widget::GetChildrenRect() const
+	const RectF& Widget::GetChildrenWorldRect() const
 	{
-		return mChildrenWorldRect;
+		return GetLayoutData().childrenWorldRect;
 	}
 
 	const Widget::WidgetsVec& Widget::GetChildWidgets() const
@@ -673,27 +673,27 @@ namespace o2
 
 	float Widget::GetMinWidthWithChildren() const
 	{
-		return layout->mData->minSize.x;
+		return GetLayoutData().minSize.x;
 	}
 
 	float Widget::GetMinHeightWithChildren() const
 	{
-		return layout->mData->minSize.y;
+		return GetLayoutData().minSize.y;
 	}
 
 	float Widget::GetWidthWeightWithChildren() const
 	{
-		return layout->mData->weight.x;
+		return GetLayoutData().weight.x;
 	}
 
 	float Widget::GetHeightWeightWithChildren() const
 	{
-		return layout->mData->weight.y;
+		return GetLayoutData().weight.y;
 	}
 
 	void Widget::UpdateBoundsWithChilds()
 	{
-		if ((!mResEnabledInHierarchy || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
+		if ((!mResEnabledInHierarchy || mIsClipped) && GetLayoutData().dirtyFrame != o2Time.GetCurrentFrame())
 			return;
 
 		mBoundsWithChilds = mBounds;
@@ -769,10 +769,10 @@ namespace o2
 
 	void Widget::UpdateBounds()
 	{
-		if ((!mResEnabledInHierarchy || mIsClipped) && layout->mData->dirtyFrame != o2Time.GetCurrentFrame())
+		if ((!mResEnabledInHierarchy || mIsClipped) && GetLayoutData().dirtyFrame != o2Time.GetCurrentFrame())
 			return;
 
-		mBounds = layout->mData->worldRectangle;
+		mBounds = GetLayoutData().worldRectangle;
 
 		for (auto layer : mDrawingLayers)
 			mBounds.Expand(layer->GetRect());
@@ -987,6 +987,16 @@ namespace o2
 #endif
 	}
 
+	WidgetLayoutData& Widget::GetLayoutData()
+	{
+		return *layout->mData;
+	}
+
+	const WidgetLayoutData& Widget::GetLayoutData() const
+	{
+		return *layout->mData;
+	}
+
 	void Widget::OnDeserialized(const DataNode& node)
 	{
 		Actor::OnDeserialized(node);
@@ -1023,16 +1033,16 @@ namespace o2
 
 	void Widget::ForceDraw(const RectF& area, float transparency)
 	{
-		Vec2F oldLayoutOffsetMin = layout->mData->offsetMin;
-		Vec2F oldLayoutOffsetMax = layout->mData->offsetMax;
+		Vec2F oldLayoutOffsetMin = GetLayoutData().offsetMin;
+		Vec2F oldLayoutOffsetMax = GetLayoutData().offsetMax;
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
 		auto oldParentWidget = mParentWidget;
 		bool oldClipped = mIsClipped;
 		bool oldResEnabledInHierarchy = mResEnabledInHierarchy;
 
-		layout->mData->offsetMin = area.LeftBottom();
-		layout->mData->offsetMax = area.RightTop();
+		GetLayoutData().offsetMin = area.LeftBottom();
+		GetLayoutData().offsetMax = area.RightTop();
 		mTransparency = transparency;
 		mParent = nullptr;
 		mParentWidget = nullptr;
@@ -1045,8 +1055,8 @@ namespace o2
 
 		Draw();
 
-		layout->mData->offsetMin = oldLayoutOffsetMin;
-		layout->mData->offsetMax = oldLayoutOffsetMax;
+		GetLayoutData().offsetMin = oldLayoutOffsetMin;
+		GetLayoutData().offsetMax = oldLayoutOffsetMax;
 		mTransparency = oldTransparency;
 		mParent = oldParent;
 		mParentWidget = oldParentWidget;
@@ -1056,7 +1066,7 @@ namespace o2
 		UpdateSelfTransform();
 		UpdateChildrenTransforms();
 
-		layout->mData->dirtyFrame = o2Time.GetCurrentFrame();
+		GetLayoutData().dirtyFrame = o2Time.GetCurrentFrame();
 
 		UpdateBounds();
 		UpdateBoundsWithChilds();

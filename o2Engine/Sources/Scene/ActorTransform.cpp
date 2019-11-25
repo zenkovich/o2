@@ -6,14 +6,14 @@
 
 namespace o2
 {
-	ActorTransform::ActorTransform(Data* data):
+	ActorTransform::ActorTransform(ActorTransformData* data):
 		mData(data)
 	{}
 
 	ActorTransform::ActorTransform(const Vec2F& size /*= Vec2F()*/, const Vec2F& position /*= Vec2F()*/,
 								   float angle /*= 0.0f*/, const Vec2F& scale /*= Vec2F(1.0f, 1.0f)*/,
 								   const Vec2F& pivot /*= Vec2F(0.5f, 0.5f)*/) :
-		ActorTransform(mnew Data())
+		ActorTransform(mnew ActorTransformData())
 	{
 		mData->dirtyFrame = 1;
 		mData->updateFrame = 1;
@@ -26,7 +26,7 @@ namespace o2
 	}
 
 	ActorTransform::ActorTransform(const ActorTransform& other):
-		ActorTransform(mnew Data())
+		ActorTransform(mnew ActorTransformData())
 	{
 		mData->dirtyFrame = 1;
 		mData->updateFrame = 1;
@@ -786,4 +786,4 @@ namespace o2
 
 DECLARE_CLASS(o2::ActorTransform);
 
-DECLARE_CLASS(o2::ActorTransform::Data);
+DECLARE_CLASS(o2::ActorTransformData);

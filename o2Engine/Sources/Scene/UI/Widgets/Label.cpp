@@ -250,22 +250,22 @@ namespace o2
 				float realSize = mTextLayer->GetRealSize().x + mExpandBorder.x*2.0f;
 				float thisSize = layout->width;
 				float sizeDelta = realSize - thisSize;
-				layout->mData->minSize.x = realSize;
+				GetLayoutData().minSize.x = realSize;
 
 				switch (mTextLayer->GetHorAlign())
 				{
 					case HorAlign::Left:
-					layout->mData->offsetMax.x += sizeDelta;
+					GetLayoutData().offsetMax.x += sizeDelta;
 					break;
 
 					case HorAlign::Middle:
 					case HorAlign::Both:
-					layout->mData->offsetMax.x += sizeDelta*0.5f;
-					layout->mData->offsetMin.x -= sizeDelta*0.5f;
+					GetLayoutData().offsetMax.x += sizeDelta*0.5f;
+					GetLayoutData().offsetMin.x -= sizeDelta*0.5f;
 					break;
 
 					case HorAlign::Right:
-					layout->mData->offsetMin.x -= sizeDelta;
+					GetLayoutData().offsetMin.x -= sizeDelta;
 					break;
 				}
 			}
@@ -281,17 +281,17 @@ namespace o2
 				switch (mTextLayer->GetVerAlign())
 				{
 					case VerAlign::Top:
-					layout->mData->offsetMin.y -= sizeDelta;
+					GetLayoutData().offsetMin.y -= sizeDelta;
 					break;
 
 					case VerAlign::Middle:
 					case VerAlign::Both:
-					layout->mData->offsetMax.y += sizeDelta*0.5f;
-					layout->mData->offsetMin.y -= sizeDelta*0.5f;
+					GetLayoutData().offsetMax.y += sizeDelta*0.5f;
+					GetLayoutData().offsetMin.y -= sizeDelta*0.5f;
 					break;
 
 					case VerAlign::Bottom:
-					layout->mData->offsetMax.y += sizeDelta;
+					GetLayoutData().offsetMax.y += sizeDelta;
 					break;
 				}
 			}

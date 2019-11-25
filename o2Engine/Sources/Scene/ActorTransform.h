@@ -6,6 +6,7 @@
 namespace o2
 {
 	class Actor;
+	class ActorTransformData;
 
 	// -------------------------------------------------------------------------------------------
 	// Actor transform. Represents the position of actor relative to his parent (the local space),
@@ -412,46 +413,12 @@ namespace o2
 
 		SERIALIZABLE(ActorTransform);
 
-	public:
-		class Data: public ISerializable
-		{
-		public:
-			int dirtyFrame = 1;  // Frame index, when layout was marked as dirty
-			int updateFrame = 1; // Frame index, when layout was updated
-
-			Vec2F position;            // Position @SERIALIZABLE
-			Vec2F size;                // Size @SERIALIZABLE
-			Vec2F scale = Vec2F(1, 1); // Scale, (1; 1) is default @SERIALIZABLE
-			Vec2F pivot;               // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-			float angle = 0;           // Rotation angle in radians @SERIALIZABLE
-			float shear = 0;           // Shear @SERIALIZABLE
-
-			RectF rectangle;              // The rectangle in local space
-			RectF parentRectangle;        // The parent rectangle
-			Vec2F parentRectangePosition; // The parent rectangle pivot position
-			RectF worldRectangle;         // The rectangle in world space
-
-			Basis transform;         // Final transform basis
-			Basis nonSizedTransform; // Final transform basis without size
-
-			Basis worldNonSizedTransform; // World transform without size
-			Basis worldTransform;         // Result world basis
-
-			Basis parentInvertedTransform;       // Parent world transform inverted
-			Basis parentTransform;               // Parent world transform
-			int   parentInvTransformActualFrame; // last mParentInvertedTransform actual frame index
-
-			Actor* owner = nullptr; // Owner actor @EXCLUDE_POINTER_SEARCH
-
-			SERIALIZABLE(Data);
-		};
-
 	protected:
-		Data* mData;
+		ActorTransformData* mData;
 
 	protected:
 		// Actor transform constructor with specified data
-		ActorTransform(Data* data);
+		ActorTransform(ActorTransformData* data);
 
 		// Copies data parameters from other transform
 		virtual void CopyFrom(const ActorTransform& other);
@@ -485,6 +452,39 @@ namespace o2
 
 		friend class Actor;
 		friend class WidgetLayout;
+	};
+
+	class ActorTransformData : public ISerializable
+	{
+	public:
+		int dirtyFrame = 1;  // Frame index, when layout was marked as dirty
+		int updateFrame = 1; // Frame index, when layout was updated
+
+		Vec2F position;            // Position @SERIALIZABLE
+		Vec2F size;                // Size @SERIALIZABLE
+		Vec2F scale = Vec2F(1, 1); // Scale, (1; 1) is default @SERIALIZABLE
+		Vec2F pivot;               // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
+		float angle = 0;           // Rotation angle in radians @SERIALIZABLE
+		float shear = 0;           // Shear @SERIALIZABLE
+
+		RectF rectangle;              // The rectangle in local space
+		RectF parentRectangle;        // The parent rectangle
+		Vec2F parentRectangePosition; // The parent rectangle pivot position
+		RectF worldRectangle;         // The rectangle in world space
+
+		Basis transform;         // Final transform basis
+		Basis nonSizedTransform; // Final transform basis without size
+
+		Basis worldNonSizedTransform; // World transform without size
+		Basis worldTransform;         // Result world basis
+
+		Basis parentInvertedTransform;       // Parent world transform inverted
+		Basis parentTransform;               // Parent world transform
+		int   parentInvTransformActualFrame; // last mParentInvertedTransform actual frame index
+
+		Actor* owner = nullptr; // Owner actor @EXCLUDE_POINTER_SEARCH
+
+		SERIALIZABLE(ActorTransformData);
 	};
 }
 
@@ -668,12 +668,12 @@ CLASS_METHODS_META(o2::ActorTransform)
 }
 END_META;
 
-CLASS_BASES_META(o2::ActorTransform::Data)
+CLASS_BASES_META(o2::ActorTransformData)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::ActorTransform::Data)
+CLASS_FIELDS_META(o2::ActorTransformData)
 {
 	PUBLIC_FIELD(dirtyFrame);
 	PUBLIC_FIELD(updateFrame);
@@ -697,7 +697,7 @@ CLASS_FIELDS_META(o2::ActorTransform::Data)
 	PUBLIC_FIELD(owner);
 }
 END_META;
-CLASS_METHODS_META(o2::ActorTransform::Data)
+CLASS_METHODS_META(o2::ActorTransformData)
 {
 }
 END_META;

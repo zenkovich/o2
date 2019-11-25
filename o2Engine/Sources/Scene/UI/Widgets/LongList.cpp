@@ -220,7 +220,7 @@ namespace o2
 		mScrollPos += delta;
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		UpdateVisibleItems();
 
@@ -231,7 +231,7 @@ namespace o2
 			child->mIsClipped = false;
 		}
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		mTargetSelectionRect += delta;
 		mTargetHoverRect += delta;

@@ -183,12 +183,12 @@ namespace o2
 
 	void GridLayout::OnChildAdded(Widget* child)
 	{
-		child->layout->mData->drivenByParent = true;
+		child->GetLayoutData().drivenByParent = true;
 	}
 
 	void GridLayout::OnChildRemoved(Widget* child)
 	{
-		child->layout->mData->drivenByParent = false;
+		child->GetLayoutData().drivenByParent = false;
 	}
 
 	void GridLayout::RearrangeChilds()
@@ -230,10 +230,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -257,10 +257,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.y -= mCellSize.y + mSpacing;
 
@@ -295,10 +295,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -331,10 +331,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.y -= mCellSize.y + mSpacing;
 
@@ -366,10 +366,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = cellPos - mCellSize;
-				child->layout->mData->offsetMax = cellPos;
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = cellPos - mCellSize;
+				child->GetLayoutData().offsetMax = cellPos;
 
 				cellPos.x -= mCellSize.x + mSpacing;
 
@@ -393,10 +393,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = cellPos - mCellSize;
-				child->layout->mData->offsetMax = cellPos;
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = cellPos - mCellSize;
+				child->GetLayoutData().offsetMax = cellPos;
 
 				cellPos.y -= mCellSize.y + mSpacing;
 
@@ -437,10 +437,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -471,10 +471,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.y -= mCellSize.y + mSpacing;
 
@@ -524,10 +524,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -569,10 +569,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.y -= mCellSize.y + mSpacing;
 
@@ -613,10 +613,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = cellPos - mCellSize;
-				child->layout->mData->offsetMax = cellPos;
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = cellPos - mCellSize;
+				child->GetLayoutData().offsetMax = cellPos;
 
 				cellPos.x -= mCellSize.x + mSpacing;
 
@@ -647,10 +647,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = cellPos - mCellSize;
-				child->layout->mData->offsetMax = cellPos;
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = cellPos - mCellSize;
+				child->GetLayoutData().offsetMax = cellPos;
 
 				cellPos.y -= mCellSize.y + mSpacing;
 
@@ -685,10 +685,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -712,10 +712,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = cellPos;
-				child->layout->mData->offsetMax = cellPos + mCellSize;
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = cellPos;
+				child->GetLayoutData().offsetMax = cellPos + mCellSize;
 
 				cellPos.y += mCellSize.y + mSpacing;
 
@@ -760,10 +760,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x, cellPos.y - mCellSize.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x + mCellSize.x, cellPos.y);
 
 				cellPos.x += mCellSize.x + mSpacing;
 
@@ -798,10 +798,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = cellPos;
-				child->layout->mData->offsetMax = cellPos + mCellSize;
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = cellPos;
+				child->GetLayoutData().offsetMax = cellPos + mCellSize;
 
 				cellPos.y += mCellSize.y + mSpacing;
 
@@ -836,10 +836,10 @@ namespace o2
 					rowIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
 
 				cellPos.x -= mCellSize.x + mSpacing;
 
@@ -863,10 +863,10 @@ namespace o2
 					colIdx = 0;
 				}
 
-				child->layout->mData->anchorMin = anchor;
-				child->layout->mData->anchorMax = anchor;
-				child->layout->mData->offsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
-				child->layout->mData->offsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
+				child->GetLayoutData().anchorMin = anchor;
+				child->GetLayoutData().anchorMax = anchor;
+				child->GetLayoutData().offsetMin = Vec2F(cellPos.x - mCellSize.x, cellPos.y);
+				child->GetLayoutData().offsetMax = Vec2F(cellPos.x, cellPos.y + mCellSize.y);
 
 				cellPos.y += mCellSize.y + mSpacing;
 
@@ -893,22 +893,22 @@ namespace o2
 
 		RectF childrenRect;
 		if (mChildWidgets.Count() > 0)
-			childrenRect = mChildWidgets[0]->layout->mData->rectangle;
+			childrenRect = mChildWidgets[0]->GetLayoutData().rectangle;
 
 		for (auto child : mChildWidgets)
 		{
-			childrenRect.left   = Math::Min(childrenRect.left, child->layout->mData->rectangle.left);
-			childrenRect.right  = Math::Max(childrenRect.right, child->layout->mData->rectangle.right);
-			childrenRect.bottom = Math::Min(childrenRect.bottom, child->layout->mData->rectangle.bottom);
-			childrenRect.top    = Math::Max(childrenRect.top, child->layout->mData->rectangle.top);
+			childrenRect.left   = Math::Min(childrenRect.left, child->GetLayoutData().rectangle.left);
+			childrenRect.right  = Math::Max(childrenRect.right, child->GetLayoutData().rectangle.right);
+			childrenRect.bottom = Math::Min(childrenRect.bottom, child->GetLayoutData().rectangle.bottom);
+			childrenRect.top    = Math::Max(childrenRect.top, child->GetLayoutData().rectangle.top);
 		}
 
-		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - mChildrenWorldRect.Size();
+		Vec2F szDelta = (childrenRect.Size() + mBorder.LeftBottom() + mBorder.RightTop()) - GetChildrenWorldRect().Size();
 
 		if (szDelta != Vec2F())
 		{
-			layout->mData->offsetMax += szDelta*(Vec2F::One() - relativePivot);
-			layout->mData->offsetMin -= szDelta*relativePivot;
+			GetLayoutData().offsetMax += szDelta*(Vec2F::One() - relativePivot);
+			GetLayoutData().offsetMin -= szDelta*relativePivot;
 
 			layout->SetDirty();
 		}

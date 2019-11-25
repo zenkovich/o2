@@ -294,8 +294,8 @@ namespace o2
 {
 		layout->Update();
 
-		mChildrenWorldRect = layout->mData->worldRectangle;
-		mAbsoluteClip = mClipLayout.Calculate(layout->mData->worldRectangle);
+		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
+		mAbsoluteClip = mClipLayout.Calculate(GetLayoutData().worldRectangle);
 	}
 
 	void CustomDropDown::OnItemSelected()

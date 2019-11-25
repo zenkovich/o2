@@ -989,7 +989,7 @@ namespace o2
 		mIsNeedUpdateVisibleNodes = false;
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		int lastMinVisible = mMinVisibleNodeIdx;
 		int lastMaxVisible = mMaxVisibleNodeIdx;
@@ -1066,7 +1066,7 @@ namespace o2
 		if (mIsDraggingNodes)
 			OnDraggedAbove(this);
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 	}
 
 	void Tree::CreateVisibleNodeWidget(Node* node, int i)
@@ -1333,8 +1333,8 @@ namespace o2
 
 			if (node->widget)
 			{
-				node->widget->layout->mData->offsetMin.y -= offs;
-				node->widget->layout->mData->offsetMax.y -= offs;
+				node->widget->GetLayoutData().offsetMin.y -= offs;
+				node->widget->GetLayoutData().offsetMax.y -= offs;
 			}
 		}
 
@@ -1357,11 +1357,11 @@ namespace o2
 		mScrollPos += delta;
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		UpdateVisibleNodes();
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		UpdateScrollParams();
 

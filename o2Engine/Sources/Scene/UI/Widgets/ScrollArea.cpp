@@ -14,7 +14,7 @@
 
 namespace o2
 {
-	ScrollArea::ScrollArea(): Widget()
+	ScrollArea::ScrollArea() : Widget()
 	{}
 
 	ScrollArea::ScrollArea(const ScrollArea& other) :
@@ -26,7 +26,7 @@ namespace o2
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
-			mHorScrollBar->layout->mData->drivenByParent = true;
+			mHorScrollBar->GetLayoutData().drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 
 			mEnableHorScroll = mHorScrollBar->IsEnabled();
@@ -36,7 +36,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 		{
 			mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
-			mVerScrollBar->layout->mData->drivenByParent = true;
+			mVerScrollBar->GetLayoutData().drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
 			mEnableVerScroll = mVerScrollBar->IsEnabled();
@@ -251,7 +251,7 @@ namespace o2
 		{
 			mHorScrollBar->name = "horScrollBar";
 			mHorScrollBar->SetInternalParent(this, false);
-			mHorScrollBar->layout->mData->drivenByParent = true;
+			mHorScrollBar->GetLayoutData().drivenByParent = true;
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
 		}
 
@@ -279,7 +279,7 @@ namespace o2
 		{
 			mVerScrollBar->name = "verScrollBar";
 			mVerScrollBar->SetInternalParent(this, false);
-			mVerScrollBar->layout->mData->drivenByParent = true;
+			mVerScrollBar->GetLayoutData().drivenByParent = true;
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 		}
 
@@ -357,12 +357,12 @@ namespace o2
 
 	void ScrollArea::OnChildAdded(Widget* child)
 	{
-		child->layout->mData->drivenByParent = true;
+		child->GetLayoutData().drivenByParent = true;
 	}
 
 	void ScrollArea::OnChildRemoved(Widget* child)
 	{
-		child->layout->mData->drivenByParent = false;
+		child->GetLayoutData().drivenByParent = false;
 	}
 
 	void ScrollArea::CheckScrollBarsVisibility()
@@ -410,15 +410,15 @@ namespace o2
 	{
 		layout->Update();
 
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
-		mChildrenWorldRect = mAbsoluteViewArea;
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 	}
 
 	void ScrollArea::UpdateChildren(float dt)
 	{
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		for (auto child : mChildren)
 			child->Update(dt);
@@ -426,7 +426,7 @@ namespace o2
 		for (auto child : mChildren)
 			child->UpdateChildren(dt);
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		for (auto child : mInternalWidgets)
 			child->Update(dt);
@@ -444,11 +444,11 @@ namespace o2
 	void ScrollArea::UpdateChildrenTransforms()
 	{
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		Widget::UpdateChildrenTransforms();
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		CheckChildrenClipping();
 		UpdateScrollParams();
@@ -474,13 +474,13 @@ namespace o2
 		mScrollPos += delta;
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		Vec2F widgetsMove(-delta.x, delta.y);
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		UpdateScrollParams();
 	}
@@ -494,12 +494,12 @@ namespace o2
 			UpdateSelfTransform();
 
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
 
-		mChildrenWorldRect = mAbsoluteViewArea;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		for (auto child : mInternalWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
@@ -531,7 +531,7 @@ namespace o2
 			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(ContextMenu))
 				continue;
 
-			RecalculateScrollAreaRect(child->layout->mData->rectangle, offset);
+			RecalculateScrollAreaRect(child->GetLayoutData().rectangle, offset);
 		}
 	}
 
@@ -547,13 +547,13 @@ namespace o2
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
-		offset = mChildrenWorldRect.LeftBottom() - layout->mData->worldRectangle.LeftBottom() - mChildrenWorldRect.Size()*layout->pivot + 
-			Vec2F(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		offset = GetChildrenWorldRect().LeftBottom() - GetLayoutData().worldRectangle.LeftBottom() -
+			GetChildrenWorldRect().Size()*layout->pivot + Vec2F(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 	}
 
 	void ScrollArea::UpdateScrollParams()
 	{
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
 		RectF localViewArea(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
 		CalculateScrollArea();
@@ -564,11 +564,11 @@ namespace o2
 		mScrollRange.bottom = localViewArea.top - mScrollArea.top;
 		mScrollRange.top = localViewArea.bottom - mScrollArea.bottom;
 
-// 		o2Debug.Log(mName + " area: " + (String)mScrollArea + ", range: " + (String)mScrollRange + 
-// 					", scroll: " + (String)mScrollPos);
+		// 		o2Debug.Log(mName + " area: " + (String)mScrollArea + ", range: " + (String)mScrollRange + 
+		// 					", scroll: " + (String)mScrollPos);
 
-// 		mScrollPos.x = Math::Clamp(mScrollPos.x, mScrollRange.left, mScrollRange.right);
-// 		mScrollPos.y = Math::Clamp(mScrollPos.y, mScrollRange.bottom, mScrollRange.top);
+		// 		mScrollPos.x = Math::Clamp(mScrollPos.x, mScrollRange.left, mScrollRange.right);
+		// 		mScrollPos.y = Math::Clamp(mScrollPos.y, mScrollRange.bottom, mScrollRange.top);
 
 		if (mHorScrollBar)
 		{
@@ -699,19 +699,19 @@ namespace o2
 
 		Widget::CopyData(other);
 
-		mClipAreaLayout      = other.mClipAreaLayout;
-		mViewAreaLayout      = other.mViewAreaLayout;
-		mScrollPos           = other.mScrollPos;
-		mOwnHorScrollBar     = other.mOwnHorScrollBar;
-		mOwnVerScrollBar     = other.mOwnVerScrollBar;
-		mScrollSpeedDamp     = other.mScrollSpeedDamp;
+		mClipAreaLayout = other.mClipAreaLayout;
+		mViewAreaLayout = other.mViewAreaLayout;
+		mScrollPos = other.mScrollPos;
+		mOwnHorScrollBar = other.mOwnHorScrollBar;
+		mOwnVerScrollBar = other.mOwnVerScrollBar;
+		mScrollSpeedDamp = other.mScrollSpeedDamp;
 		mEnableScrollsHiding = other.mEnableScrollsHiding;
 
 		if (mOwnHorScrollBar)
 		{
 			mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
 			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
-			mHorScrollBar->layout->mData->drivenByParent = true;
+			mHorScrollBar->GetLayoutData().drivenByParent = true;
 
 			mEnableHorScroll = mHorScrollBar->IsEnabled();
 		}
@@ -721,7 +721,7 @@ namespace o2
 		{
 			mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
-			mVerScrollBar->layout->mData->drivenByParent = true;
+			mVerScrollBar->GetLayoutData().drivenByParent = true;
 
 			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
@@ -763,7 +763,7 @@ namespace o2
 			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
 
 		for (auto child : mChildWidgets)
-			child->layout->mData->drivenByParent = true;
+			child->GetLayoutData().drivenByParent = true;
 
 		RetargetStatesAnimations();
 	}

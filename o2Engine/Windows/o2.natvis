@@ -100,7 +100,7 @@
   </Type>
 
   <Type Name="o2::Widget">
-    <DisplayString>Widget "{ mName }" ({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
+    <DisplayString>Widget "{ mName }" ({ (int)GetLayoutData().worldRectangle.left }, { (int)GetLayoutData().worldRectangle.bottom }, { (int)GetLayoutData().worldRectangle.right }, { (int)GetLayoutData().worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
@@ -116,7 +116,7 @@
       <Item Name="layout" ExcludeView="simple">layout</Item>
       
       <Synthetic Name="layout">
-        <DisplayString>({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
+        <DisplayString>({ (int)GetLayoutData().worldRectangle.left }, { (int)GetLayoutData().worldRectangle.bottom }, { (int)GetLayoutData().worldRectangle.right }, { (int)GetLayoutData().worldRectangle.top })</DisplayString>
         <Expand>
           <ExpandedItem>layout</ExpandedItem>
         </Expand>

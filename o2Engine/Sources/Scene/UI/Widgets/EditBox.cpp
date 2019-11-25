@@ -696,13 +696,13 @@ namespace o2
 {
 		layout->Update();
 
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
 		mTextDrawable->SetRect(mAbsoluteViewArea + roundedScrollPos);
 
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 
 		UpdateScrollParams();
 		UpdateSelectionAndCaret();

@@ -192,15 +192,15 @@ namespace o2
 	{
 		ScrollArea::UpdateSelfTransform();
 
-		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mTopDragAreaRect         = mTopDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mBottomDragAreaRect      = mBottomDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mLeftDragAreaRect        = mLeftDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mRightDragAreaRect       = mRightDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mLeftTopDragAreaRect     = mLeftTopDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mRightTopDragAreaRect    = mRightTopDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mLeftBottomDragAreaRect  = mLeftBottomDragAreaLayout.Calculate(layout->mData->worldRectangle);
-		mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(layout->mData->worldRectangle);
+		mHeadDragAreaRect        = mHeadDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mTopDragAreaRect         = mTopDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mBottomDragAreaRect      = mBottomDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mLeftDragAreaRect        = mLeftDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mRightDragAreaRect       = mRightDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mLeftTopDragAreaRect     = mLeftTopDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mRightTopDragAreaRect    = mRightTopDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mLeftBottomDragAreaRect  = mLeftBottomDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mRightBottomDragAreaRect = mRightBottomDragAreaLayout.Calculate(GetLayoutData().worldRectangle);
 	}
 
 	CursorEventsArea& Window::GetBackCursorListener()

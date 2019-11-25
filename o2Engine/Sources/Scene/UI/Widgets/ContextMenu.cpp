@@ -409,7 +409,7 @@ namespace o2
 		}
 		else
 		{
-			mTargetSelectionRect = mSelectionLayout.Calculate(itemUnderCursor->layout->mData->worldRectangle);
+			mTargetSelectionRect = mSelectionLayout.Calculate(itemUnderCursor->GetLayoutData().worldRectangle);
 
 			auto hoverState = state["hover"];
 			if (hoverState)
@@ -688,16 +688,16 @@ namespace o2
 {
 		layout->Update();
 
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(layout->mData->worldRectangle);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(layout->mData->worldRectangle);
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
 
-		mChildrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 		
 		UpdateScrollParams();
 
-		RectF _mChildrenAbsRect = mChildrenWorldRect;
-		mChildrenWorldRect = layout->mData->worldRectangle;
+		RectF bufRect = GetLayoutData().childrenWorldRect;
+		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
 
 		if (mOwnHorScrollBar)
 			mHorScrollBar->UpdateSelfTransform();
@@ -705,7 +705,7 @@ namespace o2
 		if (mOwnVerScrollBar)
 			mVerScrollBar->UpdateSelfTransform();
 
-		mChildrenWorldRect = _mChildrenAbsRect;
+		GetLayoutData().childrenWorldRect = bufRect;
 	}
 
 	bool ContextMenu::IsInputTransparent() const

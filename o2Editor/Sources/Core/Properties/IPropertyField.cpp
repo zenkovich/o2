@@ -32,13 +32,13 @@ namespace Editor
 
 	void IPropertyField::UpdateChildren(float dt)
 	{
-		auto prevChildrenRect = mChildrenWorldRect;
+		auto prevChildrenRect = GetChildrenWorldRect();
 
 		if (mRemoveBtn)
-			mChildrenWorldRect.right -= 20;
+			GetLayoutData().childrenWorldRect.right -= 20;
 
 		HorizontalLayout::UpdateChildren(dt);
-		mChildrenWorldRect = prevChildrenRect;
+		GetLayoutData().childrenWorldRect = prevChildrenRect;
 	}
 
 	void IPropertyField::SetValueAndPrototypeProxy(const TargetsVec& targets)
@@ -141,13 +141,13 @@ namespace Editor
 
 	void IPropertyField::UpdateChildrenTransforms()
 	{
-		auto prevChildrenRect = mChildrenWorldRect;
+		auto prevChildrenRect = GetChildrenWorldRect();
 
 		if (mRemoveBtn)
-			mChildrenWorldRect.right -= 20;
+			GetLayoutData().childrenWorldRect.right -= 20;
 
 		HorizontalLayout::UpdateChildrenTransforms();
-		mChildrenWorldRect = prevChildrenRect;
+		GetLayoutData().childrenWorldRect = prevChildrenRect;
 	}
 
 	void IPropertyField::CheckValueChangeCompleted()

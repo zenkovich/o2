@@ -299,7 +299,7 @@ namespace Editor
 					RectF parentWorldRect;
 
 					if (parentWidget)
-						parentWorldRect = parentWidget->GetChildrenRect();
+						parentWorldRect = parentWidget->GetChildrenWorldRect();
 					else
 						parentWorldRect = parent->GetTransform().AABB();
 
@@ -347,7 +347,7 @@ namespace Editor
 				RectF parentWorldRect;
 
 				if (parentWidget)
-					parentWorldRect = parentWidget->GetChildrenRect();
+					parentWorldRect = parentWidget->GetChildrenWorldRect();
 				else if (parent)
 					parentWorldRect = parent->GetTransform().AABB();
 				else
@@ -1401,7 +1401,7 @@ namespace Editor
 		auto parent = object->GetEditableParent();
 		Basis parentTransform = parent->GetTransform();
 		if (auto parentWidget = dynamic_cast<Widget*>(parent))
-			parentTransform = parentWidget->GetChildrenRect();
+			parentTransform = parentWidget->GetChildrenWorldRect();
 
 		return parentTransform;
 	}
