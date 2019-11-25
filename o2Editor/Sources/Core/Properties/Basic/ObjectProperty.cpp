@@ -36,7 +36,7 @@ namespace Editor
 
 	void ObjectProperty::InitializeControls()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mSpoiler = FindChildByType<Spoiler>(false);
 		if (!mSpoiler)
@@ -74,7 +74,7 @@ namespace Editor
 
 	void ObjectProperty::Refresh()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		if (mSpoiler->IsExpanded())
 		{
@@ -153,7 +153,7 @@ namespace Editor
 
 	void ObjectProperty::OnExpand()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		if (mPropertiesInitialized)
 			return;

@@ -8,7 +8,9 @@ using namespace o2;
 
 namespace o2
 {
+	class Button;
 	class Spoiler;
+	class Widget;
 }
 
 namespace Editor
@@ -91,13 +93,18 @@ namespace Editor
 
 		TargetObjectsVec  mTargetObjects; // Target objects
 						 						    
-		PropertyFieldsVec mValueProperties;            // Values properties
-		PropertyFieldsVec mValuePropertiesPool;        // Unused value properties pool
-		IntegerProperty*  mCountProperty = nullptr;    // Vector count property
-		bool              mCountDifferents = false;    // Is targets counts of elements differents
-		int               mCountOfElements = 0;        // Common count of elements
+		PropertyFieldsVec mValueProperties;     // Values properties
+		PropertyFieldsVec mValuePropertiesPool; // Unused value properties pool
 
-		bool              mIsRefreshing = false;       // Is currently refreshing content. Need to prevent cycled size changing
+		IntegerProperty* mCountProperty = nullptr; // Vector count property
+
+		bool mCountDifferents = false; // Is targets counts of elements are different
+		int  mCountOfElements = 0;     // Common count of elements
+
+		Widget* mAddButtonContainer = nullptr; // Add button container, located under all elements
+		Button* mAddButton = nullptr;          // Add button, adds new element at end
+
+		bool mIsRefreshing = false;       // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
 		// Copies data of actor from other to this
@@ -117,6 +124,12 @@ namespace Editor
 
 		// It is called when count property changing
 		void OnCountChanged(IPropertyField* def);
+
+		// Sets new count of elements in vector
+		void Resize(int newCount);
+
+		// It is called when add button has pressed
+		void OnAddPressed();
 
 		// It is called when expanding spoiler, refreshing array properties
 		void OnExpand();
@@ -144,6 +157,8 @@ CLASS_FIELDS_META(Editor::VectorProperty)
 	PROTECTED_FIELD(mCountProperty);
 	PROTECTED_FIELD(mCountDifferents);
 	PROTECTED_FIELD(mCountOfElements);
+	PROTECTED_FIELD(mAddButtonContainer);
+	PROTECTED_FIELD(mAddButton);
 	PROTECTED_FIELD(mIsRefreshing);
 }
 END_META;
@@ -167,6 +182,8 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PROTECTED_FUNCTION(IPropertyField*, GetFreeValueProperty);
 	PROTECTED_FUNCTION(void, FreeValueProperty, IPropertyField*);
 	PROTECTED_FUNCTION(void, OnCountChanged, IPropertyField*);
+	PROTECTED_FUNCTION(void, Resize, int);
+	PROTECTED_FUNCTION(void, OnAddPressed);
 	PROTECTED_FUNCTION(void, OnExpand);
 	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);

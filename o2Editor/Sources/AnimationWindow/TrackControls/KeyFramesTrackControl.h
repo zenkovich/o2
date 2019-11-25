@@ -270,7 +270,7 @@ namespace Editor
 	template<typename AnimatedValueType>
 	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		Vector<UInt64> selectedHandles;
 		for (auto keyHandle : mHandles)

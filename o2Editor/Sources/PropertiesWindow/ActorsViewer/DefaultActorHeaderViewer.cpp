@@ -26,7 +26,7 @@ namespace Editor
 {
 	DefaultActorHeaderViewer::DefaultActorHeaderViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mDataView = mnew Widget();
 		mDataView->name = "actor head";

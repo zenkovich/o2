@@ -44,12 +44,12 @@ namespace Editor
 
 	int Scope::mDepth = 0;
 
-	PushScopeEnterOnStack::PushScopeEnterOnStack()
+	PushEditorScopeOnStack::PushEditorScopeOnStack()
 	{
 		Scope::Enter();
 	}
 
-	PushScopeEnterOnStack::~PushScopeEnterOnStack()
+	PushEditorScopeOnStack::~PushEditorScopeOnStack()
 	{
 		Scope::Exit();
 	}

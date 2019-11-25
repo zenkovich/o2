@@ -24,7 +24,7 @@ namespace Editor
 {
 	ImageAssetPropertiesViewer::ImageAssetPropertiesViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mContent = mnew VerticalLayout();
 		mContent->spacing = 5.0f;

@@ -13,7 +13,7 @@ namespace Editor
 
 	DefaultWidgetLayerPropertiesViewer::DefaultWidgetLayerPropertiesViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		mFitSizeButton = o2UI.CreateButton("Fit size by drawable", THIS_FUNC(FitLayerByDrawable));
 	}
 
@@ -40,7 +40,7 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::Rebuild()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		static Vector<String> hiddenFields = {
 			"name", "enabled", "locked", "layout"

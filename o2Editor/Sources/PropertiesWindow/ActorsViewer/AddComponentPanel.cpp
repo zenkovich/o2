@@ -186,13 +186,13 @@ namespace Editor
 
 	void ComponentsTree::UpdateVisibleNodes()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		Tree::UpdateVisibleNodes();
 	}
 
 	TreeNode* ComponentsTree::CreateTreeNodeWidget()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
 	}
 

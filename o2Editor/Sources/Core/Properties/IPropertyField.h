@@ -46,6 +46,9 @@ namespace Editor
 		// Copy-operator
 		IPropertyField& operator=(const IPropertyField& other);
 
+		// Updates children
+		void UpdateChildren(float dt) override;
+
 		// Sets targets pointers
 		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets);
 
@@ -63,6 +66,9 @@ namespace Editor
 
 		// Returns property caption
 		virtual WString GetCaption() const;
+
+		// Adds remove button
+		virtual Button* AddRemoveButton();
 
 		// Returns editing by this field type
 		virtual const Type* GetFieldType() const { return &TypeOf(void); }
@@ -135,12 +141,16 @@ namespace Editor
 		bool       mValuesDifferent = true; // Are values different
 
 		Button* mRevertBtn = nullptr; // Revert to source prototype button
+		Button* mRemoveBtn = nullptr; // Remove from array button
 		Label*  mCaption = nullptr;   // Caption label, null by default   
 
 		String           mValuesPath;         // Reflection path of target values
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
+		// Updates children and internal children transforms
+		void UpdateChildrenTransforms() override;
+
 		// Stores values to data
 		virtual void StoreValues(Vector<DataNode>& data) const {}
 
@@ -478,6 +488,7 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mValuesDifferent);
 	PROTECTED_FIELD(mRevertBtn);
+	PROTECTED_FIELD(mRemoveBtn);
 	PROTECTED_FIELD(mCaption);
 	PROTECTED_FIELD(mValuesPath);
 	PROTECTED_FIELD(mBeforeChangeValues);
@@ -492,6 +503,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(Button*, AddRemoveButton);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(void, SetValuePath, const String&);
@@ -503,6 +515,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
+	PROTECTED_FUNCTION(void, UpdateChildrenTransforms);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);

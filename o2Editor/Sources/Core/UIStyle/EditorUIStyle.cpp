@@ -2809,7 +2809,7 @@ namespace Editor
 										   Layout::BothStretch(-4, -4, -5, -5));
 
 		auto icon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_curves_mode.png"),
-										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
+									 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
 		Animation hoverAnim = Animation::EaseInOut(sample, "layer/regular/child/selectBack/transparency", 0.0f, 1.0f, 0.1f);
@@ -3168,6 +3168,177 @@ namespace Editor
 			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void EditorUIStyleBuilder::RebuildAnimationSpoiler()
+	{
+		auto sample = mnew SpoilerWithHead();
+		sample->SetHeadHeight(30);
+		sample->spacing = 5.0f;
+		sample->borderLeft = 10;
+		sample->borderTop = 5.0f;
+		sample->expandHeight = false;
+		sample->expandWidth = true;
+		sample->fitByChildren = true;
+		sample->baseCorner = BaseCorner::RightTop;
+
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->text = "Button";
+		captionText->horAlign = HorAlign::Left;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = true;
+		captionText->color = Color4(235, 255, 253);
+		sample->AddLayer("caption", captionText, Layout::HorStretch(VerAlign::Top, 41, 0, 20, 0));
+
+		auto expandBtn = o2UI.CreateWidget<Button>("expand");
+		expandBtn->name = "expand";
+		*expandBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, 0));
+		sample->AddInternalWidget(expandBtn);
+
+		auto playStopBtn = o2UI.CreateWidget<Toggle>("animation component play-stop");
+		playStopBtn->name = "play-stop";
+		*playStopBtn->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(20, 0));
+		sample->AddInternalWidget(playStopBtn);
+
+		auto removeBtn = o2UI.CreateWidget<Button>("remove small");
+		removeBtn->name = "expand";
+		*removeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 0));
+		sample->AddInternalWidget(removeBtn);
+
+		auto loopBtn = o2UI.CreateWidget<Toggle>("animation component loop");
+		loopBtn->name = "loop";
+		*loopBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-20, 0));
+		sample->AddInternalWidget(loopBtn);
+
+		auto bar = o2UI.CreateWidget<HorizontalProgress>("animation component bar");
+		bar->name = "bar";
+		*bar->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 2, 20);
+		sample->AddInternalWidget(bar);
+
+		o2UI.AddWidgetStyle(sample, "animation state");
+	}
+
+	void EditorUIStyleBuilder::RebuildAnimationComponentViewerPlayToggle()
+	{
+		Toggle* sample = mnew Toggle();
+		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
+		auto stopRootIconLayer = sample->AddLayer("stopRootIcon", nullptr);
+
+		auto playIconLayer = playRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_play_anim_regular.png"),
+															  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto playSelectIconLayer = playRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_play_anim_hover.png"),
+																	Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto playPressedIconLayer = playRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_play_anim_pressed.png"),
+																	 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto stopIconLayer = stopRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_stop_anim_regular.png"),
+															  Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto stopSelectIconLayer = stopRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_stop_anim_hover.png"),
+																	Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto stopPressedIconLayer = stopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_stop_anim_pressed.png"),
+																	 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		Animation playBtnSelectAnim = Animation::EaseInOut(sample, "layer/playRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnSelectAnim.AddAnimationValue<float>("layer/stopRootIcon/child/hover/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("hover", playBtnSelectAnim)->offStateAnimationSpeed = 0.25f;
+
+		Animation playBtnPressAnim = Animation::EaseInOut(sample, "layer/playRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*playBtnPressAnim.AddAnimationValue<float>("layer/stopRootIcon/child/pressed/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+
+		sample->AddState("pressed", playBtnPressAnim)->offStateAnimationSpeed = 0.5f;
+
+		Animation valueBtnPressAnim = Animation::EaseInOut(sample, "layer/playRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueBtnPressAnim.AddAnimationValue<float>("layer/stopRootIcon/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueBtnPressAnim);
+
+		o2UI.AddWidgetStyle(sample, "animation component play-stop");
+	}
+
+	void EditorUIStyleBuilder::RebuildAnimationComponentViewerLoopToggle()
+	{
+		Toggle* sample = mnew Toggle();
+		auto loopRootIconLayer = sample->AddLayer("loopRootIcon", nullptr);
+		auto nonLoopRootIconLayer = sample->AddLayer("nonLoopRootIcon", nullptr);
+
+		loopRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_anim_loop_regular.png"),
+										 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		loopRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_anim_loop_hover.png"),
+										 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		loopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_anim_loop_pressed.png"),
+										 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		nonLoopRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_non_loop_anim_regular.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		nonLoopRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_non_loop_anim_hover.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		nonLoopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_non_loop_anim_pressed.png"),
+											Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		Animation hoverAnim = Animation::EaseInOut(sample, "layer/loopRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
+		*hoverAnim.AddAnimationValue<float>("layer/nonLoopRootIcon/child/hover/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("hover", hoverAnim)->offStateAnimationSpeed = 0.25f;
+
+		Animation pressedAnim = Animation::EaseInOut(sample, "layer/loopRootIcon/child/pressed/transparency", 0.0f, 1.0f, 0.1f);
+		*pressedAnim.AddAnimationValue<float>("layer/nonLoopRootIcon/child/pressed/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.05f);
+
+		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 0.5f;
+
+		Animation valueAnim = Animation::EaseInOut(sample, "layer/loopRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		*valueAnim.AddAnimationValue<float>("layer/nonLoopRootIcon/transparency") =
+			AnimatedValue<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+
+		sample->AddState("value", valueAnim);
+
+		o2UI.AddWidgetStyle(sample, "animation component loop");
+	}
+
+	void EditorUIStyleBuilder::RebuildAnimationComponentViewerProgressBar()
+	{
+		HorizontalProgress* sample = mnew HorizontalProgress();
+		sample->layout->minSize = Vec2F(5, 5);
+		auto backLayer = sample->AddLayer("back", nullptr);
+		auto spriteBackLayer = backLayer->AddChildLayer("sprite", mnew Sprite(Color4(181, 203, 204)), Layout::BothStretch());
+
+		backLayer->interactableLayout = Layout(Vec2F(0.0f, 0.5f), Vec2F(1.0f, 0.5f), Vec2F(0, -4), Vec2F(0, 4));
+
+		auto barLayer = sample->AddLayer("bar", nullptr);
+		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite(Color4(248, 93, 72)), Layout::BothStretch());
+
+		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite(Color4(248, 93, 72).ChangeLightness(0.1f)), 
+													   Layout::BothStretch());
+
+		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite(Color4(248, 93, 72).ChangeLightness(-0.1f)), 
+														Layout::BothStretch());
+
+		sample->AddState("hover", Animation::EaseInOut(sample, "layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/bar/child/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->SetOrientation(HorizontalProgress::Orientation::Right);
+
+		o2UI.AddWidgetStyle(sample, "animation component bar");
 	}
 
 	void EditorUIStyleBuilder::RebuildFloatProperty()
@@ -4183,7 +4354,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildEditorUIManager(bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		String generateDateCachePath = "uiGeneratedDate.xml";
 

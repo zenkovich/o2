@@ -11,7 +11,7 @@ namespace Editor
 
 	IWidgetLayerPropertiesViewer::IWidgetLayerPropertiesViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 

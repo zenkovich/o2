@@ -16,7 +16,7 @@ namespace Editor
 {
 	TextViewer::TextViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		auto layout = mnew VerticalLayout();
 		layout->borderTop = 5;

@@ -157,7 +157,7 @@ namespace Editor
 	template<typename AnimationValueType>
 	void MapKeyFramesTrackControl::HandlesGroup<AnimationValueType>::CreateHandles()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		for (auto& key : animatedValue->GetKeys())
 		{

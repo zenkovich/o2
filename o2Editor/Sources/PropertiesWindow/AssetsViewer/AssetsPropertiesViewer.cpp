@@ -22,7 +22,7 @@ namespace Editor
 
 	AssetsPropertiesViewer::AssetsPropertiesViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		auto viewersTypes = TypeOf(IAssetPropertiesViewer).GetDerivedTypes();
 		for (auto type : viewersTypes)
@@ -52,7 +52,7 @@ namespace Editor
 
 	void AssetsPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mTargetAssets = targets.Cast<AssetRef*>();
 

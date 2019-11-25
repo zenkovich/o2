@@ -10,7 +10,7 @@ namespace Editor
 {
 	DefaultAssetPropertiesViewer::DefaultAssetPropertiesViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mPropertiesLayout = mnew VerticalLayout();
 		mPropertiesLayout->name = "properties";
@@ -46,7 +46,7 @@ namespace Editor
 
 	void DefaultAssetPropertiesViewer::SpecializeAssetType(const Type* type)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mAssetType = type;
 		o2EditorProperties.BuildObjectProperties((VerticalLayout*)mPropertiesLayout, type, mFieldProperties, "");

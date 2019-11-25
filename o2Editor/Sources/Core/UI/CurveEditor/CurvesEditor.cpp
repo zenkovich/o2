@@ -744,7 +744,7 @@ namespace Editor
 #undef DrawText
 	void CurvesEditor::AddCurveKeyHandles(CurveInfo* info, int keyId)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		KeyHandles* keyHandles = mnew KeyHandles(mMainHandleSample, mSupportHandleSample, this, info->color);
 		keyHandles->curveKeyIdx = keyId;

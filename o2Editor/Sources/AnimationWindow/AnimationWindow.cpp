@@ -96,7 +96,7 @@ namespace Editor
 
 	void AnimationWindow::InitializeWindow()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mWindow->caption = "Animation";
 		mWindow->name = "animation window";

@@ -203,13 +203,13 @@ namespace Editor
 
 	void AnimationPropertiesTree::UpdateVisibleNodes()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		Tree::UpdateVisibleNodes();
 	}
 
 	TreeNode* AnimationPropertiesTree::CreateTreeNodeWidget()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
 	}
 

@@ -126,6 +126,11 @@ namespace Editor
 		void RebuildAddComponentButton();
 		void RebuildAddComponentsTree();
 
+		void RebuildAnimationComponentViewerPlayToggle();
+		void RebuildAnimationComponentViewerLoopToggle();
+		void RebuildAnimationComponentViewerProgressBar();
+		void RebuildAnimationSpoiler();
+
 		void RebuildEditorUIManager(bool saveStyle = true, bool checkEditedDate = true);
 
 		IOBJECT(EditorUIStyleBuilder);
@@ -331,6 +336,10 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildSpoilerWithHead);
 	PUBLIC_FUNCTION(void, RebuildAddComponentButton);
 	PUBLIC_FUNCTION(void, RebuildAddComponentsTree);
+	PUBLIC_FUNCTION(void, RebuildAnimationComponentViewerPlayToggle);
+	PUBLIC_FUNCTION(void, RebuildAnimationComponentViewerLoopToggle);
+	PUBLIC_FUNCTION(void, RebuildAnimationComponentViewerProgressBar);
+	PUBLIC_FUNCTION(void, RebuildAnimationSpoiler);
 	PUBLIC_FUNCTION(void, RebuildEditorUIManager, bool, bool);
 }
 END_META;

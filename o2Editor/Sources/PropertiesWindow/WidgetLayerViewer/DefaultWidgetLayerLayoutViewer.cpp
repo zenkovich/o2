@@ -20,7 +20,7 @@ namespace Editor
 
 	DefaultWidgetLayerLayoutViewer::DefaultWidgetLayerLayoutViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		// Position
 		auto positionPropertyContainer = mnew Widget();

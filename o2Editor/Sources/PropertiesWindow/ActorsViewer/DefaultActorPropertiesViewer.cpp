@@ -54,7 +54,7 @@ namespace Editor
 
 	void DefaultActorPropertiesViewer::Rebuild()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		static Vector<String> hiddenFields ={
 			"prototype", "parent", "name", "layer", "layerName", "enabled", "locked", "tags", "transform",

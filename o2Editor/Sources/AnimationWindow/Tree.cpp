@@ -285,7 +285,7 @@ namespace Editor
 
 	TreeNode* AnimationTree::CreateTreeNodeWidget()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
 	}
 
@@ -379,7 +379,7 @@ namespace Editor
 
 	void AnimationTreeNode::InitilizeTrackControl()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		static Map<const Type*, const Type*> animatedValueToControlTrackTypes =
 		{

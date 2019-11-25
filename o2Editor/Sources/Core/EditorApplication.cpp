@@ -74,7 +74,7 @@ namespace Editor
 
 	void EditorApplication::OnStarted()
 	{
-		PushScopeEnterOnStack enterScope;
+		PushEditorScopeOnStack enterScope;
 
 		o2Application.SetWindowCaption("o2 Editor");
 

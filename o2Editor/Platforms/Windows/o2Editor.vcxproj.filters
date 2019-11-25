@@ -36,6 +36,9 @@
     <Filter Include="Sources\Core\UI\CurveEditor">
       <UniqueIdentifier>{e85dc53e-2443-4638-9c9c-cb08ece29777}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\PropertiesWindow\ActorsViewer\Components">
+      <UniqueIdentifier>{02b0e862-02b0-4a73-8ae1-3e230033210e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h">
@@ -205,9 +208,6 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Properties\IPropertyField.h">
       <Filter>Sources\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\AnimationViewer.h">
-      <Filter>Sources\Core\Properties\ObjectViewers</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\DefaultObjectViewer.h">
       <Filter>Sources\Core\Properties\ObjectViewers</Filter>
@@ -383,6 +383,12 @@
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\AddComponentPanel.h">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\Components\AnimationComponentViewer.h">
+      <Filter>Sources\PropertiesWindow\ActorsViewer\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\AnimationViewer.h">
+      <Filter>Sources\Core\Properties\ObjectViewers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp">
@@ -549,9 +555,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Properties\IPropertyField.cpp">
       <Filter>Sources\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\AnimationViewer.cpp">
-      <Filter>Sources\Core\Properties\ObjectViewers</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\DefaultObjectViewer.cpp">
       <Filter>Sources\Core\Properties\ObjectViewers</Filter>
@@ -729,6 +732,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\AddComponentPanel.cpp">
       <Filter>Sources\PropertiesWindow\ActorsViewer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\Components\AnimationComponentViewer.cpp">
+      <Filter>Sources\PropertiesWindow\ActorsViewer\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\AnimationViewer.cpp">
+      <Filter>Sources\Core\Properties\ObjectViewers</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

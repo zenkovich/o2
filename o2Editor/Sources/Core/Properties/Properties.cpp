@@ -207,7 +207,7 @@ namespace Editor
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		Vector<FieldInfo*> regularFields = fields.FindAll(
 			[&](FieldInfo* x) { return IsPropertyVisible(x, false); });
@@ -249,7 +249,7 @@ namespace Editor
 													const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 													const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		PushScopeEnterOnStack enterScope;
+		PushEditorScopeOnStack enterScope;
 
 		if (type->GetUsage() == Type::Usage::Vector)
 			return CreateVectorField(type, name, onChangeCompleted, onChanged);

@@ -67,6 +67,10 @@ namespace o2
 		void SetHSL(float hue, float saturation, float lightness);
 		void ToHSL(float& hue, float& saturation, float& lightness);
 
+		Color4& ChangeHue(float offset);
+		Color4& ChangeSaturation(float offset);
+		Color4& ChangeLightness(float offset);
+
 		Color4 BlendByAlpha(const Color4& other);
 
 		static Color4 White();

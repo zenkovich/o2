@@ -26,7 +26,7 @@ namespace Editor
 {
 	ActorViewer::ActorViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		// Create viewers
 		mHeaderViewer = mnew DefaultActorHeaderViewer();
@@ -147,7 +147,7 @@ namespace Editor
 
 	void ActorViewer::Refresh()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		if (mTargetActors.IsEmpty())
 			return;
@@ -175,7 +175,7 @@ namespace Editor
 
 	void ActorViewer::SetTargets(const Vector<IObject*> targets)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mTargetActors = targets.Select<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
 
@@ -203,7 +203,7 @@ namespace Editor
 
 	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		const Type* type = &mTargetActors[0]->GetType();
 		bool isAllSameType = mTargetActors.All([&](Actor* x) { return &x->GetType() == type; });
@@ -224,7 +224,7 @@ namespace Editor
 
 		if (!mActorPropertiesViewersPool.ContainsKey(type))
 		{
-			PushScopeEnterOnStack scope;
+			PushEditorScopeOnStack scope;
 
 			auto newViewer = (IActorPropertiesViewer*)(viewerSample->GetType().CreateSample());
 
@@ -270,7 +270,7 @@ namespace Editor
 
 	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mCommonComponentsTypes = GetCommonComponentsTypes(targets);
 

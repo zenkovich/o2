@@ -305,7 +305,7 @@ namespace Editor
 
 	void FoldersTree::UpdateVisibleNodes()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		Tree::UpdateNodesStructure();
 	}
 

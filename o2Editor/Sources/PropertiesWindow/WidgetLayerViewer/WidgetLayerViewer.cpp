@@ -17,7 +17,7 @@ namespace Editor
 {
 	WidgetLayerViewer::WidgetLayerViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mHeaderViewer = mnew DefaultWidgetLayerHeaderViewer();
 		mLayoutViewer = mnew DefaultWidgetLayerLayoutViewer();
@@ -101,7 +101,7 @@ namespace Editor
 
 	void WidgetLayerViewer::SetTargets(const Vector<IObject*> targets)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mTargetLayers = targets.Select<WidgetLayer*>([](auto x) { return dynamic_cast<WidgetLayer*>(x); });
 

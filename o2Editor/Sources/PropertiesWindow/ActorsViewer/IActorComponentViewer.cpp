@@ -2,6 +2,7 @@
 #include "IActorComponentViewer.h"
 
 #include "Core/EditorScope.h"
+#include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widget.h"
@@ -12,7 +13,7 @@ namespace Editor
 {
 	IActorComponentViewer::IActorComponentViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
@@ -21,7 +22,7 @@ namespace Editor
 		mSpoiler->fitByChildren = true;
 		mSpoiler->borderBottom = 5;
 		mSpoiler->borderRight = 5;
-		mSpoiler->SetCaption("Transform");
+		mSpoiler->SetCaption("COmponent");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
 		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
 		mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
@@ -42,6 +43,17 @@ namespace Editor
 	void IActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 	{
 		mTargetComponents = components;
+		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
+
+		if (!components.IsEmpty())
+		{
+			String caption = components[0]->GetName();
+			if (caption.IsEmpty())
+				caption = o2EditorProperties.MakeSmartFieldName(GetComponentType()->GetName());
+
+			mSpoiler->SetCaption(caption);
+			mSpoiler->GetIcon()->SetImageName(components[0]->GetIcon());
+		}
 	}
 
 	Widget* IActorComponentViewer::GetWidget() const
@@ -67,7 +79,7 @@ namespace Editor
 
 	bool IActorComponentViewer::IsBuiltWithEmpty() const
 	{
-		return false;
+		return mBuiltWithHidden;
 	}
 
 	void IActorComponentViewer::RemoveTargetComponents()

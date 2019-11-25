@@ -39,7 +39,7 @@ namespace o2
 		// Updates widget
 		void Update(float dt) override;
 
-		// Updates childs and dropdown list
+		// Updates children
 		void UpdateChildren(float dt) override;
 
 		// Sets scroll position

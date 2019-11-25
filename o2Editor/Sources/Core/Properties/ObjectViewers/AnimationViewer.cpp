@@ -12,7 +12,7 @@ namespace Editor
 	AnimationViewer::AnimationViewer() :
 		DefaultObjectViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mEditButton = o2UI.CreateButton("Edit", THIS_FUNC(OnEditPressed));
 	}

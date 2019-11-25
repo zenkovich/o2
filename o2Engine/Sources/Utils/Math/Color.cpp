@@ -263,6 +263,36 @@ namespace o2
 		}
 	}
 
+	Color4& Color4::ChangeHue(float offset)
+	{
+		float h, s, l;
+		ToHSL(h, s, l);
+		h = Math::Mod(h + offset, 1.0f);
+		SetHSL(h, s, l);
+
+		return *this;
+	}
+
+	Color4& Color4::ChangeSaturation(float offset)
+	{
+		float h, s, l;
+		ToHSL(h, s, l);
+		s = Math::Clamp(s + offset, 0.0f, 1.0f);
+		SetHSL(h, s, l);
+
+		return *this;
+	}
+
+	Color4& Color4::ChangeLightness(float offset)
+	{
+		float h, s, l;
+		ToHSL(h, s, l);
+		l = Math::Clamp(l + offset, 0.0f, 1.0f);
+		SetHSL(h, s, l);
+
+		return *this;
+	}
+
 	Color4 Color4::BlendByAlpha(const Color4& other)
 	{
 		float a1 = AF(), a2 = other.AF();
@@ -318,4 +348,5 @@ namespace o2
 		res.SetHSL(Math::Mod(startOffset + currCorner + currCycle*cycleOffset, 1.0f), 0.7f, 0.6f);
 		return res;
 	}
+
 }

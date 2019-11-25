@@ -24,7 +24,7 @@ namespace Editor
 
 	private:
 		const Type*         mRealObjectType = nullptr; // Specialized viewing object type
-		FieldPropertiesInfo mFieldProperties; // Field properties information
+		FieldPropertiesInfo mFieldProperties;          // Field properties information
 	};
 }
 

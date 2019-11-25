@@ -9,7 +9,7 @@ namespace Editor
 {
 	DefaultObjectViewer::DefaultObjectViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		auto layout = mnew VerticalLayout();
 		layout->spacing = 5;
@@ -23,7 +23,7 @@ namespace Editor
 
 	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		if (targetObjets.IsEmpty())
 			return;

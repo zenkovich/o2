@@ -31,7 +31,7 @@ namespace Editor
 	AssetsIconsScrollArea::AssetsIconsScrollArea() :
 		ScrollArea()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mGrid = mnew GridLayout();
 		*mGrid->layout = WidgetLayout::BothStretch();
@@ -57,7 +57,7 @@ namespace Editor
 		mHightlightSprite(other.mHightlightSprite->CloneAs<Sprite>()), mHightlightLayout(other.mHightlightLayout),
 		mHightlightAnim(other.mHightlightAnim), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>())
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		RemoveAllChildren();
 
@@ -184,7 +184,7 @@ namespace Editor
 
 	void AssetsIconsScrollArea::UpdateAssetsGridByCurrentPath()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		Focus();
 		DeselectAllAssets();

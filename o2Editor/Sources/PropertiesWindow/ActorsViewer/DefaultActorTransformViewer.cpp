@@ -22,7 +22,7 @@ namespace Editor
 {
 	DefaultActorTransformViewer::DefaultActorTransformViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		// Position
 		auto positionPropertyContainer = mnew Widget();

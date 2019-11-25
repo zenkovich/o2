@@ -10,7 +10,7 @@ namespace Editor
 {
 	IWidgetLayerLayoutViewer::IWidgetLayerLayoutViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 

@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "VectorProperty.h"
 
-#include "Scene/UI/UIManager.h"
-#include "Scene/UI/Widgets/Spoiler.h"
-#include "Core/Properties/Properties.h"
+#include "Core/EditorScope.h"
 #include "Core/Properties/Basic/IntegerProperty.h"
+#include "Core/Properties/Properties.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/Spoiler.h"
 #include "SceneWindow/SceneEditScreen.h"
 
 namespace Editor
@@ -34,6 +36,7 @@ namespace Editor
 
 	void VectorProperty::InitializeControls()
 	{
+		// Spoiler
 		mSpoiler = FindChildByType<Spoiler>(false);
 
 		if (!mSpoiler)
@@ -45,6 +48,7 @@ namespace Editor
 		if (mSpoiler)
 			mSpoiler->onExpand = THIS_FUNC(OnExpand);
 
+		// Count property
 		mCountProperty = mSpoiler->FindChildByType<IntegerProperty>(false);
 		if (!mCountProperty)
 		{
@@ -61,6 +65,31 @@ namespace Editor
 			mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
 		}
 
+		// Add button
+		mAddButtonContainer = mSpoiler->FindChildByTypeAndName<Widget>("add new");
+		if (!mAddButtonContainer)
+		{
+			mAddButtonContainer = mnew Widget();
+			mAddButtonContainer->name = "add new";
+			mAddButtonContainer->layout->minHeight = 20;
+			mSpoiler->AddChild(mAddButtonContainer);
+		}
+
+		mAddButton = mAddButtonContainer->FindChildByTypeAndName<Button>("add button");
+		if (!mAddButton)
+		{
+			mAddButton = o2UI.CreateWidget<Button>("add small");
+			mAddButton->name = "add button";
+			*mAddButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(2, 0));
+			mAddButton->onClick = THIS_FUNC(OnAddPressed);
+			mAddButton->isPointInside = [=](const Vec2F& point) {
+				return mAddButton->layout->IsPointInside(point) || mAddButtonContainer->IsUnderPoint(point);
+			};
+
+			mAddButtonContainer->AddChild(mAddButton);
+		}
+
+		// Other
 		expandHeight = true;
 		expandWidth = true;
 		fitByChildren = true;
@@ -92,6 +121,8 @@ namespace Editor
 
 	void VectorProperty::Refresh()
 	{
+		PushEditorScopeOnStack scope;
+
 		if (mTargetObjects.IsEmpty())
 			return;
 
@@ -135,6 +166,8 @@ namespace Editor
 
 				mValueProperties.Clear();
 
+				mAddButtonContainer->Hide(true);
+
 				onChanged(this);
 				o2EditorSceneScreen.OnSceneChanged();
 			}
@@ -164,7 +197,7 @@ namespace Editor
 				}
 
 				mSpoiler->AddChild(propertyDef);
-				propertyDef->SetCaption((String)"Element " + (String)i);
+				propertyDef->SetCaption((String)"# " + (String)i);
 				propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
 				propertyDef->SetValuePath((String)i);
 				propertyDef->onChangeCompleted =
@@ -179,6 +212,9 @@ namespace Editor
 				mSpoiler->RemoveChild(mValueProperties[i], false);
 				FreeValueProperty(mValueProperties[i]);
 			}
+
+			mAddButtonContainer->Show(true);
+			mAddButtonContainer->SetIndexInSiblings(mSpoiler->GetChildren().Count());
 
 			mSpoiler->SetLayoutDirty();
 
@@ -275,6 +311,8 @@ namespace Editor
 			return mValuePropertiesPool.PopBack();
 
 		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mType->GetElementType(), "Element", onChangeCompleted, onChanged);
+		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
+		res->AddRemoveButton();
 
 		if (res)
 			res->SpecializeType(mType->GetElementType());
@@ -292,40 +330,12 @@ namespace Editor
 		if (mIsRefreshing)
 			return;
 
-		Vector<DataNode> prevValues, newValues;
+		Resize(mCountProperty->GetCommonValue());
+	}
 
-		int newCount = mCountProperty->GetCommonValue();
-		auto elementFieldInfo = mType->GetElementFieldInfo();
-
-		auto availableTypes = elementFieldInfo->GetType()->GetDerivedTypes();
-		auto elementCreateType = availableTypes.IsEmpty() ? elementFieldInfo->GetType() : availableTypes.First();
-
-		for (auto& obj : mTargetObjects)
-		{
-			prevValues.Add(DataNode());
-			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(obj.first.data));
-			DataNode& elementsData = prevValues.Last()["Elements"];
-
-			int lastCount = mType->GetObjectVectorSize(obj.first.data);
-			for (int i = newCount; i < lastCount; i++)
-			{
-				elementFieldInfo->Serialize(mType->GetObjectVectorElementPtr(obj.first.data, i),
-								   *elementsData.AddNode("Element" + (String)i));
-			}
-
-			newValues.Add(DataNode());
-			newValues.Last()["Size"].SetValue(newCount);
-
-			mType->SetObjectVectorSize(obj.first.data, newCount);
-		}
-
-		Refresh();
-
-		if (prevValues != newValues)
-			onChangeCompleted(mValuesPath + "/count", prevValues, newValues);
-
-		onChanged(this);
-		o2EditorSceneScreen.OnSceneChanged();
+	void VectorProperty::OnAddPressed()
+	{
+		Resize(mCountOfElements + 1);
 	}
 
 	void VectorProperty::OnExpand()
@@ -363,6 +373,42 @@ namespace Editor
 			pair.first.SetValue();
 
 		onChangeCompleted(path, before, after);
+	}
+
+	void VectorProperty::Resize(int newCount)
+	{
+		Vector<DataNode> prevValues, newValues;
+		auto elementFieldInfo = mType->GetElementFieldInfo();
+
+		auto availableTypes = elementFieldInfo->GetType()->GetDerivedTypes();
+		auto elementCreateType = availableTypes.IsEmpty() ? elementFieldInfo->GetType() : availableTypes.First();
+
+		for (auto& obj : mTargetObjects)
+		{
+			prevValues.Add(DataNode());
+			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(obj.first.data));
+			DataNode& elementsData = prevValues.Last()["Elements"];
+
+			int lastCount = mType->GetObjectVectorSize(obj.first.data);
+			for (int i = newCount; i < lastCount; i++)
+			{
+				elementFieldInfo->Serialize(mType->GetObjectVectorElementPtr(obj.first.data, i),
+											*elementsData.AddNode("Element" + (String)i));
+			}
+
+			newValues.Add(DataNode());
+			newValues.Last()["Size"].SetValue(newCount);
+
+			mType->SetObjectVectorSize(obj.first.data, newCount);
+		}
+
+		Refresh();
+
+		if (prevValues != newValues)
+			onChangeCompleted(mValuesPath + "/count", prevValues, newValues);
+
+		onChanged(this);
+		o2EditorSceneScreen.OnSceneChanged();
 	}
 
 	void VectorProperty::TargetObjectData::Refresh()

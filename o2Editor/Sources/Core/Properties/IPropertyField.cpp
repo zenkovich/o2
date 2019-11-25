@@ -1,15 +1,16 @@
 #include "stdafx.h"
 #include "IPropertyField.h"
 
-#include "SceneWindow/SceneEditScreen.h"
+#include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widget.h"
+#include "Scene/UI/WidgetLayout.h"
+#include "Scene/UI/WidgetState.h"
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/Label.h"
-#include "Scene/UI/Widget.h"
-#include "Scene/UI/WidgetState.h"
+#include "SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {
-
 	IPropertyField::IPropertyField()
 	{
 		mRevertBtn = FindChildByType<Button>("revert");
@@ -27,6 +28,17 @@ namespace Editor
 	{
 		HorizontalLayout::operator=(other);
 		return *this;
+	}
+
+	void IPropertyField::UpdateChildren(float dt)
+	{
+		auto prevChildrenRect = mChildrenWorldRect;
+
+		if (mRemoveBtn)
+			mChildrenWorldRect.right -= 20;
+
+		HorizontalLayout::UpdateChildren(dt);
+		mChildrenWorldRect = prevChildrenRect;
 	}
 
 	void IPropertyField::SetValueAndPrototypeProxy(const TargetsVec& targets)
@@ -77,6 +89,15 @@ namespace Editor
 		return "";
 	}
 
+	Button* IPropertyField::AddRemoveButton()
+	{
+		mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
+		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(20, 0));
+		AddInternalWidget(mRemoveBtn);
+
+		return mRemoveBtn;
+	}
+
 	bool IPropertyField::IsValuesDifferent() const
 	{
 		return mValuesDifferent;
@@ -118,6 +139,17 @@ namespace Editor
 		SpecializeType(fieldInfo->GetType());
 	}
 
+	void IPropertyField::UpdateChildrenTransforms()
+	{
+		auto prevChildrenRect = mChildrenWorldRect;
+
+		if (mRemoveBtn)
+			mChildrenWorldRect.right -= 20;
+
+		HorizontalLayout::UpdateChildrenTransforms();
+		mChildrenWorldRect = prevChildrenRect;
+	}
+
 	void IPropertyField::CheckValueChangeCompleted()
 	{
 		Vector<DataNode> valuesData;
@@ -154,7 +186,6 @@ namespace Editor
 	{
 		CheckValueChangeCompleted();
 	}
-
 }
 
 DECLARE_CLASS(Editor::IPropertyField);

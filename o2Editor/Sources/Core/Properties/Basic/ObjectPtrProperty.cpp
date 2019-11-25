@@ -39,7 +39,7 @@ namespace Editor
 
 	void ObjectPtrProperty::InitializeControls()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mSpoiler = FindChildByType<Spoiler>(false);
 		if (!mSpoiler)
@@ -85,7 +85,7 @@ namespace Editor
 
 	void ObjectPtrProperty::Refresh()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		if (!mTargetObjects.IsEmpty())
 		{
@@ -216,7 +216,7 @@ namespace Editor
 
 	void ObjectPtrProperty::OnCreateOrDeletePressed()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		bool hasObject = !mTargetObjects.IsEmpty() && GetProxy(mTargetObjects[0].first) != nullptr;
 		if (hasObject)
@@ -264,7 +264,7 @@ namespace Editor
 
 	void ObjectPtrProperty::CreateObject(const ObjectType* type)
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		StoreValues(mBeforeChangeValues);
 		for (auto targetObj : mTargetObjects)

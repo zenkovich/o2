@@ -30,13 +30,13 @@ namespace Editor
 	// ---------------------------------------------------------------
 	// Pushing editor's scope here, and pop after stack frame finished
 	// ---------------------------------------------------------------
-	class PushScopeEnterOnStack
+	class PushEditorScopeOnStack
 	{
 	public: 
 		// Default constructor, calls Scope::Enter
-		PushScopeEnterOnStack();
+		PushEditorScopeOnStack();
 
 		// Destructor, calls Scope::Exit
-		~PushScopeEnterOnStack();
+		~PushEditorScopeOnStack();
 	};
 }

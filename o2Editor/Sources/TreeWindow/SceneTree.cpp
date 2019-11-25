@@ -156,13 +156,13 @@ namespace Editor
 
 	void SceneTree::UpdateVisibleNodes()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		Tree::UpdateVisibleNodes();
 	}
 
 	TreeNode* SceneTree::CreateTreeNodeWidget()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 		return Tree::CreateTreeNodeWidget();
 	}
 

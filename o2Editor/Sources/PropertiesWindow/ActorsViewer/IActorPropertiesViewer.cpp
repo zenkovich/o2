@@ -10,7 +10,7 @@ namespace Editor
 {
 	IActorPropertiesViewer::IActorPropertiesViewer()
 	{
-		PushScopeEnterOnStack scope;
+		PushEditorScopeOnStack scope;
 
 		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
