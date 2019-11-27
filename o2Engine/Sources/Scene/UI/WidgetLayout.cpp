@@ -641,7 +641,7 @@ namespace o2
 
 		if (mData->owner)
 		{
-			mData->childrenWorldRect = mData->worldRectangle;
+			mData->owner->SetChildrenWorldRect(mData->worldRectangle);
 			mData->owner->OnTransformUpdated();
 		}
 	}

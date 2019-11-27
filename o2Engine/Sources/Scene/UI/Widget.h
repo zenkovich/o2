@@ -312,6 +312,9 @@ namespace o2
 		// Returns layout data reference
 		const WidgetLayoutData& GetLayoutData() const;
 
+		// Sets children world rectangle. Here you can override children position
+		virtual void SetChildrenWorldRect(const RectF& childrenWorldRect);
+
 		// Moves widget's to delta and checks for clipping
 		virtual void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea);
 
@@ -784,6 +787,7 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
 	PROTECTED_FUNCTION(WidgetLayoutData&, GetLayoutData);
 	PROTECTED_FUNCTION(const WidgetLayoutData&, GetLayoutData);
+	PROTECTED_FUNCTION(void, SetChildrenWorldRect, const RectF&);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);

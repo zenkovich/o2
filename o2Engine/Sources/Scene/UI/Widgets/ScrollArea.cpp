@@ -70,9 +70,13 @@ namespace o2
 
 	void ScrollArea::Draw()
 	{
-		if (!mResEnabledInHierarchy || mIsClipped) {
-			for (auto child : mDrawingChildren)
-				child->Draw();
+		if (!mResEnabledInHierarchy || mIsClipped)
+		{
+			if (mIsClipped)
+			{
+				for (auto child : mDrawingChildren)
+					child->Draw();
+			}
 
 			return;
 		}
@@ -150,6 +154,17 @@ namespace o2
 
 				mVerScrollBar->Hide();
 			}
+		}
+	}
+
+	void ScrollArea::UpdateChildren(float dt)
+	{
+		Widget::UpdateChildren(dt);
+
+		if (mLayoutUpdated && !!mResEnabledInHierarchy)
+		{
+			CheckChildrenClipping();
+			UpdateScrollParams();
 		}
 	}
 
@@ -355,6 +370,12 @@ namespace o2
 		return mViewAreaLayout;
 	}
 
+	void ScrollArea::SetChildrenWorldRect(const RectF& childrenWorldRect)
+	{
+		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+	}
+
 	void ScrollArea::OnChildAdded(Widget* child)
 	{
 		child->GetLayoutData().drivenByParent = true;
@@ -408,47 +429,15 @@ namespace o2
 
 	void ScrollArea::UpdateSelfTransform()
 	{
-		layout->Update();
+		Widget::UpdateSelfTransform();
 
 		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
 		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
-	}
-
-	void ScrollArea::UpdateChildren(float dt)
-	{
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
-		for (auto child : mChildren)
-			child->Update(dt);
-
-		for (auto child : mChildren)
-			child->UpdateChildren(dt);
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
-
-		for (auto child : mInternalWidgets)
-			child->Update(dt);
-
-		for (auto child : mInternalWidgets)
-			child->UpdateChildren(dt);
-
-		if (mLayoutUpdated && !!mResEnabledInHierarchy)
-		{
-			CheckChildrenClipping();
-			UpdateScrollParams();
-		}
 	}
 
 	void ScrollArea::UpdateChildrenTransforms()
 	{
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
 		Widget::UpdateChildrenTransforms();
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		CheckChildrenClipping();
 		UpdateScrollParams();
@@ -472,37 +461,13 @@ namespace o2
 	void ScrollArea::MoveScrollPosition(const Vec2F& delta)
 	{
 		mScrollPos += delta;
-
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		SetChildrenWorldRect(GetLayoutData().worldRectangle);
 
 		Vec2F widgetsMove(-delta.x, delta.y);
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(widgetsMove, mAbsoluteClipArea);
 
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
-
 		UpdateScrollParams();
-	}
-
-	void ScrollArea::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
-	{
-		mBoundsWithChilds += delta;
-		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
-
-		if (!mIsClipped)
-			UpdateSelfTransform();
-
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
-		for (auto child : mChildWidgets)
-			child->MoveAndCheckClipping(delta, clipArea);
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
-
-		for (auto child : mInternalWidgets)
-			child->MoveAndCheckClipping(delta, clipArea);
 	}
 
 	void ScrollArea::CheckChildrenClipping()
@@ -521,20 +486,6 @@ namespace o2
 			child->CheckClipping(newClipArea);
 	}
 
-	void ScrollArea::CalculateScrollArea()
-	{
-		Vec2F offset;
-		InitializeScrollAreaRectCalculation(offset);
-
-		for (auto child : mChildWidgets)
-		{
-			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(ContextMenu))
-				continue;
-
-			RecalculateScrollAreaRect(child->GetLayoutData().rectangle, offset);
-		}
-	}
-
 	void ScrollArea::RecalculateScrollAreaRect(const RectF &childRect, const Vec2F &offset)
 	{
 		mScrollArea.left = Math::Min(mScrollArea.left, childRect.left - offset.x);
@@ -547,8 +498,22 @@ namespace o2
 	{
 		mScrollArea = RectF(0.0f, 0.0f, mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height());
 
-		offset = GetChildrenWorldRect().LeftBottom() - GetLayoutData().worldRectangle.LeftBottom() -
-			GetChildrenWorldRect().Size()*layout->pivot + Vec2F(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+		offset = mAbsoluteViewArea.LeftBottom() - GetLayoutData().worldRectangle.LeftBottom() -
+			mAbsoluteViewArea.Size()*layout->pivot + Vec2F(Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+	}
+
+	void ScrollArea::CalculateScrollArea()
+	{
+		Vec2F offset;
+		InitializeScrollAreaRectCalculation(offset);
+
+		for (auto child : mChildWidgets)
+		{
+			if (!child->mResEnabledInHierarchy || child->GetType() == TypeOf(ContextMenu))
+				continue;
+
+			RecalculateScrollAreaRect(child->GetLayoutData().rectangle, offset);
+		}
 	}
 
 	void ScrollArea::UpdateScrollParams()

@@ -171,11 +171,11 @@ namespace o2
 		// It is called when child widget was removed
 		void OnChildRemoved(Widget* child) override;
 
+		// Sets children world rectangle. Moves children rectangle to scroll position offset
+		void SetChildrenWorldRect(const RectF& childrenWorldRect) override;
+
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
-
-		// Moves widget's to delta and checks for clipping
-		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
 
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
@@ -290,8 +290,8 @@ CLASS_METHODS_META(o2::ScrollArea)
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
+	PROTECTED_FUNCTION(void, SetChildrenWorldRect, const RectF&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);

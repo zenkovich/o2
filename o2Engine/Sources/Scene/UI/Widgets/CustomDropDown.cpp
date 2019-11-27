@@ -293,8 +293,6 @@ namespace o2
 	void CustomDropDown::UpdateSelfTransform()
 {
 		layout->Update();
-
-		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
 		mAbsoluteClip = mClipLayout.Calculate(GetLayoutData().worldRectangle);
 	}
 

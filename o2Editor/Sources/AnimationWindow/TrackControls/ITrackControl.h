@@ -73,7 +73,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ITrackControl)
 {
-	BASE_CLASS(Widget);
+	BASE_CLASS(o2::Widget);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ITrackControl)

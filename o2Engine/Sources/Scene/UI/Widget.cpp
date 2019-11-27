@@ -185,14 +185,23 @@ namespace o2
 		for (auto child : mChildren)
 			child->Update(dt);
 
+		RectF childrenWorldRect = GetLayoutData().childrenWorldRect;
+		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
+
 		for (auto child : mInternalWidgets)
 			child->Update(dt);
+
+		GetLayoutData().childrenWorldRect = childrenWorldRect;
 
 		for (auto child : mChildren)
 			child->UpdateChildren(dt);
 
+		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
+
 		for (auto child : mInternalWidgets)
 			child->UpdateChildren(dt);
+
+		GetLayoutData().childrenWorldRect = childrenWorldRect;
 	}
 
 	void Widget::UpdateTransform()
@@ -209,11 +218,16 @@ namespace o2
 	{
 		Actor::UpdateChildrenTransforms();
 
+		RectF childrenWorldRect = GetLayoutData().childrenWorldRect;
+		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
+
 		for (auto child : mInternalWidgets)
 			child->UpdateSelfTransform();
 
 		for (auto child : mInternalWidgets)
 			child->UpdateChildrenTransforms();
+
+		GetLayoutData().childrenWorldRect = childrenWorldRect;
 	}
 
 	void Widget::SetLayoutDirty()
@@ -223,8 +237,6 @@ namespace o2
 
 	void Widget::Draw()
 	{
-		DrawDebugFrame();
-
 		if (!mResEnabledInHierarchy || mIsClipped)
 		{
 			if (mIsClipped) 
@@ -997,6 +1009,11 @@ namespace o2
 		return *layout->mData;
 	}
 
+	void Widget::SetChildrenWorldRect(const RectF& childrenWorldRect)
+	{
+		layout->mData->childrenWorldRect = childrenWorldRect;
+	}
+
 	void Widget::OnDeserialized(const DataNode& node)
 	{
 		Actor::OnDeserialized(node);
@@ -1253,8 +1270,6 @@ namespace o2
 
 	void Widget::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
 	{
-		RectF last = mBoundsWithChilds;
-
 		mBoundsWithChilds += delta;
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 
@@ -1264,8 +1279,13 @@ namespace o2
 		for (auto child : mChildWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
 
+		RectF childrenWorldRect = GetLayoutData().childrenWorldRect;
+		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
+
 		for (auto child : mInternalWidgets)
 			child->MoveAndCheckClipping(delta, clipArea);
+
+		GetLayoutData().childrenWorldRect = childrenWorldRect;
 	}
 
 #if IS_EDITOR

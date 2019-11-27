@@ -217,9 +217,9 @@ namespace Editor
 
 CLASS_BASES_META(Editor::KeyHandlesSheet)
 {
-	BASE_CLASS(Widget);
-	BASE_CLASS(SelectableDragHandlesGroup);
-	BASE_CLASS(CursorAreaEventsListener);
+	BASE_CLASS(o2::Widget);
+	BASE_CLASS(o2::SelectableDragHandlesGroup);
+	BASE_CLASS(o2::CursorAreaEventsListener);
 }
 END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
