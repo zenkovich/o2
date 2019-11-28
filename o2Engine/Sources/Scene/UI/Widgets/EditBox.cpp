@@ -692,22 +692,6 @@ namespace o2
 		}
 	}
 
-	void EditBox::UpdateSelfTransform()
-{
-		layout->Update();
-
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-
-		mTextDrawable->SetRect(mAbsoluteViewArea + roundedScrollPos);
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
-		UpdateScrollParams();
-		UpdateSelectionAndCaret();
-	}
-
 	bool EditBox::IsUnderPoint(const Vec2F& point)
 	{
 		return mDrawingScissorRect.IsInside(point) && mAbsoluteViewArea.IsInside(point);
@@ -763,6 +747,14 @@ namespace o2
 
 		for (UInt i = 0; i < mSelectionMesh->vertexCount; i++)
 			mSelectionMesh->vertices[i].color = selectionClr;
+	}
+
+	void EditBox::UpdateLayersLayouts()
+	{
+		ScrollArea::UpdateLayersLayouts();
+
+		mTextDrawable->SetRect(GetChildrenWorldRect());
+		UpdateSelectionAndCaret();
 	}
 
 	void EditBox::UpdateSelectionAndCaret()

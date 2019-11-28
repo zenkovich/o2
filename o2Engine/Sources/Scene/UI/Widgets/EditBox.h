@@ -144,9 +144,6 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
 
-		// Updates layout
-		void UpdateSelfTransform() override;
-
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
 
@@ -190,6 +187,9 @@ namespace o2
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
+
+		// Updates layers layouts, calls after updating widget layout
+		void UpdateLayersLayouts() override;
 
 		// It is called when visible was changed
 		void OnResEnableInHierarchyChanged() override;
@@ -358,11 +358,11 @@ CLASS_METHODS_META(o2::EditBox)
 	PUBLIC_FUNCTION(float, GetCaretBlinkingDelay);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);

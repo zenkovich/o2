@@ -988,9 +988,6 @@ namespace o2
 	{
 		mIsNeedUpdateVisibleNodes = false;
 
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
 		int lastMinVisible = mMinVisibleNodeIdx;
 		int lastMaxVisible = mMaxVisibleNodeIdx;
 
@@ -1065,8 +1062,6 @@ namespace o2
 
 		if (mIsDraggingNodes)
 			OnDraggedAbove(this);
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 	}
 
 	void Tree::CreateVisibleNodeWidget(Node* node, int i)
@@ -1354,16 +1349,8 @@ namespace o2
 
 	void Tree::MoveScrollPosition(const Vec2F& delta)
 	{
-		mScrollPos += delta;
-
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-
+		ScrollArea::MoveScrollPosition(delta);
 		UpdateVisibleNodes();
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
-
-		UpdateScrollParams();
 
 		mTargetHoverRect += delta;
 		mCurrentHoverRect += delta;

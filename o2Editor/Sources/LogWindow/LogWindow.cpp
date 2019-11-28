@@ -55,7 +55,7 @@ namespace Editor
 
 		Widget* listItemSample = mnew Widget();
 		listItemSample->layout->minHeight = 25;
-		listItemSample->AddLayer("back", mnew Sprite(Color4(212, 216, 224, 100)));
+		listItemSample->AddLayer("back", mnew Sprite(Color4(0, 0, 0, 255)));
 		listItemSample->AddLayer("warning", mnew Sprite(Color4(226, 198, 83, 255)),
 								 Layout::VerStretch(HorAlign::Left, 0, 0, 10, 0));
 		listItemSample->AddLayer("error", mnew Sprite(Color4(248, 94, 72, 255)),
@@ -195,7 +195,7 @@ namespace Editor
 
 		item->layer["warning"]->GetDrawable()->enabled = message->type == LogMessage::Type::Warning;
 		item->layer["error"]->GetDrawable()->enabled = message->type == LogMessage::Type::Error;
-		item->layer["back"]->GetDrawable()->enabled = message->idx % 2 == 1;
+		item->layer["back"]->GetDrawable()->transparency = message->idx % 2 == 1 ? 0.05f : 0.0f;
 
 		Text* text = item->GetLayerDrawable<Text>("caption");
 		text->text = message->message.SubStr(0, message->message.Find("\n"));

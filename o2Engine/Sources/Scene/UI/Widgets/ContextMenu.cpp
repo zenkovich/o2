@@ -684,30 +684,6 @@ namespace o2
 
 	ContextMenu* ContextMenu::mVisibleContextMenu = nullptr;
 
-	void ContextMenu::UpdateSelfTransform()
-{
-		layout->Update();
-
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
-		
-		UpdateScrollParams();
-
-		RectF bufRect = GetLayoutData().childrenWorldRect;
-		GetLayoutData().childrenWorldRect = GetLayoutData().worldRectangle;
-
-		if (mOwnHorScrollBar)
-			mHorScrollBar->UpdateSelfTransform();
-
-		if (mOwnVerScrollBar)
-			mVerScrollBar->UpdateSelfTransform();
-
-		GetLayoutData().childrenWorldRect = bufRect;
-	}
-
 	bool ContextMenu::IsInputTransparent() const
 	{
 		return false;

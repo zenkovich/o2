@@ -217,21 +217,9 @@ namespace o2
 
 	void LongList::MoveScrollPosition(const Vec2F& delta)
 	{
-		mScrollPos += delta;
-
-		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
+		ScrollArea::MoveScrollPosition(delta);
 
 		UpdateVisibleItems();
-
-		for (auto child : mChildWidgets)
-		{
-			child->UpdateSelfTransform();
-			child->UpdateChildrenTransforms();
-			child->mIsClipped = false;
-		}
-
-		GetLayoutData().childrenWorldRect = mAbsoluteViewArea;
 
 		mTargetSelectionRect += delta;
 		mTargetHoverRect += delta;
@@ -241,8 +229,6 @@ namespace o2
 
 		mSelectionDrawable->SetRect(mCurrentSelectionRect);
 		mHoverDrawable->SetRect(mCurrentHoverRect);
-
-		UpdateScrollParams();
 	}
 
 	void LongList::UpdateVisibleItems()
@@ -315,6 +301,13 @@ namespace o2
 		mChildren.Add(itemsWidgets.Cast<Actor*>());
 		mChildWidgets.Add(itemsWidgets);
 		mDrawingChildren.Add(itemsWidgets);
+
+		for (auto child : mChildWidgets)
+		{
+			child->UpdateSelfTransform();
+			child->UpdateChildrenTransforms();
+			child->mIsClipped = false;
+		}
 	}
 
 	void LongList::OnCursorPressed(const Input::Cursor& cursor)

@@ -816,12 +816,12 @@ namespace o2
 
 		Button* closeBtn = o2UI.CreateWidget<Button>("close");
 		closeBtn->name = "closeButton";
-		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(4, -22));
+		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(4, -18));
 		sample->AddInternalWidget(closeBtn);
 
 		Button* optionsBtn = o2UI.CreateWidget<Button>("arrow");
 		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-12, -22));
+		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-12, -18));
 		sample->AddInternalWidget(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head
