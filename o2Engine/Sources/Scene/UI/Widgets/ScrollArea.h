@@ -105,9 +105,6 @@ namespace o2
 		// Returns view layout
 		Layout GetViewLayout() const;
 
-		// Updates layout
-		void UpdateSelfTransform() override;
-
 		// Updates children transforms, calculates scroll rectangle and updates scrollbars
 		void UpdateChildrenTransforms() override;
 
@@ -281,7 +278,6 @@ CLASS_METHODS_META(o2::ScrollArea)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, SetViewLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetViewLayout);
-	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);

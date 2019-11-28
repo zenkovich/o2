@@ -179,12 +179,12 @@ namespace Editor
 		// additional elements
 		Button* closeBtn = o2UI.CreateWidget<Button>("close");
 		closeBtn->name = "closeButton";
-		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 20));
+		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(0, 2));
 		sample->AddInternalWidget(closeBtn);
 
 		Button* optionsBtn = o2UI.CreateWidget<Button>("arrow");
 		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 20));
+		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-16, 2));
 		sample->AddInternalWidget(optionsBtn);
 
 		// drag handles

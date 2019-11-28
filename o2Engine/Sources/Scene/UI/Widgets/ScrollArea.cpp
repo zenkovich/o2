@@ -373,6 +373,10 @@ namespace o2
 	void ScrollArea::SetChildrenWorldRect(const RectF& childrenWorldRect)
 	{
 		Vec2F roundedScrollPos(-Math::Round(mScrollPos.x), Math::Round(mScrollPos.y));
+
+		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
+		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
+
 		GetLayoutData().childrenWorldRect = mAbsoluteViewArea + roundedScrollPos;
 	}
 
@@ -425,14 +429,6 @@ namespace o2
 				}
 			}
 		}
-	}
-
-	void ScrollArea::UpdateSelfTransform()
-	{
-		Widget::UpdateSelfTransform();
-
-		mAbsoluteViewArea = mViewAreaLayout.Calculate(GetLayoutData().worldRectangle);
-		mAbsoluteClipArea = mClipAreaLayout.Calculate(GetLayoutData().worldRectangle);
 	}
 
 	void ScrollArea::UpdateChildrenTransforms()

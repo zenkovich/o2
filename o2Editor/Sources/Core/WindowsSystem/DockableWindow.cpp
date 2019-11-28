@@ -68,6 +68,7 @@ namespace Editor
 			mDockingFrameCurrent = Math::Lerp(mDockingFrameCurrent, mDockingFrameTarget, dt*lerpFrameCoef);
 			mDockingFrameSample->rect = mDockingFrameCurrent;
 		}
+
 		mDockingFrameAppearance.Update(dt);
 	}
 
