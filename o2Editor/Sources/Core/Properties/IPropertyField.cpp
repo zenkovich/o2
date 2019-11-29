@@ -30,17 +30,6 @@ namespace Editor
 		return *this;
 	}
 
-	void IPropertyField::UpdateChildren(float dt)
-	{
-		auto prevChildrenRect = GetChildrenWorldRect();
-
-		if (mRemoveBtn)
-			GetLayoutData().childrenWorldRect.right -= 20;
-
-		HorizontalLayout::UpdateChildren(dt);
-		GetLayoutData().childrenWorldRect = prevChildrenRect;
-	}
-
 	void IPropertyField::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
 		mValuesProxies = targets;
@@ -92,7 +81,7 @@ namespace Editor
 	Button* IPropertyField::AddRemoveButton()
 	{
 		mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(20, 0));
+		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, 0));
 		AddInternalWidget(mRemoveBtn);
 
 		return mRemoveBtn;
@@ -139,15 +128,11 @@ namespace Editor
 		SpecializeType(fieldInfo->GetType());
 	}
 
-	void IPropertyField::UpdateChildrenTransforms()
+	void IPropertyField::SetChildrenWorldRect(const RectF& childrenWorldRect)
 	{
-		auto prevChildrenRect = GetChildrenWorldRect();
-
+		GetLayoutData().childrenWorldRect = childrenWorldRect;
 		if (mRemoveBtn)
-			GetLayoutData().childrenWorldRect.right -= 20;
-
-		HorizontalLayout::UpdateChildrenTransforms();
-		GetLayoutData().childrenWorldRect = prevChildrenRect;
+			GetLayoutData().childrenWorldRect.right -= 20.0f;
 	}
 
 	void IPropertyField::CheckValueChangeCompleted()

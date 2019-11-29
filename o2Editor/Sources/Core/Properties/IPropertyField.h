@@ -46,9 +46,6 @@ namespace Editor
 		// Copy-operator
 		IPropertyField& operator=(const IPropertyField& other);
 
-		// Updates children
-		void UpdateChildren(float dt) override;
-
 		// Sets targets pointers
 		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets);
 
@@ -148,8 +145,8 @@ namespace Editor
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
-		// Updates children and internal children transforms
-		void UpdateChildrenTransforms() override;
+		// Sets children world rectangle. Moves children rectangle to scroll position offset
+		void SetChildrenWorldRect(const RectF& childrenWorldRect) override;
 
 		// Stores values to data
 		virtual void StoreValues(Vector<DataNode>& data) const {}
@@ -497,7 +494,6 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
 {
 
-	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
 	PUBLIC_FUNCTION(void, Refresh);
@@ -516,7 +512,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
-	PROTECTED_FUNCTION(void, UpdateChildrenTransforms);
+	PROTECTED_FUNCTION(void, SetChildrenWorldRect, const RectF&);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);

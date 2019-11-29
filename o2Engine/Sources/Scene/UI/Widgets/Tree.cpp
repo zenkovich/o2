@@ -986,6 +986,8 @@ namespace o2
 
 	void Tree::UpdateVisibleNodes()
 	{
+		UpdateSelfTransform();
+
 		mIsNeedUpdateVisibleNodes = false;
 
 		int lastMinVisible = mMinVisibleNodeIdx;
