@@ -113,12 +113,12 @@ namespace Editor
 
 	float AnimationTree::GetLineNumber(float worldPosition) const
 	{
-		return (layout->GetWorldTop() - worldPosition + mScrollPos.y) / mNodeWidgetSample->layout->GetMinimalHeight();
+		return (layout->GetWorldTop() - worldPosition + mScrollPos.y) / mNodeWidgetSample->layout->GetMinHeight();
 	}
 
 	float AnimationTree::GetLineWorldPosition(float lineNumber) const
 	{
-		return -(lineNumber * mNodeWidgetSample->layout->GetMinimalHeight() - mScrollPos.y - layout->GetWorldTop());
+		return -(lineNumber * mNodeWidgetSample->layout->GetMinHeight() - mScrollPos.y - layout->GetWorldTop());
 	}
 
 	void AnimationTree::InitializeContext()

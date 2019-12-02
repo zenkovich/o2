@@ -151,7 +151,7 @@ namespace Editor
 		Label* label = o2UI.CreateWidget<Label>();
 		label->name = "propertyName";
 		label->horAlign = HorAlign::Left;
-		label->layout->widthWeight = 1.0f;
+		label->layout->widthWeight = 0.6f;
 		label->horOverflow = Label::HorOverflow::Dots;
 
 		property->AddChild(label, 0);

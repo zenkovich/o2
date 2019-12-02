@@ -324,7 +324,7 @@ namespace o2
 		SetDirty();
 	}
 
-	float WidgetLayout::GetMinimalWidth() const
+	float WidgetLayout::GetMinWidth() const
 	{
 		return mData->minSize.x;
 	}
@@ -336,7 +336,7 @@ namespace o2
 		SetDirty();
 	}
 
-	float WidgetLayout::GetMinimalHeight() const
+	float WidgetLayout::GetMinHeight() const
 	{
 		return mData->minSize.y;
 	}
@@ -360,7 +360,7 @@ namespace o2
 		SetDirty();
 	}
 
-	float WidgetLayout::GetMaximalWidth() const
+	float WidgetLayout::GetMaxWidth() const
 	{
 		return mData->maxSize.x;
 	}
@@ -372,7 +372,7 @@ namespace o2
 		SetDirty();
 	}
 
-	float WidgetLayout::GetMaximalHeight() const
+	float WidgetLayout::GetMaxHeight() const
 	{
 		return mData->maxSize.y;
 	}

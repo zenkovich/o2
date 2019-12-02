@@ -34,12 +34,12 @@ namespace o2
 		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
 
 		PROPERTY(Vec2F, minSize, SetMinimalSize, GetMinimalSize);      // Minimal size property
-		PROPERTY(float, minWidth, SetMinimalWidth, GetMinimalWidth);   // Minimal width property
-		PROPERTY(float, minHeight,SetMinimalHeight, GetMinimalHeight); // Minimal height property
+		PROPERTY(float, minWidth, SetMinimalWidth, GetMinWidth);   // Minimal width property
+		PROPERTY(float, minHeight,SetMinimalHeight, GetMinHeight); // Minimal height property
 
 		PROPERTY(Vec2F, maxSize, SetMaximalSize, GetMaximalSize);       // Maximum size property
-		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaximalWidth);    // Maximum width property
-		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaximalHeight); // Maximum height property
+		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaxWidth);    // Maximum width property
+		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaxHeight); // Maximum height property
 
 		PROPERTY(Vec2F, weight, SetWeight, GetWeight);                   // Layout weight property
 		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property
@@ -189,13 +189,13 @@ namespace o2
 		void SetMinimalWidth(float value);
 
 		// Returns minimal width
-		float GetMinimalWidth() const;
+		float GetMinWidth() const;
 
 		// Sets minimal height, enables size check
 		void SetMinimalHeight(float value);
 
 		// Returns minimal height
-		float GetMinimalHeight() const;
+		float GetMinHeight() const;
 
 		// Sets maximal size, enables size check
 		void SetMaximalSize(const Vec2F& maxSize);
@@ -207,13 +207,13 @@ namespace o2
 		void SetMaximalWidth(float value);
 
 		// Returns maximal width
-		float GetMaximalWidth() const;
+		float GetMaxWidth() const;
 
 		// Sets maximal height, enables size check
 		void SetMaximalHeight(float value);
 
 		// Returns maximal height
-		float GetMaximalHeight() const;
+		float GetMaxHeight() const;
 
 		// Disables size checking
 		void DisableSizeChecks();
@@ -381,15 +381,15 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	PUBLIC_FUNCTION(void, SetMinimalSize, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetMinimalSize);
 	PUBLIC_FUNCTION(void, SetMinimalWidth, float);
-	PUBLIC_FUNCTION(float, GetMinimalWidth);
+	PUBLIC_FUNCTION(float, GetMinWidth);
 	PUBLIC_FUNCTION(void, SetMinimalHeight, float);
-	PUBLIC_FUNCTION(float, GetMinimalHeight);
+	PUBLIC_FUNCTION(float, GetMinHeight);
 	PUBLIC_FUNCTION(void, SetMaximalSize, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, GetMaximalSize);
 	PUBLIC_FUNCTION(void, SetMaximalWidth, float);
-	PUBLIC_FUNCTION(float, GetMaximalWidth);
+	PUBLIC_FUNCTION(float, GetMaxWidth);
 	PUBLIC_FUNCTION(void, SetMaximalHeight, float);
-	PUBLIC_FUNCTION(float, GetMaximalHeight);
+	PUBLIC_FUNCTION(float, GetMaxHeight);
 	PUBLIC_FUNCTION(void, DisableSizeChecks);
 	PUBLIC_FUNCTION(void, EnableSizeChecks);
 	PUBLIC_FUNCTION(void, SetWeight, const Vec2F&);

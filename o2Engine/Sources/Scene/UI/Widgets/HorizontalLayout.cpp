@@ -5,14 +5,14 @@
 
 namespace o2
 {
-	HorizontalLayout::HorizontalLayout(): Widget()
+	HorizontalLayout::HorizontalLayout() : Widget()
 	{
 		SetLayoutDirty();
 	}
 
-	HorizontalLayout::HorizontalLayout(const HorizontalLayout& other):
+	HorizontalLayout::HorizontalLayout(const HorizontalLayout& other) :
 		mBaseCorner(other.mBaseCorner), mSpacing(other.mSpacing), mBorder(other.mBorder), mExpandWidth(other.mExpandWidth),
-		mExpandHeight(other.mExpandHeight), Widget(other), mFitByChildren(other.mFitByChildren), baseCorner(this), 
+		mExpandHeight(other.mExpandHeight), Widget(other), mFitByChildren(other.mFitByChildren), baseCorner(this),
 		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
 		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
@@ -21,7 +21,7 @@ namespace o2
 	}
 
 	HorizontalLayout::~HorizontalLayout()
-	{}
+	{ }
 
 	HorizontalLayout& HorizontalLayout::operator=(const HorizontalLayout& other)
 	{
@@ -140,7 +140,7 @@ namespace o2
 	}
 
 	void HorizontalLayout::UpdateSelfTransform()
-{
+	{
 		UpdateLayoutParametres();
 
 		if (mFitByChildren)
@@ -155,10 +155,10 @@ namespace o2
 	{
 		const HorizontalLayout& other = dynamic_cast<const HorizontalLayout&>(otherActor);
 
-		mBaseCorner   = other.mBaseCorner;
-		mSpacing      = other.mSpacing;
-		mBorder       = other.mBorder;
-		mExpandWidth  = other.mExpandWidth;
+		mBaseCorner = other.mBaseCorner;
+		mSpacing = other.mSpacing;
+		mBorder = other.mBorder;
+		mExpandWidth = other.mExpandWidth;
 		mExpandHeight = other.mExpandHeight;
 
 		Widget::CopyData(other);
@@ -431,7 +431,7 @@ namespace o2
 
 	void HorizontalLayout::ExpandSizeByChilds()
 	{
-		const static Vec2F relativePivots[] ={
+		const static Vec2F relativePivots[] = {
 			Vec2F(0.0f, 0.5f), // Left
 			Vec2F(1.0f, 0.5f), // Right
 			Vec2F(0.5f, 1.0f), // Top
@@ -461,67 +461,69 @@ namespace o2
 
 	Vector<float> HorizontalLayout::CalculateExpandedWidths()
 	{
-		int ichildCount = mChildWidgets.Count();
-		float childCount = (float)ichildCount;
-		float availableWidth = GetChildrenWorldRect().Width() - mBorder.left - mBorder.right;
-		float minWidthSum = mChildWidgets.Sum<float>([&](Widget* child) { return child->layout->GetMinimalWidth(); });
-		float expandValue = Math::Max(availableWidth - minWidthSum - (childCount - 1.0f)*mSpacing, 0.0f);
+		int childCount = mChildWidgets.Count();
+		Vector<float> minWidths(childCount);
+		Vector<float> maxWidths(childCount);
+		Vector<float> weights(childCount);
 
-		Vector<float> widths(ichildCount + 1);
-		mChildWidgets.ForEach([&](auto child) { widths.Add(child->layout->GetMinimalWidth()); });
+		float minWidthsSum = 0;
+		float weightsSum = 0;
 
-		while (expandValue > 0)
+		for (auto child : mChildWidgets)
 		{
-			float minSz = FLT_MAX;
-			float maxSzWeight = 0.0f;
-			float minSzWeightsSum = 0.0f;
-			Vector<int> minSzChilds(ichildCount + 1);
+			float minWidth = child->layout->GetMinWidth();
+			float maxWidth = child->layout->GetMaxWidth();
+			float weight = child->layout->GetWidthWeight();
 
-			for (int i = 0; i < widths.Count(); i++)
+			minWidthsSum += minWidth;
+
+			if (minWidth < maxWidth)
+				weightsSum += weight;
+
+			minWidths.Add(minWidth);
+			maxWidths.Add(maxWidth);
+			weights.Add(weight);
+		}
+
+		Vector<float> widths = minWidths;
+
+		float availableWidth = GetChildrenWorldRect().Width() - mBorder.left - mBorder.right;
+		float expandWidth = availableWidth - minWidthsSum;
+
+		while (expandWidth > 0)
+		{
+			float currentExpand = expandWidth;
+			float invWeightsSum = 1.0f/weightsSum;
+
+			for (int i = 0; i < childCount; i++)
 			{
-				float w = widths[i];
-				if (Math::Equals(w, minSz))
+				if (widths[i] < maxWidths[i])
 				{
-					float wweight = mChildWidgets[i]->layout->GetWidthWeight();
-					maxSzWeight = Math::Max(maxSzWeight, wweight);
-					minSzWeightsSum += wweight;
-					minSzChilds.Add(i);
-				}
+					float expand = currentExpand*weights[i]*invWeightsSum;
+					float maxExpand = maxWidths[i] - widths[i];
 
-				if (w < minSz)
-				{
-					minSz = w;
-					minSzChilds.Clear();
-					minSzChilds.Add(i);
-					float wweight = mChildWidgets[i]->layout->GetWidthWeight();
-					maxSzWeight = wweight;
-					minSzWeightsSum = wweight;
+					if (expand > maxExpand)
+					{
+						float coef = maxExpand/expand;
+						currentExpand *= coef;
+					}
 				}
 			}
 
-			float needsDelta = 0.0f;
-			if (minSzChilds.Count() == ichildCount)
+			for (int i = 0; i < childCount; i++)
 			{
-				needsDelta = expandValue;
-			}
-			else
-			{
-				float nearestToMinSz = FLT_MAX;
-
-				for (int i = 0; i < widths.Count(); i++)
+				if (widths[i] < maxWidths[i])
 				{
-					if (widths[i] > minSz && widths[i] < nearestToMinSz)
-						nearestToMinSz = widths[i];
-				}
+					widths[i] += currentExpand*weights[i]*invWeightsSum;
 
-				float deffToNearest = nearestToMinSz - minSz;
-				needsDelta = Math::Min((nearestToMinSz - minSz)*minSzWeightsSum/maxSzWeight, expandValue);
+					if (widths[i] >= maxWidths[i])
+					{
+						weightsSum -= weights[i];
+					}
+				}
 			}
 
-			float expValueByWeight = needsDelta/minSzWeightsSum;
-			minSzChilds.ForEach([&](int idx) { widths[idx] += expValueByWeight*mChildWidgets[idx]->layout->GetWidthWeight(); });
-
-			expandValue -= needsDelta;
+			expandWidth -= currentExpand;
 		}
 
 		return widths;

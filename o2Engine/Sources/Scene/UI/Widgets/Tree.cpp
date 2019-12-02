@@ -507,7 +507,7 @@ namespace o2
 		bool someSelected = false;
 
 		int idx = 0;
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		for (auto node : mAllNodes)
 		{
 			if (mSelectedNodes.Contains(node))
@@ -960,7 +960,7 @@ namespace o2
 	void Tree::DrawZebraBack()
 	{
 		float pos = -mScrollPos.y;
-		float lineSize = mNodeWidgetSample->layout->GetMinimalHeight();
+		float lineSize = mNodeWidgetSample->layout->GetMinHeight();
 		while (pos < -lineSize)
 			pos += lineSize*2.0f;
 
@@ -1099,7 +1099,7 @@ namespace o2
 
 	void Tree::UpdateNodeView(Node* node, TreeNode* widget, int idx)
 	{
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		node->widget = widget;
 
 		FillNodeDataByObject(widget, node->object);
@@ -1125,7 +1125,7 @@ namespace o2
 
 	void Tree::UpdateNodeWidgetLayout(Node* node, int idx)
 	{
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		float dragModeOffset = 0.0f;
 
 		if (mIsDraggingNodes)
@@ -1138,7 +1138,7 @@ namespace o2
 	int Tree::GetNodeIndex(float position) const
 	{
 		int res = 0;
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 
 		if (mExpandingNodeState != ExpandState::None && position > mExpandingNodeBottomPosition)
 		{
@@ -1152,7 +1152,7 @@ namespace o2
 
 	float Tree::GetNodePosition(int idx) const
 	{
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 
 		float res = (float)idx*nodeHeight;
 
@@ -1180,7 +1180,7 @@ namespace o2
 			NodesVec newNodes;
 			InsertNodes(node, position, &newNodes);
 
-			float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+			float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 			float topViewBorder = mScrollPos.y;
 			float bottomViewBorder = topViewBorder + mAbsoluteViewArea.Height();
 			int idx = position;
@@ -1250,7 +1250,7 @@ namespace o2
 	{
 		int idx = mAllNodes.Find(node);
 
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 
 		mExpandingNodeIdx = idx;
 		mExpandingNodePosition = mExpandingNodeIdx*nodeHeight + nodeHeight;
@@ -1322,7 +1322,7 @@ namespace o2
 		mExpandingNodeCurrHeight = mExpandingNodeFunc.Evaluate(mExpandingNodeCurrCoef)*mExpandingNodeTargetHeight;
 		mExpandingNodeBottomPosition = mExpandingNodePosition + mExpandingNodeCurrHeight;
 
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		float offs = mExpandingNodeBottomPosition - lastExpandBottom;
 		for (int i = Math::Max(mExpandingNodeIdx + mExpandingNodeChildsCount + 1, mMinVisibleNodeIdx); i <= mMaxVisibleNodeIdx && i < mAllNodes.Count(); i++)
 		{
@@ -1386,7 +1386,7 @@ namespace o2
 	{
 		if (!mIsDraggingNodes)
 		{
-			float a = (float)mAllNodes.Count()*mNodeWidgetSample->layout->GetMinimalHeight();
+			float a = (float)mAllNodes.Count()*mNodeWidgetSample->layout->GetMinHeight();
 			float b = mAbsoluteViewArea.top - cursor.position.y + mScrollPos.y;
 			bool isCursorUnderNode = a > b;
 
@@ -1567,7 +1567,7 @@ namespace o2
 
 	void Tree::UpdateDraggingInsertionAnim(float dt)
 	{
-		float nodeHeight = mNodeWidgetSample->layout->GetMinimalHeight();
+		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		for (auto node : mVisibleNodes)
 		{
 			bool changed = false;

@@ -193,7 +193,7 @@ namespace o2
 		Vec2F offset;
 		InitializeScrollAreaRectCalculation(offset);
 
-		float itemsHeight = (float)getItemsCountFunc()*mItemSample->layout->GetMinimalHeight();
+		float itemsHeight = (float)getItemsCountFunc()*mItemSample->layout->GetMinHeight();
 		RecalculateScrollAreaRect(RectF(0, mAbsoluteViewArea.Height(), mAbsoluteViewArea.Width(), mAbsoluteViewArea.Height() - itemsHeight), Vec2F());
 	}
 

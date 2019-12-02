@@ -460,67 +460,69 @@ namespace o2
 
 	Vector<float> VerticalLayout::CalculateExpandedHeights()
 	{
-		int ichildCount = mChildWidgets.Count();
-		float childCount = (float)ichildCount;
-		float availableHeight = GetChildrenWorldRect().Height() - mBorder.bottom - mBorder.top;
-		float minHeightSum = mChildWidgets.Sum<float>([&](Widget* child) { return child->layout->GetMinimalHeight(); });
-		float expandValue = Math::Max(availableHeight - minHeightSum - (childCount - 1.0f)*mSpacing, 0.0f);
+		int childCount = mChildWidgets.Count();
+		Vector<float> minHeights(childCount);
+		Vector<float> maxHeights(childCount);
+		Vector<float> weights(childCount);
 
-		Vector<float> heights(ichildCount + 1);
-		mChildWidgets.ForEach([&](Widget* child) { heights.Add(child->layout->GetMinimalHeight()); });
+		float minHeightsSum = 0;
+		float weightsSum = 0;
 
-		while (expandValue > 0)
+		for (auto child : mChildWidgets)
 		{
-			float minSz = FLT_MAX;
-			float maxSzWeight = 0.0f;
-			float minSzWeightsSum = 0.0f;
-			Vector<int> minSzChilds(ichildCount + 1);
+			float minHeight = child->layout->GetMinHeight();
+			float maxHeight = child->layout->GetMaxHeight();
+			float weight = child->layout->GetHeightWeight();
 
-			for (int i = 0; i < heights.Count(); i++)
+			minHeightsSum += minHeight;
+
+			if (minHeight < maxHeight)
+				weightsSum += weight;
+
+			minHeights.Add(minHeight);
+			maxHeights.Add(maxHeight);
+			weights.Add(weight);
+		}
+
+		Vector<float> heights = minHeights;
+
+		float availableHeight = GetChildrenWorldRect().Height() - mBorder.left - mBorder.right;
+		float expandHeight = availableHeight - minHeightsSum;
+
+		while (expandHeight > 0)
+		{
+			float currentExpand = expandHeight;
+			float invWeightsSum = 1.0f/weightsSum;
+
+			for (int i = 0; i < childCount; i++)
 			{
-				float h = heights[i];
-				if (Math::Equals(h, minSz))
+				if (heights[i] < maxHeights[i])
 				{
-					float wweight = mChildWidgets[i]->layout->GetHeightWeight();
-					maxSzWeight = Math::Max(maxSzWeight, wweight);
-					minSzWeightsSum += wweight;
-					minSzChilds.Add(i);
-				}
+					float expand = currentExpand*weights[i]*invWeightsSum;
+					float maxExpand = maxHeights[i] - heights[i];
 
-				if (h < minSz)
-				{
-					minSz = h;
-					minSzChilds.Clear();
-					minSzChilds.Add(i);
-					float wweight = mChildWidgets[i]->layout->GetHeightWeight();
-					maxSzWeight = wweight;
-					minSzWeightsSum = wweight;
+					if (expand > maxExpand)
+					{
+						float coef = maxExpand/expand;
+						currentExpand *= coef;
+					}
 				}
 			}
 
-			float needsDelta = 0.0f;
-			if (minSzChilds.Count() == ichildCount)
+			for (int i = 0; i < childCount; i++)
 			{
-				needsDelta = expandValue;
-			}
-			else
-			{
-				float nearestToMinSz = FLT_MAX;
-
-				for (int i = 0; i < heights.Count(); i++)
+				if (heights[i] < maxHeights[i])
 				{
-					if (heights[i] > minSz && heights[i] < nearestToMinSz)
-						nearestToMinSz = heights[i];
-				}
+					heights[i] += currentExpand*weights[i]*invWeightsSum;
 
-				float deffToNearest = nearestToMinSz - minSz;
-				needsDelta = Math::Min((nearestToMinSz - minSz)*minSzWeightsSum/maxSzWeight, expandValue);
+					if (heights[i] >= maxHeights[i])
+					{
+						weightsSum -= weights[i];
+					}
+				}
 			}
 
-			float expValueByWeight = needsDelta/minSzWeightsSum;
-			minSzChilds.ForEach([&](int idx) { heights[idx] += expValueByWeight*mChildWidgets[idx]->layout->GetHeightWeight(); });
-
-			expandValue -= needsDelta;
+			expandHeight -= currentExpand;
 		}
 
 		return heights;

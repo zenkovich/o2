@@ -3356,16 +3356,14 @@ namespace Editor
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
 		editBox->name = "editBox";
 		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		layout->AddChild(editBox);
 
 		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
 		revertBtn->name = "revert";
 		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		sample->AddChild(revertBtn);
 
-		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+		Animation revertStateAnim = Animation::EaseInOut(sample, "child/revert/layout/maxWidth", 0.0f, 20.0f, 0.15f);
 		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
