@@ -176,7 +176,7 @@ namespace Editor
 		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch();
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -207,16 +207,7 @@ namespace Editor
 		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		box->AddChild(linkBtn);
 
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revertBtn";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
 		layout->AddChild(box);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/box/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revertBtn/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}

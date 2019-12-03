@@ -145,9 +145,6 @@ namespace Editor
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
-		// Sets children world rectangle. Moves children rectangle to scroll position offset
-		void SetChildrenWorldRect(const RectF& childrenWorldRect) override;
-
 		// Stores values to data
 		virtual void StoreValues(Vector<DataNode>& data) const {}
 
@@ -512,7 +509,6 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
-	PROTECTED_FUNCTION(void, SetChildrenWorldRect, const RectF&);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);

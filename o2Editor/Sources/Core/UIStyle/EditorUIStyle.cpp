@@ -3321,10 +3321,10 @@ namespace Editor
 		auto barLayer = sample->AddLayer("bar", nullptr);
 		auto barRegularSprite = barLayer->AddChildLayer("regular", mnew Sprite(Color4(248, 93, 72)), Layout::BothStretch());
 
-		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite(Color4(248, 93, 72).ChangeLightness(0.1f)), 
+		auto barSelectSprite = barLayer->AddChildLayer("hover", mnew Sprite(Color4(248, 93, 72).ChangeLightness(0.1f)),
 													   Layout::BothStretch());
 
-		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite(Color4(248, 93, 72).ChangeLightness(-0.1f)), 
+		auto barPressedSprite = barLayer->AddChildLayer("pressed", mnew Sprite(Color4(248, 93, 72).ChangeLightness(-0.1f)),
 														Layout::BothStretch());
 
 		sample->AddState("hover", Animation::EaseInOut(sample, "layer/bar/child/hover/transparency", 0.0f, 1.0f, 0.1f))
@@ -3355,16 +3355,8 @@ namespace Editor
 
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
 		editBox->name = "editBox";
-		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch();
 		layout->AddChild(editBox);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-		sample->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/revert/layout/maxWidth", 0.0f, 20.0f, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3383,18 +3375,8 @@ namespace Editor
 
 		auto editBox = o2UI.CreateEditBox("red singleline");
 		editBox->name = "editBox";
-		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
+		*editBox->layout = WidgetLayout::BothStretch();
 		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "red");
 	}
@@ -3413,18 +3395,8 @@ namespace Editor
 
 		auto editBox = o2UI.CreateEditBox("green singleline");
 		editBox->name = "editBox";
-		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
+		*editBox->layout = WidgetLayout::BothStretch();
 		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "green");
 	}
@@ -3443,18 +3415,8 @@ namespace Editor
 
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
 		editBox->name = "editBox";
-		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
+		*editBox->layout = WidgetLayout::BothStretch();
 		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3474,7 +3436,7 @@ namespace Editor
 		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch();
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -3504,17 +3466,7 @@ namespace Editor
 		auto linkBtn = o2UI.CreateWidget<Button>("asset link");
 		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
 		box->AddChild(linkBtn);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
 		layout->AddChild(box);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/box/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3547,18 +3499,8 @@ namespace Editor
 
 		Toggle* toggle = o2UI.CreateToggle("", "without caption");
 		toggle->name = "toggle";
-		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
+		*toggle->layout = WidgetLayout::BothStretch();
 		layout->AddChild(toggle);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/toggle/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3577,7 +3519,7 @@ namespace Editor
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
@@ -3624,18 +3566,6 @@ namespace Editor
 		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -3653,7 +3583,7 @@ namespace Editor
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
@@ -3700,18 +3630,6 @@ namespace Editor
 		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -3729,22 +3647,11 @@ namespace Editor
 
 		auto box = mnew Widget();
 		box->name = "box";
-		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
-									   Layout::BothStretch(-9, -9, -9, -9));
+		*box->layout = WidgetLayout::BothStretch();
+		box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
+					  Layout::BothStretch(-9, -9, -9, -9));
 
 		layout->AddChild(box);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/box/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3764,7 +3671,7 @@ namespace Editor
 		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch();
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -3788,17 +3695,7 @@ namespace Editor
 		nameText->dotsEngings = true;
 		nameText->color = Color4(96, 125, 139);
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
 		layout->AddChild(box);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/box/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3818,7 +3715,7 @@ namespace Editor
 		auto box = mnew Widget();
 		box->name = "box";
 		box->SetFocusable(true);
-		*box->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*box->layout = WidgetLayout::BothStretch();
 
 		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
 									   Layout::BothStretch(-9, -9, -9, -9));
@@ -3835,16 +3732,7 @@ namespace Editor
 		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
 		layout->AddChild(box);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/box/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3863,19 +3751,8 @@ namespace Editor
 
 		DropDown* dropDown = o2UI.CreateDropdown();
 		dropDown->name = "dropdown";
-		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*dropDown->layout = WidgetLayout::BothStretch();
 		layout->AddChild(dropDown);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(dropDown);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/dropdown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3894,19 +3771,8 @@ namespace Editor
 
 		DropDown* dropDown = o2UI.CreateDropdown();
 		dropDown->name = "dropdown";
-		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*dropDown->layout = WidgetLayout::BothStretch();
 		layout->AddChild(dropDown);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(dropDown);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/dropdown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -3923,10 +3789,9 @@ namespace Editor
 		layout->name = "layout";
 		sample->AddChild(layout);
 
-
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
@@ -3973,18 +3838,6 @@ namespace Editor
 		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -4002,7 +3855,7 @@ namespace Editor
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto leftLabel = o2UI.CreateLabel("L");
@@ -4049,18 +3902,6 @@ namespace Editor
 		*bottomProperty->layout = WidgetLayout(Vec2F(0.75f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(bottomProperty);
 
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -4077,19 +3918,8 @@ namespace Editor
 		sample->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("singleline");
-		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch();
 		layout->AddChild(editBox);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -4107,19 +3937,8 @@ namespace Editor
 		sample->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("singleline");
-		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*editBox->layout = WidgetLayout::BothStretch();
 		layout->AddChild(editBox);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -4139,17 +3958,6 @@ namespace Editor
 		EditBox* editBox = o2UI.CreateEditBox("singleline");
 		layout->AddChild(editBox);
 
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -4167,7 +3975,7 @@ namespace Editor
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto xLabel = o2UI.CreateLabel("X");
@@ -4192,18 +4000,6 @@ namespace Editor
 		*yProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(yProperty);
 
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -4221,7 +4017,7 @@ namespace Editor
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto xLabel = o2UI.CreateLabel("X");
@@ -4246,18 +4042,6 @@ namespace Editor
 		*yProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(yProperty);
 
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
-
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
@@ -4275,7 +4059,7 @@ namespace Editor
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
-		*propertiesLayout->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
+		*propertiesLayout->layout = WidgetLayout::BothStretch();
 		layout->AddChild(propertiesLayout);
 
 		auto xLabel = o2UI.CreateLabel("X");
@@ -4299,18 +4083,6 @@ namespace Editor
 		yProperty->name = "y";
 		*yProperty->layout = WidgetLayout(Vec2F(0.5f, 0), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0));
 		propertiesLayout->AddChild(yProperty);
-
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(layout);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/properties/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "colored");
 	}

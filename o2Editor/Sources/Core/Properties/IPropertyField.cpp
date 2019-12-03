@@ -13,10 +13,6 @@ namespace Editor
 {
 	IPropertyField::IPropertyField()
 	{
-		mRevertBtn = FindChildByType<Button>("revert");
-		if (mRevertBtn)
-			mRevertBtn->onClick = THIS_FUNC(Revert);
-
 		mCaption = FindChildByType<Label>("caption");
 	}
 
@@ -81,8 +77,10 @@ namespace Editor
 	Button* IPropertyField::AddRemoveButton()
 	{
 		mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, 0));
-		AddInternalWidget(mRemoveBtn);
+		mRemoveBtn->name = "remove";
+		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+		mRemoveBtn->layout->maxWidth = 20;
+		AddChild(mRemoveBtn);
 
 		return mRemoveBtn;
 	}
@@ -128,13 +126,6 @@ namespace Editor
 		SpecializeType(fieldInfo->GetType());
 	}
 
-	void IPropertyField::SetChildrenWorldRect(const RectF& childrenWorldRect)
-	{
-		GetLayoutData().childrenWorldRect = childrenWorldRect;
-		if (mRemoveBtn)
-			GetLayoutData().childrenWorldRect.right -= 20.0f;
-	}
-
 	void IPropertyField::CheckValueChangeCompleted()
 	{
 		Vector<DataNode> valuesData;
@@ -151,8 +142,30 @@ namespace Editor
 
 	void IPropertyField::CheckRevertableState()
 	{
+		bool isRevertable = IsValueRevertable();
+
+		if (isRevertable)
+		{
+			mRevertBtn = FindChildByType<Button>("revert");
+
+			if (!mRevertBtn)
+			{
+				mRevertBtn = o2UI.CreateWidget<Button>("revert");
+				*mRevertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+				mRevertBtn->layout->maxWidth = 0;
+				AddChild(mRevertBtn);
+
+				Animation revertStateAnim = Animation::EaseInOut(this, "child/revert/layout/maxWidth", 0.0f, 20.0f, 0.15f);
+				*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+				AddState("revert", revertStateAnim);
+			}
+
+			if (mRevertBtn)
+				mRevertBtn->onClick = THIS_FUNC(Revert);
+		}
+
 		if (auto revertState = state["revert"])
-			*revertState = IsValueRevertable();
+			*revertState = isRevertable;
 	}
 
 	void IPropertyField::OnValueChanged()
