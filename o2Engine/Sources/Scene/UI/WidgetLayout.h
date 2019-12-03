@@ -69,7 +69,7 @@ namespace o2
 		void Update() override;
 
 		// Sets transform dirty and needed to update. Checks is driven by parent and marks parent as dirty too
-		void SetDirty(bool fromParent = true) override;
+		void SetDirty(bool fromParent = false) override;
 
 		// Copies data parameters from other layout
 		void CopyFrom(const ActorTransform& other);
@@ -303,6 +303,9 @@ namespace o2
 
 		SERIALIZABLE(WidgetLayoutData);
 	};
+
+	// Calculates children widths or heights by weights and min/max sizes
+	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth);
 }
 
 CLASS_BASES_META(o2::WidgetLayout)

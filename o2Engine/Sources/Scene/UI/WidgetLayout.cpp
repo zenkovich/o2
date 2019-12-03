@@ -6,14 +6,14 @@
 
 namespace o2
 {
-	WidgetLayout::WidgetLayout():
+	WidgetLayout::WidgetLayout() :
 		ActorTransform(mnew WidgetLayoutData())
 	{
 		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
 		mCheckMinMaxFunc = &WidgetLayout::DontCheckMinMax;
 	}
 
-	WidgetLayout::WidgetLayout(const WidgetLayout& other):
+	WidgetLayout::WidgetLayout(const WidgetLayout& other) :
 		ActorTransform(mnew WidgetLayoutData()), anchorMin(this), anchorMax(this), offsetMin(this), offsetMax(this),
 		anchorLeft(this), anchorRight(this), anchorBottom(this), anchorTop(this), offsetLeft(this),
 		offsetBottom(this), offsetTop(this), minSize(this), minWidth(this), minHeight(this),
@@ -27,7 +27,7 @@ namespace o2
 	}
 
 	WidgetLayout::WidgetLayout(const Vec2F& anchorMin, const Vec2F& anchorMax,
-								   const Vec2F& offsetMin, const Vec2F& offsetMax):
+							   const Vec2F& offsetMin, const Vec2F& offsetMax) :
 		ActorTransform(mnew WidgetLayoutData())
 	{
 		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
@@ -41,7 +41,7 @@ namespace o2
 	}
 
 	WidgetLayout::WidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
-								   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom):
+							   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom) :
 		ActorTransform(mnew WidgetLayoutData())
 	{
 		mData = static_cast<WidgetLayoutData*>(ActorTransform::mData);
@@ -436,67 +436,67 @@ namespace o2
 		WidgetLayout res;
 		switch (corner)
 		{
-			case BaseCorner::Left:
-			res.mData->anchorMin = Vec2F(0.0f, 0.5f);
-			res.mData->anchorMax = Vec2F(0.0f, 0.5f);
-			res.mData->offsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
-			res.mData->offsetMax = Vec2F(size.x, size.y*0.5f) + offset;
-			break;
+		case BaseCorner::Left:
+		res.mData->anchorMin = Vec2F(0.0f, 0.5f);
+		res.mData->anchorMax = Vec2F(0.0f, 0.5f);
+		res.mData->offsetMin = Vec2F(0.0f, -size.y*0.5f) + offset;
+		res.mData->offsetMax = Vec2F(size.x, size.y*0.5f) + offset;
+		break;
 
-			case BaseCorner::Right:
-			res.mData->anchorMin = Vec2F(1.0f, 0.5f);
-			res.mData->anchorMax = Vec2F(1.0f, 0.5f);
-			res.mData->offsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
-			res.mData->offsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
-			break;
-			case BaseCorner::Top:
-			res.mData->anchorMin = Vec2F(0.5f, 1.0f);
-			res.mData->anchorMax = Vec2F(0.5f, 1.0f);
-			res.mData->offsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
-			res.mData->offsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
-			break;
+		case BaseCorner::Right:
+		res.mData->anchorMin = Vec2F(1.0f, 0.5f);
+		res.mData->anchorMax = Vec2F(1.0f, 0.5f);
+		res.mData->offsetMin = Vec2F(-size.x, -size.y*0.5f) + offset;
+		res.mData->offsetMax = Vec2F(0.0f, size.y*0.5f) + offset;
+		break;
+		case BaseCorner::Top:
+		res.mData->anchorMin = Vec2F(0.5f, 1.0f);
+		res.mData->anchorMax = Vec2F(0.5f, 1.0f);
+		res.mData->offsetMin = Vec2F(-size.x*0.5f, -size.y) + offset;
+		res.mData->offsetMax = Vec2F(size.x*0.5f, 0.0f) + offset;
+		break;
 
-			case BaseCorner::Bottom:
-			res.mData->anchorMin = Vec2F(0.5f, 0.0f);
-			res.mData->anchorMax = Vec2F(0.5f, 0.0f);
-			res.mData->offsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
-			res.mData->offsetMax = Vec2F(size.x*0.5f, size.y) + offset;
-			break;
+		case BaseCorner::Bottom:
+		res.mData->anchorMin = Vec2F(0.5f, 0.0f);
+		res.mData->anchorMax = Vec2F(0.5f, 0.0f);
+		res.mData->offsetMin = Vec2F(-size.x*0.5f, 0.0f) + offset;
+		res.mData->offsetMax = Vec2F(size.x*0.5f, size.y) + offset;
+		break;
 
-			case BaseCorner::Center:
-			res.mData->anchorMin = Vec2F(0.5f, 0.5f);
-			res.mData->anchorMax = Vec2F(0.5f, 0.5f);
-			res.mData->offsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
-			res.mData->offsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
-			break;
+		case BaseCorner::Center:
+		res.mData->anchorMin = Vec2F(0.5f, 0.5f);
+		res.mData->anchorMax = Vec2F(0.5f, 0.5f);
+		res.mData->offsetMin = Vec2F(-size.x*0.5f, -size.y*0.5f) + offset;
+		res.mData->offsetMax = Vec2F(size.x*0.5f, size.y*0.5f) + offset;
+		break;
 
-			case BaseCorner::LeftBottom:
-			res.mData->anchorMin = Vec2F(0.0f, 0.0f);
-			res.mData->anchorMax = Vec2F(0.0f, 0.0f);
-			res.mData->offsetMin = Vec2F(0.0f, 0.0f) + offset;
-			res.mData->offsetMax = Vec2F(size.x, size.y) + offset;
-			break;
+		case BaseCorner::LeftBottom:
+		res.mData->anchorMin = Vec2F(0.0f, 0.0f);
+		res.mData->anchorMax = Vec2F(0.0f, 0.0f);
+		res.mData->offsetMin = Vec2F(0.0f, 0.0f) + offset;
+		res.mData->offsetMax = Vec2F(size.x, size.y) + offset;
+		break;
 
-			case BaseCorner::LeftTop:
-			res.mData->anchorMin = Vec2F(0.0f, 1.0f);
-			res.mData->anchorMax = Vec2F(0.0f, 1.0f);
-			res.mData->offsetMin = Vec2F(0.0f, -size.y) + offset;
-			res.mData->offsetMax = Vec2F(size.x, 0.0f) + offset;
-			break;
+		case BaseCorner::LeftTop:
+		res.mData->anchorMin = Vec2F(0.0f, 1.0f);
+		res.mData->anchorMax = Vec2F(0.0f, 1.0f);
+		res.mData->offsetMin = Vec2F(0.0f, -size.y) + offset;
+		res.mData->offsetMax = Vec2F(size.x, 0.0f) + offset;
+		break;
 
-			case BaseCorner::RightBottom:
-			res.mData->anchorMin = Vec2F(1.0f, 0.0f);
-			res.mData->anchorMax = Vec2F(1.0f, 0.0f);
-			res.mData->offsetMin = Vec2F(-size.x, 0.0f) + offset;
-			res.mData->offsetMax = Vec2F(0.0f, size.y) + offset;
-			break;
+		case BaseCorner::RightBottom:
+		res.mData->anchorMin = Vec2F(1.0f, 0.0f);
+		res.mData->anchorMax = Vec2F(1.0f, 0.0f);
+		res.mData->offsetMin = Vec2F(-size.x, 0.0f) + offset;
+		res.mData->offsetMax = Vec2F(0.0f, size.y) + offset;
+		break;
 
-			case BaseCorner::RightTop:
-			res.mData->anchorMin = Vec2F(1.0f, 1.0f);
-			res.mData->anchorMax = Vec2F(1.0f, 1.0f);
-			res.mData->offsetMin = Vec2F(-size.x, -size.y) + offset;
-			res.mData->offsetMax = Vec2F(0.0f, 0.0f) + offset;
-			break;
+		case BaseCorner::RightTop:
+		res.mData->anchorMin = Vec2F(1.0f, 1.0f);
+		res.mData->anchorMax = Vec2F(1.0f, 1.0f);
+		res.mData->offsetMin = Vec2F(-size.x, -size.y) + offset;
+		res.mData->offsetMax = Vec2F(0.0f, 0.0f) + offset;
+		break;
 		}
 
 		return res;
@@ -512,29 +512,29 @@ namespace o2
 
 		switch (align)
 		{
-			case HorAlign::Left:
-			res.mData->anchorMin.x = 0.0f;
-			res.mData->anchorMax.x = 0.0f;
-			res.mData->offsetMin.x = offsX;
-			res.mData->offsetMax.x = offsX + width;
-			break;
+		case HorAlign::Left:
+		res.mData->anchorMin.x = 0.0f;
+		res.mData->anchorMax.x = 0.0f;
+		res.mData->offsetMin.x = offsX;
+		res.mData->offsetMax.x = offsX + width;
+		break;
 
-			case HorAlign::Middle:
-			res.mData->anchorMin.x = 0.5f;
-			res.mData->anchorMax.x = 0.5f;
-			res.mData->offsetMin.x = offsX - width*0.5f;
-			res.mData->offsetMax.x = offsX + width*0.5f;
-			break;
+		case HorAlign::Middle:
+		res.mData->anchorMin.x = 0.5f;
+		res.mData->anchorMax.x = 0.5f;
+		res.mData->offsetMin.x = offsX - width*0.5f;
+		res.mData->offsetMax.x = offsX + width*0.5f;
+		break;
 
-			case HorAlign::Right:
-			res.mData->anchorMin.x = 1.0f;
-			res.mData->anchorMax.x = 1.0f;
-			res.mData->offsetMin.x = -offsX - width;
-			res.mData->offsetMax.x = -offsX;
-			break;
+		case HorAlign::Right:
+		res.mData->anchorMin.x = 1.0f;
+		res.mData->anchorMax.x = 1.0f;
+		res.mData->offsetMin.x = -offsX - width;
+		res.mData->offsetMax.x = -offsX;
+		break;
 
-			default:
-			break;
+		default:
+		break;
 		}
 
 		return res;
@@ -550,29 +550,29 @@ namespace o2
 
 		switch (align)
 		{
-			case VerAlign::Top:
-			res.mData->anchorMin.y = 1.0f;
-			res.mData->anchorMax.y = 1.0f;
-			res.mData->offsetMin.y = -offsY - height;
-			res.mData->offsetMax.y = -offsY;
-			break;
+		case VerAlign::Top:
+		res.mData->anchorMin.y = 1.0f;
+		res.mData->anchorMax.y = 1.0f;
+		res.mData->offsetMin.y = -offsY - height;
+		res.mData->offsetMax.y = -offsY;
+		break;
 
-			case VerAlign::Middle:
-			res.mData->anchorMin.y = 0.5f;
-			res.mData->anchorMax.y = 0.5f;
-			res.mData->offsetMin.y = offsY - height*0.5f;
-			res.mData->offsetMax.y = offsY + height*0.5f;
-			break;
+		case VerAlign::Middle:
+		res.mData->anchorMin.y = 0.5f;
+		res.mData->anchorMax.y = 0.5f;
+		res.mData->offsetMin.y = offsY - height*0.5f;
+		res.mData->offsetMax.y = offsY + height*0.5f;
+		break;
 
-			case VerAlign::Bottom:
-			res.mData->anchorMin.y = 0.0f;
-			res.mData->anchorMax.y = 0.0f;
-			res.mData->offsetMin.y = offsY;
-			res.mData->offsetMax.y = offsY + height;
-			break;
+		case VerAlign::Bottom:
+		res.mData->anchorMin.y = 0.0f;
+		res.mData->anchorMax.y = 0.0f;
+		res.mData->offsetMin.y = offsY;
+		res.mData->offsetMax.y = offsY + height;
+		break;
 
-			case VerAlign::Both:
-			break;
+		case VerAlign::Both:
+		break;
 		}
 
 		return res;
@@ -585,7 +585,7 @@ namespace o2
 		SetDirty();
 	}
 
-	void WidgetLayout::SetDirty(bool fromParent /*= true*/)
+	void WidgetLayout::SetDirty(bool fromParent /*= false*/)
 	{
 		if (!fromParent && mData->drivenByParent && mData->owner && mData->owner->mParent)
 			mData->owner->mParent->transform->SetDirty(fromParent);
@@ -605,7 +605,7 @@ namespace o2
 
 	void WidgetLayout::Update()
 	{
-		RectF parentWorldRect; 
+		RectF parentWorldRect;
 		Vec2F parentWorldPosition;
 
 		if (mData->owner->mParentWidget)
@@ -648,8 +648,8 @@ namespace o2
 
 	void WidgetLayout::FloorRectangle()
 	{
-		mData->size.x     = Math::Round(mData->size.x);
-		mData->size.y     = Math::Round(mData->size.y);
+		mData->size.x = Math::Round(mData->size.x);
+		mData->size.y = Math::Round(mData->size.y);
 		mData->position.x = Math::Round(mData->position.x);
 		mData->position.y = Math::Round(mData->position.y);
 	}
@@ -657,7 +657,7 @@ namespace o2
 	void WidgetLayout::UpdateOffsetsByCurrentTransform()
 	{
 		Vec2F offs;
-		
+
 		if (mData->owner->mParentWidget)
 		{
 			offs = mData->owner->mParentWidget->GetLayoutData().childrenWorldRect.LeftBottom() -
@@ -704,6 +704,83 @@ namespace o2
 
 	void WidgetLayout::DontCheckMinMax()
 	{}
+
+	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth)
+	{
+		Vector<float> minSizes(widgets.Count());
+		Vector<float> maxSizes(widgets.Count());
+		Vector<float> weights(widgets.Count());
+
+		float minSizesSum = 0;
+		float weightsSum = 0;
+
+		for (auto itChild = widgets.begin(); itChild != widgets.end();)
+		{
+			if (!(*itChild)->IsEnabledInHierarchy())
+				itChild = widgets.erase(itChild);
+			else
+			{
+				auto child = *itChild;
+
+				float minWidth = horizontal ? child->layout->GetMinWidth() : child->layout->GetMinHeight();
+				float maxWidth = horizontal ? child->layout->GetMaxWidth() : child->layout->GetMaxHeight();
+				float weight = horizontal ? child->layout->GetWidthWeight() : child->layout->GetHeightWeight();
+
+				minSizesSum += minWidth;
+
+				if (minWidth < maxWidth)
+					weightsSum += weight;
+
+				minSizes.Add(minWidth);
+				maxSizes.Add(maxWidth);
+				weights.Add(weight);
+
+				++itChild;
+			}
+		}
+
+	Vector<float> widths = minSizes;
+
+	int childCount = widgets.Count();
+
+	float expandWidth = availableWidth - minSizesSum;
+	while (expandWidth > 0)
+	{
+		float currentExpand = expandWidth;
+		float invWeightsSum = 1.0f/weightsSum;
+
+		for (int i = 0; i < childCount; i++)
+		{
+			if (widths[i] < maxSizes[i])
+			{
+				float expand = currentExpand*weights[i]*invWeightsSum;
+				float maxExpand = maxSizes[i] - widths[i];
+
+				if (expand > maxExpand)
+				{
+					float coef = maxExpand/expand;
+					currentExpand *= coef;
+				}
+			}
+		}
+
+		for (int i = 0; i < childCount; i++)
+		{
+			if (widths[i] < maxSizes[i])
+			{
+				widths[i] += currentExpand*weights[i]*invWeightsSum;
+
+				if (widths[i] >= maxSizes[i])
+					weightsSum -= weights[i];
+			}
+		}
+
+		expandWidth -= currentExpand;
+	}
+
+	return widths;
+}
+
 }
 
 DECLARE_CLASS(o2::WidgetLayout);

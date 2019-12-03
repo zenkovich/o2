@@ -273,14 +273,12 @@ namespace o2
 			float availableWidth = GetChildrenWorldRect().Width() - mBorder.left - mBorder.right;
 			float totalWidth = availableWidth;
 			float position = -totalWidth*0.5f;
-			auto widths = CalculateExpandedWidths();
+			auto widgets = mChildWidgets;
+			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right);
 
 			int i = 0;
-			for (auto child : mChildWidgets)
+			for (auto child : widgets)
 			{
-				if (!child->mResEnabledInHierarchy)
-					continue;
-
 				child->GetLayoutData().offsetMin.x = position;
 				position += widths[i++];
 
@@ -316,14 +314,12 @@ namespace o2
 		if (mExpandWidth)
 		{
 			float position = mBorder.left;
-			auto widths = CalculateExpandedWidths();
+			auto widgets = mChildWidgets;
+			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right);
 
 			int i = 0;
-			for (auto child : mChildWidgets)
+			for (auto child : widgets)
 			{
-				if (!child->mResEnabledInHierarchy)
-					continue;
-
 				child->GetLayoutData().offsetMin.x = position;
 				position += widths[i++];
 
@@ -357,14 +353,12 @@ namespace o2
 		if (mExpandWidth)
 		{
 			float position = mBorder.right;
-			auto widths = CalculateExpandedWidths();
+			auto widgets = mChildWidgets;
+			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right);
 
 			int i = 0;
-			for (auto child : mChildWidgets)
+			for (auto child : widgets)
 			{
-				if (!child->mResEnabledInHierarchy)
-					continue;
-
 				child->GetLayoutData().offsetMax.x = -position;
 				position += widths[i++];
 
@@ -457,76 +451,6 @@ namespace o2
 
 		GetLayoutData().offsetMax += szDelta*(Vec2F::One() - relativePivot);
 		GetLayoutData().offsetMin -= szDelta*relativePivot;
-	}
-
-	Vector<float> HorizontalLayout::CalculateExpandedWidths()
-	{
-		int childCount = mChildWidgets.Count();
-		Vector<float> minWidths(childCount);
-		Vector<float> maxWidths(childCount);
-		Vector<float> weights(childCount);
-
-		float minWidthsSum = 0;
-		float weightsSum = 0;
-
-		for (auto child : mChildWidgets)
-		{
-			float minWidth = child->layout->GetMinWidth();
-			float maxWidth = child->layout->GetMaxWidth();
-			float weight = child->layout->GetWidthWeight();
-
-			minWidthsSum += minWidth;
-
-			if (minWidth < maxWidth)
-				weightsSum += weight;
-
-			minWidths.Add(minWidth);
-			maxWidths.Add(maxWidth);
-			weights.Add(weight);
-		}
-
-		Vector<float> widths = minWidths;
-
-		float availableWidth = GetChildrenWorldRect().Width() - mBorder.left - mBorder.right;
-		float expandWidth = availableWidth - minWidthsSum;
-
-		while (expandWidth > 0)
-		{
-			float currentExpand = expandWidth;
-			float invWeightsSum = 1.0f/weightsSum;
-
-			for (int i = 0; i < childCount; i++)
-			{
-				if (widths[i] < maxWidths[i])
-				{
-					float expand = currentExpand*weights[i]*invWeightsSum;
-					float maxExpand = maxWidths[i] - widths[i];
-
-					if (expand > maxExpand)
-					{
-						float coef = maxExpand/expand;
-						currentExpand *= coef;
-					}
-				}
-			}
-
-			for (int i = 0; i < childCount; i++)
-			{
-				if (widths[i] < maxWidths[i])
-				{
-					widths[i] += currentExpand*weights[i]*invWeightsSum;
-
-					if (widths[i] >= maxWidths[i])
-					{
-						weightsSum -= weights[i];
-					}
-				}
-			}
-
-			expandWidth -= currentExpand;
-		}
-
-		return widths;
 	}
 }
 

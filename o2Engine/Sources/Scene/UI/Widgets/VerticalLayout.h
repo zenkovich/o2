@@ -146,9 +146,6 @@ namespace o2
 		// Expands size by children
 		virtual void ExpandSizeByChilds();
 
-		// Calculates children widths by weights and minimal sizes
-		Vector<float> CalculateExpandedHeights();
-
 		// Aligns widget by height with base corner
 		void AlignWidgetByWidth(Widget* child, float heightAnchor);
 
@@ -217,7 +214,6 @@ CLASS_METHODS_META(o2::VerticalLayout)
 	PROTECTED_FUNCTION(void, ArrangeFromBottomToTop);
 	PROTECTED_FUNCTION(void, ArrangeFromCenter);
 	PROTECTED_FUNCTION(void, ExpandSizeByChilds);
-	PROTECTED_FUNCTION(Vector<float>, CalculateExpandedHeights);
 	PROTECTED_FUNCTION(void, AlignWidgetByWidth, Widget*, float);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
 }
