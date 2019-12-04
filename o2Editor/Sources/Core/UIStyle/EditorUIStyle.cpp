@@ -1561,24 +1561,20 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		Toggle* toggle = o2UI.CreateToggle("empty", "actor head enable");
 		toggle->name = "toggle";
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
 		layout->AddChild(toggle);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/toggle/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head enable");
 	}
@@ -1632,25 +1628,20 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("actor head name");
 		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		editBox->name = "editBox";
 		layout->AddChild(editBox);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head name");
 	}
@@ -1698,24 +1689,20 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		Toggle* toggle = o2UI.CreateToggle("empty", "actor head lock");
 		toggle->name = "toggle";
 		*toggle->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
 		layout->AddChild(toggle);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/toggle/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head lock");
 	}
@@ -1727,9 +1714,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto box = mnew Widget();
 		box->name = "box";
@@ -1819,25 +1812,20 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("actor head tags");
 		editBox->name = "editBox";
 		*editBox->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(editBox);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(editBox);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/editBox/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head tags");
 	}
@@ -1907,25 +1895,20 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		DropDown* dropDown = o2UI.CreateDropdown("actor head layer");
 		dropDown->name = "dropDown";
 		*dropDown->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 		layout->AddChild(dropDown);
-
-		Button* revertBtn = o2UI.CreateWidget<Button>("revert");
-		revertBtn->name = "revert";
-		*revertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-
-		layout->AddChild(dropDown);
-		layout->AddChild(revertBtn);
-
-		Animation revertStateAnim = Animation::EaseInOut(sample, "child/layout/child/dropDown/layout/offsetRight", 0.0f, -20.0f, 0.15f);
-		*revertStateAnim.AddAnimationValue<bool>("child/layout/child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
-		sample->AddState("revert", revertStateAnim);
 
 		o2UI.AddWidgetStyle(sample, "actor head layer");
 	}
@@ -3349,9 +3332,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
 		editBox->name = "editBox";
@@ -3369,9 +3358,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("red singleline");
 		editBox->name = "editBox";
@@ -3389,9 +3384,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("green singleline");
 		editBox->name = "editBox";
@@ -3409,9 +3410,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto editBox = o2UI.CreateEditBox("singleline with arrows");
 		editBox->name = "editBox";
@@ -3429,9 +3436,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto box = mnew Widget();
 		box->name = "box";
@@ -3493,9 +3506,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		Toggle* toggle = o2UI.CreateToggle("", "without caption");
 		toggle->name = "toggle";
@@ -3513,9 +3532,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
@@ -3577,9 +3602,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
@@ -3641,9 +3672,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto box = mnew Widget();
 		box->name = "box";
@@ -3664,9 +3701,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto box = mnew Widget();
 		box->name = "box";
@@ -3708,9 +3751,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto box = mnew Widget();
 		box->name = "box";
@@ -3745,9 +3794,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		DropDown* dropDown = o2UI.CreateDropdown();
 		dropDown->name = "dropdown";
@@ -3765,9 +3820,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		DropDown* dropDown = o2UI.CreateDropdown();
 		dropDown->name = "dropdown";
@@ -3785,9 +3846,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
@@ -3849,9 +3916,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
@@ -3913,9 +3986,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("singleline");
 		*editBox->layout = WidgetLayout::BothStretch();
@@ -3932,9 +4011,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("singleline");
 		*editBox->layout = WidgetLayout::BothStretch();
@@ -3951,9 +4036,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		EditBox* editBox = o2UI.CreateEditBox("singleline");
 		layout->AddChild(editBox);
@@ -3969,9 +4060,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
@@ -4011,9 +4108,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";
@@ -4053,9 +4156,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto propertiesLayout = mnew Widget();
 		propertiesLayout->name = "properties";

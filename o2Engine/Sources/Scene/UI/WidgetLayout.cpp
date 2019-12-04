@@ -705,7 +705,7 @@ namespace o2
 	void WidgetLayout::DontCheckMinMax()
 	{}
 
-	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth)
+	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth, float spacing)
 	{
 		Vector<float> minSizes(widgets.Count());
 		Vector<float> maxSizes(widgets.Count());
@@ -743,6 +743,7 @@ namespace o2
 
 	int childCount = widgets.Count();
 
+	availableWidth -= spacing*(float)widgets.Count();
 	float expandWidth = availableWidth - minSizesSum;
 	while (expandWidth > 0)
 	{

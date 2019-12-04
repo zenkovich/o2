@@ -31,7 +31,7 @@ namespace Editor
 
 	void CurveProperty::InitializeControls()
 	{
-		mEditBox = GetChildWidget("layout/box");
+		mEditBox = GetChildWidget("container/layout/box");
 		if (mEditBox)
 		{
 			mPreviewImage = mnew CurvePreview();

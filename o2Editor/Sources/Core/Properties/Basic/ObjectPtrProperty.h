@@ -58,6 +58,9 @@ namespace Editor
 		// Returns property caption
 		WString GetCaption() const override;
 
+		// Adds remove button
+		Button* AddRemoveButton() override;
+
 		// Expands property fields
 		void Expand();
 
@@ -150,6 +153,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(Button*, AddRemoveButton);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);

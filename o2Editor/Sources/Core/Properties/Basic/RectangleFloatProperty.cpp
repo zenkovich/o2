@@ -28,7 +28,7 @@ namespace Editor
 
 	void RectFProperty::InitializeControls()
 	{
-		mLeftProperty = GetChildByType<FloatProperty>("layout/properties/left");
+		mLeftProperty = GetChildByType<FloatProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
 		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -36,7 +36,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mBottomProperty = GetChildByType<FloatProperty>("layout/properties/bottom");
+		mBottomProperty = GetChildByType<FloatProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
 		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -44,7 +44,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mRightProperty = GetChildByType<FloatProperty>("layout/properties/right");
+		mRightProperty = GetChildByType<FloatProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
 		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -52,7 +52,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mTopProperty = GetChildByType<FloatProperty>("layout/properties/top");
+		mTopProperty = GetChildByType<FloatProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
 		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)

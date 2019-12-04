@@ -44,7 +44,7 @@ namespace Editor
 		mCommonValue = nullptr;
 		mComponentType = &TypeOf(Component);
 
-		mBox = GetChildWidget("layout/box");
+		mBox = GetChildWidget("container/layout/box");
 		if (mBox)
 		{
 			mBox->onDraw += [&]() { DragDropArea::OnDrawn(); };

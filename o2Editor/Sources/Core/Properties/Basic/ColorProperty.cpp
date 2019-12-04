@@ -32,7 +32,7 @@ namespace Editor
 
 	void ColorProperty::InitializeControls()
 	{
-		mEditBox = GetChildWidget("layout/box");
+		mEditBox = GetChildWidget("container/layout/box");
 		if (mEditBox)
 		{
 			mEditBox->layout->minHeight = 10;

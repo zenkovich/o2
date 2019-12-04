@@ -67,8 +67,8 @@ namespace Editor
 
 		mAnchorRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mAnchorRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mAnchorRightTopProperty->GetChildByType<Label>("layout/properties/x label")->text = "R";
-		mAnchorRightTopProperty->GetChildByType<Label>("layout/properties/y label")->text = "T";
+		mAnchorRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
+		mAnchorRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
 		mAnchorRightTopProperty->SetValuePath("layout/anchorMax");
 		mAnchorRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
 		mAnchorRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
@@ -82,8 +82,8 @@ namespace Editor
 
 		mAnchorLeftBottomProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mAnchorLeftBottomProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mAnchorLeftBottomProperty->GetChildByType<Label>("layout/properties/x label")->text = "L";
-		mAnchorLeftBottomProperty->GetChildByType<Label>("layout/properties/y label")->text = "B";
+		mAnchorLeftBottomProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "L";
+		mAnchorLeftBottomProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "B";
 		mAnchorLeftBottomProperty->SetValuePath("layout/anchorMin");
 		mAnchorLeftBottomProperty->onChanged = THIS_FUNC(OnPropertyChanged);
 		mAnchorLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
@@ -102,8 +102,8 @@ namespace Editor
 
 		moffsetRightTopProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*moffsetRightTopProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		moffsetRightTopProperty->GetChildByType<Label>("layout/properties/x label")->text = "R";
-		moffsetRightTopProperty->GetChildByType<Label>("layout/properties/y label")->text = "T";
+		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "R";
+		moffsetRightTopProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "T";
 		moffsetRightTopProperty->SetValuePath("layout/offsetMax");
 		moffsetRightTopProperty->onChanged = THIS_FUNC(OnPropertyChanged);
 		moffsetRightTopProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);
@@ -117,8 +117,8 @@ namespace Editor
 
 		mOffsetLeftBottomProperty = o2UI.CreateWidget<Vec2FProperty>("colored");
 		*mOffsetLeftBottomProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 20, 0, 20, 0);
-		mOffsetLeftBottomProperty->GetChildByType<Label>("layout/properties/x label")->text = "L";
-		mOffsetLeftBottomProperty->GetChildByType<Label>("layout/properties/y label")->text = "B";
+		mOffsetLeftBottomProperty->GetChildByType<Label>("container/layout/properties/x label")->text = "L";
+		mOffsetLeftBottomProperty->GetChildByType<Label>("container/layout/properties/y label")->text = "B";
 		mOffsetLeftBottomProperty->SetValuePath("layout/offsetMin");
 		mOffsetLeftBottomProperty->onChanged = THIS_FUNC(OnPropertyChanged);
 		mOffsetLeftBottomProperty->onChangeCompleted = THIS_FUNC(OnPropertyChangeCompleted);

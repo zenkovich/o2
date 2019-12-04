@@ -274,7 +274,8 @@ namespace o2
 			float totalWidth = availableWidth;
 			float position = -totalWidth*0.5f;
 			auto widgets = mChildWidgets;
-			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right);
+			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right,
+												mSpacing);
 
 			int i = 0;
 			for (auto child : widgets)
@@ -315,7 +316,8 @@ namespace o2
 		{
 			float position = mBorder.left;
 			auto widgets = mChildWidgets;
-			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right);
+			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right,
+												mSpacing);
 
 			int i = 0;
 			for (auto child : widgets)
@@ -354,7 +356,8 @@ namespace o2
 		{
 			float position = mBorder.right;
 			auto widgets = mChildWidgets;
-			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right);
+			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right,
+												mSpacing);
 
 			int i = 0;
 			for (auto child : widgets)

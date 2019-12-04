@@ -169,9 +169,15 @@ namespace Editor
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
 
-		auto layout = mnew Widget();
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		sample->AddChild(layout);
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
 
 		auto box = mnew Widget();
 		box->name = "box";

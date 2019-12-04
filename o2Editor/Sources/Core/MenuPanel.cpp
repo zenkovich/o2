@@ -25,6 +25,7 @@
 #include "UIStyle/EditorUIStyle.h"
 #include "Utils/Math/Curve.h"
 #include "Properties/Basic/FloatProperty.h"
+#include "Properties/Basic/IntegerProperty.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -97,7 +98,7 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
-		mMenuPanel->AddItem("Debug/Add property", [&]() { o2UI.CreateWidget<FloatProperty>("with caption")->AddRemoveButton(); });
+		mMenuPanel->AddItem("Debug/Add property", [&]() { o2UI.CreateWidget<IntegerProperty>("with caption")->AddRemoveButton(); });
 		mMenuPanel->AddItem("Debug/RebuildEditorUIManager", [&]() {
 			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIManager(false);

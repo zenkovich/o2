@@ -80,7 +80,11 @@ namespace Editor
 		mRemoveBtn->name = "remove";
 		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 		mRemoveBtn->layout->maxWidth = 20;
-		AddChild(mRemoveBtn);
+
+		if (auto layout = FindChild("layout"))
+			layout->AddChild(mRemoveBtn);
+		else
+			AddChild(mRemoveBtn);
 
 		return mRemoveBtn;
 	}

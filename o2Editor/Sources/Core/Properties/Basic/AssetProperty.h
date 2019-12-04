@@ -118,7 +118,7 @@ namespace Editor
 	template<typename _type>
 	void AssetProperty<_type>::InitializeControls()
 	{
-		mBox = GetChildWidget("layout/box");
+		mBox = GetChildWidget("container/layout/box");
 		if (mBox)
 		{
 			mBox->SetFocusable(true);

@@ -194,6 +194,15 @@ namespace Editor
 		return mSpoiler->GetCaption();
 	}
 
+	Button* ObjectPtrProperty::AddRemoveButton()
+	{
+		auto button = o2UI.CreateWidget<Button>("remove small");
+		*button->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F());
+		AddInternalWidget(button);
+
+		return button;
+	}
+
 	void ObjectPtrProperty::Expand()
 	{
 		SetExpanded(true);

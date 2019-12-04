@@ -4,8 +4,9 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
-#include "Scene/UI/Widgets/Spoiler.h"
 #include "Scene/UI/UIManager.h"
+#include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/Spoiler.h"
 
 using namespace o2;
 
@@ -129,6 +130,15 @@ namespace Editor
 	WString ObjectProperty::GetCaption() const
 	{
 		return mSpoiler->GetCaption();
+	}
+
+	Button* ObjectProperty::AddRemoveButton()
+	{
+		auto button = o2UI.CreateWidget<Button>("remove small");
+		*button->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F());
+		AddInternalWidget(button);
+
+		return button;
 	}
 
 	void ObjectProperty::Expand()

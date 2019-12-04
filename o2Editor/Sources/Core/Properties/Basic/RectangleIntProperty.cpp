@@ -28,7 +28,7 @@ namespace Editor
 
 	void RectIProperty::InitializeControls()
 	{
-		mLeftProperty = GetChildByType<IntegerProperty>("layout/properties/left");
+		mLeftProperty = GetChildByType<IntegerProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
 		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -36,7 +36,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mBottomProperty = GetChildByType<IntegerProperty>("layout/properties/bottom");
+		mBottomProperty = GetChildByType<IntegerProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
 		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -44,7 +44,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mRightProperty = GetChildByType<IntegerProperty>("layout/properties/right");
+		mRightProperty = GetChildByType<IntegerProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
 		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -52,7 +52,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mTopProperty = GetChildByType<IntegerProperty>("layout/properties/top");
+		mTopProperty = GetChildByType<IntegerProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
 		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)

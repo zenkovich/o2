@@ -28,7 +28,7 @@ namespace Editor
 
 	void Vec2IProperty::InitializeControls()
 	{
-		mXProperty = GetChildByType<IntegerProperty>("layout/properties/x");
+		mXProperty = GetChildByType<IntegerProperty>("container/layout/properties/x");
 		mXProperty->SetValuePath("x");
 		mXProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mXProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
@@ -36,7 +36,7 @@ namespace Editor
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
 
-		mYProperty = GetChildByType<IntegerProperty>("layout/properties/y");
+		mYProperty = GetChildByType<IntegerProperty>("container/layout/properties/y");
 		mYProperty->SetValuePath("y");
 		mYProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
 		mYProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)

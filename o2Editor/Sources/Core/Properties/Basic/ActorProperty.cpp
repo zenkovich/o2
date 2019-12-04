@@ -41,7 +41,7 @@ namespace Editor
 	{
 		mCommonValue = nullptr;
 
-		mBox = GetChildWidget("layout/box");
+		mBox = GetChildWidget("container/layout/box");
 		if (mBox)
 		{
 			mBox->SetFocusable(true);
