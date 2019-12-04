@@ -200,6 +200,8 @@ namespace Editor
 				propertyDef->SetCaption((String)"# " + (String)i);
 				propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
 				propertyDef->SetValuePath((String)i);
+				propertyDef->GetRemoveButton()->onClick = [=]() { Remove(i); };
+
 				propertyDef->onChangeCompleted =
 					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
 				{
@@ -212,6 +214,8 @@ namespace Editor
 				mSpoiler->RemoveChild(mValueProperties[i], false);
 				FreeValueProperty(mValueProperties[i]);
 			}
+
+			mValueProperties.Resize(mCountOfElements);
 
 			mAddButtonContainer->Show(true);
 			mAddButtonContainer->SetIndexInSiblings(mSpoiler->GetChildren().Count());
@@ -312,7 +316,6 @@ namespace Editor
 
 		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mType->GetElementType(), "Element", onChangeCompleted, onChanged);
 		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-16, 0)));
-		res->AddRemoveButton();
 
 		if (res)
 			res->SpecializeType(mType->GetElementType());
@@ -380,9 +383,6 @@ namespace Editor
 		Vector<DataNode> prevValues, newValues;
 		auto elementFieldInfo = mType->GetElementFieldInfo();
 
-		auto availableTypes = elementFieldInfo->GetType()->GetDerivedTypes();
-		auto elementCreateType = availableTypes.IsEmpty() ? elementFieldInfo->GetType() : availableTypes.First();
-
 		for (auto& obj : mTargetObjects)
 		{
 			prevValues.Add(DataNode());
@@ -406,6 +406,31 @@ namespace Editor
 
 		if (prevValues != newValues)
 			onChangeCompleted(mValuesPath + "/count", prevValues, newValues);
+
+		onChanged(this);
+		o2EditorSceneScreen.OnSceneChanged();
+	}
+
+	void VectorProperty::Remove(int idx)
+	{
+		Vector<DataNode> prevValues, newValues;
+		auto elementFieldInfo = mType->GetElementFieldInfo();
+
+		for (auto& obj : mTargetObjects)
+		{
+			prevValues.Add(DataNode());
+			mType->Serialize(obj.first.data, prevValues.Last());
+
+			mType->RemoveObjectVectorElement(obj.first.data, idx);
+
+			newValues.Add(DataNode());
+			mType->Serialize(obj.first.data, newValues.Last());
+		}
+
+		Refresh();
+
+		if (prevValues != newValues)
+			onChangeCompleted(mValuesPath, prevValues, newValues);
 
 		onChanged(this);
 		o2EditorSceneScreen.OnSceneChanged();

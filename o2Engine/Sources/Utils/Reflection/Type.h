@@ -4,7 +4,7 @@
 
 #include "Utils/Delegates.h"
 #include "Utils/Reflection/Attributes.h"
-#include "Utils/Reflection/IFieldSerializer.h"
+#include "Utils/Reflection/TypeSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
 #include "Utils/Types/CommonTypes.h"
 #include "Utils/Types/Containers/Map.h"
@@ -65,7 +65,7 @@ namespace o2
 
 	public:
 		// Default constructor
-		Type(const String& name, int size);
+		Type(const String& name, int size, ITypeSerializer* serializer);
 
 		// Destructor
 		virtual ~Type();
@@ -131,6 +131,21 @@ namespace o2
 		// Returns abstract value proxy for object value
 		virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
 
+		// Serializes value from ptr
+		virtual void Serialize(void* ptr, DataNode& data) const;
+
+		// Deserializes value from ptr
+		virtual void Deserialize(void* ptr, const DataNode& data) const;
+
+		// Returns is values getted from object A and object B equals
+		virtual bool IsValueEquals(void* objectA, void* objectB) const;
+
+		// Copies value getter from objectB to value from objectA
+		virtual void CopyValue(void* objectA, void* objectB) const;
+
+		// Returns type serializer
+		ITypeSerializer* GetSerializer() const;
+
 	public:
 		// --------------------
 		// Dummy type container
@@ -138,13 +153,14 @@ namespace o2
 		struct Dummy { static Type* type; };
 
 	protected:
-		TypeId            mId;                // Id of type
-		String            mName;              // Name of object type
-		BaseTypesVec      mBaseTypes;         // Base types ids with offset 
-		FieldInfosVec     mFields;            // Fields information
-		FunctionsInfosVec mFunctions;         // Functions informations
-		mutable Type*     mPtrType = nullptr; // Pointer type from this
-		int               mSize;              // Size of type in bytes
+		TypeId            mId;                   // Id of type
+		String            mName;                 // Name of object type
+		BaseTypesVec      mBaseTypes;            // Base types ids with offset 
+		FieldInfosVec     mFields;               // Fields information
+		FunctionsInfosVec mFunctions;            // Functions informations
+		mutable Type*     mPtrType = nullptr;    // Pointer type from this
+		int               mSize;                 // Size of type in bytes
+		ITypeSerializer*  mSerializer = nullptr; // Value serializer
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
@@ -184,7 +200,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		ObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
+		ObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*), ITypeSerializer* serializer);
 
 		// Returns type usage
 		Usage GetUsage() const override;
@@ -241,7 +257,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		PointerType(const Type* unptrType);
+		PointerType(const Type* unptrType, ITypeSerializer* serializer);
 
 		// Returns type usage
 		Usage GetUsage() const override;
@@ -289,7 +305,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		PropertyType(const String& name, int size);
+		PropertyType(const String& name, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
 		Usage GetUsage() const;
@@ -356,7 +372,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		VectorType(const String& name, int size);
+		VectorType(const String& name, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
@@ -375,6 +391,9 @@ namespace o2
 
 		// Returns element's value proxy by index
 		virtual IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const = 0;
+
+		// Removes element at idx in vector
+		virtual void RemoveObjectVectorElement(void* object, int idx) const = 0;
 
 		// Returns filed pointer by path
 		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
@@ -405,16 +424,19 @@ namespace o2
 		TVectorType();
 
 		// Returns size of vector by pointer
-		int GetObjectVectorSize(void* object) const;
+		int GetObjectVectorSize(void* object) const override;
 
 		// Sets size of vector by pointer
-		void SetObjectVectorSize(void* object, int size) const;
+		void SetObjectVectorSize(void* object, int size) const override;
 
 		// Returns element's pointer by index
-		void* GetObjectVectorElementPtr(void* object, int idx) const;
+		void* GetObjectVectorElementPtr(void* object, int idx) const override;
 
 		// Returns element's value proxy by index
-		IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const;
+		IAbstractValueProxy* GetObjectVectorElementProxy(void* object, int idx) const override;
+
+		// Removes element at idx in vector
+		void RemoveObjectVectorElement(void* object, int idx) const override;
 
 		// Creates sample copy and returns him
 		void* CreateSample() const override;
@@ -427,14 +449,14 @@ namespace o2
 	};
 
 	template<typename _element_type>
-	struct VectorCountFieldSerializer : public IFieldSerializer
+	struct VectorCountFieldSerializer : public ITypeSerializer
 	{
 		VectorCountFieldSerializer() { }
 		void Serialize(void* object, DataNode& data) const;
 		void Deserialize(void* object, DataNode& data) const;
 		bool Equals(void* objectA, void* objectB) const;
 		void Copy(void* objectA, void* objectB) const;
-		IFieldSerializer* Clone() const;
+		ITypeSerializer* Clone() const;
 	};
 
 	// --------------------------
@@ -444,7 +466,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		MapType(const Type* keyType, const Type* valueType, int size);
+		MapType(const Type* keyType, const Type* valueType, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
 		virtual Usage GetUsage() const;
@@ -500,7 +522,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		StringPointerAccessorType(const String& name, int size);
+		StringPointerAccessorType(const String& name, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
 		Usage GetUsage() const override;
@@ -553,7 +575,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		EnumType(const String& name, int size);
+		EnumType(const String& name, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
 		Usage GetUsage() const;
@@ -793,7 +815,7 @@ namespace o2
 
 	template<typename _type>
 	TType<_type>::TType(const String& name, int size):
-		Type(name, size)
+		Type(name, size, mnew TypeSerializer<_type>())
 	{}
 
 	template<typename _type>
@@ -822,7 +844,7 @@ namespace o2
 
 	template<typename _type>
 	TObjectType<_type>::TObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
-		ObjectType(name, size, castFromFunc, castToFunc)
+		ObjectType(name, size, castFromFunc, castToFunc, mnew TypeSerializer<_type>())
 	{}
 
 	template<typename _type>
@@ -861,7 +883,7 @@ namespace o2
 
 	template<typename _type>
 	TPointerType<_type>::TPointerType(const Type* unptrType):
-		PointerType(unptrType)
+		PointerType(unptrType, mnew TypeSerializer<_type*>())
 	{}
 
 	template<typename _type>
@@ -892,7 +914,8 @@ namespace o2
 
 	template<typename _value_type, typename _property_type>
 	TPropertyType<_value_type, _property_type>::TPropertyType():
-		PropertyType((String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">", sizeof(_value_type))
+		PropertyType((String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">", sizeof(_value_type), 
+					 mnew TypeSerializer<_property_type>())
 	{
 		mValueType = &GetTypeOf<_value_type>();
 	}
@@ -996,6 +1019,12 @@ namespace o2
 	}
 
 	template<typename _element_type>
+	void TVectorType<_element_type>::RemoveObjectVectorElement(void* object, int idx) const
+	{
+		((Vector<_element_type>*)object)->RemoveAt(idx);
+	}
+
+	template<typename _element_type>
 	void* TVectorType<_element_type>::CreateSample() const
 	{
 		return mnew Vector<_element_type>();
@@ -1015,15 +1044,11 @@ namespace o2
 
 	template<typename _element_type>
 	TVectorType<_element_type>::TVectorType():
-		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", sizeof(Vector<_element_type>))
+		VectorType((String)"o2::Vector<" + GetTypeOf<_element_type>().GetName() + ">", sizeof(Vector<_element_type>), mnew TypeSerializer<Vector<_element_type>>())
 	{
 		mElementType = &GetTypeOf<_element_type>();
 
-		typedef typename std::conditional<DataNode::IsSupport<_element_type>::value,
-			                              FieldInfo::FieldSerializer<_element_type>,
-			                              IFieldSerializer>::type serializerType;
-
-		mElementFieldInfo = mnew FieldInfo("element", 0, mElementType, ProtectSection::Private, mnew serializerType());
+		mElementFieldInfo = mnew FieldInfo("element", 0, mElementType, ProtectSection::Private);
 		mCountFieldInfo = mnew FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
 	}
 
@@ -1089,7 +1114,7 @@ namespace o2
 	}
 
 	template<typename _element_type>
-	IFieldSerializer* VectorCountFieldSerializer<_element_type>::Clone() const
+	ITypeSerializer* VectorCountFieldSerializer<_element_type>::Clone() const
 	{
 		return mnew VectorCountFieldSerializer();
 	}
@@ -1100,7 +1125,7 @@ namespace o2
 
 	template<typename _key_type, typename _value_type>
 	TMapType<_key_type, _value_type>::TMapType():
-		MapType(&GetTypeOf<_key_type>(), &GetTypeOf<_value_type>(), sizeof(Map<_key_type, _value_type>))
+		MapType(&GetTypeOf<_key_type>(), &GetTypeOf<_value_type>(), sizeof(Map<_key_type, _value_type>), mnew TypeSerializer<Map<_key_type, _value_type>>())
 	{
 		mGetDictionaryObjectSizeFunc = [](void* obj) { return ((Map<_key_type, _value_type>*)obj)->Count(); };
 
@@ -1147,7 +1172,7 @@ namespace o2
 	template<typename _return_type, typename _accessor_type>
 	TStringPointerAccessorType<_return_type, _accessor_type>::TStringPointerAccessorType():
 		StringPointerAccessorType((String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">",
-			 sizeof(_accessor_type))
+			 sizeof(_accessor_type), mnew TypeSerializer<_accessor_type>())
 	{
 		mReturnType = &GetTypeOf<_return_type>();
 	}
@@ -1217,7 +1242,7 @@ namespace o2
 
 	template<typename _type>
 	TEnumType<_type>::TEnumType(const String& name, int size):
-		EnumType(name, size)
+		EnumType(name, size, mnew TypeSerializer<_type>())
 	{}
 
 	template<typename _type>
@@ -1265,11 +1290,7 @@ namespace o2
 	{
 		auto valType = &TypeOf(_type);
 
-		typedef typename std::conditional<DataNode::IsSupport<_type>::value,
-			FieldInfo::FieldSerializer<_type>,
-			IFieldSerializer>::type serializerType;
-
-		auto fieldInfo = mnew FieldInfo(name, pointerGetter, valType, section, mnew serializerType());
+		auto fieldInfo = mnew FieldInfo(name, pointerGetter, valType, section);
 		fieldInfo->mOwnerType = type;
 		type->mFields.Add(fieldInfo);
 

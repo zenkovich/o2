@@ -9,8 +9,8 @@
 
 namespace o2
 {
-	Type::Type(const String& name, int size):
-		mId(0), mPtrType(nullptr), mName(name), mSize(size)
+	Type::Type(const String& name, int size, ITypeSerializer* serializer):
+		mId(0), mPtrType(nullptr), mName(name), mSize(size), mSerializer(serializer)
 	{}
 
 	Type::~Type()
@@ -185,8 +185,33 @@ namespace o2
 		return nullptr;
 	}
 
-	VectorType::VectorType(const String& name, int size):
-		Type(name, size)
+	void Type::Serialize(void* ptr, DataNode& data) const
+	{
+		mSerializer->Serialize(ptr, data);
+	}
+
+	void Type::Deserialize(void* ptr, const DataNode& data) const
+	{
+		mSerializer->Deserialize(ptr, data);
+	}
+
+	bool Type::IsValueEquals(void* objectA, void* objectB) const
+	{
+		return mSerializer->Equals(objectA, objectB);
+	}
+
+	void Type::CopyValue(void* objectA, void* objectB) const
+	{
+		mSerializer->Copy(objectA, objectB);
+	}
+
+	ITypeSerializer* Type::GetSerializer() const
+	{
+		return mSerializer;
+	}
+
+	VectorType::VectorType(const String& name, int size, ITypeSerializer* serializer) :
+		Type(name, size, serializer)
 	{}
 
 	Type::Usage VectorType::GetUsage() const
@@ -235,8 +260,8 @@ namespace o2
 		return mCountFieldInfo;
 	}
 
-	MapType::MapType(const Type* keyType, const Type* valueType, int size):
-		Type((String)"o2::Dictionary<" + keyType->GetName() + ", " + valueType->GetName() + ">", size),
+	MapType::MapType(const Type* keyType, const Type* valueType, int size, ITypeSerializer* serializer):
+		Type((String)"o2::Dictionary<" + keyType->GetName() + ", " + valueType->GetName() + ">", size, serializer),
 		mKeyType(keyType), mValueType(valueType)
 	{}
 
@@ -286,8 +311,8 @@ namespace o2
 		return nullptr;
 	}
 
-	EnumType::EnumType(const String& name, int size):
-		Type(name, size)
+	EnumType::EnumType(const String& name, int size, ITypeSerializer* serializer):
+		Type(name, size, serializer)
 	{}
 
 	Type::Usage EnumType::GetUsage() const
@@ -300,8 +325,8 @@ namespace o2
 		return mEntries;
 	}
 
-	PointerType::PointerType(const Type* unptrType):
-		Type(unptrType->GetName() + "*", sizeof(void*)),
+	PointerType::PointerType(const Type* unptrType, ITypeSerializer* serializer):
+		Type(unptrType->GetName() + "*", sizeof(void*), serializer),
 		mUnptrType(unptrType)
 	{}
 
@@ -333,8 +358,8 @@ namespace o2
 		return mnew PointerValueProxy<void*>((void**)object);
 	}
 
-	PropertyType::PropertyType(const String& name, int size):
-		Type(name, size)
+	PropertyType::PropertyType(const String& name, int size, ITypeSerializer* serializer):
+		Type(name, size, serializer)
 	{}
 
 	Type::Usage PropertyType::GetUsage() const
@@ -347,9 +372,9 @@ namespace o2
 		return mValueType;
 	}
 
-	ObjectType::ObjectType(const String& name, int size,
-						   void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
-		Type(name, size), mCastToFunc(castToFunc), mCastFromFunc(castFromFunc)
+	ObjectType::ObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*),
+						   ITypeSerializer* serializer):
+		Type(name, size, serializer), mCastToFunc(castToFunc), mCastFromFunc(castFromFunc)
 	{}
 
 	Type::Usage ObjectType::GetUsage() const
@@ -377,8 +402,8 @@ namespace o2
 		return realType->GetFieldPtr(dynamic_cast<const ObjectType*>(realType)->DynamicCastFromIObject(iobject), path, fieldInfo);
 	}
 
-	StringPointerAccessorType::StringPointerAccessorType(const String& name, int size) :
-		Type(name, size)
+	StringPointerAccessorType::StringPointerAccessorType(const String& name, int size, ITypeSerializer* serializer) :
+		Type(name, size, serializer)
 	{}
 
 	Type::Usage StringPointerAccessorType::GetUsage() const

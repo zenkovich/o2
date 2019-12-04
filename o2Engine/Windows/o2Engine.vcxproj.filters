@@ -490,9 +490,6 @@
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
-    <ClInclude Include="..\Sources\Utils\Reflection\IFieldSerializer.h">
-      <Filter>Sources\Utils\Reflection</Filter>
-    </ClInclude>
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h">
       <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
@@ -591,6 +588,9 @@
     </ClInclude>
     <ClInclude Include="..\Sources\Scene\Components\AnimationComponent.h">
       <Filter>Sources\Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Sources\Utils\Reflection\TypeSerializer.h">
+      <Filter>Sources\Utils\Reflection</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

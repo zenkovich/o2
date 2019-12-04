@@ -9,9 +9,9 @@ namespace o2
 	{}
 
 	FieldInfo::FieldInfo(const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type,
-						 ProtectSection sect, IFieldSerializer* serializer):
+						 ProtectSection sect, ITypeSerializer* serializer):
 		mName(name), mPointerGetter(pointerGetter), mType(type), mProtectSection(sect),
-		mSerializer(serializer)
+		mSerializer(serializer ? serializer : mType->GetSerializer())
 	{}
 
 	FieldInfo::~FieldInfo()
@@ -65,7 +65,7 @@ namespace o2
 		mSerializer->Serialize(GetValuePtrStrong(object), data);
 	}
 
-	void FieldInfo::DeserializeFromObject(void* object, DataNode& data) const
+	void FieldInfo::DeserializeFromObject(void* object, const DataNode& data) const
 	{
 		mSerializer->Deserialize(GetValuePtrStrong(object), data);
 	}
@@ -75,7 +75,7 @@ namespace o2
 		mSerializer->Serialize(ptr, data);
 	}
 
-	void FieldInfo::Deserialize(void* ptr, DataNode& data) const
+	void FieldInfo::Deserialize(void* ptr, const DataNode& data) const
 	{
 		mSerializer->Deserialize(ptr, data);
 	}

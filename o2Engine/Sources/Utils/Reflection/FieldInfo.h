@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Utils/Reflection/Attributes.h"
-#include "Utils/Reflection/IFieldSerializer.h"
 #include "Utils/Reflection/SearchPassedObject.h"
+#include "Utils/Reflection/TypeSerializer.h"
+#include "Utils/Reflection/TypeSerializer.h"
 #include "Utils/Reflection/TypeTraits.h"
 #include "Utils/Serialization/DataNode.h"
 #include "Utils/Types/CommonTypes.h"
@@ -23,24 +24,6 @@ namespace o2
 	public:
 		typedef Vector<IAttribute*> AttributesVec;
 
-		template<typename T> struct RealEquals { static bool Check(const T& a, const T& b) { return Math::Equals(a, b); } };
-		template<typename T> struct FakeEquals { static bool Check(const T& a, const T& b) { return false; } };
-
-		template<typename T> struct RealCopy { static void Copy(T& a, const T& b) { a = b; } };
-		template<typename T> struct FakeCopy { static void Copy(T& a, const T& b) {  } };
-
-		template<typename _type, 
-			     typename _checker = typename std::conditional<EqualsOperator::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type,
-			     typename _copier = typename std::conditional<std::is_assignable<_type&, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
-		struct FieldSerializer: public IFieldSerializer
-		{
-			void Serialize(void* object, DataNode& data) const;
-			void Deserialize(void* object, DataNode& data) const;
-			bool Equals(void* objectA, void* objectB) const;
-			void Copy(void* objectA, void* objectB) const;
-			IFieldSerializer* Clone() const;
-		};
-
 		typedef void*(*GetValuePointerFuncPtr)(void*);
 
 	public:
@@ -49,7 +32,7 @@ namespace o2
 
 		// Constructor
 		FieldInfo(const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type, ProtectSection sect,
-				  IFieldSerializer* serializer);
+				  ITypeSerializer* serializer = nullptr);
 
 		// Destructor
 		virtual ~FieldInfo();
@@ -108,13 +91,13 @@ namespace o2
 		void SerializeFromObject(void* object, DataNode& data) const;
 
 		// Deserializes from object pointer, that contains this field
-		void DeserializeFromObject(void* object, DataNode& data) const;
+		void DeserializeFromObject(void* object, const DataNode& data) const;
 
 		// Serializes value from ptr
 		void Serialize(void* ptr, DataNode& data) const;
 
 		// Deserializes value from ptr
-		void Deserialize(void* ptr, DataNode& data) const;
+		void Deserialize(void* ptr, const DataNode& data) const;
 
 		// Returns is values getted from object A and object B equals
 		bool IsValueEquals(void* objectA, void* objectB) const;
@@ -128,7 +111,7 @@ namespace o2
 		const Type*            mType = nullptr;                          // Field type
 		Type*                  mOwnerType = nullptr;                     // Field owner type
 		AttributesVec          mAttributes;                              // Attributes array
-		IFieldSerializer*      mSerializer = nullptr;                    // field serializer
+		ITypeSerializer*       mSerializer = nullptr;                    // field serializer
 		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function
 
 	protected:
@@ -195,35 +178,5 @@ namespace o2
 		attribute->mOwnerFieldInfo = this;
 		mAttributes.Add(attribute);
 		return *this;
-	}
-
-	template<typename _type, typename _checker, typename _copier>
-	void FieldInfo::FieldSerializer<_type, _checker, _copier>::Serialize(void* object, DataNode& data) const
-	{
-		data.SetValue(*(_type*)object);
-	}
-
-	template<typename _type, typename _checker, typename _copier>
-	void FieldInfo::FieldSerializer<_type, _checker, _copier>::Deserialize(void* object, DataNode& data) const
-	{
-		data.GetValue(*(_type*)object);
-	}
-
-	template<typename _type, typename _checker, typename _copier>
-	bool FieldInfo::FieldSerializer<_type, _checker, _copier>::Equals(void* objectA, void* objectB) const
-	{
-		return _checker::Check(*(_type*)objectA, *(_type*)objectB);
-	}
-
-	template<typename _type, typename _checker, typename _copier>
-	void FieldInfo::FieldSerializer<_type, _checker, _copier>::Copy(void* objectA, void* objectB) const
-	{
-		_copier::Copy(*(_type*)objectA, *(_type*)objectB);
-	}
-
-	template<typename _type, typename _checker, typename _copier>
-	IFieldSerializer* FieldInfo::FieldSerializer<_type, _checker, _copier>::Clone() const
-	{
-		return mnew FieldSerializer();
 	}
 }

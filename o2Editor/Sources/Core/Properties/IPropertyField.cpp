@@ -74,17 +74,20 @@ namespace Editor
 		return "";
 	}
 
-	Button* IPropertyField::AddRemoveButton()
+	Button* IPropertyField::GetRemoveButton()
 	{
-		mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-		mRemoveBtn->name = "remove";
-		*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-		mRemoveBtn->layout->maxWidth = 20;
+		if (!mRemoveBtn)
+		{
+			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
+			mRemoveBtn->name = "remove";
+			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
+			mRemoveBtn->layout->maxWidth = 20;
 
-		if (auto layout = FindChild("layout"))
-			layout->AddChild(mRemoveBtn);
-		else
-			AddChild(mRemoveBtn);
+			if (auto layout = FindChild("layout"))
+				layout->AddChild(mRemoveBtn);
+			else
+				AddChild(mRemoveBtn);
+		}
 
 		return mRemoveBtn;
 	}

@@ -64,8 +64,8 @@ namespace Editor
 		// Returns property caption
 		virtual WString GetCaption() const;
 
-		// Adds remove button
-		virtual Button* AddRemoveButton();
+		// Returns remove button, creates if required
+		virtual Button* GetRemoveButton();
 
 		// Returns editing by this field type
 		virtual const Type* GetFieldType() const { return &TypeOf(void); }
@@ -497,7 +497,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(Button*, AddRemoveButton);
+	PUBLIC_FUNCTION(Button*, GetRemoveButton);
 	PUBLIC_FUNCTION(const Type*, GetFieldType);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(void, SetValuePath, const String&);

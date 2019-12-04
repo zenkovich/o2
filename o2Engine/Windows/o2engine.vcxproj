@@ -283,10 +283,10 @@
     <ClInclude Include="..\Sources\Utils\Reflection\Attributes.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FieldInfo.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\FunctionInfo.h" />
-    <ClInclude Include="..\Sources\Utils\Reflection\IFieldSerializer.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Reflection.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\SearchPassedObject.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\Type.h" />
+    <ClInclude Include="..\Sources\Utils\Reflection\TypeSerializer.h" />
     <ClInclude Include="..\Sources\Utils\Reflection\TypeTraits.h" />
     <ClInclude Include="..\Sources\Utils\Serialization\DataNode.h" />
     <ClInclude Include="..\Sources\Utils\Serialization\Serializable.h" />

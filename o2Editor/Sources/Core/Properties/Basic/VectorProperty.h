@@ -128,6 +128,9 @@ namespace Editor
 		// Sets new count of elements in vector
 		void Resize(int newCount);
 
+		// Removes element from vector
+		void Remove(int idx);
+
 		// It is called when add button has pressed
 		void OnAddPressed();
 
@@ -183,6 +186,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PROTECTED_FUNCTION(void, FreeValueProperty, IPropertyField*);
 	PROTECTED_FUNCTION(void, OnCountChanged, IPropertyField*);
 	PROTECTED_FUNCTION(void, Resize, int);
+	PROTECTED_FUNCTION(void, Remove, int);
 	PROTECTED_FUNCTION(void, OnAddPressed);
 	PROTECTED_FUNCTION(void, OnExpand);
 	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
