@@ -78,15 +78,19 @@ namespace Editor
 	{
 		if (!mRemoveBtn)
 		{
-			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-			mRemoveBtn->name = "remove";
-			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
-			mRemoveBtn->layout->maxWidth = 20;
+			auto buttonContainer = mnew Widget();
+			buttonContainer->name = "remove container";
+			buttonContainer->layout->maxWidth = 20;
 
 			if (auto layout = FindChild("layout"))
-				layout->AddChild(mRemoveBtn);
+				layout->AddChild(buttonContainer);
 			else
-				AddChild(mRemoveBtn);
+				AddChild(buttonContainer);
+
+			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
+			mRemoveBtn->name = "remove";
+			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(2, 0));
+			buttonContainer->AddChild(mRemoveBtn);
 		}
 
 		return mRemoveBtn;

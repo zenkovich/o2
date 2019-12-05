@@ -3,6 +3,9 @@
 
 #include "Core/EditorApplication.h"
 #include "Core/EditorScope.h"
+#include "Core/Properties/Basic/VectorProperty.h"
+#include "Core/Properties/Properties.h"
+#include "Core/UI/SpoilerWithHead.h"
 #include "Scene/Components/AnimationComponent.h"
 
 
@@ -30,10 +33,20 @@ namespace Editor
 
 	void AnimationComponentViewer::Refresh()
 	{
+		mFieldProperties.Set(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
+			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink()));
+		}));
 	}
 
 	void AnimationComponentViewer::Rebuild()
 	{
+		o2EditorProperties.FreeProperties(mFieldProperties);
+
+		const Type& type = TypeOf(AnimationComponent);
+
+		mAnimations = dynamic_cast<VectorProperty*>(
+			o2EditorProperties.BuildField(mSpoiler, type, "mStates", (String)"component:" + GetComponentType()->GetName() + "/",
+										  mFieldProperties, THIS_FUNC(OnPropertyChanged)));
 	}
 
 	void AnimationComponentViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)

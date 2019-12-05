@@ -80,7 +80,7 @@ namespace Editor
 		{
 			mAddButton = o2UI.CreateWidget<Button>("add small");
 			mAddButton->name = "add button";
-			*mAddButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0));
+			*mAddButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(2, 0));
 			mAddButton->onClick = THIS_FUNC(OnAddPressed);
 			mAddButton->isPointInside = [=](const Vec2F& point) {
 				return mAddButton->layout->IsPointInside(point) || mAddButtonContainer->IsUnderPoint(point);
@@ -315,7 +315,7 @@ namespace Editor
 			return mValuePropertiesPool.PopBack();
 
 		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mType->GetElementType(), "Element", onChangeCompleted, onChanged);
-		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-16, 0)));
+		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 
 		if (res)
 			res->SpecializeType(mType->GetElementType());

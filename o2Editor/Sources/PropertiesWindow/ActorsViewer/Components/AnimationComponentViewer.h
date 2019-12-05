@@ -2,9 +2,12 @@
 
 #include "PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
 #include "Scene/Components/AnimationComponent.h"
+#include "Core/Properties/FieldPropertiesInfo.h"
 
 namespace Editor
 {
+	class VectorProperty;
+
 	// --------------------------
 	// Animation component viewer
 	// --------------------------
@@ -32,6 +35,9 @@ namespace Editor
 		IOBJECT(AnimationComponentViewer);
 
 	protected:
+		VectorProperty* mAnimations = nullptr;
+
+		FieldPropertiesInfo mFieldProperties; // Field properties information
 
 	protected:
 		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
@@ -46,6 +52,8 @@ CLASS_BASES_META(Editor::AnimationComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationComponentViewer)
 {
+	PROTECTED_FIELD(mAnimations);
+	PROTECTED_FIELD(mFieldProperties);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationComponentViewer)

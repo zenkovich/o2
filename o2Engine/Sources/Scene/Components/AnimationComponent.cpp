@@ -38,7 +38,10 @@ namespace o2
 	void AnimationComponent::Update(float dt)
 	{
 		for (auto state : mStates)
-			state->animation.Update(dt);
+		{
+			if (state)
+				state->animation.Update(dt);
+		}
 
 		for (auto val : mValues)
 			val->Update();

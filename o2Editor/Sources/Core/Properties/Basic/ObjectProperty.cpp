@@ -137,7 +137,7 @@ namespace Editor
 		if (!mRemoveBtn)
 		{
 			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F());
+			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, 0));
 			AddInternalWidget(mRemoveBtn);
 		}
 
