@@ -79,15 +79,17 @@ namespace Editor
 		const ObjectType* mObjectType = nullptr;    // Type of target objects
 		const Type*       mObjectPtrType = nullptr; // Type of target object pointer
 
+		bool mDontDeleteEnabled = false; // When it is true, delete button is disabled
+
 		TargetsVec               mTargetObjects;   // Target objects
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
-		Widget*        mTypeContainer = nullptr;      // Type caption and create/delete button container widget, placed on spoiler head
-		Spoiler*       mSpoiler = nullptr;            // Properties spoiler
-		Label*         mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
-		Button*        mCreateDeleteButton = nullptr; // CReate and delete button. Create - when value is nullptr, delete - when not
-		ContextMenu* mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
-													  // when this type changing and create button were pressed
+		HorizontalLayout* mHeaderContainer = nullptr;    // Type caption and create/delete button container widget, placed on spoiler head
+		Spoiler*          mSpoiler = nullptr;            // Properties spoiler
+		Label*            mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
+		Button*           mCreateDeleteButton = nullptr; // Create and delete button. Create - when value is nullptr, delete - when not
+		ContextMenu*      mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
+													     // when this type changing and create button were pressed
 
 		bool mPropertiesInitialized = false; // True when properties were built and initialized. 
 		                                     // Properties building when spoiler is expanding or when changing type and spoiler is still expanding
@@ -130,9 +132,10 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
 	PROTECTED_FIELD(mObjectType);
 	PROTECTED_FIELD(mObjectPtrType);
+	PROTECTED_FIELD(mDontDeleteEnabled);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mObjectPropertiesViewer);
-	PROTECTED_FIELD(mTypeContainer);
+	PROTECTED_FIELD(mHeaderContainer);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mTypeCaption);
 	PROTECTED_FIELD(mCreateDeleteButton);

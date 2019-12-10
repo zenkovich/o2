@@ -92,7 +92,7 @@ namespace Editor
 		bool IsRevertable() const;
 
 		// Specializes field type
-		virtual void SpecializeType(const Type* type) {}
+		virtual void SpecializeType(const Type* type);
 
 		// Specializes field info
 		virtual void SpecializeFieldInfo(const FieldInfo* fieldInfo);
@@ -132,6 +132,9 @@ namespace Editor
 		IOBJECT(IPropertyField);
 
 	protected:
+		const Type*      mSpecializedType = nullptr;      // Specialized type
+		const FieldInfo* mSpecializedFieldInfo = nullptr; // Specialzed field info
+
 		bool mRevertable = true; // Is property can be reverted
 
 		TargetsVec mValuesProxies;          // Target values proxies
@@ -478,6 +481,8 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 {
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
+	PROTECTED_FIELD(mSpecializedType);
+	PROTECTED_FIELD(mSpecializedFieldInfo);
 	PROTECTED_FIELD(mRevertable);
 	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mValuesDifferent);

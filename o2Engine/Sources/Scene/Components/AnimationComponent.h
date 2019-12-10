@@ -2,8 +2,10 @@
 
 #include "Animation/Animation.h"
 #include "Animation/AnimationState.h"
-#include "Utils/Debug/Debug.h"
 #include "Scene/Component.h"
+#include "Utils/Debug/Debug.h"
+#include "Utils/Editor/Attributes/DefaultType.h"
+#include "Utils/Editor/Attributes/DontDelete.h"
 
 namespace o2
 {
@@ -155,7 +157,7 @@ namespace o2
 		};
 
 	protected:
-		AnimationStatesVec mStates; // Animation states array @SERIALIZABLE
+		AnimationStatesVec mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE
 		ValueAgentsVec     mValues; // Assigning value agents
 		BlendState         mBlend;  // Current blend parameters
 
@@ -260,7 +262,7 @@ CLASS_BASES_META(o2::AnimationComponent)
 END_META;
 CLASS_FIELDS_META(o2::AnimationComponent)
 {
-	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mStates).DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValues);
 	PROTECTED_FIELD(mBlend);
 }

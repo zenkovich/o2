@@ -50,7 +50,7 @@ namespace o2
 	class SerializableAttribute: public IAttribute
 	{
 		ATTRIBUTE_COMMENT_DEFINITION("SERIALIZABLE");
-		ATTRIBUTE_SHORT_DEFINITION("SERIALIZABLE_ATTRIBUTE()");
+		ATTRIBUTE_SHORT_DEFINITION("SERIALIZABLE_ATTRIBUTE");
 	};
 
 	// Serialization implementation macros

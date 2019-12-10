@@ -318,7 +318,10 @@ namespace Editor
 		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 
 		if (res)
+		{
 			res->SpecializeType(mType->GetElementType());
+			res->SpecializeFieldInfo(mSpecializedFieldInfo);
+		}
 
 		return res;
 	}

@@ -822,13 +822,21 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		{
 			for (auto attributeClass : mCache.attributes)
 			{
-				if (!attributeClass->GetAttributeCommentDef().empty() &&
-					synComment->GetData().find(attributeClass->GetAttributeCommentDef()) != string::npos)
+				auto fnd = synComment->GetData().find(attributeClass->GetAttributeCommentDef());
+				if (!attributeClass->GetAttributeCommentDef().empty() && fnd != string::npos)
 				{
+					string parameters = "()";
+					auto parametersBegin = fnd + attributeClass->GetAttributeCommentDef().length();
+					if (synComment->GetData()[parametersBegin] == '(')
+					{
+						auto parametersEnd = synComment->GetData().find(')', parametersBegin) + 1;
+						parameters = synComment->GetData().substr(parametersBegin, parametersEnd - parametersBegin);
+					}
+
 					if (!attributeClass->GetAttributeShortDef().empty())
-						attributes += string(".") + attributeClass->GetAttributeShortDef();
+						attributes += string(".") + attributeClass->GetAttributeShortDef() + parameters;
 					else
-						attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + ")";
+						attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + parameters + ")";
 				}
 			}
 		}
@@ -1254,9 +1262,7 @@ void CodeToolCache::SearchAttributes(SyntaxSection* section, SyntaxClass* attrib
 		{
 			SyntaxClass* childClass = dynamic_cast<SyntaxClass*>(childSection);
 			if (IsClassBasedOn(childClass, attributeClass))
-			{
 				attributes.push_back(childClass);
-			}
 		}
 
 		SearchAttributes(childSection, attributeClass);

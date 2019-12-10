@@ -11,6 +11,9 @@
 #include "Core/WindowsSystem/WindowsManager.h"
 #include "Dialogs/CurveEditorDlg.h"
 #include "LogWindow/LogWindow.h"
+#include "Properties/Basic/FloatProperty.h"
+#include "Properties/Basic/IntegerProperty.h"
+#include "Properties/Basic/ObjectPtrProperty.h"
 #include "PropertiesWindow/PropertiesWindow.h"
 #include "Scene/Scene.h"
 #include "Scene/UI/UIManager.h"
@@ -24,8 +27,6 @@
 #include "TreeWindow/TreeWindow.h"
 #include "UIStyle/EditorUIStyle.h"
 #include "Utils/Math/Curve.h"
-#include "Properties/Basic/FloatProperty.h"
-#include "Properties/Basic/IntegerProperty.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -98,7 +99,7 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
-		mMenuPanel->AddItem("Debug/Add property", [&]() { o2UI.CreateWidget<IntegerProperty>("with caption")->GetRemoveButton(); });
+		mMenuPanel->AddItem("Debug/Add property", [&]() { o2UI.CreateWidget<ObjectPtrProperty>("with caption")->GetRemoveButton(); });
 		mMenuPanel->AddItem("Debug/RebuildEditorUIManager", [&]() {
 			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIManager(false);

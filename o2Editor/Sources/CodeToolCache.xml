@@ -3694,79 +3694,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectPtrProperty.h">
-		<date year="2019" month="12" day="4" hour="14" minute="21" second="4" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ObjectPtrProperty" fullname="Editor::ObjectPtrProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/IPropertyField.h">
-		<date year="2019" month="12" day="4" hour="14" minute="21" second="4" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IPropertyField" fullname="Editor::IPropertyField" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;" newDef="TargetPair" />
-								<typedef what="Vector&lt;Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;&gt;" newDef="TargetsVec" />
-								<typedef what="Function&lt;void(IPropertyField*)&gt;" newDef="OnChangedFunc" />
-								<typedef what="Function&lt;void(const String&amp;, const Vector&lt;DataNode&gt;&amp;, const Vector&lt;DataNode&gt;&amp;)&gt;" newDef="OnChangeCompletedFunc" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="HorizontalLayout" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="TPropertyField" fullname="Editor::TPropertyField" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertyField" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/VectorProperty.h">
 		<date year="2019" month="12" day="4" hour="18" minute="2" second="51" />
 		<globalNamespace name="" fullname="">
@@ -3828,6 +3755,79 @@
 			</sections>
 			<typedefs />
 			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/IPropertyField.h">
+		<date year="2019" month="12" day="10" hour="15" minute="53" second="49" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="IPropertyField" fullname="Editor::IPropertyField" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;" newDef="TargetPair" />
+								<typedef what="Vector&lt;Pair&lt;IAbstractValueProxy*, IAbstractValueProxy*&gt;&gt;" newDef="TargetsVec" />
+								<typedef what="Function&lt;void(IPropertyField*)&gt;" newDef="OnChangedFunc" />
+								<typedef what="Function&lt;void(const String&amp;, const Vector&lt;DataNode&gt;&amp;, const Vector&lt;DataNode&gt;&amp;)&gt;" newDef="OnChangeCompletedFunc" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="HorizontalLayout" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="TPropertyField" fullname="Editor::TPropertyField" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\o2_\o2Editor\Platforms\Windows\..\..\Sources/Core/Properties/Basic/ObjectPtrProperty.h">
+		<date year="2019" month="12" day="10" hour="16" minute="29" second="3" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ObjectPtrProperty" fullname="Editor::ObjectPtrProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IPropertyField" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
 		</globalNamespace>
 	</file>
 </files>

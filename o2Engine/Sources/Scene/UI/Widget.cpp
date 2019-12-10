@@ -671,14 +671,7 @@ namespace o2
 
 		if (mParentWidget)
 		{
-			mParentWidget->mChildWidgets.Clear();
-			for (auto child : mParentWidget->mChildren)
-			{
-				Widget* widget = dynamic_cast<Widget*>(child);
-				if (widget)
-					mParentWidget->mChildWidgets.Add(widget);
-			}
-
+			mParentWidget->UpdateChildWidgetsList();
 			mParentWidget->UpdateDrawingChildren();
 		}
 	}
@@ -934,7 +927,7 @@ namespace o2
 		Widget* widget = dynamic_cast<Widget*>(child);
 		if (widget)
 		{
-			mChildWidgets.Add(widget);
+			UpdateChildWidgetsList();
 			UpdateDrawingChildren();
 
 			OnChildAdded(widget);
@@ -997,6 +990,16 @@ namespace o2
 		o2Scene.mEditableObjects.Add(&layersEditable);
 		o2Scene.mEditableObjects.Add(&internalChildrenEditable);
 #endif
+	}
+
+	void Widget::UpdateChildWidgetsList()
+	{
+		mChildWidgets.Clear();
+		for (auto child : mChildren) 
+		{
+			if (auto widget = dynamic_cast<Widget*>(child))
+				mChildWidgets.Add(widget);
+		}
 	}
 
 	WidgetLayoutData& Widget::GetLayoutData()

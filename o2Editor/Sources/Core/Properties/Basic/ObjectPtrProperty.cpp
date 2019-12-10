@@ -4,11 +4,12 @@
 #include "Core/EditorScope.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
+#include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widgets/Spoiler.h"
-#include "Scene/UI/UIManager.h"
+#include "Utils/Editor/Attributes/DontDelete.h"
 
 using namespace o2;
 
@@ -51,9 +52,11 @@ namespace Editor
 		if (mSpoiler)
 			mSpoiler->onExpand = THIS_FUNC(Refresh);
 
-		mTypeContainer = mnew Widget();
-		*mTypeContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
-		mTypeContainer->SetInternalParent(mSpoiler, false);
+		mHeaderContainer = mnew HorizontalLayout();
+		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
+		mHeaderContainer->baseCorner = BaseCorner::Right;
+		mHeaderContainer->expandHeight = false;
+		mHeaderContainer->SetInternalParent(mSpoiler, false);
 
 		mTypeCaption = o2UI.CreateLabel("nullptr");
 		*mTypeCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
@@ -62,12 +65,14 @@ namespace Editor
 		mTypeCaption->verAlign = VerAlign::Bottom;
 		mTypeCaption->height = 8;
 		mTypeCaption->transparency = 0.6f;
-		mTypeContainer->AddChild(mTypeCaption);
+		mHeaderContainer->AddInternalWidget(mTypeCaption);
 
 		mCreateDeleteButton = o2UI.CreateButton("Create");
-		*mCreateDeleteButton->layout = WidgetLayout(1, 1, 1, 0, -75, 0, 0, -3);
+		mCreateDeleteButton->layout->maxWidth = 75;
+		mCreateDeleteButton->layout->minHeight = 15;
+		mCreateDeleteButton->layout->height = 15;
 		mCreateDeleteButton->onClick = THIS_FUNC(OnCreateOrDeletePressed);
-		mTypeContainer->AddChild(mCreateDeleteButton);
+		mHeaderContainer->AddChild(mCreateDeleteButton);
 
 		mCreateMenu = o2UI.CreateWidget<ContextMenu>();
 		mCreateDeleteButton->AddChild(mCreateMenu);
@@ -92,19 +97,16 @@ namespace Editor
 			auto object = GetProxy(mTargetObjects[0].first);
 
 			if (object)
-			{
-				auto tp = &object->GetType();
-
-				if (tp == nullptr)
-					tp = &object->GetType();
-
+			{				
 				mTypeCaption->text = object->GetType().GetName();
 				mCreateDeleteButton->caption = "Delete";
+				mCreateDeleteButton->enabled = !mDontDeleteEnabled;
 			}
 			else
 			{
 				mTypeCaption->text = "nullptr";
 				mCreateDeleteButton->caption = "Create";
+				mCreateDeleteButton->enabled = true;
 			}
 		}
 
@@ -154,6 +156,8 @@ namespace Editor
 
 	void ObjectPtrProperty::SpecializeType(const Type* type)
 	{
+		IPropertyField::SpecializeType(type);
+
 		if (type->GetUsage() == Type::Usage::Property)
 			type = dynamic_cast<const PropertyType*>(type)->GetValueType();
 
@@ -166,10 +170,15 @@ namespace Editor
 
 	void ObjectPtrProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
 	{
-		SpecializeType(fieldInfo->GetType());
+		IPropertyField::SpecializeFieldInfo(fieldInfo);
 
-		if (fieldInfo->GetAttribute<ExpandedByDefaultAttribute>())
-			mSpoiler->Expand();
+		if (fieldInfo)
+		{
+			if (fieldInfo->GetAttribute<ExpandedByDefaultAttribute>())
+				mSpoiler->Expand();
+
+			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();
+		}
 	}
 
 	const Type* ObjectPtrProperty::GetSpecializedType() const
@@ -185,7 +194,7 @@ namespace Editor
 		if (spoilerCaptionLayer)
 		{
 			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
-			*mTypeContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
 		}
 	}
 
@@ -199,8 +208,8 @@ namespace Editor
 		if (!mRemoveBtn)
 		{
 			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
-			*mRemoveBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(2, 0));
-			AddInternalWidget(mRemoveBtn);
+			mRemoveBtn->layout->maxWidth = 20;
+			mHeaderContainer->AddChild(mRemoveBtn, 0);
 		}
 
 		return mRemoveBtn;

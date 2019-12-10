@@ -132,9 +132,14 @@ namespace Editor
 		return mRevertable;
 	}
 
+	void IPropertyField::SpecializeType(const Type* type)
+	{
+		mSpecializedType = type;
+	}
+
 	void IPropertyField::SpecializeFieldInfo(const FieldInfo* fieldInfo)
 	{
-		SpecializeType(fieldInfo->GetType());
+		mSpecializedFieldInfo = fieldInfo;
 	}
 
 	void IPropertyField::CheckValueChangeCompleted()

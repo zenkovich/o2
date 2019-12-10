@@ -306,6 +306,9 @@ namespace o2
 		// It is called when actor including from scene, including this to layer drawables
 		void OnIncludeToScene() override;
 
+		// Updates child widgets list
+		void UpdateChildWidgetsList();
+
 		// Returns layout data reference
 		WidgetLayoutData& GetLayoutData();
 
@@ -785,6 +788,7 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnExcludeFromScene);
 	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PROTECTED_FUNCTION(void, UpdateChildWidgetsList);
 	PROTECTED_FUNCTION(WidgetLayoutData&, GetLayoutData);
 	PROTECTED_FUNCTION(const WidgetLayoutData&, GetLayoutData);
 	PROTECTED_FUNCTION(void, SetChildrenWorldRect, const RectF&);
