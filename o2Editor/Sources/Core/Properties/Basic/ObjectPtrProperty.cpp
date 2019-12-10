@@ -9,6 +9,7 @@
 #include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widgets/Spoiler.h"
+#include "Utils/Editor/Attributes/DefaultType.h"
 #include "Utils/Editor/Attributes/DontDelete.h"
 
 using namespace o2;
@@ -96,17 +97,26 @@ namespace Editor
 		{
 			auto object = GetProxy(mTargetObjects[0].first);
 
+			if (!object && mSpecializedFieldInfo)
+			{
+				if (auto defaultTypeAttr = mSpecializedFieldInfo->GetAttribute<DefaultTypeAttribute>())
+				{
+					CreateObject(dynamic_cast<const ObjectType*>(defaultTypeAttr->defaultType));
+					return;
+				}
+			}
+
 			if (object)
 			{				
 				mTypeCaption->text = object->GetType().GetName();
 				mCreateDeleteButton->caption = "Delete";
-				mCreateDeleteButton->enabled = !mDontDeleteEnabled;
+				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
 			}
 			else
 			{
 				mTypeCaption->text = "nullptr";
 				mCreateDeleteButton->caption = "Create";
-				mCreateDeleteButton->enabled = true;
+				mCreateDeleteButton->enabledForcibly = true;
 			}
 		}
 

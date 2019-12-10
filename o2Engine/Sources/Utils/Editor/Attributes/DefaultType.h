@@ -1,3 +1,4 @@
+#pragma once
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Attributes.h"
 #include "Utils/Reflection/Reflection.h"

@@ -26,6 +26,8 @@ namespace o2
 	public:
 		PROPERTIES(Widget);
 
+		PROPERTY(bool, enabledForcibly, SetEnableForcible, IsEnabled); // Enable propertu, works forcibly
+
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency
 
@@ -685,6 +687,7 @@ CLASS_BASES_META(o2::Widget)
 END_META;
 CLASS_FIELDS_META(o2::Widget)
 {
+	PUBLIC_FIELD(enabledForcibly);
 	PUBLIC_FIELD(transparency);
 	PUBLIC_FIELD(resTransparency);
 	PUBLIC_FIELD(childrenWidgets);
