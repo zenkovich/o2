@@ -12,7 +12,9 @@ namespace Editor
 	}
 
 	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets)
-	{}
+	{
+		mFieldProperties.Set(targetObjets);
+	}
 
 	const Type* IObjectPropertiesViewer::GetViewingObjectType() const
 	{

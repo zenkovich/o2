@@ -84,7 +84,7 @@ namespace Editor
 		// Returns available field by type
 		IPropertyField* GetFieldPropertyPrototype(const Type* type) const;
 
-		// Creates field property by type field info
+		// Creates field property by type 
 		IPropertyField* CreateFieldProperty(const Type* type, const String& name,
 											const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 											const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);

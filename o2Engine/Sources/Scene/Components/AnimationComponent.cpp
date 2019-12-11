@@ -237,6 +237,11 @@ namespace o2
 		}
 	}
 
+	void AnimationComponent::OnStatesListChanged()
+	{
+
+	}
+
 	void AnimationComponent::BlendState::Update(float dt)
 	{
 		time -= dt;

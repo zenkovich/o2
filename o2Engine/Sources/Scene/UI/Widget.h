@@ -2,6 +2,8 @@
 
 #include "Scene/Actor.h"
 #include "Scene/Drawable.h"
+#include "Utils/Editor/Attributes/DefaultType.h"
+#include "Utils/Editor/Attributes/DontDelete.h"
 #include "Utils/Math/Layout.h"
 
 namespace o2
@@ -250,27 +252,27 @@ namespace o2
 		using Actor::mLayer;
 		using Actor::mIsOnScene;
 
-		LayersVec mLayers; // Layers array @SERIALIZABLE
-		StatesVec mStates; // States array @SERIALIZABLE
+		LayersVec mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+		StatesVec mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 
 		Widget*    mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
-		WidgetsVec mChildWidgets;           // Children widgets, a part of all children
-		WidgetsVec mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE
-		WidgetsVec mDrawingChildren;        // Children widgets, which drawing depth isn't overridden
+		WidgetsVec mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+		WidgetsVec mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+		WidgetsVec mDrawingChildren;        // Children widgets, which drawing depth isn't overridden @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 
 		bool mOverrideDepth = false; // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 
 		float mTransparency = 1.0f;	   // Widget transparency @SERIALIZABLE
 		float mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
-		LayersVec mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000)
-		LayersVec mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000)
+		LayersVec mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+		LayersVec mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 
-		WidgetState* mFocusedState = nullptr; // Focused widget state
+		WidgetState* mFocusedState = nullptr; // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 		bool         mIsFocused = false;      // Is widget focused
 		bool         mIsFocusable = false;    // Is widget can be focused @SERIALIZABLE
 
-		WidgetState* mVisibleState = nullptr; // Widget visibility state
+		WidgetState* mVisibleState = nullptr; // Widget visibility state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 
 		bool mIsClipped = false; // Is widget fully clipped by some scissors
 
@@ -702,20 +704,20 @@ CLASS_FIELDS_META(o2::Widget)
 	PUBLIC_FIELD(onUnfocused);
 	PUBLIC_FIELD(onShow);
 	PUBLIC_FIELD(onHide);
-	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mLayers).SERIALIZABLE_ATTRIBUTE().DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer);
+	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE().DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState);
 	PROTECTED_FIELD(mParentWidget);
-	PROTECTED_FIELD(mChildWidgets);
-	PROTECTED_FIELD(mInternalWidgets).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mDrawingChildren);
+	PROTECTED_FIELD(mChildWidgets).DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::Widget);
+	PROTECTED_FIELD(mInternalWidgets).SERIALIZABLE_ATTRIBUTE().DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::Widget);
+	PROTECTED_FIELD(mDrawingChildren).DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::Widget);
 	PROTECTED_FIELD(mOverrideDepth).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mTransparency).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResTransparency);
 	PROTECTED_FIELD(mDrawingLayers);
-	PROTECTED_FIELD(mFocusedState);
+	PROTECTED_FIELD(mFocusedState).DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState);
 	PROTECTED_FIELD(mIsFocused);
 	PROTECTED_FIELD(mIsFocusable).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mVisibleState);
+	PROTECTED_FIELD(mVisibleState).DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState);
 	PROTECTED_FIELD(mIsClipped);
 	PROTECTED_FIELD(mBounds);
 	PROTECTED_FIELD(mBoundsWithChilds);

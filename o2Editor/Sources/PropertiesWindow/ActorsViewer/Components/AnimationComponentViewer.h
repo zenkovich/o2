@@ -26,9 +26,6 @@ namespace Editor
 		// Returns viewing component type 
 		const Type* GetComponentType() const override;
 
-		// Updates all component values
-		void Refresh() override;
-
 		// Rebuilds properties layout
 		void Rebuild() override;
 
@@ -36,8 +33,6 @@ namespace Editor
 
 	protected:
 		VectorProperty* mAnimations = nullptr;
-
-		FieldPropertiesInfo mFieldProperties; // Field properties information
 
 	protected:
 		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
@@ -53,7 +48,6 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationComponentViewer)
 {
 	PROTECTED_FIELD(mAnimations);
-	PROTECTED_FIELD(mFieldProperties);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationComponentViewer)
@@ -61,7 +55,6 @@ CLASS_METHODS_META(Editor::AnimationComponentViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
-	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Rebuild);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }

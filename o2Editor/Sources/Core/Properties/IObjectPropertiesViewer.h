@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Properties/FieldPropertiesInfo.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Types/Containers/Pair.h"
 #include "Utils/Types/Containers/Vector.h"
@@ -52,6 +53,8 @@ namespace Editor
 	protected:
 		Widget* mViewWidget = nullptr; // View layout
 
+		FieldPropertiesInfo mFieldProperties; // Field properties information
+
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
 		                                                    // inChangeCompleted from this with full combined path
 
@@ -72,6 +75,7 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FIELD(onChangeCompleted);
 	PUBLIC_FIELD(path);
 	PROTECTED_FIELD(mViewWidget);
+	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mOnChildFieldChangeCompleted);
 }
 END_META;

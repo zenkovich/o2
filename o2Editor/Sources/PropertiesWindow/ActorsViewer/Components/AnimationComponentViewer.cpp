@@ -31,13 +31,6 @@ namespace Editor
 		return &TypeOf(AnimationComponent);
 	}
 
-	void AnimationComponentViewer::Refresh()
-	{
-		mFieldProperties.Set(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
-			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink()));
-		}));
-	}
-
 	void AnimationComponentViewer::Rebuild()
 	{
 		o2EditorProperties.FreeProperties(mFieldProperties);

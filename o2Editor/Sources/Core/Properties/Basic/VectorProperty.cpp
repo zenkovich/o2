@@ -8,6 +8,7 @@
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/Spoiler.h"
 #include "SceneWindow/SceneEditScreen.h"
+#include "Utils/Editor/Attributes/InvokeOnChange.h"
 
 namespace Editor
 {
@@ -412,6 +413,14 @@ namespace Editor
 
 		onChanged(this);
 		o2EditorSceneScreen.OnSceneChanged();
+
+		if (mSpecializedFieldInfo)
+		{
+			if (auto invokeOnChange = mSpecializedFieldInfo->GetAttribute<InvokeOnChangeAttribute>())
+			{
+
+			}
+		}
 	}
 
 	void VectorProperty::Remove(int idx)

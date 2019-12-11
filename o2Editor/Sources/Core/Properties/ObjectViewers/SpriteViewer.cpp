@@ -95,11 +95,6 @@ namespace Editor
 			o2EditorProperties.BuildField(mTiledPropertiesSpoiler, spriteType, "tileScale", "", mFieldProperties, mOnChildFieldChangeCompleted, onChanged));
 	}
 
-	void SpriteViewer::Refresh(const TargetsVec& targetObjets)
-	{
-		mFieldProperties.Set(targetObjets);
-	}
-
 	const Type* SpriteViewer::GetViewingObjectType() const
 	{
 		return &TypeOf(Sprite);

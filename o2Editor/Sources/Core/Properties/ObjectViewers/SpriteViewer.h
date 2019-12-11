@@ -32,9 +32,6 @@ namespace Editor
 		// Default constructor. Initializes fields controls
 		SpriteViewer();
 
-		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets) override;
-
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
 
@@ -42,8 +39,6 @@ namespace Editor
 
 	protected:
 		typedef AssetProperty<ImageAssetRef> ImageAssetProperty;
-
-		FieldPropertiesInfo mFieldProperties; // Field properties information
 
 		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
 
@@ -76,7 +71,6 @@ CLASS_BASES_META(Editor::SpriteViewer)
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
 {
-	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mHiddenProperties);
 	PROTECTED_FIELD(mImageProperty);
 	PROTECTED_FIELD(mColorProperty);
@@ -95,7 +89,6 @@ END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)
 {
 
-	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PROTECTED_FUNCTION(void, OnModeSelected);
 }

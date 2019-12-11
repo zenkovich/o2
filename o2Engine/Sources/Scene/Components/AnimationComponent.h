@@ -6,6 +6,7 @@
 #include "Utils/Debug/Debug.h"
 #include "Utils/Editor/Attributes/DefaultType.h"
 #include "Utils/Editor/Attributes/DontDelete.h"
+#include "Utils/Editor/Attributes/InvokeOnChange.h"
 
 namespace o2
 {
@@ -157,7 +158,7 @@ namespace o2
 		};
 
 	protected:
-		AnimationStatesVec mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE
+		AnimationStatesVec mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE @INVOKE_ON_CHANGE(OnStatesListChanged)
 		ValueAgentsVec     mValues; // Assigning value agents
 		BlendState         mBlend;  // Current blend parameters
 
@@ -169,6 +170,8 @@ namespace o2
 		template<typename _type>
 		void RegAnimatedValue(AnimatedValue< _type >* value, const String& path, AnimationState* state);
 
+		// It is called from editor, refreshes states
+		void OnStatesListChanged();
 
 		friend class Animation;
 		friend class IAnimatedValue;
@@ -262,7 +265,7 @@ CLASS_BASES_META(o2::AnimationComponent)
 END_META;
 CLASS_FIELDS_META(o2::AnimationComponent)
 {
-	PROTECTED_FIELD(mStates).DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE().DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged);
 	PROTECTED_FIELD(mValues);
 	PROTECTED_FIELD(mBlend);
 }
@@ -292,5 +295,6 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	PUBLIC_FUNCTION(String, GetCategory);
 	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, UnregAnimatedValue, IAnimatedValue*, const String&);
+	PROTECTED_FUNCTION(void, OnStatesListChanged);
 }
 END_META;

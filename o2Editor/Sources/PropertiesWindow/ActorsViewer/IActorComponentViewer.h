@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Utils/Types/Containers/Vector.h"
+#include "Core/Properties/FieldPropertiesInfo.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Reflection/Type.h"
+#include "Utils/Types/Containers/Vector.h"
 
 using namespace o2;
 
@@ -60,6 +61,8 @@ namespace Editor
 	protected:
 		Vector<Component*> mTargetComponents; // Target components
 
+		FieldPropertiesInfo mFieldProperties; // Field properties information
+
 		SpoilerWithHead* mSpoiler = nullptr;      // Component's spoiler
 		Button*          mRemoveButton = nullptr; // Remove component button
 
@@ -100,6 +103,7 @@ END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
 	PROTECTED_FIELD(mTargetComponents);
+	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mRemoveButton);
 	PROTECTED_FIELD(mBuiltWithHidden);
