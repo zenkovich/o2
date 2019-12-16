@@ -1,21 +1,9 @@
 #include "stdafx.h"
 #include "DefaultActorComponentViewer.h"
 
-#include "Core/Actions/PropertyChange.h"
-#include "Core/EditorApplication.h"
-#include "Core/EditorScope.h"
-#include "Core/Properties/Basic/ObjectProperty.h"
-#include "Core/Properties/Basic/ObjectPtrProperty.h"
+#include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
-#include "PropertiesWindow/PropertiesWindow.h"
-#include "Scene/Component.h"
-#include "Scene/UI/Widget.h"
-#include "Scene/UI/Widgets/Image.h"
-#include "Scene/UI/Widgets/Label.h"
-#include "Scene/UI/Widgets/Spoiler.h"
-#include "Scene/UI/Widgets/VerticalLayout.h"
-#include "SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {
@@ -42,23 +30,28 @@ namespace Editor
 			return;
 
 		mComponentType = type;
-		Rebuild();
+		mSpoiler->name = "component " + mComponentType->GetName();
 	}
 
 	void DefaultActorComponentViewer::Refresh()
 	{
-		mFieldProperties.Set(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
-			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink())); 
-		}));
-	}
+		bool requiredNewViewer = mViewer ? mViewer->GetViewingObjectType() != mComponentType : mComponentType != nullptr;
+		if (requiredNewViewer) {
+			if (mViewer)
+				o2EditorProperties.FreeObjectViewer(mViewer, mComponentType);
 
-	void DefaultActorComponentViewer::Rebuild()
-	{
-		mSpoiler->name = "component " + mComponentType->GetName();
+			mViewer = o2EditorProperties.CreateObjectViewer(mComponentType, (String)"component:" + mComponentType->GetName() + "/",
+															THIS_FUNC(OnPropertyChanged));
 
-		o2EditorProperties.FreeProperties(mFieldProperties);
-		o2EditorProperties.BuildObjectProperties((VerticalLayout*)mSpoiler, mComponentType, mFieldProperties,
-			(String)"component:" + mComponentType->GetName() + "/", THIS_FUNC(OnPropertyChanged));
+			mSpoiler->AddChild(mViewer->GetViewWidget());
+		}
+
+		if (mViewer)
+		{
+			mViewer->Refresh(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
+				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink()));
+			}));
+		}
 	}
 
 	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)

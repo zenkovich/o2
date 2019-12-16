@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Assets/ImageAsset.h"
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;
@@ -43,8 +43,6 @@ namespace Editor
 	protected:
 		typedef AssetProperty<FontAssetRef> FontAssetProperty;
 
-		FieldPropertiesInfo mFieldProperties; // Field properties information
-
 		ColorProperty*     mColorProperty = nullptr;
 		FloatProperty*     mAlphaProperty = nullptr;
 		FontAssetProperty* mFontProperty = nullptr;
@@ -66,7 +64,6 @@ CLASS_BASES_META(Editor::TextViewer)
 END_META;
 CLASS_FIELDS_META(Editor::TextViewer)
 {
-	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mColorProperty);
 	PROTECTED_FIELD(mAlphaProperty);
 	PROTECTED_FIELD(mFontProperty);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/EditorApplication.h"
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IPropertyField.h"
 #include "Utils/Delegates.h"
 #include "Utils/Singleton.h"
@@ -44,29 +44,29 @@ namespace Editor
 		bool IsPrivateFieldsVisible() const;
 
 		// Free properties and put in cache
-		void FreeProperties(FieldPropertiesInfo& propertiesInfo);
+		void FreeProperties(PropertiesContext& propertiesInfo);
 
 		// Free property field and put in cache
 		void FreeProperty(IPropertyField* field);
 
 		// Builds layout viewer by type for objects
-		void BuildObjectProperties(VerticalLayout* layout, const Type* type, FieldPropertiesInfo& propertiesInfo, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, const Type* type, PropertiesContext& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Builds layout viewer by fields
-		void BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
-		IPropertyField* BuildField(VerticalLayout* layout, FieldInfo* fieldInfo, FieldPropertiesInfo& propertiesInfo, const String& path,
+		IPropertyField* BuildField(VerticalLayout* layout, FieldInfo* fieldInfo, PropertiesContext& propertiesInfo, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
 		IPropertyField* BuildField(VerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path, 
-								   FieldPropertiesInfo& propertiesInfo,
+								   PropertiesContext& propertiesInfo,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -147,7 +147,7 @@ namespace Editor
 		void InitializeAvailableObjectPropertiesViewers();
 
 		// Builds layout viewer by fields without filtering
-		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, FieldPropertiesInfo& propertiesInfo, const String& path,
+		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& propertiesInfo, const String& path,
 						 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 						 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 	};

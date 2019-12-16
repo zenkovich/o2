@@ -69,7 +69,7 @@ namespace Editor
 	}
 
 	IPropertyField* Properties::BuildField(VerticalLayout* layout, FieldInfo* fieldInfo,
-										   FieldPropertiesInfo& propertiesInfo, const String& path,
+										   PropertiesContext& propertiesInfo, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -82,13 +82,14 @@ namespace Editor
 		if (!fieldWidget)
 			return nullptr;
 
+		fieldWidget->name = fieldInfo->GetName() + " : " + fieldInfo->GetType()->GetName();
 		fieldWidget->SetValuePath(path + fieldInfo->GetName());
 		fieldWidget->SpecializeType(fieldInfo->GetType());
 		fieldWidget->SpecializeFieldInfo(fieldInfo);
 
-		layout->AddChild(fieldWidget, false);
+		layout->AddChild(fieldWidget);
 
-		propertiesInfo.properties.Add(fieldInfo, fieldWidget);
+		propertiesInfo.mProperties.Add(fieldInfo, fieldWidget);
 
 		//o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)timer.GetDeltaTime());
 
@@ -96,7 +97,7 @@ namespace Editor
 	}
 
 	IPropertyField* Properties::BuildField(VerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path,
-										   FieldPropertiesInfo& propertiesInfo, 
+										   PropertiesContext& propertiesInfo, 
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/, 
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -104,7 +105,7 @@ namespace Editor
 	}
 
 	void Properties::BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields,
-								 FieldPropertiesInfo& propertiesInfo, const String& path,
+								 PropertiesContext& propertiesInfo, const String& path,
 								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -159,12 +160,12 @@ namespace Editor
 		return false;
 	}
 
-	void Properties::FreeProperties(FieldPropertiesInfo& propertiesInfo)
+	void Properties::FreeProperties(PropertiesContext& propertiesInfo)
 	{
-		for (auto prop : propertiesInfo.properties)
+		for (auto prop : propertiesInfo.mProperties)
 			FreeProperty(prop.second);
 
-		propertiesInfo.properties.Clear();
+		propertiesInfo.mProperties.Clear();
 	}
 
 	void Properties::FreeProperty(IPropertyField* field)
@@ -196,7 +197,7 @@ namespace Editor
 	}
 
 	void Properties::BuildObjectProperties(VerticalLayout* layout, const Type* type,
-										   FieldPropertiesInfo& propertiesInfo, const String& path,
+										   PropertiesContext& propertiesInfo, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -204,7 +205,7 @@ namespace Editor
 	}
 
 	void Properties::BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields,
-										   FieldPropertiesInfo& propertiesInfo, const String& path,
+										   PropertiesContext& propertiesInfo, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -222,7 +223,7 @@ namespace Editor
 
 			if (!privateFields.IsEmpty())
 			{
-				Spoiler* privates = propertiesInfo.privatePropertiesSpoiler;
+				Spoiler* privates = propertiesInfo.mPrivatePropertiesSpoiler;
 
 				if (!privates)
 					privates = layout->GetChildByType<Spoiler>("privates");
@@ -236,14 +237,16 @@ namespace Editor
 				}
 				else privates->SetIndexInSiblings(layout->GetChildren().Count() - 1);
 
-				propertiesInfo.privatePropertiesSpoiler = privates;
+				propertiesInfo.mPrivatePropertiesSpoiler = privates;
 				BuildFields(privates, privateFields, propertiesInfo, path, onChangeCompleted, onChanged);
 			}
 		}
-		else if (propertiesInfo.privatePropertiesSpoiler)
+		else if (propertiesInfo.mPrivatePropertiesSpoiler)
 		{
-			propertiesInfo.privatePropertiesSpoiler->SetEnabled(false);
+			propertiesInfo.mPrivatePropertiesSpoiler->SetEnabled(false);
 		}
+
+		propertiesInfo.mBuildWithPrivateProperties = mPrivateVisible;
 	}
 
 	IPropertyField* Properties::CreateFieldProperty(const Type* type, const String& name,

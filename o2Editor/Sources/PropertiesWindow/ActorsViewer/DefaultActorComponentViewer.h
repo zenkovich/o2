@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IPropertyField.h"
 #include "PropertiesWindow/ActorsViewer/IActorComponentViewer.h"
 
 namespace Editor
 {
+	class IObjectPropertiesViewer;
+
 	// ------------------------------
 	// Default actor component viewer
 	// ------------------------------
@@ -27,17 +29,14 @@ namespace Editor
 		// Updates all component values
 		void Refresh() override;
 
-		// Rebuilds properties layout
-		void Rebuild() override;
-
 		// Specialize viewing component type. Creates all using properties
 		void SpecializeComponentType(const Type* type);
 
 		IOBJECT(DefaultActorComponentViewer);
 
 	protected:
-		FieldPropertiesInfo mFieldProperties;         // Field properties information
-		const Type*         mComponentType = nullptr; // Target component type
+		const Type*              mComponentType = nullptr; // Target component type
+		IObjectPropertiesViewer* mViewer = nullptr;        //Component properties viewer
 
 	protected:
 		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
@@ -52,8 +51,8 @@ CLASS_BASES_META(Editor::DefaultActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
-	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mComponentType);
+	PROTECTED_FIELD(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
@@ -62,7 +61,6 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
 	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(void, SpecializeComponentType, const Type*);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }

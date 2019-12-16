@@ -268,7 +268,7 @@
     <ClInclude Include="..\..\Sources\Core\Properties\Basic\Vector2IntProperty.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\Basic\VectorProperty.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\Basic\WStringProperty.h" />
-    <ClInclude Include="..\..\Sources\Core\Properties\FieldPropertiesInfo.h" />
+    <ClInclude Include="..\..\Sources\Core\Properties\PropertiesContext.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\IObjectPropertiesViewer.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\IPropertyField.h" />
     <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\AnimationViewer.h" />
@@ -300,7 +300,6 @@
     <ClInclude Include="..\..\Sources\LogWindow\LogWindow.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\AddComponentPanel.h" />
-    <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\Components\AnimationComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
     <ClInclude Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
@@ -385,7 +384,7 @@
     <ClCompile Include="..\..\Sources\Core\Properties\Basic\Vector2IntProperty.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\Basic\VectorProperty.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\Basic\WStringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\Core\Properties\FieldPropertiesInfo.cpp" />
+    <ClCompile Include="..\..\Sources\Core\Properties\PropertiesContext.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\IObjectPropertiesViewer.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\IPropertyField.cpp" />
     <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\AnimationViewer.cpp" />
@@ -417,7 +416,6 @@
     <ClCompile Include="..\..\Sources\LogWindow\LogWindow.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\ActorViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\AddComponentPanel.cpp" />
-    <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\Components\AnimationComponentViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
     <ClCompile Include="..\..\Sources\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp" />

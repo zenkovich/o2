@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IPropertyField.h"
 #include "PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 
@@ -40,7 +40,7 @@ namespace Editor
 	protected:
 		VerticalLayout*     mPropertiesLayout;    // Properties layout
 		Vector<AssetRef*>   mTargetAssets;        // Target assets
-		FieldPropertiesInfo mFieldProperties;     // Field properties information
+		PropertiesContext mFieldProperties;     // Field properties information
 		const Type*         mAssetType = nullptr; // Target asset type
 	};
 }

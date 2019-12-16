@@ -1,19 +1,9 @@
 #include "stdafx.h"
 #include "DefaultActorPropertiesViewer.h"
 
-#include "Core/Actions/PropertyChange.h"
-#include "Core/EditorApplication.h"
-#include "Core/EditorScope.h"
-#include "Core/Properties/Basic/ObjectProperty.h"
-#include "Core/Properties/Basic/ObjectPtrProperty.h"
+#include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
-#include "Scene/Actor.h"
-#include "SceneWindow/SceneEditScreen.h"
-#include "Scene/UI/Widgets/Label.h"
-#include "Scene/UI/Widgets/Spoiler.h"
-#include "Scene/UI/Widgets/VerticalLayout.h"
-#include "Scene/UI/Widget.h"
 
 namespace Editor
 {
@@ -41,61 +31,61 @@ namespace Editor
 	{
 		mSpoiler->name = "actor " + type->GetName();
 		mActorType = type;
-
-		Rebuild();
 	}
 
 	void DefaultActorPropertiesViewer::Refresh()
 	{
-		mFieldProperties.Set(mTargetActors.Select<Pair<IObject*, IObject*>>([](Actor* x) {
-			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink().Get()));
-		}));
-	}
+		bool requiredNewViewer = mViewer ? mViewer->GetViewingObjectType() != mActorType : mActorType != nullptr;
+		if (requiredNewViewer) {
+			if (mViewer)
+				o2EditorProperties.FreeObjectViewer(mViewer, mActorType);
 
-	void DefaultActorPropertiesViewer::Rebuild()
-	{
-		PushEditorScopeOnStack scope;
+			mViewer = o2EditorProperties.CreateObjectViewer(mActorType, "");
 
-		static Vector<String> hiddenFields ={
-			"prototype", "parent", "name", "layer", "layerName", "enabled", "locked", "tags", "transform",
-			"parentWidget", "layout", "drawDepth"
-		};
-
-		static Vector<String> additionalFields ={
-			"mStates"
-		};
-
-		o2EditorProperties.FreeProperties(mFieldProperties);
-
-		auto fields = mActorType->GetFieldsWithBaseClasses();
-		if (!o2EditorProperties.IsPrivateFieldsVisible())
-		{
-			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
-
-			for (auto fieldName : additionalFields)
-			{
-				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
-				{
-					o2EditorProperties.BuildField(mSpoiler,
-												  fieldInfo, mFieldProperties, "");
-				}
-			}
+			mSpoiler->AddChild(mViewer->GetViewWidget());
 		}
 
-		o2EditorProperties.BuildObjectProperties(mSpoiler,
-												 fields, mFieldProperties, "");
-
-		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
+		if (mViewer)
+		{
+			mViewer->Refresh(mTargetActors.Select<Pair<IObject*, IObject*>>([](Actor* x) {
+				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink().Get()));
+			}));
+		}
 	}
+
+// 	void DefaultActorPropertiesViewer::Rebuild()
+// 	{
+// 		PushEditorScopeOnStack scope;
+// 
+// 		static Vector<String> hiddenFields ={
+// 			"prototype", "parent", "name", "layer", "layerName", "enabled", "locked", "tags", "transform",
+// 			"parentWidget", "layout", "drawDepth"
+// 		};
+// 
+// 		static Vector<String> additionalFields ={
+// 			"mStates"
+// 		};
+// 
+// 		o2EditorProperties.FreeProperties(mFieldProperties);
+// 
+// 		auto fields = mActorType->GetFieldsWithBaseClasses();
+// 		if (!o2EditorProperties.IsPrivateFieldsVisible())
+// 		{
+// 			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
+// 
+// 			for (auto fieldName : additionalFields)
+// 			{
+// 				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
+// 					o2EditorProperties.BuildField(mSpoiler, fieldInfo, mFieldProperties, "");
+// 			}
+// 		}
+// 
+// 		o2EditorProperties.BuildObjectProperties(mSpoiler, fields, mFieldProperties, "");
+// 	}
 
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
 		return mSpoiler->GetChildren().Count() == 0;
-	}
-
-	bool DefaultActorPropertiesViewer::IsBuiltWithHiddenFields() const
-	{
-		return mBuiltWithHidden;
 	}
 
 }

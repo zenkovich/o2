@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Properties/IObjectPropertiesViewer.h"
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 
 namespace Editor
 {
@@ -23,9 +23,8 @@ namespace Editor
 		IOBJECT(DefaultObjectViewer);
 
 	private:
-		const Type*         mRealObjectType = nullptr;          // Specialized viewing object type
-		FieldPropertiesInfo mFieldProperties;                   // Field properties information
-		bool                mBuiltWithHiddenProperties = false; // Is properties was built with hidden properties section
+		const Type* mRealObjectType = nullptr;          // Specialized viewing object type
+		bool        mBuiltWithHiddenProperties = false; // Is properties was built with hidden properties section
 	};
 }
 
@@ -37,7 +36,6 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultObjectViewer)
 {
 	PRIVATE_FIELD(mRealObjectType);
-	PRIVATE_FIELD(mFieldProperties);
 	PRIVATE_FIELD(mBuiltWithHiddenProperties);
 }
 END_META;

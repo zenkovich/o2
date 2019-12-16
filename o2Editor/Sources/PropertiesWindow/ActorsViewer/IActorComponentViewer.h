@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Reflection/Reflection.h"
 #include "Utils/Reflection/Type.h"
@@ -50,23 +50,13 @@ namespace Editor
 		// Updates all component values
 		virtual void Refresh();
 
-		// Rebuilds properties layout
-		virtual void Rebuild();
-
-		// Returns true when properties was built with hidden fields
-		virtual bool IsBuiltWithEmpty() const;
-
 		IOBJECT(IActorComponentViewer);
 
 	protected:
 		Vector<Component*> mTargetComponents; // Target components
 
-		FieldPropertiesInfo mFieldProperties; // Field properties information
-
 		SpoilerWithHead* mSpoiler = nullptr;      // Component's spoiler
 		Button*          mRemoveButton = nullptr; // Remove component button
-
-		bool mBuiltWithHidden; // True when properties was built with hidden fields
 
 	protected:
 		// Removes target components
@@ -103,10 +93,8 @@ END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
 	PROTECTED_FIELD(mTargetComponents);
-	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mRemoveButton);
-	PROTECTED_FIELD(mBuiltWithHidden);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)
@@ -118,8 +106,6 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Rebuild);
-	PUBLIC_FUNCTION(bool, IsBuiltWithEmpty);
 	PROTECTED_FUNCTION(void, RemoveTargetComponents);
 }
 END_META;

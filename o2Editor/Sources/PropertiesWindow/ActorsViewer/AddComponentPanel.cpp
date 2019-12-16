@@ -133,25 +133,30 @@ namespace Editor
 			Component* sample = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
 
 			String name = sample->GetName();
-			if (!filterStrLower.IsEmpty() && !name.ToLowerCase().Contains(filterStrLower))
-				continue;
-
-			String category = sample->GetCategory();
-			NodeData* it = &mRoot;
-			while (!category.IsEmpty())
+			if (!filterStrLower.IsEmpty())
 			{
-				int fnd = category.Find('/');
-				String subStr = category.SubStr(0, fnd);
-				category = fnd != -1 ? category.SubStr(fnd + 1) : "";
-
-				auto nextIt = it->children.FindMatch([&](NodeData* x) { return x->name == subStr; });
-				if (!nextIt)
-					nextIt = it->AddChild(subStr, nullptr);
-
-				it = nextIt;
+				if (name.ToLowerCase().Contains(filterStrLower))
+					mRoot.AddChild(name, type)->icon = sample->GetIcon();
 			}
+			else
+			{
+				String category = sample->GetCategory();
+				NodeData* it = &mRoot;
+				while (!category.IsEmpty())
+				{
+					int fnd = category.Find('/');
+					String subStr = category.SubStr(0, fnd);
+					category = fnd != -1 ? category.SubStr(fnd + 1) : "";
 
-			it->AddChild(name, type)->icon = sample->GetIcon();
+					auto nextIt = it->children.FindMatch([&](NodeData* x) { return x->name == subStr; });
+					if (!nextIt)
+						nextIt = it->AddChild(subStr, nullptr);
+
+					it = nextIt;
+				}
+
+				it->AddChild(name, type)->icon = sample->GetIcon();
+			}
 
 			delete sample;
 		}
@@ -166,22 +171,28 @@ namespace Editor
 		Refresh();
 
 		String lowerFilter = mFilterStr.ToLowerCase();
-		Function<NodeData*(NodeData*)> fnd = [&lowerFilter, &fnd](NodeData* node)
+		int minDist = INT_MAX;
+		NodeData* filtered = nullptr;
+		Function<void(NodeData*)> recursiveSearch = [&lowerFilter, &recursiveSearch, &minDist, &filtered](NodeData* node)
 		{
-			if (node->type != nullptr && node->name.ToLowerCase().Contains(lowerFilter))
-				return node;
-
-			for (auto child : node->children)
+			if (node->type != nullptr)
 			{
-				if (auto res = fnd(child))
-					return res;
+				int dist = node->name.ToLowerCase().Find(lowerFilter);
+				if (dist >= 0 && dist < minDist)
+				{
+					minDist = dist;
+					filtered = node;
+				}
 			}
 
-			return (NodeData*)nullptr;
+			for (auto child : node->children)
+				recursiveSearch(child);
 		};
 
-		if (NodeData* firstFiltered = fnd(&mRoot))
-			SelectAndHightlightObject(firstFiltered);
+		recursiveSearch(&mRoot);
+
+		if (filtered)
+			SelectAndHightlightObject(filtered);
 	}
 
 	void ComponentsTree::UpdateVisibleNodes()

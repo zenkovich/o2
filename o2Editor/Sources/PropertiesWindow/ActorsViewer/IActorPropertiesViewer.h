@@ -48,14 +48,8 @@ namespace Editor
 		// Updates all actor values
 		virtual void Refresh();
 
-		// Rebuilds properties layout
-		virtual void Rebuild();
-
 		// Returns is there no properties
 		virtual bool IsEmpty() const;
-
-		// Returns true when properties was built with hidden fields
-		virtual bool IsBuiltWithHiddenFields() const;
 
 		IOBJECT(IActorPropertiesViewer);
 
@@ -83,8 +77,6 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(bool, IsBuiltWithHiddenFields);
 }
 END_META;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Utils/Basic/IObject.h"
 #include "Utils/Types/Containers/Pair.h"
 #include "Utils/Types/Containers/Vector.h"
@@ -53,7 +53,7 @@ namespace Editor
 	protected:
 		Widget* mViewWidget = nullptr; // View layout
 
-		FieldPropertiesInfo mFieldProperties; // Field properties information
+		PropertiesContext mFieldProperties; // Field properties information
 
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
 		                                                    // inChangeCompleted from this with full combined path

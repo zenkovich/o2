@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IPropertyField.h"
 #include "Utils/Property.h"
 

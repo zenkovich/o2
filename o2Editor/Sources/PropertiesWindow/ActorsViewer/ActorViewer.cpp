@@ -236,9 +236,6 @@ namespace Editor
 
 		auto propertiesViewer = mActorPropertiesViewersPool[type];
 
-		if (propertiesViewer->IsBuiltWithHiddenFields() != o2EditorProperties.IsPrivateFieldsVisible())
-			propertiesViewer->Rebuild();
-
 		propertiesViewer->SetTargetActors(mTargetActors);
 
 		if (!propertiesViewer->IsEmpty())
@@ -301,9 +298,6 @@ namespace Editor
 			}
 
 			auto componentViewer = mComponentViewersPool[type].PopBack();
-
-			if (componentViewer->IsBuiltWithEmpty() != o2EditorProperties.IsPrivateFieldsVisible())
-				componentViewer->Rebuild();
 
 			viewersWidgets.Add(componentViewer->GetWidget());
 			mComponentsViewers.Add(componentViewer);

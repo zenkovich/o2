@@ -57,8 +57,6 @@ namespace Editor
 
 		mFitSizeButton->SetParent(nullptr);
 		mFitSizeButton->SetParent(mSpoiler);
-
-		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
 	}
 
 	bool DefaultWidgetLayerPropertiesViewer::IsEmpty() const
@@ -68,7 +66,7 @@ namespace Editor
 
 	bool DefaultWidgetLayerPropertiesViewer::IsBuiltWithHiddenFields() const
 	{
-		return mBuiltWithHidden;
+		return mFieldProperties.buildWithPrivateProperties;
 	}
 
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()

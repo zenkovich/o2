@@ -50,17 +50,9 @@ namespace Editor
 	void IActorPropertiesViewer::Refresh()
 	{}
 
-	void IActorPropertiesViewer::Rebuild()
-	{}
-
 	bool IActorPropertiesViewer::IsEmpty() const
 	{
 		return true;
-	}
-
-	bool IActorPropertiesViewer::IsBuiltWithHiddenFields() const
-	{
-		return false;
 	}
 
 }

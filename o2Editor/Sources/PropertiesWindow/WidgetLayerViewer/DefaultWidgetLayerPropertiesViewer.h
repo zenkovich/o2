@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Core/Properties/FieldPropertiesInfo.h"
+#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IPropertyField.h"
 #include "PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h"
 
@@ -44,13 +44,10 @@ namespace Editor
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<WidgetLayer*> mLayers; // Target widget layers
-
-		FieldPropertiesInfo mFieldProperties;         // Field properties information
-		Button*             mFitSizeButton = nullptr; // Fit size of layer by drawable size
-
-		bool         mBuiltWithHidden = false; // True when properties was built with hidden fields
-		const Type*  mDrawableType = nullptr;  // Target actor type
+		Vector<WidgetLayer*>   mLayers;                  // Target widget layers
+		PropertiesContext mFieldProperties;         // Field properties information
+		Button*                mFitSizeButton = nullptr; // Fit size of layer by drawable size
+		const Type*            mDrawableType = nullptr;  // Target actor type
 
 	protected:
 		// Fits layer size by drawable size, it is called when mFitSizeButton were pressed
@@ -68,7 +65,6 @@ CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 	PROTECTED_FIELD(mLayers);
 	PROTECTED_FIELD(mFieldProperties);
 	PROTECTED_FIELD(mFitSizeButton);
-	PROTECTED_FIELD(mBuiltWithHidden);
 	PROTECTED_FIELD(mDrawableType);
 }
 END_META;

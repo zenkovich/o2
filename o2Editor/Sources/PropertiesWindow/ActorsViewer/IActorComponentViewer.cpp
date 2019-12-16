@@ -43,7 +43,6 @@ namespace Editor
 	void IActorComponentViewer::SetTargetComponents(const Vector<Component*>& components)
 	{
 		mTargetComponents = components;
-		mBuiltWithHidden = o2EditorProperties.IsPrivateFieldsVisible();
 
 		if (!components.IsEmpty())
 		{
@@ -72,19 +71,7 @@ namespace Editor
 	}
 
 	void IActorComponentViewer::Refresh()
-	{
-		mFieldProperties.Set(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
-			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink()));
-		}));
-	}
-
-	void IActorComponentViewer::Rebuild()
-	{}
-
-	bool IActorComponentViewer::IsBuiltWithEmpty() const
-	{
-		return mBuiltWithHidden;
-	}
+	{	}
 
 	void IActorComponentViewer::RemoveTargetComponents()
 	{
