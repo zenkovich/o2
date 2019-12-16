@@ -30,7 +30,7 @@ namespace Editor
 
 		const Type* objectsType = &(targetObjets[0].first)->GetType();
 
-		if (mRealObjectType == objectsType)
+		if (mRealObjectType == objectsType && mBuiltWithHiddenProperties == o2EditorProperties.IsPrivateFieldsVisible())
 			return;
 
 		mRealObjectType = objectsType;
@@ -44,6 +44,11 @@ namespace Editor
 													 mFieldProperties, "", mOnChildFieldChangeCompleted, onChanged);
 
 			mFieldProperties.Set(targetObjets);
+			mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
+
+			for (auto kv : mFieldProperties.properties)
+			{
+			}
 		}
 	}
 

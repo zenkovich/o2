@@ -23,8 +23,9 @@ namespace Editor
 		IOBJECT(DefaultObjectViewer);
 
 	private:
-		const Type*         mRealObjectType = nullptr; // Specialized viewing object type
-		FieldPropertiesInfo mFieldProperties;          // Field properties information
+		const Type*         mRealObjectType = nullptr;          // Specialized viewing object type
+		FieldPropertiesInfo mFieldProperties;                   // Field properties information
+		bool                mBuiltWithHiddenProperties = false; // Is properties was built with hidden properties section
 	};
 }
 
@@ -37,6 +38,7 @@ CLASS_FIELDS_META(Editor::DefaultObjectViewer)
 {
 	PRIVATE_FIELD(mRealObjectType);
 	PRIVATE_FIELD(mFieldProperties);
+	PRIVATE_FIELD(mBuiltWithHiddenProperties);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultObjectViewer)
