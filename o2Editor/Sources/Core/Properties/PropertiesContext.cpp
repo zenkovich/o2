@@ -60,4 +60,14 @@ namespace Editor
 		}
 	}
 
+	bool PropertiesContext::IsBuiltWIthPrivateProperties() const
+	{
+		return mBuildWithPrivateProperties;
+	}
+
+	const Map<const FieldInfo*, IPropertyField*>& PropertiesContext::GetProperties() const
+	{
+		return mProperties;
+	}
+
 }

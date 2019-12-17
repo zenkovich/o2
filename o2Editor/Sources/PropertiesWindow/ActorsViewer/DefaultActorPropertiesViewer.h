@@ -47,7 +47,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::DefaultActorPropertiesViewer)
 {
-	BASE_CLASS(IActorPropertiesViewer);
+	BASE_CLASS(Editor::IActorPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorPropertiesViewer)

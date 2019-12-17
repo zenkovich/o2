@@ -19,7 +19,7 @@ namespace o2
 namespace Editor
 {
 	class IPropertiesViewer;
-	struct PropertiesContext;
+	class PropertiesContext;
 
 	// ------------------------
 	// Editor properties window

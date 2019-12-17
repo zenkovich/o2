@@ -45,10 +45,6 @@ namespace Editor
 
 			mFieldProperties.Set(targetObjets);
 			mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
-
-			for (auto kv : mFieldProperties.mProperties)
-			{
-			}
 		}
 	}
 

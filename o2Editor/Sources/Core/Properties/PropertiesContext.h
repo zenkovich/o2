@@ -23,11 +23,19 @@ namespace Editor
 		void Set(const Vector<IObject*>& targets);
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);
 
+		// Returns is properties was built with hidden properties
+		bool IsBuiltWIthPrivateProperties() const;
+
+		// Returns property info to property field map
+		const Map<const FieldInfo*, IPropertyField*>& GetProperties() const;
+
 	protected:
 		Map<const FieldInfo*, IPropertyField*> mProperties; // Property info to property field map
 
 		Spoiler* mPrivatePropertiesSpoiler = nullptr; // Private properties spoiler
 
 		bool mBuildWithPrivateProperties = false; // Is properties was built with hidden properties
+
+		friend class Properties;
 	};
 }

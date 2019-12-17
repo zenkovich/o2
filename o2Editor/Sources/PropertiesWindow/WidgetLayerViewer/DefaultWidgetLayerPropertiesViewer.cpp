@@ -66,7 +66,7 @@ namespace Editor
 
 	bool DefaultWidgetLayerPropertiesViewer::IsBuiltWithHiddenFields() const
 	{
-		return mFieldProperties.buildWithPrivateProperties;
+		return mFieldProperties.IsBuiltWIthPrivateProperties();
 	}
 
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
