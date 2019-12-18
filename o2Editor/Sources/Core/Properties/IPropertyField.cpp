@@ -188,7 +188,9 @@ namespace Editor
 	{
 		CheckRevertableState();
 		onChanged(this);
-		o2EditorSceneScreen.OnSceneChanged();
+
+		if (SceneEditScreen::IsSingletonInitialzed())
+			o2EditorSceneScreen.OnSceneChanged();
 	}
 
 	void IPropertyField::BeginUserChanging()

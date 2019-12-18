@@ -15,6 +15,11 @@ o2::String o2::EditorTestComponent::GetCategory() const
 	return "Debug";
 }
 
+void o2::EditorTestComponent::Test()
+{
+	o2Debug.Log("test");
+}
+
 DECLARE_CLASS(o2::EditorTestComponent);
 
 DECLARE_CLASS(o2::EditorTestComponent::TestInside);

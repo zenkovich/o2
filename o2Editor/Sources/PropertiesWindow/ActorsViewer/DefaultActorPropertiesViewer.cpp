@@ -36,13 +36,14 @@ namespace Editor
 	void DefaultActorPropertiesViewer::Refresh()
 	{
 		bool requiredNewViewer = mViewer ? mViewer->GetViewingObjectType() != mActorType : mActorType != nullptr;
-		if (requiredNewViewer) {
+		if (requiredNewViewer) 
+		{
 			if (mViewer)
-				o2EditorProperties.FreeObjectViewer(mViewer, mActorType);
+				o2EditorProperties.FreeObjectViewer(mViewer);
 
 			mViewer = o2EditorProperties.CreateObjectViewer(mActorType, "");
 
-			mSpoiler->AddChild(mViewer->GetViewWidget());
+			mSpoiler->AddChild(mViewer->GetLayout());
 		}
 
 		if (mViewer)
@@ -66,7 +67,7 @@ namespace Editor
 // 			"mStates"
 // 		};
 // 
-// 		o2EditorProperties.FreeProperties(mFieldProperties);
+// 		o2EditorProperties.FreeProperties(mPropertiesContext);
 // 
 // 		auto fields = mActorType->GetFieldsWithBaseClasses();
 // 		if (!o2EditorProperties.IsPrivateFieldsVisible())
@@ -76,16 +77,16 @@ namespace Editor
 // 			for (auto fieldName : additionalFields)
 // 			{
 // 				if (auto fieldInfo = fields.FindMatch([&](FieldInfo* x) { return x->GetName() == fieldName; }))
-// 					o2EditorProperties.BuildField(mSpoiler, fieldInfo, mFieldProperties, "");
+// 					o2EditorProperties.BuildField(mSpoiler, fieldInfo, mPropertiesContext, "");
 // 			}
 // 		}
 // 
-// 		o2EditorProperties.BuildObjectProperties(mSpoiler, fields, mFieldProperties, "");
+// 		o2EditorProperties.BuildObjectProperties(mSpoiler, fields, mPropertiesContext, "");
 // 	}
 
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
-		return mSpoiler->GetChildren().Count() == 0;
+		return mViewer && mViewer->IsEmpty();
 	}
 
 }

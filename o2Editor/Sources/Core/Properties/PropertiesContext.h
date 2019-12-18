@@ -20,7 +20,6 @@ namespace Editor
 	class PropertiesContext
 	{
 	public:
-		void Set(const Vector<IObject*>& targets);
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);
 
 		// Returns is properties was built with hidden properties
@@ -30,6 +29,7 @@ namespace Editor
 		const Map<const FieldInfo*, IPropertyField*>& GetProperties() const;
 
 	protected:
+		Vector<Pair<IObject*, IObject*>>       mTargets;    // Last setted targets
 		Map<const FieldInfo*, IPropertyField*> mProperties; // Property info to property field map
 
 		Spoiler* mPrivatePropertiesSpoiler = nullptr; // Private properties spoiler

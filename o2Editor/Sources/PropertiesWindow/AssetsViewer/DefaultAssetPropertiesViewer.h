@@ -40,7 +40,7 @@ namespace Editor
 	protected:
 		VerticalLayout*     mPropertiesLayout;    // Properties layout
 		Vector<AssetRef*>   mTargetAssets;        // Target assets
-		PropertiesContext mFieldProperties;     // Field properties information
+		PropertiesContext mPropertiesContext;     // Field properties information
 		const Type*         mAssetType = nullptr; // Target asset type
 	};
 }
@@ -54,7 +54,7 @@ CLASS_FIELDS_META(Editor::DefaultAssetPropertiesViewer)
 {
 	PROTECTED_FIELD(mPropertiesLayout);
 	PROTECTED_FIELD(mTargetAssets);
-	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mPropertiesContext);
 	PROTECTED_FIELD(mAssetType);
 }
 END_META;

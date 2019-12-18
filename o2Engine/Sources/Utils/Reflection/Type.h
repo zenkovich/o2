@@ -117,7 +117,7 @@ namespace o2
 
 		// Invokes function with name
 		template<typename _res_type, typename ... _args>
-		_res_type Invoke(const String& name, void* object, _args ... args);
+		_res_type Invoke(const String& name, void* object, _args ... args) const;
 
 		// Returns derived types
 		Vector<const Type*> GetDerivedTypes(bool deep = true) const;
@@ -800,11 +800,11 @@ namespace o2
 	// -------------------
 
 	template<typename _res_type, typename ... _args>
-	_res_type Type::Invoke(const String& name, void* object, _args ... args)
+	_res_type Type::Invoke(const String& name, void* object, _args ... args) const
 	{
 		const FunctionInfo* func = GetFunction(name);
 		if (func)
-			return func->Invoke(object, args ...);
+			return func->Invoke<_res_type, _args ...>(object, args ...);
 
 		return _res_type();
 	}

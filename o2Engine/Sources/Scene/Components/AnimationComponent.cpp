@@ -239,7 +239,18 @@ namespace o2
 
 	void AnimationComponent::OnStatesListChanged()
 	{
+		for (auto state : mStates)
+		{
+			if (!state->mOwner)
+			{
+				state->animation.SetTarget(this);
+				state->animation.mAnimationState = state;
+				state->mOwner = this;
 
+				for (auto& val : state->animation.mAnimatedValues)
+					val.animatedValue->RegInAnimatable(state, val.targetPath);
+			}
+		}
 	}
 
 	void AnimationComponent::BlendState::Update(float dt)

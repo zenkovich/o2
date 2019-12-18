@@ -46,14 +46,17 @@ namespace Editor
 		virtual const Type* GetViewingObjectType() const;
 
 		// Returns view widget
-		Widget* GetViewWidget() const;
+		VerticalLayout* GetLayout() const;
+
+		// Returns is viewer empty
+		bool IsEmpty() const;
 
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
-		Widget* mViewWidget = nullptr; // View layout
+		VerticalLayout* mLayout = nullptr; // View layout
 
-		PropertiesContext mFieldProperties; // Field properties information
+		PropertiesContext mPropertiesContext; // Field properties information
 
 		OnChangeCompletedFunc mOnChildFieldChangeCompleted; // Default field change completed callback, calls
 		                                                    // inChangeCompleted from this with full combined path
@@ -74,8 +77,8 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
 	PUBLIC_FIELD(path);
-	PROTECTED_FIELD(mViewWidget);
-	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mLayout);
+	PROTECTED_FIELD(mPropertiesContext);
 	PROTECTED_FIELD(mOnChildFieldChangeCompleted);
 }
 END_META;
@@ -84,7 +87,8 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(Widget*, GetViewWidget);
+	PUBLIC_FUNCTION(VerticalLayout*, GetLayout);
+	PUBLIC_FUNCTION(bool, IsEmpty);
 	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

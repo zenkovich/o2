@@ -36,15 +36,15 @@ namespace o2
 
 	public:
 		PROPERTIES(Actor);
-		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property
+		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
 
 		GETTER(SceneUID, id, GetID);              // Actor unique id
-		PROPERTY(String, name, SetName, GetName); // Actor name property
+		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE
 
-		PROPERTY(SceneLayer*, layer, SetLayer, GetLayer);    // Layer property
-		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property
+		PROPERTY(SceneLayer*, layer, SetLayer, GetLayer);    // Layer property @EDITOR_IGNORE
+		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE
 
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
 		GETTER(ActorsVec, children, GetChildren);         // Children array getter
@@ -54,14 +54,14 @@ namespace o2
 		ACCESSOR(Component*, component, String, GetComponent, GetAllComponents); // Component accessor by type name
 
 	public:
-		TagGroup              tags;      // Tags group
-		ActorTransform* const transform; // Transformation of actor
+		TagGroup              tags;      // Tags group @EDITOR_IGNORE
+		ActorTransform* const transform; // Transformation of actor @EDITOR_IGNORE
 
 	public:
 		Function<void(bool)>  onEnableChanged; // Enable changing event
 
 #if IS_EDITOR
-		PROPERTY(bool, locked, SetLocked, IsLocked);          // Is actor locked property
+		PROPERTY(bool, locked, SetLocked, IsLocked);          // Is actor locked property @EDITOR_IGNORE
 		GETTER(bool, lockedInHierarchy, IsLockedInHierarchy); // Is actor locked in hierarchy getter
 
 		Function<void()>       onChanged;               // Something in actor change event
@@ -696,21 +696,21 @@ CLASS_BASES_META(o2::Actor)
 END_META;
 CLASS_FIELDS_META(o2::Actor)
 {
-	PUBLIC_FIELD(prototype);
+	PUBLIC_FIELD(prototype).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(id);
-	PUBLIC_FIELD(name);
-	PUBLIC_FIELD(layer);
-	PUBLIC_FIELD(layerName);
-	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(name).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(layer).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(layerName).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(enabled).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(enabledInHierarchy);
 	PUBLIC_FIELD(children);
 	PUBLIC_FIELD(components);
 	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(component);
-	PUBLIC_FIELD(tags);
-	PUBLIC_FIELD(transform);
+	PUBLIC_FIELD(tags).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(transform).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(onEnableChanged);
-	PUBLIC_FIELD(locked);
+	PUBLIC_FIELD(locked).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(lockedInHierarchy);
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onParentChanged);

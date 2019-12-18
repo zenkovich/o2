@@ -11,6 +11,8 @@ namespace o2
 
 namespace Editor
 {
+	class IObjectPropertiesViewer;
+
 	// --------------------------------------
 	// Default widget layer properties viewer
 	// -------------------------------
@@ -32,22 +34,16 @@ namespace Editor
 		// Updates all actor values
 		void Refresh() override;
 
-		// Rebuilds properties layout
-		void Rebuild() override;
-
 		// Returns is there no properties
 		bool IsEmpty() const override;
-
-		// Returns true when properties was built with hidden fields
-		bool IsBuiltWithHiddenFields() const override;
 
 		IOBJECT(DefaultWidgetLayerPropertiesViewer);
 
 	protected:
-		Vector<WidgetLayer*>   mLayers;                  // Target widget layers
-		PropertiesContext mFieldProperties;         // Field properties information
-		Button*                mFitSizeButton = nullptr; // Fit size of layer by drawable size
-		const Type*            mDrawableType = nullptr;  // Target actor type
+		Vector<WidgetLayer*>     mLayers;                  // Target widget layers
+		IObjectPropertiesViewer* mViewer = nullptr;        // Properties viewer
+		Button*                  mFitSizeButton = nullptr; // Fit size of layer by drawable size
+		const Type*              mDrawableType = nullptr;  // Target actor type
 
 	protected:
 		// Fits layer size by drawable size, it is called when mFitSizeButton were pressed
@@ -63,7 +59,7 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
 	PROTECTED_FIELD(mLayers);
-	PROTECTED_FIELD(mFieldProperties);
+	PROTECTED_FIELD(mViewer);
 	PROTECTED_FIELD(mFitSizeButton);
 	PROTECTED_FIELD(mDrawableType);
 }
@@ -74,9 +70,7 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	PUBLIC_FUNCTION(const Type*, GetDrawableType);
 	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Rebuild);
 	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(bool, IsBuiltWithHiddenFields);
 	PROTECTED_FUNCTION(void, FitLayerByDrawable);
 }
 END_META;

@@ -47,17 +47,9 @@ namespace Editor
 	void IWidgetLayerPropertiesViewer::Refresh()
 	{}
 
-	void IWidgetLayerPropertiesViewer::Rebuild()
-	{}
-
 	bool IWidgetLayerPropertiesViewer::IsEmpty() const
 	{
 		return true;
-	}
-
-	bool IWidgetLayerPropertiesViewer::IsBuiltWithHiddenFields() const
-	{
-		return false;
 	}
 
 }

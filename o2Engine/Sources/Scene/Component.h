@@ -15,7 +15,7 @@ namespace o2
 	public:
 		PROPERTIES(Component);
 		GETTER(Actor*, actor, GetOwnerActor);                   // Owner actor getter
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Enabling property @EDITOR_IGNORE
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is enabled in hierarchy property
 
 	public:
@@ -90,9 +90,9 @@ namespace o2
 
 	protected:
 		Component* mPrototypeLink = nullptr; // Prototype actor component pointer. Null if no actor prototype
-		UInt64     mId;                      // Component id @SERIALIZABLE
+		UInt64     mId;                      // Component id @SERIALIZABLE @EDITOR_IGNORE
 		Actor*     mOwner = nullptr;         // Owner actor
-		bool       mEnabled = true;          // Is component enabled @SERIALIZABLE
+		bool       mEnabled = true;          // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
 		bool       mResEnabled = true;       // Is component enabled in hierarchy
 
 	protected:
@@ -180,12 +180,12 @@ END_META;
 CLASS_FIELDS_META(o2::Component)
 {
 	PUBLIC_FIELD(actor);
-	PUBLIC_FIELD(enabled);
+	PUBLIC_FIELD(enabled).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(enabledInHierarchy);
 	PROTECTED_FIELD(mPrototypeLink);
-	PROTECTED_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mId).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mOwner);
-	PROTECTED_FIELD(mEnabled).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEnabled).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResEnabled);
 }
 END_META;

@@ -9,6 +9,7 @@
 #include "Scene/Component.h"
 #include "Scene/Tags.h"
 #include "Utils/Editor/Attributes/DontDelete.h"
+#include "Utils/Editor/Attributes/InvokeOnChange.h"
 #include "Utils/Math/Curve.h"
 
 namespace o2
@@ -45,7 +46,7 @@ namespace o2
 		PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
 		PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
 
-		int mInteger;					           // @SERIALIZABLE
+		int mInteger;					           // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		float mFloat;					           // @SERIALIZABLE
 		String mString;					           // @SERIALIZABLE
 		WString mWString;				           // @SERIALIZABLE
@@ -73,9 +74,10 @@ namespace o2
 		TestEnum mTestEnum;                        // @SERIALIZABLE
 		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE
 
-		Vector<Vec2I> mVecs = { Vec2I(0, 1), Vec2I(2, 3), Vec2I(4, 5) }; // @SERIALIZABLE
-		Vector<int> mIntVector ={ 1, 2, 3, 4, 5 }; // @SERIALIZABLE
-		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE
+		Vector<Vec2I> mVecs = { Vec2I(0, 1), Vec2I(2, 3), Vec2I(4, 5) }; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+		Vector<int> mIntVector = { 1, 2, 3, 4, 5 }; // @SERIALIZABLE
+		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+		Vector<TestInside*> mTestInsideptrsVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
 
 		Map<String, String> mDictionary;    // @SERIALIZABLE
@@ -91,6 +93,8 @@ namespace o2
 		String GetName() const override;
 		String GetCategory() const override;
 
+		void Test();
+
 		SERIALIZABLE(EditorTestComponent);
 	};
 }
@@ -105,7 +109,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(spritePropPtr);
 	PUBLIC_FIELD(spriteProp);
 	PUBLIC_FIELD(arr);
-	PUBLIC_FIELD(mInteger).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mInteger).SERIALIZABLE_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(Test);
 	PUBLIC_FIELD(mFloat).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mString).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mWString).SERIALIZABLE_ATTRIBUTE();
@@ -114,7 +118,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mActorAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDataAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(spritex).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mSprite).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mSprite).SERIALIZABLE_ATTRIBUTE().DONT_DELETE_ATTRIBUTE();
 	PUBLIC_FIELD(mActor).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTags).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mLayer).SERIALIZABLE_ATTRIBUTE();
@@ -132,9 +136,10 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mTestInside).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestEnum).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestInsidePtr).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mVecs).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mVecs).SERIALIZABLE_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(Test);
 	PUBLIC_FIELD(mIntVector).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mTestInsideVector).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mTestInsideVector).SERIALIZABLE_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(Test);
+	PUBLIC_FIELD(mTestInsideptrsVector).SERIALIZABLE_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(Test);
 	PUBLIC_FIELD(mActorVector).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDictionary).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mFloat2).SERIALIZABLE_ATTRIBUTE();
@@ -158,6 +163,7 @@ CLASS_METHODS_META(o2::EditorTestComponent)
 	PUBLIC_FUNCTION(const Vector<Vec2I>&, GetArray);
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(String, GetCategory);
+	PUBLIC_FUNCTION(void, Test);
 }
 END_META;
 

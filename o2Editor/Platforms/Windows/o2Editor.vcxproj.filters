@@ -36,6 +36,9 @@
     <Filter Include="Sources\Core\UI\CurveEditor">
       <UniqueIdentifier>{e85dc53e-2443-4638-9c9c-cb08ece29777}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\Core\Properties\ObjectViewers\Components">
+      <UniqueIdentifier>{c30705e4-06fa-4b83-8886-97a5c8309caa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\AnimationWindow\AnimationWindow.h">
@@ -383,6 +386,9 @@
     <ClInclude Include="..\..\Sources\Core\Properties\PropertiesContext.h">
       <Filter>Sources\Core\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\Core\Properties\ObjectViewers\Components\AnimationComponentViewer.h">
+      <Filter>Sources\Core\Properties\ObjectViewers\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\AnimationWindow\AnimationWindow.cpp">
@@ -729,6 +735,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\Core\Properties\PropertiesContext.cpp">
       <Filter>Sources\Core\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\Core\Properties\ObjectViewers\Components\AnimationComponentViewer.cpp">
+      <Filter>Sources\Core\Properties\ObjectViewers\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

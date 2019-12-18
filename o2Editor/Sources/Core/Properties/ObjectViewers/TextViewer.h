@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Assets/ImageAsset.h"
-#include "Core/Properties/PropertiesContext.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;

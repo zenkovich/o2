@@ -136,13 +136,13 @@ namespace Editor
 			mObjectPtrType = objectPtrType;
 
 			if (mObjectPropertiesViewer)
-				o2EditorProperties.FreeObjectViewer(mObjectPropertiesViewer, mObjectPtrType);
+				o2EditorProperties.FreeObjectViewer(mObjectPropertiesViewer);
 
 			if (mObjectPtrType)
 			{
 				mObjectType = dynamic_cast<const ObjectType*>(dynamic_cast<const PointerType*>(mObjectPtrType)->GetUnpointedType());
 				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompleted, onChanged);
-				mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
+				mSpoiler->AddChild(mObjectPropertiesViewer->GetLayout());
 			}
 
 			mPropertiesInitialized = true;

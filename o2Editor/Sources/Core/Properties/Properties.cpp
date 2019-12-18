@@ -16,6 +16,7 @@
 #include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Utils/System/Time/Timer.h"
+#include "Utils/Editor/Attributes/InvokeOnChange.h"
 
 DECLARE_SINGLETON(Editor::Properties);
 
@@ -86,6 +87,18 @@ namespace Editor
 		fieldWidget->SetValuePath(path + fieldInfo->GetName());
 		fieldWidget->SpecializeType(fieldInfo->GetType());
 		fieldWidget->SpecializeFieldInfo(fieldInfo);
+
+		if (auto invokeOnChangeAttribute = fieldInfo->GetAttribute<InvokeOnChangeAttribute>())
+		{
+			fieldWidget->onChangeCompleted += [&, invokeOnChangeAttribute](const String&, const Vector<DataNode>&, const Vector<DataNode>&) {
+				for (auto target : propertiesInfo.mTargets) 
+				{
+					auto& targetType = target.first->GetType();
+					auto& targetObjType = dynamic_cast<const ObjectType&>(targetType);
+					targetObjType.Invoke<void>(invokeOnChangeAttribute->methodName, targetObjType.DynamicCastFromIObject(target.first));
+				}
+			};
+		}
 
 		layout->AddChild(fieldWidget);
 
@@ -412,13 +425,15 @@ namespace Editor
 		return viewer;
 	}
 
-	void Properties::FreeObjectViewer(IObjectPropertiesViewer* viewer, const Type* type)
+	void Properties::FreeObjectViewer(IObjectPropertiesViewer* viewer)
 	{
+		auto type = viewer->GetViewingObjectType();
+
 		if (!mObjectPropertiesViewersPool.ContainsKey(type))
 			mObjectPropertiesViewersPool.Add(type, IObjectPropertiesViewersVec());
 
 		mObjectPropertiesViewersPool[type].Add(viewer);
-		viewer->GetViewWidget()->SetParent(nullptr);
+		viewer->GetLayout()->SetParent(nullptr);
 	}
 
 	String Properties::MakeSmartFieldName(const String& fieldName)

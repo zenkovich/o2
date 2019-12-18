@@ -21,8 +21,8 @@ namespace Editor
 	{
 		DefaultObjectViewer::Refresh(targetObjets);
 
-		mViewWidget->AddChild(mEditButton);
-		mEditButton->SetIndexInSiblings(mViewWidget->GetChildren().Count() - 1);
+		mLayout->AddChild(mEditButton);
+		mEditButton->SetIndexInSiblings(mLayout->GetChildren().Count() - 1);
 
 		mCurrentAnimation = !targetObjets.IsEmpty() ? dynamic_cast<Animation*>(targetObjets[0].first) : nullptr;
 	}

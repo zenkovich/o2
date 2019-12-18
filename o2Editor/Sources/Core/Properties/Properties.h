@@ -115,7 +115,7 @@ namespace Editor
 													const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Free object viewer, store in pool for reuse
-		void FreeObjectViewer(IObjectPropertiesViewer* viewer, const Type* type);
+		void FreeObjectViewer(IObjectPropertiesViewer* viewer);
 
 		// Makes smarter field name
 		static String MakeSmartFieldName(const String& fieldName);

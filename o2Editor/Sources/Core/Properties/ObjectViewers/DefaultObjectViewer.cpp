@@ -8,18 +8,7 @@
 namespace Editor
 {
 	DefaultObjectViewer::DefaultObjectViewer()
-	{
-		PushEditorScopeOnStack scope;
-
-		auto layout = mnew VerticalLayout();
-		layout->spacing = 5;
-		layout->borderTop = 5;
-		layout->expandHeight = false;
-		layout->expandWidth = true;
-		layout->fitByChildren = true;
-
-		mViewWidget = layout;
-	}
+	{}
 
 	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
 	{
@@ -30,27 +19,28 @@ namespace Editor
 
 		const Type* objectsType = &(targetObjets[0].first)->GetType();
 
-		if (mRealObjectType == objectsType && mBuiltWithHiddenProperties == o2EditorProperties.IsPrivateFieldsVisible())
-			return;
-
-		mRealObjectType = objectsType;
-
-		if (mRealObjectType)
-			o2EditorProperties.FreeProperties(mFieldProperties);
-
-		if (mRealObjectType)
+		if (mRealObjectType != objectsType || mBuiltWithHiddenProperties != o2EditorProperties.IsPrivateFieldsVisible())
 		{
-			o2EditorProperties.BuildObjectProperties(dynamic_cast<VerticalLayout*>(mViewWidget), mRealObjectType, 
-													 mFieldProperties, "", mOnChildFieldChangeCompleted, onChanged);
+			mRealObjectType = objectsType;
 
-			mFieldProperties.Set(targetObjets);
-			mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
+			if (mRealObjectType)
+				o2EditorProperties.FreeProperties(mPropertiesContext);
+
+			if (mRealObjectType)
+			{
+				o2EditorProperties.BuildObjectProperties(dynamic_cast<VerticalLayout*>(mLayout), mRealObjectType,
+														 mPropertiesContext, "", mOnChildFieldChangeCompleted, onChanged);
+
+				mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
+			}
 		}
+
+		mPropertiesContext.Set(targetObjets);
 	}
 
 	const Type* DefaultObjectViewer::GetViewingObjectType() const
 	{
-		return &TypeOf(IObject);
+		return mRealObjectType;
 	}
 }
 

@@ -174,7 +174,7 @@ namespace Editor
 		if (!mObjectPropertiesViewer)
 		{
 			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, THIS_FUNC(OnPropertyChanged), onChanged);
-			mSpoiler->AddChild(mObjectPropertiesViewer->GetViewWidget());
+			mSpoiler->AddChild(mObjectPropertiesViewer->GetLayout());
 		}
 
 		Refresh();

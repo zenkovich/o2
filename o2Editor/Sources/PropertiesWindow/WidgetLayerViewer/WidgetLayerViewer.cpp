@@ -109,7 +109,6 @@ namespace Editor
 		mHeaderViewer->SetTargetLayers(mTargetLayers);
 		mLayoutViewer->SetTargetLayers(mTargetLayers);
 		mPropertiesViewer->SetTargetLayers(mTargetLayers);
-		mPropertiesViewer->Rebuild();
 	}
 
 	void WidgetLayerViewer::OnEnabled()

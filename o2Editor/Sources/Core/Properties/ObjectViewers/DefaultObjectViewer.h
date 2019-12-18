@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Properties/IObjectPropertiesViewer.h"
-#include "Core/Properties/PropertiesContext.h"
 
 namespace Editor
 {

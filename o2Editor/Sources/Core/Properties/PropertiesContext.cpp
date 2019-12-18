@@ -8,26 +8,10 @@
 
 namespace Editor
 {
-	void PropertiesContext::Set(const Vector<IObject*>& targets)
-	{
-		if (targets.IsEmpty())
-			return;
-
-		for (auto& kv : mProperties)
-		{
-			Vector<IAbstractValueProxy*> fieldPointers = targets.Select<IAbstractValueProxy*>([&](IObject* x) 
-			{ 
-				auto fieldInfo = kv.first;
-				auto type = fieldInfo->GetType();
-				return type->GetValueProxy(fieldInfo->GetValuePtrStrong(x)); 
-			});
-
-			kv.second->SetValueProxy(fieldPointers);
-		}
-	}
-
 	void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets)
 	{
+		mTargets = targets;
+
 		if (targets.IsEmpty())
 			return;
 

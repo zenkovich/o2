@@ -1,12 +1,13 @@
 #include "stdafx.h"
 #include "DefaultWidgetLayerPropertiesViewer.h"
 
+#include "Core/Actions/Transform.h"
 #include "Core/EditorScope.h"
+#include "Core/Properties/IObjectPropertiesViewer.h"
 #include "Core/Properties/Properties.h"
 #include "Core/UI/SpoilerWithHead.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
-#include "Core/Actions/Transform.h"
 
 namespace Editor
 {
@@ -33,40 +34,24 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::Refresh()
 	{
-		mFieldProperties.Set(mLayers.Select<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
-			return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
-		}));
-	}
+		if (!mViewer)
+		{
+			mViewer = o2EditorProperties.CreateObjectViewer(&TypeOf(WidgetLayer), "");
+			mSpoiler->AddChild(mViewer->GetLayout());
+			mFitSizeButton->SetParent(mSpoiler);
+		}
 
-	void DefaultWidgetLayerPropertiesViewer::Rebuild()
-	{
-		PushEditorScopeOnStack scope;
-
-		static Vector<String> hiddenFields = {
-			"name", "enabled", "locked", "layout"
-		};
-
-		o2EditorProperties.FreeProperties(mFieldProperties);
-
-		auto fields = TypeOf(WidgetLayer).GetFieldsWithBaseClasses();
-		if (!o2EditorProperties.IsPrivateFieldsVisible())
-			fields.RemoveAll([&](FieldInfo* x) { return hiddenFields.Contains(x->GetName()); });
-
-		o2EditorProperties.BuildObjectProperties(mSpoiler,
-												 fields, mFieldProperties, "");
-
-		mFitSizeButton->SetParent(nullptr);
-		mFitSizeButton->SetParent(mSpoiler);
+		if (mViewer)
+		{
+			mViewer->Refresh(mLayers.Select<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
+				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
+			}));
+		}
 	}
 
 	bool DefaultWidgetLayerPropertiesViewer::IsEmpty() const
 	{
 		return mSpoiler->GetChildren().Count() == 0;
-	}
-
-	bool DefaultWidgetLayerPropertiesViewer::IsBuiltWithHiddenFields() const
-	{
-		return mFieldProperties.IsBuiltWIthPrivateProperties();
 	}
 
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()

@@ -31,7 +31,8 @@ namespace Editor
 	void DefaultAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
 	{
 		mTargetAssets = assets;
-		mFieldProperties.Set(assets.Select<IObject*>([](auto x) { return (IObject*)(*x)->GetMeta(); }));
+		mPropertiesContext.Set(assets.Select<Pair<IObject*, IObject*>>([](auto x) { 
+			return Pair<IObject*, IObject*>((IObject*)(*x)->GetMeta(), nullptr); }));
 	}
 
 	const Type* DefaultAssetPropertiesViewer::GetAssetType() const
@@ -49,7 +50,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		mAssetType = type;
-		o2EditorProperties.BuildObjectProperties((VerticalLayout*)mPropertiesLayout, type, mFieldProperties, "");
+		o2EditorProperties.BuildObjectProperties((VerticalLayout*)mPropertiesLayout, type, mPropertiesContext, "");
 
 		mPropertiesLayout->name = "asset properties " + type->GetName();
 	}

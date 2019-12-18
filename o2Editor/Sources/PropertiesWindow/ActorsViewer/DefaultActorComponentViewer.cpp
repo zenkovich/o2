@@ -36,14 +36,15 @@ namespace Editor
 	void DefaultActorComponentViewer::Refresh()
 	{
 		bool requiredNewViewer = mViewer ? mViewer->GetViewingObjectType() != mComponentType : mComponentType != nullptr;
-		if (requiredNewViewer) {
+		if (requiredNewViewer) 
+		{
 			if (mViewer)
-				o2EditorProperties.FreeObjectViewer(mViewer, mComponentType);
+				o2EditorProperties.FreeObjectViewer(mViewer);
 
 			mViewer = o2EditorProperties.CreateObjectViewer(mComponentType, (String)"component:" + mComponentType->GetName() + "/",
 															THIS_FUNC(OnPropertyChanged));
 
-			mSpoiler->AddChild(mViewer->GetViewWidget());
+			mSpoiler->AddChild(mViewer->GetLayout());
 		}
 
 		if (mViewer)
