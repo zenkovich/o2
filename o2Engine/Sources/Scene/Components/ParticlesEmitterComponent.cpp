@@ -10,7 +10,7 @@ namespace o2
 	{}
 
 	ParticlesEmitterComponent::ParticlesEmitterComponent(const ParticlesEmitterComponent& other):
-		DrawableComponent(other), mEmitter(other.mEmitter)
+		DrawableComponent(other), ParticlesEmitter(other)
 	{}
 
 	ParticlesEmitterComponent::~ParticlesEmitterComponent()
@@ -19,18 +19,18 @@ namespace o2
 	ParticlesEmitterComponent& ParticlesEmitterComponent::operator=(const ParticlesEmitterComponent& other)
 	{
 		DrawableComponent::operator=(other);
-		mEmitter = other.mEmitter;
+		ParticlesEmitter::operator=(other);
 		return *this;
 	}
 
 	void ParticlesEmitterComponent::Draw()
 	{
-		mEmitter.Draw();
+		ParticlesEmitter::Draw();
 	}
 
 	void ParticlesEmitterComponent::Update(float dt)
 	{
-		mEmitter.Update(dt);
+		ParticlesEmitter::Update(dt);
 	}
 
 	String ParticlesEmitterComponent::GetName() const
@@ -50,7 +50,13 @@ namespace o2
 
 	void ParticlesEmitterComponent::OnTransformUpdated()
 	{
-		mEmitter.basis = mOwner->transform->GetWorldBasis();
+		basis = mOwner->transform->GetWorldBasis();
+	}
+
+	void ParticlesEmitterComponent::OnDeserialized(const DataNode& node)
+	{
+		DrawableComponent::OnDeserialized(node);
+		ParticlesEmitter::OnDeserialized(node);
 	}
 
 }

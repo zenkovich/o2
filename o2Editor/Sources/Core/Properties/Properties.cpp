@@ -16,7 +16,7 @@
 #include "Scene/UI/Widgets/VerticalLayout.h"
 #include "Scene/UI/WidgetLayout.h"
 #include "Utils/System/Time/Timer.h"
-#include "Utils/Editor/Attributes/InvokeOnChange.h"
+#include "Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 
 DECLARE_SINGLETON(Editor::Properties);
 

@@ -2,6 +2,8 @@
 
 #include "Animation/Animation.h"
 #include "Utils/Basic/IObject.h"
+#include "Utils/Editor/Attributes/AnimatableAttribute.h"
+#include "Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "Utils/Math/Basis.h"
 #include "Utils/Math/Rect.h"
 #include "Utils/Math/Vector2.h"
@@ -10,40 +12,41 @@
 
 namespace o2
 {
-	class Transform: public ISerializable
+	class Transform : virtual public ISerializable
 	{
 	public:
 		PROPERTIES(Transform);
-		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
-		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
-		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property
-		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space
-		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);      // Pivot property, in world space
-		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property
-		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians
-		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees
-		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property
+		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);      // Pivot property, in world space @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property
-		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property
+		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Sets the position and size
-		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle
+		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Sets the position and size @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property
-		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property
-		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Left top corner property
-		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Left top corner property
-		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center property
+		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Left top corner property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Left top corner property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(Vec2F, right, SetRight, GetRight); // X Axis direction property
-		PROPERTY(Vec2F, left, SetLeft, GetLeft);    // Negative X Axis direction property
-		PROPERTY(Vec2F, up, SetUp, GetUp);          // Y Axis direction property
-		PROPERTY(Vec2F, down, SetDown, GetDown);    // Negative Y Axis direction property
+		PROPERTY(Vec2F, right, SetRight, GetRight); // X Axis direction property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, left, SetLeft, GetLeft);    // Negative X Axis direction property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, up, SetUp, GetUp);          // Y Axis direction property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, down, SetDown, GetDown);    // Negative Y Axis direction property @EDITOR_IGNORE @ANIMATABLE
 
-		SETTER(Vec2F, lookAtPoint, LookAt); // Look at point setter
+		SETTER(Vec2F, lookAtPoint, LookAt); // Look at point setter @EDITOR_IGNORE @ANIMATABLE
 
-									   // Constructor
+	public:
+		// Constructor
 		Transform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
 				  const Vec2F& scale = Vec2F(1.0f, 1.0f), const Vec2F& pivot = Vec2F(0.5f, 0.5f));
 
@@ -51,7 +54,7 @@ namespace o2
 		Transform(const Transform& other);
 
 		// Virtual destructor
-		virtual ~Transform() {}
+		virtual ~Transform() { }
 
 		// Assign operator
 		Transform& operator=(const Transform& other);
@@ -215,19 +218,19 @@ namespace o2
 		SERIALIZABLE(Transform);
 
 	protected:
-		Vec2F  mPosition;          // Position @SERIALIZABLE
-		Vec2F  mSize;              // Size @SERIALIZABLE
-		Vec2F  mScale;             // Scale, (1; 1) is default @SERIALIZABLE
-		Vec2F  mPivot;             // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-		float  mAngle;             // Rotation angle in radians @SERIALIZABLE
-		float  mShear;             // Shear @SERIALIZABLE
+		Vec2F  mPosition; // Position @SERIALIZABLE
+		Vec2F  mSize;     // Size @SERIALIZABLE
+		Vec2F  mScale;    // Scale, (1; 1) is default @SERIALIZABLE
+		Vec2F  mPivot;    // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
+		float  mAngle;    // Rotation angle in radians @SERIALIZABLE
+		float  mShear;    // Shear @SERIALIZABLE
 
 		Basis  mTransform;         // Final transform basis
 		Basis  mNonSizedTransform; // Final transform basis without size
 
 	protected:
 		// It is called when basis changed
-		virtual void BasisChanged() {}
+		virtual void BasisChanged() { }
 
 		// It is called when object was deserialized
 		void OnDeserialized(const DataNode& node) override;
@@ -244,29 +247,29 @@ CLASS_BASES_META(o2::Transform)
 END_META;
 CLASS_FIELDS_META(o2::Transform)
 {
-	PUBLIC_FIELD(position);
-	PUBLIC_FIELD(size);
-	PUBLIC_FIELD(scale);
-	PUBLIC_FIELD(pivot);
-	PUBLIC_FIELD(worldPivot);
-	PUBLIC_FIELD(szPivot);
-	PUBLIC_FIELD(angle);
-	PUBLIC_FIELD(angleDegree);
-	PUBLIC_FIELD(shear);
-	PUBLIC_FIELD(basis);
-	PUBLIC_FIELD(nonSizedBasis);
-	PUBLIC_FIELD(rect);
-	PUBLIC_FIELD(AABB);
-	PUBLIC_FIELD(leftTop);
-	PUBLIC_FIELD(leftBottom);
-	PUBLIC_FIELD(rightTop);
-	PUBLIC_FIELD(rightBottom);
-	PUBLIC_FIELD(center);
-	PUBLIC_FIELD(right);
-	PUBLIC_FIELD(left);
-	PUBLIC_FIELD(up);
-	PUBLIC_FIELD(down);
-	PUBLIC_FIELD(lookAtPoint);
+	PUBLIC_FIELD(position).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(size).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(scale).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(pivot).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(worldPivot).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(szPivot).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(angle).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(angleDegree).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(shear).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(basis).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(nonSizedBasis).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rect).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(AABB).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftTop).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(leftBottom).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightTop).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(rightBottom).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(center).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(right).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(left).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(up).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(down).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(lookAtPoint).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPosition).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSize).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mScale).SERIALIZABLE_ATTRIBUTE();

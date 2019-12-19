@@ -6,7 +6,7 @@
 
 namespace o2
 {
-	class ParticlesEmitterComponent: public DrawableComponent
+	class ParticlesEmitterComponent: public DrawableComponent, public ParticlesEmitter
 	{
 		SERIALIZABLE(ParticlesEmitterComponent);
 
@@ -33,22 +33,22 @@ namespace o2
 		String GetIcon() const override;
 
 	protected:
-		ParticlesEmitter mEmitter; // @SERIALIZABLE @EDITOR_PROPERTY
-
-	protected:
 		// It is called when actor's transform was changed
 		void OnTransformUpdated();
+
+		// It is called when object was deserialized
+		void OnDeserialized(const DataNode& node) override;
 	};
 }
 
 CLASS_BASES_META(o2::ParticlesEmitterComponent)
 {
 	BASE_CLASS(o2::DrawableComponent);
+	BASE_CLASS(o2::ParticlesEmitter);
 }
 END_META;
 CLASS_FIELDS_META(o2::ParticlesEmitterComponent)
 {
-	PROTECTED_FIELD(mEmitter).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesEmitterComponent)
@@ -60,5 +60,6 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	PUBLIC_FUNCTION(String, GetCategory);
 	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;

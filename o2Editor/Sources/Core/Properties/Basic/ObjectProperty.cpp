@@ -7,6 +7,7 @@
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/Spoiler.h"
+#include "Utils/Editor/Attributes/NoHeaderAttribute.h"
 
 using namespace o2;
 
@@ -113,8 +114,26 @@ namespace Editor
 	{
 		SpecializeType(fieldInfo->GetType());
 
-		if (fieldInfo->GetAttribute<ExpandedByDefaultAttribute>())
+		if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
 			mSpoiler->Expand();
+
+		if (fieldInfo->HasAttribute<NoHeaderAttribute>())
+		{
+			mSpoiler->SetHeadHeight(0);
+			mSpoiler->GetLayerDrawable<Text>("caption")->enabled = false;
+			mSpoiler->GetInternalWidget("expand")->enabledForcibly = false;
+			mSpoiler->borderLeft = 0;
+			mSpoiler->borderTop = 0;
+			mSpoiler->Expand();
+		}
+		else
+		{
+			mSpoiler->SetHeadHeight(18);
+			mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
+			mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
+			mSpoiler->borderLeft = 10;
+			mSpoiler->borderTop = 5;
+		}
 	}
 
 	const Type* ObjectProperty::GetSpecializedType() const

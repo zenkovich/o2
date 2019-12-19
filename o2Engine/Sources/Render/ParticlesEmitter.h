@@ -14,7 +14,7 @@ namespace o2
 	// ------------------------------------------------------
 	// Particles emitter. Emits, updates and manage particles
 	// ------------------------------------------------------
-	class ParticlesEmitter: public IRectDrawable
+	class ParticlesEmitter: virtual public IRectDrawable
 	{
 		SERIALIZABLE(ParticlesEmitter);
 

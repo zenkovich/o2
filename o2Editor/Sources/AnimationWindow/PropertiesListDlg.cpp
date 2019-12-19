@@ -10,6 +10,7 @@
 #include "Scene/UI/Widgets/EditBox.h"
 #include "Scene/UI/Widgets/Window.h"
 #include "Core/UIRoot.h"
+#include "Utils/Editor/Attributes/AnimatableAttribute.h"
 
 DECLARE_SINGLETON(Editor::PropertiesListDlg);
 
@@ -131,10 +132,13 @@ namespace Editor
 	{
 		for (auto field : type->GetFields())
 		{
-			if (field->GetProtectionSection() != ProtectSection::Public)
-				continue;
+			bool isPublic = field->GetProtectionSection() != ProtectSection::Public;
+			bool isEditorProperty = field->HasAttribute<EditorPropertyAttribute>();
+			bool isIgnoreEditorProperty = field->HasAttribute<IgnoreEditorPropertyAttribute>();
+			bool isAnimatable = field->HasAttribute<AnimatableAttribute>();
 
-			ProcessTreeNode(field->GetValuePtr(object), field->GetType(), field->GetName(), node);
+			if (isAnimatable || (isPublic && !isIgnoreEditorProperty) || isEditorProperty) 
+				ProcessTreeNode(field->GetValuePtr(object), field->GetType(), field->GetName(), node);
 		}
 
 		for (auto base : type->GetBaseTypes())
@@ -179,7 +183,6 @@ namespace Editor
 
 			for (auto& kv : allValues)
 				ProcessTreeNode(kv.second, accessorType->GetReturnType(), kv.first, newNode);
-
 
 			if (newNode->children.empty()) {
 				node->children.Remove(newNode);

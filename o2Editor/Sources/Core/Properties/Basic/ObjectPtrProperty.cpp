@@ -9,8 +9,9 @@
 #include "Scene/UI/Widgets/ContextMenu.h"
 #include "Scene/UI/Widgets/Label.h"
 #include "Scene/UI/Widgets/Spoiler.h"
-#include "Utils/Editor/Attributes/DefaultType.h"
-#include "Utils/Editor/Attributes/DontDelete.h"
+#include "Utils/Editor/Attributes/DefaultTypeAttribute.h"
+#include "Utils/Editor/Attributes/DontDeleteAttribute.h"
+#include "Utils/Editor/Attributes/NoHeaderAttribute.h"
 
 using namespace o2;
 
@@ -184,8 +185,26 @@ namespace Editor
 
 		if (fieldInfo)
 		{
-			if (fieldInfo->GetAttribute<ExpandedByDefaultAttribute>())
+			if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
 				mSpoiler->Expand();
+
+			if (fieldInfo->HasAttribute<NoHeaderAttribute>())
+			{
+				mSpoiler->SetHeadHeight(0);
+				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = false;
+				mSpoiler->GetInternalWidget("expand")->enabledForcibly = false;
+				mSpoiler->borderLeft = 0;
+				mSpoiler->borderTop = 0;
+				mSpoiler->Expand();
+			}
+			else
+			{
+				mSpoiler->SetHeadHeight(18);
+				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
+				mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
+				mSpoiler->borderLeft = 10;
+				mSpoiler->borderTop = 5;
+			}
 
 			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();
 		}

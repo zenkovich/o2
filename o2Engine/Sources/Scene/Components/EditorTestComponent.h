@@ -8,8 +8,8 @@
 #include "Render/Sprite.h"
 #include "Scene/Component.h"
 #include "Scene/Tags.h"
-#include "Utils/Editor/Attributes/DontDelete.h"
-#include "Utils/Editor/Attributes/InvokeOnChange.h"
+#include "Utils/Editor/Attributes/DontDeleteAttribute.h"
+#include "Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "Utils/Math/Curve.h"
 
 namespace o2

@@ -5,6 +5,7 @@
 #include "Core/EditorScope.h"
 #include "Scene/UI/UIManager.h"
 #include "Scene/UI/Widgets/Button.h"
+#include "Scene/UI/Widgets/VerticalLayout.h"
 #include "SceneWindow/SceneEditScreen.h"
 
 namespace Editor

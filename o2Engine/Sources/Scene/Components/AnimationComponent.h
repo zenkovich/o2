@@ -4,9 +4,9 @@
 #include "Animation/AnimationState.h"
 #include "Scene/Component.h"
 #include "Utils/Debug/Debug.h"
-#include "Utils/Editor/Attributes/DefaultType.h"
-#include "Utils/Editor/Attributes/DontDelete.h"
-#include "Utils/Editor/Attributes/InvokeOnChange.h"
+#include "Utils/Editor/Attributes/DefaultTypeAttribute.h"
+#include "Utils/Editor/Attributes/DontDeleteAttribute.h"
+#include "Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 
 namespace o2
 {
@@ -206,7 +206,7 @@ namespace o2
 		newAgent->animValues.Add({ state, value });
 
 		FieldInfo* fieldInfo = nullptr;
-		_type* fieldPtr = (_type*)GetType().GetFieldPtr(this, path, fieldInfo);
+		_type* fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
 
 		if (!fieldInfo)
 		{
@@ -265,7 +265,7 @@ CLASS_BASES_META(o2::AnimationComponent)
 END_META;
 CLASS_FIELDS_META(o2::AnimationComponent)
 {
-	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE().DONT_DELETE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged);
+	PROTECTED_FIELD(mStates).SERIALIZABLE_ATTRIBUTE().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged);
 	PROTECTED_FIELD(mValues);
 	PROTECTED_FIELD(mBlend);
 }

@@ -51,7 +51,7 @@ namespace o2
 	{
 		mStates.Add(state);
 
-		state->animation.SetTarget(this);
+		state->animation.SetTarget(mOwner);
 		state->animation.mAnimationState = state;
 		state->mOwner = this;
 
@@ -243,7 +243,7 @@ namespace o2
 		{
 			if (!state->mOwner)
 			{
-				state->animation.SetTarget(this);
+				state->animation.SetTarget(mOwner);
 				state->animation.mAnimationState = state;
 				state->mOwner = this;
 

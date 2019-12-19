@@ -8,7 +8,7 @@
 #include "Scene/UI/Widgets/Button.h"
 #include "Scene/UI/Widgets/Spoiler.h"
 #include "SceneWindow/SceneEditScreen.h"
-#include "Utils/Editor/Attributes/InvokeOnChange.h"
+#include "Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 
 namespace Editor
 {

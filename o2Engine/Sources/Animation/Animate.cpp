@@ -186,10 +186,12 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "color", "mColor", "m_color", "_color" };
 
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mColorAnimatedValue = mAnimation.AddAnimationValue<Color4>(nameVariant);
 				return;
@@ -204,10 +206,12 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "position", "mPosition", "m_position", "_position", "pos" };
 
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mPositionAnimatedValue = mAnimation.AddAnimationValue<Vec2F>(nameVariant);
 				return;
@@ -222,10 +226,12 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "scale", "mScale", "m_scale", "_scale" };
 
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mScaleAnimatedValue = mAnimation.AddAnimationValue<Vec2F>(nameVariant);
 				return;
@@ -239,11 +245,13 @@ namespace o2
 			return;
 
 		static Vector<String> nameVariants ={ "angle", "mAngle", "mRotation", "m_angle", "m_rotation", "rotation", "rot" };
-
+		
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
-			if (mAnimation.GetTarget()->GetType().GetFieldPtr((void*)mAnimation.GetTarget(), nameVariant, fi))
+			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mRotationAnimatedValue = mAnimation.AddAnimationValue<float>(nameVariant);
 				return;

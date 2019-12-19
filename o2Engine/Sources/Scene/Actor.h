@@ -5,6 +5,8 @@
 #include "Scene/ActorRef.h"
 #include "Scene/ActorTransform.h"
 #include "Scene/Tags.h"
+#include "Utils/Editor/Attributes/AnimatableAttribute.h"
+#include "Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "Utils/Editor/SceneEditableObject.h"
 #include "Utils/Singleton.h"
 #include "Utils/Types/UID.h"
@@ -39,12 +41,12 @@ namespace o2
 		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
 
 		GETTER(SceneUID, id, GetID);              // Actor unique id
-		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE
+		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE
 
 		PROPERTY(SceneLayer*, layer, SetLayer, GetLayer);    // Layer property @EDITOR_IGNORE
-		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE
+		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
 		GETTER(ActorsVec, children, GetChildren);         // Children array getter
@@ -55,7 +57,7 @@ namespace o2
 
 	public:
 		TagGroup              tags;      // Tags group @EDITOR_IGNORE
-		ActorTransform* const transform; // Transformation of actor @EDITOR_IGNORE
+		ActorTransform* const transform; // Transformation of actor @EDITOR_IGNORE @ANIMATABLE
 
 	public:
 		Function<void(bool)>  onEnableChanged; // Enable changing event
@@ -698,17 +700,17 @@ CLASS_FIELDS_META(o2::Actor)
 {
 	PUBLIC_FIELD(prototype).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(id);
-	PUBLIC_FIELD(name).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(name).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
 	PUBLIC_FIELD(layer).EDITOR_IGNORE_ATTRIBUTE();
-	PUBLIC_FIELD(layerName).EDITOR_IGNORE_ATTRIBUTE();
-	PUBLIC_FIELD(enabled).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(layerName).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
+	PUBLIC_FIELD(enabled).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
 	PUBLIC_FIELD(enabledInHierarchy);
 	PUBLIC_FIELD(children);
 	PUBLIC_FIELD(components);
 	PUBLIC_FIELD(child);
 	PUBLIC_FIELD(component);
 	PUBLIC_FIELD(tags).EDITOR_IGNORE_ATTRIBUTE();
-	PUBLIC_FIELD(transform).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(transform).EDITOR_IGNORE_ATTRIBUTE().ANIMATABLE_ATTRIBUTE();
 	PUBLIC_FIELD(onEnableChanged);
 	PUBLIC_FIELD(locked).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(lockedInHierarchy);
