@@ -132,7 +132,7 @@ namespace Editor
 	{
 		for (auto field : type->GetFields())
 		{
-			bool isPublic = field->GetProtectionSection() != ProtectSection::Public;
+			bool isPublic = field->GetProtectionSection() == ProtectSection::Public;
 			bool isEditorProperty = field->HasAttribute<EditorPropertyAttribute>();
 			bool isIgnoreEditorProperty = field->HasAttribute<IgnoreEditorPropertyAttribute>();
 			bool isAnimatable = field->HasAttribute<AnimatableAttribute>();

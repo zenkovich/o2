@@ -14,7 +14,7 @@ namespace o2
 	// ------------------------------------------------------
 	// Particles emitter. Emits, updates and manage particles
 	// ------------------------------------------------------
-	class ParticlesEmitter: virtual public IRectDrawable
+	class ParticlesEmitter: public IRectDrawable
 	{
 		SERIALIZABLE(ParticlesEmitter);
 
@@ -242,7 +242,7 @@ namespace o2
 	protected:
 		ImageAssetRef          mImageAsset;      // Particle sprite image @SERIALIZABLE
 		ParticlesEmitterShape* mShape = nullptr; // Particles emitting shape @SERIALIZABLE
-		ParticleEffectsVec     mEffects;         // Particles effect @SERIALIZABLE
+		ParticleEffectsVec     mEffects;         // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
 														                 
 		int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
 					           		
@@ -339,7 +339,7 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
 	PUBLIC_FIELD(shape);
 	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mShape).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mEffects).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEffects).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParticlesNumLimit).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPlaying).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mEmittingCoefficient).SERIALIZABLE_ATTRIBUTE();

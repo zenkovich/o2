@@ -12,6 +12,15 @@ namespace o2
 	{
 		return emitter->mParticles;
 	}
+
+	void ParticlesGravityEffect::Update(float dt, ParticlesEmitter* emitter)
+	{
+		Vec2F v = gravity*dt;
+		for (auto& p : GetParticlesDirect(emitter))
+			p.velocity += v;
+	}
 }
 
 DECLARE_CLASS(o2::ParticlesEffect);
+
+DECLARE_CLASS(o2::ParticlesGravityEffect);

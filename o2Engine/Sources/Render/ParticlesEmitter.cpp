@@ -199,7 +199,10 @@ namespace o2
 	void ParticlesEmitter::UpdateEffects(float dt)
 	{
 		for (auto effect : mEffects)
-			effect->Update(dt, this);
+		{
+			if (effect)
+				effect->Update(dt, this);
+		}
 	}
 
 	void ParticlesEmitter::UpdateParticles(float dt)
