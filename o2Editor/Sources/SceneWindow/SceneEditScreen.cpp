@@ -397,9 +397,9 @@ namespace Editor
 		assetsScroll->RegObjectsCreationAction();
 		
 		o2UI.FocusWidget(o2EditorTree.GetSceneTree());
-		o2EditorTree.GetSceneTree()->SetSelectedObjects(assetsScroll->mInstSceneDragObjects);
+		o2EditorTree.GetSceneTree()->SetSelectedObjects(assetsScroll->mInstantiatedSceneDragObjects);
 		
-		assetsScroll->mInstSceneDragObjects.Clear();
+		assetsScroll->mInstantiatedSceneDragObjects.Clear();
 
 		o2Application.SetCursor(CursorType::Arrow);
 	}
@@ -411,7 +411,7 @@ namespace Editor
 			return;
 
 		assetsScroll->InstantiateDraggingAssets();
-		if (assetsScroll->mInstSceneDragObjects.Count() > 0)
+		if (assetsScroll->mInstantiatedSceneDragObjects.Count() > 0)
 			o2Application.SetCursor(CursorType::Hand);
 	}
 
@@ -421,7 +421,7 @@ namespace Editor
 		if (!assetsScroll)
 			return;
 
-		for (auto object : assetsScroll->mInstSceneDragObjects)
+		for (auto object : assetsScroll->mInstantiatedSceneDragObjects)
 		{
 			object->UpdateTransform();
 			Basis transform = object->GetTransform();

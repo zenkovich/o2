@@ -142,7 +142,7 @@ namespace Editor
 		bool                    mDragEnded = false;       // Is dragging ended
 		AssetIcon*              mDragIcon = nullptr;      // Dragging icon
 		Vec2F                   mDragOffset;              // Dragging offset from cursor to icon center
-		SceneEditableObjectsVec mInstSceneDragObjects;    // Instantiated objects when dragging asset above scene
+		SceneEditableObjectsVec mInstantiatedSceneDragObjects;    // Instantiated objects when dragging asset above scene
 
 		AssetIdPathVec mCuttingAssets; // Current cutted assets
 						        
@@ -381,7 +381,7 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FIELD(mDragEnded);
 	PROTECTED_FIELD(mDragIcon);
 	PROTECTED_FIELD(mDragOffset);
-	PROTECTED_FIELD(mInstSceneDragObjects);
+	PROTECTED_FIELD(mInstantiatedSceneDragObjects);
 	PROTECTED_FIELD(mCuttingAssets);
 	PROTECTED_FIELD(mNeedRebuildAssets);
 	PROTECTED_FIELD(mChangePropertiesTargetsFromThis);

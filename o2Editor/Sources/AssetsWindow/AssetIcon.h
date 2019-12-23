@@ -52,6 +52,8 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
 
 		SERIALIZABLE(AssetIcon);
 
@@ -126,6 +128,7 @@ CLASS_METHODS_META(Editor::AssetIcon)
 	PUBLIC_FUNCTION(void, SetAssetName, const WString&);
 	PUBLIC_FUNCTION(WString, GetAssetName);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, SetSelected, bool);
 	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);

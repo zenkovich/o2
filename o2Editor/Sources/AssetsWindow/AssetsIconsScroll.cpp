@@ -132,7 +132,7 @@ namespace Editor
 		if (mOwnVerScrollBar)
 			mVerScrollBar->Draw();
 
-		if (mIsDraggingIcons && mInstSceneDragObjects.Count() == 0)
+		if (mIsDraggingIcons && mInstantiatedSceneDragObjects.Count() == 0)
 			o2UI.DrawWidgetAtTop(mDragIcon);
 
 		if (IsUIDebugEnabled() || o2Input.IsKeyDown(VK_F1))
@@ -466,7 +466,11 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnCursorPressed(const Input::Cursor& cursor)
 	{
+		if (GetIconUnderPoint(cursor.position))
+			return;
+
 		mPressedPoint = cursor.position;
+
 		BeginSelecting();
 		o2UI.FocusWidget(this);
 		UpdateSelection(cursor);
@@ -495,7 +499,7 @@ namespace Editor
 	{
 		if (mSelecting)
 			CompleteSelecting();
-		else
+		else if (!mIsDraggingIcons)
 		{
 			if (!o2Input.IsKeyDown(VK_CONTROL))
 				DeselectAllAssets();
@@ -604,13 +608,13 @@ namespace Editor
 
 	void AssetsIconsScrollArea::RegObjectsCreationAction()
 	{
-		auto firstInstObject = mInstSceneDragObjects[0];
+		auto firstInstObject = mInstantiatedSceneDragObjects[0];
 		auto parent = firstInstObject->GetEditableParent();
 		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
 		int idx = parentChilds.Find(firstInstObject);
 		auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
 
-		auto createAction = mnew CreateAction(mInstSceneDragObjects, parent, prevActor);
+		auto createAction = mnew CreateAction(mInstantiatedSceneDragObjects, parent, prevActor);
 
 		o2EditorApplication.DoneAction(createAction);
 	}
@@ -624,17 +628,17 @@ namespace Editor
 			if (actor)
 			{
 				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.path));
-				mInstSceneDragObjects.Add(actor);
+				mInstantiatedSceneDragObjects.Add(actor);
 			}
 		}
 	}
 
 	void AssetsIconsScrollArea::ClearInstantiatedDraggingAssets()
 	{
-		for (auto actor : mInstSceneDragObjects)
+		for (auto actor : mInstantiatedSceneDragObjects)
 			delete actor;
 
-		mInstSceneDragObjects.Clear();
+		mInstantiatedSceneDragObjects.Clear();
 	}
 
 	void AssetsIconsScrollArea::OnCursorPressBreak(const Input::Cursor& cursor)

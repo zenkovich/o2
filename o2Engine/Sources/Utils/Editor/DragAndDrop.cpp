@@ -294,18 +294,22 @@ namespace o2
 
 
 		auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursor.id);
-		CursorAreaEventsListener* underCursorListener = nullptr;
+		DragDropArea* dragDropArea = nullptr;
 
 		for (auto listener : underCursorListeners)
 		{
 			if (listener != this)
 			{
-				underCursorListener = listener;
-				break;
+				if (auto listenerDragDropArea = dynamic_cast<DragDropArea*>(listener))
+				{
+					dragDropArea = listenerDragDropArea;
+					break;
+				}
+
+				if (!listener->IsInputTransparent())
+					break;
 			}
 		}
-
-		auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
 
 		if (!mIsDragging)
 		{
@@ -325,9 +329,9 @@ namespace o2
 
 		if (mIsDragging)
 		{
-			OnDragged(cursor, dragArea);
+			OnDragged(cursor, dragDropArea);
 
-			if (mDragDropArea != dragArea)
+			if (mDragDropArea != dragDropArea)
 			{
 				if (mDragDropArea)
 				{
@@ -337,7 +341,7 @@ namespace o2
 						mDragDropArea->OnDragExit(this);
 				}
 
-				mDragDropArea = dragArea;
+				mDragDropArea = dragDropArea;
 
 				if (mDragDropArea)
 				{
@@ -348,12 +352,12 @@ namespace o2
 				}
 			}
 
-			if (dragArea)
+			if (dragDropArea)
 			{
 				if (mSelectGroup)
-					dragArea->OnDraggedAbove(mSelectGroup);
+					dragDropArea->OnDraggedAbove(mSelectGroup);
 				else
-					dragArea->OnDraggedAbove(this);
+					dragDropArea->OnDraggedAbove(this);
 			}
 		}
 

@@ -67,6 +67,11 @@ namespace Editor
 		return Widget::IsUnderPoint(point);
 	}
 
+	bool AssetIcon::IsInputTransparent() const
+	{
+		return false;
+	}
+
 	void AssetIcon::CopyData(const Actor& otherActor)
 	{
 		const AssetIcon& other = dynamic_cast<const AssetIcon&>(otherActor);

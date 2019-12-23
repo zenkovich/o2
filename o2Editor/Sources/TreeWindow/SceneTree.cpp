@@ -257,20 +257,20 @@ namespace Editor
 		{
 			assetsScroll->InstantiateDraggingAssets();
 
-			if (!assetsScroll->mInstSceneDragObjects.IsEmpty())
+			if (!assetsScroll->mInstantiatedSceneDragObjects.IsEmpty())
 			{
 				UpdateNodesView(true);
 				SetLayoutDirty();
 
-				for (auto object : assetsScroll->mInstSceneDragObjects)
+				for (auto object : assetsScroll->mInstantiatedSceneDragObjects)
 				{
 					int idx = mAllNodes.FindIdx([=](Node* x) { return x->object == object; });
 					CreateVisibleNodeWidget(mAllNodes[idx], idx);
 				}
 
 				Focus();
-				SetSelectedObjects(assetsScroll->mInstSceneDragObjects);
-				BeginDragging(GetNode(assetsScroll->mInstSceneDragObjects.Last()));
+				SetSelectedObjects(assetsScroll->mInstantiatedSceneDragObjects);
+				BeginDragging(GetNode(assetsScroll->mInstantiatedSceneDragObjects.Last()));
 				mDragOffset = Vec2F();
 			}
 		}
@@ -309,7 +309,7 @@ namespace Editor
 			Tree::OnDropped(this);
 
 			assetsScroll->RegObjectsCreationAction();
-			assetsScroll->mInstSceneDragObjects.Clear();
+			assetsScroll->mInstantiatedSceneDragObjects.Clear();
 		}
 		else Tree::OnDropped(group);
 	}
