@@ -22,7 +22,7 @@ namespace Editor
 		IOBJECT(DefaultObjectViewer);
 
 	private:
-		const Type* mRealObjectType = nullptr;          // Specialized viewing object type
+		const Type* mRealObjectType = &TypeOf(IObject); // Specialized viewing object type
 		bool        mBuiltWithHiddenProperties = false; // Is properties was built with hidden properties section
 	};
 }

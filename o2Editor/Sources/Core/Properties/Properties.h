@@ -133,8 +133,7 @@ namespace Editor
 		PropertiesFieldsVec         mAvailablePropertiesFields;        // Available properties fields samples
 		IObjectPropertiesViewersVec mAvailableObjectPropertiesViewers; // Available object properties viewers samples
 
-		TypePropertyMap mPropertiesPool; // Pool of properties, grouped by property type
-
+		TypePropertyMap               mPropertiesPool;              // Pool of properties, grouped by property type
 		TypeObjectPropertiesViewerMap mObjectPropertiesViewersPool; // Pool of object properties viewers, grouped by object type
 
 		static IPropertyField::OnChangeCompletedFunc mOnPropertyCompletedChangingUndoCreateDelegate;
@@ -143,7 +142,7 @@ namespace Editor
 		// Initializes available properties fields samples
 		void InitializeAvailablePropertiesFields();
 
-		// Initializes available objectproperties viewers samples
+		// Initializes available object properties viewers samples
 		void InitializeAvailableObjectPropertiesViewers();
 
 		// Builds layout viewer by fields without filtering

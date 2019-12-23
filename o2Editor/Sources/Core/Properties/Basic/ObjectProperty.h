@@ -45,9 +45,6 @@ namespace Editor
 		// Specializes field info, processing attributes
 		void SpecializeFieldInfo(const FieldInfo* fieldInfo) override;
 
-		// Returns specialized type
-		const Type* GetSpecializedType() const override;
-
 		// Sets property caption
 		void SetCaption(const WString& text) override;
 
@@ -85,11 +82,9 @@ namespace Editor
 		};
 		typedef Vector<Pair<TargetObjectData, TargetObjectData>> TargetObjectsVec;
 
-	protected:
-		const Type* mObjectType = nullptr; // Type of target objects
-							     								    
-		bool                     mPropertiesInitialized = false;    // True when properties were built and initialized
-		TargetObjectsVec         mTargetObjects;                    // Target objects
+	protected:							     								    
+		TargetObjectsVec mTargetObjects; // Target objects
+
 		IObjectPropertiesViewer* mObjectPropertiesViewer = nullptr; // Object viewer
 
 		Spoiler* mSpoiler = nullptr; // Properties spoiler
@@ -119,7 +114,7 @@ CLASS_BASES_META(Editor::ObjectProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
-	PROTECTED_FIELD(mObjectType);
+	PROTECTED_FIELD(mSpecializedType);
 	PROTECTED_FIELD(mPropertiesInitialized);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mObjectPropertiesViewer);

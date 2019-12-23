@@ -68,7 +68,7 @@ namespace Editor
 		virtual Button* GetRemoveButton();
 
 		// Returns editing by this field type
-		virtual const Type* GetFieldType() const { return &TypeOf(void); }
+		virtual const Type* GetFieldType() const;
 
 		// Returns is values different
 		bool IsValuesDifferent() const;
@@ -96,9 +96,6 @@ namespace Editor
 
 		// Specializes field info
 		virtual void SpecializeFieldInfo(const FieldInfo* fieldInfo);
-
-		// Returns specialized type
-		virtual const Type* GetSpecializedType() const { return nullptr; }
 
 		// Sets targets pointers
 		template<typename _type>
@@ -133,7 +130,7 @@ namespace Editor
 
 	protected:
 		const Type*      mSpecializedType = nullptr;      // Specialized type
-		const FieldInfo* mSpecializedFieldInfo = nullptr; // Specialzed field info
+		const FieldInfo* mSpecializedFieldInfo = nullptr; // Specialized field info
 
 		bool mRevertable = true; // Is property can be reverted
 

@@ -49,9 +49,6 @@ namespace Editor
 		// Specializes field info, processing attributes
 		void SpecializeFieldInfo(const FieldInfo* fieldInfo) override;
 
-		// Returns specialized type
-		const Type* GetSpecializedType() const override;
-
 		// Sets property caption
 		void SetCaption(const WString& text) override;
 

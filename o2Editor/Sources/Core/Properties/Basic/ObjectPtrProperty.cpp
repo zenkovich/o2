@@ -162,7 +162,7 @@ namespace Editor
 
 	const Type* ObjectPtrProperty::GetFieldType() const
 	{
-		return &TypeOf(void);
+		return mSpecializedType;
 	}
 
 	void ObjectPtrProperty::SpecializeType(const Type* type)
@@ -208,11 +208,6 @@ namespace Editor
 
 			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();
 		}
-	}
-
-	const Type* ObjectPtrProperty::GetSpecializedType() const
-	{
-		return mObjectPtrType;
 	}
 
 	void ObjectPtrProperty::SetCaption(const WString& text)

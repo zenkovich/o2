@@ -14,6 +14,29 @@ namespace o2
 		EventSystem::UnregDragListener(this);
 	}
 
+	DragDropArea* DragableObject::GetDropAreaUnderCursor(CursorId cursorId) const
+	{
+		auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursorId);
+		DragDropArea* dragDropArea = nullptr;
+
+		for (auto listener : underCursorListeners)
+		{
+			if (listener != this)
+			{
+				if (auto listenerDragDropArea = dynamic_cast<DragDropArea*>(listener))
+				{
+					dragDropArea = listenerDragDropArea;
+					break;
+				}
+
+				if (!listener->IsInputTransparent())
+					break;
+			}
+		}
+
+		return dragDropArea;
+	}
+
 	void DragableObject::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		mPressedCursorPos = cursor.position;
@@ -36,8 +59,7 @@ namespace o2
 		if (cursor.delta.Length() < 0.5f)
 			return;
 
-		auto underCursorListener = o2Events.GetCursorListenerUnderCursor(cursor.id);
-		auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
+		auto dragArea = GetDropAreaUnderCursor(cursor.id);
 
 		if (!mIsDragging)
 		{
@@ -75,10 +97,7 @@ namespace o2
 		{
 			OnDragEnd(cursor);
 
-			auto underCursorListener = o2Events.GetCursorListenerUnderCursor(cursor.id);
-			auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
-
-			if (dragArea)
+			if (auto dragArea = GetDropAreaUnderCursor(cursor.id))
 			{
 				OnDropped(dragArea);
 				dragArea->OnDropped(this);
@@ -292,24 +311,7 @@ namespace o2
 		if (cursor.delta.Length() < 0.5f)
 			return;
 
-
-		auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursor.id);
-		DragDropArea* dragDropArea = nullptr;
-
-		for (auto listener : underCursorListeners)
-		{
-			if (listener != this)
-			{
-				if (auto listenerDragDropArea = dynamic_cast<DragDropArea*>(listener))
-				{
-					dragDropArea = listenerDragDropArea;
-					break;
-				}
-
-				if (!listener->IsInputTransparent())
-					break;
-			}
-		}
+		DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id);
 
 		if (!mIsDragging)
 		{
@@ -370,27 +372,13 @@ namespace o2
 		{
 			OnDragEnd(cursor);
 
-			auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursor.id);
-			CursorAreaEventsListener* underCursorListener = nullptr;
-
-			for (auto listener : underCursorListeners)
+			if (DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id))
 			{
-				if (listener != this)
-				{
-					underCursorListener = listener;
-					break;
-				}
-			}
-
-			auto dragArea = dynamic_cast<DragDropArea*>(underCursorListener);
-
-			if (dragArea)
-			{
-				OnDropped(dragArea);
+				OnDropped(dragDropArea);
 				if (mSelectGroup)
-					dragArea->OnDropped(mSelectGroup);
+					dragDropArea->OnDropped(mSelectGroup);
 				else
-					dragArea->OnDropped(this);
+					dragDropArea->OnDropped(this);
 			}
 
 			mDragDropArea = nullptr;

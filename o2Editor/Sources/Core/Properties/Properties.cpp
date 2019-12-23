@@ -402,10 +402,48 @@ namespace Editor
 															const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 															const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		auto sample = mAvailableObjectPropertiesViewers.FindMatch([=](IObjectPropertiesViewer* x) {
-			return type->IsBasedOn(*x->GetViewingObjectType()); });
+		IObjectPropertiesViewer* viwerSample = nullptr;
+		
+		int minBaseDepth = INT_MAX;
+		for (auto viewer : mAvailableObjectPropertiesViewers)
+		{
+			auto viewerType = viewer->GetViewingObjectType();
+			Vector<const Type*> itTypes = { viewerType };
+			int thisBaseDepth = 0;
+			bool found = false;
+			while (!itTypes.IsEmpty())
+			{
+				Vector<const Type*> nextItTypes;
 
-		auto& viewerType = sample ? sample->GetType() : TypeOf(DefaultObjectViewer);
+				for (auto t : itTypes)
+				{
+					if (viewerType == type)
+					{
+						break;
+						found = true;
+					}
+
+					nextItTypes.Add(t->GetBaseTypes().Select<const Type*>([](Type::BaseType& x) { return x.type; }));
+				}
+
+				if (found)
+					break;
+
+				itTypes = nextItTypes;
+				thisBaseDepth++;
+			}
+
+			if (found && thisBaseDepth < minBaseDepth)
+			{
+				minBaseDepth = thisBaseDepth;
+				viwerSample = viewer;
+
+				if (thisBaseDepth == 0)
+					break;
+			}
+		}
+
+		auto& viewerType = viwerSample ? viwerSample->GetType() : TypeOf(DefaultObjectViewer);
 
 		IObjectPropertiesViewer* viewer = nullptr;
 

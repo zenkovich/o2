@@ -138,11 +138,11 @@ namespace Editor
 		Vec2F          mPressedPoint;               // Pressed point
 		AssetsIconsVec mCurrentSelectingIcons;      // Selecting icons at current selection
 						        
-		bool                    mIsDraggingIcons = false; // Is dragging icons
-		bool                    mDragEnded = false;       // Is dragging ended
-		AssetIcon*              mDragIcon = nullptr;      // Dragging icon
-		Vec2F                   mDragOffset;              // Dragging offset from cursor to icon center
-		SceneEditableObjectsVec mInstantiatedSceneDragObjects;    // Instantiated objects when dragging asset above scene
+		bool                    mIsDraggingIcons = false;      // Is dragging icons
+		bool                    mDragEnded = false;            // Is dragging ended
+		AssetIcon*              mDragIcon = nullptr;           // Dragging icon
+		Vec2F                   mDragOffset;                   // Dragging offset from cursor to icon center
+		SceneEditableObjectsVec mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
 		AssetIdPathVec mCuttingAssets; // Current cutted assets
 						        

@@ -226,14 +226,6 @@ namespace o2
 
 	bool EventSystem::eventsListenersEnabledByDefault = true;
 
-	CursorAreaEventsListener* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
-	{
-		if (mUnderCursorListeners.ContainsKey(cursorId))
-			return mUnderCursorListeners.Get(cursorId).First();
-
-		return nullptr;
-	}
-
 	EventSystem::CursorAreaEventsListenersVec EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
 	{
 		CursorAreaEventsListenersVec res;

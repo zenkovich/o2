@@ -96,6 +96,11 @@ namespace Editor
 		return mRemoveBtn;
 	}
 
+	const Type* IPropertyField::GetFieldType() const
+	{
+		return &TypeOf(void);
+	}
+
 	bool IPropertyField::IsValuesDifferent() const
 	{
 		return mValuesDifferent;

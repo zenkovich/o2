@@ -71,6 +71,9 @@ namespace o2
 		DragDropArea* mDragDropArea = nullptr; // Drag drop area under this when dragging
 
 	protected:
+		// Returns drag drop area under cursor
+		DragDropArea* GetDropAreaUnderCursor(CursorId cursorId) const;
+
 		// It is called when cursor pressed on this
 		virtual void OnCursorPressed(const Input::Cursor& cursor);
 

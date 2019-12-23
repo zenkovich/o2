@@ -78,42 +78,37 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		if (mSpoiler->IsExpanded())
+		if (mSpoiler->IsExpanded() && mObjectPropertiesViewer)
 		{
-			if (mObjectPropertiesViewer)
+			for (auto& pair : mTargetObjects)
 			{
-				for (auto& pair : mTargetObjects)
-				{
-					pair.first.Refresh();
-					pair.second.Refresh();
-				}
-
-				mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
-					[&](const Pair<TargetObjectData, TargetObjectData>& x)
-				{
-					return Pair<IObject*, IObject*>(x.first.data, x.second.data);
-				}));
+				pair.first.Refresh();
+				pair.second.Refresh();
 			}
+
+			mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+				[&](const Pair<TargetObjectData, TargetObjectData>& x)
+			{
+				return Pair<IObject*, IObject*>(x.first.data, x.second.data);
+			}));
 		}
 	}
 
 	const Type* ObjectProperty::GetFieldType() const
 	{
-		return &TypeOf(IObject);
+		return mSpecializedType;
 	}
 
 	void ObjectProperty::SpecializeType(const Type* type)
 	{
 		if (type->GetUsage() == Type::Usage::Property)
-			mObjectType = dynamic_cast<const PropertyType*>(type)->GetValueType();
+			mSpecializedType = dynamic_cast<const PropertyType*>(type)->GetValueType();
 		else
-			mObjectType = type;
+			mSpecializedType = type;
 	}
 
 	void ObjectProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
 	{
-		SpecializeType(fieldInfo->GetType());
-
 		if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
 			mSpoiler->Expand();
 
@@ -134,11 +129,6 @@ namespace Editor
 			mSpoiler->borderLeft = 10;
 			mSpoiler->borderTop = 5;
 		}
-	}
-
-	const Type* ObjectProperty::GetSpecializedType() const
-	{
-		return mObjectType;
 	}
 
 	void ObjectProperty::SetCaption(const WString& text)
@@ -187,18 +177,13 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		if (mPropertiesInitialized)
-			return;
-
 		if (!mObjectPropertiesViewer)
 		{
-			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, THIS_FUNC(OnPropertyChanged), onChanged);
+			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mSpecializedType, mValuesPath, THIS_FUNC(OnPropertyChanged), onChanged);
 			mSpoiler->AddChild(mObjectPropertiesViewer->GetLayout());
 		}
 
 		Refresh();
-
-		mPropertiesInitialized = true;
 	}
 
 	ObjectProperty::TargetObjectData ObjectProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)
