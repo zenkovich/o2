@@ -156,22 +156,18 @@ namespace Editor
 
 		auto windowsProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Windows");
 		mWindowsProperties = (ObjectProperty*)windowsProperty;
-		mWindowsProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(windowsProperty);
 
 		auto osxProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "OSX");
 		mOSXProperties = (ObjectProperty*)osxProperty;
-		mOSXProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(osxProperty);
 
 		auto androidProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "Android");
 		mAndroidProperties = (ObjectProperty*)androidProperty;
-		mAndroidProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(androidProperty);
 
 		auto iosProperty = o2EditorProperties.CreateFieldProperty(&TypeOf(ImageAsset::PlatformMeta), "iOS");
 		mIOSProperties = (ObjectProperty*)iosProperty;
-		mIOSProperties->SpecializeType(&TypeOf(ImageAsset::PlatformMeta));
 		mContent->AddChild(iosProperty);
 	}
 

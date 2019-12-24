@@ -90,17 +90,22 @@ namespace Editor
 											const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Creates regular primitive property field
-		IPropertyField* CreateRegularField(const Type* fieldPropertyType, const String& name,
+		IPropertyField* CreateRegularField(const Type* type, const String& name,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 										   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
+		// Creates regular enumerate primitive property field
+		IPropertyField* CreateEnumField(const Type* type, const String& name,
+										const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
+										const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
+
 		// Creates object field
-		IPropertyField* CreateObjectField(const Type* type, const String& name,
+		IPropertyField* CreateObjectField(const String& name,
 										  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 										  const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Creates object pointer field
-		IPropertyField* CreateObjectPtrField(const Type* type, const String& name,
+		IPropertyField* CreateObjectPtrField(const String& name,
 											 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 											 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -144,6 +149,9 @@ namespace Editor
 
 		// Initializes available object properties viewers samples
 		void InitializeAvailableObjectPropertiesViewers();
+
+		// Returns type of object viewer, which is closest ty type by based types hierarchy depth
+		const Type* GetClosesBasedTypeObjectViewer(const Type* type) const;
 
 		// Builds layout viewer by fields without filtering
 		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& propertiesInfo, const String& path,

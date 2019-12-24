@@ -140,12 +140,12 @@ namespace Editor
 		auto lastCount = mCountOfElements;
 		auto lastDifferent = mCountDifferents;
 
-		mCountOfElements = mType->GetObjectVectorSize(mTargetObjects[0].first.data);
+		mCountOfElements = mVectorType->GetObjectVectorSize(mTargetObjects[0].first.data);
 		mCountDifferents = false;
 
 		for (auto target : mTargetObjects)
 		{
-			int targetCount = mType->GetObjectVectorSize(target.first.data);
+			int targetCount = mVectorType->GetObjectVectorSize(target.first.data);
 			if (targetCount != mCountOfElements)
 			{
 				mCountDifferents = true;
@@ -184,8 +184,8 @@ namespace Editor
 					[&](const Pair<TargetObjectData, TargetObjectData>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mType->GetObjectVectorElementProxy(x.first.data, i),
-						x.second.data ? mType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
+						mVectorType->GetObjectVectorElementProxy(x.first.data, i),
+						x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
 				});
 
 				IPropertyField* propertyDef;
@@ -234,8 +234,8 @@ namespace Editor
 					[&](const Pair<TargetObjectData, TargetObjectData>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mType->GetObjectVectorElementProxy(x.first.data, i),
-						x.second.data ? mType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
+						mVectorType->GetObjectVectorElementProxy(x.first.data, i),
+						x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
 				});
 
 				IPropertyField* propertyDef = mValueProperties[i];
@@ -246,29 +246,29 @@ namespace Editor
 		mIsRefreshing = false;
 	}
 
-	const Type* VectorProperty::GetFieldType() const
+	const Type* VectorProperty::GetValueType() const
 	{
-		return &TypeOf(void);
+		return mVectorType;
 	}
 
 	void VectorProperty::SpecializeType(const Type* type)
 	{
-		mType = nullptr;
+		mVectorType = nullptr;
 
 		if (type->GetUsage() == Type::Usage::Vector)
-			mType = dynamic_cast<const VectorType*>(type);
+			mVectorType = dynamic_cast<const VectorType*>(type);
 		else if (type->GetUsage() == Type::Usage::Property) 
 		{
 			auto propertyType = dynamic_cast<const PropertyType*>(type);
 
 			if (propertyType->GetValueType()->GetUsage() == Type::Usage::Vector)
-				mType = dynamic_cast<const VectorType*>(propertyType->GetValueType());
+				mVectorType = dynamic_cast<const VectorType*>(propertyType->GetValueType());
 		}
 	}
 
 	const Type* VectorProperty::GetSpecializedType() const
 	{
-		return mType;
+		return mVectorType;
 	}
 
 	void VectorProperty::SetCaption(const WString& text)
@@ -315,14 +315,11 @@ namespace Editor
 		if (!mValuePropertiesPool.IsEmpty())
 			return mValuePropertiesPool.PopBack();
 
-		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mType->GetElementType(), "Element", onChangeCompleted, onChanged);
+		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mVectorType->GetElementType(), "Element", onChangeCompleted, onChanged);
 		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 
 		if (res)
-		{
-			res->SpecializeType(mType->GetElementType());
-			res->SpecializeFieldInfo(mSpecializedFieldInfo);
-		}
+			res->SetFieldInfo(mFieldInfo);
 
 		return res;
 	}
@@ -385,25 +382,25 @@ namespace Editor
 	void VectorProperty::Resize(int newCount)
 	{
 		Vector<DataNode> prevValues, newValues;
-		auto elementFieldInfo = mType->GetElementFieldInfo();
+		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{
 			prevValues.Add(DataNode());
-			prevValues.Last()["Size"].SetValue(mType->GetObjectVectorSize(obj.first.data));
+			prevValues.Last()["Size"].SetValue(mVectorType->GetObjectVectorSize(obj.first.data));
 			DataNode& elementsData = prevValues.Last()["Elements"];
 
-			int lastCount = mType->GetObjectVectorSize(obj.first.data);
+			int lastCount = mVectorType->GetObjectVectorSize(obj.first.data);
 			for (int i = newCount; i < lastCount; i++)
 			{
-				elementFieldInfo->Serialize(mType->GetObjectVectorElementPtr(obj.first.data, i),
+				elementFieldInfo->Serialize(mVectorType->GetObjectVectorElementPtr(obj.first.data, i),
 											*elementsData.AddNode("Element" + (String)i));
 			}
 
 			newValues.Add(DataNode());
 			newValues.Last()["Size"].SetValue(newCount);
 
-			mType->SetObjectVectorSize(obj.first.data, newCount);
+			mVectorType->SetObjectVectorSize(obj.first.data, newCount);
 		}
 
 		Refresh();
@@ -413,30 +410,22 @@ namespace Editor
 
 		onChanged(this);
 		o2EditorSceneScreen.OnSceneChanged();
-
-		if (mSpecializedFieldInfo)
-		{
-			if (auto invokeOnChange = mSpecializedFieldInfo->GetAttribute<InvokeOnChangeAttribute>())
-			{
-
-			}
-		}
 	}
 
 	void VectorProperty::Remove(int idx)
 	{
 		Vector<DataNode> prevValues, newValues;
-		auto elementFieldInfo = mType->GetElementFieldInfo();
+		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{
 			prevValues.Add(DataNode());
-			mType->Serialize(obj.first.data, prevValues.Last());
+			mVectorType->Serialize(obj.first.data, prevValues.Last());
 
-			mType->RemoveObjectVectorElement(obj.first.data, idx);
+			mVectorType->RemoveObjectVectorElement(obj.first.data, idx);
 
 			newValues.Add(DataNode());
-			mType->Serialize(obj.first.data, newValues.Last());
+			mVectorType->Serialize(obj.first.data, newValues.Last());
 		}
 
 		Refresh();
@@ -463,7 +452,6 @@ namespace Editor
 
 		proxy->SetValuePtr(data);
 	}
-
 }
 
 DECLARE_CLASS(Editor::VectorProperty);

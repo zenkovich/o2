@@ -42,19 +42,19 @@ namespace Editor
 		void Refresh() override;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const override;
-
-		// Specializes field type
-		void SpecializeType(const Type* type) override;
-
-		// Returns specialized type
-		const Type* GetSpecializedType() const override;
+		const Type* GetValueType() const override;
 
 		// Sets property caption
 		void SetCaption(const WString& text) override;
 
 		// Returns property caption
 		WString GetCaption() const override;
+
+		// Specializes vector type
+		void SpecializeType(const Type* type);
+
+		// Returns specialized vector type
+		const Type* GetSpecializedType() const;
 
 		// Expands property fields
 		void Expand();
@@ -87,11 +87,10 @@ namespace Editor
 		typedef Vector<IPropertyField*> PropertyFieldsVec;
 
 	protected:
-		const VectorType* mType = nullptr; // Vector type
-
 		Spoiler* mSpoiler; // Properties spoiler
 
-		TargetObjectsVec  mTargetObjects; // Target objects
+		const VectorType* mVectorType = nullptr; // Vector type
+		TargetObjectsVec  mTargetObjects;        // Target objects
 						 						    
 		PropertyFieldsVec mValueProperties;     // Values properties
 		PropertyFieldsVec mValuePropertiesPool; // Unused value properties pool
@@ -104,7 +103,7 @@ namespace Editor
 		Widget* mAddButtonContainer = nullptr; // Add button container, located under all elements
 		Button* mAddButton = nullptr;          // Add button, adds new element at end
 
-		bool mIsRefreshing = false;       // Is currently refreshing content. Need to prevent cycled size changing
+		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
 		// Copies data of actor from other to this
@@ -152,8 +151,8 @@ CLASS_BASES_META(Editor::VectorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::VectorProperty)
 {
-	PROTECTED_FIELD(mType);
 	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mVectorType);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mValueProperties);
 	PROTECTED_FIELD(mValuePropertiesPool);
@@ -170,11 +169,11 @@ CLASS_METHODS_META(Editor::VectorProperty)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
+	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);

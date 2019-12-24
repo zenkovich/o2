@@ -159,7 +159,7 @@ namespace Editor
 			mTopProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent();
 	}
 
-	const Type* BorderFProperty::GetFieldType() const
+	const Type* BorderFProperty::GetValueType() const
 	{
 		return &TypeOf(BorderF);
 	}

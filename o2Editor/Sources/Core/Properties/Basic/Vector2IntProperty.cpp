@@ -120,7 +120,7 @@ namespace Editor
 		return mXProperty->IsValuesDifferent() || mYProperty->IsValuesDifferent();
 	}
 
-	const Type* Vec2IProperty::GetFieldType() const
+	const Type* Vec2IProperty::GetValueType() const
 	{
 		return &TypeOf(Vec2I);
 	}

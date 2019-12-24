@@ -68,7 +68,7 @@ namespace Editor
 		virtual Button* GetRemoveButton();
 
 		// Returns editing by this field type
-		virtual const Type* GetFieldType() const;
+		virtual const Type* GetValueType() const;
 
 		// Returns is values different
 		bool IsValuesDifferent() const;
@@ -91,11 +91,8 @@ namespace Editor
 		// Returns is property revertable - it's able to check difference between origin value and prototype
 		bool IsRevertable() const;
 
-		// Specializes field type
-		virtual void SpecializeType(const Type* type);
-
 		// Specializes field info
-		virtual void SpecializeFieldInfo(const FieldInfo* fieldInfo);
+		virtual void SetFieldInfo(const FieldInfo* fieldInfo);
 
 		// Sets targets pointers
 		template<typename _type>
@@ -129,8 +126,7 @@ namespace Editor
 		IOBJECT(IPropertyField);
 
 	protected:
-		const Type*      mSpecializedType = nullptr;      // Specialized type
-		const FieldInfo* mSpecializedFieldInfo = nullptr; // Specialized field info
+		const FieldInfo* mFieldInfo = nullptr; // Specialized field info
 
 		bool mRevertable = true; // Is property can be reverted
 
@@ -145,6 +141,9 @@ namespace Editor
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
+		// It is called when property puts in buffer. Here you can release your shared resources
+		virtual void OnFreeProperty();
+
 		// Stores values to data
 		virtual void StoreValues(Vector<DataNode>& data) const {}
 
@@ -173,6 +172,8 @@ namespace Editor
 		// Returns value from proxy
 		template<typename T>
 		T GetProxy(IAbstractValueProxy* proxy) const;
+
+		friend class Properties;
 	};
 
 	template<typename _type>
@@ -195,7 +196,7 @@ namespace Editor
 		void Revert() override;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const override;
+		const Type* GetValueType() const override;
 
 		// Sets value
 		void SetValue(const _type& value);
@@ -349,7 +350,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	const Type* TPropertyField<_type>::GetFieldType() const
+	const Type* TPropertyField<_type>::GetValueType() const
 	{
 		return &TypeOf(_type);
 	}
@@ -478,8 +479,7 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 {
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
-	PROTECTED_FIELD(mSpecializedType);
-	PROTECTED_FIELD(mSpecializedFieldInfo);
+	PROTECTED_FIELD(mFieldInfo);
 	PROTECTED_FIELD(mRevertable);
 	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mValuesDifferent);
@@ -500,7 +500,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(Button*, GetRemoveButton);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(void, SetValuePath, const String&);
 	PUBLIC_FUNCTION(const String&, GetValuePath);
@@ -508,9 +508,8 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(Label*, GetCaptionLabel);
 	PUBLIC_FUNCTION(void, SetRevertable, bool);
 	PUBLIC_FUNCTION(bool, IsRevertable);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_FUNCTION(void, SpecializeFieldInfo, const FieldInfo*);
-	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
+	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
+	PROTECTED_FUNCTION(void, OnFreeProperty);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
@@ -539,7 +538,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_FUNCTION(void, SetValue, const _type&);
 	PUBLIC_FUNCTION(void, SetUnknownValue, const _type&);
 	PUBLIC_FUNCTION(_type, GetCommonValue);

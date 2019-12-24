@@ -66,7 +66,7 @@ namespace Editor
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const override;
+		const Type* GetValueType() const override;
 
 		IOBJECT(BorderIProperty);
 
@@ -165,7 +165,7 @@ CLASS_METHODS_META(Editor::BorderIProperty)
 	PUBLIC_FUNCTION(void, SetBottomUnknownValue, int);
 	PUBLIC_FUNCTION(BorderI, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 }

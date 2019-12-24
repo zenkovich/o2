@@ -30,6 +30,14 @@ namespace Editor
 		return *this;
 	}
 
+	void ObjectProperty::OnFreeProperty()
+	{
+		if (mObjectViewer)
+			o2EditorProperties.FreeObjectViewer(mObjectViewer);
+
+		mObjectViewer = nullptr;
+	}
+
 	void ObjectProperty::CopyData(const Actor& otherActor)
 	{
 		IPropertyField::CopyData(otherActor);
@@ -48,7 +56,7 @@ namespace Editor
 		}
 
 		if (mSpoiler)
-			mSpoiler->onExpand = THIS_FUNC(OnExpand);
+			mSpoiler->onExpand = THIS_FUNC(Refresh);
 
 		expandHeight = true;
 		expandWidth = true;
@@ -78,15 +86,20 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		if (mSpoiler->IsExpanded() && mObjectPropertiesViewer)
-		{
-			for (auto& pair : mTargetObjects)
-			{
-				pair.first.Refresh();
-				pair.second.Refresh();
-			}
+		if (!mSpoiler->IsExpanded())
+			return;
 
-			mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+		for (auto& pair : mTargetObjects)
+		{
+			pair.first.Refresh();
+			pair.second.Refresh();
+		}
+
+		CheckViewer();
+
+		if (mObjectViewer)
+		{
+			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<TargetObjectData, TargetObjectData>& x)
 			{
 				return Pair<IObject*, IObject*>(x.first.data, x.second.data);
@@ -94,20 +107,38 @@ namespace Editor
 		}
 	}
 
-	const Type* ObjectProperty::GetFieldType() const
+	void ObjectProperty::CheckViewer()
 	{
-		return mSpecializedType;
+		PushEditorScopeOnStack scope;
+
+		const Type* objectType = nullptr;
+		if (!mTargetObjects.IsEmpty())
+		{
+			auto object = mTargetObjects[0].first.data;
+			if (object)
+				objectType = &object->GetType();
+		}
+
+		const Type* prevObjectType = mObjectViewer ? mObjectViewer->GetViewingObjectType() : nullptr;
+		if (objectType != prevObjectType)
+		{
+			if (mObjectViewer)
+				o2EditorProperties.FreeObjectViewer(mObjectViewer);
+
+			if (objectType)
+			{
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, onChanged);
+				mSpoiler->AddChild(mObjectViewer->GetLayout());
+			}
+		}
 	}
 
-	void ObjectProperty::SpecializeType(const Type* type)
+	const Type* ObjectProperty::GetValueType() const
 	{
-		if (type->GetUsage() == Type::Usage::Property)
-			mSpecializedType = dynamic_cast<const PropertyType*>(type)->GetValueType();
-		else
-			mSpecializedType = type;
+		return &TypeOf(IObject);
 	}
 
-	void ObjectProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
+	void ObjectProperty::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
 		if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
 			mSpoiler->Expand();
@@ -171,19 +202,6 @@ namespace Editor
 	bool ObjectProperty::IsExpanded() const
 	{
 		return mSpoiler->IsExpanded();
-	}
-
-	void ObjectProperty::OnExpand()
-	{
-		PushEditorScopeOnStack scope;
-
-		if (!mObjectPropertiesViewer)
-		{
-			mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mSpecializedType, mValuesPath, THIS_FUNC(OnPropertyChanged), onChanged);
-			mSpoiler->AddChild(mObjectPropertiesViewer->GetLayout());
-		}
-
-		Refresh();
 	}
 
 	ObjectProperty::TargetObjectData ObjectProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)

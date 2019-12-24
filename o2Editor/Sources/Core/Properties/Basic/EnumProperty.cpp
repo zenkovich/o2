@@ -37,9 +37,9 @@ namespace Editor
 		}
 	}
 
-	const Type* EnumProperty::GetFieldType() const
+	const Type* EnumProperty::GetValueType() const
 	{
-		return &TypeOf(void);
+		return mEnumType;
 	}
 
 	void EnumProperty::SpecializeType(const Type* type)

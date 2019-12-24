@@ -96,7 +96,7 @@ namespace Editor
 		return mRemoveBtn;
 	}
 
-	const Type* IPropertyField::GetFieldType() const
+	const Type* IPropertyField::GetValueType() const
 	{
 		return &TypeOf(void);
 	}
@@ -137,15 +137,13 @@ namespace Editor
 		return mRevertable;
 	}
 
-	void IPropertyField::SpecializeType(const Type* type)
+	void IPropertyField::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
-		mSpecializedType = type;
+		mFieldInfo = fieldInfo;
 	}
 
-	void IPropertyField::SpecializeFieldInfo(const FieldInfo* fieldInfo)
-	{
-		mSpecializedFieldInfo = fieldInfo;
-	}
+	void IPropertyField::OnFreeProperty()
+	{}
 
 	void IPropertyField::CheckValueChangeCompleted()
 	{

@@ -25,16 +25,16 @@ namespace Editor
 		EnumProperty& operator=(const EnumProperty& other);
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const;
+		const Type* GetValueType() const;
 
 		// Specializes field type
-		void SpecializeType(const Type* type) override;
+		void SpecializeType(const Type* type);
 
 		IOBJECT(EnumProperty);
 
 	protected:				       						      
-		const EnumType* mEnumType;               // Type of enumeration															      
-		const Map<int, String>* mEntries; // Enum entries
+		const EnumType*         mEnumType = nullptr; // Type of enumeration															      
+		const Map<int, String>* mEntries;            // Enum entries
 
 		DropDown* mDropDown = nullptr;       // Layer name dropdown
 		bool      mUpdatingValue = false;    // Is dropdown value updating and we don't we don't check selection
@@ -70,7 +70,7 @@ END_META;
 CLASS_METHODS_META(Editor::EnumProperty)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateValueView);

@@ -159,7 +159,7 @@ namespace Editor
 			mTopProperty->IsValuesDifferent() || mBottomProperty->IsValuesDifferent();
 	}
 
-	const Type* RectFProperty::GetFieldType() const
+	const Type* RectFProperty::GetValueType() const
 	{
 		return &TypeOf(RectF);
 	}

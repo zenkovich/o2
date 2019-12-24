@@ -34,6 +34,14 @@ namespace Editor
 		return *this;
 	}
 
+	void ObjectPtrProperty::OnFreeProperty()
+	{
+		if (mObjectViewer)
+			o2EditorProperties.FreeObjectViewer(mObjectViewer);
+
+		mObjectViewer = nullptr;
+	}
+
 	void ObjectPtrProperty::CopyData(const Actor& otherActor)
 	{
 		IPropertyField::CopyData(otherActor);
@@ -98,9 +106,9 @@ namespace Editor
 		{
 			auto object = GetProxy(mTargetObjects[0].first);
 
-			if (!object && mSpecializedFieldInfo)
+			if (!object && mFieldInfo)
 			{
-				if (auto defaultTypeAttr = mSpecializedFieldInfo->GetAttribute<DefaultTypeAttribute>())
+				if (auto defaultTypeAttr = mFieldInfo->GetAttribute<DefaultTypeAttribute>())
 				{
 					CreateObject(dynamic_cast<const ObjectType*>(defaultTypeAttr->defaultType));
 					return;
@@ -124,34 +132,11 @@ namespace Editor
 		if (!mSpoiler->IsExpanded())
 			return;
 
-		const Type* objectPtrType = nullptr;
-		if (!mTargetObjects.IsEmpty())
+		CheckViewer();
+
+		if (mObjectViewer)
 		{
-			auto object = GetProxy(mTargetObjects[0].first);
-			if (object)
-				objectPtrType = object->GetType().GetPointerType();
-		}
-
-		if (objectPtrType != mObjectPtrType)
-		{
-			mObjectPtrType = objectPtrType;
-
-			if (mObjectPropertiesViewer)
-				o2EditorProperties.FreeObjectViewer(mObjectPropertiesViewer);
-
-			if (mObjectPtrType)
-			{
-				mObjectType = dynamic_cast<const ObjectType*>(dynamic_cast<const PointerType*>(mObjectPtrType)->GetUnpointedType());
-				mObjectPropertiesViewer = o2EditorProperties.CreateObjectViewer(mObjectType, mValuesPath, onChangeCompleted, onChanged);
-				mSpoiler->AddChild(mObjectPropertiesViewer->GetLayout());
-			}
-
-			mPropertiesInitialized = true;
-		}
-
-		if (mObjectPtrType && mObjectPropertiesViewer)
-		{
-			mObjectPropertiesViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{
 				return Pair<IObject*, IObject*>(GetProxy(x.first),
@@ -160,28 +145,38 @@ namespace Editor
 		}
 	}
 
-	const Type* ObjectPtrProperty::GetFieldType() const
+	void ObjectPtrProperty::CheckViewer()
 	{
-		return mSpecializedType;
+		const Type* objectType = nullptr;
+		if (!mTargetObjects.IsEmpty())
+		{
+			auto object = GetProxy(mTargetObjects[0].first);
+			if (object)
+				objectType = &object->GetType();
+		}
+
+		const Type* prevObjectType = mObjectViewer ? mObjectViewer->GetViewingObjectType() : nullptr;
+		if (objectType != prevObjectType)
+		{
+			if (mObjectViewer)
+				o2EditorProperties.FreeObjectViewer(mObjectViewer);
+
+			if (mObjectPtrType)
+			{
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, onChanged);
+				mSpoiler->AddChild(mObjectViewer->GetLayout());
+			}
+		}
 	}
 
-	void ObjectPtrProperty::SpecializeType(const Type* type)
+	const Type* ObjectPtrProperty::GetValueType() const
 	{
-		IPropertyField::SpecializeType(type);
-
-		if (type->GetUsage() == Type::Usage::Property)
-			type = dynamic_cast<const PropertyType*>(type)->GetValueType();
-
-		if (type->GetUsage() != Type::Usage::Pointer)
-			return;
-
-		mObjectType = dynamic_cast<const ObjectType*>(dynamic_cast<const PointerType*>(type)->GetUnpointedType());
-		mContextInitialized = false;
+		return &TypeOf(IObject*);
 	}
 
-	void ObjectPtrProperty::SpecializeFieldInfo(const FieldInfo* fieldInfo)
+	void ObjectPtrProperty::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
-		IPropertyField::SpecializeFieldInfo(fieldInfo);
+		IPropertyField::SetFieldInfo(fieldInfo);
 
 		if (fieldInfo)
 		{

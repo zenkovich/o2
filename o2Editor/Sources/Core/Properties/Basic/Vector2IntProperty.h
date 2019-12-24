@@ -59,7 +59,7 @@ namespace Editor
 		bool IsValuesDifferent() const;
 
 		// Returns editing by this field type
-		const Type* GetFieldType() const override;
+		const Type* GetValueType() const override;
 
 		IOBJECT(Vec2IProperty);
 
@@ -126,7 +126,7 @@ CLASS_METHODS_META(Editor::Vec2IProperty)
 	PUBLIC_FUNCTION(void, SetYUnknownValue, int);
 	PUBLIC_FUNCTION(Vec2I, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(const Type*, GetFieldType);
+	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 }
