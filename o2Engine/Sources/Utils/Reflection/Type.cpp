@@ -93,6 +93,11 @@ namespace o2
 		return mFunctions;
 	}
 
+	const Type::StaticFunctionsInfosVec& Type::GetStaticFunctions() const
+	{
+		return mStaticFunctions;
+	}
+
 	Type::FunctionsInfosVec Type::GetFunctionsWithBaseClasses() const
 	{
 		FunctionsInfosVec res;
@@ -105,15 +110,31 @@ namespace o2
 		return res;
 	}
 
+	Type::StaticFunctionsInfosVec Type::GetStaticFunctionsWithBaseClasses() const
+	{
+		StaticFunctionsInfosVec res;
+
+		for (auto baseType : mBaseTypes)
+			res += baseType.type->GetStaticFunctionsWithBaseClasses();
+
+		res += mStaticFunctions;
+
+		return res;
+	}
+
 	FieldInfo* Type::GetField(const String& name) const
 	{
 		for (auto field : mFields)
+		{
 			if (field->GetName() == name)
 				return field;
+		}
 
 		for (auto baseType : mBaseTypes)
+		{
 			if (auto res = baseType.type->GetField(name))
 				return res;
+		}
 
 		return nullptr;
 	}
@@ -121,8 +142,33 @@ namespace o2
 	const FunctionInfo* Type::GetFunction(const String& name) const
 	{
 		for (auto func : mFunctions)
+		{
 			if (func->mName == name)
 				return func;
+		}
+
+		for (auto& base : mBaseTypes)
+		{
+			if (auto func = base.type->GetFunction(name))
+				return func;
+		}
+
+		return nullptr;
+	}
+
+	const StaticFunctionInfo* Type::GetStaticFunction(const String& name) const
+	{
+		for (auto func : mStaticFunctions)
+		{
+			if (func->mName == name)
+				return func;
+		}
+
+		for (auto& base : mBaseTypes)
+		{
+			if (auto func = base.type->GetStaticFunction(name))
+				return func;
+		}
 
 		return nullptr;
 	}

@@ -223,6 +223,11 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, Parametric, float, float, float, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, EaseIn, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, EaseOut, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, EaseInOut, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, Linear, float, float, float);
 	PROTECTED_FUNCTION(void, Evaluate);
 	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, OnCurveChanged);

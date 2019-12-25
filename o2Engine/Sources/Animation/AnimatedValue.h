@@ -742,8 +742,8 @@ namespace o2
 														  float endCoef, float endCoefPosition)
 	{
 		AnimatedValue<_type> res;
-		res.AddKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef), beginCoefPosition*duration);
-		res.AddKey(duration*duration, end, Math::Lerp(begin, end, endCoef), endCoefPosition, 0.0f, 0.0f);
+		res.AddKey(0.0f, begin, 0.0f, 0.0f, beginCoef, beginCoefPosition*duration);
+		res.AddKey(duration*duration, end, endCoef, endCoefPosition, 0.0f, 0.0f);
 		return res;
 	}
 
@@ -916,6 +916,11 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, Parametric, const _type&, const _type&, float, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, EaseIn, const _type&, const _type&, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, EaseOut, const _type&, const _type&, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, EaseInOut, const _type&, const _type&, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, Linear, const _type&, const _type&, float);
 	PROTECTED_FUNCTION(void, Evaluate);
 	PROTECTED_FUNCTION(_type, Evaluate, float);
 	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);

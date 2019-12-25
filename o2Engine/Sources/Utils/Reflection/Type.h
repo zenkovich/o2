@@ -19,6 +19,7 @@ namespace o2
 	class FunctionInfo;
 	class IAbstractValueProxy;
 	class IObject;
+	class StaticFunctionInfo;
 	class Type;
 
 	template<typename _type>
@@ -60,6 +61,7 @@ namespace o2
 
 		typedef Vector<FieldInfo*> FieldInfosVec;
 		typedef Vector<FunctionInfo*> FunctionsInfosVec;
+		typedef Vector<StaticFunctionInfo*> StaticFunctionsInfosVec;
 		typedef Vector<Type*> TypesVec;
 		typedef Vector<BaseType> BaseTypesVec;
 
@@ -106,8 +108,14 @@ namespace o2
 		// Returns functions informations array
 		const FunctionsInfosVec& GetFunctions() const;
 
+		// Returns static functions informations array
+		const StaticFunctionsInfosVec& GetStaticFunctions() const;
+
 		// Returns functions informations array with all base types
 		FunctionsInfosVec GetFunctionsWithBaseClasses() const;
+
+		// Returns functions informations array with all base types
+		StaticFunctionsInfosVec GetStaticFunctionsWithBaseClasses() const;
 
 		// Returns field information by name
 		FieldInfo* GetField(const String& name) const;
@@ -115,9 +123,16 @@ namespace o2
 		// Returns function info by name
 		const FunctionInfo* GetFunction(const String& name) const;
 
+		// Returns static function info by name
+		const StaticFunctionInfo* GetStaticFunction(const String& name) const;
+
 		// Invokes function with name
 		template<typename _res_type, typename ... _args>
 		_res_type Invoke(const String& name, void* object, _args ... args) const;
+
+		// Invokes function with name
+		template<typename _res_type, typename ... _args>
+		_res_type InvokeStatic(const String& name, _args ... args) const;
 
 		// Returns derived types
 		Vector<const Type*> GetDerivedTypes(bool deep = true) const;
@@ -153,14 +168,20 @@ namespace o2
 		struct Dummy { static Type* type; };
 
 	protected:
-		TypeId            mId;                   // Id of type
-		String            mName;                 // Name of object type
-		BaseTypesVec      mBaseTypes;            // Base types ids with offset 
-		FieldInfosVec     mFields;               // Fields information
-		FunctionsInfosVec mFunctions;            // Functions informations
-		mutable Type*     mPtrType = nullptr;    // Pointer type from this
-		int               mSize;                 // Size of type in bytes
-		ITypeSerializer*  mSerializer = nullptr; // Value serializer
+		TypeId mId;   // Id of type
+		String mName; // Name of object type
+
+		BaseTypesVec mBaseTypes; // Base types ids with offset 
+
+		FieldInfosVec           mFields;          // Fields information
+		FunctionsInfosVec       mFunctions;       // Functions informations
+		StaticFunctionsInfosVec mStaticFunctions; // Functions informations
+
+		mutable Type* mPtrType = nullptr; // Pointer type from this
+
+		int mSize; // Size of type in bytes
+
+		ITypeSerializer* mSerializer = nullptr; // Value serializer
 
 		friend class FieldInfo;
 		friend class FunctionInfo;
@@ -679,6 +700,10 @@ namespace o2
 		// Registers function in type
 		template<typename _class_type, typename _res_type, typename ... _args>
 		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
+
+		// Registers static function in type
+		template<typename _class_type, typename _res_type, typename ... _args>
+		static StaticFunctionInfo* RegStaticFunction(Type* type, const String& name, _res_type(*pointer)(_args ...), ProtectSection section);
 	};
 
 	// Here is the sample of type processing class
@@ -710,7 +735,10 @@ namespace o2
 		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...), ProtectSection protection) {}
 
 		template<typename _object_type, typename _res_type, typename ... _args>
-		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection) {}
+		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection) { }
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		MethodInfo* StaticMethod(_object_type* object, Type* type, const char* name, _res_type(*pointer)(_args ...), ProtectSection protection) { }
 	};
 }
 
@@ -783,6 +811,18 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
     processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
 
+#define STATIC_FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
+
+#define PUBLIC_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Public)
+
+#define PRIVATE_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Private)
+
+#define PROTECTED_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
+
 #define END_META }
 
 #include "Utils/Property.h"
@@ -802,9 +842,17 @@ namespace o2
 	template<typename _res_type, typename ... _args>
 	_res_type Type::Invoke(const String& name, void* object, _args ... args) const
 	{
-		const FunctionInfo* func = GetFunction(name);
-		if (func)
+		if (auto func = GetFunction(name))
 			return func->Invoke<_res_type, _args ...>(object, args ...);
+
+		return _res_type();
+	}
+
+	template<typename _res_type, typename ... _args>
+	_res_type Type::InvokeStatic(const String& name, _args ... args) const
+	{
+		if (auto func = GetStaticFunction(name))
+			return func->Invoke<_res_type, _args ...>(args ...);
 
 		return _res_type();
 	}
@@ -1333,6 +1381,21 @@ namespace o2
 		return funcInfo;
 	}
 
+	template<typename _class_type, typename _res_type, typename ... _args>
+	StaticFunctionInfo* TypeInitializer::RegStaticFunction(Type* type, const String& name, _res_type(*pointer)(_args ...), ProtectSection section)
+	{
+		auto retType = &TypeOf(_res_type);
+
+		auto funcInfo = mnew SpecStaticFunctionInfo<_res_type, _args ...>();
+		funcInfo->mName = name;
+		funcInfo->mFunctionPtr = pointer;
+		funcInfo->mReturnType = retType;
+		funcInfo->mProtectSection = section;
+		funcInfo->mOwnerType = type;
+		type->mStaticFunctions.Add(funcInfo);
+
+		return funcInfo;
+	}
 
 	FUNDAMENTAL_META(RectF)
 	{

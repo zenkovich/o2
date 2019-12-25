@@ -176,6 +176,7 @@ END_META;
 CLASS_METHODS_META(o2::ActorAssetRef)
 {
 
+	PUBLIC_STATIC_FUNCTION(ActorAssetRef, CreateAsset);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;

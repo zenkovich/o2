@@ -65,12 +65,8 @@ namespace Editor
 	{
 		mPropertiesContext.Set(targetObjets);
 	}
-
-	const Type* TextViewer::GetViewingObjectType() const
-	{
-		return &TypeOf(Text);
-	}
-
 }
+
+DECLARE_CLASS_MANUAL(Editor::TObjectPropertiesViewer<o2::Text>);
 
 DECLARE_CLASS(Editor::TextViewer);

@@ -45,6 +45,9 @@ namespace Editor
 		// Returns viewing objects base type
 		virtual const Type* GetViewingObjectType() const;
 
+		// Returns viewing objects base type by static function
+		static const Type* GetViewingObjectTypeStatic();
+
 		// Returns view widget
 		VerticalLayout* GetLayout() const;
 
@@ -65,6 +68,30 @@ namespace Editor
 		// It is called when some child field were changed
 		void OnFieldChangeCompleted(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
 	};
+
+	template<typename _object_type>
+	class TObjectPropertiesViewer : public IObjectPropertiesViewer
+	{
+	public:
+		// Returns viewing objects base type
+		const Type* GetViewingObjectType() const override;
+
+		// Returns viewing objects base type by static function
+		static const Type* GetViewingObjectTypeStatic();
+	};
+
+	template<typename _object_type>
+	const Type* TObjectPropertiesViewer<_object_type>::GetViewingObjectType() const
+	{
+		return GetViewingObjectTypeStatic();
+	}
+
+	template<typename _object_type>
+	const Type* TObjectPropertiesViewer<_object_type>::GetViewingObjectTypeStatic()
+	{
+		return &TypeOf(_object_type);
+	}
+
 }
 
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
@@ -87,8 +114,29 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
 	PUBLIC_FUNCTION(VerticalLayout*, GetLayout);
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+}
+END_META;
+
+META_TEMPLATES(typename _object_type)
+CLASS_BASES_META(Editor::TObjectPropertiesViewer<_object_type>)
+{
+	BASE_CLASS(Editor::IObjectPropertiesViewer);
+}
+END_META;
+META_TEMPLATES(typename _object_type)
+CLASS_FIELDS_META(Editor::TObjectPropertiesViewer<_object_type>)
+{
+}
+END_META;
+META_TEMPLATES(typename _object_type)
+CLASS_METHODS_META(Editor::TObjectPropertiesViewer<_object_type>)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
 }
 END_META;

@@ -2,6 +2,7 @@
 
 #include "Assets/ImageAsset.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
+#include "Render/Sprite.h"
 
 using namespace o2;
 
@@ -25,14 +26,11 @@ namespace Editor
 	// ----------------------
 	// Editor sprite property
 	// ----------------------
-	class SpriteViewer : public IObjectPropertiesViewer
+	class SpriteViewer : public TObjectPropertiesViewer<Sprite>
 	{
 	public:
 		// Default constructor. Initializes fields controls
 		SpriteViewer();
-
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
 
 		IOBJECT(SpriteViewer);
 
@@ -65,7 +63,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::SpriteViewer)
 {
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
+	BASE_CLASS(Editor::TObjectPropertiesViewer<Sprite>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
@@ -88,7 +86,6 @@ END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PROTECTED_FUNCTION(void, OnModeSelected);
 }
 END_META;

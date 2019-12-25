@@ -7,11 +7,10 @@
 namespace o2
 {
 	class Type;
-
-	// --------------------
-	// Function information
-	// --------------------
-	class FunctionInfo
+	// -------------------------
+	// Base function information
+	// -------------------------
+	class FunctionInfoBase
 	{
 	public:
 		struct Parameter
@@ -28,10 +27,10 @@ namespace o2
 
 	public:
 		// Returns cloned copy
-		virtual FunctionInfo* Clone() const;
+		virtual FunctionInfoBase* Clone() const;
 
 		// Check Equals operator
-		bool operator==(const FunctionInfo& other) const;
+		bool operator==(const FunctionInfoBase& other) const;
 
 		// Returns owner type
 		Type* GetOwnerType() const;
@@ -42,30 +41,66 @@ namespace o2
 		// Returns return value type
 		const Type* GetReturnType() const;
 
-		// Returns is function constant
-		bool IsConstant() const;
-
 		// Returns function's parameters
 		const ParametersVec& GetParameters() const;
 
 		// Returns protection section of function
 		ProtectSection GetProtectionSection() const;
 
-		// Invokes function with parameters
-		template<typename _res_type, typename ... _args>
-		_res_type Invoke(void* object, _args ... args) const;
-
 	protected:
 		ProtectSection mProtectSection; // Protection section
 		Type*          mOwnerType;      // Owner type pointer
 		String         mName;           // Name of function
 		const Type*    mReturnType;     // Function returning type
-		bool           mIsContant;      // Is function contant
 		ParametersVec  mParameters;     // Function parameters list
 
 		friend class Type;
 		friend class TypeInitializer;
-	};	
+	};
+
+	// ----------------------------
+	// Regular function information
+	// ----------------------------
+	class FunctionInfo : public FunctionInfoBase
+	{
+	public:
+		// Returns cloned copy
+		virtual FunctionInfoBase* Clone() const;
+
+		// Check Equals operator
+		bool operator==(const FunctionInfo& other) const;
+
+		// Returns is function constant
+		bool IsConstant() const;
+
+		// Invokes function with parameters
+		template<typename _res_type, typename ... _args>
+		_res_type Invoke(void* object, _args ... args) const;
+
+	protected:
+		bool mIsContant; // Is function constant
+
+		friend class Type;
+		friend class TypeInitializer;
+	};
+
+	// ---------------------------
+	// Static function information
+	// ---------------------------
+	class StaticFunctionInfo : public FunctionInfoBase
+	{
+	public:
+		// Returns cloned copy
+		virtual FunctionInfoBase* Clone() const;
+
+		// Invokes function with parameters
+		template<typename _res_type, typename ... _args>
+		_res_type Invoke(_args ... args) const;
+
+	protected:
+		friend class Type;
+		friend class TypeInitializer;
+	};
 
 	// ----------------------------------
 	// Function info specialization layer
@@ -77,6 +112,30 @@ namespace o2
 		virtual _res_type Invoke(void* object, _args ... args) const = 0;
 	};
 
+	// -----------------------------------
+	// Static Function info specialization
+	// -----------------------------------
+	template<typename _res_type, typename ... _args>
+	class SpecStaticFunctionInfo : public StaticFunctionInfo
+	{
+	public:
+		// Returns cloned copy
+		FunctionInfoBase* Clone() const
+		{
+			return mnew SpecStaticFunctionInfo(*this);
+		}
+
+		virtual _res_type Invoke(_args ... args) const
+		{
+			return mFunctionPtr(args ...);
+		}
+
+	private:
+		_res_type(*mFunctionPtr)(_args ... args); // Pointer to static function
+
+		friend class TypeInitializer;
+	};
+
 	// -------------------------------
 	// Function specialized class info
 	// -------------------------------
@@ -85,7 +144,7 @@ namespace o2
 	{
 	public:
 		// Returns cloned copy
-		FunctionInfo* Clone() const
+		FunctionInfoBase* Clone() const
 		{
 			return mnew SpecFunctionInfo(*this);
 		}
@@ -111,7 +170,7 @@ namespace o2
 	{
 	public:
 		// Returns cloned copy
-		FunctionInfo* Clone() const
+		FunctionInfoBase* Clone() const
 		{
 			return mnew SpecConstFunctionInfo(*this);
 		}
@@ -132,7 +191,15 @@ namespace o2
 	template<typename _res_type, typename ... _args>
 	_res_type FunctionInfo::Invoke(void* object, _args ... args) const
 	{
-		const ISpecFunctionInfo<_res_type, _args ...>* thisSpec = (const ISpecFunctionInfo<_res_type, _args ...>*)this;
+		const ISpecFunctionInfo<_res_type, _args ...>* thisSpec = dynamic_cast<const ISpecFunctionInfo<_res_type, _args ...>*>(this);
 		return thisSpec->Invoke(object, args ...);
 	}
+
+	template<typename _res_type, typename ... _args>
+	_res_type StaticFunctionInfo::Invoke(_args ... args) const
+	{
+		const SpecStaticFunctionInfo<_res_type, _args ...>* thisSpec = dynamic_cast<const SpecStaticFunctionInfo<_res_type, _args ...>*>(this);
+		return thisSpec->Invoke(args ...);
+	}
+
 }

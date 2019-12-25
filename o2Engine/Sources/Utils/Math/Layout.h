@@ -50,5 +50,10 @@ CLASS_METHODS_META(o2::Layout)
 {
 
 	PUBLIC_FUNCTION(RectF, Calculate, const RectF&);
+	PUBLIC_STATIC_FUNCTION(Layout, BothStretch, const BorderF&);
+	PUBLIC_STATIC_FUNCTION(Layout, BothStretch, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(Layout, Based, BaseCorner, const Vec2F&, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(Layout, HorStretch, VerAlign, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(Layout, VerStretch, HorAlign, float, float, float, float);
 }
 END_META;

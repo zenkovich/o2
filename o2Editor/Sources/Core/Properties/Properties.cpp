@@ -35,15 +35,22 @@ namespace Editor
 
 	Properties::~Properties()
 	{
-		for (auto field : mAvailablePropertiesFields)
-			delete field;
+		for (auto kv : mPropertiesPool)
+		{
+			for (auto p : kv.second)
+				delete p;
+		}
+
+		for (auto kv : mObjectPropertiesViewersPool)
+		{
+			for (auto p : kv.second)
+				delete p;
+		}
 	}
 
 	void Properties::InitializeAvailablePropertiesFields()
 	{
-		auto a = TypeOf(IAssetProperty).GetDerivedTypes();
-		auto b = TypeOf(IPropertyField).GetDerivedTypes();
-		auto avaialbleTypes = a + b;
+		auto avaialbleTypes = TypeOf(IAssetProperty).GetDerivedTypes() + TypeOf(IPropertyField).GetDerivedTypes();
 
 		avaialbleTypes.Remove(&TypeOf(IAssetProperty));
 		avaialbleTypes.Remove(&TypeOf(ObjectProperty));
@@ -53,13 +60,8 @@ namespace Editor
 
 		for (auto x : avaialbleTypes)
 		{
-			auto objType = dynamic_cast<const ObjectType*>(x);
-			auto sample = dynamic_cast<IPropertyField*>(objType->DynamicCastToIObject(objType->CreateSample()));
-
-			if (!sample->GetValueType())
-				delete sample;
-			else 
-				mAvailablePropertiesFields.Add(sample);
+			if (auto valueType = x->InvokeStatic<const Type*>("GetValueTypeStatic"))
+				mAvailablePropertiesFields[valueType] = x;
 		}
 	}
 
@@ -71,19 +73,19 @@ namespace Editor
 
 		for (auto x : availableTypes)
 		{
-			auto sample = (IObjectPropertiesViewer*)x->CreateSample();
-			mAvailableObjectPropertiesViewers.Add(sample);
+			if (auto objectType = x->InvokeStatic<const Type*>("GetViewingObjectTypeStatic"))
+				mAvailableObjectPropertiesViewers[objectType] = x;
 		}
 	}
 
 	const Type* Properties::GetClosesBasedTypeObjectViewer(const Type* type) const
 	{
-		IObjectPropertiesViewer* viwerSample = nullptr;
+		const Type* viewerType = nullptr;
 
 		int minBaseDepth = INT_MAX;
-		for (auto viewer : mAvailableObjectPropertiesViewers)
+		for (auto kv : mAvailableObjectPropertiesViewers)
 		{
-			auto viewerType = viewer->GetViewingObjectType();
+			auto viewerType = kv.first;
 			Vector<const Type*> itTypes = { viewerType };
 			int thisBaseDepth = 0;
 			bool found = false;
@@ -112,14 +114,13 @@ namespace Editor
 			if (found && thisBaseDepth < minBaseDepth)
 			{
 				minBaseDepth = thisBaseDepth;
-				viwerSample = viewer;
+				viewerType = kv.second;
 
 				if (thisBaseDepth == 0)
 					break;
 			}
 		}
 
-		auto viewerType = viwerSample ? &viwerSample->GetType() : &TypeOf(DefaultObjectViewer);
 		return viewerType;
 	}
 
@@ -210,8 +211,7 @@ namespace Editor
 		if (type->GetUsage() == Type::Usage::Property)
 			return IsFieldTypeSupported(dynamic_cast<const PropertyType*>(type)->GetValueType());
 
-		IPropertyField* fieldSample = GetFieldPropertyPrototype(type);
-		if (fieldSample)
+		if (GetFieldPropertyType(type))
 			return true;
 
 		return false;
@@ -228,7 +228,7 @@ namespace Editor
 	void Properties::FreeProperty(IPropertyField* field)
 	{
 		if (!mPropertiesPool.ContainsKey(field->GetValueType()))
-			mPropertiesPool.Add(field->GetValueType(), PropertiesFieldsVec());
+			mPropertiesPool.Add(field->GetValueType(), Vector<IPropertyField*>());
 
 		mPropertiesPool[field->GetValueType()].Add(field);
 		field->OnFreeProperty();
@@ -313,6 +313,9 @@ namespace Editor
 	{
 		PushEditorScopeOnStack enterScope;
 
+		if (GetFieldPropertyType(type))
+			return CreateRegularField(type, name, onChangeCompleted, onChanged);
+
 		if (type->GetUsage() == Type::Usage::Vector)
 		{
 			auto elementType = dynamic_cast<const VectorType*>(type)->GetElementType();
@@ -342,17 +345,14 @@ namespace Editor
 			return CreateFieldProperty(valueType, name, onChangeCompleted, onChanged);
 		}
 
-		return CreateRegularField(type, name, onChangeCompleted, onChanged);
+		return nullptr;
 	}
 
 	IPropertyField* Properties::CreateRegularField(const Type* type, const String& name,
 												   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 												   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		const Type* fieldPropertyType = nullptr;
-		if (auto fieldSample = GetFieldPropertyPrototype(type))
-			fieldPropertyType = &fieldSample->GetType();
-
+		const Type* fieldPropertyType = GetFieldPropertyType(type);
 		if (!fieldPropertyType)
 			return nullptr;
 
@@ -475,7 +475,7 @@ namespace Editor
 		auto type = viewer->GetViewingObjectType();
 
 		if (!mObjectPropertiesViewersPool.ContainsKey(type))
-			mObjectPropertiesViewersPool.Add(type, IObjectPropertiesViewersVec());
+			mObjectPropertiesViewersPool.Add(type, Vector<IObjectPropertiesViewer*>());
 
 		mObjectPropertiesViewersPool[type].Add(viewer);
 		viewer->GetLayout()->SetParent(nullptr);
@@ -546,18 +546,17 @@ namespace Editor
 		return res;
 	}
 
-	IPropertyField* Properties::GetFieldPropertyPrototype(const Type* type) const
+	const Type* Properties::GetFieldPropertyType(const Type* valueType) const
 	{
-		for (auto field : mAvailablePropertiesFields)
+		for (auto kv : mAvailablePropertiesFields)
 		{
-			auto fieldType = field->GetValueType();
-			if (type->GetUsage() == Type::Usage::Pointer && fieldType->GetUsage() == Type::Usage::Pointer)
+			if (valueType->GetUsage() == Type::Usage::Pointer && kv.first->GetUsage() == Type::Usage::Pointer)
 			{
-				if (((PointerType*)type)->GetUnpointedType()->IsBasedOn(*((PointerType*)fieldType)->GetUnpointedType()))
-					return field;
+				if (((PointerType*)valueType)->GetUnpointedType()->IsBasedOn(*((PointerType*)kv.first)->GetUnpointedType()))
+					return kv.second;
 			}
-			else if (type->IsBasedOn(*fieldType))
-				return field;
+			else if (valueType->IsBasedOn(*kv.first))
+				return kv.second;
 		}
 
 		return nullptr;

@@ -122,6 +122,11 @@ namespace Editor
 
 	const Type* Vec2FProperty::GetValueType() const
 	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* Vec2FProperty::GetValueTypeStatic()
+	{
 		return &TypeOf(Vec2F);
 	}
 

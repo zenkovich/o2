@@ -282,6 +282,7 @@ END_META;
 CLASS_METHODS_META(o2::ImageAssetRef)
 {
 
+	PUBLIC_STATIC_FUNCTION(ImageAssetRef, CreateAsset);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;

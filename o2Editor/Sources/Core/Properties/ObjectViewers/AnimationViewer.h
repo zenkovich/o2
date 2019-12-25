@@ -26,6 +26,9 @@ namespace Editor
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
 
+		// Returns viewing objects base type by static function
+		static const Type* GetViewingObjectTypeStatic();
+
 		IOBJECT(AnimationViewer);
 
 	private:
@@ -53,6 +56,7 @@ CLASS_METHODS_META(Editor::AnimationViewer)
 
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
 	PRIVATE_FUNCTION(void, OnEditPressed);
 }
 END_META;

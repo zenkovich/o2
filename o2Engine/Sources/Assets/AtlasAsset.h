@@ -266,6 +266,10 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(bool, ContainsImage, const String&);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, UID, UInt);
+	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const String&, UInt);
+	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, UID, UInt);
+	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const String&, UInt);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 }
@@ -283,6 +287,7 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAssetRef)
 {
 
+	PUBLIC_STATIC_FUNCTION(AtlasAssetRef, CreateAsset);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;

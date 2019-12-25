@@ -401,6 +401,10 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	PUBLIC_FUNCTION(float, GetWidthWeight);
 	PUBLIC_FUNCTION(void, SetHeightWeight, float);
 	PUBLIC_FUNCTION(float, GetHeightWeight);
+	PUBLIC_STATIC_FUNCTION(WidgetLayout, BothStretch, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(WidgetLayout, Based, BaseCorner, const Vec2F&, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(WidgetLayout, HorStretch, VerAlign, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(WidgetLayout, VerStretch, HorAlign, float, float, float, float);
 	PROTECTED_FUNCTION(void, SetOwner, Actor*);
 	PROTECTED_FUNCTION(RectF, GetParentRectangle);
 	PROTECTED_FUNCTION(void, FloorRectangle);

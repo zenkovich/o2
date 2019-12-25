@@ -864,12 +864,24 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			res += "\n";
 		}
 
-		if (x->GetClassSection() == SyntaxProtectionSection::Public)
-			res += "\tPUBLIC_FUNCTION(";
-		else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-			res += "\tPRIVATE_FUNCTION(";
-		else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-			res += "\tPROTECTED_FUNCTION(";
+		if (x->IsStatic())
+		{
+			if (x->GetClassSection() == SyntaxProtectionSection::Public)
+				res += "\tPUBLIC_STATIC_FUNCTION(";
+			else if (x->GetClassSection() == SyntaxProtectionSection::Private)
+				res += "\tPRIVATE_STATIC_FUNCTION(";
+			else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
+				res += "\tPROTECTED_STATIC_FUNCTION(";
+		}
+		else
+		{
+			if (x->GetClassSection() == SyntaxProtectionSection::Public)
+				res += "\tPUBLIC_FUNCTION(";
+			else if (x->GetClassSection() == SyntaxProtectionSection::Private)
+				res += "\tPRIVATE_FUNCTION(";
+			else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
+				res += "\tPROTECTED_FUNCTION(";
+		}
 
 		auto returnTypeName = (x->GetReturnType().IsConstant() ? "const " : "") + x->GetReturnType().GetName();
 
@@ -1071,7 +1083,6 @@ bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, Syntax
 		function->GetName().find('~') == string::npos &&
 		function->GetName().find("operator") == function->GetName().npos &&
 		!function->IsTemplate() &&
-		!function->IsStatic() &&
 		find(ignoringNames.begin(), ignoringNames.end(), function->GetName()) == ignoringNames.end();
 }
 

@@ -2,6 +2,7 @@
 
 #include "Assets/ImageAsset.h"
 #include "Core/Properties/IObjectPropertiesViewer.h"
+#include "Render/Text.h"
 
 using namespace o2;
 
@@ -25,7 +26,7 @@ namespace Editor
 	// --------------------
 	// Editor text property
 	// --------------------
-	class TextViewer : public IObjectPropertiesViewer
+	class TextViewer : public TObjectPropertiesViewer<Text>
 	{
 	public:
 		// Default constructor. Initializes fields controls
@@ -58,7 +59,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::TextViewer)
 {
-	BASE_CLASS(Editor::IObjectPropertiesViewer);
+	BASE_CLASS(Editor::TObjectPropertiesViewer<Text>);
 }
 END_META;
 CLASS_FIELDS_META(Editor::TextViewer)

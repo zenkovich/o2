@@ -82,7 +82,7 @@ namespace Editor
 		bool IsPropertyVisible(FieldInfo* info) const;
 
 		// Returns available field by type
-		IPropertyField* GetFieldPropertyPrototype(const Type* type) const;
+		const Type* GetFieldPropertyType(const Type* valueType) const;
 
 		// Creates field property by type 
 		IPropertyField* CreateFieldProperty(const Type* type, const String& name,
@@ -126,17 +126,17 @@ namespace Editor
 		static String MakeSmartFieldName(const String& fieldName);
 
 	protected:
-		typedef Vector<IPropertyField*> PropertiesFieldsVec;
-		typedef Map<const Type*, PropertiesFieldsVec> TypePropertyMap;
+		typedef Map<const Type*, const Type*> PropertiesFieldsMap;
+		typedef Map<const Type*, Vector<IPropertyField*>> TypePropertyMap;
 
-		typedef Vector<IObjectPropertiesViewer*> IObjectPropertiesViewersVec;
-		typedef Map<const Type*, IObjectPropertiesViewersVec> TypeObjectPropertiesViewerMap;
+		typedef Map<const Type*, const Type*> IObjectPropertiesViewersMap;
+		typedef Map<const Type*, Vector<IObjectPropertiesViewer*>> TypeObjectPropertiesViewerMap;
 
 		int  mPropertyFieldsPoolStep = 5; // Field properties pools resize step						    
 		bool mPrivateVisible = false;     // Is private fields visible
 
-		PropertiesFieldsVec         mAvailablePropertiesFields;        // Available properties fields samples
-		IObjectPropertiesViewersVec mAvailableObjectPropertiesViewers; // Available object properties viewers samples
+		PropertiesFieldsMap         mAvailablePropertiesFields;        // Available properties fields samples
+		IObjectPropertiesViewersMap mAvailableObjectPropertiesViewers; // Available object properties viewers samples
 
 		TypePropertyMap               mPropertiesPool;              // Pool of properties, grouped by property type
 		TypeObjectPropertiesViewerMap mObjectPropertiesViewersPool; // Pool of object properties viewers, grouped by object type

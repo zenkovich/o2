@@ -153,6 +153,9 @@ namespace o2
 
 		template<typename _object_type, typename _res_type, typename ... _args>
 		FunctionInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection);
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		StaticFunctionInfo* StaticMethod(_object_type* object, Type* type, const char* name, _res_type(*pointer)(_args ...), ProtectSection protection);
 	};
 }
 
@@ -367,4 +370,11 @@ namespace o2
 	{
 		return TypeInitializer::RegFunction<_object_type, _res_type, _args ...>(type, name, pointer, protection);
 	}
+
+	template<typename _object_type, typename _res_type, typename ... _args>
+	StaticFunctionInfo* ReflectionInitializationTypeProcessor::StaticMethod(_object_type* object, Type* type, const char* name, _res_type(*pointer)(_args ...), ProtectSection protection)
+	{
+		return TypeInitializer::RegStaticFunction<_object_type, _res_type, _args ...>(type, name, pointer, protection);
+	}
+
 }

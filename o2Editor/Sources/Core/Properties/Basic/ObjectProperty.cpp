@@ -135,6 +135,11 @@ namespace Editor
 
 	const Type* ObjectProperty::GetValueType() const
 	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* ObjectProperty::GetValueTypeStatic()
+	{
 		return &TypeOf(IObject);
 	}
 

@@ -161,6 +161,11 @@ namespace Editor
 
 	const Type* BorderIProperty::GetValueType() const
 	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* BorderIProperty::GetValueTypeStatic()
+	{
 		return &TypeOf(BorderI);
 	}
 

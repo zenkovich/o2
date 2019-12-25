@@ -87,11 +87,6 @@ namespace Editor
 			o2EditorProperties.BuildField(mTiledPropertiesSpoiler, spriteType, "tileScale", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 	}
 
-	const Type* SpriteViewer::GetViewingObjectType() const
-	{
-		return &TypeOf(Sprite);
-	}
-
 	void SpriteViewer::OnModeSelected()
 	{
 		SpriteMode mode = (SpriteMode)(mModeProperty->GetCommonValue());
@@ -110,5 +105,7 @@ namespace Editor
 	}
 
 }
+
+DECLARE_CLASS_MANUAL(Editor::TObjectPropertiesViewer<o2::Sprite>);
 
 DECLARE_CLASS(Editor::SpriteViewer);

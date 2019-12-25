@@ -489,5 +489,7 @@ CLASS_FIELDS_META(o2::ContextMenu::Item)
 END_META;
 CLASS_METHODS_META(o2::ContextMenu::Item)
 {
+
+	PUBLIC_STATIC_FUNCTION(Item, Separator);
 }
 END_META;

@@ -188,6 +188,7 @@ END_META;
 CLASS_METHODS_META(o2::BinaryAssetRef)
 {
 
+	PUBLIC_STATIC_FUNCTION(BinaryAssetRef, CreateAsset);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;

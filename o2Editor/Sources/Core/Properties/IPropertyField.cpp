@@ -98,7 +98,12 @@ namespace Editor
 
 	const Type* IPropertyField::GetValueType() const
 	{
-		return &TypeOf(void);
+		return GetValueTypeStatic();
+	}
+
+	const Type* IPropertyField::GetValueTypeStatic()
+	{
+		return nullptr;
 	}
 
 	bool IPropertyField::IsValuesDifferent() const

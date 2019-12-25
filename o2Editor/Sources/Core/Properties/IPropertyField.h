@@ -70,6 +70,9 @@ namespace Editor
 		// Returns editing by this field type
 		virtual const Type* GetValueType() const;
 
+		// Returns editing by this field type by static function, can't be changed during runtime
+		static const Type* GetValueTypeStatic();
+
 		// Returns is values different
 		bool IsValuesDifferent() const;
 
@@ -176,6 +179,9 @@ namespace Editor
 		friend class Properties;
 	};
 
+	// Returns editing by this field type by static function, can't be changed during runtime
+	static const Type* GetValueTypeStatic();
+
 	template<typename _type>
 	class TPropertyField : public IPropertyField
 	{
@@ -197,6 +203,9 @@ namespace Editor
 
 		// Returns editing by this field type
 		const Type* GetValueType() const override;
+
+		// Returns editing by this field type by static function, can't be changed during runtime
+		static const Type* GetValueTypeStatic();
 
 		// Sets value
 		void SetValue(const _type& value);
@@ -352,6 +361,12 @@ namespace Editor
 	template<typename _type>
 	const Type* TPropertyField<_type>::GetValueType() const
 	{
+		return GetValueTypeStatic();
+	}
+
+	template<typename _type>
+	const Type* Editor::TPropertyField<_type>::GetValueTypeStatic()
+	{
 		return &TypeOf(_type);
 	}
 
@@ -501,6 +516,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(Button*, GetRemoveButton);
 	PUBLIC_FUNCTION(const Type*, GetValueType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(void, SetValuePath, const String&);
 	PUBLIC_FUNCTION(const String&, GetValuePath);
@@ -539,6 +555,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(const Type*, GetValueType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
 	PUBLIC_FUNCTION(void, SetValue, const _type&);
 	PUBLIC_FUNCTION(void, SetUnknownValue, const _type&);
 	PUBLIC_FUNCTION(_type, GetCommonValue);

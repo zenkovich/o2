@@ -164,6 +164,7 @@ END_META;
 CLASS_METHODS_META(o2::BitmapFontAssetRef)
 {
 
+	PUBLIC_STATIC_FUNCTION(BitmapFontAssetRef, CreateAsset);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;

@@ -39,6 +39,9 @@ namespace Editor
 		// Returns editing by this field type
 		const Type* GetValueType() const override;
 
+		// Returns editing by this field type by static function, can't be changed during runtime
+		static const Type* GetValueTypeStatic();
+
 		// Specializes field info, processing attributes
 		void SetFieldInfo(const FieldInfo* fieldInfo) override;
 
@@ -124,6 +127,7 @@ CLASS_METHODS_META(Editor::ObjectProperty)
 	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(const Type*, GetValueType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);

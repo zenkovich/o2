@@ -161,6 +161,11 @@ namespace Editor
 
 	const Type* RectIProperty::GetValueType() const
 	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* RectIProperty::GetValueTypeStatic()
+	{
 		return &TypeOf(RectI);
 	}
 

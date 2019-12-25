@@ -175,6 +175,7 @@ END_META;
 CLASS_METHODS_META(o2::FontAssetRef)
 {
 
+	PUBLIC_STATIC_FUNCTION(FontAssetRef, CreateAsset);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;

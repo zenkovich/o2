@@ -68,6 +68,9 @@ namespace Editor
 		// Returns editing by this field type
 		const Type* GetValueType() const override;
 
+		// Returns editing by this field type by static function, can't be changed during runtime
+		static const Type* GetValueTypeStatic();
+
 		IOBJECT(RectIProperty);
 
 	protected:
@@ -166,6 +169,7 @@ CLASS_METHODS_META(Editor::RectIProperty)
 	PUBLIC_FUNCTION(RectI, GetCommonValue);
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(const Type*, GetValueType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 }

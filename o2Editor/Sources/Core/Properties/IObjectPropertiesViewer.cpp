@@ -30,6 +30,11 @@ namespace Editor
 
 	const Type* IObjectPropertiesViewer::GetViewingObjectType() const
 	{
+		return GetViewingObjectTypeStatic();
+	}
+
+	const Type* IObjectPropertiesViewer::GetViewingObjectTypeStatic()
+	{
 		return nullptr;
 	}
 

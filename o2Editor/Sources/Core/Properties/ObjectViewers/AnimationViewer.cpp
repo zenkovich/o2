@@ -30,6 +30,11 @@ namespace Editor
 
 	const Type* AnimationViewer::GetViewingObjectType() const
 	{
+		return GetViewingObjectTypeStatic();
+	}
+
+	const Type* AnimationViewer::GetViewingObjectTypeStatic()
+	{
 		return &TypeOf(Animation);
 	}
 

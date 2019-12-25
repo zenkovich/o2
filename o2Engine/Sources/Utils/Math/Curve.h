@@ -343,6 +343,10 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(float, Length);
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PUBLIC_FUNCTION(RectF, GetRect);
+	PUBLIC_STATIC_FUNCTION(Curve, EaseIn);
+	PUBLIC_STATIC_FUNCTION(Curve, EaseOut);
+	PUBLIC_STATIC_FUNCTION(Curve, EaseInOut);
+	PUBLIC_STATIC_FUNCTION(Curve, Linear);
 	PROTECTED_FUNCTION(void, CheckSmoothKeys);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);

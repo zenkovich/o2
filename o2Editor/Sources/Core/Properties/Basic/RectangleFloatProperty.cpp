@@ -161,6 +161,11 @@ namespace Editor
 
 	const Type* RectFProperty::GetValueType() const
 	{
+		return GetValueTypeStatic();
+	}
+
+	const Type* RectFProperty::GetValueTypeStatic()
+	{
 		return &TypeOf(RectF);
 	}
 

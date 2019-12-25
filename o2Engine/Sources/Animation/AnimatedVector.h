@@ -286,6 +286,11 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
 	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, Parametric, const Vec2F&, const Vec2F&, float, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, EaseIn, const Vec2F&, const Vec2F&, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, EaseOut, const Vec2F&, const Vec2F&, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, EaseInOut, const Vec2F&, const Vec2F&, float);
+	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, Linear, const Vec2F&, const Vec2F&, float);
 	PROTECTED_FUNCTION(void, Evaluate);
 	PROTECTED_FUNCTION(Vec2F, Evaluate, float);
 	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);

@@ -247,7 +247,7 @@ namespace Editor
 	{
 		mTreeControls = mnew Widget();
 
-		auto fieldProto = o2EditorProperties.GetFieldPropertyPrototype(&TypeOf(AnimatedValueType::ValueType));
+		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(AnimatedValueType::ValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(fieldProto->GetType(), "standard"));
 		mPropertyValueProxy = PointerValueProxy<AnimatedValueTypeValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });

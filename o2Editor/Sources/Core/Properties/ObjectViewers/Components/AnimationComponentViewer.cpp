@@ -3,7 +3,6 @@
 
 #include "Core/EditorScope.h"
 #include "Core/Properties/Properties.h"
-#include "Scene/Components/AnimationComponent.h"
 
 namespace Editor
 {
@@ -20,11 +19,8 @@ namespace Editor
 		mPropertiesContext.Set(targetObjets);
 	}
 
-	const Type* AnimationComponentViewer::GetViewingObjectType() const
-	{
-		return &TypeOf(AnimationComponent);
-	}
-
 }
+
+DECLARE_CLASS_MANUAL(Editor::TObjectPropertiesViewer<o2::AnimationComponent>);
 
 DECLARE_CLASS(Editor::AnimationComponentViewer);

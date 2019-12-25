@@ -3,28 +3,38 @@
 
 namespace o2
 {
-	bool FunctionInfo::operator==(const FunctionInfo& other) const
+	bool FunctionInfoBase::operator==(const FunctionInfoBase& other) const
 	{
-		return mName == other.mName && mIsContant == other.mIsContant &&
+		return mName == other.mName &&
 			mReturnType == other.mReturnType && mParameters == other.mParameters;
 	}
 
-	FunctionInfo* FunctionInfo::Clone() const
+	FunctionInfoBase* FunctionInfoBase::Clone() const
+	{
+		return mnew FunctionInfoBase(*this);
+	}
+
+	FunctionInfoBase* FunctionInfo::Clone() const
 	{
 		return mnew FunctionInfo(*this);
 	}
 
-	Type* FunctionInfo::GetOwnerType() const
+	bool FunctionInfo::operator==(const FunctionInfo& other) const
+	{
+		return FunctionInfoBase::operator==(other) && mIsContant == other.mIsContant;
+	}
+
+	Type* FunctionInfoBase::GetOwnerType() const
 	{
 		return mOwnerType;
 	}
 
-	const String& FunctionInfo::GetName() const
+	const String& FunctionInfoBase::GetName() const
 	{
 		return mName;
 	}
 
-	const Type* FunctionInfo::GetReturnType() const
+	const Type* FunctionInfoBase::GetReturnType() const
 	{
 		return mReturnType;
 	}
@@ -34,20 +44,24 @@ namespace o2
 		return mIsContant;
 	}
 
-	const FunctionInfo::ParametersVec& FunctionInfo::GetParameters() const
-	{
-		return mParameters;
-	}
-
-	ProtectSection FunctionInfo::GetProtectionSection() const
+	ProtectSection FunctionInfoBase::GetProtectionSection() const
 	{
 		return mProtectSection;
 	}
 
-	bool FunctionInfo::Parameter::operator==(const Parameter& other) const
+	bool FunctionInfoBase::Parameter::operator==(const Parameter& other) const
 	{
 		return name == other.name && type == other.type && isConstant == other.isConstant && isPointer == other.isPointer &&
 			isReference == other.isReference;
 	}
 
+	const FunctionInfo::ParametersVec& FunctionInfoBase::GetParameters() const
+	{
+		return mParameters;
+	}
+
+	FunctionInfoBase* StaticFunctionInfo::Clone() const
+	{
+		return mnew StaticFunctionInfo(*this);
+	}
 }
