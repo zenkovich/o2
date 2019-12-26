@@ -273,12 +273,12 @@ namespace o2
 
 		PrimitiveType mCurrentPrimitiveType; // Type of drawing primitives for next DIP
 
-		Texture* mLastDrawTexture;     // Stored texture ptr from last DIP
-		UInt     mLastDrawVertex;      // Last vertex idx for next DIP
-		UInt     mLastDrawIdx;         // Last vertex index for next DIP
-		UInt     mTrianglesCount;      // Triangles count for next DIP
-		UInt     mFrameTrianglesCount; // Total triangles at current frame
-		UInt     mDIPCount;            // DrawIndexedPrimitives calls count
+		Texture* mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
+		UInt     mLastDrawVertex;            // Last vertex idx for next DIP
+		UInt     mLastDrawIdx;               // Last vertex index for next DIP
+		UInt     mTrianglesCount;            // Triangles count for next DIP
+		UInt     mFrameTrianglesCount;       // Total triangles at current frame
+		UInt     mDIPCount;                  // DrawIndexedPrimitives calls count
 
 		LogStream* mLog; // Render log stream
 

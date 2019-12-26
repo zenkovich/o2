@@ -105,7 +105,7 @@ namespace Editor
 										  const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Creates object pointer field
-		IPropertyField* CreateObjectPtrField(const String& name,
+		IPropertyField* CreateObjectPtrField(const ObjectType* basicType, const String& name,
 											 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 											 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 

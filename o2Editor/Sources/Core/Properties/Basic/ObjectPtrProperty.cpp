@@ -147,23 +147,23 @@ namespace Editor
 
 	void ObjectPtrProperty::CheckViewer()
 	{
-		const Type* objectType = nullptr;
+		mCurrentObjectType = nullptr;
 		if (!mTargetObjects.IsEmpty())
 		{
 			auto object = GetProxy(mTargetObjects[0].first);
 			if (object)
-				objectType = &object->GetType();
+				mCurrentObjectType = dynamic_cast<const ObjectType*>(&object->GetType());
 		}
 
 		const Type* prevObjectType = mObjectViewer ? mObjectViewer->GetViewingObjectType() : nullptr;
-		if (objectType != prevObjectType)
+		if (mCurrentObjectType != prevObjectType)
 		{
 			if (mObjectViewer)
 				o2EditorProperties.FreeObjectViewer(mObjectViewer);
 
-			if (mObjectPtrType)
+			if (mCurrentObjectType)
 			{
-				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, onChanged);
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted, onChanged);
 				mSpoiler->AddChild(mObjectViewer->GetLayout());
 			}
 		}
@@ -239,6 +239,11 @@ namespace Editor
 		return mRemoveBtn;
 	}
 
+	void ObjectPtrProperty::SetBasicType(const ObjectType* type)
+	{
+		mBasicObjectType = type;
+	}
+
 	void ObjectPtrProperty::Expand()
 	{
 		SetExpanded(true);
@@ -287,8 +292,8 @@ namespace Editor
 			{
 				mCreateMenu->RemoveAllItems();
 
-				auto availableTypes = mObjectType->GetDerivedTypes();
-				availableTypes.Insert(mObjectType, 0);
+				auto availableTypes = mBasicObjectType->GetDerivedTypes();
+				availableTypes.Insert(mBasicObjectType, 0);
 
 				mImmediateCreateObject = availableTypes.Count() == 1;
 
@@ -301,7 +306,7 @@ namespace Editor
 			}
 
 			if (mImmediateCreateObject)
-				CreateObject(mObjectType);
+				CreateObject(mBasicObjectType);
 			else
 				mCreateMenu->Show();
 		}

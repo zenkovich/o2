@@ -36,6 +36,8 @@ namespace o2
 		mUsage = usage;
 		mSize = size;
 
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+
 		glGenTextures(1, &mHandle);
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
@@ -70,6 +72,8 @@ namespace o2
 									 GetGLErrorDesc(glError));
 
 				mReady = false;
+				glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
+
 				return;
 			}
 
@@ -77,6 +81,8 @@ namespace o2
 
 			glBindFramebufferEXT(GL_FRAMEBUFFER, 0);
 		}
+
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 
 		mReady = true;
 	}
@@ -96,6 +102,8 @@ namespace o2
 		mSize = bitmap->GetSize();
 		mFileName = bitmap->GetFilename();
 
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
+
 		glGenTextures(1, &mHandle);
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
@@ -113,11 +121,14 @@ namespace o2
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
+
 		mReady = true;
 	}
 
 	void Texture::SetData(Bitmap* bitmap)
 	{
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
@@ -132,10 +143,13 @@ namespace o2
 					 bitmap->GetData());
 
 		GL_CHECK_ERROR();
+
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 	}
 
 	void Texture::SetSubData(const Vec2I& offset, Bitmap* bitmap)
 	{
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 
 		GLint texFormat = GL_RGB;
@@ -148,10 +162,13 @@ namespace o2
 						bitmap->GetData());
 
 		GL_CHECK_ERROR();
+
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 	}
 
 	void Texture::Copy(const Texture& from, const RectI& rect)
 	{
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, from.mHandle);
 
 		GLint texFormat = GL_RGB;
@@ -161,14 +178,17 @@ namespace o2
 			texFormat = GL_RGB;
 
 		glCopyTexImage2D(GL_TEXTURE_2D, 0, texFormat, rect.left, rect.top, rect.Width(), rect.Height(), 0);
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 	}
 
 	Bitmap* Texture::GetData()
 	{
 		Bitmap* bitmap = mnew Bitmap(mFormat, mSize);
 
+		auto prevTextureHandle = o2Render.mLastDrawTexture ? o2Render.mLastDrawTexture->mHandle : 0;
 		glBindTexture(GL_TEXTURE_2D, mHandle);
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, bitmap->GetData());
+		glBindTexture(GL_TEXTURE_2D, prevTextureHandle);
 
 		return bitmap;
 	}

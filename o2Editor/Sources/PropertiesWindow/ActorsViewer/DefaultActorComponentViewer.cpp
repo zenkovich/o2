@@ -35,7 +35,7 @@ namespace Editor
 
 	void DefaultActorComponentViewer::Refresh()
 	{
-		bool requiredNewViewer = mViewer ? mViewer->GetViewingObjectType() != mComponentType : mComponentType != nullptr;
+		bool requiredNewViewer = mViewer ? !mComponentType->IsBasedOn(*mViewer->GetViewingObjectType()) : mComponentType != nullptr;
 		if (requiredNewViewer) 
 		{
 			if (mViewer)

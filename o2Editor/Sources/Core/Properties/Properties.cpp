@@ -80,48 +80,24 @@ namespace Editor
 
 	const Type* Properties::GetClosesBasedTypeObjectViewer(const Type* type) const
 	{
-		const Type* viewerType = nullptr;
-
-		int minBaseDepth = INT_MAX;
-		for (auto kv : mAvailableObjectPropertiesViewers)
+		Vector<const Type*> itTypes = { type };
+		while (!itTypes.IsEmpty())
 		{
-			auto viewerType = kv.first;
-			Vector<const Type*> itTypes = { viewerType };
-			int thisBaseDepth = 0;
-			bool found = false;
-			while (!itTypes.IsEmpty())
+			Vector<const Type*> nextItTypes;
+
+			for (auto t : itTypes)
 			{
-				Vector<const Type*> nextItTypes;
+				const Type* viewerType = nullptr;
+				if (mAvailableObjectPropertiesViewers.TryGetValue(t, viewerType))
+					return viewerType;
 
-				for (auto t : itTypes)
-				{
-					if (viewerType == type)
-					{
-						break;
-						found = true;
-					}
-
-					nextItTypes.Add(t->GetBaseTypes().Select<const Type*>([](const Type::BaseType& x) { return x.type; }));
-				}
-
-				if (found)
-					break;
-
-				itTypes = nextItTypes;
-				thisBaseDepth++;
+				nextItTypes.Add(t->GetBaseTypes().Select<const Type*>([](const Type::BaseType& x) { return x.type; }));
 			}
 
-			if (found && thisBaseDepth < minBaseDepth)
-			{
-				minBaseDepth = thisBaseDepth;
-				viewerType = kv.second;
-
-				if (thisBaseDepth == 0)
-					break;
-			}
+			itTypes = nextItTypes;
 		}
 
-		return viewerType;
+		return nullptr;
 	}
 
 	IPropertyField* Properties::BuildField(VerticalLayout* layout, FieldInfo* fieldInfo,
@@ -330,8 +306,9 @@ namespace Editor
 
 		if (type->GetUsage() == Type::Usage::Pointer)
 		{
-			if (dynamic_cast<const PointerType*>(type)->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
-				return CreateObjectPtrField(name, onChangeCompleted, onChanged);
+			auto pointerType = dynamic_cast<const PointerType*>(type);
+			if (pointerType->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
+				return CreateObjectPtrField(dynamic_cast<const ObjectType*>(pointerType->GetUnpointedType()), name, onChangeCompleted, onChanged);
 
 			return nullptr;
 		}
@@ -408,21 +385,22 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IPropertyField* Properties::CreateObjectPtrField(const String& name,
+	IPropertyField* Properties::CreateObjectPtrField(const ObjectType* basicType, const String& name,
 													 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 													 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		IPropertyField* fieldProperty = nullptr;
+		ObjectPtrProperty* fieldProperty = nullptr;
 
 		const Type* objectType = &TypeOf(IObject*);
 		if (mPropertiesPool.ContainsKey(objectType) && mPropertiesPool[objectType].Count() > 0)
-			fieldProperty = mPropertiesPool[objectType].PopBack();
+			fieldProperty = dynamic_cast<ObjectPtrProperty*>(mPropertiesPool[objectType].PopBack());
 		else
 			fieldProperty = mnew ObjectPtrProperty();
 
 		fieldProperty->onChanged = onChanged;
 		fieldProperty->onChangeCompleted = onChangeCompleted;
 		fieldProperty->SetCaption(name);
+		fieldProperty->SetBasicType(basicType);
 
 		return fieldProperty;
 	}

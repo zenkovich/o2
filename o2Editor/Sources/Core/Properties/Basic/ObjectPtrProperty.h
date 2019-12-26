@@ -58,6 +58,9 @@ namespace Editor
 		// Adds remove button
 		Button* GetRemoveButton() override;
 
+		// Sets basic object type, used in create
+		void SetBasicType(const ObjectType* type);
+
 		// Expands property fields
 		void Expand();
 
@@ -73,8 +76,8 @@ namespace Editor
 		IOBJECT(ObjectPtrProperty);
 
 	protected:
-		const ObjectType* mObjectType = nullptr;    // Type of target objects
-		const Type*       mObjectPtrType = nullptr; // Type of target object pointer
+		const ObjectType* mBasicObjectType = nullptr;   // Base object type, used for create
+		const ObjectType* mCurrentObjectType = nullptr; // Type of target objects
 
 		bool mDontDeleteEnabled = false; // When it is true, delete button is disabled
 
@@ -130,8 +133,8 @@ CLASS_BASES_META(Editor::ObjectPtrProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
-	PROTECTED_FIELD(mObjectType);
-	PROTECTED_FIELD(mObjectPtrType);
+	PROTECTED_FIELD(mBasicObjectType);
+	PROTECTED_FIELD(mCurrentObjectType);
 	PROTECTED_FIELD(mDontDeleteEnabled);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mObjectViewer);
@@ -155,6 +158,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(Button*, GetRemoveButton);
+	PUBLIC_FUNCTION(void, SetBasicType, const ObjectType*);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
