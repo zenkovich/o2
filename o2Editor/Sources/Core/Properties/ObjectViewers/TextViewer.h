@@ -35,9 +35,6 @@ namespace Editor
 		// Refreshing controls and properties by target objects
 		void Refresh(const TargetsVec& targetObjets) override;
 
-		// Returns viewing objects type
-		const Type* GetViewingObjectType() const override;
-
 		IOBJECT(TextViewer);
 
 	protected:
@@ -81,6 +78,5 @@ CLASS_METHODS_META(Editor::TextViewer)
 {
 
 	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 }
 END_META;

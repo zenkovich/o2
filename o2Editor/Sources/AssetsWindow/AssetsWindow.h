@@ -228,6 +228,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PUBLIC_FUNCTION(void, CreatePrefabAsset, const String&);
 	PUBLIC_FUNCTION(void, CreateScriptAsset, const String&);
 	PUBLIC_FUNCTION(void, CreateAnimationAsset, const String&);
+	PUBLIC_STATIC_FUNCTION(Sprite*, GetAssetIconSprite, const AssetRef&);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeFoldersTreeSeparator);
 	PROTECTED_FUNCTION(void, InitializeFoldersTreeVisibleState);

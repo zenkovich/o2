@@ -451,6 +451,8 @@ namespace Editor
 															const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
 		auto viewerType = GetClosesBasedTypeObjectViewer(type);
+		if (!viewerType)
+			viewerType = &TypeOf(DefaultObjectViewer);
 
 		IObjectPropertiesViewer* viewer = nullptr;
 

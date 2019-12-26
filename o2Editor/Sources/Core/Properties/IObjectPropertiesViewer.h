@@ -78,6 +78,8 @@ namespace Editor
 
 		// Returns viewing objects base type by static function
 		static const Type* GetViewingObjectTypeStatic();
+
+		IOBJECT(TObjectPropertiesViewer<_object_type>);
 	};
 
 	template<typename _object_type>
