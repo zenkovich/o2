@@ -476,6 +476,7 @@ namespace o2
 			mFocusedState = state;
 
 		state->mOwner = this;
+		state->animation.SetTarget(this);
 
 		OnStateAdded(state);
 
@@ -903,6 +904,15 @@ namespace o2
 
 	void Widget::OnStateAdded(WidgetState* state)
 	{}
+
+	void Widget::OnStatesListChanged()
+	{
+		auto statesCopy = mStates;
+		mStates.Clear();
+
+		for (auto state : statesCopy)
+			AddState(state);
+	}
 
 	void Widget::OnParentChanged(Actor* oldParent)
 	{

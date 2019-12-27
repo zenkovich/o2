@@ -6,6 +6,7 @@
 #include "Utils/Editor/Attributes/DefaultTypeAttribute.h"
 #include "Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "Utils/Editor/Attributes/EditorPropertyAttribute.h"
+#include "Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "Utils/Math/Layout.h"
 
 namespace o2
@@ -255,7 +256,7 @@ namespace o2
 		using Actor::mIsOnScene;
 
 		LayersVec mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-		StatesVec mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
+		StatesVec mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
 
 		Widget*    mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
 		WidgetsVec mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
@@ -377,6 +378,9 @@ namespace o2
 
 		// It is called when widget state was added
 		virtual void OnStateAdded(WidgetState* state);
+
+		// It is called from editor, refreshes states
+		void OnStatesListChanged();
 
 		// Draws debug frame by mAbsoluteRect
 		void DrawDebugFrame();
@@ -707,7 +711,7 @@ CLASS_FIELDS_META(o2::Widget)
 	PUBLIC_FIELD(onShow);
 	PUBLIC_FIELD(onHide);
 	PROTECTED_FIELD(mLayers).DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mStates).DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mStates).DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParentWidget);
 	PROTECTED_FIELD(mChildWidgets).DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE();
 	PROTECTED_FIELD(mInternalWidgets).DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
@@ -817,6 +821,7 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, OnChildFocused, Widget*);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnStateAdded, WidgetState*);
+	PROTECTED_FUNCTION(void, OnStatesListChanged);
 	PROTECTED_FUNCTION(void, DrawDebugFrame);
 	PROTECTED_FUNCTION(void, UpdateDrawingChildren);
 	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
