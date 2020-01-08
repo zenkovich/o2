@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="FastDebug|Win32">
+      <Configuration>FastDebug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="FastDebug|x64">
+      <Configuration>FastDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\3rdPartyLibs\LibPNG\png.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\LibPNG\pngconf.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugiconfig.hpp" />
+    <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugixml.hpp" />
+    <ClInclude Include="..\..\3rdPartyLibs\StackWalker\StackWalker.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\crc32.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\crypt.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\deflate.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\inffast.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\inffixed.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\inflate.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\inftrees.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\ioapi.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\trees.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\unzip.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\zconf.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\zconf.in.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\zip.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\zlib.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\Zlib\zutil.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\freetype\include\config\ftconfig.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\freetype\include\config\ftheader.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\freetype\include\config\ftmodule.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\freetype\include\config\ftoption.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\freetype\include\config\ftstdlib.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\freetype\include\ft2build.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\png.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngerror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pnggccrd.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngget.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngmem.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngpread.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngread.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngrio.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngrtran.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngrutil.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngset.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngtrans.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngvcrd.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngwio.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngwrite.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngwtran.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngwutil.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\PugiXml\pugixml.cpp" />
+    <ClCompile Include="..\..\3rdPartyLibs\StackWalker\StackWalker.cpp" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\adler32.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\compress.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\crc32.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\deflate.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\gzio.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\infback.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\inffast.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\inflate.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\inftrees.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\ioapi.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\trees.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\uncompr.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\unzip.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\zip.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\Zlib\zutil.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\autofit\autofit.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftbase.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftbbox.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftbitmap.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftfstype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftgasp.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftglyph.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftgxval.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftinit.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftlcdfil.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftmm.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftotval.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftpatent.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftpfr.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftstroke.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftsynth.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftsystem.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\fttype1.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\base\ftwinfnt.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\bdf\bdf.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\cache\ftcache.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\cff\cff.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\cid\type1cid.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\gzip\ftgzip.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\lzw\ftlzw.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\pcf\pcf.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\pfr\pfr.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\psaux\psaux.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\pshinter\pshinter.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\psnames\psmodule.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\raster\raster.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\sfnt\sfnt.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\smooth\smooth.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\truetype\truetype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\type1\type1.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\type42\type42.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\freetype\src\winfonts\winfnt.c" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{69E3A44A-2755-4CC4-9697-4F43876C1BC0}</ProjectGuid>
+    <RootNamespace>3rdPartyLibs</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\3rdPartyLibs\</IntDir>
+    <TargetName>3rdPartyLibs</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\3rdPartyLibs\</IntDir>
+    <TargetName>3rdPartyLibs</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\3rdPartyLibs\</IntDir>
+    <TargetName>3rdPartyLibs</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <LinkTimeCodeGeneration />
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableParallelCodeGeneration>
+      </EnableParallelCodeGeneration>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <LinkTimeCodeGeneration />
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>true</OpenMPSupport>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
