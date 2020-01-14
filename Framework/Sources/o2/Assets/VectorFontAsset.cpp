@@ -98,7 +98,7 @@ namespace o2
 		return !mMeta->IsEqual(other.mMeta);
 	}
 
-	const VectorFontAsset::EffectsVec& VectorFontAsset::GetEffects() const
+	const VectorFontAsset::Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
 	{
 		return GetMeta()->mEffects;
 	}

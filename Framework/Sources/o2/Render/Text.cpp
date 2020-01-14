@@ -599,7 +599,7 @@ namespace o2
 
 		yOffset += mPosition.y;
 
-		for (LineDefsVec::Iterator it = mLines.begin(); it != mLines.end(); ++it)
+		for (Vector<Line>::Iterator it = mLines.begin(); it != mLines.end(); ++it)
 		{
 			Line* line = &(*it);
 
@@ -619,7 +619,7 @@ namespace o2
 			line->mPosition = locOrigin;
 			yOffset -= lineHeight;
 
-			for (SymbolDefsVec::Iterator jt = line->mSymbols.begin(); jt != line->mSymbols.end(); ++jt)
+			for (Vector<Symbol>::Iterator jt = line->mSymbols.begin(); jt != line->mSymbols.end(); ++jt)
 			{
 				if (jt->mCharId == ' ')
 					locOrigin.x += additiveSpaceOffs;

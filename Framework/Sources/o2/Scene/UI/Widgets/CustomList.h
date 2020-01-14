@@ -152,15 +152,12 @@ namespace o2
 			bool operator==(const Selection& other) const;
 		};
 
-		typedef Vector<Selection> SelectionsVec;
-		typedef Vector<Sprite*> SpritesVec;
-
 	protected:
 		VerticalLayout* mVerLayout = nullptr;  // Child vertical layout
 		Widget*         mItemSample = nullptr; // Item sample widget @SERIALIZABLE
 
-		bool          mMultiSelection = true; // Is multi selection available @SERIALIZABLE
-		SelectionsVec mSelectedItems;         // Current selected items
+		bool              mMultiSelection = true; // Is multi selection available @SERIALIZABLE
+		Vector<Selection> mSelectedItems;         // Current selected items
 
 		Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
 		Sprite* mHoverDrawable = nullptr;     // Item hover drawable @SERIALIZABLE
@@ -174,7 +171,7 @@ namespace o2
 		Vec2F mLastHoverCheckCursor;  // Last cursor position on hover check
 		Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-		SpritesVec mSelectionSpritesPool; // Selection sprites pool
+		Vector<Sprite*> mSelectionSpritesPool; // Selection sprites pool
 
 	protected:
 		// Copies data of actor from other to this

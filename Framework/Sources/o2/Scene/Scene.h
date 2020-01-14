@@ -13,17 +13,11 @@
 namespace o2
 {
 	class Actor;
-	typedef Vector<Actor*> ActorsVec;
-
 	class SceneLayer;
-	typedef Vector<SceneLayer*> SceneLayersVec;
-
 	class Tag;
-	typedef Vector<Tag*> TagsVec;
 
 #if IS_EDITOR
 	class SceneEditableObject;
-	typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
 #endif
 
 	// -------------------------------------------------------
@@ -32,19 +26,15 @@ namespace o2
 	class Scene : public Singleton<Scene>
 	{
 	public:
-		typedef Vector<ActorAssetRef> ActorsAssetsVec;
-		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
-		typedef Map<ActorAssetRef, ActorsVec> ActorsCacheMap;
-
-	public:
 #if IS_EDITOR
-		Function<void(SceneEditableObject*)>           onCreated;                  // Actor creation event
-		Function<void(SceneEditableObject*)>           onDestroying;               // Actor destroying event
-		Function<void(SceneEditableObject*)>           onEnableChanged;            // Actor enable changing
-		Function<void(SceneEditableObject*)>           onLockChanged;			   // Actor locking change
-		Function<void(SceneEditableObject*)>           onNameChanged;			   // Actor name changing event
-		Function<void(SceneEditableObject*)>           onChildrenHierarchyChanged; // Actor childs hierarchy change event
-		Function<void(const SceneEditableObjectsVec&)> onObjectsChanged;           // Actors some change event
+		Function<void(SceneEditableObject*)> onCreated;                  // Actor creation event
+		Function<void(SceneEditableObject*)> onDestroying;               // Actor destroying event
+		Function<void(SceneEditableObject*)> onEnableChanged;            // Actor enable changing
+		Function<void(SceneEditableObject*)> onLockChanged;			     // Actor locking change
+		Function<void(SceneEditableObject*)> onNameChanged;			     // Actor name changing event
+		Function<void(SceneEditableObject*)> onChildrenHierarchyChanged; // Actor childs hierarchy change event
+
+		Function<void(const Vector<SceneEditableObject*>&)> onObjectsChanged; // Actors some change event
 #endif
 
 	public:
@@ -64,7 +54,7 @@ namespace o2
 		void RemoveLayer(const String& name, bool removeActors = true);
 
 		// Returns layers array
-		SceneLayersVec& GetLayers();
+		Vector<SceneLayer*>& GetLayers();
 
 		// Returns tag with name
 		Tag* GetTag(const String& name) const;
@@ -79,19 +69,19 @@ namespace o2
 		void RemoveTag(const String& name);
 
 		// Returns tags array
-		const TagsVec& GetTags() const;
+		const Vector<Tag*>& GetTags() const;
 
 		// Returns root actors
-		const ActorsVec& GetRootActors() const;
+		const Vector<Actor*>& GetRootActors() const;
 
 		// Returns root actors
-		ActorsVec& GetRootActors();
+		Vector<Actor*>& GetRootActors();
 
 		// Returns all actors
-		const ActorsVec& GetAllActors() const;
+		const Vector<Actor*>& GetAllActors() const;
 
 		// Returns all actors
-		ActorsVec& GetAllActors();
+		Vector<Actor*>& GetAllActors();
 
 		// Returns actor by id
 		Actor* GetActorByID(SceneUID id) const;
@@ -126,12 +116,12 @@ namespace o2
 		void Update(float dt); 
 
 	protected:
-		ActorsVec       mRootActors;   // Scene root actors		
-		ActorsVec       mAllActors;    // All scene actors
-		SceneLayersVec  mLayers;       // Scene layers
-		TagsVec         mTags;         // Scene tags
-		SceneLayer*     mDefaultLayer; // Default scene layer
-		ActorsAssetsVec mCache;        // Cached actors assets
+		Vector<Actor*>        mRootActors;   // Scene root actors		
+		Vector<Actor*>        mAllActors;    // All scene actors
+		Vector<SceneLayer*>   mLayers;       // Scene layers
+		Vector<Tag*>          mTags;         // Scene tags
+		SceneLayer*           mDefaultLayer; // Default scene layer
+		Vector<ActorAssetRef> mCache;        // Cached actors assets
 
 	protected:
 		// Default constructor
@@ -161,7 +151,7 @@ namespace o2
 #if IS_EDITOR	  	
 	public:
 		// Returns root editable objects
-		SceneEditableObjectsVec GetRootEditableObjects();
+		Vector<SceneEditableObject*> GetRootEditableObjects();
 
 		// Registers editable object
 		static void RegEditableObject(SceneEditableObject* object);
@@ -170,13 +160,13 @@ namespace o2
 		static void UnregEditableObject(SceneEditableObject* object);
 
 		// Returns all editable objects
-		const SceneEditableObjectsVec& GetAllEditableObjects();
+		const Vector<SceneEditableObject*>& GetAllEditableObjects();
 
 		// Returns current changed actors
-		const SceneEditableObjectsVec& GetChangedObjects() const;
+		const Vector<SceneEditableObject*>& GetChangedObjects() const;
 
 		// Returns drawn on last frame editable objects
-		const SceneEditableObjectsVec& GetDrawnEditableObjects() const;
+		const Vector<SceneEditableObject*>& GetDrawnEditableObjects() const;
 
 		// Returns actor by id
 		SceneEditableObject* GetEditableObjectByID(SceneUID id) const;
@@ -192,7 +182,7 @@ namespace o2
 		void CheckChangedObjects();
 
 		// Returns cache of linked to prototypes actors
-		ActorsCacheMap& GetPrototypesLinksCache();
+		Map<ActorAssetRef, Vector<Actor*>>& GetPrototypesLinksCache();
 
 		// It is called when scene started to draw. When scene draw started, drawn scene objects will be collected
 		void BeginDrawingScene();
@@ -222,12 +212,12 @@ namespace o2
 		static void OnActorPrototypeBroken(Actor* actor);
 
 	protected:
-		ActorsCacheMap mPrototypeLinksCache; // Cache of linked to prototypes actors
+		Map<ActorAssetRef, Vector<Actor*>> mPrototypeLinksCache; // Cache of linked to prototypes actors
 
-		SceneEditableObjectsVec mChangedObjects;  // Changed actors array
-		SceneEditableObjectsVec mEditableObjects; // All scene editable objects
+		Vector<SceneEditableObject*> mChangedObjects;  // Changed actors array
+		Vector<SceneEditableObject*> mEditableObjects; // All scene editable objects
 
-		SceneEditableObjectsVec mDrawnObjects;           // List of drawn on last frame editable objects
+		Vector<SceneEditableObject*> mDrawnObjects;           // List of drawn on last frame editable objects
 		bool                    mIsDrawingScene = false; // Sets true when started drawing scene, and false when not
 
 		friend class SceneEditableObject;

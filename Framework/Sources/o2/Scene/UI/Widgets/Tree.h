@@ -24,9 +24,6 @@ namespace o2
 		// Tree node expand states
 		enum class ExpandState { None, Expanding, Collaping };
 
-		typedef Vector<UnknownPtr>  UnknownPtrsVec;
-		typedef Vector<TreeNode*> TreeNodesVec;
-
 	public:
 		Function<UnknownPtr(UnknownPtr)>         getObjectParentDelegate;      // Getting objects' parent delegate
 		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;    // Getting objects' childs count delegate 
@@ -38,9 +35,9 @@ namespace o2
 		Function<void(TreeNode*)> onNodeDoubleClicked;      // Node double clicked event
 		Function<void(TreeNode*)> onNodeRightButtonClicked; // Node right button click event
 
-		Function<void(UnknownPtrsVec)> onObjectsSelectionChanged; // Objects selected event
+		Function<void(Vector<UnknownPtr>)> onObjectsSelectionChanged; // Objects selected event
 
-		Function<void(UnknownPtrsVec, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
+		Function<void(Vector<UnknownPtr>, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
 
 	public:
 		// Default constructor
@@ -62,7 +59,7 @@ namespace o2
 		void OnObjectRemoved(UnknownPtr object);
 
 		// Updates tree for changed objects
-		void OnObjectsChanged(const UnknownPtrsVec& objects);
+		void OnObjectsChanged(const Vector<UnknownPtr>& objects);
 
 		// Draws widget
 		void Draw() override;
@@ -92,7 +89,7 @@ namespace o2
 		Vector<UnknownPtr> GetSelectedObjects() const;
 
 		// Sets selected objects
-		void SetSelectedObjects(const UnknownPtrsVec& objects);
+		void SetSelectedObjects(const Vector<UnknownPtr>& objects);
 
 		// Selects object
 		void SelectObject(UnknownPtr object);
@@ -188,7 +185,6 @@ namespace o2
 
 	protected:
 		struct Node;
-		typedef Vector<Node*> NodesVec;
 
 		// --------------------
 		// Tree node definition
@@ -202,8 +198,8 @@ namespace o2
 			bool       isSelected = false; // Is node selected
 			bool       isExpanded = false; // Is node expanded
 
-			Node*    parent = nullptr; // Parent node definition
-			NodesVec childs;           // Children nodes definitions
+			Node*         parent = nullptr; // Parent node definition
+			Vector<Node*> childs;           // Children nodes definitions
 
 			bool  inserting = false; // Node insertion flag
 			float insertCoef = 0.0f; // Inserting coefficient (0...1)
@@ -232,7 +228,6 @@ namespace o2
 
 			bool operator==(const VisibleWidgetDef& other) const;
 		};
-		typedef Vector<VisibleWidgetDef> VisibleWidgetsDefsVec;
 
 	protected:
 		RearrangeType mRearrangeType = RearrangeType::Enabled; // Current available rearrange type @SERIALIZABLE
@@ -245,15 +240,15 @@ namespace o2
 		bool mIsNeedUdateLayout = false;        // Is layout needs to rebuild
 		bool mIsNeedUpdateVisibleNodes = false; // In need to update visible nodes
 
-		NodesVec mAllNodes; // All expanded nodes definitions
+		Vector<Node*> mAllNodes; // All expanded nodes definitions
 
-		UnknownPtrsVec mSelectedObjects; // Selected objects
-		NodesVec       mSelectedNodes;   // Selected nodes definitions
+		Vector<UnknownPtr> mSelectedObjects; // Selected objects
+		Vector<Node*>      mSelectedNodes;   // Selected nodes definitions
 
-		TreeNodesVec mNodeWidgetsBuf; // Nodes widgets buffer
-		NodesVec     mNodesBuf;       // Nodes buffer
+		Vector<TreeNode*> mNodeWidgetsBuf; // Nodes widgets buffer
+		Vector<Node*>     mNodesBuf;       // Nodes buffer
 
-		NodesVec mVisibleNodes;           // Visible nodes
+		Vector<Node*> mVisibleNodes;           // Visible nodes
 		int      mMinVisibleNodeIdx = 0;  // Minimal visible node index
 		int      mMaxVisibleNodeIdx = -1; // Maximum visible node index
 
@@ -265,14 +260,14 @@ namespace o2
 		RectF     mCurrentHoverRect;        // Current selection rectangle (for smoothing)
 		RectF     mTargetHoverRect;         // Target selection rectangle (over selected item)	
 
-		bool           mIsDraggingNodes = false;       // Is nodes moving by cursor
-		TreeNode*      mFakeDragNode = nullptr;        // Dragging node
-		Vec2F          mDragOffset;                    // Offset from cursor to dragging node's center
-		TreeNode*      mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
-		UnknownPtrsVec mBeforeDragSelectedItems;       // Before drag begin selection
-		bool           mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
+		bool               mIsDraggingNodes = false;       // Is nodes moving by cursor
+		TreeNode*          mFakeDragNode = nullptr;        // Dragging node
+		Vec2F              mDragOffset;                    // Offset from cursor to dragging node's center
+		TreeNode*          mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
+		Vector<UnknownPtr> mBeforeDragSelectedItems;       // Before drag begin selection
+		bool               mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
 
-		UnknownPtrsVec mExpandedObjects; // Expanded objects
+		Vector<UnknownPtr> mExpandedObjects; // Expanded objects
 
 		ExpandState mExpandingNodeState = ExpandState::None; // Expanding node state
 		int         mExpandingNodeIdx = -1;                  // Current expanding node index. -1 if no expanding node
@@ -300,7 +295,7 @@ namespace o2
 		
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
-		VisibleWidgetsDefsVec mVisibleWidgetsCache; // Visible widgets cache
+		Vector<VisibleWidgetDef> mVisibleWidgetsCache; // Visible widgets cache
 
 	protected:
 		// Copies data of actor from other to this
@@ -337,10 +332,10 @@ namespace o2
 		virtual void OnNodeRBClick(TreeNode* nodeWidget);
 
 		// It is called when list of selected objects was changed
-		virtual void OnNodesSelectionChanged(UnknownPtrsVec objects);
+		virtual void OnNodesSelectionChanged(Vector<UnknownPtr> objects);
 
 		// It is called when objects was dragged in new parent in position next of prevObject
-		virtual void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject);
+		virtual void OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject);
 
 // ISelectableDragableObjectsGroup implementation
 
@@ -389,7 +384,7 @@ namespace o2
 		virtual void UpdateNodesStructure();
 
 		// Inserts node to hierarchy
-		int InsertNodes(Node* parentNode, int position, NodesVec* newNodes = nullptr);
+		int InsertNodes(Node* parentNode, int position, Vector<Node*>* newNodes = nullptr);
 
 		// Removes node from hierarchy
 		void RemoveNodes(Node* parentNode);
@@ -650,7 +645,7 @@ CLASS_METHODS_META(o2::Tree)
 
 	PUBLIC_FUNCTION(void, OnObjectCreated, UnknownPtr, UnknownPtr);
 	PUBLIC_FUNCTION(void, OnObjectRemoved, UnknownPtr);
-	PUBLIC_FUNCTION(void, OnObjectsChanged, const UnknownPtrsVec&);
+	PUBLIC_FUNCTION(void, OnObjectsChanged, const Vector<UnknownPtr>&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
@@ -660,7 +655,7 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(void, ExpandAll);
 	PUBLIC_FUNCTION(void, CollapseAll);
 	PUBLIC_FUNCTION(Vector<UnknownPtr>, GetSelectedObjects);
-	PUBLIC_FUNCTION(void, SetSelectedObjects, const UnknownPtrsVec&);
+	PUBLIC_FUNCTION(void, SetSelectedObjects, const Vector<UnknownPtr>&);
 	PUBLIC_FUNCTION(void, SelectObject, UnknownPtr);
 	PUBLIC_FUNCTION(void, SelectAndHightlightObject, UnknownPtr);
 	PUBLIC_FUNCTION(void, DeselectObject, UnknownPtr);
@@ -702,8 +697,8 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnNodeDblClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnNodeRBClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
-	PROTECTED_FUNCTION(void, OnDraggedObjects, UnknownPtrsVec, UnknownPtr, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
+	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<UnknownPtr>, UnknownPtr, UnknownPtr);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
 	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);
@@ -718,7 +713,7 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, UpdateHighlighting, float);
 	PROTECTED_FUNCTION(void, UpdatePressedNodeExpand, float);
 	PROTECTED_FUNCTION(void, UpdateNodesStructure);
-	PROTECTED_FUNCTION(int, InsertNodes, Node*, int, NodesVec*);
+	PROTECTED_FUNCTION(int, InsertNodes, Node*, int, Vector<Node*>*);
 	PROTECTED_FUNCTION(void, RemoveNodes, Node*);
 	PROTECTED_FUNCTION(Node*, CreateNode, UnknownPtr, Node*);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);

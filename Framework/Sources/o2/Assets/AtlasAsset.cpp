@@ -115,7 +115,7 @@ namespace o2
 		return !mMeta->IsEqual(other.mMeta);
 	}
 
-	AssetInfosVec AtlasAsset::GetImages() const
+	Vector<AssetInfo> AtlasAsset::GetImages() const
 	{
 		return mImagesAssetsInfos;
 	}
@@ -129,7 +129,7 @@ namespace o2
 		return res;
 	}
 
-	AtlasAsset::PagesVec AtlasAsset::GetPages() const
+	Vector<AtlasAsset::Page> AtlasAsset::GetPages() const
 	{
 		return mPages;
 	}
@@ -171,7 +171,7 @@ namespace o2
 
 	String AtlasAsset::GetPageTextureFileName(const String& atlasPath, UInt pageIdx)
 	{
-		return o2Assets.GetDataPath() + atlasPath + (String)pageIdx + ".png";
+		return o2Assets.GetBuiltAssetsPath() + atlasPath + (String)pageIdx + ".png";
 	}
 
 	TextureRef AtlasAsset::GetPageTextureRef(UID atlasId, UInt pageIdx)

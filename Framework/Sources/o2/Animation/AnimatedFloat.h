@@ -12,9 +12,7 @@ namespace o2
 	{
 	public:
 		typedef float ValueType;
-
 		typedef Curve::Key Key;
-		typedef Vector<Key> KeysVec;
 
 	public:
 		PROPERTIES(AnimatedValue<float>);
@@ -22,7 +20,7 @@ namespace o2
 		SETTER(float*, target, SetTarget);                            // Bind target setter
 		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
 		SETTER(IValueProxy<float>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
+		PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant);          // Keys property
 
 	public:
 		Curve curve; // Animation curve @SERIALIZABLE
@@ -111,10 +109,10 @@ namespace o2
 		int FindKeyIdx(UInt64 uid) const;
 
 		// Returns keys array
-		const KeysVec& GetKeys() const;
+		const Vector<Key>& GetKeys() const;
 
 		// Sets keys
-		void SetKeys(const KeysVec& keys);
+		void SetKeys(const Vector<Key>& keys);
 
 		// Smooths key at position
 		void SmoothKey(float position, float smooth);
@@ -155,7 +153,7 @@ namespace o2
 		void Evaluate() override;
 
 		// Returns keys (for property)
-		KeysVec GetKeysNonContant();
+		Vector<Key> GetKeysNonContant();
 
 		// It is called when curve updated keys and calculated duration
 		void OnCurveChanged();
@@ -220,8 +218,8 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
-	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
+	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, Parametric, float, float, float, float, float, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, EaseIn, float, float, float);
@@ -229,7 +227,7 @@ CLASS_METHODS_META(o2::AnimatedValue<float>)
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, EaseInOut, float, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<float>, Linear, float, float, float);
 	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, OnCurveChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);

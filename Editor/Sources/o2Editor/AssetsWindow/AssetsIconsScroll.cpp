@@ -193,7 +193,7 @@ namespace Editor
 		prevIcons.ForEach([&](auto x) { FreeAssetIconToPool(x); });
 		mGrid->RemoveAllChildren(false);
 
-		AssetInfosVec folderAssetsInfos;
+		Vector<AssetInfo> folderAssetsInfos;
 		if (mCurrentPath != "")
 			folderAssetsInfos = FolderAssetRef(mCurrentPath)->GetContainingAssetsInfos();
 		else

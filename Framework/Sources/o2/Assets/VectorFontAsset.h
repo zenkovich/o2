@@ -15,8 +15,6 @@ namespace o2
 	public:
 		class MetaInfo;
 
-		typedef Vector<VectorFont::Effect*> EffectsVec;
-
 	public:
 		PROPERTIES(VectorFontAsset);
 		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
@@ -38,7 +36,7 @@ namespace o2
 		MetaInfo* GetMeta() const;
 
 		// Returns font effects array 
-		const EffectsVec& GetEffects() const;
+		const Vector<VectorFont::Effect*>& GetEffects() const;
 
 		// Adds effect to font
 		void AddEffect(VectorFont::Effect* effect);
@@ -77,7 +75,7 @@ namespace o2
 			SERIALIZABLE(MetaInfo);
 
 		protected:
-			EffectsVec mEffects; // Font effects array @SERIALIZABLE
+			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE
 
 			friend class VectorFontAsset;
 		};
@@ -183,7 +181,7 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 {
 
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
-	PUBLIC_FUNCTION(const EffectsVec&, GetEffects);
+	PUBLIC_FUNCTION(const Vector<VectorFont::Effect*>&, GetEffects);
 	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
 	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
 	PUBLIC_FUNCTION(void, RemoveAllEffects);

@@ -11,19 +11,17 @@ namespace o2
 	// ---------------------------------------------
 	class LongList: public ScrollArea
 	{
-	public:
-		typedef Vector<UnknownType*> UnknownsVec;
 
 	public:
 		PROPERTIES(LongList);
 		PROPERTY(int, selectedItemPos, SelectItemAt, GetSelectedItemPosition); // Selected item position property	
 
 	public:
-		Function<void(int)> onFocused;         // Select item position event
+		Function<void(int)> onFocused; // Select item position event
 
-		Function<int()>                       getItemsCountFunc; // Items count getting function
-		Function<UnknownsVec(int, int)>       getItemsRangeFunc; // Items getting in range function
-		Function<void(Widget*, UnknownType*)> setupItemFunc;     // Setup item widget function
+		Function<int()>                          getItemsCountFunc; // Items count getting function
+		Function<Vector<UnknownType*>(int, int)> getItemsRangeFunc; // Items getting in range function
+		Function<void(Widget*, UnknownType*)>    setupItemFunc;     // Setup item widget function
 
 	public:
 	    // Default constructor
@@ -86,26 +84,26 @@ namespace o2
 		SERIALIZABLE(LongList);
 
 	protected:
-		Widget*         mItemSample = nullptr;                    // Item sample widget @SERIALIZABLE
+		Widget* mItemSample = nullptr; // Item sample widget @SERIALIZABLE
 
-		Sprite*           mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
-		Sprite*           mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
-		Layout            mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
-		Layout            mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
-													    
-		int               mMinVisibleItemIdx = -1;                  // Visible item with minimal index
-		int               mMaxVisibleItemIdx = -1;                  // Visible item with maximal index
-		int               mSelectedItem = -1;                       // Position of current selected item (-1 if no item isn't selected)
-													    
-		RectF             mCurrentSelectionRect;                    // Current selection rectangle (for smoothing)
-		RectF             mTargetSelectionRect;                     // Target selection rectangle (over selected item)
-		RectF             mCurrentHoverRect;                        // Current hover rectangle (for smoothing)
-		RectF             mTargetHoverRect;                         // Target hover rectangle (over selected item)
-													    
-		Vec2F             mLastHoverCheckCursor;                    // Last cursor position on hover check
-		Vec2F             mLastSelectCheckCursor;                   // Last cursor position on selection check
-													    
-		WidgetsVec        mItemsPool;                               // Items pool
+		Sprite* mSelectionDrawable = nullptr;             // Selection sprite @SERIALIZABLE
+		Sprite* mHoverDrawable = nullptr;                 // Item hover drawable @SERIALIZABLE
+		Layout  mSelectionLayout = Layout::BothStretch(); // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Layout  mHoverLayout = Layout::BothStretch();     // Hover layout, result selection area depends on selected item @SERIALIZABLE
+					 						    
+		int mMinVisibleItemIdx = -1; // Visible item with minimal index
+		int mMaxVisibleItemIdx = -1; // Visible item with maximal index
+		int mSelectedItem = -1;      // Position of current selected item (-1 if no item isn't selected)
+					 						    
+		RectF mCurrentSelectionRect; // Current selection rectangle (for smoothing)
+		RectF mTargetSelectionRect;  // Target selection rectangle (over selected item)
+		RectF mCurrentHoverRect;     // Current hover rectangle (for smoothing)
+		RectF mTargetHoverRect;      // Target hover rectangle (over selected item)
+					 						    
+		Vec2F mLastHoverCheckCursor;  // Last cursor position on hover check
+		Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
+					 						    
+		Vector<Widget*> mItemsPool; // Items pool
 
 	protected:
 		// Copies data of actor from other to this

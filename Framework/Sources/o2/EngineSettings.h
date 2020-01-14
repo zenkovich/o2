@@ -46,17 +46,26 @@ bool IsReleaseBuild();
 // Building assets before launching app
 bool IsAssetsPrebuildEnabled();
 
-// Assets path. Relative from project path
-const char* GetAssetsPath();
-
-// Data path with built assets. Relative from executable
-const char* GetDataPath();
-
 // Basic atlas path (from assets path)
 const char* GetBasicAtlasPath();
 
-// Data assets tree path
-const char* GetDataAssetsTreePath();
+// Assets path. Relative from project path
+const char* GetAssetsPath();
+
+// Built assets path with built assets. Relative from executable
+const char* GetBuiltAssetsPath();
+
+// Built assets assets tree path
+const char* GetBuiltAssetsTreePath();
+
+// Editor's assets path. Relative from project path
+const char* GetEditorAssetsPath();
+
+// Editor's built assets path with built assets. Relative from executable
+const char* GetEditorBuiltAssetsPath();
+
+// Editor's built assets assets tree path
+const char* GetEditorBuiltAssetsTreePath();
 
 
 // ----------------------

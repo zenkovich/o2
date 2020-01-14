@@ -99,7 +99,7 @@ namespace o2
 
 	void Render::CheckTexturesUnloading()
 	{
-		TexturesVec unloadTextures;
+		Vector<Texture*> unloadTextures;
 		for (auto texture : mTextures)
 			if (texture->mRefs.Count() == 0)
 				unloadTextures.Add(texture);
@@ -109,7 +109,7 @@ namespace o2
 
 	void Render::CheckFontsUnloading()
 	{
-		FontsVec unloadFonts;
+		Vector<Font*> unloadFonts;
 		for (auto font : mFonts)
 			if (font->mRefs.Count() == 0)
 				unloadFonts.Add(font);
@@ -443,7 +443,7 @@ namespace o2
 		return (RectI)(mStackScissors.Last().mSummaryScissorRect);
 	}
 
-	const Render::StackScissorVec& Render::GetScissorsStack() const
+	const Vector<Render::ScissorStackEntry>& Render::GetScissorsStack() const
 	{
 		return mStackScissors;
 	}
@@ -544,7 +544,7 @@ namespace o2
 		return mDrawingDepth;
 	}
 
-	const Render::ScissorInfosVec& Render::GetScissorInfos() const
+	const Vector<Render::ScissorInfo>& Render::GetScissorInfos() const
 	{
 		return mScissorInfos;
 	}
@@ -568,14 +568,14 @@ namespace o2
 			mScissorRect == other.mScissorRect;
 	}
 
-	Render::ScissorStackItem::ScissorStackItem()
+	Render::ScissorStackEntry::ScissorStackEntry()
 	{}
 
-	Render::ScissorStackItem::ScissorStackItem(const RectI& rect, const RectI& summaryRect, bool renderTarget /*= false*/) :
+	Render::ScissorStackEntry::ScissorStackEntry(const RectI& rect, const RectI& summaryRect, bool renderTarget /*= false*/) :
 		mScrissorRect(rect), mSummaryScissorRect(summaryRect), mRenderTarget(renderTarget)
 	{}
 
-	bool Render::ScissorStackItem::operator==(const ScissorStackItem& other) const
+	bool Render::ScissorStackEntry::operator==(const ScissorStackEntry& other) const
 	{
 		return mScrissorRect == other.mScrissorRect;
 	}

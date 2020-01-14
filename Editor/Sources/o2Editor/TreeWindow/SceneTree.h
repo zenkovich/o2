@@ -116,7 +116,7 @@ namespace Editor
 		void OnNodeDblClick(TreeNode* nodeWidget) override;
 
 		// It is called when objects was dragged in new parent in position next of prevObject
-		void OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject) override;
+		void OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject) override;
 
 		// It is called when object was created
 		void OnObjectCreated(SceneEditableObject* object);
@@ -143,7 +143,7 @@ namespace Editor
 		void LockObjectsGroupReleased(bool value);
 
 		// It is called when list of selected objects was changed
-		void OnNodesSelectionChanged(UnknownPtrsVec objects) override;
+		void OnNodesSelectionChanged(Vector<UnknownPtr> objects) override;
 
 		// It is called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
@@ -255,7 +255,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
 	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnNodeDblClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnDraggedObjects, UnknownPtrsVec, UnknownPtr, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<UnknownPtr>, UnknownPtr, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectDestroing, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectsChanged, const SceneEditableObjsVec&);
@@ -264,7 +264,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PROTECTED_FUNCTION(void, EnableObjectsGroupReleased, bool);
 	PROTECTED_FUNCTION(void, LockObjectsGroupPressed, bool);
 	PROTECTED_FUNCTION(void, LockObjectsGroupReleased, bool);
-	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
+	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);

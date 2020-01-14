@@ -255,7 +255,7 @@ namespace Editor
 			mAnimation->AddAnimationValueNoType(propertyNode->mData->path);
 	}
 
-	void AnimationPropertiesTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
 	{
 
 	}

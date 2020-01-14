@@ -20,7 +20,7 @@ namespace o2
 	void AtlasAssetConverter::ConvertAsset(const AssetTree::AssetNode& node)
 	{
 		String sourceAssetPath = o2Assets.GetAssetsPath() + node.path;
-		String buildedAssetPath = o2Assets.GetDataPath() + node.path;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 		String sourceAssetMetaPath = sourceAssetPath + ".meta";
 		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
@@ -32,7 +32,7 @@ namespace o2
 
 	void AtlasAssetConverter::RemoveAsset(const AssetTree::AssetNode& node)
 	{
-		String buildedAssetPath = o2Assets.GetDataPath() + node.path;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
 		DataNode atlasData;
@@ -48,8 +48,8 @@ namespace o2
 
 	void AtlasAssetConverter::MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo)
 	{
-		String fullPathFrom = o2Assets.GetDataPath() + nodeFrom.path;
-		String fullPathTo = o2Assets.GetDataPath() + nodeTo.path;
+		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
+		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
 		String fullMetaPathFrom = fullPathFrom + ".meta";
 		String fullMetaPathTo = fullPathTo + ".meta";
 
@@ -125,10 +125,10 @@ namespace o2
 		DataNode atlasData;
 		atlasData.LoadFromFile(mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path);
 
-		ImagesVec lastImages;
+		Vector<Image> lastImages;
 		lastImages = atlasData["AllImages"];
 
-		ImagesVec currentImages;
+		Vector<Image> currentImages;
 		const Type* imageType = &TypeOf(ImageAsset);
 		UID atlasId = atlasInfo->meta->ID();
 		for (auto assetInfo : mAssetsBuilder->mBuiltAssetsTree.mAllAssets)
@@ -152,7 +152,7 @@ namespace o2
 		return false;
 	}
 
-	bool AtlasAssetConverter::IsAtlasNeedRebuild(ImagesVec& currentImages, ImagesVec& lastImages)
+	bool AtlasAssetConverter::IsAtlasNeedRebuild(Vector<Image>& currentImages, Vector<Image>& lastImages)
 	{
 		if (currentImages.Count() != lastImages.Count())
 			return true;
@@ -189,7 +189,7 @@ namespace o2
 		return false;
 	}
 
-	void AtlasAssetConverter::RebuildAtlas(AssetTree::AssetNode* atlasInfo, ImagesVec& images)
+	void AtlasAssetConverter::RebuildAtlas(AssetTree::AssetNode* atlasInfo, Vector<Image>& images)
 	{
 		auto meta = (AtlasAsset::MetaInfo*)atlasInfo->meta;
 
@@ -197,7 +197,7 @@ namespace o2
 		float imagesBorder = (float)meta->mBorder;
 
 		// Initialize pack images
-		ImagePackDefsVec packImages;
+		Vector<ImagePackDef> packImages;
 		for (auto img : images)
 		{
 			// Find image info
@@ -210,7 +210,7 @@ namespace o2
 				continue;
 			}
 
-			String assetFullPath = mAssetsBuilder->mSourceAssetsPath + imgInfo->path;
+			String assetFullPath = mAssetsBuilder->GetSourceAssetsPath() + imgInfo->path;
 
 			// Load bitmap
 			Bitmap* bitmap = mnew Bitmap();
@@ -260,7 +260,7 @@ namespace o2
 		}
 
 		// Save image assets data and fill pages
-		AssetInfosVec atlasImagesInfos;
+		Vector<AssetInfo> atlasImagesInfos;
 		for (auto imgDef : packImages)
 		{
 			imgDef.mPackRect->rect.left += imagesBorder;
@@ -282,7 +282,7 @@ namespace o2
 		// Save pages bitmaps
 		for (int i = 0; i < pagesCount; i++)
 		{
-			resAtlasBitmaps[i]->Save(mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path + (String)i + ".png",
+			resAtlasBitmaps[i]->Save(mAssetsBuilder->GetBuiltAssetsPath() + atlasInfo->path + (String)i + ".png",
 									 Bitmap::ImageType::Png);
 
 			delete resAtlasBitmaps[i];
@@ -294,7 +294,7 @@ namespace o2
 		atlasData["AllImages"] = images;
 		atlasData["mImagesAssetsInfos"] = atlasImagesInfos;
 
-		String atlasFullPath = mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path;
+		String atlasFullPath = mAssetsBuilder->GetBuiltAssetsPath() + atlasInfo->path;
 		atlasData.SaveToFile(atlasFullPath);
 		o2FileSystem.SetFileEditDate(atlasFullPath, atlasInfo->time);
 	}
@@ -304,14 +304,14 @@ namespace o2
 		DataNode imgData;
 		imgData["mAtlasPage"] = imgDef.mPackRect->page;
 		imgData["mAtlasRect"] = (RectI)(imgDef.mPackRect->rect);
-		String imageFullPath = mAssetsBuilder->mBuiltAssetsPath + imgDef.mAssetInfo->path;
+		String imageFullPath = mAssetsBuilder->GetBuiltAssetsPath() + imgDef.mAssetInfo->path;
 		imgData.SaveToFile(imageFullPath);
 		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.mAssetInfo->time);
 
 		DataNode metaData;
 		metaData = imgDef.mAssetInfo->meta;
-		metaData.SaveToFile(mAssetsBuilder->mBuiltAssetsPath + imgDef.mAssetInfo->path + ".meta");
-		metaData.SaveToFile(mAssetsBuilder->mSourceAssetsPath + imgDef.mAssetInfo->path + ".meta");
+		metaData.SaveToFile(mAssetsBuilder->GetBuiltAssetsPath() + imgDef.mAssetInfo->path + ".meta");
+		metaData.SaveToFile(mAssetsBuilder->GetSourceAssetsPath() + imgDef.mAssetInfo->path + ".meta");
 	}
 
 	AtlasAssetConverter::Image::Image(UID id, const TimeStamp& time):

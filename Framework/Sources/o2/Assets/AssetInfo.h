@@ -35,7 +35,6 @@ namespace o2
 		// Completion deserialization callback, reads asset type name
 		void OnDeserialized(const DataNode& node) override;
 	};
-	typedef Vector<AssetInfo> AssetInfosVec;
 }
 
 CLASS_BASES_META(o2::AssetInfo)

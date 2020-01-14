@@ -16,9 +16,6 @@ namespace o2
 	class AssetsBuilder
 	{
 	public:
-		typedef Vector<UID> AssetsIdsVec;
-
-	public:
 		// Default constructor
 		AssetsBuilder();
 
@@ -26,22 +23,26 @@ namespace o2
 		~AssetsBuilder();
 
 		// Builds asset from assets path to dataAssetsPath. Removes all builded assets if forcible is true
-		AssetsIdsVec BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
+		Vector<UID> BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
+
+		// Returns source assets path in building
+		const String& GetSourceAssetsPath() const;
+
+		// Returns built assets path in building
+		const String& GetBuiltAssetsPath() const;
 
 	protected:
-		typedef Map<const Type*, IAssetConverter*> ConvertersMap;
-
 		LogStream* mLog; // Asset builder log stream
 
 		String    mSourceAssetsPath; // Source assets path
 		AssetTree mSourceAssetsTree; // Source assets tree
-		String    mBuiltAssetsPath;  // Builded assets path
-		AssetTree mBuiltAssetsTree;  // Builded assets tree
+		String    mBuiltAssetsPath;  // Built assets path
+		AssetTree mBuiltAssetsTree;  // Built assets tree
 
-		AssetTree::AssetsVec mModifiedAssets; // Modified assets infos
+		AssetTree::Vector<AssetNode*> mModifiedAssets; // Modified assets infos
 
-		ConvertersMap    mAssetConverters;   // Assets converters by type
-		StdAssetConverter mStdAssetConverter; // Standard assets converter
+		Map<const Type*, IAssetConverter*> mAssetConverters;   // Assets converters by type
+		StdAssetConverter                  mStdAssetConverter; // Standard assets converter
 
 	protected:
 		// Initializes converters
@@ -57,16 +58,16 @@ namespace o2
 		void CreateMissingMetas();
 
 		// Searching and removing assets
-		AssetsIdsVec ProcessRemovedAssets();
+		Vector<UID> ProcessRemovedAssets();
 
 		// Searching modified and moved assets
-		AssetsIdsVec ProcessModifiedAssets();
+		Vector<UID> ProcessModifiedAssets();
 
 		// Searches new assets
-		AssetsIdsVec ProcessNewAssets();
+		Vector<UID> ProcessNewAssets();
 
 		// Launches converters post process
-		AssetsIdsVec ConvertersPostProcess();
+		Vector<UID> ConvertersPostProcess();
 
 		// Saving data assets tree
 		void SaveAssetsTree();

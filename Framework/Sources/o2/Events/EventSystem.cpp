@@ -226,9 +226,9 @@ namespace o2
 
 	bool EventSystem::eventsListenersEnabledByDefault = true;
 
-	EventSystem::CursorAreaEventsListenersVec EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
+	Vector<CursorAreaEventsListener*> EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
 	{
-		CursorAreaEventsListenersVec res;
+		Vector<CursorAreaEventsListener*> res;
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
 		for (auto listener : mAreaCursorListeners)
 		{

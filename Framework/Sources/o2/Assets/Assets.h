@@ -23,9 +23,6 @@ namespace o2
 	class Assets: public Singleton<Assets>
 	{
 	public:
-		typedef Map<String, const Type*> TypesExtsMap;
-
-	public:
 		PROPERTIES(Assets);
 		GETTER(String, assetsPath, GetAssetsPath); // Assets path getter
 
@@ -43,7 +40,7 @@ namespace o2
 		String GetAssetsPath() const;
 
 		// Returns data path
-		String GetDataPath() const;
+		String GetBuiltAssetsPath() const;
 
 		// Returns asset path by asset id
 		String GetAssetPath(UID id) const;
@@ -58,7 +55,7 @@ namespace o2
 		AssetInfo GetAssetInfo(const String& path) const;
 
 		// Returns assets types and extensions dictionary. Key - extension, value - type of asset
-		const TypesExtsMap GetAssetsExtensionsTypes() const;
+		const Map<String, const Type*> GetAssetsExtensionsTypes() const;
 
 		// Returns standard asset type
 		const Type* GetStdAssetType() const;
@@ -156,7 +153,6 @@ namespace o2
 
 			~AssetCache();
 		};
-		typedef Vector<AssetCache*> AssetsCachesVec;
 
 		String mAssetsFolderPath; // Project assets path
 		String mDataFolderPath;   // Project data (builded assets) path
@@ -164,10 +160,10 @@ namespace o2
 		AssetTree      mAssetsTree;    // Assets information tree
 		LogStream*     mLog;           // Log stream
 		AssetsBuilder* mAssetsBuilder; // Assets builder
-		TypesExtsMap   mAssetsTypes;   // Assets types and extensions dictionary
+		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary
 		const Type*    mStdAssetType;  // Standard asset type
 
-		AssetsCachesVec mCachedAssets; // Current cached assets
+		Vector<AssetCache*> mCachedAssets; // Current cached assets
 
 	protected:
 		// Loads asset infos

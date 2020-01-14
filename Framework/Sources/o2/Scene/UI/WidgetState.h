@@ -65,7 +65,6 @@ namespace o2
 
 		friend class Widget;
 	};
-	typedef Vector<WidgetState*>  StatesVec;
 }
 
 CLASS_BASES_META(o2::WidgetState)

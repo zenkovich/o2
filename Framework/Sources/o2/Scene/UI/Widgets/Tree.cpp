@@ -182,7 +182,7 @@ namespace o2
 		SetLayoutDirty();
 
 		const int widgetsBufferInitialSize = 20;
-		TreeNodesVec widgets;
+		Vector<TreeNode*> widgets;
 		for (int i = 0; i < widgetsBufferInitialSize; i++)
 			widgets.Add(CreateTreeNodeWidget());
 
@@ -390,12 +390,12 @@ namespace o2
 		onNodeRightButtonClicked(nodeWidget);
 	}
 
-	void Tree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	void Tree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
 	{
 		onObjectsSelectionChanged(objects);
 	}
 
-	void Tree::OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject)
+	void Tree::OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject)
 	{
 		onDraggedObjects(objects, newParent, prevObject);
 	}
@@ -622,7 +622,7 @@ namespace o2
 		return mSelectedObjects;
 	}
 
-	void Tree::SetSelectedObjects(const UnknownPtrsVec& objects)
+	void Tree::SetSelectedObjects(const Vector<UnknownPtr>& objects)
 	{
 		for (auto sel : mSelectedNodes)
 			sel->SetSelected(false);
@@ -786,7 +786,7 @@ namespace o2
 		mIsNeedUpdateView = true;
 	}
 
-	void Tree::OnObjectsChanged(const UnknownPtrsVec& objects)
+	void Tree::OnObjectsChanged(const Vector<UnknownPtr>& objects)
 	{
 		for (auto object : objects)
 		{
@@ -854,7 +854,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	int Tree::InsertNodes(Node* parentNode, int position, NodesVec* newNodes /*= nullptr*/)
+	int Tree::InsertNodes(Node* parentNode, int position, Vector<Node*>* newNodes /*= nullptr*/)
 	{
 		int initialPosition = position;
 
@@ -1177,7 +1177,7 @@ namespace o2
 			mExpandingNodeState = ExpandState::Expanding;
 		else
 		{
-			NodesVec newNodes;
+			Vector<Node*> newNodes;
 			InsertNodes(node, position, &newNodes);
 
 			float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
@@ -1663,7 +1663,7 @@ namespace o2
 		EndDragging(true);
 		OnSelectionChanged();
 
-		UnknownPtrsVec objects;
+		Vector<UnknownPtr> objects;
 		UnknownPtr targetParent = UnknownPtr();
 		UnknownPtr targetPrevObject = UnknownPtr();
 		Node* insertNodeCandidate = mInsertNodeCandidate ? mInsertNodeCandidate->mNodeDef : nullptr;

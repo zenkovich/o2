@@ -113,7 +113,7 @@ namespace o2
 		Timer t;
 
 		DataNode styleData;
-		styleData.LoadFromFile(o2Assets.GetDataPath() + path);
+		styleData.LoadFromFile(o2Assets.GetBuiltAssetsPath() + path);
 
 		o2Debug.Log("Loaded file " + path + " for " + String(t.GetDeltaTime()) + "sec");
 
@@ -332,7 +332,7 @@ namespace o2
 		mTopWidgets.Add(widget);
 	}
 
-	const UIManager::WidgetsVec& UIManager::GetWidgetStyles() const
+	const UIManager::Vector<Widget*>& UIManager::GetWidgetStyles() const
 	{
 		return mStyleSamples;
 	}

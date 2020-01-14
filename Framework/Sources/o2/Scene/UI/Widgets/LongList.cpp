@@ -249,7 +249,7 @@ namespace o2
 		Vector<Widget*> itemsWidgets;
 		itemsWidgets.Resize(mMaxVisibleItemIdx - mMinVisibleItemIdx + 1);
 
-		WidgetsVec removingItems;
+		Vector<Widget*> removingItems;
 		for (int i = lastMinItemIdx; i <= lastMaxItemIdx; i++)
 		{
 			if (i < 0)

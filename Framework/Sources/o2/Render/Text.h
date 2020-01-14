@@ -170,14 +170,13 @@ namespace o2
 			 // Equals operator
 				bool operator==(const Symbol& other) const;
 			};
-			typedef Vector<Symbol> SymbolDefsVec;
 
 			// -------------------------
 			// Line definition structure
 			// -------------------------
 			struct Line
 			{
-				SymbolDefsVec mSymbols;       // Symbols in line
+				Vector<Symbol> mSymbols;       // Symbols in line
 				WString       mString;        // Line string
 				Vec2F         mSize;          // Size of line in pixels
 				Vec2F         mPosition;      // Position of line
@@ -192,22 +191,22 @@ namespace o2
 				// Equals operator
 				bool operator==(const Line& other) const;
 			};
-			typedef Vector<Line> LineDefsVec;
 
 		public:
-			FontRef     mFont;            // Font
-			int         mHeight;          // Text height
-			WString     mText;            // Text string
-			Vec2F       mPosition;        // Position, in pixels
-			Vec2F       mAreaSize;        // Area size, in pixels
-			Vec2F       mRealSize;        // Real text size
-			HorAlign    mHorAlign;        // Horizontal align
-			VerAlign    mVerAlign;        // Vertical align
-			bool        mWordWrap;        // True, when words wrapping
-			bool        mDotsEndings;     // Dots ending when overflow
-			float       mSymbolsDistCoef; // Characters distance coefficient, 1 is standard
-			float       mLinesDistCoef;   // Lines distance coefficient, 1 is standard
-			LineDefsVec mLines;           // Lines definitions
+			FontRef  mFont;            // Font
+			int      mHeight;          // Text height
+			WString  mText;            // Text string
+			Vec2F    mPosition;        // Position, in pixels
+			Vec2F    mAreaSize;        // Area size, in pixels
+			Vec2F    mRealSize;        // Real text size
+			HorAlign mHorAlign;        // Horizontal align
+			VerAlign mVerAlign;        // Vertical align
+			bool     mWordWrap;        // True, when words wrapping
+			bool     mDotsEndings;     // Dots ending when overflow
+			float    mSymbolsDistCoef; // Characters distance coefficient, 1 is standard
+			float    mLinesDistCoef;   // Lines distance coefficient, 1 is standard
+
+			Vector<Line> mLines; // Lines definitions
 
 		public:
 			// Calculating characters layout by parameters
@@ -220,8 +219,6 @@ namespace o2
 		};
 
 	protected:
-		typedef Vector<Mesh*> MeshesVec;
-
 		static const char* mBasicSymbolsPreset;
 		const UInt mMeshMaxPolyCount = 4096;
 
@@ -236,8 +233,8 @@ namespace o2
 		bool     mWordWrap;          // True, when words wrapping @SERIALIZABLE
 		bool     mDotsEndings;       // If true, text will end on '...' @SERIALIZABLE
 
-		MeshesVec mMeshes;        // Meshes vector
-		Basis     mLastTransform; // Last mesh update transformation
+		Vector<Mesh*> mMeshes;        // Meshes vector
+		Basis         mLastTransform; // Last mesh update transformation
 
 		SymbolsSet mSymbolsSet; // Symbols set definition
 

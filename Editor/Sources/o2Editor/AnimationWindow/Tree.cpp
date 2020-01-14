@@ -271,7 +271,7 @@ namespace Editor
 		mContextMenu->Show();
 	}
 
-	void AnimationTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	void AnimationTree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
 	{
 		mAnimationWindow->mHandlesSheet->DeselectAll();
 

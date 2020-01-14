@@ -204,7 +204,7 @@ namespace Editor
 		((SceneTreeNode*)nodeWidget)->EnableEditName();
 	}
 
-	void SceneTree::OnDraggedObjects(UnknownPtrsVec objects, UnknownPtr newParent, UnknownPtr prevObject)
+	void SceneTree::OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject)
 	{
 		SceneEditableObject* newParentEditableObject = (SceneEditableObject*)newParent;
 		SceneEditableObject* prevEditableObject = prevObject;
@@ -244,7 +244,7 @@ namespace Editor
 		o2EditorApplication.DoneAction(action);
 	}
 
-	void SceneTree::OnNodesSelectionChanged(UnknownPtrsVec objects)
+	void SceneTree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
 	{
 		onObjectsSelectionChanged(objects.Cast<SceneEditableObject*>());
 		Tree::OnNodesSelectionChanged(objects);

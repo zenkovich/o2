@@ -147,7 +147,6 @@ namespace o2
 		if (!SetFileTime(hFile, NULL, NULL, &lastWriteTime))
 		{
 			auto error = GetLastError();
-			printf("err %i\n", error);
 			CloseHandle(hFile);
 			return false;
 		}
@@ -172,7 +171,10 @@ namespace o2
 		if (extrPath == path)
 			return false;
 
-		return FolderCreate(extrPath, true);
+		if (!FolderCreate(extrPath, true))
+			return false;
+
+		return CreateDirectoryA(path.Data(), NULL) == TRUE;
 	}
 
 	bool FileSystem::FolderCopy(const String& from, const String& to) const

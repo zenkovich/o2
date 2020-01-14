@@ -81,8 +81,12 @@ namespace o2
 	{
 		mPath = path;
 
+		if (!o2FileSystem.IsFolderExist(path))
+			o2FileSystem.FolderCreate(path);
+
 		FolderInfo folderInfo = o2FileSystem.GetFolderInfo(path);
 		folderInfo.ClampPathNames();
+
 		LoadFolder(folderInfo, nullptr);
 	}
 
@@ -283,7 +287,7 @@ namespace o2
 	{
 		struct helper
 		{
-			static void Do(AssetsVec& assets, AssetsVec& children)
+			static void Do(Vector<AssetNode*>& assets, Vector<AssetNode*>& children)
 			{
 				assets.Add(children);
 

@@ -198,27 +198,27 @@ namespace o2
 		return &dummy;
 	}
 
-	const Input::CursorsVec& Input::GetCursors() const
+	const Vector<Input::Cursor>& Input::GetCursors() const
 	{
 		return mCursors;
 	}
 
-	const Input::CursorsVec& Input::GetReleasedCursors() const
+	const Vector<Input::Cursor>& Input::GetReleasedCursors() const
 	{
 		return mReleasedCursors;
 	}
 
-	Input::KeysVec const& Input::GetPressedKeys() const
+	Vector<Input::Key> const& Input::GetPressedKeys() const
 	{
 		return mPressedKeys;
 	}
 
-	Input::KeysVec const& Input::GetDownKeys() const
+	Vector<Input::Key> const& Input::GetDownKeys() const
 	{
 		return mDownKeys;
 	}
 
-	Input::KeysVec const& Input::GetReleasedKeys() const
+	Vector<Input::Key> const& Input::GetReleasedKeys() const
 	{
 		return mReleasedKeys;
 	}

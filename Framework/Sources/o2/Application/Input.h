@@ -26,9 +26,6 @@ namespace o2
 		struct Cursor;
 		struct Key;
 
-		typedef Vector<Cursor> CursorsVec;
-		typedef Vector<Key> KeysVec;
-
 	public:
 		PROPERTIES(Input);
 		GETTER(bool, cursorPressed, IsCursorPressed);            // Is cursor pressed at current frame getter
@@ -111,19 +108,19 @@ namespace o2
 		Cursor* GetCursor(CursorId id = 0);
 
 		// Returns cursors vector
-		const CursorsVec& GetCursors() const;
+		const Vector<Cursor>& GetCursors() const;
 
 		// Returns released cursors vector
-		const CursorsVec& GetReleasedCursors() const;
+		const Vector<Cursor>& GetReleasedCursors() const;
 
 		// Returns pressed keys
-		KeysVec const& GetPressedKeys() const;
+		Vector<Key> const& GetPressedKeys() const;
 
 		// Returns pressed keys
-		KeysVec const& GetDownKeys() const;
+		Vector<Key> const& GetDownKeys() const;
 
 		// Returns pressed keys
-		KeysVec const& GetReleasedKeys() const;
+		Vector<Key> const& GetReleasedKeys() const;
 
 		// Call it when preparing to update frame
 		void PreUpdate();
@@ -213,7 +210,6 @@ namespace o2
 			// Applies input message
 			virtual void Apply() = 0;
 		};
-		typedef Vector<IInputMsg*> InputMsgsVec;
 
 		struct InputCursorPressedMsg : public IInputMsg
 		{
@@ -260,16 +256,17 @@ namespace o2
 		};
 
 	protected:
-		InputMsgsVec mInputQueue; // Input messages queue
+		Vector<IInputMsg*> mInputQueue; // Input messages queue
 
-		KeysVec mPressedKeys;  // Pressed keys at current frame
-		KeysVec mDownKeys;     // Held down at current frame keys
-		KeysVec mReleasedKeys; // Released at current frame keys
+		Vector<Key> mPressedKeys;  // Pressed keys at current frame
+		Vector<Key> mDownKeys;     // Held down at current frame keys
+		Vector<Key> mReleasedKeys; // Released at current frame keys
 
-		CursorsVec mCursors;         // Cursors. First - main cursor
-		CursorsVec mReleasedCursors; // Released cursors. First - main cursor
-		Vec2F      mMainCursorPos;   // Main cursor position
-		Vec2F      mMainCursorDelta; // Main cursor delta
+		Vector<Cursor> mCursors;         // Cursors. First - main cursor
+		Vector<Cursor> mReleasedCursors; // Released cursors. First - main cursor
+
+		Vec2F mMainCursorPos;   // Main cursor position
+		Vec2F mMainCursorDelta; // Main cursor delta
 
 		float mMouseWheelDelta = 0; // Mouse wheel delta at current frame
 

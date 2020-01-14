@@ -169,12 +169,12 @@ namespace o2
 		return curve.ContainsKey(position);
 	}
 
-	const AnimatedValue<float>::KeysVec& AnimatedValue<float>::GetKeys() const
+	const Vector<AnimatedValue<float>::Key>& AnimatedValue<float>::GetKeys() const
 	{
 		return curve.GetKeys();
 	}
 
-	void AnimatedValue<float>::SetKeys(const KeysVec& keys)
+	void AnimatedValue<float>::SetKeys(const Vector<Key>& keys)
 	{
 		curve.SetKeys(keys);
 	}
@@ -189,7 +189,7 @@ namespace o2
 		return curve.GetKey(position);
 	}
 
-	AnimatedValue<float>::KeysVec AnimatedValue<float>::GetKeysNonContant()
+	Vector<AnimatedValue<float>::Key> AnimatedValue<float>::GetKeysNonContant()
 	{
 		return curve.GetKeys();
 	}

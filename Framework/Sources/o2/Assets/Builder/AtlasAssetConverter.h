@@ -55,7 +55,6 @@ namespace o2
 
 			SERIALIZABLE(Image);
 		};
-		typedef Vector<Image> ImagesVec;
 
 		// ------------------------
 		// Image packing definition
@@ -69,7 +68,6 @@ namespace o2
 			// Check equal operator
 			bool operator==(const ImagePackDef& other) const;
 		};
-		typedef Vector<ImagePackDef> ImagePackDefsVec;
 
 	protected:
 		// Checks images for attaching to base atlas
@@ -82,10 +80,10 @@ namespace o2
 		bool CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo);
 
 		// Returns true if atlas needs to rebuild
-		bool IsAtlasNeedRebuild(ImagesVec& currentImages, ImagesVec& lastImages);
+		bool IsAtlasNeedRebuild(Vector<Image>& currentImages, Vector<Image>& lastImages);
 
 		// Rebuilds atlas
-		void RebuildAtlas(AssetTree::AssetNode* atlasInfo, ImagesVec& images);
+		void RebuildAtlas(AssetTree::AssetNode* atlasInfo, Vector<Image>& images);
 
 		// Saves image asset data
 		void SaveImageAsset(ImagePackDef& imgDef);
@@ -113,8 +111,8 @@ CLASS_METHODS_META(o2::AtlasAssetConverter)
 	PROTECTED_FUNCTION(void, CheckBasicAtlas);
 	PROTECTED_FUNCTION(Vector<UID>, CheckRebuildingAtlases);
 	PROTECTED_FUNCTION(bool, CheckAtlasRebuilding, AssetTree::AssetNode*);
-	PROTECTED_FUNCTION(bool, IsAtlasNeedRebuild, ImagesVec&, ImagesVec&);
-	PROTECTED_FUNCTION(void, RebuildAtlas, AssetTree::AssetNode*, ImagesVec&);
+	PROTECTED_FUNCTION(bool, IsAtlasNeedRebuild, Vector<Image>&, Vector<Image>&);
+	PROTECTED_FUNCTION(void, RebuildAtlas, AssetTree::AssetNode*, Vector<Image>&);
 	PROTECTED_FUNCTION(void, SaveImageAsset, ImagePackDef&);
 }
 END_META;

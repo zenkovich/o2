@@ -32,9 +32,6 @@ namespace o2
 	// ---------------------------------------------------------------------------------------------
 	class Actor : virtual public ActorBase
 	{
-	public:
-		typedef Vector<Actor*> ActorsVec;
-		typedef Vector<Component*> ComponentsVec;
 
 	public:
 		PROPERTIES(Actor);
@@ -49,8 +46,8 @@ namespace o2
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
-		GETTER(ActorsVec, children, GetChildren);         // Children array getter
-		GETTER(ComponentsVec, components, GetComponents); // Components array getter
+		GETTER(Vector<Actor*>, children, GetChildren);         // Children array getter
+		GETTER(Vector<Component*>, components, GetComponents); // Components array getter
 
 		ACCESSOR(Actor*, child, String, GetChild, GetAllChilds);                 // Children accessor
 		ACCESSOR(Component*, component, String, GetComponent, GetAllComponents); // Component accessor by type name
@@ -81,7 +78,7 @@ namespace o2
 		Actor(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Constructor with components
-		Actor(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
+		Actor(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor
 		Actor(const Actor& other);
@@ -195,7 +192,7 @@ namespace o2
 		_type* FindChildByType(bool searchInChildren = true);
 
 		// Returns children array
-		ActorsVec GetChildren() const;
+		Vector<Actor*> GetChildren() const;
 
 		// Removes child and destroys him if needed
 		void RemoveChild(Actor* actor, bool release = true);
@@ -242,7 +239,7 @@ namespace o2
 		Vector<_type*> GetComponentsInChildren() const;
 
 		// Returns all components
-		ComponentsVec GetComponents() const;
+		Vector<Component*> GetComponents() const;
 
 		// Sets layer
 		void SetLayer(SceneLayer* layer);
@@ -373,8 +370,6 @@ namespace o2
 		SERIALIZABLE(Actor);
 
 	protected:
-		typedef Vector<ActorRef*> ActorRefsVec;
-
 		static ActorCreateMode mDefaultCreationMode;   // Default mode creation
 
 		SceneUID mId;   // Unique actor id
@@ -382,10 +377,10 @@ namespace o2
 
 		SceneLayer* mLayer = nullptr; // Scene layer @EXCLUDE_POINTER_SEARCH
 
-		Actor*    mParent = nullptr; // Parent actor @EXCLUDE_POINTER_SEARCH
-		ActorsVec mChildren;         // Children actors 
+		Actor*         mParent = nullptr; // Parent actor @EXCLUDE_POINTER_SEARCH
+		Vector<Actor*> mChildren;         // Children actors 
 
-		ComponentsVec mComponents; // Components vector 
+		Vector<Component*> mComponents; // Components vector 
 
 		bool mEnabled = true;               // Is actor enabled
 		bool mResEnabled = true;            // Is actor really enabled. 
@@ -396,7 +391,7 @@ namespace o2
 		bool mIsAsset = false; // Is this actor cached asset
 		UID  mAssetId;         // Source asset id
 
-		ActorRefsVec mReferences; // References to this actor
+		Vector<ActorRef*> mReferences; // References to this actor
 
 #if IS_EDITOR
 		ActorAssetRef mPrototype;               // Prototype asset
@@ -419,7 +414,7 @@ namespace o2
 		Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Constructor with components with transform
-		Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
+		Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor with transform
 		Actor(ActorTransform* transform, const Actor& other);
@@ -522,7 +517,7 @@ namespace o2
 		{
 			Actor*    actor;
 			Actor*    matchingChild;
-			ActorsVec allChildren;
+			Vector<Actor*> allChildren;
 
 			Vector<Actor**>     actorPointersFields;
 			Vector<Component**> componentPointersFields;
@@ -782,7 +777,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
 	PUBLIC_FUNCTION(Actor*, FindChild, const String&);
-	PUBLIC_FUNCTION(ActorsVec, GetChildren);
+	PUBLIC_FUNCTION(Vector<Actor*>, GetChildren);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChildren, bool);
 	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
@@ -791,7 +786,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Component*, GetComponent, const String&);
 	PUBLIC_FUNCTION(Component*, GetComponent, const Type*);
 	PUBLIC_FUNCTION(Component*, GetComponent, SceneUID);
-	PUBLIC_FUNCTION(ComponentsVec, GetComponents);
+	PUBLIC_FUNCTION(Vector<Component*>, GetComponents);
 	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
 	PUBLIC_FUNCTION(void, SetLayer, const String&);
 	PUBLIC_FUNCTION(SceneLayer*, GetLayer);

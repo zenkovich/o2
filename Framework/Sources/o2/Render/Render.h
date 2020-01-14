@@ -43,23 +43,21 @@ namespace o2
 
 			bool operator==(const ScissorInfo& other) const;
 		};
-		typedef Vector<ScissorInfo> ScissorInfosVec;
 
 		// --------------------------------
 		// Scissor clipping stack info item
 		// --------------------------------
-		struct ScissorStackItem
+		struct ScissorStackEntry
 		{
 			RectI mScrissorRect;       // Clipping scissor rectangle
 			RectI mSummaryScissorRect; // Real clipping rectangle: summary of top clipping rectangles
 			bool  mRenderTarget;       // Is render target turned on this step
 
-			ScissorStackItem();
-			ScissorStackItem(const RectI& rect, const RectI& summaryRect, bool renderTarget = false);
+			ScissorStackEntry();
+			ScissorStackEntry(const RectI& rect, const RectI& summaryRect, bool renderTarget = false);
 
-			bool operator==(const ScissorStackItem& other) const;
+			bool operator==(const ScissorStackEntry& other) const;
 		};
-		typedef Vector<ScissorStackItem> StackScissorVec;
 
 	public:
 		PROPERTIES(Render);
@@ -211,7 +209,7 @@ namespace o2
 		RectI GetResScissorRect() const;
 
 		// Returns scissors stack
-		const StackScissorVec& GetScissorsStack() const;
+		const Vector<ScissorStackEntry>& GetScissorsStack() const;
 
 		// Enabling scissor test
 		void EnableScissorTest(const RectI& rect);
@@ -264,13 +262,9 @@ namespace o2
 		float GetDrawingDepth();
 
 		// Returns scissor infos at current frame
-		const ScissorInfosVec& GetScissorInfos() const;
+		const Vector<ScissorInfo>& GetScissorInfos() const;
 
 	protected:
-		typedef Vector<Texture*> TexturesVec;
-		typedef Vector<Font*> FontsVec;
-		typedef Vector<Sprite*> SpritesVec;
-
 		PrimitiveType mCurrentPrimitiveType; // Type of drawing primitives for next DIP
 
 		Texture* mLastDrawTexture = nullptr; // Stored texture ptr from last DIP
@@ -282,8 +276,8 @@ namespace o2
 
 		LogStream* mLog; // Render log stream
 
-		TexturesVec mTextures; // Loaded textures
-		FontsVec    mFonts;    // Loaded fonts
+		Vector<Texture*> mTextures; // Loaded textures
+		Vector<Font*>    mFonts;    // Loaded fonts
 
 		Camera mCamera;            // Camera transformation
 		Vec2I  mResolution;        // Primary back buffer size
@@ -298,9 +292,9 @@ namespace o2
 		bool mStencilDrawing; // True, if drawing in stencil buffer
 		bool mStencilTest;    // True, if drawing with stencil test
 
-		ScissorInfosVec mScissorInfos;       // Scissor clipping depth infos vector
-		StackScissorVec mStackScissors;      // Stack of scissors clippings
-		bool            mClippingEverything; // Is everything clipped
+		Vector<ScissorInfo>       mScissorInfos;       // Scissor clipping depth infos vector
+		Vector<ScissorStackEntry> mStackScissors;      // Stack of scissors clippings
+		bool                      mClippingEverything; // Is everything clipped
 
 		TextureRef mCurrentRenderTarget; // Current render target. NULL if rendering in back buffer
 
@@ -308,7 +302,7 @@ namespace o2
 
 		FT_Library mFreeTypeLib; // FreeType library, for rendering fonts
 
-		SpritesVec mSprites; // All sprites
+		Vector<Sprite*> mSprites; // All sprites
 
 		UInt16*    mHardLinesIndexData; // Index data buffer
 		TextureRef mSolidLineTexture;   // Solid line texture

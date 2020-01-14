@@ -16,8 +16,6 @@ namespace o2
 	// ------------
 	class ToggleGroup
 	{
-	public:
-		typedef Vector<Toggle*> TogglesVec;
 		enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };
 
 	public:
@@ -38,18 +36,21 @@ namespace o2
 		void RemoveToggle(Toggle* toggle);
 
 		// Returns all toggles in group
-		const TogglesVec& GetToggles() const;
+		const Vector<Toggle*>& GetToggles() const;
 
 		// Returns toggled toggles in group
-		const TogglesVec& GetToggled() const;
+		const Vector<Toggle*>& GetToggled() const;
 
 	protected:
-		bool       mPressed = false;      // Is group in pressed state
-		bool       mPressedValue = false; // Group pressed value
-		TogglesVec mToggles;              // All toggles in group
-		TogglesVec mToggled;              // Toggled toggles in group
-		Toggle*    mOwner = nullptr;      // Owner toggle
-		Type       mType;                 // Toggle group type
+		bool mPressed = false;      // Is group in pressed state
+		bool mPressedValue = false; // Group pressed value
+
+		Vector<Toggle*> mToggles; // All toggles in group
+		Vector<Toggle*> mToggled; // Toggled toggles in group
+
+		Toggle* mOwner = nullptr; // Owner toggle
+
+		Type mType; // Toggle group type
 
 	protected:
 		// It is called when some toggle was toggled, 
@@ -62,16 +63,19 @@ namespace o2
 	{
 	public:
 		PROPERTIES(Toggle);
-		PROPERTY(bool, value, SetValue, GetValue);                             // Current state value property
-		PROPERTY(WString, caption, SetCaption, GetCaption);                    // Caption property. Searches text layer with name "caption" or creates them if he's not exist
+		PROPERTY(bool, value, SetValue, GetValue);                           // Current state value property
+		PROPERTY(WString, caption, SetCaption, GetCaption);                  // Caption property. Searches text layer with name "caption" or creates them if he's not exist
 		PROPERTY(ToggleGroup*, toggleGroup, SetToggleGroup, GetToggleGroup); // Toggle group property
 
-		ShortcutKeys             shortcut;       // Shortcut keys
+	public:
+		Function<void()>     onClick;        // Click event
+		Function<void(bool)> onToggle;       // Toggle event
+		Function<void(bool)> onToggleByUser; // Toggle by user event 
 
-		Function<void()>         onClick;        // Click event
-		Function<void(bool)>     onToggle;       // Toggle event
-		Function<void(bool)>     onToggleByUser; // Toggle by user event 
+	public:
+		ShortcutKeys shortcut;// Shortcut keys
 
+	public:
 		// Default constructor
 		Toggle();
 

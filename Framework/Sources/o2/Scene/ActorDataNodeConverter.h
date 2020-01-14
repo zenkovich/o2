@@ -42,13 +42,11 @@ namespace o2
 			}
 		};
 
-		typedef Vector<ActorDef> ActorDefsVec;
-		typedef Vector<Actor*> ActorsVec;
-
 	protected:
-		ActorDefsVec mUnresolvedActors;
-		ActorsVec    mNewActors;
-		int          mLockDepth = 0;
+		Vector<ActorDef> mUnresolvedActors;
+		Vector<Actor*>   mNewActors;
+
+		int mLockDepth = 0;
 
 	protected:
 		// Locks pointers resolving depth

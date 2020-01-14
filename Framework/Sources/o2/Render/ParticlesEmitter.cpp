@@ -359,7 +359,7 @@ namespace o2
 		mEffects.Add(effect);
 	}
 
-	const ParticlesEmitter::ParticleEffectsVec& ParticlesEmitter::GetEffects() const
+	const Vector<ParticlesEffect*>& ParticlesEmitter::GetEffects() const
 	{
 		return mEffects;
 	}
@@ -411,7 +411,7 @@ namespace o2
 		return mNumAliveParticles > 0;
 	}
 
-	const ParticlesEmitter::ParticlesVec& ParticlesEmitter::GetParticles() const
+	const Vector<Particle>& ParticlesEmitter::GetParticles() const
 	{
 		return mParticles;
 	}

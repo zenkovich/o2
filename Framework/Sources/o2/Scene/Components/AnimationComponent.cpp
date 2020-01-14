@@ -113,7 +113,7 @@ namespace o2
 		return nullptr;
 	}
 
-	const AnimationStatesVec& AnimationComponent::GetStates() const
+	const Vector<AnimationState*>& AnimationComponent::GetStates() const
 	{
 		return mStates;
 	}

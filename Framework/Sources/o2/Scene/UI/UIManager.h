@@ -38,9 +38,6 @@ namespace o2
 	class UIManager : public Singleton<UIManager>
 	{
 	public:
-		typedef Vector<Widget*> WidgetsVec;
-
-	public:
 		// Loads widgets style
 		void LoadStyle(const String& path);
 
@@ -139,15 +136,16 @@ namespace o2
 		void DrawWidgetAtTop(Widget* widget);
 
 		// Returns all styles widgets
-		const WidgetsVec& GetWidgetStyles() const;
+		const Vector<Widget*>& GetWidgetStyles() const;
 
 	protected:
 		LogStream * mLog = nullptr;          // UI Log stream
-		Widget*    mFocusedWidget = nullptr; // Current selected widget
-		WidgetsVec mFocusableWidgets;        // List of selectable widgets
-		WidgetsVec mTopWidgets;              // Top widgets, drawing after mScreenWidget 
 
-		WidgetsVec mStyleSamples; // Style widgets
+		Widget*         mFocusedWidget = nullptr; // Current selected widget
+		Vector<Widget*> mFocusableWidgets;        // List of selectable widgets
+		Vector<Widget*> mTopWidgets;              // Top widgets, drawing after mScreenWidget 
+
+		Vector<Widget*> mStyleSamples; // Style widgets
 
 	protected:
 		// Default constructor

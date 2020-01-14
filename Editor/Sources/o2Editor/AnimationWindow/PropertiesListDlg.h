@@ -132,7 +132,7 @@ namespace Editor
 		void OnNodeDblClick(TreeNode* nodeWidget) override;
 
 		// It is called when list of selected objects was changed
-		void OnNodesSelectionChanged(UnknownPtrsVec objects) override;
+		void OnNodesSelectionChanged(Vector<UnknownPtr> objects) override;
 
 		friend class AnimationPropertiesTreeNode;
 	};
@@ -212,7 +212,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
 	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
 	PRIVATE_FUNCTION(void, OnNodeDblClick, TreeNode*);
-	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, UnknownPtrsVec);
+	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
 }
 END_META;
 

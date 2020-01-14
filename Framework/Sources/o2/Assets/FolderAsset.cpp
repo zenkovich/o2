@@ -65,7 +65,7 @@ namespace o2
 		return !mMeta->IsEqual(other.mMeta);
 	}
 
-	AssetInfosVec FolderAsset::GetContainingAssetsInfos() const
+	Vector<AssetInfo> FolderAsset::GetContainingAssetsInfos() const
 	{
 		return mContainingAssetsInfos;
 	}

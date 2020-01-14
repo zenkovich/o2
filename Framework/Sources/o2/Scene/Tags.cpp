@@ -168,7 +168,7 @@ namespace o2
 		return mTags.Contains(tag);
 	}
 
-	const TagsVec& TagGroup::GetTags() const
+	const Vector<Tag*>& TagGroup::GetTags() const
 	{
 		return mTags;
 	}

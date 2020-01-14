@@ -55,7 +55,7 @@ namespace o2
 
 		friend class Actor;
 	};
-	typedef Vector<Tag*> TagsVec;
+	typedef Vector<Tag*> Vector<Tag*>;
 
 	// ----------
 	// Tags group
@@ -110,7 +110,7 @@ namespace o2
 		bool IsHaveTag(Tag* tag) const;
 
 		// Returns tags array
-		const TagsVec& GetTags() const;
+		const Vector<Tag*>& GetTags() const;
 
 		// Returns tags names array
 		StringsVec GetTagsNames() const;
@@ -130,7 +130,7 @@ namespace o2
 		SERIALIZABLE(TagGroup);
 
 	private:
-		TagsVec mTags; // @SERIALIZABLE
+		Vector<Tag*> mTags; // @SERIALIZABLE
 
 		friend class Tag;
 	};
@@ -196,7 +196,7 @@ CLASS_METHODS_META(o2::TagGroup)
 	PUBLIC_FUNCTION(void, Clear);
 	PUBLIC_FUNCTION(bool, IsHaveTag, const String&);
 	PUBLIC_FUNCTION(bool, IsHaveTag, Tag*);
-	PUBLIC_FUNCTION(const TagsVec&, GetTags);
+	PUBLIC_FUNCTION(const Vector<Tag*>&, GetTags);
 	PUBLIC_FUNCTION(StringsVec, GetTagsNames);
 }
 END_META;

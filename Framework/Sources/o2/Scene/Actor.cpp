@@ -61,7 +61,7 @@ namespace o2
 		ActorDataNodeConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, mode)
 	{
 		for (auto comp : components)
@@ -99,7 +99,7 @@ namespace o2
 		Actor(mnew ActorTransform(), mode)
 	{}
 
-	Actor::Actor(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Actor::Actor(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew ActorTransform(), components, mode)
 	{}
 
@@ -555,7 +555,7 @@ namespace o2
 		return nullptr;
 	}
 
-	Actor::ActorsVec Actor::GetChildren() const
+	Vector<Actor*> Actor::GetChildren() const
 	{
 		return mChildren;
 	}
@@ -656,7 +656,7 @@ namespace o2
 		return nullptr;
 	}
 
-	Actor::ComponentsVec Actor::GetComponents() const
+	Vector<Component*> Actor::GetComponents() const
 	{
 		return mComponents;
 	}

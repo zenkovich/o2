@@ -62,12 +62,12 @@ const char* GetAssetsPath()
 	return "Assets/";
 }
 
-const char* GetDataPath()
+const char* GetBuiltAssetsPath()
 {
 #if defined PLATFORM_WINDOWS
-	return "BuiltAssets/Windows/";
+	return "BuiltAssets/Windows/Data/";
 #elif defined PLATFORM_ANDROID
-    return "AndroidAssets/Data/";
+    return "AndroidAssets/BuiltAssets/";
 #endif
 }
 
@@ -76,13 +76,28 @@ const char* GetBasicAtlasPath()
 	return "BasicAtlas.atlas";
 }
 
-const char* GetDataAssetsTreePath()
+const char* GetBuiltAssetsTreePath()
 {
 #if defined PLATFORM_WINDOWS
-	return "DataTree.xml";
+	return "AssetsTree.xml";
 #elif defined PLATFORM_ANDROID
-	return "AndroidAssets/DataTree.xml";
+	return "AndroidAssets/AssetsTree.xml";
 #endif
+}
+
+const char* GetEditorAssetsPath()
+{
+	return "o2/Editor/Assets/";
+}
+
+const char* GetEditorBuiltAssetsPath()
+{
+	return "BuiltAssets/Windows/EditorData/";
+}
+
+const char* GetEditorBuiltAssetsTreePath()
+{
+	return "EditorAssetsTree.xml";
 }
 
 #ifdef PLATFORM_ANDROID

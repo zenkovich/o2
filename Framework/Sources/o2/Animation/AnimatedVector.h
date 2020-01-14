@@ -15,7 +15,6 @@ namespace o2
 		typedef o2::Vec2F ValueType;
 
 		class Key;
-		typedef Vector<Key> KeysVec;
 
 	public:
 		PROPERTIES(AnimatedValue<o2::Vec2F>);
@@ -23,7 +22,7 @@ namespace o2
 		SETTER(o2::Vec2F*, target, SetTarget);                        // Bind target setter
 		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter  
 		SETTER(IValueProxy<o2::Vec2F>*, targetProxy, SetTargetProxy); // Bind proxy setter
-		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
+		PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant);      // Keys property
 
 	public:
         // Default constructor
@@ -95,7 +94,7 @@ namespace o2
 		bool ContainsKey(float position) const;
 
 		// Returns keys array
-		const KeysVec& GetKeys() const;
+		const Vector<Key>& GetKeys() const;
 
 		// Returns key at position
 		Key GetKey(float position) const;
@@ -110,7 +109,7 @@ namespace o2
 		int FindKeyIdx(UInt64 uid) const;
 
 		// Sets keys
-		void SetKeys(const KeysVec& keys);
+		void SetKeys(const Vector<Key>& keys);
 
 		// Smooths key at position
 		void SmoothKey(float position, float smooth);
@@ -199,7 +198,7 @@ namespace o2
 		bool mBatchChange = false; // It is true when began batch change
 		bool mChangedKeys = false; // It is true when some keys changed during batch change
 
-		KeysVec mKeys; // Animation keys @SERIALIZABLE
+		Vector<Key> mKeys; // Animation keys @SERIALIZABLE
 
 		Vec2F mValue; // Current animation value
 
@@ -215,7 +214,7 @@ namespace o2
 		Vec2F Evaluate(float position) const;
 
 		// Returns keys (for property)
-		KeysVec GetKeysNonContant();
+		Vector<Key> GetKeysNonContant();
 
 		// Updates keys approximation
 		void UpdateApproximation();
@@ -279,12 +278,12 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, Parametric, const Vec2F&, const Vec2F&, float, float, float, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, EaseIn, const Vec2F&, const Vec2F&, float);
@@ -293,7 +292,7 @@ CLASS_METHODS_META(o2::AnimatedValue<o2::Vec2F>)
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<Vec2F>, Linear, const Vec2F&, const Vec2F&, float);
 	PROTECTED_FUNCTION(void, Evaluate);
 	PROTECTED_FUNCTION(Vec2F, Evaluate, float);
-	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);

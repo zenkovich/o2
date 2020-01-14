@@ -157,20 +157,18 @@ namespace o2
 		virtual void RemoveAllTimeEvents();
 
 		SERIALIZABLE(IAnimation);
+		
+		float mTime;           // Current animation time, can be out of bounds
+		float mInDurationTime; // In duration time
+		float mDuration;       // Animation duration @SERIALIZABLE
+		float mBeginTime;      // Begin time
+		float mEndTime;        // End time
+		float mDirection;      // Animation direction: 1 - forward, -1 - reversed
+		float mSpeed;          // Animation speed, 1 is default
+		Loop  mLoop;           // Loop type @SERIALIZABLE
+		bool  mPlaying;        // True if animation playing
 
-	protected:
-		typedef Map<float, Function<void()>> EventsMap;
-
-		float      mTime;           // Current animation time, can be out of bounds
-		float      mInDurationTime; // In duration time
-		float      mDuration;       // Animation duration @SERIALIZABLE
-		float      mBeginTime;      // Begin time
-		float      mEndTime;        // End time
-		float      mDirection;      // Animation direction: 1 - forward, -1 - reversed
-		float      mSpeed;          // Animation speed, 1 is default
-		Loop       mLoop;           // Loop type @SERIALIZABLE
-		bool       mPlaying;        // True if animation playing
-		EventsMap mTimeEvents;     // Animation time events
+		Map<float, Function<void()>> mTimeEvents; // Animation time events
 
 	protected:
 		// Updates mTime and mInDurationTime

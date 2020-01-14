@@ -19,10 +19,6 @@ namespace o2
 		SERIALIZABLE(ParticlesEmitter);
 
 	public:
-		typedef Vector<Particle> ParticlesVec;
-		typedef Vector<ParticlesEffect*> ParticleEffectsVec;
-
-	public:
 		PROPERTIES(ParticlesEmitter);
 		PROPERTY(bool, playing, SetPlaying, IsPlaying);                                 // Is particles playing property
 		PROPERTY(float, emittingCoefficient, SetEmittingCoef, GetEmittingCoef);         // Particles emitting coefficient property (0...1)
@@ -108,7 +104,7 @@ namespace o2
 		void AddEffect(_args ... args);
 
 		// Returns list of effects
-		const ParticleEffectsVec& GetEffects() const;
+		const Vector<ParticlesEffect*>& GetEffects() const;
 
 		// Removes effect
 		void RemoveEffect(ParticlesEffect* effect);
@@ -129,7 +125,7 @@ namespace o2
 		bool IsAliveParticles() const;
 
 		// Returns particles list
-		const ParticlesVec& GetParticles() const;
+		const Vector<Particle>& GetParticles() const;
 
 		// Sets particles relativity
 		void SetParticlesRelativity(bool relative);
@@ -242,7 +238,7 @@ namespace o2
 	protected:
 		ImageAssetRef          mImageAsset;      // Particle sprite image @SERIALIZABLE
 		ParticlesEmitterShape* mShape = nullptr; // Particles emitting shape @SERIALIZABLE
-		ParticleEffectsVec     mEffects;         // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
+		Vector<ParticlesEffect*>     mEffects;         // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
 														                 
 		int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
 					           		
@@ -274,13 +270,13 @@ namespace o2
 		Color4 mEmitParticlesColorA; // Emitting particles color A (particle emitting with color in range from this and ColorB)  @SERIALIZABLE
 		Color4 mEmitParticlesColorB; // Emitting particles color B (particle emitting with color in range from this and ColorA) @SERIALIZABLE
 
-		float        mCurrentTime = 0;         // Current working time in seconds
-		float        mEmitTimeBuffer = 0;      // Emitting next particle time buffer
-		Mesh*        mParticlesMesh = nullptr; // Particles mesh
-		ParticlesVec mParticles;               // Working particles
-		Vector<int>  mDeadParticles;           // Dead particles indexes
-		int          mNumAliveParticles = 0;   // Count of current alive particles
-		Basis        mLastTransform;           // Last transformation
+		float            mCurrentTime = 0;         // Current working time in seconds
+		float            mEmitTimeBuffer = 0;      // Emitting next particle time buffer
+		Mesh*            mParticlesMesh = nullptr; // Particles mesh
+		Vector<Particle> mParticles;               // Working particles
+		Vector<int>      mDeadParticles;           // Dead particles indexes
+		int              mNumAliveParticles = 0;   // Count of current alive particles
+		Basis            mLastTransform;           // Last transformation
 
 	protected:
 		// Emits particles hen updating
@@ -385,14 +381,14 @@ CLASS_METHODS_META(o2::ParticlesEmitter)
 	PUBLIC_FUNCTION(void, SetShape, ParticlesEmitterShape*);
 	PUBLIC_FUNCTION(ParticlesEmitterShape*, GetShape);
 	PUBLIC_FUNCTION(void, AddEffect, ParticlesEffect*);
-	PUBLIC_FUNCTION(const ParticleEffectsVec&, GetEffects);
+	PUBLIC_FUNCTION(const Vector<ParticlesEffect*>&, GetEffects);
 	PUBLIC_FUNCTION(void, RemoveEffect, ParticlesEffect*);
 	PUBLIC_FUNCTION(void, RemoveAllEffects);
 	PUBLIC_FUNCTION(void, SetMaxParticles, int);
 	PUBLIC_FUNCTION(int, GetMaxParticles);
 	PUBLIC_FUNCTION(int, GetParticlesCount);
 	PUBLIC_FUNCTION(bool, IsAliveParticles);
-	PUBLIC_FUNCTION(const ParticlesVec&, GetParticles);
+	PUBLIC_FUNCTION(const Vector<Particle>&, GetParticles);
 	PUBLIC_FUNCTION(void, SetParticlesRelativity, bool);
 	PUBLIC_FUNCTION(bool, IsParticlesRelative);
 	PUBLIC_FUNCTION(void, SetLoop, bool);

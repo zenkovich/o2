@@ -230,32 +230,32 @@ namespace o2
 		RemoveTag(GetTag(name));
 	}
 
-	SceneLayersVec& Scene::GetLayers()
+	Vector<SceneLayer*>& Scene::GetLayers()
 	{
 		return mLayers;
 	}
 
-	const TagsVec& Scene::GetTags() const
+	const Vector<Tag*>& Scene::GetTags() const
 	{
 		return mTags;
 	}
 
-	const ActorsVec& Scene::GetRootActors() const
+	const Vector<Actor*>& Scene::GetRootActors() const
 	{
 		return mRootActors;
 	}
 
-	ActorsVec& Scene::GetRootActors()
+	Vector<Actor*>& Scene::GetRootActors()
 	{
 		return mRootActors;
 	}
 
-	const ActorsVec& Scene::GetAllActors() const
+	const Vector<Actor*>& Scene::GetAllActors() const
 	{
 		return mAllActors;
 	}
 
-	ActorsVec& Scene::GetAllActors()
+	Vector<Actor*>& Scene::GetAllActors()
 	{
 		return mAllActors;
 	}
@@ -386,7 +386,7 @@ namespace o2
 	}
 
 #if IS_EDITOR
-	SceneEditableObjectsVec Scene::GetRootEditableObjects()
+	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
 	{
 		return mRootActors.Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
@@ -403,7 +403,7 @@ namespace o2
 			Instance().mEditableObjects.Remove(object);
 	}
 
-	const SceneEditableObjectsVec& Scene::GetAllEditableObjects()
+	const Vector<SceneEditableObject*>& Scene::GetAllEditableObjects()
 	{
 		return mEditableObjects;
 	}
@@ -500,17 +500,17 @@ namespace o2
 		}
 	}
 
-	const SceneEditableObjectsVec& Scene::GetChangedObjects() const
+	const Vector<SceneEditableObject*>& Scene::GetChangedObjects() const
 	{
 		return mChangedObjects;
 	}
 
-	const SceneEditableObjectsVec& Scene::GetDrawnEditableObjects() const
+	const Vector<SceneEditableObject*>& Scene::GetDrawnEditableObjects() const
 	{
 		return mDrawnObjects;
 	}
 
-	Scene::ActorsCacheMap& Scene::GetPrototypesLinksCache()
+	Map<ActorAssetRef, Vector<Actor*>>& Scene::GetPrototypesLinksCache()
 	{
 		return mPrototypeLinksCache;
 	}
@@ -575,7 +575,7 @@ namespace o2
 			return;
 
 		if (!Instance().mPrototypeLinksCache.ContainsKey(assetRef))
-			Instance().mPrototypeLinksCache.Add(assetRef, ActorsVec());
+			Instance().mPrototypeLinksCache.Add(assetRef, Vector<Actor*>());
 
 		Instance().mPrototypeLinksCache[assetRef].Add(actor);
 	}

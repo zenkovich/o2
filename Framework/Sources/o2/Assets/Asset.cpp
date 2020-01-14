@@ -181,7 +181,7 @@ namespace o2
 
 	String Asset::GetDataFullPath() const
 	{
-		return o2Assets.GetDataPath() + mPath;
+		return o2Assets.GetBuiltAssetsPath() + mPath;
 	}
 
 	String Asset::GetMetaFullPath() const

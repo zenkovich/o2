@@ -17,7 +17,7 @@ namespace o2
 	Assets::Assets()
 	{
 		mAssetsFolderPath = ::GetAssetsPath();
-		mDataFolderPath = ::GetDataPath();
+		mDataFolderPath = ::GetBuiltAssetsPath();
 
 		mLog = mnew LogStream("Assets");
 		o2Debug.GetLog()->BindStream(mLog);
@@ -42,7 +42,7 @@ namespace o2
 		return o2Config.GetProjectPath() + mAssetsFolderPath;
 	}
 
-	String Assets::GetDataPath() const
+	String Assets::GetBuiltAssetsPath() const
 	{
 		return mDataFolderPath;
 	}
@@ -72,7 +72,7 @@ namespace o2
 		return UID();
 	}
 
-	const Assets::TypesExtsMap Assets::GetAssetsExtensionsTypes() const
+	const Map<String, const Type*> Assets::GetAssetsExtensionsTypes() const
 	{
 		return mAssetsTypes;
 	}
@@ -257,7 +257,7 @@ namespace o2
 
 		if (GetAssetId(newPath) != 0)
 		{
-			mLog->Error("Can't remove asset by path (" + info.path + ") \nto new path (" + newPath + 
+			mLog->Error("Can't remove asset by path (" + info.path + ") \nto new path (" + newPath +
 						")\n - another asset exist in target path");
 			return false;
 		}
@@ -336,7 +336,10 @@ namespace o2
 	{
 		ClearAssetsCache();
 
-		auto changedAssetsIds = mAssetsBuilder->BuildAssets(GetAssetsPath(), GetDataPath());
+ 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(GetAssetsPath(), GetBuiltAssetsPath());
+		changedAssetsIds += mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetEditorAssetsPath(),
+														::GetEditorBuiltAssetsPath());
+
 		LoadAssetsTree();
 
 		onAssetsRebuilded(changedAssetsIds);
@@ -380,16 +383,20 @@ namespace o2
 
 		if (extension.IsEmpty())
 			return MakeUniqueAssetName(path + " copy");
-		
+
 		return MakeUniqueAssetName(withoutExtension + " copy." + extension);
 	}
 
 	void Assets::LoadAssetsTree()
 	{
 		DataNode data;
-		data.LoadFromFile(GetDataAssetsTreePath());
+		data.LoadFromFile(GetBuiltAssetsTreePath());
 
 		mAssetsTree.Clear();
+		mAssetsTree = data;
+
+		data.Clear();
+		data.LoadFromFile(GetEditorBuiltAssetsTreePath());
 		mAssetsTree = data;
 	}
 
@@ -411,7 +418,7 @@ namespace o2
 			{
 				if (mAssetsTypes.ContainsKey(ext))
 				{
-					mLog->Warning("Assets extensions duplicating: " + ext + ", at " + mAssetsTypes[ext]->GetName() + 
+					mLog->Warning("Assets extensions duplicating: " + ext + ", at " + mAssetsTypes[ext]->GetName() +
 								  " and " + type->GetName());
 					continue;
 				}

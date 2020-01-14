@@ -15,7 +15,7 @@ namespace o2
 	public:
 		PROPERTIES(FolderAsset);
 		GETTER(MetaInfo*, meta, GetMeta);                              // Meta information getter
-		GETTER(AssetInfosVec, insideAssets, GetContainingAssetsInfos); // Inside assets infos getter
+		GETTER(Vector<AssetInfo>, insideAssets, GetContainingAssetsInfos); // Inside assets infos getter
 
 	public:
 		// Destructor
@@ -31,7 +31,7 @@ namespace o2
 		bool operator!=(const FolderAsset& other) const;
 
 		// Returns containing assets infos
-		AssetInfosVec GetContainingAssetsInfos() const;
+		Vector<AssetInfo> GetContainingAssetsInfos() const;
 
 		// Returns meta information
 		MetaInfo* GetMeta() const;
@@ -52,7 +52,7 @@ namespace o2
 		};
 
 	protected:
-		AssetInfosVec mContainingAssetsInfos; // Inside assets infos
+		Vector<AssetInfo> mContainingAssetsInfos; // Inside assets infos
 
 	protected:
 		// Default constructor
@@ -153,7 +153,7 @@ END_META;
 CLASS_METHODS_META(o2::FolderAsset)
 {
 
-	PUBLIC_FUNCTION(AssetInfosVec, GetContainingAssetsInfos);
+	PUBLIC_FUNCTION(Vector<AssetInfo>, GetContainingAssetsInfos);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);

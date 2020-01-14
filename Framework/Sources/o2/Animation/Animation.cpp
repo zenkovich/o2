@@ -131,12 +131,12 @@ namespace o2
 		mAnimatedValues.Clear();
 	}
 
-	Animation::AnimatedValuesVec& Animation::GetAnimationsValues()
+	Vector<Animation::AnimatedValueDef>& Animation::GetAnimationsValues()
 	{
 		return mAnimatedValues;
 	}
 
-	const Animation::AnimatedValuesVec& Animation::GetAnimationsValues() const
+	const Vector<Animation::AnimatedValueDef>& Animation::GetAnimationsValues() const
 	{
 		return mAnimatedValues;
 	}

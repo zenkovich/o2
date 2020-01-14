@@ -68,16 +68,16 @@ namespace o2
 
 			bool operator==(const Character& other) const;
 		};
-		typedef Vector<Character> CharactersVec;
-
-		typedef Vector<FontRef*> FontRefsVec;
 
 	protected:
-		FontRefsVec   mRefs;           // Array of reference to this font
-		CharactersVec mCharacters;     // Characters array
-		TextureRef    mTexture;        // Texture
-		RectI         mTextureSrcRect; // Texture source rectangle
-		bool          mReady;          // True when font is ready to use
+		Vector<FontRef*>  mRefs; // Array of reference to this font
+
+		Vector<Character> mCharacters; // Characters array
+
+		TextureRef mTexture;        // Texture
+		RectI      mTextureSrcRect; // Texture source rectangle
+
+		bool mReady; // True when font is ready to use
 
 		friend class Text;
 		friend class FontRef;

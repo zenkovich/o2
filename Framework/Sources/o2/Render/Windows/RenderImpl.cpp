@@ -409,7 +409,7 @@ namespace o2
 		}
 
 		mScissorInfos.Add(ScissorInfo(summaryScissorRect, mDrawingDepth));
-		mStackScissors.Add(ScissorStackItem(rect, summaryScissorRect));
+		mStackScissors.Add(ScissorStackEntry(rect, summaryScissorRect));
 		
 		RectI screenScissorRect = CalculateScreenSpaceScissorRect(summaryScissorRect);
 		glScissor((int)(screenScissorRect.left + mCurrentResolution.x*0.5f), (int)(screenScissorRect.bottom + mCurrentResolution.y*0.5f),
@@ -558,7 +558,7 @@ namespace o2
 			GL_CHECK_ERROR();
 		}
 
-		mStackScissors.Add(ScissorStackItem(RectI(), RectI(), true));
+		mStackScissors.Add(ScissorStackEntry(RectI(), RectI(), true));
 
 		glBindFramebufferEXT(GL_FRAMEBUFFER, renderTarget->mFrameBuffer);
 		GL_CHECK_ERROR();

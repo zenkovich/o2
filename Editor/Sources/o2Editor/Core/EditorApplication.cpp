@@ -4,16 +4,8 @@
 #include "Actions/PropertyChange.h"
 #include "o2/Animation/AnimatedFloat.h"
 #include "o2/Animation/AnimatedVector.h"
-#include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
-#include "o2Editor/Core/Actions/IAction.h"
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/Core/MenuPanel.h"
-#include "o2Editor/Core/Properties/Properties.h"
-#include "o2Editor/Core/ToolsPanel.h"
-#include "o2Editor/Core/UIRoot.h"
-#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Render/Render.h"
 #include "o2/Scene/Actor.h"
@@ -24,13 +16,21 @@
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
-#include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2Editor/TreeWindow/TreeWindow.h"
-#include "UIStyle/EditorUIStyle.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/System/Time/Time.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
+#include "o2Editor/Core/Actions/IAction.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/Core/MenuPanel.h"
+#include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/Core/ToolsPanel.h"
+#include "o2Editor/Core/UIRoot.h"
+#include "o2Editor/Core/UIStyle/EditorUIStyle.h"
+#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
+#include "o2Editor/SceneWindow/SceneEditScreen.h"
+#include "o2Editor/TreeWindow/TreeWindow.h"
 
 namespace Editor
 {
@@ -94,9 +94,7 @@ namespace Editor
 		mToolsPanel = mnew ToolsPanel();
 
 		if (mConfig->mProjectConfig.mMaximized)
-		{
 			o2Application.Maximize();
-		}
 		else
 		{
 			Vec2I pos = mConfig->mProjectConfig.mWindowPosition;

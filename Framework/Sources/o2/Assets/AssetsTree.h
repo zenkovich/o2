@@ -20,13 +20,11 @@ namespace o2
 		// ----------------------
 		struct AssetNode: public AssetInfo
 		{ 
-			typedef Vector<AssetNode*> AssetNodesVec;
-
-			Asset::IMetaInfo* meta;     // Asset meta
-			TimeStamp         time;     // Asset edited time
-
-			AssetNode*        parent = nullptr; // Parent node
-			AssetNodesVec     children;         // Children nodes @SERIALIZABLE
+			Asset::IMetaInfo*  meta;     // Asset meta
+			TimeStamp          time;     // Asset edited time
+							  
+			AssetNode*         parent = nullptr; // Parent node
+			Vector<AssetNode*> children;         // Children nodes @SERIALIZABLE
 
 		public:
 			// Default constructor
@@ -53,13 +51,12 @@ namespace o2
 			// It is called when deserializing node, sets parent for children
 			void OnDeserialized(const DataNode& node) override;
 		};
-		typedef Vector<AssetNode*> AssetsVec;
 
 	public:
-		String     mPath;       // Assets information root path @SERIALIZABLE
-		LogStream* mLog;        // Log stream
-		AssetsVec  mRootAssets; // Root path assets @SERIALIZABLE
-		AssetsVec  mAllAssets;  // All assets
+		String             mPath;       // Assets information root path @SERIALIZABLE
+		LogStream*         mLog;        // Log stream
+		Vector<AssetNode*> mRootAssets; // Root path assets @SERIALIZABLE
+		Vector<AssetNode*> mAllAssets;  // All assets
 
 	public:
 		// Default constructor

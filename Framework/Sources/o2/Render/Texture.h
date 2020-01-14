@@ -118,17 +118,16 @@ namespace o2
 		int GetAtlasPage() const;
 
 	protected:
-		typedef Vector<TextureRef*> TextureRefsVec;
+		Vec2I       mSize;                    // Size of texture
+		Filter      mFilter = Filter::Linear; // Min/Mag filter
+		PixelFormat mFormat;                  // Texture format
+		Usage       mUsage;                   // Texture usage
+		String      mFileName;                // Source file name
+		UID         mAtlasAssetId;            // Atlas asset id. Equals 0 if it isn't atlas texture
+		int         mAtlasPage;               // Atlas page
+		bool        mReady;                   // Is texture ready to use
 
-		Vec2I          mSize;                    // Size of texture
-		Filter         mFilter = Filter::Linear; // Min/Mag filter
-		PixelFormat    mFormat;                  // Texture format
-		Usage          mUsage;                   // Texture usage
-		String         mFileName;                // Source file name
-		UID            mAtlasAssetId;            // Atlas asset id. Equals 0 if it isn't atlas texture
-		int            mAtlasPage;               // Atlas page
-		bool           mReady;                   // Is texture ready to use
-		TextureRefsVec mRefs;                    // Texture references
+		Vector<TextureRef*> mRefs; // Texture references
 
 		friend class Render;
 		friend class TextureRef;

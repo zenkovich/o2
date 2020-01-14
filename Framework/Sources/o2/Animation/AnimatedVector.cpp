@@ -251,12 +251,12 @@ namespace o2
 		return false;
 	}
 
-	const AnimatedValue<Vec2F>::KeysVec& AnimatedValue<Vec2F>::GetKeys() const
+	const Vector<AnimatedValue<Vec2F>::Key>& AnimatedValue<Vec2F>::GetKeys() const
 	{
 		return mKeys;
 	}
 
-	void AnimatedValue<Vec2F>::SetKeys(const KeysVec& keys)
+	void AnimatedValue<Vec2F>::SetKeys(const Vector<Key>& keys)
 	{
 		mKeys = keys;
 
@@ -405,7 +405,7 @@ namespace o2
 		return Math::Lerp(begs, ends, segCoef);
 	}
 
-	AnimatedValue<Vec2F>::KeysVec AnimatedValue<Vec2F>::GetKeysNonContant()
+	Vector<AnimatedValue<Vec2F>::Key> AnimatedValue<Vec2F>::GetKeysNonContant()
 	{
 		return mKeys;
 	}

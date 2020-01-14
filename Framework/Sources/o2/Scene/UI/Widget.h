@@ -24,11 +24,6 @@ namespace o2
 	class Widget : public Actor, public SceneDrawable
 	{
 	public:
-		typedef Vector<Widget*> WidgetsVec;
-		typedef Vector<WidgetLayer*> LayersVec;
-		typedef Vector<WidgetState*> StatesVec;
-
-	public:
 		PROPERTIES(Widget);
 
 		PROPERTY(bool, enabledForcibly, SetEnableForcible, IsEnabled); // Enable propertu, works forcibly @EDITOR_IGNORE @ANIMATABLE
@@ -36,10 +31,10 @@ namespace o2
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency @EDITOR_IGNORE @ANIMATABLE
 
-		GETTER(WidgetsVec, childrenWidgets, GetChildrenNonConst); // Widget children getter
+		GETTER(Vector<Widget*>, childrenWidgets, GetChildrenNonConst); // Widget children getter
 
-		GETTER(LayersVec, layers, GetLayers); // Layers getter
-		GETTER(StatesVec, states, GetStates); // States getter
+		GETTER(Vector<WidgetLayer*>, layers, GetLayers); // Layers getter
+		GETTER(Vector<WidgetState*>, states, GetStates); // States getter
 
 		ACCESSOR(Widget*, childWidget, String, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
 		ACCESSOR(WidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
@@ -63,7 +58,7 @@ namespace o2
 		Widget(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Widget constructor with components
-		Widget(ComponentsVec components, ActorCreateMode mode = ActorCreateMode::Default);
+		Widget(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor
 		Widget(const Widget& other);
@@ -111,7 +106,7 @@ namespace o2
 		Widget* AddChildWidget(Widget* widget, int position);
 
 		// Returns constant children widgets vector
-		const WidgetsVec& GetChildWidgets() const;
+		const Vector<Widget*>& GetChildWidgets() const;
 
 		// Sets index position in parent or scene
 		void SetIndexInSiblings(int index) override;
@@ -147,7 +142,7 @@ namespace o2
 		_type* GetLayerDrawable(const String& path) const;
 
 		// Returns all layers
-		const LayersVec& GetLayers() const;
+		const Vector<WidgetLayer*>& GetLayers() const;
 
 
 		// Adds new state with name
@@ -181,7 +176,7 @@ namespace o2
 		WidgetState* GetStateObject(const String& name) const;
 
 		// Returns all states
-		const StatesVec& GetStates() const;
+		const Vector<WidgetState*>& GetStates() const;
 
 		// Sets depth overriding
 		void SetDepthOverridden(bool overrideDepth);
@@ -255,21 +250,21 @@ namespace o2
 		using Actor::mLayer;
 		using Actor::mIsOnScene;
 
-		LayersVec mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-		StatesVec mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
+		Vector<WidgetLayer*> mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+		Vector<WidgetState*> mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
 
-		Widget*    mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
-		WidgetsVec mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
-		WidgetsVec mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
-		WidgetsVec mDrawingChildren;        // Children widgets, which drawing depth isn't overridden @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+		Widget*         mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
+		Vector<Widget*> mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+		Vector<Widget*> mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+		Vector<Widget*> mDrawingChildren;        // Children widgets, which drawing depth isn't overridden @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 
 		bool mOverrideDepth = false; // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
 
 		float mTransparency = 1.0f;	   // Widget transparency @SERIALIZABLE
 		float mResTransparency = 1.0f; // Widget result transparency, depends on parent's result transparency
 
-		LayersVec mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-		LayersVec mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+		Vector<WidgetLayer*> mDrawingLayers;    // Layers ordered by depth, which drawing before children (depth < 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+		Vector<WidgetLayer*> mTopDrawingLayers; // Layers ordered by depth, which drawing after children (depth > 1000) @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 
 		WidgetState* mFocusedState = nullptr; // Focused widget state @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState)
 		bool         mIsFocused = false;      // Is widget focused
@@ -398,13 +393,13 @@ namespace o2
 		void SetParentWidget(Widget* widget);
 
 		// Returns children widgets (for property)
-		WidgetsVec GetChildrenNonConst();
+		Vector<Widget*> GetChildrenNonConst();
 
 		// Returns layers (for property)
-		LayersVec GetLayersNonConst();
+		Vector<WidgetLayer*> GetLayersNonConst();
 
 		// Returns states (for property)
-		StatesVec GetStatesNonConst();
+		Vector<WidgetState*> GetStatesNonConst();
 
 		// Returns dictionary of all layers by names
 		Map<String, WidgetLayer*> GetAllLayers();
@@ -750,7 +745,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(Widget*, GetChildWidget, const String&);
 	PUBLIC_FUNCTION(Widget*, AddChildWidget, Widget*);
 	PUBLIC_FUNCTION(Widget*, AddChildWidget, Widget*, int);
-	PUBLIC_FUNCTION(const WidgetsVec&, GetChildWidgets);
+	PUBLIC_FUNCTION(const Vector<Widget*>&, GetChildWidgets);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(WidgetLayer*, AddLayer, WidgetLayer*);
 	PUBLIC_FUNCTION(WidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
@@ -759,7 +754,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(void, RemoveAllLayers);
 	PUBLIC_FUNCTION(WidgetLayer*, GetLayer, const String&);
 	PUBLIC_FUNCTION(WidgetLayer*, FindLayer, const String&);
-	PUBLIC_FUNCTION(const LayersVec&, GetLayers);
+	PUBLIC_FUNCTION(const Vector<WidgetLayer*>&, GetLayers);
 	PUBLIC_FUNCTION(WidgetState*, AddState, const String&);
 	PUBLIC_FUNCTION(WidgetState*, AddState, const String&, const Animation&);
 	PUBLIC_FUNCTION(WidgetState*, AddState, WidgetState*);
@@ -770,7 +765,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(void, SetStateForcible, const String&, bool);
 	PUBLIC_FUNCTION(bool, GetState, const String&);
 	PUBLIC_FUNCTION(WidgetState*, GetStateObject, const String&);
-	PUBLIC_FUNCTION(const StatesVec&, GetStates);
+	PUBLIC_FUNCTION(const Vector<WidgetState*>&, GetStates);
 	PUBLIC_FUNCTION(void, SetDepthOverridden, bool);
 	PUBLIC_FUNCTION(bool, IsDepthOverriden);
 	PUBLIC_FUNCTION(void, SetTransparency, float);
@@ -827,9 +822,9 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, UpdateLayersDrawingSequence);
 	PROTECTED_FUNCTION(void, RetargetStatesAnimations);
 	PROTECTED_FUNCTION(void, SetParentWidget, Widget*);
-	PROTECTED_FUNCTION(WidgetsVec, GetChildrenNonConst);
-	PROTECTED_FUNCTION(LayersVec, GetLayersNonConst);
-	PROTECTED_FUNCTION(StatesVec, GetStatesNonConst);
+	PROTECTED_FUNCTION(Vector<Widget*>, GetChildrenNonConst);
+	PROTECTED_FUNCTION(Vector<WidgetLayer*>, GetLayersNonConst);
+	PROTECTED_FUNCTION(Vector<WidgetState*>, GetStatesNonConst);
 	PROTECTED_FUNCTION(_tmp1, GetAllLayers);
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp3, GetAllStates);

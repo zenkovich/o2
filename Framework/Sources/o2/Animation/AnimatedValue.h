@@ -60,7 +60,6 @@ namespace o2
 		typedef _type ValueType;
 
 		class Key;
-		typedef Vector<Key> KeysVec;
 
 	public:
 		PROPERTIES(AnimatedValue<_type>);
@@ -68,7 +67,7 @@ namespace o2
 		SETTER(_type*, target, SetTarget);                            // Bind target setter
 		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
 		SETTER(IValueProxy<_type>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(KeysVec, keys, SetKeys, GetKeysNonContant);          // Keys property
+		PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant);          // Keys property
 
 	public:
 		// Default constructor
@@ -143,7 +142,7 @@ namespace o2
 		bool ContainsKey(float position) const;
 
 		// Returns keys array
-		const KeysVec& GetKeys() const;
+		const Vector<Key>& GetKeys() const;
 
 		// Returns key at position
 		Key GetKey(float position) const;
@@ -158,7 +157,7 @@ namespace o2
 		int FindKeyIdx(UInt64 uid) const;
 
 		// Sets keys
-		void SetKeys(const KeysVec& keys);
+		void SetKeys(const Vector<Key>& keys);
 
 		// Smooths key at position
 		void SmoothKey(float position, float smooth);
@@ -242,7 +241,7 @@ namespace o2
 		bool mBatchChange = false; // It is true when began batch change
 		bool mChangedKeys = false; // It is true when some keys changed during batch change
 
-		KeysVec mKeys; // Animation keys @SERIALIZABLE
+		Vector<Key> mKeys; // Animation keys @SERIALIZABLE
 
 		_type mValue; // Current animation value
 
@@ -258,7 +257,7 @@ namespace o2
 		_type Evaluate(float position) const;
 
 		// Returns keys (for property)
-		KeysVec GetKeysNonContant();
+		Vector<Key> GetKeysNonContant();
 
 		// Updates keys approximation
 		void UpdateApproximation();
@@ -556,13 +555,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	const typename AnimatedValue<_type>::KeysVec& AnimatedValue<_type>::GetKeys() const
+	const Vector<typename AnimatedValue<_type>::Key>& AnimatedValue<_type>::GetKeys() const
 	{
 		return mKeys;
 	}
 
 	template<typename _type>
-	void AnimatedValue<_type>::SetKeys(const KeysVec& keys)
+	void AnimatedValue<_type>::SetKeys(const Vector<Key>& keys)
 	{
 		mKeys = keys;
 
@@ -672,7 +671,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename AnimatedValue<_type>::KeysVec AnimatedValue<_type>::GetKeysNonContant()
+	Vector<typename AnimatedValue<_type>::Key> AnimatedValue<_type>::GetKeysNonContant()
 	{
 		return mKeys;
 	}
@@ -909,12 +908,12 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, Parametric, const _type&, const _type&, float, float, float, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, EaseIn, const _type&, const _type&, float);
@@ -923,7 +922,7 @@ CLASS_METHODS_META(o2::AnimatedValue<_type>)
 	PUBLIC_STATIC_FUNCTION(AnimatedValue<_type>, Linear, const _type&, const _type&, float);
 	PROTECTED_FUNCTION(void, Evaluate);
 	PROTECTED_FUNCTION(_type, Evaluate, float);
-	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SetTargetVoid, void*);

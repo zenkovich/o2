@@ -34,12 +34,11 @@ namespace o2
 		AnimationComponent* mOwner; // Animatable owner
 
 		friend class AnimationComponent;
-		friend class ANimation;
+		friend class Animation;
 
 		template<typename _type>
 		friend class AnimatedValue;
 	};
-	typedef Vector<AnimationState*> AnimationStatesVec;
 }
 
 CLASS_BASES_META(o2::AnimationState)

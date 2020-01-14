@@ -27,12 +27,12 @@ namespace o2
 		Reset();
 	}
 
-	AssetsBuilder::AssetsIdsVec AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, 
+	AssetsBuilder::Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, 
 														   bool forcible /*= false*/)
 	{
 		Reset();
 
-		AssetsIdsVec modifiedAssets;
+		Vector<UID> modifiedAssets;
 
 		mSourceAssetsPath = assetsPath;
 		mBuiltAssetsPath = dataAssetsPath;
@@ -62,6 +62,16 @@ namespace o2
 		return modifiedAssets;
 	}
 
+	const String& AssetsBuilder::GetSourceAssetsPath() const
+	{
+		return mSourceAssetsPath;
+	}
+
+	const String& AssetsBuilder::GetBuiltAssetsPath() const
+	{
+		return mBuiltAssetsPath;
+	}
+
 	void AssetsBuilder::InitializeConverters()
 	{
 		auto converterTypes = TypeOf(IAssetConverter).GetDerivedTypes();
@@ -73,6 +83,8 @@ namespace o2
 			for (auto tp : availableAssetTypes)
 				mAssetConverters.Add(tp, converter);
 		}
+
+		mStdAssetConverter.SetAssetsBuilder(this);
 	}
 
 	void AssetsBuilder::RemoveBuiltAssets()
@@ -146,9 +158,9 @@ namespace o2
 		}
 	}
 
-	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessRemovedAssets()
+	AssetsBuilder::Vector<UID> AssetsBuilder::ProcessRemovedAssets()
 	{
-		AssetsIdsVec modifiedAssets;
+		Vector<UID> modifiedAssets;
 		const Type* folderTypeId = &TypeOf(FolderAsset);
 
 		mBuiltAssetsTree.SortInverse();
@@ -212,9 +224,9 @@ namespace o2
 		return modifiedAssets;
 	}
 
-	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessModifiedAssets()
+	AssetsBuilder::Vector<UID> AssetsBuilder::ProcessModifiedAssets()
 	{
-		AssetsIdsVec modifiedAssets;
+		Vector<UID> modifiedAssets;
 		const Type* folderType = &TypeOf(FolderAsset);
 
 		mSourceAssetsTree.Sort();
@@ -299,9 +311,9 @@ namespace o2
 		return modifiedAssets;
 	}
 
-	AssetsBuilder::AssetsIdsVec AssetsBuilder::ProcessNewAssets()
+	AssetsBuilder::Vector<UID> AssetsBuilder::ProcessNewAssets()
 	{
-		AssetsIdsVec modifiedAssets;
+		Vector<UID> modifiedAssets;
 		const Type* folderType = &TypeOf(FolderAsset);
 
 		mSourceAssetsTree.Sort();
@@ -351,9 +363,9 @@ namespace o2
 		return modifiedAssets;
 	}
 
-	AssetsBuilder::AssetsIdsVec AssetsBuilder::ConvertersPostProcess()
+	AssetsBuilder::Vector<UID> AssetsBuilder::ConvertersPostProcess()
 	{
-		AssetsIdsVec res;
+		Vector<UID> res;
 
 		for (auto it = mAssetConverters.Begin(); it != mAssetConverters.End(); ++it)
 			res.Add(it->second->AssetsPostProcess());
@@ -368,7 +380,7 @@ namespace o2
 		DataNode data;
 		data = mBuiltAssetsTree;
 
-		data.SaveToFile(GetDataAssetsTreePath());
+		data.SaveToFile(GetBuiltAssetsTreePath());
 	}
 
 	void AssetsBuilder::GenerateMeta(const Type& assetType, const String& metaFullPath)

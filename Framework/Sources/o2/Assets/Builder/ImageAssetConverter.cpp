@@ -2,6 +2,7 @@
 #include "ImageAssetConverter.h"
 
 #include "o2/Assets/Assets.h"
+#include "o2/Assets/Builder/AssetsBuilder.h"
 #include "o2/Assets/ImageAsset.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
@@ -16,8 +17,8 @@ namespace o2
 
 	void ImageAssetConverter::ConvertAsset(const AssetTree::AssetNode& node)
 	{
-		String sourceAssetPath = o2Assets.GetAssetsPath() + node.path;
-		String buildedAssetPath = o2Assets.GetDataPath() + node.path;
+		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 		String sourceAssetMetaPath = sourceAssetPath + ".meta";
 		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
@@ -28,7 +29,7 @@ namespace o2
 
 	void ImageAssetConverter::RemoveAsset(const AssetTree::AssetNode& node)
 	{
-		String buildedAssetPath = o2Assets.GetDataPath() + node.path;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
 		o2FileSystem.FileDelete(buildedAssetPath);
@@ -37,8 +38,8 @@ namespace o2
 
 	void ImageAssetConverter::MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo)
 	{
-		String fullPathFrom = o2Assets.GetDataPath() + nodeFrom.path;
-		String fullPathTo = o2Assets.GetDataPath() + nodeTo.path;
+		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
+		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
 		String fullMetaPathFrom = fullPathFrom + ".meta";
 		String fullMetaPathTo = fullPathTo + ".meta";
 

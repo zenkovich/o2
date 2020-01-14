@@ -97,35 +97,32 @@ namespace o2
 
 			bool operator==(const CharDef& other) const { return false; }
 		};
-		typedef Vector<CharDef> CharDefsVec;
 
 		// -----------------------
 		// Characters packing line
 		// -----------------------
 		struct PackLine
 		{
-			int         position = 0;
-			int         height = 0;
-			int         length = 0;
-			CharDefsVec characters;
+			int position = 0;
+			int height = 0;
+			int length = 0;
 
+			Vector<CharDef> characters;
+
+		public:
 			bool operator==(const PackLine& other) const { return false; }
 		};
-		typedef Vector<PackLine*> PackLinesVec;
-
-		typedef Vector<Effect*> EffectsVec;
-		typedef Map<int, float> HeightsMap;
 
 	protected:
 		String  mFileName;     // Source file name
 		FT_Face mFreeTypeFace; // Free Type font face
 
-		EffectsVec mEffects; // Font effects
+		Vector<Effect*> mEffects; // Font effects
 
-		PackLinesVec mPackLines;           // Packed symbols lines
-		int          mLastPackLinePos = 0; // Last packed line bottom pos
+		Vector<PackLine*> mPackLines;           // Packed symbols lines
+		int               mLastPackLinePos = 0; // Last packed line bottom pos
 
-		mutable HeightsMap mHeights; // Cached line heights
+		mutable Map<int, float> mHeights; // Cached line heights
 
 	protected:
 		// Updates characters set

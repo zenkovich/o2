@@ -346,12 +346,12 @@ namespace o2
 		toggle->mToggleGroup = nullptr;
 	}
 
-	const ToggleGroup::TogglesVec& ToggleGroup::GetToggles() const
+	const ToggleGroup::Vector<Toggle*>& ToggleGroup::GetToggles() const
 	{
 		return mToggles;
 	}
 
-	const ToggleGroup::TogglesVec& ToggleGroup::GetToggled() const
+	const ToggleGroup::Vector<Toggle*>& ToggleGroup::GetToggled() const
 	{
 		return mToggled;
 	}

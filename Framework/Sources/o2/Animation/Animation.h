@@ -24,7 +24,6 @@ namespace o2
 	{
 	public:
 		struct AnimatedValueDef;
-		typedef Vector<AnimatedValueDef> AnimatedValuesVec;
 
 	public:
 		Function<void()> onChanged;        // It is called when some animated value has changed
@@ -54,10 +53,10 @@ namespace o2
 		void Clear();
 
 		// Returns animation values
-		AnimatedValuesVec& GetAnimationsValues();
+		Vector<AnimatedValueDef>& GetAnimationsValues();
 
 		// Returns animation values
-		const AnimatedValuesVec& GetAnimationsValues() const;
+		const Vector<AnimatedValueDef>& GetAnimationsValues() const;
 
 		// Returns is contains animated value by path (some like "path/abc/cde")
 		bool ContainsAnimationValue(const String& path) const;
@@ -94,19 +93,19 @@ namespace o2
 
 		// Sets keys in animated value by path
 		template<typename _type>
-		void SetKeys(const String& targetPath, const typename AnimatedValue<_type>::KeysVec& key);
+		void SetKeys(const String& targetPath, const Vector<typename AnimatedValue<_type>::Key>& key);
 
 		// Sets keys in animated value for target 
 		template<typename _type>
-		void SetKeys(_type* target, const typename AnimatedValue<_type>::KeysVec& key);
+		void SetKeys(_type* target, const Vector<typename AnimatedValue<_type>::Key>& key);
 
 		// Returns animated value keys by path
 		template<typename _type>
-		typename AnimatedValue<_type>::KeysVec GetKeys(const String& path);
+		Vector<typename AnimatedValue<_type>::Key> GetKeys(const String& path);
 
 		// Returns animated value keys by target
 		template<typename _type>
-		typename AnimatedValue<_type>::KeysVec GetKeys(_type* target);
+		Vector<typename AnimatedValue<_type>::Key> GetKeys(_type* target);
 
 		// Removes key in animated value by path and position
 		template<typename _type>
@@ -174,7 +173,7 @@ namespace o2
 		};
 
 	protected:
-		AnimatedValuesVec mAnimatedValues; // Animated value @SERIALIZABLE
+		Vector<AnimatedValueDef> mAnimatedValues; // Animated value @SERIALIZABLE
 		IObject*          mTarget;         // Target object
 		AnimationState*   mAnimationState; // Animation state owner
 
@@ -320,27 +319,27 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename AnimatedValue<_type>::KeysVec Animation::GetKeys(_type* target)
+	Vector<typename AnimatedValue<_type>::Key> Animation::GetKeys(_type* target)
 	{
 		AnimatedValue<_type> animVal = FindValue<_type*>(target);
 		if (animVal)
 			return animVal->GetKeys();
 
-		return AnimatedValue<_type>::KeysVec();
+		return AnimatedValue<_type>::Vector<Key>();
 	}
 
 	template<typename _type>
-	typename AnimatedValue<_type>::KeysVec Animation::GetKeys(const String& path)
+	Vector<typename AnimatedValue<_type>::Key> Animation::GetKeys(const String& path)
 	{
 		AnimatedValue<_type> animVal = FindValue<_type*>(path);
 		if (animVal)
 			return animVal->GetKeys();
 
-		return AnimatedValue<_type>::KeysVec();
+		return AnimatedValue<_type>::Vector<Key>();
 	}
 
 	template<typename _type>
-	void Animation::SetKeys(_type* target, const typename AnimatedValue<_type>::KeysVec& key)
+	void Animation::SetKeys(_type* target, const Vector<typename AnimatedValue<_type>::Key>& key)
 	{
 		AnimatedValue<_type> animVal = FindValue<_type*>(target);
 		if (!animVal)
@@ -350,7 +349,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Animation::SetKeys(const String& targetPath, const typename AnimatedValue<_type>::KeysVec& key)
+	void Animation::SetKeys(const String& targetPath, const Vector<typename AnimatedValue<_type>::Key>& key)
 	{
 		AnimatedValue<_type> animVal = FindValue<_type*>(targetPath);
 		if (!animVal)
@@ -478,8 +477,8 @@ CLASS_METHODS_META(o2::Animation)
 	PUBLIC_FUNCTION(void, SetTarget, IObject*, bool);
 	PUBLIC_FUNCTION(IObject*, GetTarget);
 	PUBLIC_FUNCTION(void, Clear);
-	PUBLIC_FUNCTION(AnimatedValuesVec&, GetAnimationsValues);
-	PUBLIC_FUNCTION(const AnimatedValuesVec&, GetAnimationsValues);
+	PUBLIC_FUNCTION(Vector<AnimatedValueDef>&, GetAnimationsValues);
+	PUBLIC_FUNCTION(const Vector<AnimatedValueDef>&, GetAnimationsValues);
 	PUBLIC_FUNCTION(bool, ContainsAnimationValue, const String&);
 	PUBLIC_FUNCTION(IAnimatedValue*, AddAnimationValueNoType, const String&);
 	PUBLIC_FUNCTION(bool, RemoveAnimationValue, const String&);

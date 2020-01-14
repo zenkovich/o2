@@ -17,14 +17,12 @@ namespace o2
 		class MetaInfo;
 		class Page;
 
-		typedef Vector<Page> PagesVec;
-
 	public:
 		PROPERTIES(AtlasAsset);
 		GETTER(MetaInfo*, meta, GetMeta);                  // Meta information getter
-		GETTER(AssetInfosVec, imagesInfos, GetImages);     // Containing images infos getter
+		GETTER(Vector<AssetInfo>, imagesInfos, GetImages);     // Containing images infos getter
 		GETTER(Vector<AssetRef>, images, GetImagesAssets); // Images assets getter
-		GETTER(PagesVec, pages, GetPages);                 // Pages getter
+		GETTER(Vector<Page>, pages, GetPages);                 // Pages getter
 
 	public:
 		// Destructor
@@ -40,13 +38,13 @@ namespace o2
 		bool operator!=(const AtlasAsset& other) const;
 
 		// Returns containing images infos array
-		AssetInfosVec GetImages() const;
+		Vector<AssetInfo> GetImages() const;
 
 		// Returns containing images assets
 		Vector<AssetRef> GetImagesAssets() const;
 
 		// Returns pages array
-		PagesVec GetPages() const;
+		Vector<Page> GetPages() const;
 
 		// Is contains image
 		bool ContainsImage(const ImageAssetRef& image);
@@ -152,8 +150,8 @@ namespace o2
 		};
 
 	protected:
-		AssetInfosVec mImagesAssetsInfos; // Loaded image infos
-		PagesVec      mPages;             // Pages
+		Vector<AssetInfo> mImagesAssetsInfos; // Loaded image infos
+		Vector<Page>      mPages;             // Pages
 
 	protected:
 		// Default constructor
@@ -257,9 +255,9 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAsset)
 {
 
-	PUBLIC_FUNCTION(AssetInfosVec, GetImages);
+	PUBLIC_FUNCTION(Vector<AssetInfo>, GetImages);
 	PUBLIC_FUNCTION(Vector<AssetRef>, GetImagesAssets);
-	PUBLIC_FUNCTION(PagesVec, GetPages);
+	PUBLIC_FUNCTION(Vector<Page>, GetPages);
 	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(bool, ContainsImage, const AssetInfo&);
 	PUBLIC_FUNCTION(bool, ContainsImage, UID);

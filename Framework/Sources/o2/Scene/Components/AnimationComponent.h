@@ -54,7 +54,7 @@ namespace o2
 		AnimationState* GetState(const String& name);
 
 		// Returns all states array
-		const AnimationStatesVec& GetStates() const;
+		const Vector<AnimationState*>& GetStates() const;
 
 		// Creates new state and plays him
 		AnimationState* Play(const Animation& animation, const String& name);
@@ -115,7 +115,6 @@ namespace o2
 			// Returns is agent hasn't no values
 			virtual bool IsEmpty() const = 0;
 		};
-		typedef Vector<IValueAgent*> ValueAgentsVec;
 
 		// ------------------------------
 		// Template value assigning agent
@@ -123,10 +122,8 @@ namespace o2
 		template<typename _type>
 		struct ValueAgent: public IValueAgent
 		{
-			using AnimatedValuesVec = Vector<Pair<AnimationState*, AnimatedValue<_type>*>>;
-
 		public:
-			AnimatedValuesVec   animValues; // Animated values associated with animation states
+			Vector<Pair<AnimationState*, AnimatedValue<_type>*>> animValues; // Animated values associated with animation states
 			IValueProxy<_type>* target;    // Target value proxy
 
 		public:
@@ -148,7 +145,7 @@ namespace o2
 		// ----------------------
 		struct BlendState
 		{
-			AnimationStatesVec  mBlendOffStates;           // Turning off states
+			Vector<AnimationState*>  mBlendOffStates;           // Turning off states
 			AnimationState*     mBlendOnState = nullptr;   // Turning on state
 			float               duration;                  // Blending duration
 			float               time = -1.0f;              // Current blending remaining time
@@ -158,9 +155,10 @@ namespace o2
 		};
 
 	protected:
-		AnimationStatesVec mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE @INVOKE_ON_CHANGE(OnStatesListChanged)
-		ValueAgentsVec     mValues; // Assigning value agents
-		BlendState         mBlend;  // Current blend parameters
+		Vector<AnimationState*> mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE @INVOKE_ON_CHANGE(OnStatesListChanged)
+		Vector<IValueAgent*>     mValues; // Assigning value agents
+
+		BlendState mBlend;  // Current blend parameters
 
 	protected:
 		// Removes animated value from agent by path
@@ -281,7 +279,7 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	PUBLIC_FUNCTION(void, RemoveState, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllStates);
 	PUBLIC_FUNCTION(AnimationState*, GetState, const String&);
-	PUBLIC_FUNCTION(const AnimationStatesVec&, GetStates);
+	PUBLIC_FUNCTION(const Vector<AnimationState*>&, GetStates);
 	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&, const String&);
 	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&);
 	PUBLIC_FUNCTION(AnimationState*, Play, const String&);

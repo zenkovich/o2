@@ -41,7 +41,7 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	Widget::Widget(ComponentsVec components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Widget::Widget(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -309,7 +309,7 @@ namespace o2
 		return GetLayoutData().childrenWorldRect;
 	}
 
-	const Widget::WidgetsVec& Widget::GetChildWidgets() const
+	const Vector<Widget*>& Widget::GetChildWidgets() const
 	{
 		return mChildWidgets;
 	}
@@ -425,7 +425,7 @@ namespace o2
 		mLayers.Clear();
 	}
 
-	const LayersVec& Widget::GetLayers() const
+	const Vector<WidgetLayer*>& Widget::GetLayers() const
 	{
 		return mLayers;
 	}
@@ -558,7 +558,7 @@ namespace o2
 		return mStates.FindMatch([&](auto state) { return state->name == name; });
 	}
 
-	const Widget::StatesVec& Widget::GetStates() const
+	const Vector<WidgetState*>& Widget::GetStates() const
 	{
 		return mStates;
 	}
@@ -852,17 +852,17 @@ namespace o2
 		return dynamic_cast<Widget*>(AddChild(widget, position));
 	}
 
-	Widget::WidgetsVec Widget::GetChildrenNonConst()
+	Vector<Widget*> Widget::GetChildrenNonConst()
 	{
 		return mChildWidgets;
 	}
 
-	LayersVec Widget::GetLayersNonConst()
+	Vector<WidgetLayer*> Widget::GetLayersNonConst()
 	{
 		return mLayers;
 	}
 
-	StatesVec Widget::GetStatesNonConst()
+	Vector<WidgetState*> Widget::GetStatesNonConst()
 	{
 		return mStates;
 	}

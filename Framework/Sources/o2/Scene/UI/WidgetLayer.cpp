@@ -200,12 +200,12 @@ namespace o2
 		return mParent;
 	}
 
-	WidgetLayer::ChildrenVec& WidgetLayer::GetChilds()
+	Vector<WidgetLayer*>& WidgetLayer::GetChilds()
 	{
 		return mChildren;
 	}
 
-	const WidgetLayer::ChildrenVec& o2::WidgetLayer::GetChilds() const
+	const Vector<WidgetLayer*>& o2::WidgetLayer::GetChilds() const
 	{
 		return mChildren;
 	}
@@ -272,9 +272,9 @@ namespace o2
 		return nullptr;
 	}
 
-	LayersVec WidgetLayer::GetAllChilds() const
+	Vector<WidgetLayer*> WidgetLayer::GetAllChilds() const
 	{
-		LayersVec res = mChildren;
+		Vector<WidgetLayer*> res = mChildren;
 		for (auto child : mChildren)
 		{
 			res.Add(child->GetAllChilds());

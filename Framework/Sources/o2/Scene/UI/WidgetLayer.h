@@ -13,9 +13,6 @@ namespace o2
 {
 	class Widget;
 
-	class WidgetLayer;
-	typedef Vector<WidgetLayer*>  LayersVec;
-
 #if IS_EDITOR
 	typedef SceneEditableObject WidgetLayerBase;
 #else
@@ -27,9 +24,6 @@ namespace o2
 	// ---------------------
 	class WidgetLayer: public WidgetLayerBase
 	{
-	public:
-		typedef Vector<WidgetLayer*> ChildrenVec;
-
 	public:
 		PROPERTIES(WidgetLayer);
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                       // Enable property
@@ -102,10 +96,10 @@ namespace o2
 		void RemoveAllChilds();
 
 		// Return child layers
-		ChildrenVec& GetChilds();
+		Vector<WidgetLayer*>& GetChilds();
 
 		// Returns constant child layers
-		const ChildrenVec& GetChilds() const;
+		const Vector<WidgetLayer*>& GetChilds() const;
 
 		// Adds child layer
 		WidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
@@ -122,7 +116,7 @@ namespace o2
 		_type* FindChild() const;
 
 		// Returns all child layers
-		LayersVec GetAllChilds() const;
+		Vector<WidgetLayer*> GetAllChilds() const;
 
 		// Sets depth
 		void SetDepth(float depth);
@@ -246,8 +240,8 @@ namespace o2
 
 		Widget* mOwnerWidget = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
 
-		WidgetLayer*  mParent = nullptr; // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
-		ChildrenVec   mChildren;         // Children layers @SERIALIZABLE
+		WidgetLayer*         mParent = nullptr; // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
+		Vector<WidgetLayer*> mChildren;         // Children layers @SERIALIZABLE
 
 		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
@@ -355,12 +349,12 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	PUBLIC_FUNCTION(WidgetLayer*, AddChild, WidgetLayer*);
 	PUBLIC_FUNCTION(bool, RemoveChild, WidgetLayer*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChilds);
-	PUBLIC_FUNCTION(ChildrenVec&, GetChilds);
-	PUBLIC_FUNCTION(const ChildrenVec&, GetChilds);
+	PUBLIC_FUNCTION(Vector<WidgetLayer*>&, GetChilds);
+	PUBLIC_FUNCTION(const Vector<WidgetLayer*>&, GetChilds);
 	PUBLIC_FUNCTION(WidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
 	PUBLIC_FUNCTION(WidgetLayer*, GetChild, const String&);
 	PUBLIC_FUNCTION(WidgetLayer*, FindChild, const String&);
-	PUBLIC_FUNCTION(LayersVec, GetAllChilds);
+	PUBLIC_FUNCTION(Vector<WidgetLayer*>, GetAllChilds);
 	PUBLIC_FUNCTION(void, SetDepth, float);
 	PUBLIC_FUNCTION(float, GetDepth);
 	PUBLIC_FUNCTION(void, SetTransparency, float);

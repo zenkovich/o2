@@ -67,7 +67,7 @@ namespace o2
 		friend class Widget;
 	};
 
-	typedef Vector<SceneLayer*> SceneLayersVec;
+	typedef Vector<SceneLayer*> Vector<SceneLayer*>;
 
 	// -------------------------
 	// Layer data node converter
