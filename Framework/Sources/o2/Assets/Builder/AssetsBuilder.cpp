@@ -27,7 +27,7 @@ namespace o2
 		Reset();
 	}
 
-	AssetsBuilder::Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, 
+	Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, 
 														   bool forcible /*= false*/)
 	{
 		Reset();
@@ -158,7 +158,7 @@ namespace o2
 		}
 	}
 
-	AssetsBuilder::Vector<UID> AssetsBuilder::ProcessRemovedAssets()
+	Vector<UID> AssetsBuilder::ProcessRemovedAssets()
 	{
 		Vector<UID> modifiedAssets;
 		const Type* folderTypeId = &TypeOf(FolderAsset);
@@ -224,7 +224,7 @@ namespace o2
 		return modifiedAssets;
 	}
 
-	AssetsBuilder::Vector<UID> AssetsBuilder::ProcessModifiedAssets()
+	Vector<UID> AssetsBuilder::ProcessModifiedAssets()
 	{
 		Vector<UID> modifiedAssets;
 		const Type* folderType = &TypeOf(FolderAsset);
@@ -311,7 +311,7 @@ namespace o2
 		return modifiedAssets;
 	}
 
-	AssetsBuilder::Vector<UID> AssetsBuilder::ProcessNewAssets()
+	Vector<UID> AssetsBuilder::ProcessNewAssets()
 	{
 		Vector<UID> modifiedAssets;
 		const Type* folderType = &TypeOf(FolderAsset);
@@ -363,7 +363,7 @@ namespace o2
 		return modifiedAssets;
 	}
 
-	AssetsBuilder::Vector<UID> AssetsBuilder::ConvertersPostProcess()
+	Vector<UID> AssetsBuilder::ConvertersPostProcess()
 	{
 		Vector<UID> res;
 

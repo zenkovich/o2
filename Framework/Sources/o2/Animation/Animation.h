@@ -174,8 +174,8 @@ namespace o2
 
 	protected:
 		Vector<AnimatedValueDef> mAnimatedValues; // Animated value @SERIALIZABLE
-		IObject*          mTarget;         // Target object
-		AnimationState*   mAnimationState; // Animation state owner
+		IObject*                 mTarget;         // Target object
+		AnimationState*          mAnimationState; // Animation state owner
 
 	protected:
 		// Evaluates all animated values by time

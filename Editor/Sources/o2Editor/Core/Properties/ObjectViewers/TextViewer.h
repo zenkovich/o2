@@ -1,8 +1,8 @@
 #pragma once
 
 #include "o2/Assets/ImageAsset.h"
-#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2/Render/Text.h"
+#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;
 
@@ -33,7 +33,7 @@ namespace Editor
 		TextViewer();
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets) override;
+		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		IOBJECT(TextViewer);
 
@@ -77,6 +77,8 @@ END_META;
 CLASS_METHODS_META(Editor::TextViewer)
 {
 
-	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+
+	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 }
 END_META;

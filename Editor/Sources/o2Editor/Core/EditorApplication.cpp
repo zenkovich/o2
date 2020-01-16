@@ -1,7 +1,6 @@
 #include "o2Editor/stdafx.h"
 #include "EditorApplication.h"
 
-#include "Actions/PropertyChange.h"
 #include "o2/Animation/AnimatedFloat.h"
 #include "o2/Animation/AnimatedVector.h"
 #include "o2/Application/Input.h"
@@ -22,6 +21,7 @@
 #include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/Core/Actions/IAction.h"
+#include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/MenuPanel.h"
 #include "o2Editor/Core/Properties/Properties.h"

@@ -18,9 +18,6 @@ namespace o2
 	class TaskManager: public Singleton<TaskManager>
 	{
 	public:
-		typedef Vector<Task*> TasksVec;
-
-	public:
 		// Stops task with specified id
 		void StopTask(int id);
 
@@ -46,8 +43,8 @@ namespace o2
 		void Play(const Animation& animation, float delay = 0.0f);
 
 	protected:
-		TasksVec mTasks;      // All tasks array
-		int      mLastTaskId; // Last given task id
+		Vector<Task*> mTasks;      // All tasks array
+		int           mLastTaskId; // Last given task id
 		
 	protected:
 		// Default constructor

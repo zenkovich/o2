@@ -1,8 +1,8 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/PropertiesContext.h"
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Utils/Property.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/Properties/PropertiesContext.h"
 
 using namespace o2;
 
@@ -82,18 +82,16 @@ namespace Editor
 			void Refresh();
 			void SetValue();
 		};
-		typedef Vector<Pair<TargetObjectData, TargetObjectData>> TargetObjectsVec;
-
-		typedef Vector<IPropertyField*> PropertyFieldsVec;
 
 	protected:
 		Spoiler* mSpoiler; // Properties spoiler
 
 		const VectorType* mVectorType = nullptr; // Vector type
-		TargetObjectsVec  mTargetObjects;        // Target objects
+
+		Vector<Pair<TargetObjectData, TargetObjectData>>  mTargetObjects; // Target objects
 						 						    
-		PropertyFieldsVec mValueProperties;     // Values properties
-		PropertyFieldsVec mValuePropertiesPool; // Unused value properties pool
+		Vector<IPropertyField*> mValueProperties;     // Values properties
+		Vector<IPropertyField*> mValuePropertiesPool; // Unused value properties pool
 
 		IntegerProperty* mCountProperty = nullptr; // Vector count property
 

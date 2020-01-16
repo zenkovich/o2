@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
-
 #include "ActionsList.h"
+
+#include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "PropertyChange.h"
 
 namespace Editor
 {
@@ -89,12 +89,12 @@ namespace Editor
 		mForwardActions.Clear();
 	}
 
-	const ActionsList::EditorActionsVec ActionsList::GetUndoActions() const
+	const Vector<IAction*> ActionsList::GetUndoActions() const
 	{
 		return mActions;
 	}
 
-	const ActionsList::EditorActionsVec ActionsList::GetRedoActions() const
+	const Vector<IAction*> ActionsList::GetRedoActions() const
 	{
 		return mForwardActions;
 	}

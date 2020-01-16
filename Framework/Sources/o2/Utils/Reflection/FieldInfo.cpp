@@ -55,7 +55,7 @@ namespace o2
 		return mOwnerType;
 	}
 
-	const FieldInfo::AttributesVec& FieldInfo::GetAttributes() const
+	const Vector<IAttribute*>& FieldInfo::GetAttributes() const
 	{
 		return mAttributes;
 	}

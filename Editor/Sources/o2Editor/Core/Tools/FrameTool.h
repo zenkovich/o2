@@ -21,9 +21,6 @@ namespace Editor
     class FrameTool: public SelectionTool
     {
     public:
-        typedef Vector<Basis> BasisVec;
-
-    public:
         // Default constructor
         FrameTool();
 
@@ -46,7 +43,6 @@ namespace Editor
 
             bool operator==(const SnapLine& other) const { return color == other.color && begin == other.begin && end == other.end; }
         };
-        typedef Vector<SnapLine> LinesVec;
 
     protected:
         const Color4 mFrameColor = Color4(44, 62, 80, 255);           // Objects frame color
@@ -90,10 +86,10 @@ namespace Editor
         bool mIsDragging = false;	   // Is frame dragging
         bool mChangedFromThis = false; // Is objects changed from this, needs to break circular updating
 
-        BasisVec         mBeforeTransforms;   		 // Array of objects transformations before changing
+        Vector<Basis>    mBeforeTransforms;   		 // Array of objects transformations before changing
         TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
-        LinesVec mSnapLines; // Immediate drawing lines, used for drawing snapping
+        Vector<SnapLine> mSnapLines; // Immediate drawing lines, used for drawing snapping
 
     protected:
         // Draws tool

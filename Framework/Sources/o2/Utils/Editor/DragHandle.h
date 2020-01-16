@@ -327,14 +327,11 @@ namespace o2
 	class ISelectableDragHandlesGroup
 	{
 	public:
-		typedef Vector<DragHandle*> SelectableDragHandlesVec;
-
-	public:
 		// Returns selected handles in group
-		virtual SelectableDragHandlesVec GetSelectedHandles() const = 0;
+		virtual Vector<DragHandle*> GetSelectedHandles() const = 0;
 
 		// Returns all handles in group 
-		virtual SelectableDragHandlesVec GetAllHandles() const = 0;
+		virtual Vector<DragHandle*> GetAllHandles() const = 0;
 
 		// Selects handle
 		virtual void SelectHandle(DragHandle* handle) = 0;
@@ -383,17 +380,14 @@ namespace o2
 	class SelectableDragHandlesGroup : public ISelectableDragHandlesGroup
 	{
 	public:
-		typedef Vector<DragHandle*> SelectableDragHandlesVec;
-
-	public:
 		// Destructor
 		~SelectableDragHandlesGroup();
 
 		// Returns selected handles in group
-		SelectableDragHandlesVec GetSelectedHandles() const;
+		Vector<DragHandle*> GetSelectedHandles() const;
 
 		// Returns all handles in group 
-		SelectableDragHandlesVec GetAllHandles() const;
+		Vector<DragHandle*> GetAllHandles() const;
 
 		// Selects handle
 		void SelectHandle(DragHandle* handle) override;
@@ -414,8 +408,8 @@ namespace o2
 		void SelectAll() override;
 
 	protected:
-		SelectableDragHandlesVec mSelectedHandles;
-		SelectableDragHandlesVec mHandles;
+		Vector<DragHandle*> mSelectedHandles;
+		Vector<DragHandle*> mHandles;
 
 	protected:
 		// It is called when selection is changed - some handle was added or removed from selection

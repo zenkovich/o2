@@ -23,7 +23,6 @@ namespace o2
 
 			bool operator==(const Parameter& other) const;
 		};
-		typedef Vector<Parameter> ParametersVec;
 
 	public:
 		// Returns cloned copy
@@ -42,17 +41,17 @@ namespace o2
 		const Type* GetReturnType() const;
 
 		// Returns function's parameters
-		const ParametersVec& GetParameters() const;
+		const Vector<Parameter>& GetParameters() const;
 
 		// Returns protection section of function
 		ProtectSection GetProtectionSection() const;
 
 	protected:
-		ProtectSection mProtectSection; // Protection section
-		Type*          mOwnerType;      // Owner type pointer
-		String         mName;           // Name of function
-		const Type*    mReturnType;     // Function returning type
-		ParametersVec  mParameters;     // Function parameters list
+		ProtectSection    mProtectSection; // Protection section
+		Type*             mOwnerType;      // Owner type pointer
+		String            mName;           // Name of function
+		const Type*       mReturnType;     // Function returning type
+		Vector<Parameter> mParameters;     // Function parameters list
 
 		friend class Type;
 		friend class TypeInitializer;

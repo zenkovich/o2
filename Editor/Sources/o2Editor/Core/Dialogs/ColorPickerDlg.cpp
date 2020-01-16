@@ -1,19 +1,19 @@
 #include "o2Editor/stdafx.h"
-#include "o2Editor/Core/Dialogs/ColorPickerDlg.h"
+#include "ColorPickerDlg.h"
 
-#include "o2Editor/Core/UIRoot.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayer.h"
+#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/DropDown.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/HorizontalLayout.h"
 #include "o2/Scene/UI/Widgets/HorizontalProgress.h"
 #include "o2/Scene/UI/Widgets/Image.h"
 #include "o2/Scene/UI/Widgets/Label.h"
-#include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Scene/UI/Widgets/VerticalProgress.h"
-#include "o2/Scene/UI/WidgetLayer.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Window.h"
+#include "o2Editor/Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::ColorPickerDlg);
 

@@ -1,6 +1,15 @@
 #include "o2Editor/stdafx.h"
 #include "SceneEditScreen.h"
 
+#include "o2/Render/Render.h"
+#include "o2/Render/Sprite.h"
+#include "o2/Scene/Actor.h"
+#include "o2/Scene/DrawableComponent.h"
+#include "o2/Scene/Scene.h"
+#include "o2/Scene/SceneLayer.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/Tree.h"
+#include "o2/Utils/Math/Math.h"
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2Editor/Core/Actions/Select.h"
 #include "o2Editor/Core/EditorApplication.h"
@@ -10,18 +19,9 @@
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
-#include "o2/Render/Render.h"
-#include "o2/Render/Sprite.h"
-#include "o2/Scene/Actor.h"
-#include "o2/Scene/DrawableComponent.h"
-#include "o2/Scene/Scene.h"
-#include "o2/Scene/SceneLayer.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
 #include "o2Editor/TreeWindow/SceneTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "o2/Scene/UI/Widgets/Tree.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Utils/Math/Math.h"
 
 DECLARE_SINGLETON(Editor::SceneEditScreen);
 
@@ -191,7 +191,7 @@ namespace Editor
 		// 	o2Render.DrawLine(bs.offs, bs.offs + bs.yv*100.0f);
 	}
 
-	void SceneEditScreen::SelectObjects(SceneEditableObjectsVec objects, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjects(Vector<SceneEditableObject*> objects, bool additive /*= true*/)
 	{
 		auto prevSelectedObjects = mSelectedObjects;
 
@@ -252,12 +252,12 @@ namespace Editor
 		}
 	}
 
-	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetSelectedObjects() const
+	const Vector<SceneEditableObject*>& SceneEditScreen::GetSelectedObjects() const
 	{
 		return mSelectedObjects;
 	}
 
-	const SceneEditScreen::SceneEditableObjectsVec& SceneEditScreen::GetTopSelectedObjects() const
+	const Vector<SceneEditableObject*>& SceneEditScreen::GetTopSelectedObjects() const
 	{
 		return mTopSelectedObjects;
 	}
@@ -283,10 +283,10 @@ namespace Editor
 
 		mSceneTree->onObjectsSelectionChanged += THIS_FUNC(OnTreeSelectionChanged);
 
-		o2Scene.onObjectsChanged += Function<void(SceneEditableObjectsVec)>(this, &SceneEditScreen::OnSceneChanged);
+		o2Scene.onObjectsChanged += Function<void(Vector<SceneEditableObject*>)>(this, &SceneEditScreen::OnSceneChanged);
 	}
 
-	void SceneEditScreen::OnTreeSelectionChanged(SceneEditableObjectsVec selectedObjects)
+	void SceneEditScreen::OnTreeSelectionChanged(Vector<SceneEditableObject*> selectedObjects)
 	{
 		if (mSelectedFromThis)
 		{
@@ -341,7 +341,7 @@ namespace Editor
 		}
 	}
 
-	void SceneEditScreen::OnSceneChanged(SceneEditableObjectsVec actors)
+	void SceneEditScreen::OnSceneChanged(Vector<SceneEditableObject*> actors)
 	{
 		mNeedRedraw = true;
 
@@ -364,7 +364,7 @@ namespace Editor
 			OnObjectsSelectedFromThis();
 	}
 
-	void SceneEditScreen::SelectObjectsWithoutAction(SceneEditableObjectsVec objects, bool additive /*= true*/)
+	void SceneEditScreen::SelectObjectsWithoutAction(Vector<SceneEditableObject*> objects, bool additive /*= true*/)
 	{
 		if (!additive)
 			mSelectedObjects.Clear();

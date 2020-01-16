@@ -340,10 +340,10 @@ namespace o2
 // ISelectableDragableObjectsGroup implementation
 
 		// Returns selected objects in group
-		SelectDragObjectsVec GetSelectedDragObjects() const override;
+		Vector<SelectableDragableObject*> GetSelectedDragObjects() const override;
 
 		// Returns all objects in group 
-		SelectDragObjectsVec GetAllObjects() const override;
+		Vector<SelectableDragableObject*> GetAllObjects() const override;
 
 		// Selects object
 		void Select(SelectableDragableObject* object) override;
@@ -699,8 +699,8 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, OnNodeRBClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
 	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<UnknownPtr>, UnknownPtr, UnknownPtr);
-	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
-	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);
+	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
+	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetAllObjects);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*, bool);
 	PROTECTED_FUNCTION(void, Deselect, SelectableDragableObject*);

@@ -168,7 +168,7 @@ namespace o2
 		}));
 	}
 
-	void Curve::AppendKeys(const KeysVec& keys)
+	void Curve::AppendKeys(const Vector<Key>& keys)
 	{
 		if (keys.IsEmpty())
 			return;
@@ -198,7 +198,7 @@ namespace o2
 		}));
 	}
 
-	void Curve::PrependKeys(const KeysVec& keys)
+	void Curve::PrependKeys(const Vector<Key>& keys)
 	{
 		if (keys.IsEmpty())
 			return;
@@ -228,7 +228,7 @@ namespace o2
 		}), position);
 	}
 
-	void Curve::InsertKeys(const KeysVec& keys, float position)
+	void Curve::InsertKeys(const Vector<Key>& keys, float position)
 	{
 		if (keys.IsEmpty())
 			return;
@@ -563,12 +563,12 @@ namespace o2
 		return false;
 	}
 
-	const Curve::KeysVec& Curve::GetKeys() const
+	const Vector<Curve::Key>& Curve::GetKeys() const
 	{
 		return mKeys;
 	}
 
-	void Curve::SetKeys(const KeysVec& keys)
+	void Curve::SetKeys(const Vector<Key>& keys)
 	{
 		mKeys = keys;
 		CheckSmoothKeys();
@@ -740,7 +740,7 @@ namespace o2
 		onKeysChanged();
 	}
 
-	Curve::KeysVec Curve::GetKeysNonContant()
+	Vector<Curve::Key> Curve::GetKeysNonContant()
 	{
 		return mKeys;
 	}

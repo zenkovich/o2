@@ -1,6 +1,15 @@
 #include "o2Editor/stdafx.h"
 #include "ActorViewer.h"
 
+#include "o2/Scene/Actor.h"
+#include "o2/Scene/Component.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/Button.h"
+#include "o2/Scene/UI/Widgets/EditBox.h"
+#include "o2/Scene/UI/Widgets/ScrollArea.h"
+#include "o2/Scene/UI/Widgets/Tree.h"
+#include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h"
@@ -12,15 +21,6 @@
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorTransformViewer.h"
-#include "o2/Scene/Actor.h"
-#include "o2/Scene/Component.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Scene/UI/WidgetLayout.h"
-#include "o2/Scene/UI/Widgets/Button.h"
-#include "o2/Scene/UI/Widgets/EditBox.h"
-#include "o2/Scene/UI/Widgets/ScrollArea.h"
-#include "o2/Scene/UI/Widgets/Tree.h"
-#include "o2/Scene/UI/Widgets/VerticalLayout.h"
 
 namespace Editor
 {

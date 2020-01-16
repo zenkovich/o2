@@ -62,7 +62,7 @@ namespace o2
 
 	void TaskManager::Update(float dt)
 	{
-		TasksVec doneTasks;
+		Vector<Task*> doneTasks;
 		for (auto task : mTasks)
 		{
 			task->Update(dt);

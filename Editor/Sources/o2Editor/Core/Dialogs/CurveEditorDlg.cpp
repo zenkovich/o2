@@ -1,12 +1,12 @@
 #include "o2Editor/stdafx.h"
 #include "CurveEditorDlg.h"
 
-#include "o2Editor/Core/UI/CurveEditor/CurvesEditor.h"
-#include "o2Editor/Core/UIRoot.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Window.h"
+#include "o2Editor/Core/UI/CurveEditor/CurvesEditor.h"
+#include "o2Editor/Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::CurveEditorDlg);
 

@@ -1,11 +1,10 @@
 #pragma once
 
-#include "o2Editor/Core/WindowsSystem/WindowsLayout.h"
-#include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2Editor/Core/WindowsSystem/WindowsLayout.h"
 
 using namespace o2;
-
 
 namespace o2
 {
@@ -30,10 +29,6 @@ namespace Editor
 	class WindowsManager: public Singleton<WindowsManager>
 	{
 	public:
-		typedef Vector<IEditorWindow*> EditorWindowsVec;
-		typedef Map<String, WindowsLayout> WndLayoutsMap;
-
-	public:
 		// Adds new window
 		void AddWindow(IEditorWindow* window);
 
@@ -57,9 +52,9 @@ namespace Editor
 		void SaveCurrentWindowsLayout(const String& name);
 
 	protected:
-		EditorWindowsVec mEditorWindows;           // Editors windows list
-		DockWindowPlace* mMainDockPlace = nullptr; // Main windows dock place
-		WndLayoutsMap   mAvailableLayouts;        // Available layouts
+		Vector<IEditorWindow*>     mEditorWindows;           // Editors windows list
+		DockWindowPlace*           mMainDockPlace = nullptr; // Main windows dock place
+		Map<String, WindowsLayout> mAvailableLayouts;        // Available layouts
 
 	protected:
 		// Default constructor

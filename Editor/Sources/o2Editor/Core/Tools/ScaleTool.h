@@ -1,8 +1,8 @@
 #pragma once
 
+#include "o2/Utils/Math/Basis.h"
 #include "o2Editor/Core/Tools/SelectionTool.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
-#include "o2/Utils/Math/Basis.h"
 
 namespace Editor
 {
@@ -13,9 +13,6 @@ namespace Editor
     // -------------------------
     class ScaleTool: public SelectionTool
     {
-    public:
-        typedef Vector<Basis> BasisVec;
-
     public:
         float bothScaleSence = 0.01f;
 
@@ -41,7 +38,7 @@ namespace Editor
         Vec2F mLastVerHandlePos;  // Last vertical handle position
         Vec2F mLastBothHandlePos; // Last both axis handle position
 
-        BasisVec         mBeforeTransforms;			 // Array of objects' transformations before changing
+        Vector<Basis>    mBeforeTransforms;			 // Array of objects' transformations before changing
         TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
     protected:

@@ -145,11 +145,11 @@ namespace o2
 		class Key: public ISerializable
 		{
 		public:
-			UInt64 uid;              // Random unique id @SERIALIZABLE
-			float  position;		 // Position on time line, in seconds @SERIALIZABLE
-			Vec2F  value;			 // Value @SERIALIZABLE
-			Vec2F  prevSupportValue; // Previous animation segment support value @SERIALIZABLE
-			Vec2F  nextSupportValue; // Next animation segment support value @SERIALIZABLE
+			UInt64 uid;                  // Random unique id @SERIALIZABLE
+			float  position;		     // Position on time line, in seconds @SERIALIZABLE
+			Vec2F  value;			     // Value @SERIALIZABLE
+			Vec2F  prevSupportValue;     // Previous animation segment support value @SERIALIZABLE
+			Vec2F  nextSupportValue;     // Next animation segment support value @SERIALIZABLE
 			float  leftSupportValue;	 // Transition curve coefficient for previous animation segment @SERIALIZABLE
 			float  leftSupportPosition;  // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
 			float  rightSupportValue;	 // Transition curve coefficient for next animation segment @SERIALIZABLE

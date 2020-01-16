@@ -55,7 +55,7 @@ namespace o2
 			isReference == other.isReference;
 	}
 
-	const FunctionInfo::ParametersVec& FunctionInfoBase::GetParameters() const
+	const Vector<FunctionInfoBase::Parameter>& FunctionInfoBase::GetParameters() const
 	{
 		return mParameters;
 	}

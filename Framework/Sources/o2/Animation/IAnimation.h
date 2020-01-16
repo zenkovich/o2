@@ -18,7 +18,7 @@ namespace o2
 	// -------------------------
 	// Basic animation interface
 	// -------------------------
-	class IAnimation: public ISerializable
+	class IAnimation : public ISerializable
 	{
 	public:
 		PROPERTIES(IAnimation);
@@ -157,7 +157,8 @@ namespace o2
 		virtual void RemoveAllTimeEvents();
 
 		SERIALIZABLE(IAnimation);
-		
+
+	protected:
 		float mTime;           // Current animation time, can be out of bounds
 		float mInDurationTime; // In duration time
 		float mDuration;       // Animation duration @SERIALIZABLE

@@ -13,9 +13,9 @@ namespace Editor
 	void ITrackControl::UpdateHandles()
 	{}
 
-	ITrackControl::KeyHandlesVec ITrackControl::GetKeyHandles() const
+	Vector<ITrackControl::KeyHandle*> ITrackControl::GetKeyHandles() const
 	{
-		return KeyHandlesVec();
+		return Vector<KeyHandle*>();
 	}
 
 	Widget* ITrackControl::GetTreePartControls() const

@@ -14,7 +14,7 @@ namespace Editor
 		DefaultObjectViewer();
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets) override;
+		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
@@ -41,7 +41,9 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultObjectViewer)
 {
 
-	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+
+	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 }
 END_META;

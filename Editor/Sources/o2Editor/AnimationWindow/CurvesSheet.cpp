@@ -1,13 +1,12 @@
 #include "o2Editor/stdafx.h"
 
-#include "o2Editor/AnimationWindow/CurvesSheet.h"
-
 #include "o2/Animation/AnimatedFloat.h"
-#include "o2Editor/AnimationWindow/AnimationWindow.h"
-#include "o2Editor/AnimationWindow/Timeline.h"
-#include "o2Editor/AnimationWindow/Tree.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
+#include "o2Editor/AnimationWindow/CurvesSheet.h"
+#include "o2Editor/AnimationWindow/Timeline.h"
+#include "o2Editor/AnimationWindow/Tree.h"
 
 namespace Editor
 {

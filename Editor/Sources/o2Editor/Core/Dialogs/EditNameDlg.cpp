@@ -1,15 +1,15 @@
 #include "o2Editor/stdafx.h"
 #include "EditNameDlg.h"
 
-#include "o2Editor/Core/UIRoot.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayer.h"
+#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/HorizontalLayout.h"
-#include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2/Scene/UI/WidgetLayer.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Window.h"
+#include "o2Editor/Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::NameEditDlg);
 

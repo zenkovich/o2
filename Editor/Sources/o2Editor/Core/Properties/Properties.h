@@ -1,11 +1,11 @@
 #pragma once
 
-#include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/Properties/PropertiesContext.h"
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Utils/Delegates.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/String.h"
+#include "o2Editor/Core/EditorApplication.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/Properties/PropertiesContext.h"
 
 using namespace o2;
 

@@ -2,8 +2,8 @@
 #include "FloatProperty.h"
 
 #include "o2/Application/Application.h"
-#include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/WidgetLayer.h"
+#include "o2/Scene/UI/Widgets/EditBox.h"
 
 
 namespace Editor

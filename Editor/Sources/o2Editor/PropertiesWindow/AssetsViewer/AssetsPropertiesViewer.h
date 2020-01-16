@@ -35,14 +35,10 @@ namespace Editor
 		IOBJECT(AssetsPropertiesViewer);
 
 	protected:
-		typedef Vector<IAssetPropertiesViewer*> AssetPropertiesViewersVec;
-		typedef Vector<AssetRef*> AssetsVec;
-		typedef Map<const Type*, AssetPropertiesViewersVec> TypeAssetViewersMap;
+		Vector<AssetRef*> mTargetAssets; // Current target assets
 
-		AssetsVec mTargetAssets; // Current target assets
-
-		IAssetPropertiesViewer*   mCurrentViewer = nullptr;      // Current asset viewer
-		AssetPropertiesViewersVec mAvailableAssetViewers;        // Available asset viewers
+		IAssetPropertiesViewer*         mCurrentViewer = nullptr; // Current asset viewer
+		Vector<IAssetPropertiesViewer*> mAvailableAssetViewers;   // Available asset viewers
 
 	protected:
 		// Sets target objects

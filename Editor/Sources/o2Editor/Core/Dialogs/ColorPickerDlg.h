@@ -1,8 +1,8 @@
 #pragma once
 
+#include "o2/Events/CursorEventsArea.h"
 #include "o2/Events/CursorEventsListener.h"
 #include "o2/Render/TextureRef.h"
-#include "o2/Events/CursorEventsArea.h"
 #include "o2/Utils/Delegates.h"
 #include "o2/Utils/Math/Color.h"
 #include "o2/Utils/Singleton.h"

@@ -59,12 +59,6 @@ namespace o2
 			bool operator==(const BaseType& other) const { return type == other.type; }
 		};
 
-		typedef Vector<FieldInfo*> FieldInfosVec;
-		typedef Vector<FunctionInfo*> FunctionsInfosVec;
-		typedef Vector<StaticFunctionInfo*> StaticFunctionsInfosVec;
-		typedef Vector<Type*> TypesVec;
-		typedef Vector<BaseType> BaseTypesVec;
-
 	public:
 		// Default constructor
 		Type(const String& name, int size, ITypeSerializer* serializer);
@@ -97,25 +91,25 @@ namespace o2
 		virtual Usage GetUsage() const;
 
 		// Returns vector of base types
-		const BaseTypesVec& GetBaseTypes() const;
+		const Vector<BaseType>& GetBaseTypes() const;
 
 		// Returns fields informations array
-		const FieldInfosVec& GetFields() const;
+		const Vector<FieldInfo*>& GetFields() const;
 
 		// Returns fields informations array with all base types
-		FieldInfosVec GetFieldsWithBaseClasses() const;
+		Vector<FieldInfo*> GetFieldsWithBaseClasses() const;
 
 		// Returns functions informations array
-		const FunctionsInfosVec& GetFunctions() const;
+		const Vector<FunctionInfo*>& GetFunctions() const;
 
 		// Returns static functions informations array
-		const StaticFunctionsInfosVec& GetStaticFunctions() const;
+		const Vector<StaticFunctionInfo*>& GetStaticFunctions() const;
 
 		// Returns functions informations array with all base types
-		FunctionsInfosVec GetFunctionsWithBaseClasses() const;
+		Vector<FunctionInfo*> GetFunctionsWithBaseClasses() const;
 
 		// Returns functions informations array with all base types
-		StaticFunctionsInfosVec GetStaticFunctionsWithBaseClasses() const;
+		Vector<StaticFunctionInfo*> GetStaticFunctionsWithBaseClasses() const;
 
 		// Returns field information by name
 		FieldInfo* GetField(const String& name) const;
@@ -170,16 +164,15 @@ namespace o2
 	protected:
 		TypeId mId;   // Id of type
 		String mName; // Name of object type
+		int    mSize; // Size of type in bytes
 
-		BaseTypesVec mBaseTypes; // Base types ids with offset 
+		Vector<BaseType> mBaseTypes; // Base types ids with offset 
 
-		FieldInfosVec           mFields;          // Fields information
-		FunctionsInfosVec       mFunctions;       // Functions informations
-		StaticFunctionsInfosVec mStaticFunctions; // Functions informations
+		Vector<FieldInfo*>          mFields;          // Fields information
+		Vector<FunctionInfo*>       mFunctions;       // Functions informations
+		Vector<StaticFunctionInfo*> mStaticFunctions; // Functions informations
 
 		mutable Type* mPtrType = nullptr; // Pointer type from this
-
-		int mSize; // Size of type in bytes
 
 		ITypeSerializer* mSerializer = nullptr; // Value serializer
 

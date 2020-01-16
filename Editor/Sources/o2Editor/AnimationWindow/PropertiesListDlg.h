@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2/Utils/Singleton.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
+#include "o2/Utils/Singleton.h"
 
 namespace o2
 {

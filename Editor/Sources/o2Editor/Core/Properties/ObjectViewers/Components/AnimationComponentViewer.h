@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2/Scene/Components/AnimationComponent.h"
+#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;
 
@@ -17,7 +17,7 @@ namespace Editor
 		AnimationComponentViewer();
 
 		// Refreshing controls and properties by target objects
-		void Refresh(const TargetsVec& targetObjets) override;
+		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		IOBJECT(AnimationComponentViewer);
 	};
@@ -35,6 +35,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationComponentViewer)
 {
 
-	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+
+	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 }
 END_META;

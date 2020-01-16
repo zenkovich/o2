@@ -1,12 +1,12 @@
 #include "o2Editor/stdafx.h"
 #include "AddComponentPanel.h"
 
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/PropertiesWindow/ActorsViewer/ActorViewer.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/PropertiesWindow/ActorsViewer/ActorViewer.h"
 
 namespace Editor
 {

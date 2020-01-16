@@ -1,11 +1,11 @@
 #include "o2Editor/stdafx.h"
 #include "SceneWindow.h"
 
-#include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2/Scene/UI/Widgets/Button.h"
-#include "o2/Scene/UI/Widgets/CustomDropDown.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/Button.h"
+#include "o2/Scene/UI/Widgets/CustomDropDown.h"
+#include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {

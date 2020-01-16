@@ -1,6 +1,8 @@
 #pragma once
 
 #include "AnimationKeyDragHandle.h"
+#include "o2/Scene/UI/Widget.h"
+#include "o2/Scene/UI/Widgets/Image.h"
 #include "o2Editor/AnimationWindow/AnimationKeysActions.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
@@ -9,8 +11,6 @@
 #include "o2Editor/Core/Actions/ActionsList.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "o2/Scene/UI/Widget.h"
-#include "o2/Scene/UI/Widgets/Image.h"
 
 using namespace o2;
 
@@ -55,7 +55,7 @@ namespace Editor
 		void UpdateHandles();
 
 		// Returns key handles list
-		KeyHandlesVec GetKeyHandles() const override;
+		Vector<KeyHandle*> GetKeyHandles() const override;
 
 		// Returns a container of controllers that are part of a tree
 		Widget* GetTreePartControls() const override;
@@ -83,7 +83,7 @@ namespace Editor
 	private:
 		typedef typename AnimatedValueType::ValueType AnimatedValueTypeValueType;
 
-		KeyHandlesVec mHandles; // List of handles, each for keys
+		Vector<KeyHandle*> mHandles; // List of handles, each for keys
 
 		String mAnimatedValuePath; // Path to animated value in animation
 
@@ -221,7 +221,7 @@ namespace Editor
 	}
 
 	template<typename AnimatedValueType>
-	ITrackControl::KeyHandlesVec KeyFramesTrackControl<AnimatedValueType>::GetKeyHandles() const
+	Vector<ITrackControl::KeyHandle*> KeyFramesTrackControl<AnimatedValueType>::GetKeyHandles() const
 	{
 		return mHandles;
 	}
@@ -521,7 +521,7 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
 	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
-	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
+	PUBLIC_FUNCTION(Vector<KeyHandle*>, GetKeyHandles);
 	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
 	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
 	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);

@@ -111,22 +111,23 @@ namespace o2
 		SERIALIZABLE(MenuPanel);
 
 	protected:
-		HorizontalLayout*      mLayout = nullptr;             // Items layout
+		HorizontalLayout* mLayout = nullptr; // Items layout
 
-		Widget*                mItemSample = nullptr;         // Item sample @SERIALIZABLE
+		Widget* mItemSample = nullptr; // Item sample @SERIALIZABLE
 
-		Vector<Function<void()>> mClickFunctions;               // Items click functions
+		Vector<Function<void()>> mClickFunctions; // Items click functions
 
-		Sprite*                  mSelectionDrawable = nullptr;  // Selection sprite @SERIALIZABLE
-		Layout                   mSelectionLayout;              // Selection layout, result selection area depends on selected item @SERIALIZABLE
+		Sprite* mSelectionDrawable = nullptr; // Selection sprite @SERIALIZABLE
+		Layout  mSelectionLayout;             // Selection layout, result selection area depends on selected item @SERIALIZABLE
 
-		RectF                    mCurrentSelectionRect;         // Current selection rectangle (for smoothing)
-		RectF                    mTargetSelectionRect;          // Target selection rectangle (over selected item)
-		Vec2F                    mLastSelectCheckCursor;        // Last cursor position on selection check
+		RectF mCurrentSelectionRect;  // Current selection rectangle (for smoothing)
+		RectF mTargetSelectionRect;   // Target selection rectangle (over selected item)
+		Vec2F mLastSelectCheckCursor; // Last cursor position on selection check
 
-		int                      mSelectedItem = -1;            // Index of selected item
-		float                    mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
-		ContextMenu*           mOpenedContext = nullptr;      // Last opened context in menu
+		int   mSelectedItem = -1;            // Index of selected item
+		float mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
+
+		ContextMenu* mOpenedContext = nullptr; // Last opened context in menu
 
 	protected:
 		// Copies data of actor from other to this

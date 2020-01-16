@@ -2,10 +2,10 @@
 #include "ColorProperty.h"
 
 #include "o2/Application/Application.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/Image.h"
 #include "o2Editor/Core/Dialogs/ColorPickerDlg.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "o2/Scene/UI/Widgets/Image.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

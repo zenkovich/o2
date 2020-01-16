@@ -1,8 +1,8 @@
 #pragma once
 
-#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Utils/Singleton.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
 using namespace o2;
 
@@ -57,11 +57,10 @@ namespace Editor
 		IOBJECT(PropertiesWindow);
 
 	protected:
-		typedef Vector<IPropertiesViewer*> PropViewersVec;
+		Vector<IObject*> mTargets; // Target objects
 
-		Vector<IObject*>   mTargets;                 // Target objects
-		IPropertiesViewer* mCurrentViewer = nullptr; // Current properties viewer
-		PropViewersVec     mViewers;                 // All available object types viewers
+		IPropertiesViewer*         mCurrentViewer = nullptr; // Current properties viewer
+		Vector<IPropertiesViewer*> mViewers;                 // All available object types viewers
 
 		Function<void()> mOnTargetsChangedDelegate; // It is called when targets array changing
 		bool             mTargetsChanged = false;   // True when targets was changed    

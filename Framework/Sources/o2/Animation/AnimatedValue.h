@@ -17,6 +17,7 @@ namespace o2
 	public:
 		Function<void()> onKeysChanged; // It is called when keys was changed
 
+	public:
 		// Sets target changing delegate
 		virtual void SetTargetDelegate(const Function<void()>& changeEvent) {}
 

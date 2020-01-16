@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
+#include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
 
 using namespace o2;
 

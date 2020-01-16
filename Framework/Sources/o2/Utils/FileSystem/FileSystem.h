@@ -23,9 +23,6 @@ namespace o2
 	// ---------------------------------------------------
 	class FileSystem: public Singleton<FileSystem>
 	{
-		typedef Vector<String> StringsVec;
-		typedef Map<FileType, StringsVec> ExtnsionsMap;
-
 	public:
 		// Default constructor
 		FileSystem();
@@ -99,8 +96,10 @@ namespace o2
 		static void WriteFile(const String& path, const String& data);
 
 	private:
-		LogStream*     mLog;           // File system log stream
-		ExtnsionsMap  mExtensions;    // Extensions arrays dictionary
-		String         mResourcesPath; // Basic application resources path
+		LogStream* mLog; // File system log stream
+
+		Map<FileType, Vector<String>> mExtensions; // Extensions arrays dictionary
+
+		String mResourcesPath; // Basic application resources path
 	};
 }

@@ -2,10 +2,6 @@
 #include "CurvesEditor.h"
 
 #include "o2/Application/Application.h"
-#include "o2Editor/Core/Dialogs/KeyEditDlg.h"
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/Core/UI/CurveEditor/CurveActions.h"
-#include "o2Editor/Core/UIRoot.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/UI/UIManager.h"
@@ -21,6 +17,10 @@
 #include "o2/Scene/UI/Widgets/VerticalScrollBar.h"
 #include "o2/Scene/UI/Widgets/Window.h"
 #include "o2/Utils/System/Clipboard.h"
+#include "o2Editor/Core/Dialogs/KeyEditDlg.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/Core/UI/CurveEditor/CurveActions.h"
+#include "o2Editor/Core/UIRoot.h"
 
 namespace Editor
 {
@@ -1189,7 +1189,7 @@ namespace Editor
 
 		if (addedKey)
 		{
-			CurveKeysInfosVec keyInfos;
+			Vector<CurveKeysInfo> keyInfos;
 			keyInfos.Add(CurveKeysInfo());
 			keyInfos.Last().curveId = clickedCurveInfo->curveId;
 			keyInfos.Last().keys.Add(newKey);
@@ -1654,7 +1654,7 @@ namespace Editor
 
 		if (changed)
 		{
-			CurveKeysChangeAction::KeysInfosVec actionKeysInfos;
+			Vector<CurveKeysChangeAction::KeysInfo> actionKeysInfos;
 			for (auto& keysInfo : mBeforeTransformKeys)
 			{
 				CurveInfo* curveInfo = mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
@@ -1809,7 +1809,7 @@ namespace Editor
 		if (!IsFocused())
 			return;
 
-		CurveCopyInfosVec copyKeys;
+		Vector<CurveCopyInfo*> copyKeys;
 
 		for (auto curve : mCurves)
 		{
@@ -1855,10 +1855,10 @@ namespace Editor
 		DataNode data;
 		data.LoadFromData(Clipboard::GetText());
 
-		CurveCopyInfosVec copyKeys;
+		Vector<CurveCopyInfo*> copyKeys;
 		copyKeys = data;
 
-		CurveKeysInfosVec keyInfos;
+		Vector<CurveKeysInfo> keyInfos;
 
 		for (auto curve : copyKeys)
 		{
@@ -1911,7 +1911,7 @@ namespace Editor
 		if (!IsFocused())
 			return;
 
-		CurveKeysInfosVec keyInfos;
+		Vector<CurveKeysInfo> keyInfos;
 
 		for (auto curveInfo : mCurves)
 		{
@@ -1970,7 +1970,7 @@ namespace Editor
 		DataNode data;
 		data.LoadFromData(Clipboard::GetText());
 
-		CurveCopyInfosVec copyKeys;
+		Vector<CurveCopyInfo*> copyKeys;
 		copyKeys = data;
 
 		for (auto curve : copyKeys)

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Types/Containers/Pair.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/ValueProxy.h"
+#include "o2Editor/Core/Properties/PropertiesContext.h"
 
 using namespace o2;
 
@@ -24,13 +24,11 @@ namespace Editor
 	class IObjectPropertiesViewer : public IObject
 	{
 	public:
-		typedef Vector<Pair<IObject*, IObject*>> TargetsVec;
-
 		typedef Function<void(IPropertyField*)> OnChangedFunc;
 		typedef Function<void(const String&, const Vector<DataNode>&, const Vector<DataNode>&)> OnChangeCompletedFunc;
 
 	public:
-		OnChangedFunc         onChanged;         // Immediate change value by user event
+		OnChangedFunc onChanged;                 // Immediate change value by user event
 		OnChangeCompletedFunc onChangeCompleted; // Change completed by user event
 
 		String path; // Path to viewing object fields
@@ -40,7 +38,7 @@ namespace Editor
 		IObjectPropertiesViewer();
 
 		// Refreshing controls and properties by target objects
-		virtual void Refresh(const TargetsVec& targetObjets);
+		virtual void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets);
 
 		// Returns viewing objects base type
 		virtual const Type* GetViewingObjectType() const;
@@ -114,7 +112,9 @@ END_META;
 CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, Refresh, const TargetsVec&);
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+
+	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
 	PUBLIC_FUNCTION(VerticalLayout*, GetLayout);

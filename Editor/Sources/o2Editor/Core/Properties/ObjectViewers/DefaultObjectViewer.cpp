@@ -1,16 +1,16 @@
 #include "o2Editor/stdafx.h"
 #include "DefaultObjectViewer.h"
 
+#include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "o2/Scene/UI/Widgets/VerticalLayout.h"
 
 namespace Editor
 {
 	DefaultObjectViewer::DefaultObjectViewer()
 	{}
 
-	void DefaultObjectViewer::Refresh(const TargetsVec& targetObjets)
+	void DefaultObjectViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		PushEditorScopeOnStack scope;
 

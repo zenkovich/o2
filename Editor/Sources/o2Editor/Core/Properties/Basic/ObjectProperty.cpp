@@ -1,13 +1,13 @@
 #include "o2Editor/stdafx.h"
 #include "ObjectProperty.h"
 
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
-#include "o2Editor/Core/Properties/Properties.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include "o2Editor/Core/Properties/Properties.h"
 
 using namespace o2;
 

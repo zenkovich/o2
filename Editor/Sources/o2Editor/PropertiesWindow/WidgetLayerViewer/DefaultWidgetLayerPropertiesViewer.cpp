@@ -1,13 +1,13 @@
 #include "o2Editor/stdafx.h"
 #include "DefaultWidgetLayerPropertiesViewer.h"
 
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/Button.h"
 #include "o2Editor/Core/Actions/Transform.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Scene/UI/Widgets/Button.h"
 
 namespace Editor
 {

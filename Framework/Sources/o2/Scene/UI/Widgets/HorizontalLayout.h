@@ -20,8 +20,8 @@ namespace o2
 		PROPERTY(float, borderTop, SetBorderTop, GetBorderTop);          // Top border property
 		PROPERTY(float, borderBottom, SetBorderBottom, GetBorderBottom); // Bottom border property
 
-		PROPERTY(bool, expandWidth, SetWidthExpand, IsWidthExpand);           // Expand children by width property
-		PROPERTY(bool, expandHeight, SetHeightExpand, IsHeightExpand);        // Expand children by height property
+		PROPERTY(bool, expandWidth, SetWidthExpand, IsWidthExpand);    // Expand children by width property
+		PROPERTY(bool, expandHeight, SetHeightExpand, IsHeightExpand); // Expand children by height property
 
 		PROPERTY(bool, fitByChildren, SetFitByChildren, IsFittingByChildren); // Fitting size by children property
 

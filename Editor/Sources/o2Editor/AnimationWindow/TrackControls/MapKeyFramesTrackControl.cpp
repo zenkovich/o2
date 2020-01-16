@@ -1,9 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "MapKeyFramesTrackControl.h"
 
-#include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
 #include "o2/Scene/ActorTransform.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
 
 namespace Editor
 {
@@ -119,9 +119,9 @@ namespace Editor
 		}
 	}
 
-	ITrackControl::KeyHandlesVec MapKeyFramesTrackControl::GetKeyHandles() const
+	Vector<ITrackControl::KeyHandle*> MapKeyFramesTrackControl::GetKeyHandles() const
 	{
-		ITrackControl::KeyHandlesVec res;
+		Vector<ITrackControl::KeyHandle*> res;
 		for (auto& kv : mHandlesGroups) {
 			res.Add(kv.second->handles.Cast<ITrackControl::KeyHandle*>());
 		}

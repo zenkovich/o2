@@ -3,8 +3,8 @@
 
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
-#include "o2Editor/Core/UI/CurvePreview.h"
 #include "o2Editor/Core/Dialogs/CurveEditorDlg.h"
+#include "o2Editor/Core/UI/CurvePreview.h"
 
 namespace Editor
 {

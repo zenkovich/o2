@@ -3,14 +3,14 @@
 
 #include "o2/Application/Application.h"
 #include "o2/Config/ProjectConfig.h"
-#include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
-#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
-#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Window.h"
-#include "WindowsSystem/IEditorWindow.h"
-#include "MenuPanel.h"
-#include "ToolsPanel.h"
+#include "o2Editor/Core/MenuPanel.h"
+#include "o2Editor/Core/ToolsPanel.h"
+#include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
+#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
+#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 
 
 namespace Editor

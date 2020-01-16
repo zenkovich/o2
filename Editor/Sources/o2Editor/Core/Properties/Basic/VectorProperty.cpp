@@ -1,14 +1,14 @@
 #include "o2Editor/stdafx.h"
 #include "VectorProperty.h"
 
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
-#include "o2Editor/Core/Properties/Properties.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/Spoiler.h"
-#include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
+#include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {

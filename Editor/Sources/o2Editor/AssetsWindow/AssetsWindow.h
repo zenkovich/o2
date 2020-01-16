@@ -1,10 +1,10 @@
 #pragma once
 
 #include "o2/Application/Input.h"
-#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
-#include "o2/Utils/Types/Containers/Pair.h"
 #include "o2/Events/CursorEventsArea.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Containers/Pair.h"
+#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
 using namespace o2;
 
@@ -119,8 +119,6 @@ namespace Editor
 		IOBJECT(AssetsWindow);
 
 	protected:
-		typedef Vector<Pair<UID, String>> AssetIdPathVec;
-
 		float mFoldersTreeShowCoef; // Animating show folders tree coefficient (0...1)
 
 		Button*  mFilterButton;           // Search filter button
@@ -138,7 +136,7 @@ namespace Editor
 		CursorEventsArea mSeparatorHandle; // Folders tree and assets tree/grid separator handle
 		float            mSeparatorCoef;   // Separator coefficient, means anchors for tree nad assets scroll
 
-		AssetIdPathVec mCuttingAssets; // Current cutted assets
+		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 
 	protected:
 		// Initializes window

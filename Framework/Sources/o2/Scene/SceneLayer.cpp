@@ -7,22 +7,22 @@
 
 namespace o2
 {
-	const SceneLayer::ActorsVec& SceneLayer::GetActors() const
+	const Vector<Actor*>& SceneLayer::GetActors() const
 	{
 		return mActors;
 	}
 
-	const SceneLayer::ActorsVec& SceneLayer::GetEnabledActors() const
+	const Vector<Actor*>& SceneLayer::GetEnabledActors() const
 	{
 		return mEnabledActors;
 	}
 
-	const SceneLayer::DrawablesVec& SceneLayer::GetDrawables() const
+	const Vector<SceneDrawable*>& SceneLayer::GetDrawables() const
 	{
 		return mDrawables;
 	}
 
-	const SceneLayer::DrawablesVec& SceneLayer::GetEnabledDrawables() const
+	const Vector<SceneDrawable*>& SceneLayer::GetEnabledDrawables() const
 	{
 		return mEnabledDrawables;
 	}

@@ -28,8 +28,6 @@ namespace o2
 			Rect(const Vec2F& size = Vec2F());
 		};
 
-		typedef Vector<Rect*> RectsVec;
-
 	public:
 		// Constructor
 		RectsPacker(const Vec2F&  maxSize = Vec2F(512, 512));
@@ -78,12 +76,11 @@ namespace o2
 			// Check equals operator
 			bool operator==(const QuadNode& other);
 		};
-		typedef Vector<QuadNode*> NodesVec;
 
-		Pool<Rect> mRectsPool; // Rectangles pool
-		RectsVec   mRects;     // Rectangles
-		NodesVec   mQuadNodes; // Quad nodes 
-		Vec2F      mMaxSize;   // Max page size
+		Pool<Rect>        mRectsPool; // Rectangles pool
+		Vector<Rect*>     mRects;     // Rectangles
+		Vector<QuadNode*> mQuadNodes; // Quad nodes 
+		Vec2F             mMaxSize;   // Max page size
 
 	protected:
 		// Tries to insert rectangle

@@ -400,14 +400,14 @@ namespace o2
 		onDraggedObjects(objects, newParent, prevObject);
 	}
 
-	ISelectableDragableObjectsGroup::SelectDragObjectsVec Tree::GetSelectedDragObjects() const
+	Vector<SelectableDragableObject*> Tree::GetSelectedDragObjects() const
 	{
-		return SelectDragObjectsVec();
+		return Vector<SelectableDragableObject*>();
 	}
 
-	ISelectableDragableObjectsGroup::SelectDragObjectsVec Tree::GetAllObjects() const
+	Vector<SelectableDragableObject*> Tree::GetAllObjects() const
 	{
-		return SelectDragObjectsVec();
+		return Vector<SelectableDragableObject*>();
 	}
 
 	void Tree::Select(SelectableDragableObject* object, bool sendOnSelectionChanged)

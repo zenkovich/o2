@@ -1064,12 +1064,12 @@ namespace Editor
 		return nullptr;
 	}
 
-	ISelectableDragableObjectsGroup::SelectDragObjectsVec AssetsIconsScrollArea::GetSelectedDragObjects() const
+	Vector<SelectableDragableObject*> AssetsIconsScrollArea::GetSelectedDragObjects() const
 	{
 		return mSelectedAssetsIcons.Cast<SelectableDragableObject*>();
 	}
 
-	ISelectableDragableObjectsGroup::SelectDragObjectsVec AssetsIconsScrollArea::GetAllObjects() const
+	Vector<SelectableDragableObject*> AssetsIconsScrollArea::GetAllObjects() const
 	{
 		return mGrid->GetChildWidgets().Cast<SelectableDragableObject*>();
 	}

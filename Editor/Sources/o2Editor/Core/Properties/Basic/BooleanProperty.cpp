@@ -1,9 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "BooleanProperty.h"
 
-#include "o2/Scene/UI/Widgets/Toggle.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/Toggle.h"
 
 
 namespace Editor

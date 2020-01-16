@@ -1,10 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "TagProperty.h"
 
-#include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
-
+#include "o2/Scene/UI/Widgets/EditBox.h"
 
 namespace Editor
 {

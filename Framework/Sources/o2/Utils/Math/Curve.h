@@ -15,11 +15,10 @@ namespace o2
 	{
 	public:
 		class Key;
-		typedef Vector<Key> KeysVec;
 
 	public:
 		PROPERTIES(Curve);
-		PROPERTY(KeysVec, keys, SetKeys, GetKeys); // Keys property
+		PROPERTY(Vector<Key>, keys, SetKeys, GetKeys); // Keys property
 		GETTER(float, length, Length);             // Max position getter
 
 	public:
@@ -79,19 +78,19 @@ namespace o2
 		void AppendKeys(Vector<Vec2F> values, bool smooth = true);
 
 		// Adds keys at end
-		void AppendKeys(const KeysVec& keys);
+		void AppendKeys(const Vector<Key>& keys);
 
 		// Adds keys with smoothing at beginning
 		void PrependKeys(Vector<Vec2F> values, bool smooth = true);
 
 		// Adds keys at beginning
-		void PrependKeys(const KeysVec& keys);
+		void PrependKeys(const Vector<Key>& keys);
 
 		// Inserts keys with smoothing at position
 		void InsertKeys(Vector<Vec2F> values, float position, bool smooth = true);
 
 		// Inserts keys at position
-		void InsertKeys(const KeysVec& keys, float position);
+		void InsertKeys(const Vector<Key>& keys, float position);
 
 		// Inserts key and returns index
 		int InsertKey(const Key& key);
@@ -139,7 +138,7 @@ namespace o2
 		bool ContainsKey(float position) const;
 
 		// Returns keys array
-		const KeysVec& GetKeys() const;
+		const Vector<Key>& GetKeys() const;
 
 		// Returns key at position
 		Key GetKey(float position) const;
@@ -154,7 +153,7 @@ namespace o2
 		int FindKeyIdx(UInt64 uid) const;
 
 		// Sets keys
-		void SetKeys(const KeysVec& keys);
+		void SetKeys(const Vector<Key>& keys);
 
 		// Sets key data at position
 		void SetKey(const Key& key, int position);
@@ -262,7 +261,7 @@ namespace o2
 		bool mBatchChange = false; // It is true when began batch change
 		bool mChangedKeys = false; // It is true when some keys changed during batch change
 
-		KeysVec mKeys;           // Curve keys @SERIALIZABLE
+		Vector<Key> mKeys; // Curve keys @SERIALIZABLE
 
 	protected:
 		// Checks all smooth keys and updates supports points
@@ -272,7 +271,7 @@ namespace o2
 		void UpdateApproximation();
 
 		// Returns keys (for property)
-		KeysVec GetKeysNonContant();
+		Vector<Key> GetKeysNonContant();
 
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node) override;
@@ -312,11 +311,11 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(void, PrependCurve, const Curve&);
 	PUBLIC_FUNCTION(void, InsertCurve, const Curve&, float);
 	PUBLIC_FUNCTION(void, AppendKeys, Vector<Vec2F>, bool);
-	PUBLIC_FUNCTION(void, AppendKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, PrependKeys, Vector<Vec2F>, bool);
-	PUBLIC_FUNCTION(void, PrependKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, InsertKeys, Vector<Vec2F>, float, bool);
-	PUBLIC_FUNCTION(void, InsertKeys, const KeysVec&, float);
+	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Key>&, float);
 	PUBLIC_FUNCTION(int, InsertKey, const Key&);
 	PUBLIC_FUNCTION(int, InsertKey, float, float, float, float, float, float);
 	PUBLIC_FUNCTION(int, InsertKey, float, float, float);
@@ -331,12 +330,12 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const KeysVec&, GetKeys);
+	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);
 	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const KeysVec&);
+	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PUBLIC_FUNCTION(void, SmoothKeyAt, int, float);
@@ -349,7 +348,7 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_STATIC_FUNCTION(Curve, Linear);
 	PROTECTED_FUNCTION(void, CheckSmoothKeys);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
-	PROTECTED_FUNCTION(KeysVec, GetKeysNonContant);
+	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
 	PROTECTED_FUNCTION(void, InternalSmoothKey, float, float);

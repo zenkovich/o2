@@ -1,11 +1,10 @@
 #include "o2Editor/stdafx.h"
 #include "Timeline.h"
 
-#include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2/Application/Input.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/HorizontalScrollBar.h"
-#include <string>
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
 
 namespace Editor
 {

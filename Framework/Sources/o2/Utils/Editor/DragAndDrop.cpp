@@ -167,12 +167,12 @@ namespace o2
 			RemoveSelectableObject(object);
 	}
 
-	SelectableDragableObjectsGroup::SelectDragObjectsVec SelectableDragableObjectsGroup::GetSelectedDragObjects() const
+	Vector<SelectableDragableObject*> SelectableDragableObjectsGroup::GetSelectedDragObjects() const
 	{
 		return mSelectedObjects;
 	}
 
-	SelectableDragableObjectsGroup::SelectDragObjectsVec SelectableDragableObjectsGroup::GetAllObjects() const
+	Vector<SelectableDragableObject*> SelectableDragableObjectsGroup::GetAllObjects() const
 	{
 		return mObjects;
 	}

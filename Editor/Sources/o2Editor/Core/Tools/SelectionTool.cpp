@@ -1,14 +1,14 @@
 #include "o2Editor/stdafx.h"
 #include "SelectionTool.h"
 
-#include "o2Editor/Core/Actions/Select.h"
-#include "o2Editor/Core/EditorApplication.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/SceneLayer.h"
+#include "o2/Utils/Editor/SceneEditableObject.h"
+#include "o2Editor/Core/Actions/Select.h"
+#include "o2Editor/Core/EditorApplication.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "o2/Utils/Editor/SceneEditableObject.h"
 
 namespace Editor
 {

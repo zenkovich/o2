@@ -105,14 +105,14 @@ namespace o2
 		typedef void(*TypeInitializingFunc)(void*, ReflectionInitializationTypeProcessor&);
 		typedef Vector<TypeInitializingFunc> TypeInitializingFuncsVec;
 
-		static Reflection*       mInstance;              // Reflection instance
+		static Reflection* mInstance; // Reflection instance
 
-		Vector<Type*>            mTypes;                 // All registered types
-		UInt                     mLastGivenTypeId;       // Last given type index
+		Vector<Type*> mTypes;           // All registered types
+		UInt          mLastGivenTypeId; // Last given type index
 
 		TypeInitializingFuncsVec mInitializingFunctions; // List of types initializations functions
 
-		bool                     mTypesInitialized = false;
+		bool mTypesInitialized = false;
 
 	protected:
 		// Constructor. Initializes dummy type

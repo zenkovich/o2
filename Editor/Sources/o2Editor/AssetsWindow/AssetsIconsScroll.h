@@ -109,13 +109,6 @@ namespace Editor
 		SERIALIZABLE(AssetsIconsScrollArea);
 
 	protected:
-		typedef Vector<AssetIcon*> AssetsIconsVec;
-		typedef Vector<Sprite*> SpritesVec;
-		typedef Map<String, AssetsIconsVec> IconArrsMap;
-		typedef Vector<Pair<UID, String>> AssetIdPathVec;
-		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
-		typedef Vector<AssetRef*> AssetsVec;
-
 		const Vec2F mAssetIconSize = Vec2F(50, 60);
 						        
 		String mCurrentPath = "_"; // Current viewing path
@@ -123,28 +116,28 @@ namespace Editor
 		GridLayout*  mGrid = nullptr;        // Assets icons grid
 		ContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
-		AssetsIconsVec mSelectedAssetsIcons;     // Selected assets icons
-		AssetsVec      mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<AssetIcon*> mSelectedAssetsIcons;     // Selected assets icons
+		Vector<AssetRef*>  mSelectedPreloadedAssets; // Preloaded selected assets
 						        
 		AssetIcon* mHightlightIcon = nullptr;   // Current highlighting asset icon
 		Animation  mHightlightAnim;             // Icon highlight animation @SERIALIZABLE
 		Sprite*    mHightlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
 		Layout     mHightlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
 						        
-		IconArrsMap mIconsPool; // Assets icons pool
+		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
 						        
-		Sprite*        mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
-		bool           mSelecting = false;          // Is selecting icons 
-		Vec2F          mPressedPoint;               // Pressed point
-		AssetsIconsVec mCurrentSelectingIcons;      // Selecting icons at current selection
+		Sprite*            mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
+		bool               mSelecting = false;          // Is selecting icons 
+		Vec2F              mPressedPoint;               // Pressed point
+		Vector<AssetIcon*> mCurrentSelectingIcons;      // Selecting icons at current selection
 						        
-		bool                    mIsDraggingIcons = false;      // Is dragging icons
-		bool                    mDragEnded = false;            // Is dragging ended
-		AssetIcon*              mDragIcon = nullptr;           // Dragging icon
-		Vec2F                   mDragOffset;                   // Dragging offset from cursor to icon center
-		SceneEditableObjectsVec mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
+		bool                         mIsDraggingIcons = false;      // Is dragging icons
+		bool                         mDragEnded = false;            // Is dragging ended
+		AssetIcon*                   mDragIcon = nullptr;           // Dragging icon
+		Vec2F                        mDragOffset;                   // Dragging offset from cursor to icon center
+		Vector<SceneEditableObject*> mInstantiatedSceneDragObjects; // Instantiated objects when dragging asset above scene
 
-		AssetIdPathVec mCuttingAssets; // Current cutted assets
+		Vector<Pair<UID, String>> mCuttingAssets; // Current cutted assets
 						        
 		bool mNeedRebuildAssets = false; // Is assets needs to rebuild
 						        
@@ -284,10 +277,10 @@ namespace Editor
 // ISelectableDragableObjectsGroup implementation
 
 		// Returns selected objects in group
-		SelectDragObjectsVec GetSelectedDragObjects() const override;
+		Vector<SelectableDragableObject*> GetSelectedDragObjects() const override;
 
 		// Returns all objects in group 
-		SelectDragObjectsVec GetAllObjects() const override;
+		Vector<SelectableDragableObject*> GetAllObjects() const override;
 
 		// Selects object
 		void Select(SelectableDragableObject* object) override;
@@ -451,8 +444,8 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ImageAssetRef&);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAssetRef&);
 	PROTECTED_FUNCTION(void, CheckPreloadedAssetsSaving);
-	PROTECTED_FUNCTION(SelectDragObjectsVec, GetSelectedDragObjects);
-	PROTECTED_FUNCTION(SelectDragObjectsVec, GetAllObjects);
+	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
+	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetAllObjects);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*, bool);
 	PROTECTED_FUNCTION(void, Deselect, SelectableDragableObject*);

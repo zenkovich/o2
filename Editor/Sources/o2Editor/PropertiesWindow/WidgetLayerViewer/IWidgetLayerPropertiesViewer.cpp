@@ -1,14 +1,13 @@
 #include "o2Editor/stdafx.h"
 #include "IWidgetLayerPropertiesViewer.h"
 
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/Image.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
-#include "o2/Scene/UI/Widgets/Image.h"
-#include "o2/Scene/UI/UIManager.h"
 
 namespace Editor
 {
-
 	IWidgetLayerPropertiesViewer::IWidgetLayerPropertiesViewer()
 	{
 		PushEditorScopeOnStack scope;

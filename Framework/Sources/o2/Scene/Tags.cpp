@@ -173,7 +173,7 @@ namespace o2
 		return mTags;
 	}
 
-	TagGroup::StringsVec TagGroup::GetTagsNames() const
+	Vector<String> TagGroup::GetTagsNames() const
 	{
 		return mTags.Select<String>([](auto x) { return x->GetName(); });
 	}

@@ -1,10 +1,10 @@
 #pragma once
 
-#include "o2Editor/Core/WindowsSystem/WindowsLayout.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
+#include "o2Editor/Core/WindowsSystem/WindowsLayout.h"
 
 using namespace o2;
 
@@ -44,12 +44,11 @@ namespace Editor
 		class GlobalConfig: public ISerializable
 		{
 		public:
-			typedef Map<String, WindowsLayout> WndLayoutsMap;
-		public:
 			String         mLastOpenedProjectpath; // Last opened project path @SERIALIZABLE
 			WindowsLayout  mDefaultLayout;         // Default windows layout, using in resetting @SERIALIZABLE
-			WndLayoutsMap mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
 			DataNode       mUserData;              // User data  @SERIALIZABLE
+
+			Map<String, WindowsLayout> mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
 
 			SERIALIZABLE(GlobalConfig);
 		};
@@ -136,8 +135,8 @@ CLASS_FIELDS_META(Editor::EditorConfig::GlobalConfig)
 {
 	PUBLIC_FIELD(mLastOpenedProjectpath).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDefaultLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mAvailableLayouts).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mUserData).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mAvailableLayouts).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::GlobalConfig)

@@ -2,20 +2,20 @@
 #include "AssetsPropertiesViewer.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2Editor/AssetsWindow/AssetsWindow.h"
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h"
-#include "o2Editor/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 #include "o2/Render/Sprite.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widget.h"
+#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/Image.h"
 #include "o2/Scene/UI/Widgets/Label.h"
-#include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2/Scene/UI/Widget.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2Editor/AssetsWindow/AssetsWindow.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h"
+#include "o2Editor/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 
 namespace Editor
 {

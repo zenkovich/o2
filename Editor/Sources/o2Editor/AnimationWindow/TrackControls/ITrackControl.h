@@ -1,9 +1,9 @@
 #pragma once
 
-#include "o2/Animation/AnimatedValue.h"
-#include "o2Editor/Core/Properties/IPropertyField.h"
-#include "o2/Scene/UI/Widget.h"
 #include "AnimationKeyDragHandle.h"
+#include "o2/Animation/AnimatedValue.h"
+#include "o2/Scene/UI/Widget.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 using namespace o2;
 
@@ -25,7 +25,6 @@ namespace Editor
 
 			bool operator==(const KeyHandle& other) const;
 		};
-		typedef Vector<KeyHandle*> KeyHandlesVec;
 
 	public:
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
@@ -38,7 +37,7 @@ namespace Editor
 		virtual void UpdateHandles();
 
 		// Returns key handles list
-		virtual KeyHandlesVec GetKeyHandles() const;
+		virtual Vector<KeyHandle*> GetKeyHandles() const;
 
 		// Returns a container of controllers that are part of a tree
 		virtual Widget* GetTreePartControls() const;
@@ -86,7 +85,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*, const String&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
-	PUBLIC_FUNCTION(KeyHandlesVec, GetKeyHandles);
+	PUBLIC_FUNCTION(Vector<KeyHandle*>, GetKeyHandles);
 	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
 	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
 	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);

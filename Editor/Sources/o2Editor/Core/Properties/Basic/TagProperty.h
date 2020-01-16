@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Scene/Tags.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 namespace o2
 {
@@ -31,9 +31,9 @@ namespace Editor
 		IOBJECT(TagsProperty);
 
 	protected:
-		EditBox*       mEditBox = nullptr;        // Edit box 
-		ContextMenu* mTagsContext = nullptr;    // tags context
-		bool           mPushingTag = false;       // Is pushing tag and we don't need to check edit text
+		EditBox*     mEditBox = nullptr;     // Edit box 
+		ContextMenu* mTagsContext = nullptr; // tags context
+		bool         mPushingTag = false;    // Is pushing tag and we don't need to check edit text
 
 	protected:
 		// Copies data of actor from other to this

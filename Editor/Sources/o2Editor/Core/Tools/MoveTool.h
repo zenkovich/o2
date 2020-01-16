@@ -1,8 +1,8 @@
 #pragma once
 
+#include "o2/Utils/Math/Basis.h"
 #include "o2Editor/Core/Tools/SelectionTool.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
-#include "o2/Utils/Math/Basis.h"
 
 namespace o2
 {
@@ -19,11 +19,9 @@ namespace Editor
 	class MoveTool: public SelectionTool
 	{
 	public:
-		typedef Vector<Basis> BasisVec;
-
-	public:
 		float snapStep = 10.0f; // Moving snap step
 
+	public:
 		// Default constructor
 		MoveTool();
 
@@ -41,7 +39,7 @@ namespace Editor
 		Vec2F mSnapPosition;        // Snapping handles position
 		float mHandlesAngle = 0.0f; // Handles angle, in radians
 						 
-		BasisVec         mBeforeTransforms;          // Before transformation transforms
+		Vector<Basis>    mBeforeTransforms;          // Before transformation transforms
 		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
 	protected:

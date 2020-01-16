@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2Editor/Core/UI/ScrollView.h"
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Render/Camera.h"
@@ -8,6 +7,7 @@
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
 #include "o2/Utils/Singleton.h"
+#include "o2Editor/Core/UI/ScrollView.h"
 
 using namespace o2;
 
@@ -35,13 +35,7 @@ namespace Editor
 		public Singleton<SceneEditScreen>, public ScrollView
 	{
 	public:
-		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
-		typedef Vector<DrawableComponent*> DrawableComponentsVec;
-		typedef Vector<SceneDragHandle*> DragHandlesVec;
-		typedef Vector<IEditTool*> ToolsVec;
-
-	public:
-		Function<void(const SceneEditableObjectsVec&)> onSelectionChanged; // Actors selection change event
+		Function<void(const Vector<SceneEditableObject*>&)> onSelectionChanged; // Actors selection change event
 
 		// Default constructor
 		SceneEditScreen();
@@ -80,7 +74,7 @@ namespace Editor
 		void DrawObjectSelection(SceneEditableObject* object, const Color4& color);
 
 		// Selects objects
-		void SelectObjects(SceneEditableObjectsVec objects, bool additive = true);
+		void SelectObjects(Vector<SceneEditableObject*> objects, bool additive = true);
 
 		// Selects object
 		void SelectObject(SceneEditableObject* object, bool additive = true);
@@ -96,10 +90,10 @@ namespace Editor
 		void SelectTool();
 
 		// Returns selected objects array
-		const SceneEditableObjectsVec& GetSelectedObjects() const;
+		const Vector<SceneEditableObject*>& GetSelectedObjects() const;
 
 		// Returns top selected objects in hierarchy
-		const SceneEditableObjectsVec& GetTopSelectedObjects() const;
+		const Vector<SceneEditableObject*>& GetTopSelectedObjects() const;
 
 		// Returns color for single selected object
 		const Color4& GetSingleObjectSelectionColor() const;
@@ -120,15 +114,16 @@ namespace Editor
 		Color4 mMultiSelectedObjectColor = Color4(220, 220, 220, 100); // Selected object color
 		float  mObjectMinimalSelectionSize = 10.0f;                    // Minimal object size on pixels
 
-		SceneTree*            mSceneTree;				   // Pointer to object tree widget
-		SceneEditableObjectsVec mSelectedObjects;          // Current selected objects
-		SceneEditableObjectsVec mTopSelectedObjects;       // Current selected objects most top in hierarchy
-		bool                    mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
+		SceneTree* mSceneTree; // Pointer to object tree widget
 
-		ToolsVec   mTools;				   // Available tools
-		IEditTool* mEnabledTool = nullptr; // Current enabled tool
+		Vector<SceneEditableObject*> mSelectedObjects;          // Current selected objects
+		Vector<SceneEditableObject*> mTopSelectedObjects;       // Current selected objects most top in hierarchy
+		bool                         mSelectedFromThis = false; // True if selection changed from this, needs to break recursive selection update
 
-		DragHandlesVec mDragHandles; // Dragging handles array
+		Vector<IEditTool*> mTools;                 // Available tools
+		IEditTool*         mEnabledTool = nullptr; // Current enabled tool
+
+		Vector<SceneDragHandle*> mDragHandles; // Dragging handles array
 		
 	protected:
 		// Initializes tools
@@ -204,19 +199,19 @@ namespace Editor
 		void BindSceneTree();
 
 		// It is called when scene tree selection changed
-		void OnTreeSelectionChanged(SceneEditableObjectsVec selectedObjects);
+		void OnTreeSelectionChanged(Vector<SceneEditableObject*> selectedObjects);
 
 		// Updates top selected objects
 		void UpdateTopSelectedObjects();
 
 		// It is called when objects was changed
-		void OnSceneChanged(SceneEditableObjectsVec objects);
+		void OnSceneChanged(Vector<SceneEditableObject*> objects);
 
 		// Clears objects selection
 		void ClearSelectionWithoutAction(bool sendSelectedMessage = true);
 
 		// Selects objects
-		void SelectObjectsWithoutAction(SceneEditableObjectsVec objects, bool additive = true);
+		void SelectObjectsWithoutAction(Vector<SceneEditableObject*> objects, bool additive = true);
 
 		// Selects object
 		void SelectObjectWithoutAction(SceneEditableObject* object, bool additive = true);
@@ -293,12 +288,12 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(Vec2F, ScreenToSceneVector, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, SceneToScreenVector, const Vec2F&);
 	PUBLIC_FUNCTION(void, DrawObjectSelection, SceneEditableObject*, const Color4&);
-	PUBLIC_FUNCTION(void, SelectObjects, SceneEditableObjectsVec, bool);
+	PUBLIC_FUNCTION(void, SelectObjects, Vector<SceneEditableObject*>, bool);
 	PUBLIC_FUNCTION(void, SelectObject, SceneEditableObject*, bool);
 	PUBLIC_FUNCTION(void, SelectAllObjects);
 	PUBLIC_FUNCTION(void, ClearSelection);
-	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetSelectedObjects);
-	PUBLIC_FUNCTION(const SceneEditableObjectsVec&, GetTopSelectedObjects);
+	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetSelectedObjects);
+	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetTopSelectedObjects);
 	PUBLIC_FUNCTION(const Color4&, GetSingleObjectSelectionColor);
 	PUBLIC_FUNCTION(const Color4&, GetManyObjectsSelectionColor);
 	PUBLIC_FUNCTION(void, OnSceneChanged);
@@ -327,11 +322,11 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	PROTECTED_FUNCTION(void, DrawObjects);
 	PROTECTED_FUNCTION(void, DrawSelection);
 	PROTECTED_FUNCTION(void, BindSceneTree);
-	PROTECTED_FUNCTION(void, OnTreeSelectionChanged, SceneEditableObjectsVec);
+	PROTECTED_FUNCTION(void, OnTreeSelectionChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, UpdateTopSelectedObjects);
-	PROTECTED_FUNCTION(void, OnSceneChanged, SceneEditableObjectsVec);
+	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
 	PROTECTED_FUNCTION(void, ClearSelectionWithoutAction, bool);
-	PROTECTED_FUNCTION(void, SelectObjectsWithoutAction, SceneEditableObjectsVec, bool);
+	PROTECTED_FUNCTION(void, SelectObjectsWithoutAction, Vector<SceneEditableObject*>, bool);
 	PROTECTED_FUNCTION(void, SelectObjectWithoutAction, SceneEditableObject*, bool);
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);

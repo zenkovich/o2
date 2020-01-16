@@ -30,10 +30,10 @@ namespace o2
 
 	public:
 		PROPERTIES(Texture);
-		GETTER(Vec2I,  size, GetSize);         // Size of texture getter
-		GETTER(PixelFormat, format, GetFormat);     // texture format getter
-		GETTER(Usage,  usage, GetUsage);       // Texture usage getter
-		GETTER(String, fileName, GetFileName); // Texture file name getter
+		GETTER(Vec2I,  size, GetSize);          // Size of texture getter
+		GETTER(PixelFormat, format, GetFormat); // texture format getter
+		GETTER(Usage,  usage, GetUsage);        // Texture usage getter
+		GETTER(String, fileName, GetFileName);  // Texture file name getter
 
 	public:
 		// Default constructor

@@ -1,10 +1,10 @@
 #include "o2Editor/stdafx.h"
 #include "DockWindowPlace.h"
 
-#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 #include "o2/Render/Render.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/WidgetState.h"
+#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 
 namespace Editor
 {

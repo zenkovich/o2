@@ -1,15 +1,15 @@
 #pragma once
 
 #include "o2/Assets/ImageAsset.h"
-#include "o2Editor/Core/Actions/ActionsList.h"
-#include "o2Editor/Core/Actions/IAction.h"
-#include "o2Editor/Core/UI/FrameScrollView.h"
 #include "o2/Render/Camera.h"
 #include "o2/Render/FontRef.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2/Utils/Editor/FrameHandles.h"
 #include "o2/Utils/Math/Curve.h"
+#include "o2Editor/Core/Actions/ActionsList.h"
+#include "o2Editor/Core/Actions/IAction.h"
+#include "o2Editor/Core/UI/FrameScrollView.h"
 
 using namespace o2;
 
@@ -108,9 +108,6 @@ namespace Editor
 		SERIALIZABLE(CurvesEditor);
 
 	protected:
-		typedef Vector<Vec2F> PointsVec;
-		typedef Vector<IAction*> ActionsVec;
-
 		struct CurveInfo;
 
 		struct CurveHandle : public DragHandle
@@ -152,17 +149,15 @@ namespace Editor
 			SERIALIZABLE(CurveHandle);
 		};
 
-		typedef Vector<CurveHandle*> SelectableHandlesVec;
-
 		struct KeyHandles
 		{
 			CurvesEditor* curveEditor = nullptr;
-			CurveHandle  mainHandle;
-			CurveHandle  leftSupportHandle;
-			CurveHandle  rightSupportHandle;
-				           
-			int          curveKeyIdx;
-			UInt64       curveKeyUid;
+			CurveHandle   mainHandle;
+			CurveHandle   leftSupportHandle;
+			CurveHandle   rightSupportHandle;
+				            
+			int    curveKeyIdx;
+			UInt64 curveKeyUid;
 
 		public:
 			KeyHandles() {}
@@ -171,7 +166,6 @@ namespace Editor
 			void Draw(const RectF& camRect);
 			bool IsSomeHandleSelected() const;
 		};
-		typedef Vector<KeyHandles*> KeyHandlesVec;
 
 		struct CurveInfo
 		{
@@ -180,9 +174,9 @@ namespace Editor
 			String curveId;
 			Curve* curve = nullptr;
 
-			KeyHandlesVec handles;
+			Vector<KeyHandles*> handles;
 
-			PointsVec approximatedPoints;
+			Vector<Vec2F> approximatedPoints;
 
 			Color4 color;
 			Vec2F viewScale;
@@ -202,7 +196,6 @@ namespace Editor
 			void BeginCurveManualChange();
 			void CompleteCurveManualChange();
 		};
-		typedef Vector<CurveInfo*> CurveInfosVec;
 
 		class CurveCopyInfo: public ISerializable
 		{
@@ -212,7 +205,6 @@ namespace Editor
 
 			SERIALIZABLE(CurveCopyInfo);
 		};
-		typedef Vector<CurveCopyInfo*> CurveCopyInfosVec;
 
 		struct RangeInfo
 		{
@@ -226,7 +218,6 @@ namespace Editor
 
 			void UpdateMesh();
 		};
-		typedef Vector<RangeInfo*> RangeInfosVec;
 
 		struct SelectedHandlesInfo
 		{
@@ -237,17 +228,15 @@ namespace Editor
 
 			bool operator==(const SelectedHandlesInfo& other) const;
 		};
-		typedef Vector<SelectedHandlesInfo> SelectedHandlesInfosVec;
 
 		struct CurveKeysInfo
 		{
-			String                  curveId;
-			Curve::KeysVec          keys;
-			SelectedHandlesInfosVec selectedHandles;
+			String                      curveId;
+			Vector<Curve::Key>          keys;
+			Vector<SelectedHandlesInfo> selectedHandles;
 
 			bool operator==(const CurveKeysInfo& other) const;
 		};
-		typedef Vector<CurveKeysInfo> CurveKeysInfosVec;
 
 	protected:
 		ContextMenu* mContextMenu = nullptr; // Context menu for editing keys properties, copying, pasting and other
@@ -256,13 +245,13 @@ namespace Editor
 		CurveHandle mSupportHandleSample;   // Support handle sample, uses to copy sprites @SERIALIZABLE
 		CurveInfo   mHandleSamplesStubInfo; // Empty curve info, used int handles samples
 							    								    
-		CurveInfosVec mCurves; // Editing curves infos list 
-		RangeInfosVec mRanges; // Curves ranges list
+		Vector<CurveInfo*> mCurves; // Editing curves infos list 
+		Vector<RangeInfo*> mRanges; // Curves ranges list
 							    								    
-		SelectableHandlesVec       mSupportHandles;      // Support points handles list
+		Vector<CurveHandle*>       mSupportHandles;      // Support points handles list
 		SelectableDragHandlesGroup mSupportHandlesGroup; // Support points handles selection group. They are must be selectable separately from main handles
 		
-		SelectableHandlesVec mSelectingHandlesBuf; // Potentially selecting handles while selecting
+		Vector<CurveHandle*> mSelectingHandlesBuf; // Potentially selecting handles while selecting
 							    								    
 		Sprite* mSelectionSprite = nullptr; // Selection sprite @SERIALIZABLE
 
@@ -285,7 +274,7 @@ namespace Editor
 
 		bool mNeedAdjustView = false; // True when need to adjust view scale. This works in update
 							    
-		CurveKeysInfosVec mBeforeTransformKeys; // Stored selected keys before handles transformed
+		Vector<CurveKeysInfo> mBeforeTransformKeys; // Stored selected keys before handles transformed
 
 		ActionsList mActionsList; // Local actions list. It uses when actionFallDown is null 
 

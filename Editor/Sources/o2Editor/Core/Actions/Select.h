@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/Actions/IAction.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2Editor/Core/Actions/IAction.h"
 
 using namespace o2;
 

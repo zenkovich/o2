@@ -4,17 +4,17 @@
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/AssetsTree.h"
 #include "o2/Assets/FolderAsset.h"
-#include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
-#include "o2Editor/AssetsWindow/AssetsWindow.h"
-#include "o2Editor/Core/EditorScope.h"
 #include "o2/Render/Sprite.h"
-#include "o2/Scene/UI/Widgets/ContextMenu.h"
-#include "o2/Scene/UI/Widgets/EditBox.h"
-#include "o2/Scene/UI/Widgets/Tree.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/ContextMenu.h"
+#include "o2/Scene/UI/Widgets/EditBox.h"
+#include "o2/Scene/UI/Widgets/Tree.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
+#include "o2Editor/AssetsWindow/AssetsWindow.h"
+#include "o2Editor/Core/EditorScope.h"
 
 namespace Editor
 {

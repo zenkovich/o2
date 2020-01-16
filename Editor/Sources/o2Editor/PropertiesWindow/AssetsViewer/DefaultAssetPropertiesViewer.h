@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
 
 namespace o2
@@ -38,10 +38,10 @@ namespace Editor
 		IOBJECT(DefaultAssetPropertiesViewer);
 
 	protected:
-		VerticalLayout*     mPropertiesLayout;    // Properties layout
-		Vector<AssetRef*>   mTargetAssets;        // Target assets
-		PropertiesContext mPropertiesContext;     // Field properties information
-		const Type*         mAssetType = nullptr; // Target asset type
+		VerticalLayout*   mPropertiesLayout;    // Properties layout
+		Vector<AssetRef*> mTargetAssets;        // Target assets
+		PropertiesContext mPropertiesContext;   // Field properties information
+		const Type*       mAssetType = nullptr; // Target asset type
 	};
 }
 

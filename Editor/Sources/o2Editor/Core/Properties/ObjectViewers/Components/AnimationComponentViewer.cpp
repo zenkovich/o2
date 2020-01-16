@@ -14,7 +14,7 @@ namespace Editor
 									  mOnChildFieldChangeCompleted, onChanged);
 	}
 
-	void AnimationComponentViewer::Refresh(const TargetsVec& targetObjets)
+	void AnimationComponentViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		mPropertiesContext.Set(targetObjets);
 	}

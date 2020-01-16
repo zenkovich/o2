@@ -1,7 +1,7 @@
 #pragma once
 
+#include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
 #include "o2Editor/Core/Actions/IAction.h"
-#include "KeyHandlesSheet.h"
 
 namespace Editor
 {

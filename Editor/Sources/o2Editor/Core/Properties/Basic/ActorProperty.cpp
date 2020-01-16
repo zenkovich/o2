@@ -2,15 +2,15 @@
 #include "ActorProperty.h"
 
 #include "o2/Assets/Assets.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widget.h"
+#include "o2/Scene/UI/WidgetLayer.h"
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/TreeWindow/SceneTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Scene/UI/Widget.h"
-#include "o2/Scene/UI/WidgetLayer.h"
 
 namespace Editor
 {

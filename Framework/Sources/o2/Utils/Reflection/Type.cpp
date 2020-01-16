@@ -66,19 +66,19 @@ namespace o2
 		return Usage::Regular;
 	}
 
-	const Type::BaseTypesVec& Type::GetBaseTypes() const
+	const Vector<Type::BaseType>& Type::GetBaseTypes() const
 	{
 		return mBaseTypes;
 	}
 
-	const Type::FieldInfosVec& Type::GetFields() const
+	const Vector<FieldInfo*>& Type::GetFields() const
 	{
 		return mFields;
 	}
 
-	Type::FieldInfosVec Type::GetFieldsWithBaseClasses() const
+	Vector<FieldInfo*> Type::GetFieldsWithBaseClasses() const
 	{
-		FieldInfosVec res;
+		Vector<FieldInfo*> res;
 
 		for (auto baseType : mBaseTypes)
 			res += baseType.type->GetFieldsWithBaseClasses();
@@ -88,19 +88,19 @@ namespace o2
 		return res;
 	}
 
-	const Type::FunctionsInfosVec& Type::GetFunctions() const
+	const Vector<FunctionInfo*>& Type::GetFunctions() const
 	{
 		return mFunctions;
 	}
 
-	const Type::StaticFunctionsInfosVec& Type::GetStaticFunctions() const
+	const Vector<StaticFunctionInfo*>& Type::GetStaticFunctions() const
 	{
 		return mStaticFunctions;
 	}
 
-	Type::FunctionsInfosVec Type::GetFunctionsWithBaseClasses() const
+	Vector<FunctionInfo*> Type::GetFunctionsWithBaseClasses() const
 	{
-		FunctionsInfosVec res;
+		Vector<FunctionInfo*> res;
 
 		for (auto baseType : mBaseTypes)
 			res += baseType.type->GetFunctionsWithBaseClasses();
@@ -110,9 +110,9 @@ namespace o2
 		return res;
 	}
 
-	Type::StaticFunctionsInfosVec Type::GetStaticFunctionsWithBaseClasses() const
+	Vector<StaticFunctionInfo*> Type::GetStaticFunctionsWithBaseClasses() const
 	{
-		StaticFunctionsInfosVec res;
+		Vector<StaticFunctionInfo*> res;
 
 		for (auto baseType : mBaseTypes)
 			res += baseType.type->GetStaticFunctionsWithBaseClasses();

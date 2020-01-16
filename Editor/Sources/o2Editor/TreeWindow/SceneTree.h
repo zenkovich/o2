@@ -25,10 +25,7 @@ namespace Editor
 	class SceneTree: public Tree
 	{
 	public:
-		typedef Vector<SceneEditableObject*> SceneEditableObjsVec;
-
-	public:
-		Function<void(SceneEditableObjsVec)> onObjectsSelectionChanged;
+		Function<void(Vector<SceneEditableObject*>)> onObjectsSelectionChanged;
 
 		// Default constructor
 		SceneTree();
@@ -52,10 +49,10 @@ namespace Editor
 		TreeNode* GetNode(SceneEditableObject* object);
 
 		// Returns selected objects vector
-		SceneEditableObjsVec GetSelectedObjects() const;
+		Vector<SceneEditableObject*> GetSelectedObjects() const;
 
 		// Sets selected objects
-		void SetSelectedObjects(const SceneEditableObjsVec& objects);
+		void SetSelectedObjects(const Vector<SceneEditableObject*>& objects);
 
 		// Selects object
 		void SelectObject(SceneEditableObject* object);
@@ -125,7 +122,7 @@ namespace Editor
 		void OnObjectDestroing(SceneEditableObject* object);
 
 		// It is called when some objects were changed
-		void OnObjectsChanged(const SceneEditableObjsVec& objects);
+		void OnObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
 		// It is called when object was changed
 		void OnObjectChanged(SceneEditableObject* object);
@@ -238,8 +235,8 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PUBLIC_FUNCTION(void, AttachToSceneEvents);
 	PUBLIC_FUNCTION(void, DeattachFromSceneEvents);
 	PUBLIC_FUNCTION(TreeNode*, GetNode, SceneEditableObject*);
-	PUBLIC_FUNCTION(SceneEditableObjsVec, GetSelectedObjects);
-	PUBLIC_FUNCTION(void, SetSelectedObjects, const SceneEditableObjsVec&);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetSelectedObjects);
+	PUBLIC_FUNCTION(void, SetSelectedObjects, const Vector<SceneEditableObject*>&);
 	PUBLIC_FUNCTION(void, SelectObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, SelectAndHightlightObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, ScrollToAndHightlight, SceneEditableObject*);
@@ -258,7 +255,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<UnknownPtr>, UnknownPtr, UnknownPtr);
 	PROTECTED_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectDestroing, SceneEditableObject*);
-	PROTECTED_FUNCTION(void, OnObjectsChanged, const SceneEditableObjsVec&);
+	PROTECTED_FUNCTION(void, OnObjectsChanged, const Vector<SceneEditableObject*>&);
 	PROTECTED_FUNCTION(void, OnObjectChanged, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, EnableObjectsGroupPressed, bool);
 	PROTECTED_FUNCTION(void, EnableObjectsGroupReleased, bool);

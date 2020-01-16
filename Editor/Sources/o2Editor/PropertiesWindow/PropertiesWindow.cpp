@@ -1,10 +1,10 @@
 #include "o2Editor/stdafx.h"
 #include "PropertiesWindow.h"
 
-#include "o2Editor/Core/Properties/Properties.h"
-#include "IPropertiesViewer.h"
-#include "o2/Scene/UI/Widgets/ContextMenu.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/ContextMenu.h"
+#include "o2Editor/Core/Properties/IPropertiesViewer.h"
+#include "o2Editor/Core/Properties/Properties.h"
 
 
 DECLARE_SINGLETON(Editor::PropertiesWindow);

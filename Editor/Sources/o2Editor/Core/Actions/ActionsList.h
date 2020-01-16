@@ -7,9 +7,6 @@ namespace Editor
 	class ActionsList
 	{
 	public:
-		typedef Vector<IAction*> EditorActionsVec;
-
-	public:
 		// Destructor. Destroys stored actions
 		~ActionsList();
 
@@ -41,13 +38,13 @@ namespace Editor
 		void ResetUndoActions();
 
 		// Returns done actions
-		const EditorActionsVec GetUndoActions() const;
+		const Vector<IAction*> GetUndoActions() const;
 
 		// Returns redo actions
-		const EditorActionsVec GetRedoActions() const;
+		const Vector<IAction*> GetRedoActions() const;
 
 	protected:
-		EditorActionsVec mActions;        // Done actions
-		EditorActionsVec mForwardActions; // Forward actions, what you can redo
+		Vector<IAction*> mActions;        // Done actions
+		Vector<IAction*> mForwardActions; // Forward actions, what you can redo
 	};
 }

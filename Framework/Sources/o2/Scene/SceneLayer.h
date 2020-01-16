@@ -14,32 +14,28 @@ namespace o2
 	class SceneLayer: public ISerializable
 	{
 	public:
-		typedef Vector<Actor*> ActorsVec;
-		typedef Vector<SceneDrawable*> DrawablesVec;
-
-	public:
 		String name; // Name of layer @SERIALIZABLE
 
 	public:
 		// Returns all actors in layer
-		const ActorsVec& GetActors() const;
+		const Vector<Actor*>& GetActors() const;
 
 		// Returns enabled actors in layer
-		const ActorsVec& GetEnabledActors() const;
+		const Vector<Actor*>& GetEnabledActors() const;
 
 		// Returns all drawable objects of actors in layer
-		const DrawablesVec& GetDrawables() const;
+		const Vector<SceneDrawable*>& GetDrawables() const;
 
 		// Returns enabled drawable objects of actors in layer
-		const DrawablesVec& GetEnabledDrawables() const;
+		const Vector<SceneDrawable*>& GetEnabledDrawables() const;
 
 		SERIALIZABLE(SceneLayer);
 
 	protected:
-		ActorsVec    mActors;           // Actors in layer
-		ActorsVec    mEnabledActors;    // Enabled actors
-		DrawablesVec mDrawables;        // Drawable objects in layer
-		DrawablesVec mEnabledDrawables; // Enabled drawable objects in layer
+		Vector<Actor*>         mActors;           // Actors in layer
+		Vector<Actor*>         mEnabledActors;    // Enabled actors
+		Vector<SceneDrawable*> mDrawables;        // Drawable objects in layer
+		Vector<SceneDrawable*> mEnabledDrawables; // Enabled drawable objects in layer
 
 	protected:
 		// Registers drawable object
@@ -66,8 +62,6 @@ namespace o2
 		friend class SceneDrawable;
 		friend class Widget;
 	};
-
-	typedef Vector<SceneLayer*> Vector<SceneLayer*>;
 
 	// -------------------------
 	// Layer data node converter
@@ -103,10 +97,10 @@ END_META;
 CLASS_METHODS_META(o2::SceneLayer)
 {
 
-	PUBLIC_FUNCTION(const ActorsVec&, GetActors);
-	PUBLIC_FUNCTION(const ActorsVec&, GetEnabledActors);
-	PUBLIC_FUNCTION(const DrawablesVec&, GetDrawables);
-	PUBLIC_FUNCTION(const DrawablesVec&, GetEnabledDrawables);
+	PUBLIC_FUNCTION(const Vector<Actor*>&, GetActors);
+	PUBLIC_FUNCTION(const Vector<Actor*>&, GetEnabledActors);
+	PUBLIC_FUNCTION(const Vector<SceneDrawable*>&, GetDrawables);
+	PUBLIC_FUNCTION(const Vector<SceneDrawable*>&, GetEnabledDrawables);
 	PROTECTED_FUNCTION(void, RegisterDrawable, SceneDrawable*);
 	PROTECTED_FUNCTION(void, UnregisterDrawable, SceneDrawable*);
 	PROTECTED_FUNCTION(void, DrawableDepthChanged, SceneDrawable*);

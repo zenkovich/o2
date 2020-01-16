@@ -1,10 +1,10 @@
 #include "o2Editor/stdafx.h"
 #include "DefaultAssetPropertiesViewer.h"
 
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

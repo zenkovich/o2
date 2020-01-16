@@ -1,14 +1,14 @@
 #include "o2Editor/stdafx.h"
 
-#include "o2Editor/AnimationWindow/AnimationWindow.h"
-#include "o2Editor/Core/EditorScope.h"
 #include "PropertiesListDlg.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
-#include "TrackControls/KeyFramesTrackControl.h"
-#include "TrackControls/MapKeyFramesTrackControl.h"
-#include "Tree.h"
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
+#include "o2Editor/AnimationWindow/TrackControls/KeyFramesTrackControl.h"
+#include "o2Editor/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h"
+#include "o2Editor/AnimationWindow/Tree.h"
+#include "o2Editor/Core/EditorScope.h"
 
 namespace Editor
 {

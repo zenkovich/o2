@@ -1,8 +1,8 @@
 #pragma once
 
 #include "o2/Assets/ImageAsset.h"
-#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2/Render/Sprite.h"
+#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 
 using namespace o2;
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Scene/SceneLayer.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 namespace o2
 {

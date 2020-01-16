@@ -1,9 +1,9 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 namespace o2
 {

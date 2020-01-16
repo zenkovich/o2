@@ -29,12 +29,9 @@ namespace o2
 	class FolderInfo
 	{
 	public:
-		typedef Vector<FileInfo> FilesVec;
-		typedef Vector<FolderInfo> PathsVec;
-
-		String   path;  // Path of this 
-		FilesVec files; // Files vector
-		PathsVec folders; // Paths vector
+		String             path;    // Path of this 
+		Vector<FileInfo>   files;   // Files vector
+		Vector<FolderInfo> folders; // Paths vector
 
 	public:
 		// Equal operator

@@ -19,8 +19,8 @@ namespace o2
 		PROPERTY(WString, text, SetText, GetText);			      // Text property
 		PROPERTY(int, caret, SetCaretPosition, GetCaretPosition); // Caret position property
 
-		PROPERTY(int, selectionBegin, SetSelectionBegin, GetSelectionBegin);  // Selection begin index property
-		PROPERTY(int, selectionEnd, SetSelectionEnd, GetSelectionEnd);	      // Selection end index property
+		PROPERTY(int, selectionBegin, SetSelectionBegin, GetSelectionBegin); // Selection begin index property
+		PROPERTY(int, selectionEnd, SetSelectionEnd, GetSelectionEnd);	     // Selection end index property
 
 	public:
 		Function<void(const WString&)> onChanged;         // Text changed event

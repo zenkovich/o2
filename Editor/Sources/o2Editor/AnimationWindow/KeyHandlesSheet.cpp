@@ -3,15 +3,15 @@
 
 #include "o2/Animation/AnimatedValue.h"
 #include "o2/Animation/Animation.h"
-#include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
-#include "Timeline.h"
-#include "TrackControls/ITrackControl.h"
-#include "Tree.h"
 #include "o2/Utils/System/Clipboard.h"
-#include "AnimationKeysActions.h"
+#include "o2Editor/AnimationWindow/AnimationKeysActions.h"
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
+#include "o2Editor/AnimationWindow/Timeline.h"
+#include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
+#include "o2Editor/AnimationWindow/Tree.h"
 
 namespace Editor
 {

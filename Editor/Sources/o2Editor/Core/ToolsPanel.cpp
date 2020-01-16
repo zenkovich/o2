@@ -1,15 +1,6 @@
 #include "o2Editor/stdafx.h"
 #include "ToolsPanel.h"
 
-#include "o2Editor/Core/Tools/FrameTool.h"
-#include "o2Editor/Core/Tools/MoveTool.h"
-#include "o2Editor/Core/Tools/RotateTool.h"
-#include "o2Editor/Core/Tools/ScaleTool.h"
-#include "o2Editor/Core/Tools/SelectionTool.h"
-#include "o2Editor/Core/UIRoot.h"
-#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
-#include "Dialogs/EditNameDlg.h"
-#include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2/Animation/AnimatedFloat.h"
 #include "o2/Animation/AnimatedVector.h"
 #include "o2/Scene/UI/UIManager.h"
@@ -18,6 +9,15 @@
 #include "o2/Scene/UI/Widgets/DropDown.h"
 #include "o2/Scene/UI/Widgets/HorizontalLayout.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
+#include "o2Editor/Core/Dialogs/EditNameDlg.h"
+#include "o2Editor/Core/Tools/FrameTool.h"
+#include "o2Editor/Core/Tools/MoveTool.h"
+#include "o2Editor/Core/Tools/RotateTool.h"
+#include "o2Editor/Core/Tools/ScaleTool.h"
+#include "o2Editor/Core/Tools/SelectionTool.h"
+#include "o2Editor/Core/UIRoot.h"
+#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
+#include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 
 namespace Editor

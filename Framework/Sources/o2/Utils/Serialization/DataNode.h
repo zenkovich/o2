@@ -35,9 +35,8 @@ namespace o2
 	public:
 		enum class Format { Xml, JSON, Binary };
 
-		typedef Vector<DataNode*> DataNodesVec;
-		typedef DataNodesVec::Iterator Iterator;
-		typedef DataNodesVec::ConstIterator ConstIterator;
+		typedef Vector<DataNode*>::Iterator Iterator;
+		typedef Vector<DataNode*>::ConstIterator ConstIterator;
 
 		// Is DataNode supporting type trait
 		template<typename _type>
@@ -133,7 +132,7 @@ namespace o2
 		const WString& Data() const;
 
 		// Returns constant reference to children list
-		const DataNode::DataNodesVec& GetChildNodes() const;
+		const Vector<DataNode*>& GetChildNodes() const;
 
 		// Loads data structure from file
 		bool LoadFromFile(const String& fileName);
@@ -172,10 +171,10 @@ namespace o2
 		ConstIterator end() const;
 
 	protected:
-		WString      mName;       // Name of node
-		WString      mData;       // Node data
-		DataNode*    mParent;     // Node parent
-		DataNodesVec mChildNodes; // Children nodes
+		WString           mName;       // Name of node
+		WString           mData;       // Node data
+		DataNode*         mParent;     // Node parent
+		Vector<DataNode*> mChildNodes; // Children nodes
 	};
 }
 

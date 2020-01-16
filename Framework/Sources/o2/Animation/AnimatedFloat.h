@@ -16,11 +16,11 @@ namespace o2
 
 	public:
 		PROPERTIES(AnimatedValue<float>);
-		GETTER(float, value, GetValue);                               // Current value getter 
-		SETTER(float*, target, SetTarget);                            // Bind target setter
-		SETTER(Function<void()>, targetDelegate, SetTargetDelegate);  // Bind target change event setter
-		SETTER(IValueProxy<float>*, targetProxy, SetTargetProxy);     // Bind proxy setter
-		PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant);          // Keys property
+		GETTER(float, value, GetValue);                              // Current value getter 
+		SETTER(float*, target, SetTarget);                           // Bind target setter
+		SETTER(Function<void()>, targetDelegate, SetTargetDelegate); // Bind target change event setter
+		SETTER(IValueProxy<float>*, targetProxy, SetTargetProxy);    // Bind proxy setter
+		PROPERTY(Vector<Key>, keys, SetKeys, GetKeysNonContant);     // Keys property
 
 	public:
 		Curve curve; // Animation curve @SERIALIZABLE

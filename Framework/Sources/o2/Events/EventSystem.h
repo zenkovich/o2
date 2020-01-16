@@ -119,14 +119,17 @@ namespace o2
 	protected:
 		float mDblClickTime = 0.3f; // Time between clicks for double click reaction
 
-		Vector<CursorEventsListener*>                    mCursorListeners;              // All cursor non area listeners
-		Vector<CursorAreaEventsListener*>                mAreaCursorListeners;          // All cursor area listeners
+		Vector<CursorEventsListener*>      mCursorListeners;     // All cursor non area listeners
+		Vector<CursorAreaEventsListener*>  mAreaCursorListeners; // All cursor area listeners
+
 		Map<CursorId, Vector<CursorAreaEventsListener*>> mPressedListeners;             // Pressed listeners for all pressed cursors
 		Vector<CursorAreaEventsListener*>                mRightButtonPressedListeners;  // Right mouse button pressed listener
 		Vector<CursorAreaEventsListener*>                mMiddleButtonPressedListeners; // Middle mouse button pressed listener
-		Map<CursorId, Vector<CursorAreaEventsListener*>> mUnderCursorListeners;         // Under cursor listeners for each cursor
-		Map<CursorId, Vector<CursorAreaEventsListener*>> mLastUnderCursorListeners;     // Under cursor listeners for each cursor on last frame
-		Vector<DragableObject*>                          mDragListeners;                // Drag events listeners
+
+		Map<CursorId, Vector<CursorAreaEventsListener*>> mUnderCursorListeners;     // Under cursor listeners for each cursor
+		Map<CursorId, Vector<CursorAreaEventsListener*>> mLastUnderCursorListeners; // Under cursor listeners for each cursor on last frame
+
+		Vector<DragableObject*> mDragListeners; // Drag events listeners
 
 		Vector<KeyboardEventsListener*>     mKeyboardListeners;    // Keyboard events listeners
 		Vector<ApplicationEventsListener*>  mApplicationListeners; // Application events listeners

@@ -1,15 +1,13 @@
 #include "o2Editor/stdafx.h"
 #include "FrameScrollView.h"
 
+#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/HorizontalScrollBar.h"
 #include "o2/Scene/UI/Widgets/VerticalScrollBar.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {
-
-	FrameScrollView::FrameScrollView():
-		ScrollView()
+	FrameScrollView::FrameScrollView() : ScrollView()
 	{
 		mReady = false;
 
@@ -26,9 +24,8 @@ namespace Editor
 		mReady = true;
 	}
 
-	FrameScrollView::FrameScrollView(const FrameScrollView& other):
-		ScrollView(other), 
-		mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()), 
+	FrameScrollView::FrameScrollView(const FrameScrollView& other) :ScrollView(other),
+		mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
 		mVerScrollbar(other.mVerScrollbar->CloneAs<VerticalScrollBar>())
 	{
 		mReady = false;
@@ -84,7 +81,7 @@ namespace Editor
 	}
 
 	void FrameScrollView::UpdateSelfTransform()
-{
+	{
 		ScrollView::UpdateSelfTransform();
 
 		if (!mReady)
@@ -150,7 +147,7 @@ namespace Editor
 		RectF camRect = mViewCamera.GetRect();
 		Vec2F camSize = camRect.Size();
 
-		mHorScrollbar->SetValueRange(Math::Min(mAvailableArea.left + camSize.x*0.5f, camRect.Center().x), 
+		mHorScrollbar->SetValueRange(Math::Min(mAvailableArea.left + camSize.x*0.5f, camRect.Center().x),
 									 Math::Max(mAvailableArea.right - camSize.x*0.5f, camRect.Center().x));
 		mHorScrollbar->SetScrollHandleSize(camRect.Width());
 

@@ -2,10 +2,10 @@
 #include "IEditorWindow.h"
 
 #include "o2/Application/Application.h"
-#include "o2Editor/Core/UIRoot.h"
-#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2Editor/Core/UIRoot.h"
+#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 
 namespace Editor
 {

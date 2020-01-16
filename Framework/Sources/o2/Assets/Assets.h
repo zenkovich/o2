@@ -20,7 +20,7 @@ namespace o2
 	// ----------------
 	// Assets utilities
 	// ----------------
-	class Assets: public Singleton<Assets>
+	class Assets : public Singleton<Assets>
 	{
 	public:
 		PROPERTIES(Assets);
@@ -154,14 +154,16 @@ namespace o2
 			~AssetCache();
 		};
 
+	protected:
 		String mAssetsFolderPath; // Project assets path
 		String mDataFolderPath;   // Project data (builded assets) path
 
 		AssetTree      mAssetsTree;    // Assets information tree
 		LogStream*     mLog;           // Log stream
 		AssetsBuilder* mAssetsBuilder; // Assets builder
+
 		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary
-		const Type*    mStdAssetType;  // Standard asset type
+		const Type*              mStdAssetType;  // Standard asset type
 
 		Vector<AssetCache*> mCachedAssets; // Current cached assets
 

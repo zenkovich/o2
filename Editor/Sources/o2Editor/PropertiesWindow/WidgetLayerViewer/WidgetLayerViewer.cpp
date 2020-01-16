@@ -1,17 +1,17 @@
 #include "o2Editor/stdafx.h"
 #include "WidgetLayerViewer.h"
 
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "DefaultWidgetLayerHeadViewer.h"
-#include "DefaultWidgetLayerLayoutViewer.h"
-#include "DefaultWidgetLayerPropertiesViewer.h"
+#include "o2Editor/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerHeadViewer.h"
+#include "o2Editor/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerLayoutViewer.h"
+#include "o2Editor/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerHeadViewer.h"
 #include "o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerLayoutViewer.h"
 #include "o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 
 namespace Editor
 {

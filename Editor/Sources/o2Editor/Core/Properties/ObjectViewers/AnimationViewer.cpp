@@ -1,11 +1,11 @@
 #include "o2Editor/stdafx.h"
 #include "AnimationViewer.h"
 
-#include "o2Editor/AnimationWindow/AnimationWindow.h"
-#include "o2Editor/Core/EditorScope.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
+#include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor
@@ -18,7 +18,7 @@ namespace Editor
 		mEditButton = o2UI.CreateButton("Edit", THIS_FUNC(OnEditPressed));
 	}
 
-	void AnimationViewer::Refresh(const TargetsVec& targetObjets)
+	void AnimationViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		DefaultObjectViewer::Refresh(targetObjets);
 

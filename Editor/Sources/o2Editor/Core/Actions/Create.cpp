@@ -2,9 +2,9 @@
 #include "Create.h"
 
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/Scene.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "o2/Scene/Scene.h"
 
 namespace Editor
 {

@@ -1,7 +1,6 @@
 #include "o2Editor/stdafx.h"
 #include "PropertiesListDlg.h"
 
-#include "o2Editor/Core/EditorScope.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
 #include "o2/Scene/UI/UIManager.h"
@@ -9,8 +8,9 @@
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/Window.h"
-#include "o2Editor/Core/UIRoot.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::PropertiesListDlg);
 

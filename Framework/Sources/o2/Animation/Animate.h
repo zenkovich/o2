@@ -109,11 +109,11 @@ namespace o2
 
 
 	protected:
-		Animation              mAnimation;                       // Building animation
-		bool                   mKeysApplied = false;             // Is stored keys was applied
-		float                  mTime = 0.0f;                     // Current sequence time
-		Vector<IKeyContainer*> mKeyContainers;                   // Stored keys that applies in For()
-		Function<void()>       mFunction;                        // Stored callback that applies in For()
+		Animation              mAnimation;           // Building animation
+		bool                   mKeysApplied = false; // Is stored keys was applied
+		float                  mTime = 0.0f;         // Current sequence time
+		Vector<IKeyContainer*> mKeyContainers;       // Stored keys that applies in For()
+		Function<void()>       mFunction;            // Stored callback that applies in For()
 
 		AnimatedValue<Color4>* mColorAnimatedValue = nullptr;    // Color animated value, stores when needs
 		AnimatedValue<Vec2F>*  mPositionAnimatedValue = nullptr; // Position animated value, stores when needs

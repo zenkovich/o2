@@ -1,10 +1,10 @@
 #include "o2Editor/stdafx.h"
 #include "PropertiesContext.h"
 
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Utils/Basic/IObject.h"
-#include "o2/Utils/System/Time/Time.h"
 #include "o2/Utils/Debug/Debug.h"
+#include "o2/Utils/System/Time/Time.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 namespace Editor
 {

@@ -9,7 +9,7 @@ namespace Editor
 	{
 	public:
 		CurveAddKeysAction();
-		CurveAddKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor);
+		CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor);
 
 		String GetName();
 		void Redo();
@@ -18,15 +18,15 @@ namespace Editor
 		SERIALIZABLE(CurveAddKeysAction);
 
 	protected:
-		CurvesEditor::CurveKeysInfosVec mInfos;
-		CurvesEditor*                   mEditor;
+		Vector<CurvesEditor::CurveKeysInfo> mInfos;
+		CurvesEditor*                       mEditor;
 	};
 
 	class CurveDeleteKeysAction : public IAction
 	{
 	public:
 		CurveDeleteKeysAction();
-		CurveDeleteKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor);
+		CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor);
 
 		String GetName();
 		void Redo();
@@ -35,8 +35,8 @@ namespace Editor
 		SERIALIZABLE(CurveDeleteKeysAction);
 
 	protected:
-		CurvesEditor::CurveKeysInfosVec mInfos;
-		CurvesEditor*                   mEditor;
+		Vector<CurvesEditor::CurveKeysInfo> mInfos;
+		CurvesEditor*                       mEditor;
 	};
 
 	class CurveKeysChangeAction : public IAction
@@ -44,18 +44,19 @@ namespace Editor
 	public:
 		struct KeysInfo
 		{
-			String                               curveId;
-			Curve::KeysVec                       beforeKeys;
-			Curve::KeysVec                       afterKeys;
-			CurvesEditor::SelectedHandlesInfosVec selectedHandles;
+			String curveId;
+
+			Vector<Curve::Key> beforeKeys;
+			Vector<Curve::Key> afterKeys;
+
+			Vector<CurvesEditor::SelectedHandlesInfo> selectedHandles;
 
 			bool operator==(const KeysInfo& other) const;
 		};
-		typedef Vector<KeysInfo> KeysInfosVec;
 
 	public:
 		CurveKeysChangeAction();
-		CurveKeysChangeAction(const KeysInfosVec& infos, CurvesEditor* editor);
+		CurveKeysChangeAction(const Vector<KeysInfo>& infos, CurvesEditor* editor);
 
 		String GetName();
 		void Redo();
@@ -64,8 +65,8 @@ namespace Editor
 		SERIALIZABLE(CurveKeysChangeAction);
 
 	protected:
-		KeysInfosVec   mInfos;
-		CurvesEditor*   mEditor;
+		Vector<KeysInfo> mInfos;
+		CurvesEditor*    mEditor;
 	};
 }
 

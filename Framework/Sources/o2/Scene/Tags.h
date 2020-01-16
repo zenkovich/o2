@@ -14,9 +14,6 @@ namespace o2
 	class Tag: public ISerializable
 	{
 	public:
-		typedef Vector<Actor*> ActorsVec;
-
-	public:
 		// Default constructor
 		Tag();
 
@@ -50,21 +47,17 @@ namespace o2
 		SERIALIZABLE(Tag);
 
 	protected:
-		String    mName;   // Tag name @SERIALIZABLE
-		ActorsVec mActors; // Actors in layer
+		String         mName;   // Tag name @SERIALIZABLE
+		Vector<Actor*> mActors; // Actors in layer
 
 		friend class Actor;
 	};
-	typedef Vector<Tag*> Vector<Tag*>;
 
 	// ----------
 	// Tags group
 	// ----------
 	class TagGroup: public ISerializable
 	{
-	public:
-		typedef Vector<String> StringsVec;
-
 	public:
 		Function<void(Tag*)> onTagAdded;
 		Function<void(Tag*)> onTagRemoved;
@@ -113,7 +106,7 @@ namespace o2
 		const Vector<Tag*>& GetTags() const;
 
 		// Returns tags names array
-		StringsVec GetTagsNames() const;
+		Vector<String> GetTagsNames() const;
 
 		// Adds tag
 		TagGroup& operator+=(const String& name);
@@ -197,6 +190,6 @@ CLASS_METHODS_META(o2::TagGroup)
 	PUBLIC_FUNCTION(bool, IsHaveTag, const String&);
 	PUBLIC_FUNCTION(bool, IsHaveTag, Tag*);
 	PUBLIC_FUNCTION(const Vector<Tag*>&, GetTags);
-	PUBLIC_FUNCTION(StringsVec, GetTagsNames);
+	PUBLIC_FUNCTION(Vector<String>, GetTagsNames);
 }
 END_META;

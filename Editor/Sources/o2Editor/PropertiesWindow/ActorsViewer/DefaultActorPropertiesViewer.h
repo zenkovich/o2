@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
+#include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h"
 
 namespace Editor

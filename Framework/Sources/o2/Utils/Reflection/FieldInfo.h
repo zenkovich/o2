@@ -22,8 +22,6 @@ namespace o2
 	class FieldInfo
 	{
 	public:
-		typedef Vector<IAttribute*> AttributesVec;
-
 		typedef void*(*GetValuePointerFuncPtr)(void*);
 
 	public:
@@ -85,7 +83,7 @@ namespace o2
 		bool HasAttribute() const;
 
 		// Returns attributes array
-		const AttributesVec& GetAttributes() const;
+		const Vector<IAttribute*>& GetAttributes() const;
 
 		// Serializes from object pointer, that contains this field
 		void SerializeFromObject(void* object, DataNode& data) const;
@@ -110,7 +108,7 @@ namespace o2
 		String                 mName;                                    // Name of field
 		const Type*            mType = nullptr;                          // Field type
 		Type*                  mOwnerType = nullptr;                     // Field owner type
-		AttributesVec          mAttributes;                              // Attributes array
+		Vector<IAttribute*>    mAttributes;                              // Attributes array
 		ITypeSerializer*       mSerializer = nullptr;                    // field serializer
 		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function
 

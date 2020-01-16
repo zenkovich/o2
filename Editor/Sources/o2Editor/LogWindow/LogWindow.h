@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
 using namespace o2;
 
@@ -30,7 +30,6 @@ namespace Editor
 
 			bool operator==(const LogMessage& other) const;
 		};
-		typedef Vector<LogMessage> MessagesVec;
 
 		// Updates window logic
 		void Update(float dt) override;
@@ -42,8 +41,8 @@ namespace Editor
 		Text*     mWarningsCountLabel = nullptr;
 		Text*     mErrorsCountLabel = nullptr;
 
-		MessagesVec mAllMessages;
-		MessagesVec mVisibleMessages;
+		Vector<LogMessage> mAllMessages;
+		Vector<LogMessage> mVisibleMessages;
 
 		bool mRegularMessagesEnabled;
 		bool mWarningMessagesEnabled;

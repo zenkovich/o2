@@ -1,8 +1,8 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2/Events/CursorEventsArea.h"
 #include "o2/Utils/Math/Curve.h"
+#include "o2Editor/Core/Properties/IPropertyField.h"
 
 using namespace o2;
 

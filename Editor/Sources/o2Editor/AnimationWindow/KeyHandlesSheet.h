@@ -1,8 +1,8 @@
 #pragma once
 
-#include "o2/Utils/Editor/DragHandle.h"
 #include "o2/Events/CursorEventsListener.h"
-#include "TrackControls/AnimationKeyDragHandle.h"
+#include "o2/Utils/Editor/DragHandle.h"
+#include "o2Editor/AnimationWindow/TrackControls/AnimationKeyDragHandle.h"
 
 namespace o2
 {
@@ -104,7 +104,7 @@ namespace Editor
 		Vec2F   mBeginSelectPoint;         // Begin frame selection point, where x is position on timeline, y is line number
 		bool    mIsFrameSelecting = false; // It is true when user selection by frame now
 
-		SelectableDragHandlesVec mBeginSelectHandles; // handles list, that were selected before frame selecting
+		Vector<DragHandle*> mBeginSelectHandles; // handles list, that were selected before frame selecting
 
 		DragHandle mLeftFrameDragHandle;   // Left frame border drag handle, resizing selected handles rect
 		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect

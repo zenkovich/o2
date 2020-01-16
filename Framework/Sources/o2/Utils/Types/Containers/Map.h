@@ -6,8 +6,6 @@
 
 namespace o2
 {
-	// - Изменить все typedef на using = 
-
 	// ----------
 	// Dictionary
 	// ----------

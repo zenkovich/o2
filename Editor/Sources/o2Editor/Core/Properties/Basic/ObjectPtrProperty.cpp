@@ -1,9 +1,6 @@
 #include "o2Editor/stdafx.h"
 #include "ObjectPtrProperty.h"
 
-#include "o2Editor/Core/EditorScope.h"
-#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
-#include "o2Editor/Core/Properties/Properties.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
@@ -12,6 +9,9 @@
 #include "o2/Utils/Editor/Attributes/DefaultTypeAttribute.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
+#include "o2Editor/Core/EditorScope.h"
+#include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
+#include "o2Editor/Core/Properties/Properties.h"
 
 using namespace o2;
 

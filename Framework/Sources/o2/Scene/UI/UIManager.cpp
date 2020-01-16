@@ -332,7 +332,7 @@ namespace o2
 		mTopWidgets.Add(widget);
 	}
 
-	const UIManager::Vector<Widget*>& UIManager::GetWidgetStyles() const
+	const Vector<Widget*>& UIManager::GetWidgetStyles() const
 	{
 		return mStyleSamples;
 	}

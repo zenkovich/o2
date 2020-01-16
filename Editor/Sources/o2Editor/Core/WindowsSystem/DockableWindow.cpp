@@ -3,16 +3,16 @@
 
 #include "o2/Animation/AnimatedFloat.h"
 #include "o2/Animation/AnimatedVector.h"
-#include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 #include "o2/Events/CursorEventsListener.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Render/Render.h"
+#include "o2/Render/Text.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/WidgetState.h"
-#include "o2/Render/Text.h"
-#include "../UIRoot.h"
+#include "o2Editor/Core/UIRoot.h"
+#include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 
 namespace Editor
 {

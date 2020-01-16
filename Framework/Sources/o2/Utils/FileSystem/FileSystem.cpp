@@ -12,18 +12,18 @@ namespace o2
 		mLog = mnew LogStream("File System");
 		o2Debug.GetLog()->BindStream(mLog);
 
-		mExtensions.Add(FileType::Image, StringsVec());
+		mExtensions.Add(FileType::Image, Vector<String>());
 		mExtensions[FileType::Image].Add("png");
 		mExtensions[FileType::Image].Add("jpg");
 		mExtensions[FileType::Image].Add("dds");
 		mExtensions[FileType::Image].Add("pvr");
 
-		mExtensions.Add(FileType::Config, StringsVec());
+		mExtensions.Add(FileType::Config, Vector<String>());
 		mExtensions[FileType::Config].Add("xml");
 		mExtensions[FileType::Config].Add("txt");
 		mExtensions[FileType::Config].Add("cfg");
 
-		mExtensions.Add(FileType::Atlas, StringsVec());
+		mExtensions.Add(FileType::Atlas, Vector<String>());
 		mExtensions[FileType::Atlas].Add("atlas");
 	}
 

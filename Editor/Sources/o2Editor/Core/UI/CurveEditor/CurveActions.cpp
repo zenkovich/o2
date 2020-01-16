@@ -4,7 +4,7 @@
 
 namespace Editor
 {
-	CurveAddKeysAction::CurveAddKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor) :
+	CurveAddKeysAction::CurveAddKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -84,7 +84,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	CurveDeleteKeysAction::CurveDeleteKeysAction(const CurvesEditor::CurveKeysInfosVec& infos, CurvesEditor* editor) :
+	CurveDeleteKeysAction::CurveDeleteKeysAction(const Vector<CurvesEditor::CurveKeysInfo>& infos, CurvesEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{
 		for (auto& info : mInfos)
@@ -164,7 +164,7 @@ namespace Editor
 		mEditor->CheckHandlesVisible();
 	}
 
-	CurveKeysChangeAction::CurveKeysChangeAction(const KeysInfosVec& infos, CurvesEditor* editor) :
+	CurveKeysChangeAction::CurveKeysChangeAction(const Vector<KeysInfo>& infos, CurvesEditor* editor) :
 		mInfos(infos), mEditor(editor)
 	{ }
 

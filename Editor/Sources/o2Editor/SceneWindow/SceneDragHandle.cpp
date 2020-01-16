@@ -2,8 +2,8 @@
 #include "SceneDragHandle.h"
 
 #include "o2/Application/Application.h"
-#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2/Render/Sprite.h"
+#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/SceneWindow/SceneWindow.h"
 

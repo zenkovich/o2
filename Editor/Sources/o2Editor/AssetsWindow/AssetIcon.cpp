@@ -1,11 +1,11 @@
 #include "o2Editor/stdafx.h"
 #include "AssetIcon.h"
 
-#include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2/Render/Text.h"
-#include "o2/Scene/UI/Widgets/Label.h"
 #include "o2/Scene/UI/WidgetState.h"
+#include "o2/Scene/UI/Widgets/Label.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 
 namespace Editor
 {

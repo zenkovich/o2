@@ -110,7 +110,7 @@ namespace o2
 
 	void MemoryManager::OnMemoryRelease(void* memory)
 	{
-		AllocsInfosMap::iterator fnd = mAllocs.find(memory);
+		std::map<void*, AllocInfo>::iterator fnd = mAllocs.find(memory);
 		if (fnd != mAllocs.end())
 		{
 			mTotalBytes -= (*fnd).second.size;

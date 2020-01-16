@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../Tree.h"
-#include "o2Editor/AnimationWindow/Timeline.h"
-#include "o2Editor/Core/EditorScope.h"
-#include "ITrackControl.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Utils/Editor/DragHandle.h"
+#include "o2Editor/AnimationWindow/Timeline.h"
+#include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
+#include "o2Editor/AnimationWindow/Tree.h"
+#include "o2Editor/Core/EditorScope.h"
 
 using namespace o2;
 
@@ -42,7 +42,7 @@ namespace Editor
 		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
 
 		// Returns key handles list
-		ITrackControl::KeyHandlesVec GetKeyHandles() const override;
+		Vector<ITrackControl::KeyHandle*> GetKeyHandles() const override;
 
 		// Removes key from track
 		void DeleteKey(UInt64 keyUid) override;
@@ -75,13 +75,12 @@ namespace Editor
 
 			bool operator==(const KeyHandle& other) const;
 		};
-		typedef Vector<KeyHandle*> KeyHandlesVec;
 
 		struct IHandlesGroup
 		{
 			String                    animatedValuePath;
 			MapKeyFramesTrackControl* trackControl;
-			KeyHandlesVec             handles;
+			Vector<KeyHandle*>        handles;
 
 		public:
 			virtual ~IHandlesGroup();
@@ -111,13 +110,11 @@ namespace Editor
 			void DeleteKey(UInt64 keyUid) override;
 		};
 
-		typedef Map<IAnimatedValue*, IHandlesGroup*> AnimatedValueKeyHandlesMap;
-
 	private:
-		AnimatedValueKeyHandlesMap mHandlesGroups;          // List of handles, each for keys
-		Vector<IAnimatedValue*>    mAnimatedValues;         // Editing animated values
-		AnimationTimeline*         mTimeline = nullptr;     // Timeline used for calculating handles positions
-		KeyHandlesSheet*           mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
+		Map<IAnimatedValue*, IHandlesGroup*> mHandlesGroups;          // List of handles, each for keys
+		Vector<IAnimatedValue*>              mAnimatedValues;         // Editing animated values
+		AnimationTimeline*                   mTimeline = nullptr;     // Timeline used for calculating handles positions
+		KeyHandlesSheet*                     mHandlesSheet = nullptr; // Handles sheet, used for drawing and managing drag handles
 
 		Vector<AnimationKeyDragHandle*> mHandlesCache; // Cached drag handles, can be reused
 
@@ -288,7 +285,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
-	PUBLIC_FUNCTION(ITrackControl::KeyHandlesVec, GetKeyHandles);
+	PUBLIC_FUNCTION(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::AnimationValueNode&);
 	PUBLIC_FUNCTION(void, UpdateHandlesForValue, IAnimatedValue*);

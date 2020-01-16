@@ -300,7 +300,7 @@ namespace o2
 		mName = name;
 	}
 
-	const DataNode::DataNodesVec& DataNode::GetChildNodes() const
+	const Vector<DataNode*>& DataNode::GetChildNodes() const
 	{
 		return mChildNodes;
 	}

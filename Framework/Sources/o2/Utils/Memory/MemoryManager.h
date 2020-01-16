@@ -78,12 +78,11 @@ namespace o2
 			size_t      size;       // Allocated size in bytes
 			void*       memory;     // Pointer to allocated memory
 		};
-		typedef std::map<void*, AllocInfo> AllocsInfosMap;
 
 		static MemoryManager* mInstance; // Instance pointer
 
-		AllocsInfosMap mAllocs;          // Allocations info
-		size_t         mTotalBytes;      // Total managed allocated bytes
+		std::map<void*, AllocInfo> mAllocs;     // Allocations info
+		size_t                     mTotalBytes; // Total managed allocated bytes
 
 	protected:
 		// It is called when memory was allocated and registers allocation

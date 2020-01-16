@@ -4,9 +4,19 @@
 #include "o2/Assets/ActorAsset.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/FolderAsset.h"
+#include "o2/Events/EventSystem.h"
+#include "o2/Scene/Actor.h"
+#include "o2/Scene/Scene.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayer.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/WidgetState.h"
+#include "o2/Scene/UI/Widgets/Button.h"
+#include "o2/Scene/UI/Widgets/EditBox.h"
+#include "o2/Scene/UI/Widgets/Toggle.h"
+#include "o2Editor/AssetsWindow/AssetIcon.h"
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
-#include "o2Editor/AssetsWindow/AssetIcon.h"
 #include "o2Editor/Core/Actions/Enable.h"
 #include "o2Editor/Core/Actions/Lock.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
@@ -16,16 +26,6 @@
 #include "o2Editor/Core/Properties/Basic/ActorProperty.h"
 #include "o2Editor/Core/Properties/Basic/ComponentProperty.h"
 #include "o2Editor/Core/UIRoot.h"
-#include "o2/Events/EventSystem.h"
-#include "o2/Scene/Actor.h"
-#include "o2/Scene/Scene.h"
-#include "o2/Scene/UI/Widgets/Button.h"
-#include "o2/Scene/UI/Widgets/EditBox.h"
-#include "o2/Scene/UI/Widgets/Toggle.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Scene/UI/WidgetLayer.h"
-#include "o2/Scene/UI/WidgetLayout.h"
-#include "o2/Scene/UI/WidgetState.h"
 
 namespace Editor
 {
@@ -95,12 +95,12 @@ namespace Editor
 		return Tree::GetNode((UnknownPtr)(void*)object);
 	}
 
-	SceneTree::SceneEditableObjsVec SceneTree::GetSelectedObjects() const
+	Vector<SceneEditableObject*> SceneTree::GetSelectedObjects() const
 	{
 		return Tree::GetSelectedObjects().Select<SceneEditableObject*>([](auto x) { return (SceneEditableObject*)(void*)x; });
 	}
 
-	void SceneTree::SetSelectedObjects(const SceneEditableObjsVec& objects)
+	void SceneTree::SetSelectedObjects(const Vector<SceneEditableObject*>& objects)
 	{
 		Tree::SetSelectedObjects(objects.Select<UnknownPtr>([](auto x) { return (UnknownPtr)(void*)x; }));
 	}
@@ -225,7 +225,7 @@ namespace Editor
 
 	void SceneTree::EnableObjectsGroupReleased(bool value)
 	{
-		SceneEditableObjsVec objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
+		Vector<SceneEditableObject*> objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
 			[](Toggle* x) { return ((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew EnableAction(objects, value);
@@ -237,7 +237,7 @@ namespace Editor
 
 	void SceneTree::LockObjectsGroupReleased(bool value)
 	{
-		SceneEditableObjsVec objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
+		Vector<SceneEditableObject*> objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
 			[](Toggle* x) { return ((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew LockAction(objects, value);
@@ -324,7 +324,7 @@ namespace Editor
 		Tree::OnObjectRemoved(object);
 	}
 
-	void SceneTree::OnObjectsChanged(const SceneEditableObjsVec& objects)
+	void SceneTree::OnObjectsChanged(const Vector<SceneEditableObject*>& objects)
 	{
 		Tree::OnObjectsChanged(objects.Cast<UnknownPtr>());
 	}

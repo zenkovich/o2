@@ -16,6 +16,7 @@ namespace o2
 	// ------------
 	class ToggleGroup
 	{
+	public:
 		enum class Type { OnlySingleTrue, VerOneClick, HorOneClick };
 
 	public:
@@ -121,11 +122,13 @@ namespace o2
 		SERIALIZABLE(Toggle);
 
 	protected:
-		bool           mValue = false;          // Current value @SERIALIZABLE
-		bool           mValueUnknown = false;   // Is value unknown @SERIALIZABLE
-		Text*          mCaptionText = nullptr;  // Caption layer text
-		WidgetLayer* mBackLayer = nullptr;    // Background layer
-		ToggleGroup* mToggleGroup = nullptr;  // Toggle group
+		bool mValue = false;        // Current value @SERIALIZABLE
+		bool mValueUnknown = false; // Is value unknown @SERIALIZABLE
+
+		Text*        mCaptionText = nullptr; // Caption layer text
+		WidgetLayer* mBackLayer = nullptr;   // Background layer
+
+		ToggleGroup* mToggleGroup = nullptr; // Toggle group
 
 	protected:
 		// It is called when deserialized
@@ -178,10 +181,10 @@ CLASS_FIELDS_META(o2::Toggle)
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(toggleGroup);
-	PUBLIC_FIELD(shortcut);
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(onToggle);
 	PUBLIC_FIELD(onToggleByUser);
+	PUBLIC_FIELD(shortcut);
 	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValueUnknown).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mCaptionText);

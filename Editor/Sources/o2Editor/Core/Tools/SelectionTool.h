@@ -18,9 +18,6 @@ namespace Editor
 	class SelectionTool: public IEditTool
 	{
 	public:
-		typedef Vector<SceneEditableObject*> SceneEditableObjectsVec;
-
-	public:
 		// Default constructor
 		SelectionTool();
 
@@ -32,8 +29,8 @@ namespace Editor
 	protected:
 		Sprite* mSelectionSprite = nullptr; // Selection frame sprite
 
-		SceneEditableObjectsVec mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
-		SceneEditableObjectsVec mBeforeSelectingObjects;  // Before selection objects array
+		Vector<SceneEditableObject*> mCurrentSelectingObjects; // Current selecting objects (when cursor pressed, but not released yet)
+		Vector<SceneEditableObject*> mBeforeSelectingObjects;  // Before selection objects array
 
 		Vec2F mPressPoint;				 // Press point before selecting
 		bool  mSelectingObjects = false; // Is selecting objects now

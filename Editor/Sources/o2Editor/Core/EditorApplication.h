@@ -1,9 +1,9 @@
 #pragma once
 
 #include "o2/Application/Application.h"
-#include "o2Editor/Core/Actions/ActionsList.h"
-#include "EditorConfig.h"
 #include "o2/Render/Sprite.h"
+#include "o2Editor/Core/Actions/ActionsList.h"
+#include "o2Editor/Core/EditorConfig.h"
 
 using namespace o2;
 

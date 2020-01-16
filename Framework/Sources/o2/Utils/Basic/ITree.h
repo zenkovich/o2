@@ -12,9 +12,6 @@ namespace o2
 	class ITreeNode
 	{
 	public:
-		typedef Vector<_type*> ChildrenVec;
-
-	public:
 		// Default constructor
 		ITreeNode();
 
@@ -37,15 +34,15 @@ namespace o2
 		virtual _type* GetParent() const;
 
 		// Return child nodes
-		virtual ChildrenVec& GetChilds();
+		virtual Vector<_type*>& GetChilds();
 
 		// Returns constant child nodes
-		virtual const ChildrenVec& GetChilds() const;
+		virtual const Vector<_type*>& GetChilds() const;
 
 	protected:
-		_type*      _this;     // Template this pointer
-		_type*      mParent;   // Pointer to parent node
-		ChildrenVec mChildren; // Children nodes @SERIALIZABLE
+		_type*         _this;     // Template this pointer
+		_type*         mParent;   // Pointer to parent node
+		Vector<_type*> mChildren; // Children nodes @SERIALIZABLE
 
 	protected:
 		// It is called when added new child
@@ -135,13 +132,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename ITreeNode<_type>::ChildrenVec& ITreeNode<_type>::GetChilds()
+	typename Vector<_type*>& ITreeNode<_type>::GetChilds()
 	{
 		return mChildren;
 	}
 
 	template<typename _type>
-	const typename ITreeNode<_type>::ChildrenVec& o2::ITreeNode<_type>::GetChilds() const
+	const typename Vector<_type*>& o2::ITreeNode<_type>::GetChilds() const
 	{
 		return mChildren;
 	}

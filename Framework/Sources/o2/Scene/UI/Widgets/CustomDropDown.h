@@ -117,10 +117,10 @@ namespace o2
 		SERIALIZABLE(CustomDropDown);
 
 	protected:
-		CustomList*   mItemsList = nullptr;                // List view @SERIALIZABLE
-		Layout        mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
-		RectF         mAbsoluteClip;                       // Absolute clipping rectangle
-		int           mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
+		CustomList* mItemsList = nullptr;                // List view @SERIALIZABLE
+		Layout      mClipLayout = Layout::BothStretch(); // Clipping layout @SERIALIZABLE
+		RectF       mAbsoluteClip;                       // Absolute clipping rectangle
+		int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
 	protected:
 		// Copies data of actor from other to this

@@ -2,7 +2,6 @@
 
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
-
 namespace o2
 {
 	class Widget;

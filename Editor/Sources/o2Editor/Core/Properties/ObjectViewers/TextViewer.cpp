@@ -1,6 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "TextViewer.h"
 
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
@@ -9,8 +11,6 @@
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/WStringProperty.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "o2/Scene/UI/Widgets/Spoiler.h"
-#include "o2/Scene/UI/UIManager.h"
 
 namespace Editor
 {
@@ -61,7 +61,7 @@ namespace Editor
 			o2EditorProperties.BuildField(commonFieldsLayout, textType, "linesDistanceCoef", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 	}
 
-	void TextViewer::Refresh(const TargetsVec& targetObjets)
+	void TextViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		mPropertiesContext.Set(targetObjets);
 	}

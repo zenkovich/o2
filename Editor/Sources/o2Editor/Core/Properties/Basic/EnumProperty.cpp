@@ -3,7 +3,6 @@
 
 #include "o2/Scene/UI/Widgets/DropDown.h"
 
-
 namespace Editor
 {
 	EnumProperty::EnumProperty()

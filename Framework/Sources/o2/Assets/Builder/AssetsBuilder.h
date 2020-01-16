@@ -39,7 +39,7 @@ namespace o2
 		String    mBuiltAssetsPath;  // Built assets path
 		AssetTree mBuiltAssetsTree;  // Built assets tree
 
-		AssetTree::Vector<AssetNode*> mModifiedAssets; // Modified assets infos
+		Vector<AssetTree::AssetNode*> mModifiedAssets; // Modified assets infos
 
 		Map<const Type*, IAssetConverter*> mAssetConverters;   // Assets converters by type
 		StdAssetConverter                  mStdAssetConverter; // Standard assets converter

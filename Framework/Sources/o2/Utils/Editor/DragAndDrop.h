@@ -110,14 +110,11 @@ namespace o2
 	class ISelectableDragableObjectsGroup: virtual public CursorAreaEventsListener
 	{
 	public:
-		typedef Vector<SelectableDragableObject*> SelectDragObjectsVec;
-
-	public:
 		// Returns selected objects in group
-		virtual SelectDragObjectsVec GetSelectedDragObjects() const = 0;
+		virtual Vector<SelectableDragableObject*> GetSelectedDragObjects() const = 0;
 
 		// Returns all objects in group 
-		virtual SelectDragObjectsVec GetAllObjects() const = 0;
+		virtual Vector<SelectableDragableObject*> GetAllObjects() const = 0;
 
 		// Selects object
 		virtual void Select(SelectableDragableObject* object) = 0;
@@ -156,17 +153,14 @@ namespace o2
 	class SelectableDragableObjectsGroup: public ISelectableDragableObjectsGroup
 	{
 	public:
-		typedef Vector<SelectableDragableObject*> SelectDragObjectsVec;
-
-	public:
 		// Destructor
 		virtual ~SelectableDragableObjectsGroup();
 
 		// Returns selected listeners in group
-		SelectDragObjectsVec GetSelectedDragObjects() const;
+		Vector<SelectableDragableObject*> GetSelectedDragObjects() const;
 
 		// Returns all objects in group 
-		SelectDragObjectsVec GetAllObjects() const;
+		Vector<SelectableDragableObject*> GetAllObjects() const;
 
 		// Selects object
 		void Select(SelectableDragableObject* object);
@@ -184,8 +178,8 @@ namespace o2
 		virtual bool IsUnderPoint(const Vec2F& point);
 
 	protected:
-		SelectDragObjectsVec mObjects;         // Listeners in group
-		SelectDragObjectsVec mSelectedObjects; // Selected listeners in group
+		Vector<SelectableDragableObject*> mObjects;         // Listeners in group
+		Vector<SelectableDragableObject*> mSelectedObjects; // Selected listeners in group
 
 	protected:
 		// It is called when selectable draggable object was pressed

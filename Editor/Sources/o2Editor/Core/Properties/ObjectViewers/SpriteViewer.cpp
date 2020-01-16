@@ -1,6 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "SpriteViewer.h"
 
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/BorderIntProperty.h"
@@ -9,8 +11,6 @@
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
 #include "o2Editor/Core/Properties/Properties.h"
-#include "o2/Scene/UI/Widgets/Spoiler.h"
-#include "o2/Scene/UI/UIManager.h"
 
 namespace Editor
 {

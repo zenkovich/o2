@@ -20,9 +20,9 @@ namespace o2
 	public:
 		PROPERTIES(AtlasAsset);
 		GETTER(MetaInfo*, meta, GetMeta);                  // Meta information getter
-		GETTER(Vector<AssetInfo>, imagesInfos, GetImages);     // Containing images infos getter
+		GETTER(Vector<AssetInfo>, imagesInfos, GetImages); // Containing images infos getter
 		GETTER(Vector<AssetRef>, images, GetImagesAssets); // Images assets getter
-		GETTER(Vector<Page>, pages, GetPages);                 // Pages getter
+		GETTER(Vector<Page>, pages, GetPages);             // Pages getter
 
 	public:
 		// Destructor

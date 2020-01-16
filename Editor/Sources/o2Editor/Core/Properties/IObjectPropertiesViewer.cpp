@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "IObjectPropertiesViewer.h"
 
-#include "o2Editor/Core/EditorScope.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
+#include "o2Editor/Core/EditorScope.h"
 
 namespace Editor
 {
@@ -23,7 +23,7 @@ namespace Editor
 			const Vector<DataNode>&, const Vector<DataNode>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
 	}
 
-	void IObjectPropertiesViewer::Refresh(const TargetsVec& targetObjets)
+	void IObjectPropertiesViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		mPropertiesContext.Set(targetObjets);
 	}

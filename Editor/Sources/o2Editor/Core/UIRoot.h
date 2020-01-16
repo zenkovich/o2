@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2/Utils/Singleton.h"
 #include "o2/Events/ApplicationEventsListener.h"
+#include "o2/Utils/Singleton.h"
 
 using namespace o2;
 

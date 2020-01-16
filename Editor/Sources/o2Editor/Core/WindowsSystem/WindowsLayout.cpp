@@ -1,12 +1,12 @@
 #include "o2Editor/stdafx.h"
 #include "WindowsLayout.h"
 
-#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
-#include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
-#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
-#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
+#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
+#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+#include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 
 namespace Editor
 {
