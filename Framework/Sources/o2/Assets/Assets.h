@@ -137,7 +137,7 @@ namespace o2
 		void RebuildAssets(bool forcible = false);
 
 		// Returns assets tree
-		const AssetTree& GetAssetsTree() const;
+		const AssetsTree& GetAssetsTree() const;
 
 		// Makes unique asset name from first path variant
 		String MakeUniqueAssetName(const String& path);
@@ -158,14 +158,16 @@ namespace o2
 		String mAssetsFolderPath; // Project assets path
 		String mDataFolderPath;   // Project data (builded assets) path
 
-		AssetTree      mAssetsTree;    // Assets information tree
+		AssetsTree     mAssetsTree;    // Assets information tree
 		LogStream*     mLog;           // Log stream
 		AssetsBuilder* mAssetsBuilder; // Assets builder
 
 		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary
 		const Type*              mStdAssetType;  // Standard asset type
 
-		Vector<AssetCache*> mCachedAssets; // Current cached assets
+		Vector<AssetCache*>      mCachedAssets;       // Current cached assets
+		Map<String, AssetCache*> mCachedAssetsByPath; // Current cached assets by path
+		Map<UID, AssetCache*>    mCachedAssetsByUID;  // Current cached assets by uid
 
 	protected:
 		// Loads asset infos
@@ -197,6 +199,8 @@ namespace o2
 		cached->referencesCount = 0;
 
 		mCachedAssets.Add(cached);
+		mCachedAssetsByPath[cached->asset->GetPath()] = cached;
+		mCachedAssetsByPath[cached->asset->GetAssetId()] = cached;
 
 		return AssetRef(newAset, &cached->referencesCount);
 	}

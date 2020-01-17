@@ -27,8 +27,8 @@ namespace o2
 		Reset();
 	}
 
-	Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, 
-														   bool forcible /*= false*/)
+	Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath,
+										   bool forcible /*= false*/)
 	{
 		Reset();
 
@@ -36,6 +36,7 @@ namespace o2
 
 		mSourceAssetsPath = assetsPath;
 		mBuiltAssetsPath = dataAssetsPath;
+		mBuiltAssetsTreePath = dataAssetsTreePath;
 
 		mLog->Out("Started assets building from: " + assetsPath + " to: " + dataAssetsPath);
 
@@ -168,10 +169,10 @@ namespace o2
 		// in first pass skipping folders (only files), in second - files
 		for (int pass = 0; pass < 2; pass++)
 		{
-			for (auto builtAssetInfoIt = mBuiltAssetsTree.mAllAssets.Begin(); builtAssetInfoIt != mBuiltAssetsTree.mAllAssets.End(); )
+			for (auto builtAssetInfoIt = mBuiltAssetsTree.allAssets.Begin(); builtAssetInfoIt != mBuiltAssetsTree.allAssets.End(); )
 			{
 				bool isFolder = (*builtAssetInfoIt)->assetType == folderTypeId;
-				bool skip = pass == 0 ? isFolder:!isFolder;
+				bool skip = pass == 0 ? isFolder : !isFolder;
 				if (skip)
 				{
 					++builtAssetInfoIt;
@@ -179,7 +180,7 @@ namespace o2
 				}
 
 				bool needRemove = true;
-				for (auto sourceAssetInfo : mSourceAssetsTree.mAllAssets)
+				for (auto sourceAssetInfo : mSourceAssetsTree.allAssets)
 				{
 					if ((*builtAssetInfoIt)->path == sourceAssetInfo->path &&
 						(*builtAssetInfoIt)->meta->ID() == sourceAssetInfo->meta->ID())
@@ -195,7 +196,7 @@ namespace o2
 					continue;
 				}
 
-				for (auto sourceAssetInfo : mSourceAssetsTree.mAllAssets)
+				for (auto sourceAssetInfo : mSourceAssetsTree.allAssets)
 				{
 					if ((*builtAssetInfoIt)->path == sourceAssetInfo->path &&
 						(*builtAssetInfoIt)->meta->ID() == sourceAssetInfo->meta->ID())
@@ -213,8 +214,8 @@ namespace o2
 
 				auto builtAssetInfo = *builtAssetInfoIt;
 
-				builtAssetInfoIt = mBuiltAssetsTree.mAllAssets.Remove(builtAssetInfoIt);
-				mBuiltAssetsTree.mRootAssets.Remove(builtAssetInfo);
+				builtAssetInfoIt = mBuiltAssetsTree.allAssets.Remove(builtAssetInfoIt);
+				mBuiltAssetsTree.rootAssets.Remove(builtAssetInfo);
 
 				if (builtAssetInfo->parent)
 					builtAssetInfo->parent->RemoveChild(builtAssetInfo);
@@ -234,14 +235,14 @@ namespace o2
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
 		{
-			for (auto sourceAssetInfo : mSourceAssetsTree.mAllAssets)
+			for (auto sourceAssetInfo : mSourceAssetsTree.allAssets)
 			{
 				bool isFolder = sourceAssetInfo->assetType == folderType;
-				bool skip = pass == 0 ? !isFolder:isFolder;
+				bool skip = pass == 0 ? !isFolder : isFolder;
 				if (skip)
 					continue;
 
-				for (auto builtAssetInfo : mBuiltAssetsTree.mAllAssets)
+				for (auto builtAssetInfo : mBuiltAssetsTree.allAssets)
 				{
 					if (sourceAssetInfo->meta->ID() == builtAssetInfo->meta->ID())
 					{
@@ -321,16 +322,16 @@ namespace o2
 		// in first pass skipping files (only folders), in second - folders
 		for (int pass = 0; pass < 2; pass++)
 		{
-			for (auto sourceAssetInfoIt = mSourceAssetsTree.mAllAssets.Begin(); sourceAssetInfoIt != mSourceAssetsTree.mAllAssets.End(); ++sourceAssetInfoIt)
+			for (auto sourceAssetInfoIt = mSourceAssetsTree.allAssets.Begin(); sourceAssetInfoIt != mSourceAssetsTree.allAssets.End(); ++sourceAssetInfoIt)
 			{
 				bool isFolder = (*sourceAssetInfoIt)->assetType == folderType;
-				bool skip = pass == 0 ? !isFolder:isFolder;
+				bool skip = pass == 0 ? !isFolder : isFolder;
 
 				if (skip)
 					continue;
 
 				bool isNew = true;
-				for (auto builtAssetInfo : mBuiltAssetsTree.mAllAssets)
+				for (auto builtAssetInfo : mBuiltAssetsTree.allAssets)
 				{
 					if ((*sourceAssetInfoIt)->path == builtAssetInfo->path &&
 						(*sourceAssetInfoIt)->meta->ID() == builtAssetInfo->meta->ID())
@@ -349,12 +350,12 @@ namespace o2
 
 				mLog->Out("New asset: " + (*sourceAssetInfoIt)->path);
 
-				AssetTree::AssetNode* newBuiltAsset = mnew AssetTree::AssetNode();
+				AssetsTree::AssetNode* newBuiltAsset = mnew AssetsTree::AssetNode();
 				newBuiltAsset->path = (*sourceAssetInfoIt)->path;
 				newBuiltAsset->assetType = (*sourceAssetInfoIt)->assetType;
 				newBuiltAsset->time = (*sourceAssetInfoIt)->time;
 				newBuiltAsset->meta = (*sourceAssetInfoIt)->meta->CloneAs<Asset::IMetaInfo>();
-				newBuiltAsset->id   = newBuiltAsset->meta->ID();
+				newBuiltAsset->id = newBuiltAsset->meta->ID();
 
 				mBuiltAssetsTree.AddAsset(newBuiltAsset);
 			}
@@ -380,7 +381,7 @@ namespace o2
 		DataNode data;
 		data = mBuiltAssetsTree;
 
-		data.SaveToFile(GetBuiltAssetsTreePath());
+		data.SaveToFile(mBuiltAssetsTreePath);
 	}
 
 	void AssetsBuilder::GenerateMeta(const Type& assetType, const String& metaFullPath)

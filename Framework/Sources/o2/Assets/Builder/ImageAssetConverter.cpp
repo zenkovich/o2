@@ -15,7 +15,7 @@ namespace o2
 		return res;
 	}
 
-	void ImageAssetConverter::ConvertAsset(const AssetTree::AssetNode& node)
+	void ImageAssetConverter::ConvertAsset(const AssetsTree::AssetNode& node)
 	{
 		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
@@ -27,7 +27,7 @@ namespace o2
 		o2FileSystem.SetFileEditDate(buildedAssetPath, node.time);
 	}
 
-	void ImageAssetConverter::RemoveAsset(const AssetTree::AssetNode& node)
+	void ImageAssetConverter::RemoveAsset(const AssetsTree::AssetNode& node)
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 		String buildedAssetMetaPath = buildedAssetPath + ".meta";
@@ -36,7 +36,7 @@ namespace o2
 		o2FileSystem.FileDelete(buildedAssetMetaPath);
 	}
 
-	void ImageAssetConverter::MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo)
+	void ImageAssetConverter::MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo)
 	{
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;

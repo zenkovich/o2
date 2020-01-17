@@ -18,13 +18,13 @@ namespace o2
 		Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Converts atlas by path
-		void ConvertAsset(const AssetTree::AssetNode& node);
+		void ConvertAsset(const AssetsTree::AssetNode& node);
 
 		// Removes atlas by path
-		void RemoveAsset(const AssetTree::AssetNode& node);
+		void RemoveAsset(const AssetsTree::AssetNode& node);
 
 		// Moves atlas
-		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
+		void MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo);
 
 		// Post processing atlases. Here checking atlases for rebuild
 		Vector<UID> AssetsPostProcess();
@@ -63,7 +63,7 @@ namespace o2
 		{
 			Bitmap*               mBitmap = nullptr;    // Image bitmap pointer
 			RectsPacker::Rect*    mPackRect = nullptr;  // Image pack rectangle pointer
-			AssetTree::AssetNode* mAssetInfo = nullptr; // Asset information
+			AssetsTree::AssetNode* mAssetInfo = nullptr; // Asset information
 
 			// Check equal operator
 			bool operator==(const ImagePackDef& other) const;
@@ -77,13 +77,13 @@ namespace o2
 		Vector<UID> CheckRebuildingAtlases();
 
 		// Checks atlas for rebuilding
-		bool CheckAtlasRebuilding(AssetTree::AssetNode* atlasInfo);
+		bool CheckAtlasRebuilding(AssetsTree::AssetNode* atlasInfo);
 
 		// Returns true if atlas needs to rebuild
 		bool IsAtlasNeedRebuild(Vector<Image>& currentImages, Vector<Image>& lastImages);
 
 		// Rebuilds atlas
-		void RebuildAtlas(AssetTree::AssetNode* atlasInfo, Vector<Image>& images);
+		void RebuildAtlas(AssetsTree::AssetNode* atlasInfo, Vector<Image>& images);
 
 		// Saves image asset data
 		void SaveImageAsset(ImagePackDef& imgDef);
@@ -103,16 +103,16 @@ CLASS_METHODS_META(o2::AtlasAssetConverter)
 {
 
 	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
+	PUBLIC_FUNCTION(void, ConvertAsset, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, RemoveAsset, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, MoveAsset, const AssetsTree::AssetNode&, const AssetsTree::AssetNode&);
 	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
 	PUBLIC_FUNCTION(void, Reset);
 	PROTECTED_FUNCTION(void, CheckBasicAtlas);
 	PROTECTED_FUNCTION(Vector<UID>, CheckRebuildingAtlases);
-	PROTECTED_FUNCTION(bool, CheckAtlasRebuilding, AssetTree::AssetNode*);
+	PROTECTED_FUNCTION(bool, CheckAtlasRebuilding, AssetsTree::AssetNode*);
 	PROTECTED_FUNCTION(bool, IsAtlasNeedRebuild, Vector<Image>&, Vector<Image>&);
-	PROTECTED_FUNCTION(void, RebuildAtlas, AssetTree::AssetNode*, Vector<Image>&);
+	PROTECTED_FUNCTION(void, RebuildAtlas, AssetsTree::AssetNode*, Vector<Image>&);
 	PROTECTED_FUNCTION(void, SaveImageAsset, ImagePackDef&);
 }
 END_META;

@@ -44,7 +44,7 @@ namespace o2
 
 	String Assets::GetBuiltAssetsPath() const
 	{
-		return mDataFolderPath;
+		return o2Config.GetProjectPath() + mDataFolderPath;
 	}
 
 	String Assets::GetAssetPath(UID id) const
@@ -96,11 +96,11 @@ namespace o2
 
 		if (!cached)
 		{
-			AssetInfo ai = GetAssetInfo(path);
-			if (!ai.assetType)
+			auto assetInfo = mAssetsTree.FindAsset(path);
+			if (!assetInfo->assetType)
 				return AssetRef();
 
-			Asset* asset = (Asset*)ai.assetType->CreateSample();
+			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
 			asset->Load(path);
 
 			cached = mnew AssetCache();
@@ -108,6 +108,8 @@ namespace o2
 			cached->referencesCount = 0;
 
 			mCachedAssets.Add(cached);
+			mCachedAssetsByPath[cached->asset->GetPath()] = cached;
+			mCachedAssetsByPath[cached->asset->GetAssetId()] = cached;
 		}
 
 		return AssetRef(cached->asset, &cached->referencesCount);
@@ -119,11 +121,11 @@ namespace o2
 
 		if (!cached)
 		{
-			AssetInfo ai = GetAssetInfo(id);
-			if (!ai.assetType)
+			auto assetInfo = mAssetsTree.FindAsset(id);
+			if (!assetInfo->assetType)
 				return AssetRef();
 
-			Asset* asset = (Asset*)ai.assetType->CreateSample();
+			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
 			asset->Load(id);
 
 			cached = mnew AssetCache();
@@ -131,6 +133,8 @@ namespace o2
 			cached->referencesCount = 0;
 
 			mCachedAssets.Add(cached);
+			mCachedAssetsByPath[cached->asset->GetPath()] = cached;
+			mCachedAssetsByPath[cached->asset->GetAssetId()] = cached;
 		}
 
 		return AssetRef(cached->asset, &cached->referencesCount);
@@ -336,16 +340,20 @@ namespace o2
 	{
 		ClearAssetsCache();
 
- 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(GetAssetsPath(), GetBuiltAssetsPath());
+ 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetAssetsPath(),
+															o2Config.GetProjectPath() + ::GetBuiltAssetsPath(),
+															o2Config.GetProjectPath() + ::GetBuiltAssetsTreePath(), forcible);
+
 		changedAssetsIds += mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetEditorAssetsPath(),
-														::GetEditorBuiltAssetsPath());
+														o2Config.GetProjectPath() + ::GetEditorBuiltAssetsPath(),
+														o2Config.GetProjectPath() + ::GetEditorBuiltAssetsTreePath(), forcible);
 
 		LoadAssetsTree();
 
 		onAssetsRebuilded(changedAssetsIds);
 	}
 
-	const AssetTree& Assets::GetAssetsTree() const
+	const AssetsTree& Assets::GetAssetsTree() const
 	{
 		return mAssetsTree;
 	}
@@ -390,13 +398,13 @@ namespace o2
 	void Assets::LoadAssetsTree()
 	{
 		DataNode data;
-		data.LoadFromFile(GetBuiltAssetsTreePath());
+		data.LoadFromFile(o2Config.GetProjectPath() + ::GetBuiltAssetsTreePath());
 
 		mAssetsTree.Clear();
 		mAssetsTree = data;
 
 		data.Clear();
-		data.LoadFromFile(GetEditorBuiltAssetsTreePath());
+		data.LoadFromFile(o2Config.GetProjectPath() + ::GetEditorBuiltAssetsTreePath());
 		mAssetsTree = data;
 	}
 
@@ -430,20 +438,16 @@ namespace o2
 
 	Assets::AssetCache* Assets::FindAssetCache(const String& path)
 	{
-		for (auto cache : mCachedAssets)
-			if (cache->asset->mPath == path)
-				return cache;
-
-		return nullptr;
+		Assets::AssetCache* res = nullptr;
+		mCachedAssetsByPath.TryGetValue(path, res);
+		return res;
 	}
 
 	Assets::AssetCache* Assets::FindAssetCache(UID id)
 	{
-		for (auto cache : mCachedAssets)
-			if (cache->asset->IdRef() == id)
-				return cache;
-
-		return nullptr;
+		Assets::AssetCache* res = nullptr;
+		mCachedAssetsByPath.TryGetValue(id, res);
+		return res;
 	}
 
 	void Assets::ClearAssetsCache()

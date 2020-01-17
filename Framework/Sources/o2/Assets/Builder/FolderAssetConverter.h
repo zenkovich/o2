@@ -14,13 +14,13 @@ namespace o2
 		Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Converts folder by path
-		void ConvertAsset(const AssetTree::AssetNode& node);
+		void ConvertAsset(const AssetsTree::AssetNode& node);
 
 		// Removes folder by path
-		void RemoveAsset(const AssetTree::AssetNode& node);
+		void RemoveAsset(const AssetsTree::AssetNode& node);
 
 		// Moves folder to new path
-		void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
+		void MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo);
 
 		// Post processing folders
 		Vector<UID> AssetsPostProcess();
@@ -49,9 +49,9 @@ CLASS_METHODS_META(o2::FolderAssetConverter)
 {
 
 	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
+	PUBLIC_FUNCTION(void, ConvertAsset, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, RemoveAsset, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, MoveAsset, const AssetsTree::AssetNode&, const AssetsTree::AssetNode&);
 	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
 	PUBLIC_FUNCTION(void, Reset);
 }

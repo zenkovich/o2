@@ -24,13 +24,13 @@ namespace o2
 		virtual Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Converts asset by path
-		virtual void ConvertAsset(const AssetTree::AssetNode& node);
+		virtual void ConvertAsset(const AssetsTree::AssetNode& node);
 
 		// Removes asset by path
-		virtual void RemoveAsset(const AssetTree::AssetNode& node);
+		virtual void RemoveAsset(const AssetsTree::AssetNode& node);
 
 		// Moves asset to new path
-		virtual void MoveAsset(const AssetTree::AssetNode& nodeFrom, const AssetTree::AssetNode& nodeTo);
+		virtual void MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo);
 
 		// Post processing
 		virtual Vector<UID> AssetsPostProcess();
@@ -63,9 +63,9 @@ CLASS_METHODS_META(o2::IAssetConverter)
 {
 
 	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetTree::AssetNode&, const AssetTree::AssetNode&);
+	PUBLIC_FUNCTION(void, ConvertAsset, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, RemoveAsset, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, MoveAsset, const AssetsTree::AssetNode&, const AssetsTree::AssetNode&);
 	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
 	PUBLIC_FUNCTION(void, Reset);
 	PUBLIC_FUNCTION(void, SetAssetsBuilder, AssetsBuilder*);

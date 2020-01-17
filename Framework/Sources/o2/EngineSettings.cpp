@@ -79,7 +79,7 @@ const char* GetBasicAtlasPath()
 const char* GetBuiltAssetsTreePath()
 {
 #if defined PLATFORM_WINDOWS
-	return "AssetsTree.xml";
+	return "BuiltAssets/Windows/Data.xml";
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/AssetsTree.xml";
 #endif
@@ -97,7 +97,7 @@ const char* GetEditorBuiltAssetsPath()
 
 const char* GetEditorBuiltAssetsTreePath()
 {
-	return "EditorAssetsTree.xml";
+	return "BuiltAssets/Windows/EditorData.xml";
 }
 
 #ifdef PLATFORM_ANDROID

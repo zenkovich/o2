@@ -81,7 +81,7 @@ namespace o2
 		if (folderAssetInfo)
 		{
 			mContainingAssetsInfos = folderAssetInfo->children.Select<AssetInfo>(
-				[&](AssetTree::AssetNode* asset) { return (AssetInfo)(*asset); });
+				[&](AssetsTree::AssetNode* asset) { return (AssetInfo)(*asset); });
 		}
 	}
 

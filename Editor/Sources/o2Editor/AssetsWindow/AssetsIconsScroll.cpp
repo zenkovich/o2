@@ -197,7 +197,7 @@ namespace Editor
 		if (mCurrentPath != "")
 			folderAssetsInfos = FolderAssetRef(mCurrentPath)->GetContainingAssetsInfos();
 		else
-			folderAssetsInfos = o2Assets.GetAssetsTree().mRootAssets.Select<AssetInfo>([](auto x) { return (AssetInfo)*x; });
+			folderAssetsInfos = o2Assets.GetAssetsTree().rootAssets.Select<AssetInfo>([](auto x) { return (AssetInfo)*x; });
 
 		auto getAssetTypeSortWeight = [](const AssetInfo& asset) {
 

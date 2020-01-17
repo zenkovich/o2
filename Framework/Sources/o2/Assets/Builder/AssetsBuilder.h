@@ -23,7 +23,7 @@ namespace o2
 		~AssetsBuilder();
 
 		// Builds asset from assets path to dataAssetsPath. Removes all builded assets if forcible is true
-		Vector<UID> BuildAssets(const String& assetsPath, const String& dataAssetsPath, bool forcible = false);
+		Vector<UID> BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath, bool forcible = false);
 
 		// Returns source assets path in building
 		const String& GetSourceAssetsPath() const;
@@ -34,12 +34,14 @@ namespace o2
 	protected:
 		LogStream* mLog; // Asset builder log stream
 
-		String    mSourceAssetsPath; // Source assets path
-		AssetTree mSourceAssetsTree; // Source assets tree
-		String    mBuiltAssetsPath;  // Built assets path
-		AssetTree mBuiltAssetsTree;  // Built assets tree
+		String     mSourceAssetsPath;     // Source assets path
+		AssetsTree mSourceAssetsTree;     // Source assets tree
 
-		Vector<AssetTree::AssetNode*> mModifiedAssets; // Modified assets infos
+		String     mBuiltAssetsPath;     // Built assets path
+		String     mBuiltAssetsTreePath; // Built assets tree data path
+		AssetsTree mBuiltAssetsTree;     // Built assets tree
+
+		Vector<AssetsTree::AssetNode*> mModifiedAssets; // Modified assets infos
 
 		Map<const Type*, IAssetConverter*> mAssetConverters;   // Assets converters by type
 		StdAssetConverter                  mStdAssetConverter; // Standard assets converter

@@ -103,8 +103,6 @@ namespace o2
 			// Returns asset id
 			UID ID() const;
 
-			void r() { mId.Randomize(); }
-
 			SERIALIZABLE(IMetaInfo);
 		};
 
@@ -316,6 +314,5 @@ CLASS_METHODS_META(o2::Asset::IMetaInfo)
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
 	PUBLIC_FUNCTION(UID, ID);
-	PUBLIC_FUNCTION(void, r);
 }
 END_META;
