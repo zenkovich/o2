@@ -44,15 +44,15 @@ namespace o2
         return length;
     }
 
-    String InFile::ReadFullData()
+    WString InFile::ReadFullData()
     {
         UInt len = GetDataSize();
-        char* buffer = mnew char[len + 1];
+        wchar_t* buffer = mnew wchar_t[len/sizeof(wchar_t) + 1];
 
         ReadData(buffer, len);
-        buffer[len] = '\0';
+        buffer[len/sizeof(wchar_t)] = '\0';
 
-		return String(buffer);
+		return WString(buffer);
     }
 
     void InFile::ReadData(void *dataPtr, UInt bytes)

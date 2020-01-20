@@ -55,7 +55,7 @@ namespace o2
 		return path.SubStr(0, idx);
 	}
 
-	String FileSystem::ReadFile(const String& path)
+	WString FileSystem::ReadFile(const String& path)
 	{
 		InFile file(path);
 		if (!file.IsOpened())
@@ -64,9 +64,9 @@ namespace o2
 		return file.ReadFullData();
 	}
 
-	void FileSystem::WriteFile(const String& path, const String& data)
+	void FileSystem::WriteFile(const String& path, const WString& data)
 	{
 		OutFile file(path);
-		file.WriteData(path.Data(), path.Length());
+		file.WriteData(data.Data(), data.Length()*sizeof(wchar_t));
 	}
 }

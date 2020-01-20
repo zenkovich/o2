@@ -22,9 +22,8 @@ namespace o2
 		{ 
 			AssetsTree* tree = nullptr; // Owner asset tree
 
-			Asset::IMetaInfo*  meta; // Asset meta
-			TimeStamp          time; // Asset edited time
-							  
+			Asset::IMetaInfo*  meta;             // Asset meta @SERIALIZABLE
+			TimeStamp          time;             // Asset edited time							  
 			AssetNode*         parent = nullptr; // Parent node
 			Vector<AssetNode*> children;         // Children nodes @SERIALIZABLE
 
@@ -165,7 +164,7 @@ END_META;
 CLASS_FIELDS_META(o2::AssetsTree::AssetNode)
 {
 	PUBLIC_FIELD(tree);
-	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(meta).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(time);
 	PUBLIC_FIELD(parent);
 	PUBLIC_FIELD(children).SERIALIZABLE_ATTRIBUTE();

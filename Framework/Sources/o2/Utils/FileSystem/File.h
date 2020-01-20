@@ -32,7 +32,7 @@ namespace o2
 		bool Close();
 
 		// Returns file data as string
-		String ReadFullData();
+		WString ReadFullData();
 
 		// Read full file data and return size of ridden data
 		UInt ReadFullData(void *dataPtr);
@@ -77,7 +77,7 @@ namespace o2
 		// Constructor with opening file
 		OutFile(const String& filename);
 
-		// Destcructor
+		// Destructor
 		~OutFile();
 
 		// Opening file 

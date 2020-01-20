@@ -30,7 +30,6 @@ namespace o2
 	Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath,
 										   bool forcible /*= false*/)
 	{
-		forcible = true;
 		Reset();
 
 		Vector<UID> modifiedAssets;
@@ -39,7 +38,7 @@ namespace o2
 		mBuiltAssetsPath = dataAssetsPath;
 		mBuiltAssetsTreePath = dataAssetsTreePath;
 
-		mLog->Out("Started assets building from: " + assetsPath + " to: " + dataAssetsPath);
+		mLog->Out("Started assets building from: " + mSourceAssetsPath + " to: " + mBuiltAssetsPath);
 
 		Timer timer;
 
@@ -49,15 +48,15 @@ namespace o2
 		CheckBasicAtlas();
 		CreateMissingMetas();
 
-		mSourceAssetsTree.BuildTree(assetsPath);
-		mBuiltAssetsTree.BuildTree(dataAssetsPath);
+		mSourceAssetsTree.BuildTree(mSourceAssetsPath);
+		mBuiltAssetsTree.DeserializeFromString(o2FileSystem.ReadFile(mBuiltAssetsTreePath));
 
 		modifiedAssets.Add(ProcessModifiedAssets());
 		modifiedAssets.Add(ProcessRemovedAssets());
 		modifiedAssets.Add(ProcessNewAssets());
 		modifiedAssets.Add(ConvertersPostProcess());
 
-		SaveAssetsTree();
+		o2FileSystem.WriteFile(mBuiltAssetsTreePath, mBuiltAssetsTree.SerializeToString());
 
 		mLog->Out("Completed for " + (String)timer.GetDeltaTime() + " seconds");
 
@@ -375,14 +374,6 @@ namespace o2
 		res.Add(mStdAssetConverter.AssetsPostProcess());
 
 		return res;
-	}
-
-	void AssetsBuilder::SaveAssetsTree()
-	{
-		DataNode data;
-		data = mBuiltAssetsTree;
-
-		data.SaveToFile(mBuiltAssetsTreePath);
 	}
 
 	void AssetsBuilder::GenerateMeta(const Type& assetType, const String& metaFullPath)

@@ -87,10 +87,10 @@ namespace o2
 		static String GetParentPath(const String& path);
 
 		// Read file and returns result
-		static String ReadFile(const String& path);
+		static WString ReadFile(const String& path);
 
 		// Writes file data
-		static void WriteFile(const String& path, const String& data);
+		static void WriteFile(const String& path, const WString& data);
 
 	private:
 		LogStream* mLog; // File system log stream

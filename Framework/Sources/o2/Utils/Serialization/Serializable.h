@@ -22,6 +22,12 @@ namespace o2
 		// Deserializing object from data node
 		virtual void Deserialize(const DataNode& node) {};
 
+		// Serializes data to string
+		WString SerializeToString() const;
+
+		// Deserializes data from string
+		void DeserializeFromString(const WString& str);
+
 		// DataNode converting operator
 		operator DataNode() { return Serialize(); };
 
@@ -131,6 +137,8 @@ CLASS_METHODS_META(o2::ISerializable)
 
 	PUBLIC_FUNCTION(DataNode, Serialize);
 	PUBLIC_FUNCTION(void, Deserialize, const DataNode&);
+	PUBLIC_FUNCTION(WString, SerializeToString);
+	PUBLIC_FUNCTION(void, DeserializeFromString, const WString&);
 	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
 	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
 	PROTECTED_FUNCTION(void, SerializeBasic, const IObject&, DataNode&);

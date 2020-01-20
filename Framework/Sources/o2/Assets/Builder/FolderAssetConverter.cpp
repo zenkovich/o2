@@ -20,31 +20,23 @@ namespace o2
 	{
 		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
-		String sourceAssetMetaPath = sourceAssetPath + ".meta";
-		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
 		o2FileSystem.FolderCreate(buildedAssetPath);
-		o2FileSystem.FileCopy(sourceAssetMetaPath, buildedAssetMetaPath);
 	}
 
 	void FolderAssetConverter::RemoveAsset(const AssetsTree::AssetNode& node)
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
-		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
 		o2FileSystem.FolderRemove(buildedAssetPath);
-		o2FileSystem.FileDelete(buildedAssetMetaPath);
 	}
 
 	void FolderAssetConverter::MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo)
 	{
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
-		String fullMetaPathFrom = fullPathFrom + ".meta";
-		String fullMetaPathTo = fullPathTo + ".meta";
 
 		o2FileSystem.FolderCreate(fullPathTo);
-		o2FileSystem.FileMove(fullMetaPathFrom, fullMetaPathTo);
 
 		mRemovedFolders.Add(fullPathFrom);
 		mRemovedFolders.Remove(fullPathTo);

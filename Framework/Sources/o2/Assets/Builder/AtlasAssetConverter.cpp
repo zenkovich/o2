@@ -21,19 +21,14 @@ namespace o2
 	{
 		String sourceAssetPath = o2Assets.GetAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
-		String sourceAssetMetaPath = sourceAssetPath + ".meta";
-		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
 		if (!o2FileSystem.IsFileExist(buildedAssetPath))
 			o2FileSystem.WriteFile(buildedAssetPath, "");
-
-		o2FileSystem.FileCopy(sourceAssetMetaPath, buildedAssetMetaPath);
 	}
 
 	void AtlasAssetConverter::RemoveAsset(const AssetsTree::AssetNode& node)
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
-		String buildedAssetMetaPath = buildedAssetPath + ".meta";
 
 		DataNode atlasData;
 		atlasData.LoadFromFile(buildedAssetPath);
@@ -43,26 +38,21 @@ namespace o2
 			o2FileSystem.FileDelete(buildedAssetPath + (String)i + ".png");
 
 		o2FileSystem.FileDelete(buildedAssetPath);
-		o2FileSystem.FileDelete(buildedAssetMetaPath);
 	}
 
 	void AtlasAssetConverter::MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo)
 	{
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
-		String fullMetaPathFrom = fullPathFrom + ".meta";
-		String fullMetaPathTo = fullPathTo + ".meta";
 
 		DataNode atlasData;
 		atlasData.LoadFromFile(fullPathFrom);
 		int pagesCount = atlasData["mPages"].GetChildNodes().Count();
 
 		for (int i = 0; i < pagesCount; i++)
-			o2FileSystem.FileMove(fullPathFrom + (String)i + ".png",
-								  fullPathTo + (String)i + ".png");
+			o2FileSystem.FileMove(fullPathFrom + (String)i + ".png", fullPathTo + (String)i + ".png");
 
 		o2FileSystem.FileMove(fullPathFrom, fullPathTo);
-		o2FileSystem.FileMove(fullMetaPathFrom, fullMetaPathTo);
 	}
 
 	Vector<UID> AtlasAssetConverter::AssetsPostProcess()

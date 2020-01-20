@@ -70,9 +70,6 @@ namespace o2
 
 		// Launches converters post process
 		Vector<UID> ConvertersPostProcess();
-
-		// Saving data assets tree
-		void SaveAssetsTree();
 		
 		// Processes folder for missing metas
 		void ProcessMissingMetasCreation(FolderInfo& folder);
