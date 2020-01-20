@@ -14,11 +14,10 @@ namespace o2
 	{
 	public:
 		String    path;
-		FileType  fileType;
 		TimeStamp createdDate;
 		TimeStamp accessDate;
 		TimeStamp editDate;
-		UInt      size;
+		Int64     size;
 
 		bool operator==(const FileInfo& other) const;
 	};

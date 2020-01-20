@@ -30,6 +30,7 @@ namespace o2
 	Vector<UID> AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath,
 										   bool forcible /*= false*/)
 	{
+		forcible = true;
 		Reset();
 
 		Vector<UID> modifiedAssets;

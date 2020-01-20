@@ -57,12 +57,3 @@ namespace o2
 	}
 
 }
-
-ENUM_META_(o2::FileType, FileType)
-{
-	ENUM_ENTRY(Atlas);
-	ENUM_ENTRY(Config);
-	ENUM_ENTRY(File);
-	ENUM_ENTRY(Image);
-}
-END_ENUM_META;

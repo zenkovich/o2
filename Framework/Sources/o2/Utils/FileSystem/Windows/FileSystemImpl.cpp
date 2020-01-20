@@ -102,21 +102,10 @@ namespace o2
 		res.editDate = TimeStamp(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth, stLocal.wYear);
 
 		res.path = path;
-		String extension = path.SubStr(path.FindLast(".") + 1);
-		res.fileType = FileType::File;
 
-		for (auto iext : mInstance->mExtensions)
-		{
-			if (iext.second.Contains(extension))
-			{
-				res.fileType = iext.first;
-				break;
-			}
-		}
-
-		DWORD dwSizeHigh = 0, dwSizeLow = 0;
-		dwSizeLow = GetFileSize(hFile, &dwSizeHigh);
-		res.size = (dwSizeHigh * (MAXDWORD+1)) + dwSizeLow;
+		LARGE_INTEGER size;
+		GetFileSizeEx(hFile, &size);
+		res.size = size.QuadPart;
 
 		CloseHandle(hFile);
 

@@ -35,9 +35,6 @@ namespace o2
         AAssetManager* GetAssetManager() const;
 #endif
 
-		// Returns resource path
-		const String& GetResourcesPath() const;
-
 		// Returns info of paths and files of specified path
 		FolderInfo GetFolderInfo(const String& path) const;
 
@@ -97,9 +94,5 @@ namespace o2
 
 	private:
 		LogStream* mLog; // File system log stream
-
-		Map<FileType, Vector<String>> mExtensions; // Extensions arrays dictionary
-
-		String mResourcesPath; // Basic application resources path
 	};
 }

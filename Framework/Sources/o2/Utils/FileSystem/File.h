@@ -10,8 +10,6 @@
 
 namespace o2
 {
-	enum class FileType { File, Image, Config, Atlas };
-
 	// ----------
 	// Input file
 	// ----------

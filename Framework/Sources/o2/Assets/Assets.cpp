@@ -340,13 +340,13 @@ namespace o2
 	{
 		ClearAssetsCache();
 
- 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetAssetsPath(),
-															o2Config.GetProjectPath() + ::GetBuiltAssetsPath(),
-															o2Config.GetProjectPath() + ::GetBuiltAssetsTreePath(), forcible);
+		auto changedAssetsIds = mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetEditorAssetsPath(),
+															o2Config.GetProjectPath() + ::GetEditorBuiltAssetsPath(),
+															o2Config.GetProjectPath() + ::GetEditorBuiltAssetsTreePath(), forcible);
 
-		changedAssetsIds += mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetEditorAssetsPath(),
-														o2Config.GetProjectPath() + ::GetEditorBuiltAssetsPath(),
-														o2Config.GetProjectPath() + ::GetEditorBuiltAssetsTreePath(), forcible);
+		changedAssetsIds += mAssetsBuilder->BuildAssets(o2Config.GetProjectPath() + ::GetAssetsPath(),
+														o2Config.GetProjectPath() + ::GetBuiltAssetsPath(),
+														o2Config.GetProjectPath() + ::GetBuiltAssetsTreePath(), forcible);
 
 		LoadAssetsTree();
 
@@ -397,15 +397,15 @@ namespace o2
 
 	void Assets::LoadAssetsTree()
 	{
-		DataNode data;
-		data.LoadFromFile(o2Config.GetProjectPath() + ::GetBuiltAssetsTreePath());
-
 		mAssetsTree.Clear();
-		mAssetsTree = data;
+		DataNode data;
+
+		data.LoadFromFile(o2Config.GetProjectPath() + ::GetEditorBuiltAssetsTreePath());
+		mAssetsTree.Deserialize(data);
 
 		data.Clear();
-		data.LoadFromFile(o2Config.GetProjectPath() + ::GetEditorBuiltAssetsTreePath());
-		mAssetsTree = data;
+		data.LoadFromFile(o2Config.GetProjectPath() + ::GetBuiltAssetsTreePath());
+		mAssetsTree.Deserialize(data);
 	}
 
 	void Assets::LoadAssetTypes()
