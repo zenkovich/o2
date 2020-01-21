@@ -6,114 +6,34 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <random>
 
 namespace o2
 {
 	class UID
 	{
 	public:
-		char data[16];
+		long long data[2];
 
 	public:
-		UID()
-		{ 
-			Randomize(); 
-		}
+		UID();
+		UID(long long value);
+		UID(const UID& other);
+		UID(const String& stringData);
 
-		UID(int value)
-		{
-			memset(data, 0, 16);
-			memcpy(data, &value, 4);
-		}
+		UID& operator=(const UID& other);
 
-		UID(const UID& other) 
-		{
-			memcpy(data, other.data, 16); 
-		}
+		bool operator==(const UID& other) const;
+		bool operator!=(const UID& other) const;
 
-		UID& operator=(const UID& other)
-		{
-			memcpy(data, other.data, 16);
-			return *this;
-		}
+		bool operator<(const UID& other) const;
 
-		bool operator==(const UID& other) const
-		{
-			return memcmp(data, other.data, 16) == 0;
-		}
+		void Randomize();
 
-		bool operator!=(const UID& other) const
-		{
-			return memcmp(data, other.data, 16) != 0;
-		}
+		String ToString() const;
+		void FromString(const String& stringData);
 
-		bool operator<(const UID& other) const
-		{
-			for (int i = 0; i < 16; i += 4)
-			{
-				if (*(int*)(data + i) >= *(int*)(other.data + i))
-					return false;
-			}
-
-			return true;
-		}
-
-		void Randomize()
-		{
-			for (int i = 0; i < 16; i += 2)
-			{
-				auto r = rand();
-				memcpy(data + i, &r, 2);
-			}
-		}
-
-		String ToString() const
-		{
-			char st[33];
-			st[32] = '\0';
-			for (int i = 0; i < 16; i += 4)
-			{
-				std::stringstream stream;
-				stream << std::hex << *(int*)(data + i);
-
-				int l = (int)stream.str().length();
-				for (int j = 0; j < 8; j++)
-				{
-					int x = l - 8 + j;
-					st[i*2 + j] = x < 0 ? '0' : stream.str()[x];
-				}
-			}
-
-			return st;
-		}
-
-		void FromString(const String& stringData)
-		{
-			char* pp;
-			char* str = mnew char[stringData.Length() + 1];
-			strcpy(str, stringData.Data());
-			for (int i = 0; i < 16; i += 4)
-			{
-				int ii = i*2;
-				int ii1 = ii + 8;
-				char t = str[ii1];
-				str[ii1] = '\0';
-				long x = strtol(str + ii, &pp, 16);
-				memcpy(data + i, &x, 4);
-				//*(long*)(data + i) = x;
-				str[ii1] = t;
-			}
-		}
-
-		operator String() const
-		{
-			return ToString();
-		}
-
-		UID& operator=(const String& data)
-		{
-			FromString(data);
-			return *this;
-		}
+		operator String() const;
+		UID& operator=(const String& data);
 	};
 }

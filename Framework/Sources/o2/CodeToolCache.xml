@@ -3966,29 +3966,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Math.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Math" fullname="o2::Math">
-							<sections />
-							<typedefs />
-							<usings />
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Vec2&lt;float&gt;" newDef="Vec2F" />
-						<typedef what="Rect&lt;float&gt;" newDef="RectF" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/OBB.h">
 		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
 		<globalNamespace name="" fullname="">
@@ -5586,27 +5563,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/UID.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UID" fullname="o2::UID" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/UnknownPtr.h">
 		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
 		<globalNamespace name="" fullname="">
@@ -5804,6 +5760,50 @@
 							<baseClasses>
 								<class name="IAttribute" protection="0" />
 							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Math.h">
+		<date year="2020" month="1" day="21" hour="19" minute="12" second="59" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Math" fullname="o2::Math">
+							<sections />
+							<typedefs />
+							<usings />
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Vec2&lt;float&gt;" newDef="Vec2F" />
+						<typedef what="Rect&lt;float&gt;" newDef="RectF" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/UID.h">
+		<date year="2020" month="1" day="21" hour="19" minute="23" second="22" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="UID" fullname="o2::UID" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
 						</section>
 					</sections>
 					<typedefs />

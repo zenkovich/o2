@@ -2,6 +2,7 @@
 
 #include <float.h>
 #include <math.h>
+#include <random>
 #include <stdlib.h>
 #include "o2/Utils/Types/CommonTypes.h"
 
@@ -129,12 +130,9 @@ namespace o2
 		
 		inline UInt64 Random()
 		{
-			unsigned long long r = 0;
-
-			for (int i = 0; i < 5; ++i)
-				r = (r << 15) | (rand() & 0x7FFF);
-
-			return r & 0xFFFFFFFFFFFFFFFFULL;
+			static std::default_random_engine generator;
+			static std::uniform_int_distribution<unsigned long long> distribution;
+			return distribution(generator);
 		}
 
 		template<typename T>

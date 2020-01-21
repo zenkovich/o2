@@ -1,2 +1,4 @@
 /Framework/Platforms/Windows/Framework.vcxproj.user
 /CodeTool/.vs
+/Editor/Platforms/Windows/Editor.vcxproj.user
+/Framework/Platforms/Windows/3rdPartyLibs.vcxproj.user

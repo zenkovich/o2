@@ -478,6 +478,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Framework.natvis" />

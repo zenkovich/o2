@@ -1053,6 +1053,9 @@
     <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
       <Filter>Sources\o2</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Framework.natvis" />
