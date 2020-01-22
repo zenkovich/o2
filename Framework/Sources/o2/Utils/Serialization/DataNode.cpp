@@ -378,8 +378,8 @@ namespace o2
 			return false;
 
 		auto sz = file.GetDataSize();
-		wchar_t* data = mnew wchar_t[sz];
-		file.ReadData(data, file.GetDataSize());
+		wchar_t* data = mnew wchar_t[sz + 1];
+		file.ReadData(data, sz);
 		data[sz/sizeof(wchar_t)] = '\0';
 
 		bool res = LoadFromData(data);

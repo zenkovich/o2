@@ -44,9 +44,7 @@ namespace o2
 		path = path.SubStr(Math::Min(charCount, (int)path.Length()));
 
 		for (FileInfo& file:files)
-		{
 			file.path = file.path.SubStr(Math::Min(charCount, file.path.Length()));
-		}
 
 		for (FolderInfo& path:folders)
 			path.ProcessPathNamesClamping(charCount);

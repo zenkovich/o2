@@ -48,10 +48,10 @@ namespace o2
 		void SetBitmap(Bitmap* bitmap);
 
 		// Returns atlas id
-		UID GetAtlasId() const;
+		const UID& GetAtlasId() const;
 
 		// Sets atlas id
-		void SetAtlasId(UID id);
+		void SetAtlasId(const UID& id);
 
 		// Returns atlas asset
 		AtlasAssetRef GetAtlas() const;
@@ -109,7 +109,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public IMetaInfo
+		class MetaInfo: public AssetMeta
 		{
 		public:
 			UID          mAtlasId;     // Atlas owner id @SERIALIZABLE
@@ -125,7 +125,7 @@ namespace o2
 			const Type* GetAssetType() const override;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(IMetaInfo* other) const override;
+			bool IsEqual(AssetMeta* other) const override;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -143,7 +143,7 @@ namespace o2
 		ImageAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		ImageAsset(UID id);
+		ImageAsset(const UID& id);
 
 		// Copy-constructor
 		ImageAsset(const ImageAsset& asset);
@@ -183,7 +183,7 @@ namespace o2
 		ImageAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		ImageAssetRef(UID id): AssetRef(id) {}
+		ImageAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~ImageAssetRef() {}
@@ -250,8 +250,8 @@ CLASS_METHODS_META(o2::ImageAsset)
 
 	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
 	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
-	PUBLIC_FUNCTION(UID, GetAtlasId);
-	PUBLIC_FUNCTION(void, SetAtlasId, UID);
+	PUBLIC_FUNCTION(const UID&, GetAtlasId);
+	PUBLIC_FUNCTION(void, SetAtlasId, const UID&);
 	PUBLIC_FUNCTION(AtlasAssetRef, GetAtlas);
 	PUBLIC_FUNCTION(void, SetAtlas, const AtlasAssetRef&);
 	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
@@ -324,6 +324,6 @@ CLASS_METHODS_META(o2::ImageAsset::MetaInfo)
 {
 
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
+	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
 }
 END_META;

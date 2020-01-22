@@ -21,7 +21,7 @@ namespace Editor
 	{
 	public:
 		// Sets value asset id
-		virtual void SetAssetId(UID id) {}
+		virtual void SetAssetId(const UID& id) {}
 	};
 
 	// -------------------------
@@ -41,7 +41,7 @@ namespace Editor
 		AssetProperty& operator=(const AssetProperty& other);
 
 		// Sets value asset id
-		void SetAssetId(UID id);
+		void SetAssetId(const UID& id);
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -60,10 +60,10 @@ namespace Editor
 		void InitializeControls();
 
 		// Sets common value asset id
-		void SetCommonAssetId(UID id);
+		void SetCommonAssetId(const UID& id);
 
 		// Sets asset id, checks value changed, calls onChangeCompleted
-		void SetAssetIdByUser(UID id);
+		void SetAssetIdByUser(const UID& id);
 
 		// Updates value view
 		void UpdateValueView() override;
@@ -157,7 +157,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetProperty<_type>::SetAssetId(UID id)
+	void AssetProperty<_type>::SetAssetId(const UID& id)
 	{
 		mCommonValue = id == 0 ? _type() : _type(id);
 
@@ -168,7 +168,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetProperty<_type>::SetCommonAssetId(UID id)
+	void AssetProperty<_type>::SetCommonAssetId(const UID& id)
 	{
 		mCommonValue = id == 0 ? _type() : _type(id);
 		mValuesDifferent = false;
@@ -179,7 +179,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void AssetProperty<_type>::SetAssetIdByUser(UID id)
+	void AssetProperty<_type>::SetAssetIdByUser(const UID& id)
 	{
 		StoreValues(mBeforeChangeValues);
 		SetAssetId(id);
@@ -234,7 +234,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAsset.mAssetType->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -249,7 +249,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAsset.mAssetType->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		SetAssetIdByUser(lastSelectedAsset.id);

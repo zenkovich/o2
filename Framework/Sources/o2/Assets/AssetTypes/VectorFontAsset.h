@@ -60,7 +60,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public IMetaInfo
+		class MetaInfo: public AssetMeta
 		{
 		public:
 			// Destructor
@@ -70,7 +70,7 @@ namespace o2
 			const Type* GetAssetType() const override;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(IMetaInfo* other) const override;
+			bool IsEqual(AssetMeta* other) const override;
 
 			SERIALIZABLE(MetaInfo);
 
@@ -88,7 +88,7 @@ namespace o2
 		VectorFontAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		VectorFontAsset(UID id);
+		VectorFontAsset(const UID& id);
 
 		// Copy-constructor
 		VectorFontAsset(const VectorFontAsset& asset);
@@ -121,7 +121,7 @@ namespace o2
 		VectorFontAssetRef(const String& path): FontAssetRef(path) {}
 
 		// Constructor from asset id
-		VectorFontAssetRef(UID id): FontAssetRef(id) {}
+		VectorFontAssetRef(const UID& id): FontAssetRef(id) {}
 
 		// Destructor
 		~VectorFontAssetRef() {}
@@ -221,6 +221,6 @@ CLASS_METHODS_META(o2::VectorFontAsset::MetaInfo)
 {
 
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
+	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
 }
 END_META;

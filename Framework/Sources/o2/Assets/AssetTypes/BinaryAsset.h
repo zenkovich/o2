@@ -52,7 +52,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public IMetaInfo
+		class MetaInfo: public AssetMeta
 		{
 		public:
 			// Returns asset type id
@@ -73,7 +73,7 @@ namespace o2
 		BinaryAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		BinaryAsset(UID id);
+		BinaryAsset(const UID& id);
 
 		// Copy-constructor
 		BinaryAsset(const BinaryAsset& asset);
@@ -109,7 +109,7 @@ namespace o2
 		BinaryAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		BinaryAssetRef(UID id): AssetRef(id) {}
+		BinaryAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~BinaryAssetRef() {}

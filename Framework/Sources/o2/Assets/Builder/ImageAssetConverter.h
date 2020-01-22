@@ -14,13 +14,13 @@ namespace o2
 		Vector<const Type*> GetProcessingAssetsTypes() const;
 
 		// Converts image
-		void ConvertAsset(const AssetsTree::AssetNode& node);
+		void ConvertAsset(const AssetsTree::AssetInfo& node);
 
 		// Removes image
-		void RemoveAsset(const AssetsTree::AssetNode& node);
+		void RemoveAsset(const AssetsTree::AssetInfo& node);
 
 		// Moves image to new path
-		void MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo);
+		void MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo);
 
 		IOBJECT(ImageAssetConverter);
 	};
@@ -39,8 +39,8 @@ CLASS_METHODS_META(o2::ImageAssetConverter)
 {
 
 	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetsTree::AssetNode&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetsTree::AssetNode&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetsTree::AssetNode&, const AssetsTree::AssetNode&);
+	PUBLIC_FUNCTION(void, ConvertAsset, const AssetsTree::AssetInfo&);
+	PUBLIC_FUNCTION(void, RemoveAsset, const AssetsTree::AssetInfo&);
+	PUBLIC_FUNCTION(void, MoveAsset, const AssetsTree::AssetInfo&, const AssetsTree::AssetInfo&);
 }
 END_META;

@@ -22,16 +22,16 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	BinaryAsset::BinaryAsset(UID id):
+	BinaryAsset::BinaryAsset(const UID& id):
 		Asset(), mData(nullptr), mDataSize(0)
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -42,7 +42,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 
 		if (asset.mDataSize > 0)
 		{

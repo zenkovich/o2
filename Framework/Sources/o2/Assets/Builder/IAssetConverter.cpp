@@ -10,13 +10,13 @@ namespace o2
 		return Vector<const Type*>();
 	}
 
-	void IAssetConverter::ConvertAsset(const AssetsTree::AssetNode& node)
+	void IAssetConverter::ConvertAsset(const AssetsTree::AssetInfo& node)
 	{}
 
-	void IAssetConverter::RemoveAsset(const AssetsTree::AssetNode& node)
+	void IAssetConverter::RemoveAsset(const AssetsTree::AssetInfo& node)
 	{}
 
-	void IAssetConverter::MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo)
+	void IAssetConverter::MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo)
 	{}
 
 	Vector<UID> IAssetConverter::AssetsPostProcess()

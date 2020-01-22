@@ -283,12 +283,12 @@ namespace Editor
 		if (mTargetAssets.IsEmpty())
 			return;
 
-		UID commonValue = (*mTargetAssets[0])->GetAtlasId();
+		auto& commonValue = (*mTargetAssets[0])->GetAtlasId();
 		bool valuesDifferent = false;
 
 		for (int i = 1; i < mTargetAssets.Count(); i++)
 		{
-			UID id = (*mTargetAssets[i])->GetAtlasId();
+			auto& id = (*mTargetAssets[i])->GetAtlasId();
 			if (id != commonValue)
 			{
 				valuesDifferent = true;
@@ -304,7 +304,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::OnAtlasPropertyChanged(IPropertyField* field)
 	{
-		UID id = mAtlasProperty->GetCommonValue()->GetAssetId();
+		const UID& id = mAtlasProperty->GetCommonValue()->GetAssetId();
 
 		for (auto target : mTargetAssets)
 			(*target)->SetAtlasId(id);

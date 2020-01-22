@@ -87,7 +87,7 @@ namespace o2
 		Actor* GetActorByID(SceneUID id) const;
 
 		// Returns asset actor by asset id. Tries to find in cache
-		Actor* GetAssetActorByID(UID id);
+		Actor* GetAssetActorByID(const UID& id);
 
 		// Returns actor by path (ex "some node/other/target")
 		Actor* FindActor(const String& path);

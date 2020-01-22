@@ -19,9 +19,9 @@ namespace o2
 		return &TypeOf(VectorFontAsset);
 	}
 
-	bool VectorFontAsset::MetaInfo::IsEqual(IMetaInfo* other) const
+	bool VectorFontAsset::MetaInfo::IsEqual(AssetMeta* other) const
 	{
-		if (!IMetaInfo::IsEqual(other))
+		if (!AssetMeta::IsEqual(other))
 			return false;
 
 		MetaInfo* otherMeta = (MetaInfo*)other;
@@ -55,15 +55,15 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	VectorFontAsset::VectorFontAsset(UID id)
+	VectorFontAsset::VectorFontAsset(const UID& id)
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -74,7 +74,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 	}
 
 	VectorFontAsset::~VectorFontAsset()

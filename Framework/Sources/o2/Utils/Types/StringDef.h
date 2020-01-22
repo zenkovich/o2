@@ -332,7 +332,12 @@ namespace o2
 
 		// Returns formatted string, like sprintf()
 		static TString Format(TString format, va_list vlist);
+
+		static TString empty;
 	};
+
+	template<typename T>
+	__declspec(selectany) TString<T> TString<T>::empty;
 
 	// ---------------------------
 	// String with wide characters

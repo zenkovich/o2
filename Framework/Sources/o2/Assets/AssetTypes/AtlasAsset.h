@@ -53,7 +53,7 @@ namespace o2
 		bool ContainsImage(const AssetInfo& imageAssetInfo);
 
 		// Is contains image
-		bool ContainsImage(UID id);
+		bool ContainsImage(const UID& id);
 
 		// Is contains image
 		bool ContainsImage(const String& path);
@@ -65,13 +65,13 @@ namespace o2
 		const char* GetFileExtensions() const override;
 
 		// Returns atlas page's texture file name
-		static String GetPageTextureFileName(UID atlasId, UInt pageIdx);
+		static String GetPageTextureFileName(const UID& atlasId, UInt pageIdx);
 
 		// Returns atlas page's texture file name
 		static String GetPageTextureFileName(const String& atlasPath, UInt pageIdx);
 
 		// Returns atlas page's texture reference
-		static TextureRef GetPageTextureRef(UID atlasId, UInt pageIdx);
+		static TextureRef GetPageTextureRef(const UID& atlasId, UInt pageIdx);
 
 		// Returns atlas page's texture reference
 		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
@@ -95,7 +95,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public IMetaInfo
+		class MetaInfo: public AssetMeta
 		{
 		public:
 			PlatformMeta mIOS;     // IOS specified meta @SERIALIZABLE
@@ -109,7 +109,7 @@ namespace o2
 			const Type* GetAssetType() const override;
 
 			// Returns true if other meta is equal to this
-			bool IsEqual(IMetaInfo* other) const override;
+			bool IsEqual(AssetMeta* other) const override;
 
 			SERIALIZABLE(MetaInfo);
 		};
@@ -150,8 +150,8 @@ namespace o2
 		};
 
 	protected:
-		Vector<AssetInfo> mImagesAssetsInfos; // Loaded image infos
-		Vector<Page>      mPages;             // Pages
+		Vector<UID>  mImages; // Loaded image infos
+		Vector<Page> mPages;  // Pages
 
 	protected:
 		// Default constructor
@@ -161,7 +161,7 @@ namespace o2
 		AtlasAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		AtlasAsset(UID id);
+		AtlasAsset(const UID& id);
 
 		// Copy-constructor
 		AtlasAsset(const AtlasAsset& asset);
@@ -197,7 +197,7 @@ namespace o2
 		AtlasAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		AtlasAssetRef(UID id): AssetRef(id) {}
+		AtlasAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~AtlasAssetRef() {}
@@ -248,7 +248,7 @@ CLASS_FIELDS_META(o2::AtlasAsset)
 	PUBLIC_FIELD(imagesInfos);
 	PUBLIC_FIELD(images);
 	PUBLIC_FIELD(pages);
-	PROTECTED_FIELD(mImagesAssetsInfos);
+	PROTECTED_FIELD(mImages);
 	PROTECTED_FIELD(mPages);
 }
 END_META;
@@ -260,13 +260,13 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(Vector<Page>, GetPages);
 	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(bool, ContainsImage, const AssetInfo&);
-	PUBLIC_FUNCTION(bool, ContainsImage, UID);
+	PUBLIC_FUNCTION(bool, ContainsImage, const UID&);
 	PUBLIC_FUNCTION(bool, ContainsImage, const String&);
 	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, UID, UInt);
+	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const UID&, UInt);
 	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const String&, UInt);
-	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, UID, UInt);
+	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const UID&, UInt);
 	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const String&, UInt);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
@@ -324,7 +324,7 @@ CLASS_METHODS_META(o2::AtlasAsset::MetaInfo)
 {
 
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
+	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
 }
 END_META;
 

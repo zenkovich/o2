@@ -18,7 +18,7 @@ namespace o2
 		DrawableComponent(), Sprite(imagePath)
 	{}
 
-	ImageComponent::ImageComponent(UID imageId) :
+	ImageComponent::ImageComponent(const UID& imageId) :
 		DrawableComponent(), Sprite(imageId)
 	{}
 

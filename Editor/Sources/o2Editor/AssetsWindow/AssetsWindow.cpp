@@ -187,7 +187,7 @@ namespace Editor
 		mFoldersTreeShowAnim.Update(dt);
 	}
 
-	void AssetsWindow::SelectAsset(UID id)
+	void AssetsWindow::SelectAsset(const UID& id)
 	{
 		String assetPath = o2Assets.GetAssetPath(id);
 		String folder = o2FileSystem.GetParentPath(assetPath);
@@ -200,7 +200,7 @@ namespace Editor
 
 	void AssetsWindow::SelectAsset(const String& path)
 	{
-		UID id = o2Assets.GetAssetId(path);
+		const UID& id = o2Assets.GetAssetId(path);
 		String folder = o2FileSystem.GetParentPath(path);
 
 		if (GetOpenedFolderPath() != folder)
@@ -221,7 +221,7 @@ namespace Editor
 			SelectAsset(path);
 	}
 
-	void AssetsWindow::OpenAsset(UID id)
+	void AssetsWindow::OpenAsset(const UID& id)
 	{
 		OpenAsset(o2Assets.GetAssetPath(id));
 	}
@@ -232,7 +232,7 @@ namespace Editor
 		ShellExecute(NULL, "explore", fullPath, NULL, NULL, SW_SHOWNORMAL);
 	}
 
-	void AssetsWindow::OpenAndEditAsset(UID id)
+	void AssetsWindow::OpenAndEditAsset(const UID& id)
 	{
 		OpenAndEditAsset(o2Assets.GetAssetPath(id));
 	}
@@ -265,7 +265,7 @@ namespace Editor
 		mSelectedAssetPathLabel->text = path;
 	}
 
-	void AssetsWindow::ShowAssetIcon(UID id)
+	void AssetsWindow::ShowAssetIcon(const UID& id)
 	{
 		String assetPath = o2Assets.GetAssetPath(id);
 		String folder = o2FileSystem.GetParentPath(assetPath);

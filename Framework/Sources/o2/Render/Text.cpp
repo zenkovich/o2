@@ -63,7 +63,7 @@ namespace o2
 		Text(o2Assets.GetAssetId(fontFileName))
 	{}
 
-	Text::Text(UID fontAssetId) :
+	Text::Text(const UID& fontAssetId) :
 		mSymbolsDistCoef(1), mLinesDistanceCoef(1), mVerAlign(VerAlign::Top),
 		mHorAlign(HorAlign::Left), mWordWrap(false), IRectDrawable(), mDotsEndings(false), mHeight(11),
 		mUpdatingMesh(false)
@@ -164,7 +164,7 @@ namespace o2
 
 	FontAssetRef Text::GetFontAsset() const
 	{
-		AssetInfo fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
+		auto& fontAssetInfo = o2Assets.GetAssetInfo(mFontAssetId);
 		if (fontAssetInfo.GetType() == TypeOf(BitmapFontAsset))
 			return BitmapFontAssetRef(mFontAssetId);
 

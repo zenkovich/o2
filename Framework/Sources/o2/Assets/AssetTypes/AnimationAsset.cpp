@@ -16,16 +16,16 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	AnimationAsset::AnimationAsset(UID id):
+	AnimationAsset::AnimationAsset(const UID& id):
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -37,7 +37,7 @@ namespace o2
 		animation = asset.animation;
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 	}
 
 	AnimationAsset::~AnimationAsset()

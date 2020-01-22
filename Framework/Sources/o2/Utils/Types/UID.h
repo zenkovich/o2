@@ -6,19 +6,18 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <random>
 
 namespace o2
 {
 	class UID
 	{
 	public:
-		long long data[2];
+		char data[16];
 
 	public:
 		UID();
-		UID(long long value);
 		UID(const UID& other);
+		UID(int value);
 		UID(const String& stringData);
 
 		UID& operator=(const UID& other);
@@ -35,5 +34,8 @@ namespace o2
 
 		operator String() const;
 		UID& operator=(const String& data);
+
+	public:
+		static UID empty;
 	};
 }

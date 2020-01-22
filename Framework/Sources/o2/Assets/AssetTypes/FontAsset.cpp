@@ -23,15 +23,15 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	FontAsset::FontAsset(UID id)
+	FontAsset::FontAsset(const UID& id)
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -42,7 +42,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 	}
 
 	FontAsset::~FontAsset()

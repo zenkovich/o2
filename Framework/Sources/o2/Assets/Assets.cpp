@@ -16,8 +16,8 @@ namespace o2
 
 	Assets::Assets()
 	{
-		mAssetsFolderPath = ::GetAssetsPath();
-		mDataFolderPath = ::GetBuiltAssetsPath();
+		mAssetsFolderPath = o2Config.GetProjectPath() + ::GetAssetsPath();
+		mDataFolderPath = o2Config.GetProjectPath() + ::GetBuiltAssetsPath();
 
 		mLog = mnew LogStream("Assets");
 		o2Debug.GetLog()->BindStream(mLog);
@@ -37,39 +37,40 @@ namespace o2
 		delete mAssetsBuilder;
 	}
 
-	String Assets::GetAssetsPath() const
+	const String& Assets::GetAssetsPath() const
 	{
-		return o2Config.GetProjectPath() + mAssetsFolderPath;
+		return mAssetsFolderPath;
 	}
 
-	String Assets::GetBuiltAssetsPath() const
+	const String& Assets::GetBuiltAssetsPath() const
 	{
-		return o2Config.GetProjectPath() + mDataFolderPath;
+		return mDataFolderPath;
 	}
 
-	String Assets::GetAssetPath(UID id) const
+	const String& Assets::GetAssetPath(const UID& id) const
 	{
-		return GetAssetInfo(id).path;
+		return GetAssetInfo(id).mPath;
 	}
 
-	UID Assets::GetAssetId(const String& path) const
+	const UID& Assets::GetAssetId(const String& path) const
 	{
 		return GetAssetInfo(path).id;
 	}
 
-	AssetInfo Assets::GetAssetInfo(UID id) const
+	const AssetInfo& Assets::GetAssetInfo(const UID& id) const
 	{
-		return mAssetsTree.FindAssetInfo(id);
+		if (auto res = mAssetsTree.Find(id))
+			return *res;
+
+		return AssetInfo::empty;
 	}
 
-	AssetInfo Assets::GetAssetInfo(const String& path) const
+	const AssetInfo& Assets::GetAssetInfo(const String& path) const
 	{
-		return mAssetsTree.FindAssetInfo(path);
-	}
+		if (auto res = mAssetsTree.Find(path))
+			return *res;
 
-	UID Assets::GetRandomAssetId()
-	{
-		return UID();
+		return AssetInfo::empty;
 	}
 
 	const Map<String, const Type*> Assets::GetAssetsExtensionsTypes() const
@@ -96,11 +97,11 @@ namespace o2
 
 		if (!cached)
 		{
-			auto assetInfo = mAssetsTree.FindAsset(path);
-			if (!assetInfo->assetType)
+			auto assetInfo = mAssetsTree.Find(path);
+			if (!assetInfo->mAssetType)
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
+			Asset* asset = (Asset*)assetInfo->mAssetType->CreateSample();
 			asset->Load(path);
 
 			cached = mnew AssetCache();
@@ -115,17 +116,17 @@ namespace o2
 		return AssetRef(cached->asset, &cached->referencesCount);
 	}
 
-	AssetRef Assets::GetAssetRef(UID id)
+	AssetRef Assets::GetAssetRef(const UID& id)
 	{
 		auto cached = FindAssetCache(id);
 
 		if (!cached)
 		{
-			auto assetInfo = mAssetsTree.FindAsset(id);
-			if (!assetInfo->assetType)
+			auto assetInfo = mAssetsTree.Find(id);
+			if (!assetInfo->mAssetType)
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
+			Asset* asset = (Asset*)assetInfo->mAssetType->CreateSample();
 			asset->Load(id);
 
 			cached = mnew AssetCache();
@@ -145,7 +146,7 @@ namespace o2
 		return GetAssetInfo(path).id != 0;
 	}
 
-	bool Assets::IsAssetExist(UID id) const
+	bool Assets::IsAssetExist(const UID& id) const
 	{
 		return GetAssetInfo(id).id != 0;
 	}
@@ -165,7 +166,7 @@ namespace o2
 		return RemoveAsset(GetAssetInfo(path), rebuildAssets);
 	}
 
-	bool Assets::RemoveAsset(UID id, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(const UID& id, bool rebuildAssets /*= true*/)
 	{
 		return RemoveAsset(GetAssetInfo(id), rebuildAssets);
 	}
@@ -174,16 +175,16 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't remove asset by id (" + info.path + ") - asset isn't exist");
+			mLog->Error("Can't remove asset by id (" + info.mPath + ") - asset isn't exist");
 			return false;
 		}
 
-		o2FileSystem.FileDelete(GetAssetsPath() + info.path + ".meta");
+		o2FileSystem.FileDelete(GetAssetsPath() + info.mPath + ".meta");
 
-		if (info.assetType == &TypeOf(FolderAsset))
-			o2FileSystem.FolderRemove(GetAssetsPath() + info.path);
+		if (info.mAssetType == &TypeOf(FolderAsset))
+			o2FileSystem.FolderRemove(GetAssetsPath() + info.mPath);
 		else
-			o2FileSystem.FileDelete(GetAssetsPath() + info.path);
+			o2FileSystem.FileDelete(GetAssetsPath() + info.mPath);
 
 		if (rebuildAssets)
 			RebuildAssets();
@@ -201,7 +202,7 @@ namespace o2
 		return CopyAsset(GetAssetInfo(path), dest, rebuildAssets);
 	}
 
-	bool Assets::CopyAsset(UID id, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(const UID& id, const String& dest, bool rebuildAssets /*= true*/)
 	{
 		return CopyAsset(GetAssetInfo(id), dest, rebuildAssets);
 	}
@@ -210,25 +211,25 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't copy asset " + info.path + " - asset isn't exist");
+			mLog->Error("Can't copy asset " + info.mPath + " - asset isn't exist");
 			return false;
 		}
 
 		if (IsAssetExist(dest) != 0)
 		{
-			mLog->Error("Can't copy asset " + info.path + "\nto new path " + dest + "\n - another asset exist in target path");
+			mLog->Error("Can't copy asset " + info.mPath + "\nto new path " + dest + "\n - another asset exist in target path");
 			return false;
 		}
 
-		if (info.assetType == &TypeOf(FolderAsset))
+		if (info.mAssetType == &TypeOf(FolderAsset))
 		{
 			o2FileSystem.FolderCreate(GetAssetsPath() + dest);
 			FolderAsset folderAsset(info.id);
 
 			for (auto inInfo : folderAsset.GetContainingAssetsInfos())
-				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo.path), false);
+				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo.mPath), false);
 		}
-		else o2FileSystem.FileCopy(GetAssetsPath() + info.path, GetAssetsPath() + dest);
+		else o2FileSystem.FileCopy(GetAssetsPath() + info.mPath, GetAssetsPath() + dest);
 
 		if (rebuildAssets)
 			RebuildAssets();
@@ -246,7 +247,7 @@ namespace o2
 		return MoveAsset(GetAssetInfo(path), newPath, rebuildAssets);
 	}
 
-	bool Assets::MoveAsset(UID id, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(const UID& id, const String& newPath, bool rebuildAssets /*= true*/)
 	{
 		return MoveAsset(GetAssetInfo(id), newPath, rebuildAssets);
 	}
@@ -255,23 +256,23 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't remove asset by path (" + info.path + ") - asset isn't exist");
+			mLog->Error("Can't remove asset by path (" + info.mPath + ") - asset isn't exist");
 			return false;
 		}
 
 		if (GetAssetId(newPath) != 0)
 		{
-			mLog->Error("Can't remove asset by path (" + info.path + ") \nto new path (" + newPath +
+			mLog->Error("Can't remove asset by path (" + info.mPath + ") \nto new path (" + newPath +
 						")\n - another asset exist in target path");
 			return false;
 		}
 
-		o2FileSystem.FileMove(GetAssetsPath() + info.path + ".meta", GetAssetsPath() + newPath + ".meta");
+		o2FileSystem.FileMove(GetAssetsPath() + info.mPath + ".meta", GetAssetsPath() + newPath + ".meta");
 
-		if (info.assetType == &TypeOf(FolderAsset))
-			o2FileSystem.FileMove(GetAssetsPath() + info.path, GetAssetsPath() + newPath);
+		if (info.mAssetType == &TypeOf(FolderAsset))
+			o2FileSystem.FileMove(GetAssetsPath() + info.mPath, GetAssetsPath() + newPath);
 		else
-			o2FileSystem.FileMove(GetAssetsPath() + info.path, GetAssetsPath() + newPath);
+			o2FileSystem.FileMove(GetAssetsPath() + info.mPath, GetAssetsPath() + newPath);
 
 		if (rebuildAssets)
 			RebuildAssets();
@@ -284,7 +285,7 @@ namespace o2
 		bool res = true;
 		for (auto& info : assets)
 		{
-			if (!o2Assets.MoveAsset(info, destPath + "/" + o2FileSystem.GetPathWithoutDirectories(info.path), false))
+			if (!o2Assets.MoveAsset(info, destPath + "/" + o2FileSystem.GetPathWithoutDirectories(info.mPath), false))
 				res = false;
 		}
 
@@ -304,7 +305,7 @@ namespace o2
 		return RenameAsset(GetAssetInfo(path), newName, rebuildAssets);
 	}
 
-	bool Assets::RenameAsset(UID id, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(const UID& id, const String& newName, bool rebuildAssets /*= true*/)
 	{
 		return RenameAsset(GetAssetInfo(id), newName, rebuildAssets);
 	}
@@ -313,22 +314,22 @@ namespace o2
 	{
 		if (info.id == 0)
 		{
-			mLog->Error("Can't rename asset by path (" + info.path + ") - asset isn't exist");
+			mLog->Error("Can't rename asset by path (" + info.mPath + ") - asset isn't exist");
 			return false;
 		}
 
-		String parentFolder = o2FileSystem.GetParentPath(info.path);
-		String assetShortName = o2FileSystem.GetPathWithoutDirectories(info.path);
+		String parentFolder = o2FileSystem.GetParentPath(info.mPath);
+		String assetShortName = o2FileSystem.GetPathWithoutDirectories(info.mPath);
 		String newFullName = parentFolder + "/" + newName;
 
 		if (GetAssetId(newFullName) != 0)
 		{
-			mLog->Error("Can't rename asset by path (" + info.path + ") \nto (" + newName + ")\n - another asset exist in target path");
+			mLog->Error("Can't rename asset by path (" + info.mPath + ") \nto (" + newName + ")\n - another asset exist in target path");
 			return false;
 		}
 
-		o2FileSystem.Rename(GetAssetsPath() + info.path + ".meta", GetAssetsPath() + newFullName + ".meta");
-		o2FileSystem.Rename(GetAssetsPath() + info.path, GetAssetsPath() + newFullName);
+		o2FileSystem.Rename(GetAssetsPath() + info.mPath + ".meta", GetAssetsPath() + newFullName + ".meta");
+		o2FileSystem.Rename(GetAssetsPath() + info.mPath, GetAssetsPath() + newFullName);
 
 		if (rebuildAssets)
 			RebuildAssets();
@@ -443,7 +444,7 @@ namespace o2
 		return res;
 	}
 
-	Assets::AssetCache* Assets::FindAssetCache(UID id)
+	Assets::AssetCache* Assets::FindAssetCache(const UID& id)
 	{
 		Assets::AssetCache* res = nullptr;
 		mCachedAssetsByPath.TryGetValue(id, res);

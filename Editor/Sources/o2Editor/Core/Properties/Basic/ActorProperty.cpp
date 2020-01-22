@@ -243,7 +243,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.assetType != &TypeOf(ActorAsset))
+		if (lastSelectedAsset.mAssetType != &TypeOf(ActorAsset))
 			return;
 
 		SetValueByUser(o2Scene.GetAssetActorByID(lastSelectedAsset.id));
@@ -258,7 +258,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.assetType != &TypeOf(ActorAsset))
+		if (lastSelectedAsset.mAssetType != &TypeOf(ActorAsset))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/AssetInfo.h"
+#include "o2/Assets/Meta.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Property.h"
@@ -8,20 +8,19 @@
 
 namespace o2
 {
+	class AssetInfo;
+
 	// ---------------------
 	// Basic asset interface
 	// ---------------------
 	class Asset: public ISerializable
 	{
 	public:
-		class IMetaInfo;
-
-	public:
 		PROPERTIES(Asset);
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
 		GETTER(UID, id, GetAssetId);              // Asset id getter
-		GETTER(IMetaInfo*, meta, GetMeta);        // Asset meta information pointer getter
+		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
 
 	public:
 		// Virtual destructor
@@ -30,11 +29,8 @@ namespace o2
 		// Assign operator
 		Asset& operator=(const Asset& asset);
 
-		// Returns asset info
-		AssetInfo GetAssetInfo() const;
-
 		// Returns path
-		String GetPath() const;
+		const String& GetPath() const;
 
 		// Sets path
 		void SetPath(const String& path);
@@ -42,14 +38,14 @@ namespace o2
 		// Returns full asset path (from binary path)
 		String GetFullPath() const;
 
-		// Returns full builded asset path (from binary)
+		// Returns full buildt asset path (from binary)
 		String GetDataFullPath() const;
 
 		// Returns id of asset
-		UID GetAssetId() const;
+		const UID& GetAssetId() const;
 
 		// Returns meta information pointer
-		IMetaInfo* GetMeta() const;
+		AssetMeta* GetMeta() const;
 
 		// Loads asset
 		void Load();
@@ -58,7 +54,7 @@ namespace o2
 		void Load(const String& path);
 
 		// Loads asset by id
-		void Load(UID id);
+		void Load(const UID& id);
 
 		// Loads asset by info
 		void Load(const AssetInfo& info);
@@ -76,39 +72,11 @@ namespace o2
 		virtual const char* GetFileExtensions() const;
 
 		SERIALIZABLE(Asset);
-
-	public:
-		// --------------------------------------
-		// Basic asset meta information interface
-		// --------------------------------------
-		class IMetaInfo: public ISerializable
-		{
-			friend class Asset;
-
-			UID mId; // Id of asset @SERIALIZABLE
-
-		public:
-			// Default constructor
-			IMetaInfo();
-
-			// Virtual destructor
-			virtual ~IMetaInfo();
-
-			// Returns asset type id
-			virtual const Type* GetAssetType() const;
-
-			// Returns true if other meta is equal to this
-			virtual bool IsEqual(IMetaInfo* other) const;
-
-			// Returns asset id
-			UID ID() const;
-
-			SERIALIZABLE(IMetaInfo);
-		};
+		
 
 	protected:
 		String     mPath; // Asset path
-		IMetaInfo* mMeta; // Asset meta information @EDITOR_PROPERTY
+		AssetMeta* mMeta; // Asset meta information @EDITOR_PROPERTY
 
 	protected:
 		// Default constructor
@@ -117,29 +85,11 @@ namespace o2
 		// Copy-constructor
 		Asset(const Asset& asset);
 
-		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const override;
-
-		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
-
-		// Loads asset data
-		virtual void LoadData(const String& path) {};
-
-		// Saves asset data
-		virtual void SaveData(const String& path) {};
-
-		// Loads asset meta data
-		virtual void LoadMeta(const String& path);
-
-		// Saves asset meta data
-		virtual void SaveMeta(const String& path);
-
 		// Returns meta full path (from binary path)
 		String GetMetaFullPath() const;
 
 		// Returns reference to id in meta
-		UID& IdRef();
+		UID& ID();
 
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;
@@ -164,7 +114,7 @@ namespace o2
 		AssetRef(const String& path);
 
 		// Constructor from asset id
-		AssetRef(UID id);
+		AssetRef(const UID& id);
 
 		// Destructor
 		virtual ~AssetRef();
@@ -250,29 +200,22 @@ END_META;
 CLASS_METHODS_META(o2::Asset)
 {
 
-	PUBLIC_FUNCTION(AssetInfo, GetAssetInfo);
-	PUBLIC_FUNCTION(String, GetPath);
+	PUBLIC_FUNCTION(const String&, GetPath);
 	PUBLIC_FUNCTION(void, SetPath, const String&);
 	PUBLIC_FUNCTION(String, GetFullPath);
 	PUBLIC_FUNCTION(String, GetDataFullPath);
-	PUBLIC_FUNCTION(UID, GetAssetId);
-	PUBLIC_FUNCTION(IMetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(const UID&, GetAssetId);
+	PUBLIC_FUNCTION(AssetMeta*, GetMeta);
 	PUBLIC_FUNCTION(void, Load);
 	PUBLIC_FUNCTION(void, Load, const String&);
-	PUBLIC_FUNCTION(void, Load, UID);
+	PUBLIC_FUNCTION(void, Load, const UID&);
 	PUBLIC_FUNCTION(void, Load, const AssetInfo&);
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
 	PUBLIC_FUNCTION(void, Save, bool);
 	PUBLIC_FUNCTION(void, Save, const AssetInfo&, bool);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, LoadMeta, const String&);
-	PROTECTED_FUNCTION(void, SaveMeta, const String&);
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
-	PROTECTED_FUNCTION(UID&, IdRef);
+	PROTECTED_FUNCTION(UID&, ID);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
 }
 END_META;
@@ -312,7 +255,7 @@ CLASS_METHODS_META(o2::Asset::IMetaInfo)
 {
 
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, IMetaInfo*);
-	PUBLIC_FUNCTION(UID, ID);
+	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
+	PUBLIC_FUNCTION(const UID&, ID);
 }
 END_META;

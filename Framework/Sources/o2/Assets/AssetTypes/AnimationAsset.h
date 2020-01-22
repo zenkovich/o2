@@ -48,7 +48,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public IMetaInfo
+		class MetaInfo: public AssetMeta
 		{
 		public:
 			// Returns asset type id
@@ -65,7 +65,7 @@ namespace o2
 		AnimationAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		AnimationAsset(UID id);
+		AnimationAsset(const UID& id);
 
 		// Copy-constructor
 		AnimationAsset(const AnimationAsset& asset);
@@ -101,7 +101,7 @@ namespace o2
 		AnimationAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		AnimationAssetRef(UID id): AssetRef(id) {}
+		AnimationAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~AnimationAssetRef() {}

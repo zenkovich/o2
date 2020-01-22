@@ -32,7 +32,7 @@ namespace o2
 				target(target), isAsset(false), actorId(id)
 			{}
 
-			ActorDef(Actor** target, UID id) :
+			ActorDef(Actor** target, const UID& id) :
 				target(target), isAsset(true), assetId(id)
 			{}
 

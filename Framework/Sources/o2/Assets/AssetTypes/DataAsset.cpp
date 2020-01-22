@@ -17,16 +17,16 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	DataAsset::DataAsset(UID id):
+	DataAsset::DataAsset(const UID& id):
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -37,7 +37,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 
 		data = asset.data;
 	}

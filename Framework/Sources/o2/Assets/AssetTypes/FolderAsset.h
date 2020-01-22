@@ -42,7 +42,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public IMetaInfo
+		class MetaInfo: public AssetMeta
 		{
 		public:
 			// Returns asset type id
@@ -62,7 +62,7 @@ namespace o2
 		FolderAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		FolderAsset(UID id);
+		FolderAsset(const UID& id);
 
 		// Copy-constructor
 		FolderAsset(const FolderAsset& asset);
@@ -98,7 +98,7 @@ namespace o2
 		FolderAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		FolderAssetRef(UID id): AssetRef(id) {}
+		FolderAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~FolderAssetRef() {}

@@ -1,4 +1,5 @@
 #include "o2/stdafx.h"
+#include "UID.h"
 
 namespace o2
 {
@@ -10,24 +11,23 @@ namespace o2
 
 	bool UID::operator!=(const UID& other) const
 	{
-		return data[0] != other.data[0] || data[1] != other.data[1];
+		return memcmp(data, other.data, 16) != 0;
 	}
 
 	bool UID::operator==(const UID& other) const
 	{
-		return data[0] == other.data[0] && data[1] == other.data[1];
+		return memcmp(data, other.data, 16) == 0;
 	}
 
 	UID::UID(const UID& other)
 	{
-		data[0] = other.data[0];
-		data[1] = other.data[1];
+		memcpy(data, other.data, 16);
 	}
 
-	UID::UID(long long value)
+	UID::UID(int value)
 	{
-		data[0] = 0;
-		data[1] = value;
+		memset(data, 0, 16);
+		memcpy(data, &value, 4);
 	}
 
 	UID::UID()
@@ -42,40 +42,52 @@ namespace o2
 
 	bool UID::operator<(const UID& other) const
 	{
-		if (data[1] < other.data[1])
-			return true;
-		
-		if (data[1] == other.data[1])
-			return data[0] < other.data[0];
-
-		return false;
+		return memcmp(data, other.data, 16) < 0;
 	}
 
 	void UID::Randomize()
 	{
-		static std::default_random_engine generator;
-		static std::uniform_int_distribution<long long> distribution;
-		data[0] = distribution(generator);
-		data[1] = distribution(generator);
+		for (int i = 0; i < 16; i += 2)
+		{
+			auto r = rand();
+			memcpy(data + i, &r, 2);
+		}
 	}
 
 	String UID::ToString() const
 	{
-		std::stringstream stream;
-		stream << std::hex << data[0] << ' ' << data[1];
-		return stream.str();
+		char st[33];
+		st[32] = '\0';
+		for (int i = 0; i < 16; i += 4)
+		{
+			std::stringstream stream;
+			stream << std::hex << *(int*)(data + i);
+
+			int l = (int)stream.str().length();
+			for (int j = 0; j < 8; j++)
+			{
+				int x = l - 8 + j;
+				st[i * 2 + j] = x < 0 ? '0' : stream.str()[x];
+			}
+		}
+
+		return st;
 	}
 
 	void UID::FromString(const String& stringData)
 	{
-		auto s = stringData.find(' ');
-		if (s == std::string::npos)
-			Randomize();
-		else
+		char* pp;
+		char* str = mnew char[stringData.Length() + 1];
+		strcpy(str, stringData.Data());
+		for (int i = 0; i < 16; i += 4)
 		{
-			char* f;
-			data[0] = strtoll(stringData.c_str(), &f, 16);
-			data[1] = strtoll(stringData.c_str() + s, &f, 16);
+			int ii = i * 2;
+			int ii1 = ii + 8;
+			char t = str[ii1];
+			str[ii1] = '\0';
+			long x = strtol(str + ii, &pp, 16);
+			memcpy(data + i, &x, 4);
+			str[ii1] = t;
 		}
 	}
 
@@ -84,10 +96,12 @@ namespace o2
 		return ToString();
 	}
 
+	UID UID::empty = UID(0);
+
 	UID& UID::operator=(const UID& other)
 	{
-		data[0] = other.data[0];
-		data[1] = other.data[1];
+		memcpy(data, other.data, 16);
 		return *this;
 	}
+
 }

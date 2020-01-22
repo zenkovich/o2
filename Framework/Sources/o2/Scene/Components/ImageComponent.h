@@ -27,7 +27,7 @@ namespace o2
 		ImageComponent(const String& imagePath);
 
 		// Constructor from image asset by id
-		ImageComponent(UID imageId);
+		ImageComponent(const UID& imageId);
 
 		// Constructor from texture and source rectangle
 		ImageComponent(TextureRef texture, const RectI& srcRect);

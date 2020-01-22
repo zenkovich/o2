@@ -405,7 +405,7 @@ namespace o2
 		// Base actor constructor with transform
 		Actor(ActorTransform* transform, bool isOnScene = true, const String& name = "unnamed", bool enabled = true,
 			  bool resEnabled = true, bool locked = false, bool resLocked = false,
-			  SceneLayer* layer = nullptr, SceneUID id = Math::Random(), UID assetId = 0);
+			  SceneLayer* layer = nullptr, SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
 		Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);

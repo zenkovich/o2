@@ -22,15 +22,15 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	FolderAsset::FolderAsset(UID id)
+	FolderAsset::FolderAsset(const UID& id)
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -41,7 +41,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 	}
 
 	FolderAsset::~FolderAsset()
@@ -77,11 +77,11 @@ namespace o2
 
 	void FolderAsset::LoadData(const String& path)
 	{
-		auto folderAssetInfo = o2Assets.mAssetsTree.FindAsset(mPath);
+		auto folderAssetInfo = o2Assets.mAssetsTree.Find(mPath);
 		if (folderAssetInfo)
 		{
-			mContainingAssetsInfos = folderAssetInfo->children.Select<AssetInfo>(
-				[&](AssetsTree::AssetNode* asset) { return (AssetInfo)(*asset); });
+			mContainingAssetsInfos = folderAssetInfo->mChildren.Select<AssetInfo>(
+				[&](AssetsTree::AssetInfo* asset) { return (AssetInfo)(*asset); });
 		}
 	}
 

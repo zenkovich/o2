@@ -41,7 +41,7 @@ namespace o2
 		String     mBuiltAssetsTreePath; // Built assets tree data path
 		AssetsTree mBuiltAssetsTree;     // Built assets tree
 
-		Vector<AssetsTree::AssetNode*> mModifiedAssets; // Modified assets infos
+		Vector<AssetsTree::AssetInfo*> mModifiedAssets; // Modified assets infos
 
 		Map<const Type*, IAssetConverter*> mAssetConverters;   // Assets converters by type
 		StdAssetConverter                  mStdAssetConverter; // Standard assets converter
@@ -55,9 +55,6 @@ namespace o2
 
 		// Checks basic atlas exist
 		void CheckBasicAtlas();
-
-		// Creates missing meta fields for source assets
-		void CreateMissingMetas();
 
 		// Searching and removing assets
 		Vector<UID> ProcessRemovedAssets();

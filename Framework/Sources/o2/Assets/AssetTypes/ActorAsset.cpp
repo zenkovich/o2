@@ -13,7 +13,7 @@ namespace o2
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 	}
 
 	ActorAsset::ActorAsset(const String& path):
@@ -21,25 +21,25 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 
 		Load();
 	}
 
-	ActorAsset::ActorAsset(UID id):
+	ActorAsset::ActorAsset(const UID& id):
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 
 		Load();
 	}
@@ -49,11 +49,11 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 		*mActor = *asset.mActor;
 	}
 
@@ -66,7 +66,7 @@ namespace o2
 
 		*mActor = *asset.mActor;
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 
 		*mMeta = *(MetaInfo*)(asset.mMeta);
 
@@ -104,13 +104,13 @@ namespace o2
 		data.LoadFromFile(path);
 		mActor->Deserialize(data);
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 	}
 
 	void ActorAsset::SaveData(const String& path)
 	{
 		mActor->mIsAsset = true;
-		mActor->mAssetId = IdRef();
+		mActor->mAssetId = ID();
 
 		DataNode data;
 		data = mActor->Serialize();

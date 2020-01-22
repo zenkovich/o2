@@ -45,7 +45,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Selects asset with id
-		void SelectAsset(UID id);
+		void SelectAsset(const UID& id);
 
 		// Selects asset by path
 		void SelectAsset(const String& path);
@@ -57,13 +57,13 @@ namespace Editor
 		void SelectAssets(const Vector<String>& paths);
 
 		// Opens asset in folder
-		void OpenAsset(UID id);
+		void OpenAsset(const UID& id);
 
 		// Opens asset in folder
 		void OpenAsset(const String& path);
 
 		// Opens asset for editing 
-		void OpenAndEditAsset(UID id);
+		void OpenAndEditAsset(const UID& id);
 
 		// Opens asset for editing 
 		void OpenAndEditAsset(const String& path);
@@ -81,7 +81,7 @@ namespace Editor
 		void OpenFolder(const String& path);
 
 		// Shows asset
-		void ShowAssetIcon(UID id);
+		void ShowAssetIcon(const UID& id);
 
 		// Shows asset
 		void ShowAssetIcon(const String& path);

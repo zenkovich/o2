@@ -48,7 +48,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo : public IMetaInfo
+		class MetaInfo : public AssetMeta
 		{
 		public:
 			// Returns asset type id
@@ -68,7 +68,7 @@ namespace o2
 		FontAsset(const String& path);
 
 		// Constructor by id - loads asset by id
-		FontAsset(UID id);
+		FontAsset(const UID& id);
 
 		// Copy-constructor
 		FontAsset(const FontAsset& asset);
@@ -101,7 +101,7 @@ namespace o2
 		FontAssetRef(const String& path) : AssetRef(path) {}
 
 		// Constructor from asset id
-		FontAssetRef(UID id) : AssetRef(id) {}
+		FontAssetRef(const UID& id) : AssetRef(id) {}
 
 		// Destructor
 		~FontAssetRef() {}

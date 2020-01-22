@@ -44,7 +44,7 @@ namespace o2
 		Text(const String& fontFileName);
 
 		// Constructor
-		Text(UID fontAssetId);
+		Text(const UID& fontAssetId);
 
 		// Constructor
 		Text(const BitmapFontAssetRef& fontAsset);

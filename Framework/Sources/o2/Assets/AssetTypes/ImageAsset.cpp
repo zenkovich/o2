@@ -21,16 +21,16 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	ImageAsset::ImageAsset(UID id):
+	ImageAsset::ImageAsset(const UID& id):
 		Asset(), mBitmap(nullptr), mAtlasPage(0)
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -42,7 +42,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 
 		if (asset.mBitmap)
 			mBitmap = asset.mBitmap->Clone();
@@ -103,15 +103,15 @@ namespace o2
 		mBitmap = bitmap;
 	}
 
-	UID ImageAsset::GetAtlasId() const
+	const UID& ImageAsset::GetAtlasId() const
 	{
 		return ((MetaInfo*)mMeta)->mAtlasId;
 	}
 
-	void ImageAsset::SetAtlasId(UID id)
+	void ImageAsset::SetAtlasId(const UID& id)
 	{
 		AssetInfo atlasInfo = o2Assets.GetAssetInfo(id);
-		if (atlasInfo.assetType != &TypeOf(AtlasAsset))
+		if (atlasInfo.mAssetType != &TypeOf(AtlasAsset))
 		{
 			GetAssetsLogStream()->Error("Can' setup image atlas id (" + (String)id + "): wrong id");
 			return;
@@ -214,9 +214,9 @@ namespace o2
 		return &TypeOf(ImageAsset);
 	}
 
-	bool ImageAsset::MetaInfo::IsEqual(IMetaInfo* other) const
+	bool ImageAsset::MetaInfo::IsEqual(AssetMeta* other) const
 	{
-		if (!IMetaInfo::IsEqual(other))
+		if (!AssetMeta::IsEqual(other))
 			return false;
 
 		MetaInfo* otherMeta = (MetaInfo*)other;

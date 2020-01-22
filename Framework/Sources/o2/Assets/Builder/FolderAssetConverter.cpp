@@ -16,25 +16,25 @@ namespace o2
 		return res;
 	}
 
-	void FolderAssetConverter::ConvertAsset(const AssetsTree::AssetNode& node)
+	void FolderAssetConverter::ConvertAsset(const AssetsTree::AssetInfo& node)
 	{
-		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
-		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
+		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.mPath;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.mPath;
 
 		o2FileSystem.FolderCreate(buildedAssetPath);
 	}
 
-	void FolderAssetConverter::RemoveAsset(const AssetsTree::AssetNode& node)
+	void FolderAssetConverter::RemoveAsset(const AssetsTree::AssetInfo& node)
 	{
-		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.mPath;
 
 		o2FileSystem.FolderRemove(buildedAssetPath);
 	}
 
-	void FolderAssetConverter::MoveAsset(const AssetsTree::AssetNode& nodeFrom, const AssetsTree::AssetNode& nodeTo)
+	void FolderAssetConverter::MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo)
 	{
-		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
-		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
+		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.mPath;
+		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.mPath;
 
 		o2FileSystem.FolderCreate(fullPathTo);
 

@@ -40,7 +40,7 @@ namespace Editor
 		mAssetInfo = info;
 
 		if (mNameText)
-			mNameText->text = o2FileSystem.GetPathWithoutDirectories(info.path);
+			mNameText->text = o2FileSystem.GetPathWithoutDirectories(info.mPath);
 	}
 
 	const AssetInfo& AssetIcon::GetAssetInfo() const

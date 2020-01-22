@@ -11,9 +11,9 @@ namespace o2
 		return &TypeOf(AtlasAsset);
 	}
 
-	bool AtlasAsset::MetaInfo::IsEqual(IMetaInfo* other) const
+	bool AtlasAsset::MetaInfo::IsEqual(AssetMeta* other) const
 	{
-		if (!IMetaInfo::IsEqual(other))
+		if (!AssetMeta::IsEqual(other))
 			return false;
 
 		MetaInfo* otherMeta = (MetaInfo*)other;
@@ -62,16 +62,16 @@ namespace o2
 	{
 		mPath = path;
 		mMeta = mnew MetaInfo();
-		IdRef() = o2Assets.GetAssetId(path);
+		ID() = o2Assets.GetAssetId(path);
 
 		Load();
 	}
 
-	AtlasAsset::AtlasAsset(UID id):
+	AtlasAsset::AtlasAsset(const UID& id):
 		Asset()
 	{
 		mMeta = mnew MetaInfo();
-		IdRef() = id;
+		ID() = id;
 		mPath = o2Assets.GetAssetPath(id);
 
 		Load();
@@ -82,9 +82,9 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 
-		mImagesAssetsInfos = asset.mImagesAssetsInfos;
+		mImages = asset.mImages;
 		mPages = asset.mPages;
 		for (auto& page : mPages)
 			page.mOwner = this;
@@ -97,7 +97,7 @@ namespace o2
 	{
 		Asset::operator=(asset);
 
-		mImagesAssetsInfos = asset.mImagesAssetsInfos;
+		mImages = asset.mImages;
 		mPages = asset.mPages;
 
 		*mMeta = *(MetaInfo*)(asset.mMeta);
@@ -117,13 +117,13 @@ namespace o2
 
 	Vector<AssetInfo> AtlasAsset::GetImages() const
 	{
-		return mImagesAssetsInfos;
+		return mImages;
 	}
 
 	Vector<AssetRef> AtlasAsset::GetImagesAssets() const
 	{
 		Vector<AssetRef> res;
-		for (auto inf : mImagesAssetsInfos)
+		for (auto inf : mImages)
 			res.Add(ImageAssetRef(inf.id));
 
 		return res;
@@ -136,17 +136,17 @@ namespace o2
 
 	bool AtlasAsset::ContainsImage(const ImageAssetRef& image)
 	{
-		return mImagesAssetsInfos.ContainsPred([&](const AssetInfo& info) { return info.id == image->GetAssetId(); });
+		return mImages.ContainsPred([&](const AssetInfo& info) { return info.id == image->GetAssetId(); });
 	}
 
 	bool AtlasAsset::ContainsImage(const AssetInfo& imageAssetInfo)
 	{
-		return mImagesAssetsInfos.ContainsPred([&](const AssetInfo& info) { return info.id == imageAssetInfo.id; });
+		return mImages.ContainsPred([&](const AssetInfo& info) { return info.id == imageAssetInfo.id; });
 	}
 
-	bool AtlasAsset::ContainsImage(UID id)
+	bool AtlasAsset::ContainsImage(const UID& id)
 	{
-		return mImagesAssetsInfos.ContainsPred([&](const AssetInfo& info) { return info.id == id; });
+		return mImages.ContainsPred([&](const AssetInfo& info) { return info.id == id; });
 	}
 
 	bool AtlasAsset::ContainsImage(const String& path)
@@ -164,7 +164,7 @@ namespace o2
 		return "atlas";
 	}
 
-	String AtlasAsset::GetPageTextureFileName(UID atlasId, UInt pageIdx)
+	String AtlasAsset::GetPageTextureFileName(const UID& atlasId, UInt pageIdx)
 	{
 		return GetPageTextureFileName(o2Assets.GetAssetPath(atlasId), pageIdx);
 	}
@@ -174,7 +174,7 @@ namespace o2
 		return o2Assets.GetBuiltAssetsPath() + atlasPath + (String)pageIdx + ".png";
 	}
 
-	TextureRef AtlasAsset::GetPageTextureRef(UID atlasId, UInt pageIdx)
+	TextureRef AtlasAsset::GetPageTextureRef(const UID& atlasId, UInt pageIdx)
 	{
 		return TextureRef(GetPageTextureFileName(atlasId, pageIdx));
 	}
@@ -189,10 +189,10 @@ namespace o2
 		DataNode data;
 		data.LoadFromFile(path);
 
-		if (auto node = data.GetNode("mImagesAssetsInfos"))
-			mImagesAssetsInfos = *node;
+		if (auto node = data.GetNode("images"))
+			mImages = *node;
 
-		if (auto node = data.GetNode("mPages"))
+		if (auto node = data.GetNode("pages"))
 			mPages = *node;
 
 		for (auto& page : mPages)

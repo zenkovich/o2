@@ -68,10 +68,10 @@ namespace Editor
 		bool IsFocusable() const;
 
 		// Hightlights asset
-		void HightlightAsset(UID id);
+		void HightlightAsset(const UID& id);
 
 		// Selects asset
-		void SelectAsset(UID id, bool scroll = true);
+		void SelectAsset(const UID& id, bool scroll = true);
 
 		// Deselects all assets
 		void DeselectAllAssets();

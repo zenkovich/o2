@@ -4,6 +4,7 @@
 #include "o2/Assets/Assets.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Assets/AssetInfo.h"
 
 namespace o2
 {
@@ -18,7 +19,7 @@ namespace o2
 	Asset& Asset::operator=(const Asset& asset)
 	{
 		mPath = asset.mPath;
-		IdRef() = asset.GetAssetId();
+		ID() = asset.GetAssetId();
 
 		return *this;
 	}
@@ -28,12 +29,7 @@ namespace o2
 		delete mMeta;
 	}
 
-	AssetInfo Asset::GetAssetInfo() const
-	{
-		return AssetInfo(mPath, GetAssetId(), &GetType());
-	}
-
-	String Asset::GetPath() const
+	const String& Asset::GetPath() const
 	{
 		return mPath;
 	}
@@ -43,12 +39,12 @@ namespace o2
 		o2Assets.MoveAsset(GetAssetId(), mPath);
 	}
 
-	UID Asset::GetAssetId() const
+	const UID& Asset::GetAssetId() const
 	{
 		return mMeta->mId;
 	}
 
-	UID& Asset::IdRef()
+	UID& Asset::ID()
 	{
 		return mMeta->mId;
 	}
@@ -73,7 +69,7 @@ namespace o2
 		LoadData(GetDataFullPath());
 	}
 
-	void Asset::Load(UID id)
+	void Asset::Load(const UID& id)
 	{
 		if (!o2Assets.IsAssetExist(id))
 		{
@@ -105,24 +101,24 @@ namespace o2
 
 	void Asset::Load(const AssetInfo& info)
 	{
-		if (info.assetType != &GetType())
+		if (info.mAssetType != &GetType())
 		{
-			GetAssetsLogStream()->Error("Failed to load asset by info (" + info.path + " - " + (String)info.id + 
-										"): incorrect type (" + (String)info.assetType + ")");
+			GetAssetsLogStream()->Error("Failed to load asset by info (" + info.mPath + " - " + (String)info.id + 
+										"): incorrect type (" + (String)info.mAssetType + ")");
 			return;
 		}
 
 		mMeta->mId = info.id;
-		mPath = info.path;
+		mPath = info.mPath;
 
 		Load();
 	}
 
 	void Asset::Save(const String& path, bool rebuildAssetsImmediately /*= true*/)
 	{
-		if (path != mPath || IdRef() == 0)
+		if (path != mPath || ID() == 0)
 		{
-			IdRef() = Assets::GetRandomAssetId();
+			ID().Randomize();
 			mPath = path;
 		}
 
@@ -143,8 +139,8 @@ namespace o2
 
 	void Asset::Save(bool rebuildAssetsImmediately /*= true*/)
 	{
-		if (IdRef() == 0)
-			IdRef() = Assets::GetRandomAssetId();
+		if (ID() == 0)
+			ID().Randomize();
 
 		UID destPathAssetId = o2Assets.GetAssetId(mPath);
 		if (destPathAssetId != 0 && destPathAssetId != mMeta->mId)
@@ -164,7 +160,7 @@ namespace o2
 	void Asset::Save(const AssetInfo& info, bool rebuildAssetsImmediately /*= true*/)
 	{
 		mMeta->mId = info.id;
-		mPath = info.path;
+		mPath = info.mPath;
 
 		Save(rebuildAssetsImmediately);
 	}
@@ -211,15 +207,13 @@ namespace o2
 		return GetAssetType() == other->GetAssetType() && mId == other->mId;
 	}
 
-	UID Asset::IMetaInfo::ID() const
+	const UID& Asset::IMetaInfo::ID() const
 	{
 		return mId;
 	}
 
 	void Asset::OnSerialize(DataNode& node) const
 	{
-		*node.AddNode("path") = mPath;
-		*node.AddNode("id") = GetAssetId();
 	}
 
 	void Asset::OnDeserialized(const DataNode& node)
@@ -228,9 +222,9 @@ namespace o2
 			mPath = *pathNode;
 
 		if (auto idNode = node.GetNode("id"))
-			idNode->GetValue(IdRef());
+			idNode->GetValue(ID());
 
-		if (IdRef() != 0 || !mPath.IsEmpty())
+		if (ID() != 0 || !mPath.IsEmpty())
 			Load();
 	}
 
@@ -267,7 +261,7 @@ namespace o2
 			(*mRefCounter)++;
 	}
 
-	AssetRef::AssetRef(UID id):
+	AssetRef::AssetRef(const UID& id):
 		AssetRef(o2Assets.GetAssetRef(id))
 	{
 		if (mAssetPtr)
@@ -300,8 +294,7 @@ namespace o2
 
 		if (auto idNode = node.GetNode("id"))
 		{
-			UID id; idNode->GetValue(id);
-			*this = o2Assets.GetAssetRef(id);
+			*this = o2Assets.GetAssetRef((UID)(*idNode));
 		}
 		else if (auto pathNode = node.GetNode("path"))
 		{
