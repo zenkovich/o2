@@ -9,36 +9,36 @@ namespace o2
 	{}
 
 	AssetInfo::AssetInfo(const AssetInfo& other):
-		mAssetType(other.mAssetType), mPath(other.mPath), mEditTime(other.mEditTime), 
-		mMeta(other.mMeta ? other.mMeta->CloneAs<Asset::IMetaInfo>() : nullptr)
+		assetType(other.assetType), path(other.path), editTime(other.editTime), 
+		meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr)
 	{
-		for (auto child : other.mChildren)
+		for (auto child : other.children)
 		{
 			auto newChild = child->CloneAs<AssetInfo>();
-			newChild->mParent = this;
-			mChildren.Add(newChild);
+			newChild->parent = this;
+			children.Add(newChild);
 		}
 	}
 
 	AssetInfo::~AssetInfo()
 	{
-		if (mMeta)
-			delete mMeta;
+		if (meta)
+			delete meta;
 
-		if (mParent)
-			mParent->RemoveChild(this, false);
+		if (parent)
+			parent->RemoveChild(this, false);
 
-		for (auto child : mChildren)
+		for (auto child : children)
 		{
-			child->mParent = nullptr;
+			child->parent = nullptr;
 			delete child;
 		}
 	}
 
 	AssetInfo& AssetInfo::operator=(const AssetInfo& other)
 	{
-		if (mMeta)
-			delete mMeta;
+		if (meta)
+			delete meta;
 	}
 
 	AssetInfo::operator bool() const
@@ -48,21 +48,21 @@ namespace o2
 
 	AssetInfo* AssetInfo::AddChild(AssetInfo* node)
 	{
-		if (node->mParent)
-			node->mParent->RemoveChild(node, false);
+		if (node->parent)
+			node->parent->RemoveChild(node, false);
 
-		node->mParent = this;
+		node->parent = this;
 
-		mChildren.Add(node);
+		children.Add(node);
 
 		return node;
 	}
 
 	void AssetInfo::RemoveChild(AssetInfo* node, bool release /*= true*/)
 	{
-		node->mParent = nullptr;
+		node->parent = nullptr;
 
-		mChildren.Remove(node);
+		children.Remove(node);
 
 		if (release && node)
 			delete node;
@@ -83,45 +83,45 @@ namespace o2
 
 	void AssetInfo::OnSerialize(DataNode& node) const
 	{
-		if (mAssetType)
-			node["type"] = mAssetType->GetName();
+		if (assetType)
+			node["type"] = assetType->GetName();
 	}
 
 	void AssetInfo::OnDeserialized(const DataNode& node)
 	{
 		if (auto typeNode = node.GetNode("type"))
-			mAssetType = o2Reflection.GetType(typeNode->Data());
+			assetType = o2Reflection.GetType(typeNode->Data());
 
-		for (auto child : mChildren)
-			child->mParent = this;
+		for (auto child : children)
+			child->parent = this;
 	}
 
 	void AssetInfo::SetTree(AssetsTree* tree)
 	{
-		this->mTree = tree;
+		this->tree = tree;
 		tree->allAssets.Add(this);
-		tree->allAssetsByPath[mPath] = this;
+		tree->allAssetsByPath[path] = this;
 
-		if (mMeta)
-			tree->allAssetsByUID[mMeta->ID()] = this;
+		if (meta)
+			tree->allAssetsByUID[meta->ID()] = this;
 
-		for (auto child : mChildren)
+		for (auto child : children)
 			child->SetTree(tree);
 	}
 
 	bool AssetInfo::IsValid() const
 	{
-		return mMeta && mMeta->ID() != UID::empty;
+		return meta && meta->ID() != UID::empty;
 	}
 
 	AssetInfo AssetInfo::empty;
 
 	bool AssetInfo::operator==(const AssetInfo& other) const
 	{
-		if (mMeta && other.mMeta)
-			return mMeta->ID() == other.mMeta->ID();
+		if (meta && other.meta)
+			return meta->ID() == other.meta->ID();
 
-		return mPath == other.mPath;
+		return path == other.path;
 	}
 }
 

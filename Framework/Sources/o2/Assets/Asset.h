@@ -5,6 +5,7 @@
 #include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "AssetInfo.h"
 
 namespace o2
 {
@@ -38,7 +39,7 @@ namespace o2
 		// Returns full asset path (from binary path)
 		String GetFullPath() const;
 
-		// Returns full buildt asset path (from binary)
+		// Returns full built asset path (from binary)
 		String GetDataFullPath() const;
 
 		// Returns id of asset
@@ -71,12 +72,10 @@ namespace o2
 		// Returns extensions string (something like "ext1 ext2 ent asf")
 		virtual const char* GetFileExtensions() const;
 
-		SERIALIZABLE(Asset);
-		
+		SERIALIZABLE(Asset);		
 
 	protected:
-		String     mPath; // Asset path
-		AssetMeta* mMeta; // Asset meta information @EDITOR_PROPERTY
+		AssetInfo mInfo; // Asset info
 
 	protected:
 		// Default constructor
@@ -97,89 +96,6 @@ namespace o2
 		friend class AssetsBuilder;
 		friend class Assets;
 	};
-
-	// ---------------
-	// Asset reference
-	// ---------------
-	class AssetRef: public ISerializable
-	{
-	public:
-		// Default constructor, references to null
-		AssetRef();
-
-		// Copy-constructor
-		AssetRef(const AssetRef& other);
-
-		// Constructor from asset path
-		AssetRef(const String& path);
-
-		// Constructor from asset id
-		AssetRef(const UID& id);
-
-		// Destructor
-		virtual ~AssetRef();
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const;
-
-		// Assign operator
-		AssetRef& operator=(const AssetRef& other);
-
-		// Getter operator
-		Asset& operator*();
-
-		// Constant getter operator
-		const Asset& operator*() const;
-
-		// Asset members and field operator
-		Asset* operator->();
-
-		// Constant asset members and field operator
-		const Asset* operator->() const;
-
-		// Check equals operator
-		bool operator==(const AssetRef& other) const;
-
-		// Check not equals operator
-		bool operator!=(const AssetRef& other) const;
-
-		// Returns is reference is valid
-		bool IsValid() const;
-
-		// Returns asset type
-		virtual const Type& GetAssetType() const;
-
-		SERIALIZABLE(AssetRef);
-
-	protected:
-		int*   mRefCounter;
-		Asset* mAssetPtr;
-
-	protected:
-		// Constructor for Assets manager
-		AssetRef(Asset* assetPtr, int* refCounter);
-
-		// Beginning serialization callback - writes path and id
-		void OnSerialize(DataNode& node) const override;
-
-		// Completion deserialization callback -  reads path and id and searchs asset
-		void OnDeserialized(const DataNode& node) override;
-
-		// Check thats asset type is based on _asset_type. If not, resets reference
-		template<typename _asset_type>
-		void CheckType()
-		{
-			if (mAssetPtr && !mAssetPtr->GetType().IsBasedOn(TypeOf(_asset_type)))
-			{
-				(*mRefCounter)--;
-				mAssetPtr = nullptr;
-				mRefCounter = nullptr;
-			}
-		}
-
-		friend class Assets;
-	};
-
 }
 
 CLASS_BASES_META(o2::Asset)
@@ -193,8 +109,7 @@ CLASS_FIELDS_META(o2::Asset)
 	PUBLIC_FIELD(fullPath);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mPath);
-	PROTECTED_FIELD(mMeta).EDITOR_PROPERTY_ATTRIBUTE();
+	PROTECTED_FIELD(mInfo);
 }
 END_META;
 CLASS_METHODS_META(o2::Asset)
@@ -220,42 +135,24 @@ CLASS_METHODS_META(o2::Asset)
 }
 END_META;
 
-CLASS_BASES_META(o2::AssetRef)
+CLASS_BASES_META(o2::IAssetRef)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::AssetRef)
+CLASS_FIELDS_META(o2::IAssetRef)
 {
+	PROTECTED_FIELD(mAssetOwner);
 	PROTECTED_FIELD(mRefCounter);
 	PROTECTED_FIELD(mAssetPtr);
 }
 END_META;
-CLASS_METHODS_META(o2::AssetRef)
+CLASS_METHODS_META(o2::IAssetRef)
 {
 
 	PUBLIC_FUNCTION(bool, IsValid);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-}
-END_META;
-
-CLASS_BASES_META(o2::Asset::IMetaInfo)
-{
-	BASE_CLASS(o2::ISerializable);
-}
-END_META;
-CLASS_FIELDS_META(o2::Asset::IMetaInfo)
-{
-	PUBLIC_FIELD(mId).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-CLASS_METHODS_META(o2::Asset::IMetaInfo)
-{
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
-	PUBLIC_FUNCTION(const UID&, ID);
 }
 END_META;

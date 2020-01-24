@@ -82,26 +82,26 @@ namespace o2
 	// -------------------------
 	// Animation Asset reference
 	// -------------------------
-	class AnimationAssetRef: public AssetRef
+	class AnimationAssetRef: public IAssetRef
 	{
 	public:
 		// Creates AnimationAsset and returns reference to it
 		static AnimationAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		AnimationAssetRef(): AssetRef() {}
+		AnimationAssetRef(): IAssetRef() {}
 
 		// Copy-constructor
-		AnimationAssetRef(const AssetRef& other): AssetRef(other) { CheckType<AnimationAsset>(); }
+		AnimationAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<AnimationAsset>(); }
 
 		// Copy-constructor
-		AnimationAssetRef(const AnimationAssetRef& other): AssetRef(other) {}
+		AnimationAssetRef(const AnimationAssetRef& other): IAssetRef(other) {}
 
 		// Constructor from asset path
-		AnimationAssetRef(const String& path): AssetRef(path) {}
+		AnimationAssetRef(const String& path): IAssetRef(path) {}
 
 		// Constructor from asset id
-		AnimationAssetRef(const UID& id): AssetRef(id) {}
+		AnimationAssetRef(const UID& id): IAssetRef(id) {}
 
 		// Destructor
 		~AnimationAssetRef() {}
@@ -110,7 +110,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		AnimationAssetRef& operator=(const AnimationAssetRef& other) { AssetRef::operator=(other); return *this; }
+		AnimationAssetRef& operator=(const AnimationAssetRef& other) { IAssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		AnimationAsset& operator*() { return *((AnimationAsset*)mAssetPtr); }
@@ -125,10 +125,10 @@ namespace o2
 		const AnimationAsset* operator->() const { return ((AnimationAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const AnimationAssetRef& other) const { return AssetRef::operator==(other); }
+		bool operator==(const AnimationAssetRef& other) const { return IAssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const AnimationAssetRef& other) const { return AssetRef::operator!=(other); }
+		bool operator!=(const AnimationAssetRef& other) const { return IAssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(AnimationAsset); }
@@ -137,7 +137,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		AnimationAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+		AnimationAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -164,7 +164,7 @@ END_META;
 
 CLASS_BASES_META(o2::AnimationAssetRef)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::IAssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationAssetRef)
@@ -181,7 +181,7 @@ END_META;
 
 CLASS_BASES_META(o2::AnimationAsset::MetaInfo)
 {
-	BASE_CLASS(o2::Asset::IMetaInfo);
+	BASE_CLASS(o2::AssetMeta);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationAsset::MetaInfo)

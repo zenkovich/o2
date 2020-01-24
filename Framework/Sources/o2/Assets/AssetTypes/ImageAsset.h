@@ -164,26 +164,26 @@ namespace o2
 	// ---------------------
 	// Image Asset reference
 	// ---------------------
-	class ImageAssetRef: public AssetRef
+	class ImageAssetRef: public IAssetRef
 	{
 	public:
 		// Creates ImageAsset and returns reference to it
 		static ImageAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		ImageAssetRef(): AssetRef() {}
+		ImageAssetRef(): IAssetRef() {}
 
 		// Constructor from asset reference
-		ImageAssetRef(const AssetRef& other): AssetRef(other) { CheckType<ImageAsset>(); }
+		ImageAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<ImageAsset>(); }
 
 		// Copy-constructor
-		ImageAssetRef(const ImageAssetRef& other): AssetRef(other) {}
+		ImageAssetRef(const ImageAssetRef& other): IAssetRef(other) {}
 
 		// Constructor from asset path
-		ImageAssetRef(const String& path): AssetRef(path) {}
+		ImageAssetRef(const String& path): IAssetRef(path) {}
 
 		// Constructor from asset id
-		ImageAssetRef(const UID& id): AssetRef(id) {}
+		ImageAssetRef(const UID& id): IAssetRef(id) {}
 
 		// Destructor
 		~ImageAssetRef() {}
@@ -192,7 +192,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		ImageAssetRef& operator=(const ImageAssetRef& other) { AssetRef::operator=(other); return *this; }
+		ImageAssetRef& operator=(const ImageAssetRef& other) { IAssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		ImageAsset& operator*() { return *((ImageAsset*)mAssetPtr); }
@@ -207,10 +207,10 @@ namespace o2
 		const ImageAsset* operator->() const { return ((ImageAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const ImageAssetRef& other) const { return AssetRef::operator==(other); }
+		bool operator==(const ImageAssetRef& other) const { return IAssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const ImageAssetRef& other) const { return AssetRef::operator!=(other); }
+		bool operator!=(const ImageAssetRef& other) const { return IAssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(ImageAsset); }
@@ -219,7 +219,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		ImageAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+		ImageAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -272,7 +272,7 @@ END_META;
 
 CLASS_BASES_META(o2::ImageAssetRef)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::IAssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::ImageAssetRef)
@@ -306,7 +306,7 @@ END_META;
 
 CLASS_BASES_META(o2::ImageAsset::MetaInfo)
 {
-	BASE_CLASS(o2::Asset::IMetaInfo);
+	BASE_CLASS(o2::AssetMeta);
 }
 END_META;
 CLASS_FIELDS_META(o2::ImageAsset::MetaInfo)

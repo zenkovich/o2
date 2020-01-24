@@ -124,7 +124,7 @@ namespace Editor
 			return UnknownPtr();
 
 		AssetsTree::AssetInfo* assetTreeNode = (AssetsTree::AssetInfo*)(void*)object;
-		return (UnknownPtr)(void*)(assetTreeNode->mParent);
+		return (UnknownPtr)(void*)(assetTreeNode->parent);
 	}
 
 	Vector<UnknownPtr> AssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
@@ -133,8 +133,8 @@ namespace Editor
 
 		if (assetTreeNode)
 		{
-			return assetTreeNode->mChildren.
-				FindAll([](AssetsTree::AssetInfo* x) { return x->mAssetType == &TypeOf(FolderAsset); }).
+			return assetTreeNode->children.
+				FindAll([](AssetsTree::AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetsTree::AssetInfo* x) { return UnknownPtr(x); });
 		}
 		else
@@ -142,7 +142,7 @@ namespace Editor
 			const AssetsTree& assetsTree = o2Assets.GetAssetsTree();
 
 			return assetsTree.rootAssets.
-				FindAll([](AssetsTree::AssetInfo* x) { return x->mAssetType == &TypeOf(FolderAsset); }).
+				FindAll([](AssetsTree::AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetsTree::AssetInfo* x) { return UnknownPtr(x); });
 		}
 	}
@@ -150,7 +150,7 @@ namespace Editor
 	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, UnknownPtr object)
 	{
 		AssetsTree::AssetInfo* assetTreeNode = (AssetsTree::AssetInfo*)(void*)object;
-		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
+		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->name = pathName;
 
@@ -162,7 +162,7 @@ namespace Editor
 	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(TreeNode* node)
 	{
 		AssetsTree::AssetInfo* assetTreeNode = (AssetsTree::AssetInfo*)(void*)node->GetObject();
-		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->mPath);
+		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->SetState("edit", true);
 
@@ -174,7 +174,7 @@ namespace Editor
 
 		editBox->onChangeCompleted = [=](const WString& text) {
 
-			String newPathAsset = o2FileSystem.GetParentPath(assetTreeNode->mPath) + "/" + text;
+			String newPathAsset = o2FileSystem.GetParentPath(assetTreeNode->path) + "/" + text;
 			o2Assets.RenameAsset(*assetTreeNode, text);
 
 			node->SetState("edit", false);
@@ -194,7 +194,7 @@ namespace Editor
 		if (nodes.Count() > 0)
 		{
 			AssetsTree::AssetInfo* assetTreeNode = nodes.Last();
-			mCurrentPath = assetTreeNode->mPath;
+			mCurrentPath = assetTreeNode->path;
 			o2EditorAssets.mAssetsGridScroll->SetViewingPath(mCurrentPath);
 		}
 		else o2EditorAssets.OpenFolder("");

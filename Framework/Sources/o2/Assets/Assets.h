@@ -64,14 +64,14 @@ namespace o2
 		const Type* GetAssetTypeByExtension(const String& extension) const;
 
 		// Returns asset reference by path
-		AssetRef GetAssetRef(const String& path);
+		IAssetRef GetAssetRef(const String& path);
 
 		// Returns asset reference by id
-		AssetRef GetAssetRef(const UID& id);
+		IAssetRef GetAssetRef(const UID& id);
 
 		// Creates asset type _asset_type
 		template<typename _asset_type>
-		AssetRef CreateAsset();
+		IAssetRef CreateAsset();
 
 		// Returns true if asset exist by path
 		bool IsAssetExist(const String& path) const;
@@ -83,7 +83,7 @@ namespace o2
 		bool IsAssetExist(const AssetInfo& info) const;
 
 		// Removes asset
-		bool RemoveAsset(const AssetRef& asset, bool rebuildAssets = true);
+		bool RemoveAsset(const IAssetRef& asset, bool rebuildAssets = true);
 
 		// Removes asset by path
 		bool RemoveAsset(const String& path, bool rebuildAssets = true);
@@ -95,7 +95,7 @@ namespace o2
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
 
 		// Copies asset
-		bool CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const IAssetRef& asset, const String& dest, bool rebuildAssets = true);
 
 		// Copies asset by path
 		bool CopyAsset(const String& path, const String& dest, bool rebuildAssets = true);
@@ -107,7 +107,7 @@ namespace o2
 		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
 
 		// Moves asset to new path
-		bool MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const IAssetRef& asset, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset by path to new path
 		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
@@ -122,7 +122,7 @@ namespace o2
 		bool MoveAssets(const Vector<AssetInfo>& assets, const String& destPath, bool rebuildAssets = true);
 
 		// Renames asset to new path
-		bool RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(const IAssetRef& asset, const String& newName, bool rebuildAssets = true);
 
 		// Renames asset by path to new path
 		bool RenameAsset(const String& path, const String& newName, bool rebuildAssets = true);
@@ -187,7 +187,7 @@ namespace o2
 	};
 
 	template<typename _asset_type>
-	AssetRef Assets::CreateAsset()
+	IAssetRef Assets::CreateAsset()
 	{
 		_asset_type* newAset = mnew _asset_type();
 
@@ -198,7 +198,7 @@ namespace o2
 		mCachedAssets.Add(cached);
 		mCachedAssetsByUID[cached->asset->GetAssetId()] = cached;
 
-		return AssetRef(newAset, &cached->referencesCount);
+		return IAssetRef(newAset, &cached->referencesCount);
 	}
 
 }

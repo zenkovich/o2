@@ -1016,7 +1016,7 @@ namespace o2
 				*destValuePtr = sourceValue;
 				componentsPointers.Add(destValuePtr);
 			}
-			else if (field->GetType()->IsBasedOn(TypeOf(AssetRef)))
+			else if (field->GetType()->IsBasedOn(TypeOf(IAssetRef)))
 			{
 				field->CopyValue(dest, source);
 			}

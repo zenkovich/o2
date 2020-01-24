@@ -234,7 +234,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset.mAssetType->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -249,7 +249,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset.mAssetType->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		SetAssetIdByUser(lastSelectedAsset.id);

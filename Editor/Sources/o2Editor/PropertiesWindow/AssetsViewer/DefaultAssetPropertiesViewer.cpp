@@ -28,7 +28,7 @@ namespace Editor
 		delete mPropertiesLayout;
 	}
 
-	void DefaultAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
+	void DefaultAssetPropertiesViewer::SetTargetAssets(const Vector<IAssetRef*>& assets)
 	{
 		mTargetAssets = assets;
 		mPropertiesContext.Set(assets.Select<Pair<IObject*, IObject*>>([](auto x) { 

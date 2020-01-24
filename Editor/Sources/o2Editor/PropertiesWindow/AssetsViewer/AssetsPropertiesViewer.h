@@ -35,7 +35,7 @@ namespace Editor
 		IOBJECT(AssetsPropertiesViewer);
 
 	protected:
-		Vector<AssetRef*> mTargetAssets; // Current target assets
+		Vector<IAssetRef*> mTargetAssets; // Current target assets
 
 		IAssetPropertiesViewer*         mCurrentViewer = nullptr; // Current asset viewer
 		Vector<IAssetPropertiesViewer*> mAvailableAssetViewers;   // Available asset viewers

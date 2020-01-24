@@ -24,7 +24,7 @@ namespace Editor
 		~DefaultAssetPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetAssets(const Vector<AssetRef*>& assets);
+		void SetTargetAssets(const Vector<IAssetRef*>& assets);
 
 		// Returns viewing asset type 
 		const Type* GetAssetType() const;
@@ -39,7 +39,7 @@ namespace Editor
 
 	protected:
 		VerticalLayout*   mPropertiesLayout;    // Properties layout
-		Vector<AssetRef*> mTargetAssets;        // Target assets
+		Vector<IAssetRef*> mTargetAssets;        // Target assets
 		PropertiesContext mPropertiesContext;   // Field properties information
 		const Type*       mAssetType = nullptr; // Target asset type
 	};
@@ -61,7 +61,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultAssetPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
+	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<IAssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, SpecializeAssetType, const Type*);

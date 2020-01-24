@@ -79,26 +79,26 @@ namespace o2
 	// ----------------------
 	// Folder Asset reference
 	// ----------------------
-	class FolderAssetRef: public AssetRef
+	class FolderAssetRef: public IAssetRef
 	{
 	public:
 		// Creates FolderAsset and returns reference to it
 		static FolderAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		FolderAssetRef(): AssetRef() {}
+		FolderAssetRef(): IAssetRef() {}
 
 		// Copy-constructor
-		FolderAssetRef(const AssetRef& other): AssetRef(other) { CheckType<FolderAsset>(); }
+		FolderAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<FolderAsset>(); }
 
 		// Copy-constructor
-		FolderAssetRef(const FolderAssetRef& other): AssetRef(other) {}
+		FolderAssetRef(const FolderAssetRef& other): IAssetRef(other) {}
 
 		// Constructor from asset path
-		FolderAssetRef(const String& path): AssetRef(path) {}
+		FolderAssetRef(const String& path): IAssetRef(path) {}
 
 		// Constructor from asset id
-		FolderAssetRef(const UID& id): AssetRef(id) {}
+		FolderAssetRef(const UID& id): IAssetRef(id) {}
 
 		// Destructor
 		~FolderAssetRef() {}
@@ -107,7 +107,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		FolderAssetRef& operator=(const FolderAssetRef& other) { AssetRef::operator=(other); return *this; }
+		FolderAssetRef& operator=(const FolderAssetRef& other) { IAssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		FolderAsset& operator*() { return *((FolderAsset*)mAssetPtr); }
@@ -122,10 +122,10 @@ namespace o2
 		const FolderAsset* operator->() const { return ((FolderAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const FolderAssetRef& other) const { return AssetRef::operator==(other); }
+		bool operator==(const FolderAssetRef& other) const { return IAssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const FolderAssetRef& other) const { return AssetRef::operator!=(other); }
+		bool operator!=(const FolderAssetRef& other) const { return IAssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(FolderAsset); }
@@ -134,7 +134,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		FolderAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+		FolderAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -162,7 +162,7 @@ END_META;
 
 CLASS_BASES_META(o2::FolderAssetRef)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::IAssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::FolderAssetRef)
@@ -179,7 +179,7 @@ END_META;
 
 CLASS_BASES_META(o2::FolderAsset::MetaInfo)
 {
-	BASE_CLASS(o2::Asset::IMetaInfo);
+	BASE_CLASS(o2::AssetMeta);
 }
 END_META;
 CLASS_FIELDS_META(o2::FolderAsset::MetaInfo)

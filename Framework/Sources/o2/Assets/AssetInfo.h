@@ -1,5 +1,5 @@
 #pragma once
-#include "o2/Assets/Asset.h"
+#include "o2/Assets/Meta.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/System/Time/TimeStamp.h"
 
@@ -10,8 +10,20 @@ namespace o2
 	// -----------------
 	// Asset information
 	// -----------------
-	class AssetInfo : public ISerializable
+	struct AssetInfo : public ISerializable
 	{
+		AssetsTree* tree = nullptr; // Owner asset tree
+
+		const Type* assetType = nullptr; // Type of asset
+
+		String    path;     // Path of asset @SERIALIZABLE
+		TimeStamp editTime; // Asset edited time			
+
+		AssetMeta* meta = nullptr; // Asset meta data @SERIALIZABLE
+
+		AssetInfo*         parent = nullptr; // Parent asset info
+		Vector<AssetInfo*> children;         // Children assets infos @SERIALIZABLE
+
 	public:
 		// Copy-constructor
 		AssetInfo(const AssetInfo& other);
@@ -48,19 +60,6 @@ namespace o2
 		SERIALIZABLE(AssetInfo);
 
 	private:
-		AssetsTree* mTree = nullptr; // Owner asset tree
-
-		const Type* mAssetType = nullptr; // Type of asset
-
-		String    mPath;     // Path of asset @SERIALIZABLE
-		TimeStamp mEditTime; // Asset edited time			
-
-		Asset::IMetaInfo* mMeta = nullptr; // Asset meta data @SERIALIZABLE
-
-		AssetInfo*         mParent = nullptr; // Parent asset info
-		Vector<AssetInfo*> mChildren;         // Children assets infos @SERIALIZABLE
-
-	private:
 		// Default constructor
 		AssetInfo();
 
@@ -72,6 +71,7 @@ namespace o2
 
 		friend class AssetsBuilder;
 		friend class AssetsTree;
+		friend class Asset;
 	};
 }
 
@@ -82,13 +82,13 @@ CLASS_BASES_META(o2::AssetInfo)
 END_META;
 CLASS_FIELDS_META(o2::AssetInfo)
 {
-	PRIVATE_FIELD(mTree);
-	PRIVATE_FIELD(mAssetType);
-	PRIVATE_FIELD(mPath).SERIALIZABLE_ATTRIBUTE();
-	PRIVATE_FIELD(mEditTime);
-	PRIVATE_FIELD(mMeta).SERIALIZABLE_ATTRIBUTE();
-	PRIVATE_FIELD(mParent);
-	PRIVATE_FIELD(mChildren).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(tree);
+	PUBLIC_FIELD(assetType);
+	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(editTime);
+	PUBLIC_FIELD(meta).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(parent);
+	PUBLIC_FIELD(children).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::AssetInfo)

@@ -111,7 +111,7 @@ namespace o2
 	void ImageAsset::SetAtlasId(const UID& id)
 	{
 		AssetInfo atlasInfo = o2Assets.GetAssetInfo(id);
-		if (atlasInfo.mAssetType != &TypeOf(AtlasAsset))
+		if (atlasInfo.assetType != &TypeOf(AtlasAsset))
 		{
 			GetAssetsLogStream()->Error("Can' setup image atlas id (" + (String)id + "): wrong id");
 			return;

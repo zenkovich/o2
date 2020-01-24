@@ -8,40 +8,35 @@
 
 namespace o2
 {
-	Asset::Asset():
-		mMeta(nullptr)
+	Asset::Asset()
 	{}
 
-	Asset::Asset(const Asset& asset):
-		path(this), fullPath(this), id(this), meta(this)
+	Asset::Asset(const Asset& other):
+		mInfo(other.mInfo)
 	{}
 
-	Asset& Asset::operator=(const Asset& asset)
+	Asset& Asset::operator=(const Asset& other)
 	{
-		mPath = asset.mPath;
-		ID() = asset.GetAssetId();
-
+		mInfo = other.mInfo;
 		return *this;
 	}
 
 	Asset::~Asset()
-	{
-		delete mMeta;
-	}
+	{}
 
 	const String& Asset::GetPath() const
 	{
-		return mPath;
+		return mInfo.path;
 	}
 
 	void Asset::SetPath(const String& path)
 	{
-		o2Assets.MoveAsset(GetAssetId(), mPath);
+		mInfo.path = path;
 	}
 
 	const UID& Asset::GetAssetId() const
 	{
-		return mMeta->mId;
+		return mInfo.meta->ID();
 	}
 
 	UID& Asset::ID()
@@ -49,7 +44,7 @@ namespace o2
 		return mMeta->mId;
 	}
 
-	Asset::IMetaInfo* Asset::GetMeta() const
+	AssetMeta* Asset::GetMeta() const
 	{
 		return mMeta;
 	}
@@ -101,15 +96,15 @@ namespace o2
 
 	void Asset::Load(const AssetInfo& info)
 	{
-		if (info.mAssetType != &GetType())
+		if (info.assetType != &GetType())
 		{
-			GetAssetsLogStream()->Error("Failed to load asset by info (" + info.mPath + " - " + (String)info.id + 
-										"): incorrect type (" + (String)info.mAssetType + ")");
+			GetAssetsLogStream()->Error("Failed to load asset by info (" + info.path + " - " + (String)info.id + 
+										"): incorrect type (" + (String)info.assetType + ")");
 			return;
 		}
 
 		mMeta->mId = info.id;
-		mPath = info.mPath;
+		mPath = info.path;
 
 		Load();
 	}
@@ -160,7 +155,7 @@ namespace o2
 	void Asset::Save(const AssetInfo& info, bool rebuildAssetsImmediately /*= true*/)
 	{
 		mMeta->mId = info.id;
-		mPath = info.mPath;
+		mPath = info.path;
 
 		Save(rebuildAssetsImmediately);
 	}
@@ -188,28 +183,6 @@ namespace o2
 	LogStream* Asset::GetAssetsLogStream() const
 	{
 		return o2Assets.mLog;
-	}
-
-	Asset::IMetaInfo::IMetaInfo():
-		mId(0)
-	{}
-
-	Asset::IMetaInfo::~IMetaInfo()
-	{}
-
-	const Type* Asset::IMetaInfo::GetAssetType() const
-	{
-		return &TypeOf(Asset);
-	}
-
-	bool Asset::IMetaInfo::IsEqual(IMetaInfo* other) const
-	{
-		return GetAssetType() == other->GetAssetType() && mId == other->mId;
-	}
-
-	const UID& Asset::IMetaInfo::ID() const
-	{
-		return mId;
 	}
 
 	void Asset::OnSerialize(DataNode& node) const
@@ -243,39 +216,39 @@ namespace o2
 		metaData.SaveToFile(path);
 	}
 
-	AssetRef::AssetRef():
+	IAssetRef::IAssetRef():
 		mAssetPtr(nullptr), mRefCounter(nullptr)
 	{}
 
-	AssetRef::AssetRef(const AssetRef& other) :
+	IAssetRef::IAssetRef(const IAssetRef& other) :
 		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	AssetRef::AssetRef(const String& path):
-		AssetRef(o2Assets.GetAssetRef(path))
+	IAssetRef::IAssetRef(const String& path):
+		IAssetRef(o2Assets.GetAssetRef(path))
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	AssetRef::AssetRef(const UID& id):
-		AssetRef(o2Assets.GetAssetRef(id))
+	IAssetRef::IAssetRef(const UID& id):
+		IAssetRef(o2Assets.GetAssetRef(id))
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	AssetRef::AssetRef(Asset* assetPtr, int* refCounter):
+	IAssetRef::IAssetRef(Asset* assetPtr, int* refCounter):
 		mAssetPtr(assetPtr), mRefCounter(refCounter)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	void AssetRef::OnSerialize(DataNode& node) const
+	void IAssetRef::OnSerialize(DataNode& node) const
 	{
 		if (mAssetPtr)
 		{
@@ -284,7 +257,7 @@ namespace o2
 		}
 	}
 
-	void AssetRef::OnDeserialized(const DataNode& node)
+	void IAssetRef::OnDeserialized(const DataNode& node)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
@@ -304,13 +277,13 @@ namespace o2
 		}
 	}
 
-	AssetRef::~AssetRef()
+	IAssetRef::~IAssetRef()
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
 	}
 
-	AssetRef& AssetRef::operator=(const AssetRef& other)
+	IAssetRef& IAssetRef::operator=(const IAssetRef& other)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
@@ -324,47 +297,47 @@ namespace o2
 		return *this;
 	}
 
-	AssetRef::operator bool() const
+	IAssetRef::operator bool() const
 	{
 		return mAssetPtr != nullptr;
 	}
 
-	Asset& AssetRef::operator*()
+	Asset& IAssetRef::operator*()
 	{
 		return *mAssetPtr;
 	}
 
-	const Asset& AssetRef::operator*() const
+	const Asset& IAssetRef::operator*() const
 	{
 		return *mAssetPtr;
 	}
 
-	Asset* AssetRef::operator->()
+	Asset* IAssetRef::operator->()
 	{
 		return mAssetPtr;
 	}
 
-	const Asset* AssetRef::operator->() const
+	const Asset* IAssetRef::operator->() const
 	{
 		return mAssetPtr;
 	}
 
-	bool AssetRef::IsValid() const
+	bool IAssetRef::IsValid() const
 	{
 		return mAssetPtr != nullptr;
 	}
 
-	const Type& AssetRef::GetAssetType() const
+	const Type& IAssetRef::GetAssetType() const
 	{
 		return TypeOf(Asset);
 	}
 
-	bool AssetRef::operator!=(const AssetRef& other) const
+	bool IAssetRef::operator!=(const IAssetRef& other) const
 	{
 		return mAssetPtr != other.mAssetPtr;
 	}
 
-	bool AssetRef::operator==(const AssetRef& other) const
+	bool IAssetRef::operator==(const IAssetRef& other) const
 	{
 		return mAssetPtr == other.mAssetPtr;
 	}
@@ -373,6 +346,4 @@ namespace o2
 
 DECLARE_CLASS(o2::Asset);
 
-DECLARE_CLASS(o2::AssetRef);
-
-DECLARE_CLASS(o2::Asset::IMetaInfo);
+DECLARE_CLASS(o2::IAssetRef);

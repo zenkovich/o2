@@ -201,15 +201,15 @@ namespace Editor
 
 		auto getAssetTypeSortWeight = [](const AssetInfo& asset) {
 
-			if (asset.mAssetType == &TypeOf(FolderAsset))
+			if (asset.assetType == &TypeOf(FolderAsset))
 				return 1;
-			else if (asset.mAssetType == &TypeOf(ImageAsset))
+			else if (asset.assetType == &TypeOf(ImageAsset))
 				return 2;
-			else if (asset.mAssetType == &TypeOf(DataAsset))
+			else if (asset.assetType == &TypeOf(DataAsset))
 				return 5;
-			else if (asset.mAssetType == &TypeOf(AnimationAsset))
+			else if (asset.assetType == &TypeOf(AnimationAsset))
 				return 4;
-			else if (asset.mAssetType == &TypeOf(ActorAsset))
+			else if (asset.assetType == &TypeOf(ActorAsset))
 				return 3;
 
 			return 100;
@@ -218,7 +218,7 @@ namespace Editor
 		folderAssetsInfos.Sort([&](const AssetInfo& a, const AssetInfo& b) {
 			int wa = getAssetTypeSortWeight(a), wb = getAssetTypeSortWeight(b);
 			if (wa == wb)
-				return a.mPath.ToLowerCase() < b.mPath.ToLowerCase();
+				return a.path.ToLowerCase() < b.path.ToLowerCase();
 
 			return wa < wb;
 		});
@@ -228,27 +228,27 @@ namespace Editor
 		{
 			AssetIcon* assetIcon;
 
-			if (asset.mAssetType == &TypeOf(FolderAsset))
+			if (asset.assetType == &TypeOf(FolderAsset))
 			{
 				assetIcon = GetAssetIconFromPool("folder");
 				assetIcon->name = "folder";
 			}
-			else if (asset.mAssetType == &TypeOf(ImageAsset))
+			else if (asset.assetType == &TypeOf(ImageAsset))
 			{
 				assetIcon = GetImageAssetIcon(asset);
 				assetIcon->name = "image preview";
 			}
-			else if (asset.mAssetType == &TypeOf(DataAsset))
+			else if (asset.assetType == &TypeOf(DataAsset))
 			{
 				assetIcon = GetAssetIconFromPool("text");
 				assetIcon->name = "text";
 			}
-			else if (asset.mAssetType == &TypeOf(AnimationAsset))
+			else if (asset.assetType == &TypeOf(AnimationAsset))
 			{
 				assetIcon = GetAssetIconFromPool("animation");
 				assetIcon->name = "animation";
 			}
-			else if (asset.mAssetType == &TypeOf(ActorAsset))
+			else if (asset.assetType == &TypeOf(ActorAsset))
 			{
 				assetIcon = GetAssetIconFromPool("prototype");
 				assetIcon->name = "prototype";
@@ -357,14 +357,14 @@ namespace Editor
 
 		for (auto icon : mSelectedAssetsIcons)
 		{
-			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetAssetId() == icon->GetAssetInfo().id; }))
+			if (mSelectedPreloadedAssets.ContainsPred([&](const IAssetRef* x) { return (*x)->GetAssetId() == icon->GetAssetInfo().id; }))
 				continue;
 
-			AssetRef* iconAsset = mnew AssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().id));
+			IAssetRef* iconAsset = mnew IAssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().id));
 			mSelectedPreloadedAssets.Add(iconAsset);
 		}
 
-		onAssetsSelected(mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().mPath; }));
+		onAssetsSelected(mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().path; }));
 
 		if (PropertiesWindow::IsSingletonInitialzed())
 		{
@@ -372,12 +372,12 @@ namespace Editor
 
 			Vector<IObject*> targets;
 
-			if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
+			if (mSelectedPreloadedAssets.All([](IAssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
 			{
-				targets = mSelectedPreloadedAssets.Select<IObject*>([](AssetRef* x) {
+				targets = mSelectedPreloadedAssets.Select<IObject*>([](IAssetRef* x) {
 					ActorAssetRef asset(*x); return asset->GetActor(); });
 			}
-			else if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
+			else if (mSelectedPreloadedAssets.All([](IAssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
 				targets.Clear();
 			else
 				targets = mSelectedPreloadedAssets.Cast<IObject*>();
@@ -563,9 +563,9 @@ namespace Editor
 	void AssetsIconsScrollArea::OnDroppedFromThis()
 	{
 		AssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
-		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mAssetType == &TypeOf(FolderAsset))
+		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().assetType == &TypeOf(FolderAsset))
 		{
-			String destPath = iconUnderCursor->GetAssetInfo().mPath;
+			String destPath = iconUnderCursor->GetAssetInfo().path;
 			auto assetsInfos = mSelectedAssetsIcons.Select<AssetInfo>([](auto x) { return x->GetAssetInfo(); });
 			o2Assets.MoveAssets(assetsInfos, destPath, true);
 
@@ -581,8 +581,8 @@ namespace Editor
 		String destPath = mCurrentPath;
 
 		AssetIcon* iconUnderCursor = GetIconUnderPoint(o2Input.GetCursorPos());
-		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().mAssetType == &TypeOf(FolderAsset))
-			destPath = iconUnderCursor->GetAssetInfo().mPath;
+		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().assetType == &TypeOf(FolderAsset))
+			destPath = iconUnderCursor->GetAssetInfo().path;
 
 		Vector<String> newAssets;
 		for (auto object : sceneTree->GetSelectedObjects())
@@ -627,7 +627,7 @@ namespace Editor
 			Actor* actor = InstantiateAsset(info);
 			if (actor)
 			{
-				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.mPath));
+				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(info.path));
 				mInstantiatedSceneDragObjects.Add(actor);
 			}
 		}
@@ -786,7 +786,7 @@ namespace Editor
 		auto previewLayer = assetIcon->layer["preview"];
 		Sprite* previewSprite = (Sprite*)previewLayer->GetDrawable();
 
-		ImageAssetRef previewSpriteAsset(asset.mPath);
+		ImageAssetRef previewSpriteAsset(asset.path);
 		float previewMaxSize = 30;
 
 		if (previewSpriteAsset->width > previewSpriteAsset->height)
@@ -823,20 +823,20 @@ namespace Editor
 		auto assetNameLabel = icon->GetChildWidget("nameLabel");
 		if (assetNameLabel && assetNameLabel->IsUnderPoint(o2Input.cursorPos))
 		{
-			auto name = o2FileSystem.GetFileNameWithoutExtension(o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.mPath));
+			auto name = o2FileSystem.GetFileNameWithoutExtension(o2FileSystem.GetPathWithoutDirectories(iconAssetInfo.path));
 			StartAssetRenaming(icon, name, [=](const String& name)
 			{
-				String ext = o2FileSystem.GetFileExtension(iconAssetInfo.mPath);
+				String ext = o2FileSystem.GetFileExtension(iconAssetInfo.path);
 				if (ext.IsEmpty())
 					o2Assets.RenameAsset(iconAssetInfo, name);
 				else
-					o2Assets.RenameAsset(iconAssetInfo, name + "." + o2FileSystem.GetFileExtension(iconAssetInfo.mPath));
+					o2Assets.RenameAsset(iconAssetInfo, name + "." + o2FileSystem.GetFileExtension(iconAssetInfo.path));
 			});
 		}
 		else
 		{
-			if (iconAssetInfo.mAssetType == &TypeOf(FolderAsset))
-				o2EditorAssets.OpenFolder(iconAssetInfo.mPath);
+			if (iconAssetInfo.assetType == &TypeOf(FolderAsset))
+				o2EditorAssets.OpenFolder(iconAssetInfo.path);
 			else
 				o2EditorAssets.OpenAndEditAsset(iconAssetInfo.id);
 		}
@@ -887,13 +887,13 @@ namespace Editor
 	void AssetsIconsScrollArea::OnContextCopyPressed()
 	{
 		o2EditorAssets.CopyAssets(
-			mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().mPath; }));
+			mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void AssetsIconsScrollArea::OnContextCutPressed()
 	{
 		o2EditorAssets.CutAssets(
-			mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().mPath; }));
+			mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void AssetsIconsScrollArea::OnContextPastePressed()
@@ -910,7 +910,7 @@ namespace Editor
 		mSelectedPreloadedAssets.Clear();
 
 		o2EditorAssets.DeleteAssets(
-			mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().mPath; }));
+			mSelectedAssetsIcons.Select<String>([](AssetIcon* x) { return x->GetAssetInfo().path; }));
 	}
 
 	void AssetsIconsScrollArea::OnContextOpenPressed()
@@ -1056,9 +1056,9 @@ namespace Editor
 
 	Actor* AssetsIconsScrollArea::InstantiateAsset(const AssetInfo& assetInfo)
 	{
-		if (assetInfo.mAssetType == &TypeOf(ImageAsset))
+		if (assetInfo.assetType == &TypeOf(ImageAsset))
 			return InstantiateAsset(ImageAssetRef(assetInfo.id));
-		else if (assetInfo.mAssetType == &TypeOf(ActorAsset))
+		else if (assetInfo.assetType == &TypeOf(ActorAsset))
 			return InstantiateAsset(ActorAssetRef(assetInfo.id));
 
 		return nullptr;

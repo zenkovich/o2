@@ -84,7 +84,7 @@ namespace o2
 		BitmapFontAssetRef(): FontAssetRef() {}
 
 		// Copy-constructor
-		BitmapFontAssetRef(const AssetRef& other): FontAssetRef(other) { CheckType<BitmapFontAsset>(); }
+		BitmapFontAssetRef(const IAssetRef& other): FontAssetRef(other) { CheckType<BitmapFontAsset>(); }
 
 		// Copy-constructor
 		BitmapFontAssetRef(const BitmapFontAssetRef& other): FontAssetRef(other) {}
@@ -102,7 +102,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		BitmapFontAssetRef& operator=(const BitmapFontAssetRef& other) { AssetRef::operator=(other); return *this; }
+		BitmapFontAssetRef& operator=(const BitmapFontAssetRef& other) { IAssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		BitmapFontAsset& operator*() { return *((BitmapFontAsset*)mAssetPtr); }
@@ -117,10 +117,10 @@ namespace o2
 		const BitmapFontAsset* operator->() const { return ((BitmapFontAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const BitmapFontAssetRef& other) const { return AssetRef::operator==(other); }
+		bool operator==(const BitmapFontAssetRef& other) const { return IAssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const BitmapFontAssetRef& other) const { return AssetRef::operator!=(other); }
+		bool operator!=(const BitmapFontAssetRef& other) const { return IAssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(BitmapFontAsset); }
@@ -171,7 +171,7 @@ END_META;
 
 CLASS_BASES_META(o2::BitmapFontAsset::MetaInfo)
 {
-	BASE_CLASS(o2::Asset::IMetaInfo);
+	BASE_CLASS(o2::AssetMeta);
 }
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset::MetaInfo)

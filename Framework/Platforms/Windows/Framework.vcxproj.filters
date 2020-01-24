@@ -80,6 +80,9 @@
 		<ClInclude Include="..\..\Sources\o2\Assets\AssetInfo.h">
 			<Filter>Sources\o2\Assets</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\AssetRef.h">
+			<Filter>Sources\o2\Assets</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\ActorAsset.h">
 			<Filter>Sources\o2\Assets\AssetTypes</Filter>
 		</ClInclude>
@@ -584,7 +587,7 @@
 		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Vector.h">
 			<Filter>Sources\o2\Utils\Types\Containers</Filter>
 		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\SmartPointers.h">
+		<ClInclude Include="..\..\Sources\o2\Utils\Types\Ref.h">
 			<Filter>Sources\o2\Utils\Types</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Utils\Types\String.h">
@@ -647,6 +650,9 @@
 			<Filter>Sources\o2\Assets</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Assets\AssetInfo.cpp">
+			<Filter>Sources\o2\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\AssetRef.cpp">
 			<Filter>Sources\o2\Assets</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\ActorAsset.cpp">

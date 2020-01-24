@@ -18,23 +18,23 @@ namespace o2
 
 	void FolderAssetConverter::ConvertAsset(const AssetsTree::AssetInfo& node)
 	{
-		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.mPath;
-		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.mPath;
+		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
 		o2FileSystem.FolderCreate(buildedAssetPath);
 	}
 
 	void FolderAssetConverter::RemoveAsset(const AssetsTree::AssetInfo& node)
 	{
-		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.mPath;
+		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
 		o2FileSystem.FolderRemove(buildedAssetPath);
 	}
 
 	void FolderAssetConverter::MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo)
 	{
-		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.mPath;
-		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.mPath;
+		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
+		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
 
 		o2FileSystem.FolderCreate(fullPathTo);
 

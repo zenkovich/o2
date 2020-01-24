@@ -90,26 +90,26 @@ namespace o2
 	// ---------------------------
 	// Binary data Asset reference
 	// ---------------------------
-	class BinaryAssetRef: public AssetRef
+	class BinaryAssetRef: public IAssetRef
 	{
 	public:
 		// Creates BinaryAsset and returns reference to it
 		static BinaryAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		BinaryAssetRef(): AssetRef() {}
+		BinaryAssetRef(): IAssetRef() {}
 
 		// Copy-constructor
-		BinaryAssetRef(const AssetRef& other): AssetRef(other) { CheckType<BinaryAsset>(); }
+		BinaryAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<BinaryAsset>(); }
 
 		// Copy-constructor
-		BinaryAssetRef(const BinaryAssetRef& other): AssetRef(other) {}
+		BinaryAssetRef(const BinaryAssetRef& other): IAssetRef(other) {}
 
 		// Constructor from asset path
-		BinaryAssetRef(const String& path): AssetRef(path) {}
+		BinaryAssetRef(const String& path): IAssetRef(path) {}
 
 		// Constructor from asset id
-		BinaryAssetRef(const UID& id): AssetRef(id) {}
+		BinaryAssetRef(const UID& id): IAssetRef(id) {}
 
 		// Destructor
 		~BinaryAssetRef() {}
@@ -118,7 +118,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		BinaryAssetRef& operator=(const BinaryAssetRef& other) { AssetRef::operator=(other); return *this; }
+		BinaryAssetRef& operator=(const BinaryAssetRef& other) { IAssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		BinaryAsset& operator*() { return *((BinaryAsset*)mAssetPtr); }
@@ -133,10 +133,10 @@ namespace o2
 		const BinaryAsset* operator->() const { return ((BinaryAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const BinaryAssetRef& other) const { return AssetRef::operator==(other); }
+		bool operator==(const BinaryAssetRef& other) const { return IAssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const BinaryAssetRef& other) const { return AssetRef::operator!=(other); }
+		bool operator!=(const BinaryAssetRef& other) const { return IAssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(BinaryAsset); }
@@ -145,7 +145,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		BinaryAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
+		BinaryAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -178,7 +178,7 @@ END_META;
 
 CLASS_BASES_META(o2::BinaryAssetRef)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::IAssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::BinaryAssetRef)
@@ -195,7 +195,7 @@ END_META;
 
 CLASS_BASES_META(o2::BinaryAsset::MetaInfo)
 {
-	BASE_CLASS(o2::Asset::IMetaInfo);
+	BASE_CLASS(o2::AssetMeta);
 }
 END_META;
 CLASS_FIELDS_META(o2::BinaryAsset::MetaInfo)
