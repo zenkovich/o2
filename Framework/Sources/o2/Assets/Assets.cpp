@@ -91,7 +91,7 @@ namespace o2
 		return mStdAssetType;
 	}
 
-	IAssetRef Assets::GetAssetRef(const String& path)
+	AssetRef Assets::GetAssetRef(const String& path)
 	{
 		auto cached = FindAssetCache(path);
 
@@ -99,7 +99,7 @@ namespace o2
 		{
 			auto assetInfo = mAssetsTree.Find(path);
 			if (!assetInfo->assetType)
-				return IAssetRef();
+				return AssetRef();
 
 			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
 			asset->Load(path);
@@ -113,10 +113,10 @@ namespace o2
 			mCachedAssetsByPath[cached->asset->GetAssetId()] = cached;
 		}
 
-		return IAssetRef(cached->asset, &cached->referencesCount);
+		return AssetRef(cached->asset, &cached->referencesCount);
 	}
 
-	IAssetRef Assets::GetAssetRef(const UID& id)
+	AssetRef Assets::GetAssetRef(const UID& id)
 	{
 		auto cached = FindAssetCache(id);
 
@@ -124,7 +124,7 @@ namespace o2
 		{
 			auto assetInfo = mAssetsTree.Find(id);
 			if (!assetInfo->assetType)
-				return IAssetRef();
+				return AssetRef();
 
 			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
 			asset->Load(id);
@@ -138,7 +138,7 @@ namespace o2
 			mCachedAssetsByPath[cached->asset->GetAssetId()] = cached;
 		}
 
-		return IAssetRef(cached->asset, &cached->referencesCount);
+		return AssetRef(cached->asset, &cached->referencesCount);
 	}
 
 	bool Assets::IsAssetExist(const String& path) const
@@ -156,7 +156,7 @@ namespace o2
 		return GetAssetInfo(info.id).id == 0;
 	}
 
-	bool Assets::RemoveAsset(const IAssetRef& asset, bool rebuildAssets /*= true*/)
+	bool Assets::RemoveAsset(const AssetRef& asset, bool rebuildAssets /*= true*/)
 	{
 		return RemoveAsset(asset->GetAssetId());
 	}
@@ -192,7 +192,7 @@ namespace o2
 		return true;
 	}
 
-	bool Assets::CopyAsset(const IAssetRef& asset, const String& dest, bool rebuildAssets /*= true*/)
+	bool Assets::CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets /*= true*/)
 	{
 		return CopyAsset(asset->GetAssetId(), dest, rebuildAssets);
 	}
@@ -237,7 +237,7 @@ namespace o2
 		return true;
 	}
 
-	bool Assets::MoveAsset(const IAssetRef& asset, const String& newPath, bool rebuildAssets /*= true*/)
+	bool Assets::MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets /*= true*/)
 	{
 		return MoveAsset(asset->GetAssetId(), newPath);
 	}
@@ -295,7 +295,7 @@ namespace o2
 		return res;
 	}
 
-	bool Assets::RenameAsset(const IAssetRef& asset, const String& newName, bool rebuildAssets /*= true*/)
+	bool Assets::RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets /*= true*/)
 	{
 		return RenameAsset(GetAssetInfo(asset->GetAssetId()), newName, rebuildAssets);
 	}
@@ -461,6 +461,16 @@ namespace o2
 			if (cache->referencesCount == 0)
 				delete cache->asset;
 		}
+	}
+
+	void Assets::AddAssetCache(AssetRef& ref)
+	{
+		auto cached = mnew AssetCache();
+		cached->asset = ref.mAssetPtr;
+		cached->referencesCount = 1;
+
+		mCachedAssets.Add(cached);
+		mCachedAssetsByPath[cached->asset->GetAssetId()] = cached;
 	}
 
 	Assets::AssetCache::~AssetCache()

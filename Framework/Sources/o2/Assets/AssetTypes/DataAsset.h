@@ -81,26 +81,26 @@ namespace o2
 	// ---------------------
 	// Data Asset reference
 	// ---------------------
-	class DataAssetRef: public IAssetRef
+	class DataAssetRef: public AssetRef
 	{
 	public:
 		// Creates DataAsset and returns reference to it
 		static DataAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		DataAssetRef(): IAssetRef() {}
+		DataAssetRef(): AssetRef() {}
 
 		// Copy-constructor
-		DataAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<DataAsset>(); }
+		DataAssetRef(const AssetRef& other): AssetRef(other) { CheckType<DataAsset>(); }
 
 		// Copy-constructor
-		DataAssetRef(const DataAssetRef& other): IAssetRef(other) {}
+		DataAssetRef(const DataAssetRef& other): AssetRef(other) {}
 
 		// Constructor from asset path
-		DataAssetRef(const String& path): IAssetRef(path) {}
+		DataAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		DataAssetRef(const UID& id): IAssetRef(id) {}
+		DataAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~DataAssetRef() {}
@@ -109,7 +109,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		DataAssetRef& operator=(const DataAssetRef& other) { IAssetRef::operator=(other); return *this; }
+		DataAssetRef& operator=(const DataAssetRef& other) { AssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		DataAsset& operator*() { return *((DataAsset*)mAssetPtr); }
@@ -124,10 +124,10 @@ namespace o2
 		const DataAsset* operator->() const { return ((DataAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const DataAssetRef& other) const { return IAssetRef::operator==(other); }
+		bool operator==(const DataAssetRef& other) const { return AssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const DataAssetRef& other) const { return IAssetRef::operator!=(other); }
+		bool operator!=(const DataAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(DataAsset); }
@@ -136,7 +136,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		DataAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
+		DataAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -163,7 +163,7 @@ END_META;
 
 CLASS_BASES_META(o2::DataAssetRef)
 {
-	BASE_CLASS(o2::IAssetRef);
+	BASE_CLASS(o2::AssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::DataAssetRef)

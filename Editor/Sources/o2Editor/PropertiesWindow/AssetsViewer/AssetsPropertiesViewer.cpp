@@ -42,7 +42,7 @@ namespace Editor
 
 	const Type* AssetsPropertiesViewer::GetViewingObjectType() const
 	{
-		return &TypeOf(IAssetRef);
+		return &TypeOf(AssetRef);
 	}
 
 	void AssetsPropertiesViewer::AddAssetViewer(IAssetPropertiesViewer* viewer)
@@ -54,7 +54,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mTargetAssets = targets.Cast<IAssetRef*>();
+		mTargetAssets = targets.Cast<AssetRef*>();
 
 		if (mTargetAssets.IsEmpty())
 			return;

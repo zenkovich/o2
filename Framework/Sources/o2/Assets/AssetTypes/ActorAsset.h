@@ -83,26 +83,26 @@ namespace o2
 	// ---------------------
 	// Actor Asset reference
 	// ---------------------
-	class ActorAssetRef: public IAssetRef
+	class ActorAssetRef: public AssetRef
 	{
 	public:
 		// Creates ActorAsset and returns reference to it
 		static ActorAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		ActorAssetRef(): IAssetRef() {}
+		ActorAssetRef(): AssetRef() {}
 
 		// Copy-constructor
-		ActorAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<ActorAsset>(); }
+		ActorAssetRef(const AssetRef& other): AssetRef(other) { CheckType<ActorAsset>(); }
 
 		// Copy-constructor
-		ActorAssetRef(const ActorAssetRef& other): IAssetRef(other) {}
+		ActorAssetRef(const ActorAssetRef& other): AssetRef(other) {}
 
 		// Constructor from asset path
-		ActorAssetRef(const String& path): IAssetRef(path) {}
+		ActorAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		ActorAssetRef(const UID& id): IAssetRef(id) {}
+		ActorAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~ActorAssetRef() {}
@@ -111,7 +111,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		ActorAssetRef& operator=(const ActorAssetRef& other) { IAssetRef::operator=(other); return *this; }
+		ActorAssetRef& operator=(const ActorAssetRef& other) { AssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		ActorAsset& operator*() { return *((ActorAsset*)mAssetPtr); }
@@ -126,10 +126,10 @@ namespace o2
 		const ActorAsset* operator->() const { return ((ActorAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const ActorAssetRef& other) const { return IAssetRef::operator==(other); }
+		bool operator==(const ActorAssetRef& other) const { return AssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const ActorAssetRef& other) const { return IAssetRef::operator!=(other); }
+		bool operator!=(const ActorAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(ActorAsset); }
@@ -138,7 +138,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		ActorAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
+		ActorAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -166,7 +166,7 @@ END_META;
 
 CLASS_BASES_META(o2::ActorAssetRef)
 {
-	BASE_CLASS(o2::IAssetRef);
+	BASE_CLASS(o2::AssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::ActorAssetRef)

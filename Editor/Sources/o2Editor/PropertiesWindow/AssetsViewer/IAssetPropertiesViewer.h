@@ -21,7 +21,7 @@ namespace Editor
 		virtual ~IAssetPropertiesViewer() {}
 
 		// Sets target actors
-		virtual void SetTargetAssets(const Vector<IAssetRef*>& assets) {}
+		virtual void SetTargetAssets(const Vector<AssetRef*>& assets) {}
 
 		// Returns viewing asset type 
 		virtual const Type* GetAssetType() const { return nullptr; }
@@ -45,7 +45,7 @@ END_META;
 CLASS_METHODS_META(Editor::IAssetPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<IAssetRef*>&);
+	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 }

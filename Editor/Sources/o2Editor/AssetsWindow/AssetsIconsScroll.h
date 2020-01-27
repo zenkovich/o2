@@ -117,7 +117,7 @@ namespace Editor
 		ContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
 		Vector<AssetIcon*> mSelectedAssetsIcons;     // Selected assets icons
-		Vector<IAssetRef*>  mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<AssetRef*>  mSelectedPreloadedAssets; // Preloaded selected assets
 						        
 		AssetIcon* mHightlightIcon = nullptr;   // Current highlighting asset icon
 		Animation  mHightlightAnim;             // Icon highlight animation @SERIALIZABLE

@@ -21,11 +21,8 @@
 // Current working platform
 o2::Platform GetEnginePlatform();
 
-// Project location path. Relative from executable
-const char* GetProjectPath();
-
-// Project config file path. Relative from project path
-const char* GetProjectSettingFileLocalPath();
+// Project config file path. Relative from executable
+const char* GetProjectSettingPath();
 
 // Enables stopping on log errors
 bool IsStoppingOnLogErrors();
@@ -49,7 +46,7 @@ bool IsAssetsPrebuildEnabled();
 // Basic atlas path (from assets path)
 const char* GetBasicAtlasPath();
 
-// Assets path. Relative from project path
+// Assets path. Relative from executable
 const char* GetAssetsPath();
 
 // Built assets path with built assets. Relative from executable
@@ -58,7 +55,7 @@ const char* GetBuiltAssetsPath();
 // Built assets assets tree path
 const char* GetBuiltAssetsTreePath();
 
-// Editor's assets path. Relative from project path
+// Editor's assets path. Relative from executable
 const char* GetEditorAssetsPath();
 
 // Editor's built assets path with built assets. Relative from executable

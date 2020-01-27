@@ -1,7 +1,8 @@
 #include "o2/stdafx.h"
 #include "AssetInfo.h"
 
-#include "AssetsTree.h"
+#include "o2/Assets/Asset.h"
+#include "o2/Assets/AssetsTree.h"
 
 namespace o2
 {
@@ -39,6 +40,16 @@ namespace o2
 	{
 		if (meta)
 			delete meta;
+
+		for (auto child : children)
+		{
+			child->parent = nullptr;
+			delete child;
+		}
+
+		meta = other.meta->CloneAs<AssetMeta>();
+
+		return *this;
 	}
 
 	AssetInfo::operator bool() const

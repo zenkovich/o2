@@ -2,12 +2,13 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetInfo.h"
+#include "o2/Assets/AssetRef.h"
 #include "o2/Assets/AssetsTree.h"
-#include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Containers/Vector.h"
 
 // Assets system access macros
 #define  o2Assets o2::Assets::Instance()
@@ -64,14 +65,14 @@ namespace o2
 		const Type* GetAssetTypeByExtension(const String& extension) const;
 
 		// Returns asset reference by path
-		IAssetRef GetAssetRef(const String& path);
+		AssetRef GetAssetRef(const String& path);
 
 		// Returns asset reference by id
-		IAssetRef GetAssetRef(const UID& id);
+		AssetRef GetAssetRef(const UID& id);
 
 		// Creates asset type _asset_type
 		template<typename _asset_type>
-		IAssetRef CreateAsset();
+		AssetRef CreateAsset();
 
 		// Returns true if asset exist by path
 		bool IsAssetExist(const String& path) const;
@@ -83,7 +84,7 @@ namespace o2
 		bool IsAssetExist(const AssetInfo& info) const;
 
 		// Removes asset
-		bool RemoveAsset(const IAssetRef& asset, bool rebuildAssets = true);
+		bool RemoveAsset(const AssetRef& asset, bool rebuildAssets = true);
 
 		// Removes asset by path
 		bool RemoveAsset(const String& path, bool rebuildAssets = true);
@@ -95,7 +96,7 @@ namespace o2
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
 
 		// Copies asset
-		bool CopyAsset(const IAssetRef& asset, const String& dest, bool rebuildAssets = true);
+		bool CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets = true);
 
 		// Copies asset by path
 		bool CopyAsset(const String& path, const String& dest, bool rebuildAssets = true);
@@ -107,7 +108,7 @@ namespace o2
 		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
 
 		// Moves asset to new path
-		bool MoveAsset(const IAssetRef& asset, const String& newPath, bool rebuildAssets = true);
+		bool MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets = true);
 
 		// Moves asset by path to new path
 		bool MoveAsset(const String& path, const String& newPath, bool rebuildAssets = true);
@@ -122,7 +123,7 @@ namespace o2
 		bool MoveAssets(const Vector<AssetInfo>& assets, const String& destPath, bool rebuildAssets = true);
 
 		// Renames asset to new path
-		bool RenameAsset(const IAssetRef& asset, const String& newName, bool rebuildAssets = true);
+		bool RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets = true);
 
 		// Renames asset by path to new path
 		bool RenameAsset(const String& path, const String& newName, bool rebuildAssets = true);
@@ -182,12 +183,16 @@ namespace o2
 		// Clears assets cache
 		void ClearAssetsCache();
 
+		// Adds asset to cache
+		void AddAssetCache(AssetRef& ref);
+
 		friend class Asset;
+		friend class AssetRef;
 		friend class FolderAsset;
 	};
 
 	template<typename _asset_type>
-	IAssetRef Assets::CreateAsset()
+	AssetRef Assets::CreateAsset()
 	{
 		_asset_type* newAset = mnew _asset_type();
 
@@ -198,7 +203,7 @@ namespace o2
 		mCachedAssets.Add(cached);
 		mCachedAssetsByUID[cached->asset->GetAssetId()] = cached;
 
-		return IAssetRef(newAset, &cached->referencesCount);
+		return AssetRef(newAset, &cached->referencesCount);
 	}
 
 }

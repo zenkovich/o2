@@ -426,7 +426,7 @@ namespace Editor
 		o2Assets.RebuildAssets();
 	}
 
-	Sprite* AssetsWindow::GetAssetIconSprite(const IAssetRef& asset)
+	Sprite* AssetsWindow::GetAssetIconSprite(const AssetRef& asset)
 	{
 		const Type& type = asset->GetType();
 

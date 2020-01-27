@@ -21,7 +21,7 @@ namespace o2
 		PROPERTIES(AtlasAsset);
 		GETTER(MetaInfo*, meta, GetMeta);                  // Meta information getter
 		GETTER(Vector<AssetInfo>, imagesInfos, GetImages); // Containing images infos getter
-		GETTER(Vector<IAssetRef>, images, GetImagesAssets); // Images assets getter
+		GETTER(Vector<AssetRef>, images, GetImagesAssets); // Images assets getter
 		GETTER(Vector<Page>, pages, GetPages);             // Pages getter
 
 	public:
@@ -41,7 +41,7 @@ namespace o2
 		Vector<AssetInfo> GetImages() const;
 
 		// Returns containing images assets
-		Vector<IAssetRef> GetImagesAssets() const;
+		Vector<AssetRef> GetImagesAssets() const;
 
 		// Returns pages array
 		Vector<Page> GetPages() const;
@@ -178,26 +178,26 @@ namespace o2
 	// ---------------------
 	// Atlas Asset reference
 	// ---------------------
-	class AtlasAssetRef: public IAssetRef
+	class AtlasAssetRef: public AssetRef
 	{
 	public:
 		// Creates AtlasAsset and returns reference to it
 		static AtlasAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		AtlasAssetRef(): IAssetRef() {}
+		AtlasAssetRef(): AssetRef() {}
 
 		// Copy-constructor
-		AtlasAssetRef(const IAssetRef& other): IAssetRef(other) { CheckType<AtlasAsset>(); }
+		AtlasAssetRef(const AssetRef& other): AssetRef(other) { CheckType<AtlasAsset>(); }
 
 		// Copy-constructor
-		AtlasAssetRef(const AtlasAssetRef& other): IAssetRef(other) {}
+		AtlasAssetRef(const AtlasAssetRef& other): AssetRef(other) {}
 
 		// Constructor from asset path
-		AtlasAssetRef(const String& path): IAssetRef(path) {}
+		AtlasAssetRef(const String& path): AssetRef(path) {}
 
 		// Constructor from asset id
-		AtlasAssetRef(const UID& id): IAssetRef(id) {}
+		AtlasAssetRef(const UID& id): AssetRef(id) {}
 
 		// Destructor
 		~AtlasAssetRef() {}
@@ -206,7 +206,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		AtlasAssetRef& operator=(const AtlasAssetRef& other) { IAssetRef::operator=(other); return *this; }
+		AtlasAssetRef& operator=(const AtlasAssetRef& other) { AssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		AtlasAsset& operator*() { return *((AtlasAsset*)mAssetPtr); }
@@ -221,10 +221,10 @@ namespace o2
 		const AtlasAsset* operator->() const { return ((AtlasAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const AtlasAssetRef& other) const { return IAssetRef::operator==(other); }
+		bool operator==(const AtlasAssetRef& other) const { return AssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const AtlasAssetRef& other) const { return IAssetRef::operator!=(other); }
+		bool operator!=(const AtlasAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(AtlasAsset); }
@@ -233,7 +233,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		AtlasAssetRef(Asset* assetPtr, int* refCounter): IAssetRef(assetPtr, refCounter) {}
+		AtlasAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -256,7 +256,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 {
 
 	PUBLIC_FUNCTION(Vector<AssetInfo>, GetImages);
-	PUBLIC_FUNCTION(Vector<IAssetRef>, GetImagesAssets);
+	PUBLIC_FUNCTION(Vector<AssetRef>, GetImagesAssets);
 	PUBLIC_FUNCTION(Vector<Page>, GetPages);
 	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(bool, ContainsImage, const AssetInfo&);
@@ -275,7 +275,7 @@ END_META;
 
 CLASS_BASES_META(o2::AtlasAssetRef)
 {
-	BASE_CLASS(o2::IAssetRef);
+	BASE_CLASS(o2::AssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAssetRef)

@@ -25,6 +25,9 @@ namespace o2
 		Vector<AssetInfo*> children;         // Children assets infos @SERIALIZABLE
 
 	public:
+		// Default constructor
+		AssetInfo();
+
 		// Copy-constructor
 		AssetInfo(const AssetInfo& other);
 
@@ -39,6 +42,9 @@ namespace o2
 
 		// Returns is asset info valid - checks id for empty
 		operator bool() const;
+
+		template<typename AssetType>
+		void SetType();
 
 		// Adds new child node and returns him
 		AssetInfo* AddChild(AssetInfo* node);
@@ -60,9 +66,6 @@ namespace o2
 		SERIALIZABLE(AssetInfo);
 
 	private:
-		// Default constructor
-		AssetInfo();
-
 		// Beginning serialization callback, writes asset type name
 		void OnSerialize(DataNode& node) const override;
 
@@ -73,6 +76,20 @@ namespace o2
 		friend class AssetsTree;
 		friend class Asset;
 	};
+
+}
+
+#include "o2/Assets/Asset.h"
+
+namespace o2
+{
+	template<typename AssetType>
+	void AssetInfo::SetType()
+	{
+		assetType = &TypeOf(AssetType);
+		meta = mnew AssetType::MetaType();
+	}
+
 }
 
 CLASS_BASES_META(o2::AssetInfo)

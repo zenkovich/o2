@@ -32,7 +32,7 @@ namespace Editor
 		~ImageAssetPropertiesViewer();
 
 		// Sets target actors
-		void SetTargetAssets(const Vector<IAssetRef*>& assets);
+		void SetTargetAssets(const Vector<AssetRef*>& assets);
 
 		// Returns viewing asset type 
 		const Type* GetAssetType() const;
@@ -135,7 +135,7 @@ END_META;
 CLASS_METHODS_META(Editor::ImageAssetPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<IAssetRef*>&);
+	PUBLIC_FUNCTION(void, SetTargetAssets, const Vector<AssetRef*>&);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);

@@ -112,7 +112,7 @@ namespace o2
 		VectorFontAssetRef(): FontAssetRef() {}
 
 		// Copy-constructor
-		VectorFontAssetRef(const IAssetRef& other): FontAssetRef(other) { CheckType<VectorFontAsset>(); }
+		VectorFontAssetRef(const AssetRef& other): FontAssetRef(other) { CheckType<VectorFontAsset>(); }
 
 		// Copy-constructor
 		VectorFontAssetRef(const VectorFontAssetRef& other): FontAssetRef(other) {}
@@ -130,7 +130,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		VectorFontAssetRef& operator=(const VectorFontAssetRef& other) { IAssetRef::operator=(other); return *this; }
+		VectorFontAssetRef& operator=(const VectorFontAssetRef& other) { AssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		VectorFontAsset& operator*() { return *((VectorFontAsset*)mAssetPtr); }
@@ -145,10 +145,10 @@ namespace o2
 		const VectorFontAsset* operator->() const { return ((VectorFontAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const VectorFontAssetRef& other) const { return IAssetRef::operator==(other); }
+		bool operator==(const VectorFontAssetRef& other) const { return AssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const VectorFontAssetRef& other) const { return IAssetRef::operator!=(other); }
+		bool operator!=(const VectorFontAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(VectorFontAsset); }

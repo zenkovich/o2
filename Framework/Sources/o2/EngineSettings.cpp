@@ -19,7 +19,7 @@ const char* GetProjectPath()
 #endif
 }
 
-const char* GetProjectSettingFileLocalPath()
+const char* GetProjectSettingPath()
 {
 	return "ProjectSettings.xml";
 }

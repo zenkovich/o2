@@ -1,50 +1,62 @@
 #include "o2/stdafx.h"
 #include "AssetRef.h"
 
+#include "o2/Assets/Assets.h"
+
 namespace o2
 {
-	IAssetRef::IAssetRef():
+	AssetRef::AssetRef():
 		mAssetPtr(nullptr), mRefCounter(nullptr)
 	{}
 
-	IAssetRef::IAssetRef(const IAssetRef& other) :
+	AssetRef::AssetRef(const AssetRef& other) :
 		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	IAssetRef::IAssetRef(const String& path):
-		IAssetRef(o2Assets.GetAssetRef(path))
+	AssetRef::AssetRef(const String& path):
+		AssetRef(o2Assets.GetAssetRef(path))
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	IAssetRef::IAssetRef(const UID& id):
-		IAssetRef(o2Assets.GetAssetRef(id))
+	AssetRef::AssetRef(const UID& id):
+		AssetRef(o2Assets.GetAssetRef(id))
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	IAssetRef::IAssetRef(Asset* assetPtr, int* refCounter):
+	AssetRef::AssetRef(Asset* assetPtr, int* refCounter):
 		mAssetPtr(assetPtr), mRefCounter(refCounter)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
 	}
 
-	void IAssetRef::OnSerialize(DataNode& node) const
+	void AssetRef::OnSerialize(DataNode& node) const
 	{
-		if (mAssetPtr)
+		if (mAssetOwner)
+		{
+			node["own"] = true;
+
+			if (mAssetPtr)
+			{
+				node["asset"] = mAssetPtr->Serialize();
+				node["meta"] = mAssetPtr->GetMeta();
+			}
+		}
+		else if (mAssetPtr)
 		{
 			node["id"] = mAssetPtr->GetAssetId().ToString();
 			node["path"] = mAssetPtr->GetPath();
 		}
 	}
 
-	void IAssetRef::OnDeserialized(const DataNode& node)
+	void AssetRef::OnDeserialized(const DataNode& node)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
@@ -52,7 +64,13 @@ namespace o2
 		mAssetPtr = nullptr;
 		mRefCounter = nullptr;
 
-		if (auto idNode = node.GetNode("id"))
+		if (node.GetNode("own"))
+		{
+			mAssetPtr = *node.GetNode("asset");
+
+			o2Assets.AddAssetCache(*this);
+		}
+		else if (auto idNode = node.GetNode("id"))
 		{
 			*this = o2Assets.GetAssetRef((UID)(*idNode));
 		}
@@ -64,13 +82,13 @@ namespace o2
 		}
 	}
 
-	IAssetRef::~IAssetRef()
+	AssetRef::~AssetRef()
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
 	}
 
-	IAssetRef& IAssetRef::operator=(const IAssetRef& other)
+	AssetRef& AssetRef::operator=(const AssetRef& other)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
@@ -84,47 +102,47 @@ namespace o2
 		return *this;
 	}
 
-	IAssetRef::operator bool() const
+	AssetRef::operator bool() const
 	{
 		return mAssetPtr != nullptr;
 	}
 
-	Asset& IAssetRef::operator*()
+	Asset& AssetRef::operator*()
 	{
 		return *mAssetPtr;
 	}
 
-	const Asset& IAssetRef::operator*() const
+	const Asset& AssetRef::operator*() const
 	{
 		return *mAssetPtr;
 	}
 
-	Asset* IAssetRef::operator->()
+	Asset* AssetRef::operator->()
 	{
 		return mAssetPtr;
 	}
 
-	const Asset* IAssetRef::operator->() const
+	const Asset* AssetRef::operator->() const
 	{
 		return mAssetPtr;
 	}
 
-	bool IAssetRef::IsValid() const
+	bool AssetRef::IsValid() const
 	{
 		return mAssetPtr != nullptr;
 	}
 
-	const Type& IAssetRef::GetAssetType() const
+	const Type& AssetRef::GetAssetType() const
 	{
 		return TypeOf(Asset);
 	}
 
-	bool IAssetRef::operator!=(const IAssetRef& other) const
+	bool AssetRef::operator!=(const AssetRef& other) const
 	{
 		return mAssetPtr != other.mAssetPtr;
 	}
 
-	bool IAssetRef::operator==(const IAssetRef& other) const
+	bool AssetRef::operator==(const AssetRef& other) const
 	{
 		return mAssetPtr == other.mAssetPtr;
 	}
@@ -133,4 +151,4 @@ namespace o2
 
 DECLARE_CLASS(o2::Asset);
 
-DECLARE_CLASS(o2::IAssetRef);
+DECLARE_CLASS(o2::AssetRef);

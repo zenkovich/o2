@@ -114,7 +114,7 @@ namespace Editor
 		void CreateAnimationAsset(const String& targetPath);
 
 		// Creates and returns icon sprite for asset
-		static Sprite* GetAssetIconSprite(const IAssetRef& asset);
+		static Sprite* GetAssetIconSprite(const AssetRef& asset);
 		 
 		IOBJECT(AssetsWindow);
 
@@ -226,7 +226,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PUBLIC_FUNCTION(void, CreatePrefabAsset, const String&);
 	PUBLIC_FUNCTION(void, CreateScriptAsset, const String&);
 	PUBLIC_FUNCTION(void, CreateAnimationAsset, const String&);
-	PUBLIC_STATIC_FUNCTION(Sprite*, GetAssetIconSprite, const IAssetRef&);
+	PUBLIC_STATIC_FUNCTION(Sprite*, GetAssetIconSprite, const AssetRef&);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeFoldersTreeSeparator);
 	PROTECTED_FUNCTION(void, InitializeFoldersTreeVisibleState);

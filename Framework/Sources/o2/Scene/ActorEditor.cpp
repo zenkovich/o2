@@ -1109,7 +1109,7 @@ namespace o2
 					componentsPointers.Add(destValuePtr);
 				}
 			}
-			else if (field->GetType()->IsBasedOn(TypeOf(IAssetRef)))
+			else if (field->GetType()->IsBasedOn(TypeOf(AssetRef)))
 			{
 				if (!field->IsValueEquals(changed, source) && field->IsValueEquals(source, dest))
 					field->CopyValue(dest, changed);

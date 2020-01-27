@@ -120,9 +120,9 @@ namespace o2
 		return mImages;
 	}
 
-	Vector<IAssetRef> AtlasAsset::GetImagesAssets() const
+	Vector<AssetRef> AtlasAsset::GetImagesAssets() const
 	{
-		Vector<IAssetRef> res;
+		Vector<AssetRef> res;
 		for (auto inf : mImages)
 			res.Add(ImageAssetRef(inf.id));
 

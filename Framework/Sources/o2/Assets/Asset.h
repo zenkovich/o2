@@ -1,11 +1,9 @@
 #pragma once
 
+#include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/Meta.h"
-#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
-#include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
-#include "AssetInfo.h"
 
 namespace o2
 {
@@ -16,6 +14,9 @@ namespace o2
 	// ---------------------
 	class Asset: public ISerializable
 	{
+	public:
+		typedef AssetMeta MetaType;
+
 	public:
 		PROPERTIES(Asset);
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property
@@ -48,26 +49,17 @@ namespace o2
 		// Returns meta information pointer
 		AssetMeta* GetMeta() const;
 
-		// Loads asset
-		void Load();
-
 		// Loads asset from path
 		void Load(const String& path);
 
 		// Loads asset by id
 		void Load(const UID& id);
 
-		// Loads asset by info
-		void Load(const AssetInfo& info);
-
 		// Saves asset by path
 		void Save(const String& path, bool rebuildAssetsImmediately = true);
 
 		// Saves asset
 		void Save(bool rebuildAssetsImmediately = true);
-
-		// Saves asset by info
-		void Save(const AssetInfo& info, bool rebuildAssetsImmediately = true);
 
 		// Returns extensions string (something like "ext1 ext2 ent asf")
 		virtual const char* GetFileExtensions() const;
@@ -79,6 +71,7 @@ namespace o2
 
 	protected:
 		// Default constructor
+		template<typename Type = Asset>
 		Asset();
 
 		// Copy-constructor
@@ -96,6 +89,13 @@ namespace o2
 		friend class AssetsBuilder;
 		friend class Assets;
 	};
+
+	template<typename Type>
+	Asset::Asset()
+	{
+		mInfo.SetType<Type>();
+	}
+
 }
 
 CLASS_BASES_META(o2::Asset)
@@ -135,19 +135,19 @@ CLASS_METHODS_META(o2::Asset)
 }
 END_META;
 
-CLASS_BASES_META(o2::IAssetRef)
+CLASS_BASES_META(o2::AssetRef)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::IAssetRef)
+CLASS_FIELDS_META(o2::AssetRef)
 {
 	PROTECTED_FIELD(mAssetOwner);
 	PROTECTED_FIELD(mRefCounter);
 	PROTECTED_FIELD(mAssetPtr);
 }
 END_META;
-CLASS_METHODS_META(o2::IAssetRef)
+CLASS_METHODS_META(o2::AssetRef)
 {
 
 	PUBLIC_FUNCTION(bool, IsValid);

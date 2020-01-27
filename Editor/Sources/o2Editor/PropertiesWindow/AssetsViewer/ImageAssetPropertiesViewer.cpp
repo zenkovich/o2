@@ -171,7 +171,7 @@ namespace Editor
 		mContent->AddChild(iosProperty);
 	}
 
-	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<IAssetRef*>& assets)
+	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
 	{
 		mTargetAssets = assets.Cast<ImageAssetRef*>();
 

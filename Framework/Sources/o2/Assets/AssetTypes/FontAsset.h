@@ -82,26 +82,26 @@ namespace o2
 	// --------------------
 	// Font Asset reference
 	// --------------------
-	class FontAssetRef : public IAssetRef
+	class FontAssetRef : public AssetRef
 	{
 	public:
 		// Creates FontAsset and returns reference to it
 		static FontAssetRef CreateAsset();
 
 		// Default constructor, references to null
-		FontAssetRef() : IAssetRef() {}
+		FontAssetRef() : AssetRef() {}
 
 		// Copy-constructor
-		FontAssetRef(const IAssetRef& other) : IAssetRef(other) { CheckType<FontAsset>(); }
+		FontAssetRef(const AssetRef& other) : AssetRef(other) { CheckType<FontAsset>(); }
 
 		// Copy-constructor
-		FontAssetRef(const FontAssetRef& other) : IAssetRef(other) {}
+		FontAssetRef(const FontAssetRef& other) : AssetRef(other) {}
 
 		// Constructor from asset path
-		FontAssetRef(const String& path) : IAssetRef(path) {}
+		FontAssetRef(const String& path) : AssetRef(path) {}
 
 		// Constructor from asset id
-		FontAssetRef(const UID& id) : IAssetRef(id) {}
+		FontAssetRef(const UID& id) : AssetRef(id) {}
 
 		// Destructor
 		~FontAssetRef() {}
@@ -110,7 +110,7 @@ namespace o2
 		operator bool() const { return IsValid(); }
 
 		// Assign operator
-		FontAssetRef& operator=(const FontAssetRef& other) { IAssetRef::operator=(other); return *this; }
+		FontAssetRef& operator=(const FontAssetRef& other) { AssetRef::operator=(other); return *this; }
 
 		// Getter operator
 		FontAsset& operator*() { return *((FontAsset*)mAssetPtr); }
@@ -125,10 +125,10 @@ namespace o2
 		const FontAsset* operator->() const { return ((FontAsset*)mAssetPtr); }
 
 		// Check equals operator
-		bool operator==(const FontAssetRef& other) const { return IAssetRef::operator==(other); }
+		bool operator==(const FontAssetRef& other) const { return AssetRef::operator==(other); }
 
 		// Check not equals operator
-		bool operator!=(const FontAssetRef& other) const { return IAssetRef::operator!=(other); }
+		bool operator!=(const FontAssetRef& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
 		const Type& GetAssetType() const override { return TypeOf(FontAsset); }
@@ -137,7 +137,7 @@ namespace o2
 
 	protected:
 		// Constructor for Assets manager
-		FontAssetRef(Asset* assetPtr, int* refCounter) : IAssetRef(assetPtr, refCounter) {}
+		FontAssetRef(Asset* assetPtr, int* refCounter) : AssetRef(assetPtr, refCounter) {}
 	};
 }
 
@@ -165,7 +165,7 @@ END_META;
 
 CLASS_BASES_META(o2::FontAssetRef)
 {
-	BASE_CLASS(o2::IAssetRef);
+	BASE_CLASS(o2::AssetRef);
 }
 END_META;
 CLASS_FIELDS_META(o2::FontAssetRef)

@@ -357,10 +357,10 @@ namespace Editor
 
 		for (auto icon : mSelectedAssetsIcons)
 		{
-			if (mSelectedPreloadedAssets.ContainsPred([&](const IAssetRef* x) { return (*x)->GetAssetId() == icon->GetAssetInfo().id; }))
+			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetAssetId() == icon->GetAssetInfo().id; }))
 				continue;
 
-			IAssetRef* iconAsset = mnew IAssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().id));
+			AssetRef* iconAsset = mnew AssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().id));
 			mSelectedPreloadedAssets.Add(iconAsset);
 		}
 
@@ -372,12 +372,12 @@ namespace Editor
 
 			Vector<IObject*> targets;
 
-			if (mSelectedPreloadedAssets.All([](IAssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
+			if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
 			{
-				targets = mSelectedPreloadedAssets.Select<IObject*>([](IAssetRef* x) {
+				targets = mSelectedPreloadedAssets.Select<IObject*>([](AssetRef* x) {
 					ActorAssetRef asset(*x); return asset->GetActor(); });
 			}
-			else if (mSelectedPreloadedAssets.All([](IAssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
+			else if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
 				targets.Clear();
 			else
 				targets = mSelectedPreloadedAssets.Cast<IObject*>();
