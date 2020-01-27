@@ -203,19 +203,19 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SelectAsset, UID);
+	PUBLIC_FUNCTION(void, SelectAsset, const UID&);
 	PUBLIC_FUNCTION(void, SelectAsset, const String&);
 	PUBLIC_FUNCTION(void, SelectAsset, const Vector<UID>&);
 	PUBLIC_FUNCTION(void, SelectAssets, const Vector<String>&);
-	PUBLIC_FUNCTION(void, OpenAsset, UID);
+	PUBLIC_FUNCTION(void, OpenAsset, const UID&);
 	PUBLIC_FUNCTION(void, OpenAsset, const String&);
-	PUBLIC_FUNCTION(void, OpenAndEditAsset, UID);
+	PUBLIC_FUNCTION(void, OpenAndEditAsset, const UID&);
 	PUBLIC_FUNCTION(void, OpenAndEditAsset, const String&);
 	PUBLIC_FUNCTION(void, DeselectAssets);
 	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
 	PUBLIC_FUNCTION(String, GetOpenedFolderPath);
 	PUBLIC_FUNCTION(void, OpenFolder, const String&);
-	PUBLIC_FUNCTION(void, ShowAssetIcon, UID);
+	PUBLIC_FUNCTION(void, ShowAssetIcon, const UID&);
 	PUBLIC_FUNCTION(void, ShowAssetIcon, const String&);
 	PUBLIC_FUNCTION(void, CopyAssets, const Vector<String>&);
 	PUBLIC_FUNCTION(void, CutAssets, const Vector<String>&);

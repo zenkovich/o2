@@ -37,7 +37,7 @@ namespace o2
 		animation = asset.animation;
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		ID() = asset.GetAssetId();
+		ID() = asset.GetUID();
 	}
 
 	AnimationAsset::~AnimationAsset()

@@ -137,7 +137,7 @@ namespace o2
 		mCurrentRenderTarget = TextureRef();
 
 		if (IsDevMode())
-			o2Assets.onAssetsRebuilded += MakeFunction(this, &Render::OnAssetsRebuilded);
+			o2Assets.onAssetsRebuilt += MakeFunction(this, &Render::OnAssetsRebuilded);
 
 		mReady = true;
 	}
@@ -148,7 +148,7 @@ namespace o2
 			return;
 
 		if (IsDevMode())
-			o2Assets.onAssetsRebuilded -= MakeFunction(this, &Render::OnAssetsRebuilded);
+			o2Assets.onAssetsRebuilt -= MakeFunction(this, &Render::OnAssetsRebuilded);
 
 		mSolidLineTexture = TextureRef::Null();
 		mDashLineTexture = TextureRef::Null();

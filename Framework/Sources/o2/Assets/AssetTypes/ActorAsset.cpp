@@ -49,7 +49,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		ID() = asset.GetAssetId();
+		ID() = asset.GetUID();
 
 		mActor = mnew Actor(ActorCreateMode::NotInScene);
 		mActor->mIsAsset = true;

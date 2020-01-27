@@ -389,8 +389,8 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FUNCTION(String, GetViewingPath);
 	PUBLIC_FUNCTION(void, UpdateAssetsGridByCurrentPath);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, HightlightAsset, UID);
-	PUBLIC_FUNCTION(void, SelectAsset, UID, bool);
+	PUBLIC_FUNCTION(void, HightlightAsset, const UID&);
+	PUBLIC_FUNCTION(void, SelectAsset, const UID&, bool);
 	PUBLIC_FUNCTION(void, DeselectAllAssets);
 	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
 	PUBLIC_FUNCTION(AssetIcon*, GetIconUnderPoint, const Vec2F&);

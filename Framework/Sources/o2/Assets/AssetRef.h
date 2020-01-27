@@ -129,3 +129,45 @@ namespace o2
 		T* mSpecAssetPtr = nullptr;
 	};
 }
+
+CLASS_BASES_META(o2::AssetRef)
+{
+	BASE_CLASS(o2::ISerializable);
+}
+END_META;
+CLASS_FIELDS_META(o2::AssetRef)
+{
+	PROTECTED_FIELD(mAssetOwner);
+	PROTECTED_FIELD(mRefCounter);
+	PROTECTED_FIELD(mAssetPtr);
+}
+END_META;
+CLASS_METHODS_META(o2::AssetRef)
+{
+
+	PUBLIC_FUNCTION(bool, IsValid);
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
+	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+}
+END_META;
+
+META_TEMPLATES(typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type)
+CLASS_BASES_META(o2::Ref<T, std::enable_if<std::is_base_of<Asset, T>::value>::type>)
+{
+	BASE_CLASS(o2::AssetRef);
+}
+END_META;
+META_TEMPLATES(typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type)
+CLASS_FIELDS_META(o2::Ref<T, std::enable_if<std::is_base_of<Asset, T>::value>::type>)
+{
+	PROTECTED_FIELD(mSpecAssetPtr);
+}
+END_META;
+META_TEMPLATES(typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type)
+CLASS_METHODS_META(o2::Ref<T, std::enable_if<std::is_base_of<Asset, T>::value>::type>)
+{
+
+	PUBLIC_FUNCTION(const Type&, GetAssetType);
+}
+END_META;

@@ -267,7 +267,7 @@ namespace o2
 
 	Actor* Scene::GetAssetActorByID(const UID& id)
 	{
-		auto cached = mCache.FindMatch([=](const ActorAssetRef& x) { return x->GetAssetId() == id; });
+		auto cached = mCache.FindMatch([=](const ActorAssetRef& x) { return x->GetUID() == id; });
 
 		if (!cached)
 		{

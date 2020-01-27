@@ -8,6 +8,9 @@
 
 namespace o2
 {
+	Asset::Asset()
+	{}
+
 	Asset::Asset(const Asset& other):
 		mInfo(other.mInfo)
 	{}
@@ -28,11 +31,15 @@ namespace o2
 
 	void Asset::SetPath(const String& path)
 	{
+		o2Assets.RemoveAssetCache(this);
+
 		mInfo.path = path;
 		mInfo.meta->mId.Randomize();
+
+		o2Assets.AddAssetCache(this);
 	}
 
-	const UID& Asset::GetAssetId() const
+	const UID& Asset::GetUID() const
 	{
 		return mInfo.meta->ID();
 	}

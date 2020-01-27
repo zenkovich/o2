@@ -347,7 +347,7 @@ namespace Editor
 		for (auto asset : lastSelectedPreloadedAssets)
 		{
 			if (!mSelectedAssetsIcons.ContainsPred([&](AssetIcon* x) {
-				return x->GetAssetInfo().id == (*asset)->GetAssetId(); }))
+				return x->GetAssetInfo().id == (*asset)->GetUID(); }))
 			{
 				mSelectedPreloadedAssets.Remove(asset);
 				(*asset)->Save(false);
@@ -357,7 +357,7 @@ namespace Editor
 
 		for (auto icon : mSelectedAssetsIcons)
 		{
-			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetAssetId() == icon->GetAssetInfo().id; }))
+			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetUID() == icon->GetAssetInfo().id; }))
 				continue;
 
 			AssetRef* iconAsset = mnew AssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().id));

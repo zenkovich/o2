@@ -304,7 +304,7 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::OnAtlasPropertyChanged(IPropertyField* field)
 	{
-		const UID& id = mAtlasProperty->GetCommonValue()->GetAssetId();
+		const UID& id = mAtlasProperty->GetCommonValue()->GetUID();
 
 		for (auto target : mTargetAssets)
 			(*target)->SetAtlasId(id);

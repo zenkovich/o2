@@ -50,13 +50,13 @@ namespace o2
 	Text::Text(const BitmapFontAssetRef& fontAsset):
 		Text(fontAsset->GetFont())
 	{
-		mFontAssetId = fontAsset->GetAssetId();
+		mFontAssetId = fontAsset->GetUID();
 	}
 
 	Text::Text(const VectorFontAssetRef& fontAsset):
 		Text(fontAsset->GetFont())
 	{
-		mFontAssetId = fontAsset->GetAssetId();
+		mFontAssetId = fontAsset->GetUID();
 	}
 
 	Text::Text(const String& fontFileName):
@@ -150,7 +150,7 @@ namespace o2
 		if (asset)
 		{
 			mFont = asset->GetFont();
-			mFontAssetId = asset->GetAssetId();
+			mFontAssetId = asset->GetUID();
 		}
 		else
 			mFont = FontRef();

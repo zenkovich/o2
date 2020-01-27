@@ -42,7 +42,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		ID() = asset.GetAssetId();
+		ID() = asset.GetUID();
 
 		if (asset.mBitmap)
 			mBitmap = asset.mBitmap->Clone();
@@ -127,7 +127,7 @@ namespace o2
 
 	void ImageAsset::SetAtlas(const AtlasAssetRef& atlas)
 	{
-		((MetaInfo*)mMeta)->mAtlasId = atlas->GetAssetId();
+		((MetaInfo*)mMeta)->mAtlasId = atlas->GetUID();
 	}
 
 	void ImageAsset::SetSliceBorder(const BorderI& border)

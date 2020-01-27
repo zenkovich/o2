@@ -51,7 +51,7 @@ namespace o2
 		}
 		else if (mAssetPtr)
 		{
-			node["id"] = mAssetPtr->GetAssetId().ToString();
+			node["id"] = mAssetPtr->GetUID().ToString();
 			node["path"] = mAssetPtr->GetPath();
 		}
 	}
@@ -67,8 +67,9 @@ namespace o2
 		if (node.GetNode("own"))
 		{
 			mAssetPtr = *node.GetNode("asset");
+			mAssetPtr->mInfo.meta = *node.GetNode("meta");
 
-			o2Assets.AddAssetCache(*this);
+			o2Assets.AddAssetCache(mAssetPtr);
 		}
 		else if (auto idNode = node.GetNode("id"))
 		{
@@ -76,9 +77,7 @@ namespace o2
 		}
 		else if (auto pathNode = node.GetNode("path"))
 		{
-			String id;
-			idNode->GetValue(id);
-			*this = o2Assets.GetAssetRef(id);
+			*this = o2Assets.GetAssetRef((String)(*pathNode));
 		}
 	}
 
@@ -148,7 +147,5 @@ namespace o2
 	}
 
 }
-
-DECLARE_CLASS(o2::Asset);
 
 DECLARE_CLASS(o2::AssetRef);

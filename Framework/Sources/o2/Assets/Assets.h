@@ -28,7 +28,7 @@ namespace o2
 		GETTER(String, assetsPath, GetAssetsPath); // Assets path getter
 
 	public:
-		Function<void(const Vector<UID>&)> onAssetsRebuilded; // Assets rebuilding event
+		Function<void(const Vector<UID>&)> onAssetsRebuilt; // Assets rebuilding event
 
 	public:
 		// Default constructor
@@ -80,9 +80,6 @@ namespace o2
 		// Returns true if asset exist by id
 		bool IsAssetExist(const UID& id) const;
 
-		// Returns true if asset exist
-		bool IsAssetExist(const AssetInfo& info) const;
-
 		// Removes asset
 		bool RemoveAsset(const AssetRef& asset, bool rebuildAssets = true);
 
@@ -91,9 +88,6 @@ namespace o2
 
 		// Removes asset by id
 		bool RemoveAsset(const UID& id, bool rebuildAssets = true);
-
-		// Removes asset by info
-		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
 
 		// Copies asset
 		bool CopyAsset(const AssetRef& asset, const String& dest, bool rebuildAssets = true);
@@ -104,9 +98,6 @@ namespace o2
 		// Copies asset by id
 		bool CopyAsset(const UID& id, const String& dest, bool rebuildAssets = true);
 
-		// Copies asset by info
-		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
-
 		// Moves asset to new path
 		bool MoveAsset(const AssetRef& asset, const String& newPath, bool rebuildAssets = true);
 
@@ -116,11 +107,8 @@ namespace o2
 		// Moves asset by id to new path
 		bool MoveAsset(const UID& id, const String& newPath, bool rebuildAssets = true);
 
-		// Moves asset to new path
-		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
-
 		// Moves assets to new path
-		bool MoveAssets(const Vector<AssetInfo>& assets, const String& destPath, bool rebuildAssets = true);
+		bool MoveAssets(const Vector<UID>& assets, const String& destPath, bool rebuildAssets = true);
 
 		// Renames asset to new path
 		bool RenameAsset(const AssetRef& asset, const String& newName, bool rebuildAssets = true);
@@ -130,9 +118,6 @@ namespace o2
 
 		// Renames asset by id to new path
 		bool RenameAsset(const UID& id, const String& newName, bool rebuildAssets = true);
-
-		// Renames asset to new path
-		bool RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets = true);
 
 		// Rebuilds all assets
 		void RebuildAssets(bool forcible = false);
@@ -153,9 +138,6 @@ namespace o2
 		};
 
 	protected:
-		String mAssetsFolderPath; // Project assets path
-		String mDataFolderPath;   // Project data (builded assets) path
-
 		AssetsTree     mAssetsTree;    // Assets information tree
 		LogStream*     mLog;           // Log stream
 		AssetsBuilder* mAssetsBuilder; // Assets builder
@@ -184,7 +166,22 @@ namespace o2
 		void ClearAssetsCache();
 
 		// Adds asset to cache
-		void AddAssetCache(AssetRef& ref);
+		void AddAssetCache(Asset* asset);
+
+		// Removes asset from cache by UID and path
+		void RemoveAssetCache(Asset* asset);
+
+		// Removes asset by info
+		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);
+
+		// Copies asset by info
+		bool CopyAsset(const AssetInfo& info, const String& dest, bool rebuildAssets = true);
+
+		// Moves asset to new path
+		bool MoveAsset(const AssetInfo& info, const String& newPath, bool rebuildAssets = true);
+
+		// Renames asset to new path
+		bool RenameAsset(const AssetInfo& info, const String& newName, bool rebuildAssets = true);
 
 		friend class Asset;
 		friend class AssetRef;
@@ -201,7 +198,7 @@ namespace o2
 		cached->referencesCount = 0;
 
 		mCachedAssets.Add(cached);
-		mCachedAssetsByUID[cached->asset->GetAssetId()] = cached;
+		mCachedAssetsByUID[cached->asset->GetUID()] = cached;
 
 		return AssetRef(newAset, &cached->referencesCount);
 	}

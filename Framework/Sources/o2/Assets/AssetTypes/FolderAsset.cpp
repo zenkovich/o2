@@ -41,7 +41,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		ID() = asset.GetAssetId();
+		ID() = asset.GetUID();
 	}
 
 	FolderAsset::~FolderAsset()

@@ -279,12 +279,12 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::AssetProperty<_type>)
 {
 
-	PUBLIC_FUNCTION(void, SetAssetId, UID);
+	PUBLIC_FUNCTION(void, SetAssetId, const UID&);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, SetCommonAssetId, UID);
-	PROTECTED_FUNCTION(void, SetAssetIdByUser, UID);
+	PROTECTED_FUNCTION(void, SetCommonAssetId, const UID&);
+	PROTECTED_FUNCTION(void, SetAssetIdByUser, const UID&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);

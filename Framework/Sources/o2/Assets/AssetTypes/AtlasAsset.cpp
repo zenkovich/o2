@@ -33,12 +33,12 @@ namespace o2
 
 	TextureRef AtlasAsset::Page::GetTextureRef() const
 	{
-		return AtlasAsset::GetPageTextureRef(mOwner->GetAssetId(), mId);
+		return AtlasAsset::GetPageTextureRef(mOwner->GetUID(), mId);
 	}
 
 	String AtlasAsset::Page::GetTextureFileName() const
 	{
-		return AtlasAsset::GetPageTextureFileName(mOwner->GetAssetId(), mId);
+		return AtlasAsset::GetPageTextureFileName(mOwner->GetUID(), mId);
 	}
 
 	const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
@@ -82,7 +82,7 @@ namespace o2
 	{
 		mMeta = mnew MetaInfo();
 		mPath = asset.mPath;
-		ID() = asset.GetAssetId();
+		ID() = asset.GetUID();
 
 		mImages = asset.mImages;
 		mPages = asset.mPages;
@@ -136,7 +136,7 @@ namespace o2
 
 	bool AtlasAsset::ContainsImage(const ImageAssetRef& image)
 	{
-		return mImages.ContainsPred([&](const AssetInfo& info) { return info.id == image->GetAssetId(); });
+		return mImages.ContainsPred([&](const AssetInfo& info) { return info.id == image->GetUID(); });
 	}
 
 	bool AtlasAsset::ContainsImage(const AssetInfo& imageAssetInfo)

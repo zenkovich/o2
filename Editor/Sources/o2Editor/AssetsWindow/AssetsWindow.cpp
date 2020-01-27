@@ -40,7 +40,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeWindow()
 	{
-		o2Assets.onAssetsRebuilded += THIS_FUNC(OnAssetsRebuilded);
+		o2Assets.onAssetsRebuilt += THIS_FUNC(OnAssetsRebuilded);
 
 		mWindow->caption = "Assets";
 		mWindow->name = "assets window";

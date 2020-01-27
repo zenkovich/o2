@@ -1095,7 +1095,7 @@ namespace o2
 	{
 		if (mImageAsset)
 		{
-			mImageAsset = ImageAssetRef(mImageAsset->GetAssetId());
+			mImageAsset = ImageAssetRef(mImageAsset->GetUID());
 
 			mMesh->mTexture = TextureRef(mImageAsset->GetAtlasId(), mImageAsset->GetAtlasPage());
 			mTextureSrcRect = mImageAsset->GetAtlasRect();

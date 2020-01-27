@@ -12,7 +12,7 @@ namespace o2
 	// ---------------------
 	// Basic asset interface
 	// ---------------------
-	class Asset: public ISerializable
+	class Asset : public ISerializable
 	{
 	public:
 		typedef AssetMeta MetaType;
@@ -21,7 +21,7 @@ namespace o2
 		PROPERTIES(Asset);
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
-		GETTER(UID, id, GetAssetId);              // Asset id getter
+		GETTER(UID, id, GetUID);              // Asset id getter
 		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
 
 	public:
@@ -44,7 +44,7 @@ namespace o2
 		String GetDataFullPath() const;
 
 		// Returns id of asset
-		const UID& GetAssetId() const;
+		const UID& GetUID() const;
 
 		// Returns meta information pointer
 		AssetMeta* GetMeta() const;
@@ -64,14 +64,13 @@ namespace o2
 		// Returns extensions string (something like "ext1 ext2 ent asf")
 		virtual const char* GetFileExtensions() const;
 
-		SERIALIZABLE(Asset);		
+		SERIALIZABLE(Asset);
 
 	protected:
 		AssetInfo mInfo; // Asset info
 
 	protected:
 		// Default constructor
-		template<typename Type = Asset>
 		Asset();
 
 		// Copy-constructor
@@ -86,16 +85,17 @@ namespace o2
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;
 
-		friend class AssetsBuilder;
+		friend class AssetRef;
 		friend class Assets;
+		friend class AssetsBuilder;
 	};
 
-	template<typename Type>
-	Asset::Asset()
+	template<typename T>
+	class TAsset : public Asset
 	{
-		mInfo.SetType<Type>();
-	}
-
+	protected:
+		TAsset() { mInfo.SetType<T>(); }
+	};
 }
 
 CLASS_BASES_META(o2::Asset)
@@ -119,15 +119,12 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(void, SetPath, const String&);
 	PUBLIC_FUNCTION(String, GetFullPath);
 	PUBLIC_FUNCTION(String, GetDataFullPath);
-	PUBLIC_FUNCTION(const UID&, GetAssetId);
+	PUBLIC_FUNCTION(const UID&, GetUID);
 	PUBLIC_FUNCTION(AssetMeta*, GetMeta);
-	PUBLIC_FUNCTION(void, Load);
 	PUBLIC_FUNCTION(void, Load, const String&);
 	PUBLIC_FUNCTION(void, Load, const UID&);
-	PUBLIC_FUNCTION(void, Load, const AssetInfo&);
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
 	PUBLIC_FUNCTION(void, Save, bool);
-	PUBLIC_FUNCTION(void, Save, const AssetInfo&, bool);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, ID);
@@ -135,24 +132,19 @@ CLASS_METHODS_META(o2::Asset)
 }
 END_META;
 
-CLASS_BASES_META(o2::AssetRef)
+META_TEMPLATES(typename T)
+CLASS_BASES_META(o2::TAsset<T>)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::Asset);
 }
 END_META;
-CLASS_FIELDS_META(o2::AssetRef)
+META_TEMPLATES(typename T)
+CLASS_FIELDS_META(o2::TAsset<T>)
 {
-	PROTECTED_FIELD(mAssetOwner);
-	PROTECTED_FIELD(mRefCounter);
-	PROTECTED_FIELD(mAssetPtr);
 }
 END_META;
-CLASS_METHODS_META(o2::AssetRef)
+META_TEMPLATES(typename T)
+CLASS_METHODS_META(o2::TAsset<T>)
 {
-
-	PUBLIC_FUNCTION(bool, IsValid);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;

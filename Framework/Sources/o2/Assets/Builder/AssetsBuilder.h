@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/AssetsTree.h"
 #include "o2/Assets/Builder/StdAssetConverter.h"
 #include "o2/Utils/Types/String.h"
@@ -22,8 +23,8 @@ namespace o2
 		// Destructor
 		~AssetsBuilder();
 
-		// Builds asset from assets path to dataAssetsPath. Removes all builded assets if forcible is true
-		Vector<UID> BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath, bool forcible = false);
+		// Builds asset from assets path to dataAssetsPath. Removes all built assets if forcible is true
+		const Vector<UID>& BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath, bool forcible = false);
 
 		// Returns source assets path in building
 		const String& GetSourceAssetsPath() const;
@@ -41,7 +42,7 @@ namespace o2
 		String     mBuiltAssetsTreePath; // Built assets tree data path
 		AssetsTree mBuiltAssetsTree;     // Built assets tree
 
-		Vector<AssetsTree::AssetInfo*> mModifiedAssets; // Modified assets infos
+		Vector<UID> mModifiedAssets; // Modified assets infos
 
 		Map<const Type*, IAssetConverter*> mAssetConverters;   // Assets converters by type
 		StdAssetConverter                  mStdAssetConverter; // Standard assets converter
@@ -50,23 +51,23 @@ namespace o2
 		// Initializes converters
 		void InitializeConverters();
 
-		// Removes all builded assets
+		// Removes all built assets
 		void RemoveBuiltAssets();
 
 		// Checks basic atlas exist
 		void CheckBasicAtlas();
 
 		// Searching and removing assets
-		Vector<UID> ProcessRemovedAssets();
+		void ProcessRemovedAssets();
 
 		// Searching modified and moved assets
-		Vector<UID> ProcessModifiedAssets();
+		void ProcessModifiedAssets();
 
 		// Searches new assets
-		Vector<UID> ProcessNewAssets();
+		void ProcessNewAssets();
 
 		// Launches converters post process
-		Vector<UID> ConvertersPostProcess();
+		void ConvertersPostProcess();
 		
 		// Processes folder for missing metas
 		void ProcessMissingMetasCreation(FolderInfo& folder);
