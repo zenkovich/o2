@@ -3,8 +3,8 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AtlasAsset.h"
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/AtlasAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
 #include "o2/Utils/Debug/Debug.h"
@@ -315,9 +315,9 @@ namespace o2
 		mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
 		mImageAsset     = image;
 		mTextureSrcRect = image->GetAtlasRect();
-		mSlices         = image->GetMeta()->mSliceBorder;
+		mSlices         = image->GetMeta()->sliceBorder;
 
-		SetMode(image->GetMeta()->mDefaultMode);
+		SetMode(image->GetMeta()->defaultMode);
 
 		if (setSizeByImage)
 			SetSize(mTextureSrcRect.Size());
@@ -1099,7 +1099,7 @@ namespace o2
 
 			mMesh->mTexture = TextureRef(mImageAsset->GetAtlasId(), mImageAsset->GetAtlasPage());
 			mTextureSrcRect = mImageAsset->GetAtlasRect();
-			mSlices         = mImageAsset->GetMeta()->mSliceBorder;
+			mSlices         = mImageAsset->GetMeta()->sliceBorder;
 
 			UpdateMesh();
 		}

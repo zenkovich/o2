@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/ActorAsset.h"
+#include "o2/Assets/AssetTypes/ActorAsset.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"

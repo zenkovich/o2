@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Render/Text.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 

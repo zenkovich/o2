@@ -1,8 +1,5 @@
 #pragma once
 
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/AnimatedValue.h"
-#include "o2/Animation/AnimatedVector.h"
 #include "o2/Animation/Animation.h"
 #include "o2/Assets/Asset.h"
 
@@ -11,33 +8,24 @@ namespace o2
 	// ---------------
 	// Animation asset
 	// ---------------
-	class AnimationAsset: public Asset
+	class AnimationAsset: public TAsset<AnimationAsset>
 	{
 	public:
-		class MetaInfo;
+		class Meta;
 
 	public:
 		PROPERTIES(AnimationAsset);
-		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
+		GETTER(Meta*, meta, GetMeta); // Meta information getter
 
 	public:
-		Animation animation; // Asset data
+		Animation animation; // Asset data @SERIALIZABLE
 
 	public:
-		// Destructor
-		~AnimationAsset();
-
 		// Check equals operator
 		AnimationAsset& operator=(const AnimationAsset& asset);
 
-		// Check equals operator
-		bool operator==(const AnimationAsset& other) const;
-
-		// Check not equals operator
-		bool operator!=(const AnimationAsset& other) const;
-
 		// Returns meta information
-		MetaInfo* GetMeta() const;
+		Meta* GetMeta() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
@@ -48,149 +36,54 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public AssetMeta
+		class Meta: public TAssetMeta<AnimationAsset>
 		{
 		public:
-			// Returns asset type id
-			const Type* GetAssetType() const override;
-
-			SERIALIZABLE(MetaInfo);
+			SERIALIZABLE(Meta);
 		};
 
 	protected:
 		// Default constructor
 		AnimationAsset();
 
-		// Constructor by path - loads asset by path
-		AnimationAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		AnimationAsset(const UID& id);
-
 		// Copy-constructor
 		AnimationAsset(const AnimationAsset& asset);
-
-		// Loads data
-		void LoadData(const String& path) override;
-
-		// Saves data
-		void SaveData(const String& path) override;
 
 		friend class Assets;
 	};
 
-	// -------------------------
-	// Animation Asset reference
-	// -------------------------
-	class AnimationAssetRef: public AssetRef
-	{
-	public:
-		// Creates AnimationAsset and returns reference to it
-		static AnimationAssetRef CreateAsset();
-
-		// Default constructor, references to null
-		AnimationAssetRef(): AssetRef() {}
-
-		// Copy-constructor
-		AnimationAssetRef(const AssetRef& other): AssetRef(other) { CheckType<AnimationAsset>(); }
-
-		// Copy-constructor
-		AnimationAssetRef(const AnimationAssetRef& other): AssetRef(other) {}
-
-		// Constructor from asset path
-		AnimationAssetRef(const String& path): AssetRef(path) {}
-
-		// Constructor from asset id
-		AnimationAssetRef(const UID& id): AssetRef(id) {}
-
-		// Destructor
-		~AnimationAssetRef() {}
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const { return IsValid(); }
-
-		// Assign operator
-		AnimationAssetRef& operator=(const AnimationAssetRef& other) { AssetRef::operator=(other); return *this; }
-
-		// Getter operator
-		AnimationAsset& operator*() { return *((AnimationAsset*)mAssetPtr); }
-
-		// Constant getter operator
-		const AnimationAsset& operator*() const { return *((AnimationAsset*)mAssetPtr); }
-
-		// Asset members and field operator
-		AnimationAsset* operator->() { return ((AnimationAsset*)mAssetPtr); }
-
-		// Constant asset members and field operator
-		const AnimationAsset* operator->() const { return ((AnimationAsset*)mAssetPtr); }
-
-		// Check equals operator
-		bool operator==(const AnimationAssetRef& other) const { return AssetRef::operator==(other); }
-
-		// Check not equals operator
-		bool operator!=(const AnimationAssetRef& other) const { return AssetRef::operator!=(other); }
-
-		// Returns asset type
-		const Type& GetAssetType() const override { return TypeOf(AnimationAsset); }
-
-		SERIALIZABLE(AnimationAssetRef);
-
-	protected:
-		// Constructor for Assets manager
-		AnimationAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
-	};
+	typedef Ref<AnimationAsset> AnimationAssetRef;
 }
 
 CLASS_BASES_META(o2::AnimationAsset)
 {
-	BASE_CLASS(o2::Asset);
+	BASE_CLASS(o2::TAsset<AnimationAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationAsset)
 {
 	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(animation);
+	PUBLIC_FIELD(animation).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationAsset)
 {
 
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
 }
 END_META;
 
-CLASS_BASES_META(o2::AnimationAssetRef)
+CLASS_BASES_META(o2::AnimationAsset::Meta)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::TAssetMeta<AnimationAsset>);
 }
 END_META;
-CLASS_FIELDS_META(o2::AnimationAssetRef)
-{
-}
-END_META;
-CLASS_METHODS_META(o2::AnimationAssetRef)
-{
-
-	PUBLIC_STATIC_FUNCTION(AnimationAssetRef, CreateAsset);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_BASES_META(o2::AnimationAsset::MetaInfo)
-{
-	BASE_CLASS(o2::AssetMeta);
-}
-END_META;
-CLASS_FIELDS_META(o2::AnimationAsset::MetaInfo)
+CLASS_FIELDS_META(o2::AnimationAsset::Meta)
 {
 }
 END_META;
-CLASS_METHODS_META(o2::AnimationAsset::MetaInfo)
+CLASS_METHODS_META(o2::AnimationAsset::Meta)
 {
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
 }
 END_META;

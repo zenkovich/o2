@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Events/ShortcutKeysListener.h"
 #include "o2/Scene/UI/Widgets/ScrollArea.h"

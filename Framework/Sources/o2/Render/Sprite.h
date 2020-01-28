@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Render/TextureRef.h"

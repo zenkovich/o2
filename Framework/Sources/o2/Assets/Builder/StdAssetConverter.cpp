@@ -2,9 +2,9 @@
 #include "StdAssetConverter.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/BinaryAsset.h"
+#include "o2/Assets/AssetTypes/BinaryAsset.h"
 #include "o2/Assets/Builder/AssetsBuilder.h"
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace o2
@@ -16,7 +16,7 @@ namespace o2
 		return res;
 	}
 
-	void StdAssetConverter::ConvertAsset(const AssetsTree::AssetInfo& node)
+	void StdAssetConverter::ConvertAsset(const AssetInfo& node)
 	{
 		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
@@ -25,14 +25,14 @@ namespace o2
 		o2FileSystem.SetFileEditDate(buildedAssetPath, node.editTime);
 	}
 
-	void StdAssetConverter::RemoveAsset(const AssetsTree::AssetInfo& node)
+	void StdAssetConverter::RemoveAsset(const AssetInfo& node)
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
 		o2FileSystem.FileDelete(buildedAssetPath);
 	}
 
-	void StdAssetConverter::MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo)
+	void StdAssetConverter::MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo)
 	{
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;

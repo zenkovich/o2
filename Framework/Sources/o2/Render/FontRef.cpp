@@ -2,8 +2,8 @@
 #include "FontRef.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/BitmapFontAsset.h"
-#include "o2/Assets/VectorFontAsset.h"
+#include "o2/Assets/AssetTypes/BitmapFontAsset.h"
+#include "o2/Assets/AssetTypes/VectorFontAsset.h"
 #include "o2/Render/BitmapFont.h"
 #include "o2/Render/VectorFont.h"
 #include "o2/Utils/FileSystem/FileSystem.h"

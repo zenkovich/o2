@@ -1,8 +1,8 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/BitmapFontAsset.h"
-#include "o2/Assets/VectorFontAsset.h"
+#include "o2/Assets/AssetTypes/BitmapFontAsset.h"
+#include "o2/Assets/AssetTypes/VectorFontAsset.h"
 #include "o2/Render/FontRef.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Utils/Types/String.h"

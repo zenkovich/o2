@@ -3,7 +3,7 @@
 
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/AssetsTree.h"
-#include "o2/Assets/FolderAsset.h"
+#include "o2/Assets/AssetTypes/FolderAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
@@ -123,33 +123,33 @@ namespace Editor
 		if (!object)
 			return UnknownPtr();
 
-		AssetsTree::AssetInfo* assetTreeNode = (AssetsTree::AssetInfo*)(void*)object;
+		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
 		return (UnknownPtr)(void*)(assetTreeNode->parent);
 	}
 
 	Vector<UnknownPtr> AssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
 	{
-		AssetsTree::AssetInfo* assetTreeNode = object;
+		AssetInfo* assetTreeNode = object;
 
 		if (assetTreeNode)
 		{
 			return assetTreeNode->children.
-				FindAll([](AssetsTree::AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
-				Select<UnknownPtr>([](AssetsTree::AssetInfo* x) { return UnknownPtr(x); });
+				FindAll([](AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
+				Select<UnknownPtr>([](AssetInfo* x) { return UnknownPtr(x); });
 		}
 		else
 		{
 			const AssetsTree& assetsTree = o2Assets.GetAssetsTree();
 
 			return assetsTree.rootAssets.
-				FindAll([](AssetsTree::AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
-				Select<UnknownPtr>([](AssetsTree::AssetInfo* x) { return UnknownPtr(x); });
+				FindAll([](AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
+				Select<UnknownPtr>([](AssetInfo* x) { return UnknownPtr(x); });
 		}
 	}
 
 	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, UnknownPtr object)
 	{
-		AssetsTree::AssetInfo* assetTreeNode = (AssetsTree::AssetInfo*)(void*)object;
+		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->name = pathName;
@@ -161,7 +161,7 @@ namespace Editor
 
 	void AssetsFoldersTree::OnFoldersTreeNodeDblClick(TreeNode* node)
 	{
-		AssetsTree::AssetInfo* assetTreeNode = (AssetsTree::AssetInfo*)(void*)node->GetObject();
+		AssetInfo* assetTreeNode = (AssetInfo*)(void*)node->GetObject();
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
 
 		node->SetState("edit", true);
@@ -193,7 +193,7 @@ namespace Editor
 
 		if (nodes.Count() > 0)
 		{
-			AssetsTree::AssetInfo* assetTreeNode = nodes.Last();
+			AssetInfo* assetTreeNode = nodes.Last();
 			mCurrentPath = assetTreeNode->path;
 			o2EditorAssets.mAssetsGridScroll->SetViewingPath(mCurrentPath);
 		}

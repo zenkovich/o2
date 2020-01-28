@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Render/Particle.h"
 #include "o2/Render/ParticlesEmitterShapes.h"
 #include "o2/Render/RectDrawable.h"

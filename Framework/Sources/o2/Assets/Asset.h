@@ -9,9 +9,9 @@ namespace o2
 {
 	class AssetInfo;
 
-	// ---------------------
-	// Basic asset interface
-	// ---------------------
+	// -------------------------------------------------------------------------------------------------
+	// Basic asset interface. Contains copy of asset, without caching. For regular use assets references
+	// -------------------------------------------------------------------------------------------------
 	class Asset : public ISerializable
 	{
 	public:
@@ -21,7 +21,7 @@ namespace o2
 		PROPERTIES(Asset);
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
-		GETTER(UID, id, GetUID);              // Asset id getter
+		GETTER(UID, id, GetUID);                  // Asset id getter
 		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
 
 	public:
@@ -85,6 +85,12 @@ namespace o2
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;
 
+		// Loads asset data, using DataNode and serialization
+		virtual void LoadData(const String& path);
+
+		// Saves asset data, using DataNode and serialization
+		virtual void SaveData(const String& path) const;
+
 		friend class AssetRef;
 		friend class Assets;
 		friend class AssetsBuilder;
@@ -129,6 +135,8 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, ID);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
 }
 END_META;
 

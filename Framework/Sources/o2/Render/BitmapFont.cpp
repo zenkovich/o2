@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "BitmapFont.h"
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "3rdPartyLibs/pugixml/pugixml.hpp"
 #include "o2/Render/Render.h"
 #include "o2/Utils/Serialization/DataNode.h"

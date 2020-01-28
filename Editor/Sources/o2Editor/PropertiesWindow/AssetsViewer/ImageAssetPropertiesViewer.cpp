@@ -1,7 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "ImageAssetPropertiesViewer.h"
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Texture.h"
 #include "o2/Scene/UI/UIManager.h"
@@ -176,22 +176,22 @@ namespace Editor
 		mTargetAssets = assets.Cast<ImageAssetRef*>();
 
 		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mSliceBorder); });
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->sliceBorder); });
 
 		mDefaultTypeProperty->SelectValuesPointers<int, ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->mDefaultMode);});
+			[](const ImageAssetRef* x) { return (int*)&((*x)->GetMeta()->defaultMode);});
 
 		mWindowsProperties->SelectValuesPointers<ImageAsset::PlatformMeta, ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mWindows); });
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->windows); });
 
 		mOSXProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mMacOS); });
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->macOS); });
 
 		mAndroidProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mAndroid); });
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->android); });
 
 		mIOSProperties->SelectValuesPointers<ImageAsset::PlatformMeta,  ImageAssetRef>(mTargetAssets,
-			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->mIOS); });
+			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->ios); });
 
 		mPreviewImage->imageAsset = *mTargetAssets.Last();
 		mPreviewImage->GetImage()->mode = SpriteMode::Default;

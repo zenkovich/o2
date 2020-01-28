@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/FontAsset.h"
+#include "o2/Assets/AssetTypes/FontAsset.h"
 #include "o2/Render/VectorFont.h"
 
 namespace o2
@@ -13,27 +13,18 @@ namespace o2
 	class VectorFontAsset: public FontAsset
 	{
 	public:
-		class MetaInfo;
+		class Meta;
 
 	public:
 		PROPERTIES(VectorFontAsset);
-		GETTER(MetaInfo*, meta, GetMeta); // Meta information getter
+		GETTER(Meta*, meta, GetMeta); // Meta information getter
 
 	public:
-		// Destructor
-		~VectorFontAsset();
-
 		// Check equals operator
 		VectorFontAsset& operator=(const VectorFontAsset& asset);
 
-		// Check equals operator
-		bool operator==(const VectorFontAsset& other) const;
-
-		// Check not equals operator
-		bool operator!=(const VectorFontAsset& other) const;
-
 		// Returns meta information
-		MetaInfo* GetMeta() const;
+		Meta* GetMeta() const;
 
 		// Returns font effects array 
 		const Vector<VectorFont::Effect*>& GetEffects() const;
@@ -60,19 +51,16 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public AssetMeta
+		class Meta: public TAssetMeta<VectorFontAsset>
 		{
 		public:
 			// Destructor
-			~MetaInfo();
-
-			// Returns asset type id
-			const Type* GetAssetType() const override;
+			~Meta();
 
 			// Returns true if other meta is equal to this
 			bool IsEqual(AssetMeta* other) const override;
 
-			SERIALIZABLE(MetaInfo);
+			SERIALIZABLE(Meta);
 
 		protected:
 			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE
@@ -84,12 +72,6 @@ namespace o2
 		// Default constructor
 		VectorFontAsset();
 
-		// Constructor by path - loads asset by path
-		VectorFontAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		VectorFontAsset(const UID& id);
-
 		// Copy-constructor
 		VectorFontAsset(const VectorFontAsset& asset);
 
@@ -99,66 +81,7 @@ namespace o2
 		friend class Assets;
 	};
 
-	// ---------------------------
-	// Vector font Asset reference
-	// ---------------------------
-	class VectorFontAssetRef: public FontAssetRef
-	{
-	public:
-		// Creates VectorFontAsset and returns reference to it
-		static VectorFontAssetRef CreateAsset();
-
-		// Default constructor, references to null
-		VectorFontAssetRef(): FontAssetRef() {}
-
-		// Copy-constructor
-		VectorFontAssetRef(const AssetRef& other): FontAssetRef(other) { CheckType<VectorFontAsset>(); }
-
-		// Copy-constructor
-		VectorFontAssetRef(const VectorFontAssetRef& other): FontAssetRef(other) {}
-
-		// Constructor from asset path
-		VectorFontAssetRef(const String& path): FontAssetRef(path) {}
-
-		// Constructor from asset id
-		VectorFontAssetRef(const UID& id): FontAssetRef(id) {}
-
-		// Destructor
-		~VectorFontAssetRef() {}
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const { return IsValid(); }
-
-		// Assign operator
-		VectorFontAssetRef& operator=(const VectorFontAssetRef& other) { AssetRef::operator=(other); return *this; }
-
-		// Getter operator
-		VectorFontAsset& operator*() { return *((VectorFontAsset*)mAssetPtr); }
-
-		// Constant getter operator
-		const VectorFontAsset& operator*() const { return *((VectorFontAsset*)mAssetPtr); }
-
-		// Asset members and field operator
-		VectorFontAsset* operator->() { return ((VectorFontAsset*)mAssetPtr); }
-
-		// Constant asset members and field operator
-		const VectorFontAsset* operator->() const { return ((VectorFontAsset*)mAssetPtr); }
-
-		// Check equals operator
-		bool operator==(const VectorFontAssetRef& other) const { return AssetRef::operator==(other); }
-
-		// Check not equals operator
-		bool operator!=(const VectorFontAssetRef& other) const { return AssetRef::operator!=(other); }
-
-		// Returns asset type
-		const Type& GetAssetType() const override { return TypeOf(VectorFontAsset); }
-
-		SERIALIZABLE(VectorFontAssetRef);
-
-	protected:
-		// Constructor for Assets manager
-		VectorFontAssetRef(Asset* assetPtr, int* refCounter): FontAssetRef(assetPtr, refCounter) {}
-	};
+	typedef Ref<VectorFontAsset> VectorFontAssetRef;
 
 	template<typename _type, typename ... _args>
 	void VectorFontAsset::AddEffect(_args ... args)
@@ -180,7 +103,7 @@ END_META;
 CLASS_METHODS_META(o2::VectorFontAsset)
 {
 
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(const Vector<VectorFont::Effect*>&, GetEffects);
 	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
 	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
@@ -190,37 +113,19 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 }
 END_META;
 
-CLASS_BASES_META(o2::VectorFontAssetRef)
+CLASS_BASES_META(o2::VectorFontAsset::Meta)
 {
-	BASE_CLASS(o2::FontAssetRef);
+	BASE_CLASS(o2::TAssetMeta<VectorFontAsset>);
 }
 END_META;
-CLASS_FIELDS_META(o2::VectorFontAssetRef)
-{
-}
-END_META;
-CLASS_METHODS_META(o2::VectorFontAssetRef)
-{
-
-	PUBLIC_STATIC_FUNCTION(VectorFontAssetRef, CreateAsset);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_BASES_META(o2::VectorFontAsset::MetaInfo)
-{
-	BASE_CLASS(o2::AssetMeta);
-}
-END_META;
-CLASS_FIELDS_META(o2::VectorFontAsset::MetaInfo)
+CLASS_FIELDS_META(o2::VectorFontAsset::Meta)
 {
 	PROTECTED_FIELD(mEffects).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::VectorFontAsset::MetaInfo)
+CLASS_METHODS_META(o2::VectorFontAsset::Meta)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
 }
 END_META;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Render/Camera.h"
 #include "o2/Render/FontRef.h"
 #include "o2/Render/Mesh.h"

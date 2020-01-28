@@ -64,9 +64,7 @@ namespace o2
 			return;
 		}
 
-		DataNode data;
-		data.LoadFromFile(GetFullPath());
-		Deserialize(data);
+		LoadData(GetFullPath());
 	}
 
 	void Asset::Load(const UID& id)
@@ -79,9 +77,7 @@ namespace o2
 			return;
 		}
 
-		DataNode data;
-		data.LoadFromFile(GetFullPath());
-		Deserialize(data);
+		LoadData(GetFullPath());
 	}
 
 	void Asset::Save(const String& path, bool rebuildAssetsImmediately /*= true*/)
@@ -107,9 +103,7 @@ namespace o2
 		metaData = mInfo.meta;
 		metaData.SaveToFile(GetMetaFullPath());
 
-		DataNode data;
-		data.LoadFromFile(GetFullPath());
-		Deserialize(data);
+		SaveData(GetFullPath());
 
 		if (rebuildAssetsImmediately)
 			o2Assets.RebuildAssets();
@@ -139,6 +133,20 @@ namespace o2
 	{
 		return o2Assets.mLog;
 	}
+
+	void Asset::LoadData(const String& path)
+	{
+		DataNode data;
+		data.LoadFromFile(path);
+		Deserialize(data);
+	}
+
+	void Asset::SaveData(const String& path) const
+	{
+		DataNode data = Serialize();
+		data.SaveToFile(path);
+	}
+
 }
 
 DECLARE_CLASS(o2::Asset);

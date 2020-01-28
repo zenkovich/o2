@@ -75,21 +75,21 @@ namespace o2
 		friend class Assets;
 	};
 
-	template<typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type>
-	class Ref: public AssetRef
+	template<typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>
+	class Ref : public AssetRef
 	{
 	public:
 		// Default constructor, references to null
-		Ref(): AssetRef() {}
+		Ref() : AssetRef() {}
 
 		// Copy-constructor
-		Ref(const AssetRef& other): AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const AssetRef& other) : AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Constructor from asset path
-		Ref(const String& path): AssetRef(path) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const String& path) : AssetRef(path) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Constructor from asset id
-		Ref(const UID& id): AssetRef(id) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const UID& id) : AssetRef(id) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const { return IsValid(); }
@@ -97,7 +97,7 @@ namespace o2
 		// Assign operator
 		Ref<T>& operator=(const Ref<T>& other)
 		{
-			AssetRef::operator=(other); 
+			AssetRef::operator=(other);
 			mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr);
 			return *this;
 		}
@@ -122,6 +122,8 @@ namespace o2
 
 		// Returns asset type
 		virtual const Type& GetAssetType() const { return TypeOf(T); }
+
+		static Ref<T> CreateAsset() { return o2Assets.CreateAsset<T>(); }
 
 		SERIALIZABLE(Ref<T>);
 
@@ -152,22 +154,23 @@ CLASS_METHODS_META(o2::AssetRef)
 }
 END_META;
 
-META_TEMPLATES(typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type)
-CLASS_BASES_META(o2::Ref<T, std::enable_if<std::is_base_of<Asset, T>::value>::type>)
+META_TEMPLATES(typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type)
+CLASS_BASES_META(o2::Ref<T, X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>)
 {
 	BASE_CLASS(o2::AssetRef);
 }
 END_META;
-META_TEMPLATES(typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type)
-CLASS_FIELDS_META(o2::Ref<T, std::enable_if<std::is_base_of<Asset, T>::value>::type>)
+META_TEMPLATES(typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type)
+CLASS_FIELDS_META(o2::Ref<T, X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>)
 {
 	PROTECTED_FIELD(mSpecAssetPtr);
 }
 END_META;
-META_TEMPLATES(typename T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type)
-CLASS_METHODS_META(o2::Ref<T, std::enable_if<std::is_base_of<Asset, T>::value>::type>)
+META_TEMPLATES(typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type)
+CLASS_METHODS_META(o2::Ref<T, X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>)
 {
 
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
+	PUBLIC_STATIC_FUNCTION(Ref<T>, CreateAsset);
 }
 END_META;

@@ -244,6 +244,8 @@ namespace o2
 
 							mBuiltAssetsTree.RemoveAsset(builtAssetInfo, false);
 
+							mLog->Out("Modified and moved to " + sourceAssetInfo->path + " asset: " + builtAssetInfo->path);
+
 							builtAssetInfo->path = sourceAssetInfo->path;
 							builtAssetInfo->editTime = sourceAssetInfo->editTime;
 
@@ -251,25 +253,24 @@ namespace o2
 							builtAssetInfo->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
 
 							GetAssetConverter(sourceAssetInfo->assetType)->ConvertAsset(*sourceAssetInfo);
-							mLog->Out("Modified and moved to " + sourceAssetInfo->path + " asset: " + builtAssetInfo->path);
 
 							mModifiedAssets.Add(sourceAssetInfo->meta->ID());
-
 							mBuiltAssetsTree.AddAsset(builtAssetInfo);
 						}
 						else
 						{
 							GetAssetConverter(sourceAssetInfo->assetType)->MoveAsset(*builtAssetInfo, *sourceAssetInfo);
-							mModifiedAssets.Add(sourceAssetInfo->id);
-							mLog->Out("Moved asset: " + builtAssetInfo->path + " to " + sourceAssetInfo->path);
+							mLog->Out("Moved asset from " + builtAssetInfo->path + " to " + sourceAssetInfo->path);
 
 							mBuiltAssetsTree.RemoveAsset(builtAssetInfo, false);
 
 							builtAssetInfo->path = sourceAssetInfo->path;
 							builtAssetInfo->editTime = sourceAssetInfo->editTime;
+
 							delete builtAssetInfo->meta;
 							builtAssetInfo->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
 
+							mModifiedAssets.Add(sourceAssetInfo->meta->ID());
 							mBuiltAssetsTree.AddAsset(builtAssetInfo);
 						}
 					}
@@ -291,38 +292,31 @@ namespace o2
 		{
 			for (auto sourceAssetInfoIt = mSourceAssetsTree.allAssets.Begin(); sourceAssetInfoIt != mSourceAssetsTree.allAssets.End(); ++sourceAssetInfoIt)
 			{
-				bool isFolder = (*sourceAssetInfoIt)->assetType == folderType;
+				auto sourceAssetInfo = *sourceAssetInfoIt;
+
+				bool isFolder = sourceAssetInfo->assetType == folderType;
 				bool skip = pass == 0 ? !isFolder : isFolder;
 
 				if (skip)
 					continue;
 
-				bool isNew = true;
-				for (auto builtAssetInfo : mBuiltAssetsTree.allAssets)
-				{
-					if ((*sourceAssetInfoIt)->path == builtAssetInfo->path &&
-						(*sourceAssetInfoIt)->meta->ID() == builtAssetInfo->meta->ID())
-					{
-						isNew = false;
-						break;
-					}
-				}
+				auto fnd = mBuiltAssetsTree.allAssetsByUID.find(sourceAssetInfo->meta->ID());
+				bool isNew = !(fnd != mBuiltAssetsTree.allAssetsByUID.end() && fnd->second->path != sourceAssetInfo->path);
 
 				if (!isNew)
 					continue;
 
-				GetAssetConverter((*sourceAssetInfoIt)->assetType)->ConvertAsset(**sourceAssetInfoIt);
+				GetAssetConverter(sourceAssetInfo->assetType)->ConvertAsset(*sourceAssetInfo);
 
-				mModifiedAssets.Add((*sourceAssetInfoIt)->id);
+				mModifiedAssets.Add(sourceAssetInfo->meta->ID());
 
-				mLog->Out("New asset: " + (*sourceAssetInfoIt)->path);
+				mLog->Out("New asset: " + sourceAssetInfo->path);
 
 				AssetInfo* newBuiltAsset = mnew AssetInfo();
-				newBuiltAsset->path = (*sourceAssetInfoIt)->path;
-				newBuiltAsset->assetType = (*sourceAssetInfoIt)->assetType;
-				newBuiltAsset->editTime = (*sourceAssetInfoIt)->editTime;
-				newBuiltAsset->meta = (*sourceAssetInfoIt)->meta->CloneAs<AssetMeta>();
-				newBuiltAsset->id = newBuiltAsset->meta->ID();
+				newBuiltAsset->path = sourceAssetInfo->path;
+				newBuiltAsset->assetType = sourceAssetInfo->assetType;
+				newBuiltAsset->editTime = sourceAssetInfo->editTime;
+				newBuiltAsset->meta = sourceAssetInfo->meta->CloneAs<AssetMeta>();
 
 				mBuiltAssetsTree.AddAsset(newBuiltAsset);
 			}

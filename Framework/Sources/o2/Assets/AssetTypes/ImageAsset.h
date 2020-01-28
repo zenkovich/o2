@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/AtlasAsset.h"
+#include "o2/Assets/AssetTypes/AtlasAsset.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 
@@ -10,23 +10,26 @@ namespace o2
 	// -----------
 	// Image asset
 	// -----------
-	class ImageAsset: public Asset
+	class ImageAsset: public TAsset<ImageAsset>
 	{
 	public:
-		class MetaInfo;
+		class Meta;
 
 	public:
 		PROPERTIES(ImageAsset);
-		PROPERTY(Bitmap*, bitmap, SetBitmap, GetBitmap);                // Bitmap data property
-		PROPERTY(UID, atlasId, SetAtlasId, GetAtlasId);                 // Atlas owner id property
-		PROPERTY(AtlasAssetRef, atlas, SetAtlas, GetAtlas);             // Atlas owner asset property
+		PROPERTY(Bitmap*, bitmap, SetBitmap, GetBitmap); // Bitmap data property
+
 		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder); // Slice border
-		GETTER(UInt, atlasPage, GetAtlasPage);                          // Atlas page index getter
-		GETTER(RectI, atlasRect, GetAtlasRect);                         // Atlas source image rectangle getter
-		GETTER(Vec2F, size, GetSize);                                   // Image size getter
-		GETTER(float, width, GetWidth);                                 // Image width getter
-		GETTER(float, height, GetHeight);                               // Image height getter
-		GETTER(MetaInfo*, meta, GetMeta);                               // Meta information getter
+
+		PROPERTY(AtlasAssetRef, atlas, SetAtlas, GetAtlas); // Atlas owner asset property
+		GETTER(UInt, atlasPage, GetAtlasPage);              // Atlas page index getter
+		GETTER(RectI, atlasRect, GetAtlasRect);             // Atlas source image rectangle getter
+
+		GETTER(Vec2F, size, GetSize);     // Image size getter
+		GETTER(float, width, GetWidth);   // Image width getter
+		GETTER(float, height, GetHeight); // Image height getter
+
+		GETTER(Meta*, meta, GetMeta); // Meta information getter
 
 	public:
 		// Destructor
@@ -35,23 +38,11 @@ namespace o2
 		// Check equals operator
 		ImageAsset& operator=(const ImageAsset& asset);
 
-		// Check equals operator
-		bool operator==(const ImageAsset& other) const;
-
-		// Check not equals operator
-		bool operator!=(const ImageAsset& other) const;
-
 		// Returns bitmap data
 		Bitmap* GetBitmap();
 
 		// Sets bitmap data
 		void SetBitmap(Bitmap* bitmap);
-
-		// Returns atlas id
-		const UID& GetAtlasId() const;
-
-		// Sets atlas id
-		void SetAtlasId(const UID& id);
 
 		// Returns atlas asset
 		AtlasAssetRef GetAtlas() const;
@@ -84,7 +75,7 @@ namespace o2
 		TextureRef GetAtlasTextureRef() const;
 
 		// Returns meta information
-		MetaInfo* GetMeta() const;
+		Meta* GetMeta() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
@@ -97,9 +88,9 @@ namespace o2
 		// -----------------------
 		struct PlatformMeta: public ISerializable
 		{
-			Vec2I  mMaxSize; // Maximum image size @SERIALIZABLE
-			Vec2F  mScale;   // Image scale ((1; 1) - is default) @SERIALIZABLE
-			String mFormat;  // Image format @SERIALIZABLE
+			Vec2I  maxSize; // Maximum image size @SERIALIZABLE
+			Vec2F  scale;   // Image scale ((1; 1) - is default) @SERIALIZABLE
+			String format;  // Image format @SERIALIZABLE
 
 			bool operator==(const PlatformMeta& other) const;
 
@@ -109,50 +100,38 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public AssetMeta
+		class Meta: public TAssetMeta<ImageAsset>
 		{
 		public:
-			UID          mAtlasId;     // Atlas owner id @SERIALIZABLE
-			PlatformMeta mIOS;         // IOS specified meta @SERIALIZABLE
-			PlatformMeta mAndroid;     // Android specified meta @SERIALIZABLE
-			PlatformMeta mMacOS;       // MacOS specified meta @SERIALIZABLE
-			PlatformMeta mWindows;     // Windows specified meta @SERIALIZABLE
-			BorderI      mSliceBorder; // Default slice border @SERIALIZABLE
-			SpriteMode   mDefaultMode; // Default sprite mode @SERIALIZABLE
+			UID          atlasId;     // Atlas owner id @SERIALIZABLE
+			PlatformMeta ios;         // IOS specified meta @SERIALIZABLE
+			PlatformMeta android;     // Android specified meta @SERIALIZABLE
+			PlatformMeta macOS;       // MacOS specified meta @SERIALIZABLE
+			PlatformMeta windows;     // Windows specified meta @SERIALIZABLE
+			BorderI      sliceBorder; // Default slice border @SERIALIZABLE
+			SpriteMode   defaultMode; // Default sprite mode @SERIALIZABLE
 
 		public:
-			// Returns asset type id
-			const Type* GetAssetType() const override;
-
 			// Returns true if other meta is equal to this
 			bool IsEqual(AssetMeta* other) const override;
 
-			SERIALIZABLE(MetaInfo);
+			SERIALIZABLE(Meta);
 		};
 
 	protected:
 		Bitmap* mBitmap;    // Image bitmap. Loading only when needs
-		UInt    mAtlasPage; // Owner atlas page index
-		RectI   mAtlasRect; // Owner atlas rectange
+		UInt    mAtlasPage; // Owner atlas page index @SERIALIZABLE
+		RectI   mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
 		// Default constructor
 		ImageAsset();
 
-		// Constructor by path - loads asset by path
-		ImageAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		ImageAsset(const UID& id);
-
 		// Copy-constructor
 		ImageAsset(const ImageAsset& asset);
 
-		// Loads data
-		void LoadData(const String& path) override;
-
 		// Saves data
-		void SaveData(const String& path) override;
+		void SaveData(const String& path) const override;
 
 		// Load bitmap
 		void LoadBitmap();
@@ -161,79 +140,19 @@ namespace o2
 		friend class Assets;
 	};
 
-	// ---------------------
-	// Image Asset reference
-	// ---------------------
-	class ImageAssetRef: public AssetRef
-	{
-	public:
-		// Creates ImageAsset and returns reference to it
-		static ImageAssetRef CreateAsset();
-
-		// Default constructor, references to null
-		ImageAssetRef(): AssetRef() {}
-
-		// Constructor from asset reference
-		ImageAssetRef(const AssetRef& other): AssetRef(other) { CheckType<ImageAsset>(); }
-
-		// Copy-constructor
-		ImageAssetRef(const ImageAssetRef& other): AssetRef(other) {}
-
-		// Constructor from asset path
-		ImageAssetRef(const String& path): AssetRef(path) {}
-
-		// Constructor from asset id
-		ImageAssetRef(const UID& id): AssetRef(id) {}
-
-		// Destructor
-		~ImageAssetRef() {}
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const { return IsValid(); }
-
-		// Assign operator
-		ImageAssetRef& operator=(const ImageAssetRef& other) { AssetRef::operator=(other); return *this; }
-
-		// Getter operator
-		ImageAsset& operator*() { return *((ImageAsset*)mAssetPtr); }
-
-		// Constant getter operator
-		const ImageAsset& operator*() const { return *((ImageAsset*)mAssetPtr); }
-
-		// Asset members and field operator
-		ImageAsset* operator->() { return ((ImageAsset*)mAssetPtr); }
-
-		// Constant asset members and field operator
-		const ImageAsset* operator->() const { return ((ImageAsset*)mAssetPtr); }
-
-		// Check equals operator
-		bool operator==(const ImageAssetRef& other) const { return AssetRef::operator==(other); }
-
-		// Check not equals operator
-		bool operator!=(const ImageAssetRef& other) const { return AssetRef::operator!=(other); }
-
-		// Returns asset type
-		const Type& GetAssetType() const override { return TypeOf(ImageAsset); }
-
-		SERIALIZABLE(ImageAssetRef);
-
-	protected:
-		// Constructor for Assets manager
-		ImageAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
-	};
+	typedef Ref<ImageAsset> ImageAssetRef;
 }
 
 CLASS_BASES_META(o2::ImageAsset)
 {
-	BASE_CLASS(o2::Asset);
+	BASE_CLASS(o2::TAsset<ImageAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::ImageAsset)
 {
 	PUBLIC_FIELD(bitmap);
-	PUBLIC_FIELD(atlasId);
-	PUBLIC_FIELD(atlas);
 	PUBLIC_FIELD(sliceBorder);
+	PUBLIC_FIELD(atlas);
 	PUBLIC_FIELD(atlasPage);
 	PUBLIC_FIELD(atlasRect);
 	PUBLIC_FIELD(size);
@@ -241,8 +160,8 @@ CLASS_FIELDS_META(o2::ImageAsset)
 	PUBLIC_FIELD(height);
 	PUBLIC_FIELD(meta);
 	PROTECTED_FIELD(mBitmap);
-	PROTECTED_FIELD(mAtlasPage);
-	PROTECTED_FIELD(mAtlasRect);
+	PROTECTED_FIELD(mAtlasPage).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAtlasRect).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ImageAsset)
@@ -250,8 +169,6 @@ CLASS_METHODS_META(o2::ImageAsset)
 
 	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
 	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
-	PUBLIC_FUNCTION(const UID&, GetAtlasId);
-	PUBLIC_FUNCTION(void, SetAtlasId, const UID&);
 	PUBLIC_FUNCTION(AtlasAssetRef, GetAtlas);
 	PUBLIC_FUNCTION(void, SetAtlas, const AtlasAssetRef&);
 	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
@@ -262,28 +179,10 @@ CLASS_METHODS_META(o2::ImageAsset)
 	PUBLIC_FUNCTION(float, GetWidth);
 	PUBLIC_FUNCTION(float, GetHeight);
 	PUBLIC_FUNCTION(TextureRef, GetAtlasTextureRef);
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 	PROTECTED_FUNCTION(void, LoadBitmap);
-}
-END_META;
-
-CLASS_BASES_META(o2::ImageAssetRef)
-{
-	BASE_CLASS(o2::AssetRef);
-}
-END_META;
-CLASS_FIELDS_META(o2::ImageAssetRef)
-{
-}
-END_META;
-CLASS_METHODS_META(o2::ImageAssetRef)
-{
-
-	PUBLIC_STATIC_FUNCTION(ImageAssetRef, CreateAsset);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
 }
 END_META;
 
@@ -294,9 +193,9 @@ CLASS_BASES_META(o2::ImageAsset::PlatformMeta)
 END_META;
 CLASS_FIELDS_META(o2::ImageAsset::PlatformMeta)
 {
-	PUBLIC_FIELD(mMaxSize).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mScale).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mFormat).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(maxSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(scale).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(format).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ImageAsset::PlatformMeta)
@@ -304,26 +203,25 @@ CLASS_METHODS_META(o2::ImageAsset::PlatformMeta)
 }
 END_META;
 
-CLASS_BASES_META(o2::ImageAsset::MetaInfo)
+CLASS_BASES_META(o2::ImageAsset::Meta)
 {
-	BASE_CLASS(o2::AssetMeta);
+	BASE_CLASS(o2::TAssetMeta<ImageAsset>);
 }
 END_META;
-CLASS_FIELDS_META(o2::ImageAsset::MetaInfo)
+CLASS_FIELDS_META(o2::ImageAsset::Meta)
 {
-	PUBLIC_FIELD(mAtlasId).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mIOS).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mAndroid).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mMacOS).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mWindows).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mSliceBorder).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mDefaultMode).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(atlasId).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(ios).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(android).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(macOS).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(sliceBorder).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(defaultMode).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
-CLASS_METHODS_META(o2::ImageAsset::MetaInfo)
+CLASS_METHODS_META(o2::ImageAsset::Meta)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
 }
 END_META;

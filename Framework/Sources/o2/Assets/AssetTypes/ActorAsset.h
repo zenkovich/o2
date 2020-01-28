@@ -9,14 +9,13 @@ namespace o2
 	// -----------
 	// Actor asset
 	// -----------
-	class ActorAsset: public Asset
+	class ActorAsset: public TAsset<ActorAsset>
 	{
 	public:
-		class MetaInfo;
+		class Meta;
 
-	public:
 		PROPERTIES(ActorAsset);
-		GETTER(MetaInfo*, meta, GetMeta);  // Meta information getter
+		GETTER(Meta*, meta, GetMeta);  // Meta information getter
 
 	public:
 		// Destructor
@@ -25,14 +24,8 @@ namespace o2
 		// Check equals operator
 		ActorAsset& operator=(const ActorAsset& asset);
 
-		// Check equals operator
-		bool operator==(const ActorAsset& other) const;
-
-		// Check not equals operator
-		bool operator!=(const ActorAsset& other) const;
-
 		// Returns meta information
-		MetaInfo* GetMeta() const;
+		Meta* GetMeta() const;
 
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
@@ -46,17 +39,14 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class MetaInfo: public AssetMeta
+		class Meta: public TAssetMeta<ActorAsset>
 		{
 		public:
-			// Returns asset type id
-			const Type* GetAssetType() const override;
-
-			SERIALIZABLE(MetaInfo);
+			SERIALIZABLE(Meta);
 		};
 
 	protected:
-		Actor* mActor; // Asset data
+		Actor* mActor = mnew Actor(ActorCreateMode::NotInScene); // Asset data @SERIALIZABLE
 
 	protected:
 		// Default constructor
@@ -64,135 +54,41 @@ namespace o2
 
 		// Copy-constructor
 		ActorAsset(const ActorAsset& other);
-
-		// Constructor by path - loads asset by path
-		ActorAsset(const String& path);
-
-		// Constructor by id - loads asset by id
-		ActorAsset(const UID& id);
-
-		// Loads data
-		void LoadData(const String& path) override;
-
-		// Saves data
-		void SaveData(const String& path) override;
-
-		friend class Assets;
 	};
 
-	// ---------------------
-	// Actor Asset reference
-	// ---------------------
-	class ActorAssetRef: public AssetRef
-	{
-	public:
-		// Creates ActorAsset and returns reference to it
-		static ActorAssetRef CreateAsset();
-
-		// Default constructor, references to null
-		ActorAssetRef(): AssetRef() {}
-
-		// Copy-constructor
-		ActorAssetRef(const AssetRef& other): AssetRef(other) { CheckType<ActorAsset>(); }
-
-		// Copy-constructor
-		ActorAssetRef(const ActorAssetRef& other): AssetRef(other) {}
-
-		// Constructor from asset path
-		ActorAssetRef(const String& path): AssetRef(path) {}
-
-		// Constructor from asset id
-		ActorAssetRef(const UID& id): AssetRef(id) {}
-
-		// Destructor
-		~ActorAssetRef() {}
-
-		// Boolean cast operator, true means that reference is valid
-		operator bool() const { return IsValid(); }
-
-		// Assign operator
-		ActorAssetRef& operator=(const ActorAssetRef& other) { AssetRef::operator=(other); return *this; }
-
-		// Getter operator
-		ActorAsset& operator*() { return *((ActorAsset*)mAssetPtr); }
-
-		// Constant getter operator
-		const ActorAsset& operator*() const { return *((ActorAsset*)mAssetPtr); }
-
-		// Asset members and field operator
-		ActorAsset* operator->() { return ((ActorAsset*)mAssetPtr); }
-
-		// Constant asset members and field operator
-		const ActorAsset* operator->() const { return ((ActorAsset*)mAssetPtr); }
-
-		// Check equals operator
-		bool operator==(const ActorAssetRef& other) const { return AssetRef::operator==(other); }
-
-		// Check not equals operator
-		bool operator!=(const ActorAssetRef& other) const { return AssetRef::operator!=(other); }
-
-		// Returns asset type
-		const Type& GetAssetType() const override { return TypeOf(ActorAsset); }
-
-		SERIALIZABLE(ActorAssetRef);
-
-	protected:
-		// Constructor for Assets manager
-		ActorAssetRef(Asset* assetPtr, int* refCounter): AssetRef(assetPtr, refCounter) {}
-	};
+	typedef Ref<ActorAsset> ActorAssetRef;
 }
 
 CLASS_BASES_META(o2::ActorAsset)
 {
-	BASE_CLASS(o2::Asset);
+	BASE_CLASS(o2::TAsset<ActorAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::ActorAsset)
 {
 	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mActor);
+	PROTECTED_FIELD(mActor).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ActorAsset)
 {
 
-	PUBLIC_FUNCTION(MetaInfo*, GetMeta);
+	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_FUNCTION(Actor*, GetActor);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
 }
 END_META;
 
-CLASS_BASES_META(o2::ActorAssetRef)
+CLASS_BASES_META(o2::ActorAsset::Meta)
 {
-	BASE_CLASS(o2::AssetRef);
+	BASE_CLASS(o2::TAssetMeta<ActorAsset>);
 }
 END_META;
-CLASS_FIELDS_META(o2::ActorAssetRef)
-{
-}
-END_META;
-CLASS_METHODS_META(o2::ActorAssetRef)
-{
-
-	PUBLIC_STATIC_FUNCTION(ActorAssetRef, CreateAsset);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-}
-END_META;
-
-CLASS_BASES_META(o2::ActorAsset::MetaInfo)
-{
-	BASE_CLASS(o2::AssetMeta);
-}
-END_META;
-CLASS_FIELDS_META(o2::ActorAsset::MetaInfo)
+CLASS_FIELDS_META(o2::ActorAsset::Meta)
 {
 }
 END_META;
-CLASS_METHODS_META(o2::ActorAsset::MetaInfo)
+CLASS_METHODS_META(o2::ActorAsset::Meta)
 {
-
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
 }
 END_META;

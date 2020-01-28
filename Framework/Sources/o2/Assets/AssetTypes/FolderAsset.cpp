@@ -6,100 +6,43 @@
 
 namespace o2
 {
-	const Type* FolderAsset::MetaInfo::GetAssetType() const
-	{
-		return &TypeOf(FolderAsset);
-	}
-
 	FolderAsset::FolderAsset():
-		Asset()
-	{
-		mMeta = mnew MetaInfo();
-	}
-
-	FolderAsset::FolderAsset(const String& path):
-		Asset()
-	{
-		mPath = path;
-		mMeta = mnew MetaInfo();
-		ID() = o2Assets.GetAssetId(path);
-
-		Load();
-	}
-
-	FolderAsset::FolderAsset(const UID& id)
-	{
-		mMeta = mnew MetaInfo();
-		ID() = id;
-		mPath = o2Assets.GetAssetPath(id);
-
-		Load();
-	}
+	{}
 
 	FolderAsset::FolderAsset(const FolderAsset& asset):
-		Asset(asset), mContainingAssetsInfos(asset.mContainingAssetsInfos), meta(this), insideAssets(this)
-	{
-		mMeta = mnew MetaInfo();
-		mPath = asset.mPath;
-		ID() = asset.GetUID();
-	}
-
-	FolderAsset::~FolderAsset()
+		TAsset(asset), meta(this), insideAssets(this)
 	{}
 
 	FolderAsset& FolderAsset::operator=(const FolderAsset& asset)
 	{
 		Asset::operator=(asset);
-		mContainingAssetsInfos = asset.mContainingAssetsInfos;
-		*mMeta = *(MetaInfo*)(asset.mMeta);
 		return *this;
 	}
 
-	bool FolderAsset::operator==(const FolderAsset& other) const
+	Vector<AssetRef> FolderAsset::GetContainingAssetsInfos() const
 	{
-		return mMeta->IsEqual(other.mMeta);
+		Vector<AssetRef> res;
+		for (auto asset : mInfo.children)
+			res.Add(AssetRef(asset->meta->ID()));
+
+		return res;
 	}
 
-	bool FolderAsset::operator!=(const FolderAsset& other) const
+	FolderAsset::Meta* FolderAsset::GetMeta() const
 	{
-		return !mMeta->IsEqual(other.mMeta);
-	}
-
-	Vector<AssetInfo> FolderAsset::GetContainingAssetsInfos() const
-	{
-		return mContainingAssetsInfos;
-	}
-
-	FolderAsset::MetaInfo* FolderAsset::GetMeta() const
-	{
-		return (MetaInfo*)mMeta;
+		return (Meta*)mInfo.meta;
 	}
 
 	void FolderAsset::LoadData(const String& path)
-	{
-		auto folderAssetInfo = o2Assets.mAssetsTree.Find(mPath);
-		if (folderAssetInfo)
-		{
-			mContainingAssetsInfos = folderAssetInfo->children.Select<AssetInfo>(
-				[&](AssetsTree::AssetInfo* asset) { return (AssetInfo)(*asset); });
-		}
-	}
+	{}
 
-	void FolderAsset::SaveData(const String& path)
+	void FolderAsset::SaveData(const String& path) const
 	{
 		if (!o2FileSystem.IsFolderExist(path))
 			o2FileSystem.FolderCreate(path);
 	}
-
-	FolderAssetRef FolderAssetRef::CreateAsset()
-	{
-		return o2Assets.CreateAsset<FolderAsset>();
-	}
-
 }
 
 DECLARE_CLASS(o2::FolderAsset);
 
-DECLARE_CLASS(o2::FolderAssetRef);
-
-DECLARE_CLASS(o2::FolderAsset::MetaInfo);
+DECLARE_CLASS(o2::FolderAsset::Meta);

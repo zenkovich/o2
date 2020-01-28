@@ -7,45 +7,11 @@
 
 namespace o2
 {
-	const Type* FontAsset::MetaInfo::GetAssetType() const
-	{
-		return &TypeOf(FontAsset);
-	}
+	FontAsset::FontAsset()
+	{}
 
-	FontAsset::FontAsset() :
-		Asset()
-	{
-		mMeta = mnew MetaInfo();
-	}
-
-	FontAsset::FontAsset(const String& path) :
-		Asset()
-	{
-		mPath = path;
-		mMeta = mnew MetaInfo();
-		ID() = o2Assets.GetAssetId(path);
-
-		Load();
-	}
-
-	FontAsset::FontAsset(const UID& id)
-	{
-		mMeta = mnew MetaInfo();
-		ID() = id;
-		mPath = o2Assets.GetAssetPath(id);
-
-		Load();
-	}
-
-	FontAsset::FontAsset(const FontAsset& asset) :
-		Asset(asset), mFont(asset.mFont), meta(this), font(this)
-	{
-		mMeta = mnew MetaInfo();
-		mPath = asset.mPath;
-		ID() = asset.GetUID();
-	}
-
-	FontAsset::~FontAsset()
+	FontAsset::FontAsset(const FontAsset& other) :
+		TAsset(other), mFont(other.mFont), font(this)
 	{}
 
 	FontRef FontAsset::GetFont() const
@@ -53,46 +19,17 @@ namespace o2
 		return mFont;
 	}
 
-	FontAsset& FontAsset::operator=(const FontAsset& asset)
+	FontAsset& FontAsset::operator=(const FontAsset& other)
 	{
-		Asset::operator=(asset);
-		mFont = asset.mFont;
-		*mMeta = *(MetaInfo*)(asset.mMeta);
+		Asset::operator=(other);
+		mFont = other.mFont;
 		return *this;
-	}
-
-	bool FontAsset::operator==(const FontAsset& other) const
-	{
-		return mMeta->IsEqual(other.mMeta);
-	}
-
-	bool FontAsset::operator!=(const FontAsset& other) const
-	{
-		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	const char* FontAsset::GetFileExtensions() const
 	{
 		return "ufnt";
 	}
-
-	FontAsset::MetaInfo* FontAsset::GetMeta() const
-	{
-		return (MetaInfo*)mMeta;
-	}
-
-	void FontAsset::LoadData(const String& path)
-	{}
-
-	FontAssetRef FontAssetRef::CreateAsset()
-	{
-		return o2Assets.CreateAsset<FontAsset>();
-	}
-
 }
 
 DECLARE_CLASS(o2::FontAsset);
-
-DECLARE_CLASS(o2::FontAssetRef);
-
-DECLARE_CLASS(o2::FontAsset::MetaInfo);

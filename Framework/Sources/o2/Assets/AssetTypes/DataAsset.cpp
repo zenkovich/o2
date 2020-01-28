@@ -5,76 +5,31 @@
 
 namespace o2
 {
-
 	DataAsset::DataAsset():
-		Asset()
+	{}
+
+	DataAsset::DataAsset(const DataAsset& other):
+		TAsset(other), data(other.data), meta(this)
 	{
-		mMeta = mnew MetaInfo();
-	}
-
-	DataAsset::DataAsset(const String& path):
-		Asset()
-	{
-		mPath = path;
-		mMeta = mnew MetaInfo();
-		ID() = o2Assets.GetAssetId(path);
-
-		Load();
-	}
-
-	DataAsset::DataAsset(const UID& id):
-		Asset()
-	{
-		mMeta = mnew MetaInfo();
-		ID() = id;
-		mPath = o2Assets.GetAssetPath(id);
-
-		Load();
-	}
-
-	DataAsset::DataAsset(const DataAsset& asset):
-		Asset(asset), meta(this)
-	{
-		mMeta = mnew MetaInfo();
-		mPath = asset.mPath;
-		ID() = asset.GetUID();
-
-		data = asset.data;
-	}
-
-	DataAsset::~DataAsset()
-	{
+		data = other.data;
 	}
 
 	DataAsset& DataAsset::operator=(const DataAsset& asset)
 	{
 		Asset::operator=(asset);
-
 		data = asset.data;
-
-		*mMeta = *(MetaInfo*)(asset.mMeta);
 
 		return *this;
 	}
 
-	bool DataAsset::operator==(const DataAsset& other) const
+	DataAsset::Meta* DataAsset::GetMeta() const
 	{
-		return mMeta->IsEqual(other.mMeta);
-	}
-
-	bool DataAsset::operator!=(const DataAsset& other) const
-	{
-		return !mMeta->IsEqual(other.mMeta);
-	}
-
-	DataAsset::MetaInfo* DataAsset::GetMeta() const
-	{
-		return (MetaInfo*)mMeta;
+		return (Meta*)mInfo.meta;
 	}
 
 	const char* DataAsset::GetFileExtensions() const
 	{
-		return "xml cfg";
+		return "xml";
 	}
 
 	void DataAsset::LoadData(const String& path)
@@ -83,25 +38,12 @@ namespace o2
 		data.LoadFromFile(path);
 	}
 
-	void DataAsset::SaveData(const String& path)
+	void DataAsset::SaveData(const String& path) const
 	{
 		data.SaveToFile(path);
 	}
-
-	const Type* DataAsset::MetaInfo::GetAssetType() const
-	{
-		return &TypeOf(DataAsset);
-	}
-
-	DataAssetRef DataAssetRef::CreateAsset()
-	{
-		return o2Assets.CreateAsset<DataAsset>();
-	}
-
 }
 
 DECLARE_CLASS(o2::DataAsset);
 
-DECLARE_CLASS(o2::DataAssetRef);
-
-DECLARE_CLASS(o2::DataAsset::MetaInfo);
+DECLARE_CLASS(o2::DataAsset::Meta);

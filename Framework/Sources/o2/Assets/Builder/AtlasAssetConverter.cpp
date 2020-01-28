@@ -1,12 +1,12 @@
 #include "o2/stdafx.h"
 #include "AtlasAssetConverter.h"
 
+#include "o2/Assets/AssetTypes/AtlasAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AtlasAsset.h"
-#include "o2/Assets/ImageAsset.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
-#include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace o2
 {
@@ -17,7 +17,7 @@ namespace o2
 		return res;
 	}
 
-	void AtlasAssetConverter::ConvertAsset(const AssetsTree::AssetInfo& node)
+	void AtlasAssetConverter::ConvertAsset(const AssetInfo& node)
 	{
 		String sourceAssetPath = o2Assets.GetAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
@@ -26,7 +26,7 @@ namespace o2
 			o2FileSystem.WriteFile(buildedAssetPath, "");
 	}
 
-	void AtlasAssetConverter::RemoveAsset(const AssetsTree::AssetInfo& node)
+	void AtlasAssetConverter::RemoveAsset(const AssetInfo& node)
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
@@ -40,7 +40,7 @@ namespace o2
 		o2FileSystem.FileDelete(buildedAssetPath);
 	}
 
-	void AtlasAssetConverter::MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo)
+	void AtlasAssetConverter::MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo)
 	{
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
@@ -69,7 +69,7 @@ namespace o2
 		const Type* imageType = &TypeOf(ImageAsset);
 		const Type* atlasType = &TypeOf(AtlasAsset);
 
-		AssetsTree::AssetInfo* basicAtlasInfo = nullptr;
+		AssetInfo* basicAtlasInfo = nullptr;
 
 		Vector<UID> availableAtlasesIds;
 		for (auto assetInfo : mAssetsBuilder->mBuiltAssetsTree.allAssets)
@@ -87,10 +87,10 @@ namespace o2
 		{
 			if (assetInfo->assetType == imageType)
 			{
-				ImageAsset::MetaInfo* imageMeta = (ImageAsset::MetaInfo*)assetInfo->meta;
+				ImageAsset::Meta* imageMeta = (ImageAsset::Meta*)assetInfo->meta;
 
-				if (!availableAtlasesIds.Contains(imageMeta->mAtlasId))
-					imageMeta->mAtlasId = basicAtlasInfo->meta->ID();
+				if (!availableAtlasesIds.Contains(imageMeta->atlasId))
+					imageMeta->atlasId = basicAtlasInfo->meta->ID();
 			}
 		}
 	}
@@ -110,7 +110,7 @@ namespace o2
 		return res;
 	}
 
-	bool AtlasAssetConverter::CheckAtlasRebuilding(AssetsTree::AssetInfo* atlasInfo)
+	bool AtlasAssetConverter::CheckAtlasRebuilding(AssetInfo* atlasInfo)
 	{
 		DataNode atlasData;
 		atlasData.LoadFromFile(mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path);
@@ -125,8 +125,8 @@ namespace o2
 		{
 			if (assetInfo->assetType == imageType)
 			{
-				ImageAsset::MetaInfo* imageMeta = (ImageAsset::MetaInfo*)assetInfo->meta;
-				if (imageMeta->mAtlasId == atlasId)
+				ImageAsset::Meta* imageMeta = (ImageAsset::Meta*)assetInfo->meta;
+				if (imageMeta->atlasId == atlasId)
 					currentImages.Add(Image(imageMeta->ID(), assetInfo->editTime));
 			}
 		}
@@ -177,19 +177,19 @@ namespace o2
 		return false;
 	}
 
-	void AtlasAssetConverter::RebuildAtlas(AssetsTree::AssetInfo* atlasInfo, Vector<Image>& images)
+	void AtlasAssetConverter::RebuildAtlas(AssetInfo* atlasInfo, Vector<Image>& images)
 	{
-		auto meta = (AtlasAsset::MetaInfo*)atlasInfo->meta;
+		auto meta = (AtlasAsset::Meta*)atlasInfo->meta;
 
-		RectsPacker packer(meta->mWindows.mMaxSize);
-		float imagesBorder = (float)meta->mBorder;
+		RectsPacker packer(meta->windows.maxSize);
+		float imagesBorder = (float)meta->border;
 
 		// Initialize pack images
 		Vector<ImagePackDef> packImages;
 		for (auto img : images)
 		{
 			// Find image info
-			AssetsTree::AssetInfo* imgInfo =
+			AssetInfo* imgInfo =
 				mAssetsBuilder->mBuiltAssetsTree.allAssets.FindMatch([&](auto info) { return info->meta->ID() == img.id; });
 
 			if (!imgInfo)

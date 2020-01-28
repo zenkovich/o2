@@ -6,49 +6,17 @@
 
 namespace o2
 {
-	const Type* BinaryAsset::MetaInfo::GetAssetType() const
+	BinaryAsset::BinaryAsset()
+	{}
+
+	BinaryAsset::BinaryAsset(const BinaryAsset& other):
+		TAsset(other), data(this), dataSize(this), meta(this)
 	{
-		return &TypeOf(BinaryAsset);
-	}
-
-	BinaryAsset::BinaryAsset():
-		Asset(), mData(nullptr), mDataSize(0)
-	{
-		mMeta = mnew MetaInfo();
-	}
-
-	BinaryAsset::BinaryAsset(const String& path):
-		Asset(), mData(nullptr), mDataSize(0)
-	{
-		mPath = path;
-		mMeta = mnew MetaInfo();
-		ID() = o2Assets.GetAssetId(path);
-
-		Load();
-	}
-
-	BinaryAsset::BinaryAsset(const UID& id):
-		Asset(), mData(nullptr), mDataSize(0)
-	{
-		mMeta = mnew MetaInfo();
-		ID() = id;
-		mPath = o2Assets.GetAssetPath(id);
-
-		Load();
-	}
-
-	BinaryAsset::BinaryAsset(const BinaryAsset& asset):
-		Asset(asset), data(this), dataSize(this), meta(this)
-	{
-		mMeta = mnew MetaInfo();
-		mPath = asset.mPath;
-		ID() = asset.GetUID();
-
-		if (asset.mDataSize > 0)
+		if (other.mDataSize > 0)
 		{
-			mDataSize = asset.mDataSize;
+			mDataSize = other.mDataSize;
 			mData = mnew char[mDataSize];
-			memcpy(mData, asset.mData, mDataSize);
+			memcpy(mData, other.mData, mDataSize);
 		}
 		else
 		{
@@ -63,18 +31,18 @@ namespace o2
 			delete[] mData;
 	}
 
-	BinaryAsset& BinaryAsset::operator=(const BinaryAsset& asset)
+	BinaryAsset& BinaryAsset::operator=(const BinaryAsset& other)
 	{
-		Asset::operator=(asset);
+		Asset::operator=(other);
 
 		if (mData)
 			delete[] mData;
 
-		if (asset.mDataSize > 0)
+		if (other.mDataSize > 0)
 		{
-			mDataSize = asset.mDataSize;
+			mDataSize = other.mDataSize;
 			mData = mnew char[mDataSize];
-			memcpy(mData, asset.mData, mDataSize);
+			memcpy(mData, other.mData, mDataSize);
 		}
 		else
 		{
@@ -82,19 +50,7 @@ namespace o2
 			mData = nullptr;
 		}
 
-		*mMeta = *(MetaInfo*)(asset.mMeta);
-
 		return *this;
-	}
-
-	bool BinaryAsset::operator==(const BinaryAsset& other) const
-	{
-		return mMeta->IsEqual(other.mMeta);
-	}
-
-	bool BinaryAsset::operator!=(const BinaryAsset& other) const
-	{
-		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	char* BinaryAsset::GetData() const
@@ -125,9 +81,9 @@ namespace o2
 		}
 	}
 
-	BinaryAsset::MetaInfo* BinaryAsset::GetMeta() const
+	BinaryAsset::Meta* BinaryAsset::GetMeta() const
 	{
-		return (MetaInfo*)mMeta;
+		return (Meta*)mInfo.meta;
 	}
 
 	const char* BinaryAsset::GetFileExtensions() const
@@ -146,22 +102,14 @@ namespace o2
 		file.ReadFullData(mData);
 	}
 
-	void BinaryAsset::SaveData(const String& path)
+	void BinaryAsset::SaveData(const String& path) const
 	{
 		OutFile file(path);
 		if (mDataSize > 0 && mData)
 			file.WriteData(mData, mDataSize);
 	}
-
-	BinaryAssetRef BinaryAssetRef::CreateAsset()
-	{
-		return o2Assets.CreateAsset<BinaryAsset>();
-	}
-
 }
 
 DECLARE_CLASS(o2::BinaryAsset);
 
-DECLARE_CLASS(o2::BinaryAssetRef);
-
-DECLARE_CLASS(o2::BinaryAsset::MetaInfo);
+DECLARE_CLASS(o2::BinaryAsset::Meta);

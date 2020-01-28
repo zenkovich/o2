@@ -2,8 +2,8 @@
 #include "FolderAssetConverter.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/BinaryAsset.h"
-#include "o2/Assets/FolderAsset.h"
+#include "o2/Assets/AssetTypes/BinaryAsset.h"
+#include "o2/Assets/AssetTypes/FolderAsset.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "AssetsBuilder.h"
 
@@ -16,7 +16,7 @@ namespace o2
 		return res;
 	}
 
-	void FolderAssetConverter::ConvertAsset(const AssetsTree::AssetInfo& node)
+	void FolderAssetConverter::ConvertAsset(const AssetInfo& node)
 	{
 		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
@@ -24,14 +24,14 @@ namespace o2
 		o2FileSystem.FolderCreate(buildedAssetPath);
 	}
 
-	void FolderAssetConverter::RemoveAsset(const AssetsTree::AssetInfo& node)
+	void FolderAssetConverter::RemoveAsset(const AssetInfo& node)
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
 		o2FileSystem.FolderRemove(buildedAssetPath);
 	}
 
-	void FolderAssetConverter::MoveAsset(const AssetsTree::AssetInfo& nodeFrom, const AssetsTree::AssetInfo& nodeTo)
+	void FolderAssetConverter::MoveAsset(const AssetInfo& nodeFrom, const AssetInfo& nodeTo)
 	{
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;

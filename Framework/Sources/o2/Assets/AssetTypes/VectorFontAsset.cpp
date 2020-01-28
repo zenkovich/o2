@@ -8,23 +8,18 @@
 
 namespace o2
 {
-	VectorFontAsset::MetaInfo::~MetaInfo()
+	VectorFontAsset::Meta::~Meta()
 	{
 		for (auto eff : mEffects)
 			delete eff;
 	}
 
-	const Type* VectorFontAsset::MetaInfo::GetAssetType() const
-	{
-		return &TypeOf(VectorFontAsset);
-	}
-
-	bool VectorFontAsset::MetaInfo::IsEqual(AssetMeta* other) const
+	bool VectorFontAsset::Meta::IsEqual(AssetMeta* other) const
 	{
 		if (!AssetMeta::IsEqual(other))
 			return false;
 
-		MetaInfo* otherMeta = (MetaInfo*)other;
+		Meta* otherMeta = (Meta*)other;
 		for (auto eff : mEffects)
 		{
 			bool found = false;
@@ -44,58 +39,18 @@ namespace o2
 		return true;
 	}
 
-	VectorFontAsset::VectorFontAsset():
-		FontAsset()
-	{
-		mMeta = mnew MetaInfo();
-	}
-
-	VectorFontAsset::VectorFontAsset(const String& path):
-		FontAsset()
-	{
-		mPath = path;
-		mMeta = mnew MetaInfo();
-		ID() = o2Assets.GetAssetId(path);
-
-		Load();
-	}
-
-	VectorFontAsset::VectorFontAsset(const UID& id)
-	{
-		mMeta = mnew MetaInfo();
-		ID() = id;
-		mPath = o2Assets.GetAssetPath(id);
-
-		Load();
-	}
+	VectorFontAsset::VectorFontAsset()
+	{}
 
 	VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
 		FontAsset(asset), meta(this)
-	{
-		mMeta = mnew MetaInfo();
-		mPath = asset.mPath;
-		ID() = asset.GetUID();
-	}
-
-	VectorFontAsset::~VectorFontAsset()
 	{}
 
 	VectorFontAsset& VectorFontAsset::operator=(const VectorFontAsset& asset)
 	{
 		FontAsset::operator=(asset);
 		mFont = asset.mFont;
-		*mMeta = *(MetaInfo*)(asset.mMeta);
 		return *this;
-	}
-
-	bool VectorFontAsset::operator==(const VectorFontAsset& other) const
-	{
-		return mMeta->IsEqual(other.mMeta);
-	}
-
-	bool VectorFontAsset::operator!=(const VectorFontAsset& other) const
-	{
-		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	const Vector<VectorFont::Effect*>& VectorFontAsset::GetEffects() const
@@ -130,9 +85,9 @@ namespace o2
 		return "ttf";
 	}
 
-	VectorFontAsset::MetaInfo* VectorFontAsset::GetMeta() const
+	VectorFontAsset::Meta* VectorFontAsset::GetMeta() const
 	{
-		return (MetaInfo*)mMeta;
+		return (Meta*)mInfo.meta;
 	}
 
 	void VectorFontAsset::LoadData(const String& path)
@@ -151,16 +106,8 @@ namespace o2
 			}
 		}
 	}
-
-	VectorFontAssetRef VectorFontAssetRef::CreateAsset()
-	{
-		return o2Assets.CreateAsset<VectorFontAsset>();
-	}
-
 }
 
 DECLARE_CLASS(o2::VectorFontAsset);
 
-DECLARE_CLASS(o2::VectorFontAssetRef);
-
-DECLARE_CLASS(o2::VectorFontAsset::MetaInfo);
+DECLARE_CLASS(o2::VectorFontAsset::Meta);

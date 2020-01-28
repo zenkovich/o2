@@ -1,8 +1,8 @@
 #include "o2/stdafx.h"
 #include "ImageAsset.h"
 
+#include "o2/Assets/AssetTypes/AtlasAsset.h"
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AtlasAsset.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 
@@ -10,47 +10,20 @@
 
 namespace o2
 {
-	ImageAsset::ImageAsset():
-		Asset(), mBitmap(nullptr), mAtlasPage(0)
+	ImageAsset::ImageAsset()
+	{}
+
+	ImageAsset::ImageAsset(const ImageAsset& other):
+		TAsset(other), mAtlasPage(other.mAtlasPage), mAtlasRect(other.mAtlasRect), bitmap(this), atlas(this), sliceBorder(this), 
+		atlasPage(this), atlasRect(this), size(this), width(this), height(this), meta(this)
 	{
-		mMeta = mnew MetaInfo();
-	}
-
-	ImageAsset::ImageAsset(const String& path):
-		Asset(), mBitmap(nullptr), mAtlasPage(0)
-	{
-		mPath = path;
-		mMeta = mnew MetaInfo();
-		ID() = o2Assets.GetAssetId(path);
-
-		Load();
-	}
-
-	ImageAsset::ImageAsset(const UID& id):
-		Asset(), mBitmap(nullptr), mAtlasPage(0)
-	{
-		mMeta = mnew MetaInfo();
-		ID() = id;
-		mPath = o2Assets.GetAssetPath(id);
-
-		Load();
-	}
-
-	ImageAsset::ImageAsset(const ImageAsset& asset):
-		Asset(asset), bitmap(this), atlasId(this), atlas(this), sliceBorder(this), atlasPage(this),
-		atlasRect(this), size(this), width(this), height(this), meta(this)
-	{
-		mMeta = mnew MetaInfo();
-		mPath = asset.mPath;
-		ID() = asset.GetUID();
-
-		if (asset.mBitmap)
-			mBitmap = asset.mBitmap->Clone();
+		if (other.mBitmap)
+			mBitmap = other.mBitmap->Clone();
 		else
 			mBitmap = nullptr;
 
-		mAtlasPage = asset.mAtlasPage;
-		mAtlasRect = asset.mAtlasRect;
+		mAtlasPage = other.mAtlasPage;
+		mAtlasRect = other.mAtlasRect;
 	}
 
 	ImageAsset::~ImageAsset()
@@ -72,19 +45,7 @@ namespace o2
 		mAtlasPage = asset.mAtlasPage;
 		mAtlasRect = asset.mAtlasRect;
 
-		*mMeta = *(MetaInfo*)(asset.mMeta);
-
 		return *this;
-	}
-
-	bool ImageAsset::operator==(const ImageAsset& other) const
-	{
-		return mMeta->IsEqual(other.mMeta);
-	}
-
-	bool ImageAsset::operator!=(const ImageAsset& other) const
-	{
-		return !mMeta->IsEqual(other.mMeta);
 	}
 
 	Bitmap* ImageAsset::GetBitmap()
@@ -103,41 +64,24 @@ namespace o2
 		mBitmap = bitmap;
 	}
 
-	const UID& ImageAsset::GetAtlasId() const
-	{
-		return ((MetaInfo*)mMeta)->mAtlasId;
-	}
-
-	void ImageAsset::SetAtlasId(const UID& id)
-	{
-		AssetInfo atlasInfo = o2Assets.GetAssetInfo(id);
-		if (atlasInfo.assetType != &TypeOf(AtlasAsset))
-		{
-			GetAssetsLogStream()->Error("Can' setup image atlas id (" + (String)id + "): wrong id");
-			return;
-		}
-
-		((MetaInfo*)mMeta)->mAtlasId = id;
-	}
-
 	AtlasAssetRef ImageAsset::GetAtlas() const
 	{
-		return AtlasAssetRef(((MetaInfo*)mMeta)->mAtlasId);
+		return AtlasAssetRef(GetMeta()->atlasId);
 	}
 
 	void ImageAsset::SetAtlas(const AtlasAssetRef& atlas)
 	{
-		((MetaInfo*)mMeta)->mAtlasId = atlas->GetUID();
+		GetMeta()->atlasId = atlas->GetUID();
 	}
 
 	void ImageAsset::SetSliceBorder(const BorderI& border)
 	{
-		GetMeta()->mSliceBorder = border;
+		GetMeta()->sliceBorder = border;
 	}
 
 	BorderI ImageAsset::GetSliceBorder() const
 	{
-		return GetMeta()->mSliceBorder;
+		return GetMeta()->sliceBorder;
 	}
 
 	UInt ImageAsset::GetAtlasPage() const
@@ -167,12 +111,12 @@ namespace o2
 
 	TextureRef ImageAsset::GetAtlasTextureRef() const
 	{
-		return AtlasAsset::GetPageTextureRef(GetAtlasId(), GetAtlasPage());
+		return AtlasAsset::GetPageTextureRef(GetAtlas(), GetAtlasPage());
 	}
 
-	ImageAsset::MetaInfo* ImageAsset::GetMeta() const
+	ImageAsset::Meta* ImageAsset::GetMeta() const
 	{
-		return ((MetaInfo*)mMeta);
+		return (Meta*)mInfo.meta;
 	}
 
 	const char* ImageAsset::GetFileExtensions() const
@@ -180,19 +124,7 @@ namespace o2
 		return "png jpg bmp";
 	}
 
-	void ImageAsset::LoadData(const String& path)
-	{
-		DataNode data;
-		data.LoadFromFile(path);
-
-		if (auto node = data.GetNode("mAtlasPage"))
-			mAtlasPage = *node;
-
-		if (auto node = data.GetNode("mAtlasRect"))
-			mAtlasRect = *node;
-	}
-
-	void ImageAsset::SaveData(const String& path)
+	void ImageAsset::SaveData(const String& path) const
 	{
 		if (mBitmap)
 			mBitmap->Save(GetFullPath(), Bitmap::ImageType::Png);
@@ -206,36 +138,23 @@ namespace o2
 
 	bool ImageAsset::PlatformMeta::operator==(const PlatformMeta& other) const
 	{
-		return mMaxSize == other.mMaxSize && mFormat == other.mFormat && mScale == other.mScale;
+		return maxSize == other.maxSize && format == other.format && scale == other.scale;
 	}
 
-	const Type* ImageAsset::MetaInfo::GetAssetType() const
-	{
-		return &TypeOf(ImageAsset);
-	}
-
-	bool ImageAsset::MetaInfo::IsEqual(AssetMeta* other) const
+	bool ImageAsset::Meta::IsEqual(AssetMeta* other) const
 	{
 		if (!AssetMeta::IsEqual(other))
 			return false;
 
-		MetaInfo* otherMeta = (MetaInfo*)other;
-		return mAtlasId == otherMeta->mAtlasId && mIOS == otherMeta->mIOS && mWindows == otherMeta->mWindows &&
-			mAndroid == otherMeta->mAndroid && mMacOS == otherMeta->mMacOS && mSliceBorder == otherMeta->mSliceBorder &&
-			mDefaultMode == otherMeta->mDefaultMode;
+		Meta* otherMeta = (Meta*)other;
+		return atlasId == otherMeta->atlasId && ios == otherMeta->ios && windows == otherMeta->windows &&
+			android == otherMeta->android && macOS == otherMeta->macOS && sliceBorder == otherMeta->sliceBorder &&
+			defaultMode == otherMeta->defaultMode;
 	}
-
-	ImageAssetRef ImageAssetRef::CreateAsset()
-	{
-		return o2Assets.CreateAsset<ImageAsset>();
-	}
-
 }
 
 DECLARE_CLASS(o2::ImageAsset);
 
-DECLARE_CLASS(o2::ImageAssetRef);
-
 DECLARE_CLASS(o2::ImageAsset::PlatformMeta);
 
-DECLARE_CLASS(o2::ImageAsset::MetaInfo);
+DECLARE_CLASS(o2::ImageAsset::Meta);

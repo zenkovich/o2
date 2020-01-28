@@ -1,7 +1,7 @@
 #pragma once
 
-#include "o2/Assets/AtlasAsset.h"
-#include "o2/Assets/ImageAsset.h"
+#include "o2/Assets/AssetTypes/AtlasAsset.h"
+#include "o2/Assets/AssetTypes/ImageAsset.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2/Events/CursorEventsArea.h"
 #include "o2Editor/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h"
