@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/AssetTypes/FontAsset.h"
+#include "o2/Assets/Types/FontAsset.h"
 
 namespace o2
 {

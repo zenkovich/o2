@@ -1,14 +1,12 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/AssetRef.h"
 #include "o2/Render/TextureRef.h"
+#include "o2/Utils/Types/Ref.h"
+#include "o2/Assets/Types/ImageAsset.h"
 
 namespace o2
 {
-	class ImageAsset;
-	class ImageAssetRef;
-
 	// -----------
 	// Atlas asset
 	// -----------

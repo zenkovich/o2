@@ -35,7 +35,7 @@
 		<Filter Include="Sources\o2\Utils\Tools" />
 		<Filter Include="Sources\o2\Utils\Types" />
 		<Filter Include="Sources\o2\Utils\Types\Containers" />
-		<Filter Include="Sources\o2\Assets\AssetTypes" />
+		<Filter Include="Sources\o2\Assets\Types" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
@@ -83,36 +83,6 @@
 		<ClInclude Include="..\..\Sources\o2\Assets\AssetRef.h">
 			<Filter>Sources\o2\Assets</Filter>
 		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\ActorAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\AnimationAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\AtlasAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\BinaryAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\BitmapFontAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\DataAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\FolderAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\FontAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\ImageAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetTypes\VectorFontAsset.h">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Assets\Assets.h">
 			<Filter>Sources\o2\Assets</Filter>
 		</ClInclude>
@@ -139,6 +109,36 @@
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Assets\Meta.h">
 			<Filter>Sources\o2\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\ActorAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\AnimationAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\AtlasAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\BinaryAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\DataAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\FolderAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\FontAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\ImageAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Config\ProjectConfig.h">
 			<Filter>Sources\o2\Config</Filter>
@@ -655,36 +655,6 @@
 		<ClCompile Include="..\..\Sources\o2\Assets\AssetRef.cpp">
 			<Filter>Sources\o2\Assets</Filter>
 		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\ActorAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\AnimationAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\AtlasAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\BinaryAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\BitmapFontAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\DataAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\FolderAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\FontAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\ImageAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetTypes\VectorFontAsset.cpp">
-			<Filter>Sources\o2\Assets\AssetTypes</Filter>
-		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Assets\Assets.cpp">
 			<Filter>Sources\o2\Assets</Filter>
 		</ClCompile>
@@ -711,6 +681,36 @@
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Assets\Meta.cpp">
 			<Filter>Sources\o2\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\ActorAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\AnimationAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\AtlasAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\BinaryAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\DataAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\FolderAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\FontAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\ImageAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Config\ProjectConfig.cpp">
 			<Filter>Sources\o2\Config</Filter>

@@ -3,7 +3,7 @@
 
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/AssetsTree.h"
-#include "o2/Assets/AssetTypes/FolderAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Assets/AssetTypes/ActorAsset.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/IActorHeaderViewer.h"
 
 namespace o2

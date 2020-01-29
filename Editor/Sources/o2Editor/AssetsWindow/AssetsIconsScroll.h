@@ -1,8 +1,8 @@
 #pragma once
 
-#include "o2/Assets/AssetTypes/ActorAsset.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/AssetInfo.h"
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Scene/UI/Widgets/ScrollArea.h"

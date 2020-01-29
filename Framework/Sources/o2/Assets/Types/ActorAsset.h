@@ -46,7 +46,7 @@ namespace o2
 		};
 
 	protected:
-		Actor* mActor = mnew Actor(ActorCreateMode::NotInScene); // Asset data @SERIALIZABLE
+		Actor* mActor; // Asset data @SERIALIZABLE
 
 	protected:
 		// Default constructor

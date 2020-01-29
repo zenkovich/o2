@@ -3,8 +3,8 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/AtlasAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
 #include "o2/Utils/Debug/Debug.h"

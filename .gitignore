@@ -6,3 +6,4 @@
 /CodeTool/Bin/*.pdb
 /CodeTool/Bin/*.iobj
 /CodeTool/Bin/*.ipdb
+/CodeTool/CodeTool.vcxproj.user

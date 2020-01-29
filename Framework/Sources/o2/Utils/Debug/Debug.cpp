@@ -3,8 +3,8 @@
 
 #include <cstdarg>
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AssetTypes/BitmapFontAsset.h"
-#include "o2/Assets/AssetTypes/VectorFontAsset.h"
+#include "o2/Assets/Types/BitmapFontAsset.h"
+#include "o2/Assets/Types/VectorFontAsset.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Text.h"
 #include "o2/Render/VectorFont.h"

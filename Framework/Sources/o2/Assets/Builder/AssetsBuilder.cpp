@@ -1,8 +1,8 @@
 #include "o2/stdafx.h"
 #include "AssetsBuilder.h"
 
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
-#include "o2/Assets/AssetTypes/FolderAsset.h"
+#include "o2/Assets/Types/AtlasAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/Builder/AtlasAssetConverter.h"
 #include "o2/Assets/Builder/FolderAssetConverter.h"

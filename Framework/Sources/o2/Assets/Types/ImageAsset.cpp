@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "ImageAsset.h"
 
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
+#include "o2/Assets/Types/AtlasAsset.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
@@ -64,14 +64,14 @@ namespace o2
 		mBitmap = bitmap;
 	}
 
-	AtlasAssetRef ImageAsset::GetAtlas() const
+	UID ImageAsset::GetAtlas() const
 	{
-		return AtlasAssetRef(GetMeta()->atlasId);
+		return GetMeta()->atlasId;
 	}
 
-	void ImageAsset::SetAtlas(const AtlasAssetRef& atlas)
+	void ImageAsset::SetAtlas(const UID& atlas)
 	{
-		GetMeta()->atlasId = atlas->GetUID();
+		GetMeta()->atlasId = atlas;
 	}
 
 	void ImageAsset::SetSliceBorder(const BorderI& border)

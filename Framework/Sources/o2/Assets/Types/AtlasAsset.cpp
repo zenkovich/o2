@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "AtlasAsset.h"
 
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Assets/Assets.h"
 
 namespace o2

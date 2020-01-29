@@ -2,8 +2,8 @@
 #include "Assets.h"
 
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/AssetTypes/BinaryAsset.h"
-#include "o2/Assets/AssetTypes/FolderAsset.h"
+#include "o2/Assets/Types/BinaryAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Assets/Builder/AssetsBuilder.h"
 #include "o2/Config/ProjectConfig.h"
 #include "o2/Utils/Debug/Debug.h"
@@ -34,12 +34,12 @@ namespace o2
 		delete mAssetsBuilder;
 	}
 
-	const String& Assets::GetAssetsPath() const
+	String Assets::GetAssetsPath() const
 	{
 		return ::GetAssetsPath();
 	}
 
-	const String& Assets::GetBuiltAssetsPath() const
+	String Assets::GetBuiltAssetsPath() const
 	{
 		return ::GetBuiltAssetsPath();
 	}
@@ -217,10 +217,10 @@ namespace o2
 		if (info.assetType == &TypeOf(FolderAsset))
 		{
 			o2FileSystem.FolderCreate(GetAssetsPath() + dest);
-			FolderAsset folderAsset(info.path);
+			FolderAssetRef folderAsset(info.path);
 
-			for (auto inInfo : folderAsset.GetContainingAssetsInfos())
-				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo.path), false);
+			for (auto inInfo : folderAsset->GetContainingAssetsInfos())
+				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()), false);
 		}
 		else o2FileSystem.FileCopy(GetAssetsPath() + info.path, GetAssetsPath() + dest);
 

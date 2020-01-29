@@ -38,10 +38,10 @@ namespace o2
 		~Assets();
 
 		// Returns assets path
-		const String& GetAssetsPath() const;
+		String GetAssetsPath() const;
 
 		// Returns data path
-		const String& GetBuiltAssetsPath() const;
+		String GetBuiltAssetsPath() const;
 
 		// Returns asset path by asset id
 		const String& GetAssetPath(const UID& id) const;

@@ -2,9 +2,9 @@
 #include "StdAssetConverter.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AssetTypes/BinaryAsset.h"
+#include "o2/Assets/Types/BinaryAsset.h"
 #include "o2/Assets/Builder/AssetsBuilder.h"
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace o2

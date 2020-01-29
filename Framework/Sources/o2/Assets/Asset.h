@@ -95,13 +95,10 @@ namespace o2
 	};
 
 	template<typename T>
-	class TAsset : public Asset
+	class TAsset: public Asset
 	{
 	protected:
 		TAsset() { mInfo.SetType<T>(); }
-
-	public:
-		SERIALIZABLE(TAsset<T>);
 	};
 }
 
@@ -138,22 +135,5 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
-}
-END_META;
-
-META_TEMPLATES(typename T)
-CLASS_BASES_META(o2::TAsset<T>)
-{
-	BASE_CLASS(o2::Asset);
-}
-END_META;
-META_TEMPLATES(typename T)
-CLASS_FIELDS_META(o2::TAsset<T>)
-{
-}
-END_META;
-META_TEMPLATES(typename T)
-CLASS_METHODS_META(o2::TAsset<T>)
-{
 }
 END_META;

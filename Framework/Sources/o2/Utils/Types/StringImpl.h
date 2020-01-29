@@ -246,7 +246,7 @@ namespace o2
 	template<typename T>
 	TString<T>::operator float() const
 	{
-		if (empty())
+		if (std::basic_string<T>::empty())
 			return 0.0f;
 
 		return std::stof(*this);

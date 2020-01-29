@@ -1,9 +1,9 @@
 #pragma once
 
-#include "o2/Assets/AssetTypes/ActorAsset.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/AssetTypes/DataAsset.h"
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/DataAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "ImageComponent.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Component.h"

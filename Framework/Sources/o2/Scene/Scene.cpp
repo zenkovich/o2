@@ -2,7 +2,7 @@
 #include "Scene.h"
 
 #include "o2/Application/Input.h"
-#include "o2/Assets/AssetTypes/ActorAsset.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ActorDataNodeConverter.h"
 #include "o2/Scene/DrawableComponent.h"

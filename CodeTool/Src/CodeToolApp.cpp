@@ -618,7 +618,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	{
 		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), [](SyntaxFunction* x) { return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE"; }) != cls->GetFunctions().end();
 
-		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass() && !hasIObject) || cls == baseObjectClass)
+		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
 			continue;
 
 		if (!cls->IsTemplate())
@@ -1126,6 +1126,9 @@ bool CodeToolCache::IsClassBasedOn(SyntaxClass* _class, SyntaxClass* baseClass)
 	if (!_class || !baseClass)
 		return false;
 
+	if (_class->mSourceClass)
+		_class = _class->mSourceClass;
+
 	if (_class == baseClass)
 		return true;
 
@@ -1418,12 +1421,13 @@ void CodeToolCache::ResolveBaseClassDependencies(SyntaxSection* section)
 		SyntaxClass* cls = (SyntaxClass*)section;
 		for (auto& baseClass : cls->mBaseClasses)
 		{
+			if (baseClass.GetClassName() == "TAsset<AtlasAsset>")
+				int x = 5;
+
 			baseClass.mClass = (SyntaxClass*)FindSection(baseClass.mClassName, section);
 
 			if (!baseClass.mClass)
 				CodeToolApplication::VerboseLog("Not found base class: %s\n", baseClass.mClassName.c_str());
-
-			baseClass.mClass = (SyntaxClass*)FindSection(baseClass.mClassName, section);
 		}
 	}
 

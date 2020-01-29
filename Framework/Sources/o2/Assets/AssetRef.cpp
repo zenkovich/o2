@@ -77,7 +77,7 @@ namespace o2
 		}
 		else if (auto pathNode = node.GetNode("path"))
 		{
-			*this = o2Assets.GetAssetRef((String)(*pathNode));
+			*this = o2Assets.GetAssetRef(pathNode->Data());
 		}
 	}
 

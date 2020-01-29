@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
+#include "o2/Assets/AssetRef.h"
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 
@@ -21,9 +21,9 @@ namespace o2
 
 		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder); // Slice border
 
-		PROPERTY(AtlasAssetRef, atlas, SetAtlas, GetAtlas); // Atlas owner asset property
-		GETTER(UInt, atlasPage, GetAtlasPage);              // Atlas page index getter
-		GETTER(RectI, atlasRect, GetAtlasRect);             // Atlas source image rectangle getter
+		PROPERTY(UID, atlas, SetAtlas, GetAtlas); // Atlas owner asset property
+		GETTER(UInt, atlasPage, GetAtlasPage);    // Atlas page index getter
+		GETTER(RectI, atlasRect, GetAtlasRect);   // Atlas source image rectangle getter
 
 		GETTER(Vec2F, size, GetSize);     // Image size getter
 		GETTER(float, width, GetWidth);   // Image width getter
@@ -45,10 +45,10 @@ namespace o2
 		void SetBitmap(Bitmap* bitmap);
 
 		// Returns atlas asset
-		AtlasAssetRef GetAtlas() const;
+		UID GetAtlas() const;
 
 		// Sets atlas
-		void SetAtlas(const AtlasAssetRef& atlas);
+		void SetAtlas(const UID& atlas);
 
 		// Sets slice border
 		void SetSliceBorder(const BorderI& border);
@@ -169,8 +169,8 @@ CLASS_METHODS_META(o2::ImageAsset)
 
 	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
 	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
-	PUBLIC_FUNCTION(AtlasAssetRef, GetAtlas);
-	PUBLIC_FUNCTION(void, SetAtlas, const AtlasAssetRef&);
+	PUBLIC_FUNCTION(UID, GetAtlas);
+	PUBLIC_FUNCTION(void, SetAtlas, const UID&);
 	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
 	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
 	PUBLIC_FUNCTION(UInt, GetAtlasPage);

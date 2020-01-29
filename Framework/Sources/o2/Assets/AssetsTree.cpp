@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "AssetsTree.h"
 
-#include "o2/Assets/AssetTypes/FolderAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/FileSystem.h"

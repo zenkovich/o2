@@ -1,8 +1,8 @@
 #include "o2/stdafx.h"
 #include "AtlasAssetConverter.h"
 
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/AtlasAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
@@ -103,8 +103,10 @@ namespace o2
 		for (auto info : mAssetsBuilder->mBuiltAssetsTree.allAssets)
 		{
 			if (info->assetType == atlasAssetType)
+			{
 				if (CheckAtlasRebuilding(info))
-					res.Add(info->id);
+					res.Add(info->meta->ID());
+			}
 		}
 
 		return res;

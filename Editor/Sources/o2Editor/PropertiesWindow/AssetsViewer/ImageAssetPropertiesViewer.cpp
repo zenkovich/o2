@@ -1,7 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "ImageAssetPropertiesViewer.h"
 
-#include "o2/Assets/AssetTypes/ImageAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Texture.h"
 #include "o2/Scene/UI/UIManager.h"

@@ -420,39 +420,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/AssetsIconsScroll.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="AssetsIconsScrollArea" fullname="Editor::AssetsIconsScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ScrollArea" protection="0" />
-								<class name="DragDropArea" protection="0" />
-								<class name="KeyboardEventsListener" protection="0" />
-								<class name="ISelectableDragableObjectsGroup" protection="1" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/AssetsWindow.h">
 		<date year="2020" month="1" day="28" hour="8" minute="50" second="18" />
 		<globalNamespace name="" fullname="">
@@ -2068,70 +2035,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/SpriteViewer.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SpriteViewer" fullname="Editor::SpriteViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="AssetProperty&lt;ImageAssetRef&gt;" newDef="ImageAssetProperty" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="TObjectPropertiesViewer&lt;Sprite&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/TextViewer.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="TextViewer" fullname="Editor::TextViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="AssetProperty&lt;FontAssetRef&gt;" newDef="FontAssetProperty" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="TObjectPropertiesViewer&lt;Text&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Properties.h">
 		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
@@ -2447,84 +2350,6 @@
 			</sections>
 			<typedefs />
 			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurveEditor/CurvesEditor.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="CurvesEditor" fullname="Editor::CurvesEditor" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="CurveHandle" fullname="Editor::CurvesEditor::CurveHandle" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="DragHandle" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="KeyHandles" fullname="Editor::CurvesEditor::KeyHandles" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="CurveInfo" fullname="Editor::CurvesEditor::CurveInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="CurveCopyInfo" fullname="Editor::CurvesEditor::CurveCopyInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="RangeInfo" fullname="Editor::CurvesEditor::RangeInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="SelectedHandlesInfo" fullname="Editor::CurvesEditor::SelectedHandlesInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="CurveKeysInfo" fullname="Editor::CurvesEditor::CurveKeysInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="FrameScrollView" protection="0" />
-								<class name="SelectableDragHandlesGroup" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurvePreview.h">
@@ -3019,36 +2844,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultActorHeaderViewer" fullname="Editor::DefaultActorHeaderViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IActorHeaderViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings>
-						<typedef name="o2" />
-					</usings>
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h">
 		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
@@ -3298,45 +3093,6 @@
 							<usings />
 							<baseClasses>
 								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="PreviewImage" fullname="Editor::ImageAssetPropertiesViewer::PreviewImage" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="Image" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetPropertiesViewer" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -3767,8 +3523,252 @@
 			</usings>
 		</globalNamespace>
 	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/AssetsIconsScroll.h">
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="50" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="AssetsIconsScrollArea" fullname="Editor::AssetsIconsScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ScrollArea" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="KeyboardEventsListener" protection="0" />
+								<class name="ISelectableDragableObjectsGroup" protection="1" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/SpriteViewer.h">
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="48" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="SpriteViewer" fullname="Editor::SpriteViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="AssetProperty&lt;ImageAssetRef&gt;" newDef="ImageAssetProperty" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="TObjectPropertiesViewer&lt;Sprite&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/TextViewer.h">
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="48" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="TextViewer" fullname="Editor::TextViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="AssetProperty&lt;FontAssetRef&gt;" newDef="FontAssetProperty" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="TObjectPropertiesViewer&lt;Text&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurveEditor/CurvesEditor.h">
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="CurvesEditor" fullname="Editor::CurvesEditor" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="CurveHandle" fullname="Editor::CurvesEditor::CurveHandle" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="DragHandle" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="KeyHandles" fullname="Editor::CurvesEditor::KeyHandles" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="CurveInfo" fullname="Editor::CurvesEditor::CurveInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="CurveCopyInfo" fullname="Editor::CurvesEditor::CurveCopyInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="RangeInfo" fullname="Editor::CurvesEditor::RangeInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="SelectedHandlesInfo" fullname="Editor::CurvesEditor::SelectedHandlesInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="CurveKeysInfo" fullname="Editor::CurvesEditor::CurveKeysInfo" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="FrameScrollView" protection="0" />
+								<class name="SelectableDragHandlesGroup" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="DefaultActorHeaderViewer" fullname="Editor::DefaultActorHeaderViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IActorHeaderViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings>
+						<typedef name="o2" />
+					</usings>
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="50" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="PreviewImage" fullname="Editor::ImageAssetPropertiesViewer::PreviewImage" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="Image" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAssetPropertiesViewer" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/stdafx.h">
-		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />

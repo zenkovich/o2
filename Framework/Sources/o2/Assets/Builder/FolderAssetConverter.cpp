@@ -2,8 +2,8 @@
 #include "FolderAssetConverter.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AssetTypes/BinaryAsset.h"
-#include "o2/Assets/AssetTypes/FolderAsset.h"
+#include "o2/Assets/Types/BinaryAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "AssetsBuilder.h"
 

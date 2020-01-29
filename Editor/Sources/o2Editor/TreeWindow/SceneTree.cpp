@@ -1,9 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "SceneTree.h"
 
-#include "o2/Assets/AssetTypes/ActorAsset.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AssetTypes/FolderAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Scene.h"

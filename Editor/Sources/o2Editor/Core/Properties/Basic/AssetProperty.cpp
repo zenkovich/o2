@@ -1,15 +1,15 @@
 #include "o2Editor/stdafx.h"
 #include "AssetProperty.h"
 
-#include "o2/Assets/AssetTypes/ActorAsset.h"
-#include "o2/Assets/AssetTypes/AnimationAsset.h"
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
-#include "o2/Assets/AssetTypes/BinaryAsset.h"
-#include "o2/Assets/AssetTypes/BitmapFontAsset.h"
-#include "o2/Assets/AssetTypes/DataAsset.h"
-#include "o2/Assets/AssetTypes/FolderAsset.h"
-#include "o2/Assets/AssetTypes/ImageAsset.h"
-#include "o2/Assets/AssetTypes/VectorFontAsset.h"
+#include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Assets/Types/AnimationAsset.h"
+#include "o2/Assets/Types/AtlasAsset.h"
+#include "o2/Assets/Types/BinaryAsset.h"
+#include "o2/Assets/Types/BitmapFontAsset.h"
+#include "o2/Assets/Types/DataAsset.h"
+#include "o2/Assets/Types/FolderAsset.h"
+#include "o2/Assets/Types/ImageAsset.h"
+#include "o2/Assets/Types/VectorFontAsset.h"
 
 DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::ActorAssetRef>);
 DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::AnimationAssetRef>);

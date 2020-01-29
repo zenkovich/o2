@@ -2,7 +2,7 @@
 #include "o2/Render/Texture.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Assets/AssetTypes/AtlasAsset.h"
+#include "o2/Assets/Types/AtlasAsset.h"
 #include "o2/Render/Render.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
