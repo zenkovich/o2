@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/AssetRef.h"
 #include "o2/Render/TextureRef.h"
 
 namespace o2
@@ -19,9 +20,9 @@ namespace o2
 
 	public:
 		PROPERTIES(AtlasAsset);
-		GETTER(Meta*, meta, GetMeta);                      // Meta information getter
-		GETTER(Vector<AssetRef>, images, GetImages); // Images assets getter
-		GETTER(Vector<Page>, pages, GetPages);             // Pages getter
+		GETTER(Meta*, meta, GetMeta);                     // Meta information getter
+		GETTER(Vector<ImageAssetRef>, images, GetImages); // Images assets getter
+		GETTER(Vector<Page>, pages, GetPages);            // Pages getter
 
 	public:
 		// Check equals operator

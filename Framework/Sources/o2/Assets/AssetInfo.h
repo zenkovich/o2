@@ -77,19 +77,12 @@ namespace o2
 		friend class Asset;
 	};
 
-}
-
-#include "o2/Assets/Asset.h"
-
-namespace o2
-{
 	template<typename AssetType>
 	void AssetInfo::SetType()
 	{
 		assetType = &TypeOf(AssetType);
 		meta = mnew AssetType::MetaType();
 	}
-
 }
 
 CLASS_BASES_META(o2::AssetInfo)

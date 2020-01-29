@@ -22,7 +22,6 @@ namespace o2
 		PROPERTIES(ProjectConfig);
 		PROPERTY(String, projectName, SetProjectName, GetProjectName); // Project name property
 		PROPERTY(Platform, currentPlatform, SetPlatform, GetPlatform); // Project platform property
-		GETTER(String, projectPath, GetProjectPath);                   // Project path location
 
 	public:
 		// Default constructor
@@ -68,7 +67,6 @@ CLASS_FIELDS_META(o2::ProjectConfig)
 {
 	PUBLIC_FIELD(projectName);
 	PUBLIC_FIELD(currentPlatform);
-	PUBLIC_FIELD(projectPath);
 	PROTECTED_FIELD(mProjectName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPlatform);
 }

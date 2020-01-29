@@ -2,7 +2,7 @@
 
 namespace o2
 {	
-	template<typename T>
+	template<typename _type, typename _enable = void>
 	class Ref
 	{};
 }

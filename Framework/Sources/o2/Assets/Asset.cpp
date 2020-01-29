@@ -4,7 +4,6 @@
 #include "o2/Assets/Assets.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
-#include "o2/Assets/AssetInfo.h"
 
 namespace o2
 {

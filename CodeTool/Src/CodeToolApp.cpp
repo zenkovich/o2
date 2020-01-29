@@ -492,11 +492,9 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 			if (EndsWith(file, "stdafx.cpp"))
 			{
 				auto headerDebug = clCompile.append_child("PrecompiledHeader");
-				headerDebug.append_attribute("Condition") = "'$(Configuration)|$(Platform)'=='Debug|Win32'";
 				headerDebug.append_child(pugi::node_pcdata).set_value("Create");
 
 				auto headerRelease = clCompile.append_child("PrecompiledHeader");
-				headerRelease.append_attribute("Condition") = "'$(Configuration)|$(Platform)'=='Release|Win32'";
 				headerRelease.append_child(pugi::node_pcdata).set_value("Create");
 			}
 		}

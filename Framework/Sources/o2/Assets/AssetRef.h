@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Utils/Types/Ref.h"
 
 namespace o2
 {
@@ -75,8 +76,8 @@ namespace o2
 		friend class Assets;
 	};
 
-	template<typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>
-	class Ref : public AssetRef
+	template<typename T>
+	class Ref<T, typename std::enable_if<std::is_base_of<o2::Asset, T>::value>::type> : public AssetRef
 	{
 	public:
 		// Default constructor, references to null
@@ -154,20 +155,20 @@ CLASS_METHODS_META(o2::AssetRef)
 }
 END_META;
 
-META_TEMPLATES(typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type)
-CLASS_BASES_META(o2::Ref<T, X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>)
+META_TEMPLATES(typename T)
+CLASS_BASES_META(o2::Ref<T, typename std::enable_if<std::is_base_of<o2::Asset, T>::value>::type><T>)
 {
 	BASE_CLASS(o2::AssetRef);
 }
 END_META;
-META_TEMPLATES(typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type)
-CLASS_FIELDS_META(o2::Ref<T, X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>)
+META_TEMPLATES(typename T)
+CLASS_FIELDS_META(o2::Ref<T, typename std::enable_if<std::is_base_of<o2::Asset, T>::value>::type><T>)
 {
 	PROTECTED_FIELD(mSpecAssetPtr);
 }
 END_META;
-META_TEMPLATES(typename T, typename X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type)
-CLASS_METHODS_META(o2::Ref<T, X = std::enable_if<std::is_base_of<o2::Asset, T>::value>::type>)
+META_TEMPLATES(typename T)
+CLASS_METHODS_META(o2::Ref<T, typename std::enable_if<std::is_base_of<o2::Asset, T>::value>::type><T>)
 {
 
 	PUBLIC_FUNCTION(const Type&, GetAssetType);

@@ -7,8 +7,6 @@
 
 namespace o2
 {
-	class AssetInfo;
-
 	// -------------------------------------------------------------------------------------------------
 	// Basic asset interface. Contains copy of asset, without caching. For regular use assets references
 	// -------------------------------------------------------------------------------------------------
@@ -101,6 +99,9 @@ namespace o2
 	{
 	protected:
 		TAsset() { mInfo.SetType<T>(); }
+
+	public:
+		SERIALIZABLE(TAsset<T>);
 	};
 }
 
