@@ -312,7 +312,7 @@ namespace o2
 			return;
 		}
 
-		mMesh->mTexture = TextureRef(image->GetAtlasId(), image->GetAtlasPage());
+		mMesh->mTexture = TextureRef(image->GetAtlas(), image->GetAtlasPage());
 		mImageAsset     = image;
 		mTextureSrcRect = image->GetAtlasRect();
 		mSlices         = image->GetMeta()->sliceBorder;
@@ -391,7 +391,7 @@ namespace o2
 	UID Sprite::GetAtlasAssetId() const
 	{
 		if (mImageAsset)
-			return mImageAsset->GetAtlasId();
+			return mImageAsset->GetAtlas();
 
 		return 0;
 	}
@@ -1071,7 +1071,7 @@ namespace o2
 	{
 		if (mImageAsset)
 		{
-			mMesh->mTexture = TextureRef(mImageAsset->GetAtlasId(), mImageAsset->GetAtlasPage());
+			mMesh->mTexture = TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage());
 			mImageAsset     = image;
 			mTextureSrcRect = mImageAsset->GetAtlasRect();
 		}
@@ -1097,7 +1097,7 @@ namespace o2
 		{
 			mImageAsset = ImageAssetRef(mImageAsset->GetUID());
 
-			mMesh->mTexture = TextureRef(mImageAsset->GetAtlasId(), mImageAsset->GetAtlasPage());
+			mMesh->mTexture = TextureRef(mImageAsset->GetAtlas(), mImageAsset->GetAtlasPage());
 			mTextureSrcRect = mImageAsset->GetAtlasRect();
 			mSlices         = mImageAsset->GetMeta()->sliceBorder;
 

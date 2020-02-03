@@ -139,6 +139,7 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		friend class Assets;
+		friend class ImageAsset;
 	};
 
 	typedef Ref<AtlasAsset> AtlasAssetRef;

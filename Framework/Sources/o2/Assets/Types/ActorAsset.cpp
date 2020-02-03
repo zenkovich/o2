@@ -49,3 +49,4 @@ namespace o2
 DECLARE_CLASS(o2::ActorAsset);
 
 DECLARE_CLASS(o2::ActorAsset::Meta);
+

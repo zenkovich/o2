@@ -52,7 +52,7 @@ namespace o2
 	const UID& Assets::GetAssetId(const String& path) const
 	{
 		auto info = GetAssetInfo(path);
-		return info.meta ? info.meta->ID() : UID(0);
+		return info.meta ? info.meta->ID() : UID::empty;
 	}
 
 	const AssetInfo& Assets::GetAssetInfo(const UID& id) const

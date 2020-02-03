@@ -71,7 +71,14 @@ namespace o2
 
 	void ImageAsset::SetAtlas(const UID& atlas)
 	{
+		ImageAssetRef thisRef(GetUID());
+		if (auto prevAtlas = AtlasAssetRef(GetMeta()->atlasId)) 
+			prevAtlas->mImages.Remove(thisRef);
+
 		GetMeta()->atlasId = atlas;
+
+		if (auto newAtlas = AtlasAssetRef(GetMeta()->atlasId))
+			newAtlas->mImages.Add(thisRef);
 	}
 
 	void ImageAsset::SetSliceBorder(const BorderI& border)

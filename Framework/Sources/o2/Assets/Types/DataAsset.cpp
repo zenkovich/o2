@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	DataAsset::DataAsset():
+	DataAsset::DataAsset()
 	{}
 
 	DataAsset::DataAsset(const DataAsset& other):

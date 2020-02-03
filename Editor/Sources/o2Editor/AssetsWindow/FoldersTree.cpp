@@ -173,9 +173,8 @@ namespace Editor
 		editBox->ResetScroll();
 
 		editBox->onChangeCompleted = [=](const WString& text) {
-
 			String newPathAsset = o2FileSystem.GetParentPath(assetTreeNode->path) + "/" + text;
-			o2Assets.RenameAsset(*assetTreeNode, text);
+			o2Assets.RenameAsset(assetTreeNode->meta->ID(), text);
 
 			node->SetState("edit", false);
 			//node->UpdateView(false);

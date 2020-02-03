@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/AssetRef.h"
 
 namespace o2
 {
@@ -54,6 +55,8 @@ namespace o2
 
 		// Copy-constructor
 		ActorAsset(const ActorAsset& other);
+
+		friend class Assets;
 	};
 
 	typedef Ref<ActorAsset> ActorAssetRef;

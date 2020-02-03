@@ -6,7 +6,7 @@
 
 namespace o2
 {
-	FolderAsset::FolderAsset():
+	FolderAsset::FolderAsset()
 	{}
 
 	FolderAsset::FolderAsset(const FolderAsset& asset):

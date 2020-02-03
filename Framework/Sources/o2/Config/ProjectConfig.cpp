@@ -10,9 +10,7 @@ namespace o2
 
 	ProjectConfig::ProjectConfig():
 		mPlatform(GetEnginePlatform())
-	{
-		SetProjectPath(::GetProjectPath());
-	}
+	{}
 
 	ProjectConfig::~ProjectConfig()
 	{}
@@ -35,27 +33,6 @@ namespace o2
 	void ProjectConfig::SetPlatform(Platform platform)
 	{
 		mPlatform = platform;
-	}
-
-	String ProjectConfig::GetProjectPath() const
-	{
-		return mProjectPath;
-	}
-
-	void ProjectConfig::SetProjectPath(const String& path)
-	{
-		String cfgFilePath = path + GetProjectSettingFileLocalPath();
-
-		DataNode data;
-		if (!data.LoadFromFile(cfgFilePath))
-		{
-			o2Debug.LogError("Failed to load Project Config. Path: " + cfgFilePath + ". Initializing default values.");
-			InitializeDefault(cfgFilePath);
-			return;
-		}
-		else Deserialize(data);
-
-		mProjectPath = path;
 	}
 
 	void ProjectConfig::InitializeDefault(const String& configFilePath)
