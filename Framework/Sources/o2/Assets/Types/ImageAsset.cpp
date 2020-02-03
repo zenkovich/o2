@@ -14,7 +14,7 @@ namespace o2
 	{}
 
 	ImageAsset::ImageAsset(const ImageAsset& other):
-		TAsset(other), mAtlasPage(other.mAtlasPage), mAtlasRect(other.mAtlasRect), bitmap(this), atlas(this), sliceBorder(this), 
+		Asset(other), mAtlasPage(other.mAtlasPage), mAtlasRect(other.mAtlasRect), bitmap(this), atlas(this), sliceBorder(this),
 		atlasPage(this), atlasRect(this), size(this), width(this), height(this), meta(this)
 	{
 		if (other.mBitmap)
@@ -159,8 +159,6 @@ namespace o2
 			defaultMode == otherMeta->defaultMode;
 	}
 }
-
-DECLARE_CLASS(o2::ImageAsset);
 
 DECLARE_CLASS(o2::ImageAsset::PlatformMeta);
 

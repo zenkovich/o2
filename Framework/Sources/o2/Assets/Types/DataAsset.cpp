@@ -9,7 +9,7 @@ namespace o2
 	{}
 
 	DataAsset::DataAsset(const DataAsset& other):
-		TAsset(other), data(other.data), meta(this)
+		AssetWithDefaultMeta<DataAsset>(other), data(other.data)
 	{
 		data = other.data;
 	}
@@ -20,11 +20,6 @@ namespace o2
 		data = asset.data;
 
 		return *this;
-	}
-
-	DataAsset::Meta* DataAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
 	}
 
 	const char* DataAsset::GetFileExtensions() const
@@ -43,7 +38,3 @@ namespace o2
 		data.SaveToFile(path);
 	}
 }
-
-DECLARE_CLASS(o2::DataAsset);
-
-DECLARE_CLASS(o2::DataAsset::Meta);

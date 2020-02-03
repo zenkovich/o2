@@ -41,7 +41,6 @@ namespace Editor
 	{
 		DataNode data;
 
-		mGlobalConfig.mLastOpenedProjectpath = o2Config.GetProjectPath();
 		mGlobalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
 
 		data = mGlobalConfig;
@@ -54,7 +53,7 @@ namespace Editor
 
 		DataNode data;
 		data = mProjectConfig;
-		data.SaveToFile(o2Config.GetProjectPath() + mConfigPath);
+		data.SaveToFile(mConfigPath);
 	}
 
 	void EditorConfig::LoadConfigs()
@@ -68,9 +67,8 @@ namespace Editor
 	void EditorConfig::LoadProjectConfig()
 	{
 		DataNode data;
-		o2Config.SetProjectPath(mGlobalConfig.mLastOpenedProjectpath);
 
-		if (data.LoadFromFile(o2Config.GetProjectPath() + mConfigPath))
+		if (data.LoadFromFile(mConfigPath))
 			mProjectConfig = data;
 		else
 		{
@@ -84,10 +82,7 @@ namespace Editor
 		if (data.LoadFromFile(mGlobalConfigPath))
 			mGlobalConfig = data;
 		else
-		{
 			mGlobalConfig = GlobalConfig();
-			mGlobalConfig.mLastOpenedProjectpath = GetProjectPath();
-		}
 	}
 
 	void EditorConfig::OnWindowChange()

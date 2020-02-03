@@ -267,7 +267,7 @@ namespace Editor
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
 
-		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last().id);
+		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last().meta->ID());
 		SetValueByUser(actor->GetComponent(mComponentType));
 
 		o2Application.SetCursor(CursorType::Arrow);
@@ -279,7 +279,7 @@ namespace Editor
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
 
-		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last().id);
+		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last().meta->ID());
 		if (actor)
 		{
 			auto component = actor->GetComponent(mComponentType);

@@ -13,9 +13,7 @@ namespace o2
 	struct AssetInfo : public ISerializable
 	{
 		AssetsTree* tree = nullptr; // Owner asset tree
-
-		const Type* assetType = nullptr; // Type of asset
-
+		
 		String    path;     // Path of asset @SERIALIZABLE
 		TimeStamp editTime; // Asset edited time			
 
@@ -43,9 +41,6 @@ namespace o2
 		// Returns is asset info valid - checks id for empty
 		operator bool() const;
 
-		template<typename AssetType>
-		void SetType();
-
 		// Adds new child node and returns him
 		AssetInfo* AddChild(AssetInfo* node);
 
@@ -66,9 +61,6 @@ namespace o2
 		SERIALIZABLE(AssetInfo);
 
 	private:
-		// Beginning serialization callback, writes asset type name
-		void OnSerialize(DataNode& node) const override;
-
 		// Completion deserialization callback, reads asset type name
 		void OnDeserialized(const DataNode& node) override;
 
@@ -76,13 +68,6 @@ namespace o2
 		friend class AssetsTree;
 		friend class Asset;
 	};
-
-	template<typename AssetType>
-	void AssetInfo::SetType()
-	{
-		assetType = &TypeOf(AssetType);
-		meta = mnew AssetType::MetaType();
-	}
 }
 
 CLASS_BASES_META(o2::AssetInfo)
@@ -93,7 +78,6 @@ END_META;
 CLASS_FIELDS_META(o2::AssetInfo)
 {
 	PUBLIC_FIELD(tree);
-	PUBLIC_FIELD(assetType);
 	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(editTime);
 	PUBLIC_FIELD(meta).SERIALIZABLE_ATTRIBUTE();
@@ -109,7 +93,6 @@ CLASS_METHODS_META(o2::AssetInfo)
 	PUBLIC_FUNCTION(void, SetParent, AssetInfo*);
 	PUBLIC_FUNCTION(void, SetTree, AssetsTree*);
 	PUBLIC_FUNCTION(bool, IsValid);
-	PRIVATE_FUNCTION(void, OnSerialize, DataNode&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;

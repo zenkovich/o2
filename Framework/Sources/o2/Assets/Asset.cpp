@@ -8,7 +8,9 @@
 namespace o2
 {
 	Asset::Asset()
-	{}
+	{
+		mInfo.meta = CreateMeta();
+	}
 
 	Asset::Asset(const Asset& other):
 		mInfo(other.mInfo)
@@ -51,6 +53,11 @@ namespace o2
 	AssetMeta* Asset::GetMeta() const
 	{
 		return mInfo.meta;
+	}
+
+	const AssetInfo& Asset::GetInfo() const
+	{
+		return mInfo;
 	}
 
 	void Asset::Load(const String& path)
@@ -144,6 +151,11 @@ namespace o2
 	{
 		DataNode data = Serialize();
 		data.SaveToFile(path);
+	}
+
+	AssetMeta* Asset::CreateMeta() const
+	{
+		return mnew AssetMeta();
 	}
 
 }

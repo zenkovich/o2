@@ -50,7 +50,7 @@ namespace o2
 	{}
 
 	AtlasAsset::AtlasAsset(const AtlasAsset& other):
-		TAsset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
+		Asset(other), mImages(other.mImages), mPages(other.mPages), meta(this), images(this), pages(this)
 	{
 		for (auto& page : mPages)
 			page.mOwner = this;
@@ -122,8 +122,6 @@ namespace o2
 		return maxSize == other.maxSize && format == other.format;
 	}
 }
-
-DECLARE_CLASS(o2::AtlasAsset);
 
 DECLARE_CLASS(o2::AtlasAsset::PlatformMeta);
 

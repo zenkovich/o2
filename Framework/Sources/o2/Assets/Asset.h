@@ -47,6 +47,9 @@ namespace o2
 		// Returns meta information pointer
 		AssetMeta* GetMeta() const;
 
+		// Returns asset info
+		const AssetInfo& GetInfo() const;
+
 		// Loads asset from path
 		void Load(const String& path);
 
@@ -89,16 +92,50 @@ namespace o2
 		// Saves asset data, using DataNode and serialization
 		virtual void SaveData(const String& path) const;
 
+		// Returns new meta for specific asset type. Must be overridden in other asset types. Use ASSET_TYPE or DEFAULT_ASSET_TYPE macro for defining asset types
+		virtual AssetMeta* CreateMeta() const;
+
 		friend class AssetRef;
 		friend class Assets;
 		friend class AssetsBuilder;
 	};
 
+	// This macro defines asset type
+#define ASSET_TYPE(THIS_TYPE, META_TYPE)                            \
+SERIALIZABLE(THIS_TYPE);                                            \
+typedef META_TYPE MetaType;                                         \
+AssetMeta* CreateMeta() const override { return mnew META_TYPE(); }
+
+	// ----------------------------
+	// Base asset with default meta
+	// ----------------------------
 	template<typename T>
-	class TAsset: public Asset
+	class AssetWithDefaultMeta: public Asset
 	{
+	public:
+		// ------------------
+		// Default asset meta
+		// ------------------
+		struct Meta : public AssetMeta
+		{
+			// Returns asset type id
+			const Type* GetAssetType() const override { return &TypeOf(T); }
+		};
+
+		typedef Meta MetaType;
+
+	public:
+		PROPERTIES(AssetWithDefaultMeta<T>);
+		GETTER(Meta*, meta, GetMeta);  // Meta information getter
+
+	public:
+		AssetWithDefaultMeta() {}
+		AssetWithDefaultMeta(const AssetWithDefaultMeta<T>& other) : Asset(other), meta(this) {}
+		Meta* GetMeta() const { return dynamic_cast<Meta*>(mInfo.meta); }
+		SERIALIZABLE(AssetWithDefaultMeta<T>);
+
 	protected:
-		TAsset() { mInfo.SetType<T>(); }
+		AssetMeta* CreateMeta() const override { return mnew Meta(); }
 	};
 }
 
@@ -125,6 +162,7 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(String, GetDataFullPath);
 	PUBLIC_FUNCTION(const UID&, GetUID);
 	PUBLIC_FUNCTION(AssetMeta*, GetMeta);
+	PUBLIC_FUNCTION(const AssetInfo&, GetInfo);
 	PUBLIC_FUNCTION(void, Load, const String&);
 	PUBLIC_FUNCTION(void, Load, const UID&);
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
@@ -135,5 +173,27 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
+	PROTECTED_FUNCTION(AssetMeta*, CreateMeta);
+}
+END_META;
+
+META_TEMPLATES(typename T)
+CLASS_BASES_META(o2::AssetWithDefaultMeta<T>)
+{
+	BASE_CLASS(o2::Asset);
+}
+END_META;
+META_TEMPLATES(typename T)
+CLASS_FIELDS_META(o2::AssetWithDefaultMeta<T>)
+{
+	PUBLIC_FIELD(meta);
+}
+END_META;
+META_TEMPLATES(typename T)
+CLASS_METHODS_META(o2::AssetWithDefaultMeta<T>)
+{
+
+	PUBLIC_FUNCTION(Meta*, GetMeta);
+	PROTECTED_FUNCTION(AssetMeta*, CreateMeta);
 }
 END_META;

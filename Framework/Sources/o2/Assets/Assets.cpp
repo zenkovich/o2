@@ -96,10 +96,10 @@ namespace o2
 		if (!cached)
 		{
 			auto assetInfo = mAssetsTree.Find(path);
-			if (!assetInfo->assetType)
+			if (!assetInfo->meta->GetAssetType())
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
+			Asset* asset = (Asset*)assetInfo->meta->GetAssetType()->CreateSample();
 			asset->Load(path);
 
 			cached = mnew AssetCache();
@@ -121,10 +121,10 @@ namespace o2
 		if (!cached)
 		{
 			auto assetInfo = mAssetsTree.Find(id);
-			if (!assetInfo->assetType)
+			if (!assetInfo->meta->GetAssetType())
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo->assetType->CreateSample();
+			Asset* asset = (Asset*)assetInfo->meta->GetAssetType()->CreateSample();
 			asset->Load(id);
 
 			cached = mnew AssetCache();
@@ -174,7 +174,7 @@ namespace o2
 
 		o2FileSystem.FileDelete(GetAssetsPath() + info.path + ".meta");
 
-		if (info.assetType == &TypeOf(FolderAsset))
+		if (info.meta->GetAssetType() == &TypeOf(FolderAsset))
 			o2FileSystem.FolderRemove(GetAssetsPath() + info.path);
 		else
 			o2FileSystem.FileDelete(GetAssetsPath() + info.path);
@@ -214,7 +214,7 @@ namespace o2
 			return false;
 		}
 
-		if (info.assetType == &TypeOf(FolderAsset))
+		if (info.meta->GetAssetType() == &TypeOf(FolderAsset))
 		{
 			o2FileSystem.FolderCreate(GetAssetsPath() + dest);
 			FolderAssetRef folderAsset(info.path);
@@ -261,7 +261,7 @@ namespace o2
 
 		o2FileSystem.FileMove(GetAssetsPath() + info.path + ".meta", GetAssetsPath() + newPath + ".meta");
 
-		if (info.assetType == &TypeOf(FolderAsset))
+		if (info.meta->GetAssetType() == &TypeOf(FolderAsset))
 			o2FileSystem.FileMove(GetAssetsPath() + info.path, GetAssetsPath() + newPath);
 		else
 			o2FileSystem.FileMove(GetAssetsPath() + info.path, GetAssetsPath() + newPath);

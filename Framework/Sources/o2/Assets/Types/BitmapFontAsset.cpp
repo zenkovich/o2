@@ -40,6 +40,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::BitmapFontAsset);
-
 DECLARE_CLASS(o2::BitmapFontAsset::Meta);

@@ -44,7 +44,6 @@ namespace Editor
 		class GlobalConfig: public ISerializable
 		{
 		public:
-			String         mLastOpenedProjectpath; // Last opened project path @SERIALIZABLE
 			WindowsLayout  mDefaultLayout;         // Default windows layout, using in resetting @SERIALIZABLE
 			DataNode       mUserData;              // User data  @SERIALIZABLE
 
@@ -133,7 +132,6 @@ CLASS_BASES_META(Editor::EditorConfig::GlobalConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::GlobalConfig)
 {
-	PUBLIC_FIELD(mLastOpenedProjectpath).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDefaultLayout).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mUserData).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mAvailableLayouts).SERIALIZABLE_ATTRIBUTE();

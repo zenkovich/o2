@@ -135,7 +135,7 @@ namespace Editor
 	{
 		if (!mValuesDifferent)
 		{
-			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetAssetId()))
+			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetUID()))
 			{
 				mNameText->text = "Null:" + TypeOf(_type).GetName();
 				mBox->layer["caption"]->transparency = 0.5f;
@@ -234,7 +234,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAsset.meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -249,10 +249,10 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset.assetType->IsBasedOn(mCommonValue.GetAssetType()))
+		if (!lastSelectedAsset.meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
-		SetAssetIdByUser(lastSelectedAsset.id);
+		SetAssetIdByUser(lastSelectedAsset.meta->ID());
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();

@@ -108,6 +108,4 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::VectorFontAsset);
-
 DECLARE_CLASS(o2::VectorFontAsset::Meta);

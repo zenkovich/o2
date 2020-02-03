@@ -117,7 +117,7 @@ namespace o2
 		if (asset->parent)
 			asset->parent->RemoveChild(asset, false);
 
-		if (asset->assetType == &TypeOf(FolderAsset) && release)
+		if (asset->meta->GetAssetType() == &TypeOf(FolderAsset) && release)
 		{
 			auto& childs = asset->children;
 			for (auto ch : childs)
@@ -195,7 +195,6 @@ namespace o2
 		asset->meta = meta;
 		asset->path = path;
 		asset->editTime = time;
-		asset->assetType = meta->GetAssetType();
 		asset->SetParent(parent);
 
 		if (!parent)

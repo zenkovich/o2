@@ -74,7 +74,7 @@ namespace o2
 		Vector<UID> availableAtlasesIds;
 		for (auto assetInfo : mAssetsBuilder->mBuiltAssetsTree.allAssets)
 		{
-			if (assetInfo->assetType == atlasType)
+			if (assetInfo->meta->GetAssetType() == atlasType)
 			{
 				availableAtlasesIds.Add(assetInfo->meta->ID());
 			}
@@ -85,7 +85,7 @@ namespace o2
 
 		for (auto assetInfo : mAssetsBuilder->mBuiltAssetsTree.allAssets)
 		{
-			if (assetInfo->assetType == imageType)
+			if (assetInfo->meta->GetAssetType() == imageType)
 			{
 				ImageAsset::Meta* imageMeta = (ImageAsset::Meta*)assetInfo->meta;
 
@@ -102,7 +102,7 @@ namespace o2
 
 		for (auto info : mAssetsBuilder->mBuiltAssetsTree.allAssets)
 		{
-			if (info->assetType == atlasAssetType)
+			if (info->meta->GetAssetType() == atlasAssetType)
 			{
 				if (CheckAtlasRebuilding(info))
 					res.Add(info->meta->ID());
@@ -125,7 +125,7 @@ namespace o2
 		const UID& atlasId = atlasInfo->meta->ID();
 		for (auto assetInfo : mAssetsBuilder->mBuiltAssetsTree.allAssets)
 		{
-			if (assetInfo->assetType == imageType)
+			if (assetInfo->meta->GetAssetType() == imageType)
 			{
 				ImageAsset::Meta* imageMeta = (ImageAsset::Meta*)assetInfo->meta;
 				if (imageMeta->atlasId == atlasId)

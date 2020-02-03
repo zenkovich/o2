@@ -14,7 +14,7 @@ namespace o2
 	}
 
 	ActorAsset::ActorAsset(const ActorAsset& other):
-		TAsset(other), mActor(other.mActor->CloneAs<Actor>()), meta(this)
+		AssetWithDefaultMeta<ActorAsset>(other), mActor(other.mActor->CloneAs<Actor>())
 	{}
 
 	ActorAsset::~ActorAsset()
@@ -45,8 +45,3 @@ namespace o2
 		return mActor;
 	}
 }
-
-DECLARE_CLASS(o2::ActorAsset);
-
-DECLARE_CLASS(o2::ActorAsset::Meta);
-

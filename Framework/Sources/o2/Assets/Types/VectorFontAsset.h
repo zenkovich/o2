@@ -45,7 +45,7 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
 
-		SERIALIZABLE(VectorFontAsset);
+		ASSET_TYPE(VectorFontAsset, Meta);
 
 	public:
 		// ----------------
@@ -89,29 +89,6 @@ namespace o2
 		AddEffect(mnew _type(args ...));
 	}
 }
-
-CLASS_BASES_META(o2::VectorFontAsset)
-{
-	BASE_CLASS(o2::FontAsset);
-}
-END_META;
-CLASS_FIELDS_META(o2::VectorFontAsset)
-{
-	PUBLIC_FIELD(meta);
-}
-END_META;
-CLASS_METHODS_META(o2::VectorFontAsset)
-{
-
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const Vector<VectorFont::Effect*>&, GetEffects);
-	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
-	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
-	PUBLIC_FUNCTION(void, RemoveAllEffects);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-}
-END_META;
 
 CLASS_BASES_META(o2::VectorFontAsset::Meta)
 {

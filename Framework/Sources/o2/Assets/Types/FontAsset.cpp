@@ -11,7 +11,7 @@ namespace o2
 	{}
 
 	FontAsset::FontAsset(const FontAsset& other) :
-		TAsset(other), mFont(other.mFont), font(this)
+		Asset(other), mFont(other.mFont), font(this)
 	{}
 
 	FontRef FontAsset::GetFont() const
@@ -24,11 +24,6 @@ namespace o2
 		Asset::operator=(other);
 		mFont = other.mFont;
 		return *this;
-	}
-
-	const char* FontAsset::GetFileExtensions() const
-	{
-		return "ufnt";
 	}
 }
 

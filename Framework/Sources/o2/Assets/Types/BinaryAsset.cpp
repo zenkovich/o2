@@ -10,7 +10,7 @@ namespace o2
 	{}
 
 	BinaryAsset::BinaryAsset(const BinaryAsset& other):
-		TAsset(other), data(this), dataSize(this), meta(this)
+		AssetWithDefaultMeta<BinaryAsset>(other), data(this), dataSize(this)
 	{
 		if (other.mDataSize > 0)
 		{
@@ -81,11 +81,6 @@ namespace o2
 		}
 	}
 
-	BinaryAsset::Meta* BinaryAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
-
 	const char* BinaryAsset::GetFileExtensions() const
 	{
 		return "bin";
@@ -109,7 +104,3 @@ namespace o2
 			file.WriteData(mData, mDataSize);
 	}
 }
-
-DECLARE_CLASS(o2::BinaryAsset);
-
-DECLARE_CLASS(o2::BinaryAsset::Meta);

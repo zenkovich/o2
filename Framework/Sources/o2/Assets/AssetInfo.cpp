@@ -10,8 +10,7 @@ namespace o2
 	{}
 
 	AssetInfo::AssetInfo(const AssetInfo& other):
-		assetType(other.assetType), path(other.path), editTime(other.editTime), 
-		meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr)
+		path(other.path), editTime(other.editTime), meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr)
 	{
 		for (auto child : other.children)
 		{
@@ -92,17 +91,8 @@ namespace o2
 		}
 	}
 
-	void AssetInfo::OnSerialize(DataNode& node) const
-	{
-		if (assetType)
-			node["type"] = assetType->GetName();
-	}
-
 	void AssetInfo::OnDeserialized(const DataNode& node)
 	{
-		if (auto typeNode = node.GetNode("type"))
-			assetType = o2Reflection.GetType(typeNode->Data());
-
 		for (auto child : children)
 			child->parent = this;
 	}

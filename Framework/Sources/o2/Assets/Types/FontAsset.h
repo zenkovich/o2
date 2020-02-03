@@ -10,7 +10,7 @@ namespace o2
 	// ----------
 	// Font asset
 	// ----------
-	class FontAsset : public TAsset<FontAsset>
+	class FontAsset : public Asset
 	{
 	public:
 		PROPERTIES(FontAsset);
@@ -22,9 +22,6 @@ namespace o2
 
 		// Returns font pointer
 		virtual FontRef GetFont() const;
-
-		// Returns extensions string
-		const char* GetFileExtensions() const override;
 
 		SERIALIZABLE(FontAsset);
 
@@ -46,7 +43,7 @@ namespace o2
 
 CLASS_BASES_META(o2::FontAsset)
 {
-	BASE_CLASS(o2::TAsset<FontAsset>);
+	BASE_CLASS(o2::Asset);
 }
 END_META;
 CLASS_FIELDS_META(o2::FontAsset)
@@ -59,6 +56,5 @@ CLASS_METHODS_META(o2::FontAsset)
 {
 
 	PUBLIC_FUNCTION(FontRef, GetFont);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 }
 END_META;

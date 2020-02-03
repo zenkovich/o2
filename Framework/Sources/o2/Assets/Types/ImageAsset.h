@@ -10,7 +10,7 @@ namespace o2
 	// -----------
 	// Image asset
 	// -----------
-	class ImageAsset: public TAsset<ImageAsset>
+	class ImageAsset: public Asset
 	{
 	public:
 		class Meta;
@@ -80,7 +80,7 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
 
-		SERIALIZABLE(ImageAsset);
+		ASSET_TYPE(ImageAsset, Meta);
 
 	public:
 		// -----------------------
@@ -119,9 +119,10 @@ namespace o2
 		};
 
 	protected:
-		Bitmap* mBitmap;    // Image bitmap. Loading only when needs
-		UInt    mAtlasPage; // Owner atlas page index @SERIALIZABLE
-		RectI   mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
+		Bitmap* mBitmap = nullptr; // Image bitmap. Loading only when needs
+
+		UInt  mAtlasPage; // Owner atlas page index @SERIALIZABLE
+		RectI mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
 		// Default constructor
@@ -142,49 +143,6 @@ namespace o2
 
 	typedef Ref<ImageAsset> ImageAssetRef;
 }
-
-CLASS_BASES_META(o2::ImageAsset)
-{
-	BASE_CLASS(o2::TAsset<ImageAsset>);
-}
-END_META;
-CLASS_FIELDS_META(o2::ImageAsset)
-{
-	PUBLIC_FIELD(bitmap);
-	PUBLIC_FIELD(sliceBorder);
-	PUBLIC_FIELD(atlas);
-	PUBLIC_FIELD(atlasPage);
-	PUBLIC_FIELD(atlasRect);
-	PUBLIC_FIELD(size);
-	PUBLIC_FIELD(width);
-	PUBLIC_FIELD(height);
-	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mBitmap);
-	PROTECTED_FIELD(mAtlasPage).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAtlasRect).SERIALIZABLE_ATTRIBUTE();
-}
-END_META;
-CLASS_METHODS_META(o2::ImageAsset)
-{
-
-	PUBLIC_FUNCTION(Bitmap*, GetBitmap);
-	PUBLIC_FUNCTION(void, SetBitmap, Bitmap*);
-	PUBLIC_FUNCTION(UID, GetAtlas);
-	PUBLIC_FUNCTION(void, SetAtlas, const UID&);
-	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
-	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
-	PUBLIC_FUNCTION(UInt, GetAtlasPage);
-	PUBLIC_FUNCTION(RectI, GetAtlasRect);
-	PUBLIC_FUNCTION(Vec2F, GetSize);
-	PUBLIC_FUNCTION(float, GetWidth);
-	PUBLIC_FUNCTION(float, GetHeight);
-	PUBLIC_FUNCTION(TextureRef, GetAtlasTextureRef);
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, LoadBitmap);
-}
-END_META;
 
 CLASS_BASES_META(o2::ImageAsset::PlatformMeta)
 {

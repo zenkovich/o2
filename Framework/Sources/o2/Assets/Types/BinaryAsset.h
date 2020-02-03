@@ -7,16 +7,12 @@ namespace o2
 	// -------------------
 	// Binary format asset
 	// -------------------
-	class BinaryAsset: public TAsset<BinaryAsset>
+	class BinaryAsset: public AssetWithDefaultMeta<BinaryAsset>
 	{
-	public: 
-		class Meta;
-
 	public:
 		PROPERTIES(BinaryAsset);
 		GETTER(char*, data, GetData);        // Data getter
 		GETTER(UInt, dataSize, GetDataSize); // Data size getter
-		GETTER(Meta*, meta, GetMeta);        // Meta information getter
 
 	public:
 		// Destructor
@@ -34,23 +30,8 @@ namespace o2
 		// Sets data and size
 		void SetData(char* data, UInt size);
 
-		// Returns meta information
-		Meta* GetMeta() const;
-
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
-
-		SERIALIZABLE(BinaryAsset);
-
-	public:
-		// ----------------
-		// Meta information
-		// ----------------
-		class Meta: public TAssetMeta<BinaryAsset>
-		{
-		public:
-			SERIALIZABLE(Meta);
-		};
 
 	protected:
 		char* mData = nullptr; // Asset data
@@ -74,44 +55,3 @@ namespace o2
 
 	typedef Ref<BinaryAsset> BinaryAssetRef;
 }
-
-CLASS_BASES_META(o2::BinaryAsset)
-{
-	BASE_CLASS(o2::TAsset<BinaryAsset>);
-}
-END_META;
-CLASS_FIELDS_META(o2::BinaryAsset)
-{
-	PUBLIC_FIELD(data);
-	PUBLIC_FIELD(dataSize);
-	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mData);
-	PROTECTED_FIELD(mDataSize);
-}
-END_META;
-CLASS_METHODS_META(o2::BinaryAsset)
-{
-
-	PUBLIC_FUNCTION(char*, GetData);
-	PUBLIC_FUNCTION(UInt, GetDataSize);
-	PUBLIC_FUNCTION(void, SetData, char*, UInt);
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-}
-END_META;
-
-CLASS_BASES_META(o2::BinaryAsset::Meta)
-{
-	BASE_CLASS(o2::TAssetMeta<BinaryAsset>);
-}
-END_META;
-CLASS_FIELDS_META(o2::BinaryAsset::Meta)
-{
-}
-END_META;
-CLASS_METHODS_META(o2::BinaryAsset::Meta)
-{
-}
-END_META;

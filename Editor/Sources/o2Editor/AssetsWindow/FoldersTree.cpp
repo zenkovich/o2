@@ -134,7 +134,7 @@ namespace Editor
 		if (assetTreeNode)
 		{
 			return assetTreeNode->children.
-				FindAll([](AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
+				FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetInfo* x) { return UnknownPtr(x); });
 		}
 		else
@@ -142,7 +142,7 @@ namespace Editor
 			const AssetsTree& assetsTree = o2Assets.GetAssetsTree();
 
 			return assetsTree.rootAssets.
-				FindAll([](AssetInfo* x) { return x->assetType == &TypeOf(FolderAsset); }).
+				FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); }).
 				Select<UnknownPtr>([](AssetInfo* x) { return UnknownPtr(x); });
 		}
 	}

@@ -9,7 +9,7 @@ namespace o2
 	{}
 
 	AnimationAsset::AnimationAsset(const AnimationAsset& other):
-		TAsset(other), animation(other.animation), meta(this)
+		AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation)
 	{}
 
 	AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)
@@ -20,17 +20,8 @@ namespace o2
 		return *this;
 	}
 
-	AnimationAsset::Meta* AnimationAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
-
 	const char* AnimationAsset::GetFileExtensions() const
 	{
 		return "anim";
 	}
 }
-
-DECLARE_CLASS(o2::AnimationAsset);
-
-DECLARE_CLASS(o2::AnimationAsset::Meta);

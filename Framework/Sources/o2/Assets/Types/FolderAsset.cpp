@@ -10,7 +10,7 @@ namespace o2
 	{}
 
 	FolderAsset::FolderAsset(const FolderAsset& asset):
-		TAsset(asset), meta(this), insideAssets(this)
+		AssetWithDefaultMeta<FolderAsset>(asset)
 	{}
 
 	FolderAsset& FolderAsset::operator=(const FolderAsset& asset)
@@ -28,11 +28,6 @@ namespace o2
 		return res;
 	}
 
-	FolderAsset::Meta* FolderAsset::GetMeta() const
-	{
-		return (Meta*)mInfo.meta;
-	}
-
 	void FolderAsset::LoadData(const String& path)
 	{}
 
@@ -42,7 +37,3 @@ namespace o2
 			o2FileSystem.FolderCreate(path);
 	}
 }
-
-DECLARE_CLASS(o2::FolderAsset);
-
-DECLARE_CLASS(o2::FolderAsset::Meta);

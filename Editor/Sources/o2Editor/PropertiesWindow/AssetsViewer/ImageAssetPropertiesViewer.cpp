@@ -272,7 +272,7 @@ namespace Editor
 	{
 		BorderI value = mBordersSmoothValue;
 		for (auto target : mTargetAssets)
-			(*target)->GetMeta()->mSliceBorder = value;
+			(*target)->GetMeta()->sliceBorder = value;
 
 		mBorderProperty->Refresh();
 		UpdateBordersAnchors();
@@ -283,12 +283,12 @@ namespace Editor
 		if (mTargetAssets.IsEmpty())
 			return;
 
-		auto& commonValue = (*mTargetAssets[0])->GetAtlasId();
+		auto& commonValue = (*mTargetAssets[0])->GetAtlas();
 		bool valuesDifferent = false;
 
 		for (int i = 1; i < mTargetAssets.Count(); i++)
 		{
-			auto& id = (*mTargetAssets[i])->GetAtlasId();
+			auto& id = (*mTargetAssets[i])->GetAtlas();
 			if (id != commonValue)
 			{
 				valuesDifferent = true;
@@ -307,7 +307,7 @@ namespace Editor
 		const UID& id = mAtlasProperty->GetCommonValue()->GetUID();
 
 		for (auto target : mTargetAssets)
-			(*target)->SetAtlasId(id);
+			(*target)->SetAtlas(id);
 	}
 
 	Sprite* ImageAssetPropertiesViewer::CreateGridSprite()
