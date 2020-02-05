@@ -161,10 +161,10 @@ namespace o2
 	}
 }
 
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::ImageAsset>);
+
 DECLARE_CLASS(o2::ImageAsset);
 
 DECLARE_CLASS(o2::ImageAsset::PlatformMeta);
 
 DECLARE_CLASS(o2::ImageAsset::Meta);
-
-DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::ImageAsset>);

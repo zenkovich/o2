@@ -24,7 +24,8 @@ namespace o2
 		~AssetsBuilder();
 
 		// Builds asset from assets path to dataAssetsPath. Removes all built assets if forcible is true
-		const Vector<UID>& BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath, bool forcible = false);
+		const Vector<UID>& BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath, 
+									   AssetsTree* assetsTree, bool forcible = false);
 
 		// Returns source assets path in building
 		const String& GetSourceAssetsPath() const;
@@ -38,9 +39,9 @@ namespace o2
 		String     mSourceAssetsPath;     // Source assets path
 		AssetsTree mSourceAssetsTree;     // Source assets tree
 
-		String     mBuiltAssetsPath;     // Built assets path
-		String     mBuiltAssetsTreePath; // Built assets tree data path
-		AssetsTree mBuiltAssetsTree;     // Built assets tree
+		String      mBuiltAssetsPath;     // Built assets path
+		String      mBuiltAssetsTreePath; // Built assets tree data path
+		AssetsTree* mBuiltAssetsTree;     // Built assets tree
 
 		Vector<UID> mModifiedAssets; // Modified assets infos
 

@@ -582,8 +582,6 @@ namespace o2
 
 		static void Read(Vector<T>& value, const DataNode& data)
 		{
-			value.Clear();
-
 			for (auto childNode : data.mChildNodes)
 			{
 				T v = T();
@@ -612,8 +610,6 @@ namespace o2
 
 		static void Read(Map<_key, _value>& value, const DataNode& data)
 		{
-			value.Clear();
-
 			for (auto childNode : data.mChildNodes)
 			{
 				auto keyNode = childNode->GetNode("Key");

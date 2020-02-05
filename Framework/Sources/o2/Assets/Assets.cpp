@@ -57,16 +57,22 @@ namespace o2
 
 	const AssetInfo& Assets::GetAssetInfo(const UID& id) const
 	{
-		if (auto res = mAssetsTree.Find(id))
-			return *res;
+		for (auto tree : mAssetsTrees)
+		{
+			if (auto res = tree->Find(id))
+				return *res;
+		}
 
 		return AssetInfo::empty;
 	}
 
 	const AssetInfo& Assets::GetAssetInfo(const String& path) const
 	{
-		if (auto res = mAssetsTree.Find(path))
-			return *res;
+		for (auto tree : mAssetsTrees)
+		{
+			if (auto res = tree->Find(path))
+				return *res;
+		}
 
 		return AssetInfo::empty;
 	}
@@ -95,11 +101,11 @@ namespace o2
 
 		if (!cached)
 		{
-			auto assetInfo = mAssetsTree.Find(path);
-			if (!assetInfo->meta->GetAssetType())
+			auto& assetInfo = GetAssetInfo(path);
+			if (!assetInfo.meta->GetAssetType())
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo->meta->GetAssetType()->CreateSample();
+			Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();
 			asset->Load(path);
 
 			cached = mnew AssetCache();
@@ -120,11 +126,11 @@ namespace o2
 
 		if (!cached)
 		{
-			auto assetInfo = mAssetsTree.Find(id);
-			if (!assetInfo->meta->GetAssetType())
+			auto assetInfo = GetAssetInfo(id);
+			if (!assetInfo.meta->GetAssetType())
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo->meta->GetAssetType()->CreateSample();
+			Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();
 			asset->Load(id);
 
 			cached = mnew AssetCache();
@@ -334,22 +340,28 @@ namespace o2
 	{
 		ClearAssetsCache();
 
-		auto changedAssetsIds = mAssetsBuilder->BuildAssets(::GetEditorAssetsPath(),
-															::GetEditorBuiltAssetsPath(),
-															::GetEditorBuiltAssetsTreePath(), forcible);
+		auto editorAssetsTree = mnew AssetsTree();
+		auto changedAssetsIds = mAssetsBuilder->BuildAssets(::GetEditorAssetsPath(), ::GetEditorBuiltAssetsPath(),
+															::GetEditorBuiltAssetsTreePath(), editorAssetsTree, forcible);
 
-		changedAssetsIds += mAssetsBuilder->BuildAssets(::GetAssetsPath(),
-														::GetBuiltAssetsPath(),
-														::GetBuiltAssetsTreePath(), forcible);
+		mMainAssetsTree = mnew AssetsTree();
+		changedAssetsIds += mAssetsBuilder->BuildAssets(::GetAssetsPath(), ::GetBuiltAssetsPath(),
+														::GetBuiltAssetsTreePath(), mMainAssetsTree, forcible);
 
-		LoadAssetsTree();
+		mAssetsTrees.Add(mMainAssetsTree);
+		mAssetsTrees.Add(editorAssetsTree);
 
 		onAssetsRebuilt(changedAssetsIds);
 	}
 
+	const Vector<AssetsTree*>& Assets::GetAssetsTrees() const
+	{
+		return mAssetsTrees;
+	}
+
 	const AssetsTree& Assets::GetAssetsTree() const
 	{
-		return mAssetsTree;
+		return *mMainAssetsTree;
 	}
 
 	String Assets::MakeUniqueAssetName(const String& path)
@@ -391,9 +403,16 @@ namespace o2
 
 	void Assets::LoadAssetsTree()
 	{
-		mAssetsTree.Clear();
-		mAssetsTree.DeserializeFromString(o2FileSystem.ReadFile(::GetEditorBuiltAssetsTreePath()));
-		mAssetsTree.DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
+		mAssetsTrees.Clear();
+
+		auto editorAssetsTree = mnew AssetsTree();
+		editorAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetEditorBuiltAssetsTreePath()));
+
+		mMainAssetsTree = mnew AssetsTree();
+		mMainAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(::GetBuiltAssetsTreePath()));
+
+		mAssetsTrees.Add(mMainAssetsTree);
+		mAssetsTrees.Add(editorAssetsTree);
 	}
 
 	void Assets::LoadAssetTypes()

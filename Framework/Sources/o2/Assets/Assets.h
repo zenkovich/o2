@@ -122,7 +122,10 @@ namespace o2
 		// Rebuilds all assets
 		void RebuildAssets(bool forcible = false);
 
-		// Returns assets tree
+		// Returns all assets trees
+		const Vector<AssetsTree*>& GetAssetsTrees() const;
+
+		// Returns main tree
 		const AssetsTree& GetAssetsTree() const;
 
 		// Makes unique asset name from first path variant
@@ -138,9 +141,10 @@ namespace o2
 		};
 
 	protected:
-		AssetsTree     mAssetsTree;    // Assets information tree
-		LogStream*     mLog;           // Log stream
-		AssetsBuilder* mAssetsBuilder; // Assets builder
+		AssetsTree*         mMainAssetsTree; // Main assets tree
+		Vector<AssetsTree*> mAssetsTrees;    // Assets trees
+		LogStream*          mLog;            // Log stream
+		AssetsBuilder*      mAssetsBuilder;  // Assets builder
 
 		Map<String, const Type*> mAssetsTypes;   // Assets types and extensions dictionary
 		const Type*              mStdAssetType;  // Standard asset type

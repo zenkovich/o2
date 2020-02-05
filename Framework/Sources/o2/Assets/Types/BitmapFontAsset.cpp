@@ -40,8 +40,8 @@ namespace o2
 			mFont = mnew BitmapFont(path);
 	}
 }
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::BitmapFontAsset>);
 
 DECLARE_CLASS(o2::BitmapFontAsset);
 
 DECLARE_CLASS(o2::BitmapFontAsset::Meta);
-DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::BitmapFontAsset>);

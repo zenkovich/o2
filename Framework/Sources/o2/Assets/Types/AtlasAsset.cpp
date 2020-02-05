@@ -124,6 +124,8 @@ namespace o2
 	}
 }
 
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::AtlasAsset>);
+
 DECLARE_CLASS(o2::AtlasAsset);
 
 DECLARE_CLASS(o2::AtlasAsset::PlatformMeta);
@@ -131,5 +133,3 @@ DECLARE_CLASS(o2::AtlasAsset::PlatformMeta);
 DECLARE_CLASS(o2::AtlasAsset::Meta);
 
 DECLARE_CLASS(o2::AtlasAsset::Page);
-
-DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::AtlasAsset>);
