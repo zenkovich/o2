@@ -7,11 +7,16 @@
 
 namespace o2
 {
-	FontAsset::FontAsset()
+	FontAsset::FontAsset():
+		Asset(nullptr)
 	{}
 
 	FontAsset::FontAsset(const FontAsset& other) :
 		Asset(other), mFont(other.mFont), font(this)
+	{}
+
+	FontAsset::FontAsset(AssetMeta* meta):
+		Asset(meta)
 	{}
 
 	FontRef FontAsset::GetFont() const

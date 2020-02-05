@@ -70,9 +70,13 @@ namespace o2
 	protected:
 		AssetInfo mInfo; // Asset info
 
-	protected:
-		// Default constructor
+	private:
+		// Hidden default constructor
 		Asset();
+
+	protected:
+		// Constructor with meta, use it as default constructor
+		Asset(AssetMeta* meta);
 
 		// Copy-constructor
 		Asset(const Asset& asset);
@@ -92,9 +96,6 @@ namespace o2
 		// Saves asset data, using DataNode and serialization
 		virtual void SaveData(const String& path) const;
 
-		// Returns new meta for specific asset type. Must be overridden in other asset types. Use ASSET_TYPE or DEFAULT_ASSET_TYPE macro for defining asset types
-		virtual AssetMeta* CreateMeta() const;
-
 		friend class AssetRef;
 		friend class Assets;
 		friend class AssetsBuilder;
@@ -103,8 +104,7 @@ namespace o2
 	// This macro defines asset type
 #define ASSET_TYPE(THIS_TYPE, META_TYPE)                            \
 SERIALIZABLE(THIS_TYPE);                                            \
-typedef META_TYPE MetaType;                                         \
-AssetMeta* CreateMeta() const override { return mnew META_TYPE(); }
+typedef META_TYPE MetaType;                                         
 
 	// ----------------------------
 	// Base asset with default meta
@@ -113,15 +113,7 @@ AssetMeta* CreateMeta() const override { return mnew META_TYPE(); }
 	class AssetWithDefaultMeta: public Asset
 	{
 	public:
-		// ------------------
-		// Default asset meta
-		// ------------------
-		struct Meta : public AssetMeta
-		{
-			// Returns asset type id
-			const Type* GetAssetType() const override { return &TypeOf(T); }
-		};
-
+		typedef DefaultAssetMeta<T> Meta;
 		typedef Meta MetaType;
 
 	public:
@@ -129,13 +121,11 @@ AssetMeta* CreateMeta() const override { return mnew META_TYPE(); }
 		GETTER(Meta*, meta, GetMeta);  // Meta information getter
 
 	public:
-		AssetWithDefaultMeta() {}
+		AssetWithDefaultMeta(): Asset(mnew Meta()) {}
 		AssetWithDefaultMeta(const AssetWithDefaultMeta<T>& other) : Asset(other), meta(this) {}
 		Meta* GetMeta() const { return dynamic_cast<Meta*>(mInfo.meta); }
-		SERIALIZABLE(AssetWithDefaultMeta<T>);
 
-	protected:
-		AssetMeta* CreateMeta() const override { return mnew Meta(); }
+		SERIALIZABLE(AssetWithDefaultMeta<T>);
 	};
 }
 
@@ -173,7 +163,6 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(AssetMeta*, CreateMeta);
 }
 END_META;
 
@@ -194,6 +183,5 @@ CLASS_METHODS_META(o2::AssetWithDefaultMeta<T>)
 {
 
 	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PROTECTED_FUNCTION(AssetMeta*, CreateMeta);
 }
 END_META;

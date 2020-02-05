@@ -616,7 +616,10 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	auto classes = file->GetGlobalNamespace()->GetAllClasses();
 	for (auto cls : classes)
 	{
-		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), [](SyntaxFunction* x) { return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE"; }) != cls->GetFunctions().end();
+		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), 
+									   [](SyntaxFunction* x) { 
+			return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE";
+		}) != cls->GetFunctions().end();
 
 		if ((!mCache.IsClassBasedOn(cls, baseObjectClass) && !cls->IsMetaClass()) || !hasIObject || cls == baseObjectClass)
 			continue;
@@ -1074,7 +1077,7 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
-	static vector<string> ignoringNames ={ "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
+	static vector<string> ignoringNames ={ "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
 
 	return !StartsWith(owner->GetName(), function->GetName()) &&
 		!StartsWith(function->GetName(), string("~") + owner->GetName()) &&

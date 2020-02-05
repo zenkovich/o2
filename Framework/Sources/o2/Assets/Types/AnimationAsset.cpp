@@ -25,3 +25,6 @@ namespace o2
 		return "anim";
 	}
 }
+
+DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::AnimationAsset>);
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::AnimationAsset>);

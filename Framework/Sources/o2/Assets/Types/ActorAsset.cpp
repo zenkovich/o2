@@ -45,3 +45,6 @@ namespace o2
 		return mActor;
 	}
 }
+
+DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::ActorAsset>);
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::ActorAsset>);

@@ -51,7 +51,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class Meta: public TAssetMeta<VectorFontAsset>
+		class Meta: public DefaultAssetMeta<VectorFontAsset>
 		{
 		public:
 			// Destructor
@@ -90,9 +90,32 @@ namespace o2
 	}
 }
 
+CLASS_BASES_META(o2::VectorFontAsset)
+{
+	BASE_CLASS(o2::FontAsset);
+}
+END_META;
+CLASS_FIELDS_META(o2::VectorFontAsset)
+{
+	PUBLIC_FIELD(meta);
+}
+END_META;
+CLASS_METHODS_META(o2::VectorFontAsset)
+{
+
+	PUBLIC_FUNCTION(Meta*, GetMeta);
+	PUBLIC_FUNCTION(const Vector<VectorFont::Effect*>&, GetEffects);
+	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
+	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
+	PUBLIC_FUNCTION(void, RemoveAllEffects);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+}
+END_META;
+
 CLASS_BASES_META(o2::VectorFontAsset::Meta)
 {
-	BASE_CLASS(o2::TAssetMeta<VectorFontAsset>);
+	BASE_CLASS(o2::DefaultAssetMeta<VectorFontAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAsset::Meta)

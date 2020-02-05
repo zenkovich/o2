@@ -34,7 +34,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class Meta: public TAssetMeta<BitmapFontAsset>
+		class Meta: public DefaultAssetMeta<BitmapFontAsset>
 		{
 		public:
 			SERIALIZABLE(Meta);
@@ -56,9 +56,28 @@ namespace o2
 	typedef Ref<BitmapFontAsset> BitmapFontAssetRef;
 }
 
+CLASS_BASES_META(o2::BitmapFontAsset)
+{
+	BASE_CLASS(o2::FontAsset);
+}
+END_META;
+CLASS_FIELDS_META(o2::BitmapFontAsset)
+{
+	PUBLIC_FIELD(meta);
+}
+END_META;
+CLASS_METHODS_META(o2::BitmapFontAsset)
+{
+
+	PUBLIC_FUNCTION(Meta*, GetMeta);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+}
+END_META;
+
 CLASS_BASES_META(o2::BitmapFontAsset::Meta)
 {
-	BASE_CLASS(o2::TAssetMeta<BitmapFontAsset>);
+	BASE_CLASS(o2::DefaultAssetMeta<BitmapFontAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset::Meta)

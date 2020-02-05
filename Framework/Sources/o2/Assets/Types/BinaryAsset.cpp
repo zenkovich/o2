@@ -104,3 +104,6 @@ namespace o2
 			file.WriteData(mData, mDataSize);
 	}
 }
+
+DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::BinaryAsset>);
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::BinaryAsset>);

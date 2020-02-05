@@ -10,11 +10,11 @@ namespace o2
 	// ----------
 	// Font asset
 	// ----------
-	class FontAsset : public Asset
+	class FontAsset: public Asset
 	{
 	public:
 		PROPERTIES(FontAsset);
-		GETTER(FontRef, font, GetFont);   // Font getter
+		GETTER(FontRef, font, GetFont); // Font getter
 
 	public:
 		// Check equals operator
@@ -28,9 +28,13 @@ namespace o2
 	protected:
 		FontRef mFont;
 
-	protected:
+	private:
 		// Default constructor
 		FontAsset();
+
+	protected:
+		// Default constructor
+		FontAsset(AssetMeta* meta);
 
 		// Copy-constructor
 		FontAsset(const FontAsset& asset);

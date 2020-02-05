@@ -38,11 +38,13 @@ namespace o2
 	// Asset meta specialization. Use it as base class
 	// -----------------------------------------------
 	template<typename T>
-	class TAssetMeta : public AssetMeta
+	class DefaultAssetMeta : public AssetMeta
 	{
 	public:
 		// Returns asset type id
 		const Type* GetAssetType() const override { return &TypeOf(T); }
+
+		SERIALIZABLE(DefaultAssetMeta<T>);
 	};
 }
 
@@ -62,5 +64,24 @@ CLASS_METHODS_META(o2::AssetMeta)
 	PUBLIC_FUNCTION(const UID&, ID);
 	PUBLIC_FUNCTION(const Type*, GetAssetType);
 	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
+}
+END_META;
+
+META_TEMPLATES(typename T)
+CLASS_BASES_META(o2::DefaultAssetMeta<T>)
+{
+	BASE_CLASS(o2::AssetMeta);
+}
+END_META;
+META_TEMPLATES(typename T)
+CLASS_FIELDS_META(o2::DefaultAssetMeta<T>)
+{
+}
+END_META;
+META_TEMPLATES(typename T)
+CLASS_METHODS_META(o2::DefaultAssetMeta<T>)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetAssetType);
 }
 END_META;

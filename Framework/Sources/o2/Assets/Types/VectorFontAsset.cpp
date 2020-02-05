@@ -39,7 +39,8 @@ namespace o2
 		return true;
 	}
 
-	VectorFontAsset::VectorFontAsset()
+	VectorFontAsset::VectorFontAsset():
+		FontAsset(mnew Meta())
 	{}
 
 	VectorFontAsset::VectorFontAsset(const VectorFontAsset& asset):
@@ -108,4 +109,8 @@ namespace o2
 	}
 }
 
+DECLARE_CLASS(o2::VectorFontAsset);
+
 DECLARE_CLASS(o2::VectorFontAsset::Meta);
+
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::VectorFontAsset>);

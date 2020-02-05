@@ -37,3 +37,6 @@ namespace o2
 			o2FileSystem.FolderCreate(path);
 	}
 }
+
+DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::FolderAsset>);
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::FolderAsset>);

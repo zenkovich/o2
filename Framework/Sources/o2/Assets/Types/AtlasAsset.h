@@ -72,7 +72,7 @@ namespace o2
 		// ----------------
 		// Meta information
 		// ----------------
-		class Meta: public TAssetMeta<AtlasAsset>
+		class Meta: public DefaultAssetMeta<AtlasAsset>
 		{
 		public:
 			PlatformMeta ios;     // IOS specified meta @SERIALIZABLE
@@ -145,6 +145,36 @@ namespace o2
 	typedef Ref<AtlasAsset> AtlasAssetRef;
 }
 
+CLASS_BASES_META(o2::AtlasAsset)
+{
+	BASE_CLASS(o2::Asset);
+}
+END_META;
+CLASS_FIELDS_META(o2::AtlasAsset)
+{
+	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(images);
+	PUBLIC_FIELD(pages);
+	PROTECTED_FIELD(mImages).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mPages).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::AtlasAsset)
+{
+
+	PUBLIC_FUNCTION(const Vector<ImageAssetRef>&, GetImages);
+	PUBLIC_FUNCTION(const Vector<Page>&, GetPages);
+	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(Meta*, GetMeta);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const UID&, UInt);
+	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const String&, UInt);
+	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const UID&, UInt);
+	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const String&, UInt);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+}
+END_META;
+
 CLASS_BASES_META(o2::AtlasAsset::PlatformMeta)
 {
 	BASE_CLASS(o2::ISerializable);
@@ -163,7 +193,7 @@ END_META;
 
 CLASS_BASES_META(o2::AtlasAsset::Meta)
 {
-	BASE_CLASS(o2::TAssetMeta<AtlasAsset>);
+	BASE_CLASS(o2::DefaultAssetMeta<AtlasAsset>);
 }
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::Meta)

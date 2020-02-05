@@ -38,3 +38,6 @@ namespace o2
 		data.SaveToFile(path);
 	}
 }
+
+DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::DataAsset>);
+DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::DataAsset>);
