@@ -737,32 +737,44 @@ namespace o2
 
 typedef void*(*GetValuePointerFuncPtr)(void*);
 
-#define DECLARE_CLASS(CLASS)                                                                                            \
-    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)		
-
-#define DECLARE_CLASS_MANUAL(CLASS)                                                                                     \
-    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)											            
-
-#define CLASS_BASES_META(CLASS)                                                                                         \
-    template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor)          \
-	{                                                                                                                   \
-        typedef CLASS thisclass;                                                                                        \
-		processor.template StartBases<CLASS>(object, type);															            
-
-#define CLASS_FIELDS_META(CLASS)                                                                                        \
-    template<typename _type_processor> void CLASS::ProcessFields(CLASS* object, _type_processor& processor)             \
-	{                                                                                                                   \
-        typedef CLASS thisclass;                                                                                        \
-		processor.template StartFields<CLASS>(object, type);															            
-
-#define CLASS_METHODS_META(CLASS)                                                                                       \
-    template<typename _type_processor> void CLASS::ProcessMethods(CLASS* object, _type_processor& processor)            \
-	{                                                                                                                   \
-        typedef CLASS thisclass;                                                                                        \
+#define DECLARE_CLASS(CLASS)                                                                                   \
+    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)										             
+																											   
+#define CLASS_BASES_META(CLASS)                                                                                \
+    template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor) \
+	{                                                                                                          \
+        typedef CLASS thisclass;                                                                               \
+		processor.template StartBases<CLASS>(object, type);														         
+																											   
+#define CLASS_FIELDS_META(CLASS)                                                                               \
+    template<typename _type_processor> void CLASS::ProcessFields(CLASS* object, _type_processor& processor)    \
+	{                                                                                                          \
+        typedef CLASS thisclass;                                                                               \
+		processor.template StartFields<CLASS>(object, type);													             
+																											   
+#define CLASS_METHODS_META(CLASS)                                                                              \
+    template<typename _type_processor> void CLASS::ProcessMethods(CLASS* object, _type_processor& processor)   \
+	{                                                                                                          \
+        typedef CLASS thisclass;                                                                               \
 		processor.template StartMethods<CLASS>(object, type);
 
 #define META_TEMPLATES(...) \
     template<__VA_ARGS__>
+
+#define DECLARE_CLASS_MANUAL(CLASS) \
+    DECLARE_CLASS(CLASS)	
+
+#define CLASS_BASES_META_MANUAL(CLASS) \
+    CLASS_BASES_META(CLASS)
+
+#define CLASS_FIELDS_META_MANUAL(CLASS) \
+    CLASS_FIELDS_META(CLASS)
+
+#define CLASS_METHODS_META_MANUAL(CLASS) \
+    CLASS_METHODS_META(CLASS)
+
+#define META_TEMPLATES_MANUAL(...) \
+    META_TEMPLATES(__VA_ARGS__)
 
 #define FUNDAMENTAL_META(NAME) \
     template<>                                                                                                                                \

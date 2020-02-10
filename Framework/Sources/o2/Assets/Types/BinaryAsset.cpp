@@ -107,3 +107,6 @@ namespace o2
 
 DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::BinaryAsset>);
 DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::BinaryAsset>);
+DECLARE_CLASS_MANUAL(o2::Ref<o2::BinaryAsset>);
+
+DECLARE_CLASS(o2::BinaryAsset);

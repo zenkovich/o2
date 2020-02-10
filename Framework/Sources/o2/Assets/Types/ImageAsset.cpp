@@ -119,7 +119,7 @@ namespace o2
 
 	TextureRef ImageAsset::GetAtlasTextureRef() const
 	{
-		return AtlasAsset::GetPageTextureRef(GetAtlas(), GetAtlasPage());
+		return AtlasAsset::GetPageTextureRef(o2Assets.GetAssetInfo(GetAtlas()), GetAtlasPage());
 	}
 
 	ImageAsset::Meta* ImageAsset::GetMeta() const
@@ -162,6 +162,7 @@ namespace o2
 }
 
 DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::ImageAsset>);
+DECLARE_CLASS_MANUAL(o2::Ref<o2::ImageAsset>);
 
 DECLARE_CLASS(o2::ImageAsset);
 

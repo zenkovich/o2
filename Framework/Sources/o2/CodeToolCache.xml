@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <files>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/Animate.h">
-		<date year="2020" month="1" day="16" hour="14" minute="47" second="31" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -37,7 +37,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/AnimatedFloat.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -63,7 +63,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/AnimatedValue.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -105,7 +105,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/AnimatedVector.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -139,7 +139,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/Animation.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -176,7 +176,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/AnimationMask.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -199,7 +199,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/AnimationState.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="11" hour="9" minute="15" second="11" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -222,7 +222,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/IAnimation.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -245,7 +245,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Animation/TweenValue.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="59" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -253,7 +253,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Application/Android/ApplicationBase.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -274,7 +274,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Application/Android/VKCodes.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -282,7 +282,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Application/Application.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="58" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -306,7 +306,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Application/Input.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="11" hour="9" minute="15" second="11" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -396,7 +396,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Application/Windows/ApplicationBase.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -416,98 +416,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Asset.h">
-		<date year="2020" month="2" day="5" hour="12" minute="51" second="35" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Asset" fullname="o2::Asset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="AssetMeta" newDef="MetaType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="AssetWithDefaultMeta" fullname="o2::AssetWithDefaultMeta" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="DefaultAssetMeta&lt;T&gt;" newDef="Meta" />
-								<typedef what="Meta" newDef="MetaType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="Asset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetInfo.h">
-		<date year="2020" month="2" day="3" hour="18" minute="44" second="15" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AssetInfo" fullname="o2::AssetInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetRef.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AssetRef" fullname="o2::AssetRef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;o2::Asset, T&gt;::value&gt;::type&gt;" fullname="o2::Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;o2::Asset, T&gt;::value&gt;::type&gt;" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetRef" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Assets.h">
-		<date year="2020" month="2" day="5" hour="17" minute="45" second="2" />
+		<date year="2020" month="2" day="6" hour="21" minute="58" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -537,7 +447,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetsTree.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -560,7 +470,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Builder/AssetsBuilder.h">
-		<date year="2020" month="2" day="5" hour="16" minute="54" second="10" />
+		<date year="2020" month="2" day="6" hour="21" minute="58" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -581,7 +491,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Builder/AtlasAssetConverter.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
+		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -619,7 +529,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Builder/FolderAssetConverter.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
+		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -642,7 +552,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Builder/IAssetConverter.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
+		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -665,7 +575,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Builder/ImageAssetConverter.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
+		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -688,7 +598,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Builder/StdAssetConverter.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="28" />
+		<date year="2020" month="1" day="28" hour="22" minute="51" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -711,7 +621,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Meta.h">
-		<date year="2020" month="2" day="5" hour="12" minute="51" second="35" />
+		<date year="2020" month="2" day="4" hour="22" minute="53" second="44" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -741,133 +651,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/ActorAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="28" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="ActorAsset" fullname="o2::ActorAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;ActorAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;ActorAsset&gt;" newDef="ActorAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AnimationAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="29" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AnimationAsset" fullname="o2::AnimationAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;AnimationAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;AnimationAsset&gt;" newDef="AnimationAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AtlasAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="31" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AtlasAsset" fullname="o2::AtlasAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="PlatformMeta" fullname="o2::AtlasAsset::PlatformMeta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="Meta" fullname="o2::AtlasAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="DefaultAssetMeta&lt;AtlasAsset&gt;" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="Page" fullname="o2::AtlasAsset::Page" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Asset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;AtlasAsset&gt;" newDef="AtlasAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BinaryAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="18" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="BinaryAsset" fullname="o2::BinaryAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;BinaryAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;BinaryAsset&gt;" newDef="BinaryAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BitmapFontAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="20" />
+		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -900,58 +685,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/DataAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="DataAsset" fullname="o2::DataAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;DataAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;DataAsset&gt;" newDef="DataAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FolderAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="22" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="FolderAsset" fullname="o2::FolderAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;FolderAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;FolderAsset&gt;" newDef="FolderAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FontAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="24" />
+		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -976,7 +711,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/ImageAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="25" />
+		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1018,7 +753,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/VectorFontAsset.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="42" />
+		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1052,7 +787,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Config/ProjectConfig.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="27" />
+		<date year="2020" month="1" day="28" hour="22" minute="57" second="11" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1076,7 +811,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/EngineSettings.h">
-		<date year="2020" month="1" day="27" hour="13" minute="3" second="14" />
+		<date year="2020" month="1" day="25" hour="22" minute="37" second="27" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -1084,7 +819,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/ApplicationEventsListener.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="49" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1107,7 +842,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/CursorEventsArea.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="49" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1130,7 +865,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/CursorEventsListener.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="58" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1159,7 +894,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/DrawableCursorEventsListener.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="49" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1182,7 +917,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/EventSystem.h">
-		<date year="2020" month="1" day="16" hour="15" minute="31" second="16" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1205,7 +940,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/IEventsListener.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1226,7 +961,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/KeyboardEventsListener.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="57" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1249,7 +984,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Events/ShortcutKeysListener.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="48" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1281,7 +1016,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/O2.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -1289,7 +1024,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Android/OpenGL.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1303,7 +1038,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Android/RenderBase.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1324,7 +1059,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Android/TextureBase.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1345,7 +1080,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/BitmapFont.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="46" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1368,7 +1103,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Camera.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="27" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1391,7 +1126,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/DrawPolyLine.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="46" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1414,7 +1149,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Font.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="14" hour="9" minute="11" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1442,7 +1177,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/FontRef.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="46" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1463,7 +1198,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/IDrawable.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1484,7 +1219,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Mesh.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="46" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1507,7 +1242,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Particle.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1528,7 +1263,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/ParticlesEffects.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="45" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1559,7 +1294,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/ParticlesEmitter.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="55" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1582,7 +1317,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/ParticlesEmitterShapes.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1621,7 +1356,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/RectDrawable.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="45" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1645,7 +1380,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Render.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="14" hour="9" minute="11" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1682,7 +1417,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Sprite.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="55" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1705,7 +1440,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Text.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="55" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1748,7 +1483,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Texture.h">
-		<date year="2020" month="1" day="16" hour="15" minute="31" second="16" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1771,7 +1506,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/TextureRef.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="45" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1792,7 +1527,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/VectorFont.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="14" hour="9" minute="11" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1836,7 +1571,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/VectorFontEffects.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="45" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1883,7 +1618,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Windows/OpenGL.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="11" minute="0" second="18" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1897,7 +1632,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Windows/RenderBase.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="47" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1918,7 +1653,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Render/Windows/TextureBase.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="47" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1939,7 +1674,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Actor.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="23" second="0" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1977,7 +1712,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/ActorCreationMode.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1991,7 +1726,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/ActorDataNodeConverter.h">
-		<date year="2020" month="1" day="22" hour="18" minute="33" second="12" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2031,7 +1766,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/ActorRef.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2054,7 +1789,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/ActorTransform.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2085,7 +1820,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Component.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="26" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2108,7 +1843,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Components/AnimationComponent.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="14" hour="9" minute="11" second="14" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2152,7 +1887,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Components/EditorTestComponent.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2184,7 +1919,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Components/ImageComponent.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2208,7 +1943,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Components/ParticlesEmitterComponent.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="44" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2232,7 +1967,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Drawable.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="43" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2256,7 +1991,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/DrawableComponent.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2280,7 +2015,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Scene.h">
-		<date year="2020" month="1" day="30" hour="11" minute="4" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="56" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2308,7 +2043,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/SceneLayer.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2331,7 +2066,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/Tags.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2362,7 +2097,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/UIManager.h">
-		<date year="2020" month="1" day="16" hour="9" minute="51" second="36" />
+		<date year="2020" month="1" day="16" hour="7" minute="13" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2376,7 +2111,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widget.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="16" hour="7" minute="16" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2422,7 +2157,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/WidgetLayer.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="25" />
+		<date year="2020" month="1" day="16" hour="7" minute="14" second="51" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2448,7 +2183,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/WidgetLayerLayout.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2471,7 +2206,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/WidgetLayout.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="40" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2502,7 +2237,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/WidgetState.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="16" hour="7" minute="16" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2525,7 +2260,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Button.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="48" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2550,7 +2285,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/ContextMenu.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2592,7 +2327,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/CustomDropDown.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2616,7 +2351,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/CustomList.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="16" hour="7" minute="11" second="16" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2646,7 +2381,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/DropDown.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2669,7 +2404,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/EditBox.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2693,7 +2428,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/GridLayout.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2716,7 +2451,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/HorizontalLayout.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2739,7 +2474,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/HorizontalProgress.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="24" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="48" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2763,7 +2498,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/HorizontalScrollBar.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="48" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2787,7 +2522,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Image.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="29" hour="23" minute="22" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2810,7 +2545,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Label.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="43" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2833,7 +2568,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/List.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2856,7 +2591,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/LongList.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="16" hour="7" minute="13" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2879,7 +2614,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/MenuPanel.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2912,7 +2647,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/ScrollArea.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2936,7 +2671,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Spoiler.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="41" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2959,7 +2694,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Toggle.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="23" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2990,7 +2725,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Tree.h">
-		<date year="2020" month="2" day="5" hour="18" minute="16" second="50" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3037,7 +2772,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/VerticalLayout.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="40" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3060,7 +2795,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/VerticalProgress.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="47" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3084,7 +2819,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/VerticalScrollBar.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="47" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3108,7 +2843,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Window.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="47" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3131,7 +2866,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Basic/IDynamic.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3152,7 +2887,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Basic/IObject.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3173,7 +2908,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Basic/ITree.h">
-		<date year="2020" month="1" day="16" hour="10" minute="45" second="19" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3194,7 +2929,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Bitmap/Bitmap.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3215,7 +2950,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Bitmap/PngFormat.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3229,7 +2964,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Debug/Assert.h">
-		<date year="2020" month="1" day="16" hour="13" minute="41" second="30" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3243,7 +2978,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Debug/Debug.h">
-		<date year="2020" month="1" day="16" hour="15" minute="36" second="49" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -3251,7 +2986,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Debug/Log/ConsoleLogStream.h">
-		<date year="2020" month="1" day="16" hour="14" minute="14" second="0" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3274,7 +3009,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Debug/Log/FileLogStream.h">
-		<date year="2020" month="1" day="16" hour="14" minute="19" second="34" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3297,7 +3032,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Debug/Log/LogStream.h">
-		<date year="2020" month="1" day="16" hour="14" minute="13" second="12" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3318,7 +3053,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Debug/StackTrace.h">
-		<date year="2020" month="1" day="16" hour="14" minute="14" second="12" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3341,7 +3076,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Delegates.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="26" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3429,7 +3164,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/AnimatableAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3452,7 +3187,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/DefaultTypeAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3475,7 +3210,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/DontDeleteAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3498,7 +3233,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/EditorPropertyAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3529,7 +3264,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3552,7 +3287,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3575,7 +3310,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/Attributes/NoHeaderAttribute.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3598,7 +3333,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/DragAndDrop.h">
-		<date year="2020" month="1" day="16" hour="10" minute="45" second="19" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3653,7 +3388,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/DragHandle.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3701,7 +3436,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/FrameHandles.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3724,7 +3459,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/SceneEditableObject.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3747,7 +3482,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/FileSystem/File.h">
-		<date year="2020" month="1" day="20" hour="13" minute="8" second="29" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3774,7 +3509,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/FileSystem/FileInfo.h">
-		<date year="2020" month="1" day="20" hour="8" minute="20" second="31" />
+		<date year="2020" month="1" day="19" hour="15" minute="6" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3801,7 +3536,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/FileSystem/FileSystem.h">
-		<date year="2020" month="1" day="20" hour="13" minute="8" second="29" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3824,7 +3559,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Basis.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3851,7 +3586,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Border.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3875,7 +3610,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Color.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3896,7 +3631,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Curve.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="22" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3928,7 +3663,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Geometry.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3948,7 +3683,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Interpolation.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3962,7 +3697,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Intersection.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3982,7 +3717,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Layout.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="21" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4005,7 +3740,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Math.h">
-		<date year="2020" month="1" day="21" hour="19" minute="12" second="59" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4028,7 +3763,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/OBB.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4049,7 +3784,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/PolyLine.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4070,7 +3805,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Ray.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4091,7 +3826,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Rect.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4115,7 +3850,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Transform.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="21" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="59" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4138,7 +3873,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Vector2.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4162,7 +3897,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Vertex2.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4183,7 +3918,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Memory/MemoryManager.h">
-		<date year="2020" month="1" day="16" hour="10" minute="45" second="18" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4211,7 +3946,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Property.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="26" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4260,7 +3995,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/Attributes.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4281,7 +4016,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/FieldInfo.h">
-		<date year="2020" month="1" day="16" hour="10" minute="45" second="18" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4304,7 +4039,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/FunctionInfo.h">
-		<date year="2020" month="1" day="16" hour="10" minute="45" second="18" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4380,7 +4115,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/Reflection.h">
-		<date year="2020" month="1" day="16" hour="15" minute="36" second="49" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4412,7 +4147,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/SearchPassedObject.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4432,16 +4167,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/Type.h">
-		<date year="2020" month="1" day="16" hour="10" minute="45" second="18" />
-		<globalNamespace name="" fullname="">
-			<sections />
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/TypeSerializer.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4518,7 +4245,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/TypeTraits.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -4865,7 +4592,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/DataNode.h">
-		<date year="2020" month="2" day="5" hour="15" minute="14" second="12" />
+		<date year="2020" month="2" day="6" hour="21" minute="58" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5111,39 +4838,8 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/Serializable.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="ISerializable" fullname="o2::ISerializable" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="SerializableAttribute" fullname="o2::SerializableAttribute" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="SERIALIZABLE" attributeShortDef="SERIALIZABLE_ATTRIBUTE">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAttribute" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/XmlDataFormat.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="53" second="1" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5163,7 +4859,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Singleton.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="26" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5184,7 +4880,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/System/Clipboard.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="28" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -5192,7 +4888,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/System/ShortcutKeys.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="21" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="28" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5215,7 +4911,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/System/Time/Time.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5238,7 +4934,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/System/Time/TimeStamp.h">
-		<date year="2020" month="1" day="30" hour="16" minute="22" second="21" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5261,7 +4957,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/System/Time/Timer.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5288,7 +4984,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Tasks/AnimationTask.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="58" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5311,7 +5007,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Tasks/Task.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="28" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5372,7 +5068,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Tasks/TaskManager.h">
-		<date year="2020" month="1" day="16" hour="12" minute="37" second="27" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5395,7 +5091,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Tools/RectPacker.h">
-		<date year="2020" month="1" day="16" hour="12" minute="37" second="27" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5431,7 +5127,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/CommonTypes.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5456,7 +5152,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/IArray.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="27" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5477,7 +5173,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/IDictionary.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="7" hour="9" minute="37" second="52" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5498,7 +5194,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/Map.h">
-		<date year="2020" month="1" day="16" hour="12" minute="37" second="27" />
+		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5522,7 +5218,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/Pair.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5536,7 +5232,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/Pool.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="27" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5557,7 +5253,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/Vector.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="27" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5584,7 +5280,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Ref.h">
-		<date year="2020" month="1" day="29" hour="9" minute="53" second="13" />
+		<date year="2020" month="1" day="29" hour="7" minute="18" second="1" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5605,7 +5301,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/String.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
@@ -5613,7 +5309,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/StringDef.h">
-		<date year="2020" month="1" day="22" hour="18" minute="47" second="31" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5636,7 +5332,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/StringImpl.h">
-		<date year="2020" month="1" day="30" hour="11" minute="4" second="26" />
+		<date year="2020" month="1" day="29" hour="23" minute="30" second="13" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5650,7 +5346,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/UID.h">
-		<date year="2020" month="1" day="22" hour="18" minute="47" second="32" />
+		<date year="2020" month="1" day="23" hour="11" minute="46" second="42" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5671,7 +5367,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/UnknownPtr.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5692,7 +5388,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/ValueProxy.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="52" second="26" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -5736,9 +5432,315 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/stdafx.h">
-		<date year="2020" month="1" day="14" hour="11" minute="6" second="33" />
+		<date year="2020" month="1" day="5" hour="10" minute="53" second="1" />
 		<globalNamespace name="" fullname="">
 			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Asset.h">
+		<date year="2020" month="2" day="8" hour="19" minute="23" second="27" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Asset" fullname="o2::Asset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="AssetMeta" newDef="MetaType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="AssetWithDefaultMeta" fullname="o2::AssetWithDefaultMeta" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="DefaultAssetMeta&lt;T&gt;" newDef="Meta" />
+								<typedef what="Meta" newDef="MetaType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="Asset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AtlasAsset.h">
+		<date year="2020" month="2" day="9" hour="0" minute="3" second="29" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AtlasAsset" fullname="o2::AtlasAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="PlatformMeta" fullname="o2::AtlasAsset::PlatformMeta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="Meta" fullname="o2::AtlasAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="DefaultAssetMeta&lt;AtlasAsset&gt;" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="Page" fullname="o2::AtlasAsset::Page" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Asset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;AtlasAsset&gt;" newDef="AtlasAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FolderAsset.h">
+		<date year="2020" month="2" day="9" hour="12" minute="11" second="34" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="FolderAsset" fullname="o2::FolderAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;FolderAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;FolderAsset&gt;" newDef="FolderAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetInfo.h">
+		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AssetInfo" fullname="o2::AssetInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/ActorAsset.h">
+		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="ActorAsset" fullname="o2::ActorAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;ActorAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;ActorAsset&gt;" newDef="ActorAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AnimationAsset.h">
+		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AnimationAsset" fullname="o2::AnimationAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;AnimationAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;AnimationAsset&gt;" newDef="AnimationAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BinaryAsset.h">
+		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="BinaryAsset" fullname="o2::BinaryAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;BinaryAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;BinaryAsset&gt;" newDef="BinaryAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/DataAsset.h">
+		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="DataAsset" fullname="o2::DataAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;DataAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;DataAsset&gt;" newDef="DataAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/Type.h">
+		<date year="2020" month="2" day="10" hour="17" minute="10" second="16" />
+		<globalNamespace name="" fullname="">
+			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/Serializable.h">
+		<date year="2020" month="2" day="10" hour="20" minute="21" second="20" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="ISerializable" fullname="o2::ISerializable" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IObject" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="SerializableAttribute" fullname="o2::SerializableAttribute" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="SERIALIZABLE" attributeShortDef="SERIALIZABLE_ATTRIBUTE">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IAttribute" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetRef.h">
+		<date year="2020" month="2" day="10" hour="20" minute="55" second="37" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AssetRef" fullname="o2::AssetRef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" fullname="o2::Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" newDef="_thisType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="AssetRef" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
 			<typedefs />
 			<usings />
 		</globalNamespace>

@@ -78,20 +78,20 @@ namespace o2
 	};
 
 	template<typename T>
-	class Ref<T, typename std::enable_if<std::is_base_of<o2::Asset, T>::value>::type> : public AssetRef
+	class Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type>: public AssetRef
 	{
 	public:
 		// Default constructor, references to null
-		Ref() : AssetRef() {}
+		Ref(): AssetRef() {}
 
 		// Copy-constructor
-		Ref(const AssetRef& other) : AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const AssetRef& other): AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Constructor from asset path
-		Ref(const String& path) : AssetRef(path) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const String& path): AssetRef(path) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Constructor from asset id
-		Ref(const UID& id) : AssetRef(id) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const UID& id): AssetRef(id) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const { return IsValid(); }
@@ -126,6 +126,39 @@ namespace o2
 		virtual const Type& GetAssetType() const { return TypeOf(T); }
 
 		static Ref<T> CreateAsset() { return o2Assets.CreateAsset<T>(); }
+
+	public:
+		typedef Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type> _thisType;
+
+		SERIALIZABLE_MAIN(_thisType);
+
+		template<typename _type_processor>
+		static void ProcessBaseTypes(_thisType* object, _type_processor& processor)
+		{
+			typedef _thisType thisclass;
+			processor.template StartBases<_thisType>(object, type);
+
+			BASE_CLASS(o2::AssetRef);
+		}
+
+		template<typename _type_processor>
+		static void ProcessFields(_thisType* object, _type_processor& processor)
+		{
+			typedef _thisType thisclass;
+			processor.template StartFields<_thisType>(object, type);
+
+			PROTECTED_FIELD(mSpecAssetPtr);
+		}
+
+		template<typename _type_processor>
+		static void ProcessMethods(_thisType* object, _type_processor& processor)
+		{
+			typedef _thisType thisclass;
+			processor.template StartMethods<_thisType>(object, type);
+
+			PUBLIC_FUNCTION(const Type&, GetAssetType);
+			PUBLIC_STATIC_FUNCTION(Ref<T>, CreateAsset);
+		}
 
 	protected:
 		T* mSpecAssetPtr = nullptr;

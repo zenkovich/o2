@@ -65,28 +65,34 @@ namespace o2
 
 	void Asset::Load(const String& path)
 	{
-		mInfo = o2Assets.GetAssetInfo(path);
+		auto info = o2Assets.GetAssetInfo(path);
 
-		if (mInfo.meta->mId == 0)
+		if (info.meta->mId == 0)
 		{
 			GetAssetsLogStream()->Error("Failed to load asset by path (" + path + "): asset isn't exist");
 			return;
 		}
 
-		LoadData(GetFullPath());
+		Load(info);
 	}
 
 	void Asset::Load(const UID& id)
 	{
-		mInfo = o2Assets.GetAssetInfo(path);
+		auto& info = o2Assets.GetAssetInfo(id);
 
-		if (mInfo.meta->mId == 0)
+		if (info.meta->mId == 0)
 		{
 			GetAssetsLogStream()->Error("Failed to load asset by UID (" + id + "): asset isn't exist");
 			return;
 		}
 
-		LoadData(GetFullPath());
+		Load(info);
+	}
+
+	void Asset::Load(const AssetInfo& info)
+	{
+		mInfo = info;
+		LoadData(GetBuiltFullPath());
 	}
 
 	void Asset::Save(const String& path, bool rebuildAssetsImmediately /*= true*/)
@@ -128,7 +134,7 @@ namespace o2
 		return (mInfo.tree ? mInfo.tree->assetsPath : String()) + mInfo.path;
 	}
 
-	String Asset::GetDataFullPath() const
+	String Asset::GetBuiltFullPath() const
 	{
 		return (mInfo.tree ? mInfo.tree->builtAssetsPath : String()) + mInfo.path;
 	}

@@ -65,11 +65,12 @@ namespace o2
 
 	void Texture::Create(UID atlasAssetId, int page)
 	{
-		if (o2Assets.IsAssetExist(atlasAssetId))
+		auto& info = o2Assets.GetAssetInfo(atlasAssetId);
+		if (info.IsValid())
 		{
 			mAtlasAssetId = atlasAssetId;
 			mAtlasPage = page;
-			String textureFileName = AtlasAsset::GetPageTextureFileName(atlasAssetId, page);
+			String textureFileName = AtlasAsset::GetPageTextureFileName(info, page);
 			Create(textureFileName);
 
 			mReady = true;
@@ -79,11 +80,12 @@ namespace o2
 
 	void Texture::Create(const String& atlasAssetName, int page)
 	{
-		if (o2Assets.IsAssetExist(atlasAssetName))
+		auto& info = o2Assets.GetAssetInfo(atlasAssetName);
+		if (info.IsValid())
 		{
 			mAtlasAssetId = o2Assets.GetAssetId(atlasAssetName);
 			mAtlasPage = page;
-			String textureFileName = AtlasAsset::GetPageTextureFileName(atlasAssetName, page);
+			String textureFileName = AtlasAsset::GetPageTextureFileName(info, page);
 			Create(textureFileName);
 
 			mReady = true;

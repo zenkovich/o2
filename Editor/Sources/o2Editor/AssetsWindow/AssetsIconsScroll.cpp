@@ -195,7 +195,10 @@ namespace Editor
 
 		Vector<AssetInfo*> folderAssetsInfos;
 		if (mCurrentPath != "")
-			folderAssetsInfos = FolderAssetRef(mCurrentPath)->GetInfo().children;
+		{
+			FolderAssetRef ref(mCurrentPath);
+			folderAssetsInfos = ref->GetInfo().children;
+		}
 		else
 			folderAssetsInfos = o2Assets.GetAssetsTree().rootAssets;
 
@@ -360,7 +363,7 @@ namespace Editor
 			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetUID() == icon->GetAssetInfo().meta->ID(); }))
 				continue;
 
-			AssetRef* iconAsset = mnew AssetRef(o2Assets.GetAssetRef(icon->GetAssetInfo().meta->ID()));
+			AssetRef* iconAsset = o2Assets.GetAssetRef(icon->GetAssetInfo().meta->ID()).CloneAs<AssetRef>();
 			mSelectedPreloadedAssets.Add(iconAsset);
 		}
 

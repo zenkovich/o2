@@ -71,7 +71,7 @@ namespace o2
 	AssetInfo* AssetsTree::Find(const UID& id) const
 	{
 		AssetInfo* res = nullptr;
-		allAssetsByPath.TryGetValue(assetsPath, res);
+		allAssetsByUID.TryGetValue(id, res);
 		return res;
 	}
 
@@ -96,7 +96,6 @@ namespace o2
 			}
 			else parent->AddChild(asset);
 
-			allAssets.Add(asset);
 			asset->SetTree(this);
 		}
 

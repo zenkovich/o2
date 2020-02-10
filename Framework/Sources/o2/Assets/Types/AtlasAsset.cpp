@@ -28,12 +28,12 @@ namespace o2
 
 	TextureRef AtlasAsset::Page::GetTextureRef() const
 	{
-		return AtlasAsset::GetPageTextureRef(mOwner->GetUID(), mId);
+		return AtlasAsset::GetPageTextureRef(mOwner->mInfo, mId);
 	}
 
 	String AtlasAsset::Page::GetTextureFileName() const
 	{
-		return AtlasAsset::GetPageTextureFileName(mOwner->GetUID(), mId);
+		return AtlasAsset::GetPageTextureFileName(mOwner->mInfo, mId);
 	}
 
 	const Map<UID, RectI>& AtlasAsset::Page::ImagesRects() const
@@ -98,24 +98,14 @@ namespace o2
 		return "atlas";
 	}
 
-	String AtlasAsset::GetPageTextureFileName(const UID& atlasId, UInt pageIdx)
+	String AtlasAsset::GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx)
 	{
-		return GetPageTextureFileName(o2Assets.GetAssetPath(atlasId), pageIdx);
+		return (atlasInfo.tree ? atlasInfo.tree->builtAssetsPath : String()) + atlasInfo.path + (String)pageIdx + ".png";
 	}
 
-	String AtlasAsset::GetPageTextureFileName(const String& atlasPath, UInt pageIdx)
+	TextureRef AtlasAsset::GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx)
 	{
-		return o2Assets.GetBuiltAssetsPath() + atlasPath + (String)pageIdx + ".png";
-	}
-
-	TextureRef AtlasAsset::GetPageTextureRef(const UID& atlasId, UInt pageIdx)
-	{
-		return TextureRef(GetPageTextureFileName(atlasId, pageIdx));
-	}
-
-	TextureRef AtlasAsset::GetPageTextureRef(const String& atlasPath, UInt pageIdx)
-	{
-		return TextureRef(GetPageTextureFileName(atlasPath, pageIdx));
+		return TextureRef(GetPageTextureFileName(atlasInfo, pageIdx));
 	}
 
 	bool AtlasAsset::PlatformMeta::operator==(const PlatformMeta& other) const
@@ -125,6 +115,7 @@ namespace o2
 }
 
 DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::AtlasAsset>);
+DECLARE_CLASS_MANUAL(o2::Ref<o2::AtlasAsset>);
 
 DECLARE_CLASS(o2::AtlasAsset);
 

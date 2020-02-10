@@ -51,7 +51,7 @@ namespace o2
 
 	const UID& Assets::GetAssetId(const String& path) const
 	{
-		auto info = GetAssetInfo(path);
+		auto& info = GetAssetInfo(path);
 		return info.meta ? info.meta->ID() : UID::empty;
 	}
 
@@ -102,11 +102,12 @@ namespace o2
 		if (!cached)
 		{
 			auto& assetInfo = GetAssetInfo(path);
-			if (!assetInfo.meta->GetAssetType())
+			if (!assetInfo.IsValid())
 				return AssetRef();
 
-			Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();
-			asset->Load(path);
+			auto type = assetInfo.meta->GetAssetType();
+			Asset* asset = (Asset*)type->CreateSample();
+			asset->Load(assetInfo);
 
 			cached = mnew AssetCache();
 			cached->asset = asset;
@@ -114,7 +115,7 @@ namespace o2
 
 			mCachedAssets.Add(cached);
 			mCachedAssetsByPath[cached->asset->GetPath()] = cached;
-			mCachedAssetsByPath[cached->asset->GetUID()] = cached;
+			mCachedAssetsByUID[cached->asset->GetUID()] = cached;
 		}
 
 		return AssetRef(cached->asset, &cached->referencesCount);
@@ -139,7 +140,7 @@ namespace o2
 
 			mCachedAssets.Add(cached);
 			mCachedAssetsByPath[cached->asset->GetPath()] = cached;
-			mCachedAssetsByPath[cached->asset->GetUID()] = cached;
+			mCachedAssetsByUID[cached->asset->GetUID()] = cached;
 		}
 
 		return AssetRef(cached->asset, &cached->referencesCount);
@@ -476,7 +477,8 @@ namespace o2
 		cached->referencesCount = 1;
 
 		mCachedAssets.Add(cached);
-		mCachedAssetsByPath[cached->asset->GetUID()] = cached;
+		mCachedAssetsByPath[cached->asset->GetPath()] = cached;
+		mCachedAssetsByUID[cached->asset->GetUID()] = cached;
 	}
 
 	void Assets::RemoveAssetCache(Asset* asset)

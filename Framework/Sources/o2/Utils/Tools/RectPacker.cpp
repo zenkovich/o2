@@ -48,6 +48,9 @@ namespace o2
 
 	int RectsPacker::GetPagesCount() const
 	{
+		if (mRects.IsEmpty())
+			return 0;
+
 		return mRects.Max<int>([&](Rect* rt) { return rt->page; })->page + 1;
 	}
 

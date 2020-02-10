@@ -16,6 +16,8 @@ namespace o2
 		// Returns containing assets infos
 		Vector<AssetRef> GetContainingAssetsInfos() const;
 
+		SERIALIZABLE(FolderAsset);
+
 	protected:
 		// Default constructor
 		FolderAsset();
@@ -34,3 +36,21 @@ namespace o2
 
 	typedef Ref<FolderAsset> FolderAssetRef;
 }
+
+CLASS_BASES_META(o2::FolderAsset)
+{
+	BASE_CLASS(o2::AssetWithDefaultMeta<FolderAsset>);
+}
+END_META;
+CLASS_FIELDS_META(o2::FolderAsset)
+{
+}
+END_META;
+CLASS_METHODS_META(o2::FolderAsset)
+{
+
+	PUBLIC_FUNCTION(Vector<AssetRef>, GetContainingAssetsInfos);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
+}
+END_META;

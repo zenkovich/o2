@@ -10,15 +10,10 @@ namespace o2
 	{}
 
 	AssetInfo::AssetInfo(const AssetInfo& other):
-		path(other.path), editTime(other.editTime), meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr)
-	{
-		for (auto child : other.children)
-		{
-			auto newChild = child->CloneAs<AssetInfo>();
-			newChild->parent = this;
-			children.Add(newChild);
-		}
-	}
+		path(other.path), editTime(other.editTime), tree(other.tree), 
+		meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr),
+		ownChildren(false), children(other.children)
+	{}
 
 	AssetInfo::~AssetInfo()
 	{
@@ -28,10 +23,13 @@ namespace o2
 		if (parent)
 			parent->RemoveChild(this, false);
 
-		for (auto child : children)
+		if (ownChildren)
 		{
-			child->parent = nullptr;
-			delete child;
+			for (auto child : children)
+			{
+				child->parent = nullptr;
+				delete child;
+			}
 		}
 	}
 
@@ -40,13 +38,21 @@ namespace o2
 		if (meta)
 			delete meta;
 
-		for (auto child : children)
+		if (ownChildren)
 		{
-			child->parent = nullptr;
-			delete child;
+			for (auto child : children)
+			{
+				child->parent = nullptr;
+				delete child;
+			}
 		}
 
 		meta = other.meta->CloneAs<AssetMeta>();
+		path = other.path;
+		editTime = other.editTime;
+		tree = other.tree;
+		children = other.children;
+		ownChildren = false;
 
 		return *this;
 	}

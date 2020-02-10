@@ -20,6 +20,8 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
 
+		SERIALIZABLE(AnimationAsset);
+
 	protected:
 		// Default constructor
 		AnimationAsset();
@@ -32,3 +34,20 @@ namespace o2
 
 	typedef Ref<AnimationAsset> AnimationAssetRef;
 }
+
+CLASS_BASES_META(o2::AnimationAsset)
+{
+	BASE_CLASS(o2::AssetWithDefaultMeta<AnimationAsset>);
+}
+END_META;
+CLASS_FIELDS_META(o2::AnimationAsset)
+{
+	PUBLIC_FIELD(animation).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::AnimationAsset)
+{
+
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+}
+END_META;

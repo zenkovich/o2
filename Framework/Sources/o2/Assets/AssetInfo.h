@@ -15,12 +15,13 @@ namespace o2
 		AssetsTree* tree = nullptr; // Owner asset tree
 		
 		String    path;     // Path of asset @SERIALIZABLE
-		TimeStamp editTime; // Asset edited time			
+		TimeStamp editTime; // Asset edited time @SERIALIZABLE		
 
 		AssetMeta* meta = nullptr; // Asset meta data @SERIALIZABLE
 
-		AssetInfo*         parent = nullptr; // Parent asset info
-		Vector<AssetInfo*> children;         // Children assets infos @SERIALIZABLE
+		AssetInfo*         parent = nullptr;   // Parent asset info
+		Vector<AssetInfo*> children;           // Children assets infos @SERIALIZABLE
+		bool               ownChildren = true; // Is children assets is owned by this asset info
 
 	public:
 		// Default constructor
@@ -79,10 +80,11 @@ CLASS_FIELDS_META(o2::AssetInfo)
 {
 	PUBLIC_FIELD(tree);
 	PUBLIC_FIELD(path).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(editTime);
+	PUBLIC_FIELD(editTime).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(meta).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(parent);
 	PUBLIC_FIELD(children).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(ownChildren);
 }
 END_META;
 CLASS_METHODS_META(o2::AssetInfo)

@@ -173,7 +173,10 @@ namespace Editor
 
 	void ImageAssetPropertiesViewer::SetTargetAssets(const Vector<AssetRef*>& assets)
 	{
-		mTargetAssets = assets.Cast<ImageAssetRef*>();
+		for (auto targetAsset : mTargetAssets)
+			delete targetAsset;
+
+		mTargetAssets = assets.Select<ImageAssetRef*>([](AssetRef* x) { return mnew ImageAssetRef(*x); });
 
 		mBorderProperty->SelectValuesPointers<BorderI, ImageAssetRef>(mTargetAssets,
 			[](const ImageAssetRef* x) { return &((*x)->GetMeta()->sliceBorder); });

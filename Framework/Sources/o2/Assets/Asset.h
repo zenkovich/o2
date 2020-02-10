@@ -39,7 +39,7 @@ namespace o2
 		String GetFullPath() const;
 
 		// Returns full built asset path (from binary)
-		String GetDataFullPath() const;
+		String GetBuiltFullPath() const;
 
 		// Returns id of asset
 		const UID& GetUID() const;
@@ -89,6 +89,9 @@ namespace o2
 
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;
+
+		// Loads asset from path
+		void Load(const AssetInfo& info);
 
 		// Loads asset data, using DataNode and serialization
 		virtual void LoadData(const String& path);
@@ -149,7 +152,7 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(const String&, GetPath);
 	PUBLIC_FUNCTION(void, SetPath, const String&);
 	PUBLIC_FUNCTION(String, GetFullPath);
-	PUBLIC_FUNCTION(String, GetDataFullPath);
+	PUBLIC_FUNCTION(String, GetBuiltFullPath);
 	PUBLIC_FUNCTION(const UID&, GetUID);
 	PUBLIC_FUNCTION(AssetMeta*, GetMeta);
 	PUBLIC_FUNCTION(const AssetInfo&, GetInfo);
@@ -161,6 +164,7 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, ID);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
+	PROTECTED_FUNCTION(void, Load, const AssetInfo&);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 }

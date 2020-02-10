@@ -20,6 +20,8 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
 
+		SERIALIZABLE(DataAsset);
+
 	protected:
 		// Default constructor
 		DataAsset();
@@ -38,3 +40,22 @@ namespace o2
 
 	typedef Ref<DataAsset> DataAssetRef;
 }
+
+CLASS_BASES_META(o2::DataAsset)
+{
+	BASE_CLASS(o2::AssetWithDefaultMeta<DataAsset>);
+}
+END_META;
+CLASS_FIELDS_META(o2::DataAsset)
+{
+	PUBLIC_FIELD(data);
+}
+END_META;
+CLASS_METHODS_META(o2::DataAsset)
+{
+
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
+}
+END_META;

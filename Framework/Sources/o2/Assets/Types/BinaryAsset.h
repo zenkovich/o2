@@ -33,6 +33,8 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
 
+		SERIALIZABLE(BinaryAsset);
+
 	protected:
 		char* mData = nullptr; // Asset data
 		UInt  mDataSize = 0;   // Asset data size
@@ -55,3 +57,28 @@ namespace o2
 
 	typedef Ref<BinaryAsset> BinaryAssetRef;
 }
+
+CLASS_BASES_META(o2::BinaryAsset)
+{
+	BASE_CLASS(o2::AssetWithDefaultMeta<BinaryAsset>);
+}
+END_META;
+CLASS_FIELDS_META(o2::BinaryAsset)
+{
+	PUBLIC_FIELD(data);
+	PUBLIC_FIELD(dataSize);
+	PROTECTED_FIELD(mData);
+	PROTECTED_FIELD(mDataSize);
+}
+END_META;
+CLASS_METHODS_META(o2::BinaryAsset)
+{
+
+	PUBLIC_FUNCTION(char*, GetData);
+	PUBLIC_FUNCTION(UInt, GetDataSize);
+	PUBLIC_FUNCTION(void, SetData, char*, UInt);
+	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
+}
+END_META;

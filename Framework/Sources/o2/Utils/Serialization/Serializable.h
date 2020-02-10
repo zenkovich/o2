@@ -60,7 +60,7 @@ namespace o2
 	};
 
 	// Serialization implementation macros
-#define SERIALIZABLE(CLASS)  							                                                        \
+#define SERIALIZABLE_MAIN(CLASS)  							                                                    \
 private:                                                                                                        \
 	static o2::Type* type;							                                                            \
                                                                                                                 \
@@ -77,7 +77,7 @@ private:                                                                        
 	friend class o2::TObjectType;                                                                               \
                                                                                                                 \
     template<typename __type>                                                                                   \
-	friend class PointerValueProxy;                                                                            \
+	friend class PointerValueProxy;                                                                             \
                                                                                                                 \
     friend class o2::TypeInitializer;                                                                           \
     friend class o2::Reflection;                                                                                \
@@ -95,10 +95,6 @@ public:                                                                         
 		ProcessFields<_type_processor>(object, processor);                                                      \
 		ProcessMethods<_type_processor>(object, processor);                                                     \
 	}                                                                                                           \
-		                                                                                                        \
-    template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
-    template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \
-    template<typename _type_processor> static void ProcessMethods(CLASS* object, _type_processor& processor);   \
                                                                                                                 \
     o2::DataNode Serialize() const override                                                                     \
     {												                                                            \
@@ -117,7 +113,17 @@ public:                                                                         
 	operator o2::DataNode() 						                                                            \
 	{ 												                                                            \
 		return Serialize(); 						                                                            \
-	}            									                                                            
+	}            
+
+#define SERIALIZABLE(CLASS)                                                                                     \
+    SERIALIZABLE_MAIN(CLASS)                                                                                    \
+		                                                                                                        \
+    template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
+    template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \
+    template<typename _type_processor> static void ProcessMethods(CLASS* object, _type_processor& processor);   
+
+#define SERIALIZABLE_MANUAL(CLASS) \
+    SERIALIZABLE(CLASS)
 
 #define SERIALIZABLE_ATTRIBUTE() \
     AddAttribute(new SerializableAttribute())

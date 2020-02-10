@@ -27,11 +27,11 @@ namespace o2
 		Reset();
 	}
 
-	const Vector<UID>& AssetsBuilder::BuildAssets(const String& assetsPath, const String& dataAssetsPath, const String& dataAssetsTreePath,
+	const Vector<UID>& AssetsBuilder::BuildAssets(const String& assetsPath, const String& builtAssetsPath, const String& dataAssetsTreePath,
 												  AssetsTree* assetsTree, bool forcible /*= false*/)
 	{
 		mSourceAssetsPath = assetsPath;
-		mBuiltAssetsPath = dataAssetsPath;
+		mBuiltAssetsPath = builtAssetsPath;
 		mBuiltAssetsTreePath = dataAssetsTreePath;
 		mBuiltAssetsTree = assetsTree;
 
@@ -60,9 +60,12 @@ namespace o2
 		ProcessNewAssets();
 		ConvertersPostProcess();
 
-		mBuiltAssetsTree->assetsPath = mSourceAssetsPath;
-		mBuiltAssetsTree->builtAssetsPath = mBuiltAssetsTreePath;
-		o2FileSystem.WriteFile(mBuiltAssetsTreePath, mBuiltAssetsTree->SerializeToString());
+		if (!mModifiedAssets.IsEmpty())
+		{
+			mBuiltAssetsTree->assetsPath = mSourceAssetsPath;
+			mBuiltAssetsTree->builtAssetsPath = mBuiltAssetsPath;
+			o2FileSystem.WriteFile(mBuiltAssetsTreePath, mBuiltAssetsTree->SerializeToString());
+		}
 
 		mLog->Out("Completed for " + (String)timer.GetDeltaTime() + " seconds");
 
@@ -107,7 +110,7 @@ namespace o2
 		if (!o2FileSystem.IsFileExist(basicAtlasFullPath))
 		{
 			AtlasAssetRef basicAtlas = AtlasAssetRef::CreateAsset();
-			basicAtlas->Save(GetBasicAtlasPath(), false);
+			basicAtlas->Save(basicAtlasFullPath, false);
 		}
 	}
 
@@ -278,8 +281,6 @@ namespace o2
 							mBuiltAssetsTree->AddAsset(builtAssetInfo);
 						}
 					}
-
-					break;
 				}
 			}
 		}

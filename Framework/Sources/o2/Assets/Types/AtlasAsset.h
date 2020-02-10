@@ -42,16 +42,10 @@ namespace o2
 		const char* GetFileExtensions() const override;
 
 		// Returns atlas page's texture file name
-		static String GetPageTextureFileName(const UID& atlasId, UInt pageIdx);
-
-		// Returns atlas page's texture file name
-		static String GetPageTextureFileName(const String& atlasPath, UInt pageIdx);
+		static String GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx);
 
 		// Returns atlas page's texture reference
-		static TextureRef GetPageTextureRef(const UID& atlasId, UInt pageIdx);
-
-		// Returns atlas page's texture reference
-		static TextureRef GetPageTextureRef(const String& atlasPath, UInt pageIdx);
+		static TextureRef GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx);
 
 		ASSET_TYPE(AtlasAsset, Meta);
 
@@ -167,10 +161,8 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const UID&, UInt);
-	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const String&, UInt);
-	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const UID&, UInt);
-	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const String&, UInt);
+	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const AssetInfo&, UInt);
+	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;
