@@ -11,6 +11,7 @@
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/WidgetState.h"
+#include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 
@@ -35,6 +36,8 @@ namespace Editor
 	DockableWindow::DockableWindow(const DockableWindow& other):
 		Window(other)
 	{
+		PushEditorScopeOnStack scope;
+
 		InitializeDragHandles();
 		SetDocked(false);
 		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
@@ -510,6 +513,8 @@ namespace Editor
 
 	void DockableWindow::PlaceDock(DockWindowPlace* targetDock)
 	{
+		PushEditorScopeOnStack scope;
+
 		mNonDockSize = layout->size;
 
 		mTabPosition = targetDock->mChildren.Count();
@@ -527,6 +532,8 @@ namespace Editor
 
 	void DockableWindow::PlaceNonLineDock(DockWindowPlace* targetDock, Side dockPosition)
 	{
+		PushEditorScopeOnStack scope;
+
 		mNonDockSize = layout->size;
 		RectF dockPlaceRect = targetDock->layout->GetWorldRect();
 
@@ -583,6 +590,8 @@ namespace Editor
 
 	void DockableWindow::PlaceLineDock(DockWindowPlace* targetDock, Side dockPosition, RectF dockZoneRect)
 	{
+		PushEditorScopeOnStack scope;
+
 		mNonDockSize = layout->size;
 		RectF dockPlaceRect = targetDock->layout->GetWorldRect();
 
@@ -727,6 +736,8 @@ namespace Editor
 
 	void DockableWindow::Undock()
 	{
+		PushEditorScopeOnStack scope;
+
 		if (!IsDocked())
 			return;
 

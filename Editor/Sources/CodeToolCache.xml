@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <files>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/AnimationKeysActions.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -40,7 +40,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/AnimationWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -71,7 +71,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/CurvesSheet.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="5" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -96,7 +96,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/KeyHandlesSheet.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -128,7 +128,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/PropertiesListDlg.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -181,7 +181,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/Timeline.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -212,7 +212,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/TrackControls/AnimationKeyDragHandle.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="59" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -237,7 +237,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/TrackControls/ITrackControl.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -269,7 +269,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/TrackControls/KeyFramesTrackControl.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -296,7 +296,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="38" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -344,7 +344,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AnimationWindow/Tree.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -389,7 +389,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/AssetIcon.h">
-		<date year="2020" month="1" day="5" hour="10" minute="41" second="4" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -421,7 +421,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/AssetsIconsScroll.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="50" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -454,7 +454,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/AssetsWindow.h">
-		<date year="2020" month="1" day="28" hour="8" minute="50" second="18" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -485,7 +485,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/AssetsWindow/FoldersTree.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -524,7 +524,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/ActionsList.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="12" minute="37" second="28" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -545,7 +545,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Create.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -575,7 +575,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Delete.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -614,7 +614,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Enable.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -644,7 +644,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/IAction.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="58" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -669,7 +669,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Lock.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -699,7 +699,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/PropertyChange.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="4" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -729,7 +729,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Reparent.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -766,7 +766,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Select.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -796,7 +796,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Actions/Transform.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -833,7 +833,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Dialogs/ColorPickerDlg.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="17" minute="51" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -864,7 +864,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Dialogs/CurveEditorDlg.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="17" minute="51" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -895,7 +895,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Dialogs/EditNameDlg.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="17" minute="51" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -926,7 +926,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Dialogs/KeyEditDlg.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="58" />
+		<date year="2020" month="1" day="14" hour="11" minute="6" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -956,7 +956,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/EditorApplication.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="18" minute="11" second="40" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -987,7 +987,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/EditorConfig.h">
-		<date year="2020" month="2" day="3" hour="23" minute="37" second="25" />
+		<date year="2020" month="2" day="3" hour="13" minute="34" second="53" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1035,7 +1035,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/EditorScope.h">
-		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
+		<date year="2020" month="1" day="14" hour="11" minute="6" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1064,7 +1064,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/MenuPanel.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="59" />
+		<date year="2020" month="1" day="16" hour="18" minute="11" second="40" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1089,7 +1089,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/ActorProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1119,7 +1119,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/AssetProperty.h">
-		<date year="2020" month="2" day="3" hour="23" minute="37" second="25" />
+		<date year="2020" month="2" day="3" hour="18" minute="40" second="15" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1153,7 +1153,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/BooleanProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1183,7 +1183,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/BorderFloatProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="3" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1241,7 +1241,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/BorderIntProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="2" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1299,7 +1299,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/ColorProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1329,7 +1329,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/ComponentProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1359,7 +1359,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/CurveProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="36" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1389,43 +1389,15 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/EnumMaskProperty.h">
-		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
+		<date year="2020" month="1" day="14" hour="11" minute="6" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections />
 			<typedefs />
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/EnumProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="2" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="EnumProperty" fullname="Editor::EnumProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="TPropertyField&lt;int&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/FloatProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1456,7 +1428,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/IntegerProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1487,7 +1459,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/LayerProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1515,7 +1487,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/ObjectProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1552,7 +1524,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/ObjectPtrProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1582,7 +1554,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/RectangleFloatProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="1" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1640,7 +1612,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/RectangleIntProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="0" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1698,7 +1670,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/StringProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="0" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1728,7 +1700,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/TagProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1756,7 +1728,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/Vector2FloatProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="0" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="35" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1798,7 +1770,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/Vector2IntProperty.h">
-		<date year="2020" month="1" day="6" hour="12" minute="23" second="0" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -1840,7 +1812,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/VectorProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1877,7 +1849,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/WStringProperty.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1907,7 +1879,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/IObjectPropertiesViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1948,7 +1920,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/IPropertyField.h">
-		<date year="2020" month="1" day="5" hour="10" minute="41" second="0" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -1991,7 +1963,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/AnimationViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2021,7 +1993,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/Components/AnimationComponentViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2046,7 +2018,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/DefaultObjectViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2069,7 +2041,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/SpriteViewer.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="48" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2101,7 +2073,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/ObjectViewers/TextViewer.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="48" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2133,7 +2105,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Properties.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="17" minute="59" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2168,7 +2140,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/PropertiesContext.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="17" minute="59" second="37" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2196,7 +2168,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Tools/FrameTool.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2233,7 +2205,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Tools/IEditorTool.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="34" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2263,7 +2235,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Tools/MoveTool.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2291,7 +2263,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Tools/RotateTool.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2321,7 +2293,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Tools/ScaleTool.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2344,7 +2316,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Tools/SelectionTool.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2374,7 +2346,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/ToolsPanel.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
+		<date year="2020" month="1" day="16" hour="18" minute="11" second="40" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2404,7 +2376,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurveEditor/CurveActions.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2450,7 +2422,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurveEditor/CurvesEditor.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2528,7 +2500,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurvePreview.h">
-		<date year="2020" month="1" day="5" hour="10" minute="35" second="28" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2558,7 +2530,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/FrameScrollView.h">
-		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2586,7 +2558,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/ScrollView.h">
-		<date year="2020" month="1" day="5" hour="10" minute="35" second="36" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2617,7 +2589,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/SpoilerWithHead.h">
-		<date year="2020" month="1" day="5" hour="10" minute="35" second="28" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2647,7 +2619,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UIRoot.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="18" minute="11" second="39" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2678,7 +2650,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UIStyle/BasicUIStyle.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="33" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2701,7 +2673,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UIStyle/EditorUIStyle.h">
-		<date year="2020" month="1" day="6" hour="12" minute="22" second="56" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2726,7 +2698,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/WindowsSystem/DockWindowPlace.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2752,7 +2724,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/WindowsSystem/DockableWindow.h">
-		<date year="2020" month="1" day="5" hour="10" minute="35" second="28" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2777,7 +2749,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/WindowsSystem/IEditorWindow.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -2802,7 +2774,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/WindowsSystem/WindowsLayout.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2841,7 +2813,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/WindowsSystem/WindowsManager.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="16" hour="18" minute="6" second="12" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2871,7 +2843,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/LogWindow/LogWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2909,7 +2881,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/ActorViewer.h">
-		<date year="2020" month="1" day="6" hour="12" minute="22" second="52" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2942,7 +2914,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h">
-		<date year="2020" month="1" day="5" hour="10" minute="35" second="35" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -2997,7 +2969,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -3020,7 +2992,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorHeaderViewer.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="32" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3050,7 +3022,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorPropertiesViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -3073,7 +3045,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/DefaultActorTransformViewer.h">
-		<date year="2020" month="1" day="6" hour="12" minute="22" second="52" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -3096,7 +3068,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/IActorComponentViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3134,7 +3106,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/IActorHeaderViewer.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3164,7 +3136,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/IActorPropertiesViewer.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3194,7 +3166,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/ActorsViewer/IActorTransformViewer.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3224,7 +3196,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/AssetsPropertiesViewer.h">
-		<date year="2020" month="1" day="25" hour="23" minute="13" second="36" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3254,7 +3226,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="25" hour="23" minute="13" second="36" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3282,7 +3254,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="25" hour="23" minute="13" second="36" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3312,7 +3284,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="50" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="31" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3351,7 +3323,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/IPropertiesViewer.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="55" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3381,7 +3353,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/PropertiesWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3412,7 +3384,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerHeadViewer.h">
-		<date year="2020" month="1" day="6" hour="12" minute="22" second="51" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3442,7 +3414,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerLayoutViewer.h">
-		<date year="2020" month="1" day="6" hour="12" minute="22" second="51" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -3465,7 +3437,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/DefaultWidgetLayerPropertiesViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3493,7 +3465,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerHeadViewer.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="55" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3523,7 +3495,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerLayoutViewer.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3553,7 +3525,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/IWidgetLayerPropertiesViewer.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="55" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3583,7 +3555,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/WidgetLayerViewer/WidgetLayerViewer.h">
-		<date year="2020" month="1" day="6" hour="12" minute="22" second="51" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3613,7 +3585,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/SceneWindow/SceneDragHandle.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="55" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="Editor" fullname="Editor">
@@ -3638,7 +3610,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/SceneWindow/SceneEditScreen.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="30" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3671,7 +3643,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/SceneWindow/SceneWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3699,7 +3671,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/TreeWindow/SceneTree.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3737,7 +3709,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/TreeWindow/TreeWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="1" day="30" hour="16" minute="22" second="29" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3768,9 +3740,37 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/stdafx.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
+		<date year="2020" month="1" day="30" hour="11" minute="4" second="26" />
 		<globalNamespace name="" fullname="">
 			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/EnumProperty.h">
+		<date year="2020" month="2" day="11" hour="19" minute="55" second="34" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="EnumProperty" fullname="Editor::EnumProperty" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="TPropertyField&lt;int&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
 			<typedefs />
 			<usings />
 		</globalNamespace>

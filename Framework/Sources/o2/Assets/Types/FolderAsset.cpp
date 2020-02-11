@@ -42,5 +42,4 @@ DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::FolderAsset>);
 DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::FolderAsset>);
 DECLARE_CLASS_MANUAL(o2::Ref<o2::FolderAsset>);
 
-
 DECLARE_CLASS(o2::FolderAsset);

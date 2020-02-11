@@ -3,6 +3,7 @@
 
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 #include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
@@ -47,6 +48,8 @@ namespace Editor
 
 	void WindowsLayout::RestoreDock(WindowDockPlace* dockDef, DockWindowPlace* dockWidget)
 	{
+		PushEditorScopeOnStack scope;
+
 		Vector<DockWindowPlace*> childDockWidgets;
 		for (auto child : dockDef->childs)
 		{
@@ -146,6 +149,8 @@ namespace Editor
 
 	void WindowsLayout::CleanEmptyDocks(DockWindowPlace* dockPlace)
 	{
+		PushEditorScopeOnStack scope;
+
 		auto childs = dockPlace->GetChildWidgets();
 		for (auto child : childs)
 		{

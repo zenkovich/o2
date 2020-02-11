@@ -14,11 +14,14 @@
 #include "o2/Render/Render.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
+#include "../EditorScope.h"
 
 namespace Editor
 {
 	WindowsManager::WindowsManager()
 	{
+		PushEditorScopeOnStack scope;
+
 		mnew ColorPickerDlg();
 		mnew CurveEditorDlg();
 		mnew NameEditDlg();
@@ -54,6 +57,8 @@ namespace Editor
 
 	void WindowsManager::InitializeDock()
 	{
+		PushEditorScopeOnStack scope;
+
 		mMainDockPlace = mnew DockWindowPlace();
 		mMainDockPlace->name = "main dock";
 		*mMainDockPlace->layout = WidgetLayout::BothStretch(0, 0, 0, 48);
@@ -127,6 +132,8 @@ namespace Editor
 
 	void WindowsManager::SetWindowsLayout(WindowsLayout layout)
 	{
+		PushEditorScopeOnStack scope;
+
 		for (auto wnd : layout.windows)
 		{
 			IEditorWindow* editorWindow = o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) {

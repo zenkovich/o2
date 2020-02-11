@@ -30,6 +30,9 @@ namespace Editor
 		// Specializes field type
 		void SpecializeType(const Type* type);
 
+		// Returns editing by this field type by static function, can't be changed during runtime
+		static const Type* GetValueTypeStatic();
+
 		IOBJECT(EnumProperty);
 
 	protected:				       						      
@@ -72,6 +75,7 @@ CLASS_METHODS_META(Editor::EnumProperty)
 
 	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, InitializeControls);

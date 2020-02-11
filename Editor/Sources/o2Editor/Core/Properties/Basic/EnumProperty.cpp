@@ -57,6 +57,11 @@ namespace Editor
 		}
 	}
 
+	const Type* EnumProperty::GetValueTypeStatic()
+	{
+		return nullptr;
+	}
+
 	void EnumProperty::UpdateValueView()
 	{
 		mUpdatingValue = true;
