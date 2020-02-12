@@ -1,1076 +1,1085 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup>
-		<Filter Include="Sources" />
-		<Filter Include="Sources\o2\Animation" />
-		<Filter Include="Sources\o2" />
-		<Filter Include="Sources\o2\Application" />
-		<Filter Include="Sources\o2\Application\Windows" />
-		<Filter Include="Sources\o2\Assets" />
-		<Filter Include="Sources\o2\Assets\Builder" />
-		<Filter Include="Sources\o2\Config" />
-		<Filter Include="Sources\o2\Events" />
-		<Filter Include="Sources\o2\Render" />
-		<Filter Include="Sources\o2\Render\Windows" />
-		<Filter Include="Sources\o2\Scene" />
-		<Filter Include="Sources\o2\Scene\Components" />
-		<Filter Include="Sources\o2\Scene\UI" />
-		<Filter Include="Sources\o2\Scene\UI\Widgets" />
-		<Filter Include="Sources\o2\Utils\Basic" />
-		<Filter Include="Sources\o2\Utils" />
-		<Filter Include="Sources\o2\Utils\Bitmap" />
-		<Filter Include="Sources\o2\Utils\Debug" />
-		<Filter Include="Sources\o2\Utils\Debug\Log" />
-		<Filter Include="Sources\o2\Utils\Editor\Attributes" />
-		<Filter Include="Sources\o2\Utils\Editor" />
-		<Filter Include="Sources\o2\Utils\FileSystem" />
-		<Filter Include="Sources\o2\Utils\FileSystem\Windows" />
-		<Filter Include="Sources\o2\Utils\Math" />
-		<Filter Include="Sources\o2\Utils\Memory" />
-		<Filter Include="Sources\o2\Utils\Reflection" />
-		<Filter Include="Sources\o2\Utils\Serialization" />
-		<Filter Include="Sources\o2\Utils\System" />
-		<Filter Include="Sources\o2\Utils\System\Time" />
-		<Filter Include="Sources\o2\Utils\Tasks" />
-		<Filter Include="Sources\o2\Utils\Tools" />
-		<Filter Include="Sources\o2\Utils\Types" />
-		<Filter Include="Sources\o2\Utils\Types\Containers" />
-		<Filter Include="Sources\o2\Assets\Types" />
-	</ItemGroup>
-	<ItemGroup>
-		<ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimatedFloat.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimatedValue.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimatedVector.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\Animation.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimationMask.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimationState.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\IAnimation.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Animation\TweenValue.h">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Application\Application.h">
-			<Filter>Sources\o2\Application</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Application\Input.h">
-			<Filter>Sources\o2\Application</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Application\Windows\ApplicationBase.h">
-			<Filter>Sources\o2\Application\Windows</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Asset.h">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetInfo.h">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetRef.h">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Assets.h">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetsTree.h">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.h">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.h">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.h">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.h">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.h">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.h">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Meta.h">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\ActorAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\AnimationAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\AtlasAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\BinaryAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\DataAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\FolderAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\FontAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\ImageAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.h">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Config\ProjectConfig.h">
-			<Filter>Sources\o2\Config</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\EngineSettings.h">
-			<Filter>Sources\o2</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\ApplicationEventsListener.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\CursorEventsArea.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\CursorEventsListener.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\EventSystem.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\IEventsListener.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\KeyboardEventsListener.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Events\ShortcutKeysListener.h">
-			<Filter>Sources\o2\Events</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\O2.h">
-			<Filter>Sources\o2</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\BitmapFont.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Camera.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\DrawPolyLine.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Font.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\FontRef.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\IDrawable.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Mesh.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Particle.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\ParticlesEffects.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitter.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\RectDrawable.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Render.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Sprite.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Text.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Texture.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\TextureRef.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\VectorFont.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\VectorFontEffects.h">
-			<Filter>Sources\o2\Render</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Windows\OpenGL.h">
-			<Filter>Sources\o2\Render\Windows</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Windows\RenderBase.h">
-			<Filter>Sources\o2\Render\Windows</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Render\Windows\TextureBase.h">
-			<Filter>Sources\o2\Render\Windows</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Actor.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Component.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\AnimationComponent.h">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.h">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\ImageComponent.h">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Drawable.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Scene.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\SceneLayer.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\Tags.h">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\UIManager.h">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widget.h">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayer.h">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.h">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayout.h">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetState.h">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Button.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Image.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Label.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\List.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Window.h">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Basic\IDynamic.h">
-			<Filter>Sources\o2\Utils\Basic</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Basic\IObject.h">
-			<Filter>Sources\o2\Utils\Basic</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Basic\ITree.h">
-			<Filter>Sources\o2\Utils\Basic</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.h">
-			<Filter>Sources\o2\Utils\Bitmap</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.h">
-			<Filter>Sources\o2\Utils\Bitmap</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Assert.h">
-			<Filter>Sources\o2\Utils\Debug</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Debug.h">
-			<Filter>Sources\o2\Utils\Debug</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.h">
-			<Filter>Sources\o2\Utils\Debug\Log</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.h">
-			<Filter>Sources\o2\Utils\Debug\Log</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.h">
-			<Filter>Sources\o2\Utils\Debug\Log</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\StackTrace.h">
-			<Filter>Sources\o2\Utils\Debug</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Delegates.h">
-			<Filter>Sources\o2\Utils</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\AnimatableAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DefaultTypeAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DontDeleteAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\EditorPropertyAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\ExpandedByDefaultAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\InvokeOnChangeAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\NoHeaderAttribute.h">
-			<Filter>Sources\o2\Utils\Editor\Attributes</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.h">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\DragHandle.h">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\FrameHandles.h">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.h">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\FileSystem\File.h">
-			<Filter>Sources\o2\Utils\FileSystem</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.h">
-			<Filter>Sources\o2\Utils\FileSystem</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h">
-			<Filter>Sources\o2\Utils\FileSystem</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Border.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Color.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Curve.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Geometry.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Interpolation.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Intersection.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Layout.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Math.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\OBB.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\PolyLine.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Ray.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Rect.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Transform.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h">
-			<Filter>Sources\o2\Utils\Memory</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Property.h">
-			<Filter>Sources\o2\Utils</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Reflection.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\SearchPassedObject.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Type.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeSerializer.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeTraits.h">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataNode.h">
-			<Filter>Sources\o2\Utils\Serialization</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h">
-			<Filter>Sources\o2\Utils\Serialization</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.h">
-			<Filter>Sources\o2\Utils\Serialization</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Singleton.h">
-			<Filter>Sources\o2\Utils</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Clipboard.h">
-			<Filter>Sources\o2\Utils\System</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\System\ShortcutKeys.h">
-			<Filter>Sources\o2\Utils\System</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Time\Time.h">
-			<Filter>Sources\o2\Utils\System\Time</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.h">
-			<Filter>Sources\o2\Utils\System\Time</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Time\Timer.h">
-			<Filter>Sources\o2\Utils\System\Time</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Tasks\AnimationTask.h">
-			<Filter>Sources\o2\Utils\Tasks</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Tasks\Task.h">
-			<Filter>Sources\o2\Utils\Tasks</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Tasks\TaskManager.h">
-			<Filter>Sources\o2\Utils\Tasks</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Tools\RectPacker.h">
-			<Filter>Sources\o2\Utils\Tools</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\CommonTypes.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IArray.h">
-			<Filter>Sources\o2\Utils\Types\Containers</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IDictionary.h">
-			<Filter>Sources\o2\Utils\Types\Containers</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Map.h">
-			<Filter>Sources\o2\Utils\Types\Containers</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pair.h">
-			<Filter>Sources\o2\Utils\Types\Containers</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pool.h">
-			<Filter>Sources\o2\Utils\Types\Containers</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Vector.h">
-			<Filter>Sources\o2\Utils\Types\Containers</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Ref.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\String.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\StringDef.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\StringImpl.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\UID.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\UnknownPtr.h">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\Utils\ValueProxy.h">
-			<Filter>Sources\o2\Utils</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2\stdafx.h">
-			<Filter>Sources\o2</Filter>
-		</ClInclude>
-	</ItemGroup>
-	<ItemGroup>
-		<ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimatedFloat.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimatedValue.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimatedVector.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\Animation.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimationMask.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimationState.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Animation\IAnimation.cpp">
-			<Filter>Sources\o2\Animation</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Application\Application.cpp">
-			<Filter>Sources\o2\Application</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Application\Input.cpp">
-			<Filter>Sources\o2\Application</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Application\Windows\ApplicationImpl.cpp">
-			<Filter>Sources\o2\Application\Windows</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Asset.cpp">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetInfo.cpp">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetRef.cpp">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Assets.cpp">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetsTree.cpp">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.cpp">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.cpp">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.cpp">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.cpp">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.cpp">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.cpp">
-			<Filter>Sources\o2\Assets\Builder</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Meta.cpp">
-			<Filter>Sources\o2\Assets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\ActorAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\AnimationAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\AtlasAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\BinaryAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\DataAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\FolderAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\FontAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\ImageAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.cpp">
-			<Filter>Sources\o2\Assets\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Config\ProjectConfig.cpp">
-			<Filter>Sources\o2\Config</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\EngineSettings.cpp">
-			<Filter>Sources\o2</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\ApplicationEventsListener.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\CursorEventsArea.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\CursorEventsListener.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\EventSystem.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\IEventsListener.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\KeyboardEventsListener.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Events\ShortcutKeysListener.cpp">
-			<Filter>Sources\o2\Events</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\BitmapFont.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Camera.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Font.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\FontRef.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\IDrawable.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Mesh.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\ParticlesEffects.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitter.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\RectDrawable.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Render.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Sprite.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Text.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Texture.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\TextureRef.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\VectorFont.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\VectorFontEffects.cpp">
-			<Filter>Sources\o2\Render</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Windows\OpenGL.cpp">
-			<Filter>Sources\o2\Render\Windows</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Windows\RenderImpl.cpp">
-			<Filter>Sources\o2\Render\Windows</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Render\Windows\TextureImpl.cpp">
-			<Filter>Sources\o2\Render\Windows</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Actor.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorCreationMode.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorEditor.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorRef.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorTransform.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Component.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\AnimationComponent.cpp">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.cpp">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\ImageComponent.cpp">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp">
-			<Filter>Sources\o2\Scene\Components</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Drawable.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\SceneLayer.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\Tags.cpp">
-			<Filter>Sources\o2\Scene</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\UIManager.cpp">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widget.cpp">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayer.cpp">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.cpp">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayout.cpp">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetState.cpp">
-			<Filter>Sources\o2\Scene\UI</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Button.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Image.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Label.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\List.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Window.cpp">
-			<Filter>Sources\o2\Scene\UI\Widgets</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.cpp">
-			<Filter>Sources\o2\Utils\Bitmap</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.cpp">
-			<Filter>Sources\o2\Utils\Bitmap</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Assert.cpp">
-			<Filter>Sources\o2\Utils\Debug</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Debug.cpp">
-			<Filter>Sources\o2\Utils\Debug</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.cpp">
-			<Filter>Sources\o2\Utils\Debug\Log</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.cpp">
-			<Filter>Sources\o2\Utils\Debug\Log</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.cpp">
-			<Filter>Sources\o2\Utils\Debug\Log</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\StackTrace.cpp">
-			<Filter>Sources\o2\Utils\Debug</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.cpp">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\DragHandle.cpp">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\FrameHandles.cpp">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.cpp">
-			<Filter>Sources\o2\Utils\Editor</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\File.cpp">
-			<Filter>Sources\o2\Utils\FileSystem</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.cpp">
-			<Filter>Sources\o2\Utils\FileSystem</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.cpp">
-			<Filter>Sources\o2\Utils\FileSystem</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileImpl.cpp">
-			<Filter>Sources\o2\Utils\FileSystem\Windows</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileSystemImpl.cpp">
-			<Filter>Sources\o2\Utils\FileSystem\Windows</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Color.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Curve.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Geometry.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Intersection.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Layout.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Math.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Transform.cpp">
-			<Filter>Sources\o2\Utils\Math</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Memory\MemoryManager.cpp">
-			<Filter>Sources\o2\Utils\Memory</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.cpp">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.cpp">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\Reflection.cpp">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\Type.cpp">
-			<Filter>Sources\o2\Utils\Reflection</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\DataNode.cpp">
-			<Filter>Sources\o2\Utils\Serialization</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\Serializable.cpp">
-			<Filter>Sources\o2\Utils\Serialization</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.cpp">
-			<Filter>Sources\o2\Utils\Serialization</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Clipboard.cpp">
-			<Filter>Sources\o2\Utils\System</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\System\ShortcutKeys.cpp">
-			<Filter>Sources\o2\Utils\System</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Time\Time.cpp">
-			<Filter>Sources\o2\Utils\System\Time</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.cpp">
-			<Filter>Sources\o2\Utils\System\Time</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Time\Timer.cpp">
-			<Filter>Sources\o2\Utils\System\Time</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Tasks\AnimationTask.cpp">
-			<Filter>Sources\o2\Utils\Tasks</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Tasks\Task.cpp">
-			<Filter>Sources\o2\Utils\Tasks</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Tasks\TaskManager.cpp">
-			<Filter>Sources\o2\Utils\Tasks</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Tools\RectPacker.cpp">
-			<Filter>Sources\o2\Utils\Tools</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Types\CommonTypes.cpp">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp">
-			<Filter>Sources\o2\Utils\Types</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2\stdafx.cpp">
-			<Filter>Sources\o2</Filter>
-		</ClCompile>
-	</ItemGroup>
-	<ItemGroup>
-		<Natvis Include="Framework.natvis" />
-	</ItemGroup>
+  <ItemGroup>
+    <Filter Include="Sources" />
+    <Filter Include="Sources\o2\Animation" />
+    <Filter Include="Sources\o2" />
+    <Filter Include="Sources\o2\Application" />
+    <Filter Include="Sources\o2\Application\Windows" />
+    <Filter Include="Sources\o2\Assets" />
+    <Filter Include="Sources\o2\Assets\Builder" />
+    <Filter Include="Sources\o2\Config" />
+    <Filter Include="Sources\o2\Events" />
+    <Filter Include="Sources\o2\Render" />
+    <Filter Include="Sources\o2\Render\Windows" />
+    <Filter Include="Sources\o2\Scene" />
+    <Filter Include="Sources\o2\Scene\Components" />
+    <Filter Include="Sources\o2\Scene\UI" />
+    <Filter Include="Sources\o2\Scene\UI\Widgets" />
+    <Filter Include="Sources\o2\Utils\Basic" />
+    <Filter Include="Sources\o2\Utils" />
+    <Filter Include="Sources\o2\Utils\Bitmap" />
+    <Filter Include="Sources\o2\Utils\Debug" />
+    <Filter Include="Sources\o2\Utils\Debug\Log" />
+    <Filter Include="Sources\o2\Utils\Editor\Attributes" />
+    <Filter Include="Sources\o2\Utils\Editor" />
+    <Filter Include="Sources\o2\Utils\FileSystem" />
+    <Filter Include="Sources\o2\Utils\FileSystem\Windows" />
+    <Filter Include="Sources\o2\Utils\Math" />
+    <Filter Include="Sources\o2\Utils\Memory" />
+    <Filter Include="Sources\o2\Utils\Reflection" />
+    <Filter Include="Sources\o2\Utils\Serialization" />
+    <Filter Include="Sources\o2\Utils\System" />
+    <Filter Include="Sources\o2\Utils\System\Time" />
+    <Filter Include="Sources\o2\Utils\Tasks" />
+    <Filter Include="Sources\o2\Utils\Tools" />
+    <Filter Include="Sources\o2\Utils\Types" />
+    <Filter Include="Sources\o2\Utils\Types\Containers" />
+    <Filter Include="Sources\o2\Assets\Types" />
+    <Filter Include="Sources\o2\Physics">
+      <UniqueIdentifier>{9c73acef-f5b0-4b08-85b9-8afcccc6c6fb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimatedFloat.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimatedValue.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimatedVector.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\Animation.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationMask.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationState.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\IAnimation.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\TweenValue.h">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Application\Application.h">
+      <Filter>Sources\o2\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Application\Input.h">
+      <Filter>Sources\o2\Application</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Application\Windows\ApplicationBase.h">
+      <Filter>Sources\o2\Application\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Asset.h">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\AssetInfo.h">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\AssetRef.h">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Assets.h">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\AssetsTree.h">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.h">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.h">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.h">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.h">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.h">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.h">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Meta.h">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\ActorAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\AnimationAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\AtlasAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\BinaryAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\DataAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\FolderAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\FontAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\ImageAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.h">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Config\ProjectConfig.h">
+      <Filter>Sources\o2\Config</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\EngineSettings.h">
+      <Filter>Sources\o2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\ApplicationEventsListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\CursorEventsArea.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\CursorEventsListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\EventSystem.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\IEventsListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\KeyboardEventsListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\ShortcutKeysListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\O2.h">
+      <Filter>Sources\o2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\BitmapFont.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Camera.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\DrawPolyLine.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Font.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\FontRef.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\IDrawable.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Mesh.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Particle.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\ParticlesEffects.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitter.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\RectDrawable.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Render.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Sprite.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Text.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Texture.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\TextureRef.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\VectorFont.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\VectorFontEffects.h">
+      <Filter>Sources\o2\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Windows\OpenGL.h">
+      <Filter>Sources\o2\Render\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Windows\RenderBase.h">
+      <Filter>Sources\o2\Render\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Render\Windows\TextureBase.h">
+      <Filter>Sources\o2\Render\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Actor.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Component.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\AnimationComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\ImageComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Drawable.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Scene.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\SceneLayer.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Tags.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\UIManager.h">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widget.h">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayer.h">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.h">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayout.h">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetState.h">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Button.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Image.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Label.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\List.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Window.h">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Basic\IDynamic.h">
+      <Filter>Sources\o2\Utils\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Basic\IObject.h">
+      <Filter>Sources\o2\Utils\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Basic\ITree.h">
+      <Filter>Sources\o2\Utils\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.h">
+      <Filter>Sources\o2\Utils\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.h">
+      <Filter>Sources\o2\Utils\Bitmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Assert.h">
+      <Filter>Sources\o2\Utils\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Debug.h">
+      <Filter>Sources\o2\Utils\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.h">
+      <Filter>Sources\o2\Utils\Debug\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.h">
+      <Filter>Sources\o2\Utils\Debug\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.h">
+      <Filter>Sources\o2\Utils\Debug\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\StackTrace.h">
+      <Filter>Sources\o2\Utils\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Delegates.h">
+      <Filter>Sources\o2\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\AnimatableAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DefaultTypeAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DontDeleteAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\EditorPropertyAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\ExpandedByDefaultAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\InvokeOnChangeAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\NoHeaderAttribute.h">
+      <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.h">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\DragHandle.h">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\FrameHandles.h">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.h">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\File.h">
+      <Filter>Sources\o2\Utils\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.h">
+      <Filter>Sources\o2\Utils\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h">
+      <Filter>Sources\o2\Utils\FileSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Border.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Color.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Curve.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Geometry.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Interpolation.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Intersection.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Layout.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Math.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\OBB.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\PolyLine.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Ray.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Rect.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Transform.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h">
+      <Filter>Sources\o2\Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Property.h">
+      <Filter>Sources\o2\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Reflection.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\SearchPassedObject.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Type.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeSerializer.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeTraits.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataNode.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Singleton.h">
+      <Filter>Sources\o2\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Clipboard.h">
+      <Filter>Sources\o2\Utils\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\System\ShortcutKeys.h">
+      <Filter>Sources\o2\Utils\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Time\Time.h">
+      <Filter>Sources\o2\Utils\System\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.h">
+      <Filter>Sources\o2\Utils\System\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Time\Timer.h">
+      <Filter>Sources\o2\Utils\System\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Tasks\AnimationTask.h">
+      <Filter>Sources\o2\Utils\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Tasks\Task.h">
+      <Filter>Sources\o2\Utils\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Tasks\TaskManager.h">
+      <Filter>Sources\o2\Utils\Tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Tools\RectPacker.h">
+      <Filter>Sources\o2\Utils\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\CommonTypes.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IArray.h">
+      <Filter>Sources\o2\Utils\Types\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IDictionary.h">
+      <Filter>Sources\o2\Utils\Types\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Map.h">
+      <Filter>Sources\o2\Utils\Types\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pair.h">
+      <Filter>Sources\o2\Utils\Types\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pool.h">
+      <Filter>Sources\o2\Utils\Types\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Vector.h">
+      <Filter>Sources\o2\Utils\Types\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Ref.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\String.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\StringDef.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\StringImpl.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\UID.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\UnknownPtr.h">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\ValueProxy.h">
+      <Filter>Sources\o2\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\stdafx.h">
+      <Filter>Sources\o2</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h">
+      <Filter>Sources\o2\Physics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimatedFloat.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimatedValue.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimatedVector.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\Animation.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationMask.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationState.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Animation\IAnimation.cpp">
+      <Filter>Sources\o2\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Application\Application.cpp">
+      <Filter>Sources\o2\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Application\Input.cpp">
+      <Filter>Sources\o2\Application</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Application\Windows\ApplicationImpl.cpp">
+      <Filter>Sources\o2\Application\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Asset.cpp">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\AssetInfo.cpp">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\AssetRef.cpp">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Assets.cpp">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\AssetsTree.cpp">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.cpp">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.cpp">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.cpp">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.cpp">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.cpp">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.cpp">
+      <Filter>Sources\o2\Assets\Builder</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Meta.cpp">
+      <Filter>Sources\o2\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\ActorAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\AnimationAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\AtlasAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\BinaryAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\DataAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\FolderAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\FontAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\ImageAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.cpp">
+      <Filter>Sources\o2\Assets\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Config\ProjectConfig.cpp">
+      <Filter>Sources\o2\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\EngineSettings.cpp">
+      <Filter>Sources\o2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\ApplicationEventsListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\CursorEventsArea.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\CursorEventsListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\EventSystem.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\IEventsListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\KeyboardEventsListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\ShortcutKeysListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\BitmapFont.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Camera.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Font.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\FontRef.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\IDrawable.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Mesh.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\ParticlesEffects.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitter.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\RectDrawable.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Render.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Sprite.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Text.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Texture.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\TextureRef.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\VectorFont.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\VectorFontEffects.cpp">
+      <Filter>Sources\o2\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Windows\OpenGL.cpp">
+      <Filter>Sources\o2\Render\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Windows\RenderImpl.cpp">
+      <Filter>Sources\o2\Render\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Render\Windows\TextureImpl.cpp">
+      <Filter>Sources\o2\Render\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Actor.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorCreationMode.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorEditor.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorRef.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorTransform.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Component.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\AnimationComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\ImageComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Drawable.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\SceneLayer.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Tags.cpp">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\UIManager.cpp">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widget.cpp">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayer.cpp">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.cpp">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayout.cpp">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetState.cpp">
+      <Filter>Sources\o2\Scene\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Button.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Image.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Label.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\List.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Window.cpp">
+      <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.cpp">
+      <Filter>Sources\o2\Utils\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.cpp">
+      <Filter>Sources\o2\Utils\Bitmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Assert.cpp">
+      <Filter>Sources\o2\Utils\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Debug.cpp">
+      <Filter>Sources\o2\Utils\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.cpp">
+      <Filter>Sources\o2\Utils\Debug\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.cpp">
+      <Filter>Sources\o2\Utils\Debug\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.cpp">
+      <Filter>Sources\o2\Utils\Debug\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\StackTrace.cpp">
+      <Filter>Sources\o2\Utils\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.cpp">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\DragHandle.cpp">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\FrameHandles.cpp">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.cpp">
+      <Filter>Sources\o2\Utils\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\File.cpp">
+      <Filter>Sources\o2\Utils\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.cpp">
+      <Filter>Sources\o2\Utils\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.cpp">
+      <Filter>Sources\o2\Utils\FileSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileImpl.cpp">
+      <Filter>Sources\o2\Utils\FileSystem\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileSystemImpl.cpp">
+      <Filter>Sources\o2\Utils\FileSystem\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Color.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Curve.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Geometry.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Intersection.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Layout.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Math.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Transform.cpp">
+      <Filter>Sources\o2\Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\MemoryManager.cpp">
+      <Filter>Sources\o2\Utils\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.cpp">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.cpp">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\Reflection.cpp">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\Type.cpp">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\DataNode.cpp">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\Serializable.cpp">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.cpp">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Clipboard.cpp">
+      <Filter>Sources\o2\Utils\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\System\ShortcutKeys.cpp">
+      <Filter>Sources\o2\Utils\System</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Time\Time.cpp">
+      <Filter>Sources\o2\Utils\System\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.cpp">
+      <Filter>Sources\o2\Utils\System\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Time\Timer.cpp">
+      <Filter>Sources\o2\Utils\System\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Tasks\AnimationTask.cpp">
+      <Filter>Sources\o2\Utils\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Tasks\Task.cpp">
+      <Filter>Sources\o2\Utils\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Tasks\TaskManager.cpp">
+      <Filter>Sources\o2\Utils\Tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Tools\RectPacker.cpp">
+      <Filter>Sources\o2\Utils\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Types\CommonTypes.cpp">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp">
+      <Filter>Sources\o2\Utils\Types</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
+      <Filter>Sources\o2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp">
+      <Filter>Sources\o2\Physics</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="Framework.natvis" />
+  </ItemGroup>
 </Project>

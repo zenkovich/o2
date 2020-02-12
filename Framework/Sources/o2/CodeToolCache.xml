@@ -5745,5 +5745,28 @@
 			<usings />
 		</globalNamespace>
 	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Physics/PhysicsWorld.h">
+		<date year="2020" month="2" day="12" hour="17" minute="42" second="34" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="PhysicsWorld" fullname="o2::PhysicsWorld" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Singleton&lt;PhysicsWorld&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
 </files>
 <parentProjects />

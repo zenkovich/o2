@@ -68,7 +68,7 @@
     </PreBuildEvent>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
       <WarningLevel>Level2</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -92,7 +92,7 @@
     </PreBuildEvent>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <WarningLevel>Level2</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -116,7 +116,7 @@
     </PreBuildEvent>
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>PLATFORM_WINDOWS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <WarningLevel>Level2</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -183,6 +183,7 @@
     <ClInclude Include="..\..\Sources\o2\Events\KeyboardEventsListener.h" />
     <ClInclude Include="..\..\Sources\o2\Events\ShortcutKeysListener.h" />
     <ClInclude Include="..\..\Sources\o2\O2.h" />
+    <ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h" />
     <ClInclude Include="..\..\Sources\o2\Render\BitmapFont.h" />
     <ClInclude Include="..\..\Sources\o2\Render\Camera.h" />
     <ClInclude Include="..\..\Sources\o2\Render\DrawPolyLine.h" />
@@ -374,6 +375,7 @@
     <ClCompile Include="..\..\Sources\o2\Events\IEventsListener.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\KeyboardEventsListener.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\ShortcutKeysListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\BitmapFont.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\Camera.cpp" />
     <ClCompile Include="..\..\Sources\o2\Render\Font.cpp" />
