@@ -410,6 +410,7 @@
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Drawable.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\SceneLayer.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Tags.cpp" />

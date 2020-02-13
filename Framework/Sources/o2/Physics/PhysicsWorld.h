@@ -20,5 +20,7 @@ namespace o2
 
 	private:
 		b2World mWorld;
+
+		friend class RigidBody;
 	};
 }

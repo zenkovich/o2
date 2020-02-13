@@ -1084,6 +1084,9 @@
     <ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp">
       <Filter>Sources\o2\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp">
+      <Filter>Sources\o2\Scene\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="Framework.natvis" />
