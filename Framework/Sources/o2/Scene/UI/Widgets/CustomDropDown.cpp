@@ -285,7 +285,7 @@ namespace o2
 			*selectState = false;
 	}
 
-	void CustomDropDown::OnResEnableInHierarchyChanged()
+	void CustomDropDown::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

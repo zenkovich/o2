@@ -106,7 +106,7 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
@@ -184,7 +184,7 @@ CLASS_METHODS_META(o2::HorizontalProgress)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, UpdateProgressLayersLayouts);
 	PROTECTED_FUNCTION(void, GetValueFromCursor, const Input::Cursor&);

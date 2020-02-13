@@ -265,7 +265,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void VerticalScrollBar::OnResEnableInHierarchyChanged()
+	void VerticalScrollBar::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

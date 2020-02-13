@@ -491,7 +491,7 @@ namespace o2
 		void SetParentProp(Actor* actor);
 
 		// It is called when result enable was changed
-		virtual void OnResEnableInHierarchyChanged();
+		virtual void OnEnableInHierarchyChanged();
 
 		// It is called when transformation was changed and updated
 		virtual void OnTransformUpdated();
@@ -848,7 +848,7 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
 	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);

@@ -94,7 +94,7 @@ namespace o2
 		void OnLayerAdded(WidgetLayer* layer) override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// It is called when listener becomes interactable, disabled "inactive" state when exists
 		void OnBecomeInteractable() override;
@@ -141,7 +141,7 @@ CLASS_METHODS_META(o2::Button)
 	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnBecomeInteractable);
 	PROTECTED_FUNCTION(void, OnBecomeNotInteractable);
 }

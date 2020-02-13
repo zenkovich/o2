@@ -218,6 +218,7 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Drawable.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Scene.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\SceneLayer.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Tags.h" />

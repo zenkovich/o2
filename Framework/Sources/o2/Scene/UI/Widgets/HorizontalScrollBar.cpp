@@ -293,7 +293,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void HorizontalScrollBar::OnResEnableInHierarchyChanged()
+	void HorizontalScrollBar::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

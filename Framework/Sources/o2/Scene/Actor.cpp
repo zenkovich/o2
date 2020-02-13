@@ -770,7 +770,7 @@ namespace o2
 			if (IsHieararchyOnScene())
 				o2Scene.onEnableChanged(this);
 #endif
-			OnResEnableInHierarchyChanged();
+			OnEnableInHierarchyChanged();
 			OnChanged();
 		}
 
@@ -918,7 +918,7 @@ namespace o2
 			comp->OnIncludeToScene();
 	}
 
-	void Actor::OnResEnableInHierarchyChanged()
+	void Actor::OnEnableInHierarchyChanged()
 	{}
 
 	void Actor::CopyData(const Actor& otherActor)

@@ -370,7 +370,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void MenuPanel::OnResEnableInHierarchyChanged()
+	void MenuPanel::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

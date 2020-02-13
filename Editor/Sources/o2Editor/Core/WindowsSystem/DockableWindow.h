@@ -117,7 +117,7 @@ namespace Editor
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when visible was changed, undocks when hiding
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// It is called when widget was selected, enables active tab
 		void OnFocused() override;
@@ -216,7 +216,7 @@ CLASS_METHODS_META(Editor::DockableWindow)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, InitializeDockFrameAppearanceAnim);
 	PROTECTED_FUNCTION(void, InitializeDragHandles);

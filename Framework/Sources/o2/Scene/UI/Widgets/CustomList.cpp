@@ -590,7 +590,7 @@ namespace o2
 	void CustomList::OnSelectionChanged()
 	{}
 
-	void CustomList::OnResEnableInHierarchyChanged()
+	void CustomList::OnEnableInHierarchyChanged()
 	{
 		SetInteractable(mResEnabled);
 	}

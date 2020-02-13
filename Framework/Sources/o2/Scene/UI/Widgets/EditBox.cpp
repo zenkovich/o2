@@ -360,7 +360,7 @@ namespace o2
 		return true;
 	}
 
-	void EditBox::OnResEnableInHierarchyChanged()
+	void EditBox::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

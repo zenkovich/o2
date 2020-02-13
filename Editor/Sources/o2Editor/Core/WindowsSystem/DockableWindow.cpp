@@ -320,9 +320,9 @@ namespace Editor
 			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
 	}
 
-	void DockableWindow::OnResEnableInHierarchyChanged()
+	void DockableWindow::OnEnableInHierarchyChanged()
 	{
-		Window::OnResEnableInHierarchyChanged();
+		Window::OnEnableInHierarchyChanged();
 
 		if (!mResEnabled)
 			Undock();

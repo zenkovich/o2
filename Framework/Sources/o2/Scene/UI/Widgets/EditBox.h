@@ -192,7 +192,7 @@ namespace o2
 		void UpdateLayersLayouts() override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// It is called when widget was selected
 		void OnFocused() override;
@@ -363,7 +363,7 @@ CLASS_METHODS_META(o2::EditBox)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, UpdateScrollParams);

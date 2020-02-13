@@ -137,49 +137,7 @@ namespace Editor
 
 	void EditorApplication::ProcessFrame()
 	{
-		if (!mReady)
-			return;
-
-		if (mCursorInfiniteModeEnabled)
-			CheckCursorInfiniteMode();
-
-		float maxFPS = 60.0f;
-		float maxFPSDeltaTime = 1.0f/maxFPS;
-
-		float realdDt = mTimer->GetDeltaTime();
-
-		if (realdDt < maxFPSDeltaTime)
-		{
-			Sleep((int)((maxFPSDeltaTime - realdDt)*1000.0f));
-			realdDt = maxFPSDeltaTime;
-		}
-
-		float dt = Math::Clamp(realdDt, 0.001f, 0.05f);
-
-		mInput->PreUpdate();
-		mTime->Update(realdDt);
-		o2Debug.Update(dt);
-		mTaskManager->Update(dt);
-		mEventSystem->Update(dt);
-
-		mRender->Begin();
-
-		OnDraw();
-		OnUpdate(dt);
-
-		mUIRoot->Update(dt);
-		mEventSystem->PostUpdate();
-		mScene->Update(dt);
-
-
-		OnDraw();
-		mUIRoot->Draw();
-		mUIManager->Draw();
-		o2Debug.Draw();
-
-		mRender->End();
-
-		mInput->Update(dt);
+		Application::ProcessFrame();
 
 		mDrawCalls = mRender->GetDrawCallsCount();
 	}
@@ -198,6 +156,8 @@ namespace Editor
 	void EditorApplication::OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);
+		mUIRoot->Update(dt);
+
 		o2Application.windowCaption = String("o2 Editor. FPS: ") + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
 			" Cursor: " + (String)o2Input.GetCursorPos();

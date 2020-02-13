@@ -329,7 +329,7 @@ namespace o2
 		BindHandlesInteractableToVisibility();
 	}
 
-	void Window::OnResEnableInHierarchyChanged()
+	void Window::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 

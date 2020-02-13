@@ -113,7 +113,7 @@ namespace o2
 		void OnDeserialized(const DataNode& node) override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
@@ -211,7 +211,7 @@ CLASS_METHODS_META(o2::LongList)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, CalculateScrollArea);
 	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);

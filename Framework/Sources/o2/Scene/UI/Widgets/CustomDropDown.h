@@ -149,7 +149,7 @@ namespace o2
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// It is called when item was selected in list
 		void OnItemSelected();
@@ -218,7 +218,7 @@ CLASS_METHODS_META(o2::CustomDropDown)
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnItemSelected);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 }

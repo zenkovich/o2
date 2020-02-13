@@ -24,10 +24,7 @@ namespace o2
 {
 	DECLARE_SINGLETON(Application);
 
-	Application::Application() :
-		mLog(nullptr), mReady(false), mAssets(nullptr), mEventSystem(nullptr), mFileSystem(nullptr), mInput(nullptr),
-		mProjectConfig(nullptr), mRender(nullptr), mScene(nullptr), mTaskManager(nullptr), mTime(nullptr), mTimer(nullptr),
-		mUIManager(nullptr), mCursorInfiniteModeEnabled(false)
+	Application::Application()
 	{}
 
 	Application::~Application()
@@ -73,12 +70,15 @@ namespace o2
 
 		mScene = mnew Scene();
 
+		mPhysics = mnew PhysicsWorld();
+
 		mLog->Out("Initialized");
 	}
 
 	void Application::DeinitializeSystems()
 	{
 		delete mUIManager;
+		delete mPhysics;
 		delete mScene;
 		delete mRender;
 		delete mInput;
@@ -98,8 +98,7 @@ namespace o2
 		if (mCursorInfiniteModeEnabled)
 			CheckCursorInfiniteMode();
 
-		float maxFPS = 60.0f;
-		float maxFPSDeltaTime = 1.0f/maxFPS;
+		float maxFPSDeltaTime = 1.0f/(float)maxFPS;
 
 		float realdDt = mTimer->GetDeltaTime();
 
@@ -124,6 +123,16 @@ namespace o2
 		OnUpdate(dt);
 
 		mScene->Update(dt);
+
+		mAccumulatedDT += dt;
+		float fixedDT = 1.0f/(float)fixedFPS;
+		while (mAccumulatedDT > fixedDT)
+		{
+			OnFixedUpdate(fixedDT);
+			mPhysics->Update(fixedDT);
+			mAccumulatedDT -= fixedDT;
+		}
+
 		mEventSystem->PostUpdate();
 
 		OnDraw();
@@ -175,6 +184,9 @@ namespace o2
 	{}
 
 	void Application::OnUpdate(float dt)
+	{}
+
+	void Application::OnFixedUpdate(float dt)
 	{}
 
 	void Application::OnDraw()

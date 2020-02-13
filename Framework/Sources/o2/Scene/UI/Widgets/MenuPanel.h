@@ -134,7 +134,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// Creates sub context menus by path
 		ContextMenu* CreateSubContext(WString& path);
@@ -215,7 +215,7 @@ CLASS_METHODS_META(o2::MenuPanel)
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(ContextMenu*, CreateSubContext, WString&);
 	PROTECTED_FUNCTION(Widget*, CreateItem, const Item&);
 	PROTECTED_FUNCTION(Item, GetItemDef, int);

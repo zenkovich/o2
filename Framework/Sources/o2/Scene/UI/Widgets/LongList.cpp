@@ -514,7 +514,7 @@ namespace o2
 	void LongList::OnSelectionChanged()
 	{}
 
-	void LongList::OnResEnableInHierarchyChanged()
+	void LongList::OnEnableInHierarchyChanged()
 	{
 		SetInteractable(mResEnabled);
 	}

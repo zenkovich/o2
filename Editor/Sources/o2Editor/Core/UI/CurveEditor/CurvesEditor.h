@@ -283,7 +283,7 @@ namespace Editor
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when visible was changed. Sets context menu items priority
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// It is called when scrolling
 		void OnScrolled(float scroll) override;
@@ -516,7 +516,7 @@ CLASS_METHODS_META(Editor::CurvesEditor)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(ContextMenu*, GetContextMenu);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);

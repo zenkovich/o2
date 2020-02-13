@@ -1142,7 +1142,7 @@ namespace o2
 				o2Scene.onEnableChanged(this);
 #endif
 
-			OnResEnableInHierarchyChanged();
+			OnEnableInHierarchyChanged();
 			OnChanged();
 		}
 

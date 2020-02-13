@@ -212,7 +212,7 @@ namespace o2
 		RetargetStatesAnimations();
 	}
 
-	void HorizontalProgress::OnResEnableInHierarchyChanged()
+	void HorizontalProgress::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

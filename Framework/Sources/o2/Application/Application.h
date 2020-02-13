@@ -24,6 +24,7 @@ namespace o2
 	class FileSystem;
 	class Input;
 	class LogStream;
+	class PhysicsWorld;
 	class ProjectConfig;
 	class Render;
 	class Scene;
@@ -53,6 +54,10 @@ namespace o2
 		Function<void()> onClosing;     // On closing event callbacks
 		Function<void()> onResizing;    // On resized app window callbacks. Ignoring on mobiles/tables
 		Function<void()> onMoving;      // On moving app window callbacks. Ignoring on mobiles/tables
+
+	public:
+		int maxFPS = 60.0f;   // Maximum frames per second
+		int fixedFPS = 60.0f; // Fixed frames per second
 
 	public:
 		// Default constructor
@@ -144,8 +149,8 @@ namespace o2
 
 #if defined PLATFORM_WINDOWS
 
-        // Initializes engine application
-        virtual void Initialize();
+		// Initializes engine application
+		virtual void Initialize();
 
 		// Launching application cycle
 		virtual void Launch();
@@ -154,10 +159,10 @@ namespace o2
 
 		// Launching application
 		virtual void Initialize(JNIEnv* env, jobject activity, AAssetManager* assetManager, String dataPath,
-                                const Vec2I& resolution);
+								const Vec2I& resolution);
 
-        // Launching application cycle
-        virtual void Launch();
+		// Launching application cycle
+		virtual void Launch();
 
 		// Updates frame
 		void Update();
@@ -165,23 +170,26 @@ namespace o2
 #endif
 
 	protected:
-		Assets*        mAssets;        // Assets
-		EventSystem*   mEventSystem;   // Events processing system
-		FileSystem*    mFileSystem;    // File system
-		Input*         mInput;         // While application user input message
-		LogStream*     mLog;           // Log stream with id "app", using only for application messages
-		ProjectConfig* mProjectConfig; // Project config
-		Render*        mRender;        // Graphics render
-		Scene*         mScene;         // Scene
-		TaskManager*   mTaskManager;   // Tasks manager
-		Time*          mTime;          // Time utilities
-		Timer*         mTimer;         // Timer for detecting delta time for update
-		UIManager*     mUIManager;     // UI manager
+		bool mReady = false; // Is all systems is ready
 
-		bool           mReady;         // Is all systems is ready
+		Assets*        mAssets = nullptr;        // Assets
+		EventSystem*   mEventSystem = nullptr;   // Events processing system
+		FileSystem*    mFileSystem = nullptr;    // File system
+		Input*         mInput = nullptr;         // While application user input message
+		LogStream*     mLog = nullptr;           // Log stream with id "app", using only for application messages
+		PhysicsWorld*  mPhysics = nullptr;       // Physics
+		ProjectConfig* mProjectConfig = nullptr; // Project config
+		Render*        mRender = nullptr;        // Graphics render
+		Scene*         mScene = nullptr;         // Scene
+		TaskManager*   mTaskManager = nullptr;   // Tasks manager
+		Time*          mTime = nullptr;          // Time utilities
+		Timer*         mTimer = nullptr;         // Timer for detecting delta time for update
+		UIManager*     mUIManager = nullptr;     // UI manager
 
-		bool           mCursorInfiniteModeEnabled; // Is cursor infinite mode enabled
-		Vec2F          mCursorCorrectionDelta;     // Cursor corrections delta - result of infinite cursors offset
+		bool  mCursorInfiniteModeEnabled = false; // Is cursor infinite mode enabled
+		Vec2F mCursorCorrectionDelta;             // Cursor corrections delta - result of infinite cursors offset
+
+		float mAccumulatedDT = 0.0f; // Accumulated delta time for fixed FPS update
 
 	protected:
 		// Basic initialization for all platforms
@@ -192,6 +200,9 @@ namespace o2
 
 		// Calling on updating
 		virtual void OnUpdate(float dt);
+
+		// Calling on updating by fixed FPS
+		virtual void OnFixedUpdate(float dt);
 
 		// Calling on drawing
 		virtual void OnDraw();

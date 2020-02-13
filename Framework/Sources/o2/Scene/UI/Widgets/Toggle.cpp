@@ -318,7 +318,7 @@ namespace o2
 			mBackLayer = layer;
 	}
 
-	void Toggle::OnResEnableInHierarchyChanged()
+	void Toggle::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

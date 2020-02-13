@@ -39,6 +39,9 @@
     <Filter Include="Sources\o2\Physics">
       <UniqueIdentifier>{9c73acef-f5b0-4b08-85b9-8afcccc6c6fb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\o2\Scene\Physics">
+      <UniqueIdentifier>{31bdff58-e377-4a6b-ac49-2ebda93bfe1e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h">
       <Filter>Sources\o2\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h">
+      <Filter>Sources\o2\Scene\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

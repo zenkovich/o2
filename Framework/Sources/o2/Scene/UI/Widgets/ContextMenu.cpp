@@ -371,7 +371,7 @@ namespace o2
 		SetupItem(itemWidget, item);
 	}
 
-	void ContextMenu::OnResEnableInHierarchyChanged()
+	void ContextMenu::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;
 	}

@@ -294,7 +294,7 @@ namespace o2
 		void CheckClipping(const RectF& clipArea) override;
 
 		// It is called when visible was changed
-		void OnResEnableInHierarchyChanged() override;
+		void OnEnableInHierarchyChanged() override;
 
 		// Creates context items by path ("node/sub node/target")
 		ContextMenu* CreateItemsByPath(WString& path);
@@ -450,7 +450,7 @@ CLASS_METHODS_META(o2::ContextMenu)
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, OnResEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(ContextMenu*, CreateItemsByPath, WString&);
 	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);

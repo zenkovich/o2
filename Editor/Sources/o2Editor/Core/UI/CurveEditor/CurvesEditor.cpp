@@ -322,7 +322,7 @@ namespace Editor
 		mReady = true;
 	}
 
-	void CurvesEditor::OnResEnableInHierarchyChanged()
+	void CurvesEditor::OnEnableInHierarchyChanged()
 	{
 		if (mResEnabled)
 			mContextMenu->SetItemsMaxPriority();
