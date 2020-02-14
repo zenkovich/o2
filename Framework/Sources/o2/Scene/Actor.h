@@ -382,6 +382,7 @@ namespace o2
 
 		Vector<Component*> mComponents; // Components vector 
 
+		bool mStarted = false;              // Is actor started
 		bool mEnabled = true;               // Is actor enabled
 		bool mResEnabled = true;            // Is actor really enabled. 
 		bool mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
@@ -489,6 +490,27 @@ namespace o2
 
 		// Sets parent
 		void SetParentProp(Actor* actor);
+
+		// Is is called when actor has added to scene
+		virtual void OnAddedToScene();
+
+		// It is called when actor has removed from scene
+		virtual void OnRemovedFromScene();
+
+		// It is called on first update
+		virtual void OnStart();
+
+		// Is is called on update with frame dt
+		virtual void OnUpdate(float dt);
+
+		// It is called on fixed update with fixed dt
+		virtual void OnFixedUpdate(float dt);
+
+		// Is is called when actor enabled in hierarchy
+		virtual void OnEnabled();
+
+		// It is called when actor disabled in hierarchy
+		virtual void OnDisabled();
 
 		// It is called when result enable was changed
 		virtual void OnEnableInHierarchyChanged();

@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Math/Math.h"
 #include "o2/Utils/Basic/IObject.h"
+#include "Box2D/Common/b2Math.h"
 
 namespace o2
 {
@@ -19,6 +20,9 @@ namespace o2
 
 		template<typename RT>
 		inline operator Vec2<RT>();
+
+		inline Vec2(const b2Vec2& v);
+		inline operator b2Vec2() const;
 
 		inline bool operator==(const Vec2& v) const;
 		inline bool operator!=(const Vec2& v) const;
@@ -113,6 +117,17 @@ namespace o2
 	Vec2<T>::operator Vec2<RT>()
 	{
 		return Vec2<RT>((RT)x, (RT)y);
+	}
+
+	template<typename T>
+	Vec2<T>::Vec2(const b2Vec2& v):
+		x(v.x), y(v.y)
+	{}
+
+	template<typename T>
+	Vec2<T>::operator b2Vec2() const
+	{
+		return b2Vec2(x, y);
 	}
 
 	template<typename T>

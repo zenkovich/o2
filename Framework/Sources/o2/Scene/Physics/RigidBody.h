@@ -2,8 +2,7 @@
 
 #include "o2/Scene/Actor.h"
 #include "Box2D/Collision/Shapes/b2Shape.h"
-
-class b2Body;
+#include "Box2D/Dynamics/b2Body.h"
 
 namespace o2
 {
@@ -113,7 +112,7 @@ namespace o2
 		b2Body*    mBody = nullptr; // Box 2d physics body
 		b2MassData mMassData;       // Body mass data
 
-		Type mType = Type::Dynamic; // Type of body @SERIALIZABLE
+		Type mBodyType = Type::Dynamic; // Type of body @SERIALIZABLE
 
 		float mMass = 1.0f;             // Mass @SERIALIZABLE
 		float mInertia = 1.0f;          // Inertia @SERIALIZABLE
@@ -135,5 +134,8 @@ namespace o2
 
 		// Removes body
 		void RemoveBody();
+
+		// Converts body type
+		static b2BodyType GetBodyType(Type type);
 	};
 }

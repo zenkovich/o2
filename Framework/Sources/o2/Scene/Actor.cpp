@@ -170,6 +170,14 @@ namespace o2
 			UpdateSelfTransform();
 		}
 
+		if (!mStarted)
+		{
+			OnStart();
+			mStarted = true;
+		}
+
+		OnUpdate(dt);
+
 		for (auto comp : mComponents)
 			comp->Update(dt);
 	}
@@ -744,6 +752,27 @@ namespace o2
 		SetParent(actor, false);
 	}
 
+	void Actor::OnAddedToScene()
+	{}
+
+	void Actor::OnRemovedFromScene()
+	{}
+
+	void Actor::OnStart()
+	{}
+
+	void Actor::OnUpdate(float dt)
+	{}
+
+	void Actor::OnFixedUpdate(float dt)
+	{}
+
+	void Actor::OnEnabled()
+	{}
+
+	void Actor::OnDisabled()
+	{}
+
 	void Actor::UpdateResEnabled()
 	{
 		mResEnabled = mEnabled;
@@ -919,7 +948,12 @@ namespace o2
 	}
 
 	void Actor::OnEnableInHierarchyChanged()
-	{}
+	{
+		if (mResEnabledInHierarchy)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
 
 	void Actor::CopyData(const Actor& otherActor)
 	{
