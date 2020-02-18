@@ -270,7 +270,7 @@ namespace o2
 
 		mCurrentCursor = LoadCursor(NULL, cursorsIds[(int)type]);
 		::SetCursor(mCurrentCursor);
-		SetClassLongPtr(mHWnd, GCLP_HCURSOR, (DWORD)mCurrentCursor);
+		SetClassLongPtr(mHWnd, (int)GCLP_HCURSOR, (LONG_PTR)mCurrentCursor);
 	}
 
 	void Application::SetCursorPosition(const Vec2F& position)

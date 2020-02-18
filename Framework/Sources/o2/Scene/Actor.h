@@ -742,6 +742,7 @@ CLASS_FIELDS_META(o2::Actor)
 	PROTECTED_FIELD(mParent);
 	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
+	PROTECTED_FIELD(mStarted);
 	PROTECTED_FIELD(mEnabled);
 	PROTECTED_FIELD(mResEnabled);
 	PROTECTED_FIELD(mResEnabledInHierarchy);
@@ -870,6 +871,13 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
 	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
+	PROTECTED_FUNCTION(void, OnAddedToScene);
+	PROTECTED_FUNCTION(void, OnRemovedFromScene);
+	PROTECTED_FUNCTION(void, OnStart);
+	PROTECTED_FUNCTION(void, OnUpdate, float);
+	PROTECTED_FUNCTION(void, OnFixedUpdate, float);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);

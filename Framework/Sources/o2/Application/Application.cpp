@@ -7,6 +7,7 @@
 #include "o2/Assets/Assets.h"
 #include "o2/Config/ProjectConfig.h"
 #include "o2/Events/EventSystem.h"
+#include "o2/Physics/PhysicsWorld.h"
 #include "o2/Render/Render.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/UI/UIManager.h"

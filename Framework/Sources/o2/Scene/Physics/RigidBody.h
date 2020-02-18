@@ -139,3 +139,66 @@ namespace o2
 		static b2BodyType GetBodyType(Type type);
 	};
 }
+
+CLASS_BASES_META(o2::RigidBody)
+{
+	BASE_CLASS(o2::Actor);
+}
+END_META;
+CLASS_FIELDS_META(o2::RigidBody)
+{
+	PUBLIC_FIELD(bodyType);
+	PUBLIC_FIELD(mass);
+	PUBLIC_FIELD(inertia);
+	PUBLIC_FIELD(linearVelocity);
+	PUBLIC_FIELD(angularVelocity);
+	PUBLIC_FIELD(linearDamping);
+	PUBLIC_FIELD(angularDamping);
+	PUBLIC_FIELD(gravityScale);
+	PUBLIC_FIELD(isBullet);
+	PUBLIC_FIELD(isSleeping);
+	PUBLIC_FIELD(isFixedRotation);
+	PROTECTED_FIELD(mBody);
+	PROTECTED_FIELD(mMassData);
+	PROTECTED_FIELD(mBodyType).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mMass).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mInertia).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mLinearDamping).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAngularDamping).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mGravityScale).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mIsBullet).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mIsFixedRotation).SERIALIZABLE_ATTRIBUTE();
+}
+END_META;
+CLASS_METHODS_META(o2::RigidBody)
+{
+
+	PUBLIC_FUNCTION(void, SetBodyType, Type);
+	PUBLIC_FUNCTION(Type, GetBodyType);
+	PUBLIC_FUNCTION(void, SetMass, float);
+	PUBLIC_FUNCTION(float, GetMass);
+	PUBLIC_FUNCTION(void, SetInertia, float);
+	PUBLIC_FUNCTION(float, GetInertia);
+	PUBLIC_FUNCTION(void, SetLinearVelocity, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetLinearVelocity);
+	PUBLIC_FUNCTION(void, SetAngularVelocity, float);
+	PUBLIC_FUNCTION(float, GetAngularVelocity);
+	PUBLIC_FUNCTION(void, SetLinearDamping, float);
+	PUBLIC_FUNCTION(float, GetLinearDamping);
+	PUBLIC_FUNCTION(void, SetAngularDamping, float);
+	PUBLIC_FUNCTION(float, GetAngularDamping);
+	PUBLIC_FUNCTION(void, SetGravityScale, float);
+	PUBLIC_FUNCTION(float, GetGravityScale);
+	PUBLIC_FUNCTION(void, SetIsBullet, bool);
+	PUBLIC_FUNCTION(bool, IsBullet);
+	PUBLIC_FUNCTION(void, SetIsSleeping, bool);
+	PUBLIC_FUNCTION(bool, IsSleeping);
+	PUBLIC_FUNCTION(void, SetIsFixedRotation, bool);
+	PUBLIC_FUNCTION(bool, IsFixedRotation);
+	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
+	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, CreateBody);
+	PROTECTED_FUNCTION(void, RemoveBody);
+	PROTECTED_STATIC_FUNCTION(b2BodyType, GetBodyType, Type);
+}
+END_META;

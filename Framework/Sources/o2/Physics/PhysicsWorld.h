@@ -14,7 +14,12 @@ namespace o2
 		int velocityIterations = 8;
 		int positionIterations = 3;
 
+		Vec2F gravity = Vec2F(0, -9.8f);
+
 	public:
+		// Default constructor
+		PhysicsWorld();
+
 		// Updates physics world and sync bodies
 		void Update(float dt);
 

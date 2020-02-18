@@ -130,7 +130,7 @@ namespace o2
 	/* else */ typename std::conditional<IsFundamental<T>::value && !std::is_const<T>::value,
 		       /* then */ FundamentalTypeContainer<T>,
 		       /* else */ typename std::conditional<
-		                  /* if */   std::is_enum<T>::value,
+		                  /* if */   std::is_enum<T>::value && IsEnumReflectable<T>::value,
 		                  /* then */ EnumTypeContainer<T>,
 		                  /* else */ Type::Dummy
 			              >::type
