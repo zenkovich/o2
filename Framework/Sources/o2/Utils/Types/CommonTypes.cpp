@@ -3,7 +3,7 @@
 
 #include "o2/Utils/Reflection/Reflection.h"
 
-ENUM_META_(o2::BaseCorner, BaseCorner)
+ENUM_META(o2::BaseCorner)
 {
 	ENUM_ENTRY(Bottom);
 	ENUM_ENTRY(Center);
@@ -17,7 +17,7 @@ ENUM_META_(o2::BaseCorner, BaseCorner)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::CursorType, CursorType)
+ENUM_META(o2::CursorType)
 {
 	ENUM_ENTRY(AppStarting);
 	ENUM_ENTRY(Arrow);
@@ -37,7 +37,7 @@ ENUM_META_(o2::CursorType, CursorType)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::Side, Side)
+ENUM_META(o2::Side)
 {
 	ENUM_ENTRY(Bottom);
 	ENUM_ENTRY(Left);
@@ -47,7 +47,7 @@ ENUM_META_(o2::Side, Side)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::Corner, Corner)
+ENUM_META(o2::Corner)
 {
 	ENUM_ENTRY(LeftBottom);
 	ENUM_ENTRY(LeftTop);
@@ -56,14 +56,14 @@ ENUM_META_(o2::Corner, Corner)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::TwoDirection, TwoDirection)
+ENUM_META(o2::TwoDirection)
 {
 	ENUM_ENTRY(Horizontal);
 	ENUM_ENTRY(Vertical);
 }
 END_ENUM_META;
 
-ENUM_META_(o2::SpriteMode, SpriteMode)
+ENUM_META(o2::SpriteMode)
 {
 	ENUM_ENTRY(Default);
 	ENUM_ENTRY(Fill360CCW);
@@ -77,7 +77,7 @@ ENUM_META_(o2::SpriteMode, SpriteMode)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::VerAlign, VerAlign)
+ENUM_META(o2::VerAlign)
 {
 	ENUM_ENTRY(Both);
 	ENUM_ENTRY(Bottom);
@@ -86,7 +86,7 @@ ENUM_META_(o2::VerAlign, VerAlign)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::HorAlign, HorAlign)
+ENUM_META(o2::HorAlign)
 {
 	ENUM_ENTRY(Both);
 	ENUM_ENTRY(Left);
@@ -95,7 +95,7 @@ ENUM_META_(o2::HorAlign, HorAlign)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::ProtectSection, ProtectSection)
+ENUM_META(o2::ProtectSection)
 {
 	ENUM_ENTRY(Private);
 	ENUM_ENTRY(Protected);
@@ -103,7 +103,7 @@ ENUM_META_(o2::ProtectSection, ProtectSection)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::Platform, Platform)
+ENUM_META(o2::Platform)
 {
 	ENUM_ENTRY(Android);
 	ENUM_ENTRY(MacOSX);
@@ -112,14 +112,14 @@ ENUM_META_(o2::Platform, Platform)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::LineType, LineType)
+ENUM_META(o2::LineType)
 {
 	ENUM_ENTRY(Dash);
 	ENUM_ENTRY(Solid);
 }
 END_ENUM_META;
 
-ENUM_META_(o2::PrimitiveType, PrimitiveType)
+ENUM_META(o2::PrimitiveType)
 {
 	ENUM_ENTRY(Line);
 	ENUM_ENTRY(Polygon);
@@ -127,7 +127,7 @@ ENUM_META_(o2::PrimitiveType, PrimitiveType)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::PixelFormat, PixelFormat)
+ENUM_META(o2::PixelFormat)
 {
 	ENUM_ENTRY(R8G8B8);
 	ENUM_ENTRY(R8G8B8A8);

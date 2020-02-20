@@ -18,6 +18,7 @@
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
+#include "EditorApplication.h"
 
 
 namespace Editor
@@ -35,6 +36,12 @@ namespace Editor
 	HorizontalLayout* ToolsPanel::GetToolsPanel() const
 	{
 		return mEditToolsPanel;
+	}
+
+	void ToolsPanel::Update(float dt)
+	{
+		mPlayToggle->value = o2EditorApplication.isPlaying;
+		mPauseToggle->value = o2EditorApplication.isPaused;
 	}
 
 	ToolsPanel::ToolsPanel()
@@ -67,15 +74,18 @@ namespace Editor
 		mPanelRoot->AddChild(mPlayPanel);
 
 		mPlayToggle = o2UI.CreateWidget<Toggle>("play-stop");
+		mPlayToggle->onToggle = [&](bool value) { OnPlayStopToggled(value); };
 		*mPlayToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(5, 1));
 		mPlayPanel->AddChild(mPlayToggle);
 
 		mPauseToggle = o2UI.CreateWidget<Toggle>("pause");
+		mPauseToggle->onToggle = [this](bool value) { OnPauseToggled(value); };
 		*mPauseToggle->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(22, 1));
 		mPauseToggle->shortcut = ShortcutKeys(VK_F11);
 		mPlayPanel->AddChild(mPauseToggle);
 
 		mStepButton = o2UI.CreateWidget<Button>("step");
+		mStepButton->onClick = [this]() { OnStepPressed(); };
 		*mStepButton->layout = WidgetLayout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(39, 1));
 		mStepButton->shortcut = ShortcutKeys(VK_F10);
 		mPlayPanel->AddChild(mStepButton);
@@ -212,6 +222,22 @@ namespace Editor
 		{
 			o2EditorWindows.SetWindowsLayout(name);
 		}
+	}
+
+	void ToolsPanel::OnPlayStopToggled(bool play)
+	{
+		o2EditorApplication.isPlaying = play;
+	}
+
+	void ToolsPanel::OnPauseToggled(bool pause)
+	{
+		o2EditorApplication.isPaused = pause;
+	}
+
+	void ToolsPanel::OnStepPressed()
+	{
+		o2EditorApplication.isPaused = true;
+		o2EditorApplication.step = true;
 	}
 
 }

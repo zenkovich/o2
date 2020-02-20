@@ -198,6 +198,12 @@ namespace o2
 		// Platform-specific initializations
 		void InitializePlatform();
 
+		// Updates scene
+		virtual void UpdateScene(float dt);
+
+		// Draws scene
+		virtual void DrawScene();
+
 		// Calling on updating
 		virtual void OnUpdate(float dt);
 

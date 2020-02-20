@@ -739,3 +739,5 @@ namespace o2
 		}
 	};
 }
+
+PRE_ENUM_META(o2::DataNode::Format);

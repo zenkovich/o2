@@ -658,8 +658,6 @@ namespace o2
 				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
 		}
 
-		Widget::CopyData(other);
-
 		mClipAreaLayout = other.mClipAreaLayout;
 		mViewAreaLayout = other.mViewAreaLayout;
 		mScrollPos = other.mScrollPos;
@@ -667,6 +665,8 @@ namespace o2
 		mOwnVerScrollBar = other.mOwnVerScrollBar;
 		mScrollSpeedDamp = other.mScrollSpeedDamp;
 		mEnableScrollsHiding = other.mEnableScrollsHiding;
+
+		Widget::CopyData(other);
 
 		if (mOwnHorScrollBar)
 		{

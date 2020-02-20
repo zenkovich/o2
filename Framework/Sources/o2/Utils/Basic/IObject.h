@@ -58,7 +58,7 @@ namespace o2
 // Types meta information macroses
 // -------------------------------
 
-#define IOBJECT(CLASS)  							                                                            \
+#define IOBJECT_MAIN(CLASS)  							                                                        \
 private:                                                                                                        \
 	static o2::Type* type;							                                                            \
                                                                                                                 \
@@ -76,6 +76,9 @@ private:                                                                        
                                                                                                                 \
     template<typename __type>                                                                                   \
 	friend class PointerValueProxy;                                                                             \
+																												\
+    template<typename _type>																					\
+	friend class IValueProxy;																			        \
                                                                                                                 \
     friend class o2::TypeInitializer;                                                                           \
     friend class o2::Reflection;                                                                                \
@@ -92,7 +95,10 @@ public:                                                                         
 		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
 		ProcessFields<_type_processor>(object, processor);                                                      \
 		ProcessMethods<_type_processor>(object, processor);                                                     \
-	}                                                                                                           \
+	}                                                                                                           
+
+#define IOBJECT(CLASS)																							\
+    IOBJECT_MAIN(CLASS)																							\
 		                                                                                                        \
     template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
     template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \

@@ -322,9 +322,7 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::Label);
-
-ENUM_META_(o2::Label::HorOverflow, HorOverflow)
+ENUM_META(o2::Label::HorOverflow)
 {
 	ENUM_ENTRY(Cut);
 	ENUM_ENTRY(Dots);
@@ -334,10 +332,12 @@ ENUM_META_(o2::Label::HorOverflow, HorOverflow)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::Label::VerOverflow, VerOverflow)
+ENUM_META(o2::Label::VerOverflow)
 {
 	ENUM_ENTRY(Cut);
 	ENUM_ENTRY(Expand);
 	ENUM_ENTRY(None);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::Label);

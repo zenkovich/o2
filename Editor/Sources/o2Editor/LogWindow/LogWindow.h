@@ -101,6 +101,8 @@ namespace Editor
 	};
 }
 
+PRE_ENUM_META(Editor::LogWindow::LogMessage::Type);
+
 CLASS_BASES_META(Editor::LogWindow)
 {
 	BASE_CLASS(Editor::IEditorWindow);

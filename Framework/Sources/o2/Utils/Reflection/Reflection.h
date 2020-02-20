@@ -164,31 +164,8 @@ namespace o2
     template<>                         \
 	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
 
-#define PRE_ENUM_META(NAME)                                      \
-    template<>                                                   \
-    class o2::IsEnumReflectable<NAME>: public std::true_type {};
-
-#define ENUM_META(NAME)                                                                                  \
-    PRE_ENUM_META(NAME)                                                                                  \
-    template<>                                                                                           \
-    o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
-    typedef NAME EnumName;                                                                               \
-    o2::Map<int, o2::String> res;    
-
-#define ENUM_META_(NAME, U)																				 \
-    PRE_ENUM_META(NAME)                                      											 \
-    template<>             																				 \
-    o2::EnumType* o2::EnumTypeContainer<NAME>::type = o2::Reflection::InitializeEnum<NAME>(#NAME, []() { \
-    typedef NAME EnumName;                                                                               \
-    o2::Map<int, o2::String> res;                                        
-
-#define ENUM_ENTRY(NAME) \
-    res.Add((int)EnumName::NAME, #NAME)
-
-#define END_ENUM_META \
-    return res; });
-
 #include "o2/Utils/Reflection/Type.h"
+#include "o2/Utils/Reflection/Enum.h"
 
 namespace o2
 {

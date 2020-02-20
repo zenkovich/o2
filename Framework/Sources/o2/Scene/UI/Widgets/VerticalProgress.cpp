@@ -277,11 +277,11 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::VerticalProgress);
-
-ENUM_META_(o2::VerticalProgress::Orientation, Orientation)
+ENUM_META(o2::VerticalProgress::Orientation)
 {
 	ENUM_ENTRY(Down);
 	ENUM_ENTRY(Up);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::VerticalProgress);

@@ -121,3 +121,5 @@ namespace Editor
 		void OnCursorPressedOutside();
 	};
 }
+
+PRE_ENUM_META(Editor::ColorPickerDlg::ColorType);

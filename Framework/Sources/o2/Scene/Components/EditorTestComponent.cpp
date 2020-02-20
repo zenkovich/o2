@@ -20,11 +20,7 @@ void o2::EditorTestComponent::Test()
 	o2Debug.Log("test");
 }
 
-DECLARE_CLASS(o2::EditorTestComponent);
-
-DECLARE_CLASS(o2::EditorTestComponent::TestInside);
-
-ENUM_META_(o2::EditorTestComponent::TestEnum, TestEnum)
+ENUM_META(o2::EditorTestComponent::TestEnum)
 {
 	ENUM_ENTRY(A);
 	ENUM_ENTRY(B);
@@ -40,3 +36,7 @@ ENUM_META_(o2::EditorTestComponent::TestEnum, TestEnum)
 	ENUM_ENTRY(N);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::EditorTestComponent);
+
+DECLARE_CLASS(o2::EditorTestComponent::TestInside);

@@ -22,6 +22,7 @@
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/UIStyle/EditorUIStyle.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
+#include "o2Editor/GameWindow/GameWindow.h"
 #include "o2Editor/LogWindow/LogWindow.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneWindow.h"
@@ -73,8 +74,7 @@ namespace Editor
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddToggleItem("Edit/Options/View editor UI tree", false,
-								  [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
+		mMenuPanel->AddItem("Edit/Scene view settings", [&]() { o2EditorPropertiesWindow.SetTarget(&Scene::Instance()); });
 
 		// VIEW
 		mMenuPanel->AddItem("View/Show Tree", [&]() { OnShowTreePressed(); });
@@ -83,6 +83,7 @@ namespace Editor
 		mMenuPanel->AddItem("View/Show Properties", [&]() { OnShowPropertiesPressed(); });
 		mMenuPanel->AddItem("View/Show Animation", [&]() { OnShowAnimationPressed(); });
 		mMenuPanel->AddItem("View/Show Log", [&]() { OnShowLogPressed(); });
+		mMenuPanel->AddItem("View/Show Game", [&]() { OnShowGamePressed(); });
 		mMenuPanel->AddItem("View/---");
 		mMenuPanel->AddItem("View/Reset layout", [&]() { OnResetLayoutPressed(); });
 
@@ -100,10 +101,14 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
 		mMenuPanel->AddItem("Debug/Add property", [&]() { o2UI.CreateWidget<ObjectPtrProperty>("with caption")->GetRemoveButton(); });
+
+		mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
+		
 		mMenuPanel->AddItem("Debug/RebuildEditorUIManager", [&]() {
 			EditorUIStyleBuilder builder;
 			builder.RebuildEditorUIManager(false);
 		});
+
 		mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
 	}
 
@@ -293,6 +298,13 @@ namespace Editor
 	void MenuPanel::OnShowLogPressed()
 	{
 		auto window = o2EditorWindows.GetWindow<LogWindow>();
+		if (window)
+			window->Show();
+	}
+
+	void MenuPanel::OnShowGamePressed()
+	{
+		auto window = o2EditorWindows.GetWindow<GameWindow>();
 		if (window)
 			window->Show();
 	}

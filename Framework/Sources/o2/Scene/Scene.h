@@ -1,11 +1,13 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
-#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Scene/SceneView.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Types/UID.h"
+#include "o2/Utils/Property.h"
 
 // Scene graph access macros
 #define o2Scene Scene::Instance()
@@ -23,9 +25,12 @@ namespace o2
 	// -------------------------------------------------------
 	// Actors scene. Contains and manages actors, tags, layers
 	// -------------------------------------------------------
-	class Scene : public Singleton<Scene>
+	class Scene : public Singleton<Scene>, public IObject
 	{
 	public:
+		PROPERTIES(Scene);
+		PROPERTY(ISceneView*, sceneView, SetSceneView, GetSceneView);
+
 #if IS_EDITOR
 		Function<void(SceneEditableObject*)> onCreated;                  // Actor creation event
 		Function<void(SceneEditableObject*)> onDestroying;               // Actor destroying event
@@ -112,8 +117,28 @@ namespace o2
 		// Saves scene into file
 		void Save(const String& path);
 
+		// Draws scene drawable objects
+		void Draw();
+
 		// Updates root actors
-		void Update(float dt); 
+		void Update(float dt);
+
+		// Returns scene view size
+		const Vec2F& GetSceneViewSize() const;
+
+		// Sets scene view size
+		void SetSceneViewSize(const Vec2F& size);
+
+		// Returns scene view
+		ISceneView* GetSceneView() const;
+
+		// Sets scene view
+		void SetSceneView(ISceneView* view);
+
+		// Returns scene local game view size
+		Vec2F GetSceneLocalViewSize() const;
+
+		IOBJECT(Scene);
 
 	protected:
 		Vector<Actor*>        mRootActors;   // Scene root actors		
@@ -123,15 +148,15 @@ namespace o2
 		SceneLayer*           mDefaultLayer; // Default scene layer
 		Vector<ActorAssetRef> mCache;        // Cached actors assets
 
+		Vec2F       mSceneViewSize = Vec2F(1024, 768);             // Scene view size
+		ISceneView* mSceneView = mnew ScreenResolutionSceneView(); // Scene view
+
 	protected:
 		// Default constructor
 		Scene();
 
 		// Destructor
 		~Scene();
-
-		// Draws scene drawable objects
-		void Draw();
 
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
@@ -252,3 +277,94 @@ namespace o2
 		return nullptr;
 	}
 };
+
+CLASS_BASES_META(o2::Scene)
+{
+	BASE_CLASS(o2::Singleton<Scene>);
+	BASE_CLASS(o2::IObject);
+}
+END_META;
+CLASS_FIELDS_META(o2::Scene)
+{
+	PUBLIC_FIELD(sceneView);
+	PUBLIC_FIELD(onCreated);
+	PUBLIC_FIELD(onDestroying);
+	PUBLIC_FIELD(onEnableChanged);
+	PUBLIC_FIELD(onLockChanged);
+	PUBLIC_FIELD(onNameChanged);
+	PUBLIC_FIELD(onChildrenHierarchyChanged);
+	PUBLIC_FIELD(onObjectsChanged);
+	PROTECTED_FIELD(mRootActors);
+	PROTECTED_FIELD(mAllActors);
+	PROTECTED_FIELD(mLayers);
+	PROTECTED_FIELD(mTags);
+	PROTECTED_FIELD(mDefaultLayer);
+	PROTECTED_FIELD(mCache);
+	PROTECTED_FIELD(mSceneViewSize);
+	PROTECTED_FIELD(mSceneView);
+	PROTECTED_FIELD(mPrototypeLinksCache);
+	PROTECTED_FIELD(mChangedObjects);
+	PROTECTED_FIELD(mEditableObjects);
+	PROTECTED_FIELD(mDrawnObjects);
+	PROTECTED_FIELD(mIsDrawingScene);
+}
+END_META;
+CLASS_METHODS_META(o2::Scene)
+{
+
+	typedef Map<ActorAssetRef, Vector<Actor*>>& _tmp1;
+
+	PUBLIC_FUNCTION(SceneLayer*, GetLayer, const String&);
+	PUBLIC_FUNCTION(SceneLayer*, GetDefaultLayer);
+	PUBLIC_FUNCTION(SceneLayer*, AddLayer, const String&);
+	PUBLIC_FUNCTION(void, RemoveLayer, SceneLayer*, bool);
+	PUBLIC_FUNCTION(void, RemoveLayer, const String&, bool);
+	PUBLIC_FUNCTION(Vector<SceneLayer*>&, GetLayers);
+	PUBLIC_FUNCTION(Tag*, GetTag, const String&);
+	PUBLIC_FUNCTION(Tag*, AddTag, const String&);
+	PUBLIC_FUNCTION(void, RemoveTag, Tag*);
+	PUBLIC_FUNCTION(void, RemoveTag, const String&);
+	PUBLIC_FUNCTION(const Vector<Tag*>&, GetTags);
+	PUBLIC_FUNCTION(const Vector<Actor*>&, GetRootActors);
+	PUBLIC_FUNCTION(Vector<Actor*>&, GetRootActors);
+	PUBLIC_FUNCTION(const Vector<Actor*>&, GetAllActors);
+	PUBLIC_FUNCTION(Vector<Actor*>&, GetAllActors);
+	PUBLIC_FUNCTION(Actor*, GetActorByID, SceneUID);
+	PUBLIC_FUNCTION(Actor*, GetAssetActorByID, const UID&);
+	PUBLIC_FUNCTION(Actor*, FindActor, const String&);
+	PUBLIC_FUNCTION(void, Clear);
+	PUBLIC_FUNCTION(void, ClearCache);
+	PUBLIC_FUNCTION(void, Load, const String&, bool);
+	PUBLIC_FUNCTION(void, Save, const String&);
+	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(const Vec2F&, GetSceneViewSize);
+	PUBLIC_FUNCTION(void, SetSceneViewSize, const Vec2F&);
+	PUBLIC_FUNCTION(ISceneView*, GetSceneView);
+	PUBLIC_FUNCTION(void, SetSceneView, ISceneView*);
+	PUBLIC_FUNCTION(Vec2F, GetSceneLocalViewSize);
+	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
+	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
+	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
+	PUBLIC_STATIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
+	PUBLIC_STATIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);
+	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetAllEditableObjects);
+	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetChangedObjects);
+	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetDrawnEditableObjects);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableObjectByID, SceneUID);
+	PUBLIC_FUNCTION(int, GetObjectHierarchyIdx, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, ReparentEditableObjects, const Vector<SceneEditableObject*>&, SceneEditableObject*, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, CheckChangedObjects);
+	PUBLIC_FUNCTION(_tmp1, GetPrototypesLinksCache);
+	PUBLIC_FUNCTION(void, BeginDrawingScene);
+	PUBLIC_FUNCTION(void, EndDrawingScene);
+	PUBLIC_STATIC_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
+	PUBLIC_STATIC_FUNCTION(void, OnObjectDestroyed, SceneEditableObject*);
+	PUBLIC_STATIC_FUNCTION(void, OnObjectChanged, SceneEditableObject*);
+	PUBLIC_STATIC_FUNCTION(void, OnObjectDrawn, SceneEditableObject*);
+	PUBLIC_STATIC_FUNCTION(void, OnActorWithPrototypeCreated, Actor*);
+	PUBLIC_STATIC_FUNCTION(void, OnActorLinkedToPrototype, ActorAssetRef&, Actor*);
+	PUBLIC_STATIC_FUNCTION(void, OnActorPrototypeBroken, Actor*);
+}
+END_META;

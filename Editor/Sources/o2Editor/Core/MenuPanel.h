@@ -102,6 +102,9 @@ namespace Editor
 		// On View/Log pressed in menu
 		void OnShowLogPressed();
 
+		// On View/Game pressed in menu
+		void OnShowGamePressed();
+
 		// On View/Reset layout pressed in menu
 		void OnResetLayoutPressed();
 

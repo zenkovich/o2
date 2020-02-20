@@ -152,7 +152,7 @@ namespace o2
 		WidgetState* AddState(const String& name, const Animation& animation);
 
 		// Adds state
-		WidgetState* AddState(WidgetState* state);
+		WidgetState* AddState(WidgetState* state, bool showAnimErrors = true);
 
 		// Removes state by name
 		bool RemoveState(const String& name);
@@ -757,7 +757,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(const Vector<WidgetLayer*>&, GetLayers);
 	PUBLIC_FUNCTION(WidgetState*, AddState, const String&);
 	PUBLIC_FUNCTION(WidgetState*, AddState, const String&, const Animation&);
-	PUBLIC_FUNCTION(WidgetState*, AddState, WidgetState*);
+	PUBLIC_FUNCTION(WidgetState*, AddState, WidgetState*, bool);
 	PUBLIC_FUNCTION(bool, RemoveState, const String&);
 	PUBLIC_FUNCTION(bool, RemoveState, WidgetState*);
 	PUBLIC_FUNCTION(void, RemoveAllStates);

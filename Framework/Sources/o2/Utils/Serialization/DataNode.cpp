@@ -412,7 +412,7 @@ namespace o2
 	}
 }
 
-ENUM_META_(o2::DataNode::Format, Format)
+ENUM_META(o2::DataNode::Format)
 {
 	ENUM_ENTRY(Binary);
 	ENUM_ENTRY(JSON);

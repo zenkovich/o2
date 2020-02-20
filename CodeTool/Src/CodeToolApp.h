@@ -155,6 +155,9 @@ protected:
 	// Return enum reflection meta
 	string GetEnumMeta(SyntaxEnum* enm);
 
+	// Return enum reflection meta for header
+	string GetEnumPreMeta(SyntaxEnum* enm);
+
 	// Builds meta templates parameters for template classes
 	void AggregateTemplates(SyntaxSection* sec, string& templates, string& fullName);
 

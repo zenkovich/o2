@@ -161,6 +161,8 @@ namespace Editor
 			if (mObjectViewer)
 				o2EditorProperties.FreeObjectViewer(mObjectViewer);
 
+			mObjectViewer = nullptr;
+
 			if (mCurrentObjectType)
 			{
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted, onChanged);

@@ -133,3 +133,7 @@ namespace o2
 		friend class TextureRef;
 	};
 }
+
+PRE_ENUM_META(o2::Texture::Usage);
+
+PRE_ENUM_META(o2::Texture::Filter);

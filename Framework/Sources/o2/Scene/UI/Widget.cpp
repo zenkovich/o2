@@ -99,7 +99,7 @@ namespace o2
 		for (auto state : other.mStates)
 		{
 			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
-			AddState(newState);
+			AddState(newState, false);
 		}
 
 		if (mLayer && mDefaultCreationMode == ActorCreateMode::InScene)
@@ -450,7 +450,7 @@ namespace o2
 		return AddState(newState);
 	}
 
-	WidgetState* Widget::AddState(WidgetState* state)
+	WidgetState* Widget::AddState(WidgetState* state, bool showAnimErrors /*= true*/)
 	{
 		mStates.Add(state);
 
@@ -476,7 +476,7 @@ namespace o2
 			mFocusedState = state;
 
 		state->mOwner = this;
-		state->animation.SetTarget(this);
+		state->animation.SetTarget(this, showAnimErrors);
 
 		OnStateAdded(state);
 
@@ -1213,11 +1213,10 @@ namespace o2
 		for (auto state : other.mStates)
 		{
 			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
-			AddState(newState);
+			AddState(newState, false);
 		}
 
 		UpdateLayersDrawingSequence();
-		RetargetStatesAnimations();
 	}
 
 	void Widget::SetInternalParent(Widget* parent, bool worldPositionStays /*= false*/)

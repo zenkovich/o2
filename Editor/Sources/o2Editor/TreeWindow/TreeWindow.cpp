@@ -89,7 +89,7 @@ namespace Editor
 		InitializeTopPanel();
 		InitializeSceneTree();
 		InitializeContextMenu();
-		InitializeTestScene();
+		//InitializeTestScene();
 
 		mSceneTree->UpdateNodesView();
 	}

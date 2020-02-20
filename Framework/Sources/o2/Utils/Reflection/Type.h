@@ -672,9 +672,6 @@ namespace o2
 		friend class Reflection;
 	};
 
-	template<typename _type>
-	class IsEnumReflectable: std::false_type {};
-
 	// ----------------
 	// Type initializer
 	// ----------------

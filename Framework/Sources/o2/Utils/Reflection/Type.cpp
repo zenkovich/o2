@@ -459,7 +459,7 @@ namespace o2
 
 }
 
-ENUM_META_(o2::Type::Usage, Usage)
+ENUM_META(o2::Type::Usage)
 {
 	ENUM_ENTRY(Map);
 	ENUM_ENTRY(Enumeration);

@@ -179,6 +179,9 @@
     <ClInclude Include="..\..\Sources\o2\O2.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h">
+      <Filter>Sources\o2\Physics</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Render\BitmapFont.h">
       <Filter>Sources\o2\Render</Filter>
     </ClInclude>
@@ -280,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h">
       <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h">
+      <Filter>Sources\o2\Scene\Physics</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\Scene.h">
       <Filter>Sources\o2\Scene</Filter>
@@ -512,6 +518,9 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h">
       <Filter>Sources\o2\Utils\Reflection</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Enum.h">
+      <Filter>Sources\o2\Utils\Reflection</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.h">
       <Filter>Sources\o2\Utils\Reflection</Filter>
     </ClInclude>
@@ -617,11 +626,8 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h">
-      <Filter>Sources\o2\Physics</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h">
-      <Filter>Sources\o2\Scene\Physics</Filter>
+    <ClInclude Include="..\..\Sources\o2\Scene\SceneView.h">
+      <Filter>Sources\o2\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -754,6 +760,9 @@
     <ClCompile Include="..\..\Sources\o2\Events\ShortcutKeysListener.cpp">
       <Filter>Sources\o2\Events</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp">
+      <Filter>Sources\o2\Physics</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Render\BitmapFont.cpp">
       <Filter>Sources\o2\Render</Filter>
     </ClCompile>
@@ -852,6 +861,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp">
       <Filter>Sources\o2\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp">
+      <Filter>Sources\o2\Scene\Physics</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp">
       <Filter>Sources\o2\Scene</Filter>
@@ -1081,11 +1093,8 @@
     <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
       <Filter>Sources\o2</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp">
-      <Filter>Sources\o2\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp">
-      <Filter>Sources\o2\Scene\Physics</Filter>
+    <ClCompile Include="..\..\Sources\o2\Scene\SceneView.cpp">
+      <Filter>Sources\o2\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

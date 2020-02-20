@@ -140,14 +140,14 @@ namespace o2
 	}
 }
 
-ENUM_META_(o2::Texture::Usage, Usage)
+ENUM_META(o2::Texture::Usage)
 {
 	ENUM_ENTRY(Default);
 	ENUM_ENTRY(RenderTarget);
 }
 END_ENUM_META;
 
-ENUM_META_(o2::Texture::Filter, Filter)
+ENUM_META(o2::Texture::Filter)
 {
 	ENUM_ENTRY(Linear);
 	ENUM_ENTRY(Nearest);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "o2/Utils/Reflection/Enum.h"
+
 namespace o2
 {
 	typedef unsigned long long UInt64;
@@ -47,3 +49,29 @@ namespace o2
 
 	enum class PixelFormat { R8G8B8A8, R8G8B8 };
 }
+
+PRE_ENUM_META(o2::BaseCorner);
+
+PRE_ENUM_META(o2::CursorType);
+
+PRE_ENUM_META(o2::Side);
+
+PRE_ENUM_META(o2::Corner);
+
+PRE_ENUM_META(o2::TwoDirection);
+
+PRE_ENUM_META(o2::SpriteMode);
+
+PRE_ENUM_META(o2::VerAlign);
+
+PRE_ENUM_META(o2::HorAlign);
+
+PRE_ENUM_META(o2::ProtectSection);
+
+PRE_ENUM_META(o2::Platform);
+
+PRE_ENUM_META(o2::LineType);
+
+PRE_ENUM_META(o2::PrimitiveType);
+
+PRE_ENUM_META(o2::PixelFormat);

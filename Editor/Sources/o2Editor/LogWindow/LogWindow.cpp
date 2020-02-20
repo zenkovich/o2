@@ -299,12 +299,12 @@ namespace Editor
 
 }
 
-DECLARE_CLASS(Editor::LogWindow);
-
-ENUM_META_(Editor::LogWindow::LogMessage::Type, Type)
+ENUM_META(Editor::LogWindow::LogMessage::Type)
 {
 	ENUM_ENTRY(Error);
 	ENUM_ENTRY(Regular);
 	ENUM_ENTRY(Warning);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(Editor::LogWindow);

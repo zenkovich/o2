@@ -38,6 +38,34 @@ namespace o2
 			actor->UpdateChildren(dt);
 	}
 
+	const Vec2F& Scene::GetSceneViewSize() const
+	{
+		return mSceneViewSize;
+	}
+
+	void Scene::SetSceneViewSize(const Vec2F& size)
+	{
+		mSceneViewSize = size;
+	}
+
+	ISceneView* Scene::GetSceneView() const
+	{
+		return mSceneView;
+	}
+
+	void Scene::SetSceneView(ISceneView* view)
+	{
+		if (mSceneView)
+			delete mSceneView;
+
+		mSceneView = view;
+	}
+
+	Vec2F Scene::GetSceneLocalViewSize() const
+	{
+		return mSceneView->GetTransform(mSceneViewSize).GetScale();
+	}
+
 	void Scene::Draw()
 	{
 #if IS_EDITOR
@@ -599,3 +627,5 @@ namespace o2
 
 #endif
 }
+
+DECLARE_CLASS(o2::Scene);

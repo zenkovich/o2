@@ -99,6 +99,8 @@ namespace o2
 	};
 }
 
+PRE_ENUM_META(o2::EditorTestComponent::TestEnum);
+
 CLASS_BASES_META(o2::EditorTestComponent)
 {
 	BASE_CLASS(o2::Component);

@@ -897,11 +897,7 @@ namespace o2
 
 }
 
-DECLARE_CLASS(o2::Curve);
-
-DECLARE_CLASS(o2::Curve::Key);
-
-ENUM_META_(o2::Curve::Key::Type, Type)
+ENUM_META(o2::Curve::Key::Type)
 {
 	ENUM_ENTRY(Broken);
 	ENUM_ENTRY(Discrete);
@@ -911,3 +907,7 @@ ENUM_META_(o2::Curve::Key::Type, Type)
 	ENUM_ENTRY(Smooth);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::Curve);
+
+DECLARE_CLASS(o2::Curve::Key);

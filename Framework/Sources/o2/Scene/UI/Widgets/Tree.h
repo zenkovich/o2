@@ -570,6 +570,10 @@ namespace o2
 	};
 }
 
+PRE_ENUM_META(o2::Tree::RearrangeType);
+
+PRE_ENUM_META(o2::Tree::ExpandState);
+
 CLASS_BASES_META(o2::Tree)
 {
 	BASE_CLASS(o2::ScrollArea);

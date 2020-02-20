@@ -277,11 +277,11 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::HorizontalProgress);
-
-ENUM_META_(o2::HorizontalProgress::Orientation, Orientation)
+ENUM_META(o2::HorizontalProgress::Orientation)
 {
 	ENUM_ENTRY(Left);
 	ENUM_ENTRY(Right);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::HorizontalProgress);

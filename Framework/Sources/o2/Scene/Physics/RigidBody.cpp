@@ -242,12 +242,12 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::RigidBody);
-
-ENUM_META_(o2::RigidBody::Type, Type)
+ENUM_META(o2::RigidBody::Type)
 {
 	ENUM_ENTRY(Dynamic);
 	ENUM_ENTRY(Kinematic);
 	ENUM_ENTRY(Static);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::RigidBody);

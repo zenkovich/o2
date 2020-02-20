@@ -122,7 +122,8 @@ namespace Editor
 
 		DrawDebugFrame();
 
-		mDockingFrameSample->Draw();
+		if (mDockingFrameSample->GetTransparency() > 0.001f)
+			mDockingFrameSample->Draw();
 	}
 
 	void DockableWindow::SetDocked(bool docked)

@@ -585,6 +585,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	RemoveMetas(hSource, "CLASS_FIELDS_META(", "END_META;");
 	RemoveMetas(hSource, "CLASS_METHODS_META(", "END_META;");
 	RemoveMetas(hSource, "DECLARE_CLASS(", ");", false);
+	RemoveMetas(hSource, "PRE_ENUM_META(", ");", false);
 
 	string cppSourcePath = file->GetPath().substr(0, file->GetPath().rfind('.')) + ".cpp";
 
@@ -606,6 +607,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 				RemoveMetas(cppSource, "CLASS_FIELDS_META(", "END_META;");
 				RemoveMetas(cppSource, "CLASS_METHODS_META(", "END_META;");
 				RemoveMetas(cppSource, "DECLARE_CLASS(", ");", false);
+				RemoveMetas(cppSource, "PRE_ENUM_META(", ");", false);
 			}
 			else cppSource = "#include \"" + GetPathWithoutDirectories(file->GetPath()) + "\"\n\n";
 
@@ -613,6 +615,30 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 		}
 	};
 
+	// Enums
+	SyntaxEnumsVec allEnums = file->GetGlobalNamespace()->GetAllEnums();
+	SyntaxEnumsVec metaEnums;
+
+	for (auto enm : allEnums)
+	{
+		auto owner = enm->GetOwnerSyntaxSection();
+		if (owner && owner->IsClass() && ((SyntaxClass*)owner)->IsTemplate())
+			continue;
+
+		metaEnums.push_back(enm);
+	}
+
+	if (!metaEnums.empty())
+		checkCppLoad();
+
+	for (auto enm : metaEnums)
+	{
+		cppSource += GetEnumMeta(enm);
+		hSource += GetEnumPreMeta(enm);
+		VerboseLog("Generated meta for enum:%s\n", enm->GetFullName().c_str());
+	}
+
+	// Classes
 	auto classes = file->GetGlobalNamespace()->GetAllClasses();
 	for (auto cls : classes)
 	{
@@ -635,27 +661,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
 	}
 
-	SyntaxEnumsVec allEnums = file->GetGlobalNamespace()->GetAllEnums();
-	SyntaxEnumsVec metaEnums;
-
-	for (auto enm : allEnums)
-	{
-		auto owner = enm->GetOwnerSyntaxSection();
-		if (owner && owner->IsClass() && ((SyntaxClass*)owner)->IsTemplate())
-			continue;
-
-		metaEnums.push_back(enm);
-	}
-
-	if (!metaEnums.empty())
-		checkCppLoad();
-
-	for (auto enm : metaEnums)
-	{
-		cppSource += GetEnumMeta(enm);
-		VerboseLog("Generated meta for enum:%s\n", enm->GetFullName().c_str());
-	}
-
+	// Write
 	if (cppLoaded && cppSource != cppSourceInitial)
 		WriteFile(cppSourcePath, cppSource);
 
@@ -934,13 +940,19 @@ string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)
 	string res;
 	res.reserve(enm->GetEntries().size()*15);
 
-	res += "\nENUM_META_(" + enm->GetFullName() + ", " + enm->GetName() + ")\n{\n";
+	res += "\nENUM_META(" + enm->GetFullName() + ")\n{\n";
 
 	for (auto e : enm->GetEntries())
 		res += "\tENUM_ENTRY(" + e.first + ");\n";
 
 	res += "}\nEND_ENUM_META;\n";
 
+	return res;
+}
+
+string CodeToolApplication::GetEnumPreMeta(SyntaxEnum* enm)
+{
+	string res = "\nPRE_ENUM_META(" + enm->GetFullName() + ");\n";
 	return res;
 }
 

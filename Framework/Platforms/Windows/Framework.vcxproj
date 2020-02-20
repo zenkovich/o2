@@ -221,6 +221,7 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Scene.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\SceneLayer.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\SceneView.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Tags.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\UI\UIManager.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\UI\Widget.h" />
@@ -296,6 +297,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Property.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Enum.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Reflection.h" />
@@ -413,6 +415,7 @@
     <ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\SceneLayer.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\SceneView.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Tags.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\UI\UIManager.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\UI\Widget.cpp" />

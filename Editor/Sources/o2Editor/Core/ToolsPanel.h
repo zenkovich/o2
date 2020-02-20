@@ -35,6 +35,9 @@ namespace Editor
 		// Returns tools' panel widget 
 		HorizontalLayout* GetToolsPanel() const;
 
+		// Updates panel
+		void Update(float dt);
+
 	protected:
 		const String mDefaultSchemeName = "Default";
 		const String mSaveAsSchemeName = "Save as ...";
@@ -79,6 +82,15 @@ namespace Editor
 
 		// It is called when selected scheme
 		void OnSchemeSelected(const WString& name);
+
+		// Is is called when play/stop toggle changed
+		void OnPlayStopToggled(bool play);
+
+		// Is is called when pause toggle changed
+		void OnPauseToggled(bool pause);
+
+		// It is called when step button has pressed
+		void OnStepPressed();
 
 		friend class EditorApplication;
 		friend class EditorConfig;

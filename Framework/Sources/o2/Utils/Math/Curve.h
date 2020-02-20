@@ -284,6 +284,8 @@ namespace o2
 	};
 }
 
+PRE_ENUM_META(o2::Curve::Key::Type);
+
 CLASS_BASES_META(o2::Curve)
 {
 	BASE_CLASS(o2::ISerializable);

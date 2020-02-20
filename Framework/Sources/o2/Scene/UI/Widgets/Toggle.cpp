@@ -379,12 +379,12 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS(o2::Toggle);
-
-ENUM_META_(o2::ToggleGroup::Type, Type)
+ENUM_META(o2::ToggleGroup::Type)
 {
 	ENUM_ENTRY(HorOneClick);
 	ENUM_ENTRY(OnlySingleTrue);
 	ENUM_ENTRY(VerOneClick);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::Toggle);

@@ -833,7 +833,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Dialogs/ColorPickerDlg.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="2" day="19" hour="12" minute="22" second="20" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -955,37 +955,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/EditorApplication.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="EditorApplication" fullname="Editor::EditorApplication" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Application" protection="0" />
-								<class name="ActionsList" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/EditorConfig.h">
 		<date year="2020" month="2" day="3" hour="23" minute="37" second="25" />
 		<globalNamespace name="" fullname="">
@@ -1061,31 +1030,6 @@
 			</sections>
 			<typedefs />
 			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/MenuPanel.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="59" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="MenuPanel" fullname="Editor::MenuPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Singleton&lt;MenuPanel&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/Properties/Basic/ActorProperty.h">
@@ -2373,36 +2317,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/ToolsPanel.h">
-		<date year="2020" month="1" day="5" hour="10" minute="40" second="56" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ToolsPanel" fullname="Editor::ToolsPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Singleton&lt;ToolsPanel&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/UI/CurveEditor/CurveActions.h">
 		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
@@ -2871,7 +2785,7 @@
 		</globalNamespace>
 	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/LogWindow/LogWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
+		<date year="2020" month="2" day="19" hour="12" minute="22" second="21" />
 		<globalNamespace name="" fullname="">
 			<sections>
 				<section name="o2" fullname="o2">
@@ -3223,133 +3137,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/AssetsPropertiesViewer.h">
-		<date year="2020" month="1" day="25" hour="23" minute="13" second="36" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="AssetsPropertiesViewer" fullname="Editor::AssetsPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IPropertiesViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/DefaultAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="25" hour="23" minute="13" second="36" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="DefaultAssetPropertiesViewer" fullname="Editor::DefaultAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetPropertiesViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/IAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="25" hour="23" minute="13" second="36" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="IAssetPropertiesViewer" fullname="Editor::IAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/AssetsViewer/ImageAssetPropertiesViewer.h">
-		<date year="2020" month="1" day="29" hour="23" minute="22" second="50" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="ImageAssetPropertiesViewer" fullname="Editor::ImageAssetPropertiesViewer" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="PreviewImage" fullname="Editor::ImageAssetPropertiesViewer::PreviewImage" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="Image" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IAssetPropertiesViewer" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings>
-				<typedef name="o2" />
-			</usings>
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/PropertiesWindow/IPropertiesViewer.h">
 		<date year="2020" month="1" day="5" hour="10" minute="40" second="55" />
 		<globalNamespace name="" fullname="">
@@ -3670,34 +3457,6 @@
 			</usings>
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/SceneWindow/SceneWindow.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs />
-					<usings />
-				</section>
-				<section name="Editor" fullname="Editor">
-					<sections>
-						<section name="SceneWindow" fullname="Editor::SceneWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="IEditorWindow" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/TreeWindow/SceneTree.h">
 		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
@@ -3771,6 +3530,157 @@
 		<date year="2020" month="1" day="29" hour="23" minute="22" second="49" />
 		<globalNamespace name="" fullname="">
 			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/EditorApplication.h">
+		<date year="2020" month="2" day="19" hour="20" minute="40" second="55" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="EditorApplication" fullname="Editor::EditorApplication" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Application" protection="0" />
+								<class name="ActionsList" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/ToolsPanel.h">
+		<date year="2020" month="2" day="19" hour="21" minute="49" second="51" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="ToolsPanel" fullname="Editor::ToolsPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Singleton&lt;ToolsPanel&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/SceneWindow/SceneWindow.h">
+		<date year="2020" month="2" day="19" hour="21" minute="51" second="23" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="SceneWindow" fullname="Editor::SceneWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IEditorWindow" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/Core/MenuPanel.h">
+		<date year="2020" month="2" day="19" hour="21" minute="56" second="34" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="MenuPanel" fullname="Editor::MenuPanel" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Singleton&lt;MenuPanel&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings>
+				<typedef name="o2" />
+			</usings>
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Editor\Platforms\Windows\..\..\Sources/o2Editor/GameWindow/GameWindow.h">
+		<date year="2020" month="2" day="20" hour="11" minute="7" second="51" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+				<section name="Editor" fullname="Editor">
+					<sections>
+						<section name="GameWindow" fullname="Editor::GameWindow" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="GameView" fullname="Editor::GameWindow::GameView" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="Widget" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="IEditorWindow" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
 			<typedefs />
 			<usings />
 		</globalNamespace>

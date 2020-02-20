@@ -153,10 +153,25 @@ namespace Editor
 		//o2UI.LoadStyle("editor_ui_style.xml");
 	}
 
+	void EditorApplication::UpdateScene(float dt)
+	{
+		if (isPlaying && (!isPaused || step))
+		{
+			mScene->Update(dt);
+			o2EditorSceneScreen.NeedRedraw();
+
+			step = false;
+		}
+	}
+
+	void EditorApplication::DrawScene()
+	{}
+
 	void EditorApplication::OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);
 		mUIRoot->Update(dt);
+		mToolsPanel->Update(dt);
 
 		o2Application.windowCaption = String("o2 Editor. FPS: ") + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
@@ -175,7 +190,8 @@ namespace Editor
 
 		mBackground->Draw();
 		mBackSign->Draw();
-		mWindowsManager->Draw();
+		mWindowsManager->Draw(); 
+		mUIRoot->Draw();
 
 		// Debug draw undo actions
 		if (o2Input.IsKeyDown(VK_F6)) 

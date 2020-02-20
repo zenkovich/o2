@@ -330,12 +330,12 @@ namespace o2
 	{}
 }
 
-DECLARE_CLASS(o2::IAnimation);
-
-ENUM_META_(o2::Loop, Loop)
+ENUM_META(o2::Loop)
 {
 	ENUM_ENTRY(None);
 	ENUM_ENTRY(PingPong);
 	ENUM_ENTRY(Repeat);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::IAnimation);

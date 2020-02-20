@@ -46,6 +46,16 @@ namespace o2
 		mReady = true;
 	}
 
+	void Application::UpdateScene(float dt)
+	{
+		mScene->Update(dt);
+	}
+
+	void Application::DrawScene()
+	{
+		mScene->Draw();
+	}
+
 	void Application::InitalizeSystems()
 	{
 		srand((UInt)time(NULL));
@@ -120,10 +130,8 @@ namespace o2
 
 		mRender->Begin();
 
-		OnDraw();
 		OnUpdate(dt);
-
-		mScene->Update(dt);
+		UpdateScene(dt);
 
 		mAccumulatedDT += dt;
 		float fixedDT = 1.0f/(float)fixedFPS;
@@ -137,7 +145,8 @@ namespace o2
 		mEventSystem->PostUpdate();
 
 		OnDraw();
-		mScene->Draw();
+		DrawScene();
+
 		mUIManager->Draw();
 		o2Debug.Draw();
 

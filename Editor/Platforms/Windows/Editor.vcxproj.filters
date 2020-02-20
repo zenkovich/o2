@@ -21,10 +21,10 @@
 		<Filter Include="Sources\o2Editor\LogWindow" />
 		<Filter Include="Sources\o2Editor\PropertiesWindow\ActorsViewer" />
 		<Filter Include="Sources\o2Editor\PropertiesWindow" />
-		<Filter Include="Sources\o2Editor\PropertiesWindow\AssetsViewer" />
 		<Filter Include="Sources\o2Editor\PropertiesWindow\WidgetLayerViewer" />
 		<Filter Include="Sources\o2Editor\SceneWindow" />
 		<Filter Include="Sources\o2Editor\TreeWindow" />
+		<Filter Include="Sources\o2Editor\GameWindow" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
@@ -285,6 +285,9 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.h">
 			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\GameWindow\GameWindow.h">
+			<Filter>Sources\o2Editor\GameWindow</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\LogWindow\LogWindow.h">
 			<Filter>Sources\o2Editor\LogWindow</Filter>
 		</ClInclude>
@@ -317,18 +320,6 @@
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h">
 			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.h">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.h">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.h">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.h">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h">
 			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
@@ -632,6 +623,9 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.cpp">
 			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\GameWindow\GameWindow.cpp">
+			<Filter>Sources\o2Editor\GameWindow</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\LogWindow\LogWindow.cpp">
 			<Filter>Sources\o2Editor\LogWindow</Filter>
 		</ClCompile>
@@ -664,18 +658,6 @@
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
 			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\AssetsPropertiesViewer.cpp">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\DefaultAssetPropertiesViewer.cpp">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\IAssetPropertiesViewer.cpp">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetsViewer\ImageAssetPropertiesViewer.cpp">
-			<Filter>Sources\o2Editor\PropertiesWindow\AssetsViewer</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp">
 			<Filter>Sources\o2Editor\PropertiesWindow</Filter>

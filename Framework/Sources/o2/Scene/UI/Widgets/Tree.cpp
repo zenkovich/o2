@@ -1889,11 +1889,7 @@ namespace o2
 
 }
 
-DECLARE_CLASS(o2::Tree);
-
-DECLARE_CLASS(o2::TreeNode);
-
-ENUM_META_(o2::Tree::RearrangeType, RearrangeType)
+ENUM_META(o2::Tree::RearrangeType)
 {
 	ENUM_ENTRY(Disabled);
 	ENUM_ENTRY(Enabled);
@@ -1901,10 +1897,14 @@ ENUM_META_(o2::Tree::RearrangeType, RearrangeType)
 }
 END_ENUM_META;
 
-ENUM_META_(o2::Tree::ExpandState, ExpandState)
+ENUM_META(o2::Tree::ExpandState)
 {
 	ENUM_ENTRY(Collaping);
 	ENUM_ENTRY(Expanding);
 	ENUM_ENTRY(None);
 }
 END_ENUM_META;
+
+DECLARE_CLASS(o2::Tree);
+
+DECLARE_CLASS(o2::TreeNode);

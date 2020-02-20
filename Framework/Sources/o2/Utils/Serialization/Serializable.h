@@ -61,40 +61,7 @@ namespace o2
 
 	// Serialization implementation macros
 #define SERIALIZABLE_MAIN(CLASS)  							                                                    \
-private:                                                                                                        \
-	static o2::Type* type;							                                                            \
-                                                                                                                \
-    template<typename __type, typename _getter>                                                                 \
-	friend const o2::Type& o2::GetTypeOf();                                                                     \
-                                                                                                                \
-	template<typename T>                                                                                        \
-	friend struct o2::RegularTypeGetter;                                                                        \
-                                                                                                                \
-	template<typename T, typename X>                                                                            \
-	friend struct o2::GetTypeHelper;                                                                            \
-                                                                                                                \
-	template<typename __type>                                                                                   \
-	friend class o2::TObjectType;                                                                               \
-                                                                                                                \
-    template<typename __type>                                                                                   \
-	friend class PointerValueProxy;                                                                             \
-                                                                                                                \
-    friend class o2::TypeInitializer;                                                                           \
-    friend class o2::Reflection;                                                                                \
-    friend class o2::DataNode;                                                                                  \
-                                                                                                                \
-public:                                                                                                         \
-	typedef CLASS thisclass;                                                                                    \
-	IObject* Clone() const override { return mnew CLASS(*this); }                                               \
-	const o2::Type& GetType() const override { return *type; };                                                 \
-                                                                                                                \
-    template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
-	{                                                                                                           \
-		processor.template Start<CLASS>(object, type);                                                          \
-		ProcessBaseTypes<_type_processor>(object, processor);                                                   \
-		ProcessFields<_type_processor>(object, processor);                                                      \
-		ProcessMethods<_type_processor>(object, processor);                                                     \
-	}                                                                                                           \
+    IOBJECT_MAIN(CLASS)																							\
                                                                                                                 \
     o2::DataNode Serialize() const override                                                                     \
     {												                                                            \

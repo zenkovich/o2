@@ -31,6 +31,11 @@ namespace Editor
 	class EditorApplication: public Application, public ActionsList
 	{
 	public:
+		bool isPlaying = false; // Is editor scene playing
+		bool isPaused = false;  // Is editor scene paused
+		bool step = false;      // Is needed to do one update step
+
+	public:
 		// Default constructor. Initializes all editor components
 		EditorApplication();
 
@@ -74,34 +79,37 @@ namespace Editor
 		// Check style rebuilding and loads editor UI style
 		void LoadUIStyle();
 
+		// Updates scene
+		void UpdateScene(float dt) override;
+
+		// Draws scene
+		void DrawScene() override;
+
 		// Calling on updating
-		void OnUpdate(float dt);
+		void OnUpdate(float dt) override;
 
 		// Calling on drawing
-		void OnDraw();
+		void OnDraw() override;
 
 		// Calling when application activated
-		void OnActivated();
+		void OnActivated() override;
 
 		// Calling when application deactivated
-		void OnDeactivated();
+		void OnDeactivated() override;
 
 		// Calling when application is starting
-		void OnStarted();
-
-		// Initializes menu
-		void InitializeMenu();
+		void OnStarted() override;
 
 		// Calling when application is closing
-		void OnClosing();
+		void OnClosing() override;
 
 		// Calling when application window resized. Ignoring on mobiles/tablets
-		void OnResizing();
+		void OnResizing() override;
 
 		// Calling when application window moved. Ignoring on mobiles/tablets
-		void OnMoved();
+		void OnMoved() override;
 
 		// Processing frame update, drawing and input messages without scene
-		void ProcessFrame();
+		void ProcessFrame() override;
 	};
 }

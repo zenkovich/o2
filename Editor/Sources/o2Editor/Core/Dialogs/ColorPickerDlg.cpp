@@ -495,7 +495,7 @@ void ColorPickerDlg::OnCursorPressedOutside()
 }
 }
 
-ENUM_META_(Editor::ColorPickerDlg::ColorType, ColorType)
+ENUM_META(Editor::ColorPickerDlg::ColorType)
 {
 	ENUM_ENTRY(HSL);
 	ENUM_ENTRY(RGB);
