@@ -54,6 +54,12 @@ namespace o2
 		// Returns is reference is valid
 		bool IsValid() const;
 
+		// Returns asset
+		Asset* Get();
+
+		// Returns asset
+		const Asset* Get() const;
+
 		// Returns asset type
 		virtual const Type& GetAssetType() const;
 
@@ -181,6 +187,8 @@ CLASS_METHODS_META(o2::AssetRef)
 {
 
 	PUBLIC_FUNCTION(bool, IsValid);
+	PUBLIC_FUNCTION(Asset*, Get);
+	PUBLIC_FUNCTION(const Asset*, Get);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

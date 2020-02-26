@@ -22,12 +22,12 @@ namespace Editor
 	{
 		mWindow->caption = "Game";
 		mWindow->name = "game window";
-		mWindow->SetIcon(mnew Sprite("ui/UI4_scene_icon.png"));
-		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-2, 2)));
+		mWindow->SetIcon(mnew Sprite("ui/UI4_game_icon.png"));
+		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-1, 2)));
 		mWindow->SetViewLayout(Layout::BothStretch(-1, 0, 0, 18));
 
 		auto gameView = mnew GameView();
-		*gameView->layout = WidgetLayout::BothStretch(0, 0, 0, 20);
+		*gameView->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
 		mWindow->AddChild(gameView);
 		
 		Widget* upPanel = mnew Widget();

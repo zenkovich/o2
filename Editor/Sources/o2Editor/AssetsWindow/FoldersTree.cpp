@@ -81,7 +81,7 @@ namespace Editor
 
 	void AssetsFoldersTree::SelectAndExpandFolder(const String& path)
 	{
-		mFoldersTree->SelectAndHightlightObject(o2Assets.GetAssetsTree().Find(path));
+		mFoldersTree->SelectAndHighlightObject(o2Assets.GetAssetsTree().Find(path));
 		mCurrentPath = path;
 	}
 
@@ -94,15 +94,10 @@ namespace Editor
 	{
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
-		mContextMenu->AddItem("Import", [&]() { OnContextImportPressed(); });
-		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
-		mContextMenu->AddItem("Create/Prefab", [&]() { OnContextCreatePrefabPressed(); });
-		mContextMenu->AddItem("Create/Script", [&]() { OnContextCreateScriptPressed(); });
-		mContextMenu->AddItem("Create/Animation", [&]() { OnContextCreateAnimationPressed(); });
 		mContextMenu->AddItem("---");
 		mContextMenu->AddItem("Copy", [&]() { OnContextCopyPressed(); }, ImageAssetRef(), ShortcutKeys('C', true));
 		mContextMenu->AddItem("Cut", [&]() { OnContextCutPressed(); }, ImageAssetRef(), ShortcutKeys('X', true));
@@ -118,24 +113,24 @@ namespace Editor
 		AddChild(mContextMenu);
 	}
 
-	UnknownPtr AssetsFoldersTree::GetFoldersTreeNodeParent(UnknownPtr object)
+	void* AssetsFoldersTree::GetFoldersTreeNodeParent(void* object)
 	{
 		if (!object)
-			return UnknownPtr();
+			return nullptr;
 
 		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
-		return (UnknownPtr)(void*)(assetTreeNode->parent);
+		return (void*)(void*)(assetTreeNode->parent);
 	}
 
-	Vector<UnknownPtr> AssetsFoldersTree::GetFoldersTreeNodeChilds(UnknownPtr object)
+	Vector<void*> AssetsFoldersTree::GetFoldersTreeNodeChilds(void* object)
 	{
-		AssetInfo* assetTreeNode = object;
+		AssetInfo* assetTreeNode = (AssetInfo*)object;
 
 		if (assetTreeNode)
 		{
 			return assetTreeNode->children.
 				FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); }).
-				Select<UnknownPtr>([](AssetInfo* x) { return UnknownPtr(x); });
+				Select<void*>([](AssetInfo* x) { return (void*)x; });
 		}
 		else
 		{
@@ -143,11 +138,11 @@ namespace Editor
 
 			return assetsTree.rootAssets.
 				FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); }).
-				Select<UnknownPtr>([](AssetInfo* x) { return UnknownPtr(x); });
+				Select<void*>([](AssetInfo* x) { return (void*)x; });
 		}
 	}
 
-	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, UnknownPtr object)
+	void AssetsFoldersTree::SetupFoldersTreeNode(TreeNode* node, void* object)
 	{
 		AssetInfo* assetTreeNode = (AssetInfo*)(void*)object;
 		String pathName = o2FileSystem.GetPathWithoutDirectories(assetTreeNode->path);
@@ -183,7 +178,7 @@ namespace Editor
 		};
 	}
 
-	void AssetsFoldersTree::OnFoldersTreeSelect(Vector<UnknownPtr> nodes)
+	void AssetsFoldersTree::OnFoldersTreeSelect(Vector<void*> nodes)
 	{
 		if (mOpengingFolderFromThis)
 			return;
@@ -192,7 +187,7 @@ namespace Editor
 
 		if (nodes.Count() > 0)
 		{
-			AssetInfo* assetTreeNode = nodes.Last();
+			AssetInfo* assetTreeNode = (AssetInfo*)nodes.Last();
 			mCurrentPath = assetTreeNode->path;
 			o2EditorAssets.mAssetsGridScroll->SetViewingPath(mCurrentPath);
 		}
@@ -240,29 +235,10 @@ namespace Editor
 		o2EditorAssets.OpenAsset(mCurrentPath);
 	}
 
-	void AssetsFoldersTree::OnContextImportPressed()
-	{
-		o2EditorAssets.ImportAssets(mCurrentPath);
-	}
-
 	void AssetsFoldersTree::OnContextCreateFolderPressed()
 	{
-		o2EditorAssets.CreateFolderAsset(mCurrentPath, "New folder");
-	}
-
-	void AssetsFoldersTree::OnContextCreatePrefabPressed()
-	{
-		o2EditorAssets.CreatePrefabAsset(mCurrentPath);
-	}
-
-	void AssetsFoldersTree::OnContextCreateScriptPressed()
-	{
-		o2EditorAssets.CreateScriptAsset(mCurrentPath);
-	}
-
-	void AssetsFoldersTree::OnContextCreateAnimationPressed()
-	{
-		o2EditorAssets.CreateAnimationAsset(mCurrentPath);
+		FolderAssetRef folderAsset = FolderAssetRef::CreateAsset();
+		folderAsset->Save(o2Assets.MakeUniqueAssetName(mCurrentPath + "/New folder"));
 	}
 
 	void AssetsFoldersTree::OnContextExpandPressed()

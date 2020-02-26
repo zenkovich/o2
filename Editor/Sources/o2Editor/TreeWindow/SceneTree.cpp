@@ -92,7 +92,7 @@ namespace Editor
 
 	TreeNode* SceneTree::GetNode(SceneEditableObject* object)
 	{
-		return Tree::GetNode((UnknownPtr)(void*)object);
+		return Tree::GetNode((void*)(void*)object);
 	}
 
 	Vector<SceneEditableObject*> SceneTree::GetSelectedObjects() const
@@ -102,27 +102,27 @@ namespace Editor
 
 	void SceneTree::SetSelectedObjects(const Vector<SceneEditableObject*>& objects)
 	{
-		Tree::SetSelectedObjects(objects.Select<UnknownPtr>([](auto x) { return (UnknownPtr)(void*)x; }));
+		Tree::SetSelectedObjects(objects.Select<void*>([](auto x) { return (void*)(void*)x; }));
 	}
 
 	void SceneTree::SelectObject(SceneEditableObject* object)
 	{
-		Tree::SelectObject((UnknownPtr)(void*)object);
+		Tree::SelectObject((void*)(void*)object);
 	}
 
-	void SceneTree::SelectAndHightlightObject(SceneEditableObject* object)
+	void SceneTree::SelectAndHighlightObject(SceneEditableObject* object)
 	{
-		Tree::SelectAndHightlightObject((UnknownPtr)(void*)object);
+		Tree::SelectAndHighlightObject((void*)(void*)object);
 	}
 
-	void SceneTree::ScrollToAndHightlight(SceneEditableObject* object)
+	void SceneTree::ScrollToAndHighlight(SceneEditableObject* object)
 	{
-		Tree::ScrollToAndHightlight(object);
+		Tree::ScrollToAndHighlight(object);
 	}
 
 	void SceneTree::DeselectObject(SceneEditableObject* object)
 	{
-		Tree::DeselectObject((UnknownPtr)(void*)object);
+		Tree::DeselectObject((void*)(void*)object);
 	}
 
 	void SceneTree::DeselectAllObjects()
@@ -132,7 +132,7 @@ namespace Editor
 
 	void SceneTree::ScrollTo(SceneEditableObject* object)
 	{
-		Tree::ScrollTo((UnknownPtr)(void*)object);
+		Tree::ScrollTo((void*)(void*)object);
 	}
 
 	void SceneTree::SetEditorWatching(bool watching)
@@ -166,35 +166,35 @@ namespace Editor
 		return Tree::CreateTreeNodeWidget();
 	}
 
-	UnknownPtr SceneTree::GetObjectParent(UnknownPtr object)
+	void* SceneTree::GetObjectParent(void* object)
 	{
-		SceneEditableObject* sceneObject = object;
+		SceneEditableObject* sceneObject = (SceneEditableObject*)object;
 		return sceneObject->GetEditableParent();
 	}
 
-	Vector<UnknownPtr> SceneTree::GetObjectChilds(UnknownPtr object)
+	Vector<void*> SceneTree::GetObjectChilds(void* object)
 	{
 		if (object)
 		{
-			SceneEditableObject* parent = object;
-			return parent->GetEditablesChildren().Cast<UnknownPtr>();
+			SceneEditableObject* parent = (SceneEditableObject*)object;
+			return parent->GetEditablesChildren().Cast<void*>();
 		}
 
 		if (mWatchEditor)
-			return EditorUIRoot.GetRootWidget()->GetEditablesChildren().Cast<UnknownPtr>();
+			return EditorUIRoot.GetRootWidget()->GetEditablesChildren().Cast<void*>();
 
-		return o2Scene.GetRootActors().Select<UnknownPtr>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return o2Scene.GetRootActors().Select<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	String SceneTree::GetObjectDebug(UnknownPtr object)
+	String SceneTree::GetObjectDebug(void* object)
 	{
 		return object ? ((SceneEditableObject*)object)->GetName() : "null";
 	}
 
-	void SceneTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
+	void SceneTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
 	{
 		SceneTreeNode* node = (SceneTreeNode*)nodeWidget;
-		node->SetSceneObject(object);
+		node->SetSceneObject((SceneEditableObject*)object);
 		node->mLockToggle->SetToggleGroup(mLockTogglesGroup);
 		node->mEnableToggle->SetToggleGroup(mEnableTogglesGroup);
 	}
@@ -204,10 +204,10 @@ namespace Editor
 		((SceneTreeNode*)nodeWidget)->EnableEditName();
 	}
 
-	void SceneTree::OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject)
+	void SceneTree::OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject)
 	{
 		SceneEditableObject* newParentEditableObject = (SceneEditableObject*)newParent;
-		SceneEditableObject* prevEditableObject = prevObject;
+		SceneEditableObject* prevEditableObject = (SceneEditableObject*)prevObject;
 		Vector<SceneEditableObject*> editableObjects = objects.Cast<SceneEditableObject*>();
 
 		auto action = mnew ReparentAction(editableObjects);
@@ -226,7 +226,7 @@ namespace Editor
 	void SceneTree::EnableObjectsGroupReleased(bool value)
 	{
 		Vector<SceneEditableObject*> objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
-			[](Toggle* x) { return ((TreeNode*)x->GetParent())->GetObject(); });
+			[](Toggle* x) { return (SceneEditableObject*)((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew EnableAction(objects, value);
 		o2EditorApplication.DoneAction(action);
@@ -238,13 +238,13 @@ namespace Editor
 	void SceneTree::LockObjectsGroupReleased(bool value)
 	{
 		Vector<SceneEditableObject*> objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
-			[](Toggle* x) { return ((TreeNode*)x->GetParent())->GetObject(); });
+			[](Toggle* x) { return (SceneEditableObject*)((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew LockAction(objects, value);
 		o2EditorApplication.DoneAction(action);
 	}
 
-	void SceneTree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
+	void SceneTree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
 		onObjectsSelectionChanged(objects.Cast<SceneEditableObject*>());
 		Tree::OnNodesSelectionChanged(objects);
@@ -326,7 +326,7 @@ namespace Editor
 
 	void SceneTree::OnObjectsChanged(const Vector<SceneEditableObject*>& objects)
 	{
-		Tree::OnObjectsChanged(objects.Cast<UnknownPtr>());
+		Tree::OnObjectsChanged(objects.Cast<void*>());
 	}
 
 	void SceneTree::OnObjectChanged(SceneEditableObject* object)

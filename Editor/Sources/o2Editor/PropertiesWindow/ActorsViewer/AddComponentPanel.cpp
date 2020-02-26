@@ -192,7 +192,7 @@ namespace Editor
 		recursiveSearch(&mRoot);
 
 		if (filtered)
-			SelectAndHightlightObject(filtered);
+			SelectAndHighlightObject(filtered);
 	}
 
 	void ComponentsTree::UpdateVisibleNodes()
@@ -207,7 +207,7 @@ namespace Editor
 		return Tree::CreateTreeNodeWidget();
 	}
 
-	UnknownPtr ComponentsTree::GetObjectParent(UnknownPtr object)
+	void* ComponentsTree::GetObjectParent(void* object)
 	{
 		auto node = (NodeData*)object;
 		if (node->parent == &mRoot)
@@ -216,15 +216,15 @@ namespace Editor
 		return node->parent;
 	}
 
-	Vector<UnknownPtr> ComponentsTree::GetObjectChilds(UnknownPtr object)
+	Vector<void*> ComponentsTree::GetObjectChilds(void* object)
 	{
 		if (object)
-			return ((NodeData*)object)->children.Cast<UnknownPtr>();
+			return ((NodeData*)object)->children.Cast<void*>();
 
-		return mRoot.children.Cast<UnknownPtr>();
+		return mRoot.children.Cast<void*>();
 	}
 
-	String ComponentsTree::GetObjectDebug(UnknownPtr object)
+	String ComponentsTree::GetObjectDebug(void* object)
 	{
 		if (object)
 			return ((NodeData*)object)->path;
@@ -232,7 +232,7 @@ namespace Editor
 		return "";
 	}
 
-	void ComponentsTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
+	void ComponentsTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
 	{
 		auto propertyNode = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
 		propertyNode->Setup((NodeData*)object, this);

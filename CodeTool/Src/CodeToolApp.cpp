@@ -755,6 +755,12 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		if (x->IsStatic())
 			continue;
 
+		// try search comment
+		SyntaxComment* synComment = cls->FindCommentNearLine(x->GetLine());
+
+		if (synComment && synComment->GetData().find("@IGNORE") != string::npos)
+			continue;
+
 		if (x->GetClassSection() == SyntaxProtectionSection::Public)
 			res += "\tPUBLIC_FIELD(" + x->GetName() + ")";
 		else if (x->GetClassSection() == SyntaxProtectionSection::Private)
@@ -789,39 +795,6 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 						attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + ")";
 				}
 				else attributes += string(".ATTRIBUTE(") + attributeEntry + ")";
-			}
-		}
-
-		// try search comment
-		SyntaxComment* synComment = nullptr;
-		for (auto comment : cls->GetComments())
-		{
-			// comment is on same line as variable
-			if (comment->GetLine() == x->GetLine())
-			{
-				synComment = comment;
-				break;
-			}
-
-			// comment is on up line to variable
-			if (comment->GetLine() == x->GetLine() - 1)
-			{
-				// check other variable on this line
-				bool success = true;
-				for (auto v : cls->GetVariables())
-				{
-					if (v->GetLine() == comment->GetLine())
-					{
-						success = false;
-						break;
-					}
-				}
-
-				if (success)
-				{
-					synComment = comment;
-					break;
-				}
 			}
 		}
 

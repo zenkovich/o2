@@ -86,7 +86,7 @@ namespace Editor
 						o2EditorSceneScreen.ClearSelectionWithoutAction(false);
 
 					o2EditorSceneScreen.SelectObjectWithoutAction(object);
-					o2EditorTree.HightlightObjectTreeNode(object);
+					o2EditorTree.HighlightObjectTreeNode(object);
 					selected = true;
 
 					auto selectionAction = mnew SelectAction(o2EditorSceneScreen.GetSelectedObjects(),

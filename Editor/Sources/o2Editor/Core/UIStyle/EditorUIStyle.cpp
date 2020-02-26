@@ -683,11 +683,11 @@ namespace Editor
 		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
-		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
-		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		sample->SetHightlightLayout(Layout::BothStretch());
-		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									   Hide().Scale(1.5f).Then().
 									   Wait(0.3f).Then().
 									   Show().Scale(1.0f).For(0.2f).Then().
@@ -1112,11 +1112,11 @@ namespace Editor
 		*sample->GetHoverDrawable() = Sprite("ui/UI4_Context_menu_white.png");
 		sample->SetHoverLayout(Layout::BothStretch(-10, -16, -10, -16));
 
-		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
-		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		sample->SetHightlightLayout(Layout::BothStretch());
-		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									   Hide().Scale(1.5f).Then().
 									   Wait(0.3f).Then().
 									   Show().Scale(1.0f).For(0.2f).Then().
@@ -1134,7 +1134,7 @@ namespace Editor
 		auto itemUnfocusedLayer = itemSelectionLayer->AddChildLayer("unfocused", mnew Sprite("ui/UI4_Context_menu_white.png"),
 																	Layout::BothStretch(-10, -16, -10, -16));
 
-		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, 0)));
+		itemSample->AddLayer("icon", mnew Sprite("ui/UI4_folder_icon_dark.png"), Layout::Based(BaseCorner::Left, Vec2F(20, 20), Vec2F(10, 0)));
 
 		Text* captionLayerText = mnew Text("stdFont.ttf");
 		captionLayerText->horAlign = HorAlign::Left;
@@ -1240,6 +1240,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildRegularAssetIcon()
 	{
 		AssetIcon* sample = mnew AssetIcon();
+		sample->layout->minSize = Vec2F(50, 60);
 
 		// selection layer
 		auto itemSelectionLayer = sample->AddLayer("select", nullptr);
@@ -1310,70 +1311,6 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildFolderAssetIcon()
-	{
-		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
-
-		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI4_big_folder_icon.png");
-
-		o2UI.AddWidgetStyle(sample, "folder");
-	}
-
-	void EditorUIStyleBuilder::RebuildPrototypeAssetIcon()
-	{
-		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
-
-		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI4_actor_icon.png");
-
-		o2UI.AddWidgetStyle(sample, "prototype");
-	}
-
-	void EditorUIStyleBuilder::RebuildPrefabPreviewAssetIcon()
-	{
-		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
-
-		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI4_image_asset_back.png");
-
-		sample->AddLayer("preview", mnew Sprite(),
-						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 20)));
-
-		o2UI.AddWidgetStyle(sample, "prototype preview");
-	}
-
-	void EditorUIStyleBuilder::RebuildImagePreviewAssetIcon()
-	{
-		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
-
-		sample->RemoveLayer("icon");
-		sample->AddLayer("preview", mnew Sprite(),
-						 Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 15)));
-
-		o2UI.AddWidgetStyle(sample, "image preview");
-	}
-
-	void EditorUIStyleBuilder::RebuildTextAssetIcon()
-	{
-		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
-
-		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI4_big_text_file_icon.png");
-
-		o2UI.AddWidgetStyle(sample, "text");
-	}
-
-	void EditorUIStyleBuilder::RebuildAnimationAssetIcon()
-	{
-		AssetIcon* sample = o2UI.CreateWidget<AssetIcon>();
-
-		auto iconLayer = sample->layer["icon"];
-		((Sprite*)iconLayer->GetDrawable())->LoadFromImage("ui/UI4_anim_file_icon.png");
-
-		o2UI.AddWidgetStyle(sample, "animation");
-	}
-
 	void EditorUIStyleBuilder::RebuildAssetsGridScroll()
 	{
 		AssetsIconsScrollArea* sample = mnew AssetsIconsScrollArea();
@@ -1381,12 +1318,14 @@ namespace Editor
 		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
 		sample->SetViewLayout(Layout::BothStretch(5, 5, 5, 5));
 		sample->SetEnableScrollsHiding(true);
+		sample->SetItemSample(o2UI.CreateWidget<AssetIcon>());
+		sample->SetItemsSpacing(Vec2F(5, 5));
 
-		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
-		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		sample->SetHightlightLayout(Layout::BothStretch());
-		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									   Hide().Scale(1.5f).Then().
 									   Wait(0.3f).Then().
 									   Show().Scale(1.0f).For(0.2f).Then().
@@ -2126,11 +2065,11 @@ namespace Editor
 		// zebra back
 		sample->SetZebraBackLine(new Sprite(Color4(0, 0, 0, 13)));
 
-		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
-		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		sample->SetHightlightLayout(Layout::BothStretch());
-		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									   Hide().Scale(1.5f).Then().
 									   Wait(0.3f).Then().
 									   Show().Scale(1.0f).For(0.2f).Then().
@@ -2268,11 +2207,11 @@ namespace Editor
 		// zebra back
 		sample->SetZebraBackLine(mnew Sprite(Color4(0, 0, 0, 13)));
 
-		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
-		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		sample->SetHightlightLayout(Layout::BothStretch());
-		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									   Hide().Scale(1.5f).Then().
 									   Wait(0.3f).Then().
 									   Show().Scale(1.0f).For(0.2f).Then().
@@ -3040,11 +2979,11 @@ namespace Editor
 		// zebra back
 		sample->SetZebraBackLine(mnew Sprite(Color4(0, 0, 0, 13)));
 
-		// hightlight
-		*sample->GetHightlightDrawable() = Sprite("ui/UI4_selection_frame.png");
-		sample->GetHightlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
-		sample->SetHightlightLayout(Layout::BothStretch());
-		sample->SetHightlightAnimation(Animate(*sample->GetHightlightDrawable()).
+		// highlight
+		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
+		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
+		sample->SetHighlightLayout(Layout::BothStretch());
+		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									   Hide().Scale(1.5f).Then().
 									   Wait(0.3f).Then().
 									   Show().Scale(1.0f).For(0.2f).Then().

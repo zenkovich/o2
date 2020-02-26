@@ -290,6 +290,21 @@ namespace o2
 		return mSelectGroup;
 	}
 
+	void SelectableDragableObject::SetDragOnlySelected(bool value)
+	{
+		mDragOnlySelected = value;
+	}
+
+	bool SelectableDragableObject::IsDragOnlySelected() const
+	{
+		return mDragOnlySelected;
+	}
+
+	bool SelectableDragableObject::IsInputTransparent() const
+	{
+		return mDragOnlySelected && !mIsSelected;
+	}
+
 	void SelectableDragableObject::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		DragableObject::OnCursorPressed(cursor);
@@ -302,18 +317,17 @@ namespace o2
 
 	void SelectableDragableObject::OnCursorStillDown(const Input::Cursor& cursor)
 	{
-		if (!mIsPressed)
+		if (!mIsPressed || cursor.id != mPressedCursorId || cursor.delta.Length() < 0.5f)
+		{
+			CursorAreaEventsListener::OnCursorStillDown(cursor);
 			return;
-
-		if (cursor.id != mPressedCursorId)
-			return;
-
-		if (cursor.delta.Length() < 0.5f)
-			return;
+		}
 
 		DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id);
 
-		if (!mIsDragging)
+		bool isDragAvailable = mDragOnlySelected ? mIsSelected : true;
+
+		if (!mIsDragging && isDragAvailable)
 		{
 			float delta = (cursor.position - mPressedCursorPos).Length();
 			if (delta > mDragDistanceThreshold)

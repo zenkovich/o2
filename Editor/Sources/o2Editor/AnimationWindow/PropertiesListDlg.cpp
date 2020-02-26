@@ -216,20 +216,20 @@ namespace Editor
 		return Tree::CreateTreeNodeWidget();
 	}
 
-	UnknownPtr AnimationPropertiesTree::GetObjectParent(UnknownPtr object)
+	void* AnimationPropertiesTree::GetObjectParent(void* object)
 	{
 		return ((NodeData*)object)->parent;
 	}
 
-	Vector<UnknownPtr> AnimationPropertiesTree::GetObjectChilds(UnknownPtr object)
+	Vector<void*> AnimationPropertiesTree::GetObjectChilds(void* object)
 	{
 		if (object)
-			return ((NodeData*)object)->children.Cast<UnknownPtr>();
+			return ((NodeData*)object)->children.Cast<void*>();
 
-		return mRoot.children.Cast<UnknownPtr>();
+		return mRoot.children.Cast<void*>();
 	}
 
-	String AnimationPropertiesTree::GetObjectDebug(UnknownPtr object)
+	String AnimationPropertiesTree::GetObjectDebug(void* object)
 	{
 		if (object)
 			return ((NodeData*)object)->path;
@@ -237,7 +237,7 @@ namespace Editor
 		return "";
 	}
 
-	void AnimationPropertiesTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
+	void AnimationPropertiesTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
 	{
 		auto propertyNode = dynamic_cast<AnimationPropertiesTreeNode*>(nodeWidget);
 		propertyNode->Setup((NodeData*)object, this);
@@ -255,7 +255,7 @@ namespace Editor
 			mAnimation->AddAnimationValueNoType(propertyNode->mData->path);
 	}
 
-	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
+	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
 
 	}
@@ -342,7 +342,7 @@ namespace Editor
 			{
 				mTree->mAnimation->AddAnimationValueNoType(mData->path); 
 				mData->used = true; 
-				mTree->OnObjectsChanged({ (UnknownPtr)mData }); 
+				mTree->OnObjectsChanged({ (void*)mData }); 
 			};
 		}
 
@@ -352,7 +352,7 @@ namespace Editor
 			mRemoveButton->onClick = [&]() { 
 				mTree->mAnimation->RemoveAnimationValue(mData->path);
 				mData->used = false;
-				mTree->OnObjectsChanged({ (UnknownPtr)mData });
+				mTree->OnObjectsChanged({ (void*)mData });
 			};
 		}
 	}

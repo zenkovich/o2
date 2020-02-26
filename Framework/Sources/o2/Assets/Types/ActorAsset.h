@@ -28,6 +28,12 @@ namespace o2
 		// Returns actor
 		Actor* GetActor() const;
 
+		// Returns editor icon
+		static String GetEditorIcon() { return "ui/UI4_actor_icon.png"; }
+
+		// Returns editor sorting weight
+		static int GetEditorSorting() { return 99; }
+
 		SERIALIZABLE(ActorAsset);
 
 	protected:
@@ -62,5 +68,7 @@ CLASS_METHODS_META(o2::ActorAsset)
 	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_FUNCTION(Actor*, GetActor);
+	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
+	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 }
 END_META;

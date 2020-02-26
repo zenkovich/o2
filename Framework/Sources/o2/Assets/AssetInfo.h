@@ -27,6 +27,9 @@ namespace o2
 		// Default constructor
 		AssetInfo();
 
+		// Default constructor with meta
+		AssetInfo(AssetMeta* meta);
+
 		// Copy-constructor
 		AssetInfo(const AssetInfo& other);
 

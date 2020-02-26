@@ -82,10 +82,10 @@ namespace Editor
 		int GetVisibleMessagesCount();
 
 		// Returns array of visible messages in range from min to max
-		Vector<UnknownType*> GetVisibleMessagesRange(int min, int max);
+		Vector<void*> GetVisibleMessagesRange(int min, int max);
 
 		// Sets list item by message
-		void SetupListMessage(Widget* item, UnknownType* object);
+		void SetupListMessage(Widget* item, void* object);
 
 		// Outs string to stream
 		void OutStrEx(const WString& str);
@@ -137,8 +137,8 @@ CLASS_METHODS_META(Editor::LogWindow)
 	PROTECTED_FUNCTION(void, OnErrorMessagesToggled, bool);
 	PROTECTED_FUNCTION(void, UpdateVisibleMessages);
 	PROTECTED_FUNCTION(int, GetVisibleMessagesCount);
-	PROTECTED_FUNCTION(Vector<UnknownType*>, GetVisibleMessagesRange, int, int);
-	PROTECTED_FUNCTION(void, SetupListMessage, Widget*, UnknownType*);
+	PROTECTED_FUNCTION(Vector<void*>, GetVisibleMessagesRange, int, int);
+	PROTECTED_FUNCTION(void, SetupListMessage, Widget*, void*);
 	PROTECTED_FUNCTION(void, OutStrEx, const WString&);
 	PROTECTED_FUNCTION(void, OutErrorEx, const WString&);
 	PROTECTED_FUNCTION(void, OutWarningEx, const WString&);

@@ -149,6 +149,9 @@ namespace o2
 		return o2Assets.mLog;
 	}
 
+	void Asset::SetMeta(AssetMeta* meta)
+	{}
+
 	void Asset::LoadData(const String& path)
 	{
 		DataNode data;

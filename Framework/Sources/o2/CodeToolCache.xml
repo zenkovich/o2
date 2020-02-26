@@ -392,98 +392,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Asset.h">
-		<date year="2020" month="2" day="8" hour="19" minute="23" second="27" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Asset" fullname="o2::Asset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="AssetMeta" newDef="MetaType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="AssetWithDefaultMeta" fullname="o2::AssetWithDefaultMeta" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="DefaultAssetMeta&lt;T&gt;" newDef="Meta" />
-								<typedef what="Meta" newDef="MetaType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="Asset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetInfo.h">
-		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AssetInfo" fullname="o2::AssetInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetRef.h">
-		<date year="2020" month="2" day="10" hour="20" minute="55" second="37" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AssetRef" fullname="o2::AssetRef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" fullname="o2::Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" newDef="_thisType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="AssetRef" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Assets.h">
 		<date year="2020" month="2" day="6" hour="21" minute="58" second="39" />
 		<globalNamespace name="" fullname="">
@@ -719,240 +627,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/ActorAsset.h">
-		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="ActorAsset" fullname="o2::ActorAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;ActorAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;ActorAsset&gt;" newDef="ActorAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AnimationAsset.h">
-		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AnimationAsset" fullname="o2::AnimationAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;AnimationAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;AnimationAsset&gt;" newDef="AnimationAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AtlasAsset.h">
-		<date year="2020" month="2" day="9" hour="0" minute="3" second="29" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="AtlasAsset" fullname="o2::AtlasAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="PlatformMeta" fullname="o2::AtlasAsset::PlatformMeta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="Meta" fullname="o2::AtlasAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="DefaultAssetMeta&lt;AtlasAsset&gt;" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="Page" fullname="o2::AtlasAsset::Page" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="ISerializable" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Asset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;AtlasAsset&gt;" newDef="AtlasAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BinaryAsset.h">
-		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="BinaryAsset" fullname="o2::BinaryAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;BinaryAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;BinaryAsset&gt;" newDef="BinaryAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BitmapFontAsset.h">
-		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="BitmapFontAsset" fullname="o2::BitmapFontAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Meta" fullname="o2::BitmapFontAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="DefaultAssetMeta&lt;BitmapFontAsset&gt;" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="FontAsset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;BitmapFontAsset&gt;" newDef="BitmapFontAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/DataAsset.h">
-		<date year="2020" month="2" day="9" hour="12" minute="23" second="21" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="DataAsset" fullname="o2::DataAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;DataAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;DataAsset&gt;" newDef="DataAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FolderAsset.h">
-		<date year="2020" month="2" day="9" hour="12" minute="11" second="34" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="FolderAsset" fullname="o2::FolderAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="AssetWithDefaultMeta&lt;FolderAsset&gt;" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;FolderAsset&gt;" newDef="FolderAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FontAsset.h">
-		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="FontAsset" fullname="o2::FontAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Asset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;FontAsset&gt;" newDef="FontAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/ImageAsset.h">
 		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
 		<globalNamespace name="" fullname="">
@@ -987,40 +661,6 @@
 					</sections>
 					<typedefs>
 						<typedef what="Ref&lt;ImageAsset&gt;" newDef="ImageAssetRef" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/VectorFontAsset.h">
-		<date year="2020" month="2" day="4" hour="22" minute="53" second="42" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="VectorFontAsset" fullname="o2::VectorFontAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Meta" fullname="o2::VectorFontAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="DefaultAssetMeta&lt;VectorFontAsset&gt;" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="FontAsset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Ref&lt;VectorFontAsset&gt;" newDef="VectorFontAssetRef" />
 					</typedefs>
 					<usings />
 				</section>
@@ -2805,29 +2445,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/LongList.h">
-		<date year="2020" month="2" day="13" hour="0" minute="4" second="46" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="LongList" fullname="o2::LongList" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ScrollArea" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/MenuPanel.h">
 		<date year="2020" month="2" day="13" hour="0" minute="4" second="45" />
 		<globalNamespace name="" fullname="">
@@ -2928,53 +2545,6 @@
 								<class name="Widget" protection="0" />
 								<class name="DrawableCursorEventsListener" protection="0" />
 								<class name="KeyboardEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Tree.h">
-		<date year="2020" month="2" day="19" hour="12" minute="20" second="27" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Tree" fullname="o2::Tree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Node" fullname="o2::Tree::Node" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="VisibleWidgetDef" fullname="o2::Tree::VisibleWidgetDef" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ScrollArea" protection="0" />
-								<class name="DragDropArea" protection="0" />
-								<class name="ISelectableDragableObjectsGroup" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="TreeNode" fullname="o2::TreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Widget" protection="0" />
-								<class name="SelectableDragableObject" protection="0" />
 							</baseClasses>
 						</section>
 					</sections>
@@ -3526,61 +3096,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/DragAndDrop.h">
-		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="DragDropArea" fullname="o2::DragDropArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="CursorAreaEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="DragableObject" fullname="o2::DragableObject" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="CursorAreaEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="ISelectableDragableObjectsGroup" fullname="o2::ISelectableDragableObjectsGroup" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="CursorAreaEventsListener" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="SelectableDragableObjectsGroup" fullname="o2::SelectableDragableObjectsGroup" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="ISelectableDragableObjectsGroup" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="SelectableDragableObject" fullname="o2::SelectableDragableObject" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="DragableObject" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/DragHandle.h">
 		<date year="2020" month="1" day="16" hour="23" minute="24" second="30" />
 		<globalNamespace name="" fullname="">
@@ -4066,30 +3581,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Vector2.h">
-		<date year="2020" month="2" day="14" hour="23" minute="0" second="54" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Vec2" fullname="o2::Vec2" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs>
-						<typedef what="Vec2&lt;float&gt;" newDef="Vec2F" />
-						<typedef what="Vec2&lt;int&gt;" newDef="Vec2I" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Vertex2.h">
 		<date year="2020" month="1" day="5" hour="10" minute="52" second="31" />
 		<globalNamespace name="" fullname="">
@@ -4380,14 +3871,6 @@
 					<usings />
 				</section>
 			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/Type.h">
-		<date year="2020" month="2" day="19" hour="0" minute="16" second="3" />
-		<globalNamespace name="" fullname="">
-			<sections />
 			<typedefs />
 			<usings />
 		</globalNamespace>
@@ -4816,253 +4299,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/DataNode.h">
-		<date year="2020" month="2" day="19" hour="12" minute="20" second="27" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="Converter" fullname="o2::DataNode::Converter" isClass="true" isMeta="false" templates="typename _type, typename _enable = void" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-								<section name="IsSupport" fullname="o2::DataNode::IsSupport" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses />
-								</section>
-							</sections>
-							<typedefs>
-								<typedef what="Vector&lt;DataNode*&gt;::Iterator" newDef="Iterator" />
-								<typedef what="Vector&lt;DataNode*&gt;::ConstIterator" newDef="ConstIterator" />
-							</typedefs>
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;DataNode&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings>
-								<typedef name="" />
-							</usings>
-							<baseClasses>
-								<class name="Converter&lt;char*&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings>
-								<typedef name="" />
-							</usings>
-							<baseClasses>
-								<class name="Converter&lt;wchar_t*&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;bool&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;int&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;float&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;UInt&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;UInt64&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;String&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;WString&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;UID&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;Vec2F&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;Vec2I&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;RectF&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;RectI&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;BorderF&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;BorderI&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;Color4&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="typename std::enable_if&lt;std::is_pointer&lt;T&gt;::value &amp;&amp; !std::is_const&lt;T&gt;::value &amp;&amp;&#10;  std::is_base_of&lt;o2::IObject, typename std::remove_pointer&lt;T&gt;::type&gt;::value&gt;::type&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="typename std::enable_if&lt;std::is_pointer&lt;T&gt;::value &amp;&amp; !std::is_const&lt;T&gt;::value &amp;&amp; &#10;  !std::is_base_of&lt;o2::IObject, typename std::remove_pointer&lt;T&gt;::type&gt;::value&gt;::type&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Converter&lt;Vector&lt;T&gt;&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename _key, typename _value" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="_value&gt;&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="typename std::enable_if&lt;std::is_enum&lt;T&gt;::value&gt;::type&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="typename std::enable_if&lt;IsProperty&lt;T&gt;::value&gt;::type&gt;" protection="1" />
-							</baseClasses>
-						</section>
-						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="typename std::enable_if&lt;std::is_base_of&lt;IObject, T&gt;::value || std::is_same&lt;IObject, T&gt;::value&gt;::type&gt;" protection="1" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/XmlDataFormat.h">
 		<date year="2020" month="1" day="5" hour="10" minute="53" second="1" />
 		<globalNamespace name="" fullname="">
@@ -5351,31 +4587,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/CommonTypes.h">
-		<date year="2020" month="2" day="19" hour="12" minute="20" second="27" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections />
-					<typedefs>
-						<typedef what="unsigned long long" newDef="UInt64" />
-						<typedef what="unsigned short" newDef="UInt16" />
-						<typedef what="unsigned char" newDef="UInt8" />
-						<typedef what="long long" newDef="Int64" />
-						<typedef what="unsigned int" newDef="UInt" />
-						<typedef what="unsigned long" newDef="ULong" />
-						<typedef what="int" newDef="KeyboardKey" />
-						<typedef what="int" newDef="CursorId" />
-						<typedef what="char" newDef="UnknownType" />
-						<typedef what="UInt64" newDef="SceneUID" />
-					</typedefs>
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/Containers/IArray.h">
 		<date year="2020" month="1" day="5" hour="10" minute="52" second="27" />
 		<globalNamespace name="" fullname="">
@@ -5591,27 +4802,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/UnknownPtr.h">
-		<date year="2020" month="1" day="3" hour="11" minute="32" second="3" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="UnknownPtr" fullname="o2::UnknownPtr" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs />
-							<usings />
-							<baseClasses />
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/ValueProxy.h">
 		<date year="2020" month="1" day="5" hour="10" minute="52" second="26" />
 		<globalNamespace name="" fullname="">
@@ -5680,52 +4870,6 @@
 							</baseClasses>
 						</section>
 					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widget.h">
-		<date year="2020" month="2" day="20" hour="11" minute="39" second="26" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Widget" fullname="o2::Widget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections>
-								<section name="LayersEditable" fullname="o2::Widget::LayersEditable" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="SceneEditableObject" protection="0" />
-									</baseClasses>
-								</section>
-								<section name="InternalChildrenEditableEditable" fullname="o2::Widget::InternalChildrenEditableEditable" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
-									<sections />
-									<typedefs />
-									<usings />
-									<baseClasses>
-										<class name="SceneEditableObject" protection="0" />
-									</baseClasses>
-								</section>
-							</sections>
-							<typedefs />
-							<usings />
-							<baseClasses>
-								<class name="Actor" protection="0" />
-								<class name="SceneDrawable" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-				<section name="o2" fullname="o2">
-					<sections />
 					<typedefs />
 					<usings />
 				</section>
@@ -5852,6 +4996,863 @@
 							<typedefs />
 							<usings />
 							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetRef.h">
+		<date year="2020" month="2" day="20" hour="23" minute="56" second="3" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AssetRef" fullname="o2::AssetRef" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" fullname="o2::Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="Ref&lt;T, typename std::enable_if&lt;std::is_base_of&lt;Asset, T&gt;::value&gt;::type&gt;" newDef="_thisType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="AssetRef" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Math/Vector2.h">
+		<date year="2020" month="2" day="21" hour="0" minute="38" second="20" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Vec2" fullname="o2::Vec2" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Vec2&lt;float&gt;" newDef="Vec2F" />
+						<typedef what="Vec2&lt;int&gt;" newDef="Vec2I" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widget.h">
+		<date year="2020" month="2" day="23" hour="12" minute="41" second="16" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Widget" fullname="o2::Widget" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="LayersEditable" fullname="o2::Widget::LayersEditable" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="SceneEditableObject" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="InternalChildrenEditableEditable" fullname="o2::Widget::InternalChildrenEditableEditable" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="SceneEditableObject" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Actor" protection="0" />
+								<class name="SceneDrawable" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Reflection/Type.h">
+		<date year="2020" month="2" day="23" hour="12" minute="53" second="51" />
+		<globalNamespace name="" fullname="">
+			<sections />
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Serialization/DataNode.h">
+		<date year="2020" month="2" day="23" hour="13" minute="4" second="0" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Converter" fullname="o2::DataNode::Converter" isClass="true" isMeta="false" templates="typename _type, typename _enable = void" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="IsSupport" fullname="o2::DataNode::IsSupport" isClass="true" isMeta="false" templates="typename _type" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs>
+								<typedef what="Vector&lt;DataNode*&gt;::Iterator" newDef="Iterator" />
+								<typedef what="Vector&lt;DataNode*&gt;::ConstIterator" newDef="ConstIterator" />
+							</typedefs>
+							<usings />
+							<baseClasses />
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;DataNode&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings>
+								<typedef name="" />
+							</usings>
+							<baseClasses>
+								<class name="Converter&lt;char*&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings>
+								<typedef name="" />
+							</usings>
+							<baseClasses>
+								<class name="Converter&lt;wchar_t*&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;bool&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;int&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;float&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;UInt&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;UInt64&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;String&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;WString&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;UID&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;Vec2F&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;Vec2I&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;RectF&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;RectI&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;BorderF&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;BorderI&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;Color4&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="typename std::enable_if&lt;std::is_pointer&lt;T&gt;::value &amp;&amp; !std::is_const&lt;T&gt;::value &amp;&amp;&#10;  std::is_base_of&lt;o2::IObject, typename std::remove_pointer&lt;T&gt;::type&gt;::value&gt;::type&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="typename std::enable_if&lt;std::is_pointer&lt;T&gt;::value &amp;&amp; !std::is_const&lt;T&gt;::value &amp;&amp; &#10;  !std::is_base_of&lt;o2::IObject, typename std::remove_pointer&lt;T&gt;::type&gt;::value &amp;&amp; !std::is_same&lt;void*, T&gt;::value&gt;::type&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Converter&lt;Vector&lt;T&gt;&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename _key, typename _value" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="_value&gt;&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="typename std::enable_if&lt;std::is_enum&lt;T&gt;::value&gt;::type&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="typename std::enable_if&lt;IsProperty&lt;T&gt;::value&gt;::type&gt;" protection="1" />
+							</baseClasses>
+						</section>
+						<section name="DataNode" fullname="o2::DataNode" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="typename std::enable_if&lt;std::is_base_of&lt;IObject, T&gt;::value || std::is_same&lt;IObject, T&gt;::value&gt;::type&gt;" protection="1" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/Tree.h">
+		<date year="2020" month="2" day="23" hour="13" minute="18" second="26" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Tree" fullname="o2::Tree" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Node" fullname="o2::Tree::Node" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+								<section name="VisibleWidgetDef" fullname="o2::Tree::VisibleWidgetDef" isClass="true" isMeta="false" templates="" protection="2" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses />
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ScrollArea" protection="0" />
+								<class name="DragDropArea" protection="0" />
+								<class name="ISelectableDragableObjectsGroup" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="TreeNode" fullname="o2::TreeNode" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Widget" protection="0" />
+								<class name="SelectableDragableObject" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Types/CommonTypes.h">
+		<date year="2020" month="2" day="23" hour="13" minute="35" second="4" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections />
+					<typedefs>
+						<typedef what="unsigned long long" newDef="UInt64" />
+						<typedef what="unsigned short" newDef="UInt16" />
+						<typedef what="unsigned char" newDef="UInt8" />
+						<typedef what="long long" newDef="Int64" />
+						<typedef what="unsigned int" newDef="UInt" />
+						<typedef what="unsigned long" newDef="ULong" />
+						<typedef what="int" newDef="KeyboardKey" />
+						<typedef what="int" newDef="CursorId" />
+						<typedef what="UInt64" newDef="SceneUID" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/LongList.h">
+		<date year="2020" month="2" day="23" hour="14" minute="18" second="26" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="LongList" fullname="o2::LongList" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ScrollArea" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Asset.h">
+		<date year="2020" month="2" day="23" hour="23" minute="54" second="47" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Asset" fullname="o2::Asset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="AssetMeta" newDef="MetaType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="AssetWithDefaultMeta" fullname="o2::AssetWithDefaultMeta" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="DefaultAssetMeta&lt;T&gt;" newDef="Meta" />
+								<typedef what="Meta" newDef="MetaType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="Asset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FolderAsset.h">
+		<date year="2020" month="2" day="23" hour="23" minute="54" second="48" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="FolderAsset" fullname="o2::FolderAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;FolderAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;FolderAsset&gt;" newDef="FolderAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/ActorAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="ActorAsset" fullname="o2::ActorAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;ActorAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;ActorAsset&gt;" newDef="ActorAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AnimationAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AnimationAsset" fullname="o2::AnimationAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;AnimationAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;AnimationAsset&gt;" newDef="AnimationAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/AtlasAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AtlasAsset" fullname="o2::AtlasAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="PlatformMeta" fullname="o2::AtlasAsset::PlatformMeta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="Meta" fullname="o2::AtlasAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="DefaultAssetMeta&lt;AtlasAsset&gt;" protection="0" />
+									</baseClasses>
+								</section>
+								<section name="Page" fullname="o2::AtlasAsset::Page" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="ISerializable" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Asset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;AtlasAsset&gt;" newDef="AtlasAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BinaryAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="BinaryAsset" fullname="o2::BinaryAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;BinaryAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;BinaryAsset&gt;" newDef="BinaryAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/BitmapFontAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="BitmapFontAsset" fullname="o2::BitmapFontAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Meta" fullname="o2::BitmapFontAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="DefaultAssetMeta&lt;BitmapFontAsset&gt;" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="FontAsset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;BitmapFontAsset&gt;" newDef="BitmapFontAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/DataAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="DataAsset" fullname="o2::DataAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="AssetWithDefaultMeta&lt;DataAsset&gt;" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;DataAsset&gt;" newDef="DataAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/FontAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="FontAsset" fullname="o2::FontAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="Asset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;FontAsset&gt;" newDef="FontAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/VectorFontAsset.h">
+		<date year="2020" month="2" day="24" hour="23" minute="24" second="36" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="VectorFontAsset" fullname="o2::VectorFontAsset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections>
+								<section name="Meta" fullname="o2::VectorFontAsset::Meta" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+									<sections />
+									<typedefs />
+									<usings />
+									<baseClasses>
+										<class name="DefaultAssetMeta&lt;VectorFontAsset&gt;" protection="0" />
+									</baseClasses>
+								</section>
+							</sections>
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="FontAsset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs>
+						<typedef what="Ref&lt;VectorFontAsset&gt;" newDef="VectorFontAssetRef" />
+					</typedefs>
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/AssetInfo.h">
+		<date year="2020" month="2" day="25" hour="20" minute="52" second="5" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="AssetInfo" fullname="o2::AssetInfo" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Scene/UI/Widgets/GridLayoutScrollArea.h">
+		<date year="2020" month="2" day="25" hour="22" minute="43" second="13" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="GridLayoutScrollArea" fullname="o2::GridLayoutScrollArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ScrollArea" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Utils/Editor/DragAndDrop.h">
+		<date year="2020" month="2" day="25" hour="23" minute="44" second="47" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="DragDropArea" fullname="o2::DragDropArea" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="CursorAreaEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="DragableObject" fullname="o2::DragableObject" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="CursorAreaEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="ISelectableDragableObjectsGroup" fullname="o2::ISelectableDragableObjectsGroup" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="CursorAreaEventsListener" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="SelectableDragableObjectsGroup" fullname="o2::SelectableDragableObjectsGroup" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="ISelectableDragableObjectsGroup" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="SelectableDragableObject" fullname="o2::SelectableDragableObject" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs />
+							<usings />
+							<baseClasses>
+								<class name="DragableObject" protection="0" />
+							</baseClasses>
 						</section>
 					</sections>
 					<typedefs />

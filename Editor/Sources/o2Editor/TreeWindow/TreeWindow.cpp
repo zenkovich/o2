@@ -51,9 +51,9 @@ namespace Editor
 		return mSceneTree;
 	}
 
-	void TreeWindow::HightlightObjectTreeNode(SceneEditableObject* targetObject)
+	void TreeWindow::HighlightObjectTreeNode(SceneEditableObject* targetObject)
 	{
-		mSceneTree->ScrollToAndHightlight(targetObject);
+		mSceneTree->ScrollToAndHighlight(targetObject);
 	}
 
 	void TreeWindow::SetWidgetsLayersVisible(bool visible)
@@ -354,7 +354,7 @@ namespace Editor
 		bool canCreateUILayers = false;
 		if (node)
 		{
-			SceneEditableObject* object = node->GetObject();
+			SceneEditableObject* object = (SceneEditableObject*)node->GetObject();
 			canCreateUILayers = dynamic_cast<WidgetLayer*>(object) != nullptr ||
 				dynamic_cast<Widget::LayersEditable*>(object) != nullptr ||
 				dynamic_cast<Widget*>(object) != nullptr;
@@ -406,7 +406,7 @@ namespace Editor
 
 		newObject->UpdateTransform();
 
-		mSceneTree->ScrollToAndHightlight(newObject);
+		mSceneTree->ScrollToAndHighlight(newObject);
 		o2EditorSceneScreen.SelectObjectWithoutAction(newObject, false);
 	}
 

@@ -20,6 +20,12 @@ namespace o2
 		// Returns extensions string
 		const char* GetFileExtensions() const override;
 
+		// Returns editor icon
+		static String GetEditorIcon() { return "ui/UI4_big_text_file_icon.png"; }
+
+		// Returns editor sorting weight
+		static int GetEditorSorting() { return 94; }
+
 		SERIALIZABLE(DataAsset);
 
 	protected:
@@ -55,6 +61,8 @@ CLASS_METHODS_META(o2::DataAsset)
 {
 
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
+	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 }

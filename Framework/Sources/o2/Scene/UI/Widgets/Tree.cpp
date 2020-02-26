@@ -72,7 +72,7 @@ namespace o2
 		SetExpanded(false, forcible);
 	}
 
-	UnknownPtr TreeNode::GetObject() const
+	void* TreeNode::GetObject() const
 	{
 		return mNodeDef->object;
 	}
@@ -335,7 +335,7 @@ namespace o2
 			if (!mHighlightAnim.IsPlaying())
 			{
 				mHighlighNode = nullptr;
-				mHighlightObject = UnknownPtr();
+				mHighlightObject = nullptr;
 			}
 		}
 		else mHighlightSprite->transparency = 0.0f;
@@ -355,27 +355,27 @@ namespace o2
 		UpdateVisibleNodes();
 	}
 
-	UnknownPtr Tree::GetObjectParent(UnknownPtr object)
+	void* Tree::GetObjectParent(void* object)
 	{
 		return getObjectParentDelegate(object);
 	}
 
-	Vector<UnknownPtr> Tree::GetObjectChilds(UnknownPtr object)
+	Vector<void*> Tree::GetObjectChilds(void* object)
 	{
 		return getObjectChildrenDelegate(object);
 	}
 
-	String Tree::GetObjectDebug(UnknownPtr object)
+	String Tree::GetObjectDebug(void* object)
 	{
 		return getDebugForObject(object);
 	}
 
-	void Tree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
+	void Tree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
 	{
 		fillNodeDataByObjectDelegate(nodeWidget, object);
 	}
 
-	void Tree::FreeNodeData(TreeNode* nodeWidget, UnknownPtr object)
+	void Tree::FreeNodeData(TreeNode* nodeWidget, void* object)
 	{
 		freeNodeDataDelegate(nodeWidget, object);
 	}
@@ -390,12 +390,12 @@ namespace o2
 		onNodeRightButtonClicked(nodeWidget);
 	}
 
-	void Tree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
+	void Tree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
 		onObjectsSelectionChanged(objects);
 	}
 
-	void Tree::OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject)
+	void Tree::OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject)
 	{
 		onDraggedObjects(objects, newParent, prevObject);
 	}
@@ -577,7 +577,7 @@ namespace o2
 		else mIsNeedUpdateView = true;
 	}
 
-	TreeNode* Tree::GetNode(UnknownPtr object)
+	TreeNode* Tree::GetNode(void* object)
 	{
 		Node* fnd = mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
 		if (fnd)
@@ -617,12 +617,12 @@ namespace o2
 		}
 	}
 
-	Vector<UnknownPtr> Tree::GetSelectedObjects() const
+	Vector<void*> Tree::GetSelectedObjects() const
 	{
 		return mSelectedObjects;
 	}
 
-	void Tree::SetSelectedObjects(const Vector<UnknownPtr>& objects)
+	void Tree::SetSelectedObjects(const Vector<void*>& objects)
 	{
 		for (auto sel : mSelectedNodes)
 			sel->SetSelected(false);
@@ -647,7 +647,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void Tree::SelectObject(UnknownPtr object)
+	void Tree::SelectObject(void* object)
 	{
 		if (!mMultiSelectAvailable)
 			DeselectAllObjects();
@@ -670,15 +670,15 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void Tree::SelectAndHightlightObject(UnknownPtr object)
+	void Tree::SelectAndHighlightObject(void* object)
 	{
 		DeselectAllObjects();
 		UpdateNodesStructure();
-		ScrollToAndHightlight(object);
+		ScrollToAndHighlight(object);
 		SelectObject(object);
 	}
 
-	void Tree::DeselectObject(UnknownPtr object)
+	void Tree::DeselectObject(void* object)
 	{
 		int idx = mSelectedNodes.FindIdx([&](auto x) { return x->object == object; });
 
@@ -703,7 +703,7 @@ namespace o2
 		OnSelectionChanged();
 	}
 
-	void Tree::ScrollTo(UnknownPtr object)
+	void Tree::ScrollTo(void* object)
 	{
 		if (!object)
 		{
@@ -719,7 +719,7 @@ namespace o2
 			SetScroll(Vec2F(mScrollPos.x, (float)idx*mNodeWidgetSample->layout->minHeight - layout->height*0.5f));
 	}
 
-	void Tree::ScrollToAndHightlight(UnknownPtr object)
+	void Tree::ScrollToAndHighlight(void* object)
 	{
 		if (!object)
 		{
@@ -743,10 +743,10 @@ namespace o2
 		}
 	}
 
-	void Tree::ExpandParentObjects(UnknownPtr object)
+	void Tree::ExpandParentObjects(void* object)
 	{
-		Vector<UnknownPtr> parentsStack;
-		UnknownPtr current = GetObjectParent(object);
+		Vector<void*> parentsStack;
+		void* current = GetObjectParent(object);
 		while (current)
 		{
 			parentsStack.Add(current);
@@ -776,17 +776,17 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void Tree::OnObjectCreated(UnknownPtr object, UnknownPtr parent)
+	void Tree::OnObjectCreated(void* object, void* parent)
 	{
 		mIsNeedUpdateView = true;
 	}
 
-	void Tree::OnObjectRemoved(UnknownPtr object)
+	void Tree::OnObjectRemoved(void* object)
 	{
 		mIsNeedUpdateView = true;
 	}
 
-	void Tree::OnObjectsChanged(const Vector<UnknownPtr>& objects)
+	void Tree::OnObjectsChanged(const Vector<void*>& objects)
 	{
 		for (auto object : objects)
 		{
@@ -813,7 +813,7 @@ namespace o2
 				child->SetLayoutDirty();
 		}
 
-		Vector<UnknownPtr> rootObjects = GetObjectChilds(UnknownPtr());
+		Vector<void*> rootObjects = GetObjectChilds(nullptr);
 
 		mVisibleWidgetsCache.Clear();
 		for (auto node : mVisibleNodes)
@@ -888,7 +888,7 @@ namespace o2
 		mAllNodes.RemoveRange(begin, end);
 	}
 
-	Tree::Node* Tree::CreateNode(UnknownPtr object, Node* parent)
+	Tree::Node* Tree::CreateNode(void* object, Node* parent)
 	{
 		Node* node = mNodesBuf.IsEmpty() ? mnew Node() : mNodesBuf.PopBack();
 		node->childs.Clear();
@@ -1663,9 +1663,9 @@ namespace o2
 		EndDragging(true);
 		OnSelectionChanged();
 
-		Vector<UnknownPtr> objects;
-		UnknownPtr targetParent = UnknownPtr();
-		UnknownPtr targetPrevObject = UnknownPtr();
+		Vector<void*> objects;
+		void* targetParent = nullptr;
+		void* targetPrevObject = nullptr;
 		Node* insertNodeCandidate = mInsertNodeCandidate ? mInsertNodeCandidate->mNodeDef : nullptr;
 
 		if (underCursorItem)
@@ -1674,7 +1674,7 @@ namespace o2
 		{
 			if (insertNodeCandidate)
 			{
-				targetParent = insertNodeCandidate->parent ? insertNodeCandidate->parent->object : UnknownPtr();
+				targetParent = insertNodeCandidate->parent ? insertNodeCandidate->parent->object : nullptr;
 				auto parentChilds = GetObjectChilds(targetParent);
 
 				int idx = parentChilds.Find(insertNodeCandidate->object);
@@ -1686,21 +1686,21 @@ namespace o2
 						targetPrevObject = parentChilds[idx - 2];
 				}
 				else
-					targetPrevObject = UnknownPtr();
+					targetPrevObject = nullptr;
 			}
 			else
 			{
-				auto rootObjects = GetObjectChilds(UnknownPtr());
+				auto rootObjects = GetObjectChilds(nullptr);
 				if (rootObjects.Count() > 0)
 				{
 					targetPrevObject = rootObjects.Last();
 
-					if (mSelectedObjects.ContainsPred([&](Node* x) { return x->object == targetPrevObject; }))
+					if (mSelectedObjects.ContainsPred([&](void* x) { return ((Node*)x)->object == targetPrevObject; }))
 					{
 						if (rootObjects.Count() > 1)
 							targetPrevObject = rootObjects[rootObjects.Count() - 2];
 						else
-							targetPrevObject = UnknownPtr();
+							targetPrevObject = nullptr;
 					}
 				}
 			}
@@ -1710,7 +1710,7 @@ namespace o2
 		{
 			bool processing = true;
 
-			UnknownPtr parent = GetObjectParent(sel);
+			void* parent = GetObjectParent(sel);
 			while (parent)
 			{
 				if (mSelectedObjects.Contains(parent))
@@ -1759,18 +1759,18 @@ namespace o2
 		return mHoverDrawable;
 	}
 
-	Sprite* Tree::GetHightlightDrawable() const
+	Sprite* Tree::GetHighlightDrawable() const
 	{
 		return mHighlightSprite;
 	}
 
-	void Tree::SetHightlightAnimation(const Animation& animation)
+	void Tree::SetHighlightAnimation(const Animation& animation)
 	{
 		mHighlightAnim.SetTarget(mHighlightSprite);
 		mHighlightAnim = animation;
 	}
 
-	void Tree::SetHightlightLayout(const Layout& layout)
+	void Tree::SetHighlightLayout(const Layout& layout)
 	{
 		mHighlightLayout = layout;
 	}
@@ -1808,7 +1808,7 @@ namespace o2
 		{
 			if (!mSelectedObjects.IsEmpty())
 			{
-				UnknownPtr lastSelected = mSelectedObjects.Last();
+				void* lastSelected = mSelectedObjects.Last();
 				DeselectAllObjects();
 				SelectObject(lastSelected);
 			}

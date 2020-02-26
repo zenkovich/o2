@@ -36,12 +36,6 @@ namespace Editor
 		void RebuildTreeMenuButton();
 		void RebuildFoldersTree();
 		void RebuildRegularAssetIcon();
-		void RebuildFolderAssetIcon();
-		void RebuildPrototypeAssetIcon();
-		void RebuildPrefabPreviewAssetIcon();
-		void RebuildImagePreviewAssetIcon();
-		void RebuildTextAssetIcon();
-		void RebuildAnimationAssetIcon();
 		void RebuildAssetsGridScroll();
 		void RebuildLinkBtn();
 		void RebuildSinglelineEditboxProperty();
@@ -259,12 +253,6 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildTreeMenuButton);
 	PUBLIC_FUNCTION(void, RebuildFoldersTree);
 	PUBLIC_FUNCTION(void, RebuildRegularAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildFolderAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildPrototypeAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildPrefabPreviewAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildImagePreviewAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildTextAssetIcon);
-	PUBLIC_FUNCTION(void, RebuildAnimationAssetIcon);
 	PUBLIC_FUNCTION(void, RebuildAssetsGridScroll);
 	PUBLIC_FUNCTION(void, RebuildLinkBtn);
 	PUBLIC_FUNCTION(void, RebuildSinglelineEditboxProperty);

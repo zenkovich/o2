@@ -191,7 +191,7 @@ namespace Editor
 				if (ownerActor->IsAsset())
 					o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(ownerActor->GetAssetID()));
 				else if (ownerActor->IsOnScene())
-					o2EditorTree.HightlightObjectTreeNode(ownerActor);
+					o2EditorTree.HighlightObjectTreeNode(ownerActor);
 			}
 		}
 	}
@@ -267,7 +267,7 @@ namespace Editor
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
 
-		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last().meta->ID());
+		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last()->meta->ID());
 		SetValueByUser(actor->GetComponent(mComponentType));
 
 		o2Application.SetCursor(CursorType::Arrow);
@@ -279,7 +279,7 @@ namespace Editor
 		if (assetsIconsScroll->GetSelectedAssets().Count() > 1)
 			return;
 
-		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last().meta->ID());
+		auto actor = o2Scene.GetAssetActorByID(assetsIconsScroll->GetSelectedAssets().Last()->meta->ID());
 		if (actor)
 		{
 			auto component = actor->GetComponent(mComponentType);

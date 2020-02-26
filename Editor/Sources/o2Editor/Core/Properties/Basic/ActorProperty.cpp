@@ -174,7 +174,7 @@ namespace Editor
 			if (mCommonValue->IsAsset())
 				o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(mCommonValue->GetAssetID()));
 			else if (mCommonValue->IsOnScene())
-				o2EditorTree.HightlightObjectTreeNode(mCommonValue);
+				o2EditorTree.HighlightObjectTreeNode(mCommonValue);
 		}
 	}
 
@@ -243,10 +243,10 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.meta->GetAssetType() != &TypeOf(ActorAsset))
+		if (lastSelectedAsset->meta->GetAssetType() != &TypeOf(ActorAsset))
 			return;
 
-		SetValueByUser(o2Scene.GetAssetActorByID(lastSelectedAsset.meta->ID()));
+		SetValueByUser(o2Scene.GetAssetActorByID(lastSelectedAsset->meta->ID()));
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();
@@ -258,7 +258,7 @@ namespace Editor
 			return;
 
 		auto lastSelectedAsset = assetsIconsScroll->GetSelectedAssets().Last();
-		if (lastSelectedAsset.meta->GetAssetType() != &TypeOf(ActorAsset))
+		if (lastSelectedAsset->meta->GetAssetType() != &TypeOf(ActorAsset))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);

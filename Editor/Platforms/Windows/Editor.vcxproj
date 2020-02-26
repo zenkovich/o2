@@ -453,6 +453,8 @@
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h" />
@@ -567,6 +569,8 @@
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp" />

@@ -33,8 +33,8 @@ namespace Editor
 		// Returns actors tree widget
 		SceneTree* GetSceneTree() const;
 
-		// Expands all actor's parents nodes in tree and hightlights actor
-		void HightlightObjectTreeNode(SceneEditableObject* targetObject);
+		// Expands all actor's parents nodes in tree and highlights actor
+		void HighlightObjectTreeNode(SceneEditableObject* targetObject);
 
 		// Sets widgets layers visibility in hierarchy
 		void SetWidgetsLayersVisible(bool visible);
@@ -197,7 +197,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
 {
 
 	PUBLIC_FUNCTION(SceneTree*, GetSceneTree);
-	PUBLIC_FUNCTION(void, HightlightObjectTreeNode, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, HighlightObjectTreeNode, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, SetWidgetsLayersVisible, bool);
 	PUBLIC_FUNCTION(bool, IsWidgetsLayersVisible);
 	PUBLIC_FUNCTION(void, SetWidgetsInternalChildrenVisible, bool);

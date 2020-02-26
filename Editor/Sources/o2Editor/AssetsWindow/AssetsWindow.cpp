@@ -40,7 +40,7 @@ namespace Editor
 
 	void AssetsWindow::InitializeWindow()
 	{
-		o2Assets.onAssetsRebuilt += THIS_FUNC(OnAssetsRebuilded);
+		o2Assets.onAssetsRebuilt += THIS_FUNC(OnAssetsRebuilt);
 
 		mWindow->caption = "Assets";
 		mWindow->name = "assets window";
@@ -248,7 +248,7 @@ namespace Editor
 		mAssetsGridScroll->DeselectAllAssets();
 	}
 
-	Vector<AssetInfo> AssetsWindow::GetSelectedAssets() const
+	const Vector<const AssetInfo*>& AssetsWindow::GetSelectedAssets() const
 	{
 		return mAssetsGridScroll->GetSelectedAssets();
 	}
@@ -273,7 +273,7 @@ namespace Editor
 		if (GetOpenedFolderPath() != folder)
 			OpenFolder(folder);
 
-		mAssetsGridScroll->HightlightAsset(id);
+		mAssetsGridScroll->HighlightAsset(id);
 	}
 
 	void AssetsWindow::ShowAssetIcon(const String& path)
@@ -284,7 +284,7 @@ namespace Editor
 		if (GetOpenedFolderPath() != folder)
 			OpenFolder(folder);
 
-		mAssetsGridScroll->HightlightAsset(assetId);
+		mAssetsGridScroll->HighlightAsset(assetId);
 	}
 
 	void AssetsWindow::CopyAssets(const Vector<String>& assetsPaths)
@@ -394,38 +394,6 @@ namespace Editor
 		o2Assets.RebuildAssets();
 	}
 
-	void AssetsWindow::ImportAssets(const String& targetPath)
-	{
-
-	}
-
-	void AssetsWindow::CreateFolderAsset(const String& targetPath, const String& name)
-	{
-		FolderAssetRef folderAsset = FolderAssetRef::CreateAsset();
-		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/" + name));
-	}
-
-	void AssetsWindow::CreatePrefabAsset(const String& targetPath)
-	{
-		ActorAssetRef folderAsset = ActorAssetRef::CreateAsset();
-		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New prototye.proto"));
-
-		o2Assets.RebuildAssets();
-	}
-
-	void AssetsWindow::CreateScriptAsset(const String& targetPath)
-	{
-
-	}
-
-	void AssetsWindow::CreateAnimationAsset(const String& targetPath)
-	{
-		AnimationAssetRef folderAsset = AnimationAssetRef::CreateAsset();
-		folderAsset->Save(o2Assets.MakeUniqueAssetName(targetPath + "/New animation.anim"));
-
-		o2Assets.RebuildAssets();
-	}
-
 	Sprite* AssetsWindow::GetAssetIconSprite(const AssetRef& asset)
 	{
 		const Type& type = asset->GetType();
@@ -460,12 +428,12 @@ namespace Editor
 			mFoldersTreeShowAnim.PlayBack();
 	}
 
-	void AssetsWindow::OnAssetsRebuilded(const Vector<UID>& changedAssets)
+	void AssetsWindow::OnAssetsRebuilt(const Vector<UID>& changedAssets)
 	{
 		mFoldersTree->UpdateView();
 		mFoldersTree->SelectAndExpandFolder(mAssetsGridScroll->GetViewingPath());
 
-		mAssetsGridScroll->UpdateAssetsGridByCurrentPath();
+		mAssetsGridScroll->UpdateAssetsByCurrentPath();
 	}
 }
 

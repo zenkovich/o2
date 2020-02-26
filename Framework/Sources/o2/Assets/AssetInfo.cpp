@@ -15,6 +15,10 @@ namespace o2
 		ownChildren(false), children(other.children)
 	{}
 
+	AssetInfo::AssetInfo(AssetMeta* meta):
+		meta(meta)
+	{}
+
 	AssetInfo::~AssetInfo()
 	{
 		if (meta)
@@ -121,7 +125,7 @@ namespace o2
 		return meta && meta->ID() != UID::empty;
 	}
 
-	AssetInfo AssetInfo::empty;
+	AssetInfo AssetInfo::empty = AssetInfo(mnew AssetMeta());
 
 	bool AssetInfo::operator==(const AssetInfo& other) const
 	{

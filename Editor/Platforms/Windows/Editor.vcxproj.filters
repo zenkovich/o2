@@ -321,6 +321,12 @@
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h">
 			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h">
 			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
 		</ClInclude>
@@ -658,6 +664,12 @@
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
 			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp">
 			<Filter>Sources\o2Editor\PropertiesWindow</Filter>

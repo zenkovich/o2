@@ -3,8 +3,10 @@
 
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
-#include "o2Editor/PropertiesWindow/IPropertiesViewer.h"
+#include "o2Editor/Core/Properties/ObjectViewers/DefaultObjectViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/PropertiesWindow/DefaultPropertiesViewer.h"
+#include "o2Editor/PropertiesWindow/IPropertiesViewer.h"
 
 
 DECLARE_SINGLETON(Editor::PropertiesWindow);
@@ -57,9 +59,12 @@ namespace Editor
 	void PropertiesWindow::InitializeViewers()
 	{
 		auto viewersTypes = TypeOf(IPropertiesViewer).GetDerivedTypes();
+		viewersTypes.Remove(&TypeOf(DefaultPropertiesViewer));
 
 		for (auto type : viewersTypes)
 			mViewers.Add((IPropertiesViewer*)type->CreateSample());
+
+		mDefaultViewer = mnew DefaultPropertiesViewer();
 	}
 
 	void PropertiesWindow::OnPrivateFieldsVisibleChanged(bool visible)
@@ -94,6 +99,9 @@ namespace Editor
 			auto type = &targets[0]->GetType();
 			objectViewer = mViewers.FindMatch([&](auto x) { return type->IsBasedOn(*x->GetViewingObjectType()); });
 		}
+
+		if (!objectViewer)
+			objectViewer = mDefaultViewer;
 
 		if (objectViewer != mCurrentViewer)
 		{

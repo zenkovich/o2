@@ -225,6 +225,9 @@ public:
 	// Returns comment in section
 	virtual const SyntaxCommentsVec& GetComments() const;
 
+	// Returns comment above or on this line
+	SyntaxComment* FindCommentNearLine(int line) const;
+
 	// Returns all inside sections
 	virtual SyntaxSectionsVec GetAllSections() const;
 

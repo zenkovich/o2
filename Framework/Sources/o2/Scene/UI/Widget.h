@@ -416,25 +416,26 @@ namespace o2
 		// It is called when deserialized
 		void OnDeserialized(const DataNode& node) override;
 
-		friend class Scene;
 		friend class ContextMenu;
 		friend class CustomDropDown;
 		friend class CustomList;
 		friend class DropDown;
 		friend class EditBox;
 		friend class GridLayout;
+		friend class GridLayoutScrollArea;
 		friend class HorizontalLayout;
 		friend class HorizontalProgress;
 		friend class HorizontalScrollBar;
 		friend class Label;
 		friend class List;
 		friend class LongList;
-		friend class UIManager;
 		friend class MenuPanel;
+		friend class Scene;
 		friend class ScrollArea;
 		friend class Spoiler;
 		friend class Tree;
 		friend class TreeNode;
+		friend class UIManager;
 		friend class VerticalLayout;
 		friend class VerticalProgress;
 		friend class VerticalScrollBar;

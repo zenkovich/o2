@@ -1,13 +1,13 @@
 #pragma once
 
-#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/AssetInfo.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
-#include "o2/Scene/UI/Widgets/ScrollArea.h"
-#include "o2/Utils/Types/Containers/Pair.h"
+#include "o2/Scene/UI/Widgets/GridLayoutScrollArea.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
+#include "o2/Utils/Types/Containers/Pair.h"
 
 using namespace o2;
 
@@ -30,7 +30,7 @@ namespace Editor
 	// ------------------------
 	// Assets icons scroll area
 	// ------------------------
-	class AssetsIconsScrollArea: public ScrollArea, public DragDropArea, public KeyboardEventsListener, 
+	class AssetsIconsScrollArea: public GridLayoutScrollArea, public DragDropArea, public KeyboardEventsListener, 
 		public ISelectableDragableObjectsGroup
 	{
 	public:
@@ -59,16 +59,16 @@ namespace Editor
 		void SetViewingPath(const String& path);
 
 		// Returns viewing path
-		String GetViewingPath() const;
+		const String& GetViewingPath() const;
 
 		// Updates assets path contents
-		void UpdateAssetsGridByCurrentPath();
+		void UpdateAssetsByCurrentPath();
 
 		// Returns is this widget can be selected
 		bool IsFocusable() const;
 
-		// Hightlights asset
-		void HightlightAsset(const UID& id);
+		// Highlights asset
+		void HighlightAsset(const UID& id);
 
 		// Selects asset
 		void SelectAsset(const UID& id, bool scroll = true);
@@ -77,19 +77,19 @@ namespace Editor
 		void DeselectAllAssets();
 
 		// Returns selected assets infos
-		Vector<AssetInfo> GetSelectedAssets() const;
+		const Vector<const AssetInfo*>& GetSelectedAssets() const;
 
 		// Return asset icon under point
 		AssetIcon* GetIconUnderPoint(const Vec2F& point) const;
 
-		// Returns node hightlight drawable
-		Sprite* GetHightlightDrawable() const;
+		// Returns node highlight drawable
+		Sprite* GetHighlightDrawable() const;
 
-		// Sets hightlight animation
-		void SetHightlightAnimation(const Animation& animation);
+		// Sets highlight animation
+		void SetHighlightAnimation(const Animation& animation);
 
-		// Sets hightlight layout
-		void SetHightlightLayout(const Layout& layout);
+		// Sets highlight layout
+		void SetHighlightLayout(const Layout& layout);
 
 		// Returns selecting rectangle drawable
 		Sprite* GetSelectingDrawable() const;
@@ -112,24 +112,26 @@ namespace Editor
 		const Vec2F mAssetIconSize = Vec2F(50, 60);
 						        
 		String mCurrentPath = "_"; // Current viewing path
-						        
-		GridLayout*  mGrid = nullptr;        // Assets icons grid
+
+		Vector<const AssetInfo*> mAssetInfos;        // Asset infos in path @IGNORE
+		Vector<AssetIcon*>       mVisibleAssetIcons; // Visible asset icons
+
 		ContextMenu* mContextMenu = nullptr; // Assets Context menu
 						        
-		Vector<AssetIcon*> mSelectedAssetsIcons;     // Selected assets icons
-		Vector<AssetRef*>  mSelectedPreloadedAssets; // Preloaded selected assets
+		Vector<const AssetInfo*> mSelectedAssets;          // Selected assets icons @IGNORE
+		Vector<AssetRef*>        mSelectedPreloadedAssets; // Preloaded selected assets
 						        
-		AssetIcon* mHightlightIcon = nullptr;   // Current highlighting asset icon
-		Animation  mHightlightAnim;             // Icon highlight animation @SERIALIZABLE
-		Sprite*    mHightlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
-		Layout     mHightlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
+		AssetIcon* mHighlightIcon = nullptr;   // Current highlighting asset icon
+		Animation  mHighlightAnim;             // Icon highlight animation @SERIALIZABLE
+		Sprite*    mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
+		Layout     mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
 						        
 		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
 						        
-		Sprite*            mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
-		bool               mSelecting = false;          // Is selecting icons 
-		Vec2F              mPressedPoint;               // Pressed point
-		Vector<AssetIcon*> mCurrentSelectingIcons;      // Selecting icons at current selection
+		Sprite*                  mSelectionSprite = nullptr;  // Icons selection rectangle sprite @SERIALIZABLE
+		bool                     mSelecting = false;          // Is selecting icons 
+		Vec2F                    mPressedPoint;               // Pressed point
+		Vector<const AssetInfo*> mCurrentSelectingInfos;      // Selecting icons at current selection @IGNORE
 						        
 		bool                         mIsDraggingIcons = false;      // Is dragging icons
 		bool                         mDragEnded = false;            // Is dragging ended
@@ -146,6 +148,18 @@ namespace Editor
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
+
+		// Returns items count, calls getItemsCountFunc
+		int GetItemsCount() const override;
+
+		// Returns items in range from start to end, calls getItemsRangeFunc
+		Vector<void*> GetItemsRange(int start, int end) const override;
+
+		// Sets item widget, calls setupItemFunc
+		void SetupItemWidget(Widget* widget, void* item) override;
+
+		// Updates visible items
+		void UpdateVisibleItems() override;
 
 		// It is called when widget was selected
 		void OnFocused() override;
@@ -198,8 +212,8 @@ namespace Editor
 		// Initializes assets context menu
 		void InitializeContext();
 
-		// Prepares icons pools
-		void PrepareIconsPools();
+		// Initializes assets create context menu
+		void InitializeCreateContext();
 
 		// Returns asset icon from pool or creates new by style name
 		AssetIcon* GetAssetIconFromPool(const String& style);
@@ -207,11 +221,8 @@ namespace Editor
 		// Frees icon to pool
 		void FreeAssetIconToPool(AssetIcon* icon);
 
-		// Returns image asset icon for asset
-		AssetIcon* GetImageAssetIcon(const AssetInfo& asset);
-
-		// Updates assets grid size
-		void UpdateAssetsGridSize();
+		// Returns asset icon if visible
+		AssetIcon* FindVisibleIcon(const AssetInfo* info);
 
 		// It is called when asset icon double clicked, starting editing name
 		void OnAssetDblClick(AssetIcon* icon);
@@ -237,20 +248,11 @@ namespace Editor
 		// It is called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// It is called when context import pressed
-		void OnContextImportPressed();
+		// It is called when context create asset pressed
+		void OnContextCreateAssetPressed(const Type* assetType);
 
 		// It is called when context create folder pressed
 		void OnContextCreateFolderPressed();
-
-		// It is called when context create prefab pressed
-		void OnContextCreatePrefabPressed();
-
-		// It is called when context create script pressed
-		void OnContextCreateScriptPressed();
-
-		// It is called when context create animation pressed
-		void OnContextCreateAnimationPressed();
 
 		// Instantiates dragging assets
 		void InstantiateDraggingAssets();
@@ -258,7 +260,7 @@ namespace Editor
 		// Removes and clears instantiated dragging assets
 		void ClearInstantiatedDraggingAssets();
 
-		// Instentiates actor from asset info
+		// Instantiate actor from asset info
 		Actor* InstantiateAsset(const AssetInfo& assetInfo);
 
 		// Dummy asset instantiate function from asset
@@ -346,7 +348,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::AssetsIconsScrollArea)
 {
-	BASE_CLASS(o2::ScrollArea);
+	BASE_CLASS(o2::GridLayoutScrollArea);
 	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::ISelectableDragableObjectsGroup);
@@ -357,19 +359,17 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FIELD(onAssetsSelected);
 	PROTECTED_FIELD(mAssetIconSize);
 	PROTECTED_FIELD(mCurrentPath);
-	PROTECTED_FIELD(mGrid);
+	PROTECTED_FIELD(mVisibleAssetIcons);
 	PROTECTED_FIELD(mContextMenu);
-	PROTECTED_FIELD(mSelectedAssetsIcons);
 	PROTECTED_FIELD(mSelectedPreloadedAssets);
-	PROTECTED_FIELD(mHightlightIcon);
-	PROTECTED_FIELD(mHightlightAnim).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightSprite).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHightlightLayout).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlightIcon);
+	PROTECTED_FIELD(mHighlightAnim).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlightSprite).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlightLayout).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mIconsPool);
 	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSelecting);
 	PROTECTED_FIELD(mPressedPoint);
-	PROTECTED_FIELD(mCurrentSelectingIcons);
 	PROTECTED_FIELD(mIsDraggingIcons);
 	PROTECTED_FIELD(mDragEnded);
 	PROTECTED_FIELD(mDragIcon);
@@ -386,23 +386,27 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetViewingPath, const String&);
-	PUBLIC_FUNCTION(String, GetViewingPath);
-	PUBLIC_FUNCTION(void, UpdateAssetsGridByCurrentPath);
+	PUBLIC_FUNCTION(const String&, GetViewingPath);
+	PUBLIC_FUNCTION(void, UpdateAssetsByCurrentPath);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(void, HightlightAsset, const UID&);
+	PUBLIC_FUNCTION(void, HighlightAsset, const UID&);
 	PUBLIC_FUNCTION(void, SelectAsset, const UID&, bool);
 	PUBLIC_FUNCTION(void, DeselectAllAssets);
-	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
+	PUBLIC_FUNCTION(const Vector<const AssetInfo*>&, GetSelectedAssets);
 	PUBLIC_FUNCTION(AssetIcon*, GetIconUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(Sprite*, GetHightlightDrawable);
-	PUBLIC_FUNCTION(void, SetHightlightAnimation, const Animation&);
-	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
+	PUBLIC_FUNCTION(Sprite*, GetHighlightDrawable);
+	PUBLIC_FUNCTION(void, SetHighlightAnimation, const Animation&);
+	PUBLIC_FUNCTION(void, SetHighlightLayout, const Layout&);
 	PUBLIC_FUNCTION(Sprite*, GetSelectingDrawable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(int, GetItemsCount);
+	PROTECTED_FUNCTION(Vector<void*>, GetItemsRange, int, int);
+	PROTECTED_FUNCTION(void, SetupItemWidget, Widget*, void*);
+	PROTECTED_FUNCTION(void, UpdateVisibleItems);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -420,11 +424,10 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, CompleteSelecting);
 	PROTECTED_FUNCTION(void, RegObjectsCreationAction);
 	PROTECTED_FUNCTION(void, InitializeContext);
-	PROTECTED_FUNCTION(void, PrepareIconsPools);
+	PROTECTED_FUNCTION(void, InitializeCreateContext);
 	PROTECTED_FUNCTION(AssetIcon*, GetAssetIconFromPool, const String&);
 	PROTECTED_FUNCTION(void, FreeAssetIconToPool, AssetIcon*);
-	PROTECTED_FUNCTION(AssetIcon*, GetImageAssetIcon, const AssetInfo&);
-	PROTECTED_FUNCTION(void, UpdateAssetsGridSize);
+	PROTECTED_FUNCTION(AssetIcon*, FindVisibleIcon, const AssetInfo*);
 	PROTECTED_FUNCTION(void, OnAssetDblClick, AssetIcon*);
 	PROTECTED_FUNCTION(void, StartAssetRenaming, AssetIcon*, const String&, const Function<void(const String&)>&);
 	PROTECTED_FUNCTION(void, OnContextCopyPressed);
@@ -433,11 +436,8 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, OnContextDeletePressed);
 	PROTECTED_FUNCTION(void, OnContextOpenPressed);
 	PROTECTED_FUNCTION(void, OnContextShowInExplorerPressed);
-	PROTECTED_FUNCTION(void, OnContextImportPressed);
+	PROTECTED_FUNCTION(void, OnContextCreateAssetPressed, const Type*);
 	PROTECTED_FUNCTION(void, OnContextCreateFolderPressed);
-	PROTECTED_FUNCTION(void, OnContextCreatePrefabPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateScriptPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateAnimationPressed);
 	PROTECTED_FUNCTION(void, InstantiateDraggingAssets);
 	PROTECTED_FUNCTION(void, ClearInstantiatedDraggingAssets);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const AssetInfo&);

@@ -131,6 +131,16 @@ namespace o2
 		return mAssetPtr != nullptr;
 	}
 
+	Asset* AssetRef::Get()
+	{
+		return mAssetPtr;
+	}
+
+	const Asset* AssetRef::Get() const
+	{
+		return mAssetPtr;
+	}
+
 	const Type& AssetRef::GetAssetType() const
 	{
 		return TypeOf(Asset);

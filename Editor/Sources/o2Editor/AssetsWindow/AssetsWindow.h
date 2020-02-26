@@ -56,6 +56,12 @@ namespace Editor
 		// Selects assets by paths
 		void SelectAssets(const Vector<String>& paths);
 
+		// Deselects all assets
+		void DeselectAssets();
+
+		// Returns selected assets infos
+		const Vector<const AssetInfo*>& GetSelectedAssets() const;
+
 		// Opens asset in folder
 		void OpenAsset(const UID& id);
 
@@ -67,12 +73,6 @@ namespace Editor
 
 		// Opens asset for editing 
 		void OpenAndEditAsset(const String& path);
-
-		// Deselects all assets
-		void DeselectAssets();
-
-		// Returns selected assets infos
-		Vector<AssetInfo> GetSelectedAssets() const;
 
 		// Returns opened folder path
 		String GetOpenedFolderPath() const;
@@ -97,21 +97,6 @@ namespace Editor
 
 		// Removes assets in clipboard
 		void DeleteAssets(const Vector<String>& assetsPaths);
-
-		// It is called when context import pressed
-		void ImportAssets(const String& targetPath);
-
-		// It is called when context create folder pressed
-		void CreateFolderAsset(const String& targetPath, const String& name);
-
-		// It is called when context create prefab pressed
-		void CreatePrefabAsset(const String& targetPath);
-
-		// It is called when context create script pressed
-		void CreateScriptAsset(const String& targetPath);
-
-		// It is called when context create animation pressed
-		void CreateAnimationAsset(const String& targetPath);
 
 		// Creates and returns icon sprite for asset
 		static Sprite* GetAssetIconSprite(const AssetRef& asset);
@@ -166,8 +151,8 @@ namespace Editor
 		// It is called when show folders tree button pressed
 		void OnShowTreePressed();
 
-		// It is called when assets was rebuilded
-		void OnAssetsRebuilded(const Vector<UID>& changedAssets);
+		// It is called when assets was rebuilt
+		void OnAssetsRebuilt(const Vector<UID>& changedAssets);
 
 		// Copies asset folder recursively
 		void CopyAssetFolder(const String& src, const String& dst);
@@ -207,12 +192,12 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PUBLIC_FUNCTION(void, SelectAsset, const String&);
 	PUBLIC_FUNCTION(void, SelectAsset, const Vector<UID>&);
 	PUBLIC_FUNCTION(void, SelectAssets, const Vector<String>&);
+	PUBLIC_FUNCTION(void, DeselectAssets);
+	PUBLIC_FUNCTION(const Vector<const AssetInfo*>&, GetSelectedAssets);
 	PUBLIC_FUNCTION(void, OpenAsset, const UID&);
 	PUBLIC_FUNCTION(void, OpenAsset, const String&);
 	PUBLIC_FUNCTION(void, OpenAndEditAsset, const UID&);
 	PUBLIC_FUNCTION(void, OpenAndEditAsset, const String&);
-	PUBLIC_FUNCTION(void, DeselectAssets);
-	PUBLIC_FUNCTION(Vector<AssetInfo>, GetSelectedAssets);
 	PUBLIC_FUNCTION(String, GetOpenedFolderPath);
 	PUBLIC_FUNCTION(void, OpenFolder, const String&);
 	PUBLIC_FUNCTION(void, ShowAssetIcon, const UID&);
@@ -221,11 +206,6 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PUBLIC_FUNCTION(void, CutAssets, const Vector<String>&);
 	PUBLIC_FUNCTION(void, PasteAssets, const String&);
 	PUBLIC_FUNCTION(void, DeleteAssets, const Vector<String>&);
-	PUBLIC_FUNCTION(void, ImportAssets, const String&);
-	PUBLIC_FUNCTION(void, CreateFolderAsset, const String&, const String&);
-	PUBLIC_FUNCTION(void, CreatePrefabAsset, const String&);
-	PUBLIC_FUNCTION(void, CreateScriptAsset, const String&);
-	PUBLIC_FUNCTION(void, CreateAnimationAsset, const String&);
 	PUBLIC_STATIC_FUNCTION(Sprite*, GetAssetIconSprite, const AssetRef&);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeFoldersTreeSeparator);
@@ -236,7 +216,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
 	PROTECTED_FUNCTION(void, OnShowTreePressed);
-	PROTECTED_FUNCTION(void, OnAssetsRebuilded, const Vector<UID>&);
+	PROTECTED_FUNCTION(void, OnAssetsRebuilt, const Vector<UID>&);
 	PROTECTED_FUNCTION(void, CopyAssetFolder, const String&, const String&);
 }
 END_META;

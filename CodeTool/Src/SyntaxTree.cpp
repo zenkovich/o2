@@ -155,6 +155,43 @@ const SyntaxCommentsVec& SyntaxSection::GetComments() const
 	return mComments;
 }
 
+SyntaxComment* SyntaxSection::FindCommentNearLine(int line) const
+{
+	SyntaxComment* synComment = nullptr;
+	for (auto comment : mComments)
+	{
+		// comment is on same line as variable
+		if (comment->GetLine() == line)
+		{
+			synComment = comment;
+			break;
+		}
+
+		// comment is on up line to variable
+		if (comment->GetLine() == line - 1)
+		{
+			// check other variable on this line
+			bool success = true;
+			for (auto v :mVariables)
+			{
+				if (v->GetLine() == comment->GetLine())
+				{
+					success = false;
+					break;
+				}
+			}
+
+			if (success)
+			{
+				synComment = comment;
+				break;
+			}
+		}
+	}
+
+	return synComment;
+}
+
 SyntaxSectionsVec SyntaxSection::GetAllSections() const
 {
 	SyntaxSectionsVec res = mSections;

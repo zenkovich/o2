@@ -47,6 +47,9 @@ namespace o2
 		// Returns atlas page's texture reference
 		static TextureRef GetPageTextureRef(const AssetInfo& atlasInfo, UInt pageIdx);
 
+		// Returns editor sorting weight
+		static int GetEditorSorting() { return 97; }
+
 		ASSET_TYPE(AtlasAsset, Meta);
 
 	public:
@@ -163,6 +166,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const AssetInfo&, UInt);
 	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
+	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;

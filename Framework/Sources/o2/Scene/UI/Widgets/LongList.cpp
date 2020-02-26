@@ -169,11 +169,6 @@ namespace o2
 		return mHoverLayout;
 	}
 
-	bool LongList::IsScrollable() const
-	{
-		return mEnableHorScroll || mEnableVerScroll;
-	}
-
 	void LongList::OnItemsUpdated(bool itemsRearranged /*= false*/)
 	{
 		if (itemsRearranged)

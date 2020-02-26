@@ -58,10 +58,10 @@ namespace Editor
 		void SelectObject(SceneEditableObject* object);
 
 		// Selects object
-		void SelectAndHightlightObject(SceneEditableObject* object);
+		void SelectAndHighlightObject(SceneEditableObject* object);
 
 		// Scrolls view to object and highlights
-		void ScrollToAndHightlight(SceneEditableObject* object);
+		void ScrollToAndHighlight(SceneEditableObject* object);
 
 		// Deselects object
 		void DeselectObject(SceneEditableObject* object);
@@ -98,22 +98,22 @@ namespace Editor
 		TreeNode* CreateTreeNodeWidget() override;
 
 		// Returns object's parent
-		UnknownPtr GetObjectParent(UnknownPtr object) override;
+		void* GetObjectParent(void* object) override;
 
 		// Returns object's children
-		Vector<UnknownPtr> GetObjectChilds(UnknownPtr object) override;
+		Vector<void*> GetObjectChilds(void* object) override;
 
 		// Returns debugging string for object
-		String GetObjectDebug(UnknownPtr object) override;
+		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object) override;
+		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
 		// It is called when tree node was double clicked
 		void OnNodeDblClick(TreeNode* nodeWidget) override;
 
 		// It is called when objects was dragged in new parent in position next of prevObject
-		void OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject) override;
+		void OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject) override;
 
 		// It is called when object was created
 		void OnObjectCreated(SceneEditableObject* object);
@@ -140,7 +140,7 @@ namespace Editor
 		void LockObjectsGroupReleased(bool value);
 
 		// It is called when list of selected objects was changed
-		void OnNodesSelectionChanged(Vector<UnknownPtr> objects) override;
+		void OnNodesSelectionChanged(Vector<void*> objects) override;
 
 		// It is called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
@@ -238,8 +238,8 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetSelectedObjects);
 	PUBLIC_FUNCTION(void, SetSelectedObjects, const Vector<SceneEditableObject*>&);
 	PUBLIC_FUNCTION(void, SelectObject, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, SelectAndHightlightObject, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, ScrollToAndHightlight, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, SelectAndHighlightObject, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, ScrollToAndHighlight, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, DeselectObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, DeselectAllObjects);
 	PUBLIC_FUNCTION(void, ScrollTo, SceneEditableObject*);
@@ -247,12 +247,12 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PROTECTED_FUNCTION(void, Initialize);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
 	PROTECTED_FUNCTION(TreeNode*, CreateTreeNodeWidget);
-	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
-	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
-	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
-	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void*, GetObjectParent, void*);
+	PROTECTED_FUNCTION(Vector<void*>, GetObjectChilds, void*);
+	PROTECTED_FUNCTION(String, GetObjectDebug, void*);
+	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
 	PROTECTED_FUNCTION(void, OnNodeDblClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<UnknownPtr>, UnknownPtr, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<void*>, void*, void*);
 	PROTECTED_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectDestroing, SceneEditableObject*);
 	PROTECTED_FUNCTION(void, OnObjectsChanged, const Vector<SceneEditableObject*>&);
@@ -261,7 +261,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PROTECTED_FUNCTION(void, EnableObjectsGroupReleased, bool);
 	PROTECTED_FUNCTION(void, LockObjectsGroupPressed, bool);
 	PROTECTED_FUNCTION(void, LockObjectsGroupReleased, bool);
-	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
+	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<void*>);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);

@@ -82,7 +82,7 @@ namespace Editor
 		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets);
+		void SetTargets(const Vector<IObject*> targets) override;
 
 		// Sets target actor properties
 		void SetTargetsActorProperties(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
@@ -94,16 +94,10 @@ namespace Editor
 		Vector<const Type*> GetCommonComponentsTypes(const Vector<IObject*> targets) const;
 
 		// Enable viewer event function
-		void OnEnabled();
+		void OnEnabled() override;
 
 		// Disable viewer event function
-		void OnDisabled();
-
-		// Updates viewer
-		void Update(float dt);
-
-		// Draws something
-		void Draw();
+		void OnDisabled() override;
 
 		friend class AddComponentPanel;
 	};
@@ -149,7 +143,5 @@ CLASS_METHODS_META(Editor::ActorViewer)
 	PROTECTED_FUNCTION(Vector<const Type*>, GetCommonComponentsTypes, const Vector<IObject*>);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, Draw);
 }
 END_META;

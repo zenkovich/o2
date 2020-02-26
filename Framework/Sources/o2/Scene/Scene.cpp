@@ -55,9 +55,6 @@ namespace o2
 
 	void Scene::SetSceneView(ISceneView* view)
 	{
-		if (mSceneView)
-			delete mSceneView;
-
 		mSceneView = view;
 	}
 

@@ -315,12 +315,6 @@ namespace Editor
 		mTargetActors.Clear();
 	}
 
-	void ActorViewer::Update(float dt)
-	{}
-
-	void ActorViewer::Draw()
-	{}
-
 }
 
 DECLARE_CLASS(Editor::ActorViewer);

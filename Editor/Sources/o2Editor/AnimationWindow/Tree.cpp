@@ -70,7 +70,7 @@ namespace Editor
 
 		RebuildAnimationTree();
 		ExpandAll();
-		OnObjectsChanged({ (UnknownPtr)mRootValue });
+		OnObjectsChanged({ (void*)mRootValue });
 	}
 
 	void AnimationTree::SetTreeWidth(float width)
@@ -219,41 +219,41 @@ namespace Editor
 
 			RebuildAnimationTree();
 			ExpandAll();
-			OnObjectsChanged({ (UnknownPtr)mRootValue });
+			OnObjectsChanged({ (void*)mRootValue });
 		}
 	}
 
-	UnknownPtr AnimationTree::GetObjectParent(UnknownPtr object)
+	void* AnimationTree::GetObjectParent(void* object)
 	{
 		if (!object)
-			return UnknownPtr((AnimationValueNode*)nullptr);
+			return nullptr;
 
 		auto treeNode = (AnimationValueNode*)object;
 		return treeNode->parent;
 	}
 
-	Vector<UnknownPtr> AnimationTree::GetObjectChilds(UnknownPtr object)
+	Vector<void*> AnimationTree::GetObjectChilds(void* object)
 	{
 		if (!object)
-			return { (UnknownPtr)mRootValue };
+			return { (void*)mRootValue };
 
 		auto treeNode = (AnimationValueNode*)object;
-		return treeNode->children.Cast<UnknownPtr>();
+		return treeNode->children.Cast<void*>();
 	}
 
-	String AnimationTree::GetObjectDebug(UnknownPtr object)
+	String AnimationTree::GetObjectDebug(void* object)
 	{
 		auto treeNode = (AnimationValueNode*)object;
 		return treeNode ? treeNode->name : "Empty";
 	}
 
-	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object)
+	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
 	{
 		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
 		node->Setup((AnimationValueNode*)object, mAnimationWindow->mTimeline, mAnimationWindow->mHandlesSheet);
 	}
 
-	void AnimationTree::FreeNodeData(TreeNode* nodeWidget, UnknownPtr object)
+	void AnimationTree::FreeNodeData(TreeNode* nodeWidget, void* object)
 	{
 		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
 		node->Free();
@@ -271,7 +271,7 @@ namespace Editor
 		mContextMenu->Show();
 	}
 
-	void AnimationTree::OnNodesSelectionChanged(Vector<UnknownPtr> objects)
+	void AnimationTree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
 		mAnimationWindow->mHandlesSheet->DeselectAll();
 

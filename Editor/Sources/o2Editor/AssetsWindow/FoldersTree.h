@@ -3,7 +3,6 @@
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
-#include "o2/Utils/Types/UnknownPtr.h"
 
 using namespace o2;
 
@@ -57,19 +56,19 @@ namespace Editor
 		void InitializeContext();
 
 		// Returns folder parent (for folders tree)
-		UnknownPtr GetFoldersTreeNodeParent(UnknownPtr object);
+		void* GetFoldersTreeNodeParent(void* object);
 
 		// Returns folder childs (for folders tree)
-		Vector<UnknownPtr> GetFoldersTreeNodeChilds(UnknownPtr object);
+		Vector<void*> GetFoldersTreeNodeChilds(void* object);
 
 		// Setups tree node by folder (for folders tree)
-		void SetupFoldersTreeNode(TreeNode* node, UnknownPtr object);
+		void SetupFoldersTreeNode(TreeNode* node, void* object);
 
 		// It is called when folder item double clicked (for folders tree)
 		void OnFoldersTreeNodeDblClick(TreeNode* node);
 
 		// It is called when folder item clicked (for folders tree)
-		void OnFoldersTreeSelect(Vector<UnknownPtr> nodes);
+		void OnFoldersTreeSelect(Vector<void*> nodes);
 
 		// It is called when folders tree clicked by right button
 		void OnFoldersTreeRightClick(TreeNode* node);
@@ -92,20 +91,8 @@ namespace Editor
 		// It is called when context show in explorer pressed
 		void OnContextShowInExplorerPressed();
 
-		// It is called when context import pressed
-		void OnContextImportPressed();
-
 		// It is called when context create folder pressed
 		void OnContextCreateFolderPressed();
-
-		// It is called when context create prefab pressed
-		void OnContextCreatePrefabPressed();
-
-		// It is called when context create script pressed
-		void OnContextCreateScriptPressed();
-
-		// It is called when context create animation pressed
-		void OnContextCreateAnimationPressed();
 
 		// It is called when context expand pressed
 		void OnContextExpandPressed();
@@ -151,11 +138,11 @@ CLASS_METHODS_META(Editor::AssetsFoldersTree)
 	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
 	PROTECTED_FUNCTION(void, UpdateView);
 	PROTECTED_FUNCTION(void, InitializeContext);
-	PROTECTED_FUNCTION(UnknownPtr, GetFoldersTreeNodeParent, UnknownPtr);
-	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetFoldersTreeNodeChilds, UnknownPtr);
-	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, TreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void*, GetFoldersTreeNodeParent, void*);
+	PROTECTED_FUNCTION(Vector<void*>, GetFoldersTreeNodeChilds, void*);
+	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, TreeNode*, void*);
 	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<UnknownPtr>);
+	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<void*>);
 	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnContextCopyPressed);
 	PROTECTED_FUNCTION(void, OnContextCutPressed);
@@ -163,11 +150,7 @@ CLASS_METHODS_META(Editor::AssetsFoldersTree)
 	PROTECTED_FUNCTION(void, OnContextDeletePressed);
 	PROTECTED_FUNCTION(void, OnContextOpenPressed);
 	PROTECTED_FUNCTION(void, OnContextShowInExplorerPressed);
-	PROTECTED_FUNCTION(void, OnContextImportPressed);
 	PROTECTED_FUNCTION(void, OnContextCreateFolderPressed);
-	PROTECTED_FUNCTION(void, OnContextCreatePrefabPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateScriptPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateAnimationPressed);
 	PROTECTED_FUNCTION(void, OnContextExpandPressed);
 	PROTECTED_FUNCTION(void, OnContextCollapsePressed);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);

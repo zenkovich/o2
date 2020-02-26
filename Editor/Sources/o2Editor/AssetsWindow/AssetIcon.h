@@ -15,9 +15,9 @@ namespace Editor
 {
 	class AssetsIconsScrollArea;
 
-	// ---------------------------
-	// Draggable asset icon widget
-	// ---------------------------
+	// --------------------------
+	// Dragable asset icon widget
+	// --------------------------
 	class AssetIcon: public Widget, public SelectableDragableObject, public DragDropArea
 	{
 	public:

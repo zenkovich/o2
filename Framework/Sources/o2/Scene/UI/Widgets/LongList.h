@@ -20,8 +20,8 @@ namespace o2
 		Function<void(int)> onFocused; // Select item position event
 
 		Function<int()>                          getItemsCountFunc; // Items count getting function
-		Function<Vector<UnknownType*>(int, int)> getItemsRangeFunc; // Items getting in range function
-		Function<void(Widget*, UnknownType*)>    setupItemFunc;     // Setup item widget function
+		Function<Vector<void*>(int, int)> getItemsRangeFunc; // Items getting in range function
+		Function<void(Widget*, void*)>    setupItemFunc;     // Setup item widget function
 
 	public:
 	    // Default constructor
@@ -74,9 +74,6 @@ namespace o2
 
 		// Updates items
 		void OnItemsUpdated(bool itemsRearranged = false);
-
-		// Returns is listener scrollable
-		bool IsScrollable() const override;
 
 		// Updates layout
 		void UpdateSelfTransform() override;
@@ -207,7 +204,6 @@ CLASS_METHODS_META(o2::LongList)
 	PUBLIC_FUNCTION(void, SetHoverDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
-	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

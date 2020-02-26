@@ -18,6 +18,7 @@ namespace o2
 
 namespace Editor
 {
+	class DefaultPropertiesViewer;
 	class IPropertiesViewer;
 	class PropertiesContext;
 
@@ -61,6 +62,7 @@ namespace Editor
 
 		IPropertiesViewer*         mCurrentViewer = nullptr; // Current properties viewer
 		Vector<IPropertiesViewer*> mViewers;                 // All available object types viewers
+		DefaultPropertiesViewer*   mDefaultViewer = nullptr; // Default properties viewer
 
 		Function<void()> mOnTargetsChangedDelegate; // It is called when targets array changing
 		bool             mTargetsChanged = false;   // True when targets was changed    
@@ -94,6 +96,7 @@ CLASS_FIELDS_META(Editor::PropertiesWindow)
 	PROTECTED_FIELD(mTargets);
 	PROTECTED_FIELD(mCurrentViewer);
 	PROTECTED_FIELD(mViewers);
+	PROTECTED_FIELD(mDefaultViewer);
 	PROTECTED_FIELD(mOnTargetsChangedDelegate);
 	PROTECTED_FIELD(mTargetsChanged);
 }

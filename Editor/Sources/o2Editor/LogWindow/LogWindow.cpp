@@ -175,21 +175,21 @@ namespace Editor
 		return mVisibleMessages.Count();
 	}
 
-	Vector<UnknownType*> LogWindow::GetVisibleMessagesRange(int min, int max)
+	Vector<void*> LogWindow::GetVisibleMessagesRange(int min, int max)
 	{
-		Vector<UnknownType*> res;
+		Vector<void*> res;
 		for (int i = min; i < max; i++)
 		{
 			if (i == mVisibleMessages.Count())
 				break;
 
-			res.Add((UnknownType*)(void*)&mVisibleMessages[i]);
+			res.Add((void*)(void*)&mVisibleMessages[i]);
 		}
 
 		return res;
 	}
 
-	void LogWindow::SetupListMessage(Widget* item, UnknownType* object)
+	void LogWindow::SetupListMessage(Widget* item, void* object)
 	{
 		LogMessage* message = (LogMessage*)(void*)object;
 
@@ -287,7 +287,7 @@ namespace Editor
 		if (mAllMessages.Count() > 0)
 		{
 			mLastMessageView->Show(true);
-			SetupListMessage(mLastMessageView, (UnknownType*)(void*)&mAllMessages.Last());
+			SetupListMessage(mLastMessageView, (void*)(void*)&mAllMessages.Last());
 		}
 		else mLastMessageView->Hide(true);
 	}

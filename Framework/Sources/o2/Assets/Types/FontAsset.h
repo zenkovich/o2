@@ -23,6 +23,9 @@ namespace o2
 		// Returns font pointer
 		virtual FontRef GetFont() const;
 
+		// Returns editor sorting weight
+		static int GetEditorSorting() { return 93; }
+
 		SERIALIZABLE(FontAsset);
 
 	protected:
@@ -60,5 +63,6 @@ CLASS_METHODS_META(o2::FontAsset)
 {
 
 	PUBLIC_FUNCTION(FontRef, GetFont);
+	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 }
 END_META;

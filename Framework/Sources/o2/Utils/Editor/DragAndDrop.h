@@ -215,8 +215,19 @@ namespace o2
 		// Returns selection group
 		ISelectableDragableObjectsGroup* GetSelectionGroup() const;
 
+		// Sets dragging available only when selected
+		void SetDragOnlySelected(bool value);
+
+		// Returns dragging available only when selected
+		bool IsDragOnlySelected() const;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
+
 	protected:
-		bool                             mIsSelected  = false;   // Is this selected
+		bool mDragOnlySelected = false; // Is dragging available only when selected
+		bool mIsSelected  = false;      // Is this selected
+
 		ISelectableDragableObjectsGroup* mSelectGroup = nullptr; // Selection group
 
 	protected:

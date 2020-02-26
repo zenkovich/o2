@@ -107,7 +107,7 @@ namespace Editor
 			}
 		}
 
-		o2EditorTree.HightlightObjectTreeNode(lastRestored);
+		o2EditorTree.HighlightObjectTreeNode(lastRestored);
 		o2EditorTree.GetSceneTree()->UpdateNodesView();
 	}
 

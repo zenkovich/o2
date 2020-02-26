@@ -99,19 +99,19 @@ namespace Editor
 		void SetCurveViewMode(bool enable);
 
 		// Returns object's parent
-		UnknownPtr GetObjectParent(UnknownPtr object) override;
+		void* GetObjectParent(void* object) override;
 
 		// Returns object's children
-		Vector<UnknownPtr> GetObjectChilds(UnknownPtr object) override;
+		Vector<void*> GetObjectChilds(void* object) override;
 
 		// Returns debugging string for object
-		String GetObjectDebug(UnknownPtr object) override;
+		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object) override;
+		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
 		// Free node data
-		void FreeNodeData(TreeNode* nodeWidget, UnknownPtr object) override;
+		void FreeNodeData(TreeNode* nodeWidget, void* object) override;
 
 		// Updates visible nodes (calculates range and initializes nodes), updates tree width on visible nodes
 		void UpdateVisibleNodes() override;
@@ -120,7 +120,7 @@ namespace Editor
 		void OnNodeRBClick(TreeNode* node) override;
 
 		// It is called when list of selected objects was changed
-		void OnNodesSelectionChanged(Vector<UnknownPtr> objects) override;
+		void OnNodesSelectionChanged(Vector<void*> objects) override;
 
 		// Gets tree node from pool or creates new, in editor scope
 		TreeNode* CreateTreeNodeWidget();
@@ -229,14 +229,14 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
 	PRIVATE_FUNCTION(void, UpdateTreeWidth);
 	PRIVATE_FUNCTION(void, SetCurveViewMode, bool);
-	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
-	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
-	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
-	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
-	PRIVATE_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
+	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
+	PRIVATE_FUNCTION(Vector<void*>, GetObjectChilds, void*);
+	PRIVATE_FUNCTION(String, GetObjectDebug, void*);
+	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
+	PRIVATE_FUNCTION(void, FreeNodeData, TreeNode*, void*);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(void, OnNodeRBClick, TreeNode*);
-	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
+	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, Vector<void*>);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PRIVATE_FUNCTION(void, OnDeletePropertyPressed);
 }

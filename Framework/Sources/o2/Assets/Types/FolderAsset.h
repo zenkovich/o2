@@ -16,6 +16,12 @@ namespace o2
 		// Returns containing assets infos
 		Vector<AssetRef> GetContainingAssetsInfos() const;
 
+		// Returns editor icon
+		static String GetEditorIcon() { return "ui/UI4_big_folder_icon.png"; }
+
+		// Returns editor sorting weight
+		static int GetEditorSorting() { return 100; }
+
 		SERIALIZABLE(FolderAsset);
 
 	protected:
@@ -50,6 +56,8 @@ CLASS_METHODS_META(o2::FolderAsset)
 {
 
 	PUBLIC_FUNCTION(Vector<AssetRef>, GetContainingAssetsInfos);
+	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
+	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 }

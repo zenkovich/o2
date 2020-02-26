@@ -1,0 +1,44 @@
+#pragma once
+
+#include "o2Editor/PropertiesWindow/DefaultPropertiesViewer.h"
+
+using namespace o2;
+
+namespace Editor
+{
+	class DefaultObjectViewer;
+
+	// -------------------------
+	// Default properties viewer
+	// -------------------------
+	class AssetPropertiesViewer : public DefaultPropertiesViewer
+	{
+	public:
+		// Returns viewing object type
+		const Type* GetViewingObjectType() const override;
+
+		IOBJECT(AssetPropertiesViewer);
+
+	protected:
+		// Sets target objects
+		void SetTargets(const Vector<IObject*> targets) override;
+	};
+
+}
+
+CLASS_BASES_META(Editor::AssetPropertiesViewer)
+{
+	BASE_CLASS(Editor::DefaultPropertiesViewer);
+}
+END_META;
+CLASS_FIELDS_META(Editor::AssetPropertiesViewer)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::AssetPropertiesViewer)
+{
+
+	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
+}
+END_META;

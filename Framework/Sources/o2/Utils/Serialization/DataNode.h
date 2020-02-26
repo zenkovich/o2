@@ -552,7 +552,7 @@ namespace o2
 
 	template<typename T>
 	struct DataNode::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value && 
-		!std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
+		!std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value && !std::is_same<void*, T>::value>::type>
 	{
 		static constexpr bool isSupported = DataNode::Converter<std::remove_pointer<T>::type>::isSupported;
 

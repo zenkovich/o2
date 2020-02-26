@@ -15,8 +15,6 @@ namespace o2
 	typedef int                KeyboardKey;
 	typedef int                CursorId;
 
-	typedef char               UnknownType;
-
 	typedef UInt64             SceneUID;
 
 	enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };

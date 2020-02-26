@@ -52,7 +52,7 @@ namespace Editor
 				object->SetIndexInSiblings(insertIdx++);
 		}
 
-		o2EditorTree.HightlightObjectTreeNode(objects.Last());
+		o2EditorTree.HighlightObjectTreeNode(objects.Last());
 		o2EditorSceneScreen.SelectObjectsWithoutAction(objects, false);
 	}
 

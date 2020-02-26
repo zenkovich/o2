@@ -2,6 +2,7 @@
 
 #include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/Meta.h"
+#include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
@@ -65,10 +66,18 @@ namespace o2
 		// Returns extensions string (something like "ext1 ext2 ent asf")
 		virtual const char* GetFileExtensions() const;
 
+		// Returns editor icon
+		static String GetEditorIcon() { return "ui/UI4_big_file_icon.png"; }
+
+		// Returns editor sorting weight
+		static int GetEditorSorting() { return 1; }
+
 		SERIALIZABLE(Asset);
 
 	protected:
-		AssetInfo mInfo; // Asset info
+		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE
+
+		AssetInfo mInfo; // Asset info 
 
 	private:
 		// Hidden default constructor
@@ -89,6 +98,9 @@ namespace o2
 
 		// Returns assets log stream pointer
 		LogStream* GetAssetsLogStream() const;
+
+		// Meta setter, used for property
+		void SetMeta(AssetMeta* meta);
 
 		// Loads asset from path
 		void Load(const AssetInfo& info);
@@ -143,6 +155,7 @@ CLASS_FIELDS_META(o2::Asset)
 	PUBLIC_FIELD(fullPath);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(mMeta).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE();
 	PROTECTED_FIELD(mInfo);
 }
 END_META;
@@ -161,9 +174,12 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
 	PUBLIC_FUNCTION(void, Save, bool);
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
+	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, ID);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
+	PROTECTED_FUNCTION(void, SetMeta, AssetMeta*);
 	PROTECTED_FUNCTION(void, Load, const AssetInfo&);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);

@@ -4,7 +4,6 @@
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
 #include "o2/Utils/Math/Curve.h"
-#include "o2/Utils/Types/UnknownPtr.h"
 
 namespace o2
 {
@@ -25,19 +24,19 @@ namespace o2
 		enum class ExpandState { None, Expanding, Collaping };
 
 	public:
-		Function<UnknownPtr(UnknownPtr)>         getObjectParentDelegate;      // Getting objects' parent delegate
-		Function<Vector<UnknownPtr>(UnknownPtr)> getObjectChildrenDelegate;    // Getting objects' childs count delegate 
-		Function<void(TreeNode*, UnknownPtr)>    fillNodeDataByObjectDelegate; // Setup tree node item delegate
-		Function<void(TreeNode*, UnknownPtr)>    freeNodeDataDelegate;         // Free tree node data delegate
+		Function<void*(void*)>         getObjectParentDelegate;      // Getting objects' parent delegate
+		Function<Vector<void*>(void*)> getObjectChildrenDelegate;    // Getting objects' childs count delegate 
+		Function<void(TreeNode*, void*)>    fillNodeDataByObjectDelegate; // Setup tree node item delegate
+		Function<void(TreeNode*, void*)>    freeNodeDataDelegate;         // Free tree node data delegate
 
-		Function<String(UnknownPtr)> getDebugForObject; // Getting debug string for object delegate
+		Function<String(void*)> getDebugForObject; // Getting debug string for object delegate
 
 		Function<void(TreeNode*)> onNodeDoubleClicked;      // Node double clicked event
 		Function<void(TreeNode*)> onNodeRightButtonClicked; // Node right button click event
 
-		Function<void(Vector<UnknownPtr>)> onObjectsSelectionChanged; // Objects selected event
+		Function<void(Vector<void*>)> onObjectsSelectionChanged; // Objects selected event
 
-		Function<void(Vector<UnknownPtr>, UnknownPtr, UnknownPtr)> onDraggedObjects; // Objects dragged event
+		Function<void(Vector<void*>, void*, void*)> onDraggedObjects; // Objects dragged event
 
 	public:
 		// Default constructor
@@ -53,13 +52,13 @@ namespace o2
 		Tree& operator=(const Tree& other);
 
 		// Creates tree node for object
-		void OnObjectCreated(UnknownPtr object, UnknownPtr parent);
+		void OnObjectCreated(void* object, void* parent);
 
 		// Removes tree node for object
-		void OnObjectRemoved(UnknownPtr object);
+		void OnObjectRemoved(void* object);
 
 		// Updates tree for changed objects
-		void OnObjectsChanged(const Vector<UnknownPtr>& objects);
+		void OnObjectsChanged(const Vector<void*>& objects);
 
 		// Draws widget
 		void Draw() override;
@@ -77,7 +76,7 @@ namespace o2
 		void UpdateNodesView(bool immediately = true);
 
 		// Returns ui node for object
-		TreeNode* GetNode(UnknownPtr object);
+		TreeNode* GetNode(void* object);
 
 		// Expands all nodes
 		void ExpandAll();
@@ -86,31 +85,31 @@ namespace o2
 		void CollapseAll();
 
 		// Returns selected objects vector
-		Vector<UnknownPtr> GetSelectedObjects() const;
+		Vector<void*> GetSelectedObjects() const;
 
 		// Sets selected objects
-		void SetSelectedObjects(const Vector<UnknownPtr>& objects);
+		void SetSelectedObjects(const Vector<void*>& objects);
 
 		// Selects object
-		void SelectObject(UnknownPtr object);
+		void SelectObject(void* object);
 
 		// Selects object
-		void SelectAndHightlightObject(UnknownPtr object);
+		void SelectAndHighlightObject(void* object);
 
 		// Deselects object
-		void DeselectObject(UnknownPtr object);
+		void DeselectObject(void* object);
 
 		// Deselects all objects
 		void DeselectAllObjects();
 
 		// Scrolls view to object
-		void ScrollTo(UnknownPtr object);
+		void ScrollTo(void* object);
 
-		// Scrolls view to object and hightlights
-		void ScrollToAndHightlight(UnknownPtr object);
+		// Scrolls view to object and highlights
+		void ScrollToAndHighlight(void* object);
 
 		// Expands all parent objects for specified object
-		void ExpandParentObjects(UnknownPtr object);
+		void ExpandParentObjects(void* object);
 
 		// Returns item widget under point
 		TreeNode* GetTreeNodeUnderPoint(const Vec2F& point);
@@ -139,14 +138,14 @@ namespace o2
 		// Sets hover layout
 		void SetHoverLayout(const Layout& layout);
 
-		// Returns node hightlight drawable
-		Sprite* GetHightlightDrawable() const;
+		// Returns node highlight drawable
+		Sprite* GetHighlightDrawable() const;
 
-		// Sets hightlight animation
-		void SetHightlightAnimation(const Animation& animation);
+		// Sets highlight animation
+		void SetHighlightAnimation(const Animation& animation);
 
-		// Sets hightlight layout
-		void SetHightlightLayout(const Layout& layout);
+		// Sets highlight layout
+		void SetHighlightLayout(const Layout& layout);
 
 		// Sets zebra back line sprite drawable. When it is null no zebra back isn't drawing
 		void SetZebraBackLine(Sprite* sprite);
@@ -192,7 +191,7 @@ namespace o2
 		struct Node
 		{
 			String     id;
-			UnknownPtr object;             // Pointer to object
+			void* object;             // Pointer to object
 			TreeNode*  widget = nullptr;   // Node widget
 			int        level = 0;          // Hierarchy depth level
 			bool       isSelected = false; // Is node selected
@@ -221,7 +220,7 @@ namespace o2
 		// -----------------------------------
 		struct VisibleWidgetDef
 		{
-			UnknownPtr object;
+			void* object;
 			TreeNode*  widget;
 			int        position;
 		public:
@@ -242,7 +241,7 @@ namespace o2
 
 		Vector<Node*> mAllNodes; // All expanded nodes definitions
 
-		Vector<UnknownPtr> mSelectedObjects; // Selected objects
+		Vector<void*> mSelectedObjects; // Selected objects
 		Vector<Node*>      mSelectedNodes;   // Selected nodes definitions
 
 		Vector<TreeNode*> mNodeWidgetsBuf; // Nodes widgets buffer
@@ -264,10 +263,10 @@ namespace o2
 		TreeNode*          mFakeDragNode = nullptr;        // Dragging node
 		Vec2F              mDragOffset;                    // Offset from cursor to dragging node's center
 		TreeNode*          mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
-		Vector<UnknownPtr> mBeforeDragSelectedItems;       // Before drag begin selection
+		Vector<void*> mBeforeDragSelectedItems;       // Before drag begin selection
 		bool               mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
 
-		Vector<UnknownPtr> mExpandedObjects; // Expanded objects
+		Vector<void*> mExpandedObjects; // Expanded objects
 
 		ExpandState mExpandingNodeState = ExpandState::None; // Expanding node state
 		int         mExpandingNodeIdx = -1;                  // Current expanding node index. -1 if no expanding node
@@ -291,7 +290,7 @@ namespace o2
 		Sprite*    mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
 		Layout     mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
 		Node*      mHighlighNode = nullptr;    // Hightlighing node
-		UnknownPtr mHighlightObject;           // Highlight object
+		void* mHighlightObject;           // Highlight object
 		
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
@@ -311,19 +310,19 @@ namespace o2
 		void DrawZebraBack();
 
 		// Returns object's parent
-		virtual UnknownPtr GetObjectParent(UnknownPtr object);
+		virtual void* GetObjectParent(void* object);
 
 		// Returns object's children
-		virtual Vector<UnknownPtr> GetObjectChilds(UnknownPtr object);
+		virtual Vector<void*> GetObjectChilds(void* object);
 
 		// Returns debugging string for object
-		virtual String GetObjectDebug(UnknownPtr object);
+		virtual String GetObjectDebug(void* object);
 
 		// Sets nodeWidget data by object
-		virtual void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object);
+		virtual void FillNodeDataByObject(TreeNode* nodeWidget, void* object);
 
 		// Free node data
-		virtual void FreeNodeData(TreeNode* nodeWidget, UnknownPtr object);
+		virtual void FreeNodeData(TreeNode* nodeWidget, void* object);
 
 		// It is called when tree node was double clicked
 		virtual void OnNodeDblClick(TreeNode* nodeWidget);
@@ -332,10 +331,10 @@ namespace o2
 		virtual void OnNodeRBClick(TreeNode* nodeWidget);
 
 		// It is called when list of selected objects was changed
-		virtual void OnNodesSelectionChanged(Vector<UnknownPtr> objects);
+		virtual void OnNodesSelectionChanged(Vector<void*> objects);
 
 		// It is called when objects was dragged in new parent in position next of prevObject
-		virtual void OnDraggedObjects(Vector<UnknownPtr> objects, UnknownPtr newParent, UnknownPtr prevObject);
+		virtual void OnDraggedObjects(Vector<void*> objects, void* newParent, void* prevObject);
 
 // ISelectableDragableObjectsGroup implementation
 
@@ -390,7 +389,7 @@ namespace o2
 		void RemoveNodes(Node* parentNode);
 
 		// Creates node from object with parent
-		Node* CreateNode(UnknownPtr object, Node* parent);
+		Node* CreateNode(void* object, Node* parent);
 
 		// Updates visible nodes (calculates range and initializes nodes)
 		virtual void UpdateVisibleNodes();
@@ -523,7 +522,7 @@ namespace o2
 		void Collapse(bool forcible = false);
 
 		// Returns object pointer
-		UnknownPtr GetObject() const;
+		void* GetObject() const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -647,26 +646,26 @@ END_META;
 CLASS_METHODS_META(o2::Tree)
 {
 
-	PUBLIC_FUNCTION(void, OnObjectCreated, UnknownPtr, UnknownPtr);
-	PUBLIC_FUNCTION(void, OnObjectRemoved, UnknownPtr);
-	PUBLIC_FUNCTION(void, OnObjectsChanged, const Vector<UnknownPtr>&);
+	PUBLIC_FUNCTION(void, OnObjectCreated, void*, void*);
+	PUBLIC_FUNCTION(void, OnObjectRemoved, void*);
+	PUBLIC_FUNCTION(void, OnObjectsChanged, const Vector<void*>&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, UpdateNodesView, bool);
-	PUBLIC_FUNCTION(TreeNode*, GetNode, UnknownPtr);
+	PUBLIC_FUNCTION(TreeNode*, GetNode, void*);
 	PUBLIC_FUNCTION(void, ExpandAll);
 	PUBLIC_FUNCTION(void, CollapseAll);
-	PUBLIC_FUNCTION(Vector<UnknownPtr>, GetSelectedObjects);
-	PUBLIC_FUNCTION(void, SetSelectedObjects, const Vector<UnknownPtr>&);
-	PUBLIC_FUNCTION(void, SelectObject, UnknownPtr);
-	PUBLIC_FUNCTION(void, SelectAndHightlightObject, UnknownPtr);
-	PUBLIC_FUNCTION(void, DeselectObject, UnknownPtr);
+	PUBLIC_FUNCTION(Vector<void*>, GetSelectedObjects);
+	PUBLIC_FUNCTION(void, SetSelectedObjects, const Vector<void*>&);
+	PUBLIC_FUNCTION(void, SelectObject, void*);
+	PUBLIC_FUNCTION(void, SelectAndHighlightObject, void*);
+	PUBLIC_FUNCTION(void, DeselectObject, void*);
 	PUBLIC_FUNCTION(void, DeselectAllObjects);
-	PUBLIC_FUNCTION(void, ScrollTo, UnknownPtr);
-	PUBLIC_FUNCTION(void, ScrollToAndHightlight, UnknownPtr);
-	PUBLIC_FUNCTION(void, ExpandParentObjects, UnknownPtr);
+	PUBLIC_FUNCTION(void, ScrollTo, void*);
+	PUBLIC_FUNCTION(void, ScrollToAndHighlight, void*);
+	PUBLIC_FUNCTION(void, ExpandParentObjects, void*);
 	PUBLIC_FUNCTION(TreeNode*, GetTreeNodeUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetRearrangeType, RearrangeType);
 	PUBLIC_FUNCTION(RearrangeType, GetRearrangeType);
@@ -676,9 +675,9 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(void, SetNodeSample, TreeNode*);
 	PUBLIC_FUNCTION(Sprite*, GetHoverDrawable);
 	PUBLIC_FUNCTION(void, SetHoverLayout, const Layout&);
-	PUBLIC_FUNCTION(Sprite*, GetHightlightDrawable);
-	PUBLIC_FUNCTION(void, SetHightlightAnimation, const Animation&);
-	PUBLIC_FUNCTION(void, SetHightlightLayout, const Layout&);
+	PUBLIC_FUNCTION(Sprite*, GetHighlightDrawable);
+	PUBLIC_FUNCTION(void, SetHighlightAnimation, const Animation&);
+	PUBLIC_FUNCTION(void, SetHighlightLayout, const Layout&);
 	PUBLIC_FUNCTION(void, SetZebraBackLine, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);
 	PUBLIC_FUNCTION(void, SetNodeExpandTimer, float);
@@ -694,15 +693,15 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, DrawZebraBack);
-	PROTECTED_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
-	PROTECTED_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
-	PROTECTED_FUNCTION(String, GetObjectDebug, UnknownPtr);
-	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
-	PROTECTED_FUNCTION(void, FreeNodeData, TreeNode*, UnknownPtr);
+	PROTECTED_FUNCTION(void*, GetObjectParent, void*);
+	PROTECTED_FUNCTION(Vector<void*>, GetObjectChilds, void*);
+	PROTECTED_FUNCTION(String, GetObjectDebug, void*);
+	PROTECTED_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
+	PROTECTED_FUNCTION(void, FreeNodeData, TreeNode*, void*);
 	PROTECTED_FUNCTION(void, OnNodeDblClick, TreeNode*);
 	PROTECTED_FUNCTION(void, OnNodeRBClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<UnknownPtr>);
-	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<UnknownPtr>, UnknownPtr, UnknownPtr);
+	PROTECTED_FUNCTION(void, OnNodesSelectionChanged, Vector<void*>);
+	PROTECTED_FUNCTION(void, OnDraggedObjects, Vector<void*>, void*, void*);
 	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
 	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetAllObjects);
 	PROTECTED_FUNCTION(void, Select, SelectableDragableObject*);
@@ -719,7 +718,7 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, UpdateNodesStructure);
 	PROTECTED_FUNCTION(int, InsertNodes, Node*, int, Vector<Node*>*);
 	PROTECTED_FUNCTION(void, RemoveNodes, Node*);
-	PROTECTED_FUNCTION(Node*, CreateNode, UnknownPtr, Node*);
+	PROTECTED_FUNCTION(Node*, CreateNode, void*, Node*);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
 	PROTECTED_FUNCTION(void, CreateVisibleNodeWidget, Node*, int);
 	PROTECTED_FUNCTION(void, UpdateNodeView, Node*, TreeNode*, int);
@@ -774,7 +773,7 @@ CLASS_METHODS_META(o2::TreeNode)
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PUBLIC_FUNCTION(void, Expand, bool);
 	PUBLIC_FUNCTION(void, Collapse, bool);
-	PUBLIC_FUNCTION(UnknownPtr, GetObject);
+	PUBLIC_FUNCTION(void*, GetObject);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTreeLayout, float);

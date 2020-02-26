@@ -127,7 +127,7 @@ namespace o2
 	template<typename T>
 	Vec2<T>::operator b2Vec2() const
 	{
-		return b2Vec2(x, y);
+		return b2Vec2((float32)x, (float32)y);
 	}
 
 	template<typename T>

@@ -119,16 +119,16 @@ namespace Editor
 		TreeNode* CreateTreeNodeWidget() override;
 
 		// Returns object's parent
-		UnknownPtr GetObjectParent(UnknownPtr object) override;
+		void* GetObjectParent(void* object) override;
 
 		// Returns object's children
-		Vector<UnknownPtr> GetObjectChilds(UnknownPtr object) override;
+		Vector<void*> GetObjectChilds(void* object) override;
 
 		// Returns debugging string for object
-		String GetObjectDebug(UnknownPtr object) override;
+		String GetObjectDebug(void* object) override;
 
 		// Sets nodeWidget data by object
-		void FillNodeDataByObject(TreeNode* nodeWidget, UnknownPtr object) override;
+		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
 		friend class ComponentsTreeNode;
 	};
@@ -223,10 +223,10 @@ CLASS_METHODS_META(Editor::ComponentsTree)
 	PUBLIC_FUNCTION(void, SetFilter, const WString&);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
-	PRIVATE_FUNCTION(UnknownPtr, GetObjectParent, UnknownPtr);
-	PRIVATE_FUNCTION(Vector<UnknownPtr>, GetObjectChilds, UnknownPtr);
-	PRIVATE_FUNCTION(String, GetObjectDebug, UnknownPtr);
-	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, UnknownPtr);
+	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
+	PRIVATE_FUNCTION(Vector<void*>, GetObjectChilds, void*);
+	PRIVATE_FUNCTION(String, GetObjectDebug, void*);
+	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
 }
 END_META;
 
