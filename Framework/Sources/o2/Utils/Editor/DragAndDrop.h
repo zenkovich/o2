@@ -227,6 +227,7 @@ namespace o2
 	protected:
 		bool mDragOnlySelected = false; // Is dragging available only when selected
 		bool mIsSelected  = false;      // Is this selected
+		bool mIsDragAvailable = true;   // Is dragging available
 
 		ISelectableDragableObjectsGroup* mSelectGroup = nullptr; // Selection group
 

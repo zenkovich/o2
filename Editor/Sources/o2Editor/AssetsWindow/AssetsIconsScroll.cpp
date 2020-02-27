@@ -442,11 +442,15 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnCursorPressed(const Input::Cursor& cursor)
 	{
+		if (auto icon = GetIconUnderPoint(cursor.position))
+		{
+			if (icon->IsSelected())
+				return;
+		}
+
 		mPressedPoint = cursor.position;
 
 		BeginSelecting();
-		o2UI.FocusWidget(this);
-		UpdateSelection(cursor);
 	}
 
 	void AssetsIconsScrollArea::OnCursorStillDown(const Input::Cursor& cursor)
@@ -466,6 +470,13 @@ namespace Editor
 
 		if (!o2Input.IsKeyDown(VK_CONTROL))
 			DeselectAllAssets();
+
+		o2UI.FocusWidget(this);
+
+		RectF selectionRect(mPressedPoint, mPressedPoint);
+		mSelectionSprite->SetRect(selectionRect);
+
+		mCurrentSelectingInfos.Clear();
 	}
 
 	void AssetsIconsScrollArea::OnCursorReleased(const Input::Cursor& cursor)
@@ -494,15 +505,18 @@ namespace Editor
 			}
 		}
 
-		*mDragIcon = *dragIcon;
-		mDragIcon->DragDropArea::SetInteractable(false);
-		mDragIcon->CursorAreaEventsListener::SetInteractable(false);
-		mDragIcon->SetEnabled(true);
-		mDragIcon->ExcludeFromScene();
-		mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
+		if (dragIcon)
+		{
+			*mDragIcon = *dragIcon;
+			mDragIcon->DragDropArea::SetInteractable(false);
+			mDragIcon->CursorAreaEventsListener::SetInteractable(false);
+			mDragIcon->SetEnabled(true);
+			mDragIcon->ExcludeFromScene();
+			mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
-		if (mSelectedAssets.Count() > 1)
-			mDragIcon->assetName = (String)mSelectedAssets.Count() + " items";
+			if (mSelectedAssets.Count() > 1)
+				mDragIcon->assetName = (String)mSelectedAssets.Count() + " items";
+		}
 	}
 
 	void AssetsIconsScrollArea::EndDragging(bool droppedToThis /*= false*/)
@@ -594,6 +608,9 @@ namespace Editor
 
 	void AssetsIconsScrollArea::RegObjectsCreationAction()
 	{
+		if (mInstantiatedSceneDragObjects.IsEmpty())
+			return;
+
 		auto firstInstObject = mInstantiatedSceneDragObjects[0];
 		auto parent = firstInstObject->GetEditableParent();
 		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
@@ -609,7 +626,7 @@ namespace Editor
 	{
 		for (auto sel : mSelectedAssets)
 		{
-			Actor* actor = InstantiateAsset(sel);
+			Actor* actor = InstantiateAsset(*sel);
 			if (actor)
 			{
 				actor->name = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(sel->path));
@@ -969,6 +986,9 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor)
 	{
+		if ((mPressedPoint - cursor.position).Length() > 5.0f)
+			return;
+
 		if (!o2Input.IsKeyDown(VK_CONTROL) && !o2Input.IsKeyDown(VK_SHIFT))
 			DeselectAllAssets();
 

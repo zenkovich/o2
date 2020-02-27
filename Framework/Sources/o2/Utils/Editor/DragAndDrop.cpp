@@ -312,6 +312,9 @@ namespace o2
 		if (mSelectGroup)
 			mSelectGroup->OnSelectableObjectCursorPressed(this, cursor);
 
+		if (mDragOnlySelected && !mIsSelected)
+			mIsDragAvailable = false;
+
 		CursorAreaEventsListener::OnCursorPressed(cursor);
 	}
 
@@ -325,9 +328,7 @@ namespace o2
 
 		DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id);
 
-		bool isDragAvailable = mDragOnlySelected ? mIsSelected : true;
-
-		if (!mIsDragging && isDragAvailable)
+		if (!mIsDragging && mIsDragAvailable)
 		{
 			float delta = (cursor.position - mPressedCursorPos).Length();
 			if (delta > mDragDistanceThreshold)
@@ -406,6 +407,7 @@ namespace o2
 				SetSelected(!IsSelected());
 		}
 
+		mIsDragAvailable = true;
 		CursorAreaEventsListener::OnCursorReleased(cursor);
 	}
 
@@ -413,6 +415,8 @@ namespace o2
 	{
 		if (!mSelectGroup)
 			Deselect();
+
+		mIsDragAvailable = true;
 	}
 
 	void SelectableDragableObject::OnSelected()
