@@ -315,6 +315,8 @@ namespace o2
 		if (mDragOnlySelected && !mIsSelected)
 			mIsDragAvailable = false;
 
+		mPressedTime = o2Time.GetApplicationTime();
+
 		CursorAreaEventsListener::OnCursorPressed(cursor);
 	}
 
@@ -327,6 +329,12 @@ namespace o2
 		}
 
 		DragDropArea* dragDropArea = GetDropAreaUnderCursor(cursor.id);
+
+		if (!mIsDragAvailable)
+		{
+			if (o2Time.GetApplicationTime() - mPressedTime < mDragDelay)
+				mIsDragAvailable = true;
+		}
 
 		if (!mIsDragging && mIsDragAvailable)
 		{

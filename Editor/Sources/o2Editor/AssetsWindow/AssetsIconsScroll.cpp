@@ -1020,6 +1020,12 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnSelectableObjectBeganDragging(SelectableDragableObject* object)
 	{
+		if (mSelecting)
+		{
+			Select(object, false);
+			mSelecting = false;
+		}
+
 		if (!o2Input.IsKeyDown(VK_CONTROL) && !mSelectedAssets.Contains(&dynamic_cast<AssetIcon*>(object)->GetAssetInfo()))
 		{
 			for (auto info : mSelectedAssets)
