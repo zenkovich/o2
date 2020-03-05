@@ -7,12 +7,12 @@ using namespace o2;
 
 namespace o2
 {
-	class BorderIProperty;
+	class WidgetDragHandle;
 }
 
 namespace Editor
 {
-	class WidgetDragHandle;
+	class BorderIProperty;
 
 	// -----------------------------
 	// Editor of image slices widget
@@ -45,7 +45,6 @@ namespace Editor
 		};
 
 	private:
-		Widget*       mPreviewImageContent;
 		PreviewImage* mPreviewImage = nullptr;
 		Image*        mPreviewImageBack = nullptr;
 
@@ -58,9 +57,6 @@ namespace Editor
 		BorderIProperty* mBorderProperty = nullptr;
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Initializes image preview widgets and border handles
 		void InitializeImagePreview();
 
@@ -81,32 +77,48 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::CurvePreview)
+CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 {
 	BASE_CLASS(o2::Widget);
 }
 END_META;
-CLASS_FIELDS_META(Editor::CurvePreview)
+CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget)
 {
-	PROTECTED_FIELD(mCurve);
-	PROTECTED_FIELD(mNeedRedraw);
-	PROTECTED_FIELD(mSprite);
-	PROTECTED_FIELD(mBackColor);
-	PROTECTED_FIELD(mCurveColor);
+	PRIVATE_FIELD(mPreviewImage);
+	PRIVATE_FIELD(mPreviewImageBack);
+	PRIVATE_FIELD(mBorderLeftHandle);
+	PRIVATE_FIELD(mBorderRightHandle);
+	PRIVATE_FIELD(mBorderTopHandle);
+	PRIVATE_FIELD(mBorderBottomHandle);
+	PRIVATE_FIELD(mBordersSmoothValue);
+	PRIVATE_FIELD(mBorderProperty);
 }
 END_META;
-CLASS_METHODS_META(Editor::CurvePreview)
+CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 {
 
-	PUBLIC_FUNCTION(void, SetCurve, Curve*);
+	PUBLIC_FUNCTION(void, Setup, const ImageAssetRef&, BorderIProperty*);
+	PROTECTED_FUNCTION(void, InitializeImagePreview);
+	PROTECTED_FUNCTION(void, InitializeSliceHandles);
+	PROTECTED_FUNCTION(void, FitImage);
+	PROTECTED_FUNCTION(void, UpdateBordersAnchors);
+	PROTECTED_FUNCTION(void, UpdateBordersValue);
+	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
+}
+END_META;
+
+CLASS_BASES_META(Editor::ImageSlicesEditorWidget::PreviewImage)
+{
+	BASE_CLASS(o2::Image);
+}
+END_META;
+CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
+{
+}
+END_META;
+CLASS_METHODS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
+{
+
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetBackColor);
-	PUBLIC_FUNCTION(void, SetCurveColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetCurveColor);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, Redraw);
-	PROTECTED_FUNCTION(void, OnCurveChanged);
 }
 END_META;

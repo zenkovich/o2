@@ -1,60 +1,57 @@
 #include "o2Editor/stdafx.h"
 #include "ImageSlicesEditorWidget.h"
 
+#include "o2/Utils/Editor/DragHandle.h"
+#include "o2Editor/Core/Properties/Basic/BorderIntProperty.h"
+
 namespace Editor
 {
-
 	ImageSlicesEditorWidget::ImageSlicesEditorWidget()
 	{
-
+		InitializeImagePreview();
 	}
 
-	ImageSlicesEditorWidget::ImageSlicesEditorWidget(const ImageSlicesEditorWidget& other)
+	ImageSlicesEditorWidget::ImageSlicesEditorWidget(const ImageSlicesEditorWidget& other):
+		Widget(other)
 	{
+		InitializeImagePreview();
+	}
 
+	ImageSlicesEditorWidget& ImageSlicesEditorWidget::operator=(const ImageSlicesEditorWidget& other)
+	{
+		Widget::operator=(other);
+		InitializeImagePreview();
+		return *this;
 	}
 
 	void ImageSlicesEditorWidget::Setup(const ImageAssetRef& image, BorderIProperty* borderProperty)
 	{
+		mBorderProperty = borderProperty;
 
-	}
+		mPreviewImage->SetImageAsset(image);
+		mPreviewImage->GetImage()->mode = SpriteMode::Default;
 
-	void ImageSlicesEditorWidget::CopyData(const Actor& otherActor)
-	{
-
-	}
-
-	Editor::ImageSlicesEditorWidget& ImageSlicesEditorWidget::operator=(const ImageSlicesEditorWidget& other)
-	{
-
-	}
-
-	void ImageSlicesEditorWidget::PreviewImage::Draw()
-	{
-
+		FitImage();
 	}
 
 	void ImageSlicesEditorWidget::InitializeImagePreview()
 	{
-		mPreviewImageContent = mnew Widget();
-		mPreviewImageContent->layout->minHeight = 200;
+		layout->minHeight = 200;
 
 		auto separatorImg = o2UI.CreateImage("ui/UI4_Separator.png");
 		*separatorImg->layout = WidgetLayout::HorStretch(VerAlign::Bottom, -6, -15, 5, -4);
-		mPreviewImageContent->AddChild(separatorImg);
+		AddChild(separatorImg);
 
 		mPreviewImageBack = mnew Image();
 		mPreviewImageBack->SetImage(CreateGridSprite());
 		*mPreviewImageBack->layout = WidgetLayout::BothStretch();
-		mPreviewImageContent->AddChild(mPreviewImageBack);
+		AddChild(mPreviewImageBack);
 
 		mPreviewImage = mnew PreviewImage();
 		*mPreviewImage->layout = WidgetLayout::BothStretch();
-		mPreviewImageContent->AddChild(mPreviewImage);
+		AddChild(mPreviewImage);
 
 		InitializeSliceHandles();
-
-		mLayout->AddChild(mPreviewImageContent);
 	}
 
 	void ImageSlicesEditorWidget::InitializeSliceHandles()
@@ -128,9 +125,9 @@ namespace Editor
 
 	void ImageSlicesEditorWidget::FitImage()
 	{
-		mLayout->UpdateTransform();
+		UpdateTransform();
 
-		Vec2F maxSize = mPreviewImageContent->layout->size;
+		Vec2F maxSize = layout->size;
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
 
 		float heightFitScale = maxSize.y/imageSize.y;
@@ -186,11 +183,7 @@ namespace Editor
 
 	void ImageSlicesEditorWidget::UpdateBordersValue()
 	{
-		BorderI value = mBordersSmoothValue;
-		for (auto target : mPropertiesContext.targets)
-			dynamic_cast<ImageAsset*>(target.first)->sliceBorder = value;
-
-		mBorderProperty->Refresh();
+		mBorderProperty->SetValue(mBordersSmoothValue);
 		UpdateBordersAnchors();
 	}
 
@@ -220,4 +213,6 @@ namespace Editor
 
 }
 
-DECLARE_CLASS(Editor::CurvePreview);
+DECLARE_CLASS(Editor::ImageSlicesEditorWidget);
+
+DECLARE_CLASS(Editor::ImageSlicesEditorWidget::PreviewImage);

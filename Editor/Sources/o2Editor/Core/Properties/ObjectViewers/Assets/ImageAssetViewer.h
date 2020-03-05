@@ -13,6 +13,7 @@ namespace o2
 namespace Editor
 {
 	class BorderIProperty;
+	class ImageSlicesEditorWidget;
 
 	// ------------------
 	// Image asset viewer
@@ -35,46 +36,7 @@ namespace Editor
 		IOBJECT(ImageAssetViewer);
 
 	private:
-		class PreviewImage: public Image
-		{
-		public:
-			// Sets texture filter to nearest and draws it
-			void Draw() override;
-
-			SERIALIZABLE(PreviewImage);
-		};
-
-	private:
-		Widget*       mPreviewImageContent;
-		PreviewImage* mPreviewImage = nullptr;
-		Image*        mPreviewImageBack = nullptr;
-
-		WidgetDragHandle* mBorderLeftHandle;
-		WidgetDragHandle* mBorderRightHandle;
-		WidgetDragHandle* mBorderTopHandle;
-		WidgetDragHandle* mBorderBottomHandle;
-		BorderF           mBordersSmoothValue;
-
-		BorderIProperty* mBorderProperty = nullptr;
-
-	private:
-		// Initializes image preview widgets and border handles
-		void InitializeImagePreview();
-
-		// Initializes image slices handles
-		void InitializeSliceHandles();
-
-		// Fits image by size
-		void FitImage();
-
-		// Updates borders anchors layouts
-		void UpdateBordersAnchors();
-
-		// Updates targets assets borders values by floored mBordersSmoothValue
-		void UpdateBordersValue();
-
-		// Creates grid sprite
-		Sprite* CreateGridSprite();
+		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
 	};
 }
 
@@ -85,15 +47,7 @@ CLASS_BASES_META(Editor::ImageAssetViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)
 {
-	PRIVATE_FIELD(mPreviewImageContent);
-	PRIVATE_FIELD(mPreviewImage);
-	PRIVATE_FIELD(mPreviewImageBack);
-	PRIVATE_FIELD(mBorderLeftHandle);
-	PRIVATE_FIELD(mBorderRightHandle);
-	PRIVATE_FIELD(mBorderTopHandle);
-	PRIVATE_FIELD(mBorderBottomHandle);
-	PRIVATE_FIELD(mBordersSmoothValue);
-	PRIVATE_FIELD(mBorderProperty);
+	PRIVATE_FIELD(mSlicesEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageAssetViewer)
@@ -104,27 +58,5 @@ CLASS_METHODS_META(Editor::ImageAssetViewer)
 	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
-	PRIVATE_FUNCTION(void, InitializeImagePreview);
-	PRIVATE_FUNCTION(void, InitializeSliceHandles);
-	PRIVATE_FUNCTION(void, FitImage);
-	PRIVATE_FUNCTION(void, UpdateBordersAnchors);
-	PRIVATE_FUNCTION(void, UpdateBordersValue);
-	PRIVATE_FUNCTION(Sprite*, CreateGridSprite);
-}
-END_META;
-
-CLASS_BASES_META(Editor::ImageAssetViewer::PreviewImage)
-{
-	BASE_CLASS(o2::Image);
-}
-END_META;
-CLASS_FIELDS_META(Editor::ImageAssetViewer::PreviewImage)
-{
-}
-END_META;
-CLASS_METHODS_META(Editor::ImageAssetViewer::PreviewImage)
-{
-
-	PUBLIC_FUNCTION(void, Draw);
 }
 END_META;

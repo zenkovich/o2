@@ -7,3 +7,5 @@
 /CodeTool/Bin/*.iobj
 /CodeTool/Bin/*.ipdb
 /CodeTool/CodeTool.vcxproj.user
+/Framework/Sources/o2/CodeToolCache.xml
+/Editor/Sources/CodeToolCache.xml

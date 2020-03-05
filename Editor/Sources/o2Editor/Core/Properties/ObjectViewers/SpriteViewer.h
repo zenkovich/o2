@@ -17,10 +17,11 @@ namespace Editor
 	template<typename _type>
 	class AssetProperty;
 
-	class FloatProperty;
+	class BorderIProperty;
 	class ColorProperty;
 	class EnumProperty;
-	class BorderIProperty;
+	class FloatProperty;
+	class ImageSlicesEditorWidget;
 	class Vec2FProperty;
 
 	// ----------------------
@@ -31,6 +32,9 @@ namespace Editor
 	public:
 		// Default constructor. Initializes fields controls
 		SpriteViewer();
+
+		// Refreshing controls and properties by target objects, initializes slices editor
+		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		IOBJECT(SpriteViewer);
 
@@ -54,6 +58,8 @@ namespace Editor
 
 		Spoiler*       mTiledPropertiesSpoiler = nullptr;
 		FloatProperty* mTileScaleProperty = nullptr;
+
+		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
 
 	protected:
 		// It is called when type enum selected, shows required property spoiler
@@ -81,11 +87,15 @@ CLASS_FIELDS_META(Editor::SpriteViewer)
 	PROTECTED_FIELD(mSliceBorderProperty);
 	PROTECTED_FIELD(mTiledPropertiesSpoiler);
 	PROTECTED_FIELD(mTileScaleProperty);
+	PROTECTED_FIELD(mSlicesEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)
 {
 
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+
+	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PROTECTED_FUNCTION(void, OnModeSelected);
 }
 END_META;

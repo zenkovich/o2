@@ -11,6 +11,7 @@
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
 #include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/Core/UI/ImageSlicesEditorWidget.h"
 
 namespace Editor
 {
@@ -75,6 +76,12 @@ namespace Editor
 		mSliceBorderProperty = dynamic_cast<BorderIProperty*>(
 			o2EditorProperties.BuildField(mSlicedPropertiesSpoiler, spriteType, "sliceBorder", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 
+		auto slicesEditorSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
+		slicesEditorSpoiler->SetCaption("Slice border");
+		mSlicesEditor = mnew ImageSlicesEditorWidget();
+		slicesEditorSpoiler->AddChildWidget(mSlicesEditor);
+		mSlicedPropertiesSpoiler->AddChild(slicesEditorSpoiler);
+
 		// Slice properties
 		mTiledPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
 		mHiddenProperties->AddChild(mTiledPropertiesSpoiler);
@@ -85,6 +92,12 @@ namespace Editor
 
 		mTileScaleProperty = dynamic_cast<FloatProperty*>(
 			o2EditorProperties.BuildField(mTiledPropertiesSpoiler, spriteType, "tileScale", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+	}
+
+	void SpriteViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	{
+		TObjectPropertiesViewer<Sprite>::Refresh(targetObjets);
+		mSlicesEditor->Setup(dynamic_cast<Sprite*>(targetObjets[0].first)->GetImageAsset(), mSliceBorderProperty);
 	}
 
 	void SpriteViewer::OnModeSelected()
