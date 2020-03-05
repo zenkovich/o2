@@ -134,6 +134,9 @@ namespace o2
 		// Sorts elements in array by predicate
 		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer) override;
 
+		// Returns copy with sorts elements in array by predicate
+		Vector Sorted(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer);
+
 		// Return vector of elements which pass function
 		Vector FindAll(const Function<bool(const _type&)>& match) const;
 
@@ -431,6 +434,14 @@ namespace o2
 	void Vector<_type>::Sort(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
 	{
 		std::sort(std::vector<_type>::begin(), std::vector<_type>::end(), pred);
+	}
+
+	template<typename _type>
+	Vector<_type> Vector<_type>::Sorted(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
+	{
+		Vector<_type> copy = *this;
+		copy.Sort(pred);
+		return copy;
 	}
 
 	template<typename _type>

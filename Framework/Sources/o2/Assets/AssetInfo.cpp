@@ -39,9 +39,6 @@ namespace o2
 
 	AssetInfo& AssetInfo::operator=(const AssetInfo& other)
 	{
-		if (meta)
-			delete meta;
-
 		if (ownChildren)
 		{
 			for (auto child : children)
@@ -51,7 +48,7 @@ namespace o2
 			}
 		}
 
-		meta = other.meta->CloneAs<AssetMeta>();
+		meta = other.meta;
 		path = other.path;
 		editTime = other.editTime;
 		tree = other.tree;

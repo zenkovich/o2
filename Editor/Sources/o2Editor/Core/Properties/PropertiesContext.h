@@ -20,6 +20,14 @@ namespace Editor
 	class PropertiesContext
 	{
 	public:
+		Vector<Pair<IObject*, IObject*>>       targets;    // Last set targets
+		Map<const FieldInfo*, IPropertyField*> properties; // Property info to property field map
+
+		Spoiler* privatePropertiesSpoiler = nullptr; // Private properties spoiler
+
+		bool builtWithPrivateProperties = false; // Is properties was built with hidden properties
+
+	public:
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);
 
 		// Returns is properties was built with hidden properties
@@ -27,14 +35,6 @@ namespace Editor
 
 		// Returns property info to property field map
 		const Map<const FieldInfo*, IPropertyField*>& GetProperties() const;
-
-	protected:
-		Vector<Pair<IObject*, IObject*>>       mTargets;    // Last setted targets
-		Map<const FieldInfo*, IPropertyField*> mProperties; // Property info to property field map
-
-		Spoiler* mPrivatePropertiesSpoiler = nullptr; // Private properties spoiler
-
-		bool mBuildWithPrivateProperties = false; // Is properties was built with hidden properties
 
 		friend class Properties;
 	};

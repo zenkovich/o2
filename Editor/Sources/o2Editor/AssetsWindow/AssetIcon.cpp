@@ -35,17 +35,17 @@ namespace Editor
 		return *this;
 	}
 
-	void AssetIcon::SetAssetInfo(const AssetInfo& info)
+	void AssetIcon::SetAssetInfo(const AssetInfo* info)
 	{
 		mAssetInfo = info;
 
 		if (mNameText)
-			mNameText->text = o2FileSystem.GetPathWithoutDirectories(info.path);
+			mNameText->text = o2FileSystem.GetPathWithoutDirectories(info->path);
 	}
 
 	const AssetInfo& AssetIcon::GetAssetInfo() const
 	{
-		return mAssetInfo;
+		return *mAssetInfo;
 	}
 
 	void AssetIcon::SetAssetName(const WString& name)

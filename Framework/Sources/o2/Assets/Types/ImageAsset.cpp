@@ -92,6 +92,16 @@ namespace o2
 		return GetMeta()->sliceBorder;
 	}
 
+	void ImageAsset::SetDefaultMode(SpriteMode mode)
+	{
+		GetMeta()->defaultMode = mode;
+	}
+
+	SpriteMode ImageAsset::GetDefaultMode() const
+	{
+		return GetMeta()->defaultMode;
+	}
+
 	UInt ImageAsset::GetAtlasPage() const
 	{
 		return mAtlasPage;

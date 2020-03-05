@@ -128,17 +128,19 @@ namespace Editor
 
 		if (assetTreeNode)
 		{
-			return assetTreeNode->children.
-				FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); }).
-				Select<void*>([](AssetInfo* x) { return (void*)x; });
+			return assetTreeNode->children
+				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
+				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
+				.Select<void*>([](AssetInfo* x) { return (void*)x; });
 		}
 		else
 		{
 			const AssetsTree& assetsTree = o2Assets.GetAssetsTree();
 
-			return assetsTree.rootAssets.
-				FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); }).
-				Select<void*>([](AssetInfo* x) { return (void*)x; });
+			return assetsTree.rootAssets
+				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
+				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
+				.Select<void*>([](AssetInfo* x) { return (void*)x; });
 		}
 	}
 

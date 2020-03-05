@@ -3,7 +3,6 @@
 
 namespace Editor
 {
-
 	const Type* AssetPropertiesViewer::GetViewingObjectType() const
 	{
 		return &TypeOf(AssetRef);

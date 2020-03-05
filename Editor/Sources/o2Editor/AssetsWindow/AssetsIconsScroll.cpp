@@ -174,13 +174,18 @@ namespace Editor
 		}
 		else mAssetInfos = o2Assets.GetAssetsTree().rootAssets.Cast<const AssetInfo*>();
 
-		mAssetInfos.Sort([&](const AssetInfo* a, const AssetInfo* b) {
-			int wa = a->meta->GetAssetType()->InvokeStatic<int>("GetEditorSorting");
-			int wb = b->meta->GetAssetType()->InvokeStatic<int>("GetEditorSorting");
-			if (wa == wb)
-				return a->path.ToLowerCase() < b->path.ToLowerCase();
+		Map<const AssetInfo*, Pair<String, int>> sortingCache;
+		for (auto assetInfo : mAssetInfos)
+		{
+			sortingCache[assetInfo] = { assetInfo->path.ToLowerCase(),
+				assetInfo->meta->GetAssetType()->InvokeStatic<int>("GetEditorSorting") };
+		}
 
-			return wa > wb;
+		mAssetInfos.Sort([&](const AssetInfo* a, const AssetInfo* b) {
+			if (a->meta->GetAssetType() == b->meta->GetAssetType())
+				return sortingCache[a].first < sortingCache[b].first;
+
+			return sortingCache[a].second > sortingCache[b].second;
 		});
 
 		OnItemsUpdated(true);
@@ -408,7 +413,7 @@ namespace Editor
 			iconLayer->layout = Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10));
 		}
 
-		assetIcon->SetAssetInfo(*asset);
+		assetIcon->SetAssetInfo(asset);
 		assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.first == asset->meta->ID(); }));
 		assetIcon->SetSelectionGroup(this);
 		assetIcon->SetSelected(mSelectedAssets.Contains(asset));

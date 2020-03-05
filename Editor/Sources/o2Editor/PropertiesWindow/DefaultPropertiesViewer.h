@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class DefaultObjectViewer;
+	class IObjectPropertiesViewer;
 
 	// -------------------------
 	// Default properties viewer
@@ -25,7 +25,7 @@ namespace Editor
 		IOBJECT(DefaultPropertiesViewer);
 
 	protected:
-		DefaultObjectViewer* mObjectViewer = nullptr; // Object properties viewer
+		IObjectPropertiesViewer* mViewer = nullptr; // Object properties viewer
 
 		Vector<IObject*> mTargets; // Viewing targets
 
@@ -43,7 +43,7 @@ CLASS_BASES_META(Editor::DefaultPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultPropertiesViewer)
 {
-	PROTECTED_FIELD(mObjectViewer);
+	PROTECTED_FIELD(mViewer);
 	PROTECTED_FIELD(mTargets);
 }
 END_META;

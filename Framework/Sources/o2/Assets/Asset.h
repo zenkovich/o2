@@ -18,7 +18,7 @@ namespace o2
 
 	public:
 		PROPERTIES(Asset);
-		PROPERTY(String, path, SetPath, GetPath); // Asset path property
+		PROPERTY(String, path, SetPath, GetPath); // Asset path property @EDITOR_IGNORE
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
 		GETTER(UID, id, GetUID);                  // Asset id getter
 		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
@@ -151,7 +151,7 @@ CLASS_BASES_META(o2::Asset)
 END_META;
 CLASS_FIELDS_META(o2::Asset)
 {
-	PUBLIC_FIELD(path);
+	PUBLIC_FIELD(path).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(fullPath);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(meta);

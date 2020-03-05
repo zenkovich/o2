@@ -121,7 +121,7 @@ namespace Editor
 		if (auto invokeOnChangeAttribute = fieldInfo->GetAttribute<InvokeOnChangeAttribute>())
 		{
 			fieldWidget->onChangeCompleted += [&, invokeOnChangeAttribute](const String&, const Vector<DataNode>&, const Vector<DataNode>&) {
-				for (auto target : propertiesInfo.mTargets) 
+				for (auto target : propertiesInfo.targets) 
 				{
 					auto& targetType = target.first->GetType();
 					auto& targetObjType = dynamic_cast<const ObjectType&>(targetType);
@@ -132,7 +132,7 @@ namespace Editor
 
 		layout->AddChild(fieldWidget);
 
-		propertiesInfo.mProperties.Add(fieldInfo, fieldWidget);
+		propertiesInfo.properties.Add(fieldInfo, fieldWidget);
 
 		//o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)timer.GetDeltaTime());
 
@@ -195,10 +195,10 @@ namespace Editor
 
 	void Properties::FreeProperties(PropertiesContext& propertiesInfo)
 	{
-		for (auto prop : propertiesInfo.mProperties)
+		for (auto prop : propertiesInfo.properties)
 			FreeProperty(prop.second);
 
-		propertiesInfo.mProperties.Clear();
+		propertiesInfo.properties.Clear();
 	}
 
 	void Properties::FreeProperty(IPropertyField* field)
@@ -257,7 +257,7 @@ namespace Editor
 
 			if (!privateFields.IsEmpty())
 			{
-				Spoiler* privates = propertiesInfo.mPrivatePropertiesSpoiler;
+				Spoiler* privates = propertiesInfo.privatePropertiesSpoiler;
 
 				if (!privates)
 					privates = layout->GetChildByType<Spoiler>("privates");
@@ -271,16 +271,16 @@ namespace Editor
 				}
 				else privates->SetIndexInSiblings(layout->GetChildren().Count() - 1);
 
-				propertiesInfo.mPrivatePropertiesSpoiler = privates;
+				propertiesInfo.privatePropertiesSpoiler = privates;
 				BuildFields(privates, privateFields, propertiesInfo, path, onChangeCompleted, onChanged);
 			}
 		}
-		else if (propertiesInfo.mPrivatePropertiesSpoiler)
+		else if (propertiesInfo.privatePropertiesSpoiler)
 		{
-			propertiesInfo.mPrivatePropertiesSpoiler->SetEnabled(false);
+			propertiesInfo.privatePropertiesSpoiler->SetEnabled(false);
 		}
 
-		propertiesInfo.mBuildWithPrivateProperties = mPrivateVisible;
+		propertiesInfo.builtWithPrivateProperties = mPrivateVisible;
 	}
 
 	IPropertyField* Properties::CreateFieldProperty(const Type* type, const String& name,

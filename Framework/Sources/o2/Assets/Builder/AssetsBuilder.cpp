@@ -55,9 +55,9 @@ namespace o2
 		mSourceAssetsTree.Build(folderInfo);
 		mBuiltAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(mBuiltAssetsTreePath));
 
-		ProcessModifiedAssets();
 		ProcessRemovedAssets();
 		ProcessNewAssets();
+		ProcessModifiedAssets();
 		ConvertersPostProcess();
 
 		if (!mModifiedAssets.IsEmpty())
@@ -178,7 +178,7 @@ namespace o2
 				}
 
 				auto fnd = mSourceAssetsTree.allAssetsByUID.find(builtAssetInfo->meta->ID());
-				bool needRemove = fnd == mSourceAssetsTree.allAssetsByUID.end() || builtAssetInfo->path != fnd->second->path;
+				bool needRemove = fnd == mSourceAssetsTree.allAssetsByUID.end();
 
 				if (!needRemove)
 				{
@@ -306,7 +306,7 @@ namespace o2
 					continue;
 
 				auto fnd = mBuiltAssetsTree->allAssetsByUID.find(sourceAssetInfo->meta->ID());
-				bool isNew = !(fnd != mBuiltAssetsTree->allAssetsByUID.end() && fnd->second->path == sourceAssetInfo->path);
+				bool isNew = fnd == mBuiltAssetsTree->allAssetsByUID.end();
 
 				if (!isNew)
 					continue;

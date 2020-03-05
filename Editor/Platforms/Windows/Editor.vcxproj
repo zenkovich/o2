@@ -414,6 +414,7 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\AnimationViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Assets\ImageAssetViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Components\AnimationComponentViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\DefaultObjectViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\SpriteViewer.h" />
@@ -431,6 +432,7 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h" />
@@ -530,6 +532,7 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\AnimationViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Assets\ImageAssetViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Components\AnimationComponentViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\DefaultObjectViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\SpriteViewer.cpp" />
@@ -547,6 +550,7 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp" />

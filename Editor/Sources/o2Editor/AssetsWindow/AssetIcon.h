@@ -38,7 +38,7 @@ namespace Editor
 		AssetIcon& operator=(const AssetIcon& other);
 
 		// Sets asset info
-		void SetAssetInfo(const AssetInfo& info);
+		void SetAssetInfo(const AssetInfo* info);
 
 		// Returns asset info
 		const AssetInfo& GetAssetInfo() const;
@@ -59,7 +59,7 @@ namespace Editor
 
 	protected:
 		Label*                 mNameText = nullptr;      // Asset name text
-		AssetInfo              mAssetInfo;               // Asset information
+		const AssetInfo*       mAssetInfo;               // Asset information
 		WidgetState*           mSelectedState = nullptr; // Node selected state
 		AssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
 
@@ -123,7 +123,7 @@ END_META;
 CLASS_METHODS_META(Editor::AssetIcon)
 {
 
-	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo&);
+	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo*);
 	PUBLIC_FUNCTION(const AssetInfo&, GetAssetInfo);
 	PUBLIC_FUNCTION(void, SetAssetName, const WString&);
 	PUBLIC_FUNCTION(WString, GetAssetName);

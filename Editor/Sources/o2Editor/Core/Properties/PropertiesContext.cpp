@@ -10,12 +10,12 @@ namespace Editor
 {
 	void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets)
 	{
-		mTargets = targets;
+		this->targets = targets;
 
 		if (targets.IsEmpty())
 			return;
 
-		for (auto& kv : mProperties)
+		for (auto& kv : properties)
 		{
 			auto fieldPointers = targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 				[&](const Pair<IObject*, IObject*>& x)
@@ -46,12 +46,12 @@ namespace Editor
 
 	bool PropertiesContext::IsBuiltWIthPrivateProperties() const
 	{
-		return mBuildWithPrivateProperties;
+		return builtWithPrivateProperties;
 	}
 
 	const Map<const FieldInfo*, IPropertyField*>& PropertiesContext::GetProperties() const
 	{
-		return mProperties;
+		return properties;
 	}
 
 }

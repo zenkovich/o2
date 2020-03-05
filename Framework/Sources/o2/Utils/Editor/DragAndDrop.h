@@ -225,7 +225,7 @@ namespace o2
 		bool IsInputTransparent() const override;
 
 	protected:
-		float mDragDelay = 0.7f;   // Delay before disabling drag
+		float mDragDelay = 0.35f;   // Delay before disabling drag
 		float mPressedTime = 0.0f; // Time when cursor pressed 
 
 		bool mDragOnlySelected = false; // Is dragging available only when selected

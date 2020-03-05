@@ -19,7 +19,8 @@ namespace o2
 		PROPERTIES(ImageAsset);
 		PROPERTY(Bitmap*, bitmap, SetBitmap, GetBitmap); // Bitmap data property
 
-		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder); // Slice border
+		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);    // Slice border property
+		PROPERTY(SpriteMode, defaultMode, SetDefaultMode, GetDefaultMode); // Sprite default mode property
 
 		PROPERTY(UID, atlas, SetAtlas, GetAtlas); // Atlas owner asset property
 		GETTER(UInt, atlasPage, GetAtlasPage);    // Atlas page index getter
@@ -55,6 +56,12 @@ namespace o2
 
 		// Returns slice border
 		BorderI GetSliceBorder() const;
+
+		// Sets default sprite mode
+		void SetDefaultMode(SpriteMode mode);
+
+		// Returns default sprite mode
+		SpriteMode GetDefaultMode() const;
 
 		// Returns atlas page
 		UInt GetAtlasPage() const;
@@ -153,6 +160,7 @@ CLASS_FIELDS_META(o2::ImageAsset)
 {
 	PUBLIC_FIELD(bitmap);
 	PUBLIC_FIELD(sliceBorder);
+	PUBLIC_FIELD(defaultMode);
 	PUBLIC_FIELD(atlas);
 	PUBLIC_FIELD(atlasPage);
 	PUBLIC_FIELD(atlasRect);
@@ -174,6 +182,8 @@ CLASS_METHODS_META(o2::ImageAsset)
 	PUBLIC_FUNCTION(void, SetAtlas, const UID&);
 	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
 	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
+	PUBLIC_FUNCTION(void, SetDefaultMode, SpriteMode);
+	PUBLIC_FUNCTION(SpriteMode, GetDefaultMode);
 	PUBLIC_FUNCTION(UInt, GetAtlasPage);
 	PUBLIC_FUNCTION(RectI, GetAtlasRect);
 	PUBLIC_FUNCTION(Vec2F, GetSize);

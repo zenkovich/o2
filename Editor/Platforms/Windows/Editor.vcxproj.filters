@@ -25,6 +25,7 @@
 		<Filter Include="Sources\o2Editor\SceneWindow" />
 		<Filter Include="Sources\o2Editor\TreeWindow" />
 		<Filter Include="Sources\o2Editor\GameWindow" />
+		<Filter Include="Sources\o2Editor\Core\Properties\ObjectViewers\Assets" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
@@ -204,6 +205,9 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\AnimationViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\ObjectViewers</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Assets\ImageAssetViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\ObjectViewers\Assets</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Components\AnimationComponentViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\ObjectViewers\Components</Filter>
 		</ClInclude>
@@ -253,6 +257,9 @@
 			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h">
 			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h">
@@ -548,6 +555,9 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\AnimationViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\ObjectViewers</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Assets\ImageAssetViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\ObjectViewers\Assets</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewers\Components\AnimationComponentViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\ObjectViewers\Components</Filter>
 		</ClCompile>
@@ -597,6 +607,9 @@
 			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp">
 			<Filter>Sources\o2Editor\Core\UI</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp">
