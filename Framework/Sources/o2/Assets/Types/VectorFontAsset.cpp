@@ -107,6 +107,10 @@ namespace o2
 			}
 		}
 	}
+
+	void VectorFontAsset::SaveData(const String& path) const
+	{}
+
 }
 
 DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::VectorFontAsset>);

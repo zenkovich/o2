@@ -120,6 +120,8 @@ namespace Editor
 						        
 		Vector<const AssetInfo*> mSelectedAssets;          // Selected assets icons @IGNORE
 		Vector<AssetRef*>        mSelectedPreloadedAssets; // Preloaded selected assets
+
+		Asset* mNewAsset = nullptr; // Temporary new asset. Used when creating new asset
 						        
 		AssetIcon* mHighlightIcon = nullptr;   // Current highlighting asset icon
 		Animation  mHighlightAnim;             // Icon highlight animation @SERIALIZABLE
@@ -205,6 +207,9 @@ namespace Editor
 
 		// Completes selecting
 		void CompleteSelecting();
+
+		// Sorts current asset infos
+		void SortAssetInfos();
 
 		// Registers objects creation undo action
 		void RegObjectsCreationAction();
@@ -362,6 +367,7 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FIELD(mVisibleAssetIcons);
 	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mSelectedPreloadedAssets);
+	PROTECTED_FIELD(mNewAsset);
 	PROTECTED_FIELD(mHighlightIcon);
 	PROTECTED_FIELD(mHighlightAnim).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHighlightSprite).SERIALIZABLE_ATTRIBUTE();
@@ -422,6 +428,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FUNCTION(void, BeginSelecting);
 	PROTECTED_FUNCTION(void, UpdateSelection, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CompleteSelecting);
+	PROTECTED_FUNCTION(void, SortAssetInfos);
 	PROTECTED_FUNCTION(void, RegObjectsCreationAction);
 	PROTECTED_FUNCTION(void, InitializeContext);
 	PROTECTED_FUNCTION(void, InitializeCreateContext);

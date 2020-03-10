@@ -12,7 +12,7 @@ namespace o2
 	// -----------------
 	struct AssetInfo : public ISerializable
 	{
-		AssetsTree* tree = nullptr; // Owner asset tree
+		const AssetsTree* tree = nullptr; // Owner asset tree
 		
 		String    path;     // Path of asset @SERIALIZABLE
 		TimeStamp editTime; // Asset edited time @SERIALIZABLE		

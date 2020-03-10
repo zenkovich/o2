@@ -174,6 +174,12 @@ namespace Editor
 		}
 		else mAssetInfos = o2Assets.GetAssetsTree().rootAssets.Cast<const AssetInfo*>();
 
+		SortAssetInfos();
+		OnItemsUpdated(true);
+	}
+
+	void AssetsIconsScrollArea::SortAssetInfos()
+	{
 		Map<const AssetInfo*, Pair<String, int>> sortingCache;
 		for (auto assetInfo : mAssetInfos)
 		{
@@ -187,8 +193,6 @@ namespace Editor
 
 			return sortingCache[a].second > sortingCache[b].second;
 		});
-
-		OnItemsUpdated(true);
 	}
 
 	bool AssetsIconsScrollArea::IsFocusable() const
@@ -213,13 +217,14 @@ namespace Editor
 
 		SetViewingPath(assetFolder);
 
+		auto assetInfo = mAssetInfos.FindMatch([&](auto* x) { return x->meta->ID() == id; });
+		ScrollTo((void*)assetInfo);
+
 		AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindMatch([=](Widget* x) {
-			return ((AssetIcon*)x)->GetAssetInfo().meta->ID() == id; }));
+			return &((AssetIcon*)x)->GetAssetInfo() == assetInfo; }));
 
 		if (!icon)
 			return;
-
-		SetScroll(Vec2F(0.0f, -icon->layout->worldTop + layout->worldTop + GetScroll().y));
 
 		mHighlightIcon = icon;
 		mHighlightAnim.RewindAndPlay();
@@ -234,7 +239,9 @@ namespace Editor
 
 		SetViewingPath(assetFolder);
 
-		auto assetInfo = &o2Assets.GetAssetInfo(id);		
+		auto assetInfo = &o2Assets.GetAssetInfo(id);	
+		if (!assetInfo->IsValid())
+			return;
 
 		if (!mSelectedAssets.Contains(assetInfo))
 		{
@@ -725,7 +732,7 @@ namespace Editor
 		mContextMenu->AddItem("Open", [&]() { OnContextOpenPressed(); });
 		mContextMenu->AddItem("Show in folder", [&]() { OnContextShowInExplorerPressed(); });
 		mContextMenu->AddItem("---");
-		mContextMenu->AddItem("New folder", [&]() { OnContextCreateFolderPressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
+		mContextMenu->AddItem("New folder", [&]() { OnContextCreateAssetPressed(&TypeOf(FolderAsset)); });
 
 		InitializeCreateContext();
 
@@ -745,8 +752,15 @@ namespace Editor
 	void AssetsIconsScrollArea::InitializeCreateContext()
 	{
 		auto types = TypeOf(Asset).GetDerivedTypes();
+
 		for (auto type : types)
 		{
+			if (!type->InvokeStatic<bool>("IsAvailableToCreateFromEditor"))
+				continue;
+
+			if (type == &TypeOf(FolderAsset))
+				continue;
+
 			mContextMenu->AddItem("Create/" + o2EditorProperties.MakeSmartFieldName(type->GetName()),
 								  [=]() { OnContextCreateAssetPressed(type); });
 		}
@@ -895,20 +909,31 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnContextCreateAssetPressed(const Type* assetType)
 	{
-		// 		AssetIcon* assetIcon = GetAssetIconFromPool("folder");
-		// 
-		// 		assetIcon->SetState("halfHide", false);
-		// 		assetIcon->SetSelectionGroup(this);
-		// 		assetIcon->mOwner = this;
-		// 
-		// 		mGrid->AddChild(assetIcon, 0);
-		// 
-		// 		StartAssetRenaming(assetIcon, "New " + o2EditorProperties.MakeSmartFieldName(assetType->GetName()), 
-		// 						   [&](const String& name)
-		// 		{
-		// 			//o2EditorAssets.create(mCurrentPath, name);
-		// 			o2EditorAssets.SelectAsset(mCurrentPath + "/" + name);
-		// 		});
+		String newAssetName = "New " + o2EditorProperties.MakeSmartFieldName(assetType->GetName());
+
+		auto objectType = dynamic_cast<const ObjectType*>(assetType);
+
+		mNewAsset = dynamic_cast<Asset*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
+		mNewAsset->SetPath(mCurrentPath + "/" + newAssetName);
+		mAssetInfos.Add(&mNewAsset->GetInfo());
+
+		SortAssetInfos();
+		OnItemsUpdated(true);
+		ScrollTo((void*)&mNewAsset->GetInfo()); 
+		
+		AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindMatch([=](Widget* x) {
+			return &((AssetIcon*)x)->GetAssetInfo() == &mNewAsset->GetInfo(); }));
+
+		if (!icon)
+			return;
+		
+ 		StartAssetRenaming(icon, newAssetName,
+ 						   [&](const String& name)
+ 		{
+			String path = !mCurrentPath.IsEmpty() ? mCurrentPath + "/" + name : name;
+			mNewAsset->Save(path);
+ 			o2EditorAssets.SelectAsset(path);
+ 		});
 	}
 
 	void AssetsIconsScrollArea::OnContextCreateFolderPressed()

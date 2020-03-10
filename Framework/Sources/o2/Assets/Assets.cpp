@@ -128,7 +128,7 @@ namespace o2
 		if (!cached)
 		{
 			auto assetInfo = GetAssetInfo(id);
-			if (!assetInfo.meta->GetAssetType())
+			if (!assetInfo.IsValid())
 				return AssetRef();
 
 			Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();

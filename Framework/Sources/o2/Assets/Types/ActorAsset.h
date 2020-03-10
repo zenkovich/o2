@@ -34,6 +34,9 @@ namespace o2
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 99; }
 
+		// Is this asset type is available to create from editor's assets window
+		static bool IsAvailableToCreateFromEditor() { return true; }
+
 		SERIALIZABLE(ActorAsset);
 
 	protected:
@@ -70,5 +73,6 @@ CLASS_METHODS_META(o2::ActorAsset)
 	PUBLIC_FUNCTION(Actor*, GetActor);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
+	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
 }
 END_META;

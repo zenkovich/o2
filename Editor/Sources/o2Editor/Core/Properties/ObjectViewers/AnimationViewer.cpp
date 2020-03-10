@@ -41,7 +41,9 @@ namespace Editor
 	void AnimationViewer::OnEditPressed()
 	{
 		o2EditorAnimationWindow.SetAnimation(mCurrentAnimation);
-		o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+
+		if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
+			o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 	}
 
 }

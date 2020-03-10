@@ -228,7 +228,7 @@ namespace o2
 
 	void ScrollArea::ResetScroll()
 	{
-		SetScroll(mScrollArea.LeftBottom());
+		SetScrollForcible(mScrollArea.LeftBottom());
 	}
 
 	void ScrollArea::SetHorizontalScroll(float scroll)

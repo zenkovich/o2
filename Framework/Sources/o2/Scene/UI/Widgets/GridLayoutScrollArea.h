@@ -44,6 +44,9 @@ namespace o2
 		// Updates items
 		void OnItemsUpdated(bool itemsRearranged = false);
 
+		// Scroll view to item
+		void ScrollTo(void* item);
+
 		// Updates layout
 		void UpdateSelfTransform() override;
 
@@ -125,6 +128,7 @@ CLASS_METHODS_META(o2::GridLayoutScrollArea)
 	PUBLIC_FUNCTION(void, SetItemsSpacing, const Vec2F&);
 	PUBLIC_FUNCTION(const Vec2F&, GetItemsSpacing);
 	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
+	PUBLIC_FUNCTION(void, ScrollTo, void*);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);

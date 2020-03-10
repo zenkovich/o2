@@ -66,7 +66,7 @@ namespace o2
 			SERIALIZABLE(Meta);
 
 		protected:
-			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE
+			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT
 
 			friend class VectorFontAsset;
 		};
@@ -80,6 +80,9 @@ namespace o2
 
 		// Loads data
 		void LoadData(const String& path) override;
+
+		// Saves asset data, using DataNode and serialization
+		void SaveData(const String& path) const override;
 
 		friend class Assets;
 	};
@@ -114,6 +117,7 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
+	PROTECTED_FUNCTION(void, SaveData, const String&);
 }
 END_META;
 
@@ -124,7 +128,7 @@ CLASS_BASES_META(o2::VectorFontAsset::Meta)
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAsset::Meta)
 {
-	PROTECTED_FIELD(mEffects).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEffects).EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::VectorFontAsset::Meta)

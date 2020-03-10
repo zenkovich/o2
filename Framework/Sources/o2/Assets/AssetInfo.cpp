@@ -7,7 +7,10 @@
 namespace o2
 {
 	AssetInfo::AssetInfo()
-	{}
+	{
+		if (Assets::IsSingletonInitialzed())
+			tree = &o2Assets.GetAssetsTree();
+	}
 
 	AssetInfo::AssetInfo(const AssetInfo& other):
 		path(other.path), editTime(other.editTime), tree(other.tree), 
@@ -17,7 +20,10 @@ namespace o2
 
 	AssetInfo::AssetInfo(AssetMeta* meta):
 		meta(meta)
-	{}
+	{
+		if (Assets::IsSingletonInitialzed())
+			tree = &o2Assets.GetAssetsTree();
+	}
 
 	AssetInfo::~AssetInfo()
 	{

@@ -41,7 +41,7 @@ namespace o2
 		ACCESSOR(WidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
 
 	public:
-		WidgetLayout* const layout; // Widget layout
+		WidgetLayout* const layout; // Widget layout @EDITOR_IGNORE
 
 	public:
 		Function<void()> onLayoutUpdated; // Layout change event
@@ -700,7 +700,7 @@ CLASS_FIELDS_META(o2::Widget)
 	PUBLIC_FIELD(childWidget);
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(state);
-	PUBLIC_FIELD(layout);
+	PUBLIC_FIELD(layout).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(onLayoutUpdated);
 	PUBLIC_FIELD(onFocused);
 	PUBLIC_FIELD(onUnfocused);

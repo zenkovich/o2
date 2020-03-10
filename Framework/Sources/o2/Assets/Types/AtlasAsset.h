@@ -50,6 +50,9 @@ namespace o2
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 97; }
 
+		// Is this asset type is available to create from editor's assets window
+		static bool IsAvailableToCreateFromEditor() { return true; }
+
 		ASSET_TYPE(AtlasAsset, Meta);
 
 	public:
@@ -167,6 +170,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const AssetInfo&, UInt);
 	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
+	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 }
 END_META;

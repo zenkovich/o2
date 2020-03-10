@@ -87,6 +87,16 @@ namespace o2
 		SetLayoutDirty();
 	}
 
+	void GridLayoutScrollArea::ScrollTo(void* item)
+	{
+		int idx = GetItemsRange(0, GetItemsCount()).Find(item);
+		if (idx < 0)
+			return;
+
+		int itemsInLine = GetItemsInLine();
+		SetScrollForcible(Vec2F(0, idx/itemsInLine*(mItemSample->layout->GetMinHeight() + mItemsSpacing.y)));
+	}
+
 	void GridLayoutScrollArea::CalculateScrollArea()
 	{
 		Vec2F offset;
@@ -196,18 +206,15 @@ namespace o2
 			newItem->mParentWidget = this;
 
 			itemsWidgets[i - mMinVisibleItemIdx] = newItem;
+
+			newItem->UpdateSelfTransform();
+			newItem->UpdateChildrenTransforms();
+			newItem->mIsClipped = false;
 		}
 
 		mChildren.Add(itemsWidgets.Cast<Actor*>());
 		mChildWidgets.Add(itemsWidgets);
 		mDrawingChildren.Add(itemsWidgets);
-
-		for (auto child : mChildWidgets)
-		{
-			child->UpdateSelfTransform();
-			child->UpdateChildrenTransforms();
-			child->mIsClipped = false;
-		}
 
 		mPrevItemsInLine = itemsInLine;
 	}

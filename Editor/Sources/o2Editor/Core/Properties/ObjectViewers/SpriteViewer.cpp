@@ -72,12 +72,13 @@ namespace Editor
 		auto sliceSpace = mnew Widget();
 		sliceSpace->layout->minHeight = 5;
 		mSlicedPropertiesSpoiler->AddChildWidget(sliceSpace);
-
-		mSliceBorderProperty = dynamic_cast<BorderIProperty*>(
-			o2EditorProperties.BuildField(mSlicedPropertiesSpoiler, spriteType, "sliceBorder", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
-
+		
 		auto slicesEditorSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
-		slicesEditorSpoiler->SetCaption("Slice border");
+
+		slicesEditorSpoiler->SetCaption("Slices");
+		mSliceBorderProperty = dynamic_cast<BorderIProperty*>(
+			o2EditorProperties.BuildField(slicesEditorSpoiler, spriteType, "sliceBorder", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+
 		mSlicesEditor = mnew ImageSlicesEditorWidget();
 		slicesEditorSpoiler->AddChildWidget(mSlicesEditor);
 		mSlicedPropertiesSpoiler->AddChild(slicesEditorSpoiler);

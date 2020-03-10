@@ -3,6 +3,7 @@
 #include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/Meta.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
+#include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
@@ -21,7 +22,7 @@ namespace o2
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property @EDITOR_IGNORE
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
 		GETTER(UID, id, GetUID);                  // Asset id getter
-		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
+		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter @EXPANDED_BY_DEFAULT
 
 	public:
 		// Virtual destructor
@@ -71,6 +72,9 @@ namespace o2
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 1; }
+
+		// Is this asset type is available to create from editor's assets window
+		static bool IsAvailableToCreateFromEditor() { return false; }
 
 		SERIALIZABLE(Asset);
 
@@ -154,7 +158,7 @@ CLASS_FIELDS_META(o2::Asset)
 	PUBLIC_FIELD(path).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(fullPath);
 	PUBLIC_FIELD(id);
-	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(meta).EXPANDED_BY_DEFAULT_ATTRIBUTE();
 	PUBLIC_FIELD(mMeta).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE();
 	PROTECTED_FIELD(mInfo);
 }
@@ -176,6 +180,7 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
+	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, ID);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
