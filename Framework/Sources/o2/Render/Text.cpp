@@ -4,7 +4,6 @@
 #include "o2/Assets/Assets.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Render.h"
-#include "o2/Utils/Debug/Debug.h"
 
 namespace o2
 {
@@ -20,7 +19,7 @@ namespace o2
 		mFontAssetId(0), mDotsEndings(false), mHeight(11)
 	{
 		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
@@ -42,7 +41,7 @@ namespace o2
 		mHeight = text.mHeight;
 
 		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 	}
@@ -77,7 +76,7 @@ namespace o2
 			delete mesh;
 
 		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 	}
 
 	Text& Text::operator=(const Text& other)
@@ -85,7 +84,7 @@ namespace o2
 		IRectDrawable::operator=(other);
 
 		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		mText = other.mText;
 		mFontAssetId = other.mFontAssetId;
@@ -99,7 +98,7 @@ namespace o2
 		mHeight = other.mHeight;
 
 		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 
@@ -125,12 +124,12 @@ namespace o2
 	void Text::SetFont(FontRef font)
 	{
 		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		mFont = font;
 
 		if (mFont)
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 
@@ -145,7 +144,7 @@ namespace o2
 	void Text::SetFontAsset(const FontAssetRef& asset)
 	{
 		if (mFont)
-			mFont->onCharactersRebuild -= ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
 		if (asset)
 		{
@@ -157,7 +156,7 @@ namespace o2
 
 		if (mFont)
 		{
-			mFont->onCharactersRebuild += ObjFunctionPtr<Text, void>(this, &Text::UpdateMesh);
+			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 			mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
 		}
 	}
@@ -375,6 +374,13 @@ namespace o2
 		currentMesh->SetTexture(mFont->mTexture);
 
 		mUpdatingMesh = false;
+	}
+
+	void Text::CheckCharactersAndRebuildMesh()
+	{
+		mFont->CheckCharacters(mText, height);
+		mFont->CheckCharacters(".", height);
+		UpdateMesh();
 	}
 
 	void Text::PrepareMesh(int charactersCount)

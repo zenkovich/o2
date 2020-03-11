@@ -36,10 +36,13 @@ namespace o2
 	const Font::Character& Font::GetCharacter(UInt16 id, int height)
 	{
 		for (const Character& ch : mCharacters)
+		{
 			if (ch.mId == id && height == ch.mHeight)
 				return ch;
+		}
 
-		return mCharacters.Get(0);
+		static Character empty;
+		return empty;
 	}
 
 	void Font::CheckCharacters(const WString& needChararacters, int height)

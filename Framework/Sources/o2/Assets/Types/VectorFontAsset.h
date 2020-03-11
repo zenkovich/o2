@@ -2,6 +2,7 @@
 
 #include "o2/Assets/Types/FontAsset.h"
 #include "o2/Render/VectorFont.h"
+#include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 
 namespace o2
 {
@@ -66,7 +67,13 @@ namespace o2
 			SERIALIZABLE(Meta);
 
 		protected:
-			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT
+			Vector<VectorFont::Effect*> mEffects; // Font effects array @SERIALIZABLE @EDITOR_PROPERTY @EXPANDED_BY_DEFAULT @INVOKE_ON_CHANGE(UpdateFontEffects)
+			
+			VectorFontAsset* mAsset = nullptr; // Asset pointer
+
+		protected:
+			// Calls UpdateFontEffects from asset
+			void UpdateFontEffects();
 
 			friend class VectorFontAsset;
 		};
@@ -83,6 +90,9 @@ namespace o2
 
 		// Saves asset data, using DataNode and serialization
 		void SaveData(const String& path) const override;
+
+		// Updates font effects in 
+		void UpdateFontEffects();
 
 		friend class Assets;
 	};
@@ -118,6 +128,7 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
+	PROTECTED_FUNCTION(void, UpdateFontEffects);
 }
 END_META;
 
@@ -128,12 +139,14 @@ CLASS_BASES_META(o2::VectorFontAsset::Meta)
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAsset::Meta)
 {
-	PROTECTED_FIELD(mEffects).EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mEffects).EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(UpdateFontEffects).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAsset);
 }
 END_META;
 CLASS_METHODS_META(o2::VectorFontAsset::Meta)
 {
 
 	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
+	PROTECTED_FUNCTION(void, UpdateFontEffects);
 }
 END_META;

@@ -2,7 +2,6 @@
 
 #include "AnimationKeyDragHandle.h"
 #include "o2/Scene/UI/Widget.h"
-#include "o2/Scene/UI/Widgets/Image.h"
 #include "o2Editor/AnimationWindow/AnimationKeysActions.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AnimationWindow/KeyHandlesSheet.h"

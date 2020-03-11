@@ -2,8 +2,6 @@
 #include "VectorFontAsset.h"
 
 #include "o2/Assets/Assets.h"
-#include "o2/Render/BitmapFont.h"
-#include "o2/Render/Font.h"
 #include "o2/Render/Render.h"
 
 namespace o2
@@ -37,6 +35,12 @@ namespace o2
 		}
 
 		return true;
+	}
+
+	void VectorFontAsset::Meta::UpdateFontEffects()
+	{
+		if (mAsset)
+			mAsset->UpdateFontEffects();
 	}
 
 	VectorFontAsset::VectorFontAsset():
@@ -98,19 +102,26 @@ namespace o2
 		if (!mFont)
 		{
 			mFont = mnew VectorFont(path);
-
-			VectorFont* vectorFont = (VectorFont*)mFont.mFont;
-			for (auto eff : GetMeta()->mEffects)
-			{
-				if (eff)
-					vectorFont->AddEffect(eff->CloneAs<VectorFont::Effect>());
-			}
+			UpdateFontEffects();
 		}
+		
+		GetMeta()->mAsset = this;
 	}
 
 	void VectorFontAsset::SaveData(const String& path) const
 	{}
 
+	void VectorFontAsset::UpdateFontEffects()
+	{
+		Vector<VectorFont::Effect*> clonedEffects;;
+		for (auto eff : GetMeta()->mEffects)
+		{
+			if (eff)
+				clonedEffects.Add(eff->CloneAs<VectorFont::Effect>());
+		}
+
+		dynamic_cast<VectorFont*>(mFont.mFont)->SetEffects(clonedEffects);
+	}
 }
 
 DECLARE_CLASS_MANUAL(o2::DefaultAssetMeta<o2::VectorFontAsset>);

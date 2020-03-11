@@ -79,6 +79,12 @@ namespace o2
 		// Removes all effects
 		void RemoveAllEffects();
 
+		// Sets effects list
+		void SetEffects(const Vector<Effect*>& effects);
+
+		// Returns effects list
+		const Vector<Effect*>& GetEffects() const;
+
 		// Removes all cached characters
 		void Reset();
 

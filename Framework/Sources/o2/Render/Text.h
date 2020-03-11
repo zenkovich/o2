@@ -244,6 +244,9 @@ namespace o2
 		// Updating meshes
 		void UpdateMesh();
 
+		// Checks test's characters in font and rebuilds mesh. Used when fond is resetting
+		void CheckCharactersAndRebuildMesh();
+
 		// Transforming meshes by basis
 		void TransformMesh(const Basis& bas);
 
@@ -327,6 +330,7 @@ CLASS_METHODS_META(o2::Text)
 	PUBLIC_FUNCTION(RectF, GetRealRect);
 	PUBLIC_STATIC_FUNCTION(Vec2F, GetTextSize, const WString&, Font*, int, const Vec2F&, HorAlign, VerAlign, bool, bool, float, float);
 	PROTECTED_FUNCTION(void, UpdateMesh);
+	PROTECTED_FUNCTION(void, CheckCharactersAndRebuildMesh);
 	PROTECTED_FUNCTION(void, TransformMesh, const Basis&);
 	PROTECTED_FUNCTION(void, PrepareMesh, int);
 	PROTECTED_FUNCTION(Basis, CalculateTextBasis);

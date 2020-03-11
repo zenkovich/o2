@@ -120,7 +120,7 @@ namespace Editor
 
 		if (auto invokeOnChangeAttribute = fieldInfo->GetAttribute<InvokeOnChangeAttribute>())
 		{
-			fieldWidget->onChangeCompleted += [&, invokeOnChangeAttribute](const String&, const Vector<DataNode>&, const Vector<DataNode>&) {
+			fieldWidget->onChanged += [&, invokeOnChangeAttribute](IPropertyField*) {
 				for (auto target : propertiesInfo.targets) 
 				{
 					auto& targetType = target.first->GetType();

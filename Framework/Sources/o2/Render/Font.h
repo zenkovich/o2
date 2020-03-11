@@ -26,7 +26,7 @@ namespace o2
 		struct Character;
 
 	public:
-		Function<void()> onCharactersRebuild;
+		Function<void()> onCharactersRebuilt;
 
 	public:
 		// Default constructor

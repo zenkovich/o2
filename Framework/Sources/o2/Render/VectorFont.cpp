@@ -10,10 +10,9 @@
 #include "o2/Application/Application.h"
 #include "o2/Render/Render.h"
 #include "o2/Utils/Bitmap/Bitmap.h"
-#include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Utils/FileSystem/File.h"
 #include "o2/Utils/System/Time/Timer.h"
-#include "o2/Assets/Assets.h"
 
 namespace o2
 {
@@ -166,6 +165,8 @@ namespace o2
 	VectorFont::Effect* VectorFont::AddEffect(Effect* effect)
 	{
 		mEffects.Add(effect);
+		Reset();
+		
 		return effect;
 	}
 
@@ -173,6 +174,7 @@ namespace o2
 	{
 		mEffects.Remove(effect);
 		delete effect;
+		Reset();
 	}
 
 	void VectorFont::RemoveAllEffects()
@@ -181,18 +183,33 @@ namespace o2
 			delete effect;
 
 		mEffects.Clear();
+		Reset();
+	}
+
+	void VectorFont::SetEffects(const Vector<Effect*>& effects)
+	{
+		for (auto effect : mEffects)
+			delete effect;
+
+		mEffects = effects;
+		Reset();
+	}
+
+	const Vector<VectorFont::Effect*>& VectorFont::GetEffects() const
+	{
+		return mEffects;
 	}
 
 	void VectorFont::Reset()
 	{
 		mCharacters.Clear();
+		onCharactersRebuilt();
 	}
 
 	void VectorFont::UpdateCharacters(Vector<wchar_t>& newCharacters, int height)
 	{
 		RenderNewCharacters(newCharacters, height);
-
-		onCharactersRebuild();
+		onCharactersRebuilt();
 	}
 
 	void VectorFont::RenderNewCharacters(Vector<wchar_t>& newCharacters, int height)
