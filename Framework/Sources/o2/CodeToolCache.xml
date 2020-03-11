@@ -5747,42 +5747,6 @@
 			<usings />
 		</globalNamespace>
 	</file>
-	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Asset.h">
-		<date year="2020" month="3" day="9" hour="14" minute="37" second="16" />
-		<globalNamespace name="" fullname="">
-			<sections>
-				<section name="o2" fullname="o2">
-					<sections>
-						<section name="Asset" fullname="o2::Asset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="AssetMeta" newDef="MetaType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="ISerializable" protection="0" />
-							</baseClasses>
-						</section>
-						<section name="AssetWithDefaultMeta" fullname="o2::AssetWithDefaultMeta" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
-							<sections />
-							<typedefs>
-								<typedef what="DefaultAssetMeta&lt;T&gt;" newDef="Meta" />
-								<typedef what="Meta" newDef="MetaType" />
-							</typedefs>
-							<usings />
-							<baseClasses>
-								<class name="Asset" protection="0" />
-							</baseClasses>
-						</section>
-					</sections>
-					<typedefs />
-					<usings />
-				</section>
-			</sections>
-			<typedefs />
-			<usings />
-		</globalNamespace>
-	</file>
 	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Types/VectorFontAsset.h">
 		<date year="2020" month="3" day="9" hour="15" minute="18" second="14" />
 		<globalNamespace name="" fullname="">
@@ -5855,6 +5819,42 @@
 				</section>
 				<section name="o2" fullname="o2">
 					<sections />
+					<typedefs />
+					<usings />
+				</section>
+			</sections>
+			<typedefs />
+			<usings />
+		</globalNamespace>
+	</file>
+	<file path="C:\work\PetStory\o2\Framework\Platforms\Windows\..\..\Sources\o2/Assets/Asset.h">
+		<date year="2020" month="3" day="10" hour="22" minute="4" second="59" />
+		<globalNamespace name="" fullname="">
+			<sections>
+				<section name="o2" fullname="o2">
+					<sections>
+						<section name="Asset" fullname="o2::Asset" isClass="true" isMeta="false" templates="" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="AssetMeta" newDef="MetaType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="ISerializable" protection="0" />
+							</baseClasses>
+						</section>
+						<section name="AssetWithDefaultMeta" fullname="o2::AssetWithDefaultMeta" isClass="true" isMeta="false" templates="typename T" protection="0" attributeCommentDef="" attributeShortDef="">
+							<sections />
+							<typedefs>
+								<typedef what="DefaultAssetMeta&lt;T&gt;" newDef="Meta" />
+								<typedef what="Meta" newDef="MetaType" />
+							</typedefs>
+							<usings />
+							<baseClasses>
+								<class name="Asset" protection="0" />
+							</baseClasses>
+						</section>
+					</sections>
 					<typedefs />
 					<usings />
 				</section>

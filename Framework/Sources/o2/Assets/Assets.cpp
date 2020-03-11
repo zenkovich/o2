@@ -127,7 +127,7 @@ namespace o2
 
 		if (!cached)
 		{
-			auto assetInfo = GetAssetInfo(id);
+			auto& assetInfo = GetAssetInfo(id);
 			if (!assetInfo.IsValid())
 				return AssetRef();
 
@@ -454,7 +454,7 @@ namespace o2
 	Assets::AssetCache* Assets::FindAssetCache(const UID& id)
 	{
 		Assets::AssetCache* res = nullptr;
-		mCachedAssetsByPath.TryGetValue(id, res);
+		mCachedAssetsByUID.TryGetValue(id, res);
 		return res;
 	}
 

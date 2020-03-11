@@ -22,7 +22,7 @@ namespace o2
 		PROPERTY(String, path, SetPath, GetPath); // Asset path property @EDITOR_IGNORE
 		GETTER(String, fullPath, GetFullPath);    // Full asset path getter (from binary path)
 		GETTER(UID, id, GetUID);                  // Asset id getter
-		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter @EXPANDED_BY_DEFAULT
+		GETTER(AssetMeta*, meta, GetMeta);        // Asset meta information pointer getter
 
 	public:
 		// Virtual destructor
@@ -79,7 +79,7 @@ namespace o2
 		SERIALIZABLE(Asset);
 
 	protected:
-		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE
+		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT
 
 		AssetInfo mInfo; // Asset info 
 
@@ -158,8 +158,8 @@ CLASS_FIELDS_META(o2::Asset)
 	PUBLIC_FIELD(path).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(fullPath);
 	PUBLIC_FIELD(id);
-	PUBLIC_FIELD(meta).EXPANDED_BY_DEFAULT_ATTRIBUTE();
-	PUBLIC_FIELD(mMeta).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE();
+	PUBLIC_FIELD(meta);
+	PUBLIC_FIELD(mMeta).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE();
 	PROTECTED_FIELD(mInfo);
 }
 END_META;

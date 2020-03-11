@@ -320,7 +320,7 @@ namespace Editor
 			else if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
 				targets.Clear();
 			else
-				targets = mSelectedPreloadedAssets.Cast<IObject*>();
+				targets = mSelectedPreloadedAssets.DynamicCast<IObject*>();
 
 			if (!targets.IsEmpty())
 				o2EditorPropertiesWindow.SetTargets(targets, THIS_FUNC(CheckPreloadedAssetsSaving));

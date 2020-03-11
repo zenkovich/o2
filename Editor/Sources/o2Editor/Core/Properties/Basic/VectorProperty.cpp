@@ -132,7 +132,8 @@ namespace Editor
 		
 		mIsRefreshing = true;
 
-		for (auto& pair : mTargetObjects) {
+		for (auto& pair : mTargetObjects) 
+		{
 			pair.first.Refresh();
 			pair.second.Refresh();
 		}
@@ -263,6 +264,17 @@ namespace Editor
 
 			if (propertyType->GetValueType()->GetUsage() == Type::Usage::Vector)
 				mVectorType = dynamic_cast<const VectorType*>(propertyType->GetValueType());
+		}
+	}
+
+	void VectorProperty::SetFieldInfo(const FieldInfo* fieldInfo)
+	{
+		IPropertyField::SetFieldInfo(fieldInfo);
+
+		if (fieldInfo)
+		{
+			if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
+				mSpoiler->Expand();
 		}
 	}
 

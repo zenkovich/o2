@@ -53,6 +53,9 @@ namespace Editor
 		// Specializes vector type
 		void SpecializeType(const Type* type);
 
+		// Specializes field info, processing attributes
+		void SetFieldInfo(const FieldInfo* fieldInfo) override;
+
 		// Returns specialized vector type
 		const Type* GetSpecializedType() const;
 
@@ -171,6 +174,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
+	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
