@@ -22,6 +22,9 @@ namespace Editor
 
 	void DefaultPropertiesViewer::Refresh()
 	{
+		if (mTargets.IsEmpty())
+			return;
+		
 		const Type* objectType = !mTargets.IsEmpty() ? &mTargets[0]->GetType() : nullptr;
 
 		bool requiredNewViewer = mViewer ? !objectType->IsBasedOn(*mViewer->GetViewingObjectType()) : objectType != nullptr;

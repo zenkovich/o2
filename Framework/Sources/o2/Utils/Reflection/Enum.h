@@ -5,7 +5,7 @@
 namespace o2
 {
 	template<typename _type>
-	class IsEnumReflectable: std::false_type {};
+	class IsEnumReflectable: public std::false_type {};
 
 #define PRE_ENUM_META(NAME)                                      \
     template<>                                                   \

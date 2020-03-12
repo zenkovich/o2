@@ -5,7 +5,6 @@
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
-#include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2Editor/AnimationWindow/CurvesSheet.h"

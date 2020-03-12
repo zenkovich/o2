@@ -45,7 +45,7 @@ namespace o2
 		PROPERTY(Color4, emitParticlesColorB, SetEmitParticlesColorB, GetEmitParticlesColorB); // Emitting particle color B property													   
 
 		PROPERTY(ImageAssetRef, image, SetImage, GetImage);          // Particle image property
-		PROPERTY(ParticlesEmitterShape*, shape, SetShape, GetShape); // Emitting shape property
+		PROPERTY(ParticlesEmitterShape*, shape, SetShape, GetShape); // Emitting shape property @EDITOR_IGNORE
 
 	public:
 		// Default constructor
@@ -237,7 +237,7 @@ namespace o2
 
 	protected:
 		ImageAssetRef          mImageAsset;      // Particle sprite image @SERIALIZABLE
-		ParticlesEmitterShape* mShape = nullptr; // Particles emitting shape @SERIALIZABLE
+		ParticlesEmitterShape* mShape = nullptr; // Particles emitting shape @SERIALIZABLE @EDITOR_PROPERTY 
 		Vector<ParticlesEffect*>     mEffects;         // Particles effect @SERIALIZABLE @EDITOR_PROPERTY 
 														                 
 		int mParticlesNumLimit = 100; // Max available visible particles @SERIALIZABLE
@@ -332,9 +332,9 @@ CLASS_FIELDS_META(o2::ParticlesEmitter)
 	PUBLIC_FIELD(emitParticlesColorA);
 	PUBLIC_FIELD(emitParticlesColorB);
 	PUBLIC_FIELD(image);
-	PUBLIC_FIELD(shape);
+	PUBLIC_FIELD(shape).EDITOR_IGNORE_ATTRIBUTE();
 	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mShape).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mShape).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mEffects).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mParticlesNumLimit).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPlaying).SERIALIZABLE_ATTRIBUTE();

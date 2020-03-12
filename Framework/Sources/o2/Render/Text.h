@@ -22,14 +22,19 @@ namespace o2
 
 	public:
 		PROPERTIES(Text);
-		PROPERTY(FontRef, font, SetFont, GetFont);                                            // Font reference property
-		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset);                        // Font asset reference property
-		PROPERTY(WString, text, SetText, GetText);                                            // Text property, wstring
-		PROPERTY(int, height, SetHeight, GetHeight);                                          // Text height
-		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign);                               // vertical align property
-		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign);                               // Horizontal align property
-		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);                                   // Words wrapping flag property
-		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings);                           // Dots endings when overflow property
+		PROPERTY(FontRef, font, SetFont, GetFont);                     // Font reference property
+		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
+		
+		PROPERTY(WString, text, SetText, GetText); // Text property, wstring
+		
+		PROPERTY(int, height, SetHeight, GetHeight); // Text height
+		
+		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property
+		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property
+		
+		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);         // Words wrapping flag property
+		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings); // Dots endings when overflow property
+		
 		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard
 		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
 
@@ -86,7 +91,7 @@ namespace o2
 		void SetText(const WString& text);
 
 		// Returns text
-		WString GetText() const;
+		const WString& GetText() const;
 
 		// Sets horizontal align
 		void SetHorAlign(HorAlign align);
@@ -312,7 +317,7 @@ CLASS_METHODS_META(o2::Text)
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
-	PUBLIC_FUNCTION(WString, GetText);
+	PUBLIC_FUNCTION(const WString&, GetText);
 	PUBLIC_FUNCTION(void, SetHorAlign, HorAlign);
 	PUBLIC_FUNCTION(HorAlign, GetHorAlign);
 	PUBLIC_FUNCTION(void, SetVerAlign, VerAlign);

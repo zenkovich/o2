@@ -460,15 +460,10 @@ namespace o2
 		sample->horOverflow = Label::HorOverflow::Dots;
 		sample->verOverflow = Label::VerOverflow::None;
 
-		Text* captionText = mnew Text("stdFont.ttf");
-		captionText->text = "Checkbox";
-		captionText->horAlign = HorAlign::Middle;
-		captionText->verAlign = VerAlign::Middle;
-		captionText->color = Color4(96, 125, 139);
-		sample->AddLayer("text", captionText);
-
-		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->SetFont(FontRef("stdFont.ttf"));
+		sample->SetHorAlign(HorAlign::Middle);
+		sample->SetVerAlign(VerAlign::Middle);
+		sample->SetColor(Color4(96, 125, 139));
 
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
@@ -816,12 +811,12 @@ namespace o2
 
 		Button* closeBtn = o2UI.CreateWidget<Button>("close");
 		closeBtn->name = "closeButton";
-		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(4, -18));
+		*closeBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(1, 2));
 		sample->AddInternalWidget(closeBtn);
 
 		Button* optionsBtn = o2UI.CreateWidget<Button>("arrow");
 		optionsBtn->name = "optionsButton";
-		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-12, -18));
+		*optionsBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-15, 2));
 		sample->AddInternalWidget(optionsBtn);
 
 		sample->SetDragAreaLayouts(Layout(Vec2F(0, 1), Vec2F(1, 1), Vec2F(5, -15), Vec2F(-5, -2)),    // head

@@ -9,7 +9,9 @@
 namespace o2
 {
 	Label::Label()
-	{}
+	{
+		CreateDefaultText();
+	}
 
 	Label::Label(const Label& other):
 		Widget(other), mHorOverflow(other.mHorOverflow), mVerOverflow(other.mVerOverflow), 
@@ -17,9 +19,11 @@ namespace o2
 		horOverflow(this), verOverflow(this), expandBorder(this), symbolsDistanceCoef(this), linesDistanceCoef(this),
 		color(this)
 	{
-		mTextLayer = GetLayerDrawable<Text>("text");
+		mTextDrawable = GetLayerDrawable<Text>("text");
+		if (!mTextDrawable)
+			CreateDefaultText();
+		
 		RetargetStatesAnimations();
-
 		SetLayoutDirty();
 	}
 
@@ -76,79 +80,93 @@ namespace o2
 
 	void Label::SetFont(FontRef font)
 	{
-		if (mTextLayer)
-			mTextLayer->SetFont(font);
+		if (mTextDrawable)
+			mTextDrawable->SetFont(font);
 
 		SetLayoutDirty();
 	}
 
 	FontRef Label::GetFont() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetFont();
+		if (mTextDrawable)
+			return mTextDrawable->GetFont();
 
 		return FontRef();
 	}
 
+	void Label::SetFontAsset(const FontAssetRef& asset)
+	{
+		if (mTextDrawable)
+			mTextDrawable->SetFontAsset(asset);
+	}
+
+	FontAssetRef Label::GetFontAsset() const
+	{
+		if (mTextDrawable)
+			return mTextDrawable->GetFontAsset();
+
+		return FontAssetRef();
+	}
+
 	void Label::SetText(const WString& text)
 	{
-		if (mTextLayer)
-			mTextLayer->SetText(text);
+		if (mTextDrawable)
+			mTextDrawable->SetText(text);
 
 		if (mHorOverflow == HorOverflow::Expand || mVerOverflow == VerOverflow::Expand)
 			SetLayoutDirty();
 	}
 
-	WString Label::GetText() const
+	const WString& Label::GetText() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetText();
+		if (mTextDrawable)
+			return mTextDrawable->GetText();
 
-		return WString();
+		return WString::empty;
 	}
 
 	void Label::SetColor(const Color4& color)
 	{
-		if (mTextLayer)
-			mTextLayer->SetColor(color);
+		if (mTextDrawable)
+			mTextDrawable->SetColor(color);
 	}
 
 	Color4 Label::GetColor() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetColor();
+		if (mTextDrawable)
+			return mTextDrawable->GetColor();
 
 		return Color4();
 	}
 
 	void Label::SetHorAlign(HorAlign align)
 	{
-		if (mTextLayer)
-			mTextLayer->SetHorAlign(align);
+		if (mTextDrawable)
+			mTextDrawable->SetHorAlign(align);
 
 		SetLayoutDirty();
 	}
 
 	HorAlign Label::GetHorAlign() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetHorAlign();
+		if (mTextDrawable)
+			return mTextDrawable->GetHorAlign();
 
 		return HorAlign::Left;
 	}
 
 	void Label::SetVerAlign(VerAlign align)
 	{
-		if (mTextLayer)
-			mTextLayer->SetVerAlign(align);
+		if (mTextDrawable)
+			mTextDrawable->SetVerAlign(align);
 
 		SetLayoutDirty();
 	}
 
 	VerAlign Label::GetVerAlign() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetVerAlign();
+		if (mTextDrawable)
+			return mTextDrawable->GetVerAlign();
 
 		return VerAlign::Top;
 	}
@@ -157,10 +175,10 @@ namespace o2
 	{
 		mHorOverflow = overflow;
 
-		if (mTextLayer)
+		if (mTextDrawable)
 		{
-			mTextLayer->wordWrap = mHorOverflow == HorOverflow::Wrap;
-			mTextLayer->dotsEngings = mHorOverflow == HorOverflow::Dots;
+			mTextDrawable->wordWrap = mHorOverflow == HorOverflow::Wrap;
+			mTextDrawable->dotsEngings = mHorOverflow == HorOverflow::Dots;
 		}
 
 		SetLayoutDirty();
@@ -184,32 +202,32 @@ namespace o2
 
 	void Label::SetSymbolsDistanceCoef(float coef /*= 1*/)
 	{
-		if (mTextLayer)
-			mTextLayer->SetSymbolsDistanceCoef(coef);
+		if (mTextDrawable)
+			mTextDrawable->SetSymbolsDistanceCoef(coef);
 
 		SetLayoutDirty();
 	}
 
 	float Label::GetSymbolsDistanceCoef() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetSymbolsDistanceCoef();
+		if (mTextDrawable)
+			return mTextDrawable->GetSymbolsDistanceCoef();
 
 		return 1.0f;
 	}
 
 	void Label::SetLinesDistanceCoef(float coef /*= 1*/)
 	{
-		if (mTextLayer)
-			mTextLayer->SetLinesDistanceCoef(coef);
+		if (mTextDrawable)
+			mTextDrawable->SetLinesDistanceCoef(coef);
 
 		SetLayoutDirty();
 	}
 
 	float Label::GetLinesDistanceCoef() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetLinesDistanceCoef();
+		if (mTextDrawable)
+			return mTextDrawable->GetLinesDistanceCoef();
 
 		return 1.0f;
 	}
@@ -227,32 +245,32 @@ namespace o2
 
 	void Label::SetHeight(int height)
 	{
-		if (mTextLayer)
-			mTextLayer->SetHeight(height);
+		if (mTextDrawable)
+			mTextDrawable->SetHeight(height);
 	}
 
 	int Label::GetHeight() const
 	{
-		if (mTextLayer)
-			return mTextLayer->GetHeight();
+		if (mTextDrawable)
+			return mTextDrawable->GetHeight();
 
 		return 0;
 	}
 
 	void Label::UpdateSelfTransform()
 {
-		if (mTextLayer)
+		if (mTextDrawable)
 		{
 			if (mHorOverflow == HorOverflow::Expand)
 			{
 				layout->Update();
 
-				float realSize = mTextLayer->GetRealSize().x + mExpandBorder.x*2.0f;
+				float realSize = mTextDrawable->GetRealSize().x + mExpandBorder.x*2.0f;
 				float thisSize = layout->width;
 				float sizeDelta = realSize - thisSize;
 				GetLayoutData().minSize.x = realSize;
 
-				switch (mTextLayer->GetHorAlign())
+				switch (mTextDrawable->GetHorAlign())
 				{
 					case HorAlign::Left:
 					GetLayoutData().offsetMax.x += sizeDelta;
@@ -274,11 +292,11 @@ namespace o2
 			{
 				layout->Update();
 
-				float realSize = mTextLayer->GetRealSize().y + mExpandBorder.y*2.0f;
+				float realSize = mTextDrawable->GetRealSize().y + mExpandBorder.y*2.0f;
 				float thisSize = layout->height;
 				float sizeDelta = realSize - thisSize;
 
-				switch (mTextLayer->GetVerAlign())
+				switch (mTextDrawable->GetVerAlign())
 				{
 					case VerAlign::Top:
 					GetLayoutData().offsetMin.y -= sizeDelta;
@@ -306,10 +324,13 @@ namespace o2
 
 		Widget::CopyData(other);
 
-		mTextLayer    = GetLayerDrawable<Text>("text");
+		mTextDrawable    = GetLayerDrawable<Text>("text");
 		mHorOverflow  = other.mHorOverflow;
 		mVerOverflow  = other.mVerOverflow;
 		mExpandBorder = other.mExpandBorder;
+		
+		if (!mTextDrawable)
+			CreateDefaultText();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -318,7 +339,13 @@ namespace o2
 	void Label::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-			mTextLayer = (Text*)layer->GetDrawable();
+			mTextDrawable = (Text*)layer->GetDrawable();
+	}
+
+	void Label::CreateDefaultText()
+	{
+		mTextDrawable = dynamic_cast<Text*>(AddLayer("text", mnew Text())->GetDrawable());
+		mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
 	}
 }
 

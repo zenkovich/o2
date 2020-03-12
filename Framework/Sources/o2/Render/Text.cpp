@@ -41,9 +41,10 @@ namespace o2
 		mHeight = text.mHeight;
 
 		if (mFont)
+		{
 			mFont->onCharactersRebuilt += ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
-
-		mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
+			mFont->CheckCharacters(mBasicSymbolsPreset, mHeight);
+		}
 	}
 
 	Text::Text(const BitmapFontAssetRef& fontAsset):
@@ -193,7 +194,7 @@ namespace o2
 		UpdateMesh();
 	}
 
-	WString Text::GetText() const
+	const WString& Text::GetText() const
 	{
 		return mText;
 	}

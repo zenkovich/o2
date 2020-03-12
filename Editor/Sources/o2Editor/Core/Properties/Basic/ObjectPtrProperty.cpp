@@ -235,6 +235,7 @@ namespace Editor
 		{
 			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
 			mRemoveBtn->layout->maxWidth = 20;
+			mRemoveBtn->layout->minHeight = 20;
 			mHeaderContainer->AddChild(mRemoveBtn, 0);
 		}
 

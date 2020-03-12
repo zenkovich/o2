@@ -18,7 +18,9 @@ namespace o2
 		PROPERTIES(Label);
 		PROPERTY(WString, text, SetText, GetText);   // Text property, wstring
 
-		PROPERTY(FontRef, font, SetFont, GetFont);   // Font pointer property
+		PROPERTY(FontRef, font, SetFont, GetFont);                     // Font pointer property
+		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
+		
 		PROPERTY(int, height, SetHeight, GetHeight); // Text height property
 		PROPERTY(Color4, color, SetColor, GetColor); // Text color property
 
@@ -52,11 +54,17 @@ namespace o2
 		// Returns using font
 		FontRef GetFont() const;
 
+		// Sets bitmap font asset 
+		void SetFontAsset(const FontAssetRef& asset);
+
+		// Returns asset by font asset id
+		FontAssetRef GetFontAsset() const;
+
 		// Sets text
 		void SetText(const WString& text);
 
 		// Returns text
-		WString GetText() const;
+		const WString& GetText() const;
 
 		// Sets text color
 		void SetColor(const Color4& color);
@@ -118,7 +126,7 @@ namespace o2
 		SERIALIZABLE(Label);
 
 	protected:
-		Text*       mTextLayer = nullptr;             // Text layer drawable. Getting from layer "text"
+		Text*       mTextDrawable = nullptr;             // Text layer drawable. Getting from layer "text"
 		HorOverflow mHorOverflow = HorOverflow::None; // Text horizontal overflow logic @SERIALIZABLE
 		VerOverflow mVerOverflow = VerOverflow::None; // Text vertical overflow logic @SERIALIZABLE
 		Vec2F       mExpandBorder;                    // Expand overflow border size @SERIALIZABLE
@@ -129,6 +137,9 @@ namespace o2
 
 		// It is called when layer added and updates drawing sequence
 		void OnLayerAdded(WidgetLayer* layer) override;
+
+		// Creates default text layer
+		void CreateDefaultText();
 	};
 }
 
@@ -145,6 +156,7 @@ CLASS_FIELDS_META(o2::Label)
 {
 	PUBLIC_FIELD(text);
 	PUBLIC_FIELD(font);
+	PUBLIC_FIELD(fontAsset);
 	PUBLIC_FIELD(height);
 	PUBLIC_FIELD(color);
 	PUBLIC_FIELD(verAlign);
@@ -154,7 +166,7 @@ CLASS_FIELDS_META(o2::Label)
 	PUBLIC_FIELD(expandBorder);
 	PUBLIC_FIELD(symbolsDistanceCoef);
 	PUBLIC_FIELD(linesDistanceCoef);
-	PROTECTED_FIELD(mTextLayer);
+	PROTECTED_FIELD(mTextDrawable);
 	PROTECTED_FIELD(mHorOverflow).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mVerOverflow).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mExpandBorder).SERIALIZABLE_ATTRIBUTE();
@@ -166,8 +178,10 @@ CLASS_METHODS_META(o2::Label)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetFont, FontRef);
 	PUBLIC_FUNCTION(FontRef, GetFont);
+	PUBLIC_FUNCTION(void, SetFontAsset, const FontAssetRef&);
+	PUBLIC_FUNCTION(FontAssetRef, GetFontAsset);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
-	PUBLIC_FUNCTION(WString, GetText);
+	PUBLIC_FUNCTION(const WString&, GetText);
 	PUBLIC_FUNCTION(void, SetColor, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetColor);
 	PUBLIC_FUNCTION(void, SetHorAlign, HorAlign);
@@ -189,5 +203,6 @@ CLASS_METHODS_META(o2::Label)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
+	PROTECTED_FUNCTION(void, CreateDefaultText);
 }
 END_META;
