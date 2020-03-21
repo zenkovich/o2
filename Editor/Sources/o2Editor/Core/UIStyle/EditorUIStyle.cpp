@@ -1648,7 +1648,7 @@ namespace Editor
 
 	void EditorUIStyleBuilder::RebuildActorHeadActorAssetProperty()
 	{
-		auto sample = mnew AssetProperty<ActorAssetRef>();
+		auto sample = mnew AssetProperty();
 		sample->expandHeight = true;
 		sample->expandWidth = true;
 		sample->fitByChildren = false;
@@ -3423,18 +3423,62 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildAssetsPropeties()
+
+	void EditorUIStyleBuilder::RebuildAssetPropety()
 	{
-		RebuildAssetPropety<o2::ActorAssetRef>();
-		RebuildAssetPropety<o2::AtlasAssetRef>();
-		RebuildAssetPropety<o2::AnimationAssetRef>();
-		RebuildAssetPropety<o2::BinaryAssetRef>();
-		RebuildAssetPropety<o2::BitmapFontAssetRef>();
-		RebuildAssetPropety<o2::DataAssetRef>();
-		RebuildAssetPropety<o2::FolderAssetRef>();
-		RebuildAssetPropety<o2::ImageAssetRef>();
-		RebuildAssetPropety<o2::VectorFontAssetRef>();
-		RebuildAssetPropety<o2::FontAssetRef>();
+		auto sample = mnew AssetProperty();
+		sample->layout->minHeight = 20;
+		sample->expandHeight = true;
+		sample->expandWidth = true;
+		sample->fitByChildren = false;
+
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
+		layout->name = "layout";
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
+
+		auto box = mnew Widget();
+		box->name = "box";
+		box->SetFocusable(true);
+		*box->layout = WidgetLayout::BothStretch();
+
+		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
+			Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"),
+			Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
+			Layout::BothStretch(-9, -9, -9, -9));
+
+		box->AddState("focused", Animation::EaseInOut(box, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		nameText->color = Color4(96, 125, 139);;
+		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		box->SetFocusable(true);
+
+		auto linkBtn = o2UI.CreateWidget<Button>("asset link");
+		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
+		box->AddChild(linkBtn);
+
+		layout->AddChild(box);
+
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
 	void EditorUIStyleBuilder::RebuildBoolPropety()
@@ -4138,18 +4182,7 @@ namespace Editor
 	void EditorUIStyleBuilder::RebuildPropertiesWithCaptins()
 	{
 		BuildPropertyWithCaption<ActorProperty>("standard", "with caption");
-
-		BuildPropertyWithCaption<AssetProperty<o2::ActorAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::AtlasAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::AnimationAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::BinaryAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::BitmapFontAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::DataAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::FolderAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::ImageAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::VectorFontAssetRef>>("standard", "with caption");
-		BuildPropertyWithCaption<AssetProperty<o2::FontAssetRef>>("standard", "with caption");
-
+		BuildPropertyWithCaption<AssetProperty>("standard", "with caption");
 		BuildPropertyWithCaption<BooleanProperty>("standard", "with caption");
 		BuildPropertyWithCaption<BorderFProperty>("standard", "with caption");
 		BuildPropertyWithCaption<BorderIProperty>("standard", "with caption");

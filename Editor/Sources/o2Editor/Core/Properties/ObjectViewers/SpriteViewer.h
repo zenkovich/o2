@@ -14,9 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	template<typename _type>
 	class AssetProperty;
-
 	class BorderIProperty;
 	class ColorProperty;
 	class EnumProperty;
@@ -39,16 +37,14 @@ namespace Editor
 		IOBJECT(SpriteViewer);
 
 	protected:
-		typedef AssetProperty<ImageAssetRef> ImageAssetProperty;
-
 		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
 
-		ImageAssetProperty* mImageProperty = nullptr;
-		ColorProperty*      mColorProperty = nullptr;
-		FloatProperty*      mAlphaProperty = nullptr;
-		Vec2FProperty*      mSizePivotProperty = nullptr;
-		Vec2FProperty*      mPivotProperty = nullptr;
-		EnumProperty*       mModeProperty = nullptr;
+		AssetProperty* mImageProperty = nullptr;
+		ColorProperty* mColorProperty = nullptr;
+		FloatProperty* mAlphaProperty = nullptr;
+		Vec2FProperty* mSizePivotProperty = nullptr;
+		Vec2FProperty* mPivotProperty = nullptr;
+		EnumProperty*  mModeProperty = nullptr;
 
 		Spoiler*       mFillPropertiesSpoiler = nullptr;
 		FloatProperty* mFillProperty = nullptr;

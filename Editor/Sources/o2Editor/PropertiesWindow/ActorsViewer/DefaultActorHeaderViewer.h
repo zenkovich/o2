@@ -18,8 +18,6 @@ namespace Editor
 	class LayerProperty;
 	class BooleanProperty;
 	class StringProperty;
-
-	template<typename _type>
 	class AssetProperty;
 
 	// ---------------------------

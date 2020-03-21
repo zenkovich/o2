@@ -1,34 +1,158 @@
 #include "o2Editor/stdafx.h"
 #include "AssetProperty.h"
 
-#include "o2/Assets/Types/ActorAsset.h"
-#include "o2/Assets/Types/AnimationAsset.h"
-#include "o2/Assets/Types/AtlasAsset.h"
-#include "o2/Assets/Types/BinaryAsset.h"
-#include "o2/Assets/Types/BitmapFontAsset.h"
-#include "o2/Assets/Types/DataAsset.h"
-#include "o2/Assets/Types/FolderAsset.h"
-#include "o2/Assets/Types/ImageAsset.h"
-#include "o2/Assets/Types/VectorFontAsset.h"
+namespace Editor
+{
+	AssetProperty::AssetProperty()
+	{}
 
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::ActorAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::AnimationAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::AtlasAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::BinaryAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::BitmapFontAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::DataAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::FolderAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::FontAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::ImageAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::AssetProperty<o2::VectorFontAssetRef>);
+	AssetProperty::AssetProperty(const AssetProperty& other) :
+		TPropertyField(other)
+	{
+		InitializeControls();
+	}
 
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::ActorAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::AnimationAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::AtlasAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::BinaryAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::BitmapFontAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::DataAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::FolderAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::FontAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::ImageAssetRef>);
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::VectorFontAssetRef>);
+	AssetProperty& AssetProperty::operator=(const AssetProperty& other)
+	{
+		TPropertyField::operator =(other);
+		return *this;
+	}
+
+	void AssetProperty::CopyData(const Actor& otherActor)
+	{
+		TPropertyField::CopyData(otherActor);
+		InitializeControls();
+	}
+
+	void AssetProperty::InitializeControls()
+	{
+		mBox = GetChildWidget("container/layout/box");
+		if (mBox)
+		{
+			mBox->SetFocusable(true);
+			mBox->onDraw += MakeFunction<DragDropArea, void>(this, &DragDropArea::OnDrawn);
+
+			mNameText = mBox->GetLayerDrawable<Text>("caption");
+			if (mNameText)
+				mNameText->text = "--";
+		}
+	}
+
+	void AssetProperty::UpdateValueView()
+	{
+		if (!mValuesDifferent)
+		{
+			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetUID()))
+			{
+				mNameText->text = "Null";
+				mBox->layer["caption"]->transparency = 0.5f;
+			}
+			else
+			{
+				auto name = o2FileSystem.GetFileNameWithoutExtension(
+					o2FileSystem.GetPathWithoutDirectories(mCommonValue->GetPath()));
+
+				mNameText->text = name;
+				mBox->layer["caption"]->transparency = 1.0f;
+			}
+		}
+		else
+		{
+			mNameText->text = "--";
+			mBox->layer["caption"]->transparency = 1.0f;
+		}
+	}
+
+	void AssetProperty::SetAssetId(const UID& id)
+	{
+		mCommonValue = id == 0 ? AssetRef() : AssetRef(id);
+
+		for (auto ptr : mValuesProxies)
+			SetProxy(ptr.first, mCommonValue);
+
+		SetCommonAssetId(id);
+	}
+
+	void AssetProperty::SetCommonAssetId(const UID& id)
+	{
+		mCommonValue = id == 0 ? AssetRef() : AssetRef(id);
+		mValuesDifferent = false;
+
+		UpdateValueView();
+		CheckRevertableState();
+		OnValueChanged();
+	}
+
+	void AssetProperty::SetAssetIdByUser(const UID& id)
+	{
+		StoreValues(mBeforeChangeValues);
+		SetAssetId(id);
+		CheckValueChangeCompleted();
+	}
+
+	void AssetProperty::OnCursorPressed(const Input::Cursor& cursor)
+	{
+		o2UI.FocusWidget(mBox);
+		if (mCommonValue)
+			o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
+	}
+
+	void AssetProperty::OnCursorExit(const Input::Cursor& cursor)
+	{
+		mBox->SetState("select", false);
+	}
+
+	void AssetProperty::OnCursorEnter(const Input::Cursor& cursor)
+	{
+		mBox->SetState("select", true);
+	}
+
+	void AssetProperty::OnKeyPressed(const Input::Key& key)
+	{
+		if (mBox && mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
+			SetAssetIdByUser(0);
+	}
+
+	bool AssetProperty::IsUnderPoint(const Vec2F& point)
+	{
+		return mBox->IsUnderPoint(point);
+	}
+
+	void AssetProperty::OnDragExit(ISelectableDragableObjectsGroup* group)
+	{
+		o2Application.SetCursor(CursorType::Arrow);
+		mBox->SetState("focused", false);
+	}
+
+	void AssetProperty::OnDragEnter(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		if (!assetIconsScroll)
+			return;
+
+		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
+		if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
+			return;
+
+		o2Application.SetCursor(CursorType::Hand);
+		mBox->SetState("focused", true);
+	}
+
+	void AssetProperty::OnDropped(ISelectableDragableObjectsGroup* group)
+	{
+		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
+		if (!assetIconsScroll)
+			return;
+
+		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
+		if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
+			return;
+
+		SetAssetIdByUser(lastSelectedAsset->meta->ID());
+
+		o2Application.SetCursor(CursorType::Arrow);
+		mBox->Focus();
+	}
+}
+
+DECLARE_CLASS(Editor::AssetProperty);

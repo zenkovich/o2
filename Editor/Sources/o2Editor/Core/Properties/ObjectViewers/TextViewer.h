@@ -14,9 +14,7 @@ namespace o2
 
 namespace Editor
 {
-	template<typename _type>
 	class AssetProperty;
-
 	class FloatProperty;
 	class ColorProperty;
 	class EnumProperty;
@@ -38,19 +36,17 @@ namespace Editor
 		IOBJECT(TextViewer);
 
 	protected:
-		typedef AssetProperty<FontAssetRef> FontAssetProperty;
-
-		ColorProperty*     mColorProperty = nullptr;
-		FloatProperty*     mAlphaProperty = nullptr;
-		FontAssetProperty* mFontProperty = nullptr;
-		WStringProperty*   mTextProperty = nullptr;
-		FloatProperty*     mHeightProperty = nullptr;
-		EnumProperty*      mHorAlignProperty = nullptr;
-		EnumProperty*      mVerAlignProperty = nullptr;
-		BooleanProperty*   mWordWrapProperty = nullptr;
-		BooleanProperty*   mDotsEndingsProperty = nullptr;
-		FloatProperty*     mSymbolsDistCoefProperty = nullptr;
-		FloatProperty*     mLinesDistCoefProperty = nullptr;
+		ColorProperty*   mColorProperty = nullptr;
+		FloatProperty*   mAlphaProperty = nullptr;
+		AssetProperty*   mFontProperty = nullptr;
+		WStringProperty* mTextProperty = nullptr;
+		FloatProperty*   mHeightProperty = nullptr;
+		EnumProperty*    mHorAlignProperty = nullptr;
+		EnumProperty*    mVerAlignProperty = nullptr;
+		BooleanProperty* mWordWrapProperty = nullptr;
+		BooleanProperty* mDotsEndingsProperty = nullptr;
+		FloatProperty*   mSymbolsDistCoefProperty = nullptr;
+		FloatProperty*   mLinesDistCoefProperty = nullptr;
 	};
 }
 

@@ -9,26 +9,14 @@
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
 
-
 using namespace o2;
 
 namespace Editor
 {
-	// ------------------------------
-	// Asset property field interface
-	// ------------------------------
-	class IAssetProperty
-	{
-	public:
-		// Sets value asset id
-		virtual void SetAssetId(const UID& id) {}
-	};
-
 	// -------------------------
 	// Editor asset property box
 	// -------------------------
-	template<typename _type>
-	class AssetProperty : public TPropertyField<_type>, public IAssetProperty, public DragDropArea, public KeyboardEventsListener
+	class AssetProperty : public TPropertyField<AssetRef>, public DragDropArea, public KeyboardEventsListener
 	{
 	public:
 		// Default constructor
@@ -51,6 +39,8 @@ namespace Editor
 	protected:
 		Widget* mBox = nullptr;      // Property edit box
 		Text*   mNameText = nullptr; // Asset name text
+
+		const Type* mAssetType = nullptr; // Type of asset
 
 	protected:
 		// Copies data of actor from other to this
@@ -89,194 +79,23 @@ namespace Editor
 		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 	};
-
-	template<typename _type>
-	AssetProperty<_type>::AssetProperty()
-	{}
-
-	template<typename _type>
-	AssetProperty<_type>::AssetProperty(const AssetProperty& other) :
-		TPropertyField<_type>(other)
-	{
-		InitializeControls();
-	}
-
-	template<typename _type>
-	AssetProperty<_type>& AssetProperty<_type>::operator=(const AssetProperty<_type>& other)
-	{
-		TPropertyField<_type>::operator =(other);
-		return *this;
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<_type>::CopyData(otherActor);
-		InitializeControls();
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::InitializeControls()
-	{
-		mBox = GetChildWidget("container/layout/box");
-		if (mBox)
-		{
-			mBox->SetFocusable(true);
-			mBox->onDraw += MakeFunction<DragDropArea, void>(this, &DragDropArea::OnDrawn);
-
-			mNameText = mBox->GetLayerDrawable<Text>("caption");
-			if (mNameText)
-				mNameText->text = "--";
-		}
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::UpdateValueView()
-	{
-		if (!mValuesDifferent)
-		{
-			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetUID()))
-			{
-				mNameText->text = "Null:" + TypeOf(_type).GetName();
-				mBox->layer["caption"]->transparency = 0.5f;
-			}
-			else
-			{
-				auto name = o2FileSystem.GetFileNameWithoutExtension(
-					o2FileSystem.GetPathWithoutDirectories(mCommonValue->GetPath()));
-
-				mNameText->text = name;
-				mBox->layer["caption"]->transparency = 1.0f;
-			}
-		}
-		else
-		{
-			mNameText->text = "--";
-			mBox->layer["caption"]->transparency = 1.0f;
-		}
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::SetAssetId(const UID& id)
-	{
-		mCommonValue = id == 0 ? _type() : _type(id);
-
-		for (auto ptr : mValuesProxies)
-			SetProxy<_type>(ptr.first, mCommonValue);
-
-		SetCommonAssetId(id);
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::SetCommonAssetId(const UID& id)
-	{
-		mCommonValue = id == 0 ? _type() : _type(id);
-		mValuesDifferent = false;
-
-		UpdateValueView();
-		CheckRevertableState();
-		OnValueChanged();
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::SetAssetIdByUser(const UID& id)
-	{
-		StoreValues(mBeforeChangeValues);
-		SetAssetId(id);
-		CheckValueChangeCompleted();
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnCursorPressed(const Input::Cursor& cursor)
-	{
-		o2UI.FocusWidget(mBox);
-		if (mCommonValue)
-			o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnCursorExit(const Input::Cursor& cursor)
-	{
-		mBox->SetState("select", false);
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnCursorEnter(const Input::Cursor& cursor)
-	{
-		mBox->SetState("select", true);
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnKeyPressed(const Input::Key& key)
-	{
-		if (mBox && mBox->IsFocused() && (key == VK_DELETE || key == VK_BACK))
-			SetAssetIdByUser(0);
-	}
-
-	template<typename _type>
-	bool AssetProperty<_type>::IsUnderPoint(const Vec2F& point)
-	{
-		return mBox->IsUnderPoint(point);
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnDragExit(ISelectableDragableObjectsGroup* group)
-	{
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->SetState("focused", false);
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnDragEnter(ISelectableDragableObjectsGroup* group)
-	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
-		if (!assetIconsScroll)
-			return;
-
-		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
-			return;
-
-		o2Application.SetCursor(CursorType::Hand);
-		mBox->SetState("focused", true);
-	}
-
-	template<typename _type>
-	void AssetProperty<_type>::OnDropped(ISelectableDragableObjectsGroup* group)
-	{
-		auto assetIconsScroll = dynamic_cast<AssetsIconsScrollArea*>(group);
-		if (!assetIconsScroll)
-			return;
-
-		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
-			return;
-
-		SetAssetIdByUser(lastSelectedAsset->meta->ID());
-
-		o2Application.SetCursor(CursorType::Arrow);
-		mBox->Focus();
-	}
 }
 
-META_TEMPLATES(typename _type)
-CLASS_BASES_META(Editor::AssetProperty<_type>)
+CLASS_BASES_META(Editor::AssetProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<_type>);
-	BASE_CLASS(Editor::IAssetProperty);
+	BASE_CLASS(Editor::TPropertyField<AssetRef>);
 	BASE_CLASS(o2::DragDropArea);
 	BASE_CLASS(o2::KeyboardEventsListener);
 }
 END_META;
-META_TEMPLATES(typename _type)
-CLASS_FIELDS_META(Editor::AssetProperty<_type>)
+CLASS_FIELDS_META(Editor::AssetProperty)
 {
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
+	PROTECTED_FIELD(mAssetType);
 }
 END_META;
-META_TEMPLATES(typename _type)
-CLASS_METHODS_META(Editor::AssetProperty<_type>)
+CLASS_METHODS_META(Editor::AssetProperty)
 {
 
 	PUBLIC_FUNCTION(void, SetAssetId, const UID&);

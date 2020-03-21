@@ -82,6 +82,7 @@ namespace Editor
 		void RebuildVector2FProperty();
 		void RebuildVector2IProperty();
 		void RebuildColoredVector2Property();
+		void RebuildAssetPropety();
 
 		void RebuildPropertiesWithCaptins();
 
@@ -133,8 +134,6 @@ namespace Editor
 		template<typename _property_type>
 		void BuildPropertyWithCaption(const String& propertyStyle, const String& propertyWithCaptionStyle);
 
-		template<typename _type>
-		void RebuildAssetPropety();
 	};
 
 	template<typename _property_type>
@@ -153,65 +152,6 @@ namespace Editor
 
 		o2UI.AddWidgetStyle(property, propertyWithCaptionStyle);
 	}
-
-	template<typename _type>
-	void EditorUIStyleBuilder::RebuildAssetPropety()
-	{
-		auto sample = mnew AssetProperty<_type>();
-		sample->layout->minHeight = 20;
-		sample->expandHeight = true;
-		sample->expandWidth = true;
-		sample->fitByChildren = false;
-
-		auto layoutContainer = mnew Widget();
-		layoutContainer->name = "container";
-		*layoutContainer->layout = WidgetLayout::BothStretch();
-		sample->AddChild(layoutContainer);
-
-		auto layout = mnew HorizontalLayout();
-		layout->name = "layout";
-		*layout->layout = WidgetLayout::BothStretch();
-		layoutContainer->AddChild(layout);
-
-		auto box = mnew Widget();
-		box->name = "box";
-		box->SetFocusable(true);
-		*box->layout = WidgetLayout::BothStretch();
-
-		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
-									   Layout::BothStretch(-9, -9, -9, -9));
-
-		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"),
-										 Layout::BothStretch(-9, -9, -9, -9));
-
-		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
-										Layout::BothStretch(-9, -9, -9, -9));
-
-		box->AddState("focused", Animation::EaseInOut(box, "layer/focus/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		box->AddState("hover", Animation::EaseInOut(box, "layer/hover/transparency", 0.0f, 1.0f, 0.05f))
-			->offStateAnimationSpeed = 0.5f;
-
-		auto nameText = mnew Text("stdFont.ttf");
-		nameText->text = "--";
-		nameText->horAlign = HorAlign::Left;
-		nameText->verAlign = VerAlign::Middle;
-		nameText->dotsEngings = true;
-		nameText->color = Color4(96, 125, 139);;
-		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
-
-		box->SetFocusable(true);
-
-		auto linkBtn = o2UI.CreateWidget<Button>("asset link");
-		*linkBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(15, 15), Vec2F());
-		box->AddChild(linkBtn);
-
-		layout->AddChild(box);
-
-		o2UI.AddWidgetStyle(sample, "standard");
-	}
-
 }
 
 CLASS_BASES_META(Editor::EditorUIStyleBuilder)
@@ -295,6 +235,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildVector2FProperty);
 	PUBLIC_FUNCTION(void, RebuildVector2IProperty);
 	PUBLIC_FUNCTION(void, RebuildColoredVector2Property);
+	PUBLIC_FUNCTION(void, RebuildAssetPropety);
 	PUBLIC_FUNCTION(void, RebuildPropertiesWithCaptins);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableProperty);

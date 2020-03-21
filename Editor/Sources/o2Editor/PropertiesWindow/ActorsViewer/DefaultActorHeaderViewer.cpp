@@ -61,7 +61,7 @@ namespace Editor
 		*linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
-		mPrototypeProperty = o2UI.CreateWidget<AssetProperty<ActorAssetRef>>("actor head asset property");
+		mPrototypeProperty = o2UI.CreateWidget<AssetProperty>("actor head asset property");
 		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
 		prototypeRoot->AddChild(mPrototypeProperty);
 
@@ -144,8 +144,8 @@ namespace Editor
 		mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
 			actors, prototypes, [](Actor* x) { return &x->locked; });
 
-		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
-			actors, [](Actor* x) { return &x->prototype; });
+		// mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
+		// 	actors, [](Actor* x) { return &x->prototype; });
 
 		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
 
