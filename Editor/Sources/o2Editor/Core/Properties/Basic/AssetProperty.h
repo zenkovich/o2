@@ -31,6 +31,12 @@ namespace Editor
 		// Sets value asset id
 		void SetAssetId(const UID& id);
 
+		// Sets asset type
+		void SetAssetType(const Type* assetType);
+
+		// Specializes field info
+		void SetFieldInfo(const FieldInfo* fieldInfo) override;
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
@@ -54,6 +60,9 @@ namespace Editor
 
 		// Sets asset id, checks value changed, calls onChangeCompleted
 		void SetAssetIdByUser(const UID& id);
+
+		// Returns value from proxy
+		AssetRef GetProxy(IAbstractValueProxy* proxy) const override;
 
 		// Updates value view
 		void UpdateValueView() override;
@@ -99,11 +108,14 @@ CLASS_METHODS_META(Editor::AssetProperty)
 {
 
 	PUBLIC_FUNCTION(void, SetAssetId, const UID&);
+	PUBLIC_FUNCTION(void, SetAssetType, const Type*);
+	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, SetCommonAssetId, const UID&);
 	PROTECTED_FUNCTION(void, SetAssetIdByUser, const UID&);
+	PROTECTED_FUNCTION(AssetRef, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);

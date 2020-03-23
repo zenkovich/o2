@@ -23,7 +23,6 @@ namespace Editor
 {
 	class ActorProperty;
 	class ComponentProperty;
-	class IAssetProperty;
 	class SceneTree;
 	class AssetIcon;
 

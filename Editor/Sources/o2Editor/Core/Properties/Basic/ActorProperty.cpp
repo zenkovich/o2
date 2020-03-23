@@ -74,7 +74,7 @@ namespace Editor
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		Actor* sourceActor = GetProxy<Actor*>(source);
+		Actor* sourceActor = GetProxy(source);
 		Actor* topSourceActor = sourceActor;
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
@@ -108,8 +108,8 @@ namespace Editor
 		{
 			if (ptr.second)
 			{
-				Actor* value = GetProxy<Actor*>(ptr.first);
-				Actor* proto = GetProxy<Actor*>(ptr.second);
+				Actor* value = GetProxy(ptr.first);
+				Actor* proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{

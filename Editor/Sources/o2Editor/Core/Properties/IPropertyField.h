@@ -228,6 +228,9 @@ namespace Editor
 		// Stores values to data
 		void StoreValues(Vector<DataNode>& data) const override;
 
+		// Returns value from proxy
+		virtual _type GetProxy(IAbstractValueProxy* proxy) const;
+
 		// Sets common value
 		virtual void SetCommonValue(const _type& value);
 
@@ -237,150 +240,6 @@ namespace Editor
 		// Updates value view
 		virtual void UpdateValueView() {}
 	};
-
-	template<typename _type>
-	TPropertyField<_type>::TPropertyField()
-	{}
-
-	template<typename _type>
-	TPropertyField<_type>::TPropertyField(const TPropertyField& other) :
-		IPropertyField(other)
-	{}
-
-	template<typename _type>
-	TPropertyField<_type>& Editor::TPropertyField<_type>::operator=(const TPropertyField& other)
-	{
-		IPropertyField::operator=(other);
-		return *this;
-	}
-
-	template<typename _type>
-	void Editor::TPropertyField<_type>::Refresh()
-	{
-		if (mValuesProxies.IsEmpty())
-			return;
-
-		auto lastCommonValue = mCommonValue;
-		bool lastDifferent = mValuesDifferent;
-
-		_type newCommonValue = GetProxy<_type>(mValuesProxies[0].first);
-
-		bool newDifferent = false;
-
-		for (int i = 1; i < mValuesProxies.Count(); i++)
-		{
-			_type value; mValuesProxies[i].first->GetValuePtr(&value);
-			if (newCommonValue != value)
-			{
-				newDifferent = true;
-				break;
-			}
-		}
-
-		if (newDifferent)
-		{
-			if (!lastDifferent)
-				SetUnknownValue();
-		}
-		else if (lastCommonValue != newCommonValue || lastDifferent)
-			SetCommonValue(newCommonValue);
-
-		CheckRevertableState();
-	}
-
-	// -----------------------------
-	// TPropertyField implementation
-	// -----------------------------
-
-	template<typename _type>
-	void TPropertyField<_type>::SetValueByUser(const _type& value)
-	{
-		StoreValues(mBeforeChangeValues);
-		SetValue(value);
-		CheckValueChangeCompleted();
-	}
-
-	template<typename _type>
-	void TPropertyField<_type>::SetCommonValue(const _type& value)
-	{
-		mCommonValue = value;
-		mValuesDifferent = false;
-
-		UpdateValueView();
-		OnValueChanged();
-	}
-
-	template<typename _type>
-	void TPropertyField<_type>::StoreValues(Vector<DataNode>& data) const
-	{
-		data.Clear();
-		for (auto ptr : mValuesProxies)
-		{
-			data.Add(DataNode());
-			data.Last() = GetProxy<_type>(ptr.first);
-		}
-	}
-
-	template<typename _type>
-	bool TPropertyField<_type>::IsValueRevertable() const
-	{
-		for (auto ptr : mValuesProxies)
-		{
-			if (ptr.second && !Math::Equals(GetProxy<_type>(ptr.first), GetProxy<_type>(ptr.second)))
-				return true;
-		}
-
-		return false;
-	}
-
-	template<typename _type>
-	_type TPropertyField<_type>::GetCommonValue() const
-	{
-		return mCommonValue;
-	}
-
-	template<typename _type>
-	void TPropertyField<_type>::SetUnknownValue(const _type& defaultValue /*= _type()*/)
-	{
-		mCommonValue = defaultValue;
-		mValuesDifferent = true;
-
-		UpdateValueView();
-		OnValueChanged();
-	}
-
-	template<typename _type>
-	void TPropertyField<_type>::SetValue(const _type& value)
-	{
-		for (auto ptr : mValuesProxies)
-			SetProxy<_type>(ptr.first, value);
-
-		SetCommonValue(value);
-	}
-
-	template<typename _type>
-	const Type* TPropertyField<_type>::GetValueType() const
-	{
-		return GetValueTypeStatic();
-	}
-
-	template<typename _type>
-	const Type* Editor::TPropertyField<_type>::GetValueTypeStatic()
-	{
-		return &TypeOf(_type);
-	}
-
-	template<typename _type>
-	void TPropertyField<_type>::Revert()
-	{
-		for (auto ptr : mValuesProxies)
-		{
-			if (ptr.second)
-				SetProxy<_type>(ptr.first, GetProxy<_type>(ptr.second));
-		}
-
-		Refresh();
-	}
 
 	// -----------------------------
 	// IPropertyField implementation
@@ -425,7 +284,7 @@ namespace Editor
 	}
 
 	template<typename _type, typename _object_type>
-	void IPropertyField::SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type*(_object_type*)> getter)
+	void IPropertyField::SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type* (_object_type*)> getter)
 	{
 		SetValueAndPrototypeProxy(targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[&](_object_type* target)
@@ -437,7 +296,7 @@ namespace Editor
 
 	template<typename _object_type, typename _property_type>
 	void IPropertyField::SelectValuesProperties(const Vector<_object_type*>& targets,
-												std::function<_property_type*(_object_type*)> getter)
+		std::function<_property_type* (_object_type*)> getter)
 	{
 		SetValueAndPrototypeProxy(targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[&](_object_type* target)
@@ -449,8 +308,8 @@ namespace Editor
 
 	template<typename _type, typename _object_type>
 	void IPropertyField::SelectValueAndPrototypePointers(const Vector<_object_type*>& targets,
-														 const Vector<_object_type*>& prototypes,
-														 std::function<_type*(_object_type*)> getter)
+		const Vector<_object_type*>& prototypes,
+		std::function<_type* (_object_type*)> getter)
 	{
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs(targets.Count());
 
@@ -467,8 +326,8 @@ namespace Editor
 
 	template<typename _object_type, typename _property_type>
 	void IPropertyField::SelectValueAndPrototypeProperties(const Vector<_object_type*>& targets,
-														   const Vector<_object_type*>& prototypes,
-														   std::function<_property_type*(_object_type*)> getter)
+		const Vector<_object_type*>& prototypes,
+		std::function<_property_type* (_object_type*)> getter)
 	{
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs(targets.Count());
 
@@ -481,6 +340,156 @@ namespace Editor
 		}
 
 		SetValueAndPrototypeProxy(targetPairs);
+	}
+
+	// -----------------------------
+	// TPropertyField implementation
+	// -----------------------------
+
+	template<typename _type>
+	TPropertyField<_type>::TPropertyField()
+	{}
+
+	template<typename _type>
+	TPropertyField<_type>::TPropertyField(const TPropertyField& other) :
+		IPropertyField(other)
+	{}
+
+	template<typename _type>
+	TPropertyField<_type>& Editor::TPropertyField<_type>::operator=(const TPropertyField& other)
+	{
+		IPropertyField::operator=(other);
+		return *this;
+	}
+
+	template<typename _type>
+	void Editor::TPropertyField<_type>::Refresh()
+	{
+		if (mValuesProxies.IsEmpty())
+			return;
+
+		auto lastCommonValue = mCommonValue;
+		bool lastDifferent = mValuesDifferent;
+
+		_type newCommonValue = GetProxy(mValuesProxies[0].first);
+
+		bool newDifferent = false;
+
+		for (int i = 1; i < mValuesProxies.Count(); i++)
+		{
+			_type value; mValuesProxies[i].first->GetValuePtr(&value);
+			if (newCommonValue != value)
+			{
+				newDifferent = true;
+				break;
+			}
+		}
+
+		if (newDifferent)
+		{
+			if (!lastDifferent)
+				SetUnknownValue();
+		}
+		else if (lastCommonValue != newCommonValue || lastDifferent)
+			SetCommonValue(newCommonValue);
+
+		CheckRevertableState();
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::SetValueByUser(const _type& value)
+	{
+		StoreValues(mBeforeChangeValues);
+		SetValue(value);
+		CheckValueChangeCompleted();
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::SetCommonValue(const _type& value)
+	{
+		mCommonValue = value;
+		mValuesDifferent = false;
+
+		UpdateValueView();
+		OnValueChanged();
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::StoreValues(Vector<DataNode>& data) const
+	{
+		data.Clear();
+		for (auto ptr : mValuesProxies)
+		{
+			data.Add(DataNode());
+			data.Last() = GetProxy(ptr.first);
+		}
+	}
+
+	template<typename _type>
+	bool TPropertyField<_type>::IsValueRevertable() const
+	{
+		for (auto ptr : mValuesProxies)
+		{
+			if (ptr.second && !Math::Equals(GetProxy(ptr.first), GetProxy(ptr.second)))
+				return true;
+		}
+
+		return false;
+	}
+
+	template<typename _type>
+	_type TPropertyField<_type>::GetCommonValue() const
+	{
+		return mCommonValue;
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::SetUnknownValue(const _type& defaultValue /*= _type()*/)
+	{
+		mCommonValue = defaultValue;
+		mValuesDifferent = true;
+
+		UpdateValueView();
+		OnValueChanged();
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::SetValue(const _type& value)
+	{
+		for (auto ptr : mValuesProxies)
+			SetProxy<_type>(ptr.first, value);
+
+		SetCommonValue(value);
+	}
+
+	template<typename _type>
+	const Type* TPropertyField<_type>::GetValueType() const
+	{
+		return GetValueTypeStatic();
+	}
+
+	template<typename _type>
+	const Type* TPropertyField<_type>::GetValueTypeStatic()
+	{
+		return &TypeOf(_type);
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::Revert()
+	{
+		for (auto ptr : mValuesProxies)
+		{
+			if (ptr.second)
+				SetProxy<_type>(ptr.first, GetProxy(ptr.second));
+		}
+
+		Refresh();
+	}
+
+	template<typename _type>
+	_type TPropertyField<_type>::GetProxy(IAbstractValueProxy* proxy) const
+	{
+		return IPropertyField::GetProxy<_type>(proxy);
 	}
 
 }
@@ -561,6 +570,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PUBLIC_FUNCTION(_type, GetCommonValue);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(_type, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, SetCommonValue, const _type&);
 	PROTECTED_FUNCTION(void, SetValueByUser, const _type&);
 	PROTECTED_FUNCTION(void, UpdateValueView);

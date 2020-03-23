@@ -48,12 +48,12 @@ namespace Editor
 
 		Widget* mDataView = nullptr;
 
-		BooleanProperty*              mEnableProperty = nullptr;
-		StringProperty*               mNameProperty = nullptr;
-		BooleanProperty*              mLockProperty = nullptr;
-		AssetProperty<ActorAssetRef>* mPrototypeProperty = nullptr;
-		TagsProperty*                 mTagsProperty = nullptr;
-		LayerProperty*                mLayerProperty = nullptr;
+		BooleanProperty* mEnableProperty = nullptr;
+		StringProperty*  mNameProperty = nullptr;
+		BooleanProperty* mLockProperty = nullptr;
+		AssetProperty*   mPrototypeProperty = nullptr;
+		TagsProperty*    mTagsProperty = nullptr;
+		LayerProperty*   mLayerProperty = nullptr;
 
 		Button* mPrototypeApplyBtn = nullptr;
 		Button* mPrototypeRevertBtn = nullptr;

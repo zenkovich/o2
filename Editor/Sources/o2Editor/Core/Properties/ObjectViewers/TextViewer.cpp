@@ -33,7 +33,7 @@ namespace Editor
 		mAlphaProperty = dynamic_cast<FloatProperty*>(
 			o2EditorProperties.BuildField(commonFieldsLayout, textType, "transparency", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 
-		mFontProperty = dynamic_cast<FontAssetProperty*>(
+		mFontProperty = dynamic_cast<AssetProperty*>(
 			o2EditorProperties.BuildField(commonFieldsLayout, textType, "fontAsset", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 
 		mTextProperty = dynamic_cast<WStringProperty*>(

@@ -1,6 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "AssetProperty.h"
 
+#include "o2Editor/Core/Properties/Properties.h"
+
 namespace Editor
 {
 	AssetProperty::AssetProperty()
@@ -45,6 +47,10 @@ namespace Editor
 			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetUID()))
 			{
 				mNameText->text = "Null";
+				if (mAssetType)
+				{
+					mNameText->text += WString(": " + o2EditorProperties.MakeSmartFieldName(mAssetType->GetName()));
+				}
 				mBox->layer["caption"]->transparency = 0.5f;
 			}
 			else
@@ -73,6 +79,17 @@ namespace Editor
 		SetCommonAssetId(id);
 	}
 
+	void AssetProperty::SetAssetType(const Type* assetType)
+	{
+		mAssetType = assetType;
+	}
+
+	void AssetProperty::SetFieldInfo(const FieldInfo* fieldInfo)
+	{
+		SetAssetType(fieldInfo->GetType()->InvokeStatic<const Type*>("GetAssetTypeStatic"));
+		IPropertyField::SetFieldInfo(fieldInfo);
+	}
+
 	void AssetProperty::SetCommonAssetId(const UID& id)
 	{
 		mCommonValue = id == 0 ? AssetRef() : AssetRef(id);
@@ -88,6 +105,18 @@ namespace Editor
 		StoreValues(mBeforeChangeValues);
 		SetAssetId(id);
 		CheckValueChangeCompleted();
+	}
+
+	AssetRef AssetProperty::GetProxy(IAbstractValueProxy* proxy) const
+	{
+		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
+		auto proxySample = proxyType->CreateSample();
+		proxy->GetValuePtr(proxySample);
+		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
+		AssetRef* assetSample = dynamic_cast<AssetRef*>(objectSample);
+		AssetRef res = *assetSample;
+		delete assetSample;
+		return res;
 	}
 
 	void AssetProperty::OnCursorPressed(const Input::Cursor& cursor)
@@ -130,9 +159,12 @@ namespace Editor
 		if (!assetIconsScroll)
 			return;
 
-		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
-			return;
+		if (mAssetType)
+		{
+			auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
+			if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(*mAssetType))
+				return;
+		}
 
 		o2Application.SetCursor(CursorType::Hand);
 		mBox->SetState("focused", true);
@@ -154,5 +186,7 @@ namespace Editor
 		mBox->Focus();
 	}
 }
+
+DECLARE_CLASS_MANUAL(Editor::TPropertyField<AssetRef>);
 
 DECLARE_CLASS(Editor::AssetProperty);

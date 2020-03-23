@@ -28,7 +28,7 @@ namespace Editor
 
 		const Type& spriteType = TypeOf(Sprite);
 
-		mImageProperty = dynamic_cast<ImageAssetProperty*>(
+		mImageProperty = dynamic_cast<AssetProperty*>(
 			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "image", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 
 		mSizePivotProperty = dynamic_cast<Vec2FProperty*>(

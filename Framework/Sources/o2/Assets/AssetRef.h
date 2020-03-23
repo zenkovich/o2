@@ -129,8 +129,12 @@ namespace o2
 		bool operator!=(const Ref<T>& other) const { return AssetRef::operator!=(other); }
 
 		// Returns asset type
-		virtual const Type& GetAssetType() const { return TypeOf(T); }
+		const Type& GetAssetType() const override { return TypeOf(T); }
 
+		// Returns asset type
+		static const Type* GetAssetTypeStatic() { return &TypeOf(T); }
+
+		// Creates asset and returns reference
 		static Ref<T> CreateAsset() { return o2Assets.CreateAsset<T>(); }
 
 	public:
@@ -164,6 +168,7 @@ namespace o2
 
 			PUBLIC_FUNCTION(const Type&, GetAssetType);
 			PUBLIC_STATIC_FUNCTION(Ref<T>, CreateAsset);
+			PUBLIC_STATIC_FUNCTION(const Type*, GetAssetTypeStatic);
 		}
 
 	protected:

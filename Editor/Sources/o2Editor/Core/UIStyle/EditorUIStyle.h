@@ -65,7 +65,6 @@ namespace Editor
 		void RebuildGreenFloatProperty();
 		void RebuildIntegerProperty();
 		void RebuildActorPropety();
-		void RebuildAssetsPropeties();
 		void RebuildBoolPropety();
 		void RebuildBorderFProperty();
 		void RebuildBorderIProperty();
@@ -218,7 +217,6 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildIntegerProperty);
 	PUBLIC_FUNCTION(void, RebuildActorPropety);
-	PUBLIC_FUNCTION(void, RebuildAssetsPropeties);
 	PUBLIC_FUNCTION(void, RebuildBoolPropety);
 	PUBLIC_FUNCTION(void, RebuildBorderFProperty);
 	PUBLIC_FUNCTION(void, RebuildBorderIProperty);

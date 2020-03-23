@@ -50,9 +50,8 @@ namespace Editor
 
 	void Properties::InitializeAvailablePropertiesFields()
 	{
-		auto avaialbleTypes = TypeOf(IAssetProperty).GetDerivedTypes() + TypeOf(IPropertyField).GetDerivedTypes();
+		auto avaialbleTypes = TypeOf(IPropertyField).GetDerivedTypes();
 
-		avaialbleTypes.Remove(&TypeOf(IAssetProperty));
 		avaialbleTypes.Remove(&TypeOf(ObjectProperty));
 		avaialbleTypes.Remove(&TypeOf(ObjectPtrProperty));
 		avaialbleTypes.Remove(&TypeOf(VectorProperty));
