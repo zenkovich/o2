@@ -61,9 +61,9 @@ namespace Editor
 		*linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
-		mPrototypeProperty = o2UI.CreateWidget<AssetProperty>("actor head asset property");
-		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
-		prototypeRoot->AddChild(mPrototypeProperty);
+// 		mPrototypeProperty = o2UI.CreateWidget<AssetProperty>("actor head asset property");
+// 		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
+// 		prototypeRoot->AddChild(mPrototypeProperty);
 
 		mPrototypeApplyBtn = o2UI.CreateWidget<Button>("accept prototype");
 		*mPrototypeApplyBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
@@ -147,7 +147,7 @@ namespace Editor
 		// mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
 		// 	actors, [](Actor* x) { return &x->prototype; });
 
-		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
+		//mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
 
 		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
 			actors, prototypes, [](Actor* x) { return &x->tags; });
@@ -166,10 +166,10 @@ namespace Editor
 		mEnableProperty->Refresh();
 		mNameProperty->Refresh();
 		mLockProperty->Refresh();
-		mPrototypeProperty->Refresh();
+		//mPrototypeProperty->Refresh();
 		mTagsProperty->Refresh();
 
-		*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
+		//*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
 	}
 
 	void DefaultActorHeaderViewer::OnApplyPrototypePressed()

@@ -28,7 +28,10 @@ namespace Editor
 
 	void AssetProperty::InitializeControls()
 	{
-		mBox = GetChildWidget("container/layout/box");
+		mSpoiler = GetChildByType<Spoiler>("spoiler");
+		mHeaderContainer = mSpoiler->GetInternalWidgetByType<HorizontalLayout>("layout");
+
+		mBox = mSpoiler->GetInternalWidget("layout/box");
 		if (mBox)
 		{
 			mBox->SetFocusable(true);
@@ -38,6 +41,15 @@ namespace Editor
 			if (mNameText)
 				mNameText->text = "--";
 		}
+
+		auto createInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("layout/create");
+		createInstanceBtn->onClick = THIS_FUNC(OnCreateInstancePressed);
+
+		auto saveInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("layout/save");
+		saveInstanceBtn->onClick = THIS_FUNC(OnSaveInstancePressed);
+
+		auto removeInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("layout/remove");
+		removeInstanceBtn->onClick = THIS_FUNC(OnRemoveInstancePressed);
 	}
 
 	void AssetProperty::UpdateValueView()
@@ -90,6 +102,29 @@ namespace Editor
 		IPropertyField::SetFieldInfo(fieldInfo);
 	}
 
+	void AssetProperty::SetCaption(const WString& text)
+	{
+		mSpoiler->SetCaption(text);
+	}
+
+	WString AssetProperty::GetCaption() const
+	{
+		return mSpoiler->GetCaption();
+	}
+
+	Button* AssetProperty::GetRemoveButton()
+	{
+		if (!mRemoveBtn)
+		{
+			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
+			mRemoveBtn->layout->maxWidth = 20;
+			mRemoveBtn->layout->minHeight = 20;
+			mHeaderContainer->AddChild(mRemoveBtn, 0);
+		}
+
+		return mRemoveBtn;
+	}
+
 	void AssetProperty::SetCommonAssetId(const UID& id)
 	{
 		mCommonValue = id == 0 ? AssetRef() : AssetRef(id);
@@ -105,6 +140,21 @@ namespace Editor
 		StoreValues(mBeforeChangeValues);
 		SetAssetId(id);
 		CheckValueChangeCompleted();
+	}
+
+	void AssetProperty::OnCreateInstancePressed()
+	{
+		SetState("instance", true);
+	}
+
+	void AssetProperty::OnRemoveInstancePressed()
+	{
+		SetState("instance", false);
+	}
+
+	void AssetProperty::OnSaveInstancePressed()
+	{
+
 	}
 
 	AssetRef AssetProperty::GetProxy(IAbstractValueProxy* proxy) const

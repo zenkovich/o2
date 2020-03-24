@@ -103,25 +103,60 @@
   </Type>
 
   <Type Name="o2::Widget">
-    <DisplayString>Widget "{ mName }" ({ (int)GetLayoutData().worldRectangle.left }, { (int)GetLayoutData().worldRectangle.bottom }, { (int)GetLayoutData().worldRectangle.right }, { (int)GetLayoutData().worldRectangle.top })</DisplayString>
+    <DisplayString>Widget "{ mName }" ({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
+      <Item Name="enabled in hierarchy" ExcludeView="simple">mResEnabledInHierarchy</Item>
+      <Item Name="locked" ExcludeView="simple">mLocked</Item>
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      <Item Name="layer" ExcludeView="simple">Actor::mLayer->name</Item>
+      <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
       <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
-      <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
       <Item Name="res enabled" ExcludeView="simple">mResEnabled</Item>
-      <Item Name="enabled in hierarchy" ExcludeView="simple">mResEnabledInHierarchy</Item>
-      <Item Name="parent" ExcludeView="simple">mParent</Item>
       <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
-      <Item Name="children rect" ExcludeView="simple">mChildrenWorldRect</Item>
+      <Item Name="children rect" ExcludeView="simple">layout->mData->childrenWorldRect</Item>
+      <Item Name="is on scene" ExcludeView="simple">Actor::mIsOnScene</Item>
+      <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
+      <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
+      <Item Name="layer ptr" ExcludeView="simple">Actor::mLayer</Item>
 
       <Item Name="layout" ExcludeView="simple">layout</Item>
-      
-      <Synthetic Name="layout">
-        <DisplayString>({ (int)GetLayoutData().worldRectangle.left }, { (int)GetLayoutData().worldRectangle.bottom }, { (int)GetLayoutData().worldRectangle.right }, { (int)GetLayoutData().worldRectangle.top })</DisplayString>
+
+      <Synthetic Name="prototype">
+        <DisplayString>({ mPrototype })</DisplayString>
         <Expand>
-          <ExpandedItem>layout</ExpandedItem>
+          <ExpandedItem>mPrototype</ExpandedItem>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="prototype link">
+        <DisplayString>({ mPrototypeLink.mActor })</DisplayString>
+        <Expand>
+          <ExpandedItem>mPrototypeLink.mActor</ExpandedItem>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="components">
+        <DisplayString>count={mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mComponents._Mypair._Myval2._Mylast - mComponents._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mComponents._Mypair._Myval2._Myfirst</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="children">
+        <DisplayString>count={mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
+          </ArrayItems>
         </Expand>
       </Synthetic>
 
@@ -184,12 +219,6 @@
           </ArrayItems>
         </Expand>
       </Synthetic>
-
-      <ArrayItems>
-        <Size>mChildWidgets._Mypair._Myval2._Mylast - mChildWidgets._Mypair._Myval2._Myfirst</Size>
-        <ValuePointer>mChildWidgets._Mypair._Myval2._Myfirst</ValuePointer>
-      </ArrayItems>
-
     </Expand>
   </Type>
 

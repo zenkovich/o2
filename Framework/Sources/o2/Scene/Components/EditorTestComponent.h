@@ -79,6 +79,7 @@ namespace o2
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<TestInside*> mTestInsideptrsVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
+		Vector<ImageAssetRef> mAssetsVector;               // @SERIALIZABLE
 
 		Map<String, String> mDictionary;    // @SERIALIZABLE
 		float mFloat2;					           // @SERIALIZABLE
@@ -143,6 +144,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mTestInsideVector).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestInsideptrsVector).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActorVector).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mAssetsVector).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDictionary).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mFloat2).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mFloat3).SERIALIZABLE_ATTRIBUTE();

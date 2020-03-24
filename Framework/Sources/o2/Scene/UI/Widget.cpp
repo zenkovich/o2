@@ -885,6 +885,15 @@ namespace o2
 		return res;
 	}
 
+	Map<o2::String, Widget*> Widget::GetAllInternalWidgets()
+	{
+		Map<String, Widget*> res;
+		for (auto child : mInternalWidgets)
+			res.Add(child->GetName(), child);
+
+		return res;
+	}
+
 	Map<String, WidgetState*> Widget::GetAllStates()
 	{
 		Map<String, WidgetState*> res;

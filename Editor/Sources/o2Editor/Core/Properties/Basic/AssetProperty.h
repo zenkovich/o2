@@ -37,14 +37,26 @@ namespace Editor
 		// Specializes field info
 		void SetFieldInfo(const FieldInfo* fieldInfo) override;
 
+		// Sets property caption
+		void SetCaption(const WString& text) override;
+
+		// Returns property caption
+		WString GetCaption() const override;
+
+		// Adds remove button
+		Button* GetRemoveButton() override;
+
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
 		IOBJECT(AssetProperty);
 
 	protected:
-		Widget* mBox = nullptr;      // Property edit box
-		Text*   mNameText = nullptr; // Asset name text
+		Widget*  mBox = nullptr;      // Property edit box
+		Text*    mNameText = nullptr; // Asset name text
+		Spoiler* mSpoiler = nullptr;  // Spoiler
+
+		HorizontalLayout* mHeaderContainer = nullptr; // Asset controls container: create, save and remove
 
 		const Type* mAssetType = nullptr; // Type of asset
 
@@ -60,6 +72,15 @@ namespace Editor
 
 		// Sets asset id, checks value changed, calls onChangeCompleted
 		void SetAssetIdByUser(const UID& id);
+
+		// It is called when create instance button pressed, creates asset instance
+		void OnCreateInstancePressed();
+
+		// It is called when remove instance button pressed, removes asset instance
+		void OnRemoveInstancePressed();
+
+		// It is called when save instance button pressed, saves asset instance as asset
+		void OnSaveInstancePressed();
 
 		// Returns value from proxy
 		AssetRef GetProxy(IAbstractValueProxy* proxy) const override;
@@ -101,6 +122,8 @@ CLASS_FIELDS_META(Editor::AssetProperty)
 {
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
+	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mHeaderContainer);
 	PROTECTED_FIELD(mAssetType);
 }
 END_META;
@@ -110,11 +133,17 @@ CLASS_METHODS_META(Editor::AssetProperty)
 	PUBLIC_FUNCTION(void, SetAssetId, const UID&);
 	PUBLIC_FUNCTION(void, SetAssetType, const Type*);
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
+	PUBLIC_FUNCTION(void, SetCaption, const WString&);
+	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(Button*, GetRemoveButton);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, SetCommonAssetId, const UID&);
 	PROTECTED_FUNCTION(void, SetAssetIdByUser, const UID&);
+	PROTECTED_FUNCTION(void, OnCreateInstancePressed);
+	PROTECTED_FUNCTION(void, OnRemoveInstancePressed);
+	PROTECTED_FUNCTION(void, OnSaveInstancePressed);
 	PROTECTED_FUNCTION(AssetRef, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

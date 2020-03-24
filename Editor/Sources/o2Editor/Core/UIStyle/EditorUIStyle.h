@@ -60,6 +60,10 @@ namespace Editor
 		void RebuildAddSmallBtn();
 		void RebuildRemoveSmallBtn();
 
+		void RebuildCreateAssetInstanceBtn();
+		void RebuildRemoveAssetInstanceBtn();
+		void RebuildSaveAssetInstanceBtn();
+
 		void RebuildFloatProperty();
 		void RebuildRedFloatProperty();
 		void RebuildGreenFloatProperty();
@@ -212,6 +216,9 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildAddKeyDotButton);
 	PUBLIC_FUNCTION(void, RebuildAddSmallBtn);
 	PUBLIC_FUNCTION(void, RebuildRemoveSmallBtn);
+	PUBLIC_FUNCTION(void, RebuildCreateAssetInstanceBtn);
+	PUBLIC_FUNCTION(void, RebuildRemoveAssetInstanceBtn);
+	PUBLIC_FUNCTION(void, RebuildSaveAssetInstanceBtn);
 	PUBLIC_FUNCTION(void, RebuildFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildRedFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);

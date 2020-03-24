@@ -36,9 +36,10 @@ namespace o2
 		GETTER(Vector<WidgetLayer*>, layers, GetLayers); // Layers getter
 		GETTER(Vector<WidgetState*>, states, GetStates); // States getter
 
-		ACCESSOR(Widget*, childWidget, String, GetChildWidget, GetAllChilds); // Widget child accessor by path like "child/subchild/somechild"
-		ACCESSOR(WidgetLayer*, layer, String, GetLayer, GetAllLayers);        // Widget layer accessor by path like "layer/sublayer/target"
-		ACCESSOR(WidgetState*, state, String, GetStateObject, GetAllStates);  // Widget state accessor by name
+		ACCESSOR(Widget*, childWidget, String, GetChildWidget, GetAllChilds);                // Widget child accessor by path like "child/subchild/somechild"
+		ACCESSOR(Widget*, internalWidget, String, GetInternalWidget, GetAllInternalWidgets); // Widget internals accessor by path like "child/subchild/somechild"
+		ACCESSOR(WidgetLayer*, layer, String, GetLayer, GetAllLayers);                       // Widget layer accessor by path like "layer/sublayer/target"
+		ACCESSOR(WidgetState*, state, String, GetStateObject, GetAllStates);                 // Widget state accessor by name
 
 	public:
 		WidgetLayout* const layout; // Widget layout @EDITOR_IGNORE
@@ -407,6 +408,9 @@ namespace o2
 		// Returns dictionary of all children by names
 		Map<String, Widget*> GetAllChilds();
 
+		// Returns dictionary of all internal widgets by names
+		Map<String, Widget*> GetAllInternalWidgets();
+
 		// Returns dictionary of all states by names
 		Map<String, WidgetState*> GetAllStates();
 
@@ -698,6 +702,7 @@ CLASS_FIELDS_META(o2::Widget)
 	PUBLIC_FIELD(layers);
 	PUBLIC_FIELD(states);
 	PUBLIC_FIELD(childWidget);
+	PUBLIC_FIELD(internalWidget);
 	PUBLIC_FIELD(layer);
 	PUBLIC_FIELD(state);
 	PUBLIC_FIELD(layout).EDITOR_IGNORE_ATTRIBUTE();
@@ -732,7 +737,8 @@ CLASS_METHODS_META(o2::Widget)
 
 	typedef Map<String, WidgetLayer*> _tmp1;
 	typedef Map<String, Widget*> _tmp2;
-	typedef Map<String, WidgetState*> _tmp3;
+	typedef Map<String, Widget*> _tmp3;
+	typedef Map<String, WidgetState*> _tmp4;
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
@@ -828,7 +834,8 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(Vector<WidgetState*>, GetStatesNonConst);
 	PROTECTED_FUNCTION(_tmp1, GetAllLayers);
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
-	PROTECTED_FUNCTION(_tmp3, GetAllStates);
+	PROTECTED_FUNCTION(_tmp3, GetAllInternalWidgets);
+	PROTECTED_FUNCTION(_tmp4, GetAllStates);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
