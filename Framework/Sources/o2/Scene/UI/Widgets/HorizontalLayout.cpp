@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	HorizontalLayout::HorizontalLayout() : Widget()
+	HorizontalLayout::HorizontalLayout(): Widget()
 	{
 		SetLayoutDirty();
 	}
@@ -16,6 +16,9 @@ namespace o2
 		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
 		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
+		for (auto child : mChildWidgets)
+			child->GetLayoutData().drivenByParent = true;
+
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
@@ -26,6 +29,10 @@ namespace o2
 	HorizontalLayout& HorizontalLayout::operator=(const HorizontalLayout& other)
 	{
 		Widget::operator=(other);
+
+		for (auto child : mChildWidgets)
+			child->GetLayoutData().drivenByParent = true;
+
 		return *this;
 	}
 
@@ -163,6 +170,9 @@ namespace o2
 
 		Widget::CopyData(other);
 
+		for (auto child : mChildWidgets)
+			child->GetLayoutData().drivenByParent = true;
+
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
@@ -275,7 +285,7 @@ namespace o2
 			float position = -totalWidth*0.5f;
 			auto widgets = mChildWidgets;
 			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right,
-												mSpacing);
+				mSpacing);
 
 			int i = 0;
 			for (auto child : widgets)
@@ -317,7 +327,7 @@ namespace o2
 			float position = mBorder.left;
 			auto widgets = mChildWidgets;
 			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right,
-												mSpacing);
+				mSpacing);
 
 			int i = 0;
 			for (auto child : widgets)
@@ -357,7 +367,7 @@ namespace o2
 			float position = mBorder.right;
 			auto widgets = mChildWidgets;
 			auto widths = CalculateExpandedSize(widgets, true, GetChildrenWorldRect().Width() - mBorder.left - mBorder.right,
-												mSpacing);
+				mSpacing);
 
 			int i = 0;
 			for (auto child : widgets)

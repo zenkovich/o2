@@ -81,6 +81,7 @@ namespace o2
 			{
 				childWidget->mParentWidget = this;
 				mChildWidgets.Add(childWidget);
+				OnChildAdded(childWidget);
 
 				if (childWidget->mOverrideDepth)
 					childWidget->IncludeInScene();
@@ -1054,6 +1055,7 @@ namespace o2
 			{
 				childWidget->mParentWidget = this;
 				mChildWidgets.Add(childWidget);
+				OnChildAdded(childWidget);
 			}
 		}
 
@@ -1144,7 +1146,7 @@ namespace o2
 				mLayer->mEnabledActors.Remove(this);
 			}
 
-			layout->SetDirty(true);
+			layout->SetDirty(false);
 
 #if IS_EDITOR
 			if (IsHieararchyOnScene())
@@ -1209,7 +1211,10 @@ namespace o2
 		{
 			Widget* childWidget = dynamic_cast<Widget*>(child);
 			if (childWidget)
+			{
 				mChildWidgets.Add(childWidget);
+				OnChildAdded(childWidget);
+			}
 		}
 
 		for (auto child : other.mInternalWidgets)

@@ -86,6 +86,15 @@ namespace o2
 		// Sets height
 		void SetHeight(float value) override;
 
+		// Return size
+		Vec2F GetSize() const override;
+
+		// Return width
+		float GetWidth() const override;
+
+		// Return height
+		float GetHeight() const override;
+
 		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
 		void SetPivot(const Vec2F& pivot) override;
 
@@ -350,6 +359,9 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetWidth, float);
 	PUBLIC_FUNCTION(void, SetHeight, float);
+	PUBLIC_FUNCTION(Vec2F, GetSize);
+	PUBLIC_FUNCTION(float, GetWidth);
+	PUBLIC_FUNCTION(float, GetHeight);
 	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetBasis, const Basis&);
 	PUBLIC_FUNCTION(void, SetNonSizedBasis, const Basis&);

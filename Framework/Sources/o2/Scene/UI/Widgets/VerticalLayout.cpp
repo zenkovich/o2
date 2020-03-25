@@ -17,6 +17,9 @@ namespace o2
 		spacing(this), border(this), borderLeft(this), borderRight(this), expandWidth(this), expandHeight(this),
 		borderTop(this), borderBottom(this), fitByChildren(this)
 	{
+		for (auto child : mChildWidgets)
+			child->GetLayoutData().drivenByParent = true;
+
 		RetargetStatesAnimations();
 		SetLayoutDirty();
 	}
@@ -27,6 +30,10 @@ namespace o2
 	VerticalLayout& VerticalLayout::operator=(const VerticalLayout& other)
 	{
 		Widget::operator=(other);
+
+		for (auto child : mChildWidgets)
+			child->GetLayoutData().drivenByParent = true;
+
 		return *this;
 	}
 
@@ -164,6 +171,9 @@ namespace o2
 		mFitByChildren = other.mFitByChildren;
 
 		Widget::CopyData(other);
+
+		for (auto child : mChildWidgets)
+			child->GetLayoutData().drivenByParent = true;
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

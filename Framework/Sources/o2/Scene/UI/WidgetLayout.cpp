@@ -122,6 +122,21 @@ namespace o2
 		SetDirty();
 	}
 
+	Vec2F WidgetLayout::GetSize() const
+	{
+		return Vec2F(GetWidth(), GetHeight());
+	}
+
+	float WidgetLayout::GetWidth() const
+	{
+		return Math::Clamp(mData->size.x, mData->minSize.x, mData->maxSize.x);
+	}
+
+	float WidgetLayout::GetHeight() const
+	{
+		return Math::Clamp(mData->size.y, mData->minSize.y, mData->maxSize.y);
+	}
+
 	void WidgetLayout::SetRect(const RectF& rect)
 	{
 		RectF parentRect = GetParentRectangle();

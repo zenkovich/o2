@@ -2917,8 +2917,7 @@ namespace Editor
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.05f));
 
 		o2UI.AddWidgetStyle(sample, "create asset instance");
 	}
@@ -2944,8 +2943,7 @@ namespace Editor
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.05f));
 
 		o2UI.AddWidgetStyle(sample, "remove asset instance");
 	}
@@ -2971,8 +2969,7 @@ namespace Editor
 		sample->AddState("pressed", Animation::EaseInOut(sample, "layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
 			->offStateAnimationSpeed = 0.5f;
 
-		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.2f))
-			->offStateAnimationSpeed = 0.5f;
+		sample->AddState("visible", Animation::EaseInOut(sample, "transparency", 0.0f, 1.0f, 0.05f));
 
 		o2UI.AddWidgetStyle(sample, "save asset instance");
 	}
@@ -3515,15 +3512,29 @@ namespace Editor
 
 		auto spoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 		spoiler->name = "spoiler";
+		spoiler->RemoveLayer("caption");
 		*spoiler->layout = WidgetLayout::BothStretch();
 		sample->AddChild(spoiler);
 
+		auto mainLayout = mnew HorizontalLayout();
+		mainLayout->name = "mainLayout";
+		*mainLayout->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 19, 0);
+		mainLayout->expandHeight = false;
+		spoiler->AddInternalWidget(mainLayout);
+
+		auto label = o2UI.CreateWidget<Label>();
+		label->name = "propertyName";
+		label->horAlign = HorAlign::Left;
+		label->layout->widthWeight = 0.6f;
+		label->horOverflow = Label::HorOverflow::Dots;
+		mainLayout->AddChild(label);
+
 		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
-		*layout->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
+		*layout->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 19, 0);
 		layout->baseCorner = BaseCorner::Right;
 		layout->expandHeight = false;
-		spoiler->AddInternalWidget(layout);
+		mainLayout->AddChild(layout);
 
 		auto instanceCaption = o2UI.CreateLabel("instance");
 		*instanceCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
@@ -3582,36 +3593,45 @@ namespace Editor
 		nameText->color = Color4(96, 125, 139);;
 		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
 
-		box->SetFocusable(true);
+		box->SetFocusable(true); 
 
 		Animation instanceAnim;
 		instanceAnim.SetTarget(sample);
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/layout/internalWidget/instanceCaption/transparency") = 
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/internalWidget/instanceCaption/transparency") = 
 			AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/layout/child/box/transparency") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/box/transparency") =
 			AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
 
 		*instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/expand/enabled") = 
 			AnimatedValue<bool>::EaseInOut(false, true, 0.2f);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/layout/child/create/layout/maxWidth") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/create/layout/maxWidth") =
 			AnimatedValue<float>::EaseInOut(16, 0, 0.2f);
 
-		*instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/layout/child/create/enabled") =
-			AnimatedValue<bool>::EaseInOut(true, false, 0.2f);
+		auto createAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/layout/child/create/enabled");
+		createAnim->AddKey(0, true);
+		createAnim->AddKey(0.05f, true);
+		createAnim->AddKey(0.055f, false);
+		createAnim->AddKey(0.2f, false);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/layout/child/save/layout/maxWidth") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/save/layout/maxWidth") =
 			AnimatedValue<float>::EaseInOut(0, 16, 0.2f);
 
-		*instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/layout/child/save/enabled") =
-			AnimatedValue<bool>::EaseInOut(false, true, 0.2f);
+		auto saveAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/layout/child/save/enabled");
+		saveAnim->AddKey(0, false);
+		saveAnim->AddKey(0.1f, false);
+		saveAnim->AddKey(0.105f, true);
+		saveAnim->AddKey(0.2f, true);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/layout/child/remove/layout/maxWidth") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/remove/layout/maxWidth") =
 			AnimatedValue<float>::EaseInOut(0, 16, 0.2f);
 
-		*instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/layout/child/remove/enabled") =
-			AnimatedValue<bool>::EaseInOut(false, true, 0.2f);
+		auto removeAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/layout/child/remove/enabled");
+		removeAnim->AddKey(0, false);
+		removeAnim->AddKey(0.1f, false);
+		removeAnim->AddKey(0.105f, true);
+		removeAnim->AddKey(0.2f, true);
 
 		sample->AddState("instance", instanceAnim);
 
@@ -3620,7 +3640,7 @@ namespace Editor
 // 		box->AddChild(linkBtn);
 
 		o2UI.AddWidgetStyle(sample, "standard");
-		o2UI.AddWidgetStyle(sample, "with caption");
+		o2UI.AddWidgetStyle(sample->CloneAs<AssetProperty>(), "with caption");
 	}
 
 	void EditorUIStyleBuilder::RebuildBoolPropety()

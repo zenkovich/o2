@@ -55,6 +55,7 @@ namespace Editor
 		Widget*  mBox = nullptr;      // Property edit box
 		Text*    mNameText = nullptr; // Asset name text
 		Spoiler* mSpoiler = nullptr;  // Spoiler
+		Label*   mCaption = nullptr;  // Property name caption
 
 		HorizontalLayout* mHeaderContainer = nullptr; // Asset controls container: create, save and remove
 
@@ -123,6 +124,7 @@ CLASS_FIELDS_META(Editor::AssetProperty)
 	PROTECTED_FIELD(mBox);
 	PROTECTED_FIELD(mNameText);
 	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mCaption);
 	PROTECTED_FIELD(mHeaderContainer);
 	PROTECTED_FIELD(mAssetType);
 }

@@ -45,8 +45,9 @@ namespace Editor
 		if (mCaption)
 			mCaption->text = text;
 
-		auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName"));
-		if (captionWidget)
+		if (auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName")))
+			captionWidget->text = text;
+		else if (auto captionWidget = dynamic_cast<Label*>(FindInternalWidget("propertyName")))
 			captionWidget->text = text;
 		else
 		{
@@ -61,8 +62,9 @@ namespace Editor
 		if (mCaption)
 			return mCaption->text;
 
-		auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName"));
-		if (captionWidget)
+		if (auto captionWidget = dynamic_cast<Label*>(FindChild("propertyName")))
+			return captionWidget->text;
+		else if (auto captionWidget = dynamic_cast<Label*>(FindInternalWidget("propertyName")))
 			return captionWidget->text;
 		else
 		{

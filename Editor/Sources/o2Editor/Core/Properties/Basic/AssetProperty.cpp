@@ -29,9 +29,10 @@ namespace Editor
 	void AssetProperty::InitializeControls()
 	{
 		mSpoiler = GetChildByType<Spoiler>("spoiler");
-		mHeaderContainer = mSpoiler->GetInternalWidgetByType<HorizontalLayout>("layout");
+		mHeaderContainer = mSpoiler->GetInternalWidgetByType<HorizontalLayout>("mainLayout/layout");
+		mCaption = mSpoiler->GetInternalWidgetByType<Label>("mainLayout/propertyName");
 
-		mBox = mSpoiler->GetInternalWidget("layout/box");
+		mBox = mSpoiler->GetInternalWidget("mainLayout/layout/box");
 		if (mBox)
 		{
 			mBox->SetFocusable(true);
@@ -42,13 +43,13 @@ namespace Editor
 				mNameText->text = "--";
 		}
 
-		auto createInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("layout/create");
+		auto createInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/layout/create");
 		createInstanceBtn->onClick = THIS_FUNC(OnCreateInstancePressed);
 
-		auto saveInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("layout/save");
+		auto saveInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/layout/save");
 		saveInstanceBtn->onClick = THIS_FUNC(OnSaveInstancePressed);
 
-		auto removeInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("layout/remove");
+		auto removeInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/layout/remove");
 		removeInstanceBtn->onClick = THIS_FUNC(OnRemoveInstancePressed);
 	}
 
@@ -104,12 +105,16 @@ namespace Editor
 
 	void AssetProperty::SetCaption(const WString& text)
 	{
-		mSpoiler->SetCaption(text);
+		if (mCaption)
+			mCaption->SetText(text);
 	}
 
 	WString AssetProperty::GetCaption() const
 	{
-		return mSpoiler->GetCaption();
+		if (mCaption)
+			return mCaption->GetText();
+
+		return WString();
 	}
 
 	Button* AssetProperty::GetRemoveButton()
