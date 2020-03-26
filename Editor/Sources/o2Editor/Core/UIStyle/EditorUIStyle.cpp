@@ -3518,7 +3518,7 @@ namespace Editor
 
 		auto mainLayout = mnew HorizontalLayout();
 		mainLayout->name = "mainLayout";
-		*mainLayout->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 19, 0);
+		*mainLayout->layout = WidgetLayout::HorStretch(VerAlign::Top, 10, 0, 19, 0);
 		mainLayout->expandHeight = false;
 		spoiler->AddInternalWidget(mainLayout);
 
@@ -3529,12 +3529,17 @@ namespace Editor
 		label->horOverflow = Label::HorOverflow::Dots;
 		mainLayout->AddChild(label);
 
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		mainLayout->AddChild(layoutContainer);
+
 		auto layout = mnew HorizontalLayout();
 		layout->name = "layout";
 		*layout->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 19, 0);
 		layout->baseCorner = BaseCorner::Right;
 		layout->expandHeight = false;
-		mainLayout->AddChild(layout);
+		layoutContainer->AddChild(layout);
 
 		auto instanceCaption = o2UI.CreateLabel("instance");
 		*instanceCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
@@ -3597,37 +3602,37 @@ namespace Editor
 
 		Animation instanceAnim;
 		instanceAnim.SetTarget(sample);
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/internalWidget/instanceCaption/transparency") = 
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/internalWidget/instanceCaption/transparency") = 
 			AnimatedValue<float>::EaseInOut(0, 1, 0.2f);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/box/transparency") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/box/transparency") =
 			AnimatedValue<float>::EaseInOut(1, 0, 0.2f);
 
 		*instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/expand/enabled") = 
 			AnimatedValue<bool>::EaseInOut(false, true, 0.2f);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/create/layout/maxWidth") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/create/layout/maxWidth") =
 			AnimatedValue<float>::EaseInOut(16, 0, 0.2f);
 
-		auto createAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/layout/child/create/enabled");
+		auto createAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/create/enabled");
 		createAnim->AddKey(0, true);
 		createAnim->AddKey(0.05f, true);
 		createAnim->AddKey(0.055f, false);
 		createAnim->AddKey(0.2f, false);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/save/layout/maxWidth") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/save/layout/maxWidth") =
 			AnimatedValue<float>::EaseInOut(0, 16, 0.2f);
 
-		auto saveAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/layout/child/save/enabled");
+		auto saveAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/save/enabled");
 		saveAnim->AddKey(0, false);
 		saveAnim->AddKey(0.1f, false);
 		saveAnim->AddKey(0.105f, true);
 		saveAnim->AddKey(0.2f, true);
 
-		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/layout/child/remove/layout/maxWidth") =
+		*instanceAnim.AddAnimationValue<float>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/remove/layout/maxWidth") =
 			AnimatedValue<float>::EaseInOut(0, 16, 0.2f);
 
-		auto removeAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/layout/child/remove/enabled");
+		auto removeAnim = instanceAnim.AddAnimationValue<bool>("child/spoiler/internalWidget/mainLayout/child/container/child/layout/child/remove/enabled");
 		removeAnim->AddKey(0, false);
 		removeAnim->AddKey(0.1f, false);
 		removeAnim->AddKey(0.105f, true);

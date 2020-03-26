@@ -63,6 +63,19 @@ namespace o2
 		// Returns asset type
 		virtual const Type& GetAssetType() const;
 
+		// Creates own asset instance. If asset is empty creates empty instance, 
+		// copies asset if else
+		void CreateInstance();
+
+		// Removes own asset instance
+		void RemoveInstance();
+
+		// Saves asset instance
+		void SaveInstance(const String& path);
+
+		// Is asset instance owner
+		bool IsInstance() const;
+
 		SERIALIZABLE(AssetRef);
 
 	protected:
@@ -79,6 +92,9 @@ namespace o2
 
 		// Completion deserialization callback -  reads path and id and searches asset
 		void OnDeserialized(const DataNode& node) override;
+
+		// Updates specialized asset pointer
+		virtual void UpdateSpecAsset() {};
 
 		friend class Assets;
 	};
@@ -173,6 +189,10 @@ namespace o2
 
 	protected:
 		T* mSpecAssetPtr = nullptr;
+
+	protected:
+		// Updates specialized asset pointer
+		void UpdateSpecAsset() override { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); };
 	};
 }
 

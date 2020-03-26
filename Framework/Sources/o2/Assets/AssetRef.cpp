@@ -146,6 +146,47 @@ namespace o2
 		return TypeOf(Asset);
 	}
 
+	void AssetRef::CreateInstance()
+	{
+		if (mAssetOwner)
+			return;
+
+		if (mAssetPtr)
+		{
+			mAssetPtr = mAssetPtr->CloneAs<Asset>();
+		}
+		else
+		{
+			auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());
+			mAssetPtr = dynamic_cast<Asset*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
+		}
+
+		UpdateSpecAsset();
+
+		mAssetOwner = true;
+	}
+
+	void AssetRef::RemoveInstance()
+	{
+		if (!mAssetOwner)
+			return;
+
+		mAssetOwner = false;
+		mAssetPtr = nullptr;
+
+		UpdateSpecAsset();
+	}
+
+	void AssetRef::SaveInstance(const String& path)
+	{
+
+	}
+
+	bool AssetRef::IsInstance() const
+	{
+
+	}
+
 	bool AssetRef::operator!=(const AssetRef& other) const
 	{
 		return mAssetPtr != other.mAssetPtr;
