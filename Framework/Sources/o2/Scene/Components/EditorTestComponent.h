@@ -1,10 +1,11 @@
 #pragma once
 
-#include "o2/Assets/Types/ActorAsset.h"
+#include "ImageComponent.h"
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Assets/Types/DataAsset.h"
 #include "o2/Assets/Types/ImageAsset.h"
-#include "ImageComponent.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Tags.h"
@@ -54,6 +55,7 @@ namespace o2
 		ImageAssetRef mImageAsset;			       // @SERIALIZABLE
 		ActorAssetRef mActorAsset;			       // @SERIALIZABLE
 		DataAssetRef mDataAsset;                   // @SERIALIZABLE
+		AnimationAssetRef mAnimationAsset;         // @SERIALIZABLE
 		Sprite spritex;                            // @SERIALIZABLE
 		Sprite* mSprite = mnew Sprite();           // @SERIALIZABLE @DONT_DELETE
 		Actor* mActor = nullptr;                   // @SERIALIZABLE
@@ -120,6 +122,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActorAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDataAsset).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mAnimationAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(spritex).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mSprite).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActor).SERIALIZABLE_ATTRIBUTE();

@@ -11,7 +11,7 @@
 namespace Editor
 {
 	AnimationViewer::AnimationViewer() :
-		DefaultObjectViewer()
+		DefaultObjectPropertiesViewer()
 	{
 		PushEditorScopeOnStack scope;
 
@@ -20,7 +20,7 @@ namespace Editor
 
 	void AnimationViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		DefaultObjectViewer::Refresh(targetObjets);
+		DefaultObjectPropertiesViewer::Refresh(targetObjets);
 
 		mLayout->AddChild(mEditButton);
 		mEditButton->SetIndexInSiblings(mLayout->GetChildren().Count() - 1);

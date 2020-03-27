@@ -13,7 +13,7 @@ namespace Editor
 
 		mLayout = mnew VerticalLayout();
 		mLayout->spacing = 5;
-		mLayout->borderTop = 5;
+		mLayout->borderTop = 3;
 		mLayout->expandHeight = false;
 		mLayout->expandWidth = true;
 		mLayout->fitByChildren = true;

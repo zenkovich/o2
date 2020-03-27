@@ -215,7 +215,12 @@ CLASS_METHODS_META(o2::AssetRef)
 	PUBLIC_FUNCTION(Asset*, Get);
 	PUBLIC_FUNCTION(const Asset*, Get);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
+	PUBLIC_FUNCTION(void, CreateInstance);
+	PUBLIC_FUNCTION(void, RemoveInstance);
+	PUBLIC_FUNCTION(void, SaveInstance, const String&);
+	PUBLIC_FUNCTION(bool, IsInstance);
 	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, UpdateSpecAsset);
 }
 END_META;

@@ -3508,7 +3508,7 @@ namespace Editor
 		sample->layout->minHeight = 20;
 		sample->expandHeight = true;
 		sample->expandWidth = true;
-		sample->fitByChildren = false;
+		sample->fitByChildren = true;
 
 		auto spoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 		spoiler->name = "spoiler";
@@ -3519,7 +3519,7 @@ namespace Editor
 		auto mainLayout = mnew HorizontalLayout();
 		mainLayout->name = "mainLayout";
 		*mainLayout->layout = WidgetLayout::HorStretch(VerAlign::Top, 10, 0, 19, 0);
-		mainLayout->expandHeight = false;
+		mainLayout->expandHeight = true;
 		spoiler->AddInternalWidget(mainLayout);
 
 		auto label = o2UI.CreateWidget<Label>();
@@ -3542,7 +3542,7 @@ namespace Editor
 		layoutContainer->AddChild(layout);
 
 		auto instanceCaption = o2UI.CreateLabel("instance");
-		*instanceCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
+		*instanceCaption->layout = WidgetLayout::BothStretch(0, 5, 0, 0);
 		instanceCaption->name = "instanceCaption";
 		instanceCaption->horOverflow = Label::HorOverflow::Dots;
 		instanceCaption->horAlign = HorAlign::Left;

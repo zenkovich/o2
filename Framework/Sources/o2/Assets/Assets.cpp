@@ -444,6 +444,24 @@ namespace o2
 		}
 	}
 
+	void Assets::CheckAssetsUnload()
+	{
+		for (auto it = mCachedAssets.Begin(); it != mCachedAssets.End();)
+		{
+			if ((*it)->referencesCount <= 0)
+			{
+				mCachedAssetsByPath.Remove((*it)->asset->GetPath());
+				mCachedAssetsByUID.Remove((*it)->asset->GetUID());
+
+				delete (*it)->asset;
+				delete* it;
+
+				it = mCachedAssets.erase(it);
+			}
+			else ++it;
+		}
+	}
+
 	Assets::AssetCache* Assets::FindAssetCache(const String& path)
 	{
 		Assets::AssetCache* res = nullptr;
@@ -470,7 +488,7 @@ namespace o2
 		}
 	}
 
-	void Assets::AddAssetCache(Asset* asset)
+	Assets::AssetCache* Assets::AddAssetCache(Asset* asset)
 	{
 		auto cached = mnew AssetCache();
 		cached->asset = asset;
@@ -479,6 +497,8 @@ namespace o2
 		mCachedAssets.Add(cached);
 		mCachedAssetsByPath[cached->asset->GetPath()] = cached;
 		mCachedAssetsByUID[cached->asset->GetUID()] = cached;
+
+		return cached;
 	}
 
 	void Assets::RemoveAssetCache(Asset* asset)

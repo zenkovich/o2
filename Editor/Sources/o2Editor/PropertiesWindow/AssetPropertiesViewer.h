@@ -6,7 +6,7 @@ using namespace o2;
 
 namespace Editor
 {
-	class DefaultObjectViewer;
+	class DefaultObjectPropertiesViewer;
 
 	// -------------------------
 	// Default properties viewer

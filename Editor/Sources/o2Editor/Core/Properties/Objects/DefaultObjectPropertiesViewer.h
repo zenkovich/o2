@@ -7,11 +7,11 @@ namespace Editor
 	// ------------------------------------------------------------
 	// Default object properties viewer. Builds field by reflection
 	// ------------------------------------------------------------
-	class DefaultObjectViewer : public IObjectPropertiesViewer
+	class DefaultObjectPropertiesViewer : public IObjectPropertiesViewer
 	{
 	public:
 		// Default constructor, creates view widget as vertical layout
-		DefaultObjectViewer();
+		DefaultObjectPropertiesViewer();
 
 		// Refreshing controls and properties by target objects
 		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
@@ -19,7 +19,7 @@ namespace Editor
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
 
-		IOBJECT(DefaultObjectViewer);
+		IOBJECT(DefaultObjectPropertiesViewer);
 
 	private:
 		const Type* mRealObjectType = &TypeOf(IObject); // Specialized viewing object type
@@ -27,18 +27,18 @@ namespace Editor
 	};
 }
 
-CLASS_BASES_META(Editor::DefaultObjectViewer)
+CLASS_BASES_META(Editor::DefaultObjectPropertiesViewer)
 {
 	BASE_CLASS(Editor::IObjectPropertiesViewer);
 }
 END_META;
-CLASS_FIELDS_META(Editor::DefaultObjectViewer)
+CLASS_FIELDS_META(Editor::DefaultObjectPropertiesViewer)
 {
 	PRIVATE_FIELD(mRealObjectType);
 	PRIVATE_FIELD(mBuiltWithHiddenProperties);
 }
 END_META;
-CLASS_METHODS_META(Editor::DefaultObjectViewer)
+CLASS_METHODS_META(Editor::DefaultObjectPropertiesViewer)
 {
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2Editor/Core/Properties/ObjectViewers/DefaultObjectViewer.h"
+#include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 
 using namespace o2;
 
@@ -18,7 +18,7 @@ namespace Editor
 	// ------------------
 	// Image asset viewer
 	// ------------------
-	class ImageAssetViewer : public DefaultObjectViewer
+	class ImageAssetViewer : public DefaultObjectPropertiesViewer
 	{
 	public:
 		// Default constructor. Initializes fields controls
@@ -42,7 +42,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ImageAssetViewer)
 {
-	BASE_CLASS(Editor::DefaultObjectViewer);
+	BASE_CLASS(Editor::DefaultObjectPropertiesViewer);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)

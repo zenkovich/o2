@@ -76,6 +76,9 @@ namespace o2
 		// Is this asset type is available to create from editor's assets window
 		static bool IsAvailableToCreateFromEditor() { return false; }
 
+		// Is asset reference available to contain instance inside
+		static bool IsReferenceCanOwnInstance() { return false; }
+
 		SERIALIZABLE(Asset);
 
 	protected:
@@ -181,6 +184,7 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
+	PUBLIC_STATIC_FUNCTION(bool, IsReferenceCanOwnInstance);
 	PROTECTED_FUNCTION(String, GetMetaFullPath);
 	PROTECTED_FUNCTION(UID&, ID);
 	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);

@@ -20,10 +20,10 @@ namespace Editor
 	{
 	public:
 		// Virtual destructor
-		virtual ~IPropertiesViewer() {}
+		virtual ~IPropertiesViewer();
 
 		// Returns viewing object type
-		virtual const Type* GetViewingObjectType() const { return nullptr; }
+		virtual const Type* GetViewingObjectType() const;
 
 		IOBJECT(IPropertiesViewer);
 

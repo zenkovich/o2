@@ -91,13 +91,13 @@ namespace Editor
 
 			if (sameToProtoSourceActor)
 			{
-				SetProxy<Actor*>(target, sameToProtoSourceActor);
+				SetProxy(target, sameToProtoSourceActor);
 				return;
 			}
 		}
 
 		if (sourceActor->IsOnScene())
-			SetProxy<Actor*>(target, sourceActor);
+			SetProxy(target, sourceActor);
 	}
 
 	bool ActorProperty::IsValueRevertable() const

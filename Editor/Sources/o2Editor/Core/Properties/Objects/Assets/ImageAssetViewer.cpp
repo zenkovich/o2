@@ -15,7 +15,7 @@
 namespace Editor
 {
 	ImageAssetViewer::ImageAssetViewer() :
-		DefaultObjectViewer()
+		DefaultObjectPropertiesViewer()
 	{
 		PushEditorScopeOnStack scope;
 		mSlicesEditor = mnew ImageSlicesEditorWidget();
@@ -24,7 +24,7 @@ namespace Editor
 
 	void ImageAssetViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		DefaultObjectViewer::Refresh(targetObjets);
+		DefaultObjectPropertiesViewer::Refresh(targetObjets);
 		mSlicesEditor->Setup(ImageAssetRef(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
 							 dynamic_cast<BorderIProperty*>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
 	}

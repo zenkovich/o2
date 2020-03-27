@@ -1,5 +1,5 @@
 #include "o2Editor/stdafx.h"
-#include "DefaultObjectViewer.h"
+#include "DefaultObjectPropertiesViewer.h"
 
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2Editor/Core/EditorScope.h"
@@ -7,10 +7,10 @@
 
 namespace Editor
 {
-	DefaultObjectViewer::DefaultObjectViewer()
+	DefaultObjectPropertiesViewer::DefaultObjectPropertiesViewer()
 	{}
 
-	void DefaultObjectViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void DefaultObjectPropertiesViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		PushEditorScopeOnStack scope;
 
@@ -38,10 +38,10 @@ namespace Editor
 		mPropertiesContext.Set(targetObjets);
 	}
 
-	const Type* DefaultObjectViewer::GetViewingObjectType() const
+	const Type* DefaultObjectPropertiesViewer::GetViewingObjectType() const
 	{
 		return mRealObjectType;
 	}
 }
 
-DECLARE_CLASS(Editor::DefaultObjectViewer);
+DECLARE_CLASS(Editor::DefaultObjectPropertiesViewer);

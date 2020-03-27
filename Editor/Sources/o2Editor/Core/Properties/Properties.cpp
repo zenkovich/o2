@@ -16,7 +16,7 @@
 #include "o2Editor/Core/Properties/Basic/ObjectPtrProperty.h"
 #include "o2Editor/Core/Properties/Basic/VectorProperty.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
-#include "o2Editor/Core/Properties/ObjectViewers/DefaultObjectViewer.h"
+#include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 
 DECLARE_SINGLETON(Editor::Properties);
 
@@ -68,7 +68,7 @@ namespace Editor
 	{
 		auto availableTypes = TypeOf(IObjectPropertiesViewer).GetDerivedTypes();
 		availableTypes.Remove(&TypeOf(IObjectPropertiesViewer));
-		availableTypes.Remove(&TypeOf(DefaultObjectViewer));
+		availableTypes.Remove(&TypeOf(DefaultObjectPropertiesViewer));
 
 		for (auto x : availableTypes)
 		{
@@ -429,7 +429,7 @@ namespace Editor
 	{
 		auto viewerType = GetClosesBasedTypeObjectViewer(type);
 		if (!viewerType)
-			viewerType = &TypeOf(DefaultObjectViewer);
+			viewerType = &TypeOf(DefaultObjectPropertiesViewer);
 
 		IObjectPropertiesViewer* viewer = nullptr;
 

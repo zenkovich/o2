@@ -2,6 +2,7 @@
 #include "AssetProperty.h"
 
 #include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/Core/Properties/ObjectViewer.h"
 
 namespace Editor
 {
@@ -43,8 +44,8 @@ namespace Editor
 				mNameText->text = "--";
 		}
 
-		auto createInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/container/layout/create");
-		createInstanceBtn->onClick = THIS_FUNC(OnCreateInstancePressed);
+		mCreateInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/container/layout/create");
+		mCreateInstanceBtn->onClick = THIS_FUNC(OnCreateInstancePressed);
 
 		auto saveInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/container/layout/save");
 		saveInstanceBtn->onClick = THIS_FUNC(OnSaveInstancePressed);
@@ -55,15 +56,17 @@ namespace Editor
 
 	void AssetProperty::UpdateValueView()
 	{
+		mCreateInstanceBtn->SetEnabled(mAvailableToHaveInstance && !mValuesDifferent);
+		bool allAreInstance = false;
+
 		if (!mValuesDifferent)
 		{
 			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetUID()))
 			{
 				mNameText->text = "Null";
 				if (mAssetType)
-				{
 					mNameText->text += WString(": " + o2EditorProperties.MakeSmartFieldName(mAssetType->GetName()));
-				}
+
 				mBox->layer["caption"]->transparency = 0.5f;
 			}
 			else
@@ -73,6 +76,47 @@ namespace Editor
 
 				mNameText->text = name;
 				mBox->layer["caption"]->transparency = 1.0f;
+
+				if (mAvailableToHaveInstance)
+				{
+					Vector<IObject*> targets;
+
+					allAreInstance = true;
+					for (auto proxy : mValuesProxies)
+					{
+						auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
+						if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+						{
+							void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
+							if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+							{
+								if (refPtr->IsInstance())
+									targets.Add(refPtr->Get());
+								else
+								{
+									allAreInstance = false;
+									break;
+								}
+							}
+						}
+					}
+
+					if (allAreInstance)
+					{
+						if (!mAssetObjectViewer)
+						{
+							mAssetObjectViewer = mnew ObjectViewer();
+							mSpoiler->AddChild(mAssetObjectViewer);
+						}
+
+						mAssetObjectViewer->SetEnabled(true);
+						mAssetObjectViewer->Refresh(targets);
+					}
+					else if (mAssetObjectViewer)
+					{
+						mAssetObjectViewer->SetEnabled(false);
+					}
+				}
 			}
 		}
 		else
@@ -80,6 +124,8 @@ namespace Editor
 			mNameText->text = "--";
 			mBox->layer["caption"]->transparency = 1.0f;
 		}
+
+		SetState("instance", mAvailableToHaveInstance && allAreInstance && !mValuesDifferent);
 	}
 
 	void AssetProperty::SetAssetId(const UID& id)
@@ -95,11 +141,12 @@ namespace Editor
 	void AssetProperty::SetAssetType(const Type* assetType)
 	{
 		mAssetType = assetType;
+		mAvailableToHaveInstance &= assetType->InvokeStatic<bool>("IsReferenceCanOwnInstance");
 	}
 
 	void AssetProperty::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
-		SetAssetType(fieldInfo->GetType()->InvokeStatic<const Type*>("GetAssetTypeStatic"));
+		mAvailableToHaveInstance = fieldInfo->GetType()->GetUsage() != Type::Usage::Property;
 		IPropertyField::SetFieldInfo(fieldInfo);
 	}
 
@@ -150,16 +197,49 @@ namespace Editor
 	void AssetProperty::OnCreateInstancePressed()
 	{
 		SetState("instance", true);
+		
+		for (auto proxy : mValuesProxies)
+		{
+			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
+			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+			{
+				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
+				if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+					refPtr->CreateInstance();
+			}
+		}
+
+		Refresh();
+		mSpoiler->Expand();
 	}
 
 	void AssetProperty::OnRemoveInstancePressed()
 	{
 		SetState("instance", false);
+		mSpoiler->Collapse();
+
+		for (auto proxy : mValuesProxies)
+		{
+			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
+			if (auto ptrProxy = dynamic_cast<IPointerValueProxy*>(proxy.first))
+			{
+				void* rawAssetRefPtr = ptrProxy->GetValueVoidPointer();
+				if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
+					refPtr->RemoveInstance();
+			}
+		}
+
+		Refresh();
 	}
 
 	void AssetProperty::OnSaveInstancePressed()
 	{
 
+	}
+
+	void AssetProperty::OnTypeSpecialized(const Type& type)
+	{
+		SetAssetType(type.InvokeStatic<const Type*>("GetAssetTypeStatic"));
 	}
 
 	AssetRef AssetProperty::GetProxy(IAbstractValueProxy* proxy) const

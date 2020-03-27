@@ -13,6 +13,8 @@ using namespace o2;
 
 namespace Editor
 {
+	class ObjectViewer;
+
 	// -------------------------
 	// Editor asset property box
 	// -------------------------
@@ -52,14 +54,19 @@ namespace Editor
 		IOBJECT(AssetProperty);
 
 	protected:
-		Widget*  mBox = nullptr;      // Property edit box
-		Text*    mNameText = nullptr; // Asset name text
-		Spoiler* mSpoiler = nullptr;  // Spoiler
-		Label*   mCaption = nullptr;  // Property name caption
+		Widget*  mBox = nullptr;               // Property edit box
+		Text*    mNameText = nullptr;          // Asset name text
+		Spoiler* mSpoiler = nullptr;           // Spoiler
+		Label*   mCaption = nullptr;           // Property name caption
+		Button*  mCreateInstanceBtn = nullptr; // Create instance button
 
 		HorizontalLayout* mHeaderContainer = nullptr; // Asset controls container: create, save and remove
 
+		ObjectViewer* mAssetObjectViewer = nullptr; // Asset instance viewer. Created if required
+
 		const Type* mAssetType = nullptr; // Type of asset
+
+		bool mAvailableToHaveInstance = false; // Is asset can own an instance
 
 	protected:
 		// Copies data of actor from other to this
@@ -82,6 +89,9 @@ namespace Editor
 
 		// It is called when save instance button pressed, saves asset instance as asset
 		void OnSaveInstancePressed();
+
+		// It is called when type specialized during setting value proxy
+		void OnTypeSpecialized(const Type& type) override;
 
 		// Returns value from proxy
 		AssetRef GetProxy(IAbstractValueProxy* proxy) const override;
@@ -125,8 +135,11 @@ CLASS_FIELDS_META(Editor::AssetProperty)
 	PROTECTED_FIELD(mNameText);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mCaption);
+	PROTECTED_FIELD(mCreateInstanceBtn);
 	PROTECTED_FIELD(mHeaderContainer);
+	PROTECTED_FIELD(mAssetObjectViewer);
 	PROTECTED_FIELD(mAssetType);
+	PROTECTED_FIELD(mAvailableToHaveInstance);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetProperty)
@@ -146,6 +159,7 @@ CLASS_METHODS_META(Editor::AssetProperty)
 	PROTECTED_FUNCTION(void, OnCreateInstancePressed);
 	PROTECTED_FUNCTION(void, OnRemoveInstancePressed);
 	PROTECTED_FUNCTION(void, OnSaveInstancePressed);
+	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(AssetRef, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

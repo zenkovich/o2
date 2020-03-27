@@ -1,9 +1,9 @@
 #include "o2/stdafx.h"
 #include "DropDown.h"
 
-#include "o2/Scene/UI/Widgets/Label.h"
-#include "../UIManager.h"
 #include "o2/Render/Render.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/Label.h"
 
 namespace o2
 {

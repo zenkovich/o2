@@ -42,8 +42,8 @@ namespace Editor
 		mWindow->SetIcon(mnew Sprite("ui/UI4_tree_wnd_icon.png"));
 		mWindow->SetIconLayout(Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(0, 1)));
 
-		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
-		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
+// 		mWindow->GetInternalWidget("closeButton")->layout->position -= Vec2F(2, -2);
+// 		mWindow->GetInternalWidget("optionsButton")->layout->position -= Vec2F(2, -2);
 
 		Widget* upPanel = mnew Widget();
 		upPanel->name = "up panel";

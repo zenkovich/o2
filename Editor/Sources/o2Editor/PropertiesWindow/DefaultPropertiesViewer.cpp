@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "DefaultPropertiesViewer.h"
 
-#include "o2Editor/Core/Properties/ObjectViewers/DefaultObjectViewer.h"
-#include "../Core/Properties/Properties.h"
+#include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/Core/Properties/ObjectViewer.h"
 
 namespace Editor
 {
@@ -13,6 +13,10 @@ namespace Editor
 		scrollArea->SetClippingLayout(Layout::BothStretch());
 		scrollArea->name = "scroll area";
 		mContentWidget = scrollArea;
+
+		mViewer = mnew ObjectViewer();
+		*mViewer->layout = WidgetLayout::BothStretch(5, 0, 0, 0);
+		mContentWidget->AddChild(mViewer);
 	}
 
 	DefaultPropertiesViewer::~DefaultPropertiesViewer()
@@ -24,27 +28,8 @@ namespace Editor
 	{
 		if (mTargets.IsEmpty())
 			return;
-		
-		const Type* objectType = !mTargets.IsEmpty() ? &mTargets[0]->GetType() : nullptr;
 
-		bool requiredNewViewer = mViewer ? !objectType->IsBasedOn(*mViewer->GetViewingObjectType()) : objectType != nullptr;
-		if (requiredNewViewer)
-		{
-			if (mViewer)
-				o2EditorProperties.FreeObjectViewer(mViewer);
-
-			mViewer = o2EditorProperties.CreateObjectViewer(objectType, "");
-
-
-			mContentWidget->AddChild(mViewer->GetLayout());
-			*mViewer->GetLayout()->layout = WidgetLayout::BothStretch(5, 0, 5, 0);
-		}
-
-		if (mViewer)
-		{
-			mViewer->Refresh(mTargets.Select<Pair<IObject*, IObject*>>([](IObject* x) {
-				return Pair<IObject*, IObject*>(x, nullptr); }));
-		}
+		mViewer->Refresh(mTargets);
 	}
 
 	void DefaultPropertiesViewer::SetTargets(const Vector<IObject*> targets)

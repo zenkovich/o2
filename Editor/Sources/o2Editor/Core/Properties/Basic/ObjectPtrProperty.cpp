@@ -63,7 +63,7 @@ namespace Editor
 			mSpoiler->onExpand = THIS_FUNC(Refresh);
 
 		mHeaderContainer = mnew HorizontalLayout();
-		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 17, 0);
+		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 19, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
 		mHeaderContainer->SetInternalParent(mSpoiler, false);
@@ -143,6 +143,8 @@ namespace Editor
 												x.second ? GetProxy(x.second) : nullptr);
 			}));
 		}
+
+		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty());
 	}
 
 	void ObjectPtrProperty::CheckViewer()
@@ -201,11 +203,11 @@ namespace Editor
 			}
 			else
 			{
-				mSpoiler->SetHeadHeight(18);
+				mSpoiler->SetHeadHeight(20);
 				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
 				mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
 				mSpoiler->borderLeft = 10;
-				mSpoiler->borderTop = 5;
+				mSpoiler->borderTop = 3;
 			}
 
 			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();

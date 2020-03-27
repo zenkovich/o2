@@ -144,6 +144,9 @@ namespace Editor
 		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
+		// It is called when type specialized during setting value proxy
+		virtual void OnTypeSpecialized(const Type& type) {}
+
 		// It is called when property puts in buffer. Here you can release your shared resources
 		virtual void OnFreeProperty();
 
@@ -230,6 +233,9 @@ namespace Editor
 
 		// Returns value from proxy
 		virtual _type GetProxy(IAbstractValueProxy* proxy) const;
+
+		// Sets value to proxy
+		virtual void SetProxy(IAbstractValueProxy* proxy, const _type& value);
 
 		// Sets common value
 		virtual void SetCommonValue(const _type& value);
@@ -457,7 +463,7 @@ namespace Editor
 	void TPropertyField<_type>::SetValue(const _type& value)
 	{
 		for (auto ptr : mValuesProxies)
-			SetProxy<_type>(ptr.first, value);
+			SetProxy(ptr.first, value);
 
 		SetCommonValue(value);
 	}
@@ -480,7 +486,7 @@ namespace Editor
 		for (auto ptr : mValuesProxies)
 		{
 			if (ptr.second)
-				SetProxy<_type>(ptr.first, GetProxy(ptr.second));
+				SetProxy(ptr.first, GetProxy(ptr.second));
 		}
 
 		Refresh();
@@ -490,6 +496,12 @@ namespace Editor
 	_type TPropertyField<_type>::GetProxy(IAbstractValueProxy* proxy) const
 	{
 		return IPropertyField::GetProxy<_type>(proxy);
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::SetProxy(IAbstractValueProxy* proxy, const _type& value)
+	{
+		IPropertyField::SetProxy<_type>(proxy, value);
 	}
 
 }
@@ -534,6 +546,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetRevertable, bool);
 	PUBLIC_FUNCTION(bool, IsRevertable);
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
+	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(void, OnFreeProperty);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
@@ -571,6 +584,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
 	PROTECTED_FUNCTION(_type, GetProxy, IAbstractValueProxy*);
+	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, const _type&);
 	PROTECTED_FUNCTION(void, SetCommonValue, const _type&);
 	PROTECTED_FUNCTION(void, SetValueByUser, const _type&);
 	PROTECTED_FUNCTION(void, UpdateValueView);

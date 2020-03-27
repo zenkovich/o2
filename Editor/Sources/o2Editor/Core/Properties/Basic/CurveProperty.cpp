@@ -50,7 +50,7 @@ namespace Editor
 	void CurveProperty::OnValueChanged()
 	{
 		for (auto ptr : mValuesProxies)
-			SetProxy<Curve>(ptr.first, mCommonValue);
+			SetProxy(ptr.first, mCommonValue);
 	}
 
 	void CurveProperty::OnClicked()

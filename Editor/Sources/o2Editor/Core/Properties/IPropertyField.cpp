@@ -29,6 +29,10 @@ namespace Editor
 	void IPropertyField::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
 		mValuesProxies = targets;
+
+		if (!mValuesProxies.IsEmpty())
+			OnTypeSpecialized(mValuesProxies[0].first->GetType());
+
 		Refresh();
 	}
 

@@ -3,7 +3,7 @@
 
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
-#include "o2Editor/Core/Properties/ObjectViewers/DefaultObjectViewer.h"
+#include "o2Editor/Core/Properties/Objects/DefaultObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/DefaultPropertiesViewer.h"
 #include "o2Editor/PropertiesWindow/IPropertiesViewer.h"

@@ -67,6 +67,9 @@ namespace Editor
 		void OnFieldChangeCompleted(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
 	};
 
+	// --------------------------------------
+	// Specialize object properties interface
+	// --------------------------------------
 	template<typename _object_type>
 	class TObjectPropertiesViewer : public IObjectPropertiesViewer
 	{

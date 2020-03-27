@@ -160,6 +160,9 @@ namespace o2
 		// Initializes types extensions dictionary
 		void LoadAssetTypes();
 
+		// Checks assets with zero references and removes them
+		void CheckAssetsUnload();
+
 		// Returns asset cache by path
 		AssetCache* FindAssetCache(const String& path);
 
@@ -170,7 +173,7 @@ namespace o2
 		void ClearAssetsCache();
 
 		// Adds asset to cache
-		void AddAssetCache(Asset* asset);
+		AssetCache* AddAssetCache(Asset* asset);
 
 		// Removes asset from cache by UID and path
 		void RemoveAssetCache(Asset* asset);

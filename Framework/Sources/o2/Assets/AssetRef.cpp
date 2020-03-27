@@ -5,8 +5,7 @@
 
 namespace o2
 {
-	AssetRef::AssetRef():
-		mAssetPtr(nullptr), mRefCounter(nullptr)
+	AssetRef::AssetRef()
 	{}
 
 	AssetRef::AssetRef(const AssetRef& other) :
@@ -18,17 +17,11 @@ namespace o2
 
 	AssetRef::AssetRef(const String& path):
 		AssetRef(o2Assets.GetAssetRef(path))
-	{
-		if (mAssetPtr)
-			(*mRefCounter)++;
-	}
+	{}
 
 	AssetRef::AssetRef(const UID& id):
 		AssetRef(o2Assets.GetAssetRef(id))
-	{
-		if (mAssetPtr)
-			(*mRefCounter)++;
-	}
+	{}
 
 	AssetRef::AssetRef(Asset* assetPtr, int* refCounter):
 		mAssetPtr(assetPtr), mRefCounter(refCounter)
@@ -68,16 +61,18 @@ namespace o2
 		{
 			mAssetPtr = *node.GetNode("asset");
 			mAssetPtr->mInfo.meta = *node.GetNode("meta");
-
-			o2Assets.AddAssetCache(mAssetPtr);
+			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+			UpdateSpecAsset();
 		}
 		else if (auto idNode = node.GetNode("id"))
 		{
 			*this = o2Assets.GetAssetRef((UID)(*idNode));
+			UpdateSpecAsset();
 		}
 		else if (auto pathNode = node.GetNode("path"))
 		{
 			*this = o2Assets.GetAssetRef(pathNode->Data());
+			UpdateSpecAsset();
 		}
 	}
 
@@ -94,6 +89,7 @@ namespace o2
 
 		mAssetPtr = other.mAssetPtr;
 		mRefCounter = other.mRefCounter;
+		mAssetOwner = false;
 
 		if (mAssetPtr)
 			(*mRefCounter)++;
@@ -152,7 +148,12 @@ namespace o2
 			return;
 
 		if (mAssetPtr)
+			*mRefCounter--;
+
+		if (mAssetPtr)
 		{
+			*mRefCounter--;
+
 			mAssetPtr = mAssetPtr->CloneAs<Asset>();
 		}
 		else
@@ -161,6 +162,7 @@ namespace o2
 			mAssetPtr = dynamic_cast<Asset*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
 		}
 
+		mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
 		UpdateSpecAsset();
 
 		mAssetOwner = true;
@@ -171,6 +173,8 @@ namespace o2
 		if (!mAssetOwner)
 			return;
 
+		*mRefCounter--;
+
 		mAssetOwner = false;
 		mAssetPtr = nullptr;
 
@@ -179,12 +183,18 @@ namespace o2
 
 	void AssetRef::SaveInstance(const String& path)
 	{
+		if (!mAssetOwner)
+			return;
 
+		mAssetPtr->SetPath(path);
+		mAssetPtr->Save();
+
+		*this = AssetRef(path);
 	}
 
 	bool AssetRef::IsInstance() const
 	{
-
+		return mAssetOwner;
 	}
 
 	bool AssetRef::operator!=(const AssetRef& other) const

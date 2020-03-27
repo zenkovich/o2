@@ -1,20 +1,20 @@
 #include "o2Editor/stdafx.h"
 #include "WindowsManager.h"
 
+#include "o2/Render/Render.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2Editor/Core/Dialogs/ColorPickerDlg.h"
 #include "o2Editor/Core/Dialogs/CurveEditorDlg.h"
 #include "o2Editor/Core/Dialogs/EditNameDlg.h"
 #include "o2Editor/Core/Dialogs/KeyEditDlg.h"
 #include "o2Editor/Core/EditorConfig.h"
+#include "o2Editor/Core/EditorScope.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/UIStyle/EditorUIStyle.h"
 #include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 #include "o2Editor/Core/WindowsSystem/DockableWindow.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
-#include "o2/Render/Render.h"
-#include "o2/Scene/UI/UIManager.h"
-#include "o2/Scene/UI/Widgets/MenuPanel.h"
-#include "../EditorScope.h"
 
 namespace Editor
 {

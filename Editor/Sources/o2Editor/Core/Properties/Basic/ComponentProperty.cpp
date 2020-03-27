@@ -158,14 +158,14 @@ namespace Editor
 
 				if (sameToProtoSourceComponent)
 				{
-					SetProxy<Component*>(target, sameToProtoSourceComponent);
+					SetProxy(target, sameToProtoSourceComponent);
 					return;
 				}
 			}
 		}
 
 		if (sourceComponent->GetOwnerActor()->IsOnScene())
-			SetProxy<Component*>(target, sourceComponent);
+			SetProxy(target, sourceComponent);
 	}
 
 	void ComponentProperty::OnCursorEnter(const Input::Cursor& cursor)

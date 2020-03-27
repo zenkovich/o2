@@ -105,6 +105,8 @@ namespace Editor
 				return Pair<IObject*, IObject*>(x.first.data, x.second.data);
 			}));
 		}
+
+		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty());
 	}
 
 	void ObjectProperty::CheckViewer()
@@ -159,7 +161,7 @@ namespace Editor
 		}
 		else
 		{
-			mSpoiler->SetHeadHeight(18);
+			mSpoiler->SetHeadHeight(20);
 			mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
 			mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
 			mSpoiler->borderLeft = 10;
