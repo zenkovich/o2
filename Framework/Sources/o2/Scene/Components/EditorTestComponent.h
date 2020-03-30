@@ -81,7 +81,7 @@ namespace o2
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<TestInside*> mTestInsideptrsVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
-		Vector<ImageAssetRef> mAssetsVector;               // @SERIALIZABLE
+		Vector<AnimationAssetRef> mAssetsVector;               // @SERIALIZABLE
 
 		Map<String, String> mDictionary;    // @SERIALIZABLE
 		float mFloat2;					           // @SERIALIZABLE

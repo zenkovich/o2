@@ -480,6 +480,9 @@ namespace o2
 	{
 		auto cached = mCachedAssets;
 		mCachedAssets.Clear();
+		mCachedAssetsByPath.Clear();
+		mCachedAssetsByUID.Clear();
+		mAssetsTrees.Clear();
 
 		for (auto cache : cached)
 		{

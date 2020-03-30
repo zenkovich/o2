@@ -44,6 +44,8 @@ namespace Editor
 
 		if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
 			o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+
+		o2EditorAnimationWindow.GetWindow()->Focus();
 	}
 
 }

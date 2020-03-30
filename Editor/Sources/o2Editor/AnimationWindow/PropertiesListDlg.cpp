@@ -252,7 +252,7 @@ namespace Editor
 		if (propertyNode->mData->used)
 			mAnimation->RemoveAnimationValue(propertyNode->mData->path);
 		else
-			mAnimation->AddAnimationValueNoType(propertyNode->mData->path);
+			mAnimation->AddAnimationValue(propertyNode->mData->path, *propertyNode->mData->type);
 	}
 
 	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<void*> objects)
@@ -340,7 +340,7 @@ namespace Editor
 		{
 			mAddButton->onClick = [&]()
 			{
-				mTree->mAnimation->AddAnimationValueNoType(mData->path); 
+				mTree->mAnimation->AddAnimationValue(mData->path, *mData->type); 
 				mData->used = true; 
 				mTree->OnObjectsChanged({ (void*)mData }); 
 			};

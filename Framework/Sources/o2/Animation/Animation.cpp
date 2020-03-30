@@ -154,6 +154,48 @@ namespace o2
 		return false;
 	}
 
+	IAnimatedValue* Animation::AddAnimationValue(const String& path, const Type& type)
+	{
+		auto animTypeName = "o2::AnimatedValue<" + type.GetName() + ">";
+		auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
+		if (!animType)
+		{
+			o2Debug.LogWarning("Can't create animated value: can't find animation type " + animTypeName);
+			return nullptr;
+		}
+
+		AnimatedValueDef def;
+		def.animatedValue = dynamic_cast<IAnimatedValue*>(animType->DynamicCastToIObject(animType->CreateSample()));
+		def.animatedValue->onKeysChanged += THIS_FUNC(OnAnimatedValueChanged);
+
+		if (mTarget)
+		{
+			FieldInfo* fieldInfo = nullptr;
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&mTarget->GetType());
+			void* castedTarget = type->DynamicCastFromIObject(mTarget);
+			def.targetPtr = mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
+
+			if (!fieldInfo)
+			{
+				o2Debug.LogWarning("Can't create animated value: field info not found " + path);
+				def.targetPtr = mTarget->GetType().GetFieldPtr(castedTarget, path, fieldInfo);
+				return nullptr;
+			}
+
+			if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)
+				def.animatedValue->SetTargetProxyVoid(fieldInfo->GetType()->GetValueProxy(def.targetPtr));
+			else
+				def.animatedValue->SetTargetVoid(def.targetPtr);
+		}
+
+		def.targetPath = path;
+		mAnimatedValues.Add(def);
+
+		OnAnimatedValueAdded(def);
+
+		return def.animatedValue;
+	}
+
 	IAnimatedValue* Animation::AddAnimationValueNoType(const String& path)
 	{
 		if (!mTarget)
@@ -176,15 +218,15 @@ namespace o2
 		if (fieldType->GetUsage() == Type::Usage::Property)
 			fieldType = dynamic_cast<const PropertyType*>(fieldType)->GetValueType();
 
-		if (fieldType == &TypeOf(float))
-			def.animatedValue = mnew AnimatedValue<float>();
-		else if (fieldType == &TypeOf(Color4))
-			def.animatedValue = mnew AnimatedValue<Color4>();
-		else if (fieldType == &TypeOf(Vec2F))
-			def.animatedValue = mnew AnimatedValue<Vec2F>();
-		else if (fieldType == &TypeOf(bool))
-			def.animatedValue = mnew AnimatedValue<bool>();
+		auto animTypeName = "o2::AnimatedValue<" + fieldType->GetName() + ">";
+		auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
+		if (!animType)
+		{
+			o2Debug.LogWarning("Can't create animated value: can't find animation type " + animTypeName);
+			return nullptr;
+		}
 
+		def.animatedValue = dynamic_cast<IAnimatedValue*>(animType->DynamicCastToIObject(animType->CreateSample()));
 		def.animatedValue->onKeysChanged += THIS_FUNC(OnAnimatedValueChanged);
 
 		if (fieldInfo->GetType()->GetUsage() == Type::Usage::Property)

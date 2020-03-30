@@ -40,6 +40,9 @@ namespace Editor
 		// Hides window
 		void Hide();
 
+		// Returns window
+		DockableWindow* GetWindow() const;
+
 		IOBJECT(IEditorWindow);
 
 	protected:
@@ -73,6 +76,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
 	PUBLIC_FUNCTION(bool, IsVisible);
 	PUBLIC_FUNCTION(void, Show);
 	PUBLIC_FUNCTION(void, Hide);
+	PUBLIC_FUNCTION(DockableWindow*, GetWindow);
 	PROTECTED_FUNCTION(void, PostInitializeWindow);
 }
 END_META;

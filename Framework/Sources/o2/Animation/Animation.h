@@ -73,7 +73,10 @@ namespace o2
 		template<typename _type>
 		AnimatedValue<_type>* AddAnimationValue(const String& path);
 
-		// Add animation value with specified path
+		// Add animation value with specified path and type
+		IAnimatedValue* AddAnimationValue(const String& path, const Type& type);
+
+		// Add animation value with specified path. Required target
 		IAnimatedValue* AddAnimationValueNoType(const String& path);
 
 		// Removes animated value for target
@@ -480,6 +483,7 @@ CLASS_METHODS_META(o2::Animation)
 	PUBLIC_FUNCTION(Vector<AnimatedValueDef>&, GetAnimationsValues);
 	PUBLIC_FUNCTION(const Vector<AnimatedValueDef>&, GetAnimationsValues);
 	PUBLIC_FUNCTION(bool, ContainsAnimationValue, const String&);
+	PUBLIC_FUNCTION(IAnimatedValue*, AddAnimationValue, const String&, const Type&);
 	PUBLIC_FUNCTION(IAnimatedValue*, AddAnimationValueNoType, const String&);
 	PUBLIC_FUNCTION(bool, RemoveAnimationValue, const String&);
 	PROTECTED_FUNCTION(void, Evaluate);

@@ -39,6 +39,11 @@ namespace Editor
 		SetVisible(false);
 	}
 
+	DockableWindow* IEditorWindow::GetWindow() const
+	{
+		return mWindow;
+	}
+
 	void IEditorWindow::SetVisible(bool visible)
 	{
 		mWindow->SetEnabled(visible);
