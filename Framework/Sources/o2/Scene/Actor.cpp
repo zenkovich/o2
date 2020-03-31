@@ -66,6 +66,8 @@ namespace o2
 	{
 		for (auto comp : components)
 			AddComponent(comp);
+
+		OnTransformUpdated();
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other) :

@@ -125,7 +125,8 @@ namespace Editor
 
 	void ImageSlicesEditorWidget::FitImage()
 	{
-		UpdateTransform();
+		if (layout->IsDirty())
+			UpdateTransform();
 
 		Vec2F maxSize = layout->size;
 		Vec2F imageSize = mPreviewImage->GetImage()->GetOriginalSize();
