@@ -1,9 +1,9 @@
 #pragma once
 
-#include "o2/Animation/Animation.h"
 #include "o2/Animation/AnimationMask.h"
-#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Containers/Vector.h"
 
 namespace o2
 {
@@ -15,11 +15,11 @@ namespace o2
 	class AnimationState: public ISerializable
 	{
 	public:
-		String        name;       // State name @SERIALIZABLE
-		Animation     animation;  // Animation @SERIALIZABLE
-		AnimationMask mask;       // Animation mask @SERIALIZABLE
-		float         weight;     // State weight @SERIALIZABLE
-		float         workWeight; // State working weight, using for blendings
+		String            name;       // State name @SERIALIZABLE
+		AnimationAssetRef animation;  // Animation @SERIALIZABLE
+		AnimationMask     mask;       // Animation mask @SERIALIZABLE
+		float             weight;     // State weight @SERIALIZABLE
+		float             workWeight; // State working weight, using for blendings
 
 	public:
 		// Default constructor

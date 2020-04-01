@@ -59,8 +59,8 @@ namespace o2
 
 	Reflection::~Reflection()
 	{
-		for (auto type : mTypes)
-			delete type;
+		for (auto kv : mTypes)
+			delete kv.second;
 	}
 
 	Reflection& Reflection::Instance()
@@ -85,40 +85,24 @@ namespace o2
 		mInstance->mTypesInitialized = true;
 	}
 
-	const Vector<Type*>& Reflection::GetTypes()
+	const Map<String, Type*>& Reflection::GetTypes()
 	{
 		return mInstance->mTypes;
 	}
 
 	void* Reflection::CreateTypeSample(const String& typeName)
 	{
-		for (auto type : mInstance->mTypes)
-		{
-			if (type->GetName() == typeName)
-				return type->CreateSample();
-		}
-
-		return nullptr;
-	}
-
-	const Type* Reflection::GetType(TypeId id)
-	{
-		for (auto type : mInstance->mTypes)
-		{
-			if (type->ID() == id)
-				return type;
-		}
+		if (auto type = GetType(typeName))
+			return type->CreateSample();
 
 		return nullptr;
 	}
 
 	const Type* Reflection::GetType(const String& name)
 	{
-		for (auto type : mInstance->mTypes)
-		{
-			if (type->GetName() == name)
-				return type;
-		}
+		auto fnd = mInstance->mTypes.find(name);
+		if (fnd != mInstance->mTypes.End())
+			return fnd->second;
 
 		if (name[name.Length() - 1] == '*')
 		{
@@ -140,7 +124,7 @@ namespace o2
 		FundamentalTypeContainer<void>::type->mId = mInstance->mLastGivenTypeId++;
 		Type::Dummy::type->mId = mInstance->mLastGivenTypeId++;
 
-		mInstance->mTypes.Add(FundamentalTypeContainer<void>::type);
-		mInstance->mTypes.Add(Type::Dummy::type);
+		mInstance->mTypes[FundamentalTypeContainer<void>::type->GetName()] = FundamentalTypeContainer<void>::type;
+		mInstance->mTypes[Type::Dummy::type->GetName()] = Type::Dummy::type;
 	}
 }

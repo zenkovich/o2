@@ -17,7 +17,7 @@ o2::String o2::EditorTestComponent::GetCategory() const
 
 void o2::EditorTestComponent::Test()
 {
-	o2Debug.Log("test");
+	//o2Debug.Log("test");
 }
 
 ENUM_META(o2::EditorTestComponent::TestEnum)

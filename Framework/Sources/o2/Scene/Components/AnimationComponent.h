@@ -128,13 +128,13 @@ namespace o2
 
 		public:
 			// Updates value and blend
-			void Update();
+			void Update() override;
 
 			// Removes animated value from agent
-			void RemoveValue(IAnimatedValue* value);
+			void RemoveValue(IAnimatedValue* value) override;
 
 			// Returns is agent hasn't no values
-			bool IsEmpty() const;
+			bool IsEmpty() const override;
 
 			// Assigns value as field
 			void AssignField(_type& value);
@@ -156,7 +156,7 @@ namespace o2
 
 	protected:
 		Vector<AnimationState*> mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE @INVOKE_ON_CHANGE(OnStatesListChanged)
-		Vector<IValueAgent*>     mValues; // Assigning value agents
+		Vector<IValueAgent*>    mValues; // Assigning value agents
 
 		BlendState mBlend;  // Current blend parameters
 
@@ -185,7 +185,7 @@ namespace o2
 		{
 			if (val->path == path)
 			{
-				ValueAgent< _type>* agent = dynamic_cast<ValueAgent<_type>*>(val);
+				auto* agent = dynamic_cast<ValueAgent<_type>*>(val);
 
 				if (!agent)
 				{
@@ -198,13 +198,13 @@ namespace o2
 			}
 		}
 
-		ValueAgent<_type>* newAgent = mnew ValueAgent <_type>();
+		auto* newAgent = mnew ValueAgent <_type>();
 		mValues.Add(newAgent);
 		newAgent->path = path;
 		newAgent->animValues.Add({ state, value });
 
 		FieldInfo* fieldInfo = nullptr;
-		_type* fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
+		auto* fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
 
 		if (!fieldInfo)
 		{

@@ -42,13 +42,10 @@ namespace o2
 		static void InitializeTypes();
 
 		// Returns array of all registered types
-		static const Vector<Type*>& GetTypes();
+		static const Map<String, Type*>& GetTypes();
 
 		// Returns a copy of type sample
 		static void* CreateTypeSample(const String& typeName);
-
-		// Returns type by type id
-		static const Type* GetType(TypeId id);
 
 		// Returns type by name
 		static const Type* GetType(const String& name);
@@ -108,8 +105,8 @@ namespace o2
 
 		static Reflection* mInstance; // Reflection instance
 
-		Vector<Type*> mTypes;           // All registered types
-		UInt          mLastGivenTypeId; // Last given type index
+		Map<String, Type*> mTypes;           // All registered types
+		UInt               mLastGivenTypeId; // Last given type index
 
 		TypeInitializingFuncsVec mInitializingFunctions; // List of types initializations functions
 
@@ -203,7 +200,7 @@ namespace o2
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::template ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
-		Reflection::Instance().mTypes.Add(res);
+		mInstance->mTypes[res->GetName()] = res;
 
 		//printf("Reflection::InitializeType(%s): instance:%x - %i\n", name, mInstance, Reflection::Instance().mTypes.Count());
 
@@ -217,7 +214,7 @@ namespace o2
 
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&FundamentalTypeContainer<_type>::template InitializeType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
-		Reflection::Instance().mTypes.Add(res);
+		mInstance->mTypes[res->GetName()] = res;
 
 		return res;
 	}
@@ -233,7 +230,7 @@ namespace o2
 
 		type->mPtrType = newType;
 
-		mInstance->mTypes.Add(newType);
+		mInstance->mTypes[newType->GetName()] = newType;
 
 		return newType;
 	}
@@ -244,7 +241,7 @@ namespace o2
 		EnumType* res = mnew TEnumType<_type>(name, sizeof(_type));
 
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
-		Reflection::Instance().mTypes.Add(res);
+		mInstance->mTypes[res->GetName()] = res;
 		res->mEntries.Add(func());
 
 		return res;
@@ -255,13 +252,14 @@ namespace o2
 	{
 		String typeName = (String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">";
 
-		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return dynamic_cast<PropertyType*>(fnd);
+		auto fnd = mInstance->mTypes.find(typeName);
+		if (fnd != mInstance->mTypes.End())
+			return dynamic_cast<PropertyType*>(fnd->second);
 
 		TPropertyType<_value_type, _property_type>* newType = mnew TPropertyType<_value_type, _property_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
-		mInstance->mTypes.Add(newType);
+		mInstance->mTypes[newType->GetName()] = newType;
 
 		return newType;
 	}
@@ -271,13 +269,14 @@ namespace o2
 	{
 		String typeName = "o2::Vector<" + TypeOf(_element_type).GetName() + ">";
 
-		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return dynamic_cast<VectorType*>(fnd);
+		auto fnd = mInstance->mTypes.find(typeName);
+		if (fnd != mInstance->mTypes.End())
+			return dynamic_cast<VectorType*>(fnd->second);
 
 		TVectorType<_element_type>* newType = mnew TVectorType<_element_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
-		mInstance->mTypes.Add(newType);
+		mInstance->mTypes[newType->GetName()] = newType;
 
 		return newType;
 	}
@@ -287,13 +286,14 @@ namespace o2
 	{
 		String typeName = "o2::Dictionary<" + TypeOf(_key_type).GetName() + ", " + TypeOf(_value_type).GetName() + ">";
 
-		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return dynamic_cast<MapType*>(fnd);
+		auto fnd = mInstance->mTypes.find(typeName);
+		if (fnd != mInstance->mTypes.End())
+			return dynamic_cast<MapType*>(fnd->second);
 
 		auto newType = mnew TMapType<_key_type, _value_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
-		mInstance->mTypes.Add(newType);
+		mInstance->mTypes[newType->GetName()] = newType;
 
 		return newType;
 	}
@@ -304,13 +304,14 @@ namespace o2
 		const Type* type = &TypeOf(_return_type);
 		String typeName = (String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">";
 
-		if (auto fnd = mInstance->mTypes.FindMatch([&](auto x) { return x->mName == typeName; }))
-			return dynamic_cast<TStringPointerAccessorType<_return_type, _accessor_type>*>(fnd);
+		auto fnd = mInstance->mTypes.find(typeName);
+		if (fnd != mInstance->mTypes.End())
+			return dynamic_cast<TStringPointerAccessorType<_return_type, _accessor_type>*>(fnd->second);
 
 		TStringPointerAccessorType<_return_type, _accessor_type>* newType = mnew TStringPointerAccessorType<_return_type, _accessor_type>();
 		newType->mId = mInstance->mLastGivenTypeId++;
 
-		mInstance->mTypes.Add(newType);
+		mInstance->mTypes[newType->GetName()] = newType;
 
 		return newType;
 	}

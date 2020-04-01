@@ -2,6 +2,7 @@
 
 #include "o2/Animation/Animation.h"
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/AssetRef.h"
 #include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
 
 namespace o2

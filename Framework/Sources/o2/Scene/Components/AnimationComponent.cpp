@@ -38,7 +38,10 @@ namespace o2
 	void AnimationComponent::Update(float dt)
 	{
 		for (auto state : mStates)
-			state->animation.Update(dt);
+		{
+			if (state->animation)
+				state->animation->animation.Update(dt);
+		}
 
 		for (auto val : mValues)
 			val->Update();
@@ -51,21 +54,26 @@ namespace o2
 	{
 		mStates.Add(state);
 
-		state->animation.SetTarget(mOwner);
-		state->animation.mAnimationState = state;
+		if (state->animation)
+		{
+			state->animation->animation.SetTarget(mOwner);
+			state->animation->animation.mAnimationState = state;
+		}
+
 		state->mOwner = this;
 
-		for (auto& val : state->animation.mAnimatedValues)
+		for (auto& val : state->animation->animation.mAnimatedValues)
 			val.animatedValue->RegInAnimatable(state, val.targetPath);
 
 		return state;
 	}
 
 	AnimationState* AnimationComponent::AddState(const String& name, const Animation& animation, const AnimationMask& mask,
-											 float weight)
+												 float weight)
 	{
 		AnimationState* res = mnew AnimationState(name);
-		res->animation = animation;
+		res->animation.CreateInstance();
+		res->animation->animation = animation;
 		res->mask = mask;
 		res->weight = weight;
 		return AddState(res);
@@ -79,8 +87,11 @@ namespace o2
 
 	void AnimationComponent::RemoveState(AnimationState* state)
 	{
-		for (auto& val : state->animation.mAnimatedValues)
-			UnregAnimatedValue(val.animatedValue, val.targetPath);
+		if (state->animation)
+		{
+			for (auto& val : state->animation->animation.mAnimatedValues)
+				UnregAnimatedValue(val.animatedValue, val.targetPath);
+		}
 
 		mStates.Remove(state);
 		delete state;
@@ -121,14 +132,14 @@ namespace o2
 	AnimationState* AnimationComponent::Play(const Animation& animation, const String& name)
 	{
 		AnimationState* state = AddState(name, animation, AnimationMask(), 1.0f);
-		state->animation.Play();
+		state->animation->animation.Play();
 		return state;
 	}
 
 	AnimationState* AnimationComponent::Play(const Animation& animation)
 	{
 		AnimationState* state = AddState("unknown", animation, AnimationMask(), 1.0f);
-		state->animation.Play();
+		state->animation->animation.Play();
 		return state;
 	}
 
@@ -140,7 +151,10 @@ namespace o2
 			o2Debug.LogWarning("Can't play animation: " + name);
 			return nullptr;
 		}
-		state->animation.Play();
+
+		if (state->animation)
+			state->animation->animation.Play();
+
 		return state;
 	}
 
@@ -172,14 +186,20 @@ namespace o2
 		mBlend.mBlendOffStates.Clear();
 
 		for (auto state : mStates)
-			if (state->animation.IsPlaying())
-				mBlend.mBlendOffStates.Add(state);
+		{
+			if (state->animation)
+			{
+				if (state->animation->animation.IsPlaying())
+					mBlend.mBlendOffStates.Add(state);
+			}
+		}
 
 		mBlend.mBlendOnState = state;
 		mBlend.duration = duration;
 		mBlend.time = duration;
 
-		state->animation.Play();
+		if (state->animation)
+			state->animation->animation.Play();
 
 		return state;
 	}
@@ -192,13 +212,18 @@ namespace o2
 			o2Debug.LogWarning("Can't stop animation: " + animationName);
 			return;
 		}
-		state->animation.Stop();
+
+		if (state->animation)
+			state->animation->animation.Stop();
 	}
 
 	void AnimationComponent::StopAll()
 	{
 		for (auto state : mStates)
-			state->animation.Stop();
+		{
+			if (state->animation)
+				state->animation->animation.Stop();
+		}
 
 		mBlend.time = -1;
 	}
@@ -243,12 +268,16 @@ namespace o2
 		{
 			if (!state->mOwner)
 			{
-				state->animation.SetTarget(mOwner);
-				state->animation.mAnimationState = state;
-				state->mOwner = this;
+				if (state->animation)
+				{
+					state->animation->animation.SetTarget(mOwner);
+					state->animation->animation.mAnimationState = state;
 
-				for (auto& val : state->animation.mAnimatedValues)
-					val.animatedValue->RegInAnimatable(state, val.targetPath);
+					state->mOwner = this;
+
+					for (auto& val : state->animation->animation.mAnimatedValues)
+						val.animatedValue->RegInAnimatable(state, val.targetPath);
+				}
 			}
 		}
 	}

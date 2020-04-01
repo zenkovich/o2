@@ -176,13 +176,13 @@ namespace o2
 	Vector<const Type*> Type::GetDerivedTypes(bool deep /*= true*/) const
 	{
 		Vector<const Type*> res;
-		for (auto type : Reflection::GetTypes())
+		for (auto kv : Reflection::GetTypes())
 		{
-			auto baseTypes = type->GetBaseTypes();
+			auto baseTypes = kv.second->GetBaseTypes();
 			for (auto baseType : baseTypes)
 			{
 				if (baseType.type->mId == mId)
-					res.Add(type);
+					res.Add(kv.second);
 			}
 		}
 

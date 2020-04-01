@@ -393,6 +393,8 @@ namespace Editor
 
 	void VectorProperty::Resize(int newCount)
 	{
+		newCount = Math::Max(0, newCount);
+
 		Vector<DataNode> prevValues, newValues;
 		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
