@@ -15,12 +15,18 @@ namespace Editor
 		*layout = WidgetLayout::BothStretch();
 	}
 
-	void ObjectViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void ObjectViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjects)
 	{
-		if (targetObjets.IsEmpty())
+		if (targetObjects.IsEmpty())
 			return;
 
-		const Type* objectType = !targetObjets.IsEmpty() ? &targetObjets[0].first->GetType() : nullptr;
+		const Type* objectType = !targetObjects.IsEmpty() ? &targetObjects[0].first->GetType() : nullptr;
+
+		for (auto target : targetObjects)
+		{
+			if (!target.first->GetType().IsBasedOn(*objectType))
+				return;
+		}
 
 		bool requiredNewViewer = mPropertiesViewer ? 
 			!objectType->IsBasedOn(*mPropertiesViewer->GetViewingObjectType()) : 
@@ -40,7 +46,7 @@ namespace Editor
 		}
 
 		if (mPropertiesViewer)
-			mPropertiesViewer->Refresh(targetObjets);
+			mPropertiesViewer->Refresh(targetObjects);
 	}
 
 	void ObjectViewer::Refresh(const Vector<IObject*>& targetObjets)

@@ -133,3 +133,11 @@ ENUM_META(o2::PixelFormat)
 	ENUM_ENTRY(R8G8B8A8);
 }
 END_ENUM_META;
+
+ENUM_META(o2::Loop)
+{
+	ENUM_ENTRY(None);
+	ENUM_ENTRY(PingPong);
+	ENUM_ENTRY(Repeat);
+}
+END_ENUM_META;

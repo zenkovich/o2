@@ -33,7 +33,7 @@ namespace Editor
 
 	private:
 		Button*    mEditButton = nullptr;
-		Animation* mCurrentAnimation = nullptr;
+		AnimationClip* mCurrentAnimation = nullptr;
 
 	private:
 		void OnEditPressed();

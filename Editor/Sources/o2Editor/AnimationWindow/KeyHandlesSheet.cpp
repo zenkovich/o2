@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "KeyHandlesSheet.h"
 
-#include "o2/Animation/AnimatedValue.h"
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/Tracks/AnimationTrack.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
@@ -107,7 +107,7 @@ namespace Editor
 		}
 	}
 
-	void KeyHandlesSheet::SetAnimation(Animation* animation)
+	void KeyHandlesSheet::SetAnimation(AnimationClip* animation)
 	{
 	}
 
@@ -138,10 +138,10 @@ namespace Editor
 	{
 		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
 		{
-			if (!mHandlesGroups.ContainsKey(animHandle->animatedValue))
-				mHandlesGroups.Add(animHandle->animatedValue, {});
+			if (!mHandlesGroups.ContainsKey(animHandle->track))
+				mHandlesGroups.Add(animHandle->track, {});
 
-			mHandlesGroups[animHandle->animatedValue].Add(animHandle);
+			mHandlesGroups[animHandle->track].Add(animHandle);
 		}
 
 		SelectableDragHandlesGroup::AddHandle(handle);
@@ -150,7 +150,7 @@ namespace Editor
 	void KeyHandlesSheet::RemoveHandle(DragHandle* handle)
 	{
 		if (auto animHandle = dynamic_cast<AnimationKeyDragHandle*>(handle))
-			mHandlesGroups[animHandle->animatedValue].Remove(animHandle);
+			mHandlesGroups[animHandle->track].Remove(animHandle);
 
 		SelectableDragHandlesGroup::RemoveHandle(handle);
 	}
@@ -163,7 +163,7 @@ namespace Editor
 		{
 			for (auto& handle : handlesGroup.second)
 			{
-				if (keys.ContainsKey(handle->animatedValuePath) && keys.Get(handle->animatedValuePath).Contains(handle->keyUid))
+				if (keys.ContainsKey(handle->trackPath) && keys.Get(handle->trackPath).Contains(handle->keyUid))
 					SelectHandle(handle);
 			}
 		}
@@ -177,7 +177,7 @@ namespace Editor
 			for (auto& handle : handlesGroup.second)
 			{
 				if (handle->selected)
-					res[handle->animatedValuePath].Add(handle->keyUid);
+					res[handle->trackPath].Add(handle->keyUid);
 			}
 		}
 
@@ -235,8 +235,8 @@ namespace Editor
 
 	void KeyHandlesSheet::OnHandleMoved(DragHandle* handle, const Vec2F& cursorPos)
 	{
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->BeginKeysBatchChange();
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			track->BeginKeysBatchChange();
 
 		for (auto& kv : mHandlesGroups)
 		{
@@ -253,8 +253,8 @@ namespace Editor
 			}
 		}
 
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			track->CompleteKeysBatchingChange();
 		
 		mHandleHasMoved = true;
 		mNeedUpdateSelectionFrame = true;
@@ -335,16 +335,16 @@ namespace Editor
 
 			float scale = (point.x - mSelectionRect.right) / (mSelectionRect.left - mSelectionRect.right);
 
-			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-				animatedValueDef.animatedValue->BeginKeysBatchChange();
+			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+				track->BeginKeysBatchChange();
 
 			for (auto handle : GetSelectedHandles()) {
 				handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.right)*scale + mSelectionRect.right, handle->GetPosition().y));
 				handle->onChangedPos(handle->GetPosition());
 			}
 
-			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+				track->CompleteKeysBatchingChange();
 
 			mNeedUpdateSelectionFrame = true;
 		};
@@ -386,16 +386,16 @@ namespace Editor
 
 			float scale = (point.x - mSelectionRect.left) / (mSelectionRect.right - mSelectionRect.left);
 
-			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-				animatedValueDef.animatedValue->BeginKeysBatchChange();
+			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+				track->BeginKeysBatchChange();
 
 			for (auto handle : GetSelectedHandles()) {
 				handle->SetPosition(Vec2F((handle->GetPosition().x - mSelectionRect.left)*scale + mSelectionRect.left, handle->GetPosition().y));
 				handle->onChangedPos(handle->GetPosition());
 			}
 
-			for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-				animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+				track->CompleteKeysBatchingChange();
 
 			mNeedUpdateSelectionFrame = true;
 		};
@@ -486,12 +486,12 @@ namespace Editor
 	void KeyHandlesSheet::DeserializeKeys(const DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime, 
 										  bool generateNewUid /*= true*/)
 	{
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->BeginKeysBatchChange();
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			track->BeginKeysBatchChange();
 
 		if (data.GetChildNodes().Count() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
 		{
-			auto dataNode = (AnimationTree::AnimationValueNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
+			auto dataNode = (AnimationTree::TrackNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
 			for (auto keyNode : *data.GetChildNodes()[0]->GetNode("Keys"))
 			{
 				UInt64 uid = dataNode->trackControl->DeserializeKey(*keyNode, relativeTime);
@@ -519,8 +519,8 @@ namespace Editor
 			}
 		}
 
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			track->CompleteKeysBatchingChange();
 	}
 
 	void KeyHandlesSheet::CopyKeys()
@@ -559,14 +559,14 @@ namespace Editor
 			mAnimationWindow->mActionsList.DoneAction(mnew AnimationDeleteKeysAction(keys, data, this));
 		}
 
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->BeginKeysBatchChange();
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			track->BeginKeysBatchChange();
 		
 		for (auto& handlesGroup : mHandlesGroups)
 		{
 			for (auto& handle : handlesGroup.second)
 			{
-				if (keys.ContainsKey(handle->animatedValuePath) && keys.Get(handle->animatedValuePath).Contains(handle->keyUid))
+				if (keys.ContainsKey(handle->trackPath) && keys.Get(handle->trackPath).Contains(handle->keyUid))
 				{
 					handle->Deselect();
 					handle->trackControl->DeleteKey(handle->keyUid);
@@ -574,8 +574,8 @@ namespace Editor
 			}
 		}
 
-		for (auto animatedValueDef : mAnimationWindow->mAnimation->GetAnimationsValues())
-			animatedValueDef.animatedValue->CompleteKeysBatchingChange();
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
+			track->CompleteKeysBatchingChange();
 	}
 
 	void KeyHandlesSheet::OnCursorPressed(const Input::Cursor& cursor)

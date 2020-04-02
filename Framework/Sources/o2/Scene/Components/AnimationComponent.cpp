@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "AnimationComponent.h"
 
-#include "o2/Animation/AnimatedValue.h"
+#include "o2/Animation/Tracks/AnimationTrack.h"
 
 namespace o2
 {
@@ -11,10 +11,7 @@ namespace o2
 	AnimationComponent::AnimationComponent(const AnimationComponent& other)
 	{
 		for (auto state : other.mStates)
-		{
-			AnimationState* newState = mnew AnimationState(*state);
-			AddState(newState);
-		}
+			AddState(state->CloneAs<AnimationState>());
 	}
 
 	AnimationComponent::~AnimationComponent()
@@ -27,10 +24,7 @@ namespace o2
 		RemoveAllStates();
 
 		for (auto state : other.mStates)
-		{
-			AnimationState* newState = mnew AnimationState(*state);
-			AddState(newState);
-		}
+			AddState(state->CloneAs<AnimationState>());
 
 		return *this;
 	}
@@ -39,8 +33,8 @@ namespace o2
 	{
 		for (auto state : mStates)
 		{
-			if (state->animation)
-				state->animation->animation.Update(dt);
+			if (state->mAnimation)
+				state->player.Update(dt);
 		}
 
 		for (auto val : mValues)
@@ -51,31 +45,28 @@ namespace o2
 	}
 
 	AnimationState* AnimationComponent::AddState(AnimationState* state)
-	{
-		mStates.Add(state);
-
-		if (state->animation)
-		{
-			state->animation->animation.SetTarget(mOwner);
-			state->animation->animation.mAnimationState = state;
-		}
-
+	{		
+		state->player.mAnimationState = state;
 		state->mOwner = this;
 
-		for (auto& val : state->animation->animation.mAnimatedValues)
-			val.animatedValue->RegInAnimatable(state, val.targetPath);
+		for (auto trackPlayer : state->player.mTrackPlayers)
+			trackPlayer->RegMixer(state, trackPlayer->GetTrack()->path);
+
+		state->player.onTrackPlayerAdded += [=](auto x) { OnStateAnimationTrackAdded(state, x); };
+		state->player.onTrackPlayerRemove += [=](auto x) { OnStateAnimationTrackRemoved(state, x); };
+
+		mStates.Add(state);
 
 		return state;
 	}
 
-	AnimationState* AnimationComponent::AddState(const String& name, const Animation& animation, const AnimationMask& mask,
+	AnimationState* AnimationComponent::AddState(const String& name, const AnimationClip& animation, const AnimationMask& mask,
 												 float weight)
 	{
 		AnimationState* res = mnew AnimationState(name);
-		res->animation.CreateInstance();
-		res->animation->animation = animation;
+		res->mAnimation = AnimationAssetRef(mnew AnimationAsset(animation));
 		res->mask = mask;
-		res->weight = weight;
+		res->mWeight = weight;
 		return AddState(res);
 	}
 
@@ -87,11 +78,8 @@ namespace o2
 
 	void AnimationComponent::RemoveState(AnimationState* state)
 	{
-		if (state->animation)
-		{
-			for (auto& val : state->animation->animation.mAnimatedValues)
-				UnregAnimatedValue(val.animatedValue, val.targetPath);
-		}
+		for (auto trackPlayer : state->player.mTrackPlayers)
+			UnregTrack(trackPlayer, trackPlayer->GetTrack()->path);
 
 		mStates.Remove(state);
 		delete state;
@@ -118,8 +106,10 @@ namespace o2
 	AnimationState* AnimationComponent::GetState(const String& name)
 	{
 		for (auto state : mStates)
+		{
 			if (state->name == name)
 				return state;
+		}
 
 		return nullptr;
 	}
@@ -129,42 +119,41 @@ namespace o2
 		return mStates;
 	}
 
-	AnimationState* AnimationComponent::Play(const Animation& animation, const String& name)
+	AnimationState* AnimationComponent::Play(const AnimationClip& animation, const String& name)
 	{
 		AnimationState* state = AddState(name, animation, AnimationMask(), 1.0f);
-		state->animation->animation.Play();
+		state->player.Play();
 		return state;
 	}
 
-	AnimationState* AnimationComponent::Play(const Animation& animation)
+	AnimationState* AnimationComponent::Play(const AnimationClip& animation)
 	{
 		AnimationState* state = AddState("unknown", animation, AnimationMask(), 1.0f);
-		state->animation->animation.Play();
+		state->player.Play();
 		return state;
 	}
 
 	AnimationState* AnimationComponent::Play(const String& name)
 	{
 		AnimationState* state = GetState(name);
-		if (!state)
+		if (!state || !state->mAnimation)
 		{
 			o2Debug.LogWarning("Can't play animation: " + name);
 			return nullptr;
 		}
 
-		if (state->animation)
-			state->animation->animation.Play();
+		state->player.Play();
 
 		return state;
 	}
 
-	AnimationState* AnimationComponent::BlendTo(const Animation& animation, const String& name, float duration /*= 1.0f*/)
+	AnimationState* AnimationComponent::BlendTo(const AnimationClip& animation, const String& name, float duration /*= 1.0f*/)
 	{
 		AnimationState* state = AddState(name, animation, AnimationMask(), 1.0f);
 		return BlendTo(state, duration);
 	}
 
-	AnimationState* AnimationComponent::BlendTo(const Animation& animation, float duration /*= 1.0f*/)
+	AnimationState* AnimationComponent::BlendTo(const AnimationClip& animation, float duration /*= 1.0f*/)
 	{
 		AnimationState* state = AddState("unknown", animation, AnimationMask(), 1.0f);
 		return BlendTo(state, duration);
@@ -183,23 +172,23 @@ namespace o2
 
 	AnimationState* AnimationComponent::BlendTo(AnimationState* state, float duration /*= 1.0f*/)
 	{
-		mBlend.mBlendOffStates.Clear();
+		mBlend.blendOffStates.Clear();
 
 		for (auto state : mStates)
 		{
-			if (state->animation)
+			if (state->mAnimation)
 			{
-				if (state->animation->animation.IsPlaying())
-					mBlend.mBlendOffStates.Add(state);
+				if (state->player.IsPlaying())
+					mBlend.blendOffStates.Add(state);
 			}
 		}
 
-		mBlend.mBlendOnState = state;
+		mBlend.blendOnState = state;
 		mBlend.duration = duration;
 		mBlend.time = duration;
 
-		if (state->animation)
-			state->animation->animation.Play();
+		if (state->mAnimation)
+			state->player.Play();
 
 		return state;
 	}
@@ -213,17 +202,13 @@ namespace o2
 			return;
 		}
 
-		if (state->animation)
-			state->animation->animation.Stop();
+		state->player.Stop();
 	}
 
 	void AnimationComponent::StopAll()
 	{
 		for (auto state : mStates)
-		{
-			if (state->animation)
-				state->animation->animation.Stop();
-		}
+			state->player.Stop();
 
 		mBlend.time = -1;
 	}
@@ -243,13 +228,13 @@ namespace o2
 		return "ui/UI4_animation_component.png";
 	}
 
-	void AnimationComponent::UnregAnimatedValue(IAnimatedValue* value, const String& path)
+	void AnimationComponent::UnregTrack(IAnimationTrack::IPlayer* player, const String& path)
 	{
 		for (auto val : mValues)
 		{
 			if (val->path == path)
 			{
-				val->RemoveValue(value);
+				val->RemoveTrack(player);
 
 				if (val->IsEmpty())
 				{
@@ -262,22 +247,25 @@ namespace o2
 		}
 	}
 
+	void AnimationComponent::OnStateAnimationTrackAdded(AnimationState* state, IAnimationTrack::IPlayer* player)
+	{
+		player->RegMixer(state, player->GetTrack()->path);
+	}
+
+	void AnimationComponent::OnStateAnimationTrackRemoved(AnimationState* state, IAnimationTrack::IPlayer* player)
+	{
+		UnregTrack(player, player->GetTrack()->path);
+	}
+
 	void AnimationComponent::OnStatesListChanged()
 	{
-		for (auto state : mStates)
+		auto statesCopy = mStates;
+		for (auto state : statesCopy)
 		{
 			if (!state->mOwner)
 			{
-				if (state->animation)
-				{
-					state->animation->animation.SetTarget(mOwner);
-					state->animation->animation.mAnimationState = state;
-
-					state->mOwner = this;
-
-					for (auto& val : state->animation->animation.mAnimatedValues)
-						val.animatedValue->RegInAnimatable(state, val.targetPath);
-				}
+				mStates.Remove(state);
+				AddState(state);
 			}
 		}
 	}
@@ -287,10 +275,10 @@ namespace o2
 		time -= dt;
 		float cf = Math::Max(0.0f, time) / duration;
 
-		for (auto state : mBlendOffStates)
-			state->workWeight = cf;
+		for (auto state : blendOffStates)
+			state->blend = cf;
 
-		mBlendOnState->workWeight = 1.0f - cf;
+		blendOnState->blend = 1.0f - cf;
 	}
 }
 

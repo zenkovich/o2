@@ -1,7 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "AnimationWindow.h"
 
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
@@ -30,11 +30,8 @@ namespace Editor
 
 	void AnimationWindow::Update(float dt)
 	{
-		if (mAnimation)
-		{
-			if (mAnimation->IsPlaying() != mPlayPauseToggle->GetValue())
-				mPlayPauseToggle->SetValue(mAnimation->IsPlaying());
-		}
+		if (mPlayer && mPlayer->IsPlaying() != mPlayPauseToggle->GetValue())
+			mPlayPauseToggle->SetValue(mPlayer->IsPlaying());
 
 		if (o2Input.IsKeyDown(VK_F1))
 		{
@@ -47,32 +44,32 @@ namespace Editor
 		}
 	}
 
-	void AnimationWindow::SetAnimation(Animation* animation)
+	void AnimationWindow::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
 	{
 		if (mAnimation)
-		{
 			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
-			mAnimation->onUpdate -= THIS_FUNC(OnAnimationUpdate);
-		}
+
+		if (mPlayer)
+			mPlayer->onUpdate -= THIS_FUNC(OnAnimationUpdate);
 
 		mAnimation = animation;
+		mPlayer = player;
 
 		if (mAnimation)
-		{
-			mAnimation->Stop();
-			mLoopToggle->SetValue(mAnimation->GetLoop() == Loop::Repeat);
+			mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
 
-			if (mAnimation)
-			{
-				mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
-				mAnimation->onUpdate += THIS_FUNC(OnAnimationUpdate);
-			}
+		if (mPlayer)
+		{
+			mPlayer->Stop();
+			mLoopToggle->SetValue(mPlayer->GetLoop() == Loop::Repeat);
+
+			mPlayer->onUpdate += THIS_FUNC(OnAnimationUpdate);
 		}
 
 		mPlayPauseToggle->SetValue(false);
 
 		mHandlesSheet->SetAnimation(animation);
-		mTimeline->SetAnimation(animation);
+		mTimeline->SetAnimation(animation, player);
 		mTree->SetAnimation(animation);
 		mCurves->SetAnimation(animation);
 	}
@@ -262,23 +259,24 @@ namespace Editor
 		mTree->OnAnimationChanged();
 		mCurves->OnAnimationChanged();
 
-		mAnimation->SetTime(mAnimation->GetTime());
+		if (mPlayer)
+			mPlayer->SetTime(mPlayer->GetTime());
 	}
 
 	void AnimationWindow::OnAnimationUpdate(float time)
 	{
 		if (!mDisableTimeTracking)
-			mTimeline->mTimeCursor = mAnimation->GetLoopTime();
+			mTimeline->mTimeCursor = mPlayer->GetLoopTime();
 	}
 
 	void AnimationWindow::OnPlayPauseToggled(bool play)
 	{
-		if (mAnimation)
+		if (mPlayer)
 		{
-			if (mAnimation->GetLoop() != Loop::Repeat && Math::Equals(mAnimation->GetTime(), mAnimation->GetDuration()))
-				mAnimation->SetTime(0.0f);
+			if (mPlayer->GetLoop() != Loop::Repeat && Math::Equals(mPlayer->GetTime(), mPlayer->GetDuration()))
+				mPlayer->SetTime(0.0f);
 
-			mAnimation->SetPlaying(play);
+			mPlayer->SetPlaying(play);
 		}
 	}
 

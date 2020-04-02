@@ -28,7 +28,7 @@ namespace Editor
 		~PropertiesListDlg();
 
 		// Shows animation properties window for actor and animation
-		static void Show(Animation* animation, ActorRef actor);
+		static void Show(AnimationClip* animation, ActorRef actor);
 
 	private:
 		Window*  mWindow = nullptr;
@@ -43,7 +43,7 @@ namespace Editor
 
 	// ------------------------------------------------------------------------------------
 	// Animation properties tree. Builds data tree by actor's properties, showing by filter
-	// Can add or remove animation values
+	// Can add or remove animation tracks
 	// ------------------------------------------------------------------------------------
 	class AnimationPropertiesTree : public Tree
 	{
@@ -78,7 +78,7 @@ namespace Editor
 		AnimationPropertiesTree& operator=(const AnimationPropertiesTree& other);
 
 		// Initializes properties
-		void Initialize(Animation* animation, ActorRef actor);
+		void Initialize(AnimationClip* animation, ActorRef actor);
 
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
@@ -88,7 +88,7 @@ namespace Editor
 	private:
 		WString mFilterStr; // Filtering string
 
-		Animation* mAnimation = nullptr; // Looking animation
+		AnimationClip* mAnimation = nullptr; // Looking animation
 		ActorRef   mActor;               // Looking actor
 
 		NodeData         mRoot;         // Root properties data node
@@ -160,8 +160,8 @@ namespace Editor
 	private:
 		Text*   mName;         // Name of property
 		Sprite* mIcon;         // Property icon. Used only for finite properties
-		Button* mAddButton;    // Add button, it is enabled when animation value isn't added to animation, adds this value to animation
-		Button* mRemoveButton; // Remove button, it is enabled when animation value is added to animation, removes this value to animation
+		Button* mAddButton;    // Add button, it is enabled when animation track isn't added to animation, adds this value to animation
+		Button* mRemoveButton; // Remove button, it is enabled when animation track is added to animation, removes this value to animation
 
 		AnimationPropertiesTree::NodeData* mData = nullptr; // Data node pointer
 
@@ -198,7 +198,7 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 {
 
-	PUBLIC_FUNCTION(void, Initialize, Animation*, ActorRef);
+	PUBLIC_FUNCTION(void, Initialize, AnimationClip*, ActorRef);
 	PUBLIC_FUNCTION(void, SetFilter, const WString&);
 	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
 	PRIVATE_FUNCTION(void, ProcessObject, void*, const ObjectType*, NodeData*);

@@ -1,7 +1,6 @@
 #include "o2/stdafx.h"
 #include "TaskManager.h"
 
-#include "o2/Utils/Tasks/AnimationTask.h"
 #include "o2/Utils/Tasks/Task.h"
 
 namespace o2
@@ -72,10 +71,5 @@ namespace o2
 
 		for (auto doneTask : doneTasks)
 			delete doneTask;
-	}
-
-	void TaskManager::Play(const Animation& animation, float delay /*= 0.0f*/)
-	{
-		mnew AnimationTask(animation, delay);
 	}
 }

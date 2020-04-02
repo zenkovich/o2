@@ -98,13 +98,13 @@ namespace Editor
 		const float mDockSizeCoef = 0.2f;
 		const float mDockBorder = 1.5f;
 
-		bool      mDocked = false;               // Is window docked
-		Sprite*   mDockingFrameSample = nullptr; // Docking frame sample @SERIALIZABLE
-		Animation mDockingFrameAppearance;       // Docking frame appearance tween
-		RectF     mDockingFrameCurrent;          // Docking sample current frame
-		RectF     mDockingFrameTarget;           // Docking sample target  frame
-		Vec2F     mNonDockSize;                  // Size of widget before docking
-		Vec2F     mDragOffset;                   // Offset from cursor to dragging anchor point
+		bool            mDocked = false;               // Is window docked
+		Sprite*         mDockingFrameSample = nullptr; // Docking frame sample @SERIALIZABLE
+		AnimationPlayer mDockingFrameAppearance;       // Docking frame appearance tween
+		RectF           mDockingFrameCurrent;          // Docking sample current frame
+		RectF           mDockingFrameTarget;           // Docking sample target  frame
+		Vec2F           mNonDockSize;                  // Size of widget before docking
+		Vec2F           mDragOffset;                   // Offset from cursor to dragging anchor point
 
 		bool  mTabState = false;             // Is window as tab
 		int   mTabPosition = 0;              // Tab index

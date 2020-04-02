@@ -1,6 +1,6 @@
 #include "o2Editor/stdafx.h"
 
-#include "o2/Animation/AnimatedFloat.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
@@ -34,14 +34,14 @@ namespace Editor
 		return *this;
 	}
 
-	void CurvesSheet::SetAnimation(Animation* animation)
+	void CurvesSheet::SetAnimation(AnimationClip* animation)
 	{
 		mCurvesEditor->RemoveAllCurves();
 
-		for (auto animValue : animation->GetAnimationsValues())
+		for (auto track : animation->GetTracks())
 		{
-			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
-				mCurvesEditor->AddCurve(animValue.targetPath, &floatAnimValue->curve);
+			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
+				mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
 		}
 
 		UpdateCurvesColors();
@@ -53,12 +53,12 @@ namespace Editor
 	{
 		Color4 curveColor(44, 62, 80);
 		int colorIdx = 0;
-		for (auto animValue : mAnimationWindow->mAnimation->GetAnimationsValues())
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 		{
-			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
+			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
 			{
-				mAnimationWindow->mTree->SetAnimationValueColor(animValue.targetPath, curveColor);
-				mCurvesEditor->SetCurveColor(&floatAnimValue->curve, curveColor);
+				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
+				mCurvesEditor->SetCurveColor(&floatTrack->curve, curveColor);
 				curveColor = Color4::SomeColor(colorIdx++);
 			}
 		}
@@ -71,15 +71,15 @@ namespace Editor
 		// Check new curves
 		auto currentCurves = mCurvesEditor->GetCurves();
 		Vector<Curve*> animCurves;
-		for (auto animValue : mAnimationWindow->mAnimation->GetAnimationsValues())
+		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 		{
-			if (auto floatAnimValue = dynamic_cast<AnimatedValue<float>*>(animValue.animatedValue))
+			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
 			{
-				animCurves.Add(&floatAnimValue->curve);
+				animCurves.Add(&floatTrack->curve);
 
-				if (!currentCurves.ContainsValue(&floatAnimValue->curve))
+				if (!currentCurves.ContainsValue(&floatTrack->curve))
 				{
-					mCurvesEditor->AddCurve(animValue.targetPath, &floatAnimValue->curve);
+					mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
 					changed = true;
 				}
 			}

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "o2/Utils/Types/CommonTypes.h"
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/AnimatedVector.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"

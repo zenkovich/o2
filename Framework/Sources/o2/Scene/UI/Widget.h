@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Drawable.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
@@ -150,7 +151,10 @@ namespace o2
 		WidgetState* AddState(const String& name);
 
 		// Adds new state with name and animation
-		WidgetState* AddState(const String& name, const Animation& animation);
+		WidgetState* AddState(const String& name, const AnimationClip& animation);
+
+		// Adds new state with name and animation
+		WidgetState* AddState(const String& name, const AnimationAssetRef& animation);
 
 		// Adds state
 		WidgetState* AddState(WidgetState* state, bool showAnimErrors = true);
@@ -763,7 +767,8 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(WidgetLayer*, FindLayer, const String&);
 	PUBLIC_FUNCTION(const Vector<WidgetLayer*>&, GetLayers);
 	PUBLIC_FUNCTION(WidgetState*, AddState, const String&);
-	PUBLIC_FUNCTION(WidgetState*, AddState, const String&, const Animation&);
+	PUBLIC_FUNCTION(WidgetState*, AddState, const String&, const AnimationClip&);
+	PUBLIC_FUNCTION(WidgetState*, AddState, const String&, const AnimationAssetRef&);
 	PUBLIC_FUNCTION(WidgetState*, AddState, WidgetState*, bool);
 	PUBLIC_FUNCTION(bool, RemoveState, const String&);
 	PUBLIC_FUNCTION(bool, RemoveState, WidgetState*);

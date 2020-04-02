@@ -102,15 +102,14 @@ namespace o2
 		{
 			if (v1 > v2)
 				return v1;
+
 			return v2;
 		}
 
 		template<typename T>
 		inline void Swap(T& v1, T& v2)
 		{
-			T tmp = v1;
-			v1 = v2;
-			v2 = tmp;
+			std::swap(v1, v2);
 		}
 
 		template<typename T>

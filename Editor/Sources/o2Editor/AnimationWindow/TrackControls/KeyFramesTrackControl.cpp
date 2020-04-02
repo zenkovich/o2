@@ -3,20 +3,20 @@
 
 
 template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimatedValue<float>>);
+DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<float>>);
 
 template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimatedValue<bool>>);
+DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<bool>>);
 
 template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimatedValue<Color4>>);
+DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Color4>>);
 
 template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimatedValue<Vec2F>>);
+DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>);
 
 namespace Editor
 {
-	void DrawCurveInCoords(const Vec2F* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis,
+	void DrawCurveInCoords(const ApproximationValue* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis,
 						   const Color4& color)
 	{
 		const int bufferSize = 50;
@@ -32,7 +32,7 @@ namespace Editor
 		Basis transform = boundsBasis.Inverted() * drawBasis;
 
 		for (int j = 0; j < pointsCount; j++)
-			buffer[j].Set(points[j] * transform, color.ABGR(), 0, 0);
+			buffer[j].Set(Vec2F(points[j].position, points[j].value)*transform, color.ABGR(), 0, 0);
 
 		o2Render.DrawAAPolyLine(buffer, pointsCount, 1.0f, LineType::Solid, false);
 	}
@@ -58,14 +58,14 @@ namespace Editor
 	}
 
 	template<>
-	void KeyFramesTrackControl<AnimatedValue<float>>::SetCurveViewEnabled(bool enabled)
+	void KeyFramesTrackControl<AnimationTrack<float>>::SetCurveViewEnabled(bool enabled)
 	{
 		mAddKeyDotButton->enabled = enabled;
 		mAddKeyButton->enabled = !enabled;
 	}
 
 	template<>
-	void KeyFramesTrackControl<AnimatedValue<float>>::Draw()
+	void KeyFramesTrackControl<AnimationTrack<float>>::Draw()
 	{
 		if (!mResEnabledInHierarchy)
 			return;
@@ -77,10 +77,10 @@ namespace Editor
 
 		o2Render.EnableScissorTest(mTimeline->layout->GetWorldRect());
 
-		for (int i = 1; i < mAnimatedValue->GetKeys().Count(); i++)
+		for (int i = 1; i < mTrack->GetKeys().Count(); i++)
 		{
-			auto& key = mAnimatedValue->GetKeys()[i];
-			auto& prevKey = mAnimatedValue->GetKeys()[i - 1];
+			auto& key = mTrack->GetKeys()[i];
+			auto& prevKey = mTrack->GetKeys()[i - 1];
 
 			Basis drawCoords(RectF(mTimeline->LocalToWorld(prevKey.position) - 3,
 								   layout->GetWorldTop() - 5,

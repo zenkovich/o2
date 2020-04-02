@@ -64,7 +64,7 @@ namespace Editor
 		mAnimationWindow->mHandlesSheet->UpdateInputDrawOrder();
 	}
 
-	void AnimationTree::SetAnimation(Animation* animation)
+	void AnimationTree::SetAnimation(AnimationClip* animation)
 	{
 		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
 
@@ -81,7 +81,7 @@ namespace Editor
 
 	void AnimationTree::SetAnimationValueColor(String path, const Color4& color)
 	{
-		AnimationValueNode* node = mRootValue;
+		TrackNode* node = mRootValue;
 		while (!path.IsEmpty())
 		{
 			int fnd = path.Find('/', 0);
@@ -149,32 +149,40 @@ namespace Editor
 		if (!mAnimationWindow->mAnimation)
 			return;
 
-		mAnimationValuesCount = mAnimationWindow->mAnimation->GetAnimationsValues().Count();
+		mAnimationValuesCount = mAnimationWindow->mAnimation->GetTracks().Count();
 
-		mRootValue = mnew AnimationValueNode();
+		mRootValue = mnew TrackNode();
 		mRootValue->name = "Track name";
 
-		for (auto& value : mAnimationWindow->mAnimation->GetAnimationsValues())
-			AddAnimatedValue(value);
+		if (mAnimationWindow->mPlayer)
+		{
+			for (auto trackPlayer : mAnimationWindow->mPlayer->GetTrackPlayers())
+				AddAnimationTrack(trackPlayer->GetTrack(), trackPlayer);
+		}
+		else
+		{
+			for (auto track : mAnimationWindow->mAnimation->GetTracks())
+				AddAnimationTrack(track, nullptr);
+		}
 	}
 
-	void AnimationTree::AddAnimatedValue(Animation::AnimatedValueDef& value)
+	void AnimationTree::AddAnimationTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player /*= nullptr*/)
 	{
-		AnimationValueNode* current = nullptr;
+		TrackNode* current = nullptr;
 
 		int lastDel = 0;
 		while (lastDel >= 0)
 		{
-			int del = value.targetPath.Find('/', lastDel);
-			String subPath = value.targetPath.SubStr(lastDel, del);
-			AnimationValueNode* next = (current ? current->children : mRootValue->children)
-				.FindMatch([&](AnimationValueNode* x) { return x->name == subPath; });
+			int del = track->path.Find('/', lastDel);
+			String subPath = track->path.SubStr(lastDel, del);
+			TrackNode* next = (current ? current->children : mRootValue->children)
+				.FindMatch([&](TrackNode* x) { return x->name == subPath; });
 
 			if (!next)
 			{
-				next = mnew AnimationValueNode();
+				next = mnew TrackNode();
 				next->name = subPath;
-				next->path = value.targetPath;
+				next->path = track->path;
 
 				if (current)
 				{
@@ -188,7 +196,8 @@ namespace Editor
 			lastDel = del >= 0 ? del + 1 : -1;
 		}
 
-		current->animatedValue = value.animatedValue;
+		current->track = track;
+		current->player = player;
 	}
 
 #undef DrawText
@@ -213,7 +222,7 @@ namespace Editor
 
 	void AnimationTree::OnAnimationChanged()
 	{
-		if (mAnimationWindow->mAnimation->GetAnimationsValues().Count() != mAnimationValuesCount)
+		if (mAnimationWindow->mAnimation->GetTracks().Count() != mAnimationValuesCount)
 		{
 			mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
 
@@ -228,7 +237,7 @@ namespace Editor
 		if (!object)
 			return nullptr;
 
-		auto treeNode = (AnimationValueNode*)object;
+		auto treeNode = (TrackNode*)object;
 		return treeNode->parent;
 	}
 
@@ -237,20 +246,20 @@ namespace Editor
 		if (!object)
 			return { (void*)mRootValue };
 
-		auto treeNode = (AnimationValueNode*)object;
+		auto treeNode = (TrackNode*)object;
 		return treeNode->children.Cast<void*>();
 	}
 
 	String AnimationTree::GetObjectDebug(void* object)
 	{
-		auto treeNode = (AnimationValueNode*)object;
+		auto treeNode = (TrackNode*)object;
 		return treeNode ? treeNode->name : "Empty";
 	}
 
 	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)
 	{
 		AnimationTreeNode* node = dynamic_cast<AnimationTreeNode*>(nodeWidget);
-		node->Setup((AnimationValueNode*)object, mAnimationWindow->mTimeline, mAnimationWindow->mHandlesSheet);
+		node->Setup((TrackNode*)object, mAnimationWindow->mTimeline, mAnimationWindow->mHandlesSheet);
 	}
 
 	void AnimationTree::FreeNodeData(TreeNode* nodeWidget, void* object)
@@ -277,7 +286,7 @@ namespace Editor
 
 		for (auto obj : objects) 
 		{
-			AnimationValueNode* node = (AnimationValueNode*)obj;
+			TrackNode* node = (TrackNode*)obj;
 			for (auto handle : node->trackControl->GetKeyHandles())
 				handle->handle->SetSelected(true);
 		}
@@ -293,8 +302,8 @@ namespace Editor
 	{
 		for (auto obj : GetSelectedObjects())
 		{
-			AnimationValueNode* data = (AnimationValueNode*)obj;
-			mAnimationWindow->mAnimation->RemoveAnimationValue(data->path);
+			TrackNode* data = (TrackNode*)obj;
+			mAnimationWindow->mAnimation->RemoveTrack(data->path);
 		}
 	}
 
@@ -316,7 +325,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationTreeNode::Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	void AnimationTreeNode::Setup(AnimationTree::TrackNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
 		mHandlesSheet = handlesSheet;
@@ -381,17 +390,17 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		static Map<const Type*, const Type*> animatedValueToControlTrackTypes =
+		static Map<const Type*, const Type*> trackToControlTrackTypes =
 		{
-			{ &TypeOf(AnimatedValue<float>), &TypeOf(KeyFramesTrackControl<AnimatedValue<float>>) },
-			{ &TypeOf(AnimatedValue<bool>), &TypeOf(KeyFramesTrackControl<AnimatedValue<bool>>) },
-			{ &TypeOf(AnimatedValue<Vec2F>), &TypeOf(KeyFramesTrackControl<AnimatedValue<Vec2F>>) },
-			{ &TypeOf(AnimatedValue<Color4>), &TypeOf(KeyFramesTrackControl<AnimatedValue<Color4>>) }
+			{ &TypeOf(AnimationTrack<float>), &TypeOf(KeyFramesTrackControl<AnimationTrack<float>>) },
+			{ &TypeOf(AnimationTrack<bool>), &TypeOf(KeyFramesTrackControl<AnimationTrack<bool>>) },
+			{ &TypeOf(AnimationTrack<Vec2F>), &TypeOf(KeyFramesTrackControl<AnimationTrack<Vec2F>>) },
+			{ &TypeOf(AnimationTrack<Color4>), &TypeOf(KeyFramesTrackControl<AnimationTrack<Color4>>) }
 		};
 
 		FreeTrackControl();
 
-		if (!mData->animatedValue)
+		if (!mData->track)
 		{
 			MapKeyFramesTrackControl* trackControl = nullptr;
 			auto trackControlType = &TypeOf(MapKeyFramesTrackControl);
@@ -409,21 +418,21 @@ namespace Editor
 		}
 		else
 		{
-			auto animatedValueType = &mData->animatedValue->GetType();
-			if (!animatedValueToControlTrackTypes.ContainsKey(animatedValueType))
+			auto trackType = &mData->track->GetType();
+			if (!trackToControlTrackTypes.ContainsKey(trackType))
 			{
-				o2Debug.LogWarning("Can't create control track for type:" + animatedValueType->GetName());
+				o2Debug.LogWarning("Can't create control track for type:" + trackType->GetName());
 				return;
 			}
 
-			auto trackControlType = dynamic_cast<const ObjectType*>(animatedValueToControlTrackTypes[animatedValueType]);
+			auto trackControlType = dynamic_cast<const ObjectType*>(trackToControlTrackTypes[trackType]);
 			if (mTrackControlsCache.ContainsKey(trackControlType) && !mTrackControlsCache[trackControlType].IsEmpty())
 				mTrackControl = mTrackControlsCache[trackControlType].PopBack();
 			else
 				mTrackControl = dynamic_cast<ITrackControl*>(trackControlType->DynamicCastToIObject(trackControlType->CreateSample()));
 
 			mTrackControl->Initialize(mTimeline, mHandlesSheet);
-			mTrackControl->SetAnimatedValue(mData->animatedValue, mData->path);
+			mTrackControl->SetTrack(mData->track, mData->player, mData->path);
 
 			AddChild(mTrackControl);
 		}

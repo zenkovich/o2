@@ -18,12 +18,12 @@ namespace Editor
 		CurvesSheet& operator=(const CurvesSheet& other);
 
 		// Sets animation and updates tree structure
-		void SetAnimation(Animation* animation);
+		void SetAnimation(AnimationClip* animation);
 
 		// Generates new color for curves and transfers to the tree
 		void UpdateCurvesColors();
 
-		// It is called when animation changed, checks count of animation values, updates curves
+		// It is called when animation changed, checks count of animation tracks, updates curves
 		void OnAnimationChanged();
 
 		SERIALIZABLE(CurvesSheet);
@@ -64,7 +64,7 @@ END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*);
 	PUBLIC_FUNCTION(void, UpdateCurvesColors);
 	PUBLIC_FUNCTION(void, OnAnimationChanged);
 	PRIVATE_FUNCTION(void, InitializeControls);

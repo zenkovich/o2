@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
 #include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
@@ -13,9 +13,18 @@ namespace o2
 	class AnimationAsset: public AssetWithDefaultMeta<AnimationAsset>
 	{
 	public:
-		Animation animation; // Asset data @SERIALIZABLE @EXPANDED_BY_DEFAULT
+		AnimationClip animation; // Asset data @SERIALIZABLE @EXPANDED_BY_DEFAULT
 
 	public:
+		// Default constructor
+		AnimationAsset() = default;
+
+		// Copy-constructor
+		AnimationAsset(const AnimationAsset& asset);
+
+		// Constructor with animation clip
+		AnimationAsset(const AnimationClip& clip);
+
 		// Check equals operator
 		AnimationAsset& operator=(const AnimationAsset& asset);
 
@@ -35,13 +44,6 @@ namespace o2
 		static bool IsReferenceCanOwnInstance() { return true; }
 
 		SERIALIZABLE(AnimationAsset);
-
-	protected:
-		// Default constructor
-		AnimationAsset();
-
-		// Copy-constructor
-		AnimationAsset(const AnimationAsset& asset);
 
 		friend class Assets;
 	};

@@ -5,8 +5,9 @@ namespace o2
 {
 	float AnimationMask::GetNodeWeight(const String& node) const
 	{
-		if (weights.ContainsKey(node))
-			return weights.Get(node);
+		auto fnd = weights.find(node);
+		if (fnd != weights.End())
+			return fnd->second;
 
 		return 1.0f;
 	}

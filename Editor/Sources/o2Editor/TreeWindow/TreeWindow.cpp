@@ -1,7 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "TreeWindow.h"
 
-#include "o2/Animation/AnimatedFloat.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Components/AnimationComponent.h"
 #include "o2/Scene/Components/EditorTestComponent.h"

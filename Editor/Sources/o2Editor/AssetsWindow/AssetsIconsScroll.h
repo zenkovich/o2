@@ -85,7 +85,7 @@ namespace Editor
 		Sprite* GetHighlightDrawable() const;
 
 		// Sets highlight animation
-		void SetHighlightAnimation(const Animation& animation);
+		void SetHighlightAnimation(const AnimationClip& animation);
 
 		// Sets highlight layout
 		void SetHighlightLayout(const Layout& layout);
@@ -122,10 +122,10 @@ namespace Editor
 
 		Asset* mNewAsset = nullptr; // Temporary new asset. Used when creating new asset
 						        
-		AssetIcon* mHighlightIcon = nullptr;   // Current highlighting asset icon
-		Animation  mHighlightAnim;             // Icon highlight animation @SERIALIZABLE
-		Sprite*    mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
-		Layout     mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
+		AssetIcon*      mHighlightIcon = nullptr;   // Current highlighting asset icon
+		AnimationPlayer mHighlightAnim;             // Icon highlight animation @SERIALIZABLE
+		Sprite*         mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
+		Layout          mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
 						        
 		Map<String, Vector<AssetIcon*>> mIconsPool; // Assets icons pool
 						        
@@ -400,7 +400,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FUNCTION(const Vector<const AssetInfo*>&, GetSelectedAssets);
 	PUBLIC_FUNCTION(AssetIcon*, GetIconUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Sprite*, GetHighlightDrawable);
-	PUBLIC_FUNCTION(void, SetHighlightAnimation, const Animation&);
+	PUBLIC_FUNCTION(void, SetHighlightAnimation, const AnimationClip&);
 	PUBLIC_FUNCTION(void, SetHighlightLayout, const Layout&);
 	PUBLIC_FUNCTION(Sprite*, GetSelectingDrawable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);

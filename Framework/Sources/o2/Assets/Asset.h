@@ -3,6 +3,7 @@
 #include "o2/Assets/AssetInfo.h"
 #include "o2/Assets/Meta.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
+#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"

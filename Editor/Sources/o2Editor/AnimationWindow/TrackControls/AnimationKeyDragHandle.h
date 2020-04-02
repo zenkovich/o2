@@ -11,11 +11,11 @@ namespace Editor
 	class AnimationKeyDragHandle : public WidgetDragHandle
 	{ 
 	public:
-		String          animatedValuePath;
-		IAnimatedValue* animatedValue = nullptr;
-		ITrackControl*  trackControl = nullptr;
-		UInt64          keyUid = 0;
-		bool            isMapping = false;
+		String           trackPath;
+		IAnimationTrack* track = nullptr;
+		ITrackControl*   trackControl = nullptr;
+		UInt64           keyUid = 0;
+		bool             isMapping = false;
 
 	public:
 		// Default constructor
@@ -49,8 +49,8 @@ CLASS_BASES_META(Editor::AnimationKeyDragHandle)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
-	PUBLIC_FIELD(animatedValuePath);
-	PUBLIC_FIELD(animatedValue);
+	PUBLIC_FIELD(trackPath);
+	PUBLIC_FIELD(track);
 	PUBLIC_FIELD(trackControl);
 	PUBLIC_FIELD(keyUid);
 	PUBLIC_FIELD(isMapping);

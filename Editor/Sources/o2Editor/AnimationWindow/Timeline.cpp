@@ -304,25 +304,26 @@ namespace Editor
 			onViewChanged();
 	}
 
-	void AnimationTimeline::SetAnimation(Animation* animation)
+	void AnimationTimeline::SetAnimation(AnimationClip* animation, AnimationPlayer* player /*= nullptr*/)
 	{
 		if (mAnimation)
 			mAnimation->onDurationChange -= THIS_FUNC(UpdateDuration);
 
 		mAnimation = animation;
+		mPlayer = player;
 
 		if (mAnimation)
 		{
 			mAnimation->onDurationChange += THIS_FUNC(UpdateDuration);
 			mViewZoom = Math::Clamp((layout->worldRight - layout->worldLeft)/mOneSecondDefaultSize/mAnimation->GetDuration(), mMinScale, mMaxScale);
 		}
-
-		UpdateDuration();
+		
+		UpdateDuration(mAnimation->GetDuration());
 	}
 
-	void AnimationTimeline::UpdateDuration()
+	void AnimationTimeline::UpdateDuration(float duration)
 	{
-		mDuration = mAnimationWindow->mAnimation->GetEndBound();
+		mDuration = duration;
 
 		if (mScrollBar)
 		{
@@ -353,8 +354,13 @@ namespace Editor
 	{
 		mAnimationWindow->mDisableTimeTracking = true;
 		mTimeCursor = time;
-		mAnimation->Stop();
-		mAnimation->SetTime(time);
+
+		if (mPlayer)
+		{
+			mPlayer->Stop();
+			mPlayer->SetTime(time);
+		}
+
 		mAnimationWindow->mDisableTimeTracking = false;
 	}
 

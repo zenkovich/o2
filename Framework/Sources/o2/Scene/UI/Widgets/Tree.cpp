@@ -2,16 +2,16 @@
 #include "Tree.h"
 
 #include "o2/Animation/Animate.h"
-#include "o2/Animation/AnimatedFloat.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Application/Input.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
-#include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/WidgetState.h"
+#include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 
 namespace o2
@@ -1764,10 +1764,10 @@ namespace o2
 		return mHighlightSprite;
 	}
 
-	void Tree::SetHighlightAnimation(const Animation& animation)
+	void Tree::SetHighlightAnimation(const AnimationClip& animation)
 	{
 		mHighlightAnim.SetTarget(mHighlightSprite);
-		mHighlightAnim = animation;
+		mHighlightAnim.SetClip(animation.CloneAs<AnimationClip>(), true);
 	}
 
 	void Tree::SetHighlightLayout(const Layout& layout)

@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "DockableWindow.h"
 
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/AnimatedVector.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Events/CursorEventsListener.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Render/Render.h"
@@ -337,12 +337,14 @@ namespace Editor
 
 	void DockableWindow::InitializeDockFrameAppearanceAnim()
 	{
+		mDockingFrameAppearance.SetClip(mnew AnimationClip(), true);
 		mDockingFrameAppearance.SetTarget(this);
-		*mDockingFrameAppearance.AddAnimationValue<float>("mDockingFrameSample/transparency") =
-			AnimatedValue<float>::EaseInOut(0, 1, 0.3f);
 
-		*mDockingFrameAppearance.AddAnimationValue<float>("transparency") =
-			AnimatedValue<float>::EaseInOut(1, 0, 0.15f);
+		*mDockingFrameAppearance.GetClip()->AddTrack<float>("mDockingFrameSample/transparency") =
+			AnimationTrack<float>::EaseInOut(0, 1, 0.3f);
+
+		*mDockingFrameAppearance.GetClip()->AddTrack<float>("transparency") =
+			AnimationTrack<float>::EaseInOut(1, 0, 0.15f);
 
 		mDockingFrameAppearance.GoToBegin();
 	}

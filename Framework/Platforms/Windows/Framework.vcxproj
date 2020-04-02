@@ -17,20 +17,20 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{ED115911-D293-41D3-A9EC-AF7F2613A1CF}</ProjectGuid>
     <RootNamespace>o2engine</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
     <ProjectName>FrameworkLib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <ConfigurationType>StaticLibrary</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -139,14 +139,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2\Animation\Animate.h" />
-    <ClInclude Include="..\..\Sources\o2\Animation\AnimatedFloat.h" />
-    <ClInclude Include="..\..\Sources\o2\Animation\AnimatedValue.h" />
-    <ClInclude Include="..\..\Sources\o2\Animation\AnimatedVector.h" />
-    <ClInclude Include="..\..\Sources\o2\Animation\Animation.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationClip.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\AnimationMask.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationPlayer.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\AnimationState.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\IAnimation.h" />
-    <ClInclude Include="..\..\Sources\o2\Animation\TweenValue.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationVec2FTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\IAnimationTrack.h" />
     <ClInclude Include="..\..\Sources\o2\Application\Application.h" />
     <ClInclude Include="..\..\Sources\o2\Application\Input.h" />
     <ClInclude Include="..\..\Sources\o2\Application\Windows\ApplicationBase.h" />
@@ -279,6 +280,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\File.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Border.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Color.h" />
@@ -315,9 +317,9 @@
     <ClInclude Include="..\..\Sources\o2\Utils\System\Time\Time.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\System\Time\Timer.h" />
-    <ClInclude Include="..\..\Sources\o2\Utils\Tasks\AnimationTask.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Tasks\Task.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Tasks\TaskManager.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Tools\KeySearch.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Tools\RectPacker.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Types\CommonTypes.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IArray.h" />
@@ -336,13 +338,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Animation\AnimatedFloat.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Animation\AnimatedValue.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Animation\AnimatedVector.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Animation\Animation.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationClip.cpp" />
     <ClCompile Include="..\..\Sources\o2\Animation\AnimationMask.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationPlayer.cpp" />
     <ClCompile Include="..\..\Sources\o2\Animation\AnimationState.cpp" />
     <ClCompile Include="..\..\Sources\o2\Animation\IAnimation.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationVec2FTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\IAnimationTrack.cpp" />
     <ClCompile Include="..\..\Sources\o2\Application\Application.cpp" />
     <ClCompile Include="..\..\Sources\o2\Application\Input.cpp" />
     <ClCompile Include="..\..\Sources\o2\Application\Windows\ApplicationImpl.cpp" />
@@ -484,7 +488,6 @@
     <ClCompile Include="..\..\Sources\o2\Utils\System\Time\Time.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\System\Time\Timer.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Utils\Tasks\AnimationTask.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Tasks\Task.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Tasks\TaskManager.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Tools\RectPacker.cpp" />

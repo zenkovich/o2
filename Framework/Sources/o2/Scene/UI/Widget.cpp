@@ -435,18 +435,24 @@ namespace o2
 	{
 		WidgetState* newState = mnew WidgetState();
 		newState->name = name;
-		newState->animation.SetTarget(this);
 
 		return AddState(newState);
 	}
 
-	WidgetState* Widget::AddState(const String& name, const Animation& animation)
+	WidgetState* Widget::AddState(const String& name, const AnimationClip& animation)
 	{
 		WidgetState* newState = mnew WidgetState();
 		newState->name = name;
-		newState->animation = animation;
-		newState->animation.SetTarget(this);
-		newState->animation.relTime = 0.0f;
+		newState->animationClip = animation;
+
+		return AddState(newState);
+	}
+
+	WidgetState* Widget::AddState(const String& name, const AnimationAssetRef& animation)
+	{
+		WidgetState* newState = mnew WidgetState();
+		newState->name = name;
+		newState->animationAsset = animation;
 
 		return AddState(newState);
 	}
@@ -454,6 +460,7 @@ namespace o2
 	WidgetState* Widget::AddState(WidgetState* state, bool showAnimErrors /*= true*/)
 	{
 		mStates.Add(state);
+		state->SetOwner(this);
 
 		if (state->name == "visible")
 		{
@@ -475,9 +482,6 @@ namespace o2
 
 		if (state->name == "focused")
 			mFocusedState = state;
-
-		state->mOwner = this;
-		state->animation.SetTarget(this, showAnimErrors);
 
 		OnStateAdded(state);
 
@@ -750,8 +754,8 @@ namespace o2
 	{
 		for (auto state : mStates)
 		{
-			state->animation.SetTarget(this, false);
-			state->animation.relTime = state->GetState() ? 1.0f : 0.0f;
+			state->player.SetTarget(this, false);
+			state->player.relTime = state->GetState() ? 1.0f : 0.0f;
 		}
 	}
 

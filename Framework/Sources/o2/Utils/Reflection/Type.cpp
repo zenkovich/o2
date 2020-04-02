@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Type.h"
 
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Serialization/DataNode.h"

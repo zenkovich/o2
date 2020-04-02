@@ -2,6 +2,7 @@
 #include "Curve.h"
 
 #include "o2/Utils/Math/Interpolation.h"
+#include "o2/Utils/Tools/KeySearch.h"
 
 namespace o2
 {
@@ -62,6 +63,12 @@ namespace o2
 
 	float Curve::Evaluate(float position) const
 	{
+		int cacheKey = 0, cacheKeyApprox = 0;
+		return Evaluate(position, true, cacheKey, cacheKeyApprox);
+	}
+
+	float Curve::Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
+	{
 		int count = mKeys.Count();
 
 		if (count == 1)
@@ -69,42 +76,31 @@ namespace o2
 		else if (count == 0)
 			return 0.0f;
 
-		int begi = -1, endi = -1;
+		int prevCacheKey = cacheKey;
+		int keyLeftIdx = -1, keyRightIdx = -1;
+		SearchKey(mKeys, count, position, keyLeftIdx, keyRightIdx, direction, cacheKey);
 
-		for (int i = 1; i < count; i++)
-		{
-			begi = i - 1;
-			endi = i;
-
-			if (mKeys[i].position > position)
-				break;
-		}
-
-		if (begi < 0)
+		if (keyLeftIdx < 0)
 			return 0.0f;
 
-		const Key& beginKey = mKeys[begi];
-		const Key& endKey = mKeys[endi];
+		const Key& leftKey = mKeys[keyLeftIdx];
+		const Key& rightKey = mKeys[keyRightIdx];
 
-		int segBeg = 0;
-		int segEnd = 1;
+		int segLeftIdx = 0;
+		int segRightIdx = 1;
 
-		for (int i = 1; i < Key::mApproxValuesCount; i++)
-		{
-			segBeg = i - 1;
-			segEnd = i;
+		if (keyLeftIdx != prevCacheKey)
+			cacheKeyApprox = 0;
 
-			if (endKey.mApproxValues[i].x > position)
-				break;
-		}
+		SearchKey(rightKey.mApproxValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
 
-		Vec2F begs = endKey.mApproxValues[segBeg];
-		Vec2F ends = endKey.mApproxValues[segEnd];
+		const ApproximationValue& segLeft = rightKey.mApproxValues[segLeftIdx];
+		const ApproximationValue& segRight = rightKey.mApproxValues[segRightIdx];
 
-		float dist = ends.x - begs.x;
-		float coef = (position - begs.x) / dist;
+		float dist = segRight.position - segLeft.position;
+		float coef = (position - segLeft.position) / dist;
 
-		return Math::Lerp(begs.y, ends.y, coef);
+		return Math::Lerp(segLeft.value, segRight.value, coef);
 	}
 
 	void Curve::BeginKeysBatchChange()
@@ -639,18 +635,18 @@ namespace o2
 		if (mKeys.Count() < 2)
 			return res;
 
-		res.left = mKeys[1].mApproxValues[0].x; res.right = mKeys[1].mApproxValues[0].x;
-		res.top = mKeys[1].mApproxValues[0].y; res.bottom = mKeys[1].mApproxValues[0].y;
+		res.left = mKeys[1].mApproxValues[0].position; res.right = mKeys[1].mApproxValues[0].position;
+		res.top = mKeys[1].mApproxValues[0].value; res.bottom = mKeys[1].mApproxValues[0].value;
 
 		for (int k = 1; k < mKeys.Count(); k++)
 		{
 			auto& key = mKeys[k];
 			for (int i = 0; i < Key::mApproxValuesCount; i++)
 			{
-				res.left = Math::Min(key.mApproxValues[i].x, res.left);
-				res.right = Math::Max(key.mApproxValues[i].x, res.right);
-				res.top = Math::Max(key.mApproxValues[i].y, res.top);
-				res.bottom = Math::Min(key.mApproxValues[i].y, res.bottom);
+				res.left = Math::Min(key.mApproxValues[i].position, res.left);
+				res.right = Math::Max(key.mApproxValues[i].position, res.right);
+				res.top = Math::Max(key.mApproxValues[i].value, res.top);
+				res.bottom = Math::Min(key.mApproxValues[i].value, res.bottom);
 			}
 		}
 
@@ -843,7 +839,7 @@ namespace o2
 		return value;
 	}
 
-	const Vec2F* Curve::Key::GetApproximatedPoints() const
+	const ApproximationValue* Curve::Key::GetApproximatedPoints() const
 	{
 		return mApproxValues;
 	}

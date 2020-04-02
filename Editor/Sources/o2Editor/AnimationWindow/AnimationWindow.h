@@ -8,7 +8,7 @@ using namespace o2;
 
 namespace o2
 {
-	class Animation;
+	class AnimationClip;
 	class Button;
 	class EditBox;
 	class HorizontalScrollBar;
@@ -31,7 +31,7 @@ namespace Editor
 	// - Добавить assign акторов
 	// - Добавить "запись" изменения полей
 	// - Сделать редактор кривых для Vec2F
-	// - Переименовать Animated Value и разделить на Track и Player
+	// - Переименовать Animation track и разделить на Track и Player
 	// - Ссылки на анимации
 
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
@@ -49,7 +49,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets editing animation
-		void SetAnimation(Animation* animation);
+		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
 
 		// Sets target actor
 		void SetTarget(ActorRef actor);
@@ -64,14 +64,15 @@ namespace Editor
 		float mTreeViewWidth = 325.0f;    // Width of tree area. Changed by dragable separator
 		float mMinTreeViewWidth = 250.0f; // Minimal tree width
 
-		Animation* mAnimation = nullptr; // Editing animation
+		ActorRef         mTargetActor;         // Target actor on animation
+		AnimationPlayer* mPlayer = nullptr;    // Animation player
+		AnimationClip*   mAnimation = nullptr; // Editing animation
 
-		bool mDisableTimeTracking = false; // When true animation time chenges has no effect
+		bool mDisableTimeTracking = false; // When true animation time changes has no effect
 
-		ActorRef mTargetActor; // Target actor on animation
 
 		Widget* mUpPanel = nullptr;  // Up panel with control buttons
-		Widget* mWorkArea = nullptr; // Working area with tree and timeline
+		Widget* mWorkArea = nullptr; // Working area with tree and time line
 
 		Widget*  mControlsPanel = nullptr;    // Panel with buttons described below
 		Toggle*  mRecordToggle = nullptr;     // Record toggle
@@ -79,15 +80,15 @@ namespace Editor
 		Button*  mMoveLeft = nullptr;         // Move time one frame left
 		Toggle*  mPlayPauseToggle = nullptr;  // Play - pause toggle
 		Button*  mMoveRight = nullptr;        // Move time one frame right
-		Button*  mRewindRight = nullptr;      // Rewind enimation to end
+		Button*  mRewindRight = nullptr;      // Rewind animation to end
 		Toggle*  mLoopToggle = nullptr;       // Animation loop toggle
 		Toggle*  mCurvesToggle = nullptr;     // Toggle curves view
 		Button*  mAddKeyButton = nullptr;     // Add key on current time button
 		Button*  mPropertiesButton = nullptr; // Open properties window
 
-		AnimationTimeline*   mTimeline = nullptr;     // Animation timeline
-		HorizontalScrollBar* mTimeScroll = nullptr;   // Timeline horizontal scrollbar
-		AnimationTree*       mTree = nullptr;         // Animation values tree
+		AnimationTimeline*   mTimeline = nullptr;     // Animation time line
+		HorizontalScrollBar* mTimeScroll = nullptr;   // Time line horizontal scrollbar
+		AnimationTree*       mTree = nullptr;         // animation tracks tree
 		KeyHandlesSheet*     mHandlesSheet = nullptr; // Animation keys handles sheet
 		CurvesSheet*         mCurves = nullptr;       // Animation curves sheet
 
@@ -143,7 +144,7 @@ namespace Editor
 		friend class CurvesSheet;
 		friend class KeyHandlesSheet;
 
-		template<typename AnimatedValueType>
+		template<typename AnimationTrackType>
 		friend class KeyFramesTrackControl;
 	};
 }
@@ -158,9 +159,10 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 {
 	PROTECTED_FIELD(mTreeViewWidth);
 	PROTECTED_FIELD(mMinTreeViewWidth);
+	PROTECTED_FIELD(mTargetActor);
+	PROTECTED_FIELD(mPlayer);
 	PROTECTED_FIELD(mAnimation);
 	PROTECTED_FIELD(mDisableTimeTracking);
-	PROTECTED_FIELD(mTargetActor);
 	PROTECTED_FIELD(mUpPanel);
 	PROTECTED_FIELD(mWorkArea);
 	PROTECTED_FIELD(mControlsPanel);
@@ -187,7 +189,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*, AnimationPlayer*);
 	PUBLIC_FUNCTION(void, SetTarget, ActorRef);
 	PUBLIC_FUNCTION(void, SetCurvesMode, bool);
 	PUBLIC_FUNCTION(bool, IsCurvesMode);

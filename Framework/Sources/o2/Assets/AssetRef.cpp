@@ -30,6 +30,13 @@ namespace o2
 			(*mRefCounter)++;
 	}
 
+	AssetRef::AssetRef(Asset* instance)
+	{
+		mAssetPtr = instance;
+		mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+		mAssetOwner = true;
+	}
+
 	void AssetRef::OnSerialize(DataNode& node) const
 	{
 		if (mAssetOwner)
@@ -89,7 +96,7 @@ namespace o2
 
 		mAssetPtr = other.mAssetPtr;
 		mRefCounter = other.mRefCounter;
-		mAssetOwner = false;
+		mAssetOwner = other.mAssetOwner;
 
 		if (mAssetPtr)
 			(*mRefCounter)++;
@@ -142,6 +149,22 @@ namespace o2
 		return TypeOf(Asset);
 	}
 
+	void AssetRef::SetInstance(Asset* asset)
+	{
+		if (mAssetOwner)
+			return;
+
+		if (mAssetPtr)
+			*mRefCounter--;
+
+		mAssetPtr = asset;
+
+		mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+		UpdateSpecAsset();
+
+		mAssetOwner = true;
+	}
+
 	void AssetRef::CreateInstance()
 	{
 		if (mAssetOwner)
@@ -151,11 +174,7 @@ namespace o2
 			*mRefCounter--;
 
 		if (mAssetPtr)
-		{
-			*mRefCounter--;
-
 			mAssetPtr = mAssetPtr->CloneAs<Asset>();
-		}
 		else
 		{
 			auto objectType = dynamic_cast<const ObjectType*>(&GetAssetType());

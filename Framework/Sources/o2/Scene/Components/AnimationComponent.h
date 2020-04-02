@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Animation/AnimationState.h"
 #include "o2/Scene/Component.h"
 #include "o2/Utils/Debug/Debug.h"
@@ -35,7 +35,7 @@ namespace o2
 		AnimationState* AddState(AnimationState* state);
 
 		// Adds new animation state and returns him
-		AnimationState* AddState(const String& name, const Animation& animation,
+		AnimationState* AddState(const String& name, const AnimationClip& animation,
 								 const AnimationMask& mask, float weight);
 
 		// Adds new animation state and returns him
@@ -57,19 +57,19 @@ namespace o2
 		const Vector<AnimationState*>& GetStates() const;
 
 		// Creates new state and plays him
-		AnimationState* Play(const Animation& animation, const String& name);
+		AnimationState* Play(const AnimationClip& animation, const String& name);
 
 		// Creates new state and plays him
-		AnimationState* Play(const Animation& animation);
+		AnimationState* Play(const AnimationClip& animation);
 
 		// Searches animation state with name and plays him
 		AnimationState* Play(const String& name);
 
 		// Creates new state, and blends animation with duration
-		AnimationState* BlendTo(const Animation& animation, const String& name, float duration = 1.0f);
+		AnimationState* BlendTo(const AnimationClip& animation, const String& name, float duration = 1.0f);
 
 		// Creates new state, and blends animation with duration
-		AnimationState* BlendTo(const Animation& animation, float duration = 1.0f);
+		AnimationState* BlendTo(const AnimationClip& animation, float duration = 1.0f);
 
 		// Creates new state, and blends animation with duration
 		AnimationState* BlendTo(const String& name, float duration = 1.0f);
@@ -98,19 +98,19 @@ namespace o2
 		// -------------------------------
 		// Value assigning agent interface
 		// -------------------------------
-		struct IValueAgent
+		struct ITrackMixer
 		{
 			// Value path
 			String path;
 
 		public:
-			virtual ~IValueAgent() {}
+			virtual ~ITrackMixer() {}
 
 			// Updates value and blend
 			virtual void Update() = 0;
 
-			// Removes animated value from agent
-			virtual void RemoveValue(IAnimatedValue* value) = 0;
+			// Removes Animation track from agent
+			virtual void RemoveTrack(IAnimationTrack::IPlayer* track) = 0;
 
 			// Returns is agent hasn't no values
 			virtual bool IsEmpty() const = 0;
@@ -120,24 +120,25 @@ namespace o2
 		// Template value assigning agent
 		// ------------------------------
 		template<typename _type>
-		struct ValueAgent: public IValueAgent
+		struct TrackMixer: public ITrackMixer
 		{
 		public:
-			Vector<Pair<AnimationState*, AnimatedValue<_type>*>> animValues; // Animated values associated with animation states
-			IValueProxy<_type>* target;    // Target value proxy
+			Vector<Pair<AnimationState*, typename AnimationTrack<_type>::Player*>> tracks; // Animation tracks associated with animation states
+			
+			IValueProxy<_type>* target = nullptr; // Target value proxy
 
 		public:
+			// Destructor
+			~TrackMixer();
+
 			// Updates value and blend
 			void Update() override;
 
-			// Removes animated value from agent
-			void RemoveValue(IAnimatedValue* value) override;
+			// Removes Animation track from agent
+			void RemoveTrack(IAnimationTrack::IPlayer* track) override;
 
 			// Returns is agent hasn't no values
 			bool IsEmpty() const override;
-
-			// Assigns value as field
-			void AssignField(_type& value);
 		};
 
 		// ----------------------
@@ -145,10 +146,10 @@ namespace o2
 		// ----------------------
 		struct BlendState
 		{
-			Vector<AnimationState*>  mBlendOffStates;           // Turning off states
-			AnimationState*     mBlendOnState = nullptr;   // Turning on state
-			float               duration;                  // Blending duration
-			float               time = -1.0f;              // Current blending remaining time
+			Vector<AnimationState*> blendOffStates;           // Turning off states
+			AnimationState*         blendOnState = nullptr;   // Turning on state
+			float                   duration;                  // Blending duration
+			float                   time = -1.0f;              // Current blending remaining time
 
 			// Updates work weight by time
 			void Update(float dt);
@@ -156,52 +157,58 @@ namespace o2
 
 	protected:
 		Vector<AnimationState*> mStates; // Animation states array @SERIALIZABLE @DEFAULT_TYPE(o2::AnimationState) @DONT_DELETE @INVOKE_ON_CHANGE(OnStatesListChanged)
-		Vector<IValueAgent*>    mValues; // Assigning value agents
+		Vector<ITrackMixer*>    mValues; // Assigning value agents
 
 		BlendState mBlend;  // Current blend parameters
 
 	protected:
-		// Removes animated value from agent by path
-		void UnregAnimatedValue(IAnimatedValue* value, const String& path);
-
 		// Registers value by path and state
 		template<typename _type>
-		void RegAnimatedValue(AnimatedValue< _type >* value, const String& path, AnimationState* state);
+		void RegTrack(typename AnimationTrack< _type >::Player* player, const String& path, AnimationState* state);
+
+		// Removes Animation track from agent by path
+		void UnregTrack(IAnimationTrack::IPlayer* player, const String& path);
+
+		// It is called when new track added in animation state, registers track player in mixer
+		void OnStateAnimationTrackAdded(AnimationState* state, IAnimationTrack::IPlayer* player);
+
+		// It is called when track is removing from animation state, unregisters track player from mixer
+		void OnStateAnimationTrackRemoved(AnimationState* state, IAnimationTrack::IPlayer* player);
 
 		// It is called from editor, refreshes states
 		void OnStatesListChanged();
 
-		friend class Animation;
-		friend class IAnimatedValue;
+		friend class AnimationClip;
+		friend class IAnimationTrack;
 
 		template<typename _type>
-		friend class AnimatedValue;
+		friend class AnimationTrack;
 	};
 
 	template<typename _type>
-	void AnimationComponent::RegAnimatedValue(AnimatedValue<_type>* value, const String& path, AnimationState* state)
+	void AnimationComponent::RegTrack(typename AnimationTrack<_type>::Player* player, const String& path, AnimationState* state)
 	{
 		for (auto val : mValues)
 		{
 			if (val->path == path)
 			{
-				auto* agent = dynamic_cast<ValueAgent<_type>*>(val);
+				auto* agent = dynamic_cast<TrackMixer<_type>*>(val);
 
 				if (!agent)
 				{
-					o2Debug.LogWarning("Can't work with animated value: " + path);
+					o2Debug.LogWarning("Different track types at: " + path);
 					return;
 				}
 
-				agent->animValues.Add({ state, value });
+				agent->tracks.Add({ state, player });
 				return;
 			}
 		}
 
-		auto* newAgent = mnew ValueAgent <_type>();
+		auto* newAgent = mnew TrackMixer <_type>();
 		mValues.Add(newAgent);
 		newAgent->path = path;
-		newAgent->animValues.Add({ state, value });
+		newAgent->tracks.Add({ state, player });
 
 		FieldInfo* fieldInfo = nullptr;
 		auto* fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
@@ -216,43 +223,44 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool AnimationComponent::ValueAgent<_type>::IsEmpty() const
+	AnimationComponent::TrackMixer<_type>::~TrackMixer()
 	{
-		return animValues.IsEmpty();
+		if (target)
+			delete target;
 	}
 
 	template<typename _type>
-	void AnimationComponent::ValueAgent<_type>::RemoveValue(IAnimatedValue* value)
+	bool AnimationComponent::TrackMixer<_type>::IsEmpty() const
 	{
-		animValues.RemoveAll([&](auto x) { return x.second == value; });
+		return tracks.IsEmpty();
 	}
 
 	template<typename _type>
-	void AnimationComponent::ValueAgent<_type>::Update()
+	void AnimationComponent::TrackMixer<_type>::RemoveTrack(IAnimationTrack::IPlayer* value)
 	{
-		AnimationState* firstValueState = animValues[0].first;
-		AnimatedValue<_type>* firstValue = animValues[0].second;
+		tracks.RemoveAll([&](auto x) { return x.second == value; });
+	}
 
-		float weightsSum = firstValueState->weight*firstValueState->workWeight*firstValueState->mask.GetNodeWeight(path);
+	template<typename _type>
+	void AnimationComponent::TrackMixer<_type>::Update()
+	{
+		AnimationState* firstValueState = tracks[0].first;
+		AnimationTrack<_type>::Player* firstValue = tracks[0].second;
+
+		float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
 		_type valueSum = firstValue->GetValue();
 
-		for (int i = 1; i < animValues.Count(); i++)
+		for (int i = 1; i < tracks.Count(); i++)
 		{
-			AnimationState* valueState = animValues[i].first;
-			AnimatedValue<_type>* value = animValues[i].second;
+			AnimationState* valueState = tracks[i].first;
+			AnimationTrack<_type>::Player* value = tracks[i].second;
 
-			weightsSum += valueState->weight*valueState->workWeight*valueState->mask.GetNodeWeight(path);
+			weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
 			valueSum += value->GetValue();
 		}
 
 		_type resValue = valueSum / weightsSum;
 		target->SetValue(resValue);
-	}
-
-	template<typename _type>
-	void AnimationComponent::ValueAgent<_type>::AssignField(_type& value)
-	{
-		target->SetValue(value);
 	}
 }
 
@@ -273,18 +281,18 @@ CLASS_METHODS_META(o2::AnimationComponent)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(AnimationState*, AddState, AnimationState*);
-	PUBLIC_FUNCTION(AnimationState*, AddState, const String&, const Animation&, const AnimationMask&, float);
+	PUBLIC_FUNCTION(AnimationState*, AddState, const String&, const AnimationClip&, const AnimationMask&, float);
 	PUBLIC_FUNCTION(AnimationState*, AddState, const String&);
 	PUBLIC_FUNCTION(void, RemoveState, AnimationState*);
 	PUBLIC_FUNCTION(void, RemoveState, const String&);
 	PUBLIC_FUNCTION(void, RemoveAllStates);
 	PUBLIC_FUNCTION(AnimationState*, GetState, const String&);
 	PUBLIC_FUNCTION(const Vector<AnimationState*>&, GetStates);
-	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&, const String&);
-	PUBLIC_FUNCTION(AnimationState*, Play, const Animation&);
+	PUBLIC_FUNCTION(AnimationState*, Play, const AnimationClip&, const String&);
+	PUBLIC_FUNCTION(AnimationState*, Play, const AnimationClip&);
 	PUBLIC_FUNCTION(AnimationState*, Play, const String&);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const Animation&, const String&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const Animation&, float);
+	PUBLIC_FUNCTION(AnimationState*, BlendTo, const AnimationClip&, const String&, float);
+	PUBLIC_FUNCTION(AnimationState*, BlendTo, const AnimationClip&, float);
 	PUBLIC_FUNCTION(AnimationState*, BlendTo, const String&, float);
 	PUBLIC_FUNCTION(AnimationState*, BlendTo, AnimationState*, float);
 	PUBLIC_FUNCTION(void, Stop, const String&);
@@ -292,7 +300,9 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(String, GetCategory);
 	PUBLIC_FUNCTION(String, GetIcon);
-	PROTECTED_FUNCTION(void, UnregAnimatedValue, IAnimatedValue*, const String&);
+	PROTECTED_FUNCTION(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
+	PROTECTED_FUNCTION(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
+	PROTECTED_FUNCTION(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);
 	PROTECTED_FUNCTION(void, OnStatesListChanged);
 }
 END_META;

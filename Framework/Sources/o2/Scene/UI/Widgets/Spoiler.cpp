@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Spoiler.h"
 
-#include "o2/Animation/AnimatedFloat.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Text.h"
 #include "o2/Scene/UI/WidgetLayer.h"
@@ -20,7 +20,7 @@ namespace o2
 		mExpandHeight = false;
 
 		CreateExpandAnimation();
-		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
+		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 		UpdateExpanding(0);
 	}
@@ -32,7 +32,7 @@ namespace o2
 		if (!mExpandState)
 			CreateExpandAnimation();
 
-		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
+		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 
 		InitializeControls();
@@ -145,7 +145,7 @@ namespace o2
 		if (!mExpandState)
 			CreateExpandAnimation();
 
-		mExpandState->animation.onUpdate = THIS_FUNC(UpdateExpanding);
+		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
 		mExpandState->SetState(false);
 
 		mHeadHeight = other.mHeadHeight;
@@ -171,7 +171,7 @@ namespace o2
 
 	void Spoiler::CreateExpandAnimation()
 	{
-		mExpandState = AddState("expand", Animation::Parametric(this, "mExpandCoef", 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
+		mExpandState = AddState("expand", AnimationClip::Parametric("mExpandCoef", 0.0f, 1.0f, 0.4f, 0.0f, 0.4f, 1.0f, 1.0f));
 	}
 
 	float Spoiler::GetMinHeightWithChildren() const
@@ -233,7 +233,7 @@ namespace o2
 		if (!mExpandState)
 			return true;
 
-		return mExpandState->GetState() && !mExpandState->animation.IsPlaying();
+		return mExpandState->GetState() && !mExpandState->player.IsPlaying();
 	}
 
 	bool Spoiler::IsFullyCollapsed() const
@@ -241,7 +241,7 @@ namespace o2
 		if (!mExpandState)
 			return false;
 
-		return !mExpandState->GetState() && !mExpandState->animation.IsPlaying();
+		return !mExpandState->GetState() && !mExpandState->player.IsPlaying();
 	}
 }
 

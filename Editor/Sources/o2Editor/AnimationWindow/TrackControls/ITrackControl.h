@@ -1,7 +1,7 @@
 #pragma once
 
 #include "AnimationKeyDragHandle.h"
-#include "o2/Animation/AnimatedValue.h"
+#include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
 
@@ -30,8 +30,8 @@ namespace Editor
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
 		virtual void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
-		// Sets animated value, updates and creates key handles
-		virtual void SetAnimatedValue(IAnimatedValue* animatedValue, const String& path);
+		// Sets Animation track, updates and creates key handles
+		virtual void SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path);
 
 		// Updates handles position on timeline
 		virtual void UpdateHandles();
@@ -83,7 +83,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 {
 
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*, const String&);
+	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(Vector<KeyHandle*>, GetKeyHandles);
 	PUBLIC_FUNCTION(Widget*, GetTreePartControls);

@@ -1,24 +1,16 @@
 #pragma once
 
-#include "o2/Utils/Types/Containers/Map.h"
-#include "o2/Utils/Delegates.h"
 #include "o2/Utils/Basic/IObject.h"
+#include "o2/Utils/Delegates.h"
 #include "o2/Utils/Property.h"
-#include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Containers/Map.h"
 
 namespace o2
 {
-	enum class Loop
-	{
-		None,    // No loop 
-		Repeat,  // Repeats from start to end
-		PingPong // Repeats from start to end, from end to start, to end ...
-	};
-
 	// -------------------------
 	// Basic animation interface
 	// -------------------------
-	class IAnimation : public ISerializable
+	class IAnimation : public IObject
 	{
 	public:
 		PROPERTIES(IAnimation);
@@ -156,20 +148,20 @@ namespace o2
 		// Removes all events
 		virtual void RemoveAllTimeEvents();
 
-		SERIALIZABLE(IAnimation);
+		IOBJECT(IAnimation);
 
 	protected:
 		float mTime;           // Current animation time, can be out of bounds
 		float mInDurationTime; // In duration time
-		float mDuration;       // Animation duration @SERIALIZABLE
+		float mDuration;       // Animation duration
 		float mBeginTime;      // Begin time
 		float mEndTime;        // End time
 		float mDirection;      // Animation direction: 1 - forward, -1 - reversed
 		float mSpeed;          // Animation speed, 1 is default
-		Loop  mLoop;           // Loop type @SERIALIZABLE
+		Loop  mLoop;           // Loop type
 		bool  mPlaying;        // True if animation playing
 
-		Map<float, Function<void()>> mTimeEvents; // Animation time events
+		Vector<Pair<float, Function<void()>>> mTimeEvents; // Animation time events
 
 	protected:
 		// Updates mTime and mInDurationTime
@@ -180,11 +172,9 @@ namespace o2
 	};
 }
 
-PRE_ENUM_META(o2::Loop);
-
 CLASS_BASES_META(o2::IAnimation)
 {
-	BASE_CLASS(o2::ISerializable);
+	BASE_CLASS(o2::IObject);
 }
 END_META;
 CLASS_FIELDS_META(o2::IAnimation)
@@ -204,12 +194,12 @@ CLASS_FIELDS_META(o2::IAnimation)
 	PUBLIC_FIELD(onUpdate);
 	PROTECTED_FIELD(mTime);
 	PROTECTED_FIELD(mInDurationTime);
-	PROTECTED_FIELD(mDuration).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mDuration);
 	PROTECTED_FIELD(mBeginTime);
 	PROTECTED_FIELD(mEndTime);
 	PROTECTED_FIELD(mDirection);
 	PROTECTED_FIELD(mSpeed);
-	PROTECTED_FIELD(mLoop).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mLoop);
 	PROTECTED_FIELD(mPlaying);
 	PROTECTED_FIELD(mTimeEvents);
 }

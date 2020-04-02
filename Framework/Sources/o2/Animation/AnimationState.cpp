@@ -5,13 +5,31 @@
 
 namespace o2
 {
-	AnimationState::AnimationState():
-		weight(1.0f), workWeight(1.0f), mOwner(nullptr)
+	AnimationState::AnimationState(const String& name):
+		name(name)
 	{}
 
-	AnimationState::AnimationState(const String& name) :
-		name(name), weight(1.0f), workWeight(1.0f), mOwner(nullptr)
-	{}
+	void AnimationState::SetWeight(float weight)
+	{
+		mWeight = weight;
+	}
+
+	float AnimationState::GetWeight() const
+	{
+		return mWeight;
+	}
+
+	void AnimationState::SetAnimation(const AnimationAssetRef& animationAsset)
+	{
+		mAnimation = animationAsset;
+		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+	}
+
+	const AnimationAssetRef& AnimationState::GetAnimation() const
+	{
+		return mAnimation;
+	}
+
 }
 
 DECLARE_CLASS(o2::AnimationState);

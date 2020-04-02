@@ -308,17 +308,17 @@ namespace o2
 
 	void IAnimation::AddTimeEvent(float time, const Function<void()> eventFunc)
 	{
-		mTimeEvents.Add(time, eventFunc);
+		mTimeEvents.Add({ time, eventFunc });
 	}
 
 	void IAnimation::RemoveTimeEvent(float time)
 	{
-		mTimeEvents.Remove(time);
+		mTimeEvents.RemoveAll([&](auto& x) { return x.first == time; });
 	}
 
 	void IAnimation::RemoveTimeEvent(const Function<void()>& eventFunc)
 	{
-		mTimeEvents.RemoveAll([=](float t, const Function<void()>& f) { return f == eventFunc; });
+		mTimeEvents.RemoveAll([=](auto& x) { return x.second == eventFunc; });
 	}
 
 	void IAnimation::RemoveAllTimeEvents()
@@ -329,13 +329,5 @@ namespace o2
 	void IAnimation::Evaluate()
 	{}
 }
-
-ENUM_META(o2::Loop)
-{
-	ENUM_ENTRY(None);
-	ENUM_ENTRY(PingPong);
-	ENUM_ENTRY(Repeat);
-}
-END_ENUM_META;
 
 DECLARE_CLASS(o2::IAnimation);

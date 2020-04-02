@@ -16,7 +16,7 @@ DECLARE_SINGLETON(Editor::PropertiesListDlg);
 
 namespace Editor
 {
-
+	
 	PropertiesListDlg::PropertiesListDlg()
 	{
 		InitializeWindow();
@@ -27,7 +27,7 @@ namespace Editor
 		delete mWindow;
 	}
 
-	void PropertiesListDlg::Show(Animation* animation, ActorRef actor)
+	void PropertiesListDlg::Show(AnimationClip* animation, ActorRef actor)
 	{
 		Instance().mPropertiesTree->Initialize(animation, actor);
 		Instance().mFilter->SetText("");
@@ -87,7 +87,7 @@ namespace Editor
 		return *this;
 	}
 
-	void AnimationPropertiesTree::Initialize(Animation* animation, ActorRef actor)
+	void AnimationPropertiesTree::Initialize(AnimationClip* animation, ActorRef actor)
 	{
 		mFilterStr = "";
 		mRoot.Clear();
@@ -201,7 +201,7 @@ namespace Editor
 			return;
 
 		auto newNode = node->AddChild(name, type);
-		newNode->used = mAnimation->ContainsAnimationValue(newNode->path);
+		newNode->used = mAnimation->ContainsTrack(newNode->path);
 	}
 
 	void AnimationPropertiesTree::UpdateVisibleNodes()
@@ -250,9 +250,9 @@ namespace Editor
 
 		auto propertyNode = dynamic_cast<AnimationPropertiesTreeNode*>(nodeWidget);
 		if (propertyNode->mData->used)
-			mAnimation->RemoveAnimationValue(propertyNode->mData->path);
+			mAnimation->RemoveTrack(propertyNode->mData->path);
 		else
-			mAnimation->AddAnimationValue(propertyNode->mData->path, *propertyNode->mData->type);
+			mAnimation->AddTrack(propertyNode->mData->path, *propertyNode->mData->type);
 	}
 
 	void AnimationPropertiesTree::OnNodesSelectionChanged(Vector<void*> objects)
@@ -340,7 +340,7 @@ namespace Editor
 		{
 			mAddButton->onClick = [&]()
 			{
-				mTree->mAnimation->AddAnimationValue(mData->path, *mData->type); 
+				mTree->mAnimation->AddTrack(mData->path, *mData->type); 
 				mData->used = true; 
 				mTree->OnObjectsChanged({ (void*)mData }); 
 			};
@@ -350,7 +350,7 @@ namespace Editor
 		if (mRemoveButton)
 		{
 			mRemoveButton->onClick = [&]() { 
-				mTree->mAnimation->RemoveAnimationValue(mData->path);
+				mTree->mAnimation->RemoveTrack(mData->path);
 				mData->used = false;
 				mTree->OnObjectsChanged({ (void*)mData });
 			};

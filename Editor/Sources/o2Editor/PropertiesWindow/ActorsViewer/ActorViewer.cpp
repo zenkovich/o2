@@ -72,11 +72,11 @@ namespace Editor
 		*mAddComponentPanel->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 40, 0);
 		mContentWidget->AddChild(mAddComponentPanel);
 
-		Animation addComponentAnim = Animation::EaseInOut<float>(mContentWidget, "child/add component/layout/offsetTop", 
-																 40, 200, 0.4f);
+		AnimationClip addComponentAnim = AnimationClip::EaseInOut<float>("child/add component/layout/offsetTop",
+																		 40, 200, 0.4f);
 
-		*addComponentAnim.AddAnimationValue<float>("child/actors scroll area/layout/offsetBottom") =
-			AnimatedValue<float>::EaseInOut(40, 200, 0.4f);
+		*addComponentAnim.AddTrack<float>("child/actors scroll area/layout/offsetBottom") =
+			AnimationTrack<float>::EaseInOut(40, 200, 0.4f);
 
 		mContentWidget->AddState("add component", addComponentAnim);
 

@@ -6,7 +6,7 @@
 
 namespace o2
 {
-	class Animation;
+	class AnimationClip;
 	class ContextMenu;
 	class Sprite;
 }
@@ -37,7 +37,7 @@ namespace Editor
 		KeyHandlesSheet& operator=(const KeyHandlesSheet& other);
 
 		// Sets animation. Used for batch change of keys
-		void SetAnimation(Animation* animation);
+		void SetAnimation(AnimationClip* animation);
 
 		// Updates selection frame
 		void Update(float dt) override;
@@ -51,10 +51,10 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		// Registers animation value track control
+		// Registers animation track track control
 		void RegTrackControl(ITrackControl* trackControl, const std::string& path);
 
-		// Unregisters animation value track control
+		// Unregisters animation track track control
 		void UnregTrackControl(ITrackControl* trackControl);
 
 		// Unregisters all tracks controls
@@ -87,9 +87,9 @@ namespace Editor
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
 		Vector<ITrackControl*>               mTrackControls;    // List of actual track controls
-		Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is animated value path
+		Vector<Pair<String, ITrackControl*>> mTrackControlsMap; // Map of actual track controls, key is Animation track path
 
-		Map<IAnimatedValue*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by animated value, used for fast searching handles for same animated value
+		Map<IAnimationTrack*, Vector<AnimationKeyDragHandle*>> mHandlesGroups; // All handles grouped by Animation track, used for fast searching handles for same Animation track
 
 		ContextMenu* mContextMenu = nullptr; // Keys context menu
 		Vec2F        mContextMenuPressPoint; // Cursor position when right button were clicked. When trying to show context menu checking delta between current cursor position and this 
@@ -210,7 +210,7 @@ namespace Editor
 		friend class AnimationDeleteKeysAction;
 		friend class AnimationKeysChangeAction;
 
-		template<typename AnimatedValueType>
+		template<typename AnimationTrackType>
 		friend class KeyFramesTrackControl;
 	};
 }
@@ -254,7 +254,7 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	typedef const Map<String, Vector<UInt64>>& _tmp4;
 	typedef Map<String, Vector<UInt64>>& _tmp5;
 
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateInputDrawOrder);

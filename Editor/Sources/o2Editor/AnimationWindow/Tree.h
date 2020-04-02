@@ -7,7 +7,7 @@ using namespace o2;
 
 namespace o2
 {
-	class Animation;
+	class AnimationClip;
 }
 
 namespace Editor
@@ -16,7 +16,7 @@ namespace Editor
 	class KeyHandlesSheet;
 
 	// ---------------------
-	// Animation values tree
+	// animation tracks tree
 	// ---------------------
 	class AnimationTree : public Tree
 	{
@@ -37,9 +37,9 @@ namespace Editor
 		void Draw() override;
 
 		// Sets animation and updates tree structure
-		void SetAnimation(Animation* animation);
+		void SetAnimation(AnimationClip* animation);
 
-		// It is called when animation changed, checks count of animation values, updates tree structure if needed
+		// It is called when animation changed, checks count of animation tracks, updates tree structure if needed
 		void OnAnimationChanged();
 
 		// Sets width of tree part
@@ -48,37 +48,38 @@ namespace Editor
 		// Sets color of track by path
 		void SetAnimationValueColor(String path, const Color4& color);
 
-		// Returns animated value line number by world position, dependent on scroll
+		// Returns Animation track line number by world position, dependent on scroll
 		float GetLineNumber(float worldPosition) const;
 
-		// Returns world positionof animated value line
+		// Returns world position of Animation track line
 		float GetLineWorldPosition(float lineNumber) const;
 
 		SERIALIZABLE(AnimationTree);
 
 	public:
-		struct AnimationValueNode
+		struct TrackNode
 		{
 			String name;
 			String path;
 
 			Color4 color;
 
-			IAnimatedValue* animatedValue = nullptr;
+			IAnimationTrack*          track = nullptr;
+			IAnimationTrack::IPlayer* player = nullptr;
 
 			ITrackControl* trackControl = nullptr; 
 
-			AnimationValueNode* parent = nullptr;
-			Vector<AnimationValueNode*> children;
+			TrackNode*         parent = nullptr;
+			Vector<TrackNode*> children;
 		};
 
 	private:
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
-		int mAnimationValuesCount = 0; // Last stored animation values count. Used in checking of animation changes for tracking new values
+		int mAnimationValuesCount = 0; // Last stored animation tracks count. Used in checking of animation changes for tracking new values
 
-		AnimationValueNode* mRootValue = nullptr;       // Root animation properties tree node
-		ContextMenu*        mContextMenu;               // Context menu
+		TrackNode*   mRootValue = nullptr; // Root animation properties tree node
+		ContextMenu* mContextMenu;         // Context menu
 
 		float mTreeWidth = 100.0f; // Tree - part width
 
@@ -86,11 +87,11 @@ namespace Editor
 		// Initializes context menu
 		void InitializeContext();
 
-		// Rebuilds animation values tree - mRootValues
+		// Rebuilds animation tracks tree - mRootValues
 		void RebuildAnimationTree();
 
-		// Adds animated value to tree. Creates intermediate nodes when required
-		void AddAnimatedValue(Animation::AnimatedValueDef& value);
+		// Adds Animation track to tree. Creates intermediate nodes when required
+		void AddAnimationTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player = nullptr);
 
 		//Updates tree node width
 		void UpdateTreeWidth();
@@ -148,7 +149,7 @@ namespace Editor
 		AnimationTreeNode& operator=(const AnimationTreeNode& other);
 
 		// Sets object and updates track control
-		void Setup(AnimationTree::AnimationValueNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
+		void Setup(AnimationTree::TrackNode* node, AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet);
 
 		// Free node, unregister track control
 		void Free();
@@ -166,14 +167,14 @@ namespace Editor
 		float mAddKeyButtonSize = 25.0f;
 		float mPropertySize = 130.0f;
 
-		AnimationTree::AnimationValueNode* mData = nullptr; // Editing animated value data
+		AnimationTree::TrackNode* mData = nullptr; // Editing Animation track data
 
 		AnimationTimeline* mTimeline = nullptr;     // Animation timeline pointer, passes into track controller
 		KeyHandlesSheet*   mHandlesSheet = nullptr; // Handles sheet group, passes into track controller
 
 		Text* mNameDrawable = nullptr; // Object name drawable
 
-		ITrackControl* mTrackControl = nullptr;     // Animated value editor
+		ITrackControl* mTrackControl = nullptr;     // Animation track editor
 
 		static Map<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
 
@@ -187,7 +188,7 @@ namespace Editor
 		// initializes controls and widgets
 		void InitializeControls();
 
-		// Initializes suitable track control for animated value by type. Caching track controls
+		// Initializes suitable track control for Animation track by type. Caching track controls
 		void InitilizeTrackControl();
 
 		// Free track control and put it unto buffer
@@ -218,7 +219,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*);
 	PUBLIC_FUNCTION(void, OnAnimationChanged);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(void, SetAnimationValueColor, String, const Color4&);
@@ -226,7 +227,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
 	PRIVATE_FUNCTION(void, InitializeContext);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
-	PRIVATE_FUNCTION(void, AddAnimatedValue, Animation::AnimatedValueDef&);
+	PRIVATE_FUNCTION(void, AddAnimationTrack, IAnimationTrack*, IAnimationTrack::IPlayer*);
 	PRIVATE_FUNCTION(void, UpdateTreeWidth);
 	PRIVATE_FUNCTION(void, SetCurveViewMode, bool);
 	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
@@ -262,7 +263,7 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
-	PUBLIC_FUNCTION(void, Setup, AnimationTree::AnimationValueNode*, AnimationTimeline*, KeyHandlesSheet*);
+	PUBLIC_FUNCTION(void, Setup, AnimationTree::TrackNode*, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, Free);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);

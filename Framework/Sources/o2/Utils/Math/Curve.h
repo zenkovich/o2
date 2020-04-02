@@ -1,10 +1,11 @@
 #pragma once
 
-#include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Utils/Math/ApproximationValue.h"
 #include "o2/Utils/Math/Math.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/Containers/Vector.h"
 
 namespace o2
 {
@@ -51,6 +52,9 @@ namespace o2
 
 		// Returns value by position
 		float Evaluate(float position) const;
+
+		// Returns value by position
+		float Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update approximation
 		// Used for optimizing many keys change
@@ -239,7 +243,7 @@ namespace o2
 			bool operator!=(const Key& other) const;
 
 			// Returns approximated points
-			const Vec2F* GetApproximatedPoints() const;
+			const ApproximationValue* GetApproximatedPoints() const;
 
 			// Returns approximated points count
 			int GetApproximatedPointsCount() const;
@@ -250,9 +254,9 @@ namespace o2
 			SERIALIZABLE(Key);
 
 		public:
-			static const int mApproxValuesCount = 20; // Approximation values count
-			Vec2F mApproxValues[mApproxValuesCount];  // Approximation values (x - position, y - value)
-			RectF mApproxValuesBounds;                // Bounds of approximation values
+			static const int   mApproxValuesCount = 20;           // Approximation values count
+			ApproximationValue mApproxValues[mApproxValuesCount]; // Approximation values 
+			RectF              mApproxValuesBounds;               // Bounds of approximation values
 
 			friend class Curve;
 		};
@@ -305,6 +309,7 @@ CLASS_METHODS_META(o2::Curve)
 {
 
 	PUBLIC_FUNCTION(float, Evaluate, float);
+	PUBLIC_FUNCTION(float, Evaluate, float, bool, int&, int&);
 	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
 	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(void, MoveKeys, float);
@@ -379,7 +384,7 @@ END_META;
 CLASS_METHODS_META(o2::Curve::Key)
 {
 
-	PUBLIC_FUNCTION(const Vec2F*, GetApproximatedPoints);
+	PUBLIC_FUNCTION(const ApproximationValue*, GetApproximatedPoints);
 	PUBLIC_FUNCTION(int, GetApproximatedPointsCount);
 	PUBLIC_FUNCTION(const RectF&, GetGetApproximatedPointsBounds);
 }

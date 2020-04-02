@@ -5,11 +5,12 @@
 
 namespace o2
 {
-	AnimationAsset::AnimationAsset()
-	{}
-
 	AnimationAsset::AnimationAsset(const AnimationAsset& other):
 		AssetWithDefaultMeta<AnimationAsset>(other), animation(other.animation)
+	{}
+
+	AnimationAsset::AnimationAsset(const AnimationClip& clip):
+		AssetWithDefaultMeta<AnimationAsset>(), animation(clip)
 	{}
 
 	AnimationAsset& AnimationAsset::operator=(const AnimationAsset& other)

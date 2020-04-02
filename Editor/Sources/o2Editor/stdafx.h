@@ -1,10 +1,10 @@
 #pragma once
 
 #include "o2/Animation/Animate.h"
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/AnimatedValue.h"
-#include "o2/Animation/AnimatedVector.h"
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Animation/AnimationMask.h"
 #include "o2/Animation/AnimationState.h"
 #include "o2/Animation/IAnimation.h"

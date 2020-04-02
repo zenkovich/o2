@@ -185,8 +185,8 @@ namespace Editor
 				mRevertBtn->layout->maxWidth = 0;
 				AddChild(mRevertBtn);
 
-				Animation revertStateAnim = Animation::EaseInOut(this, "child/revert/layout/maxWidth", 0.0f, 20.0f, 0.15f);
-				*revertStateAnim.AddAnimationValue<bool>("child/revert/enabled") = AnimatedValue<bool>::EaseInOut(false, true, 0.15f);
+				AnimationClip revertStateAnim = AnimationClip::EaseInOut("child/revert/layout/maxWidth", 0.0f, 20.0f, 0.15f);
+				*revertStateAnim.AddTrack<bool>("child/revert/enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
 				AddState("revert", revertStateAnim);
 			}
 

@@ -19,7 +19,7 @@ namespace Editor
 	// Animation control track for key frames animations
 	// Creates handles for each keys and updates them
 	// -------------------------------------------------
-	template<typename AnimatedValueType>
+	template<typename AnimationTrackType>
 	class KeyFramesTrackControl : public ITrackControl
 	{
 	public:
@@ -41,11 +41,11 @@ namespace Editor
 		// Updates widget, checks value change
 		void Update(float dt) override;
 
-		// Sets animated value, updates and creates key handles
-		void SetAnimatedValue(IAnimatedValue* animatedValue, const String& path) override;
+		// Sets Animation track, updates and creates key handles
+		void SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path) override;
 
-		// Returns animated value
-		AnimatedValueType* GetAnimatedValue() const;
+		// Returns Animation track
+		AnimationTrackType* GetTrack() const;
 
 		// Sets timeline for calculating handles positions, and  handles sheet as selecting group for handles
 		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
@@ -77,29 +77,31 @@ namespace Editor
 		// Inserts new key at time
 		void InsertNewKey(float time);
 
-		SERIALIZABLE(KeyFramesTrackControl<AnimatedValueType>);
+		SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
 
 	private:
-		typedef typename AnimatedValueType::ValueType AnimatedValueTypeValueType;
+		typedef typename AnimationTrackType::ValueType TrackValueType;
+		typedef typename AnimationTrackType::Player TrackPlayerType;
 
 		Vector<KeyHandle*> mHandles; // List of handles, each for keys
 
-		String mAnimatedValuePath; // Path to animated value in animation
+		String mTrackPath; // Path to Animation track in animation
 
 		Widget* mTreeControls = nullptr; // Returns a container of controllers that are part of a tree
 
-		IPropertyField*                               mPropertyField;
-		AnimatedValueTypeValueType                    mPropertyValue = AnimatedValueTypeValueType();
-		PointerValueProxy<AnimatedValueTypeValueType> mPropertyValueProxy;
+		IPropertyField*                   mPropertyField;
+		TrackValueType                    mPropertyValue = TrackValueType();
+		PointerValueProxy<TrackValueType> mPropertyValueProxy;
 
 		Button* mAddKeyDotButton = nullptr; // Dot add key button colored with curve color
 		Button* mAddKeyButton = nullptr;    // Add key button, enables when available to add new key
 
-		AnimatedValueTypeValueType mLastAnimatedValue = AnimatedValueTypeValueType();
+		TrackValueType mLastValue = TrackValueType();
 
-		AnimatedValueType* mAnimatedValue = nullptr; // Editing animated value
-		AnimationTimeline* mTimeline = nullptr;      // Timeline used for calculating handles positions
-		KeyHandlesSheet*   mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
+		AnimationTrackType* mTrack = nullptr;         // Editing Animation track
+		TrackPlayerType*    mPlayer = nullptr;        // Track player
+		AnimationTimeline*  mTimeline = nullptr;      // Time line used for calculating handles positions
+		KeyHandlesSheet*    mHandlesSheet = nullptr;  // Handles sheet, used for drawing and managing drag handles
 
 		bool mDisableHandlesUpdate = false;  // It is true when handles are changing and combining or updating is not available
 
@@ -114,43 +116,42 @@ namespace Editor
 		void OnPropertyChanged();
 	};
 
-	template<typename AnimatedValueType>
-	KeyFramesTrackControl<AnimatedValueType>::KeyFramesTrackControl() :
+	template<typename AnimationTrackType>
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl() :
 		ITrackControl()
 	{
 		InitializeControls();
 	}
 
-	template<typename AnimatedValueType>
-	KeyFramesTrackControl<AnimatedValueType>::KeyFramesTrackControl(const KeyFramesTrackControl& other) :
+	template<typename AnimationTrackType>
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(const KeyFramesTrackControl& other) :
 		ITrackControl(other)
 	{
 		InitializeControls();
 	}
 
-	template<typename AnimatedValueType>
-	KeyFramesTrackControl<AnimatedValueType>::~KeyFramesTrackControl()
+	template<typename AnimationTrackType>
+	KeyFramesTrackControl<AnimationTrackType>::~KeyFramesTrackControl()
 	{
 		for (auto handle : mHandles)
 			delete handle;
 
-		if (mAnimatedValue)
-		{
-			auto animVal = mAnimatedValue;
-			animVal->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
-			animVal->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
-		}
+		if (mTrack)
+			mTrack->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
+
+		if (mPlayer)
+			mPlayer->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 	}
 
-	template<typename AnimatedValueType>
-	KeyFramesTrackControl<AnimatedValueType>& KeyFramesTrackControl<AnimatedValueType>::operator=(const KeyFramesTrackControl& other)
+	template<typename AnimationTrackType>
+	KeyFramesTrackControl<AnimationTrackType>& KeyFramesTrackControl<AnimationTrackType>::operator=(const KeyFramesTrackControl& other)
 	{
 		Widget::operator=(other);
 		return *this;
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::Draw()
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::Draw()
 	{
 		if (!mResEnabledInHierarchy)
 			return;
@@ -169,86 +170,86 @@ namespace Editor
 		DrawDebugFrame();
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::Update(float dt)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::Update(float dt)
 	{
 		Widget::Update(dt);
 
-		if (!Math::Equals(mLastAnimatedValue, mAnimatedValue->GetValue()))
+		if (!Math::Equals(mLastValue, mPlayer->GetValue()))
 		{
-			mPropertyValue = mAnimatedValue->GetValue();
-			mLastAnimatedValue = mPropertyValue;
+			mPropertyValue = mPlayer->GetValue();
+			mLastValue = mPropertyValue;
 			mPropertyField->Refresh();
 		}
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SetAnimatedValue(IAnimatedValue* animatedValue, const String& path)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::SetTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player, const String& path)
 	{
-		mAnimatedValuePath = path;
+		mTrackPath = path;
 
-		if (mAnimatedValue)
-		{
-			auto animVal = mAnimatedValue;
-			animVal->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
-			animVal->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
-		}
+		if (mTrack)
+			mTrack->onKeysChanged -= THIS_SUBSCRIPTION(UpdateHandles, []() {});
 
-		mAnimatedValue = dynamic_cast<AnimatedValueType*>(animatedValue);
+		if (mPlayer)
+			mPlayer->onUpdate -= THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 
-		if (mAnimatedValue)
-		{
-			mAnimatedValue->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, [&]() { mAnimatedValue = nullptr; });
-			mAnimatedValue->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, [&]() { mAnimatedValue = nullptr; });
-		}
+		mTrack = dynamic_cast<AnimationTrackType*>(track);
+		mPlayer = dynamic_cast<TrackPlayerType*>(player);
+
+		if (mTrack)
+			mTrack->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, []() {});
+
+		if (mPlayer)
+			mPlayer->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
 
 		InitializeHandles();
 		CheckCanCreateKey(mTimeline->GetTimeCursor());
 	}
 
-	template<typename AnimatedValueType>
-	AnimatedValueType* KeyFramesTrackControl<AnimatedValueType>::GetAnimatedValue() const
+	template<typename AnimationTrackType>
+	AnimationTrackType* KeyFramesTrackControl<AnimationTrackType>::GetTrack() const
 	{
-		return mAnimatedValue;
+		return mTrack;
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet)
 	{
 		mTimeline = timeline;
 		mHandlesSheet = handlesSheet;
 	}
 
-	template<typename AnimatedValueType>
-	Vector<ITrackControl::KeyHandle*> KeyFramesTrackControl<AnimatedValueType>::GetKeyHandles() const
+	template<typename AnimationTrackType>
+	Vector<ITrackControl::KeyHandle*> KeyFramesTrackControl<AnimationTrackType>::GetKeyHandles() const
 	{
 		return mHandles;
 	}
 
-	template<typename AnimatedValueType>
-	Widget* KeyFramesTrackControl<AnimatedValueType>::GetTreePartControls() const
+	template<typename AnimationTrackType>
+	Widget* KeyFramesTrackControl<AnimationTrackType>::GetTreePartControls() const
 	{
 		return mTreeControls;
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SetCurveViewColor(const Color4& color)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::SetCurveViewColor(const Color4& color)
 	{
 		mAddKeyDotButton->GetLayerDrawable<Sprite>("basic/regularBack")->SetColor(color);
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SetCurveViewEnabled(bool enabled)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::SetCurveViewEnabled(bool enabled)
 	{}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::InitializeControls()
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::InitializeControls()
 	{
 		mTreeControls = mnew Widget();
 
-		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(AnimatedValueType::ValueType));
+		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(AnimationTrackType::ValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
-		mPropertyValueProxy = PointerValueProxy<AnimatedValueTypeValueType>(&mPropertyValue);
+		mPropertyValueProxy = PointerValueProxy<TrackValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
 		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataNode>&, const Vector<DataNode>&) { OnPropertyChanged(); };
 		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
@@ -266,8 +267,8 @@ namespace Editor
 		mTreeControls->AddChildren({ mPropertyField, mAddKeyButton, mAddKeyDotButton });
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::InitializeHandles()
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::InitializeHandles()
 	{
 		PushEditorScopeOnStack scope;
 
@@ -292,7 +293,7 @@ namespace Editor
 
 		mHandles.Clear();
 
-		for (auto& key : mAnimatedValue->GetKeys())
+		for (auto& key : mTrack->GetKeys())
 		{
 			AnimationKeyDragHandle* handle = nullptr;
 
@@ -303,8 +304,8 @@ namespace Editor
 
 			handle->SetEnabled(true);
 			handle->SetPosition(Vec2F(key.position, 0.0f));
-			handle->animatedValue = mAnimatedValue;
-			handle->animatedValuePath = mAnimatedValuePath;
+			handle->track = mTrack;
+			handle->trackPath = mTrackPath;
 			handle->trackControl = this;
 			handle->keyUid = key.uid;
 			handle->isMapping = false;
@@ -319,12 +320,12 @@ namespace Editor
 			handle->onChangedPos = [=](const Vec2F& pos) {
 				mDisableHandlesUpdate = true;
 
-				int keyIdx = mAnimatedValue->FindKeyIdx(keyhandle->keyUid);
-				auto key = mAnimatedValue->GetKeys()[keyIdx];
+				int keyIdx = mTrack->FindKeyIdx(keyhandle->keyUid);
+				auto key = mTrack->GetKeys()[keyIdx];
 				key.position = pos.x;
 
-				mAnimatedValue->RemoveKeyAt(keyIdx);
-				mAnimatedValue->AddKey(key);
+				mTrack->RemoveKeyAt(keyIdx);
+				mTrack->AddKey(key);
 
 				mDisableHandlesUpdate = false;
 			};
@@ -332,33 +333,33 @@ namespace Editor
 		}
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::UpdateHandles()
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::UpdateHandles()
 	{
-		if (!mAnimatedValue)
+		if (!mTrack)
 			return;
 
 		if (mDisableHandlesUpdate)
 			return;
 
-		if (mAnimatedValue->GetKeys().Count() != mHandles.Count())
+		if (mTrack->GetKeys().Count() != mHandles.Count())
 		{
 			InitializeHandles();
 		}
 		else
 		{
 			for (auto keyHandle : mHandles)
-				keyHandle->handle->SetPosition(Vec2F(mAnimatedValue->FindKey(keyHandle->keyUid).position, 0.0f));
+				keyHandle->handle->SetPosition(Vec2F(mTrack->FindKey(keyHandle->keyUid).position, 0.0f));
 		}
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::CheckCanCreateKey(float time)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::CheckCanCreateKey(float time)
 	{
 		time = mTimeline->GetTimeCursor();
 
 		bool hasKeyAtTime = false;
-		for (auto key : mAnimatedValue->GetKeys())
+		for (auto key : mTrack->GetKeys())
 		{
 			if (mTimeline->IsSameTime(key.position, time))
 			{
@@ -370,8 +371,8 @@ namespace Editor
 		mAddKeyButton->SetInteractable(!hasKeyAtTime);
 	}
 
-	template<typename AnimatedValueType>
-	AnimationKeyDragHandle* KeyFramesTrackControl<AnimatedValueType>::CreateHandle()
+	template<typename AnimationTrackType>
+	AnimationKeyDragHandle* KeyFramesTrackControl<AnimationTrackType>::CreateHandle()
 	{
 		AnimationKeyDragHandle* handle = mnew AnimationKeyDragHandle(mnew Sprite("ui/UI4_key.png"),
 																	 mnew Sprite("ui/UI4_key_hover.png"),
@@ -409,26 +410,26 @@ namespace Editor
 		return handle;
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::InsertNewKey(float time)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::InsertNewKey(float time)
 	{
-		int idx = mAnimatedValue->AddKey(time, mAnimatedValue->GetValue(time));
+		int idx = mTrack->AddKey(time, mPlayer->GetValue(time));
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
 
 		DataNode keyData;
-		Map<String, Vector<UInt64>> keys = { { mAnimatedValuePath, { mAnimatedValue->GetKeyAt(idx).uid } } };
+		Map<String, Vector<UInt64>> keys = { { mTrackPath, { mTrack->GetKeyAt(idx).uid } } };
 		mHandlesSheet->SerializeKeys(keyData, keys, 0);
 		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::OnPropertyChanged()
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::OnPropertyChanged()
 	{
 		auto time = mTimeline->GetTimeCursor();
 		int keyIdx = -1;
 		int i = 0;
-		for (auto& key : mAnimatedValue->GetKeys())
+		for (auto& key : mTrack->GetKeys())
 		{
 			if (mTimeline->IsSameTime(key.position, time))
 			{
@@ -440,84 +441,85 @@ namespace Editor
 
 		if (keyIdx >= 0)
 		{
-			auto key = mAnimatedValue->GetKeys()[keyIdx];
-			mAnimatedValue->RemoveKeyAt(keyIdx);
+			auto key = mTrack->GetKeys()[keyIdx];
+			mTrack->RemoveKeyAt(keyIdx);
 			key.value = mPropertyValue;
-			mAnimatedValue->AddKey(key);
+			mTrack->AddKey(key);
 		}
 		else
 		{
-			mAnimatedValue->AddKey(time, mPropertyValue);
+			mTrack->AddKey(time, mPropertyValue);
 			InitializeHandles();
 		}
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
 	{
-		auto key = mAnimatedValue->FindKey(keyUid);
+		auto key = mTrack->FindKey(keyUid);
 		key.position -= relativeTime;
 		data.SetValue(key);
 	}
 
-	template<typename AnimatedValueType>
-	UInt64 KeyFramesTrackControl<AnimatedValueType>::DeserializeKey(const DataNode& data, float relativeTime,
+	template<typename AnimationTrackType>
+	UInt64 KeyFramesTrackControl<AnimationTrackType>::DeserializeKey(const DataNode& data, float relativeTime,
 																	bool generateNewUid /*= true*/)
 	{
-		AnimatedValueType::Key key;
+		AnimationTrackType::Key key;
 		data.GetValue(key);
 		key.position += relativeTime;
 
 		if (generateNewUid)
 			key.uid = Math::Random();
 
-		mAnimatedValue->AddKey(key);
+		mTrack->AddKey(key);
 
 		return key.uid;
 	}
 
-	template<typename AnimatedValueType>
-	void KeyFramesTrackControl<AnimatedValueType>::DeleteKey(UInt64 keyUid)
+	template<typename AnimationTrackType>
+	void KeyFramesTrackControl<AnimationTrackType>::DeleteKey(UInt64 keyUid)
 	{
-		int idx = mAnimatedValue->FindKeyIdx(keyUid);
+		int idx = mTrack->FindKeyIdx(keyUid);
 		if (idx >= 0)
-			mAnimatedValue->RemoveKeyAt(idx);
+			mTrack->RemoveKeyAt(idx);
 	}
 
 }
 
-META_TEMPLATES(typename AnimatedValueType)
-CLASS_BASES_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
+META_TEMPLATES(typename AnimationTrackType)
+CLASS_BASES_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 	BASE_CLASS(Editor::ITrackControl);
 }
 END_META;
-META_TEMPLATES(typename AnimatedValueType)
-CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
+META_TEMPLATES(typename AnimationTrackType)
+CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 	PRIVATE_FIELD(mHandles);
-	PRIVATE_FIELD(mAnimatedValuePath);
+	PRIVATE_FIELD(mTrackPath);
 	PRIVATE_FIELD(mTreeControls);
 	PRIVATE_FIELD(mPropertyField);
 	PRIVATE_FIELD(mPropertyValue);
 	PRIVATE_FIELD(mPropertyValueProxy);
 	PRIVATE_FIELD(mAddKeyDotButton);
 	PRIVATE_FIELD(mAddKeyButton);
-	PRIVATE_FIELD(mLastAnimatedValue);
-	PRIVATE_FIELD(mAnimatedValue);
+	PRIVATE_FIELD(mLastValue);
+	PRIVATE_FIELD(mTrack);
+	PRIVATE_FIELD(mPlayer);
 	PRIVATE_FIELD(mTimeline);
 	PRIVATE_FIELD(mHandlesSheet);
 	PRIVATE_FIELD(mDisableHandlesUpdate);
 }
 END_META;
-META_TEMPLATES(typename AnimatedValueType)
-CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimatedValueType>)
+META_TEMPLATES(typename AnimationTrackType)
+CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetAnimatedValue, IAnimatedValue*, const String&);
-	PUBLIC_FUNCTION(AnimatedValueType*, GetAnimatedValue);
+	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
+	PUBLIC_FUNCTION(AnimationTrackType*, GetTrack);
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, UpdateHandles);
 	PUBLIC_FUNCTION(Vector<KeyHandle*>, GetKeyHandles);

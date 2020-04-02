@@ -46,6 +46,8 @@ namespace o2
 	enum class PrimitiveType { Polygon, PolygonWire, Line };
 
 	enum class PixelFormat { R8G8B8A8, R8G8B8 };
+
+	enum class Loop { None, Repeat, PingPong };
 }
 
 PRE_ENUM_META(o2::BaseCorner);
@@ -73,3 +75,5 @@ PRE_ENUM_META(o2::LineType);
 PRE_ENUM_META(o2::PrimitiveType);
 
 PRE_ENUM_META(o2::PixelFormat);
+
+PRE_ENUM_META(o2::Loop);

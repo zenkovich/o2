@@ -10,7 +10,7 @@
 namespace o2
 {
 	class Task;
-	class Animation;
+	class AnimationClip;
 
 	// -----------------------
 	// Tasks manager singleton
@@ -38,9 +38,6 @@ namespace o2
 
 		// Updates tasks and checking for done
 		void Update(float dt);
-
-		// Plays animation task
-		void Play(const Animation& animation, float delay = 0.0f);
 
 	protected:
 		Vector<Task*> mTasks;      // All tasks array

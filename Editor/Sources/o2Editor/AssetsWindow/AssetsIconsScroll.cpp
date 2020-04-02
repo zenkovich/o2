@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "AssetsIconsScroll.h"
 
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/Animation.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/AnimationClip.h"
 #include "o2/Application/Application.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/Types/AnimationAsset.h"
@@ -843,9 +843,9 @@ namespace Editor
 		return mHighlightSprite;
 	}
 
-	void AssetsIconsScrollArea::SetHighlightAnimation(const Animation& animation)
+	void AssetsIconsScrollArea::SetHighlightAnimation(const AnimationClip& animation)
 	{
-		mHighlightAnim = animation;
+		mHighlightAnim.SetClip(animation.CloneAs<AnimationClip>(), true);
 		mHighlightAnim.SetTarget(mHighlightSprite);
 	}
 

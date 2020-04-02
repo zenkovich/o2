@@ -1099,7 +1099,7 @@ namespace Editor
 					continue;
 				}
 
-				const Vec2F* points = key.GetApproximatedPoints();
+				const ApproximationValue* points = key.GetApproximatedPoints();
 				for (int i = 1; i < key.GetApproximatedPointsCount(); i++)
 				{
 					Vec2F a = CurveViewToLocal(points[i - 1], info->viewScale, info->viewOffset);
@@ -2072,9 +2072,9 @@ namespace Editor
 		auto keys = curve->GetKeys();
 		for (int i = 1; i < keys.Count(); i++)
 		{
-			const Vec2F* keyPoints = keys[i].GetApproximatedPoints();
+			const ApproximationValue* keyPoints = keys[i].GetApproximatedPoints();
 			for (int j = 0; j < keys[i].GetApproximatedPointsCount(); j++)
-				approximatedPoints.Add((keyPoints[j] + viewOffset)*viewScale);
+				approximatedPoints.Add(((Vec2F)keyPoints[j] + viewOffset)*viewScale);
 		}
 	}
 

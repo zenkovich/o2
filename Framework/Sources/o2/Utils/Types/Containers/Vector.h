@@ -125,6 +125,9 @@ namespace o2
 		// Removes equal array element
 		void Remove(const _type& value) override;
 
+		// Removes matched array element
+		void Remove(const Function<bool(const _type&)>& match) override;
+
 		// Removes element by iterator
 		Iterator Remove(const Iterator& it);
 
@@ -422,6 +425,19 @@ namespace o2
 	typename Vector<_type>::Iterator Vector<_type>::Remove(const Iterator& it)
 	{
 		return std::vector<_type>::erase(it);
+	}
+
+	template<typename _type>
+	void Vector<_type>::Remove(const Function<bool(const _type&)>& match)
+	{
+		for (auto it = begin(); it != end(); ++it)
+		{
+			if (match(*it))
+			{
+				erase(it);
+				return;
+			}
+		}
 	}
 
 	template<typename _type>

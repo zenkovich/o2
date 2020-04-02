@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "EditorApplication.h"
 
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/AnimatedVector.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Events/EventSystem.h"
@@ -106,7 +106,9 @@ namespace Editor
 		OnResizing();
 
 		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
-		o2EditorAnimationWindow.SetAnimation(&widget->GetStateObject("playing")->animation);
+		o2EditorAnimationWindow.SetAnimation(&widget->GetStateObject("playing")->GetAnimationClip(),
+											 &widget->GetStateObject("playing")->player);
+
 		o2EditorAnimationWindow.SetTarget(widget);
 	}
 

@@ -1,9 +1,8 @@
 #pragma once
-
-#include "AnimatedFloat.h"
-#include "AnimatedValue.h"
-#include "AnimatedVector.h"
-#include "Animation.h"
+#include "o2/Animation/AnimationClip.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 
 namespace o2
 {
@@ -20,7 +19,7 @@ namespace o2
 		~Animate();
 
 		// Animation cast operator. Needs to store as animation
-		operator Animation() const;
+		operator AnimationClip() const;
 
 		// Inserts delay for seconds
 		Animate& Wait(float seconds);
@@ -64,9 +63,6 @@ namespace o2
 		// Rotates object
 		Animate& Rotate(float angle);
 
-		// Invokes function
-		Animate& Invoke(const Function<void()>& function);
-
 		// Sets animation looped
 		Animate& Looped();
 
@@ -95,8 +91,8 @@ namespace o2
 		template<typename T>
 		struct KeyContainer: public IKeyContainer
 		{
-			typename AnimatedValue<T>::Key key;
-			AnimatedValue<T>*              animatedValue;
+			typename AnimationTrack<T>::Key key;
+			AnimationTrack<T>*              animatedValue;
 
 			~KeyContainer() {}
 
@@ -109,40 +105,29 @@ namespace o2
 
 
 	protected:
-		Animation              mAnimation;           // Building animation
+		IObject*               mTarget = nullptr;    // Target animating object
+		AnimationClip          mAnimation;           // Building animation
 		bool                   mKeysApplied = false; // Is stored keys was applied
 		float                  mTime = 0.0f;         // Current sequence time
 		Vector<IKeyContainer*> mKeyContainers;       // Stored keys that applies in For()
 		Function<void()>       mFunction;            // Stored callback that applies in For()
 
-		AnimatedValue<Color4>* mColorAnimatedValue = nullptr;    // Color animated value, stores when needs
-		AnimatedValue<Vec2F>*  mPositionAnimatedValue = nullptr; // Position animated value, stores when needs
-		AnimatedValue<Vec2F>*  mScaleAnimatedValue = nullptr;    // Scale animated value, stores when needs
-		AnimatedValue<float>*  mRotationAnimatedValue = nullptr; // Rotation animated value, stores when needs
+		AnimationTrack<Color4>* mColorAnimatedValue = nullptr;    // Color Animation track, stores when needs
+		AnimationTrack<Vec2F>*  mPositionAnimatedValue = nullptr; // Position Animation track, stores when needs
+		AnimationTrack<Vec2F>*  mScaleAnimatedValue = nullptr;    // Scale Animation track, stores when needs
+		AnimationTrack<float>*  mRotationAnimatedValue = nullptr; // Rotation Animation track, stores when needs
 
 	protected:
-		// Returns animated value for target, or creates it
-		template<typename T>
-		AnimatedValue<T>* GetAnimatedValue(T* target)
-		{
-			auto res = mAnimation.GetAnimationValue(target);
-
-			if (!res)
-				res = mAnimation.AddAnimationValue(target);
-
-			return res;
-		}
-
-		// Checks color animated value: creates them if needed
+		// Checks color Animation track: creates them if needed
 		void CheckColorAnimatedValue();
 
-		// Checks position animated value: creates them if needed
+		// Checks position Animation track: creates them if needed
 		void CheckPositionAnimatedvalue();
 
-		// Checks scale animated value: creates them if needed
+		// Checks scale Animation track: creates them if needed
 		void CheckScaleAnimatedValue();
 
-		// Checks rotate animated value: creates them if needed
+		// Checks rotate Animation track: creates them if needed
 		void CheckRotateAnimatedValue();
 
 		// Checks applied keys: if keys was applied, clears keys containers

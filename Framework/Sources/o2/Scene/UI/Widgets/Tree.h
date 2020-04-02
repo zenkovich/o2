@@ -24,10 +24,10 @@ namespace o2
 		enum class ExpandState { None, Expanding, Collaping };
 
 	public:
-		Function<void*(void*)>         getObjectParentDelegate;      // Getting objects' parent delegate
-		Function<Vector<void*>(void*)> getObjectChildrenDelegate;    // Getting objects' childs count delegate 
-		Function<void(TreeNode*, void*)>    fillNodeDataByObjectDelegate; // Setup tree node item delegate
-		Function<void(TreeNode*, void*)>    freeNodeDataDelegate;         // Free tree node data delegate
+		Function<void*(void*)>           getObjectParentDelegate;      // Getting objects' parent delegate
+		Function<Vector<void*>(void*)>   getObjectChildrenDelegate;    // Getting objects' childs count delegate 
+		Function<void(TreeNode*, void*)> fillNodeDataByObjectDelegate; // Setup tree node item delegate
+		Function<void(TreeNode*, void*)> freeNodeDataDelegate;         // Free tree node data delegate
 
 		Function<String(void*)> getDebugForObject; // Getting debug string for object delegate
 
@@ -142,7 +142,7 @@ namespace o2
 		Sprite* GetHighlightDrawable() const;
 
 		// Sets highlight animation
-		void SetHighlightAnimation(const Animation& animation);
+		void SetHighlightAnimation(const AnimationClip& animation);
 
 		// Sets highlight layout
 		void SetHighlightLayout(const Layout& layout);
@@ -191,7 +191,7 @@ namespace o2
 		struct Node
 		{
 			String     id;
-			void* object;             // Pointer to object
+			void*      object;             // Pointer to object
 			TreeNode*  widget = nullptr;   // Node widget
 			int        level = 0;          // Hierarchy depth level
 			bool       isSelected = false; // Is node selected
@@ -220,9 +220,10 @@ namespace o2
 		// -----------------------------------
 		struct VisibleWidgetDef
 		{
-			void* object;
-			TreeNode*  widget;
-			int        position;
+			void*     object;
+			TreeNode* widget;
+			int       position;
+
 		public:
 
 			bool operator==(const VisibleWidgetDef& other) const;
@@ -242,14 +243,14 @@ namespace o2
 		Vector<Node*> mAllNodes; // All expanded nodes definitions
 
 		Vector<void*> mSelectedObjects; // Selected objects
-		Vector<Node*>      mSelectedNodes;   // Selected nodes definitions
+		Vector<Node*> mSelectedNodes;   // Selected nodes definitions
 
 		Vector<TreeNode*> mNodeWidgetsBuf; // Nodes widgets buffer
 		Vector<Node*>     mNodesBuf;       // Nodes buffer
 
 		Vector<Node*> mVisibleNodes;           // Visible nodes
-		int      mMinVisibleNodeIdx = 0;  // Minimal visible node index
-		int      mMaxVisibleNodeIdx = -1; // Maximum visible node index
+		int           mMinVisibleNodeIdx = 0;  // Minimal visible node index
+		int           mMaxVisibleNodeIdx = -1; // Maximum visible node index
 
 		Vec2F mLastClickPos; // Last click position in scroll space (depends on scroll position)
 
@@ -259,12 +260,12 @@ namespace o2
 		RectF     mCurrentHoverRect;        // Current selection rectangle (for smoothing)
 		RectF     mTargetHoverRect;         // Target selection rectangle (over selected item)	
 
-		bool               mIsDraggingNodes = false;       // Is nodes moving by cursor
-		TreeNode*          mFakeDragNode = nullptr;        // Dragging node
-		Vec2F              mDragOffset;                    // Offset from cursor to dragging node's center
-		TreeNode*          mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
+		bool          mIsDraggingNodes = false;       // Is nodes moving by cursor
+		TreeNode*     mFakeDragNode = nullptr;        // Dragging node
+		Vec2F         mDragOffset;                    // Offset from cursor to dragging node's center
+		TreeNode*     mInsertNodeCandidate = nullptr; // Insertion node candidate when dragging nodes
 		Vector<void*> mBeforeDragSelectedItems;       // Before drag begin selection
-		bool               mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
+		bool          mDragEnded = false;             // Is dragging ended and it needs to call EndDragging
 
 		Vector<void*> mExpandedObjects; // Expanded objects
 
@@ -286,11 +287,11 @@ namespace o2
 		float mNodeExpandTime = 2.0f;   // Node expand time when dragging actors @SERIALIZABLE
 		float mNodeDragIntoZone = 0.3f; // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-		Animation  mHighlightAnim;             // Node highlight animation @SERIALIZABLE
-		Sprite*    mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
-		Layout     mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
-		Node*      mHighlighNode = nullptr;    // Hightlighing node
-		void* mHighlightObject;           // Highlight object
+		AnimationPlayer mHighlightAnim;             // Node highlight animation @SERIALIZABLE
+		Sprite*         mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
+		Layout          mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
+		Node*           mHighlighNode = nullptr;    // Hightlighing node
+		void*           mHighlightObject;           // Highlight object
 		
 		Sprite* mZebraBackLine = nullptr; // Dark zebra line sprite. When it is null, no zebra back doesn't draw @SERIALIZABLE
 
@@ -676,7 +677,7 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(Sprite*, GetHoverDrawable);
 	PUBLIC_FUNCTION(void, SetHoverLayout, const Layout&);
 	PUBLIC_FUNCTION(Sprite*, GetHighlightDrawable);
-	PUBLIC_FUNCTION(void, SetHighlightAnimation, const Animation&);
+	PUBLIC_FUNCTION(void, SetHighlightAnimation, const AnimationClip&);
 	PUBLIC_FUNCTION(void, SetHighlightLayout, const Layout&);
 	PUBLIC_FUNCTION(void, SetZebraBackLine, Sprite*);
 	PUBLIC_FUNCTION(Sprite*, GetZebraBackLine);

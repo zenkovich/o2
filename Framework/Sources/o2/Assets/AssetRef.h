@@ -18,6 +18,9 @@ namespace o2
 		// Copy-constructor
 		AssetRef(const AssetRef& other);
 
+		// Instance reference asset constructor
+		AssetRef(Asset* instance);
+
 		// Constructor from asset path
 		AssetRef(const String& path);
 
@@ -63,6 +66,9 @@ namespace o2
 		// Returns asset type
 		virtual const Type& GetAssetType() const;
 
+		// Sets asset instance
+		void SetInstance(Asset* asset);
+
 		// Creates own asset instance. If asset is empty creates empty instance, 
 		// copies asset if else
 		void CreateInstance();
@@ -105,6 +111,9 @@ namespace o2
 	public:
 		// Default constructor, references to null
 		Ref(): AssetRef() {}
+
+		// Instance reference asset constructor
+		Ref(T* instance): AssetRef(instance) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
 
 		// Copy-constructor
 		Ref(const AssetRef& other): AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
@@ -215,6 +224,7 @@ CLASS_METHODS_META(o2::AssetRef)
 	PUBLIC_FUNCTION(Asset*, Get);
 	PUBLIC_FUNCTION(const Asset*, Get);
 	PUBLIC_FUNCTION(const Type&, GetAssetType);
+	PUBLIC_FUNCTION(void, SetInstance, Asset*);
 	PUBLIC_FUNCTION(void, CreateInstance);
 	PUBLIC_FUNCTION(void, RemoveInstance);
 	PUBLIC_FUNCTION(void, SaveInstance, const String&);

@@ -5,7 +5,7 @@ namespace o2
 {
 
 	Animate::Animate(IObject& object):
-		mAnimation(&object)
+		mTarget(&object)
 	{}
 
 	Animate::~Animate()
@@ -14,7 +14,7 @@ namespace o2
 			delete container;
 	}
 
-	Animate::operator Animation() const
+	Animate::operator AnimationClip() const
 	{
 		return mAnimation;
 	}
@@ -39,8 +39,6 @@ namespace o2
 
 	void Animate::ApplyKeys()
 	{
-		mAnimation.AddTimeEvent(mTime, mFunction);
-
 		for (auto container : mKeyContainers)
 			container->Apply(mTime);
 
@@ -139,7 +137,7 @@ namespace o2
 
 		KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
 		container->animatedValue = mScaleAnimatedValue;
-		container->key = AnimatedValue<Vec2F>::Key(0.0f, scale);
+		container->key = AnimationTrack<Vec2F>::Key(0.0f, scale);
 		mKeyContainers.Add(container);
 
 		return *this;
@@ -154,15 +152,6 @@ namespace o2
 		container->animatedValue = mRotationAnimatedValue;
 		container->key.value = angle;
 		mKeyContainers.Add(container);
-
-		return *this;
-	}
-
-	Animate& Animate::Invoke(const Function<void()>& function)
-	{
-		CheckAppliedKeys();
-
-		mFunction += function;
 
 		return *this;
 	}
@@ -186,14 +175,14 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "color", "mColor", "m_color", "_color" };
 
-		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
-		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
-				mColorAnimatedValue = mAnimation.AddAnimationValue<Color4>(nameVariant);
+				mColorAnimatedValue = mAnimation.AddTrack<Color4>(nameVariant);
 				return;
 			}
 		}
@@ -206,14 +195,14 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "position", "mPosition", "m_position", "_position", "pos" };
 
-		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
-		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
-				mPositionAnimatedValue = mAnimation.AddAnimationValue<Vec2F>(nameVariant);
+				mPositionAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
 				return;
 			}
 		}
@@ -226,14 +215,14 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "scale", "mScale", "m_scale", "_scale" };
 
-		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
-		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
-				mScaleAnimatedValue = mAnimation.AddAnimationValue<Vec2F>(nameVariant);
+				mScaleAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
 				return;
 			}
 		}
@@ -246,14 +235,14 @@ namespace o2
 
 		static Vector<String> nameVariants ={ "angle", "mAngle", "mRotation", "m_angle", "m_rotation", "rotation", "rot" };
 		
-		auto& targetObjType = dynamic_cast<const ObjectType&>(mAnimation.GetTarget()->GetType());
-		void* target = targetObjType.DynamicCastFromIObject(mAnimation.GetTarget());
+		auto& targetObjType = dynamic_cast<const ObjectType&>(mTarget->GetType());
+		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
 			FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
-				mRotationAnimatedValue = mAnimation.AddAnimationValue<float>(nameVariant);
+				mRotationAnimatedValue = mAnimation.AddTrack<float>(nameVariant);
 				return;
 			}
 		}

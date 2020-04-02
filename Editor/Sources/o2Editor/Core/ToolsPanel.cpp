@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "ToolsPanel.h"
 
-#include "o2/Animation/AnimatedFloat.h"
-#include "o2/Animation/AnimatedVector.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/Widgets/Button.h"
@@ -98,19 +98,18 @@ namespace Editor
 		mDevicesList->AddItems({ "iPhone", "Editor", "Simulator" });
 		mDevicesList->selectedItemPos = 0;
 
-		Animation playPanelPlayStateAnim;
-		playPanelPlayStateAnim.SetTarget(mPlayPanel);
+		AnimationClip playPanelPlayStateAnim;
 
-		*playPanelPlayStateAnim.AddAnimationValue<float>("layout/offsetRight") =
-			AnimatedValue<float>::EaseInOut(149.0f, 183.0f, 0.3f);
+		*playPanelPlayStateAnim.AddTrack<float>("layout/offsetRight") =
+			AnimationTrack<float>::EaseInOut(149.0f, 183.0f, 0.3f);
 
-		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddAnimationValue<bool>("child/pause/enabled");
+		auto visiblePauseBtnAnim = playPanelPlayStateAnim.AddTrack<bool>("child/pause/enabled");
 		visiblePauseBtnAnim->AddKey(0.0f, false);
 		visiblePauseBtnAnim->AddKey(0.1f, false);
 		visiblePauseBtnAnim->AddKey(0.11f, true);
 		visiblePauseBtnAnim->AddKey(0.3f, true);
 
-		auto visibleStepBtnAnim = playPanelPlayStateAnim.AddAnimationValue<bool>("child/step/enabled");
+		auto visibleStepBtnAnim = playPanelPlayStateAnim.AddTrack<bool>("child/step/enabled");
 		visibleStepBtnAnim->AddKey(0.0f, false);
 		visibleStepBtnAnim->AddKey(0.25f, false);
 		visibleStepBtnAnim->AddKey(0.26f, true);

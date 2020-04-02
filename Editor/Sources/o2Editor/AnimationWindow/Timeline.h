@@ -44,7 +44,7 @@ namespace Editor
 		void Update(float dt) override;
 
 		// Sets animation. Subscribes on animation duration change, controls playing time
-		void SetAnimation(Animation* animation);
+		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
 
 		// Sets current time scroll in seconds
 		void SetScroll(float scroll);
@@ -122,7 +122,8 @@ namespace Editor
 	private:
 		AnimationWindow* mAnimationWindow = nullptr; // Animation window
 
-		Animation* mAnimation = nullptr; // Animation, used for sibscribing on duration change
+		AnimationPlayer* mPlayer = nullptr;    // Animation player
+		AnimationClip*   mAnimation = nullptr; // Animation, used for sibscribing on duration change
 
 		float mTimeCursor = 0; // Current time of red cursor
 
@@ -156,7 +157,7 @@ namespace Editor
 
 	private:
 		// Updates duration and scrollbars
-		void UpdateDuration();
+		void UpdateDuration(float duration);
 
 		// Draws time scale with scroll and zoom
 		void DrawTimeScale();
@@ -192,6 +193,9 @@ namespace Editor
 		void OnScrolled(float scroll) override;
 
 		friend class AnimationWindow;
+
+		template<typename AnimationTrackType>
+		friend class KeyFramesTrackControl;
 	};
 }
 
@@ -220,6 +224,7 @@ CLASS_FIELDS_META(Editor::AnimationTimeline)
 	PRIVATE_FIELD(mScrollSpeedDecreaseCoef);
 	PRIVATE_FIELD(mScrollBorderBounceCoef);
 	PRIVATE_FIELD(mAnimationWindow);
+	PRIVATE_FIELD(mPlayer);
 	PRIVATE_FIELD(mAnimation);
 	PRIVATE_FIELD(mTimeCursor);
 	PRIVATE_FIELD(mSmoothViewScroll);
@@ -248,7 +253,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetAnimation, Animation*);
+	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*, AnimationPlayer*);
 	PUBLIC_FUNCTION(void, SetScroll, float);
 	PUBLIC_FUNCTION(void, SetViewRange, float, float, bool);
 	PUBLIC_FUNCTION(void, SetTimeCursor, float);
@@ -266,7 +271,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
-	PRIVATE_FUNCTION(void, UpdateDuration);
+	PRIVATE_FUNCTION(void, UpdateDuration, float);
 	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);
 	PRIVATE_FUNCTION(void, UpdateScrolling, float);

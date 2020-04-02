@@ -110,9 +110,9 @@ namespace Editor
 		EditBox* mSearchEditBox;          // Search edit box
 		Label*   mSelectedAssetPathLabel; // Selected asset path label
 
-		AssetsFoldersTree*  mFoldersTree;         // Folders tree			
-		Animation           mFoldersTreeShowAnim; // Folders tree visible animation
-		bool                mFoldersTreeVisible;  // Is folders tree visible
+		AssetsFoldersTree* mFoldersTree;         // Folders tree			
+		AnimationPlayer    mFoldersTreeShowAnim; // Folders tree visible animation
+		bool               mFoldersTreeVisible;  // Is folders tree visible
 
 		AssetsIconsScrollArea* mAssetsGridScroll; // Assets grid scroll
 

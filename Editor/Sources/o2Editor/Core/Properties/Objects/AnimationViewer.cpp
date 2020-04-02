@@ -25,7 +25,7 @@ namespace Editor
 		mLayout->AddChild(mEditButton);
 		mEditButton->SetIndexInSiblings(mLayout->GetChildren().Count() - 1);
 
-		mCurrentAnimation = !targetObjets.IsEmpty() ? dynamic_cast<Animation*>(targetObjets[0].first) : nullptr;
+		mCurrentAnimation = !targetObjets.IsEmpty() ? dynamic_cast<AnimationClip*>(targetObjets[0].first) : nullptr;
 	}
 
 	const Type* AnimationViewer::GetViewingObjectType() const
@@ -35,7 +35,7 @@ namespace Editor
 
 	const Type* AnimationViewer::GetViewingObjectTypeStatic()
 	{
-		return &TypeOf(Animation);
+		return &TypeOf(AnimationClip);
 	}
 
 	void AnimationViewer::OnEditPressed()

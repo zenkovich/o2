@@ -58,6 +58,9 @@ namespace o2
 		// Removes equal array element
 		virtual void Remove(const _type& value) = 0;
 
+		// Removes matched array element
+		virtual void Remove(const Function<bool(const _type&)>& match) = 0;
+
 		// Removes all elements that pass function
 		virtual void RemoveAll(const Function<bool(const _type&)>& match);
 
