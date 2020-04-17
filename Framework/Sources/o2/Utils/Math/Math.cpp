@@ -25,9 +25,14 @@ namespace o2
 						 Lerp(a.right, b.right, coef), Lerp(a.bottom, b.bottom, coef));
 		}
 
-		bool Lerp(const bool& a, const bool& b, float coef)
+		bool Lerp(bool a, bool b, float coef)
 		{
 			return coef > 0.5f ? b : a;
+		}
+
+		bool Lerp(int a, int b, float coef)
+		{
+			return (int)((float)(b - a)*coef) + a;
 		}
 
 		void OrthoProjMatrix(float* mat, float left, float right, float bottom, float top, float nearz, float farz)

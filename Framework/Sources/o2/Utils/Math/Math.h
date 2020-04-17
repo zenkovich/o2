@@ -148,7 +148,9 @@ namespace o2
 
 		RectF Lerp(const RectF& a, const RectF& b, float coef);
 
-		bool Lerp(const bool& a, const bool& b, float coef);
+		bool Lerp(bool a, bool b, float coef);
+
+		bool Lerp(int a, int b, float coef);
 
 		inline bool Equals(float a, float b, float range = FLT_EPSILON)
 		{

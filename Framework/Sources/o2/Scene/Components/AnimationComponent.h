@@ -2,6 +2,7 @@
 
 #include "o2/Animation/AnimationClip.h"
 #include "o2/Animation/AnimationState.h"
+#include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Scene/Component.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Editor/Attributes/DefaultTypeAttribute.h"
@@ -240,6 +241,12 @@ namespace o2
 	{
 		tracks.RemoveAll([&](auto x) { return x.second == value; });
 	}
+
+	template<>
+	void AnimationComponent::TrackMixer<bool>::Update();
+
+	template<>
+	void AnimationComponent::TrackMixer<int>::Update();
 
 	template<typename _type>
 	void AnimationComponent::TrackMixer<_type>::Update()

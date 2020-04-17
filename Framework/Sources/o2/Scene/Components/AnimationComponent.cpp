@@ -280,6 +280,50 @@ namespace o2
 
 		blendOnState->blend = 1.0f - cf;
 	}
+
+	template<>
+	void AnimationComponent::TrackMixer<int>::Update()
+	{
+		AnimationState* firstValueState = tracks[0].first;
+		AnimationTrack<int>::Player* firstValue = tracks[0].second;
+
+		float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
+		float valueSum = (float)firstValue->GetValue();
+
+		for (int i = 1; i < tracks.Count(); i++)
+		{
+			AnimationState* valueState = tracks[i].first;
+			AnimationTrack<int>::Player* value = tracks[i].second;
+
+			weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
+			valueSum += (float)value->GetValue();
+		}
+
+		int resValue = Math::RoundToInt(valueSum / weightsSum);
+		target->SetValue(resValue);
+	}
+	
+	template<>
+	void AnimationComponent::TrackMixer<bool>::Update()
+	{
+		AnimationState* firstValueState = tracks[0].first;
+		AnimationTrack<bool>::Player* firstValue = tracks[0].second;
+	
+		float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
+		float valueSum = firstValue->GetValue() ? 1.0f : 0.0f;
+	
+		for (int i = 1; i < tracks.Count(); i++)
+		{
+			AnimationState* valueState = tracks[i].first;
+			AnimationTrack<bool>::Player* value = tracks[i].second;
+	
+			weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
+			valueSum += value->GetValue() ? 1.0f : 0.0f;
+		}
+	
+		bool resValue = (valueSum / weightsSum) > 0.5f;
+		target->SetValue(resValue);
+	}
 }
 
 DECLARE_CLASS(o2::AnimationComponent);

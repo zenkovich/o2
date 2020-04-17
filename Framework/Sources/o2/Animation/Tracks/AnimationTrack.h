@@ -3,7 +3,6 @@
 #include "o2/Animation/AnimationState.h"
 #include "o2/Animation/IAnimation.h"
 #include "o2/Animation/Tracks/IAnimationTrack.h"
-#include "o2/Scene/Components/AnimationComponent.h"
 #include "o2/Utils/Math/Curve.h"
 #include "o2/Utils/Math/Interpolation.h"
 #include "o2/Utils/Memory/MemoryManager.h"
@@ -199,7 +198,7 @@ namespace o2
 			int   mPrevKey = 0;               // Previous evaluation key index
 			int   mPrevKeyApproximation = 0;  // Previous evaluation key approximation index
 
-			_type*              mTarget = nullptr;      // Animation target value pointer
+			_type* mTarget = nullptr;      // Animation target value pointer
 			Function<void()>    mTargetDelegate;        // Animation target value change event
 			IValueProxy<_type>* mTargetProxy = nullptr; // Animation target proxy pointer
 
@@ -280,7 +279,12 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataNode& node) override;
 	};
+}
 
+#include "o2/Scene/Components/AnimationComponent.h"
+
+namespace o2
+{
 	// ------------------------------
 	// Animation track implementation 
 	// ------------------------------
