@@ -127,7 +127,7 @@ namespace o2
 		int         mAtlasPage;               // Atlas page
 		bool        mReady;                   // Is texture ready to use
 
-		Vector<TextureRef*> mRefs; // Texture references
+		int mRefs = 0; // Texture references
 
 		friend class Render;
 		friend class TextureRef;

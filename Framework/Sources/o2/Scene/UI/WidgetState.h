@@ -25,8 +25,8 @@ namespace o2
 		PROPERTIES(WidgetState);
 		PROPERTY(bool, state, SetState, GetState); // State flag property
 
-		PROPERTY(AnimationAssetRef, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property
-		PROPERTY(AnimationClip, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property
+		PROPERTY(AnimationAssetRef, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property @EDITOR_IGNORE
+		PROPERTY(AnimationClip, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property @EDITOR_IGNORE
 
 	public:
 		Function<void()> onStateFullyTrue;	  // This event calls when state is completely true (at the end of animation)
@@ -51,7 +51,7 @@ namespace o2
 		WidgetState& operator=(bool state);
 
 		// Sets owner widget
-		void SetOwner(Widget* owner);
+		void SetOwner(Widget* owner, bool errors);
 
 		// Sets animation asset
 		void SetAnimationAsset(const AnimationAssetRef& asset);
@@ -83,7 +83,7 @@ namespace o2
 		bool    mState = false;   // Current state @SERIALIZABLE
 		Widget* mOwner = nullptr; // Owner widget pointer
 
-		AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE
+		AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY
 
 		friend class Widget;
 	};
@@ -100,21 +100,21 @@ CLASS_FIELDS_META(o2::WidgetState)
 	PUBLIC_FIELD(player);
 	PUBLIC_FIELD(offStateAnimationSpeed).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(state);
-	PUBLIC_FIELD(animationAsset);
-	PUBLIC_FIELD(animationClip);
+	PUBLIC_FIELD(animationAsset).EDITOR_IGNORE_ATTRIBUTE();
+	PUBLIC_FIELD(animationClip).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(onStateFullyTrue);
 	PUBLIC_FIELD(onStateFullyFalse);
 	PUBLIC_FIELD(onStateBecomesTrue);
 	PUBLIC_FIELD(onStateBecomesFalse);
 	PROTECTED_FIELD(mState).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mOwner);
-	PROTECTED_FIELD(mAnimation).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAnimation).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetState)
 {
 
-	PUBLIC_FUNCTION(void, SetOwner, Widget*);
+	PUBLIC_FUNCTION(void, SetOwner, Widget*, bool);
 	PUBLIC_FUNCTION(void, SetAnimationAsset, const AnimationAssetRef&);
 	PUBLIC_FUNCTION(const AnimationAssetRef&, GetAnimationAsset);
 	PUBLIC_FUNCTION(void, SetAnimationClip, const AnimationClip&);

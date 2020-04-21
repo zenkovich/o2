@@ -50,10 +50,16 @@ namespace Editor
 			mAnimation->onChanged -= THIS_FUNC(OnAnimationChanged);
 
 		if (mPlayer)
+		{
 			mPlayer->onUpdate -= THIS_FUNC(OnAnimationUpdate);
+
+			if (mOwnPlayer)
+				delete mPlayer;
+		}
 
 		mAnimation = animation;
 		mPlayer = player;
+		mOwnPlayer = false;
 
 		if (mAnimation)
 			mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
@@ -77,6 +83,13 @@ namespace Editor
 	void AnimationWindow::SetTarget(ActorRef actor)
 	{
 		mTargetActor = actor;
+
+		if (!mPlayer && mAnimation)
+		{
+			mPlayer = mnew AnimationPlayer(mTargetActor.Get(), mAnimation);
+			mTimeline->SetAnimation(mAnimation, mPlayer);
+			mOwnPlayer = true;
+		}
 	}
 
 	void AnimationWindow::SetCurvesMode(bool enabled)

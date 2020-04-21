@@ -175,7 +175,7 @@ namespace Editor
 	{
 		Widget::Update(dt);
 
-		if (!Math::Equals(mLastValue, mPlayer->GetValue()))
+		if (mPlayer && !Math::Equals(mLastValue, mPlayer->GetValue()))
 		{
 			mPropertyValue = mPlayer->GetValue();
 			mLastValue = mPropertyValue;

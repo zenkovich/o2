@@ -30,6 +30,10 @@ namespace o2
 		return mAnimation;
 	}
 
+	void AnimationState::OnAnimationChanged()
+	{
+		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+	}
 }
 
 DECLARE_CLASS(o2::AnimationState);

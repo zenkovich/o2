@@ -355,7 +355,7 @@ namespace Editor
 			float right = width - layout->GetOffsetLeft();
 			if (auto controls = mTrackControl->GetTreePartControls())
 			{
-				*controls->layout = WidgetLayout::VerStretch(HorAlign::Left, mPropertyBorder, mPropertyBorder, mPropertySize,
+				*controls->layout = WidgetLayout::VerStretch(HorAlign::Left, mPropertyBorder, mPropertyBorder + 1, mPropertySize,
 															 right - mPropertySize - mPropertyBorder);
 			}
 		}

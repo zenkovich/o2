@@ -460,7 +460,7 @@ namespace o2
 	WidgetState* Widget::AddState(WidgetState* state, bool showAnimErrors /*= true*/)
 	{
 		mStates.Add(state);
-		state->SetOwner(this);
+		state->SetOwner(this, showAnimErrors);
 
 		if (state->name == "visible")
 		{

@@ -25,10 +25,10 @@ namespace o2
 		return GetState();
 	}
 
-	void WidgetState::SetOwner(Widget* owner)
+	void WidgetState::SetOwner(Widget* owner, bool errors)
 	{
 		mOwner = owner;
-		player.SetTarget(owner);
+		player.SetTarget(owner, errors);
 		player.relTime = mState ? 1.0f : 0.0f;
 	}
 

@@ -577,8 +577,7 @@ namespace o2
 		if (!IsSingletonInitialzed())
 			return;
 
-		if (!Instance().mChangedObjects.Contains(object))
-			Instance().mChangedObjects.Add(object);
+		Instance().mChangedObjects.Add(object);
 	}
 
 	void Scene::OnObjectDrawn(SceneEditableObject* object)

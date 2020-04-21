@@ -12,6 +12,12 @@ namespace o2
 			mDuration = track->GetDuration();
 			mBeginTime = 0;
 			mEndTime = mDuration;
+
+			track->onKeysChanged += [=]()
+			{ 
+				mDuration = track->GetDuration(); 
+				mEndTime = mDuration; 
+			};
 		}
 	}
 

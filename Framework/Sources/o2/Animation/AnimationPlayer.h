@@ -64,6 +64,9 @@ namespace o2
 		// It is called when removing track from clip
 		void OnClipTrackRemove(IAnimationTrack* track);
 
+		// It is called when clip duration changed
+		void OnClipDurationChanged(float duration);
+
 		friend class AnimationComponent;
 	};
 }
@@ -97,5 +100,6 @@ CLASS_METHODS_META(o2::AnimationPlayer)
 	PROTECTED_FUNCTION(void, BindTrack, const ObjectType*, void*, IAnimationTrack*, bool);
 	PROTECTED_FUNCTION(void, OnClipTrackAdded, IAnimationTrack*);
 	PROTECTED_FUNCTION(void, OnClipTrackRemove, IAnimationTrack*);
+	PROTECTED_FUNCTION(void, OnClipDurationChanged, float);
 }
 END_META;

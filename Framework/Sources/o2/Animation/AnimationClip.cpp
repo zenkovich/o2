@@ -98,7 +98,7 @@ namespace o2
 
 	IAnimationTrack* AnimationClip::AddTrack(const String& path, const Type& type)
 	{
-		auto animTypeName = "o2::AnimatedValue<" + type.GetName() + ">";
+		auto animTypeName = "o2::AnimationTrack<" + type.GetName() + ">";
 		auto animType = dynamic_cast<const ObjectType*>(o2Reflection.GetType(animTypeName));
 		if (!animType)
 		{

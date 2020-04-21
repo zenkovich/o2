@@ -45,7 +45,8 @@ namespace o2
 	}
 
 	AnimationState* AnimationComponent::AddState(AnimationState* state)
-	{		
+	{
+		state->player.SetTarget(mOwner);
 		state->player.mAnimationState = state;
 		state->mOwner = this;
 

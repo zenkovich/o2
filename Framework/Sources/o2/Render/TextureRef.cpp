@@ -17,7 +17,7 @@ namespace o2
 						   Texture::Usage usage /*= Texture::Usage::Default*/)
 	{
 		mTexture = mnew Texture(size, format, usage);
-		mTexture->mRefs.Add(this);
+		mTexture->mRefs++;
 	}
 
 	TextureRef::TextureRef(const String& fileName)
@@ -27,27 +27,27 @@ namespace o2
 		if (!mTexture)
 			mTexture = mnew Texture(fileName);
 
-		mTexture->mRefs.Add(this);
+		mTexture->mRefs++;
 	}
 
 	TextureRef::TextureRef(Bitmap* bitmap)
 	{
 		mTexture = mnew Texture(bitmap);
-		mTexture->mRefs.Add(this);
+		mTexture->mRefs++;
 	}
 
 	TextureRef::TextureRef(const TextureRef& other):
 		mTexture(other.mTexture)
 	{
 		if (mTexture)
-			mTexture->mRefs.Add(this);
+			mTexture->mRefs++;
 	}
 
 	TextureRef::TextureRef(Texture* texture):
 		mTexture(texture)
 	{
 		if (mTexture)
-			mTexture->mRefs.Add(this);
+			mTexture->mRefs++;
 	}
 
 	TextureRef::TextureRef(UID atlasAssetId, int page)
@@ -59,7 +59,7 @@ namespace o2
 		if (!mTexture)
 			mTexture = mnew Texture(atlasAssetId, page);
 
-		mTexture->mRefs.Add(this);
+		mTexture->mRefs++;
 	}
 
 	TextureRef::TextureRef(const String& atlasAssetName, int page)
@@ -79,24 +79,24 @@ namespace o2
 		if (!mTexture)
 			mTexture = mnew Texture(atlasAssetId, page);
 
-		mTexture->mRefs.Add(this);
+		mTexture->mRefs++;
 	}
 
 	TextureRef::~TextureRef()
 	{
 		if (mTexture)
-			mTexture->mRefs.Remove(this);
+			mTexture->mRefs--;
 	}
 
 	TextureRef& TextureRef::operator=(const TextureRef& other)
 	{
 		if (mTexture)
-			mTexture->mRefs.Remove(this);
+			mTexture->mRefs--;
 
 		mTexture = other.mTexture;
 
 		if (mTexture)
-			mTexture->mRefs.Add(this);
+			mTexture->mRefs++;
 
 		return *this;
 	}

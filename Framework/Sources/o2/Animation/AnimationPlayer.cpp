@@ -6,7 +6,8 @@ namespace o2
 	AnimationPlayer::AnimationPlayer(IObject* target /*= nullptr*/, AnimationClip* clip /*= nullptr*/):
 		mTarget(target), mClip(clip)
 	{
-		BindTracks(true);
+		SetTarget(target);
+		SetClip(clip);
 	}
 
 	AnimationPlayer::~AnimationPlayer()
@@ -37,6 +38,7 @@ namespace o2
 		{
 			mClip->onTrackAdded -= THIS_FUNC(OnClipTrackAdded);
 			mClip->onTrackRemove -= THIS_FUNC(OnClipTrackRemove);
+			mClip->onDurationChange -= THIS_FUNC(OnClipDurationChanged);
 		}
 
 		mClip = clip;
@@ -46,6 +48,7 @@ namespace o2
 		{
 			mClip->onTrackAdded += THIS_FUNC(OnClipTrackAdded);
 			mClip->onTrackRemove += THIS_FUNC(OnClipTrackRemove);
+			mClip->onDurationChange += THIS_FUNC(OnClipDurationChanged);
 		}
 
 		BindTracks(true);
@@ -123,6 +126,12 @@ namespace o2
 	void AnimationPlayer::OnClipTrackRemove(IAnimationTrack* track)
 	{
 		mTrackPlayers.Remove([track, this](auto& x) { return x->GetTrack() == track; onTrackPlayerRemove(x); });
+	}
+
+	void AnimationPlayer::OnClipDurationChanged(float duration)
+	{
+		mDuration = duration;
+		mEndTime = duration;
 	}
 
 	void AnimationPlayer::Evaluate()

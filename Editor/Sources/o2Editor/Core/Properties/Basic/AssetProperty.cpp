@@ -141,12 +141,11 @@ namespace Editor
 	void AssetProperty::SetAssetType(const Type* assetType)
 	{
 		mAssetType = assetType;
-		mAvailableToHaveInstance &= assetType->InvokeStatic<bool>("IsReferenceCanOwnInstance");
+		mAvailableToHaveInstance = assetType->InvokeStatic<bool>("IsReferenceCanOwnInstance");
 	}
 
 	void AssetProperty::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
-		mAvailableToHaveInstance = fieldInfo->GetType()->GetUsage() != Type::Usage::Property;
 		IPropertyField::SetFieldInfo(fieldInfo);
 	}
 

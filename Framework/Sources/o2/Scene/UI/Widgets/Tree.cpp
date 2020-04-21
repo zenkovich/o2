@@ -1475,6 +1475,8 @@ namespace o2
 		res->SetEnableForcible(true);
 		Widget::UpdateTransparency();
 
+		mIsNeedUpdateView = false;
+
 		return res;
 	}
 

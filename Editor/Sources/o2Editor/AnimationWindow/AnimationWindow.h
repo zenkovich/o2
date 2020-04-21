@@ -66,6 +66,7 @@ namespace Editor
 
 		ActorRef         mTargetActor;         // Target actor on animation
 		AnimationPlayer* mPlayer = nullptr;    // Animation player
+		bool             mOwnPlayer = false;   // Is player owned by this
 		AnimationClip*   mAnimation = nullptr; // Editing animation
 
 		bool mDisableTimeTracking = false; // When true animation time changes has no effect
@@ -161,6 +162,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mMinTreeViewWidth);
 	PROTECTED_FIELD(mTargetActor);
 	PROTECTED_FIELD(mPlayer);
+	PROTECTED_FIELD(mOwnPlayer);
 	PROTECTED_FIELD(mAnimation);
 	PROTECTED_FIELD(mDisableTimeTracking);
 	PROTECTED_FIELD(mUpPanel);

@@ -3,6 +3,7 @@
 #include "o2/Animation/AnimationMask.h"
 #include "o2/Animation/AnimationPlayer.h"
 #include "o2/Assets/Types/AnimationAsset.h"
+#include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 
@@ -46,8 +47,12 @@ namespace o2
 
 	protected:
 		AnimationComponent* mOwner = nullptr; // Animation state owner component
-		AnimationAssetRef   mAnimation;       // Animation @SERIALIZABLE
-		float               mWeight = 1.0f;   // State weight @SERIALIZABLE
+		AnimationAssetRef   mAnimation;       // Animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
+		float               mWeight = 1.0f;   // State weight @SERIALIZABLE @EDITOR_PROPERTY
+
+	protected:
+		// It is called when animation changed from editor
+		void OnAnimationChanged();
 
 		friend class AnimationComponent;
 		friend class AnimationClip;
@@ -69,8 +74,8 @@ CLASS_FIELDS_META(o2::AnimationState)
 	PUBLIC_FIELD(blend);
 	PUBLIC_FIELD(player);
 	PROTECTED_FIELD(mOwner);
-	PROTECTED_FIELD(mAnimation).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mWeight).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAnimation).EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mWeight).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationState)
@@ -80,5 +85,6 @@ CLASS_METHODS_META(o2::AnimationState)
 	PUBLIC_FUNCTION(float, GetWeight);
 	PUBLIC_FUNCTION(void, SetAnimation, const AnimationAssetRef&);
 	PUBLIC_FUNCTION(const AnimationAssetRef&, GetAnimation);
+	PROTECTED_FUNCTION(void, OnAnimationChanged);
 }
 END_META;

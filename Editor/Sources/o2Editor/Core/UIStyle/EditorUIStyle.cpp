@@ -3536,6 +3536,7 @@ namespace Editor
 		*layout->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 19, 0);
 		layout->baseCorner = BaseCorner::Right;
 		layout->expandHeight = false;
+		layout->spacing = 2;
 		layoutContainer->AddChild(layout);
 
 		auto instanceCaption = o2UI.CreateLabel("instance");

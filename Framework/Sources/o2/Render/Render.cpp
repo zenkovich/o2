@@ -101,7 +101,7 @@ namespace o2
 	{
 		Vector<Texture*> unloadTextures;
 		for (auto texture : mTextures)
-			if (texture->mRefs.Count() == 0)
+			if (texture->mRefs == 0)
 				unloadTextures.Add(texture);
 
 		unloadTextures.ForEach([](auto texture) { delete texture; });
@@ -111,7 +111,7 @@ namespace o2
 	{
 		Vector<Font*> unloadFonts;
 		for (auto font : mFonts)
-			if (font->mRefs.Count() == 0)
+			if (font->mRefs == 0)
 				unloadFonts.Add(font);
 
 		unloadFonts.ForEach([](auto fnt) { delete fnt; });
