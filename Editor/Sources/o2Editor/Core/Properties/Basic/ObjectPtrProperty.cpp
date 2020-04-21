@@ -144,7 +144,7 @@ namespace Editor
 			}));
 		}
 
-		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty());
+		//SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty());
 	}
 
 	void ObjectPtrProperty::CheckViewer()

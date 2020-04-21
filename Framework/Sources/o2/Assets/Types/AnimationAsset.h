@@ -29,7 +29,7 @@ namespace o2
 		AnimationAsset& operator=(const AnimationAsset& asset);
 
 		// Returns extensions string
-		const char* GetFileExtensions() const override;
+		static const char* GetFileExtensions();
 
 		// Returns editor icon
 		static String GetEditorIcon() { return "ui/UI4_anim_file_icon.png"; }
@@ -64,7 +64,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationAsset)
 {
 
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);

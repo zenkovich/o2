@@ -39,7 +39,7 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns extensions string
-		const char* GetFileExtensions() const override;
+		static const char* GetFileExtensions();
 
 		// Returns atlas page's texture file name
 		static String GetPageTextureFileName(const AssetInfo& atlasInfo, UInt pageIdx);
@@ -166,7 +166,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(const Vector<Page>&, GetPages);
 	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const AssetInfo&, UInt);
 	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);

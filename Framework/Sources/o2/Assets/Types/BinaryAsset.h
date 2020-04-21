@@ -31,7 +31,7 @@ namespace o2
 		void SetData(char* data, UInt size);
 
 		// Returns extensions string
-		const char* GetFileExtensions() const override;
+		static const char* GetFileExtensions();
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 96; }
@@ -80,7 +80,7 @@ CLASS_METHODS_META(o2::BinaryAsset)
 	PUBLIC_FUNCTION(char*, GetData);
 	PUBLIC_FUNCTION(UInt, GetDataSize);
 	PUBLIC_FUNCTION(void, SetData, char*, UInt);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);

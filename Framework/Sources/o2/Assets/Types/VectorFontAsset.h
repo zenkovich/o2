@@ -44,7 +44,7 @@ namespace o2
 		void RemoveAllEffects();
 
 		// Returns extensions string
-		const char* GetFileExtensions() const override;
+		static const char* GetFileExtensions();
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 92; }
@@ -124,7 +124,7 @@ CLASS_METHODS_META(o2::VectorFontAsset)
 	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
 	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
 	PUBLIC_FUNCTION(void, RemoveAllEffects);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);

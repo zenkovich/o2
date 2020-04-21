@@ -137,7 +137,7 @@ namespace o2
 		return (Meta*)mInfo.meta;
 	}
 
-	const char* ImageAsset::GetFileExtensions() const
+	const char* ImageAsset::GetFileExtensions()
 	{
 		return "png jpg bmp";
 	}

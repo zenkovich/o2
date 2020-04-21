@@ -22,11 +22,11 @@ namespace o2
 		// Returns meta information
 		Meta* GetMeta() const;
 
-		// Returns extensions string
-		const char* GetFileExtensions() const override;
-
 		// Returns actor
 		Actor* GetActor() const;
+
+		// Returns extensions string
+		static const char* GetFileExtensions();
 
 		// Returns editor icon
 		static String GetEditorIcon() { return "ui/UI4_actor_icon.png"; }
@@ -69,8 +69,8 @@ CLASS_METHODS_META(o2::ActorAsset)
 {
 
 	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_FUNCTION(Actor*, GetActor);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);

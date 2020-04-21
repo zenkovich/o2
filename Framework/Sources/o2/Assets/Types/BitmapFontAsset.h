@@ -26,7 +26,7 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns extensions string
-		const char* GetFileExtensions() const override;
+		static const char* GetFileExtensions();
 
 		// Returns editor sorting weight
 		static int GetEditorSorting() { return 95; }
@@ -73,7 +73,7 @@ CLASS_METHODS_META(o2::BitmapFontAsset)
 {
 
 	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 }

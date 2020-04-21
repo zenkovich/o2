@@ -93,7 +93,7 @@ namespace o2
 		return (Meta*)mInfo.meta;
 	}
 
-	const char* AtlasAsset::GetFileExtensions() const
+	const char* AtlasAsset::GetFileExtensions()
 	{
 		return "atlas";
 	}

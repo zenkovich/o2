@@ -81,7 +81,7 @@ namespace o2
 		}
 	}
 
-	const char* BinaryAsset::GetFileExtensions() const
+	const char* BinaryAsset::GetFileExtensions()
 	{
 		return "bin";
 	}

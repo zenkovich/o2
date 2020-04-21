@@ -21,7 +21,7 @@ namespace o2
 		return *this;
 	}
 
-	const char* AnimationAsset::GetFileExtensions() const
+	const char* AnimationAsset::GetFileExtensions()
 	{
 		return "anim";
 	}

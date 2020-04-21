@@ -384,6 +384,7 @@
     <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.h" />
+    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\EditorApplication.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\EditorConfig.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\EditorScope.h" />
@@ -504,6 +505,7 @@
     <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.cpp" />
+    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\EditorApplication.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\EditorConfig.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\EditorScope.cpp" />

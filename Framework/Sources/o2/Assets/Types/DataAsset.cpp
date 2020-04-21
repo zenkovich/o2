@@ -22,7 +22,7 @@ namespace o2
 		return *this;
 	}
 
-	const char* DataAsset::GetFileExtensions() const
+	const char* DataAsset::GetFileExtensions()
 	{
 		return "xml";
 	}

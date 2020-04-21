@@ -85,7 +85,7 @@ namespace o2
 		((VectorFont*)mFont.mFont)->RemoveAllEffects();
 	}
 
-	const char* VectorFontAsset::GetFileExtensions() const
+	const char* VectorFontAsset::GetFileExtensions()
 	{
 		return "ttf";
 	}

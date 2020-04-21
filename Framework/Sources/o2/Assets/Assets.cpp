@@ -424,13 +424,10 @@ namespace o2
 
 		for (auto type : assetTypes)
 		{
-			auto sample = (Asset*)type->CreateSample();
-			String extensions = sample->GetFileExtensions();
+			String extensions = type->InvokeStatic<const char*>("GetFileExtensions");
 			auto extensionsVec = extensions.Split(" ");
 
-			delete sample;
-
-			for (auto ext : extensionsVec)
+			for (const auto& ext : extensionsVec)
 			{
 				if (mAssetsTypes.ContainsKey(ext))
 				{

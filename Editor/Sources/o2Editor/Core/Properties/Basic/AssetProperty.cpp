@@ -1,8 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "AssetProperty.h"
 
-#include "o2Editor/Core/Properties/Properties.h"
+#include "o2Editor/Core/Dialogs/System/OpenSaveDialog.h"
 #include "o2Editor/Core/Properties/ObjectViewer.h"
+#include "o2Editor/Core/Properties/Properties.h"
 
 namespace Editor
 {
@@ -233,7 +234,17 @@ namespace Editor
 
 	void AssetProperty::OnSaveInstancePressed()
 	{
+		String assetTypeName = o2EditorProperties.MakeSmartFieldName(mAssetType->GetName());
+		String extesions = mAssetType->InvokeStatic<const char*>("GetFileExtensions");
+		auto extensionsSplit = extesions.Split(" ");
 
+		String path = GetSaveFileNameDialog("Save asset", { { assetTypeName, "*." + extensionsSplit[0] } });
+		if (path.IsEmpty()) {
+			return;
+		}
+
+		auto asset = GetProxy(mValuesProxies[0].first);
+		asset->Save(path);
 	}
 
 	void AssetProperty::OnTypeSpecialized(const Type& type)

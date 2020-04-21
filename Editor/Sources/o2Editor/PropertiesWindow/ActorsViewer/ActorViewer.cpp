@@ -49,8 +49,9 @@ namespace Editor
 		*mContentWidget->layout = WidgetLayout::BothStretch();
 
 		auto scrollArea = o2UI.CreateScrollArea("backless");
-		scrollArea->SetViewLayout(Layout::BothStretch());
+		scrollArea->SetViewLayout(Layout::BothStretch(0, 0, 15, 0));
 		scrollArea->SetClippingLayout(Layout::BothStretch());
+		scrollArea->SetEnableScrollsHiding(false);
 		scrollArea->name = "actors scroll area";
 		*scrollArea->layout = WidgetLayout::BothStretch(0, 40, 0, 0);
 		mContentWidget->AddChild(scrollArea);

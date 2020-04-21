@@ -35,7 +35,7 @@ namespace o2
 		return (Meta*)mInfo.meta;
 	}
 
-	const char* ActorAsset::GetFileExtensions() const
+	const char* ActorAsset::GetFileExtensions()
 	{
 		return "proto";
 	}

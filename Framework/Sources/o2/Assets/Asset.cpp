@@ -124,7 +124,7 @@ namespace o2
 			o2Assets.RebuildAssets();
 	}
 
-	const char* Asset::GetFileExtensions() const
+	const char* Asset::GetFileExtensions()
 	{
 		return "";
 	}

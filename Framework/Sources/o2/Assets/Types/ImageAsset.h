@@ -85,7 +85,7 @@ namespace o2
 		Meta* GetMeta() const;
 
 		// Returns extensions string
-		const char* GetFileExtensions() const override;
+		static const char* GetFileExtensions();
 
 		ASSET_TYPE(ImageAsset, Meta);
 
@@ -191,7 +191,7 @@ CLASS_METHODS_META(o2::ImageAsset)
 	PUBLIC_FUNCTION(float, GetHeight);
 	PUBLIC_FUNCTION(TextureRef, GetAtlasTextureRef);
 	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
 	PROTECTED_FUNCTION(void, LoadBitmap);
 }

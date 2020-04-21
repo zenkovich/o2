@@ -26,6 +26,12 @@
     <Filter Include="Sources\o2Editor\Core\Properties\Objects" />
     <Filter Include="Sources\o2Editor\Core\Properties\Objects\Assets" />
     <Filter Include="Sources\o2Editor\Core\Properties\Objects\Components" />
+    <Filter Include="Sources\o2Editor\Core\Dialogs\System">
+      <UniqueIdentifier>{aa3f22a5-4b80-4789-a8d7-b2712c76e790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\o2Editor\Core\Dialogs\System\Windows">
+      <UniqueIdentifier>{41532706-fbc0-4598-ba11-545e96cab0e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
@@ -382,6 +388,9 @@
     <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.h">
       <Filter>Sources\o2Editor\Core\Properties</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h">
+      <Filter>Sources\o2Editor\Core\Dialogs\System</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.cpp">
@@ -734,6 +743,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.cpp">
       <Filter>Sources\o2Editor\Core\Properties</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp">
+      <Filter>Sources\o2Editor\Core\Dialogs\System\Windows</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

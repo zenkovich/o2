@@ -66,7 +66,7 @@ namespace o2
 		void Save(bool rebuildAssetsImmediately = true);
 
 		// Returns extensions string (something like "ext1 ext2 ent asf")
-		virtual const char* GetFileExtensions() const;
+		static const char* GetFileExtensions();
 
 		// Returns editor icon
 		static String GetEditorIcon() { return "ui/UI4_big_file_icon.png"; }
@@ -181,7 +181,7 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(void, Load, const UID&);
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
 	PUBLIC_FUNCTION(void, Save, bool);
-	PUBLIC_FUNCTION(const char*, GetFileExtensions);
+	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
