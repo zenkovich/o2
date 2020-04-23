@@ -106,7 +106,7 @@ namespace Editor
 			}));
 		}
 
-		//SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty());
+		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty() || !mNoHeader);
 	}
 
 	void ObjectProperty::CheckViewer()
@@ -158,6 +158,8 @@ namespace Editor
 			mSpoiler->borderLeft = 0;
 			mSpoiler->borderTop = 0;
 			mSpoiler->Expand();
+
+			mNoHeader = true;
 		}
 		else
 		{
@@ -166,6 +168,8 @@ namespace Editor
 			mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
 			mSpoiler->borderLeft = 10;
 			mSpoiler->borderTop = 5;
+
+			mNoHeader = true;
 		}
 	}
 

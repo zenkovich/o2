@@ -144,7 +144,7 @@ namespace Editor
 			}));
 		}
 
-		//SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty());
+		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty() || !mNoHeader);
 	}
 
 	void ObjectPtrProperty::CheckViewer()
@@ -194,20 +194,28 @@ namespace Editor
 
 			if (fieldInfo->HasAttribute<NoHeaderAttribute>())
 			{
+				mTypeCaption->enabledForcibly = false;
+
 				mSpoiler->SetHeadHeight(0);
 				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = false;
 				mSpoiler->GetInternalWidget("expand")->enabledForcibly = false;
 				mSpoiler->borderLeft = 0;
 				mSpoiler->borderTop = 0;
 				mSpoiler->Expand();
+
+				mNoHeader = true;
 			}
 			else
 			{
+				mTypeCaption->enabledForcibly = true;
+
 				mSpoiler->SetHeadHeight(20);
 				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
 				mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
 				mSpoiler->borderLeft = 10;
 				mSpoiler->borderTop = 3;
+
+				mNoHeader = false;
 			}
 
 			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();

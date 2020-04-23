@@ -80,6 +80,7 @@ namespace Editor
 		const ObjectType* mCurrentObjectType = nullptr; // Type of target objects
 
 		bool mDontDeleteEnabled = false; // When it is true, delete button is disabled
+		bool mNoHeader = false;          // Is no header attribute exists
 
 		TargetsVec               mTargetObjects;          // Target objects
 		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object viewer
@@ -136,6 +137,7 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FIELD(mBasicObjectType);
 	PROTECTED_FIELD(mCurrentObjectType);
 	PROTECTED_FIELD(mDontDeleteEnabled);
+	PROTECTED_FIELD(mNoHeader);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mObjectViewer);
 	PROTECTED_FIELD(mHeaderContainer);

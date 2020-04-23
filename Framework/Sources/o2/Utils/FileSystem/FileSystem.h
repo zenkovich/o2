@@ -89,6 +89,12 @@ namespace o2
 		// Read file and returns result
 		static WString ReadFile(const String& path);
 
+		// Returns a relative path from one path to another
+		static String GetPathRelativeToPath(const String& from, const String& to);
+
+		// Simplifies a path by removing navigation elements such as "." and ".." to produce a direct, well-formed path
+		static String CanonicalizePath(const String& path);
+
 		// Writes file data
 		static void WriteFile(const String& path, const WString& data);
 

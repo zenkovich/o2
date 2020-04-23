@@ -5,10 +5,29 @@
 
 namespace Editor
 {
-	String GetOpenFileNameDialog(const String& title, const Map<String, String>& extensions)
+	String GetOpenFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath /*= ""*/)
 	{
 		char szFile[MAX_PATH];
 		char oldDir[MAX_PATH];
+
+		int filterStrSize = extensions.Sum<int>([](auto& k, auto& v) { return k.Length() + v.Length() + 2; }) + 1;
+		char* filterStr = new char[filterStrSize];
+		filterStr[filterStrSize - 1] = '\0';
+
+		int i = 0;
+		for (auto x : extensions)
+		{
+			memcpy(filterStr + i, x.first.Data(), x.first.Length());
+			i += x.first.Length();
+			filterStr[i++] = '\0';
+
+			memcpy(filterStr + i, x.second.Data(), x.second.Length());
+			i += x.second.Length();
+			filterStr[i++] = '\0';
+		}
+		filterStr[i] = '\0';
+
+		String defaultPathReplaced = defaultPath.ReplacedAll("/", "\\");
 
 		GetCurrentDirectory(MAX_PATH, oldDir);
 
@@ -22,23 +41,9 @@ namespace Editor
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
-		ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT;
-
-		int filterStrSize = extensions.Sum<int>([](auto& k, auto& v) { return k.Length() + v.Length() + 2; }) + 1;
-		char* filterStr = new char[filterStrSize];
-		filterStr[filterStrSize - 1] = '\0';
+		ofn.lpstrInitialDir = defaultPathReplaced.Data();
+		ofn.Flags = OFN_OVERWRITEPROMPT;
 		ofn.lpstrFilter = filterStr;
-
-		int i = 0;
-		for (auto x : extensions)
-		{
-			memcpy(filterStr + i, x.first.Data(), x.first.Length() + 1);
-			i += x.first.Length() + 1;
-
-			memcpy(filterStr + i, x.second.Data(), x.second.Length() + 1);
-			i += x.second.Length() + 1;
-		}
 
 		if (GetOpenFileName(&ofn)==TRUE)
 		{
@@ -49,10 +54,29 @@ namespace Editor
 		return "";
 	}
 
-	String GetSaveFileNameDialog(const String& title, const Map<String, String>& extensions)
+	String GetSaveFileNameDialog(const String& title, const Map<String, String>& extensions, const String& defaultPath /*= ""*/)
 	{
 		char szFile[MAX_PATH];
 		char oldDir[MAX_PATH];
+
+		int filterStrSize = extensions.Sum<int>([](auto& k, auto& v) { return k.Length() + v.Length() + 2; }) + 1;
+		char* filterStr = new char[filterStrSize];
+		filterStr[filterStrSize - 1] = '\0';
+
+		int i = 0;
+		for (auto x : extensions)
+		{
+			memcpy(filterStr + i, x.first.Data(), x.first.Length());
+			i += x.first.Length();
+			filterStr[i++] = '\0';
+
+			memcpy(filterStr + i, x.second.Data(), x.second.Length());
+			i += x.second.Length();
+			filterStr[i++] = '\0';
+		}
+		filterStr[i] = '\0';
+
+		String defaultPathReplaced = defaultPath.ReplacedAll("/", "\\");
 
 		GetCurrentDirectory(MAX_PATH, oldDir);
 
@@ -66,23 +90,9 @@ namespace Editor
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
-		ofn.Flags = OFN_SHOWHELP | OFN_OVERWRITEPROMPT;
-
-		int filterStrSize = extensions.Sum<int>([](auto& k, auto& v) { return k.Length() + v.Length() + 2; }) + 1;
-		char* filterStr = new char[filterStrSize];
-		filterStr[filterStrSize - 1] = '\0';
+		ofn.lpstrInitialDir = defaultPathReplaced.Data();
+		ofn.Flags = OFN_OVERWRITEPROMPT;
 		ofn.lpstrFilter = filterStr;
-
-		int i = 0;
-		for (auto x : extensions)
-		{
-			memcpy(filterStr + i, x.first.Data(), x.first.Length() + 1);
-			i += x.first.Length() + 1;
-
-			memcpy(filterStr + i, x.second.Data(), x.second.Length() + 1);
-			i += x.second.Length() + 1;
-		}
 
 		if (GetSaveFileName(&ofn) == TRUE)
 		{

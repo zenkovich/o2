@@ -8,6 +8,7 @@
 #include "o2/Application/Application.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include <Shlwapi.h>
 
 namespace o2
 {
@@ -240,6 +241,26 @@ namespace o2
 			return false;
 
 		return true;
+	}
+	
+	String FileSystem::GetPathRelativeToPath(const String& from, const String& to)
+	{
+		char szOut[MAX_PATH] = "";
+		PathRelativePathTo(szOut,
+						   from.Data(),
+						   FILE_ATTRIBUTE_DIRECTORY,
+						   to.Data(),
+						   FILE_ATTRIBUTE_NORMAL);
+
+		return szOut;
+	}
+	
+	String FileSystem::CanonicalizePath(const String& path)
+	{
+		char szOut[MAX_PATH] = "";
+		PathCanonicalize(szOut, path.Data());
+
+		return szOut;
 	}
 }
 

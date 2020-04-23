@@ -282,7 +282,7 @@ namespace o2
 	{
 		TCHAR szFileName[MAX_PATH];
 		GetModuleFileName(NULL, szFileName, MAX_PATH);
-		return o2FileSystem.GetParentPath((String)szFileName);
+		return o2FileSystem.CanonicalizePath(o2FileSystem.GetParentPath((String)szFileName));
 	}
 
 

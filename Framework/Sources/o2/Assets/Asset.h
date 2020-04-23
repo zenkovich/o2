@@ -5,6 +5,7 @@
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Editor/Attributes/ExpandedByDefaultAttribute.h"
+#include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
@@ -83,7 +84,7 @@ namespace o2
 		SERIALIZABLE(Asset);
 
 	protected:
-		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT
+		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT @NO_HEADER
 
 		AssetInfo mInfo; // Asset info 
 
@@ -163,7 +164,7 @@ CLASS_FIELDS_META(o2::Asset)
 	PUBLIC_FIELD(fullPath);
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(meta);
-	PUBLIC_FIELD(mMeta).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE();
+	PUBLIC_FIELD(mMeta).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NO_HEADER_ATTRIBUTE();
 	PROTECTED_FIELD(mInfo);
 }
 END_META;

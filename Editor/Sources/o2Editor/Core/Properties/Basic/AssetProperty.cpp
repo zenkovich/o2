@@ -236,15 +236,20 @@ namespace Editor
 	{
 		String assetTypeName = o2EditorProperties.MakeSmartFieldName(mAssetType->GetName());
 		String extesions = mAssetType->InvokeStatic<const char*>("GetFileExtensions");
-		auto extensionsSplit = extesions.Split(" ");
+		auto extension = extesions.Split(" ")[0];
+		String defaultPath = o2Application.GetBinPath() + "\\" + o2Assets.GetAssetsPath().ReplacedAll("/", "\\");
 
-		String path = GetSaveFileNameDialog("Save asset", { { assetTypeName, "*." + extensionsSplit[0] } });
+		String path = GetSaveFileNameDialog("Save asset", { { assetTypeName, "*." + extension } },
+											defaultPath);
 		if (path.IsEmpty()) {
 			return;
 		}
 
+		String relativePath = o2FileSystem.CanonicalizePath(o2FileSystem.GetPathRelativeToPath(defaultPath, path)); 
+		relativePath.ReplaceAll("\\", "/");
+
 		auto asset = GetProxy(mValuesProxies[0].first);
-		asset->Save(path);
+		asset->Save(relativePath + "." + extension);
 	}
 
 	void AssetProperty::OnTypeSpecialized(const Type& type)

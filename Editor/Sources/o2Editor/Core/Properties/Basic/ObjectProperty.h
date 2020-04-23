@@ -87,6 +87,8 @@ namespace Editor
 		Spoiler*                 mSpoiler = nullptr;      // Properties spoiler
 		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object properties viewer
 
+		bool mNoHeader = false; // Is no header attribute exists
+
 	protected:
 		// It is called when property puts in buffer. Here you can release your shared resources
 		void OnFreeProperty() override;
@@ -118,6 +120,7 @@ CLASS_FIELDS_META(Editor::ObjectProperty)
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mObjectViewer);
+	PROTECTED_FIELD(mNoHeader);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectProperty)
