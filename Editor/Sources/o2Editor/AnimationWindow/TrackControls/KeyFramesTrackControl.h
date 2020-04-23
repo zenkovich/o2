@@ -198,10 +198,10 @@ namespace Editor
 		mPlayer = dynamic_cast<TrackPlayerType*>(player);
 
 		if (mTrack)
-			mTrack->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, []() {});
+			mTrack->onKeysChanged += THIS_SUBSCRIPTION(UpdateHandles, [&]() { mTrack = nullptr; });
 
 		if (mPlayer)
-			mPlayer->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, []() {});
+			mPlayer->onUpdate += THIS_SUBSCRIPTION(CheckCanCreateKey, [&]() { mPlayer = nullptr; });
 
 		InitializeHandles();
 		CheckCanCreateKey(mTimeline->GetTimeCursor());

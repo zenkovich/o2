@@ -10,6 +10,12 @@ namespace Editor
 {
 	void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets)
 	{
+		if (this->targets == targets)
+		{
+			Refresh();
+			return;
+		}
+
 		this->targets = targets;
 
 		if (targets.IsEmpty())
@@ -42,6 +48,12 @@ namespace Editor
 
 			kv.second->SetValueAndPrototypeProxy(fieldPointers);
 		}
+	}
+
+	void PropertiesContext::Refresh()
+	{
+		for (auto& kv : properties)
+			kv.second->Refresh();
 	}
 
 	bool PropertiesContext::IsBuiltWIthPrivateProperties() const

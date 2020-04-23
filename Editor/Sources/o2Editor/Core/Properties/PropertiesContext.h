@@ -28,7 +28,11 @@ namespace Editor
 		bool builtWithPrivateProperties = false; // Is properties was built with hidden properties
 
 	public:
+		// Sets targets objects and updates targets in properties
 		void Set(const Vector<Pair<IObject*, IObject*>>& targets);
+
+		// Refreshes properties
+		void Refresh();
 
 		// Returns is properties was built with hidden properties
 		bool IsBuiltWIthPrivateProperties() const;

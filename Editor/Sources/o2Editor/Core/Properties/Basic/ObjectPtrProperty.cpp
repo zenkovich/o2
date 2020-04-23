@@ -139,8 +139,7 @@ namespace Editor
 			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{
-				return Pair<IObject*, IObject*>(GetProxy(x.first),
-												x.second ? GetProxy(x.second) : nullptr);
+				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
 			}));
 		}
 

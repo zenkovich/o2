@@ -46,9 +46,9 @@ namespace o2
 
 		if (mClip)
 		{
-			mClip->onTrackAdded += THIS_FUNC(OnClipTrackAdded);
-			mClip->onTrackRemove += THIS_FUNC(OnClipTrackRemove);
-			mClip->onDurationChange += THIS_FUNC(OnClipDurationChanged);
+			mClip->onTrackAdded += THIS_SUBSCRIPTION(OnClipTrackAdded, [&]() { mClip = nullptr; });
+			mClip->onTrackRemove += THIS_SUBSCRIPTION(OnClipTrackRemove, [&]() { mClip = nullptr; });
+			mClip->onDurationChange += THIS_SUBSCRIPTION(OnClipDurationChanged, [&]() { mClip = nullptr; });
 		}
 
 		BindTracks(true);
