@@ -17,6 +17,8 @@ namespace o2
 
 namespace Editor
 {
+	class PropertiesContext;
+
 	// -------------------------------
 	// Editor property field interface
 	// -------------------------------
@@ -51,6 +53,9 @@ namespace Editor
 
 		// Sets targets proxies
 		virtual void SetValueProxy(const Vector<IAbstractValueProxy*>& targets);
+
+		// Sets parent context
+		virtual void SetParentContext(PropertiesContext* context);
 
 		// Checks common value and fill fields
 		virtual void Refresh() {}
@@ -130,6 +135,8 @@ namespace Editor
 
 	protected:
 		const FieldInfo* mFieldInfo = nullptr; // Specialized field info
+
+		PropertiesContext* mParentContext = nullptr; // Parent context
 
 		bool mRevertable = true; // Is property can be reverted
 
@@ -516,6 +523,7 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
 	PROTECTED_FIELD(mFieldInfo);
+	PROTECTED_FIELD(mParentContext);
 	PROTECTED_FIELD(mRevertable);
 	PROTECTED_FIELD(mValuesProxies);
 	PROTECTED_FIELD(mValuesDifferent);
@@ -531,6 +539,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	PUBLIC_FUNCTION(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
+	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);

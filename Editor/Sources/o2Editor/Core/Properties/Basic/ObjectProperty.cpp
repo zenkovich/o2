@@ -130,6 +130,7 @@ namespace Editor
 			if (objectType)
 			{
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, onChanged);
+				mObjectViewer->SetParentContext(mParentContext);
 				mSpoiler->AddChild(mObjectViewer->GetLayout());
 			}
 		}

@@ -46,6 +46,9 @@ namespace Editor
 		// Returns viewing objects base type by static function
 		static const Type* GetViewingObjectTypeStatic();
 
+		// Sets parent context
+		void SetParentContext(PropertiesContext* context);
+
 		// Returns view widget
 		VerticalLayout* GetLayout() const;
 
@@ -120,6 +123,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
+	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
 	PUBLIC_FUNCTION(VerticalLayout*, GetLayout);
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);

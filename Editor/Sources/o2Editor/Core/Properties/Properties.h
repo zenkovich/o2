@@ -44,29 +44,29 @@ namespace Editor
 		bool IsPrivateFieldsVisible() const;
 
 		// Free properties and put in cache
-		void FreeProperties(PropertiesContext& propertiesInfo);
+		void FreeProperties(PropertiesContext& context);
 
 		// Free property field and put in cache
 		void FreeProperty(IPropertyField* field);
 
 		// Builds layout viewer by type for objects
-		void BuildObjectProperties(VerticalLayout* layout, const Type* type, PropertiesContext& propertiesInfo, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, const Type* type, PropertiesContext& context, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Builds layout viewer by fields
-		void BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& propertiesInfo, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& context, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
-		IPropertyField* BuildField(VerticalLayout* layout, FieldInfo* fieldInfo, PropertiesContext& propertiesInfo, const String& path,
+		IPropertyField* BuildField(VerticalLayout* layout, FieldInfo* fieldInfo, PropertiesContext& context, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
 		IPropertyField* BuildField(VerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path, 
-								   PropertiesContext& propertiesInfo,
+								   PropertiesContext& context,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -100,22 +100,22 @@ namespace Editor
 										const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Creates object field
-		IPropertyField* CreateObjectField(const String& name,
+		IPropertyField* CreateObjectField(const String& name, 
 										  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 										  const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Creates object pointer field
-		IPropertyField* CreateObjectPtrField(const ObjectType* basicType, const String& name,
+		IPropertyField* CreateObjectPtrField(const ObjectType* basicType, const String& name, 
 											 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 											 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Creates vector field
-		IPropertyField* CreateVectorField(const Type* type, const String& name,
+		IPropertyField* CreateVectorField(const Type* type, const String& name, 
 										  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 										  const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Returns object properties viewer
-		IObjectPropertiesViewer* CreateObjectViewer(const Type* type, const String& path,
+		IObjectPropertiesViewer* CreateObjectViewer(const Type* type, const String& path, 
 													const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 													const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -154,7 +154,7 @@ namespace Editor
 		const Type* GetClosesBasedTypeObjectViewer(const Type* type) const;
 
 		// Builds layout viewer by fields without filtering
-		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& propertiesInfo, const String& path,
+		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& context, const String& path,
 						 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 						 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 	};

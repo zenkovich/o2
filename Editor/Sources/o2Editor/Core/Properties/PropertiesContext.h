@@ -20,6 +20,8 @@ namespace Editor
 	class PropertiesContext
 	{
 	public:
+		PropertiesContext* parent = nullptr; // Parent context
+
 		Vector<Pair<IObject*, IObject*>>       targets;    // Last set targets
 		Map<const FieldInfo*, IPropertyField*> properties; // Property info to property field map
 

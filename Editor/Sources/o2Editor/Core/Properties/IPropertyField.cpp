@@ -7,6 +7,7 @@
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/Label.h"
+#include "o2Editor/Core/Properties/PropertiesContext.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor
@@ -42,6 +43,11 @@ namespace Editor
 			[](IAbstractValueProxy* x) { return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(x, nullptr); });
 
 		SetValueAndPrototypeProxy(protoTargets);
+	}
+
+	void IPropertyField::SetParentContext(PropertiesContext* context)
+	{
+		mParentContext = context;
 	}
 
 	void IPropertyField::SetCaption(const WString& text)

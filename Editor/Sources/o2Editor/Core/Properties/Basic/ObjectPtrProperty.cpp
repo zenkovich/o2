@@ -166,7 +166,9 @@ namespace Editor
 
 			if (mCurrentObjectType)
 			{
-				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted, onChanged);
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted, 
+																	  onChanged);
+				mObjectViewer->SetParentContext(mParentContext);
 				mSpoiler->AddChild(mObjectViewer->GetLayout());
 			}
 		}

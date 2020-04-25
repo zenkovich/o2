@@ -38,6 +38,11 @@ namespace Editor
 		return nullptr;
 	}
 
+	void IObjectPropertiesViewer::SetParentContext(PropertiesContext* context)
+	{
+		mPropertiesContext.parent = context;
+	}
+
 	VerticalLayout* IObjectPropertiesViewer::GetLayout() const
 	{
 		return mLayout;

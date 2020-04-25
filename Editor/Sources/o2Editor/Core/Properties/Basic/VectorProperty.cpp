@@ -327,7 +327,10 @@ namespace Editor
 		if (!mValuePropertiesPool.IsEmpty())
 			return mValuePropertiesPool.PopBack();
 
-		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mVectorType->GetElementType(), "Element", onChangeCompleted, onChanged);
+		IPropertyField* res = o2EditorProperties.CreateFieldProperty(mVectorType->GetElementType(), "Element", 
+																	 onChangeCompleted, onChanged);
+		res->SetParentContext(mParentContext);
+
 		res->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"), Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
 
 		if (res)

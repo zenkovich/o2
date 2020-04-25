@@ -100,7 +100,7 @@ namespace Editor
 	}
 
 	IPropertyField* Properties::BuildField(VerticalLayout* layout, FieldInfo* fieldInfo,
-										   PropertiesContext& propertiesInfo, const String& path,
+										   PropertiesContext& context, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -114,13 +114,14 @@ namespace Editor
 			return nullptr;
 
 		fieldWidget->name = fieldInfo->GetName() + " : " + fieldInfo->GetType()->GetName();
+		fieldWidget->SetParentContext(&context);
 		fieldWidget->SetValuePath(path + fieldInfo->GetName());
 		fieldWidget->SetFieldInfo(fieldInfo);
 
 		if (auto invokeOnChangeAttribute = fieldInfo->GetAttribute<InvokeOnChangeAttribute>())
 		{
 			fieldWidget->onChanged += [&, invokeOnChangeAttribute](IPropertyField*) {
-				for (auto target : propertiesInfo.targets) 
+				for (auto target : context.targets) 
 				{
 					auto& targetType = target.first->GetType();
 					auto& targetObjType = dynamic_cast<const ObjectType&>(targetType);
@@ -131,7 +132,7 @@ namespace Editor
 
 		layout->AddChild(fieldWidget);
 
-		propertiesInfo.properties.Add(fieldInfo, fieldWidget);
+		context.properties.Add(fieldInfo, fieldWidget);
 
 		//o2Debug.Log("Field " + path + "/" + fieldInfo->GetName() + " for " + (String)timer.GetDeltaTime());
 
@@ -139,22 +140,22 @@ namespace Editor
 	}
 
 	IPropertyField* Properties::BuildField(VerticalLayout* layout, const Type& objectType, const String& fieldName, const String& path,
-										   PropertiesContext& propertiesInfo, 
+										   PropertiesContext& context, 
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/, 
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		return BuildField(layout, objectType.GetField(fieldName), propertiesInfo, path, onChangeCompleted, onChanged);
+		return BuildField(layout, objectType.GetField(fieldName), context, path, onChangeCompleted, onChanged);
 	}
 
 	void Properties::BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields,
-								 PropertiesContext& propertiesInfo, const String& path,
+								 PropertiesContext& context, const String& path,
 								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
 		Timer timer; 
 
 		for (auto fieldInfo : fields)
-			BuildField(layout, fieldInfo, propertiesInfo, path, onChangeCompleted, onChanged);
+			BuildField(layout, fieldInfo, context, path, onChangeCompleted, onChanged);
 
 		//o2Debug.Log(">>> Fields created for " + (String)timer.GetDeltaTime());
 	}
@@ -192,12 +193,12 @@ namespace Editor
 		return false;
 	}
 
-	void Properties::FreeProperties(PropertiesContext& propertiesInfo)
+	void Properties::FreeProperties(PropertiesContext& context)
 	{
-		for (auto prop : propertiesInfo.properties)
+		for (auto prop : context.properties)
 			FreeProperty(prop.second);
 
-		propertiesInfo.properties.Clear();
+		context.properties.Clear();
 	}
 
 	void Properties::FreeProperty(IPropertyField* field)
@@ -230,15 +231,15 @@ namespace Editor
 	}
 
 	void Properties::BuildObjectProperties(VerticalLayout* layout, const Type* type,
-										   PropertiesContext& propertiesInfo, const String& path,
+										   PropertiesContext& context, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), propertiesInfo, path, onChangeCompleted, onChanged);
+		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), context, path, onChangeCompleted, onChanged);
 	}
 
 	void Properties::BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields,
-										   PropertiesContext& propertiesInfo, const String& path,
+										   PropertiesContext& context, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -247,7 +248,7 @@ namespace Editor
 		Vector<FieldInfo*> regularFields = fields.FindAll(
 			[&](FieldInfo* x) { return IsPropertyVisible(x, false); });
 
-		BuildFields(layout, regularFields, propertiesInfo, path, onChangeCompleted, onChanged);
+		BuildFields(layout, regularFields, context, path, onChangeCompleted, onChanged);
 
 		if (mPrivateVisible)
 		{
@@ -256,7 +257,7 @@ namespace Editor
 
 			if (!privateFields.IsEmpty())
 			{
-				Spoiler* privates = propertiesInfo.privatePropertiesSpoiler;
+				Spoiler* privates = context.privatePropertiesSpoiler;
 
 				if (!privates)
 					privates = layout->GetChildByType<Spoiler>("privates");
@@ -270,19 +271,19 @@ namespace Editor
 				}
 				else privates->SetIndexInSiblings(layout->GetChildren().Count() - 1);
 
-				propertiesInfo.privatePropertiesSpoiler = privates;
-				BuildFields(privates, privateFields, propertiesInfo, path, onChangeCompleted, onChanged);
+				context.privatePropertiesSpoiler = privates;
+				BuildFields(privates, privateFields, context, path, onChangeCompleted, onChanged);
 			}
 		}
-		else if (propertiesInfo.privatePropertiesSpoiler)
+		else if (context.privatePropertiesSpoiler)
 		{
-			propertiesInfo.privatePropertiesSpoiler->SetEnabled(false);
+			context.privatePropertiesSpoiler->SetEnabled(false);
 		}
 
-		propertiesInfo.builtWithPrivateProperties = mPrivateVisible;
+		context.builtWithPrivateProperties = mPrivateVisible;
 	}
 
-	IPropertyField* Properties::CreateFieldProperty(const Type* type, const String& name,
+	IPropertyField* Properties::CreateFieldProperty(const Type* type, const String& name, 
 													const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 													const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -307,7 +308,10 @@ namespace Editor
 		{
 			auto pointerType = dynamic_cast<const PointerType*>(type);
 			if (pointerType->GetUnpointedType()->IsBasedOn((TypeOf(IObject))))
-				return CreateObjectPtrField(dynamic_cast<const ObjectType*>(pointerType->GetUnpointedType()), name, onChangeCompleted, onChanged);
+			{
+				return CreateObjectPtrField(dynamic_cast<const ObjectType*>(pointerType->GetUnpointedType()), name,
+											onChangeCompleted, onChanged);
+			}
 
 			return nullptr;
 		}
@@ -365,15 +369,15 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IPropertyField* Properties::CreateObjectField(const String& name,
+	IPropertyField* Properties::CreateObjectField(const String& name, 
 												  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 												  const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
-		IPropertyField* fieldProperty = nullptr;
+		ObjectProperty* fieldProperty = nullptr;
 
 		const Type* objectType = &TypeOf(IObject);
 		if (mPropertiesPool.ContainsKey(objectType) && mPropertiesPool[objectType].Count() > 0)
-			fieldProperty = mPropertiesPool[objectType].PopBack();
+			fieldProperty = dynamic_cast<ObjectProperty*>(mPropertiesPool[objectType].PopBack());
 		else
 			fieldProperty = mnew ObjectProperty();
 
@@ -384,7 +388,7 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IPropertyField* Properties::CreateObjectPtrField(const ObjectType* basicType, const String& name,
+	IPropertyField* Properties::CreateObjectPtrField(const ObjectType* basicType, const String& name, 
 													 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 													 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -404,7 +408,7 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IPropertyField* Properties::CreateVectorField(const Type* type, const String& name,
+	IPropertyField* Properties::CreateVectorField(const Type* type, const String& name, 
 												  const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 												  const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
@@ -423,7 +427,7 @@ namespace Editor
 		return fieldProperty;
 	}
 
-	IObjectPropertiesViewer* Properties::CreateObjectViewer(const Type* type, const String& path,
+	IObjectPropertiesViewer* Properties::CreateObjectViewer(const Type* type, const String& path, 
 															const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 															const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{

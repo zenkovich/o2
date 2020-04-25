@@ -107,6 +107,7 @@ namespace Editor
 						if (!mAssetObjectViewer)
 						{
 							mAssetObjectViewer = mnew ObjectViewer();
+							mAssetObjectViewer->SetParentContext(mParentContext);
 							mSpoiler->AddChild(mAssetObjectViewer);
 						}
 

@@ -41,6 +41,7 @@ namespace Editor
 			}
 
 			mPropertiesViewer = o2EditorProperties.CreateObjectViewer(objectType, "");
+			mPropertiesViewer->SetParentContext(mParentContext);
 
 			AddChild(mPropertiesViewer->GetLayout());
 		}
@@ -55,6 +56,14 @@ namespace Editor
 			[](IObject* x) { return Pair<IObject*, IObject*>(x, nullptr); });
 
 		Refresh(protoTargets);
+	}
+
+	void ObjectViewer::SetParentContext(PropertiesContext* context)
+	{
+		mParentContext = context;
+
+		if (mPropertiesViewer)
+			mPropertiesViewer->SetParentContext(context);
 	}
 
 	const Type* ObjectViewer::GetViewingObjectType() const
