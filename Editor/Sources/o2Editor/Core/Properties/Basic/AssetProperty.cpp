@@ -111,6 +111,7 @@ namespace Editor
 							mSpoiler->AddChild(mAssetObjectViewer);
 						}
 
+						mCreateInstanceBtn->SetEnableForcible(false);
 						mAssetObjectViewer->SetEnabled(true);
 						mAssetObjectViewer->Refresh(targets);
 					}
@@ -128,6 +129,11 @@ namespace Editor
 		}
 
 		SetState("instance", mAvailableToHaveInstance && allAreInstance && !mValuesDifferent);
+	}
+
+	bool AssetProperty::IsAlwaysRefresh() const
+	{
+		return true;
 	}
 
 	void AssetProperty::SetAssetId(const UID& id)

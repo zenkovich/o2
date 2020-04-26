@@ -2,6 +2,7 @@
 
 #include "o2/Animation/AnimationClip.h"
 #include "o2/Animation/AnimationState.h"
+#include "o2/Animation/Editor/EditableAnimation.h"
 #include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Scene/Component.h"
 #include "o2/Utils/Debug/Debug.h"
@@ -14,7 +15,7 @@ namespace o2
 	// -------------------
 	// Animation component
 	// -------------------
-	class AnimationComponent: public Component
+	class AnimationComponent: public Component, public IEditableAnimation
 	{
 	public:
 		// Default constructor
@@ -95,6 +96,12 @@ namespace o2
 
 		SERIALIZABLE(AnimationComponent);
 
+		// It is called when animation started to edit. It means that animation must be deactivated
+		void BeginAnimationEdit() override;
+
+		// It is called when animation finished editing. ANimation must be reactivated
+		void EndAnimationEdit() override;
+
 	protected:
 		// -------------------------------
 		// Value assigning agent interface
@@ -162,6 +169,8 @@ namespace o2
 
 		BlendState mBlend;  // Current blend parameters
 
+		bool mInEditMode = false; // True when some state animation is editing now, disables update
+
 	protected:
 		// Registers value by path and state
 		template<typename _type>
@@ -180,6 +189,7 @@ namespace o2
 		void OnStatesListChanged();
 
 		friend class AnimationClip;
+		friend class AnimationState;
 		friend class IAnimationTrack;
 
 		template<typename _type>
@@ -274,6 +284,7 @@ namespace o2
 CLASS_BASES_META(o2::AnimationComponent)
 {
 	BASE_CLASS(o2::Component);
+	BASE_CLASS(o2::IEditableAnimation);
 }
 END_META;
 CLASS_FIELDS_META(o2::AnimationComponent)
@@ -281,6 +292,7 @@ CLASS_FIELDS_META(o2::AnimationComponent)
 	PROTECTED_FIELD(mStates).DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mValues);
 	PROTECTED_FIELD(mBlend);
+	PROTECTED_FIELD(mInEditMode);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationComponent)
@@ -307,6 +319,8 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(String, GetCategory);
 	PUBLIC_FUNCTION(String, GetIcon);
+	PUBLIC_FUNCTION(void, BeginAnimationEdit);
+	PUBLIC_FUNCTION(void, EndAnimationEdit);
 	PROTECTED_FUNCTION(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
 	PROTECTED_FUNCTION(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
 	PROTECTED_FUNCTION(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);

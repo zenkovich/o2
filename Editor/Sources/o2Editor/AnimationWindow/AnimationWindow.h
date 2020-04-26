@@ -51,6 +51,9 @@ namespace Editor
 		// Sets editing animation
 		void SetAnimation(AnimationClip* animation, AnimationPlayer* player = nullptr);
 
+		// Sets animation editable
+		void SetAnimationEditable(IEditableAnimation* editable);
+
 		// Sets target actor
 		void SetTarget(ActorRef actor);
 
@@ -68,6 +71,8 @@ namespace Editor
 		AnimationPlayer* mPlayer = nullptr;    // Animation player
 		bool             mOwnPlayer = false;   // Is player owned by this
 		AnimationClip*   mAnimation = nullptr; // Editing animation
+
+		IEditableAnimation* mAnimationEditable = nullptr; // Editable animation holder. Deactivating when editing animation
 
 		bool mDisableTimeTracking = false; // When true animation time changes has no effect
 
@@ -164,6 +169,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mPlayer);
 	PROTECTED_FIELD(mOwnPlayer);
 	PROTECTED_FIELD(mAnimation);
+	PROTECTED_FIELD(mAnimationEditable);
 	PROTECTED_FIELD(mDisableTimeTracking);
 	PROTECTED_FIELD(mUpPanel);
 	PROTECTED_FIELD(mWorkArea);
@@ -192,6 +198,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*, AnimationPlayer*);
+	PUBLIC_FUNCTION(void, SetAnimationEditable, IEditableAnimation*);
 	PUBLIC_FUNCTION(void, SetTarget, ActorRef);
 	PUBLIC_FUNCTION(void, SetCurvesMode, bool);
 	PUBLIC_FUNCTION(bool, IsCurvesMode);

@@ -45,6 +45,9 @@
     <Filter Include="Sources\o2\Animation\Tracks">
       <UniqueIdentifier>{6c51fd04-91f0-4958-940a-eaf109da29ca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\o2\Animation\Editor">
+      <UniqueIdentifier>{9cb38110-64d9-42d4-9a73-a11371a0e976}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
@@ -637,6 +640,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h">
       <Filter>Sources\o2\Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Animation\Editor\EditableAnimation.h">
+      <Filter>Sources\o2\Animation\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

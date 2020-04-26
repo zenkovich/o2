@@ -46,6 +46,21 @@ namespace Editor
 			o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
 
 		o2EditorAnimationWindow.GetWindow()->Focus();
+
+		auto contextIt = mPropertiesContext.parent;
+		while (contextIt)
+		{
+			if (!contextIt->targets.IsEmpty())
+			{
+				if (auto editable = dynamic_cast<IEditableAnimation*>(contextIt->targets[0].first))
+				{
+					o2EditorAnimationWindow.SetAnimationEditable(editable);
+					break;
+				}
+			}
+
+			contextIt = contextIt->parent;
+		}
 	}
 
 }

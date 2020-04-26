@@ -31,6 +31,12 @@ namespace o2
 		// Assign operator
 		AnimationTrack<float>& operator=(const AnimationTrack<float>& other);
 
+		// Returns value at time
+		float GetValue(float position) const;
+
+		// Returns value at time
+		float GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
+
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
 		void BeginKeysBatchChange() override;
@@ -175,12 +181,6 @@ namespace o2
 			// Returns current value
 			float GetValue() const;
 
-			// Returns value at time
-			float GetValue(float time) const;
-
-			// Returns value at time
-			float GetValue(float time, bool direction, int& cacheKey, int& cacheKeyApprox) const;
-
 			IOBJECT(Player);
 
 		protected:
@@ -230,6 +230,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>)
 {
 
+	PUBLIC_FUNCTION(float, GetValue, float);
+	PUBLIC_FUNCTION(float, GetValue, float, bool, int&, int&);
 	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
 	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(float, GetDuration);
@@ -298,8 +300,6 @@ CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
 	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
 	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
 	PUBLIC_FUNCTION(float, GetValue);
-	PUBLIC_FUNCTION(float, GetValue, float);
-	PUBLIC_FUNCTION(float, GetValue, float, bool, int&, int&);
 	PROTECTED_FUNCTION(void, Evaluate);
 	PROTECTED_FUNCTION(void, RegMixer, AnimationState*, const String&);
 }

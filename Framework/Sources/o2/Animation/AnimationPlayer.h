@@ -68,6 +68,7 @@ namespace o2
 		void OnClipDurationChanged(float duration);
 
 		friend class AnimationComponent;
+		friend class AnimationState;
 	};
 }
 

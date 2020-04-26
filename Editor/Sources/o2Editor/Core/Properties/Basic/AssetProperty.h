@@ -99,6 +99,9 @@ namespace Editor
 		// Updates value view
 		void UpdateValueView() override;
 
+		// Is required refresh view every time
+		bool IsAlwaysRefresh() const override;
+
 		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
@@ -162,6 +165,7 @@ CLASS_METHODS_META(Editor::AssetProperty)
 	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(AssetRef, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, UpdateValueView);
+	PROTECTED_FUNCTION(bool, IsAlwaysRefresh);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

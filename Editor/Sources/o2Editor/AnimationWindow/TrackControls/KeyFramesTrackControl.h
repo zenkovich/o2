@@ -413,7 +413,7 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InsertNewKey(float time)
 	{
-		int idx = mTrack->AddKey(time, mPlayer->GetValue(time));
+		int idx = mTrack->AddKey(time, mTrack->GetValue(time)); 
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
 

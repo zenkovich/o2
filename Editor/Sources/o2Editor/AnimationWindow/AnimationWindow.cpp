@@ -30,6 +30,9 @@ namespace Editor
 
 	void AnimationWindow::Update(float dt)
 	{
+		if (mPlayer && mOwnPlayer)
+			mPlayer->Update(dt);
+
 		if (mPlayer && mPlayer->IsPlaying() != mPlayPauseToggle->GetValue())
 			mPlayPauseToggle->SetValue(mPlayer->IsPlaying());
 
@@ -57,9 +60,13 @@ namespace Editor
 				delete mPlayer;
 		}
 
+		if (mAnimationEditable)
+			mAnimationEditable->EndAnimationEdit();
+
 		mAnimation = animation;
 		mPlayer = player;
 		mOwnPlayer = false;
+		mAnimationEditable = nullptr;
 
 		if (mAnimation)
 			mAnimation->onChanged += THIS_FUNC(OnAnimationChanged);
@@ -71,6 +78,8 @@ namespace Editor
 
 			mPlayer->onUpdate += THIS_FUNC(OnAnimationUpdate);
 		}
+		else if (mAnimation)
+			mLoopToggle->SetValue(mAnimation->GetLoop() == Loop::Repeat);
 
 		mPlayPauseToggle->SetValue(false);
 
@@ -78,6 +87,17 @@ namespace Editor
 		mTimeline->SetAnimation(animation, player);
 		mTree->SetAnimation(animation);
 		mCurves->SetAnimation(animation);
+	}
+
+	void AnimationWindow::SetAnimationEditable(IEditableAnimation* editable)
+	{
+		if (mAnimationEditable)
+			mAnimationEditable->EndAnimationEdit();
+
+		mAnimationEditable = editable;
+
+		if (mAnimationEditable)
+			mAnimationEditable->BeginAnimationEdit();
 	}
 
 	void AnimationWindow::SetTarget(ActorRef actor)
@@ -297,6 +317,11 @@ namespace Editor
 	{
 		if (mAnimation)
 			mAnimation->SetLoop(loop ? Loop::Repeat : Loop::None);
+
+		if (mPlayer)
+			mPlayer->SetLoop(loop ? Loop::Repeat : Loop::None);
+
+		o2Scene.OnObjectChanged(mTargetActor.Get());
 	}
 
 	void AnimationWindow::OnSearchEdited(const WString& search)

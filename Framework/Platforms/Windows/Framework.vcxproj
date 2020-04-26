@@ -143,6 +143,7 @@
     <ClInclude Include="..\..\Sources\o2\Animation\AnimationMask.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\AnimationPlayer.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\AnimationState.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Editor\EditableAnimation.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\IAnimation.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.h" />
     <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.h" />

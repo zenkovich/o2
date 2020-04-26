@@ -27,6 +27,18 @@ namespace o2
 		return *this;
 	}
 
+	float AnimationTrack<float>::GetValue(float position) const
+	{
+		int cacheKey = 0;
+		int cacheKeyApprox = 0;
+		return GetValue(position, true, cacheKey, cacheKeyApprox);
+	}
+
+	float AnimationTrack<float>::GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
+	{
+		return curve.Evaluate(position, direction, cacheKey, cacheKeyApprox);
+	}
+
 	void AnimationTrack<float>::BeginKeysBatchChange()
 	{
 		curve.BeginKeysBatchChange();
@@ -264,22 +276,6 @@ namespace o2
 	float AnimationTrack<float>::Player::GetValue() const
 	{
 		return mCurrentValue;
-	}
-
-	float AnimationTrack<float>::Player::GetValue(float time) const
-	{
-		int cacheKey = 0;
-		int cacheKeyApprox = 0;
-		return GetValue(time, true, cacheKey, cacheKeyApprox);
-	}
-
-
-	float AnimationTrack<float>::Player::GetValue(float time, bool direction, int& cacheKey, int& cacheKeyApprox) const
-	{
-		if (mTrack)
-			return mTrack->curve.Evaluate(time, direction, cacheKey, cacheKeyApprox);
-
-		return 0;
 	}
 
 	void AnimationTrack<float>::Player::Evaluate()

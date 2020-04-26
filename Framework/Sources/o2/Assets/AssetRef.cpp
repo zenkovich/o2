@@ -9,7 +9,7 @@ namespace o2
 	{}
 
 	AssetRef::AssetRef(const AssetRef& other) :
-		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter)
+		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter), mAssetOwner(other.mAssetOwner)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;

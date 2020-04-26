@@ -34,6 +34,12 @@ namespace o2
 		// Assign operator
 		AnimationTrack<_type>& operator=(const AnimationTrack<_type>& other);
 
+		// Returns value at time
+		_type GetValue(float position) const;
+
+		// Returns value at time, with cached state
+		_type GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
+
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
 		void BeginKeysBatchChange() override;
@@ -181,12 +187,6 @@ namespace o2
 			// Returns current value
 			_type GetValue() const;
 
-			// Returns value at time
-			_type GetValue(float time) const;
-
-			// Returns value at time, with cached state
-			_type GetValue(float time, bool direction, int& cacheKey, int& cacheKeyApprox) const;
-
 			IOBJECT(Player);
 
 		protected:
@@ -206,10 +206,7 @@ namespace o2
 			// Evaluates value
 			void Evaluate() override;
 
-			// Returns value for specified time
-			_type Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
-
-			// Registering this in animatable value agent
+			// Registering this in animation component values mixer
 			void RegMixer(AnimationState* state, const String& path) override;
 		};
 
@@ -307,6 +304,51 @@ namespace o2
 		onKeysChanged();
 
 		return *this;
+	}
+
+	template<typename _type>
+	_type AnimationTrack<_type>::GetValue(float position) const
+	{
+		int cacheKey = 0, cacheKeyApprox = 0;
+		return GetValue(position, true, cacheKey, cacheKeyApprox);
+	}
+
+	template<typename _type>
+	_type AnimationTrack<_type>::GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
+	{
+		int count = mKeys.Count();
+
+		if (count == 1)
+			return mKeys[0].value;
+		else if (count == 0)
+			return _type();
+
+		int prevCacheKey = cacheKey;
+		int keyLeftIdx = -1, keyRightIdx = -1;
+		SearchKey(mKeys, count, position, keyLeftIdx, keyRightIdx, direction, cacheKey);
+
+		if (keyLeftIdx < 0)
+			return _type();
+
+		const Key& leftKey = mKeys[keyLeftIdx];
+		const Key& rightKey = mKeys[keyRightIdx];
+
+		int segLeftIdx = 0;
+		int segRightIdx = 1;
+
+		if (keyLeftIdx != prevCacheKey)
+			cacheKeyApprox = 0;
+
+		SearchKey(rightKey.mCurveApproxValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
+
+		const ApproximationValue& segLeft = rightKey.mCurveApproxValues[segLeftIdx];
+		const ApproximationValue& segRight = rightKey.mCurveApproxValues[segRightIdx];
+
+		float dist = segRight.position - segLeft.position;
+		float coef = (position - segLeft.position) / dist;
+		float curveCoef = Math::Lerp(segLeft.value, segRight.value, coef);
+
+		return Math::Lerp(leftKey.value, rightKey.value, curveCoef);
 	}
 
 	template<typename _type>
@@ -597,8 +639,8 @@ namespace o2
 
 			for (int j = 0; j < Key::mApproxValuesCount; j++)
 			{
-				float coef = (float)j/(float)(Key::mApproxValuesCount - 1);\
-				endKey.mCurveApproxValues[j] = Bezier(curvea, curveb, curvec, curved, coef);
+				float coef = (float)j/(float)(Key::mApproxValuesCount - 1); \
+					endKey.mCurveApproxValues[j] = Bezier(curvea, curveb, curvec, curved, coef);
 			}
 		}
 
@@ -819,22 +861,11 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type AnimationTrack<_type>::Player::GetValue(float time) const
+	void AnimationTrack<_type>::Player::Evaluate()
 	{
-		int cacheKey = 0, cacheKeyApprox = 0;
-		return Evaluate(time, true, cacheKey, cacheKeyApprox);
-	}
+		mCurrentValue = mTrack->GetValue(mInDurationTime, mInDurationTime > mPrevInDurationTime,
+										 mPrevKey, mPrevKeyApproximation);
 
-	template<typename _type>
-	_type AnimationTrack<_type>::Player::GetValue(float time, bool direction, int& cacheKey, int& cacheKeyApprox) const
-	{
-		return Evaluate(time, direction, cacheKey, cacheKeyApprox);
-	}
-
-	template<typename _type>
-	void AnimationTrack<_type>::Player::Evaluate() 
-	{
-		mCurrentValue = Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
 		mPrevInDurationTime = mInDurationTime;
 
 		if (mTarget)
@@ -844,47 +875,6 @@ namespace o2
 		}
 		else if (mTargetProxy)
 			mTargetProxy->SetValue(mCurrentValue);
-	}
-
-	template<typename _type>
-	_type AnimationTrack<_type>::Player::Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
-	{
-		if (!mTrack)
-			return _type();
-
-		int count = mTrack->mKeys.Count();
-
-		if (count == 1)
-			return mTrack->mKeys[0].value;
-		else if (count == 0)
-			return _type();
-
-		int prevCacheKey = cacheKey;
-		int keyLeftIdx = -1, keyRightIdx = -1;
-		SearchKey(mTrack->mKeys, count, position, keyLeftIdx, keyRightIdx, direction, cacheKey);
-
-		if (keyLeftIdx < 0)
-			return _type();
-
-		const Key& leftKey = mTrack->mKeys[keyLeftIdx];
-		const Key& rightKey = mTrack->mKeys[keyRightIdx];
-
-		int segLeftIdx = 0;
-		int segRightIdx = 1;
-
-		if (keyLeftIdx != prevCacheKey)
-			cacheKeyApprox = 0;
-
-		SearchKey(rightKey.mCurveApproxValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
-
-		const ApproximationValue& segLeft = rightKey.mCurveApproxValues[segLeftIdx];
-		const ApproximationValue& segRight = rightKey.mCurveApproxValues[segRightIdx];
-
-		float dist = segRight.position - segLeft.position;
-		float coef = (position - segLeft.position) / dist;
-		float curveCoef = Math::Lerp(segLeft.value, segRight.value, coef);
-
-		return Math::Lerp(leftKey.value, rightKey.value, curveCoef);
 	}
 
 	template<typename _type>
@@ -913,6 +903,8 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimationTrack<_type>)
 {
 
+	PUBLIC_FUNCTION(_type, GetValue, float);
+	PUBLIC_FUNCTION(_type, GetValue, float, bool, int&, int&);
 	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
 	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(float, GetDuration);
@@ -984,10 +976,7 @@ CLASS_METHODS_META(o2::AnimationTrack<_type>::Player)
 	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
 	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
 	PUBLIC_FUNCTION(_type, GetValue);
-	PUBLIC_FUNCTION(_type, GetValue, float);
-	PUBLIC_FUNCTION(_type, GetValue, float, bool, int&, int&);
 	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(_type, Evaluate, float, bool, int&, int&);
 	PROTECTED_FUNCTION(void, RegMixer, AnimationState*, const String&);
 }
 END_META;

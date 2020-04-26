@@ -252,6 +252,9 @@ namespace Editor
 
 		// Updates value view
 		virtual void UpdateValueView() {}
+
+		// Is required refresh view every time
+		virtual bool IsAlwaysRefresh() const;
 	};
 
 	// -----------------------------
@@ -403,10 +406,16 @@ namespace Editor
 			if (!lastDifferent)
 				SetUnknownValue();
 		}
-		else if (lastCommonValue != newCommonValue || lastDifferent)
+		else if (lastCommonValue != newCommonValue || lastDifferent || IsAlwaysRefresh())
 			SetCommonValue(newCommonValue);
 
 		CheckRevertableState();
+	}
+
+	template<typename _type>
+	bool TPropertyField<_type>::IsAlwaysRefresh() const
+	{
+		return false;
 	}
 
 	template<typename _type>
@@ -597,5 +606,6 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PROTECTED_FUNCTION(void, SetCommonValue, const _type&);
 	PROTECTED_FUNCTION(void, SetValueByUser, const _type&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
+	PROTECTED_FUNCTION(bool, IsAlwaysRefresh);
 }
 END_META;

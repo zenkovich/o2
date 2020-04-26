@@ -54,6 +54,12 @@ namespace o2
 		// It is called when animation changed from editor
 		void OnAnimationChanged();
 
+		// It is called when player has added new track
+		void OnTrackPlayerAdded(IAnimationTrack::IPlayer* trackPlayer);
+
+		// It is called when player is removing track
+		void OnTrackPlayerRemove(IAnimationTrack::IPlayer* trackPlayer);
+
 		friend class AnimationComponent;
 		friend class AnimationClip;
 
@@ -86,5 +92,7 @@ CLASS_METHODS_META(o2::AnimationState)
 	PUBLIC_FUNCTION(void, SetAnimation, const AnimationAssetRef&);
 	PUBLIC_FUNCTION(const AnimationAssetRef&, GetAnimation);
 	PROTECTED_FUNCTION(void, OnAnimationChanged);
+	PROTECTED_FUNCTION(void, OnTrackPlayerAdded, IAnimationTrack::IPlayer*);
+	PROTECTED_FUNCTION(void, OnTrackPlayerRemove, IAnimationTrack::IPlayer*);
 }
 END_META;

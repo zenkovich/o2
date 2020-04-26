@@ -29,6 +29,12 @@ namespace o2
 		// Assign operator
 		AnimationTrack<Vec2F>& operator=(const AnimationTrack<Vec2F>& other);
 
+		// Returns value at time
+		Vec2F GetValue(float position) const;
+
+		// Returns value at time
+		Vec2F GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
+
 		// It is called when beginning keys batch change. After this call all keys modifications will not be update pproximation
 		// Used for optimizing many keys change
 		void BeginKeysBatchChange() override;
@@ -176,12 +182,6 @@ namespace o2
 			// Returns current value
 			Vec2F GetValue() const;
 
-			// Returns value at time
-			Vec2F GetValue(float time) const;
-
-			// Returns value at time
-			Vec2F GetValue(float time, bool direction, int& cacheKey, int& cacheKeyApprox) const;
-
 			IOBJECT(Player);
 
 		protected:
@@ -200,9 +200,6 @@ namespace o2
 		protected:
 			// Evaluates value
 			void Evaluate() override;
-
-			// Returns value for specified time
-			Vec2F Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const;
 
 			// Registering this in animatable value agent
 			void RegMixer(AnimationState* state, const String& path) override;
@@ -298,6 +295,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>)
 {
 
+	PUBLIC_FUNCTION(Vec2F, GetValue, float);
+	PUBLIC_FUNCTION(Vec2F, GetValue, float, bool, int&, int&);
 	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
 	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(float, GetDuration);
@@ -366,10 +365,7 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)
 	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
 	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
 	PUBLIC_FUNCTION(Vec2F, GetValue);
-	PUBLIC_FUNCTION(Vec2F, GetValue, float);
-	PUBLIC_FUNCTION(Vec2F, GetValue, float, bool, int&, int&);
 	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(Vec2F, Evaluate, float, bool, int&, int&);
 	PROTECTED_FUNCTION(void, RegMixer, AnimationState*, const String&);
 }
 END_META;

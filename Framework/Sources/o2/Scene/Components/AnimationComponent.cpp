@@ -31,6 +31,9 @@ namespace o2
 
 	void AnimationComponent::Update(float dt)
 	{
+		if (mInEditMode)
+			return;
+
 		for (auto state : mStates)
 		{
 			if (state->mAnimation)
@@ -52,9 +55,6 @@ namespace o2
 
 		for (auto trackPlayer : state->player.mTrackPlayers)
 			trackPlayer->RegMixer(state, trackPlayer->GetTrack()->path);
-
-		state->player.onTrackPlayerAdded += [=](auto x) { OnStateAnimationTrackAdded(state, x); };
-		state->player.onTrackPlayerRemove += [=](auto x) { OnStateAnimationTrackRemoved(state, x); };
 
 		mStates.Add(state);
 
@@ -227,6 +227,16 @@ namespace o2
 	String AnimationComponent::GetIcon() const
 	{
 		return "ui/UI4_animation_component.png";
+	}
+
+	void AnimationComponent::BeginAnimationEdit()
+	{
+		mInEditMode = true;
+	}
+
+	void AnimationComponent::EndAnimationEdit()
+	{
+		mInEditMode = false;
 	}
 
 	void AnimationComponent::UnregTrack(IAnimationTrack::IPlayer* player, const String& path)

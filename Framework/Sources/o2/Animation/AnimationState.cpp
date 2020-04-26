@@ -7,7 +7,10 @@ namespace o2
 {
 	AnimationState::AnimationState(const String& name):
 		name(name)
-	{}
+	{
+		player.onTrackPlayerAdded = [&](auto track) { OnTrackPlayerAdded(track); };
+		player.onTrackPlayerRemove = [&](auto track) { OnTrackPlayerRemove(track); };
+	}
 
 	void AnimationState::SetWeight(float weight)
 	{
@@ -34,6 +37,19 @@ namespace o2
 	{
 		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
 	}
+
+	void AnimationState::OnTrackPlayerAdded(IAnimationTrack::IPlayer* trackPlayer)
+	{
+		if (mOwner)
+			mOwner->OnStateAnimationTrackAdded(this, trackPlayer);
+	}
+
+	void AnimationState::OnTrackPlayerRemove(IAnimationTrack::IPlayer* trackPlayer)
+	{
+		if (mOwner)
+			mOwner->OnStateAnimationTrackRemoved(this, trackPlayer);
+	}
+
 }
 
 DECLARE_CLASS(o2::AnimationState);

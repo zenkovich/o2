@@ -26,6 +26,82 @@ namespace o2
 		return *this;
 	}
 
+	Vec2F AnimationTrack<Vec2F>::GetValue(float position) const
+	{
+		int cacheKey = 0, cacheKeyApporx = 0;
+		return GetValue(position, true, cacheKey, cacheKeyApporx);
+	}
+
+	Vec2F AnimationTrack<Vec2F>::GetValue(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
+	{
+		int count = mKeys.Count();
+
+		if (count == 1)
+			return mKeys[0].value;
+		else if (count == 0)
+			return Vec2F();
+
+		int prevCacheKey = cacheKey;
+		int keyLeftIdx = -1, rightKeyIdx = -1;
+		SearchKey(mKeys, count, position, keyLeftIdx, rightKeyIdx, direction, cacheKey);
+
+		if (keyLeftIdx < 0)
+			return Vec2F();
+
+		const Key& leftKey = mKeys[keyLeftIdx];
+		const Key& rightKey = mKeys[rightKeyIdx];
+
+		if (Math::Equals(rightKey.mApproxTotalLength, 0.0f, 0.001f))
+			return rightKey.value;
+
+		float curveCoef = 0.0f;
+		{
+			int segLeftIdx = 0;
+			int segRightIdx = 1;
+
+			if (keyLeftIdx != prevCacheKey)
+				cacheKeyApprox = 0;
+
+			SearchKey(rightKey.mCurveApproxValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
+
+			const ApproximationValue& segLeft = rightKey.mCurveApproxValues[segLeftIdx];
+			const ApproximationValue& segRight = rightKey.mCurveApproxValues[segRightIdx];
+
+			float dist = segRight.position - segLeft.position;
+			float coef = (position - segLeft.position)/dist;
+
+			cacheKey = keyLeftIdx;
+			cacheKeyApprox = segLeftIdx;
+
+			curveCoef = Math::Lerp(segLeft.value, segRight.value, coef);
+		}
+
+		float keyCoef = Math::Lerp(leftKey.position, rightKey.position, curveCoef);
+
+		float lengthSum = 0.0f;
+		float posLength = rightKey.mApproxTotalLength*curveCoef;
+
+		int segBeg = 0;
+		int segEnd = 1;
+		for (int i = 1; i < Key::mApproxValuesCount; i++)
+		{
+			segBeg = i - 1;
+			segEnd = i;
+
+			lengthSum += rightKey.mApproxLengths[i];
+
+			if (lengthSum > posLength)
+				break;
+		}
+
+		float segCoef = (posLength - (lengthSum - rightKey.mApproxLengths[segEnd]))/rightKey.mApproxLengths[segEnd];
+
+		Vec2F begs = rightKey.mApproxValues[segBeg];
+		Vec2F ends = rightKey.mApproxValues[segEnd];
+
+		return Math::Lerp(begs, ends, segCoef);
+	}
+
 	void AnimationTrack<Vec2F>::BeginKeysBatchChange()
 	{
 		mBatchChange = true;
@@ -516,20 +592,11 @@ namespace o2
 		return mTrack;
 	}
 
-	Vec2F AnimationTrack<Vec2F>::Player::GetValue(float time) const
-	{
-		int cacheKey = 0, cacheKeyApporx = 0;
-		return Evaluate(time, true, cacheKey, cacheKeyApporx);
-	}
-
-	Vec2F AnimationTrack<Vec2F>::Player::GetValue(float time, bool direction, int& cacheKey, int& cacheKeyApprox) const
-	{
-		return Evaluate(time, direction, cacheKey, cacheKeyApprox);
-	}
-
 	void AnimationTrack<Vec2F>::Player::Evaluate()
 	{
-		mCurrentValue = Evaluate(mInDurationTime, mInDurationTime > mPrevInDurationTime, mPrevKey, mPrevKeyApproximation);
+		mCurrentValue = mTrack->GetValue(mInDurationTime, mInDurationTime > mPrevInDurationTime, 
+										 mPrevKey, mPrevKeyApproximation);
+
 		mPrevInDurationTime = mInDurationTime;
 
 		if (mTarget)
@@ -539,79 +606,6 @@ namespace o2
 		}
 		else if (mTargetProxy)
 			mTargetProxy->SetValue(mCurrentValue);
-	}
-
-	Vec2F AnimationTrack<Vec2F>::Player::Evaluate(float position, bool direction, int& cacheKey, int& cacheKeyApprox) const
-	{
-		if (!mTrack)
-			return Vec2F();
-
-		int count = mTrack->mKeys.Count();
-
-		if (count == 1)
-			return mTrack->mKeys[0].value;
-		else if (count == 0)
-			return Vec2F();
-
-		int prevCacheKey = cacheKey;
-		int keyLeftIdx = -1, rightKeyIdx = -1;
-		SearchKey(mTrack->mKeys, count, position, keyLeftIdx, rightKeyIdx, direction, cacheKey);
-
-		if (keyLeftIdx < 0)
-			return Vec2F();
-
-		const Key& leftKey = mTrack->mKeys[keyLeftIdx];
-		const Key& rightKey = mTrack->mKeys[rightKeyIdx];
-
-		if (Math::Equals(rightKey.mApproxTotalLength, 0.0f, 0.001f))
-			return rightKey.value;
-
-		float curveCoef = 0.0f;
-		{
- 			int segLeftIdx = 0;
- 			int segRightIdx = 1;
-
-			if (keyLeftIdx != prevCacheKey)
-				cacheKeyApprox = 0;
-
-			SearchKey(rightKey.mCurveApproxValues, Key::mApproxValuesCount, position, segLeftIdx, segRightIdx, direction, cacheKeyApprox);
-
-			const ApproximationValue& segLeft = rightKey.mCurveApproxValues[segLeftIdx];
-			const ApproximationValue& segRight = rightKey.mCurveApproxValues[segRightIdx];
-
-			float dist = segRight.position - segLeft.position;
-			float coef = (position - segLeft.position)/dist;
-
-			cacheKey = keyLeftIdx;
-			cacheKeyApprox = segLeftIdx;
-
-			curveCoef = Math::Lerp(segLeft.value, segRight.value, coef);
-		}
-
-		float keyCoef = Math::Lerp(leftKey.position, rightKey.position, curveCoef);
-
-		float lengthSum = 0.0f;
-		float posLength = rightKey.mApproxTotalLength*curveCoef;
-
-		int segBeg = 0;
-		int segEnd = 1;
-		for (int i = 1; i < Key::mApproxValuesCount; i++)
-		{
-			segBeg = i - 1;
-			segEnd = i;
-
-			lengthSum += rightKey.mApproxLengths[i];
-
-			if (lengthSum > posLength)
-				break;
-		}
-
-		float segCoef = (posLength - (lengthSum - rightKey.mApproxLengths[segEnd]))/rightKey.mApproxLengths[segEnd];
-
-		Vec2F begs = rightKey.mApproxValues[segBeg];
-		Vec2F ends = rightKey.mApproxValues[segEnd];
-
-		return Math::Lerp(begs, ends, segCoef);
 	}
 
 	void AnimationTrack<Vec2F>::Player::RegMixer(AnimationState* state, const String& path)
