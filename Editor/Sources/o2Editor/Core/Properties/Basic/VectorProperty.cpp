@@ -49,19 +49,24 @@ namespace Editor
 		if (mSpoiler)
 			mSpoiler->onExpand = THIS_FUNC(OnExpand);
 
+		mSpoiler->borderTop = 5;
+
+		mHeaderContainer = mnew HorizontalLayout();
+		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 20, 0);
+		mHeaderContainer->baseCorner = BaseCorner::Right;
+		mHeaderContainer->expandHeight = false;
+		mHeaderContainer->SetInternalParent(mSpoiler, false);
+
 		// Count property
 		mCountProperty = mSpoiler->FindChildByType<IntegerProperty>(false);
 		if (!mCountProperty)
-		{
-			mCountProperty = dynamic_cast<IntegerProperty*>
-				(o2EditorProperties.CreateFieldProperty(&TypeOf(int), "Count"));
-		}
+			mCountProperty = o2UI.CreateWidget<IntegerProperty>();
 
 		if (mCountProperty)
 		{
-			if (mSpoiler)
-				mSpoiler->AddChild(mCountProperty);
+			mHeaderContainer->AddChild(mCountProperty);
 
+			mCountProperty->layout->maxWidth = 100;
 			mCountProperty->SetValue(0);
 			mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
 		}
@@ -286,11 +291,31 @@ namespace Editor
 	void VectorProperty::SetCaption(const WString& text)
 	{
 		mSpoiler->SetCaption(text);
+
+		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
+		if (spoilerCaptionLayer)
+		{
+			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
+			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+		}
 	}
 
 	WString VectorProperty::GetCaption() const
 	{
 		return mSpoiler->GetCaption();
+	}
+
+	Button* VectorProperty::GetRemoveButton()
+	{
+		if (!mRemoveBtn)
+		{
+			mRemoveBtn = o2UI.CreateWidget<Button>("remove small");
+			mRemoveBtn->layout->maxWidth = 20;
+			mRemoveBtn->layout->minHeight = 20;
+			mHeaderContainer->AddChild(mRemoveBtn, 0);
+		}
+
+		return mRemoveBtn;
 	}
 
 	void VectorProperty::Expand()

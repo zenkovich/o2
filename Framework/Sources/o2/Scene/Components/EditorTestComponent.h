@@ -83,6 +83,8 @@ namespace o2
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
 		Vector<AnimationAssetRef> mAssetsVector;               // @SERIALIZABLE
 
+		Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
+
 		Map<String, String> mDictionary;    // @SERIALIZABLE
 		float mFloat2;					           // @SERIALIZABLE
 		float mFloat3;					           // @SERIALIZABLE
@@ -148,6 +150,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mTestInsideptrsVector).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActorVector).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mAssetsVector).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mVectorOfVector).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDictionary).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mFloat2).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mFloat3).SERIALIZABLE_ATTRIBUTE();

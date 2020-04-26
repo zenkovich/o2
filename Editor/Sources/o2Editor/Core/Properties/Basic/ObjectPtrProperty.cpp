@@ -214,7 +214,7 @@ namespace Editor
 				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
 				mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
 				mSpoiler->borderLeft = 10;
-				mSpoiler->borderTop = 3;
+				mSpoiler->borderTop = 2;
 
 				mNoHeader = false;
 			}

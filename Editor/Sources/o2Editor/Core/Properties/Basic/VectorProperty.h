@@ -50,6 +50,9 @@ namespace Editor
 		// Returns property caption
 		WString GetCaption() const override;
 
+		// Adds remove button
+		Button* GetRemoveButton() override;
+
 		// Specializes vector type
 		void SpecializeType(const Type* type);
 
@@ -100,6 +103,8 @@ namespace Editor
 
 		bool mCountDifferents = false; // Is targets counts of elements are different
 		int  mCountOfElements = 0;     // Common count of elements
+
+		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
 
 		Widget* mAddButtonContainer = nullptr; // Add button container, located under all elements
 		Button* mAddButton = nullptr;          // Add button, adds new element at end
@@ -160,6 +165,7 @@ CLASS_FIELDS_META(Editor::VectorProperty)
 	PROTECTED_FIELD(mCountProperty);
 	PROTECTED_FIELD(mCountDifferents);
 	PROTECTED_FIELD(mCountOfElements);
+	PROTECTED_FIELD(mHeaderContainer);
 	PROTECTED_FIELD(mAddButtonContainer);
 	PROTECTED_FIELD(mAddButton);
 	PROTECTED_FIELD(mIsRefreshing);
@@ -173,6 +179,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(Button*, GetRemoveButton);
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
