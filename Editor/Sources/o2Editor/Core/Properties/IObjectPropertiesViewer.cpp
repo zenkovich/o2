@@ -43,6 +43,9 @@ namespace Editor
 		mPropertiesContext.parent = context;
 	}
 
+	void IObjectPropertiesViewer::Prepare()
+	{}
+
 	VerticalLayout* IObjectPropertiesViewer::GetLayout() const
 	{
 		return mLayout;

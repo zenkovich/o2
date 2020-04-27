@@ -461,6 +461,7 @@ namespace Editor
 			mObjectPropertiesViewersPool.Add(type, Vector<IObjectPropertiesViewer*>());
 
 		mObjectPropertiesViewersPool[type].Add(viewer);
+		viewer->OnFree();
 		viewer->GetLayout()->SetParent(nullptr);
 	}
 

@@ -45,6 +45,8 @@ namespace Editor
 															THIS_FUNC(OnPropertyChanged));
 
 			mSpoiler->AddChild(mViewer->GetLayout());
+
+			mViewer->Prepare();
 		}
 
 		if (mViewer)

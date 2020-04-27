@@ -3216,7 +3216,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "animation state");
 	}
 
-	void EditorUIStyleBuilder::RebuildAnimationComponentViewerPlayToggle()
+	void EditorUIStyleBuilder::RebuildAnimationStateViewerPlayToggle()
 	{
 		Toggle* sample = mnew Toggle();
 		auto playRootIconLayer = sample->AddLayer("playRootIcon", nullptr);
@@ -3258,10 +3258,10 @@ namespace Editor
 
 		sample->AddState("value", valueBtnPressAnim);
 
-		o2UI.AddWidgetStyle(sample, "animation component play-stop");
+		o2UI.AddWidgetStyle(sample, "animation state play-stop");
 	}
 
-	void EditorUIStyleBuilder::RebuildAnimationComponentViewerLoopToggle()
+	void EditorUIStyleBuilder::RebuildAnimationStateViewerLoopToggle()
 	{
 		Toggle* sample = mnew Toggle();
 		auto loopRootIconLayer = sample->AddLayer("loopRootIcon", nullptr);
@@ -3303,10 +3303,10 @@ namespace Editor
 
 		sample->AddState("value", valueAnim);
 
-		o2UI.AddWidgetStyle(sample, "animation component loop");
+		o2UI.AddWidgetStyle(sample, "animation state loop");
 	}
 
-	void EditorUIStyleBuilder::RebuildAnimationComponentViewerProgressBar()
+	void EditorUIStyleBuilder::RebuildAnimationStateViewerProgressBar()
 	{
 		HorizontalProgress* sample = mnew HorizontalProgress();
 		sample->layout->minSize = Vec2F(5, 5);
@@ -3335,7 +3335,7 @@ namespace Editor
 
 		sample->SetOrientation(HorizontalProgress::Orientation::Right);
 
-		o2UI.AddWidgetStyle(sample, "animation component bar");
+		o2UI.AddWidgetStyle(sample, "animation state bar");
 	}
 
 	void EditorUIStyleBuilder::RebuildFloatProperty()

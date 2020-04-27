@@ -129,10 +129,10 @@ namespace Editor
 			}
 		}
 
+		CheckViewer();
+
 		if (!mSpoiler->IsExpanded())
 			return;
-
-		CheckViewer();
 
 		if (mObjectViewer)
 		{
@@ -170,6 +170,8 @@ namespace Editor
 																	  onChanged);
 				mObjectViewer->SetParentContext(mParentContext);
 				mSpoiler->AddChild(mObjectViewer->GetLayout());
+
+				mObjectViewer->Prepare();
 			}
 		}
 	}

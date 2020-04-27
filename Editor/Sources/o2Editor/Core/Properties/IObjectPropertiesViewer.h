@@ -49,6 +49,9 @@ namespace Editor
 		// Sets parent context
 		void SetParentContext(PropertiesContext* context);
 
+		// It is called when viewer preparing to initialize properties
+		virtual void Prepare();
+
 		// Returns view widget
 		VerticalLayout* GetLayout() const;
 
@@ -66,8 +69,13 @@ namespace Editor
 		                                                    // inChangeCompleted from this with full combined path
 
 	protected:
+		// It is called when viewer freeing
+		virtual void OnFree() {}
+
 		// It is called when some child field were changed
 		void OnFieldChangeCompleted(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after);
+
+		friend class Properties;
 	};
 
 	// --------------------------------------
@@ -124,8 +132,10 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
 	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
+	PUBLIC_FUNCTION(void, Prepare);
 	PUBLIC_FUNCTION(VerticalLayout*, GetLayout);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PROTECTED_FUNCTION(void, OnFree);
 	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
 }
 END_META;

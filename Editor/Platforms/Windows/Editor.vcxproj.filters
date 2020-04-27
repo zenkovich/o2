@@ -214,9 +214,6 @@
     <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h">
       <Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationComponentViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h">
       <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
     </ClInclude>
@@ -390,6 +387,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h">
       <Filter>Sources\o2Editor\Core\Dialogs\System</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h">
+      <Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -570,9 +570,6 @@
     <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp">
       <Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationComponentViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp">
       <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
     </ClCompile>
@@ -746,6 +743,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp">
       <Filter>Sources\o2Editor\Core\Dialogs\System\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp">
+      <Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

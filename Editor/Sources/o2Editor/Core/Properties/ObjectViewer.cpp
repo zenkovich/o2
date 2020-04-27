@@ -42,8 +42,8 @@ namespace Editor
 
 			mPropertiesViewer = o2EditorProperties.CreateObjectViewer(objectType, "");
 			mPropertiesViewer->SetParentContext(mParentContext);
-
 			AddChild(mPropertiesViewer->GetLayout());
+			mPropertiesViewer->Prepare();
 		}
 
 		if (mPropertiesViewer)

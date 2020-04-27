@@ -42,8 +42,8 @@ namespace Editor
 				o2EditorProperties.FreeObjectViewer(mViewer);
 
 			mViewer = o2EditorProperties.CreateObjectViewer(mActorType, "");
-
 			mSpoiler->AddChild(mViewer->GetLayout());
+			mViewer->Prepare();
 		}
 
 		if (mViewer)

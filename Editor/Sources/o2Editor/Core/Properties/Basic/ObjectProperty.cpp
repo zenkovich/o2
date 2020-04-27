@@ -86,9 +86,6 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		if (!mSpoiler->IsExpanded())
-			return;
-
 		for (auto& pair : mTargetObjects)
 		{
 			pair.first.Refresh();
@@ -96,6 +93,9 @@ namespace Editor
 		}
 
 		CheckViewer();
+
+		if (!mSpoiler->IsExpanded())
+			return;
 
 		if (mObjectViewer)
 		{
@@ -129,9 +129,12 @@ namespace Editor
 
 			if (objectType)
 			{
-				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, onChanged);
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, 
+																	  onChanged);
+
 				mObjectViewer->SetParentContext(mParentContext);
 				mSpoiler->AddChild(mObjectViewer->GetLayout());
+				mObjectViewer->Prepare();
 			}
 		}
 	}
