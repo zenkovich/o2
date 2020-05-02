@@ -462,7 +462,7 @@ namespace Editor
 
 		mObjectPropertiesViewersPool[type].Add(viewer);
 		viewer->OnFree();
-		viewer->GetLayout()->SetParent(nullptr);
+		viewer->GetSpoiler()->SetParent(nullptr);
 	}
 
 	String Properties::MakeSmartFieldName(const String& fieldName)

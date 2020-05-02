@@ -21,12 +21,6 @@ namespace Editor
 	class ImageAssetViewer : public DefaultObjectPropertiesViewer
 	{
 	public:
-		// Default constructor. Initializes fields controls
-		ImageAssetViewer();
-
-		// Refreshing controls and properties by target objects
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
 
@@ -37,6 +31,13 @@ namespace Editor
 
 	private:
 		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
+
+	private:
+		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+
+		// It is called when viewer is refreshed
+		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 }
 
@@ -54,9 +55,11 @@ CLASS_METHODS_META(Editor::ImageAssetViewer)
 {
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
+	PRIVATE_FUNCTION(void, RebuildProperties, _tmp1);
+	PRIVATE_FUNCTION(void, OnRefreshed, _tmp2);
 }
 END_META;

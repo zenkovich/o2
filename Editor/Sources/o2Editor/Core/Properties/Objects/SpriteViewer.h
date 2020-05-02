@@ -22,18 +22,12 @@ namespace Editor
 	class ImageSlicesEditorWidget;
 	class Vec2FProperty;
 
-	// ----------------------
-	// Editor sprite property
-	// ----------------------
+	// --------------------
+	// Editor sprite viewer
+	// --------------------
 	class SpriteViewer : public TObjectPropertiesViewer<Sprite>
 	{
 	public:
-		// Default constructor. Initializes fields controls
-		SpriteViewer();
-
-		// Refreshing controls and properties by target objects, initializes slices editor
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-
 		IOBJECT(SpriteViewer);
 
 	protected:
@@ -58,6 +52,12 @@ namespace Editor
 		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
 
 	protected:
+		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+
+		// It is called when viewer is refreshed
+		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+
 		// It is called when type enum selected, shows required property spoiler
 		void OnModeSelected();
 	};
@@ -90,8 +90,10 @@ CLASS_METHODS_META(Editor::SpriteViewer)
 {
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	PUBLIC_FUNCTION(void, Refresh, _tmp1);
+	PROTECTED_FUNCTION(void, RebuildProperties, _tmp1);
+	PROTECTED_FUNCTION(void, OnRefreshed, _tmp2);
 	PROTECTED_FUNCTION(void, OnModeSelected);
 }
 END_META;

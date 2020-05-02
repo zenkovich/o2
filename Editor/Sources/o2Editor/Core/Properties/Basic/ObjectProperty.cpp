@@ -33,7 +33,10 @@ namespace Editor
 	void ObjectProperty::OnFreeProperty()
 	{
 		if (mObjectViewer)
+		{
+			RemoveChild(mObjectViewer->GetSpoiler(), false);
 			o2EditorProperties.FreeObjectViewer(mObjectViewer);
+		}
 
 		mObjectViewer = nullptr;
 	}
@@ -46,18 +49,6 @@ namespace Editor
 
 	void ObjectProperty::InitializeControls()
 	{
-		PushEditorScopeOnStack scope;
-
-		mSpoiler = FindChildByType<Spoiler>(false);
-		if (!mSpoiler)
-		{
-			mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
-			AddChild(mSpoiler);
-		}
-
-		if (mSpoiler)
-			mSpoiler->onExpand = THIS_FUNC(Refresh);
-
 		expandHeight = true;
 		expandWidth = true;
 		fitByChildren = true;
@@ -94,9 +85,6 @@ namespace Editor
 
 		CheckViewer();
 
-		if (!mSpoiler->IsExpanded())
-			return;
-
 		if (mObjectViewer)
 		{
 			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
@@ -132,9 +120,11 @@ namespace Editor
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, 
 																	  onChanged);
 
+				AddChild(mObjectViewer->GetSpoiler());
 				mObjectViewer->SetParentContext(mParentContext);
-				mSpoiler->AddChild(mObjectViewer->GetLayout());
-				mObjectViewer->Prepare();
+				mObjectViewer->SetHeaderEnabled(!mNoHeader);
+				mObjectViewer->SetExpanded(mExpanded); 
+				mObjectViewer->GetSpoiler()->SetCaption(mCaption);
 			}
 		}
 	}
@@ -151,40 +141,26 @@ namespace Editor
 
 	void ObjectProperty::SetFieldInfo(const FieldInfo* fieldInfo)
 	{
-		if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
-			mSpoiler->Expand();
+		IPropertyField::SetFieldInfo(fieldInfo);
 
-		if (fieldInfo->HasAttribute<NoHeaderAttribute>())
+		if (fieldInfo)
 		{
-			mSpoiler->SetHeadHeight(0);
-			mSpoiler->GetLayerDrawable<Text>("caption")->enabled = false;
-			mSpoiler->GetInternalWidget("expand")->enabledForcibly = false;
-			mSpoiler->borderLeft = 0;
-			mSpoiler->borderTop = 0;
-			mSpoiler->Expand();
-
-			mNoHeader = true;
-		}
-		else
-		{
-			mSpoiler->SetHeadHeight(20);
-			mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
-			mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
-			mSpoiler->borderLeft = 10;
-			mSpoiler->borderTop = 2;
-
-			mNoHeader = true;
+			mExpanded = fieldInfo->HasAttribute<ExpandedByDefaultAttribute>();
+			mNoHeader = fieldInfo->HasAttribute<NoHeaderAttribute>();
 		}
 	}
 
 	void ObjectProperty::SetCaption(const WString& text)
 	{
-		mSpoiler->SetCaption(text);
+		mCaption = text;
+
+		if (mObjectViewer)
+			mObjectViewer->GetSpoiler()->SetCaption(mCaption);;
 	}
 
 	WString ObjectProperty::GetCaption() const
 	{
-		return mSpoiler->GetCaption();
+		return mCaption;
 	}
 
 	Button* ObjectProperty::GetRemoveButton()
@@ -211,12 +187,18 @@ namespace Editor
 
 	void ObjectProperty::SetExpanded(bool expanded)
 	{
-		mSpoiler->SetExpanded(expanded);
+		mExpanded = expanded;
+
+		if (mObjectViewer)
+			mObjectViewer->GetSpoiler()->SetExpanded(expanded);
 	}
 
 	bool ObjectProperty::IsExpanded() const
 	{
-		return mSpoiler->IsExpanded();
+		if (mObjectViewer)
+			return mObjectViewer->GetSpoiler()->IsExpanded();
+
+		return mExpanded;
 	}
 
 	ObjectProperty::TargetObjectData ObjectProperty::GetObjectFromProxy(IAbstractValueProxy* proxy)

@@ -27,12 +27,6 @@ namespace Editor
 	class TextViewer : public TObjectPropertiesViewer<Text>
 	{
 	public:
-		// Default constructor. Initializes fields controls
-		TextViewer();
-
-		// Refreshing controls and properties by target objects
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-
 		IOBJECT(TextViewer);
 
 	protected:
@@ -47,6 +41,10 @@ namespace Editor
 		BooleanProperty* mDotsEndingsProperty = nullptr;
 		FloatProperty*   mSymbolsDistCoefProperty = nullptr;
 		FloatProperty*   mLinesDistCoefProperty = nullptr;
+
+	protected:
+		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
+		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 }
 
@@ -75,6 +73,6 @@ CLASS_METHODS_META(Editor::TextViewer)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	PUBLIC_FUNCTION(void, Refresh, _tmp1);
+	PROTECTED_FUNCTION(void, RebuildProperties, _tmp1);
 }
 END_META;

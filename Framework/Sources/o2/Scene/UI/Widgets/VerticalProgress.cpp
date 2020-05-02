@@ -52,12 +52,15 @@ namespace o2
 		}
 	}
 
-	void VerticalProgress::SetValue(float value)
+	void VerticalProgress::SetValue(float value, bool byUser /*= false*/)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
 
 		onChange(mValue);
+
+		if (byUser)
+			onChangeByUser(mValue);
 	}
 
 	void VerticalProgress::SetValueForcible(float value)
@@ -179,9 +182,9 @@ namespace o2
 		float d = mMaxValue - mMinValue;
 		if (mOrientation == VerticalProgress::Orientation::Up)
 
-			SetValue((cursor.position.y - layout->worldBottom)/height*d + mMinValue);
+			SetValue((cursor.position.y - layout->worldBottom)/height*d + mMinValue, true);
 		else
-			SetValue((height - (cursor.position.y - layout->worldBottom))/height*d + mMinValue);
+			SetValue((height - (cursor.position.y - layout->worldBottom))/height*d + mMinValue, true);
 	}
 
 	void VerticalProgress::OnCursorEnter(const Input::Cursor& cursor)

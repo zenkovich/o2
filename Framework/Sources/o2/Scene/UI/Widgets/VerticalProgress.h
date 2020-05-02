@@ -23,7 +23,8 @@ namespace o2
 		PROPERTY(float, scrollSense, SetScrollSense, GetScrollSense); // Scroll sense coefficient
 
 	public:
-		Function<void(float)> onChange; // On Value changing event
+		Function<void(float)> onChange;      // On Value changed event
+		Function<void(float)> onChangeByUser; // On Value changed by user event
 
 	public:
 		// Constructor
@@ -42,7 +43,7 @@ namespace o2
 		void Update(float dt) override;
 
 		// Sets value
-		void SetValue(float value);
+		void SetValue(float value, bool byUser = false);
 
 		// Sets value forcible, without smoothing
 		void SetValueForcible(float value);
@@ -155,6 +156,7 @@ CLASS_FIELDS_META(o2::VerticalProgress)
 	PUBLIC_FIELD(maxValue);
 	PUBLIC_FIELD(scrollSense);
 	PUBLIC_FIELD(onChange);
+	PUBLIC_FIELD(onChangeByUser);
 	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSmoothValue);
 	PROTECTED_FIELD(mMinValue).SERIALIZABLE_ATTRIBUTE();
@@ -169,7 +171,7 @@ CLASS_METHODS_META(o2::VerticalProgress)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetValue, float);
+	PUBLIC_FUNCTION(void, SetValue, float, bool);
 	PUBLIC_FUNCTION(void, SetValueForcible, float);
 	PUBLIC_FUNCTION(float, GetValue);
 	PUBLIC_FUNCTION(void, SetMinValue, float);

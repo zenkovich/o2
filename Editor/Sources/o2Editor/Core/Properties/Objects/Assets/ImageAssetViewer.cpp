@@ -14,21 +14,6 @@
 
 namespace Editor
 {
-	ImageAssetViewer::ImageAssetViewer() :
-		DefaultObjectPropertiesViewer()
-	{
-		PushEditorScopeOnStack scope;
-		mSlicesEditor = mnew ImageSlicesEditorWidget();
-		mLayout->AddChild(mSlicesEditor);
-	}
-
-	void ImageAssetViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		DefaultObjectPropertiesViewer::Refresh(targetObjets);
-		mSlicesEditor->Setup(ImageAssetRef(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
-							 dynamic_cast<BorderIProperty*>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
-	}
-
 	const Type* ImageAssetViewer::GetViewingObjectType() const
 	{
 		return GetViewingObjectTypeStatic();
@@ -38,6 +23,20 @@ namespace Editor
 	{
 		return &TypeOf(ImageAsset);
 	}
+
+	void ImageAssetViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	{
+		PushEditorScopeOnStack scope;
+		mSlicesEditor = mnew ImageSlicesEditorWidget();
+		mSpoiler->AddChild(mSlicesEditor);
+	}
+
+	void ImageAssetViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	{
+		mSlicesEditor->Setup(ImageAssetRef(dynamic_cast<ImageAsset*>(targetObjets.Last().first)->GetUID()),
+							 dynamic_cast<BorderIProperty*>(mPropertiesContext.properties[TypeOf(ImageAsset).GetField("sliceBorder")]));
+	}
+
 }
 
 DECLARE_CLASS(Editor::ImageAssetViewer);

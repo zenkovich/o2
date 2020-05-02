@@ -37,7 +37,10 @@ namespace Editor
 	void ObjectPtrProperty::OnFreeProperty()
 	{
 		if (mObjectViewer)
+		{
+			RemoveChild(mObjectViewer->GetSpoiler(), false);
 			o2EditorProperties.FreeObjectViewer(mObjectViewer);
+		}
 
 		mObjectViewer = nullptr;
 	}
@@ -52,21 +55,17 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mSpoiler = FindChildByType<Spoiler>(false);
-		if (!mSpoiler)
-		{
-			mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
-			AddChild(mSpoiler);
-		}
+		borderLeft = 11;
 
-		if (mSpoiler)
-			mSpoiler->onExpand = THIS_FUNC(Refresh);
+		mCaption = o2UI.CreateLabel("Caption");
+		mCaption->SetHorAlign(HorAlign::Left);
+		AddChild(mCaption);
 
 		mHeaderContainer = mnew HorizontalLayout();
 		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 19, 0);
 		mHeaderContainer->baseCorner = BaseCorner::Right;
 		mHeaderContainer->expandHeight = false;
-		mHeaderContainer->SetInternalParent(mSpoiler, false);
+		mCaption->AddChildWidget(mHeaderContainer);
 
 		mTypeCaption = o2UI.CreateLabel("nullptr");
 		*mTypeCaption->layout = WidgetLayout(0, 1, 1, 0, 0, 0, 75, 1);
@@ -117,12 +116,21 @@ namespace Editor
 
 			if (object)
 			{				
-				mTypeCaption->text = object->GetType().GetName();
+				bool onlyOneType = mBasicObjectType->GetDerivedTypes().IsEmpty();
+				if (onlyOneType)
+					mTypeCaption->SetEnableForcible(false);
+				else
+				{
+					mTypeCaption->SetEnableForcible(true);
+					mTypeCaption->text = object->GetType().GetName();
+				}
+
 				mCreateDeleteButton->caption = "Delete";
 				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
 			}
 			else
 			{
+				mTypeCaption->SetEnableForcible(true);
 				mTypeCaption->text = "nullptr";
 				mCreateDeleteButton->caption = "Create";
 				mCreateDeleteButton->enabledForcibly = true;
@@ -130,9 +138,6 @@ namespace Editor
 		}
 
 		CheckViewer();
-
-		if (!mSpoiler->IsExpanded())
-			return;
 
 		if (mObjectViewer)
 		{
@@ -160,7 +165,12 @@ namespace Editor
 		if (mCurrentObjectType != prevObjectType)
 		{
 			if (mObjectViewer)
+			{
 				o2EditorProperties.FreeObjectViewer(mObjectViewer);
+				mCaption->SetEnableForcible(true);
+				mCaption->AddChildWidget(mHeaderContainer);
+				borderLeft = 11;
+			}
 
 			mObjectViewer = nullptr;
 
@@ -168,10 +178,17 @@ namespace Editor
 			{
 				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted, 
 																	  onChanged);
-				mObjectViewer->SetParentContext(mParentContext);
-				mSpoiler->AddChild(mObjectViewer->GetLayout());
 
-				mObjectViewer->Prepare();
+				borderLeft = 0;
+				AddChild(mObjectViewer->GetSpoiler());
+				mObjectViewer->SetParentContext(mParentContext);
+				mObjectViewer->SetHeaderEnabled(!mNoHeader);
+				mObjectViewer->SetExpanded(mExpanded);
+
+				mCaption->SetEnableForcible(false);
+				mHeaderContainer->SetInternalParent(mObjectViewer->GetSpoiler());
+
+				UpdateViewerHeader();
 			}
 		}
 	}
@@ -192,54 +209,22 @@ namespace Editor
 
 		if (fieldInfo)
 		{
-			if (fieldInfo->HasAttribute<ExpandedByDefaultAttribute>())
-				mSpoiler->Expand();
-
-			if (fieldInfo->HasAttribute<NoHeaderAttribute>())
-			{
-				mTypeCaption->enabledForcibly = false;
-
-				mSpoiler->SetHeadHeight(0);
-				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = false;
-				mSpoiler->GetInternalWidget("expand")->enabledForcibly = false;
-				mSpoiler->borderLeft = 0;
-				mSpoiler->borderTop = 0;
-				mSpoiler->Expand();
-
-				mNoHeader = true;
-			}
-			else
-			{
-				mTypeCaption->enabledForcibly = true;
-
-				mSpoiler->SetHeadHeight(20);
-				mSpoiler->GetLayerDrawable<Text>("caption")->enabled = true;
-				mSpoiler->GetInternalWidget("expand")->enabledForcibly = true;
-				mSpoiler->borderLeft = 10;
-				mSpoiler->borderTop = 2;
-
-				mNoHeader = false;
-			}
-
+			mExpanded = fieldInfo->HasAttribute<ExpandedByDefaultAttribute>();
+			mNoHeader = fieldInfo->HasAttribute<NoHeaderAttribute>();
 			mDontDeleteEnabled = fieldInfo->HasAttribute<DontDeleteAttribute>();
 		}
 	}
 
 	void ObjectPtrProperty::SetCaption(const WString& text)
 	{
-		mSpoiler->SetCaption(text);
+		mCaption->SetText(text);
 
-		Text* spoilerCaptionLayer = mSpoiler->GetLayerDrawable<Text>("caption");
-		if (spoilerCaptionLayer)
-		{
-			Vec2F captionSize = Text::GetTextSize(text, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
-			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
-		}
+		UpdateViewerHeader();
 	}
 
 	WString ObjectPtrProperty::GetCaption() const
 	{
-		return mSpoiler->GetCaption();
+		return mCaption->GetText();
 	}
 
 	Button* ObjectPtrProperty::GetRemoveButton()
@@ -272,12 +257,18 @@ namespace Editor
 
 	void ObjectPtrProperty::SetExpanded(bool expanded)
 	{
-		mSpoiler->SetExpanded(expanded);
+		mExpanded = expanded;
+
+		if (mObjectViewer)
+			mObjectViewer->GetSpoiler()->SetExpanded(expanded);
 	}
 
 	bool ObjectPtrProperty::IsExpanded() const
 	{
-		return mSpoiler->IsExpanded();
+		if (mObjectViewer)
+			return mObjectViewer->GetSpoiler()->IsExpanded();
+
+		return mExpanded;
 	}
 
 	void ObjectPtrProperty::OnCreateOrDeletePressed()
@@ -299,8 +290,12 @@ namespace Editor
 			}
 
 			Refresh();
-			mSpoiler->SetLayoutDirty();
-			mSpoiler->Collapse();
+
+			if (mObjectViewer)
+			{
+				mObjectViewer->GetSpoiler()->SetLayoutDirty();
+				mObjectViewer->GetSpoiler()->Collapse();
+			}
 		}
 		else
 		{
@@ -342,7 +337,9 @@ namespace Editor
 		CheckValueChangeCompleted();
 
 		Refresh();
-		mSpoiler->SetLayoutDirty();
+
+		if (mObjectViewer)
+			mObjectViewer->GetSpoiler()->SetLayoutDirty();
 	}
 
 	void ObjectPtrProperty::StoreValues(Vector<DataNode>& data) const
@@ -387,6 +384,22 @@ namespace Editor
 
 		void* valuePtr = objectType.DynamicCastFromIObject(object);
 		proxy->SetValuePtr(&valuePtr);
+	}
+
+	void ObjectPtrProperty::UpdateViewerHeader()
+	{
+		if (mObjectViewer)
+			mObjectViewer->SetCaption(mCaption->GetText());
+
+		Text* spoilerCaptionLayer = !mObjectViewer ? 
+			mCaption->GetLayerDrawableByType<Text>() : 
+			mObjectViewer->GetSpoiler()->GetLayerDrawable<Text>("caption");
+
+		if (spoilerCaptionLayer)
+		{
+			Vec2F captionSize = Text::GetTextSize(mCaption->GetText(), spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
+			*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, captionSize.x + 20.0f, 0, 17, 0);
+		}
 	}
 
 }

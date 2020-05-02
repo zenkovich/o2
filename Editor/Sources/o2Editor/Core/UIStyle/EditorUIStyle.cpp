@@ -3297,9 +3297,9 @@ namespace Editor
 
 		sample->AddState("pressed", pressedAnim)->offStateAnimationSpeed = 0.5f;
 
-		AnimationClip valueAnim = AnimationClip::EaseInOut("layer/loopRootIcon/transparency", 1.0f, 0.0f, 0.1f);
+		AnimationClip valueAnim = AnimationClip::EaseInOut("layer/loopRootIcon/transparency", 0.0f, 1.0f, 0.1f);
 		*valueAnim.AddTrack<float>("layer/nonLoopRootIcon/transparency") =
-			AnimationTrack<float>::EaseInOut(0.0f, 1.0f, 0.1f);
+			AnimationTrack<float>::EaseInOut(1.0f, 0.0f, 0.1f);
 
 		sample->AddState("value", valueAnim);
 

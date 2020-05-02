@@ -239,7 +239,7 @@ namespace o2
 	void HorizontalScrollBar::SetValueFromUser(float value)
 	{
 		SetValue(value);
-		onUserChange(mValue);
+		onChangeByUser(mValue);
 	}
 
 	void HorizontalScrollBar::OnCursorEnter(const Input::Cursor& cursor)

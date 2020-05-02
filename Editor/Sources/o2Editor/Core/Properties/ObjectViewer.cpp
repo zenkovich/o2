@@ -36,14 +36,14 @@ namespace Editor
 		{
 			if (mPropertiesViewer)
 			{
-				RemoveChild(mPropertiesViewer->GetLayout(), false);
+				RemoveChild(mPropertiesViewer->GetSpoiler(), false);
 				o2EditorProperties.FreeObjectViewer(mPropertiesViewer);
 			}
 
 			mPropertiesViewer = o2EditorProperties.CreateObjectViewer(objectType, "");
+			mPropertiesViewer->SetHeaderEnabled(false);
 			mPropertiesViewer->SetParentContext(mParentContext);
-			AddChild(mPropertiesViewer->GetLayout());
-			mPropertiesViewer->Prepare();
+			AddChild(mPropertiesViewer->GetSpoiler());
 		}
 
 		if (mPropertiesViewer)

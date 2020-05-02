@@ -84,10 +84,12 @@ namespace Editor
 	protected:							     								    
 		Vector<Pair<TargetObjectData, TargetObjectData>> mTargetObjects; // Target objects
 
-		Spoiler*                 mSpoiler = nullptr;      // Properties spoiler
 		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object properties viewer
 
-		bool mNoHeader = false; // Is no header attribute exists
+		bool mNoHeader = false;          // Is no header attribute exists
+		bool mExpanded = false;          // True when must be expanded after creating object viewer
+
+		WString mCaption; // Property caption
 
 	protected:
 		// It is called when property puts in buffer. Here you can release your shared resources
@@ -118,9 +120,10 @@ END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
 	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mObjectViewer);
 	PROTECTED_FIELD(mNoHeader);
+	PROTECTED_FIELD(mExpanded);
+	PROTECTED_FIELD(mCaption);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectProperty)

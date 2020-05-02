@@ -10,24 +10,6 @@
 
 namespace Editor
 {
-	AnimationViewer::AnimationViewer() :
-		DefaultObjectPropertiesViewer()
-	{
-		PushEditorScopeOnStack scope;
-
-		mEditButton = o2UI.CreateButton("Edit", THIS_FUNC(OnEditPressed));
-	}
-
-	void AnimationViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
-	{
-		DefaultObjectPropertiesViewer::Refresh(targetObjets);
-
-		mLayout->AddChild(mEditButton);
-		mEditButton->SetIndexInSiblings(mLayout->GetChildren().Count() - 1);
-
-		mCurrentAnimation = !targetObjets.IsEmpty() ? dynamic_cast<AnimationClip*>(targetObjets[0].first) : nullptr;
-	}
-
 	const Type* AnimationViewer::GetViewingObjectType() const
 	{
 		return GetViewingObjectTypeStatic();
@@ -36,6 +18,23 @@ namespace Editor
 	const Type* AnimationViewer::GetViewingObjectTypeStatic()
 	{
 		return &TypeOf(AnimationClip);
+	}
+
+	void AnimationViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	{
+		PushEditorScopeOnStack scope;
+
+		mEditButton = o2UI.CreateButton("Edit", THIS_FUNC(OnEditPressed));
+
+		DefaultObjectPropertiesViewer::RebuildProperties(targetObjets);
+	}
+
+	void AnimationViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	{
+		mSpoiler->AddChild(mEditButton);
+		mEditButton->SetIndexInSiblings(mSpoiler->GetChildren().Count() - 1);
+
+		mCurrentAnimation = !targetObjets.IsEmpty() ? dynamic_cast<AnimationClip*>(targetObjets[0].first) : nullptr;
 	}
 
 	void AnimationViewer::OnEditPressed()

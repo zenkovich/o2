@@ -22,7 +22,7 @@ namespace o2
 
 	public:
 		Function<void(float)> onChange;       // On value changing event
-		Function<void(float)> onUserChange;   // On Value changing from user event
+		Function<void(float)> onChangeByUser; // On Value changing from user event
 		Function<void(float)> onSmoothChange; // On smooth value changing event
 
 	public:
@@ -180,7 +180,7 @@ CLASS_FIELDS_META(o2::VerticalScrollBar)
 	PUBLIC_FIELD(scrollSense);
 	PUBLIC_FIELD(scrollSize);
 	PUBLIC_FIELD(onChange);
-	PUBLIC_FIELD(onUserChange);
+	PUBLIC_FIELD(onChangeByUser);
 	PUBLIC_FIELD(onSmoothChange);
 	PROTECTED_FIELD(mValue).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSmoothValue);

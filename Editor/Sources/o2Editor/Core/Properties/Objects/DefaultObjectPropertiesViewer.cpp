@@ -7,15 +7,14 @@
 
 namespace Editor
 {
-	DefaultObjectPropertiesViewer::DefaultObjectPropertiesViewer()
-	{}
-
-	void DefaultObjectPropertiesViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		PushEditorScopeOnStack scope;
+		IObjectPropertiesViewer::CheckBuildProperties(targetObjets);
 
 		if (targetObjets.IsEmpty())
 			return;
+
+		PushEditorScopeOnStack scope;
 
 		const Type* objectsType = &(targetObjets[0].first)->GetType();
 
@@ -28,14 +27,12 @@ namespace Editor
 
 			if (mRealObjectType)
 			{
-				o2EditorProperties.BuildObjectProperties(dynamic_cast<VerticalLayout*>(mLayout), mRealObjectType,
-														 mPropertiesContext, "", mOnChildFieldChangeCompleted, onChanged);
+				o2EditorProperties.BuildObjectProperties(mSpoiler, mRealObjectType, mPropertiesContext, "",
+														 mOnChildFieldChangeCompleted, onChanged);
 
 				mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
 			}
 		}
-
-		mPropertiesContext.Set(targetObjets);
 	}
 
 	const Type* DefaultObjectPropertiesViewer::GetViewingObjectType() const

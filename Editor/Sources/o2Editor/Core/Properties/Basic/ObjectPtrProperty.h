@@ -81,12 +81,13 @@ namespace Editor
 
 		bool mDontDeleteEnabled = false; // When it is true, delete button is disabled
 		bool mNoHeader = false;          // Is no header attribute exists
+		bool mExpanded = false;          // True when must be expanded after creating object viewer
 
 		TargetsVec               mTargetObjects;          // Target objects
 		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object viewer
 
+		Label*            mCaption = nullptr;            // Property caption, used when object is empty and there are no spoiler
 		HorizontalLayout* mHeaderContainer = nullptr;    // Type caption and create/delete button container widget, placed on spoiler head
-		Spoiler*          mSpoiler = nullptr;            // Properties spoiler
 		Label*            mTypeCaption = nullptr;        // Caption that shows type of object or nullptr
 		Button*           mCreateDeleteButton = nullptr; // Create and delete button. Create - when value is nullptr, delete - when not
 		ContextMenu*      mCreateMenu = nullptr;         // Create object context menu. Initializes with types derived from mObjectType 
@@ -109,6 +110,9 @@ namespace Editor
 
 		// Checks viewer type, creates new if needed
 		void CheckViewer();
+
+		// Updates viewer header caption and header container 
+		void UpdateViewerHeader();
 
 		// It is called when create button pressed and shows create object menu
 		void OnCreateOrDeletePressed();
@@ -138,10 +142,11 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FIELD(mCurrentObjectType);
 	PROTECTED_FIELD(mDontDeleteEnabled);
 	PROTECTED_FIELD(mNoHeader);
+	PROTECTED_FIELD(mExpanded);
 	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mObjectViewer);
+	PROTECTED_FIELD(mCaption);
 	PROTECTED_FIELD(mHeaderContainer);
-	PROTECTED_FIELD(mSpoiler);
 	PROTECTED_FIELD(mTypeCaption);
 	PROTECTED_FIELD(mCreateDeleteButton);
 	PROTECTED_FIELD(mCreateMenu);
@@ -169,6 +174,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, CheckViewer);
+	PROTECTED_FUNCTION(void, UpdateViewerHeader);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);
 	PROTECTED_FUNCTION(void, CreateObject, const ObjectType*);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);

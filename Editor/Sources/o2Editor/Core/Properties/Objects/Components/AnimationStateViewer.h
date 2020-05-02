@@ -20,14 +20,8 @@ namespace Editor
 	class AnimationStateViewer : public DefaultObjectPropertiesViewer
 	{
 	public:
-		// Default constructor. Initializes fields controls
-		AnimationStateViewer();
-
-		// Refreshing controls and properties by target objects
-		void Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
-
-		// It is called when viewer preparing to initialize properties
-		void Prepare() override;
+		// Sets spoiler caption
+		void SetCaption(const WString& caption) override;
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
@@ -43,18 +37,29 @@ namespace Editor
 
 		HorizontalProgress* mTimeProgress = nullptr;
 
+		AnimationPlayer* mSubscribedPlayer = nullptr;
+
 	private:
-		// It is called when viewer freeing
+		// Creates spoiler for properties
+		Spoiler* CreateSpoiler() override;
+
+		// It is called when viewer is refreshed
+		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+
+		// This is called when the viewer is freed
 		void OnFree() override;
 
-		// It is called when play/pause button toggled
-		void OnPlayPauseToggled(bool value);
+		// It is called when play pause toggled
+		void OnPlayPauseToggled(bool play);
 
-		// It is called when loop button toggled
-		void OnLoopToggled(bool value);
+		// It is called when loop toggled
+		void OnLoopToggled(bool looped);
 
-		// It is called when animation has updated
-		void OnAnimationUpdate(float time);
+		// It is called when time progress changed by user, sets subscribed player time 
+		void OnTimeProgressChanged(float value);
+
+		// It is called when animation updates
+		void OnAnimationUpdated(float time);
 	};
 }
 
@@ -68,6 +73,7 @@ CLASS_FIELDS_META(Editor::AnimationStateViewer)
 	PRIVATE_FIELD(mPlayPause);
 	PRIVATE_FIELD(mLooped);
 	PRIVATE_FIELD(mTimeProgress);
+	PRIVATE_FIELD(mSubscribedPlayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationStateViewer)
@@ -75,10 +81,15 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	PUBLIC_FUNCTION(void, Refresh, _tmp1);
-	PUBLIC_FUNCTION(void, Prepare);
+	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
+	PRIVATE_FUNCTION(Spoiler*, CreateSpoiler);
+	PRIVATE_FUNCTION(void, OnRefreshed, _tmp1);
 	PRIVATE_FUNCTION(void, OnFree);
+	PRIVATE_FUNCTION(void, OnPlayPauseToggled, bool);
+	PRIVATE_FUNCTION(void, OnLoopToggled, bool);
+	PRIVATE_FUNCTION(void, OnTimeProgressChanged, float);
+	PRIVATE_FUNCTION(void, OnAnimationUpdated, float);
 }
 END_META;

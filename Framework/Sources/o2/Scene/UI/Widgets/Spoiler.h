@@ -49,7 +49,7 @@ namespace o2
 		void SetCaption(const WString& caption);
 
 		// Returns caption, if text layer exist
-		WString GetCaption() const;
+		const WString& GetCaption() const;
 
 		// Sets head height
 		void SetHeadHeight(float height);
@@ -125,7 +125,7 @@ CLASS_METHODS_META(o2::Spoiler)
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
+	PUBLIC_FUNCTION(const WString&, GetCaption);
 	PUBLIC_FUNCTION(void, SetHeadHeight, float);
 	PUBLIC_FUNCTION(float, GetHeadHeight);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);

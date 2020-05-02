@@ -397,7 +397,7 @@ namespace Editor
 	void AnimationTimeline::SetScrollBar(HorizontalScrollBar* scrollBar)
 	{
 		mScrollBar = scrollBar;
-		mScrollBar->onUserChange = [&](float value) { mViewScroll = value; };
+		mScrollBar->onChangeByUser = [&](float value) { mViewScroll = value; };
 
 		AddChild(scrollBar);
 	}

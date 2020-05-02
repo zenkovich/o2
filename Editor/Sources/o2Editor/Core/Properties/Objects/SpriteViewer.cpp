@@ -15,18 +15,16 @@
 
 namespace Editor
 {
-	SpriteViewer::SpriteViewer()
+	void SpriteViewer::RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		PushEditorScopeOnStack scope;
+		const Type& spriteType = TypeOf(Sprite);
 
 		auto commonFieldsLayout = mnew VerticalLayout();
 		commonFieldsLayout->spacing = 5;
 		commonFieldsLayout->expandWidth = true;
 		commonFieldsLayout->expandHeight = false;
 		commonFieldsLayout->fitByChildren = true;
-		mLayout->AddChild(commonFieldsLayout);
-
-		const Type& spriteType = TypeOf(Sprite);
+		mSpoiler->AddChild(commonFieldsLayout);
 
 		mImageProperty = dynamic_cast<AssetProperty*>(
 			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "image", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
@@ -52,7 +50,7 @@ namespace Editor
 		mHiddenProperties->expandWidth = true;
 		mHiddenProperties->expandHeight = false;
 		mHiddenProperties->fitByChildren = true;
-		mLayout->AddChild(mHiddenProperties);
+		mSpoiler->AddChild(mHiddenProperties);
 
 		// Fill properties
 		mFillPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
@@ -72,7 +70,7 @@ namespace Editor
 		auto sliceSpace = mnew Widget();
 		sliceSpace->layout->minHeight = 5;
 		mSlicedPropertiesSpoiler->AddChildWidget(sliceSpace);
-		
+
 		auto slicesEditorSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 
 		slicesEditorSpoiler->SetCaption("Slices");
@@ -95,10 +93,10 @@ namespace Editor
 			o2EditorProperties.BuildField(mTiledPropertiesSpoiler, spriteType, "tileScale", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
 	}
 
-	void SpriteViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	void SpriteViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		TObjectPropertiesViewer<Sprite>::Refresh(targetObjets);
-		mSlicesEditor->Setup(dynamic_cast<Sprite*>(targetObjets[0].first)->GetImageAsset(), mSliceBorderProperty);
+		if (mSlicesEditor && !targetObjets.IsEmpty())
+			mSlicesEditor->Setup(dynamic_cast<Sprite*>(targetObjets[0].first)->GetImageAsset(), mSliceBorderProperty);
 	}
 
 	void SpriteViewer::OnModeSelected()

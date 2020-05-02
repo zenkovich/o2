@@ -233,7 +233,7 @@ namespace o2
 	void VerticalScrollBar::SetValueFromUser(float value)
 	{
 		SetValue(value);
-		onUserChange(mValue);
+		onChangeByUser(mValue);
 	}
 
 	void VerticalScrollBar::OnCursorEnter(const Input::Cursor& cursor)

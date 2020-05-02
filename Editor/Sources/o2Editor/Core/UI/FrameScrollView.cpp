@@ -14,12 +14,12 @@ namespace Editor
 		mHorScrollbar = mnew HorizontalScrollBar();
 		*mHorScrollbar->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 0, 0, 20);
 		mHorScrollbar->SetInternalParent(this);
-		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
+		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
 		mVerScrollbar = mnew VerticalScrollBar();
 		*mVerScrollbar->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 20);
 		mVerScrollbar->SetInternalParent(this);
-		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
+		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		mReady = true;
 	}
@@ -31,10 +31,10 @@ namespace Editor
 		mReady = false;
 
 		mHorScrollbar->SetInternalParent(this);
-		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
+		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
 		mVerScrollbar->SetInternalParent(this);
-		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
+		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		RetargetStatesAnimations();
 
@@ -96,7 +96,7 @@ namespace Editor
 		delete mHorScrollbar;
 		mHorScrollbar = scrollbar;
 		mHorScrollbar->SetInternalParent(this);
-		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
+		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
 		SetLayoutDirty();
 	}
@@ -106,7 +106,7 @@ namespace Editor
 		delete mVerScrollbar;
 		mVerScrollbar = scrollbar;
 		mVerScrollbar->SetInternalParent(this);
-		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
+		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 
 		SetLayoutDirty();
 	}
@@ -132,11 +132,11 @@ namespace Editor
 
 		mHorScrollbar = other.mHorScrollbar->CloneAs<HorizontalScrollBar>();
 		mHorScrollbar->SetInternalParent(this);
-		mHorScrollbar->onUserChange = THIS_FUNC(OnHorScrollScrolled);
+		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
 
 		mVerScrollbar = other.mVerScrollbar->CloneAs<VerticalScrollBar>();
 		mVerScrollbar->SetInternalParent(this);
-		mVerScrollbar->onUserChange = THIS_FUNC(OnVerScrollScrolled);
+		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 	}
 
 	void FrameScrollView::UpdateCameraLimits(float dt)

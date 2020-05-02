@@ -116,13 +116,13 @@ namespace o2
 			textLayer->text = caption;
 	}
 
-	WString Spoiler::GetCaption() const
+	const WString& Spoiler::GetCaption() const
 	{
 		auto textLayer = GetLayerDrawable<Text>("caption");
 		if (textLayer)
-			return textLayer->text;
+			return textLayer->GetText();
 
-		return "";
+		return WString::empty;
 	}
 
 	void Spoiler::SetHeadHeight(float height)

@@ -52,12 +52,15 @@ namespace o2
 		}
 	}
 
-	void HorizontalProgress::SetValue(float value)
+	void HorizontalProgress::SetValue(float value, bool byUser /*= false*/)
 	{
 		mValue = Math::Clamp(value, mMinValue, mMaxValue);
 		UpdateProgressLayersLayouts();
 
 		onChange(mValue);
+
+		if (byUser)
+			onChangeByUser(mValue);
 	}
 
 	void HorizontalProgress::SetValueForcible(float value)
@@ -178,9 +181,9 @@ namespace o2
 		float width = layout->width;
 		float d = mMaxValue - mMinValue;
 		if (mOrientation == Orientation::Right)
-			SetValue((cursor.position.x - layout->worldLeft)/width*d + mMinValue);
+			SetValue((cursor.position.x - layout->worldLeft)/width*d + mMinValue, true);
 		else
-			SetValue((width - (cursor.position.x - layout->worldLeft))/width*d + mMinValue);
+			SetValue((width - (cursor.position.x - layout->worldLeft))/width*d + mMinValue, true);
 	}
 
 	void HorizontalProgress::OnCursorEnter(const Input::Cursor& cursor)
