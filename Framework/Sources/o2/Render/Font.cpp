@@ -35,10 +35,12 @@ namespace o2
 
 	const Font::Character& Font::GetCharacter(UInt16 id, int height)
 	{
-		for (const Character& ch : mCharacters)
+		auto fndHeight = mCharacters.find(height);
+		if (fndHeight != mCharacters.End())
 		{
-			if (ch.mId == id && height == ch.mHeight)
-				return ch;
+			auto fndChar = fndHeight->second.find(id);
+			if (fndChar != fndHeight->second.End())
+				return fndChar->second;
 		}
 
 		static Character empty;
@@ -51,6 +53,11 @@ namespace o2
 	String Font::GetFileName() const
 	{
 		return String();
+	}
+
+	void Font::AddCharacter(const Character& character)
+	{
+		mCharacters[character.mHeight][character.mId] = character;
 	}
 
 	bool Font::Character::operator==(const Character& other) const

@@ -22,7 +22,7 @@ namespace Editor
 		InitializeControls();
 	}
 
-	ObjectPtrProperty::ObjectPtrProperty(const ObjectPtrProperty& other) :
+	ObjectPtrProperty::ObjectPtrProperty(const ObjectPtrProperty& other):
 		IPropertyField(other)
 	{
 		InitializeControls();
@@ -101,11 +101,13 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
+		mCurrentObjectType = nullptr;
 		if (!mTargetObjects.IsEmpty())
 		{
 			auto object = GetProxy(mTargetObjects[0].first);
-
-			if (!object && mFieldInfo)
+			if (object)
+				mCurrentObjectType = dynamic_cast<const ObjectType*>(&object->GetType());
+			else if (mFieldInfo)
 			{
 				if (auto defaultTypeAttr = mFieldInfo->GetAttribute<DefaultTypeAttribute>())
 				{
@@ -113,52 +115,6 @@ namespace Editor
 					return;
 				}
 			}
-
-			if (object)
-			{				
-				bool onlyOneType = mBasicObjectType->GetDerivedTypes().IsEmpty();
-				if (onlyOneType)
-					mTypeCaption->SetEnableForcible(false);
-				else
-				{
-					mTypeCaption->SetEnableForcible(true);
-					mTypeCaption->text = object->GetType().GetName();
-				}
-
-				mCreateDeleteButton->caption = "Delete";
-				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
-			}
-			else
-			{
-				mTypeCaption->SetEnableForcible(true);
-				mTypeCaption->text = "nullptr";
-				mCreateDeleteButton->caption = "Create";
-				mCreateDeleteButton->enabledForcibly = true;
-			}
-		}
-
-		CheckViewer();
-
-		if (mObjectViewer)
-		{
-			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
-				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
-			{
-				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
-			}));
-		}
-
-		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty() || !mNoHeader);
-	}
-
-	void ObjectPtrProperty::CheckViewer()
-	{
-		mCurrentObjectType = nullptr;
-		if (!mTargetObjects.IsEmpty())
-		{
-			auto object = GetProxy(mTargetObjects[0].first);
-			if (object)
-				mCurrentObjectType = dynamic_cast<const ObjectType*>(&object->GetType());
 		}
 
 		const Type* prevObjectType = mObjectViewer ? mObjectViewer->GetViewingObjectType() : nullptr;
@@ -176,21 +132,46 @@ namespace Editor
 
 			if (mCurrentObjectType)
 			{
-				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted, 
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted,
 																	  onChanged);
 
-				borderLeft = 0;
-				AddChild(mObjectViewer->GetSpoiler());
 				mObjectViewer->SetParentContext(mParentContext);
 				mObjectViewer->SetHeaderEnabled(!mNoHeader);
 				mObjectViewer->SetExpanded(mExpanded);
+				AddChild(mObjectViewer->GetSpoiler());
 
 				mCaption->SetEnableForcible(false);
 				mHeaderContainer->SetInternalParent(mObjectViewer->GetSpoiler());
 
+				mTypeCaption->text = mCurrentObjectType->GetName();
+				mTypeCaption->SetEnableForcible(mAvailableMultipleTypes);
+
+				mCreateDeleteButton->caption = "Delete";
+				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
+
+				borderLeft = 0;
+
 				UpdateViewerHeader();
 			}
+			else
+			{
+				mTypeCaption->SetEnableForcible(true);
+				mTypeCaption->text = "nullptr";
+				mCreateDeleteButton->caption = "Create";
+				mCreateDeleteButton->enabledForcibly = true;
+			}
 		}
+
+		if (mObjectViewer)
+		{
+			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
+			{
+				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
+			}));
+		}
+
+		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty() || !mNoHeader);
 	}
 
 	const Type* ObjectPtrProperty::GetValueType() const
@@ -243,6 +224,7 @@ namespace Editor
 	void ObjectPtrProperty::SetBasicType(const ObjectType* type)
 	{
 		mBasicObjectType = type;
+		mAvailableMultipleTypes = !mBasicObjectType->GetDerivedTypes().IsEmpty();
 	}
 
 	void ObjectPtrProperty::Expand()
@@ -391,8 +373,8 @@ namespace Editor
 		if (mObjectViewer)
 			mObjectViewer->SetCaption(mCaption->GetText());
 
-		Text* spoilerCaptionLayer = !mObjectViewer ? 
-			mCaption->GetLayerDrawableByType<Text>() : 
+		Text* spoilerCaptionLayer = !mObjectViewer ?
+			mCaption->GetLayerDrawableByType<Text>() :
 			mObjectViewer->GetSpoiler()->GetLayerDrawable<Text>("caption");
 
 		if (spoilerCaptionLayer)

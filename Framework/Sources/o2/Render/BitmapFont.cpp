@@ -71,7 +71,9 @@ namespace o2
 
 				newChar.mId = charNode.attribute(L"id").as_uint();
 
-				mCharacters.Add(newChar);
+				newChar.mHeight = 0;
+
+				AddCharacter(newChar);
 			}
 		}
 		else
@@ -81,13 +83,16 @@ namespace o2
 		}
 
 		Vec2F invTexSize(1.0f/mTexture->GetSize().x, 1.0f/mTexture->GetSize().y);
-		for (auto& ch : mCharacters)
+		for (auto heightKV : mCharacters)
 		{
-			ch.mSize = ch.mTexSrc.Size().InvertedY();
-			ch.mTexSrc.left *= invTexSize.x;
-			ch.mTexSrc.right *= invTexSize.x;
-			ch.mTexSrc.top *= invTexSize.y;
-			ch.mTexSrc.bottom *= invTexSize.y;
+			for (auto charKV : heightKV.second)
+			{
+				charKV.second.mSize = charKV.second.mTexSrc.Size().InvertedY();
+				charKV.second.mTexSrc.left *= invTexSize.x;
+				charKV.second.mTexSrc.right *= invTexSize.x;
+				charKV.second.mTexSrc.top *= invTexSize.y;
+				charKV.second.mTexSrc.bottom *= invTexSize.y;
+			}
 		}
 
 		mReady = true;
@@ -111,11 +116,7 @@ namespace o2
 
 	const Font::Character& BitmapFont::GetCharacter(UInt16 id, int height)
 	{
-		for (const Character& ch : mCharacters)
-			if (ch.mId == id)
-				return ch;
-
-		return mCharacters.Get(0);
+		return Font::GetCharacter(id, 0);
 	}
 
 }

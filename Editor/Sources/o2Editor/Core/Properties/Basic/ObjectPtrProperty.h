@@ -79,6 +79,8 @@ namespace Editor
 		const ObjectType* mBasicObjectType = nullptr;   // Base object type, used for create
 		const ObjectType* mCurrentObjectType = nullptr; // Type of target objects
 
+		bool mAvailableMultipleTypes = false; // Is multiple types creation available
+
 		bool mDontDeleteEnabled = false; // When it is true, delete button is disabled
 		bool mNoHeader = false;          // Is no header attribute exists
 		bool mExpanded = false;          // True when must be expanded after creating object viewer
@@ -107,9 +109,6 @@ namespace Editor
 
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
-
-		// Checks viewer type, creates new if needed
-		void CheckViewer();
 
 		// Updates viewer header caption and header container 
 		void UpdateViewerHeader();
@@ -140,6 +139,7 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
 	PROTECTED_FIELD(mBasicObjectType);
 	PROTECTED_FIELD(mCurrentObjectType);
+	PROTECTED_FIELD(mAvailableMultipleTypes);
 	PROTECTED_FIELD(mDontDeleteEnabled);
 	PROTECTED_FIELD(mNoHeader);
 	PROTECTED_FIELD(mExpanded);
@@ -173,7 +173,6 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FUNCTION(void, OnFreeProperty);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, CheckViewer);
 	PROTECTED_FUNCTION(void, UpdateViewerHeader);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);
 	PROTECTED_FUNCTION(void, CreateObject, const ObjectType*);

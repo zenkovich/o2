@@ -72,12 +72,16 @@ namespace o2
 	protected:
 		Vector<FontRef*>  mRefs; // Array of reference to this font
 
-		Vector<Character> mCharacters; // Characters array
+		Map<int, Map<UInt16, Character>> mCharacters; // Characters map, int - height, uint16 - id
 
 		TextureRef mTexture;        // Texture
 		RectI      mTextureSrcRect; // Texture source rectangle
 
 		bool mReady; // True when font is ready to use
+
+	protected:
+		// Adds character and registers in cache map
+		void AddCharacter(const Character& character);
 
 		friend class Text;
 		friend class FontRef;

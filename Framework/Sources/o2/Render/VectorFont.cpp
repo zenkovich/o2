@@ -140,13 +140,11 @@ namespace o2
 		{
 			bool isNew = true;
 			wchar_t c = needChararacters[i];
-			for (auto ch : mCharacters)
+			auto fndHeight = mCharacters.find(height);
+			if (fndHeight != mCharacters.End())
 			{
-				if (ch.mId == c && ch.mHeight == height)
-				{
-					isNew = false;
-					break;
-				}
+				auto fndId = fndHeight->second.find(c);
+				isNew = fndHeight->second.find(c) == fndHeight->second.End();
 			}
 
 			if (isNew)
@@ -296,12 +294,15 @@ namespace o2
 					mTexture = TextureRef(lastTexture->GetSize()*2, PixelFormat::R8G8B8A8, Texture::Usage::Default);
 					mTexture->Copy(*lastTexture.Get(), RectI(Vec2I(0, 0), lastTexture->GetSize()));
 
-					for (auto ch : mCharacters)
+					for (auto heightKV : mCharacters)
 					{
-						ch.mTexSrc.left *= 0.5f;
-						ch.mTexSrc.right *= 0.5f;
-						ch.mTexSrc.top *= 0.5f;
-						ch.mTexSrc.bottom *= 0.5f;
+						for (auto charKV : heightKV.second)
+						{
+							charKV.second.mTexSrc.left *= 0.5f;
+							charKV.second.mTexSrc.right *= 0.5f;
+							charKV.second.mTexSrc.top *= 0.5f;
+							charKV.second.mTexSrc.bottom *= 0.5f;
+						}
 					}
 				}
 			}
@@ -325,7 +326,7 @@ namespace o2
 
 		mTexture->SetSubData(character.rect.LeftBottom(), character.bitmap);
 
-		mCharacters.Add(character.character);
+		AddCharacter(character.character);
 
 		delete character.bitmap;
 	}
