@@ -18,16 +18,16 @@ namespace Editor
 
 		const Type* objectsType = &(targetObjets[0].first)->GetType();
 
-		if (mRealObjectType != objectsType || mBuiltWithHiddenProperties != o2EditorProperties.IsPrivateFieldsVisible())
+		if (mBuiltObjectType != objectsType || mBuiltWithHiddenProperties != o2EditorProperties.IsPrivateFieldsVisible())
 		{
-			mRealObjectType = objectsType;
+			mBuiltObjectType = objectsType;
 
-			if (mRealObjectType)
+			if (mBuiltObjectType)
 				o2EditorProperties.FreeProperties(mPropertiesContext);
 
-			if (mRealObjectType)
+			if (mBuiltObjectType)
 			{
-				o2EditorProperties.BuildObjectProperties(mSpoiler, mRealObjectType, mPropertiesContext, "",
+				o2EditorProperties.BuildObjectProperties(mSpoiler, mBuiltObjectType, mPropertiesContext, "",
 														 mOnChildFieldChangeCompleted, onChanged);
 
 				mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();

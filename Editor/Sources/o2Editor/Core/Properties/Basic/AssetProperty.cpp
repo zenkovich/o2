@@ -276,6 +276,17 @@ namespace Editor
 		return res;
 	}
 
+	void AssetProperty::SetProxy(IAbstractValueProxy* proxy, const AssetRef& value)
+	{
+		auto proxyType = dynamic_cast<const ObjectType*>(&proxy->GetType());
+		auto proxySample = proxyType->CreateSample();
+		auto objectSample = proxyType->DynamicCastToIObject(proxySample);
+		AssetRef* assetSample = dynamic_cast<AssetRef*>(objectSample);
+		*assetSample = value;
+		proxy->SetValuePtr(proxySample);
+		delete assetSample;
+	}
+
 	void AssetProperty::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(mBox);

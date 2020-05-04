@@ -16,8 +16,9 @@ namespace Editor
 		IOBJECT(DefaultObjectPropertiesViewer);
 
 	protected:
-		const Type* mRealObjectType = &TypeOf(IObject); // Specialized viewing object type
-		bool        mBuiltWithHiddenProperties = false; // Is properties was built with hidden properties section
+		const Type* mRealObjectType = &TypeOf(IObject);  // Specialized viewing object type
+		const Type* mBuiltObjectType = &TypeOf(IObject); // Type of built object properties
+		bool        mBuiltWithHiddenProperties = false;  // Is properties was built with hidden properties section
 
 	protected:
 		// Checks if properties need to be rebuilt, rebuilds if necessary
@@ -36,6 +37,7 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultObjectPropertiesViewer)
 {
 	PROTECTED_FIELD(mRealObjectType);
+	PROTECTED_FIELD(mBuiltObjectType);
 	PROTECTED_FIELD(mBuiltWithHiddenProperties);
 }
 END_META;

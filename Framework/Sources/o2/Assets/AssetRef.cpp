@@ -97,6 +97,7 @@ namespace o2
 		mAssetPtr = other.mAssetPtr;
 		mRefCounter = other.mRefCounter;
 		mAssetOwner = other.mAssetOwner;
+		UpdateSpecAsset();
 
 		if (mAssetPtr)
 			(*mRefCounter)++;

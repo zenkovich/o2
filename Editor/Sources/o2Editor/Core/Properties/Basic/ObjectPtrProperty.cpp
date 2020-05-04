@@ -118,7 +118,7 @@ namespace Editor
 		}
 
 		const Type* prevObjectType = mObjectViewer ? mObjectViewer->GetViewingObjectType() : nullptr;
-		if (mCurrentObjectType != prevObjectType)
+		if (mBuiltObjectType != prevObjectType || mCurrentObjectType != mBuiltObjectType)
 		{
 			if (mObjectViewer)
 			{
@@ -129,10 +129,11 @@ namespace Editor
 			}
 
 			mObjectViewer = nullptr;
+			mBuiltObjectType = mCurrentObjectType;
 
-			if (mCurrentObjectType)
+			if (mBuiltObjectType)
 			{
-				mObjectViewer = o2EditorProperties.CreateObjectViewer(mCurrentObjectType, mValuesPath, onChangeCompleted,
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(mBuiltObjectType, mValuesPath, onChangeCompleted,
 																	  onChanged);
 
 				mObjectViewer->SetParentContext(mParentContext);

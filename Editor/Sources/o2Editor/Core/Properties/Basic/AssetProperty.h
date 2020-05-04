@@ -96,6 +96,9 @@ namespace Editor
 		// Returns value from proxy
 		AssetRef GetProxy(IAbstractValueProxy* proxy) const override;
 
+		// Sets value to proxy
+		void SetProxy(IAbstractValueProxy* proxy, const AssetRef& value) override;
+
 		// Updates value view
 		void UpdateValueView() override;
 
@@ -164,6 +167,7 @@ CLASS_METHODS_META(Editor::AssetProperty)
 	PROTECTED_FUNCTION(void, OnSaveInstancePressed);
 	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(AssetRef, GetProxy, IAbstractValueProxy*);
+	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, const AssetRef&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(bool, IsAlwaysRefresh);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

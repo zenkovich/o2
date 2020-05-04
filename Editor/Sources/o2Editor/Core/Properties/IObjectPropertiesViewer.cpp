@@ -78,7 +78,9 @@ namespace Editor
 		if (!mSpoiler)
 		{
 			mSpoiler = CreateSpoiler();
-			mSpoiler->onExpand = [&]() { Refresh(mTargetObjets); };
+			mSpoiler->onExpand = [&]() { 
+				Refresh(mTargetObjets);
+			};
 		}
 
 		return mSpoiler;

@@ -78,6 +78,7 @@ namespace Editor
 	protected:
 		const ObjectType* mBasicObjectType = nullptr;   // Base object type, used for create
 		const ObjectType* mCurrentObjectType = nullptr; // Type of target objects
+		const ObjectType* mBuiltObjectType = nullptr;   // Type of built object properties
 
 		bool mAvailableMultipleTypes = false; // Is multiple types creation available
 
@@ -139,6 +140,7 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
 	PROTECTED_FIELD(mBasicObjectType);
 	PROTECTED_FIELD(mCurrentObjectType);
+	PROTECTED_FIELD(mBuiltObjectType);
 	PROTECTED_FIELD(mAvailableMultipleTypes);
 	PROTECTED_FIELD(mDontDeleteEnabled);
 	PROTECTED_FIELD(mNoHeader);
