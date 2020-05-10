@@ -78,6 +78,43 @@
     <ClInclude Include="..\..\3rdPartyLibs\LibPNG\pngconf.h" />
     <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugiconfig.hpp" />
     <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugixml.hpp" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\allocators.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\cursorstreamwrapper.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\document.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\encodedstream.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\encodings.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\error\en.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\error\error.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\filereadstream.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\filewritestream.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\fwd.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\biginteger.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\clzll.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\diyfp.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\dtoa.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\ieee754.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\itoa.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\meta.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\pow10.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\regex.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\stack.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\strfunc.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\strtod.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\internal\swap.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\istreamwrapper.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\memorybuffer.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\memorystream.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\msinttypes\inttypes.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\msinttypes\stdint.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\ostreamwrapper.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\pointer.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\prettywriter.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\rapidjson.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\reader.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\schema.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\stream.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\stringbuffer.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\writer.h" />
     <ClInclude Include="..\..\3rdPartyLibs\StackWalker\StackWalker.h" />
     <ClInclude Include="..\..\3rdPartyLibs\Zlib\crc32.h" />
     <ClInclude Include="..\..\3rdPartyLibs\Zlib\crypt.h" />
@@ -291,7 +328,7 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -318,7 +355,7 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -349,7 +386,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>

@@ -224,7 +224,7 @@
       <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
       <ConformanceMode>false</ConformanceMode>
@@ -254,7 +254,7 @@
       <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -325,7 +325,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
