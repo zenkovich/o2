@@ -60,22 +60,22 @@ namespace o2
 		return mAttributes;
 	}
 
-	void FieldInfo::SerializeFromObject(void* object, DataNode& data) const
+	void FieldInfo::SerializeFromObject(void* object, DataValue& data) const
 	{
 		mSerializer->Serialize(GetValuePtrStrong(object), data);
 	}
 
-	void FieldInfo::DeserializeFromObject(void* object, const DataNode& data) const
+	void FieldInfo::DeserializeFromObject(void* object, const DataValue& data) const
 	{
 		mSerializer->Deserialize(GetValuePtrStrong(object), data);
 	}
 
-	void FieldInfo::Serialize(void* ptr, DataNode& data) const
+	void FieldInfo::Serialize(void* ptr, DataValue& data) const
 	{
 		mSerializer->Serialize(ptr, data);
 	}
 
-	void FieldInfo::Deserialize(void* ptr, const DataNode& data) const
+	void FieldInfo::Deserialize(void* ptr, const DataValue& data) const
 	{
 		mSerializer->Deserialize(ptr, data);
 	}

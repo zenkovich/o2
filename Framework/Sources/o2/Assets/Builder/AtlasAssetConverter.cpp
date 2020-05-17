@@ -30,7 +30,7 @@ namespace o2
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
-		DataNode atlasData;
+		DataValue atlasData;
 		atlasData.LoadFromFile(buildedAssetPath);
 		int pagesCount = atlasData["mPages"].GetChildNodes().Count();
 
@@ -45,7 +45,7 @@ namespace o2
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
 
-		DataNode atlasData;
+		DataValue atlasData;
 		atlasData.LoadFromFile(fullPathFrom);
 		int pagesCount = atlasData["mPages"].GetChildNodes().Count();
 
@@ -114,7 +114,7 @@ namespace o2
 
 	bool AtlasAssetConverter::CheckAtlasRebuilding(AssetInfo* atlasInfo)
 	{
-		DataNode atlasData;
+		DataValue atlasData;
 		atlasData.LoadFromFile(mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path);
 
 		Vector<Image> lastImages;
@@ -277,7 +277,7 @@ namespace o2
 		String atlasFullPath = mAssetsBuilder->GetSourceAssetsPath() + atlasInfo->path;
 		String atlasFullBuiltPath = mAssetsBuilder->GetBuiltAssetsPath() + atlasInfo->path;
 
-		DataNode atlasData;
+		DataValue atlasData;
 		atlasData.LoadFromFile(atlasFullPath);
 		atlasData["mPages"] = resAtlasPages;
 		atlasData["builtImages"] = images;
@@ -291,14 +291,14 @@ namespace o2
 
 	void AtlasAssetConverter::SaveImageAsset(ImagePackDef& imgDef)
 	{
-		DataNode imgData;
+		DataValue imgData;
 		imgData["mAtlasPage"] = imgDef.packRect->page;
 		imgData["mAtlasRect"] = (RectI)(imgDef.packRect->rect);
 		String imageFullPath = mAssetsBuilder->GetBuiltAssetsPath() + imgDef.assetInfo->path;
 		imgData.SaveToFile(imageFullPath);
 		o2FileSystem.SetFileEditDate(imageFullPath, imgDef.assetInfo->editTime);
 
-		DataNode metaData;
+		DataValue metaData;
 		metaData = imgDef.assetInfo->meta;
 		metaData.SaveToFile(mAssetsBuilder->GetSourceAssetsPath() + imgDef.assetInfo->path + ".meta");
 	}

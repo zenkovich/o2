@@ -13,8 +13,8 @@ namespace Editor
 
 	PropertyChangeAction::PropertyChangeAction(const Vector<SceneEditableObject*>& objects,
 											   const String& propertyPath,
-											   const Vector<DataNode>& beforeValues,
-											   const Vector<DataNode>& afterValues) :
+											   const Vector<DataValue>& beforeValues,
+											   const Vector<DataValue>& afterValues) :
 		objectsIds(objects.Select<SceneUID>([](const SceneEditableObject* x) { return x->GetID(); })),
 		propertyPath(propertyPath), beforeValues(beforeValues), afterValues(afterValues)
 	{}
@@ -34,7 +34,7 @@ namespace Editor
 		SetProperties(beforeValues);
 	}
 
-	void PropertyChangeAction::SetProperties(Vector<DataNode>& values)
+	void PropertyChangeAction::SetProperties(Vector<DataValue>& values)
 	{
 		Vector<SceneEditableObject*> objects = objectsIds.Select<SceneEditableObject*>([](SceneUID id) { 
 			return o2Scene.GetEditableObjectByID(id); });

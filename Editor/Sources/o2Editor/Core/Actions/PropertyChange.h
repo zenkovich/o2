@@ -20,8 +20,8 @@ namespace Editor
 	public:
 		Vector<SceneUID> objectsIds;
 		String           propertyPath;
-		Vector<DataNode> beforeValues;
-		Vector<DataNode> afterValues;
+		Vector<DataValue> beforeValues;
+		Vector<DataValue> afterValues;
 
 	public:
 		// Default constructor
@@ -29,8 +29,8 @@ namespace Editor
 
 		// Constructor with all data
 		PropertyChangeAction(const Vector<SceneEditableObject*>& objects,
-								   const String& propertyPath, const Vector<DataNode>& beforeValues,
-								   const Vector<DataNode>& afterValues);
+								   const String& propertyPath, const Vector<DataValue>& beforeValues,
+								   const Vector<DataValue>& afterValues);
 
 		// Returns name of action
 		String GetName() const;
@@ -45,7 +45,7 @@ namespace Editor
 
 	protected:
 		// Sets object's properties values
-		void SetProperties(Vector<DataNode>& value);
+		void SetProperties(Vector<DataValue>& value);
 	};
 }
 
@@ -68,6 +68,6 @@ CLASS_METHODS_META(Editor::PropertyChangeAction)
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(void, Redo);
 	PUBLIC_FUNCTION(void, Undo);
-	PROTECTED_FUNCTION(void, SetProperties, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, SetProperties, Vector<DataValue>&);
 }
 END_META;

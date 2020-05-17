@@ -741,7 +741,7 @@ namespace o2
 		return mKeys;
 	}
 
-	void Curve::OnDeserialized(const DataNode& node)
+	void Curve::OnDeserialized(const DataValue& node)
 	{
 		UpdateApproximation();
 	}

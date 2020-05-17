@@ -404,7 +404,7 @@ namespace o2
 		onKeysChanged();
 	}
 
-	void AnimationTrack<Vec2F>::OnDeserialized(const DataNode& node)
+	void AnimationTrack<Vec2F>::OnDeserialized(const DataValue& node)
 	{
 		UpdateApproximation();
 	}

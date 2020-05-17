@@ -520,7 +520,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void CustomList::OnDeserialized(const DataNode& node)
+	void CustomList::OnDeserialized(const DataValue& node)
 	{
 		ScrollArea::OnDeserialized(node);
 		RetargetStatesAnimations();

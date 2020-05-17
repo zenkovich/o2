@@ -212,7 +212,7 @@ namespace o2
 		void OnCurveChanged();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 	};
 }
 
@@ -260,7 +260,7 @@ CLASS_METHODS_META(o2::AnimationTrack<float>)
 	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, Linear, float, float, float);
 	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, OnCurveChanged);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;
 

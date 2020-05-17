@@ -183,7 +183,7 @@ namespace o2
 
 	AssetInfo* AssetsTree::LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time)
 	{
-		DataNode metaData;
+		DataValue metaData;
 		metaData.LoadFromFile(this->assetsPath + path + ".meta");
 
 		AssetMeta* meta;
@@ -202,7 +202,7 @@ namespace o2
 		return asset;
 	}
 
-	void AssetsTree::OnDeserialized(const DataNode& node)
+	void AssetsTree::OnDeserialized(const DataValue& node)
 	{
 		for (auto asset : rootAssets)
 			asset->SetTree(this);

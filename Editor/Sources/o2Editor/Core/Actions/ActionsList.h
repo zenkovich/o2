@@ -32,7 +32,7 @@ namespace Editor
 		void DoneAction(IAction* action);
 
 		// It is called when some property changed, stores action for undo
-		void DoneActorPropertyChangeAction(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
+		void DoneActorPropertyChangeAction(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue);
 
 		// Resets undo and redo actions
 		void ResetUndoActions();

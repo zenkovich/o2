@@ -373,7 +373,7 @@ namespace Editor
 		InitializeControls();
 	}
 
-	void AnimationTreeNode::OnDeserialized(const DataNode& node)
+	void AnimationTreeNode::OnDeserialized(const DataValue& node)
 	{
 		TreeNode::OnDeserialized(node);
 		InitializeControls();

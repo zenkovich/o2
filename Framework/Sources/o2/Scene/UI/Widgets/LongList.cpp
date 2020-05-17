@@ -411,7 +411,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void LongList::OnDeserialized(const DataNode& node)
+	void LongList::OnDeserialized(const DataValue& node)
 	{
 		ScrollArea::OnDeserialized(node);
 		RetargetStatesAnimations();

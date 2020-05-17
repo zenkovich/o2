@@ -162,7 +162,7 @@ namespace o2
 		onKeysChanged();
 	}
 
-	void AnimationTrack<float>::OnDeserialized(const DataNode& node)
+	void AnimationTrack<float>::OnDeserialized(const DataValue& node)
 	{}
 
 	AnimationTrack<float> AnimationTrack<float>::Parametric(float begin, float end, float duration,

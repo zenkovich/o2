@@ -183,7 +183,7 @@ namespace Editor
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called on deserialization, initializes controls
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// initializes controls and widgets
 		void InitializeControls();
@@ -268,7 +268,7 @@ CLASS_METHODS_META(Editor::AnimationTreeNode)
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, InitilizeTrackControl);
 	PROTECTED_FUNCTION(void, FreeTrackControl);

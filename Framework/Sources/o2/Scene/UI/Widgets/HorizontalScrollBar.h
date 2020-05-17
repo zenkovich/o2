@@ -109,7 +109,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when deserialized
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// It is called when visible was changed
 		void OnEnableInHierarchyChanged() override;
@@ -209,7 +209,7 @@ CLASS_METHODS_META(o2::HorizontalScrollBar)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);

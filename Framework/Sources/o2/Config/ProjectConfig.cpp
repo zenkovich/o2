@@ -38,7 +38,7 @@ namespace o2
 	void ProjectConfig::InitializeDefault(const String& configFilePath)
 	{
 		mProjectName = "Unnamed";
-		DataNode data = Serialize();
+		DataValue data = Serialize();
 		data.SaveToFile(configFilePath);
 	}
 }

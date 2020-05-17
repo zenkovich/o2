@@ -38,10 +38,10 @@ namespace Editor
 	void ITrackControl::EndKeysDrag()
 	{}
 
-	void ITrackControl::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	void ITrackControl::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{}
 
-	UInt64 ITrackControl::DeserializeKey(const DataNode& data, float relativeTime, bool generateNewUid /*= true*/)
+	UInt64 ITrackControl::DeserializeKey(const DataValue& data, float relativeTime, bool generateNewUid /*= true*/)
 	{
 		return 0;
 	}

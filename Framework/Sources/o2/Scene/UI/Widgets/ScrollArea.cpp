@@ -693,7 +693,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void ScrollArea::OnDeserialized(const DataNode& node)
+	void ScrollArea::OnDeserialized(const DataValue& node)
 	{
 		Widget::OnDeserialized(node);
 

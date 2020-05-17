@@ -210,7 +210,7 @@ namespace Editor
 				propertyDef->GetRemoveButton()->onClick = [=]() { Remove(i); };
 
 				propertyDef->onChangeCompleted =
-					[&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+					[&](const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 				{
 					OnPropertyChanged(mValuesPath + "/" + path, before, after);
 				};
@@ -411,7 +411,7 @@ namespace Editor
 		return res;
 	}
 
-	void VectorProperty::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	void VectorProperty::OnPropertyChanged(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 	{
 		for (auto& pair : mTargetObjects)
 			pair.first.SetValue();
@@ -423,14 +423,14 @@ namespace Editor
 	{
 		newCount = Math::Max(0, newCount);
 
-		Vector<DataNode> prevValues, newValues;
+		Vector<DataValue> prevValues, newValues;
 		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{
-			prevValues.Add(DataNode());
+			prevValues.Add(DataValue());
 			prevValues.Last()["Size"].SetValue(mVectorType->GetObjectVectorSize(obj.first.data));
-			DataNode& elementsData = prevValues.Last()["Elements"];
+			DataValue& elementsData = prevValues.Last()["Elements"];
 
 			int lastCount = mVectorType->GetObjectVectorSize(obj.first.data);
 			for (int i = newCount; i < lastCount; i++)
@@ -439,7 +439,7 @@ namespace Editor
 											*elementsData.AddNode("Element" + (String)i));
 			}
 
-			newValues.Add(DataNode());
+			newValues.Add(DataValue());
 			newValues.Last()["Size"].SetValue(newCount);
 
 			mVectorType->SetObjectVectorSize(obj.first.data, newCount);
@@ -456,17 +456,17 @@ namespace Editor
 
 	void VectorProperty::Remove(int idx)
 	{
-		Vector<DataNode> prevValues, newValues;
+		Vector<DataValue> prevValues, newValues;
 		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{
-			prevValues.Add(DataNode());
+			prevValues.Add(DataValue());
 			mVectorType->Serialize(obj.first.data, prevValues.Last());
 
 			mVectorType->RemoveObjectVectorElement(obj.first.data, idx);
 
-			newValues.Add(DataNode());
+			newValues.Add(DataValue());
 			mVectorType->Serialize(obj.first.data, newValues.Last());
 		}
 

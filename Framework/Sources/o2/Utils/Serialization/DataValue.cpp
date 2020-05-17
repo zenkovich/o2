@@ -1,5 +1,5 @@
 #include "o2/stdafx.h"
-#include "DataNode.h"
+#include "DataValue.h"
 
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ActorDataNodeConverter.h"
@@ -13,40 +13,40 @@
 
 namespace o2
 {
-	DataNode::DataNode():
+	DataValue::DataValue():
 		mParent(nullptr)
 	{}
 
-	DataNode::DataNode(const WString& name) :
+	DataValue::DataValue(const WString& name) :
 		mName(name), mParent(nullptr)
 	{ }
 
-	DataNode::DataNode(const DataNode& other) :
+	DataValue::DataValue(const DataValue& other) :
 		mName(other.mName), mData(other.mData), mParent(nullptr)
 	{
 		for (auto child : other.mChildNodes)
 		{
-			DataNode* newNode = mnew DataNode(*child);
+			DataValue* newNode = mnew DataValue(*child);
 			newNode->mParent = this;
 			mChildNodes.Add(newNode);
 		}
 	}
 
-	DataNode::~DataNode()
+	DataValue::~DataValue()
 	{
 		Clear();
 	}
 
-	DataNode& DataNode::operator=(const DataNode& value)
+	DataValue& DataValue::operator=(const DataValue& value)
 	{
 		return SetValue(value);
 	}
 
-	DataNode& DataNode::SetValueDelta(const IObject& object, const IObject& source)
+	DataValue& DataValue::SetValueDelta(const IObject& object, const IObject& source)
 	{
 		struct helper
 		{
-			static void WriteObject(void* object, void* source, const ObjectType& type, DataNode& node)
+			static void WriteObject(void* object, void* source, const ObjectType& type, DataValue& node)
 			{
 				for (auto baseType : type.GetBaseTypes())
 				{
@@ -66,7 +66,7 @@ namespace o2
 
 					if (field->GetType()->IsBasedOn(TypeOf(IObject)))
 					{
-						DataNode* newFieldNode = mnew DataNode();
+						DataValue* newFieldNode = mnew DataValue();
 						newFieldNode->SetName(field->GetName());
 
 						newFieldNode->SetValueDelta(*(IObject*)field->GetValuePtr(object),
@@ -82,7 +82,7 @@ namespace o2
 
 					if (!field->IsValueEquals(object, source))
 					{
-						DataNode* newFieldNode = mnew DataNode();
+						DataValue* newFieldNode = mnew DataValue();
 						newFieldNode->SetName(field->GetName());
 
 						field->SerializeFromObject(object, *newFieldNode);
@@ -111,11 +111,11 @@ namespace o2
 		return *this;
 	}
 
-	void DataNode::GetValueDelta(IObject& object, const IObject& source) const
+	void DataValue::GetValueDelta(IObject& object, const IObject& source) const
 	{
 		struct helper
 		{
-			static void ReadObject(void* object, void* source, const ObjectType& type, const DataNode& node)
+			static void ReadObject(void* object, void* source, const ObjectType& type, const DataValue& node)
 			{
 				for (auto baseType : type.GetBaseTypes())
 				{
@@ -133,7 +133,7 @@ namespace o2
 					if (!field->GetAttribute<SerializableAttribute>())
 						continue;
 
-					auto fldNode = node.GetNode(field->GetName());
+					auto fldNode = node.GetMember(field->GetName());
 					if (fldNode)
 					{
 						if (field->GetType()->IsBasedOn(TypeOf(IObject)))
@@ -163,20 +163,20 @@ namespace o2
 			((ISerializable&)object).OnDeserialized(*this);
 	}
 
-	DataNode& DataNode::operator[](const WString& nodePath)
+	DataValue& DataValue::operator[](const WString& nodePath)
 	{
-		if (auto node = GetNode(nodePath))
+		if (auto node = GetMember(nodePath))
 			return *node;
 
 		return *AddNode(nodePath);
 	}
 
-	DataNode& DataNode::operator[](const char* nodePath)
+	DataValue& DataValue::operator[](const char* nodePath)
 	{
 		return operator[]((WString)nodePath);
 	}
 
-	bool DataNode::operator==(const DataNode& other) const
+	bool DataValue::operator==(const DataValue& other) const
 	{
 		if (mName != other.mName || mData != other.mData || mChildNodes.Count() != other.mChildNodes.Count())
 			return false;
@@ -190,17 +190,17 @@ namespace o2
 		return true;
 	}
 
-	bool DataNode::operator!=(const DataNode& other) const
+	bool DataValue::operator!=(const DataValue& other) const
 	{
 		return !(*this == other);
 	}
 
-	DataNode* DataNode::GetParent() const
+	DataValue* DataValue::GetParent() const
 	{
 		return mParent;
 	}
 
-	DataNode* DataNode::GetNode(const WString& nodePath) const
+	DataValue* DataValue::GetMember(const WString& nodePath) const
 	{
 		int delPos = nodePath.Find("/");
 		WString pathPart = nodePath.SubStr(0, delPos);
@@ -232,17 +232,17 @@ namespace o2
 		return nullptr;
 	}
 
-	DataNode* DataNode::AddNode(const WString& name)
+	DataValue* DataValue::AddNode(const WString& name)
 	{
 		int delPos = name.Find("/");
 		if (delPos >= 0)
 		{
 			WString namePart = name.SubStr(0, delPos);
 
-			DataNode* node = GetNode(namePart);
+			DataValue* node = GetMember(namePart);
 			if (!node)
 			{
-				node = mnew DataNode();
+				node = mnew DataValue();
 				node->SetName(namePart);
 				node->mParent = this;
 				mChildNodes.Add(node);
@@ -251,7 +251,7 @@ namespace o2
 			return node->AddNode(name.SubStr(delPos + 1));
 		}
 
-		DataNode* newNode = mnew DataNode();
+		DataValue* newNode = mnew DataValue();
 		newNode->SetName(name);
 		newNode->mParent = this;
 		mChildNodes.Add(newNode);
@@ -259,14 +259,14 @@ namespace o2
 		return newNode;
 	}
 
-	DataNode* DataNode::AddNode(DataNode* node)
+	DataValue* DataValue::AddNode(DataValue* node)
 	{
 		mChildNodes.Add(node);
 		node->mParent = this;
 		return node;
 	}
 
-	bool DataNode::RemoveNode(DataNode* node)
+	bool DataValue::RemoveNode(DataValue* node)
 	{
 		if (!mChildNodes.Contains(node))
 			return false;
@@ -277,90 +277,90 @@ namespace o2
 		return true;
 	}
 
-	bool DataNode::RemoveNode(const WString& name)
+	bool DataValue::RemoveNode(const WString& name)
 	{
-		int idx = mChildNodes.FindIdx([&](DataNode* x) { return x->mName == name; });
+		int idx = mChildNodes.FindIdx([&](DataValue* x) { return x->mName == name; });
 		if (idx < 0)
 			return false;
 
-		DataNode* node = mChildNodes.Get(idx);
+		DataValue* node = mChildNodes.Get(idx);
 		mChildNodes.RemoveAt(idx);
 		delete node;
 
 		return true;
 	}
 
-	WString DataNode::GetName() const
+	WString DataValue::GetName() const
 	{
 		return mName;
 	}
 
-	void DataNode::SetName(const WString& name)
+	void DataValue::SetName(const WString& name)
 	{
 		mName = name;
 	}
 
-	const Vector<DataNode*>& DataNode::GetChildNodes() const
+	const Vector<DataValue*>& DataValue::GetChildNodes() const
 	{
 		return mChildNodes;
 	}
 
-	DataNode::Iterator DataNode::Begin()
+	DataValue::Iterator DataValue::Begin()
 	{
 		return mChildNodes.Begin();
 	}
 
-	DataNode::ConstIterator DataNode::Begin() const
+	DataValue::ConstIterator DataValue::Begin() const
 	{
 		return mChildNodes.Begin();
 	}
 
-	DataNode::Iterator DataNode::End()
+	DataValue::Iterator DataValue::End()
 	{
 		return mChildNodes.End();
 	}
 
-	DataNode::ConstIterator DataNode::End() const
+	DataValue::ConstIterator DataValue::End() const
 	{
 		return mChildNodes.End();
 	}
 
-	DataNode::Iterator DataNode::begin()
+	DataValue::Iterator DataValue::begin()
 	{
 		return mChildNodes.Begin();
 	}
 
-	DataNode::ConstIterator DataNode::begin() const
+	DataValue::ConstIterator DataValue::begin() const
 	{
 		return mChildNodes.Begin();
 	}
 
-	DataNode::Iterator DataNode::end()
+	DataValue::Iterator DataValue::end()
 	{
 		return mChildNodes.End();
 	}
 
-	DataNode::ConstIterator DataNode::end() const
+	DataValue::ConstIterator DataValue::end() const
 	{
 		return mChildNodes.End();
 	}
 
-	WString& DataNode::Data()
+	WString& DataValue::Data()
 	{
 		return mData;
 	}
 
-	const WString& DataNode::Data() const
+	const WString& DataValue::Data() const
 	{
 		return mData;
 	}
 
-	bool DataNode::IsEmpty() const
+	bool DataValue::IsEmpty() const
 	{
 		return mData.IsEmpty() && mChildNodes.IsEmpty();
 	}
 
-	void DataNode::Clear()
+	void DataValue::Clear()
 	{
 		mData.Clear();
 
@@ -370,7 +370,7 @@ namespace o2
 		mChildNodes.Clear();
 	}
 
-	bool DataNode::LoadFromFile(const String& fileName)
+	bool DataValue::LoadFromFile(const String& fileName)
 	{
 		InFile file(fileName);
 
@@ -388,12 +388,12 @@ namespace o2
 		return res;
 	}
 
-	bool DataNode::LoadFromData(const WString& data)
+	bool DataValue::LoadFromData(const WString& data)
 	{
 		return XmlDataFormat::LoadDataDoc(data, *this);
 	}
 
-	bool DataNode::SaveToFile(const String& fileName, Format format /*= Format::Xml*/) const
+	bool DataValue::SaveToFile(const String& fileName, Format format /*= Format::Xml*/) const
 	{
 		WString data = SaveAsWString(format);
 
@@ -406,13 +406,13 @@ namespace o2
 		return false;
 	}
 
-	WString DataNode::SaveAsWString(Format format /*= Format::Xml*/) const
+	WString DataValue::SaveAsWString(Format format /*= Format::Xml*/) const
 	{
 		return XmlDataFormat::SaveDataDoc(*this);
 	}
 }
 
-ENUM_META(o2::DataNode::Format)
+ENUM_META(o2::DataValue::Format)
 {
 	ENUM_ENTRY(Binary);
 	ENUM_ENTRY(JSON);

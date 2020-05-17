@@ -123,7 +123,7 @@ namespace o2
 		void RecalculateDuration();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// It is called when Animation track was added. Need to register value agent in animation target
 		void OnTrackAdded(IAnimationTrack* track);
@@ -256,7 +256,7 @@ CLASS_METHODS_META(o2::AnimationClip)
 	PUBLIC_FUNCTION(void, RemoveTrack, const String&);
 	PROTECTED_FUNCTION(void, OnTrackChanged);
 	PROTECTED_FUNCTION(void, RecalculateDuration);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnTrackAdded, IAnimationTrack*);
 }
 END_META;

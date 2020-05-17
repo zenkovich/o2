@@ -908,7 +908,7 @@ namespace o2
 		return res;
 	}
 
-	void Widget::OnSerialize(DataNode& node) const
+	void Widget::OnSerialize(DataValue& node) const
 	{
 		Actor::OnSerialize(node);
 	}
@@ -1041,7 +1041,7 @@ namespace o2
 		layout->mData->childrenWorldRect = childrenWorldRect;
 	}
 
-	void Widget::OnDeserialized(const DataNode& node)
+	void Widget::OnDeserialized(const DataValue& node)
 	{
 		Actor::OnDeserialized(node);
 

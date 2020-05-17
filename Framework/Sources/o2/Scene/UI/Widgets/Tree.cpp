@@ -1734,7 +1734,7 @@ namespace o2
 		UpdateNodesStructure();
 	}
 
-	void Tree::OnDeserialized(const DataNode& node)
+	void Tree::OnDeserialized(const DataValue& node)
 	{
 		ScrollArea::OnDeserialized(node);
 		mHighlightAnim.SetTarget(mHighlightSprite);

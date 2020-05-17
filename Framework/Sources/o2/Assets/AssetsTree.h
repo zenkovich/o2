@@ -72,7 +72,7 @@ namespace o2
 		AssetInfo* LoadAssetNode(const String& path, AssetInfo* parent, const TimeStamp& time);
 
 		// It is called when deserializing node, combine all nodes in mAllNodes
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 	};
 }
 
@@ -107,6 +107,6 @@ CLASS_METHODS_META(o2::AssetsTree)
 	PUBLIC_FUNCTION(void, Clear);
 	PROTECTED_FUNCTION(void, LoadFolder, const FolderInfo&, AssetInfo*);
 	PROTECTED_FUNCTION(AssetInfo*, LoadAssetNode, const String&, AssetInfo*, const TimeStamp&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

@@ -792,12 +792,12 @@ namespace o2
 		UpdateScreenPosition();
 	}
 
-	void WidgetDragHandle::OnSerialize(DataNode& node) const
+	void WidgetDragHandle::OnSerialize(DataValue& node) const
 	{
 		Widget::OnSerialize(node);
 	}
 
-	void WidgetDragHandle::OnDeserialized(const DataNode& node)
+	void WidgetDragHandle::OnDeserialized(const DataValue& node)
 	{
 		Widget::OnDeserialized(node);
 	}

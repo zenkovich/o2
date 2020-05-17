@@ -419,10 +419,10 @@ namespace o2
 		Map<String, WidgetState*> GetAllStates();
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 
 		// It is called when deserialized
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		friend class ContextMenu;
 		friend class CustomDropDown;
@@ -841,8 +841,8 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp3, GetAllInternalWidgets);
 	PROTECTED_FUNCTION(_tmp4, GetAllStates);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);

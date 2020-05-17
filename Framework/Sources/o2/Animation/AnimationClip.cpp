@@ -152,7 +152,7 @@ namespace o2
 			onDurationChange(mDuration);
 	}
 
-	void AnimationClip::OnDeserialized(const DataNode& node)
+	void AnimationClip::OnDeserialized(const DataValue& node)
 	{
 		for (auto track : mTracks)
 			track->onKeysChanged += THIS_FUNC(OnTrackChanged);

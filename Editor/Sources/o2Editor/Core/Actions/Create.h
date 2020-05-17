@@ -18,7 +18,7 @@ namespace Editor
 	class CreateAction: public IAction
 	{
 	public:
-		DataNode         objectsData;
+		DataValue         objectsData;
 		Vector<SceneUID> objectsIds;
 		SceneUID         insertParentId;
 		SceneUID         insertPrevObjectId;

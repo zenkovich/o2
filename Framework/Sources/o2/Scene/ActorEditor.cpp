@@ -9,7 +9,7 @@
 
 namespace o2
 {
-	void Actor::SerializeWithProto(DataNode& node) const
+	void Actor::SerializeWithProto(DataValue& node) const
 	{
 		const Actor* proto = mPrototypeLink.Get();
 
@@ -83,7 +83,7 @@ namespace o2
 		}
 	}
 
-	void Actor::DeserializeWithProto(const DataNode& node)
+	void Actor::DeserializeWithProto(const DataValue& node)
 	{
 		ActorDataNodeConverter::Instance().LockPointersResolving();
 		ActorDataNodeConverter::Instance().ActorCreated(this);
@@ -91,12 +91,12 @@ namespace o2
 		RemoveAllChildren();
 		RemoveAllComponents();
 
-		if (auto prototypeNode = node.GetNode("Prototype"))
+		if (auto prototypeNode = node.GetMember("Prototype"))
 		{
 			SetPrototype(*prototypeNode);
 		}
 
-		if (auto prototypeLinkNode = node.GetNode("PrototypeLink"))
+		if (auto prototypeLinkNode = node.GetMember("PrototypeLink"))
 		{
 			SceneUID id = *prototypeLinkNode;
 			Actor* parent = mParent;
@@ -124,62 +124,62 @@ namespace o2
 			}
 		}
 
-		mId = *node.GetNode("Id");
+		mId = *node.GetMember("Id");
 
 		if (!mPrototypeLink)
 			return;
 
 		const Actor* proto = mPrototypeLink.Get();
 
-		if (auto subNode = node.GetNode("Name"))
+		if (auto subNode = node.GetMember("Name"))
 			mName = *subNode;
 		else
 			mName = proto->mName;
 
-		if (auto subNode = node.GetNode("Enabled"))
+		if (auto subNode = node.GetMember("Enabled"))
 			mEnabled = *subNode;
 		else
 			mEnabled = proto->mEnabled;
 
-		if (auto subNode = node.GetNode("Locked"))
+		if (auto subNode = node.GetMember("Locked"))
 			mLocked = *subNode;
 		else
 			mLocked = proto->mLocked;
 
-		if (auto subNode = node.GetNode("LayerName"))
+		if (auto subNode = node.GetMember("LayerName"))
 			SetLayer(o2Scene.GetLayer(*subNode));
 		else
 			SetLayer(proto->mLayer);
 
 		// Transform data
-		if (auto transformNode = node.GetNode("Transform"))
+		if (auto transformNode = node.GetMember("Transform"))
 		{
-			if (auto subNode = transformNode->GetNode("Position"))
+			if (auto subNode = transformNode->GetMember("Position"))
 				transform->mData->position = *subNode;
 			else
 				transform->mData->position = proto->transform->mData->position;
 
-			if (auto subNode = transformNode->GetNode("Size"))
+			if (auto subNode = transformNode->GetMember("Size"))
 				transform->mData->size = *subNode;
 			else
 				transform->mData->size = proto->transform->mData->size;
 
-			if (auto subNode = transformNode->GetNode("Scale"))
+			if (auto subNode = transformNode->GetMember("Scale"))
 				transform->mData->scale = *subNode;
 			else
 				transform->mData->scale = proto->transform->mData->scale;
 
-			if (auto subNode = transformNode->GetNode("Pivot"))
+			if (auto subNode = transformNode->GetMember("Pivot"))
 				transform->mData->pivot = *subNode;
 			else
 				transform->mData->pivot = proto->transform->mData->pivot;
 
-			if (auto subNode = transformNode->GetNode("Angle"))
+			if (auto subNode = transformNode->GetMember("Angle"))
 				transform->mData->angle = *subNode;
 			else
 				transform->mData->angle = proto->transform->mData->angle;
 
-			if (auto subNode = transformNode->GetNode("Shear"))
+			if (auto subNode = transformNode->GetMember("Shear"))
 				transform->mData->shear = *subNode;
 			else
 				transform->mData->shear = proto->transform->mData->shear;
@@ -188,12 +188,12 @@ namespace o2
 		RemoveAllChildren();
 
 		// children
-		if (auto childsNode = node.GetNode("Childs"))
+		if (auto childsNode = node.GetMember("Childs"))
 		{
 			for (auto childNode : *childsNode)
 			{
-				DataNode* typeNode = childNode->GetNode("Type");
-				DataNode* dataNode = childNode->GetNode("Data");
+				DataValue* typeNode = childNode->GetMember("Type");
+				DataValue* dataNode = childNode->GetMember("Data");
 				if (typeNode && dataNode)
 				{
 					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(typeNode->Data()));
@@ -211,7 +211,7 @@ namespace o2
 		RemoveAllComponents();
 
 		// components
-		if (auto componentsNode = node.GetNode("Components"))
+		if (auto componentsNode = node.GetMember("Components"))
 		{
 			for (auto componentNode : *componentsNode)
 			{
@@ -333,7 +333,7 @@ namespace o2
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
 		for (auto serializable : serializableObjects)
-			serializable->OnDeserialized(DataNode());
+			serializable->OnDeserialized(DataValue());
 
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
@@ -679,7 +679,7 @@ namespace o2
 		}
 
 		for (auto serializable : serializableObjects)
-			serializable->OnDeserialized(DataNode());
+			serializable->OnDeserialized(DataValue());
 
 		// update transformation
 		transform->SetDirty();

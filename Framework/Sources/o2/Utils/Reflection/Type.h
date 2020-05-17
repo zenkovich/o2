@@ -141,10 +141,10 @@ namespace o2
 		virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
 
 		// Serializes value from ptr
-		virtual void Serialize(void* ptr, DataNode& data) const;
+		virtual void Serialize(void* ptr, DataValue& data) const;
 
 		// Deserializes value from ptr
-		virtual void Deserialize(void* ptr, const DataNode& data) const;
+		virtual void Deserialize(void* ptr, const DataValue& data) const;
 
 		// Returns is values getted from object A and object B equals
 		virtual bool IsValueEquals(void* objectA, void* objectB) const;
@@ -466,8 +466,8 @@ namespace o2
 	struct VectorCountFieldSerializer : public ITypeSerializer
 	{
 		VectorCountFieldSerializer() { }
-		void Serialize(void* object, DataNode& data) const;
-		void Deserialize(void* object, DataNode& data) const;
+		void Serialize(void* object, DataValue& data) const;
+		void Deserialize(void* object, DataValue& data) const;
 		bool Equals(void* objectA, void* objectB) const;
 		void Copy(void* objectA, void* objectB) const;
 		ITypeSerializer* Clone() const;
@@ -1115,14 +1115,14 @@ namespace o2
 	}
 
 	template<typename _element_type>
-	void VectorCountFieldSerializer<_element_type>::Serialize(void* object, DataNode& data) const
+	void VectorCountFieldSerializer<_element_type>::Serialize(void* object, DataValue& data) const
 	{
 		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
 
 		int size = type.GetObjectVectorSize(object);
 		data["Size"].SetValue(size);
 
-		DataNode& elements = data["Elements"];
+		DataValue& elements = data["Elements"];
 		for (int i = 0; i < size; i++)
 		{
 			void* elementPtr = type.GetObjectVectorElementPtr(object, i);
@@ -1131,7 +1131,7 @@ namespace o2
 	}
 
 	template<typename _element_type>
-	void VectorCountFieldSerializer<_element_type>::Deserialize(void* object, DataNode& data) const
+	void VectorCountFieldSerializer<_element_type>::Deserialize(void* object, DataValue& data) const
 	{
 		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
 		int size = type.GetObjectVectorSize(object);
@@ -1139,11 +1139,11 @@ namespace o2
 		data["Size"].GetValue(newSize);
 		type.SetObjectVectorSize(object, newSize);
 
-		if (auto elementsData = data.GetNode("Elements"))
+		if (auto elementsData = data.GetMember("Elements"))
 		{
 			for (int i = size; i < newSize; i++)
 			{
-				if (auto elementData = elementsData->GetNode("Element" + (WString)i))
+				if (auto elementData = elementsData->GetMember("Element" + (WString)i))
 				{
 					void* elementPtr = type.GetObjectVectorElementPtr(object, i);
 					type.mElementFieldInfo->Deserialize(elementPtr, *elementData);
@@ -1480,6 +1480,6 @@ namespace o2
 	FUNDAMENTAL_META(Vertex2) END_META;
 	FUNDAMENTAL_META(String) END_META;
 	FUNDAMENTAL_META(WString) END_META;
-	FUNDAMENTAL_META(DataNode) END_META;
+	FUNDAMENTAL_META(DataValue) END_META;
 	FUNDAMENTAL_META(UID) END_META;
 }

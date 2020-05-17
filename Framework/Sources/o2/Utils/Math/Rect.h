@@ -8,7 +8,7 @@
 
 namespace o2
 {
-	class DataNode;
+	class DataValue;
 
 	template<typename T>
 	class Rect

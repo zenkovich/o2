@@ -110,7 +110,7 @@ namespace Editor
 		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
 		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
-		DataNode mBeforeChangeKeysData; // Serialized keys data before change
+		DataValue mBeforeChangeKeysData; // Serialized keys data before change
 
 	private:
 		// Initializes frame handles
@@ -132,10 +132,10 @@ namespace Editor
 		void UpdateSelectionFrame();
 
 		// Serialized keys into data
-		void SerializeKeys(DataNode& data, const Map<String, Vector<UInt64>>& keys, float relativeTime);
+		void SerializeKeys(DataValue& data, const Map<String, Vector<UInt64>>& keys, float relativeTime);
 
 		// Deserializes keys from data 
-		void DeserializeKeys(const DataNode& data, Map<String, Vector<UInt64>>& keys, float relativeTime, bool generateNewUid = true);
+		void DeserializeKeys(const DataValue& data, Map<String, Vector<UInt64>>& keys, float relativeTime, bool generateNewUid = true);
 
 		// Copies selected keys into buffer
 		void CopyKeys();
@@ -274,8 +274,8 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PRIVATE_FUNCTION(void, InitializeRightHandle);
 	PRIVATE_FUNCTION(void, InitializeContextMenu);
 	PRIVATE_FUNCTION(void, UpdateSelectionFrame);
-	PRIVATE_FUNCTION(void, SerializeKeys, DataNode&, _tmp4, float);
-	PRIVATE_FUNCTION(void, DeserializeKeys, const DataNode&, _tmp5, float, bool);
+	PRIVATE_FUNCTION(void, SerializeKeys, DataValue&, _tmp4, float);
+	PRIVATE_FUNCTION(void, DeserializeKeys, const DataValue&, _tmp5, float, bool);
 	PRIVATE_FUNCTION(void, CopyKeys);
 	PRIVATE_FUNCTION(void, PasteKeys);
 	PRIVATE_FUNCTION(void, OnSelectionChanged);

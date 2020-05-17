@@ -2,7 +2,7 @@
 #pragma once
 
 #include "o2/Utils/Types/Containers/Map.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Types/String.h"
@@ -17,10 +17,10 @@ namespace o2
 	{
 	public:
 		// Serializing object into data node
-		virtual DataNode Serialize() const { return DataNode(); };
+		virtual DataValue Serialize() const { return DataValue(); };
 
 		// Deserializing object from data node
-		virtual void Deserialize(const DataNode& node) {};
+		virtual void Deserialize(const DataValue& node) {};
 
 		// Serializes data to string
 		WString SerializeToString() const;
@@ -29,25 +29,25 @@ namespace o2
 		void DeserializeFromString(const WString& str);
 
 		// DataNode converting operator
-		operator DataNode() { return Serialize(); };
+		operator DataValue() { return Serialize(); };
 
 		// Assign operator from data node
-		ISerializable& operator=(const DataNode& node) { return *this; };
+		ISerializable& operator=(const DataValue& node) { return *this; };
 
 		// Beginning serialization callback
-		virtual void OnSerialize(DataNode& node) const {}
+		virtual void OnSerialize(DataValue& node) const {}
 
 		// Completion deserialization callback
-		virtual void OnDeserialized(const DataNode& node) {}
+		virtual void OnDeserialized(const DataValue& node) {}
 
 		IOBJECT(ISerializable);
 
 	protected:
 		// Serializing object into data node
-		void SerializeBasic(const IObject& thisObject, DataNode& node) const;
+		void SerializeBasic(const IObject& thisObject, DataValue& node) const;
 
 		// Deserializing object from data node
-		void DeserializeBasic(IObject& thisObject, const DataNode& node);
+		void DeserializeBasic(IObject& thisObject, const DataValue& node);
 	};
 
 	// ----------------------------
@@ -108,13 +108,13 @@ END_META;
 CLASS_METHODS_META(o2::ISerializable)
 {
 
-	PUBLIC_FUNCTION(DataNode, Serialize);
-	PUBLIC_FUNCTION(void, Deserialize, const DataNode&);
+	PUBLIC_FUNCTION(DataValue, Serialize);
+	PUBLIC_FUNCTION(void, Deserialize, const DataValue&);
 	PUBLIC_FUNCTION(WString, SerializeToString);
 	PUBLIC_FUNCTION(void, DeserializeFromString, const WString&);
-	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
-	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, SerializeBasic, const IObject&, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeBasic, IObject&, const DataNode&);
+	PUBLIC_FUNCTION(void, OnSerialize, DataValue&);
+	PUBLIC_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeBasic, const IObject&, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeBasic, IObject&, const DataValue&);
 }
 END_META;

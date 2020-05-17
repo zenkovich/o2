@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 
 namespace o2
 {
@@ -11,7 +11,7 @@ namespace o2
 	class DataAsset: public AssetWithDefaultMeta<DataAsset>
 	{
 	public:
-		DataNode data; // Asset data
+		DataValue data; // Asset data
 
 	public:
 		// Check equals operator

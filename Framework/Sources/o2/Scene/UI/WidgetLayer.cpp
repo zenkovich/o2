@@ -321,7 +321,7 @@ namespace o2
 		return mAbsolutePosition;
 	}
 
-	void WidgetLayer::OnDeserialized(const DataNode& node)
+	void WidgetLayer::OnDeserialized(const DataValue& node)
 	{
 		for (auto child : mChildren)
 		{

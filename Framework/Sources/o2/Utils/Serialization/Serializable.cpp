@@ -5,24 +5,24 @@ namespace o2
 {
 	WString ISerializable::SerializeToString() const
 	{
-		DataNode data;
+		DataValue data;
 		data = Serialize();
 		return data.SaveAsWString();
 	}
 
 	void ISerializable::DeserializeFromString(const WString& str)
 	{
-		DataNode data;
+		DataValue data;
 		data.LoadFromData(str);
 		Deserialize(data);
 	}
 
-	void ISerializable::SerializeBasic(const IObject& thisObject, DataNode& node) const
+	void ISerializable::SerializeBasic(const IObject& thisObject, DataValue& node) const
 	{
 		node.SetValue(thisObject);
 	}
 
-	void ISerializable::DeserializeBasic(IObject& thisObject, const DataNode& node)
+	void ISerializable::DeserializeBasic(IObject& thisObject, const DataValue& node)
 	{
 		node.GetValue(thisObject);
 	}

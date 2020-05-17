@@ -237,7 +237,7 @@ namespace Editor
 		return applyActors;
 	}
 
-	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue)
+	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);

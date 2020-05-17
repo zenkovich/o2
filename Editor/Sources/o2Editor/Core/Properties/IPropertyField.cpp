@@ -164,7 +164,7 @@ namespace Editor
 
 	void IPropertyField::CheckValueChangeCompleted()
 	{
-		Vector<DataNode> valuesData;
+		Vector<DataValue> valuesData;
 		StoreValues(valuesData);
 
 		if (mBeforeChangeValues != valuesData)

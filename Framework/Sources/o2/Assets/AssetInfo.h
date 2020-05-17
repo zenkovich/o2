@@ -66,7 +66,7 @@ namespace o2
 
 	private:
 		// Completion deserialization callback, reads asset type name
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		friend class AssetsBuilder;
 		friend class AssetsTree;
@@ -98,6 +98,6 @@ CLASS_METHODS_META(o2::AssetInfo)
 	PUBLIC_FUNCTION(void, SetParent, AssetInfo*);
 	PUBLIC_FUNCTION(void, SetTree, AssetsTree*);
 	PUBLIC_FUNCTION(bool, IsValid);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

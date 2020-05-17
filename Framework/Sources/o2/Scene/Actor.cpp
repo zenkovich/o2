@@ -812,7 +812,7 @@ namespace o2
 			child->UpdateResEnabledInHierarchy();
 	}
 
-	void Actor::OnSerialize(DataNode& node) const
+	void Actor::OnSerialize(DataValue& node) const
 	{
 		if (mPrototypeLink)
 			SerializeWithProto(node);
@@ -820,15 +820,15 @@ namespace o2
 			SerializeRaw(node);
 	}
 
-	void Actor::OnDeserialized(const DataNode& node)
+	void Actor::OnDeserialized(const DataValue& node)
 	{
-		if (node.GetNode("PrototypeLink") || node.GetNode("Prototype"))
+		if (node.GetMember("PrototypeLink") || node.GetMember("Prototype"))
 			DeserializeWithProto(node);
 		else
 			DeserializeRaw(node);
 	}
 
-	void Actor::SerializeRaw(DataNode& node) const
+	void Actor::SerializeRaw(DataValue& node) const
 	{
 		node["Id"] = mId;
 		node["Name"] = mName;
@@ -857,44 +857,44 @@ namespace o2
 		}
 	}
 
-	void Actor::DeserializeRaw(const DataNode& node)
+	void Actor::DeserializeRaw(const DataValue& node)
 	{
 		ActorDataNodeConverter::Instance().LockPointersResolving();
 		if (ActorDataNodeConverter::Instance().mLockDepth == 0)
 			ActorDataNodeConverter::Instance().ActorCreated(this);
 
-		mId = *node.GetNode("Id");
-		mName = *node.GetNode("Name");
-		mLocked = *node.GetNode("Locked");
-		mEnabled = *node.GetNode("Enabled");
+		mId = *node.GetMember("Id");
+		mName = *node.GetMember("Name");
+		mLocked = *node.GetMember("Locked");
+		mEnabled = *node.GetMember("Enabled");
 
-		if (auto layerNode = node.GetNode("LayerName"))
+		if (auto layerNode = node.GetMember("LayerName"))
 			SetLayer(layerNode->Data());
 		else
 			SetLayer(o2Scene.GetDefaultLayer());
 
-		node.GetNode("Transform")->GetValue(*transform);
+		node.GetMember("Transform")->GetValue(*transform);
 
 		RemoveAllComponents();
 
-		if (auto componentsNode = node.GetNode("Components"))
+		if (auto componentsNode = node.GetMember("Components"))
 		{
 			for (auto componentNode : componentsNode->GetChildNodes())
 			{
-				Component* component = (Component*)o2Reflection.CreateTypeSample(*componentNode->GetNode("Type"));
-				component->Deserialize(*componentNode->GetNode("Data"));
+				Component* component = (Component*)o2Reflection.CreateTypeSample(*componentNode->GetMember("Type"));
+				component->Deserialize(*componentNode->GetMember("Data"));
 				component->SetOwnerActor(this);
 			}
 		}
 
 		RemoveAllChildren();
 
-		if (auto childsNode = node.GetNode("Childs"))
+		if (auto childsNode = node.GetMember("Childs"))
 		{
 			for (auto childNode : childsNode->GetChildNodes())
 			{
-				DataNode* typeNode = childNode->GetNode("Type");
-				DataNode* dataNode = childNode->GetNode("Data");
+				DataValue* typeNode = childNode->GetMember("Type");
+				DataValue* dataNode = childNode->GetMember("Data");
 				if (typeNode && dataNode)
 				{
 					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(typeNode->Data()));

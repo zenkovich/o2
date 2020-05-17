@@ -66,10 +66,10 @@ namespace Editor
 		void SetCurveViewColor(const Color4& color) override;
 
 		// Serialize key with specified uid into data node
-		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
+		void SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) override;
 
 		// Deserialize key from data node and paste on track
-		UInt64 DeserializeKey(const DataNode& data, float relativeTime, bool generateNewUid = true) override;
+		UInt64 DeserializeKey(const DataValue& data, float relativeTime, bool generateNewUid = true) override;
 
 		// Removes key from track
 		void DeleteKey(UInt64 keyUid) override;
@@ -251,7 +251,7 @@ namespace Editor
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
 		mPropertyValueProxy = PointerValueProxy<TrackValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
-		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataNode>&, const Vector<DataNode>&) { OnPropertyChanged(); };
+		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataValue>&, const Vector<DataValue>&) { OnPropertyChanged(); };
 		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
@@ -417,7 +417,7 @@ namespace Editor
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
 
-		DataNode keyData;
+		DataValue keyData;
 		Map<String, Vector<UInt64>> keys = { { mTrackPath, { mTrack->GetKeyAt(idx).uid } } };
 		mHandlesSheet->SerializeKeys(keyData, keys, 0);
 		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));
@@ -454,7 +454,7 @@ namespace Editor
 	}
 
 	template<typename AnimationTrackType>
-	void KeyFramesTrackControl<AnimationTrackType>::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	void KeyFramesTrackControl<AnimationTrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{
 		auto key = mTrack->FindKey(keyUid);
 		key.position -= relativeTime;
@@ -462,7 +462,7 @@ namespace Editor
 	}
 
 	template<typename AnimationTrackType>
-	UInt64 KeyFramesTrackControl<AnimationTrackType>::DeserializeKey(const DataNode& data, float relativeTime,
+	UInt64 KeyFramesTrackControl<AnimationTrackType>::DeserializeKey(const DataValue& data, float relativeTime,
 																	bool generateNewUid /*= true*/)
 	{
 		AnimationTrackType::Key key;
@@ -526,8 +526,8 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
 	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
 	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);
-	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
-	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataNode&, float, bool);
+	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataValue&, float);
+	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataValue&, float, bool);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);

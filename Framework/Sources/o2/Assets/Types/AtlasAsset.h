@@ -136,7 +136,7 @@ namespace o2
 		AtlasAsset(const AtlasAsset& asset);
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		friend class Assets;
 		friend class ImageAsset;
@@ -171,7 +171,7 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;
 

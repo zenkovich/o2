@@ -5,7 +5,7 @@
 #include "o2/Utils/Reflection/TypeSerializer.h"
 #include "o2/Utils/Reflection/TypeSerializer.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
@@ -14,7 +14,7 @@
 namespace o2
 {
 	class Type;
-	class DataNode;
+	class DataValue;
 
 	// -----------------------
 	// Class field information
@@ -86,16 +86,16 @@ namespace o2
 		const Vector<IAttribute*>& GetAttributes() const;
 
 		// Serializes from object pointer, that contains this field
-		void SerializeFromObject(void* object, DataNode& data) const;
+		void SerializeFromObject(void* object, DataValue& data) const;
 
 		// Deserializes from object pointer, that contains this field
-		void DeserializeFromObject(void* object, const DataNode& data) const;
+		void DeserializeFromObject(void* object, const DataValue& data) const;
 
 		// Serializes value from ptr
-		void Serialize(void* ptr, DataNode& data) const;
+		void Serialize(void* ptr, DataValue& data) const;
 
 		// Deserializes value from ptr
-		void Deserialize(void* ptr, const DataNode& data) const;
+		void Deserialize(void* ptr, const DataValue& data) const;
 
 		// Returns is values getted from object A and object B equals
 		bool IsValueEquals(void* objectA, void* objectB) const;

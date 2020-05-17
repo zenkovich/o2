@@ -180,10 +180,10 @@ namespace o2
 		void NormalizeAspect();
 
 		// Calling when serializing
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 
 		// Calling when deserializing
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		SERIALIZABLE(Sprite);
 
@@ -314,8 +314,8 @@ CLASS_METHODS_META(o2::Sprite)
 	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
 	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
 	PUBLIC_FUNCTION(void, NormalizeAspect);
-	PUBLIC_FUNCTION(void, OnSerialize, DataNode&);
-	PUBLIC_FUNCTION(void, OnDeserialized, const DataNode&);
+	PUBLIC_FUNCTION(void, OnSerialize, DataValue&);
+	PUBLIC_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, BasisChanged);
 	PROTECTED_FUNCTION(void, ColorChanged);
 	PROTECTED_FUNCTION(void, UpdateMesh);

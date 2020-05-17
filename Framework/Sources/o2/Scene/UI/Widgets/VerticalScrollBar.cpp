@@ -255,7 +255,7 @@ namespace o2
 		SetValue(mValue - scroll*mScrollSense);
 	}
 
-	void VerticalScrollBar::OnDeserialized(const DataNode& node)
+	void VerticalScrollBar::OnDeserialized(const DataValue& node)
 	{
 		Widget::OnDeserialized(node);
 

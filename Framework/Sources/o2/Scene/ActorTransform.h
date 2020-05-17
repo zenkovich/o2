@@ -442,10 +442,10 @@ namespace o2
 		void CheckParentInvTransform();
 
 		// Beginning serialization callback, writes data
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 
 		// It is called when object was deserialized, reads data
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Returns parent world rect position - left bottom corner
 		Vec2F GetParentPosition() const;
@@ -662,8 +662,8 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, UpdateTransform);
 	PROTECTED_FUNCTION(void, UpdateRectangle);
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
 }
 END_META;

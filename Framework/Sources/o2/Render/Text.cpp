@@ -453,7 +453,7 @@ namespace o2
 		}
 	}
 
-	void Text::OnDeserialized(const DataNode& node)
+	void Text::OnDeserialized(const DataValue& node)
 	{
 		SetFontAsset(mFontAssetId);
 	}

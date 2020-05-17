@@ -3,7 +3,7 @@
 #include "o2/Scene/UI/Widgets/HorizontalLayout.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Reflection/Reflection.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/ValueProxy.h"
 
@@ -29,7 +29,7 @@ namespace Editor
 		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
 
 		typedef Function<void(IPropertyField*)> OnChangedFunc;
-		typedef Function<void(const String&, const Vector<DataNode>&, const Vector<DataNode>&)> OnChangeCompletedFunc;
+		typedef Function<void(const String&, const Vector<DataValue>&, const Vector<DataValue>&)> OnChangeCompletedFunc;
 
 	public:
 		OnChangedFunc         onChanged;         // Immediate change value by user event
@@ -148,7 +148,7 @@ namespace Editor
 		Label*  mCaption = nullptr;   // Caption label, null by default   
 
 		String           mValuesPath;         // Reflection path of target values
-		Vector<DataNode> mBeforeChangeValues; // Serialized value data before changes started
+		Vector<DataValue> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
 		// It is called when type specialized during setting value proxy
@@ -158,7 +158,7 @@ namespace Editor
 		virtual void OnFreeProperty();
 
 		// Stores values to data
-		virtual void StoreValues(Vector<DataNode>& data) const {}
+		virtual void StoreValues(Vector<DataValue>& data) const {}
 
 		// Checks that value was changed and calls onChangeCompleted
 		virtual void CheckValueChangeCompleted();
@@ -236,7 +236,7 @@ namespace Editor
 		bool IsValueRevertable() const override;
 
 		// Stores values to data
-		void StoreValues(Vector<DataNode>& data) const override;
+		void StoreValues(Vector<DataValue>& data) const override;
 
 		// Returns value from proxy
 		virtual _type GetProxy(IAbstractValueProxy* proxy) const;
@@ -437,12 +437,12 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void TPropertyField<_type>::StoreValues(Vector<DataNode>& data) const
+	void TPropertyField<_type>::StoreValues(Vector<DataValue>& data) const
 	{
 		data.Clear();
 		for (auto ptr : mValuesProxies)
 		{
-			data.Add(DataNode());
+			data.Add(DataValue());
 			data.Last() = GetProxy(ptr.first);
 		}
 	}
@@ -566,7 +566,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
 	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(void, OnFreeProperty);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataValue>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
@@ -600,7 +600,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PUBLIC_FUNCTION(void, SetUnknownValue, const _type&);
 	PUBLIC_FUNCTION(_type, GetCommonValue);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataValue>&);
 	PROTECTED_FUNCTION(_type, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, const _type&);
 	PROTECTED_FUNCTION(void, SetCommonValue, const _type&);

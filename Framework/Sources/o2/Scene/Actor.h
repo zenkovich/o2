@@ -456,16 +456,16 @@ namespace o2
 		virtual void UpdateResEnabledInHierarchy();
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Regular serializing without prototype
-		void SerializeRaw(DataNode& node) const;
+		void SerializeRaw(DataValue& node) const;
 
 		// Regular deserializing without prototype
-		void DeserializeRaw(const DataNode& node);
+		void DeserializeRaw(const DataValue& node);
 
 		// Returns dictionary of all children by names
 		Map<String, Actor*> GetAllChilds();
@@ -551,10 +551,10 @@ namespace o2
 		};
 
 		// Regular serializing with prototype
-		void SerializeWithProto(DataNode& node) const;
+		void SerializeWithProto(DataValue& node) const;
 
 		// Regular deserializing with prototype
-		void DeserializeWithProto(const DataNode& node);
+		void DeserializeWithProto(const DataValue& node);
 
 		// Processes making prototype
 		void ProcessPrototypeMaking(Actor* dest, Actor* source,
@@ -859,10 +859,10 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp3, _tmp4);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, SerializeRaw, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeRaw, const DataNode&);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeRaw, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeRaw, const DataValue&);
 	PROTECTED_FUNCTION(_tmp5, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp6, GetAllComponents);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
@@ -884,8 +884,8 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
-	PROTECTED_FUNCTION(void, SerializeWithProto, DataNode&);
-	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataNode&);
+	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, bool);
 	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);

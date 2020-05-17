@@ -178,7 +178,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when object was deserialized and trying to reattach states animations target
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// It is called when visible was changed
 		void OnEnableInHierarchyChanged() override;
@@ -298,7 +298,7 @@ CLASS_METHODS_META(o2::CustomList)
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);

@@ -37,7 +37,7 @@ namespace o2
 		void OnTransformUpdated();
 
 		// It is called when object was deserialized
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 	};
 }
 
@@ -60,6 +60,6 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	PUBLIC_FUNCTION(String, GetCategory);
 	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

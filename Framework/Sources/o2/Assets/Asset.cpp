@@ -114,7 +114,7 @@ namespace o2
 			return;
 		}
 
-		DataNode metaData;
+		DataValue metaData;
 		metaData = mInfo.meta;
 		metaData.SaveToFile(GetMetaFullPath());
 
@@ -154,14 +154,14 @@ namespace o2
 
 	void Asset::LoadData(const String& path)
 	{
-		DataNode data;
+		DataValue data;
 		data.LoadFromFile(path);
 		Deserialize(data);
 	}
 
 	void Asset::SaveData(const String& path) const
 	{
-		DataNode data = Serialize();
+		DataValue data = Serialize();
 		data.SaveToFile(path);
 	}
 

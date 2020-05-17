@@ -9,7 +9,7 @@ namespace Editor
 	{
 	public:
 		AnimationAddKeysAction();
-		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor);
+		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataValue& keysData, KeyHandlesSheet* editor);
 
 		String GetName() const override;
 		void Redo();
@@ -19,7 +19,7 @@ namespace Editor
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
-		DataNode                    mKeysData;
+		DataValue                    mKeysData;
 		KeyHandlesSheet*            mEditor;
 	};
 
@@ -27,7 +27,7 @@ namespace Editor
 	{
 	public:
 		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor);
+		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataValue& keysData, KeyHandlesSheet* editor);
 
 		String GetName() const override;
 		void Redo();
@@ -37,7 +37,7 @@ namespace Editor
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
-		DataNode                    mKeysData;
+		DataValue                    mKeysData;
 		KeyHandlesSheet*            mEditor;
 	};
 
@@ -45,8 +45,8 @@ namespace Editor
 	{
 	public:
 		AnimationKeysChangeAction();
-		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,  const DataNode& beforeKeysData,
-								  const DataNode& afterKeysData, KeyHandlesSheet* editor);
+		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,  const DataValue& beforeKeysData,
+								  const DataValue& afterKeysData, KeyHandlesSheet* editor);
 
 		String GetName() const override;
 		void Redo();
@@ -56,8 +56,8 @@ namespace Editor
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
-		DataNode                    mBeforeKeysData;
-		DataNode                    mAfterKeysData;
+		DataValue                    mBeforeKeysData;
+		DataValue                    mAfterKeysData;
 		KeyHandlesSheet*            mEditor;
 	};
 }

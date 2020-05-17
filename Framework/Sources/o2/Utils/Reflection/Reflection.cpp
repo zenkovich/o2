@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Reflection.h"
 
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Border.h"
@@ -48,7 +48,7 @@ namespace o2
 	DECLARE_FUNDAMENTAL_TYPE(o2::Vertex2);
 	DECLARE_FUNDAMENTAL_TYPE(o2::String);
 	DECLARE_FUNDAMENTAL_TYPE(o2::WString);
-	DECLARE_FUNDAMENTAL_TYPE(o2::DataNode);
+	DECLARE_FUNDAMENTAL_TYPE(o2::DataValue);
 	DECLARE_FUNDAMENTAL_TYPE(o2::UID);
 
 	Reflection::Reflection():

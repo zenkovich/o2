@@ -85,8 +85,8 @@ namespace Editor
 		mLockProperty->Refresh();
 	}
 
-	void DefaultWidgetLayerHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, 
-														   const Vector<DataNode>& newValue)
+	void DefaultWidgetLayerHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataValue>& prevValue, 
+														   const Vector<DataValue>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);

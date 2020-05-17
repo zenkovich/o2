@@ -31,7 +31,7 @@ namespace Editor
 		mLeftProperty = GetChildByType<FloatProperty>("container/layout/properties/left");
 		mLeftProperty->SetValuePath("left");
 		mLeftProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
-		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		mLeftProperty->onChangeCompleted = [&](const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
@@ -39,7 +39,7 @@ namespace Editor
 		mBottomProperty = GetChildByType<FloatProperty>("container/layout/properties/bottom");
 		mBottomProperty->SetValuePath("bottom");
 		mBottomProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
-		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		mBottomProperty->onChangeCompleted = [&](const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
@@ -47,7 +47,7 @@ namespace Editor
 		mRightProperty = GetChildByType<FloatProperty>("container/layout/properties/right");
 		mRightProperty->SetValuePath("right");
 		mRightProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
-		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		mRightProperty->onChangeCompleted = [&](const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};
@@ -55,7 +55,7 @@ namespace Editor
 		mTopProperty = GetChildByType<FloatProperty>("container/layout/properties/top");
 		mTopProperty->SetValuePath("top");
 		mTopProperty->onChanged = [&](IPropertyField* field) { onChanged(field); };
-		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+		mTopProperty->onChangeCompleted = [&](const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 		{
 			onChangeCompleted(mValuesPath + "/" + path, before, after);
 		};

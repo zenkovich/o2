@@ -72,10 +72,10 @@ namespace o2
 		void SetOwnerActor(Actor* actor) override;
 
 		// Calling when deserializing
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Calling when serializing
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 	};
 }
 
@@ -98,7 +98,7 @@ CLASS_METHODS_META(o2::ImageComponent)
 	PUBLIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 }
 END_META;

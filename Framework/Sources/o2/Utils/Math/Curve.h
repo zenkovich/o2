@@ -278,7 +278,7 @@ namespace o2
 		Vector<Key> GetKeysNonContant();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Smooths key at index and doesn't updates approximation
 		void InternalSmoothKeyAt(int idx, float smoothCoef = 1.0f);
@@ -356,7 +356,7 @@ CLASS_METHODS_META(o2::Curve)
 	PROTECTED_FUNCTION(void, CheckSmoothKeys);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
 	PROTECTED_FUNCTION(void, InternalSmoothKey, float, float);
 }

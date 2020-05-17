@@ -264,7 +264,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void GridLayoutScrollArea::OnDeserialized(const DataNode& node)
+	void GridLayoutScrollArea::OnDeserialized(const DataValue& node)
 	{
 		ScrollArea::OnDeserialized(node);
 		RetargetStatesAnimations();

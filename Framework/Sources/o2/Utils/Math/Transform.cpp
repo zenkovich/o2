@@ -21,7 +21,7 @@ namespace o2
 		lookAtPoint(this)
 	{}
 
-	void Transform::OnDeserialized(const DataNode& node)
+	void Transform::OnDeserialized(const DataValue& node)
 	{
 		UpdateTransform();
 	}

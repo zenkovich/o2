@@ -283,7 +283,7 @@ namespace o2
 		SetLayoutDirty();
 	}
 
-	void HorizontalScrollBar::OnDeserialized(const DataNode& node)
+	void HorizontalScrollBar::OnDeserialized(const DataValue& node)
 	{
 		Widget::OnDeserialized(node);
 

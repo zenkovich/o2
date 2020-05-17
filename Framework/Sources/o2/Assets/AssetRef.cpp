@@ -37,7 +37,7 @@ namespace o2
 		mAssetOwner = true;
 	}
 
-	void AssetRef::OnSerialize(DataNode& node) const
+	void AssetRef::OnSerialize(DataValue& node) const
 	{
 		if (mAssetOwner)
 		{
@@ -56,7 +56,7 @@ namespace o2
 		}
 	}
 
-	void AssetRef::OnDeserialized(const DataNode& node)
+	void AssetRef::OnDeserialized(const DataValue& node)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)--;
@@ -64,19 +64,19 @@ namespace o2
 		mAssetPtr = nullptr;
 		mRefCounter = nullptr;
 
-		if (node.GetNode("own"))
+		if (node.GetMember("own"))
 		{
-			mAssetPtr = *node.GetNode("asset");
-			mAssetPtr->mInfo.meta = *node.GetNode("meta");
+			mAssetPtr = *node.GetMember("asset");
+			mAssetPtr->mInfo.meta = *node.GetMember("meta");
 			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
 			UpdateSpecAsset();
 		}
-		else if (auto idNode = node.GetNode("id"))
+		else if (auto idNode = node.GetMember("id"))
 		{
 			*this = o2Assets.GetAssetRef((UID)(*idNode));
 			UpdateSpecAsset();
 		}
-		else if (auto pathNode = node.GetNode("path"))
+		else if (auto pathNode = node.GetMember("path"))
 		{
 			*this = o2Assets.GetAssetRef(pathNode->Data());
 			UpdateSpecAsset();

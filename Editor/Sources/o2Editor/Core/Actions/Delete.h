@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2Editor/Core/Actions/IAction.h"
 
@@ -19,7 +19,7 @@ namespace Editor
 		class ObjectInfo: public ISerializable
 		{
 		public:
-			DataNode objectData;   // @SERIALIZABLE
+			DataValue objectData;   // @SERIALIZABLE
 			SceneUID parentId;	   // @SERIALIZABLE
 			SceneUID prevObjectId; // @SERIALIZABLE
 			int      idx;          // @SERIALIZABLE

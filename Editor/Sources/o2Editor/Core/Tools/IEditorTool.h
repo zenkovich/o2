@@ -3,7 +3,7 @@
 #include "o2/Application/Input.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Reflection/Type.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 
 using namespace o2;
 

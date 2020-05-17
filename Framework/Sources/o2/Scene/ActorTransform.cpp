@@ -756,12 +756,12 @@ namespace o2
 			mData->parentInvertedTransform = Basis::Identity();
 	}
 
-	void ActorTransform::OnSerialize(DataNode& node) const
+	void ActorTransform::OnSerialize(DataValue& node) const
 	{
 		node.SetValue(*mData);
 	}
 
-	void ActorTransform::OnDeserialized(const DataNode& node)
+	void ActorTransform::OnDeserialized(const DataValue& node)
 	{
 		node.GetValue(*mData);
 		SetDirty();

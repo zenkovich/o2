@@ -104,7 +104,7 @@ namespace o2
 		}
 	}
 
-	void AssetInfo::OnDeserialized(const DataNode& node)
+	void AssetInfo::OnDeserialized(const DataValue& node)
 	{
 		for (auto child : children)
 			child->parent = this;

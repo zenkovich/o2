@@ -281,7 +281,7 @@ namespace o2
 
 	}
 
-	void Toggle::OnDeserialized(const DataNode& node)
+	void Toggle::OnDeserialized(const DataValue& node)
 	{
 		Widget::OnDeserialized(node);
 

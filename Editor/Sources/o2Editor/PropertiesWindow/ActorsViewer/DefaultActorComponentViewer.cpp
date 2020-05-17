@@ -57,7 +57,7 @@ namespace Editor
 		}
 	}
 
-	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	void DefaultActorComponentViewer::OnPropertyChanged(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 	{
 		for (auto component : mTargetComponents)
 			component->GetOwnerActor()->OnChanged();

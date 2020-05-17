@@ -205,7 +205,7 @@ namespace o2
 		SetValue(mValue + scroll*mScrollSense);
 	}
 
-	void HorizontalProgress::OnDeserialized(const DataNode& node)
+	void HorizontalProgress::OnDeserialized(const DataValue& node)
 	{
 		Widget::OnDeserialized(node);
 

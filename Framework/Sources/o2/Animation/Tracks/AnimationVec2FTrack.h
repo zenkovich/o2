@@ -275,7 +275,7 @@ namespace o2
 		void UpdateApproximation();
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 	};
 }
 
@@ -325,7 +325,7 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>)
 	PUBLIC_STATIC_FUNCTION(AnimationTrack<Vec2F>, Linear, const Vec2F&, const Vec2F&, float);
 	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;
 

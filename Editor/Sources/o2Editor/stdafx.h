@@ -103,7 +103,7 @@
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"

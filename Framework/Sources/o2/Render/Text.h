@@ -268,7 +268,7 @@ namespace o2
 		void BasisChanged() override;
 
 		// Calling when deserializing
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 	};
 }
 
@@ -341,6 +341,6 @@ CLASS_METHODS_META(o2::Text)
 	PROTECTED_FUNCTION(Basis, CalculateTextBasis);
 	PROTECTED_FUNCTION(void, ColorChanged);
 	PROTECTED_FUNCTION(void, BasisChanged);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

@@ -315,10 +315,10 @@ namespace o2
 		void UpdateLayersLayouts() override;
 
 		// Beginning serialization callback
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 
 		// It is called when deserialized
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 	};
 
 	// --------------------------------------------
@@ -564,7 +564,7 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PRIVATE_FUNCTION(void, UpdateLayersLayouts);
-	PRIVATE_FUNCTION(void, OnSerialize, DataNode&);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
+	PRIVATE_FUNCTION(void, OnSerialize, DataValue&);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

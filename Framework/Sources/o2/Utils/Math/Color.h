@@ -5,7 +5,7 @@
 
 namespace o2
 {
-	class DataNode;
+	class DataValue;
 
 	class Color4
 	{

@@ -57,7 +57,7 @@ namespace o2
 			page.mOwner = this;
 	}
 
-	void AtlasAsset::OnDeserialized(const DataNode& node)
+	void AtlasAsset::OnDeserialized(const DataValue& node)
 	{
 		for (auto& page : mPages)
 			page.mOwner = this;

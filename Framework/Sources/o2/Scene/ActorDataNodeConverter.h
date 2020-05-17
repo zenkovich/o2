@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Singleton.h"
 
 namespace o2
@@ -12,10 +12,10 @@ namespace o2
 	{
 	public:
 		// Converts actor pointer to data 
-		void ToData(const Actor* object, DataNode& data);
+		void ToData(const Actor* object, DataValue& data);
 
 		// Gets actor pointer from data
-		void FromData(Actor*& object, const DataNode& data);
+		void FromData(Actor*& object, const DataValue& data);
 
 	protected:
 		struct ActorDef
@@ -66,18 +66,18 @@ namespace o2
 	};
 
 	template<>
-	struct DataNode::Converter<Actor*>
+	struct DataValue::Converter<Actor*>
 	{
 		static constexpr bool isSupported = true;
 
 		using ActorPtr = Actor *;
 
-		static void Write(const ActorPtr& value, DataNode& data)
+		static void Write(const ActorPtr& value, DataValue& data)
 		{
 			ActorDataNodeConverter::Instance().ToData(value, data);
 		}
 
-		static void Read(ActorPtr& value, const DataNode& data)
+		static void Read(ActorPtr& value, const DataValue& data)
 		{
 			ActorDataNodeConverter::Instance().FromData(value, data);
 		}

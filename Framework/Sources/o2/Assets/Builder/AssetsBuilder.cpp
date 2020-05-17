@@ -340,7 +340,7 @@ namespace o2
 		auto assetTypeSample = (Asset*)assetType.CreateSample();
 		auto assetTypeSampleMeta = assetTypeSample->GetMeta();
 
-		DataNode metaData;
+		DataValue metaData;
 		metaData = assetTypeSampleMeta;
 		metaData["Value/mId"] = UID();
 

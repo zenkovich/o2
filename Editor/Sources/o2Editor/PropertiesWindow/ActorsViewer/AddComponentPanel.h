@@ -167,7 +167,7 @@ namespace Editor
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called on deserialization, initializes controls
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// initializes controls and widgets
 		void InitializeControls();
@@ -248,7 +248,7 @@ CLASS_METHODS_META(Editor::ComponentsTreeNode)
 
 	PUBLIC_FUNCTION(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
 	PRIVATE_FUNCTION(void, CopyData, const Actor&);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataNode&);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 	PRIVATE_FUNCTION(void, InitializeControls);
 }
 END_META;

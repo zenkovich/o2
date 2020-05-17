@@ -1830,7 +1830,7 @@ namespace Editor
 				copyKeys.Add(copyInfo);
 		}
 
-		DataNode copyData;
+		DataValue copyData;
 		copyData = copyKeys;
 		String copyDataStr = copyData.SaveAsWString();
 
@@ -1852,7 +1852,7 @@ namespace Editor
 			return;
 
 		float insertPos = ScreenToLocalPoint(o2Input.cursorPos).x;
-		DataNode data;
+		DataValue data;
 		data.LoadFromData(Clipboard::GetText());
 
 		Vector<CurveCopyInfo*> copyKeys;
@@ -1967,7 +1967,7 @@ namespace Editor
 			return;
 
 		float insertPos = ScreenToLocalPoint(o2Input.cursorPos).x;
-		DataNode data;
+		DataValue data;
 		data.LoadFromData(Clipboard::GetText());
 
 		Vector<CurveCopyInfo*> copyKeys;

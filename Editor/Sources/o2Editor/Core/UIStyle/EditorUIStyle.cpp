@@ -4375,7 +4375,7 @@ namespace Editor
 		String thisSourcePath = "../../../Sources/Core/UIStyle/EditorUIStyle.cpp";
 		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
 
-		DataNode data;
+		DataValue data;
 		if (data.LoadFromFile(generateDateCachePath))
 		{
 			TimeStamp cachedDate = data;

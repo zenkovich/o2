@@ -163,8 +163,8 @@ namespace Editor
 		mOffsetLeftBottomProperty->Refresh();
 	}
 
-	void DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataNode>& prevValue, 
-														   const Vector<DataNode>& newValue)
+	void DefaultWidgetLayerLayoutViewer::OnPropertyChangeCompleted(const String& path, const Vector<DataValue>& prevValue, 
+														   const Vector<DataValue>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);

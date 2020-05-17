@@ -160,7 +160,7 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// It is called when child widget was added
 		void OnChildAdded(Widget* child) override;
@@ -283,7 +283,7 @@ CLASS_METHODS_META(o2::ScrollArea)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, SetChildrenWorldRect, const RectF&);

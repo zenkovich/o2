@@ -74,7 +74,7 @@ namespace Editor
 		Vector<Actor*> GetRootApplyActors();
 
 		// It is called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
+		void OnPropertyChanged(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue);
 	};
 }
 
@@ -108,6 +108,6 @@ CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 	PROTECTED_FUNCTION(void, OnRevertPrototypePressed);
 	PROTECTED_FUNCTION(void, OnBreakPrototypePressed);
 	PROTECTED_FUNCTION(Vector<Actor*>, GetRootApplyActors);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
 }
 END_META;

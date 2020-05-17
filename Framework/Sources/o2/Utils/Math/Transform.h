@@ -233,7 +233,7 @@ namespace o2
 		virtual void BasisChanged() { }
 
 		// It is called when object was deserialized
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Updates mTransform 
 		virtual void UpdateTransform();
@@ -334,7 +334,7 @@ CLASS_METHODS_META(o2::Transform)
 	PUBLIC_FUNCTION(Vec2F, Local2WorldDir, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsPointInside, const Vec2F&);
 	PROTECTED_FUNCTION(void, BasisChanged);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, UpdateTransform);
 }
 END_META;

@@ -8,7 +8,7 @@ namespace o2
 {
 	CREATE_SINGLETON(ActorDataNodeConverter);
 
-	void ActorDataNodeConverter::ToData(const Actor* object, DataNode& data)
+	void ActorDataNodeConverter::ToData(const Actor* object, DataValue& data)
 	{
 		if (object)
 		{
@@ -21,9 +21,9 @@ namespace o2
 		}
 	}
 
-	void ActorDataNodeConverter::FromData(Actor*& object, const DataNode& data)
+	void ActorDataNodeConverter::FromData(Actor*& object, const DataValue& data)
 	{
-		if (auto assetIdNode = data.GetNode("AssetId"))
+		if (auto assetIdNode = data.GetMember("AssetId"))
 		{
 			UID assetId = *assetIdNode;
 			object = o2Scene.GetAssetActorByID(assetId);
@@ -31,7 +31,7 @@ namespace o2
 			if (!object)
 				mUnresolvedActors.Add(ActorDef(&object, assetId));
 		}
-		else if (auto sceneIdNode = data.GetNode("ID"))
+		else if (auto sceneIdNode = data.GetMember("ID"))
 		{
 			if (mLockDepth == 0)
 				object = o2Scene.GetActorByID(*sceneIdNode);
@@ -39,7 +39,7 @@ namespace o2
 			if (!object)
 				mUnresolvedActors.Add(ActorDef(&object, (SceneUID)*sceneIdNode));
 		}
-		else if (auto dataNode = data.GetNode("Data"))
+		else if (auto dataNode = data.GetMember("Data"))
 		{
 			if (dataNode->Data() == "null")
 				object = nullptr;

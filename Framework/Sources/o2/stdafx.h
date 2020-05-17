@@ -4,7 +4,7 @@
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Render/Render.h"
-#include "o2/Render/Sprite.h"
+#include "o2/Render/Sprite.h"S
 #include "o2/Render/Text.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Component.h"
@@ -28,7 +28,7 @@
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"

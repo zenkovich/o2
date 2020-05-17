@@ -1056,7 +1056,7 @@ namespace o2
 		}
 	}
 
-	void Sprite::OnSerialize(DataNode& node) const
+	void Sprite::OnSerialize(DataValue& node) const
 	{
 		if (!mImageAsset)
 		{
@@ -1067,7 +1067,7 @@ namespace o2
 		}
 	}
 
-	void Sprite::OnDeserialized(const DataNode& node)
+	void Sprite::OnDeserialized(const DataValue& node)
 	{
 		if (mImageAsset)
 		{
@@ -1077,12 +1077,12 @@ namespace o2
 		}
 		else
 		{
-			if (auto textureFileNameNode = node.GetNode("textureFileName"))
+			if (auto textureFileNameNode = node.GetMember("textureFileName"))
 				mMesh->SetTexture(TextureRef(textureFileNameNode->Data()));
 			else
 				mMesh->SetTexture(NoTexture());
 
-			if (auto textureSrcRectNode = node.GetNode("mTextureSrcRect"))
+			if (auto textureSrcRectNode = node.GetMember("mTextureSrcRect"))
 				mTextureSrcRect = *textureSrcRectNode;
 		}
 

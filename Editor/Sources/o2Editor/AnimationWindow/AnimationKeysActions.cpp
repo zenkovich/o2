@@ -6,7 +6,7 @@ namespace Editor
 	AnimationAddKeysAction::AnimationAddKeysAction()
 	{}
 
-	AnimationAddKeysAction::AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor):
+	AnimationAddKeysAction::AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataValue& keysData, KeyHandlesSheet* editor):
 		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
@@ -30,7 +30,7 @@ namespace Editor
 	AnimationDeleteKeysAction::AnimationDeleteKeysAction()
 	{}
 
-	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataNode& keysData, KeyHandlesSheet* editor) :
+	AnimationDeleteKeysAction::AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataValue& keysData, KeyHandlesSheet* editor) :
 		mKeys(keys), mKeysData(keysData), mEditor(editor)
 	{}
 
@@ -54,8 +54,8 @@ namespace Editor
 	AnimationKeysChangeAction::AnimationKeysChangeAction()
 	{}
 
-	AnimationKeysChangeAction::AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys, const DataNode& beforeKeysData,
-														 const DataNode& afterKeysData, KeyHandlesSheet* editor):
+	AnimationKeysChangeAction::AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys, const DataValue& beforeKeysData,
+														 const DataValue& afterKeysData, KeyHandlesSheet* editor):
 		mKeys(keys), mBeforeKeysData(beforeKeysData), mAfterKeysData(afterKeysData), mEditor(editor)
 	{}
 

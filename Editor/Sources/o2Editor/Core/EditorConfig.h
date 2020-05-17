@@ -33,10 +33,10 @@ namespace Editor
 		~EditorConfig();
 
 		// Returns user data from global config
-		DataNode& GetGlobalUserData();
+		DataValue& GetGlobalUserData();
 
 		// Returns user data from project config
-		DataNode& GetProjectUserData();
+		DataValue& GetProjectUserData();
 
 		SERIALIZABLE(EditorConfig);
 
@@ -45,7 +45,7 @@ namespace Editor
 		{
 		public:
 			WindowsLayout  mDefaultLayout;         // Default windows layout, using in resetting @SERIALIZABLE
-			DataNode       mUserData;              // User data  @SERIALIZABLE
+			DataValue       mUserData;              // User data  @SERIALIZABLE
 
 			Map<String, WindowsLayout> mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
 
@@ -59,7 +59,7 @@ namespace Editor
 			Vec2I         mWindowPosition;               // Application window position @SERIALIZABLE
 			bool          mMaximized = true;             // Is application window is maximized @SERIALIZABLE
 			WindowsLayout mLayout;                       // Windows layout @SERIALIZABLE
-			DataNode      mUserData;                     // User data  @SERIALIZABLE
+			DataValue      mUserData;                     // User data  @SERIALIZABLE
 
 			SERIALIZABLE(ProjectConfig);
 		};
@@ -114,8 +114,8 @@ END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
 {
 
-	PUBLIC_FUNCTION(DataNode&, GetGlobalUserData);
-	PUBLIC_FUNCTION(DataNode&, GetProjectUserData);
+	PUBLIC_FUNCTION(DataValue&, GetGlobalUserData);
+	PUBLIC_FUNCTION(DataValue&, GetProjectUserData);
 	PROTECTED_FUNCTION(void, SaveGlobalConfigs);
 	PROTECTED_FUNCTION(void, SaveProjectConfigs);
 	PROTECTED_FUNCTION(void, LoadConfigs);

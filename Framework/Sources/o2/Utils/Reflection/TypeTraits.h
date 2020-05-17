@@ -121,7 +121,7 @@ namespace o2
 		std::is_same<T, String>::value ||
 		std::is_same<T, WString>::value ||
 		std::is_same<T, UID>::value ||
-		std::is_same<T, DataNode>::value, std::true_type, std::false_type>::type {};
+		std::is_same<T, DataValue>::value, std::true_type, std::false_type>::type {};
 
 	// type trait
 	template<typename T, typename X =

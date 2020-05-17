@@ -94,10 +94,10 @@ namespace o2
 		AssetRef(Asset* assetPtr, int* refCounter);
 
 		// Beginning serialization callback - writes path and id
-		void OnSerialize(DataNode& node) const override;
+		void OnSerialize(DataValue& node) const override;
 
 		// Completion deserialization callback -  reads path and id and searches asset
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Updates specialized asset pointer
 		virtual void UpdateSpecAsset() {};
@@ -229,8 +229,8 @@ CLASS_METHODS_META(o2::AssetRef)
 	PUBLIC_FUNCTION(void, RemoveInstance);
 	PUBLIC_FUNCTION(void, SaveInstance, const String&);
 	PUBLIC_FUNCTION(bool, IsInstance);
-	PROTECTED_FUNCTION(void, OnSerialize, DataNode&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, UpdateSpecAsset);
 }
 END_META;

@@ -110,7 +110,7 @@ namespace Editor
 			kv.second->UpdateHandles();
 	}
 
-	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	void MapKeyFramesTrackControl::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{
 		for (auto& kv : mHandlesGroups)
 		{

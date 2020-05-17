@@ -38,7 +38,7 @@ namespace Editor
 		void UpdateHandles() override;
 
 		// Serialize key with specified uid into data node
-		void SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
+		void SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) override;
 
 		// Returns key handles list
 		Vector<ITrackControl::KeyHandle*> GetKeyHandles() const override;
@@ -88,7 +88,7 @@ namespace Editor
 			virtual void CreateHandles() = 0;
 			virtual void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) = 0;
 			virtual void UpdateHandles() = 0;
-			virtual bool SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) = 0;
+			virtual bool SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) = 0;
 			virtual void DeleteKey(UInt64 keyUid) = 0;
 			void CacheHandles();
 		};
@@ -105,7 +105,7 @@ namespace Editor
 			void CreateHandles() override;
 			void OnHandleChangedPos(KeyHandle* keyHandle, const Vec2F& pos) override;
 			void UpdateHandles() override;
-			bool SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime) override;
+			bool SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime) override;
 			void DeleteKey(UInt64 keyUid) override;
 		};
 
@@ -240,7 +240,7 @@ namespace Editor
 	}
 
 	template<typename TrackType>
-	bool MapKeyFramesTrackControl::HandlesGroup<TrackType>::SerializeKey(UInt64 keyUid, DataNode& data, float relativeTime)
+	bool MapKeyFramesTrackControl::HandlesGroup<TrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{
 		int idx = track->FindKeyIdx(keyUid);
 		if (idx < 0)
@@ -283,7 +283,7 @@ CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, UpdateHandles);
-	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataNode&, float);
+	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataValue&, float);
 	PUBLIC_FUNCTION(Vector<ITrackControl::KeyHandle*>, GetKeyHandles);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
 	PUBLIC_FUNCTION(void, SetMappedTracks, const AnimationTree::TrackNode&);

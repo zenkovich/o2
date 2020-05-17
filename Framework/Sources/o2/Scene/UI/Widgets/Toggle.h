@@ -132,7 +132,7 @@ namespace o2
 
 	protected:
 		// It is called when deserialized
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
@@ -207,7 +207,7 @@ CLASS_METHODS_META(o2::Toggle)
 	PUBLIC_FUNCTION(void, SetToggleGroup, ToggleGroup*);
 	PUBLIC_FUNCTION(ToggleGroup*, GetToggleGroup);
 	PUBLIC_FUNCTION(bool, IsFocusable);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);

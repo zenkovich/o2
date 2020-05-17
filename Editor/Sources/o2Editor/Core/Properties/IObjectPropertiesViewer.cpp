@@ -10,7 +10,7 @@ namespace Editor
 	{
 		mOnChildFieldChangeCompleted =
 			MakeFunction<IObjectPropertiesViewer, void, const String&,
-			const Vector<DataNode>&, const Vector<DataNode>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
+			const Vector<DataValue>&, const Vector<DataValue>&>(this, &IObjectPropertiesViewer::OnFieldChangeCompleted);
 	}
 
 	void IObjectPropertiesViewer::SetHeaderEnabled(bool enabled)
@@ -127,7 +127,7 @@ namespace Editor
 		mPropertiesBuilt = true;
 	}
 
-	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 	{
 		onChangeCompleted(this->path + "/" + path, before, after);
 	}

@@ -228,7 +228,7 @@ namespace Editor
 		return res;
 	}
 
-	void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataNode>& before, const Vector<DataNode>& after)
+	void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
 	{
 		for (auto& pair : mTargetObjects)
 			pair.first.SetValue();

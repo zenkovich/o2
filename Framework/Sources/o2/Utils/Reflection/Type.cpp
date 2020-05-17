@@ -4,7 +4,7 @@
 #include "o2/Animation/AnimationClip.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Reflection/Reflection.h"
-#include "o2/Utils/Serialization/DataNode.h"
+#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/System/Time/Timer.h"
 
 namespace o2
@@ -231,12 +231,12 @@ namespace o2
 		return nullptr;
 	}
 
-	void Type::Serialize(void* ptr, DataNode& data) const
+	void Type::Serialize(void* ptr, DataValue& data) const
 	{
 		mSerializer->Serialize(ptr, data);
 	}
 
-	void Type::Deserialize(void* ptr, const DataNode& data) const
+	void Type::Deserialize(void* ptr, const DataValue& data) const
 	{
 		mSerializer->Deserialize(ptr, data);
 	}

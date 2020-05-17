@@ -50,7 +50,7 @@ namespace Editor
 
 	protected:
 		// It is called when some property changed, stores action for undo
-		void OnPropertyChanged(const String& path, const Vector<DataNode>& prevValue, const Vector<DataNode>& newValue);
+		void OnPropertyChanged(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue);
 	};
 }
 
@@ -74,6 +74,6 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
 	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataNode>&, const Vector<DataNode>&);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
 }
 END_META;

@@ -86,12 +86,12 @@ namespace o2
 		DrawableComponent::SetOwnerActor(actor);
 	}
 
-	void ImageComponent::OnDeserialized(const DataNode& node)
+	void ImageComponent::OnDeserialized(const DataValue& node)
 	{
 		Sprite::OnDeserialized(node);
 	}
 
-	void ImageComponent::OnSerialize(DataNode& node) const
+	void ImageComponent::OnSerialize(DataValue& node) const
 	{
 		Sprite::OnSerialize(node);
 	}

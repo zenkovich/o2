@@ -357,10 +357,10 @@ namespace o2
 			mLayers.Clear();
 		}
 
-		DataNode data;
+		DataValue data;
 		data.LoadFromFile(path);
 
-		auto layersNode = data.GetNode("Layers");
+		auto layersNode = data.GetMember("Layers");
 		for (auto layerNode : *layersNode)
 		{
 			auto layer = mnew SceneLayer();
@@ -368,9 +368,9 @@ namespace o2
 			mLayers.Add(layer);
 		}
 
-		mDefaultLayer = GetLayer(data.GetNode("DefaultLayer")->Data());
+		mDefaultLayer = GetLayer(data.GetMember("DefaultLayer")->Data());
 
-		auto tagsNode = data.GetNode("Tags");
+		auto tagsNode = data.GetMember("Tags");
 		for (auto tagNode : *tagsNode)
 		{
 			auto tag = mnew Tag();
@@ -378,7 +378,7 @@ namespace o2
 			mTags.Add(tag);
 		}
 
-		auto actorsNode = data.GetNode("Actors");
+		auto actorsNode = data.GetMember("Actors");
 		for (auto actorNode : *actorsNode)
 		{
 			auto actor = mnew Actor();
@@ -391,7 +391,7 @@ namespace o2
 
 	void Scene::Save(const String& path)
 	{
-		DataNode data;
+		DataValue data;
 
 		auto layersNode = data.AddNode("Layers");
 		for (auto layer : mLayers)

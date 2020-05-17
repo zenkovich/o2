@@ -357,7 +357,7 @@ namespace Editor
 		InitializeControls();
 	}
 
-	void SceneTreeNode::OnDeserialized(const DataNode& node)
+	void SceneTreeNode::OnDeserialized(const DataValue& node)
 	{
 		TreeNode::OnDeserialized(node);
 		InitializeControls();
@@ -453,8 +453,8 @@ namespace Editor
 		((SceneTree*)mOwnerTree)->OnObjectChanged(mTargetObject);
 
 
-		DataNode prevData; prevData = prevName;
-		DataNode newData; newData = mTargetObject->GetName();
+		DataValue prevData; prevData = prevName;
+		DataValue newData; newData = mTargetObject->GetName();
 
 		auto action = mnew PropertyChangeAction({ mTargetObject }, "name", { prevData }, { newData });
 		o2EditorApplication.DoneAction(action);

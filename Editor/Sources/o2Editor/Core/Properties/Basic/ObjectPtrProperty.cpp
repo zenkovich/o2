@@ -325,12 +325,12 @@ namespace Editor
 			mObjectViewer->GetSpoiler()->SetLayoutDirty();
 	}
 
-	void ObjectPtrProperty::StoreValues(Vector<DataNode>& data) const
+	void ObjectPtrProperty::StoreValues(Vector<DataValue>& data) const
 	{
 		data.Clear();
 		for (auto targetObj : mTargetObjects)
 		{
-			data.Add(DataNode());
+			data.Add(DataValue());
 			data.Last() = GetProxy(targetObj.first);
 		}
 	}

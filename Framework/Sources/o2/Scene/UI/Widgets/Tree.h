@@ -487,7 +487,7 @@ namespace o2
 // ------------
 
 		// Completion deserialization callback
-		void OnDeserialized(const DataNode& node) override;
+		void OnDeserialized(const DataValue& node) override;
 
 		friend class TreeNode;
 	};
@@ -750,7 +750,7 @@ CLASS_METHODS_META(o2::Tree)
 	PROTECTED_FUNCTION(void, OnDraggedAbove, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataNode&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
