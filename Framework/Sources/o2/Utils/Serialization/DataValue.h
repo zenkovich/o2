@@ -6,14 +6,19 @@
 #include "o2/Utils/Types/UID.h"
 #include "o2/Utils/Property.h"
 
+#include "rapidjson/stream.h"
+#include "rapidjson/stringbuffer.h"
+#include "rapidjson/encodings.h"
+
 namespace o2
 {
 	class DataMember;
-	class DataMemberIterator;
-	class ConstDataMemberIterator;
 
-	class DataValueIterator;
-	class ConstDataValueIterator;
+	template <bool _const>
+	class BaseMemberIterator;
+
+	typedef BaseMemberIterator<false> DataMemberIterator;
+	typedef BaseMemberIterator<true> ConstDataMemberIterator;
 
 	// ----------------------------------------------
 	// DOM value. Contains value, or array, or object
@@ -85,6 +90,9 @@ namespace o2
 		template<typename _type>
 		void GetValue(_type& value) const;
 
+		// Optimized set string
+		void SetString(const wchar_t* string, int length);
+
 	public: // Array methods
 		// Checks value is array
 		bool IsArray() const;
@@ -103,31 +111,31 @@ namespace o2
 		DataValue& AddElement(DataValue& value);
 
 		// Adds element to array
-		DataValueIterator RemoveElement(DataValueIterator it);
+		DataValue* RemoveElement(DataValue* it);
 
 		// Begin array iterator
-		DataValueIterator Begin();
+		DataValue* Begin();
 
 		// Begin array const iterator
-		ConstDataValueIterator Begin() const;
+		const DataValue* Begin() const;
 
 		// End array iterator
-		DataValueIterator End();
+		DataValue* End();
 
 		// End array const iterator
-		ConstDataValueIterator End() const;
+		const DataValue* End() const;
 
 		// Begin array iterator for range based for
-		DataValueIterator begin();
+		DataValue* begin();
 
 		// Begin array const iterator for range based for
-		ConstDataValueIterator begin() const;
+		const DataValue* begin() const;
 
 		// End array iterator for range based for
-		DataValueIterator end();
+		DataValue* end();
 
 		// End array const iterator for range based for
-		ConstDataValueIterator end() const;
+		const DataValue* end() const;
 
 	public: // Object methods		
 		// Checks value is object
@@ -197,30 +205,33 @@ namespace o2
 		// Saves data to string
 		WString SaveAsWString(Format format = Format::Xml) const;
 
-	protected:
-		enum class ValueType
+	public:
+		enum class Flags : unsigned
 		{
-			Bool = 1 << 0,
-			Int = 1 << 1,
-			UInt = 1 << 2,
-			Int64 = 1 << 3,
-			UInt64 = 1 << 4,
-			Float = 1 << 5,
-			String = 1 << 6,
-			Object = 1 << 7,
-			Array = 1 << 8,
-			Null = 1 << 9,
+			Bool        = 1 << 0,
+			Int         = 1 << 1,
+			UInt        = 1 << 2,
+			Int64       = 1 << 3,
+			UInt64      = 1 << 4,
+			Float       = 1 << 5,
+			Value       = 1 << 6,
+			String      = 1 << 7,
+			Object      = 1 << 8,
+			Array       = 1 << 9,
+			Null        = 1 << 10,
 
-			BoolTrue = 1 << 10,
-			BoolFalse = 1 << 11,
+			BoolTrue    = 1 << 11,
+			BoolFalse   = 1 << 12,
 
-			ShortString = 1 << 12,
-			StringRef = 1 << 13,
-			StringCopy = 1 << 14
-		};
+			ShortString = 1 << 13,
+			StringRef   = 1 << 14,
+			StringCopy  = 1 << 15
+		}; 
+
+	protected:
 
 		static constexpr int DataPayloadSize = 16;
-		static constexpr int DataSize = DataPayloadSize + sizeof(ValueType);
+		static constexpr int DataSize = DataPayloadSize + sizeof(Flags);
 
 		struct IntData
 		{
@@ -257,7 +268,13 @@ namespace o2
 		struct ValueTypeData
 		{
 			char padding[DataPayloadSize];
-			ValueType type;
+			Flags flags;
+
+			inline bool Is(Flags f) const {
+				return static_cast<Flags>(
+					static_cast<std::underlying_type<Flags>::type>(flags) &
+					static_cast<std::underlying_type<Flags>::type>(f)) == f;
+			}
 		};
 
 		struct ObjectData
@@ -295,6 +312,59 @@ namespace o2
 		DataValue name;
 		DataValue value;
 	};
+
+	template <bool _const>
+	class BaseMemberIterator
+	{
+		typedef std::conditional<_const, const DataMember, DataMember> DataMemberType;
+
+	public:
+		typedef DataMemberType value_type;
+		typedef DataMemberType* pointer;
+		typedef DataMemberType& reference;
+		typedef std::ptrdiff_t difference_type;
+		typedef std::random_access_iterator_tag iterator_category;
+
+	public:
+		BaseMemberIterator() {}
+		BaseMemberIterator(const BaseMemberIterator<true>& other): mPointer(other.mPointer) {}
+
+		operator bool() const { return mPointer != nullptr; }
+
+		BaseMemberIterator<_const>& operator=(const BaseMemberIterator<true>& other) { mPointer = other.mPointer; return *this; }
+
+		int operator-(BaseMemberIterator<true> other) const { return mPointer - other.mPointer; }
+
+		BaseMemberIterator<_const>& operator++() { ++mPointer; return *this; }
+		BaseMemberIterator<_const>& operator--() { --mPointer; return *this; }
+		BaseMemberIterator<_const>  operator++(int) { Iterator old(*this); ++mPointer; return old; }
+		BaseMemberIterator<_const>  operator--(int) { Iterator old(*this); --mPointer; return old; }
+
+		BaseMemberIterator<_const> operator+(int n) const { return Iterator(mPointer+n); }
+		BaseMemberIterator<_const> operator-(int n) const { return Iterator(mPointer-n); }
+
+		BaseMemberIterator<_const>& operator+=(int n) { mPointer += n; return *this; }
+		BaseMemberIterator<_const>& operator-=(int n) { mPointer -= n; return *this; }
+
+		template <bool _const_> bool operator==(const BaseMemberIterator<_const_>& other) const { return mPointer == other.mPointer; }
+		template <bool _const_> bool operator!=(const BaseMemberIterator<_const_>& other) const { return mPointer != other.mPointer; }
+		template <bool _const_> bool operator<=(const BaseMemberIterator<_const_>& other) const { return mPointer <= other.mPointer; }
+		template <bool _const_> bool operator>=(const BaseMemberIterator<_const_>& other) const { return mPointer >= other.mPointer; }
+		template <bool _const_> bool operator< (const BaseMemberIterator<_const_>& other) const { return mPointer < other.mPointer; }
+		template <bool _const_> bool operator> (const BaseMemberIterator<_const_>& other) const { return mPointer > other.mPointer; }
+
+		DataMemberType& operator*() const { return *mPointer; }
+		DataMemberType* operator->() const { return mPointer; }
+		DataMemberType& operator[](int n) const { return mPointer[n]; }
+
+		bool IsValid() const { return mPointer != nullptr; }
+
+	private:
+		explicit BaseMemberIterator(DataMemberType* p): mPointer(p) {}
+
+	private:
+		DataMemberType* mPointer = nullptr;
+	};
 }
 
 #include "o2/Utils/Reflection/Reflection.h"
@@ -315,6 +385,18 @@ namespace o2
 	}
 
 	template<typename _type>
+	DataValue::DataValue(const _type& value)
+	{
+		SetValue(value);
+	}
+
+	template<typename _type>
+	bool DataValue::IsValue() const
+	{
+		return mValue.flagsData.flags & Flags::Value;
+	}
+
+	template<typename _type>
 	DataValue::operator _type() const
 	{
 		_type result;
@@ -330,30 +412,6 @@ namespace o2
 	}
 
 	template<>
-	struct DataValue::Converter<DataValue>
-	{
-		static constexpr bool isSupported = true;
-
-		static void Write(const DataValue& value, DataValue& data)
-		{
-			for (auto child : data.mChildNodes)
-				delete child;
-
-			data.mChildNodes.Clear();
-
-			for (auto child : value.mChildNodes)
-				data.mChildNodes.Add(mnew DataValue(*child));
-
-			data.mData = value.mData;
-		}
-
-		static void Read(DataValue& value, const DataValue& data)
-		{
-			Write(data, value);
-		}
-	};
-
-	template<>
 	struct DataValue::Converter<char*>
 	{
 		static constexpr bool isSupported = true;
@@ -362,12 +420,44 @@ namespace o2
 
 		static void Write(const charPtr& value, DataValue& data)
 		{
-			data.mData = value;
+			using namespace rapidjson;
+
+			StringStream source(value);
+			GenericStringBuffer<UTF16<>> target;
+
+			bool hasError = false;
+			while (source.Peek() != '\0')
+			{
+				if (!Transcoder<UTF8<>, UTF16<>>::Transcode(source, target))
+				{
+					hasError = true;
+					break;
+				}
+			}
+
+			if (!hasError)
+				data.SetValue(target.GetString());
 		}
 
 		static void Read(charPtr& value, const DataValue& data)
 		{
-			memcpy(value, ((String)data.mData).Data(), sizeof(char)*data.mData.Length());
+			using namespace rapidjson;
+
+			GenericStringStream<UTF16<>> source((wchar_t*)data);
+			GenericStringBuffer<UTF8<>> target;
+
+			bool hasError = false;
+			while (source.Peek() != '\0')
+			{
+				if (!Transcoder<UTF16<>, UTF8<>>::Transcode(source, target))
+				{
+					hasError = true;
+					break;
+				}
+			}
+
+			if (!hasError)
+				strcpy(value, target.GetString());
 		}
 	};
 
@@ -380,12 +470,31 @@ namespace o2
 
 		static void Write(const wcharPtr& value, DataValue& data)
 		{
-			data.mData = value;
+			data.SetString(value, wcslen(value));
 		}
 
 		static void Read(wcharPtr value, const DataValue& data)
 		{
-			memcpy(value, data.mData.Data(), sizeof(wchar_t)*data.mData.Length());
+			if (data.mValue.flagsData.Is(DataValue::Flags::String))
+			{
+				if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
+				{
+					auto length = data.mValue.shortStringData.stringLength;
+					memcpy(value, data.mValue.shortStringData.stringValue, sizeof(wchar_t)*length);
+					value[length] = '\0';
+				}
+				else if (data.mValue.flagsData.Is(DataValue::Flags::StringRef) || 
+						 data.mValue.flagsData.Is(DataValue::Flags::StringCopy)) 
+				{
+					auto length = data.mValue.stringPtrData.stringLength;
+					memcpy(value, data.mValue.stringPtrData.stringPtr, sizeof(wchar_t)*length);
+					value[length] = '\0';
+				}
+			}
+			else
+			{
+				value[0] = (wchar_t)"\0";
+			}
 		}
 	};
 
@@ -396,12 +505,12 @@ namespace o2
 
 		static void Write(const bool& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.~DataValue();
 		}
 
 		static void Read(bool& value, const DataValue& data)
 		{
-			value = (bool)data.mData;
+			value = data.mValue.flagsData.Is(DataValue::Flags::Bool) && data.mValue.flagsData.Is(DataValue::Flags::BoolTrue);
 		}
 	};
 

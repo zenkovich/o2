@@ -48,6 +48,9 @@
     <Filter Include="Sources\o2\Animation\Editor">
       <UniqueIdentifier>{9cb38110-64d9-42d4-9a73-a11371a0e976}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\o2\Utils\Memory\Allocators">
+      <UniqueIdentifier>{7e5b4ff1-9c8b-4051-baf8-465b4e139dd3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
@@ -644,6 +647,18 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h">
       <Filter>Sources\o2\Utils\Serialization</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\IAllocator.h">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.h">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.h">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
@@ -1116,6 +1131,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Utils\Serialization\DataValue.cpp">
       <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.cpp">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.cpp">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

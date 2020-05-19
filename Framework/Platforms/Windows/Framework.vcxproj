@@ -298,6 +298,10 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Transform.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\IAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Property.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h" />
@@ -476,6 +480,9 @@
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Layout.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Math.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Transform.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.cpp" />
