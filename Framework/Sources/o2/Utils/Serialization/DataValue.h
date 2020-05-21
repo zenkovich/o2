@@ -1,10 +1,11 @@
 #pragma once
 
+#include "o2/Utils/Memory/Allocators/ChunkPoolAllocator.h"
+#include "o2/Utils/Property.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Types/UID.h"
-#include "o2/Utils/Property.h"
 
 #include "rapidjson/stream.h"
 #include "rapidjson/stringbuffer.h"
@@ -12,6 +13,7 @@
 
 namespace o2
 {
+	class DataDocument;
 	class DataMember;
 
 	template <bool _const>
@@ -91,7 +93,7 @@ namespace o2
 		void GetValue(_type& value) const;
 
 		// Optimized set string
-		void SetString(const wchar_t* string, int length);
+		void SetString(const wchar_t* string, int length, DataDocument& document);
 
 	public: // Array methods
 		// Checks value is array
@@ -108,7 +110,7 @@ namespace o2
 		const DataValue& GetElement(int idx) const;
 
 		// Adds element to array
-		DataValue& AddElement(DataValue& value);
+		DataValue& AddElement(DataValue& value, DataDocument& document);
 
 		// Adds element to array
 		DataValue* RemoveElement(DataValue* it);
@@ -160,7 +162,7 @@ namespace o2
 		const DataValue* FindMember(const WString& path) const;
 
 		// Add new node with name
-		DataValue& AddMember(const WString& name);
+		DataValue& AddMember(const WString& name, DataDocument& document);
 
 		// Removes node by name
 		void RemoveMember(const WString& name);
@@ -307,12 +309,24 @@ namespace o2
 		ValueData mValue;
 	};
 
+	class DataDocument: public DataValue
+	{
+	protected:
+		ChunkPoolAllocator mAllocator;
+	};
+
+	// --------------------------------------------
+	// Data object value member. Has name and value
+	// --------------------------------------------
 	class DataMember
 	{
 		DataValue name;
 		DataValue value;
 	};
 
+	// -------------------------
+	// Base data member iterator
+	// -------------------------
 	template <bool _const>
 	class BaseMemberIterator
 	{
