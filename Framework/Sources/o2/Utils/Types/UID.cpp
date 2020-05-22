@@ -3,7 +3,34 @@
 
 namespace o2
 {
-	UID& UID::operator=(const String& data)
+	UID::UID()
+	{
+		Randomize();
+	}
+
+	UID::UID(int value)
+	{
+		memset(data, 0, 16);
+		memcpy(data, &value, 4);
+	}
+
+	UID::UID(const UID& other)
+	{
+		memcpy(data, other.data, 16);
+	}
+
+	UID::UID(const WString& stringData)
+	{
+		FromString(stringData);
+	}
+
+	UID& UID::operator=(const UID& other)
+	{
+		memcpy(data, other.data, 16);
+		return *this;
+	}
+
+	UID& UID::operator=(const WString& data)
 	{
 		FromString(data);
 		return *this;
@@ -19,30 +46,14 @@ namespace o2
 		return memcmp(data, other.data, 16) == 0;
 	}
 
-	UID::UID(const UID& other)
-	{
-		memcpy(data, other.data, 16);
-	}
-
-	UID::UID(int value)
-	{
-		memset(data, 0, 16);
-		memcpy(data, &value, 4);
-	}
-
-	UID::UID()
-	{
-		Randomize();
-	}
-
-	UID::UID(const String& stringData)
-	{
-		FromString(stringData);
-	}
-
 	bool UID::operator<(const UID& other) const
 	{
 		return memcmp(data, other.data, 16) < 0;
+	}
+
+	UID::operator WString() const
+	{
+		return ToString();
 	}
 
 	void UID::Randomize()
@@ -54,13 +65,13 @@ namespace o2
 		}
 	}
 
-	String UID::ToString() const
+	WString UID::ToString() const
 	{
 		char st[33];
 		st[32] = '\0';
 		for (int i = 0; i < 16; i += 4)
 		{
-			std::stringstream stream;
+			std::wstringstream stream;
 			stream << std::hex << *(int*)(data + i);
 
 			int l = (int)stream.str().length();
@@ -74,34 +85,22 @@ namespace o2
 		return st;
 	}
 
-	void UID::FromString(const String& stringData)
+	void UID::FromString(const WString& stringData)
 	{
-		char* pp;
-		char* str = mnew char[stringData.Length() + 1];
-		strcpy(str, stringData.Data());
+		wchar_t* pp;
+		wchar_t* str = mnew wchar_t[stringData.Length() + 1];
+		wcscpy(str, stringData.Data());
 		for (int i = 0; i < 16; i += 4)
 		{
 			int ii = i * 2;
 			int ii1 = ii + 8;
-			char t = str[ii1];
+			wchar_t t = str[ii1];
 			str[ii1] = '\0';
-			long x = strtol(str + ii, &pp, 16);
+			long x = wcstol(str + ii, &pp, 16);
 			memcpy(data + i, &x, 4);
 			str[ii1] = t;
 		}
 	}
 
-	UID::operator String() const
-	{
-		return ToString();
-	}
-
 	UID UID::empty = UID(0);
-
-	UID& UID::operator=(const UID& other)
-	{
-		memcpy(data, other.data, 16);
-		return *this;
-	}
-
 }

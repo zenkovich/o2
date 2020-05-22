@@ -4,7 +4,8 @@
 namespace o2
 {
 
-	ChunkPoolAllocator::ChunkPoolAllocator(size_t chunkSize /*= 64*1024*/, IAllocator* baseAllocator /*= DefaultAllocator::GetInstance()*/)
+	ChunkPoolAllocator::ChunkPoolAllocator(size_t chunkSize /*= 64*1024*/, 
+										   IAllocator* baseAllocator /*= DefaultAllocator::GetInstance()*/)
 	{
 		mBaseAllocator = baseAllocator;
 		mChunkSize = chunkSize;

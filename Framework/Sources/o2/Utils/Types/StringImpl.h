@@ -199,7 +199,9 @@ namespace o2
 
 	template<typename T>
 	TString<T>::~TString()
-	{}
+	{
+		~std::basic_string<T>();
+	}
 
 	template<typename T>
 	template<typename T2, typename X>
@@ -268,102 +270,106 @@ namespace o2
 	template<typename T>
 	TString<T>::operator Vec2F() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 2)
-			return Vec2F();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-
-		return Vec2F((float)splitted[0], (float)splitted[1]);
+		if constexpr (std::is_same<T, char>)
+		{
+			wchar_t *px = c_str(), *py;
+			return Vec2F(wcstof(px, &py), wcstof(py, nullptr));
+		}
+		else
+		{
+			char *px = c_str(), *py;
+			return Vec2F(strtof(px, &py), strtof(py, nullptr));
+		}
 	}
 
 	template<typename T>
 	TString<T>::operator Vec2I() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 2)
-			return Vec2F();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-
-		return Vec2I((int)splitted[0], (int)splitted[1]);
+		if constexpr (std::is_same<T, wchar_t>)
+		{
+			wchar_t *px = c_str(), *py;
+			return Vec2F((int)wcstol(px, &py), (int)wcstol(py, nullptr));
+		}
+		else
+		{
+			char *px = c_str(), *py;
+			return Vec2F((int)strtol(px, &py), (int)strtol(py, nullptr));
+		}
 	}
 
 	template<typename T>
 	TString<T>::operator RectF() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 4)
-			return RectF();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-		splitted[2].Trim();
-		splitted[3].Trim();
-
-		return RectF((float)splitted[0], (float)splitted[1], (float)splitted[2], (float)splitted[3]);
+		if constexpr (std::is_same<T, char>)
+		{
+			wchar_t *pl = c_str(), *pb, *pr, *pt;
+			return RectF(wcstof(pl, &pb), wcstof(pb, &pr), wcstof(pr, &pt), wcstof(pt, nullptr));
+		}
+		else
+		{
+			char *pl = c_str(), *pb, *pr, *pt;
+			return RectF(strtof(pl, &pb), strtof(pb, &pr), strtof(pr, &pt), strtof(pt, nullptr));
+		}
 	}
 
 	template<typename T>
 	TString<T>::operator RectI() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 4)
-			return RectI();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-		splitted[2].Trim();
-		splitted[3].Trim();
-
-		return RectI((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
+		if constexpr (std::is_same<T, char>)
+		{
+			wchar_t *pl = c_str(), *pb, *pr, *pt;
+			return RectF((int)wcstol(pl, &pb), (int)wcstol(pb, &pr), (int)wcstol(pr, &pt), (int)wcstol(pt, nullptr));
+		}
+		else
+		{
+			char *pl = c_str(), *pb, *pr, *pt;
+			return RectF((int)strtol(pl, &pb), (int)strtol(pb, &pr), (int)strtol(pr, &pt), (int)strtol(pt, nullptr));
+		}
 	}
 
 	template<typename T>
 	TString<T>::operator BorderF() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 4)
-			return BorderF();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-		splitted[2].Trim();
-		splitted[3].Trim();
-
-		return BorderF((float)splitted[0], (float)splitted[3], (float)splitted[2], (float)splitted[1]);
+		if constexpr (std::is_same<T, char>)
+		{
+			wchar_t *pl = c_str(), *pb, *pr, *pt;
+			return RectF(wcstof(pl, &pb), wcstof(pb, &pr), wcstof(pr, &pt), wcstof(pt, nullptr));
+		}
+		else
+		{
+			char *pl = c_str(), *pb, *pr, *pt;
+			return RectF(strtof(pl, &pb), strtof(pb, &pr), strtof(pr, &pt), strtof(pt, nullptr));
+		}
 	}
 
 	template<typename T>
 	TString<T>::operator BorderI() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 4)
-			return BorderI();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-		splitted[2].Trim();
-		splitted[3].Trim();
-
-		return BorderI((int)splitted[0], (int)splitted[3], (int)splitted[2], (int)splitted[1]);
+		if constexpr (std::is_same<T, char>)
+		{
+			wchar_t *pl = c_str(), *pb, *pr, *pt;
+			return RectF((int)wcstol(pl, &pb), (int)wcstol(pb, &pr), (int)wcstol(pr, &pt), (int)wcstol(pt, nullptr));
+		}
+		else
+		{
+			char *pl = c_str(), *pb, *pr, *pt;
+			return RectF((int)strtol(pl, &pb), (int)strtol(pb, &pr), (int)strtol(pr, &pt), (int)strtol(pt, nullptr));
+		}
 	}
 
 	template<typename T>
 	TString<T>::operator Color4() const
 	{
-		auto splitted = Split(";");
-		if (splitted.Count() < 4)
-			return Color4();
-
-		splitted[0].Trim();
-		splitted[1].Trim();
-		splitted[2].Trim();
-		splitted[3].Trim();
-
-		return Color4((int)splitted[0], (int)splitted[1], (int)splitted[2], (int)splitted[3]);
+		if constexpr (std::is_same<T, char>)
+		{
+			wchar_t *pr = c_str(), *pg, *pb, *pa;
+			return RectF((int)wcstol(pr, &pg), (int)wcstol(pg, &pb), (int)wcstol(pb, &pa), (int)wcstol(pa, nullptr));
+		}
+		else
+		{
+			char *pr = c_str(), *pg, *pb, *pa;
+			return RectF((int)strtol(pr, &pg), (int)strtol(pg, &pb), (int)strtol(pb, &pa), (int)strtol(pa, nullptr));
+		}
 	}
 
 	template<typename T>

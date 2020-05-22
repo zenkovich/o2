@@ -18,7 +18,7 @@ namespace o2
 		UID();
 		UID(const UID& other);
 		UID(int value);
-		UID(const String& stringData);
+		UID(const WString& stringData);
 
 		UID& operator=(const UID& other);
 
@@ -29,11 +29,11 @@ namespace o2
 
 		void Randomize();
 
-		String ToString() const;
-		void FromString(const String& stringData);
+		WString ToString() const;
+		void FromString(const WString& stringData);
 
-		operator String() const;
-		UID& operator=(const String& data);
+		operator WString() const;
+		UID& operator=(const WString& data);
 
 	public:
 		static UID empty;

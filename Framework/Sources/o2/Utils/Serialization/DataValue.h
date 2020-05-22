@@ -51,10 +51,10 @@ namespace o2
 
 	public:
 		// Default constructor
-		DataValue();
+		DataValue(DataDocument& document);
 
 		template<typename _type>
-		explicit DataValue(const _type& value);
+		explicit DataValue(const _type& value, DataDocument& document);
 
 		// Copy-constructor
 		DataValue(const DataValue& other);
@@ -93,7 +93,7 @@ namespace o2
 		void GetValue(_type& value) const;
 
 		// Optimized set string
-		void SetString(const wchar_t* string, int length, DataDocument& document);
+		void SetString(const wchar_t* string, int length);
 
 	public: // Array methods
 		// Checks value is array
@@ -110,7 +110,7 @@ namespace o2
 		const DataValue& GetElement(int idx) const;
 
 		// Adds element to array
-		DataValue& AddElement(DataValue& value, DataDocument& document);
+		DataValue& AddElement(DataValue& value);
 
 		// Adds element to array
 		DataValue* RemoveElement(DataValue* it);
@@ -162,10 +162,16 @@ namespace o2
 		const DataValue* FindMember(const WString& path) const;
 
 		// Add new node with name
-		DataValue& AddMember(const WString& name, DataDocument& document);
+		DataValue& AddMember(const WString& name);
+
+		// Add new node with name
+		DataValue& AddMember(const char* name);
 
 		// Removes node by name
 		void RemoveMember(const WString& name);
+
+		// Removes node by name
+		void RemoveMember(const char* name);
 
 		// Removes member
 		DataMemberIterator RemoveMember(DataMemberIterator it);
@@ -208,27 +214,27 @@ namespace o2
 		WString SaveAsWString(Format format = Format::Xml) const;
 
 	public:
-		enum class Flags : unsigned
+		enum class Flags: unsigned
 		{
-			Bool        = 1 << 0,
-			Int         = 1 << 1,
-			UInt        = 1 << 2,
-			Int64       = 1 << 3,
-			UInt64      = 1 << 4,
-			Float       = 1 << 5,
-			Value       = 1 << 6,
-			String      = 1 << 7,
-			Object      = 1 << 8,
-			Array       = 1 << 9,
-			Null        = 1 << 10,
+			Bool = 1 << 0,
+			Int = 1 << 1,
+			UInt = 1 << 2,
+			Int64 = 1 << 3,
+			UInt64 = 1 << 4,
+			Double = 1 << 5,
+			Value = 1 << 6,
+			String = 1 << 7,
+			Object = 1 << 8,
+			Array = 1 << 9,
+			Null = 1 << 10,
 
-			BoolTrue    = 1 << 11,
-			BoolFalse   = 1 << 12,
+			BoolTrue = 1 << 11,
+			BoolFalse = 1 << 12,
 
 			ShortString = 1 << 13,
-			StringRef   = 1 << 14,
-			StringCopy  = 1 << 15
-		}; 
+			StringRef = 1 << 14,
+			StringCopy = 1 << 15
+		};
 
 	protected:
 
@@ -272,7 +278,8 @@ namespace o2
 			char padding[DataPayloadSize];
 			Flags flags;
 
-			inline bool Is(Flags f) const {
+			inline bool Is(Flags f) const
+			{
 				return static_cast<Flags>(
 					static_cast<std::underlying_type<Flags>::type>(flags) &
 					static_cast<std::underlying_type<Flags>::type>(f)) == f;
@@ -306,13 +313,16 @@ namespace o2
 			ValueTypeData flagsData;
 		};
 
-		ValueData mValue;
+		ValueData     mValue;
+		DataDocument& mDocument;
 	};
 
 	class DataDocument: public DataValue
 	{
 	protected:
 		ChunkPoolAllocator mAllocator;
+
+		friend class DataValue;
 	};
 
 	// --------------------------------------------
@@ -379,6 +389,9 @@ namespace o2
 	private:
 		DataMemberType* mPointer = nullptr;
 	};
+
+	DataValue::Flags operator&(const DataValue::Flags& a, const DataValue::Flags& b);
+	DataValue::Flags operator|(const DataValue::Flags& a, const DataValue::Flags& b);
 }
 
 #include "o2/Utils/Reflection/Reflection.h"
@@ -399,7 +412,8 @@ namespace o2
 	}
 
 	template<typename _type>
-	DataValue::DataValue(const _type& value)
+	DataValue::DataValue(const _type& value, DataDocument& document):
+		mDocument(document)
 	{
 		SetValue(value);
 	}
@@ -489,25 +503,19 @@ namespace o2
 
 		static void Read(wcharPtr value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(DataValue::Flags::String))
+			Assert(data.mValue.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
+
+			if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
 			{
-				if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
-				{
-					auto length = data.mValue.shortStringData.stringLength;
-					memcpy(value, data.mValue.shortStringData.stringValue, sizeof(wchar_t)*length);
-					value[length] = '\0';
-				}
-				else if (data.mValue.flagsData.Is(DataValue::Flags::StringRef) || 
-						 data.mValue.flagsData.Is(DataValue::Flags::StringCopy)) 
-				{
-					auto length = data.mValue.stringPtrData.stringLength;
-					memcpy(value, data.mValue.stringPtrData.stringPtr, sizeof(wchar_t)*length);
-					value[length] = '\0';
-				}
+				auto length = data.mValue.shortStringData.stringLength;
+				memcpy(value, data.mValue.shortStringData.stringValue, sizeof(wchar_t)*length);
+				value[length] = '\0';
 			}
-			else
+			else 
 			{
-				value[0] = (wchar_t)"\0";
+				auto length = data.mValue.stringPtrData.stringLength;
+				memcpy(value, data.mValue.stringPtrData.stringPtr, sizeof(wchar_t)*length);
+				value[length] = '\0';
 			}
 		}
 	};
@@ -519,7 +527,10 @@ namespace o2
 
 		static void Write(const bool& value, DataValue& data)
 		{
-			data.~DataValue();
+			if (value)
+				data.mValue.flagsData.flags = DataValue::Flags::Bool | DataValue::Flags::BoolTrue;
+			else
+				data.mValue.flagsData.flags = DataValue::Flags::Bool | DataValue::Flags::BoolFalse;
 		}
 
 		static void Read(bool& value, const DataValue& data)
@@ -535,28 +546,24 @@ namespace o2
 
 		static void Write(const int& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.mValue.flagsData.flags = Flags::Int & Flags::Value;
+			data.mValue.intData.intValue = value;
 		}
 
 		static void Read(int& value, const DataValue& data)
 		{
-			value = (int)data.mData;
-		}
-	};
-
-	template<>
-	struct DataValue::Converter<float>
-	{
-		static constexpr bool isSupported = true;
-
-		static void Write(const float& value, DataValue& data)
-		{
-			data.mData = (WString)value;
-		}
-
-		static void Read(float& value, const DataValue& data)
-		{
-			value = (float)data.mData;
+			if (data.mValue.flagsData.Is(Flags::Int))
+				value = data.mValue.intData.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt))
+				value = (int)data.mValue.intData.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Int64))
+				value = (int)data.mValue.int64Data.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt64))
+				value = (int)data.mValue.int64Data.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Double))
+				value = (int)data.mValue.doubleData.value;
+			else
+				Assert(false, "Trying to get int from not number value");
 		}
 	};
 
@@ -567,12 +574,52 @@ namespace o2
 
 		static void Write(const UInt& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.mValue.flagsData.flags = Flags::UInt & Flags::Value;
+			data.mValue.intData.uintValue = value;
 		}
 
 		static void Read(UInt& value, const DataValue& data)
 		{
-			value = (UInt)data.mData;
+			if (data.mValue.flagsData.Is(Flags::UInt))
+				value = data.mValue.intData.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Int))
+				value = (UInt)data.mValue.intData.intValue;
+			else if (data.mValue.flagsData.Is(Flags::Int64))
+				value = (UInt)data.mValue.int64Data.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt64))
+				value = (UInt)data.mValue.int64Data.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Double))
+				value = (UInt)data.mValue.doubleData.value;
+			else
+				Assert(false, "Trying to get unsigned int from not number value");
+		}
+	};
+
+	template<>
+	struct DataValue::Converter<Int64>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const Int64& value, DataValue& data)
+		{
+			data.mValue.flagsData.flags = Flags::Int64 & Flags::Value;
+			data.mValue.int64Data.intValue = value;
+		}
+
+		static void Read(Int64& value, const DataValue& data)
+		{
+			if (data.mValue.flagsData.Is(Flags::Int64))
+				value = data.mValue.int64Data.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt64))
+				value = (Int64)data.mValue.int64Data.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Int))
+				value = (Int64)data.mValue.intData.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt))
+				value = (Int64)data.mValue.intData.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Double))
+				value = (Int64)data.mValue.doubleData.value;
+			else
+				Assert(false, "Trying to get int64 from not number value");
 		}
 	};
 
@@ -583,12 +630,80 @@ namespace o2
 
 		static void Write(const UInt64& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.mValue.flagsData.flags = Flags::UInt64 & Flags::Value;
+			data.mValue.int64Data.uintValue = value;
 		}
 
 		static void Read(UInt64& value, const DataValue& data)
 		{
-			value = (UInt64)data.mData;
+			if (data.mValue.flagsData.Is(Flags::UInt64))
+				value = data.mValue.int64Data.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Int64))
+				value = (UInt64)data.mValue.int64Data.intValue;
+			else if (data.mValue.flagsData.Is(Flags::Int))
+				value = (UInt64)data.mValue.intData.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt))
+				value = (UInt64)data.mValue.intData.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Double))
+				value = (UInt64)data.mValue.doubleData.value;
+			else
+				Assert(false, "Trying to get unsigned int64 from not number value");
+		}
+	};
+
+	template<>
+	struct DataValue::Converter<double>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const double& value, DataValue& data)
+		{
+			data.mValue.flagsData.flags = Flags::Double & Flags::Value;
+			data.mValue.doubleData.value = value;
+		}
+
+		static void Read(double& value, const DataValue& data)
+		{
+			if (data.mValue.flagsData.Is(Flags::Double))
+				value = data.mValue.doubleData.value;
+			else if (data.mValue.flagsData.Is(Flags::Int))
+				value = (double)data.mValue.intData.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt))
+				value = (double)data.mValue.intData.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Int64))
+				value = (double)data.mValue.int64Data.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt64))
+				value = (double)data.mValue.int64Data.uintValue;
+			else
+				Assert(false, "Trying to get double from not number value");
+		}
+	};
+
+	template<>
+	struct DataValue::Converter<float>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const float& value, DataValue& data)
+		{
+			data.mValue.flagsData.flags = Flags::Double & Flags::Value;
+			data.mValue.doubleData.value = (double)value;
+		}
+
+		static void Read(float& value, const DataValue& data)
+		{
+			if (data.mValue.flagsData.Is(Flags::Double))
+				value = (float)data.mValue.doubleData.value;
+			else if (data.mValue.flagsData.Is(Flags::Int))
+				value = (float)data.mValue.intData.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt))
+				value = (float)data.mValue.intData.uintValue;
+			else if (data.mValue.flagsData.Is(Flags::Int64))
+				value = (float)data.mValue.int64Data.intValue;
+			else if (data.mValue.flagsData.Is(Flags::UInt64))
+				value = (float)data.mValue.int64Data.uintValue;
+			else
+				Assert(false, "Trying to get float from not number value");
 		}
 	};
 
@@ -599,12 +714,28 @@ namespace o2
 
 		static void Write(const String& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.SetValue(value.Data());
 		}
 
 		static void Read(String& value, const DataValue& data)
 		{
-			value = (String)data.mData;
+			using namespace rapidjson;
+
+			GenericStringStream<UTF16<>> source((wchar_t*)data);
+			GenericStringBuffer<UTF8<>> target;
+
+			bool hasError = false;
+			while (source.Peek() != '\0')
+			{
+				if (!Transcoder<UTF16<>, UTF8<>>::Transcode(source, target))
+				{
+					hasError = true;
+					break;
+				}
+			}
+
+			if (!hasError)
+				value = target.GetString();
 		}
 	};
 
@@ -615,12 +746,17 @@ namespace o2
 
 		static void Write(const WString& value, DataValue& data)
 		{
-			data.mData = value;
+			data.SetString(value.Data(), value.Length());
 		}
 
 		static void Read(WString& value, const DataValue& data)
 		{
-			value = data.mData;
+			Assert(data.mValue.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
+
+			if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
+				value = data.mValue.shortStringData.stringValue;
+			else
+				value = data.mValue.stringPtrData.stringPtr;
 		}
 	};
 
@@ -631,12 +767,14 @@ namespace o2
 
 		static void Write(const UID& value, DataValue& data)
 		{
-			data.mData = (String)value;
+			data.SetValue((WString)value);
 		}
 
 		static void Read(UID& value, const DataValue& data)
 		{
-			value = data.mData;
+			WString buf;
+			data.GetValue(buf);
+			value = buf;
 		}
 	};
 
@@ -647,12 +785,14 @@ namespace o2
 
 		static void Write(const Vec2F& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("x") = value.x;
+			data.AddMember("y") = value.y;
 		}
 
 		static void Read(Vec2F& value, const DataValue& data)
 		{
-			value = (Vec2F)data.mData;
+			value.x = data.GetMember("x");
+			value.y = data.GetMember("y");
 		}
 	};
 
@@ -663,12 +803,14 @@ namespace o2
 
 		static void Write(const Vec2I& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("x") = value.x;
+			data.AddMember("y") = value.y;
 		}
 
 		static void Read(Vec2I& value, const DataValue& data)
 		{
-			value = (Vec2I)data.mData;
+			value.x = data.GetMember("x");
+			value.y = data.GetMember("y");
 		}
 	};
 
@@ -679,12 +821,18 @@ namespace o2
 
 		static void Write(const RectF& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("left") = value.left;
+			data.AddMember("bottom") = value.bottom;
+			data.AddMember("right") = value.right;
+			data.AddMember("top") = value.top;
 		}
 
 		static void Read(RectF& value, const DataValue& data)
 		{
-			value = (RectF)data.mData;
+			value.left = data.GetMember("left");
+			value.bottom = data.GetMember("bottom");
+			value.right = data.GetMember("right");
+			value.top = data.GetMember("top");
 		}
 	};
 
@@ -695,12 +843,18 @@ namespace o2
 
 		static void Write(const RectI& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("left") = value.left;
+			data.AddMember("bottom") = value.bottom;
+			data.AddMember("right") = value.right;
+			data.AddMember("top") = value.top;
 		}
 
 		static void Read(RectI& value, const DataValue& data)
 		{
-			value = (RectI)data.mData;
+			value.left = data.GetMember("left");
+			value.bottom = data.GetMember("bottom");
+			value.right = data.GetMember("right");
+			value.top = data.GetMember("top");
 		}
 	};
 
@@ -711,12 +865,18 @@ namespace o2
 
 		static void Write(const BorderF& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("left") = value.left;
+			data.AddMember("bottom") = value.bottom;
+			data.AddMember("right") = value.right;
+			data.AddMember("top") = value.top;
 		}
 
 		static void Read(BorderF& value, const DataValue& data)
 		{
-			value = (BorderF)data.mData;
+			value.left = data.GetMember("left");
+			value.bottom = data.GetMember("bottom");
+			value.right = data.GetMember("right");
+			value.top = data.GetMember("top");
 		}
 	};
 
@@ -727,12 +887,18 @@ namespace o2
 
 		static void Write(const BorderI& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("left") = value.left;
+			data.AddMember("bottom") = value.bottom;
+			data.AddMember("right") = value.right;
+			data.AddMember("top") = value.top;
 		}
 
 		static void Read(BorderI& value, const DataValue& data)
 		{
-			value = (BorderI)data.mData;
+			value.left = data.GetMember("left");
+			value.bottom = data.GetMember("bottom");
+			value.right = data.GetMember("right");
+			value.top = data.GetMember("top");
 		}
 	};
 
@@ -743,12 +909,18 @@ namespace o2
 
 		static void Write(const Color4& value, DataValue& data)
 		{
-			data.mData = (WString)value;
+			data.AddMember("r") = value.r;
+			data.AddMember("g") = value.g;
+			data.AddMember("b") = value.b;
+			data.AddMember("a") = value.a;
 		}
 
 		static void Read(Color4& value, const DataValue& data)
 		{
-			value = (Color4)data.mData;
+			value.r = data.GetMember("r");
+			value.g = data.GetMember("g");
+			value.b = data.GetMember("b");
+			value.a = data.GetMember("a");
 		}
 	};
 
@@ -762,18 +934,18 @@ namespace o2
 		{
 			if (value)
 			{
-				data.AddNode("Type")->SetValue(value->GetType().GetName());
-				data.AddNode("Value")->SetValue(*value);
+				data.AddMember("Type").SetValue(value->GetType().GetName());
+				data.AddMember("Value").SetValue(*value);
 			}
 		}
 
 		static void Read(T& value, const DataValue& data)
 		{
-			if (auto typeNode = data.GetMember("Type"))
+			if (auto typeNode = data.FindMember("Type"))
 			{
 				String typeName = *typeNode;
 
-				if (auto valueNode = data.GetMember("Value"))
+				if (auto valueNode = data.FindMember("Value"))
 				{
 					auto type = Reflection::GetType(typeName);
 					void* sample = type->CreateSample();
@@ -819,12 +991,12 @@ namespace o2
 			data.Clear();
 
 			for (auto v : value)
-				data.AddNode("Element")->SetValue(v);
+				data.AddMember("Element")->SetValue(v);
 		}
 
 		static void Read(Vector<T>& value, const DataValue& data)
 		{
-			for (auto childNode : data.mChildNodes)
+			for (auto childNode : data)
 			{
 				T v = T();
 				childNode->GetValue(v);
@@ -844,9 +1016,9 @@ namespace o2
 
 			for (auto& kv : value)
 			{
-				DataValue* child = data.AddNode("Element");
-				child->AddNode("Key")->SetValue(kv.first);
-				child->AddNode("Value")->SetValue(kv.second);
+				DataValue& child = data.AddMember("Element");
+				child.AddMember("Key").SetValue(kv.first);
+				child.AddMember("Value").SetValue(kv.second);
 			}
 		}
 

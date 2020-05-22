@@ -83,6 +83,11 @@ namespace o2
 
 	}
 
+	DataValue::DataValue& DataValue::AddMember(const char* name)
+	{
+
+	}
+
 	DataValue& DataValue::GetElement(int idx)
 	{
 
@@ -154,6 +159,11 @@ namespace o2
 	}
 
 	DataMemberIterator DataValue::RemoveMember(DataMemberIterator it)
+	{
+
+	}
+
+	void DataValue::RemoveMember(const char* name)
 	{
 
 	}
@@ -349,6 +359,21 @@ namespace o2
 	{
 		return XmlDataFormat::SaveDataDoc(*this);
 	}
+
+	DataValue::Flags operator&(const DataValue::Flags& a, const DataValue::Flags& b)
+	{
+		return static_cast<DataValue::Flags>(
+			static_cast<std::underlying_type<DataValue::Flags>::type>(a) &
+			static_cast<std::underlying_type<DataValue::Flags>::type>(b));
+	}
+
+	DataValue::Flags operator|(const DataValue::Flags& a, const DataValue::Flags& b)
+	{
+		return static_cast<DataValue::Flags>(
+			static_cast<std::underlying_type<DataValue::Flags>::type>(a) |
+			static_cast<std::underlying_type<DataValue::Flags>::type>(b));
+	}
+
 }
 
 ENUM_META(DataValue::Format)
