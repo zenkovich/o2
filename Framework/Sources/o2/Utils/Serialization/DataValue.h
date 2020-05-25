@@ -14,7 +14,7 @@
 namespace o2
 {
 	class DataDocument;
-	class DataMember;
+	struct DataMember;
 
 	template <bool _const>
 	class BaseMemberIterator;
@@ -40,9 +40,7 @@ namespace o2
 		};
 
 	public:
-		enum class Format { Xml, JSON, Binary };
-
-		// Is DataNode supporting type trait
+		// Is DataValue supporting type trait
 		template<typename _type>
 		struct IsSupports
 		{
@@ -53,17 +51,21 @@ namespace o2
 		// Default constructor
 		DataValue(DataDocument& document);
 
+		// Constructor as template value
 		template<typename _type>
-		explicit DataValue(const _type& value, DataDocument& document);
+		DataValue(const _type& value, DataDocument& document);
+
+		// Constructor as string value
+		DataValue(const wchar_t* string, int length, bool isCopy, DataDocument& document);
 
 		// Copy-constructor
-		DataValue(const DataValue& other);
+		DataValue(DataValue& other);
 
 		// Destructor
 		~DataValue();
 
 		// Assign operator
-		DataValue& operator=(const DataValue& value);
+		DataValue& operator=(DataValue& other);
 
 		// Equals operator
 		bool operator==(const DataValue& other) const;
@@ -71,10 +73,27 @@ namespace o2
 		// Not equals operator
 		bool operator!=(const DataValue& other) const;
 
+		// Returns data document reference
+		DataDocument& GetDocument();
+
+		// Returns data document reference
+		const DataDocument& GetDocument() const;
+
 	public:	// Value methods
-		// Checks value type
-		template<typename _type>
+		// Checks is value type
 		bool IsValue() const;
+
+		// Checks is value number type
+		bool IsNumber() const;
+
+		// Checks is value string value
+		bool IsString() const;
+
+		// Checks is value boolean
+		bool IsBoolean() const;
+
+		// Checks is value null
+		bool IsNull() const;
 
 		// Cast to type operator
 		template<typename _type>
@@ -84,20 +103,29 @@ namespace o2
 		template<typename _type>
 		DataValue& operator=(const _type& value);
 
-		// Sets value. Using DataNodeConverter specializations
+		// Sets value. Using DataValueConverter specializations
 		template<typename _type>
-		DataValue& SetValue(const _type& value);
+		DataValue& Set(const _type& value);
 
-		// Gets value. Using DataNodeConverter specializations
+		// Gets value. Using DataValueConverter specializations
 		template<typename _type>
-		void GetValue(_type& value) const;
+		void Get(_type& value) const;
 
-		// Optimized set string
-		void SetString(const wchar_t* string, int length);
+		// Sets value as null
+		void SetNull();
+
+		// Optimized set string. When isCopy is false, string pointer can be used as reference
+		void SetString(const wchar_t* string, int length, bool isCopy);
+
+		// Returns string pointer
+		const wchar_t* GetString() const;
 
 	public: // Array methods
 		// Checks value is array
 		bool IsArray() const;
+
+		// Returns array elements count
+		int GetElementsCount() const;
 
 		// Array element access by index
 		DataValue& operator[](const int idx);
@@ -144,31 +172,49 @@ namespace o2
 		bool IsObject() const;
 
 		// Member access by name. Valid only for object type
-		DataValue& operator[](const WString& name);
+		DataValue& operator[](const DataValue& name);
 
 		// Member access by name. Valid only for object type
 		DataValue& operator[](const char* name);
 
-		// Returns node by path: "node/node/abc/cde". Creates new nodes when required
-		DataValue& GetMember(const WString& path);
+		// Member access by name. Valid only for object type
+		const DataValue& operator[](const DataValue& name) const;
 
-		// Returns node by path: "node/node/abc/cde"
-		const DataValue& GetMember(const WString& path) const;
+		// Member access by name. Valid only for object type
+		const DataValue& operator[](const char* name) const;
 
-		// Returns node by path: "node/node/abc/cde"
-		DataValue* FindMember(const WString& path);
+		// Returns node by name. Creates new nodes when required
+		DataValue& GetMember(const DataValue& name);
 
-		// Returns node by path: "node/node/abc/cde"
-		const DataValue* FindMember(const WString& path) const;
+		// Returns node by name. Creates new nodes when required
+		DataValue& GetMember(const char* name);
+
+		// Returns node by name.
+		const DataValue& GetMember(const DataValue& name) const;
+
+		// Returns node by name.
+		const DataValue& GetMember(const char* name) const;
+
+		// Returns node by name.
+		DataValue* FindMember(const DataValue& name);
+
+		// Returns node by name.
+		DataValue* FindMember(const char* name);
+
+		// Returns node by name.
+		const DataValue* FindMember(const DataValue& name) const;
+
+		// Returns node by name.
+		const DataValue* FindMember(const char* name) const;
 
 		// Add new node with name
-		DataValue& AddMember(const WString& name);
+		DataValue& AddMember(DataValue& name);
 
 		// Add new node with name
 		DataValue& AddMember(const char* name);
 
 		// Removes node by name
-		void RemoveMember(const WString& name);
+		void RemoveMember(const DataValue& name);
 
 		// Removes node by name
 		void RemoveMember(const char* name);
@@ -195,26 +241,14 @@ namespace o2
 		ConstDataMemberIterator EndMember() const;
 
 	public:
-		// Returns is node data empty and have no children
+		// Returns is node data empty and have no members or elements
 		bool IsEmpty() const;
 
-		// Removes all children
+		// Removes all members or elements
 		void Clear();
 
-		// Loads data structure from file
-		bool LoadFromFile(const String& fileName);
-
-		// Loads data structure from string
-		bool LoadFromData(const WString& data);
-
-		// Saves data to file with specified format
-		bool SaveToFile(const String& fileName, Format format = Format::Xml) const;
-
-		// Saves data to string
-		WString SaveAsWString(Format format = Format::Xml) const;
-
 	public:
-		enum class Flags: unsigned
+		enum class Flags
 		{
 			Bool = 1 << 0,
 			Int = 1 << 1,
@@ -237,9 +271,11 @@ namespace o2
 		};
 
 	protected:
-
 		static constexpr int DataPayloadSize = 16;
 		static constexpr int DataSize = DataPayloadSize + sizeof(Flags);
+
+		static constexpr int ObjectInitialCapacity = 5;
+		static constexpr int ArrayInitialCapacity = 5;
 
 		struct IntData
 		{
@@ -269,8 +305,8 @@ namespace o2
 
 		struct ShortStringData
 		{
-			wchar_t stringValue[DataPayloadSize/sizeof(wchar_t) - 1];
-			wchar_t stringLength;
+			static constexpr int maxLength = DataPayloadSize/sizeof(wchar_t) - 1;
+			wchar_t stringValue[maxLength + 1];
 		};
 
 		struct ValueTypeData
@@ -315,23 +351,92 @@ namespace o2
 
 		ValueData     mValue;
 		DataDocument& mDocument;
+
+	protected:
+		// Hidden constructor without document
+		DataValue();
+
+		// Hidden constructor as temporary string. String transcodes to buffer, value initializing from reference 
+		DataValue(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& buffer, const char* str);
+
+		// Transcode wide char to char
+		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF8<>>& target, const wchar_t* source);
+
+		// Transcode char to wide char
+		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& target, const char* source);
+
+		friend class JsonDataDocumentParseHandler;
 	};
 
+	// ------------------------------------------
+	// Data values document. Must be object value
+	// ------------------------------------------
 	class DataDocument: public DataValue
 	{
+	public:
+		enum class Format { Xml, JSON, Binary };
+
+	public:
+		// Default constructor
+		DataDocument();
+
+		// Copy-constructor. Moves data from other to this
+		DataDocument(DataDocument& other);
+
+		// Destructor
+		~DataDocument();
+
+		// Copy-operator. Moves data from other to this
+		DataDocument& operator=(DataDocument& other);
+
+		// Equals operator
+		bool operator==(const DataDocument& other) const;
+
+		// Not equals operator
+		bool operator!=(const DataDocument& other) const;
+
+		// Cast to type operator
+		template<typename _type>
+		operator _type() const;
+
+		// Assign operator
+		template<typename _type>
+		DataDocument& operator=(const _type& value);
+
+		// Loads data structure from file
+		bool LoadFromFile(const String& fileName);
+
+		// Loads data structure from string
+		bool LoadFromData(const WString& data, Format format = Format::JSON);
+
+		// Saves data to file with specified format
+		bool SaveToFile(const String& fileName, Format format = Format::JSON) const;
+
+		// Saves data to string
+		WString SaveAsWString(Format format = Format::JSON) const;
+
 	protected:
 		ChunkPoolAllocator mAllocator;
 
 		friend class DataValue;
+		friend class JsonDataDocumentParseHandler;
 	};
 
 	// --------------------------------------------
 	// Data object value member. Has name and value
 	// --------------------------------------------
-	class DataMember
+	struct DataMember
 	{
 		DataValue name;
 		DataValue value;
+
+		DataMember() = default;
+		DataMember(DataValue& name, DataValue& value);
+
+		DataMember& operator=(DataMember& other);
+
+		bool operator==(const DataMember& other) const;
+		bool operator!=(const DataMember& other) const;
 	};
 
 	// -------------------------
@@ -340,7 +445,7 @@ namespace o2
 	template <bool _const>
 	class BaseMemberIterator
 	{
-		typedef std::conditional<_const, const DataMember, DataMember> DataMemberType;
+		typedef typename std::conditional<_const, const DataMember, DataMember>::type DataMemberType;
 
 	public:
 		typedef DataMemberType value_type;
@@ -388,6 +493,8 @@ namespace o2
 
 	private:
 		DataMemberType* mPointer = nullptr;
+
+		friend class DataValue;
 	};
 
 	DataValue::Flags operator&(const DataValue::Flags& a, const DataValue::Flags& b);
@@ -399,44 +506,53 @@ namespace o2
 namespace o2
 {
 	template<typename _type>
-	void DataValue::GetValue(_type& value) const
+	DataValue::DataValue(const _type& value, DataDocument& document):
+		mValue(), mDocument(document)
+	{
+		Set(value);
+	}
+
+	template<typename _type>
+	void DataValue::Get(_type& value) const
 	{
 		Converter<_type>::Read(value, *this);
 	}
 
 	template<typename _type>
-	DataValue& DataValue::SetValue(const _type& value)
+	DataValue& DataValue::Set(const _type& value)
 	{
 		Converter<_type>::Write(value, *this);
 		return *this;
 	}
 
 	template<typename _type>
-	DataValue::DataValue(const _type& value, DataDocument& document):
-		mDocument(document)
-	{
-		SetValue(value);
-	}
-
-	template<typename _type>
-	bool DataValue::IsValue() const
-	{
-		return mValue.flagsData.flags & Flags::Value;
-	}
-
-	template<typename _type>
 	DataValue::operator _type() const
 	{
 		_type result;
-		GetValue(result);
+		Get(result);
 		return result;
 	}
 
 	template<typename _type>
 	DataValue& DataValue::operator=(const _type& value)
 	{
-		SetValue(value);
+		Set(value);
 		return *this;
+	}
+
+	template<typename _type>
+	DataDocument& DataDocument::operator=(const _type& value)
+	{
+		DataValue::operator=(value);
+		return *this;
+	}
+
+	template<typename _type>
+	DataDocument::operator _type() const
+	{
+		_type result;
+		Get(result);
+		return result;
 	}
 
 	template<>
@@ -448,43 +564,15 @@ namespace o2
 
 		static void Write(const charPtr& value, DataValue& data)
 		{
-			using namespace rapidjson;
-
-			StringStream source(value);
-			GenericStringBuffer<UTF16<>> target;
-
-			bool hasError = false;
-			while (source.Peek() != '\0')
-			{
-				if (!Transcoder<UTF8<>, UTF16<>>::Transcode(source, target))
-				{
-					hasError = true;
-					break;
-				}
-			}
-
-			if (!hasError)
-				data.SetValue(target.GetString());
+			rapidjson::GenericStringBuffer<rapidjson::UTF16<>> target;
+			if (Transcode(target, value))
+				data.Set(target.GetString());
 		}
 
 		static void Read(charPtr& value, const DataValue& data)
 		{
-			using namespace rapidjson;
-
-			GenericStringStream<UTF16<>> source((wchar_t*)data);
-			GenericStringBuffer<UTF8<>> target;
-
-			bool hasError = false;
-			while (source.Peek() != '\0')
-			{
-				if (!Transcoder<UTF16<>, UTF8<>>::Transcode(source, target))
-				{
-					hasError = true;
-					break;
-				}
-			}
-
-			if (!hasError)
+			rapidjson::GenericStringBuffer<rapidjson::UTF8<>> target;
+			if (Transcode(target, data.GetString()))
 				strcpy(value, target.GetString());
 		}
 	};
@@ -498,7 +586,7 @@ namespace o2
 
 		static void Write(const wcharPtr& value, DataValue& data)
 		{
-			data.SetString(value, wcslen(value));
+			data.SetString(value, wcslen(value), true);
 		}
 
 		static void Read(wcharPtr value, const DataValue& data)
@@ -507,11 +595,9 @@ namespace o2
 
 			if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
 			{
-				auto length = data.mValue.shortStringData.stringLength;
-				memcpy(value, data.mValue.shortStringData.stringValue, sizeof(wchar_t)*length);
-				value[length] = '\0';
+				wcscpy(value, data.mValue.shortStringData.stringValue);
 			}
-			else 
+			else
 			{
 				auto length = data.mValue.stringPtrData.stringLength;
 				memcpy(value, data.mValue.stringPtrData.stringPtr, sizeof(wchar_t)*length);
@@ -714,27 +800,13 @@ namespace o2
 
 		static void Write(const String& value, DataValue& data)
 		{
-			data.SetValue(value.Data());
+			data.Set(value.Data());
 		}
 
 		static void Read(String& value, const DataValue& data)
 		{
-			using namespace rapidjson;
-
-			GenericStringStream<UTF16<>> source((wchar_t*)data);
-			GenericStringBuffer<UTF8<>> target;
-
-			bool hasError = false;
-			while (source.Peek() != '\0')
-			{
-				if (!Transcoder<UTF16<>, UTF8<>>::Transcode(source, target))
-				{
-					hasError = true;
-					break;
-				}
-			}
-
-			if (!hasError)
+			rapidjson::GenericStringBuffer<rapidjson::UTF16<>> target;
+			if (Transcode(target, value.Data()))
 				value = target.GetString();
 		}
 	};
@@ -746,7 +818,7 @@ namespace o2
 
 		static void Write(const WString& value, DataValue& data)
 		{
-			data.SetString(value.Data(), value.Length());
+			data.SetString(value.Data(), value.Length(), true);
 		}
 
 		static void Read(WString& value, const DataValue& data)
@@ -767,13 +839,13 @@ namespace o2
 
 		static void Write(const UID& value, DataValue& data)
 		{
-			data.SetValue((WString)value);
+			data.Set((WString)value);
 		}
 
 		static void Read(UID& value, const DataValue& data)
 		{
 			WString buf;
-			data.GetValue(buf);
+			data.Get(buf);
 			value = buf;
 		}
 	};
@@ -934,8 +1006,8 @@ namespace o2
 		{
 			if (value)
 			{
-				data.AddMember("Type").SetValue(value->GetType().GetName());
-				data.AddMember("Value").SetValue(*value);
+				data.AddMember("Type").Set(value->GetType().GetName());
+				data.AddMember("Value").Set(*value);
 			}
 		}
 
@@ -958,7 +1030,7 @@ namespace o2
 						value = static_cast<T>(sample);
 
 					if (value)
-						valueNode->GetValue(*value);
+						valueNode->Get(*value);
 				}
 			}
 		}
@@ -990,16 +1062,16 @@ namespace o2
 		{
 			data.Clear();
 
-			for (auto v : value)
-				data.AddMember("Element")->SetValue(v);
+			for (auto& v : value)
+				data.AddMember("Element").Set(v);
 		}
 
 		static void Read(Vector<T>& value, const DataValue& data)
 		{
-			for (auto childNode : data)
+			for (auto& childNode : data)
 			{
 				T v = T();
-				childNode->GetValue(v);
+				childNode.Get(v);
 				value.Add(v);
 			}
 		}
@@ -1017,24 +1089,24 @@ namespace o2
 			for (auto& kv : value)
 			{
 				DataValue& child = data.AddMember("Element");
-				child.AddMember("Key").SetValue(kv.first);
-				child.AddMember("Value").SetValue(kv.second);
+				child.AddMember("Key").Set(kv.first);
+				child.AddMember("Value").Set(kv.second);
 			}
 		}
 
 		static void Read(Map<_key, _value>& value, const DataValue& data)
 		{
-			for (auto childNode : data.mChildNodes)
+			for (auto& childNode : data)
 			{
-				auto keyNode = childNode->GetNode("Key");
-				auto valueNode = childNode->GetNode("Value");
+				auto keyNode = childNode.FindMember("Key");
+				auto valueNode = childNode.FindMember("Value");
 
 				if (keyNode && valueNode)
 				{
 					_value v = _value();
 					_key k = _key();
-					keyNode->GetValue(k);
-					valueNode->GetValue(v);
+					keyNode->Get(k);
+					valueNode->Get(v);
 					value.Add(k, v);
 				}
 			}
@@ -1048,30 +1120,32 @@ namespace o2
 
 		static void Write(const T& value, DataValue& data)
 		{
-			data.mData = Reflection::GetEnumName<T>(value);
+			data.Set(Reflection::GetEnumName<T>(value));
 		}
 
 		static void Read(T& value, const DataValue& data)
 		{
-			value = Reflection::GetEnumValue<T>(data.mData);
+			String buf;
+			data.Get(buf);
+			value = Reflection::GetEnumValue<T>(buf);
 		}
 	};
 
 	template<typename T>
 	struct DataValue::Converter<T, typename std::enable_if<IsProperty<T>::value>::type>
 	{
-		static constexpr bool isSupported = DataValue::IsSupport<T::valueType>::value;
+		static constexpr bool isSupported = DataValue::IsSupports<T::valueType>::value;
 		using TValueType = typename T::valueType;
 
 		static void Write(const T& value, DataValue& data)
 		{
-			data.SetValue(value.Get());
+			data.Set(value.Get());
 		}
 
 		static void Read(T& value, const DataValue& data)
 		{
 			TValueType val;
-			data.GetValue(val);
+			data.Get(val);
 			value.Set(val);
 		}
 	};
@@ -1101,7 +1175,7 @@ namespace o2
 					{
 						auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
 						if (srlzAttribute)
-							field->SerializeFromObject(object, *node.AddNode(field->GetName()));
+							field->SerializeFromObject(object, node.AddMember(field->GetName()));
 					}
 				}
 			};
@@ -1136,7 +1210,7 @@ namespace o2
 						auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
 						if (srlzAttribute)
 						{
-							auto fldNode = node.GetMember(field->GetName());
+							auto fldNode = node.FindMember(field->GetName());
 							if (fldNode)
 								field->DeserializeFromObject(object, *fldNode);
 						}
@@ -1154,4 +1228,6 @@ namespace o2
 	};
 }
 
-PRE_ENUM_META(o2::DataValue::Format);
+PRE_ENUM_META(o2::DataValue::Flags);
+
+PRE_ENUM_META(o2::DataDocument::Format);

@@ -30,7 +30,7 @@ namespace o2
 	{
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
-		DataValue atlasData;
+		DataDocument atlasData;
 		atlasData.LoadFromFile(buildedAssetPath);
 		int pagesCount = atlasData["mPages"].GetChildNodes().Count();
 
@@ -45,7 +45,7 @@ namespace o2
 		String fullPathFrom = mAssetsBuilder->GetBuiltAssetsPath() + nodeFrom.path;
 		String fullPathTo = mAssetsBuilder->GetBuiltAssetsPath() + nodeTo.path;
 
-		DataValue atlasData;
+		DataDocument atlasData;
 		atlasData.LoadFromFile(fullPathFrom);
 		int pagesCount = atlasData["mPages"].GetChildNodes().Count();
 

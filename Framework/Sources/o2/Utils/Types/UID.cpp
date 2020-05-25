@@ -56,6 +56,17 @@ namespace o2
 		return ToString();
 	}
 
+	UID::operator String() const
+	{
+		return ToString();
+	}
+
+	UID& UID::operator=(const String& data)
+	{
+		FromString(data);
+		return *this;
+	}
+
 	void UID::Randomize()
 	{
 		for (int i = 0; i < 16; i += 2)

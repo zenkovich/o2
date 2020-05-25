@@ -429,7 +429,7 @@ namespace Editor
 		for (auto& obj : mTargetObjects)
 		{
 			prevValues.Add(DataValue());
-			prevValues.Last()["Size"].SetValue(mVectorType->GetObjectVectorSize(obj.first.data));
+			prevValues.Last()["Size"].Set(mVectorType->GetObjectVectorSize(obj.first.data));
 			DataValue& elementsData = prevValues.Last()["Elements"];
 
 			int lastCount = mVectorType->GetObjectVectorSize(obj.first.data);
@@ -440,7 +440,7 @@ namespace Editor
 			}
 
 			newValues.Add(DataValue());
-			newValues.Last()["Size"].SetValue(newCount);
+			newValues.Last()["Size"].Set(newCount);
 
 			mVectorType->SetObjectVectorSize(obj.first.data, newCount);
 		}

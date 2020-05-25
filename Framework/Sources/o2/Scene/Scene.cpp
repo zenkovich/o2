@@ -4,7 +4,7 @@
 #include "o2/Application/Input.h"
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/ActorDataNodeConverter.h"
+#include "o2/Scene/ActorDataValueConverter.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/Tags.h"
@@ -348,7 +348,7 @@ namespace o2
 
 	void Scene::Load(const String& path, bool append /*= false*/)
 	{
-		ActorDataNodeConverter::Instance().LockPointersResolving();
+		ActorDataValueConverter::Instance().LockPointersResolving();
 
 		if (!append)
 		{
@@ -385,8 +385,8 @@ namespace o2
 			actor->Deserialize(*actorNode);
 		}
 
-		ActorDataNodeConverter::Instance().UnlockPointersResolving();
-		ActorDataNodeConverter::Instance().ResolvePointers();
+		ActorDataValueConverter::Instance().UnlockPointersResolving();
+		ActorDataValueConverter::Instance().ResolvePointers();
 	}
 
 	void Scene::Save(const String& path)

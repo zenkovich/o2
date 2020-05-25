@@ -345,7 +345,7 @@ namespace o2
 	{
 // 		int delPos = path.Find("/");
 // 		String pathPart = path.SubStr(0, delPos);
-// 		DataNode data;
+// 		DataValue data;
 // 		data = pathPart;
 // 
 // 		int count = GetObjectDictionarySize(object);

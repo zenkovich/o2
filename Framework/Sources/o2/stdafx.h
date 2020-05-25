@@ -4,7 +4,7 @@
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Render/Render.h"
-#include "o2/Render/Sprite.h"S
+#include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Component.h"

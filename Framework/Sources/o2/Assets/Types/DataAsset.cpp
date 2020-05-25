@@ -9,15 +9,13 @@ namespace o2
 	{}
 
 	DataAsset::DataAsset(const DataAsset& other):
-		AssetWithDefaultMeta<DataAsset>(other), data(other.data)
-	{
-		data = other.data;
-	}
+		AssetWithDefaultMeta<DataAsset>(other), data(const_cast<DataDocument&>(other.data))
+	{}
 
 	DataAsset& DataAsset::operator=(const DataAsset& asset)
 	{
 		Asset::operator=(asset);
-		data = asset.data;
+		data = const_cast<DataDocument&>(asset.data);
 
 		return *this;
 	}

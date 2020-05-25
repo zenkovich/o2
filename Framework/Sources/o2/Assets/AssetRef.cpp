@@ -45,7 +45,7 @@ namespace o2
 
 			if (mAssetPtr)
 			{
-				node["asset"] = mAssetPtr->Serialize();
+				node["asset"] = mAssetPtr;
 				node["meta"] = mAssetPtr->GetMeta();
 			}
 		}
@@ -66,19 +66,19 @@ namespace o2
 
 		if (node.GetMember("own"))
 		{
-			mAssetPtr = *node.GetMember("asset");
-			mAssetPtr->mInfo.meta = *node.GetMember("meta");
+			mAssetPtr = node.GetMember("asset");
+			mAssetPtr->mInfo.meta = node.GetMember("meta");
 			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
 			UpdateSpecAsset();
 		}
-		else if (auto idNode = node.GetMember("id"))
+		else if (auto idNode = node.FindMember("id"))
 		{
 			*this = o2Assets.GetAssetRef((UID)(*idNode));
 			UpdateSpecAsset();
 		}
-		else if (auto pathNode = node.GetMember("path"))
+		else if (auto pathNode = node.FindMember("path"))
 		{
-			*this = o2Assets.GetAssetRef(pathNode->Data());
+			*this = o2Assets.GetAssetRef((String)pathNode);
 			UpdateSpecAsset();
 		}
 	}

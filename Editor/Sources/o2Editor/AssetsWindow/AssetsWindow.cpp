@@ -82,7 +82,7 @@ namespace Editor
 			mAssetsGridScroll->layout->anchorLeft += anchorDelta;
 
 			auto& userData = o2EditorConfig.GetProjectUserData();
-			userData["layout/assetsWindow/separator_coef"].SetValue(mFoldersTree->layout->GetAnchorRight());
+			userData["layout/assetsWindow/separator_coef"].Set(mFoldersTree->layout->GetAnchorRight());
 		};
 
 		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };

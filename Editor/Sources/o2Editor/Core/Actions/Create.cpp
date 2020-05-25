@@ -16,7 +16,7 @@ namespace Editor
 	{
 		objectsIds = objects.Select<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
 
-		objectsData.SetValue(objects);
+		objectsData.Set(objects);
 
 		insertParentId = parent ? parent->GetID() : 0;
 		insertPrevObjectId = prevObject ? prevObject->GetID() : 0;
@@ -37,7 +37,7 @@ namespace Editor
 		{
 			int insertIdx = parent->GetEditablesChildren().Find(prevObject) + 1;
 
-			objectsData.GetValue(objects);
+			objectsData.Get(objects);
 
 			for (auto object : objects)
 				parent->AddEditableChild(object, insertIdx++);
@@ -46,7 +46,7 @@ namespace Editor
 		{
 			int insertIdx = o2Scene.GetRootEditableObjects().Find(prevObject) + 1;
 
-			objectsData.GetValue(objects);
+			objectsData.Get(objects);
 
 			for (auto object : objects)
 				object->SetIndexInSiblings(insertIdx++);

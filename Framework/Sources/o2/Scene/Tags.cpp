@@ -202,7 +202,7 @@ namespace o2
 		return *this;
 	}
 
-// 	void TagDataNodeConverter::ToData(void* object, DataNode& data)
+// 	void TagDataValueConverter::ToData(void* object, DataValue& data)
 // 	{
 // 		if (object)
 // 		{
@@ -211,13 +211,13 @@ namespace o2
 // 		}
 // 	}
 // 
-// 	void TagDataNodeConverter::FromData(void* object, const DataNode& data)
+// 	void TagDataValueConverter::FromData(void* object, const DataValue& data)
 // 	{
 // 		Tag*& value = *(Tag**)object;
 // 		value = o2Scene.GetTag(data);
 // 	}
 // 
-// 	bool TagDataNodeConverter::IsConvertsType(const Type* type) const
+// 	bool TagDataValueConverter::IsConvertsType(const Type* type) const
 // 	{
 // 		return type == &TypeOf(Tag);
 // 	}

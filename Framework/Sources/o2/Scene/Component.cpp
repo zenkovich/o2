@@ -145,7 +145,7 @@ namespace o2
 		}
 	}
 
-// 	void ComponentDataNodeConverter::ToData(void* object, DataNode& data)
+// 	void ComponentDataValueConverter::ToData(void* object, DataValue& data)
 // 	{
 // 		Component* value = *(Component**)object;
 // 
@@ -177,7 +177,7 @@ namespace o2
 // 		}
 // 	}
 // 
-// 	void ComponentDataNodeConverter::FromData(void* object, const DataNode& data)
+// 	void ComponentDataValueConverter::FromData(void* object, const DataValue& data)
 // 	{
 // 		Component*& component = *(Component**)object;
 // 
@@ -196,16 +196,16 @@ namespace o2
 // 			UInt64 componentId = *data.GetNode("ComponentId");
 // 			component = actor->GetComponent(componentId);
 // 		}
-// 		else if (auto dataNode = data.GetNode("Data"))
+// 		else if (auto DataValue = data.GetNode("Data"))
 // 		{
 // 			String type = *data.GetNode("Type");
 // 			component = (Component*)o2Reflection.CreateTypeSample(type);
-// 			component->Deserialize(*dataNode);
+// 			component->Deserialize(*DataValue);
 // 		}
 // 		else component = nullptr;
 // 	}
 // 
-// 	bool ComponentDataNodeConverter::IsConvertsType(const Type* type) const
+// 	bool ComponentDataValueConverter::IsConvertsType(const Type* type) const
 // 	{
 // 		return type->IsBasedOn(TypeOf(Component));
 // 	}

@@ -88,7 +88,7 @@ namespace o2
 		// Loads data
 		void LoadData(const String& path) override;
 
-		// Saves asset data, using DataNode and serialization
+		// Saves asset data, using DataValue and serialization
 		void SaveData(const String& path) const override;
 
 		// Updates font effects in 

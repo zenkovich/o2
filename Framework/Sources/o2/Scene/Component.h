@@ -121,14 +121,14 @@ namespace o2
 	// ------------------------
 	// Component data converter
 	// ------------------------
-// 	class ComponentDataNodeConverter: public IDataNodeTypeConverter
+// 	class ComponentDataValueConverter: public IDataValueTypeConverter
 // 	{
 // 	public:
 // 		// Converts component pointer to data
-// 		void ToData(void* object, DataNode& data);
+// 		void ToData(void* object, DataValue& data);
 // 
 // 		// Converts from data to component pointer
-// 		void FromData(void* object, const DataNode& data);
+// 		void FromData(void* object, const DataValue& data);
 // 
 // 		// Checks that type is based on Component type
 // 		bool IsConvertsType(const Type* type) const;

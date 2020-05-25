@@ -200,7 +200,7 @@ namespace o2
 	template<typename T>
 	TString<T>::~TString()
 	{
-		~std::basic_string<T>();
+		//~std::basic_string<T>();
 	}
 
 	template<typename T>

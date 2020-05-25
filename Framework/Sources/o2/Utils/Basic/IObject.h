@@ -82,7 +82,7 @@ private:                                                                        
                                                                                                                 \
     friend class o2::TypeInitializer;                                                                           \
     friend class o2::Reflection;                                                                                \
-    friend class o2::DataNode;                                                                                  \
+    friend class o2::DataValue;                                                                                 \
                                                                                                                 \
 public:                                                                                                         \
 	typedef CLASS thisclass;                                                                                    \

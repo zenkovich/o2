@@ -458,7 +458,7 @@ namespace Editor
 	{
 		auto key = mTrack->FindKey(keyUid);
 		key.position -= relativeTime;
-		data.SetValue(key);
+		data.Set(key);
 	}
 
 	template<typename AnimationTrackType>
@@ -466,7 +466,7 @@ namespace Editor
 																	bool generateNewUid /*= true*/)
 	{
 		AnimationTrackType::Key key;
-		data.GetValue(key);
+		data.Get(key);
 		key.position += relativeTime;
 
 		if (generateNewUid)

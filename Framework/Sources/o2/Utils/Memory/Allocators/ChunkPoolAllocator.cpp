@@ -10,7 +10,13 @@ namespace o2
 		mBaseAllocator = baseAllocator;
 		mChunkSize = chunkSize;
 
-		AddChunk();
+		AddChunk(mChunkSize);
+	}
+
+	ChunkPoolAllocator::ChunkPoolAllocator(ChunkPoolAllocator& other):
+		mBaseAllocator(other.mBaseAllocator), mChunkSize(other.mChunkSize), mHead(other.mHead)
+	{
+		other.mHead = nullptr;
 	}
 
 	ChunkPoolAllocator::~ChunkPoolAllocator()
@@ -18,13 +24,22 @@ namespace o2
 		Clear();
 	}
 
-	void ChunkPoolAllocator::AddChunk()
+	ChunkPoolAllocator& ChunkPoolAllocator::operator=(ChunkPoolAllocator& other)
 	{
-		void* mem = mBaseAllocator->Allocate(mChunkSize + sizeof(Chunk));
+		mBaseAllocator = other.mBaseAllocator;
+		mChunkSize = other.mChunkSize;
+		mHead = other.mHead;
+
+		other.mHead = nullptr;
+	}
+
+	void ChunkPoolAllocator::AddChunk(size_t capacity)
+	{
+		void* mem = mBaseAllocator->Allocate(capacity + sizeof(Chunk));
 		Chunk* nextChunk = new (mem) Chunk();
 		nextChunk->ptr = reinterpret_cast<std::byte*>(mem) + sizeof(Chunk);
 		nextChunk->currentSize = 0;
-		nextChunk->capacity = mChunkSize;
+		nextChunk->capacity = capacity;
 		nextChunk->prev = mHead;
 
 		mHead = nextChunk;
@@ -33,7 +48,7 @@ namespace o2
 	void* ChunkPoolAllocator::Allocate(size_t size)
 	{
 		if (mHead->currentSize + size > mHead->capacity)
-			AddChunk();
+			AddChunk(Math::Max(size, mChunkSize));
 
 		void* res = reinterpret_cast<std::byte*>(mHead->ptr) + mHead->currentSize;
 		mHead->currentSize += size;

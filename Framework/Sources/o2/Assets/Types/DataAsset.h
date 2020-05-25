@@ -11,7 +11,7 @@ namespace o2
 	class DataAsset: public AssetWithDefaultMeta<DataAsset>
 	{
 	public:
-		DataValue data; // Asset data
+		DataDocument data; // Asset data
 
 	public:
 		// Check equals operator

@@ -447,7 +447,7 @@ namespace Editor
 				[](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
 
 		DataValue data;
-		data.SetValue(selectedObjects);
+		data.Set(selectedObjects);
 
 		WString clipboardData = data.SaveAsWString();
 
@@ -479,7 +479,7 @@ namespace Editor
 		data.LoadFromData(clipboardData);
 
 		Vector<SceneEditableObject*> objects;
-		data.GetValue(objects);
+		data.Get(objects);
 
 		for (auto object : objects)
 			object->GenerateNewID();

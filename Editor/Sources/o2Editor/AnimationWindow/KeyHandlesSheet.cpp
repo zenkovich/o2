@@ -491,12 +491,12 @@ namespace Editor
 
 		if (data.GetChildNodes().Count() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
 		{
-			auto dataNode = (AnimationTree::TrackNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
+			auto DataValue = (AnimationTree::TrackNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
 			for (auto keyNode : *data.GetChildNodes()[0]->GetMember("Keys"))
 			{
-				UInt64 uid = dataNode->trackControl->DeserializeKey(*keyNode, relativeTime);
+				UInt64 uid = DataValue->trackControl->DeserializeKey(*keyNode, relativeTime);
 				if (uid != 0)
-					keys[dataNode->path].Add(uid);
+					keys[DataValue->path].Add(uid);
 			}
 		}
 		else

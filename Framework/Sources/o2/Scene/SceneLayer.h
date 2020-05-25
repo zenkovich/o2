@@ -66,14 +66,14 @@ namespace o2
 	// -------------------------
 	// Layer data node converter
 	// -------------------------
-// 	class LayerDataNodeConverter : public IDataNodeTypeConverter
+// 	class LayerDataValueConverter : public IDataValueTypeConverter
 // 	{
 // 	public:
 // 		// Converts layer pointer to data 
-// 		void ToData(void* object, DataNode& data);
+// 		void ToData(void* object, DataValue& data);
 // 
 // 		// Gets layer pointer from data
-// 		void FromData(void* object, const DataNode& data);
+// 		void FromData(void* object, const DataValue& data);
 // 
 // 		// Checks that type is layer's type
 // 		bool IsConvertsType(const Type* type) const;

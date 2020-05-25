@@ -8,7 +8,10 @@ namespace o2
 	{
 	public:
 		ChunkPoolAllocator(size_t chunkSize = 64*1024, IAllocator* baseAllocator = DefaultAllocator::GetInstance());
+		ChunkPoolAllocator(ChunkPoolAllocator& other);
 		~ChunkPoolAllocator() override;
+
+		ChunkPoolAllocator& operator=(ChunkPoolAllocator& other);
 
 		void* Allocate(size_t size) override;
 		void Deallocate(void* ptr) override;
@@ -33,6 +36,6 @@ namespace o2
 		Chunk* mHead;
 
 	private:
-		void AddChunk();
+		void AddChunk(size_t capacity);
 	};
 };

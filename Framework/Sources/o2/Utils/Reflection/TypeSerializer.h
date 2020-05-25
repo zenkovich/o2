@@ -21,20 +21,20 @@ namespace o2
 	template<typename T> struct RealCopy { static void Copy(T& a, const T& b) { a = b; } };
 	template<typename T> struct FakeCopy { static void Copy(T& a, const T& b) { } };
 
-	template<typename T> struct RealSerialize { static void Serialize(const T& value, DataValue& data) { data.SetValue(value); } };
+	template<typename T> struct RealSerialize { static void Serialize(const T& value, DataValue& data) { data.Set(value); } };
 	template<typename T> struct FakeSerialize { static void Serialize(const T& value, DataValue& data) { } };
 
-	template<typename T> struct RealDeserialize { static void Deserialize(T& value, const DataValue& data) { data.GetValue(value); } };
+	template<typename T> struct RealDeserialize { static void Deserialize(T& value, const DataValue& data) { data.Get(value); } };
 	template<typename T> struct FakeDeserialize { static void Deserialize(T& value, const DataValue& data) { } };
 
 	template<typename _type,
-		typename _serializer = typename std::conditional<DataValue::IsSupport<_type>::value, RealSerialize<_type>, FakeSerialize<_type>>::type,
-		typename _deserializer = typename std::conditional<DataValue::IsSupport<_type>::value, RealDeserialize<_type>, FakeDeserialize<_type>>::type,
+		typename _serializer = typename std::conditional<DataValue::IsSupports<_type>::value, RealSerialize<_type>, FakeSerialize<_type>>::type,
+		typename _deserializer = typename std::conditional<DataValue::IsSupports<_type>::value, RealDeserialize<_type>, FakeDeserialize<_type>>::type,
 		typename _checker = typename std::conditional<EqualsOperator::IsExists<_type>::value, RealEquals<_type>, FakeEquals<_type>>::type,
 		typename _copier = typename std::conditional<std::is_assignable<_type&, _type>::value, RealCopy<_type>, FakeCopy<_type>>::type>
 	struct TypeSerializer : public ITypeSerializer
 	{
-		static constexpr bool isSerializable = DataValue::IsSupport<_type>::value;
+		static constexpr bool isSerializable = DataValue::IsSupports<_type>::value;
 		static constexpr bool isEqualsSupport = EqualsOperator::IsExists<_type>::value;
 		static constexpr bool isCopyable = std::is_assignable<_type&, _type>::value;
 

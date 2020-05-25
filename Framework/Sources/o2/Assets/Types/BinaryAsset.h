@@ -49,10 +49,10 @@ namespace o2
 		// Copy-constructor
 		BinaryAsset(const BinaryAsset& asset);
 
-		// Loads asset data, using DataNode and serialization
+		// Loads asset data, using DataValue and serialization
 		void LoadData(const String& path) override;
 
-		// Saves asset data, using DataNode and serialization
+		// Saves asset data, using DataValue and serialization
 		void SaveData(const String& path) const override;
 
 		friend class Assets;

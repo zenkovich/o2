@@ -131,14 +131,14 @@ namespace o2
 	// -----------------------
 	// Tag data node converter
 	// -----------------------
-// 	class TagDataNodeConverter: public IDataNodeTypeConverter
+// 	class TagDataValueConverter: public IDataValueTypeConverter
 // 	{
 // 	public:
 // 		// Converts tag pointer to data 
-// 		void ToData(void* object, DataNode& data);
+// 		void ToData(void* object, DataValue& data);
 // 
 // 		// Gets tag pointer from data
-// 		void FromData(void* object, const DataNode& data);
+// 		void FromData(void* object, const DataValue& data);
 // 
 // 		// Checks that type is tag's type
 // 		bool IsConvertsType(const Type* type) const;

@@ -114,10 +114,10 @@ namespace o2
 		// Loads asset from path
 		void Load(const AssetInfo& info);
 
-		// Loads asset data, using DataNode and serialization
+		// Loads asset data, using DataValue and serialization
 		virtual void LoadData(const String& path);
 
-		// Saves asset data, using DataNode and serialization
+		// Saves asset data, using DataValue and serialization
 		virtual void SaveData(const String& path) const;
 
 		friend class AssetRef;

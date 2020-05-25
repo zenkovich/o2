@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Actor.h"
 
-#include "o2/Scene/ActorDataNodeConverter.h"
+#include "o2/Scene/ActorDataValueConverter.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Scene.h"
 
@@ -72,21 +72,21 @@ namespace o2
 			auto compNode = componentsNode->AddNode("Component");
 			*compNode->AddNode("Type") = component->GetType().GetName();
 
-			auto& dataNode = *compNode->AddNode("Data");
+			auto& DataValue = *compNode->AddNode("Data");
 			if (auto componentProtoLink = component->mPrototypeLink)
 			{
-				dataNode["PrototypeLink"] = componentProtoLink->mId;
+				DataValue["PrototypeLink"] = componentProtoLink->mId;
 
-				dataNode.SetValueDelta(*component, *component->mPrototypeLink);
+				DataValue.SetValueDelta(*component, *component->mPrototypeLink);
 			}
-			else dataNode = component->Serialize();
+			else DataValue = component->Serialize();
 		}
 	}
 
 	void Actor::DeserializeWithProto(const DataValue& node)
 	{
-		ActorDataNodeConverter::Instance().LockPointersResolving();
-		ActorDataNodeConverter::Instance().ActorCreated(this);
+		ActorDataValueConverter::Instance().LockPointersResolving();
+		ActorDataValueConverter::Instance().ActorCreated(this);
 
 		RemoveAllChildren();
 		RemoveAllComponents();
@@ -193,14 +193,14 @@ namespace o2
 			for (auto childNode : *childsNode)
 			{
 				DataValue* typeNode = childNode->GetMember("Type");
-				DataValue* dataNode = childNode->GetMember("Data");
-				if (typeNode && dataNode)
+				DataValue* DataValue = childNode->GetMember("Data");
+				if (typeNode && DataValue)
 				{
 					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(typeNode->Data()));
 					if (type)
 					{
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->Deserialize(*dataNode);
+						child->Deserialize(*DataValue);
 						o2Scene.mRootActors.Remove(child);
 						AddChild(child);
 					}
@@ -223,9 +223,9 @@ namespace o2
 
 				if (newComponent)
 				{
-					auto componentDataNode = (*componentNode)["Data"];
+					auto componentDataValue = (*componentNode)["Data"];
 
-					if (auto prototypeLinkNode = componentDataNode.GetNode("PrototypeLink"))
+					if (auto prototypeLinkNode = componentDataValue.GetNode("PrototypeLink"))
 					{
 						SceneUID id = *prototypeLinkNode;
 						if (mPrototypeLink)
@@ -253,9 +253,9 @@ namespace o2
 						}
 
 						if (!newComponent->mPrototypeLink)
-							newComponent->Deserialize(componentDataNode);
+							newComponent->Deserialize(componentDataValue);
 						else
-							componentDataNode.GetValueDelta(*newComponent, *newComponent->mPrototypeLink);
+							componentDataValue.GetValueDelta(*newComponent, *newComponent->mPrototypeLink);
 					}
 				}
 				else o2Debug.LogError("Can't create component with type:" + type);
@@ -264,8 +264,8 @@ namespace o2
 
 		transform->SetDirty();
 
-		ActorDataNodeConverter::Instance().UnlockPointersResolving();
-		ActorDataNodeConverter::Instance().ResolvePointers();
+		ActorDataValueConverter::Instance().UnlockPointersResolving();
+		ActorDataValueConverter::Instance().ResolvePointers();
 	}
 
 	ActorAssetRef Actor::GetPrototype() const

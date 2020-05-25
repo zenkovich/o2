@@ -35,6 +35,9 @@ namespace o2
 		operator WString() const;
 		UID& operator=(const WString& data);
 
+		operator String() const;
+		UID& operator=(const String& data);
+
 	public:
 		static UID empty;
 	};

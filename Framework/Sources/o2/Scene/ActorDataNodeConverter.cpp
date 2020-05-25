@@ -1,14 +1,14 @@
 #include "o2/stdafx.h"
-#include "ActorDataNodeConverter.h"
+#include "ActorDataValueConverter.h"
 
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
-	CREATE_SINGLETON(ActorDataNodeConverter);
+	CREATE_SINGLETON(ActorDataValueConverter);
 
-	void ActorDataNodeConverter::ToData(const Actor* object, DataValue& data)
+	void ActorDataValueConverter::ToData(const Actor* object, DataValue& data)
 	{
 		if (object)
 		{
@@ -21,7 +21,7 @@ namespace o2
 		}
 	}
 
-	void ActorDataNodeConverter::FromData(Actor*& object, const DataValue& data)
+	void ActorDataValueConverter::FromData(Actor*& object, const DataValue& data)
 	{
 		if (auto assetIdNode = data.GetMember("AssetId"))
 		{
@@ -39,36 +39,36 @@ namespace o2
 			if (!object)
 				mUnresolvedActors.Add(ActorDef(&object, (SceneUID)*sceneIdNode));
 		}
-		else if (auto dataNode = data.GetMember("Data"))
+		else if (auto DataValue = data.GetMember("Data"))
 		{
-			if (dataNode->Data() == "null")
+			if (DataValue->Data() == "null")
 				object = nullptr;
 			else
 			{
 				object = mnew Actor(ActorCreateMode::NotInScene);
-				object->Deserialize(*dataNode);
+				object->Deserialize(*DataValue);
 			}
 		}
 		else object = nullptr;
 	}
 
-	void ActorDataNodeConverter::LockPointersResolving()
+	void ActorDataValueConverter::LockPointersResolving()
 	{
 		mLockDepth++;
 	}
 
-	void ActorDataNodeConverter::UnlockPointersResolving()
+	void ActorDataValueConverter::UnlockPointersResolving()
 	{
 		mLockDepth--;
 
 		if (mLockDepth < 0)
 		{
-			o2Debug.LogWarning("ActorDataNodeConverter lock depth is less than zero. Something going wrong");
+			o2Debug.LogWarning("ActorDataValueConverter lock depth is less than zero. Something going wrong");
 			mLockDepth = 0;
 		}
 	}
 
-	void ActorDataNodeConverter::ResolvePointers()
+	void ActorDataValueConverter::ResolvePointers()
 	{
 		if (mLockDepth > 0)
 			return;
@@ -90,7 +90,7 @@ namespace o2
 		mUnresolvedActors.Clear();
 	}
 
-	void ActorDataNodeConverter::ActorCreated(Actor* actor)
+	void ActorDataValueConverter::ActorCreated(Actor* actor)
 	{
 		if (!IsSingletonInitialzed())
 			return;

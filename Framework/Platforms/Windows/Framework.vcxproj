@@ -302,6 +302,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\IAllocator.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Property.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h" />
@@ -314,6 +315,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeSerializer.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeTraits.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Singleton.h" />
@@ -483,12 +485,14 @@
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\MemoryManager.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Reflection\Reflection.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Reflection\Type.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Serialization\DataValue.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Serialization\Serializable.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\System\Clipboard.cpp" />

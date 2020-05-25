@@ -595,7 +595,7 @@ namespace o2
 #endif // IS_EDITOR
 
 		friend class ActorAsset;
-		friend class ActorDataNodeConverter;
+		friend class ActorDataValueConverter;
 		friend class ActorRef;
 		friend class ActorTransform;
 		friend class Component;

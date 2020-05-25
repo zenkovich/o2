@@ -82,7 +82,7 @@ namespace o2
 
 		if (info.meta->mId == 0)
 		{
-			GetAssetsLogStream()->Error("Failed to load asset by UID (" + id + "): asset isn't exist");
+			GetAssetsLogStream()->Error("Failed to load asset by UID (" + (WString)id + "): asset isn't exist");
 			return;
 		}
 
@@ -109,13 +109,13 @@ namespace o2
 		UID destPathAssetId = o2Assets.GetAssetId(mInfo.path);
 		if (destPathAssetId != 0 && destPathAssetId != mInfo.meta->mId)
 		{
-			GetAssetsLogStream()->Error("Failed to save asset (" + mInfo.path + " - " + (String)mInfo.meta->mId +
+			GetAssetsLogStream()->Error("Failed to save asset (" + mInfo.path + " - " + (WString)mInfo.meta->mId +
 										"): another asset exist in this path");
 			return;
 		}
 
-		DataValue metaData;
-		metaData = mInfo.meta;
+		DataDocument metaData;
+		metaData.Set(mInfo.meta);
 		metaData.SaveToFile(GetMetaFullPath());
 
 		SaveData(GetFullPath());
@@ -154,14 +154,15 @@ namespace o2
 
 	void Asset::LoadData(const String& path)
 	{
-		DataValue data;
+		DataDocument data;
 		data.LoadFromFile(path);
 		Deserialize(data);
 	}
 
 	void Asset::SaveData(const String& path) const
 	{
-		DataValue data = Serialize();
+		DataDocument data;
+		Serialize(data);
 		data.SaveToFile(path);
 	}
 

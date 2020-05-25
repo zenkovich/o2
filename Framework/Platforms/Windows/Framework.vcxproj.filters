@@ -659,6 +659,12 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h">
       <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.h">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
@@ -1139,6 +1145,12 @@
       <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp">
+      <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.cpp">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.cpp">
       <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
     </ClCompile>
   </ItemGroup>

@@ -1120,13 +1120,13 @@ namespace o2
 		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
 
 		int size = type.GetObjectVectorSize(object);
-		data["Size"].SetValue(size);
+		data["Size"].Set(size);
 
 		DataValue& elements = data["Elements"];
 		for (int i = 0; i < size; i++)
 		{
 			void* elementPtr = type.GetObjectVectorElementPtr(object, i);
-			type.mElementFieldInfo->Serialize(elementPtr, *elements.AddNode("Element" + (String)i));
+			type.mElementFieldInfo->Serialize(elementPtr, elements.AddMember("Element" + (String)i));
 		}
 	}
 
@@ -1136,7 +1136,7 @@ namespace o2
 		const VectorType& type = (const VectorType&)(GetTypeOf<Vector<_element_type>>());
 		int size = type.GetObjectVectorSize(object);
 		int newSize;
-		data["Size"].GetValue(newSize);
+		data["Size"].Get(newSize);
 		type.SetObjectVectorSize(object, newSize);
 
 		if (auto elementsData = data.GetMember("Elements"))

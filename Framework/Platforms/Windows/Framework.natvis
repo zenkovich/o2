@@ -88,7 +88,7 @@
     </Expand>
   </Type>
 
-  <Type Name="o2::DataNode">
+  <Type Name="o2::DataValue">
     <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst} }}</DisplayString>
     <Expand>
       <Item Name="name" ExcludeView="simple">mName</Item>

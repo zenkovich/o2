@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Actor.h"
 
-#include "o2/Scene/ActorDataNodeConverter.h"
+#include "o2/Scene/ActorDataValueConverter.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/SceneLayer.h"
@@ -32,7 +32,7 @@ namespace o2
 			mLayer->mActors.Add(this);
 
 		Scene::OnActorCreated(this, mIsOnScene);
-		ActorDataNodeConverter::ActorCreated(this);
+		ActorDataValueConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
@@ -58,7 +58,7 @@ namespace o2
 			mLayer->mActors.Add(this);
 
 		Scene::OnActorCreated(this, mIsOnScene);
-		ActorDataNodeConverter::ActorCreated(this);
+		ActorDataValueConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
@@ -94,7 +94,7 @@ namespace o2
 			mLayer->mActors.Add(this);
 
 		Scene::OnActorCreated(this, mIsOnScene);
-		ActorDataNodeConverter::ActorCreated(this);
+		ActorDataValueConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
@@ -835,7 +835,7 @@ namespace o2
 		node["Enabled"] = mEnabled;
 		node["Locked"] = mLocked;
 
-		node["Transform"].SetValue(*transform);
+		node["Transform"].Set(*transform);
 
 		if (mLayer)
 			node["LayerName"] = mLayer->name;
@@ -859,9 +859,9 @@ namespace o2
 
 	void Actor::DeserializeRaw(const DataValue& node)
 	{
-		ActorDataNodeConverter::Instance().LockPointersResolving();
-		if (ActorDataNodeConverter::Instance().mLockDepth == 0)
-			ActorDataNodeConverter::Instance().ActorCreated(this);
+		ActorDataValueConverter::Instance().LockPointersResolving();
+		if (ActorDataValueConverter::Instance().mLockDepth == 0)
+			ActorDataValueConverter::Instance().ActorCreated(this);
 
 		mId = *node.GetMember("Id");
 		mName = *node.GetMember("Name");
@@ -873,7 +873,7 @@ namespace o2
 		else
 			SetLayer(o2Scene.GetDefaultLayer());
 
-		node.GetMember("Transform")->GetValue(*transform);
+		node.GetMember("Transform")->Get(*transform);
 
 		RemoveAllComponents();
 
@@ -894,14 +894,14 @@ namespace o2
 			for (auto childNode : childsNode->GetChildNodes())
 			{
 				DataValue* typeNode = childNode->GetMember("Type");
-				DataValue* dataNode = childNode->GetMember("Data");
-				if (typeNode && dataNode)
+				DataValue* DataValue = childNode->GetMember("Data");
+				if (typeNode && DataValue)
 				{
 					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(typeNode->Data()));
 					if (type)
 					{
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->Deserialize(*dataNode);
+						child->Deserialize(*DataValue);
 						o2Scene.mRootActors.Remove(child);
 						AddChild(child);
 					}
@@ -909,8 +909,8 @@ namespace o2
 			}
 		}
 
-		ActorDataNodeConverter::Instance().UnlockPointersResolving();
-		ActorDataNodeConverter::Instance().ResolvePointers();
+		ActorDataValueConverter::Instance().UnlockPointersResolving();
+		ActorDataValueConverter::Instance().ResolvePointers();
 	}
 
 	Map<String, Actor*> Actor::GetAllChilds()
@@ -1038,7 +1038,7 @@ namespace o2
 
 			if (*field->GetType() == TypeOf(Actor*))
 			{
-				Actor* sourceValue = field->GetValue<Actor*>(source);
+				Actor* sourceValue = field->Get<Actor*>(source);
 				Actor** destValuePtr = (Actor**)(field->GetValuePtrStrong(dest));
 
 				*destValuePtr = sourceValue;
@@ -1046,7 +1046,7 @@ namespace o2
 			}
 			else if (*field->GetType() == TypeOf(Component*))
 			{
-				Component* sourceValue = field->GetValue<Component*>(source);
+				Component* sourceValue = field->Get<Component*>(source);
 				Component** destValuePtr = (Component**)(field->GetValuePtrStrong(dest));
 
 				*destValuePtr = sourceValue;

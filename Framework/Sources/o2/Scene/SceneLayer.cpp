@@ -103,7 +103,7 @@ namespace o2
 	}
 
 
-// 	void LayerDataNodeConverter::ToData(void* object, DataNode& data)
+// 	void LayerDataValueConverter::ToData(void* object, DataValue& data)
 // 	{
 // 		if (object)
 // 		{
@@ -112,13 +112,13 @@ namespace o2
 // 		}
 // 	}
 // 
-// 	void LayerDataNodeConverter::FromData(void* object, const DataNode& data)
+// 	void LayerDataValueConverter::FromData(void* object, const DataValue& data)
 // 	{
 // 		SceneLayer*& value = *(SceneLayer**)object;
 // 		value = o2Scene.GetLayer(data);
 // 	}
 // 
-// 	bool LayerDataNodeConverter::IsConvertsType(const Type* type) const
+// 	bool LayerDataValueConverter::IsConvertsType(const Type* type) const
 // 	{
 // 		return type->IsBasedOn(*TypeOf(SceneLayer).GetPointerType());
 // 	}

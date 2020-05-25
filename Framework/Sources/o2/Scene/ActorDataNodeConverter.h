@@ -8,7 +8,7 @@ namespace o2
 	// -------------------------
 	// Actor data node converter
 	// -------------------------
-	class ActorDataNodeConverter : public Singleton<ActorDataNodeConverter>
+	class ActorDataValueConverter : public Singleton<ActorDataValueConverter>
 	{
 	public:
 		// Converts actor pointer to data 
@@ -74,12 +74,12 @@ namespace o2
 
 		static void Write(const ActorPtr& value, DataValue& data)
 		{
-			ActorDataNodeConverter::Instance().ToData(value, data);
+			ActorDataValueConverter::Instance().ToData(value, data);
 		}
 
 		static void Read(ActorPtr& value, const DataValue& data)
 		{
-			ActorDataNodeConverter::Instance().FromData(value, data);
+			ActorDataValueConverter::Instance().FromData(value, data);
 		}
 	};
 }

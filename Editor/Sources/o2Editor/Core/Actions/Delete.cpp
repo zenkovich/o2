@@ -18,7 +18,7 @@ namespace Editor
 		for (auto object : objects)
 		{
 			ObjectInfo info;
-			info.objectData.SetValue(object);
+			info.objectData.Set(object);
 			info.idx = o2Scene.GetObjectHierarchyIdx(object);
 
 			if (auto parent = object->GetEditableParent())
@@ -88,7 +88,7 @@ namespace Editor
 				int idx = parent->GetEditablesChildren().FindIdx([=](SceneEditableObject* x) { return x->GetID() == prevId; }) + 1;
 
 				SceneEditableObject* newObject;
-				info.objectData.GetValue(newObject);
+				info.objectData.Get(newObject);
 				parent->AddEditableChild(newObject, idx);
 
 				o2EditorSceneScreen.SelectObjectWithoutAction(newObject);
@@ -99,7 +99,7 @@ namespace Editor
 				int idx = o2Scene.GetRootActors().FindIdx([&](Actor* x) { return x->GetID() == info.prevObjectId; }) + 1;
 
 				SceneEditableObject* newObject;
-				info.objectData.GetValue(newObject);
+				info.objectData.Get(newObject);
 				newObject->SetIndexInSiblings(idx);
 
 				o2EditorSceneScreen.SelectObjectWithoutAction(newObject);

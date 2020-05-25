@@ -17,7 +17,7 @@ namespace o2
 	{
 	public:
 		// Serializing object into data node
-		virtual DataValue Serialize() const { return DataValue(); };
+		virtual void Serialize(DataValue& node) const {}
 
 		// Deserializing object from data node
 		virtual void Deserialize(const DataValue& node) {};
@@ -28,11 +28,11 @@ namespace o2
 		// Deserializes data from string
 		void DeserializeFromString(const WString& str);
 
-		// DataNode converting operator
-		operator DataValue() { return Serialize(); };
-
 		// Assign operator from data node
 		ISerializable& operator=(const DataValue& node) { return *this; };
+
+		// DataDocument converting operator
+		operator DataDocument() const { return DataDocument(); }
 
 		// Beginning serialization callback
 		virtual void OnSerialize(DataValue& node) const {}
@@ -63,24 +63,24 @@ namespace o2
 #define SERIALIZABLE_MAIN(CLASS)  							                                                    \
     IOBJECT_MAIN(CLASS)																							\
                                                                                                                 \
-    o2::DataNode Serialize() const override                                                                     \
-    {												                                                            \
-        o2::DataNode res;                                                                                       \
-        SerializeBasic(*this, res);                                                                             \
-        return res;                                                                                             \
+    void Serialize(o2::DataValue& node) const override                                                          \
+    {						                                                                                    \
+        SerializeBasic(*this, node);                                                                            \
 	}												                                                            \
-    void Deserialize(const o2::DataNode& node) override                                                         \
+    void Deserialize(const o2::DataValue& node) override                                                        \
     {												                                                            \
         DeserializeBasic(*this, node);                                                                          \
 	}												                                                            \
-	CLASS& operator=(const o2::DataNode& node) 		                                                            \
+	CLASS& operator=(const o2::DataValue& node) 		                                                        \
 	{												                                                            \
 		Deserialize(node); return *this; 			                                                            \
-	} 												                                                            \
-	operator o2::DataNode() 						                                                            \
-	{ 												                                                            \
-		return Serialize(); 						                                                            \
-	}            
+	}                                                                                                           \
+	operator DataDocument() const                                                                               \
+	{                																							\
+		DataDocument doc;																						\
+		Serialize(doc);																							\
+		return doc;                                                                                             \
+	}
 
 #define SERIALIZABLE(CLASS)                                                                                     \
     SERIALIZABLE_MAIN(CLASS)                                                                                    \
@@ -108,7 +108,7 @@ END_META;
 CLASS_METHODS_META(o2::ISerializable)
 {
 
-	PUBLIC_FUNCTION(DataValue, Serialize);
+	PUBLIC_FUNCTION(void, Serialize, DataValue&);
 	PUBLIC_FUNCTION(void, Deserialize, const DataValue&);
 	PUBLIC_FUNCTION(WString, SerializeToString);
 	PUBLIC_FUNCTION(void, DeserializeFromString, const WString&);

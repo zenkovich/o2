@@ -248,7 +248,7 @@ namespace Editor
 
 		auto key = track->GetKeyAt(idx);
 		key.position -= relativeTime;
-		data.SetValue(key);
+		data.Set(key);
 
 		return true;
 	}

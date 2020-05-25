@@ -758,12 +758,12 @@ namespace o2
 
 	void ActorTransform::OnSerialize(DataValue& node) const
 	{
-		node.SetValue(*mData);
+		node.Set(*mData);
 	}
 
 	void ActorTransform::OnDeserialized(const DataValue& node)
 	{
-		node.GetValue(*mData);
+		node.Get(*mData);
 		SetDirty();
 	}
 
