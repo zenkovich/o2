@@ -155,24 +155,24 @@ namespace o2
 // 			{
 // 				if (ownerActor->IsAsset())
 // 				{
-// 					*data.AddNode("AssetId") = ownerActor->GetAssetID();
-// 					*data.AddNode("ComponentId") = value->GetID();
+// 					*data.AddMember("AssetId") = ownerActor->GetAssetID();
+// 					*data.AddMember("ComponentId") = value->GetID();
 // 				}
 // 				else if (ownerActor->IsOnScene())
 // 				{
-// 					*data.AddNode("SceneId") = ownerActor->GetID();
-// 					*data.AddNode("ComponentId") = value->GetID();
+// 					*data.AddMember("SceneId") = ownerActor->GetID();
+// 					*data.AddMember("ComponentId") = value->GetID();
 // 				}
 // 				else
 // 				{
-// 					*data.AddNode("Data") = value->Serialize();
-// 					*data.AddNode("Type") = value->GetType().GetName();
+// 					*data.AddMember("Data") = value->Serialize();
+// 					*data.AddMember("Type") = value->GetType().GetName();
 // 				}
 // 			}
 // 			else
 // 			{
-// 				*data.AddNode("Data") = value->Serialize();
-// 				*data.AddNode("Type") = value->GetType().GetName();
+// 				*data.AddMember("Data") = value->Serialize();
+// 				*data.AddMember("Type") = value->GetType().GetName();
 // 			}
 // 		}
 // 	}

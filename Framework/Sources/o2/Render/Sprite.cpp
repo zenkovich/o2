@@ -1077,12 +1077,12 @@ namespace o2
 		}
 		else
 		{
-			if (auto textureFileNameNode = node.GetMember("textureFileName"))
-				mMesh->SetTexture(TextureRef(textureFileNameNode->Data()));
+			if (auto textureFileNameNode = node.FindMember("textureFileName"))
+				mMesh->SetTexture(TextureRef(*textureFileNameNode));
 			else
 				mMesh->SetTexture(NoTexture());
 
-			if (auto textureSrcRectNode = node.GetMember("mTextureSrcRect"))
+			if (auto textureSrcRectNode = node.FindMember("mTextureSrcRect"))
 				mTextureSrcRect = *textureSrcRectNode;
 		}
 

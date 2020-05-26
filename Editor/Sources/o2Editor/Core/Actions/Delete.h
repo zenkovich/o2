@@ -19,10 +19,10 @@ namespace Editor
 		class ObjectInfo: public ISerializable
 		{
 		public:
-			DataValue objectData;   // @SERIALIZABLE
-			SceneUID parentId;	   // @SERIALIZABLE
-			SceneUID prevObjectId; // @SERIALIZABLE
-			int      idx;          // @SERIALIZABLE
+			DataDocument objectData;   // @SERIALIZABLE
+			SceneUID     parentId;	   // @SERIALIZABLE
+			SceneUID     prevObjectId; // @SERIALIZABLE
+			int          idx;          // @SERIALIZABLE
 
 			bool operator==(const ObjectInfo& other) const;
 
@@ -40,13 +40,13 @@ namespace Editor
 		DeleteAction(const Vector<SceneEditableObject*>& objects);
 
 		// Returns name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Deletes objects again
-		void Redo();
+		void Redo() override;
 
 		// Reverting deleted objects
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(DeleteAction);
 	};

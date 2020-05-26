@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "XmlDataFormat.h"
 
-namespace o2
+//namespace o2
 // {
 // 	namespace XmlDataFormat
 // 	{
@@ -33,7 +33,7 @@ namespace o2
 // 			{
 // 				DataValue* newNode = mnew DataValue(it->name());
 // 				newNode->Data() = (wchar_t*)it->value();
-// 				DataValue.AddNode(newNode);
+// 				DataValue.AddMember(newNode);
 // 			}
 // 
 // 			for (auto node:xmlNode)
@@ -43,7 +43,7 @@ namespace o2
 // 
 // 				DataValue* newNode = mnew DataValue();
 // 				LoadDataValue(node, *newNode);
-// 				DataValue.AddNode(newNode);
+// 				DataValue.AddMember(newNode);
 // 			}
 // 		}
 // 
@@ -118,4 +118,4 @@ namespace o2
 // 			}
 // 		}
 // 	}
-}
+//}

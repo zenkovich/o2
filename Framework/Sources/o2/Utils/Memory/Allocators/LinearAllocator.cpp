@@ -26,7 +26,7 @@ namespace o2
 		if (mCurrentSize + size > mBlockSize)
 		{
 			size_t newSize = mCurrentSize > 1024*1024 ? mCurrentSize + 512*1024 : mCurrentSize*2;
-			mBlock = mBaseAllocator->Reallocate(mBlock, newSize);
+			mBlock = mBaseAllocator->Reallocate(mBlock, mCurrentSize, newSize);
 			mBlockSize = newSize;
 		}
 

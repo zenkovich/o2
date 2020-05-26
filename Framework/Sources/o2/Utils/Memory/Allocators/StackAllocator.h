@@ -9,7 +9,7 @@ namespace o2
 	public:
 		StackAllocator(size_t capacity, IAllocator* baseAllocator = DefaultAllocator::GetInstance());
 
-		~StackAllocator() override;
+		~StackAllocator();
 
 		template<typename T>
 		T* Push(int count = 1);
@@ -24,6 +24,8 @@ namespace o2
 
 	protected:
 		IAllocator* mBaseAllocator;
+
+		size_t mInitialCapacity;
 
 		std::byte* mStack;
 		std::byte* mStackEnd;

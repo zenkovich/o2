@@ -32,22 +32,15 @@ namespace Editor
 		// Destructor. Saves application configuration
 		~EditorConfig();
 
-		// Returns user data from global config
-		DataValue& GetGlobalUserData();
-
-		// Returns user data from project config
-		DataValue& GetProjectUserData();
-
 		SERIALIZABLE(EditorConfig);
 
 	public:
 		class GlobalConfig: public ISerializable
 		{
 		public:
-			WindowsLayout  mDefaultLayout;         // Default windows layout, using in resetting @SERIALIZABLE
-			DataValue       mUserData;              // User data  @SERIALIZABLE
+			WindowsLayout  mDefaultLayout; // Default windows layout, using in resetting @SERIALIZABLE
 
-			Map<String, WindowsLayout> mAvailableLayouts;      // Available windows layouts @SERIALIZABLE
+			Map<String, WindowsLayout> mAvailableLayouts; // Available windows layouts @SERIALIZABLE
 
 			SERIALIZABLE(GlobalConfig);
 		};
@@ -59,7 +52,6 @@ namespace Editor
 			Vec2I         mWindowPosition;               // Application window position @SERIALIZABLE
 			bool          mMaximized = true;             // Is application window is maximized @SERIALIZABLE
 			WindowsLayout mLayout;                       // Windows layout @SERIALIZABLE
-			DataValue      mUserData;                     // User data  @SERIALIZABLE
 
 			SERIALIZABLE(ProjectConfig);
 		};
@@ -114,8 +106,6 @@ END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
 {
 
-	PUBLIC_FUNCTION(DataValue&, GetGlobalUserData);
-	PUBLIC_FUNCTION(DataValue&, GetProjectUserData);
 	PROTECTED_FUNCTION(void, SaveGlobalConfigs);
 	PROTECTED_FUNCTION(void, SaveProjectConfigs);
 	PROTECTED_FUNCTION(void, LoadConfigs);
@@ -133,7 +123,6 @@ END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::GlobalConfig)
 {
 	PUBLIC_FIELD(mDefaultLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mUserData).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mAvailableLayouts).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
@@ -153,7 +142,6 @@ CLASS_FIELDS_META(Editor::EditorConfig::ProjectConfig)
 	PUBLIC_FIELD(mWindowPosition).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mMaximized).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mLayout).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mUserData).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::ProjectConfig)

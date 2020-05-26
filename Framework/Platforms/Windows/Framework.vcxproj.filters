@@ -269,9 +269,6 @@
     <ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h">
       <Filter>Sources\o2\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.h">
-      <Filter>Sources\o2\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h">
       <Filter>Sources\o2\Scene</Filter>
     </ClInclude>
@@ -665,6 +662,9 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.h">
       <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorDataValueConverter.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
@@ -869,9 +869,6 @@
       <Filter>Sources\o2\Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\ActorCreationMode.cpp">
-      <Filter>Sources\o2\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.cpp">
       <Filter>Sources\o2\Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\ActorEditor.cpp">
@@ -1152,6 +1149,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.cpp">
       <Filter>Sources\o2\Utils\Memory\Allocators</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorDataValueConverter.cpp">
+      <Filter>Sources\o2\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,7 @@ namespace o2
 	StackAllocator::StackAllocator(size_t capacity, IAllocator* baseAllocator /*= DefaultAllocator::GetInstance()*/):
 		mBaseAllocator(baseAllocator)
 	{
+		mInitialCapacity = capacity;
 		Initialize();
 	}
 
@@ -24,7 +25,9 @@ namespace o2
 
 	void StackAllocator::Initialize()
 	{
-		Initialize();
+		mStack = (std::byte*)mBaseAllocator->Allocate(mInitialCapacity);
+		mTop = mStack;
+		mStackEnd = mStack + mInitialCapacity;
 	}
 
 }

@@ -840,20 +840,20 @@ namespace o2
 		if (mLayer)
 			node["LayerName"] = mLayer->name;
 
-		auto childsNode = node.AddNode("Childs");
+		auto childsNode = node.AddMember("Childs");
 		for (auto child : mChildren)
 		{
-			auto childNode = childsNode->AddNode("Child");
-			*childNode->AddNode("Type") = child->GetType().GetName();
-			*childNode->AddNode("Data") = child->Serialize();
+			auto childNode = childsNode.AddMember("Child");
+			childNode.AddMember("Type") = child->GetType().GetName();
+			child->Serialize(childNode.AddMember("Data"));
 		}
 
-		auto componentsNode = node.AddNode("Components");
+		auto componentsNode = node.AddMember("Components");
 		for (auto component : mComponents)
 		{
-			auto componentNode = componentsNode->AddNode("Component");
-			*componentNode->AddNode("Data") = component->Serialize();
-			*componentNode->AddNode("Type") = component->GetType().GetName();
+			auto componentNode = componentsNode.AddMember("Component");
+			component->Serialize(componentNode.AddMember("Data"));
+			componentNode.AddMember("Type") = component->GetType().GetName();
 		}
 	}
 
@@ -863,45 +863,49 @@ namespace o2
 		if (ActorDataValueConverter::Instance().mLockDepth == 0)
 			ActorDataValueConverter::Instance().ActorCreated(this);
 
-		mId = *node.GetMember("Id");
-		mName = *node.GetMember("Name");
-		mLocked = *node.GetMember("Locked");
-		mEnabled = *node.GetMember("Enabled");
+		mId = node.GetMember("Id");
+		mName = node.GetMember("Name");
+		mLocked = node.GetMember("Locked");
+		mEnabled = node.GetMember("Enabled");
 
-		if (auto layerNode = node.GetMember("LayerName"))
-			SetLayer(layerNode->Data());
+		if (auto layerNode = node.FindMember("LayerName"))
+		{
+			String layerName;
+			layerNode->Get(layerName);
+			SetLayer(layerName);
+		}
 		else
 			SetLayer(o2Scene.GetDefaultLayer());
 
-		node.GetMember("Transform")->Get(*transform);
+		node.GetMember("Transform").Get(*transform);
 
 		RemoveAllComponents();
 
-		if (auto componentsNode = node.GetMember("Components"))
+		if (auto componentsNode = node.FindMember("Components"))
 		{
-			for (auto componentNode : componentsNode->GetChildNodes())
+			for (auto& componentNode : *componentsNode)
 			{
-				Component* component = (Component*)o2Reflection.CreateTypeSample(*componentNode->GetMember("Type"));
-				component->Deserialize(*componentNode->GetMember("Data"));
+				Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
+				component->Deserialize(componentNode.GetMember("Data"));
 				component->SetOwnerActor(this);
 			}
 		}
 
 		RemoveAllChildren();
 
-		if (auto childsNode = node.GetMember("Childs"))
+		if (auto childsNode = node.FindMember("Childs"))
 		{
-			for (auto childNode : childsNode->GetChildNodes())
+			for (auto& childNode : *childsNode)
 			{
-				DataValue* typeNode = childNode->GetMember("Type");
-				DataValue* DataValue = childNode->GetMember("Data");
-				if (typeNode && DataValue)
+				const DataValue* typeNode = childNode.FindMember("Type");
+				const DataValue* dataValue = childNode.FindMember("Data");
+				if (typeNode && dataValue)
 				{
-					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(typeNode->Data()));
+					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
 					if (type)
 					{
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->Deserialize(*DataValue);
+						child->Deserialize(*dataValue);
 						o2Scene.mRootActors.Remove(child);
 						AddChild(child);
 					}
@@ -1038,7 +1042,7 @@ namespace o2
 
 			if (*field->GetType() == TypeOf(Actor*))
 			{
-				Actor* sourceValue = field->Get<Actor*>(source);
+				Actor* sourceValue = field->GetValue<Actor*>(source);
 				Actor** destValuePtr = (Actor**)(field->GetValuePtrStrong(dest));
 
 				*destValuePtr = sourceValue;
@@ -1046,7 +1050,7 @@ namespace o2
 			}
 			else if (*field->GetType() == TypeOf(Component*))
 			{
-				Component* sourceValue = field->Get<Component*>(source);
+				Component* sourceValue = field->GetValue<Component*>(source);
 				Component** destValuePtr = (Component**)(field->GetValuePtrStrong(dest));
 
 				*destValuePtr = sourceValue;

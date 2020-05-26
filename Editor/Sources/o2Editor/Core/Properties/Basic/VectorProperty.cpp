@@ -423,12 +423,12 @@ namespace Editor
 	{
 		newCount = Math::Max(0, newCount);
 
-		Vector<DataValue> prevValues, newValues;
+		Vector<DataDocument> prevValues, newValues;
 		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{
-			prevValues.Add(DataValue());
+			prevValues.Add(DataDocument());
 			prevValues.Last()["Size"].Set(mVectorType->GetObjectVectorSize(obj.first.data));
 			DataValue& elementsData = prevValues.Last()["Elements"];
 
@@ -436,10 +436,10 @@ namespace Editor
 			for (int i = newCount; i < lastCount; i++)
 			{
 				elementFieldInfo->Serialize(mVectorType->GetObjectVectorElementPtr(obj.first.data, i),
-											*elementsData.AddNode("Element" + (String)i));
+											elementsData.AddMember("Element" + (String)i));
 			}
 
-			newValues.Add(DataValue());
+			newValues.Add(DataDocument());
 			newValues.Last()["Size"].Set(newCount);
 
 			mVectorType->SetObjectVectorSize(obj.first.data, newCount);

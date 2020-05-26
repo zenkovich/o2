@@ -227,7 +227,7 @@ namespace Editor
 		if (mSelectedHandles.Count() == 1 && !mHandleHasMoved)
 			mAnimationWindow->mTimeline->SetTimeCursor(mSelectedHandles[0]->GetPosition().x);
 
-		DataValue data;
+		DataDocument data;
 		auto selectedKeys = GetSelectedKeys();
 		SerializeKeys(data, selectedKeys, 0);
 		mAnimationWindow->mActionsList.DoneAction(mnew AnimationKeysChangeAction(selectedKeys, mBeforeChangeKeysData, data, this));
@@ -468,16 +468,16 @@ namespace Editor
 			if (!fnd.second)
 				continue;
 
-			DataValue* trackData = data.AddNode("KeysGroup");
-			*trackData->AddNode("Path") = kv.first;
-			DataValue* keysData = trackData->AddNode("Keys");
+			DataValue* trackData = data.AddMember("KeysGroup");
+			trackData->AddMember("Path") = kv.first;
+			DataValue* keysData = trackData->AddMember("Keys");
 
 			for (auto handle : fnd.second->GetKeyHandles())
 			{
 				if (kv.second.Contains(handle->keyUid))
 				{
-					auto node = keysData->AddNode("key");
-					fnd.second->SerializeKey(handle->keyUid, *node, relativeTime);
+					auto node = keysData->AddMember("key");
+					fnd.second->SerializeKey(handle->keyUid, node, relativeTime);
 				}
 			}
 		}
@@ -489,29 +489,29 @@ namespace Editor
 		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 			track->BeginKeysBatchChange();
 
-		if (data.GetChildNodes().Count() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
+		if (data.GetMembersCount == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
 		{
 			auto DataValue = (AnimationTree::TrackNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
-			for (auto keyNode : *data.GetChildNodes()[0]->GetMember("Keys"))
+			for (auto& keyNode : data[0].GetMember("Keys"))
 			{
-				UInt64 uid = DataValue->trackControl->DeserializeKey(*keyNode, relativeTime);
+				UInt64 uid = DataValue->trackControl->DeserializeKey(keyNode, relativeTime);
 				if (uid != 0)
 					keys[DataValue->path].Add(uid);
 			}
 		}
 		else
 		{
-			for (auto pathNode : data)
+			for (auto& pathNode : data)
 			{
-				String path = *pathNode->GetMember("Path");
+				String path = pathNode.GetMember("Path");
 				for (auto& kv : mTrackControlsMap)
 				{
 					if (kv.first != path)
 						continue;
 
-					for (auto keyNode : *pathNode->GetMember("Keys"))
+					for (auto& keyNode : pathNode.GetMember("Keys"))
 					{
-						UInt64 uid = kv.second->DeserializeKey(*keyNode, relativeTime, generateNewUid);
+						UInt64 uid = kv.second->DeserializeKey(keyNode, relativeTime, generateNewUid);
 						if (uid != 0)
 							keys[path].Add(uid);
 					}
@@ -528,7 +528,7 @@ namespace Editor
 		float relativeTime = mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x);
 		Map<String, Vector<UInt64>> keys = GetSelectedKeys();
 
-		DataValue data;
+		DataDocument data;
 		SerializeKeys(data, keys, relativeTime);
 
 		Clipboard::SetText(data.SaveAsWString());
@@ -539,7 +539,7 @@ namespace Editor
 		DeselectAll();
 		Map<String, Vector<UInt64>> keys;
 
-		DataValue data;
+		DataDocument data;
 		data.LoadFromData(Clipboard::GetText());
 
 		DeserializeKeys(data, keys, mAnimationWindow->mTimeline->WorldToLocal(o2Input.GetCursorPos().x));
@@ -554,7 +554,7 @@ namespace Editor
 	{
 		if (createAction)
 		{
-			DataValue data;
+			DataDocument data;
 			SerializeKeys(data, keys, 0);
 			mAnimationWindow->mActionsList.DoneAction(mnew AnimationDeleteKeysAction(keys, data, this));
 		}

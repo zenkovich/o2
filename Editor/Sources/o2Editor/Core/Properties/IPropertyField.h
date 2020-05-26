@@ -29,7 +29,7 @@ namespace Editor
 		typedef Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> TargetsVec;
 
 		typedef Function<void(IPropertyField*)> OnChangedFunc;
-		typedef Function<void(const String&, const Vector<DataValue>&, const Vector<DataValue>&)> OnChangeCompletedFunc;
+		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
 		OnChangedFunc         onChanged;         // Immediate change value by user event
@@ -147,8 +147,8 @@ namespace Editor
 		Button* mRemoveBtn = nullptr; // Remove from array button
 		Label*  mCaption = nullptr;   // Caption label, null by default   
 
-		String           mValuesPath;         // Reflection path of target values
-		Vector<DataValue> mBeforeChangeValues; // Serialized value data before changes started
+		String               mValuesPath;         // Reflection path of target values
+		Vector<DataDocument> mBeforeChangeValues; // Serialized value data before changes started
 
 	protected:
 		// It is called when type specialized during setting value proxy

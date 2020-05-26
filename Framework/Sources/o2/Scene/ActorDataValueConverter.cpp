@@ -13,17 +13,23 @@ namespace o2
 		if (object)
 		{
 			if (object->mIsAsset)
-				*data.AddNode("AssetId") = object->GetAssetID();
+				data.AddMember("AssetId") = object->GetAssetID();
 			else if (object->IsOnScene() || object->IsAsset())
-				*data.AddNode("ID") = object->GetID();
+				data.AddMember("ID") = object->GetID();
 			else
-				*data.AddNode("Data") = object ? object->Serialize() : (String)"null";
+			{
+				auto dataNode = data.AddMember("Data");
+				if (object)
+					object->Serialize(dataNode);
+				else
+					dataNode = "null";
+			}
 		}
 	}
 
 	void ActorDataValueConverter::FromData(Actor*& object, const DataValue& data)
 	{
-		if (auto assetIdNode = data.GetMember("AssetId"))
+		if (auto assetIdNode = data.FindMember("AssetId"))
 		{
 			UID assetId = *assetIdNode;
 			object = o2Scene.GetAssetActorByID(assetId);
@@ -31,7 +37,7 @@ namespace o2
 			if (!object)
 				mUnresolvedActors.Add(ActorDef(&object, assetId));
 		}
-		else if (auto sceneIdNode = data.GetMember("ID"))
+		else if (auto sceneIdNode = data.FindMember("ID"))
 		{
 			if (mLockDepth == 0)
 				object = o2Scene.GetActorByID(*sceneIdNode);
@@ -39,14 +45,14 @@ namespace o2
 			if (!object)
 				mUnresolvedActors.Add(ActorDef(&object, (SceneUID)*sceneIdNode));
 		}
-		else if (auto DataValue = data.GetMember("Data"))
+		else if (auto dataValue = data.FindMember("Data"))
 		{
-			if (DataValue->Data() == "null")
+			if ((String)dataValue == "null")
 				object = nullptr;
 			else
 			{
 				object = mnew Actor(ActorCreateMode::NotInScene);
-				object->Deserialize(*DataValue);
+				object->Deserialize(*dataValue);
 			}
 		}
 		else object = nullptr;

@@ -183,6 +183,9 @@ namespace o2
 		// Member access by name. Valid only for object type
 		const DataValue& operator[](const char* name) const;
 
+		// Returns members count
+		int GetMembersCount() const;
+
 		// Returns node by name. Creates new nodes when required
 		DataValue& GetMember(const DataValue& name);
 
@@ -366,6 +369,7 @@ namespace o2
 		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& target, const char* source);
 
 		friend class JsonDataDocumentParseHandler;
+		friend class TType<DataValue>;
 	};
 
 	// ------------------------------------------

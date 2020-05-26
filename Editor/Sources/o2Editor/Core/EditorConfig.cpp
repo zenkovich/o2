@@ -27,19 +27,9 @@ namespace Editor
 		}
 	}
 
-	DataValue& EditorConfig::GetGlobalUserData()
-	{
-		return mGlobalConfig.mUserData;
-	}
-
-	DataValue& EditorConfig::GetProjectUserData()
-	{
-		return mProjectConfig.mUserData;
-	}
-
 	void EditorConfig::SaveGlobalConfigs()
 	{
-		DataValue data;
+		DataDocument data;
 
 		mGlobalConfig.mAvailableLayouts = o2EditorWindows.mAvailableLayouts;
 
@@ -51,7 +41,7 @@ namespace Editor
 	{
 		mProjectConfig.mLayout = o2EditorWindows.GetWindowsLayout();
 
-		DataValue data;
+		DataDocument data;
 		data = mProjectConfig;
 		data.SaveToFile(mConfigPath);
 	}
@@ -66,7 +56,7 @@ namespace Editor
 
 	void EditorConfig::LoadProjectConfig()
 	{
-		DataValue data;
+		DataDocument data;
 
 		if (data.LoadFromFile(mConfigPath))
 			mProjectConfig = data;
@@ -78,7 +68,7 @@ namespace Editor
 
 	void EditorConfig::LoadGlobalConfig()
 	{
-		DataValue data;
+		DataDocument data;
 		if (data.LoadFromFile(mGlobalConfigPath))
 			mGlobalConfig = data;
 		else

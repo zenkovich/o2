@@ -357,32 +357,32 @@ namespace o2
 			mLayers.Clear();
 		}
 
-		DataValue data;
+		DataDocument data;
 		data.LoadFromFile(path);
 
 		auto layersNode = data.GetMember("Layers");
-		for (auto layerNode : *layersNode)
+		for (auto& layerNode : layersNode)
 		{
 			auto layer = mnew SceneLayer();
-			layer->Deserialize(*layerNode);
+			layer->Deserialize(layerNode);
 			mLayers.Add(layer);
 		}
 
-		mDefaultLayer = GetLayer(data.GetMember("DefaultLayer")->Data());
+		mDefaultLayer = GetLayer(data.GetMember("DefaultLayer"));
 
 		auto tagsNode = data.GetMember("Tags");
-		for (auto tagNode : *tagsNode)
+		for (auto& tagNode : tagsNode)
 		{
 			auto tag = mnew Tag();
-			tag->Deserialize(*tagNode);
+			tag->Deserialize(tagNode);
 			mTags.Add(tag);
 		}
 
-		auto actorsNode = data.GetMember("Actors");
-		for (auto actorNode : *actorsNode)
+		auto& actorsNode = data.GetMember("Actors");
+		for (auto& actorNode : actorsNode)
 		{
 			auto actor = mnew Actor();
-			actor->Deserialize(*actorNode);
+			actor->Deserialize(actorNode);
 		}
 
 		ActorDataValueConverter::Instance().UnlockPointersResolving();
@@ -391,21 +391,21 @@ namespace o2
 
 	void Scene::Save(const String& path)
 	{
-		DataValue data;
+		DataDocument data;
 
-		auto layersNode = data.AddNode("Layers");
+		auto layersNode = data.AddMember("Layers");
 		for (auto layer : mLayers)
-			*layersNode->AddNode("Layer") = layer->Serialize();
+			layer->Serialize(layersNode.AddMember("Layer"));
 
-		*data.AddNode("DefaultLayer") = mDefaultLayer->name;
+		data.AddMember("DefaultLayer") = mDefaultLayer->name;
 
-		auto tagsNode = data.AddNode("Tags");
+		auto tagsNode = data.AddMember("Tags");
 		for (auto tag : mTags)
-			*tagsNode->AddNode("Tag") = tag->Serialize();
+			tag->Serialize(tagsNode.AddMember("Tag"));
 
-		auto actorsNode = data.AddNode("Actors");
+		auto actorsNode = data.AddMember("Actors");
 		for (auto actor : mRootActors)
-			*actorsNode->AddNode("Actor") = actor->Serialize();
+			actor->Serialize(actorsNode.AddMember("Actor"));
 
 		data.SaveToFile(path);
 	}

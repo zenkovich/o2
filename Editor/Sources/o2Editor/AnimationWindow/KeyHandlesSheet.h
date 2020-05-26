@@ -110,7 +110,7 @@ namespace Editor
 		DragHandle mRightFrameDragHandle;  // Right frame border drag handle, resizing selected handles rect
 		DragHandle mCenterFrameDragHandle; // Center frame drag handle, moves selected handles
 
-		DataValue mBeforeChangeKeysData; // Serialized keys data before change
+		DataDocument mBeforeChangeKeysData; // Serialized keys data before change
 
 	private:
 		// Initializes frame handles

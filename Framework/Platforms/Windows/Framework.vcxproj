@@ -210,7 +210,7 @@
     <ClInclude Include="..\..\Sources\o2\Render\Windows\TextureBase.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Actor.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h" />
-    <ClInclude Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorDataValueConverter.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Component.h" />
@@ -412,7 +412,7 @@
     <ClCompile Include="..\..\Sources\o2\Render\Windows\TextureImpl.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Actor.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\ActorCreationMode.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Scene\ActorDataNodeConverter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorDataValueConverter.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\ActorEditor.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\ActorRef.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\ActorTransform.cpp" />

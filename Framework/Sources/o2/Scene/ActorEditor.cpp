@@ -36,50 +36,51 @@ namespace o2
 			node["LayerName"] = mLayer->name;
 
 		// Transform data
-		auto transformNode = node.AddNode("Transform");
+		auto transformNode = node.AddMember("Transform");
 
 		if (transform->mData->position != proto->transform->mData->position)
-			(*transformNode)["Position"] = transform->mData->position;
+			transformNode["Position"] = transform->mData->position;
 
 		if (transform->mData->size != proto->transform->mData->size)
-			(*transformNode)["Size"] = transform->mData->size;
+			transformNode["Size"] = transform->mData->size;
 
 		if (transform->mData->scale != proto->transform->mData->scale)
-			(*transformNode)["Scale"] = transform->mData->scale;
+			transformNode["Scale"] = transform->mData->scale;
 
 		if (transform->mData->pivot != proto->transform->mData->pivot)
-			(*transformNode)["Pivot"] = transform->mData->pivot;
+			transformNode["Pivot"] = transform->mData->pivot;
 
 		if (!Math::Equals(transform->mData->angle, proto->transform->mData->angle))
-			(*transformNode)["Angle"] = transform->mData->angle;
+			transformNode["Angle"] = transform->mData->angle;
 
 		if (!Math::Equals(transform->mData->shear, proto->transform->mData->shear))
-			(*transformNode)["Shear"] = transform->mData->shear;
+			transformNode["Shear"] = transform->mData->shear;
 
 		// Children data
-		auto childsNode = node.AddNode("Childs");
+		auto childsNode = node.AddMember("Childs");
 		for (auto child : mChildren)
 		{
-			auto childNode = childsNode->AddNode("Child");
-			*childNode->AddNode("Type") = child->GetType().GetName();
-			*childNode->AddNode("Data") = child->Serialize();
+			auto childNode = childsNode.AddMember("Child");
+			childNode.AddMember("Type") = child->GetType().GetName();
+			child->Serialize(childNode.AddMember("Data"));
 		}
 
 		// Components data
-		auto componentsNode = node.AddNode("Components");
+		auto componentsNode = node.AddMember("Components");
 		for (auto component : mComponents)
 		{
-			auto compNode = componentsNode->AddNode("Component");
-			*compNode->AddNode("Type") = component->GetType().GetName();
+			auto compNode = componentsNode.AddMember("Component");
+			compNode.AddMember("Type") = component->GetType().GetName();
 
-			auto& DataValue = *compNode->AddNode("Data");
+			auto& dataValue = compNode.AddMember("Data");
 			if (auto componentProtoLink = component->mPrototypeLink)
 			{
-				DataValue["PrototypeLink"] = componentProtoLink->mId;
+				dataValue["PrototypeLink"] = componentProtoLink->mId;
 
-				DataValue.SetValueDelta(*component, *component->mPrototypeLink);
+				dataValue.SetValueDelta(*component, *component->mPrototypeLink);
 			}
-			else DataValue = component->Serialize();
+			else 
+				component->Serialize(dataValue);
 		}
 	}
 
@@ -91,12 +92,12 @@ namespace o2
 		RemoveAllChildren();
 		RemoveAllComponents();
 
-		if (auto prototypeNode = node.GetMember("Prototype"))
+		if (auto prototypeNode = node.FindMember("Prototype"))
 		{
 			SetPrototype(*prototypeNode);
 		}
 
-		if (auto prototypeLinkNode = node.GetMember("PrototypeLink"))
+		if (auto prototypeLinkNode = node.FindMember("PrototypeLink"))
 		{
 			SceneUID id = *prototypeLinkNode;
 			Actor* parent = mParent;
@@ -124,62 +125,62 @@ namespace o2
 			}
 		}
 
-		mId = *node.GetMember("Id");
+		mId = node.GetMember("Id");
 
 		if (!mPrototypeLink)
 			return;
 
 		const Actor* proto = mPrototypeLink.Get();
 
-		if (auto subNode = node.GetMember("Name"))
+		if (auto subNode = node.FindMember("Name"))
 			mName = *subNode;
 		else
 			mName = proto->mName;
 
-		if (auto subNode = node.GetMember("Enabled"))
+		if (auto subNode = node.FindMember("Enabled"))
 			mEnabled = *subNode;
 		else
 			mEnabled = proto->mEnabled;
 
-		if (auto subNode = node.GetMember("Locked"))
+		if (auto subNode = node.FindMember("Locked"))
 			mLocked = *subNode;
 		else
 			mLocked = proto->mLocked;
 
-		if (auto subNode = node.GetMember("LayerName"))
+		if (auto subNode = node.FindMember("LayerName"))
 			SetLayer(o2Scene.GetLayer(*subNode));
 		else
 			SetLayer(proto->mLayer);
 
 		// Transform data
-		if (auto transformNode = node.GetMember("Transform"))
+		if (auto transformNode = node.FindMember("Transform"))
 		{
-			if (auto subNode = transformNode->GetMember("Position"))
+			if (auto subNode = transformNode->FindMember("Position"))
 				transform->mData->position = *subNode;
 			else
 				transform->mData->position = proto->transform->mData->position;
 
-			if (auto subNode = transformNode->GetMember("Size"))
+			if (auto subNode = transformNode->FindMember("Size"))
 				transform->mData->size = *subNode;
 			else
 				transform->mData->size = proto->transform->mData->size;
 
-			if (auto subNode = transformNode->GetMember("Scale"))
+			if (auto subNode = transformNode->FindMember("Scale"))
 				transform->mData->scale = *subNode;
 			else
 				transform->mData->scale = proto->transform->mData->scale;
 
-			if (auto subNode = transformNode->GetMember("Pivot"))
+			if (auto subNode = transformNode->FindMember("Pivot"))
 				transform->mData->pivot = *subNode;
 			else
 				transform->mData->pivot = proto->transform->mData->pivot;
 
-			if (auto subNode = transformNode->GetMember("Angle"))
+			if (auto subNode = transformNode->FindMember("Angle"))
 				transform->mData->angle = *subNode;
 			else
 				transform->mData->angle = proto->transform->mData->angle;
 
-			if (auto subNode = transformNode->GetMember("Shear"))
+			if (auto subNode = transformNode->FindMember("Shear"))
 				transform->mData->shear = *subNode;
 			else
 				transform->mData->shear = proto->transform->mData->shear;
@@ -188,19 +189,19 @@ namespace o2
 		RemoveAllChildren();
 
 		// children
-		if (auto childsNode = node.GetMember("Childs"))
+		if (auto childsNode = node.FindMember("Childs"))
 		{
-			for (auto childNode : *childsNode)
+			for (auto& childNode : *childsNode)
 			{
-				DataValue* typeNode = childNode->GetMember("Type");
-				DataValue* DataValue = childNode->GetMember("Data");
-				if (typeNode && DataValue)
+				const DataValue* typeNode = childNode.FindMember("Type");
+				const DataValue* dataValue = childNode.FindMember("Data");
+				if (typeNode && dataValue)
 				{
-					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(typeNode->Data()));
+					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
 					if (type)
 					{
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->Deserialize(*DataValue);
+						child->Deserialize(*dataValue);
 						o2Scene.mRootActors.Remove(child);
 						AddChild(child);
 					}
@@ -211,11 +212,11 @@ namespace o2
 		RemoveAllComponents();
 
 		// components
-		if (auto componentsNode = node.GetMember("Components"))
+		if (auto componentsNode = node.FindMember("Components"))
 		{
-			for (auto componentNode : *componentsNode)
+			for (auto& componentNode : *componentsNode)
 			{
-				String type = (*componentNode)["Type"];
+				String type = componentNode["Type"];
 				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
 
 				mComponents.Add(newComponent);
@@ -223,9 +224,9 @@ namespace o2
 
 				if (newComponent)
 				{
-					auto componentDataValue = (*componentNode)["Data"];
+					auto& componentDataValue = componentNode["Data"];
 
-					if (auto prototypeLinkNode = componentDataValue.GetNode("PrototypeLink"))
+					if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
 					{
 						SceneUID id = *prototypeLinkNode;
 						if (mPrototypeLink)
@@ -332,8 +333,8 @@ namespace o2
 
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
-		for (auto serializable : serializableObjects)
-			serializable->OnDeserialized(DataValue());
+// 		for (auto serializable : serializableObjects)
+// 			serializable->OnDeserialized();
 
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
@@ -678,8 +679,8 @@ namespace o2
 			info.actor->OnChanged();
 		}
 
-		for (auto serializable : serializableObjects)
-			serializable->OnDeserialized(DataValue());
+// 		for (auto serializable : serializableObjects)
+// 			serializable->OnDeserialized(DataValue());
 
 		// update transformation
 		transform->SetDirty();

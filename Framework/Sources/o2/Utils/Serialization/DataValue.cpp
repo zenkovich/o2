@@ -277,6 +277,14 @@ namespace o2
 		return GetMember(name);
 	}
 
+	int DataValue::GetMembersCount() const
+	{
+		if (!IsObject())
+			return 0;
+
+		return mValue.objectData.count;
+	}
+
 	DataValue& DataValue::GetMember(const DataValue& name)
 	{
 		if (auto res = FindMember(name))

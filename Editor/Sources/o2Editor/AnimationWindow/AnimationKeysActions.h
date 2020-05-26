@@ -9,17 +9,17 @@ namespace Editor
 	{
 	public:
 		AnimationAddKeysAction();
-		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, const DataValue& keysData, KeyHandlesSheet* editor);
+		AnimationAddKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor);
 
 		String GetName() const override;
-		void Redo();
-		void Undo();
+		void Redo() override;
+		void Undo() override;
 
 		SERIALIZABLE(AnimationAddKeysAction);
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
-		DataValue                    mKeysData;
+		DataDocument                mKeysData;
 		KeyHandlesSheet*            mEditor;
 	};
 
@@ -27,17 +27,17 @@ namespace Editor
 	{
 	public:
 		AnimationDeleteKeysAction();
-		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, const DataValue& keysData, KeyHandlesSheet* editor);
+		AnimationDeleteKeysAction(const Map<String, Vector<UInt64>>& keys, DataDocument& keysData, KeyHandlesSheet* editor);
 
 		String GetName() const override;
-		void Redo();
-		void Undo();
+		void Redo() override;
+		void Undo() override;
 
 		SERIALIZABLE(AnimationDeleteKeysAction);
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
-		DataValue                    mKeysData;
+		DataDocument                mKeysData;
 		KeyHandlesSheet*            mEditor;
 	};
 
@@ -45,19 +45,20 @@ namespace Editor
 	{
 	public:
 		AnimationKeysChangeAction();
-		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys,  const DataValue& beforeKeysData,
-								  const DataValue& afterKeysData, KeyHandlesSheet* editor);
+		AnimationKeysChangeAction(const Map<String, Vector<UInt64>>& keys, 
+								  DataDocument& beforeKeysData, DataDocument& afterKeysData, 
+								  KeyHandlesSheet* editor);
 
 		String GetName() const override;
-		void Redo();
-		void Undo();
+		void Redo() override;
+		void Undo() override;
 
 		SERIALIZABLE(AnimationKeysChangeAction);
 
 	protected:
 		Map<String, Vector<UInt64>> mKeys;
-		DataValue                    mBeforeKeysData;
-		DataValue                    mAfterKeysData;
+		DataDocument                mBeforeKeysData;
+		DataDocument                mAfterKeysData;
 		KeyHandlesSheet*            mEditor;
 	};
 }
