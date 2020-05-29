@@ -158,7 +158,7 @@ namespace Editor
 		virtual void OnFreeProperty();
 
 		// Stores values to data
-		virtual void StoreValues(Vector<DataValue>& data) const {}
+		virtual void StoreValues(Vector<DataDocument>& data) const {}
 
 		// Checks that value was changed and calls onChangeCompleted
 		virtual void CheckValueChangeCompleted();
@@ -236,7 +236,7 @@ namespace Editor
 		bool IsValueRevertable() const override;
 
 		// Stores values to data
-		void StoreValues(Vector<DataValue>& data) const override;
+		void StoreValues(Vector<DataDocument>& data) const override;
 
 		// Returns value from proxy
 		virtual _type GetProxy(IAbstractValueProxy* proxy) const;
@@ -437,12 +437,12 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void TPropertyField<_type>::StoreValues(Vector<DataValue>& data) const
+	void TPropertyField<_type>::StoreValues(Vector<DataDocument>& data) const
 	{
 		data.Clear();
 		for (auto ptr : mValuesProxies)
 		{
-			data.Add(DataValue());
+			data.Add(DataDocument());
 			data.Last() = GetProxy(ptr.first);
 		}
 	}
@@ -566,7 +566,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
 	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(void, OnFreeProperty);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataDocument>&);
 	PROTECTED_FUNCTION(void, CheckValueChangeCompleted);
 	PROTECTED_FUNCTION(void, CheckRevertableState);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
@@ -600,7 +600,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PUBLIC_FUNCTION(void, SetUnknownValue, const _type&);
 	PUBLIC_FUNCTION(_type, GetCommonValue);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataDocument>&);
 	PROTECTED_FUNCTION(_type, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, const _type&);
 	PROTECTED_FUNCTION(void, SetCommonValue, const _type&);

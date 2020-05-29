@@ -1,8 +1,8 @@
 #pragma once
 
-#include <map>
 #include "o2/Utils/Debug/Assert.h"
-#include "o2/Utils/Types/Containers/IDictionary.h"
+#include "o2/Utils/Delegates.h"
+#include <map>
 
 namespace o2
 {
@@ -10,7 +10,7 @@ namespace o2
 	// Dictionary
 	// ----------
 	template<typename _key_type, typename _value_type>
-	class Map : public IDictionary<_key_type, _value_type>, public std::map<_key_type, _value_type>
+	class Map : public std::map<_key_type, _value_type>
 	{
 	public:
 		using KeyValuePair = typename std::map<_key_type, _value_type>::value_type;
@@ -40,46 +40,46 @@ namespace o2
 		Map& operator=(const Map& other);
 
 		// Adds element
-		void Add(const _key_type& key, const _value_type& value) override;
+		void Add(const _key_type& key, const _value_type& value);
 
 		// Adds element
-		void Add(const KeyValuePair& keyValue) override;
+		void Add(const KeyValuePair& keyValue);
 
 		// Adds elements from other dictionary
 		void Add(const Map& other);
 
 		// Removes element by key
-		void Remove(const _key_type& key) override;
+		void Remove(const _key_type& key);
 
 		// Removes all which pass function
-		void RemoveAll(const Function<bool(const _key_type&, const _value_type&)>& match) override;
+		void RemoveAll(const Function<bool(const _key_type&, const _value_type&)>& match);
 
 		// Removes all elements
-		void Clear() override;
+		void Clear();
 
 		// Returns true if contains element with specified key
-		bool ContainsKey(const _key_type& key) const override;
+		bool ContainsKey(const _key_type& key) const;
 
 		// Returns true if contains element with specified value
-		bool ContainsValue(const _value_type& value) const override;
+		bool ContainsValue(const _value_type& value) const;
 
 		// Returns true if contains same element
-		bool Contains(const KeyValuePair& keyValue) const override;
+		bool Contains(const KeyValuePair& keyValue) const;
 
 		// Returns true if contains element which pass function
-		bool ContainsPred(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		bool ContainsPred(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns element by key
-		KeyValuePair FindKey(const _key_type& key) const override;
+		KeyValuePair FindKey(const _key_type& key) const;
 
 		// Returns element by value
-		KeyValuePair FindValue(const _value_type& value) const override;
+		KeyValuePair FindValue(const _value_type& value) const;
 
 		// Returns first element which pass function
-		KeyValuePair Find(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		KeyValuePair Find(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns last element which pass function
-		KeyValuePair FindLast(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		KeyValuePair FindLast(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns all elements which pass function
 		Map FindAll(const Function<bool(const _key_type&, const _value_type&)>& match) const;
@@ -88,10 +88,10 @@ namespace o2
 		Map Where(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns first element which pass function
-		KeyValuePair First(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		KeyValuePair First(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns last element which pass function
-		KeyValuePair Last(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		KeyValuePair Last(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Sets value by key
 		void Set(const _key_type& key, const _value_type& value);
@@ -137,10 +137,10 @@ namespace o2
 		int MaxIdx(const Function<_sel_type(const _key_type&, const _value_type&)>& selector) const;
 
 		// Returns true when all elements pass function
-		bool All(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		bool All(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns true when any of elements pass function
-		bool Any(const Function<bool(const _key_type&, const _value_type&)>& match) const override;
+		bool Any(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns sum of selector results for all elements
 		template<typename _sel_type>

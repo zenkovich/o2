@@ -602,12 +602,6 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Types\CommonTypes.h">
       <Filter>Sources\o2\Utils\Types</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IArray.h">
-      <Filter>Sources\o2\Utils\Types\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\IDictionary.h">
-      <Filter>Sources\o2\Utils\Types\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Map.h">
       <Filter>Sources\o2\Utils\Types\Containers</Filter>
     </ClInclude>

@@ -121,12 +121,12 @@ namespace Editor
 		void CreateObject(const ObjectType* type);
 
 		// Stores values to data
-		void StoreValues(Vector<DataValue>& data) const override;
+		void StoreValues(Vector<DataDocument>& data) const override;
 
 		// Converts proxy to IObject property, gets value and returns
 		IObject* GetProxy(IAbstractValueProxy* proxy) const;
 
-		// Converts proxy to IObject proxy, then sets value thru proxy
+		// Converts proxy to IObject proxy, then sets value via proxy
 		void SetProxy(IAbstractValueProxy* proxy, IObject* object);
 	};
 }
@@ -178,7 +178,7 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FUNCTION(void, UpdateViewerHeader);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);
 	PROTECTED_FUNCTION(void, CreateObject, const ObjectType*);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, StoreValues, Vector<DataDocument>&);
 	PROTECTED_FUNCTION(IObject*, GetProxy, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, IObject*);
 }

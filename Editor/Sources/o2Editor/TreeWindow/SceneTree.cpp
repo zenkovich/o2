@@ -453,8 +453,8 @@ namespace Editor
 		((SceneTree*)mOwnerTree)->OnObjectChanged(mTargetObject);
 
 
-		DataValue prevData; prevData = prevName;
-		DataValue newData; newData = mTargetObject->GetName();
+		DataDocument prevData; prevData = prevName;
+		DataDocument newData; newData = mTargetObject->GetName();
 
 		auto action = mnew PropertyChangeAction({ mTargetObject }, "name", { prevData }, { newData });
 		o2EditorApplication.DoneAction(action);

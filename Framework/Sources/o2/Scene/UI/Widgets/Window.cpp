@@ -348,7 +348,7 @@ namespace o2
 		InitializeContextItems();
 		AddInternalWidget(mOptionsMenu);
 
-		Button* optionsBtn = dynamic_cast<Button*>(mInternalWidgets.FindMatch(
+		Button* optionsBtn = dynamic_cast<Button*>(*mInternalWidgets.FindMatch(
 			[](Widget* x) { return x->GetName() == "optionsButton" && x->GetType() == TypeOf(Button); }));
 
 		if (optionsBtn)
@@ -362,7 +362,7 @@ namespace o2
 
 	void Window::RestoreControls()
 	{
-		Button* closeBtn = dynamic_cast<Button*>(mInternalWidgets.FindMatch(
+		Button* closeBtn = dynamic_cast<Button*>(*mInternalWidgets.FindMatch(
 			[](Widget* x) { return x->GetName() == "closeButton" && x->GetType() == TypeOf(Button); }));
 
 		if (closeBtn)

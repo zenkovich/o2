@@ -153,7 +153,7 @@ namespace Editor
 
 			if (sameToProtoSourceActor)
 			{
-				Component* sameToProtoSourceComponent = sameToProtoSourceActor->GetComponents().FindMatch(
+				Component* sameToProtoSourceComponent = *sameToProtoSourceActor->GetComponents().FindMatch(
 					[&](Component* x) { return x->GetPrototypeLink() == sourceComponent; });
 
 				if (sameToProtoSourceComponent)

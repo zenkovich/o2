@@ -31,6 +31,8 @@ namespace o2
 		mHead = other.mHead;
 
 		other.mHead = nullptr;
+
+		return *this;
 	}
 
 	void ChunkPoolAllocator::AddChunk(size_t capacity)

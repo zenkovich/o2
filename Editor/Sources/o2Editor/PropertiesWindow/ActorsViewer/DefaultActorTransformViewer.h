@@ -49,7 +49,8 @@ namespace Editor
 
 	protected:
 		// It is called when some property changed, stores action for undo
-		void OnPropertyChangeCompleted(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue);
+		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue,
+									   const Vector<DataDocument>& newValue);
 	};
 }
 
@@ -83,6 +84,6 @@ CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

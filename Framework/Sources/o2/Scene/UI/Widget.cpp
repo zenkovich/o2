@@ -560,7 +560,7 @@ namespace o2
 
 	WidgetState* Widget::GetStateObject(const String& name) const
 	{
-		return mStates.FindMatch([&](auto state) { return state->name == name; });
+		return *mStates.FindMatch([&](auto state) { return state->name == name; });
 	}
 
 	const Vector<WidgetState*>& Widget::GetStates() const

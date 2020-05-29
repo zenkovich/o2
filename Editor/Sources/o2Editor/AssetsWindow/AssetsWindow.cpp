@@ -68,7 +68,7 @@ namespace Editor
 			return rt.IsInside(point);
 		};
 
-		mSeparatorCoef = o2EditorConfig.GetProjectUserData()["layout/assetsWindow/separator_coef"];
+		mSeparatorCoef = 0.0f; // o2EditorConfig.GetProjectUserData()["layout/assetsWindow/separator_coef"];
 
 		if (mSeparatorCoef < FLT_EPSILON)
 			mSeparatorCoef = 0.5f;
@@ -81,8 +81,8 @@ namespace Editor
 			mFoldersTree->layout->anchorRight += anchorDelta;
 			mAssetsGridScroll->layout->anchorLeft += anchorDelta;
 
-			auto& userData = o2EditorConfig.GetProjectUserData();
-			userData["layout/assetsWindow/separator_coef"].Set(mFoldersTree->layout->GetAnchorRight());
+// 			auto& userData = o2EditorConfig.GetProjectUserData();
+// 			userData["layout/assetsWindow/separator_coef"].Set(mFoldersTree->layout->GetAnchorRight());
 		};
 
 		mAssetsGridScroll->onDraw += [&]() { mSeparatorHandle.OnDrawn(); };

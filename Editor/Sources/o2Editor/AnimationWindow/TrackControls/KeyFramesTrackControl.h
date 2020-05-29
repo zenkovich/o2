@@ -251,7 +251,7 @@ namespace Editor
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
 		mPropertyValueProxy = PointerValueProxy<TrackValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
-		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataValue>&, const Vector<DataValue>&) { OnPropertyChanged(); };
+		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnPropertyChanged(); };
 		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 
 		mAddKeyButton = o2UI.CreateWidget<Button>("add key");
@@ -417,7 +417,7 @@ namespace Editor
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
 
-		DataValue keyData;
+		DataDocument keyData;
 		Map<String, Vector<UInt64>> keys = { { mTrackPath, { mTrack->GetKeyAt(idx).uid } } };
 		mHandlesSheet->SerializeKeys(keyData, keys, 0);
 		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));

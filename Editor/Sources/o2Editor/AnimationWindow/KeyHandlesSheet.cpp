@@ -464,7 +464,7 @@ namespace Editor
 
 		for (auto& kv : keys)
 		{
-			auto fnd = mTrackControlsMap.FindMatch([=](const Pair<String, ITrackControl*>& p) { return p.first == kv.first; });
+			auto fnd = *mTrackControlsMap.FindMatch([=](const Pair<String, ITrackControl*>& p) { return p.first == kv.first; });
 			if (!fnd.second)
 				continue;
 
@@ -489,7 +489,7 @@ namespace Editor
 		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 			track->BeginKeysBatchChange();
 
-		if (data.GetMembersCount == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
+		if (data.GetMembersCount() == 1 && mAnimationWindow->mTree->GetSelectedObjects().Count() == 1)
 		{
 			auto DataValue = (AnimationTree::TrackNode*)mAnimationWindow->mTree->GetSelectedObjects()[0];
 			for (auto& keyNode : data[0].GetMember("Keys"))

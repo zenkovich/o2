@@ -73,11 +73,11 @@ namespace Editor
 			if ((child.anchors.left < 1.0f && child.anchors.left > 0.0f) ||
 				(child.anchors.right < 1.0f && child.anchors.right > 0.0f))
 			{
-				DockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
+				DockWindowPlace* neighborMin = *childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorRight(), newDock->layout->GetAnchorLeft()) && x != newDock;
 				});
 
-				DockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
+				DockWindowPlace* neighborMax = *childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorLeft(), newDock->layout->GetAnchorRight()) && x != newDock;
 				});
 
@@ -93,11 +93,11 @@ namespace Editor
 			if ((child.anchors.top < 1.0f && child.anchors.top > 0.0f) ||
 				(child.anchors.bottom < 1.0f && child.anchors.bottom > 0.0f))
 			{
-				DockWindowPlace* neighborMin = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
+				DockWindowPlace* neighborMin = *childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorTop(), newDock->layout->GetAnchorBottom()) && x != newDock;
 				});
 
-				DockWindowPlace* neighborMax = childDockWidgets.FindMatch([&](DockWindowPlace* x) {
+				DockWindowPlace* neighborMax = *childDockWidgets.FindMatch([&](DockWindowPlace* x) {
 					return Math::Equals(x->layout->GetAnchorBottom(), newDock->layout->GetAnchorTop()) && x != newDock;
 				});
 

@@ -31,6 +31,7 @@ namespace o2
 		bool Uint64(uint64_t value);
 		bool Double(double value);
 		bool String(const wchar_t* str, unsigned length, bool copy);
+		bool RawNumber(const wchar_t* str, unsigned length, bool copy);
 		bool StartObject();
 		bool Key(const wchar_t* str, unsigned length, bool copy);
 		bool EndObject(unsigned memberCount);

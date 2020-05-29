@@ -40,7 +40,8 @@ namespace Editor
 
 	protected:
 		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
-		void OnPropertyChanged(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after);
+		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+							   const Vector<DataDocument>& after);
 	};
 }
 
@@ -62,6 +63,6 @@ CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 	PUBLIC_FUNCTION(const Type*, GetComponentType);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, SpecializeComponentType, const Type*);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

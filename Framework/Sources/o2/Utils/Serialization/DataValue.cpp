@@ -148,6 +148,8 @@ namespace o2
 	{
 		if (mValue.flagsData.Is(Flags::ShortString))
 			return mValue.shortStringData.stringValue;
+
+		return nullptr;
 	}
 
 	bool DataValue::IsArray() const
@@ -391,7 +393,8 @@ namespace o2
 
 	DataValue& DataValue::AddMember(const char* name)
 	{
-		return AddMember(DataValue(name, mDocument));
+		DataValue nameValue(name, mDocument);
+		return AddMember(nameValue);
 	}
 
 	void DataValue::RemoveMember(const DataValue& name)
@@ -704,12 +707,12 @@ namespace o2
 
 	bool DataDocument::operator!=(const DataDocument& other) const
 	{
-
+		return DataValue::operator!=(other);
 	}
 
 	bool DataDocument::operator==(const DataDocument& other) const
 	{
-
+		return DataValue::operator==(other);
 	}
 
 	DataDocument& DataDocument::operator=(DataDocument& other)

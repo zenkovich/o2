@@ -69,7 +69,8 @@ namespace Editor
 		mForwardActions.Clear();
 	}
 
-	void ActionsList::DoneActorPropertyChangeAction(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue)
+	void ActionsList::DoneActorPropertyChangeAction(const String& path, const Vector<DataDocument>& prevValue,
+													const Vector<DataDocument>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(
 			o2EditorSceneScreen.GetSelectedObjects(), path, prevValue, newValue);

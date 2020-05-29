@@ -210,7 +210,7 @@ namespace Editor
 				propertyDef->GetRemoveButton()->onClick = [=]() { Remove(i); };
 
 				propertyDef->onChangeCompleted =
-					[&](const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
+					[&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
 				{
 					OnPropertyChanged(mValuesPath + "/" + path, before, after);
 				};
@@ -411,7 +411,8 @@ namespace Editor
 		return res;
 	}
 
-	void VectorProperty::OnPropertyChanged(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after)
+	void VectorProperty::OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+										   const Vector<DataDocument>& after)
 	{
 		for (auto& pair : mTargetObjects)
 			pair.first.SetValue();
@@ -456,17 +457,17 @@ namespace Editor
 
 	void VectorProperty::Remove(int idx)
 	{
-		Vector<DataValue> prevValues, newValues;
+		Vector<DataDocument> prevValues, newValues;
 		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{
-			prevValues.Add(DataValue());
+			prevValues.Add(DataDocument());
 			mVectorType->Serialize(obj.first.data, prevValues.Last());
 
 			mVectorType->RemoveObjectVectorElement(obj.first.data, idx);
 
-			newValues.Add(DataValue());
+			newValues.Add(DataDocument());
 			mVectorType->Serialize(obj.first.data, newValues.Last());
 		}
 

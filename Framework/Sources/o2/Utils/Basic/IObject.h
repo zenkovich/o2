@@ -28,7 +28,7 @@ namespace o2
 		virtual ~IObject() {}
 
 		// Cloning interface
-		virtual IObject* Clone() const { return mnew IObject(); };
+		virtual IObject* Clone() const { return nullptr; };
 
 		// Cloning as type
 		template<typename _cast_type>
@@ -51,6 +51,18 @@ namespace o2
 
 		friend class TypeInitializer;
 		friend class Reflection;
+	};
+
+	template<typename _type>
+	struct SafeClone
+	{
+		static _type* Clone(const _type& origin)
+		{
+			if constexpr (std::is_copy_constructible<_type>::value)
+				return mnew _type(origin);
+			else
+				return nullptr;
+		}
 	};
 }
 
@@ -86,7 +98,7 @@ private:                                                                        
                                                                                                                 \
 public:                                                                                                         \
 	typedef CLASS thisclass;                                                                                    \
-	IObject* Clone() const override { return mnew CLASS(*this); }                                               \
+	IObject* Clone() const override {return SafeClone<CLASS>::Clone(*this); }                                   \
 	const o2::Type& GetType() const override { return *type; };                                                 \
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \

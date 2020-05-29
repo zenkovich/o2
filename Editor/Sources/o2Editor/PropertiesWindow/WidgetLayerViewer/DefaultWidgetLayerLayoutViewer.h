@@ -40,7 +40,8 @@ namespace Editor
 
 	protected:
 		// It is called when some property change completed, stores action for undo
-		void OnPropertyChangeCompleted(const String& path, const Vector<DataValue>& prevValue, const Vector<DataValue>& newValue);
+		void OnPropertyChangeCompleted(const String& path, const Vector<DataDocument>& prevValue, 
+									   const Vector<DataDocument>& newValue);
 
 		// it is called when some property changed, updates owner widgets
 		void OnPropertyChanged(IPropertyField* field);
@@ -68,7 +69,7 @@ CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
 
 	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;

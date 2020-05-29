@@ -136,7 +136,7 @@ namespace Editor
 
 		for (auto wnd : layout.windows)
 		{
-			IEditorWindow* editorWindow = o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) {
+			IEditorWindow* editorWindow = *o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) {
 				return x->mWindow->GetName() == wnd.first;
 			});
 

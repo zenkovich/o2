@@ -446,7 +446,7 @@ namespace Editor
 			mSceneTree->GetSelectedObjects().Select<SceneEditableObject*>(
 				[](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
 
-		DataValue data;
+		DataDocument data;
 		data.Set(selectedObjects);
 
 		WString clipboardData = data.SaveAsWString();
@@ -475,7 +475,7 @@ namespace Editor
 		SceneEditableObject* prevObject = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		WString clipboardData = Clipboard::GetText();
-		DataValue data;
+		DataDocument data;
 		data.LoadFromData(clipboardData);
 
 		Vector<SceneEditableObject*> objects;

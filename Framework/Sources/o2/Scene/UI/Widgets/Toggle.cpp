@@ -372,7 +372,7 @@ namespace o2
 			}
 			else
 			{
-				if (!mToggles.Any([&](auto x) { return x->Get(); }))
+				if (!mToggles.Any([&](auto x) { return x->GetValue(); }))
 					toggle->SetValue(true);
 			}
 		}

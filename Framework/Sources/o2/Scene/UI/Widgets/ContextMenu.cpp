@@ -245,7 +245,7 @@ namespace o2
 
 			WString subMenu = path.SubStr(0, slashPos);
 
-			Widget* subChild = resultContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
+			Widget* subChild = *resultContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
 				if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
 					return text->text == subMenu;
 
@@ -552,7 +552,7 @@ namespace o2
 
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			Widget* subChild = targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
+			Widget* subChild = *targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
 				if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
 					return text->text == subMenu;
 
@@ -576,7 +576,7 @@ namespace o2
 			targetPath = targetPath.SubStr(slashPos + 1);
 		}
 
-		Widget* removingItem = targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
+		Widget* removingItem = *targetContext->mItemsLayout->mChildWidgets.FindMatch([&](auto x) {
 			if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
 				return text->text == targetPath;
 

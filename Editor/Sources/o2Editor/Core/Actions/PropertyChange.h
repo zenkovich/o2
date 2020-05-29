@@ -18,10 +18,10 @@ namespace Editor
 	class PropertyChangeAction: public IAction
 	{
 	public:
-		Vector<SceneUID> objectsIds;
-		String           propertyPath;
-		Vector<DataValue> beforeValues;
-		Vector<DataValue> afterValues;
+		Vector<SceneUID>     objectsIds;
+		String               propertyPath;
+		Vector<DataDocument> beforeValues;
+		Vector<DataDocument> afterValues;
 
 	public:
 		// Default constructor
@@ -29,8 +29,9 @@ namespace Editor
 
 		// Constructor with all data
 		PropertyChangeAction(const Vector<SceneEditableObject*>& objects,
-								   const String& propertyPath, const Vector<DataValue>& beforeValues,
-								   const Vector<DataValue>& afterValues);
+							 const String& propertyPath,
+							 const Vector<DataDocument>& beforeValues,
+							 const Vector<DataDocument>& afterValues);
 
 		// Returns name of action
 		String GetName() const;
@@ -45,7 +46,7 @@ namespace Editor
 
 	protected:
 		// Sets object's properties values
-		void SetProperties(Vector<DataValue>& value);
+		void SetProperties(Vector<DataDocument>& value);
 	};
 }
 
@@ -68,6 +69,6 @@ CLASS_METHODS_META(Editor::PropertyChangeAction)
 	PUBLIC_FUNCTION(String, GetName);
 	PUBLIC_FUNCTION(void, Redo);
 	PUBLIC_FUNCTION(void, Undo);
-	PROTECTED_FUNCTION(void, SetProperties, Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, SetProperties, Vector<DataDocument>&);
 }
 END_META;

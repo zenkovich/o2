@@ -112,7 +112,7 @@ namespace o2
 	{
 		Timer t;
 
-		DataValue styleData;
+		DataDocument styleData;
 		styleData.LoadFromFile(o2Assets.GetBuiltAssetsPath() + path);
 
 		o2Debug.Log("Loaded file " + path + " for " + String(t.GetDeltaTime()) + "sec");
@@ -132,7 +132,7 @@ namespace o2
 
 	void UIManager::SaveStyle(const String& path)
 	{
-		DataValue styleData;
+		DataDocument styleData;
 		styleData = mStyleSamples;
 		styleData.SaveToFile(o2Assets.GetAssetsPath() + path);
 

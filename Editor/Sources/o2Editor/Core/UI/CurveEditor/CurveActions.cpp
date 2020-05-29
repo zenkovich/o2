@@ -29,7 +29,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				*mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -61,7 +61,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				*mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -106,7 +106,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				*mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -137,7 +137,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				*mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -189,7 +189,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				*mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;
@@ -235,7 +235,7 @@ namespace Editor
 		for (auto& info : mInfos)
 		{
 			auto curveInfo =
-				mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
+				*mEditor->mCurves.FindMatch([&](CurvesEditor::CurveInfo* x) { return x->curveId == info.curveId; });
 
 			if (!curveInfo)
 				continue;

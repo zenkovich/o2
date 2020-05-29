@@ -29,7 +29,8 @@ namespace Editor
 		InitializeAvailablePropertiesFields();
 		InitializeAvailableObjectPropertiesViewers();
 
-		mOnPropertyCompletedChangingUndoCreateDelegate = MakeFunction<EditorApplication, void, const String&, const Vector<DataValue>&, const Vector<DataValue>&>(
+		mOnPropertyCompletedChangingUndoCreateDelegate = 
+			MakeFunction<EditorApplication, void, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&>(
 			&o2EditorApplication, &EditorApplication::DoneActorPropertyChangeAction);
 	}
 

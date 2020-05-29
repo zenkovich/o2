@@ -8,7 +8,7 @@ namespace o2
 	bool ParseJsonInplace(wchar_t* str, DataDocument& document)
 	{
 		JsonDataDocumentParseHandler handler(document);
-		rapidjson::Reader reader;
+		rapidjson::GenericReader<rapidjson::UTF16<>, rapidjson::UTF16<>> reader;
 		rapidjson::GenericInsituStringStream<rapidjson::UTF16<>> stream(str);
 		auto result = reader.Parse<rapidjson::kParseInsituFlag>(stream, handler);
 		if (!result.IsError())
@@ -23,7 +23,7 @@ namespace o2
 	bool ParseJson(const wchar_t* str, DataDocument& document)
 	{
 		JsonDataDocumentParseHandler handler(document);
-		rapidjson::Reader reader;
+		rapidjson::GenericReader<rapidjson::UTF16<>, rapidjson::UTF16<>> reader;
 		rapidjson::GenericStringStream<rapidjson::UTF16<>> stream(str);
 		auto result = reader.Parse(stream, handler);
 		if (!result.IsError())
@@ -87,6 +87,11 @@ namespace o2
 		return true;
 	}
 
+	bool JsonDataDocumentParseHandler::RawNumber(const wchar_t* str, unsigned length, bool copy)
+	{
+		return String(str, length, copy);
+	}
+
 	bool JsonDataDocumentParseHandler::StartObject()
 	{
 		new (stack.template Push<DataValue>()) DataValue(document);
@@ -115,6 +120,8 @@ namespace o2
 			top->mValue.objectData.members = nullptr;
 
 		top->mValue.objectData.count = memberCount;
+
+		return true;
 	}
 
 	bool JsonDataDocumentParseHandler::StartArray()
@@ -139,6 +146,8 @@ namespace o2
 			top->mValue.arrayData.elements = nullptr;
 
 		top->mValue.arrayData.count = elementCount;
+
+		return true;
 	}
 
 }

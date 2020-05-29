@@ -146,7 +146,8 @@ namespace Editor
 		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
 
 		// It is called when some property changed, sets value via proxy
-		void OnPropertyChanged(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after);
+		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+							   const Vector<DataDocument>& after);
 	};
 }
 
@@ -198,6 +199,6 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PROTECTED_FUNCTION(void, OnAddPressed);
 	PROTECTED_FUNCTION(void, OnExpand);
 	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

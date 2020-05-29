@@ -324,7 +324,7 @@ namespace o2
 		if (IsKeyDown(key) || IsKeyPressed(key))
 			return;
 
-		mPressedKeys.Add(key);
+		mPressedKeys.Add(Key(key));
 	}
 
 	void Input::OnKeyReleasedMsgApply(KeyboardKey key)
@@ -334,7 +334,7 @@ namespace o2
 			if (ikey.keyCode == key)
 			{
 				mDownKeys.Remove(ikey);
-				mReleasedKeys.Add(key);
+				mReleasedKeys.Add(Key(key));
 				return;
 			}
 		}

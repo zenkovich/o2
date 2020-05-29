@@ -22,7 +22,7 @@ namespace o2
 
 	TextureRef::TextureRef(const String& fileName)
 	{
-		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) { return tex->GetFileName() == fileName; });
+		mTexture = *o2Render.mTextures.FindMatch([&](Texture* tex) { return tex->GetFileName() == fileName; });
 
 		if (!mTexture)
 			mTexture = mnew Texture(fileName);
@@ -52,7 +52,7 @@ namespace o2
 
 	TextureRef::TextureRef(UID atlasAssetId, int page)
 	{
-		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) { 
+		mTexture = *o2Render.mTextures.FindMatch([&](Texture* tex) { 
 			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
 		});
 
@@ -72,7 +72,7 @@ namespace o2
 			return;
 		}
 
-		mTexture = o2Render.mTextures.FindMatch([&](Texture* tex) {
+		mTexture = *o2Render.mTextures.FindMatch([&](Texture* tex) {
 			return tex->GetAtlasAssetId() == atlasAssetId && tex->GetAtlasPage() == page;
 		});
 

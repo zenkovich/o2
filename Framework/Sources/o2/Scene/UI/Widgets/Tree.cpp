@@ -322,7 +322,7 @@ namespace o2
 		if (mHighlightAnim.IsPlaying())
 		{
 			if (mHighlightObject && !mHighlighNode)
-				mHighlighNode = mAllNodes.FindMatch([=](Node* x) { return x->object == mHighlightObject; });
+				mHighlighNode = *mAllNodes.FindMatch([=](Node* x) { return x->object == mHighlightObject; });
 
 			if (mHighlighNode && mHighlighNode->widget)
 			{
@@ -436,7 +436,7 @@ namespace o2
 
 			uiNode->mIsSelected = true;
 
-			Node* node = mAllNodes.FindMatch([=](Node* x) { return x->widget == uiNode; });
+			Node* node = *mAllNodes.FindMatch([=](Node* x) { return x->widget == uiNode; });
 			node->SetSelected(true);
 			mSelectedNodes.Add(node);
 			mSelectedObjects.Add(node->object);
@@ -579,7 +579,7 @@ namespace o2
 
 	TreeNode* Tree::GetNode(void* object)
 	{
-		Node* fnd = mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
+		Node* fnd = *mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
 		if (fnd)
 			return fnd->widget;
 
@@ -632,7 +632,7 @@ namespace o2
 
 		for (auto obj : objects)
 		{
-			auto node = mAllNodes.FindMatch([=](Node* x) { return x->object == obj; });
+			auto node = *mAllNodes.FindMatch([=](Node* x) { return x->object == obj; });
 
 			if (!node)
 				continue;
@@ -658,7 +658,7 @@ namespace o2
 			return;
 		}
 
-		auto node = mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
+		auto node = *mAllNodes.FindMatch([=](Node* x) { return x->object == object; });
 		if (!node)
 			return;
 
@@ -755,7 +755,7 @@ namespace o2
 
 		for (int i = parentsStack.Count() - 1; i >= 0; i--)
 		{
-			auto node = mAllNodes.FindMatch([&](Node* x) { return x->object == parentsStack[i]; });
+			auto node = *mAllNodes.FindMatch([&](Node* x) { return x->object == parentsStack[i]; });
 
 			if (!node)
 			{

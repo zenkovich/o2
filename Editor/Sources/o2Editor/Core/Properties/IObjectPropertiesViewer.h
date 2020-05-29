@@ -24,7 +24,7 @@ namespace Editor
 	{
 	public:
 		typedef Function<void(IPropertyField*)> OnChangedFunc;
-		typedef Function<void(const String&, const Vector<DataValue>&, const Vector<DataValue>&)> OnChangeCompletedFunc;
+		typedef Function<void(const String&, const Vector<DataDocument>&, const Vector<DataDocument>&)> OnChangeCompletedFunc;
 
 	public:
 		OnChangedFunc onChanged;                 // Immediate change value by user event
@@ -107,7 +107,8 @@ namespace Editor
 		virtual void OnFree() {}
 
 		// It is called when some child field were changed
-		void OnFieldChangeCompleted(const String& path, const Vector<DataValue>& before, const Vector<DataValue>& after);
+		void OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before, 
+									const Vector<DataDocument>& after);
 
 		friend class Properties;
 	};
@@ -186,7 +187,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	PROTECTED_FUNCTION(void, RebuildProperties, _tmp3);
 	PROTECTED_FUNCTION(void, OnRefreshed, _tmp4);
 	PROTECTED_FUNCTION(void, OnFree);
-	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataValue>&, const Vector<DataValue>&);
+	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
 

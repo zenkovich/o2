@@ -1635,7 +1635,7 @@ namespace Editor
 		bool changed = false;
 		for (auto& keysInfo : mBeforeTransformKeys)
 		{
-			CurveInfo* curveInfo = mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
+			CurveInfo* curveInfo = *mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
 			if (!curveInfo)
 				continue;
 
@@ -1657,7 +1657,7 @@ namespace Editor
 			Vector<CurveKeysChangeAction::KeysInfo> actionKeysInfos;
 			for (auto& keysInfo : mBeforeTransformKeys)
 			{
-				CurveInfo* curveInfo = mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
+				CurveInfo* curveInfo = *mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
 				if (!curveInfo)
 					continue;
 
@@ -1830,7 +1830,7 @@ namespace Editor
 				copyKeys.Add(copyInfo);
 		}
 
-		DataValue copyData;
+		DataDocument copyData;
 		copyData = copyKeys;
 		String copyDataStr = copyData.SaveAsWString();
 
@@ -1852,7 +1852,7 @@ namespace Editor
 			return;
 
 		float insertPos = ScreenToLocalPoint(o2Input.cursorPos).x;
-		DataValue data;
+		DataDocument data;
 		data.LoadFromData(Clipboard::GetText());
 
 		Vector<CurveCopyInfo*> copyKeys;
@@ -1862,7 +1862,7 @@ namespace Editor
 
 		for (auto curve : copyKeys)
 		{
-			CurveInfo* curveInfo = mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+			CurveInfo* curveInfo = *mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
 
 			if (curveInfo == nullptr)
 			{
@@ -1967,7 +1967,7 @@ namespace Editor
 			return;
 
 		float insertPos = ScreenToLocalPoint(o2Input.cursorPos).x;
-		DataValue data;
+		DataDocument data;
 		data.LoadFromData(Clipboard::GetText());
 
 		Vector<CurveCopyInfo*> copyKeys;
@@ -1975,7 +1975,7 @@ namespace Editor
 
 		for (auto curve : copyKeys)
 		{
-			CurveInfo* curveInfo = mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+			CurveInfo* curveInfo = *mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
 
 			if (curveInfo == nullptr)
 			{

@@ -2,7 +2,6 @@
 
 #include "o2/Utils/Debug/Assert.h"
 #include "o2/Utils/Memory/MemoryManager.h"
-#include "o2/Utils/Types/Containers/IArray.h"
 #include <vector>
 #include <algorithm>
 
@@ -12,7 +11,7 @@ namespace o2
 	// Dynamic linear array
 	// --------------------
 	template<typename _type>
-	class Vector : public IArray<_type>, public std::vector<_type>
+	class Vector : public std::vector<_type>
 	{
 	public:
 		typedef typename std::vector<_type>::iterator Iterator;
@@ -29,7 +28,7 @@ namespace o2
 		Vector(const Vector& arr);
 
 		// Constructor from other array
-		Vector(const IArray<_type>* arr);
+		Vector(const Vector<_type>* arr);
 
 		// Destructor
 		virtual ~Vector();
@@ -68,74 +67,158 @@ namespace o2
 		bool operator!=(const Vector& arr) const;
 
 		// Returns a copy of this
-		IArray<_type>* Clone() const;
+		Vector<_type>* Clone() const;
 
 		// Returns data pointer
 		_type* Data();
 
 		// Returns count of elements in vector
-		int Count() const override;
+		int Count() const;
+
+		// Returns count of elements in array by lambda
+		int CountMatch(const Function<bool(const _type&)>& match) const;
 
 		// Returns capacity of vector
 		int Capacity() const;
 
 		// Changes count of elements in array. If new size less than array size elements will be removed
 		// Otherwise empty elements will be added at end
-		void Resize(int newCount) override;
+		void Resize(int newCount);
 
 		// Changes capacity of vector. New capacity can't be less than current
 		void Reserve(int newCapacity);
 
 		// Returns value at index
-		const _type& Get(int idx) const override;
+		const _type& Get(int idx) const;
 
 		// Returns value at index
-		_type& Get(int idx) override;
+		_type& Get(int idx);
 
 		// Sets value at index
-		void Set(int idx, const _type& value) override;
+		void Set(int idx, const _type& value);
 
 		// Adds new element
-		_type& Add(const _type& value) override;
+		_type& Add(const _type& value);
 
 		// Adds elements from other array
-		void Add(const IArray<_type>& arr) override;
+		void Add(const Vector<_type>& arr);
 
 		// Inserts new value at position
-		_type& Insert(const _type& value, int position) override;
+		_type& Insert(const _type& value, int position);
 
 		// Inserts new values from other array at position
-		void Insert(const IArray<_type>& arr, int position) override;
+		void Insert(const Vector<_type>& arr, int position);
 
 		// Returns index of equal element. Returns -1 when array haven't equal element
-		int Find(const _type& value) const override;
+		int Find(const _type& value) const;
 
 		// Returns true, if array contains the element
-		bool Contains(const _type& value) const override;
+		bool Contains(const _type& value) const;
 
 		// Removes element from back and returns him
-		_type PopBack() override;
+		_type PopBack();
 
 		// Removes element at position
-		void RemoveAt(int idx) override;
+		void RemoveAt(int idx);
 
 		// Removes elements in range
-		void RemoveRange(int begin, int end) override;
+		void RemoveRange(int begin, int end);
 
 		// Removes equal array element
-		void Remove(const _type& value) override;
+		void Remove(const _type& value);
 
 		// Removes matched array element
-		void Remove(const Function<bool(const _type&)>& match) override;
+		void Remove(const Function<bool(const _type&)>& match);
 
 		// Removes element by iterator
 		Iterator Remove(const Iterator& it);
 
+		// Removes all elements that pass function
+		void RemoveAll(const Function<bool(const _type&)>& match);
+
 		// Removes all elements
-		void Clear() override;
+		void Clear();
+
+		// Returns true, if array contains a element that pass function
+		bool ContainsPred(const Function<bool(const _type&)>& match) const;
+
+		// Returns elements of array that pass function
+		const _type* FindMatch(const Function<bool(const _type&)>& match) const;
+
+		// Returns elements of array that pass function
+		_type* FindMatch(const Function<bool(const _type&)>& match);
+
+		// Returns index of element that pass function
+		int FindIdx(const Function<bool(const _type&)>& match) const;
+
+		// Sorts elements in array by sorting value, that gets from function
+		template<typename _sort_type>
+		void SortBy(const Function<_sort_type(const _type&)>& selector);
+
+		// Returns first element
+		_type& First();
+
+		// Returns first element
+		const _type& First() const;
+
+		// Returns first element that pass function
+		const _type* First(const Function<bool(const _type&)>& match) const;
+
+		// Returns first element that pass function
+		_type* First(const Function<bool(const _type&)>& match);
+
+		// Returns index of first element that pass function
+		int FirstIdx(const Function<bool(const _type&)>& match) const;
+
+		// Returns last element
+		_type& Last();
+
+		// Returns constant last element
+		const _type& Last() const;
+
+		// Returns last element that pass function
+		_type Last(const Function<bool(const _type&)>& match) const;
+
+		// Returns index of last element that pass function
+		int LastIdx(const Function<bool(const _type&)>& match) const;
+
+		// Returns true if array is empty
+		bool IsEmpty() const;
+
+		// Returns element by minimal result of function
+		template<typename _sel_type>
+		_type Min(const Function<_sel_type(const _type&)>& selector) const;
+
+		// Returns element index by minimal result of function
+		template<typename _sel_type>
+		int MinIdx(const Function<_sel_type(const _type&)>& selector) const;
+
+		// Returns element by maximal result of function
+		template<typename _sel_type>
+		_type Max(const Function<_sel_type(const _type&)>& selector) const;
+
+		// Returns element index by maximal result of function
+		template<typename _sel_type>
+		int MaxIdx(const Function<_sel_type(const _type&)>& selector) const;
+
+		// Returns all elements that pass function
+		bool All(const Function<bool(const _type&)>& match) const;
+
+		// Returns true if any of elements pass function
+		bool Any(const Function<bool(const _type&)>& match) const;
+
+		// Returns sum of function results for all elements
+		template<typename _sel_type>
+		_sel_type Sum(const Function<_sel_type(const _type&)>& selector) const;
+
+		// Invokes function for all elements in array
+		void ForEach(const Function<void(_type&)>& func);
+
+		// Reversing array
+		void Reverse();
 
 		// Sorts elements in array by predicate
-		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer) override;
+		void Sort(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer);
 
 		// Returns copy with sorts elements in array by predicate
 		Vector Sorted(const Function<bool(const _type&, const _type&)>& pred = Math::Fewer);
@@ -195,7 +278,7 @@ namespace o2
 	{}
 
 	template<typename _type>
-	Vector<_type>::Vector(const IArray<_type>* arr)
+	Vector<_type>::Vector(const Vector<_type>* arr)
 	{
         std::vector<_type>::reserve(arr->Count());
 		for (int i = 0; i < arr->Count(); i++)
@@ -213,7 +296,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	IArray<_type>* Vector<_type>::Clone() const
+	Vector<_type>* Vector<_type>::Clone() const
 	{
 		return mnew Vector<_type>(this);
 	}
@@ -357,7 +440,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Vector<_type>::Add(const IArray<_type>& arr)
+	void Vector<_type>::Add(const Vector<_type>& arr)
 	{
 		for (int i = 0; i < arr.Count(); i++)
 			Add(arr.Get(i));
@@ -379,7 +462,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Vector<_type>::Insert(const IArray<_type>& arr, int position)
+	void Vector<_type>::Insert(const Vector<_type>& arr, int position)
 	{
 		for (int i = 0; i < arr.Count(); i++)
 			std::vector<_type>::insert(std::vector<_type>::begin() + position, +i, arr.Get(i));
@@ -567,5 +650,312 @@ namespace o2
 			res.Add(Get(i));
 
 		return res;
+	}
+
+	template<typename _type>
+	int Vector<_type>::CountMatch(const Function<bool(const _type&)>& match) const
+	{
+		int res = 0;
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			if (match(Get(i)))
+				res++;
+		}
+
+		return res;
+	}
+
+	template<typename _type>
+	void Vector<_type>::RemoveAll(const Function<bool(const _type&)>& match)
+	{
+		for (int i = 0; i < Count(); i++)
+		{
+			if (match(Get(i)))
+			{
+				RemoveAt(i);
+				i--;
+			}
+		}
+	}
+
+	template<typename _type>
+	bool Vector<_type>::ContainsPred(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			if (match(Get(i)))
+				return true;
+		}
+
+		return false;
+	}
+
+	template<typename _type>
+	const _type* Vector<_type>::FindMatch(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			const _type& val = Get(i);
+			if (match(val))
+				return &val;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	_type* Vector<_type>::FindMatch(const Function<bool(const _type&)>& match)
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			_type& val = Get(i);
+			if (match(val))
+				return &val;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	int Vector<_type>::FindIdx(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			if (match(Get(i)))
+				return i;
+		}
+
+		return -1;
+	}
+
+	template<typename _type>
+	template<typename _sort_type>
+	void Vector<_type>::SortBy(const Function<_sort_type(const _type&)>& selector)
+	{
+		Sort([&](const _type& l, const _type& r) { return selector(l) < selector(r); });
+	}
+
+	template<typename _type>
+	const _type* Vector<_type>::First(const Function<bool(const _type&)>& match) const
+	{
+		return FindMatch(match);
+	}
+
+	template<typename _type>
+	_type* Vector<_type>::First(const Function<bool(const _type&)>& match)
+	{
+		return FindMatch(match);
+	}
+
+	template<typename _type>
+	int Vector<_type>::FirstIdx(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			if (match(Get(i)))
+				return i;
+		}
+
+		return -1;
+	}
+
+	template<typename _type>
+	_type Vector<_type>::Last(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = count - 1; i >= 0; i--)
+		{
+			const _type& val = Get(i);
+			if (match(val))
+				return val;
+		}
+
+		return _type();
+	}
+
+	template<typename _type>
+	int Vector<_type>::LastIdx(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = count - 1; i >= 0; i++)
+		{
+			if (match(Get(i)))
+				return i;
+		}
+
+		return -1;
+	}
+
+	template<typename _type>
+	template<typename _sel_type>
+	_type Vector<_type>::Min(const Function<_sel_type(const _type&)>& selector) const
+	{
+		int count = Count();
+		if (count == 0)
+			return _type();
+
+		const _type& res = Get(0);
+		_sel_type minSel = selector(res);
+
+		for (int i = 1; i < count; i++)
+		{
+			const _type& itVal = Get(i);
+			_sel_type itSel = selector(itVal);
+
+			if (itSel < minSel)
+			{
+				minSel = itSel;
+				res = itVal;
+			}
+		}
+
+		return res;
+	}
+
+	template<typename _type>
+	template<typename _sel_type>
+	int Vector<_type>::MinIdx(const Function<_sel_type(const _type&)>& selector) const
+	{
+		int count = Count();
+		if (count == 0)
+			return -1;
+
+		int res = 0;
+		_sel_type minSel = selector(Get(0));
+
+		for (int i = 1; i < count; i++)
+		{
+			_sel_type itSel = selector(Get(i));
+
+			if (itSel < minSel)
+			{
+				res = i;
+				minSel = itSel;
+			}
+		}
+
+		return res;
+	}
+
+	template<typename _type>
+	template<typename _sel_type>
+	_type Vector<_type>::Max(const Function<_sel_type(const _type&)>& selector) const
+	{
+		int count = Count();
+		if (count == 0)
+			return _type();
+
+		const _type* res = &Get(0);
+		_sel_type minSel = selector(*res);
+
+		for (int i = 1; i < count; i++)
+		{
+			const _type* itVal = &Get(i);
+			_sel_type itSel = selector(*itVal);
+
+			if (itSel > minSel)
+			{
+				minSel = itSel;
+				res = itVal;
+			}
+		}
+
+		return *res;
+	}
+
+	template<typename _type>
+	template<typename _sel_type>
+	int Vector<_type>::MaxIdx(const Function<_sel_type(const _type&)>& selector) const
+	{
+		int count = Count();
+		if (count == 0)
+			return -1;
+
+		int res = 0;
+		_sel_type minSel = selector(Get(0));
+
+		for (int i = 1; i < count; i++)
+		{
+			_sel_type itSel = selector(Get(i));
+
+			if (itSel > minSel)
+			{
+				res = i;
+				minSel = itSel;
+			}
+		}
+
+		return res;
+	}
+
+	template<typename _type>
+	bool Vector<_type>::All(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			if (!match(Get(i)))
+				return false;
+		}
+
+		return true;
+	}
+
+	template<typename _type>
+	bool Vector<_type>::Any(const Function<bool(const _type&)>& match) const
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+		{
+			if (match(Get(i)))
+				return true;
+		}
+
+		return false;
+	}
+
+	template<typename _type>
+	template<typename _sel_type>
+	_sel_type Vector<_type>::Sum(const Function<_sel_type(const _type&)>& selector) const
+	{
+		int count = Count();
+		if (count == 0)
+			return _sel_type();
+
+		_sel_type res = selector(Get(0));
+		for (int i = 1; i < count; i++)
+		{
+			res = res + selector(Get(i));
+		}
+
+		return res;
+	}
+
+	template<typename _type>
+	void Vector<_type>::ForEach(const Function<void(_type&)>& func)
+	{
+		int count = Count();
+		for (int i = 0; i < count; i++)
+			func(Get(i));
+	}
+
+	template<typename _type>
+	void Vector<_type>::Reverse()
+	{
+		int c = Count();
+		for (int i = 0; i < c/2; i++)
+		{
+			_type a = Get(i);
+			_type b = Get(c - i - 1);
+
+			Set(i, b);
+			Set(c - i - 1, a);
+		}
 	}
 }
