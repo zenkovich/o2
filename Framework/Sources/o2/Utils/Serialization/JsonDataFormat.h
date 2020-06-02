@@ -10,6 +10,9 @@ namespace o2
 	// Parses json document into DataDocumen
 	bool ParseJson(const wchar_t* str, DataDocument& document);
 
+	// Writes data into json string
+	void WriteJson(WString& str, const DataDocument& document);
+
 	// -------------------------------------------------------------------
 	// Json data document parser handler. Build DataDocument DOM structure
 	// -------------------------------------------------------------------

@@ -59,13 +59,19 @@ namespace o2
 		DataValue(const wchar_t* string, int length, bool isCopy, DataDocument& document);
 
 		// Copy-constructor
-		DataValue(DataValue& other);
+		DataValue(const DataValue& other);
+
+		// Move-constructor
+		DataValue(DataValue&& other);
 
 		// Destructor
 		~DataValue();
 
-		// Assign operator
-		DataValue& operator=(DataValue& other);
+		// Copy operator
+		DataValue& operator=(const DataValue& other);
+
+		// Move operator
+		DataValue& operator=(DataValue&& other);
 
 		// Equals operator
 		bool operator==(const DataValue& other) const;
@@ -119,6 +125,9 @@ namespace o2
 
 		// Returns string pointer
 		const wchar_t* GetString() const;
+
+		// Returns string length
+		int GetStringLength() const;
 
 	public: // Array methods
 		// Checks value is array
@@ -352,8 +361,8 @@ namespace o2
 			ValueTypeData flagsData;
 		};
 
-		ValueData     mValue;
-		DataDocument& mDocument;
+		ValueData     mData;
+		DataDocument* mDocument;
 
 	protected:
 		// Hidden constructor without document
@@ -361,6 +370,10 @@ namespace o2
 
 		// Hidden constructor as temporary string. String transcodes to buffer, value initializing from reference 
 		DataValue(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& buffer, const char* str);
+
+		// Writes data to writer
+		template <typename _writer>
+		void Write(_writer& writer) const;
 
 		// Transcode wide char to char
 		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF8<>>& target, const wchar_t* source);
@@ -370,6 +383,8 @@ namespace o2
 
 		friend class JsonDataDocumentParseHandler;
 		friend class TType<DataValue>;
+
+		friend void WriteJson(WString& str, const DataDocument& document);
 	};
 
 	// ------------------------------------------
@@ -384,14 +399,20 @@ namespace o2
 		// Default constructor
 		DataDocument();
 
-		// Copy-constructor. Moves data from other to this
-		DataDocument(DataDocument& other);
+		// Copy-constructor
+		DataDocument(const DataDocument& other);
+
+		// Move-constructor
+		DataDocument(DataDocument&& other);
 
 		// Destructor
 		~DataDocument();
 
-		// Copy-operator. Moves data from other to this
-		DataDocument& operator=(DataDocument& other);
+		// Copy-operator. 
+		DataDocument& operator=(const DataDocument& other);
+
+		// Move-operator
+		DataDocument& operator=(DataDocument&& other);
 
 		// Equals operator
 		bool operator==(const DataDocument& other) const;
@@ -408,7 +429,7 @@ namespace o2
 		DataDocument& operator=(const _type& value);
 
 		// Loads data structure from file
-		bool LoadFromFile(const String& fileName);
+		bool LoadFromFile(const String& fileName, Format format = Format::JSON);
 
 		// Loads data structure from string
 		bool LoadFromData(const WString& data, Format format = Format::JSON);
@@ -511,7 +532,7 @@ namespace o2
 {
 	template<typename _type>
 	DataValue::DataValue(const _type& value, DataDocument& document):
-		mValue(), mDocument(document)
+		mData(), mDocument(&document)
 	{
 		Set(value);
 	}
@@ -542,6 +563,68 @@ namespace o2
 	{
 		Set(value);
 		return *this;
+	}
+
+	template <typename _writer>
+	void DataValue::Write(_writer& writer) const
+	{
+		if (IsObject())
+		{
+			writer.StartObject();
+
+			for (auto it = BeginMember(); it != EndMember(); ++it)
+			{
+				writer.Key(it->name.GetString(), it->name.GetStringLength(), it->name.mData.flagsData.Is(Flags::StringCopy));
+				it->value.Write(writer);
+			}
+
+			writer.EndObject(mData.objectData.count);
+		}
+		else if (IsArray())
+		{
+			writer.StartArray();
+
+			for (auto it = Begin(); it != End(); ++it)
+				it->Write(writer);
+
+			writer.EndArray(mData.arrayData.count);
+		}
+		else if (IsString())
+		{
+			writer.String(GetString(), GetStringLength(), mData.flagsData.Is(Flags::StringCopy));
+		}
+		else if (mData.flagsData.Is(Flags::Int))
+		{
+			writer.Int(mData.intData.intValue);
+		}
+		else if (mData.flagsData.Is(Flags::UInt))
+		{
+			writer.Uint(mData.intData.uintValue);
+		}
+		else if (mData.flagsData.Is(Flags::Int64))
+		{
+			writer.Int64(mData.int64Data.intValue);
+		}
+		else if (mData.flagsData.Is(Flags::UInt64))
+		{
+			writer.Uint64(mData.int64Data.uintValue);
+		}
+		else if (mData.flagsData.Is(Flags::Double))
+		{
+			writer.Double(mData.doubleData.value);
+		}
+		else if (mData.flagsData.Is(Flags::BoolTrue))
+		{
+			writer.Bool(true);
+		}
+		else if (mData.flagsData.Is(Flags::BoolFalse))
+		{
+			writer.Bool(false);
+		}
+		else
+		{
+			writer.Null();
+		}
 	}
 
 	template<typename _type>
@@ -595,16 +678,16 @@ namespace o2
 
 		static void Read(wcharPtr value, const DataValue& data)
 		{
-			Assert(data.mValue.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
+			Assert(data.mData.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
 
-			if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
+			if (data.mData.flagsData.Is(DataValue::Flags::ShortString))
 			{
-				wcscpy(value, data.mValue.shortStringData.stringValue);
+				wcscpy(value, data.mData.shortStringData.stringValue);
 			}
 			else
 			{
-				auto length = data.mValue.stringPtrData.stringLength;
-				memcpy(value, data.mValue.stringPtrData.stringPtr, sizeof(wchar_t)*length);
+				auto length = data.mData.stringPtrData.stringLength;
+				memcpy(value, data.mData.stringPtrData.stringPtr, sizeof(wchar_t)*length);
 				value[length] = '\0';
 			}
 		}
@@ -618,14 +701,14 @@ namespace o2
 		static void Write(const bool& value, DataValue& data)
 		{
 			if (value)
-				data.mValue.flagsData.flags = DataValue::Flags::Bool | DataValue::Flags::BoolTrue;
+				data.mData.flagsData.flags = DataValue::Flags::Bool | DataValue::Flags::BoolTrue;
 			else
-				data.mValue.flagsData.flags = DataValue::Flags::Bool | DataValue::Flags::BoolFalse;
+				data.mData.flagsData.flags = DataValue::Flags::Bool | DataValue::Flags::BoolFalse;
 		}
 
 		static void Read(bool& value, const DataValue& data)
 		{
-			value = data.mValue.flagsData.Is(DataValue::Flags::Bool) && data.mValue.flagsData.Is(DataValue::Flags::BoolTrue);
+			value = data.mData.flagsData.Is(DataValue::Flags::Bool) && data.mData.flagsData.Is(DataValue::Flags::BoolTrue);
 		}
 	};
 
@@ -636,22 +719,22 @@ namespace o2
 
 		static void Write(const int& value, DataValue& data)
 		{
-			data.mValue.flagsData.flags = Flags::Int & Flags::Value;
-			data.mValue.intData.intValue = value;
+			data.mData.flagsData.flags = Flags::Int | Flags::Value;
+			data.mData.intData.intValue = value;
 		}
 
 		static void Read(int& value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(Flags::Int))
-				value = data.mValue.intData.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt))
-				value = (int)data.mValue.intData.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Int64))
-				value = (int)data.mValue.int64Data.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt64))
-				value = (int)data.mValue.int64Data.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Double))
-				value = (int)data.mValue.doubleData.value;
+			if (data.mData.flagsData.Is(Flags::Int))
+				value = data.mData.intData.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt))
+				value = (int)data.mData.intData.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Int64))
+				value = (int)data.mData.int64Data.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt64))
+				value = (int)data.mData.int64Data.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Double))
+				value = (int)data.mData.doubleData.value;
 			else
 				Assert(false, "Trying to get int from not number value");
 		}
@@ -664,22 +747,22 @@ namespace o2
 
 		static void Write(const UInt& value, DataValue& data)
 		{
-			data.mValue.flagsData.flags = Flags::UInt & Flags::Value;
-			data.mValue.intData.uintValue = value;
+			data.mData.flagsData.flags = Flags::UInt | Flags::Value;
+			data.mData.intData.uintValue = value;
 		}
 
 		static void Read(UInt& value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(Flags::UInt))
-				value = data.mValue.intData.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Int))
-				value = (UInt)data.mValue.intData.intValue;
-			else if (data.mValue.flagsData.Is(Flags::Int64))
-				value = (UInt)data.mValue.int64Data.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt64))
-				value = (UInt)data.mValue.int64Data.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Double))
-				value = (UInt)data.mValue.doubleData.value;
+			if (data.mData.flagsData.Is(Flags::UInt))
+				value = data.mData.intData.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Int))
+				value = (UInt)data.mData.intData.intValue;
+			else if (data.mData.flagsData.Is(Flags::Int64))
+				value = (UInt)data.mData.int64Data.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt64))
+				value = (UInt)data.mData.int64Data.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Double))
+				value = (UInt)data.mData.doubleData.value;
 			else
 				Assert(false, "Trying to get unsigned int from not number value");
 		}
@@ -692,22 +775,22 @@ namespace o2
 
 		static void Write(const Int64& value, DataValue& data)
 		{
-			data.mValue.flagsData.flags = Flags::Int64 & Flags::Value;
-			data.mValue.int64Data.intValue = value;
+			data.mData.flagsData.flags = Flags::Int64 | Flags::Value;
+			data.mData.int64Data.intValue = value;
 		}
 
 		static void Read(Int64& value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(Flags::Int64))
-				value = data.mValue.int64Data.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt64))
-				value = (Int64)data.mValue.int64Data.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Int))
-				value = (Int64)data.mValue.intData.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt))
-				value = (Int64)data.mValue.intData.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Double))
-				value = (Int64)data.mValue.doubleData.value;
+			if (data.mData.flagsData.Is(Flags::Int64))
+				value = data.mData.int64Data.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt64))
+				value = (Int64)data.mData.int64Data.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Int))
+				value = (Int64)data.mData.intData.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt))
+				value = (Int64)data.mData.intData.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Double))
+				value = (Int64)data.mData.doubleData.value;
 			else
 				Assert(false, "Trying to get int64 from not number value");
 		}
@@ -720,22 +803,22 @@ namespace o2
 
 		static void Write(const UInt64& value, DataValue& data)
 		{
-			data.mValue.flagsData.flags = Flags::UInt64 & Flags::Value;
-			data.mValue.int64Data.uintValue = value;
+			data.mData.flagsData.flags = Flags::UInt64 | Flags::Value;
+			data.mData.int64Data.uintValue = value;
 		}
 
 		static void Read(UInt64& value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(Flags::UInt64))
-				value = data.mValue.int64Data.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Int64))
-				value = (UInt64)data.mValue.int64Data.intValue;
-			else if (data.mValue.flagsData.Is(Flags::Int))
-				value = (UInt64)data.mValue.intData.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt))
-				value = (UInt64)data.mValue.intData.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Double))
-				value = (UInt64)data.mValue.doubleData.value;
+			if (data.mData.flagsData.Is(Flags::UInt64))
+				value = data.mData.int64Data.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Int64))
+				value = (UInt64)data.mData.int64Data.intValue;
+			else if (data.mData.flagsData.Is(Flags::Int))
+				value = (UInt64)data.mData.intData.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt))
+				value = (UInt64)data.mData.intData.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Double))
+				value = (UInt64)data.mData.doubleData.value;
 			else
 				Assert(false, "Trying to get unsigned int64 from not number value");
 		}
@@ -748,22 +831,22 @@ namespace o2
 
 		static void Write(const double& value, DataValue& data)
 		{
-			data.mValue.flagsData.flags = Flags::Double & Flags::Value;
-			data.mValue.doubleData.value = value;
+			data.mData.flagsData.flags = Flags::Double | Flags::Value;
+			data.mData.doubleData.value = value;
 		}
 
 		static void Read(double& value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(Flags::Double))
-				value = data.mValue.doubleData.value;
-			else if (data.mValue.flagsData.Is(Flags::Int))
-				value = (double)data.mValue.intData.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt))
-				value = (double)data.mValue.intData.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Int64))
-				value = (double)data.mValue.int64Data.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt64))
-				value = (double)data.mValue.int64Data.uintValue;
+			if (data.mData.flagsData.Is(Flags::Double))
+				value = data.mData.doubleData.value;
+			else if (data.mData.flagsData.Is(Flags::Int))
+				value = (double)data.mData.intData.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt))
+				value = (double)data.mData.intData.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Int64))
+				value = (double)data.mData.int64Data.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt64))
+				value = (double)data.mData.int64Data.uintValue;
 			else
 				Assert(false, "Trying to get double from not number value");
 		}
@@ -776,22 +859,22 @@ namespace o2
 
 		static void Write(const float& value, DataValue& data)
 		{
-			data.mValue.flagsData.flags = Flags::Double & Flags::Value;
-			data.mValue.doubleData.value = (double)value;
+			data.mData.flagsData.flags = Flags::Double | Flags::Value;
+			data.mData.doubleData.value = (double)value;
 		}
 
 		static void Read(float& value, const DataValue& data)
 		{
-			if (data.mValue.flagsData.Is(Flags::Double))
-				value = (float)data.mValue.doubleData.value;
-			else if (data.mValue.flagsData.Is(Flags::Int))
-				value = (float)data.mValue.intData.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt))
-				value = (float)data.mValue.intData.uintValue;
-			else if (data.mValue.flagsData.Is(Flags::Int64))
-				value = (float)data.mValue.int64Data.intValue;
-			else if (data.mValue.flagsData.Is(Flags::UInt64))
-				value = (float)data.mValue.int64Data.uintValue;
+			if (data.mData.flagsData.Is(Flags::Double))
+				value = (float)data.mData.doubleData.value;
+			else if (data.mData.flagsData.Is(Flags::Int))
+				value = (float)data.mData.intData.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt))
+				value = (float)data.mData.intData.uintValue;
+			else if (data.mData.flagsData.Is(Flags::Int64))
+				value = (float)data.mData.int64Data.intValue;
+			else if (data.mData.flagsData.Is(Flags::UInt64))
+				value = (float)data.mData.int64Data.uintValue;
 			else
 				Assert(false, "Trying to get float from not number value");
 		}
@@ -827,12 +910,12 @@ namespace o2
 
 		static void Read(WString& value, const DataValue& data)
 		{
-			Assert(data.mValue.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
+			Assert(data.mData.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
 
-			if (data.mValue.flagsData.Is(DataValue::Flags::ShortString))
-				value = data.mValue.shortStringData.stringValue;
+			if (data.mData.flagsData.Is(DataValue::Flags::ShortString))
+				value = data.mData.shortStringData.stringValue;
 			else
-				value = data.mValue.stringPtrData.stringPtr;
+				value = data.mData.stringPtrData.stringPtr;
 		}
 	};
 

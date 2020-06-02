@@ -121,8 +121,9 @@ namespace Editor
 		DockableWindow* activeTabWindow = nullptr;
 		for (auto wnd : dockDef->windows)
 		{
-			auto window =
-				o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) { return x->mWindow->GetName() == wnd; });
+			auto window = *o2EditorWindows.mEditorWindows.FindMatch([&](IEditorWindow* x) { 
+				return x->mWindow->GetName() == wnd; 
+			});
 
 			if (window)
 			{

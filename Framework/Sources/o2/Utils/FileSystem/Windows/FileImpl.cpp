@@ -14,9 +14,7 @@ namespace o2
         mIfstream.open(filename, std::ios::binary);
 
         if (!mIfstream.is_open())
-        {
-            return false;
-        }
+			return false;
 
         mOpened = true;
         mFilename = filename;
@@ -87,9 +85,7 @@ namespace o2
         mOfstream.open(filename, std::ios::binary);
 
         if (!mOfstream.is_open())
-        {
             return false;
-        }
 
         mOpened = true;
         mFilename = filename;

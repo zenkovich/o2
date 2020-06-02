@@ -2,6 +2,8 @@
 #include "JsonDataFormat.h"
 
 #include "rapidjson/reader.h"
+#include "rapidjson/writer.h"
+#include "rapidjson/prettywriter.h"
 
 namespace o2
 {
@@ -13,7 +15,7 @@ namespace o2
 		auto result = reader.Parse<rapidjson::kParseInsituFlag>(stream, handler);
 		if (!result.IsError())
 		{
-			(DataValue&)document = *handler.stack.Pop<DataValue>();
+			(DataValue&)document = std::move(*handler.stack.Pop<DataValue>());
 			return true;
 		}
 
@@ -33,6 +35,14 @@ namespace o2
 		}
 
 		return false;
+	}
+
+	void WriteJson(WString& str, const DataDocument& document)
+	{
+		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buffer;
+		rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF16<>>, rapidjson::UTF16<>, rapidjson::UTF16<>> writer(buffer);
+		document.Write(writer);
+		str = buffer.GetString();
 	}
 
 	JsonDataDocumentParseHandler::JsonDataDocumentParseHandler(DataDocument& document):
@@ -109,17 +119,18 @@ namespace o2
 		DataMember* members = stack.template Pop<DataMember>(memberCount);
 		DataValue* top = stack.template Top<DataValue>();
 
-		top->mValue.flagsData.flags = DataValue::Flags::Object;
+		top->mData.flagsData.flags = DataValue::Flags::Object;
 		if (memberCount != 0)
 		{
 			size_t size = sizeof(DataMember)*memberCount;
-			top->mValue.objectData.members = (DataMember*)document.mAllocator.Allocate(size);
-			memcpy(top->mValue.objectData.members, members, size);
+			top->mData.objectData.members = (DataMember*)document.mAllocator.Allocate(size);
+			memcpy(top->mData.objectData.members, members, size);
 		}
 		else
-			top->mValue.objectData.members = nullptr;
+			top->mData.objectData.members = nullptr;
 
-		top->mValue.objectData.count = memberCount;
+		top->mData.objectData.count = memberCount;
+		top->mData.objectData.capacity = memberCount;
 
 		return true;
 	}
@@ -135,17 +146,18 @@ namespace o2
 		DataValue* elements = stack.template Pop<DataValue>(elementCount);
 		DataValue* top = stack.template Top<DataValue>();
 
-		top->mValue.flagsData.flags = DataValue::Flags::Array;
+		top->mData.flagsData.flags = DataValue::Flags::Array;
 		if (elementCount != 0)
 		{
 			size_t size = sizeof(DataValue)*elementCount;
-			top->mValue.arrayData.elements = (DataValue*)document.mAllocator.Allocate(size);
-			memcpy(top->mValue.arrayData.elements, elements, size);
+			top->mData.arrayData.elements = (DataValue*)document.mAllocator.Allocate(size);
+			memcpy(top->mData.arrayData.elements, elements, size);
 		}
 		else
-			top->mValue.arrayData.elements = nullptr;
+			top->mData.arrayData.elements = nullptr;
 
-		top->mValue.arrayData.count = elementCount;
+		top->mData.arrayData.count = elementCount;
+		top->mData.arrayData.capacity = elementCount;
 
 		return true;
 	}

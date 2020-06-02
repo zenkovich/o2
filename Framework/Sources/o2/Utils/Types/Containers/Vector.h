@@ -530,6 +530,36 @@ namespace o2
 	}
 
 	template<typename _type>
+	bool Vector<_type>::IsEmpty() const
+	{
+		return empty();
+	}
+
+	template<typename _type>
+	_type& Vector<_type>::First()
+	{
+		return front();
+	}
+
+	template<typename _type>
+	const _type& Vector<_type>::First() const
+	{
+		return front();
+	}
+
+	template<typename _type>
+	const _type& Vector<_type>::Last() const
+	{
+		return back();
+	}
+
+	template<typename _type>
+	_type& Vector<_type>::Last()
+	{
+		return back();
+	}
+
+	template<typename _type>
 	void Vector<_type>::Sort(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
 	{
 		std::sort(std::vector<_type>::begin(), std::vector<_type>::end(), pred);
