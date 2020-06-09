@@ -53,7 +53,10 @@ namespace o2
 
 		mSourceAssetsTree.assetsPath = assetsPath;
 		mSourceAssetsTree.Build(folderInfo);
-		mBuiltAssetsTree->DeserializeFromString(o2FileSystem.ReadFile(mBuiltAssetsTreePath));
+
+		DataDocument builtAssetsTreeDoc;
+		builtAssetsTreeDoc.LoadFromFile(mBuiltAssetsTreePath);
+		mBuiltAssetsTree->Deserialize(builtAssetsTreeDoc);
 
 		ProcessRemovedAssets();
 		ProcessNewAssets();
@@ -342,7 +345,7 @@ namespace o2
 
 		DataDocument metaData;
 		metaData = assetTypeSampleMeta;
-		metaData["Value/mId"] = UID();
+		metaData["Value"]["mId"] = UID();
 
 		metaData.SaveToFile(metaFullPath);
 

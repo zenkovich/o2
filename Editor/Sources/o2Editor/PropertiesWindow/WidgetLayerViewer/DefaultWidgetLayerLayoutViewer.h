@@ -56,12 +56,12 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
 	PROTECTED_FIELD(mLayers);
-	PROTECTED_FIELD(mPositionProperty);
-	PROTECTED_FIELD(mSizeProperty);
-	PROTECTED_FIELD(mAnchorRightTopProperty);
-	PROTECTED_FIELD(mAnchorLeftBottomProperty);
-	PROTECTED_FIELD(moffsetRightTopProperty);
-	PROTECTED_FIELD(mOffsetLeftBottomProperty);
+	PROTECTED_FIELD(mPositionProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSizeProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAnchorRightTopProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAnchorLeftBottomProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(moffsetRightTopProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mOffsetLeftBottomProperty).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)

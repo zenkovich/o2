@@ -64,7 +64,7 @@ CLASS_BASES_META(Editor::IEditorWindow)
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-	PROTECTED_FIELD(mWindow);
+	PROTECTED_FIELD(mWindow).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)

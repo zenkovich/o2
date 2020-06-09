@@ -190,7 +190,7 @@ CLASS_FIELDS_META(Editor::TreeWindow)
 	PROTECTED_FIELD(mSceneTree);
 	PROTECTED_FIELD(mTreeContextMenu);
 	PROTECTED_FIELD(mSearchObjects);
-	PROTECTED_FIELD(mInSearch);
+	PROTECTED_FIELD(mInSearch).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::TreeWindow)

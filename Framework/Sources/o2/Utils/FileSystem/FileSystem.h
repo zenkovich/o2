@@ -87,7 +87,7 @@ namespace o2
 		static String GetParentPath(const String& path);
 
 		// Read file and returns result
-		static WString ReadFile(const String& path);
+		static String ReadFile(const String& path);
 
 		// Returns a relative path from one path to another
 		static String GetPathRelativeToPath(const String& from, const String& to);
@@ -96,7 +96,7 @@ namespace o2
 		static String CanonicalizePath(const String& path);
 
 		// Writes file data
-		static void WriteFile(const String& path, const WString& data);
+		static void WriteFile(const String& path, const String& data);
 
 	private:
 		LogStream* mLog; // File system log stream

@@ -128,7 +128,7 @@ CLASS_FIELDS_META(Editor::AssetsFoldersTree)
 	PROTECTED_FIELD(mFoldersTree);
 	PROTECTED_FIELD(mContextMenu);
 	PROTECTED_FIELD(mCurrentPath);
-	PROTECTED_FIELD(mOpengingFolderFromThis);
+	PROTECTED_FIELD(mOpengingFolderFromThis).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)

@@ -349,11 +349,15 @@ SyntaxVariable* CppSyntaxParser::ParseVariable(const string& data, SyntaxProtect
 	}
 	else
 	{
-		string nextWord = ReadWord(data, caret, " \n\r(){}[]");
+		string nextWord = ReadWord(data, caret, " (){}[]");
 		if (nextWord == "const")
-			res->mName = ReadWord(data, caret, " \n\r(){}[]");
+			res->mName = ReadWord(data, caret, " (){}[]");
 		else
 			res->mName = nextWord;
+
+		nextWord = ReadWord(data, caret, " (){}[]");
+		if (nextWord == "=")
+			res->mDefaultValue = ReadWord(data, caret, ";");
 	}
 
 	return res;

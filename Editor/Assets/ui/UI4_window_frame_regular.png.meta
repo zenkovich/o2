@@ -1,0 +1,58 @@
+{
+    "Type": "o2::ImageAsset::Meta",
+    "Value": {
+        "mId": "607b57e75dfe1ee103b369af38ab75d0",
+        "atlasId": "6bd459187f2675966f8c67e46e525c59",
+        "ios": {
+            "maxSize": {
+                "x": 0,
+                "y": 0
+            },
+            "scale": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "format": ""
+        },
+        "android": {
+            "maxSize": {
+                "x": 0,
+                "y": 0
+            },
+            "scale": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "format": ""
+        },
+        "macOS": {
+            "maxSize": {
+                "x": 0,
+                "y": 0
+            },
+            "scale": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "format": ""
+        },
+        "windows": {
+            "maxSize": {
+                "x": 0,
+                "y": 0
+            },
+            "scale": {
+                "x": 0.0,
+                "y": 0.0
+            },
+            "format": ""
+        },
+        "sliceBorder": {
+            "left": 17,
+            "bottom": 17,
+            "right": 17,
+            "top": 33
+        },
+        "defaultMode": "Sliced"
+    }
+}

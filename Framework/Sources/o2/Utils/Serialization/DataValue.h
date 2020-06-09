@@ -56,10 +56,13 @@ namespace o2
 		DataValue(const _type& value, DataDocument& document);
 
 		// Constructor as string value
-		DataValue(const wchar_t* string, int length, bool isCopy, DataDocument& document);
+		DataValue(const char* string, int length, bool isCopy, DataDocument& document);
 
-		// Copy-constructor
+		// Copy-constructor with same document
 		DataValue(const DataValue& other);
+
+		// Copy-constructor with another document
+		DataValue(const DataValue& other, DataDocument& document);
 
 		// Move-constructor
 		DataValue(DataValue&& other);
@@ -121,10 +124,10 @@ namespace o2
 		void SetNull();
 
 		// Optimized set string. When isCopy is false, string pointer can be used as reference
-		void SetString(const wchar_t* string, int length, bool isCopy);
+		void SetString(const char* string, int length, bool isCopy);
 
 		// Returns string pointer
-		const wchar_t* GetString() const;
+		const char* GetString() const;
 
 		// Returns string length
 		int GetStringLength() const;
@@ -148,6 +151,9 @@ namespace o2
 
 		// Adds element to array
 		DataValue& AddElement(DataValue& value);
+
+		// Adds element to array
+		DataValue& AddElement();
 
 		// Adds element to array
 		DataValue* RemoveElement(DataValue* it);
@@ -259,6 +265,10 @@ namespace o2
 		// Removes all members or elements
 		void Clear();
 
+		// Writes data to writer
+		template <typename _writer>
+		void Write(_writer& writer) const;
+
 	public:
 		enum class Flags
 		{
@@ -283,11 +293,11 @@ namespace o2
 		};
 
 	protected:
-		static constexpr int DataPayloadSize = 16;
-		static constexpr int DataSize = DataPayloadSize + sizeof(Flags);
+		static constexpr UInt DataPayloadSize = 16;
+		static constexpr UInt DataSize = DataPayloadSize + sizeof(Flags);
 
-		static constexpr int ObjectInitialCapacity = 5;
-		static constexpr int ArrayInitialCapacity = 5;
+		static constexpr UInt ObjectInitialCapacity = 7;
+		static constexpr UInt ArrayInitialCapacity = 7;
 
 		struct IntData
 		{
@@ -311,14 +321,14 @@ namespace o2
 
 		struct StringPtrData
 		{
-			wchar_t* stringPtr;
+			char* stringPtr;
 			size_t stringLength;
 		};
 
 		struct ShortStringData
 		{
-			static constexpr int maxLength = DataPayloadSize/sizeof(wchar_t) - 1;
-			wchar_t stringValue[maxLength + 1];
+			static constexpr int maxLength = DataPayloadSize/sizeof(char) - 1;
+			char stringValue[maxLength + 1];
 		};
 
 		struct ValueTypeData
@@ -368,12 +378,8 @@ namespace o2
 		// Hidden constructor without document
 		DataValue();
 
-		// Hidden constructor as temporary string. String transcodes to buffer, value initializing from reference 
-		DataValue(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& buffer, const char* str);
-
-		// Writes data to writer
-		template <typename _writer>
-		void Write(_writer& writer) const;
+		// Constructor temporary string reference
+		explicit DataValue(const char* stringRef);
 
 		// Transcode wide char to char
 		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF8<>>& target, const wchar_t* source);
@@ -383,8 +389,6 @@ namespace o2
 
 		friend class JsonDataDocumentParseHandler;
 		friend class TType<DataValue>;
-
-		friend void WriteJson(WString& str, const DataDocument& document);
 	};
 
 	// ------------------------------------------
@@ -432,13 +436,13 @@ namespace o2
 		bool LoadFromFile(const String& fileName, Format format = Format::JSON);
 
 		// Loads data structure from string
-		bool LoadFromData(const WString& data, Format format = Format::JSON);
+		bool LoadFromData(const String& data, Format format = Format::JSON);
 
 		// Saves data to file with specified format
 		bool SaveToFile(const String& fileName, Format format = Format::JSON) const;
 
 		// Saves data to string
-		WString SaveAsWString(Format format = Format::JSON) const;
+		String SaveAsString(Format format = Format::JSON) const;
 
 	protected:
 		ChunkPoolAllocator mAllocator;
@@ -553,7 +557,7 @@ namespace o2
 	template<typename _type>
 	DataValue::operator _type() const
 	{
-		_type result;
+		_type result = _type();
 		Get(result);
 		return result;
 	}
@@ -637,7 +641,7 @@ namespace o2
 	template<typename _type>
 	DataDocument::operator _type() const
 	{
-		_type result;
+		_type result = _type();
 		Get(result);
 		return result;
 	}
@@ -651,17 +655,56 @@ namespace o2
 
 		static void Write(const charPtr& value, DataValue& data)
 		{
-			rapidjson::GenericStringBuffer<rapidjson::UTF16<>> target;
-			if (Transcode(target, value))
-				data.Set(target.GetString());
+			data.SetString(value, strlen(value), true);
 		}
 
 		static void Read(charPtr& value, const DataValue& data)
 		{
-			rapidjson::GenericStringBuffer<rapidjson::UTF8<>> target;
-			if (Transcode(target, data.GetString()))
-				strcpy(value, target.GetString());
+			Assert(data.mData.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
+
+			if (data.mData.flagsData.Is(DataValue::Flags::ShortString))
+			{
+				strcpy(value, data.mData.shortStringData.stringValue);
+			}
+			else
+			{
+				auto length = data.mData.stringPtrData.stringLength;
+				memcpy(value, data.mData.stringPtrData.stringPtr, sizeof(char)*length);
+				value[length] = '\0';
+			}
 		}
+	};
+
+	template<UInt _size>
+	struct DataValue::Converter<char[_size]>
+	{
+		static constexpr bool isSupported = true;
+
+		using charPtr = char[_size];
+
+		static void Write(const charPtr& value, DataValue& data)
+		{
+			data.SetString(value, _size, true);
+		}
+
+		static void Read(charPtr& value, const DataValue& data)
+		{}
+	};
+
+	template<>
+	struct DataValue::Converter<const char*>
+	{
+		static constexpr bool isSupported = true;
+
+		using charPtr = const char*;
+
+		static void Write(const charPtr& value, DataValue& data)
+		{
+			data.SetString(value, strlen(value), true);
+		}
+
+		static void Read(charPtr& value, const DataValue& data)
+		{}
 	};
 
 	template<>
@@ -673,24 +716,35 @@ namespace o2
 
 		static void Write(const wcharPtr& value, DataValue& data)
 		{
-			data.SetString(value, wcslen(value), true);
+			rapidjson::GenericStringBuffer<rapidjson::UTF8<>> target;
+			if (Transcode(target, value))
+				data.Set(target.GetString());
 		}
 
 		static void Read(wcharPtr value, const DataValue& data)
 		{
-			Assert(data.mData.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
-
-			if (data.mData.flagsData.Is(DataValue::Flags::ShortString))
-			{
-				wcscpy(value, data.mData.shortStringData.stringValue);
-			}
-			else
-			{
-				auto length = data.mData.stringPtrData.stringLength;
-				memcpy(value, data.mData.stringPtrData.stringPtr, sizeof(wchar_t)*length);
-				value[length] = '\0';
-			}
+			rapidjson::GenericStringBuffer<rapidjson::UTF16<>> target;
+			if (Transcode(target, data.GetString()))
+				wcscpy(value, target.GetString());
 		}
+	};
+
+	template<>
+	struct DataValue::Converter<const wchar_t*>
+	{
+		static constexpr bool isSupported = true;
+
+		using wcharPtr = const wchar_t*;
+
+		static void Write(const wcharPtr& value, DataValue& data)
+		{
+			rapidjson::GenericStringBuffer<rapidjson::UTF8<>> target;
+			if (Transcode(target, value))
+				data.Set(target.GetString());
+		}
+
+		static void Read(wcharPtr value, const DataValue& data)
+		{}
 	};
 
 	template<>
@@ -887,14 +941,17 @@ namespace o2
 
 		static void Write(const String& value, DataValue& data)
 		{
-			data.Set(value.Data());
+			data.SetString(value.Data(), value.Length(), true);
 		}
 
 		static void Read(String& value, const DataValue& data)
 		{
-			rapidjson::GenericStringBuffer<rapidjson::UTF16<>> target;
-			if (Transcode(target, value.Data()))
-				value = target.GetString();
+			Assert(data.mData.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
+
+			if (data.mData.flagsData.Is(DataValue::Flags::ShortString))
+				value = data.mData.shortStringData.stringValue;
+			else
+				value = data.mData.stringPtrData.stringPtr;
 		}
 	};
 
@@ -905,17 +962,14 @@ namespace o2
 
 		static void Write(const WString& value, DataValue& data)
 		{
-			data.SetString(value.Data(), value.Length(), true);
+			data.Set(value.Data());
 		}
 
 		static void Read(WString& value, const DataValue& data)
 		{
-			Assert(data.mData.flagsData.Is(DataValue::Flags::String), "Trying get string from not string value");
-
-			if (data.mData.flagsData.Is(DataValue::Flags::ShortString))
-				value = data.mData.shortStringData.stringValue;
-			else
-				value = data.mData.stringPtrData.stringPtr;
+			rapidjson::GenericStringBuffer<rapidjson::UTF16<>> target;
+			if (Transcode(target, data.GetString()))
+				value = target.GetString();
 		}
 	};
 
@@ -1103,9 +1157,14 @@ namespace o2
 			if (auto typeNode = data.FindMember("Type"))
 			{
 				String typeName = *typeNode;
+				if (typeName == "Editor::AnimationPropertiesTreeNode")
+					typeName = typeName;
 
 				if (auto valueNode = data.FindMember("Value"))
 				{
+					if (value)
+						delete value;
+
 					auto type = Reflection::GetType(typeName);
 					void* sample = type->CreateSample();
 					if (type->GetUsage() == Type::Usage::Object)
@@ -1147,19 +1206,26 @@ namespace o2
 
 		static void Write(const Vector<T>& value, DataValue& data)
 		{
-			data.Clear();
+			data.mData.flagsData.flags = Flags::Array;
+			data.mData.arrayData.elements = nullptr;
+			data.mData.arrayData.count = 0;
+			data.mData.arrayData.capacity = 0;
 
 			for (auto& v : value)
-				data.AddMember("Element").Set(v);
+				data.AddElement(DataValue(v, *data.mDocument));
 		}
 
 		static void Read(Vector<T>& value, const DataValue& data)
 		{
-			for (auto& childNode : data)
+			if (data.IsArray())
 			{
-				T v = T();
-				childNode.Get(v);
-				value.Add(v);
+				value.Clear();
+				for (auto& element : data)
+				{
+					T v = T();
+					element.Get(v);
+					value.Add(v);
+				}
 			}
 		}
 	};
@@ -1171,11 +1237,14 @@ namespace o2
 
 		static void Write(const Map<_key, _value>& value, DataValue& data)
 		{
-			data.Clear();
+			data.mData.flagsData.flags = Flags::Array;
+			data.mData.arrayData.elements = nullptr;
+			data.mData.arrayData.count = 0;
+			data.mData.arrayData.capacity = 0;
 
 			for (auto& kv : value)
 			{
-				DataValue& child = data.AddMember("Element");
+				DataValue& child = data.AddElement();
 				child.AddMember("Key").Set(kv.first);
 				child.AddMember("Value").Set(kv.second);
 			}
@@ -1183,18 +1252,22 @@ namespace o2
 
 		static void Read(Map<_key, _value>& value, const DataValue& data)
 		{
-			for (auto& childNode : data)
+			if (data.IsArray())
 			{
-				auto keyNode = childNode.FindMember("Key");
-				auto valueNode = childNode.FindMember("Value");
-
-				if (keyNode && valueNode)
+				value.Clear();
+				for (auto& childNode : data)
 				{
-					_value v = _value();
-					_key k = _key();
-					keyNode->Get(k);
-					valueNode->Get(v);
-					value.Add(k, v);
+					auto keyNode = childNode.FindMember("Key");
+					auto valueNode = childNode.FindMember("Value");
+
+					if (keyNode && valueNode)
+					{
+						_value v = _value();
+						_key k = _key();
+						keyNode->Get(k);
+						valueNode->Get(v);
+						value.Add(k, v);
+					}
 				}
 			}
 		}

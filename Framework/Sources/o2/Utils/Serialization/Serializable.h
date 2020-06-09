@@ -23,10 +23,10 @@ namespace o2
 		virtual void Deserialize(const DataValue& node) {};
 
 		// Serializes data to string
-		WString SerializeToString() const;
+		String SerializeToString() const;
 
 		// Deserializes data from string
-		void DeserializeFromString(const WString& str);
+		void DeserializeFromString(const String& str);
 
 		// Assign operator from data node
 		ISerializable& operator=(const DataValue& node) { return *this; };
@@ -110,8 +110,8 @@ CLASS_METHODS_META(o2::ISerializable)
 
 	PUBLIC_FUNCTION(void, Serialize, DataValue&);
 	PUBLIC_FUNCTION(void, Deserialize, const DataValue&);
-	PUBLIC_FUNCTION(WString, SerializeToString);
-	PUBLIC_FUNCTION(void, DeserializeFromString, const WString&);
+	PUBLIC_FUNCTION(String, SerializeToString);
+	PUBLIC_FUNCTION(void, DeserializeFromString, const String&);
 	PUBLIC_FUNCTION(void, OnSerialize, DataValue&);
 	PUBLIC_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, SerializeBasic, const IObject&, DataValue&);

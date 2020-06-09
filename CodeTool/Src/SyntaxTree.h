@@ -445,6 +445,9 @@ public:
 	// Returns name of variable
 	const string& GetName() const;
 
+	// Returns default value
+	const string& GetDefaultValue() const;
+
 	// Returns class definition section
 	SyntaxProtectionSection GetClassSection() const;
 
@@ -454,6 +457,7 @@ public:
 protected:
 	SyntaxType              mType;                                           // Type of variable
 	string                  mName;                                           // Name of variable
+	string                  mDefaultValue;                                   // Default variable value
 	SyntaxProtectionSection mClassSection = SyntaxProtectionSection::Public; // Protection section
 	bool                    mIsStatic = false;                               // Is variable static
 

@@ -175,8 +175,8 @@ namespace Editor
 		{
 			int del = track->path.Find('/', lastDel);
 			String subPath = track->path.SubStr(lastDel, del);
-			TrackNode* next = *(current ? current->children : mRootValue->children)
-				.FindMatch([&](TrackNode* x) { return x->name == subPath; });
+			TrackNode* next = (current ? current->children : mRootValue->children)
+				.FindMatchOrDefault([&](TrackNode* x) { return x->name == subPath; });
 
 			if (!next)
 			{

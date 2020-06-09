@@ -208,11 +208,11 @@ CLASS_BASES_META(Editor::AnimationTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
-	PRIVATE_FIELD(mAnimationWindow);
-	PRIVATE_FIELD(mAnimationValuesCount);
-	PRIVATE_FIELD(mRootValue);
+	PRIVATE_FIELD(mAnimationWindow).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mAnimationValuesCount).DEFAULT_VALUE(0);
+	PRIVATE_FIELD(mRootValue).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mContextMenu);
-	PRIVATE_FIELD(mTreeWidth);
+	PRIVATE_FIELD(mTreeWidth).DEFAULT_VALUE(100.0f);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
@@ -250,14 +250,14 @@ CLASS_BASES_META(Editor::AnimationTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTreeNode)
 {
-	PROTECTED_FIELD(mPropertyBorder);
-	PROTECTED_FIELD(mAddKeyButtonSize);
-	PROTECTED_FIELD(mPropertySize);
-	PROTECTED_FIELD(mData);
-	PROTECTED_FIELD(mTimeline);
-	PROTECTED_FIELD(mHandlesSheet);
-	PROTECTED_FIELD(mNameDrawable);
-	PROTECTED_FIELD(mTrackControl);
+	PROTECTED_FIELD(mPropertyBorder).DEFAULT_VALUE(2.0f);
+	PROTECTED_FIELD(mAddKeyButtonSize).DEFAULT_VALUE(25.0f);
+	PROTECTED_FIELD(mPropertySize).DEFAULT_VALUE(130.0f);
+	PROTECTED_FIELD(mData).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTimeline).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHandlesSheet).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNameDrawable).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTrackControl).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)

@@ -64,7 +64,7 @@ namespace o2
 		mAssetPtr = nullptr;
 		mRefCounter = nullptr;
 
-		if (node.GetMember("own"))
+		if (node.FindMember("own"))
 		{
 			mAssetPtr = node.GetMember("asset");
 			mAssetPtr->mInfo.meta = node.GetMember("meta");

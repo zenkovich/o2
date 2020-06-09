@@ -498,18 +498,18 @@ CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 	PRIVATE_FIELD(mHandles);
 	PRIVATE_FIELD(mTrackPath);
-	PRIVATE_FIELD(mTreeControls);
+	PRIVATE_FIELD(mTreeControls).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mPropertyField);
-	PRIVATE_FIELD(mPropertyValue);
+	PRIVATE_FIELD(mPropertyValue).DEFAULT_VALUE(TrackValueType());
 	PRIVATE_FIELD(mPropertyValueProxy);
-	PRIVATE_FIELD(mAddKeyDotButton);
-	PRIVATE_FIELD(mAddKeyButton);
-	PRIVATE_FIELD(mLastValue);
-	PRIVATE_FIELD(mTrack);
-	PRIVATE_FIELD(mPlayer);
-	PRIVATE_FIELD(mTimeline);
-	PRIVATE_FIELD(mHandlesSheet);
-	PRIVATE_FIELD(mDisableHandlesUpdate);
+	PRIVATE_FIELD(mAddKeyDotButton).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mAddKeyButton).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mLastValue).DEFAULT_VALUE(TrackValueType());
+	PRIVATE_FIELD(mTrack).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mPlayer).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mTimeline).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mHandlesSheet).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mDisableHandlesUpdate).DEFAULT_VALUE(false);
 }
 END_META;
 META_TEMPLATES(typename AnimationTrackType)

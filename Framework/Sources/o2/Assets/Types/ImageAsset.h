@@ -110,13 +110,13 @@ namespace o2
 		class Meta: public DefaultAssetMeta<ImageAsset>
 		{
 		public:
-			UID          atlasId;     // Atlas owner id @SERIALIZABLE
-			PlatformMeta ios;         // IOS specified meta @SERIALIZABLE
-			PlatformMeta android;     // Android specified meta @SERIALIZABLE
-			PlatformMeta macOS;       // MacOS specified meta @SERIALIZABLE
-			PlatformMeta windows;     // Windows specified meta @SERIALIZABLE
-			BorderI      sliceBorder; // Default slice border @SERIALIZABLE
-			SpriteMode   defaultMode; // Default sprite mode @SERIALIZABLE
+			UID          atlasId = UID::empty; // Atlas owner id @SERIALIZABLE
+			PlatformMeta ios;                  // IOS specified meta @SERIALIZABLE
+			PlatformMeta android;              // Android specified meta @SERIALIZABLE
+			PlatformMeta macOS;                // MacOS specified meta @SERIALIZABLE
+			PlatformMeta windows;              // Windows specified meta @SERIALIZABLE
+			BorderI      sliceBorder;          // Default slice border @SERIALIZABLE
+			SpriteMode   defaultMode;          // Default sprite mode @SERIALIZABLE
 
 		public:
 			// Returns true if other meta is equal to this
@@ -168,7 +168,7 @@ CLASS_FIELDS_META(o2::ImageAsset)
 	PUBLIC_FIELD(width);
 	PUBLIC_FIELD(height);
 	PUBLIC_FIELD(meta);
-	PROTECTED_FIELD(mBitmap);
+	PROTECTED_FIELD(mBitmap).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mAtlasPage).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mAtlasRect).SERIALIZABLE_ATTRIBUTE();
 }
@@ -221,7 +221,7 @@ CLASS_BASES_META(o2::ImageAsset::Meta)
 END_META;
 CLASS_FIELDS_META(o2::ImageAsset::Meta)
 {
-	PUBLIC_FIELD(atlasId).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(atlasId).DEFAULT_VALUE(UID::empty).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(ios).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(android).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(macOS).SERIALIZABLE_ATTRIBUTE();

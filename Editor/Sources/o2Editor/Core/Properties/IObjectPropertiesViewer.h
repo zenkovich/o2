@@ -153,9 +153,9 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
 	PUBLIC_FIELD(path);
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mHeaderEnabled);
-	PROTECTED_FIELD(mPropertiesBuilt);
+	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHeaderEnabled).DEFAULT_VALUE(true);
+	PROTECTED_FIELD(mPropertiesBuilt).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mTargetObjets);
 	PROTECTED_FIELD(mPropertiesContext);
 	PROTECTED_FIELD(mOnChildFieldChangeCompleted);

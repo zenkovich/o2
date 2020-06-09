@@ -71,7 +71,7 @@ namespace Editor
 		mSeparatorCoef = 0.0f; // o2EditorConfig.GetProjectUserData()["layout/assetsWindow/separator_coef"];
 
 		if (mSeparatorCoef < FLT_EPSILON)
-			mSeparatorCoef = 0.5f;
+			mSeparatorCoef = 0.2f;
 
 		mFoldersTree->layout->anchorRight = mSeparatorCoef;
 		mAssetsGridScroll->layout->anchorLeft = mSeparatorCoef;

@@ -89,15 +89,32 @@
   </Type>
 
   <Type Name="o2::DataValue">
-    <DisplayString>{{ name={ mName } data={ mData } childs={mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst} }}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Null) == o2::DataValue::Flags::Null">null</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::BoolTrue) == o2::DataValue::Flags::BoolTrue">true</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::BoolFalse) == o2::DataValue::Flags::BoolFalse">false</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::ShortString) == o2::DataValue::Flags::ShortString">{(const char*)mData.shortStringData.stringValue,na}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::StringRef) == o2::DataValue::Flags::StringRef">{(const char*)mData.stringPtrData.stringPtr,na}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::StringCopy) == o2::DataValue::Flags::StringCopy">{(const char*)mData.stringPtrData.stringPtr,na}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Int) == o2::DataValue::Flags::Int">{mData.intData.intValue}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::UInt) == o2::DataValue::Flags::UInt">{mData.intData.uintValue}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Int64) == o2::DataValue::Flags::Int64">{mData.int64Data.intValue}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::UInt64) == o2::DataValue::Flags::UInt64">{mData.int64Data.uintValue}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Double) == o2::DataValue::Flags::Double">{mData.doubleData.value}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object">Object members={mData.objectData.count}</DisplayString>
+    <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array">Array elements={mData.arrayData.count}</DisplayString>
     <Expand>
-      <Item Name="name" ExcludeView="simple">mName</Item>
-      <Item Name="data" ExcludeView="simple">mData</Item>
-      <Item Name="parent" ExcludeView="simple">mParent</Item>
-      <Item Name="childs" ExcludeView="simple">mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst</Item>
-      <ArrayItems>
-        <Size>mChildNodes._Mypair._Myval2._Mylast - mChildNodes._Mypair._Myval2._Myfirst</Size>
-        <ValuePointer>mChildNodes._Mypair._Myval2._Myfirst</ValuePointer>
+      <Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object" Name="[size]">mData.objectData.count</Item>
+      <Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object" Name="[capacity]">mData.objectData.capacity</Item>
+      <ArrayItems Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Object) == o2::DataValue::Flags::Object">
+        <Size>mData.objectData.count</Size>
+        <ValuePointer>mData.objectData.members</ValuePointer>
+      </ArrayItems>
+
+      <Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array" Name="[size]">mData.arrayData.count</Item>
+      <Item Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array" Name="[capacity]">mData.arrayData.capacity</Item>
+      <ArrayItems Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Array) == o2::DataValue::Flags::Array">
+        <Size>mData.arrayData.count</Size>
+        <ValuePointer>mData.arrayData.elements</ValuePointer>
       </ArrayItems>
     </Expand>
   </Type>
@@ -105,26 +122,16 @@
   <Type Name="o2::Widget">
     <DisplayString>Widget "{ mName }" ({ (int)layout->mData->worldRectangle.left }, { (int)layout->mData->worldRectangle.bottom }, { (int)layout->mData->worldRectangle.right }, { (int)layout->mData->worldRectangle.top })</DisplayString>
     <Expand>
-      <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="id" ExcludeView="simple">mId</Item>
+      <Item Name="name" ExcludeView="simple">mName</Item>
+      <Item Name="layout" ExcludeView="simple">layout</Item>
       <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
-      <Item Name="enabled in hierarchy" ExcludeView="simple">mResEnabledInHierarchy</Item>
-      <Item Name="locked" ExcludeView="simple">mLocked</Item>
-      <Item Name="parent" ExcludeView="simple">mParent</Item>
       <Item Name="layer" ExcludeView="simple">Actor::mLayer->name</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
-      <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
-      <Item Name="res enabled" ExcludeView="simple">mResEnabled</Item>
-      <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
       <Item Name="children rect" ExcludeView="simple">layout->mData->childrenWorldRect</Item>
       <Item Name="is on scene" ExcludeView="simple">Actor::mIsOnScene</Item>
-      <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
-      <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
-      <Item Name="layer ptr" ExcludeView="simple">Actor::mLayer</Item>
-
-      <Item Name="layout" ExcludeView="simple">layout</Item>
 
       <Synthetic Name="prototype">
         <DisplayString>({ mPrototype })</DisplayString>
@@ -150,12 +157,23 @@
         </Expand>
       </Synthetic>
 
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
       <Synthetic Name="children">
         <DisplayString>count={mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
             <Size>mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst</Size>
             <ValuePointer>mChildren._Mypair._Myval2._Myfirst</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="internal children">
+        <DisplayString>count={mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst}</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mInternalWidgets._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
@@ -180,22 +198,21 @@
         </Expand>
       </Synthetic>
 
+      <Item Name="locked" ExcludeView="simple">mLocked</Item>
+      <Item Name="enabled in hierarchy" ExcludeView="simple">mResEnabledInHierarchy</Item>
+      <Item Name="res enabled" ExcludeView="simple">mResEnabled</Item>
+      <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
+      <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
+      <Item Name="layer ptr" ExcludeView="simple">Actor::mLayer</Item>
+      <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
+      <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
+
       <Synthetic Name="draw layers">
         <DisplayString>count={mDrawingLayers._Mypair._Myval2._Mylast - mDrawingLayers._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
             <Size>mDrawingLayers._Mypair._Myval2._Mylast - mDrawingLayers._Mypair._Myval2._Myfirst</Size>
             <ValuePointer>mDrawingLayers._Mypair._Myval2._Myfirst</ValuePointer>
-          </ArrayItems>
-        </Expand>
-      </Synthetic>
-
-      <Synthetic Name="draw children">
-        <DisplayString>count={mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst}</DisplayString>
-        <Expand>
-          <ArrayItems>
-            <Size>mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst</Size>
-            <ValuePointer>mDrawingChildren._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
@@ -210,12 +227,12 @@
         </Expand>
       </Synthetic>
 
-      <Synthetic Name="internal children">
-        <DisplayString>count={mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst}</DisplayString>
+      <Synthetic Name="draw children">
+        <DisplayString>count={mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
           <ArrayItems>
-            <Size>mInternalWidgets._Mypair._Myval2._Mylast - mInternalWidgets._Mypair._Myval2._Myfirst</Size>
-            <ValuePointer>mInternalWidgets._Mypair._Myval2._Myfirst</ValuePointer>
+            <Size>mDrawingChildren._Mypair._Myval2._Mylast - mDrawingChildren._Mypair._Myval2._Myfirst</Size>
+            <ValuePointer>mDrawingChildren._Mypair._Myval2._Myfirst</ValuePointer>
           </ArrayItems>
         </Expand>
       </Synthetic>
@@ -228,10 +245,6 @@
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="id" ExcludeView="simple">mId</Item>
       <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
-      <Item Name="locked" ExcludeView="simple">mLocked</Item>
-      <Item Name="parent" ExcludeView="simple">mParent</Item>
-      <Item Name="layer" ExcludeView="simple">mLayer->name</Item>
-      <Item Name="tags" ExcludeView="simple">tags</Item>
       
       <Synthetic Name="prototype">
         <DisplayString>({ mPrototype })</DisplayString>
@@ -264,6 +277,8 @@
         </Expand>
       </Synthetic>
 
+      <Item Name="parent" ExcludeView="simple">mParent</Item>
+      
       <Synthetic Name="children">
         <DisplayString>count={mChildren._Mypair._Myval2._Mylast - mChildren._Mypair._Myval2._Myfirst}</DisplayString>
         <Expand>
@@ -273,7 +288,10 @@
           </ArrayItems>
         </Expand>
       </Synthetic>
-      
+
+      <Item Name="locked" ExcludeView="simple">mLocked</Item>
+      <Item Name="layer" ExcludeView="simple">mLayer->name</Item>
+      <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="is on scene" ExcludeView="simple">mIsOnScene</Item>
       <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
       <Item Name="asset id" ExcludeView="simple">mAssetId</Item>

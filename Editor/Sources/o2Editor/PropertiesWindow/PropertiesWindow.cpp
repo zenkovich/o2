@@ -97,7 +97,7 @@ namespace Editor
 		if (!targets.IsEmpty())
 		{
 			auto type = &targets[0]->GetType();
-			objectViewer = *mViewers.FindMatch([&](auto x) { return type->IsBasedOn(*x->GetViewingObjectType()); });
+			objectViewer = mViewers.FindMatchOrDefault([&](auto x) { return type->IsBasedOn(*x->GetViewingObjectType()); });
 		}
 
 		if (!objectViewer)

@@ -217,10 +217,10 @@ namespace Editor
 
 		SetViewingPath(assetFolder);
 
-		auto assetInfo = *mAssetInfos.FindMatch([&](auto* x) { return x->meta->ID() == id; });
+		auto assetInfo = mAssetInfos.FindMatchOrDefault([&](auto* x) { return x->meta->ID() == id; });
 		ScrollTo((void*)assetInfo);
 
-		AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindMatch([=](Widget* x) {
+		AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindMatchOrDefault([=](Widget* x) {
 			return &((AssetIcon*)x)->GetAssetInfo() == assetInfo; }));
 
 		if (!icon)
@@ -796,7 +796,7 @@ namespace Editor
 
 	AssetIcon* AssetsIconsScrollArea::FindVisibleIcon(const AssetInfo* info)
 	{
-		return *mVisibleAssetIcons.FindMatch([=](AssetIcon* x) { return &x->GetAssetInfo() == info; });
+		return mVisibleAssetIcons.FindMatchOrDefault([=](AssetIcon* x) { return &x->GetAssetInfo() == info; });
 	}
 
 	void AssetsIconsScrollArea::OnAssetDblClick(AssetIcon* icon)
@@ -921,7 +921,7 @@ namespace Editor
 		OnItemsUpdated(true);
 		ScrollTo((void*)&mNewAsset->GetInfo()); 
 		
-		AssetIcon* icon = (AssetIcon*)(*mChildWidgets.FindMatch([=](Widget* x) {
+		AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindMatchOrDefault([=](Widget* x) {
 			return &((AssetIcon*)x)->GetAssetInfo() == &mNewAsset->GetInfo(); }));
 
 		if (!icon)

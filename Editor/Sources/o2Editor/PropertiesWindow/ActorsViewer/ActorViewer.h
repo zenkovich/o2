@@ -112,19 +112,19 @@ END_META;
 CLASS_FIELDS_META(Editor::ActorViewer)
 {
 	PROTECTED_FIELD(mTargetActors);
-	PROTECTED_FIELD(mHeaderViewer);
-	PROTECTED_FIELD(mTransformViewer);
-	PROTECTED_FIELD(mActorPropertiesViewer);
-	PROTECTED_FIELD(mDefaultActorPropertiesViewer);
+	PROTECTED_FIELD(mHeaderViewer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTransformViewer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mActorPropertiesViewer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mDefaultActorPropertiesViewer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mAvailableActorPropertiesViewers);
 	PROTECTED_FIELD(mActorPropertiesViewersPool);
 	PROTECTED_FIELD(mCommonComponentsTypes);
 	PROTECTED_FIELD(mComponentsViewers);
-	PROTECTED_FIELD(mDefaultComponentViewer);
+	PROTECTED_FIELD(mDefaultComponentViewer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mAvailableComponentsViewers);
 	PROTECTED_FIELD(mComponentViewersPool);
-	PROTECTED_FIELD(mAddComponentPanel);
-	PROTECTED_FIELD(mViewersLayout);
+	PROTECTED_FIELD(mAddComponentPanel).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mViewersLayout).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ActorViewer)

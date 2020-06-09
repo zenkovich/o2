@@ -103,15 +103,15 @@ CLASS_BASES_META(Editor::MoveTool)
 END_META;
 CLASS_FIELDS_META(Editor::MoveTool)
 {
-	PUBLIC_FIELD(snapStep);
+	PUBLIC_FIELD(snapStep).DEFAULT_VALUE(10.0f);
 	PROTECTED_FIELD(mHorDragHandle);
 	PROTECTED_FIELD(mVerDragHandle);
 	PROTECTED_FIELD(mBothDragHandle);
 	PROTECTED_FIELD(mLastSceneHandlesPos);
 	PROTECTED_FIELD(mSnapPosition);
-	PROTECTED_FIELD(mHandlesAngle);
+	PROTECTED_FIELD(mHandlesAngle).DEFAULT_VALUE(0.0f);
 	PROTECTED_FIELD(mBeforeTransforms);
-	PROTECTED_FIELD(mTransformAction);
+	PROTECTED_FIELD(mTransformAction).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::MoveTool)

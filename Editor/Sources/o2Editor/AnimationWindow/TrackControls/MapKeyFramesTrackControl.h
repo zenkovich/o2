@@ -271,10 +271,10 @@ CLASS_FIELDS_META(Editor::MapKeyFramesTrackControl)
 {
 	PRIVATE_FIELD(mHandlesGroups);
 	PRIVATE_FIELD(mTracks);
-	PRIVATE_FIELD(mTimeline);
-	PRIVATE_FIELD(mHandlesSheet);
+	PRIVATE_FIELD(mTimeline).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mHandlesSheet).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mHandlesCache);
-	PRIVATE_FIELD(mDisableHandlesUpdate);
+	PRIVATE_FIELD(mDisableHandlesUpdate).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)

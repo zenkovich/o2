@@ -21,7 +21,7 @@ const char* GetProjectPath()
 
 const char* GetProjectSettingPath()
 {
-	return "ProjectSettings.xml";
+	return "ProjectSettings.json";
 }
 
 bool IsStoppingOnLogErrors()
@@ -79,9 +79,9 @@ const char* GetBasicAtlasPath()
 const char* GetBuiltAssetsTreePath()
 {
 #if defined PLATFORM_WINDOWS
-	return "BuiltAssets/Windows/Data.xml";
+	return "BuiltAssets/Windows/Data.json";
 #elif defined PLATFORM_ANDROID
-	return "AndroidAssets/AssetsTree.xml";
+	return "AndroidAssets/AssetsTree.json";
 #endif
 }
 
@@ -97,7 +97,7 @@ const char* GetEditorBuiltAssetsPath()
 
 const char* GetEditorBuiltAssetsTreePath()
 {
-	return "BuiltAssets/Windows/EditorData.xml";
+	return "BuiltAssets/Windows/EditorData.json";
 }
 
 #ifdef PLATFORM_ANDROID

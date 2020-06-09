@@ -34,7 +34,7 @@ namespace o2
 
 	void BitmapFontAsset::LoadData(const String& path)
 	{
-		mFont = *o2Render.mFonts.FindMatch([&](auto fnt) { return fnt->GetFileName() == path; });
+		mFont = o2Render.mFonts.FindMatchOrDefault([&](auto fnt) { return fnt->GetFileName() == path; });
 
 		if (!mFont)
 			mFont = mnew BitmapFont(path);

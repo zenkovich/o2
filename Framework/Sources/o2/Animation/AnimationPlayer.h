@@ -81,10 +81,10 @@ CLASS_FIELDS_META(o2::AnimationPlayer)
 {
 	PUBLIC_FIELD(onTrackPlayerAdded);
 	PUBLIC_FIELD(onTrackPlayerRemove);
-	PROTECTED_FIELD(mClip);
-	PROTECTED_FIELD(mClipOwner);
-	PROTECTED_FIELD(mTarget);
-	PROTECTED_FIELD(mAnimationState);
+	PROTECTED_FIELD(mClip).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mClipOwner).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mTarget).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAnimationState).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mTrackPlayers);
 }
 END_META;

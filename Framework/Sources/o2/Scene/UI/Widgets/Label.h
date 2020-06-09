@@ -140,6 +140,9 @@ namespace o2
 
 		// Creates default text layer
 		void CreateDefaultText();
+
+		// It is called when deserialized
+		void OnDeserialized(const DataValue& node) override;
 	};
 }
 
@@ -166,9 +169,9 @@ CLASS_FIELDS_META(o2::Label)
 	PUBLIC_FIELD(expandBorder);
 	PUBLIC_FIELD(symbolsDistanceCoef);
 	PUBLIC_FIELD(linesDistanceCoef);
-	PROTECTED_FIELD(mTextDrawable);
-	PROTECTED_FIELD(mHorOverflow).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mVerOverflow).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTextDrawable).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHorOverflow).DEFAULT_VALUE(HorOverflow::None).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mVerOverflow).DEFAULT_VALUE(VerOverflow::None).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mExpandBorder).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
@@ -204,5 +207,6 @@ CLASS_METHODS_META(o2::Label)
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, CreateDefaultText);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

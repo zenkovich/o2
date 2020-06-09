@@ -148,7 +148,7 @@ namespace Editor
 					String subStr = category.SubStr(0, fnd);
 					category = fnd != -1 ? category.SubStr(fnd + 1) : "";
 
-					auto nextIt = *it->children.FindMatch([&](NodeData* x) { return x->name == subStr; });
+					auto nextIt = it->children.FindMatchOrDefault([&](NodeData* x) { return x->name == subStr; });
 					if (!nextIt)
 						nextIt = it->AddChild(subStr, nullptr);
 
@@ -238,7 +238,12 @@ namespace Editor
 		propertyNode->Setup((NodeData*)object, this);
 	}
 
-	ComponentsTreeNode::ComponentsTreeNode() :
+	void ComponentsTree::OnDeserialized(const DataValue& node)
+	{
+		Tree::OnDeserialized(node);
+	}
+
+	ComponentsTreeNode::ComponentsTreeNode():
 		TreeNode()
 	{
 		InitializeControls();
@@ -277,6 +282,7 @@ namespace Editor
 
 	void ComponentsTreeNode::OnDeserialized(const DataValue& node)
 	{
+		TreeNode::OnDeserialized(node);
 		InitializeControls();
 	}
 

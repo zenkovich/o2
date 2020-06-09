@@ -55,17 +55,17 @@ CLASS_BASES_META(Editor::TextViewer)
 END_META;
 CLASS_FIELDS_META(Editor::TextViewer)
 {
-	PROTECTED_FIELD(mColorProperty);
-	PROTECTED_FIELD(mAlphaProperty);
-	PROTECTED_FIELD(mFontProperty);
-	PROTECTED_FIELD(mTextProperty);
-	PROTECTED_FIELD(mHeightProperty);
-	PROTECTED_FIELD(mHorAlignProperty);
-	PROTECTED_FIELD(mVerAlignProperty);
-	PROTECTED_FIELD(mWordWrapProperty);
-	PROTECTED_FIELD(mDotsEndingsProperty);
-	PROTECTED_FIELD(mSymbolsDistCoefProperty);
-	PROTECTED_FIELD(mLinesDistCoefProperty);
+	PROTECTED_FIELD(mColorProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAlphaProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mFontProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTextProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHeightProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHorAlignProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mVerAlignProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mWordWrapProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mDotsEndingsProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSymbolsDistCoefProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLinesDistCoefProperty).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::TextViewer)

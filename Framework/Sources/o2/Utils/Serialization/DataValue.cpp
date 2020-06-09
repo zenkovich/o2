@@ -14,22 +14,36 @@ namespace o2
 		mData.flagsData.flags = Flags::Null;
 	}
 
-	DataValue::DataValue(const DataValue& other):
-		mDocument(other.mDocument), mData()
+	DataValue::DataValue(const DataValue& other, DataDocument& document):
+		mData(), mDocument(&document)
 	{
 		if (other.IsObject())
 		{
 			for (auto memberIt = other.BeginMember(); memberIt != other.EndMember(); ++memberIt)
-				AddMember(memberIt->name) = memberIt->value;
+			{
+				DataValue name(memberIt->name, *mDocument);
+				AddMember(name) = memberIt->value;
+			}
 		}
 		else if (other.IsArray())
 		{
 			for (auto element : other)
-				AddElement(element);
+			{
+				DataValue newElement(element, *mDocument);
+				AddElement(newElement);
+			}
+		}
+		else if (other.IsString())
+		{
+			SetString(other.GetString(), other.GetStringLength(), true);
 		}
 		else
 			mData = other.mData;
 	}
+
+	DataValue::DataValue(const DataValue& other):
+		DataValue(other, *other.mDocument)
+	{}
 
 	DataValue::DataValue():
 		mData(), mDocument(nullptr)
@@ -37,14 +51,7 @@ namespace o2
 		mData.flagsData.flags = Flags::Null;
 	}
 
-	DataValue::DataValue(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& buffer, const char* str):
-		mData(), mDocument(nullptr)
-	{
-		Transcode(buffer, str);
-		SetString(buffer.GetString(), buffer.GetLength(), false);
-	}
-
-	DataValue::DataValue(const wchar_t* string, int length, bool isCopy, DataDocument& document):
+	DataValue::DataValue(const char* string, int length, bool isCopy, DataDocument& document):
 		mData(), mDocument(&document)
 	{
 		SetString(string, length, isCopy);
@@ -54,6 +61,14 @@ namespace o2
 		mDocument(other.mDocument), mData(other.mData)
 	{
 		other.mData.flagsData.flags = Flags::Null;
+	}
+
+	DataValue::DataValue(const char* stringRef):
+		mData(), mDocument(nullptr)
+	{
+		mData.flagsData.flags = Flags::String | Flags::StringRef;
+		mData.stringPtrData.stringPtr = const_cast<char*>(stringRef);
+		mData.stringPtrData.stringLength = strlen(stringRef);
 	}
 
 	bool DataValue::Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF8<>>& target, const wchar_t* source)
@@ -137,33 +152,34 @@ namespace o2
 		mData.flagsData.flags = Flags::Null;
 	}
 
-	void DataValue::SetString(const wchar_t* string, int length, bool isCopy)
+	void DataValue::SetString(const char* string, int length, bool isCopy)
 	{
 		if (isCopy)
 		{
 			if (length <= ShortStringData::maxLength)
 			{
-				memcpy(mData.shortStringData.stringValue, string, (length + 1)*sizeof(wchar_t));
+				memcpy(mData.shortStringData.stringValue, string, (length + 1)*sizeof(char));
 				mData.flagsData.flags = Flags::String | Flags::ShortString;
 			}
 			else
 			{
-				UInt64 size = length*sizeof(wchar_t);
-				mData.stringPtrData.stringPtr = (wchar_t*)mDocument->mAllocator.Allocate(size);
+				UInt64 size = length*sizeof(char);
+				mData.stringPtrData.stringPtr = (char*)mDocument->mAllocator.Allocate(size + 1);
 				memcpy(mData.stringPtrData.stringPtr, string, size);
+				mData.stringPtrData.stringPtr[size] = '\0';
 				mData.stringPtrData.stringLength = (size_t)length;
 				mData.flagsData.flags = Flags::String | Flags::StringCopy;
 			}
 		}
 		else
 		{
-			mData.stringPtrData.stringPtr = const_cast<wchar_t*>(string);
+			mData.stringPtrData.stringPtr = const_cast<char*>(string);
 			mData.stringPtrData.stringLength = length;
 			mData.flagsData.flags = Flags::String | Flags::StringRef;
 		}
 	}
 
-	const wchar_t* DataValue::GetString() const
+	const char* DataValue::GetString() const
 	{
 		Assert(mData.flagsData.Is(Flags::String), "Can't get string, value isn't string");
 
@@ -178,7 +194,7 @@ namespace o2
 		Assert(mData.flagsData.Is(Flags::String), "Can't get string length, value isn't string");
 
 		if (mData.flagsData.Is(Flags::ShortString))
-			return wcslen(mData.shortStringData.stringValue);
+			return strlen(mData.shortStringData.stringValue);
 
 		return mData.stringPtrData.stringLength;
 	}
@@ -248,10 +264,13 @@ namespace o2
 			if (!other.IsString())
 				return false;
 
-			if (mData.flagsData.Is(Flags::StringRef) && other.mData.flagsData.Is(Flags::StringRef))
-				return mData.stringPtrData.stringPtr == mData.stringPtrData.stringPtr;
+			if (mData.flagsData.Is(Flags::StringRef) && other.mData.flagsData.Is(Flags::StringRef) &&
+				mData.stringPtrData.stringPtr == other.mData.stringPtrData.stringPtr)
+			{
+				return true;
+			}
 
-			return wcscmp(GetString(), other.GetString()) == 0;
+			return strcmp(GetString(), other.GetString()) == 0;
 		}
 
 		if (IsNumber())
@@ -290,19 +309,29 @@ namespace o2
 		if (other.IsObject())
 		{
 			for (auto memberIt = other.BeginMember(); memberIt != other.EndMember(); ++memberIt)
-				AddMember(memberIt->name) = memberIt->value;
+			{
+				DataValue name(memberIt->name, *mDocument);
+				AddMember(name) = memberIt->value;
+			}
 		}
 		else if (other.IsArray())
 		{
 			for (auto element : other)
-				AddElement(element);
+			{
+				DataValue newElement(element, *mDocument);
+				AddElement(newElement);
+			}
+		}
+		else if (other.IsString())
+		{
+			SetString(other.GetString(), other.GetStringLength(), true);
 		}
 		else
 			mData = other.mData;
 
 		return *this;
 	}
-	
+
 	DataValue& DataValue::operator=(DataValue&& other)
 	{
 		mDocument = other.mDocument;
@@ -344,7 +373,8 @@ namespace o2
 		if (auto res = FindMember(name))
 			return *res;
 
-		return AddMember(name);
+		DataValue t(name, *mDocument);
+		return AddMember(t);
 	}
 
 	const DataValue& DataValue::GetMember(const DataValue& name) const
@@ -352,7 +382,7 @@ namespace o2
 		if (auto res = FindMember(name))
 			return *res;
 
-		Assert(false, "Can't access data member");
+		Assert(false, "Can't find data member");
 
 		static DataValue empty;
 		return empty;
@@ -360,19 +390,19 @@ namespace o2
 
 	DataValue& DataValue::GetMember(const char* name)
 	{
-		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buf;
-		return GetMember(DataValue(buf, name));
+		DataValue t(name);
+		return GetMember(t);
 	}
 
 	const DataValue& DataValue::GetMember(const char* name) const
 	{
-		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buf;
-		return GetMember(DataValue(buf, name));
+		return GetMember(DataValue(name));
 	}
 
 	DataValue* DataValue::FindMember(const DataValue& name)
 	{
-		Assert(IsObject(), "Trying get member, but value isn't object");
+		if (!IsObject())
+			return nullptr;
 
 		for (auto memberIt = BeginMember(); memberIt != EndMember(); ++memberIt)
 		{
@@ -385,7 +415,8 @@ namespace o2
 
 	const DataValue* DataValue::FindMember(const DataValue& name) const
 	{
-		Assert(IsObject(), "Trying get member, but value isn't object");
+		if (!IsObject())
+			return nullptr;
 
 		for (auto memberIt = BeginMember(); memberIt != EndMember(); ++memberIt)
 		{
@@ -398,14 +429,12 @@ namespace o2
 
 	DataValue* DataValue::FindMember(const char* name)
 	{
-		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buf;
-		return FindMember(DataValue(buf, name));
+		return FindMember(DataValue(name));
 	}
 
 	const DataValue* DataValue::FindMember(const char* name) const
 	{
-		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buf;
-		return FindMember(DataValue(buf, name));
+		return FindMember(DataValue(name));
 	}
 
 	DataValue& DataValue::AddMember(DataValue& name)
@@ -423,7 +452,7 @@ namespace o2
 		{
 			if (mData.objectData.members)
 			{
-				UInt newCapacity = mData.objectData.capacity*2;
+				UInt newCapacity = Math::Max(mData.objectData.capacity*2, ObjectInitialCapacity);
 				mData.objectData.members = (DataMember*)mDocument->mAllocator.Reallocate(
 					mData.objectData.members, sizeof(DataMember)*mData.objectData.capacity,
 					sizeof(DataMember)*newCapacity);
@@ -437,7 +466,7 @@ namespace o2
 			}
 		}
 
-		DataMember* newMember = 
+		DataMember* newMember =
 			new (mData.objectData.members + mData.objectData.count) DataMember(name, DataValue(*mDocument));
 
 		mData.objectData.count++;
@@ -478,8 +507,7 @@ namespace o2
 
 	void DataValue::RemoveMember(const char* name)
 	{
-		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buf;
-		RemoveMember(DataValue(buf, name));
+		RemoveMember(DataValue(name));
 	}
 
 	DataMemberIterator DataValue::BeginMember()
@@ -527,6 +555,13 @@ namespace o2
 
 	DataValue& DataValue::AddElement(DataValue& value)
 	{
+		DataValue& newElement = AddElement();
+		newElement = std::move(value);
+		return newElement;
+	}
+
+	DataValue& DataValue::AddElement()
+	{
 		if (!IsArray())
 		{
 			mData.flagsData.flags = Flags::Array;
@@ -538,7 +573,7 @@ namespace o2
 
 		if (mData.arrayData.count == mData.arrayData.capacity)
 		{
-			UInt newCapacity = mData.arrayData.capacity*2;
+			UInt newCapacity = Math::Max(mData.arrayData.capacity*2, ArrayInitialCapacity);
 			mData.arrayData.elements = (DataValue*)mDocument->mAllocator.Reallocate(
 				mData.arrayData.elements, sizeof(DataValue)*mData.arrayData.capacity,
 				sizeof(DataValue)*newCapacity);
@@ -639,7 +674,7 @@ namespace o2
 						DataValue& newFieldNode = node.AddMember(field->GetName());
 
 						newFieldNode.SetValueDelta(*(IObject*)field->GetValuePtr(object),
-													*(IObject*)field->GetValuePtr(source));
+												   *(IObject*)field->GetValuePtr(source));
 
 						if (newFieldNode.IsEmpty())
 							node.RemoveMember(field->GetName());
@@ -752,8 +787,8 @@ namespace o2
 		DataValue(*this), mAllocator()
 	{}
 
-	DataDocument::DataDocument(const DataDocument& other):
-		DataValue(other), mAllocator()
+	DataDocument::DataDocument(const DataDocument& other) :
+		DataValue(other, *this), mAllocator()
 	{}
 
 	DataDocument::DataDocument(DataDocument&& other) :
@@ -790,24 +825,21 @@ namespace o2
 
 	bool DataDocument::LoadFromFile(const String& fileName, Format format /*= Format::JSON*/)
 	{
-		std::wifstream stream;
-		stream.open(fileName, std::ios::binary);
-		if (!stream.is_open())
+		InFile file(fileName);
+		if (!file.IsOpened())
 			return false;
 
-		stream.seekg(0, std::ios::end);
-		auto size = stream.tellg();
-		stream.seekg(0, std::ios::beg);
-		wchar_t* data = (wchar_t*)mAllocator.Allocate(size*sizeof(wchar_t));
-		stream.read(data, size);
+		auto size = file.GetDataSize();
+		char* data = (char*)mAllocator.Allocate(size);
+		file.ReadData(data, size);
 
- 		if (format == Format::JSON)
- 			return ParseJsonInplace(data, *this);
+		if (format == Format::JSON)
+			return ParseJsonInplace(data, *this);
 
 		return false;
 	}
 
-	bool DataDocument::LoadFromData(const WString& data, Format format /*= Format::JSON*/)
+	bool DataDocument::LoadFromData(const String& data, Format format /*= Format::JSON*/)
 	{
 		if (format == Format::JSON)
 			return ParseJson(data.Data(), *this);
@@ -817,22 +849,22 @@ namespace o2
 
 	bool DataDocument::SaveToFile(const String& fileName, Format format /*= Format::JSON*/) const
 	{
-		WString data = SaveAsWString(format);
+		String data = SaveAsString(format);
 
 		OutFile file(fileName);
 		if (!file.IsOpened())
 			return false;
 
-		file.WriteData(data.Data(), data.Length()*sizeof(wchar_t));
+		file.WriteData(data.Data(), data.Length());
 
 		return false;
 	}
 
-	WString DataDocument::SaveAsWString(Format format /*= Format::JSON*/) const
+	String DataDocument::SaveAsString(Format format /*= Format::JSON*/) const
 	{
 		if (format == Format::JSON)
 		{
-			WString buf;
+			String buf;
 			WriteJson(buf, *this);
 			return buf;
 		}

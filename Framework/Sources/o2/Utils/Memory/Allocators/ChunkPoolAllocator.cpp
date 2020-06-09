@@ -49,7 +49,7 @@ namespace o2
 
 	void* ChunkPoolAllocator::Allocate(size_t size)
 	{
-		if (mHead->currentSize + size > mHead->capacity)
+		if (!mHead || mHead->currentSize + size > mHead->capacity)
 			AddChunk(Math::Max(size, mChunkSize));
 
 		void* res = reinterpret_cast<std::byte*>(mHead->ptr) + mHead->currentSize;

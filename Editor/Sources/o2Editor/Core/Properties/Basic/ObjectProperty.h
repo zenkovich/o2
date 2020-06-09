@@ -121,9 +121,9 @@ END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
 	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mObjectViewer);
-	PROTECTED_FIELD(mNoHeader);
-	PROTECTED_FIELD(mExpanded);
+	PROTECTED_FIELD(mObjectViewer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNoHeader).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mExpanded).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mCaption);
 }
 END_META;

@@ -45,6 +45,10 @@ namespace o2
 		template<typename _attr_type, typename ... _args>
 		FieldInfo& AddAttribute(_args ... args);
 
+		// Sets default value
+		template<typename _type>
+		FieldInfo& SetDefaultValue(const _type& value);
+
 		// Returns name of field
 		const String& GetName() const;
 
@@ -177,4 +181,16 @@ namespace o2
 		mAttributes.Add(attribute);
 		return *this;
 	}
+
+	template<typename _type>
+	FieldInfo& FieldInfo::SetDefaultValue(const _type& value)
+	{
+// 		if (auto serializer = dynamic_cast<TypeSerializer<_type>*>(mSerializer))
+// 		{
+// 			serializer.defaultValue = value;
+// 			serializer.defaultValueDefined = true;
+// 		}
+		return *this;
+	}
+
 }

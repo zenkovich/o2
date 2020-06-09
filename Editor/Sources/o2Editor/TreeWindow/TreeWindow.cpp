@@ -449,7 +449,7 @@ namespace Editor
 		DataDocument data;
 		data.Set(selectedObjects);
 
-		WString clipboardData = data.SaveAsWString();
+		WString clipboardData = data.SaveAsString();
 
 		Clipboard::SetText(clipboardData);
 	}

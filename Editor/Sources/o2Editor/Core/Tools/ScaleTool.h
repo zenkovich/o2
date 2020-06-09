@@ -106,18 +106,18 @@ CLASS_BASES_META(Editor::ScaleTool)
 END_META;
 CLASS_FIELDS_META(Editor::ScaleTool)
 {
-	PUBLIC_FIELD(bothScaleSence);
+	PUBLIC_FIELD(bothScaleSence).DEFAULT_VALUE(0.01f);
 	PROTECTED_FIELD(mHorDragHandle);
 	PROTECTED_FIELD(mVerDragHandle);
 	PROTECTED_FIELD(mBothDragHandle);
-	PROTECTED_FIELD(mHandlesAngle);
+	PROTECTED_FIELD(mHandlesAngle).DEFAULT_VALUE(0.0f);
 	PROTECTED_FIELD(mSceneHandlesPos);
-	PROTECTED_FIELD(mHandlesSize);
+	PROTECTED_FIELD(mHandlesSize).DEFAULT_VALUE(Vec2F(100, 100));
 	PROTECTED_FIELD(mLastHorHandlePos);
 	PROTECTED_FIELD(mLastVerHandlePos);
 	PROTECTED_FIELD(mLastBothHandlePos);
 	PROTECTED_FIELD(mBeforeTransforms);
-	PROTECTED_FIELD(mTransformAction);
+	PROTECTED_FIELD(mTransformAction).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScaleTool)

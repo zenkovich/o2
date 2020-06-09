@@ -462,8 +462,8 @@ CLASS_BASES_META(Editor::CurvesEditor)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor)
 {
-	PUBLIC_FIELD(actionsListDelegate);
-	PROTECTED_FIELD(mContextMenu);
+	PUBLIC_FIELD(actionsListDelegate).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mContextMenu).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHandleSamplesStubInfo);
@@ -472,20 +472,20 @@ CLASS_FIELDS_META(Editor::CurvesEditor)
 	PROTECTED_FIELD(mSupportHandles);
 	PROTECTED_FIELD(mSupportHandlesGroup);
 	PROTECTED_FIELD(mSelectingHandlesBuf);
-	PROTECTED_FIELD(mSelectionSprite).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAdjustCurvesScale);
+	PROTECTED_FIELD(mSelectionSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAdjustCurvesScale).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mTextLeft);
-	PROTECTED_FIELD(mTextRight);
-	PROTECTED_FIELD(mTextTop);
-	PROTECTED_FIELD(mTextBottom);
+	PROTECTED_FIELD(mTextLeft).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTextRight).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTextTop).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTextBottom).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mTextBorder);
 	PROTECTED_FIELD(mSelectingPressedPoint);
 	PROTECTED_FIELD(mTransformFrame);
-	PROTECTED_FIELD(mTransformFrameVisible);
+	PROTECTED_FIELD(mTransformFrameVisible).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mTransformFrameBasis);
-	PROTECTED_FIELD(mIsViewScrolling);
-	PROTECTED_FIELD(mNeedAdjustView);
+	PROTECTED_FIELD(mIsViewScrolling).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mNeedAdjustView).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mBeforeTransformKeys);
 	PROTECTED_FIELD(mActionsList);
 }
@@ -581,7 +581,7 @@ CLASS_BASES_META(Editor::CurvesEditor::CurveHandle)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor::CurveHandle)
 {
-	PROTECTED_FIELD(curveInfo);
+	PROTECTED_FIELD(curveInfo).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveHandle)

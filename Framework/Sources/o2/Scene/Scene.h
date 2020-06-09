@@ -300,13 +300,13 @@ CLASS_FIELDS_META(o2::Scene)
 	PROTECTED_FIELD(mTags);
 	PROTECTED_FIELD(mDefaultLayer);
 	PROTECTED_FIELD(mCache);
-	PROTECTED_FIELD(mSceneViewSize);
-	PROTECTED_FIELD(mSceneView);
+	PROTECTED_FIELD(mSceneViewSize).DEFAULT_VALUE(Vec2F(1024, 768));
+	PROTECTED_FIELD(mSceneView).DEFAULT_VALUE(mnew ScreenResolutionSceneView());
 	PROTECTED_FIELD(mPrototypeLinksCache);
 	PROTECTED_FIELD(mChangedObjects);
 	PROTECTED_FIELD(mEditableObjects);
 	PROTECTED_FIELD(mDrawnObjects);
-	PROTECTED_FIELD(mIsDrawingScene);
+	PROTECTED_FIELD(mIsDrawingScene).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(o2::Scene)

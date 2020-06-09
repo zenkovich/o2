@@ -1291,7 +1291,7 @@ namespace o2
 			func->Invoke<void>(this);
 		}
 
-		o2UI.SaveStyle("basic_ui_style.xml");
+		o2UI.SaveStyle("basic_ui_style.json");
 	}
 }
 

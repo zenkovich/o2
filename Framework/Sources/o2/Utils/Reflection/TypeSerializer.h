@@ -10,6 +10,7 @@ namespace o2
 
 		virtual void Serialize(void* object, DataValue& data) const { }
 		virtual void Deserialize(void* object, const DataValue& data) const { }
+
 		virtual bool Equals(void* objectA, void* objectB) const { return false; }
 		virtual void Copy(void* objectA, void* objectB) const { }
 		virtual ITypeSerializer* Clone() const { return mnew ITypeSerializer(); }
@@ -37,6 +38,12 @@ namespace o2
 		static constexpr bool isSerializable = DataValue::IsSupports<_type>::value;
 		static constexpr bool isEqualsSupport = EqualsOperator::IsExists<_type>::value;
 		static constexpr bool isCopyable = std::is_assignable<_type&, _type>::value;
+
+	public:
+// 		_type defaultValue;
+// 		bool  defaultValueDefined = false;
+
+	public:
 
 		void Serialize(void* object, DataValue& data) const;
 		void Deserialize(void* object, const DataValue& data) const;

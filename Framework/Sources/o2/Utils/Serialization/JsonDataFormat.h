@@ -5,13 +5,13 @@
 namespace o2
 {
 	// Parses json document into DataDocument. It uses "Insitu" parse method: all strings will be referenced to buffer
-	bool ParseJsonInplace(wchar_t* str, DataDocument& document);
+	bool ParseJsonInplace(char* str, DataDocument& document);
 
 	// Parses json document into DataDocumen
-	bool ParseJson(const wchar_t* str, DataDocument& document);
+	bool ParseJson(const char* str, DataDocument& document);
 
 	// Writes data into json string
-	void WriteJson(WString& str, const DataDocument& document);
+	void WriteJson(String& str, const DataDocument& document);
 
 	// -------------------------------------------------------------------
 	// Json data document parser handler. Build DataDocument DOM structure
@@ -33,10 +33,10 @@ namespace o2
 		bool Int64(int64_t value);
 		bool Uint64(uint64_t value);
 		bool Double(double value);
-		bool String(const wchar_t* str, unsigned length, bool copy);
-		bool RawNumber(const wchar_t* str, unsigned length, bool copy);
+		bool String(const char* str, unsigned length, bool copy);
+		bool RawNumber(const char* str, unsigned length, bool copy);
 		bool StartObject();
-		bool Key(const wchar_t* str, unsigned length, bool copy);
+		bool Key(const char* str, unsigned length, bool copy);
 		bool EndObject(unsigned memberCount);
 		bool StartArray();
 		bool EndArray(unsigned elementCount);

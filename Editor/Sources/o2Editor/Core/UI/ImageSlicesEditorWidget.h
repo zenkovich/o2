@@ -84,14 +84,14 @@ CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 END_META;
 CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget)
 {
-	PRIVATE_FIELD(mPreviewImage);
-	PRIVATE_FIELD(mPreviewImageBack);
+	PRIVATE_FIELD(mPreviewImage).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mPreviewImageBack).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mBorderLeftHandle);
 	PRIVATE_FIELD(mBorderRightHandle);
 	PRIVATE_FIELD(mBorderTopHandle);
 	PRIVATE_FIELD(mBorderBottomHandle);
 	PRIVATE_FIELD(mBordersSmoothValue);
-	PRIVATE_FIELD(mBorderProperty);
+	PRIVATE_FIELD(mBorderProperty).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)

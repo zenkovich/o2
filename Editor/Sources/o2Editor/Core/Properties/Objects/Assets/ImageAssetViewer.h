@@ -48,7 +48,7 @@ CLASS_BASES_META(Editor::ImageAssetViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)
 {
-	PRIVATE_FIELD(mSlicesEditor);
+	PRIVATE_FIELD(mSlicesEditor).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageAssetViewer)

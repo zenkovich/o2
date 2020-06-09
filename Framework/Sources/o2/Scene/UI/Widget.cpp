@@ -560,7 +560,7 @@ namespace o2
 
 	WidgetState* Widget::GetStateObject(const String& name) const
 	{
-		return *mStates.FindMatch([&](auto state) { return state->name == name; });
+		return mStates.FindMatchOrDefault([&](auto state) { return state->name == name; });
 	}
 
 	const Vector<WidgetState*>& Widget::GetStates() const
@@ -1050,6 +1050,9 @@ namespace o2
 
 		for (auto layer : mLayers)
 			layer->SetOwnerWidget(this);
+
+		for (auto layer : mLayers)
+			OnLayerAdded(layer);
 
 		mChildWidgets.Clear();
 		for (auto child : mChildren)

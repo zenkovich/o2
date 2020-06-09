@@ -145,6 +145,9 @@ namespace o2
 		// Returns elements of array that pass function
 		const _type* FindMatch(const Function<bool(const _type&)>& match) const;
 
+		// Returns elements of array that pass function or default value
+		_type FindMatchOrDefault(const Function<bool(const _type&)>& match) const;
+
 		// Returns elements of array that pass function
 		_type* FindMatch(const Function<bool(const _type&)>& match);
 
@@ -734,6 +737,16 @@ namespace o2
 		}
 
 		return nullptr;
+	}
+
+	template<typename _type>
+	_type Vector<_type>::FindMatchOrDefault(const Function<bool(const _type&)>& match) const
+	{
+		auto fnd = FindMatch(match);
+		if (!fnd)
+			return _type();
+
+		return *fnd;
 	}
 
 	template<typename _type>

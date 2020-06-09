@@ -89,7 +89,7 @@ namespace Editor
 		WString mFilterStr; // Filtering string
 
 		AnimationClip* mAnimation = nullptr; // Looking animation
-		ActorRef   mActor;               // Looking actor
+		ActorRef       mActor;               // Looking actor
 
 		NodeData         mRoot;         // Root properties data node
 		Vector<IObject*> mPassedObject; // Tree processing passed objects
@@ -189,7 +189,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
 	PRIVATE_FIELD(mFilterStr);
-	PRIVATE_FIELD(mAnimation);
+	PRIVATE_FIELD(mAnimation).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mActor);
 	PRIVATE_FIELD(mRoot);
 	PRIVATE_FIELD(mPassedObject);
@@ -227,8 +227,8 @@ CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
 	PRIVATE_FIELD(mIcon);
 	PRIVATE_FIELD(mAddButton);
 	PRIVATE_FIELD(mRemoveButton);
-	PRIVATE_FIELD(mData);
-	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mData).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mTree).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)

@@ -56,8 +56,8 @@ namespace Editor
 			SERIALIZABLE(ProjectConfig);
 		};
 	protected:
-		String mConfigPath = "EditorConfig.xml";
-		String mGlobalConfigPath = "Config.xml";
+		String mConfigPath = "EditorConfig.json";
+		String mGlobalConfigPath = "Config.json";
 
 		bool          mConfigsLoaded = false; // True if configurations were loaded
 		ProjectConfig mProjectConfig;         // Project editor config
@@ -96,9 +96,9 @@ CLASS_BASES_META(Editor::EditorConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)
 {
-	PROTECTED_FIELD(mConfigPath);
-	PROTECTED_FIELD(mGlobalConfigPath);
-	PROTECTED_FIELD(mConfigsLoaded);
+	PROTECTED_FIELD(mConfigPath).DEFAULT_VALUE("EditorConfig.json");
+	PROTECTED_FIELD(mGlobalConfigPath).DEFAULT_VALUE("Config.json");
+	PROTECTED_FIELD(mConfigsLoaded).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mProjectConfig);
 	PROTECTED_FIELD(mGlobalConfig);
 }
@@ -138,9 +138,9 @@ CLASS_BASES_META(Editor::EditorConfig::ProjectConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::ProjectConfig)
 {
-	PUBLIC_FIELD(mWindowSize).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mWindowSize).DEFAULT_VALUE(Vec2I(800, 600)).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mWindowPosition).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mMaximized).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mMaximized).DEFAULT_VALUE(true).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mLayout).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;

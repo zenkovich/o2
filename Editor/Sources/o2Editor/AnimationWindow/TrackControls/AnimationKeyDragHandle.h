@@ -50,10 +50,10 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
 	PUBLIC_FIELD(trackPath);
-	PUBLIC_FIELD(track);
-	PUBLIC_FIELD(trackControl);
-	PUBLIC_FIELD(keyUid);
-	PUBLIC_FIELD(isMapping);
+	PUBLIC_FIELD(track).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(trackControl).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(keyUid).DEFAULT_VALUE(0);
+	PUBLIC_FIELD(isMapping).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeyDragHandle)

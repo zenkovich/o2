@@ -224,20 +224,20 @@ CLASS_BASES_META(Editor::KeyHandlesSheet)
 END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
-	PRIVATE_FIELD(mSelectionFrameOffsets);
-	PRIVATE_FIELD(mSelectionFrameCursorOffsets);
-	PRIVATE_FIELD(mAnimationWindow);
+	PRIVATE_FIELD(mSelectionFrameOffsets).DEFAULT_VALUE(RectF(-9, -3, 5, 2));
+	PRIVATE_FIELD(mSelectionFrameCursorOffsets).DEFAULT_VALUE(RectF(-2, -3, 2, 2));
+	PRIVATE_FIELD(mAnimationWindow).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mTrackControls);
 	PRIVATE_FIELD(mTrackControlsMap);
 	PRIVATE_FIELD(mHandlesGroups);
-	PRIVATE_FIELD(mContextMenu);
+	PRIVATE_FIELD(mContextMenu).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mContextMenuPressPoint);
-	PRIVATE_FIELD(mNeedUpdateSelectionFrame);
-	PRIVATE_FIELD(mHandleHasMoved);
-	PRIVATE_FIELD(mSelectionFrame);
+	PRIVATE_FIELD(mNeedUpdateSelectionFrame).DEFAULT_VALUE(false);
+	PRIVATE_FIELD(mHandleHasMoved).DEFAULT_VALUE(false);
+	PRIVATE_FIELD(mSelectionFrame).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mSelectionRect);
 	PRIVATE_FIELD(mBeginSelectPoint);
-	PRIVATE_FIELD(mIsFrameSelecting);
+	PRIVATE_FIELD(mIsFrameSelecting).DEFAULT_VALUE(false);
 	PRIVATE_FIELD(mBeginSelectHandles);
 	PRIVATE_FIELD(mLeftFrameDragHandle);
 	PRIVATE_FIELD(mRightFrameDragHandle);

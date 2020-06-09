@@ -154,7 +154,7 @@ namespace o2
 		// Destructor
 		~UIManager();
 
-		// Tries to load style "ui_style.xml"
+		// Tries to load style "ui_style.json"
 		void TryLoadStyle();
 
 		friend class Application;

@@ -186,7 +186,7 @@ namespace o2
 		DataDocument metaData;
 		metaData.LoadFromFile(this->assetsPath + path + ".meta");
 
-		AssetMeta* meta;
+		AssetMeta* meta = nullptr;;
 		meta = metaData;
 
 		AssetInfo* asset = mnew AssetInfo();

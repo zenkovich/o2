@@ -122,7 +122,7 @@ namespace o2
 
 		mStyleSamples.Clear();
 
-		mStyleSamples = styleData;
+		styleData.Get(mStyleSamples);
 
 		for (auto styleSample : mStyleSamples)
 			styleSample->Hide(true);
@@ -339,7 +339,7 @@ namespace o2
 
 	void UIManager::TryLoadStyle()
 	{
-		if (o2Assets.IsAssetExist("ui_style.xml"))
-			LoadStyle("ui_style.xml");
+		if (o2Assets.IsAssetExist("ui_style.json"))
+			LoadStyle("ui_style.json");
 	}
 }

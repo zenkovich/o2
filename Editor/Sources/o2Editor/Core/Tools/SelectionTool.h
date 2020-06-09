@@ -82,11 +82,11 @@ CLASS_BASES_META(Editor::SelectionTool)
 END_META;
 CLASS_FIELDS_META(Editor::SelectionTool)
 {
-	PROTECTED_FIELD(mSelectionSprite);
+	PROTECTED_FIELD(mSelectionSprite).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mCurrentSelectingObjects);
 	PROTECTED_FIELD(mBeforeSelectingObjects);
 	PROTECTED_FIELD(mPressPoint);
-	PROTECTED_FIELD(mSelectingObjects);
+	PROTECTED_FIELD(mSelectingObjects).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::SelectionTool)

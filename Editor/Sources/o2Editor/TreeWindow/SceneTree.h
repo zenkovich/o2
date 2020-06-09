@@ -226,7 +226,7 @@ CLASS_FIELDS_META(Editor::SceneTree)
 	PROTECTED_FIELD(mAttachedToSceneEvents);
 	PROTECTED_FIELD(mDragActorPropertyField);
 	PROTECTED_FIELD(mDragComponentPropertyField);
-	PROTECTED_FIELD(mWatchEditor);
+	PROTECTED_FIELD(mWatchEditor).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneTree)
@@ -276,13 +276,13 @@ CLASS_BASES_META(Editor::SceneTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::SceneTreeNode)
 {
-	PROTECTED_FIELD(mTargetObject);
-	PROTECTED_FIELD(mNameDrawable);
-	PROTECTED_FIELD(mLockToggle);
-	PROTECTED_FIELD(mEnableToggle);
-	PROTECTED_FIELD(mLinkBtn);
-	PROTECTED_FIELD(mNameEditBox);
-	PROTECTED_FIELD(mEditState);
+	PROTECTED_FIELD(mTargetObject).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNameDrawable).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLockToggle).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mEnableToggle).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLinkBtn).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNameEditBox).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mEditState).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneTreeNode)

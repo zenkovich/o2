@@ -111,11 +111,11 @@ CLASS_BASES_META(Editor::LogWindow)
 END_META;
 CLASS_FIELDS_META(Editor::LogWindow)
 {
-	PROTECTED_FIELD(mList);
-	PROTECTED_FIELD(mLastMessageView);
-	PROTECTED_FIELD(mMessagesCountLabel);
-	PROTECTED_FIELD(mWarningsCountLabel);
-	PROTECTED_FIELD(mErrorsCountLabel);
+	PROTECTED_FIELD(mList).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLastMessageView).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mMessagesCountLabel).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mWarningsCountLabel).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mErrorsCountLabel).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mAllMessages);
 	PROTECTED_FIELD(mVisibleMessages);
 	PROTECTED_FIELD(mRegularMessagesEnabled);

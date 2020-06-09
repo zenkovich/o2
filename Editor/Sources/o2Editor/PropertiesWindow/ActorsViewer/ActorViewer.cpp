@@ -214,7 +214,7 @@ namespace Editor
 
 		bool usingDefaultViewer = false;
 
-		auto viewerSample = *mAvailableActorPropertiesViewers.FindMatch([&](IActorPropertiesViewer* x) {
+		auto viewerSample = mAvailableActorPropertiesViewers.FindMatchOrDefault([&](IActorPropertiesViewer* x) {
 			return x->GetActorType() == type; });
 
 		if (!viewerSample)
@@ -276,7 +276,7 @@ namespace Editor
 		{
 			bool usingDefaultComponentViewer = false;
 
-			auto viewerSample = *mAvailableComponentsViewers.FindMatch([&](IActorComponentViewer* x) {
+			auto viewerSample = mAvailableComponentsViewers.FindMatchOrDefault([&](IActorComponentViewer* x) {
 				return x->GetComponentType() == type; });
 
 			if (!viewerSample)

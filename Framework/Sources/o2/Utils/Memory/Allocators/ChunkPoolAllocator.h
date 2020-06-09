@@ -33,7 +33,7 @@ namespace o2
 		IAllocator* mBaseAllocator;
 
 		size_t mChunkSize;
-		Chunk* mHead;
+		Chunk* mHead = nullptr;
 
 	private:
 		void AddChunk(size_t capacity);

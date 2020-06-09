@@ -66,7 +66,7 @@ CLASS_BASES_META(o2::CircleParticlesEmitterShape)
 END_META;
 CLASS_FIELDS_META(o2::CircleParticlesEmitterShape)
 {
-	PUBLIC_FIELD(radius);
+	PUBLIC_FIELD(radius).DEFAULT_VALUE(0);
 }
 END_META;
 CLASS_METHODS_META(o2::CircleParticlesEmitterShape)

@@ -3,14 +3,14 @@
 
 namespace o2
 {
-	WString ISerializable::SerializeToString() const
+	String ISerializable::SerializeToString() const
 	{
 		DataDocument doc;
 		Serialize(doc);
-		return doc.SaveAsWString();
+		return doc.SaveAsString();
 	}
 
-	void ISerializable::DeserializeFromString(const WString& str)
+	void ISerializable::DeserializeFromString(const String& str)
 	{
 		DataDocument doc;
 		doc.LoadFromData(str);

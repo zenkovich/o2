@@ -246,7 +246,7 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnDisabled();
 
-		mEnabledTool = *mTools.FindMatch([&](auto x) { return x->GetType() == TypeOf(_type); });
+		mEnabledTool = mTools.FindMatchOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); });
 
 		if (mEnabledTool)
 			mEnabledTool->OnEnabled();
@@ -264,15 +264,15 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneEditScreen)
 {
 	PUBLIC_FIELD(onSelectionChanged);
-	PROTECTED_FIELD(mSelectedObjectColor);
-	PROTECTED_FIELD(mMultiSelectedObjectColor);
-	PROTECTED_FIELD(mObjectMinimalSelectionSize);
+	PROTECTED_FIELD(mSelectedObjectColor).DEFAULT_VALUE(Color4(220, 220, 220, 255));
+	PROTECTED_FIELD(mMultiSelectedObjectColor).DEFAULT_VALUE(Color4(220, 220, 220, 100));
+	PROTECTED_FIELD(mObjectMinimalSelectionSize).DEFAULT_VALUE(10.0f);
 	PROTECTED_FIELD(mSceneTree);
 	PROTECTED_FIELD(mSelectedObjects);
 	PROTECTED_FIELD(mTopSelectedObjects);
-	PROTECTED_FIELD(mSelectedFromThis);
+	PROTECTED_FIELD(mSelectedFromThis).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mTools);
-	PROTECTED_FIELD(mEnabledTool);
+	PROTECTED_FIELD(mEnabledTool).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mDragHandles);
 }
 END_META;

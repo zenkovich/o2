@@ -68,7 +68,7 @@ CLASS_BASES_META(Editor::GameWindow::GameView)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::GameView)
 {
-	PROTECTED_FIELD(mRenderTargetSprite);
+	PROTECTED_FIELD(mRenderTargetSprite).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRenderTarget);
 }
 END_META;

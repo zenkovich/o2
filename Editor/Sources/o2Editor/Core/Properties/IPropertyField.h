@@ -439,6 +439,7 @@ namespace Editor
 	template<typename _type>
 	void TPropertyField<_type>::StoreValues(Vector<DataDocument>& data) const
 	{
+		return;
 		data.Clear();
 		for (auto ptr : mValuesProxies)
 		{
@@ -531,14 +532,14 @@ CLASS_FIELDS_META(Editor::IPropertyField)
 {
 	PUBLIC_FIELD(onChanged);
 	PUBLIC_FIELD(onChangeCompleted);
-	PROTECTED_FIELD(mFieldInfo);
-	PROTECTED_FIELD(mParentContext);
-	PROTECTED_FIELD(mRevertable);
+	PROTECTED_FIELD(mFieldInfo).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mParentContext).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mRevertable).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mValuesProxies);
-	PROTECTED_FIELD(mValuesDifferent);
-	PROTECTED_FIELD(mRevertBtn);
-	PROTECTED_FIELD(mRemoveBtn);
-	PROTECTED_FIELD(mCaption);
+	PROTECTED_FIELD(mValuesDifferent).DEFAULT_VALUE(true);
+	PROTECTED_FIELD(mRevertBtn).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mRemoveBtn).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mValuesPath);
 	PROTECTED_FIELD(mBeforeChangeValues);
 }
@@ -585,7 +586,7 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::TPropertyField<_type>)
 {
-	PROTECTED_FIELD(mCommonValue);
+	PROTECTED_FIELD(mCommonValue).DEFAULT_VALUE(_type());
 }
 END_META;
 META_TEMPLATES(typename _type)

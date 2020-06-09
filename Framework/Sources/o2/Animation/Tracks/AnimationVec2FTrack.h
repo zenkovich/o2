@@ -287,8 +287,8 @@ END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>)
 {
 	PUBLIC_FIELD(keys);
-	PROTECTED_FIELD(mBatchChange);
-	PROTECTED_FIELD(mChangedKeys);
+	PROTECTED_FIELD(mBatchChange).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mChangedKeys).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mKeys).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
@@ -340,14 +340,14 @@ CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>::Player)
 	PUBLIC_FIELD(target);
 	PUBLIC_FIELD(targetDelegate);
 	PUBLIC_FIELD(targetProxy);
-	PROTECTED_FIELD(mTrack);
+	PROTECTED_FIELD(mTrack).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mCurrentValue);
-	PROTECTED_FIELD(mPrevInDurationTime);
-	PROTECTED_FIELD(mPrevKey);
-	PROTECTED_FIELD(mPrevKeyApproximation);
-	PROTECTED_FIELD(mTarget);
+	PROTECTED_FIELD(mPrevInDurationTime).DEFAULT_VALUE(0.0f);
+	PROTECTED_FIELD(mPrevKey).DEFAULT_VALUE(0);
+	PROTECTED_FIELD(mPrevKeyApproximation).DEFAULT_VALUE(0);
+	PROTECTED_FIELD(mTarget).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mTargetDelegate);
-	PROTECTED_FIELD(mTargetProxy);
+	PROTECTED_FIELD(mTargetProxy).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)

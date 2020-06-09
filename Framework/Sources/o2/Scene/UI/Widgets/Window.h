@@ -173,8 +173,8 @@ CLASS_FIELDS_META(o2::Window)
 {
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
-	PROTECTED_FIELD(mIconLayerPath);
-	PROTECTED_FIELD(mCaptionLayerPath);
+	PROTECTED_FIELD(mIconLayerPath).DEFAULT_VALUE("icon");
+	PROTECTED_FIELD(mCaptionLayerPath).DEFAULT_VALUE("caption");
 	PROTECTED_FIELD(mOptionsMenu);
 	PROTECTED_FIELD(mBackCursorArea);
 	PROTECTED_FIELD(mHeadDragHandle);

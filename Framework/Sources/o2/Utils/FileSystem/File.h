@@ -32,7 +32,7 @@ namespace o2
 		bool Close();
 
 		// Returns file data as string
-		WString ReadFullData();
+		String ReadFullData();
 
 		// Read full file data and return size of ridden data
 		UInt ReadFullData(void *dataPtr);

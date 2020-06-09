@@ -94,11 +94,11 @@ END_META;
 CLASS_FIELDS_META(Editor::PropertiesWindow)
 {
 	PROTECTED_FIELD(mTargets);
-	PROTECTED_FIELD(mCurrentViewer);
+	PROTECTED_FIELD(mCurrentViewer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mViewers);
-	PROTECTED_FIELD(mDefaultViewer);
+	PROTECTED_FIELD(mDefaultViewer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mOnTargetsChangedDelegate);
-	PROTECTED_FIELD(mTargetsChanged);
+	PROTECTED_FIELD(mTargetsChanged).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertiesWindow)

@@ -158,25 +158,25 @@ CLASS_BASES_META(Editor::ScrollView)
 END_META;
 CLASS_FIELDS_META(Editor::ScrollView)
 {
-	PUBLIC_FIELD(horGridEnabled);
-	PUBLIC_FIELD(verGridEnabled);
-	PROTECTED_FIELD(mReady);
-	PROTECTED_FIELD(mRenderTargetSprite);
+	PUBLIC_FIELD(horGridEnabled).DEFAULT_VALUE(true);
+	PUBLIC_FIELD(verGridEnabled).DEFAULT_VALUE(true);
+	PROTECTED_FIELD(mReady).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mRenderTargetSprite).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRenderTarget);
-	PROTECTED_FIELD(mNeedRedraw);
+	PROTECTED_FIELD(mNeedRedraw).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mBackColor).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mGridColor).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mViewArea);
 	PROTECTED_FIELD(mViewCamera);
-	PROTECTED_FIELD(mViewCameraTargetScale);
-	PROTECTED_FIELD(mViewCameraScaleSence);
-	PROTECTED_FIELD(mViewCameraScaleElasticyCoef);
+	PROTECTED_FIELD(mViewCameraTargetScale).DEFAULT_VALUE(Vec2F(1, 1));
+	PROTECTED_FIELD(mViewCameraScaleSence).DEFAULT_VALUE(0.1f / 120.0f);
+	PROTECTED_FIELD(mViewCameraScaleElasticyCoef).DEFAULT_VALUE(30.0f);
 	PROTECTED_FIELD(mViewCameraTargetPos);
 	PROTECTED_FIELD(mViewCameraVelocity);
-	PROTECTED_FIELD(mViewCameraPosElasticyCoef);
-	PROTECTED_FIELD(mViewCameraVelocityDampingCoef);
-	PROTECTED_FIELD(mViewCameraMinScale);
-	PROTECTED_FIELD(mViewCameraMaxScale);
+	PROTECTED_FIELD(mViewCameraPosElasticyCoef).DEFAULT_VALUE(30.0f);
+	PROTECTED_FIELD(mViewCameraVelocityDampingCoef).DEFAULT_VALUE(10.0f);
+	PROTECTED_FIELD(mViewCameraMinScale).DEFAULT_VALUE(0.001f);
+	PROTECTED_FIELD(mViewCameraMaxScale).DEFAULT_VALUE(10000.0f);
 	PROTECTED_FIELD(mLocalToScreenTransform);
 	PROTECTED_FIELD(mScreenToLocalTransform);
 }

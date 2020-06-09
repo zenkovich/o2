@@ -324,7 +324,7 @@ namespace o2
 
 		Widget::CopyData(other);
 
-		mTextDrawable    = GetLayerDrawable<Text>("text");
+		mTextDrawable = GetLayerDrawable<Text>("text");
 		mHorOverflow  = other.mHorOverflow;
 		mVerOverflow  = other.mVerOverflow;
 		mExpandBorder = other.mExpandBorder;
@@ -339,7 +339,7 @@ namespace o2
 	void Label::OnLayerAdded(WidgetLayer* layer)
 	{
 		if (layer->name == "text" && layer->GetDrawable() && layer->GetDrawable()->GetType() == TypeOf(Text))
-			mTextDrawable = (Text*)layer->GetDrawable();
+			mTextDrawable = dynamic_cast<Text*>(layer->GetDrawable());
 	}
 
 	void Label::CreateDefaultText()
@@ -347,6 +347,13 @@ namespace o2
 		mTextDrawable = dynamic_cast<Text*>(AddLayer("text", mnew Text())->GetDrawable());
 		mTextDrawable->SetFontAsset(VectorFontAssetRef("stdFont.ttf"));
 	}
+
+	void Label::OnDeserialized(const DataValue& node)
+	{
+		Widget::OnDeserialized(node);
+		mTextDrawable = GetLayerDrawable<Text>("text");
+	}
+
 }
 
 ENUM_META(o2::Label::HorOverflow)

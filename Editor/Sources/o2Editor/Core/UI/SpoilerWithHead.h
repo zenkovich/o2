@@ -59,9 +59,9 @@ CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
 	PUBLIC_FIELD(onOptionsPressed);
 	PUBLIC_FIELD(onSavePressed);
-	PRIVATE_FIELD(mOptionsBtn);
-	PRIVATE_FIELD(mSaveBtn);
-	PRIVATE_FIELD(mIcon);
+	PRIVATE_FIELD(mOptionsBtn).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mSaveBtn).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mIcon).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)

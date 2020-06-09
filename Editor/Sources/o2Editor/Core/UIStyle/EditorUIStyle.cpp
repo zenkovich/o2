@@ -4370,7 +4370,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		String generateDateCachePath = "uiGeneratedDate.xml";
+		String generateDateCachePath = "uiGeneratedDate.json";
 
 		String thisSourcePath = "../../../Sources/Core/UIStyle/EditorUIStyle.cpp";
 		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
@@ -4406,7 +4406,7 @@ namespace Editor
 
 		if (saveStyle)
 		{
-			o2UI.SaveStyle("editor_ui_style.xml");
+			o2UI.SaveStyle("editor_ui_style.json");
 
 			data.Clear();
 			data = thisSourceEditedDate;

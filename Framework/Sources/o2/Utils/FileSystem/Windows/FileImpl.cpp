@@ -42,13 +42,13 @@ namespace o2
         return length;
     }
 
-    WString InFile::ReadFullData()
+    String InFile::ReadFullData()
     {
         UInt len = GetDataSize();
-        wchar_t* buffer = mnew wchar_t[len/sizeof(wchar_t) + 1];
+        char* buffer = mnew char[len + 1];
 
         ReadData(buffer, len);
-        buffer[len/sizeof(wchar_t)] = '\0';
+        buffer[len] = '\0';
 
 		return WString(buffer);
     }

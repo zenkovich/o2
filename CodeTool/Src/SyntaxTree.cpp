@@ -499,6 +499,11 @@ const string& SyntaxVariable::GetName() const
 	return mName;
 }
 
+const std::string& SyntaxVariable::GetDefaultValue() const
+{
+	return mDefaultValue;
+}
+
 SyntaxProtectionSection SyntaxVariable::GetClassSection() const
 {
 	return mClassSection;

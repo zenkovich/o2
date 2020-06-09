@@ -464,7 +464,7 @@ namespace Editor
 
 		for (auto& kv : keys)
 		{
-			auto fnd = *mTrackControlsMap.FindMatch([=](const Pair<String, ITrackControl*>& p) { return p.first == kv.first; });
+			auto fnd = mTrackControlsMap.FindMatchOrDefault([=](const Pair<String, ITrackControl*>& p) { return p.first == kv.first; });
 			if (!fnd.second)
 				continue;
 
@@ -531,7 +531,7 @@ namespace Editor
 		DataDocument data;
 		SerializeKeys(data, keys, relativeTime);
 
-		Clipboard::SetText(data.SaveAsWString());
+		Clipboard::SetText(data.SaveAsString());
 	}
 
 	void KeyHandlesSheet::PasteKeys()

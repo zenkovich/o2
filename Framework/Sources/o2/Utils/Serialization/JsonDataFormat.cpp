@@ -7,12 +7,12 @@
 
 namespace o2
 {
-	bool ParseJsonInplace(wchar_t* str, DataDocument& document)
+	bool ParseJsonInplace(char* str, DataDocument& document)
 	{
 		JsonDataDocumentParseHandler handler(document);
-		rapidjson::GenericReader<rapidjson::UTF16<>, rapidjson::UTF16<>> reader;
-		rapidjson::GenericInsituStringStream<rapidjson::UTF16<>> stream(str);
-		auto result = reader.Parse<rapidjson::kParseInsituFlag>(stream, handler);
+		rapidjson::Reader reader;
+		rapidjson::InsituStringStream stream(str);
+		auto result = reader.Parse<rapidjson::kParseInsituFlag | rapidjson::kParseStopWhenDoneFlag>(stream, handler);
 		if (!result.IsError())
 		{
 			(DataValue&)document = std::move(*handler.stack.Pop<DataValue>());
@@ -22,25 +22,25 @@ namespace o2
 		return false;
 	}
 
-	bool ParseJson(const wchar_t* str, DataDocument& document)
+	bool ParseJson(const char* str, DataDocument& document)
 	{
 		JsonDataDocumentParseHandler handler(document);
-		rapidjson::GenericReader<rapidjson::UTF16<>, rapidjson::UTF16<>> reader;
-		rapidjson::GenericStringStream<rapidjson::UTF16<>> stream(str);
+		rapidjson::Reader reader;
+		rapidjson::StringStream stream(str);
 		auto result = reader.Parse(stream, handler);
 		if (!result.IsError())
 		{
-			(DataValue&)document = *handler.stack.Pop<DataValue>();
+			(DataValue&)document = std::move(*handler.stack.Pop<DataValue>());
 			return true;
 		}
 
 		return false;
 	}
 
-	void WriteJson(WString& str, const DataDocument& document)
+	void WriteJson(String& str, const DataDocument& document)
 	{
-		rapidjson::GenericStringBuffer<rapidjson::UTF16<>> buffer;
-		rapidjson::PrettyWriter<rapidjson::GenericStringBuffer<rapidjson::UTF16<>>, rapidjson::UTF16<>, rapidjson::UTF16<>> writer(buffer);
+		rapidjson::StringBuffer buffer;
+		rapidjson::PrettyWriter writer(buffer);
 		document.Write(writer);
 		str = buffer.GetString();
 	}
@@ -91,13 +91,13 @@ namespace o2
 		return true;
 	}
 
-	bool JsonDataDocumentParseHandler::String(const wchar_t* str, unsigned length, bool copy)
+	bool JsonDataDocumentParseHandler::String(const char* str, unsigned length, bool copy)
 	{
 		new (stack.template Push<DataValue>()) DataValue(str, length, copy, document);
 		return true;
 	}
 
-	bool JsonDataDocumentParseHandler::RawNumber(const wchar_t* str, unsigned length, bool copy)
+	bool JsonDataDocumentParseHandler::RawNumber(const char* str, unsigned length, bool copy)
 	{
 		return String(str, length, copy);
 	}
@@ -108,7 +108,7 @@ namespace o2
 		return true;
 	}
 
-	bool JsonDataDocumentParseHandler::Key(const wchar_t* str, unsigned length, bool copy)
+	bool JsonDataDocumentParseHandler::Key(const char* str, unsigned length, bool copy)
 	{
 		String(str, length, copy);
 		return true;

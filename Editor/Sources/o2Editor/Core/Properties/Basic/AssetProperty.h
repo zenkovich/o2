@@ -137,15 +137,15 @@ CLASS_BASES_META(Editor::AssetProperty)
 END_META;
 CLASS_FIELDS_META(Editor::AssetProperty)
 {
-	PROTECTED_FIELD(mBox);
-	PROTECTED_FIELD(mNameText);
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mCaption);
-	PROTECTED_FIELD(mCreateInstanceBtn);
-	PROTECTED_FIELD(mHeaderContainer);
-	PROTECTED_FIELD(mAssetObjectViewer);
-	PROTECTED_FIELD(mAssetType);
-	PROTECTED_FIELD(mAvailableToHaveInstance);
+	PROTECTED_FIELD(mBox).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNameText).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCreateInstanceBtn).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAssetObjectViewer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAssetType).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAvailableToHaveInstance).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetProperty)

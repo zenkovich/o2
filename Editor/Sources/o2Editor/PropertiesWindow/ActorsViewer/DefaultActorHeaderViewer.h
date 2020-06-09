@@ -87,16 +87,16 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 {
 	PUBLIC_FIELD(mActors);
-	PUBLIC_FIELD(mDataView);
-	PUBLIC_FIELD(mEnableProperty);
-	PUBLIC_FIELD(mNameProperty);
-	PUBLIC_FIELD(mLockProperty);
-	PUBLIC_FIELD(mPrototypeProperty);
-	PUBLIC_FIELD(mTagsProperty);
-	PUBLIC_FIELD(mLayerProperty);
-	PUBLIC_FIELD(mPrototypeApplyBtn);
-	PUBLIC_FIELD(mPrototypeRevertBtn);
-	PUBLIC_FIELD(mPrototypeBreakBtn);
+	PUBLIC_FIELD(mDataView).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mEnableProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mNameProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mLockProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mPrototypeProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mTagsProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mLayerProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mPrototypeApplyBtn).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mPrototypeRevertBtn).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mPrototypeBreakBtn).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)

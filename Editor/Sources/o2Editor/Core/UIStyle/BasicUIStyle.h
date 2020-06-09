@@ -26,8 +26,8 @@ namespace o2
 		void RebuildListStyle();
 		void RebuildCustomDropDownStyle();
 		void RebuildDropDownStyle();
-		void RebuildWindowStyle();
 		void RebuildContextMenuStyle();
+		void RebuildWindowStyle();
 		void RebuildTreeStyle();
 		void RebuildMenuPanelStyle();
 		void RebuildBacklessDropdown();
@@ -74,8 +74,8 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildListStyle);
 	PUBLIC_FUNCTION(void, RebuildCustomDropDownStyle);
 	PUBLIC_FUNCTION(void, RebuildDropDownStyle);
-	PUBLIC_FUNCTION(void, RebuildWindowStyle);
 	PUBLIC_FUNCTION(void, RebuildContextMenuStyle);
+	PUBLIC_FUNCTION(void, RebuildWindowStyle);
 	PUBLIC_FUNCTION(void, RebuildTreeStyle);
 	PUBLIC_FUNCTION(void, RebuildMenuPanelStyle);
 	PUBLIC_FUNCTION(void, RebuildBacklessDropdown);

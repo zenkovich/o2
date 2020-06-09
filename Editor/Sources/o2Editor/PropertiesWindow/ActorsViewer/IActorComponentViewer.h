@@ -93,8 +93,8 @@ END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
 	PROTECTED_FIELD(mTargetComponents);
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mRemoveButton);
+	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mRemoveButton).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)

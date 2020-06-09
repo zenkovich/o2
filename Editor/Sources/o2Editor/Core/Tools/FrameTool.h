@@ -338,12 +338,12 @@ CLASS_BASES_META(Editor::FrameTool)
 END_META;
 CLASS_FIELDS_META(Editor::FrameTool)
 {
-	PROTECTED_FIELD(mFrameColor);
-	PROTECTED_FIELD(mObjectColor);
-	PROTECTED_FIELD(mParentColor);
-	PROTECTED_FIELD(mAnchorsFrameColor);
-	PROTECTED_FIELD(mSnapLinesColor);
-	PROTECTED_FIELD(mFrameMinimalSize);
+	PROTECTED_FIELD(mFrameColor).DEFAULT_VALUE(Color4(44, 62, 80, 255));
+	PROTECTED_FIELD(mObjectColor).DEFAULT_VALUE(Color4(44, 62, 80, 150));
+	PROTECTED_FIELD(mParentColor).DEFAULT_VALUE(Color4(44, 62, 80, 100));
+	PROTECTED_FIELD(mAnchorsFrameColor).DEFAULT_VALUE(Color4(20, 100, 255, 255));
+	PROTECTED_FIELD(mSnapLinesColor).DEFAULT_VALUE(Color4(40, 255, 100, 255));
+	PROTECTED_FIELD(mFrameMinimalSize).DEFAULT_VALUE(0.001f);
 	PROTECTED_FIELD(mLeftTopRotateHandle);
 	PROTECTED_FIELD(mLeftBottomRotateHandle);
 	PROTECTED_FIELD(mRightTopRotateHandle);
@@ -364,14 +364,14 @@ CLASS_FIELDS_META(Editor::FrameTool)
 	PROTECTED_FIELD(mAnchorsCenter);
 	PROTECTED_FIELD(mFrame);
 	PROTECTED_FIELD(mAnchorsFrame);
-	PROTECTED_FIELD(mAnchorsFrameEnabled);
-	PROTECTED_FIELD(mPivotHandleEnabled);
+	PROTECTED_FIELD(mAnchorsFrameEnabled).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mPivotHandleEnabled).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mBeginDraggingFrame);
 	PROTECTED_FIELD(mBeginDraggingOffset);
-	PROTECTED_FIELD(mIsDragging);
-	PROTECTED_FIELD(mChangedFromThis);
+	PROTECTED_FIELD(mIsDragging).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mChangedFromThis).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mBeforeTransforms);
-	PROTECTED_FIELD(mTransformAction);
+	PROTECTED_FIELD(mTransformAction).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mSnapLines);
 }
 END_META;

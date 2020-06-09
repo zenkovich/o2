@@ -130,6 +130,8 @@ namespace Editor
 		// Sets nodeWidget data by object
 		void FillNodeDataByObject(TreeNode* nodeWidget, void* object) override;
 
+		void OnDeserialized(const DataValue& node) override;
+
 		friend class ComponentsTreeNode;
 	};
 
@@ -185,10 +187,10 @@ CLASS_BASES_META(Editor::AddComponentPanel)
 END_META;
 CLASS_FIELDS_META(Editor::AddComponentPanel)
 {
-	PRIVATE_FIELD(mViewer);
-	PRIVATE_FIELD(mFilterBox);
-	PRIVATE_FIELD(mAddButton);
-	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mViewer).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mFilterBox).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mAddButton).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mTree).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
@@ -227,6 +229,7 @@ CLASS_METHODS_META(Editor::ComponentsTree)
 	PRIVATE_FUNCTION(Vector<void*>, GetObjectChilds, void*);
 	PRIVATE_FUNCTION(String, GetObjectDebug, void*);
 	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
+	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
@@ -237,10 +240,10 @@ CLASS_BASES_META(Editor::ComponentsTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTreeNode)
 {
-	PUBLIC_FIELD(data);
+	PUBLIC_FIELD(data).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mName);
 	PRIVATE_FIELD(mIcon);
-	PRIVATE_FIELD(mTree);
+	PRIVATE_FIELD(mTree).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)

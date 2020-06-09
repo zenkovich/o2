@@ -63,10 +63,10 @@ END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
 	PUBLIC_FIELD(mLayers);
-	PUBLIC_FIELD(mDataView);
-	PUBLIC_FIELD(mEnableProperty);
-	PUBLIC_FIELD(mNameProperty);
-	PUBLIC_FIELD(mLockProperty);
+	PUBLIC_FIELD(mDataView).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mEnableProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mNameProperty).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(mLockProperty).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)

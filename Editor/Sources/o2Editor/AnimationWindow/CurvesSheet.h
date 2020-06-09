@@ -57,8 +57,8 @@ END_META;
 CLASS_FIELDS_META(Editor::CurvesSheet)
 {
 	PRIVATE_FIELD(mCurvesEditor);
-	PRIVATE_FIELD(mAnimationWindow);
-	PRIVATE_FIELD(mEditorViewLock);
+	PRIVATE_FIELD(mAnimationWindow).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mEditorViewLock).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)

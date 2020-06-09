@@ -118,8 +118,8 @@ CLASS_FIELDS_META(o2::Button)
 	PUBLIC_FIELD(onClick);
 	PUBLIC_FIELD(isPointInside);
 	PUBLIC_FIELD(shortcut);
-	PROTECTED_FIELD(mCaptionText);
-	PROTECTED_FIELD(mIconSprite);
+	PROTECTED_FIELD(mCaptionText).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mIconSprite).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(o2::Button)

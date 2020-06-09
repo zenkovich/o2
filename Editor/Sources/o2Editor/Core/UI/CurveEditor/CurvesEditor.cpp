@@ -1635,7 +1635,7 @@ namespace Editor
 		bool changed = false;
 		for (auto& keysInfo : mBeforeTransformKeys)
 		{
-			CurveInfo* curveInfo = *mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
+			CurveInfo* curveInfo = mCurves.FindMatchOrDefault([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
 			if (!curveInfo)
 				continue;
 
@@ -1657,7 +1657,7 @@ namespace Editor
 			Vector<CurveKeysChangeAction::KeysInfo> actionKeysInfos;
 			for (auto& keysInfo : mBeforeTransformKeys)
 			{
-				CurveInfo* curveInfo = *mCurves.FindMatch([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
+				CurveInfo* curveInfo = mCurves.FindMatchOrDefault([&](CurveInfo* x) { return x->curveId == keysInfo.curveId; });
 				if (!curveInfo)
 					continue;
 
@@ -1832,7 +1832,7 @@ namespace Editor
 
 		DataDocument copyData;
 		copyData = copyKeys;
-		String copyDataStr = copyData.SaveAsWString();
+		String copyDataStr = copyData.SaveAsString();
 
 		Clipboard::SetText(copyDataStr);
 	}
@@ -1862,7 +1862,7 @@ namespace Editor
 
 		for (auto curve : copyKeys)
 		{
-			CurveInfo* curveInfo = *mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+			CurveInfo* curveInfo = mCurves.FindMatchOrDefault([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
 
 			if (curveInfo == nullptr)
 			{
@@ -1975,7 +1975,7 @@ namespace Editor
 
 		for (auto curve : copyKeys)
 		{
-			CurveInfo* curveInfo = *mCurves.FindMatch([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
+			CurveInfo* curveInfo = mCurves.FindMatchOrDefault([=](const CurveInfo* x) { return x->curveId == curve->curveId; });
 
 			if (curveInfo == nullptr)
 			{

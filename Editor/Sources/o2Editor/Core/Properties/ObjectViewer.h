@@ -45,8 +45,8 @@ CLASS_BASES_META(Editor::ObjectViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectViewer)
 {
-	PROTECTED_FIELD(mParentContext);
-	PROTECTED_FIELD(mPropertiesViewer);
+	PROTECTED_FIELD(mParentContext).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mPropertiesViewer).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectViewer)

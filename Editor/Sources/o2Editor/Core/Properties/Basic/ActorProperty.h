@@ -110,8 +110,8 @@ CLASS_BASES_META(Editor::ActorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ActorProperty)
 {
-	PROTECTED_FIELD(mBox);
-	PROTECTED_FIELD(mNameText);
+	PROTECTED_FIELD(mBox).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNameText).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ActorProperty)

@@ -63,7 +63,7 @@ CLASS_BASES_META(Editor::IWidgetLayerPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerPropertiesViewer)
 {
-	PROTECTED_FIELD(mSpoiler);
+	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)

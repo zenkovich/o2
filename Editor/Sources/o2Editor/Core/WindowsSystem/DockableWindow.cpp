@@ -376,7 +376,7 @@ namespace Editor
 		{
 			Vec2F cursorPos = o2Input.cursorPos;
 			auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-			auto dockPlaceListener = *listenersUnderCursor.FindMatch([](CursorAreaEventsListener* x) {
+			auto dockPlaceListener = listenersUnderCursor.FindMatchOrDefault([](CursorAreaEventsListener* x) {
 				return dynamic_cast<DockWindowPlace*>(x) != nullptr;
 			});
 
@@ -472,7 +472,7 @@ namespace Editor
 	{
 		Vec2F cursorPos = o2Input.cursorPos;
 		auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
-		auto dockPlaceListener = *listenersUnderCursor.FindMatch([](CursorAreaEventsListener* x) {
+		auto dockPlaceListener = listenersUnderCursor.FindMatchOrDefault([](CursorAreaEventsListener* x) {
 			return dynamic_cast<DockWindowPlace*>(x) != nullptr;
 		});
 

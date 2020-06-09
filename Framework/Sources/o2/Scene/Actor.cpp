@@ -822,7 +822,7 @@ namespace o2
 
 	void Actor::OnDeserialized(const DataValue& node)
 	{
-		if (node.GetMember("PrototypeLink") || node.GetMember("Prototype"))
+		if (node.FindMember("PrototypeLink") || node.FindMember("Prototype"))
 			DeserializeWithProto(node);
 		else
 			DeserializeRaw(node);
@@ -840,18 +840,18 @@ namespace o2
 		if (mLayer)
 			node["LayerName"] = mLayer->name;
 
-		auto childsNode = node.AddMember("Childs");
+		auto& childsNode = node.AddMember("Childs");
 		for (auto child : mChildren)
 		{
-			auto childNode = childsNode.AddMember("Child");
+			auto& childNode = childsNode.AddElement();
 			childNode.AddMember("Type") = child->GetType().GetName();
 			child->Serialize(childNode.AddMember("Data"));
 		}
 
-		auto componentsNode = node.AddMember("Components");
+		auto& componentsNode = node.AddMember("Components");
 		for (auto component : mComponents)
 		{
-			auto componentNode = componentsNode.AddMember("Component");
+			auto& componentNode = componentsNode.AddElement();
 			component->Serialize(componentNode.AddMember("Data"));
 			componentNode.AddMember("Type") = component->GetType().GetName();
 		}
@@ -883,11 +883,14 @@ namespace o2
 
 		if (auto componentsNode = node.FindMember("Components"))
 		{
-			for (auto& componentNode : *componentsNode)
+			if (componentsNode->IsArray())
 			{
-				Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
-				component->Deserialize(componentNode.GetMember("Data"));
-				component->SetOwnerActor(this);
+				for (auto& componentNode : *componentsNode)
+				{
+					Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
+					component->Deserialize(componentNode.GetMember("Data"));
+					component->SetOwnerActor(this);
+				}
 			}
 		}
 
@@ -895,19 +898,22 @@ namespace o2
 
 		if (auto childsNode = node.FindMember("Childs"))
 		{
-			for (auto& childNode : *childsNode)
+			if (childsNode->IsArray())
 			{
-				const DataValue* typeNode = childNode.FindMember("Type");
-				const DataValue* dataValue = childNode.FindMember("Data");
-				if (typeNode && dataValue)
+				for (auto& childNode : *childsNode)
 				{
-					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
-					if (type)
+					const DataValue* typeNode = childNode.FindMember("Type");
+					const DataValue* dataValue = childNode.FindMember("Data");
+					if (typeNode && dataValue)
 					{
-						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->Deserialize(*dataValue);
-						o2Scene.mRootActors.Remove(child);
-						AddChild(child);
+						const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
+						if (type)
+						{
+							Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
+							child->Deserialize(*dataValue);
+							o2Scene.mRootActors.Remove(child);
+							AddChild(child);
+						}
 					}
 				}
 			}

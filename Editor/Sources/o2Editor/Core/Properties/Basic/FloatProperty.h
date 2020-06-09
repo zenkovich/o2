@@ -70,7 +70,7 @@ CLASS_BASES_META(Editor::FloatProperty)
 END_META;
 CLASS_FIELDS_META(Editor::FloatProperty)
 {
-	PROTECTED_FIELD(mEditBox);
+	PROTECTED_FIELD(mEditBox).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mDragHangle);
 }
 END_META;

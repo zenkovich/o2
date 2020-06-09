@@ -70,20 +70,20 @@ CLASS_BASES_META(Editor::SpriteViewer)
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
 {
-	PROTECTED_FIELD(mHiddenProperties);
-	PROTECTED_FIELD(mImageProperty);
-	PROTECTED_FIELD(mColorProperty);
-	PROTECTED_FIELD(mAlphaProperty);
-	PROTECTED_FIELD(mSizePivotProperty);
-	PROTECTED_FIELD(mPivotProperty);
-	PROTECTED_FIELD(mModeProperty);
-	PROTECTED_FIELD(mFillPropertiesSpoiler);
-	PROTECTED_FIELD(mFillProperty);
-	PROTECTED_FIELD(mSlicedPropertiesSpoiler);
-	PROTECTED_FIELD(mSliceBorderProperty);
-	PROTECTED_FIELD(mTiledPropertiesSpoiler);
-	PROTECTED_FIELD(mTileScaleProperty);
-	PROTECTED_FIELD(mSlicesEditor);
+	PROTECTED_FIELD(mHiddenProperties).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mImageProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mColorProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAlphaProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSizePivotProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mPivotProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mModeProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mFillPropertiesSpoiler).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mFillProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSlicedPropertiesSpoiler).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSliceBorderProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTiledPropertiesSpoiler).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTileScaleProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSlicesEditor).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)

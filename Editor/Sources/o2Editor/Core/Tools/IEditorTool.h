@@ -111,7 +111,7 @@ CLASS_BASES_META(Editor::IEditTool)
 END_META;
 CLASS_FIELDS_META(Editor::IEditTool)
 {
-	PROTECTED_FIELD(mNeedRedraw);
+	PROTECTED_FIELD(mNeedRedraw).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditTool)

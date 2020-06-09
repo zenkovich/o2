@@ -138,22 +138,22 @@ CLASS_BASES_META(Editor::ObjectPtrProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
-	PROTECTED_FIELD(mBasicObjectType);
-	PROTECTED_FIELD(mCurrentObjectType);
-	PROTECTED_FIELD(mBuiltObjectType);
-	PROTECTED_FIELD(mAvailableMultipleTypes);
-	PROTECTED_FIELD(mDontDeleteEnabled);
-	PROTECTED_FIELD(mNoHeader);
-	PROTECTED_FIELD(mExpanded);
+	PROTECTED_FIELD(mBasicObjectType).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCurrentObjectType).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mBuiltObjectType).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mAvailableMultipleTypes).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mDontDeleteEnabled).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mNoHeader).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mExpanded).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mObjectViewer);
-	PROTECTED_FIELD(mCaption);
-	PROTECTED_FIELD(mHeaderContainer);
-	PROTECTED_FIELD(mTypeCaption);
-	PROTECTED_FIELD(mCreateDeleteButton);
-	PROTECTED_FIELD(mCreateMenu);
-	PROTECTED_FIELD(mContextInitialized);
-	PROTECTED_FIELD(mImmediateCreateObject);
+	PROTECTED_FIELD(mObjectViewer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mTypeCaption).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCreateDeleteButton).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mCreateMenu).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mContextInitialized).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mImmediateCreateObject).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectPtrProperty)

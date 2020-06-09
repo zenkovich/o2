@@ -81,7 +81,7 @@ namespace o2
 
 		for (auto def : mUnresolvedActors)
 		{
-			*def.target = *mNewActors.FindMatch([&](Actor* x) { return x->GetID() == def.actorId; });
+			*def.target = mNewActors.FindMatchOrDefault([&](Actor* x) { return x->GetID() == def.actorId; });
 
 			if (!*def.target)
 			{

@@ -87,7 +87,7 @@ CLASS_FIELDS_META(o2::DropDown)
 {
 	PUBLIC_FIELD(value);
 	PUBLIC_FIELD(onSelectedText);
-	PROTECTED_FIELD(mSelectedText);
+	PROTECTED_FIELD(mSelectedText).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(o2::DropDown)
