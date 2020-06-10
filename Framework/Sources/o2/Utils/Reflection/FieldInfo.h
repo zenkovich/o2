@@ -136,6 +136,12 @@ namespace o2
 		friend class TStringPointerAccessorType;
 	};
 
+	template<typename _type>
+	struct FieldInfoInitializer
+	{
+
+	};
+
 	template<typename _attr_type>
 	bool FieldInfo::HasAttribute() const
 	{

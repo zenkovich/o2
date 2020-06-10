@@ -768,7 +768,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
 			res += "\tPROTECTED_FIELD(" + x->GetName() + ")";
 
-		if (!x->GetDefaultValue().empty())
+		if (!x->GetDefaultValue().empty() && x->GetDefaultValue().find("this") == string::npos)
 			res += ".DEFAULT_VALUE(" + x->GetDefaultValue() + ")";
 
 		// attributes

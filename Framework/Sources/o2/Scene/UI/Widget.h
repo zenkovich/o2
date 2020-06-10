@@ -732,8 +732,8 @@ CLASS_FIELDS_META(o2::Widget)
 	PROTECTED_FIELD(mIsClipped).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mBounds);
 	PROTECTED_FIELD(mBoundsWithChilds);
-	PROTECTED_FIELD(layersEditable).DEFAULT_VALUE(LayersEditable(this));
-	PROTECTED_FIELD(internalChildrenEditable).DEFAULT_VALUE(InternalChildrenEditableEditable(this));
+	PROTECTED_FIELD(layersEditable);
+	PROTECTED_FIELD(internalChildrenEditable);
 }
 END_META;
 CLASS_METHODS_META(o2::Widget)

@@ -18,6 +18,8 @@ namespace o2
 	class EditorTestComponent: public Component
 	{
 	public:
+		Vector<Vec2I> mVecs; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+
 		enum class TestEnum { A, B, C, D, E, F, G, H, K, L, M, N };
 		 
 		class TestInside: public ISerializable
@@ -76,8 +78,7 @@ namespace o2
 		TestEnum mTestEnum;                        // @SERIALIZABLE
 		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE
 
-		Vector<Vec2I> mVecs = { Vec2I(0, 1), Vec2I(2, 3), Vec2I(4, 5) }; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-		Vector<int> mIntVector = { 1, 2, 3, 4, 5 }; // @SERIALIZABLE
+		Vector<int> mIntVector; // @SERIALIZABLE
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<TestInside*> mTestInsideptrsVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
 		Vector<Actor*> mActorVector;               // @SERIALIZABLE
@@ -113,6 +114,7 @@ CLASS_BASES_META(o2::EditorTestComponent)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent)
 {
+	PUBLIC_FIELD(mVecs).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(spritePropPtr);
 	PUBLIC_FIELD(spriteProp);
 	PUBLIC_FIELD(arr);
@@ -144,8 +146,7 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mTestInside).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestEnum).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestInsidePtr).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mVecs).DEFAULT_VALUE({ Vec2I(0, 1), Vec2I(2, 3), Vec2I(4, 5)).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mIntVector).DEFAULT_VALUE({ 1, 2, 3, 4, 5).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mIntVector).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestInsideVector).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTestInsideptrsVector).INVOKE_ON_CHANGE_ATTRIBUTE(Test).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActorVector).SERIALIZABLE_ATTRIBUTE();

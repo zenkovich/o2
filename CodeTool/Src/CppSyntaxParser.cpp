@@ -208,7 +208,12 @@ void CppSyntaxParser::ParseSyntaxSection(SyntaxSection& section, const string& s
 
 		int blockbegin = caret;
 		string block = ReadBlock(section.mData, caret);
-		Trim(block, " \r\t\n{}");
+		Trim(block, " \r\t\n");
+		if (block[0] == '{' && block[block.length() - 1] == '}')
+		{
+			block.erase(block.length() - 1, 1);
+			block.erase(0, 1);
+		}
 
 		if (!block.empty())
 			TryParseBlock(section, block, blockbegin, caret, protectionSection);

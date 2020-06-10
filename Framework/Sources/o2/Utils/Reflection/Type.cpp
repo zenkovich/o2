@@ -17,6 +17,9 @@ namespace o2
 	{
 		for (auto field : mFields)
 			delete field;
+
+		for (auto func : mFunctions)
+			delete func;
 	}
 
 	bool Type::operator!=(const Type& other) const

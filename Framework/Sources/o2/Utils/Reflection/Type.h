@@ -798,8 +798,8 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define PROTECTED_FIELD(NAME) \
     processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Protected)
 
-#define DEFAULT_VALUE(VALUE) \
-	SetDefaultValue(VALUE)
+#define DEFAULT_VALUE \
+	SetDefaultValue
 
 #define ATTRIBUTE(NAME) \
     AddAttribute(new NAME)
