@@ -72,22 +72,16 @@ namespace o2
 	struct SupportsDivide<T, void_t<decltype(std::declval<T>() / std::declval<T>())>> : std::true_type {};
 
 	template<class T, class = void_t<>>
-	struct SupportsMultiply : std::false_type {};
+	struct SupportsMultiply: std::false_type {};
 
 	template<class T>
-	struct SupportsMultiply<T, void_t<decltype(std::declval<T>() * std::declval<T>())>> : std::true_type {};
+	struct SupportsMultiply<T, void_t<decltype(std::declval<T>() * std::declval<T>())>>: std::true_type {};
 
-	namespace EqualsOperator
-	{
-		struct No {};
-		template<typename T, typename Arg> No operator== (const T&, const Arg&);
+	template<class T, class = void_t<>>
+	struct SupportsEqualOperator: std::false_type {};
 
-		template<typename T, typename Arg = T>
-		struct IsExists
-		{
-			enum x { value = !std::is_same<decltype(*(T*)(0) == *(Arg*)(0)), No>::value };
-		};
-	}
+	template<class T>
+	struct SupportsEqualOperator<T, void_t<decltype(std::declval<T>() == std::declval<T>())>>: std::true_type {};
 
 	template<class T, class = void>
 	struct ExtractPropertyValueType
@@ -100,12 +94,7 @@ namespace o2
 	{
 		typedef typename T::valueType type;
 	};
-}
 
-#include "o2/Utils/Reflection/Type.h"
-
-namespace o2
-{
 	template<typename T>
 	struct IsFundamental: public std::conditional<
 		std::is_fundamental<T>::value ||
@@ -122,99 +111,52 @@ namespace o2
 		std::is_same<T, WString>::value ||
 		std::is_same<T, UID>::value ||
 		std::is_same<T, DataValue>::value, std::true_type, std::false_type>::type {};
+}
 
-	// type trait
-	template<typename T, typename X =
-	/* if */   typename std::conditional<std::is_base_of<IObject, T>::value,
-	/* then */ T,
-	/* else */ typename std::conditional<IsFundamental<T>::value && !std::is_const<T>::value,
-		       /* then */ FundamentalTypeContainer<T>,
-		       /* else */ typename std::conditional<
-		                  /* if */   std::is_enum<T>::value && IsEnumReflectable<T>::value,
-		                  /* then */ EnumTypeContainer<T>,
-		                  /* else */ Type::Dummy
-			              >::type
-	           >::type
-	>::type>
-	struct GetTypeHelper
-	{
-		typedef X type;
-	};
+#include "o2/Utils/Reflection/Type.h"
 
-	template<typename _type, typename _getter>
-	const Type& GetTypeOf();
-
-	template<typename T>
-	struct RegularTypeGetter
-	{
-		static const Type& GetType() { return *GetTypeHelper<T>::type::type; }
-	};
-
-	template<typename T>
-	struct PointerTypeGetter
-	{
-		static const Type& GetType();
-	};
-
-	template<typename T>
-	struct PropertyTypeGetter
-	{
-		static const Type& GetType() { return *Reflection::InitializePropertyType<typename T::valueType, T>(); }
-	};
-
-	template<typename T>
-	struct VectorTypeGetter
-	{
-		static const Type& GetType() { return *Reflection::InitializeVectorType<typename ExtractVectorElementType<T>::type>(); }
-	};
-
-	template<typename T>
-	struct MapTypeGetter
-	{
-		static const Type& GetType() 
-		{
-			return *Reflection::InitializeMapType<typename ExtractMapKeyType<T>::type, typename ExtractMapValueType<T>::type>();
-		}
-	};
-
-	template<typename T>
-	struct AccessorTypeGetter
-	{
-		static const Type& GetType() { return *Reflection::InitializeAccessorType<typename T::valueType, T>(); }
-	};
+namespace o2
+{
 
 	// Returns type of template parameter
-	template<typename _type, typename _getter = 
-		typename std::conditional<
-		/* if */   std::is_pointer<_type>::value,
-		/* then */ PointerTypeGetter<_type>,
-		/* else */ typename std::conditional<
-		           /* if */   IsVector<_type>::value,
-		           /* then */ VectorTypeGetter<_type>,
-		           /* else */ typename std::conditional<
-		                      /* if */   IsStringAccessor<_type>::value,
-		                      /* then */ AccessorTypeGetter<_type>,
-		                      /* else */ typename std::conditional<
-		                                 /* if */   IsMap<_type>::value,
-		                                 /* then */ MapTypeGetter<_type>,
-		                                            typename std::conditional<
-		                                            /* if */   IsProperty<_type>::value,
-		                                            /* then */ PropertyTypeGetter<_type>,
-		                                            /* else */ RegularTypeGetter<_type>
-													>::type
-							             >::type
-				              >::type
-		           >::type
-		>::type
-	>
+	template<typename _type>
 	const Type& GetTypeOf()
 	{
-		return _getter::GetType();
-	}
-
-	template<typename T>
-	const Type& PointerTypeGetter<T>::GetType()
-	{
-		return *GetTypeOf<typename std::remove_pointer<T>::type>().GetPointerType();
+		if constexpr (std::is_pointer<_type>::value)
+		{
+			return *GetTypeOf<typename std::remove_pointer<_type>::type>().GetPointerType();
+		}
+		else if constexpr (IsVector<_type>::value)
+		{
+			return *Reflection::InitializeVectorType<typename ExtractVectorElementType<_type>::type>();
+		}
+		else if constexpr (IsStringAccessor<_type>::value)
+		{
+			return *Reflection::InitializeAccessorType<typename _type::valueType, _type>();
+		}
+		else if constexpr (IsMap<_type>::value)
+		{
+			return *Reflection::InitializeMapType<typename ExtractMapKeyType<_type>::type, typename ExtractMapValueType<_type>::type>();
+		}
+		else if constexpr (IsProperty<_type>::value)
+		{
+			return *Reflection::InitializePropertyType<typename _type::valueType, _type>();
+		}
+		else if constexpr (std::is_base_of<IObject, _type>::value)
+		{
+			return *_type::type;
+		}
+		else if constexpr (IsFundamental<_type>::value && !std::is_const<_type>::value)
+		{
+			return *FundamentalTypeContainer<_type>::type;
+		}
+		else if constexpr (std::is_enum<_type>::value && IsEnumReflectable<_type>::value)
+		{
+			return *EnumTypeContainer<_type>::type;
+		}
+		else
+		{
+			return *Type::Dummy::type;
+		}
 	}
 }

@@ -25,6 +25,11 @@ namespace o2
 		return GetState();
 	}
 
+	bool WidgetState::operator==(const WidgetState& other) const
+	{
+		return false;
+	}
+
 	void WidgetState::SetOwner(Widget* owner, bool errors)
 	{
 		mOwner = owner;

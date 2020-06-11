@@ -62,7 +62,7 @@ namespace Editor
 				i++;
 			}
 
-			FieldInfo* fi = nullptr;
+			const FieldInfo* fi = nullptr;
 			void* ptr = nullptr;
 
 			if (componentType)

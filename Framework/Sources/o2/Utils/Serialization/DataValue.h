@@ -1331,11 +1331,11 @@ namespace o2
 						WriteObject(baseObject, *baseObjectType, node);
 					}
 
-					for (auto field : type.GetFields())
+					for (auto& field : type.GetFields())
 					{
-						auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
+						auto srlzAttribute = field.GetAttribute<SerializableAttribute>();
 						if (srlzAttribute)
-							field->SerializeFromObject(object, node.AddMember(field->GetName()));
+							field.SerializeFromObject(object, node.AddMember(field.GetName()));
 					}
 				}
 			};
@@ -1365,14 +1365,14 @@ namespace o2
 						ReadObject(baseObject, *baseObjectType, node);
 					}
 
-					for (auto field : type.GetFields())
+					for (auto& field : type.GetFields())
 					{
-						auto srlzAttribute = field->GetAttribute<SerializableAttribute>();
+						auto srlzAttribute = field.GetAttribute<SerializableAttribute>();
 						if (srlzAttribute)
 						{
-							auto fldNode = node.FindMember(field->GetName());
+							auto fldNode = node.FindMember(field.GetName());
 							if (fldNode)
-								field->DeserializeFromObject(object, *fldNode);
+								field.DeserializeFromObject(object, *fldNode);
 						}
 					}
 				}

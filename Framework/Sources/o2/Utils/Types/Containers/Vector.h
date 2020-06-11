@@ -631,7 +631,7 @@ namespace o2
 	Vector<_sel_type> Vector<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
 	{
 		Vector<_sel_type> res;
-		for (auto x : *this)
+		for (auto& x : *this)
 			res.Add(selector(x));
 
 		return res;
@@ -642,7 +642,7 @@ namespace o2
 	Vector<_sel_type> Vector<_type>::Cast() const
 	{
 		Vector<_sel_type> res;
-		for (auto x : *this)
+		for (auto& x : *this)
 			res.Add((_sel_type)x);
 
 		return res;
@@ -653,7 +653,7 @@ namespace o2
 	Vector<_sel_type> Vector<_type>::DynamicCast() const
 	{
 		Vector<_sel_type> res;
-		for (auto x : *this)
+		for (auto& x : *this)
 			res.Add(dynamic_cast<_sel_type>(x));
 
 		return res;
@@ -664,7 +664,7 @@ namespace o2
 	{
 		Vector<_type> res;
 		int i = 0;
-		for (auto x : *this)
+		for (auto& x : *this)
 		{
 			res.Add(x);
 			i++;

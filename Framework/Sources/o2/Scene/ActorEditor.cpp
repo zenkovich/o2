@@ -544,7 +544,7 @@ namespace o2
 					if (protoComponent)
 					{
 						// check differences
-						Vector<FieldInfo*> fields;
+						Vector<const FieldInfo*> fields;
 						GetComponentFields(protoComponent, fields);
 
 						for (auto& info : applyActorsInfos)
@@ -1037,7 +1037,7 @@ namespace o2
 			Component* matchingComponent = dest->mComponents.FindMatchOrDefault([&](Component* x) { return x->GetPrototypeLink() == component; });
 			if (matchingComponent)
 			{
-				Vector<FieldInfo*> fields;
+				Vector<const FieldInfo*> fields;
 				GetComponentFields(matchingComponent, fields);
 
 				CopyFields(fields, component, matchingComponent, actorsPointers, componentsPointers,
@@ -1055,7 +1055,9 @@ namespace o2
 		dest->SetLayer(source->mLayer);
 	}
 
-	void Actor::CopyChangedFields(Vector<FieldInfo*>& fields, IObject* source, IObject* changed, IObject* dest, Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers, Vector<ISerializable*>& serializableObjects)
+	void Actor::CopyChangedFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* changed, IObject* dest, 
+								  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers, 
+								  Vector<ISerializable*>& serializableObjects)
 	{
 		for (auto field : fields)
 		{

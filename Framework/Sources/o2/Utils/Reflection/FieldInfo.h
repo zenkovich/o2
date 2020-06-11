@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Utils/Reflection/Attributes.h"
-#include "o2/Utils/Reflection/SearchPassedObject.h"
 #include "o2/Utils/Reflection/TypeSerializer.h"
 #include "o2/Utils/Reflection/TypeSerializer.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
@@ -28,12 +27,15 @@ namespace o2
 		// Default constructor
 		FieldInfo();
 
+		// Move-constructor
+		FieldInfo(FieldInfo&& other);
+
 		// Constructor
-		FieldInfo(const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type, ProtectSection sect,
-				  ITypeSerializer* serializer = nullptr);
+		FieldInfo(const Type* ownerType, const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type, 
+				  ProtectSection section, ITypeSerializer* serializer = nullptr);
 
 		// Destructor
-		virtual ~FieldInfo();
+		~FieldInfo();
 
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;
@@ -111,22 +113,14 @@ namespace o2
 		ProtectSection         mProtectSection = ProtectSection::Public; // Protection section
 		String                 mName;                                    // Name of field
 		const Type*            mType = nullptr;                          // Field type
-		Type*                  mOwnerType = nullptr;                     // Field owner type
+		const Type*            mOwnerType = nullptr;                     // Field owner type
 		Vector<IAttribute*>    mAttributes;                              // Attributes array
 		ITypeSerializer*       mSerializer = nullptr;                    // field serializer
 		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function
 
 	protected:
 		// Searches field recursively by path
-		virtual void* SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo);
-
-	private:
-		// Deprecated Copy-constructor
-		FieldInfo(const FieldInfo& other);
-
-		// Deprecated Copy-operator
-		FieldInfo& operator=(const FieldInfo& other);
-
+		void* SearchFieldPtr(void* obj, const String& path, const FieldInfo*& fieldInfo) const;
 
 		friend class Type;
 		friend class VectorType;

@@ -50,6 +50,9 @@ namespace o2
 		// Assign from boolean operator
 		WidgetState& operator=(bool state);
 
+		// Equals operator
+		bool operator==(const WidgetState& other) const;
+
 		// Sets owner widget
 		void SetOwner(Widget* owner, bool errors);
 

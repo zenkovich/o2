@@ -664,32 +664,32 @@ namespace o2
 					WriteObject(baseObject, baseSourceObject, *baseObjectType, node);
 				}
 
-				for (auto field : type.GetFields())
+				for (auto& field : type.GetFields())
 				{
-					if (!field->GetAttribute<SerializableAttribute>())
+					if (!field.GetAttribute<SerializableAttribute>())
 						continue;
 
-					if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+					if (field.GetType()->IsBasedOn(TypeOf(IObject)))
 					{
-						DataValue& newFieldNode = node.AddMember(field->GetName());
+						DataValue& newFieldNode = node.AddMember(field.GetName());
 
-						newFieldNode.SetValueDelta(*(IObject*)field->GetValuePtr(object),
-												   *(IObject*)field->GetValuePtr(source));
+						newFieldNode.SetValueDelta(*(IObject*)field.GetValuePtr(object),
+												   *(IObject*)field.GetValuePtr(source));
 
 						if (newFieldNode.IsEmpty())
-							node.RemoveMember(field->GetName());
+							node.RemoveMember(field.GetName());
 
 						continue;
 					}
 
-					if (!field->IsValueEquals(object, source))
+					if (!field.IsValueEquals(object, source))
 					{
-						DataValue& newFieldNode = node.AddMember(field->GetName());
+						DataValue& newFieldNode = node.AddMember(field.GetName());
 
-						field->SerializeFromObject(object, newFieldNode);
+						field.SerializeFromObject(object, newFieldNode);
 
 						if (newFieldNode.IsEmpty())
-							node.RemoveMember(field->GetName());
+							node.RemoveMember(field.GetName());
 					}
 				}
 			}
@@ -727,22 +727,22 @@ namespace o2
 					ReadObject(baseObject, baseSourceObject, *baseObjectType, node);
 				}
 
-				for (auto field : type.GetFields())
+				for (auto& field : type.GetFields())
 				{
-					if (!field->GetAttribute<SerializableAttribute>())
+					if (!field.GetAttribute<SerializableAttribute>())
 						continue;
 
-					auto fldNode = node.FindMember(field->GetName());
+					auto fldNode = node.FindMember(field.GetName());
 					if (fldNode)
 					{
-						if (field->GetType()->IsBasedOn(TypeOf(IObject)))
+						if (field.GetType()->IsBasedOn(TypeOf(IObject)))
 						{
-							fldNode->GetValueDelta(*(IObject*)field->GetValuePtr(object),
-												   *(IObject*)field->GetValuePtr(source));
+							fldNode->GetValueDelta(*(IObject*)field.GetValuePtr(object),
+												   *(IObject*)field.GetValuePtr(source));
 						}
-						else field->DeserializeFromObject(object, *fldNode);
+						else field.DeserializeFromObject(object, *fldNode);
 					}
-					else field->CopyValue(object, source);
+					else field.CopyValue(object, source);
 				}
 			}
 		};

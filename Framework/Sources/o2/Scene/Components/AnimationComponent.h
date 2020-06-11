@@ -221,8 +221,8 @@ namespace o2
 		newAgent->path = path;
 		newAgent->tracks.Add({ state, player });
 
-		FieldInfo* fieldInfo = nullptr;
-		auto* fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
+		const FieldInfo* fieldInfo = nullptr;
+		auto fieldPtr = (_type*)GetType().GetFieldPtr(mOwner, path, fieldInfo);
 
 		if (!fieldInfo)
 		{

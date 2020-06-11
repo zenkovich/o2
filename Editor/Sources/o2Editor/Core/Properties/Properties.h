@@ -55,12 +55,12 @@ namespace Editor
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Builds layout viewer by fields
-		void BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& context, const String& path,
+		void BuildObjectProperties(VerticalLayout* layout, Vector<const FieldInfo*> fields, PropertiesContext& context, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
 		// Build layout viewer for field
-		IPropertyField* BuildField(VerticalLayout* layout, FieldInfo* fieldInfo, PropertiesContext& context, const String& path,
+		IPropertyField* BuildField(VerticalLayout* layout, const FieldInfo* fieldInfo, PropertiesContext& context, const String& path,
 								   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 								   const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 
@@ -75,11 +75,11 @@ namespace Editor
 
 		// Checks is property visible in properties window: 
 		// checking protection section, ignore and editor attributes
-		bool IsPropertyVisible(FieldInfo* info, bool allowPrivate) const;
+		bool IsPropertyVisible(const FieldInfo* info, bool allowPrivate) const;
 
 		// Checks is property visible in properties window using current private visibility state: 
 		// checking protection section, ignore and editor attributes
-		bool IsPropertyVisible(FieldInfo* info) const;
+		bool IsPropertyVisible(const FieldInfo* info) const;
 
 		// Returns available field by type
 		const Type* GetFieldPropertyType(const Type* valueType) const;
@@ -154,7 +154,7 @@ namespace Editor
 		const Type* GetClosesBasedTypeObjectViewer(const Type* type) const;
 
 		// Builds layout viewer by fields without filtering
-		void BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields, PropertiesContext& context, const String& path,
+		void BuildFields(VerticalLayout* layout, Vector<const FieldInfo*> fields, PropertiesContext& context, const String& path,
 						 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted = mOnPropertyCompletedChangingUndoCreateDelegate,
 						 const IPropertyField::OnChangedFunc& onChanged = IPropertyField::OnChangedFunc::empty);
 	};

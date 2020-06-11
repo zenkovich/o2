@@ -130,15 +130,15 @@ namespace Editor
 
 	void AnimationPropertiesTree::ProcessObject(void* object, const ObjectType* type, NodeData* node)
 	{
-		for (auto field : type->GetFields())
+		for (auto& field : type->GetFields())
 		{
-			bool isPublic = field->GetProtectionSection() == ProtectSection::Public;
-			bool isEditorProperty = field->HasAttribute<EditorPropertyAttribute>();
-			bool isIgnoreEditorProperty = field->HasAttribute<IgnoreEditorPropertyAttribute>();
-			bool isAnimatable = field->HasAttribute<AnimatableAttribute>();
+			bool isPublic = field.GetProtectionSection() == ProtectSection::Public;
+			bool isEditorProperty = field.HasAttribute<EditorPropertyAttribute>();
+			bool isIgnoreEditorProperty = field.HasAttribute<IgnoreEditorPropertyAttribute>();
+			bool isAnimatable = field.HasAttribute<AnimatableAttribute>();
 
 			if (isAnimatable || (isPublic && !isIgnoreEditorProperty) || isEditorProperty) 
-				ProcessTreeNode(field->GetValuePtr(object), field->GetType(), field->GetName(), node);
+				ProcessTreeNode(field.GetValuePtr(object), field.GetType(), field.GetName(), node);
 		}
 
 		for (auto base : type->GetBaseTypes())

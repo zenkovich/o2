@@ -8,18 +8,27 @@ namespace o2
 	FieldInfo::FieldInfo()
 	{}
 
-	FieldInfo::FieldInfo(const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type,
-						 ProtectSection sect, ITypeSerializer* serializer):
-		mName(name), mPointerGetter(pointerGetter), mType(type), mProtectSection(sect),
+	FieldInfo::FieldInfo(const Type* ownerType, const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type,
+						 ProtectSection section, ITypeSerializer* serializer):
+		mOwnerType(ownerType), mName(name), mPointerGetter(pointerGetter), mType(type), mProtectSection(section),
 		mSerializer(serializer ? serializer : mType->GetSerializer())
 	{}
+
+	FieldInfo::FieldInfo(FieldInfo&& other):
+		mProtectSection(other.mProtectSection), mName(other.mName), mType(other.mType), mOwnerType(other.mOwnerType),
+		mAttributes(other.mAttributes), mSerializer(other.mSerializer), mPointerGetter(other.mPointerGetter)
+	{
+		other.mAttributes.Clear();
+		other.mSerializer = nullptr;
+	}
 
 	FieldInfo::~FieldInfo()
 	{
 		for (auto attr : mAttributes)
 			delete attr;
 
-		delete mSerializer;
+		if (mSerializer)
+			delete mSerializer;
 	}
 
 	bool FieldInfo::operator==(const FieldInfo& other) const
@@ -90,7 +99,7 @@ namespace o2
 		mSerializer->Copy(GetValuePtrStrong(objectA), GetValuePtrStrong(objectB));
 	}
 
-	void* FieldInfo::SearchFieldPtr(void* obj, const String& path, FieldInfo*& fieldInfo)
+	void* FieldInfo::SearchFieldPtr(void* obj, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		if (!mType)
 			return nullptr;

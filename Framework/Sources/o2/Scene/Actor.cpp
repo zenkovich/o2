@@ -1038,7 +1038,7 @@ namespace o2
 		dest->CopyData(*source);
 	}
 
-	void Actor::CopyFields(Vector<FieldInfo*>& fields, IObject* source, IObject* dest, Vector<Actor**>& actorsPointers,
+	void Actor::CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest, Vector<Actor**>& actorsPointers,
 						   Vector<Component**>& componentsPointers, Vector<ISerializable*>& serializableObjects)
 	{
 		for (auto field : fields)
@@ -1083,7 +1083,7 @@ namespace o2
 	void Actor::CollectFixingFields(Component* newComponent, Vector<Component **> &componentsPointers,
 									Vector<Actor **> &actorsPointers)
 	{
-		Vector<FieldInfo*> fields;
+		Vector<const FieldInfo*> fields;
 		GetComponentFields(newComponent, fields);
 
 		for (auto field : fields)
@@ -1101,13 +1101,13 @@ namespace o2
 		}
 	}
 
-	void Actor::GetComponentFields(Component* component, Vector<FieldInfo*>& fields)
+	void Actor::GetComponentFields(Component* component, Vector<const FieldInfo*>& fields)
 	{
 		struct helper
 		{
-			static void GetFields(const Type* type, Vector<FieldInfo*>& fields)
+			static void GetFields(const Type* type, Vector<const FieldInfo*>& fields)
 			{
-				fields.Add(type->GetFields());
+				fields.Add(type->GetFields().Select<const FieldInfo*>([](const auto& x) { return &x; }));
 
 				for (auto baseType : type->GetBaseTypes())
 				{

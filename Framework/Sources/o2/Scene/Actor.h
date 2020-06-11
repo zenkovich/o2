@@ -431,7 +431,7 @@ namespace o2
 							bool isSourcePrototype);
 
 		// Copies fields from source to dest
-		void CopyFields(Vector<FieldInfo*>& fields, IObject* source, IObject* dest,
+		void CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest,
 						Vector<Actor**>& actorsPointers,
 						Vector<Component**>& componentsPointers,
 						Vector<ISerializable*>& serializableObjects);
@@ -441,7 +441,7 @@ namespace o2
 								 Vector<Actor**>& actorsPointers);
 
 		// Collects component field, except Component class fields
-		void GetComponentFields(Component* component, Vector<FieldInfo*>& fields);
+		void GetComponentFields(Component* component, Vector<const FieldInfo*>& fields);
 
 		// Fixes actors and components pointers by actors map
 		void FixComponentFieldsPointers(const Vector<Actor**>& actorsPointers,
@@ -564,7 +564,7 @@ namespace o2
 									bool isInsidePrototype);
 
 		// Copies changed field from source to dest
-		void CopyChangedFields(Vector<FieldInfo*>& fields,
+		void CopyChangedFields(Vector<const FieldInfo*>& fields,
 							   IObject* source, IObject* changed, IObject* dest,
 							   Vector<Actor**>& actorsPointers,
 							   Vector<Component**>& componentsPointers,
@@ -853,9 +853,9 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, OnChildrenChanged);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, ProcessCopying, Actor*, const Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp1, _tmp2, bool);
-	PROTECTED_FUNCTION(void, CopyFields, Vector<FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
+	PROTECTED_FUNCTION(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
-	PROTECTED_FUNCTION(void, GetComponentFields, Component*, Vector<FieldInfo*>&);
+	PROTECTED_FUNCTION(void, GetComponentFields, Component*, Vector<const FieldInfo*>&);
 	PROTECTED_FUNCTION(void, FixComponentFieldsPointers, const Vector<Actor**>&, const Vector<Component**>&, _tmp3, _tmp4);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
@@ -887,7 +887,7 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, bool);
-	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
+	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<const FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp9, _tmp10, Vector<ISerializable*>&);

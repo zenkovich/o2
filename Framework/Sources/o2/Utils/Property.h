@@ -35,11 +35,11 @@ namespace o2
                                                                                                                                                                       \
 		NAME##_PROPERTY& operator=(const NAME##_PROPERTY& value) { _this->SETTER(value.Get()); return *this; }	                                                      \
 																										                                                              \
-		template<typename _equalsChecker = typename std::conditional<EqualsOperator::IsExists<valueType>::value, RealEquals<valueType>, FakeEquals<valueType>>::type> \
-		bool operator==(const valueType& value) const { return _equalsChecker::Check(_this->GETTER(), value); }                	                                      \
+		template<typename X = typename std::enable_if<SupportsEqualOperator<valueType>::value>::type>                                                                        \
+		bool operator==(const valueType& value) const { return Math::Equals(_this->GETTER(), value); }                                                                \
 																										                                                              \
-		template<typename _equalsChecker = typename std::conditional<EqualsOperator::IsExists<valueType>::value, RealEquals<valueType>, FakeEquals<valueType>>::type> \
-		bool operator!=(const valueType& value) const { return !_equalsChecker::Check(_this->GETTER(), value); }                	                                  \
+		template<typename X = typename std::enable_if<SupportsEqualOperator<valueType>::value>::type>                                                                        \
+		bool operator!=(const valueType& value) const { return !Math::Equals(_this->GETTER(), value); }                                                               \
 																										                                                              \
 		template<typename T, typename X = typename std::enable_if<o2::SupportsPlus<T>::value && std::is_same<T, valueType>::value>::type>                             \
 		valueType operator+(const T& value) { return _this->GETTER() + value; }                	                                                                      \

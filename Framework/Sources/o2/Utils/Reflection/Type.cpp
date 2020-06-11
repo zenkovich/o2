@@ -15,9 +15,6 @@ namespace o2
 
 	Type::~Type()
 	{
-		for (auto field : mFields)
-			delete field;
-
 		for (auto func : mFunctions)
 			delete func;
 	}
@@ -74,19 +71,19 @@ namespace o2
 		return mBaseTypes;
 	}
 
-	const Vector<FieldInfo*>& Type::GetFields() const
+	const Vector<FieldInfo>& Type::GetFields() const
 	{
 		return mFields;
 	}
 
-	Vector<FieldInfo*> Type::GetFieldsWithBaseClasses() const
+	Vector<const FieldInfo*> Type::GetFieldsWithBaseClasses() const
 	{
-		Vector<FieldInfo*> res;
+		Vector<const FieldInfo*> res;
 
 		for (auto baseType : mBaseTypes)
 			res += baseType.type->GetFieldsWithBaseClasses();
 
-		res += mFields;
+		res += mFields.Select<const FieldInfo*>([](auto& x) { return &x; });
 
 		return res;
 	}
@@ -125,12 +122,12 @@ namespace o2
 		return res;
 	}
 
-	FieldInfo* Type::GetField(const String& name) const
+	const FieldInfo* Type::GetField(const String& name) const
 	{
-		for (auto field : mFields)
+		for (auto& field : mFields)
 		{
-			if (field->GetName() == name)
-				return field;
+			if (field.GetName() == name)
+				return &field;
 		}
 
 		for (auto baseType : mBaseTypes)
@@ -199,28 +196,28 @@ namespace o2
 		return res;
 	}
 
-	void* Type::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* Type::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
 		WString pathPart = path.SubStr(0, delPos);
 
-		for (auto field : mFields)
+		for (auto& field : mFields)
 		{
-			if (field->mName == pathPart)
+			if (field.mName == pathPart)
 			{
 				if (delPos == -1)
 				{
-					fieldInfo = field;
-					return field->GetValuePtrStrong(object);
+					fieldInfo = &field;
+					return field.GetValuePtrStrong(object);
 				}
 				else
 				{
-					void* val = field->GetValuePtr(object);
+					void* val = field.GetValuePtr(object);
 
 					if (!val)
 						return nullptr;
 
-					return field->SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo);
+					return field.SearchFieldPtr(val, path.SubStr(delPos + 1), fieldInfo);
 				}
 			}
 		}
@@ -273,7 +270,7 @@ namespace o2
 		return mElementType;
 	}
 
-	void* VectorType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* VectorType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
 		String pathPart = path.SubStr(0, delPos);
@@ -344,7 +341,7 @@ namespace o2
 		return mGetObjectDictionaryValuePtrFunc(object, idx);
 	}
 
-	void* MapType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* MapType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 // 		int delPos = path.Find("/");
 // 		String pathPart = path.SubStr(0, delPos);
@@ -389,7 +386,7 @@ namespace o2
 		return mUnptrType;
 	}
 
-	void* PointerType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* PointerType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		return mUnptrType->GetFieldPtr(*(void**)object, path, fieldInfo);
 	}
@@ -441,7 +438,7 @@ namespace o2
 		return (IObject*)(*mCastToFunc)(object);
 	}
 
-	void* ObjectType::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* ObjectType::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		IObject* iobject = DynamicCastToIObject(object);
 		const Type* realType = &iobject->GetType();

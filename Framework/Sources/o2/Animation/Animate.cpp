@@ -179,7 +179,7 @@ namespace o2
 		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
-			FieldInfo* fi;
+			const FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mColorAnimatedValue = mAnimation.AddTrack<Color4>(nameVariant);
@@ -199,7 +199,7 @@ namespace o2
 		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
-			FieldInfo* fi;
+			const FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mPositionAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
@@ -219,7 +219,7 @@ namespace o2
 		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
-			FieldInfo* fi;
+			const FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mScaleAnimatedValue = mAnimation.AddTrack<Vec2F>(nameVariant);
@@ -239,7 +239,7 @@ namespace o2
 		void* target = targetObjType.DynamicCastFromIObject(mTarget);
 		for (auto nameVariant : nameVariants)
 		{
-			FieldInfo* fi;
+			const FieldInfo* fi;
 			if (targetObjType.GetFieldPtr(target, nameVariant, fi))
 			{
 				mRotationAnimatedValue = mAnimation.AddTrack<float>(nameVariant);

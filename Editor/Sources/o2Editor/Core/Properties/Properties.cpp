@@ -100,7 +100,7 @@ namespace Editor
 		return nullptr;
 	}
 
-	IPropertyField* Properties::BuildField(VerticalLayout* layout, FieldInfo* fieldInfo,
+	IPropertyField* Properties::BuildField(VerticalLayout* layout, const FieldInfo* fieldInfo,
 										   PropertiesContext& context, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -148,7 +148,7 @@ namespace Editor
 		return BuildField(layout, objectType.GetField(fieldName), context, path, onChangeCompleted, onChanged);
 	}
 
-	void Properties::BuildFields(VerticalLayout* layout, Vector<FieldInfo*> fields,
+	void Properties::BuildFields(VerticalLayout* layout, Vector<const FieldInfo*> fields,
 								 PropertiesContext& context, const String& path,
 								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
@@ -212,7 +212,7 @@ namespace Editor
 		field->SetParent(nullptr, false);
 	}
 
-	bool Properties::IsPropertyVisible(FieldInfo* info, bool allowPrivate) const
+	bool Properties::IsPropertyVisible(const FieldInfo* info, bool allowPrivate) const
 	{
 		if (info->HasAttribute<IgnoreEditorPropertyAttribute>())
 			return false;
@@ -226,7 +226,7 @@ namespace Editor
 		return false;
 	}
 
-	bool Properties::IsPropertyVisible(FieldInfo* info) const
+	bool Properties::IsPropertyVisible(const FieldInfo* info) const
 	{
 		return IsPropertyVisible(info, mPrivateVisible);
 	}
@@ -239,22 +239,22 @@ namespace Editor
 		BuildObjectProperties(layout, type->GetFieldsWithBaseClasses(), context, path, onChangeCompleted, onChanged);
 	}
 
-	void Properties::BuildObjectProperties(VerticalLayout* layout, Vector<FieldInfo*> fields,
+	void Properties::BuildObjectProperties(VerticalLayout* layout, Vector<const FieldInfo*> fields,
 										   PropertiesContext& context, const String& path,
 										   const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/,
 										   const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
 	{
 		PushEditorScopeOnStack scope;
 
-		Vector<FieldInfo*> regularFields = fields.FindAll(
-			[&](FieldInfo* x) { return IsPropertyVisible(x, false); });
+		Vector<const FieldInfo*> regularFields = fields.FindAll(
+			[&](const FieldInfo* x) { return IsPropertyVisible(x, false); });
 
 		BuildFields(layout, regularFields, context, path, onChangeCompleted, onChanged);
 
 		if (mPrivateVisible)
 		{
-			Vector<FieldInfo*> privateFields = fields.FindAll(
-				[&](FieldInfo* x) { return IsPropertyVisible(x, true) && !regularFields.Contains(x); });
+			Vector<const FieldInfo*> privateFields = fields.FindAll(
+				[&](const FieldInfo* x) { return IsPropertyVisible(x, true) && !regularFields.Contains(x); });
 
 			if (!privateFields.IsEmpty())
 			{

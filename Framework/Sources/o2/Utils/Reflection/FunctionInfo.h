@@ -15,11 +15,13 @@ namespace o2
 	public:
 		struct Parameter
 		{
-			String      name;
+			String name;
+
 			const Type* type;
-			bool        isConstant;
-			bool        isReference;
-			bool        isPointer;
+
+			bool isConstant;
+			bool isReference;
+			bool isPointer;
 
 			bool operator==(const Parameter& other) const;
 		};

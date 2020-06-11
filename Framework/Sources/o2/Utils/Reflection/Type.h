@@ -5,7 +5,6 @@
 #include "o2/Utils/Delegates.h"
 #include "o2/Utils/Reflection/Attributes.h"
 #include "o2/Utils/Reflection/TypeSerializer.h"
-#include "o2/Utils/Reflection/SearchPassedObject.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
@@ -30,9 +29,6 @@ namespace o2
 
 	template<typename _type, typename _getter>
 	const Type& GetTypeOf();
-
-	template<typename T, typename X>
-	struct GetTypeHelper;
 
 	template<typename _element_type>
 	struct VectorCountFieldSerializer;
@@ -94,10 +90,10 @@ namespace o2
 		const Vector<BaseType>& GetBaseTypes() const;
 
 		// Returns fields informations array
-		const Vector<FieldInfo*>& GetFields() const;
+		const Vector<FieldInfo>& GetFields() const;
 
 		// Returns fields informations array with all base types
-		Vector<FieldInfo*> GetFieldsWithBaseClasses() const;
+		Vector<const FieldInfo*> GetFieldsWithBaseClasses() const;
 
 		// Returns functions informations array
 		const Vector<FunctionInfo*>& GetFunctions() const;
@@ -112,7 +108,7 @@ namespace o2
 		Vector<StaticFunctionInfo*> GetStaticFunctionsWithBaseClasses() const;
 
 		// Returns field information by name
-		FieldInfo* GetField(const String& name) const;
+		const FieldInfo* GetField(const String& name) const;
 
 		// Returns function info by name
 		const FunctionInfo* GetFunction(const String& name) const;
@@ -135,7 +131,7 @@ namespace o2
 		virtual void* CreateSample() const = 0;
 
 		// Returns filed pointer by path
-		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+		virtual void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const;
 
 		// Returns abstract value proxy for object value
 		virtual IAbstractValueProxy* GetValueProxy(void* object) const = 0;
@@ -168,7 +164,7 @@ namespace o2
 
 		Vector<BaseType> mBaseTypes; // Base types ids with offset 
 
-		Vector<FieldInfo*>          mFields;          // Fields information
+		Vector<FieldInfo>           mFields;          // Fields information
 		Vector<FunctionInfo*>       mFunctions;       // Functions informations
 		Vector<StaticFunctionInfo*> mStaticFunctions; // Functions informations
 
@@ -226,7 +222,7 @@ namespace o2
 		IObject* DynamicCastToIObject(void* object) const;
 
 		// Returns filed pointer by path
-		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
+		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 	protected:
 		void*(*mCastFromFunc)(void*); // Dynamic cast function from IObject
@@ -280,7 +276,7 @@ namespace o2
 		const Type* GetUnpointedType() const;
 
 		// Returns filed pointer by path
-		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
+		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 		// Creates sample copy and returns him
 		void* CreateSample() const override;
@@ -357,26 +353,13 @@ namespace o2
 		const Type* GetPointerType() const override;
 
 		// Returns filed pointer by path
-		void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const override;
+		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 		// Returns value from property casted to void*
 		void* GetValueAsPtr(void* propertyPtr) const override;
 
 		// Returns value from property
 		_value_type GetValue(void* propertyPtr) const;
-
-	private:
-		struct RealFieldGetter
-		{
-			static void* GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo);
-			static void* GetValuePtr(void* object);
-		};
-
-		struct NullFieldGetter
-		{
-			static void* GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo);
-			static void* GetValuePtr(void* object);
-		};
 	};
 
 	// ----------------------
@@ -410,7 +393,7 @@ namespace o2
 		virtual void RemoveObjectVectorElement(void* object, int idx) const = 0;
 
 		// Returns filed pointer by path
-		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 		// Returns element field info. Element field info is same for all elements
 		FieldInfo* GetElementFieldInfo() const;
@@ -501,7 +484,7 @@ namespace o2
 		void* GetObjectDictionaryValuePtr(void* object, int idx) const;
 
 		// Returns filed pointer by path
-		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 	protected:
 		const Type* mKeyType;
@@ -558,7 +541,7 @@ namespace o2
 		TStringPointerAccessorType();
 
 		// Returns filed pointer by path
-		virtual void* GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const;
+		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 		// Creates sample copy and returns him
 		void* CreateSample() const override;
@@ -632,14 +615,8 @@ namespace o2
 	protected:
 		static Type* type;
 
-		template<typename _type_, typename _getter>
+		template<typename _type_>
 		friend const Type& o2::GetTypeOf();
-
-		template<typename T>
-		friend struct RegularTypeGetter;
-
-		template<typename T, typename X>
-		friend struct o2::GetTypeHelper;
 
 		friend class Reflection;
 
@@ -660,14 +637,8 @@ namespace o2
 	protected:
 		static EnumType* type;
 
-		template<typename _type_, typename _getter>
+		template<typename _type_>
 		friend const Type& o2::GetTypeOf();
-
-		template<typename T>
-		friend struct RegularTypeGetter;
-
-		template<typename T, typename X>
-		friend struct o2::GetTypeHelper;
 
 		friend class Reflection;
 	};
@@ -996,46 +967,28 @@ namespace o2
 	}
 
 	template<typename _value_type, typename _property_type>
-	void* TPropertyType<_value_type, _property_type>::NullFieldGetter::GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo)
+	void* TPropertyType<_value_type, _property_type>::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
+		if constexpr (std::is_pointer<_value_type>::value)
+		{
+			_property_type* prop = (_property_type*)object;
+			_value_type valuePtr = prop->Get();
+			return mValueType->GetFieldPtr(&valuePtr, path, fieldInfo);
+		}
+
 		return nullptr;
-	}
-
-	template<typename _value_type, typename _property_type>
-	void* TPropertyType<_value_type, _property_type>::NullFieldGetter::GetValuePtr(void* object)
-	{
-		return nullptr;
-	}
-
-	template<typename _value_type, typename _property_type>
-	void* TPropertyType<_value_type, _property_type>::RealFieldGetter::GetFieldPtr(const TPropertyType<_value_type, _property_type>& type, void* object, const String& path, FieldInfo*& fieldInfo)
-	{
-		_property_type* prop = (_property_type*)object;
-		_value_type valuePtr = prop->Get();
-		return type.mValueType->GetFieldPtr(&valuePtr, path, fieldInfo);
-	}
-
-	template<typename _value_type, typename _property_type>
-	void* TPropertyType<_value_type, _property_type>::RealFieldGetter::GetValuePtr(void* object)
-	{
-		_property_type* prop = (_property_type*)object;
-		return prop->Get();
-	}
-
-	template<typename _value_type, typename _property_type>
-	void* TPropertyType<_value_type, _property_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
-	{
-		typedef typename std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
-
-		return getter::GetFieldPtr(*this, object, path, fieldInfo);
 	}
 
 	template<typename _value_type, typename _property_type>
 	void* TPropertyType<_value_type, _property_type>::GetValueAsPtr(void* propertyPtr) const
 	{
-		typedef typename std::conditional<std::is_pointer<_value_type>::value, RealFieldGetter, NullFieldGetter>::type getter;
+		if constexpr (std::is_pointer<_value_type>::value)
+		{
+			_property_type* prop = (_property_type*)propertyPtr;
+			return prop->Get();
+		}
 
-		return getter::GetValuePtr(propertyPtr);
+		return nullptr;
 	}
 
 	template<typename _value_type, typename _property_type>
@@ -1044,7 +997,6 @@ namespace o2
 		_property_type* prop = (_property_type*)propertyPtr;
 		return prop->Get();
 	}
-
 
 	// --------------------------
 	// TVectorType implementation
@@ -1103,8 +1055,8 @@ namespace o2
 	{
 		mElementType = &GetTypeOf<_element_type>();
 
-		mElementFieldInfo = mnew FieldInfo("element", 0, mElementType, ProtectSection::Private);
-		mCountFieldInfo = mnew FieldInfo("count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
+		mElementFieldInfo = mnew FieldInfo(this, "element", 0, mElementType, ProtectSection::Private);
+		mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
 	}
 
 	template<typename _element_type>
@@ -1245,7 +1197,7 @@ namespace o2
 	}
 
 	template<typename _return_type, typename _accessor_type>
-	void* TStringPointerAccessorType<_return_type, _accessor_type>::GetFieldPtr(void* object, const String& path, FieldInfo*& fieldInfo) const
+	void* TStringPointerAccessorType<_return_type, _accessor_type>::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
 		String pathPart = path.SubStr(0, delPos);
@@ -1344,12 +1296,9 @@ namespace o2
 										 ProtectSection section)
 	{
 		auto valType = &TypeOf(_type);
+		type->mFields.emplace_back(FieldInfo(type, name, pointerGetter, valType, section));
 
-		auto fieldInfo = mnew FieldInfo(name, pointerGetter, valType, section);
-		fieldInfo->mOwnerType = type;
-		type->mFields.Add(fieldInfo);
-
-		return *fieldInfo;
+		return type->mFields.Last();
 	}
 
 	template<typename _class_type, typename _res_type, typename ... _args>

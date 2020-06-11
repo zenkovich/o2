@@ -91,7 +91,7 @@ namespace o2
 
 	void AnimationPlayer::BindTrack(const ObjectType* type, void* castedTarget, IAnimationTrack * track, bool errors)
 	{
-		FieldInfo* fieldInfo = nullptr;
+		const FieldInfo* fieldInfo = nullptr;
 		auto targetPtr = type->GetFieldPtr(castedTarget, track->path, fieldInfo);
 
 		if (!fieldInfo)
