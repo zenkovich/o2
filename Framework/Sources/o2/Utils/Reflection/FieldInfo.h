@@ -185,11 +185,12 @@ namespace o2
 	template<typename _type>
 	FieldInfo& FieldInfo::SetDefaultValue(const _type& value)
 	{
-// 		if (auto serializer = dynamic_cast<TypeSerializer<_type>*>(mSerializer))
-// 		{
-// 			serializer.defaultValue = value;
-// 			serializer.defaultValueDefined = true;
-// 		}
+		if constexpr (std::is_copy_constructible<_type>::value)
+		{
+			if (auto serializer = dynamic_cast<TypeSerializer<_type>*>(mSerializer))
+				serializer->defaultValue = new _type(value);
+		}
+
 		return *this;
 	}
 

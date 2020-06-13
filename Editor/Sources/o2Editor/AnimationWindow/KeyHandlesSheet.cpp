@@ -468,15 +468,15 @@ namespace Editor
 			if (!fnd.second)
 				continue;
 
-			DataValue* trackData = data.AddMember("KeysGroup");
-			trackData->AddMember("Path") = kv.first;
-			DataValue* keysData = trackData->AddMember("Keys");
+			DataValue& trackData = data.AddMember("KeysGroup");
+			trackData.AddMember("Path") = kv.first;
+			DataValue& keysData = trackData.AddMember("Keys");
 
 			for (auto handle : fnd.second->GetKeyHandles())
 			{
 				if (kv.second.Contains(handle->keyUid))
 				{
-					auto node = keysData->AddMember("key");
+					auto node = keysData.AddMember("key");
 					fnd.second->SerializeKey(handle->keyUid, node, relativeTime);
 				}
 			}

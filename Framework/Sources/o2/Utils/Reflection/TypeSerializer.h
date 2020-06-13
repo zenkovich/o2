@@ -22,9 +22,10 @@ namespace o2
 		static constexpr bool isEqualsSupport = SupportsEqualOperator<_type>::value;
 		static constexpr bool isCopyable = std::is_assignable<_type&, _type>::value;
 
+		typedef typename std::conditional<std::is_copy_constructible<_type>::value, _type, void>::type defaultValueType;
+
 	public:
-// 		_type defaultValue;
-// 		bool  defaultValueDefined = false;
+		defaultValueType* defaultValue = nullptr;
 
 	public:
 		void Serialize(void* object, DataValue& data) const;
