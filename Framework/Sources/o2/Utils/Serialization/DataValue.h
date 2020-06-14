@@ -1334,7 +1334,7 @@ namespace o2
 					for (auto& field : type.GetFields())
 					{
 						auto srlzAttribute = field.GetAttribute<SerializableAttribute>();
-						if (srlzAttribute)
+						if (srlzAttribute && field.CheckSerializable(object))
 							field.SerializeFromObject(object, node.AddMember(field.GetName()));
 					}
 				}

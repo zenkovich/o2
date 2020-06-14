@@ -91,6 +91,9 @@ namespace o2
 		// Returns attributes array
 		const Vector<IAttribute*>& GetAttributes() const;
 
+		// Checks is value from object is serializable and not equals with default value
+		bool CheckSerializable(void* object) const;
+
 		// Serializes from object pointer, that contains this field
 		void SerializeFromObject(void* object, DataValue& data) const;
 

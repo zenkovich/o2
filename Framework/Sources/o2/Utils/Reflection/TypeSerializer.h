@@ -8,6 +8,8 @@ namespace o2
 	{
 		virtual ~ITypeSerializer() { }
 
+		virtual bool CheckSerializable(void* object) const { return false; }
+
 		virtual void Serialize(void* object, DataValue& data) const { }
 		virtual void Deserialize(void* object, const DataValue& data) const { }
 
@@ -28,6 +30,7 @@ namespace o2
 		defaultValueType* defaultValue = nullptr;
 
 	public:
+		bool CheckSerializable(void* object) const;
 		void Serialize(void* object, DataValue& data) const;
 		void Deserialize(void* object, const DataValue& data) const;
 		bool Equals(void* objectA, void* objectB) const;
@@ -35,6 +38,15 @@ namespace o2
 
 		ITypeSerializer* Clone() const;
 	};
+
+	template<typename _type>
+	bool TypeSerializer<_type>::CheckSerializable(void* object) const
+	{
+		if constexpr (isSerializable)
+			return !defaultValue || !Equals(object, defaultValue);
+
+		return false;
+	}
 
 	template<typename _type>
 	void TypeSerializer<_type>::Serialize(void* object, DataValue& data) const

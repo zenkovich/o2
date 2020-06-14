@@ -69,6 +69,11 @@ namespace o2
 		return mAttributes;
 	}
 
+	bool FieldInfo::CheckSerializable(void* object) const
+	{
+		return mSerializer->CheckSerializable(object);
+	}
+
 	void FieldInfo::SerializeFromObject(void* object, DataValue& data) const
 	{
 		mSerializer->Serialize(GetValuePtrStrong(object), data);
