@@ -460,12 +460,12 @@ namespace o2
 		int dirtyFrame = 1;  // Frame index, when layout was marked as dirty
 		int updateFrame = 1; // Frame index, when layout was updated
 
-		Vec2F position;            // Position @SERIALIZABLE
-		Vec2F size;                // Size @SERIALIZABLE
-		Vec2F scale = Vec2F(1, 1); // Scale, (1; 1) is default @SERIALIZABLE
-		Vec2F pivot;               // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-		float angle = 0;           // Rotation angle in radians @SERIALIZABLE
-		float shear = 0;           // Shear @SERIALIZABLE
+		Vec2F position = Vec2F(0, 0);    // Position @SERIALIZABLE
+		Vec2F size = Vec2F(0, 0);        // Size @SERIALIZABLE
+		Vec2F scale = Vec2F(1, 1);       // Scale, (1, 1) is default @SERIALIZABLE
+		Vec2F pivot = Vec2F(0.5f, 0.5f); // Pivot: (0, 0) is left bottom corner - (1, 1) is right top corner @SERIALIZABLE
+		float angle = 0.0f;              // Rotation angle in radians @SERIALIZABLE
+		float shear = 0.0f;              // Shear @SERIALIZABLE
 
 		RectF rectangle;              // The rectangle in local space
 		RectF parentRectangle;        // The parent rectangle
@@ -677,12 +677,12 @@ CLASS_FIELDS_META(o2::ActorTransformData)
 {
 	PUBLIC_FIELD(dirtyFrame).DEFAULT_VALUE(1);
 	PUBLIC_FIELD(updateFrame).DEFAULT_VALUE(1);
-	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(size).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(position).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(size).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(scale).DEFAULT_VALUE(Vec2F(1, 1)).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(pivot).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(angle).DEFAULT_VALUE(0).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(shear).DEFAULT_VALUE(0).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(pivot).DEFAULT_VALUE(Vec2F(0.5f, 0.5f)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(angle).DEFAULT_VALUE(0.0f).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(shear).DEFAULT_VALUE(0.0f).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(rectangle);
 	PUBLIC_FIELD(parentRectangle);
 	PUBLIC_FIELD(parentRectangePosition);

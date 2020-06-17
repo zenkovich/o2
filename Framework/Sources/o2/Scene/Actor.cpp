@@ -832,28 +832,38 @@ namespace o2
 	{
 		node["Id"] = mId;
 		node["Name"] = mName;
-		node["Enabled"] = mEnabled;
-		node["Locked"] = mLocked;
+
+		if (!mEnabled)
+			node["Enabled"] = mEnabled;
+
+		if (mLocked)
+			node["Locked"] = mLocked;
 
 		node["Transform"].Set(*transform);
 
 		if (mLayer)
 			node["LayerName"] = mLayer->name;
 
-		auto& childsNode = node.AddMember("Childs");
-		for (auto child : mChildren)
+		if (!mChildren.IsEmpty())
 		{
-			auto& childNode = childsNode.AddElement();
-			childNode.AddMember("Type") = child->GetType().GetName();
-			child->Serialize(childNode.AddMember("Data"));
+			auto& childsNode = node.AddMember("Childs");
+			for (auto child : mChildren)
+			{
+				auto& childNode = childsNode.AddElement();
+				childNode.AddMember("Type") = child->GetType().GetName();
+				child->Serialize(childNode.AddMember("Data"));
+			}
 		}
 
-		auto& componentsNode = node.AddMember("Components");
-		for (auto component : mComponents)
+		if (!mComponents.IsEmpty())
 		{
-			auto& componentNode = componentsNode.AddElement();
-			component->Serialize(componentNode.AddMember("Data"));
-			componentNode.AddMember("Type") = component->GetType().GetName();
+			auto& componentsNode = node.AddMember("Components");
+			for (auto component : mComponents)
+			{
+				auto& componentNode = componentsNode.AddElement();
+				component->Serialize(componentNode.AddMember("Data"));
+				componentNode.AddMember("Type") = component->GetType().GetName();
+			}
 		}
 	}
 
@@ -865,8 +875,12 @@ namespace o2
 
 		mId = node.GetMember("Id");
 		mName = node.GetMember("Name");
-		mLocked = node.GetMember("Locked");
-		mEnabled = node.GetMember("Enabled");
+
+		if (auto lockedNode = node.FindMember("Locked"))
+			mLocked = *lockedNode;
+
+		if (auto lockedNode = node.FindMember("Enabled"))
+			mEnabled = *lockedNode;
 
 		if (auto layerNode = node.FindMember("LayerName"))
 		{

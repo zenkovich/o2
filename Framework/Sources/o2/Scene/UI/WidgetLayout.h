@@ -293,16 +293,16 @@ namespace o2
 	class WidgetLayoutData : public ActorTransformData
 	{
 	public:
-		Vec2F anchorMin = Vec2F(0.0f, 0.0f); // Left bottom anchor @SERIALIZABLE
-		Vec2F anchorMax = Vec2F(0.0f, 0.0f); // Right top anchor @SERIALIZABLE
+		Vec2F anchorMin = Vec2F(0, 0); // Left bottom anchor @SERIALIZABLE
+		Vec2F anchorMax = Vec2F(0, 0); // Right top anchor @SERIALIZABLE
 
-		Vec2F offsetMin = Vec2F(0.0f, 0.0f);   // Left bottom offset @SERIALIZABLE
-		Vec2F offsetMax = Vec2F(10.0f, 10.0f); // Right top offset @SERIALIZABLE
+		Vec2F offsetMin = Vec2F(0, 0);   // Left bottom offset @SERIALIZABLE
+		Vec2F offsetMax = Vec2F(10, 10); // Right top offset @SERIALIZABLE
 
-		Vec2F minSize = Vec2F(0.0f, 0.0f);	 // Minimal size @SERIALIZABLE
+		Vec2F minSize = Vec2F(0, 0);	 // Minimal size @SERIALIZABLE
 		Vec2F maxSize = Vec2F(10000, 10000); // Maximum size @SERIALIZABLE
 
-		Vec2F weight = Vec2F(1.0f, 1.0f); // Layout weight @SERIALIZABLE
+		Vec2F weight = Vec2F(1, 1); // Layout weight @SERIALIZABLE
 
 		RectF childrenWorldRect; // World rectangle for children arranging
 
@@ -433,13 +433,13 @@ CLASS_BASES_META(o2::WidgetLayoutData)
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayoutData)
 {
-	PUBLIC_FIELD(anchorMin).DEFAULT_VALUE(Vec2F(0.0f, 0.0f)).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(anchorMax).DEFAULT_VALUE(Vec2F(0.0f, 0.0f)).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(offsetMin).DEFAULT_VALUE(Vec2F(0.0f, 0.0f)).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(offsetMax).DEFAULT_VALUE(Vec2F(10.0f, 10.0f)).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(minSize).DEFAULT_VALUE(Vec2F(0.0f, 0.0f)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(anchorMin).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(anchorMax).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMin).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMax).DEFAULT_VALUE(Vec2F(10, 10)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(minSize).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(maxSize).DEFAULT_VALUE(Vec2F(10000, 10000)).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(weight).DEFAULT_VALUE(Vec2F(1.0f, 1.0f)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(weight).DEFAULT_VALUE(Vec2F(1, 1)).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(childrenWorldRect);
 	PUBLIC_FIELD(drivenByParent).DEFAULT_VALUE(false);
 	PUBLIC_FIELD(owner).DEFAULT_VALUE(nullptr);

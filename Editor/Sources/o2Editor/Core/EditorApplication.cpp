@@ -149,7 +149,7 @@ namespace Editor
 		if (mNeedRebuildWndStyle)
 		{
 			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIManager(true, true);
+			builder.RebuildEditorUIManager(true, false);
 		}
 
 		o2UI.LoadStyle("editor_ui_style.json");

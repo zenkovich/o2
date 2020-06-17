@@ -191,7 +191,10 @@ namespace o2
 		if constexpr (std::is_copy_constructible<_type>::value)
 		{
 			if (auto serializer = dynamic_cast<TypeSerializer<_type>*>(mSerializer))
+			{
 				serializer->defaultValue = new _type(value);
+				serializer = serializer;
+			}
 		}
 
 		return *this;

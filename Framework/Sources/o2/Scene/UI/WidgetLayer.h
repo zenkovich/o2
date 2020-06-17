@@ -26,15 +26,15 @@ namespace o2
 	{
 	public:
 		PROPERTIES(WidgetLayer);
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                       // Enable property
-		PROPERTY(float, depth, SetDepth, GetDepth);                           // Drawing depth (higher depths will draw later)
-		PROPERTY(float, transparency, SetTransparency, GetTransparency);      // Drawable transparency property
-		PROPERTY(IRectDrawable*, drawable, SetDrawable, GetDrawable);        // Drawable property @EXPANDED_BY_DEFAULT
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property
+		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later)
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property
+		PROPERTY(IRectDrawable*, drawable, SetDrawable, GetDrawable);    // Drawable property @EXPANDED_BY_DEFAULT
 
 		ACCESSOR(WidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
 #if IS_EDITOR
-		PROPERTY(bool, locked, SetLocked, IsLocked);                          // Is locked property
+		PROPERTY(bool, locked, SetLocked, IsLocked); // Is locked property
 #endif 
 
 	public:
