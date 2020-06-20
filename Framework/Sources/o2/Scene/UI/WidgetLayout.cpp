@@ -722,9 +722,9 @@ namespace o2
 
 	Vector<float> CalculateExpandedSize(Vector<Widget*>& widgets, bool horizontal, float availableWidth, float spacing)
 	{
-		Vector<float> minSizes(widgets.Count());
-		Vector<float> maxSizes(widgets.Count());
-		Vector<float> weights(widgets.Count());
+		Vector<float> minSizes; minSizes.Reserve(widgets.Count());
+		Vector<float> maxSizes; maxSizes.Reserve(widgets.Count());
+		Vector<float> weights; weights.Reserve(widgets.Count());
 
 		float minSizesSum = 0;
 		float weightsSum = 0;

@@ -327,7 +327,8 @@ namespace Editor
 		const Vector<_object_type*>& prototypes,
 		std::function<_type* (_object_type*)> getter)
 	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs(targets.Count());
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
+		targetPairs.Reserve(targets.Count());
 
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
@@ -345,7 +346,8 @@ namespace Editor
 		const Vector<_object_type*>& prototypes,
 		std::function<_property_type* (_object_type*)> getter)
 	{
-		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs(targets.Count());
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
+		targetPairs.Reserve(targets.Count());
 
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
@@ -439,7 +441,6 @@ namespace Editor
 	template<typename _type>
 	void TPropertyField<_type>::StoreValues(Vector<DataDocument>& data) const
 	{
-		return;
 		data.Clear();
 		for (auto ptr : mValuesProxies)
 		{

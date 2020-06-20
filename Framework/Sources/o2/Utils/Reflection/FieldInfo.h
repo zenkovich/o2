@@ -23,6 +23,20 @@ namespace o2
 	public:
 		typedef void*(*GetValuePointerFuncPtr)(void*);
 
+		struct IDefaultValue
+		{
+			virtual bool Equals(void* value) const = 0;
+		};
+
+		template<typename T>
+		struct DefaultValue: public IDefaultValue
+		{
+			T value;
+
+			DefaultValue(const T& value): value(value) {}
+			bool Equals(void* value) const override { return *(T*)value == this->value; }
+		};
+
 	public:
 		// Default constructor
 		FieldInfo();
@@ -32,7 +46,7 @@ namespace o2
 
 		// Constructor
 		FieldInfo(const Type* ownerType, const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type, 
-				  ProtectSection section, ITypeSerializer* serializer = nullptr);
+				  ProtectSection section, IDefaultValue* defaultValue = nullptr, ITypeSerializer* serializer = nullptr);
 
 		// Destructor
 		~FieldInfo();
@@ -118,7 +132,8 @@ namespace o2
 		const Type*            mType = nullptr;                          // Field type
 		const Type*            mOwnerType = nullptr;                     // Field owner type
 		Vector<IAttribute*>    mAttributes;                              // Attributes array
-		ITypeSerializer*       mSerializer = nullptr;                    // field serializer
+		ITypeSerializer*       mSerializer = nullptr;                    // Field serializer
+		IDefaultValue*         mDefaultValue = nullptr;                  // Default field value. nullptr when undefined
 		GetValuePointerFuncPtr mPointerGetter = nullptr;                 // Value pointer getter function
 
 	protected:
@@ -131,12 +146,6 @@ namespace o2
 
 		template<typename _type, typename _accessor_type>
 		friend class TStringPointerAccessorType;
-	};
-
-	template<typename _type>
-	struct FieldInfoInitializer
-	{
-
 	};
 
 	template<typename _attr_type>
@@ -188,14 +197,8 @@ namespace o2
 	template<typename _type>
 	FieldInfo& FieldInfo::SetDefaultValue(const _type& value)
 	{
-		if constexpr (std::is_copy_constructible<_type>::value)
-		{
-			if (auto serializer = dynamic_cast<TypeSerializer<_type>*>(mSerializer))
-			{
-				serializer->defaultValue = new _type(value);
-				serializer = serializer;
-			}
-		}
+		if constexpr (std::is_copy_constructible<_type>::value && SupportsEqualOperator<_type>::value)
+			mDefaultValue = mnew DefaultValue<_type>(value);
 
 		return *this;
 	}

@@ -430,7 +430,7 @@ namespace o2
 			someSelected = true;
 		}
 
-		if (!mSelectedNodes.ContainsPred([=](Node* x) { return x->widget == uiNode; }))
+		if (!mSelectedNodes.Contains([=](Node* x) { return x->widget == uiNode; }))
 		{
 			someSelected = true;
 
@@ -824,7 +824,7 @@ namespace o2
 			VisibleWidgetDef cache;
 			cache.object = node->object;
 			cache.widget = node->widget;
-			cache.position = mAllNodes.Find(node);
+			cache.position = mAllNodes.IndexOf(node);
 
 			mVisibleWidgetsCache.Add(cache);
 		}
@@ -882,7 +882,7 @@ namespace o2
 
 	void Tree::RemoveNodes(Node* parentNode)
 	{
-		int begin = mAllNodes.Find(parentNode) + 1;
+		int begin = mAllNodes.IndexOf(parentNode) + 1;
 		int end = begin - 1 + parentNode->GetChildCount();
 
 		mAllNodes.RemoveRange(begin, end);
@@ -1164,7 +1164,7 @@ namespace o2
 
 	void Tree::ExpandNode(Node* node)
 	{
-		int position = mAllNodes.Find(node) + 1;
+		int position = mAllNodes.IndexOf(node) + 1;
 
 		if (mExpandingNodeState != ExpandState::None && mExpandingNodeIdx != position - 1)
 			UpdateNodeExpanding(mExpandNodeTime);
@@ -1227,7 +1227,7 @@ namespace o2
 
 	void Tree::CollapseNode(Node* node)
 	{
-		int idx = mAllNodes.Find(node);
+		int idx = mAllNodes.IndexOf(node);
 
 		if (mExpandingNodeState != ExpandState::None && mExpandingNodeIdx != idx)
 			UpdateNodeExpanding(mExpandNodeTime);
@@ -1248,7 +1248,7 @@ namespace o2
 
 	void Tree::StartExpandingAnimation(ExpandState direction, Node* node, int childrenCount)
 	{
-		int idx = mAllNodes.Find(node);
+		int idx = mAllNodes.IndexOf(node);
 
 		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 
@@ -1595,7 +1595,7 @@ namespace o2
 
 			if (node->widget && changed)
 			{
-				UpdateNodeWidgetLayout(node, mAllNodes.Find(node));
+				UpdateNodeWidgetLayout(node, mAllNodes.IndexOf(node));
 				node->widget->SetLayoutDirty();
 			}
 		}
@@ -1679,7 +1679,7 @@ namespace o2
 				targetParent = insertNodeCandidate->parent ? insertNodeCandidate->parent->object : nullptr;
 				auto parentChilds = GetObjectChilds(targetParent);
 
-				int idx = parentChilds.Find(insertNodeCandidate->object);
+				int idx = parentChilds.IndexOf(insertNodeCandidate->object);
 				if (idx > 0)
 				{
 					targetPrevObject = parentChilds[idx - 1];
@@ -1697,7 +1697,7 @@ namespace o2
 				{
 					targetPrevObject = rootObjects.Last();
 
-					if (mSelectedObjects.ContainsPred([&](void* x) { return ((Node*)x)->object == targetPrevObject; }))
+					if (mSelectedObjects.Contains([&](void* x) { return ((Node*)x)->object == targetPrevObject; }))
 					{
 						if (rootObjects.Count() > 1)
 							targetPrevObject = rootObjects[rootObjects.Count() - 2];

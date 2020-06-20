@@ -362,7 +362,7 @@ namespace Editor
 				i++;
 			}
 
-			if (mCuttingAssets.ContainsPred([&](auto x) { return x.second == path; }))
+			if (mCuttingAssets.Contains([&](auto x) { return x.second == path; }))
 			{
 				o2FileSystem.FileMove(path, copyFileName);
 				o2FileSystem.FileMove(path + ".meta", copyFileName + ".meta");

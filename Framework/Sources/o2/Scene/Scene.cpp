@@ -442,7 +442,7 @@ namespace o2
 	{
 		if (object->GetEditableParent())
 		{
-			return object->GetEditableParent()->GetEditablesChildren().Find(object) + GetObjectHierarchyIdx(object->GetEditableParent());
+			return object->GetEditableParent()->GetEditablesChildren().IndexOf(object) + GetObjectHierarchyIdx(object->GetEditableParent());
 		}
 
 		return mRootActors.FindIdx([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == object; });
@@ -477,7 +477,7 @@ namespace o2
 
 		if (newParent)
 		{
-			int insertIdx = newParent->GetEditablesChildren().Find(prevObject) + 1;
+			int insertIdx = newParent->GetEditablesChildren().IndexOf(prevObject) + 1;
 
 			for (auto def : objectsDefs)
 			{

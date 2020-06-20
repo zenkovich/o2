@@ -327,7 +327,7 @@ namespace Editor
 			SceneEditableObject* parent = object->GetEditableParent();
 			while (parent)
 			{
-				if (mSelectedObjects.ContainsPred([&](auto x) { return parent == x; }))
+				if (mSelectedObjects.Contains([&](auto x) { return parent == x; }))
 				{
 					processing = false;
 					break;

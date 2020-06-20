@@ -218,7 +218,7 @@ namespace o2
 		public:
 			UInt64 uid;                  // Random unique id @SERIALIZABLE
 			float  position;             // Position on time line, in seconds @SERIALIZABLE
-			_type  value;                // Value @SERIALIZABLE
+			_type  value = _type();      // Value @SERIALIZABLE
 			float  leftSupportValue;     // Transition curve coefficient for previous animation segment @SERIALIZABLE
 			float  leftSupportPosition;  // Transition curve coefficient position for previous animation segment (must be in 0...1) @SERIALIZABLE
 			float  rightSupportValue;    // Transition curve coefficient for next animation segment @SERIALIZABLE
@@ -992,7 +992,7 @@ CLASS_FIELDS_META(o2::AnimationTrack<_type>::Key)
 {
 	PUBLIC_FIELD(uid).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(position).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(value).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(value).DEFAULT_VALUE(_type()).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(leftSupportValue).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(leftSupportPosition).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(rightSupportValue).SERIALIZABLE_ATTRIBUTE();

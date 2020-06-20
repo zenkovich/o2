@@ -95,7 +95,7 @@ namespace Editor
 
 	void IntegerProperty::OnMoveHandlePressed(const Input::Cursor& cursor)
 	{
-		mBeforeChangeValues = mCommonValue;
+		StoreValues(mBeforeChangeValues);
 		o2Application.SetCursorInfiniteMode(true);
 	}
 

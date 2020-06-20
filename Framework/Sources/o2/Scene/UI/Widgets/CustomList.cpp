@@ -234,7 +234,7 @@ namespace o2
 	{
 		int itemPos = GetItemPosition(item);
 
-		if (mSelectedItems.ContainsPred([=](auto x) { return x.idx == itemPos; }))
+		if (mSelectedItems.Contains([=](auto x) { return x.idx == itemPos; }))
 			return;
 
 		if (!mMultiSelection)
@@ -262,7 +262,7 @@ namespace o2
 			return;
 		}
 
-		if (mSelectedItems.ContainsPred([=](auto x) { return x.idx == position; }))
+		if (mSelectedItems.Contains([=](auto x) { return x.idx == position; }))
 			return;
 
 		if (position >= 0)

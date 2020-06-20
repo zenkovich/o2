@@ -8,13 +8,14 @@ namespace o2
 	{
 		virtual ~ITypeSerializer() { }
 
-		virtual bool CheckSerializable(void* object) const { return false; }
+		virtual bool IsDefault(void* object) const { return false; }
 
 		virtual void Serialize(void* object, DataValue& data) const { }
 		virtual void Deserialize(void* object, const DataValue& data) const { }
 
 		virtual bool Equals(void* objectA, void* objectB) const { return false; }
 		virtual void Copy(void* objectA, void* objectB) const { }
+
 		virtual ITypeSerializer* Clone() const { return mnew ITypeSerializer(); }
 	};
 	template<typename _type>
@@ -24,26 +25,23 @@ namespace o2
 		static constexpr bool isEqualsSupport = SupportsEqualOperator<_type>::value;
 		static constexpr bool isCopyable = std::is_assignable<_type&, _type>::value;
 
-		typedef typename std::conditional<std::is_copy_constructible<_type>::value, _type, void>::type defaultValueType;
-
 	public:
-		defaultValueType* defaultValue = nullptr;
+		bool IsDefault(void* object) const override;
 
-	public:
-		bool CheckSerializable(void* object) const;
-		void Serialize(void* object, DataValue& data) const;
-		void Deserialize(void* object, const DataValue& data) const;
-		bool Equals(void* objectA, void* objectB) const;
-		void Copy(void* objectA, void* objectB) const;
+		void Serialize(void* object, DataValue& data) const override;
+		void Deserialize(void* object, const DataValue& data) const override;
 
-		ITypeSerializer* Clone() const;
+		bool Equals(void* objectA, void* objectB) const override;
+		void Copy(void* objectA, void* objectB) const override;
+
+		ITypeSerializer* Clone() const override;
 	};
 
 	template<typename _type>
-	bool TypeSerializer<_type>::CheckSerializable(void* object) const
+	bool TypeSerializer<_type>::IsDefault(void* object) const
 	{
-		if constexpr (isSerializable)
-			return !defaultValue || !Equals(object, defaultValue);
+		if constexpr (std::is_default_constructible<_type>::value && SupportsEqualOperator<_type>::value)
+			return Math::Equals(*(_type*)object, _type());
 
 		return false;
 	}

@@ -423,7 +423,9 @@ namespace o2
 		Vector<Actor*> linkedProtoActors = o2Scene.mPrototypeLinksCache[mPrototype];
 		linkedProtoActors.Remove(this);
 
-		Vector<ApplyActorInfo> applyActorsInfos(linkedProtoActors.Count());
+		Vector<ApplyActorInfo> applyActorsInfos;
+		applyActorsInfos.Reserve(linkedProtoActors.Count());
+
 		for (auto linkedActor : linkedProtoActors)
 		{
 			applyActorsInfos.Add(ApplyActorInfo());

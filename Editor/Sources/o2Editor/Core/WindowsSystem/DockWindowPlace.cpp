@@ -237,7 +237,7 @@ namespace Editor
 
 	void DockWindowPlace::CheckInteractable()
 	{
-		interactable = mChildren.CountMatch([](auto x) { return x->GetType() == TypeOf(DockWindowPlace); }) == 0;
+		interactable = mChildren.Count([](auto x) { return x->GetType() == TypeOf(DockWindowPlace); }) == 0;
 
 		for (auto child : mChildren)
 		{

@@ -77,9 +77,7 @@ namespace o2
 
 		ReflectionInitializationTypeProcessor processor;
 		for (auto func : mInstance->mInitializingFunctions)
-		{
 			func(0, processor);
-		}
 
 		mInstance->mInitializingFunctions.Clear();
 		mInstance->mTypesInitialized = true;

@@ -35,7 +35,7 @@ namespace Editor
 
 		if (parent)
 		{
-			int insertIdx = parent->GetEditablesChildren().Find(prevObject) + 1;
+			int insertIdx = parent->GetEditablesChildren().IndexOf(prevObject) + 1;
 
 			objectsData.Get(objects);
 
@@ -44,7 +44,7 @@ namespace Editor
 		}
 		else
 		{
-			int insertIdx = o2Scene.GetRootEditableObjects().Find(prevObject) + 1;
+			int insertIdx = o2Scene.GetRootEditableObjects().IndexOf(prevObject) + 1;
 
 			objectsData.Get(objects);
 

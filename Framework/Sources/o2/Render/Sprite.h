@@ -193,8 +193,8 @@ namespace o2
 		ImageAssetRef mImageAsset;                 // Image asset @SERIALIZABLE
 		SpriteMode    mMode = SpriteMode::Default; // Drawing mode @SERIALIZABLE
 		BorderI       mSlices;                     // Slice borders @SERIALIZABLE
-		float         mFill = 1;                   // Sprite fillness @SERIALIZABLE
-		float         mTileScale = 1;              // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
+		float         mFill = 1.0f;                // Sprite fillness @SERIALIZABLE
+		float         mTileScale = 1.0f;           // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
 		Mesh*         mMesh;                       // Drawing mesh
 
 		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
@@ -268,8 +268,8 @@ CLASS_FIELDS_META(o2::Sprite)
 	PROTECTED_FIELD(mImageAsset).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMode).DEFAULT_VALUE(SpriteMode::Default).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSlices).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mFill).DEFAULT_VALUE(1).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mTileScale).DEFAULT_VALUE(1).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mFill).DEFAULT_VALUE(1.0f).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mTileScale).DEFAULT_VALUE(1.0f).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMesh);
 	PROTECTED_FIELD(mMeshBuildFunc);
 }

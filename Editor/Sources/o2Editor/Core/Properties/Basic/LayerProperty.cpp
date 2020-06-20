@@ -73,7 +73,7 @@ namespace Editor
 		auto dropdownLayers = mDropDown->GetAllItemsText();
 		for (auto itemName : dropdownLayers)
 		{
-			if (!layers.ContainsPred([&](SceneLayer* x) { return x->name == itemName; }))
+			if (!layers.Contains([&](SceneLayer* x) { return x->name == itemName; }))
 				mDropDown->RemoveItem(itemName);
 		}
 

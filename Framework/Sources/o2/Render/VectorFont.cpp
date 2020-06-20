@@ -135,7 +135,9 @@ namespace o2
 	void VectorFont::CheckCharacters(const WString& needChararacters, int height)
 	{
 		int len = needChararacters.Length();
-		Vector<wchar_t> needToRenderChars(len);
+		Vector<wchar_t> needToRenderChars;
+		needToRenderChars.Reserve(len);
+
 		for (int i = 0; i < len; i++)
 		{
 			bool isNew = true;

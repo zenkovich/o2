@@ -505,7 +505,7 @@ namespace o2
 	{
 		if (mParent)
 		{
-			int lastIdx = mParent->mChildren.Find(this);
+			int lastIdx = mParent->mChildren.IndexOf(this);
 			mParent->mChildren.Insert(this, idx);
 
 			if (idx <= lastIdx)
@@ -515,7 +515,7 @@ namespace o2
 		}
 		else
 		{
-			int lastIdx = mOwnerWidget->mLayers.Find(this);
+			int lastIdx = mOwnerWidget->mLayers.IndexOf(this);
 			mOwnerWidget->mLayers.Insert(this, idx);
 
 			if (idx <= lastIdx)

@@ -23,7 +23,7 @@ namespace Editor
 				parent->GetEditablesChildren() : 
 				o2Scene.GetRootActors().Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 
-			int actorIdx = parentChildren.Find(object);
+			int actorIdx = parentChildren.IndexOf(object);
 
 			info->objectId = object->GetID();
 			info->objectHierarchyIdx = o2Scene.GetObjectHierarchyIdx(object);
@@ -61,7 +61,7 @@ namespace Editor
 
 		if (parent)
 		{
-			int insertIdx = parent->GetEditablesChildren().Find(prevObject) + 1;
+			int insertIdx = parent->GetEditablesChildren().IndexOf(prevObject) + 1;
 
 			for (auto info : objectsInfos)
 			{
@@ -77,7 +77,7 @@ namespace Editor
 			int insertIdx = 0;
 			
 			if (auto prevActor = dynamic_cast<Actor*>(prevObject))
-				insertIdx = o2Scene.GetRootActors().Find(prevActor) + 1;
+				insertIdx = o2Scene.GetRootActors().IndexOf(prevActor) + 1;
 
 			for (auto info : objectsInfos)
 			{
@@ -104,13 +104,13 @@ namespace Editor
 
 			if (parent)
 			{
-				int idx = parent->GetEditablesChildren().Find(prevObject) + 1;
+				int idx = parent->GetEditablesChildren().IndexOf(prevObject) + 1;
 				parent->AddEditableChild(object, idx);
 				object->SetTransform(info->transform);
 			}
 			else
 			{
-				int idx = o2Scene.GetRootEditableObjects().Find(prevObject) + 1;
+				int idx = o2Scene.GetRootEditableObjects().IndexOf(prevObject) + 1;
 				object->SetIndexInSiblings(idx);
 				object->SetTransform(info->transform);
 			}

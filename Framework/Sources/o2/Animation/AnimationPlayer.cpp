@@ -125,7 +125,7 @@ namespace o2
 
 	void AnimationPlayer::OnClipTrackRemove(IAnimationTrack* track)
 	{
-		mTrackPlayers.Remove([track, this](auto& x) { return x->GetTrack() == track; onTrackPlayerRemove(x); });
+		mTrackPlayers.RemoveFirst([track, this](auto& x) { return x->GetTrack() == track; onTrackPlayerRemove(x); });
 	}
 
 	void AnimationPlayer::OnClipDurationChanged(float duration)

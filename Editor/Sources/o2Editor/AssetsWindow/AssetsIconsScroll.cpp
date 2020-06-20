@@ -205,7 +205,7 @@ namespace Editor
 		for (auto child : mChildWidgets)
 		{
 			AssetIcon* icon = (AssetIcon*)child;
-			icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.ContainsPred([=](auto x) {
+			icon->SetState("halfHide", o2EditorAssets.mCuttingAssets.Contains([=](auto x) {
 				return x.first == icon->GetAssetInfo().meta->ID(); }));
 		}
 	}
@@ -255,7 +255,7 @@ namespace Editor
 
 		if (scroll)
 		{
-			int idx = mAssetInfos.Find(assetInfo);
+			int idx = mAssetInfos.IndexOf(assetInfo);
 			float itemHeight = mItemSample->layout->minHeight;
 			int itemsInLine = Math::Max(1, Math::FloorToInt(mAbsoluteViewArea.Width()/mItemSample->layout->GetMinWidth()));
 
@@ -286,7 +286,7 @@ namespace Editor
 		auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
 		for (auto asset : lastSelectedPreloadedAssets)
 		{
-			if (!mSelectedAssets.ContainsPred([&](const AssetInfo* x) {
+			if (!mSelectedAssets.Contains([&](const AssetInfo* x) {
 				return x->meta->ID() == (*asset)->GetUID(); }))
 			{
 				mSelectedPreloadedAssets.Remove(asset);
@@ -297,7 +297,7 @@ namespace Editor
 
 		for (auto icon : mSelectedAssets)
 		{
-			if (mSelectedPreloadedAssets.ContainsPred([&](const AssetRef* x) { return (*x)->GetUID() == icon->meta->ID(); }))
+			if (mSelectedPreloadedAssets.Contains([&](const AssetRef* x) { return (*x)->GetUID() == icon->meta->ID(); }))
 				continue;
 
 			AssetRef* iconAsset = o2Assets.GetAssetRef(icon->meta->ID()).CloneAs<AssetRef>();
@@ -421,7 +421,7 @@ namespace Editor
 		}
 
 		assetIcon->SetAssetInfo(asset);
-		assetIcon->SetState("halfHide", mCuttingAssets.ContainsPred([&](auto x) { return x.first == asset->meta->ID(); }));
+		assetIcon->SetState("halfHide", mCuttingAssets.Contains([&](auto x) { return x.first == asset->meta->ID(); }));
 		assetIcon->SetSelectionGroup(this);
 		assetIcon->SetSelected(mSelectedAssets.Contains(asset));
 		assetIcon->SetDragOnlySelected(true);
@@ -626,7 +626,7 @@ namespace Editor
 		auto firstInstObject = mInstantiatedSceneDragObjects[0];
 		auto parent = firstInstObject->GetEditableParent();
 		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
-		int idx = parentChilds.Find(firstInstObject);
+		int idx = parentChilds.IndexOf(firstInstObject);
 		auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
 
 		auto createAction = mnew CreateAction(mInstantiatedSceneDragObjects, parent, prevActor);
@@ -1026,8 +1026,8 @@ namespace Editor
 		{
 			auto selectIcon = dynamic_cast<AssetIcon*>(object);
 			auto selectInfo = &selectIcon->GetAssetInfo();
-			int iconUnderCursorIdx = mAssetInfos.Find(selectInfo);
-			int lastSelectedIdx = mAssetInfos.Find(mSelectedAssets.Last());
+			int iconUnderCursorIdx = mAssetInfos.IndexOf(selectInfo);
+			int lastSelectedIdx = mAssetInfos.IndexOf(mSelectedAssets.Last());
 
 			int begin = Math::Min(iconUnderCursorIdx, lastSelectedIdx);
 			int end = Math::Max(iconUnderCursorIdx, lastSelectedIdx);

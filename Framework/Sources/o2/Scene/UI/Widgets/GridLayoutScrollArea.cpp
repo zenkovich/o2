@@ -89,7 +89,7 @@ namespace o2
 
 	void GridLayoutScrollArea::ScrollTo(void* item)
 	{
-		int idx = GetItemsRange(0, GetItemsCount()).Find(item);
+		int idx = GetItemsRange(0, GetItemsCount()).IndexOf(item);
 		if (idx < 0)
 			return;
 

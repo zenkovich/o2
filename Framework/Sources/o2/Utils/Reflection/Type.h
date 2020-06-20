@@ -10,6 +10,7 @@
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/StringDef.h"
 
+// Returns type of TYPE
 #define TypeOf(TYPE) GetTypeOf<TYPE>()
 
 namespace o2
@@ -1056,7 +1057,9 @@ namespace o2
 		mElementType = &GetTypeOf<_element_type>();
 
 		mElementFieldInfo = mnew FieldInfo(this, "element", 0, mElementType, ProtectSection::Private);
-		mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public, mnew VectorCountFieldSerializer<_element_type>());
+		mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public, 
+										 mnew FieldInfo::DefaultValue<int>(0), 
+										 mnew VectorCountFieldSerializer<_element_type>());
 	}
 
 	template<typename _element_type>

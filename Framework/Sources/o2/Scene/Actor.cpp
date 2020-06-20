@@ -373,7 +373,7 @@ namespace o2
 	{
 		if (mParent)
 		{
-			int lastIdx = mParent->mChildren.Find(this);
+			int lastIdx = mParent->mChildren.IndexOf(this);
 			mParent->mChildren.Insert(this, index);
 
 			if (index <= lastIdx)
@@ -386,7 +386,7 @@ namespace o2
 		{
 			if (mIsOnScene)
 			{
-				int lastIdx = o2Scene.mRootActors.Find(this);
+				int lastIdx = o2Scene.mRootActors.IndexOf(this);
 				o2Scene.mRootActors.Insert(this, index);
 
 				if (index <= lastIdx)

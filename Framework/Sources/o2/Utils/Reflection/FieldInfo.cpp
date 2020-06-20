@@ -9,17 +9,20 @@ namespace o2
 	{}
 
 	FieldInfo::FieldInfo(const Type* ownerType, const String& name, GetValuePointerFuncPtr pointerGetter, const Type* type,
-						 ProtectSection section, ITypeSerializer* serializer):
+						 ProtectSection section, IDefaultValue* defaultValue /*= nullptr*/, 
+						 ITypeSerializer* serializer /*= nullptr*/):
 		mOwnerType(ownerType), mName(name), mPointerGetter(pointerGetter), mType(type), mProtectSection(section),
-		mSerializer(serializer ? serializer : mType->GetSerializer())
+		mSerializer(serializer ? serializer : mType->GetSerializer()), mDefaultValue(defaultValue)
 	{}
 
 	FieldInfo::FieldInfo(FieldInfo&& other):
 		mProtectSection(other.mProtectSection), mName(other.mName), mType(other.mType), mOwnerType(other.mOwnerType),
-		mAttributes(other.mAttributes), mSerializer(other.mSerializer), mPointerGetter(other.mPointerGetter)
+		mAttributes(other.mAttributes), mSerializer(other.mSerializer), mDefaultValue(other.mDefaultValue), 
+		mPointerGetter(other.mPointerGetter)
 	{
 		other.mAttributes.Clear();
 		other.mSerializer = nullptr;
+		other.mDefaultValue = nullptr;
 	}
 
 	FieldInfo::~FieldInfo()
@@ -29,6 +32,9 @@ namespace o2
 
 		if (mSerializer)
 			delete mSerializer;
+
+		if (mDefaultValue)
+			delete mDefaultValue;
 	}
 
 	bool FieldInfo::operator==(const FieldInfo& other) const
@@ -71,7 +77,15 @@ namespace o2
 
 	bool FieldInfo::CheckSerializable(void* object) const
 	{
-		return mSerializer->CheckSerializable(GetValuePtrStrong(object));
+		void* valuePtr = GetValuePtrStrong(object);
+
+		if (mDefaultValue)
+			return !mDefaultValue->Equals(valuePtr);
+
+		if (mSerializer)
+			return !mSerializer->IsDefault(valuePtr);
+
+		return true;
 	}
 
 	void FieldInfo::SerializeFromObject(void* object, DataValue& data) const

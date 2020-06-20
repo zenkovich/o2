@@ -72,7 +72,7 @@ namespace Editor
 
 			int startIdx = drawnObjects.Count() - 1;
 			if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
-				startIdx = drawnObjects.Find(o2EditorSceneScreen.GetSelectedObjects().Last()) - 1;
+				startIdx = drawnObjects.IndexOf(o2EditorSceneScreen.GetSelectedObjects().Last()) - 1;
 
 			for (int i = startIdx; i >= 0; i--)
 			{

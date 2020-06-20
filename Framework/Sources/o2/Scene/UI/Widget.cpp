@@ -508,7 +508,7 @@ namespace o2
 
 	bool Widget::RemoveState(WidgetState* state)
 	{
-		int idx = mStates.Find(state);
+		int idx = mStates.IndexOf(state);
 		if (idx < 0)
 			return false;
 

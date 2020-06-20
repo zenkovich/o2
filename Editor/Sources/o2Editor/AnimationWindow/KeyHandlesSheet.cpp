@@ -245,7 +245,7 @@ namespace Editor
 				if (!mSelectedHandles.Contains(handle))
 					continue;
 
-				if (handle->isMapping && kv.second.ContainsPred([=](auto x) { return !x->isMapping && x->id == handle->id; }))
+				if (handle->isMapping && kv.second.Contains([=](auto x) { return !x->isMapping && x->id == handle->id; }))
 					continue;
 
 				handle->SetDragPosition(handle->ScreenToLocal(cursorPos) + handle->GetDraggingOffset());

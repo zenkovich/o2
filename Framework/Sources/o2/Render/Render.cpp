@@ -111,8 +111,10 @@ namespace o2
 	{
 		Vector<Font*> unloadFonts;
 		for (auto font : mFonts)
-			if (font->mRefs == 0)
+		{
+			if (font->mRefs.IsEmpty())
 				unloadFonts.Add(font);
+		}
 
 		unloadFonts.ForEach([](auto fnt) { delete fnt; });
 	}

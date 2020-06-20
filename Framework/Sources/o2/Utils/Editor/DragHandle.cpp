@@ -873,7 +873,7 @@ namespace o2
 	{
 		mHandles.Remove(handle);
 
-		int idx = mSelectedHandles.Find(handle);
+		int idx = mSelectedHandles.IndexOf(handle);
 		if (idx >= 0)
 		{
 			mSelectedHandles.Remove(handle);

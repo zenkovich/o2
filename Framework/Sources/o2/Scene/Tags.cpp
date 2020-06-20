@@ -160,7 +160,7 @@ namespace o2
 
 	bool TagGroup::IsHaveTag(const String& name) const
 	{
-		return mTags.ContainsPred([&](auto x) { return x->GetName() == name; });
+		return mTags.Contains([&](auto x) { return x->GetName() == name; });
 	}
 
 	bool TagGroup::IsHaveTag(Tag* tag) const

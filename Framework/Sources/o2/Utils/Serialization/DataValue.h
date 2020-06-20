@@ -1157,7 +1157,7 @@ namespace o2
 			if (auto typeNode = data.FindMember("Type"))
 			{
 				String typeName = *typeNode;
-				if (typeName == "Editor::AnimationPropertiesTreeNode")
+				if (typeName == "Editor::AssetProperty")
 					typeName = typeName;
 
 				if (auto valueNode = data.FindMember("Value"))

@@ -19,7 +19,7 @@ namespace o2
 
 	public:
 		// Constructor by initial capacity
-		Vector(int capacity = 5);
+		Vector();
 
 		// Constructor from initializer list
 		Vector(std::initializer_list<_type> init);
@@ -27,14 +27,17 @@ namespace o2
 		// Copy-constructor
 		Vector(const Vector& arr);
 
-		// Constructor from other array
-		Vector(const Vector<_type>* arr);
+		// Move-constructor
+		Vector(Vector&& arr);
 
 		// Destructor
-		virtual ~Vector();
+		~Vector();
 
 		// Assign operator
 		Vector& operator=(const Vector& arr);
+
+		// Move operator
+		Vector& operator=(Vector&& arr);
 
 		// Plus operator - returns sum of this array and other elements
 		Vector operator+(const Vector& arr) const;
@@ -76,7 +79,7 @@ namespace o2
 		int Count() const;
 
 		// Returns count of elements in array by lambda
-		int CountMatch(const Function<bool(const _type&)>& match) const;
+		int Count(const Function<bool(const _type&)>& match) const;
 
 		// Returns capacity of vector
 		int Capacity() const;
@@ -110,7 +113,7 @@ namespace o2
 		void Insert(const Vector<_type>& arr, int position);
 
 		// Returns index of equal element. Returns -1 when array haven't equal element
-		int Find(const _type& value) const;
+		int IndexOf(const _type& value) const;
 
 		// Returns true, if array contains the element
 		bool Contains(const _type& value) const;
@@ -118,20 +121,20 @@ namespace o2
 		// Removes element from back and returns him
 		_type PopBack();
 
+		// Removes equal array element
+		void Remove(const _type& value);
+
+		// Removes element by iterator
+		Iterator Remove(const Iterator& it);
+
 		// Removes element at position
 		void RemoveAt(int idx);
 
 		// Removes elements in range
 		void RemoveRange(int begin, int end);
 
-		// Removes equal array element
-		void Remove(const _type& value);
-
 		// Removes matched array element
-		void Remove(const Function<bool(const _type&)>& match);
-
-		// Removes element by iterator
-		Iterator Remove(const Iterator& it);
+		void RemoveFirst(const Function<bool(const _type&)>& match);
 
 		// Removes all elements that pass function
 		void RemoveAll(const Function<bool(const _type&)>& match);
@@ -140,7 +143,7 @@ namespace o2
 		void Clear();
 
 		// Returns true, if array contains a element that pass function
-		bool ContainsPred(const Function<bool(const _type&)>& match) const;
+		bool Contains(const Function<bool(const _type&)>& match) const;
 
 		// Returns elements of array that pass function
 		const _type* FindMatch(const Function<bool(const _type&)>& match) const;
@@ -264,11 +267,9 @@ namespace o2
 	};
 
 	template<typename _type>
-	Vector<_type>::Vector(int capacity /*= 5*/) :
+	Vector<_type>::Vector() :
 		std::vector<_type>()
-	{
-        std::vector<_type>::reserve(capacity);
-	}
+	{}
 
 	template<typename _type>
 	Vector<_type>::Vector(std::initializer_list<_type> init) :
@@ -281,16 +282,15 @@ namespace o2
 	{}
 
 	template<typename _type>
-	Vector<_type>::Vector(const Vector<_type>* arr)
-	{
-        std::vector<_type>::reserve(arr->Count());
-		for (int i = 0; i < arr->Count(); i++)
-            std::vector<_type>::push_back(arr->Get(i));
-	}
+	Vector<_type>::Vector(Vector&& arr):
+		std::vector<_type>((std::vector<_type>&&)arr)
+	{}
 
 	template<typename _type>
 	Vector<_type>::~Vector()
-	{}
+	{
+		std::vector<_type>::~vector<_type>();
+	}
 
 	template<typename _type>
 	_type* Vector<_type>::Data()
@@ -306,6 +306,13 @@ namespace o2
 
 	template<typename _type>
 	Vector<_type>& Vector<_type>::operator=(const Vector<_type>& arr)
+	{
+		std::vector<_type>::operator=(arr);
+		return *this;
+	}
+
+	template<typename _type>
+	Vector<_type>& Vector<_type>::operator=(Vector&& arr)
 	{
 		std::vector<_type>::operator=(arr);
 		return *this;
@@ -472,7 +479,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Vector<_type>::Find(const _type& value) const
+	int Vector<_type>::IndexOf(const _type& value) const
 	{
 		auto fnd = std::find(std::vector<_type>::begin(), std::vector<_type>::end(), value);
 		if (fnd == std::vector<_type>::end())
@@ -484,7 +491,7 @@ namespace o2
 	template<typename _type>
 	bool Vector<_type>::Contains(const _type& value) const
 	{
-		return Find(value) != -1;
+		return IndexOf(value) != -1;
 	}
 
 	template<typename _type>
@@ -514,7 +521,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	void Vector<_type>::Remove(const Function<bool(const _type&)>& match)
+	void Vector<_type>::RemoveFirst(const Function<bool(const _type&)>& match)
 	{
 		for (auto it = begin(); it != end(); ++it)
 		{
@@ -686,7 +693,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Vector<_type>::CountMatch(const Function<bool(const _type&)>& match) const
+	int Vector<_type>::Count(const Function<bool(const _type&)>& match) const
 	{
 		int res = 0;
 		int count = Count();
@@ -713,7 +720,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	bool Vector<_type>::ContainsPred(const Function<bool(const _type&)>& match) const
+	bool Vector<_type>::Contains(const Function<bool(const _type&)>& match) const
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
