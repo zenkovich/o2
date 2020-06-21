@@ -177,7 +177,7 @@ namespace o2
 
 	SceneLayer* Scene::GetLayer(const String& name)
 	{
-		if (auto layer = mLayers.FindMatchOrDefault([&](auto x) { return x->name == name; }))
+		if (auto layer = mLayers.FindOrDefault([&](auto x) { return x->name == name; }))
 			return layer;
 
 		return AddLayer(name);
@@ -190,7 +190,7 @@ namespace o2
 
 	SceneLayer* Scene::AddLayer(const String& name)
 	{
-		if (auto layer = mLayers.FindMatchOrDefault([&](auto x) { return x->name == name; }))
+		if (auto layer = mLayers.FindOrDefault([&](auto x) { return x->name == name; }))
 			return layer;
 
 		SceneLayer* newLayer = mnew SceneLayer();
@@ -223,7 +223,7 @@ namespace o2
 
 	Tag* Scene::GetTag(const String& name) const
 	{
-		return mTags.FindMatchOrDefault([&](auto x) { return x->GetName() == name; });
+		return mTags.FindOrDefault([&](auto x) { return x->GetName() == name; });
 	}
 
 	Tag* Scene::AddTag(const String& name)
@@ -287,12 +287,12 @@ namespace o2
 
 	Actor* Scene::GetActorByID(SceneUID id) const
 	{
-		return mAllActors.FindMatchOrDefault([=](Actor* x) { return x->mId == id; });
+		return mAllActors.FindOrDefault([=](Actor* x) { return x->mId == id; });
 	}
 
 	Actor* Scene::GetAssetActorByID(const UID& id)
 	{
-		auto cached = mCache.FindMatchOrDefault([=](const ActorAssetRef& x) { return x->GetUID() == id; });
+		auto cached = mCache.FindOrDefault([=](const ActorAssetRef& x) { return x->GetUID() == id; });
 
 		if (!cached)
 		{
@@ -435,7 +435,7 @@ namespace o2
 
 	SceneEditableObject* Scene::GetEditableObjectByID(SceneUID id) const
 	{
-		return mEditableObjects.FindMatchOrDefault([=](SceneEditableObject* x) { return x->GetID() == id; });
+		return mEditableObjects.FindOrDefault([=](SceneEditableObject* x) { return x->GetID() == id; });
 	}
 
 	int Scene::GetObjectHierarchyIdx(SceneEditableObject* object) const
@@ -445,7 +445,7 @@ namespace o2
 			return object->GetEditableParent()->GetEditablesChildren().IndexOf(object) + GetObjectHierarchyIdx(object->GetEditableParent());
 		}
 
-		return mRootActors.FindIdx([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == object; });
+		return mRootActors.IndexOf([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == object; });
 	}
 
 	void Scene::ReparentEditableObjects(const Vector<SceneEditableObject*>& objects,
@@ -491,7 +491,7 @@ namespace o2
 
 			if (prevObject)
 			{
-				insertIdx = mRootActors.FindIdx([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == prevObject; });
+				insertIdx = mRootActors.IndexOf([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == prevObject; });
 
 				if (insertIdx < 0)
 					insertIdx = mRootActors.Count();

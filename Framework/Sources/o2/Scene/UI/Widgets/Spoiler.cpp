@@ -219,7 +219,7 @@ namespace o2
 
 	Button* Spoiler::FindExpandButton() const
 	{
-		auto expandBtn = mInternalWidgets.FindMatchOrDefault(
+		auto expandBtn = mInternalWidgets.FindOrDefault(
 			[](Widget* x) { return x->GetName() == "expand" && x->GetType() == TypeOf(Button); });
 
 		if (expandBtn)

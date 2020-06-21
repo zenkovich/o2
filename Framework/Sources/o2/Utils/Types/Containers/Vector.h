@@ -91,6 +91,9 @@ namespace o2
 		// Changes capacity of vector. New capacity can't be less than current
 		void Reserve(int newCapacity);
 
+		// Reduces memory usage by freeing unused memory
+		void ShrinkToFit();
+
 		// Returns value at index
 		const _type& Get(int idx) const;
 
@@ -127,11 +130,14 @@ namespace o2
 		// Removes element by iterator
 		Iterator Remove(const Iterator& it);
 
+		// Removes elements by iterators range
+		Iterator Remove(const Iterator& first, const Iterator& last);
+
 		// Removes element at position
 		void RemoveAt(int idx);
 
 		// Removes elements in range
-		void RemoveRange(int begin, int end);
+		void RemoveRange(int first, int last);
 
 		// Removes matched array element
 		void RemoveFirst(const Function<bool(const _type&)>& match);
@@ -146,16 +152,16 @@ namespace o2
 		bool Contains(const Function<bool(const _type&)>& match) const;
 
 		// Returns elements of array that pass function
-		const _type* FindMatch(const Function<bool(const _type&)>& match) const;
-
-		// Returns elements of array that pass function or default value
-		_type FindMatchOrDefault(const Function<bool(const _type&)>& match) const;
+		const _type* Find(const Function<bool(const _type&)>& match) const;
 
 		// Returns elements of array that pass function
-		_type* FindMatch(const Function<bool(const _type&)>& match);
+		_type* Find(const Function<bool(const _type&)>& match);
+
+		// Returns elements of array that pass function or default value
+		_type FindOrDefault(const Function<bool(const _type&)>& match) const;
 
 		// Returns index of element that pass function
-		int FindIdx(const Function<bool(const _type&)>& match) const;
+		int IndexOf(const Function<bool(const _type&)>& match) const;
 
 		// Sorts elements in array by sorting value, that gets from function
 		template<typename _sort_type>
@@ -183,7 +189,10 @@ namespace o2
 		const _type& Last() const;
 
 		// Returns last element that pass function
-		_type Last(const Function<bool(const _type&)>& match) const;
+		const _type* Last(const Function<bool(const _type&)>& match) const;
+
+		// Returns last element that pass function
+		_type* Last(const Function<bool(const _type&)>& match);
 
 		// Returns index of last element that pass function
 		int LastIdx(const Function<bool(const _type&)>& match) const;
@@ -219,6 +228,9 @@ namespace o2
 
 		// Invokes function for all elements in array
 		void ForEach(const Function<void(_type&)>& func);
+
+		// Invokes function for all elements in array
+		void ForEach(const Function<void(const _type&)>& func) const;
 
 		// Reversing array
 		void Reverse();
@@ -425,6 +437,12 @@ namespace o2
 	}
 
 	template<typename _type>
+	void Vector<_type>::ShrinkToFit()
+	{
+		shrink_to_fit();
+	}
+
+	template<typename _type>
 	const _type& Vector<_type>::Get(int idx) const
 	{
 		return std::vector<_type>::at(idx);
@@ -452,8 +470,7 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::Add(const Vector<_type>& arr)
 	{
-		for (int i = 0; i < arr.Count(); i++)
-			Add(arr.Get(i));
+		insert(end(), arr.begin(), arr.end());
 	}
 
 	template<typename _type>
@@ -467,57 +484,62 @@ namespace o2
 	template<typename _type>
 	_type& Vector<_type>::Insert(const _type& value, int position)
 	{
-		std::vector<_type>::insert(std::vector<_type>::begin() + position, value);
-		return std::vector<_type>::at(position);
+		insert(begin() + position, value);
+		return at(position);
 	}
 
 	template<typename _type>
 	void Vector<_type>::Insert(const Vector<_type>& arr, int position)
 	{
-		for (int i = 0; i < arr.Count(); i++)
-			std::vector<_type>::insert(std::vector<_type>::begin() + position, +i, arr.Get(i));
+		insert(begin() + position, arr.begin(), arr.end());
 	}
 
 	template<typename _type>
 	int Vector<_type>::IndexOf(const _type& value) const
 	{
-		auto fnd = std::find(std::vector<_type>::begin(), std::vector<_type>::end(), value);
-		if (fnd == std::vector<_type>::end())
+		auto fnd = std::find(begin(), end(), value);
+		if (fnd == end())
 			return -1;
 
-		return fnd - std::vector<_type>::begin();
+		return fnd - begin();
 	}
 
 	template<typename _type>
 	bool Vector<_type>::Contains(const _type& value) const
 	{
-		return IndexOf(value) != -1;
+		return std::find(begin(), end(), value) != end();
 	}
 
 	template<typename _type>
 	void Vector<_type>::RemoveAt(int idx)
 	{
-		std::vector<_type>::erase(std::vector<_type>::begin() + idx);
+		erase(begin() + idx);
 	}
 
 	template<typename _type>
-	void Vector<_type>::RemoveRange(int begin, int end)
+	void Vector<_type>::RemoveRange(int first, int last)
 	{
-		std::vector<_type>::erase(std::vector<_type>::begin() + begin, std::vector<_type>::begin() + end);
+		erase(begin() + first, begin() + last);
 	}
 
 	template<typename _type>
 	void Vector<_type>::Remove(const _type& value)
 	{
-		auto fnd = std::find(std::vector<_type>::begin(), std::vector<_type>::end(), value);
-		if (fnd != std::vector<_type>::end())
-			std::vector<_type>::erase(fnd);
+		auto fnd = std::find(begin(), end(), value);
+		if (fnd != end())
+			erase(fnd);
+	}
+
+	template<typename _type>
+	typename Vector<_type>::Iterator Vector<_type>::Remove(const Iterator& first, const Iterator& last)
+	{
+		return erase(first, last);
 	}
 
 	template<typename _type>
 	typename Vector<_type>::Iterator Vector<_type>::Remove(const Iterator& it)
 	{
-		return std::vector<_type>::erase(it);
+		return erase(it);
 	}
 
 	template<typename _type>
@@ -536,7 +558,7 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::Clear()
 	{
-		std::vector<_type>::clear();
+		clear();
 	}
 
 	template<typename _type>
@@ -572,7 +594,7 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::Sort(const Function<bool(const _type&, const _type&)>& pred /*= Math::Fewer*/)
 	{
-		std::sort(std::vector<_type>::begin(), std::vector<_type>::end(), pred);
+		std::sort(begin(), end(), pred);
 	}
 
 	template<typename _type>
@@ -586,35 +608,35 @@ namespace o2
 	template<typename _type>
 	typename Vector<_type>::Iterator Vector<_type>::Begin()
 	{
-		return std::vector<_type>::begin();
+		return begin();
 	}
 
 	template<typename _type>
 	typename Vector<_type>::Iterator Vector<_type>::End()
 	{
-		return std::vector<_type>::end();
+		return end();
 	}
 
 	template<typename _type>
 	typename Vector<_type>::ConstIterator Vector<_type>::Begin() const
 	{
-		return std::vector<_type>::cbegin();
+		return cbegin();
 	}
 
 	template<typename _type>
 	typename Vector<_type>::ConstIterator Vector<_type>::End() const
 	{
-		return std::vector<_type>::cend();
+		return cend();
 	}
 
 	template<typename _type>
 	Vector<_type> Vector<_type>::FindAll(const Function<bool(const _type&)>& match) const
 	{
 		Vector<_type> res;
-		for (auto x : *this)
+		for (auto& element : *this)
 		{
-			if (match(x))
-				res.Add(x);
+			if (match(element))
+				res.Add(element);
 		}
 
 		return res;
@@ -624,10 +646,10 @@ namespace o2
 	Vector<_type> Vector<_type>::Where(const Function<bool(const _type&)>& match) const
 	{
 		Vector<_type> res;
-		for (auto x : *this)
+		for (auto& element : *this)
 		{
-			if (match(x))
-				res.Add(x);
+			if (match(element))
+				res.Add(element);
 		}
 
 		return res;
@@ -638,8 +660,8 @@ namespace o2
 	Vector<_sel_type> Vector<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
 	{
 		Vector<_sel_type> res;
-		for (auto& x : *this)
-			res.Add(selector(x));
+		for (auto& element : *this)
+			res.Add(selector(element));
 
 		return res;
 	}
@@ -649,8 +671,8 @@ namespace o2
 	Vector<_sel_type> Vector<_type>::Cast() const
 	{
 		Vector<_sel_type> res;
-		for (auto& x : *this)
-			res.Add((_sel_type)x);
+		for (auto& element : *this)
+			res.Add((_sel_type)element);
 
 		return res;
 	}
@@ -660,8 +682,8 @@ namespace o2
 	Vector<_sel_type> Vector<_type>::DynamicCast() const
 	{
 		Vector<_sel_type> res;
-		for (auto& x : *this)
-			res.Add(dynamic_cast<_sel_type>(x));
+		for (auto& element : *this)
+			res.Add(dynamic_cast<_sel_type>(element));
 
 		return res;
 	}
@@ -671,9 +693,9 @@ namespace o2
 	{
 		Vector<_type> res;
 		int i = 0;
-		for (auto& x : *this)
+		for (auto& element : *this)
 		{
-			res.Add(x);
+			res.Add(element);
 			i++;
 			if (i == count)
 				break;
@@ -686,7 +708,7 @@ namespace o2
 	Vector<_type> Vector<_type>::Take(int begin, int end) const
 	{
 		Vector<_type> res;
-		for (int i = begin; i < end && i < (int)std::vector<_type>::size(); i++)
+		for (int i = begin; i < end && i < (int)size(); i++)
 			res.Add(Get(i));
 
 		return res;
@@ -709,23 +731,21 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::RemoveAll(const Function<bool(const _type&)>& match)
 	{
-		for (int i = 0; i < Count(); i++)
+		for (auto it = begin(); it != end();)
 		{
-			if (match(Get(i)))
-			{
-				RemoveAt(i);
-				i--;
-			}
+			if (match(*it))
+				it = erase(it);
+			else
+				++it;
 		}
 	}
 
 	template<typename _type>
 	bool Vector<_type>::Contains(const Function<bool(const _type&)>& match) const
 	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
+		for (auto& element : *this)
 		{
-			if (match(Get(i)))
+			if (match(element))
 				return true;
 		}
 
@@ -733,23 +753,33 @@ namespace o2
 	}
 
 	template<typename _type>
-	const _type* Vector<_type>::FindMatch(const Function<bool(const _type&)>& match) const
+	const _type* Vector<_type>::Find(const Function<bool(const _type&)>& match) const
 	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
+		for (auto& element : *this)
 		{
-			const _type& val = Get(i);
-			if (match(val))
-				return &val;
+			if (match(element))
+				return &element;
 		}
 
 		return nullptr;
 	}
 
 	template<typename _type>
-	_type Vector<_type>::FindMatchOrDefault(const Function<bool(const _type&)>& match) const
+	_type* Vector<_type>::Find(const Function<bool(const _type&)>& match)
 	{
-		auto fnd = FindMatch(match);
+		for (auto& element : *this)
+		{
+			if (match(element))
+				return &element;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	_type Vector<_type>::FindOrDefault(const Function<bool(const _type&)>& match) const
+	{
+		auto fnd = Find(match);
 		if (!fnd)
 			return _type();
 
@@ -757,21 +787,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type* Vector<_type>::FindMatch(const Function<bool(const _type&)>& match)
-	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
-		{
-			_type& val = Get(i);
-			if (match(val))
-				return &val;
-		}
-
-		return nullptr;
-	}
-
-	template<typename _type>
-	int Vector<_type>::FindIdx(const Function<bool(const _type&)>& match) const
+	int Vector<_type>::IndexOf(const Function<bool(const _type&)>& match) const
 	{
 		int count = Count();
 		for (int i = 0; i < count; i++)
@@ -793,13 +809,13 @@ namespace o2
 	template<typename _type>
 	const _type* Vector<_type>::First(const Function<bool(const _type&)>& match) const
 	{
-		return FindMatch(match);
+		return Find(match);
 	}
 
 	template<typename _type>
 	_type* Vector<_type>::First(const Function<bool(const _type&)>& match)
 	{
-		return FindMatch(match);
+		return Find(match);
 	}
 
 	template<typename _type>
@@ -816,27 +832,36 @@ namespace o2
 	}
 
 	template<typename _type>
-	_type Vector<_type>::Last(const Function<bool(const _type&)>& match) const
+	const _type* Vector<_type>::Last(const Function<bool(const _type&)>& match) const
 	{
-		int count = Count();
-		for (int i = count - 1; i >= 0; i--)
+		for (auto& element : *this)
 		{
-			const _type& val = Get(i);
-			if (match(val))
-				return val;
+			if (match(element))
+				return &element;
 		}
 
-		return _type();
+		return nullptr;
+	}
+
+	template<typename _type>
+	_type* Vector<_type>::Last(const Function<bool(const _type&)>& match)
+	{
+		for (auto& element : *this)
+		{
+			if (match(element))
+				return &element;
+		}
+
+		return nullptr;
 	}
 
 	template<typename _type>
 	int Vector<_type>::LastIdx(const Function<bool(const _type&)>& match) const
 	{
-		int count = Count();
-		for (int i = count - 1; i >= 0; i++)
+		for (auto it = rbegin(); it != rend(); it--)
 		{
-			if (match(Get(i)))
-				return i;
+			if (match(*it))
+				return it - begin();
 		}
 
 		return -1;
@@ -947,10 +972,9 @@ namespace o2
 	template<typename _type>
 	bool Vector<_type>::All(const Function<bool(const _type&)>& match) const
 	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
+		for (auto& element : *this)
 		{
-			if (!match(Get(i)))
+			if (!match(element))
 				return false;
 		}
 
@@ -960,10 +984,9 @@ namespace o2
 	template<typename _type>
 	bool Vector<_type>::Any(const Function<bool(const _type&)>& match) const
 	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
+		for (auto& element : *this)
 		{
-			if (match(Get(i)))
+			if (match(element))
 				return true;
 		}
 
@@ -980,9 +1003,7 @@ namespace o2
 
 		_sel_type res = selector(Get(0));
 		for (int i = 1; i < count; i++)
-		{
 			res = res + selector(Get(i));
-		}
 
 		return res;
 	}
@@ -990,9 +1011,15 @@ namespace o2
 	template<typename _type>
 	void Vector<_type>::ForEach(const Function<void(_type&)>& func)
 	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
-			func(Get(i));
+		for (auto& element : *this)
+			func(element);
+	}
+
+	template<typename _type>
+	void Vector<_type>::ForEach(const Function<void(const _type&)>& func) const
+	{
+		for (auto& element : *this)
+			func(element);
 	}
 
 	template<typename _type>

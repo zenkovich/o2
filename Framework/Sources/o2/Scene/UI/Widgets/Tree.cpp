@@ -322,7 +322,7 @@ namespace o2
 		if (mHighlightAnim.IsPlaying())
 		{
 			if (mHighlightObject && !mHighlighNode)
-				mHighlighNode = mAllNodes.FindMatchOrDefault([=](Node* x) { return x->object == mHighlightObject; });
+				mHighlighNode = mAllNodes.FindOrDefault([=](Node* x) { return x->object == mHighlightObject; });
 
 			if (mHighlighNode && mHighlighNode->widget)
 			{
@@ -436,7 +436,7 @@ namespace o2
 
 			uiNode->mIsSelected = true;
 
-			Node* node = mAllNodes.FindMatchOrDefault([=](Node* x) { return x->widget == uiNode; });
+			Node* node = mAllNodes.FindOrDefault([=](Node* x) { return x->widget == uiNode; });
 			node->SetSelected(true);
 			mSelectedNodes.Add(node);
 			mSelectedObjects.Add(node->object);
@@ -456,7 +456,7 @@ namespace o2
 		TreeNode* uiNode = (TreeNode*)object;
 		uiNode->mIsSelected = false;
 
-		int idx = mSelectedNodes.FindIdx([&](auto x) { return x->widget == uiNode; });
+		int idx = mSelectedNodes.IndexOf([&](auto x) { return x->widget == uiNode; });
 
 		if (idx < 0)
 			return;
@@ -579,7 +579,7 @@ namespace o2
 
 	TreeNode* Tree::GetNode(void* object)
 	{
-		Node* fnd = mAllNodes.FindMatchOrDefault([=](Node* x) { return x->object == object; });
+		Node* fnd = mAllNodes.FindOrDefault([=](Node* x) { return x->object == object; });
 		if (fnd)
 			return fnd->widget;
 
@@ -632,7 +632,7 @@ namespace o2
 
 		for (auto obj : objects)
 		{
-			auto node = mAllNodes.FindMatchOrDefault([=](Node* x) { return x->object == obj; });
+			auto node = mAllNodes.FindOrDefault([=](Node* x) { return x->object == obj; });
 
 			if (!node)
 				continue;
@@ -658,7 +658,7 @@ namespace o2
 			return;
 		}
 
-		auto node = mAllNodes.FindMatchOrDefault([=](Node* x) { return x->object == object; });
+		auto node = mAllNodes.FindOrDefault([=](Node* x) { return x->object == object; });
 		if (!node)
 			return;
 
@@ -680,7 +680,7 @@ namespace o2
 
 	void Tree::DeselectObject(void* object)
 	{
-		int idx = mSelectedNodes.FindIdx([&](auto x) { return x->object == object; });
+		int idx = mSelectedNodes.IndexOf([&](auto x) { return x->object == object; });
 
 		if (idx < 0)
 			return;
@@ -713,7 +713,7 @@ namespace o2
 
 		ExpandParentObjects(object);
 
-		int idx = mAllNodes.FindIdx([=](Node* x) { return x->object == object; });
+		int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
 
 		if (idx >= 0)
 			SetScroll(Vec2F(mScrollPos.x, (float)idx*mNodeWidgetSample->layout->minHeight - layout->height*0.5f));
@@ -729,7 +729,7 @@ namespace o2
 
 		ExpandParentObjects(object);
 
-		int idx = mAllNodes.FindIdx([=](Node* x) { return x->object == object; });
+		int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
 
 		if (idx >= 0)
 		{
@@ -755,7 +755,7 @@ namespace o2
 
 		for (int i = parentsStack.Count() - 1; i >= 0; i--)
 		{
-			auto node = mAllNodes.FindMatchOrDefault([&](Node* x) { return x->object == parentsStack[i]; });
+			auto node = mAllNodes.FindOrDefault([&](Node* x) { return x->object == parentsStack[i]; });
 
 			if (!node)
 			{
@@ -790,7 +790,7 @@ namespace o2
 	{
 		for (auto object : objects)
 		{
-			int idx = mAllNodes.FindIdx([=](Node* x) { return x->object == object; });
+			int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
 
 			if (idx < 0 || !mAllNodes[idx]->widget)
 				continue;
@@ -1068,7 +1068,7 @@ namespace o2
 
 	void Tree::CreateVisibleNodeWidget(Node* node, int i)
 	{
-		int cacheIdx = mVisibleWidgetsCache.FindIdx([=](const VisibleWidgetDef& x) {
+		int cacheIdx = mVisibleWidgetsCache.IndexOf([=](const VisibleWidgetDef& x) {
 			return x.object == node->object && x.position == i; });
 
 		TreeNode* widget;

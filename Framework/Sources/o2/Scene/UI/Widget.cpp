@@ -490,7 +490,7 @@ namespace o2
 
 	bool Widget::RemoveState(const String& name)
 	{
-		int idx = mStates.FindIdx([&](WidgetState* state) { return state->name == name; });
+		int idx = mStates.IndexOf([&](WidgetState* state) { return state->name == name; });
 		if (idx < 0)
 			return false;
 
@@ -560,7 +560,7 @@ namespace o2
 
 	WidgetState* Widget::GetStateObject(const String& name) const
 	{
-		return mStates.FindMatchOrDefault([&](auto state) { return state->name == name; });
+		return mStates.FindOrDefault([&](auto state) { return state->name == name; });
 	}
 
 	const Vector<WidgetState*>& Widget::GetStates() const

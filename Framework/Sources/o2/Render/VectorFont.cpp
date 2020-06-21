@@ -275,7 +275,7 @@ namespace o2
 
 		while (!packLine)
 		{
-			packLine = mPackLines.FindMatchOrDefault([&](PackLine* x) {
+			packLine = mPackLines.FindOrDefault([&](PackLine* x) {
 				return x->height >= height && x->length + character.bitmap->GetSize().x < mTexture->GetSize().x; });
 
 			if (!packLine)

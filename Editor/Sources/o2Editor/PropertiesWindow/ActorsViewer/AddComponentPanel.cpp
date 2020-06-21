@@ -148,7 +148,7 @@ namespace Editor
 					String subStr = category.SubStr(0, fnd);
 					category = fnd != -1 ? category.SubStr(fnd + 1) : "";
 
-					auto nextIt = it->children.FindMatchOrDefault([&](NodeData* x) { return x->name == subStr; });
+					auto nextIt = it->children.FindOrDefault([&](NodeData* x) { return x->name == subStr; });
 					if (!nextIt)
 						nextIt = it->AddChild(subStr, nullptr);
 

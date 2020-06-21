@@ -464,7 +464,7 @@ namespace Editor
 
 		for (auto& kv : keys)
 		{
-			auto fnd = mTrackControlsMap.FindMatchOrDefault([=](const Pair<String, ITrackControl*>& p) { return p.first == kv.first; });
+			auto fnd = mTrackControlsMap.FindOrDefault([=](const Pair<String, ITrackControl*>& p) { return p.first == kv.first; });
 			if (!fnd.second)
 				continue;
 

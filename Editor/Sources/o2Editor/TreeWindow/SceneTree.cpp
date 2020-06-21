@@ -264,7 +264,7 @@ namespace Editor
 
 				for (auto object : assetsScroll->mInstantiatedSceneDragObjects)
 				{
-					int idx = mAllNodes.FindIdx([=](Node* x) { return x->object == object; });
+					int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
 					CreateVisibleNodeWidget(mAllNodes[idx], idx);
 				}
 

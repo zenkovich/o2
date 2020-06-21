@@ -246,7 +246,7 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnDisabled();
 
-		mEnabledTool = mTools.FindMatchOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); });
+		mEnabledTool = mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); });
 
 		if (mEnabledTool)
 			mEnabledTool->OnEnabled();

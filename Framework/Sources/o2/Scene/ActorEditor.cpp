@@ -447,7 +447,7 @@ namespace o2
 		for (int i = allProtoChildren.Count() - 1; i >= 0; i--)
 		{
 			Actor* itActor = allProtoChildren[i];
-			bool removed = allThisChildren.FindMatchOrDefault([&](Actor* x) { return x->IsLinkedToActor(itActor); }) == nullptr;
+			bool removed = allThisChildren.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(itActor); }) == nullptr;
 			if (removed)
 			{
 				for (auto& info : applyActorsInfos)
@@ -492,7 +492,7 @@ namespace o2
 
 				for (auto& info : applyActorsInfos)
 				{
-					info.matchingChild = info.allChildren.FindMatchOrDefault([&](Actor* x) { return x->IsLinkedToActor(protoChild); });
+					info.matchingChild = info.allChildren.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(protoChild); });
 
 					if (info.matchingChild)
 					{
@@ -503,7 +503,7 @@ namespace o2
 
 				if (child->mParent && child->mParent->mPrototypeLink)
 				{
-					Actor* newParent = allProtoChildren.FindMatchOrDefault([&](Actor* x) { return child->mParent->IsLinkedToActor(x); });
+					Actor* newParent = allProtoChildren.FindOrDefault([&](Actor* x) { return child->mParent->IsLinkedToActor(x); });
 					protoChild->SetParent(newParent);
 				}
 
@@ -518,7 +518,7 @@ namespace o2
 				auto childProtoLinkComponents = protoChild->mComponents;
 				for (auto protoComponent : childProtoLinkComponents)
 				{
-					bool removed = child->mComponents.FindMatchOrDefault([&](Component* x) {
+					bool removed = child->mComponents.FindOrDefault([&](Component* x) {
 						return x->IsLinkedToComponent(protoComponent); }) == nullptr;
 
 					if (removed)
@@ -528,7 +528,7 @@ namespace o2
 							if (!info.matchingChild)
 								continue;
 
-							Component* matchingComponent = info.matchingChild->mComponents.FindMatchOrDefault([&](Component* x) {
+							Component* matchingComponent = info.matchingChild->mComponents.FindOrDefault([&](Component* x) {
 								return x->IsLinkedToComponent(protoComponent); });
 
 							if (matchingComponent)
@@ -554,7 +554,7 @@ namespace o2
 							if (!info.matchingChild)
 								continue;
 
-							Component* matchingComponent = info.matchingChild->mComponents.FindMatchOrDefault([&](Component* x) {
+							Component* matchingComponent = info.matchingChild->mComponents.FindOrDefault([&](Component* x) {
 								return x->IsLinkedToComponent(protoComponent); });
 
 							if (!matchingComponent)
@@ -602,7 +602,7 @@ namespace o2
 
 			Actor* childParentProtoLink = child->mParent->mPrototypeLink.Get();
 			if (!allProtoChildren.Contains(childParentProtoLink))
-				childParentProtoLink = allProtoChildren.FindMatchOrDefault([&](Actor* x) { return x->IsLinkedToActor(protoChild); });
+				childParentProtoLink = allProtoChildren.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(protoChild); });
 
 			newProtoChild->SetParent(childParentProtoLink);
 
@@ -642,7 +642,7 @@ namespace o2
 				info.allChildren.Add(newChild);
 				info.actorsMap.Add(child, newChild);
 
-				Actor* newChildParent = info.allChildren.FindMatchOrDefault([&](Actor* x) { return x->IsLinkedToActor(childParentProtoLink); });
+				Actor* newChildParent = info.allChildren.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(childParentProtoLink); });
 
 				newChild->SetParent(newChildParent);
 
@@ -1012,7 +1012,7 @@ namespace o2
 		{
 			Actor* newChild = nullptr;
 
-			newChild = separatedActors.FindMatchOrDefault([&](Actor* x) { return x->GetPrototypeLink() == child; });
+			newChild = separatedActors.FindOrDefault([&](Actor* x) { return x->GetPrototypeLink() == child; });
 
 			if (!newChild)
 				newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
@@ -1036,7 +1036,7 @@ namespace o2
 
 		for (auto component : source->mComponents)
 		{
-			Component* matchingComponent = dest->mComponents.FindMatchOrDefault([&](Component* x) { return x->GetPrototypeLink() == component; });
+			Component* matchingComponent = dest->mComponents.FindOrDefault([&](Component* x) { return x->GetPrototypeLink() == component; });
 			if (matchingComponent)
 			{
 				Vector<const FieldInfo*> fields;
@@ -1146,7 +1146,7 @@ namespace o2
 			if (!changed->mParent->IsLinkedToActor(source->mParent) && dest->mParent &&
 				dest->mParent->IsLinkedToActor(source->mParent))
 			{
-				Actor* newParent = allDestChilds.FindMatchOrDefault([&](Actor* x) { return x->IsLinkedToActor(changed->mParent->mPrototypeLink.Get()); });
+				Actor* newParent = allDestChilds.FindOrDefault([&](Actor* x) { return x->IsLinkedToActor(changed->mParent->mPrototypeLink.Get()); });
 				dest->SetParent(newParent);
 			}
 		}

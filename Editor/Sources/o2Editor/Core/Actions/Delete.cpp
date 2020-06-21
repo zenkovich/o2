@@ -85,7 +85,7 @@ namespace Editor
 			if (parent)
 			{
 				SceneUID prevId = info.prevObjectId;
-				int idx = parent->GetEditablesChildren().FindIdx([=](SceneEditableObject* x) { return x->GetID() == prevId; }) + 1;
+				int idx = parent->GetEditablesChildren().IndexOf([=](SceneEditableObject* x) { return x->GetID() == prevId; }) + 1;
 
 				SceneEditableObject* newObject;
 				info.objectData.Get(newObject);
@@ -96,7 +96,7 @@ namespace Editor
 			}
 			else
 			{
-				int idx = o2Scene.GetRootActors().FindIdx([&](Actor* x) { return x->GetID() == info.prevObjectId; }) + 1;
+				int idx = o2Scene.GetRootActors().IndexOf([&](Actor* x) { return x->GetID() == info.prevObjectId; }) + 1;
 
 				SceneEditableObject* newObject;
 				info.objectData.Get(newObject);

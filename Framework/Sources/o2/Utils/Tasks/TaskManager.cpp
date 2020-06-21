@@ -28,7 +28,7 @@ namespace o2
 
 	Task* TaskManager::FindTask(int id)
 	{
-		return mTasks.FindMatchOrDefault([&](auto x) { return x->mId == id; });
+		return mTasks.FindOrDefault([&](auto x) { return x->mId == id; });
 	}
 
 	void TaskManager::Run(const Function<void(float)>& update, const Function<bool()> isDone)
