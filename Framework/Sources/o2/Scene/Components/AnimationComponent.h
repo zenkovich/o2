@@ -249,7 +249,7 @@ namespace o2
 	template<typename _type>
 	void AnimationComponent::TrackMixer<_type>::RemoveTrack(IAnimationTrack::IPlayer* value)
 	{
-		tracks.RemoveAll([&](auto& x) { return x.second == value; });
+		tracks.RemoveAll([&](const auto& x) { return x.second == value; });
 	}
 
 	template<>

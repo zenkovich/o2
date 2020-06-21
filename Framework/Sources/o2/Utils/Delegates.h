@@ -408,7 +408,7 @@ namespace o2
 		}
 
 		// Constructor from lambda
-		template<typename _lambda_type, typename x = std::enable_if<!std::is_invocable<_lambda_type, _args ...>::value>::type>
+		template<typename _lambda_type, typename x = std::enable_if<std::is_invocable_r<_res_type, _lambda_type, _args ...>::value>::type>
 		Function(const _lambda_type& lambda)
 		{
 			mFunctions.push_back(new SharedLambda<_res_type(_args ...)>(lambda));

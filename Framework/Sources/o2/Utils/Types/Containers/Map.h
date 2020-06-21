@@ -67,7 +67,7 @@ namespace o2
 		bool Contains(const KeyValuePair& keyValue) const;
 
 		// Returns true if contains element which pass function
-		bool ContainsPred(const Function<bool(const _key_type&, const _value_type&)>& match) const;
+		bool Contains(const Function<bool(const _key_type&, const _value_type&)>& match) const;
 
 		// Returns element by key
 		KeyValuePair FindKey(const _key_type& key) const;
@@ -407,7 +407,7 @@ namespace o2
 	}
 
 	template<typename _key_type, typename _value_type>
-	bool Map<_key_type, _value_type>::ContainsPred(const Function<bool(const _key_type&, const _value_type&)>& match) const
+	bool Map<_key_type, _value_type>::Contains(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
 		for (auto it = rbegin(); it != rend(); ++it)
 		{
