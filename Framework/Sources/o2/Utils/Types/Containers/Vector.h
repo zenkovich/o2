@@ -81,6 +81,9 @@ namespace o2
 		// Returns count of elements in array by lambda
 		int Count(const Function<bool(const _type&)>& match) const;
 
+		// Returns true if array is empty
+		bool IsEmpty() const;
+
 		// Returns capacity of vector
 		int Capacity() const;
 
@@ -117,6 +120,9 @@ namespace o2
 
 		// Returns index of equal element. Returns -1 when array haven't equal element
 		int IndexOf(const _type& value) const;
+
+		// Returns index of first element that pass function
+		int IndexOf(const Function<bool(const _type&)>& match) const;
 
 		// Returns true, if array contains the element
 		bool Contains(const _type& value) const;
@@ -160,9 +166,6 @@ namespace o2
 		// Returns elements of array that pass function or default value
 		_type FindOrDefault(const Function<bool(const _type&)>& match) const;
 
-		// Returns index of element that pass function
-		int IndexOf(const Function<bool(const _type&)>& match) const;
-
 		// Sorts elements in array by sorting value, that gets from function
 		template<typename _sort_type>
 		void SortBy(const Function<_sort_type(const _type&)>& selector);
@@ -179,9 +182,6 @@ namespace o2
 		// Returns first element that pass function
 		_type* First(const Function<bool(const _type&)>& match);
 
-		// Returns index of first element that pass function
-		int FirstIdx(const Function<bool(const _type&)>& match) const;
-
 		// Returns last element
 		_type& Last();
 
@@ -195,10 +195,7 @@ namespace o2
 		_type* Last(const Function<bool(const _type&)>& match);
 
 		// Returns index of last element that pass function
-		int LastIdx(const Function<bool(const _type&)>& match) const;
-
-		// Returns true if array is empty
-		bool IsEmpty() const;
+		int LastIndexOf(const Function<bool(const _type&)>& match) const;
 
 		// Returns element by minimal result of function
 		template<typename _sel_type>
@@ -249,7 +246,7 @@ namespace o2
 
 		// Return vector of function results of all elements
 		template<typename _sel_type>
-		Vector<_sel_type> Select(const Function<_sel_type(const _type&)>& selector) const;
+		Vector<_sel_type> Convert(const Function<_sel_type(const _type&)>& selector) const;
 
 		// Return vector with casted type
 		template<typename _sel_type>
@@ -657,7 +654,7 @@ namespace o2
 
 	template<typename _type>
 	template<typename _sel_type>
-	Vector<_sel_type> Vector<_type>::Select(const Function<_sel_type(const _type&)>& selector) const
+	Vector<_sel_type> Vector<_type>::Convert(const Function<_sel_type(const _type&)>& selector) const
 	{
 		Vector<_sel_type> res;
 		for (auto& element : *this)
@@ -819,19 +816,6 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Vector<_type>::FirstIdx(const Function<bool(const _type&)>& match) const
-	{
-		int count = Count();
-		for (int i = 0; i < count; i++)
-		{
-			if (match(Get(i)))
-				return i;
-		}
-
-		return -1;
-	}
-
-	template<typename _type>
 	const _type* Vector<_type>::Last(const Function<bool(const _type&)>& match) const
 	{
 		for (auto& element : *this)
@@ -856,7 +840,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	int Vector<_type>::LastIdx(const Function<bool(const _type&)>& match) const
+	int Vector<_type>::LastIndexOf(const Function<bool(const _type&)>& match) const
 	{
 		for (auto it = rbegin(); it != rend(); it--)
 		{

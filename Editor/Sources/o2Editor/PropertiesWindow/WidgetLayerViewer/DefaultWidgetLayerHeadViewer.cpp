@@ -59,8 +59,8 @@ namespace Editor
 	{
 		mLayers = layers;
 
-		Vector<WidgetLayer*> prototypes = layers.Select<WidgetLayer*>([](WidgetLayer* x) { return nullptr; });
-// 		auto prototypes = layers.Select<WidgetLayer*>([](WidgetLayer* x) { 
+		Vector<WidgetLayer*> prototypes = layers.Convert<WidgetLayer*>([](WidgetLayer* x) { return nullptr; });
+// 		auto prototypes = layers.Convert<WidgetLayer*>([](WidgetLayer* x) { 
 // 			return x->GetOwnerWidget()->GetPrototypeLink().Get(); });
 
 		mEnableProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayer::enabled)>(

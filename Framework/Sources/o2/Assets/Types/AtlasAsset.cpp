@@ -88,6 +88,22 @@ namespace o2
 		return mImages.Contains(image);
 	}
 
+	void AtlasAsset::AddImage(const ImageAssetRef& image)
+	{
+		if (!mImages.Contains(image))
+			mImages.Add(image);
+	}
+
+	void AtlasAsset::RemoveImage(const ImageAssetRef& image)
+	{
+		mImages.Remove(image);
+	}
+
+	void AtlasAsset::RemoveAllImages()
+	{
+		mImages.Clear();
+	}
+
 	AtlasAsset::Meta* AtlasAsset::GetMeta() const
 	{
 		return (Meta*)mInfo.meta;

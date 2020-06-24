@@ -132,7 +132,7 @@ namespace Editor
 			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
 
 		onSelectionChanged(mSelectedObjects);
-		o2EditorPropertiesWindow.SetTargets(mSelectedObjects.Select<IObject*>([](auto x) { return (IObject*)x; }));
+		o2EditorPropertiesWindow.SetTargets(mSelectedObjects.Convert<IObject*>([](auto x) { return (IObject*)x; }));
 	}
 
 	void SceneEditScreen::RedrawContent()
@@ -226,7 +226,7 @@ namespace Editor
 		{
 			mSelectedObjects.Add(layer->GetEnabledActors().
 								 FindAll([](auto x) { return !x->IsLockedInHierarchy(); }).
-								 Select<SceneEditableObject*>([](auto x) { return dynamic_cast<SceneEditableObject*>(x); }));
+								 Convert<SceneEditableObject*>([](auto x) { return dynamic_cast<SceneEditableObject*>(x); }));
 		}
 
 		mNeedRedraw = true;
@@ -304,7 +304,7 @@ namespace Editor
 		if (mEnabledTool)
 			mEnabledTool->OnObjectsSelectionChanged(mSelectedObjects);
 
-		auto selectedIObjects = mSelectedObjects.Select<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); });
+		auto selectedIObjects = mSelectedObjects.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); });
 
 		if (mSelectedObjects != prevSelectedObjects || 
 			selectedIObjects != o2EditorPropertiesWindow.GetTargets())

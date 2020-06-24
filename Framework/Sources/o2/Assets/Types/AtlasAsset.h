@@ -35,6 +35,15 @@ namespace o2
 		// Is contains image
 		bool ContainsImage(const ImageAssetRef& image);
 
+		// Adds image to atlas
+		void AddImage(const ImageAssetRef& image);
+
+		// Removes image from atlas
+		void RemoveImage(const ImageAssetRef& image);
+
+		// Removes all images from atlas
+		void RemoveAllImages();
+
 		// Returns meta information
 		Meta* GetMeta() const;
 
@@ -165,6 +174,9 @@ CLASS_METHODS_META(o2::AtlasAsset)
 	PUBLIC_FUNCTION(const Vector<ImageAssetRef>&, GetImages);
 	PUBLIC_FUNCTION(const Vector<Page>&, GetPages);
 	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, AddImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, RemoveImage, const ImageAssetRef&);
+	PUBLIC_FUNCTION(void, RemoveAllImages);
 	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const AssetInfo&, UInt);

@@ -413,7 +413,7 @@ namespace o2
 #if IS_EDITOR
 	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
 	{
-		return mRootActors.Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mRootActors.Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	void Scene::RegEditableObject(SceneEditableObject* object)

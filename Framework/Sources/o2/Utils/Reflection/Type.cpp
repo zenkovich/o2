@@ -83,7 +83,7 @@ namespace o2
 		for (auto baseType : mBaseTypes)
 			res += baseType.type->GetFieldsWithBaseClasses();
 
-		res += mFields.Select<const FieldInfo*>([](auto& x) { return &x; });
+		res += mFields.Convert<const FieldInfo*>([](auto& x) { return &x; });
 
 		return res;
 	}

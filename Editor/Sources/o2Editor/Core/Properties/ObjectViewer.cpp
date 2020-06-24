@@ -52,7 +52,7 @@ namespace Editor
 
 	void ObjectViewer::Refresh(const Vector<IObject*>& targetObjets)
 	{
-		auto protoTargets = targetObjets.Select<Pair<IObject*, IObject*>>(
+		auto protoTargets = targetObjets.Convert<Pair<IObject*, IObject*>>(
 			[](IObject* x) { return Pair<IObject*, IObject*>(x, nullptr); });
 
 		Refresh(protoTargets);

@@ -81,10 +81,10 @@ namespace Editor
 	{
 		mValuesProxies = targets;
 
-		mXProperty->SetValueAndPrototypeProxy(targets.Select<TargetPair>([](const TargetPair& x) {
+		mXProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
 			return TargetPair(mnew XValueProxy(x.first), x.second ? mnew XValueProxy(x.second) : nullptr); }));
 
-		mYProperty->SetValueAndPrototypeProxy(targets.Select<TargetPair>([](const TargetPair& x) {
+		mYProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
 			return TargetPair(mnew YValueProxy(x.first), x.second ? mnew YValueProxy(x.second) : nullptr); }));
 	}
 

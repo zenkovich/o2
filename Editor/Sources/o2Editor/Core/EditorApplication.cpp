@@ -146,13 +146,8 @@ namespace Editor
 
 	void EditorApplication::LoadUIStyle()
 	{
-		if (mNeedRebuildWndStyle)
-		{
-			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIManager(true, true);
-		}
-
-		o2UI.LoadStyle("editor_ui_style.json");
+		EditorUIStyleBuilder builder;
+		builder.RebuildEditorUIManager("editor_ui_style.json", true, true);
 	}
 
 	void EditorApplication::UpdateScene(float dt)

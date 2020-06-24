@@ -131,7 +131,7 @@ namespace Editor
 			return assetTreeNode->children
 				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
 				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
-				.Select<void*>([](AssetInfo* x) { return (void*)x; });
+				.Convert<void*>([](AssetInfo* x) { return (void*)x; });
 		}
 		else
 		{
@@ -140,7 +140,7 @@ namespace Editor
 			return assetsTree.rootAssets
 				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
 				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
-				.Select<void*>([](AssetInfo* x) { return (void*)x; });
+				.Convert<void*>([](AssetInfo* x) { return (void*)x; });
 		}
 	}
 

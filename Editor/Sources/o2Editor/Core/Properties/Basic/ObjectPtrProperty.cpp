@@ -145,7 +145,7 @@ namespace Editor
 				mHeaderContainer->SetInternalParent(mObjectViewer->GetSpoiler());
 
 				mTypeCaption->text = mCurrentObjectType->GetName();
-				mTypeCaption->SetEnableForcible(mAvailableMultipleTypes);
+				mTypeCaption->SetEnableForcible(mAvailableMultipleTypes && !mNoHeader);
 
 				mCreateDeleteButton->caption = "Delete";
 				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
@@ -165,7 +165,7 @@ namespace Editor
 
 		if (mObjectViewer)
 		{
-			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+			mObjectViewer->Refresh(mTargetObjects.Convert<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{
 				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
@@ -291,7 +291,7 @@ namespace Editor
 
 				mImmediateCreateObject = availableTypes.Count() == 1;
 
-				mCreateMenu->AddItems(availableTypes.Select<ContextMenu::Item>([&](const Type* type)
+				mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item>([&](const Type* type)
 				{
 					return ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
 				}));

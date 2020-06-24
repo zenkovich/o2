@@ -11,7 +11,7 @@ namespace Editor
 
 	TransformAction::TransformAction(const Vector<SceneEditableObject*>& actors)
 	{
-		objectsIds = actors.Select<UInt64>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = actors.Convert<UInt64>([](SceneEditableObject* x) { return x->GetID(); });
 		GetTransforms(objectsIds, beforeTransforms);
 	}
 
@@ -37,7 +37,7 @@ namespace Editor
 
 	void TransformAction::GetTransforms(const Vector<SceneUID>& objectIds, Vector<Transform>& transforms)
 	{
-		transforms = objectIds.Select<Transform>([=](SceneUID id)
+		transforms = objectIds.Convert<Transform>([=](SceneUID id)
 		{
 			SceneEditableObject* object = o2Scene.GetEditableObjectByID(id);
 			if (object)

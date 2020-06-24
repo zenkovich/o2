@@ -23,7 +23,7 @@ namespace Editor
 
 		for (auto& kv : properties)
 		{
-			auto fieldPointers = targets.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+			auto fieldPointers = targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 				[&](const Pair<IObject*, IObject*>& x)
 			{
 				auto fieldInfo = kv.first;

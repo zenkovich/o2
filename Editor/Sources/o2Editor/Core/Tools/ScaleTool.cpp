@@ -212,7 +212,7 @@ namespace Editor
 
 	void ScaleTool::HandlePressed()
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
 			[](SceneEditableObject* x) { return x->GetTransform(); });
 
 		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());

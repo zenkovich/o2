@@ -134,7 +134,7 @@ namespace Editor
 	{
 		mLayers = layers;
 
-		auto prototypes = layers.Select<WidgetLayer*>([](WidgetLayer* x) { return nullptr; });
+		auto prototypes = layers.Convert<WidgetLayer*>([](WidgetLayer* x) { return nullptr; });
 
 		mPositionProperty->SelectValueAndPrototypeProperties<WidgetLayer, decltype(WidgetLayerLayout::position)>(
 			layers, prototypes, [](WidgetLayer* x) { return &x->layout.position; });

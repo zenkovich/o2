@@ -10,7 +10,7 @@ namespace Editor
 
 	void AssetPropertiesViewer::SetTargets(const Vector<IObject*> targets)
 	{
-		DefaultPropertiesViewer::SetTargets(targets.Select<IObject*>([](IObject* x) {
+		DefaultPropertiesViewer::SetTargets(targets.Convert<IObject*>([](IObject* x) {
 			return dynamic_cast<AssetRef*>(x)->Get();
 		}));
 	}

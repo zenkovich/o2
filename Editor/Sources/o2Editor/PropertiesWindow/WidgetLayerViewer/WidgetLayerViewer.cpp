@@ -103,7 +103,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mTargetLayers = targets.Select<WidgetLayer*>([](auto x) { return dynamic_cast<WidgetLayer*>(x); });
+		mTargetLayers = targets.Convert<WidgetLayer*>([](auto x) { return dynamic_cast<WidgetLayer*>(x); });
 
 		// rebuild
 		mHeaderViewer->SetTargetLayers(mTargetLayers);

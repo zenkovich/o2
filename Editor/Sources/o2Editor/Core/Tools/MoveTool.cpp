@@ -111,7 +111,7 @@ namespace Editor
 
 	void MoveTool::HandlePressed()
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
 			[](SceneEditableObject* x) { return x->GetTransform(); });
 
 		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
@@ -270,7 +270,7 @@ namespace Editor
 
 	void MoveTool::MoveSelectedObjectsWithAction(const Vec2F& delta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
 			[](SceneEditableObject* x) { return x->GetTransform(); });
 
 		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());

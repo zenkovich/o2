@@ -41,8 +41,14 @@ namespace o2
 		// Loads widgets style
 		void LoadStyle(const String& path);
 
+		// Loads widgets style
+		void LoadStyle(const DataValue& data);
+
 		// Saves style
 		void SaveStyle(const String& path);
+
+		// Saves style
+		void SaveStyle(DataValue& data);
 
 		// Clears style widgets
 		void ClearStyle();

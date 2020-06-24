@@ -283,15 +283,20 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnAssetsSelected()
 	{
-		auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
-		for (auto asset : lastSelectedPreloadedAssets)
+		o2Debug.Log("OnAssetsSelected");
+
+		if (!mSelectedAssets.IsEmpty())
 		{
-			if (!mSelectedAssets.Contains([&](const AssetInfo* x) {
-				return x->meta->ID() == (*asset)->GetUID(); }))
+			auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
+			for (auto asset : lastSelectedPreloadedAssets)
 			{
-				mSelectedPreloadedAssets.Remove(asset);
-				(*asset)->Save(false);
-				delete asset;
+				if (!mSelectedAssets.Contains([&](const AssetInfo* x) {
+					return x->meta->ID() == (*asset)->GetUID(); }))
+				{
+					mSelectedPreloadedAssets.Remove(asset);
+					(*asset)->Save(false);
+					delete asset;
+				}
 			}
 		}
 
@@ -304,7 +309,7 @@ namespace Editor
 			mSelectedPreloadedAssets.Add(iconAsset);
 		}
 
-		onAssetsSelected(mSelectedAssets.Select<String>([](const AssetInfo* x) { return x->path; }));
+		onAssetsSelected(mSelectedAssets.Convert<String>([](const AssetInfo* x) { return x->path; }));
 
 		if (PropertiesWindow::IsSingletonInitialzed())
 		{
@@ -314,7 +319,7 @@ namespace Editor
 
 			if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(ActorAsset); }))
 			{
-				targets = mSelectedPreloadedAssets.Select<IObject*>([](AssetRef* x) {
+				targets = mSelectedPreloadedAssets.Convert<IObject*>([](AssetRef* x) {
 					ActorAssetRef asset(*x); return asset->GetActor(); });
 			}
 			else if (mSelectedPreloadedAssets.All([](AssetRef* x) { return (*x)->GetType() == TypeOf(FolderAsset); }))
@@ -575,7 +580,7 @@ namespace Editor
 		if (iconUnderCursor && iconUnderCursor->GetAssetInfo().meta->GetAssetType() == &TypeOf(FolderAsset))
 		{
 			String destPath = iconUnderCursor->GetAssetInfo().path;
-			auto assetsInfos = mSelectedAssets.Select<UID>([](const AssetInfo* x) { return x->meta->ID(); });
+			auto assetsInfos = mSelectedAssets.Convert<UID>([](const AssetInfo* x) { return x->meta->ID(); });
 			o2Assets.MoveAssets(assetsInfos, destPath, true);
 
 			DeselectAllAssets();
@@ -687,6 +692,8 @@ namespace Editor
 		mSelectedAssets.Add(mCurrentSelectingInfos);
 		mCurrentSelectingInfos.Clear();
 		mSelecting = false;
+
+		OnAssetsSelected();
 	}
 
 	void AssetsIconsScrollArea::OnCursorMoved(const Input::Cursor& cursor)
@@ -869,13 +876,13 @@ namespace Editor
 	void AssetsIconsScrollArea::OnContextCopyPressed()
 	{
 		o2EditorAssets.CopyAssets(
-			mSelectedAssets.Select<String>([](const AssetInfo* x) { return x->path; }));
+			mSelectedAssets.Convert<String>([](const AssetInfo* x) { return x->path; }));
 	}
 
 	void AssetsIconsScrollArea::OnContextCutPressed()
 	{
 		o2EditorAssets.CutAssets(
-			mSelectedAssets.Select<String>([](const AssetInfo* x) { return x->path; }));
+			mSelectedAssets.Convert<String>([](const AssetInfo* x) { return x->path; }));
 	}
 
 	void AssetsIconsScrollArea::OnContextPastePressed()
@@ -892,7 +899,7 @@ namespace Editor
 		mSelectedPreloadedAssets.Clear();
 
 		o2EditorAssets.DeleteAssets(
-			mSelectedAssets.Select<String>([](const AssetInfo* x) { return x->path; }));
+			mSelectedAssets.Convert<String>([](const AssetInfo* x) { return x->path; }));
 	}
 
 	void AssetsIconsScrollArea::OnContextOpenPressed()

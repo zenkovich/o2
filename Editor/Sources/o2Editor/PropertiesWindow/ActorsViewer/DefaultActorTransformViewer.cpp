@@ -249,7 +249,7 @@ namespace Editor
 	{
 		mTargetActors = actors;
 
-		auto prototypes = actors.Select<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
+		auto prototypes = actors.Convert<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
 
 		mPositionProperty->SelectValueAndPrototypeProperties<Actor, decltype(ActorTransform::position)>(
 			actors, prototypes, [](Actor* x) { return &x->transform->position; });
@@ -282,14 +282,14 @@ namespace Editor
 
 		Vector<Widget*> targetWidgets = mTargetActors
 			.FindAll([](Actor* x) { return dynamic_cast<Widget*>(x) != nullptr; })
-			.Select<Widget*>([](Actor* x) { return dynamic_cast<Widget*>(x); });
+			.Convert<Widget*>([](Actor* x) { return dynamic_cast<Widget*>(x); });
 
 		mLayoutEnabled = !targetWidgets.IsEmpty();
 		mLayoutSpoiler->enabled = mLayoutEnabled;
 
 		if (mLayoutEnabled)
 		{
-			auto widgetPrototypes = targetWidgets.Select<Widget*>(
+			auto widgetPrototypes = targetWidgets.Convert<Widget*>(
 				[](Actor* x) { return dynamic_cast<Widget*>(x->GetPrototypeLink().Get()); });
 
 			mAnchorRightTopProperty->SelectValueAndPrototypeProperties<Widget, decltype(WidgetLayout::anchorMax)>(

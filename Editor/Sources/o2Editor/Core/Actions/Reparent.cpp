@@ -21,7 +21,7 @@ namespace Editor
 
 			Vector<SceneEditableObject*> parentChildren = parent ? 
 				parent->GetEditablesChildren() : 
-				o2Scene.GetRootActors().Select<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+				o2Scene.GetRootActors().Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 
 			int actorIdx = parentChildren.IndexOf(object);
 

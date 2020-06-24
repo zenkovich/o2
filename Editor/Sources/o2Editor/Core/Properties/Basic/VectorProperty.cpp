@@ -186,7 +186,7 @@ namespace Editor
 			int i = 0;
 			for (; i < mCountOfElements; i++)
 			{
-				auto itemTargetValues = mTargetObjects.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+				auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 					[&](const Pair<TargetObjectData, TargetObjectData>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
@@ -236,7 +236,7 @@ namespace Editor
 		{
 			for (int i = 0; i < mCountOfElements; i++)
 			{
-				auto itemTargetValues = mTargetObjects.Select<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+				auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 					[&](const Pair<TargetObjectData, TargetObjectData>& x)
 				{
 					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(

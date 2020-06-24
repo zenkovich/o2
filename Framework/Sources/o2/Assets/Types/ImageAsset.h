@@ -115,8 +115,8 @@ namespace o2
 			PlatformMeta android;              // Android specified meta @SERIALIZABLE
 			PlatformMeta macOS;                // MacOS specified meta @SERIALIZABLE
 			PlatformMeta windows;              // Windows specified meta @SERIALIZABLE
-			BorderI      sliceBorder;          // Default slice border @SERIALIZABLE
-			SpriteMode   defaultMode;          // Default sprite mode @SERIALIZABLE
+			BorderI      sliceBorder;          // Default slice border @SERIALIZABLE @EDITOR_IGNORE
+			SpriteMode   defaultMode;          // Default sprite mode @SERIALIZABLE @EDITOR_IGNORE
 
 		public:
 			// Returns true if other meta is equal to this
@@ -226,8 +226,8 @@ CLASS_FIELDS_META(o2::ImageAsset::Meta)
 	PUBLIC_FIELD(android).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(macOS).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(windows).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(sliceBorder).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(defaultMode).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(sliceBorder).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(defaultMode).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::ImageAsset::Meta)

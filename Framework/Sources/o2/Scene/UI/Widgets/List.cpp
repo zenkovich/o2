@@ -111,7 +111,7 @@ namespace o2
 
 	Vector<WString> List::GetSelectedItemsText() const
 	{
-		return mSelectedItems.Select<WString>([&](auto x) { return GetItemText(x.idx); });
+		return mSelectedItems.Convert<WString>([&](auto x) { return GetItemText(x.idx); });
 	}
 
 	void List::CopyData(const Actor& otherActor)

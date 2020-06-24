@@ -175,7 +175,7 @@ namespace o2
 
 	Vector<String> TagGroup::GetTagsNames() const
 	{
-		return mTags.Select<String>([](auto x) { return x->GetName(); });
+		return mTags.Convert<String>([](auto x) { return x->GetName(); });
 	}
 
 	TagGroup& TagGroup::operator-=(Tag* tag)

@@ -1058,7 +1058,7 @@ namespace o2
 
 		mNodeWidgetsBuf.Add(mVisibleWidgetsCache
 							.FindAll([](const VisibleWidgetDef& x) { return x.widget != nullptr; })
-							.Select<TreeNode*>([&](const VisibleWidgetDef& x) { FreeNodeData(x.widget, x.object); return x.widget; }));
+							.Convert<TreeNode*>([&](const VisibleWidgetDef& x) { FreeNodeData(x.widget, x.object); return x.widget; }));
 
 		mVisibleWidgetsCache.Clear();
 

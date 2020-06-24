@@ -4366,22 +4366,23 @@ namespace Editor
 		BuildPropertyWithCaption<WStringProperty>("standard", "with caption");
 	}
 
-	void EditorUIStyleBuilder::RebuildEditorUIManager(bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)
+	void EditorUIStyleBuilder::RebuildEditorUIManager(const String& stylesFileName, bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)
 	{
 		PushEditorScopeOnStack scope;
 
-		String generateDateCachePath = "uiGeneratedDate.json";
-
-		String thisSourcePath = "../../../Sources/Core/UIStyle/EditorUIStyle.cpp";
+		String thisSourcePath = "o2/Editor/Sources/o2Editor/Core/UIStyle/EditorUIStyle.cpp";
 		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
 
-		DataDocument data;
-		if (data.LoadFromFile(generateDateCachePath))
+		DataDocument stylesData;
+		if (stylesData.LoadFromFile(GetEditorAssetsPath() + stylesFileName))
 		{
-			TimeStamp cachedDate = data;
+			TimeStamp cachedDate = stylesData["generatedDate"];
 
 			if (thisSourceEditedDate == cachedDate && checkEditedDate)
+			{
+				o2UI.LoadStyle(stylesData["styles"]);
 				return;
+			}
 		}
 
 		o2UI.ClearStyle();
@@ -4406,11 +4407,10 @@ namespace Editor
 
 		if (saveStyle)
 		{
-			o2UI.SaveStyle("editor_ui_style.json");
-
-			data.Clear();
-			data = thisSourceEditedDate;
-			data.SaveToFile(generateDateCachePath);
+			DataDocument newStylesData;
+			o2UI.SaveStyle(newStylesData["styles"]);
+			newStylesData["generatedDate"] = thisSourceEditedDate;
+			newStylesData.SaveToFile(GetEditorAssetsPath() + stylesFileName);
 		}
 	}
 }

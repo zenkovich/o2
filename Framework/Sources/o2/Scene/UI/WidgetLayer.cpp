@@ -472,7 +472,7 @@ namespace o2
 
 	Vector<SceneEditableObject*> WidgetLayer::GetEditablesChildren() const
 	{
-		return mChildren.Select<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mChildren.Convert<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	SceneEditableObject* WidgetLayer::GetEditableParent() const

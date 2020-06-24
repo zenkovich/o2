@@ -87,7 +87,7 @@ namespace Editor
 
 		if (mObjectViewer)
 		{
-			mObjectViewer->Refresh(mTargetObjects.Select<Pair<IObject*, IObject*>>(
+			mObjectViewer->Refresh(mTargetObjects.Convert<Pair<IObject*, IObject*>>(
 				[&](const Pair<TargetObjectData, TargetObjectData>& x)
 			{
 				return Pair<IObject*, IObject*>(x.first.data, x.second.data);

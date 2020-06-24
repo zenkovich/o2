@@ -279,7 +279,7 @@ namespace Editor
 				selectedHandles.Add(keyHandle->keyUid);
 		}
 
-		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Select<AnimationKeyDragHandle*>([&](const KeyHandle* x) {
+		Vector<AnimationKeyDragHandle*> handlesCache = mHandles.Convert<AnimationKeyDragHandle*>([&](const KeyHandle* x) {
 			x->handle->SetParent(nullptr);
 			x->handle->SetEnabled(false);
 			x->handle->SetSelectionGroup(nullptr);

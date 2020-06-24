@@ -111,18 +111,24 @@ namespace o2
 	void UIManager::LoadStyle(const String& path)
 	{
 		Timer t;
-
 		DataDocument styleData;
 		styleData.LoadFromFile(o2Assets.GetBuiltAssetsPath() + path);
 
 		o2Debug.Log("Loaded file " + path + " for " + String(t.GetDeltaTime()) + "sec");
+
+		LoadStyle(styleData);
+	}
+
+	void UIManager::LoadStyle(const DataValue& data)
+	{
+		Timer t;
 
 		for (auto st : mStyleSamples)
 			delete st;
 
 		mStyleSamples.Clear();
 
-		styleData.Get(mStyleSamples);
+		data.Get(mStyleSamples);
 
 		for (auto styleSample : mStyleSamples)
 			styleSample->Hide(true);
@@ -133,10 +139,15 @@ namespace o2
 	void UIManager::SaveStyle(const String& path)
 	{
 		DataDocument styleData;
-		styleData = mStyleSamples;
+		SaveStyle(styleData);
 		styleData.SaveToFile(o2Assets.GetAssetsPath() + path);
 
 		o2Assets.RebuildAssets();
+	}
+
+	void UIManager::SaveStyle(DataValue& data)
+	{
+		data = mStyleSamples;
 	}
 
 	void UIManager::ClearStyle()

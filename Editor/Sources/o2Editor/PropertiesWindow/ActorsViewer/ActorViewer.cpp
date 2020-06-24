@@ -178,7 +178,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mTargetActors = targets.Select<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
+		mTargetActors = targets.Convert<Actor*>([](auto x) { return dynamic_cast<Actor*>(x); });
 
 		// clear 
 		mViewersLayout->RemoveAllChildren(false);
@@ -247,12 +247,12 @@ namespace Editor
 
 	Vector<const Type*> ActorViewer::GetCommonComponentsTypes(const Vector<IObject*> targets) const
 	{
-		auto commonComponentsTypes = mTargetActors[0]->GetComponents().Select<const Type*>([](auto x) {
+		auto commonComponentsTypes = mTargetActors[0]->GetComponents().Convert<const Type*>([](auto x) {
 			return &x->GetType(); });
 
 		for (int i = 1; i < mTargetActors.Count(); i++)
 		{
-			auto actorComponentsTypes = mTargetActors[i]->GetComponents().Select<const Type*>([](auto x) {
+			auto actorComponentsTypes = mTargetActors[i]->GetComponents().Convert<const Type*>([](auto x) {
 				return &x->GetType(); });
 
 			auto commTypesTemp = commonComponentsTypes;
@@ -304,7 +304,7 @@ namespace Editor
 			mComponentsViewers.Add(componentViewer);
 
 			componentViewer->SetTargetComponents(
-				mTargetActors.Select<Component*>([&](Actor* x) { return x->GetComponent(type); }));
+				mTargetActors.Convert<Component*>([&](Actor* x) { return x->GetComponent(type); }));
 		}
 	}
 

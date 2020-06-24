@@ -1121,7 +1121,7 @@ namespace o2
 		{
 			static void GetFields(const Type* type, Vector<const FieldInfo*>& fields)
 			{
-				fields.Add(type->GetFields().Select<const FieldInfo*>([](const auto& x) { return &x; }));
+				fields.Add(type->GetFields().Convert<const FieldInfo*>([](const auto& x) { return &x; }));
 
 				for (auto baseType : type->GetBaseTypes())
 				{

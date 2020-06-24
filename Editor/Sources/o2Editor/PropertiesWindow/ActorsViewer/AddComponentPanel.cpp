@@ -76,7 +76,7 @@ namespace Editor
 		for (auto actor : mViewer->mTargetActors)
 			actor->AddComponent(dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample())));
 
-		mViewer->SetTargets(mViewer->mTargetActors.Select<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
+		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
 	}
 
 	void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
@@ -92,7 +92,7 @@ namespace Editor
 		for (auto actor : mViewer->mTargetActors)
 			actor->AddComponent(dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample())));
 
-		mViewer->SetTargets(mViewer->mTargetActors.Select<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
+		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
 	}
 
 	void AddComponentPanel::OnKeyReleased(const Input::Key& key)

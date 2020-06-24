@@ -48,7 +48,7 @@ namespace Editor
 
 		if (mViewer)
 		{
-			mViewer->Refresh(mTargetActors.Select<Pair<IObject*, IObject*>>([](Actor* x) {
+			mViewer->Refresh(mTargetActors.Convert<Pair<IObject*, IObject*>>([](Actor* x) {
 				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink().Get()));
 			}));
 		}

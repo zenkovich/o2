@@ -1428,7 +1428,7 @@ namespace o2
 
 	Vector<SceneEditableObject*> Widget::LayersEditable::GetEditablesChildren() const
 	{
-		return mWidget->mLayers.Select<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mWidget->mLayers.Convert<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	o2::SceneEditableObject* Widget::LayersEditable::GetEditableParent() const
@@ -1485,7 +1485,7 @@ namespace o2
 
 	Vector<SceneEditableObject*> Widget::InternalChildrenEditableEditable::GetEditablesChildren() const
 	{
-		return mWidget->mInternalWidgets.Select<SceneEditableObject*>([](Widget* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mWidget->mInternalWidgets.Convert<SceneEditableObject*>([](Widget* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	o2::SceneEditableObject* Widget::InternalChildrenEditableEditable::GetEditableParent() const

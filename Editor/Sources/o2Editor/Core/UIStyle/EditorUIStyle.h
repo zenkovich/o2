@@ -129,7 +129,7 @@ namespace Editor
 		void RebuildAnimationStateViewerProgressBar();
 		void RebuildAnimationSpoiler();
 
-		void RebuildEditorUIManager(bool saveStyle = true, bool checkEditedDate = true);
+		void RebuildEditorUIManager(const String& stylesFileName, bool saveStyle = true, bool checkEditedDate = true);
 
 		IOBJECT(EditorUIStyleBuilder);
 
@@ -271,6 +271,6 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildAnimationStateViewerLoopToggle);
 	PUBLIC_FUNCTION(void, RebuildAnimationStateViewerProgressBar);
 	PUBLIC_FUNCTION(void, RebuildAnimationSpoiler);
-	PUBLIC_FUNCTION(void, RebuildEditorUIManager, bool, bool);
+	PUBLIC_FUNCTION(void, RebuildEditorUIManager, const String&, bool, bool);
 }
 END_META;

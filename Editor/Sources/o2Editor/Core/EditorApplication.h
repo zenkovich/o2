@@ -58,8 +58,6 @@ namespace Editor
 		bool IsSceneChanged() const;
 
 	protected:
-		const bool mNeedRebuildWndStyle = true; // Is need to rebuild dockable windows style
-
 		Sprite* mBackground; // Background sprite
 		Sprite* mBackSign;   // Background o2 signature
 

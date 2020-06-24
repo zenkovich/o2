@@ -157,7 +157,7 @@ namespace o2
 
 	void Curve::AppendKeys(Vector<Vec2F> values, bool smooth /*= true*/)
 	{
-		AppendKeys(values.Select<Key>([=](const Vec2F& v) {
+		AppendKeys(values.Convert<Key>([=](const Vec2F& v) {
 			Key res(v.x, v.y, 0, 0, 0, 0);
 			res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
 			return res;
@@ -187,7 +187,7 @@ namespace o2
 
 	void Curve::PrependKeys(Vector<Vec2F> values, bool smooth /*= true*/)
 	{
-		PrependKeys(values.Select<Key>([=](const Vec2F& v) {
+		PrependKeys(values.Convert<Key>([=](const Vec2F& v) {
 			Key res(v.x, v.y, 0, 0, 0, 0);
 			res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
 			return res;
@@ -217,7 +217,7 @@ namespace o2
 
 	void Curve::InsertKeys(Vector<Vec2F> values, float position, bool smooth /*= true*/)
 	{
-		InsertKeys(values.Select<Key>([=](const Vec2F& v) {
+		InsertKeys(values.Convert<Key>([=](const Vec2F& v) {
 			Key res(v.x, v.y, 0, 0, 0, 0);
 			res.supportsType = smooth ? Key::Type::Smooth : Key::Type::Broken;
 			return res;

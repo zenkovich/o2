@@ -97,12 +97,12 @@ namespace Editor
 
 	Vector<SceneEditableObject*> SceneTree::GetSelectedObjects() const
 	{
-		return Tree::GetSelectedObjects().Select<SceneEditableObject*>([](auto x) { return (SceneEditableObject*)(void*)x; });
+		return Tree::GetSelectedObjects().Convert<SceneEditableObject*>([](auto x) { return (SceneEditableObject*)(void*)x; });
 	}
 
 	void SceneTree::SetSelectedObjects(const Vector<SceneEditableObject*>& objects)
 	{
-		Tree::SetSelectedObjects(objects.Select<void*>([](auto x) { return (void*)(void*)x; }));
+		Tree::SetSelectedObjects(objects.Convert<void*>([](auto x) { return (void*)(void*)x; }));
 	}
 
 	void SceneTree::SelectObject(SceneEditableObject* object)
@@ -183,7 +183,7 @@ namespace Editor
 		if (mWatchEditor)
 			return EditorUIRoot.GetRootWidget()->GetEditablesChildren().Cast<void*>();
 
-		return o2Scene.GetRootActors().Select<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	String SceneTree::GetObjectDebug(void* object)
@@ -225,7 +225,7 @@ namespace Editor
 
 	void SceneTree::EnableObjectsGroupReleased(bool value)
 	{
-		Vector<SceneEditableObject*> objects = mEnableTogglesGroup->GetToggled().Select<SceneEditableObject*>(
+		Vector<SceneEditableObject*> objects = mEnableTogglesGroup->GetToggled().Convert<SceneEditableObject*>(
 			[](Toggle* x) { return (SceneEditableObject*)((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew EnableAction(objects, value);
@@ -237,7 +237,7 @@ namespace Editor
 
 	void SceneTree::LockObjectsGroupReleased(bool value)
 	{
-		Vector<SceneEditableObject*> objects = mLockTogglesGroup->GetToggled().Select<SceneEditableObject*>(
+		Vector<SceneEditableObject*> objects = mLockTogglesGroup->GetToggled().Convert<SceneEditableObject*>(
 			[](Toggle* x) { return (SceneEditableObject*)((TreeNode*)x->GetParent())->GetObject(); });
 
 		auto action = mnew LockAction(objects, value);

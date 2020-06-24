@@ -121,16 +121,16 @@ namespace Editor
 	{
 		mValuesProxies = targets;
 
-		mLeftProperty->SetValueAndPrototypeProxy(targets.Select<TargetPair>([](const TargetPair& x) {
+		mLeftProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
 			return TargetPair(mnew LeftValueProxy(x.first), x.second ? mnew LeftValueProxy(x.second) : nullptr); }));
 
-		mRightProperty->SetValueAndPrototypeProxy(targets.Select<TargetPair>([](const TargetPair& x) {
+		mRightProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
 			return TargetPair(mnew RightValueProxy(x.first), x.second ? mnew RightValueProxy(x.second) : nullptr); }));
 
-		mTopProperty->SetValueAndPrototypeProxy(targets.Select<TargetPair>([](const TargetPair& x) {
+		mTopProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
 			return TargetPair(mnew TopValueProxy(x.first), x.second ? mnew TopValueProxy(x.second) : nullptr); }));
 
-		mBottomProperty->SetValueAndPrototypeProxy(targets.Select<TargetPair>([](const TargetPair& x) {
+		mBottomProperty->SetValueAndPrototypeProxy(targets.Convert<TargetPair>([](const TargetPair& x) {
 			return TargetPair(mnew BottomValueProxy(x.first), x.second ? mnew BottomValueProxy(x.second) : nullptr); }));
 	}
 

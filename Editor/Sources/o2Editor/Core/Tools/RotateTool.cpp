@@ -215,7 +215,7 @@ namespace Editor
 			mCurrentRotateAngle = mPressAngle;
 			mSnapAngleAccumulated = 0.0f;
 
-			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+			mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
 				[](SceneEditableObject* x) { return x->GetTransform(); });
 
 			mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
@@ -351,7 +351,7 @@ namespace Editor
 
 	void RotateTool::RotateObjectsWithAction(float angleDelta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
 			[](SceneEditableObject* x) { return x->GetTransform(); });
 
 		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());
@@ -365,7 +365,7 @@ namespace Editor
 
 	void RotateTool::RotateObjectsSeparatedWithAction(float angleDelta)
 	{
-		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Select<Basis>(
+		mBeforeTransforms = o2EditorSceneScreen.GetTopSelectedObjects().Convert<Basis>(
 			[](SceneEditableObject* x) { return x->GetTransform(); });
 
 		mTransformAction = mnew TransformAction(o2EditorSceneScreen.GetTopSelectedObjects());

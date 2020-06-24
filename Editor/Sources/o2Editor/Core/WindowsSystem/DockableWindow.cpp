@@ -754,7 +754,7 @@ namespace Editor
 		{
 			auto parent = dynamic_cast<DockWindowPlace*>(mParent);
 			auto parentNeighbors = topDock->GetChildWidgets().FindAll([&](auto x) { return x != parent; })
-				.Select<DockWindowPlace*>([](auto x) { return (DockWindowPlace*)x; });
+				.Convert<DockWindowPlace*>([](auto x) { return (DockWindowPlace*)x; });
 
 			EditorUIRoot.AddWidget(this);
 

@@ -3,50 +3,6 @@
     "Value": {
         "mId": "12a80f3344a31e2d3354161c2f944638",
         "atlasId": "6bd459187f2675966f8c67e46e525c59",
-        "ios": {
-            "maxSize": {
-                "x": 0,
-                "y": 0
-            },
-            "scale": {
-                "x": 0.0,
-                "y": 0.0
-            },
-            "format": ""
-        },
-        "android": {
-            "maxSize": {
-                "x": 0,
-                "y": 0
-            },
-            "scale": {
-                "x": 0.0,
-                "y": 0.0
-            },
-            "format": ""
-        },
-        "macOS": {
-            "maxSize": {
-                "x": 0,
-                "y": 0
-            },
-            "scale": {
-                "x": 0.0,
-                "y": 0.0
-            },
-            "format": ""
-        },
-        "windows": {
-            "maxSize": {
-                "x": 0,
-                "y": 0
-            },
-            "scale": {
-                "x": 0.0,
-                "y": 0.0
-            },
-            "format": ""
-        },
         "sliceBorder": {
             "left": 8,
             "bottom": 8,

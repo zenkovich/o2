@@ -118,7 +118,7 @@ namespace o2
 		atlasData.LoadFromFile(mAssetsBuilder->mBuiltAssetsPath + atlasInfo->path);
 
 		Vector<Image> lastImages;
-		lastImages = atlasData["builtImages"];
+		lastImages = atlasData["mImages"];
 
 		Vector<Image> currentImages;
 		const Type* imageType = &TypeOf(ImageAsset);
@@ -280,7 +280,7 @@ namespace o2
 		DataDocument atlasData;
 		atlasData.LoadFromFile(atlasFullPath);
 		atlasData["mPages"] = resAtlasPages;
-		atlasData["builtImages"] = images;
+		atlasData["mImages"] = images;
 
 		atlasData.SaveToFile(atlasFullPath);
 		atlasData.SaveToFile(atlasFullBuiltPath);

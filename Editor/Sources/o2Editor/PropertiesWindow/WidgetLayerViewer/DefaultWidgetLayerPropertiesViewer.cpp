@@ -44,7 +44,7 @@ namespace Editor
 
 		if (mViewer)
 		{
-			mViewer->Refresh(mLayers.Select<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
+			mViewer->Refresh(mLayers.Convert<Pair<IObject*, IObject*>>([](WidgetLayer* x) {
 				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), nullptr);
 			}));
 		}
@@ -57,7 +57,7 @@ namespace Editor
 
 	void DefaultWidgetLayerPropertiesViewer::FitLayerByDrawable()
 	{
-		TransformAction* action = new TransformAction(mLayers.Select<SceneEditableObject*>([](WidgetLayer* layer) { return dynamic_cast<SceneEditableObject*>(layer); }));
+		TransformAction* action = new TransformAction(mLayers.Convert<SceneEditableObject*>([](WidgetLayer* layer) { return dynamic_cast<SceneEditableObject*>(layer); }));
 
 		for (auto layer : mLayers)
 		{

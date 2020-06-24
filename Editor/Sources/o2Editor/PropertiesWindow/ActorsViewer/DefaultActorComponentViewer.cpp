@@ -49,7 +49,7 @@ namespace Editor
 
 		if (mViewer)
 		{
-			mViewer->Refresh(mTargetComponents.Select<Pair<IObject*, IObject*>>([](Component* x) {
+			mViewer->Refresh(mTargetComponents.Convert<Pair<IObject*, IObject*>>([](Component* x) {
 				return Pair<IObject*, IObject*>(dynamic_cast<IObject*>(x), dynamic_cast<IObject*>(x->GetPrototypeLink()));
 			}));
 

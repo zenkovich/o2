@@ -12,6 +12,7 @@ namespace o2
 
 namespace Editor
 {
+	class AssetProperty;
 	class BorderIProperty;
 	class ImageSlicesEditorWidget;
 
@@ -32,6 +33,8 @@ namespace Editor
 	private:
 		ImageSlicesEditorWidget* mSlicesEditor = nullptr;
 
+		AssetProperty* mAtlasProperty = nullptr;
+
 	private:
 		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
@@ -49,6 +52,7 @@ END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)
 {
 	PRIVATE_FIELD(mSlicesEditor).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mAtlasProperty).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageAssetViewer)

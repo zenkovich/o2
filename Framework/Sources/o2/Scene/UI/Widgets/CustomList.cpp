@@ -296,7 +296,7 @@ namespace o2
 
 	Vector<int> CustomList::GetSelectedItems() const
 	{
-		return mSelectedItems.Select<int>([](auto x) { return x.idx; });
+		return mSelectedItems.Convert<int>([](auto x) { return x.idx; });
 	}
 
 	int CustomList::GetSelectedItemPos() const

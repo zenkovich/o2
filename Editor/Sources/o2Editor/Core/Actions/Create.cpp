@@ -14,7 +14,7 @@ namespace Editor
 	CreateAction::CreateAction(const Vector<SceneEditableObject*>& objects, 
 											 SceneEditableObject* parent, SceneEditableObject* prevObject)
 	{
-		objectsIds = objects.Select<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
+		objectsIds = objects.Convert<SceneUID>([](SceneEditableObject* x) { return x->GetID(); });
 
 		objectsData.Set(objects);
 

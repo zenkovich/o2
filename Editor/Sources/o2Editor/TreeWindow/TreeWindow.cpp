@@ -443,7 +443,7 @@ namespace Editor
 			return;
 
 		Vector<SceneEditableObject*> selectedObjects =
-			mSceneTree->GetSelectedObjects().Select<SceneEditableObject*>(
+			mSceneTree->GetSelectedObjects().Convert<SceneEditableObject*>(
 				[](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
 
 		DataDocument data;

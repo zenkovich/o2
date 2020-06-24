@@ -26,23 +26,23 @@ namespace Editor
 		commonFieldsLayout->fitByChildren = true;
 		mSpoiler->AddChild(commonFieldsLayout);
 
-		mImageProperty = dynamic_cast<AssetProperty*>(
-			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "image", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mImageProperty = o2EditorProperties.BuildFieldType<AssetProperty>(commonFieldsLayout, spriteType, "image", "",
+																		  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mSizePivotProperty = dynamic_cast<Vec2FProperty*>(
-			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "szPivot", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mSizePivotProperty = o2EditorProperties.BuildFieldType<Vec2FProperty>(commonFieldsLayout, spriteType, "szPivot", "",
+																			  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mPivotProperty = dynamic_cast<Vec2FProperty*>(
-			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "pivot", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mPivotProperty = o2EditorProperties.BuildFieldType<Vec2FProperty>(commonFieldsLayout, spriteType, "pivot", "",
+																		  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mColorProperty = dynamic_cast<ColorProperty*>(
-			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "color", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mColorProperty = o2EditorProperties.BuildFieldType<ColorProperty>(commonFieldsLayout, spriteType, "color", "",
+																		  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mAlphaProperty = dynamic_cast<FloatProperty*>(
-			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "transparency", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mAlphaProperty = o2EditorProperties.BuildFieldType<FloatProperty>(commonFieldsLayout, spriteType, "transparency", "",
+																		  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mModeProperty = dynamic_cast<EnumProperty*>(
-			o2EditorProperties.BuildField(commonFieldsLayout, spriteType, "mode", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mModeProperty = o2EditorProperties.BuildFieldType<EnumProperty>(commonFieldsLayout, spriteType, "mode", "",
+																		mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
 		mModeProperty->onChanged += [&](IPropertyField* x) { OnModeSelected(); };
 
@@ -60,8 +60,8 @@ namespace Editor
 		fillSpace->layout->minHeight = 5;
 		mFillPropertiesSpoiler->AddChildWidget(fillSpace);
 
-		mFillProperty = dynamic_cast<FloatProperty*>(
-			o2EditorProperties.BuildField(mFillPropertiesSpoiler, spriteType, "fill", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mFillProperty = o2EditorProperties.BuildFieldType<FloatProperty>(mFillPropertiesSpoiler, spriteType, "fill", "",
+																		 mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
 		// Slice properties
 		mSlicedPropertiesSpoiler = o2UI.CreateWidget<Spoiler>();
@@ -74,8 +74,8 @@ namespace Editor
 		auto slicesEditorSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 
 		slicesEditorSpoiler->SetCaption("Slices");
-		mSliceBorderProperty = dynamic_cast<BorderIProperty*>(
-			o2EditorProperties.BuildField(slicesEditorSpoiler, spriteType, "sliceBorder", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mSliceBorderProperty = o2EditorProperties.BuildFieldType<BorderIProperty>(slicesEditorSpoiler, spriteType, "sliceBorder", "",
+																				  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
 		mSlicesEditor = mnew ImageSlicesEditorWidget();
 		slicesEditorSpoiler->AddChildWidget(mSlicesEditor);
@@ -89,8 +89,8 @@ namespace Editor
 		tiledSpace->layout->minHeight = 5;
 		mTiledPropertiesSpoiler->AddChildWidget(tiledSpace);
 
-		mTileScaleProperty = dynamic_cast<FloatProperty*>(
-			o2EditorProperties.BuildField(mTiledPropertiesSpoiler, spriteType, "tileScale", "", mPropertiesContext, mOnChildFieldChangeCompleted, onChanged));
+		mTileScaleProperty = o2EditorProperties.BuildFieldType<FloatProperty>(mTiledPropertiesSpoiler, spriteType, "tileScale", "",
+																			  mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 	}
 
 	void SpriteViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)

@@ -15,7 +15,7 @@ namespace Editor
 											   const String& propertyPath,
 											   const Vector<DataDocument>& beforeValues,
 											   const Vector<DataDocument>& afterValues) :
-		objectsIds(objects.Select<SceneUID>([](const SceneEditableObject* x) { return x->GetID(); })),
+		objectsIds(objects.Convert<SceneUID>([](const SceneEditableObject* x) { return x->GetID(); })),
 		propertyPath(propertyPath), beforeValues(beforeValues), afterValues(afterValues)
 	{}
 
@@ -36,7 +36,7 @@ namespace Editor
 
 	void PropertyChangeAction::SetProperties(Vector<DataDocument>& values)
 	{
-		Vector<SceneEditableObject*> objects = objectsIds.Select<SceneEditableObject*>([](SceneUID id) { 
+		Vector<SceneEditableObject*> objects = objectsIds.Convert<SceneEditableObject*>([](SceneUID id) { 
 			return o2Scene.GetEditableObjectByID(id); });
 
 		const Type* componentType = nullptr;

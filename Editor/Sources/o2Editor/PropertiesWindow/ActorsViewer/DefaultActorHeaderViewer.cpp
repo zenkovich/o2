@@ -133,7 +133,7 @@ namespace Editor
 	{
 		mActors = actors;
 
-		auto prototypes = actors.Select<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
+		auto prototypes = actors.Convert<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
 				
 		mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
 			actors, prototypes, [](Actor* x) { return &x->enabled; });
@@ -152,7 +152,7 @@ namespace Editor
 		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
 			actors, prototypes, [](Actor* x) { return &x->tags; });
 
-		Vector<void*> layersTargets = actors.Select<void*>([](Actor* x) { return &x->layer; });
+		Vector<void*> layersTargets = actors.Convert<void*>([](Actor* x) { return &x->layer; });
 		//mLayerProperty->Setup(tagsTargets, true);
 	}
 
@@ -193,13 +193,13 @@ namespace Editor
 		mActors.Clear();
 		if (areViewActorsAssets)
 		{
-			Vector<UID> viewActors = mActors.Select<UID>([](Actor* x) { return x->GetAssetID(); });
+			Vector<UID> viewActors = mActors.Convert<UID>([](Actor* x) { return x->GetAssetID(); });
 			for (auto id : viewActors)
 				mActors.Add(ActorAssetRef(id)->GetActor());
 		}
 		else
 		{
-			Vector<UInt64> viewActors = mActors.Select<UInt64>([](Actor* x) { return x->GetID(); });
+			Vector<UInt64> viewActors = mActors.Convert<UInt64>([](Actor* x) { return x->GetID(); });
 			for (auto id : viewActors)
 				mActors.Add(o2Scene.GetActorByID(id));
 		}

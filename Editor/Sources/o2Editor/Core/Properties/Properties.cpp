@@ -91,7 +91,7 @@ namespace Editor
 				if (mAvailableObjectPropertiesViewers.TryGetValue(t, viewerType))
 					return viewerType;
 
-				nextItTypes.Add(t->GetBaseTypes().Select<const Type*>([](const Type::BaseType& x) { return x.type; }));
+				nextItTypes.Add(t->GetBaseTypes().Convert<const Type*>([](const Type::BaseType& x) { return x.type; }));
 			}
 
 			itTypes = nextItTypes;
@@ -159,6 +159,15 @@ namespace Editor
 			BuildField(layout, fieldInfo, context, path, onChangeCompleted, onChanged);
 
 		//o2Debug.Log(">>> Fields created for " + (String)timer.GetDeltaTime());
+	}
+
+	void Properties::BuildFields(VerticalLayout* layout, const Type& objectType, const Vector<String>& fieldsNames, 
+								 const String& path, PropertiesContext& context, 
+								 const IPropertyField::OnChangeCompletedFunc& onChangeCompleted /*= mOnPropertyCompletedChangingUndoCreateDelegate*/, 
+								 const IPropertyField::OnChangedFunc& onChanged /*= IPropertyField::OnChangedFunc::empty*/)
+	{
+		for (auto& name : fieldsNames)
+			BuildField(layout, objectType, name, path, context, onChangeCompleted, onChanged);
 	}
 
 	void Properties::SetPrivateFieldsVisible(bool visible)
