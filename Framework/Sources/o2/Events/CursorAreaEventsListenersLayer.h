@@ -9,7 +9,8 @@ namespace o2
 	{
 	public:
 		Basis drawnTransform;
-		Basis coordSystem;
+		Basis viewPortBasis;
+		Basis renderBasis;
 
 		Vector<CursorAreaEventsListener*> cursorEventAreaListeners;
 

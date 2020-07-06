@@ -60,6 +60,8 @@ namespace Editor
 
 		o2Scene.Draw();
 
+		o2Render.DrawCross(mListenersLayer.ToLocal(o2Input.GetCursorPos()), 5.0f, Color4::Red());
+
 		mListenersLayer.OnEndDraw();
 		o2Render.UnbindRenderTexture();
 		o2Render.SetCamera(Camera());

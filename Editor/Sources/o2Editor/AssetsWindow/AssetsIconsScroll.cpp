@@ -283,8 +283,6 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnAssetsSelected()
 	{
-		o2Debug.Log("OnAssetsSelected");
-
 		if (!mSelectedAssets.IsEmpty())
 		{
 			auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
