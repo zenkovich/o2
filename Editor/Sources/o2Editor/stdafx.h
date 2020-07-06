@@ -24,7 +24,7 @@
 #include "o2/Assets/Types/VectorFontAsset.h"
 #include "o2/Config/ProjectConfig.h"
 #include "o2/Events/ApplicationEventsListener.h"
-#include "o2/Events/CursorEventsListener.h"
+#include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Events/DrawableCursorEventsListener.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Events/KeyboardEventsListener.h"

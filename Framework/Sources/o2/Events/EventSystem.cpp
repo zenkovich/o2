@@ -2,7 +2,7 @@
 #include "EventSystem.h"
 
 #include "o2/Events/ApplicationEventsListener.h"
-#include "o2/Events/CursorEventsListener.h"
+#include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Events/ShortcutKeysListener.h"
 #include "o2/Render/Render.h"
@@ -21,6 +21,7 @@ namespace o2
 	EventSystem::EventSystem()
 	{
 		mShortcutEventsManager = mnew ShortcutKeysListenersManager();
+		mCurrentCursorAreaEventsLayer = &mCursorAreaListenersBasicLayer;
 	}
 
 	EventSystem::~EventSystem()
@@ -35,7 +36,7 @@ namespace o2
 
 	void EventSystem::Update(float dt)
 	{
-		mAreaCursorListeners.Reverse();
+		mCursorAreaListenersBasicLayer.cursorEventAreaListeners.Reverse();
 		mDragListeners.Reverse();
 
 		mLastUnderCursorListeners = mUnderCursorListeners;
@@ -123,7 +124,7 @@ namespace o2
 
 	void EventSystem::PostUpdate()
 	{
-		mAreaCursorListeners.Clear();
+		mCursorAreaListenersBasicLayer.cursorEventAreaListeners.Clear();
 		mDragListeners.Clear();
 	}
 
@@ -174,12 +175,7 @@ namespace o2
 
 	void EventSystem::ProcessCursorTracing(const Input::Cursor& cursor)
 	{
-		if (o2Input.IsKeyDown(VK_F1)) {
-			int x = 5;
-			x = x;
-		}
-
-		for (auto listener : mAreaCursorListeners)
+		for (auto listener : mCursorAreaListenersBasicLayer.cursorEventAreaListeners)
 		{
 			if (!listener->IsUnderPoint(cursor.position) || !listener->mScissorRect.IsInside(cursor.position))
 				continue;
@@ -230,7 +226,7 @@ namespace o2
 	{
 		Vector<CursorAreaEventsListener*> res;
 		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
-		for (auto listener : mAreaCursorListeners)
+		for (auto listener : mCursorAreaListenersBasicLayer.cursorEventAreaListeners)
 		{
 			if (!listener->IsUnderPoint(cursorPos) || !listener->mScissorRect.IsInside(cursorPos) || !listener->mInteractable)
 				continue;
@@ -260,9 +256,11 @@ namespace o2
 		for (auto listener : mCursorListeners)
 			listener->OnCursorPressed(cursor);
 
-		for (auto listener : mAreaCursorListeners)
+		for (auto listener : mCursorAreaListenersBasicLayer.cursorEventAreaListeners)
+		{
 			if (!listener->IsUnderPoint(cursor.position))
 				listener->OnCursorPressedOutside(cursor);
+		}
 
 		if (!mUnderCursorListeners.ContainsKey(cursor.id))
 			return;
@@ -329,7 +327,7 @@ namespace o2
 		for (auto listener : mCursorListeners)
 			listener->OnCursorReleased(cursor);
 
-		for (auto listener : mAreaCursorListeners)
+		for (auto listener : mCursorAreaListenersBasicLayer.cursorEventAreaListeners)
 		{
 			if (!listener->IsUnderPoint(cursor.position))
 				listener->OnCursorReleasedOutside(cursor);
@@ -537,6 +535,14 @@ namespace o2
 		}
 	}
 
+	void EventSystem::SetCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
+	{
+		if (layer)
+			mInstance->mCurrentCursorAreaEventsLayer = layer;
+		else
+			mInstance->mCurrentCursorAreaEventsLayer = &mInstance->mCursorAreaListenersBasicLayer;
+	}
+
 	void EventSystem::DrawnCursorAreaListener(CursorAreaEventsListener* listener)
 	{
 		if (!IsSingletonInitialzed())
@@ -545,12 +551,12 @@ namespace o2
 		if (!listener->IsListeningEvents())
 			return;
 
-		mInstance->mAreaCursorListeners.Add(listener);
+		mInstance->mCurrentCursorAreaEventsLayer->cursorEventAreaListeners.Add(listener);
 	}
 
 	void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)
 	{
-		mInstance->mAreaCursorListeners.Remove(listener);
+		mInstance->mCurrentCursorAreaEventsLayer->cursorEventAreaListeners.Remove(listener);
 		mInstance->mRightButtonPressedListeners.Remove(listener);
 		mInstance->mMiddleButtonPressedListeners.Remove(listener);
 

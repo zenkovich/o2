@@ -104,7 +104,7 @@ namespace Editor
 			mSprite->SetTextureSrcRect(RectI(Vec2I(), texture->GetSize()));
 		}
 
-		o2Render.SetRenderTexture(texture);
+		o2Render.BindRenderTexture(texture);
 		o2Render.Clear(mBackColor);
 
 		RectF rect(mCurve->GetRect());

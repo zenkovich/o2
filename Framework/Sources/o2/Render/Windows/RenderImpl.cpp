@@ -1,11 +1,12 @@
 #include "o2/stdafx.h"
 
 #ifdef PLATFORM_WINDOWS
-
 #include "o2/Render/Render.h"
 
 #include "o2/Application/Application.h"
+#include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
+#include "o2/Events/EventSystem.h"
 #include "o2/Render/Font.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Sprite.h"
@@ -14,7 +15,6 @@
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/Math/Geometry.h"
 #include "o2/Utils/Math/Interpolation.h"
-#include "o2/Application/Input.h"
 
 namespace o2
 {
@@ -527,7 +527,7 @@ namespace o2
 		mLastDrawIdx += indexesCount;
 	}
 
-	void Render::SetRenderTexture(TextureRef renderTarget)
+	void Render::BindRenderTexture(TextureRef renderTarget)
 	{
 		if (!renderTarget)
 		{

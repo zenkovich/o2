@@ -1,10 +1,10 @@
 #pragma once
 
 #include "o2/Application/Input.h"
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
+#include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
-
-#include "o2/Utils/Singleton.h"
 
 // Events system accessor macros
 #define o2Events o2::EventSystem::Instance()
@@ -119,8 +119,10 @@ namespace o2
 	protected:
 		float mDblClickTime = 0.3f; // Time between clicks for double click reaction
 
-		Vector<CursorEventsListener*>      mCursorListeners;     // All cursor non area listeners
-		Vector<CursorAreaEventsListener*>  mAreaCursorListeners; // All cursor area listeners
+		Vector<CursorEventsListener*> mCursorListeners;     // All cursor non area listeners
+
+		CursorAreaEventListenersLayer  mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
+		CursorAreaEventListenersLayer* mCurrentCursorAreaEventsLayer;  // Current list of area listeners
 
 		Map<CursorId, Vector<CursorAreaEventsListener*>> mPressedListeners;             // Pressed listeners for all pressed cursors
 		Vector<CursorAreaEventsListener*>                mRightButtonPressedListeners;  // Right mouse button pressed listener
@@ -137,6 +139,9 @@ namespace o2
 		ShortcutKeysListenersManager* mShortcutEventsManager; // Shortcut events manager
 
 	protected:
+		// Sets current cursor area events listeners layer
+		static void SetCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+
 		// Registering cursor area events listener
 		static void DrawnCursorAreaListener(CursorAreaEventsListener* listener);
 
@@ -169,6 +174,7 @@ namespace o2
 
 		friend class Application;
 		friend class ApplicationEventsListener;
+		friend class CursorAreaEventListenersLayer;
 		friend class CursorAreaEventsListener;
 		friend class CursorEventsListener;
 		friend class DragableObject;

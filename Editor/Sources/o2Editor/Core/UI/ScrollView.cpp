@@ -249,7 +249,7 @@ namespace Editor
 	{
 		mNeedRedraw = false;
 		UpdateLocalScreenTransforms();
-		o2Render.SetRenderTexture(mRenderTarget);
+		o2Render.BindRenderTexture(mRenderTarget);
 
 		o2Render.Clear(mBackColor);
 		o2Render.SetCamera(mViewCamera);

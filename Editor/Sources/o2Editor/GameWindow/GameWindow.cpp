@@ -52,17 +52,22 @@ namespace Editor
 	{
 		Widget::Draw();
 
-		o2Render.SetRenderTexture(mRenderTarget);
+		o2Render.BindRenderTexture(mRenderTarget);
 
 		o2Render.Clear();
 		o2Render.SetCamera(Camera());
+		mListenersLayer.OnBeginDraw();
 
 		o2Scene.Draw();
 
+		mListenersLayer.OnEndDraw();
 		o2Render.UnbindRenderTexture();
 		o2Render.SetCamera(Camera());
 
 		mRenderTargetSprite->Draw();
+		mListenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
+
+		o2Render.DrawCross(mListenersLayer.FromLocal(o2Input.GetCursorPos()));
 	}
 
 	void GameWindow::GameView::OnTransformUpdated()

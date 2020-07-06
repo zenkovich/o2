@@ -22,6 +22,7 @@ namespace o2
 	class Mesh;
 	class Font;
 	class Sprite;
+	class CursorAreaEventListenersLayer;
 
 	// ------------------
 	// 2D Graphics render
@@ -63,7 +64,7 @@ namespace o2
 		PROPERTIES(Render);
 		PROPERTY(Camera, camera, SetCamera, GetCamera);                          // Current camera property
 		PROPERTY(RectI, scissorRect, EnableScissorTest, GetScissorRect);         // Scissor rect property
-		PROPERTY(TextureRef, renderTexture, SetRenderTexture, GetRenderTexture); // Render target texture property
+		PROPERTY(TextureRef, renderTexture, BindRenderTexture, GetRenderTexture); // Render target texture property
 		GETTER(Vec2I, resolution, GetResolution);                                // Screen resolution getter
 		GETTER(bool, renderTextureAvailable, IsRenderTextureAvailable);          // Render textures available getter
 		GETTER(Vec2I, maxTextureSize, GetMaxTextureSize);                        // Maximal texture size getter
@@ -244,7 +245,7 @@ namespace o2
 							bool scaleToScreenSpace = true);
 
 	    // Binding render target
-		void SetRenderTexture(TextureRef renderTarget);
+		void BindRenderTexture(TextureRef renderTarget);
 
 		// Unbinding render target
 		void UnbindRenderTexture();

@@ -178,7 +178,8 @@
     <ClInclude Include="..\..\Sources\o2\EngineSettings.h" />
     <ClInclude Include="..\..\Sources\o2\Events\ApplicationEventsListener.h" />
     <ClInclude Include="..\..\Sources\o2\Events\CursorEventsArea.h" />
-    <ClInclude Include="..\..\Sources\o2\Events\CursorEventsListener.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListener.h" />
     <ClInclude Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.h" />
     <ClInclude Include="..\..\Sources\o2\Events\EventSystem.h" />
     <ClInclude Include="..\..\Sources\o2\Events\IEventsListener.h" />
@@ -379,8 +380,9 @@
     <ClCompile Include="..\..\Sources\o2\Config\ProjectConfig.cpp" />
     <ClCompile Include="..\..\Sources\o2\EngineSettings.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\ApplicationEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\CursorEventsArea.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Events\CursorEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListener.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\EventSystem.cpp" />
     <ClCompile Include="..\..\Sources\o2\Events\IEventsListener.cpp" />

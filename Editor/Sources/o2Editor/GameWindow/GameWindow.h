@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
 namespace o2
@@ -27,6 +28,8 @@ namespace Editor
 		protected:
 			Sprite*    mRenderTargetSprite = nullptr; // Render target sprite, using for drawing scene render target
 			TextureRef mRenderTarget;                 // Render target texture, using for rendering scene
+
+			CursorAreaEventListenersLayer mListenersLayer; // Render target listeners layer
 
 		protected:
 			// It is called when transformation was changed and updated, updates render texture and sprite
@@ -70,6 +73,7 @@ CLASS_FIELDS_META(Editor::GameWindow::GameView)
 {
 	PROTECTED_FIELD(mRenderTargetSprite).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRenderTarget);
+	PROTECTED_FIELD(mListenersLayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)

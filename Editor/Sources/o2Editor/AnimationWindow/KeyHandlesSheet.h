@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Events/CursorEventsListener.h"
+#include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2Editor/AnimationWindow/TrackControls/AnimationKeyDragHandle.h"
 

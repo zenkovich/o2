@@ -173,9 +173,6 @@
     <ClInclude Include="..\..\Sources\o2\Events\CursorEventsArea.h">
       <Filter>Sources\o2\Events</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Events\CursorEventsListener.h">
-      <Filter>Sources\o2\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.h">
       <Filter>Sources\o2\Events</Filter>
     </ClInclude>
@@ -656,6 +653,12 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListener.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.h">
+      <Filter>Sources\o2\Events</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
@@ -773,9 +776,6 @@
       <Filter>Sources\o2\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Events\CursorEventsArea.cpp">
-      <Filter>Sources\o2\Events</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Events\CursorEventsListener.cpp">
       <Filter>Sources\o2\Events</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.cpp">
@@ -1143,6 +1143,12 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
       <Filter>Sources\o2</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListener.cpp">
+      <Filter>Sources\o2\Events</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.cpp">
+      <Filter>Sources\o2\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

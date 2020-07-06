@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Events/CursorEventsListener.h"
+#include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Render/Mesh.h"
 #include "o2/Render/Sprite.h"

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Events/CursorEventsListener.h"
+#include "o2/Events/CursorAreaEventsListener.h"
 
 namespace o2
 {
