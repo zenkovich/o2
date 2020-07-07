@@ -38,7 +38,7 @@ namespace o2
 		void BreakCursorEvent();
 
 		// Updates and processes events
-		void Update(float dt);
+		void Update();
 
 		// Post update events
 		void PostUpdate();
@@ -68,45 +68,6 @@ namespace o2
 		// It is called when application frame was sized
 		void OnApplicationSized();
 
-		// processes cursor tracing for cursor
-		void ProcessCursorTracing(const Input::Cursor& cursor);
-
-		// Processes cursor enter event
-		void ProcessCursorEnter();
-
-		// Processes cursor exit event
-		void ProcessCursorExit();
-
-		// Processes cursor pressed event
-		void ProcessCursorPressed(const Input::Cursor& cursor);
-
-		// Processes cursor down event
-		void ProcessCursorDown(const Input::Cursor& cursor);
-
-		// Processes cursor released event
-		void ProcessCursorReleased(const Input::Cursor& cursor);
-
-		// Processes mouse right button pressed event
-		void ProcessRBPressed();
-
-		// Processes mouse right button down event
-		void ProcessRBDown();
-
-		// Processes mouse right button released event
-		void ProcessRBReleased();
-
-		// Processes mouse middle button pressed event
-		void ProcessMBPressed();
-
-		// Processes mouse middle button down event
-		void ProcessMBDown();
-
-		// Processes mouse middle button released event
-		void ProcessMBReleased();
-
-		// Processes scrolling event
-		void ProcessScrolling();
-
 		// Processes key pressed event
 		void ProcessKeyPressed(const Input::Key& key);
 
@@ -119,22 +80,15 @@ namespace o2
 	protected:
 		float mDblClickTime = 0.3f; // Time between clicks for double click reaction
 
-		Vector<CursorEventsListener*> mCursorListeners;     // All cursor non area listeners
+		Vector<CursorEventsListener*> mCursorListeners; // All cursor non area listeners
+
+		Vector<CursorAreaEventListenersLayer*> mCursorAreaEventsListenersLayers; // Drawn cursor area events lsteners layers
 
 		CursorAreaEventListenersLayer  mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
 		CursorAreaEventListenersLayer* mCurrentCursorAreaEventsLayer;  // Current list of area listeners
 
-		Map<CursorId, Vector<CursorAreaEventsListener*>> mPressedListeners;             // Pressed listeners for all pressed cursors
-		Vector<CursorAreaEventsListener*>                mRightButtonPressedListeners;  // Right mouse button pressed listener
-		Vector<CursorAreaEventsListener*>                mMiddleButtonPressedListeners; // Middle mouse button pressed listener
-
-		Map<CursorId, Vector<CursorAreaEventsListener*>> mUnderCursorListeners;     // Under cursor listeners for each cursor
-		Map<CursorId, Vector<CursorAreaEventsListener*>> mLastUnderCursorListeners; // Under cursor listeners for each cursor on last frame
-
-		Vector<DragableObject*> mDragListeners; // Drag events listeners
-
-		Vector<KeyboardEventsListener*>     mKeyboardListeners;    // Keyboard events listeners
-		Vector<ApplicationEventsListener*>  mApplicationListeners; // Application events listeners
+		Vector<KeyboardEventsListener*>    mKeyboardListeners;    // Keyboard events listeners
+		Vector<ApplicationEventsListener*> mApplicationListeners; // Application events listeners
 
 		ShortcutKeysListenersManager* mShortcutEventsManager; // Shortcut events manager
 

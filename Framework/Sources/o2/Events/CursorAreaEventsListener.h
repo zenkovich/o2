@@ -125,6 +125,7 @@ namespace o2
 		virtual void OnBecomeNotInteractable() {}
 
 		friend class EventSystem;
+		friend class CursorAreaEventListenersLayer;
 	};
 
 	// -----------------------

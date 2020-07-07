@@ -100,6 +100,7 @@ namespace Editor
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
 
 		// test actors
+		return;
 		for (int i = 0; i < 10; i++)
 		{
 			Actor* actor = mnew Actor(ActorCreateMode::InScene);

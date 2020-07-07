@@ -126,7 +126,7 @@ namespace o2
 		mTime->Update(realdDt);
 		o2Debug.Update(dt);
 		mTaskManager->Update(dt);
-		mEventSystem->Update(dt);
+		mEventSystem->Update();
 
 		mRender->Begin();
 
