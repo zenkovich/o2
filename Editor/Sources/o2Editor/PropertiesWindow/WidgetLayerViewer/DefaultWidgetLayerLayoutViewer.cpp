@@ -10,7 +10,7 @@
 #include "o2/Utils/Math/Layout.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"

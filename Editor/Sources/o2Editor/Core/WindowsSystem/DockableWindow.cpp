@@ -11,7 +11,7 @@
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/WidgetState.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"
 

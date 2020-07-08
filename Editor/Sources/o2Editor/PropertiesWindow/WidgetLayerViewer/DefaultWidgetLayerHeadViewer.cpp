@@ -6,7 +6,7 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
 #include "o2Editor/Core/Properties/Basic/StringProperty.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"

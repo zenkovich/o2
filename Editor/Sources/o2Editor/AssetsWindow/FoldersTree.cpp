@@ -14,7 +14,7 @@
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace Editor
 {

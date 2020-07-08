@@ -1,57 +1,50 @@
-#include "o2Editor/stdafx.h"
+#include "o2/stdafx.h"
 #include "EditorScope.h"
 
 #include "o2/Events/EventSystem.h"
 #include "o2/Utils/Debug/Assert.h"
 
-namespace Editor
+namespace o2
 {
-	void Scope::Enter()
+	void EditorScope::Enter(int count /*= 1*/)
 	{
 		Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
-		EventSystem::eventsListenersEnabledByDefault = true;
 
-		mDepth++;
+		mDepth += count;
 	}
 
-	void Scope::Exit()
+	void EditorScope::Exit(int count /*= 1*/)
 	{
-		mDepth--;
+		mDepth -= count;
 
 		if (mDepth == 0)
-		{
 			Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
-			EventSystem::eventsListenersEnabledByDefault = false;
-		}
 		else 
-		{
 			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
-			EventSystem::eventsListenersEnabledByDefault = true;
-		}
 
 		Assert(mDepth >= 0, "Editor scope Enter/Exit mismatch");
 	}
 
-	int Scope::GetDepth()
+	int EditorScope::GetDepth()
 	{
 		return mDepth;
 	}
 
-	bool Scope::IsInScope()
+	bool EditorScope::IsInScope()
 	{
 		return mDepth > 0;
 	}
 
-	int Scope::mDepth = 0;
+	int EditorScope::mDepth = 0;
 
 	PushEditorScopeOnStack::PushEditorScopeOnStack()
 	{
-		Scope::Enter();
+		EditorScope::Enter();
 	}
 
 	PushEditorScopeOnStack::~PushEditorScopeOnStack()
 	{
-		Scope::Exit();
+		EditorScope::Exit();
 	}
 
 }

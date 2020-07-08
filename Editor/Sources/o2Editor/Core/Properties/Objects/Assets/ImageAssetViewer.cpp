@@ -7,7 +7,7 @@
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/BorderIntProperty.h"
 #include "o2Editor/Core/Properties/Properties.h"

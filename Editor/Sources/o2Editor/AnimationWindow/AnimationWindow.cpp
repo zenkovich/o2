@@ -12,7 +12,7 @@
 #include "o2Editor/AnimationWindow/PropertiesListDlg.h"
 #include "o2Editor/AnimationWindow/Timeline.h"
 #include "o2Editor/AnimationWindow/Tree.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 DECLARE_SINGLETON(Editor::AnimationWindow);
 

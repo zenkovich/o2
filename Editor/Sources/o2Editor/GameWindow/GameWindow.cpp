@@ -1,5 +1,6 @@
 #include "o2Editor/stdafx.h"
 #include "GameWindow.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace Editor
 {
@@ -58,7 +59,12 @@ namespace Editor
 		o2Render.SetCamera(Camera());
 		mListenersLayer.OnBeginDraw();
 
+		int editorDepth = EditorScope::GetDepth();
+		EditorScope::Exit(editorDepth);
+
 		o2Scene.Draw();
+
+		EditorScope::Enter(editorDepth);
 
 		o2Render.DrawCross(mListenersLayer.ToLocal(o2Input.GetCursorPos()), 5.0f, Color4::Red());
 

@@ -5,7 +5,7 @@
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"

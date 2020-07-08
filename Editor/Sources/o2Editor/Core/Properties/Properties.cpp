@@ -9,7 +9,7 @@
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/EnumProperty.h"
 #include "o2Editor/Core/Properties/Basic/ObjectProperty.h"

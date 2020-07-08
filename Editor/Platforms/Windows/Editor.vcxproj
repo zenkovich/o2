@@ -1,601 +1,599 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="FastDebug|Win32">
-      <Configuration>FastDebug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="FastDebug|x64">
-      <Configuration>FastDebug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-  </ItemGroup>
-  <PropertyGroup Label="Globals">
-    <ProjectGuid>{B8629B91-422C-4541-9E06-6013F5C99E66}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
-    <RootNamespace>o2Test</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
-    <ProjectName>EditorLib</ProjectName>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>NotSet</CharacterSet>
-  </PropertyGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="ExtensionSettings" />
-  <ImportGroup Label="Shared" />
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-  </ImportGroup>
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
-    <TargetName>Editor</TargetName>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
-    <TargetName>Editor</TargetName>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
-    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
-    <TargetName>Editor</TargetName>
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
-    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
-    <TargetName>Editor</TargetName>
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-    <TargetName>Editor</TargetName>
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
-    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
-    <TargetName>Editor</TargetName>
-    <TargetExt>.lib</TargetExt>
-  </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;DEBUG;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild />
-      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AssemblyDebug>false</AssemblyDebug>
-      <OptimizeReferences>false</OptimizeReferences>
-      <EnableCOMDATFolding>false</EnableCOMDATFolding>
-      <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
-    </Link>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
-    <BuildLog>
-      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
-    </BuildLog>
-    <PreBuildEvent>
-      <Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Generating reflection</Message>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level3</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;DEBUG;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <BrowseInformation>false</BrowseInformation>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <MinimalRebuild />
-      <RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AssemblyDebug>false</AssemblyDebug>
-      <OptimizeReferences>false</OptimizeReferences>
-      <EnableCOMDATFolding>false</EnableCOMDATFolding>
-      <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
-    </Link>
-    <Bscmake>
-      <PreserveSbr>true</PreserveSbr>
-    </Bscmake>
-    <BuildLog>
-      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
-    </BuildLog>
-    <PreBuildEvent>
-      <Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Generating reflection</Message>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
-      <ConformanceMode>false</ConformanceMode>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Lib\o2engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <BuildLog>
-      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
-    </BuildLog>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Reflection generation</Message>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level2</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <SDLCheck>true</SDLCheck>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(SolutionDir)Lib\o2engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <BuildLog>
-      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
-    </BuildLog>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Reflection generation</Message>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <OmitFramePointers>true</OmitFramePointers>
-      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <WholeProgramOptimization>true</WholeProgramOptimization>
-      <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
-      <MinimalRebuild />
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <ExceptionHandling>false</ExceptionHandling>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>Debug</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
-      <AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
-    </Link>
-    <BuildLog>
-      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
-    </BuildLog>
-    <PreBuildEvent>
-      <Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Generating reflection</Message>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <ClCompile>
-      <WarningLevel>Level2</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-      <SDLCheck>false</SDLCheck>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-    </ClCompile>
-    <Link>
-      <SubSystem>Console</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>$(SolutionDir)Lib\o2engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Link>
-    <BuildLog>
-      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
-    </BuildLog>
-    <PreBuildEvent>
-      <Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
-    </PreBuildEvent>
-    <PreBuildEvent>
-      <Message>Reflection generation</Message>
-    </PreBuildEvent>
-  </ItemDefinitionGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets" />
-  <ItemGroup>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Create.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Delete.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Enable.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\IAction.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Lock.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Reparent.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Select.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Transform.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\EditorApplication.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\EditorConfig.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\EditorScope.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\MenuPanel.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumMaskProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Properties.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\ToolsPanel.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\GameWindow\GameWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\LogWindow\LogWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.h" />
-    <ClInclude Include="..\..\Sources\o2Editor\stdafx.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Tree.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Create.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Delete.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Enable.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\IAction.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Lock.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Reparent.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Select.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Transform.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\EditorApplication.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\EditorConfig.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\EditorScope.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\MenuPanel.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Properties.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\ToolsPanel.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\GameWindow\GameWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\LogWindow\LogWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.cpp" />
-    <ClCompile Include="..\..\Sources\o2Editor\stdafx.cpp">
-      <PrecompiledHeader>Create</PrecompiledHeader>
-      <PrecompiledHeader>Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
+	<ItemGroup Label="ProjectConfigurations">
+		<ProjectConfiguration Include="Debug|Win32">
+			<Configuration>Debug</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="FastDebug|Win32">
+			<Configuration>FastDebug</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="FastDebug|x64">
+			<Configuration>FastDebug</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Release|Win32">
+			<Configuration>Release</Configuration>
+			<Platform>Win32</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Debug|x64">
+			<Configuration>Debug</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+		<ProjectConfiguration Include="Release|x64">
+			<Configuration>Release</Configuration>
+			<Platform>x64</Platform>
+		</ProjectConfiguration>
+	</ItemGroup>
+	<PropertyGroup Label="Globals">
+		<ProjectGuid>{B8629B91-422C-4541-9E06-6013F5C99E66}</ProjectGuid>
+		<Keyword>Win32Proj</Keyword>
+		<RootNamespace>o2Test</RootNamespace>
+		<WindowsTargetPlatformVersion>10.0.18362.0</WindowsTargetPlatformVersion>
+		<ProjectName>EditorLib</ProjectName>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<UseDebugLibraries>true</UseDebugLibraries>
+		<PlatformToolset>v142</PlatformToolset>
+		<CharacterSet>NotSet</CharacterSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<UseDebugLibraries>true</UseDebugLibraries>
+		<PlatformToolset>v142</PlatformToolset>
+		<CharacterSet>NotSet</CharacterSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<UseDebugLibraries>false</UseDebugLibraries>
+		<PlatformToolset>v142</PlatformToolset>
+		<WholeProgramOptimization>true</WholeProgramOptimization>
+		<CharacterSet>NotSet</CharacterSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<UseDebugLibraries>true</UseDebugLibraries>
+		<PlatformToolset>v141</PlatformToolset>
+		<CharacterSet>NotSet</CharacterSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<UseDebugLibraries>true</UseDebugLibraries>
+		<PlatformToolset>v141</PlatformToolset>
+		<CharacterSet>NotSet</CharacterSet>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+		<ConfigurationType>StaticLibrary</ConfigurationType>
+		<UseDebugLibraries>false</UseDebugLibraries>
+		<PlatformToolset>v141</PlatformToolset>
+		<WholeProgramOptimization>true</WholeProgramOptimization>
+		<CharacterSet>NotSet</CharacterSet>
+	</PropertyGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+	<ImportGroup Label="ExtensionSettings" />
+	<ImportGroup Label="Shared" />
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="PropertySheets">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+	</ImportGroup>
+	<PropertyGroup Label="UserMacros" />
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<LinkIncremental>false</LinkIncremental>
+		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+		<IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
+		<TargetName>Editor</TargetName>
+		<PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+		<TargetExt>.lib</TargetExt>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'">
+		<LinkIncremental>false</LinkIncremental>
+		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+		<IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
+		<TargetName>Editor</TargetName>
+		<PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+		<TargetExt>.lib</TargetExt>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<LinkIncremental>true</LinkIncremental>
+		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+		<IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
+		<EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+		<TargetName>Editor</TargetName>
+		<TargetExt>.lib</TargetExt>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+		<LinkIncremental>true</LinkIncremental>
+		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+		<IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
+		<EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+		<TargetName>Editor</TargetName>
+		<TargetExt>.lib</TargetExt>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<LinkIncremental>false</LinkIncremental>
+		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+		<IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
+		<PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+		<TargetName>Editor</TargetName>
+		<TargetExt>.lib</TargetExt>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<LinkIncremental>false</LinkIncremental>
+		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+		<IntDir>$(SolutionDir)Temp\$(Configuration)\EditorLib\</IntDir>
+		<EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
+		<TargetName>Editor</TargetName>
+		<TargetExt>.lib</TargetExt>
+	</PropertyGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<ClCompile>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<WarningLevel>Level3</WarningLevel>
+			<Optimization>Disabled</Optimization>
+			<PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;DEBUG;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<BrowseInformation>false</BrowseInformation>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+			<InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+			<BasicRuntimeChecks>Default</BasicRuntimeChecks>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<MinimalRebuild />
+			<RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateDebugInformation>Debug</GenerateDebugInformation>
+			<AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AssemblyDebug>false</AssemblyDebug>
+			<OptimizeReferences>false</OptimizeReferences>
+			<EnableCOMDATFolding>false</EnableCOMDATFolding>
+			<AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
+		</Link>
+		<Bscmake>
+			<PreserveSbr>true</PreserveSbr>
+		</Bscmake>
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<PreBuildEvent>
+			<Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
+		</PreBuildEvent>
+		<PreBuildEvent>
+			<Message>Generating reflection</Message>
+		</PreBuildEvent>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'">
+		<ClCompile>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<WarningLevel>Level3</WarningLevel>
+			<Optimization>Disabled</Optimization>
+			<PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;DEBUG;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<BrowseInformation>false</BrowseInformation>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+			<InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+			<BasicRuntimeChecks>Default</BasicRuntimeChecks>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<MinimalRebuild />
+			<RemoveUnreferencedCodeData>false</RemoveUnreferencedCodeData>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateDebugInformation>Debug</GenerateDebugInformation>
+			<AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AssemblyDebug>false</AssemblyDebug>
+			<OptimizeReferences>false</OptimizeReferences>
+			<EnableCOMDATFolding>false</EnableCOMDATFolding>
+			<AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
+		</Link>
+		<Bscmake>
+			<PreserveSbr>true</PreserveSbr>
+		</Bscmake>
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<PreBuildEvent>
+			<Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
+		</PreBuildEvent>
+		<PreBuildEvent>
+			<Message>Generating reflection</Message>
+		</PreBuildEvent>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+		<ClCompile>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<WarningLevel>Level2</WarningLevel>
+			<Optimization>Disabled</Optimization>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
+			<ConformanceMode>false</ConformanceMode>
+			<LanguageStandard>stdcpp17</LanguageStandard>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+			<SDLCheck>true</SDLCheck>
+			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<AdditionalDependencies>$(SolutionDir)Lib\o2engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+		</Link>
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<PreBuildEvent>
+			<Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
+		</PreBuildEvent>
+		<PreBuildEvent>
+			<Message>Reflection generation</Message>
+		</PreBuildEvent>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+		<ClCompile>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<WarningLevel>Level2</WarningLevel>
+			<Optimization>Disabled</Optimization>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
+			<LanguageStandard>stdcpp17</LanguageStandard>
+			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+			<DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+			<SDLCheck>true</SDLCheck>
+			<BasicRuntimeChecks>Default</BasicRuntimeChecks>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<AdditionalDependencies>$(SolutionDir)Lib\o2engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+		</Link>
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<PreBuildEvent>
+			<Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
+		</PreBuildEvent>
+		<PreBuildEvent>
+			<Message>Reflection generation</Message>
+		</PreBuildEvent>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<ClCompile>
+			<WarningLevel>Level3</WarningLevel>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<Optimization>MaxSpeed</Optimization>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<IntrinsicFunctions>true</IntrinsicFunctions>
+			<PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>..\..\..\o2Engine\;..\..\..\o2Engine\Sources\;..\..\Sources\;..\..\..\o2Engine\Dependencies\;..\..\..\o2Engine\Dependencies\freetype\include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<OmitFramePointers>true</OmitFramePointers>
+			<EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<WholeProgramOptimization>true</WholeProgramOptimization>
+			<AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+			<MinimalRebuild />
+			<FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+			<ExceptionHandling>false</ExceptionHandling>
+			<EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+			<EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateDebugInformation>Debug</GenerateDebugInformation>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<OptimizeReferences>true</OptimizeReferences>
+			<AdditionalDependencies>$(SolutionDir)Tmp\o2Engine_$(Configuration).lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+			<AdditionalOptions>/WHOLEARCHIVE:$(SolutionDir)Tmp\o2Engine_$(Configuration).lib %(AdditionalOptions)</AdditionalOptions>
+		</Link>
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<PreBuildEvent>
+			<Command>..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
+		</PreBuildEvent>
+		<PreBuildEvent>
+			<Message>Generating reflection</Message>
+		</PreBuildEvent>
+	</ItemDefinitionGroup>
+	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+		<ClCompile>
+			<WarningLevel>Level2</WarningLevel>
+			<PrecompiledHeader>Use</PrecompiledHeader>
+			<Optimization>MaxSpeed</Optimization>
+			<FunctionLevelLinking>true</FunctionLevelLinking>
+			<IntrinsicFunctions>true</IntrinsicFunctions>
+			<PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+			<AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+			<MultiProcessorCompilation>true</MultiProcessorCompilation>
+			<PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
+			<LanguageStandard>stdcpp17</LanguageStandard>
+			<EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+			<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+			<SDLCheck>false</SDLCheck>
+			<InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+			<FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+		</ClCompile>
+		<Link>
+			<SubSystem>Console</SubSystem>
+			<GenerateDebugInformation>true</GenerateDebugInformation>
+			<EnableCOMDATFolding>true</EnableCOMDATFolding>
+			<OptimizeReferences>true</OptimizeReferences>
+			<AdditionalDependencies>$(SolutionDir)Lib\o2engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
+		</Link>
+		<BuildLog>
+			<Path>$(IntDir)$(MSBuildProjectName).log</Path>
+		</BuildLog>
+		<PreBuildEvent>
+			<Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources" -msvs_project "$(ProjectPath)" -parent_projects "$(ProjectDir)..\..\..\Framework\Sources\o2\CodeToolCache.xml"</Command>
+		</PreBuildEvent>
+		<PreBuildEvent>
+			<Message>Reflection generation</Message>
+		</PreBuildEvent>
+	</ItemDefinitionGroup>
+	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+	<ImportGroup Label="ExtensionTargets" />
+	<ItemGroup>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Create.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Delete.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Enable.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\IAction.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Lock.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Reparent.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Select.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Transform.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\EditorApplication.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\EditorConfig.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\MenuPanel.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumMaskProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Properties.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\ToolsPanel.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\GameWindow\GameWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\LogWindow\LogWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\stdafx.h" />
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Tree.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Create.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Delete.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Enable.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\IAction.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Lock.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Reparent.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Select.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Transform.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\EditorApplication.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\EditorConfig.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\MenuPanel.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Properties.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\ToolsPanel.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\GameWindow\GameWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\LogWindow\LogWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\stdafx.cpp">
+			<PrecompiledHeader>Create</PrecompiledHeader>
+			<PrecompiledHeader>Create</PrecompiledHeader>
+		</ClCompile>
+	</ItemGroup>
 </Project>

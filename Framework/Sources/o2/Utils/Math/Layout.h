@@ -10,10 +10,10 @@ namespace o2
 	class Layout: public ISerializable
 	{
 	public:
-		Vec2F anchorMin; // @SERIALIZABLE
-		Vec2F anchorMax; // @SERIALIZABLE
-		Vec2F offsetMin; // @SERIALIZABLE
-		Vec2F offsetMax; // @SERIALIZABLE
+		Vec2F anchorMin = Vec2F(0, 0); // @SERIALIZABLE
+		Vec2F anchorMax = Vec2F(1, 1); // @SERIALIZABLE
+		Vec2F offsetMin = Vec2F(0, 0); // @SERIALIZABLE
+		Vec2F offsetMax = Vec2F(0, 0); // @SERIALIZABLE
 
 		Layout();
 		Layout(const Vec2F& anchorMin, const Vec2F& anchorMax, const Vec2F& offsetMin, const Vec2F& offsetMax);
@@ -40,10 +40,10 @@ CLASS_BASES_META(o2::Layout)
 END_META;
 CLASS_FIELDS_META(o2::Layout)
 {
-	PUBLIC_FIELD(anchorMin).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(anchorMax).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(offsetMin).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(offsetMax).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(anchorMin).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(anchorMax).DEFAULT_VALUE(Vec2F(1, 1)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMin).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(offsetMax).DEFAULT_VALUE(Vec2F(0, 0)).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::Layout)

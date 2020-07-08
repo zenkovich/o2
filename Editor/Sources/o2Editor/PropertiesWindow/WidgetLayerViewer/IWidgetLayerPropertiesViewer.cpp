@@ -3,7 +3,7 @@
 
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Image.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
 
 namespace Editor

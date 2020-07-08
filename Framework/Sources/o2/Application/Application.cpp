@@ -51,11 +51,6 @@ namespace o2
 		mScene->Update(dt);
 	}
 
-	void Application::DrawScene()
-	{
-		mScene->Draw();
-	}
-
 	void Application::InitalizeSystems()
 	{
 		srand((UInt)time(NULL));
@@ -147,7 +142,8 @@ namespace o2
 		OnDraw();
 		DrawScene();
 
-		mUIManager->Draw();
+		DrawUIManager();
+
 		o2Debug.Draw();
 
 		mRender->End();
@@ -155,24 +151,14 @@ namespace o2
 		mInput->Update(dt);
 	}
 
-	LogStream* Application::GetLog() const
+	void Application::DrawScene()
 	{
-		return mInstance->mLog;
+		mScene->Draw();
 	}
 
-	Input* Application::GetInput() const
+	void Application::DrawUIManager()
 	{
-		return mInstance->mInput;
-	}
-
-	ProjectConfig* Application::GetProjectConfig() const
-	{
-		return mInstance->mProjectConfig;
-	}
-
-	Time* Application::GetTime() const
-	{
-		return mInstance->mTime;
+		mUIManager->Draw();
 	}
 
 	void Application::OnMoved()
@@ -221,6 +207,27 @@ namespace o2
 	{
 		return IS_EDITOR;
 	}
+
+	LogStream* Application::GetLog() const
+	{
+		return mInstance->mLog;
+	}
+
+	Input* Application::GetInput() const
+	{
+		return mInstance->mInput;
+	}
+
+	ProjectConfig* Application::GetProjectConfig() const
+	{
+		return mInstance->mProjectConfig;
+	}
+
+	Time* Application::GetTime() const
+	{
+		return mInstance->mTime;
+	}
+
 	MemoryManager* MemoryManager::mInstance = new MemoryManager();
 	template<> Debug* Singleton<Debug>::mInstance = mnew Debug();
 	template<> FileSystem* Singleton<FileSystem>::mInstance = mnew FileSystem();

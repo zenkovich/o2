@@ -83,6 +83,9 @@ namespace Editor
 		// Draws scene
 		void DrawScene() override;
 
+		// Draws UI manager
+		void DrawUIManager() override;
+
 		// Calling on updating
 		void OnUpdate(float dt) override;
 

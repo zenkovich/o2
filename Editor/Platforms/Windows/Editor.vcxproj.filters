@@ -1,751 +1,745 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Filter Include="Sources" />
-    <Filter Include="Sources\o2Editor\AnimationWindow" />
-    <Filter Include="Sources\o2Editor" />
-    <Filter Include="Sources\o2Editor\AnimationWindow\TrackControls" />
-    <Filter Include="Sources\o2Editor\AssetsWindow" />
-    <Filter Include="Sources\o2Editor\Core\Actions" />
-    <Filter Include="Sources\o2Editor\Core" />
-    <Filter Include="Sources\o2Editor\Core\Dialogs" />
-    <Filter Include="Sources\o2Editor\Core\Properties\Basic" />
-    <Filter Include="Sources\o2Editor\Core\Properties" />
-    <Filter Include="Sources\o2Editor\Core\Tools" />
-    <Filter Include="Sources\o2Editor\Core\UI\CurveEditor" />
-    <Filter Include="Sources\o2Editor\Core\UI" />
-    <Filter Include="Sources\o2Editor\Core\UIStyle" />
-    <Filter Include="Sources\o2Editor\Core\WindowsSystem" />
-    <Filter Include="Sources\o2Editor\LogWindow" />
-    <Filter Include="Sources\o2Editor\PropertiesWindow\ActorsViewer" />
-    <Filter Include="Sources\o2Editor\PropertiesWindow" />
-    <Filter Include="Sources\o2Editor\PropertiesWindow\WidgetLayerViewer" />
-    <Filter Include="Sources\o2Editor\SceneWindow" />
-    <Filter Include="Sources\o2Editor\TreeWindow" />
-    <Filter Include="Sources\o2Editor\GameWindow" />
-    <Filter Include="Sources\o2Editor\Core\Properties\Objects" />
-    <Filter Include="Sources\o2Editor\Core\Properties\Objects\Assets" />
-    <Filter Include="Sources\o2Editor\Core\Properties\Objects\Components" />
-    <Filter Include="Sources\o2Editor\Core\Dialogs\System">
-      <UniqueIdentifier>{aa3f22a5-4b80-4789-a8d7-b2712c76e790}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Sources\o2Editor\Core\Dialogs\System\Windows">
-      <UniqueIdentifier>{41532706-fbc0-4598-ba11-545e96cab0e0}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.h">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.h">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.h">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.h">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.h">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.h">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.h">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Create.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Delete.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Enable.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\IAction.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Lock.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Reparent.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Select.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Transform.h">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.h">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.h">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.h">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.h">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\EditorApplication.h">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\EditorConfig.h">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\EditorScope.h">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\MenuPanel.h">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumMaskProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.h">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Properties.h">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.h">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.h">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.h">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.h">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.h">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.h">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.h">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\ToolsPanel.h">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.h">
-      <Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.h">
-      <Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.h">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h">
-      <Filter>Sources\o2Editor\Core\UIStyle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.h">
-      <Filter>Sources\o2Editor\Core\UIStyle</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.h">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.h">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.h">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.h">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.h">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\GameWindow\GameWindow.h">
-      <Filter>Sources\o2Editor\GameWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\LogWindow\LogWindow.h">
-      <Filter>Sources\o2Editor\LogWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.h">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.h">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.h">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.h">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.h">
-      <Filter>Sources\o2Editor\TreeWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.h">
-      <Filter>Sources\o2Editor\TreeWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\stdafx.h">
-      <Filter>Sources\o2Editor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h">
-      <Filter>Sources\o2Editor\Core\Dialogs\System</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h">
-      <Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Tree.cpp">
-      <Filter>Sources\o2Editor\AnimationWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.cpp">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.cpp">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.cpp">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.cpp">
-      <Filter>Sources\o2Editor\AssetsWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Create.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Delete.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Enable.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\IAction.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Lock.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Reparent.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Select.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Transform.cpp">
-      <Filter>Sources\o2Editor\Core\Actions</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.cpp">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.cpp">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.cpp">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.cpp">
-      <Filter>Sources\o2Editor\Core\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\EditorApplication.cpp">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\EditorConfig.cpp">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\EditorScope.cpp">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\MenuPanel.cpp">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.cpp">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Properties.cpp">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.cpp">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.cpp">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.cpp">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.cpp">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.cpp">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.cpp">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.cpp">
-      <Filter>Sources\o2Editor\Core\Tools</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\ToolsPanel.cpp">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.cpp">
-      <Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.cpp">
-      <Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.cpp">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp">
-      <Filter>Sources\o2Editor\Core\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp">
-      <Filter>Sources\o2Editor\Core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp">
-      <Filter>Sources\o2Editor\Core\UIStyle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.cpp">
-      <Filter>Sources\o2Editor\Core\UIStyle</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.cpp">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.cpp">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.cpp">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.cpp">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.cpp">
-      <Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\GameWindow\GameWindow.cpp">
-      <Filter>Sources\o2Editor\GameWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\LogWindow\LogWindow.cpp">
-      <Filter>Sources\o2Editor\LogWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.cpp">
-      <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.cpp">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.cpp">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.cpp">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.cpp">
-      <Filter>Sources\o2Editor\TreeWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.cpp">
-      <Filter>Sources\o2Editor\TreeWindow</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\stdafx.cpp">
-      <Filter>Sources\o2Editor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp">
-      <Filter>Sources\o2Editor\Core\Dialogs\System\Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
-    </ClCompile>
-  </ItemGroup>
+	<ItemGroup>
+		<Filter Include="Sources" />
+		<Filter Include="Sources\o2Editor\AnimationWindow" />
+		<Filter Include="Sources\o2Editor" />
+		<Filter Include="Sources\o2Editor\AnimationWindow\TrackControls" />
+		<Filter Include="Sources\o2Editor\AssetsWindow" />
+		<Filter Include="Sources\o2Editor\Core\Actions" />
+		<Filter Include="Sources\o2Editor\Core" />
+		<Filter Include="Sources\o2Editor\Core\Dialogs" />
+		<Filter Include="Sources\o2Editor\Core\Properties\Basic" />
+		<Filter Include="Sources\o2Editor\Core\Properties" />
+		<Filter Include="Sources\o2Editor\Core\Tools" />
+		<Filter Include="Sources\o2Editor\Core\UI\CurveEditor" />
+		<Filter Include="Sources\o2Editor\Core\UI" />
+		<Filter Include="Sources\o2Editor\Core\UIStyle" />
+		<Filter Include="Sources\o2Editor\Core\WindowsSystem" />
+		<Filter Include="Sources\o2Editor\LogWindow" />
+		<Filter Include="Sources\o2Editor\PropertiesWindow\ActorsViewer" />
+		<Filter Include="Sources\o2Editor\PropertiesWindow" />
+		<Filter Include="Sources\o2Editor\PropertiesWindow\WidgetLayerViewer" />
+		<Filter Include="Sources\o2Editor\SceneWindow" />
+		<Filter Include="Sources\o2Editor\TreeWindow" />
+		<Filter Include="Sources\o2Editor\GameWindow" />
+		<Filter Include="Sources\o2Editor\Core\Properties\Objects" />
+		<Filter Include="Sources\o2Editor\Core\Properties\Objects\Assets" />
+		<Filter Include="Sources\o2Editor\Core\Properties\Objects\Components" />
+		<Filter Include="Sources\o2Editor\Core\Dialogs\System">
+			<UniqueIdentifier>{aa3f22a5-4b80-4789-a8d7-b2712c76e790}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Sources\o2Editor\Core\Dialogs\System\Windows">
+			<UniqueIdentifier>{41532706-fbc0-4598-ba11-545e96cab0e0}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.h">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.h">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.h">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.h">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.h">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.h">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.h">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Create.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Delete.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Enable.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\IAction.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Lock.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Reparent.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Select.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Actions\Transform.h">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.h">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.h">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.h">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.h">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Dialogs\System\OpenSaveDialog.h">
+			<Filter>Sources\o2Editor\Core\Dialogs\System</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\EditorApplication.h">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\EditorConfig.h">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\MenuPanel.h">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumMaskProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.h">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Properties.h">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.h">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.h">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.h">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.h">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.h">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.h">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.h">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\ToolsPanel.h">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.h">
+			<Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.h">
+			<Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.h">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.h">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.h">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.h">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.h">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.h">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\GameWindow\GameWindow.h">
+			<Filter>Sources\o2Editor\GameWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\LogWindow\LogWindow.h">
+			<Filter>Sources\o2Editor\LogWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.h">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.h">
+			<Filter>Sources\o2Editor\SceneWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.h">
+			<Filter>Sources\o2Editor\SceneWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.h">
+			<Filter>Sources\o2Editor\SceneWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.h">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.h">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\stdafx.h">
+			<Filter>Sources\o2Editor</Filter>
+		</ClInclude>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationWindow.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\CurvesSheet.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\KeyHandlesSheet.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\PropertiesListDlg.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Timeline.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationKeyDragHandle.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Tree.cpp">
+			<Filter>Sources\o2Editor\AnimationWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.cpp">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.cpp">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsWindow.cpp">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\FoldersTree.cpp">
+			<Filter>Sources\o2Editor\AssetsWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\ActionsList.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Create.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Delete.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Enable.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\IAction.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Lock.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\PropertyChange.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Reparent.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Select.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Actions\Transform.cpp">
+			<Filter>Sources\o2Editor\Core\Actions</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\ColorPickerDlg.cpp">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\CurveEditorDlg.cpp">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\EditNameDlg.cpp">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\KeyEditDlg.cpp">
+			<Filter>Sources\o2Editor\Core\Dialogs</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Dialogs\System\Windows\OpenSaveDialog.cpp">
+			<Filter>Sources\o2Editor\Core\Dialogs\System\Windows</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\EditorApplication.cpp">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\EditorConfig.cpp">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\MenuPanel.cpp">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ActorProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\AssetProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BooleanProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderFloatProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\BorderIntProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ColorProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ComponentProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\CurveProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\EnumProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\LayerProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ObjectPtrProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleFloatProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\TagProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2FloatProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\Vector2IntProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\VectorProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\WStringProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IObjectPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\IPropertyField.cpp">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\TextViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Properties.cpp">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\PropertiesContext.cpp">
+			<Filter>Sources\o2Editor\Core\Properties</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\FrameTool.cpp">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\IEditorTool.cpp">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\MoveTool.cpp">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\RotateTool.cpp">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\ScaleTool.cpp">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Tools\SelectionTool.cpp">
+			<Filter>Sources\o2Editor\Core\Tools</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\ToolsPanel.cpp">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurveActions.cpp">
+			<Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurveEditor\CurvesEditor.cpp">
+			<Filter>Sources\o2Editor\Core\UI\CurveEditor</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\CurvePreview.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp">
+			<Filter>Sources\o2Editor\Core\UI</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp">
+			<Filter>Sources\o2Editor\Core</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\EditorUIStyle.cpp">
+			<Filter>Sources\o2Editor\Core\UIStyle</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockWindowPlace.cpp">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\DockableWindow.cpp">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\IEditorWindow.cpp">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsLayout.cpp">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\WindowsSystem\WindowsManager.cpp">
+			<Filter>Sources\o2Editor\Core\WindowsSystem</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\GameWindow\GameWindow.cpp">
+			<Filter>Sources\o2Editor\GameWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\LogWindow\LogWindow.cpp">
+			<Filter>Sources\o2Editor\LogWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\ActorViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\AddComponentPanel.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorComponentViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorHeaderViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\DefaultActorTransformViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorComponentViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorHeaderViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\ActorsViewer\IActorTransformViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\ActorsViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\AssetPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\DefaultPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\IPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\PropertiesWindow.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerHeadViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerLayoutViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\DefaultWidgetLayerPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerHeadViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerLayoutViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\IWidgetLayerPropertiesViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.cpp">
+			<Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.cpp">
+			<Filter>Sources\o2Editor\SceneWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.cpp">
+			<Filter>Sources\o2Editor\SceneWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.cpp">
+			<Filter>Sources\o2Editor\SceneWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.cpp">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\TreeWindow\TreeWindow.cpp">
+			<Filter>Sources\o2Editor\TreeWindow</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\stdafx.cpp">
+			<Filter>Sources\o2Editor</Filter>
+		</ClCompile>
+	</ItemGroup>
 </Project>

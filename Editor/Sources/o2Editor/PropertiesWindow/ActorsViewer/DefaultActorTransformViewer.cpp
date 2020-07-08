@@ -12,7 +12,7 @@
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/FloatProperty.h"
 #include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"

@@ -204,6 +204,9 @@ namespace o2
 		// Draws scene
 		virtual void DrawScene();
 
+		// Draws UI manager
+		virtual void DrawUIManager();
+
 		// Calling on updating
 		virtual void OnUpdate(float dt);
 

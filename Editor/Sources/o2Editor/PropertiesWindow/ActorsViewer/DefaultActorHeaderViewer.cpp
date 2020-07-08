@@ -13,7 +13,7 @@
 #include "o2/Scene/UI/Widgets/Toggle.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
 #include "o2Editor/Core/Properties/Basic/LayerProperty.h"

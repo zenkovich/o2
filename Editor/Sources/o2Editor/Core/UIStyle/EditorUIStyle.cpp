@@ -12,7 +12,7 @@
 #include "o2/Assets/Types/FolderAsset.h"
 #include "o2Editor/AssetsWindow/AssetIcon.h"
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/ActorProperty.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/BooleanProperty.h"

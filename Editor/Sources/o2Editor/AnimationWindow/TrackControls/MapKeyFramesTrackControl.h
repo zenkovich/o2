@@ -1,10 +1,10 @@
 #pragma once
 
 #include "o2/Utils/Editor/DragHandle.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/AnimationWindow/Timeline.h"
 #include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
 #include "o2Editor/AnimationWindow/Tree.h"
-#include "o2Editor/Core/EditorScope.h"
 
 using namespace o2;
 

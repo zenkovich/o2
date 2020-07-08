@@ -2,7 +2,7 @@
 #include "IObjectPropertiesViewer.h"
 
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace Editor
 {

@@ -9,7 +9,7 @@
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/Window.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UIRoot.h"
 
 DECLARE_SINGLETON(Editor::PropertiesListDlg);

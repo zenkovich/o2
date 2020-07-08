@@ -22,7 +22,7 @@
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
 #include "o2Editor/Core/Actions/Create.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/TreeWindow/SceneTree.h"

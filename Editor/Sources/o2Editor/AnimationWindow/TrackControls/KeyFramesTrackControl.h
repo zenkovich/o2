@@ -8,7 +8,7 @@
 #include "o2Editor/AnimationWindow/Timeline.h"
 #include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
 #include "o2Editor/Core/Actions/ActionsList.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
 
 using namespace o2;

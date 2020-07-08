@@ -22,7 +22,7 @@
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/Core/Actions/IAction.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/MenuPanel.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/ToolsPanel.h"
@@ -164,6 +164,12 @@ namespace Editor
 	void EditorApplication::DrawScene()
 	{}
 
+	void EditorApplication::DrawUIManager()
+	{
+		PushEditorScopeOnStack scope;
+		Application::DrawUIManager();
+	}
+
 	void EditorApplication::OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);
@@ -182,6 +188,8 @@ namespace Editor
 
 	void EditorApplication::OnDraw()
 	{
+		PushEditorScopeOnStack scope;
+
 		o2Render.Clear();
 		o2Render.camera = Camera::Default();
 

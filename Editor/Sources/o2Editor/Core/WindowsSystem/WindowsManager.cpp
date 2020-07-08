@@ -9,7 +9,7 @@
 #include "o2Editor/Core/Dialogs/EditNameDlg.h"
 #include "o2Editor/Core/Dialogs/KeyEditDlg.h"
 #include "o2Editor/Core/EditorConfig.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/UIStyle/EditorUIStyle.h"
 #include "o2Editor/Core/WindowsSystem/DockWindowPlace.h"

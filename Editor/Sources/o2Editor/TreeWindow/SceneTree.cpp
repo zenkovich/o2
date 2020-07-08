@@ -22,7 +22,7 @@
 #include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/Actions/Reparent.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/ActorProperty.h"
 #include "o2Editor/Core/Properties/Basic/ComponentProperty.h"
 #include "o2Editor/Core/UIRoot.h"

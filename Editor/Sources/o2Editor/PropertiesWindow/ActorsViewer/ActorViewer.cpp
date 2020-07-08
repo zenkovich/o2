@@ -10,7 +10,7 @@
 #include "o2/Scene/UI/Widgets/ScrollArea.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h"
 #include "o2Editor/PropertiesWindow/ActorsViewer/DefaultActorComponentViewer.h"

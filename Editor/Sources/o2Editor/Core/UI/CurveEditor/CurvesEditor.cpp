@@ -18,7 +18,7 @@
 #include "o2/Scene/UI/Widgets/Window.h"
 #include "o2/Utils/System/Clipboard.h"
 #include "o2Editor/Core/Dialogs/KeyEditDlg.h"
-#include "o2Editor/Core/EditorScope.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/UI/CurveEditor/CurveActions.h"
 #include "o2Editor/Core/UIRoot.h"
 
