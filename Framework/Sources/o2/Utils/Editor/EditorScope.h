@@ -30,11 +30,27 @@ namespace o2
 	// ---------------------------------------------------------------
 	class PushEditorScopeOnStack
 	{
-	public: 
+	public:
 		// Default constructor, calls Scope::Enter
 		PushEditorScopeOnStack();
 
 		// Destructor, calls Scope::Exit
 		~PushEditorScopeOnStack();
+	};
+
+	// ---------------------------------------------------------------
+	// Sets not editor in this scope, then restores edtiro scope depth
+	// ---------------------------------------------------------------
+	class ForcePopEditorScopeOnStack
+	{
+	public:
+		// Default constructor, calls Scope::Exit and stores depth
+		ForcePopEditorScopeOnStack();
+
+		// Destructor, calls Scope::Exit
+		~ForcePopEditorScopeOnStack();
+
+	private:
+		int mDepth;
 	};
 }

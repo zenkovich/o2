@@ -86,6 +86,12 @@ namespace Editor
 		// Draws UI manager
 		void DrawUIManager() override;
 
+		// Updates event system
+		void UpdateEventSystem() override;
+
+		// Post updates event system
+		void PostUpdateEventSystem() override;
+
 		// Calling on updating
 		void OnUpdate(float dt) override;
 

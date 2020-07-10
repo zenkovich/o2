@@ -27,10 +27,10 @@ namespace o2
 		void OnDrawn(const Basis& transform);
 
 		// Converts point to local coordinates
-		Vec2F ToLocal(const Vec2F& point);
+		Vec2F ToLocal(const Vec2F& point) const;
 
 		// Converts from local point
-		Vec2F FromLocal(const Vec2F& point);
+		Vec2F FromLocal(const Vec2F& point) const;
 
 		// Updates and processes events
 		void Update();
@@ -50,8 +50,13 @@ namespace o2
 		// Returns all cursor listeners under cursor arranged by depth
 		Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
 
+		// Returns true if point is in this object
+		bool IsUnderPoint(const Vec2F& point) override;
+
 	private:
-		Basis mLocalToWorldTransform;
+		bool mEnabled = false;
+
+		Basis mLocalToWorldTransform = Basis::Identity();
 
 		Map<CursorId, Vector<CursorAreaEventsListener*>> mPressedListeners;             // Pressed listeners for all pressed cursors
 		Vector<CursorAreaEventsListener*>                mRightButtonPressedListeners;  // Right mouse button pressed listener
@@ -63,6 +68,15 @@ namespace o2
 		Vector<DragableObject*> mDragListeners; // Drag events listeners
 
 	private:
+		// It is called when cursor enters this object
+		void OnCursorEnter(const Input::Cursor& cursor) override;
+
+		// It is called when cursor exits this object
+		void OnCursorExit(const Input::Cursor& cursor) override;
+
+		// Converts cursor to local coordinates
+		Input::Cursor ConvertLocalCursor(const Input::Cursor& cursor) const;
+
 		// processes cursor tracing for cursor
 		void ProcessCursorTracing(const Input::Cursor& cursor);
 

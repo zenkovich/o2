@@ -47,4 +47,15 @@ namespace o2
 		EditorScope::Exit();
 	}
 
+	ForcePopEditorScopeOnStack::ForcePopEditorScopeOnStack()
+	{
+		mDepth = EditorScope::GetDepth();
+		EditorScope::Exit(mDepth);
+	}
+
+	ForcePopEditorScopeOnStack::~ForcePopEditorScopeOnStack()
+	{
+		EditorScope::Enter(mDepth);
+	}
+
 }

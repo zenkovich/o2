@@ -170,6 +170,8 @@ namespace Editor
 	template<typename _type>
 	void TreeWindow::CreateObject(const String& name)
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		SceneEditableObject* object = new _type();
 		object->SetName(name);
 		OnCreateObject(object);

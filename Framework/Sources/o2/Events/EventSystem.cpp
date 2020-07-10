@@ -22,6 +22,7 @@ namespace o2
 	{
 		mShortcutEventsManager = mnew ShortcutKeysListenersManager();
 		mCurrentCursorAreaEventsLayer = &mCursorAreaListenersBasicLayer;
+		mCursorAreaListenersBasicLayer.mEnabled = true;
 	}
 
 	EventSystem::~EventSystem()

@@ -204,6 +204,12 @@ namespace o2
 		// Draws scene
 		virtual void DrawScene();
 
+		// Updates event system
+		virtual void UpdateEventSystem();
+
+		// Post updates event system
+		virtual void PostUpdateEventSystem();
+
 		// Draws UI manager
 		virtual void DrawUIManager();
 

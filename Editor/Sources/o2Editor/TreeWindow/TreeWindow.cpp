@@ -16,6 +16,7 @@
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/Editor/SceneEditableObject.h"
 #include "o2/Utils/System/Clipboard.h"
 #include "o2Editor/Core/Actions/Create.h"
@@ -100,7 +101,6 @@ namespace Editor
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
 
 		// test actors
-		return;
 		for (int i = 0; i < 10; i++)
 		{
 			Actor* actor = mnew Actor(ActorCreateMode::InScene);
@@ -262,6 +262,7 @@ namespace Editor
 		{
 			String path = subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/");
 			mTreeContextMenu->AddItem("Create other/" + path, [=]() {
+				ForcePopEditorScopeOnStack scope;
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
 				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
 				newActor->name = path;
@@ -282,6 +283,7 @@ namespace Editor
 
 			mTreeContextMenu->AddItem(String("Create UI style/") + path, [=]()
 			{
+				ForcePopEditorScopeOnStack scope;
 				Widget* newWidget = styleWidget->CloneAs<Widget>();
 				newWidget->SetEnableForcible(true);
 				OnCreateObject(newWidget);

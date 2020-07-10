@@ -170,6 +170,18 @@ namespace Editor
 		Application::DrawUIManager();
 	}
 
+	void EditorApplication::UpdateEventSystem()
+	{
+		PushEditorScopeOnStack scope;
+		Application::UpdateEventSystem();
+	}
+
+	void EditorApplication::PostUpdateEventSystem()
+	{
+		PushEditorScopeOnStack scope;
+		Application::PostUpdateEventSystem();
+	}
+
 	void EditorApplication::OnUpdate(float dt)
 	{
 		mWindowsManager->Update(dt);

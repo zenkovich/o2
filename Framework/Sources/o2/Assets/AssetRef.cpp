@@ -63,9 +63,11 @@ namespace o2
 
 		mAssetPtr = nullptr;
 		mRefCounter = nullptr;
+		mAssetOwner = false;
 
 		if (node.FindMember("own"))
 		{
+			mAssetOwner = true;
 			mAssetPtr = node.GetMember("asset");
 			mAssetPtr->mInfo.meta = node.GetMember("meta");
 			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;

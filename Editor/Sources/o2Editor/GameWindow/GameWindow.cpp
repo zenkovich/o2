@@ -1,6 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "GameWindow.h"
+
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2Editor/Core/EditorApplication.h"
 
 namespace Editor
 {
@@ -66,16 +68,14 @@ namespace Editor
 
 		EditorScope::Enter(editorDepth);
 
-		o2Render.DrawCross(mListenersLayer.ToLocal(o2Input.GetCursorPos()), 5.0f, Color4::Red());
-
 		mListenersLayer.OnEndDraw();
 		o2Render.UnbindRenderTexture();
 		o2Render.SetCamera(Camera());
 
 		mRenderTargetSprite->Draw();
-		mListenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
 
-		o2Render.DrawCross(mListenersLayer.FromLocal(o2Input.GetCursorPos()));
+		if (o2EditorApplication.isPlaying)
+			mListenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
 	}
 
 	void GameWindow::GameView::OnTransformUpdated()

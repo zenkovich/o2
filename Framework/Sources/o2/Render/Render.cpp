@@ -438,9 +438,11 @@ namespace o2
 
 	RectI Render::GetResScissorRect() const
 	{
-		if (mStackScissors.IsEmpty())
+		if (mStackScissors.IsEmpty() || mStackScissors.Last().mRenderTarget)
+		{
 			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
-			(int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
+				(int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
+		}
 
 		return (RectI)(mStackScissors.Last().mSummaryScissorRect);
 	}

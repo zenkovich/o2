@@ -121,7 +121,7 @@ namespace o2
 		mTime->Update(realdDt);
 		o2Debug.Update(dt);
 		mTaskManager->Update(dt);
-		mEventSystem->Update();
+		UpdateEventSystem();
 
 		mRender->Begin();
 
@@ -137,7 +137,7 @@ namespace o2
 			mAccumulatedDT -= fixedDT;
 		}
 
-		mEventSystem->PostUpdate();
+		PostUpdateEventSystem();
 
 		OnDraw();
 		DrawScene();
@@ -154,6 +154,16 @@ namespace o2
 	void Application::DrawScene()
 	{
 		mScene->Draw();
+	}
+
+	void Application::UpdateEventSystem()
+	{
+		mEventSystem->Update();
+	}
+
+	void Application::PostUpdateEventSystem()
+	{
+		mEventSystem->PostUpdate();
 	}
 
 	void Application::DrawUIManager()
