@@ -86,7 +86,6 @@ namespace Editor
 		bool mNoHeader = false;          // Is no header attribute exists
 		bool mExpanded = false;          // True when must be expanded after creating object viewer
 
-		TargetsVec               mTargetObjects;          // Target objects
 		IObjectPropertiesViewer* mObjectViewer = nullptr; // Object viewer
 
 		Label*            mCaption = nullptr;            // Property caption, used when object is empty and there are no spoiler
@@ -145,7 +144,6 @@ CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 	PROTECTED_FIELD(mDontDeleteEnabled).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mNoHeader).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mExpanded).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mTargetObjects);
 	PROTECTED_FIELD(mObjectViewer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);

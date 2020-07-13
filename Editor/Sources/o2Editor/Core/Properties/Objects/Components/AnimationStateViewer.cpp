@@ -7,19 +7,6 @@
 
 namespace Editor
 {
-
-	void AnimationStateViewer::SetCaption(const WString& caption)
-	{
-		DefaultObjectPropertiesViewer::SetCaption(caption);
-
-		Text* spoilerCaptionLayer = GetSpoiler()->GetLayerDrawable<Text>("caption");
-		if (spoilerCaptionLayer)
-		{
-			Vec2F captionSize = Text::GetTextSize(caption, spoilerCaptionLayer->GetFont().Get(), spoilerCaptionLayer->GetHeight());
-			*mPlayPause->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(11 + captionSize.x, 1));
-		}
-	}
-
 	const Type* AnimationStateViewer::GetViewingObjectType() const
 	{
 		return GetViewingObjectTypeStatic();
@@ -36,7 +23,7 @@ namespace Editor
 
 		mPlayPause = o2UI.CreateWidget<Toggle>("animation state play-stop");
 		mPlayPause->name = "play-stop";
-		*mPlayPause->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(20, 0));
+		*mPlayPause->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(7, 1));
 		mPlayPause->onToggle = THIS_FUNC(OnPlayPauseToggled);
 		mSpoiler->AddInternalWidget(mPlayPause);
 
@@ -48,9 +35,16 @@ namespace Editor
 
 		mTimeProgress = o2UI.CreateWidget<HorizontalProgress>("animation state bar");
 		mTimeProgress->name = "bar";
-		*mTimeProgress->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 2, 20);
+		*mTimeProgress->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 2, 18);
 		mTimeProgress->onChangeByUser = THIS_FUNC(OnTimeProgressChanged);
 		mSpoiler->AddInternalWidget(mTimeProgress);
+
+		if (auto textLayer = GetSpoiler()->GetLayer("caption"))
+		{
+			textLayer->layout.offsetLeft = 27;
+			textLayer->layout.offsetBottom = -19;
+			textLayer->layout.offsetTop = 1;
+		}
 
 		return mSpoiler;
 	}

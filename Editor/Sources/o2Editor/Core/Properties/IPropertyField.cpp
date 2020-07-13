@@ -37,6 +37,11 @@ namespace Editor
 		Refresh();
 	}
 
+	const IPropertyField::TargetsVec& IPropertyField::GetValueAndPrototypeProxy() const
+	{
+		return mValuesProxies;
+	}
+
 	void IPropertyField::SetValueProxy(const Vector<IAbstractValueProxy*>& targets)
 	{
 		auto protoTargets = targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(

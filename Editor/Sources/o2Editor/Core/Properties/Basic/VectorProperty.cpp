@@ -208,6 +208,7 @@ namespace Editor
 				propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
 				propertyDef->SetValuePath((String)i);
 				propertyDef->GetRemoveButton()->onClick = [=]() { Remove(i); };
+				UpdateElementCaption(propertyDef);
 
 				propertyDef->onChangeCompleted =
 					[&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
@@ -246,6 +247,7 @@ namespace Editor
 
 				IPropertyField* propertyDef = mValueProperties[i];
 				propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
+				UpdateElementCaption(propertyDef);
 			}
 		}
 
@@ -478,6 +480,37 @@ namespace Editor
 
 		onChanged(this);
 		o2EditorSceneScreen.OnSceneChanged();
+	}
+
+	void VectorProperty::UpdateElementCaption(IPropertyField* propertyDef) const
+	{
+		auto& proxies = propertyDef->GetValueAndPrototypeProxy();
+		if (!proxies.IsEmpty())
+		{
+			const Type* itemType = &proxies[0].first->GetType();
+			if (auto ptrType = dynamic_cast<const PointerType*>(itemType))
+				itemType = ptrType->GetUnpointedType();
+
+			if (auto objectType = dynamic_cast<const ObjectType*>(itemType))
+			{
+				static String nameVariants[] = { "name", "mName", "_name", "id", "mId" };
+				for (auto& name : nameVariants)
+				{
+					if (auto nameField = objectType->GetField(name))
+					{
+						void* objectPtr;
+						proxies[0].first->GetValuePtr(&objectPtr);
+						String name = nameField->GetValue<String>(objectPtr);
+						if (!name.IsEmpty())
+							propertyDef->SetCaption(name);
+
+						return;
+					}
+				}
+			}
+		}
+
+		propertyDef->SetCaption("#" + propertyDef->GetValuePath());
 	}
 
 	void VectorProperty::TargetObjectData::Refresh()

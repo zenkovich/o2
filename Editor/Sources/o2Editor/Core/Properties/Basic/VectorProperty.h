@@ -127,6 +127,9 @@ namespace Editor
 		// Frees element property
 		void FreeValueProperty(IPropertyField* def);
 
+		// Updates element caption
+		void UpdateElementCaption(IPropertyField* propertyDef) const;
+
 		// It is called when count property changing
 		void OnCountChanged(IPropertyField* def);
 
@@ -193,6 +196,7 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PROTECTED_FUNCTION(void*, GetProxyValuePointer, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(IPropertyField*, GetFreeValueProperty);
 	PROTECTED_FUNCTION(void, FreeValueProperty, IPropertyField*);
+	PROTECTED_FUNCTION(void, UpdateElementCaption, IPropertyField*);
 	PROTECTED_FUNCTION(void, OnCountChanged, IPropertyField*);
 	PROTECTED_FUNCTION(void, Resize, int);
 	PROTECTED_FUNCTION(void, Remove, int);

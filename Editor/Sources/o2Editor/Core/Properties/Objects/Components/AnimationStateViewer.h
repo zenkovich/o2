@@ -20,9 +20,6 @@ namespace Editor
 	class AnimationStateViewer : public DefaultObjectPropertiesViewer
 	{
 	public:
-		// Sets spoiler caption
-		void SetCaption(const WString& caption) override;
-
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const override;
 

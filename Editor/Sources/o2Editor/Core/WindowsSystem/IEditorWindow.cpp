@@ -13,6 +13,9 @@ namespace Editor
 	{
 		mWindow = o2UI.CreateWidget<DockableWindow>();
 		mWindow->layout->size = Vec2F(200, 200);
+		mWindow->onOpened = THIS_FUNC(OnOpened);
+		mWindow->onClosed = THIS_FUNC(OnClosed);
+
 		EditorUIRoot.AddWidget(mWindow);
 	}
 

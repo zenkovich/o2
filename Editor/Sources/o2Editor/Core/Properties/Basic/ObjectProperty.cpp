@@ -65,6 +65,7 @@ namespace Editor
 				delete pair.second.data;
 		}
 
+		mValuesProxies = targets;
 		mTargetObjects.Clear();
 
 		for (auto& pair : targets)

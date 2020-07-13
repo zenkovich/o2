@@ -273,7 +273,7 @@ namespace o2
 		auto statesCopy = mStates;
 		for (auto state : statesCopy)
 		{
-			if (!state->mOwner)
+			if (state && !state->mOwner)
 			{
 				mStates.Remove(state);
 				AddState(state);

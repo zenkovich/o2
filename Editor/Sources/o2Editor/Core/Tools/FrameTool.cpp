@@ -155,6 +155,8 @@ namespace Editor
 	{
 		SelectionTool::DrawScene();
 
+		UpdateSelectionFrame();
+
 		if (o2EditorSceneScreen.GetSelectedObjects().Count() > 0)
 		{
 			for (auto object : o2EditorSceneScreen.GetSelectedObjects())

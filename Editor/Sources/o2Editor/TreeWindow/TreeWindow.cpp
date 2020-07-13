@@ -101,19 +101,19 @@ namespace Editor
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
 
 		// test actors
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 1; i++)
 		{
 			Actor* actor = mnew Actor(ActorCreateMode::InScene);
 			actor->name = String::Format("Actor #%i", i + 1);
 			actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
 
-			for (int j = 0; j < 10; j++)
+			for (int j = 0; j < 1; j++)
 			{
 				Actor* childActor = mnew Actor(ActorCreateMode::InScene);
 				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
 				actor->AddChild(childActor);
 
-				for (int k = 0; k < 10; k++)
+				for (int k = 0; k < 1; k++)
 				{
 					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI4_Background.png"),
 													  mnew EditorTestComponent(),

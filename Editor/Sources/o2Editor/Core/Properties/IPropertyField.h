@@ -48,8 +48,11 @@ namespace Editor
 		// Copy-operator
 		IPropertyField& operator=(const IPropertyField& other);
 
-		// Sets targets pointers
+		// Sets targets proxies
 		virtual void SetValueAndPrototypeProxy(const TargetsVec& targets);
+
+		// Returns targets proxies
+		const TargetsVec& GetValueAndPrototypeProxy() const;
 
 		// Sets targets proxies
 		virtual void SetValueProxy(const Vector<IAbstractValueProxy*>& targets);
@@ -549,6 +552,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 {
 
 	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	PUBLIC_FUNCTION(const TargetsVec&, GetValueAndPrototypeProxy);
 	PUBLIC_FUNCTION(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
 	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
 	PUBLIC_FUNCTION(void, Refresh);

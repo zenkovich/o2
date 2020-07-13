@@ -52,6 +52,12 @@ namespace Editor
 		// It is called after that all windows was created
 		virtual void PostInitializeWindow() {}
 
+		// It is called when editor window has opened
+		virtual void OnOpened() {}
+
+		// It is called when editor window has closed
+		virtual void OnClosed() {}
+
 		friend class WindowsManager;
 		friend class WindowsLayout;
 	};
@@ -78,5 +84,7 @@ CLASS_METHODS_META(Editor::IEditorWindow)
 	PUBLIC_FUNCTION(void, Hide);
 	PUBLIC_FUNCTION(DockableWindow*, GetWindow);
 	PROTECTED_FUNCTION(void, PostInitializeWindow);
+	PROTECTED_FUNCTION(void, OnOpened);
+	PROTECTED_FUNCTION(void, OnClosed);
 }
 END_META;

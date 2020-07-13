@@ -11,6 +11,7 @@ namespace o2
 	class AnimationClip;
 	class Button;
 	class EditBox;
+	class HorizontalLayout;
 	class HorizontalScrollBar;
 	class Toggle;
 	class WidgetDragHandle;
@@ -31,8 +32,6 @@ namespace Editor
 	// - Добавить assign акторов
 	// - Добавить "запись" изменения полей
 	// - Сделать редактор кривых для Vec2F
-	// - Переименовать Animation track и разделить на Track и Player
-	// - Ссылки на анимации
 
 	class AnimationWindow : public IEditorWindow, public Singleton<AnimationWindow>
 	{
@@ -80,17 +79,19 @@ namespace Editor
 		Widget* mUpPanel = nullptr;  // Up panel with control buttons
 		Widget* mWorkArea = nullptr; // Working area with tree and time line
 
-		Widget*  mControlsPanel = nullptr;    // Panel with buttons described below
-		Toggle*  mRecordToggle = nullptr;     // Record toggle
-		Button*  mRewindLeft = nullptr;       // Rewind animation to start button
-		Button*  mMoveLeft = nullptr;         // Move time one frame left
-		Toggle*  mPlayPauseToggle = nullptr;  // Play - pause toggle
-		Button*  mMoveRight = nullptr;        // Move time one frame right
-		Button*  mRewindRight = nullptr;      // Rewind animation to end
-		Toggle*  mLoopToggle = nullptr;       // Animation loop toggle
-		Toggle*  mCurvesToggle = nullptr;     // Toggle curves view
-		Button*  mAddKeyButton = nullptr;     // Add key on current time button
-		Button*  mPropertiesButton = nullptr; // Open properties window
+		HorizontalLayout* mControlsPanel = nullptr; // Panel with buttons described below
+
+		Toggle* mPreviewToggle = nullptr;    // Preview toggle
+		Toggle* mRecordToggle = nullptr;     // Record toggle
+		Button* mRewindLeft = nullptr;       // Rewind animation to start button
+		Button* mMoveLeft = nullptr;         // Move time one frame left
+		Toggle* mPlayPauseToggle = nullptr;  // Play - pause toggle
+		Button* mMoveRight = nullptr;        // Move time one frame right
+		Button* mRewindRight = nullptr;      // Rewind animation to end
+		Toggle* mLoopToggle = nullptr;       // Animation loop toggle
+		Toggle* mCurvesToggle = nullptr;     // Toggle curves view
+		Button* mAddKeyButton = nullptr;     // Add key on current time button
+		Button* mPropertiesButton = nullptr; // Open properties window
 
 		AnimationTimeline*   mTimeline = nullptr;     // Animation time line
 		HorizontalScrollBar* mTimeScroll = nullptr;   // Time line horizontal scrollbar
@@ -103,6 +104,9 @@ namespace Editor
 		ActionsList mActionsList; // List of actions in animation editor, also injecting into curves editor
 
 	protected:
+		// It is called when editor window has closed
+		void OnClosed() override;
+
 		// Initializes window
 		void InitializeWindow();
 
@@ -142,8 +146,11 @@ namespace Editor
 		// It is called when menu filter button was pressed
 		void OnMenuFilterPressed();
 
+		// It is called when menu preview button was pressed
+		void OnMenuPreviewToggle(bool value);
+
 		// It is called when menu record button was pressed
-		void OnMenuRecordPressed();
+		void OnMenuRecordToggle(bool value);
 
 		friend class AnimationTimeline;
 		friend class AnimationTree;
@@ -174,6 +181,7 @@ CLASS_FIELDS_META(Editor::AnimationWindow)
 	PROTECTED_FIELD(mUpPanel).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mWorkArea).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mControlsPanel).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mPreviewToggle).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRecordToggle).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRewindLeft).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mMoveLeft).DEFAULT_VALUE(nullptr);
@@ -202,6 +210,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PUBLIC_FUNCTION(void, SetTarget, ActorRef);
 	PUBLIC_FUNCTION(void, SetCurvesMode, bool);
 	PUBLIC_FUNCTION(bool, IsCurvesMode);
+	PROTECTED_FUNCTION(void, OnClosed);
 	PROTECTED_FUNCTION(void, InitializeWindow);
 	PROTECTED_FUNCTION(void, InitializeHandlesSheet);
 	PROTECTED_FUNCTION(void, InitializeTree);
@@ -215,6 +224,7 @@ CLASS_METHODS_META(Editor::AnimationWindow)
 	PROTECTED_FUNCTION(void, OnLoopToggled, bool);
 	PROTECTED_FUNCTION(void, OnSearchEdited, const WString&);
 	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
-	PROTECTED_FUNCTION(void, OnMenuRecordPressed);
+	PROTECTED_FUNCTION(void, OnMenuPreviewToggle, bool);
+	PROTECTED_FUNCTION(void, OnMenuRecordToggle, bool);
 }
 END_META;

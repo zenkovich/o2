@@ -93,7 +93,7 @@ namespace Editor
 
 	void ObjectPtrProperty::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
-		mTargetObjects = targets;
+		mValuesProxies = targets;
 		Refresh();
 	}
 
@@ -102,9 +102,9 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		mCurrentObjectType = nullptr;
-		if (!mTargetObjects.IsEmpty())
+		if (!mValuesProxies.IsEmpty())
 		{
-			auto object = GetProxy(mTargetObjects[0].first);
+			auto object = GetProxy(mValuesProxies[0].first);
 			if (object)
 				mCurrentObjectType = dynamic_cast<const ObjectType*>(&object->GetType());
 			else if (mFieldInfo)
@@ -165,7 +165,7 @@ namespace Editor
 
 		if (mObjectViewer)
 		{
-			mObjectViewer->Refresh(mTargetObjects.Convert<Pair<IObject*, IObject*>>(
+			mObjectViewer->Refresh(mValuesProxies.Convert<Pair<IObject*, IObject*>>(
 				[&](const Pair<IAbstractValueProxy*, IAbstractValueProxy*>& x)
 			{
 				return Pair<IObject*, IObject*>(GetProxy(x.first), x.second ? GetProxy(x.second) : nullptr);
@@ -258,10 +258,10 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		bool hasObject = !mTargetObjects.IsEmpty() && GetProxy(mTargetObjects[0].first) != nullptr;
+		bool hasObject = !mValuesProxies.IsEmpty() && GetProxy(mValuesProxies[0].first) != nullptr;
 		if (hasObject)
 		{
-			for (auto targetObj : mTargetObjects)
+			for (auto targetObj : mValuesProxies)
 			{
 				IObject* object = GetProxy(targetObj.first);
 
@@ -311,7 +311,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		StoreValues(mBeforeChangeValues);
-		for (auto targetObj : mTargetObjects)
+		for (auto targetObj : mValuesProxies)
 		{
 			if (GetProxy(targetObj.first) == nullptr)
 				SetProxy(targetObj.first, type->DynamicCastToIObject(type->CreateSample()));
@@ -328,7 +328,7 @@ namespace Editor
 	void ObjectPtrProperty::StoreValues(Vector<DataDocument>& data) const
 	{
 		data.Clear();
-		for (auto targetObj : mTargetObjects)
+		for (auto targetObj : mValuesProxies)
 		{
 			data.Add(DataDocument());
 			data.Last() = GetProxy(targetObj.first);

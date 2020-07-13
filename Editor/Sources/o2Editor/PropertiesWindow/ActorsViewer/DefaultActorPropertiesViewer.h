@@ -42,6 +42,11 @@ namespace Editor
 		const Type*    mActorType = nullptr; // Target actor type
 
 		IObjectPropertiesViewer* mViewer = nullptr; // Actor properties viewer
+
+	protected:
+		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
+		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
+							   const Vector<DataDocument>& after);
 	};
 }
 
@@ -65,5 +70,6 @@ CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, SpecializeActorType, const Type*);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

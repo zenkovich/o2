@@ -314,6 +314,16 @@ namespace o2
 		onFocused();
 	}
 
+	void Window::OnEnabled()
+	{
+		onOpened();
+	}
+
+	void Window::OnDisabled()
+	{
+		onClosed();
+	}
+
 	void Window::OnChildFocused(Widget* child)
 	{
 		OnFocused();

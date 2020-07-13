@@ -41,7 +41,7 @@ namespace Editor
 			if (mViewer)
 				o2EditorProperties.FreeObjectViewer(mViewer);
 
-			mViewer = o2EditorProperties.CreateObjectViewer(mActorType, "");
+			mViewer = o2EditorProperties.CreateObjectViewer(mActorType, "", THIS_FUNC(OnPropertyChanged));
 			mViewer->SetHeaderEnabled(false);
 			mSpoiler->AddChild(mViewer->GetSpoiler());
 		}
@@ -87,6 +87,15 @@ namespace Editor
 	bool DefaultActorPropertiesViewer::IsEmpty() const
 	{
 		return mViewer && mViewer->IsEmpty();
+	}
+
+	void DefaultActorPropertiesViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+														 const Vector<DataDocument>& after)
+	{
+		for (auto actors : mTargetActors)
+			actors->OnChanged();
+
+		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
 	}
 
 }

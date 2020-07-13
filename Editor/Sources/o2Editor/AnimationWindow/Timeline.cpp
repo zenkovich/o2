@@ -185,8 +185,11 @@ namespace Editor
 
 	void AnimationTimeline::SetAnimationTimeByCursor(const Input::Cursor& cursor)
 	{
-		if (cursor.isPressed && mAnimationWindow->mAnimation) 
+		if (cursor.isPressed && mAnimationWindow->mAnimation)
+		{
+			mAnimationWindow->mPreviewToggle->value = true;
 			SetTimeCursor(Math::Max(0.0f, WorldToLocal(cursor.position.x)));
+		}
 	}
 
 	void AnimationTimeline::OnCursorRightMousePressed(const Input::Cursor& cursor)

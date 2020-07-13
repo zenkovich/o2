@@ -19,6 +19,9 @@ namespace o2
 		PROPERTY(WString, caption, SetCaption, GetCaption); // Window caption property
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Window icon sprite property
 
+		Function<void()> onOpened; // On window opened delegate
+		Function<void()> onClosed; // On window closed delegate
+
 	public:
 		// Default constructor
 		Window();
@@ -132,6 +135,12 @@ namespace o2
 		// It is called when widget was selected
 		void OnFocused() override;
 
+		// Is is called when actor enabled in hierarchy, calls onOpened
+		void OnEnabled() override;
+
+		// It is called when actor disabled in hierarchy, calls onCLosed
+		void OnDisabled()override;
+
 		// It is called when widget state was added
 		void OnStateAdded(WidgetState* state) override;
 
@@ -173,6 +182,8 @@ CLASS_FIELDS_META(o2::Window)
 {
 	PUBLIC_FIELD(caption);
 	PUBLIC_FIELD(icon);
+	PUBLIC_FIELD(onOpened);
+	PUBLIC_FIELD(onClosed);
 	PROTECTED_FIELD(mIconLayerPath).DEFAULT_VALUE("icon");
 	PROTECTED_FIELD(mCaptionLayerPath).DEFAULT_VALUE("caption");
 	PROTECTED_FIELD(mOptionsMenu);
@@ -226,6 +237,8 @@ CLASS_METHODS_META(o2::Window)
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(void, OnStateAdded, WidgetState*);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
