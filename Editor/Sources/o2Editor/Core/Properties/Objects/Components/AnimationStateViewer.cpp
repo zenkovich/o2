@@ -103,7 +103,15 @@ namespace Editor
 	{
 		if (!mTargetObjets.IsEmpty())
 		{
-			auto animationRef = dynamic_cast<AnimationState*>(mTargetObjets.Last().first)->GetAnimation();
+			auto animationState = dynamic_cast<AnimationState*>(mTargetObjets.Last().first);
+			auto animationRef = animationState->GetAnimation();
+			if (!animationRef) {
+				animationRef.CreateInstance();
+				animationState->SetAnimation(animationRef);
+
+				GetSpoiler()->Expand();
+			}
+
 			if (animationRef)
 			{
 				o2EditorAnimationWindow.SetAnimation(&animationRef->animation);
@@ -125,7 +133,8 @@ namespace Editor
 
 	void AnimationStateViewer::OnAnimationUpdated(float time)
 	{
-		mTimeProgress->value = mSubscribedPlayer->GetRelTime();
+		mTimeProgress->value = mSubscribedPlayer->GetLoopTime()/mSubscribedPlayer->GetDuration();
+		mPlayPause->value = mSubscribedPlayer->IsPlaying();
 	}
 
 }

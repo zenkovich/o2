@@ -106,8 +106,7 @@ namespace Editor
 
 		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
 
-		Widget* mAddButtonContainer = nullptr; // Add button container, located under all elements
-		Button* mAddButton = nullptr;          // Add button, adds new element at end
+		Button* mAddButton = nullptr; // Add button, adds new element at end
 
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
@@ -170,7 +169,6 @@ CLASS_FIELDS_META(Editor::VectorProperty)
 	PROTECTED_FIELD(mCountDifferents).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mCountOfElements).DEFAULT_VALUE(0);
 	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAddButtonContainer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mAddButton).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mIsRefreshing).DEFAULT_VALUE(false);
 }

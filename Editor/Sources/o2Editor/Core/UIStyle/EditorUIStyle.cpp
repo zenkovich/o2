@@ -3382,13 +3382,13 @@ namespace Editor
 			Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		nonLoopRootIconLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_non_loop_anim_regular.png"),
-			Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+			Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
 		nonLoopRootIconLayer->AddChildLayer("hover", mnew Sprite("ui/UI4_non_loop_anim_hover.png"),
-			Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+			Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
 		nonLoopRootIconLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_non_loop_anim_pressed.png"),
-			Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+			Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, -1)));
 
 		AnimationClip hoverAnim = AnimationClip::EaseInOut("layer/loopRootIcon/child/hover/transparency", 0.0f, 1.0f, 0.1f);
 		*hoverAnim.AddTrack<float>("layer/nonLoopRootIcon/child/hover/transparency") =

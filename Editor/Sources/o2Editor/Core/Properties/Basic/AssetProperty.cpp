@@ -133,7 +133,7 @@ namespace Editor
 
 	bool AssetProperty::IsAlwaysRefresh() const
 	{
-		return true;
+		return false;
 	}
 
 	void AssetProperty::SetAssetId(const UID& id)

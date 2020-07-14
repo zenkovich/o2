@@ -336,6 +336,9 @@ namespace o2
 
 		if (ContextMenu::mVisibleContextMenu)
 			ContextMenu::mVisibleContextMenu->SpecialDraw();
+
+		if (o2Input.IsKeyPressed(VK_TAB))
+			FocusNextWidget();
 	}
 
 	void UIManager::DrawWidgetAtTop(Widget* widget)

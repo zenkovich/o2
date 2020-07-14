@@ -57,6 +57,19 @@ namespace Editor
 		mHeaderContainer->expandHeight = false;
 		mHeaderContainer->SetInternalParent(mSpoiler, false);
 
+		// Add button
+		mAddButton = mSpoiler->FindChildByTypeAndName<Button>("add button");
+		if (!mAddButton)
+		{
+			mAddButton = o2UI.CreateWidget<Button>("add small");
+			mAddButton->name = "add button";
+			mAddButton->layout->maxWidth = 20;
+			mAddButton->layout->minHeight = 20;
+			mAddButton->onClick = THIS_FUNC(OnAddPressed);
+
+			mHeaderContainer->AddChild(mAddButton);
+		}
+
 		// Count property
 		mCountProperty = mSpoiler->FindChildByType<IntegerProperty>(false);
 		if (!mCountProperty)
@@ -66,33 +79,9 @@ namespace Editor
 		{
 			mHeaderContainer->AddChild(mCountProperty);
 
-			mCountProperty->layout->maxWidth = 100;
+			mCountProperty->layout->maxWidth = 40;
 			mCountProperty->SetValue(0);
 			mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
-		}
-
-		// Add button
-		mAddButtonContainer = mSpoiler->FindChildByTypeAndName<Widget>("add new");
-		if (!mAddButtonContainer)
-		{
-			mAddButtonContainer = mnew Widget();
-			mAddButtonContainer->name = "add new";
-			mAddButtonContainer->layout->minHeight = 20;
-			mSpoiler->AddChild(mAddButtonContainer);
-		}
-
-		mAddButton = mAddButtonContainer->FindChildByTypeAndName<Button>("add button");
-		if (!mAddButton)
-		{
-			mAddButton = o2UI.CreateWidget<Button>("add small");
-			mAddButton->name = "add button";
-			*mAddButton->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(2, 0));
-			mAddButton->onClick = THIS_FUNC(OnAddPressed);
-			mAddButton->isPointInside = [=](const Vec2F& point) {
-				return mAddButton->layout->IsPointInside(point) || mAddButtonContainer->IsUnderPoint(point);
-			};
-
-			mAddButtonContainer->AddChild(mAddButton);
 		}
 
 		// Other
@@ -173,7 +162,7 @@ namespace Editor
 
 				mValueProperties.Clear();
 
-				mAddButtonContainer->Hide(true);
+				mAddButton->Hide(true);
 
 				onChanged(this);
 				o2EditorSceneScreen.OnSceneChanged();
@@ -225,8 +214,7 @@ namespace Editor
 
 			mValueProperties.Resize(mCountOfElements);
 
-			mAddButtonContainer->Show(true);
-			mAddButtonContainer->SetIndexInSiblings(mSpoiler->GetChildren().Count());
+			mAddButton->Show(true);
 
 			mSpoiler->SetLayoutDirty();
 
@@ -381,6 +369,7 @@ namespace Editor
 
 	void VectorProperty::OnAddPressed()
 	{
+		Expand();
 		Resize(mCountOfElements + 1);
 	}
 
