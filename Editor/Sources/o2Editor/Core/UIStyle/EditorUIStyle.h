@@ -125,6 +125,7 @@ namespace Editor
 		void RebuildAddComponentButton();
 		void RebuildAddComponentsTree();
 
+		void RebuildAnimationStateViewerEditButton();
 		void RebuildAnimationStateViewerPlayToggle();
 		void RebuildAnimationStateViewerLoopToggle();
 		void RebuildAnimationStateViewerProgressBar();
@@ -269,6 +270,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildSpoilerWithHead);
 	PUBLIC_FUNCTION(void, RebuildAddComponentButton);
 	PUBLIC_FUNCTION(void, RebuildAddComponentsTree);
+	PUBLIC_FUNCTION(void, RebuildAnimationStateViewerEditButton);
 	PUBLIC_FUNCTION(void, RebuildAnimationStateViewerPlayToggle);
 	PUBLIC_FUNCTION(void, RebuildAnimationStateViewerLoopToggle);
 	PUBLIC_FUNCTION(void, RebuildAnimationStateViewerProgressBar);

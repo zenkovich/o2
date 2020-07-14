@@ -2435,7 +2435,7 @@ namespace Editor
 		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
 										   Layout::BothStretch(-4, -4, -5, -5));
 
-		auto recordIcon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_preview_anim.png"),
+		auto recordIcon = sample->AddLayer("playIcon", mnew Sprite("ui/UI4_pencil_icon_green.png"),
 										   Layout::Based(BaseCorner::Center, Vec2F(20, 20), Vec2F(0, 1)));
 
 		// hover
@@ -3243,6 +3243,33 @@ namespace Editor
 			->offStateAnimationSpeed = 0.5;
 
 		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void EditorUIStyleBuilder::RebuildAnimationStateViewerEditButton()
+	{
+		Button* sample = mnew Button();
+		sample->layout->minSize = Vec2F(5, 5);
+
+		auto regularLayer = sample->AddLayer("regular", mnew Sprite("ui/UI4_edit_anim_regular.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto hoverLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_edit_anim_hover.png"),
+										   Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_edit_anim_pressed.png"),
+											 Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
+
+
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.1f))
+			->offStateAnimationSpeed = 1.0f / 4.0f;
+
+		sample->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "edit animation state");
 	}
 
 	void EditorUIStyleBuilder::RebuildAnimationSpoiler()

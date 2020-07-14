@@ -42,6 +42,29 @@ namespace Editor
 		// Returns property info to property field map
 		const Map<const FieldInfo*, IPropertyField*>& GetProperties() const;
 
+		// Searches target with suitable type on contexts stack
+		template<typename _type>
+		_type* FindOnStack() const;
+
 		friend class Properties;
 	};
+
+	template<typename _type>
+	_type* PropertiesContext::FindOnStack() const
+	{
+		auto contextIt = parent;
+		while (contextIt)
+		{
+			if (!contextIt->targets.IsEmpty())
+			{
+				if (auto typed = dynamic_cast<_type*>(contextIt->targets[0].first))
+					return typed;
+			}
+
+			contextIt = contextIt->parent;
+		}
+
+		return nullptr;
+	}
+
 }

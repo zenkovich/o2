@@ -30,6 +30,7 @@ namespace Editor
 
 	private:
 		Toggle* mPlayPause = nullptr;
+		Button* mEditBtn = nullptr;
 		Toggle* mLooped = nullptr;
 
 		HorizontalProgress* mTimeProgress = nullptr;
@@ -52,6 +53,9 @@ namespace Editor
 		// It is called when loop toggled
 		void OnLoopToggled(bool looped);
 
+		// It is called when edit button pressed, sets animation editing
+		void OnEditPressed();
+
 		// It is called when time progress changed by user, sets subscribed player time 
 		void OnTimeProgressChanged(float value);
 
@@ -68,6 +72,7 @@ END_META;
 CLASS_FIELDS_META(Editor::AnimationStateViewer)
 {
 	PRIVATE_FIELD(mPlayPause).DEFAULT_VALUE(nullptr);
+	PRIVATE_FIELD(mEditBtn).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mLooped).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mTimeProgress).DEFAULT_VALUE(nullptr);
 	PRIVATE_FIELD(mSubscribedPlayer).DEFAULT_VALUE(nullptr);
@@ -78,7 +83,6 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
 	PRIVATE_FUNCTION(Spoiler*, CreateSpoiler);
@@ -86,6 +90,7 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 	PRIVATE_FUNCTION(void, OnFree);
 	PRIVATE_FUNCTION(void, OnPlayPauseToggled, bool);
 	PRIVATE_FUNCTION(void, OnLoopToggled, bool);
+	PRIVATE_FUNCTION(void, OnEditPressed);
 	PRIVATE_FUNCTION(void, OnTimeProgressChanged, float);
 	PRIVATE_FUNCTION(void, OnAnimationUpdated, float);
 }

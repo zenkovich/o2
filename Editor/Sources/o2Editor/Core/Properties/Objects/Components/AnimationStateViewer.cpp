@@ -2,6 +2,7 @@
 #include "AnimationStateViewer.h"
 
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
@@ -26,6 +27,12 @@ namespace Editor
 		*mPlayPause->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(7, 1));
 		mPlayPause->onToggle = THIS_FUNC(OnPlayPauseToggled);
 		mSpoiler->AddInternalWidget(mPlayPause);
+
+		mEditBtn = o2UI.CreateWidget<Button>("edit animation state");
+		mEditBtn->name = "edit";
+		*mEditBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(20, 20), Vec2F(-40, 1));
+		mEditBtn->onClick = THIS_FUNC(OnEditPressed);
+		mSpoiler->AddInternalWidget(mEditBtn);
 
 		mLooped = o2UI.CreateWidget<Toggle>("animation state loop");
 		mLooped->name = "loop";
@@ -90,6 +97,24 @@ namespace Editor
 			mSubscribedPlayer->SetLoop(looped ? Loop::Repeat : Loop::None);
 
 		o2Scene.OnObjectChanged(o2EditorSceneScreen.GetSelectedObjects().First());
+	}
+
+	void AnimationStateViewer::OnEditPressed()
+	{
+		if (!mTargetObjets.IsEmpty())
+		{
+			auto animationRef = dynamic_cast<AnimationState*>(mTargetObjets.Last().first)->GetAnimation();
+			if (animationRef)
+			{
+				o2EditorAnimationWindow.SetAnimation(&animationRef->animation);
+
+				if (!o2EditorSceneScreen.GetSelectedObjects().IsEmpty())
+					o2EditorAnimationWindow.SetTarget(dynamic_cast<Actor*>(o2EditorSceneScreen.GetSelectedObjects().Last()));
+
+				o2EditorAnimationWindow.SetAnimationEditable(mPropertiesContext.FindOnStack<IEditableAnimation>());
+				o2EditorAnimationWindow.GetWindow()->Focus();
+			}
+		}
 	}
 
 	void AnimationStateViewer::OnTimeProgressChanged(float value)
