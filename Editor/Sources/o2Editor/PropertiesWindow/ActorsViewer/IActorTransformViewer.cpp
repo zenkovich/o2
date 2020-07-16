@@ -23,7 +23,6 @@ namespace Editor
 		mSpoiler = o2UI.CreateWidget<SpoilerWithHead>();
 
 		mSpoiler->borderBottom = 5;
-		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("Transform");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
 

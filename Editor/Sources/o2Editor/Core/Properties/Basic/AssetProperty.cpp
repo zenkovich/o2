@@ -35,8 +35,9 @@ namespace Editor
 		mCaption = mSpoiler->GetInternalWidgetByType<Label>("mainLayout/propertyName");
 
 		auto expandSpoilerBtn = mSpoiler->GetExpandButton();
+		auto mainLayout = mSpoiler->GetInternalWidget("mainLayout");
 		expandSpoilerBtn->isPointInside = [=](const Vec2F& p) {
-			return expandSpoilerBtn->layout->IsPointInside(p) || mCaption->layout->IsPointInside(p);
+			return expandSpoilerBtn->layout->IsPointInside(p) || mainLayout->layout->IsPointInside(p);
 		};
 
 		mBox = mSpoiler->GetInternalWidget("mainLayout/container/layout/box");
@@ -317,7 +318,7 @@ namespace Editor
 
 	bool AssetProperty::IsUnderPoint(const Vec2F& point)
 	{
-		return mBox->IsUnderPoint(point);
+		return mBox->IsUnderPoint(point) && mBox->transparency > 0.1f;
 	}
 
 	void AssetProperty::OnDragExit(ISelectableDragableObjectsGroup* group)

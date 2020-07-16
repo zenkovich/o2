@@ -21,7 +21,6 @@ namespace Editor
 		mSpoiler->expandWidth = true;
 		mSpoiler->fitByChildren = true;
 		mSpoiler->borderBottom = 5;
-		mSpoiler->borderRight = 5;
 		mSpoiler->SetCaption("COmponent");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
 		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);

@@ -17,7 +17,6 @@ namespace Editor
 		mSpoiler->expandHeight = false;
 		mSpoiler->expandWidth = true;
 		mSpoiler->fitByChildren = true;
-		mSpoiler->borderRight = 5;
 		mSpoiler->borderBottom = 5;
 		mSpoiler->SetCaption("Transform");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_transform_icon_white.png");
