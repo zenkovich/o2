@@ -74,7 +74,7 @@ namespace Editor
 
 		mRenderTargetSprite->Draw();
 
-		if (o2EditorApplication.isPlaying)
+		if (o2EditorApplication.IsPlaying())
 			mListenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
 	}
 

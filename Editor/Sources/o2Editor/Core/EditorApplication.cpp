@@ -72,6 +72,29 @@ namespace Editor
 		return GetUndoActionsCount() > 0;
 	}
 
+	void EditorApplication::SetPlaying(bool playing)
+	{
+		PushEditorScopeOnStack scope;
+
+		if (playing == mIsPlaying)
+			return;
+
+		if (playing)
+		{
+			mSceneDump.Clear();
+			o2Scene.Save(mSceneDump);
+		}
+		else
+			o2Scene.Load(mSceneDump);
+
+		mIsPlaying = playing;
+	}
+
+	bool EditorApplication::IsPlaying() const
+	{
+		return mIsPlaying;
+	}
+
 	void EditorApplication::OnStarted()
 	{
 		PushEditorScopeOnStack enterScope;
@@ -152,7 +175,7 @@ namespace Editor
 
 	void EditorApplication::UpdateScene(float dt)
 	{
-		if (isPlaying && (!isPaused || step))
+		if (mIsPlaying && (!isPaused || step))
 		{
 			mScene->Update(dt);
 			o2EditorSceneScreen.NeedRedraw();

@@ -114,8 +114,14 @@ namespace o2
 		// Loads scene from file. If append is true, old actors will not be destroyed
 		void Load(const String& path, bool append = false);
 
+		// Loads scene from document. If append is true, old actors will not be destroyed
+		void Load(const DataDocument& doc, bool append = false);
+
 		// Saves scene into file
 		void Save(const String& path);
+
+		// Saves scene into document
+		void Save(DataDocument& doc);
 
 		// Draws scene drawable objects
 		void Draw();
@@ -335,7 +341,9 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Clear);
 	PUBLIC_FUNCTION(void, ClearCache);
 	PUBLIC_FUNCTION(void, Load, const String&, bool);
+	PUBLIC_FUNCTION(void, Load, const DataDocument&, bool);
 	PUBLIC_FUNCTION(void, Save, const String&);
+	PUBLIC_FUNCTION(void, Save, DataDocument&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(const Vec2F&, GetSceneViewSize);

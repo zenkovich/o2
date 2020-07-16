@@ -40,7 +40,7 @@ namespace Editor
 
 	void ToolsPanel::Update(float dt)
 	{
-		mPlayToggle->value = o2EditorApplication.isPlaying;
+		mPlayToggle->value = o2EditorApplication.IsPlaying();
 		mPauseToggle->value = o2EditorApplication.isPaused;
 	}
 
@@ -225,7 +225,7 @@ namespace Editor
 
 	void ToolsPanel::OnPlayStopToggled(bool play)
 	{
-		o2EditorApplication.isPlaying = play;
+		o2EditorApplication.SetPlaying(play);
 	}
 
 	void ToolsPanel::OnPauseToggled(bool pause)

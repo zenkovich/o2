@@ -31,7 +31,6 @@ namespace Editor
 	class EditorApplication: public Application, public ActionsList
 	{
 	public:
-		bool isPlaying = false; // Is editor scene playing
 		bool isPaused = false;  // Is editor scene paused
 		bool step = false;      // Is needed to do one update step
 
@@ -57,6 +56,12 @@ namespace Editor
 		// Returns is current scene was changed
 		bool IsSceneChanged() const;
 
+		// Runs or stops scene playing. Saving scene into temprorary file before playing, restoring after stopping
+		void SetPlaying(bool playing);
+
+		// Is scene playing
+		bool IsPlaying() const;
+
 	protected:
 		Sprite* mBackground; // Background sprite
 		Sprite* mBackSign;   // Background o2 signature
@@ -70,6 +75,10 @@ namespace Editor
 		Properties* mProperties; // Properties manager
 
 		String mLoadedScene; // Current loaded scene
+
+		DataDocument mSceneDump; // Scene dump, created before playing
+
+		bool mIsPlaying = false; // Is editor scene playing
 
 		int mDrawCalls; // Draw calls count, stored before beginning rendering
 

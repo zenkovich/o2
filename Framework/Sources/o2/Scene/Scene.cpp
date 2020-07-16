@@ -360,7 +360,12 @@ namespace o2
 		DataDocument data;
 		data.LoadFromFile(path);
 
-		auto layersNode = data.GetMember("Layers");
+		Load(data, append);
+	}
+
+	void Scene::Load(const DataDocument& doc, bool append /*= false*/)
+	{
+		auto& layersNode = doc.GetMember("Layers");
 		for (auto& layerNode : layersNode)
 		{
 			auto layer = mnew SceneLayer();
@@ -368,9 +373,9 @@ namespace o2
 			mLayers.Add(layer);
 		}
 
-		mDefaultLayer = GetLayer(data.GetMember("DefaultLayer"));
+		mDefaultLayer = GetLayer(doc.GetMember("DefaultLayer"));
 
-		auto tagsNode = data.GetMember("Tags");
+		auto& tagsNode = doc.GetMember("Tags");
 		for (auto& tagNode : tagsNode)
 		{
 			auto tag = mnew Tag();
@@ -378,12 +383,7 @@ namespace o2
 			mTags.Add(tag);
 		}
 
-		auto& actorsNode = data.GetMember("Actors");
-		for (auto& actorNode : actorsNode)
-		{
-			auto actor = mnew Actor();
-			actor->Deserialize(actorNode);
-		}
+		mRootActors = doc.GetMember("Actors");
 
 		ActorDataValueConverter::Instance().UnlockPointersResolving();
 		ActorDataValueConverter::Instance().ResolvePointers();
@@ -392,22 +392,23 @@ namespace o2
 	void Scene::Save(const String& path)
 	{
 		DataDocument data;
-
-		auto layersNode = data.AddMember("Layers");
-		for (auto layer : mLayers)
-			layer->Serialize(layersNode.AddMember("Layer"));
-
-		data.AddMember("DefaultLayer") = mDefaultLayer->name;
-
-		auto tagsNode = data.AddMember("Tags");
-		for (auto tag : mTags)
-			tag->Serialize(tagsNode.AddMember("Tag"));
-
-		auto actorsNode = data.AddMember("Actors");
-		for (auto actor : mRootActors)
-			actor->Serialize(actorsNode.AddMember("Actor"));
-
+		Save(data);
 		data.SaveToFile(path);
+	}
+
+	void Scene::Save(DataDocument& doc)
+	{
+		auto& layersNode = doc.AddMember("Layers");
+		for (auto layer : mLayers)
+			layer->Serialize(layersNode.AddElement());
+
+		doc.AddMember("DefaultLayer") = mDefaultLayer->name;
+
+		auto& tagsNode = doc.AddMember("Tags");
+		for (auto tag : mTags)
+			tag->Serialize(tagsNode.AddElement());
+
+		doc.AddMember("Actors") = mRootActors;
 	}
 
 #if IS_EDITOR
