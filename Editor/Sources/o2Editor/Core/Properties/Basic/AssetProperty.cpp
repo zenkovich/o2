@@ -34,6 +34,11 @@ namespace Editor
 		mHeaderContainer = mSpoiler->GetInternalWidgetByType<HorizontalLayout>("mainLayout/container/layout");
 		mCaption = mSpoiler->GetInternalWidgetByType<Label>("mainLayout/propertyName");
 
+		auto expandSpoilerBtn = mSpoiler->GetExpandButton();
+		expandSpoilerBtn->isPointInside = [=](const Vec2F& p) {
+			return expandSpoilerBtn->layout->IsPointInside(p) || mCaption->layout->IsPointInside(p);
+		};
+
 		mBox = mSpoiler->GetInternalWidget("mainLayout/container/layout/box");
 		if (mBox)
 		{

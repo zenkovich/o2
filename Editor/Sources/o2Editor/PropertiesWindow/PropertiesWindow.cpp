@@ -138,6 +138,14 @@ namespace Editor
 
 	void PropertiesWindow::Update(float dt)
 	{
+		mRefreshRemainingTime -= dt;
+		if (mRefreshRemainingTime < 0.0f)
+		{
+			mRefreshRemainingTime = mRefreshDelay;
+			if (mCurrentViewer)
+				mCurrentViewer->Refresh();
+		}
+
 		if (mCurrentViewer)
 			mCurrentViewer->Update(dt);
 	}

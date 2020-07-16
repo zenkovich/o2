@@ -49,7 +49,7 @@ namespace Editor
 		void AddActorPropertiesViewerType(IActorPropertiesViewer* viewer);
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(ActorViewer);
 

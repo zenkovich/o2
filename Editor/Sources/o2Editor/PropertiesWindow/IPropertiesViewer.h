@@ -25,6 +25,9 @@ namespace Editor
 		// Returns viewing object type
 		virtual const Type* GetViewingObjectType() const;
 
+		// Refreshes viewing properties
+		virtual void Refresh();
+
 		IOBJECT(IPropertiesViewer);
 
 	protected:
@@ -64,6 +67,7 @@ CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);

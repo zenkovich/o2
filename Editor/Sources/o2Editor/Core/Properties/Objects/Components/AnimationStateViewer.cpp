@@ -133,8 +133,10 @@ namespace Editor
 
 	void AnimationStateViewer::OnAnimationUpdated(float time)
 	{
-		mTimeProgress->value = mSubscribedPlayer->GetLoopTime()/mSubscribedPlayer->GetDuration();
-		mPlayPause->value = mSubscribedPlayer->IsPlaying();
+		if (mSubscribedPlayer) {
+			mTimeProgress->value = mSubscribedPlayer->GetLoopTime()/mSubscribedPlayer->GetDuration();
+			mPlayPause->value = mSubscribedPlayer->IsPlaying();
+		}
 	}
 
 }

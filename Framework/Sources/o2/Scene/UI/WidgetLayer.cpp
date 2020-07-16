@@ -10,7 +10,12 @@ namespace o2
 	WidgetLayer::WidgetLayer() :
 		layout(this), mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mDrawable(nullptr)
-	{}
+	{
+#if IS_EDITOR
+		Scene::RegEditableObject(this);
+		o2Scene.OnObjectCreated(this);
+#endif
+	}
 
 	WidgetLayer::WidgetLayer(const WidgetLayer& other) :
 		mDepth(other.mDepth), name(other.name), layout(this, other.layout), mTransparency(other.mTransparency),
@@ -22,6 +27,11 @@ namespace o2
 
 		for (auto child : other.mChildren)
 			AddChild(child->CloneAs<WidgetLayer>());
+
+#if IS_EDITOR
+		Scene::RegEditableObject(this);
+		o2Scene.OnObjectCreated(this);
+#endif
 	}
 
 	WidgetLayer::~WidgetLayer()

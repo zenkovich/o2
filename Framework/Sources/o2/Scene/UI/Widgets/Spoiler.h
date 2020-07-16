@@ -57,6 +57,9 @@ namespace o2
 		// Returns head's height
 		float GetHeadHeight() const;
 
+		// Searches expand button by name and type
+		Button* GetExpandButton() const;
+
 		SERIALIZABLE(Spoiler);
 
 	protected:
@@ -87,9 +90,6 @@ namespace o2
 
 		// Checks is expand button exist and sets click callback, searching caption layer
 		void InitializeControls();
-
-		// Searches expand button by name and type
-		Button* FindExpandButton() const;
 
 		// Returns is spoiler fully expanded and not animating
 		bool IsFullyExpanded() const;
@@ -128,6 +128,7 @@ CLASS_METHODS_META(o2::Spoiler)
 	PUBLIC_FUNCTION(const WString&, GetCaption);
 	PUBLIC_FUNCTION(void, SetHeadHeight, float);
 	PUBLIC_FUNCTION(float, GetHeadHeight);
+	PUBLIC_FUNCTION(Button*, GetExpandButton);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
@@ -135,7 +136,6 @@ CLASS_METHODS_META(o2::Spoiler)
 	PROTECTED_FUNCTION(void, CreateExpandAnimation);
 	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
 	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(Button*, FindExpandButton);
 	PROTECTED_FUNCTION(bool, IsFullyExpanded);
 	PROTECTED_FUNCTION(bool, IsFullyCollapsed);
 }

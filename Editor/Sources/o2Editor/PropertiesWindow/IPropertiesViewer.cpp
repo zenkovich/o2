@@ -16,6 +16,8 @@ namespace Editor
 		return nullptr;
 	}
 
+	void IPropertiesViewer::Refresh()
+	{}
 }
 
 DECLARE_CLASS(Editor::IPropertiesViewer);

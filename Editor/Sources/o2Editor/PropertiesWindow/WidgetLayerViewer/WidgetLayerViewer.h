@@ -41,7 +41,7 @@ namespace Editor
 		void SetActorPropertiesViewer(IWidgetLayerPropertiesViewer* viewer);
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(WidgetLayerViewer);
 

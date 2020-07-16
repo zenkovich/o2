@@ -139,6 +139,11 @@ namespace o2
 		}
 	}
 
+	void WidgetState::OnAnimationChanged()
+	{
+		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+	}
+
 	WidgetState& WidgetState::operator=(bool state)
 	{
 		SetState(state);

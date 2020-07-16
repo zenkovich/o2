@@ -86,7 +86,11 @@ namespace o2
 		bool    mState = false;   // Current state @SERIALIZABLE
 		Widget* mOwner = nullptr; // Owner widget pointer
 
-		AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY
+		AnimationAssetRef mAnimation; // Widget animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
+
+	protected:
+		// It is called when animation changed from editor
+		void OnAnimationChanged();
 
 		friend class Widget;
 	};
@@ -111,7 +115,7 @@ CLASS_FIELDS_META(o2::WidgetState)
 	PUBLIC_FIELD(onStateBecomesFalse);
 	PROTECTED_FIELD(mState).DEFAULT_VALUE(false).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mOwner).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAnimation).EDITOR_PROPERTY_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mAnimation).EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetState)
@@ -126,5 +130,6 @@ CLASS_METHODS_META(o2::WidgetState)
 	PUBLIC_FUNCTION(void, SetStateForcible, bool);
 	PUBLIC_FUNCTION(bool, GetState);
 	PUBLIC_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, OnAnimationChanged);
 }
 END_META;

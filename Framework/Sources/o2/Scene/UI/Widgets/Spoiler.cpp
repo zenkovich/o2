@@ -64,7 +64,7 @@ namespace o2
 		if (expand)
 			onExpand();
 
-		auto expandBtn = FindExpandButton();
+		auto expandBtn = GetExpandButton();
 		if (expandBtn)
 			expandBtn->SetState("expanded", expand);
 
@@ -206,7 +206,7 @@ namespace o2
 	void Spoiler::InitializeControls()
 	{
 		auto textLayer = GetLayerDrawable<Text>("caption");
-		auto expandBtn = FindExpandButton();
+		auto expandBtn = GetExpandButton();
 
 		if (expandBtn)
 		{
@@ -217,15 +217,9 @@ namespace o2
 		}
 	}
 
-	Button* Spoiler::FindExpandButton() const
+	Button* Spoiler::GetExpandButton() const
 	{
-		auto expandBtn = mInternalWidgets.FindOrDefault(
-			[](Widget* x) { return x->GetName() == "expand" && x->GetType() == TypeOf(Button); });
-
-		if (expandBtn)
-			return dynamic_cast<Button*>(expandBtn);
-
-		return nullptr;
+		return FindInternalWidgetByType<Button>("expand");
 	}
 
 	bool Spoiler::IsFullyExpanded() const

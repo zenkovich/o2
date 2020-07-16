@@ -67,6 +67,9 @@ namespace Editor
 		Function<void()> mOnTargetsChangedDelegate; // It is called when targets array changing
 		bool             mTargetsChanged = false;   // True when targets was changed    
 
+		float mRefreshDelay = 0.5f;         // Values refreshing delay
+		float mRefreshRemainingTime = 0.5f; // Time to next values refreshing
+
 	protected:
 		// Initializes window
 		void InitializeWindow();
@@ -99,6 +102,8 @@ CLASS_FIELDS_META(Editor::PropertiesWindow)
 	PROTECTED_FIELD(mDefaultViewer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mOnTargetsChangedDelegate);
 	PROTECTED_FIELD(mTargetsChanged).DEFAULT_VALUE(false);
+	PROTECTED_FIELD(mRefreshDelay).DEFAULT_VALUE(0.5f);
+	PROTECTED_FIELD(mRefreshRemainingTime).DEFAULT_VALUE(0.5f);
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertiesWindow)

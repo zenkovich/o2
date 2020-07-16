@@ -639,6 +639,8 @@ namespace Editor
 
 	void AssetsIconsScrollArea::InstantiateDraggingAssets()
 	{
+		PushEditorScopeOnStack scope;
+
 		for (auto sel : mSelectedAssets)
 		{
 			Actor* actor = InstantiateAsset(*sel);

@@ -20,7 +20,7 @@ namespace Editor
 		~DefaultPropertiesViewer();
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(DefaultPropertiesViewer);
 
