@@ -491,7 +491,7 @@ namespace Editor
 						proxies[0].first->GetValuePtr(&objectPtr);
 						String name = nameField->GetValue<String>(objectPtr);
 						if (!name.IsEmpty())
-							propertyDef->SetCaption(name);
+							propertyDef->SetCaption("#" + propertyDef->GetValuePath() + " - " + name);
 
 						return;
 					}
