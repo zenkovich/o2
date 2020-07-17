@@ -74,7 +74,7 @@ namespace Editor
 
 	void EditorApplication::SetPlaying(bool playing)
 	{
-		PushEditorScopeOnStack scope;
+		ForcePopEditorScopeOnStack scope;
 
 		if (playing == mIsPlaying)
 			return;
@@ -85,7 +85,10 @@ namespace Editor
 			o2Scene.Save(mSceneDump);
 		}
 		else
+		{
+			o2EditorSceneScreen.ClearSelection();
 			o2Scene.Load(mSceneDump);
+		}
 
 		mIsPlaying = playing;
 	}

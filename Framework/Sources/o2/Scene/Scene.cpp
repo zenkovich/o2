@@ -365,6 +365,9 @@ namespace o2
 
 	void Scene::Load(const DataDocument& doc, bool append /*= false*/)
 	{
+		if (!append)
+			Clear();
+
 		auto& layersNode = doc.GetMember("Layers");
 		for (auto& layerNode : layersNode)
 		{

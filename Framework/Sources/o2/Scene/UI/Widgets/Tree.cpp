@@ -788,6 +788,9 @@ namespace o2
 
 	void Tree::OnObjectsChanged(const Vector<void*>& objects)
 	{
+		if (mIsNeedUpdateView)
+			return;
+
 		for (auto object : objects)
 		{
 			int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
