@@ -156,6 +156,8 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create UI/Empty layer", [&]() { CreateObject<WidgetLayer>("Layer"); });
 		mTreeContextMenu->AddItem("Create UI/Sprite layer", [&]()
 		{
+			ForcePopEditorScopeOnStack scope;
+
 			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->SetDrawable(mnew Sprite());
 			newLayer->name = "Sprite";
@@ -164,6 +166,8 @@ namespace Editor
 
 		mTreeContextMenu->AddItem("Create UI/Text layer", [&]()
 		{
+			ForcePopEditorScopeOnStack scope;
+
 			WidgetLayer* newLayer = mnew WidgetLayer();
 			newLayer->SetDrawable(mnew Text());
 			newLayer->name = "Text";
@@ -415,6 +419,8 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateNewPressed()
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (!mSceneTree->IsFocused())
 			return;
 
@@ -425,6 +431,8 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateSprite()
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (!mSceneTree->IsFocused())
 			return;
 
@@ -468,6 +476,8 @@ namespace Editor
 
 	void TreeWindow::OnContextPastePressed()
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		if (!mSceneTree->IsFocused())
 			return;
 
