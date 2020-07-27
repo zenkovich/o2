@@ -53,7 +53,7 @@ namespace o2
 		SERIALIZABLE(SceneDrawable);
 
 	protected:
-		SceneLayer* mLayer = nullptr;     // Scene layer, where this will be drawn @EXCLUDE_POINTER_SEARCH
+		SceneLayer* mLayer = nullptr;     // Scene layer, where this will be drawn 
 		bool        mIsOnScene = false;   // Is drawable on scene
 		float       mDrawingDepth = 0.0f; // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
 

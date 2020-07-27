@@ -318,7 +318,7 @@ namespace o2
 	{
 		onOpened();
 	}
-
+	 
 	void Window::OnDisabled()
 	{
 		onClosed();

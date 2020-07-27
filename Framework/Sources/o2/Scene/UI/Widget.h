@@ -258,7 +258,7 @@ namespace o2
 		Vector<WidgetLayer*> mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 		Vector<WidgetState*> mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
 
-		Widget*         mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null @EXCLUDE_POINTER_SEARCH
+		Widget*         mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null 
 		Vector<Widget*> mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 		Vector<Widget*> mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 		Vector<Widget*> mDrawingChildren;        // Children widgets, which drawing depth isn't overridden @DONT_DELETE @DEFAULT_TYPE(o2::Widget)

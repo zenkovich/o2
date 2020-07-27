@@ -25,7 +25,7 @@ namespace o2
 		mDrawingDepth = other.mDrawingDepth;
 
 		if (mLayer)
-			mLayer->DrawableDepthChanged(this);
+			mLayer->OnDrawableDepthChanged(this);
 
 		return *this;
 	}
@@ -40,7 +40,7 @@ namespace o2
 		mDrawingDepth = depth;
 
 		if (mLayer)
-			mLayer->DrawableDepthChanged(this);
+			mLayer->OnDrawableDepthChanged(this);
 	}
 
 	float SceneDrawable::GetDrawingDepth() const

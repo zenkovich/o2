@@ -43,9 +43,9 @@ namespace o2
 		if (lastResEnabled != mResEnabled && mLayer)
 		{
 			if (mResEnabled)
-				mLayer->DrawableEnabled(this);
+				mLayer->OnDrawableEnabled(this);
 			else
-				mLayer->DrawableDisabled(this);
+				mLayer->OnDrawableDisabled(this);
 		}
 	}
 

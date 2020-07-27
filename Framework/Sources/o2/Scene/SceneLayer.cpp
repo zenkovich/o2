@@ -7,6 +7,22 @@
 
 namespace o2
 {
+	void SceneLayer::SetName(const String& name)
+	{
+		String oldName = mName;
+		mName = name;
+
+		o2Scene.OnLayerRenamed(this, oldName);
+
+		for (auto actor : mActors)
+			actor->mLayerName = name;
+	}
+
+	const String& SceneLayer::GetName() const
+	{
+		return mName;
+	}
+
 	const Vector<Actor*>& SceneLayer::GetActors() const
 	{
 		return mActors;
@@ -27,25 +43,45 @@ namespace o2
 		return mEnabledDrawables;
 	}
 
+	void SceneLayer::RegisterActor(Actor* actor)
+	{
+		mActors.Add(actor);
+	}
+
+	void SceneLayer::UnregisterActor(Actor* actor)
+	{
+		mActors.Remove(actor);
+	}
+
+	void SceneLayer::OnActorEnabled(Actor* actor)
+	{
+		mEnabledActors.Add(actor);
+	}
+
+	void SceneLayer::OnActorDisabled(Actor* actor)
+	{
+		mEnabledActors.Remove(actor);
+	}
+
 	void SceneLayer::RegisterDrawable(SceneDrawable* drawable)
 	{
 		mDrawables.Add(drawable);
-		DrawableEnabled(drawable);
+		OnDrawableEnabled(drawable);
 	}
 
 	void SceneLayer::UnregisterDrawable(SceneDrawable* drawable)
 	{
-		DrawableDisabled(drawable);
+		OnDrawableDisabled(drawable);
 		mDrawables.Remove(drawable);
 	}
 
-	void SceneLayer::DrawableDepthChanged(SceneDrawable* drawable)
+	void SceneLayer::OnDrawableDepthChanged(SceneDrawable* drawable)
 	{
-		DrawableDisabled(drawable);
-		DrawableEnabled(drawable);
+		OnDrawableDisabled(drawable);
+		OnDrawableEnabled(drawable);
 	}
 
-	void SceneLayer::DrawableEnabled(SceneDrawable* drawable)
+	void SceneLayer::OnDrawableEnabled(SceneDrawable* drawable)
 	{
 		const int binSearchRangeSizeStop = 5;
 		int rangeMin = 0, rangeMax = mEnabledDrawables.Count();
@@ -81,14 +117,14 @@ namespace o2
 		mEnabledDrawables.Insert(drawable, position);
 	}
 
-	void SceneLayer::DrawableDisabled(SceneDrawable* drawable)
+	void SceneLayer::OnDrawableDisabled(SceneDrawable* drawable)
 	{
 		mEnabledDrawables.Remove(drawable);
 	}
 
 	void SceneLayer::SetLastByDepth(SceneDrawable* drawable)
 	{
-		DrawableDisabled(drawable);
+		OnDrawableDisabled(drawable);
 
 		for (int position = 0; position < mEnabledDrawables.Count(); position++)
 		{

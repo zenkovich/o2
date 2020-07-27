@@ -59,7 +59,10 @@ namespace o2
 		void RemoveLayer(const String& name, bool removeActors = true);
 
 		// Returns layers array
-		Vector<SceneLayer*>& GetLayers();
+		const Vector<SceneLayer*>& GetLayers() const;
+
+		// Returns layers map by name
+		const Map<String, SceneLayer*>& GetLayersMap() const;
 
 		// Returns tag with name
 		Tag* GetTag(const String& name) const;
@@ -106,7 +109,7 @@ namespace o2
 		Vector<_type>* FindAllActorsComponents();
 
 		// Removes all actors
-		void Clear();
+		void Clear(bool keepDefaultLayer = true);
 
 		// Clears assets cache
 		void ClearCache();
@@ -147,12 +150,16 @@ namespace o2
 		IOBJECT(Scene);
 
 	protected:
-		Vector<Actor*>        mRootActors;   // Scene root actors		
-		Vector<Actor*>        mAllActors;    // All scene actors
-		Vector<SceneLayer*>   mLayers;       // Scene layers
-		Vector<Tag*>          mTags;         // Scene tags
-		SceneLayer*           mDefaultLayer; // Default scene layer
-		Vector<ActorAssetRef> mCache;        // Cached actors assets
+		Vector<Actor*> mRootActors; // Scene root actors		
+		Vector<Actor*> mAllActors;  // All scene actors
+
+		Map<String, SceneLayer*> mLayersMap;    // Layers by names map
+		Vector<SceneLayer*>      mLayers;       // Scene layers
+		SceneLayer*              mDefaultLayer; // Default scene layer
+
+		Vector<Tag*> mTags; // Scene tags
+
+		Vector<ActorAssetRef> mCache; // Cached actors assets
 
 		Vec2F       mSceneViewSize = Vec2F(1024, 768);             // Scene view size
 		ISceneView* mSceneView = mnew ScreenResolutionSceneView(); // Scene view
@@ -173,9 +180,13 @@ namespace o2
 		// It is called when actor is destroying - removes from root and all actors lists, unregisters in editor tools
 		static void OnActorDestroying(Actor* actor);
 
+		// It is called when scene layer renamed, updates layers map
+		static void OnLayerRenamed(SceneLayer* layer, const String& oldName);
+
 		friend class Actor;
 		friend class Application;
 		friend class DrawableComponent;
+		friend class SceneLayer;
 		friend class Widget;
 		friend class WidgetLayer;
 
@@ -302,9 +313,10 @@ CLASS_FIELDS_META(o2::Scene)
 	PUBLIC_FIELD(onObjectsChanged);
 	PROTECTED_FIELD(mRootActors);
 	PROTECTED_FIELD(mAllActors);
+	PROTECTED_FIELD(mLayersMap);
 	PROTECTED_FIELD(mLayers);
-	PROTECTED_FIELD(mTags);
 	PROTECTED_FIELD(mDefaultLayer);
+	PROTECTED_FIELD(mTags);
 	PROTECTED_FIELD(mCache);
 	PROTECTED_FIELD(mSceneViewSize).DEFAULT_VALUE(Vec2F(1024, 768));
 	PROTECTED_FIELD(mSceneView).DEFAULT_VALUE(mnew ScreenResolutionSceneView());
@@ -318,14 +330,16 @@ END_META;
 CLASS_METHODS_META(o2::Scene)
 {
 
-	typedef Map<ActorAssetRef, Vector<Actor*>>& _tmp1;
+	typedef const Map<String, SceneLayer*>& _tmp1;
+	typedef Map<ActorAssetRef, Vector<Actor*>>& _tmp2;
 
 	PUBLIC_FUNCTION(SceneLayer*, GetLayer, const String&);
 	PUBLIC_FUNCTION(SceneLayer*, GetDefaultLayer);
 	PUBLIC_FUNCTION(SceneLayer*, AddLayer, const String&);
 	PUBLIC_FUNCTION(void, RemoveLayer, SceneLayer*, bool);
 	PUBLIC_FUNCTION(void, RemoveLayer, const String&, bool);
-	PUBLIC_FUNCTION(Vector<SceneLayer*>&, GetLayers);
+	PUBLIC_FUNCTION(const Vector<SceneLayer*>&, GetLayers);
+	PUBLIC_FUNCTION(_tmp1, GetLayersMap);
 	PUBLIC_FUNCTION(Tag*, GetTag, const String&);
 	PUBLIC_FUNCTION(Tag*, AddTag, const String&);
 	PUBLIC_FUNCTION(void, RemoveTag, Tag*);
@@ -338,7 +352,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(Actor*, GetActorByID, SceneUID);
 	PUBLIC_FUNCTION(Actor*, GetAssetActorByID, const UID&);
 	PUBLIC_FUNCTION(Actor*, FindActor, const String&);
-	PUBLIC_FUNCTION(void, Clear);
+	PUBLIC_FUNCTION(void, Clear, bool);
 	PUBLIC_FUNCTION(void, ClearCache);
 	PUBLIC_FUNCTION(void, Load, const String&, bool);
 	PUBLIC_FUNCTION(void, Load, const DataDocument&, bool);
@@ -354,6 +368,7 @@ CLASS_METHODS_META(o2::Scene)
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
 	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
 	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);
+	PROTECTED_STATIC_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	PUBLIC_STATIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
 	PUBLIC_STATIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);
@@ -364,7 +379,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(int, GetObjectHierarchyIdx, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, ReparentEditableObjects, const Vector<SceneEditableObject*>&, SceneEditableObject*, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, CheckChangedObjects);
-	PUBLIC_FUNCTION(_tmp1, GetPrototypesLinksCache);
+	PUBLIC_FUNCTION(_tmp2, GetPrototypesLinksCache);
 	PUBLIC_FUNCTION(void, BeginDrawingScene);
 	PUBLIC_FUNCTION(void, EndDrawingScene);
 	PUBLIC_STATIC_FUNCTION(void, OnObjectCreated, SceneEditableObject*);

@@ -375,9 +375,10 @@ namespace o2
 		SceneUID mId;   // Unique actor id
 		String   mName; // Name of actor
 
-		SceneLayer* mLayer = nullptr; // Scene layer @EXCLUDE_POINTER_SEARCH
+		String      mLayerName;       // Scene layer name
+		SceneLayer* mLayer = nullptr; // Scene layer. Empty when actor isn't on scene
 
-		Actor*         mParent = nullptr; // Parent actor @EXCLUDE_POINTER_SEARCH
+		Actor*         mParent = nullptr; // Parent actor 
 		Vector<Actor*> mChildren;         // Children actors 
 
 		Vector<Component*> mComponents; // Components vector 
@@ -405,7 +406,7 @@ namespace o2
 	protected:
 		// Base actor constructor with transform
 		Actor(ActorTransform* transform, bool isOnScene = true, const String& name = "unnamed", bool enabled = true,
-			  bool resEnabled = true, bool locked = false, bool resLocked = false,
+			  bool resEnabled = true, bool locked = false, bool resLocked = false, const String& layerName = "",
 			  SceneLayer* layer = nullptr, SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
@@ -537,8 +538,8 @@ namespace o2
 		// -----------------------------
 		struct ApplyActorInfo
 		{
-			Actor*    actor;
-			Actor*    matchingChild;
+			Actor*         actor;
+			Actor*         matchingChild;
 			Vector<Actor*> allChildren;
 
 			Vector<Actor**>     actorPointersFields;
@@ -738,6 +739,7 @@ CLASS_FIELDS_META(o2::Actor)
 	PUBLIC_FIELD(onNameChanged);
 	PROTECTED_FIELD(mId);
 	PROTECTED_FIELD(mName);
+	PROTECTED_FIELD(mLayerName);
 	PROTECTED_FIELD(mLayer).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mParent).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mChildren);

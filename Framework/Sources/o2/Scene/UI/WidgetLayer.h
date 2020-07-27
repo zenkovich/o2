@@ -238,9 +238,9 @@ namespace o2
 		RectF mAbsolutePosition; // Result absolute drawable position
 		RectF mInteractableArea; // Interactable area, depends on interactableLayout
 
-		Widget* mOwnerWidget = nullptr; // Owner widget pointer @EXCLUDE_POINTER_SEARCH
+		Widget* mOwnerWidget = nullptr; // Owner widget pointer 
 
-		WidgetLayer*         mParent = nullptr; // Pointer to parent layer @EXCLUDE_POINTER_SEARCH
+		WidgetLayer*         mParent = nullptr; // Pointer to parent layer 
 		Vector<WidgetLayer*> mChildren;         // Children layers @SERIALIZABLE
 
 		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 

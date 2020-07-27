@@ -14,9 +14,12 @@ namespace o2
 	class SceneLayer: public ISerializable
 	{
 	public:
-		String name; // Name of layer @SERIALIZABLE
+		// Sets layer name
+		void SetName(const String& name);
 
-	public:
+		// Returns layer name
+		const String& GetName() const;
+
 		// Returns all actors in layer
 		const Vector<Actor*>& GetActors() const;
 
@@ -32,12 +35,27 @@ namespace o2
 		SERIALIZABLE(SceneLayer);
 
 	protected:
-		Vector<Actor*>         mActors;           // Actors in layer
-		Vector<Actor*>         mEnabledActors;    // Enabled actors
+		String mName; // Name of layer @SERIALIZABLE
+
+		Vector<Actor*>  mActors;        // Actors in layer
+		Vector<Actor*>  mEnabledActors; // Enabled actors
+
 		Vector<SceneDrawable*> mDrawables;        // Drawable objects in layer
 		Vector<SceneDrawable*> mEnabledDrawables; // Enabled drawable objects in layer
 
 	protected:
+		// Registers actor in list
+		void RegisterActor(Actor* actor);
+
+		// Unregisters actor in list
+		void UnregisterActor(Actor* actor);
+
+		// Is is called when actor has enabled
+		void OnActorEnabled(Actor* actor);
+
+		// Is is called when actor has disabled
+		void OnActorDisabled(Actor* actor);
+
 		// Registers drawable object
 		void RegisterDrawable(SceneDrawable* drawable);
 
@@ -45,13 +63,13 @@ namespace o2
 		void UnregisterDrawable(SceneDrawable* drawable);
 
 		// It is called when drawable object depth was changed and sorts all drawable component
-		void DrawableDepthChanged(SceneDrawable* drawable);
+		void OnDrawableDepthChanged(SceneDrawable* drawable);
 
 		// It is called when object was enabled
-		void DrawableEnabled(SceneDrawable* drawable);
+		void OnDrawableEnabled(SceneDrawable* drawable);
 
 		// It is called when object was enabled
-		void DrawableDisabled(SceneDrawable* drawable);
+		void OnDrawableDisabled(SceneDrawable* drawable);
 
 		// Sets drawable order as last of all objects with same depth
 		void SetLastByDepth(SceneDrawable* drawable);
@@ -87,7 +105,7 @@ CLASS_BASES_META(o2::SceneLayer)
 END_META;
 CLASS_FIELDS_META(o2::SceneLayer)
 {
-	PUBLIC_FIELD(name).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mActors);
 	PROTECTED_FIELD(mEnabledActors);
 	PROTECTED_FIELD(mDrawables);
@@ -97,15 +115,21 @@ END_META;
 CLASS_METHODS_META(o2::SceneLayer)
 {
 
+	PUBLIC_FUNCTION(void, SetName, const String&);
+	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(const Vector<Actor*>&, GetActors);
 	PUBLIC_FUNCTION(const Vector<Actor*>&, GetEnabledActors);
 	PUBLIC_FUNCTION(const Vector<SceneDrawable*>&, GetDrawables);
 	PUBLIC_FUNCTION(const Vector<SceneDrawable*>&, GetEnabledDrawables);
+	PROTECTED_FUNCTION(void, RegisterActor, Actor*);
+	PROTECTED_FUNCTION(void, UnregisterActor, Actor*);
+	PROTECTED_FUNCTION(void, OnActorEnabled, Actor*);
+	PROTECTED_FUNCTION(void, OnActorDisabled, Actor*);
 	PROTECTED_FUNCTION(void, RegisterDrawable, SceneDrawable*);
 	PROTECTED_FUNCTION(void, UnregisterDrawable, SceneDrawable*);
-	PROTECTED_FUNCTION(void, DrawableDepthChanged, SceneDrawable*);
-	PROTECTED_FUNCTION(void, DrawableEnabled, SceneDrawable*);
-	PROTECTED_FUNCTION(void, DrawableDisabled, SceneDrawable*);
+	PROTECTED_FUNCTION(void, OnDrawableDepthChanged, SceneDrawable*);
+	PROTECTED_FUNCTION(void, OnDrawableEnabled, SceneDrawable*);
+	PROTECTED_FUNCTION(void, OnDrawableDisabled, SceneDrawable*);
 	PROTECTED_FUNCTION(void, SetLastByDepth, SceneDrawable*);
 }
 END_META;

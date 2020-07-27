@@ -33,7 +33,7 @@ namespace o2
 			node["Locked"] = mLocked;
 
 		if (mLayer != proto->mLayer)
-			node["LayerName"] = mLayer->name;
+			node["LayerName"] = mLayer->mName;
 
 		// Transform data
 		auto transformNode = node.AddMember("Transform");

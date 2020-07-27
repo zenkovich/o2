@@ -59,7 +59,7 @@ namespace Editor
 			}
 			else
 			{
-				mDropDown->value = mCommonValue->name;
+				mDropDown->value = mCommonValue->GetName();
 				mDropDown->SetState("undefined", false);
 			}
 		}
@@ -73,14 +73,14 @@ namespace Editor
 		auto dropdownLayers = mDropDown->GetAllItemsText();
 		for (auto itemName : dropdownLayers)
 		{
-			if (!layers.Contains([&](SceneLayer* x) { return x->name == itemName; }))
+			if (!layers.Contains([&](SceneLayer* x) { return x->GetName() == itemName; }))
 				mDropDown->RemoveItem(itemName);
 		}
 
 		for (auto layer : layers)
 		{
-			if (!dropdownLayers.Contains(layer->name))
-				mDropDown->AddItem(layer->name);
+			if (!dropdownLayers.Contains(layer->GetName()))
+				mDropDown->AddItem(layer->GetName());
 		}
 	}
 

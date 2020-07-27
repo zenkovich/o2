@@ -308,7 +308,7 @@ namespace o2
 
 		bool drivenByParent = false; // Is layout controlling by parent
 
-		Widget* owner = nullptr; // owner widget pointer @EXCLUDE_POINTER_SEARCH
+		Widget* owner = nullptr; // owner widget pointer 
 
 		SERIALIZABLE(WidgetLayoutData);
 	};

@@ -21,7 +21,7 @@ namespace o2
 	{
 	public:
 		PROPERTIES(ActorTransform);
-		GETTER(Actor*, actor, GetOwnerActor); // Owner actor getter @EXCLUDE_POINTER_SEARCH
+		GETTER(Actor*, actor, GetOwnerActor); // Owner actor getter 
 
 		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
 		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
@@ -482,7 +482,7 @@ namespace o2
 		Basis parentTransform;               // Parent world transform
 		int   parentInvTransformActualFrame; // last mParentInvertedTransform actual frame index
 
-		Actor* owner = nullptr; // Owner actor @EXCLUDE_POINTER_SEARCH
+		Actor* owner = nullptr; // Owner actor 
 
 		SERIALIZABLE(ActorTransformData);
 	};

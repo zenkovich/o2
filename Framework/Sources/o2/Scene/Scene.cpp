@@ -175,9 +175,16 @@ namespace o2
 #endif
 	}
 
+	void Scene::OnLayerRenamed(SceneLayer* layer, const String& oldName)
+	{
+		Instance().mLayersMap.Remove(oldName);
+		Instance().mLayersMap[layer->GetName()] = layer;
+	}
+
 	SceneLayer* Scene::GetLayer(const String& name)
 	{
-		if (auto layer = mLayers.FindOrDefault([&](auto x) { return x->name == name; }))
+		SceneLayer* layer = nullptr;
+		if (mLayersMap.TryGetValue(name, layer))
 			return layer;
 
 		return AddLayer(name);
@@ -190,12 +197,15 @@ namespace o2
 
 	SceneLayer* Scene::AddLayer(const String& name)
 	{
-		if (auto layer = mLayers.FindOrDefault([&](auto x) { return x->name == name; }))
+		SceneLayer* layer = nullptr;
+		if (mLayersMap.TryGetValue(name, layer))
 			return layer;
 
 		SceneLayer* newLayer = mnew SceneLayer();
-		newLayer->name = name;
+		newLayer->mName = name;
 		mLayers.Add(newLayer);
+		mLayersMap[name] = newLayer;
+
 		return newLayer;
 	}
 
@@ -212,6 +222,7 @@ namespace o2
 		}
 
 		mLayers.Remove(layer);
+		mLayersMap.Remove(layer->mName);
 
 		delete layer;
 	}
@@ -255,9 +266,14 @@ namespace o2
 		RemoveTag(GetTag(name));
 	}
 
-	Vector<SceneLayer*>& Scene::GetLayers()
+	const Vector<SceneLayer*>& Scene::GetLayers()const
 	{
 		return mLayers;
+	}
+
+	const Map<String, SceneLayer*>& Scene::GetLayersMap() const
+	{
+		return mLayersMap;
 	}
 
 	const Vector<Tag*>& Scene::GetTags() const
@@ -322,7 +338,7 @@ namespace o2
 		return nullptr;
 	}
 
-	void Scene::Clear()
+	void Scene::Clear(bool keepDefaultLayer /*= true*/)
 	{
 		auto allActors = mRootActors;
 		for (auto actor : allActors)
@@ -332,8 +348,10 @@ namespace o2
 			delete layer;
 
 		mLayers.Clear();
+		mLayersMap.Clear();
 
-		mDefaultLayer = AddLayer("Default");
+		if (keepDefaultLayer)
+			mDefaultLayer = AddLayer("Default");
 
 		for (auto tag : mTags)
 			delete tag;
@@ -350,13 +368,6 @@ namespace o2
 	{
 		ActorDataValueConverter::Instance().LockPointersResolving();
 
-		if (!append)
-		{
-			Clear();
-			delete mDefaultLayer;
-			mLayers.Clear();
-		}
-
 		DataDocument data;
 		data.LoadFromFile(path);
 
@@ -366,7 +377,7 @@ namespace o2
 	void Scene::Load(const DataDocument& doc, bool append /*= false*/)
 	{
 		if (!append)
-			Clear();
+			Clear(false);
 
 		auto& layersNode = doc.GetMember("Layers");
 		for (auto& layerNode : layersNode)
@@ -374,6 +385,7 @@ namespace o2
 			auto layer = mnew SceneLayer();
 			layer->Deserialize(layerNode);
 			mLayers.Add(layer);
+			mLayersMap[layer->mName] = layer;
 		}
 
 		mDefaultLayer = GetLayer(doc.GetMember("DefaultLayer"));
@@ -405,7 +417,7 @@ namespace o2
 		for (auto layer : mLayers)
 			layer->Serialize(layersNode.AddElement());
 
-		doc.AddMember("DefaultLayer") = mDefaultLayer->name;
+		doc.AddMember("DefaultLayer") = mDefaultLayer->mName;
 
 		auto& tagsNode = doc.AddMember("Tags");
 		for (auto tag : mTags)

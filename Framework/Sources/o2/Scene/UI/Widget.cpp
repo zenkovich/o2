@@ -12,7 +12,7 @@
 
 namespace o2
 {
-	Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -27,7 +27,7 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	Widget::Widget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Widget::Widget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -41,7 +41,7 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	Widget::Widget(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Widget::Widget(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -56,9 +56,9 @@ namespace o2
 		layout->SetOwner(this);
 	}
 
-	Widget::Widget(const Widget& other) :
+	Widget::Widget(const Widget& other):
 		Actor(mnew WidgetLayout(*other.layout), other), layout(dynamic_cast<WidgetLayout*>(transform)),
-		mTransparency(other.mTransparency), transparency(this), resTransparency(this), 
+		mTransparency(other.mTransparency), transparency(this), resTransparency(this),
 		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
@@ -240,7 +240,7 @@ namespace o2
 	{
 		if (!mResEnabledInHierarchy || mIsClipped)
 		{
-			if (mIsClipped) 
+			if (mIsClipped)
 			{
 				for (auto child : mDrawingChildren)
 					child->Draw();
@@ -336,7 +336,7 @@ namespace o2
 	}
 
 	WidgetLayer* Widget::AddLayer(const String& name, IRectDrawable* drawable,
-									  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+								  const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mDrawingLayers.Count();
@@ -1019,7 +1019,7 @@ namespace o2
 	void Widget::UpdateChildWidgetsList()
 	{
 		mChildWidgets.Clear();
-		for (auto child : mChildren) 
+		for (auto child : mChildren)
 		{
 			if (auto widget = dynamic_cast<Widget*>(child))
 				mChildWidgets.Add(widget);
@@ -1145,12 +1145,16 @@ namespace o2
 			if (mResEnabledInHierarchy)
 			{
 				onShow();
-				mLayer->mEnabledActors.Add(this);
+
+				if (mLayer)
+					mLayer->RegisterActor(this);
 			}
 			else
 			{
 				onHide();
-				mLayer->mEnabledActors.Remove(this);
+
+				if (mLayer)
+					mLayer->UnregisterActor(this);
 			}
 
 			layout->SetDirty(false);
@@ -1329,7 +1333,7 @@ namespace o2
 	SceneEditableObject* Widget::GetEditableParent() const
 	{
 		if (mParentWidget && std::find(mParentWidget->mInternalWidgets.begin(),
-									   mParentWidget->mInternalWidgets.end(), this) != mParentWidget->mInternalWidgets.end())
+			mParentWidget->mInternalWidgets.end(), this) != mParentWidget->mInternalWidgets.end())
 		{
 			return &mParentWidget->internalChildrenEditable;
 		}
@@ -1404,7 +1408,7 @@ namespace o2
 	Widget::LayersEditable::LayersEditable()
 	{}
 
-	Widget::LayersEditable::LayersEditable(Widget* widget) :
+	Widget::LayersEditable::LayersEditable(Widget* widget):
 		mWidget(widget)
 	{}
 
@@ -1432,7 +1436,7 @@ namespace o2
 	}
 
 	o2::SceneEditableObject* Widget::LayersEditable::GetEditableParent() const
-{
+	{
 		return dynamic_cast<SceneEditableObject*>(mWidget);
 	}
 
@@ -1461,7 +1465,7 @@ namespace o2
 	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
 	{}
 
-	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(Widget* widget) :
+	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(Widget* widget):
 		mWidget(widget)
 	{}
 
@@ -1489,7 +1493,7 @@ namespace o2
 	}
 
 	o2::SceneEditableObject* Widget::InternalChildrenEditableEditable::GetEditableParent() const
-{
+	{
 		return dynamic_cast<SceneEditableObject*>(mWidget);
 	}
 
