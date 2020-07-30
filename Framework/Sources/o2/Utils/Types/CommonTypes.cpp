@@ -141,3 +141,11 @@ ENUM_META(o2::Loop)
 	ENUM_ENTRY(Repeat);
 }
 END_ENUM_META;
+
+ENUM_META(o2::Units)
+{
+	ENUM_ENTRY(Centimeters);
+	ENUM_ENTRY(Inches);
+	ENUM_ENTRY(Pixels);
+}
+END_ENUM_META;

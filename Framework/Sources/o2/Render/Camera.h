@@ -13,6 +13,9 @@ namespace o2
 	class Camera: public Transform
 	{
 	public:
+		enum class Type { Default, FixedSize, FittedSize, PhysicalCorrect };
+
+	public:
 		// Default constructor
 		Camera();
 
@@ -27,6 +30,15 @@ namespace o2
 
 		// Returns default camera
 		static Camera Default();
+
+		// Returns camera with fixed size
+		static Camera FixedSize(const Vec2F& size);
+
+		// Returns camera with fixed aspect
+		static Camera FittedSize(const Vec2F& size);
+
+		// Returns camera with physical correct units
+		static Camera PhysicalCorrect(Units units);
 
 		SERIALIZABLE(Camera);
 	};
@@ -45,5 +57,8 @@ CLASS_METHODS_META(o2::Camera)
 {
 
 	PUBLIC_STATIC_FUNCTION(Camera, Default);
+	PUBLIC_STATIC_FUNCTION(Camera, FixedSize, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(Camera, FittedSize, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(Camera, PhysicalCorrect, Units);
 }
 END_META;

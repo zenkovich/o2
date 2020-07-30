@@ -35,6 +35,39 @@ namespace o2
 		return Camera();
 	}
 
+	Camera Camera::FixedSize(const Vec2F& size)
+	{		
+		return Camera(Vec2F(), size);
+	}
+
+	Camera Camera::FittedSize(const Vec2F& size)
+	{
+		Vec2F resolution = o2Render.GetCurrentResolution();
+
+		Vec2F scaledResolution = resolution*(size.x/resolution.x); 
+		if (scaledResolution.y < size.y)
+			scaledResolution = resolution*(size.y/resolution.y);
+
+		return Camera(Vec2F(), scaledResolution);
+	}
+
+	Camera Camera::PhysicalCorrect(Units units)
+	{
+		Vec2F resolution = o2Render.GetCurrentResolution();
+		Vec2F dpi = o2Render.GetDPI();
+		float inchesInCentimeter = 2.5400013716f;
+
+		Vec2F pixelsInUnit(1.0f, 1.0f);
+		if (units == Units::Inches)
+			pixelsInUnit = dpi;
+		else if (units == Units::Centimeters)
+			pixelsInUnit = dpi/inchesInCentimeter;
+		else if (units == Units::Millimeters)
+			pixelsInUnit = dpi/inchesInCentimeter/10.0f;
+
+		return Camera(Vec2F(), resolution/pixelsInUnit);
+	}
+
 }
 
 DECLARE_CLASS(o2::Camera);

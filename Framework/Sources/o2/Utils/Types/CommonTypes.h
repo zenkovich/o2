@@ -48,6 +48,8 @@ namespace o2
 	enum class PixelFormat { R8G8B8A8, R8G8B8 };
 
 	enum class Loop { None, Repeat, PingPong };
+
+	enum class Units { Pixels, Centimeters, Millimeters, Inches };
 }
 
 PRE_ENUM_META(o2::BaseCorner);
@@ -77,3 +79,5 @@ PRE_ENUM_META(o2::PrimitiveType);
 PRE_ENUM_META(o2::PixelFormat);
 
 PRE_ENUM_META(o2::Loop);
+
+PRE_ENUM_META(o2::Units);

@@ -58,7 +58,8 @@ namespace Editor
 		o2Render.BindRenderTexture(mRenderTarget);
 
 		o2Render.Clear();
-		o2Render.SetCamera(Camera());
+		//o2Render.SetCamera(Camera());
+		o2Render.SetCamera(Camera::FittedSize(Vec2F(800, 600)));
 		mListenersLayer.OnBeginDraw();
 
 		int editorDepth = EditorScope::GetDepth();
