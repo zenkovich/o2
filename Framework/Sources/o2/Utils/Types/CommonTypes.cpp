@@ -146,6 +146,7 @@ ENUM_META(o2::Units)
 {
 	ENUM_ENTRY(Centimeters);
 	ENUM_ENTRY(Inches);
+	ENUM_ENTRY(Millimeters);
 	ENUM_ENTRY(Pixels);
 }
 END_ENUM_META;

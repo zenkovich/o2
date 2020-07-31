@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Assets/Types/ActorAsset.h"
-#include "o2/Scene/SceneView.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/Containers/Vector.h"
@@ -15,6 +14,7 @@
 namespace o2
 {
 	class Actor;
+	class CameraActor;
 	class SceneLayer;
 	class Tag;
 
@@ -29,7 +29,6 @@ namespace o2
 	{
 	public:
 		PROPERTIES(Scene);
-		PROPERTY(ISceneView*, sceneView, SetSceneView, GetSceneView);
 
 #if IS_EDITOR
 		Function<void(SceneEditableObject*)> onCreated;                  // Actor creation event
@@ -132,24 +131,14 @@ namespace o2
 		// Updates root actors
 		void Update(float dt);
 
-		// Returns scene view size
-		const Vec2F& GetSceneViewSize() const;
-
-		// Sets scene view size
-		void SetSceneViewSize(const Vec2F& size);
-
-		// Returns scene view
-		ISceneView* GetSceneView() const;
-
-		// Sets scene view
-		void SetSceneView(ISceneView* view);
-
-		// Returns scene local game view size
-		Vec2F GetSceneLocalViewSize() const;
+		// Returns camera
+		CameraActor& GetCamera();
 
 		IOBJECT(Scene);
 
 	protected:
+		CameraActor* mDefaultCamera = nullptr; // Default scene camera
+
 		Vector<Actor*> mRootActors; // Scene root actors		
 		Vector<Actor*> mAllActors;  // All scene actors
 
@@ -160,9 +149,6 @@ namespace o2
 		Vector<Tag*> mTags; // Scene tags
 
 		Vector<ActorAssetRef> mCache; // Cached actors assets
-
-		Vec2F       mSceneViewSize = Vec2F(1024, 768);             // Scene view size
-		ISceneView* mSceneView = mnew ScreenResolutionSceneView(); // Scene view
 
 	protected:
 		// Default constructor
@@ -303,7 +289,6 @@ CLASS_BASES_META(o2::Scene)
 END_META;
 CLASS_FIELDS_META(o2::Scene)
 {
-	PUBLIC_FIELD(sceneView);
 	PUBLIC_FIELD(onCreated);
 	PUBLIC_FIELD(onDestroying);
 	PUBLIC_FIELD(onEnableChanged);
@@ -311,6 +296,7 @@ CLASS_FIELDS_META(o2::Scene)
 	PUBLIC_FIELD(onNameChanged);
 	PUBLIC_FIELD(onChildrenHierarchyChanged);
 	PUBLIC_FIELD(onObjectsChanged);
+	PROTECTED_FIELD(mDefaultCamera).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRootActors);
 	PROTECTED_FIELD(mAllActors);
 	PROTECTED_FIELD(mLayersMap);
@@ -318,8 +304,6 @@ CLASS_FIELDS_META(o2::Scene)
 	PROTECTED_FIELD(mDefaultLayer);
 	PROTECTED_FIELD(mTags);
 	PROTECTED_FIELD(mCache);
-	PROTECTED_FIELD(mSceneViewSize).DEFAULT_VALUE(Vec2F(1024, 768));
-	PROTECTED_FIELD(mSceneView).DEFAULT_VALUE(mnew ScreenResolutionSceneView());
 	PROTECTED_FIELD(mPrototypeLinksCache);
 	PROTECTED_FIELD(mChangedObjects);
 	PROTECTED_FIELD(mEditableObjects);
@@ -360,11 +344,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Save, DataDocument&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(const Vec2F&, GetSceneViewSize);
-	PUBLIC_FUNCTION(void, SetSceneViewSize, const Vec2F&);
-	PUBLIC_FUNCTION(ISceneView*, GetSceneView);
-	PUBLIC_FUNCTION(void, SetSceneView, ISceneView*);
-	PUBLIC_FUNCTION(Vec2F, GetSceneLocalViewSize);
+	PUBLIC_FUNCTION(CameraActor&, GetCamera);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
 	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
 	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);

@@ -1,6 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "GameWindow.h"
 
+#include "o2/Scene/CameraActor.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/EditorApplication.h"
 
@@ -58,8 +59,7 @@ namespace Editor
 		o2Render.BindRenderTexture(mRenderTarget);
 
 		o2Render.Clear();
-		//o2Render.SetCamera(Camera());
-		o2Render.SetCamera(Camera::FittedSize(Vec2F(800, 600)));
+		o2Scene.GetCamera().Setup();
 		mListenersLayer.OnBeginDraw();
 
 		int editorDepth = EditorScope::GetDepth();

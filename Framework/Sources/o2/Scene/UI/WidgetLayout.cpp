@@ -143,8 +143,12 @@ namespace o2
 		RectF parentAnchoredRect(parentRect.Size()*mData->anchorMin,
 								 parentRect.Size()*mData->anchorMax);
 
-		mData->offsetMin = rect.LeftBottom() - parentAnchoredRect.LeftBottom();
-		mData->offsetMax = rect.RightTop() - parentAnchoredRect.RightTop();
+		RectF localRect = rect;
+		if (auto parent = mData->owner->mParent)
+			localRect += parentRect.Size()*parent->transform->mData->pivot;
+
+		mData->offsetMin = localRect.LeftBottom() - parentAnchoredRect.LeftBottom();
+		mData->offsetMax = localRect.RightTop() - parentAnchoredRect.RightTop();
 
 		SetDirty();
 	}
@@ -602,18 +606,21 @@ namespace o2
 
 	void WidgetLayout::SetDirty(bool fromParent /*= false*/)
 	{
-		if (!fromParent && mData->drivenByParent && mData->owner && mData->owner->mParent)
-			mData->owner->mParent->transform->SetDirty(fromParent);
+		if (!fromParent && mData->drivenByParent && mData->owner)
+		{
+			if (auto parent = mData->owner->mParent)
+				parent->transform->SetDirty(fromParent);
+		}
 
 		ActorTransform::SetDirty(fromParent);
 	}
 
 	RectF WidgetLayout::GetParentRectangle() const
 	{
-		if (mData->owner->mParentWidget)
-			return mData->owner->mParentWidget->GetLayoutData().childrenWorldRect;
-		else if (mData->owner->mParent)
-			return mData->owner->mParent->transform->mData->worldRectangle;
+		if (auto parentWidget = mData->owner->mParentWidget)
+			return parentWidget->GetLayoutData().childrenWorldRect;
+		else if (auto parent = mData->owner->mParent)
+			return parent->transform->mData->worldRectangle;
 
 		return RectF();
 	}
@@ -623,20 +630,20 @@ namespace o2
 		RectF parentWorldRect;
 		Vec2F parentWorldPosition;
 
-		if (mData->owner->mParentWidget)
+		if (auto parentWidget = mData->owner->mParentWidget)
 		{
-			parentWorldRect = mData->owner->mParentWidget->GetLayoutData().childrenWorldRect;
+			parentWorldRect = parentWidget->GetLayoutData().childrenWorldRect;
 
-			RectF notWidgetWorldRect = mData->owner->mParentWidget->transform->mData->worldRectangle;
+			RectF notWidgetWorldRect = parentWidget->transform->mData->worldRectangle;
 			parentWorldPosition = notWidgetWorldRect.LeftBottom() +
-				mData->owner->mParentWidget->transform->mData->pivot*notWidgetWorldRect.Size();
+				parentWidget->transform->mData->pivot*notWidgetWorldRect.Size();
 		}
-		else if (mData->owner->mParent)
+		else if (auto parent = mData->owner->mParent)
 		{
-			parentWorldRect = mData->owner->mParent->transform->mData->worldRectangle;
+			parentWorldRect = parent->transform->mData->worldRectangle;
 
 			parentWorldPosition = parentWorldRect.LeftBottom() +
-				mData->owner->mParent->transform->mData->pivot*parentWorldRect.Size();
+				parent->transform->mData->pivot*parentWorldRect.Size();
 		}
 
 		RectF worldRectangle(parentWorldRect.LeftBottom() + mData->offsetMin + mData->anchorMin*parentWorldRect.Size(),
@@ -673,10 +680,10 @@ namespace o2
 	{
 		Vec2F offs;
 
-		if (mData->owner->mParentWidget)
+		if (auto parentWidget = mData->owner->mParentWidget)
 		{
-			offs = mData->owner->mParentWidget->GetLayoutData().childrenWorldRect.LeftBottom() -
-				mData->owner->mParentWidget->GetLayoutData().worldRectangle.LeftBottom();
+			offs = parentWidget->GetLayoutData().childrenWorldRect.LeftBottom() -
+				parentWidget->GetLayoutData().worldRectangle.LeftBottom();
 		}
 
 		SetRect(ActorTransform::GetRect() - offs);

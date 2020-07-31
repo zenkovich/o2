@@ -3,14 +3,15 @@
 
 #include "o2/Application/Input.h"
 #include "o2/Assets/Types/ActorAsset.h"
+#include "o2/Render/Render.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ActorDataValueConverter.h"
+#include "o2/Scene/CameraActor.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/Tags.h"
-#include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widget.h"
-#include "o2/Render/Render.h"
+#include "o2/Scene/UI/WidgetLayout.h"
 
 namespace o2
 {
@@ -19,6 +20,9 @@ namespace o2
 	Scene::Scene()
 	{
 		mDefaultLayer = AddLayer("Default");
+		mDefaultCamera = mnew CameraActor();
+		mDefaultCamera->name = "Camera";
+		mRootActors.Remove(mDefaultCamera);
 	}
 
 	Scene::~Scene()
@@ -31,36 +35,20 @@ namespace o2
 
 	void Scene::Update(float dt)
 	{
+		mDefaultCamera->Update(dt);
+
 		for (auto actor : mRootActors)
 			actor->Update(dt);
+
+		mDefaultCamera->UpdateChildren(dt);
 
 		for (auto actor : mRootActors)
 			actor->UpdateChildren(dt);
 	}
 
-	const Vec2F& Scene::GetSceneViewSize() const
+	CameraActor& Scene::GetCamera()
 	{
-		return mSceneViewSize;
-	}
-
-	void Scene::SetSceneViewSize(const Vec2F& size)
-	{
-		mSceneViewSize = size;
-	}
-
-	ISceneView* Scene::GetSceneView() const
-	{
-		return mSceneView;
-	}
-
-	void Scene::SetSceneView(ISceneView* view)
-	{
-		mSceneView = view;
-	}
-
-	Vec2F Scene::GetSceneLocalViewSize() const
-	{
-		return mSceneView->GetTransform(mSceneViewSize).GetScale();
+		return *mDefaultCamera;
 	}
 
 	void Scene::Draw()

@@ -13,9 +13,6 @@ namespace o2
 	class Camera: public Transform
 	{
 	public:
-		enum class Type { Default, FixedSize, FittedSize, PhysicalCorrect };
-
-	public:
 		// Default constructor
 		Camera();
 

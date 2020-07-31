@@ -217,6 +217,9 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\CameraActorViewer.h">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
 		</ClInclude>
@@ -569,6 +572,9 @@
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Assets</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\CameraActorViewer.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>

@@ -258,6 +258,9 @@ namespace Editor
 	{
 		for (auto object : o2EditorSceneScreen.GetTopSelectedObjects())
 		{
+			if (o2Input.IsKeyDown(VK_CONTROL))
+				o2Debug.Log("asd");
+
 			if (object->GetTransform().GetScale() != Vec2F())
 				object->SetTransform(object->GetTransform()*transform);
 			// 			else

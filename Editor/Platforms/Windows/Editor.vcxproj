@@ -416,6 +416,7 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.h" />
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\CameraActorViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h" />
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.h" />
@@ -535,6 +536,7 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\ObjectViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\AnimationViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Assets\ImageAssetViewer.cpp" />
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\CameraActorViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\Components\AnimationStateViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp" />
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.cpp" />

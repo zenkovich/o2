@@ -1,11 +1,12 @@
 #include "o2Editor/stdafx.h"
 #include "SceneTree.h"
 
-#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/Assets.h"
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/CameraActor.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayer.h"
@@ -14,6 +15,7 @@
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/AssetsWindow/AssetIcon.h"
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
@@ -22,7 +24,6 @@
 #include "o2Editor/Core/Actions/PropertyChange.h"
 #include "o2Editor/Core/Actions/Reparent.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/ActorProperty.h"
 #include "o2Editor/Core/Properties/Basic/ComponentProperty.h"
 #include "o2Editor/Core/UIRoot.h"
@@ -183,7 +184,10 @@ namespace Editor
 		if (mWatchEditor)
 			return EditorUIRoot.GetRootWidget()->GetEditablesChildren().Cast<void*>();
 
-		return o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		Vector<void*> res = o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		res.Add(dynamic_cast<SceneEditableObject*>(&(o2Scene.GetCamera())));
+
+		return res;
 	}
 
 	String SceneTree::GetObjectDebug(void* object)

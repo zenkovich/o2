@@ -189,10 +189,6 @@ namespace o2
 		bool  mCursorInfiniteModeEnabled = false; // Is cursor infinite mode enabled
 		Vec2F mCursorCorrectionDelta;             // Cursor corrections delta - result of infinite cursors offset
 
-		Camera::Type mDefaultCameraType = Camera::Type::Default; // Default camera type. THis camera is used by default when beginning rendering
-		Units        mDefaultCameraUnits = Units::Pixels;        // Physical camera units
-		Vec2F        mDefaultCameraSize;                         // FIxed or fitted camera size
-
 		float mAccumulatedDT = 0.0f; // Accumulated delta time for fixed FPS update
 
 	protected:
