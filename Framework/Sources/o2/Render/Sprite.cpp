@@ -259,6 +259,7 @@ namespace o2
 			case SpriteMode::Default:         mMeshBuildFunc = &Sprite::BuildDefaultMesh; break;
 			case SpriteMode::Sliced:          mMeshBuildFunc = &Sprite::BuildSlicedMesh; break;
 			case SpriteMode::Tiled:           mMeshBuildFunc = &Sprite::BuildTiledMesh; break;
+			case SpriteMode::FixedAspect:     mMeshBuildFunc = &Sprite::BuildFixedAspectMesh; break;
 			case SpriteMode::FillLeftToRight: mMeshBuildFunc = &Sprite::BuildFillLeftToRightMesh; break;
 			case SpriteMode::FillRightToLeft: mMeshBuildFunc = &Sprite::BuildFillRightToLeftMesh; break;
 			case SpriteMode::FillUpToDown:    mMeshBuildFunc = &Sprite::BuildFillUpToDownMesh; break;
@@ -640,6 +641,58 @@ namespace o2
 
 		mMesh->vertexCount = vi;
 		mMesh->polyCount = pi/3;
+	}
+
+	void Sprite::BuildFixedAspectMesh()
+	{
+		Vec2F invTexSize(1.0f, 1.0f);
+		Vec2F texSize(1.0f, 1.0f);
+
+		if (mMesh->mTexture)
+		{
+			texSize = mMesh->mTexture->GetSize();
+			invTexSize.Set(1.0f/texSize.x, 1.0f/texSize.y);
+		}
+
+		ULong rcc[4];
+		for (int i = 0; i < 4; i++)
+			rcc[i] = (mColor*mCornersColors[i]).ABGR();
+
+		static UInt16 indexes[] = { 0, 1, 2, 0, 2, 3 };
+
+		float uvLeft = mTextureSrcRect.left*invTexSize.x;
+		float uvRight = mTextureSrcRect.right*invTexSize.x;
+
+		float uvUp = 1.0f - mTextureSrcRect.bottom*invTexSize.y;
+		float uvDown = 1.0f - mTextureSrcRect.top*invTexSize.y;
+
+		float fy = mSize.x*invTexSize.x*texSize.y;
+		if (fy > mSize.y)
+		{
+			float fx = mSize.y*invTexSize.y*texSize.x;
+			float off = (mSize.x - fx)*0.5f;
+			Vec2F offx = mNonSizedTransform.xv*off;
+
+			mMesh->vertices[0].Set(mTransform.origin + mTransform.yv + offx, rcc[0], uvLeft, uvUp);
+			mMesh->vertices[1].Set(mTransform.origin + mTransform.yv + mTransform.xv - offx, rcc[1], uvRight, uvUp);
+			mMesh->vertices[2].Set(mTransform.origin + mTransform.xv - offx, rcc[2], uvRight, uvDown);
+			mMesh->vertices[3].Set(mTransform.origin + offx, rcc[3], uvLeft, uvDown);
+		}
+		else
+		{
+			float off = (mSize.y - fy)*0.5f;
+			Vec2F offy = mNonSizedTransform.yv*off;
+
+			mMesh->vertices[0].Set(mTransform.origin + mTransform.yv - offy, rcc[0], uvLeft, uvUp);
+			mMesh->vertices[1].Set(mTransform.origin + mTransform.yv + mTransform.xv - offy, rcc[1], uvRight, uvUp);
+			mMesh->vertices[2].Set(mTransform.origin + mTransform.xv + offy, rcc[2], uvRight, uvDown);
+			mMesh->vertices[3].Set(mTransform.origin + offy, rcc[3], uvLeft, uvDown);
+		}
+
+		memcpy(mMesh->indexes, indexes, sizeof(UInt16)*6);
+
+		mMesh->vertexCount = 4;
+		mMesh->polyCount = 2;
 	}
 
 	void Sprite::BuildFillLeftToRightMesh()

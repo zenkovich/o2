@@ -639,7 +639,7 @@ namespace Editor
 
 	void AssetsIconsScrollArea::InstantiateDraggingAssets()
 	{
-		PushEditorScopeOnStack scope;
+		ForcePopEditorScopeOnStack scope;
 
 		for (auto sel : mSelectedAssets)
 		{

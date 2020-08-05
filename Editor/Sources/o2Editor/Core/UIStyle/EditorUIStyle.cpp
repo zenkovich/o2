@@ -361,6 +361,72 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "round");
 	}
 
+	void EditorUIStyleBuilder::RebuildMenuPanelDropDown()
+	{
+		DropDown* sample = mnew DropDown();
+		sample->layout->minSize = Vec2F(20, 20);
+
+		auto backLayer = sample->AddLayer("regularBack", mnew Sprite("ui/UI4_panel_button.png"),
+										  Layout::BothStretch(-4, -4, -5, -5));
+
+		auto selectLayer = sample->AddLayer("hover", mnew Sprite("ui/UI4_panel_button_select.png"),
+											Layout::BothStretch(-4, -4, -5, -5));
+
+		auto pressedLayer = sample->AddLayer("pressed", mnew Sprite("ui/UI4_panel_button_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
+										   Layout::BothStretch(-4, -5, -5, -5));
+
+		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
+										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0)));
+
+		sample->SetClippingLayout(Layout::BothStretch(10, 3, 20, 1));
+
+		auto list = sample->GetListView();
+		*list = *o2UI.GetWidgetStyle<CustomList>("standard");
+
+		list->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+		list->SetClippingLayout(Layout::BothStretch(0, 0, 0, 0));
+
+		list->RemoveLayer("back");
+		list->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-21, -19, -19, -19));
+
+		list->layout->pivot = Vec2F(0.5f, 1.0f);
+		list->layout->anchorMin = Vec2F(0, 0);
+		list->layout->anchorMax = Vec2F(1, 0);
+		list->layout->offsetMin = Vec2F(0, -60);
+		list->layout->offsetMax = Vec2F(0, 0);
+
+		Label* itemSample = o2UI.CreateLabel("empty");
+		itemSample->horAlign = HorAlign::Left;
+		sample->SetItemSample(itemSample);
+
+
+		// Selected text
+		Text* captionText = mnew Text("stdFont.ttf");
+		captionText->horAlign = HorAlign::Left;
+		captionText->verAlign = VerAlign::Middle;
+		captionText->dotsEngings = true;
+		captionText->wordWrap = false;
+		captionText->color = Color4(96, 125, 139);
+		sample->AddLayer("selectedText", captionText, Layout::BothStretch(7, 0, 0, 0));
+
+		// States
+		sample->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		sample->AddState("opened", AnimationClip::EaseInOut("layer/arrow/mDrawable/scale", Vec2F(1, 1), Vec2F(1, -1), 0.2f));
+
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "menu panel");
+	}
+
 	void EditorUIStyleBuilder::RebuildArrowToggle()
 	{
 		Toggle* sample = mnew Toggle();
@@ -832,7 +898,7 @@ namespace Editor
 			Layout::BothStretch(-4, -4, -5, -5));
 
 		auto focusLayer = sample->AddLayer("focused", mnew Sprite("ui/UI4_panel_button_focus.png"),
-			Layout::BothStretch(-4, -4, -5, -5));
+			Layout::BothStretch(-4, -5, -5, -5));
 
 		auto arrowLayer = sample->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
 			Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0)));

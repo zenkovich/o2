@@ -172,7 +172,7 @@ namespace Editor
 		Vector<DataDocument> valuesData;
 		StoreValues(valuesData);
 
-		if (mBeforeChangeValues != valuesData)
+		if (mBeforeChangeValues != valuesData || valuesData.IsEmpty())
 			onChangeCompleted(mValuesPath, mBeforeChangeValues, valuesData);
 	}
 

@@ -218,6 +218,9 @@ namespace o2
 		// Builds mesh for tiled mode
 		void BuildTiledMesh();
 
+		// Builds mesh for fixed aspect mode
+		void BuildFixedAspectMesh();
+
 		// Builds mesh for fill left to right mode
 		void BuildFillLeftToRightMesh();
 
@@ -322,6 +325,7 @@ CLASS_METHODS_META(o2::Sprite)
 	PROTECTED_FUNCTION(void, BuildDefaultMesh);
 	PROTECTED_FUNCTION(void, BuildSlicedMesh);
 	PROTECTED_FUNCTION(void, BuildTiledMesh);
+	PROTECTED_FUNCTION(void, BuildFixedAspectMesh);
 	PROTECTED_FUNCTION(void, BuildFillLeftToRightMesh);
 	PROTECTED_FUNCTION(void, BuildFillRightToLeftMesh);
 	PROTECTED_FUNCTION(void, BuildFillUpToDownMesh);

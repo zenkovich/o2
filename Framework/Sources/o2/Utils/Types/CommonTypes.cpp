@@ -72,6 +72,7 @@ ENUM_META(o2::SpriteMode)
 	ENUM_ENTRY(FillLeftToRight);
 	ENUM_ENTRY(FillRightToLeft);
 	ENUM_ENTRY(FillUpToDown);
+	ENUM_ENTRY(FixedAspect);
 	ENUM_ENTRY(Sliced);
 	ENUM_ENTRY(Tiled);
 }
