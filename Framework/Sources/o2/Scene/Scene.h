@@ -39,9 +39,14 @@ namespace o2
 		Function<void(SceneEditableObject*)> onChildrenHierarchyChanged; // Actor childs hierarchy change event
 
 		Function<void(const Vector<SceneEditableObject*>&)> onObjectsChanged; // Actors some change event
+
+		Function<void()> onLayersListChanged; // It is called when layer added, removed or renamed
 #endif
 
 	public:
+		// Checks is layer exists
+		bool HasLayer(const String& name) const;
+
 		// Returns layer by name
 		SceneLayer* GetLayer(const String& name);
 
@@ -57,8 +62,14 @@ namespace o2
 		// Removes layer by name
 		void RemoveLayer(const String& name, bool removeActors = true);
 
+		// Sets layer order
+		void SetLayerOrder(SceneLayer* layer, int idx);
+
 		// Returns layers array
 		const Vector<SceneLayer*>& GetLayers() const;
+
+		// Returns layers names array
+		Vector<String> GetLayersNames() const;
 
 		// Returns layers map by name
 		const Map<String, SceneLayer*>& GetLayersMap() const;
@@ -131,13 +142,10 @@ namespace o2
 		// Updates root actors
 		void Update(float dt);
 
-		// Returns camera
-		CameraActor& GetCamera();
-
 		IOBJECT(Scene);
 
 	protected:
-		CameraActor* mDefaultCamera = nullptr; // Default scene camera
+		Vector<CameraActor*> mCameras; // List of cameras on scene
 
 		Vector<Actor*> mRootActors; // Scene root actors		
 		Vector<Actor*> mAllActors;  // All scene actors
@@ -169,8 +177,15 @@ namespace o2
 		// It is called when scene layer renamed, updates layers map
 		static void OnLayerRenamed(SceneLayer* layer, const String& oldName);
 
+		// It is called when camera was added to scene
+		static void OnCameraAddedOnScene(CameraActor* camera);
+
+		// It is called when camera was removed from scene
+		static void OnCameraRemovedScene(CameraActor* camera);
+
 		friend class Actor;
 		friend class Application;
+		friend class CameraActor;
 		friend class DrawableComponent;
 		friend class SceneLayer;
 		friend class Widget;
@@ -296,7 +311,8 @@ CLASS_FIELDS_META(o2::Scene)
 	PUBLIC_FIELD(onNameChanged);
 	PUBLIC_FIELD(onChildrenHierarchyChanged);
 	PUBLIC_FIELD(onObjectsChanged);
-	PROTECTED_FIELD(mDefaultCamera).DEFAULT_VALUE(nullptr);
+	PUBLIC_FIELD(onLayersListChanged);
+	PROTECTED_FIELD(mCameras);
 	PROTECTED_FIELD(mRootActors);
 	PROTECTED_FIELD(mAllActors);
 	PROTECTED_FIELD(mLayersMap);
@@ -317,12 +333,15 @@ CLASS_METHODS_META(o2::Scene)
 	typedef const Map<String, SceneLayer*>& _tmp1;
 	typedef Map<ActorAssetRef, Vector<Actor*>>& _tmp2;
 
+	PUBLIC_FUNCTION(bool, HasLayer, const String&);
 	PUBLIC_FUNCTION(SceneLayer*, GetLayer, const String&);
 	PUBLIC_FUNCTION(SceneLayer*, GetDefaultLayer);
 	PUBLIC_FUNCTION(SceneLayer*, AddLayer, const String&);
 	PUBLIC_FUNCTION(void, RemoveLayer, SceneLayer*, bool);
 	PUBLIC_FUNCTION(void, RemoveLayer, const String&, bool);
+	PUBLIC_FUNCTION(void, SetLayerOrder, SceneLayer*, int);
 	PUBLIC_FUNCTION(const Vector<SceneLayer*>&, GetLayers);
+	PUBLIC_FUNCTION(Vector<String>, GetLayersNames);
 	PUBLIC_FUNCTION(_tmp1, GetLayersMap);
 	PUBLIC_FUNCTION(Tag*, GetTag, const String&);
 	PUBLIC_FUNCTION(Tag*, AddTag, const String&);
@@ -344,11 +363,12 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Save, DataDocument&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(CameraActor&, GetCamera);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
 	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
 	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);
 	PROTECTED_STATIC_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);
+	PROTECTED_STATIC_FUNCTION(void, OnCameraAddedOnScene, CameraActor*);
+	PROTECTED_STATIC_FUNCTION(void, OnCameraRemovedScene, CameraActor*);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	PUBLIC_STATIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
 	PUBLIC_STATIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);

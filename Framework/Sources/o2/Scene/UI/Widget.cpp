@@ -325,12 +325,13 @@ namespace o2
 		UpdateLayersDrawingSequence();
 		OnLayerAdded(layer);
 
-#if IS_EDITOR
-		if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene()) {
-			o2Scene.OnObjectChanged(&layersEditable);
-			o2Scene.onChildrenHierarchyChanged(&layersEditable);
+		if constexpr (IS_EDITOR)
+		{
+			if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene()) {
+				o2Scene.OnObjectChanged(&layersEditable);
+				o2Scene.onChildrenHierarchyChanged(&layersEditable);
+			}
 		}
-#endif
 
 		return layer;
 	}
@@ -993,11 +994,12 @@ namespace o2
 			layer->OnExcludeFromScene();
 
 		SceneDrawable::OnExcludeFromScene();
-
-#if IS_EDITOR
-		o2Scene.mEditableObjects.Remove(&layersEditable);
-		o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
-#endif
+		
+		if constexpr (IS_EDITOR)
+		{
+			o2Scene.mEditableObjects.Remove(&layersEditable);
+			o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
+		}
 	}
 
 	void Widget::OnIncludeToScene()
@@ -1010,10 +1012,11 @@ namespace o2
 		for (auto layer : mLayers)
 			layer->OnIncludeInScene();
 
-#if IS_EDITOR
-		o2Scene.mEditableObjects.Add(&layersEditable);
-		o2Scene.mEditableObjects.Add(&internalChildrenEditable);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			o2Scene.mEditableObjects.Add(&layersEditable);
+			o2Scene.mEditableObjects.Add(&internalChildrenEditable);
+		}
 	}
 
 	void Widget::UpdateChildWidgetsList()
@@ -1159,10 +1162,11 @@ namespace o2
 
 			layout->SetDirty(false);
 
-#if IS_EDITOR
-			if (IsHieararchyOnScene())
-				o2Scene.onEnableChanged(this);
-#endif
+			if constexpr (IS_EDITOR)
+			{
+				if (IsHieararchyOnScene())
+					o2Scene.onEnableChanged(this);
+			}
 
 			OnEnableInHierarchyChanged();
 			OnChanged();

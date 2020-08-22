@@ -126,7 +126,7 @@
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="layout" ExcludeView="simple">layout</Item>
       <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
-      <Item Name="layer" ExcludeView="simple">Actor::mLayer->name</Item>
+      <Item Name="layer" ExcludeView="simple">Actor::mLayer->mName</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
@@ -290,7 +290,7 @@
       </Synthetic>
 
       <Item Name="locked" ExcludeView="simple">mLocked</Item>
-      <Item Name="layer" ExcludeView="simple">mLayer->name</Item>
+      <Item Name="layer" ExcludeView="simple">mLayer->mName</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="is on scene" ExcludeView="simple">mIsOnScene</Item>
       <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>

@@ -5,6 +5,7 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/CustomDropDown.h"
+#include "o2Editor/SceneWindow/LayersPopup.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor
@@ -36,25 +37,22 @@ namespace Editor
 		*mEditWidget->layout = WidgetLayout::BothStretch(0, 0, 0, 19);
 		mWindow->AddChild(mEditWidget);
 
-		Widget* upPanel = mnew Widget();
-		upPanel->name = "up panel";
-		*upPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
-		upPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
-		mWindow->AddChild(upPanel);
+		mUpPanel = mnew Widget();
+		mUpPanel->name = "up panel";
+		*mUpPanel->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 20, 0);
+		mUpPanel->AddLayer("back", mnew Sprite("ui/UI4_small_panel_back.png"), Layout::BothStretch(-5, -4, -4, -5));
+		mWindow->AddChild(mUpPanel);
 
-		auto layersButton = o2UI.CreateWidget<Button>("panel down");
-		layersButton->caption = "Layers";
-		*layersButton->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 100, 0);
-		upPanel->AddChild(layersButton);
+		mLayersButton = o2UI.CreateWidget<Button>("panel down");
+		mLayersButton->caption = "Layers";
+		*mLayersButton->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 100, 0);
+		mUpPanel->AddChild(mLayersButton);
 
-		auto gizmosButton = o2UI.CreateWidget<Button>("panel down");
-		gizmosButton->caption = "Gizmos";
-		*gizmosButton->layout = WidgetLayout::VerStretch(HorAlign::Right, 0, 0, 100, 100);
-		upPanel->AddChild(gizmosButton);
+		mLayersPopup = mnew LayersPopup();
+		mUpPanel->AddChild(mLayersPopup);
+
+		mLayersButton->onClick = [&]() { mLayersPopup->Show(mLayersButton->layout->worldLeftBottom); };
 	}
-
-	void SceneWindow::InitializeLayersView()
-	{}
 
 	void SceneWindow::PostInitializeWindow()
 	{

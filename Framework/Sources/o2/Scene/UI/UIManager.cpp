@@ -334,8 +334,8 @@ namespace o2
 
 		mTopWidgets.Clear();
 
-		if (ContextMenu::mVisibleContextMenu)
-			ContextMenu::mVisibleContextMenu->SpecialDraw();
+		if (PopupWidget::mVisiblePopup)
+			PopupWidget::mVisiblePopup->SpecialDraw();
 
 		if (o2Input.IsKeyPressed(VK_TAB))
 			FocusNextWidget();

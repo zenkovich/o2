@@ -6,12 +6,11 @@
 
 namespace o2
 {
-	IEventsListener::IEventsListener() :
+	IEventsListener::IEventsListener():
 		mEnabledListeningEvents(EventSystem::eventsListenersEnabledByDefault)
 	{
-#if IS_EDITOR
-		mIsEditorMode = EditorScope::IsInScope();
-#endif
+		if constexpr (IS_EDITOR)
+			mIsEditorMode = EditorScope::IsInScope();
 	}
 
 	IEventsListener::~IEventsListener()
@@ -19,11 +18,10 @@ namespace o2
 
 	bool IEventsListener::IsListeningEvents() const
 	{
-#if IS_EDITOR
-		return mEnabledListeningEvents && mIsEditorMode == EditorScope::IsInScope();
-#else
-		return mEnabledListeningEvents;
-#endif
+		if constexpr (IS_EDITOR)
+			return mEnabledListeningEvents && mIsEditorMode == EditorScope::IsInScope();
+		else
+			return mEnabledListeningEvents;
 	}
 
 	void IEventsListener::SetListeningEvents(bool isListening)

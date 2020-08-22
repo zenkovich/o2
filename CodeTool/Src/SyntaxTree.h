@@ -431,6 +431,7 @@ protected:
 	bool   mIsContant = false;  
 	bool   mIsReference = false;
 	bool   mIsPointer = false;  
+	bool   mIsMutable = false;
 
 	friend class CppSyntaxParser;
 };

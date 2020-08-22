@@ -11,6 +11,7 @@ namespace o2
 		void RebuildButtonStyle();
 		void RebuildCloseButtonStyle();
 		void RebuildArrowButtonStyle();
+		void RebuildHorSeparatorStyle();
 		void RebuildHorProgressBarStyle();
 		void RebuildVerProgressBarStyle();
 		void RebuildHorScrollBarStyle();
@@ -19,6 +20,7 @@ namespace o2
 		void RebuildCheckboxWithoutCaptionStyle();
 		void RebuildScrollAreaStyle();
 		void RebuildScrollAreaStraightBarsStyle();
+		void RebuildPopupStyle();
 		void RebuildLabelStyle();
 		void RebuildEditBoxStyle();
 		void RebuildCustomListStyle();
@@ -59,6 +61,7 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildButtonStyle);
 	PUBLIC_FUNCTION(void, RebuildCloseButtonStyle);
 	PUBLIC_FUNCTION(void, RebuildArrowButtonStyle);
+	PUBLIC_FUNCTION(void, RebuildHorSeparatorStyle);
 	PUBLIC_FUNCTION(void, RebuildHorProgressBarStyle);
 	PUBLIC_FUNCTION(void, RebuildVerProgressBarStyle);
 	PUBLIC_FUNCTION(void, RebuildHorScrollBarStyle);
@@ -67,6 +70,7 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildCheckboxWithoutCaptionStyle);
 	PUBLIC_FUNCTION(void, RebuildScrollAreaStyle);
 	PUBLIC_FUNCTION(void, RebuildScrollAreaStraightBarsStyle);
+	PUBLIC_FUNCTION(void, RebuildPopupStyle);
 	PUBLIC_FUNCTION(void, RebuildLabelStyle);
 	PUBLIC_FUNCTION(void, RebuildEditBoxStyle);
 	PUBLIC_FUNCTION(void, RebuildCustomListStyle);

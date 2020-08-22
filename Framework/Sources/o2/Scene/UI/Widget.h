@@ -438,6 +438,7 @@ namespace o2
 		friend class List;
 		friend class LongList;
 		friend class MenuPanel;
+		friend class PopupWidget;
 		friend class Scene;
 		friend class ScrollArea;
 		friend class Spoiler;

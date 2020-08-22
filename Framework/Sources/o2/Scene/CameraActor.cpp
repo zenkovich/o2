@@ -1,15 +1,28 @@
 #include "o2/stdafx.h"
 #include "CameraActor.h"
 
+#include "o2/Scene/Scene.h"
+
 namespace o2
 {
 	CameraActor::CameraActor():
 		Actor()
-	{}
+	{
+		if (mIsOnScene)
+			OnAddedToScene();
+	}
 
 	CameraActor::CameraActor(const CameraActor& other):
 		Actor(other), mType(other.mType), mFixedOrFittedSize(other.mFixedOrFittedSize), mUnits(other.mUnits)
-	{}
+	{
+		if (mIsOnScene)
+			OnAddedToScene();
+	}
+
+	CameraActor::~CameraActor()
+	{
+		o2Scene.OnCameraRemovedScene(this);
+	}
 
 	CameraActor& CameraActor::operator=(const CameraActor& other)
 	{
@@ -24,21 +37,44 @@ namespace o2
 
 	void CameraActor::Setup()
 	{
-		Camera camera = GetRenderCamera();
-		transform->size = camera.GetSize();
-		o2Render.SetCamera(camera);
+		o2Render.SetCamera(GetRenderCamera());
+	}
+
+	void CameraActor::SetupAndDraw()
+	{
+		if (fillBackground)
+			o2Render.Clear(fillColor);
+
+		Camera prevCamera = o2Render.GetCamera();
+		Setup();
+
+		for (auto layer : drawLayers.GetLayers())
+		{
+			for (auto comp : layer->mEnabledDrawables)
+				comp->Draw();
+		}
+
+		o2Render.SetCamera(prevCamera);
 	}
 
 	Camera CameraActor::GetRenderCamera() const
 	{
+		Camera camera;
 		switch (mType)
 		{
-			case Type::Default: return Camera::Default();
-			case Type::FixedSize: return Camera::FixedSize(mFixedOrFittedSize);
-			case Type::FittedSize: return Camera::FittedSize(mFixedOrFittedSize);
-			case Type::PhysicalCorrect: return Camera::PhysicalCorrect(mUnits);
-			default: return Camera::Default();
+			case Type::Default: camera = Camera::Default(); break;
+			case Type::FreeSize: camera = Camera::FixedSize(transform->GetSize()); break;
+			case Type::FixedSize: camera = Camera::FixedSize(mFixedOrFittedSize); break;
+			case Type::FittedSize: camera = Camera::FittedSize(mFixedOrFittedSize); break;
+			case Type::PhysicalCorrect: camera = Camera::PhysicalCorrect(mUnits); break;
+			default: camera = Camera::Default(); break;
 		}
+
+		transform->size = camera.GetSize();
+		transform->Update();
+		camera.basis = transform->worldBasis;
+
+		return camera;
 	}
 
 	void CameraActor::SetDefault()
@@ -50,12 +86,14 @@ namespace o2
 	{
 		mType = Type::FixedSize;
 		mFixedOrFittedSize = size;
+		mUnits = Units::Pixels;
 	}
 
 	void CameraActor::SetFittedSize(const Vec2F& size)
 	{
 		mType = Type::FittedSize;
 		mFixedOrFittedSize = size;
+		mUnits = Units::Pixels;
 	}
 
 	void CameraActor::SetPhysicalCorrect(Units units)
@@ -63,6 +101,32 @@ namespace o2
 		mType = Type::PhysicalCorrect;
 		mUnits = units;
 	}
+
+	CameraActor::Type CameraActor::GetCameraType() const
+	{
+		return mType;
+	}
+
+	const Vec2F& CameraActor::GetFittedOrFixedSize() const
+	{
+		return mFixedOrFittedSize;
+	}
+
+	Units CameraActor::GetUnits() const
+	{
+		return mUnits;
+	}
+
+	void CameraActor::OnAddedToScene()
+	{
+		o2Scene.OnCameraAddedOnScene(this);
+	}
+
+	void CameraActor::OnRemovedFromScene()
+	{
+		o2Scene.OnCameraRemovedScene(this);
+	}
+
 }
 
 ENUM_META(o2::CameraActor::Type)
@@ -70,6 +134,7 @@ ENUM_META(o2::CameraActor::Type)
 	ENUM_ENTRY(Default);
 	ENUM_ENTRY(FittedSize);
 	ENUM_ENTRY(FixedSize);
+	ENUM_ENTRY(FreeSize);
 	ENUM_ENTRY(PhysicalCorrect);
 }
 END_ENUM_META;

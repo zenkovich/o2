@@ -12,6 +12,7 @@
 #include "o2/Scene/Tags.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Render/VectorFontEffects.h"
 
 namespace o2
 {
@@ -20,9 +21,8 @@ namespace o2
 	Scene::Scene()
 	{
 		mDefaultLayer = AddLayer("Default");
-		mDefaultCamera = mnew CameraActor();
-		mDefaultCamera->name = "Camera";
-		mRootActors.Remove(mDefaultCamera);
+		auto camera = mnew CameraActor();
+		camera->name = "Camera";
 	}
 
 	Scene::~Scene()
@@ -35,39 +35,43 @@ namespace o2
 
 	void Scene::Update(float dt)
 	{
-		mDefaultCamera->Update(dt);
-
 		for (auto actor : mRootActors)
 			actor->Update(dt);
-
-		mDefaultCamera->UpdateChildren(dt);
 
 		for (auto actor : mRootActors)
 			actor->UpdateChildren(dt);
 	}
 
-	CameraActor& Scene::GetCamera()
-	{
-		return *mDefaultCamera;
-	}
-
+#undef DrawText
 	void Scene::Draw()
 	{
-#if IS_EDITOR
-		BeginDrawingScene();
-#endif
+		if constexpr (IS_EDITOR)
+			BeginDrawingScene();
 
-		for (auto layer : mLayers)
+		if (mCameras.IsEmpty())
 		{
-			for (auto comp : layer->mEnabledDrawables)
-				comp->Draw();
+			if constexpr (IS_EDITOR)
+			{
+				o2Render.SetCamera(Camera());
+				o2Render.Clear();
+
+				static auto font = mnew VectorFont(o2Assets.GetBuiltAssetsPath() + "debugFont.ttf");
+				static auto text = mnew Text(FontRef(font));
+
+				text->SetText("No camera");
+				text->Draw();
+			}
+		}
+		else
+		{
+			for (auto camera : mCameras)
+				camera->SetupAndDraw();
 		}
 
 		DrawCursorDebugInfo();
 
-#if IS_EDITOR
-		EndDrawingScene();
-#endif
+		if constexpr (IS_EDITOR)
+			EndDrawingScene();
 	}
 
 #undef DrawText
@@ -139,14 +143,12 @@ namespace o2
 			Instance().mRootActors.Add(actor);
 			Instance().mAllActors.Add(actor);
 
-#if IS_EDITOR
-			RegEditableObject(actor);
-#endif
+			if constexpr (IS_EDITOR)
+				RegEditableObject(actor);
 		}
 
-#if IS_EDITOR
-		OnObjectCreated(actor);
-#endif
+		if constexpr (IS_EDITOR)
+			OnObjectCreated(actor);
 	}
 
 	void Scene::OnActorDestroying(Actor* actor)
@@ -157,16 +159,34 @@ namespace o2
 		Instance().mRootActors.Remove(actor);
 		Instance().mAllActors.Remove(actor);
 
-#if IS_EDITOR
-		OnObjectDestroyed(actor);
-		OnActorPrototypeBroken(actor);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			OnObjectDestroyed(actor);
+			OnActorPrototypeBroken(actor);
+		}
 	}
 
 	void Scene::OnLayerRenamed(SceneLayer* layer, const String& oldName)
 	{
 		Instance().mLayersMap.Remove(oldName);
 		Instance().mLayersMap[layer->GetName()] = layer;
+
+		Instance().onLayersListChanged();
+	}
+
+	void Scene::OnCameraAddedOnScene(CameraActor* camera)
+	{
+		Instance().mCameras.Add(camera);
+	}
+
+	void Scene::OnCameraRemovedScene(CameraActor* camera)
+	{
+		Instance().mCameras.Remove(camera);
+	}
+
+	bool Scene::HasLayer(const String& name) const
+	{
+		return mLayersMap.ContainsKey(name);
 	}
 
 	SceneLayer* Scene::GetLayer(const String& name)
@@ -193,6 +213,8 @@ namespace o2
 		newLayer->mName = name;
 		mLayers.Add(newLayer);
 		mLayersMap[name] = newLayer;
+		
+		onLayersListChanged();
 
 		return newLayer;
 	}
@@ -212,12 +234,20 @@ namespace o2
 		mLayers.Remove(layer);
 		mLayersMap.Remove(layer->mName);
 
+		onLayersListChanged();
+
 		delete layer;
 	}
 
 	void Scene::RemoveLayer(const String& name, bool removeActors /*= true*/)
 	{
 		RemoveLayer(GetLayer(name), removeActors);
+	}
+
+	void Scene::SetLayerOrder(SceneLayer* layer, int idx)
+	{
+		mLayers.Remove(layer);
+		mLayers.Insert(layer, idx);
 	}
 
 	Tag* Scene::GetTag(const String& name) const
@@ -257,6 +287,11 @@ namespace o2
 	const Vector<SceneLayer*>& Scene::GetLayers()const
 	{
 		return mLayers;
+	}
+
+	Vector<String> Scene::GetLayersNames() const
+	{
+		return mLayers.Convert<String>([](SceneLayer* x) { return x->GetName(); });
 	}
 
 	const Map<String, SceneLayer*>& Scene::GetLayersMap() const
@@ -377,6 +412,8 @@ namespace o2
 		}
 
 		mDefaultLayer = GetLayer(doc.GetMember("DefaultLayer"));
+
+		onLayersListChanged();
 
 		auto& tagsNode = doc.GetMember("Tags");
 		for (auto& tagNode : tagsNode)

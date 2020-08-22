@@ -50,7 +50,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu():
-		ScrollArea()
+		PopupWidget()
 	{
 		mItemSample = mnew ContextMenuItem();
 		mItemSample->ExcludeFromScene();
@@ -76,8 +76,6 @@ namespace o2
 		mItemsLayout->baseCorner    = BaseCorner::LeftTop;
 		mItemsLayout->fitByChildren = true;
 		*mItemsLayout->layout       = WidgetLayout::BothStretch();
-
-		SetEnableForcible(false);
 	}
 
 	ContextMenu::ContextMenu(Vector<Item> items):
@@ -87,7 +85,7 @@ namespace o2
 	}
 
 	ContextMenu::ContextMenu(const ContextMenu& other):
-		ScrollArea(other), mMaxVisibleItems(other.mMaxVisibleItems)
+		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample        = other.mItemSample->CloneAs<ContextMenuItem>();
 		mItemSample->ExcludeFromScene();
@@ -100,7 +98,6 @@ namespace o2
 		mItemsLayout       = FindChildByType<VerticalLayout>();
 
 		RetargetStatesAnimations();
-		SetEnableForcible(false);
 	}
 
 	ContextMenu::~ContextMenu()
@@ -112,7 +109,7 @@ namespace o2
 
 	ContextMenu& ContextMenu::operator=(const ContextMenu& other)
 	{
-		ScrollArea::operator=(other);
+		PopupWidget::operator=(other);
 		return *this;
 	}
 
@@ -121,7 +118,7 @@ namespace o2
 		if (!mResEnabledInHierarchy)
 			return;
 
-		ScrollArea::Update(dt);
+		PopupWidget::Update(dt);
 
 		const float rectLerpCoef = 20.0f;
 		if (mCurrentSelectionRect != mTargetSelectionRect)
@@ -133,7 +130,7 @@ namespace o2
 		bool cursorPressed = o2Input.IsCursorPressed() || o2Input.IsRightMousePressed();
 		if (cursorPressed)
 		{
-			if (!mChildContextMenu && (cursorPressed || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
+			if (!mChildPopup && (cursorPressed || Math::Abs(o2Input.GetMouseWheelDelta()) > 0.1f) &&
 				!layout->IsPointInside(o2Input.GetCursorPos()) && !mShownAtFrame && mEnabled)
 			{
 				HideWithParent();
@@ -146,10 +143,10 @@ namespace o2
 
 			if (mSelectSubContextTime < 0.0f && GetItemUnderPoint(o2Input.GetCursorPos()) == mSelectedItem)
 			{
-				if (mChildContextMenu)
-					mChildContextMenu->HideWithChild();
+				if (mChildPopup)
+					mChildPopup->HideWithChild();
 
-				mChildContextMenu = nullptr;
+				mChildPopup = nullptr;
 
 				if (mSelectedItem && mSelectedItem->GetSubMenu())
 					mSelectedItem->GetSubMenu()->Show(this, mSelectedItem->layout->worldRightTop);
@@ -159,17 +156,9 @@ namespace o2
 		mShownAtFrame = false;
 	}
 
-	void ContextMenu::Draw()
-	{}
-
-	void ContextMenu::Show(ContextMenu* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
+	void ContextMenu::Show(PopupWidget* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
-		if (parent)
-		{
-			mParentContextMenu = parent;
-			parent->mChildContextMenu = this;
-		}
-		else mVisibleContextMenu = this;
+		PopupWidget::Show(parent, position);
 
 		auto hoverState = state["hover"];
 		if (hoverState)
@@ -178,18 +167,11 @@ namespace o2
 			*hoverState = false;
 		}
 		else mSelectionDrawable->SetEnabled(false);
-
-		FitSizeAndPosition(position);
-		UpdateSelfTransform();
-		UpdateChildrenTransforms();
-		Widget::Show();
-
-		mShownAtFrame = true;
 	}
 
 	void ContextMenu::Show(const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
-		Show(nullptr, position);
+		PopupWidget::Show(position);
 	}
 
 	ContextMenuItem* ContextMenu::AddItem(const Item& item)
@@ -297,14 +279,14 @@ namespace o2
 
 	void ContextMenu::AddItems(Vector<Item> items)
 	{
-		for (auto item : items)
+		for (auto& item : items)
 			AddItem(item);
 	}
 
 	void ContextMenu::InsertItems(Vector<Item> items, int position)
 	{
 		int i = 0;
-		for (auto item : items)
+		for (auto& item : items)
 		{
 			InsertItem(item, position + i);
 			i++;
@@ -369,11 +351,6 @@ namespace o2
 
 		ContextMenuItem* itemWidget = (ContextMenuItem*)(mItemsLayout->mChildren[position]);
 		SetupItem(itemWidget, item);
-	}
-
-	void ContextMenu::OnEnableInHierarchyChanged()
-	{
-		interactable = mResEnabled;
 	}
 
 	ContextMenuItem* ContextMenu::GetItemUnderPoint(const Vec2F& point)
@@ -464,12 +441,6 @@ namespace o2
 		}
 	}
 
-	void ContextMenu::OnCursorPressBreak(const Input::Cursor& cursor)
-	{
-		HideWithParent();
-		HideWithChild();
-	}
-
 	void ContextMenu::OnCursorMoved(const Input::Cursor& cursor)
 	{
 		const float checkDeltaThreshold = 2.0f;
@@ -481,46 +452,15 @@ namespace o2
 		UpdateHover(cursor.position);
 	}
 
-	void ContextMenu::OnKeyPressed(const Input::Key& key)
-	{
-// 		if (mVisibleContextMenu && mVisibleContextMenu->IsVisible() && mVisibleContextMenu != this)
-// 			return;
-// 
-// 		for (auto child : mItemsLayout->mChildren)
-// 		{
-// 			if (child->GetType() == TypeOf(UIContextMenuItem))
-// 			{
-// 				auto item = (UIContextMenuItem*)child;
-// 
-// 				if (item->shortcut.IsPressed())
-// 				{
-// 					item->onClick();
-// 					break;
-// 				}
-// 			}
-// 		}
-	}
-
 	void ContextMenu::HideWithParent()
 	{
-		Hide();
-
-		if (mParentContextMenu)
-			mParentContextMenu->HideWithParent();
-
-		mParentContextMenu = nullptr;
-		mChildContextMenu = nullptr;
+		PopupWidget::HideWithParent();
 		mSelectedItem = nullptr;
 	}
 
 	void ContextMenu::HideWithChild()
 	{
-		Hide();
-
-		if (mChildContextMenu)
-			mChildContextMenu->HideWithChild();
-
-		mChildContextMenu = nullptr;
+		PopupWidget::HideWithChild();
 		mSelectedItem = nullptr;
 	}
 
@@ -647,11 +587,6 @@ namespace o2
 		return mSelectionLayout;
 	}
 
-	void ContextMenu::SetMinFitSize(float size)
-	{
-		mFitSizeMin = size;
-	}
-
 	void ContextMenu::SetMaxItemsVisible(int count)
 	{
 		mMaxVisibleItems = count;
@@ -677,23 +612,11 @@ namespace o2
 		}
 	}
 
-	bool ContextMenu::IsScrollable() const
-	{
-		return true;
-	}
-
-	ContextMenu* ContextMenu::mVisibleContextMenu = nullptr;
-
-	bool ContextMenu::IsInputTransparent() const
-	{
-		return false;
-	}
-
 	void ContextMenu::CopyData(const Actor& otherActor)
 	{
 		const ContextMenu& other = dynamic_cast<const ContextMenu&>(otherActor);
 
-		ScrollArea::CopyData(other);
+		PopupWidget::CopyData(other);
 
 		delete mItemSample;
 		delete mSelectionDrawable;
@@ -709,20 +632,8 @@ namespace o2
 		mItemSample->ExcludeFromScene();
 		mSeparatorSample->ExcludeFromScene();
 
-		mFitSizeMin = other.mFitSizeMin;
-
 		RetargetStatesAnimations();
 		SetLayoutDirty();
-	}
-
-	void ContextMenu::CheckClipping(const RectF& clipArea)
-	{
-		mIsClipped = false;
-
-		Vec2F resolution = o2Render.GetCurrentResolution();
-		RectF fullScreenRect(resolution*0.5f, resolution*(-0.5f));
-		for (auto child : mChildWidgets)
-			child->CheckClipping(fullScreenRect);
 	}
 
 	void ContextMenu::FitSizeAndPosition(const Vec2F& position)
@@ -750,31 +661,7 @@ namespace o2
 		size.x = mFitSizeMin + maxCaption + maxShortcut;
 		size.y += mViewAreaLayout.offsetMin.y - mViewAreaLayout.offsetMax.y;
 
-		size.x = Math::Min(size.x, (float)o2Render.GetResolution().x);
-		size.y = Math::Min(size.y, (float)o2Render.GetResolution().y);
-
-		RectF thisRect(position.x, position.y, position.x + size.x, position.y - size.y);
-		RectF screenRect(-o2Render.GetResolution().x*0.5f, o2Render.GetResolution().y*0.5f,
-						 o2Render.GetResolution().x*0.5f, -o2Render.GetResolution().y*0.5f);
-
-		if (thisRect.left < screenRect.left)
-			thisRect += Vec2F(screenRect.left - thisRect.left, 0);
-
-		if (thisRect.right > screenRect.right)
-			thisRect += Vec2F(screenRect.right - thisRect.right, 0);
-
-		if (thisRect.top > screenRect.top)
-			thisRect += Vec2F(0, screenRect.top - thisRect.top);
-
-		if (thisRect.bottom < screenRect.bottom)
-			thisRect += Vec2F(0, screenRect.bottom - thisRect.bottom);
-
-		thisRect.left = Math::Round(thisRect.left);
-		thisRect.right = Math::Round(thisRect.right);
-		thisRect.top = Math::Round(thisRect.top);
-		thisRect.bottom = Math::Round(thisRect.bottom);
-
-		layout->worldRect = thisRect;
+		FitPosition(position, size);
 	}
 
 	void ContextMenu::SpecialDraw()
@@ -808,8 +695,8 @@ namespace o2
 
 		DrawDebugFrame();
 
-		if (mChildContextMenu)
-			mChildContextMenu->SpecialDraw();
+		if (mChildPopup)
+			mChildPopup->SpecialDraw();
 	}
 
 	ContextMenuItem* ContextMenu::CreateItem(const Item& item)

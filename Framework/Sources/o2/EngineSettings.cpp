@@ -6,17 +6,16 @@ o2::Platform GetEnginePlatform()
 #ifdef PLATFORM_WINDOWS
 	return o2::Platform::Windows;
 #elif defined PLATFORM_ANDROID
-    return o2::Platform::Android;
+	return o2::Platform::Android;
 #endif
 }
 
 const char* GetProjectPath()
 {
-#if IS_EDITOR
-	return "";
-#else
-    return "AndroidAssets/";
-#endif
+	if constexpr (IS_EDITOR)
+		return "";
+	else
+		return "AndroidAssets/";
 }
 
 const char* GetProjectSettingPath()
@@ -53,7 +52,7 @@ bool IsAssetsPrebuildEnabled()
 #ifdef PLATFORM_WINDOWS
 	return true;
 #else
-    return false;
+	return false;
 #endif
 }
 
@@ -67,7 +66,7 @@ const char* GetBuiltAssetsPath()
 #if defined PLATFORM_WINDOWS
 	return "BuiltAssets/Windows/Data/";
 #elif defined PLATFORM_ANDROID
-    return "AndroidAssets/BuiltAssets/";
+	return "AndroidAssets/BuiltAssets/";
 #endif
 }
 
@@ -104,7 +103,7 @@ const char* GetEditorBuiltAssetsTreePath()
 
 const char* GetAndroidAssetsPath()
 {
-    return "AndroidAssets/";
+	return "AndroidAssets/";
 }
 
 #endif

@@ -17,6 +17,8 @@ namespace o2
 		GETTER(int, itemsCount, GetItemsCount);                                // All items count getter
 
 	public:
+		Function<void()> onBeforeExpand; // It is called before opening 
+
 		Function<void(int)>     onSelectedPos;   // Select item position event
 		Function<void(Widget*)> onSelectedItem;  // Select item event
 
@@ -170,6 +172,7 @@ CLASS_FIELDS_META(o2::CustomDropDown)
 	PUBLIC_FIELD(selectedItem);
 	PUBLIC_FIELD(selectedItemPos);
 	PUBLIC_FIELD(itemsCount);
+	PUBLIC_FIELD(onBeforeExpand);
 	PUBLIC_FIELD(onSelectedPos);
 	PUBLIC_FIELD(onSelectedItem);
 	PROTECTED_FIELD(mItemsList).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();

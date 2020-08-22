@@ -14,6 +14,10 @@ namespace o2
 	class SceneLayer: public ISerializable
 	{
 	public:
+#if IS_EDITOR
+		bool visible = true; // Is layer visible in editor
+#endif
+
 		// Sets layer name
 		void SetName(const String& name);
 
@@ -75,6 +79,7 @@ namespace o2
 		void SetLastByDepth(SceneDrawable* drawable);
 
 		friend class Actor;
+		friend class CameraActor;
 		friend class DrawableComponent;
 		friend class Scene;
 		friend class SceneDrawable;
@@ -105,6 +110,7 @@ CLASS_BASES_META(o2::SceneLayer)
 END_META;
 CLASS_FIELDS_META(o2::SceneLayer)
 {
+	PUBLIC_FIELD(visible).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mActors);
 	PROTECTED_FIELD(mEnabledActors);

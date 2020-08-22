@@ -62,6 +62,8 @@ namespace o2
 
 	void CustomDropDown::Expand()
 	{
+		onBeforeExpand();
+
 		float itemHeight   = mItemsList->GetItemSample()->layout->minHeight;
 		int itemsVisible   = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
 

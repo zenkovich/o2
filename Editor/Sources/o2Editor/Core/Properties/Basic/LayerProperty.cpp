@@ -37,6 +37,7 @@ namespace Editor
 		if (mDropDown)
 		{
 			mDropDown->onSelectedText = THIS_FUNC(SelectLayer);
+			mDropDown->onBeforeExpand = THIS_FUNC(UpdateLayersList);
 			mDropDown->SetState("undefined", true);
 		}
 	}
@@ -44,6 +45,8 @@ namespace Editor
 	void LayerProperty::UpdateValueView()
 	{
 		mUpdatingValue = true;
+
+		UpdateLayersList();
 
 		if (mValuesDifferent)
 		{
@@ -91,6 +94,15 @@ namespace Editor
 
 		SetValueByUser(o2Scene.GetLayer(name));
 	}
+
+	bool LayerProperty::IsAlwaysRefresh() const
+	{
+		if (mCommonValue && !mValuesDifferent && mCommonValue->GetName() != mDropDown->GetSelectedItemText())
+			return true;
+
+		return false;
+	}
+
 }
 DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::SceneLayer*>);
 

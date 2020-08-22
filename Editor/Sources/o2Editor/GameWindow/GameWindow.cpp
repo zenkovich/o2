@@ -145,8 +145,6 @@ namespace Editor
 
 		o2Render.BindRenderTexture(mRenderTarget);
 
-		o2Render.Clear();
-		o2Scene.GetCamera().Setup();
 		mListenersLayer.OnBeginDraw();
 
 		int editorDepth = EditorScope::GetDepth();
@@ -158,7 +156,6 @@ namespace Editor
 
 		mListenersLayer.OnEndDraw();
 		o2Render.UnbindRenderTexture();
-		o2Render.SetCamera(Camera());
 
 		mRenderTargetSprite->Draw();
 

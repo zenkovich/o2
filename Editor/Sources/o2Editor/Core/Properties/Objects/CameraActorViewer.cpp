@@ -4,7 +4,10 @@
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
+#include "o2Editor/Core/Properties/Basic/ColorProperty.h"
 #include "o2Editor/Core/Properties/Basic/EnumProperty.h"
+#include "o2Editor/Core/Properties/Basic/SceneLayersListProperty.h"
 #include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/UI/ImageSlicesEditorWidget.h"
@@ -15,31 +18,31 @@ namespace Editor
 	{
 		const Type& cameraActorType = TypeOf(CameraActor);
 
-		auto commonFieldsLayout = mnew VerticalLayout();
-		commonFieldsLayout->spacing = 5;
-		commonFieldsLayout->expandWidth = true;
-		commonFieldsLayout->expandHeight = false;
-		commonFieldsLayout->fitByChildren = true;
-		mSpoiler->AddChild(commonFieldsLayout);
+		// Basic properties
+		o2EditorProperties.BuildFieldType<ColorProperty>(mSpoiler, cameraActorType, "drawLayers", "",
+														 mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
-		mTypeProperty = o2EditorProperties.BuildFieldType<EnumProperty>(commonFieldsLayout, cameraActorType, "mType", "",
+		o2EditorProperties.BuildFieldType<BooleanProperty>(mSpoiler, cameraActorType, "fillBackground", "",
+																   mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
+
+		o2EditorProperties.BuildFieldType<SceneLayersListProperty>(mSpoiler, cameraActorType, "fillColor", "",
+																   mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
+
+		// Type
+		mTypeProperty = o2EditorProperties.BuildFieldType<EnumProperty>(mSpoiler, cameraActorType, "mType", "",
 																		mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
 
 		mTypeProperty->onChanged += [&](IPropertyField* x) { OnTypeSelected(); };
 
-		mHiddenProperties = o2UI.CreateWidget<VerticalLayout>();
-		mHiddenProperties->expandWidth = true;
-		mHiddenProperties->expandHeight = false;
-		mHiddenProperties->fitByChildren = true;
-		mSpoiler->AddChild(mHiddenProperties);
+		mHiddenTypeProperties = o2UI.CreateWidget<VerticalLayout>();
+		mHiddenTypeProperties->expandWidth = true;
+		mHiddenTypeProperties->expandHeight = false;
+		mHiddenTypeProperties->fitByChildren = true;
+		mSpoiler->AddChild(mHiddenTypeProperties);
 
 		// Size properties
 		mSizePropertySpoiler = o2UI.CreateWidget<Spoiler>();
-		mHiddenProperties->AddChild(mSizePropertySpoiler);
-
-		auto sizeSpace = mnew Widget();
-		sizeSpace->layout->minHeight = 5;
-		mSizePropertySpoiler->AddChildWidget(sizeSpace);
+		mHiddenTypeProperties->AddChild(mSizePropertySpoiler);
 
 		mSizeProperty = o2EditorProperties.BuildFieldType<Vec2FProperty>(mSizePropertySpoiler, cameraActorType, "mFixedOrFittedSize", "",
 																		 mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);
@@ -48,11 +51,7 @@ namespace Editor
 
 		// Units properties
 		mUnitsPropertySpoiler = o2UI.CreateWidget<Spoiler>();
-		mHiddenProperties->AddChild(mUnitsPropertySpoiler);
-
-		auto unitsSpace = mnew Widget();
-		unitsSpace->layout->minHeight = 5;
-		mUnitsPropertySpoiler->AddChildWidget(unitsSpace);
+		mHiddenTypeProperties->AddChild(mUnitsPropertySpoiler);
 
 		mUnitsProperty = o2EditorProperties.BuildFieldType<EnumProperty>(mUnitsPropertySpoiler, cameraActorType, "mUnits", "",
 																		 mPropertiesContext, mOnChildFieldChangeCompleted, onChanged);

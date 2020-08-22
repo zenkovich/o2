@@ -14,6 +14,8 @@ namespace Editor
 {
 	class EnumProperty;
 	class Vec2FProperty;
+	class SceneLayersListProperty;
+	class ColorProperty;
 
 	// -------------------
 	// Camera actor viewer
@@ -24,9 +26,11 @@ namespace Editor
 		IOBJECT(CameraActorViewer);
 
 	protected:
-		VerticalLayout* mHiddenProperties = nullptr; // Hidden properties
+		ColorProperty*           mColorProperty = nullptr;
+		SceneLayersListProperty* mLayersProperty = nullptr;
 
-		EnumProperty*  mTypeProperty = nullptr;
+		EnumProperty*   mTypeProperty = nullptr;
+		VerticalLayout* mHiddenTypeProperties = nullptr;
 
 		Spoiler*       mSizePropertySpoiler = nullptr;
 		Vec2FProperty* mSizeProperty = nullptr;
@@ -50,8 +54,10 @@ CLASS_BASES_META(Editor::CameraActorViewer)
 END_META;
 CLASS_FIELDS_META(Editor::CameraActorViewer)
 {
-	PROTECTED_FIELD(mHiddenProperties).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mColorProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLayersProperty).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mTypeProperty).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mHiddenTypeProperties).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mSizePropertySpoiler).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mSizeProperty).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mUnitsPropertySpoiler).DEFAULT_VALUE(nullptr);

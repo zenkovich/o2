@@ -47,6 +47,9 @@ namespace Editor
 
 		// Selects layer
 		void SelectLayer(const WString& name);
+
+		// Is required refresh view every time
+		bool IsAlwaysRefresh() const override;
 	};
 }
 
@@ -69,5 +72,6 @@ CLASS_METHODS_META(Editor::LayerProperty)
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, UpdateLayersList);
 	PROTECTED_FUNCTION(void, SelectLayer, const WString&);
+	PROTECTED_FUNCTION(bool, IsAlwaysRefresh);
 }
 END_META;

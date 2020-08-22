@@ -1,10 +1,9 @@
 #pragma once
 
 #include "o2/Assets/Types/ImageAsset.h"
-#include "o2/Events/KeyboardEventsListener.h"
 #include "o2/Events/ShortcutKeysListener.h"
+#include "o2/Scene/UI/Widgets/PopupWidget.h"
 #include "o2/Scene/UI/Widgets/ScrollArea.h"
-#include "o2/Utils/Delegates.h"
 #include "o2/Utils/System/ShortcutKeys.h"
 
 namespace o2
@@ -65,10 +64,10 @@ namespace o2
 		void SetShortcut(const ShortcutKeys& shortcut);
 
 		// Sets item enabled
-		void SetEnabled(bool enabled);
+		void SetEnabled(bool enabled) override;
 
 		// Returns is item enabled
-		bool IsEnabled() const;
+		bool IsEnabled() const override;
 
 		// Enables item
 		void Enable();
@@ -89,10 +88,10 @@ namespace o2
 		void CopyData(const Actor& otherActor) override;
 
 		// It is called when child widget was added
-		void OnChildAdded(Widget* child);
+		void OnChildAdded(Widget* child) override;
 
 		// This event calling when shortcut hit and this listener has max priority. Calls click callback
-		void OnShortcutPressed();
+		void OnShortcutPressed() override;
 
 		friend class ContextMenu;
 	};
@@ -100,7 +99,7 @@ namespace o2
 	// -----------------------
 	// Context menu ui element
 	// -----------------------
-	class ContextMenu: public ScrollArea, public KeyboardEventsListener
+	class ContextMenu: public PopupWidget
 	{
 	public:
 		// ---------
@@ -109,18 +108,19 @@ namespace o2
 		class Item:public ISerializable
 		{
 		public:
-			WString              text;	    // @SERIALIZABLE
-			ImageAssetRef        icon;	    // @SERIALIZABLE
-			ShortcutKeys         shortcut;  // @SERIALIZABLE
+			WString       text;	    // @SERIALIZABLE
+			ImageAssetRef icon;	    // @SERIALIZABLE
+			ShortcutKeys  shortcut; // @SERIALIZABLE
 
-			Vector<Item>         subItems;  // @SERIALIZABLE
+			Vector<Item> subItems;  // @SERIALIZABLE
 
-			bool                 checked;   // @SERIALIZABLE
-			bool                 checkable; // @SERIALIZABLE
+			bool checked;   // @SERIALIZABLE
+			bool checkable; // @SERIALIZABLE
 
 			Function<void()>     onClick;   // On click event	
 			Function<void(bool)> onChecked; // On checked event	
 
+		public:
 			Item();
 
 			Item(const WString& text, Vector<Item> subItems, const ImageAssetRef& icon = ImageAssetRef());
@@ -159,11 +159,8 @@ namespace o2
 		// Updates drawables, states and widget
 		void Update(float dt) override;
 
-		// Draws widget
-		void Draw() override;
-
 		// Show from parent context
-		void Show(ContextMenu* parent, const Vec2F& position = o2Input.GetCursorPos());
+		void Show(PopupWidget* parent, const Vec2F& position = o2Input.GetCursorPos()) override;
 
 		// Shows context
 		void Show(const Vec2F& position = o2Input.GetCursorPos());
@@ -241,9 +238,6 @@ namespace o2
 		// Returns selection drawable layout
 		Layout GetSelectionDrawableLayout() const;
 
-		// Sets minimal fitting size
-		void SetMinFitSize(float size);
-
 		// Sets maximum visible items count
 		void SetMaxItemsVisible(int count);
 
@@ -253,23 +247,12 @@ namespace o2
 		// Sets context menu items shortcut minimum priority
 		void SetItemsMinPriority();
 
-		// Returns is listener scrollable
-		bool IsScrollable() const override;
-
-		// Returns true when input events can be handled by down listeners
-		bool IsInputTransparent() const override;
-
 		SERIALIZABLE(ContextMenu);
 
 	protected:
-		static ContextMenu* mVisibleContextMenu;      // Current visible context menu
-		const float         mOpenSubMenuDelay = 0.8f; // Sub menu opengin delay whe cursor hover it
+		const float mOpenSubMenuDelay = 0.8f; // Sub menu opengin delay whe cursor hover it
 
-		float mFitSizeMin = 40.0f;    // Minimal fitting size @SERIALIZABLE
-		int   mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
-
-		ContextMenu* mParentContextMenu = nullptr; // Parent visible context menu
-		ContextMenu* mChildContextMenu = nullptr;  // Child visible context menu
+		int mMaxVisibleItems = 100; // Maximum visible items @SERIALIZABLE
 
 		VerticalLayout*  mItemsLayout = nullptr;       // Items layout
 		ContextMenuItem* mItemSample = nullptr;        // Item sample @SERIALIZABLE
@@ -284,32 +267,24 @@ namespace o2
 		ContextMenuItem* mSelectedItem = nullptr;       // Index of selected item
 		float            mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
-		bool mShownAtFrame = false; // Is context was shown at current frame
-
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
-
-		// Checks widget clipping by area
-		void CheckClipping(const RectF& clipArea) override;
-
-		// It is called when visible was changed
-		void OnEnableInHierarchyChanged() override;
 
 		// Creates context items by path ("node/sub node/target")
 		ContextMenu* CreateItemsByPath(WString& path);
 
 		// Fits size by items
-		void FitSizeAndPosition(const Vec2F& position);
+		void FitSizeAndPosition(const Vec2F& position) override;
 
 		// Hides context with his parent
-		void HideWithParent();
+		void HideWithParent() override;
 
 		// Hides context with his child
-		void HideWithChild();
+		void HideWithChild() override;
 
 		// Special drawing for contexts
-		void SpecialDraw();
+		void SpecialDraw() override;
 
 		// Creates item widget
 		ContextMenuItem* CreateItem(const Item& item);
@@ -335,14 +310,8 @@ namespace o2
 		// It is called when cursor released (only when cursor pressed this at previous time)
 		void OnCursorReleased(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor) override;
-
 		// It is called when cursor moved on this (or moved outside when this was pressed)
 		void OnCursorMoved(const Input::Cursor& cursor) override;
-
-		// It is called when key was released
-		void OnKeyPressed(const Input::Key& key) override;
 
 		friend class UIManager;
 		friend class MenuPanel;
@@ -388,17 +357,13 @@ END_META;
 
 CLASS_BASES_META(o2::ContextMenu)
 {
-	BASE_CLASS(o2::ScrollArea);
-	BASE_CLASS(o2::KeyboardEventsListener);
+	BASE_CLASS(o2::PopupWidget);
 }
 END_META;
 CLASS_FIELDS_META(o2::ContextMenu)
 {
 	PROTECTED_FIELD(mOpenSubMenuDelay).DEFAULT_VALUE(0.8f);
-	PROTECTED_FIELD(mFitSizeMin).DEFAULT_VALUE(40.0f).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mMaxVisibleItems).DEFAULT_VALUE(100).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mParentContextMenu).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mChildContextMenu).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mItemsLayout).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mItemSample).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mSeparatorSample).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
@@ -409,15 +374,13 @@ CLASS_FIELDS_META(o2::ContextMenu)
 	PROTECTED_FIELD(mLastSelectCheckCursor);
 	PROTECTED_FIELD(mSelectedItem).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mSelectSubContextTime).DEFAULT_VALUE(-1.0f);
-	PROTECTED_FIELD(mShownAtFrame).DEFAULT_VALUE(false);
 }
 END_META;
 CLASS_METHODS_META(o2::ContextMenu)
 {
 
 	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Show, ContextMenu*, const Vec2F&);
+	PUBLIC_FUNCTION(void, Show, PopupWidget*, const Vec2F&);
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
 	PUBLIC_FUNCTION(ContextMenuItem*, AddItem, const Item&);
 	PUBLIC_FUNCTION(ContextMenuItem*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
@@ -442,15 +405,10 @@ CLASS_METHODS_META(o2::ContextMenu)
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
-	PUBLIC_FUNCTION(void, SetMinFitSize, float);
 	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
 	PUBLIC_FUNCTION(void, SetItemsMaxPriority);
 	PUBLIC_FUNCTION(void, SetItemsMinPriority);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
-	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(ContextMenu*, CreateItemsByPath, WString&);
 	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);
@@ -464,9 +422,7 @@ CLASS_METHODS_META(o2::ContextMenu)
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
 }
 END_META;
 

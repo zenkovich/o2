@@ -7,17 +7,18 @@
 
 namespace o2
 {
-	WidgetLayer::WidgetLayer() :
+	WidgetLayer::WidgetLayer():
 		layout(this), mDepth(0.0f), name((String)Math::Random<UInt>(0, UINT_MAX)),
 		interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mDrawable(nullptr)
 	{
-#if IS_EDITOR
-		Scene::RegEditableObject(this);
-		o2Scene.OnObjectCreated(this);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			Scene::RegEditableObject(this);
+			o2Scene.OnObjectCreated(this);
+		}
 	}
 
-	WidgetLayer::WidgetLayer(const WidgetLayer& other) :
+	WidgetLayer::WidgetLayer(const WidgetLayer& other):
 		mDepth(other.mDepth), name(other.name), layout(this, other.layout), mTransparency(other.mTransparency),
 		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
 		mDrawable(nullptr), depth(this), transparency(this)
@@ -28,18 +29,20 @@ namespace o2
 		for (auto child : other.mChildren)
 			AddChild(child->CloneAs<WidgetLayer>());
 
-#if IS_EDITOR
-		Scene::RegEditableObject(this);
-		o2Scene.OnObjectCreated(this);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			Scene::RegEditableObject(this);
+			o2Scene.OnObjectCreated(this);
+		}
 	}
 
 	WidgetLayer::~WidgetLayer()
 	{
-#if IS_EDITOR
-		Scene::UnregEditableObject(this);
-		o2Scene.OnObjectDestroyed(this);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			Scene::UnregEditableObject(this);
+			o2Scene.OnObjectDestroyed(this);
+		}
 
 		if (mParent)
 			mParent->RemoveChild(this, false);
@@ -144,10 +147,11 @@ namespace o2
 
 		OnChildAdded(node);
 
-#if IS_EDITOR
-		o2Scene.OnObjectChanged(this);
-		o2Scene.OnObjectChanged(node);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			o2Scene.OnObjectChanged(this);
+			o2Scene.OnObjectChanged(node);
+		}
 
 		return node;
 	}
@@ -167,9 +171,8 @@ namespace o2
 		if (lastOwnerWidget)
 			lastOwnerWidget->UpdateLayersDrawingSequence();
 
-#if IS_EDITOR
-		o2Scene.OnObjectChanged(this);
-#endif
+		if constexpr (IS_EDITOR)
+			o2Scene.OnObjectChanged(this);
 
 		return true;
 	}
@@ -184,9 +187,8 @@ namespace o2
 
 		mChildren.Clear();
 
-#if IS_EDITOR
-		o2Scene.OnObjectChanged(this);
-#endif
+		if constexpr (IS_EDITOR)
+			o2Scene.OnObjectChanged(this);
 	}
 
 	void WidgetLayer::SetParent(WidgetLayer* parent)
@@ -221,7 +223,7 @@ namespace o2
 	}
 
 	WidgetLayer* WidgetLayer::AddChildLayer(const String& name, IRectDrawable* drawable,
-												const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
+											const Layout& layout /*= Layout::Both()*/, float depth /*= 0.0f*/)
 	{
 		if (Math::Equals(depth, 0.0f))
 			depth = (float)mOwnerWidget->mDrawingLayers.Count();
@@ -349,10 +351,11 @@ namespace o2
 
 		UpdateResTransparency();
 
-#if IS_EDITOR
-		if (Scene::IsSingletonInitialzed() && mOwnerWidget && mOwnerWidget->IsHieararchyOnScene())
-			o2Scene.mEditableObjects.Add(this);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			if (Scene::IsSingletonInitialzed() && mOwnerWidget && mOwnerWidget->IsHieararchyOnScene())
+				o2Scene.mEditableObjects.Add(this);
+		}
 	}
 
 	void WidgetLayer::OnChildAdded(WidgetLayer* child)
@@ -414,9 +417,8 @@ namespace o2
 
 	void WidgetLayer::OnIncludeInScene()
 	{
-#if IS_EDITOR
-		o2Scene.mEditableObjects.Add(this);
-#endif
+		if constexpr (IS_EDITOR)
+			o2Scene.mEditableObjects.Add(this);
 
 		for (auto layer : mChildren)
 			layer->OnIncludeInScene();
@@ -424,9 +426,8 @@ namespace o2
 
 	void WidgetLayer::OnExcludeFromScene()
 	{
-#if IS_EDITOR
-		Scene::UnregEditableObject(this);
-#endif
+		if constexpr (IS_EDITOR)
+			Scene::UnregEditableObject(this);
 
 		for (auto layer : mChildren)
 			layer->OnIncludeInScene();

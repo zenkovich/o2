@@ -152,8 +152,8 @@ namespace Editor
 		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
 			actors, prototypes, [](Actor* x) { return &x->tags; });
 
-		Vector<void*> layersTargets = actors.Convert<void*>([](Actor* x) { return &x->layer; });
-		//mLayerProperty->Setup(tagsTargets, true);
+		mLayerProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::layer)>(
+			actors, prototypes, [](Actor* x) { return &x->layer; });
 	}
 
 	Widget* DefaultActorHeaderViewer::GetWidget() const
@@ -168,6 +168,7 @@ namespace Editor
 		mLockProperty->Refresh();
 		//mPrototypeProperty->Refresh();
 		mTagsProperty->Refresh();
+		mLayerProperty->Refresh();
 
 		//*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
 	}

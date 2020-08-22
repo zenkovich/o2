@@ -70,8 +70,8 @@ namespace Editor
 		void RebuildRedFloatProperty();
 		void RebuildGreenFloatProperty();
 		void RebuildIntegerProperty();
-		void RebuildActorPropety();
-		void RebuildBoolPropety();
+		void RebuildActorProperty();
+		void RebuildBoolProperty();
 		void RebuildBorderFProperty();
 		void RebuildBorderIProperty();
 		void RebuildColorPropety();
@@ -88,6 +88,7 @@ namespace Editor
 		void RebuildVector2IProperty();
 		void RebuildColoredVector2Property();
 		void RebuildAssetPropety();
+		void RebuildSceneLayersListProperty();
 
 		void RebuildPropertiesWithCaptins();
 
@@ -228,8 +229,8 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildRedFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildGreenFloatProperty);
 	PUBLIC_FUNCTION(void, RebuildIntegerProperty);
-	PUBLIC_FUNCTION(void, RebuildActorPropety);
-	PUBLIC_FUNCTION(void, RebuildBoolPropety);
+	PUBLIC_FUNCTION(void, RebuildActorProperty);
+	PUBLIC_FUNCTION(void, RebuildBoolProperty);
 	PUBLIC_FUNCTION(void, RebuildBorderFProperty);
 	PUBLIC_FUNCTION(void, RebuildBorderIProperty);
 	PUBLIC_FUNCTION(void, RebuildColorPropety);
@@ -246,6 +247,7 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildVector2IProperty);
 	PUBLIC_FUNCTION(void, RebuildColoredVector2Property);
 	PUBLIC_FUNCTION(void, RebuildAssetPropety);
+	PUBLIC_FUNCTION(void, RebuildSceneLayersListProperty);
 	PUBLIC_FUNCTION(void, RebuildPropertiesWithCaptins);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableToggle);
 	PUBLIC_FUNCTION(void, RebuildActorHeadEnableProperty);

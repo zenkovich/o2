@@ -5,6 +5,10 @@
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayer.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
 #include "o2/Scene/UI/Widgets/CustomDropDown.h"
@@ -17,16 +21,13 @@
 #include "o2/Scene/UI/Widgets/List.h"
 #include "o2/Scene/UI/Widgets/LongList.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
+#include "o2/Scene/UI/Widgets/PopupWidget.h"
 #include "o2/Scene/UI/Widgets/ScrollArea.h"
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
 #include "o2/Scene/UI/Widgets/Tree.h"
-#include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widgets/VerticalProgress.h"
 #include "o2/Scene/UI/Widgets/VerticalScrollBar.h"
-#include "o2/Scene/UI/WidgetLayer.h"
-#include "o2/Scene/UI/WidgetLayout.h"
-#include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/Window.h"
 
 namespace o2
@@ -124,6 +125,19 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "arrow");
+	}
+
+	void BasicUIStyleBuilder::RebuildHorSeparatorStyle()
+	{
+		Widget* sample = mnew Widget();
+		sample->AddLayer("line", mnew Sprite("ui/UI4_Separator.png"),
+								  Layout::HorStretch(VerAlign::Middle, 0, 0, 5, 0));
+		*sample->layout = WidgetLayout::HorStretch(VerAlign::Top, 0, 0, 5);
+		sample->layout->maxHeight = 5;
+		sample->layout->minHeight = 5;
+		sample->layout->height = 5;
+
+		o2UI.AddWidgetStyle(sample, "hor separator");
 	}
 
 	void BasicUIStyleBuilder::RebuildHorProgressBarStyle()
@@ -420,6 +434,37 @@ namespace o2
 			->offStateAnimationSpeed = 0.5f;
 
 		o2UI.AddWidgetStyle(sample, "straight bars");
+	}
+
+	void BasicUIStyleBuilder::RebuildPopupStyle()
+	{
+		PopupWidget* sample = mnew PopupWidget();
+		sample->layout->minSize = Vec2F(20, 20);
+		sample->SetClippingLayout(Layout::BothStretch(1, 2, 1, 1));
+		sample->SetViewLayout(Layout::BothStretch(2, 2, 2, 2));
+		sample->SetEnableScrollsHiding(true);
+		sample->SetMinFitSize(50);
+
+		sample->AddLayer("back", mnew Sprite("ui/UI4_Context_menu.png"), Layout::BothStretch(-20, -19, -20, -19));
+
+		HorizontalScrollBar* horScrollBar = o2UI.CreateHorScrollBar();
+		horScrollBar->layout->anchorMin = Vec2F(0, 0);
+		horScrollBar->layout->anchorMax = Vec2F(1, 0);
+		horScrollBar->layout->offsetMin = Vec2F(5, 0);
+		horScrollBar->layout->offsetMax = Vec2F(-15, 15);
+		sample->SetHorizontalScrollBar(horScrollBar);
+
+		VerticalScrollBar* verScrollBar = o2UI.CreateVerScrollBar();
+		verScrollBar->layout->anchorMin = Vec2F(1, 0);
+		verScrollBar->layout->anchorMax = Vec2F(1, 1);
+		verScrollBar->layout->offsetMin = Vec2F(-15, 15);
+		verScrollBar->layout->offsetMax = Vec2F(0, -5);
+		sample->SetVerticalScrollBar(verScrollBar);
+
+		sample->AddState("visible", AnimationClip::EaseInOut("transparency", 0.0f, 1.0f, 0.2f))
+			->offStateAnimationSpeed = 0.5f;
+
+		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
 	void BasicUIStyleBuilder::RebuildScrollAreaStyle()

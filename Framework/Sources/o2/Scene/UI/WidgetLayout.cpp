@@ -695,7 +695,6 @@ namespace o2
 
 		if (otherLayout)
 		{
-
 			mData->anchorMin = otherLayout->mData->anchorMin;
 			mData->anchorMax = otherLayout->mData->anchorMax;
 			mData->offsetMin = otherLayout->mData->offsetMin;

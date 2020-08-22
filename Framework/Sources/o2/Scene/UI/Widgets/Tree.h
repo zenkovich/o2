@@ -561,10 +561,10 @@ namespace o2
 		void OnDragEnd(const Input::Cursor& cursor) override;
 
 		// It is called when this was selected
-		void OnSelected();
+		void OnSelected() override;
 
 		// It is called when this was unselected
-		void OnDeselected();
+		void OnDeselected() override;
 
 		friend class Tree;
 	};

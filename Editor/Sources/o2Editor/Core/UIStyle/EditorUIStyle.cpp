@@ -4,38 +4,10 @@
 #include "o2/Animation/Animate.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
-#include "o2Editor/AnimationWindow/PropertiesListDlg.h"
-#include "o2Editor/AnimationWindow/Tree.h"
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Assets/Types/BinaryAsset.h"
 #include "o2/Assets/Types/DataAsset.h"
 #include "o2/Assets/Types/FolderAsset.h"
-#include "o2Editor/AssetsWindow/AssetIcon.h"
-#include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
-#include "o2/Utils/Editor/EditorScope.h"
-#include "o2Editor/Core/Properties/Basic/ActorProperty.h"
-#include "o2Editor/Core/Properties/Basic/AssetProperty.h"
-#include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
-#include "o2Editor/Core/Properties/Basic/BorderFloatProperty.h"
-#include "o2Editor/Core/Properties/Basic/BorderIntProperty.h"
-#include "o2Editor/Core/Properties/Basic/ColorProperty.h"
-#include "o2Editor/Core/Properties/Basic/ComponentProperty.h"
-#include "o2Editor/Core/Properties/Basic/CurveProperty.h"
-#include "o2Editor/Core/Properties/Basic/EnumProperty.h"
-#include "o2Editor/Core/Properties/Basic/FloatProperty.h"
-#include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
-#include "o2Editor/Core/Properties/Basic/LayerProperty.h"
-#include "o2Editor/Core/Properties/Basic/RectangleFloatProperty.h"
-#include "o2Editor/Core/Properties/Basic/RectangleIntProperty.h"
-#include "o2Editor/Core/Properties/Basic/StringProperty.h"
-#include "o2Editor/Core/Properties/Basic/TagProperty.h"
-#include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
-#include "o2Editor/Core/Properties/Basic/Vector2IntProperty.h"
-#include "o2Editor/Core/Properties/Basic/WStringProperty.h"
-#include "o2Editor/Core/UI/SpoilerWithHead.h"
-#include "o2Editor/Core/UIStyle/BasicUIStyle.h"
-#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
-#include "o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
 #include "o2/Scene/UI/UIManager.h"
@@ -61,9 +33,38 @@
 #include "o2/Scene/UI/Widgets/VerticalProgress.h"
 #include "o2/Scene/UI/Widgets/VerticalScrollBar.h"
 #include "o2/Scene/UI/Widgets/Window.h"
-#include "o2Editor/TreeWindow/SceneTree.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 #include "o2/Utils/System/Time/Timer.h"
+#include "o2Editor/AnimationWindow/PropertiesListDlg.h"
+#include "o2Editor/AnimationWindow/Tree.h"
+#include "o2Editor/AssetsWindow/AssetIcon.h"
+#include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
+#include "o2Editor/Core/Properties/Basic/ActorProperty.h"
+#include "o2Editor/Core/Properties/Basic/AssetProperty.h"
+#include "o2Editor/Core/Properties/Basic/BooleanProperty.h"
+#include "o2Editor/Core/Properties/Basic/BorderFloatProperty.h"
+#include "o2Editor/Core/Properties/Basic/BorderIntProperty.h"
+#include "o2Editor/Core/Properties/Basic/ColorProperty.h"
+#include "o2Editor/Core/Properties/Basic/ComponentProperty.h"
+#include "o2Editor/Core/Properties/Basic/CurveProperty.h"
+#include "o2Editor/Core/Properties/Basic/EnumProperty.h"
+#include "o2Editor/Core/Properties/Basic/FloatProperty.h"
+#include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
+#include "o2Editor/Core/Properties/Basic/LayerProperty.h"
+#include "o2Editor/Core/Properties/Basic/RectangleFloatProperty.h"
+#include "o2Editor/Core/Properties/Basic/RectangleIntProperty.h"
+#include "o2Editor/Core/Properties/Basic/SceneLayersListProperty.h"
+#include "o2Editor/Core/Properties/Basic/StringProperty.h"
+#include "o2Editor/Core/Properties/Basic/TagProperty.h"
+#include "o2Editor/Core/Properties/Basic/Vector2FloatProperty.h"
+#include "o2Editor/Core/Properties/Basic/Vector2IntProperty.h"
+#include "o2Editor/Core/Properties/Basic/WStringProperty.h"
+#include "o2Editor/Core/UI/SpoilerWithHead.h"
+#include "o2Editor/Core/UIStyle/BasicUIStyle.h"
+#include "o2Editor/Core/WindowsSystem/DockableWindow.h"
+#include "o2Editor/PropertiesWindow/ActorsViewer/AddComponentPanel.h"
+#include "o2Editor/TreeWindow/SceneTree.h"
 
 using namespace o2;
 
@@ -3613,7 +3614,7 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample, "standard");
 	}
 
-	void EditorUIStyleBuilder::RebuildActorPropety()
+	void EditorUIStyleBuilder::RebuildActorProperty()
 	{
 		auto sample = mnew ActorProperty();
 		sample->layout->minHeight = 20;
@@ -3816,7 +3817,68 @@ namespace Editor
 		o2UI.AddWidgetStyle(sample->CloneAs<AssetProperty>(), "with caption");
 	}
 
-	void EditorUIStyleBuilder::RebuildBoolPropety()
+	void EditorUIStyleBuilder::RebuildSceneLayersListProperty()
+	{
+		auto sample = mnew SceneLayersListProperty();
+		sample->layout->minHeight = 20;
+		sample->expandHeight = true;
+		sample->expandWidth = true;
+		sample->fitByChildren = false;
+
+		auto layoutContainer = mnew Widget();
+		layoutContainer->name = "container";
+		*layoutContainer->layout = WidgetLayout::BothStretch();
+		sample->AddChild(layoutContainer);
+
+		auto layout = mnew HorizontalLayout();
+		layout->name = "layout";
+		*layout->layout = WidgetLayout::BothStretch();
+		layoutContainer->AddChild(layout);
+
+		auto box = mnew Button();
+		box->name = "box";
+		box->SetFocusable(true);
+		*box->layout = WidgetLayout::BothStretch();
+
+		auto backLayer = box->AddLayer("back", mnew Sprite("ui/UI4_Editbox_regular.png"),
+									   Layout::BothStretch(-9, -9, -9, -9));
+
+		auto selectLayer = box->AddLayer("hover", mnew Sprite("ui/UI4_Editbox_select.png"),
+										 Layout::BothStretch(-9, -9, -9, -9));
+
+		auto focusLayer = box->AddLayer("focus", mnew Sprite("ui/UI4_Editbox_focus.png"),
+										Layout::BothStretch(-9, -9, -9, -9));
+
+		auto pressedLayer = box->AddLayer("pressed", mnew Sprite("ui/UI4_Editbox_pressed.png"),
+											 Layout::BothStretch(-4, -4, -5, -5));
+
+		auto arrowLayer = box->AddLayer("arrow", mnew Sprite("ui/UI4_Down_icn.png"),
+										   Layout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F(0, 0)));
+
+		box->AddState("focused", AnimationClip::EaseInOut("layer/focus/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		box->AddState("hover", AnimationClip::EaseInOut("layer/hover/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		box->AddState("pressed", AnimationClip::EaseInOut("layer/pressed/transparency", 0.0f, 1.0f, 0.05f))
+			->offStateAnimationSpeed = 0.5f;
+
+		auto nameText = mnew Text("stdFont.ttf");
+		nameText->text = "--";
+		nameText->horAlign = HorAlign::Left;
+		nameText->verAlign = VerAlign::Middle;
+		nameText->dotsEngings = true;
+		nameText->color = Color4(96, 125, 139);
+		box->AddLayer("caption", nameText, Layout::BothStretch(2, 2, 2, 2));
+
+		box->SetFocusable(true);
+		layout->AddChild(box);
+
+		o2UI.AddWidgetStyle(sample, "standard");
+	}
+
+	void EditorUIStyleBuilder::RebuildBoolProperty()
 	{
 		auto sample = mnew BooleanProperty();
 		sample->layout->minHeight = 20;
@@ -3836,7 +3898,7 @@ namespace Editor
 
 		Toggle* toggle = o2UI.CreateToggle("", "without caption");
 		toggle->name = "toggle";
-		*toggle->layout = WidgetLayout::BothStretch();
+		toggle->layout->maxWidth = 20;
 		layout->AddChild(toggle);
 
 		o2UI.AddWidgetStyle(sample, "standard");
@@ -4535,6 +4597,7 @@ namespace Editor
 		BuildPropertyWithCaption<Vec2FProperty>("colored", "colored with caption");
 		BuildPropertyWithCaption<Vec2IProperty>("standard", "with caption");
 		BuildPropertyWithCaption<WStringProperty>("standard", "with caption");
+		BuildPropertyWithCaption<SceneLayersListProperty>("standard", "with caption");
 	}
 
 	void EditorUIStyleBuilder::RebuildEditorUIManager(const String& stylesFileName, bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)

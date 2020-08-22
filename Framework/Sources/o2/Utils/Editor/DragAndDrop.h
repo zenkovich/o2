@@ -57,7 +57,7 @@ namespace o2
 		bool IsDragging() const;
 
 		// It is called when listener was drawn
-		virtual void OnDrawn();
+		void OnDrawn() override;
 
 		// Returns last cursor pressed point
 		Vec2F GetCursorPressedPoint() const;
@@ -75,16 +75,16 @@ namespace o2
 		DragDropArea* GetDropAreaUnderCursor(CursorId cursorId) const;
 
 		// It is called when cursor pressed on this
-		virtual void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		virtual void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		virtual void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		virtual void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when started dragging
 		virtual void OnDragStart(const Input::Cursor& cursor);
@@ -157,25 +157,25 @@ namespace o2
 		virtual ~SelectableDragableObjectsGroup();
 
 		// Returns selected listeners in group
-		Vector<SelectableDragableObject*> GetSelectedDragObjects() const;
+		Vector<SelectableDragableObject*> GetSelectedDragObjects() const override;
 
 		// Returns all objects in group 
-		Vector<SelectableDragableObject*> GetAllObjects() const;
+		Vector<SelectableDragableObject*> GetAllObjects() const override;
 
 		// Selects object
-		void Select(SelectableDragableObject* object);
+		void Select(SelectableDragableObject* object) override;
 
 		// Deselects object
-		void Deselect(SelectableDragableObject* object);
+		void Deselect(SelectableDragableObject* object) override;
 
 		// Adds selectable object to group
-		void AddSelectableObject(SelectableDragableObject* object);
+		void AddSelectableObject(SelectableDragableObject* object) override;
 
 		// Removes selectable object from group
-		void RemoveSelectableObject(SelectableDragableObject* object);
+		void RemoveSelectableObject(SelectableDragableObject* object) override;
 
 		// Returns true if point is in this object
-		virtual bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 	protected:
 		Vector<SelectableDragableObject*> mObjects;         // Listeners in group
@@ -183,7 +183,7 @@ namespace o2
 
 	protected:
 		// It is called when selectable draggable object was pressed
-		virtual void OnSelectableObjectCursorPressed(SelectableDragableObject* object, const Input::Cursor& cursor);
+		void OnSelectableObjectCursorPressed(SelectableDragableObject* object, const Input::Cursor& cursor) override;
 
 		friend class SelectableDragableObject;
 	};
@@ -236,16 +236,16 @@ namespace o2
 
 	protected:
 		// It is called when cursor pressed on this
-		virtual void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		virtual void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		virtual void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released outside this(only when cursor pressed this at previous time)
-		virtual void OnCursorReleasedOutside(const Input::Cursor& cursor);
+		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
 
 		// It is called when this was selected
 		virtual void OnSelected();

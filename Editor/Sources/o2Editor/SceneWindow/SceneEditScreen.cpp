@@ -154,6 +154,9 @@ namespace Editor
 
 		for (auto layer : o2Scene.GetLayers())
 		{
+			if (!layer->visible)
+				continue;
+
 			for (auto drw : layer->GetEnabledDrawables())
 				drw->Draw();
 		}

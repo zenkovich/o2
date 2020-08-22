@@ -330,6 +330,14 @@ SyntaxVariable* CppSyntaxParser::ParseVariable(const string& data, SyntaxProtect
 		typeDefinition += " " + typeWord;
 	}
 
+	if (typeWord == "mutable")
+	{
+		typeWord = ReadWord(data, caret, " \n\r(){}[]");
+		res->mType.mIsMutable = true;
+
+		typeDefinition += " " + typeWord;
+	}
+
 	if (!typeWord.empty() && typeWord[typeWord.length() - 1] == '&')
 		res->mType.mIsReference = true;
 

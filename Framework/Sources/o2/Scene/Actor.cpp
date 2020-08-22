@@ -10,16 +10,16 @@ namespace o2
 {
 	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
-	Actor::Actor(ActorTransform* transform, bool isOnScene /*= true*/, const String& name /*= "unnamed"*/, 
-				 bool enabled /*= true*/, bool resEnabled /*= true*/, bool locked /*= false*/, bool resLocked /*= false*/, 
-				 const String& layerName /*= ""*/, SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/, 
+	Actor::Actor(ActorTransform* transform, bool isOnScene /*= true*/, const String& name /*= "unnamed"*/,
+				 bool enabled /*= true*/, bool resEnabled /*= true*/, bool locked /*= false*/, bool resLocked /*= false*/,
+				 const String& layerName /*= ""*/, SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/,
 				 UID assetId /*= UID(0)*/):
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
-		mLocked(locked), mResLocked(resLocked), mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId), 
+		mLocked(locked), mResLocked(resLocked), mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId),
 		mIsOnScene(isOnScene)
 	{}
 
-	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(transform, IsModeOnScene(mode))
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
@@ -44,7 +44,7 @@ namespace o2
 		ActorDataValueConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(transform, IsModeOnScene(mode), prototype->GetActor()->mName,
 			  prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled, prototype->GetActor()->mLocked,
 			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayerName, nullptr)
@@ -74,7 +74,7 @@ namespace o2
 		ActorDataValueConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
+	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(transform, mode)
 	{
 		for (auto comp : components)
@@ -83,7 +83,7 @@ namespace o2
 		OnTransformUpdated();
 	}
 
-	Actor::Actor(ActorTransform* transform, const Actor& other) :
+	Actor::Actor(ActorTransform* transform, const Actor& other):
 		Actor(transform, mDefaultCreationMode == ActorCreateMode::InScene, other.mName, other.mEnabled,
 			  other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer, Math::Random(), other.mAssetId)
 	{
@@ -113,7 +113,7 @@ namespace o2
 		ActorDataValueConverter::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/) :
+	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/):
 		Actor(mnew ActorTransform(), mode)
 	{}
 
@@ -139,7 +139,7 @@ namespace o2
 
 		if (mParent)
 			mParent->RemoveChild(this, false);
-		
+
 		Scene::OnActorDestroying(this);
 
 		RemoveAllChildren();
@@ -288,10 +288,11 @@ namespace o2
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
 
-#if IS_EDITOR
-		if (!keepEditorObjects)
-			o2Scene.mEditableObjects.Remove(this);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			if (!keepEditorObjects)
+				o2Scene.mEditableObjects.Remove(this);
+		}
 
 		OnExcludeFromScene();
 		ExcludeComponentsFromScene();
@@ -315,9 +316,8 @@ namespace o2
 
 		o2Scene.mAllActors.Add(this);
 
-#if IS_EDITOR
-		o2Scene.mEditableObjects.Add(this);
-#endif
+		if constexpr (IS_EDITOR)
+			o2Scene.mEditableObjects.Add(this);
 
 		mIsOnScene = true;
 
@@ -351,10 +351,11 @@ namespace o2
 
 		onEnableChanged(mEnabled);
 
-#if IS_EDITOR
-		if (IsHieararchyOnScene())
-			o2Scene.onEnableChanged(this);
-#endif
+		if constexpr (IS_EDITOR)
+		{
+			if (IsHieararchyOnScene())
+				o2Scene.onEnableChanged(this);
+		}
 
 		OnChanged();
 	}
@@ -815,10 +816,12 @@ namespace o2
 					mLayer->OnActorDisabled(this);
 			}
 
-#if IS_EDITOR
-			if (IsHieararchyOnScene())
-				o2Scene.onEnableChanged(this);
-#endif
+			if constexpr (IS_EDITOR)
+			{
+				if (IsHieararchyOnScene())
+					o2Scene.onEnableChanged(this);
+			}
+
 			OnEnableInHierarchyChanged();
 			OnChanged();
 		}
@@ -1103,15 +1106,15 @@ namespace o2
 
 				auto fields = field->GetType()->GetFieldsWithBaseClasses();
 				CopyFields(fields, (IObject*)field->GetValuePtr(source),
-					(IObject*)field->GetValuePtr(dest),
+						   (IObject*)field->GetValuePtr(dest),
 						   actorsPointers, componentsPointers, serializableObjects);
 			}
 			else field->CopyValue(dest, source);
 		}
 	}
 
-	void Actor::CollectFixingFields(Component* newComponent, Vector<Component **> &componentsPointers,
-									Vector<Actor **> &actorsPointers)
+	void Actor::CollectFixingFields(Component* newComponent, Vector<Component**>& componentsPointers,
+									Vector<Actor**>& actorsPointers)
 	{
 		Vector<const FieldInfo*> fields;
 		GetComponentFields(newComponent, fields);

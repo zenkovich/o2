@@ -184,10 +184,7 @@ namespace Editor
 		if (mWatchEditor)
 			return EditorUIRoot.GetRootWidget()->GetEditablesChildren().Cast<void*>();
 
-		Vector<void*> res = o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
-		res.Add(dynamic_cast<SceneEditableObject*>(&(o2Scene.GetCamera())));
-
-		return res;
+		return o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	String SceneTree::GetObjectDebug(void* object)
