@@ -1,0 +1,87 @@
+#include "o2Editor/stdafx.h"
+#include "SceneLayersListProperty.h"
+
+#include "o2/Scene/UI/UIManager.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+
+namespace Editor
+{
+	SceneLayersListProperty::SceneLayersListProperty()
+	{}
+
+	SceneLayersListProperty::SceneLayersListProperty(const SceneLayersListProperty& other):
+		TPropertyField<SceneLayersList>(other)
+	{
+		InitializeControls();
+	}
+
+	SceneLayersListProperty& SceneLayersListProperty::operator=(const SceneLayersListProperty& other)
+	{
+		TPropertyField<SceneLayersList>::operator=(other);
+		return *this;
+	}
+
+	void SceneLayersListProperty::CopyData(const Actor& otherActor)
+	{
+		TPropertyField<SceneLayersList>::CopyData(otherActor);
+		InitializeControls();
+	}
+
+	void SceneLayersListProperty::InitializeControls()
+	{
+		mPropertyButton = GetChildByType<Button>("container/layout/box");
+		if (mPropertyButton)
+		{
+			mPropertyButton->SetFocusable(true);
+			mPropertyButton->onClick = THIS_FUNC(OpenContext);
+
+			mPropertyText = mPropertyButton->GetLayerDrawable<Text>("caption");
+			if (mPropertyText)
+				mPropertyText->text = "--";
+
+			mLayersContext = o2UI.CreateWidget<ContextMenu>();
+			mPropertyButton->AddChild(mLayersContext);
+		}
+	}
+
+	void SceneLayersListProperty::OpenContext()
+	{
+		mLayersContext->RemoveAllItems();
+
+		mLayersContext->AddToggleItem("All layers", o2Scene.GetLayers().All([&](SceneLayer* x) { return mCommonValue.HasLayer(x); }),
+									  [&](bool b) { if (b) SetValueByUser(o2Scene.GetLayers()); else SetValueByUser({}); });
+
+		mLayersContext->AddItem("---");
+
+		for (auto layer : o2Scene.GetLayers())
+			mLayersContext->AddToggleItem(layer->GetName(), mCommonValue.HasLayer(layer), 
+										  [=](bool b) { 
+			SceneLayersList copy = mCommonValue;
+			if (b)
+				copy.AddLayer(layer);
+			else
+				copy.RemoveLayer(layer);
+
+			SetValueByUser(copy);
+		});
+
+		mLayersContext->Show(mPropertyButton->layout->GetWorldLeftBottom());
+	}
+
+	void SceneLayersListProperty::UpdateValueView()
+	{
+		String layers;
+		for (auto& layer : mCommonValue.GetLayersNames())
+		{
+			if (!layers.IsEmpty())
+				layers += ", ";
+
+			layers += layer;
+		}
+
+		mPropertyText->text = layers;
+	}
+}
+DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::SceneLayersList>);
+
+DECLARE_CLASS(Editor::SceneLayersListProperty);
