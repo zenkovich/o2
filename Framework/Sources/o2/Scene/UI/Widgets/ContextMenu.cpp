@@ -53,7 +53,7 @@ namespace o2
 		PopupWidget()
 	{
 		mItemSample = mnew ContextMenuItem();
-		mItemSample->ExcludeFromScene();
+		mItemSample->RemoveFromScene();
 		mItemSample->layout->minHeight = 20.0f;
 		auto basicLayer = mItemSample->AddLayer("basic", nullptr);
 		basicLayer->AddChildLayer("icon", nullptr, Layout(Vec2F(0.0f, 0.5f), Vec2F(0.0f, 0.5f), Vec2F(10, 0), Vec2F(10, 0)));
@@ -62,7 +62,7 @@ namespace o2
 		basicLayer->AddChildLayer("shortcut", nullptr, Layout(Vec2F(0.0f, 0.0f), Vec2F(1.0f, 1.0f), Vec2F(20, 0), Vec2F(0, 0)));
 
 		mSeparatorSample = mnew Widget();
-		mSeparatorSample->ExcludeFromScene();
+		mSeparatorSample->RemoveFromScene();
 		mSeparatorSample->layout->minHeight = 3.0f;
 		mSeparatorSample->layout->height = 3.0f;
 
@@ -88,10 +88,10 @@ namespace o2
 		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
 		mItemSample        = other.mItemSample->CloneAs<ContextMenuItem>();
-		mItemSample->ExcludeFromScene();
+		mItemSample->RemoveFromScene();
 
 		mSeparatorSample   = other.mSeparatorSample->CloneAs<Widget>();
-		mSeparatorSample->ExcludeFromScene();
+		mSeparatorSample->RemoveFromScene();
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout   = other.mSelectionLayout;
@@ -629,8 +629,8 @@ namespace o2
 		mItemsLayout       = FindChildByType<VerticalLayout>();
 		mMaxVisibleItems   = other.mMaxVisibleItems;
 
-		mItemSample->ExcludeFromScene();
-		mSeparatorSample->ExcludeFromScene();
+		mItemSample->RemoveFromScene();
+		mSeparatorSample->RemoveFromScene();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();

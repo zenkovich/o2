@@ -308,10 +308,10 @@ namespace o2
 		void OnLayerChanged(SceneLayer* oldLayer) override;
 
 		// It is called when actor excluding from scene, removes this from layer drawables
-		void OnExcludeFromScene() override;
+		void OnRemoveFromScene() override;
 
 		// It is called when actor including from scene, including this to layer drawables
-		void OnIncludeToScene() override;
+		void OnAddToScene() override;
 
 		// Updates child widgets list
 		void UpdateChildWidgetsList();
@@ -805,8 +805,8 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
+	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, UpdateChildWidgetsList);
 	PROTECTED_FUNCTION(WidgetLayoutData&, GetLayoutData);
 	PROTECTED_FUNCTION(const WidgetLayoutData&, GetLayoutData);

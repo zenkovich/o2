@@ -214,17 +214,17 @@ namespace o2
 		mBlend.time = -1;
 	}
 
-	String AnimationComponent::GetName() const
+	String AnimationComponent::GetName()
 	{
 		return "Animation";
 	}
 
-	String AnimationComponent::GetCategory() const
+	String AnimationComponent::GetCategory()
 	{
 		return "Basic";
 	}
 
-	String AnimationComponent::GetIcon() const
+	String AnimationComponent::GetIcon()
 	{
 		return "ui/UI4_animation_component.png";
 	}

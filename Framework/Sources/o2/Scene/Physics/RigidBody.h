@@ -6,6 +6,8 @@
 
 namespace o2
 {
+	class ICollider;
+
 	// ------------------
 	// Physics rigid body
 	// ------------------
@@ -122,6 +124,8 @@ namespace o2
 		bool  mIsBullet = false;        // Is using continuous collision detection @SERIALIZABLE
 		bool  mIsFixedRotation = false; // Is fixed rotation @SERIALIZABLE
 
+		Vector<ICollider*> mColliders; // Attached colliders list
+
 	protected:
 		// It is called when result enable was changed
 		void OnEnableInHierarchyChanged() override;
@@ -135,8 +139,16 @@ namespace o2
 		// Removes body
 		void RemoveBody();
 
+		// Adds collider to body
+		void AddCollider(ICollider* collider);
+
+		// Removes collider from body
+		void RemoveCollider(ICollider* collider);
+
 		// Converts body type
 		static b2BodyType GetBodyType(Type type);
+
+		friend class ICollider;
 	};
 }
 
@@ -170,6 +182,7 @@ CLASS_FIELDS_META(o2::RigidBody)
 	PROTECTED_FIELD(mGravityScale).DEFAULT_VALUE(1.0f).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mIsBullet).DEFAULT_VALUE(false).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mIsFixedRotation).DEFAULT_VALUE(false).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mColliders);
 }
 END_META;
 CLASS_METHODS_META(o2::RigidBody)
@@ -201,6 +214,8 @@ CLASS_METHODS_META(o2::RigidBody)
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, CreateBody);
 	PROTECTED_FUNCTION(void, RemoveBody);
+	PROTECTED_FUNCTION(void, AddCollider, ICollider*);
+	PROTECTED_FUNCTION(void, RemoveCollider, ICollider*);
 	PROTECTED_STATIC_FUNCTION(b2BodyType, GetBodyType, Type);
 }
 END_META;

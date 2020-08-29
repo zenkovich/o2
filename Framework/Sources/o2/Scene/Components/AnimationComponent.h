@@ -85,22 +85,22 @@ namespace o2
 		// Stops all states
 		void StopAll();
 
-		// Returns name of component
-		String GetName() const override;
-
-		// Returns category of component
-		String GetCategory() const override;
-
-		// Returns name of component icon
-		String GetIcon() const override;
-
-		SERIALIZABLE(AnimationComponent);
-
 		// It is called when animation started to edit. It means that animation must be deactivated
 		void BeginAnimationEdit() override;
 
 		// It is called when animation finished editing. ANimation must be reactivated
 		void EndAnimationEdit() override;
+
+		// Returns name of component
+		static String GetName();
+
+		// Returns category of component
+		static String GetCategory();
+
+		// Returns name of component icon
+		static String GetIcon();
+
+		SERIALIZABLE(AnimationComponent);
 
 	protected:
 		// -------------------------------
@@ -316,11 +316,11 @@ CLASS_METHODS_META(o2::AnimationComponent)
 	PUBLIC_FUNCTION(AnimationState*, BlendTo, AnimationState*, float);
 	PUBLIC_FUNCTION(void, Stop, const String&);
 	PUBLIC_FUNCTION(void, StopAll);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(String, GetCategory);
-	PUBLIC_FUNCTION(String, GetIcon);
 	PUBLIC_FUNCTION(void, BeginAnimationEdit);
 	PUBLIC_FUNCTION(void, EndAnimationEdit);
+	PUBLIC_STATIC_FUNCTION(String, GetName);
+	PUBLIC_STATIC_FUNCTION(String, GetCategory);
+	PUBLIC_STATIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
 	PROTECTED_FUNCTION(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
 	PROTECTED_FUNCTION(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);

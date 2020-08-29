@@ -2,15 +2,9 @@
 #include "EditorTestComponent.h"
 
 #include "o2/Scene/Actor.h"
-
 #include "o2/Scene/SceneLayer.h"
 
-o2::String o2::EditorTestComponent::GetName() const
-{
-	return "Test";
-}
-
-o2::String o2::EditorTestComponent::GetCategory() const
+o2::String o2::EditorTestComponent::GetCategory()
 {
 	return "Debug";
 }

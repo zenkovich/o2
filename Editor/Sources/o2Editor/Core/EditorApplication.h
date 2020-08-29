@@ -78,13 +78,23 @@ namespace Editor
 
 		DataDocument mSceneDump; // Scene dump, created before playing
 
-		bool mIsPlaying = false; // Is editor scene playing
+		bool mIsPlaying = false;  // Is editor scene playing
+		bool mUpdateStep = false; // True when frame updating available on this frame
 
 		int mDrawCalls; // Draw calls count, stored before beginning rendering
 
 	protected:
 		// Check style rebuilding and loads editor UI style
 		void LoadUIStyle();
+
+		// Before update physics
+		void PreUpdatePhysics() override;
+
+		// Updates physics
+		void UpdatePhysics(float dt) override;
+
+		// After update physics
+		void PostUpdatePhysics() override;
 
 		// Updates scene
 		void UpdateScene(float dt) override;

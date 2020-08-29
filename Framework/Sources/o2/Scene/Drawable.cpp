@@ -68,7 +68,7 @@ namespace o2
 			mLayer->RegisterDrawable(this);
 	}
 
-	void SceneDrawable::OnExcludeFromScene()
+	void SceneDrawable::OnRemoveFromScene()
 	{
 		if (mLayer)
 			mLayer->UnregisterDrawable(this);
@@ -76,7 +76,7 @@ namespace o2
 		mIsOnScene = false;
 	}
 
-	void SceneDrawable::OnIncludeToScene()
+	void SceneDrawable::OnAddToScene()
 	{
 		if (mLayer)
 			mLayer->RegisterDrawable(this);

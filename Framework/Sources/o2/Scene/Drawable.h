@@ -58,11 +58,11 @@ namespace o2
 		float       mDrawingDepth = 0.0f; // Drawing depth. Objects with higher depth will be drawn later @SERIALIZABLE
 
 	protected:
-		// It is called when actor was excluded from scene
-		void OnExcludeFromScene();
-
 		// It is called when actor was included to scene
-		void OnIncludeToScene();
+		void OnAddToScene();
+
+		// It is called when actor was excluded from scene
+		void OnRemoveFromScene();
 
 		friend class Scene;
 		friend class SceneLayer;
@@ -100,8 +100,8 @@ CLASS_METHODS_META(o2::SceneDrawable)
 	PUBLIC_FUNCTION(float, GetDrawingDepth);
 	PUBLIC_FUNCTION(void, SetLastOnCurrentDepth);
 	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(void, OnIncludeToScene);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
 	PUBLIC_FUNCTION(void, OnDrawn);
 }

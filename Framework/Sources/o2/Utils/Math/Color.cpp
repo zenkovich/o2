@@ -23,6 +23,15 @@ namespace o2
 		this->a = (int)(a*255.0f);
 	}
 
+	Color4::Color4(const b2Color& color):
+		Color4(color.r, color.g, color.b, 1.0f)
+	{}
+
+	Color4::operator b2Color() const
+	{
+		return b2Color(RF(), GF(), BF());
+	}
+
 	bool Color4::operator==(const Color4& color) const
 	{
 		return a == color.a && r == color.r && g == color.g && b == color.b;

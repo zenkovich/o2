@@ -107,6 +107,12 @@ namespace o2
 		// Returns current camera
 		Camera GetCamera() const;
 
+		// Draws polygon
+		void DrawFilledPolygon(const Vector<Vec2F>& points, const Color4& color = Color4::White());
+
+		// Draws polygon
+		void DrawFilledPolygon(const Vertex2* points, int vertexCount);
+
 		// Draws single line with color
 		void DrawLine(const Vec2F& a, const Vec2F& b, const Color4& color = Color4::White());
 
@@ -132,6 +138,9 @@ namespace o2
 
 		// Draws circle with color
 		void DrawCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20);
+
+		// Draws filled circle with color
+		void DrawFilledCircle(const Vec2F& pos, float radius = 5, const Color4& color = Color4::White(), int segCount = 20);
 
 		// Draws bezier curve with color
 		void DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,

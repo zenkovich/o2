@@ -81,8 +81,11 @@ namespace Editor
 
 		if (playing)
 		{
+			o2EditorSceneScreen.ClearSelection();
+
 			mSceneDump.Clear();
 			o2Scene.Save(mSceneDump);
+			o2Scene.Load(mSceneDump);
 		}
 		else
 		{
@@ -165,6 +168,9 @@ namespace Editor
 
 	void EditorApplication::ProcessFrame()
 	{
+		mUpdateStep = mIsPlaying && (!isPaused || step);
+		step = false;
+
 		Application::ProcessFrame();
 
 		mDrawCalls = mRender->GetDrawCallsCount();
@@ -176,14 +182,30 @@ namespace Editor
 		builder.RebuildEditorUIManager("editor_ui_style.json", true, true);
 	}
 
+	void EditorApplication::PreUpdatePhysics()
+	{
+		if (mUpdateStep)
+			Application::PreUpdatePhysics();
+	}
+
+	void EditorApplication::UpdatePhysics(float dt)
+	{
+		if (mUpdateStep)
+			Application::UpdatePhysics(dt);
+	}
+
+	void EditorApplication::PostUpdatePhysics()
+	{
+		if (mUpdateStep)
+			Application::PostUpdatePhysics();
+	}
+
 	void EditorApplication::UpdateScene(float dt)
 	{
-		if (mIsPlaying && (!isPaused || step))
+		if (mUpdateStep)
 		{
 			mScene->Update(dt);
 			o2EditorSceneScreen.NeedRedraw();
-
-			step = false;
 		}
 	}
 

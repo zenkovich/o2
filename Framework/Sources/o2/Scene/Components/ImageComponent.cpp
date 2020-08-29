@@ -58,17 +58,17 @@ namespace o2
 		DrawableComponent::OnDrawn();
 	}
 
-	String ImageComponent::GetName() const
+	String ImageComponent::GetName()
 	{
 		return "Image";
 	}
 
-	String ImageComponent::GetCategory() const
+	String ImageComponent::GetCategory()
 	{
 		return "Render";
 	}
 
-	String ImageComponent::GetIcon() const
+	String ImageComponent::GetIcon()
 	{
 		return "ui/UI4_image_component.png";
 	}

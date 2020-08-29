@@ -32,7 +32,6 @@ namespace o2
 	// ---------------------------------------------------------------------------------------------
 	class Actor : virtual public ActorBase
 	{
-
 	public:
 		PROPERTIES(Actor);
 		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
@@ -125,11 +124,11 @@ namespace o2
 		// Is this from asset
 		bool IsAsset() const;
 
-		// Excludes from scene and will not be update and draw automatically from scene
-		void ExcludeFromScene(bool keepEditorObjects = false);
-
 		// Includes to scene and now will be update and draw automatically from scene
-		void IncludeInScene();
+		void AddToScene();
+
+		// Excludes from scene and will not be update and draw automatically from scene
+		void RemoveFromScene(bool keepEditorObjects = false);
 
 		// Is actor on scene
 		bool IsOnScene() const;
@@ -477,12 +476,6 @@ namespace o2
 		// Returns all children actors with their children
 		void GetAllChildrenActors(Vector<Actor*>& actors);
 
-		// It is called when actor excluding from scene
-		virtual void OnExcludeFromScene();
-
-		// It is called when actor including from scene
-		virtual void OnIncludeToScene();
-
 		// Applies excluding from scene for all components in hierarchy
 		void ExcludeComponentsFromScene();
 
@@ -493,10 +486,10 @@ namespace o2
 		void SetParentProp(Actor* actor);
 
 		// Is is called when actor has added to scene
-		virtual void OnAddedToScene();
+		virtual void OnAddToScene();
 
 		// It is called when actor has removed from scene
-		virtual void OnRemovedFromScene();
+		virtual void OnRemoveFromScene();
 
 		// It is called on first update
 		virtual void OnStart();
@@ -530,6 +523,12 @@ namespace o2
 
 		// It is called when layer was changed
 		virtual void OnLayerChanged(SceneLayer* oldLayer);
+
+		// It is called when new component has added to actor
+		virtual void OnComponentAdded(Component* component);
+
+		// It is called when component going to be removed from actor
+		virtual void OnComponentRemoving(Component* component);
 
 #if IS_EDITOR
 
@@ -704,6 +703,7 @@ namespace o2
 
 		_type* newComponent = mnew _type();
 		AddComponent(newComponent);
+
 		return newComponent;
 	}
 
@@ -784,8 +784,8 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(UID, GetAssetID);
 	PUBLIC_FUNCTION(bool, IsAsset);
-	PUBLIC_FUNCTION(void, ExcludeFromScene, bool);
-	PUBLIC_FUNCTION(void, IncludeInScene);
+	PUBLIC_FUNCTION(void, AddToScene);
+	PUBLIC_FUNCTION(void, RemoveFromScene, bool);
 	PUBLIC_FUNCTION(bool, IsOnScene);
 	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
@@ -868,13 +868,11 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(_tmp5, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp6, GetAllComponents);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(void, OnIncludeToScene);
 	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
 	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
-	PROTECTED_FUNCTION(void, OnAddedToScene);
-	PROTECTED_FUNCTION(void, OnRemovedFromScene);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PROTECTED_FUNCTION(void, OnStart);
 	PROTECTED_FUNCTION(void, OnUpdate, float);
 	PROTECTED_FUNCTION(void, OnFixedUpdate, float);
@@ -886,6 +884,8 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
+	PROTECTED_FUNCTION(void, OnComponentAdded, Component*);
+	PROTECTED_FUNCTION(void, OnComponentRemoving, Component*);
 	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, bool);

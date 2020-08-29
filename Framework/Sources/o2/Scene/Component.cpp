@@ -99,17 +99,17 @@ namespace o2
 		return mOwner;
 	}
 
-	String Component::GetName() const
+	String Component::GetName()
 	{
 		return String();
 	}
 
-	String Component::GetCategory() const
+	String Component::GetCategory()
 	{
 		return "";
 	}
 
-	String Component::GetIcon() const
+	String Component::GetIcon()
 	{
 		return "ui/UI4_component_icon.png";
 	}

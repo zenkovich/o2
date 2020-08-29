@@ -129,18 +129,18 @@ namespace Editor
 
 		for (auto type : availableComponentsTypes)
 		{
-			auto objType = dynamic_cast<const ObjectType*>(type);
-			Component* sample = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
+			String name = type->InvokeStatic<String>("GetName");
+			if (name.IsEmpty())
+				name = type->GetName();
 
-			String name = sample->GetName();
 			if (!filterStrLower.IsEmpty())
 			{
 				if (name.ToLowerCase().Contains(filterStrLower))
-					mRoot.AddChild(name, type)->icon = sample->GetIcon();
+					mRoot.AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
 			}
 			else
 			{
-				String category = sample->GetCategory();
+				String category = type->InvokeStatic<String>("GetCategory");
 				NodeData* it = &mRoot;
 				while (!category.IsEmpty())
 				{
@@ -155,10 +155,8 @@ namespace Editor
 					it = nextIt;
 				}
 
-				it->AddChild(name, type)->icon = sample->GetIcon();
+				it->AddChild(name, type)->icon = type->InvokeStatic<String>("GetIcon");
 			}
-
-			delete sample;
 		}
 
 		UpdateNodesStructure();

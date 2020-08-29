@@ -1,6 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "SceneEditScreen.h"
 
+#include "o2/Physics/PhysicsWorld.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Actor.h"
@@ -163,6 +164,7 @@ namespace Editor
 
 		o2Scene.EndDrawingScene();
 
+		o2Physics.DrawDebug();
 // 		static bool drawing = false;
 // 		if (drawing)
 // 			return;

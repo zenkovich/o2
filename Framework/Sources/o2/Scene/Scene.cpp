@@ -7,6 +7,7 @@
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ActorDataValueConverter.h"
 #include "o2/Scene/CameraActor.h"
+#include "o2/Scene/Component.h"
 #include "o2/Scene/DrawableComponent.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Scene/Tags.h"
@@ -34,6 +35,40 @@ namespace o2
 	}
 
 	void Scene::Update(float dt)
+	{
+		UpdateAddedEntities();
+		UpdateStartingEntities();
+		UpdateActors(dt);
+	}
+
+	void Scene::UpdateAddedEntities()
+	{
+		for (auto actor : mAddedActors)
+			actor->OnAddToScene();
+
+		for (auto comp : mAddedComponents)
+			comp->OnAddToScene();
+
+		mStartActors = mAddedActors;
+		mStartComponents = mAddedComponents;
+
+		mAddedActors.Clear();
+		mAddedComponents.Clear();
+	}
+
+	void Scene::UpdateStartingEntities()
+	{
+		for (auto actor : mStartActors)
+			actor->OnStart();
+
+		for (auto comp : mStartComponents)
+			comp->OnStart();
+
+		mStartActors.Clear();
+		mStartComponents.Clear();
+	}
+
+	void Scene::UpdateActors(float dt)
 	{
 		for (auto actor : mRootActors)
 			actor->Update(dt);
@@ -143,6 +178,8 @@ namespace o2
 			Instance().mRootActors.Add(actor);
 			Instance().mAllActors.Add(actor);
 
+			Instance().mAddedActors.Add(actor);
+
 			if constexpr (IS_EDITOR)
 				RegEditableObject(actor);
 		}
@@ -164,6 +201,16 @@ namespace o2
 			OnObjectDestroyed(actor);
 			OnActorPrototypeBroken(actor);
 		}
+	}
+
+	void Scene::OnComponentAdded(Component* component)
+	{
+		Instance().mAddedComponents.Add(component);
+	}
+
+	void Scene::OnComponentRemoved(Component* component)
+	{
+
 	}
 
 	void Scene::OnLayerRenamed(SceneLayer* layer, const String& oldName)

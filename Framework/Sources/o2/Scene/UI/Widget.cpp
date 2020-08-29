@@ -84,16 +84,16 @@ namespace o2
 				OnChildAdded(childWidget);
 
 				if (childWidget->mOverrideDepth)
-					childWidget->IncludeInScene();
+					childWidget->AddToScene();
 				else
-					childWidget->ExcludeFromScene();
+					childWidget->RemoveFromScene();
 			}
 		}
 
 		for (auto child : other.mInternalWidgets)
 		{
 			auto newChild = child->CloneAs<Widget>();
-			newChild->ExcludeFromScene();
+			newChild->RemoveFromScene();
 			newChild->SetInternalParent(this, false);
 		}
 
@@ -938,11 +938,11 @@ namespace o2
 		if (mParentWidget)
 		{
 			if (mOverrideDepth)
-				IncludeInScene();
+				AddToScene();
 			else
-				ExcludeFromScene(true);
+				RemoveFromScene(true);
 		}
-		else if (mParent && mParent->IsOnScene()) IncludeInScene();
+		else if (mParent && mParent->IsOnScene()) AddToScene();
 	}
 
 	void Widget::OnChildAdded(Actor* child)
@@ -985,15 +985,15 @@ namespace o2
 		SceneDrawable::SetLayer(mLayer);
 	}
 
-	void Widget::OnExcludeFromScene()
+	void Widget::OnRemoveFromScene()
 	{
 		for (auto child : mInternalWidgets)
-			child->ExcludeFromScene();
+			child->RemoveFromScene();
 
 		for (auto layer : mLayers)
 			layer->OnExcludeFromScene();
 
-		SceneDrawable::OnExcludeFromScene();
+		SceneDrawable::OnRemoveFromScene();
 		
 		if constexpr (IS_EDITOR)
 		{
@@ -1002,12 +1002,12 @@ namespace o2
 		}
 	}
 
-	void Widget::OnIncludeToScene()
+	void Widget::OnAddToScene()
 	{
-		SceneDrawable::OnIncludeToScene();
+		SceneDrawable::OnAddToScene();
 
 		for (auto child : mInternalWidgets)
-			child->IncludeInScene();
+			child->AddToScene();
 
 		for (auto layer : mLayers)
 			layer->OnIncludeInScene();
@@ -1074,7 +1074,7 @@ namespace o2
 			child->mParent = this;
 			child->mParentWidget = this;
 
-			child->ExcludeFromScene();
+			child->RemoveFromScene();
 		}
 
 		RetargetStatesAnimations();
@@ -1235,7 +1235,7 @@ namespace o2
 		for (auto child : other.mInternalWidgets)
 		{
 			auto newChild = child->CloneAs<Widget>();
-			newChild->ExcludeFromScene();
+			newChild->RemoveFromScene();
 			newChild->SetInternalParent(this, false);
 		}
 

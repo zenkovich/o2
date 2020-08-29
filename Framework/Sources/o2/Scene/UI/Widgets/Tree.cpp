@@ -1464,7 +1464,7 @@ namespace o2
 		if (mNodeWidgetsBuf.IsEmpty())
 		{
 			res = mNodeWidgetSample->CloneAs<TreeNode>();
-			res->ExcludeFromScene();
+			res->RemoveFromScene();
 			res->Show(true);
 			res->SetSelectionGroup(this);
 			res->messageFallDownListener = this;

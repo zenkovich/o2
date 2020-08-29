@@ -96,8 +96,7 @@ namespace o2
 		float mFloat8;					           // @SERIALIZABLE
 		float mFloat9;					           // @SERIALIZABLE
 
-		String GetName() const override;
-		String GetCategory() const override;
+		static String GetCategory();
 
 		void Test();
 
@@ -172,8 +171,7 @@ CLASS_METHODS_META(o2::EditorTestComponent)
 	PUBLIC_FUNCTION(Sprite, GetSprite);
 	PUBLIC_FUNCTION(void, SetArray, const Vector<Vec2I>&);
 	PUBLIC_FUNCTION(const Vector<Vec2I>&, GetArray);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(String, GetCategory);
+	PUBLIC_STATIC_FUNCTION(String, GetCategory);
 	PUBLIC_FUNCTION(void, Test);
 }
 END_META;

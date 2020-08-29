@@ -3,6 +3,7 @@
 
 #include "Box2D/Dynamics/b2Body.h"
 #include "o2/Physics/PhysicsWorld.h"
+#include "o2/Scene/Physics/ICollider.h"
 
 namespace o2
 {
@@ -240,6 +241,25 @@ namespace o2
 		PhysicsWorld::Instance().mWorld.DestroyBody(mBody);
 		mBody = nullptr;
 	}
+
+	void RigidBody::AddCollider(ICollider* collider)
+	{
+		if (mBody && !mColliders.Contains(collider)) 
+		{
+			collider->AddToRigidBody(this);
+			mColliders.Add(collider);
+		}
+	}
+
+	void RigidBody::RemoveCollider(ICollider* collider)
+	{
+		if (mBody)
+		{
+			collider->RemoveFromRigidBody();
+			mColliders.Remove(collider);
+		}
+	}
+
 }
 
 ENUM_META(o2::RigidBody::Type)

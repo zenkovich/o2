@@ -276,7 +276,7 @@ namespace o2
 				for (int j = 0; j < 10; j++)
 				{
 					Widget* newItem = mItemSample->CloneAs<Widget>();
-					newItem->ExcludeFromScene();
+					newItem->RemoveFromScene();
 					mItemsPool.Add(newItem);
 				}
 			}

@@ -86,6 +86,53 @@ namespace o2
 		return mCamera;
 	}
 
+	void Render::DrawFilledPolygon(const Vertex2* verticies, int vertexCount)
+	{
+		static Mesh mesh(TextureRef(), 1024, 1024);
+
+		int polyCount = vertexCount - 2;
+		if (mesh.GetMaxVertexCount() < vertexCount || mesh.GetMaxPolyCount() < polyCount)
+			mesh.Resize(vertexCount, polyCount);
+
+		memcpy(mesh.vertices, verticies, sizeof(Vertex2)*vertexCount);
+
+		for (int i = 2; i < vertexCount; i++)
+		{
+			mesh.indexes[(i - 2)*3] = i - 2;
+			mesh.indexes[(i - 2)*3 + 1] = i - 1;
+			mesh.indexes[(i - 2)*3 + 2] = i;
+		}
+
+		mesh.vertexCount = vertexCount;
+		mesh.polyCount = polyCount;
+		mesh.Draw();
+	}
+
+	void Render::DrawFilledPolygon(const Vector<Vec2F>& points, const Color4& color /*= Color4::White()*/)
+	{
+		static Mesh mesh(TextureRef(), 1024, 1024);
+
+		int vertexCount = points.Count();
+		int polyCount = points.Count() - 2;
+		if (mesh.GetMaxVertexCount() < points.Count() || mesh.GetMaxPolyCount() < polyCount)
+			mesh.Resize(points.Count(), polyCount);
+
+		ULong dcolor = color.ABGR();
+		for (int i = 0; i < points.Count(); i++)
+			mesh.vertices[i] = Vertex2(points[i], dcolor, 0.0f, 0.0f);
+
+		for (int i = 2; i < points.Count(); i++)
+		{
+			mesh.indexes[(i - 2)*3] = i - 2;
+			mesh.indexes[(i - 2)*3 + 1] = i - 1;
+			mesh.indexes[(i - 2)*3 + 2] = i;
+		}
+
+		mesh.vertexCount = vertexCount;
+		mesh.polyCount = polyCount;
+		mesh.Draw();
+	}
+
 	RectI Render::CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect)
 	{
 		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F((float)mCurrentResolution.x, 0.0f), Vec2F(0.0f, (float)mCurrentResolution.y));
@@ -359,18 +406,53 @@ namespace o2
 	void Render::DrawCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/,
 							int segCount /*= 20*/)
 	{
-		Vertex2* v = mnew Vertex2[segCount + 1];
+		static int vertexBufferSize = segCount + 1;
+		static Vertex2* vertexBuffer = mnew Vertex2[vertexBufferSize];
+
+		int vertexCount = segCount + 1;
+		if (vertexCount > vertexBufferSize)
+		{
+			delete[] vertexBuffer;
+			vertexBufferSize = vertexCount;
+			vertexBuffer = mnew Vertex2[vertexBufferSize];
+		}
+
 		ULong dcolor = color.ABGR();
 
 		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
 		for (int i = 0; i < segCount + 1; i++)
 		{
 			float a = (float)i*angleSeg;
-			v[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+			vertexBuffer[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
 		}
 
-		DrawPolyLine(v, segCount + 1);
-		delete[] v;
+		DrawPolyLine(vertexBuffer, segCount + 1);
+	}
+
+	void Render::DrawFilledCircle(const Vec2F& pos, float radius /*= 5*/, const Color4& color /*= Color4::White()*/, 
+								  int segCount /*= 20*/)
+	{
+		static int vertexBufferSize = segCount + 1;
+		static Vertex2* vertexBuffer = mnew Vertex2[vertexBufferSize];
+
+		int vertexCount = segCount + 1;
+		if (vertexCount > vertexBufferSize)
+		{
+			delete[] vertexBuffer;
+			vertexBufferSize = vertexCount;
+			vertexBuffer = mnew Vertex2[vertexBufferSize];
+		}
+
+		ULong dcolor = color.ABGR();
+
+		float angleSeg = 2.0f*Math::PI() / (float)(segCount - 1);
+		for (int i = 0; i < segCount + 1; i++)
+		{
+			float a = (float)i*angleSeg;
+			vertexBuffer[i] = Vertex2(Vec2F::Rotated(a)*radius + pos, dcolor, 0, 0);
+		}
+
+		DrawFilledPolygon(vertexBuffer, vertexCount);
 	}
 
 	void Render::DrawBezierCurve(const Vec2F& p1, const Vec2F& p2, const Vec2F& p3, const Vec2F& p4,

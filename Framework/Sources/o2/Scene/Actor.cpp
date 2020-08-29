@@ -274,7 +274,7 @@ namespace o2
 		}
 	}
 
-	void Actor::ExcludeFromScene(bool keepEditorObjects /*= false*/)
+	void Actor::RemoveFromScene(bool keepEditorObjects /*= false*/)
 	{
 		if (!mIsOnScene)
 			return;
@@ -294,16 +294,16 @@ namespace o2
 				o2Scene.mEditableObjects.Remove(this);
 		}
 
-		OnExcludeFromScene();
+		OnRemoveFromScene();
 		ExcludeComponentsFromScene();
 
 		mIsOnScene = false;
 
 		for (auto child : mChildren)
-			child->ExcludeFromScene();
+			child->RemoveFromScene();
 	}
 
-	void Actor::IncludeInScene()
+	void Actor::AddToScene()
 	{
 		if (mIsOnScene)
 			return;
@@ -321,11 +321,11 @@ namespace o2
 
 		mIsOnScene = true;
 
-		OnIncludeToScene();
+		OnAddToScene();
 		IncludeComponentsToScene();
 
 		for (auto child : mChildren)
-			child->IncludeInScene();
+			child->AddToScene();
 	}
 
 	bool Actor::IsOnScene() const
@@ -449,10 +449,10 @@ namespace o2
 		UpdateResEnabledInHierarchy();
 
 		if (actor && actor->mIsOnScene && !mIsOnScene)
-			ExcludeFromScene();
+			RemoveFromScene();
 
 		if (actor && !actor->mIsOnScene && mIsOnScene)
-			IncludeInScene();
+			AddToScene();
 
 		OnParentChanged(oldParent);
 	}
@@ -488,10 +488,10 @@ namespace o2
 		actor->OnParentChanged(oldParent);
 
 		if (actor->mIsOnScene && !mIsOnScene)
-			ExcludeFromScene();
+			RemoveFromScene();
 
 		if (!actor->mIsOnScene && mIsOnScene)
-			IncludeInScene();
+			AddToScene();
 
 		return actor;
 	}
@@ -519,10 +519,10 @@ namespace o2
 		actor->OnParentChanged(oldParent);
 
 		if (actor->mIsOnScene && !mIsOnScene)
-			ExcludeFromScene();
+			RemoveFromScene();
 
 		if (!actor->mIsOnScene && mIsOnScene)
-			IncludeInScene();
+			AddToScene();
 
 		return actor;
 	}
@@ -629,12 +629,22 @@ namespace o2
 	Component* Actor::AddComponent(Component* component)
 	{
 		component->SetOwnerActor(this);
+		if (mIsOnScene)
+			o2Scene.OnComponentAdded(component);
+
+		OnComponentAdded(component);
 		OnChanged();
+
 		return component;
 	}
 
 	void Actor::RemoveComponent(Component* component, bool release /*= true*/)
 	{
+		if (mIsOnScene)
+			o2Scene.OnComponentRemoved(component);
+
+		OnComponentRemoving(component);
+
 		mComponents.Remove(component);
 		component->mOwner = nullptr;
 
@@ -647,10 +657,19 @@ namespace o2
 	void Actor::RemoveAllComponents()
 	{
 		auto components = mComponents;
-		for (auto comp : components)
-			delete comp;
-
 		mComponents.Clear();
+
+		if (mIsOnScene)
+		{
+			for (auto comp : components)
+				comp->OnRemoveFromScene();
+		}
+
+		for (auto comp : components)
+		{
+			OnComponentRemoving(comp);
+			delete comp;
+		}
 
 		OnChanged();
 	}
@@ -770,10 +789,10 @@ namespace o2
 		SetParent(actor, false);
 	}
 
-	void Actor::OnAddedToScene()
+	void Actor::OnAddToScene()
 	{}
 
-	void Actor::OnRemovedFromScene()
+	void Actor::OnRemoveFromScene()
 	{}
 
 	void Actor::OnStart()
@@ -789,6 +808,12 @@ namespace o2
 	{}
 
 	void Actor::OnDisabled()
+	{}
+
+	void Actor::OnComponentAdded(Component* component)
+	{}
+
+	void Actor::OnComponentRemoving(Component* component)
 	{}
 
 	void Actor::UpdateResEnabled()
@@ -974,22 +999,16 @@ namespace o2
 		return res;
 	}
 
-	void Actor::OnExcludeFromScene()
-	{}
-
-	void Actor::OnIncludeToScene()
-	{}
-
 	void Actor::ExcludeComponentsFromScene()
 	{
 		for (auto comp : mComponents)
-			comp->OnExcludeFromScene();
+			comp->OnRemoveFromScene();
 	}
 
 	void Actor::IncludeComponentsToScene()
 	{
 		for (auto comp : mComponents)
-			comp->OnIncludeToScene();
+			comp->OnAddToScene();
 	}
 
 	void Actor::OnEnableInHierarchyChanged()
@@ -1043,7 +1062,7 @@ namespace o2
 
 			Actor* newChild = dynamic_cast<Actor*>(type->DynamicCastToIObject(child->GetType().CreateSample()));
 			if (!dest->mIsOnScene)
-				newChild->ExcludeFromScene();
+				newChild->RemoveFromScene();
 
 			dest->AddChild(newChild);
 

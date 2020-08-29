@@ -346,7 +346,7 @@ namespace o2
 	{
 		ActorAssetRef prototypeAsset = ActorAssetRef::CreateAsset();
 		Actor* prototype = prototypeAsset->GetActor();
-		prototype->ExcludeFromScene();
+		prototype->RemoveFromScene();
 
 		prototype->RemoveAllChildren();
 		prototype->RemoveAllComponents();

@@ -17,7 +17,7 @@ namespace o2
 		ScrollArea()
 	{
 		mItemSample = mnew Widget();
-		mItemSample->ExcludeFromScene();
+		mItemSample->RemoveFromScene();
 
 		mSelectionDrawable = mnew Sprite();
 		mHoverDrawable     = mnew Sprite();
@@ -44,7 +44,7 @@ namespace o2
 		mVerLayout = FindChildByType<VerticalLayout>();
 
 		mItemSample = other.mItemSample->CloneAs<Widget>();
-		mItemSample->ExcludeFromScene();
+		mItemSample->RemoveFromScene();
 		mItemSample->UpdateSelfTransform();
 		mItemSample->UpdateChildrenTransforms();
 
@@ -513,7 +513,7 @@ namespace o2
 
 		mVerLayout = FindChildByType<VerticalLayout>();
 		mItemSample = other.mItemSample->CloneAs<Widget>();
-		mItemSample->ExcludeFromScene();
+		mItemSample->RemoveFromScene();
 		mItemSample->SetLayoutDirty();
 
 		RetargetStatesAnimations();

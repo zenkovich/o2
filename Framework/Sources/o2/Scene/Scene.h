@@ -15,6 +15,7 @@ namespace o2
 {
 	class Actor;
 	class CameraActor;
+	class Component;
 	class SceneLayer;
 	class Tag;
 
@@ -150,6 +151,12 @@ namespace o2
 		Vector<Actor*> mRootActors; // Scene root actors		
 		Vector<Actor*> mAllActors;  // All scene actors
 
+		Vector<Actor*>     mAddedActors;     // List of added on previous frame actors. Will receive OnAddToScene at current frame
+		Vector<Component*> mAddedComponents; // List of added on previous frame components. Will receive OnAddToScene at current frame
+
+		Vector<Actor*>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
+		Vector<Component*> mStartComponents; // List of starting on current frame components. Will receive OnStart at current frame
+
 		Map<String, SceneLayer*> mLayersMap;    // Layers by names map
 		Vector<SceneLayer*>      mLayers;       // Scene layers
 		SceneLayer*              mDefaultLayer; // Default scene layer
@@ -165,6 +172,15 @@ namespace o2
 		// Destructor
 		~Scene();
 
+		// Updates root actors and their children
+		void UpdateActors(float dt);
+
+		// Updates just added actors and components
+		void UpdateAddedEntities();
+
+		// Updates starting actors and components
+		void UpdateStartingEntities();
+
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
@@ -173,6 +189,12 @@ namespace o2
 
 		// It is called when actor is destroying - removes from root and all actors lists, unregisters in editor tools
 		static void OnActorDestroying(Actor* actor);
+
+		// It is called when component added to actor, registers for calling OnAddOnScene
+		static void OnComponentAdded(Component* component);
+
+		// It is called when component removed, register for calling OnRemovFromScene
+		static void OnComponentRemoved(Component* component);
 
 		// It is called when scene layer renamed, updates layers map
 		static void OnLayerRenamed(SceneLayer* layer, const String& oldName);
@@ -315,6 +337,10 @@ CLASS_FIELDS_META(o2::Scene)
 	PROTECTED_FIELD(mCameras);
 	PROTECTED_FIELD(mRootActors);
 	PROTECTED_FIELD(mAllActors);
+	PROTECTED_FIELD(mAddedActors);
+	PROTECTED_FIELD(mAddedComponents);
+	PROTECTED_FIELD(mStartActors);
+	PROTECTED_FIELD(mStartComponents);
 	PROTECTED_FIELD(mLayersMap);
 	PROTECTED_FIELD(mLayers);
 	PROTECTED_FIELD(mDefaultLayer);
@@ -363,9 +389,14 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Save, DataDocument&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
+	PROTECTED_FUNCTION(void, UpdateActors, float);
+	PROTECTED_FUNCTION(void, UpdateAddedEntities);
+	PROTECTED_FUNCTION(void, UpdateStartingEntities);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
 	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
 	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);
+	PROTECTED_STATIC_FUNCTION(void, OnComponentAdded, Component*);
+	PROTECTED_STATIC_FUNCTION(void, OnComponentRemoved, Component*);
 	PROTECTED_STATIC_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);
 	PROTECTED_STATIC_FUNCTION(void, OnCameraAddedOnScene, CameraActor*);
 	PROTECTED_STATIC_FUNCTION(void, OnCameraRemovedScene, CameraActor*);

@@ -51,6 +51,21 @@ namespace o2
 		mScene->Update(dt);
 	}
 
+	void Application::PreUpdatePhysics()
+	{
+		mPhysics->PreUpdate();
+	}
+
+	void Application::UpdatePhysics(float dt)
+	{
+		mPhysics->Update(dt);
+	}
+
+	void Application::PostUpdatePhysics()
+	{
+		mPhysics->PostUpdate();
+	}
+
 	void Application::InitalizeSystems()
 	{
 		srand((UInt)time(NULL));
@@ -128,14 +143,18 @@ namespace o2
 		OnUpdate(dt);
 		UpdateScene(dt);
 
+		PreUpdatePhysics();
+
 		mAccumulatedDT += dt;
 		float fixedDT = 1.0f/(float)fixedFPS;
 		while (mAccumulatedDT > fixedDT)
 		{
 			OnFixedUpdate(fixedDT);
-			mPhysics->Update(fixedDT);
+			UpdatePhysics(fixedDT);
 			mAccumulatedDT -= fixedDT;
 		}
+
+		PostUpdatePhysics();
 
 		PostUpdateEventSystem();
 

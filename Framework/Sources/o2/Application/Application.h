@@ -201,6 +201,15 @@ namespace o2
 		// Updates scene
 		virtual void UpdateScene(float dt);
 
+		// Before update physics
+		virtual void PreUpdatePhysics();
+
+		// Updates physics
+		virtual void UpdatePhysics(float dt);
+
+		// After update physics
+		virtual void PostUpdatePhysics();
+
 		// Draws scene
 		virtual void DrawScene();
 

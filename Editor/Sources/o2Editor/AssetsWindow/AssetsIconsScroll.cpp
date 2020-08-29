@@ -526,7 +526,7 @@ namespace Editor
 			mDragIcon->DragDropArea::SetInteractable(false);
 			mDragIcon->CursorAreaEventsListener::SetInteractable(false);
 			mDragIcon->SetEnabled(true);
-			mDragIcon->ExcludeFromScene();
+			mDragIcon->RemoveFromScene();
 			mDragOffset = icon->layout->worldCenter - o2Input.GetCursorPos();
 
 			if (mSelectedAssets.Count() > 1)

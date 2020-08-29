@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Math/Math.h"
+#include "Box2D/Common/b2Draw.h"
 
 namespace o2
 {
@@ -18,6 +19,9 @@ namespace o2
 		Color4();
 		Color4(int r, int g, int b, int a = 255);
 		Color4(float r, float g, float b, float a = 1.0f);
+		Color4(const b2Color& color);
+
+		operator b2Color() const;
 		
 		bool operator==(const Color4& color) const;
 		bool operator!=(const Color4& color) const;

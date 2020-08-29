@@ -49,7 +49,7 @@ namespace o2
 		// Returns is component enabled
 		bool IsEnabled() const;
 
-		// Returns is compontent enabled in hierarchy
+		// Returns is component enabled in hierarchy
 		bool IsEnabledInHierarchy() const;
 
 		// Returns prototype link
@@ -78,13 +78,13 @@ namespace o2
 		Vector<_type*> GetComponentsInChildren() const;
 
 		// Returns name of component
-		virtual String GetName() const;
+		static String GetName();
 
 		// Returns category of component
-		virtual String GetCategory() const;
+		static String GetCategory();
 
 		// Returns name of component icon
-		virtual String GetIcon() const;
+		static String GetIcon();
 
 		SERIALIZABLE(Component);
 
@@ -96,6 +96,18 @@ namespace o2
 		bool       mResEnabled = true;       // Is component enabled in hierarchy
 
 	protected:
+		// Sets owner actor
+		virtual void SetOwnerActor(Actor* actor);
+
+		// It is called when actor was included to scene
+		virtual void OnAddToScene() {}
+
+		// It is called when actor was excluded from scene
+		virtual void OnRemoveFromScene() {}
+
+		// It is called when component started working on first update frame
+		virtual void OnStart() {}
+
 		// It is called when actor changed layer
 		virtual void OnLayerChanged(SceneLayer* oldLayer, SceneLayer* newLayer) {}
 
@@ -105,16 +117,8 @@ namespace o2
 		// It is called when actor's transform was changed
 		virtual void OnTransformUpdated() {}
 
-		// Sets owner actor
-		virtual void SetOwnerActor(Actor* actor);
-
-		// It is called when actor was excluded from scene
-		virtual void OnExcludeFromScene() {}
-
-		// It is called when actor was included to scene
-		virtual void OnIncludeToScene() {}
-
 		friend class Actor;
+		friend class Scene;
 		friend class Widget;
 	};
 
@@ -202,14 +206,15 @@ CLASS_METHODS_META(o2::Component)
 	PUBLIC_FUNCTION(Component*, GetPrototypeLink);
 	PUBLIC_FUNCTION(bool, IsLinkedToComponent, Component*);
 	PUBLIC_FUNCTION(Actor*, GetOwnerActor);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(String, GetCategory);
-	PUBLIC_FUNCTION(String, GetIcon);
+	PUBLIC_STATIC_FUNCTION(String, GetName);
+	PUBLIC_STATIC_FUNCTION(String, GetCategory);
+	PUBLIC_STATIC_FUNCTION(String, GetIcon);
+	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
+	PROTECTED_FUNCTION(void, OnStart);
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
-	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(void, OnIncludeToScene);
 }
 END_META;

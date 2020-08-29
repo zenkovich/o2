@@ -54,13 +54,13 @@ namespace o2
 		void Draw() override;
 
 		// Returns name of component
-		String GetName() const override;
+		static String GetName();
 
 		// Returns category of component
-		String GetCategory() const override;
+		static String GetCategory();
 
 		// Returns name of component icon
-		String GetIcon() const override;
+		static String GetIcon();
 
 		SERIALIZABLE(ImageComponent);
 
@@ -93,9 +93,9 @@ CLASS_METHODS_META(o2::ImageComponent)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(String, GetCategory);
-	PUBLIC_FUNCTION(String, GetIcon);
+	PUBLIC_STATIC_FUNCTION(String, GetName);
+	PUBLIC_STATIC_FUNCTION(String, GetCategory);
+	PUBLIC_STATIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
