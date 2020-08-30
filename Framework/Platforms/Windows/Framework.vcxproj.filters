@@ -305,6 +305,12 @@
 		<ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h">
 			<Filter>Sources\o2\Scene</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Scene\Physics\BoxCollider.h">
+			<Filter>Sources\o2\Scene\Physics</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Scene\Physics\ICollider.h">
+			<Filter>Sources\o2\Scene\Physics</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h">
 			<Filter>Sources\o2\Scene\Physics</Filter>
 		</ClInclude>
@@ -912,6 +918,12 @@
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp">
 			<Filter>Sources\o2\Scene</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Scene\Physics\BoxCollider.cpp">
+			<Filter>Sources\o2\Scene\Physics</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Scene\Physics\ICollider.cpp">
+			<Filter>Sources\o2\Scene\Physics</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp">
 			<Filter>Sources\o2\Scene\Physics</Filter>

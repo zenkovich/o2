@@ -115,16 +115,16 @@ namespace o2
 		}
 
 		mFixture = body->mBody->CreateFixture(&fixture);
-		mBody = body;
+		mRigidBodyComp = body;
 	}
 
 	void ICollider::RemoveFromRigidBody()
 	{
-		if (mBody) {
-			mBody->mBody->DestroyFixture(mFixture);
+		if (mRigidBodyComp && mRigidBodyComp->mBody) {
+			mRigidBodyComp->mBody->DestroyFixture(mFixture);
 		}
 
-		mBody = nullptr;
+		mRigidBodyComp = nullptr;
 		mFixture = nullptr;
 	}
 

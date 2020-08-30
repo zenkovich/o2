@@ -75,7 +75,7 @@ namespace o2
 		bool mIsSensor = false; // Is collider sensor @SERIALIZABLE
 
 		b2Fixture* mFixture = nullptr;
-		RigidBody* mBody = nullptr;
+		RigidBody* mRigidBodyComp = nullptr;
 
 	protected:
 		// Adds fixture with shape to body
@@ -121,7 +121,7 @@ CLASS_FIELDS_META(o2::ICollider)
 	PROTECTED_FIELD(mLayer).DEFAULT_VALUE("Default").SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mIsSensor).DEFAULT_VALUE(false).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mFixture).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mBody).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mRigidBodyComp).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(o2::ICollider)

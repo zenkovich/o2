@@ -7,17 +7,11 @@ namespace o2
 {
 	CameraActor::CameraActor():
 		Actor()
-	{
-		if (mIsOnScene)
-			OnAddedToScene();
-	}
+	{}
 
 	CameraActor::CameraActor(const CameraActor& other):
 		Actor(other), mType(other.mType), mFixedOrFittedSize(other.mFixedOrFittedSize), mUnits(other.mUnits)
-	{
-		if (mIsOnScene)
-			OnAddedToScene();
-	}
+	{}
 
 	CameraActor::~CameraActor()
 	{
@@ -117,12 +111,12 @@ namespace o2
 		return mUnits;
 	}
 
-	void CameraActor::OnAddedToScene()
+	void CameraActor::OnAddToScene()
 	{
 		o2Scene.OnCameraAddedOnScene(this);
 	}
 
-	void CameraActor::OnRemovedFromScene()
+	void CameraActor::OnRemoveFromScene()
 	{
 		o2Scene.OnCameraRemovedScene(this);
 	}

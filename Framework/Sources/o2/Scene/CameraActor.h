@@ -70,10 +70,10 @@ namespace o2
 
 	protected:
 		// Is is called when actor has added to scene
-		void OnAddedToScene() override;
+		void OnAddToScene() override;
 
 		// It is called when actor has removed from scene
-		void OnRemovedFromScene() override;
+		void OnRemoveFromScene() override;
 	};
 }
 
@@ -107,7 +107,7 @@ CLASS_METHODS_META(o2::CameraActor)
 	PUBLIC_FUNCTION(Type, GetCameraType);
 	PUBLIC_FUNCTION(const Vec2F&, GetFittedOrFixedSize);
 	PUBLIC_FUNCTION(Units, GetUnits);
-	PROTECTED_FUNCTION(void, OnAddedToScene);
-	PROTECTED_FUNCTION(void, OnRemovedFromScene);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 }
 END_META;
