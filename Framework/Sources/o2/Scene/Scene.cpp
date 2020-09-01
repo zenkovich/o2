@@ -38,34 +38,61 @@ namespace o2
 	{
 		UpdateAddedEntities();
 		UpdateStartingEntities();
+		UpdateDestroyingEntities();
 		UpdateActors(dt);
 	}
 
 	void Scene::UpdateAddedEntities()
 	{
-		for (auto actor : mAddedActors)
-			actor->OnAddToScene();
-
-		for (auto comp : mAddedComponents)
-			comp->OnAddToScene();
+		auto addedActors = mAddedActors;
+		auto addedComponents = mAddedComponents;
 
 		mStartActors = mAddedActors;
 		mStartComponents = mAddedComponents;
 
 		mAddedActors.Clear();
 		mAddedComponents.Clear();
+
+		for (auto actor : addedActors)
+			actor->OnAddToScene();
+
+		for (auto comp : addedComponents)
+			comp->OnAddToScene();
 	}
 
 	void Scene::UpdateStartingEntities()
 	{
-		for (auto actor : mStartActors)
-			actor->OnStart();
-
-		for (auto comp : mStartComponents)
-			comp->OnStart();
+		auto startActors = mStartActors;
+		auto startComponents = mStartComponents;
 
 		mStartActors.Clear();
 		mStartComponents.Clear();
+
+		for (auto actor : startActors)
+			actor->OnStart();
+
+		for (auto comp : startComponents)
+			comp->OnStart();
+	}
+
+	void Scene::UpdateDestroyingEntities()
+	{
+		auto destroyActors = mDestroyActors;
+		auto destroyComponents = mDestroyComponents;
+
+		mDestroyActors.Clear();
+		mDestroyComponents.Clear();
+
+		for (auto actor : destroyActors)
+			delete actor;
+
+		for (auto comp : destroyComponents)
+			delete comp;
+	}
+
+	void Scene::DestroyActor(Actor* actor)
+	{
+		Instance().mDestroyActors.Add(actor);
 	}
 
 	void Scene::UpdateActors(float dt)

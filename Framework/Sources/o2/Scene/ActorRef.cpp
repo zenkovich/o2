@@ -2,6 +2,7 @@
 #include "ActorRef.h"
 
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/Scene.h"
 
 namespace o2
 {
@@ -99,6 +100,12 @@ namespace o2
 	const Actor* ActorRef::Get() const
 	{
 		return mActor;
+	}
+
+	void ActorRef::Destroy()
+	{
+		if (mActor)
+			o2Scene.DestroyActor(mActor);
 	}
 
 	bool ActorRef::IsValid() const

@@ -157,6 +157,9 @@ namespace o2
 		Vector<Actor*>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
 		Vector<Component*> mStartComponents; // List of starting on current frame components. Will receive OnStart at current frame
 
+		Vector<Actor*>     mDestroyActors;     // List of destroying on current frame actors
+		Vector<Component*> mDestroyComponents; // List of destroying on current frame components
+
 		Map<String, SceneLayer*> mLayersMap;    // Layers by names map
 		Vector<SceneLayer*>      mLayers;       // Scene layers
 		SceneLayer*              mDefaultLayer; // Default scene layer
@@ -181,11 +184,17 @@ namespace o2
 		// Updates starting actors and components
 		void UpdateStartingEntities();
 
+		// Updates destroying actors and components
+		void UpdateDestroyingEntities();
+
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
 		// It is called when actor created, adds in root and all actors list, registers for editor tools
 		static void OnActorCreated(Actor* actor, bool isOnScene);
+
+		// Adds actor to destroy list
+		static void DestroyActor(Actor* actor);
 
 		// It is called when actor is destroying - removes from root and all actors lists, unregisters in editor tools
 		static void OnActorDestroying(Actor* actor);
@@ -285,6 +294,7 @@ namespace o2
 		Vector<SceneEditableObject*> mDrawnObjects;           // List of drawn on last frame editable objects
 		bool                         mIsDrawingScene = false; // Sets true when started drawing scene, and false when not
 
+		friend class Scene;
 		friend class SceneEditableObject;
 #endif
 	};

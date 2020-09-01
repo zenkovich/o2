@@ -60,6 +60,9 @@ namespace o2
 		// Returns actor pointer
 		const Actor* Get() const;
 
+		// Destroy the actor
+		void Destroy();
+
 		// Returns is reference is valid
 		bool IsValid() const;
 
