@@ -8,19 +8,13 @@
 namespace o2
 {
 	RigidBody::RigidBody()
-	{
-		if (mIsOnScene)
-			CreateBody();
-	}
+	{}
 
 	RigidBody::RigidBody(const RigidBody& other):
 		Actor(other), mBodyType(other.mBodyType), mMass(other.mMass), mInertia(other.mInertia),
 		mLinearDamping(other.mLinearDamping), mAngularDamping(other.mAngularDamping), mGravityScale(other.mGravityScale),
 		mIsBullet(other.mIsBullet), mIsFixedRotation(other.mIsFixedRotation)
-	{
-		if (mIsOnScene)
-			CreateBody();
-	}
+	{}
 
 	RigidBody::~RigidBody()
 	{
@@ -214,6 +208,16 @@ namespace o2
 	void RigidBody::OnTransformUpdated()
 	{
 		Actor::OnTransformUpdated();
+	}
+
+	void RigidBody::OnAddToScene()
+	{
+		CreateBody();
+	}
+
+	void RigidBody::OnRemoveFromScene()
+	{
+		RemoveBody();
 	}
 
 	void RigidBody::CreateBody()

@@ -215,6 +215,7 @@ namespace o2
 		static void OnCameraRemovedScene(CameraActor* camera);
 
 		friend class Actor;
+		friend class ActorRef;
 		friend class Application;
 		friend class CameraActor;
 		friend class DrawableComponent;
@@ -351,6 +352,8 @@ CLASS_FIELDS_META(o2::Scene)
 	PROTECTED_FIELD(mAddedComponents);
 	PROTECTED_FIELD(mStartActors);
 	PROTECTED_FIELD(mStartComponents);
+	PROTECTED_FIELD(mDestroyActors);
+	PROTECTED_FIELD(mDestroyComponents);
 	PROTECTED_FIELD(mLayersMap);
 	PROTECTED_FIELD(mLayers);
 	PROTECTED_FIELD(mDefaultLayer);
@@ -402,8 +405,10 @@ CLASS_METHODS_META(o2::Scene)
 	PROTECTED_FUNCTION(void, UpdateActors, float);
 	PROTECTED_FUNCTION(void, UpdateAddedEntities);
 	PROTECTED_FUNCTION(void, UpdateStartingEntities);
+	PROTECTED_FUNCTION(void, UpdateDestroyingEntities);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
 	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
+	PROTECTED_STATIC_FUNCTION(void, DestroyActor, Actor*);
 	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);
 	PROTECTED_STATIC_FUNCTION(void, OnComponentAdded, Component*);
 	PROTECTED_STATIC_FUNCTION(void, OnComponentRemoved, Component*);

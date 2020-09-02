@@ -41,6 +41,13 @@ namespace o2
 	b2Shape* BoxCollider::GetShape(const Basis& transform)
 	{
 		Vec2F halfSize = mSize*0.5f;
+
+		if (halfSize.x < FLT_EPSILON)
+			halfSize.x = 1.0f;
+
+		if (halfSize.y < FLT_EPSILON)
+			halfSize.y = 1.0f;
+
 		mShape.SetAsBox(halfSize.x, halfSize.y, Vec2F(), transform.GetAngle());
 
 		return &mShape;

@@ -184,8 +184,7 @@ namespace Editor
 
 	void EditorApplication::PreUpdatePhysics()
 	{
-		if (mUpdateStep)
-			Application::PreUpdatePhysics();
+		Application::PreUpdatePhysics();
 	}
 
 	void EditorApplication::UpdatePhysics(float dt)
@@ -196,8 +195,7 @@ namespace Editor
 
 	void EditorApplication::PostUpdatePhysics()
 	{
-		if (mUpdateStep)
-			Application::PostUpdatePhysics();
+		Application::PostUpdatePhysics();
 	}
 
 	void EditorApplication::UpdateScene(float dt)

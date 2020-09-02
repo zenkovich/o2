@@ -948,6 +948,10 @@ namespace o2
 					Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
 					component->Deserialize(componentNode.GetMember("Data"));
 					component->SetOwnerActor(this);
+					if (mIsOnScene)
+						o2Scene.OnComponentAdded(component);
+
+					OnComponentAdded(component);
 				}
 			}
 		}

@@ -95,6 +95,7 @@ CLASS_METHODS_META(o2::ActorRef)
 
 	PUBLIC_FUNCTION(Actor*, Get);
 	PUBLIC_FUNCTION(const Actor*, Get);
+	PUBLIC_FUNCTION(void, Destroy);
 	PUBLIC_FUNCTION(bool, IsValid);
 	PUBLIC_FUNCTION(bool, IsWasDeleted);
 }

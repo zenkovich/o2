@@ -133,6 +133,12 @@ namespace o2
 		// It is called when transformation was changed and updated
 		void OnTransformUpdated() override;
 
+		// Is is called when actor has added to scene; creates rigid body
+		void OnAddToScene() override;
+
+		// It is called when actor has removed from scene; destroys rigid body
+		void OnRemoveFromScene() override;
+
 		// Creates box2d body, registers in physics world
 		void CreateBody();
 
@@ -212,6 +218,8 @@ CLASS_METHODS_META(o2::RigidBody)
 	PUBLIC_FUNCTION(bool, IsFixedRotation);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PROTECTED_FUNCTION(void, CreateBody);
 	PROTECTED_FUNCTION(void, RemoveBody);
 	PROTECTED_FUNCTION(void, AddCollider, ICollider*);

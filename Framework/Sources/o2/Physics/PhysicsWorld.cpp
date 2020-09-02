@@ -20,9 +20,8 @@ namespace o2
 	{
 		mWorld.SetGravity(gravity);
 
-		for (int i = 0; i < mWorld.GetBodyCount(); i++)
+		for (b2Body* body = mWorld.GetBodyList(); body; body = body->GetNext())
 		{
-			auto body = &mWorld.GetBodyList()[i];
 			auto rigidBody = (RigidBody*)body->GetUserData();
 			auto transform = rigidBody->transform;
 
@@ -37,9 +36,8 @@ namespace o2
 
 	void PhysicsWorld::PostUpdate()
 	{
-		for (int i = 0; i < mWorld.GetBodyCount(); i++)
+		for (b2Body* body = mWorld.GetBodyList(); body; body = body->GetNext())
 		{
-			auto body = &mWorld.GetBodyList()[i];
 			auto rigidBody = (RigidBody*)body->GetUserData();
 			auto transform = rigidBody->transform;
 
