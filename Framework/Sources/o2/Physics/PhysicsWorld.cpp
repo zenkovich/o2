@@ -59,9 +59,11 @@ namespace o2
 	void PhysicsDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{
 		Vector<Vec2F> points; 
-		points.Resize(vertexCount);
+		points.Resize(vertexCount + 1);
 		for (int i = 0; i < vertexCount; i++)
 			points[i] = vertices[i];
+
+		points.Last() = vertices[0];
 
 		o2Render.DrawAALine(points, color);
 	}

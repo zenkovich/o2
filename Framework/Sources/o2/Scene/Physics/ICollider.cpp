@@ -98,8 +98,13 @@ namespace o2
 
 	void ICollider::AddToRigidBody(RigidBody* body)
 	{
-		Basis relativeTransform = body->transform->GetWorldNonSizedBasis().Inverted()*
-			mOwner->transform->GetWorldNonSizedBasis();
+		auto thisTransform = mOwner->transform;
+		auto bodyTransform = body->transform;
+		Vec2F thisSize = thisTransform->GetSize();
+		Vec2F bodySize = bodyTransform->GetSize();
+		Basis thisBasis = thisTransform->GetWorldBasis(); thisBasis.Scale(Vec2F(1.0f/thisSize.x, 1.0f/thisSize.y));
+		Basis bodyBasis = bodyTransform->GetWorldBasis(); bodyBasis.Scale(Vec2F(1.0f/bodySize.x, 1.0f/bodySize.y));
+		Basis relativeTransform = thisBasis*(bodyBasis.Inverted());
 
 		b2FixtureDef fixture;
 		fixture.shape = GetShape(relativeTransform);
@@ -153,6 +158,11 @@ namespace o2
 	b2Shape* ICollider::GetShape(const Basis& transform)
 	{
 		return nullptr;
+	}
+
+	void ICollider::OnTransformUpdated()
+	{
+		OnShapeChanged();
 	}
 
 	void ICollider::OnAddToScene()

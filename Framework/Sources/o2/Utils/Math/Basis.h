@@ -24,6 +24,7 @@ namespace o2
 
 		inline Basis operator*(const Basis& cbasis) const;
 		inline Vec2F operator*(const Vec2F& vec) const;
+		inline Vec2F operator/(const Vec2F& vec) const;
 
 		inline void Set(const Vec2F& origin = Vec2F(0, 0), const Vec2F& xvec = Vec2F(1, 0), const Vec2F& yvec = Vec2F(0, 1));
 		inline void Set(const Vec2F& origin, float angle);
@@ -133,6 +134,11 @@ namespace o2
 		ret.x = xv.x*vec.x + yv.x*vec.y + origin.x;
 		ret.y = xv.y*vec.x + yv.y*vec.y + origin.y;
 		return ret;
+	}
+
+	Vec2F Basis::operator/(const Vec2F& vec) const
+	{
+		return operator*(vec.Inverted());
 	}
 
 	void Basis::Set(const Vec2F& origin /*= vec2f(0, 0)*/, const Vec2F& xvec /*= vec2f(1, 0)*/, const Vec2F& yvec /*= vec2f(0, 1)*/)

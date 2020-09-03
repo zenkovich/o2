@@ -48,7 +48,13 @@ namespace o2
 		if (halfSize.y < FLT_EPSILON)
 			halfSize.y = 1.0f;
 
-		mShape.SetAsBox(halfSize.x, halfSize.y, Vec2F(), transform.GetAngle());
+		b2Vec2 verticies[4];
+		verticies[0] = Vec2F(-halfSize.x, -halfSize.y)*transform;
+		verticies[1] = Vec2F(halfSize.x, -halfSize.y)*transform;
+		verticies[2] = Vec2F(halfSize.x, halfSize.y)*transform;
+		verticies[3] = Vec2F(-halfSize.x, halfSize.y)*transform;
+
+		mShape.Set(verticies, 4);
 
 		return &mShape;
 	}
