@@ -205,11 +205,6 @@ namespace o2
 			mBody->SetActive(mResEnabledInHierarchy);
 	}
 
-	void RigidBody::OnTransformUpdated()
-	{
-		Actor::OnTransformUpdated();
-	}
-
 	void RigidBody::OnAddToScene()
 	{
 		CreateBody();

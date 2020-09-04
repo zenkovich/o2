@@ -930,6 +930,9 @@ namespace o2
 
 	void Actor::OnParentChanged(Actor* oldParent)
 	{
+		for (auto comp : mComponents)
+			comp->OnParentChanged(oldParent);
+
 		onParentChanged(oldParent);
 		onChanged();
 
@@ -943,15 +946,6 @@ namespace o2
 			o2Scene.onChildrenHierarchyChanged(mParent);
 		}
 	}
-
-	void Actor::OnChildAdded(Actor* child)
-	{}
-
-	void Actor::OnChildRemoved(Actor* child)
-	{}
-
-	void Actor::OnLayerChanged(SceneLayer* oldLayer)
-	{}
 	
 	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers,
 										 Vector<Component**>& componentsPointers,

@@ -18,6 +18,8 @@ namespace o2
 
 	void PhysicsWorld::PreUpdate()
 	{
+		mIsUpdatingPhysicsNow = true;
+
 		mWorld.SetGravity(gravity);
 
 		for (b2Body* body = mWorld.GetBodyList(); body; body = body->GetNext())
@@ -44,11 +46,18 @@ namespace o2
 			transform->SetWorldPosition(body->GetPosition());
 			transform->SetWorldAngle(body->GetAngle());
 		}
+
+		mIsUpdatingPhysicsNow = false;
 	}
 
 	void PhysicsWorld::DrawDebug()
 	{
 		mWorld.DrawDebugData();
+	}
+
+	bool PhysicsWorld::IsUpdatingPhysicsNow() const
+	{
+		return mIsUpdatingPhysicsNow;
 	}
 
 	void PhysicsDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)

@@ -5,6 +5,7 @@
 #include "o2/Utils/Singleton.h"
 
 #include "o2/Utils/Property.h"
+#include "PhysicsConfig.h"
 
 // Project configuration access macros
 #define o2Config o2::ProjectConfig::Instance()
@@ -22,6 +23,9 @@ namespace o2
 		PROPERTIES(ProjectConfig);
 		PROPERTY(String, projectName, SetProjectName, GetProjectName); // Project name property
 		PROPERTY(Platform, currentPlatform, SetPlatform, GetPlatform); // Project platform property
+
+	public:
+		PhysicsConfig physics; // Physics world config @SERIALIZABLE
 
 	public:
 		// Default constructor
@@ -67,6 +71,7 @@ CLASS_FIELDS_META(o2::ProjectConfig)
 {
 	PUBLIC_FIELD(projectName);
 	PUBLIC_FIELD(currentPlatform);
+	PUBLIC_FIELD(physics).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mProjectName).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mPlatform);
 }

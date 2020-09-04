@@ -36,8 +36,13 @@ namespace o2
 		// Draws debug graphics
 		void DrawDebug();
 
+		// Returns True when PreUpdate has just called, until PostUpdate finished
+		bool IsUpdatingPhysicsNow() const;
+
 	private:
 		b2World mWorld;
+
+		bool mIsUpdatingPhysicsNow = false; // True when PreUpdate has just called, until PostUpdate finished
 
 		friend class RigidBody;
 	}; 

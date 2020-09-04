@@ -143,6 +143,9 @@ namespace o2
 		// Updates root actors
 		void Update(float dt);
 
+		// Updates root actors with fixed delta time
+		void FixedUpdate(float dt);
+
 		IOBJECT(Scene);
 
 	protected:
@@ -402,6 +405,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Save, DataDocument&);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, FixedUpdate, float);
 	PROTECTED_FUNCTION(void, UpdateActors, float);
 	PROTECTED_FUNCTION(void, UpdateAddedEntities);
 	PROTECTED_FUNCTION(void, UpdateStartingEntities);

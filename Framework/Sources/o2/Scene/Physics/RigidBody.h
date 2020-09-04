@@ -130,9 +130,6 @@ namespace o2
 		// It is called when result enable was changed
 		void OnEnableInHierarchyChanged() override;
 
-		// It is called when transformation was changed and updated
-		void OnTransformUpdated() override;
-
 		// Is is called when actor has added to scene; creates rigid body
 		void OnAddToScene() override;
 
@@ -217,7 +214,6 @@ CLASS_METHODS_META(o2::RigidBody)
 	PUBLIC_FUNCTION(void, SetIsFixedRotation, bool);
 	PUBLIC_FUNCTION(bool, IsFixedRotation);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PROTECTED_FUNCTION(void, CreateBody);

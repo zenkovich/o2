@@ -82,19 +82,22 @@ namespace o2
 		// Copy-constructor
 		Actor(const Actor& other);
 
-		// Destructor
-		~Actor();
-
 		// Assign operator
 		Actor& operator=(const Actor& other);
 
 		// Updates actor and components
 		virtual void Update(float dt);
 
+		// Updates actor and components with fixed delta time
+		virtual void FixedUpdate(float dt);
+
 		// Updates childs
 		virtual void UpdateChildren(float dt);
 
-		// Updtates self transform, dependent parents and children transforms
+		// Updates childs with fixed delta time
+		virtual void FixedUpdateChildren(float dt);
+
+		// Updates self transform, dependent parents and children transforms
 		virtual void UpdateTransform();
 
 		// Updates transform
@@ -420,6 +423,9 @@ namespace o2
 		// Copy-constructor with transform
 		Actor(ActorTransform* transform, const Actor& other);
 
+		// Destructor
+		~Actor();
+
 		// Copies data of actor from other to this
 		virtual void CopyData(const Actor& otherActor);
 
@@ -476,12 +482,6 @@ namespace o2
 		// Returns all children actors with their children
 		void GetAllChildrenActors(Vector<Actor*>& actors);
 
-		// Applies excluding from scene for all components in hierarchy
-		void ExcludeComponentsFromScene();
-
-		// Applies including to scene for all components in hierarchy
-		void IncludeComponentsToScene();
-
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
@@ -509,8 +509,11 @@ namespace o2
 		// It is called when result enable was changed
 		virtual void OnEnableInHierarchyChanged();
 
-		// It is called when transformation was changed and updated
+		// It is called when transformation was updated
 		virtual void OnTransformUpdated();
+
+		// It is called when transformation was changed 
+		virtual void OnTransformChanged();
 
 		// It is called when parent changed
 		virtual void OnParentChanged(Actor* oldParent);
@@ -773,7 +776,9 @@ CLASS_METHODS_META(o2::Actor)
 	typedef Map<const Component*, Component*>& _tmp10;
 
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, FixedUpdate, float);
 	PUBLIC_FUNCTION(void, UpdateChildren, float);
+	PUBLIC_FUNCTION(void, FixedUpdateChildren, float);
 	PUBLIC_FUNCTION(void, UpdateTransform);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
@@ -868,8 +873,6 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(_tmp5, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp6, GetAllComponents);
 	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
-	PROTECTED_FUNCTION(void, ExcludeComponentsFromScene);
-	PROTECTED_FUNCTION(void, IncludeComponentsToScene);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);
@@ -880,6 +883,7 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);

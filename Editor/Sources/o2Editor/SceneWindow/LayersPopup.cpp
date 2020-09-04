@@ -214,7 +214,7 @@ namespace Editor
 	void LayersPopup::EndDragging()
 	{
 		float itemPos = GetChildrenWorldRect().top - mDraggingItem->layout->worldTop + 10.0f;
-		int idx = itemPos/mDraggingItem->layout->minHeight;
+		int idx = (int)(itemPos/mDraggingItem->layout->minHeight);
 		o2Scene.SetLayerOrder(mDraggingItem->mLayer, idx);
 
 		mDraggingItem = nullptr;

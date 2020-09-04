@@ -15,7 +15,7 @@ namespace Editor
 		mContentWidget = scrollArea;
 
 		mViewer = mnew ObjectViewer();
-		*mViewer->layout = WidgetLayout::BothStretch(5, 0, 0, 0);
+		*mViewer->layout = WidgetLayout::BothStretch(5, 0, 5, 5);
 		mContentWidget->AddChild(mViewer);
 	}
 

@@ -69,13 +69,7 @@ namespace Editor
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddItem("Edit/Transform/Move", [&]() {});
-		mMenuPanel->AddItem("Edit/Transform/Rotate", [&]() {});
-		mMenuPanel->AddItem("Edit/Transform/Scale", [&]() {});
-
-		mMenuPanel->AddItem("Edit/---");
-
-		mMenuPanel->AddItem("Edit/Scene view settings", [&]() { o2EditorPropertiesWindow.SetTarget(&Scene::Instance()); });
+		mMenuPanel->AddItem("Edit/Project/Physics", [&]() { o2EditorPropertiesWindow.SetTarget(&o2Config.physics); });
 
 		// VIEW
 		mMenuPanel->AddItem("View/Show Tree", [&]() { OnShowTreePressed(); });

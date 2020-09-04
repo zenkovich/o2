@@ -80,9 +80,6 @@ namespace o2
 
 	void ImageComponent::SetOwnerActor(Actor* actor)
 	{
-		if (actor)
-			actor->transform->SetSize(Sprite::GetSize());
-
 		DrawableComponent::SetOwnerActor(actor);
 	}
 

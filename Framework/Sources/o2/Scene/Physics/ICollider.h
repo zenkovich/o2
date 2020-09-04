@@ -93,8 +93,8 @@ namespace o2
 		// Returns shape with relative position and angle
 		virtual b2Shape* GetShape(const Basis& transform);
 
-		// It is called when actor's transform was changed; Updates shape
-		void OnTransformUpdated() override;
+		// It is called when transformation was changed 
+		void OnTransformChanged() override;
 
 		// It is called when actor was included to scene
 		void OnAddToScene() override;
@@ -145,7 +145,7 @@ CLASS_METHODS_META(o2::ICollider)
 	PROTECTED_FUNCTION(RigidBody*, FindRigidBody);
 	PROTECTED_FUNCTION(void, OnShapeChanged);
 	PROTECTED_FUNCTION(b2Shape*, GetShape, const Basis&);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 }

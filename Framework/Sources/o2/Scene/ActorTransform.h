@@ -100,7 +100,7 @@ namespace o2
 		Actor* GetOwnerActor() const;
 
 		// Sets transform dirty and needed to update
-		virtual void SetDirty(bool fromParent = true);
+		virtual void SetDirty(bool fromParent = false);
 
 		// Returns is transform dirty
 		bool IsDirty() const;

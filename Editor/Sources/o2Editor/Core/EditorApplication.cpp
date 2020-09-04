@@ -207,6 +207,12 @@ namespace Editor
 		}
 	}
 
+	void EditorApplication::FixedUpdateScene(float dt)
+	{
+		if (mUpdateStep)
+			mScene->FixedUpdate(dt);
+	}
+
 	void EditorApplication::DrawScene()
 	{}
 

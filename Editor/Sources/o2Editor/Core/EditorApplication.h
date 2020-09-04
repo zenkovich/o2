@@ -99,6 +99,9 @@ namespace Editor
 		// Updates scene
 		void UpdateScene(float dt) override;
 
+		// Updates scene with fixed delta time
+		void FixedUpdateScene(float dt) override;
+
 		// Draws scene
 		void DrawScene() override;
 

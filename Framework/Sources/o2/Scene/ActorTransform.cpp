@@ -670,13 +670,16 @@ namespace o2
 		SetDirty();
 	}
 
-	void ActorTransform::SetDirty(bool fromParent /*= true*/)
+	void ActorTransform::SetDirty(bool fromParent /*= false*/)
 	{
 		mData->dirtyFrame = o2Time.GetCurrentFrame();
 		mData->updateFrame = 0;
 
-		if (mData->owner)
+		if (mData->owner && !fromParent)
+		{
 			mData->owner->OnChanged();
+			mData->owner->OnTransformChanged();
+		}
 	}
 
 	void ActorTransform::Update()

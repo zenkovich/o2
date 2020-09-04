@@ -1,6 +1,7 @@
 #include "o2/stdafx.h"
 #include "ICollider.h"
 
+#include "o2/Physics/PhysicsWorld.h"
 #include "o2/Scene/Physics/RigidBody.h"
 
 namespace o2
@@ -100,10 +101,9 @@ namespace o2
 	{
 		auto thisTransform = mOwner->transform;
 		auto bodyTransform = body->transform;
-		Vec2F thisSize = thisTransform->GetSize();
-		Vec2F bodySize = bodyTransform->GetSize();
-		Basis thisBasis = thisTransform->GetWorldBasis(); thisBasis.Scale(Vec2F(1.0f/thisSize.x, 1.0f/thisSize.y));
-		Basis bodyBasis = bodyTransform->GetWorldBasis(); bodyBasis.Scale(Vec2F(1.0f/bodySize.x, 1.0f/bodySize.y));
+		Basis thisBasis = thisTransform->GetWorldNonSizedBasis(); 
+		Basis bodyBasis = bodyTransform->GetWorldNonSizedBasis(); 
+		bodyBasis.xv.Normalize(); bodyBasis.yv.Normalize();
 		Basis relativeTransform = thisBasis*(bodyBasis.Inverted());
 
 		b2FixtureDef fixture;
@@ -160,9 +160,10 @@ namespace o2
 		return nullptr;
 	}
 
-	void ICollider::OnTransformUpdated()
+	void ICollider::OnTransformChanged()
 	{
-		OnShapeChanged();
+		if (!o2Physics.IsUpdatingPhysicsNow())
+			OnShapeChanged();
 	}
 
 	void ICollider::OnAddToScene()

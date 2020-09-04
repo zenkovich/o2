@@ -96,18 +96,13 @@ namespace o2
 
 		memcpy(mesh.vertices, verticies, sizeof(Vertex2)*vertexCount);
 
-		for (int i = 2; i < vertexCount; i++)
+		for (int i = 1; i < vertexCount; i++)
 		{
 			int ii = (i - 2)*3;
-			mesh.indexes[ii] = i - 2;
-			mesh.indexes[ii + 1] = i - 1;
-			mesh.indexes[ii + 2] = i;
+			mesh.indexes[ii] = i - 1;
+			mesh.indexes[ii + 1] = i;
+			mesh.indexes[ii + 2] = 0;
 		}
-
-		int ii = (vertexCount - 2)*3;
-		mesh.indexes[ii] = vertexCount - 2;
-		mesh.indexes[ii + 1] = vertexCount - 1;
-		mesh.indexes[ii + 2] = 0;
 
 		mesh.vertexCount = vertexCount;
 		mesh.polyCount = polyCount;
@@ -119,7 +114,7 @@ namespace o2
 		static Mesh mesh(TextureRef(), 1024, 1024);
 
 		int vertexCount = points.Count();
-		int polyCount = points.Count() - 1;
+		int polyCount = points.Count() - 2;
 		if (mesh.GetMaxVertexCount() < points.Count() || mesh.GetMaxPolyCount() < polyCount)
 			mesh.Resize(points.Count(), polyCount);
 
@@ -130,15 +125,10 @@ namespace o2
 		for (int i = 2; i < points.Count(); i++)
 		{
 			int ii = (i - 2)*3;
-			mesh.indexes[ii] = i - 2;
-			mesh.indexes[ii + 1] = i - 1;
-			mesh.indexes[ii + 2] = i;
+			mesh.indexes[ii] = i - 1;
+			mesh.indexes[ii + 1] = i;
+			mesh.indexes[ii + 2] = 0;
 		}
-
-		int ii = (points.Count() - 2)*3;
-		mesh.indexes[ii] = points.Count() - 2;
-		mesh.indexes[ii + 1] = points.Count() - 1;
-		mesh.indexes[ii + 2] = 0;
 
 		mesh.vertexCount = vertexCount;
 		mesh.polyCount = polyCount;

@@ -201,6 +201,9 @@ namespace o2
 		// Updates scene
 		virtual void UpdateScene(float dt);
 
+		// Updates scene with fixed delta time
+		virtual void FixedUpdateScene(float dt);
+
 		// Before update physics
 		virtual void PreUpdatePhysics();
 

@@ -200,6 +200,11 @@ namespace o2
 			comp->Update(dt);
 	}
 
+	void Actor::FixedUpdate(float dt)
+	{
+		OnFixedUpdate(dt);
+	}
+
 	void Actor::UpdateChildren(float dt)
 	{
 		for (auto child : mChildren)
@@ -207,6 +212,15 @@ namespace o2
 
 		for (auto child : mChildren)
 			child->UpdateChildren(dt);
+	}
+
+	void Actor::FixedUpdateChildren(float dt)
+	{
+		for (auto child : mChildren)
+			child->FixedUpdate(dt);
+
+		for (auto child : mChildren)
+			child->FixedUpdateChildren(dt);
 	}
 
 	void Actor::UpdateTransform()
@@ -295,7 +309,6 @@ namespace o2
 		}
 
 		OnRemoveFromScene();
-		ExcludeComponentsFromScene();
 
 		mIsOnScene = false;
 
@@ -322,7 +335,6 @@ namespace o2
 		mIsOnScene = true;
 
 		OnAddToScene();
-		IncludeComponentsToScene();
 
 		for (auto child : mChildren)
 			child->AddToScene();
@@ -732,10 +744,6 @@ namespace o2
 			layer->OnActorEnabled(this);
 
 		OnLayerChanged(lastLayer);
-
-		for (auto comp : mComponents)
-			comp->OnLayerChanged(lastLayer, layer);
-
 		OnChanged();
 	}
 
@@ -784,16 +792,28 @@ namespace o2
 			comp->OnTransformUpdated();
 	}
 
+	void Actor::OnTransformChanged()
+	{
+		for (auto comp : mComponents)
+			comp->OnTransformChanged();
+	}
+
 	void Actor::SetParentProp(Actor* actor)
 	{
 		SetParent(actor, false);
 	}
 
 	void Actor::OnAddToScene()
-	{}
+	{
+		for (auto comp : mComponents)
+			comp->OnAddToScene();
+	}
 
 	void Actor::OnRemoveFromScene()
-	{}
+	{
+		for (auto comp : mComponents)
+			comp->OnRemoveFromScene();
+	}
 
 	void Actor::OnStart()
 	{}
@@ -810,11 +830,35 @@ namespace o2
 	void Actor::OnDisabled()
 	{}
 
+	void Actor::OnChildAdded(Actor* child)
+	{
+		for (auto comp : mComponents)
+			comp->OnChildAdded(child);
+	}
+
+	void Actor::OnChildRemoved(Actor* child)
+	{
+		for (auto comp : mComponents)
+			comp->OnChildRemoved(child);
+	}
+
+	void Actor::OnLayerChanged(SceneLayer* oldLayer)
+	{
+		for (auto comp : mComponents)
+			comp->OnLayerChanged(oldLayer);
+	}
+
 	void Actor::OnComponentAdded(Component* component)
-	{}
+	{
+		for (auto comp : mComponents)
+			comp->OnComponentAdded(component);
+	}
 
 	void Actor::OnComponentRemoving(Component* component)
-	{}
+	{
+		for (auto comp : mComponents)
+			comp->OnComponentRemoving(component);
+	}
 
 	void Actor::UpdateResEnabled()
 	{
@@ -1001,18 +1045,6 @@ namespace o2
 			res.Add(child->GetType().GetName(), child);
 
 		return res;
-	}
-
-	void Actor::ExcludeComponentsFromScene()
-	{
-		for (auto comp : mComponents)
-			comp->OnRemoveFromScene();
-	}
-
-	void Actor::IncludeComponentsToScene()
-	{
-		for (auto comp : mComponents)
-			comp->OnAddToScene();
 	}
 
 	void Actor::OnEnableInHierarchyChanged()
@@ -1206,7 +1238,11 @@ namespace o2
 
 	void Actor::OnChildrenChanged() {}
 
-	void Actor::OnParentChanged(Actor* oldParent) {}
+	void Actor::OnParentChanged(Actor* oldParent) 
+	{
+		for (auto comp : mComponents)
+			comp->OnParentChanged(oldParent);
+	}
 
 #endif // !IS_EDITOR
 }

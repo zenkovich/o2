@@ -123,8 +123,16 @@ namespace o2
 		else
 			mResEnabled = mEnabled;
 
-		if (lastResEnabled != mResEnabled && mOwner)
-			mOwner->OnChanged();
+		if (lastResEnabled != mResEnabled)
+		{
+			if (mResEnabled)
+				OnEnabled();
+			else
+				OnDisabled();
+
+			if (mOwner)
+				mOwner->OnChanged();
+		}
 	}
 
 	void Component::SetOwnerActor(Actor* actor)
@@ -144,6 +152,9 @@ namespace o2
 			mOwner->OnChanged();
 		}
 	}
+
+	void Component::FixedUpdate(float dt)
+	{}
 
 // 	void ComponentDataValueConverter::ToData(void* object, DataValue& data)
 // 	{

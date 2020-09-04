@@ -139,7 +139,6 @@ namespace Editor
 	void SceneTree::SetEditorWatching(bool watching)
 	{
 		mWatchEditor = watching;
-
 		UpdateNodesView();
 	}
 

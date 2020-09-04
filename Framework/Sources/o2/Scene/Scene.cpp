@@ -42,6 +42,15 @@ namespace o2
 		UpdateActors(dt);
 	}
 
+	void Scene::FixedUpdate(float dt)
+	{
+		for (auto actor : mRootActors)
+			actor->FixedUpdate(dt);
+
+		for (auto actor : mRootActors)
+			actor->FixedUpdateChildren(dt);
+	}
+
 	void Scene::UpdateAddedEntities()
 	{
 		auto addedActors = mAddedActors;
@@ -463,8 +472,6 @@ namespace o2
 
 	void Scene::Load(const String& path, bool append /*= false*/)
 	{
-		ActorDataValueConverter::Instance().LockPointersResolving();
-
 		DataDocument data;
 		data.LoadFromFile(path);
 
@@ -473,6 +480,8 @@ namespace o2
 
 	void Scene::Load(const DataDocument& doc, bool append /*= false*/)
 	{
+		ActorDataValueConverter::Instance().LockPointersResolving();
+
 		if (!append)
 			Clear(false);
 
@@ -501,6 +510,13 @@ namespace o2
 
 		ActorDataValueConverter::Instance().UnlockPointersResolving();
 		ActorDataValueConverter::Instance().ResolvePointers();
+
+		for (auto actor : mRootActors)
+			actor->UpdateTransform();
+
+#if IS_EDITOR
+		mChangedObjects.Clear();
+#endif
 	}
 
 	void Scene::Save(const String& path)

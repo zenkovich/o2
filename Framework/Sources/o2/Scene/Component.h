@@ -37,6 +37,9 @@ namespace o2
 		// Updates component
 		virtual void Update(float dt);
 
+		// Updates component with fixed delta time
+		virtual void FixedUpdate(float dt);
+
 		// Sets component enable
 		virtual void SetEnabled(bool active);
 
@@ -86,6 +89,11 @@ namespace o2
 		// Returns name of component icon
 		static String GetIcon();
 
+#if IS_EDITOR
+		// It is called when component added from editor
+		virtual void OnAddedFromEditor() {}
+#endif
+
 		SERIALIZABLE(Component);
 
 	protected:
@@ -108,14 +116,38 @@ namespace o2
 		// It is called when component started working on first update frame
 		virtual void OnStart() {}
 
-		// It is called when actor changed layer
-		virtual void OnLayerChanged(SceneLayer* oldLayer, SceneLayer* newLayer) {}
-
 		// Updates component enable
 		virtual void UpdateEnabled();
 
+		// Is is called when actor enabled in hierarchy
+		virtual void OnEnabled() {}
+
+		// It is called when actor disabled in hierarchy
+		virtual void OnDisabled() {}
+
+		// It is called when transformation was changed 
+		virtual void OnTransformChanged() {}
+
 		// It is called when actor's transform was changed
 		virtual void OnTransformUpdated() {}
+
+		// It is called when parent changed
+		virtual void OnParentChanged(Actor* oldParent) {}
+
+		// It is called when child actor was added
+		virtual void OnChildAdded(Actor* child) {}
+
+		// It is called when child actor was removed
+		virtual void OnChildRemoved(Actor* child) {}
+
+		// It is called when layer was changed
+		virtual void OnLayerChanged(SceneLayer* oldLayer) {}
+
+		// It is called when new component has added to actor
+		virtual void OnComponentAdded(Component* component) {}
+
+		// It is called when component going to be removed from actor
+		virtual void OnComponentRemoving(Component* component) {}
 
 		friend class Actor;
 		friend class Scene;
@@ -198,6 +230,7 @@ CLASS_METHODS_META(o2::Component)
 
 	PUBLIC_FUNCTION(UInt64, GetID);
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_FUNCTION(void, FixedUpdate, float);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);
@@ -209,12 +242,21 @@ CLASS_METHODS_META(o2::Component)
 	PUBLIC_STATIC_FUNCTION(String, GetName);
 	PUBLIC_STATIC_FUNCTION(String, GetCategory);
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);
+	PUBLIC_FUNCTION(void, OnAddedFromEditor);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PROTECTED_FUNCTION(void, OnStart);
-	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*, SceneLayer*);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
+	PROTECTED_FUNCTION(void, OnTransformChanged);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
+	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
+	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
+	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
+	PROTECTED_FUNCTION(void, OnComponentAdded, Component*);
+	PROTECTED_FUNCTION(void, OnComponentRemoving, Component*);
 }
 END_META;

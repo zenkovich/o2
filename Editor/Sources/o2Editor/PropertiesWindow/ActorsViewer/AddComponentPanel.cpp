@@ -74,7 +74,11 @@ namespace Editor
 		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->type);
 
 		for (auto actor : mViewer->mTargetActors)
-			actor->AddComponent(dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample())));
+		{
+			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
+			actor->AddComponent(comp);
+			comp->OnAddedFromEditor();
+		}
 
 		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
 	}
@@ -90,7 +94,11 @@ namespace Editor
 		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->data->type);
 
 		for (auto actor : mViewer->mTargetActors)
-			actor->AddComponent(dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample())));
+		{
+			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
+			actor->AddComponent(comp);
+			comp->OnAddedFromEditor();
+		}
 
 		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
 	}
