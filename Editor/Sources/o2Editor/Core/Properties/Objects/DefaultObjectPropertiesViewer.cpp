@@ -7,12 +7,12 @@
 
 namespace Editor
 {
-	void DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	bool DefaultObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		IObjectPropertiesViewer::CheckBuildProperties(targetObjets);
 
 		if (targetObjets.IsEmpty())
-			return;
+			return false;
 
 		PushEditorScopeOnStack scope;
 
@@ -32,7 +32,11 @@ namespace Editor
 
 				mBuiltWithHiddenProperties = o2EditorProperties.IsPrivateFieldsVisible();
 			}
+
+			return true;
 		}
+
+		return false;
 	}
 
 	void DefaultObjectPropertiesViewer::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)

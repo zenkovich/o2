@@ -51,8 +51,8 @@ namespace Editor
 
 		if (!mHeaderEnabled || spoiler->IsExpanded())
 		{
-			CheckBuildProperties(targetObjets);
-			mPropertiesContext.Set(targetObjets);
+			bool force = CheckBuildProperties(targetObjets);
+			mPropertiesContext.Set(targetObjets, force);
 		}
 
 		OnRefreshed(targetObjets);
@@ -116,15 +116,17 @@ namespace Editor
 		return o2UI.CreateWidget<Spoiler>("expand with caption");
 	}
 
-	void IObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	bool IObjectPropertiesViewer::CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
 		if (mPropertiesBuilt)
-			return;
+			return false;
 
 		PushEditorScopeOnStack scope;
 		RebuildProperties(targetObjets);
 
 		mPropertiesBuilt = true;
+
+		return true;
 	}
 
 	void IObjectPropertiesViewer::OnFieldChangeCompleted(const String& path, const Vector<DataDocument>& before, 

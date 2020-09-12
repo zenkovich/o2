@@ -8,9 +8,15 @@
 
 namespace Editor
 {
-	void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets)
+
+	void PropertiesContext::Invalidate()
 	{
-		if (this->targets == targets)
+		targets.Clear();
+	}
+
+	void PropertiesContext::Set(const Vector<Pair<IObject*, IObject*>>& targets, bool force /*= false*/)
+	{
+		if (this->targets == targets && !force)
 		{
 			Refresh();
 			return;

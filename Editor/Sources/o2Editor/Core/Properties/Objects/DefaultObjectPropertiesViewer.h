@@ -22,7 +22,7 @@ namespace Editor
 
 	protected:
 		// Checks if properties need to be rebuilt, rebuilds if necessary
-		void CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
+		bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 
 		// It is called when viewer is refreshed, stores real object type
 		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
@@ -48,7 +48,7 @@ CLASS_METHODS_META(Editor::DefaultObjectPropertiesViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PROTECTED_FUNCTION(void, CheckBuildProperties, _tmp1);
+	PROTECTED_FUNCTION(bool, CheckBuildProperties, _tmp1);
 	PROTECTED_FUNCTION(void, OnRefreshed, _tmp2);
 }
 END_META;

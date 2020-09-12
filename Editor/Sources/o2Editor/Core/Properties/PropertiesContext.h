@@ -30,8 +30,11 @@ namespace Editor
 		bool builtWithPrivateProperties = false; // Is properties was built with hidden properties
 
 	public:
+		// Marks context as not actual and required to update values proxies
+		void Invalidate();
+
 		// Sets targets objects and updates targets in properties
-		void Set(const Vector<Pair<IObject*, IObject*>>& targets);
+		void Set(const Vector<Pair<IObject*, IObject*>>& targets, bool force = false);
 
 		// Refreshes properties
 		void Refresh();

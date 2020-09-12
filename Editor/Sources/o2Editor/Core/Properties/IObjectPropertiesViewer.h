@@ -94,8 +94,8 @@ namespace Editor
 		// It is called when header enable changed
 		virtual void OnHeaderEnableChanged(bool enabled) {}
 
-		// Checks if properties need to be rebuilt, rebuilds if necessary
-		virtual void CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets);
+		// Checks if properties need to be rebuilt, rebuilds if necessary; returns true when properties was rebuilt
+		virtual bool CheckBuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets);
 
 		// It is called when the viewer is refreshed, builds properties, and places them in mPropertiesContext
 		virtual void RebuildProperties(const Vector<Pair<IObject*, IObject*>>& targetObjets) {}
@@ -183,7 +183,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PROTECTED_FUNCTION(Spoiler*, CreateSpoiler);
 	PROTECTED_FUNCTION(void, OnHeaderEnableChanged, bool);
-	PROTECTED_FUNCTION(void, CheckBuildProperties, _tmp2);
+	PROTECTED_FUNCTION(bool, CheckBuildProperties, _tmp2);
 	PROTECTED_FUNCTION(void, RebuildProperties, _tmp3);
 	PROTECTED_FUNCTION(void, OnRefreshed, _tmp4);
 	PROTECTED_FUNCTION(void, OnFree);
