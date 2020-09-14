@@ -130,13 +130,16 @@ namespace Editor
 	{
 		mRoot.Clear();
 
-		auto availableComponentsTypes = TypeOf(Component).GetDerivedTypes();
-		availableComponentsTypes.Remove(&TypeOf(DrawableComponent));
+		auto componentsTypes = TypeOf(Component).GetDerivedTypes();
+		componentsTypes.Remove(&TypeOf(DrawableComponent));
 
 		String filterStrLower = mFilterStr.ToLowerCase();
 
-		for (auto type : availableComponentsTypes)
+		for (auto type : componentsTypes)
 		{
+			if (!type->InvokeStatic<bool>("IsAvailableFromCreateMenu"))
+				continue;
+
 			String name = type->InvokeStatic<String>("GetName");
 			if (name.IsEmpty())
 				name = type->GetName();

@@ -89,6 +89,9 @@ namespace o2
 		// Returns name of component icon
 		static String GetIcon();
 
+		// Is component visible in create menu
+		static bool IsAvailableFromCreateMenu();
+
 #if IS_EDITOR
 		// It is called when component added from editor
 		virtual void OnAddedFromEditor() {}
@@ -242,6 +245,7 @@ CLASS_METHODS_META(o2::Component)
 	PUBLIC_STATIC_FUNCTION(String, GetName);
 	PUBLIC_STATIC_FUNCTION(String, GetCategory);
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);
+	PUBLIC_STATIC_FUNCTION(bool, IsAvailableFromCreateMenu);
 	PUBLIC_FUNCTION(void, OnAddedFromEditor);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnAddToScene);

@@ -49,6 +49,11 @@ namespace o2
 		return "Physics";
 	}
 
+	bool BoxCollider::IsAvailableFromCreateMenu()
+	{
+		return true;
+	}
+
 	BoxCollider& BoxCollider::operator=(const BoxCollider& other)
 	{
 		ICollider::operator=(other);

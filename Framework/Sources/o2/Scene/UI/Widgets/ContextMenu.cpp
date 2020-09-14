@@ -11,6 +11,7 @@
 #include "o2/Scene/UI/WidgetLayer.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/WidgetState.h"
+#include "o2/Utils/Editor/EditorScope.h"
 
 namespace o2
 {
@@ -23,21 +24,21 @@ namespace o2
 		checked(false), checkable(false)
 	{}
 
-	ContextMenu::Item::Item(const WString& text, const Function<void()> onClick, 
-							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
-							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
+	ContextMenu::Item::Item(const WString& text, const Function<void()> onClick,
+							const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), onClick(onClick), shortcut(shortcut), icon(icon), checked(false), checkable(false)
 	{}
 
-	ContextMenu::Item::Item(const WString& text, Vector<Item> subItems, 
-							  const ImageAssetRef& icon /*= ImageAssetRef()*/) :
+	ContextMenu::Item::Item(const WString& text, Vector<Item> subItems,
+							const ImageAssetRef& icon /*= ImageAssetRef()*/) :
 		text(text), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
 
-	ContextMenu::Item::Item(const WString& text, bool checked, 
-							  Function<void(bool)> onChecked /*= Function<void(bool)>()*/, 
-							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
-							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
+	ContextMenu::Item::Item(const WString& text, bool checked,
+							Function<void(bool)> onChecked /*= Function<void(bool)>()*/,
+							const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
 		text(text), checked(checked), onChecked(onChecked), checkable(true), shortcut(shortcut), icon(icon)
 	{}
 
@@ -46,8 +47,10 @@ namespace o2
 
 	ContextMenu::Item ContextMenu::Item::Separator()
 	{
-		return Item("---", Function<void()>());
+		return Item(separatorText, Function<void()>());
 	}
+
+	WString ContextMenu::Item::separatorText = "---";
 
 	ContextMenu::ContextMenu():
 		PopupWidget()
@@ -71,11 +74,11 @@ namespace o2
 		mItemsLayout = mnew VerticalLayout();
 		AddChild(mItemsLayout);
 
-		mItemsLayout->expandHeight  = false;
-		mItemsLayout->expandWidth   = true;
-		mItemsLayout->baseCorner    = BaseCorner::LeftTop;
+		mItemsLayout->expandHeight = false;
+		mItemsLayout->expandWidth = true;
+		mItemsLayout->baseCorner = BaseCorner::LeftTop;
 		mItemsLayout->fitByChildren = true;
-		*mItemsLayout->layout       = WidgetLayout::BothStretch();
+		*mItemsLayout->layout = WidgetLayout::BothStretch();
 	}
 
 	ContextMenu::ContextMenu(Vector<Item> items):
@@ -87,15 +90,15 @@ namespace o2
 	ContextMenu::ContextMenu(const ContextMenu& other):
 		PopupWidget(other), mMaxVisibleItems(other.mMaxVisibleItems)
 	{
-		mItemSample        = other.mItemSample->CloneAs<ContextMenuItem>();
+		mItemSample = other.mItemSample->CloneAs<ContextMenuItem>();
 		mItemSample->RemoveFromScene();
 
-		mSeparatorSample   = other.mSeparatorSample->CloneAs<Widget>();
+		mSeparatorSample = other.mSeparatorSample->CloneAs<Widget>();
 		mSeparatorSample->RemoveFromScene();
 
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout   = other.mSelectionLayout;
-		mItemsLayout       = FindChildByType<VerticalLayout>();
+		mSelectionLayout = other.mSelectionLayout;
+		mItemsLayout = FindChildByType<VerticalLayout>();
 
 		RetargetStatesAnimations();
 	}
@@ -158,6 +161,9 @@ namespace o2
 
 	void ContextMenu::Show(PopupWidget* parent, const Vec2F& position /*= o2Input.GetCursorPos()*/)
 	{
+		if (!mItemsBuilt)
+			RebuildItems();
+
 		PopupWidget::Show(parent, position);
 
 		auto hoverState = state["hover"];
@@ -174,50 +180,42 @@ namespace o2
 		PopupWidget::Show(position);
 	}
 
-	ContextMenuItem* ContextMenu::AddItem(const Item& item)
+	void ContextMenu::AddItem(const Item& item)
 	{
-		if (item.text == "---")
+		mItems.Add(item);
+		mItemsBuilt = false;
+
+		if (mResEnabledInHierarchy)
 		{
-			Widget* newItem = mSeparatorSample->CloneAs<Widget>();
-			newItem->name = "Separator";
-			mItemsLayout->AddChild(newItem);
-
-			return nullptr;
+			RebuildItems();
+			FitSizeAndPosition(layout->worldLeftTop);
+			SetLayoutDirty();
 		}
-
-		ContextMenuItem* newItem = CreateItem(item);
-		mItemsLayout->AddChild(newItem);
-		newItem->onClick = item.onClick;
-
-		FitSizeAndPosition(layout->worldLeftTop);
-		SetLayoutDirty();
-
-		return newItem;
 	}
 
-	ContextMenuItem* ContextMenu::AddItem(const WString& path,
-									 const Function<void()>& clickFunc /*= Function<void()>()*/,
-									 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
-									 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	void ContextMenu::AddItem(const WString& path,
+							  const Function<void()>& clickFunc /*= Function<void()>()*/,
+							  const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
-		ContextMenu* targetContext = CreateItemsByPath(targetPath);
-		return targetContext->AddItem(Item(targetPath, clickFunc, icon, shortcut));
+		auto itemsList = CreateItemsByPath(targetPath);
+		itemsList->Add(Item(targetPath, clickFunc, icon, shortcut));
 	}
 
-	ContextMenuItem* ContextMenu::AddToggleItem(const WString& path, bool value,
-										  const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
-										  const ImageAssetRef& icon /*= ImageAssetRef()*/, 
-										  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	void ContextMenu::AddToggleItem(const WString& path, bool value,
+									const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
+									const ImageAssetRef& icon /*= ImageAssetRef()*/,
+									const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString targetPath = path;
-		ContextMenu* targetContext = CreateItemsByPath(targetPath);
-		return targetContext->AddItem(Item(targetPath, value, clickFunc, icon, shortcut));
+		auto itemsList = CreateItemsByPath(targetPath);
+		itemsList->Add(Item(targetPath, value, clickFunc, icon, shortcut));
 	}
 
-	ContextMenu* ContextMenu::CreateItemsByPath(WString& path)
+	Vector<ContextMenu::Item>* ContextMenu::CreateItemsByPath(WString& path)
 	{
-		ContextMenu* resultContext = this;
+		Vector<Item>* items = &mItems;
 
 		while (true)
 		{
@@ -227,54 +225,32 @@ namespace o2
 
 			WString subMenu = path.SubStr(0, slashPos);
 
-			Widget* subChild = resultContext->mItemsLayout->mChildWidgets.FindOrDefault([&](auto x) {
-				if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
-					return text->text == subMenu;
+			auto subItem = items->Find([&](const Item& x) { return x.text == subMenu; });
 
-				return false;
-			});
-
-			if (!subChild)
-				subChild = resultContext->AddItem(subMenu);
-
-			ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
-			if (!subContext)
+			if (!subItem)
 			{
-				subContext = o2UI.CreateWidget<ContextMenu>();
-				subChild->AddChild(subContext);
-
-				if (auto subIconLayer = subChild->FindLayer("subIcon"))
-					subIconLayer->transparency = 1.0f;
+				items->Add(Item(subMenu, Function<void()>()));
+				subItem = &items->Last();
 			}
 
-			resultContext = subContext;
+			items = &subItem->subItems;
 			path = path.SubStr(slashPos + 1);
 		}
 
-		return resultContext;
+		return items;
 	}
 
-	ContextMenuItem* ContextMenu::InsertItem(const Item& item, int position)
+	void ContextMenu::InsertItem(const Item& item, int position)
 	{
-		if (item.text == "---")
+		mItems.Insert(item, position);
+		mItemsBuilt = false;
+
+		if (mResEnabledInHierarchy)
 		{
-			Widget* newItem = mSeparatorSample->CloneAs<Widget>();
-			newItem->name = "Separator";
-			mItemsLayout->AddChild(newItem, position);
-
-			return nullptr;
+			RebuildItems();
+			FitSizeAndPosition(layout->worldLeftTop);
+			SetLayoutDirty();
 		}
-
-		ContextMenuItem* newItem = CreateItem(item);
-		mItemsLayout->AddChild(newItem, position);
-
-		if (item.subItems.Count() == 0)
-			newItem->onClick = item.onClick;
-
-		FitSizeAndPosition(layout->worldLeftTop);
-		SetLayoutDirty();
-
-		return newItem;
 	}
 
 	void ContextMenu::AddItems(Vector<Item> items)
@@ -346,11 +322,18 @@ namespace o2
 
 	void ContextMenu::SetItem(int position, const Item& item)
 	{
-		if (position < 0 || position >= mItemsLayout->mChildren.Count())
+		if (position < 0 || position >= mItems.Count())
 			return;
 
-		ContextMenuItem* itemWidget = (ContextMenuItem*)(mItemsLayout->mChildren[position]);
-		SetupItem(itemWidget, item);
+		mItems[position] = item;
+		mItemsBuilt = false;
+
+		if (mResEnabledInHierarchy)
+		{
+			RebuildItems();
+			FitSizeAndPosition(layout->worldLeftTop);
+			SetLayoutDirty();
+		}
 	}
 
 	ContextMenuItem* ContextMenu::GetItemUnderPoint(const Vec2F& point)
@@ -622,12 +605,12 @@ namespace o2
 		delete mSelectionDrawable;
 		delete mSeparatorSample;
 
-		mItemSample        = other.mItemSample->CloneAs<ContextMenuItem>();
-		mSeparatorSample   = other.mSeparatorSample->CloneAs<Widget>();
+		mItemSample = other.mItemSample->CloneAs<ContextMenuItem>();
+		mSeparatorSample = other.mSeparatorSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout   = other.mSelectionLayout;
-		mItemsLayout       = FindChildByType<VerticalLayout>();
-		mMaxVisibleItems   = other.mMaxVisibleItems;
+		mSelectionLayout = other.mSelectionLayout;
+		mItemsLayout = FindChildByType<VerticalLayout>();
+		mMaxVisibleItems = other.mMaxVisibleItems;
 
 		mItemSample->RemoveFromScene();
 		mSeparatorSample->RemoveFromScene();
@@ -699,69 +682,50 @@ namespace o2
 			mChildPopup->SpecialDraw();
 	}
 
-	ContextMenuItem* ContextMenu::CreateItem(const Item& item)
+	void ContextMenu::RebuildItems()
 	{
-		ContextMenuItem* itemWidget = mItemSample->CloneAs<ContextMenuItem>();
-		SetupItem(itemWidget, item);
-		return itemWidget;
-	}
+		Vector<ContextMenuItem*> cache;
 
-	void ContextMenu::SetupItem(ContextMenuItem* widget, const Item& item)
-	{
-		widget->name = (WString)"Context Item " + item.text;
-
-		if (auto iconLayer = widget->FindLayer("icon"))
+		for (auto& item : mItems)
 		{
-			if (item.icon)
+			if (item.widget)
+				mItemsLayout->RemoveChild(item.widget, false);
+		}
+
+		auto children = mItemsLayout->GetChildren();
+		for (auto child : children)
+		{
+			if (auto item = dynamic_cast<ContextMenuItem*>(child))
 			{
-				Vec2F size = item.icon->GetAtlasRect().Size();
-
-				if (size.x > size.y)
-				{
-					size.y *= size.x / widget->layout->height;
-					size.x = widget->layout->height;
-				}
-				else
-				{
-					size.x *= size.y / widget->layout->height;
-					size.y = widget->layout->height;
-				}
-
-				iconLayer->AddChildLayer("sprite", mnew Sprite(item.icon),
-										 Layout(Vec2F(), Vec2F(),
-										 Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
-										 Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));
-
-				widget->UpdateLayersDrawingSequence();
+				cache.Add(item);
+				mItemsLayout->RemoveChild(item, false);
 			}
 		}
 
-		if (auto textLayer = widget->GetLayerDrawable<Text>("basic/caption"))
-			textLayer->text = item.text;
-
-		if (auto shortcutLayer = widget->GetLayerDrawable<Text>("basic/shortcut"))
-			shortcutLayer->text = item.shortcut.AsString();
-
-		if (auto subIconLayer = widget->FindLayer("subIcon"))
-			subIconLayer->transparency = item.subItems.Count() > 0 ? 1.0f : 0.0f;
-
-		if (auto checkLayer = widget->GetLayerDrawable<Sprite>("check"))
-			checkLayer->enabled = item.checked;
-
-		widget->SetShortcut(item.shortcut);
-		widget->SetChecked(item.checked);
-		widget->SetCheckable(item.checkable);
-		widget->onChecked = item.onChecked;
-
-		widget->RemoveAllChildren();
-		if (item.subItems.Count() > 0)
+		for (auto& item : mItems)
 		{
-			ContextMenu* subMenu = mnew ContextMenu(*this);
-			subMenu->RemoveAllItems();
-			subMenu->AddItems(item.subItems);
+			if (item.widget)
+				mItemsLayout->AddChild(item.widget);
+			else
+			{
+				if (item.text == Item::separatorText)
+				{
+					Widget* newItem = mSeparatorSample->CloneAs<Widget>();
+					newItem->name = "Separator";
+					mItemsLayout->AddChild(newItem);
+				}
+				else
+				{
+					PushEditorScopeOnStack scope(IEventsListener::mIsEditorMode ? 1 : 0);
 
-			widget->AddChild(subMenu);
+					ContextMenuItem* newItem = cache.IsEmpty() ? mItemSample->CloneAs<ContextMenuItem>() : cache.PopBack();
+					newItem->Setup(item, this);
+					mItemsLayout->AddChild(newItem);
+				}
+			}
 		}
+
+		mItemsBuilt = true;
 	}
 
 	ContextMenu::Item ContextMenu::GetItemDef(int idx) const
@@ -770,9 +734,7 @@ namespace o2
 		auto item = mItemsLayout->mChildren[idx];
 
 		if (item->name == "Separator")
-		{
-			res.text = "---";
-		}
+			res.text = Item::separatorText;
 		else
 		{
 			auto contextItem = (ContextMenuItem*)item;
@@ -813,6 +775,67 @@ namespace o2
 
 	ContextMenuItem::~ContextMenuItem()
 	{}
+
+	void ContextMenuItem::Setup(ContextMenu::Item& item, ContextMenu* owner)
+	{
+		item.widget = this;
+		name = (WString)"Context Item " + item.text;
+
+		if (auto iconLayer = FindLayer("icon"))
+		{
+			if (item.icon)
+			{
+				Vec2F size = item.icon->GetAtlasRect().Size();
+
+				if (size.x > size.y)
+				{
+					size.y *= size.x / layout->height;
+					size.x = layout->height;
+				}
+				else
+				{
+					size.x *= size.y / layout->height;
+					size.y = layout->height;
+				}
+
+				iconLayer->AddChildLayer("sprite", mnew Sprite(item.icon),
+										 Layout(Vec2F(), Vec2F(),
+										 Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
+										 Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));
+
+				UpdateLayersDrawingSequence();
+			}
+		}
+
+		if (auto textLayer = GetLayerDrawable<Text>("basic/caption"))
+			textLayer->text = item.text;
+
+		if (auto shortcutLayer = GetLayerDrawable<Text>("basic/shortcut"))
+			shortcutLayer->text = item.shortcut.AsString();
+
+		if (auto subIconLayer = FindLayer("subIcon"))
+			subIconLayer->transparency = item.subItems.Count() > 0 ? 1.0f : 0.0f;
+
+		if (auto checkLayer = GetLayerDrawable<Sprite>("check"))
+			checkLayer->enabled = item.checked;
+
+		SetShortcut(item.shortcut);
+		SetChecked(item.checked);
+		SetCheckable(item.checkable);
+
+		onClick = item.onClick;
+		onChecked = item.onChecked;
+
+		RemoveAllChildren();
+		if (item.subItems.Count() > 0)
+		{
+			ContextMenu* subMenu = owner->CloneAs<ContextMenu>();
+			subMenu->RemoveAllItems();
+			subMenu->AddItems(item.subItems);
+
+			AddChild(subMenu);
+		}
+	}
 
 	void ContextMenuItem::SetText(const WString& text)
 	{
@@ -913,8 +936,8 @@ namespace o2
 
 }
 
-DECLARE_CLASS(o2::ContextMenuItem);
-
 DECLARE_CLASS(o2::ContextMenu);
+
+DECLARE_CLASS(o2::ContextMenuItem);
 
 DECLARE_CLASS(o2::ContextMenu::Item);

@@ -55,19 +55,19 @@ namespace o2
 		Widget* AddItem(const Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		Widget* AddItem(const WString& path, const Function<void()>& 
-						  clickFunc = Function<void()>(),
-						  const ImageAssetRef& icon = ImageAssetRef(), 
-						  const ShortcutKeys& shortcut = ShortcutKeys());
+		void AddItem(const WString& path, const Function<void()>&
+					 clickFunc = Function<void()>(),
+					 const ImageAssetRef& icon = ImageAssetRef(),
+					 const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Adds toggle item by path ("node/sub node/target")
-		Widget* AddToggleItem(const WString& path, bool value, 
-								const Function<void(bool)>& clickFunc = Function<void(bool)>(),
-								const ImageAssetRef& icon = ImageAssetRef(), 
-								const ShortcutKeys& shortcut = ShortcutKeys());
+		void AddToggleItem(const WString& path, bool value,
+						   const Function<void(bool)>& clickFunc = Function<void(bool)>(),
+						   const ImageAssetRef& icon = ImageAssetRef(),
+						   const ShortcutKeys& shortcut = ShortcutKeys());
 
-			  // Inserts item at position
-		Widget* InsertItem(const Item& item, int position);
+		// Inserts item at position
+		void InsertItem(const Item& item, int position);
 
 		// Adds array of items
 		void AddItems(Vector<Item> items);
@@ -198,9 +198,9 @@ CLASS_METHODS_META(o2::MenuPanel)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(Widget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(Widget*, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(Widget*, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(Widget*, InsertItem, const Item&, int);
+	PUBLIC_FUNCTION(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+	PUBLIC_FUNCTION(void, InsertItem, const Item&, int);
 	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
 	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
 	PUBLIC_FUNCTION(Item, GetItem, int);

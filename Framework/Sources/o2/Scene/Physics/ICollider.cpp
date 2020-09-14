@@ -97,6 +97,11 @@ namespace o2
 		return mIsSensor;
 	}
 
+	bool ICollider::IsAvailableFromCreateMenu()
+	{
+		return false;
+	}
+
 	void ICollider::AddToRigidBody(RigidBody* body)
 	{
 		auto thisTransform = mOwner->transform;

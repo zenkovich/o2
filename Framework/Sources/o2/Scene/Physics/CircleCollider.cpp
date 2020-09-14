@@ -49,6 +49,11 @@ namespace o2
 		return "Physics";
 	}
 
+	bool CircleCollider::IsAvailableFromCreateMenu()
+	{
+		return true;
+	}
+
 	CircleCollider& CircleCollider::operator=(const CircleCollider& other)
 	{
 		ICollider::operator=(other);

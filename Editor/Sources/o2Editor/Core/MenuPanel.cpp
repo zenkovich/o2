@@ -115,16 +115,16 @@ namespace Editor
 		return mMenuPanel->AddItem(item);
 	}
 
-	Widget* MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
+	void MenuPanel::AddItem(const WString& path, const Function<void()>& clickFunc /*= Function<void()>()*/,
 								 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
 								 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
-		return mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
+		mMenuPanel->AddItem(path, clickFunc, icon, shortcut);
 	}
 
-	Widget* MenuPanel::InsertItem(const o2::MenuPanel::Item& item, int position)
+	void MenuPanel::InsertItem(const o2::MenuPanel::Item& item, int position)
 	{
-		return mMenuPanel->InsertItem(item, position);
+		mMenuPanel->InsertItem(item, position);
 	}
 
 	void MenuPanel::AddItems(Vector<o2::MenuPanel::Item> items)

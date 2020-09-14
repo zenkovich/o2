@@ -188,12 +188,6 @@ namespace o2
 			UpdateSelfTransform();
 		}
 
-		if (!mStarted)
-		{
-			OnStart();
-			mStarted = true;
-		}
-
 		OnUpdate(dt);
 
 		for (auto comp : mComponents)

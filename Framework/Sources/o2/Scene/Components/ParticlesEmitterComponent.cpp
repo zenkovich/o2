@@ -35,7 +35,7 @@ namespace o2
 
 	String ParticlesEmitterComponent::GetName()
 	{
-		return "Emitter";
+		return "Particles emitter";
 	}
 
 	String ParticlesEmitterComponent::GetCategory()

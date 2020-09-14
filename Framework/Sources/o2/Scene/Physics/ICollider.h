@@ -63,6 +63,9 @@ namespace o2
 		// Returns is collider sensor
 		bool IsSensor() const;
 
+		// Is component visible in create menu
+		static bool IsAvailableFromCreateMenu();
+
 		SERIALIZABLE(ICollider);
 
 	protected:
@@ -140,6 +143,7 @@ CLASS_METHODS_META(o2::ICollider)
 	PUBLIC_FUNCTION(const String&, GetLayer);
 	PUBLIC_FUNCTION(void, SetIsSensor, bool);
 	PUBLIC_FUNCTION(bool, IsSensor);
+	PUBLIC_STATIC_FUNCTION(bool, IsAvailableFromCreateMenu);
 	PROTECTED_FUNCTION(void, AddToRigidBody, RigidBody*);
 	PROTECTED_FUNCTION(void, RemoveFromRigidBody);
 	PROTECTED_FUNCTION(RigidBody*, FindRigidBody);

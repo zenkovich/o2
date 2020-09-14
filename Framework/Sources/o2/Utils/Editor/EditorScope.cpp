@@ -8,21 +8,27 @@ namespace o2
 {
 	void EditorScope::Enter(int count /*= 1*/)
 	{
-		Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+		if (count > 0)
+		{
+			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
 
-		mDepth += count;
+			mDepth += count;
+		}
 	}
 
 	void EditorScope::Exit(int count /*= 1*/)
 	{
-		mDepth -= count;
+		if (count > 0)
+		{
+			mDepth -= count;
 
-		if (mDepth == 0)
-			Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
-		else 
-			Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
+			if (mDepth == 0)
+				Actor::SetDefaultCreationMode(ActorCreateMode::InScene);
+			else
+				Actor::SetDefaultCreationMode(ActorCreateMode::NotInScene);
 
-		Assert(mDepth >= 0, "Editor scope Enter/Exit mismatch");
+			Assert(mDepth >= 0, "Editor scope Enter/Exit mismatch");
+		}
 	}
 
 	int EditorScope::GetDepth()
@@ -37,14 +43,15 @@ namespace o2
 
 	int EditorScope::mDepth = 0;
 
-	PushEditorScopeOnStack::PushEditorScopeOnStack()
+	PushEditorScopeOnStack::PushEditorScopeOnStack(int count /*= 1*/):
+		mDepth(count)
 	{
-		EditorScope::Enter();
+		EditorScope::Enter(count);
 	}
 
 	PushEditorScopeOnStack::~PushEditorScopeOnStack()
 	{
-		EditorScope::Exit();
+		EditorScope::Exit(mDepth);
 	}
 
 	ForcePopEditorScopeOnStack::ForcePopEditorScopeOnStack()

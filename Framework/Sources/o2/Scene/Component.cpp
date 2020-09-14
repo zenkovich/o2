@@ -114,6 +114,11 @@ namespace o2
 		return "ui/UI4_component_icon.png";
 	}
 
+	bool Component::IsAvailableFromCreateMenu()
+	{
+		return true;
+	}
+
 	void Component::UpdateEnabled()
 	{
 		bool lastResEnabled = mResEnabled;

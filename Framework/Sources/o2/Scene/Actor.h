@@ -385,7 +385,6 @@ namespace o2
 
 		Vector<Component*> mComponents; // Components vector 
 
-		bool mStarted = false;              // Is actor started
 		bool mEnabled = true;               // Is actor enabled
 		bool mResEnabled = true;            // Is actor really enabled. 
 		bool mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
@@ -747,7 +746,6 @@ CLASS_FIELDS_META(o2::Actor)
 	PROTECTED_FIELD(mParent).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mChildren);
 	PROTECTED_FIELD(mComponents);
-	PROTECTED_FIELD(mStarted).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mEnabled).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mResEnabled).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mResEnabledInHierarchy).DEFAULT_VALUE(true);

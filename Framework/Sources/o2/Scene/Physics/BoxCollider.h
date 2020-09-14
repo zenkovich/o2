@@ -42,6 +42,9 @@ namespace o2
 		// Returns category of component
 		static String GetCategory();
 
+		// Is component visible in create menu
+		static bool IsAvailableFromCreateMenu();
+
 #if IS_EDITOR
 		// It is called when component added from editor; fits collider by actor size
 		void OnAddedFromEditor() override;
@@ -88,6 +91,7 @@ CLASS_METHODS_META(o2::BoxCollider)
 	PUBLIC_FUNCTION(bool, IsFitByActor);
 	PUBLIC_STATIC_FUNCTION(String, GetName);
 	PUBLIC_STATIC_FUNCTION(String, GetCategory);
+	PUBLIC_STATIC_FUNCTION(bool, IsAvailableFromCreateMenu);
 	PUBLIC_FUNCTION(void, OnAddedFromEditor);
 	PRIVATE_FUNCTION(b2Shape*, GetShape, const Basis&);
 	PRIVATE_FUNCTION(void, OnTransformChanged);

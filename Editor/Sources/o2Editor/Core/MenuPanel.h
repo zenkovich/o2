@@ -26,11 +26,11 @@ namespace Editor
 		Widget* AddItem(const o2::MenuPanel::Item& item);
 
 		// Adds item by path ("node/sub node/target")
-		Widget* AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
-						  const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+		void AddItem(const WString& path, const Function<void()>& clickFunc = Function<void()>(),
+					 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 		// Inserts item at position
-		Widget* InsertItem(const o2::MenuPanel::Item& item, int position);
+		void InsertItem(const o2::MenuPanel::Item& item, int position);
 
 		// Adds array of items
 		void AddItems(Vector<o2::MenuPanel::Item> items);

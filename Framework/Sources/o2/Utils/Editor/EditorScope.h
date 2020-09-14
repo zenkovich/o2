@@ -32,10 +32,13 @@ namespace o2
 	{
 	public:
 		// Default constructor, calls Scope::Enter
-		PushEditorScopeOnStack();
+		PushEditorScopeOnStack(int count = 1);
 
 		// Destructor, calls Scope::Exit
 		~PushEditorScopeOnStack();
+
+	private:
+		int mDepth;
 	};
 
 	// ---------------------------------------------------------------

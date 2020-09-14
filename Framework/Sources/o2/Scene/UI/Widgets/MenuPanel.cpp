@@ -23,20 +23,20 @@ namespace o2
 		mLayout = mnew HorizontalLayout();
 		AddChild(mLayout);
 
-		mLayout->expandHeight  = true;
-		mLayout->expandWidth   = false;
-		mLayout->baseCorner    = BaseCorner::LeftTop;
+		mLayout->expandHeight = true;
+		mLayout->expandWidth = false;
+		mLayout->baseCorner = BaseCorner::LeftTop;
 		mLayout->fitByChildren = true;
-		*mLayout->layout       = WidgetLayout::BothStretch();
+		*mLayout->layout = WidgetLayout::BothStretch();
 	}
 
 	MenuPanel::MenuPanel(const MenuPanel& other):
 		Widget(other), DrawableCursorEventsListener(this)
 	{
-		mItemSample        = other.mItemSample->CloneAs<Widget>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = FindChildByType<HorizontalLayout>();
+		mSelectionLayout = other.mSelectionLayout;
+		mLayout = FindChildByType<HorizontalLayout>();
 
 		RetargetStatesAnimations();
 		UpdateSelfTransform();
@@ -138,7 +138,7 @@ namespace o2
 		});
 
 		if (!subChild)
-			subChild = AddItem(subMenu);
+			subChild = AddItem(Item(subMenu, Function<void()>()));
 
 		ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
 		if (!subContext)
@@ -152,33 +152,36 @@ namespace o2
 		return subContext;
 	}
 
-	Widget* MenuPanel::AddItem(const WString& path, 
-								   const Function<void()>& clickFunc /*= Function<void()>()*/,
-								   const ImageAssetRef& icon /*= ImageAssetRef()*/,
-								   const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	void MenuPanel::AddItem(const WString& path,
+							const Function<void()>& clickFunc /*= Function<void()>()*/,
+							const ImageAssetRef& icon /*= ImageAssetRef()*/,
+							const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString itemPath = path;
 		ContextMenu* subContext = CreateSubContext(itemPath);
 		if (!subContext)
-			return AddItem(Item(path, clickFunc));
+		{
+			AddItem(Item(path, clickFunc));
+			return;
+		}
 
-		return subContext->AddItem(itemPath, clickFunc, icon, shortcut);
+		subContext->AddItem(itemPath, clickFunc, icon, shortcut);
 	}
 
-	Widget* MenuPanel::AddToggleItem(const WString& path, bool value,
-										 const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/, 
-										 const ImageAssetRef& icon /*= ImageAssetRef()*/, 
-										 const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
+	void MenuPanel::AddToggleItem(const WString& path, bool value,
+								  const Function<void(bool)>& clickFunc /*= Function<void(bool)>()*/,
+								  const ImageAssetRef& icon /*= ImageAssetRef()*/,
+								  const ShortcutKeys& shortcut /*= ShortcutKeys()*/)
 	{
 		WString itemPath = path;
 		ContextMenu* subContext = CreateSubContext(itemPath);
 		if (!subContext)
-			return nullptr;
+			return;
 
-		return subContext->AddToggleItem(itemPath, value, clickFunc, icon, shortcut);
+		subContext->AddToggleItem(itemPath, value, clickFunc, icon, shortcut);
 	}
 
-	Widget* MenuPanel::InsertItem(const Item& item, int position)
+	void MenuPanel::InsertItem(const Item& item, int position)
 	{
 		Widget* newItem = CreateItem(item);
 		mLayout->AddChild(newItem, position);
@@ -191,8 +194,6 @@ namespace o2
 			}, position);
 		}
 		else mClickFunctions.Insert(item.onClick, position);
-
-		return newItem;
 	}
 
 	void MenuPanel::AddItems(Vector<Item> items)
@@ -361,10 +362,10 @@ namespace o2
 		delete mItemSample;
 		delete mSelectionDrawable;
 
-		mItemSample        = other.mItemSample->CloneAs<Widget>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout   = other.mSelectionLayout;
-		mLayout            = FindChildByType<HorizontalLayout>();
+		mSelectionLayout = other.mSelectionLayout;
+		mLayout = FindChildByType<HorizontalLayout>();
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
