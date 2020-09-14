@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Application/Application.h"
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2/Render/Sprite.h"
 #include "o2Editor/Core/Actions/ActionsList.h"
 #include "o2Editor/Core/EditorConfig.h"
@@ -62,6 +63,9 @@ namespace Editor
 		// Is scene playing
 		bool IsPlaying() const;
 
+		// Returns game view render target listeners layer
+		CursorAreaEventListenersLayer& GetGameViewListenersLayer();
+
 	protected:
 		Sprite* mBackground; // Background sprite
 		Sprite* mBackSign;   // Background o2 signature
@@ -73,6 +77,8 @@ namespace Editor
 		MenuPanel*      mMenuPanel;      // Menu panel
 
 		Properties* mProperties; // Properties manager
+
+		CursorAreaEventListenersLayer mListenersLayer; // Game view render target listeners layer
 
 		String mLoadedScene; // Current loaded scene
 

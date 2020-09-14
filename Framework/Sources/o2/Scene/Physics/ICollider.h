@@ -105,6 +105,7 @@ namespace o2
 		// It is called when actor was excluded from scene
 		void OnRemoveFromScene() override;
 
+		friend class PhysicsWorld;
 		friend class RigidBody;
 	};
 }

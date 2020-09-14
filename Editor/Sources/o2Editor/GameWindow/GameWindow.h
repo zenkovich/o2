@@ -36,8 +36,6 @@ namespace Editor
 			Sprite*    mRenderTargetSprite = nullptr; // Render target sprite, using for drawing scene render target
 			TextureRef mRenderTarget;                 // Render target texture, using for rendering scene
 
-			CursorAreaEventListenersLayer mListenersLayer; // Render target listeners layer
-
 		protected:
 			// It is called when transformation was changed and updated, updates render texture and sprite
 			void OnTransformUpdated() override;
@@ -138,7 +136,6 @@ CLASS_FIELDS_META(Editor::GameWindow::GameView)
 	PUBLIC_FIELD(resolution);
 	PROTECTED_FIELD(mRenderTargetSprite).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mRenderTarget);
-	PROTECTED_FIELD(mListenersLayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)

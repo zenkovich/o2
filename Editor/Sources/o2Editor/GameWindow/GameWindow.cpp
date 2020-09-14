@@ -22,7 +22,8 @@ namespace Editor
 	}
 
 	GameWindow::~GameWindow()
-	{}
+	{
+	}
 
 	void GameWindow::InitializeWindow()
 	{
@@ -145,7 +146,7 @@ namespace Editor
 
 		o2Render.BindRenderTexture(mRenderTarget);
 
-		mListenersLayer.OnBeginDraw();
+		o2EditorApplication.GetGameViewListenersLayer().OnBeginDraw();
 
 		int editorDepth = EditorScope::GetDepth();
 		EditorScope::Exit(editorDepth);
@@ -154,13 +155,13 @@ namespace Editor
 
 		EditorScope::Enter(editorDepth);
 
-		mListenersLayer.OnEndDraw();
+		o2EditorApplication.GetGameViewListenersLayer().OnEndDraw();
 		o2Render.UnbindRenderTexture();
 
 		mRenderTargetSprite->Draw();
 
 		if (o2EditorApplication.IsPlaying())
-			mListenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
+			o2EditorApplication.GetGameViewListenersLayer().OnDrawn(mRenderTargetSprite->GetBasis());
 	}
 
 	void GameWindow::GameView::OnTransformUpdated()

@@ -1,6 +1,7 @@
 #include "o2/stdafx.h"
 #include "ICollider.h"
 
+#include "o2/Config/ProjectConfig.h"
 #include "o2/Physics/PhysicsWorld.h"
 #include "o2/Scene/Physics/RigidBody.h"
 
@@ -110,6 +111,11 @@ namespace o2
 		Basis bodyBasis = bodyTransform->GetWorldNonSizedBasis(); 
 		bodyBasis.xv.Normalize(); bodyBasis.yv.Normalize();
 		Basis relativeTransform = thisBasis*(bodyBasis.Inverted());
+
+		float invScale = 1.0f/o2Config.physics.scale;
+		relativeTransform.origin *= invScale;
+		relativeTransform.xv *= invScale;
+		relativeTransform.yv *= invScale;
 
 		b2FixtureDef fixture;
 		fixture.shape = GetShape(relativeTransform);

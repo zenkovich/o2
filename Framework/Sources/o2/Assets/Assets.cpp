@@ -148,12 +148,12 @@ namespace o2
 
 	bool Assets::IsAssetExist(const String& path) const
 	{
-		return GetAssetInfo(path).meta != nullptr;
+		return GetAssetInfo(path).meta->ID() != UID::empty;
 	}
 
 	bool Assets::IsAssetExist(const UID& id) const
 	{
-		return GetAssetInfo(id).meta != nullptr;
+		return GetAssetInfo(id).meta->ID() != UID::empty;
 	}
 
 	bool Assets::RemoveAsset(const AssetRef& asset, bool rebuildAssets /*= true*/)

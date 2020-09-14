@@ -101,6 +101,11 @@ namespace Editor
 		return mIsPlaying;
 	}
 
+	CursorAreaEventListenersLayer& EditorApplication::GetGameViewListenersLayer()
+	{
+		return mListenersLayer;
+	}
+
 	void EditorApplication::OnStarted()
 	{
 		PushEditorScopeOnStack enterScope;

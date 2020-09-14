@@ -68,7 +68,7 @@ namespace o2
 		if (radius < FLT_EPSILON)
 			radius = 1.0f;
 
-		mShape.m_radius = radius;
+		mShape.m_radius = radius*transform.xv.Length();
 		mShape.m_p = transform.origin;
 
 		return &mShape;

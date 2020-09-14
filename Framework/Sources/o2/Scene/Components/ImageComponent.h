@@ -53,6 +53,9 @@ namespace o2
 		// Draws sprite 
 		void Draw() override;
 
+		// Sets actor's size as image size
+		void FitActorByImage() const;
+
 		// Returns name of component
 		static String GetName();
 
@@ -93,6 +96,7 @@ CLASS_METHODS_META(o2::ImageComponent)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_FUNCTION(void, FitActorByImage);
 	PUBLIC_STATIC_FUNCTION(String, GetName);
 	PUBLIC_STATIC_FUNCTION(String, GetCategory);
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);

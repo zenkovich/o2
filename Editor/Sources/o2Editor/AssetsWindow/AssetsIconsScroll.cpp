@@ -964,7 +964,11 @@ namespace Editor
 
 	Actor* AssetsIconsScrollArea::InstantiateAsset(const ImageAssetRef& asset)
 	{
-		return mnew Actor({ mnew ImageComponent(asset) });
+		auto actor = mnew Actor();
+		auto comp = mnew ImageComponent(asset);
+		actor->AddComponent(comp);
+		comp->FitActorByImage();
+		return actor;
 	}
 
 	Actor* AssetsIconsScrollArea::InstantiateAsset(const ActorAssetRef& asset)

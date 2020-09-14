@@ -15,12 +15,6 @@ namespace o2
 	class PhysicsWorld : public Singleton<PhysicsWorld>
 	{
 	public:
-		int velocityIterations = 8;
-		int positionIterations = 3;
-
-		Vec2F gravity = Vec2F(0, -9.8f);
-
-	public:
 		// Default constructor
 		PhysicsWorld();
 
@@ -43,6 +37,12 @@ namespace o2
 		b2World mWorld;
 
 		bool mIsUpdatingPhysicsNow = false; // True when PreUpdate has just called, until PostUpdate finished
+
+		float mPrevPhysicsScale = 0.0f; // Previous physics scale
+
+	private:
+		// Checks phsyics scale config; updates bodies and colliders with new scale
+		void CheckPhysicsScale();
 
 		friend class RigidBody;
 	}; 

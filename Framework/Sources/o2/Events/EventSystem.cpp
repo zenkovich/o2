@@ -10,6 +10,7 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Editor/DragAndDrop.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/System/Time/Time.h"
 
 namespace o2
@@ -20,6 +21,8 @@ namespace o2
 
 	EventSystem::EventSystem()
 	{
+		PushEditorScopeOnStack scope;
+
 		mShortcutEventsManager = mnew ShortcutKeysListenersManager();
 		mCurrentCursorAreaEventsLayer = &mCursorAreaListenersBasicLayer;
 		mCursorAreaListenersBasicLayer.mEnabled = true;

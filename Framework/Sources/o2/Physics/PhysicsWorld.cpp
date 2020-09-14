@@ -2,6 +2,8 @@
 #include "PhysicsWorld.h"
 
 #include "Box2D/Dynamics/b2Body.h"
+#include "o2/Config/ProjectConfig.h"
+#include "o2/Scene/Physics/ICollider.h"
 #include "o2/Scene/Physics/RigidBody.h"
 
 namespace o2
@@ -9,41 +11,48 @@ namespace o2
 	DECLARE_SINGLETON(PhysicsWorld);
 
 	PhysicsWorld::PhysicsWorld():
-		mWorld(gravity)
+		mWorld(Vec2F())
 	{
 		auto debugDraw = mnew PhysicsDebugDraw();
 		mWorld.SetDebugDraw(debugDraw);
 		debugDraw->SetFlags(b2Draw::e_shapeBit | b2Draw::e_aabbBit | b2Draw::e_pairBit | b2Draw::e_centerOfMassBit | b2Draw::e_jointBit);
+
+		mPrevPhysicsScale = o2Config.physics.scale;
 	}
 
 	void PhysicsWorld::PreUpdate()
 	{
+		CheckPhysicsScale();
+
 		mIsUpdatingPhysicsNow = true;
 
-		mWorld.SetGravity(gravity);
+		mWorld.SetGravity(o2Config.physics.gravity);
+
+		float invScale = 1.0f/o2Config.physics.scale;
 
 		for (b2Body* body = mWorld.GetBodyList(); body; body = body->GetNext())
 		{
 			auto rigidBody = (RigidBody*)body->GetUserData();
 			auto transform = rigidBody->transform;
 
-			body->SetTransform(transform->GetWorldPosition(), transform->GetWorldAngle());
+			body->SetTransform(transform->GetWorldPosition()*invScale, transform->GetWorldAngle());
 		}
 	}
 
 	void PhysicsWorld::Update(float dt)
 	{
-		mWorld.Step(dt, velocityIterations, positionIterations);
+		mWorld.Step(dt, o2Config.physics.velocityIterations, o2Config.physics.positionIterations);
 	}
 
 	void PhysicsWorld::PostUpdate()
 	{
+		float scale = o2Config.physics.scale;
 		for (b2Body* body = mWorld.GetBodyList(); body; body = body->GetNext())
 		{
 			auto rigidBody = (RigidBody*)body->GetUserData();
 			auto transform = rigidBody->transform;
 
-			transform->SetWorldPosition(body->GetPosition());
+			transform->SetWorldPosition(Vec2F(body->GetPosition())*scale);
 			transform->SetWorldAngle(body->GetAngle());
 		}
 
@@ -60,46 +69,76 @@ namespace o2
 		return mIsUpdatingPhysicsNow;
 	}
 
+	void PhysicsWorld::CheckPhysicsScale()
+	{
+		if (Math::Equals(mPrevPhysicsScale, o2Config.physics.scale))
+			return;
+
+		float scale = o2Config.physics.scale;
+		float invScale = 1.0f/scale;
+		for (b2Body* body = mWorld.GetBodyList(); body; body = body->GetNext())
+		{
+			auto rigidBody = (RigidBody*)body->GetUserData();
+			auto transform = rigidBody->transform;
+
+			body->SetTransform(transform->GetWorldPosition()*invScale, transform->GetWorldAngle());
+
+			auto colliders = rigidBody->mColliders;
+			for (auto collider : colliders)
+				collider->OnShapeChanged();
+		}
+
+		mPrevPhysicsScale = scale;
+	}
+
 	void PhysicsDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 	{
-		o2Render.DrawAACircle(center, radius, color);
+		float scale = o2Config.physics.scale;
+		o2Render.DrawAACircle(Vec2F(center)*scale, radius*scale, color);
 	}
 
 	void PhysicsDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{
+		float scale = o2Config.physics.scale;
+
 		Vector<Vec2F> points; 
 		points.Resize(vertexCount + 1);
 		for (int i = 0; i < vertexCount; i++)
-			points[i] = vertices[i];
+			points[i] = Vec2F(vertices[i])*scale;
 
-		points.Last() = vertices[0];
+		points.Last() = Vec2F(vertices[0])*scale;
 
 		o2Render.DrawAALine(points, color);
 	}
 
 	void PhysicsDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 	{
-		o2Render.DrawAALine(p1, p2, color);
+		float scale = o2Config.physics.scale;
+		o2Render.DrawAALine(Vec2F(p1)*scale, Vec2F(p2)*scale, color);
 	}
 
 	void PhysicsDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 	{
-		o2Render.DrawFilledCircle(center, radius, color);
+		float scale = o2Config.physics.scale;
+		o2Render.DrawFilledCircle(Vec2F(center)*scale, radius*scale, color);
 	}
 
 	void PhysicsDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
 	{
+		float scale = o2Config.physics.scale;
+
 		Vector<Vec2F> points;
 		points.Resize(vertexCount);
 		for (int i = 0; i < vertexCount; i++)
-			points[i] = vertices[i];
+			points[i] = Vec2F(vertices[i])*scale;
 
 		o2Render.DrawFilledPolygon(points, color);
 	}
 
 	void PhysicsDebugDraw::DrawTransform(const b2Transform& xf)
 	{
-		o2Render.DrawBasis(Basis(xf.p, xf.q.GetXAxis(), xf.q.GetYAxis()));
+		float scale = o2Config.physics.scale;
+		o2Render.DrawBasis(Basis(Vec2F(xf.p)*scale, Vec2F(xf.q.GetXAxis())*scale, Vec2F(xf.q.GetYAxis())*scale));
 	}
 
 }

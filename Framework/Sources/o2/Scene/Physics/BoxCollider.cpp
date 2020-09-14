@@ -66,10 +66,10 @@ namespace o2
 	{
 		Vec2F halfSize = mSize*0.5f;
 
-		if (halfSize.x < FLT_EPSILON)
+		if (halfSize.x < 0.001f)
 			halfSize.x = 1.0f;
 
-		if (halfSize.y < FLT_EPSILON)
+		if (halfSize.y < 0.001f)
 			halfSize.y = 1.0f;
 
 		b2Vec2 verticies[4];

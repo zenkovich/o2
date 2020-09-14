@@ -41,7 +41,7 @@ namespace Editor
 		EditorUIRoot.AddWidget(mMenuPanel);
 
 		// FILE
-		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, ImageAssetRef(), ShortcutKeys('N', true));
+		mMenuPanel->AddItem("File/New scene", [&]() { OnNewScenePressed(); }, ImageAssetRef(), ShortcutKeys('N', true, true));
 		mMenuPanel->AddItem("File/Open scene", [&]() { OnOpenScenePressed(); }, ImageAssetRef(), ShortcutKeys('O', true));
 		mMenuPanel->AddItem("File/Save scene", [&]() { OnSaveScenePressed(); }, ImageAssetRef(), ShortcutKeys('S', true));
 		mMenuPanel->AddItem("File/Save scene as ...", [&]() { OnSaveSceneAsPressed(); }, ImageAssetRef(), ShortcutKeys('S', true, false, true));

@@ -945,8 +945,10 @@ namespace o2
 	void Tree::OnFocused()
 	{
 		for (auto node : mVisibleNodes)
+		{
 			if (node->widget)
 				node->widget->SetState("focused", true);
+		}
 
 		onFocused();
 	}
@@ -954,8 +956,10 @@ namespace o2
 	void Tree::OnUnfocused()
 	{
 		for (auto node : mVisibleNodes)
+		{
 			if (node->widget)
 				node->widget->SetState("focused", false);
+		}
 
 		onUnfocused();
 	}
@@ -1362,7 +1366,9 @@ namespace o2
 	}
 
 	void Tree::OnCursorPressed(const Input::Cursor& cursor)
-	{}
+	{
+		Focus();
+	}
 
 	void Tree::UpdateHover(TreeNode* itemUnderCursor)
 	{

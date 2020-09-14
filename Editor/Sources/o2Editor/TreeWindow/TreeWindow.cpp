@@ -147,7 +147,7 @@ namespace Editor
 		mTreeContextMenu->AddItem("---");
 
 		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
-								  ShortcutKeys('N', true, true));
+								  ShortcutKeys('N', true, false));
 
 		mTreeContextMenu->AddItem("Create UI/Widget", [&]() { CreateObject<Widget>("Widget"); });
 
@@ -421,9 +421,6 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		if (!mSceneTree->IsFocused())
-			return;
-
 		Actor* newActor = mnew Actor();
 		newActor->name = "Empty";
 		OnCreateObject(newActor);
@@ -433,9 +430,6 @@ namespace Editor
 	{
 		ForcePopEditorScopeOnStack scope;
 
-		if (!mSceneTree->IsFocused())
-			return;
-
 		Actor* newActor = mnew Actor({ mnew ImageComponent() });
 		newActor->name = "Sprite";
 		newActor->transform->size = Vec2F(10, 10);
@@ -444,15 +438,10 @@ namespace Editor
 
 	void TreeWindow::OnContextCreateButton()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
 	}
 
 	void TreeWindow::OnContextCopyPressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		Vector<SceneEditableObject*> selectedObjects =
 			mSceneTree->GetSelectedObjects().Convert<SceneEditableObject*>(
 				[](auto x) { return dynamic_cast<SceneEditableObject*>(x); });
@@ -467,9 +456,6 @@ namespace Editor
 
 	void TreeWindow::OnContextCutPressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		OnContextCopyPressed();
 		OnContextDeletePressed();
 	}
@@ -477,9 +463,6 @@ namespace Editor
 	void TreeWindow::OnContextPastePressed()
 	{
 		ForcePopEditorScopeOnStack scope;
-
-		if (!mSceneTree->IsFocused())
-			return;
 
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
@@ -510,9 +493,6 @@ namespace Editor
 
 	void TreeWindow::OnContextDeletePressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		o2EditorPropertiesWindow.SetTarget(nullptr);
 
 		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
@@ -532,8 +512,7 @@ namespace Editor
 
 	void TreeWindow::OnContextDuplicatePressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
+		ForcePopEditorScopeOnStack scope;
 
 		auto selectedObjects = o2EditorSceneScreen.GetTopSelectedObjects();
 
@@ -549,9 +528,6 @@ namespace Editor
 
 	void TreeWindow::OnContextExpandAllPressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
 		for (auto object : selectedObjects)
@@ -565,9 +541,6 @@ namespace Editor
 
 	void TreeWindow::OnContextCollapseAllPressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		auto selectedObject = mSceneTree->GetSelectedObjects();
 
 		for (auto object : selectedObject)
@@ -581,9 +554,6 @@ namespace Editor
 
 	void TreeWindow::OnContextLockPressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
 		bool value = selectedObjects.Count() > 0 ? !selectedObjects.Last()->IsLocked() : true;
@@ -602,9 +572,6 @@ namespace Editor
 
 	void TreeWindow::OnContextEnablePressed()
 	{
-		if (!mSceneTree->IsFocused())
-			return;
-
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
 		bool value = selectedObjects.Count() > 0 ? !selectedObjects.Last()->IsEnabled() : true;

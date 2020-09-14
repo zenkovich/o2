@@ -152,6 +152,7 @@ namespace o2
 		static b2BodyType GetBodyType(Type type);
 
 		friend class ICollider;
+		friend class PhysicsWorld;
 	};
 }
 

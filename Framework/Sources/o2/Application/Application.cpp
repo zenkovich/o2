@@ -85,6 +85,7 @@ namespace o2
 		mAssets = mnew Assets();
 
 		mInput = mnew Input();
+
 		mTaskManager = mnew TaskManager();
 
 		mTimer = mnew Timer();

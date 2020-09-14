@@ -58,6 +58,12 @@ namespace o2
 		DrawableComponent::OnDrawn();
 	}
 
+	void ImageComponent::FitActorByImage() const
+	{
+		if (mImageAsset)
+			mOwner->transform->size = mImageAsset->GetSize();
+	}
+
 	String ImageComponent::GetName()
 	{
 		return "Image";

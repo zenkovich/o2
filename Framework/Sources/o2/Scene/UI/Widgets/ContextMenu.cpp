@@ -579,8 +579,7 @@ namespace o2
 	{
 		for (auto child : mItemsLayout->mChildren)
 		{
-			ContextMenuItem* item = dynamic_cast<ContextMenuItem*>(child);
-			if (item)
+			if (ContextMenuItem* item = dynamic_cast<ContextMenuItem*>(child))
 				item->SetMaxPriority();
 		}
 	}
@@ -589,8 +588,7 @@ namespace o2
 	{
 		for (auto child : mItemsLayout->mChildren)
 		{
-			ContextMenuItem* item = dynamic_cast<ContextMenuItem*>(child);
-			if (item)
+			if (ContextMenuItem* item = dynamic_cast<ContextMenuItem*>(child))
 				item->SetMinPriority();
 		}
 	}
