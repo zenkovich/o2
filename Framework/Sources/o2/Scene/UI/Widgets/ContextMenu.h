@@ -27,6 +27,7 @@ namespace o2
 		{
 		public:
 			WString       text;	    // @SERIALIZABLE
+			WString       group;    // @SERIALIZABLE
 			ImageAssetRef icon;	    // @SERIALIZABLE
 			ShortcutKeys  shortcut; // @SERIALIZABLE
 
@@ -43,13 +44,15 @@ namespace o2
 		public:
 			Item();
 
-			Item(const WString& text, Vector<Item> subItems, const ImageAssetRef& icon = ImageAssetRef());
+			Item(const WString& text, Vector<Item> subItems, const WString& group = "", 
+				 const ImageAssetRef& icon = ImageAssetRef());
 
-			Item(const WString& text, const Function<void()> onClick, const ImageAssetRef& icon = ImageAssetRef(),
-				 const ShortcutKeys& shortcut = ShortcutKeys());
+			Item(const WString& text, const Function<void()> onClick, const WString& group = "",
+				 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
 
 			Item(const WString& text, bool checked, Function<void(bool)> onChecked = Function<void(bool)>(),
-				 const ImageAssetRef& icon = ImageAssetRef(), const ShortcutKeys& shortcut = ShortcutKeys());
+				 const WString& group = "", const ImageAssetRef& icon = ImageAssetRef(), 
+				 const ShortcutKeys& shortcut = ShortcutKeys());
 
 			~Item();
 
@@ -267,7 +270,7 @@ namespace o2
 		ContextMenuItem& operator=(const ContextMenuItem& other);
 
 		// Sets item
-		void Setup(ContextMenu::Item& item, ContextMenu* owner);
+		void Setup(ContextMenu::Item& item);
 
 		// Sets text
 		void SetText(const WString& text);
@@ -418,7 +421,7 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenuItem)
 {
 
-	PUBLIC_FUNCTION(void, Setup, ContextMenu::Item&, ContextMenu*);
+	PUBLIC_FUNCTION(void, Setup, ContextMenu::Item&);
 	PUBLIC_FUNCTION(void, SetText, const WString&);
 	PUBLIC_FUNCTION(WString, GetText);
 	PUBLIC_FUNCTION(ContextMenu*, GetSubMenu);
@@ -445,6 +448,7 @@ END_META;
 CLASS_FIELDS_META(o2::ContextMenu::Item)
 {
 	PUBLIC_FIELD(text).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(group).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(icon).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(shortcut).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(subItems).SERIALIZABLE_ATTRIBUTE();

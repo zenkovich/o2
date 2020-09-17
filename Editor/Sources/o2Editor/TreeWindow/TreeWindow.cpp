@@ -149,12 +149,8 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
 								  ShortcutKeys('N', true, false));
 
-		mTreeContextMenu->AddItem("Create UI/Widget", [&]() { CreateObject<Widget>("Widget"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Empty layer", [&]() { CreateObject<WidgetLayer>("Layer"); });
-		mTreeContextMenu->AddItem("Create UI/Sprite layer", [&]()
+		mTreeContextMenu->AddItem("Create/UI/Empty layer._layers", [&]() { CreateObject<WidgetLayer>("Layer"); });
+		mTreeContextMenu->AddItem("Create/UI/Sprite layer._layers", [&]()
 		{
 			ForcePopEditorScopeOnStack scope;
 
@@ -164,7 +160,7 @@ namespace Editor
 			OnCreateObject(newLayer);
 		});
 
-		mTreeContextMenu->AddItem("Create UI/Text layer", [&]()
+		mTreeContextMenu->AddItem("Create/UI/Text layer._layers", [&]()
 		{
 			ForcePopEditorScopeOnStack scope;
 
@@ -174,50 +170,7 @@ namespace Editor
 			OnCreateObject(newLayer);
 		});
 
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Horizontal layout", [&]() { CreateObject<HorizontalLayout>("Horizontal layout"); });
-		mTreeContextMenu->AddItem("Create UI/Vertical layout", [&]() { CreateObject<VerticalLayout>("Vertical layout"); });
-		mTreeContextMenu->AddItem("Create UI/Grid layout", [&]() { CreateObject<GridLayout>("Grid layout"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Scroll area", [&]() { CreateObject<ScrollArea>("Scroll area"); });
-		mTreeContextMenu->AddItem("Create UI/Button", [&]() { CreateObject<Button>("Button"); });
-		mTreeContextMenu->AddItem("Create UI/Label", [&]() { CreateObject<Label>("Label"); });
-		mTreeContextMenu->AddItem("Create UI/Image", [&]() { CreateObject<Image>("Image"); });
-		mTreeContextMenu->AddItem("Create UI/Edit box", [&]() { CreateObject<EditBox>("Edit box"); });
-		mTreeContextMenu->AddItem("Create UI/Toggle", [&]() { CreateObject<Toggle>("Toggle"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Horizontal progress", [&]() { CreateObject<HorizontalProgress>("Progress"); });
-		mTreeContextMenu->AddItem("Create UI/Vertical progress", [&]() { CreateObject<VerticalProgress>("Progress"); });
-		mTreeContextMenu->AddItem("Create UI/Horizontal scroll bar", [&]() { CreateObject<HorizontalScrollBar>("Scroll bar"); });
-		mTreeContextMenu->AddItem("Create UI/Vertical scroll bar", [&]() { CreateObject<VerticalScrollBar>("Scroll bar"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Context menu", [&]() { CreateObject<ContextMenu>("Context menu"); });
-		mTreeContextMenu->AddItem("Create UI/Menu panel", [&]() { CreateObject<o2::MenuPanel>("Menu panel"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-		mTreeContextMenu->AddItem("Create UI/Custom drop down", [&]() { CreateObject<CustomDropDown>("Dropdown"); });
-		mTreeContextMenu->AddItem("Create UI/Custom list", [&]() { CreateObject<CustomList>("List"); });
-		mTreeContextMenu->AddItem("Create UI/Drop down", [&]() { CreateObject<DropDown>("Dropdown"); });
-		mTreeContextMenu->AddItem("Create UI/List", [&]() { CreateObject<List>("List"); });
-		mTreeContextMenu->AddItem("Create UI/Long list", [&]() { CreateObject<LongList>("List"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Spoiler", [&]() { CreateObject<Spoiler>("Spoiler"); });
-		mTreeContextMenu->AddItem("Create UI/Tree", [&]() { CreateObject<Tree>("Tree"); });
-
-		mTreeContextMenu->AddItem("Create UI/---");
-
-		mTreeContextMenu->AddItem("Create UI/Window", [&]() { CreateObject<Window>("Window"); });
-
-		InitializeOtherCreateMenu();
+		InitializeCreateMenu();
 
 		mTreeContextMenu->AddItem("---");
 
@@ -258,14 +211,29 @@ namespace Editor
 		mSceneTree->onUnfocused = [&]() { mTreeContextMenu->SetItemsMinPriority(); };
 	}
 
-	void TreeWindow::InitializeOtherCreateMenu()
+	void TreeWindow::InitializeCreateMenu()
 	{
 		auto subTypes = TypeOf(Actor).GetDerivedTypes();
 
 		for (auto subType : subTypes)
 		{
-			String path = subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/");
-			mTreeContextMenu->AddItem("Create other/" + path, [=]() {
+			String category = subType->InvokeStatic<String>("GetCreateMenuCategory");
+			String path;
+			if (category.IsEmpty())
+				path = subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/");
+			else
+			{
+				String name = subType->GetName().ReplacedAll("o2::", "");
+				int fnd = name.FindLast("::");
+				if (fnd >= 0)
+					name = name.SubStr(fnd + 2);
+
+				path = category + "/" + name;
+			}
+
+			String group = subType->InvokeStatic<String>("GetCreateMenuGroup");
+
+			mTreeContextMenu->AddItem("Create/" + path + "." + group, [=]() {
 				ForcePopEditorScopeOnStack scope;
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
 				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));

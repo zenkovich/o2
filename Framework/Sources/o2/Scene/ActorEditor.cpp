@@ -923,11 +923,6 @@ namespace o2
 		}
 	}
 
-	const String& Actor::GetCreateMenuCategory() const
-	{
-		return GetType().GetName();
-	}
-
 	void Actor::OnParentChanged(Actor* oldParent)
 	{
 		for (auto comp : mComponents)

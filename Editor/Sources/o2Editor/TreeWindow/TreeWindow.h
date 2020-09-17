@@ -84,7 +84,7 @@ namespace Editor
 		void InitializeContextMenu();
 
 		// Gets all actor types and creates create sub menu
-		void InitializeOtherCreateMenu();
+		void InitializeCreateMenu();
 
 		// Creates creation menu items for UI style
 		void InitUIStyleCreateMenu();
@@ -209,7 +209,7 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	PROTECTED_FUNCTION(void, InitializeSceneTree);
 	PROTECTED_FUNCTION(void, InitializeTopPanel);
 	PROTECTED_FUNCTION(void, InitializeContextMenu);
-	PROTECTED_FUNCTION(void, InitializeOtherCreateMenu);
+	PROTECTED_FUNCTION(void, InitializeCreateMenu);
 	PROTECTED_FUNCTION(void, InitUIStyleCreateMenu);
 	PROTECTED_FUNCTION(void, InitUILayersCreateMenu);
 	PROTECTED_FUNCTION(void, PostInitializeWindow);

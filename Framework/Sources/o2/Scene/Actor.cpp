@@ -1222,6 +1222,16 @@ namespace o2
 		}
 	}
 
+	String Actor::GetCreateMenuCategory()
+	{
+		return "";
+	}
+
+	String Actor::GetCreateMenuGroup()
+	{
+		return "";
+	}
+
 #if !IS_EDITOR
 
 	void Actor::OnChanged() {}

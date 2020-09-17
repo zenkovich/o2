@@ -264,10 +264,13 @@ namespace o2
 		// Returns is current mode means mode on scene. For InScene always returns true. For returns true only when default creation mode is onscene.
 		static bool IsModeOnScene(ActorCreateMode mode);
 
-#if IS_EDITOR
-		// Returns the path of create menu category
-		virtual const String& GetCreateMenuCategory() const;
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
+#if IS_EDITOR
 		// Sets locking. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
 		void SetLocked(bool locked);
 
@@ -822,7 +825,8 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_STATIC_FUNCTION(void, SetDefaultCreationMode, ActorCreateMode);
 	PUBLIC_STATIC_FUNCTION(ActorCreateMode, GetDefaultCreationMode);
 	PUBLIC_STATIC_FUNCTION(bool, IsModeOnScene, ActorCreateMode);
-	PUBLIC_FUNCTION(const String&, GetCreateMenuCategory);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PUBLIC_FUNCTION(void, SetLocked, bool);
 	PUBLIC_FUNCTION(void, Lock);
 	PUBLIC_FUNCTION(void, Unlock);

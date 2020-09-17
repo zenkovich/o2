@@ -370,20 +370,20 @@ namespace Editor
 
 			ContextMenu::Item::Separator(),
 
-			ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed), ImageAssetRef()),
+			ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			ContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), ImageAssetRef(), ShortcutKeys('C', true)),
-			ContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), ImageAssetRef(), ShortcutKeys('X', true)),
-			ContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), ImageAssetRef(), ShortcutKeys('V', true)),
-			ContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), ImageAssetRef(), ShortcutKeys(VK_DELETE)),
-			ContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed), ImageAssetRef()),
+			ContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), "", ImageAssetRef(), ShortcutKeys('C', true)),
+			ContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), "", ImageAssetRef(), ShortcutKeys('X', true)),
+			ContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), "", ImageAssetRef(), ShortcutKeys('V', true)),
+			ContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), "", ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			ContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), ImageAssetRef(), ShortcutKeys('Z', true)),
-			ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), ImageAssetRef(), ShortcutKeys('Z', true, true))
+			ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true)),
+			ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true, true))
 							   });
 
 		onShow = [&]() { mContextMenu->SetItemsMaxPriority(); };

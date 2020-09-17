@@ -315,6 +315,11 @@ namespace o2
 		return mChildWidgets;
 	}
 
+	String Widget::GetCreateMenuCategory()
+	{
+		return "UI";
+	}
+
 	WidgetLayer* Widget::AddLayer(WidgetLayer* layer)
 	{
 		if (layer->mParent)

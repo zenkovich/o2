@@ -249,6 +249,9 @@ namespace o2
 		template<typename _type>
 		_type* FindInternalWidgetByType() const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(Widget);
 
 	protected:
@@ -797,6 +800,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(void, AddInternalWidget, Widget*, bool);
 	PUBLIC_FUNCTION(Widget*, GetInternalWidget, const String&);
 	PUBLIC_FUNCTION(Widget*, FindInternalWidget, const String&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
