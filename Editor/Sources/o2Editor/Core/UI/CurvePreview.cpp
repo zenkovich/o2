@@ -70,6 +70,11 @@ namespace Editor
 		return mCurveColor;
 	}
 
+	String CurvePreview::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void CurvePreview::CopyData(const Actor& otherActor)
 	{
 		const CurvePreview& other = dynamic_cast<const CurvePreview&>(otherActor);

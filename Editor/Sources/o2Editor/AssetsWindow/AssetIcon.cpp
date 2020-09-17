@@ -72,6 +72,11 @@ namespace Editor
 		return false;
 	}
 
+	String AssetIcon::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void AssetIcon::CopyData(const Actor& otherActor)
 	{
 		const AssetIcon& other = dynamic_cast<const AssetIcon&>(otherActor);

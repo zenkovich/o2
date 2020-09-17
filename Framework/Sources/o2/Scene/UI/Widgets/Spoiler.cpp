@@ -237,6 +237,11 @@ namespace o2
 
 		return !mExpandState->GetState() && !mExpandState->player.IsPlaying();
 	}
+
+	String Spoiler::GetCreateMenuGroup()
+	{
+		return "Dropping";
+	}
 }
 
 DECLARE_CLASS(o2::Spoiler);

@@ -125,6 +125,11 @@ namespace o2
 	{
 		onSelectedText(GetSelectedItemText());
 	}
+
+	String List::GetCreateMenuGroup()
+	{
+		return "List";
+	}
 }
 
 DECLARE_CLASS(o2::List);

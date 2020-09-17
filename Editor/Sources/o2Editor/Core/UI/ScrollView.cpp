@@ -97,6 +97,11 @@ namespace Editor
 		return true;
 	}
 
+	String ScrollView::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void ScrollView::CopyData(const Actor& otherActor)
 	{
 		const ScrollView& other = dynamic_cast<const ScrollView&>(otherActor);

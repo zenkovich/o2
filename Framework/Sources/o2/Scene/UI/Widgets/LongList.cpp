@@ -513,6 +513,11 @@ namespace o2
 	{
 		SetInteractable(mResEnabled);
 	}
+
+	String LongList::GetCreateMenuGroup()
+	{
+		return "List";
+	}
 }
 
 DECLARE_CLASS(o2::LongList);

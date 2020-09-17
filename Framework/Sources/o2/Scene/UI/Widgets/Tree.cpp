@@ -82,6 +82,11 @@ namespace o2
 		return Widget::IsUnderPoint(point);
 	}
 
+	String TreeNode::GetCreateMenuGroup()
+	{
+		return "Tree";
+	}
+
 	void TreeNode::CopyData(const Actor& otherActor)
 	{
 		const TreeNode& other = dynamic_cast<const TreeNode&>(otherActor);
@@ -1898,6 +1903,10 @@ namespace o2
 		return object == other.object;
 	}
 
+	String Tree::GetCreateMenuGroup()
+	{
+		return "Tree";
+	}
 }
 
 ENUM_META(o2::Tree::RearrangeType)

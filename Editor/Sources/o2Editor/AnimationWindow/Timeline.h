@@ -97,6 +97,9 @@ namespace Editor
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AnimationTimeline);
 
 	private:
@@ -271,6 +274,7 @@ CLASS_METHODS_META(Editor::AnimationTimeline)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, UpdateDuration, float);
 	PRIVATE_FUNCTION(void, DrawTimeScale);
 	PRIVATE_FUNCTION(void, ChooseScaleParams, int&, double&);

@@ -164,6 +164,11 @@ namespace Editor
 			o2EditorApplication.GetGameViewListenersLayer().OnDrawn(mRenderTargetSprite->GetBasis());
 	}
 
+	String GameWindow::GameView::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void GameWindow::GameView::OnTransformUpdated()
 	{
 		Widget::OnTransformUpdated();

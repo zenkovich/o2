@@ -86,6 +86,9 @@ namespace Editor
 		// Returns true if point is under drawable
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(DockableWindow);
 
 	protected:
@@ -215,6 +218,7 @@ CLASS_METHODS_META(Editor::DockableWindow)
 	PUBLIC_FUNCTION(void, Undock);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);

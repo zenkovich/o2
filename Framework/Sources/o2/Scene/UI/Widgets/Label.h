@@ -123,6 +123,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform();
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Label);
 
 	protected:
@@ -204,6 +207,7 @@ CLASS_METHODS_META(o2::Label)
 	PUBLIC_FUNCTION(void, SetHeight, int);
 	PUBLIC_FUNCTION(int, GetHeight);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, CreateDefaultText);

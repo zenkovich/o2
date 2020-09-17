@@ -119,6 +119,9 @@ namespace o2
 		// Returns is this widget can be selected
 		bool IsFocusable() const override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Toggle);
 
 	protected:
@@ -207,6 +210,7 @@ CLASS_METHODS_META(o2::Toggle)
 	PUBLIC_FUNCTION(void, SetToggleGroup, ToggleGroup*);
 	PUBLIC_FUNCTION(ToggleGroup*, GetToggleGroup);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);

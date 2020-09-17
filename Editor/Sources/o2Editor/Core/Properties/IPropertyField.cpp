@@ -164,6 +164,11 @@ namespace Editor
 		mFieldInfo = fieldInfo;
 	}
 
+	String IPropertyField::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void IPropertyField::OnFreeProperty()
 	{}
 

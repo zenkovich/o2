@@ -132,7 +132,10 @@ namespace Editor
 		template<typename _object_type, typename _property_type>
 		void SelectValueAndPrototypeProperties(const Vector<_object_type*>& targets,
 											   const Vector<_object_type*>& prototypes,
-											   std::function<_property_type*(_object_type*)> getter);
+											   std::function<_property_type* (_object_type*)> getter);
+
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
 
 		IOBJECT(IPropertyField);
 
@@ -570,6 +573,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	PUBLIC_FUNCTION(void, SetRevertable, bool);
 	PUBLIC_FUNCTION(bool, IsRevertable);
 	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(void, OnFreeProperty);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataDocument>&);

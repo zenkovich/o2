@@ -36,6 +36,11 @@ namespace Editor
 			UpdateDragAnimation(dt);
 	}
 
+	String LayersPopup::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void LayersPopup::SpecialDraw()
 	{
 		PopupWidget::SpecialDraw();
@@ -317,6 +322,11 @@ namespace Editor
 	bool LayerPopupItem::IsUnderPoint(const Vec2F& point)
 	{
 		return layout->IsPointInside(point);
+	}
+
+	String LayerPopupItem::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 	void LayerPopupItem::OnCursorDblClicked(const Input::Cursor& cursor)

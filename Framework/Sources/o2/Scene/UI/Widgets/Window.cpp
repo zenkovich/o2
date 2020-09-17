@@ -390,6 +390,11 @@ namespace o2
 
 		InitializeContextMenu();
 	}
+
+	String Window::GetCreateMenuGroup()
+	{
+		return "Window";
+	}
 }
 
 DECLARE_CLASS(o2::Window);

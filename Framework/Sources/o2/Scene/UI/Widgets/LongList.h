@@ -78,6 +78,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(LongList);
 
 	protected:
@@ -205,6 +208,7 @@ CLASS_METHODS_META(o2::LongList)
 	PUBLIC_FUNCTION(Layout, GetHoverDrawableLayout);
 	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);

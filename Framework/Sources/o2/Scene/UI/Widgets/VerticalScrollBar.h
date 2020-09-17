@@ -92,6 +92,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(VerticalScrollBar);
 
 	protected:
@@ -216,6 +219,7 @@ CLASS_METHODS_META(o2::VerticalScrollBar)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);

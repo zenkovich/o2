@@ -347,6 +347,11 @@ namespace o2
 
 		UpdateProgressLayersLayouts();
 	}
+
+	String HorizontalScrollBar::GetCreateMenuGroup()
+	{
+		return "Progress";
+	}
 }
 
 DECLARE_CLASS(o2::HorizontalScrollBar);

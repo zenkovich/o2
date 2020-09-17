@@ -193,6 +193,11 @@ namespace Editor
 		mDragHandleAreaMax = mDragHandleLayoutMax.Calculate(layout->GetWorldRect());
 	}
 
+	String DockWindowPlace::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void DockWindowPlace::CopyData(const Actor& otherActor)
 	{
 		const DockWindowPlace& other = dynamic_cast<const DockWindowPlace&>(otherActor);

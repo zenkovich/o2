@@ -63,6 +63,9 @@ namespace o2
 		// Returns selected items texts
 		Vector<WString> GetSelectedItemsText() const;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(List);
 
 	protected:
@@ -100,6 +103,7 @@ CLASS_METHODS_META(o2::List)
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
 	PUBLIC_FUNCTION(void, SetSelectedItems, const Vector<WString>&);
 	PUBLIC_FUNCTION(Vector<WString>, GetSelectedItemsText);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 }

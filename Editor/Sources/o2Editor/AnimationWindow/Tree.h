@@ -54,6 +54,9 @@ namespace Editor
 		// Returns world position of Animation track line
 		float GetLineWorldPosition(float lineNumber) const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AnimationTree);
 
 	public:
@@ -160,6 +163,9 @@ namespace Editor
 		// it is called from handles sheet, when user double clicked, creates new key under cursor
 		void OnDoubleClicked(const Input::Cursor& cursor);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AnimationTreeNode);
 
 	protected:
@@ -225,6 +231,7 @@ CLASS_METHODS_META(Editor::AnimationTree)
 	PUBLIC_FUNCTION(void, SetAnimationValueColor, String, const Color4&);
 	PUBLIC_FUNCTION(float, GetLineNumber, float);
 	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, InitializeContext);
 	PRIVATE_FUNCTION(void, RebuildAnimationTree);
 	PRIVATE_FUNCTION(void, AddAnimationTrack, IAnimationTrack*, IAnimationTrack::IPlayer*);
@@ -267,6 +274,7 @@ CLASS_METHODS_META(Editor::AnimationTreeNode)
 	PUBLIC_FUNCTION(void, Free);
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, InitializeControls);

@@ -164,6 +164,11 @@ namespace o2
 		RearrangeChilds();
 	}
 
+	String GridLayout::GetCreateMenuGroup()
+	{
+		return "Layout";
+	}
+
 	void GridLayout::CopyData(const Actor& otherActor)
 	{
 		const GridLayout& other = dynamic_cast<const GridLayout&>(otherActor);

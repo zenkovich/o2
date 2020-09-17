@@ -75,6 +75,9 @@ namespace Editor
 		// Sets watching editor UI state
 		void SetEditorWatching(bool watching);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(SceneTree);
 
 	protected:
@@ -178,6 +181,9 @@ namespace Editor
 		// Enables edit name edit box
 		void EnableEditName();
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(SceneTreeNode);
 
 	protected:
@@ -244,6 +250,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PUBLIC_FUNCTION(void, DeselectAllObjects);
 	PUBLIC_FUNCTION(void, ScrollTo, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, SetEditorWatching, bool);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, Initialize);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
 	PROTECTED_FUNCTION(TreeNode*, CreateTreeNodeWidget);
@@ -290,6 +297,7 @@ CLASS_METHODS_META(Editor::SceneTreeNode)
 
 	PUBLIC_FUNCTION(void, SetSceneObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, EnableEditName);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, InitializeControls);

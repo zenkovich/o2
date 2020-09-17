@@ -309,6 +309,11 @@ namespace Editor
 		return !mTabState && Widget::IsUnderPoint(point);
 	}
 
+	String DockableWindow::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void DockableWindow::CopyData(const Actor& otherActor)
 	{
 		const DockableWindow& other = dynamic_cast<const DockableWindow&>(otherActor);

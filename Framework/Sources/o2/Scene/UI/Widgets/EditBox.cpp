@@ -702,6 +702,11 @@ namespace o2
 		return false;
 	}
 
+	String EditBox::GetCreateMenuGroup()
+	{
+		return "Basic";
+	}
+
 	void EditBox::CopyData(const Actor& otherActor)
 	{
 		const EditBox& other = dynamic_cast<const EditBox&>(otherActor);

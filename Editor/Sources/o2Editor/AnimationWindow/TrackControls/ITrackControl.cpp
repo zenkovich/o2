@@ -49,6 +49,11 @@ namespace Editor
 	void ITrackControl::DeleteKey(UInt64 keyUid)
 	{}
 
+	String ITrackControl::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	bool ITrackControl::KeyHandle::operator==(const KeyHandle& other) const
 	{
 		return handle == other.handle;

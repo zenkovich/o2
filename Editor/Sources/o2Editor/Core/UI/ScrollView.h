@@ -75,6 +75,9 @@ namespace Editor
 		// Returns is this widget can be focused
 		bool IsFocusable() const override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(ScrollView);
 
 	protected:
@@ -197,6 +200,7 @@ CLASS_METHODS_META(Editor::ScrollView)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsFocusable);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, UpdateTransparency);

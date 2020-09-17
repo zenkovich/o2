@@ -38,6 +38,9 @@ namespace Editor
 		// Draws handle
 		void Draw() override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AnimationKeyDragHandle);
 	};
 }
@@ -60,5 +63,6 @@ CLASS_METHODS_META(Editor::AnimationKeyDragHandle)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 }
 END_META;

@@ -45,6 +45,9 @@ namespace Editor
 		// Returns curve color on image
 		Color4 GetCurveColor() const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(CurvePreview);
 
 	protected:
@@ -93,6 +96,7 @@ CLASS_METHODS_META(Editor::CurvePreview)
 	PUBLIC_FUNCTION(Color4, GetBackColor);
 	PUBLIC_FUNCTION(void, SetCurveColor, const Color4&);
 	PUBLIC_FUNCTION(Color4, GetCurveColor);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, Redraw);

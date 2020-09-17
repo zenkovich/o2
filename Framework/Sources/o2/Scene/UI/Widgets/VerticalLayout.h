@@ -102,6 +102,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(VerticalLayout);
 
 	protected:
@@ -203,6 +206,7 @@ CLASS_METHODS_META(o2::VerticalLayout)
 	PUBLIC_FUNCTION(void, SetFitByChildren, bool);
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(float, GetMinWidthWithChildren);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);

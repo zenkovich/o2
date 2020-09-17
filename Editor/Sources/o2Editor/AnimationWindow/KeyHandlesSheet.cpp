@@ -189,6 +189,11 @@ namespace Editor
 		return mContextMenu;
 	}
 
+	String KeyHandlesSheet::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void KeyHandlesSheet::OnSelectionChanged()
 	{
 		mNeedUpdateSelectionFrame = true;

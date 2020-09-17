@@ -66,6 +66,9 @@ namespace Editor
 		// Removes key from track
 		virtual void DeleteKey(UInt64 keyUid);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(ITrackControl);
 	};
 }
@@ -95,5 +98,6 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataValue&, float);
 	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataValue&, float, bool);
 	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 }
 END_META;

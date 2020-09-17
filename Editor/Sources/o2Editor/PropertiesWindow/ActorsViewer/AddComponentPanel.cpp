@@ -61,6 +61,11 @@ namespace Editor
 		return true;
 	}
 
+	String AddComponentPanel::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void AddComponentPanel::OnAddPressed()
 	{
 		if (mTree->GetSelectedObjects().IsEmpty())
@@ -204,6 +209,11 @@ namespace Editor
 			SelectAndHighlightObject(filtered);
 	}
 
+	String ComponentsTree::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void ComponentsTree::UpdateVisibleNodes()
 	{
 		PushEditorScopeOnStack scope;
@@ -281,6 +291,11 @@ namespace Editor
 
 		this->data = data;
 		mTree = tree;
+	}
+
+	String ComponentsTreeNode::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 	void ComponentsTreeNode::CopyData(const Actor& otherActor)

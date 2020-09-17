@@ -116,6 +116,9 @@ namespace o2
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(CustomDropDown);
 
 	protected:
@@ -213,6 +216,7 @@ CLASS_METHODS_META(o2::CustomDropDown)
 	PUBLIC_FUNCTION(void, SetClippingLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);

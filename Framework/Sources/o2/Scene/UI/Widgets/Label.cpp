@@ -354,6 +354,10 @@ namespace o2
 		mTextDrawable = GetLayerDrawable<Text>("text");
 	}
 
+	String Label::GetCreateMenuGroup()
+	{
+		return "Basic";
+	}
 }
 
 ENUM_META(o2::Label::HorOverflow)

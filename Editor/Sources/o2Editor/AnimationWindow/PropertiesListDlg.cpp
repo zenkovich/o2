@@ -113,6 +113,11 @@ namespace Editor
 		UpdateVisibleNodes();
 	}
 
+	String AnimationPropertiesTree::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void AnimationPropertiesTree::InitializeTreeNode(NodeData* node, IObject* object)
 	{
 		if (!object)
@@ -317,6 +322,11 @@ namespace Editor
 
 		mAddButton->SetEnableForcible(!data->used && data->children.IsEmpty());
 		mRemoveButton->SetEnableForcible(data->used && data->children.IsEmpty());
+	}
+
+	String AnimationPropertiesTreeNode::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 	void AnimationPropertiesTreeNode::CopyData(const Actor& otherActor)

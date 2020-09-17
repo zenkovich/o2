@@ -50,6 +50,9 @@ namespace o2
 		// Fits size by items
 		virtual void FitSizeAndPosition(const Vec2F& position);
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(PopupWidget);
 
 	protected:
@@ -128,6 +131,7 @@ CLASS_METHODS_META(o2::PopupWidget)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);

@@ -79,6 +79,11 @@ namespace o2
 		return mDrawingScissorRect.IsInside(point) && isPointInside(point);
 	}
 
+	String Button::GetCreateMenuGroup()
+	{
+		return "Basic";
+	}
+
 	void Button::CopyData(const Actor& otherActor)
 	{
 		const Button& other = dynamic_cast<const Button&>(otherActor);

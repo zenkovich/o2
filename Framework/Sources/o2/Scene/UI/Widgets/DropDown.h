@@ -61,6 +61,9 @@ namespace o2
 		// Selects item text
 		void SelectItemText(const WString& text);
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(DropDown);
 
 	protected:
@@ -103,6 +106,7 @@ CLASS_METHODS_META(o2::DropDown)
 	PUBLIC_FUNCTION(Vector<WString>, GetAllItemsText);
 	PUBLIC_FUNCTION(WString, GetSelectedItemText);
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);

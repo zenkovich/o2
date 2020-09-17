@@ -354,6 +354,11 @@ namespace Editor
 		return ScrollArea::IsInputTransparent();
 	}
 
+	String AssetsIconsScrollArea::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void AssetsIconsScrollArea::CopyData(const Actor& otherActor)
 	{
 		const AssetsIconsScrollArea& other = dynamic_cast<const AssetsIconsScrollArea&>(otherActor);

@@ -105,6 +105,9 @@ namespace Editor
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AssetsIconsScrollArea);
 
 	protected:
@@ -407,6 +410,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(int, GetItemsCount);
 	PROTECTED_FUNCTION(Vector<void*>, GetItemsRange, int, int);

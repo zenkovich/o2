@@ -82,6 +82,9 @@ namespace o2
 		// Returns back cursor events listener
 		CursorEventsArea& GetBackCursorListener();
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Window);
 
 	protected:
@@ -235,6 +238,7 @@ CLASS_METHODS_META(o2::Window)
 	PUBLIC_FUNCTION(bool, IsModal);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnEnabled);

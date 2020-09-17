@@ -99,6 +99,11 @@ namespace Editor
 			UpdateCurvesColors();
 	}
 
+	String CurvesSheet::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void CurvesSheet::InitializeControls()
 	{
 		mCurvesEditor = mnew CurvesEditor();

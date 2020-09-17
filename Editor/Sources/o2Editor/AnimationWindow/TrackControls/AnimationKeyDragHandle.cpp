@@ -29,6 +29,11 @@ namespace Editor
 		//o2Debug.DrawText(GetScreenPosition(), String(mIsClipped));
 	}
 
+	String AnimationKeyDragHandle::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	Editor::AnimationKeyDragHandle& AnimationKeyDragHandle::operator=(const AnimationKeyDragHandle& other)
 	{
 		WidgetDragHandle::operator=(other);

@@ -158,6 +158,11 @@ namespace o2
 		RearrangeChilds();
 	}
 
+	String HorizontalLayout::GetCreateMenuGroup()
+	{
+		return "Layout";
+	}
+
 	void HorizontalLayout::CopyData(const Actor& otherActor)
 	{
 		const HorizontalLayout& other = dynamic_cast<const HorizontalLayout&>(otherActor);

@@ -142,6 +142,11 @@ namespace Editor
 		UpdateNodesView();
 	}
 
+	String SceneTree::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void SceneTree::Initialize()
 	{
 		mEnableTogglesGroup = mnew ToggleGroup(ToggleGroup::Type::VerOneClick);
@@ -432,6 +437,11 @@ namespace Editor
 		mNameEditBox->SelectAll();
 		mNameEditBox->Widget::Focus();
 		mNameEditBox->ResetScroll();
+	}
+
+	String SceneTreeNode::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 	void SceneTreeNode::OnLockClicked()

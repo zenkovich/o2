@@ -74,6 +74,11 @@ namespace Editor
 		return &TypeOf(IObject);
 	}
 
+	String ObjectViewer::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 }
 
 DECLARE_CLASS(Editor::ObjectViewer);

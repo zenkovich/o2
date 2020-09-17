@@ -180,6 +180,9 @@ namespace o2
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Tree);
 
 	protected:
@@ -528,6 +531,9 @@ namespace o2
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(TreeNode);
 
 	protected:
@@ -690,6 +696,7 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
@@ -776,6 +783,7 @@ CLASS_METHODS_META(o2::TreeNode)
 	PUBLIC_FUNCTION(void, Collapse, bool);
 	PUBLIC_FUNCTION(void*, GetObject);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTreeLayout, float);
 	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);

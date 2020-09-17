@@ -30,6 +30,9 @@ namespace Editor
 
 			void Draw();
 
+			// Returns create menu category in editor
+			static String GetCreateMenuCategory();
+
 			SERIALIZABLE(GameView);
 
 		protected:
@@ -142,6 +145,7 @@ CLASS_METHODS_META(Editor::GameWindow::GameView)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 }
 END_META;

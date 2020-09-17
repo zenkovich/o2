@@ -34,6 +34,11 @@ namespace Editor
 		FitImage();
 	}
 
+	String ImageSlicesEditorWidget::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void ImageSlicesEditorWidget::InitializeImagePreview()
 	{
 		layout->minHeight = 200;
@@ -210,6 +215,11 @@ namespace Editor
 		Image::Draw();
 
 		mImage->GetTexture()->SetFilter(prevFilter);
+	}
+
+	String ImageSlicesEditorWidget::PreviewImage::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 }

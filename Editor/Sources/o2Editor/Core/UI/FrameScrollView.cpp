@@ -24,8 +24,8 @@ namespace Editor
 		mReady = true;
 	}
 
-	FrameScrollView::FrameScrollView(const FrameScrollView& other) :ScrollView(other),
-		mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
+	FrameScrollView::FrameScrollView(const FrameScrollView& other) :
+		ScrollView(other), mHorScrollbar(other.mHorScrollbar->CloneAs<HorizontalScrollBar>()),
 		mVerScrollbar(other.mVerScrollbar->CloneAs<VerticalScrollBar>())
 	{
 		mReady = false;
@@ -119,6 +119,11 @@ namespace Editor
 	RectF FrameScrollView::GetViewArea() const
 	{
 		return mAvailableArea;
+	}
+
+	String FrameScrollView::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 	void FrameScrollView::CopyData(const Actor& otherActor)

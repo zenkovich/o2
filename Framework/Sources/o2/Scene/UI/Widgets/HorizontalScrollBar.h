@@ -89,6 +89,9 @@ namespace o2
 		// Returns is listener scrollable
 		bool IsScrollable() const override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(HorizontalScrollBar);
 
 	protected:
@@ -208,6 +211,7 @@ CLASS_METHODS_META(o2::HorizontalScrollBar)
 	PUBLIC_FUNCTION(void, SetMinimalScrollHandleSize, float);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);

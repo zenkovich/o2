@@ -78,6 +78,9 @@ namespace Editor
 		// Returns context menu
 		ContextMenu* GetContextMenu() const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(KeyHandlesSheet);
 
 	private:
@@ -268,6 +271,7 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	PUBLIC_FUNCTION(_tmp2, GetSelectedKeys);
 	PUBLIC_FUNCTION(void, DeleteKeys, _tmp3, bool);
 	PUBLIC_FUNCTION(ContextMenu*, GetContextMenu);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, InitializeHandles);
 	PRIVATE_FUNCTION(void, InitializeCenterHandle);
 	PRIVATE_FUNCTION(void, InitializeLeftHandle);

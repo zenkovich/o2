@@ -137,6 +137,11 @@ namespace o2
 		mItemsList->SelectItemAt(idx);
 	}
 
+	String DropDown::GetCreateMenuGroup()
+	{
+		return "Dropping";
+	}
+
 	void DropDown::CopyData(const Actor& otherActor)
 	{
 		const DropDown& other = dynamic_cast<const DropDown&>(otherActor);

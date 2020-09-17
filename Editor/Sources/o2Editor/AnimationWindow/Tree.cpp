@@ -121,6 +121,11 @@ namespace Editor
 		return -(lineNumber * mNodeWidgetSample->layout->GetMinHeight() - mScrollPos.y - layout->GetWorldTop());
 	}
 
+	String AnimationTree::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void AnimationTree::InitializeContext()
 	{
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
@@ -365,6 +370,11 @@ namespace Editor
 	{
 		if (mTrackControl)
 			mTrackControl->InsertNewKey(mTimeline->WorldToLocal(cursor.position.x));
+	}
+
+	String AnimationTreeNode::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 	void AnimationTreeNode::CopyData(const Actor& otherActor)

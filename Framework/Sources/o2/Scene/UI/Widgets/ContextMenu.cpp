@@ -600,6 +600,11 @@ namespace o2
 		}
 	}
 
+	String ContextMenu::GetCreateMenuGroup()
+	{
+		return "Context";
+	}
+
 	void ContextMenu::CopyData(const Actor& otherActor)
 	{
 		const ContextMenu& other = dynamic_cast<const ContextMenu&>(otherActor);
@@ -933,6 +938,11 @@ namespace o2
 	void ContextMenuItem::Disable()
 	{
 		SetEnabled(false);
+	}
+
+	String ContextMenuItem::GetCreateMenuGroup()
+	{
+		return "Context";
 	}
 
 	void ContextMenuItem::CopyData(const Actor& otherActor)

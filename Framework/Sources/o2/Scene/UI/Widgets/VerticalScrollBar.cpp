@@ -350,6 +350,11 @@ namespace o2
 	{
 		return mSmoothValue;
 	}
+
+	String VerticalScrollBar::GetCreateMenuGroup()
+	{
+		return "Progress";
+	}
 }
 
 DECLARE_CLASS(o2::VerticalScrollBar);

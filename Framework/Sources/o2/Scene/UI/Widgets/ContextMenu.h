@@ -172,6 +172,9 @@ namespace o2
 		// Sets context menu items shortcut minimum priority
 		void SetItemsMinPriority();
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(ContextMenu);
 
 	protected:
@@ -308,6 +311,9 @@ namespace o2
 		// DIsables item
 		void Disable();
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(ContextMenuItem);
 
 	protected:
@@ -385,6 +391,7 @@ CLASS_METHODS_META(o2::ContextMenu)
 	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
 	PUBLIC_FUNCTION(void, SetItemsMaxPriority);
 	PUBLIC_FUNCTION(void, SetItemsMinPriority);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);
@@ -434,6 +441,7 @@ CLASS_METHODS_META(o2::ContextMenuItem)
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnShortcutPressed);

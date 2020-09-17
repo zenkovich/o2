@@ -400,6 +400,11 @@ namespace o2
 		mHoverDrawable->SetRect(mCurrentHoverRect);
 	}
 
+	String CustomList::GetCreateMenuGroup()
+	{
+		return "List";
+	}
+
 	void CustomList::UpdateSelectionSprites()
 	{
 		for (auto& sel : mSelectedItems)

@@ -83,6 +83,9 @@ namespace Editor
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AnimationPropertiesTree);
 
 	private:
@@ -155,6 +158,9 @@ namespace Editor
 		// Initializes node by data
 		void Setup(AnimationPropertiesTree::NodeData* data, AnimationPropertiesTree* tree);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AnimationPropertiesTreeNode);
 
 	private:
@@ -200,6 +206,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 
 	PUBLIC_FUNCTION(void, Initialize, AnimationClip*, ActorRef);
 	PUBLIC_FUNCTION(void, SetFilter, const WString&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
 	PRIVATE_FUNCTION(void, ProcessObject, void*, const ObjectType*, NodeData*);
 	PRIVATE_FUNCTION(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);
@@ -235,6 +242,7 @@ CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 {
 
 	PUBLIC_FUNCTION(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 	PRIVATE_FUNCTION(void, InitializeControls);

@@ -52,6 +52,9 @@ namespace Editor
 		// Returns view area
 		RectF GetViewArea() const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(FrameScrollView);
 
 	protected:
@@ -100,6 +103,7 @@ CLASS_METHODS_META(Editor::FrameScrollView)
 	PUBLIC_FUNCTION(void, SetVerScrollbar, VerticalScrollBar*);
 	PUBLIC_FUNCTION(void, SetViewArea, const RectF&);
 	PUBLIC_FUNCTION(RectF, GetViewArea);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateCameraLimits, float);
 	PROTECTED_FUNCTION(void, OnHorScrollScrolled, float);

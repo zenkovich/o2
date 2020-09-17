@@ -25,6 +25,7 @@
 #include "o2Editor/Core/Actions/Lock.h"
 #include "o2Editor/Core/Actions/Reparent.h"
 #include "o2Editor/Core/EditorApplication.h"
+#include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/SceneTree.h"
@@ -149,8 +150,8 @@ namespace Editor
 		mTreeContextMenu->AddItem("Create empty actor", [&]() { OnContextCreateNewPressed(); }, ImageAssetRef(),
 								  ShortcutKeys('N', true, false));
 
-		mTreeContextMenu->AddItem("Create/UI/Empty layer._layers", [&]() { CreateObject<WidgetLayer>("Layer"); });
-		mTreeContextMenu->AddItem("Create/UI/Sprite layer._layers", [&]()
+		mTreeContextMenu->AddItem("Create/UI/Empty layer.alayers", [&]() { CreateObject<WidgetLayer>("Layer"); });
+		mTreeContextMenu->AddItem("Create/UI/Sprite layer.alayers", [&]()
 		{
 			ForcePopEditorScopeOnStack scope;
 
@@ -160,7 +161,7 @@ namespace Editor
 			OnCreateObject(newLayer);
 		});
 
-		mTreeContextMenu->AddItem("Create/UI/Text layer._layers", [&]()
+		mTreeContextMenu->AddItem("Create/UI/Text layer.alayers", [&]()
 		{
 			ForcePopEditorScopeOnStack scope;
 
@@ -171,6 +172,7 @@ namespace Editor
 		});
 
 		InitializeCreateMenu();
+		InitUIStyleCreateMenu();
 
 		mTreeContextMenu->AddItem("---");
 
@@ -201,10 +203,6 @@ namespace Editor
 		mTreeContextMenu->AddToggleItem("View widgets layers", true, THIS_FUNC(OnViewLayersToggled));
 		mTreeContextMenu->AddToggleItem("View widgets internal children", true, THIS_FUNC(OnViewInternalChildrenToggled));
 
-		mTreeContextMenu->AddItem("---");
-
-		InitUIStyleCreateMenu();
-
 		mWindow->AddChild(mTreeContextMenu);
 
 		mSceneTree->onFocused = [&]() { mTreeContextMenu->SetItemsMaxPriority(); };
@@ -220,7 +218,7 @@ namespace Editor
 			String category = subType->InvokeStatic<String>("GetCreateMenuCategory");
 			String path;
 			if (category.IsEmpty())
-				path = subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/");
+				path = o2EditorProperties.MakeSmartFieldName(subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/"));
 			else
 			{
 				String name = subType->GetName().ReplacedAll("o2::", "");
@@ -228,7 +226,7 @@ namespace Editor
 				if (fnd >= 0)
 					name = name.SubStr(fnd + 2);
 
-				path = category + "/" + name;
+				path = category + "/" + o2EditorProperties.MakeSmartFieldName(name);
 			}
 
 			String group = subType->InvokeStatic<String>("GetCreateMenuGroup");
@@ -253,7 +251,7 @@ namespace Editor
 			path.ReplaceAll("o2::", "");
 			path.ReplaceAll("::", "/");
 
-			mTreeContextMenu->AddItem(String("Create UI style/") + path, [=]()
+			mTreeContextMenu->AddItem(String("Create/UI/Style/") + path, [=]()
 			{
 				ForcePopEditorScopeOnStack scope;
 				Widget* newWidget = styleWidget->CloneAs<Widget>();

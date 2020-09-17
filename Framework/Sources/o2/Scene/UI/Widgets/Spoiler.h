@@ -60,6 +60,9 @@ namespace o2
 		// Searches expand button by name and type
 		Button* GetExpandButton() const;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Spoiler);
 
 	protected:
@@ -129,6 +132,7 @@ CLASS_METHODS_META(o2::Spoiler)
 	PUBLIC_FUNCTION(void, SetHeadHeight, float);
 	PUBLIC_FUNCTION(float, GetHeadHeight);
 	PUBLIC_FUNCTION(Button*, GetExpandButton);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);

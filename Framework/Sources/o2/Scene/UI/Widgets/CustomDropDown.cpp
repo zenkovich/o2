@@ -298,6 +298,11 @@ namespace o2
 		mAbsoluteClip = mClipLayout.Calculate(GetLayoutData().worldRectangle);
 	}
 
+	String CustomDropDown::GetCreateMenuGroup()
+	{
+		return "Dropping";
+	}
+
 	void CustomDropDown::OnItemSelected()
 	{
 		auto pressedState = state["pressed"];

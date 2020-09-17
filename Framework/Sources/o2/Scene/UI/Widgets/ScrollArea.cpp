@@ -748,6 +748,10 @@ namespace o2
 		}
 	}
 
+	String ScrollArea::GetCreateMenuGroup()
+	{
+		return "Basic";
+	}
 }
 
 DECLARE_CLASS(o2::ScrollArea);

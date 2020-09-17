@@ -58,6 +58,9 @@ namespace o2
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Button);
 
 	protected:
@@ -132,6 +135,7 @@ CLASS_METHODS_META(o2::Button)
 	PUBLIC_FUNCTION(Sprite*, GetIcon);
 	PUBLIC_FUNCTION(bool, IsFocusable);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

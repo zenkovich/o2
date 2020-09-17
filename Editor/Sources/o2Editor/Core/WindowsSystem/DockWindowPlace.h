@@ -52,6 +52,9 @@ namespace Editor
 		// Updates layout
 		void UpdateSelfTransform() override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(DockWindowPlace);
 
 	protected:
@@ -117,6 +120,7 @@ CLASS_METHODS_META(Editor::DockWindowPlace)
 	PUBLIC_FUNCTION(void, SetActiveTab, DockableWindow*);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
 	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);

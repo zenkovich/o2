@@ -786,6 +786,11 @@ namespace o2
 		return DragHandle::ScreenToLocal(point);
 	}
 
+	String WidgetDragHandle::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void WidgetDragHandle::UpdateLayersLayouts()
 	{
 		onLayoutUpdated();

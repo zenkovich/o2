@@ -318,6 +318,11 @@ namespace o2
 			mBackLayer = layer;
 	}
 
+	String Toggle::GetCreateMenuGroup()
+	{
+		return "Basic";
+	}
+
 	void Toggle::OnEnableInHierarchyChanged()
 	{
 		interactable = mResEnabled;

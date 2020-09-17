@@ -86,6 +86,11 @@ namespace o2
 		if (!mImage)
 			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
+
+	String Image::GetCreateMenuGroup()
+	{
+		return "Basic";
+	}
 }
 
 DECLARE_CLASS(o2::Image);

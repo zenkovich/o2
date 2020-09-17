@@ -500,6 +500,11 @@ namespace o2
 	{
 		return text == other.text;
 	}
+
+	String MenuPanel::GetCreateMenuGroup()
+	{
+		return "Dropping";
+	}
 }
 
 DECLARE_CLASS(o2::MenuPanel);

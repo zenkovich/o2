@@ -278,6 +278,11 @@ namespace o2
 
 		UpdateProgressLayersLayouts();
 	}
+
+	String HorizontalProgress::GetCreateMenuGroup()
+	{
+		return "Progress";
+	}
 }
 
 ENUM_META(o2::HorizontalProgress::Orientation)

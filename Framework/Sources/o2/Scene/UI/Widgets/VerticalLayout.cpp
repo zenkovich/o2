@@ -159,6 +159,11 @@ namespace o2
 		RearrangeChilds();
 	}
 
+	String VerticalLayout::GetCreateMenuGroup()
+	{
+		return "Layout";
+	}
+
 	void VerticalLayout::CopyData(const Actor& otherActor)
 	{
 		const VerticalLayout& other = dynamic_cast<const VerticalLayout&>(otherActor);

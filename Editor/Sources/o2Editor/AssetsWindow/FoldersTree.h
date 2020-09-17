@@ -33,6 +33,9 @@ namespace Editor
 		// Copy-operator
 		AssetsFoldersTree& operator=(const AssetsFoldersTree& other);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AssetsFoldersTree);
 
 	protected:
@@ -114,6 +117,9 @@ namespace Editor
 	protected:
 		// Updates visible nodes (calculates range and initializes nodes), enables editor mode
 		void UpdateVisibleNodes() override;
+
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
 	};
 }
 
@@ -134,6 +140,7 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
 	PROTECTED_FUNCTION(void, UpdateView);
@@ -170,5 +177,6 @@ CLASS_METHODS_META(Editor::FoldersTree)
 {
 
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
+	PROTECTED_STATIC_FUNCTION(String, GetCreateMenuCategory);
 }
 END_META;

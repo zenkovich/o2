@@ -28,6 +28,11 @@ namespace Editor
 		return mIcon;
 	}
 
+	String SpoilerWithHead::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	void SpoilerWithHead::InitializeControls()
 	{
 		mOptionsBtn = FindInternalWidgetByType<Button>("options");

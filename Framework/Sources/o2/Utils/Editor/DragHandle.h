@@ -304,6 +304,9 @@ namespace o2
 		// Converts point from local to screen space
 		Vec2F LocalToScreen(const Vec2F& point) override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(WidgetDragHandle);
 
 	private:
@@ -563,6 +566,7 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, UpdateLayersLayouts);
 	PRIVATE_FUNCTION(void, OnSerialize, DataValue&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);

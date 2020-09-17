@@ -26,6 +26,9 @@ namespace Editor
 		// It is called when animation changed, checks count of animation tracks, updates curves
 		void OnAnimationChanged();
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(CurvesSheet);
 
 	private:
@@ -67,6 +70,7 @@ CLASS_METHODS_META(Editor::CurvesSheet)
 	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*);
 	PUBLIC_FUNCTION(void, UpdateCurvesColors);
 	PUBLIC_FUNCTION(void, OnAnimationChanged);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, SetCameraAsTimelineView);
 	PRIVATE_FUNCTION(void, OnEditorViewChanged);

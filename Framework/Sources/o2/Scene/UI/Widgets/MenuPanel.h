@@ -108,6 +108,9 @@ namespace o2
 		// Returns selection drawable layout
 		Layout GetSelectionDrawableLayout() const;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(MenuPanel);
 
 	protected:
@@ -214,6 +217,7 @@ CLASS_METHODS_META(o2::MenuPanel)
 	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(ContextMenu*, CreateSubContext, WString&);

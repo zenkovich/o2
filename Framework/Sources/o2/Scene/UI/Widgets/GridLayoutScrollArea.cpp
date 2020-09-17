@@ -115,6 +115,11 @@ namespace o2
 		ScrollArea::UpdateSelfTransform();
 	}
 
+	String GridLayoutScrollArea::GetCreateMenuGroup()
+	{
+		return "Layout";
+	}
+
 	void GridLayoutScrollArea::MoveScrollPosition(const Vec2F& delta)
 	{
 		ScrollArea::MoveScrollPosition(delta);

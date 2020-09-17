@@ -45,6 +45,9 @@ namespace Editor
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(AddComponentPanel);
 
 	private:
@@ -105,6 +108,9 @@ namespace Editor
 		// Sets filter and refreshes tree
 		void SetFilter(const WString& filter);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(ComponentsTree);
 
 	private:
@@ -156,6 +162,9 @@ namespace Editor
 		// Initializes node by data
 		void Setup(ComponentsTree::NodeData* data, ComponentsTree* tree);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(ComponentsTreeNode);
 
 	private:
@@ -201,6 +210,7 @@ CLASS_METHODS_META(Editor::AddComponentPanel)
 	PUBLIC_FUNCTION(ComponentsTree*, GetTree);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, OnAddPressed);
 	PRIVATE_FUNCTION(void, OnNodeDblClick, TreeNode*);
 	PRIVATE_FUNCTION(void, OnKeyReleased, const Input::Key&);
@@ -223,6 +233,7 @@ CLASS_METHODS_META(Editor::ComponentsTree)
 
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(void, SetFilter, const WString&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
 	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
 	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
@@ -250,6 +261,7 @@ CLASS_METHODS_META(Editor::ComponentsTreeNode)
 {
 
 	PUBLIC_FUNCTION(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 	PRIVATE_FUNCTION(void, InitializeControls);

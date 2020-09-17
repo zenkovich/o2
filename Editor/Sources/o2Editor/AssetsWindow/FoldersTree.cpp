@@ -58,6 +58,11 @@ namespace Editor
 	AssetsFoldersTree::~AssetsFoldersTree()
 	{}
 
+	String AssetsFoldersTree::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 	AssetsFoldersTree& AssetsFoldersTree::operator=(const AssetsFoldersTree& other)
 	{
 		Widget::operator=(other);
@@ -284,6 +289,11 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 		Tree::UpdateNodesStructure();
+	}
+
+	String FoldersTree::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
 	}
 
 }

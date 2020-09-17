@@ -46,6 +46,9 @@ namespace o2
 		// Returns asset image name
 		String GetImageName() const;
 
+		// Returns create menu group in editor
+		static String GetCreateMenuGroup();
+
 		SERIALIZABLE(Image);
 
 	protected:
@@ -81,6 +84,7 @@ CLASS_METHODS_META(o2::Image)
 	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
 	PUBLIC_FUNCTION(void, SetImageName, const String&);
 	PUBLIC_FUNCTION(String, GetImageName);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 }
 END_META;

@@ -32,6 +32,9 @@ namespace Editor
 		// Sets image and property
 		void Setup(const ImageAssetRef& image, BorderIProperty* borderProperty);
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(ImageSlicesEditorWidget);
 
 	protected:
@@ -40,6 +43,9 @@ namespace Editor
 		public:
 			// Sets texture filter to nearest and draws it
 			void Draw() override;
+
+			// Returns create menu category in editor
+			static String GetCreateMenuCategory();
 
 			SERIALIZABLE(PreviewImage);
 		};
@@ -98,6 +104,7 @@ CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 {
 
 	PUBLIC_FUNCTION(void, Setup, const ImageAssetRef&, BorderIProperty*);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, InitializeImagePreview);
 	PROTECTED_FUNCTION(void, InitializeSliceHandles);
 	PROTECTED_FUNCTION(void, FitImage);
@@ -120,5 +127,6 @@ CLASS_METHODS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
 {
 
 	PUBLIC_FUNCTION(void, Draw);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 }
 END_META;

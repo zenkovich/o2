@@ -34,6 +34,9 @@ namespace Editor
 		// Updates widget and dragging animation
 		void Update(float dt) override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(LayersPopup);
 
 	private:
@@ -113,6 +116,9 @@ namespace Editor
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(LayerPopupItem);
 
 	private:
@@ -178,6 +184,7 @@ CLASS_METHODS_META(Editor::LayersPopup)
 
 	PUBLIC_FUNCTION(void, Show, const Vec2F&);
 	PUBLIC_FUNCTION(void, Update, float);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, SpecialDraw);
 	PRIVATE_FUNCTION(Vec2F, GetContentSize);
 	PRIVATE_FUNCTION(void, InitializeControls);
@@ -218,6 +225,7 @@ CLASS_METHODS_META(Editor::LayerPopupItem)
 	PUBLIC_FUNCTION(void, BreakEditName);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnDragStart, const Input::Cursor&);
 	PRIVATE_FUNCTION(void, OnDragged, const Input::Cursor&, DragDropArea*);

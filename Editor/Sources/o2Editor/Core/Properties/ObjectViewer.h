@@ -29,6 +29,9 @@ namespace Editor
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		SERIALIZABLE(ObjectViewer);
 
 	protected:
@@ -58,5 +61,6 @@ CLASS_METHODS_META(Editor::ObjectViewer)
 	PUBLIC_FUNCTION(void, Refresh, const Vector<IObject*>&);
 	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 }
 END_META;

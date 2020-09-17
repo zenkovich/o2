@@ -34,6 +34,9 @@ namespace Editor
 		// Returns icon
 		Image* GetIcon() const;
 
+		// Returns create menu category in editor
+		static String GetCreateMenuCategory();
+
 		IOBJECT(SpoilerWithHead);
 
 	private:
@@ -68,6 +71,7 @@ CLASS_METHODS_META(Editor::SpoilerWithHead)
 {
 
 	PUBLIC_FUNCTION(Image*, GetIcon);
+	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 }

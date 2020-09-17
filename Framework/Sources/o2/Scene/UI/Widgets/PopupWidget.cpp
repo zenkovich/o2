@@ -245,6 +245,11 @@ namespace o2
 		if (mChildPopup)
 			mChildPopup->SpecialDraw();
 	}
+
+	String PopupWidget::GetCreateMenuGroup()
+	{
+		return "Window";
+	}
 }
 
 DECLARE_CLASS(o2::PopupWidget);

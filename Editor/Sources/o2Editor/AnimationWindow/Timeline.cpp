@@ -429,6 +429,12 @@ namespace Editor
 	{
 		return !mViewHasZoomed && !mDragViewScroll;
 	}
+
+	String AnimationTimeline::GetCreateMenuCategory()
+	{
+		return "UI/Editor";
+	}
+
 }
 
 DECLARE_CLASS(Editor::AnimationTimeline);
