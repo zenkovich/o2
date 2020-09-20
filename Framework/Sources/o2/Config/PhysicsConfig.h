@@ -13,6 +13,8 @@ namespace o2
 		int velocityIterations = 8; // Number of velocity solver iterations @SERIALIZABLE
 		int positionIterations = 3; // Number of position solver iterations @SERIALIZABLE
 
+		float debugDrawAlpha = 0.5f; // Debug draw transparency @SERIALIZABLE
+
 		SERIALIZABLE(PhysicsConfig);
 	};
 }
@@ -28,6 +30,7 @@ CLASS_FIELDS_META(o2::PhysicsConfig)
 	PUBLIC_FIELD(scale).DEFAULT_VALUE(10.0f).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(velocityIterations).DEFAULT_VALUE(8).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(positionIterations).DEFAULT_VALUE(3).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(debugDrawAlpha).DEFAULT_VALUE(0.5f).SERIALIZABLE_ATTRIBUTE();
 }
 END_META;
 CLASS_METHODS_META(o2::PhysicsConfig)

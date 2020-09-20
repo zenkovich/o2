@@ -10,6 +10,7 @@
 #include "o2/Scene/UI/Widgets/Label.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/Math/Curve.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
@@ -45,12 +46,6 @@ namespace Editor
 		mMenuPanel->AddItem("File/Open scene", [&]() { OnOpenScenePressed(); }, ImageAssetRef(), ShortcutKeys('O', true));
 		mMenuPanel->AddItem("File/Save scene", [&]() { OnSaveScenePressed(); }, ImageAssetRef(), ShortcutKeys('S', true));
 		mMenuPanel->AddItem("File/Save scene as ...", [&]() { OnSaveSceneAsPressed(); }, ImageAssetRef(), ShortcutKeys('S', true, false, true));
-
-		mMenuPanel->AddItem("File/---");
-
-		mMenuPanel->AddItem("File/New project", [&]() { OnNewProjectPressed(); });
-		mMenuPanel->AddItem("File/Open project", [&]() { OnOpenProjectPressed(); });
-		mMenuPanel->AddItem("File/Save project", [&]() { OnSaveProjectPressed(); }, ImageAssetRef(), ShortcutKeys('S', true, true));
 
 		mMenuPanel->AddItem("File/---");
 
@@ -157,27 +152,19 @@ namespace Editor
 		return mMenuPanel->RemoveItem(path);
 	}
 
-	void MenuPanel::OnNewScenePressed()
-	{
-		if (o2EditorApplication.IsSceneChanged())
-			o2Debug.Log("Check saving scene");
-
-		o2EditorApplication.MakeNewScene();
-	}
-
-	void MenuPanel::OnOpenScenePressed()
+	void MenuPanel::CheckSceneSaving(const Function<void()>& onCompleted)
 	{
 		if (o2EditorApplication.IsSceneChanged())
 		{
 			auto wnd = EditorUIRoot.AddWidget(o2UI.CreateWindow("Save scene?"));
-			*wnd->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(300, 200));
+			*wnd->layout = WidgetLayout::Based(BaseCorner::Center, Vec2F(400, 150));
 
 			auto verLayout = o2UI.CreateVerLayout();
 			wnd->AddChild(verLayout);
 			*verLayout->layout = WidgetLayout::BothStretch();
 			verLayout->baseCorner = BaseCorner::Top;
 
-			auto text = o2UI.CreateLabel("Current scene was modified and not saved. Do you want to save it?");
+			auto text = o2UI.CreateLabel("Current scene was modified but wasn't saved.\nDo you want to save it?");
 			text->horOverflow = Label::HorOverflow::Wrap;
 			verLayout->AddChild(text);
 
@@ -185,23 +172,41 @@ namespace Editor
 			verLayout->AddChild(horLayout);
 
 			*horLayout->layout = WidgetLayout::BothStretch();
-			horLayout->border = BorderF(20, 20, 20, 20);
-			horLayout->spacing = 20;
-			horLayout->AddChild(o2UI.CreateButton("Save"));
-			horLayout->AddChild(o2UI.CreateButton("Don't save"));
-			horLayout->AddChild(o2UI.CreateButton("Cancel"));
+			horLayout->border = BorderF(10, 10, 10, 10);
+			horLayout->spacing = 10;
+			horLayout->AddChild(o2UI.CreateButton("Save", [=]() {
+				o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
+				onCompleted();
+			}));
 
-			o2Debug.Log("Check saving scene");
+			horLayout->AddChild(o2UI.CreateButton("Don't save", onCompleted));
+
+			horLayout->AddChild(o2UI.CreateButton("Cancel", [=]() { wnd->Hide(); }));
+
 			return;
 		}
 
-		String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
+		onCompleted();
+	}
 
-		if (fileName.IsEmpty())
-			return;
+	void MenuPanel::OnNewScenePressed()
+	{
+		CheckSceneSaving([]() { o2EditorApplication.MakeNewScene(); });
+	}
 
+	void MenuPanel::OnOpenScenePressed()
+	{
+		auto openDialog = []() {
+			String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
 
-		o2EditorApplication.LoadScene(fileName);
+			if (fileName.IsEmpty())
+				return;
+
+			ForcePopEditorScopeOnStack scope;
+			o2EditorApplication.LoadScene(fileName); 
+		};
+
+		CheckSceneSaving(openDialog);
 	}
 
 	void MenuPanel::OnSaveScenePressed()
@@ -223,21 +228,6 @@ namespace Editor
 			fileName += ".scn";
 
 		o2EditorApplication.SaveScene(fileName);
-	}
-
-	void MenuPanel::OnNewProjectPressed()
-	{
-
-	}
-
-	void MenuPanel::OnOpenProjectPressed()
-	{
-
-	}
-
-	void MenuPanel::OnSaveProjectPressed()
-	{
-
 	}
 
 	void MenuPanel::OnExitPressed()

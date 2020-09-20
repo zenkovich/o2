@@ -126,7 +126,8 @@
       <Item Name="name" ExcludeView="simple">mName</Item>
       <Item Name="layout" ExcludeView="simple">layout</Item>
       <Item Name="enabled" ExcludeView="simple">mEnabled</Item>
-      <Item Name="layer" ExcludeView="simple">Actor::mLayer->mName</Item>
+      <Item Name="layer" ExcludeView="simple">Actor::mLayerName</Item>
+      <Item Name="layer ptr" ExcludeView="simple">Actor::mLayer</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
@@ -203,7 +204,6 @@
       <Item Name="res enabled" ExcludeView="simple">mResEnabled</Item>
       <Item Name="res alpha" ExcludeView="simple">mResTransparency</Item>
       <Item Name="override depth" ExcludeView="simple">mOverrideDepth</Item>
-      <Item Name="layer ptr" ExcludeView="simple">Actor::mLayer</Item>
       <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
       <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
 
@@ -290,12 +290,12 @@
       </Synthetic>
 
       <Item Name="locked" ExcludeView="simple">mLocked</Item>
-      <Item Name="layer" ExcludeView="simple">mLayer->mName</Item>
+      <Item Name="layer" ExcludeView="simple">mLayerName</Item>
+      <Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
       <Item Name="is on scene" ExcludeView="simple">mIsOnScene</Item>
       <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
       <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
-      <Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
 
     </Expand>
   </Type>

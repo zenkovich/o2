@@ -54,6 +54,9 @@ namespace Editor
 		o2::MenuPanel* mMenuPanel; // Menu panel
 
 	protected:
+		// Checks is scene was changed and shows confirm dialog
+		void CheckSceneSaving(const Function<void()>& onCompleted);
+
 		// On File/New scene pressed in menu
 		void OnNewScenePressed();
 
@@ -65,15 +68,6 @@ namespace Editor
 
 		// On File/Save scene as pressed in menu
 		void OnSaveSceneAsPressed();
-
-		// On File/New project pressed in menu
-		void OnNewProjectPressed();
-
-		// On File/Open project pressed in menu
-		void OnOpenProjectPressed();
-
-		// On File/Save project pressed in menu
-		void OnSaveProjectPressed();
 
 		// On File/Exit pressed in menu
 		void OnExitPressed();

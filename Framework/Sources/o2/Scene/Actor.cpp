@@ -293,6 +293,8 @@ namespace o2
 		if (mLayer && mResEnabledInHierarchy)
 			mLayer->OnActorDisabled(this);
 
+		mLayer = nullptr;
+
 		o2Scene.mRootActors.Remove(this);
 		o2Scene.mAllActors.Remove(this);
 
@@ -317,6 +319,8 @@ namespace o2
 
 		if (!mParent)
 			o2Scene.mRootActors.Add(this);
+
+		mLayer = o2Scene.GetLayer(mLayerName);
 
 		if (mLayer && mResEnabledInHierarchy)
 			mLayer->OnActorEnabled(this);
@@ -732,10 +736,13 @@ namespace o2
 				lastLayer->OnActorDisabled(this);
 		}
 
-		layer->RegisterActor(this);
+		if (layer)
+		{
+			layer->RegisterActor(this);
 
-		if (mResEnabledInHierarchy && mIsOnScene)
-			layer->OnActorEnabled(this);
+			if (mResEnabledInHierarchy && mIsOnScene)
+				layer->OnActorEnabled(this);
+		}
 
 		OnLayerChanged(lastLayer);
 		OnChanged();
@@ -743,7 +750,8 @@ namespace o2
 
 	void Actor::SetLayer(const String& layerName)
 	{
-		SetLayer(o2Scene.GetLayer(layerName));
+		mLayerName = layerName;
+		SetLayer(mIsOnScene ? o2Scene.GetLayer(layerName) : nullptr);
 	}
 
 	SceneLayer* Actor::GetLayer() const

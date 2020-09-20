@@ -35,10 +35,15 @@
 namespace Editor
 {
 	EditorApplication::EditorApplication()
-	{}
+	{
+		PushEditorScopeOnStack scope;
+		mListenersLayer = mnew CursorAreaEventListenersLayer();
+	}
 
 	EditorApplication::~EditorApplication()
-	{}
+	{
+		delete mListenersLayer;
+	}
 
 	const String& EditorApplication::GetLoadedSceneName() const
 	{
@@ -49,6 +54,7 @@ namespace Editor
 	{
 		mLoadedScene = name;
 		o2Scene.Load(name);
+		o2Scene.Update(0.0f);
 
 		ResetUndoActions();
 	}
@@ -103,7 +109,7 @@ namespace Editor
 
 	CursorAreaEventListenersLayer& EditorApplication::GetGameViewListenersLayer()
 	{
-		return mListenersLayer;
+		return *mListenersLayer;
 	}
 
 	void EditorApplication::OnStarted()

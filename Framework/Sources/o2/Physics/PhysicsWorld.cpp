@@ -94,7 +94,7 @@ namespace o2
 	void PhysicsDebugDraw::DrawCircle(const b2Vec2& center, float32 radius, const b2Color& color)
 	{
 		float scale = o2Config.physics.scale;
-		o2Render.DrawAACircle(Vec2F(center)*scale, radius*scale, color);
+		o2Render.DrawAACircle(Vec2F(center)*scale, radius*scale, Color4(color.r, color.g, color.b, o2Config.physics.debugDrawAlpha));
 	}
 
 	void PhysicsDebugDraw::DrawPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -108,19 +108,19 @@ namespace o2
 
 		points.Last() = Vec2F(vertices[0])*scale;
 
-		o2Render.DrawAALine(points, color);
+		o2Render.DrawAALine(points, Color4(color.r, color.g, color.b, o2Config.physics.debugDrawAlpha));
 	}
 
 	void PhysicsDebugDraw::DrawSegment(const b2Vec2& p1, const b2Vec2& p2, const b2Color& color)
 	{
 		float scale = o2Config.physics.scale;
-		o2Render.DrawAALine(Vec2F(p1)*scale, Vec2F(p2)*scale, color);
+		o2Render.DrawAALine(Vec2F(p1)*scale, Vec2F(p2)*scale, Color4(color.r, color.g, color.b, o2Config.physics.debugDrawAlpha));
 	}
 
 	void PhysicsDebugDraw::DrawSolidCircle(const b2Vec2& center, float32 radius, const b2Vec2& axis, const b2Color& color)
 	{
 		float scale = o2Config.physics.scale;
-		o2Render.DrawFilledCircle(Vec2F(center)*scale, radius*scale, color);
+		o2Render.DrawFilledCircle(Vec2F(center)*scale, radius*scale, Color4(color.r, color.g, color.b, o2Config.physics.debugDrawAlpha));
 	}
 
 	void PhysicsDebugDraw::DrawSolidPolygon(const b2Vec2* vertices, int32 vertexCount, const b2Color& color)
@@ -132,7 +132,7 @@ namespace o2
 		for (int i = 0; i < vertexCount; i++)
 			points[i] = Vec2F(vertices[i])*scale;
 
-		o2Render.DrawFilledPolygon(points, color);
+		o2Render.DrawFilledPolygon(points, Color4(color.r, color.g, color.b, o2Config.physics.debugDrawAlpha));
 	}
 
 	void PhysicsDebugDraw::DrawTransform(const b2Transform& xf)

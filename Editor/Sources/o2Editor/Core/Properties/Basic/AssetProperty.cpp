@@ -68,7 +68,7 @@ namespace Editor
 
 		if (!mValuesDifferent)
 		{
-			if (!mCommonValue || !o2Assets.IsAssetExist(mCommonValue->GetUID()))
+			if (!mCommonValue)
 			{
 				mNameText->text = "Null";
 				if (mAssetType)

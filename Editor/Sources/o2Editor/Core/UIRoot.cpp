@@ -12,6 +12,7 @@ namespace Editor
 	UIRoot::UIRoot()
 	{
 		mRootWidget = mnew Widget(ActorCreateMode::NotInScene);
+		mRootWidget->Actor::SetLayer(mnew SceneLayer());
 	}
 
 	UIRoot::~UIRoot()

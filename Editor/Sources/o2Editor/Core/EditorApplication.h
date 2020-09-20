@@ -78,7 +78,7 @@ namespace Editor
 
 		Properties* mProperties; // Properties manager
 
-		CursorAreaEventListenersLayer mListenersLayer; // Game view render target listeners layer
+		CursorAreaEventListenersLayer* mListenersLayer = nullptr; // Game view render target listeners layer
 
 		String mLoadedScene; // Current loaded scene
 

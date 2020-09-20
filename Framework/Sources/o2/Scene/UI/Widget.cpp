@@ -18,9 +18,6 @@ namespace o2
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
-		if (mIsOnScene && mLayer)
-			mLayer->RegisterDrawable(this);
-
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
 
@@ -31,9 +28,6 @@ namespace o2
 		Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
-
-		if (mIsOnScene && mLayer && !mOverrideDepth)
-			mLayer->RegisterDrawable(this);
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
@@ -46,9 +40,6 @@ namespace o2
 	{
 		SceneDrawable::mLayer = Actor::mLayer;
 		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
-
-		if (mIsOnScene && mLayer)
-			mLayer->RegisterDrawable(this);
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
@@ -103,8 +94,6 @@ namespace o2
 			AddState(newState, false);
 		}
 
-		if (mLayer && mDefaultCreationMode == ActorCreateMode::InScene)
-			mLayer->RegisterDrawable(this);
 
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
