@@ -98,15 +98,20 @@ namespace Editor
 
 	void TreeWindow::InitializeTestScene()
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		for (int i = 0; i < 10; i++)
 			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
+
+		auto editBox = o2UI.CreateWidget<EditBox>();
+		editBox->layout->size = Vec2F(100, 100);
 
 		// test actors
 		for (int i = 0; i < 0; i++)
 		{
 			Actor* actor = mnew Actor(ActorCreateMode::InScene);
 			actor->name = String::Format("Actor #%i", i + 1);
-			actor->layer = o2Scene.AddLayer(String::Format("Layer #%i", i + 1));
+			actor->SetLayer(String::Format("Layer #%i", i + 1));
 
 			for (int j = 0; j < 1; j++)
 			{

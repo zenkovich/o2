@@ -181,11 +181,14 @@ namespace o2
 	{
 		if (auto rigidBody = FindRigidBody())
 			rigidBody->AddCollider(this);
+
+		Component::OnAddToScene();
 	}
 
 	void ICollider::OnRemoveFromScene()
 	{
 		RemoveFromRigidBody();
+		Component::OnRemoveFromScene();
 	}
 
 }

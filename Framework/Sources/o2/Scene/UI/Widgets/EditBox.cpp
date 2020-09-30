@@ -64,7 +64,7 @@ namespace o2
 		for (auto layer : mDrawingLayers)
 			layer->Draw();
 
-		IDrawable::OnDrawn();
+		ISceneDrawable::OnDrawn();
 
 		o2Render.EnableScissorTest(mAbsoluteClipArea);
 
@@ -101,9 +101,6 @@ namespace o2
 			return;
 
 		UpdateCaretBlinking(dt);
-
-		if (mIsFocused && o2Input.IsCursorReleased() && !Widget::IsUnderPoint(o2Input.GetCursorPos()) && !mJustFocused)
-			Widget::Unfocus();
 
 		mJustFocused = false;
 	}
@@ -443,6 +440,12 @@ namespace o2
 
 		if (!Widget::IsUnderPoint(cursor.position))
 			o2Application.SetCursor(CursorType::Arrow);
+	}
+
+	void EditBox::OnCursorReleasedOutside(const Input::Cursor& cursor)
+	{
+		if (mIsFocused)
+			Unfocus();
 	}
 
 	void EditBox::OnCursorStillDown(const Input::Cursor& cursor)

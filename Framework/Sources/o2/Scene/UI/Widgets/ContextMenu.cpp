@@ -694,6 +694,8 @@ namespace o2
 
 	void ContextMenu::RebuildItems()
 	{
+		PushEditorScopeOnStack scope(IEventsListener::mIsEditorMode ? 1 : 0);
+
 		Vector<ContextMenuItem*> cache;
 
 		for (auto& item : mItems)
@@ -710,6 +712,8 @@ namespace o2
 				cache.Add(item);
 				mItemsLayout->RemoveChild(item, false);
 			}
+			else if (child->name == "Separator")
+				mItemsLayout->RemoveChild(child);
 		}
 
 		Map<WString, Vector<Item*>> groups;
@@ -743,8 +747,6 @@ namespace o2
 					}
 					else
 					{
-						PushEditorScopeOnStack scope(IEventsListener::mIsEditorMode ? 1 : 0);
-
 						ContextMenuItem* newItem = cache.IsEmpty() ? mItemSample->CloneAs<ContextMenuItem>() : cache.PopBack();
 						newItem->Setup(*item);
 						mItemsLayout->AddChild(newItem);

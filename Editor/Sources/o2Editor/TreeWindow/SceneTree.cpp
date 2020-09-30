@@ -62,8 +62,8 @@ namespace Editor
 	{
 		o2Scene.onObjectsChanged += THIS_FUNC(OnObjectsChanged);
 
-		o2Scene.onCreated += THIS_FUNC(OnObjectCreated);
-		o2Scene.onDestroying += THIS_FUNC(OnObjectDestroing);
+		o2Scene.onAddedToScene += THIS_FUNC(OnObjectCreated);
+		o2Scene.onRemovedFromScene += THIS_FUNC(OnObjectDestroing);
 
 		auto updateTreeNode = THIS_FUNC(OnObjectChanged);
 		o2Scene.onEnableChanged += updateTreeNode;
@@ -80,8 +80,8 @@ namespace Editor
 		{
 			o2Scene.onObjectsChanged -= THIS_FUNC(OnObjectsChanged);
 
-			o2Scene.onCreated -= THIS_FUNC(OnObjectCreated);
-			o2Scene.onDestroying -= THIS_FUNC(OnObjectDestroing);
+			o2Scene.onAddedToScene -= THIS_FUNC(OnObjectCreated);
+			o2Scene.onRemovedFromScene -= THIS_FUNC(OnObjectDestroing);
 
 			auto updateTreeNode = THIS_FUNC(OnObjectChanged);
 			o2Scene.onEnableChanged -= updateTreeNode;

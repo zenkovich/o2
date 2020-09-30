@@ -78,7 +78,9 @@ namespace o2
 					listener->OnCursorMiddleMousePressed(cursor);
 			}
 			else
+			{
 				ProcessKeyPressed(key);
+			}
 		}
 
 		for (const Input::Key& key : o2Input.GetDownKeys())
@@ -234,7 +236,7 @@ namespace o2
 		auto listeners = mKeyboardListeners;
 		for (auto listener : listeners)
 		{
-			if (listener->IsListeningEvents())
+			if (listener->mEnabledListeningEvents)
 				listener->OnKeyPressed(key);
 		}
 	}
@@ -244,7 +246,7 @@ namespace o2
 		auto listeners = mKeyboardListeners;
 		for (auto listener : listeners)
 		{
-			if (listener->IsListeningEvents())
+			if (listener->mEnabledListeningEvents)
 				listener->OnKeyStayDown(key);
 		}
 	}
@@ -254,7 +256,7 @@ namespace o2
 		auto listeners = mKeyboardListeners;
 		for (auto listener : listeners)
 		{
-			if (listener->IsListeningEvents())
+			if (listener->mEnabledListeningEvents)
 				listener->OnKeyReleased(key);
 		}
 	}

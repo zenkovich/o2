@@ -6,7 +6,7 @@
 namespace o2
 {
 	class Actor;
-	class SceneDrawable;
+	class ISceneDrawable;
 
 	// --------------------------------------------------------------------------------
 	// Scene layer. It contains Actors and their Drawable parts, managing sorting order
@@ -31,10 +31,10 @@ namespace o2
 		const Vector<Actor*>& GetEnabledActors() const;
 
 		// Returns all drawable objects of actors in layer
-		const Vector<SceneDrawable*>& GetDrawables() const;
+		const Vector<ISceneDrawable*>& GetDrawables() const;
 
 		// Returns enabled drawable objects of actors in layer
-		const Vector<SceneDrawable*>& GetEnabledDrawables() const;
+		const Vector<ISceneDrawable*>& GetEnabledDrawables() const;
 
 		SERIALIZABLE(SceneLayer);
 
@@ -44,8 +44,8 @@ namespace o2
 		Vector<Actor*>  mActors;        // Actors in layer
 		Vector<Actor*>  mEnabledActors; // Enabled actors
 
-		Vector<SceneDrawable*> mDrawables;        // Drawable objects in layer
-		Vector<SceneDrawable*> mEnabledDrawables; // Enabled drawable objects in layer
+		Vector<ISceneDrawable*> mDrawables;        // Drawable objects in layer
+		Vector<ISceneDrawable*> mEnabledDrawables; // Enabled drawable objects in layer
 
 	protected:
 		// Registers actor in list
@@ -61,28 +61,28 @@ namespace o2
 		void OnActorDisabled(Actor* actor);
 
 		// Registers drawable object
-		void RegisterDrawable(SceneDrawable* drawable);
+		void RegisterDrawable(ISceneDrawable* drawable);
 
 		// Unregisters drawable object
-		void UnregisterDrawable(SceneDrawable* drawable);
+		void UnregisterDrawable(ISceneDrawable* drawable);
 
 		// It is called when drawable object depth was changed and sorts all drawable component
-		void OnDrawableDepthChanged(SceneDrawable* drawable);
+		void OnDrawableDepthChanged(ISceneDrawable* drawable);
 
 		// It is called when object was enabled
-		void OnDrawableEnabled(SceneDrawable* drawable);
+		void OnDrawableEnabled(ISceneDrawable* drawable);
 
 		// It is called when object was enabled
-		void OnDrawableDisabled(SceneDrawable* drawable);
+		void OnDrawableDisabled(ISceneDrawable* drawable);
 
 		// Sets drawable order as last of all objects with same depth
-		void SetLastByDepth(SceneDrawable* drawable);
+		void SetLastByDepth(ISceneDrawable* drawable);
 
 		friend class Actor;
 		friend class CameraActor;
 		friend class DrawableComponent;
 		friend class Scene;
-		friend class SceneDrawable;
+		friend class ISceneDrawable;
 		friend class Widget;
 	};
 
@@ -125,17 +125,17 @@ CLASS_METHODS_META(o2::SceneLayer)
 	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(const Vector<Actor*>&, GetActors);
 	PUBLIC_FUNCTION(const Vector<Actor*>&, GetEnabledActors);
-	PUBLIC_FUNCTION(const Vector<SceneDrawable*>&, GetDrawables);
-	PUBLIC_FUNCTION(const Vector<SceneDrawable*>&, GetEnabledDrawables);
+	PUBLIC_FUNCTION(const Vector<ISceneDrawable*>&, GetDrawables);
+	PUBLIC_FUNCTION(const Vector<ISceneDrawable*>&, GetEnabledDrawables);
 	PROTECTED_FUNCTION(void, RegisterActor, Actor*);
 	PROTECTED_FUNCTION(void, UnregisterActor, Actor*);
 	PROTECTED_FUNCTION(void, OnActorEnabled, Actor*);
 	PROTECTED_FUNCTION(void, OnActorDisabled, Actor*);
-	PROTECTED_FUNCTION(void, RegisterDrawable, SceneDrawable*);
-	PROTECTED_FUNCTION(void, UnregisterDrawable, SceneDrawable*);
-	PROTECTED_FUNCTION(void, OnDrawableDepthChanged, SceneDrawable*);
-	PROTECTED_FUNCTION(void, OnDrawableEnabled, SceneDrawable*);
-	PROTECTED_FUNCTION(void, OnDrawableDisabled, SceneDrawable*);
-	PROTECTED_FUNCTION(void, SetLastByDepth, SceneDrawable*);
+	PROTECTED_FUNCTION(void, RegisterDrawable, ISceneDrawable*);
+	PROTECTED_FUNCTION(void, UnregisterDrawable, ISceneDrawable*);
+	PROTECTED_FUNCTION(void, OnDrawableDepthChanged, ISceneDrawable*);
+	PROTECTED_FUNCTION(void, OnDrawableEnabled, ISceneDrawable*);
+	PROTECTED_FUNCTION(void, OnDrawableDisabled, ISceneDrawable*);
+	PROTECTED_FUNCTION(void, SetLastByDepth, ISceneDrawable*);
 }
 END_META;

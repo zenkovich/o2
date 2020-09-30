@@ -13,7 +13,7 @@ namespace o2
 	{
 		if constexpr (IS_EDITOR)
 		{
-			Scene::RegEditableObject(this);
+			o2Scene.RegEditableObject(this);
 			o2Scene.OnObjectCreated(this);
 		}
 	}
@@ -31,7 +31,7 @@ namespace o2
 
 		if constexpr (IS_EDITOR)
 		{
-			Scene::RegEditableObject(this);
+			o2Scene.RegEditableObject(this);
 			o2Scene.OnObjectCreated(this);
 		}
 	}
@@ -40,7 +40,7 @@ namespace o2
 	{
 		if constexpr (IS_EDITOR)
 		{
-			Scene::UnregEditableObject(this);
+			o2Scene.UnregEditableObject(this);
 			o2Scene.OnObjectDestroyed(this);
 		}
 
@@ -427,7 +427,7 @@ namespace o2
 	void WidgetLayer::OnExcludeFromScene()
 	{
 		if constexpr (IS_EDITOR)
-			Scene::UnregEditableObject(this);
+			o2Scene.UnregEditableObject(this);
 
 		for (auto layer : mChildren)
 			layer->OnIncludeInScene();
@@ -471,7 +471,7 @@ namespace o2
 		}
 	}
 
-	String WidgetLayer::GetName() const
+	const String& WidgetLayer::GetName() const
 	{
 		return name;
 	}

@@ -36,7 +36,7 @@ namespace o2
 		mIsBullet = other.mIsBullet;
 		mIsFixedRotation = other.mIsFixedRotation;
 
-		if (mIsOnScene)
+		if (IsOnScene())
 			CreateBody();
 
 		return *this;
@@ -208,11 +208,13 @@ namespace o2
 	void RigidBody::OnAddToScene()
 	{
 		CreateBody();
+		Actor::OnAddToScene();
 	}
 
 	void RigidBody::OnRemoveFromScene()
 	{
 		RemoveBody();
+		Actor::OnRemoveFromScene();
 	}
 
 	void RigidBody::CreateBody()

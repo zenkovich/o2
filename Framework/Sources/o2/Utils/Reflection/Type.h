@@ -5,6 +5,7 @@
 #include "o2/Utils/Delegates.h"
 #include "o2/Utils/Reflection/Attributes.h"
 #include "o2/Utils/Reflection/TypeSerializer.h"
+#include "o2/Utils/Reflection/TypeTraits.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
@@ -157,6 +158,12 @@ namespace o2
 		// Dummy type container
 		// --------------------
 		struct Dummy { static Type* type; };
+
+		template<class T, class = void_t<>>
+		struct IsConstructible: std::false_type {};
+
+		template<class T>
+		struct IsConstructible<T, void_t<decltype(std::declval<T()>())>>: std::true_type {};
 
 	protected:
 		TypeId mId;   // Id of type
@@ -877,13 +884,25 @@ namespace o2
 	template<typename _type>
 	void* TObjectType<_type>::CreateSample() const
 	{
-		return mnew _type();
+		if constexpr (IsConstructible<_type>::value)
+			return mnew _type();
+		else
+		{
+			Assert(false, "Type isn't constructible");
+			return nullptr;
+		}
 	}
 
 	template<typename _type>
 	IAbstractValueProxy* TObjectType<_type>::GetValueProxy(void* object) const
 	{
-		return mnew PointerValueProxy<_type>((_type*)object);
+		if constexpr (std::is_copy_constructible<_type>::value)
+			return mnew PointerValueProxy<_type>((_type*)object);
+		else
+		{
+			Assert(false, "Type isn't copy constructible");
+			return nullptr;
+		}
 	}
 
 	template<typename _type>
@@ -922,7 +941,6 @@ namespace o2
 	template<typename _type>
 	IAbstractValueProxy* TPointerType<_type>::GetValueProxy(void* object) const
 	{
-		auto unptrProxy = dynamic_cast<IValueProxy<_type>*>(GetUnpointedType()->GetValueProxy(*(void**)object));
 		return mnew PointerValueProxy<_type*>((_type**)object);
 	}
 

@@ -2,7 +2,7 @@
 #include "SceneLayer.h"
 
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/Drawable.h"
+#include "o2/Scene/ISceneDrawable.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
@@ -33,12 +33,12 @@ namespace o2
 		return mEnabledActors;
 	}
 
-	const Vector<SceneDrawable*>& SceneLayer::GetDrawables() const
+	const Vector<ISceneDrawable*>& SceneLayer::GetDrawables() const
 	{
 		return mDrawables;
 	}
 
-	const Vector<SceneDrawable*>& SceneLayer::GetEnabledDrawables() const
+	const Vector<ISceneDrawable*>& SceneLayer::GetEnabledDrawables() const
 	{
 		return mEnabledDrawables;
 	}
@@ -63,25 +63,23 @@ namespace o2
 		mEnabledActors.Remove(actor);
 	}
 
-	void SceneLayer::RegisterDrawable(SceneDrawable* drawable)
+	void SceneLayer::RegisterDrawable(ISceneDrawable* drawable)
 	{
 		mDrawables.Add(drawable);
-		OnDrawableEnabled(drawable);
 	}
 
-	void SceneLayer::UnregisterDrawable(SceneDrawable* drawable)
+	void SceneLayer::UnregisterDrawable(ISceneDrawable* drawable)
 	{
-		OnDrawableDisabled(drawable);
 		mDrawables.Remove(drawable);
 	}
 
-	void SceneLayer::OnDrawableDepthChanged(SceneDrawable* drawable)
+	void SceneLayer::OnDrawableDepthChanged(ISceneDrawable* drawable)
 	{
 		OnDrawableDisabled(drawable);
 		OnDrawableEnabled(drawable);
 	}
 
-	void SceneLayer::OnDrawableEnabled(SceneDrawable* drawable)
+	void SceneLayer::OnDrawableEnabled(ISceneDrawable* drawable)
 	{
 		const int binSearchRangeSizeStop = 5;
 		int rangeMin = 0, rangeMax = mEnabledDrawables.Count();
@@ -117,12 +115,12 @@ namespace o2
 		mEnabledDrawables.Insert(drawable, position);
 	}
 
-	void SceneLayer::OnDrawableDisabled(SceneDrawable* drawable)
+	void SceneLayer::OnDrawableDisabled(ISceneDrawable* drawable)
 	{
 		mEnabledDrawables.Remove(drawable);
 	}
 
-	void SceneLayer::SetLastByDepth(SceneDrawable* drawable)
+	void SceneLayer::SetLastByDepth(ISceneDrawable* drawable)
 	{
 		OnDrawableDisabled(drawable);
 

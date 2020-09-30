@@ -144,6 +144,11 @@ namespace o2
 		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
 	}
 
+	void WidgetState::OnDeserialized(const DataValue& node)
+	{
+		player.SetClip(mAnimation ? &mAnimation->animation : nullptr);
+	}
+
 	WidgetState& WidgetState::operator=(bool state)
 	{
 		SetState(state);

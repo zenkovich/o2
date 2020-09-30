@@ -33,7 +33,7 @@ namespace o2
 		virtual void GenerateNewID(bool childs = true);
 
 		// Returns name of object
-		virtual String GetName() const;
+		virtual const String& GetName() const;
 
 		// Sets name of object
 		virtual void SetName(const String& name);
@@ -145,7 +145,7 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
-	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);

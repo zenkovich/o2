@@ -15,9 +15,6 @@ namespace o2
 	Widget::Widget(ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew WidgetLayout(), mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
-		SceneDrawable::mLayer = Actor::mLayer;
-		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
-
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
 
@@ -27,8 +24,6 @@ namespace o2
 	Widget::Widget(const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew WidgetLayout(), prototype, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
-		SceneDrawable::mLayer = Actor::mLayer;
-
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
 
@@ -38,9 +33,6 @@ namespace o2
 	Widget::Widget(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(mnew WidgetLayout(), components, mode), layout(dynamic_cast<WidgetLayout*>(transform))
 	{
-		SceneDrawable::mLayer = Actor::mLayer;
-		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
-
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
 
@@ -52,8 +44,6 @@ namespace o2
 		mTransparency(other.mTransparency), transparency(this), resTransparency(this),
 		childrenWidgets(this), layers(this), states(this), childWidget(this), layer(this), state(this)
 	{
-		SceneDrawable::mLayer = Actor::mLayer;
-		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 		layout->SetOwner(this);
 
 		for (auto layer : other.mLayers)
@@ -94,7 +84,6 @@ namespace o2
 			AddState(newState, false);
 		}
 
-
 		if (IsFocusable() && UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Add(this);
 
@@ -125,11 +114,11 @@ namespace o2
 			delete child;
 		}
 
-		if (mLayer && mIsOnScene)
-			mLayer->UnregisterDrawable(this);
-
 		if (UIManager::IsSingletonInitialzed())
 			o2UI.mFocusableWidgets.Remove(this);
+
+		if (IsOnScene())
+			ISceneDrawable::OnRemoveFromScene();
 	}
 
 	Widget& Widget::operator=(const Widget& other)
@@ -279,6 +268,16 @@ namespace o2
 		onLayoutUpdated();
 	}
 
+	SceneLayer* Widget::GetSceneDrawableSceneLayer() const
+	{
+		return mLayer;
+	}
+
+	bool Widget::IsSceneDrawableEnabled() const
+	{
+		return mResEnabledInHierarchy;
+	}
+
 	void Widget::OnFocused()
 	{
 		onFocused();
@@ -321,7 +320,8 @@ namespace o2
 
 		if constexpr (IS_EDITOR)
 		{
-			if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene()) {
+			if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
+			{
 				o2Scene.OnObjectChanged(&layersEditable);
 				o2Scene.onChildrenHierarchyChanged(&layersEditable);
 			}
@@ -570,22 +570,21 @@ namespace o2
 
 		mOverrideDepth = overrideDepth;
 
-		if (mLayer)
+		if (mOverrideDepth)
 		{
-			if (mOverrideDepth)
-			{
-				mLayer->RegisterDrawable(this);
+			AddToScene();
+			mLayer = o2Scene.GetLayer(mLayerName);
 
-				if (mParentWidget)
-					mParentWidget->mDrawingChildren.Remove(this);
-			}
-			else
-			{
-				mLayer->UnregisterDrawable(this);
+			if (mParentWidget)
+				mParentWidget->mDrawingChildren.Remove(this);
+		}
+		else
+		{
+			mLayer->UnregisterDrawable(this);
+			RemoveFromScene();
 
-				if (mParentWidget)
-					mParentWidget->mDrawingChildren.Add(this);
-			}
+			if (mParentWidget)
+				mParentWidget->mDrawingChildren.Add(this);
 		}
 	}
 
@@ -974,34 +973,32 @@ namespace o2
 	void Widget::OnChildRemoved(Widget* child)
 	{}
 
-	void Widget::OnLayerChanged(SceneLayer* oldLayer)
-	{
-		SceneDrawable::SetLayer(mLayer);
-	}
-
 	void Widget::OnRemoveFromScene()
 	{
-		for (auto child : mInternalWidgets)
-			child->RemoveFromScene();
+		Actor::OnRemoveFromScene();
+		ISceneDrawable::OnRemoveFromScene();
 
-		for (auto layer : mLayers)
-			layer->OnExcludeFromScene();
-
-		SceneDrawable::OnRemoveFromScene();
-		
 		if constexpr (IS_EDITOR)
 		{
 			o2Scene.mEditableObjects.Remove(&layersEditable);
 			o2Scene.mEditableObjects.Remove(&internalChildrenEditable);
 		}
+
+		for (auto layer : mLayers)
+			layer->OnExcludeFromScene();
+
+		for (auto child : mInternalWidgets)
+			child->OnRemoveFromScene();
+
 	}
 
 	void Widget::OnAddToScene()
 	{
-		SceneDrawable::OnAddToScene();
+		Actor::OnAddToScene();
+		ISceneDrawable::OnAddToScene();
 
 		for (auto child : mInternalWidgets)
-			child->AddToScene();
+			child->OnAddToScene();
 
 		for (auto layer : mLayers)
 			layer->OnIncludeInScene();
@@ -1041,9 +1038,6 @@ namespace o2
 	void Widget::OnDeserialized(const DataValue& node)
 	{
 		Actor::OnDeserialized(node);
-
-		SceneDrawable::mLayer = Actor::mLayer;
-		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		for (auto layer : mLayers)
 			layer->SetOwnerWidget(this);
@@ -1143,15 +1137,21 @@ namespace o2
 			{
 				onShow();
 
-				if (mLayer)
-					mLayer->RegisterActor(this);
+				if (mLayer && mSceneStatus == Actor::SceneStatus::InScene)
+				{
+					mLayer->OnActorEnabled(this);
+					ISceneDrawable::OnEnabled();
+				}
 			}
 			else
 			{
 				onHide();
 
-				if (mLayer)
-					mLayer->UnregisterActor(this);
+				if (mLayer && mSceneStatus == Actor::SceneStatus::InScene)
+				{
+					mLayer->OnActorDisabled(this);
+					ISceneDrawable::OnDisabled();
+				}
 			}
 
 			layout->SetDirty(false);
@@ -1199,9 +1199,6 @@ namespace o2
 		mStates.Clear();
 		mVisibleState = nullptr;
 		mFocusedState = nullptr;
-
-		SceneDrawable::mLayer = Actor::mLayer;
-		SceneDrawable::mIsOnScene = Actor::mIsOnScene;
 
 		layout->CopyFrom(*other.layout);
 		mTransparency = other.mTransparency;
@@ -1420,9 +1417,10 @@ namespace o2
 		mUID = Math::Random();
 	}
 
-	String Widget::LayersEditable::GetName() const
+	const String& Widget::LayersEditable::GetName() const
 	{
-		return "layers";
+		static String name = "layers";
+		return name;
 	}
 
 	void Widget::LayersEditable::SetName(const String& name)
@@ -1477,9 +1475,10 @@ namespace o2
 		mUID = Math::Random();
 	}
 
-	String Widget::InternalChildrenEditableEditable::GetName() const
+	const String& Widget::InternalChildrenEditableEditable::GetName() const
 	{
-		return "internal children";
+		static String name = "internal children";
+		return name;
 	}
 
 	void Widget::InternalChildrenEditableEditable::SetName(const String& name)

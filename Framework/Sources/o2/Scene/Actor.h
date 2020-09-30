@@ -33,13 +33,15 @@ namespace o2
 	class Actor : virtual public ActorBase
 	{
 	public:
+		enum class SceneStatus { InScene, NotInScene, WaitingAddToScene };
+
+	public:
 		PROPERTIES(Actor);
 		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
 
 		GETTER(SceneUID, id, GetID);              // Actor unique id
 		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(SceneLayer*, layer, SetLayer, GetLayer);    // Layer property @EDITOR_IGNORE
 		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE @ANIMATABLE
 
 		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
@@ -110,7 +112,7 @@ namespace o2
 		void SetName(const String& name);
 
 		// Returns name
-		String GetName() const;
+		const String& GetName() const;
 
 		// Returns actor's unique id
 		SceneUID GetID() const;
@@ -119,7 +121,7 @@ namespace o2
 		void SetID(SceneUID id);
 
 		// Generates new random id 
-		void GenerateNewID(bool childs = true);
+		void GenerateNewID(bool withChildren = true);
 
 		// Returns asset id
 		UID GetAssetID() const;
@@ -241,10 +243,7 @@ namespace o2
 		Vector<_type*> GetComponentsInChildren() const;
 
 		// Returns all components
-		Vector<Component*> GetComponents() const;
-
-		// Sets layer
-		void SetLayer(SceneLayer* layer);
+		const Vector<Component*>& GetComponents() const;
 
 		// Sets layer by name
 		void SetLayer(const String& layerName);
@@ -392,7 +391,7 @@ namespace o2
 		bool mResEnabled = true;            // Is actor really enabled. 
 		bool mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
 
-		bool mIsOnScene = true; // Is actor on scene
+		SceneStatus mSceneStatus = SceneStatus::NotInScene; // Actor on scene status
 
 		bool mIsAsset = false; // Is this actor cached asset
 		UID  mAssetId;         // Source asset id
@@ -409,9 +408,10 @@ namespace o2
 
 	protected:
 		// Base actor constructor with transform
-		Actor(ActorTransform* transform, bool isOnScene = true, const String& name = "unnamed", bool enabled = true,
-			  bool resEnabled = true, bool locked = false, bool resLocked = false, const String& layerName = "",
-			  SceneLayer* layer = nullptr, SceneUID id = Math::Random(), UID assetId = UID(0));
+		Actor(ActorTransform* transform, SceneStatus sceneStatus = SceneStatus::WaitingAddToScene, 
+			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, bool locked = false,
+			  bool resLocked = false, const String& layerName = "", SceneLayer* layer = nullptr, 
+			  SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
 		Actor(ActorTransform* transform, ActorCreateMode mode = ActorCreateMode::Default);
@@ -605,7 +605,7 @@ namespace o2
 		friend class ActorTransform;
 		friend class Component;
 		friend class DrawableComponent;
-		friend class SceneDrawable;
+		friend class ISceneDrawable;
 		friend class Scene;
 		friend class SceneLayer;
 		friend class Tag;
@@ -714,6 +714,8 @@ namespace o2
 
 }
 
+PRE_ENUM_META(o2::Actor::SceneStatus);
+
 CLASS_BASES_META(o2::Actor)
 {
 	BASE_CLASS(o2::SceneEditableObject);
@@ -724,7 +726,6 @@ CLASS_FIELDS_META(o2::Actor)
 	PUBLIC_FIELD(prototype).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(id);
 	PUBLIC_FIELD(name).ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE();
-	PUBLIC_FIELD(layer).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(layerName).ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(enabled).ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(enabledInHierarchy);
@@ -752,7 +753,7 @@ CLASS_FIELDS_META(o2::Actor)
 	PROTECTED_FIELD(mEnabled).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mResEnabled).DEFAULT_VALUE(true);
 	PROTECTED_FIELD(mResEnabledInHierarchy).DEFAULT_VALUE(true);
-	PROTECTED_FIELD(mIsOnScene).DEFAULT_VALUE(true);
+	PROTECTED_FIELD(mSceneStatus).DEFAULT_VALUE(SceneStatus::NotInScene);
 	PROTECTED_FIELD(mIsAsset).DEFAULT_VALUE(false);
 	PROTECTED_FIELD(mAssetId);
 	PROTECTED_FIELD(mReferences);
@@ -784,7 +785,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(void, UpdateChildrenTransforms);
 	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, SetID, SceneUID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
@@ -817,8 +818,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Component*, GetComponent, const String&);
 	PUBLIC_FUNCTION(Component*, GetComponent, const Type*);
 	PUBLIC_FUNCTION(Component*, GetComponent, SceneUID);
-	PUBLIC_FUNCTION(Vector<Component*>, GetComponents);
-	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
+	PUBLIC_FUNCTION(const Vector<Component*>&, GetComponents);
 	PUBLIC_FUNCTION(void, SetLayer, const String&);
 	PUBLIC_FUNCTION(SceneLayer*, GetLayer);
 	PUBLIC_FUNCTION(String, GetLayerName);

@@ -299,9 +299,6 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h">
       <Filter>Sources\o2\Scene\Components</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Scene\Drawable.h">
-      <Filter>Sources\o2\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h">
       <Filter>Sources\o2\Scene</Filter>
     </ClInclude>
@@ -680,6 +677,9 @@
     <ClInclude Include="..\..\Sources\o2\Config\PhysicsConfig.h">
       <Filter>Sources\o2\Config</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ISceneDrawable.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
@@ -918,9 +918,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp">
       <Filter>Sources\o2\Scene\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Scene\Drawable.cpp">
-      <Filter>Sources\o2\Scene</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp">
       <Filter>Sources\o2\Scene</Filter>
@@ -1191,6 +1188,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Config\PhysicsConfig.cpp">
       <Filter>Sources\o2\Config</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\ISceneDrawable.cpp">
+      <Filter>Sources\o2\Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

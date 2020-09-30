@@ -2,7 +2,7 @@
 
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/Drawable.h"
+#include "o2/Scene/ISceneDrawable.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
 #include "o2/Utils/Editor/Attributes/DefaultTypeAttribute.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
@@ -22,12 +22,12 @@ namespace o2
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class Widget : public Actor, public SceneDrawable
+	class Widget : public Actor, public ISceneDrawable
 	{
 	public:
 		PROPERTIES(Widget);
 
-		PROPERTY(bool, enabledForcibly, SetEnableForcible, IsEnabled); // Enable propertu, works forcibly @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(bool, enabledForcibly, SetEnableForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE
 
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency @EDITOR_IGNORE @ANIMATABLE
@@ -256,7 +256,7 @@ namespace o2
 
 	protected:
 		using Actor::mLayer;
-		using Actor::mIsOnScene;
+		using Actor::mSceneStatus;
 
 		Vector<WidgetLayer*> mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 		Vector<WidgetState*> mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
@@ -307,14 +307,17 @@ namespace o2
 		// It is called when child actor was removed
 		void OnChildRemoved(Actor* child) override;
 
-		// It is called when layer was changed
-		void OnLayerChanged(SceneLayer* oldLayer) override;
-
 		// It is called when actor excluding from scene, removes this from layer drawables
 		void OnRemoveFromScene() override;
 
 		// It is called when actor including from scene, including this to layer drawables
 		void OnAddToScene() override;
+
+		// Returns current scene layer
+		SceneLayer* GetSceneDrawableSceneLayer() const override;
+
+		// Returns is drawable enabled
+		bool IsSceneDrawableEnabled() const override;
 
 		// Updates child widgets list
 		void UpdateChildWidgetsList();
@@ -473,7 +476,7 @@ namespace o2
 
 
 			// Returns name of object
-			String GetName() const override;
+			const String& GetName() const override;
 
 			// Sets name of object
 			void SetName(const String& name) override;
@@ -528,7 +531,7 @@ namespace o2
 
 
 			// Returns name of object
-			String GetName() const override;
+			const String& GetName() const override;
 
 			// Sets name of object
 			void SetName(const String& name) override;
@@ -698,7 +701,7 @@ namespace o2
 CLASS_BASES_META(o2::Widget)
 {
 	BASE_CLASS(o2::Actor);
-	BASE_CLASS(o2::SceneDrawable);
+	BASE_CLASS(o2::ISceneDrawable);
 }
 END_META;
 CLASS_FIELDS_META(o2::Widget)
@@ -808,9 +811,10 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Actor*);
-	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
+	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);
 	PROTECTED_FUNCTION(void, UpdateChildWidgetsList);
 	PROTECTED_FUNCTION(WidgetLayoutData&, GetLayoutData);
 	PROTECTED_FUNCTION(const WidgetLayoutData&, GetLayoutData);
@@ -877,7 +881,7 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
-	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
@@ -905,7 +909,7 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
-	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);

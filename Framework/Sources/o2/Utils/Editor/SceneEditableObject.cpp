@@ -29,9 +29,9 @@ namespace o2
 	void SceneEditableObject::GenerateNewID(bool childs /*= true*/)
 	{ }
 
-	String SceneEditableObject::GetName() const
+	const String& SceneEditableObject::GetName() const
 	{
-		return String();
+		return String::empty;
 	}
 
 	void SceneEditableObject::SetName(const String& name)

@@ -54,19 +54,13 @@ namespace o2
 	void Scene::UpdateAddedEntities()
 	{
 		auto addedActors = mAddedActors;
-		auto addedComponents = mAddedComponents;
 
 		mStartActors = mAddedActors;
-		mStartComponents = mAddedComponents;
 
 		mAddedActors.Clear();
-		mAddedComponents.Clear();
 
 		for (auto actor : addedActors)
-			actor->OnAddToScene();
-
-		for (auto comp : addedComponents)
-			comp->OnAddToScene();
+			AddActorToScene(actor);
 	}
 
 	void Scene::UpdateStartingEntities()
@@ -101,7 +95,12 @@ namespace o2
 
 	void Scene::DestroyActor(Actor* actor)
 	{
-		Instance().mDestroyActors.Add(actor);
+		mDestroyActors.Add(actor);
+	}
+
+	void Scene::AddActorToSceneDeferred(Actor* actor)
+	{
+		mAddedActors.Add(actor);
 	}
 
 	void Scene::UpdateActors(float dt)
@@ -204,36 +203,37 @@ namespace o2
 		o2Debug.DrawText(((Vec2F)o2Render.GetResolution().InvertedX())*0.5f, debugInfo);
 	}
 
-	void Scene::OnActorCreated(Actor* actor, bool isOnScene)
+	void Scene::AddActorToScene(Actor* actor)
 	{
-		if (!IsSingletonInitialzed())
-			return;
+		if (!actor->mParent)
+			mRootActors.Add(actor);
 
-		if (isOnScene)
-		{
-			Instance().mRootActors.Add(actor);
-			Instance().mAllActors.Add(actor);
-
-			Instance().mAddedActors.Add(actor);
-
-			if constexpr (IS_EDITOR)
-				RegEditableObject(actor);
-		}
+		mAllActors.Add(actor);
+		actor->OnAddToScene();
 
 		if constexpr (IS_EDITOR)
-			OnObjectCreated(actor);
+		{
+			mChangedObjects.Add(actor);
+			RegEditableObject(actor);
+			onAddedToScene(actor);
+		}
 	}
 
-	void Scene::OnActorDestroying(Actor* actor)
+	void Scene::RemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
 	{
-		if (!IsSingletonInitialzed())
-			return;
+		if (!actor->mParent)
+		mRootActors.Remove(actor);
 
-		Instance().mRootActors.Remove(actor);
-		Instance().mAllActors.Remove(actor);
+		mAllActors.Remove(actor);
+
+		mStartActors.Remove(actor);
+		mAddedActors.Remove(actor);
 
 		if constexpr (IS_EDITOR)
 		{
+			if (!keepEditorObjects)
+				UnregEditableObject(actor);
+
 			OnObjectDestroyed(actor);
 			OnActorPrototypeBroken(actor);
 		}
@@ -241,30 +241,30 @@ namespace o2
 
 	void Scene::OnComponentAdded(Component* component)
 	{
-		Instance().mAddedComponents.Add(component);
+		mStartComponents.Add(component);
 	}
 
 	void Scene::OnComponentRemoved(Component* component)
 	{
-
+		mStartComponents.Remove(component);
 	}
 
 	void Scene::OnLayerRenamed(SceneLayer* layer, const String& oldName)
 	{
-		Instance().mLayersMap.Remove(oldName);
-		Instance().mLayersMap[layer->GetName()] = layer;
+		mLayersMap.Remove(oldName);
+		mLayersMap[layer->GetName()] = layer;
 
-		Instance().onLayersListChanged();
+		onLayersListChanged();
 	}
 
 	void Scene::OnCameraAddedOnScene(CameraActor* camera)
 	{
-		Instance().mCameras.Add(camera);
+		mCameras.Add(camera);
 	}
 
 	void Scene::OnCameraRemovedScene(CameraActor* camera)
 	{
-		Instance().mCameras.Remove(camera);
+		mCameras.Remove(camera);
 	}
 
 	bool Scene::HasLayer(const String& name) const
@@ -296,7 +296,7 @@ namespace o2
 		newLayer->mName = name;
 		mLayers.Add(newLayer);
 		mLayersMap[name] = newLayer;
-		
+
 		onLayersListChanged();
 
 		return newLayer;
@@ -507,6 +507,7 @@ namespace o2
 		}
 
 		mRootActors = doc.GetMember("Actors");
+		mRootActors.Clear();
 
 		ActorDataValueConverter::Instance().UnlockPointersResolving();
 		ActorDataValueConverter::Instance().ResolvePointers();
@@ -549,14 +550,13 @@ namespace o2
 
 	void Scene::RegEditableObject(SceneEditableObject* object)
 	{
-		if (IsSingletonInitialzed())
-			Instance().mEditableObjects.Add(object);
+		mEditableObjects.Add(object);
 	}
 
 	void Scene::UnregEditableObject(SceneEditableObject* object)
 	{
-		if (IsSingletonInitialzed())
-			Instance().mEditableObjects.Remove(object);
+		mChangedObjects.Remove(object);
+		mEditableObjects.Remove(object);
 	}
 
 	const Vector<SceneEditableObject*>& Scene::GetAllEditableObjects()
@@ -686,38 +686,25 @@ namespace o2
 
 	void Scene::OnObjectCreated(SceneEditableObject* object)
 	{
-		if (!IsSingletonInitialzed())
-			return;
-
-		Instance().onCreated(object);
+		onAddedToScene(object);
 		OnObjectChanged(object);
 	}
 
 	void Scene::OnObjectDestroyed(SceneEditableObject* object)
 	{
-		if (!IsSingletonInitialzed())
-			return;
-
-		Instance().onDestroying(object);
-		UnregEditableObject(object);
+		onRemovedFromScene(object);
 		OnObjectChanged(nullptr);
 	}
 
 	void Scene::OnObjectChanged(SceneEditableObject* object)
 	{
-		if (!IsSingletonInitialzed())
-			return;
-
-		Instance().mChangedObjects.Add(object);
+		mChangedObjects.Add(object);
 	}
 
 	void Scene::OnObjectDrawn(SceneEditableObject* object)
 	{
-		if (!IsSingletonInitialzed())
-			return;
-
-		if (Instance().mIsDrawingScene)
-			Instance().mDrawnObjects.Add(object);
+		if (mIsDrawingScene)
+			mDrawnObjects.Add(object);
 	}
 
 	void Scene::OnActorWithPrototypeCreated(Actor* actor)
@@ -728,27 +715,21 @@ namespace o2
 
 	void Scene::OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor)
 	{
-		if (!IsSingletonInitialzed())
-			return;
+		if (!mPrototypeLinksCache.ContainsKey(assetRef))
+			mPrototypeLinksCache.Add(assetRef, Vector<Actor*>());
 
-		if (!Instance().mPrototypeLinksCache.ContainsKey(assetRef))
-			Instance().mPrototypeLinksCache.Add(assetRef, Vector<Actor*>());
-
-		Instance().mPrototypeLinksCache[assetRef].Add(actor);
+		mPrototypeLinksCache[assetRef].Add(actor);
 	}
 
 	void Scene::OnActorPrototypeBroken(Actor* actor)
 	{
-		if (!IsSingletonInitialzed())
-			return;
-
-		for (auto& it = Instance().mPrototypeLinksCache.Begin(); it != Instance().mPrototypeLinksCache.End();)
+		for (auto& it = mPrototypeLinksCache.Begin(); it != mPrototypeLinksCache.End();)
 		{
 			it->second.Remove(actor);
 			if (it->second.IsEmpty())
 			{
-				Instance().mPrototypeLinksCache.Remove(it->first);
-				it = Instance().mPrototypeLinksCache.Begin();
+				mPrototypeLinksCache.Remove(it->first);
+				it = mPrototypeLinksCache.Begin();
 			}
 			else it++;
 		}

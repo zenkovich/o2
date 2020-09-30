@@ -1,14 +1,14 @@
 #pragma once
 
 #include "o2/Scene/Component.h"
-#include "o2/Scene/Drawable.h"
+#include "o2/Scene/ISceneDrawable.h"
 
 namespace o2
 {
 	// ------------------
 	// Drawable component
 	// ------------------
-	class DrawableComponent: public Component, virtual public SceneDrawable
+	class DrawableComponent: public Component, public ISceneDrawable
 	{
 	public:
 		// Default constructor. Registers in scene as drawable object
@@ -20,7 +20,7 @@ namespace o2
 		// Copy operator
 		DrawableComponent& operator=(const DrawableComponent& other);
 
-		// Sets drawing depth. Components with higher depth will be drawn later
+		// Sets drawing depth. Objects with higher depth will be drawn later
 		void SetDrawingDepth(float depth) override;
 
 		SERIALIZABLE(DrawableComponent);
@@ -28,11 +28,18 @@ namespace o2
 	protected:
 		using Component::mOwner;
 
+	protected:
 		// Updates component enable
 		void UpdateEnabled();
 
 		// Sets owner actor
 		void SetOwnerActor(Actor* actor) override;
+
+		// Returns current scene layer
+		SceneLayer* GetSceneDrawableSceneLayer() const override;
+
+		// Returns is drawable enabled
+		bool IsSceneDrawableEnabled() const override;
 
 		friend class Scene;
 
@@ -47,7 +54,7 @@ namespace o2
 CLASS_BASES_META(o2::DrawableComponent)
 {
 	BASE_CLASS(o2::Component);
-	BASE_CLASS(o2::SceneDrawable);
+	BASE_CLASS(o2::ISceneDrawable);
 }
 END_META;
 CLASS_FIELDS_META(o2::DrawableComponent)
@@ -60,6 +67,8 @@ CLASS_METHODS_META(o2::DrawableComponent)
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
+	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
+	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
 }
 END_META;

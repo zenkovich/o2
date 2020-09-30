@@ -115,18 +115,18 @@ namespace o2
 
 	void CursorAreaEventListenersLayer::UnregCursorAreaListener(CursorAreaEventsListener* listener)
 	{
-		cursorEventAreaListeners.Remove(listener);
-		mRightButtonPressedListeners.Remove(listener);
-		mMiddleButtonPressedListeners.Remove(listener);
+		cursorEventAreaListeners.RemoveAll([&](auto x) { return x == listener; });
+		mRightButtonPressedListeners.RemoveAll([&](auto x) { return x == listener; });
+		mMiddleButtonPressedListeners.RemoveAll([&](auto x) { return x == listener; });
 
 		for (auto& kv : mPressedListeners)
-			kv.second.Remove(listener);
+			kv.second.RemoveAll([&](auto x) { return x == listener; });
 
 		for (auto& kv : mUnderCursorListeners)
-			kv.second.Remove(listener);
+			kv.second.RemoveAll([&](auto x) { return x == listener; });
 
 		for (auto& kv : mLastUnderCursorListeners)
-			kv.second.Remove(listener);
+			kv.second.RemoveAll([&](auto x) { return x == listener; });
 	}
 
 	void CursorAreaEventListenersLayer::UnregDragListener(DragableObject* listener)

@@ -120,19 +120,18 @@ namespace Editor
 
 		if (mTargetObjects.IsEmpty())
 			return;
-
-		if (!IsExpanded())
-			return;
 		
 		mIsRefreshing = true;
 
-		for (auto& pair : mTargetObjects) 
+		if (IsExpanded())
 		{
-			pair.first.Refresh();
-			pair.second.Refresh();
+			for (auto& pair : mTargetObjects)
+			{
+				pair.first.Refresh();
+				pair.second.Refresh();
+			}
 		}
 
-		auto lastCount = mCountOfElements;
 		auto lastDifferent = mCountDifferents;
 
 		mCountOfElements = mVectorType->GetObjectVectorSize(mTargetObjects[0].first.data);
@@ -154,88 +153,97 @@ namespace Editor
 			{
 				mCountProperty->SetUnknownValue();
 
-				for (auto prop : mValueProperties)
+				if (IsExpanded())
 				{
-					mSpoiler->RemoveChild(prop, false);
-					FreeValueProperty(prop);
+					for (auto prop : mValueProperties)
+					{
+						mSpoiler->RemoveChild(prop, false);
+						FreeValueProperty(prop);
+					}
+
+					mValueProperties.Clear();
+
+					mAddButton->Hide(true);
+
+					onChanged(this);
+					o2EditorSceneScreen.OnSceneChanged();
+				}
+			}
+		}
+		else if (lastDifferent || mValueProperties.Count() != mCountOfElements)
+		{
+			mCountProperty->SetValue(mCountOfElements);
+
+			if (IsExpanded())
+			{
+				int i = 0;
+				for (; i < mCountOfElements; i++)
+				{
+					auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+						[&](const Pair<TargetObjectData, TargetObjectData>& x)
+					{
+						return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+							mVectorType->GetObjectVectorElementProxy(x.first.data, i),
+							x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
+					});
+
+					IPropertyField* propertyDef;
+					if (i < mValueProperties.Count())
+						propertyDef = mValueProperties[i];
+					else
+					{
+						propertyDef = GetFreeValueProperty();
+						mValueProperties.Add(propertyDef);
+					}
+
+					mSpoiler->AddChild(propertyDef);
+					propertyDef->SetCaption((String)"# " + (String)i);
+					propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
+					propertyDef->SetValuePath((String)i);
+					propertyDef->GetRemoveButton()->onClick = [=]() { Remove(i); };
+					UpdateElementCaption(propertyDef);
+
+					propertyDef->onChangeCompleted =
+						[&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
+					{
+						OnPropertyChanged(mValuesPath + "/" + path, before, after);
+					};
 				}
 
-				mValueProperties.Clear();
+				for (; i < mValueProperties.Count(); i++)
+				{
+					mSpoiler->RemoveChild(mValueProperties[i], false);
+					FreeValueProperty(mValueProperties[i]);
+				}
 
-				mAddButton->Hide(true);
+				mValueProperties.Resize(mCountOfElements);
+
+				mAddButton->Show(true);
+
+				mSpoiler->SetLayoutDirty();
 
 				onChanged(this);
 				o2EditorSceneScreen.OnSceneChanged();
 			}
 		}
-		else if (lastDifferent || lastCount != mCountOfElements)
-		{
-			mCountProperty->SetValue(mCountOfElements);
-
-			int i = 0;
-			for (; i < mCountOfElements; i++)
-			{
-				auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-					[&](const Pair<TargetObjectData, TargetObjectData>& x)
-				{
-					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mVectorType->GetObjectVectorElementProxy(x.first.data, i),
-						x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
-				});
-
-				IPropertyField* propertyDef;
-				if (i < mValueProperties.Count())
-					propertyDef = mValueProperties[i];
-				else
-				{
-					propertyDef = GetFreeValueProperty();
-					mValueProperties.Add(propertyDef);
-				}
-
-				mSpoiler->AddChild(propertyDef);
-				propertyDef->SetCaption((String)"# " + (String)i);
-				propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
-				propertyDef->SetValuePath((String)i);
-				propertyDef->GetRemoveButton()->onClick = [=]() { Remove(i); };
-				UpdateElementCaption(propertyDef);
-
-				propertyDef->onChangeCompleted =
-					[&](const String& path, const Vector<DataDocument>& before, const Vector<DataDocument>& after)
-				{
-					OnPropertyChanged(mValuesPath + "/" + path, before, after);
-				};
-			}
-
-			for (; i < mValueProperties.Count(); i++)
-			{
-				mSpoiler->RemoveChild(mValueProperties[i], false);
-				FreeValueProperty(mValueProperties[i]);
-			}
-
-			mValueProperties.Resize(mCountOfElements);
-
-			mAddButton->Show(true);
-
-			mSpoiler->SetLayoutDirty();
-
-			onChanged(this);
-			o2EditorSceneScreen.OnSceneChanged();
-		}
 		else
 		{
-			for (int i = 0; i < mCountOfElements; i++)
+			if (IsExpanded())
 			{
-				auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-					[&](const Pair<TargetObjectData, TargetObjectData>& x)
+				for (int i = 0; i < mCountOfElements; i++)
 				{
-					return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-						mVectorType->GetObjectVectorElementProxy(x.first.data, i),
-						x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
-				});
+					auto itemTargetValues = mTargetObjects.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+						[&](const Pair<TargetObjectData, TargetObjectData>& x)
+					{
+						return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+							mVectorType->GetObjectVectorElementProxy(x.first.data, i),
+							x.second.data ? mVectorType->GetObjectVectorElementProxy(x.second.data, i) : nullptr);
+					});
 
-				IPropertyField* propertyDef = mValueProperties[i];
-				propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
-				UpdateElementCaption(propertyDef);
+					IPropertyField* propertyDef = mValueProperties[i];
+					propertyDef->SetValueAndPrototypeProxy(itemTargetValues);
+					UpdateElementCaption(propertyDef);
+				}
 			}
 		}
 

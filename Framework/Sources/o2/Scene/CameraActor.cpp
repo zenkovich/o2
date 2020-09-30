@@ -114,11 +114,15 @@ namespace o2
 	void CameraActor::OnAddToScene()
 	{
 		o2Scene.OnCameraAddedOnScene(this);
+
+		Actor::OnAddToScene();
 	}
 
 	void CameraActor::OnRemoveFromScene()
 	{
 		o2Scene.OnCameraRemovedScene(this);
+
+		Actor::OnRemoveFromScene();
 	}
 
 }

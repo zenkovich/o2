@@ -32,8 +32,8 @@ namespace o2
 		PROPERTIES(Scene);
 
 #if IS_EDITOR
-		Function<void(SceneEditableObject*)> onCreated;                  // Actor creation event
-		Function<void(SceneEditableObject*)> onDestroying;               // Actor destroying event
+		Function<void(SceneEditableObject*)> onAddedToScene;             // Actor added to scene event
+		Function<void(SceneEditableObject*)> onRemovedFromScene;         // Actor removed from scene event
 		Function<void(SceneEditableObject*)> onEnableChanged;            // Actor enable changing
 		Function<void(SceneEditableObject*)> onLockChanged;			     // Actor locking change
 		Function<void(SceneEditableObject*)> onNameChanged;			     // Actor name changing event
@@ -154,9 +154,8 @@ namespace o2
 		Vector<Actor*> mRootActors; // Scene root actors		
 		Vector<Actor*> mAllActors;  // All scene actors
 
-		Vector<Actor*>     mAddedActors;     // List of added on previous frame actors. Will receive OnAddToScene at current frame
-		Vector<Component*> mAddedComponents; // List of added on previous frame components. Will receive OnAddToScene at current frame
-
+		Vector<Actor*> mAddedActors; // List of added on previous frame actors. Will receive OnAddToScene at current frame
+		
 		Vector<Actor*>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
 		Vector<Component*> mStartComponents; // List of starting on current frame components. Will receive OnStart at current frame
 
@@ -193,29 +192,32 @@ namespace o2
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
-		// It is called when actor created, adds in root and all actors list, registers for editor tools
-		static void OnActorCreated(Actor* actor, bool isOnScene);
-
 		// Adds actor to destroy list
-		static void DestroyActor(Actor* actor);
+		void DestroyActor(Actor* actor);
 
-		// It is called when actor is destroying - removes from root and all actors lists, unregisters in editor tools
-		static void OnActorDestroying(Actor* actor);
+		// It is called when actor adding to scene; registers in actors list and events list
+		void AddActorToScene(Actor* actor);
+
+		// It is called when actor constructing and adding to scene. The OnAddToScene will be called on next frame
+		void AddActorToSceneDeferred(Actor* actor);
+
+		// It is called when actor removing from scene; unregisters from actors list and events list
+		void RemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
 
 		// It is called when component added to actor, registers for calling OnAddOnScene
-		static void OnComponentAdded(Component* component);
+		void OnComponentAdded(Component* component);
 
 		// It is called when component removed, register for calling OnRemovFromScene
-		static void OnComponentRemoved(Component* component);
+		void OnComponentRemoved(Component* component);
 
 		// It is called when scene layer renamed, updates layers map
-		static void OnLayerRenamed(SceneLayer* layer, const String& oldName);
+		void OnLayerRenamed(SceneLayer* layer, const String& oldName);
 
 		// It is called when camera was added to scene
-		static void OnCameraAddedOnScene(CameraActor* camera);
+		void OnCameraAddedOnScene(CameraActor* camera);
 
 		// It is called when camera was removed from scene
-		static void OnCameraRemovedScene(CameraActor* camera);
+		void OnCameraRemovedScene(CameraActor* camera);
 
 		friend class Actor;
 		friend class ActorRef;
@@ -232,10 +234,10 @@ namespace o2
 		Vector<SceneEditableObject*> GetRootEditableObjects();
 
 		// Registers editable object
-		static void RegEditableObject(SceneEditableObject* object);
+		void RegEditableObject(SceneEditableObject* object);
 
 		// Removes object from registered list
-		static void UnregEditableObject(SceneEditableObject* object);
+		void UnregEditableObject(SceneEditableObject* object);
 
 		// Returns all editable objects
 		const Vector<SceneEditableObject*>& GetAllEditableObjects();
@@ -269,25 +271,25 @@ namespace o2
 		void EndDrawingScene();
 
 		// It is called when object was created
-		static void OnObjectCreated(SceneEditableObject* object);
+		void OnObjectCreated(SceneEditableObject* object);
 
 		// It is called when object is destroying
-		static void OnObjectDestroyed(SceneEditableObject* object);
+		void OnObjectDestroyed(SceneEditableObject* object);
 
 		// It is called when object was changed
-		static void OnObjectChanged(SceneEditableObject* object);
+		void OnObjectChanged(SceneEditableObject* object);
 
 		// It is called when object was drawn 
-		static void OnObjectDrawn(SceneEditableObject* object);
+		void OnObjectDrawn(SceneEditableObject* object);
 
 		// It is called when created actor with prototype, updates cache
-		static void OnActorWithPrototypeCreated(Actor* actor);
+		void OnActorWithPrototypeCreated(Actor* actor);
 
 		// It is called when some actor created and linked to prototype, updates linked actors cache
-		static void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
+		void OnActorLinkedToPrototype(ActorAssetRef& assetRef, Actor* actor);
 
 		// It is called when actor destroying or prototype link broken, updates cache
-		static void OnActorPrototypeBroken(Actor* actor);
+		void OnActorPrototypeBroken(Actor* actor);
 
 	protected:
 		Map<ActorAssetRef, Vector<Actor*>> mPrototypeLinksCache; // Cache of linked to prototypes actors
@@ -340,8 +342,8 @@ CLASS_BASES_META(o2::Scene)
 END_META;
 CLASS_FIELDS_META(o2::Scene)
 {
-	PUBLIC_FIELD(onCreated);
-	PUBLIC_FIELD(onDestroying);
+	PUBLIC_FIELD(onAddedToScene);
+	PUBLIC_FIELD(onRemovedFromScene);
 	PUBLIC_FIELD(onEnableChanged);
 	PUBLIC_FIELD(onLockChanged);
 	PUBLIC_FIELD(onNameChanged);
@@ -352,7 +354,6 @@ CLASS_FIELDS_META(o2::Scene)
 	PROTECTED_FIELD(mRootActors);
 	PROTECTED_FIELD(mAllActors);
 	PROTECTED_FIELD(mAddedActors);
-	PROTECTED_FIELD(mAddedComponents);
 	PROTECTED_FIELD(mStartActors);
 	PROTECTED_FIELD(mStartComponents);
 	PROTECTED_FIELD(mDestroyActors);
@@ -411,17 +412,18 @@ CLASS_METHODS_META(o2::Scene)
 	PROTECTED_FUNCTION(void, UpdateStartingEntities);
 	PROTECTED_FUNCTION(void, UpdateDestroyingEntities);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
-	PROTECTED_STATIC_FUNCTION(void, OnActorCreated, Actor*, bool);
-	PROTECTED_STATIC_FUNCTION(void, DestroyActor, Actor*);
-	PROTECTED_STATIC_FUNCTION(void, OnActorDestroying, Actor*);
-	PROTECTED_STATIC_FUNCTION(void, OnComponentAdded, Component*);
-	PROTECTED_STATIC_FUNCTION(void, OnComponentRemoved, Component*);
-	PROTECTED_STATIC_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);
-	PROTECTED_STATIC_FUNCTION(void, OnCameraAddedOnScene, CameraActor*);
-	PROTECTED_STATIC_FUNCTION(void, OnCameraRemovedScene, CameraActor*);
+	PROTECTED_FUNCTION(void, DestroyActor, Actor*);
+	PROTECTED_FUNCTION(void, AddActorToScene, Actor*);
+	PROTECTED_FUNCTION(void, AddActorToSceneDeferred, Actor*);
+	PROTECTED_FUNCTION(void, RemoveActorFromScene, Actor*, bool);
+	PROTECTED_FUNCTION(void, OnComponentAdded, Component*);
+	PROTECTED_FUNCTION(void, OnComponentRemoved, Component*);
+	PROTECTED_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);
+	PROTECTED_FUNCTION(void, OnCameraAddedOnScene, CameraActor*);
+	PROTECTED_FUNCTION(void, OnCameraRemovedScene, CameraActor*);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
-	PUBLIC_STATIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
-	PUBLIC_STATIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetAllEditableObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetChangedObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetDrawnEditableObjects);
@@ -432,12 +434,12 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(_tmp2, GetPrototypesLinksCache);
 	PUBLIC_FUNCTION(void, BeginDrawingScene);
 	PUBLIC_FUNCTION(void, EndDrawingScene);
-	PUBLIC_STATIC_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
-	PUBLIC_STATIC_FUNCTION(void, OnObjectDestroyed, SceneEditableObject*);
-	PUBLIC_STATIC_FUNCTION(void, OnObjectChanged, SceneEditableObject*);
-	PUBLIC_STATIC_FUNCTION(void, OnObjectDrawn, SceneEditableObject*);
-	PUBLIC_STATIC_FUNCTION(void, OnActorWithPrototypeCreated, Actor*);
-	PUBLIC_STATIC_FUNCTION(void, OnActorLinkedToPrototype, ActorAssetRef&, Actor*);
-	PUBLIC_STATIC_FUNCTION(void, OnActorPrototypeBroken, Actor*);
+	PUBLIC_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, OnObjectDestroyed, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, OnObjectChanged, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, OnObjectDrawn, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, OnActorWithPrototypeCreated, Actor*);
+	PUBLIC_FUNCTION(void, OnActorLinkedToPrototype, ActorAssetRef&, Actor*);
+	PUBLIC_FUNCTION(void, OnActorPrototypeBroken, Actor*);
 }
 END_META;

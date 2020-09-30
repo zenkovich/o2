@@ -215,6 +215,9 @@ namespace o2
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
 		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
+		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+
 		// It is called when cursor stay down during frame
 		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
@@ -374,6 +377,7 @@ CLASS_METHODS_META(o2::EditBox)
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
+	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);

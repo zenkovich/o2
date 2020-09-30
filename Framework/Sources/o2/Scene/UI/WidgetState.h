@@ -92,6 +92,9 @@ namespace o2
 		// It is called when animation changed from editor
 		void OnAnimationChanged();
 
+		// Completion deserialization callback
+		void OnDeserialized(const DataValue& node) override;
+
 		friend class Widget;
 	};
 }
@@ -131,5 +134,6 @@ CLASS_METHODS_META(o2::WidgetState)
 	PUBLIC_FUNCTION(bool, GetState);
 	PUBLIC_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnAnimationChanged);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

@@ -152,7 +152,7 @@ namespace o2
 		void GenerateNewID(bool childs = true) override;
 
 		// Returns name of object
-		String GetName() const override;
+		const String& GetName() const override;
 
 		// Sets name of object
 		void SetName(const String& name) override;
@@ -365,7 +365,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	PUBLIC_FUNCTION(bool, IsOnScene);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
-	PUBLIC_FUNCTION(String, GetName);
+	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);

@@ -142,20 +142,16 @@ namespace o2
 
 	void Component::SetOwnerActor(Actor* actor)
 	{
+		if (mOwner == actor)
+			return;
+
 		if (mOwner)
-		{
-			mOwner->OnChanged();
-			mOwner->mComponents.Remove(this);
-		}
+			mOwner->RemoveComponent(this, false);
 
 		mOwner = actor;
 
 		if (mOwner)
-		{
-			mOwner->mComponents.Add(this);
 			OnTransformUpdated();
-			mOwner->OnChanged();
-		}
 	}
 
 	void Component::FixedUpdate(float dt)

@@ -221,7 +221,7 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ImageComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h" />
-    <ClInclude Include="..\..\Sources\o2\Scene\Drawable.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ISceneDrawable.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Physics\BoxCollider.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Physics\CircleCollider.h" />
@@ -429,7 +429,7 @@
     <ClCompile Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ImageComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp" />
-    <ClCompile Include="..\..\Sources\o2\Scene\Drawable.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ISceneDrawable.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Physics\BoxCollider.cpp" />
     <ClCompile Include="..\..\Sources\o2\Scene\Physics\CircleCollider.cpp" />

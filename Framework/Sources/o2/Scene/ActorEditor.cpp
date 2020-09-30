@@ -148,9 +148,9 @@ namespace o2
 			mLocked = proto->mLocked;
 
 		if (auto subNode = node.FindMember("LayerName"))
-			SetLayer(o2Scene.GetLayer(*subNode));
+			SetLayer(*subNode);
 		else
-			SetLayer(proto->mLayer);
+			SetLayer(proto->mLayerName);
 
 		// Transform data
 		if (auto transformNode = node.FindMember("Transform"))
@@ -511,7 +511,7 @@ namespace o2
 				protoChild->mEnabled = child->mEnabled;
 				*protoChild->transform = *child->transform;
 				protoChild->mAssetId = child->mAssetId;
-				protoChild->SetLayer(child->mLayer);
+				protoChild->SetLayer(child->mLayerName);
 
 				// check new/removed components 
 				// removing
@@ -610,7 +610,7 @@ namespace o2
 			newProtoChild->mEnabled = child->mEnabled;
 			*newProtoChild->transform = *child->transform;
 			newProtoChild->mAssetId = child->mAssetId;
-			newProtoChild->SetLayer(child->mLayer);
+			newProtoChild->SetLayer(child->mLayerName);
 
 			if (child->mPrototype)
 				newProtoChild->SetPrototype(child->mPrototype);
@@ -638,7 +638,7 @@ namespace o2
 
 			for (auto& info : applyActorsInfos)
 			{
-				Actor* newChild = mnew Actor(info.actor->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+				Actor* newChild = mnew Actor(info.actor->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 				info.allChildren.Add(newChild);
 				info.actorsMap.Add(child, newChild);
 
@@ -650,7 +650,7 @@ namespace o2
 				newChild->mEnabled = child->mEnabled;
 				*newChild->transform = *child->transform;
 				newChild->mAssetId = child->mAssetId;
-				newChild->SetLayer(child->mLayer);
+				newChild->SetLayer(child->mLayerName);
 
 				if (child->mPrototype)
 					newChild->SetPrototype(child->mPrototype);
@@ -665,8 +665,8 @@ namespace o2
 					CollectFixingFields(newComponent, info.componentPointersFields, info.actorPointersFields);
 				}
 
-				if (newChild->mIsOnScene)
-					newChild->SetLayer(child->mLayer);
+				if (newChild->IsOnScene())
+					newChild->SetLayer(child->mLayerName);
 			}
 		}
 
@@ -965,7 +965,7 @@ namespace o2
 
 		for (auto child : source->mChildren)
 		{
-			Actor* newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+			Actor* newChild = mnew Actor(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 			dest->AddChild(newChild);
 
 			ProcessPrototypeMaking(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap,
@@ -981,7 +981,7 @@ namespace o2
 			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
 		}
 
-		dest->SetLayer(source->mLayer);
+		dest->SetLayer(source->mLayerName);
 	}
 
 	void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
@@ -1004,7 +1004,7 @@ namespace o2
 			newChild = separatedActors.FindOrDefault([&](Actor* x) { return x->GetPrototypeLink() == child; });
 
 			if (!newChild)
-				newChild = mnew Actor(dest->mIsOnScene ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
+				newChild = mnew Actor(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
 
 			dest->AddChild(newChild);
 
@@ -1043,7 +1043,7 @@ namespace o2
 			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
 		}
 
-		dest->SetLayer(source->mLayer);
+		dest->SetLayer(source->mLayerName);
 	}
 
 	void Actor::CopyChangedFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* changed, IObject* dest, 
@@ -1150,7 +1150,7 @@ namespace o2
 			dest->mLocked = changed->mLocked;
 
 		if (source->mLayer != changed->mLayer && dest->mLayer == source->mLayer)
-			dest->SetLayer(changed->mLayer);
+			dest->SetLayer(changed->mLayerName);
 
 		// transform
 		if (withTransform)

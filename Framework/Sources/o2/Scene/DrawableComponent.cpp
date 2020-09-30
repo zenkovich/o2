@@ -8,24 +8,24 @@
 namespace o2
 {
 	DrawableComponent::DrawableComponent():
-		Component(), SceneDrawable()
+		Component(), ISceneDrawable()
 	{}
 
 	DrawableComponent::DrawableComponent(const DrawableComponent& other) :
-		Component(other), SceneDrawable(other)
+		Component(other), ISceneDrawable(other)
 	{}
 
 	DrawableComponent& DrawableComponent::operator=(const DrawableComponent& other)
 	{
 		Component::operator=(other);
-		SceneDrawable::operator=(other);
+		ISceneDrawable::operator=(other);
 
 		return *this;
 	}
 
 	void DrawableComponent::SetDrawingDepth(float depth)
 	{
-		SceneDrawable::SetDrawingDepth(depth);
+		ISceneDrawable::SetDrawingDepth(depth);
 
 		if (mOwner)
 			mOwner->OnChanged();
@@ -40,25 +40,23 @@ namespace o2
 		else
 			mResEnabled = mEnabled;
 
-		if (lastResEnabled != mResEnabled && mLayer)
+		if (lastResEnabled != mResEnabled)
 		{
 			if (mResEnabled)
-				mLayer->OnDrawableEnabled(this);
+				ISceneDrawable::OnEnabled();
 			else
-				mLayer->OnDrawableDisabled(this);
+				ISceneDrawable::OnDisabled();
 		}
 	}
 
 	void DrawableComponent::SetOwnerActor(Actor* actor)
 	{
-		SceneDrawable::SetLayer(actor->mLayer);
-
 		if (mOwner)
 		{
 			mOwner->mComponents.Remove(this);
 
-			if (mOwner->mIsOnScene)
-				mOwner->mLayer->UnregisterDrawable(this);
+			if (mOwner->IsOnScene())
+				ISceneDrawable::OnRemoveFromScene();
 		}
 
 		mOwner = actor;
@@ -67,11 +65,21 @@ namespace o2
 		{
 			mOwner->mComponents.Add(this);
 
-			if (mOwner->mIsOnScene)
-				mOwner->mLayer->RegisterDrawable(this);
+			if (mOwner->IsOnScene())
+				ISceneDrawable::OnAddToScene();
 
 			OnTransformUpdated();
 		}
+	}
+
+	SceneLayer* DrawableComponent::GetSceneDrawableSceneLayer() const
+	{
+		return mOwner->mLayer;
+	}
+
+	bool DrawableComponent::IsSceneDrawableEnabled() const
+	{
+		return mResEnabled;
 	}
 
 #if IS_EDITOR

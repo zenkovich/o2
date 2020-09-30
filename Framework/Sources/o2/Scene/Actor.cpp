@@ -10,44 +10,41 @@ namespace o2
 {
 	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
-	Actor::Actor(ActorTransform* transform, bool isOnScene /*= true*/, const String& name /*= "unnamed"*/,
-				 bool enabled /*= true*/, bool resEnabled /*= true*/, bool locked /*= false*/, bool resLocked /*= false*/,
-				 const String& layerName /*= ""*/, SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/,
-				 UID assetId /*= UID(0)*/):
+	Actor::Actor(ActorTransform* transform, SceneStatus sceneStatus /*= SceneStatus::WaitingAddToScene*/, 
+				 const String& name /*= "unnamed"*/, bool enabled /*= true*/, bool resEnabled /*= true*/, 
+				 bool locked /*= false*/, bool resLocked /*= false*/, const String& layerName /*= ""*/, 
+				 SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/):
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
 		mLocked(locked), mResLocked(resLocked), mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId),
-		mIsOnScene(isOnScene)
+		mSceneStatus(sceneStatus)
 	{}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/):
-		Actor(transform, IsModeOnScene(mode))
+		Actor(transform, IsModeOnScene(mode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene)
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
 
 		transform->SetOwner(this);
 
-		mIsOnScene = IsModeOnScene(mode);
-
 		if (Scene::IsSingletonInitialzed())
 		{
 			mLayerName = o2Scene.GetDefaultLayer()->GetName();
 
-			if (mIsOnScene)
+			if (IsOnScene())
 			{
 				mLayer = o2Scene.GetLayer(mLayerName);
-				mLayer->RegisterActor(this);
+				o2Scene.AddActorToSceneDeferred(this);
 			}
 		}
 
-		Scene::OnActorCreated(this, mIsOnScene);
 		ActorDataValueConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
-		Actor(transform, IsModeOnScene(mode), prototype->GetActor()->mName,
-			  prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled, prototype->GetActor()->mLocked,
-			  prototype->GetActor()->mLocked, prototype->GetActor()->mLayerName, nullptr)
+		Actor(transform, IsModeOnScene(mode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene, 
+			  prototype->GetActor()->mName, prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled,
+			  prototype->GetActor()->mLocked, prototype->GetActor()->mLocked, prototype->GetActor()->mLayerName, nullptr)
 	{
 		transform->SetOwner(this);
 
@@ -63,14 +60,15 @@ namespace o2
 
 		transform->SetDirty();
 
-		if (mIsOnScene)
+		if (Scene::IsSingletonInitialzed())
 		{
-			mLayer = o2Scene.GetLayer(mLayerName);
-			mLayer->RegisterActor(this);
+			if (IsOnScene())
+			{
+				mLayer = o2Scene.GetLayer(mLayerName);
+				o2Scene.AddActorToSceneDeferred(this);
+			}
 		}
 
-		UpdateResEnabledInHierarchy();
-		Scene::OnActorCreated(this, mIsOnScene);
 		ActorDataValueConverter::ActorCreated(this);
 	}
 
@@ -84,8 +82,9 @@ namespace o2
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other):
-		Actor(transform, mDefaultCreationMode == ActorCreateMode::InScene, other.mName, other.mEnabled,
-			  other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer, Math::Random(), other.mAssetId)
+		Actor(transform, IsModeOnScene(mDefaultCreationMode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene, 
+			  other.mName, other.mEnabled, other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer, 
+			  Math::Random(), other.mAssetId)
 	{
 		transform->SetOwner(this);
 
@@ -102,14 +101,15 @@ namespace o2
 
 		transform->SetDirty();
 
-		if (mIsOnScene)
+		if (Scene::IsSingletonInitialzed())
 		{
-			mLayer = o2Scene.GetLayer(mLayerName);
-			mLayer->RegisterActor(this);
+			if (IsOnScene())
+			{
+				mLayer = o2Scene.GetLayer(mLayerName);
+				o2Scene.AddActorToSceneDeferred(this);
+			}
 		}
 
-		UpdateResEnabledInHierarchy();
-		Scene::OnActorCreated(this, mIsOnScene);
 		ActorDataValueConverter::ActorCreated(this);
 	}
 
@@ -140,19 +140,24 @@ namespace o2
 		if (mParent)
 			mParent->RemoveChild(this, false);
 
-		Scene::OnActorDestroying(this);
-
 		RemoveAllChildren();
 		RemoveAllComponents();
 
-		if (mLayer)
-		{
-			mLayer->OnActorDisabled(this);
-			mLayer->UnregisterActor(this);
-		}
-
 		if (Scene::IsSingletonInitialzed())
-			o2Scene.mChangedObjects.Remove(this);
+		{
+			if (IsOnScene())
+			{
+				if (mLayer)
+				{
+					if (mResEnabledInHierarchy)
+						mLayer->OnActorDisabled(this);
+
+					mLayer->UnregisterActor(this);
+				}
+
+				o2Scene.RemoveActorFromScene(this);
+			}
+		}
 	}
 
 	Actor& Actor::operator=(const Actor& other)
@@ -170,9 +175,9 @@ namespace o2
 		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
-		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
 
+		UpdateResEnabledInHierarchy();
 		OnChanged();
 
 		return *this;
@@ -180,7 +185,7 @@ namespace o2
 
 	void Actor::Update(float dt)
 	{
-		if (transform->mData->updateFrame == 0)
+		if (transform->IsDirty())
 		{
 			for (auto child : mChildren)
 				child->transform->SetDirty(true);
@@ -243,7 +248,7 @@ namespace o2
 		OnNameChanged();
 	}
 
-	String Actor::GetName() const
+	const String& Actor::GetName() const
 	{
 		return mName;
 	}
@@ -271,42 +276,37 @@ namespace o2
 		return mIsAsset;
 	}
 
-	void Actor::GenerateNewID(bool childs /*= true*/)
+	void Actor::GenerateNewID(bool withChildren /*= true*/)
 	{
 		mId = Math::Random();
 
-		if (childs)
+		if (withChildren)
 		{
 			for (auto child : mChildren)
-				child->GenerateNewID(childs);
+				child->GenerateNewID(withChildren);
 		}
 	}
 
 	void Actor::RemoveFromScene(bool keepEditorObjects /*= false*/)
 	{
-		if (!mIsOnScene)
+		if (!IsOnScene())
 			return;
 
-		if (!Scene::IsSingletonInitialzed())
-			return;
-
-		if (mLayer && mResEnabledInHierarchy)
-			mLayer->OnActorDisabled(this);
-
-		mLayer = nullptr;
-
-		o2Scene.mRootActors.Remove(this);
-		o2Scene.mAllActors.Remove(this);
-
-		if constexpr (IS_EDITOR)
+		if (mLayer)
 		{
-			if (!keepEditorObjects)
-				o2Scene.mEditableObjects.Remove(this);
+			if (mResEnabledInHierarchy)
+				mLayer->OnActorDisabled(this);
+
+			mLayer->UnregisterActor(this);
 		}
+
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.RemoveActorFromScene(this, keepEditorObjects);
 
 		OnRemoveFromScene();
 
-		mIsOnScene = false;
+		mLayer = nullptr;
+		mSceneStatus = SceneStatus::NotInScene;
 
 		for (auto child : mChildren)
 			child->RemoveFromScene();
@@ -314,25 +314,25 @@ namespace o2
 
 	void Actor::AddToScene()
 	{
-		if (mIsOnScene)
+		if (IsOnScene())
 			return;
 
-		if (!mParent)
-			o2Scene.mRootActors.Add(this);
+		if (Scene::IsSingletonInitialzed())
+		{
+			mLayer = o2Scene.GetLayer(mLayerName);
 
-		mLayer = o2Scene.GetLayer(mLayerName);
+			if (mLayer)
+			{
+				mLayer->RegisterActor(this);
 
-		if (mLayer && mResEnabledInHierarchy)
-			mLayer->OnActorEnabled(this);
+				if (mResEnabledInHierarchy)
+					mLayer->OnActorEnabled(this);
+			}
 
-		o2Scene.mAllActors.Add(this);
+			o2Scene.AddActorToScene(this);
+		}
 
-		if constexpr (IS_EDITOR)
-			o2Scene.mEditableObjects.Add(this);
-
-		mIsOnScene = true;
-
-		OnAddToScene();
+		mSceneStatus = SceneStatus::InScene;
 
 		for (auto child : mChildren)
 			child->AddToScene();
@@ -340,15 +340,15 @@ namespace o2
 
 	bool Actor::IsOnScene() const
 	{
-		return mIsOnScene;
+		return mSceneStatus != SceneStatus::NotInScene;
 	}
 
 	bool Actor::IsHieararchyOnScene() const
 	{
 		if (mParent)
-			return mIsOnScene || mParent->mIsOnScene || mParent->IsHieararchyOnScene();
+			return IsOnScene() || mParent->IsOnScene() || mParent->IsHieararchyOnScene();
 
-		return mIsOnScene;
+		return IsOnScene();
 	}
 
 	void Actor::SetEnabled(bool enabled)
@@ -410,7 +410,7 @@ namespace o2
 		}
 		else
 		{
-			if (mIsOnScene)
+			if (IsOnScene())
 			{
 				int lastIdx = o2Scene.mRootActors.IndexOf(this);
 				o2Scene.mRootActors.Insert(this, index);
@@ -425,19 +425,18 @@ namespace o2
 
 	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/)
 	{
-		if ((actor && actor->mChildren.Contains(this)) || actor == this || actor == mParent)
+		if (actor == this)
+			actor = actor;
+
+		if ((actor && actor->mParent == this) || actor == this || actor == mParent)
 			return;
 
 		Basis lastParentBasis = transform->GetWorldBasis();
 		auto oldParent = mParent;
 
 		if (mParent)
-		{
-			mParent->mChildren.Remove(this);
-			mParent->OnChildRemoved(this);
-			mParent->OnChildrenChanged();
-		}
-		else if (mIsOnScene)
+			mParent->RemoveChild(this, false);
+		else if (IsOnScene() && Scene::IsSingletonInitialzed())
 			o2Scene.mRootActors.Remove(this);
 
 		mParent = actor;
@@ -448,7 +447,7 @@ namespace o2
 			mParent->OnChildAdded(this);
 			mParent->OnChildrenChanged();
 		}
-		else if (mIsOnScene)
+		else if (IsOnScene() && Scene::IsSingletonInitialzed())
 			o2Scene.mRootActors.Add(this);
 
 		if (worldPositionStays)
@@ -458,11 +457,13 @@ namespace o2
 
 		UpdateResEnabledInHierarchy();
 
-		if (actor && actor->mIsOnScene && !mIsOnScene)
-			RemoveFromScene();
-
-		if (actor && !actor->mIsOnScene && mIsOnScene)
-			AddToScene();
+		if (mParent && mParent->mSceneStatus != mSceneStatus)
+		{
+			if (mParent->IsOnScene())
+				AddToScene();
+			else
+				RemoveFromScene();
+		}
 
 		OnParentChanged(oldParent);
 	}
@@ -474,65 +475,20 @@ namespace o2
 
 	Actor* Actor::AddChild(Actor* actor)
 	{
-		if (mChildren.Contains(actor) || actor == this)
-			return actor;
+		Assert(actor, "Actor is null");
 
-		auto oldParent = actor->mParent;
+		if (actor == this)
+			actor = actor;
 
-		if (actor->mParent)
-			actor->mParent->RemoveChild(actor, false);
-		else
-		{
-			if (Scene::IsSingletonInitialzed())
-				o2Scene.mRootActors.Remove(actor);
-		}
-
-		mChildren.Add(actor);
-		actor->mParent = this;
-
-		actor->transform->SetDirty(false);
-		actor->UpdateResEnabledInHierarchy();
-
-		OnChildAdded(actor);
-		OnChildrenChanged();
-		actor->OnParentChanged(oldParent);
-
-		if (actor->mIsOnScene && !mIsOnScene)
-			RemoveFromScene();
-
-		if (!actor->mIsOnScene && mIsOnScene)
-			AddToScene();
-
+		actor->SetParent(this, false);
 		return actor;
 	}
 
 	Actor* Actor::AddChild(Actor* actor, int index)
 	{
-		if (mChildren.Contains(actor) || actor == this)
-			return actor;
-
-		auto oldParent = actor->mParent;
-
-		if (actor->mParent)
-			actor->mParent->RemoveChild(actor, false);
-		else
-			o2Scene.mRootActors.Remove(actor);
-
+		AddChild(actor);
 		mChildren.Insert(actor, index);
-		actor->mParent = this;
-
-		actor->transform->SetDirty();
-		actor->UpdateResEnabledInHierarchy();
-
-		OnChildAdded(actor);
-		OnChildrenChanged();
-		actor->OnParentChanged(oldParent);
-
-		if (actor->mIsOnScene && !mIsOnScene)
-			RemoveFromScene();
-
-		if (!actor->mIsOnScene && mIsOnScene)
-			AddToScene();
+		mChildren.PopBack();
 
 		return actor;
 	}
@@ -602,18 +558,15 @@ namespace o2
 
 		actor->mParent = nullptr;
 		mChildren.Remove(actor);
+
+		actor->OnParentChanged(oldParent);
 		OnChildRemoved(actor);
+		OnChildrenChanged();
 
 		if (release)
-		{
-			actor->OnParentChanged(oldParent);
-			OnChildrenChanged();
-
 			delete actor;
-		}
 		else
 		{
-			actor->OnParentChanged(oldParent);
 			actor->transform->SetDirty();
 			actor->UpdateResEnabledInHierarchy();
 		}
@@ -639,8 +592,7 @@ namespace o2
 	Component* Actor::AddComponent(Component* component)
 	{
 		component->SetOwnerActor(this);
-		if (mIsOnScene)
-			o2Scene.OnComponentAdded(component);
+		mComponents.Add(component);
 
 		OnComponentAdded(component);
 		OnChanged();
@@ -650,18 +602,15 @@ namespace o2
 
 	void Actor::RemoveComponent(Component* component, bool release /*= true*/)
 	{
-		if (mIsOnScene)
-			o2Scene.OnComponentRemoved(component);
-
 		OnComponentRemoving(component);
 
 		mComponents.Remove(component);
 		component->mOwner = nullptr;
 
-		OnChanged();
-
 		if (release)
 			delete component;
+
+		OnChanged();
 	}
 
 	void Actor::RemoveAllComponents()
@@ -669,16 +618,10 @@ namespace o2
 		auto components = mComponents;
 		mComponents.Clear();
 
-		if (mIsOnScene)
+		for (auto component : components)
 		{
-			for (auto comp : components)
-				comp->OnRemoveFromScene();
-		}
-
-		for (auto comp : components)
-		{
-			OnComponentRemoving(comp);
-			delete comp;
+			OnComponentRemoving(component);
+			delete component;
 		}
 
 		OnChanged();
@@ -711,47 +654,32 @@ namespace o2
 		return nullptr;
 	}
 
-	Vector<Component*> Actor::GetComponents() const
+	const Vector<Component*>& Actor::GetComponents() const
 	{
 		return mComponents;
 	}
 
-	void Actor::SetLayer(SceneLayer* layer)
-	{
-		if (layer == mLayer)
-			return;
-
-		SceneLayer* lastLayer = mLayer;
-
-		if (layer == nullptr)
-			layer = o2Scene.GetDefaultLayer();
-
-		mLayer = layer;
-
-		if (lastLayer)
-		{
-			lastLayer->UnregisterActor(this);
-
-			if (mResEnabledInHierarchy && mIsOnScene)
-				lastLayer->OnActorDisabled(this);
-		}
-
-		if (layer)
-		{
-			layer->RegisterActor(this);
-
-			if (mResEnabledInHierarchy && mIsOnScene)
-				layer->OnActorEnabled(this);
-		}
-
-		OnLayerChanged(lastLayer);
-		OnChanged();
-	}
-
 	void Actor::SetLayer(const String& layerName)
 	{
+		if (layerName == mLayerName)
+			return;
+
+		if (!IsOnScene())
+			return;
+
+		auto oldLayer = mLayer;
+
+		OnRemoveFromScene();
+
 		mLayerName = layerName;
-		SetLayer(mIsOnScene ? o2Scene.GetLayer(layerName) : nullptr);
+
+		if (Scene::IsSingletonInitialzed())
+			mLayer = o2Scene.GetLayer(mLayerName);
+
+		OnAddToScene();
+
+		OnLayerChanged(oldLayer);
+		OnChanged();
 	}
 
 	SceneLayer* Actor::GetLayer() const
@@ -807,12 +735,30 @@ namespace o2
 
 	void Actor::OnAddToScene()
 	{
+		mSceneStatus = SceneStatus::InScene;
+
+		if (mLayer)
+		{
+			mLayer->RegisterActor(this);
+
+			if (mResEnabledInHierarchy && IsOnScene())
+				mLayer->OnActorEnabled(this);
+		}
+
 		for (auto comp : mComponents)
 			comp->OnAddToScene();
 	}
 
 	void Actor::OnRemoveFromScene()
 	{
+		if (mLayer)
+		{
+			if (mResEnabledInHierarchy)
+				mLayer->OnActorDisabled(this);
+
+			mLayer->UnregisterActor(this);
+		}
+
 		for (auto comp : mComponents)
 			comp->OnRemoveFromScene();
 	}
@@ -852,12 +798,28 @@ namespace o2
 
 	void Actor::OnComponentAdded(Component* component)
 	{
+		if (IsOnScene())
+		{
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.OnComponentAdded(component);
+
+			component->OnAddToScene();
+		}
+
 		for (auto comp : mComponents)
 			comp->OnComponentAdded(component);
 	}
 
 	void Actor::OnComponentRemoving(Component* component)
 	{
+		if (IsOnScene())
+		{
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.OnComponentRemoved(component);
+
+			component->OnRemoveFromScene();
+		}
+
 		for (auto comp : mComponents)
 			comp->OnComponentRemoving(component);
 	}
@@ -879,7 +841,7 @@ namespace o2
 
 		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
 		{
-			if (mLayer)
+			if (mLayer && mSceneStatus == SceneStatus::InScene)
 			{
 				if (mResEnabledInHierarchy)
 					mLayer->OnActorEnabled(this);
@@ -972,14 +934,11 @@ namespace o2
 		if (auto lockedNode = node.FindMember("Enabled"))
 			mEnabled = *lockedNode;
 
+		String layerName;
 		if (auto layerNode = node.FindMember("LayerName"))
-		{
-			String layerName;
 			layerNode->Get(layerName);
-			SetLayer(layerName);
-		}
 		else
-			SetLayer(o2Scene.GetDefaultLayer());
+			layerName = o2Scene.GetDefaultLayer()->GetName();
 
 		node.GetMember("Transform").Get(*transform);
 
@@ -994,8 +953,6 @@ namespace o2
 					Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
 					component->Deserialize(componentNode.GetMember("Data"));
 					component->SetOwnerActor(this);
-					if (mIsOnScene)
-						o2Scene.OnComponentAdded(component);
 
 					OnComponentAdded(component);
 				}
@@ -1029,6 +986,8 @@ namespace o2
 
 		ActorDataValueConverter::Instance().UnlockPointersResolving();
 		ActorDataValueConverter::Instance().ResolvePointers();
+
+		SetLayer(layerName);
 	}
 
 	Map<String, Actor*> Actor::GetAllChilds()
@@ -1099,7 +1058,7 @@ namespace o2
 			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
 
 			Actor* newChild = dynamic_cast<Actor*>(type->DynamicCastToIObject(child->GetType().CreateSample()));
-			if (!dest->mIsOnScene)
+			if (!dest->IsOnScene())
 				newChild->RemoveFromScene();
 
 			dest->AddChild(newChild);
@@ -1124,7 +1083,6 @@ namespace o2
 			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
 		}
 
-		dest->SetLayer(dest->mLayerName);
 		dest->CopyData(*source);
 	}
 
@@ -1163,7 +1121,7 @@ namespace o2
 
 				auto fields = field->GetType()->GetFieldsWithBaseClasses();
 				CopyFields(fields, (IObject*)field->GetValuePtr(source),
-						   (IObject*)field->GetValuePtr(dest),
+					(IObject*)field->GetValuePtr(dest),
 						   actorsPointers, componentsPointers, serializableObjects);
 			}
 			else field->CopyValue(dest, source);
@@ -1250,7 +1208,7 @@ namespace o2
 
 	void Actor::OnChildrenChanged() {}
 
-	void Actor::OnParentChanged(Actor* oldParent) 
+	void Actor::OnParentChanged(Actor* oldParent)
 	{
 		for (auto comp : mComponents)
 			comp->OnParentChanged(oldParent);
@@ -1258,5 +1216,13 @@ namespace o2
 
 #endif // !IS_EDITOR
 }
+
+ENUM_META(o2::Actor::SceneStatus)
+{
+	ENUM_ENTRY(InScene);
+	ENUM_ENTRY(NotInScene);
+	ENUM_ENTRY(WaitingAddToScene);
+}
+END_ENUM_META;
 
 DECLARE_CLASS(o2::Actor);

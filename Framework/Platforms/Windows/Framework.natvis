@@ -88,6 +88,10 @@
     </Expand>
   </Type>
 
+  <Type Name="o2::DataMember">
+    <DisplayString>{{{ name }:{ value } }}</DisplayString>
+  </Type>
+
   <Type Name="o2::DataValue">
     <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::Null) == o2::DataValue::Flags::Null">null</DisplayString>
     <DisplayString Condition="(mData.flagsData.flags &amp; o2::DataValue::Flags::BoolTrue) == o2::DataValue::Flags::BoolTrue">true</DisplayString>
@@ -132,7 +136,7 @@
       <Item Name="alpha" ExcludeView="simple">mTransparency</Item>
       <Item Name="clipped" ExcludeView="simple">mIsClipped</Item>
       <Item Name="children rect" ExcludeView="simple">layout->mData->childrenWorldRect</Item>
-      <Item Name="is on scene" ExcludeView="simple">Actor::mIsOnScene</Item>
+      <Item Name="is on scene" ExcludeView="simple">Actor::mSceneStatus</Item>
 
       <Synthetic Name="prototype">
         <DisplayString>({ mPrototype })</DisplayString>
@@ -293,7 +297,7 @@
       <Item Name="layer" ExcludeView="simple">mLayerName</Item>
       <Item Name="layer ptr" ExcludeView="simple">mLayer</Item>
       <Item Name="tags" ExcludeView="simple">tags</Item>
-      <Item Name="is on scene" ExcludeView="simple">mIsOnScene</Item>
+      <Item Name="is on scene" ExcludeView="simple">mSceneStatus</Item>
       <Item Name="is asset" ExcludeView="simple">mIsAsset</Item>
       <Item Name="asset id" ExcludeView="simple">mAssetId</Item>
 
