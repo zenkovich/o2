@@ -798,7 +798,7 @@ namespace o2
 
 	void Actor::OnComponentAdded(Component* component)
 	{
-		if (IsOnScene())
+		if (mSceneStatus == SceneStatus::InScene)
 		{
 			if (Scene::IsSingletonInitialzed())
 				o2Scene.OnComponentAdded(component);
@@ -952,9 +952,8 @@ namespace o2
 				{
 					Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
 					component->Deserialize(componentNode.GetMember("Data"));
-					component->SetOwnerActor(this);
 
-					OnComponentAdded(component);
+					AddComponent(component);
 				}
 			}
 		}

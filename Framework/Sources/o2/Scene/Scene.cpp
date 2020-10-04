@@ -453,6 +453,9 @@ namespace o2
 		for (auto layer : mLayers)
 			delete layer;
 
+		mAddedActors.Clear();
+		mStartActors.Clear();
+		mStartComponents.Clear();
 		mLayers.Clear();
 		mLayersMap.Clear();
 

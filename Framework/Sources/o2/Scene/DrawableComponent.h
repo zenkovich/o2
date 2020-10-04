@@ -32,14 +32,17 @@ namespace o2
 		// Updates component enable
 		void UpdateEnabled();
 
-		// Sets owner actor
-		void SetOwnerActor(Actor* actor) override;
-
 		// Returns current scene layer
 		SceneLayer* GetSceneDrawableSceneLayer() const override;
 
 		// Returns is drawable enabled
 		bool IsSceneDrawableEnabled() const override;
+
+		// It is called when actor was included to scene
+		void OnAddToScene();
+
+		// It is called when actor was excluded from scene
+		void OnRemoveFromScene();
 
 		friend class Scene;
 
@@ -66,9 +69,10 @@ CLASS_METHODS_META(o2::DrawableComponent)
 
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
-	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
 	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
 }
 END_META;

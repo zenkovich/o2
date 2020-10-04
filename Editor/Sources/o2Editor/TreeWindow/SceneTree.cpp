@@ -390,11 +390,14 @@ namespace Editor
 	void SceneTreeNode::SetSceneObject(SceneEditableObject* object)
 	{
 		mTargetObject = object;
-		mName = object->GetName();
+
+		if (mName != object->GetName())
+		{
+			mName = object->GetName();
+			mNameDrawable->SetText(mName);
+		}
 
 		float alpha = object->IsEnabledInHierarchy() ? 1.0f : 0.5f;
-
-		mNameDrawable->SetText(mName);
 		if (!Math::Equals(alpha, mNameDrawable->GetTransparency()))
 		{
 			mNameDrawable->SetTransparency(alpha);

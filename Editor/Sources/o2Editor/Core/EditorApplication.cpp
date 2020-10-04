@@ -52,6 +52,8 @@ namespace Editor
 
 	void EditorApplication::LoadScene(const String& name)
 	{
+		ForcePopEditorScopeOnStack scope;
+
 		mLoadedScene = name;
 		o2Scene.Load(name);
 		o2Scene.Update(0.0f);

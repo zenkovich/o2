@@ -449,9 +449,6 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Debug\StackTrace.h">
       <Filter>Sources\o2\Utils\Debug</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Delegates.h">
-      <Filter>Sources\o2\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\AnimatableAttribute.h">
       <Filter>Sources\o2\Utils\Editor\Attributes</Filter>
     </ClInclude>
@@ -679,6 +676,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\ISceneDrawable.h">
       <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function.h">
+      <Filter>Sources\o2\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

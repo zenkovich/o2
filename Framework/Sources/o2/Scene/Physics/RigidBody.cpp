@@ -245,20 +245,21 @@ namespace o2
 
 	void RigidBody::AddCollider(ICollider* collider)
 	{
-		if (mBody && !mColliders.Contains(collider)) 
-		{
+		if (mColliders.Contains(collider))
+			return;
+
+		if (mBody)
 			collider->AddToRigidBody(this);
-			mColliders.Add(collider);
-		}
+
+		mColliders.Add(collider);
 	}
 
 	void RigidBody::RemoveCollider(ICollider* collider)
 	{
 		if (mBody)
-		{
 			collider->RemoveFromRigidBody();
-			mColliders.Remove(collider);
-		}
+
+		mColliders.Remove(collider);
 	}
 
 }

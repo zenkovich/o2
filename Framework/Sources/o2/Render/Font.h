@@ -6,7 +6,7 @@
 #include "o2/Render/TextureRef.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Vector.h"
-#include "o2/Utils/Delegates.h"
+#include "o2/Utils/Function.h"
 #include "o2/Utils/Math/Rect.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Types/String.h"

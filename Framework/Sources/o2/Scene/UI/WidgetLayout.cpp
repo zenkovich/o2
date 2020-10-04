@@ -2,7 +2,7 @@
 #include "WidgetLayout.h"
 
 #include "o2/Scene/UI/Widget.h"
-#include "o2/Utils/Delegates.h"
+#include "o2/Utils/Function.h"
 
 namespace o2
 {

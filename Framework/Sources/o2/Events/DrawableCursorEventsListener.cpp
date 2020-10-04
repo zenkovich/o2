@@ -2,7 +2,7 @@
 #include "DrawableCursorEventsListener.h"
 
 #include "o2/Render/IDrawable.h"
-#include "o2/Utils/Delegates.h"
+#include "o2/Utils/Function.h"
 
 namespace o2
 {

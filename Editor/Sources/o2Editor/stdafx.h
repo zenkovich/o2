@@ -86,7 +86,7 @@
 #include "o2/Scene/UI/Widgets/Window.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Debug/Debug.h"
-#include "o2/Utils/Delegates.h"
+#include "o2/Utils/Function.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Border.h"
 #include "o2/Utils/Math/Color.h"

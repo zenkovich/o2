@@ -49,29 +49,6 @@ namespace o2
 		}
 	}
 
-	void DrawableComponent::SetOwnerActor(Actor* actor)
-	{
-		if (mOwner)
-		{
-			mOwner->mComponents.Remove(this);
-
-			if (mOwner->IsOnScene())
-				ISceneDrawable::OnRemoveFromScene();
-		}
-
-		mOwner = actor;
-
-		if (mOwner)
-		{
-			mOwner->mComponents.Add(this);
-
-			if (mOwner->IsOnScene())
-				ISceneDrawable::OnAddToScene();
-
-			OnTransformUpdated();
-		}
-	}
-
 	SceneLayer* DrawableComponent::GetSceneDrawableSceneLayer() const
 	{
 		return mOwner->mLayer;
@@ -80,6 +57,16 @@ namespace o2
 	bool DrawableComponent::IsSceneDrawableEnabled() const
 	{
 		return mResEnabled;
+	}
+
+	void DrawableComponent::OnAddToScene()
+	{
+		ISceneDrawable::OnAddToScene();
+	}
+
+	void DrawableComponent::OnRemoveFromScene()
+	{
+		ISceneDrawable::OnRemoveFromScene();
 	}
 
 #if IS_EDITOR

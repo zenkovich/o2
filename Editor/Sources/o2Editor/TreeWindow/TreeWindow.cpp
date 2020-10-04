@@ -98,40 +98,7 @@ namespace Editor
 
 	void TreeWindow::InitializeTestScene()
 	{
-		ForcePopEditorScopeOnStack scope;
-
-		for (int i = 0; i < 10; i++)
-			o2Scene.AddTag(String::Format("Tag_#%i", i + 1));
-
-		auto editBox = o2UI.CreateWidget<EditBox>();
-		editBox->layout->size = Vec2F(100, 100);
-
-		// test actors
-		for (int i = 0; i < 0; i++)
-		{
-			Actor* actor = mnew Actor(ActorCreateMode::InScene);
-			actor->name = String::Format("Actor #%i", i + 1);
-			actor->SetLayer(String::Format("Layer #%i", i + 1));
-
-			for (int j = 0; j < 1; j++)
-			{
-				Actor* childActor = mnew Actor(ActorCreateMode::InScene);
-				childActor->name = String::Format("%i Child actor #%i", i + 1, j + 1);
-				actor->AddChild(childActor);
-
-				for (int k = 0; k < 1; k++)
-				{
-					Actor* childActor2 = mnew Actor({ mnew ImageComponent("ui/UI4_Background.png"),
-													  mnew EditorTestComponent(),
-													  mnew AnimationComponent(),
-													  mnew ParticlesEmitterComponent() }, ActorCreateMode::InScene);
-					childActor2->name = String::Format("%i %i Sub Child actor #%i", i + 1, j + 1, k + 1);
-					//childActor2->transform->position = Vec2F(Math::Random(-500.0f, 500.0f), Math::Random(-500.0f, 500.0f));
-					childActor2->transform->position = Vec2F((float)(k*100), (float)((i*2 + j)*100));
-					childActor->AddChild(childActor2);
-				}
-			}
-		}
+		o2EditorApplication.LoadScene("Assets/test.scn");
 	}
 
 	void TreeWindow::InitializeSceneTree()

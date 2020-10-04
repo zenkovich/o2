@@ -101,6 +101,7 @@ namespace o2
 	void BoxCollider::OnAddedFromEditor()
 	{
 		mSize = mOwner->transform->GetSize();
+		OnShapeChanged();
 	}
 #endif
 }

@@ -273,7 +273,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Debug\StackTrace.h" />
-    <ClInclude Include="..\..\Sources\o2\Utils\Delegates.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\AnimatableAttribute.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DefaultTypeAttribute.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DontDeleteAttribute.h" />

@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "o2/Utils/Delegates.h"
+#include "o2/Utils/Function.h"
 #include "o2/Utils/Reflection/Attributes.h"
 #include "o2/Utils/Reflection/TypeSerializer.h"
 #include "o2/Utils/Reflection/TypeTraits.h"

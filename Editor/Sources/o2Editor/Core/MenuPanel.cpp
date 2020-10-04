@@ -177,9 +177,13 @@ namespace Editor
 			horLayout->AddChild(o2UI.CreateButton("Save", [=]() {
 				o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
 				onCompleted();
+				wnd->Hide();
 			}));
 
-			horLayout->AddChild(o2UI.CreateButton("Don't save", onCompleted));
+			horLayout->AddChild(o2UI.CreateButton("Don't save", [=]() {
+				onCompleted();
+				wnd->Hide();
+			}));
 
 			horLayout->AddChild(o2UI.CreateButton("Cancel", [=]() { wnd->Hide(); }));
 
