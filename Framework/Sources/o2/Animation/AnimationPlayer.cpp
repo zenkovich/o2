@@ -46,7 +46,8 @@ namespace o2
 
 		if (mClip)
 		{
-			mClip->onTrackAdded += THIS_SUBSCRIPTION(OnClipTrackAdded, [&]() { mClip = nullptr; });
+			Function<void()> ff([&]() { mClip = nullptr; });
+			mClip->onTrackAdded += MakeSubscription(this, &thisclass::OnClipTrackAdded, [&]() { mClip = nullptr; });
 			mClip->onTrackRemove += THIS_SUBSCRIPTION(OnClipTrackRemove, [&]() { mClip = nullptr; });
 			mClip->onDurationChange += THIS_SUBSCRIPTION(OnClipDurationChanged, [&]() { mClip = nullptr; });
 		}

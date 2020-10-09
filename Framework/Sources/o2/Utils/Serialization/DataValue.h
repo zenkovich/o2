@@ -303,20 +303,20 @@ namespace o2
 		{
 			int intValue;
 			UInt uintValue;
-			char padding[DataPayloadSize - sizeof(int)];
+			Byte padding[DataPayloadSize - sizeof(int)];
 		};
 
 		struct Int64Data
 		{
 			Int64 intValue;
 			UInt64 uintValue;
-			char padding[DataPayloadSize - sizeof(Int64)];
+			Byte padding[DataPayloadSize - sizeof(Int64)];
 		};
 
 		struct DoubleData
 		{
 			double value;
-			char padding[DataPayloadSize - sizeof(double)];
+			Byte padding[DataPayloadSize - sizeof(double)];
 		};
 
 		struct StringPtrData
@@ -327,13 +327,13 @@ namespace o2
 
 		struct ShortStringData
 		{
-			static constexpr int maxLength = DataPayloadSize/sizeof(char) - 1;
+			static constexpr int maxLength = DataPayloadSize/sizeof(Byte) - 1;
 			char stringValue[maxLength + 1];
 		};
 
 		struct ValueTypeData
 		{
-			char padding[DataPayloadSize];
+			Byte padding[DataPayloadSize];
 			Flags flags;
 
 			inline bool Is(Flags f) const

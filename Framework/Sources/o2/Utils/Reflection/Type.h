@@ -498,9 +498,9 @@ namespace o2
 		const Type* mKeyType;
 		const Type* mValueType;
 
-		SharedLambda<int(void*)>        mGetDictionaryObjectSizeFunc;
-		SharedLambda<void*(void*, int)> mGetObjectDictionaryKeyPtrFunc;
-		SharedLambda<void*(void*, int)> mGetObjectDictionaryValuePtrFunc;
+		Function<int(void*)>        mGetDictionaryObjectSizeFunc;
+		Function<void*(void*, int)> mGetObjectDictionaryKeyPtrFunc;
+		Function<void*(void*, int)> mGetObjectDictionaryValuePtrFunc;
 	};
 
 	template<typename _key_type, typename _value_type>

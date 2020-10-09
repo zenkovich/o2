@@ -14,7 +14,7 @@ namespace o2
 	// Basic delegate interface
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class IFunction <_res_type(_args ...)>
+	class IFunction<_res_type(_args ...)>
 	{
 	public:
 		// Virtual destructor
@@ -23,11 +23,17 @@ namespace o2
 		// Returns cloned copy of this
 		virtual IFunction* Clone() const = 0;
 
+		// Returns cloned emplace copy of this in memory
+		virtual IFunction* Clone(void* memory) const = 0;
+
 		// Invokes function with arguments
 		virtual _res_type Invoke(_args ... args) const = 0;
 
 		// Returns true if other functions is equal
 		virtual bool Equals(const IFunction<_res_type(_args ...)>* other) const = 0;
+
+		// Returns size of function
+		virtual UInt GetSizeOf() const = 0;
 
 		// Invokes function with arguments as functor
 		_res_type operator()(_args ... args) const
@@ -36,25 +42,22 @@ namespace o2
 		}
 	};
 
-	template <typename UnusedType>
-	class FunctionPtr;
-
 	// ------------------------
 	// Static function delegate
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class FunctionPtr <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class FunctionPtr: public IFunction<_res_type(_args ...)>
 	{
 		_res_type(*mFunctionPtr)(_args ... args); // Pointer to static function
 
 	public:
 		// Constructor
-		FunctionPtr(_res_type(*functionPtr)(_args ... args)) :
+		FunctionPtr(_res_type(*functionPtr)(_args ... args)):
 			mFunctionPtr(functionPtr)
 		{}
 
 		// Copy-constructor
-		FunctionPtr(const FunctionPtr& other) :
+		FunctionPtr(const FunctionPtr& other):
 			mFunctionPtr(other.mFunctionPtr)
 		{}
 
@@ -83,6 +86,12 @@ namespace o2
 			return mnew FunctionPtr(*this);
 		}
 
+		// Returns cloned emplace copy of this in memory
+		IFunction* Clone(void* memory) const
+		{
+			return new (memory) FunctionPtr(*this);
+		}
+
 		// Invokes function with arguments as functor
 		_res_type Invoke(_args ... args) const
 		{
@@ -98,25 +107,31 @@ namespace o2
 
 			return false;
 		}
+
+		// Returns size of function
+		UInt GetSizeOf() const override
+		{
+			return sizeof(*this);
+		}
 	};
 
 	// ------------------------
 	// Object function delegate
 	// ------------------------
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjFunctionPtr : public IFunction<_res_type(_args ...)>
+	class ObjFunctionPtr: public IFunction<_res_type(_args ...)>
 	{
 		_res_type(_class_type::*mFunctionPtr)(_args ... args); // Pointer to function
 		_class_type* mObject;                                  // Pointer to function's owner object
 
 	public:
 		// Constructor
-		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)) :
+		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)):
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
 		// Copy-constructor
-		ObjFunctionPtr(const ObjFunctionPtr& other) :
+		ObjFunctionPtr(const ObjFunctionPtr& other):
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
@@ -146,6 +161,12 @@ namespace o2
 			return mnew ObjFunctionPtr(*this);
 		}
 
+		// Returns cloned emplace copy of this in memory
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		{
+			return new (memory) ObjFunctionPtr(*this);
+		}
+
 		// Invokes function with arguments as functor
 		_res_type Invoke(_args ... args) const
 		{
@@ -161,25 +182,31 @@ namespace o2
 
 			return false;
 		}
+
+		// Returns size of function
+		UInt GetSizeOf() const override
+		{
+			return sizeof(*this);
+		}
 	};
 
 	// ---------------------------------
 	// Object constant function delegate
 	// ---------------------------------
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjConstFunctionPtr : public IFunction<_res_type(_args ...)>
+	class ObjConstFunctionPtr: public IFunction<_res_type(_args ...)>
 	{
 		_res_type(_class_type::*mFunctionPtr)(_args ... args) const; // Pointer to const function
 		_class_type* mObject;                                        // Pointer to function's owner object
 
 	public:
 		// Constructor
-		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const) :
+		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
 			mFunctionPtr(functionPtr), mObject(object)
 		{}
 
 		// Copy-constructor
-		ObjConstFunctionPtr(const ObjConstFunctionPtr& other) :
+		ObjConstFunctionPtr(const ObjConstFunctionPtr& other):
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
 		{}
 
@@ -209,6 +236,12 @@ namespace o2
 			return mnew ObjConstFunctionPtr(*this);
 		}
 
+		// Returns cloned emplace copy of this in memory
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		{
+			return new (memory) ObjConstFunctionPtr(*this);
+		}
+
 		// Invokes function with arguments as functor
 		_res_type Invoke(_args ... args) const
 		{
@@ -224,110 +257,42 @@ namespace o2
 
 			return false;
 		}
-	};
 
-	template <typename UnusedType>
-	class SharedLambda;
+		// Returns size of function
+		UInt GetSizeOf() const override
+		{
+			return sizeof(*this);
+		}
+	};
 
 	// ----------------------
 	// Shared lambda delegate
 	// ----------------------
-	template<typename _res_type, typename ... _args>
-	class SharedLambda <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	template<typename _lambda_type, typename _res_type, typename ... _args>
+	class SharedLambda: public IFunction<_res_type(_args ...)>
 	{
-		// ------------------------
-		// Lambda invoker interface
-		// ------------------------
-		struct ILambdaInvoker
-		{
-			virtual ~ILambdaInvoker() {}
-			virtual _res_type Invoke(_args ... args) const = 0;
-			virtual void IncRef() = 0;
-			virtual void DecRef() = 0;
-			virtual int RefCount() const = 0;
-		};
-
-		// -----------------------
-		// Template lambda invoker
-		// -----------------------
-		template<typename _lambda_type>
-		struct LambdaInvoker : ILambdaInvoker
-		{
-			_lambda_type mLambda;     // Lambda object (anonymous functor)
-			int          mReferences; // References count to this
-
-			// Constructor
-			LambdaInvoker(const _lambda_type& lambda) :
-				mLambda(lambda), mReferences(1)
-			{}
-
-			// Invokes lambda
-			_res_type Invoke(_args ... args) const
-			{
-				return mLambda(args ...);
-			}
-
-			// Increases references count
-			void IncRef()
-			{
-				mReferences++;
-			}
-
-			// Decreases references count
-			void DecRef()
-			{
-				mReferences--;
-			}
-
-			// Returns count of references
-			int RefCount() const
-			{
-				return mReferences;
-			}
-		};
-
-		ILambdaInvoker* mInvokerPtr; // Lambda invoker pinter
+		_lambda_type mLambda;
 
 	public:
-		SharedLambda() :mInvokerPtr(nullptr) {}
+		// Constructor
+		SharedLambda(const _lambda_type& lambda):
+			mLambda(lambda)
+		{}
 
 		// Constructor
-		template<typename _lambda_type>
-		SharedLambda(const _lambda_type& lambda) :
-			mInvokerPtr(new LambdaInvoker<_lambda_type>(lambda))
+		SharedLambda(_lambda_type&& lambda):
+			mLambda(lambda)
 		{}
 
 		// Copy-constructor
-		SharedLambda(const SharedLambda& other) :
-			mInvokerPtr(other.mInvokerPtr)
-		{
-			mInvokerPtr->IncRef();
-		}
-
-		// Destructor
-		~SharedLambda()
-		{
-			if (mInvokerPtr)
-			{
-				mInvokerPtr->DecRef();
-				if (mInvokerPtr->RefCount() == 0)
-					delete mInvokerPtr;
-			}
-		}
+		SharedLambda(const SharedLambda& other):
+			mLambda(other.mLambda)
+		{}
 
 		// Copy-operator
 		SharedLambda& operator=(const SharedLambda& other)
 		{
-			if (mInvokerPtr)
-			{
-				mInvokerPtr->DecRef();
-				if (mInvokerPtr->RefCount() == 0)
-					delete mInvokerPtr;
-			}
-
-			mInvokerPtr = other.mInvokerPtr;
-			mInvokerPtr->IncRef();
-
+			mLambda = other.mLambda;
 			return *this;
 		}
 
@@ -337,22 +302,28 @@ namespace o2
 			return mnew SharedLambda(*this);
 		}
 
+		// Returns cloned emplace copy of this in memory
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		{
+			return new (memory) SharedLambda(*this);
+		}
+
 		// Invokes function with arguments as functor
 		_res_type Invoke(_args ... args) const
 		{
-			return mInvokerPtr->Invoke(args ...);
+			return mLambda(args ...);
 		}
 
 		// Equal operator
 		bool operator==(const SharedLambda& other) const
 		{
-			return mInvokerPtr == other.mInvokerPtr;
+			return true;
 		}
 
 		// Not equal operator
 		bool operator!=(const SharedLambda& other) const
 		{
-			return mInvokerPtr != other.mInvokerPtr;
+			return false;
 		}
 
 		// Returns true if functions is equals
@@ -364,6 +335,12 @@ namespace o2
 
 			return false;
 		}
+
+		// Returns size of function
+		UInt GetSizeOf() const override
+		{
+			return sizeof(*this);
+		}
 	};
 
 	template <typename UnusedType>
@@ -373,11 +350,67 @@ namespace o2
 	// Combined delegate. Can contain many other functors
 	// --------------------------------------------------
 	template<typename _res_type, typename ... _args>
-	class Function <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class Function<_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
 	{
-		typedef std::vector<IFunction<_res_type(_args ...)>*> FunctionsVec;
+		enum class DataType { Empty, OneFunction, CoupleOfFunctions };
 
-		FunctionsVec mFunctions; // Vector of functors
+		static constexpr UInt payloadSize = sizeof(std::vector<void*>);
+		static constexpr UInt dataSize = payloadSize + sizeof(DataType);
+
+		struct TypeData
+		{
+			Byte padding[payloadSize];
+			DataType type;
+		};
+
+		struct OneFunctionData
+		{
+			static constexpr UInt capacity = payloadSize - sizeof(void*);
+
+			Byte functionData[capacity];
+			void(*destructor)(IFunction<_res_type(_args ...)>*) = nullptr;
+		};
+
+		union Data
+		{
+			std::vector<IFunction<_res_type(_args ...)>*> functions;
+
+			OneFunctionData oneFunctionData;
+
+			TypeData typeData;
+
+			Data() { typeData.type = DataType::Empty; }
+			~Data() {}
+		};
+
+		Data mData;
+
+		IFunction<_res_type(_args ...)>& OneFunctionRef() const
+		{
+			return *const_cast<Function<_res_type(_args ...)>*>(reinterpret_cast<const Function<_res_type(_args ...)>*>(mData.oneFunctionData.functionData));
+		}
+
+		void DestroyOneFunction()
+		{
+			if (mData.oneFunctionData.destructor)
+				(*mData.oneFunctionData.destructor)(&OneFunctionRef());
+		}
+
+		void ConvertToCoupleFunctionsType()
+		{
+			if (mData.typeData.type == DataType::OneFunction)
+			{
+				IFunction<_res_type(_args ...)>* firstFunction = OneFunctionRef().Clone();
+				DestroyOneFunction();
+
+				mData.functions = std::vector<IFunction<_res_type(_args ...)>*>();
+				mData.functions.push_back(firstFunction);
+			}
+			else
+				mData.functions = std::vector<IFunction<_res_type(_args ...)>*>();
+
+			mData.typeData.type = DataType::CoupleOfFunctions;
+		}
 
 	public:
 		static const Function<_res_type(_args ...)> empty;
@@ -385,54 +418,96 @@ namespace o2
 	public:
 		// Constructor
 		Function()
+			: mData()
 		{}
 
 		// Copy-constructor
 		Function(const Function& other)
 		{
-			for (auto func : other.mFunctions)
-				mFunctions.push_back(func->Clone());
+			if (other.mData.typeData.type == DataType::Empty)
+				return;
+
+			if (other.mData.typeData.type == DataType::OneFunction)
+			{
+				other.OneFunctionRef().Clone(mData.oneFunctionData.functionData);
+				return;
+			}
+
+			for (auto func : other.mData.functions)
+				Add(*func);
+		}
+
+		// Move-constructor
+		Function(Function&& other)
+		{
+			memcpy(&mData, &other.mData, sizeof(Data));
+			other.mData.typeData.type = DataType::Empty;
 		}
 
 		// Constructor from IFunction
 		Function(const IFunction<_res_type(_args ...)>& func)
+			: mData()
 		{
-			mFunctions.push_back(func.Clone());
+			Add(func);
+		}
+
+		// Constructor from IFunction
+		Function(IFunction<_res_type(_args ...)>&& func)
+			: mData()
+		{
+			Emplace(func);
 		}
 
 		// Constructor from static function pointer
-		template<typename _func_type>
-		Function(const _func_type* func)
+		template<typename _static_func_type, typename enable = std::enable_if<std::is_function<_static_func_type>::value>::type>
+		Function(const _static_func_type* func):
+			Function()
 		{
-			mFunctions.push_back(new Function<_res_type(_args ...)>(*func));
+			Emplace(FunctionPtr<_res_type, _args ...>(func));
 		}
 
 		// Constructor from lambda
-		template<typename _lambda_type, typename x = std::enable_if<std::is_invocable_r<_res_type, _lambda_type, _args ...>::value>::type>
-		Function(const _lambda_type& lambda)
+		template<typename _lambda_type, typename enable = std::enable_if<std::is_invocable_r<_res_type, _lambda_type, _args ...>::value && !std::is_base_of<IFunction<_res_type(_args ...)>, _lambda_type>::value>::type>
+		Function(const _lambda_type& lambda):
+			Function()
 		{
-			mFunctions.push_back(new SharedLambda<_res_type(_args ...)>(lambda));
+			Emplace(SharedLambda<_lambda_type, _res_type, _args ...>(lambda));
+		}
+
+		// Move-constructor from lambda
+		template<typename _lambda_type, typename enable = std::enable_if<
+			std::is_invocable_r<_res_type, _lambda_type, _args ...>::value &&
+			!std::is_base_of<IFunction<_res_type(_args ...)>, std::remove_reference<_lambda_type>::type>::value &&
+			std::is_rvalue_reference<_lambda_type&&>::value
+		>::type>
+		Function(_lambda_type&& lambda):
+			Function()
+		{
+			Emplace(SharedLambda<_lambda_type, _res_type, _args ...>(lambda));
 		}
 
 		// Constructor from object and his function
 		template<typename _class_type>
 		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+			: Function()
 		{
-			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		// Constructor from object and his function
 		template<typename _class_type>
-		Function(const ObjFunctionPtr<_class_type, _res_type, _args ...>& func)
+		Function(const ObjFunctionPtr<_class_type, _res_type, _args ...>& func):
+			Function()
 		{
-			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(func));
+			Emplace(ObjFunctionPtr<_class_type, _res_type, _args ...>(func));
 		}
 
 		// Constructor from object and his function
 		template<typename _class_type>
-		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
+		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
+			Function()
 		{
-			mFunctions.push_back(new ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		// Destructor
@@ -447,83 +522,153 @@ namespace o2
 			return mnew Function(*this);
 		}
 
+		// Returns cloned emplace copy of this in memory
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		{
+			return new (memory) Function(*this);
+		}
+
 		// Removing all inside functions
 		void Clear()
 		{
-			for (auto func : mFunctions)
-				delete func;
+			if (mData.typeData.type == DataType::CoupleOfFunctions)
+			{
+				for (auto func : mData.functions)
+					delete func;
 
-			mFunctions.clear();
+				mData.functions.clear();
+			}
+			else if (mData.typeData.type == DataType::OneFunction)
+			{
+				DestroyOneFunction();
+				mData.typeData.type = DataType::Empty;
+			}
 		}
 
 		// Returns true when function is empty
 		bool IsEmpty() const
 		{
-			return mFunctions.size() == 0;
+			return mData.typeData.type == DataType::Empty ||
+				(mData.typeData.type == DataType::CoupleOfFunctions && mData.functions.empty());
+		}
+
+		// Emplace function
+		template<typename _function_type, typename enabled = std::enable_if<std::is_base_of<IFunction<_res_type(_args ...)>, _function_type>::value>::type>
+		void Emplace(_function_type&& func)
+		{
+			auto size = sizeof(_function_type);
+			if (mData.typeData.type == DataType::Empty && size <= OneFunctionData::capacity)
+			{
+				new (mData.oneFunctionData.functionData) _function_type(func);
+				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { delete f; };
+				mData.typeData.type = DataType::OneFunction;
+			}
+			else
+			{
+				ConvertToCoupleFunctionsType();
+				mData.functions.push_back(mnew _function_type(func));
+			}
+		}
+
+		// Add function
+		void Add(const IFunction<_res_type(_args ...)>& func)
+		{
+			auto size = func.GetSizeOf();
+			if (mData.typeData.type == DataType::Empty && size <= OneFunctionData::capacity)
+			{
+				func.Clone(mData.oneFunctionData.functionData);
+				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { delete f; };
+				mData.typeData.type = DataType::OneFunction;
+			}
+			else
+			{
+				ConvertToCoupleFunctionsType();
+				mData.functions.push_back(func.Clone());
+			}
+		}
+
+		// Add function pointer
+		void Add(IFunction<_res_type(_args ...)>* func)
+		{
+			if (mData.typeData.type != DataType::CoupleOfFunctions)
+				ConvertToCoupleFunctionsType();
+
+			mData.functions.push_back(func);
+		}
+
+		// Removes function
+		void Remove(const IFunction<_res_type(_args ...)>& function)
+		{
+			if (mData.typeData.type == DataType::OneFunction)
+			{
+				if (OneFunctionRef().Equals(&function))
+				{
+					DestroyOneFunction();
+					mData.typeData.type = DataType::Empty;
+				}
+			}
+			else if (mData.typeData.type == DataType::CoupleOfFunctions)
+			{
+				for (auto funcIt = mData.functions.begin(); funcIt != mData.functions.end(); ++funcIt)
+				{
+					if ((*funcIt)->Equals(&function))
+					{
+						delete *funcIt;
+						mData.functions.erase(funcIt);
+						break;
+					}
+				}
+			}
+		}
+
+		// Removes function pointer
+		void Remove(const IFunction<_res_type(_args ...)>* function)
+		{
+			if (mData.typeData.type == DataType::CoupleOfFunctions)
+			{
+				auto fnd = std::find(mData.functions.begin(), mData.functions.end(), function);
+				if (fnd != mData.functions.end())
+					mData.functions.erase(fnd);
+
+				delete function;
+			}
 		}
 
 		// Add delegate to inside list
 		template<typename _class_type>
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
-			mFunctions.push_back(new ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		// Add delegate to inside list
 		template<typename _class_type>
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
 		{
-			mFunctions.push_back(new ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		// Add delegate to inside list
-		void Add(const IFunction<_res_type(_args ...)>& func)
+		void Add(const Function& func)
 		{
-			mFunctions.push_back(func.Clone());
-		}
-
-		// Add delegate to inside list
-		void Add(const Function& funcs)
-		{
-			for (auto func : funcs.mFunctions)
-				mFunctions.push_back(func->Clone());
-		}
-
-		// Add delegate to inside list
-		void Remove(const IFunction<_res_type(_args ...)>& func)
-		{
-			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
+			if (func.mData.typeData.type == DataType::OneFunction)
+				Add(func.OneFunctionRef());
+			else if (func.mData.typeData.type == DataType::CoupleOfFunctions)
 			{
-				if ((*funcIt)->Equals(&func))
-				{
-					delete *funcIt;
-					mFunctions.erase(funcIt);
-					break;
-				}
+				for (auto x : func.mData.functions)
+					Add(*x);
 			}
 		}
 
 		// Remove delegate from list
 		void Remove(const Function& func)
 		{
-			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); )
+			if (func.mData.typeData.type == DataType::OneFunction)
+				Remove(func.OneFunctionRef());
+			else if (func.mData.typeData.type == DataType::CoupleOfFunctions)
 			{
-				bool found = false;
-				for (auto funcIt2 = func.mFunctions.begin(); funcIt2 != func.mFunctions.end(); ++funcIt2)
-				{
-					if ((*funcIt)->Equals(*funcIt2))
-					{
-						found = true;
-						break;
-					}
-				}
-
-				if (found)
-				{
-					delete *funcIt;
-					funcIt = mFunctions.erase(funcIt);
-				}
-				else ++funcIt;
+				for (auto x : func.mData.functions)
+					Remove(*x);
 			}
 		}
 
@@ -544,10 +689,15 @@ namespace o2
 		// Returns true, if this contains the delegate
 		bool Contains(const IFunction<_res_type(_args ...)>& func) const
 		{
-			for (auto funcIt = mFunctions.begin(); funcIt != mFunctions.end(); ++funcIt)
+			if (mData.typeData.type == DataType::OneFunction)
+				return OneFunctionRef().Equals(&func);
+			else if (mData.typeData.type == DataType::CoupleOfFunctions)
 			{
-				if ((*funcIt)->Equals(&func))
-					return true;
+				for (auto x : mData.functions)
+				{
+					if (x->Equals(&func))
+						return true;
+				}
 			}
 
 			return false;
@@ -562,14 +712,21 @@ namespace o2
 		// Invokes function with arguments
 		_res_type Invoke(_args ... args) const
 		{
-			if (mFunctions.size() == 0)
-				return _res_type();
+			if (mData.typeData.type == DataType::OneFunction)
+				return OneFunctionRef().Invoke(args ...);
+			else if (mData.typeData.type == DataType::CoupleOfFunctions)
+			{
+				if (mData.functions.size() == 0)
+					return _res_type();
 
-			auto it = mFunctions.cbegin();
-			for (; it != mFunctions.cend() - 1; ++it)
-				(*it)->Invoke(args ...);
+				auto it = mData.functions.cbegin();
+				for (; it != mData.functions.cend() - 1; ++it)
+					(*it)->Invoke(args ...);
 
-			return (*it)->Invoke(args ...);
+				return (*it)->Invoke(args ...);
+			}
+
+			return _res_type();
 		}
 
 		// Copy operator
@@ -581,6 +738,14 @@ namespace o2
 		}
 
 		// Copy operator
+		Function<_res_type(_args ...)>& operator=(IFunction<_res_type(_args ...)>&& func)
+		{
+			Clear();
+			Emplace(func);
+			return *this;
+		}
+
+		// Copy operator
 		Function<_res_type(_args ...)>& operator=(const Function& other)
 		{
 			Clear();
@@ -588,13 +753,54 @@ namespace o2
 			return *this;
 		}
 
+		// Move operator
+		Function<_res_type(_args ...)>& operator=(Function&& other)
+		{
+			Clear();
+			memcpy(&mData, &other.mData, sizeof(Data));
+			other.mData.typeData.type = DataType::Empty;
+
+			return *this;
+		}
+
 		// Equal operator
 		bool operator==(const Function& other) const
 		{
-			for (auto func : mFunctions)
+			if (mData.typeData.type == DataType::Empty)
+				return other.mData.typeData.type == DataType::Empty;
+
+			if (mData.typeData.type == DataType::OneFunction)
+			{
+				if (other.mData.typeData.type == DataType::OneFunction)
+					return OneFunctionRef().Equals(&other.OneFunctionRef());
+				else if (other.mData.typeData.type == DataType::CoupleOfFunctions)
+				{
+					if (other.mData.functions.size() != 1)
+						return false;
+
+					return OneFunctionRef().Equals(other.mData.functions[0]);
+				}
+
+				return false;
+			}
+
+			// CoupleOfFunctions
+
+			if (other.mData.typeData.type == DataType::Empty)
+				return mData.functions.empty();
+
+			if (other.mData.typeData.type == DataType::OneFunction)
+			{
+				if (mData.functions.size() != 1)
+					return false;
+
+				return mData.functions[0]->Equals(&other.OneFunctionRef());
+			}
+
+			for (auto func : mData.functions)
 			{
 				bool found = false;
-				for (auto otherFunc : other.mFunctions)
+				for (auto otherFunc : other.mData.functions)
 				{
 					if (func->Equals(otherFunc))
 					{
@@ -619,10 +825,16 @@ namespace o2
 		// Equal operator
 		bool operator==(const IFunction<_res_type(_args ...)>& func) const
 		{
-			if (mFunctions.size() != 1)
+			if (mData.typeData.type == DataType::Empty)
 				return false;
 
-			return mFunctions[0]->Equals(&func);
+			if (mData.typeData.type == DataType::OneFunction)
+				return OneFunctionRef().Equals(&func);
+
+			if (mData.functions.size() != 1)
+				return false;
+
+			return mData.functions[0]->Equals(&func);
 		}
 
 		// Not equal operator
@@ -634,7 +846,7 @@ namespace o2
 		// Returns true, when delegates list isn't empty
 		operator bool() const
 		{
-			return mFunctions.size() > 0;
+			return IsEmpty();
 		}
 
 		// Returns true when functions is equal
@@ -706,6 +918,12 @@ namespace o2
 			Remove(other);
 			return *this;
 		}
+
+		// Returns size of function
+		UInt GetSizeOf() const override
+		{
+			return sizeof(*this);
+		}
 	};
 
 	template<typename _res_type, typename ... _args>
@@ -726,7 +944,7 @@ namespace o2
 	// Function holder delegate
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class Subscription <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class Subscription <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
 	{
 		Function<_res_type(_args ...)> mFunction;
 		Function<void()> mOnDestroy;
@@ -734,14 +952,14 @@ namespace o2
 
 	public:
 		// Constructor
-		Subscription(const Function<_res_type(_args ...)>& function, const Function<void()>& onDestroy) :
+		Subscription(const Function<_res_type(_args ...)>& function, const Function<void()>& onDestroy):
 			mFunction(function), mOnDestroy(onDestroy)
 		{
 			(*mRefs) = 1;
 		}
 
 		// Copy-constructor
-		Subscription(const Subscription& other) :
+		Subscription(const Subscription& other):
 			mFunction(other.mFunction), mOnDestroy(other.mOnDestroy), mRefs(other.mRefs)
 		{
 			(*mRefs)++;
@@ -783,6 +1001,12 @@ namespace o2
 			return mnew Subscription(*this);
 		}
 
+		// Returns cloned emplace copy of this in memory
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		{
+			return new (memory) Subscription(*this);
+		}
+
 		// Invokes function with arguments as functor
 		_res_type Invoke(_args ... args) const
 		{
@@ -797,6 +1021,12 @@ namespace o2
 				return *otherFuncPtr == *this;
 
 			return false;
+		}
+
+		// Returns size of function
+		UInt GetSizeOf() const override
+		{
+			return sizeof(*this);
 		}
 
 	protected:

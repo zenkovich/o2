@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Reflection/Enum.h"
+#include <cstddef>
 
 namespace o2
 {
@@ -9,13 +10,15 @@ namespace o2
 	typedef unsigned char      UInt8;
 	typedef long long          Int64;
 
-	typedef unsigned int       UInt;
-	typedef unsigned long      ULong;
+	typedef unsigned int  UInt;
+	typedef unsigned long ULong;
 
-	typedef int                KeyboardKey;
-	typedef int                CursorId;
+	typedef int KeyboardKey;
+	typedef int CursorId;
 
-	typedef UInt64             SceneUID;
+	typedef UInt64 SceneUID;
+
+	typedef std::byte Byte;
 
 	enum class BaseCorner { Left, Right, Top, Bottom, Center, LeftBottom, LeftTop, RightBottom, RightTop };
 
