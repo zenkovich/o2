@@ -281,12 +281,17 @@ namespace o2
 
 		// Constructor
 		SharedLambda(_lambda_type&& lambda):
-			mLambda(lambda)
+			mLambda(std::forward<_lambda_type>(lambda))
 		{}
 
 		// Copy-constructor
 		SharedLambda(const SharedLambda& other):
 			mLambda(other.mLambda)
+		{}
+
+		// Move-constructor
+		SharedLambda(SharedLambda&& other):
+			mLambda(std::forward<_lambda_type>(other.mLambda))
 		{}
 
 		// Copy-operator
@@ -403,11 +408,11 @@ namespace o2
 				IFunction<_res_type(_args ...)>* firstFunction = OneFunctionRef().Clone();
 				DestroyOneFunction();
 
-				mData.functions = std::vector<IFunction<_res_type(_args ...)>*>();
+				new (&mData.functions) std::vector<IFunction<_res_type(_args ...)>*>();
 				mData.functions.push_back(firstFunction);
 			}
 			else
-				mData.functions = std::vector<IFunction<_res_type(_args ...)>*>();
+				new (&mData.functions) std::vector<IFunction<_res_type(_args ...)>*>();
 
 			mData.typeData.type = DataType::CoupleOfFunctions;
 		}
@@ -483,7 +488,7 @@ namespace o2
 		Function(_lambda_type&& lambda):
 			Function()
 		{
-			Emplace(SharedLambda<_lambda_type, _res_type, _args ...>(lambda));
+			Emplace(std::forward<SharedLambda<_lambda_type, _res_type, _args ...>>(SharedLambda<_lambda_type, _res_type, _args ...>(std::forward<_lambda_type>(lambda))));
 		}
 
 		// Constructor from object and his function
@@ -491,7 +496,7 @@ namespace o2
 		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 			: Function()
 		{
-			Emplace(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(std::forward<ObjFunctionPtr<_class_type, _res_type, _args ...>>(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
 		}
 
 		// Constructor from object and his function
@@ -499,7 +504,7 @@ namespace o2
 		Function(const ObjFunctionPtr<_class_type, _res_type, _args ...>& func):
 			Function()
 		{
-			Emplace(ObjFunctionPtr<_class_type, _res_type, _args ...>(func));
+			Emplace(std::forward<ObjFunctionPtr<_class_type, _res_type, _args ...>>(ObjFunctionPtr<_class_type, _res_type, _args ...>(func)));
 		}
 
 		// Constructor from object and his function
@@ -507,7 +512,7 @@ namespace o2
 		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
 			Function()
 		{
-			Emplace(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(std::forward<ObjConstFunctionPtr<_class_type, _res_type, _args ...>>(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
 		}
 
 		// Destructor
@@ -559,8 +564,8 @@ namespace o2
 			auto size = sizeof(_function_type);
 			if (mData.typeData.type == DataType::Empty && size <= OneFunctionData::capacity)
 			{
-				new (mData.oneFunctionData.functionData) _function_type(func);
-				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { delete f; };
+				new (mData.oneFunctionData.functionData) _function_type(std::forward<_function_type>(func));
+				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { f->~IFunction<_res_type(_args ...)>(); };
 				mData.typeData.type = DataType::OneFunction;
 			}
 			else
@@ -577,7 +582,7 @@ namespace o2
 			if (mData.typeData.type == DataType::Empty && size <= OneFunctionData::capacity)
 			{
 				func.Clone(mData.oneFunctionData.functionData);
-				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { delete f; };
+				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { f->~IFunction<_res_type(_args ...)>(); };
 				mData.typeData.type = DataType::OneFunction;
 			}
 			else
@@ -638,14 +643,14 @@ namespace o2
 		template<typename _class_type>
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
 		{
-			Emplace(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(std::forward<ObjFunctionPtr<_class_type, _res_type, _args ...>>(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
 		}
 
 		// Add delegate to inside list
 		template<typename _class_type>
 		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
 		{
-			Emplace(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
+			Emplace(std::forward<ObjConstFunctionPtr<_class_type, _res_type, _args ...>>(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
 		}
 
 		// Add delegate to inside list
@@ -719,11 +724,10 @@ namespace o2
 				if (mData.functions.size() == 0)
 					return _res_type();
 
-				auto it = mData.functions.cbegin();
-				for (; it != mData.functions.cend() - 1; ++it)
-					(*it)->Invoke(args ...);
+				for (int i = 0; i < mData.functions.size() - 1; i++)
+					mData.functions[i]->Invoke(args ...);
 
-				return (*it)->Invoke(args ...);
+				return mData.functions.back()->Invoke(args ...);
 			}
 
 			return _res_type();
