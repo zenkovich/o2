@@ -188,11 +188,17 @@ namespace Editor
 
 	protected:
 		SceneEditableObject* mTargetObject = nullptr; // Target object
+													    
+		Toggle*      mLockToggle = nullptr;              // Lock toggle
+		WidgetState* mLockToggleLockedState = nullptr;   // Lock toggle locked state
+		WidgetState* mLockToggleHalfHideState = nullptr; // Lock toggle half hide state
+
+		Toggle* mEnableToggle = nullptr; // Enable toggle
+
+		Button*      mLinkBtn = nullptr;              // View link button
+		WidgetState* mLinkBtnHalfHideState = nullptr; // View link button half hide state
 
 		Text*        mNameDrawable = nullptr; // Object name drawable
-		Toggle*      mLockToggle = nullptr;   // Lock toggle
-		Toggle*      mEnableToggle = nullptr; // Enable toggle
-		Button*      mLinkBtn = nullptr;      // View link button
 		EditBox*     mNameEditBox = nullptr;  // Object's name edit box
 		WidgetState* mEditState = nullptr;    // Object's name edit state
 
@@ -284,10 +290,13 @@ END_META;
 CLASS_FIELDS_META(Editor::SceneTreeNode)
 {
 	PROTECTED_FIELD(mTargetObject).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mNameDrawable).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mLockToggle).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLockToggleLockedState).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLockToggleHalfHideState).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mEnableToggle).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mLinkBtn).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mLinkBtnHalfHideState).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mNameDrawable).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mNameEditBox).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mEditState).DEFAULT_VALUE(nullptr);
 }

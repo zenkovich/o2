@@ -82,6 +82,18 @@ namespace o2
 		return Widget::IsUnderPoint(point);
 	}
 
+	void TreeNode::SetSelectedState(bool state)
+	{
+		if (mSelectedState)
+			mSelectedState->SetStateForcible(state);
+	}
+
+	void TreeNode::SetFocusedState(bool state)
+	{
+		if (mFocusedState)
+			mFocusedState->SetStateForcible(state);
+	}
+
 	String TreeNode::GetCreateMenuGroup()
 	{
 		return "Tree";
@@ -103,6 +115,14 @@ namespace o2
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
+	}
+
+	void TreeNode::OnStateAdded(WidgetState* state)
+	{
+		Widget::OnStateAdded(state);
+
+		if (state->name == "selected")
+			mSelectedState = state;
 	}
 
 	void TreeNode::UpdateTreeLayout(float dt)
@@ -798,12 +818,13 @@ namespace o2
 
 		for (auto object : objects)
 		{
-			int idx = mAllNodes.IndexOf([=](Node* x) { return x->object == object; });
-
-			if (idx < 0 || !mAllNodes[idx]->widget)
+			auto nodeIdx = mVisibleNodes.IndexOf([=](Node* x) { return x->object == object; });
+			if (nodeIdx < 0)
 				continue;
 
-			UpdateNodeView(mAllNodes[idx], mAllNodes[idx]->widget, idx);
+			nodeIdx += mMinVisibleNodeIdx;
+
+			UpdateNodeView(mVisibleNodes[nodeIdx], mVisibleNodes[nodeIdx]->widget, nodeIdx);
 		}
 	}
 
@@ -1129,8 +1150,8 @@ namespace o2
 		}
 
 		widget->mIsSelected = node->isSelected;
-		widget->SetStateForcible("selected", node->isSelected);
-		widget->SetStateForcible("focused", mIsFocused);
+		widget->SetSelectedState(node->isSelected);
+		widget->SetFocusedState(mIsFocused);
 
 		UpdateNodeWidgetLayout(node, idx);
 	}

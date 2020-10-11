@@ -701,7 +701,13 @@ namespace o2
 
 	void Scene::OnObjectChanged(SceneEditableObject* object)
 	{
-		mChangedObjects.Add(object);
+		if (!object || object->changedFrame != o2Time.GetCurrentFrame())
+		{
+			if (object)
+				object->changedFrame = o2Time.GetCurrentFrame();
+
+			mChangedObjects.Add(object);
+		}
 	}
 
 	void Scene::OnObjectDrawn(SceneEditableObject* object)

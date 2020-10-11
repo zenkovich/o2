@@ -531,6 +531,12 @@ namespace o2
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
+		// Sets selected state
+		void SetSelectedState(bool state);
+
+		// Sets focused state
+		void SetFocusedState(bool state);
+
 		// Returns create menu group in editor
 		static String GetCreateMenuGroup();
 
@@ -541,9 +547,14 @@ namespace o2
 		Tree*       mOwnerTree = nullptr; // Owner tree
 		Button*     mExpandBtn = nullptr; // Node expanding button
 
+		WidgetState* mSelectedState = nullptr; // Selected state cached
+
 	protected:
 		// Copies data of actor from other to this
 		void CopyData(const Actor& otherActor) override;
+
+		// It is called when widget state was added, caches selected state
+		void OnStateAdded(WidgetState* state) override;
 
 		// Updates expanding
 		void UpdateTreeLayout(float dt);
@@ -772,6 +783,7 @@ CLASS_FIELDS_META(o2::TreeNode)
 	PROTECTED_FIELD(mNodeDef).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mOwnerTree).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mExpandBtn).DEFAULT_VALUE(nullptr);
+	PROTECTED_FIELD(mSelectedState).DEFAULT_VALUE(nullptr);
 }
 END_META;
 CLASS_METHODS_META(o2::TreeNode)
@@ -783,8 +795,11 @@ CLASS_METHODS_META(o2::TreeNode)
 	PUBLIC_FUNCTION(void, Collapse, bool);
 	PUBLIC_FUNCTION(void*, GetObject);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetSelectedState, bool);
+	PUBLIC_FUNCTION(void, SetFocusedState, bool);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
 	PROTECTED_FUNCTION(void, CopyData, const Actor&);
+	PROTECTED_FUNCTION(void, OnStateAdded, WidgetState*);
 	PROTECTED_FUNCTION(void, UpdateTreeLayout, float);
 	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

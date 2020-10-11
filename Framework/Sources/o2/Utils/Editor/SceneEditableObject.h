@@ -14,6 +14,9 @@ namespace o2
 	class SceneEditableObject: virtual public ISerializable
 	{
 	public:
+		int changedFrame = 0; // Index of frame, when object has changed
+
+	public:
 		// Default constructor. Registers itself in scene editable objects list
 		SceneEditableObject();
 
@@ -136,6 +139,7 @@ CLASS_BASES_META(o2::SceneEditableObject)
 END_META;
 CLASS_FIELDS_META(o2::SceneEditableObject)
 {
+	PUBLIC_FIELD(changedFrame).DEFAULT_VALUE(0);
 }
 END_META;
 CLASS_METHODS_META(o2::SceneEditableObject)

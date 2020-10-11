@@ -866,7 +866,7 @@ namespace o2
 
 	Vector<SceneEditableObject*> Actor::GetEditablesChildren() const
 	{
-		return mChildren.Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return mChildren.DynamicCast<SceneEditableObject*>();
 	}
 
 	void Actor::SetEditableParent(SceneEditableObject* object)

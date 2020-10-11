@@ -377,8 +377,16 @@ namespace Editor
 		mNameEditBox = (EditBox*)GetChild("nameEditBox");
 		mEditState = GetStateObject("edit");
 
+		if (mLinkBtn)
+			mLinkBtnHalfHideState = mLinkBtn->GetStateObject("halfHide");
+
 		if (mLockToggle)
+		{
+			mLockToggleHalfHideState = mLockToggle->GetStateObject("halfHide");
+			mLockToggleLockedState = mLockToggle->GetStateObject("locked");
+
 			mLockToggle->onClick = THIS_FUNC(OnLockClicked);
+		}
 
 		if (mEnableToggle)
 			mEnableToggle->onClick = THIS_FUNC(OnEnableCkicked);
@@ -408,7 +416,7 @@ namespace Editor
 		if (Actor* actor = dynamic_cast<Actor*>(object))
 		{
 			mLinkBtn->SetEnabled(actor->GetPrototype());
-			mLinkBtn->SetStateForcible("halfHide", !actor->GetPrototypeDirectly().IsValid());
+			mLinkBtnHalfHideState->SetState(!actor->GetPrototypeDirectly().IsValid());
 
 			if (actor->GetPrototype())
 			{
@@ -428,8 +436,8 @@ namespace Editor
 		else mEnableToggle->SetEnabled(false);
 
 		mLockToggle->SetValue(object->IsLocked());
-		mLockToggle->SetStateForcible("locked", object->IsLockedInHierarchy());
-		mLockToggle->SetStateForcible("halfHide", object->IsLockedInHierarchy() && !object->IsLocked());
+		mLockToggleLockedState->SetState(object->IsLockedInHierarchy());
+		mLockToggleHalfHideState->SetState(object->IsLockedInHierarchy() && !object->IsLocked());
 	}
 
 	void SceneTreeNode::EnableEditName()
