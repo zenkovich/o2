@@ -96,13 +96,13 @@ namespace o2
 
 		memcpy(mesh.vertices, verticies, sizeof(Vertex2)*vertexCount);
 
-		for (int i = 1; i < vertexCount; i++)
+		for (int i = 2; i < vertexCount; i++)
 		{
 			int ii = (i - 2)*3;
 			mesh.indexes[ii] = i - 1;
 			mesh.indexes[ii + 1] = i;
 			mesh.indexes[ii + 2] = 0;
-		}
+ 		}
 
 		mesh.vertexCount = vertexCount;
 		mesh.polyCount = polyCount;

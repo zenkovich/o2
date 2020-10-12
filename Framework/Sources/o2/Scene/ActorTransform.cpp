@@ -39,6 +39,11 @@ namespace o2
 		mData->shear = other.mData->shear;
 	}
 
+	ActorTransform::~ActorTransform()
+	{
+		delete mData;
+	}
+
 	void ActorTransform::CopyFrom(const ActorTransform& other)
 	{
 		mData->size = other.mData->size;

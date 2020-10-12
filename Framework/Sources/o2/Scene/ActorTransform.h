@@ -87,6 +87,9 @@ namespace o2
 		// Copy-constructor
 		ActorTransform(const ActorTransform& other);
 
+		// Destructor
+		~ActorTransform();
+
 		// Assign operator
 		ActorTransform& operator=(const ActorTransform& other);
 
