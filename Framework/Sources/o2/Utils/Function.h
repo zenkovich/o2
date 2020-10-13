@@ -434,7 +434,7 @@ namespace o2
 
 			if (other.mData.typeData.type == DataType::OneFunction)
 			{
-				other.OneFunctionRef().Clone(mData.oneFunctionData.functionData);
+				Add(other.OneFunctionRef());
 				return;
 			}
 
