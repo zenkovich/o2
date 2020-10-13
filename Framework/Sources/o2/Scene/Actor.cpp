@@ -425,9 +425,6 @@ namespace o2
 
 	void Actor::SetParent(Actor* actor, bool worldPositionStays /*= true*/)
 	{
-		if (actor == this)
-			actor = actor;
-
 		if ((actor && actor->mParent == this) || actor == this || actor == mParent)
 			return;
 
@@ -440,6 +437,7 @@ namespace o2
 			o2Scene.mRootActors.Remove(this);
 
 		mParent = actor;
+		transform->mData->parentInvTransformActualFrame = 0;
 
 		if (mParent)
 		{
@@ -476,9 +474,6 @@ namespace o2
 	Actor* Actor::AddChild(Actor* actor)
 	{
 		Assert(actor, "Actor is null");
-
-		if (actor == this)
-			actor = actor;
 
 		actor->SetParent(this, false);
 		return actor;

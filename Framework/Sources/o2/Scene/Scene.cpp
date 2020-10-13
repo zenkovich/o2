@@ -501,12 +501,14 @@ namespace o2
 
 		onLayersListChanged();
 
-		auto& tagsNode = doc.GetMember("Tags");
-		for (auto& tagNode : tagsNode)
+		if (auto& tagsNode = doc.GetMember("Tags"))
 		{
-			auto tag = mnew Tag();
-			tag->Deserialize(tagNode);
-			mTags.Add(tag);
+			for (auto& tagNode : tagsNode)
+			{
+				auto tag = mnew Tag();
+				tag->Deserialize(tagNode);
+				mTags.Add(tag);
+			}
 		}
 
 		mRootActors = doc.GetMember("Actors");

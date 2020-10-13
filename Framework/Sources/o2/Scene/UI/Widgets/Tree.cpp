@@ -822,9 +822,7 @@ namespace o2
 			if (nodeIdx < 0)
 				continue;
 
-			nodeIdx += mMinVisibleNodeIdx;
-
-			UpdateNodeView(mVisibleNodes[nodeIdx], mVisibleNodes[nodeIdx]->widget, nodeIdx);
+			UpdateNodeView(mVisibleNodes[nodeIdx], mVisibleNodes[nodeIdx]->widget, nodeIdx + mMinVisibleNodeIdx);
 		}
 	}
 

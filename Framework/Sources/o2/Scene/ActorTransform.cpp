@@ -693,7 +693,6 @@ namespace o2
 		UpdateTransform();
 		UpdateWorldRectangleAndTransform();
 
-		mData->parentInvTransformActualFrame = o2Time.GetCurrentFrame();
 		mData->updateFrame = mData->dirtyFrame;
 		mData->owner->OnTransformUpdated();
 	}
