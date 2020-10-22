@@ -719,6 +719,9 @@ namespace o2
 
 	void Actor::OnTransformChanged()
 	{
+		if (mSceneStatus == SceneStatus::WaitingAddToScene)
+			return;
+
 		for (auto comp : mComponents)
 			comp->OnTransformChanged();
 	}

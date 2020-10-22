@@ -21,7 +21,7 @@ namespace o2
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
 	}
 
-	TreeNode::TreeNode(const TreeNode& other) :
+	TreeNode::TreeNode(const TreeNode& other):
 		Widget(other)
 	{
 		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
@@ -184,7 +184,7 @@ namespace o2
 		mHighlightAnim.SetTarget(mHighlightSprite);
 	}
 
-	Tree::Tree(const Tree& other) :
+	Tree::Tree(const Tree& other):
 		ScrollArea(other)
 	{
 		mRearrangeType = other.mRearrangeType;
@@ -508,7 +508,8 @@ namespace o2
 			mSelectedObjects.Clear();
 		}
 
-		object->SetSelected(!object->IsSelected());
+		if (!o2Input.IsKeyDown(VK_SHIFT))
+			object->SetSelected(!object->IsSelected());
 	}
 
 	void Tree::OnSelectableObjectBeganDragging(SelectableDragableObject* object)
@@ -614,7 +615,7 @@ namespace o2
 	void Tree::ExpandAll()
 	{
 		bool isAllExpanded = false;
-		while (!isAllExpanded) 
+		while (!isAllExpanded)
 		{
 			UpdateNodesView(true);
 			UpdateVisibleNodes();
@@ -822,7 +823,8 @@ namespace o2
 			if (nodeIdx < 0)
 				continue;
 
-			UpdateNodeView(mVisibleNodes[nodeIdx], mVisibleNodes[nodeIdx]->widget, nodeIdx + mMinVisibleNodeIdx);
+			auto node = mVisibleNodes[nodeIdx];
+			UpdateNodeView(node, node->widget, -1);
 		}
 	}
 
@@ -1005,7 +1007,7 @@ namespace o2
 	}
 
 	void Tree::UpdateSelfTransform()
-{
+	{
 		ScrollArea::UpdateSelfTransform();
 		mIsNeedUdateLayout = false;
 	}
@@ -1105,15 +1107,14 @@ namespace o2
 		TreeNode* widget;
 
 		if (cacheIdx < 0)
-		{
 			widget = CreateTreeNodeWidget();
-			UpdateNodeView(node, widget, i);
-		}
 		else
 		{
 			widget = mVisibleWidgetsCache[cacheIdx].widget;
 			mVisibleWidgetsCache[cacheIdx].widget = nullptr;
 		}
+
+		UpdateNodeView(node, widget, i);
 
 		widget->mIsSelected = node->isSelected;
 		widget->mNodeDef = node;
@@ -1151,7 +1152,8 @@ namespace o2
 		widget->SetSelectedState(node->isSelected);
 		widget->SetFocusedState(mIsFocused);
 
-		UpdateNodeWidgetLayout(node, idx);
+		if (idx >= 0)
+			UpdateNodeWidgetLayout(node, idx);
 	}
 
 	void Tree::UpdateNodeWidgetLayout(Node* node, int idx)
@@ -1163,7 +1165,7 @@ namespace o2
 			dragModeOffset = mExpandingNodeFunc.Evaluate(node->insertCoef)*nodeHeight;
 
 		node->widget->layout->CopyFrom(WidgetLayout::HorStretch(VerAlign::Top, mChildrenOffset*(float)node->level, 0,
-																  nodeHeight, GetNodePosition(idx) + dragModeOffset));
+									   nodeHeight, GetNodePosition(idx) + dragModeOffset));
 	}
 
 	int Tree::GetNodeIndex(float position) const
