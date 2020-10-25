@@ -18,13 +18,15 @@ namespace o2
 		class Item: public ISerializable
 		{
 		public:
-			WString                     text;     // @SERIALIZABLE
-			Vector<ContextMenu::Item> subItems; // @SERIALIZABLE
+			WString text; // @SERIALIZABLE
 
-			Function<void()>            onClick;
+			Vector<ContextMenu::Item*> subItems; // @SERIALIZABLE
 
+			Function<void()> onClick;
+
+		public:
 			Item();
-			Item(const WString& text, Vector<ContextMenu::Item> subItems);
+			Item(const WString& text, const Vector<ContextMenu::Item*>& subItems);
 			Item(const WString& text, const Function<void()> onClick);
 
 			bool operator==(const Item& other) const;

@@ -488,7 +488,7 @@ namespace o2
 	MenuPanel::Item::Item()
 	{}
 
-	MenuPanel::Item::Item(const WString& text, Vector<ContextMenu::Item> subItems):
+	MenuPanel::Item::Item(const WString& text, const Vector<ContextMenu::Item*>& subItems):
 		text(text), subItems(subItems)
 	{}
 

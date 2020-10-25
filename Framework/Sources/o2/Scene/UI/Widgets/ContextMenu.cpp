@@ -18,7 +18,7 @@ namespace o2
 {
 	bool ContextMenu::Item::operator==(const Item& other) const
 	{
-		return text == other.text && shortcut == other.shortcut && icon == other.icon;
+		return text == other.text && mShortcut == other.mShortcut && icon == other.icon;
 	}
 
 	ContextMenu::Item::Item():
@@ -28,10 +28,12 @@ namespace o2
 	ContextMenu::Item::Item(const WString& text, const Function<void()> onClick,
 							const WString& group /*= ""*/, const ImageAssetRef& icon /*= ImageAssetRef()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), group(group), onClick(onClick), shortcut(shortcut), icon(icon), checked(false), checkable(false)
-	{}
+		text(text), group(group), onClick(onClick), mShortcut(shortcut), icon(icon), checked(false), checkable(false)
+	{
+		SetShortcut(shortcut);
+	}
 
-	ContextMenu::Item::Item(const WString& text, Vector<Item> subItems,
+	ContextMenu::Item::Item(const WString& text, const Vector<Item*>& subItems,
 							const WString& group /*= ""*/, const ImageAssetRef& icon /*= ImageAssetRef()*/) :
 		text(text), group(group), subItems(subItems), icon(icon), checked(false), checkable(false)
 	{}
@@ -40,18 +42,56 @@ namespace o2
 							Function<void(bool)> onChecked /*= Function<void(bool)>()*/,
 							const WString& group /*= ""*/, const ImageAssetRef& icon /*= ImageAssetRef()*/,
 							const ShortcutKeys& shortcut /*= ShortcutKeys()*/) :
-		text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), shortcut(shortcut), icon(icon)
-	{}
+		text(text), group(group), checked(checked), onChecked(onChecked), checkable(true), mShortcut(shortcut), icon(icon)
+	{
+		SetShortcut(shortcut);
+	}
 
 	ContextMenu::Item::~Item()
-	{}
-
-	ContextMenu::Item ContextMenu::Item::Separator()
 	{
-		return Item(separatorText, Function<void()>());
+		for (auto item : subItems)
+			delete item;
+	}
+
+	void ContextMenu::Item::SetShortcut(const ShortcutKeys& shortcut)
+	{
+		mShortcut = shortcut;
+		ShortcutKeysListener::SetShortcut(shortcut);
+	}
+
+	const ShortcutKeys& ContextMenu::Item::GetShortcut() const
+	{
+		return mShortcut;
+	}
+
+	void ContextMenu::Item::SetMaxPriority()
+	{
+		ShortcutKeysListener::SetMaxPriority();
+
+		for (auto item : subItems)
+			item->SetMaxPriority();
+	}
+
+	void ContextMenu::Item::SetMinPriority()
+	{
+		ShortcutKeysListener::SetMinPriority();
+
+		for (auto item : subItems)
+			item->SetMinPriority();
+	}
+
+	ContextMenu::Item* ContextMenu::Item::Separator()
+	{
+		return mnew Item(separatorText, Function<void()>());
 	}
 
 	WString ContextMenu::Item::separatorText = "---";
+
+	void ContextMenu::Item::OnShortcutPressed()
+	{
+		onClick();
+		onChecked(checked);
+	}
 
 	ContextMenu::ContextMenu():
 		PopupWidget()
@@ -82,7 +122,7 @@ namespace o2
 		*mItemsLayout->layout = WidgetLayout::BothStretch();
 	}
 
-	ContextMenu::ContextMenu(Vector<Item> items):
+	ContextMenu::ContextMenu(const Vector<Item*>& items):
 		ContextMenu()
 	{
 		AddItems(items);
@@ -106,6 +146,9 @@ namespace o2
 
 	ContextMenu::~ContextMenu()
 	{
+		for (auto item : mItems)
+			delete item;
+
 		delete mItemSample;
 		delete mSelectionDrawable;
 		delete mSeparatorSample;
@@ -181,7 +224,7 @@ namespace o2
 		PopupWidget::Show(position);
 	}
 
-	void ContextMenu::AddItem(const Item& item)
+	void ContextMenu::AddItem(Item* item)
 	{
 		mItems.Add(item);
 		mItemsBuilt = false;
@@ -202,7 +245,7 @@ namespace o2
 		WString targetPath = path;
 		auto itemsList = CreateItemsByPath(targetPath);
 		int groupDelPos = targetPath.FindLast(".");
-		itemsList->Add(Item(targetPath.SubStr(0, groupDelPos), clickFunc,
+		itemsList->Add(mnew Item(targetPath.SubStr(0, groupDelPos), clickFunc,
 					   groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
 					   icon, shortcut));
 	}
@@ -215,14 +258,14 @@ namespace o2
 		WString targetPath = path;
 		auto itemsList = CreateItemsByPath(targetPath);
 		int groupDelPos = targetPath.FindLast(".");
-		itemsList->Add(Item(targetPath.SubStr(0, groupDelPos), value, clickFunc,
+		itemsList->Add(mnew Item(targetPath.SubStr(0, groupDelPos), value, clickFunc,
 					   groupDelPos < 0 ? "" : targetPath.SubStr(groupDelPos + 1),
 					   icon, shortcut));
 	}
 
-	Vector<ContextMenu::Item>* ContextMenu::CreateItemsByPath(WString& path)
+	Vector<ContextMenu::Item*>* ContextMenu::CreateItemsByPath(WString& path)
 	{
-		Vector<Item>* items = &mItems;
+		Vector<Item*>* items = &mItems;
 
 		while (true)
 		{
@@ -232,22 +275,22 @@ namespace o2
 
 			WString subMenu = path.SubStr(0, slashPos);
 
-			auto subItem = items->Find([&](const Item& x) { return x.text == subMenu; });
+			auto subItem = items->Find([&](Item* x) { return x->text == subMenu; });
 
 			if (!subItem)
 			{
-				items->Add(Item(subMenu, Function<void()>(), o2FileSystem.GetFileExtension(subMenu)));
+				items->Add(mnew Item(subMenu, Function<void()>(), o2FileSystem.GetFileExtension(subMenu)));
 				subItem = &items->Last();
 			}
 
-			items = &subItem->subItems;
+			items = &(*subItem)->subItems;
 			path = path.SubStr(slashPos + 1);
 		}
 
 		return items;
 	}
 
-	void ContextMenu::InsertItem(const Item& item, int position)
+	void ContextMenu::InsertItem(Item* item, int position)
 	{
 		mItems.Insert(item, position);
 		mItemsBuilt = false;
@@ -260,13 +303,13 @@ namespace o2
 		}
 	}
 
-	void ContextMenu::AddItems(Vector<Item> items)
+	void ContextMenu::AddItems(const Vector<Item*>& items)
 	{
 		for (auto& item : items)
 			AddItem(item);
 	}
 
-	void ContextMenu::InsertItems(Vector<Item> items, int position)
+	void ContextMenu::InsertItems(const Vector<Item*>& items, int position)
 	{
 		int i = 0;
 		for (auto& item : items)
@@ -274,14 +317,6 @@ namespace o2
 			InsertItem(item, position + i);
 			i++;
 		}
-	}
-
-	ContextMenu::Item ContextMenu::GetItem(int position)
-	{
-		if (position > 0 && position < mItemsLayout->GetChildren().Count())
-			return GetItemDef(position);
-
-		return Item();
 	}
 
 	ContextMenuItem* ContextMenu::GetItemWidget(int position)
@@ -327,12 +362,14 @@ namespace o2
 		return nullptr;
 	}
 
-	void ContextMenu::SetItem(int position, const Item& item)
+	void ContextMenu::SetItem(int position, Item* item)
 	{
 		if (position < 0 || position >= mItems.Count())
 			return;
 
+		delete mItems[position];
 		mItems[position] = item;
+
 		mItemsBuilt = false;
 
 		if (mResEnabledInHierarchy)
@@ -454,13 +491,9 @@ namespace o2
 		mSelectedItem = nullptr;
 	}
 
-	Vector<ContextMenu::Item> ContextMenu::GetItems() const
+	const Vector<ContextMenu::Item*>& ContextMenu::GetItems() const
 	{
-		Vector<Item> res;
-		for (int i = 0; i < mItemsLayout->GetChildren().Count(); i++)
-			res.Add(GetItemDef(i));
-
-		return res;
+		return mItems;
 	}
 
 	void ContextMenu::RemoveItem(int position)
@@ -471,61 +504,48 @@ namespace o2
 
 	void ContextMenu::RemoveItem(const WString& path)
 	{
-		ContextMenu* targetContext = this;
+		Item* item = nullptr;
+		Vector<Item*>* itItems = &mItems;
 		WString targetPath = path;
 
-		while (true)
+		while (!targetPath.IsEmpty())
 		{
 			int slashPos = targetPath.Find("/");
-			if (slashPos < 0)
-				break;
-
 			WString subMenu = targetPath.SubStr(0, slashPos);
 
-			Widget* subChild = targetContext->mItemsLayout->mChildWidgets.FindOrDefault([&](auto x) {
-				if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
-					return text->text == subMenu;
+			auto subItem = itItems->FindOrDefault([&](const Item* x) { return x->text == subMenu; });
+			if (!subItem)
+				break;
 
-				return false;
-			});
-
-			if (!subChild)
+			if (slashPos < 0)
 			{
-				o2Debug.LogError("Failed to remove context item " + path);
-				return;
+				item = subItem;
+				break;
 			}
 
-			ContextMenu* subContext = subChild->FindChildByType<ContextMenu>();
-			if (!subContext)
-			{
-				o2Debug.LogError("Failed to remove context item " + path);
-				return;
-			}
-
-			targetContext = subContext;
+			itItems = &subItem->subItems;
 			targetPath = targetPath.SubStr(slashPos + 1);
 		}
 
-		Widget* removingItem = targetContext->mItemsLayout->mChildWidgets.FindOrDefault([&](auto x) {
-			if (auto text = x->template GetLayerDrawable<Text>("basic/caption"))
-				return text->text == targetPath;
-
-			return false;
-		});
-
-		if (!removingItem)
+		if (item)
 		{
-			o2Debug.LogError("Failed to remove context item " + path);
-			return;
-		}
+			if (item->widget)
+				delete item->widget;
 
-		targetContext->mItemsLayout->RemoveChild(removingItem);
+			itItems->Remove(item);
+			delete item;
+		}
 	}
 
 	void ContextMenu::RemoveAllItems()
 	{
 		mItemsLayout->RemoveAllChildren();
 		mSelectedItem = nullptr;
+
+		for (auto item : mItems)
+			delete item;
+
+		mItems.Clear();
 	}
 
 	void ContextMenu::SetItemChecked(int position, bool checked)
@@ -584,20 +604,14 @@ namespace o2
 
 	void ContextMenu::SetItemsMaxPriority()
 	{
-		for (auto child : mItemsLayout->mChildren)
-		{
-			if (ContextMenuItem* item = dynamic_cast<ContextMenuItem*>(child))
-				item->SetMaxPriority();
-		}
+		for (auto item : mItems)
+			item->SetMaxPriority();
 	}
 
 	void ContextMenu::SetItemsMinPriority()
 	{
-		for (auto child : mItemsLayout->mChildren)
-		{
-			if (ContextMenuItem* item = dynamic_cast<ContextMenuItem*>(child))
-				item->SetMinPriority();
-		}
+		for (auto item : mItems)
+			item->SetMinPriority();
 	}
 
 	String ContextMenu::GetCreateMenuGroup()
@@ -609,11 +623,12 @@ namespace o2
 	{
 		const ContextMenu& other = dynamic_cast<const ContextMenu&>(otherActor);
 
-		PopupWidget::CopyData(other);
-
+		RemoveAllItems();
 		delete mItemSample;
 		delete mSelectionDrawable;
 		delete mSeparatorSample;
+
+		PopupWidget::CopyData(other);
 
 		mItemSample = other.mItemSample->CloneAs<ContextMenuItem>();
 		mSeparatorSample = other.mSeparatorSample->CloneAs<Widget>();
@@ -698,10 +713,10 @@ namespace o2
 
 		Vector<ContextMenuItem*> cache;
 
-		for (auto& item : mItems)
+		for (auto item : mItems)
 		{
-			if (item.widget)
-				mItemsLayout->RemoveChild(item.widget, false);
+			if (item->widget)
+				mItemsLayout->RemoveChild(item->widget, false);
 		}
 
 		auto children = mItemsLayout->GetChildren();
@@ -717,8 +732,8 @@ namespace o2
 		}
 
 		Map<WString, Vector<Item*>> groups;
-		for (auto& item : mItems)
-			groups[item.group].Add(&item);
+		for (auto item : mItems)
+			groups[item->group].Add(item);
 
 		bool isFirst = true;
 		for (auto& kv : groups)
@@ -733,7 +748,7 @@ namespace o2
 			if (isFirst)
 				isFirst = false;
 
-			for (auto& item : kv.second)
+			for (auto item : kv.second)
 			{
 				if (item->widget)
 					mItemsLayout->AddChild(item->widget);
@@ -748,7 +763,7 @@ namespace o2
 					else
 					{
 						ContextMenuItem* newItem = cache.IsEmpty() ? mItemSample->CloneAs<ContextMenuItem>() : cache.PopBack();
-						newItem->Setup(*item);
+						newItem->Setup(item);
 						mItemsLayout->AddChild(newItem);
 					}
 				}
@@ -758,33 +773,9 @@ namespace o2
 		mItemsBuilt = true;
 	}
 
-	ContextMenu::Item ContextMenu::GetItemDef(int idx) const
+	ContextMenu::Item* ContextMenu::GetItem(int idx) const
 	{
-		Item res;
-		auto item = mItemsLayout->mChildren[idx];
-
-		if (item->name == "Separator")
-			res.text = Item::separatorText;
-		else
-		{
-			auto contextItem = (ContextMenuItem*)item;
-			if (auto iconLayer = contextItem->GetLayerDrawable<Sprite>("basic/icon"))
-				res.icon = iconLayer->GetImageAsset();
-
-			if (auto textLayer = contextItem->GetLayerDrawable<Text>("basic/caption"))
-				res.text = textLayer->text;
-
-			if (auto shortcutLayer = contextItem->GetLayerDrawable<Text>("basic/shortcut"))
-				res.shortcut = contextItem->GetShortcut();
-
-			if (auto subMenu = contextItem->FindChildByType<ContextMenu>())
-				res.subItems = subMenu->GetItems();
-
-			res.checked = contextItem->IsChecked();
-			res.onClick = contextItem->onClick;
-		}
-
-		return res;
+		return mItems[idx];
 	}
 
 	ContextMenuItem::ContextMenuItem():
@@ -806,16 +797,17 @@ namespace o2
 	ContextMenuItem::~ContextMenuItem()
 	{}
 
-	void ContextMenuItem::Setup(ContextMenu::Item& item)
+	void ContextMenuItem::Setup(ContextMenu::Item* item)
 	{
-		item.widget = this;
-		name = (WString)"Context Item " + item.text;
+		item->widget = this;
+
+		name = (WString)"Context Item " + item->text;
 
 		if (auto iconLayer = FindLayer("icon"))
 		{
-			if (item.icon)
+			if (item->icon)
 			{
-				Vec2F size = item.icon->GetAtlasRect().Size();
+				Vec2F size = item->icon->GetAtlasRect().Size();
 
 				if (size.x > size.y)
 				{
@@ -828,7 +820,7 @@ namespace o2
 					size.y = layout->height;
 				}
 
-				iconLayer->AddChildLayer("sprite", mnew Sprite(item.icon),
+				iconLayer->AddChildLayer("sprite", mnew Sprite(item->icon),
 										 Layout(Vec2F(), Vec2F(),
 										 Vec2F(-Math::Floor(size.x*0.5f), Math::Floor(size.y*0.5f)),
 										 Vec2F(Math::Floor(size.x*0.5f), -Math::Floor(size.y*0.5f))));
@@ -838,30 +830,29 @@ namespace o2
 		}
 
 		if (auto textLayer = GetLayerDrawable<Text>("basic/caption"))
-			textLayer->text = item.text;
+			textLayer->text = item->text;
 
 		if (auto shortcutLayer = GetLayerDrawable<Text>("basic/shortcut"))
-			shortcutLayer->text = item.shortcut.AsString();
+			shortcutLayer->text = item->GetShortcut().AsString();
 
 		if (auto subIconLayer = FindLayer("subIcon"))
-			subIconLayer->transparency = item.subItems.Count() > 0 ? 1.0f : 0.0f;
+			subIconLayer->transparency = item->subItems.Count() > 0 ? 1.0f : 0.0f;
 
 		if (auto checkLayer = GetLayerDrawable<Sprite>("check"))
-			checkLayer->enabled = item.checked;
+			checkLayer->enabled = item->checked;
 
-		SetShortcut(item.shortcut);
-		SetChecked(item.checked);
-		SetCheckable(item.checkable);
+		SetChecked(item->checked);
+		SetCheckable(item->checkable);
 
-		onClick = item.onClick;
-		onChecked = item.onChecked;
+		onClick = item->onClick;
+		onChecked = item->onChecked;
 
 		RemoveAllChildren();
-		if (item.subItems.Count() > 0)
+		if (item->subItems.Count() > 0)
 		{
 			ContextMenu* subMenu = o2UI.CreateWidget<ContextMenu>();
 			subMenu->RemoveAllItems();
-			subMenu->AddItems(item.subItems);
+			subMenu->AddItems(item->subItems);
 
 			AddChild(subMenu);
 		}
@@ -917,11 +908,6 @@ namespace o2
 		return mCheckable;
 	}
 
-	void ContextMenuItem::SetShortcut(const ShortcutKeys& shortcut)
-	{
-		ShortcutKeysListener::SetShortcut(shortcut);
-	}
-
 	void ContextMenuItem::SetEnabled(bool enabled)
 	{
 		SetState("enabled", enabled);
@@ -963,12 +949,6 @@ namespace o2
 		if (child->GetType() == TypeOf(ContextMenu))
 			mSubMenu = (ContextMenu*)child;
 	}
-
-	void ContextMenuItem::OnShortcutPressed()
-	{
-		onClick();
-	}
-
 }
 
 DECLARE_CLASS(o2::ContextMenu);

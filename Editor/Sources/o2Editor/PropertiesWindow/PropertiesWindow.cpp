@@ -53,7 +53,7 @@ namespace Editor
 		}
 
 		context->AddItem(ContextMenu::Item::Separator());
-		context->AddItem(ContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
+		context->AddItem(mnew ContextMenu::Item("Private visible", false, THIS_FUNC(OnPrivateFieldsVisibleChanged)));
 	}
 
 	void PropertiesWindow::InitializeViewers()

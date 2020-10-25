@@ -291,9 +291,9 @@ namespace Editor
 
 				mImmediateCreateObject = availableTypes.Count() == 1;
 
-				mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item>([&](const Type* type)
+				mCreateMenu->AddItems(availableTypes.Convert<ContextMenu::Item*>([&](const Type* type)
 				{
-					return ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
+					return mnew ContextMenu::Item(type->GetName(), [=]() { CreateObject(dynamic_cast<const ObjectType*>(type)); });
 				}));
 
 				mContextInitialized = true;

@@ -24,7 +24,7 @@
 
 namespace Editor
 {
-	CurvesEditor::CurvesEditor() :
+	CurvesEditor::CurvesEditor():
 		FrameScrollView()
 	{
 		mReady = false;
@@ -50,7 +50,7 @@ namespace Editor
 		mReady = true;
 	}
 
-	CurvesEditor::CurvesEditor(const CurvesEditor& other) :
+	CurvesEditor::CurvesEditor(const CurvesEditor& other):
 		FrameScrollView(other), mSelectionSprite(other.mSelectionSprite->CloneAs<Sprite>()), mTextFont(other.mTextFont)
 	{
 		mReady = false;
@@ -268,7 +268,7 @@ namespace Editor
 	}
 
 	void CurvesEditor::SetMainHandleImages(const ImageAssetRef& regular, const ImageAssetRef& hover,
-										  const ImageAssetRef& pressed, const ImageAssetRef& selected)
+										   const ImageAssetRef& pressed, const ImageAssetRef& selected)
 	{
 		mMainHandleSample.curveInfo = &mHandleSamplesStubInfo;
 		mMainHandleSample = CurveHandle(mnew Sprite(regular), mnew Sprite(hover),
@@ -359,32 +359,32 @@ namespace Editor
 	{
 		mContextMenu = o2UI.CreateWidget<ContextMenu>();
 
-		mContextMenu->AddItems({
-
-			ContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
-			ContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
-			ContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
-			ContextMenu::Item("Linear", false, THIS_FUNC(OnLinearChecked)),
-			ContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
-			ContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
-
-			ContextMenu::Item::Separator(),
-
-			ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed)),
+		mContextMenu->AddItems( {
+			mnew ContextMenu::Item("Auto smooth", false, THIS_FUNC(OnAutoSmoothChecked)),
+			mnew ContextMenu::Item("Flat", false, THIS_FUNC(OnFlatChecked)),
+			mnew ContextMenu::Item("Free", false, THIS_FUNC(OnFreeChecked)),
+			mnew ContextMenu::Item("Linear", false, THIS_FUNC(OnLinearChecked)),
+			mnew ContextMenu::Item("Broken", false, THIS_FUNC(OnBrokenChecked)),
+			mnew ContextMenu::Item("Discrete", false, THIS_FUNC(OnDiscreteChecked)),
 
 			ContextMenu::Item::Separator(),
 
-			ContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), "", ImageAssetRef(), ShortcutKeys('C', true)),
-			ContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), "", ImageAssetRef(), ShortcutKeys('X', true)),
-			ContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), "", ImageAssetRef(), ShortcutKeys('V', true)),
-			ContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), "", ImageAssetRef(), ShortcutKeys(VK_DELETE)),
-			ContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed)),
+			mnew ContextMenu::Item("Edit", THIS_FUNC(OnEditPressed)),
 
 			ContextMenu::Item::Separator(),
 
-			ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true)),
-			ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true, true))
-							   });
+			mnew ContextMenu::Item("Copy keys", THIS_FUNC(OnCopyPressed), "", ImageAssetRef(), ShortcutKeys('C', true)),
+			mnew ContextMenu::Item("Cut keys", THIS_FUNC(OnCutPressed), "", ImageAssetRef(), ShortcutKeys('X', true)),
+			mnew ContextMenu::Item("Paste keys", THIS_FUNC(OnPastePressed), "", ImageAssetRef(), ShortcutKeys('V', true)),
+			mnew ContextMenu::Item("Delete keys", THIS_FUNC(OnDeletePressed), "", ImageAssetRef(), ShortcutKeys(VK_DELETE)),
+			mnew ContextMenu::Item("Insert key", THIS_FUNC(OnInsertPressed)),
+
+			ContextMenu::Item::Separator(),
+
+			mnew ContextMenu::Item("Undo", THIS_FUNC(OnUndoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true)),
+			mnew ContextMenu::Item("Redo", THIS_FUNC(OnRedoPressed), "", ImageAssetRef(), ShortcutKeys('Z', true, true))
+			}
+		);
 
 		onShow = [&]() { mContextMenu->SetItemsMaxPriority(); };
 		onHide = [&]() { mContextMenu->SetItemsMinPriority(); };
@@ -725,8 +725,8 @@ namespace Editor
 		Vec2F borders(10, 10);
 
 		mTransformFrame.SetBasis(Basis(LocalToScreenPoint(mTransformFrameBasis.origin) - borders,
-									   mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
-									   mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
+								 mTransformFrameBasis.xv/mViewCamera.GetScale() + Vec2F(borders.x*2.0f, 0),
+								 mTransformFrameBasis.yv/mViewCamera.GetScale() + Vec2F(0, borders.y*2.0f)));
 
 		mTransformFrame.Draw();
 
@@ -772,7 +772,7 @@ namespace Editor
 		// left support handle
 		keyHandles->leftSupportHandle.curveInfo = info;
 		keyHandles->leftSupportHandle.SetPosition(Vec2F(curveKey.position + curveKey.leftSupportPosition,
-														curveKey.value + curveKey.leftSupportValue));
+												  curveKey.value + curveKey.leftSupportValue));
 
 		keyHandles->leftSupportHandle.onChangedPos =
 			[=](const Vec2F& pos) { OnCurveKeyLeftSupportHandleDragged(info, keyHandles, pos); };
@@ -790,7 +790,7 @@ namespace Editor
 		// right support handle
 		keyHandles->rightSupportHandle.curveInfo = info;
 		keyHandles->rightSupportHandle.SetPosition(Vec2F(curveKey.position + curveKey.rightSupportPosition,
-														 curveKey.value + curveKey.rightSupportValue));
+												   curveKey.value + curveKey.rightSupportValue));
 
 		keyHandles->rightSupportHandle.onChangedPos =
 			[=](const Vec2F& pos) { OnCurveKeyRightSupportHandleDragged(info, keyHandles, pos); };
@@ -960,7 +960,7 @@ namespace Editor
 		if (key.supportsType == Curve::Key::Type::Free && handles->curveKeyIdx < info->curve->GetKeys().Count() - 1)
 		{
 			Curve::Key nextKey = info->curve->GetKeyAt(Math::Min(handles->curveKeyIdx + 1,
-																 info->curve->GetKeys().Count() - 1));
+													   info->curve->GetKeys().Count() - 1));
 
 			key.rightSupportPosition = -key.leftSupportPosition;
 			key.rightSupportValue = -key.leftSupportValue;
@@ -1251,10 +1251,10 @@ namespace Editor
 		info->UpdateApproximatedPoints();
 
 		info->handles[idx]->leftSupportHandle.SetPosition(Vec2F(key.position + key.leftSupportPosition,
-																key.value + key.leftSupportValue));
+														  key.value + key.leftSupportValue));
 
 		info->handles[idx]->rightSupportHandle.SetPosition(Vec2F(key.position + key.rightSupportPosition,
-																 key.value + key.rightSupportValue));
+														   key.value + key.rightSupportValue));
 
 		if (idx > 0)
 		{
@@ -2033,7 +2033,7 @@ namespace Editor
 		}
 
 		if (curve)
-			curve->onKeysChanged -= MakeSubscription(this, &CurveInfo::OnCurveChanged, []() { });
+			curve->onKeysChanged -= MakeSubscription(this, &CurveInfo::OnCurveChanged, []() {});
 	}
 
 	void CurvesEditor::CurveInfo::UpdateHandles()
@@ -2182,7 +2182,7 @@ namespace Editor
 	}
 
 	CurvesEditor::KeyHandles::KeyHandles(const CurveHandle& mainSample, const CurveHandle& supportSample,
-										CurvesEditor* editor, const Color4& color) :
+										 CurvesEditor* editor, const Color4& color):
 		mainHandle(mainSample), leftSupportHandle(supportSample), rightSupportHandle(supportSample), curveEditor(editor)
 	{
 		mainHandle.SetSpritesColor(color);
@@ -2229,7 +2229,7 @@ namespace Editor
 	{ }
 
 	CurvesEditor::CurveHandle::CurveHandle(Sprite* regular, Sprite* hover /*= nullptr*/, Sprite* pressed /*= nullptr*/,
-										  Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, Sprite* selectedPressed /*= nullptr*/) :
+										   Sprite* selected /*= nullptr*/, Sprite* selectedHovered /*= nullptr*/, Sprite* selectedPressed /*= nullptr*/):
 		DragHandle(regular, hover, pressed, selected, selectedHovered, selectedPressed)
 	{ }
 
