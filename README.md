@@ -2,7 +2,7 @@
 
 o2 - it's an open-source technology for easy making 2D games and applications for mobile and PC platforms using C++ and Lua with very flexible editor. The main features are performance, usability and effective development.
 
-Here is the test project: https://github.com/zenkovich/PetStory
+Here is the test project: https://github.com/zenkovich/o2-Template
 
 Now work in progress.
 
