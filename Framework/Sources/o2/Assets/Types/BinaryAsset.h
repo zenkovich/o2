@@ -15,6 +15,12 @@ namespace o2
 		GETTER(UInt, dataSize, GetDataSize); // Data size getter
 
 	public:
+		// Default constructor
+		BinaryAsset();
+
+		// Copy-constructor
+		BinaryAsset(const BinaryAsset& asset);
+
 		// Destructor
 		~BinaryAsset();
 
@@ -43,12 +49,6 @@ namespace o2
 		UInt  mDataSize = 0;   // Asset data size
 
 	protected:
-		// Default constructor
-		BinaryAsset();
-
-		// Copy-constructor
-		BinaryAsset(const BinaryAsset& asset);
-
 		// Loads asset data, using DataValue and serialization
 		void LoadData(const String& path) override;
 

@@ -488,16 +488,25 @@ namespace o2
 		if (!append)
 			Clear(false);
 
-		auto& layersNode = doc.GetMember("Layers");
-		for (auto& layerNode : layersNode)
+		if (!doc)
 		{
-			auto layer = mnew SceneLayer();
-			layer->Deserialize(layerNode);
-			mLayers.Add(layer);
-			mLayersMap[layer->mName] = layer;
+			mDefaultLayer = AddLayer("Default");
+			return;
 		}
 
-		mDefaultLayer = GetLayer(doc.GetMember("DefaultLayer"));
+		if (auto& layersNode = doc.GetMember("Layers"))
+		{
+			for (auto& layerNode : layersNode)
+			{
+				auto layer = mnew SceneLayer();
+				layer->Deserialize(layerNode);
+				mLayers.Add(layer);
+				mLayersMap[layer->mName] = layer;
+			}
+		}
+
+		if (auto& defaultLayerNode = doc.GetMember("DefaultLayer"))
+			mDefaultLayer = GetLayer(defaultLayerNode);
 
 		onLayersListChanged();
 
@@ -511,8 +520,11 @@ namespace o2
 			}
 		}
 
-		mRootActors = doc.GetMember("Actors");
-		mRootActors.Clear();
+		if (auto& actorsNode = doc.GetMember("Actors"))
+		{
+			mRootActors = actorsNode;
+			mRootActors.Clear();
+		}
 
 		ActorDataValueConverter::Instance().UnlockPointersResolving();
 		ActorDataValueConverter::Instance().ResolvePointers();

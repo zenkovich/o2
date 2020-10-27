@@ -19,6 +19,12 @@ namespace o2
 		GETTER(Meta*, meta, GetMeta); // Meta information getter
 
 	public:
+		// Default constructor
+		BitmapFontAsset();
+
+		// Copy-constructor
+		BitmapFontAsset(const BitmapFontAsset& asset);
+
 		// Check equals operator
 		BitmapFontAsset& operator=(const BitmapFontAsset& asset);
 
@@ -44,12 +50,6 @@ namespace o2
 		};
 
 	protected:
-		// Default constructor
-		BitmapFontAsset();
-
-		// Copy-constructor
-		BitmapFontAsset(const BitmapFontAsset& asset);
-
 		// Loads data
 		void LoadData(const String& path) override;
 

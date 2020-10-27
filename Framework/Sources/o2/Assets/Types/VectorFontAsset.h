@@ -21,6 +21,12 @@ namespace o2
 		GETTER(Meta*, meta, GetMeta); // Meta information getter
 
 	public:
+		// Default constructor
+		VectorFontAsset();
+
+		// Copy-constructor
+		VectorFontAsset(const VectorFontAsset& asset);
+
 		// Check equals operator
 		VectorFontAsset& operator=(const VectorFontAsset& asset);
 
@@ -79,12 +85,6 @@ namespace o2
 		};
 
 	protected:
-		// Default constructor
-		VectorFontAsset();
-
-		// Copy-constructor
-		VectorFontAsset(const VectorFontAsset& asset);
-
 		// Loads data
 		void LoadData(const String& path) override;
 

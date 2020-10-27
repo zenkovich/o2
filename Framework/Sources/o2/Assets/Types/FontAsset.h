@@ -17,6 +17,15 @@ namespace o2
 		GETTER(FontRef, font, GetFont); // Font getter
 
 	public:
+		// Default constructor
+		FontAsset();
+
+		// Default constructor
+		FontAsset(AssetMeta* meta);
+
+		// Copy-constructor
+		FontAsset(const FontAsset& asset);
+
 		// Check equals operator
 		FontAsset& operator=(const FontAsset& asset);
 
@@ -30,17 +39,6 @@ namespace o2
 
 	protected:
 		FontRef mFont;
-
-	private:
-		// Default constructor
-		FontAsset();
-
-	protected:
-		// Default constructor
-		FontAsset(AssetMeta* meta);
-
-		// Copy-constructor
-		FontAsset(const FontAsset& asset);
 
 		friend class Assets;
 	};

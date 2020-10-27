@@ -13,6 +13,12 @@ namespace o2
 	class ActorAsset: public AssetWithDefaultMeta<ActorAsset>
 	{
 	public:
+		// Default constructor
+		ActorAsset();
+
+		// Copy-constructor
+		ActorAsset(const ActorAsset& other);
+
 		// Destructor
 		~ActorAsset();
 
@@ -41,13 +47,6 @@ namespace o2
 
 	protected:
 		Actor* mActor; // Asset data @SERIALIZABLE
-
-	protected:
-		// Default constructor
-		ActorAsset();
-
-		// Copy-constructor
-		ActorAsset(const ActorAsset& other);
 
 		friend class Assets;
 	};

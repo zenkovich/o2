@@ -14,6 +14,12 @@ namespace o2
 		DataDocument data; // Asset data
 
 	public:
+		// Default constructor
+		DataAsset();
+
+		// Copy-constructor
+		DataAsset(const DataAsset& asset);
+
 		// Check equals operator
 		DataAsset& operator=(const DataAsset& asset);
 
@@ -32,12 +38,6 @@ namespace o2
 		SERIALIZABLE(DataAsset);
 
 	protected:
-		// Default constructor
-		DataAsset();
-
-		// Copy-constructor
-		DataAsset(const DataAsset& asset);
-
 		// Loads data
 		void LoadData(const String& path) override;
 

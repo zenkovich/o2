@@ -23,6 +23,12 @@ namespace o2
 		GETTER(Vector<Page>, pages, GetPages);            // Pages getter
 
 	public:
+		// Default constructor
+		AtlasAsset();
+
+		// Copy-constructor
+		AtlasAsset(const AtlasAsset& asset);
+
 		// Check equals operator
 		AtlasAsset& operator=(const AtlasAsset& asset);
 
@@ -138,12 +144,6 @@ namespace o2
 		Vector<Page>          mPages;  // Pages @SERIALIZABLE
 
 	protected:
-		// Default constructor
-		AtlasAsset();
-
-		// Copy-constructor
-		AtlasAsset(const AtlasAsset& asset);
-
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 

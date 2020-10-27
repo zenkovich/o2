@@ -33,6 +33,12 @@ namespace o2
 		GETTER(Meta*, meta, GetMeta); // Meta information getter
 
 	public:
+		// Default constructor
+		ImageAsset();
+
+		// Copy-constructor
+		ImageAsset(const ImageAsset& asset);
+
 		// Destructor
 		~ImageAsset();
 
@@ -132,12 +138,6 @@ namespace o2
 		RectI mAtlasRect; // Owner atlas rectangle @SERIALIZABLE
 
 	protected:
-		// Default constructor
-		ImageAsset();
-
-		// Copy-constructor
-		ImageAsset(const ImageAsset& asset);
-
 		// Saves data
 		void SaveData(const String& path) const override;
 

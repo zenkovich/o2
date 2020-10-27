@@ -10,6 +10,12 @@ namespace o2
 	class FolderAsset: public AssetWithDefaultMeta<FolderAsset>
 	{
 	public:
+		// Default constructor
+		FolderAsset();
+
+		// Copy-constructor
+		FolderAsset(const FolderAsset& asset);
+
 		// Check equals operator
 		FolderAsset& operator=(const FolderAsset& asset);
 
@@ -28,12 +34,6 @@ namespace o2
 		SERIALIZABLE(FolderAsset);
 
 	protected:
-		// Default constructor
-		FolderAsset();
-
-		// Copy-constructor
-		FolderAsset(const FolderAsset& asset);
-
 		// Loads data
 		void LoadData(const String& path) override;
 
