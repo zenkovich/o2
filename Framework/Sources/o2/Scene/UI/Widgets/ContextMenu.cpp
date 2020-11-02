@@ -628,12 +628,13 @@ namespace o2
 		delete mSelectionDrawable;
 		delete mSeparatorSample;
 
-		PopupWidget::CopyData(other);
-
 		mItemSample = other.mItemSample->CloneAs<ContextMenuItem>();
 		mSeparatorSample = other.mSeparatorSample->CloneAs<Widget>();
 		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
 		mSelectionLayout = other.mSelectionLayout;
+
+		PopupWidget::CopyData(other);
+
 		mItemsLayout = FindChildByType<VerticalLayout>();
 		mMaxVisibleItems = other.mMaxVisibleItems;
 

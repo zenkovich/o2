@@ -468,6 +468,9 @@ namespace o2
 
 	Basis ActorTransform::GetWorldBasis() const
 	{
+		if (IsDirty())
+			const_cast<ActorTransform*>(this)->Update();
+
 		return mData->worldTransform;
 	}
 

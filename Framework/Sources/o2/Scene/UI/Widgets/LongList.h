@@ -19,7 +19,7 @@ namespace o2
 	public:
 		Function<void(int)> onFocused; // Select item position event
 
-		Function<int()>                          getItemsCountFunc; // Items count getting function
+		Function<int()>                   getItemsCountFunc; // Items count getting function
 		Function<Vector<void*>(int, int)> getItemsRangeFunc; // Items getting in range function
 		Function<void(Widget*, void*)>    setupItemFunc;     // Setup item widget function
 

@@ -6,54 +6,54 @@
 
 namespace o2
 {
-	ActorRef::ActorRef()
+	Ref<Actor>::Ref()
 	{}
 
-	ActorRef::ActorRef(Actor* actor) :
+	Ref<Actor>::Ref(Actor* actor) :
 		mActor(actor)
 	{
 		if (mActor)
 			mActor->mReferences.Add(this);
 	}
 
-	ActorRef::ActorRef(const ActorAssetRef& prototype, ActorCreateMode mode /*= Actor::CreateMode::InScene*/)
+	Ref<Actor>::Ref(const ActorAssetRef& prototype, ActorCreateMode mode /*= Actor::CreateMode::InScene*/)
 	{
 		Actor* newActor = mnew Actor(prototype, mode);
 		mActor = newActor;
 		mActor->mReferences.Add(this);
 	}
 
-	ActorRef::ActorRef(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::InScene*/)
+	Ref<Actor>::Ref(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::InScene*/)
 	{
 		Actor* newActor = mnew Actor(components, mode);
 		mActor = newActor;
 		mActor->mReferences.Add(this);
 	}
 
-	ActorRef::ActorRef(const Actor& other)
+	Ref<Actor>::Ref(const Actor& other)
 	{
 		Actor* newActor = mnew Actor(other);
 		mActor = newActor;
 		mActor->mReferences.Add(this);
 	}
 
-	ActorRef::~ActorRef()
+	Ref<Actor>::~Ref()
 	{
 		if (mActor)
 			mActor->mReferences.Remove(this);
 	}
 
-	bool ActorRef::operator!=(const ActorRef& other) const
+	bool Ref<Actor>::operator!=(const Ref<Actor>& other) const
 	{
 		return mActor != other.mActor;
 	}
 
-	bool ActorRef::operator==(const ActorRef& other) const
+	bool Ref<Actor>::operator==(const Ref<Actor>& other) const
 	{
 		return mActor == other.mActor;
 	}
 
-	ActorRef& ActorRef::operator=(const ActorRef& other)
+	Ref<Actor>& Ref<Actor>::operator=(const Ref<Actor>& other)
 	{
 		if (mActor)
 			mActor->mReferences.Remove(this);
@@ -67,56 +67,56 @@ namespace o2
 		return *this;
 	}
 
-	ActorRef::operator bool() const
+	Ref<Actor>::operator bool() const
 	{
 		return mActor != nullptr;
 	}
 
-	Actor& ActorRef::operator*()
+	Actor& Ref<Actor>::operator*()
 	{
 		return *mActor;
 	}
 
-	const Actor& ActorRef::operator*() const
+	const Actor& Ref<Actor>::operator*() const
 	{
 		return *mActor;
 	}
 
-	Actor* ActorRef::operator->()
+	Actor* Ref<Actor>::operator->()
 	{
 		return mActor;
 	}
 
-	const Actor* ActorRef::operator->() const
+	const Actor* Ref<Actor>::operator->() const
 	{
 		return mActor;
 	}
 
-	Actor* ActorRef::Get()
+	Actor* Ref<Actor>::Get()
 	{
 		return mActor;
 	}
 
-	const Actor* ActorRef::Get() const
+	const Actor* Ref<Actor>::Get() const
 	{
 		return mActor;
 	}
 
-	void ActorRef::Destroy()
+	void Ref<Actor>::Destroy()
 	{
 		if (mActor)
 			o2Scene.DestroyActor(mActor);
 	}
 
-	bool ActorRef::IsValid() const
+	bool Ref<Actor>::IsValid() const
 	{
 		return mActor != nullptr;
 	}
 
-	bool ActorRef::IsWasDeleted() const
+	bool Ref<Actor>::IsWasDeleted() const
 	{
 		return mWasDeleted;
 	}
 }
 
-DECLARE_CLASS(o2::ActorRef);
+DECLARE_CLASS(o2::Ref<o2::Actor>);

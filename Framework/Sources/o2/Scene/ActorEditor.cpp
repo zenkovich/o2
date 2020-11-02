@@ -79,7 +79,7 @@ namespace o2
 
 				dataValue.SetValueDelta(*component, *component->mPrototypeLink);
 			}
-			else 
+			else
 				component->Serialize(dataValue);
 		}
 	}
@@ -333,8 +333,8 @@ namespace o2
 
 		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
 
-// 		for (auto serializable : serializableObjects)
-// 			serializable->OnDeserialized();
+		// 		for (auto serializable : serializableObjects)
+		// 			serializable->OnDeserialized();
 
 		UpdateResEnabledInHierarchy();
 		transform->SetDirty();
@@ -681,10 +681,10 @@ namespace o2
 			info.actor->OnChanged();
 		}
 
-// 		for (auto serializable : serializableObjects)
-// 			serializable->OnDeserialized(DataValue());
+		// 		for (auto serializable : serializableObjects)
+		// 			serializable->OnDeserialized(DataValue());
 
-		// update transformation
+				// update transformation
 		transform->SetDirty();
 
 		for (auto& info : applyActorsInfos)
@@ -871,7 +871,7 @@ namespace o2
 
 	void Actor::SetEditableParent(SceneEditableObject* object)
 	{
-		SetParent(dynamic_cast<Actor*>(object));
+		SetParent(dynamic_cast<Actor*>(object), false);
 	}
 
 	SceneEditableObject* Actor::GetEditableParent() const
@@ -941,12 +941,12 @@ namespace o2
 			o2Scene.onChildrenHierarchyChanged(mParent);
 		}
 	}
-	
+
 	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers,
-										 Vector<Component**>& componentsPointers,
-										 Map<const Actor*, Actor*>& actorsMap,
-										 Map<const Component*, Component*>& componentsMap,
-										 bool isInsidePrototype)
+									   Vector<Component**>& componentsPointers,
+									   Map<const Actor*, Actor*>& actorsMap,
+									   Map<const Component*, Component*>& componentsMap,
+									   bool isInsidePrototype)
 	{
 		dest->mName = source->mName;
 		dest->mEnabled = source->mEnabled;
@@ -1046,8 +1046,8 @@ namespace o2
 		dest->SetLayer(source->mLayerName);
 	}
 
-	void Actor::CopyChangedFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* changed, IObject* dest, 
-								  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers, 
+	void Actor::CopyChangedFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* changed, IObject* dest,
+								  Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
 								  Vector<ISerializable*>& serializableObjects)
 	{
 		for (auto field : fields)
@@ -1115,7 +1115,7 @@ namespace o2
 
 				auto fields = field->GetType()->GetFieldsWithBaseClasses();
 				CopyChangedFields(fields, (IObject*)field->GetValuePtr(source),
-								  (IObject*)field->GetValuePtr(changed),
+					(IObject*)field->GetValuePtr(changed),
 								  (IObject*)field->GetValuePtr(dest),
 								  actorsPointers, componentsPointers, serializableObjects);
 			}

@@ -71,8 +71,8 @@ namespace o2
 		AssetRef GetAssetRef(const UID& id);
 
 		// Creates asset type _asset_type
-		template<typename _asset_type>
-		AssetRef CreateAsset();
+		template<typename _asset_type, typename ... _args>
+		AssetRef CreateAsset(_args ... args);
 
 		// Returns true if asset exist by path
 		bool IsAssetExist(const String& path) const;
@@ -195,10 +195,10 @@ namespace o2
 		friend class FolderAsset;
 	};
 
-	template<typename _asset_type>
-	AssetRef Assets::CreateAsset()
+	template<typename _asset_type, typename ... _args>
+	AssetRef Assets::CreateAsset(_args ... args)
 	{
-		_asset_type* newAset = mnew _asset_type();
+		_asset_type* newAset = mnew _asset_type(args ...);
 
 		auto cached = mnew AssetCache();
 		cached->asset = newAset;

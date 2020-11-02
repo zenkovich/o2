@@ -47,7 +47,7 @@ namespace o2
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		virtual SceneEditableObject* GetEditableParent() const;
 
-		// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
+		// Sets parent object. nullptr means make this object as root
 		virtual void SetEditableParent(SceneEditableObject* object);
 
 		// Adds child. idx is place in parent children. idx == -1 means last

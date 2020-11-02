@@ -488,13 +488,8 @@ namespace o2
 		if (!append)
 			Clear(false);
 
-		if (!doc)
-		{
-			mDefaultLayer = AddLayer("Default");
-			return;
-		}
-
-		if (auto& layersNode = doc.GetMember("Layers"))
+		auto& layersNode = doc.GetMember("Layers");
+		if (!layersNode.IsEmpty())
 		{
 			for (auto& layerNode : layersNode)
 			{
@@ -505,12 +500,16 @@ namespace o2
 			}
 		}
 
-		if (auto& defaultLayerNode = doc.GetMember("DefaultLayer"))
+		auto& defaultLayerNode = doc.GetMember("DefaultLayer");
+		if (!defaultLayerNode.IsEmpty())
 			mDefaultLayer = GetLayer(defaultLayerNode);
+		else
+			mDefaultLayer = AddLayer("Default");
 
 		onLayersListChanged();
 
-		if (auto& tagsNode = doc.GetMember("Tags"))
+		auto& tagsNode = doc.GetMember("Tags");
+		if (!tagsNode.IsEmpty())
 		{
 			for (auto& tagNode : tagsNode)
 			{
@@ -520,7 +519,8 @@ namespace o2
 			}
 		}
 
-		if (auto& actorsNode = doc.GetMember("Actors"))
+		auto& actorsNode = doc.GetMember("Actors");
+		if (!actorsNode.IsEmpty())
 		{
 			mRootActors = actorsNode;
 			mRootActors.Clear();

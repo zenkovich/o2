@@ -220,10 +220,10 @@ namespace o2
 		void OnCameraRemovedScene(CameraActor* camera);
 
 		friend class Actor;
-		friend class ActorRef;
 		friend class Application;
 		friend class CameraActor;
 		friend class DrawableComponent;
+		friend class Ref<Actor>;
 		friend class SceneLayer;
 		friend class Widget;
 		friend class WidgetLayer;

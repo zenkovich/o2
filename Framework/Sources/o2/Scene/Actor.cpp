@@ -488,12 +488,10 @@ namespace o2
 		return actor;
 	}
 
-	Vector<Actor*> Actor::AddChildren(Vector<Actor*> actors)
+	void Actor::AddChildren(const Vector<Actor*>& actors)
 	{
 		for (auto actor : actors)
 			AddChild(actor);
-
-		return actors;
 	}
 
 	Actor* Actor::GetChild(const String& path) const
@@ -542,7 +540,7 @@ namespace o2
 		return nullptr;
 	}
 
-	Vector<Actor*> Actor::GetChildren() const
+	const Vector<Actor*>& Actor::GetChildren() const
 	{
 		return mChildren;
 	}
@@ -682,7 +680,7 @@ namespace o2
 		return mLayer;
 	}
 
-	String Actor::GetLayerName() const
+	const String& Actor::GetLayerName() const
 	{
 		return mLayerName;
 	}

@@ -117,7 +117,7 @@ namespace o2
 		// Returns actor's unique id
 		SceneUID GetID() const;
 
-		// Sets id. Be carefully! Ids must be unique! Don't recommending to change this
+		// Sets id. Be carefully! Ids must be unique! Not recommended to change this
 		void SetID(SceneUID id);
 
 		// Generates new random id 
@@ -172,7 +172,7 @@ namespace o2
 		Actor* AddChild(Actor* actor);
 
 		// Add children actors
-		Vector<Actor*> AddChildren(Vector<Actor*> actors);
+		void AddChildren(const Vector<Actor*>& actors);
 
 		// Add child actor
 		Actor* AddChild(Actor* actor, int index);
@@ -196,7 +196,7 @@ namespace o2
 		_type* FindChildByType(bool searchInChildren = true);
 
 		// Returns children array
-		Vector<Actor*> GetChildren() const;
+		const Vector<Actor*>& GetChildren() const;
 
 		// Removes child and destroys him if needed
 		void RemoveChild(Actor* actor, bool release = true);
@@ -252,7 +252,7 @@ namespace o2
 		SceneLayer* GetLayer() const;
 
 		// Returns layer name
-		String GetLayerName() const;
+		const String& GetLayerName() const;
 
 		// Sets default actors creation mode
 		static void SetDefaultCreationMode(ActorCreateMode mode);
@@ -601,11 +601,11 @@ namespace o2
 
 		friend class ActorAsset;
 		friend class ActorDataValueConverter;
-		friend class ActorRef;
 		friend class ActorTransform;
 		friend class Component;
 		friend class DrawableComponent;
 		friend class ISceneDrawable;
+		friend class Ref<Actor>;
 		friend class Scene;
 		friend class SceneLayer;
 		friend class Tag;
@@ -805,11 +805,11 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, GetParent);
 	PUBLIC_FUNCTION(void, SetIndexInSiblings, int);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*);
-	PUBLIC_FUNCTION(Vector<Actor*>, AddChildren, Vector<Actor*>);
+	PUBLIC_FUNCTION(void, AddChildren, const Vector<Actor*>&);
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
 	PUBLIC_FUNCTION(Actor*, FindChild, const String&);
-	PUBLIC_FUNCTION(Vector<Actor*>, GetChildren);
+	PUBLIC_FUNCTION(const Vector<Actor*>&, GetChildren);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChildren, bool);
 	PUBLIC_FUNCTION(Component*, AddComponent, Component*);
@@ -821,7 +821,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(const Vector<Component*>&, GetComponents);
 	PUBLIC_FUNCTION(void, SetLayer, const String&);
 	PUBLIC_FUNCTION(SceneLayer*, GetLayer);
-	PUBLIC_FUNCTION(String, GetLayerName);
+	PUBLIC_FUNCTION(const String&, GetLayerName);
 	PUBLIC_STATIC_FUNCTION(void, SetDefaultCreationMode, ActorCreateMode);
 	PUBLIC_STATIC_FUNCTION(ActorCreateMode, GetDefaultCreationMode);
 	PUBLIC_STATIC_FUNCTION(bool, IsModeOnScene, ActorCreateMode);
