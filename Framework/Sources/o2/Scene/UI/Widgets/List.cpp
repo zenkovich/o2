@@ -114,13 +114,6 @@ namespace o2
 		return mSelectedItems.Convert<WString>([&](auto x) { return GetItemText(x.idx); });
 	}
 
-	void List::CopyData(const Actor& otherActor)
-	{
-		const List& other = dynamic_cast<const List&>(otherActor);
-		CustomList::CopyData(other);
-		RetargetStatesAnimations();
-	}
-
 	void List::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());

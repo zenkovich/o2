@@ -66,9 +66,6 @@ namespace o2
 		bool mShownAtFrame = false; // Is popup was shown at current frame
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Checks widget clipping by area
 		void CheckClipping(const RectF& clipArea) override;
 
@@ -132,7 +129,6 @@ CLASS_METHODS_META(o2::PopupWidget)
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, FitPosition, const Vec2F&, Vec2F);

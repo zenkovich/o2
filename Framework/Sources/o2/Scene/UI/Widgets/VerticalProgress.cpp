@@ -28,6 +28,18 @@ namespace o2
 	VerticalProgress& VerticalProgress::operator=(const VerticalProgress& other)
 	{
 		Widget::operator=(other);
+
+		mValue = other.mValue;
+		mMinValue = other.mMinValue;
+		mMaxValue = other.mMaxValue;
+		mOrientation = other.mOrientation;
+		mScrollSense = other.mScrollSense;
+		mBarLayer = FindLayer("bar");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -249,24 +261,6 @@ namespace o2
 			mBackLayer->layout = Layout::BothStretch();
 
 		Widget::UpdateLayersLayouts();
-	}
-
-	void VerticalProgress::CopyData(const Actor& otherActor)
-	{
-		const VerticalProgress& other = dynamic_cast<const VerticalProgress&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mValue       = other.mValue;
-		mMinValue    = other.mMinValue;
-		mMaxValue    = other.mMaxValue;
-		mOrientation = other.mOrientation;
-		mScrollSense = other.mScrollSense;
-		mBarLayer    = FindLayer("bar");
-		mBackLayer   = FindLayer("back");
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void VerticalProgress::OnLayerAdded(WidgetLayer* layer)

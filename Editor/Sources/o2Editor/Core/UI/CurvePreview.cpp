@@ -26,6 +26,15 @@ namespace Editor
 	CurvePreview& CurvePreview::operator=(const CurvePreview& other)
 	{
 		Widget::operator=(other);
+
+		mBackColor = other.mBackColor;
+		mCurveColor = other.mCurveColor;
+
+		mSprite = GetLayerDrawable<Sprite>("image");
+		RetargetStatesAnimations();
+
+		mNeedRedraw = true;
+
 		return *this;
 	}
 
@@ -73,21 +82,6 @@ namespace Editor
 	String CurvePreview::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void CurvePreview::CopyData(const Actor& otherActor)
-	{
-		const CurvePreview& other = dynamic_cast<const CurvePreview&>(otherActor);
-
-		Widget::CopyData(otherActor);
-
-		mBackColor = other.mBackColor;
-		mCurveColor = other.mCurveColor;
-
-		mSprite = GetLayerDrawable<Sprite>("image");
-		RetargetStatesAnimations();
-
-		mNeedRedraw = true;
 	}
 
 	void CurvePreview::UpdateLayersLayouts()

@@ -20,13 +20,8 @@ namespace Editor
 	CurveProperty& CurveProperty::operator=(const CurveProperty& other)
 	{
 		TPropertyField<Curve>::operator=(other);
-		return *this;
-	}
-
-	void CurveProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<Curve>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void CurveProperty::InitializeControls()

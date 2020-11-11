@@ -279,9 +279,6 @@ namespace Editor
 		ActionsList mActionsList; // Local actions list. It uses when actionFallDown is null 
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when visible was changed. Sets context menu items priority
 		void OnEnableInHierarchyChanged() override;
 
@@ -515,7 +512,6 @@ CLASS_METHODS_META(Editor::CurvesEditor)
 	PUBLIC_FUNCTION(void, SetAdjustCurvesScale, bool);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(ContextMenu*, GetContextMenu);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnScrolled, float);
 	PROTECTED_FUNCTION(Curve*, FindCurve, const String&);

@@ -23,6 +23,11 @@ namespace o2
 	Image& Image::operator=(const Image& other)
 	{
 		Widget::operator=(other);
+
+		mImage = GetLayerDrawable<Sprite>("image");
+		if (!mImage)
+			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
+
 		return *this;
 	}
 
@@ -74,17 +79,6 @@ namespace o2
 			return imageAsset->GetPath();
 
 		return "";
-	}
-
-	void Image::CopyData(const Actor& otherActor)
-	{
-		const Image& other = dynamic_cast<const Image&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mImage = GetLayerDrawable<Sprite>("image");
-		if (!mImage)
-			mImage = dynamic_cast<Sprite*>(AddLayer("image", mnew Sprite())->GetDrawable());
 	}
 
 	String Image::GetCreateMenuGroup()

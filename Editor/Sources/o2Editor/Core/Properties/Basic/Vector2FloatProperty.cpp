@@ -17,13 +17,8 @@ namespace Editor
 	Vec2FProperty& Vec2FProperty::operator=(const Vec2FProperty& other)
 	{
 		IPropertyField::operator=(other);
-		return *this;
-	}
-
-	void Vec2FProperty::CopyData(const Actor& otherActor)
-	{
-		IPropertyField::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void Vec2FProperty::InitializeControls()

@@ -174,9 +174,6 @@ namespace Editor
 		ComponentsTree* mTree = nullptr;
 
 	private:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
@@ -262,7 +259,6 @@ CLASS_METHODS_META(Editor::ComponentsTreeNode)
 
 	PUBLIC_FUNCTION(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
 	PRIVATE_FUNCTION(void, InitializeControls);
 }

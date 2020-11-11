@@ -17,13 +17,8 @@ namespace Editor
 	RectIProperty& RectIProperty::operator=(const RectIProperty& other)
 	{
 		IPropertyField::operator=(other);
-		return *this;
-	}
-
-	void RectIProperty::CopyData(const Actor& otherActor)
-	{
-		IPropertyField::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void RectIProperty::InitializeControls()

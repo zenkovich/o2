@@ -116,9 +116,6 @@ namespace Editor
 		bool  mAutoCalculateTabWidth = true; // Automatically calculating tab width when changing caption
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when visible was changed, undocks when hiding
 		void OnEnableInHierarchyChanged() override;
 
@@ -219,7 +216,6 @@ CLASS_METHODS_META(Editor::DockableWindow)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, InitializeDockFrameAppearanceAnim);

@@ -69,9 +69,6 @@ namespace Editor
 		bool mAvailableToHaveInstance = false; // Is asset can own an instance
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -158,7 +155,6 @@ CLASS_METHODS_META(Editor::AssetProperty)
 	PUBLIC_FUNCTION(WString, GetCaption);
 	PUBLIC_FUNCTION(Button*, GetRemoveButton);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, SetCommonAssetId, const UID&);
 	PROTECTED_FUNCTION(void, SetAssetIdByUser, const UID&);

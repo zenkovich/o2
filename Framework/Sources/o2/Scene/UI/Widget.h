@@ -292,9 +292,6 @@ namespace o2
 		// Updates enabling
 		void UpdateResEnabledInHierarchy() override;
 
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when transformation was changed and updated
 		void OnTransformUpdated() override;
 
@@ -806,7 +803,6 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnParentChanged, Actor*);
 	PROTECTED_FUNCTION(void, OnChildAdded, Actor*);

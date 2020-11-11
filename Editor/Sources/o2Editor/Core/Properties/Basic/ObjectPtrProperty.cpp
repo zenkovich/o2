@@ -31,6 +31,7 @@ namespace Editor
 	ObjectPtrProperty& ObjectPtrProperty::operator=(const ObjectPtrProperty& other)
 	{
 		IPropertyField::operator=(other);
+		InitializeControls();
 		return *this;
 	}
 
@@ -43,12 +44,6 @@ namespace Editor
 		}
 
 		mObjectViewer = nullptr;
-	}
-
-	void ObjectPtrProperty::CopyData(const Actor& otherActor)
-	{
-		IPropertyField::CopyData(otherActor);
-		InitializeControls();
 	}
 
 	void ObjectPtrProperty::InitializeControls()

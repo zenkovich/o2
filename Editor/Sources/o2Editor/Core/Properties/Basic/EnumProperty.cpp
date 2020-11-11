@@ -17,13 +17,8 @@ namespace Editor
 	EnumProperty& EnumProperty::operator=(const EnumProperty& other)
 	{
 		TPropertyField<int>::operator=(other);
-		return *this;
-	}
-
-	void EnumProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<int>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void EnumProperty::InitializeControls()

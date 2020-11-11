@@ -26,13 +26,8 @@ namespace Editor
 	VectorProperty& VectorProperty::operator=(const VectorProperty& other)
 	{
 		IPropertyField::operator=(other);
+		InitializeControls();
 		return *this;
-	}
-
-	void VectorProperty::CopyData(const Actor& otherActor)
-	{
-		IPropertyField::CopyData(otherActor);
-		InitializeControls();		
 	}
 
 	void VectorProperty::InitializeControls()

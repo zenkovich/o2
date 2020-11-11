@@ -52,7 +52,34 @@ namespace o2
 
 	EditBox& EditBox::operator=(const EditBox& other)
 	{
+		delete mTextDrawable;
+		delete mCaretDrawable;
+
 		ScrollArea::operator=(other);
+
+		mText = other.mText;
+		mLastText = mText;
+		mAvailableSymbols = other.mAvailableSymbols;
+		mSelectionBegin = 0;
+		mSelectionEnd = 0;
+		mCaretBlinkTime = 0;
+		mLastClickTime = -10.0f;
+		mMultiLine = other.mMultiLine;
+		mWordWrap = other.mWordWrap;
+		mMaxLineChars = other.mMaxLineChars;
+		mMaxLinesCount = other.mMaxLinesCount;
+		mSelectionColor = other.mSelectionColor;
+		mCaretBlinkDelay = other.mCaretBlinkDelay;
+		mTextDrawable = other.mTextDrawable->CloneAs<Text>();
+		mCaretDrawable = other.mCaretDrawable->CloneAs<Sprite>();
+
+		mTextDrawable->SetText(mText);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
+		onChanged(mText);
+
 		return *this;
 	}
 
@@ -708,39 +735,6 @@ namespace o2
 	String EditBox::GetCreateMenuGroup()
 	{
 		return "Basic";
-	}
-
-	void EditBox::CopyData(const Actor& otherActor)
-	{
-		const EditBox& other = dynamic_cast<const EditBox&>(otherActor);
-
-		ScrollArea::CopyData(other);
-
-		delete mTextDrawable;
-		delete mCaretDrawable;
-
-		mText             = other.mText;
-		mLastText         = mText;
-		mAvailableSymbols = other.mAvailableSymbols;
-		mSelectionBegin   = 0;
-		mSelectionEnd     = 0;
-		mCaretBlinkTime   = 0;
-		mLastClickTime    = -10.0f;
-		mMultiLine        = other.mMultiLine;
-		mWordWrap         = other.mWordWrap;
-		mMaxLineChars     = other.mMaxLineChars;
-		mMaxLinesCount    = other.mMaxLinesCount;
-		mSelectionColor   = other.mSelectionColor;
-		mCaretBlinkDelay  = other.mCaretBlinkDelay;
-		mTextDrawable     = other.mTextDrawable->CloneAs<Text>();
-		mCaretDrawable    = other.mCaretDrawable->CloneAs<Sprite>();
-
-		mTextDrawable->SetText(mText);
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
-
-		onChanged(mText);
 	}
 
 	void EditBox::UpdateTransparency()

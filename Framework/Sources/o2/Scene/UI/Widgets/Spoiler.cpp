@@ -43,6 +43,19 @@ namespace o2
 	Spoiler& Spoiler::operator=(const Spoiler& other)
 	{
 		VerticalLayout::operator=(other);
+
+		mExpandState = GetStateObject("expand");
+		if (!mExpandState)
+			CreateExpandAnimation();
+
+		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
+		mExpandState->SetState(false);
+
+		mHeadHeight = other.mHeadHeight;
+
+		InitializeControls();
+		UpdateExpanding(0);
+
 		return *this;
 	}
 
@@ -133,25 +146,6 @@ namespace o2
 	float Spoiler::GetHeadHeight() const
 	{
 		return mHeadHeight;
-	}
-
-	void Spoiler::CopyData(const Actor& otherActor)
-	{
-		const Spoiler& other = dynamic_cast<const Spoiler&>(otherActor);
-
-		VerticalLayout::CopyData(other);
-
-		mExpandState = GetStateObject("expand");
-		if (!mExpandState)
-			CreateExpandAnimation();
-
-		mExpandState->player.onUpdate = THIS_FUNC(UpdateExpanding);
-		mExpandState->SetState(false);
-
-		mHeadHeight = other.mHeadHeight;
-
-		InitializeControls();
-		UpdateExpanding(0);
 	}
 
 	void Spoiler::RearrangeChilds()

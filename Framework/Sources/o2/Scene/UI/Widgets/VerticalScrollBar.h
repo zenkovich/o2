@@ -115,9 +115,6 @@ namespace o2
 		WidgetLayer* mBackLayer = nullptr;   // Background layer
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Updates layers layouts, calls after updating widget layout
 		void UpdateLayersLayouts() override;
 
@@ -220,7 +217,6 @@ CLASS_METHODS_META(o2::VerticalScrollBar)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);

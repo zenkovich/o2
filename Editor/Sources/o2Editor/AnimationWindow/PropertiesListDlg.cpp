@@ -15,8 +15,7 @@
 DECLARE_SINGLETON(Editor::PropertiesListDlg);
 
 namespace Editor
-{
-	
+{	
 	PropertiesListDlg::PropertiesListDlg()
 	{
 		InitializeWindow();
@@ -327,12 +326,6 @@ namespace Editor
 	String AnimationPropertiesTreeNode::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void AnimationPropertiesTreeNode::CopyData(const Actor& otherActor)
-	{
-		TreeNode::CopyData(otherActor);
-		InitializeControls();
 	}
 
 	void AnimationPropertiesTreeNode::OnDeserialized(const DataValue& node)

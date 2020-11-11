@@ -17,13 +17,8 @@ namespace Editor
 	WStringProperty& WStringProperty::operator=(const WStringProperty& other)
 	{
 		TPropertyField<WString>::operator=(other);
-		return *this;
-	}
-
-	void WStringProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<WString>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void WStringProperty::InitializeControls()

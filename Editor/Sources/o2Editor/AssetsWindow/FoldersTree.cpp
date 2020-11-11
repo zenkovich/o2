@@ -66,14 +66,6 @@ namespace Editor
 	AssetsFoldersTree& AssetsFoldersTree::operator=(const AssetsFoldersTree& other)
 	{
 		Widget::operator=(other);
-		return *this;
-	}
-
-	void AssetsFoldersTree::CopyData(const Actor& otherActor)
-	{
-		const AssetsFoldersTree& other = dynamic_cast<const AssetsFoldersTree&>(otherActor);
-
-		Widget::CopyData(other);
 
 		mFoldersTree = FindChildByType<Tree>();
 		RemoveChild(FindChildByType<ContextMenu>());
@@ -82,6 +74,8 @@ namespace Editor
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
+
+		return *this;
 	}
 
 	void AssetsFoldersTree::SelectAndExpandFolder(const String& path)

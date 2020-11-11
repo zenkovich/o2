@@ -5,7 +5,7 @@
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Render/Render.h"
 #include "o2/Scene/Actor.h"
-#include "o2/Scene/ActorDataValueConverter.h"
+#include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/CameraActor.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/DrawableComponent.h"
@@ -483,7 +483,7 @@ namespace o2
 
 	void Scene::Load(const DataDocument& doc, bool append /*= false*/)
 	{
-		ActorDataValueConverter::Instance().LockPointersResolving();
+		ActorRefResolver::Instance().LockResolving();
 
 		if (!append)
 			Clear(false);
@@ -526,8 +526,8 @@ namespace o2
 			mRootActors.Clear();
 		}
 
-		ActorDataValueConverter::Instance().UnlockPointersResolving();
-		ActorDataValueConverter::Instance().ResolvePointers();
+		ActorRefResolver::Instance().UnlockResolving();
+		ActorRefResolver::Instance().ResolveRefs();
 
 		for (auto actor : mRootActors)
 			actor->UpdateTransform();
@@ -746,6 +746,7 @@ namespace o2
 
 	void Scene::OnActorPrototypeBroken(Actor* actor)
 	{
+		// !!! TODO: Optimize this
 		for (auto& it = mPrototypeLinksCache.Begin(); it != mPrototypeLinksCache.End();)
 		{
 			it->second.Remove(actor);

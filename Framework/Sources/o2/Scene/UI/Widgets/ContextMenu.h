@@ -213,9 +213,6 @@ namespace o2
 		float            mSelectSubContextTime = -1.0f; // Time to appearing selected sub context
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Fits size by items
 		void FitSizeAndPosition(const Vec2F& position) override;
 
@@ -333,9 +330,6 @@ namespace o2
 		bool mCheckable = false; // Is menu item can be checked
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when child widget was added
 		void OnChildAdded(Widget* child) override;
 
@@ -398,7 +392,6 @@ CLASS_METHODS_META(o2::ContextMenu)
 	PUBLIC_FUNCTION(void, SetItemsMaxPriority);
 	PUBLIC_FUNCTION(void, SetItemsMinPriority);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
 	PROTECTED_FUNCTION(void, HideWithParent);
 	PROTECTED_FUNCTION(void, HideWithChild);
@@ -446,7 +439,6 @@ CLASS_METHODS_META(o2::ContextMenuItem)
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 }
 END_META;

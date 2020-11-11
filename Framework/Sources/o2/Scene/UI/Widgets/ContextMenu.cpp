@@ -156,7 +156,27 @@ namespace o2
 
 	ContextMenu& ContextMenu::operator=(const ContextMenu& other)
 	{
+		RemoveAllItems();
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mSeparatorSample;
+
+		mItemSample = other.mItemSample->CloneAs<ContextMenuItem>();
+		mSeparatorSample = other.mSeparatorSample->CloneAs<Widget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mSelectionLayout = other.mSelectionLayout;
+
 		PopupWidget::operator=(other);
+
+		mItemsLayout = FindChildByType<VerticalLayout>();
+		mMaxVisibleItems = other.mMaxVisibleItems;
+
+		mItemSample->RemoveFromScene();
+		mSeparatorSample->RemoveFromScene();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -619,32 +639,6 @@ namespace o2
 		return "Context";
 	}
 
-	void ContextMenu::CopyData(const Actor& otherActor)
-	{
-		const ContextMenu& other = dynamic_cast<const ContextMenu&>(otherActor);
-
-		RemoveAllItems();
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mSeparatorSample;
-
-		mItemSample = other.mItemSample->CloneAs<ContextMenuItem>();
-		mSeparatorSample = other.mSeparatorSample->CloneAs<Widget>();
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout = other.mSelectionLayout;
-
-		PopupWidget::CopyData(other);
-
-		mItemsLayout = FindChildByType<VerticalLayout>();
-		mMaxVisibleItems = other.mMaxVisibleItems;
-
-		mItemSample->RemoveFromScene();
-		mSeparatorSample->RemoveFromScene();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
-	}
-
 	void ContextMenu::FitSizeAndPosition(const Vec2F& position)
 	{
 		Vec2F size;
@@ -877,7 +871,12 @@ namespace o2
 
 	ContextMenuItem& ContextMenuItem::operator=(const ContextMenuItem& other)
 	{
-		CopyData(other);
+		Widget::operator=(other);
+
+		mSubMenu = FindChildByType<ContextMenu>();
+		if (mSubMenu)
+			mSubMenu->Hide(true);
+
 		return *this;
 	}
 
@@ -932,17 +931,6 @@ namespace o2
 	String ContextMenuItem::GetCreateMenuGroup()
 	{
 		return "Context";
-	}
-
-	void ContextMenuItem::CopyData(const Actor& otherActor)
-	{
-		const ContextMenuItem& other = dynamic_cast<const ContextMenuItem&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mSubMenu = FindChildByType<ContextMenu>();
-		if (mSubMenu)
-			mSubMenu->Hide(true);
 	}
 
 	void ContextMenuItem::OnChildAdded(Widget* child)

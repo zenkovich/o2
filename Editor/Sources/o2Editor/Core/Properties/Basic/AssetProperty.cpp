@@ -19,13 +19,8 @@ namespace Editor
 	AssetProperty& AssetProperty::operator=(const AssetProperty& other)
 	{
 		TPropertyField::operator =(other);
-		return *this;
-	}
-
-	void AssetProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void AssetProperty::InitializeControls()

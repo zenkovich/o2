@@ -301,9 +301,6 @@ namespace o2
 		Vector<VisibleWidgetDef> mVisibleWidgetsCache; // Visible widgets cache
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when widget was selected
 		void OnFocused() override;
 
@@ -550,9 +547,6 @@ namespace o2
 		WidgetState* mSelectedState = nullptr; // Selected state cached
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when widget state was added, caches selected state
 		void OnStateAdded(WidgetState* state) override;
 
@@ -708,7 +702,6 @@ CLASS_METHODS_META(o2::Tree)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnUnfocused);
 	PROTECTED_FUNCTION(void, DrawZebraBack);
@@ -798,7 +791,6 @@ CLASS_METHODS_META(o2::TreeNode)
 	PUBLIC_FUNCTION(void, SetSelectedState, bool);
 	PUBLIC_FUNCTION(void, SetFocusedState, bool);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnStateAdded, WidgetState*);
 	PROTECTED_FUNCTION(void, UpdateTreeLayout, float);
 	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);

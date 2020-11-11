@@ -45,9 +45,6 @@ namespace Editor
 		Text*   mNameText = nullptr; // Asset name text
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -119,7 +116,6 @@ CLASS_METHODS_META(Editor::ActorProperty)
 
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, UpdateValueView);

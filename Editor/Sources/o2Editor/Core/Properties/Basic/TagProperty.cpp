@@ -19,13 +19,8 @@ namespace Editor
 	TagsProperty& TagsProperty::operator=(const TagsProperty& other)
 	{
 		TPropertyField<TagGroup>::operator=(other);
-		return *this;
-	}
-
-	void TagsProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<TagGroup>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void TagsProperty::InitializeControls()

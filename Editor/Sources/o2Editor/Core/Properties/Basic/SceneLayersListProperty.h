@@ -31,15 +31,12 @@ namespace Editor
 		SERIALIZABLE(SceneLayersListProperty);
 
 	protected:
-		Button*      mPropertyButton = nullptr;   // Property box with layers' names
-		Text*        mPropertyText = nullptr;  // Text layer inside property box
+		Button* mPropertyButton = nullptr; // Property box with layers' names
+		Text*   mPropertyText = nullptr;   // Text layer inside property box
 
 		ContextMenu* mLayersContext = nullptr; // Layers list toggles context
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Updates value view
 		void UpdateValueView() override;
 
@@ -66,7 +63,6 @@ END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)
 {
 
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OpenContext);

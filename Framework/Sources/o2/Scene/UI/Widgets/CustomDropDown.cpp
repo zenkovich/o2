@@ -37,6 +37,17 @@ namespace o2
 	CustomDropDown& CustomDropDown::operator=(const CustomDropDown& other)
 	{
 		Widget::operator=(other);
+
+		mItemsList = FindInternalWidgetByType<CustomList>();
+		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
+		mItemsList->Hide(true);
+		mItemsList->SetMultiselectionAvailable(false);
+
+		mClipLayout = other.mClipLayout;
+		mMaxListItems = other.mMaxListItems;
+
+		RetargetStatesAnimations();
+
 		return *this;
 	}
 
@@ -204,23 +215,6 @@ namespace o2
 	Layout CustomDropDown::GetClippingLayout()
 	{
 		return mClipLayout;
-	}
-
-	void CustomDropDown::CopyData(const Actor& otherActor)
-	{
-		const CustomDropDown& other = dynamic_cast<const CustomDropDown&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mItemsList = FindInternalWidgetByType<CustomList>();
-		mItemsList->onSelectedItem += [&](auto x) { OnItemSelected(); };
-		mItemsList->Hide(true);
-		mItemsList->SetMultiselectionAvailable(false);
-
-		mClipLayout = other.mClipLayout;
-		mMaxListItems = other.mMaxListItems;
-
-		RetargetStatesAnimations();
 	}
 
 	void CustomDropDown::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)

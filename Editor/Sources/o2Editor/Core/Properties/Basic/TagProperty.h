@@ -36,9 +36,6 @@ namespace Editor
 		bool         mPushingTag = false;    // Is pushing tag and we don't need to check edit text
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Updates value view
 		void UpdateValueView() override;
 
@@ -80,7 +77,6 @@ END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, SetCommonValue, const TagGroup&);
 	PROTECTED_FUNCTION(void, InitializeControls);

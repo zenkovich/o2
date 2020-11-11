@@ -32,6 +32,7 @@ namespace Editor
 	AssetIcon& AssetIcon::operator=(const AssetIcon& other)
 	{
 		Widget::operator=(other);
+		mNameText = FindChildByType<Label>();
 		return *this;
 	}
 
@@ -75,14 +76,6 @@ namespace Editor
 	String AssetIcon::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void AssetIcon::CopyData(const Actor& otherActor)
-	{
-		const AssetIcon& other = dynamic_cast<const AssetIcon&>(otherActor);
-
-		Widget::CopyData(other);
-		mNameText = FindChildByType<Label>();
 	}
 
 	void AssetIcon::SetSelected(bool selected)

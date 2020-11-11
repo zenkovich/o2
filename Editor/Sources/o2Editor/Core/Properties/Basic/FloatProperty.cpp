@@ -20,13 +20,8 @@ namespace Editor
 	FloatProperty& FloatProperty::operator=(const FloatProperty& other)
 	{
 		TPropertyField<float>::operator=(other);
-		return *this;
-	}
-
-	void FloatProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<float>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void FloatProperty::InitializeControls()

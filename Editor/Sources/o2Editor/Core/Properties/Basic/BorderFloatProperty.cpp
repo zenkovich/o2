@@ -17,13 +17,8 @@ namespace Editor
 	BorderFProperty& BorderFProperty::operator=(const BorderFProperty& other)
 	{
 		IPropertyField::operator=(other);
-		return *this;
-	}
-
-	void BorderFProperty::CopyData(const Actor& otherActor)
-	{
-		IPropertyField::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void BorderFProperty::InitializeControls()

@@ -30,8 +30,17 @@ namespace o2
 	{
 		Widget::operator=(other);
 
+		mBaseCorner = other.mBaseCorner;
+		mSpacing = other.mSpacing;
+		mBorder = other.mBorder;
+		mExpandWidth = other.mExpandWidth;
+		mExpandHeight = other.mExpandHeight;
+
 		for (auto child : mChildWidgets)
 			child->GetLayoutData().drivenByParent = true;
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 
 		return *this;
 	}
@@ -161,25 +170,6 @@ namespace o2
 	String HorizontalLayout::GetCreateMenuGroup()
 	{
 		return "Layout";
-	}
-
-	void HorizontalLayout::CopyData(const Actor& otherActor)
-	{
-		const HorizontalLayout& other = dynamic_cast<const HorizontalLayout&>(otherActor);
-
-		mBaseCorner = other.mBaseCorner;
-		mSpacing = other.mSpacing;
-		mBorder = other.mBorder;
-		mExpandWidth = other.mExpandWidth;
-		mExpandHeight = other.mExpandHeight;
-
-		Widget::CopyData(other);
-
-		for (auto child : mChildWidgets)
-			child->GetLayoutData().drivenByParent = true;
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	float HorizontalLayout::GetMinWidthWithChildren() const

@@ -37,9 +37,6 @@ namespace Editor
 		CursorEventsArea mClickArea;             // Box click area
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Updates value view
 		void UpdateValueView() override;
 
@@ -66,7 +63,6 @@ END_META;
 CLASS_METHODS_META(Editor::ColorProperty)
 {
 
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnClicked);

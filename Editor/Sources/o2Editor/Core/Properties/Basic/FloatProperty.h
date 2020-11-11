@@ -31,13 +31,10 @@ namespace Editor
 		IOBJECT(FloatProperty);
 
 	protected:
-		EditBox*         mEditBox = nullptr;        // Edit box 
-		CursorEventsArea mDragHangle;               // Value changing drag handle
+		EditBox*         mEditBox = nullptr; // Edit box 
+		CursorEventsArea mDragHangle;        // Value changing drag handle
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Updates value view
 		void UpdateValueView() override;
 
@@ -77,7 +74,6 @@ END_META;
 CLASS_METHODS_META(Editor::FloatProperty)
 {
 
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
 	PROTECTED_FUNCTION(void, InitializeControls);

@@ -16,6 +16,9 @@ namespace o2
 		// Default constructor
 		ActorAsset();
 
+		// Constructor
+		ActorAsset(Actor* actor);
+
 		// Copy-constructor
 		ActorAsset(const ActorAsset& other);
 

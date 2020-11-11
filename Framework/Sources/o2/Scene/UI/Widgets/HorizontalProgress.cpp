@@ -28,6 +28,19 @@ namespace o2
 	HorizontalProgress& HorizontalProgress::operator=(const HorizontalProgress& other)
 	{
 		Widget::operator=(other);
+
+		mValue = other.mValue;
+		mMinValue = other.mMinValue;
+		mMaxValue = other.mMaxValue;
+		mOrientation = other.mOrientation;
+		mScrollSense = other.mScrollSense;
+
+		mBarLayer = FindLayer("bar");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -248,25 +261,6 @@ namespace o2
 			mBackLayer->layout = Layout::BothStretch();
 
 		Widget::UpdateLayersLayouts();
-	}
-
-	void HorizontalProgress::CopyData(const Actor& otherActor)
-	{
-		const HorizontalProgress& other = dynamic_cast<const HorizontalProgress&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mValue       = other.mValue;
-		mMinValue    = other.mMinValue;
-		mMaxValue    = other.mMaxValue;
-		mOrientation = other.mOrientation;
-		mScrollSense = other.mScrollSense;
-
-		mBarLayer    = FindLayer("bar");
-		mBackLayer   = FindLayer("back");
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void HorizontalProgress::OnLayerAdded(WidgetLayer* layer)

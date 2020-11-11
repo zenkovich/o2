@@ -122,9 +122,6 @@ namespace o2
 		bool         mFitByChildren = false;                  // Fitting by children @SERIALIZABLE
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when child widget was added
 		void OnChildAdded(Widget* child) override;
 
@@ -220,7 +217,6 @@ CLASS_METHODS_META(o2::GridLayout)
 	PUBLIC_FUNCTION(bool, IsFittingByChildren);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);
 	PROTECTED_FUNCTION(void, RearrangeChilds);

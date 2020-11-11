@@ -29,6 +29,11 @@ namespace o2
 	Button& Button::operator=(const Button& other)
 	{
 		Widget::operator=(other);
+
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mIconSprite = GetLayerDrawable<Sprite>("icon");
+		RetargetStatesAnimations();
+
 		return *this;
 	}
 
@@ -82,17 +87,6 @@ namespace o2
 	String Button::GetCreateMenuGroup()
 	{
 		return "Basic";
-	}
-
-	void Button::CopyData(const Actor& otherActor)
-	{
-		const Button& other = dynamic_cast<const Button&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mIconSprite = GetLayerDrawable<Sprite>("icon");
-		RetargetStatesAnimations();
 	}
 
 	void Button::OnCursorPressed(const Input::Cursor& cursor)

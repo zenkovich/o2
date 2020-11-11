@@ -160,7 +160,8 @@ namespace o2
 		static const Type* GetAssetTypeStatic() { return &TypeOf(T); }
 
 		// Creates asset and returns reference
-		static Ref<T> CreateAsset() { return o2Assets.CreateAsset<T>(); }
+		template<typename ... _args>
+		static Ref<T> CreateAsset(_args ... args) { return o2Assets.CreateAsset<T>(args ...); }
 
 	public:
 		typedef Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type> _thisType;

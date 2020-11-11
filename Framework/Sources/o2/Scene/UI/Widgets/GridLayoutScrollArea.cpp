@@ -31,8 +31,18 @@ namespace o2
 
 	GridLayoutScrollArea& GridLayoutScrollArea::operator=(const GridLayoutScrollArea& other)
 	{
+		delete mItemSample;
+
 		ScrollArea::operator=(other);
 		mItemsSpacing = other.mItemsSpacing;
+
+		mItemSample = other.mItemSample->CloneAs<Widget>();
+		mItemSample->UpdateSelfTransform();
+		mItemSample->UpdateChildrenTransforms();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -251,22 +261,6 @@ namespace o2
 		float itemWidth = mItemSample->layout->GetMinWidth();
 		return Math::Max(1, Math::FloorToInt((mAbsoluteViewArea.Width() - itemWidth)/
 			(itemWidth + mItemsSpacing.x) + 1.0f));
-	}
-
-	void GridLayoutScrollArea::CopyData(const Actor& otherActor)
-	{
-		const GridLayoutScrollArea& other = dynamic_cast<const GridLayoutScrollArea&>(otherActor);
-
-		delete mItemSample;
-
-		ScrollArea::CopyData(other);
-
-		mItemSample = other.mItemSample->CloneAs<Widget>();
-		mItemSample->UpdateSelfTransform();
-		mItemSample->UpdateChildrenTransforms();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void GridLayoutScrollArea::OnDeserialized(const DataValue& node)

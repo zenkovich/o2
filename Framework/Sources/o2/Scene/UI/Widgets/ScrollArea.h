@@ -159,9 +159,6 @@ namespace o2
 		float mLastVerScrollChangeTime = -1.0f; // Last time when horizontal scroll bar was changed
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
@@ -286,7 +283,6 @@ CLASS_METHODS_META(o2::ScrollArea)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
 	PROTECTED_FUNCTION(void, OnChildRemoved, Widget*);

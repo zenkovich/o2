@@ -24,6 +24,12 @@ namespace o2
 	PopupWidget& PopupWidget::operator=(const PopupWidget& other)
 	{
 		ScrollArea::operator=(other);
+
+		mFitSizeMin = other.mFitSizeMin;
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -136,18 +142,6 @@ namespace o2
 	bool PopupWidget::IsInputTransparent() const
 	{
 		return false;
-	}
-
-	void PopupWidget::CopyData(const Actor& otherActor)
-	{
-		const PopupWidget& other = dynamic_cast<const PopupWidget&>(otherActor);
-
-		ScrollArea::CopyData(other);
-
-		mFitSizeMin = other.mFitSizeMin;
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void PopupWidget::CheckClipping(const RectF& clipArea)

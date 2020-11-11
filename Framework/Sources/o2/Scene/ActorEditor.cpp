@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Actor.h"
 
-#include "o2/Scene/ActorDataValueConverter.h"
+#include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Scene.h"
 
@@ -9,6 +9,26 @@
 
 namespace o2
 {
+	void Actor::SourceToTargetMapCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
+	{
+		sourceToTargetActors[source] = target;
+	}
+
+	void Actor::SourceToTargetMapCloneVisitor::OnCopyComponent(const Component* source, Component* target)
+	{
+		sourceToTargetComponents[source] = target;
+	}
+
+	void Actor::MakePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
+	{
+
+	}
+
+	void Actor::MakePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
+	{
+
+	}
+
 	void Actor::SerializeWithProto(DataValue& node) const
 	{
 		const Actor* proto = mPrototypeLink.Get();
@@ -86,8 +106,8 @@ namespace o2
 
 	void Actor::DeserializeWithProto(const DataValue& node)
 	{
-		ActorDataValueConverter::Instance().LockPointersResolving();
-		ActorDataValueConverter::Instance().ActorCreated(this);
+		ActorRefResolver::Instance().LockResolving();
+		ActorRefResolver::Instance().ActorCreated(this);
 
 		RemoveAllChildren();
 		RemoveAllComponents();
@@ -265,8 +285,8 @@ namespace o2
 
 		transform->SetDirty();
 
-		ActorDataValueConverter::Instance().UnlockPointersResolving();
-		ActorDataValueConverter::Instance().ResolvePointers();
+		ActorRefResolver::Instance().UnlockResolving();
+		ActorRefResolver::Instance().ResolveRefs();
 	}
 
 	ActorAssetRef Actor::GetPrototype() const
@@ -344,12 +364,9 @@ namespace o2
 
 	ActorAssetRef Actor::MakePrototype()
 	{
-		ActorAssetRef prototypeAsset = ActorAssetRef::CreateAsset();
-		Actor* prototype = prototypeAsset->GetActor();
-		prototype->RemoveFromScene();
-
-		prototype->RemoveAllChildren();
-		prototype->RemoveAllComponents();
+		auto& thisType = dynamic_cast<const ObjectType&>(GetType());
+		Actor* prototype = dynamic_cast<Actor*>(thisType.DynamicCastToIObject(thisType.CreateSample()));
+		ActorAssetRef prototypeAsset = ActorAssetRef::CreateAsset(prototype);
 
 		Vector<Actor**> actorPointersFields;
 		Vector<Component**> componentPointersFields;

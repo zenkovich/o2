@@ -104,9 +104,6 @@ namespace Editor
 		// It is called when property puts in buffer. Here you can release your shared resources
 		void OnFreeProperty() override;
 
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -171,7 +168,6 @@ CLASS_METHODS_META(Editor::ObjectPtrProperty)
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
 	PROTECTED_FUNCTION(void, OnFreeProperty);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, UpdateViewerHeader);
 	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);

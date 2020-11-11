@@ -20,13 +20,8 @@ namespace Editor
 	BooleanProperty& BooleanProperty::operator=(const BooleanProperty& other)
 	{
 		TPropertyField<bool>::operator=(other);
-		return *this;
-	}
-
-	void BooleanProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<bool>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void BooleanProperty::InitializeControls()

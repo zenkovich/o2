@@ -142,13 +142,6 @@ namespace o2
 		return "Dropping";
 	}
 
-	void DropDown::CopyData(const Actor& otherActor)
-	{
-		const DropDown& other = dynamic_cast<const DropDown&>(otherActor);
-		CustomDropDown::CopyData(other);
-		RetargetStatesAnimations();
-	}
-
 	void DropDown::OnSelectionChanged()
 	{
 		onSelectedText(GetSelectedItemText());

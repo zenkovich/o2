@@ -377,12 +377,6 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void AnimationTreeNode::CopyData(const Actor& otherActor)
-	{
-		TreeNode::CopyData(otherActor);
-		InitializeControls();
-	}
-
 	void AnimationTreeNode::OnDeserialized(const DataValue& node)
 	{
 		TreeNode::OnDeserialized(node);

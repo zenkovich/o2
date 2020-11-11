@@ -185,9 +185,6 @@ namespace Editor
 		static Map<const Type*, Vector<ITrackControl*>> mTrackControlsCache; // Shared track controls cache
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
@@ -275,7 +272,6 @@ CLASS_METHODS_META(Editor::AnimationTreeNode)
 	PUBLIC_FUNCTION(void, SetTreeWidth, float);
 	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, InitilizeTrackControl);

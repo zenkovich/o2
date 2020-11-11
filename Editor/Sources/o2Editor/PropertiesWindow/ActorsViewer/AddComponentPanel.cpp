@@ -298,12 +298,6 @@ namespace Editor
 		return "UI/Editor";
 	}
 
-	void ComponentsTreeNode::CopyData(const Actor& otherActor)
-	{
-		TreeNode::CopyData(otherActor);
-		InitializeControls();
-	}
-
 	void ComponentsTreeNode::OnDeserialized(const DataValue& node)
 	{
 		TreeNode::OnDeserialized(node);

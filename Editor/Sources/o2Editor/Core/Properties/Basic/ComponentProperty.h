@@ -53,9 +53,6 @@ namespace Editor
 		Text*   mNameText = nullptr;       // Component name text
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Checks is value can be reverted
 		bool IsValueRevertable() const override;
 
@@ -130,7 +127,6 @@ CLASS_METHODS_META(Editor::ComponentProperty)
 	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
 	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

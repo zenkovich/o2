@@ -64,7 +64,51 @@ namespace o2
 
 	ScrollArea& ScrollArea::operator=(const ScrollArea& other)
 	{
+		if (mHorScrollBar)
+		{
+			if (!mOwnHorScrollBar)
+				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
+		}
+
+		if (mVerScrollBar)
+		{
+			if (!mOwnVerScrollBar)
+				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
+		}
+
+		mClipAreaLayout = other.mClipAreaLayout;
+		mViewAreaLayout = other.mViewAreaLayout;
+		mScrollPos = other.mScrollPos;
+		mOwnHorScrollBar = other.mOwnHorScrollBar;
+		mOwnVerScrollBar = other.mOwnVerScrollBar;
+		mScrollSpeedDamp = other.mScrollSpeedDamp;
+		mEnableScrollsHiding = other.mEnableScrollsHiding;
+
 		Widget::operator=(other);
+
+		if (mOwnHorScrollBar)
+		{
+			mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
+			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
+			mHorScrollBar->GetLayoutData().drivenByParent = true;
+
+			mEnableHorScroll = mHorScrollBar->IsEnabled();
+		}
+		else mHorScrollBar = nullptr;
+
+		if (mOwnVerScrollBar)
+		{
+			mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
+			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
+			mVerScrollBar->GetLayoutData().drivenByParent = true;
+
+			mEnableVerScroll = mVerScrollBar->IsEnabled();
+		}
+		else mVerScrollBar = nullptr;
+
+		RetargetStatesAnimations();
+		UpdateScrollParams();
+		SetLayoutDirty();
 		return *this;
 	}
 
@@ -640,57 +684,6 @@ namespace o2
 
 		onScrolled(mScrollPos);
 		OnScrolled();
-	}
-
-	void ScrollArea::CopyData(const Actor& otherActor)
-	{
-		const ScrollArea& other = dynamic_cast<const ScrollArea&>(otherActor);
-
-		if (mHorScrollBar)
-		{
-			if (!mOwnHorScrollBar)
-				mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
-		}
-
-		if (mVerScrollBar)
-		{
-			if (!mOwnVerScrollBar)
-				mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
-		}
-
-		mClipAreaLayout = other.mClipAreaLayout;
-		mViewAreaLayout = other.mViewAreaLayout;
-		mScrollPos = other.mScrollPos;
-		mOwnHorScrollBar = other.mOwnHorScrollBar;
-		mOwnVerScrollBar = other.mOwnVerScrollBar;
-		mScrollSpeedDamp = other.mScrollSpeedDamp;
-		mEnableScrollsHiding = other.mEnableScrollsHiding;
-
-		Widget::CopyData(other);
-
-		if (mOwnHorScrollBar)
-		{
-			mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");
-			mHorScrollBar->onSmoothChange += THIS_FUNC(OnHorScrollChanged);
-			mHorScrollBar->GetLayoutData().drivenByParent = true;
-
-			mEnableHorScroll = mHorScrollBar->IsEnabled();
-		}
-		else mHorScrollBar = nullptr;
-
-		if (mOwnVerScrollBar)
-		{
-			mVerScrollBar = GetInternalWidgetByType<VerticalScrollBar>("verScrollBar");
-			mVerScrollBar->onSmoothChange += THIS_FUNC(OnVerScrollChanged);
-			mVerScrollBar->GetLayoutData().drivenByParent = true;
-
-			mEnableVerScroll = mVerScrollBar->IsEnabled();
-		}
-		else mVerScrollBar = nullptr;
-
-		RetargetStatesAnimations();
-		UpdateScrollParams();
-		SetLayoutDirty();
 	}
 
 	void ScrollArea::OnDeserialized(const DataValue& node)

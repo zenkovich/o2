@@ -17,13 +17,8 @@ namespace Editor
 	StringProperty& StringProperty::operator=(const StringProperty& other)
 	{
 		TPropertyField<String>::operator=(other);
-		return *this;
-	}
-
-	void StringProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<String>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void StringProperty::InitializeControls()

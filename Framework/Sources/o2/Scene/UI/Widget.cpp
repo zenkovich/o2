@@ -123,7 +123,62 @@ namespace o2
 
 	Widget& Widget::operator=(const Widget& other)
 	{
-		Actor::operator=(other);
+		auto layers = mLayers;
+		for (auto layer : layers)
+			delete layer;
+
+		auto states = mStates;
+		for (auto state : states)
+			delete state;
+
+		auto internalChildren = mInternalWidgets;
+		for (auto child : internalChildren)
+			delete child;
+
+		mInternalWidgets.Clear();
+		mLayers.Clear();
+		mStates.Clear();
+		mVisibleState = nullptr;
+		mFocusedState = nullptr;
+
+		layout->CopyFrom(*other.layout);
+		mTransparency = other.mTransparency;
+		mIsFocusable = other.mIsFocusable;
+
+		for (auto layer : other.mLayers)
+		{
+			auto newLayer = mnew WidgetLayer(*layer);
+			newLayer->SetOwnerWidget(this);
+			mLayers.Add(newLayer);
+			OnLayerAdded(newLayer);
+		}
+
+		mChildWidgets.Clear();
+		for (auto child : mChildren)
+		{
+			Widget* childWidget = dynamic_cast<Widget*>(child);
+			if (childWidget)
+			{
+				mChildWidgets.Add(childWidget);
+				OnChildAdded(childWidget);
+			}
+		}
+
+		for (auto child : other.mInternalWidgets)
+		{
+			auto newChild = child->CloneAs<Widget>();
+			newChild->RemoveFromScene();
+			newChild->SetInternalParent(this, false);
+		}
+
+		for (auto state : other.mStates)
+		{
+			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
+			AddState(newState, false);
+		}
+
+		UpdateLayersDrawingSequence();
+
 		return *this;
 	}
 
@@ -1174,69 +1229,6 @@ namespace o2
 
 		for (auto child : mInternalWidgets)
 			child->UpdateResEnabledInHierarchy();
-	}
-
-	void Widget::CopyData(const Actor& otherActor)
-	{
-		const Widget& other = dynamic_cast<const Widget&>(otherActor);
-
-		Actor::CopyData(other);
-
-		auto layers = mLayers;
-		for (auto layer : layers)
-			delete layer;
-
-		auto states = mStates;
-		for (auto state : states)
-			delete state;
-
-		auto internalChildren = mInternalWidgets;
-		for (auto child : internalChildren)
-			delete child;
-
-		mInternalWidgets.Clear();
-		mLayers.Clear();
-		mStates.Clear();
-		mVisibleState = nullptr;
-		mFocusedState = nullptr;
-
-		layout->CopyFrom(*other.layout);
-		mTransparency = other.mTransparency;
-		mIsFocusable = other.mIsFocusable;
-
-		for (auto layer : other.mLayers)
-		{
-			auto newLayer = mnew WidgetLayer(*layer);
-			newLayer->SetOwnerWidget(this);
-			mLayers.Add(newLayer);
-			OnLayerAdded(newLayer);
-		}
-
-		mChildWidgets.Clear();
-		for (auto child : mChildren)
-		{
-			Widget* childWidget = dynamic_cast<Widget*>(child);
-			if (childWidget)
-			{
-				mChildWidgets.Add(childWidget);
-				OnChildAdded(childWidget);
-			}
-		}
-
-		for (auto child : other.mInternalWidgets)
-		{
-			auto newChild = child->CloneAs<Widget>();
-			newChild->RemoveFromScene();
-			newChild->SetInternalParent(this, false);
-		}
-
-		for (auto state : other.mStates)
-		{
-			WidgetState* newState = dynamic_cast<WidgetState*>(state->Clone());
-			AddState(newState, false);
-		}
-
-		UpdateLayersDrawingSequence();
 	}
 
 	void Widget::SetInternalParent(Widget* parent, bool worldPositionStays /*= false*/)

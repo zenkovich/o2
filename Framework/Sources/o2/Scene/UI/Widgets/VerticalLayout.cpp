@@ -29,10 +29,20 @@ namespace o2
 
 	VerticalLayout& VerticalLayout::operator=(const VerticalLayout& other)
 	{
+		mBaseCorner = other.mBaseCorner;
+		mSpacing = other.mSpacing;
+		mBorder = other.mBorder;
+		mExpandWidth = other.mExpandWidth;
+		mExpandHeight = other.mExpandHeight;
+		mFitByChildren = other.mFitByChildren;
+
 		Widget::operator=(other);
 
 		for (auto child : mChildWidgets)
 			child->GetLayoutData().drivenByParent = true;
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 
 		return *this;
 	}
@@ -162,26 +172,6 @@ namespace o2
 	String VerticalLayout::GetCreateMenuGroup()
 	{
 		return "Layout";
-	}
-
-	void VerticalLayout::CopyData(const Actor& otherActor)
-	{
-		const VerticalLayout& other = dynamic_cast<const VerticalLayout&>(otherActor);
-
-		mBaseCorner    = other.mBaseCorner;
-		mSpacing       = other.mSpacing;
-		mBorder        = other.mBorder;
-		mExpandWidth   = other.mExpandWidth;
-		mExpandHeight  = other.mExpandHeight;
-		mFitByChildren = other.mFitByChildren;
-
-		Widget::CopyData(other);
-
-		for (auto child : mChildWidgets)
-			child->GetLayoutData().drivenByParent = true;
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	float VerticalLayout::GetMinWidthWithChildren() const

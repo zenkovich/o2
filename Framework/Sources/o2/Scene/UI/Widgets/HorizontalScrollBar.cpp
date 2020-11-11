@@ -31,6 +31,22 @@ namespace o2
 	HorizontalScrollBar& HorizontalScrollBar::operator=(const HorizontalScrollBar& other)
 	{
 		Widget::operator=(other);
+
+		mValue = other.mValue;
+		mMinValue = other.mMinValue;
+		mMaxValue = other.mMaxValue;
+		mScrollSense = other.mScrollSense;
+		mScrollHandleSize = other.mScrollHandleSize;
+		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
+		mSmoothValue = mValue;
+		mHandlePressed = false;
+
+		mHandleLayer = FindLayer("handle");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -259,28 +275,6 @@ namespace o2
 	void HorizontalScrollBar::OnScrolled(float scroll)
 	{
 		SetValue(mValue - scroll*mScrollSense);
-	}
-
-	void HorizontalScrollBar::CopyData(const Actor& otherActor)
-	{
-		const HorizontalScrollBar& other = dynamic_cast<const HorizontalScrollBar&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mValue                 = other.mValue;
-		mMinValue              = other.mMinValue;
-		mMaxValue              = other.mMaxValue;
-		mScrollSense           = other.mScrollSense;
-		mScrollHandleSize      = other.mScrollHandleSize;
-		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
-		mSmoothValue           = mValue;
-		mHandlePressed         = false;
-
-		mHandleLayer = FindLayer("handle");
-		mBackLayer = FindLayer("back");
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void HorizontalScrollBar::OnDeserialized(const DataValue& node)

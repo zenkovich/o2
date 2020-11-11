@@ -19,13 +19,8 @@ namespace Editor
 	IntegerProperty& IntegerProperty::operator=(const IntegerProperty& other)
 	{
 		TPropertyField<int>::operator=(other);
-		return *this;
-	}
-
-	void IntegerProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<int>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void IntegerProperty::InitializeControls()

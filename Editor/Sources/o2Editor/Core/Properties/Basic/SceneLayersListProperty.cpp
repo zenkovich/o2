@@ -18,13 +18,8 @@ namespace Editor
 	SceneLayersListProperty& SceneLayersListProperty::operator=(const SceneLayersListProperty& other)
 	{
 		TPropertyField<SceneLayersList>::operator=(other);
-		return *this;
-	}
-
-	void SceneLayersListProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<SceneLayersList>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void SceneLayersListProperty::InitializeControls()

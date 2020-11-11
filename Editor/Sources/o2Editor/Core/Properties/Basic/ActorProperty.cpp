@@ -28,13 +28,8 @@ namespace Editor
 	ActorProperty& ActorProperty::operator=(const ActorProperty& other)
 	{
 		TPropertyField<Actor*>::operator=(other);
-		return *this;
-	}
-
-	void ActorProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<Actor*>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void ActorProperty::InitializeControls()

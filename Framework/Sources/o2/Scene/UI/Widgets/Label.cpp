@@ -30,6 +30,18 @@ namespace o2
 	Label& Label::operator=(const Label& other)
 	{
 		Widget::operator=(other);
+
+		mTextDrawable = GetLayerDrawable<Text>("text");
+		mHorOverflow = other.mHorOverflow;
+		mVerOverflow = other.mVerOverflow;
+		mExpandBorder = other.mExpandBorder;
+
+		if (!mTextDrawable)
+			CreateDefaultText();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -316,24 +328,6 @@ namespace o2
 		}
 
 		layout->Update();
-	}
-
-	void Label::CopyData(const Actor& otherActor)
-	{
-		const Label& other = dynamic_cast<const Label&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mTextDrawable = GetLayerDrawable<Text>("text");
-		mHorOverflow  = other.mHorOverflow;
-		mVerOverflow  = other.mVerOverflow;
-		mExpandBorder = other.mExpandBorder;
-		
-		if (!mTextDrawable)
-			CreateDefaultText();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void Label::OnLayerAdded(WidgetLayer* layer)

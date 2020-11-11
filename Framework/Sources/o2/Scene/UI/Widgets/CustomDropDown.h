@@ -128,9 +128,6 @@ namespace o2
 		int         mMaxListItems = 10;                  // Maximum visible items in list @SERIALIZABLE
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Moves widget's to delta and checks for clipping
 		void MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea) override;
 
@@ -217,7 +214,6 @@ CLASS_METHODS_META(o2::CustomDropDown)
 	PUBLIC_FUNCTION(Layout, GetClippingLayout);
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, MoveAndCheckClipping, const Vec2F&, const RectF&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

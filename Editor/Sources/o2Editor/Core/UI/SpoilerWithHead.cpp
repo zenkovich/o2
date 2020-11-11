@@ -20,6 +20,7 @@ namespace Editor
 	SpoilerWithHead& SpoilerWithHead::operator=(const SpoilerWithHead& other)
 	{
 		Spoiler::operator=(other);
+		InitializeControls();
 		return *this;
 	}
 
@@ -44,13 +45,6 @@ namespace Editor
 			mSaveBtn->onClick = [&]() { onSavePressed(); };
 
 		mIcon = FindInternalWidgetByType<Image>("icon");
-	}
-
-	void SpoilerWithHead::CopyData(const Actor& otherActor)
-	{
-		Spoiler::CopyData(otherActor);
-		InitializeControls();
-
 	}
 }
 

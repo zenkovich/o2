@@ -42,6 +42,18 @@ namespace o2
 	TreeNode& TreeNode::operator=(const TreeNode& other)
 	{
 		Widget::operator=(other);
+
+		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
+
+		mExpandBtn = (Button*)GetChild("expandBtn");
+		if (mExpandBtn)
+			mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree); };
+
+		SetSelectionGroup(other.GetSelectionGroup());
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -97,24 +109,6 @@ namespace o2
 	String TreeNode::GetCreateMenuGroup()
 	{
 		return "Tree";
-	}
-
-	void TreeNode::CopyData(const Actor& otherActor)
-	{
-		const TreeNode& other = dynamic_cast<const TreeNode&>(otherActor);
-
-		Widget::CopyData(other);
-
-		onDraw = [&]() { CursorAreaEventsListener::OnDrawn(); };
-
-		mExpandBtn = (Button*)GetChild("expandBtn");
-		if (mExpandBtn)
-			mExpandBtn->onClick = [&]() { if (IsExpanded()) Collapse(); else Expand(); o2UI.FocusWidget(mOwnerTree); };
-
-		SetSelectionGroup(other.GetSelectionGroup());
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void TreeNode::OnStateAdded(WidgetState* state)
@@ -231,6 +225,28 @@ namespace o2
 	Tree& Tree::operator=(const Tree& other)
 	{
 		ScrollArea::operator=(other);
+
+		delete mNodeWidgetSample;
+		delete mHoverDrawable;
+		delete mFakeDragNode;
+		delete mHighlightSprite;
+
+		mRearrangeType = other.mRearrangeType;
+		mMultiSelectAvailable = other.mMultiSelectAvailable;
+		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<TreeNode>();
+		mFakeDragNode = other.mNodeWidgetSample->CloneAs<TreeNode>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
+
+		mHighlightAnim.SetTarget(mHighlightSprite);
+
+		mHoverLayout = other.mHoverLayout;
+		mHighlightLayout = other.mHighlightLayout;
+		mHighlightAnim = other.mHighlightAnim;
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -938,34 +954,6 @@ namespace o2
 			mSelectedNodes.Add(node);
 
 		return node;
-	}
-
-	void Tree::CopyData(const Actor& otherActor)
-	{
-		const Tree& other = dynamic_cast<const Tree&>(otherActor);
-
-		ScrollArea::CopyData(other);
-
-		delete mNodeWidgetSample;
-		delete mHoverDrawable;
-		delete mFakeDragNode;
-		delete mHighlightSprite;
-
-		mRearrangeType = other.mRearrangeType;
-		mMultiSelectAvailable = other.mMultiSelectAvailable;
-		mNodeWidgetSample = other.mNodeWidgetSample->CloneAs<TreeNode>();
-		mFakeDragNode = other.mNodeWidgetSample->CloneAs<TreeNode>();
-		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
-
-		mHighlightAnim.SetTarget(mHighlightSprite);
-
-		mHoverLayout = other.mHoverLayout;
-		mHighlightLayout = other.mHighlightLayout;
-		mHighlightAnim = other.mHighlightAnim;
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void Tree::OnFocused()

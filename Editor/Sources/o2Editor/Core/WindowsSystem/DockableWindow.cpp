@@ -58,6 +58,12 @@ namespace Editor
 	DockableWindow& DockableWindow::operator=(const DockableWindow& other)
 	{
 		Window::operator=(other);
+
+		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
+
+		if (mVisibleState)
+			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
+
 		return *this;
 	}
 
@@ -312,18 +318,6 @@ namespace Editor
 	String DockableWindow::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void DockableWindow::CopyData(const Actor& otherActor)
-	{
-		const DockableWindow& other = dynamic_cast<const DockableWindow&>(otherActor);
-
-		Window::CopyData(other);
-
-		mDockingFrameSample = other.mDockingFrameSample->CloneAs<Sprite>();
-
-		if (mVisibleState)
-			mVisibleState->onStateFullyFalse += THIS_FUNC(Undock);
 	}
 
 	void DockableWindow::OnEnableInHierarchyChanged()

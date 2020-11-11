@@ -26,7 +26,18 @@ namespace o2
 
 	GridLayout& GridLayout::operator=(const GridLayout& other)
 	{
+		mBaseCorner = other.mBaseCorner;
+		mSpacing = other.mSpacing;
+		mBorder = other.mBorder;
+		mCellSize = other.mCellSize;
+		mArrangeAxis = other.mArrangeAxis;
+		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
+
 		Widget::operator=(other);
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -167,23 +178,6 @@ namespace o2
 	String GridLayout::GetCreateMenuGroup()
 	{
 		return "Layout";
-	}
-
-	void GridLayout::CopyData(const Actor& otherActor)
-	{
-		const GridLayout& other = dynamic_cast<const GridLayout&>(otherActor);
-
-		mBaseCorner          = other.mBaseCorner;
-		mSpacing             = other.mSpacing;
-		mBorder              = other.mBorder;
-		mCellSize            = other.mCellSize;
-		mArrangeAxis         = other.mArrangeAxis;
-		mArrangeAxisMaxCells = other.mArrangeAxisMaxCells;
-
-		Widget::CopyData(other);
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void GridLayout::OnChildAdded(Widget* child)

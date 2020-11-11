@@ -31,6 +31,7 @@ namespace Editor
 	DockWindowPlace& DockWindowPlace::operator=(const DockWindowPlace& other)
 	{
 		Widget::operator=(other);
+		mDragHandleLayoutMin = other.mDragHandleLayoutMin;
 		return *this;
 	}
 
@@ -196,14 +197,6 @@ namespace Editor
 	String DockWindowPlace::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void DockWindowPlace::CopyData(const Actor& otherActor)
-	{
-		const DockWindowPlace& other = dynamic_cast<const DockWindowPlace&>(otherActor);
-
-		Widget::CopyData(other);
-		mDragHandleLayoutMin = other.mDragHandleLayoutMin;
 	}
 
 	void DockWindowPlace::OnDragHandleMinMoved(const Vec2F& delta)

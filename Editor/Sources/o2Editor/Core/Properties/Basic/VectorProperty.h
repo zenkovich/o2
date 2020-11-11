@@ -111,9 +111,6 @@ namespace Editor
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -189,7 +186,6 @@ CLASS_METHODS_META(Editor::VectorProperty)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, SetExpanded, bool);
 	PUBLIC_FUNCTION(bool, IsExpanded);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void*, GetProxyValuePointer, IAbstractValueProxy*);
 	PROTECTED_FUNCTION(IPropertyField*, GetFreeValueProperty);

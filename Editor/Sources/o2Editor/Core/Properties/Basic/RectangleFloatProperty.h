@@ -80,9 +80,6 @@ namespace Editor
 		FloatProperty* mBottomProperty = nullptr; // Bottom value property
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
@@ -170,7 +167,6 @@ CLASS_METHODS_META(Editor::RectFProperty)
 	PUBLIC_FUNCTION(bool, IsValuesDifferent);
 	PUBLIC_FUNCTION(const Type*, GetValueType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 }
 END_META;

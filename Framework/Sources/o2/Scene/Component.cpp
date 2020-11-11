@@ -2,23 +2,34 @@
 #include "Component.h"
 
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/Scene.h"
 
 namespace o2
 {
 	Component::Component() :
 		mId(Math::Random())
-	{}
+	{
+		ActorRefResolver::ComponentCreated(this);
+	}
 
 	Component::Component(const Component& other) :
 		mEnabled(other.mEnabled), mResEnabled(other.mEnabled), mId(Math::Random()),
 		actor(this), enabled(this), enabledInHierarchy(this)
-	{}
+	{
+		ActorRefResolver::ComponentCreated(this);
+	}
 
 	Component::~Component()
 	{
 		if (mOwner)
 			mOwner->RemoveComponent(this, false);
+
+		for (auto ref : mReferences)
+		{
+			ref->mComponent = nullptr;
+			ref->mWasDeleted = true;
+		}
 	}
 
 	Component& Component::operator=(const Component& other)
@@ -32,7 +43,7 @@ namespace o2
 		return *this;
 	}
 
-	UInt64 Component::GetID() const
+	SceneUID Component::GetID() const
 	{
 		return mId;
 	}

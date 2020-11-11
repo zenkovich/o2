@@ -170,7 +170,7 @@ namespace o2
 		float mCaretBlinkTime = 0.0f;  // Caret blinking timer
 
 		int  mSelectionBegin = 0;       // Selection begin index
-		int  mSelectionEnd = 0;	       // Selection end index
+		int  mSelectionEnd = 0;	        // Selection end index
 		bool mSelectingByWords = false; // Selection works by solid words
 		int  mSelWordBegin = 0;         // Selection by words begin index
 		int  mSelWordEnd = 0;           // Selection by words end index
@@ -185,9 +185,6 @@ namespace o2
 		Vec2F mLastCursorPos;         // Last pressed cursor position
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Updates transparency for this and children widgets
 		void UpdateTransparency() override;
 
@@ -367,7 +364,6 @@ CLASS_METHODS_META(o2::EditBox)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, UpdateTransparency);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);

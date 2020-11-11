@@ -47,9 +47,6 @@ namespace Editor
 	private:
 		// Initializes controls: options, save button and icon
 		void InitializeControls();
-
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
 	};
 }
 
@@ -73,6 +70,5 @@ CLASS_METHODS_META(Editor::SpoilerWithHead)
 	PUBLIC_FUNCTION(Image*, GetIcon);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, InitializeControls);
-	PRIVATE_FUNCTION(void, CopyData, const Actor&);
 }
 END_META;

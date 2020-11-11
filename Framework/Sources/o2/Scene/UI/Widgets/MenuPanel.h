@@ -135,9 +135,6 @@ namespace o2
 		ContextMenu* mOpenedContext = nullptr; // Last opened context in menu
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when visible was changed
 		void OnEnableInHierarchyChanged() override;
 
@@ -220,7 +217,6 @@ CLASS_METHODS_META(o2::MenuPanel)
 	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
 	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(ContextMenu*, CreateSubContext, WString&);
 	PROTECTED_FUNCTION(Widget*, CreateItem, const Item&);

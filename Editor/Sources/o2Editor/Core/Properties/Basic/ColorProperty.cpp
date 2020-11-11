@@ -21,13 +21,8 @@ namespace Editor
 	ColorProperty& ColorProperty::operator=(const ColorProperty& other)
 	{
 		TPropertyField<Color4>::operator=(other);
-		return *this;
-	}
-
-	void ColorProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<Color4>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void ColorProperty::InitializeControls()

@@ -73,9 +73,6 @@ namespace o2
 		float        mTargetHeight = 0.0f;   // target expanding height
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Invokes required function for childs arranging
 		void RearrangeChilds() override;
 
@@ -133,7 +130,6 @@ CLASS_METHODS_META(o2::Spoiler)
 	PUBLIC_FUNCTION(float, GetHeadHeight);
 	PUBLIC_FUNCTION(Button*, GetExpandButton);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, RearrangeChilds);
 	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
 	PROTECTED_FUNCTION(void, UpdateExpanding, float);

@@ -41,6 +41,22 @@ namespace o2
 	Window& Window::operator=(const Window& other)
 	{
 		ScrollArea::operator=(other);
+
+		mHeadDragAreaLayout = other.mHeadDragAreaLayout;
+		mTopDragAreaLayout = other.mTopDragAreaLayout;
+		mBottomDragAreaLayout = other.mBottomDragAreaLayout;
+		mLeftDragAreaLayout = other.mLeftDragAreaLayout;
+		mRightDragAreaLayout = other.mRightDragAreaLayout;
+		mLeftTopDragAreaLayout = other.mLeftTopDragAreaLayout;
+		mRightTopDragAreaLayout = other.mRightTopDragAreaLayout;
+		mLeftBottomDragAreaLayout = other.mLeftBottomDragAreaLayout;
+		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
+
+		RestoreControls();
+		RetargetStatesAnimations();
+		BindHandlesInteractableToVisibility();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -206,28 +222,6 @@ namespace o2
 	CursorEventsArea& Window::GetBackCursorListener()
 	{
 		return mBackCursorArea;
-	}
-
-	void Window::CopyData(const Actor& otherActor)
-	{
-		const Window& other = dynamic_cast<const Window&>(otherActor);
-
-		ScrollArea::CopyData(other);
-
-		mHeadDragAreaLayout        = other.mHeadDragAreaLayout;
-		mTopDragAreaLayout         = other.mTopDragAreaLayout;
-		mBottomDragAreaLayout      = other.mBottomDragAreaLayout;
-		mLeftDragAreaLayout        = other.mLeftDragAreaLayout;
-		mRightDragAreaLayout       = other.mRightDragAreaLayout;
-		mLeftTopDragAreaLayout     = other.mLeftTopDragAreaLayout;
-		mRightTopDragAreaLayout    = other.mRightTopDragAreaLayout;
-		mLeftBottomDragAreaLayout  = other.mLeftBottomDragAreaLayout;
-		mRightBottomDragAreaLayout = other.mRightBottomDragAreaLayout;
-
-		RestoreControls();
-		RetargetStatesAnimations();
-		BindHandlesInteractableToVisibility();
-		SetLayoutDirty();
 	}
 
 	void Window::InitializeHandles()

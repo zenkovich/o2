@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Scene/ComponentRef.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
@@ -32,7 +33,7 @@ namespace o2
 		Component& operator=(const Component& other);
 
 		// Returns component id
-		UInt64 GetID() const;
+		SceneUID GetID() const;
 
 		// Updates component
 		virtual void Update(float dt);
@@ -101,10 +102,12 @@ namespace o2
 
 	protected:
 		Component* mPrototypeLink = nullptr; // Prototype actor component pointer. Null if no actor prototype
-		UInt64     mId;                      // Component id @SERIALIZABLE @EDITOR_IGNORE
+		SceneUID   mId;                      // Component id @SERIALIZABLE @EDITOR_IGNORE
 		Actor*     mOwner = nullptr;         // Owner actor
 		bool       mEnabled = true;          // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
 		bool       mResEnabled = true;       // Is component enabled in hierarchy
+
+		Vector<ComponentRef*> mReferences; // References to this component
 
 	protected:
 		// Sets owner actor
@@ -153,6 +156,8 @@ namespace o2
 		virtual void OnComponentRemoving(Component* component) {}
 
 		friend class Actor;
+		friend class ActorRefResolver;
+		friend class Ref<Component>;
 		friend class Scene;
 		friend class Widget;
 	};
@@ -226,12 +231,13 @@ CLASS_FIELDS_META(o2::Component)
 	PROTECTED_FIELD(mOwner).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mEnabled).DEFAULT_VALUE(true).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResEnabled).DEFAULT_VALUE(true);
+	PROTECTED_FIELD(mReferences);
 }
 END_META;
 CLASS_METHODS_META(o2::Component)
 {
 
-	PUBLIC_FUNCTION(UInt64, GetID);
+	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, FixedUpdate, float);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);

@@ -69,9 +69,6 @@ namespace o2
 		SERIALIZABLE(List);
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
 	};
@@ -104,7 +101,6 @@ CLASS_METHODS_META(o2::List)
 	PUBLIC_FUNCTION(void, SetSelectedItems, const Vector<WString>&);
 	PUBLIC_FUNCTION(Vector<WString>, GetSelectedItemsText);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 }
 END_META;

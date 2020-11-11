@@ -17,6 +17,13 @@ namespace o2
 		AssetWithDefaultMeta<ActorAsset>(other), mActor(other.mActor->CloneAs<Actor>())
 	{}
 
+	ActorAsset::ActorAsset(Actor* actor):
+		mActor(actor)
+	{
+		mActor->mIsAsset = true;
+		mActor->mAssetId = ID();
+	}
+
 	ActorAsset::~ActorAsset()
 	{
 		delete mActor;

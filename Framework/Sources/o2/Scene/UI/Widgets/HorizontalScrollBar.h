@@ -95,22 +95,23 @@ namespace o2
 		SERIALIZABLE(HorizontalScrollBar);
 
 	protected:
-		float        mValue = 0.0f;                 // Current value @SERIALIZABLE
-		float        mSmoothValue = 0.0f;           // Smooth value
-		float        mMinValue = 0.0f;              // Minimum value @SERIALIZABLE
-		float        mMaxValue = 1.0f;              // Maximum value @SERIALIZABLE
-		float        mScrollSense = 1.0f;           // Scroll sense coefficient @SERIALIZABLE
-		float        mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
-		float        mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
-		float        mPressHandleOffset = 0.0f;     // Value offset when handle was pressed
-		bool         mHandlePressed = false;        // True, when handle was pressed
-		WidgetLayer* mHandleLayer = nullptr;        // Handle layer
-		WidgetLayer* mBackLayer = nullptr;          // Background layer
+		float mValue = 0.0f;       // Current value @SERIALIZABLE
+		float mSmoothValue = 0.0f; // Smooth value
+
+		float mMinValue = 0.0f; // Minimum value @SERIALIZABLE
+		float mMaxValue = 1.0f; // Maximum value @SERIALIZABLE
+
+		float mScrollSense = 1.0f;           // Scroll sense coefficient @SERIALIZABLE
+		float mScrollHandleSize = 0.2f;      // Scroll handle size (in value range) @SERIALIZABLE
+		float mScrollhandleMinPxSize = 5.0f; // Minimal scroll size in pixels @SERIALIZABLE
+
+		float        mPressHandleOffset = 0.0f; // Value offset when handle was pressed
+		bool         mHandlePressed = false;    // True, when handle was pressed
+		WidgetLayer* mHandleLayer = nullptr;    // Handle layer
+
+		WidgetLayer* mBackLayer = nullptr; // Background layer
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when deserialized
 		void OnDeserialized(const DataValue& node) override;
 
@@ -212,7 +213,6 @@ CLASS_METHODS_META(o2::HorizontalScrollBar)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);

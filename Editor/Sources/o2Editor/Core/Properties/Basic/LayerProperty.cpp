@@ -20,13 +20,8 @@ namespace Editor
 	LayerProperty& LayerProperty::operator=(const LayerProperty& other)
 	{
 		TPropertyField<SceneLayer*>::operator=(other);
-		return *this;
-	}
-
-	void LayerProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<SceneLayer*>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void LayerProperty::InitializeControls()

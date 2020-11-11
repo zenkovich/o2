@@ -150,9 +150,6 @@ namespace Editor
 		bool mChangePropertiesTargetsFromThis = false;
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// Returns items count, calls getItemsCountFunc
 		int GetItemsCount() const override;
 
@@ -411,7 +408,6 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PUBLIC_FUNCTION(bool, IsScrollable);
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(int, GetItemsCount);
 	PROTECTED_FUNCTION(Vector<void*>, GetItemsRange, int, int);
 	PROTECTED_FUNCTION(void, SetupItemWidget, Widget*, void*);

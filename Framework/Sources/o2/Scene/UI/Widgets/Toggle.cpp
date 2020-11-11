@@ -34,6 +34,18 @@ namespace o2
 	Toggle& Toggle::operator=(const Toggle& other)
 	{
 		Widget::operator=(other);
+
+		mCaptionText = GetLayerDrawable<Text>("caption");
+		mBackLayer = FindLayer("back");
+
+		mValue = !other.mValue;
+		SetValue(other.mValue);
+
+		if (other.IsValueUnknown())
+			SetValueUnknown();
+
+		RetargetStatesAnimations();
+
 		return *this;
 	}
 
@@ -287,24 +299,6 @@ namespace o2
 
 		mCaptionText = GetLayerDrawable<Text>("caption");
 		mBackLayer = FindLayer("back");
-
-		RetargetStatesAnimations();
-	}
-
-	void Toggle::CopyData(const Actor& otherActor)
-	{
-		const Toggle& other = dynamic_cast<const Toggle&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mCaptionText = GetLayerDrawable<Text>("caption");
-		mBackLayer = FindLayer("back");
-
-		mValue = !other.mValue;
-		SetValue(other.mValue);
-
-		if (other.IsValueUnknown())
-			SetValueUnknown();
 
 		RetargetStatesAnimations();
 	}

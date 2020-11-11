@@ -54,10 +54,6 @@ namespace o2
 	protected:
 		Sprite* mImage = nullptr; // Image layer drawable
 
-	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		friend class UIButtonGroup;
 	};
 }
@@ -85,6 +81,5 @@ CLASS_METHODS_META(o2::Image)
 	PUBLIC_FUNCTION(void, SetImageName, const String&);
 	PUBLIC_FUNCTION(String, GetImageName);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 }
 END_META;

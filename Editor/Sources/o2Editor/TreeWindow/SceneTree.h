@@ -203,9 +203,6 @@ namespace Editor
 		WidgetState* mEditState = nullptr;    // Object's name edit state
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called on deserialization, initializes controls
 		void OnDeserialized(const DataValue& node) override;
 
@@ -307,7 +304,6 @@ CLASS_METHODS_META(Editor::SceneTreeNode)
 	PUBLIC_FUNCTION(void, SetSceneObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, EnableEditName);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, InitializeControls);
 	PROTECTED_FUNCTION(void, OnLockClicked);

@@ -52,7 +52,19 @@ namespace Editor
 
 	FrameScrollView& FrameScrollView::operator=(const FrameScrollView& other)
 	{
+		delete mHorScrollbar;
+		delete mVerScrollbar;
+
 		ScrollView::operator=(other);
+
+		mHorScrollbar = other.mHorScrollbar->CloneAs<HorizontalScrollBar>();
+		mHorScrollbar->SetInternalParent(this);
+		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
+
+		mVerScrollbar = other.mVerScrollbar->CloneAs<VerticalScrollBar>();
+		mVerScrollbar->SetInternalParent(this);
+		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
+
 		return *this;
 	}
 
@@ -124,24 +136,6 @@ namespace Editor
 	String FrameScrollView::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void FrameScrollView::CopyData(const Actor& otherActor)
-	{
-		const FrameScrollView& other = dynamic_cast<const FrameScrollView&>(otherActor);
-
-		ScrollView::CopyData(other);
-
-		delete mHorScrollbar;
-		delete mVerScrollbar;
-
-		mHorScrollbar = other.mHorScrollbar->CloneAs<HorizontalScrollBar>();
-		mHorScrollbar->SetInternalParent(this);
-		mHorScrollbar->onChangeByUser = THIS_FUNC(OnHorScrollScrolled);
-
-		mVerScrollbar = other.mVerScrollbar->CloneAs<VerticalScrollBar>();
-		mVerScrollbar->SetInternalParent(this);
-		mVerScrollbar->onChangeByUser = THIS_FUNC(OnVerScrollScrolled);
 	}
 
 	void FrameScrollView::UpdateCameraLimits(float dt)

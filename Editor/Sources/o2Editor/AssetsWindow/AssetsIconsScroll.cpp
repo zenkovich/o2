@@ -72,7 +72,24 @@ namespace Editor
 
 	AssetsIconsScrollArea& AssetsIconsScrollArea::operator=(const AssetsIconsScrollArea& other)
 	{
+		delete mDragIcon;
+		delete mHighlightSprite;
+		delete mSelectionSprite;
+
 		ScrollArea::operator=(other);
+
+		mDragIcon = other.mDragIcon->CloneAs<AssetIcon>();
+
+		mContextMenu = FindChildByType<ContextMenu>();
+
+		mHighlightLayout = other.mHighlightLayout;
+		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
+		mHighlightAnim.SetTarget(mHighlightSprite);
+
+		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
 		return *this;
 	}
 
@@ -357,30 +374,6 @@ namespace Editor
 	String AssetsIconsScrollArea::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void AssetsIconsScrollArea::CopyData(const Actor& otherActor)
-	{
-		const AssetsIconsScrollArea& other = dynamic_cast<const AssetsIconsScrollArea&>(otherActor);
-
-		delete mDragIcon;
-		delete mHighlightSprite;
-		delete mSelectionSprite;
-
-		ScrollArea::CopyData(other);
-
-		mDragIcon = other.mDragIcon->CloneAs<AssetIcon>();
-
-		mContextMenu = FindChildByType<ContextMenu>();
-
-		mHighlightLayout = other.mHighlightLayout;
-		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
-		mHighlightAnim.SetTarget(mHighlightSprite);
-
-		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	int AssetsIconsScrollArea::GetItemsCount() const

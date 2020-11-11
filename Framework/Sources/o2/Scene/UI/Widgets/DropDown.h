@@ -70,9 +70,6 @@ namespace o2
 		Text* mSelectedText = nullptr; // Selected text label, draws separately
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when selected item index was changed
 		void OnSelectionChanged() override;
 
@@ -107,7 +104,6 @@ CLASS_METHODS_META(o2::DropDown)
 	PUBLIC_FUNCTION(WString, GetSelectedItemText);
 	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnSelectionChanged);
 	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
 }

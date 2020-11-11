@@ -11,7 +11,6 @@
 
 namespace o2
 {
-
 	MenuPanel::MenuPanel():
 		Widget(), DrawableCursorEventsListener(this)
 	{
@@ -52,6 +51,18 @@ namespace o2
 	MenuPanel& MenuPanel::operator=(const MenuPanel& other)
 	{
 		Widget::operator=(other);
+
+		delete mItemSample;
+		delete mSelectionDrawable;
+
+		mItemSample = other.mItemSample->CloneAs<Widget>();
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mSelectionLayout = other.mSelectionLayout;
+		mLayout = FindChildByType<HorizontalLayout>();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -351,24 +362,6 @@ namespace o2
 		res.onClick = mClickFunctions[idx];
 
 		return res;
-	}
-
-	void MenuPanel::CopyData(const Actor& otherActor)
-	{
-		const MenuPanel& other = dynamic_cast<const MenuPanel&>(otherActor);
-
-		Widget::CopyData(other);
-
-		delete mItemSample;
-		delete mSelectionDrawable;
-
-		mItemSample = other.mItemSample->CloneAs<Widget>();
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mSelectionLayout = other.mSelectionLayout;
-		mLayout = FindChildByType<HorizontalLayout>();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void MenuPanel::OnEnableInHierarchyChanged()

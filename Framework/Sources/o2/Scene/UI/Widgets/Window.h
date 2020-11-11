@@ -132,9 +132,6 @@ namespace o2
 		RectF            mRightBottomDragAreaRect;   //	Right Bottom drag handle rect
 
 	protected:
-		// Copies data of actor from other to this
-		void CopyData(const Actor& otherActor) override;
-
 		// It is called when widget was selected
 		void OnFocused() override;
 
@@ -239,7 +236,6 @@ CLASS_METHODS_META(o2::Window)
 	PUBLIC_FUNCTION(void, UpdateSelfTransform);
 	PUBLIC_FUNCTION(CursorEventsArea&, GetBackCursorListener);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CopyData, const Actor&);
 	PROTECTED_FUNCTION(void, OnFocused);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);

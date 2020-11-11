@@ -30,7 +30,22 @@ namespace o2
 
 	VerticalScrollBar& VerticalScrollBar::operator=(const VerticalScrollBar& other)
 	{
-		Widget::operator=(other);
+		Widget::operator=(other); 
+
+		mValue = other.mValue;
+		mMinValue = other.mMinValue;
+		mMaxValue = other.mMaxValue;
+		mScrollSense = other.mScrollSense;
+		mScrollHandleSize = other.mScrollHandleSize;
+		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
+		mSmoothValue = mValue;
+		mHandlePressed = false;
+		mHandleLayer = FindLayer("handle");
+		mBackLayer = FindLayer("back");
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -308,27 +323,6 @@ namespace o2
 			mBackLayer->layout = Layout::BothStretch();
 
 		Widget::UpdateLayersLayouts();
-	}
-
-	void VerticalScrollBar::CopyData(const Actor& otherActor)
-	{
-		const VerticalScrollBar& other = dynamic_cast<const VerticalScrollBar&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mValue                 = other.mValue;
-		mMinValue              = other.mMinValue;
-		mMaxValue              = other.mMaxValue;
-		mScrollSense           = other.mScrollSense;
-		mScrollHandleSize      = other.mScrollHandleSize;
-		mScrollhandleMinPxSize = other.mScrollhandleMinPxSize;
-		mSmoothValue           = mValue;
-		mHandlePressed         = false;
-		mHandleLayer           = FindLayer("handle");
-		mBackLayer             = FindLayer("back");
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void VerticalScrollBar::UpdateLayersLayouts()

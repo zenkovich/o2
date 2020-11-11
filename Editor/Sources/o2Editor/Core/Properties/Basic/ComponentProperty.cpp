@@ -30,13 +30,8 @@ namespace Editor
 	ComponentProperty& ComponentProperty::operator=(const ComponentProperty& other)
 	{
 		TPropertyField<Component*>::operator=(other);
-		return *this;
-	}
-
-	void ComponentProperty::CopyData(const Actor& otherActor)
-	{
-		TPropertyField<Component*>::CopyData(otherActor);
 		InitializeControls();
+		return *this;
 	}
 
 	void ComponentProperty::InitializeControls()

@@ -39,6 +39,20 @@ namespace Editor
 	ScrollView& ScrollView::operator=(const ScrollView& other)
 	{
 		Widget::operator=(other);
+
+		mReady = false;
+
+		delete mRenderTargetSprite;
+
+		mBackColor = other.mBackColor;
+		mGridColor = other.mGridColor;
+		mRenderTarget = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
+		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
+
+		RetargetStatesAnimations();
+
+		mReady = true;
+
 		return *this;
 	}
 
@@ -100,26 +114,6 @@ namespace Editor
 	String ScrollView::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
-	}
-
-	void ScrollView::CopyData(const Actor& otherActor)
-	{
-		const ScrollView& other = dynamic_cast<const ScrollView&>(otherActor);
-
-		Widget::CopyData(other);
-
-		mReady = false;
-
-		delete mRenderTargetSprite;
-
-		mBackColor          = other.mBackColor;
-		mGridColor          = other.mGridColor;
-		mRenderTarget       = TextureRef(Vec2I(256, 256), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
-		mRenderTargetSprite = mnew Sprite(mRenderTarget, RectI(0, 0, 256, 256));
-
-		RetargetStatesAnimations();
-
-		mReady = true;
 	}
 
 	void ScrollView::OnTransformUpdated()

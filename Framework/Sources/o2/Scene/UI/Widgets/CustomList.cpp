@@ -64,7 +64,27 @@ namespace o2
 
 	CustomList& CustomList::operator=(const CustomList& other)
 	{
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
+		mVerLayout = nullptr;
+
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+
+		mSelectionLayout = other.mSelectionLayout;
+		mHoverLayout = other.mHoverLayout;
+
 		ScrollArea::operator=(other);
+
+		mVerLayout = FindChildByType<VerticalLayout>();
+		mItemSample = other.mItemSample->CloneAs<Widget>();
+		mItemSample->RemoveFromScene();
+		mItemSample->SetLayoutDirty();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -497,32 +517,6 @@ namespace o2
 			*idxPtr = -1;
 
 		return nullptr;
-	}
-
-	void CustomList::CopyData(const Actor& otherActor)
-	{
-		const CustomList& other = dynamic_cast<const CustomList&>(otherActor);
-
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mHoverDrawable;
-		mVerLayout = nullptr;
-
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-
-		mSelectionLayout = other.mSelectionLayout;
-		mHoverLayout = other.mHoverLayout;
-
-		ScrollArea::CopyData(other);
-
-		mVerLayout = FindChildByType<VerticalLayout>();
-		mItemSample = other.mItemSample->CloneAs<Widget>();
-		mItemSample->RemoveFromScene();
-		mItemSample->SetLayoutDirty();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void CustomList::OnDeserialized(const DataValue& node)

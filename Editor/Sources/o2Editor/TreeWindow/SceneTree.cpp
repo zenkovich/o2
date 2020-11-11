@@ -346,20 +346,14 @@ namespace Editor
 	SceneTreeNode::SceneTreeNode(const SceneTreeNode& other) :
 		TreeNode(other)
 	{
-		CopyData(other);
 		InitializeControls();
 	}
 
 	Editor::SceneTreeNode& SceneTreeNode::operator=(const SceneTreeNode& other)
 	{
-		CopyData(other);
-		return *this;
-	}
-
-	void SceneTreeNode::CopyData(const Actor& otherActor)
-	{
-		TreeNode::CopyData(otherActor);
+		TreeNode::operator=(other);
 		InitializeControls();
+		return *this;
 	}
 
 	void SceneTreeNode::OnDeserialized(const DataValue& node)

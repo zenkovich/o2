@@ -1,7 +1,7 @@
 #include "o2/stdafx.h"
 #include "Actor.h"
 
-#include "o2/Scene/ActorDataValueConverter.h"
+#include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/SceneLayer.h"
@@ -38,27 +38,70 @@ namespace o2
 			}
 		}
 
-		ActorDataValueConverter::ActorCreated(this);
+		ActorRefResolver::ActorCreated(this);
 	}
 
-	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/):
 		Actor(transform, IsModeOnScene(mode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene, 
-			  prototype->GetActor()->mName, prototype->GetActor()->mEnabled, prototype->GetActor()->mEnabled,
-			  prototype->GetActor()->mLocked, prototype->GetActor()->mLocked, prototype->GetActor()->mLayerName, nullptr)
+			  other.mName, other.mEnabled, other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer, 
+			  Math::Random(), other.mAssetId)
 	{
 		transform->SetOwner(this);
 
-		SetPrototype(prototype);
+		ActorRefResolver::LockResolving();
 
-		Vector<Actor**> actorPointersFields;
-		Vector<Component**> componentPointersFields;
-		Map<const Actor*, Actor*> actorsMap;
-		Map<const Component*, Component*> componentsMap;
+		if constexpr (IS_EDITOR)
+		{
+			if (other.mCopyVisitor)
+				other.mCopyVisitor->OnCopyActor(&other, this);
+		}
 
-		ProcessCopying(this, prototype->GetActor(), actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
-		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+		if (other.mIsAsset)
+			SetPrototype(ActorAssetRef(other.GetAssetID()));
 
-		transform->SetDirty();
+		mName = other.mName;
+		mEnabled = other.mEnabled;
+		mResEnabled = mEnabled;
+		mResEnabledInHierarchy = mEnabled;
+		transform->CopyFrom(*other.transform);
+		mAssetId = other.mAssetId; 
+		mPrototypeLink = other.mPrototypeLink;
+
+		if (!mPrototype && other.mPrototype)
+		{
+			mPrototype = other.mPrototype;
+
+			ActorAssetRef proto = other.mPrototype;
+			while (proto)
+			{
+				o2Scene.OnActorLinkedToPrototype(proto, this);
+				proto = proto->GetActor()->GetPrototype();
+			}
+		}
+
+		for (auto child : other.mChildren)
+		{
+			if constexpr (IS_EDITOR)
+				child->mCopyVisitor = other.mCopyVisitor;
+
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
+
+			AddChild(child->CloneAs<Actor>());
+		}
+
+		for (auto component : other.mComponents)
+		{
+			Component* newComponent = AddComponent(component->CloneAs<Component>());
+
+			if constexpr (IS_EDITOR)
+			{
+				if (other.mCopyVisitor)
+					other.mCopyVisitor->OnCopyComponent(component, newComponent);
+			}
+
+			if (mPrototypeLink)
+				newComponent->mPrototypeLink = component->mPrototypeLink;
+		}
 
 		if (Scene::IsSingletonInitialzed())
 		{
@@ -69,48 +112,21 @@ namespace o2
 			}
 		}
 
-		ActorDataValueConverter::ActorCreated(this);
+		ActorRefResolver::ActorCreated(this);
+		ActorRefResolver::UnlockResolving();
 	}
 
-	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
+		Actor(transform, *prototype->GetActor(), mode)
+	{}
+
+	Actor::Actor(ActorTransform* transform, Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::Default*/) :
 		Actor(transform, mode)
 	{
 		for (auto comp : components)
 			AddComponent(comp);
 
 		OnTransformUpdated();
-	}
-
-	Actor::Actor(ActorTransform* transform, const Actor& other):
-		Actor(transform, IsModeOnScene(mDefaultCreationMode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene, 
-			  other.mName, other.mEnabled, other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer, 
-			  Math::Random(), other.mAssetId)
-	{
-		transform->SetOwner(this);
-
-		if (other.mIsAsset)
-			SetPrototype(ActorAssetRef(other.GetAssetID()));
-
-		Vector<Actor**> actorPointersFields;
-		Vector<Component**> componentPointersFields;
-		Map<const Actor*, Actor*> actorsMap;
-		Map<const Component*, Component*> componentsMap;
-
-		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, true);
-		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
-
-		transform->SetDirty();
-
-		if (Scene::IsSingletonInitialzed())
-		{
-			if (IsOnScene())
-			{
-				mLayer = o2Scene.GetLayer(mLayerName);
-				o2Scene.AddActorToSceneDeferred(this);
-			}
-		}
-
-		ActorDataValueConverter::ActorCreated(this);
 	}
 
 	Actor::Actor(ActorCreateMode mode /*= CreateMode::Default*/):
@@ -125,8 +141,8 @@ namespace o2
 		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
 	{}
 
-	Actor::Actor(const Actor& other) :
-		Actor(mnew ActorTransform(*other.transform), other)
+	Actor::Actor(const Actor& other, ActorCreateMode mode /*= CreateMode::Default*/) :
+		Actor(mnew ActorTransform(*other.transform), other, mode)
 	{}
 
 	Actor::~Actor()
@@ -165,17 +181,72 @@ namespace o2
 		RemoveAllChildren();
 		RemoveAllComponents();
 
-		SetPrototype(other.mPrototype);
+		ActorRefResolver::LockResolving();
 
-		Vector<Actor**> actorPointersFields;
-		Vector<Component**> componentPointersFields;
-		Map<const Actor*, Actor*> actorsMap;
-		Map<const Component*, Component*> componentsMap;
+		if constexpr (IS_EDITOR)
+		{
+			if (other.mCopyVisitor)
+				other.mCopyVisitor->OnCopyActor(&other, this);
+		}
 
-		ProcessCopying(this, &other, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
-		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
+		if (other.mIsAsset)
+			SetPrototype(ActorAssetRef(other.GetAssetID()));
 
-		transform->SetDirty();
+		mName = other.mName;
+		mEnabled = other.mEnabled;
+		mResEnabled = mEnabled;
+		mResEnabledInHierarchy = mEnabled;
+		transform->CopyFrom(*other.transform);
+		mAssetId = other.mAssetId;
+		mPrototypeLink = other.mPrototypeLink;
+
+		if (!mPrototype && other.mPrototype)
+		{
+			mPrototype = other.mPrototype;
+
+			ActorAssetRef proto = other.mPrototype;
+			while (proto)
+			{
+				o2Scene.OnActorLinkedToPrototype(proto, this);
+				proto = proto->GetActor()->GetPrototype();
+			}
+		}
+
+		for (auto child : other.mChildren)
+		{
+			if constexpr (IS_EDITOR)
+				child->mCopyVisitor = other.mCopyVisitor;
+
+			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
+
+			AddChild(child->CloneAs<Actor>());
+		}
+
+		for (auto component : other.mComponents)
+		{
+			Component* newComponent = AddComponent(component->CloneAs<Component>());
+
+			if constexpr (IS_EDITOR)
+			{
+				if (other.mCopyVisitor)
+					other.mCopyVisitor->OnCopyComponent(component, newComponent);
+			}
+
+			if (mPrototypeLink)
+				newComponent->mPrototypeLink = component->mPrototypeLink;
+		}
+
+		if (Scene::IsSingletonInitialzed())
+		{
+			if (IsOnScene())
+			{
+				mLayer = o2Scene.GetLayer(mLayerName);
+				o2Scene.AddActorToSceneDeferred(this);
+			}
+		}
+
+		ActorRefResolver::ActorCreated(this);
+		ActorRefResolver::UnlockResolving();
 
 		UpdateResEnabledInHierarchy();
 		OnChanged();
@@ -917,9 +988,9 @@ namespace o2
 
 	void Actor::DeserializeRaw(const DataValue& node)
 	{
-		ActorDataValueConverter::Instance().LockPointersResolving();
-		if (ActorDataValueConverter::Instance().mLockDepth == 0)
-			ActorDataValueConverter::Instance().ActorCreated(this);
+		ActorRefResolver::Instance().LockResolving();
+		if (ActorRefResolver::Instance().mLockDepth == 0)
+			ActorRefResolver::Instance().ActorCreated(this);
 
 		mId = node.GetMember("Id");
 		mName = node.GetMember("Name");
@@ -979,8 +1050,8 @@ namespace o2
 			}
 		}
 
-		ActorDataValueConverter::Instance().UnlockPointersResolving();
-		ActorDataValueConverter::Instance().ResolvePointers();
+		ActorRefResolver::Instance().UnlockResolving();
+		ActorRefResolver::Instance().ResolveRefs();
 
 		SetLayer(layerName);
 	}
@@ -1009,76 +1080,6 @@ namespace o2
 			OnEnabled();
 		else
 			OnDisabled();
-	}
-
-	void Actor::CopyData(const Actor& otherActor)
-	{
-		mName = otherActor.mName;
-		mEnabled = otherActor.mEnabled;
-		mResEnabled = mEnabled;
-		mResEnabledInHierarchy = mEnabled;
-		transform->CopyFrom(*otherActor.transform);
-		mAssetId = otherActor.mAssetId;
-	}
-
-	void Actor::ProcessCopying(Actor* dest, const Actor* source, Vector<Actor**>& actorsPointers,
-							   Vector<Component**>& componentsPointers, Map<const Actor*, Actor*>& actorsMap,
-							   Map<const Component*, Component*>& componentsMap,
-							   bool isSourcePrototype)
-	{
-		if (!dest->mPrototype && source->mPrototype)
-		{
-			dest->mPrototype = source->mPrototype;
-
-			ActorAssetRef proto = source->mPrototype;
-			while (proto)
-			{
-				o2Scene.OnActorLinkedToPrototype(proto, dest);
-				proto = proto->GetActor()->GetPrototype();
-			}
-		}
-
-		if (dest->mParent && dest->mParent->mPrototypeLink)
-		{
-			if (isSourcePrototype)
-				dest->mPrototypeLink = const_cast<Actor*>(source);
-			else
-				dest->mPrototypeLink = source->mPrototypeLink;
-		}
-
-		actorsMap.Add(source, dest);
-
-		for (auto child : source->mChildren)
-		{
-			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
-
-			Actor* newChild = dynamic_cast<Actor*>(type->DynamicCastToIObject(child->GetType().CreateSample()));
-			if (!dest->IsOnScene())
-				newChild->RemoveFromScene();
-
-			dest->AddChild(newChild);
-
-			ProcessCopying(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap, isSourcePrototype);
-		}
-
-		for (auto component : source->mComponents)
-		{
-			Component* newComponent = dest->AddComponent(component->CloneAs<Component>());
-
-			componentsMap.Add(component, newComponent);
-
-			if (dest->mPrototypeLink)
-			{
-				if (isSourcePrototype)
-					newComponent->mPrototypeLink = component;
-				else
-					newComponent->mPrototypeLink = component->mPrototypeLink;
-			}
-
-			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
-		}
-
-		dest->CopyData(*source);
 	}
 
 	void Actor::CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest, Vector<Actor**>& actorsPointers,
@@ -1210,6 +1211,7 @@ namespace o2
 	}
 
 #endif // !IS_EDITOR
+
 }
 
 ENUM_META(o2::Actor::SceneStatus)

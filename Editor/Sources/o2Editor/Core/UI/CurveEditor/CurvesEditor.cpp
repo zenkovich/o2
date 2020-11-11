@@ -92,6 +92,26 @@ namespace Editor
 	Editor::CurvesEditor& CurvesEditor::operator=(const CurvesEditor& other)
 	{
 		FrameScrollView::operator=(other);
+
+		mReady = false;
+
+		delete mSelectionSprite;
+		delete mTextLeft;
+		delete mTextRight;
+		delete mTextTop;
+		delete mTextBottom;
+
+		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
+		mTextFont = other.mTextFont;
+
+		mMainHandleSample = other.mMainHandleSample;
+		mSupportHandleSample = other.mSupportHandleSample;
+
+		InitializeTextDrawables();
+		RetargetStatesAnimations();
+
+		mReady = true;
+
 		return *this;
 	}
 
@@ -294,32 +314,6 @@ namespace Editor
 
 		mNeedRedraw = true;
 		mNeedAdjustView = true;
-	}
-
-	void CurvesEditor::CopyData(const Actor& otherActor)
-	{
-		const CurvesEditor& other = dynamic_cast<const CurvesEditor&>(otherActor);
-
-		FrameScrollView::CopyData(other);
-
-		mReady = false;
-
-		delete mSelectionSprite;
-		delete mTextLeft;
-		delete mTextRight;
-		delete mTextTop;
-		delete mTextBottom;
-
-		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
-		mTextFont = other.mTextFont;
-
-		mMainHandleSample = other.mMainHandleSample;
-		mSupportHandleSample = other.mSupportHandleSample;
-
-		InitializeTextDrawables();
-		RetargetStatesAnimations();
-
-		mReady = true;
 	}
 
 	void CurvesEditor::OnEnableInHierarchyChanged()

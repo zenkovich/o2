@@ -40,7 +40,25 @@ namespace o2
 
 	LongList& LongList::operator=(const LongList& other)
 	{
+		delete mItemSample;
+		delete mSelectionDrawable;
+		delete mHoverDrawable;
+
+		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
+		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
+
+		mSelectionLayout = other.mSelectionLayout;
+		mHoverLayout = other.mHoverLayout;
+
 		ScrollArea::operator=(other);
+
+		mItemSample = other.mItemSample->CloneAs<Widget>();
+		mItemSample->UpdateSelfTransform();
+		mItemSample->UpdateChildrenTransforms();
+
+		RetargetStatesAnimations();
+		SetLayoutDirty();
+
 		return *this;
 	}
 
@@ -385,30 +403,6 @@ namespace o2
 			*idxPtr = -1;
 
 		return nullptr;
-	}
-
-	void LongList::CopyData(const Actor& otherActor)
-	{
-		const LongList& other = dynamic_cast<const LongList&>(otherActor);
-
-		delete mItemSample;
-		delete mSelectionDrawable;
-		delete mHoverDrawable;
-
-		mSelectionDrawable = other.mSelectionDrawable->CloneAs<Sprite>();
-		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
-
-		mSelectionLayout = other.mSelectionLayout;
-		mHoverLayout = other.mHoverLayout;
-
-		ScrollArea::CopyData(other);
-
-		mItemSample = other.mItemSample->CloneAs<Widget>();
-		mItemSample->UpdateSelfTransform();
-		mItemSample->UpdateChildrenTransforms();
-
-		RetargetStatesAnimations();
-		SetLayoutDirty();
 	}
 
 	void LongList::OnDeserialized(const DataValue& node)
