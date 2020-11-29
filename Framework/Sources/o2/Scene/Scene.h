@@ -154,6 +154,8 @@ namespace o2
 		Vector<Actor*> mRootActors; // Scene root actors		
 		Vector<Actor*> mAllActors;  // All scene actors
 
+		Map<SceneUID, Actor*> mActorsMap; // Actors map by uniquie ID
+
 		Vector<Actor*> mAddedActors; // List of added on previous frame actors. Will receive OnAddToScene at current frame
 		
 		Vector<Actor*>     mStartActors;     // List of starting on current frame actors. Will receive OnStart at current frame
@@ -204,6 +206,9 @@ namespace o2
 		// It is called when actor removing from scene; unregisters from actors list and events list
 		void RemoveActorFromScene(Actor* actor, bool keepEditorObjects = false);
 
+		// It is called when actor unique id was changed; updates actors map
+		void OnActorIdChanged(Actor* actor, SceneUID prevId);
+
 		// It is called when component added to actor, registers for calling OnAddOnScene
 		void OnComponentAdded(Component* component);
 
@@ -223,7 +228,7 @@ namespace o2
 		friend class Application;
 		friend class CameraActor;
 		friend class DrawableComponent;
-		friend class Ref<Actor>;
+		friend class ActorRef;
 		friend class SceneLayer;
 		friend class Widget;
 		friend class WidgetLayer;
@@ -353,6 +358,7 @@ CLASS_FIELDS_META(o2::Scene)
 	PROTECTED_FIELD(mCameras);
 	PROTECTED_FIELD(mRootActors);
 	PROTECTED_FIELD(mAllActors);
+	PROTECTED_FIELD(mActorsMap);
 	PROTECTED_FIELD(mAddedActors);
 	PROTECTED_FIELD(mStartActors);
 	PROTECTED_FIELD(mStartComponents);
@@ -416,6 +422,7 @@ CLASS_METHODS_META(o2::Scene)
 	PROTECTED_FUNCTION(void, AddActorToScene, Actor*);
 	PROTECTED_FUNCTION(void, AddActorToSceneDeferred, Actor*);
 	PROTECTED_FUNCTION(void, RemoveActorFromScene, Actor*, bool);
+	PROTECTED_FUNCTION(void, OnActorIdChanged, Actor*, SceneUID);
 	PROTECTED_FUNCTION(void, OnComponentAdded, Component*);
 	PROTECTED_FUNCTION(void, OnComponentRemoved, Component*);
 	PROTECTED_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);

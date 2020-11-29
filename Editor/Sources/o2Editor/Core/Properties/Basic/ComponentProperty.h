@@ -20,7 +20,7 @@ namespace Editor
 	// -----------------------------------
 	// Editor actor component property box
 	// -----------------------------------
-	class ComponentProperty: public TPropertyField<Component*>, public KeyboardEventsListener, public DragDropArea
+	class ComponentProperty: public TPropertyField<ComponentRef>, public KeyboardEventsListener, public DragDropArea
 	{
 	public:
 		// Default constructor
@@ -35,12 +35,6 @@ namespace Editor
 		// Reverts value to prototype value
 		void Revert() override;
 
-		// Specializes field type
-		void SpecializeType(const Type* type);
-
-		// Returns specialized type
-		const Type* GetSpecializedType() const;
-
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
 
@@ -53,6 +47,9 @@ namespace Editor
 		Text*   mNameText = nullptr;       // Component name text
 
 	protected:
+		// It is called when type specialized during setting value proxy
+		void OnTypeSpecialized(const Type& type) override;
+
 		// Checks is value can be reverted
 		bool IsValueRevertable() const override;
 
@@ -108,7 +105,7 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ComponentProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<Component*>);
+	BASE_CLASS(Editor::TPropertyField<ComponentRef>);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::DragDropArea);
 }
@@ -124,9 +121,8 @@ CLASS_METHODS_META(Editor::ComponentProperty)
 {
 
 	PUBLIC_FUNCTION(void, Revert);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
+	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, UpdateValueView);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);

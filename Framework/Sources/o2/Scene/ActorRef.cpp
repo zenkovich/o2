@@ -6,54 +6,39 @@
 
 namespace o2
 {
-	Ref<Actor>::Ref()
+	ActorRef::ActorRef()
 	{}
 
-	Ref<Actor>::Ref(Actor* actor) :
+	ActorRef::ActorRef(Actor* actor) :
 		mActor(actor)
 	{
 		if (mActor)
 			mActor->mReferences.Add(this);
 	}
 
-	Ref<Actor>::Ref(const ActorAssetRef& prototype, ActorCreateMode mode /*= Actor::CreateMode::InScene*/)
+	ActorRef::ActorRef(const ActorRef& other):
+		ActorRef(other.mActor)
 	{
-		Actor* newActor = mnew Actor(prototype, mode);
-		mActor = newActor;
-		mActor->mReferences.Add(this);
+		ActorRefResolver::RequireRemap(*this);
 	}
 
-	Ref<Actor>::Ref(Vector<Component*> components, ActorCreateMode mode /*= ActorCreateMode::InScene*/)
-	{
-		Actor* newActor = mnew Actor(components, mode);
-		mActor = newActor;
-		mActor->mReferences.Add(this);
-	}
-
-	Ref<Actor>::Ref(const Actor& other)
-	{
-		Actor* newActor = mnew Actor(other);
-		mActor = newActor;
-		mActor->mReferences.Add(this);
-	}
-
-	Ref<Actor>::~Ref()
+	ActorRef::~ActorRef()
 	{
 		if (mActor)
 			mActor->mReferences.Remove(this);
 	}
 
-	bool Ref<Actor>::operator!=(const Ref<Actor>& other) const
+	bool ActorRef::operator!=(const ActorRef& other) const
 	{
 		return mActor != other.mActor;
 	}
 
-	bool Ref<Actor>::operator==(const Ref<Actor>& other) const
+	bool ActorRef::operator==(const ActorRef& other) const
 	{
 		return mActor == other.mActor;
 	}
 
-	Ref<Actor>& Ref<Actor>::operator=(const Ref<Actor>& other)
+	ActorRef& ActorRef::operator=(const ActorRef& other)
 	{
 		if (mActor)
 			mActor->mReferences.Remove(this);
@@ -61,62 +46,97 @@ namespace o2
 		mActor = other.mActor;
 		mWasDeleted = other.mWasDeleted;
 
+		UpdateSpecActor();
+
 		if (mActor)
 			mActor->mReferences.Add(this);
 
 		return *this;
 	}
 
-	Ref<Actor>::operator bool() const
+	ActorRef::operator bool() const
 	{
 		return mActor != nullptr;
 	}
 
-	Actor& Ref<Actor>::operator*()
+	Actor& ActorRef::operator*()
 	{
 		return *mActor;
 	}
 
-	const Actor& Ref<Actor>::operator*() const
+	const Actor& ActorRef::operator*() const
 	{
 		return *mActor;
 	}
 
-	Actor* Ref<Actor>::operator->()
+	Actor* ActorRef::operator->()
 	{
 		return mActor;
 	}
 
-	const Actor* Ref<Actor>::operator->() const
+	const Actor* ActorRef::operator->() const
 	{
 		return mActor;
 	}
 
-	Actor* Ref<Actor>::Get()
+	Actor* ActorRef::Get()
 	{
 		return mActor;
 	}
 
-	const Actor* Ref<Actor>::Get() const
+	const Actor* ActorRef::Get() const
 	{
 		return mActor;
 	}
 
-	void Ref<Actor>::Destroy()
+	void ActorRef::Destroy()
 	{
 		if (mActor)
 			o2Scene.DestroyActor(mActor);
 	}
 
-	bool Ref<Actor>::IsValid() const
+	bool ActorRef::IsValid() const
 	{
 		return mActor != nullptr;
 	}
 
-	bool Ref<Actor>::IsWasDeleted() const
+	bool ActorRef::IsWasDeleted() const
 	{
 		return mWasDeleted;
 	}
+
+	const Type& ActorRef::GetActorType() const
+	{
+		return TypeOf(Actor);
+	}
+
+	const Type* ActorRef::GetActorTypeStatic()
+	{
+		return &TypeOf(Actor);
+	}
+
+	void ActorRef::OnSerialize(DataValue& node) const
+	{
+		if (mActor)
+		{
+			if (mActor->mIsAsset)
+				node.AddMember("AssetId") = mActor->GetAssetID();
+			else 
+				node.AddMember("ID") = mActor->GetID();
+		}
+	}
+
+	void ActorRef::OnDeserialized(const DataValue& node)
+	{
+		if (auto assetIdNode = node.FindMember("AssetId"))
+			ActorRefResolver::RequireResolve(*this, (UID)*assetIdNode);
+		else if (auto sceneIdNode = node.FindMember("ID"))
+			ActorRefResolver::RequireResolve(*this, (SceneUID)*sceneIdNode);
+		else *this = nullptr;
+	}
+
 }
 
-DECLARE_CLASS(o2::Ref<o2::Actor>);
+DECLARE_CLASS_MANUAL(o2::Ref<o2::Actor>);
+
+DECLARE_CLASS(o2::ActorRef);

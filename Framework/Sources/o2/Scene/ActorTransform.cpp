@@ -62,11 +62,11 @@ namespace o2
 		return *this;
 	}
 
-	ActorTransform& ActorTransform::operator=(const Transform& other)
-	{
-		SetWorldBasis(other.GetBasis());
-		return *this;
-	}
+// 	ActorTransform& ActorTransform::operator=(const Transform& other)
+// 	{
+// 		SetWorldBasis(other.GetBasis());
+// 		return *this;
+// 	}
 
 	bool ActorTransform::operator==(const ActorTransform& other) const
 	{

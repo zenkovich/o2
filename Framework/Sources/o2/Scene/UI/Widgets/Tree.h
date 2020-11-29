@@ -290,7 +290,8 @@ namespace o2
 		float mNodeExpandTime = 2.0f;   // Node expand time when dragging actors @SERIALIZABLE
 		float mNodeDragIntoZone = 0.3f; // Node inside dragging zone coefficient (0.5 is full node area) @SERIALIZABLE
 
-		AnimationPlayer mHighlightAnim;             // Node highlight animation @SERIALIZABLE
+		AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
+		AnimationPlayer mHighlightAnim;             // Node highlight animation
 		Sprite*         mHighlightSprite = nullptr; // Node highlight sprite @SERIALIZABLE
 		Layout          mHighlightLayout;           // Node highlight sprite layout @SERIALIZABLE
 		Node*           mHighlighNode = nullptr;    // Hightlighing node
@@ -646,7 +647,8 @@ CLASS_FIELDS_META(o2::Tree)
 	PROTECTED_FIELD(mPressedTime).DEFAULT_VALUE(10.0f);
 	PROTECTED_FIELD(mNodeExpandTime).DEFAULT_VALUE(2.0f).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mNodeDragIntoZone).DEFAULT_VALUE(0.3f).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHighlightAnim).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlighClip).SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mHighlightAnim);
 	PROTECTED_FIELD(mHighlightSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHighlightLayout).SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mHighlighNode).DEFAULT_VALUE(nullptr);

@@ -20,14 +20,14 @@ namespace Editor
 	}
 
 	ActorProperty::ActorProperty(const ActorProperty& other) :
-		TPropertyField<Actor*>(other)
+		TPropertyField<ActorRef>(other)
 	{
 		InitializeControls();
 	}
 
 	ActorProperty& ActorProperty::operator=(const ActorProperty& other)
 	{
-		TPropertyField<Actor*>::operator=(other);
+		TPropertyField<ActorRef>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -69,8 +69,8 @@ namespace Editor
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		Actor* sourceActor = GetProxy(source);
-		Actor* topSourceActor = sourceActor;
+		ActorRef sourceActor = GetProxy(source);
+		ActorRef topSourceActor = sourceActor;
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
 
@@ -95,6 +95,12 @@ namespace Editor
 			SetProxy(target, sourceActor);
 	}
 
+	void ActorProperty::OnTypeSpecialized(const Type& type)
+	{
+		TPropertyField<ActorRef>::OnTypeSpecialized(type);
+		mActorType = type.InvokeStatic<const Type*>("GetActorTypeStatic");
+	}
+
 	bool ActorProperty::IsValueRevertable() const
 	{
 		bool revertable = false;
@@ -103,8 +109,8 @@ namespace Editor
 		{
 			if (ptr.second)
 			{
-				Actor* value = GetProxy(ptr.first);
-				Actor* proto = GetProxy(ptr.second);
+				ActorRef value = GetProxy(ptr.first);
+				ActorRef proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
@@ -134,7 +140,7 @@ namespace Editor
 		{
 			if (!mCommonValue)
 			{
-				mNameText->text = "Null:Actor";
+				mNameText->text = "Null:" + mActorType->GetName();
 				mBox->layer["caption"]->transparency = 0.5f;
 			}
 			else
@@ -169,7 +175,7 @@ namespace Editor
 			if (mCommonValue->IsAsset())
 				o2EditorAssets.ShowAssetIcon(o2Assets.GetAssetPath(mCommonValue->GetAssetID()));
 			else if (mCommonValue->IsOnScene())
-				o2EditorTree.HighlightObjectTreeNode(mCommonValue);
+				o2EditorTree.HighlightObjectTreeNode(mCommonValue.Get());
 		}
 	}
 
@@ -217,6 +223,10 @@ namespace Editor
 	void ActorProperty::OnDragEnterFromActorsTree(SceneTree* actorsTree)
 	{
 		if (actorsTree->GetSelectedObjects().Count() > 1)
+			return;
+
+		Actor* actor = dynamic_cast<Actor*>(actorsTree->GetSelectedObjects()[0]);
+		if (!actor || !actor->GetType().IsBasedOn(*mActorType))
 			return;
 
 		o2Application.SetCursor(CursorType::Hand);
@@ -269,6 +279,6 @@ namespace Editor
 		mBox->SetState("focused", false);
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::Actor*>);
+DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::ActorRef>);
 
 DECLARE_CLASS(Editor::ActorProperty);

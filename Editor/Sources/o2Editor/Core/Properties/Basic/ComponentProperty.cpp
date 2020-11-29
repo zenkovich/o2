@@ -22,14 +22,14 @@ namespace Editor
 	}
 
 	ComponentProperty::ComponentProperty(const ComponentProperty& other) :
-		TPropertyField<Component*>(other)
+		TPropertyField<ComponentRef>(other)
 	{
 		InitializeControls();
 	}
 
 	ComponentProperty& ComponentProperty::operator=(const ComponentProperty& other)
 	{
-		TPropertyField<Component*>::operator=(other);
+		TPropertyField<ComponentRef>::operator=(other);
 		InitializeControls();
 		return *this;
 	}
@@ -61,22 +61,15 @@ namespace Editor
 		Refresh();
 	}
 
-	void ComponentProperty::SpecializeType(const Type* type)
-	{
-		if (type->GetUsage() == Type::Usage::Pointer)
-			mComponentType = ((PointerType*)type)->GetUnpointedType();
-		else
-			mComponentType = type;
-	}
-
-	const Type* ComponentProperty::GetSpecializedType() const
-	{
-		return mComponentType;
-	}
-
 	bool ComponentProperty::IsUnderPoint(const Vec2F& point)
 	{
 		return mBox->IsUnderPoint(point);
+	}
+
+	void ComponentProperty::OnTypeSpecialized(const Type& type)
+	{
+		TPropertyField<ComponentRef>::OnTypeSpecialized(type);
+		mComponentType = type.InvokeStatic<const Type*>("GetComponentTypeStatic");
 	}
 
 	bool ComponentProperty::IsValueRevertable() const
@@ -85,12 +78,12 @@ namespace Editor
 		{
 			if (ptr.second)
 			{
-				Component* value = GetProxy(ptr.first);
-				Component* proto = GetProxy(ptr.second);
+				ComponentRef value = GetProxy(ptr.first);
+				ComponentRef proto = GetProxy(ptr.second);
 
 				if (value && value->GetPrototypeLink())
 				{
-					if (value->GetPrototypeLink() != proto)
+					if (proto != value->GetPrototypeLink())
 						return true;
 				}
 				else
@@ -131,7 +124,7 @@ namespace Editor
 		if (!source || !targetOwner || targetOwner->GetType().IsBasedOn(TypeOf(Component)))
 			return;
 
-		Component* sourceComponent = GetProxy(source);
+		ComponentRef sourceComponent = GetProxy(source);
 		Actor* topSourceActor = sourceComponent->GetOwnerActor();
 		while (topSourceActor->GetParent())
 			topSourceActor = topSourceActor->GetParent();
@@ -149,7 +142,7 @@ namespace Editor
 			if (sameToProtoSourceActor)
 			{
 				Component* sameToProtoSourceComponent = sameToProtoSourceActor->GetComponents().FindOrDefault(
-					[&](Component* x) { return x->GetPrototypeLink() == sourceComponent; });
+					[&](Component* x) { return sourceComponent == x->GetPrototypeLink(); });
 
 				if (sameToProtoSourceComponent)
 				{
@@ -293,6 +286,6 @@ namespace Editor
 		mBox->SetState("focused", false);
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::Component*>);
+DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::ComponentRef>);
 
 DECLARE_CLASS(Editor::ComponentProperty);

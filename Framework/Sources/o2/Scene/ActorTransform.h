@@ -94,7 +94,7 @@ namespace o2
 		ActorTransform& operator=(const ActorTransform& other);
 
 		// Assign operator
-		ActorTransform& operator=(const Transform& other);
+		//ActorTransform& operator=(const Transform& other);
 
 		// Check EqualSid operator
 		bool operator==(const ActorTransform& other) const;

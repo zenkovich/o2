@@ -54,7 +54,6 @@ namespace o2
 			OnLayerAdded(newLayer);
 		}
 
-		mChildWidgets.Clear();
 		for (auto child : mChildren)
 		{
 			Widget* childWidget = dynamic_cast<Widget*>(child);

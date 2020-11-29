@@ -103,6 +103,12 @@ namespace o2
 		mAddedActors.Add(actor);
 	}
 
+	void Scene::OnActorIdChanged(Actor* actor, SceneUID prevId)
+	{
+		mActorsMap.Remove(prevId);
+		mActorsMap[actor->mId] = actor;
+	}
+
 	void Scene::UpdateActors(float dt)
 	{
 		for (auto actor : mRootActors)
@@ -209,6 +215,8 @@ namespace o2
 			mRootActors.Add(actor);
 
 		mAllActors.Add(actor);
+		mActorsMap[actor->mId] = actor;
+
 		actor->OnAddToScene();
 
 		if constexpr (IS_EDITOR)
@@ -222,9 +230,10 @@ namespace o2
 	void Scene::RemoveActorFromScene(Actor* actor, bool keepEditorObjects /*= false*/)
 	{
 		if (!actor->mParent)
-		mRootActors.Remove(actor);
+			mRootActors.Remove(actor);
 
 		mAllActors.Remove(actor);
+		mActorsMap.Remove(actor->mId);
 
 		mStartActors.Remove(actor);
 		mAddedActors.Remove(actor);
@@ -409,7 +418,7 @@ namespace o2
 
 	Actor* Scene::GetActorByID(SceneUID id) const
 	{
-		return mAllActors.FindOrDefault([=](Actor* x) { return x->mId == id; });
+		return mActorsMap.FindKey(id).second;
 	}
 
 	Actor* Scene::GetAssetActorByID(const UID& id)

@@ -195,9 +195,6 @@ namespace Editor
 		friend class Properties;
 	};
 
-	// Returns editing by this field type by static function, can't be changed during runtime
-	static const Type* GetValueTypeStatic();
-
 	template<typename _type>
 	class TPropertyField : public IPropertyField
 	{
@@ -237,7 +234,12 @@ namespace Editor
 	protected:
 		_type mCommonValue = _type();
 
+		const Type* mRealType = nullptr;
+
 	protected:
+		// It is called when type specialized during setting value proxy
+		void OnTypeSpecialized(const Type& type) override;
+
 		// Checks is value can be reverted
 		bool IsValueRevertable() const override;
 
@@ -387,7 +389,7 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void Editor::TPropertyField<_type>::Refresh()
+	void TPropertyField<_type>::Refresh()
 	{
 		if (mValuesProxies.IsEmpty())
 			return;
@@ -418,6 +420,12 @@ namespace Editor
 			SetCommonValue(newCommonValue);
 
 		CheckRevertableState();
+	}
+
+	template<typename _type>
+	void TPropertyField<_type>::OnTypeSpecialized(const Type& type)
+	{
+		mRealType = &type;
 	}
 
 	template<typename _type>
@@ -519,6 +527,19 @@ namespace Editor
 	template<typename _type>
 	_type TPropertyField<_type>::GetProxy(IAbstractValueProxy* proxy) const
 	{
+		if constexpr (std::is_polymorphic<_type>::value)
+		{
+			if (mRealType && mRealType->GetUsage() == Type::Usage::Object && TypeOf(_type) != *mRealType)
+			{
+				auto objectType = dynamic_cast<const ObjectType*>(mRealType);
+				void* typeSample = objectType->CreateSample();
+				proxy->GetValuePtr(typeSample);
+				_type res = *dynamic_cast<_type*>(objectType->DynamicCastToIObject(typeSample));
+				delete typeSample;
+				return res;
+			}
+		}
+
 		return IPropertyField::GetProxy<_type>(proxy);
 	}
 
@@ -596,6 +617,7 @@ META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::TPropertyField<_type>)
 {
 	PROTECTED_FIELD(mCommonValue).DEFAULT_VALUE(_type());
+	PROTECTED_FIELD(mRealType).DEFAULT_VALUE(nullptr);
 }
 END_META;
 META_TEMPLATES(typename _type)
@@ -609,6 +631,7 @@ CLASS_METHODS_META(Editor::TPropertyField<_type>)
 	PUBLIC_FUNCTION(void, SetValue, const _type&);
 	PUBLIC_FUNCTION(void, SetUnknownValue, const _type&);
 	PUBLIC_FUNCTION(_type, GetCommonValue);
+	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, StoreValues, Vector<DataDocument>&);
 	PROTECTED_FUNCTION(_type, GetProxy, IAbstractValueProxy*);

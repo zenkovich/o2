@@ -50,12 +50,6 @@ namespace o2
 
 		ActorRefResolver::LockResolving();
 
-		if constexpr (IS_EDITOR)
-		{
-			if (other.mCopyVisitor)
-				other.mCopyVisitor->OnCopyActor(&other, this);
-		}
-
 		if (other.mIsAsset)
 			SetPrototype(ActorAssetRef(other.GetAssetID()));
 
@@ -66,6 +60,15 @@ namespace o2
 		transform->CopyFrom(*other.transform);
 		mAssetId = other.mAssetId; 
 		mPrototypeLink = other.mPrototypeLink;
+
+		if constexpr (IS_EDITOR)
+		{
+			if (!other.mCopyVisitor)
+				other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
+
+			other.mCopyVisitor->OnCopyActor(&other, this);
+			other.mCopyVisitor->depth++;
+		}
 
 		if (!mPrototype && other.mPrototype)
 		{
@@ -84,9 +87,10 @@ namespace o2
 			if constexpr (IS_EDITOR)
 				child->mCopyVisitor = other.mCopyVisitor;
 
-			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
-
 			AddChild(child->CloneAs<Actor>());
+
+			if constexpr (IS_EDITOR)
+				child->mCopyVisitor = nullptr;
 		}
 
 		for (auto component : other.mComponents)
@@ -114,6 +118,21 @@ namespace o2
 
 		ActorRefResolver::ActorCreated(this);
 		ActorRefResolver::UnlockResolving();
+
+		if constexpr (IS_EDITOR)
+		{
+			if (other.mCopyVisitor)
+			{
+				other.mCopyVisitor->depth--;
+
+				if (other.mCopyVisitor->depth == 0)
+				{
+					other.mCopyVisitor->Finalize();
+					delete other.mCopyVisitor;
+					other.mCopyVisitor = nullptr;
+				}
+			}
+		}
 	}
 
 	Actor::Actor(ActorTransform* transform, const ActorAssetRef& prototype, ActorCreateMode mode /*= ActorCreateMode::Default*/):
@@ -141,8 +160,12 @@ namespace o2
 		Actor(mnew ActorTransform(*prototype->GetActor()->transform), prototype, mode)
 	{}
 
-	Actor::Actor(const Actor& other, ActorCreateMode mode /*= CreateMode::Default*/) :
+	Actor::Actor(const Actor& other, ActorCreateMode mode) :
 		Actor(mnew ActorTransform(*other.transform), other, mode)
+	{}
+
+	Actor::Actor(const Actor& other):
+		Actor(other, ActorCreateMode::Default)
 	{}
 
 	Actor::~Actor()
@@ -200,6 +223,15 @@ namespace o2
 		mAssetId = other.mAssetId;
 		mPrototypeLink = other.mPrototypeLink;
 
+		if constexpr (IS_EDITOR)
+		{
+			if (!other.mCopyVisitor)
+				other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
+
+			other.mCopyVisitor->OnCopyActor(&other, this);
+			other.mCopyVisitor->depth++;
+		}
+
 		if (!mPrototype && other.mPrototype)
 		{
 			mPrototype = other.mPrototype;
@@ -217,9 +249,10 @@ namespace o2
 			if constexpr (IS_EDITOR)
 				child->mCopyVisitor = other.mCopyVisitor;
 
-			const ObjectType* type = dynamic_cast<const ObjectType*>(&child->GetType());
-
 			AddChild(child->CloneAs<Actor>());
+
+			if constexpr (IS_EDITOR)
+				child->mCopyVisitor = nullptr;
 		}
 
 		for (auto component : other.mComponents)
@@ -247,6 +280,21 @@ namespace o2
 
 		ActorRefResolver::ActorCreated(this);
 		ActorRefResolver::UnlockResolving();
+
+		if constexpr (IS_EDITOR)
+		{
+			if (other.mCopyVisitor)
+			{
+				other.mCopyVisitor->depth--;
+
+				if (other.mCopyVisitor->depth == 0)
+				{
+					other.mCopyVisitor->Finalize();
+					delete other.mCopyVisitor;
+					other.mCopyVisitor = nullptr;
+				}
+			}
+		}
 
 		UpdateResEnabledInHierarchy();
 		OnChanged();
@@ -331,7 +379,13 @@ namespace o2
 
 	void Actor::SetID(SceneUID id)
 	{
+		auto prevId = mId;
 		mId = id;
+
+		if (IsOnScene())
+			o2Scene.OnActorIdChanged(this, prevId);
+
+		ActorRefResolver::OnActorIdChanged(this, prevId);
 	}
 
 	UID Actor::GetAssetID() const
@@ -349,7 +403,7 @@ namespace o2
 
 	void Actor::GenerateNewID(bool withChildren /*= true*/)
 	{
-		mId = Math::Random();
+		SetID(Math::Random());
 
 		if (withChildren)
 		{
@@ -992,7 +1046,7 @@ namespace o2
 		if (ActorRefResolver::Instance().mLockDepth == 0)
 			ActorRefResolver::Instance().ActorCreated(this);
 
-		mId = node.GetMember("Id");
+		SetID(node.GetMember("Id"));
 		mName = node.GetMember("Name");
 
 		if (auto lockedNode = node.FindMember("Locked"))
@@ -1211,7 +1265,6 @@ namespace o2
 	}
 
 #endif // !IS_EDITOR
-
 }
 
 ENUM_META(o2::Actor::SceneStatus)

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "o2/Scene/ComponentRef.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
 namespace o2
 {
 	class Actor;
+	class ComponentRef;
 
 	// ---------------------------
 	// Actor's component interface
@@ -102,7 +102,7 @@ namespace o2
 
 	protected:
 		Component* mPrototypeLink = nullptr; // Prototype actor component pointer. Null if no actor prototype
-		SceneUID   mId;                      // Component id @SERIALIZABLE @EDITOR_IGNORE
+		SceneUID   mId;                      // Component id @EDITOR_IGNORE
 		Actor*     mOwner = nullptr;         // Owner actor
 		bool       mEnabled = true;          // Is component enabled @SERIALIZABLE @EDITOR_IGNORE
 		bool       mResEnabled = true;       // Is component enabled in hierarchy
@@ -110,6 +110,12 @@ namespace o2
 		Vector<ComponentRef*> mReferences; // References to this component
 
 	protected:
+		// Beginning serialization callback
+		void OnSerialize(DataValue& node) const override;
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataValue& node) override;
+
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);
 
@@ -157,7 +163,7 @@ namespace o2
 
 		friend class Actor;
 		friend class ActorRefResolver;
-		friend class Ref<Component>;
+		friend class ComponentRef;
 		friend class Scene;
 		friend class Widget;
 	};
@@ -227,7 +233,7 @@ CLASS_FIELDS_META(o2::Component)
 	PUBLIC_FIELD(enabled).EDITOR_IGNORE_ATTRIBUTE();
 	PUBLIC_FIELD(enabledInHierarchy);
 	PROTECTED_FIELD(mPrototypeLink).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mId).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
+	PROTECTED_FIELD(mId).EDITOR_IGNORE_ATTRIBUTE();
 	PROTECTED_FIELD(mOwner).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mEnabled).DEFAULT_VALUE(true).EDITOR_IGNORE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PROTECTED_FIELD(mResEnabled).DEFAULT_VALUE(true);
@@ -253,6 +259,8 @@ CLASS_METHODS_META(o2::Component)
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableFromCreateMenu);
 	PUBLIC_FUNCTION(void, OnAddedFromEditor);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);

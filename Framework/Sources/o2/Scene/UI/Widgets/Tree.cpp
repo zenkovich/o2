@@ -96,6 +96,9 @@ namespace o2
 
 	void TreeNode::SetSelectedState(bool state)
 	{
+		if (!mSelectedState)
+			mSelectedState = GetStateObject("selected");
+
 		if (mSelectedState)
 			mSelectedState->SetStateForcible(state);
 	}
@@ -191,11 +194,12 @@ namespace o2
 		if (other.mZebraBackLine)
 			mZebraBackLine = other.mZebraBackLine->CloneAs<Sprite>();
 
+		mHighlighClip = other.mHighlighClip;
 		mHighlightAnim.SetTarget(mHighlightSprite);
+		mHighlightAnim.SetClip(&mHighlighClip);
 
 		mHoverLayout = other.mHoverLayout;
 		mHighlightLayout = other.mHighlightLayout;
-		mHighlightAnim = other.mHighlightAnim;
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -238,11 +242,12 @@ namespace o2
 		mHoverDrawable = other.mHoverDrawable->CloneAs<Sprite>();
 		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
 
+		mHighlighClip = other.mHighlighClip;
 		mHighlightAnim.SetTarget(mHighlightSprite);
+		mHighlightAnim.SetClip(&mHighlighClip);
 
 		mHoverLayout = other.mHoverLayout;
 		mHighlightLayout = other.mHighlightLayout;
-		mHighlightAnim = other.mHighlightAnim;
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -1761,6 +1766,7 @@ namespace o2
 	{
 		ScrollArea::OnDeserialized(node);
 		mHighlightAnim.SetTarget(mHighlightSprite);
+		mHighlightAnim.SetClip(&mHighlighClip);
 	}
 
 	void Tree::OnSelectionChanged()
@@ -1791,8 +1797,9 @@ namespace o2
 
 	void Tree::SetHighlightAnimation(const AnimationClip& animation)
 	{
+		mHighlighClip = animation;
 		mHighlightAnim.SetTarget(mHighlightSprite);
-		mHighlightAnim.SetClip(animation.CloneAs<AnimationClip>(), true);
+		mHighlightAnim.SetClip(&mHighlighClip);
 	}
 
 	void Tree::SetHighlightLayout(const Layout& layout)

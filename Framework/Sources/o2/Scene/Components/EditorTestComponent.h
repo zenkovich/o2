@@ -8,6 +8,8 @@
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Scene/Component.h"
+#include "o2/Scene/Components/ParticlesEmitterComponent.h"
+#include "o2/Scene/Physics/RigidBody.h"
 #include "o2/Scene/Tags.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
@@ -49,52 +51,54 @@ namespace o2
 		PROPERTY(Sprite, spriteProp, SetSprite, GetSprite);
 		PROPERTY(Vector<Vec2I>, arr, SetArray, GetArray);
 
-		int mInteger;					           // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-		float mFloat;					           // @SERIALIZABLE
-		String mString;					           // @SERIALIZABLE
-		WString mWString;				           // @SERIALIZABLE
-		bool mBool;						           // @SERIALIZABLE
-		ImageAssetRef mImageAsset;			       // @SERIALIZABLE
-		ActorAssetRef mActorAsset;			       // @SERIALIZABLE
-		DataAssetRef mDataAsset;                   // @SERIALIZABLE
-		AnimationAssetRef mAnimationAsset;         // @SERIALIZABLE
-		Sprite spritex;                            // @SERIALIZABLE
-		Sprite* mSprite = mnew Sprite();           // @SERIALIZABLE @DONT_DELETE
-		Actor* mActor = nullptr;                   // @SERIALIZABLE
-		TagGroup mTags;                            // @SERIALIZABLE
-		SceneLayer* mLayer;                        // @SERIALIZABLE
-		Component* mComponent = nullptr;           // @SERIALIZABLE
-		ImageComponent* mImageComponent = nullptr; // @SERIALIZABLE
-		Color4 mColor;					           // @SERIALIZABLE
-		Vec2F mVec2F;					           // @SERIALIZABLE
-		Vec2I mVec2I;					           // @SERIALIZABLE
-		Vertex2 mVertex;				           // @SERIALIZABLE
-		RectF mRectF;					           // @SERIALIZABLE
-		RectI mRectI;					           // @SERIALIZABLE
-		BorderF mBorderF;					       // @SERIALIZABLE
-		BorderI mBorderI;					       // @SERIALIZABLE
-		Curve mCurve = Curve::EaseInOut();         // @SERIALIZABLE
-		TestInside mTestInside;                    // @SERIALIZABLE
-		TestEnum mTestEnum;                        // @SERIALIZABLE
-		TestInside* mTestInsidePtr = nullptr;      // @SERIALIZABLE
+		int mInteger;					                    // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+		float mFloat;					                    // @SERIALIZABLE
+		String mString;					                    // @SERIALIZABLE
+		WString mWString;				                    // @SERIALIZABLE
+		bool mBool;						                    // @SERIALIZABLE
+		ImageAssetRef mImageAsset;			                // @SERIALIZABLE
+		ActorAssetRef mActorAsset;			                // @SERIALIZABLE
+		DataAssetRef mDataAsset;                            // @SERIALIZABLE
+		AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
+		Sprite spritex;                                     // @SERIALIZABLE
+		Sprite* mSprite = mnew Sprite();                    // @SERIALIZABLE @DONT_DELETE
+		ActorRef mActor;                                    // @SERIALIZABLE
+		TagGroup mTags;                                     // @SERIALIZABLE
+		SceneLayer* mLayer;                                 // @SERIALIZABLE
+		ComponentRef mComponent;                            // @SERIALIZABLE
+		Ref<RigidBody> mRigidBody;                          // @SERIALIZABLE
+		Ref<ImageComponent> mImageComponent;                // @SERIALIZABLE
+		Ref<ParticlesEmitterComponent> mParticlesComponent; // @SERIALIZABLE
+		Color4 mColor;					                    // @SERIALIZABLE
+		Vec2F mVec2F;					                    // @SERIALIZABLE
+		Vec2I mVec2I;					                    // @SERIALIZABLE
+		Vertex2 mVertex;				                    // @SERIALIZABLE
+		RectF mRectF;					                    // @SERIALIZABLE
+		RectI mRectI;					                    // @SERIALIZABLE
+		BorderF mBorderF;					                // @SERIALIZABLE
+		BorderI mBorderI;					                // @SERIALIZABLE
+		Curve mCurve = Curve::EaseInOut();                  // @SERIALIZABLE
+		TestInside mTestInside;                             // @SERIALIZABLE
+		TestEnum mTestEnum;                                 // @SERIALIZABLE
+		TestInside* mTestInsidePtr = nullptr;               // @SERIALIZABLE
 
-		Vector<int> mIntVector; // @SERIALIZABLE
+		Vector<int> mIntVector;                    // @SERIALIZABLE
 		Vector<TestInside> mTestInsideVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-		Vector<TestInside*> mTestInsideptrsVector;      // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
-		Vector<Actor*> mActorVector;               // @SERIALIZABLE
-		Vector<AnimationAssetRef> mAssetsVector;               // @SERIALIZABLE
+		Vector<TestInside*> mTestInsideptrsVector; // @SERIALIZABLE @INVOKE_ON_CHANGE(Test)
+		Vector<ActorRef> mActorVector;             // @SERIALIZABLE
+		Vector<AnimationAssetRef> mAssetsVector;   // @SERIALIZABLE
 
 		Vector<Vector<TestInside*>> mVectorOfVector; // @SERIALIZABLE
 
 		Map<String, String> mDictionary;    // @SERIALIZABLE
-		float mFloat2;					           // @SERIALIZABLE
-		float mFloat3;					           // @SERIALIZABLE
-		float mFloat4;					           // @SERIALIZABLE
-		float mFloat5;					           // @SERIALIZABLE
-		float mFloat6;					           // @SERIALIZABLE
-		float mFloat7;					           // @SERIALIZABLE
-		float mFloat8;					           // @SERIALIZABLE
-		float mFloat9;					           // @SERIALIZABLE
+		float mFloat2;					    // @SERIALIZABLE
+		float mFloat3;					    // @SERIALIZABLE
+		float mFloat4;					    // @SERIALIZABLE
+		float mFloat5;					    // @SERIALIZABLE
+		float mFloat6;					    // @SERIALIZABLE
+		float mFloat7;					    // @SERIALIZABLE
+		float mFloat8;					    // @SERIALIZABLE
+		float mFloat9;					    // @SERIALIZABLE
 
 		static String GetCategory();
 
@@ -128,11 +132,13 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mAnimationAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(spritex).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mSprite).DEFAULT_VALUE(mnew Sprite()).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mActor).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mActor).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTags).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mLayer).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mComponent).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(mImageComponent).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mComponent).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mRigidBody).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mImageComponent).SERIALIZABLE_ATTRIBUTE();
+	PUBLIC_FIELD(mParticlesComponent).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mColor).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mVec2F).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mVec2I).SERIALIZABLE_ATTRIBUTE();

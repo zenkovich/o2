@@ -113,7 +113,7 @@ namespace o2
 		Ref(): AssetRef() {}
 
 		// Instance reference asset constructor
-		Ref(T* instance): AssetRef(instance) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(T* instance): AssetRef(instance) { mSpecAssetPtr = instance; }
 
 		// Copy-constructor
 		Ref(const AssetRef& other): AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }

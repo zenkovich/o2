@@ -20,7 +20,7 @@ namespace Editor
 	// ---------------------
 	// Editor actor property
 	// ---------------------
-	class ActorProperty: public TPropertyField<Actor*>, public KeyboardEventsListener, public DragDropArea
+	class ActorProperty: public TPropertyField<ActorRef>, public KeyboardEventsListener, public DragDropArea
 	{
 	public:
 		// Default constructor
@@ -41,21 +41,20 @@ namespace Editor
 		IOBJECT(ActorProperty);
 
 	protected:
+		const Type* mActorType = nullptr;  // Actor value type
+
 		Widget* mBox = nullptr;      // Property edit box
 		Text*   mNameText = nullptr; // Asset name text
 
 	protected:
-		// Searches controls widgets and layers and initializes them
-		void InitializeControls();
+		// It is called when type specialized during setting value proxy
+		void OnTypeSpecialized(const Type& type) override;
 
 		// Checks is value can be reverted
 		bool IsValueRevertable() const override;
 
 		// Updates value view
 		void UpdateValueView() override;
-
-		// Reverts target value to source
-		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
 		// It is called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
@@ -77,6 +76,12 @@ namespace Editor
 
 		// It is called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
+
+		// Searches controls widgets and layers and initializes them
+		void InitializeControls();
+
+		// Reverts target value to source
+		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
 		// It is called when actors tree nodes was dragged and dropped to this
 		void OnDroppedFromActorsTree(SceneTree* actorsTree);
@@ -100,13 +105,14 @@ namespace Editor
 
 CLASS_BASES_META(Editor::ActorProperty)
 {
-	BASE_CLASS(Editor::TPropertyField<Actor*>);
+	BASE_CLASS(Editor::TPropertyField<ActorRef>);
 	BASE_CLASS(o2::KeyboardEventsListener);
 	BASE_CLASS(o2::DragDropArea);
 }
 END_META;
 CLASS_FIELDS_META(Editor::ActorProperty)
 {
+	PROTECTED_FIELD(mActorType).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mBox).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mNameText).DEFAULT_VALUE(nullptr);
 }
@@ -116,10 +122,9 @@ CLASS_METHODS_META(Editor::ActorProperty)
 
 	PUBLIC_FUNCTION(void, Revert);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, InitializeControls);
+	PROTECTED_FUNCTION(void, OnTypeSpecialized, const Type&);
 	PROTECTED_FUNCTION(bool, IsValueRevertable);
 	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
 	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
@@ -127,6 +132,8 @@ CLASS_METHODS_META(Editor::ActorProperty)
 	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragEnter, ISelectableDragableObjectsGroup*);
 	PROTECTED_FUNCTION(void, OnDragExit, ISelectableDragableObjectsGroup*);
+	PROTECTED_FUNCTION(void, InitializeControls);
+	PROTECTED_FUNCTION(void, RevertoToPrototype, IAbstractValueProxy*, IAbstractValueProxy*, IObject*);
 	PROTECTED_FUNCTION(void, OnDroppedFromActorsTree, SceneTree*);
 	PROTECTED_FUNCTION(void, OnDragEnterFromActorsTree, SceneTree*);
 	PROTECTED_FUNCTION(void, OnDragExitFromActorsTree, SceneTree*);

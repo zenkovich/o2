@@ -9,33 +9,26 @@ namespace o2
 	// --------------------------------------------------------------
 	// Actor reference, automatically invalidates when actor deleting
 	// --------------------------------------------------------------
-	template<>
-	class Ref<Actor>: public ISerializable
+	class ActorRef: public ISerializable
 	{
 	public:
 		// Default constructor, no reference
-		Ref();
+		ActorRef();
 
 		// Constructor with referencing on actor
-		Ref(Actor* actor);
-
-		// Creates actor by prototype and returns reference on it
-		Ref(const ActorAssetRef& prototype, ActorCreateMode mode = ActorCreateMode::Default);
-
-		// Creates actor with components and returns reference on it
-		Ref(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
+		ActorRef(Actor* actor);
 
 		// Creates a copy of actor and returns reference on it
-		Ref(const Actor& other);
+		ActorRef(const ActorRef& other);
 
 		// Destructor
-		~Ref();
+		~ActorRef();
 
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const;
 
 		// Assign operator
-		Ref& operator=(const Ref& other);
+		ActorRef& operator=(const ActorRef& other);
 
 		// Getter operator
 		Actor& operator*();
@@ -50,10 +43,10 @@ namespace o2
 		const Actor* operator->() const;
 
 		// Check equals operator
-		bool operator==(const Ref& other) const;
+		bool operator==(const ActorRef& other) const;
 
 		// Check not equals operator
-		bool operator!=(const Ref& other) const;
+		bool operator!=(const ActorRef& other) const;
 
 		// Returns actor pointer
 		Actor* Get();
@@ -70,30 +63,137 @@ namespace o2
 		// Returns is actor was deleted
 		bool IsWasDeleted() const;
 
-		SERIALIZABLE(Ref<Actor>);
+		// Returns actor type
+		virtual const Type& GetActorType() const;
+
+		// Returns actor type
+		static const Type* GetActorTypeStatic();
+
+		SERIALIZABLE(ActorRef);
 
 	protected:
 		Actor* mActor = nullptr;
 		bool   mWasDeleted = false;
 
+	protected:
+		// Updates specialized actor pointer
+		virtual void UpdateSpecActor() {}
+
+		// Beginning serialization callback
+		void OnSerialize(DataValue& node) const override;
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataValue& node) override;
+
 		friend class Actor;
+		friend class ActorRefResolver;
 	};
 
-	typedef Ref<Actor> ActorRef;
+	// ---------------------------------------
+	// Reference on derived from actor classes
+	// ---------------------------------------
+	template<typename T>
+	class Ref<T, typename std::enable_if<std::is_base_of<Actor, T>::value>::type>: public ActorRef
+	{
+	public:
+		// Default constructor, no reference
+		Ref(): ActorRef() {}
+
+		// Constructor with referencing on actor
+		Ref(T* actor): ActorRef(actor), mSpecActor(actor) {}
+
+		// Creates a copy of actor and returns reference on it
+		Ref(const Ref<T>& other): ActorRef(other), mSpecActor(other.mSpecActor) {}
+
+		// Boolean cast operator, true means that reference is valid
+		operator bool() const { return IsValid(); }
+
+		// Assign operator
+		Ref<T>& operator=(const Ref<T>& other)
+		{
+			ActorRef::operator=(other);
+			mSpecActor = other.mSpecActor;
+			return *this;
+		}
+
+		// Getter operator
+		T& operator*() { return *mSpecActor; }
+
+		// Constant getter operator
+		const T& operator*() const { return *mSpecActor; }
+
+		// Asset members and field operator
+		T* operator->() { return mSpecActor; }
+
+		// Constant asset members and field operator
+		const T* operator->() const { return mSpecActor; }
+
+		// Check equals operator
+		bool operator==(const Ref<T>& other) const { return ActorRef::operator==(other); }
+
+		// Check not equals operator
+		bool operator!=(const Ref<T>& other) const { return ActorRef::operator!=(other); }
+
+		// Returns actor type
+		const Type& GetActorType() const override { return TypeOf(T); }
+
+		// Returns actor type
+		static const Type* GetActorTypeStatic() { return &TypeOf(T); }
+
+	public:
+		typedef Ref<T, typename std::enable_if<std::is_base_of<Actor, T>::value>::type> _thisType;
+
+		SERIALIZABLE_MAIN(_thisType);
+
+		template<typename _type_processor>
+		static void ProcessBaseTypes(_thisType* object, _type_processor& processor)
+		{
+			typedef _thisType thisclass;
+			processor.template StartBases<_thisType>(object, type);
+
+			BASE_CLASS(o2::ActorRef);
+		}
+
+		template<typename _type_processor>
+		static void ProcessFields(_thisType* object, _type_processor& processor)
+		{
+			typedef _thisType thisclass;
+			processor.template StartFields<_thisType>(object, type);
+
+			PROTECTED_FIELD(mSpecActor);
+		}
+
+		template<typename _type_processor>
+		static void ProcessMethods(_thisType* object, _type_processor& processor)
+		{
+			typedef _thisType thisclass;
+			processor.template StartMethods<_thisType>(object, type);
+
+			PUBLIC_FUNCTION(const Type&, GetActorType);
+			PUBLIC_STATIC_FUNCTION(const Type*, GetActorTypeStatic);
+		}
+
+	protected:
+		T* mSpecActor = nullptr;
+
+	protected:
+		// Updates specialized actor pointer
+		void UpdateSpecActor() override { mSpecActor = dynamic_cast<T*>(mActor); };
+	};
 }
 
-CLASS_BASES_META(o2::Ref<o2::Actor>)
+CLASS_BASES_META(o2::ActorRef)
 {
 	BASE_CLASS(o2::ISerializable);
 }
 END_META;
-CLASS_FIELDS_META(o2::Ref<o2::Actor>)
+CLASS_FIELDS_META(o2::ActorRef)
 {
 	PROTECTED_FIELD(mActor).DEFAULT_VALUE(nullptr);
 	PROTECTED_FIELD(mWasDeleted).DEFAULT_VALUE(false);
 }
 END_META;
-CLASS_METHODS_META(o2::Ref<o2::Actor>)
+CLASS_METHODS_META(o2::ActorRef)
 {
 
 	PUBLIC_FUNCTION(Actor*, Get);
@@ -101,5 +201,10 @@ CLASS_METHODS_META(o2::Ref<o2::Actor>)
 	PUBLIC_FUNCTION(void, Destroy);
 	PUBLIC_FUNCTION(bool, IsValid);
 	PUBLIC_FUNCTION(bool, IsWasDeleted);
+	PUBLIC_FUNCTION(const Type&, GetActorType);
+	PUBLIC_STATIC_FUNCTION(const Type*, GetActorTypeStatic);
+	PROTECTED_FUNCTION(void, UpdateSpecActor);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

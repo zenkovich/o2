@@ -151,6 +151,18 @@ namespace o2
 		}
 	}
 
+	void Component::OnSerialize(DataValue& node) const
+	{
+		node.AddMember("mId") = mId;
+	}
+
+	void Component::OnDeserialized(const DataValue& node)
+	{
+		auto prevId = mId;
+		mId = node.GetMember("mId");
+		ActorRefResolver::OnComponentIdChanged(this, prevId);
+	}
+
 	void Component::SetOwnerActor(Actor* actor)
 	{
 		if (mOwner == actor)

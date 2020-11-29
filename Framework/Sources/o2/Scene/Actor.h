@@ -10,6 +10,8 @@
 #include "o2/Utils/Editor/SceneEditableObject.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/UID.h"
+#include "Scene.h"
+#include "ActorRefResolver.h"
 
 namespace o2
 {
@@ -83,7 +85,13 @@ namespace o2
 		Actor(Vector<Component*> components, ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Copy-constructor
-		Actor(const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
+		Actor(const Actor& other, ActorCreateMode mode);
+
+		// Copy-constructor
+		Actor(const Actor& other);
+
+		// Destructor
+		virtual ~Actor();
 
 		// Assign operator
 		Actor& operator=(const Actor& other);
@@ -402,12 +410,15 @@ namespace o2
 #if IS_EDITOR
 		struct ICopyVisitor
 		{
+			int depth = 0;
+
 			virtual ~ICopyVisitor() {}
 			virtual void OnCopyActor(const Actor* source, Actor* target) = 0;
 			virtual void OnCopyComponent(const Component* source, Component* target) = 0;
+			virtual void Finalize() {}
 		};
 
-		ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. It is called when copying actor and calls on actor or component copying
+		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. It is called when copying actor and calls on actor or component copying
 
 		ActorAssetRef mPrototype;               // Prototype asset
 		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
@@ -434,9 +445,6 @@ namespace o2
 
 		// Copy-constructor with transform
 		Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode = ActorCreateMode::Default);
-
-		// Destructor
-		~Actor();
 
 		// Copies fields from source to dest
 		void CopyFields(Vector<const FieldInfo*>& fields, IObject* source, IObject* dest,
@@ -543,6 +551,7 @@ namespace o2
 
 			void OnCopyActor(const Actor* source, Actor* target) override;
 			void OnCopyComponent(const Component* source, Component* target) override;
+			void Finalize() override;
 		};
 
 		struct MakePrototypeCloneVisitor: SourceToTargetMapCloneVisitor
@@ -574,13 +583,6 @@ namespace o2
 
 		// Regular deserializing with prototype
 		void DeserializeWithProto(const DataValue& node);
-
-		// Processes making prototype
-		void ProcessPrototypeMaking(Actor* dest, Actor* source,
-									Vector<Actor**>& actorsPointers, Vector<Component**>& componentsPointers,
-									Map<const Actor*, Actor*>& actorsMap,
-									Map<const Component*, Component*>& componentsMap,
-									bool isInsidePrototype);
 
 		// Copies changed field from source to dest
 		void CopyChangedFields(Vector<const FieldInfo*>& fields,
@@ -614,12 +616,13 @@ namespace o2
 #endif // IS_EDITOR
 
 		friend class ActorAsset;
+		friend class ActorRef;
 		friend class ActorRefResolver;
 		friend class ActorTransform;
 		friend class Component;
+		friend class ComponentRef;
 		friend class DrawableComponent;
 		friend class ISceneDrawable;
-		friend class Ref<Actor>;
 		friend class Scene;
 		friend class SceneLayer;
 		friend class Tag;
@@ -787,8 +790,6 @@ CLASS_METHODS_META(o2::Actor)
 	typedef Map<String, Component*> _tmp4;
 	typedef Map<const Actor*, Actor*>& _tmp5;
 	typedef Map<const Component*, Component*>& _tmp6;
-	typedef Map<const Actor*, Actor*>& _tmp7;
-	typedef Map<const Component*, Component*>& _tmp8;
 
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, FixedUpdate, float);
@@ -905,11 +906,10 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnComponentRemoving, Component*);
 	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
-	PROTECTED_FUNCTION(void, ProcessPrototypeMaking, Actor*, Actor*, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, bool);
 	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<const FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
-	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp7, _tmp8, Vector<ISerializable*>&);
+	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
 	PROTECTED_FUNCTION(void, SetPrototype, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateLocking);

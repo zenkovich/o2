@@ -18,15 +18,21 @@ namespace o2
 	{
 		sourceToTargetComponents[source] = target;
 	}
+	
+	void Actor::SourceToTargetMapCloneVisitor::Finalize()
+	{
+		ActorRefResolver::RemapReferences(sourceToTargetActors, sourceToTargetComponents);
+	}
 
 	void Actor::MakePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
 	{
-
+		SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
+		const_cast<Actor*>(source)->mPrototypeLink = target;
 	}
 
 	void Actor::MakePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
 	{
-
+		SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
 	}
 
 	void Actor::SerializeWithProto(DataValue& node) const
@@ -145,7 +151,7 @@ namespace o2
 			}
 		}
 
-		mId = node.GetMember("Id");
+		SetID(node.GetMember("Id"));
 
 		if (!mPrototypeLink)
 			return;
@@ -363,19 +369,11 @@ namespace o2
 	}
 
 	ActorAssetRef Actor::MakePrototype()
-	{
-		auto& thisType = dynamic_cast<const ObjectType&>(GetType());
-		Actor* prototype = dynamic_cast<Actor*>(thisType.DynamicCastToIObject(thisType.CreateSample()));
+	{		
+		mCopyVisitor = mnew MakePrototypeCloneVisitor();
+		auto prototype = CloneAs<Actor>();
+
 		ActorAssetRef prototypeAsset = ActorAssetRef::CreateAsset(prototype);
-
-		Vector<Actor**> actorPointersFields;
-		Vector<Component**> componentPointersFields;
-		Map<const Actor*, Actor*> actorsMap;
-		Map<const Component*, Component*> componentsMap;
-
-		ProcessPrototypeMaking(prototype, this, actorPointersFields, componentPointersFields, actorsMap, componentsMap, false);
-		FixComponentFieldsPointers(actorPointersFields, componentPointersFields, actorsMap, componentsMap);
-
 		SetPrototype(prototypeAsset);
 
 		prototype->UpdateResEnabledInHierarchy();
@@ -957,48 +955,6 @@ namespace o2
 			o2Scene.onChildrenHierarchyChanged(oldParent);
 			o2Scene.onChildrenHierarchyChanged(mParent);
 		}
-	}
-
-	void Actor::ProcessPrototypeMaking(Actor* dest, Actor* source, Vector<Actor**>& actorsPointers,
-									   Vector<Component**>& componentsPointers,
-									   Map<const Actor*, Actor*>& actorsMap,
-									   Map<const Component*, Component*>& componentsMap,
-									   bool isInsidePrototype)
-	{
-		dest->mName = source->mName;
-		dest->mEnabled = source->mEnabled;
-		*dest->transform = *source->transform;
-		dest->mAssetId = source->mAssetId;
-
-		if (!isInsidePrototype && !source->mPrototype && source->mPrototypeLink)
-			source->mPrototypeLink = nullptr;
-
-		dest->SetPrototype(source->mPrototype);
-
-		dest->mPrototypeLink = source->mPrototypeLink;
-		source->mPrototypeLink = dest;
-
-		actorsMap.Add(source, dest);
-
-		for (auto child : source->mChildren)
-		{
-			Actor* newChild = mnew Actor(dest->IsOnScene() ? ActorCreateMode::InScene : ActorCreateMode::NotInScene);
-			dest->AddChild(newChild);
-
-			ProcessPrototypeMaking(newChild, child, actorsPointers, componentsPointers, actorsMap, componentsMap,
-								   source->mPrototype.IsValid() || isInsidePrototype);
-		}
-
-		for (auto component : source->mComponents)
-		{
-			Component* newComponent = dest->AddComponent(component->CloneAs<Component>());
-			componentsMap.Add(component, newComponent);
-			newComponent->mPrototypeLink = component->mPrototypeLink;
-			component->mPrototypeLink = newComponent;
-			CollectFixingFields(newComponent, componentsPointers, actorsPointers);
-		}
-
-		dest->SetLayer(source->mLayerName);
 	}
 
 	void Actor::ProcessReverting(Actor* dest, const Actor* source, const Vector<Actor*>& separatedActors,
