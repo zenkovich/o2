@@ -891,6 +891,8 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnContextDeletePressed()
 	{
+		o2EditorPropertiesWindow.ResetTargets();
+
 		for (auto asset : mSelectedPreloadedAssets)
 			delete asset;
 

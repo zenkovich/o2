@@ -136,6 +136,9 @@ namespace o2
 		// Checks value is array
 		bool IsArray() const;
 
+		// Sets data value type as array
+		void SetArray();
+
 		// Returns array elements count
 		int GetElementsCount() const;
 
@@ -185,6 +188,9 @@ namespace o2
 	public: // Object methods		
 		// Checks value is object
 		bool IsObject() const;
+
+		// Sets data value type as object
+		void SetObject();
 
 		// Member access by name. Valid only for object type
 		DataValue& operator[](const DataValue& name);

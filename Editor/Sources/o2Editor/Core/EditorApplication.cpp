@@ -16,19 +16,20 @@
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Utils/Debug/Debug.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/System/Time/Time.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/Core/Actions/IAction.h"
 #include "o2Editor/Core/Actions/PropertyChange.h"
-#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/MenuPanel.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/ToolsPanel.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/UIStyle/EditorUIStyle.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
+#include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
@@ -73,6 +74,7 @@ namespace Editor
 		o2Scene.Clear();
 
 		ResetUndoActions();
+		o2EditorPropertiesWindow.ResetTargets();
 	}
 
 	bool EditorApplication::IsSceneChanged() const

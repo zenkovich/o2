@@ -32,7 +32,7 @@ namespace o2
 	// When editor pragma is enabled, it is derived from SceneEditableObject and support all editor 
 	// features for editing actor
 	// ---------------------------------------------------------------------------------------------
-	class Actor : virtual public ActorBase
+	class Actor: virtual public ActorBase
 	{
 	public:
 		enum class SceneStatus { InScene, NotInScene, WaitingAddToScene };
@@ -383,6 +383,33 @@ namespace o2
 		SERIALIZABLE(Actor);
 
 	protected:
+		struct ICopyVisitor
+		{
+			int depth = 0;
+
+			virtual ~ICopyVisitor() {}
+			virtual void OnCopyActor(const Actor* source, Actor* target) = 0;
+			virtual void OnCopyComponent(const Component* source, Component* target) = 0;
+			virtual void Finalize() {}
+		};
+
+		struct SourceToTargetMapCloneVisitor: public ICopyVisitor
+		{
+			Map<const Actor*, Actor*>         sourceToTargetActors;
+			Map<const Component*, Component*> sourceToTargetComponents;
+
+			void OnCopyActor(const Actor* source, Actor* target) override;
+			void OnCopyComponent(const Component* source, Component* target) override;
+			void Finalize() override;
+		};
+
+		struct InstantiatePrototypeVisitor: SourceToTargetMapCloneVisitor
+		{
+			void OnCopyActor(const Actor* source, Actor* target) override;
+			void OnCopyComponent(const Component* source, Component* target) override;
+		};
+
+	protected:
 		static ActorCreateMode mDefaultCreationMode;   // Default mode creation
 
 		SceneUID mId;   // Unique actor id
@@ -407,19 +434,10 @@ namespace o2
 
 		Vector<ActorRef*> mReferences; // References to this actor
 
-#if IS_EDITOR
-		struct ICopyVisitor
-		{
-			int depth = 0;
-
-			virtual ~ICopyVisitor() {}
-			virtual void OnCopyActor(const Actor* source, Actor* target) = 0;
-			virtual void OnCopyComponent(const Component* source, Component* target) = 0;
-			virtual void Finalize() {}
-		};
-
 		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. It is called when copying actor and calls on actor or component copying
 
+
+#if IS_EDITOR		
 		ActorAssetRef mPrototype;               // Prototype asset
 		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
 
@@ -429,9 +447,9 @@ namespace o2
 
 	protected:
 		// Base actor constructor with transform
-		Actor(ActorTransform* transform, SceneStatus sceneStatus = SceneStatus::WaitingAddToScene, 
+		Actor(ActorTransform* transform, SceneStatus sceneStatus = SceneStatus::WaitingAddToScene,
 			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, bool locked = false,
-			  bool resLocked = false, const String& layerName = "", SceneLayer* layer = nullptr, 
+			  bool resLocked = false, const String& layerName = "", SceneLayer* layer = nullptr,
 			  SceneUID id = Math::Random(), UID assetId = UID(0));
 
 		// Default constructor with transform
@@ -544,16 +562,6 @@ namespace o2
 		virtual void OnComponentRemoving(Component* component);
 
 #if IS_EDITOR
-		struct SourceToTargetMapCloneVisitor: public ICopyVisitor
-		{
-			Map<const Actor*, Actor*>         sourceToTargetActors;
-			Map<const Component*, Component*> sourceToTargetComponents;
-
-			void OnCopyActor(const Actor* source, Actor* target) override;
-			void OnCopyComponent(const Component* source, Component* target) override;
-			void Finalize() override;
-		};
-
 		struct MakePrototypeCloneVisitor: SourceToTargetMapCloneVisitor
 		{
 			void OnCopyActor(const Actor* source, Actor* target) override;

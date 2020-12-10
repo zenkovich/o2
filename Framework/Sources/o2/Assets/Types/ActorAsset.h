@@ -51,6 +51,10 @@ namespace o2
 	protected:
 		Actor* mActor; // Asset data @SERIALIZABLE
 
+	protected:
+		// Completion deserialization callback
+		void OnDeserialized(const DataValue& node) override;
+
 		friend class Assets;
 	};
 
@@ -76,5 +80,6 @@ CLASS_METHODS_META(o2::ActorAsset)
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

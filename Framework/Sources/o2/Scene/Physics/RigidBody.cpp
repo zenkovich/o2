@@ -239,8 +239,11 @@ namespace o2
 
 	void RigidBody::RemoveBody()
 	{
-		PhysicsWorld::Instance().mWorld.DestroyBody(mBody);
-		mBody = nullptr;
+		if (mBody)
+		{
+			PhysicsWorld::Instance().mWorld.DestroyBody(mBody);
+			mBody = nullptr;
+		}
 	}
 
 	void RigidBody::AddCollider(ICollider* collider)

@@ -45,7 +45,7 @@ namespace o2
 		DataValue(other, *other.mDocument)
 	{}
 
-	DataValue::DataValue():
+	DataValue::DataValue() :
 		mData(), mDocument(nullptr)
 	{
 		mData.flagsData.flags = Flags::Null;
@@ -437,16 +437,21 @@ namespace o2
 		return FindMember(DataValue(name));
 	}
 
+	void DataValue::SetObject()
+	{
+		if (IsObject())
+			return;
+
+		mData.flagsData.flags = Flags::Object;
+
+		mData.objectData.members = (DataMember*)mDocument->mAllocator.Allocate(sizeof(DataMember)*ObjectInitialCapacity);
+		mData.objectData.capacity = ObjectInitialCapacity;
+		mData.objectData.count = 0;
+	}
+
 	DataValue& DataValue::AddMember(DataValue& name)
 	{
-		if (!IsObject())
-		{
-			mData.flagsData.flags = Flags::Object;
-
-			mData.objectData.members = (DataMember*)mDocument->mAllocator.Allocate(sizeof(DataMember)*ObjectInitialCapacity);
-			mData.objectData.capacity = ObjectInitialCapacity;
-			mData.objectData.count = 0;
-		}
+		SetObject();
 
 		if (mData.objectData.count == mData.objectData.capacity)
 		{
@@ -490,6 +495,7 @@ namespace o2
 			{
 				*memberIt = *(mData.objectData.members + mData.objectData.count - 1);
 				mData.objectData.count--;
+				break;
 			}
 		}
 	}
@@ -553,6 +559,18 @@ namespace o2
 		return mData.arrayData.elements[idx];
 	}
 
+	void DataValue::SetArray()
+	{
+		if (IsArray())
+			return;
+
+		mData.flagsData.flags = Flags::Array;
+
+		mData.arrayData.elements = (DataValue*)mDocument->mAllocator.Allocate(sizeof(DataValue)*ArrayInitialCapacity);
+		mData.arrayData.capacity = ArrayInitialCapacity;
+		mData.arrayData.count = 0;
+	}
+
 	DataValue& DataValue::AddElement(DataValue& value)
 	{
 		DataValue& newElement = AddElement();
@@ -562,14 +580,7 @@ namespace o2
 
 	DataValue& DataValue::AddElement()
 	{
-		if (!IsArray())
-		{
-			mData.flagsData.flags = Flags::Array;
-
-			mData.arrayData.elements = (DataValue*)mDocument->mAllocator.Allocate(sizeof(DataValue)*ArrayInitialCapacity);
-			mData.arrayData.capacity = ArrayInitialCapacity;
-			mData.arrayData.count = 0;
-		}
+		SetArray();
 
 		if (mData.arrayData.count == mData.arrayData.capacity)
 		{
@@ -695,7 +706,9 @@ namespace o2
 			}
 		};
 
-		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
+		auto& objectType = object.GetType();
+		auto& sourceType = source.GetType();
+		if (!objectType.IsBasedOn(sourceType) && !sourceType.IsBasedOn(objectType))
 			return Set(object);
 
 		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))

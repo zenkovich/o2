@@ -119,7 +119,7 @@ namespace o2
 			auto actor = mComponent->mOwner;
 			if (actor->mIsAsset)
 				node.AddMember("AssetID") = actor->GetAssetID();
-			else if (actor->IsOnScene())
+			else 
 				node.AddMember("ActorID") = actor->GetID();
 
 			node.AddMember("ComponentId") = mComponent->mId;

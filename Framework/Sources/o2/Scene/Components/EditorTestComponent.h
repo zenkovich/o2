@@ -60,7 +60,6 @@ namespace o2
 		ActorAssetRef mActorAsset;			                // @SERIALIZABLE
 		DataAssetRef mDataAsset;                            // @SERIALIZABLE
 		AnimationAssetRef mAnimationAsset;                  // @SERIALIZABLE
-		Sprite spritex;                                     // @SERIALIZABLE
 		Sprite* mSprite = mnew Sprite();                    // @SERIALIZABLE @DONT_DELETE
 		ActorRef mActor;                                    // @SERIALIZABLE
 		TagGroup mTags;                                     // @SERIALIZABLE
@@ -130,7 +129,6 @@ CLASS_FIELDS_META(o2::EditorTestComponent)
 	PUBLIC_FIELD(mActorAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mDataAsset).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mAnimationAsset).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(spritex).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mSprite).DEFAULT_VALUE(mnew Sprite()).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mActor).SERIALIZABLE_ATTRIBUTE();
 	PUBLIC_FIELD(mTags).SERIALIZABLE_ATTRIBUTE();

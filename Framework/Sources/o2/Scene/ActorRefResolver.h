@@ -110,5 +110,7 @@ namespace o2
 		friend class Actor;
 		friend class Component;
 		friend class Scene;
+
+		friend class ActorRef;
 	};
 }

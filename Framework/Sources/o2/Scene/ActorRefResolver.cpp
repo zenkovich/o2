@@ -94,12 +94,18 @@ namespace o2
 		if (!mInstance)
 			return;
 
+		if (!IsLocked())
+			return;
+
 		mInstance->mRemapActorRefs.Add(&ref);
 	}
 
 	void ActorRefResolver::RequireRemap(ComponentRef& ref)
 	{
 		if (!mInstance)
+			return;
+
+		if (!IsLocked())
 			return;
 
 		mInstance->mRemapComponentRefs.Add(&ref);

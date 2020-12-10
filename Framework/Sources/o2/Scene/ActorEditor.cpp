@@ -9,21 +9,6 @@
 
 namespace o2
 {
-	void Actor::SourceToTargetMapCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
-	{
-		sourceToTargetActors[source] = target;
-	}
-
-	void Actor::SourceToTargetMapCloneVisitor::OnCopyComponent(const Component* source, Component* target)
-	{
-		sourceToTargetComponents[source] = target;
-	}
-	
-	void Actor::SourceToTargetMapCloneVisitor::Finalize()
-	{
-		ActorRefResolver::RemapReferences(sourceToTargetActors, sourceToTargetComponents);
-	}
-
 	void Actor::MakePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
 	{
 		SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
@@ -83,26 +68,27 @@ namespace o2
 			transformNode["Shear"] = transform->mData->shear;
 
 		// Children data
-		auto childsNode = node.AddMember("Childs");
+		auto& childsNode = node.AddMember("Children");
+		childsNode.SetArray();
 		for (auto child : mChildren)
 		{
-			auto childNode = childsNode.AddMember("Child");
+			auto& childNode = childsNode.AddElement();
 			childNode.AddMember("Type") = child->GetType().GetName();
 			child->Serialize(childNode.AddMember("Data"));
 		}
 
 		// Components data
-		auto componentsNode = node.AddMember("Components");
+		auto& componentsNode = node.AddMember("Components");
+		componentsNode.SetArray();
 		for (auto component : mComponents)
 		{
-			auto compNode = componentsNode.AddMember("Component");
+			auto& compNode = componentsNode.AddElement();
 			compNode.AddMember("Type") = component->GetType().GetName();
 
 			auto& dataValue = compNode.AddMember("Data");
 			if (auto componentProtoLink = component->mPrototypeLink)
 			{
 				dataValue["PrototypeLink"] = componentProtoLink->mId;
-
 				dataValue.SetValueDelta(*component, *component->mPrototypeLink);
 			}
 			else
@@ -112,16 +98,14 @@ namespace o2
 
 	void Actor::DeserializeWithProto(const DataValue& node)
 	{
-		ActorRefResolver::Instance().LockResolving();
-		ActorRefResolver::Instance().ActorCreated(this);
-
 		RemoveAllChildren();
 		RemoveAllComponents();
 
+		ActorRefResolver::Instance().LockResolving();
+		ActorRefResolver::Instance().ActorCreated(this);
+
 		if (auto prototypeNode = node.FindMember("Prototype"))
-		{
 			SetPrototype(*prototypeNode);
-		}
 
 		if (auto prototypeLinkNode = node.FindMember("PrototypeLink"))
 		{
@@ -154,7 +138,11 @@ namespace o2
 		SetID(node.GetMember("Id"));
 
 		if (!mPrototypeLink)
+		{
+			ActorRefResolver::Instance().UnlockResolving();
+			ActorRefResolver::Instance().ResolveRefs();
 			return;
+		}
 
 		const Actor* proto = mPrototypeLink.Get();
 
@@ -212,12 +200,11 @@ namespace o2
 				transform->mData->shear = proto->transform->mData->shear;
 		}
 
-		RemoveAllChildren();
-
 		// children
-		if (auto childsNode = node.FindMember("Childs"))
+		auto childrenNode = node.FindMember("Children");
+		if (childrenNode && childrenNode->IsArray())
 		{
-			for (auto& childNode : *childsNode)
+			for (auto& childNode : *childrenNode)
 			{
 				const DataValue* typeNode = childNode.FindMember("Type");
 				const DataValue* dataValue = childNode.FindMember("Data");
@@ -227,18 +214,16 @@ namespace o2
 					if (type)
 					{
 						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						child->Deserialize(*dataValue);
-						o2Scene.mRootActors.Remove(child);
 						AddChild(child);
+						child->Deserialize(*dataValue);
 					}
 				}
 			}
 		}
 
-		RemoveAllComponents();
-
 		// components
-		if (auto componentsNode = node.FindMember("Components"))
+		auto componentsNode = node.FindMember("Components");
+		if (componentsNode && componentsNode->IsArray())
 		{
 			for (auto& componentNode : *componentsNode)
 			{
@@ -257,25 +242,13 @@ namespace o2
 						SceneUID id = *prototypeLinkNode;
 						if (mPrototypeLink)
 						{
-							Actor* x = mPrototypeLink.Get();
-							while (x)
+							for (auto protoLinkComponent : mPrototypeLink->mComponents)
 							{
-								bool found = false;
-
-								for (auto protoLinkComponent : x->mComponents)
+								if (protoLinkComponent->mId == id)
 								{
-									if (protoLinkComponent->mId == id)
-									{
-										newComponent->mPrototypeLink = protoLinkComponent;
-										found = true;
-										break;
-									}
-								}
-
-								if (found)
+									newComponent->mPrototypeLink = protoLinkComponent;
 									break;
-
-								x = x->mPrototypeLink.Get();
+								}
 							}
 						}
 
@@ -369,7 +342,7 @@ namespace o2
 	}
 
 	ActorAssetRef Actor::MakePrototype()
-	{		
+	{
 		mCopyVisitor = mnew MakePrototypeCloneVisitor();
 		auto prototype = CloneAs<Actor>();
 
@@ -778,8 +751,10 @@ namespace o2
 			return this;
 
 		for (auto child : mChildren)
+		{
 			if (auto res = child->FindActorById(id))
 				return res;
+		}
 
 		return nullptr;
 	}

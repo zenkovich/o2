@@ -26,6 +26,9 @@ namespace o2
 	{
 		if (mActor)
 			mActor->mReferences.Remove(this);
+
+		if (ActorRefResolver::IsLocked())
+			ActorRefResolver::Instance().mRemapActorRefs.Remove(this);
 	}
 
 	bool ActorRef::operator!=(const ActorRef& other) const

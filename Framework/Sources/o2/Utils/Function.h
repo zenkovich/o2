@@ -411,7 +411,7 @@ namespace o2
 				new (&mData.functions) std::vector<IFunction<_res_type(_args ...)>*>();
 				mData.functions.push_back(firstFunction);
 			}
-			else
+			else if (mData.typeData.type == DataType::Empty)
 				new (&mData.functions) std::vector<IFunction<_res_type(_args ...)>*>();
 
 			mData.typeData.type = DataType::CoupleOfFunctions;

@@ -47,7 +47,17 @@ namespace o2
 		return "proto";
 	}
 
-	Actor* ActorAsset::GetActor() const 
+	void ActorAsset::OnDeserialized(const DataValue& node)
+	{
+		if (mActor)
+		{
+			mActor->RemoveFromScene();
+			mActor->mIsAsset = true;
+			mActor->mAssetId = GetUID();
+		}
+	}
+
+	Actor* ActorAsset::GetActor() const
 	{
 		return mActor;
 	}
