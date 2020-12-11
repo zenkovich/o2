@@ -3,6 +3,7 @@
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ISceneDrawable.h"
+#include "o2/Scene/UI/WidgetState.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
 #include "o2/Utils/Editor/Attributes/DefaultTypeAttribute.h"
 #include "o2/Utils/Editor/Attributes/DontDeleteAttribute.h"
@@ -16,7 +17,6 @@ namespace o2
 	class WidgetLayer;
 	class WidgetLayout;
 	class WidgetLayoutData;
-	class WidgetState;
 
 	// ------------------------------------------------------
 	// Basic UI Widget. Its a simple and basic element of UI, 

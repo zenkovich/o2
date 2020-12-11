@@ -59,13 +59,66 @@ namespace o2
 		ATTRIBUTE_SHORT_DEFINITION("SERIALIZABLE_ATTRIBUTE");
 	};
 
+	class SerializationTypeProcessor
+	{
+		// !!! Remove attributes pointer!!!
+	public:
+		DataValue& node;
+
+	public:
+		SerializationTypeProcessor(DataValue& node):node(node) {}
+
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name)
+		{
+			if constexpr (std::is_base_of<ISerializable, _base_type>::value)
+				object->_base_type::Serialize(node);
+		}
+
+		template<typename _object_type>
+		void StartBases(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartFields(_object_type* object, Type* type) {}
+
+		template<typename _field_type>
+		struct FieldInfo
+		{
+			_field_type* fieldPtr;
+			DataValue&   node;
+			const char*  name;
+
+			FieldInfo(_field_type* fieldPtr, DataValue& node, const char* name):fieldPtr(fieldPtr), node(node), name(name) {}
+
+			template<typename _attribute_type>
+			FieldInfo& AddAttribute(_attribute_type* attribute)
+			{
+				if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
+					node.AddMember(name).Set(*fieldPtr);
+
+				return *this;
+			}
+
+			FieldInfo& SetDefaultValue(const _field_type& val) { return *this; }
+		};
+
+		template<typename _object_type, typename _field_type>
+		FieldInfo<_field_type> Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection)
+		{
+			_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+			return FieldInfo<_field_type>(fieldPtr, node, name);
+		}
+	};
+
 	// Serialization implementation macros
 #define SERIALIZABLE_MAIN(CLASS)  							                                                    \
     IOBJECT_MAIN(CLASS)																							\
                                                                                                                 \
     void Serialize(o2::DataValue& node) const override                                                          \
     {						                                                                                    \
-        SerializeBasic(*this, node);                                                                            \
+		SerializationTypeProcessor p(node);                                                                     \
+		ProcessBaseTypes(const_cast<thisclass*>(this), p);                                                      \
+		ProcessFields(const_cast<thisclass*>(this), p);                                                         \
 	}												                                                            \
     void Deserialize(const o2::DataValue& node) override                                                        \
     {												                                                            \
