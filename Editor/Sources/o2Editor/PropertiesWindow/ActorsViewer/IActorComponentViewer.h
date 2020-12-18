@@ -92,9 +92,9 @@ CLASS_BASES_META(Editor::IActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorComponentViewer)
 {
-	PROTECTED_FIELD(mTargetComponents);
-	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mRemoveButton).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mTargetComponents).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRemoveButton).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)
@@ -119,7 +119,7 @@ END_META;
 META_TEMPLATES(typename _component_type)
 CLASS_FIELDS_META(Editor::TActorComponentViewer<_component_type>)
 {
-	PROTECTED_FIELD(mTargetComponents);
+	FIELD().NAME(mTargetComponents).PROTECTED();
 }
 END_META;
 META_TEMPLATES(typename _component_type)

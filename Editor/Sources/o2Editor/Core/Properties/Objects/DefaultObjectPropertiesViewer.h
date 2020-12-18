@@ -36,9 +36,9 @@ CLASS_BASES_META(Editor::DefaultObjectPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultObjectPropertiesViewer)
 {
-	PROTECTED_FIELD(mRealObjectType).DEFAULT_VALUE(&TypeOf(IObject));
-	PROTECTED_FIELD(mBuiltObjectType).DEFAULT_VALUE(&TypeOf(IObject));
-	PROTECTED_FIELD(mBuiltWithHiddenProperties).DEFAULT_VALUE(false);
+	FIELD().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mRealObjectType).PROTECTED();
+	FIELD().DEFAULT_VALUE(&TypeOf(IObject)).NAME(mBuiltObjectType).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mBuiltWithHiddenProperties).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultObjectPropertiesViewer)

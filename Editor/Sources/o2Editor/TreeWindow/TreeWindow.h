@@ -187,12 +187,12 @@ CLASS_BASES_META(Editor::TreeWindow)
 END_META;
 CLASS_FIELDS_META(Editor::TreeWindow)
 {
-	PROTECTED_FIELD(mListTreeToggle);
-	PROTECTED_FIELD(mSearchEditBox);
-	PROTECTED_FIELD(mSceneTree);
-	PROTECTED_FIELD(mTreeContextMenu);
-	PROTECTED_FIELD(mSearchObjects);
-	PROTECTED_FIELD(mInSearch).DEFAULT_VALUE(false);
+	FIELD().NAME(mListTreeToggle).PROTECTED();
+	FIELD().NAME(mSearchEditBox).PROTECTED();
+	FIELD().NAME(mSceneTree).PROTECTED();
+	FIELD().NAME(mTreeContextMenu).PROTECTED();
+	FIELD().NAME(mSearchObjects).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mInSearch).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::TreeWindow)

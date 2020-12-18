@@ -48,7 +48,7 @@ CLASS_BASES_META(Editor::BooleanProperty)
 END_META;
 CLASS_FIELDS_META(Editor::BooleanProperty)
 {
-	PROTECTED_FIELD(mToggle).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mToggle).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)

@@ -184,7 +184,7 @@ namespace o2
 		friend class FunctionInfo;
 		friend class PointerType;
 		friend class Reflection;
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 		friend class VectorType;
 
 		template<typename _type, typename _accessor_type>
@@ -650,68 +650,6 @@ namespace o2
 
 		friend class Reflection;
 	};
-
-	// ----------------
-	// Type initializer
-	// ----------------
-	class TypeInitializer
-	{
-	public:
-		// Adds basic type
-		template<typename _this_type, typename _base_type, typename X = typename std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type>
-		static void AddBaseType(Type*& type);
-
-		// Registers field in type
-		template<typename _type>
-		static FieldInfo& RegField(Type* type, const String& name, void*(*pointerGetter)(void*), _type& value, ProtectSection section);
-
-		// Registers function in type
-		template<typename _class_type, typename _res_type, typename ... _args>
-		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...), ProtectSection section);
-
-		// Registers function in type
-		template<typename _class_type, typename _res_type, typename ... _args>
-		static FunctionInfo* RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section);
-
-		// Registers static function in type
-		template<typename _class_type, typename _res_type, typename ... _args>
-		static StaticFunctionInfo* RegStaticFunction(Type* type, const String& name, _res_type(*pointer)(_args ...), ProtectSection section);
-	};
-
-	// Here is the sample of type processing class
-	class ITypeProcessor
-	{
-	public:
-		class FieldInfo {};
-		class MethodInfo {};
-
-		template<typename _object_type>
-		void Start(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartBases(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartFields(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartMethods(_object_type* object, Type* type) {}
-
-		template<typename _object_type, typename _base_type>
-		void BaseType(_object_type* object, Type* type, const char* name) {}
-
-		template<typename _object_type, typename _field_type>
-		FieldInfo& Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection) {}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...), ProtectSection protection) {}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		MethodInfo* Method(_object_type* object, Type* type, const char* name, _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection) { }
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		MethodInfo* StaticMethod(_object_type* object, Type* type, const char* name, _res_type(*pointer)(_args ...), ProtectSection protection) { }
-	};
 }
 
 typedef void*(*GetValuePointerFuncPtr)(void*);
@@ -765,23 +703,26 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define BASE_CLASS(CLASS) \
     processor.template BaseType<thisclass, CLASS>(object, type, #CLASS)
 
-#define FIELD(NAME, PROTECT_SECTION) \
-    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::PROTECT_SECTION)
+#define FIELD() \
+    processor.StartField()
 
-#define PUBLIC_FIELD(NAME) \
-    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Public)
+#define NAME(NAME) \
+    template FieldBasics<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME)
 
-#define PRIVATE_FIELD(NAME) \
-    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Private)
+#define PUBLIC() \
+	SetProtectSection(ProtectSection::Public)
 
-#define PROTECTED_FIELD(NAME) \
-    processor.template Field<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME, ProtectSection::Protected)
+#define PRIVATE() \
+	SetProtectSection(ProtectSection::Private)
+
+#define PROTECTED() \
+	SetProtectSection(ProtectSection::Protected)
 
 #define DEFAULT_VALUE \
 	SetDefaultValue
 
 #define ATTRIBUTE(NAME) \
-    AddAttribute(new NAME)
+    AddAttribute<NAME>()
 
 #define ATTRIBUTES(...)
 
@@ -1076,7 +1017,7 @@ namespace o2
 
 		mElementFieldInfo = mnew FieldInfo(this, "element", 0, mElementType, ProtectSection::Private);
 		mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public, 
-										 mnew FieldInfo::DefaultValue<int>(0), 
+										 mnew DefaultValue<int>(0), 
 										 mnew VectorCountFieldSerializer<_element_type>());
 	}
 
@@ -1294,142 +1235,62 @@ namespace o2
 		return mPtrType;
 	}
 
-	// ------------------------------
-	// TypeInitializer implementation
-	// ------------------------------
-
-	template<typename _this_type, typename _base_type, typename X>
-	void TypeInitializer::AddBaseType(Type*& type)
-	{
-		if (std::is_same<X, Type::Dummy>::value)
-			return;
-
-		Type::BaseType baseTypeInfo;
-		baseTypeInfo.type = X::type;
-		baseTypeInfo.dynamicCastUpFunc = &Reflection::CastFunc<_this_type, _base_type>;
-		baseTypeInfo.dynamicCastDownFunc = &Reflection::CastFunc<_base_type, _this_type>;
-
-		type->mBaseTypes.Add(baseTypeInfo);
-	}
-
-	template<typename _type>
-	FieldInfo& TypeInitializer::RegField(Type* type, const String& name, void*(*pointerGetter)(void*), _type& value,
-										 ProtectSection section)
-	{
-		auto valType = &TypeOf(_type);
-		type->mFields.emplace_back(FieldInfo(type, name, pointerGetter, valType, section));
-
-		return type->mFields.Last();
-	}
-
-	template<typename _class_type, typename _res_type, typename ... _args>
-	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name, _res_type(_class_type::*pointer)(_args ...),
-											   ProtectSection section)
-	{
-		auto retType = &TypeOf(_res_type);
-
-		auto funcInfo = mnew SpecFunctionInfo<_class_type, _res_type, _args ...>();
-		funcInfo->mName = name;
-		funcInfo->mFunctionPtr = pointer;
-		funcInfo->mReturnType = retType;
-		funcInfo->mIsContant = false;
-		funcInfo->mProtectSection = section;
-		funcInfo->mOwnerType = type;
-		type->mFunctions.Add(funcInfo);
-
-		return funcInfo;
-	}
-
-	template<typename _class_type, typename _res_type, typename ... _args>
-	FunctionInfo* TypeInitializer::RegFunction(Type* type, const String& name,
-											   _res_type(_class_type::*pointer)(_args ...) const, ProtectSection section)
-	{
-		auto retType = &TypeOf(_res_type);
-
-		auto funcInfo = mnew SpecConstFunctionInfo<_class_type, _res_type, _args ...>();
-		funcInfo->mName = name;
-		funcInfo->mFunctionPtr = pointer;
-		funcInfo->mReturnType = retType;
-		funcInfo->mIsContant = true;
-		funcInfo->mProtectSection = section;
-		funcInfo->mOwnerType = type;
-		type->mFunctions.Add(funcInfo);
-
-		return funcInfo;
-	}
-
-	template<typename _class_type, typename _res_type, typename ... _args>
-	StaticFunctionInfo* TypeInitializer::RegStaticFunction(Type* type, const String& name, _res_type(*pointer)(_args ...), ProtectSection section)
-	{
-		auto retType = &TypeOf(_res_type);
-
-		auto funcInfo = mnew SpecStaticFunctionInfo<_res_type, _args ...>();
-		funcInfo->mName = name;
-		funcInfo->mFunctionPtr = pointer;
-		funcInfo->mReturnType = retType;
-		funcInfo->mProtectSection = section;
-		funcInfo->mOwnerType = type;
-		type->mStaticFunctions.Add(funcInfo);
-
-		return funcInfo;
-	}
-
 	FUNDAMENTAL_META(RectF)
 	{
-		PUBLIC_FIELD(left);
-		PUBLIC_FIELD(right);
-		PUBLIC_FIELD(top);
-		PUBLIC_FIELD(bottom);
+		FIELD().NAME(left).PUBLIC();
+		FIELD().NAME(right).PUBLIC();
+		FIELD().NAME(top).PUBLIC();
+		FIELD().NAME(bottom).PUBLIC();
 	}
 	END_META;
 
 	FUNDAMENTAL_META(RectI)
 	{
-		PUBLIC_FIELD(left);
-		PUBLIC_FIELD(right);
-		PUBLIC_FIELD(top);
-		PUBLIC_FIELD(bottom);
+		FIELD().NAME(left).PUBLIC();
+		FIELD().NAME(right).PUBLIC();
+		FIELD().NAME(top).PUBLIC();
+		FIELD().NAME(bottom).PUBLIC();
 	}
 	END_META;
 
 	FUNDAMENTAL_META(BorderF)
 	{
-		PUBLIC_FIELD(left);
-		PUBLIC_FIELD(right);
-		PUBLIC_FIELD(top);
-		PUBLIC_FIELD(bottom);
+		FIELD().NAME(left).PUBLIC();
+		FIELD().NAME(right).PUBLIC();
+		FIELD().NAME(top).PUBLIC();
+		FIELD().NAME(bottom).PUBLIC();
 	}
 	END_META;
 
 	FUNDAMENTAL_META(BorderI)
 	{
-		PUBLIC_FIELD(left);
-		PUBLIC_FIELD(right);
-		PUBLIC_FIELD(top);
-		PUBLIC_FIELD(bottom);
+		FIELD().NAME(left).PUBLIC();
+		FIELD().NAME(right).PUBLIC();
+		FIELD().NAME(top).PUBLIC();
+		FIELD().NAME(bottom).PUBLIC();
 	}
 	END_META;
 
 	FUNDAMENTAL_META(Vec2F)
 	{
-		PUBLIC_FIELD(x);
-		PUBLIC_FIELD(y);
+		FIELD().NAME(x).PUBLIC();
+		FIELD().NAME(y).PUBLIC();
 	}
 	END_META;
 
 	FUNDAMENTAL_META(Vec2I)
 	{
-		PUBLIC_FIELD(x);
-		PUBLIC_FIELD(y);
+		FIELD().NAME(x).PUBLIC();
+		FIELD().NAME(y).PUBLIC();
 	}
 	END_META;
 
 	FUNDAMENTAL_META(Color4)
 	{
-		PUBLIC_FIELD(r);
-		PUBLIC_FIELD(g);
-		PUBLIC_FIELD(b);
-		PUBLIC_FIELD(a);
+		FIELD().NAME(r).PUBLIC();
+		FIELD().NAME(g).PUBLIC();
+		FIELD().NAME(b).PUBLIC();
+		FIELD().NAME(a).PUBLIC();
 	}
 	END_META;
 

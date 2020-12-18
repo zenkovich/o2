@@ -66,7 +66,7 @@ CLASS_BASES_META(o2::BitmapFontAsset)
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset)
 {
-	PUBLIC_FIELD(meta);
+	FIELD().NAME(meta).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::BitmapFontAsset)

@@ -752,11 +752,11 @@ namespace Editor
 		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		sample->SetHighlightLayout(Layout::BothStretch());
 		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
-			Hide().Scale(1.5f).Then().
-			Wait(0.3f).Then().
-			Show().Scale(1.0f).For(0.2f).Then().
-			Wait(1.0f).Then().
-			Hide().For(0.2f));
+									  Hide().Scale(1.5f).Then().
+									  Wait(0.3f).Then().
+									  Show().Scale(1.0f).For(0.2f).Then().
+									  Wait(1.0f).Then().
+									  Hide().For(0.2f));
 
 		// node sample
 		TreeNode* itemSample = sample->GetNodeSample();
@@ -4639,7 +4639,7 @@ namespace Editor
 			o2Debug.Log(func->GetName() + " for " + (String)time + " sec");
 		}
 
-		if (saveStyle)
+		if (saveStyle || true)
 		{
 			DataDocument newStylesData;
 			o2UI.SaveStyle(newStylesData["styles"]);

@@ -355,10 +355,13 @@ SyntaxVariable* CppSyntaxParser::ParseVariable(const string& data, SyntaxProtect
 
 		int tmpCaret = 0;
 		string bracesFirst = ReadWord(braces, tmpCaret);
-		tmpCaret += 3;
-		res->mName = braces.substr(tmpCaret);
+		if (braces[tmpCaret] == '*')
+		{
+			tmpCaret += 3;
+			res->mName = braces.substr(tmpCaret);
 
-		res->mType.mName += " (" + bracesFirst + "*)(" + nextBraces + ")";
+			res->mType.mName += " (" + bracesFirst + "*)(" + nextBraces + ")";
+		}
 	}
 	else
 	{

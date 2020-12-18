@@ -191,11 +191,11 @@ CLASS_BASES_META(Editor::AnimationPropertiesTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
-	PRIVATE_FIELD(mFilterStr);
-	PRIVATE_FIELD(mAnimation).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mActor);
-	PRIVATE_FIELD(mRoot);
-	PRIVATE_FIELD(mPassedObject);
+	FIELD().NAME(mFilterStr).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimation).PRIVATE();
+	FIELD().NAME(mActor).PRIVATE();
+	FIELD().NAME(mRoot).PRIVATE();
+	FIELD().NAME(mPassedObject).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTree)
@@ -227,12 +227,12 @@ CLASS_BASES_META(Editor::AnimationPropertiesTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
 {
-	PRIVATE_FIELD(mName);
-	PRIVATE_FIELD(mIcon);
-	PRIVATE_FIELD(mAddButton);
-	PRIVATE_FIELD(mRemoveButton);
-	PRIVATE_FIELD(mData).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mTree).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mName).PRIVATE();
+	FIELD().NAME(mIcon).PRIVATE();
+	FIELD().NAME(mAddButton).PRIVATE();
+	FIELD().NAME(mRemoveButton).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mData).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTree).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)

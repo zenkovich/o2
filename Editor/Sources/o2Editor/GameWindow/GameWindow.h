@@ -106,13 +106,13 @@ CLASS_BASES_META(Editor::GameWindow)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow)
 {
-	PROTECTED_FIELD(mGameView).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mResolutionsButton).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mDevicesList);
-	PROTECTED_FIELD(mDevicesMenu).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCurrentWindowSizeItem).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCustomSizeItem).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCustomSizeProperty).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mGameView).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mResolutionsButton).PROTECTED();
+	FIELD().NAME(mDevicesList).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDevicesMenu).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentWindowSizeItem).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCustomSizeItem).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCustomSizeProperty).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow)
@@ -135,10 +135,10 @@ CLASS_BASES_META(Editor::GameWindow::GameView)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::GameView)
 {
-	PUBLIC_FIELD(fixedResolution).DEFAULT_VALUE(true);
-	PUBLIC_FIELD(resolution);
-	PROTECTED_FIELD(mRenderTargetSprite).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mRenderTarget);
+	FIELD().DEFAULT_VALUE(true).NAME(fixedResolution).PUBLIC();
+	FIELD().NAME(resolution).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite).PROTECTED();
+	FIELD().NAME(mRenderTarget).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)
@@ -157,8 +157,8 @@ CLASS_BASES_META(Editor::GameWindow::SimulationDevice)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::SimulationDevice)
 {
-	PUBLIC_FIELD(deviceName).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(resolution).SERIALIZABLE_ATTRIBUTE();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(deviceName).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(resolution).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::SimulationDevice)

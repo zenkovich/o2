@@ -70,9 +70,9 @@ CLASS_BASES_META(Editor::AnimationAddKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationAddKeysAction)
 {
-	PROTECTED_FIELD(mKeys);
-	PROTECTED_FIELD(mKeysData);
-	PROTECTED_FIELD(mEditor);
+	FIELD().NAME(mKeys).PROTECTED();
+	FIELD().NAME(mKeysData).PROTECTED();
+	FIELD().NAME(mEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationAddKeysAction)
@@ -91,9 +91,9 @@ CLASS_BASES_META(Editor::AnimationDeleteKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationDeleteKeysAction)
 {
-	PROTECTED_FIELD(mKeys);
-	PROTECTED_FIELD(mKeysData);
-	PROTECTED_FIELD(mEditor);
+	FIELD().NAME(mKeys).PROTECTED();
+	FIELD().NAME(mKeysData).PROTECTED();
+	FIELD().NAME(mEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationDeleteKeysAction)
@@ -112,10 +112,10 @@ CLASS_BASES_META(Editor::AnimationKeysChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeysChangeAction)
 {
-	PROTECTED_FIELD(mKeys);
-	PROTECTED_FIELD(mBeforeKeysData);
-	PROTECTED_FIELD(mAfterKeysData);
-	PROTECTED_FIELD(mEditor);
+	FIELD().NAME(mKeys).PROTECTED();
+	FIELD().NAME(mBeforeKeysData).PROTECTED();
+	FIELD().NAME(mAfterKeysData).PROTECTED();
+	FIELD().NAME(mEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeysChangeAction)

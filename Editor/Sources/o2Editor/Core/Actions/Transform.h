@@ -68,9 +68,9 @@ CLASS_BASES_META(Editor::TransformAction)
 END_META;
 CLASS_FIELDS_META(Editor::TransformAction)
 {
-	PUBLIC_FIELD(objectsIds);
-	PUBLIC_FIELD(beforeTransforms);
-	PUBLIC_FIELD(doneTransforms);
+	FIELD().NAME(objectsIds).PUBLIC();
+	FIELD().NAME(beforeTransforms).PUBLIC();
+	FIELD().NAME(doneTransforms).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::TransformAction)

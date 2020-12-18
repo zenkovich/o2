@@ -113,11 +113,11 @@ CLASS_BASES_META(Editor::AssetIcon)
 END_META;
 CLASS_FIELDS_META(Editor::AssetIcon)
 {
-	PUBLIC_FIELD(assetName);
-	PROTECTED_FIELD(mNameText).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAssetInfo);
-	PROTECTED_FIELD(mSelectedState).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mOwner).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(assetName).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameText).PROTECTED();
+	FIELD().NAME(mAssetInfo).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectedState).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwner).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetIcon)

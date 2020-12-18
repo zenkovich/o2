@@ -170,18 +170,18 @@ CLASS_BASES_META(Editor::AssetsWindow)
 END_META;
 CLASS_FIELDS_META(Editor::AssetsWindow)
 {
-	PROTECTED_FIELD(mFoldersTreeShowCoef);
-	PROTECTED_FIELD(mFilterButton);
-	PROTECTED_FIELD(mSearchEditBox);
-	PROTECTED_FIELD(mSelectedAssetPathLabel);
-	PROTECTED_FIELD(mFoldersTree);
-	PROTECTED_FIELD(mFoldersTreeShowAnim);
-	PROTECTED_FIELD(mFoldersTreeVisible);
-	PROTECTED_FIELD(mAssetsGridScroll);
-	PROTECTED_FIELD(mAssetsTree);
-	PROTECTED_FIELD(mSeparatorHandle);
-	PROTECTED_FIELD(mSeparatorCoef);
-	PROTECTED_FIELD(mCuttingAssets);
+	FIELD().NAME(mFoldersTreeShowCoef).PROTECTED();
+	FIELD().NAME(mFilterButton).PROTECTED();
+	FIELD().NAME(mSearchEditBox).PROTECTED();
+	FIELD().NAME(mSelectedAssetPathLabel).PROTECTED();
+	FIELD().NAME(mFoldersTree).PROTECTED();
+	FIELD().NAME(mFoldersTreeShowAnim).PROTECTED();
+	FIELD().NAME(mFoldersTreeVisible).PROTECTED();
+	FIELD().NAME(mAssetsGridScroll).PROTECTED();
+	FIELD().NAME(mAssetsTree).PROTECTED();
+	FIELD().NAME(mSeparatorHandle).PROTECTED();
+	FIELD().NAME(mSeparatorCoef).PROTECTED();
+	FIELD().NAME(mCuttingAssets).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetsWindow)

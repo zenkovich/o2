@@ -183,7 +183,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartFields<_thisType>(object, type);
 
-			PROTECTED_FIELD(mSpecAssetPtr);
+			FIELD().NAME(mSpecAssetPtr).PUBLIC();
 		}
 
 		template<typename _type_processor>
@@ -213,9 +213,9 @@ CLASS_BASES_META(o2::AssetRef)
 END_META;
 CLASS_FIELDS_META(o2::AssetRef)
 {
-	PROTECTED_FIELD(mAssetOwner).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mRefCounter).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAssetPtr).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(false).NAME(mAssetOwner).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRefCounter).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetPtr).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::AssetRef)

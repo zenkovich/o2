@@ -62,11 +62,11 @@ CLASS_BASES_META(Editor::DefaultWidgetLayerHeaderViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
-	PUBLIC_FIELD(mLayers);
-	PUBLIC_FIELD(mDataView).DEFAULT_VALUE(nullptr);
-	PUBLIC_FIELD(mEnableProperty).DEFAULT_VALUE(nullptr);
-	PUBLIC_FIELD(mNameProperty).DEFAULT_VALUE(nullptr);
-	PUBLIC_FIELD(mLockProperty).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mLayers).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDataView).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnableProperty).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameProperty).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLockProperty).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)

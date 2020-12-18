@@ -112,9 +112,9 @@ CLASS_BASES_META(Editor::ComponentProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentProperty)
 {
-	PROTECTED_FIELD(mComponentType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mBox).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mNameText).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mComponentType).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mBox).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameText).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentProperty)

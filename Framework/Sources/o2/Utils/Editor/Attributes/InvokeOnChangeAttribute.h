@@ -19,5 +19,5 @@ namespace o2
 	};
 
 #define INVOKE_ON_CHANGE_ATTRIBUTE(methodName) \
-    AddAttribute(new InvokeOnChangeAttribute(#methodName))
+    AddAttribute<InvokeOnChangeAttribute>(#methodName)
 }

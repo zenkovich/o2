@@ -56,7 +56,7 @@ CLASS_BASES_META(o2::IAssetConverter)
 END_META;
 CLASS_FIELDS_META(o2::IAssetConverter)
 {
-	PROTECTED_FIELD(mAssetsBuilder).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetsBuilder).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::IAssetConverter)

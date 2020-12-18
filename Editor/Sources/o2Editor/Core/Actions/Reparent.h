@@ -68,9 +68,9 @@ CLASS_BASES_META(Editor::ReparentAction)
 END_META;
 CLASS_FIELDS_META(Editor::ReparentAction)
 {
-	PUBLIC_FIELD(objectsInfos);
-	PUBLIC_FIELD(newParentId);
-	PUBLIC_FIELD(newPrevObjectId);
+	FIELD().NAME(objectsInfos).PUBLIC();
+	FIELD().NAME(newParentId).PUBLIC();
+	FIELD().NAME(newPrevObjectId).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::ReparentAction)

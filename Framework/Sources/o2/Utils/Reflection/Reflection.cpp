@@ -125,4 +125,9 @@ namespace o2
 		mInstance->mTypes[FundamentalTypeContainer<void>::type->GetName()] = FundamentalTypeContainer<void>::type;
 		mInstance->mTypes[Type::Dummy::type->GetName()] = Type::Dummy::type;
 	}
+
+	ReflectionInitializationTypeProcessor::FieldProcessor ReflectionInitializationTypeProcessor::StartField()
+	{
+		return FieldProcessor();
+	}
 }

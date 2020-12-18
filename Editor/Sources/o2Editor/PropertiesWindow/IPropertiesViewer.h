@@ -60,7 +60,7 @@ CLASS_BASES_META(Editor::IPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IPropertiesViewer)
 {
-	PROTECTED_FIELD(mContentWidget);
+	FIELD().NAME(mContentWidget).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IPropertiesViewer)

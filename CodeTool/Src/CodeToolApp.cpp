@@ -752,7 +752,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 	for (auto x : cls->GetVariables())
 	{
-		if (x->IsStatic())
+		if (x->IsStatic() || x->GetName().empty())
 			continue;
 
 		// try search comment
@@ -761,70 +761,22 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		if (synComment && synComment->GetData().find("@IGNORE") != string::npos)
 			continue;
 
-		if (x->GetClassSection() == SyntaxProtectionSection::Public)
-			res += "\tPUBLIC_FIELD(" + x->GetName() + ")";
-		else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-			res += "\tPRIVATE_FIELD(" + x->GetName() + ")";
-		else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-			res += "\tPROTECTED_FIELD(" + x->GetName() + ")";
+		res += "\tFIELD()";
+
+		res += GetFieldAttributes(cls, x, synComment);
 
 		if (!x->GetDefaultValue().empty() && x->GetDefaultValue().find("this") == string::npos)
 			res += ".DEFAULT_VALUE(" + x->GetDefaultValue() + ")";
 
-		// attributes
-		string attributes = "";
+		res += ".NAME(" + x->GetName() + ")";
 
-		// try attributes section
-		SyntaxAttributes* synAttributes = nullptr;
-		for (auto attr : cls->GetAttributes())
-		{
-			if (attr->GetLine() == x->GetLine() - 1)
-			{
-				synAttributes = attr;
-				break;
-			}
-		}
+		if (x->GetClassSection() == SyntaxProtectionSection::Public)
+			res += ".PUBLIC();\n";
+		else if (x->GetClassSection() == SyntaxProtectionSection::Private)
+			res += ".PRIVATE();\n";
+		else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
+			res += ".PROTECTED();\n";
 
-		if (synAttributes)
-		{
-			for (auto& attributeEntry : synAttributes->GetAttributesList())
-			{
-				SyntaxClass* attributeClass = dynamic_cast<SyntaxClass*>(mCache.FindSection(attributeEntry, cls));
-				if (attributeClass)
-				{
-					if (!attributeClass->GetAttributeShortDef().empty())
-						attributes += string(".") + attributeClass->GetAttributeShortDef();
-					else
-						attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + ")";
-				}
-				else attributes += string(".ATTRIBUTE(") + attributeEntry + ")";
-			}
-		}
-
-		if (synComment)
-		{
-			for (auto attributeClass : mCache.attributes)
-			{
-				auto fnd = synComment->GetData().find(attributeClass->GetAttributeCommentDef());
-				if (!attributeClass->GetAttributeCommentDef().empty() && fnd != string::npos)
-				{
-					string parameters = "()";
-					auto parametersBegin = fnd + attributeClass->GetAttributeCommentDef().length();
-					if (synComment->GetData()[parametersBegin] == '(')
-					{
-						auto parametersEnd = synComment->GetData().find(')', parametersBegin) + 1;
-						parameters = synComment->GetData().substr(parametersBegin, parametersEnd - parametersBegin);
-					}
-
-					if (!attributeClass->GetAttributeShortDef().empty())
-						attributes += string(".") + attributeClass->GetAttributeShortDef() + parameters;
-					else
-						attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + parameters + ")";
-				}
-			}
-		}
-
-		res += attributes + ";\n";
 	}
 	res += "}\nEND_META;\n";
 
@@ -909,6 +861,62 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	res += "}\nEND_META;\n";
 
 	return res;
+}
+
+string CodeToolApplication::GetFieldAttributes(SyntaxClass* cls, SyntaxVariable* x, SyntaxComment* synComment)
+{
+	string attributes;
+
+	SyntaxAttributes* synAttributes = nullptr;
+	for (auto attr : cls->GetAttributes())
+	{
+		if (attr->GetLine() == x->GetLine() - 1)
+		{
+			synAttributes = attr;
+			break;
+		}
+	}
+
+	if (synAttributes)
+	{
+		for (auto& attributeEntry : synAttributes->GetAttributesList())
+		{
+			SyntaxClass* attributeClass = dynamic_cast<SyntaxClass*>(mCache.FindSection(attributeEntry, cls));
+			if (attributeClass)
+			{
+				if (!attributeClass->GetAttributeShortDef().empty())
+					attributes += string(".") + attributeClass->GetAttributeShortDef();
+				else
+					attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + ")";
+			}
+			else attributes += string(".ATTRIBUTE(") + attributeEntry + ")";
+		}
+	}
+
+	if (synComment)
+	{
+		for (auto attributeClass : mCache.attributes)
+		{
+			auto fnd = synComment->GetData().find(attributeClass->GetAttributeCommentDef());
+			if (!attributeClass->GetAttributeCommentDef().empty() && fnd != string::npos)
+			{
+				string parameters = "()";
+				auto parametersBegin = fnd + attributeClass->GetAttributeCommentDef().length();
+				if (synComment->GetData()[parametersBegin] == '(')
+				{
+					auto parametersEnd = synComment->GetData().find(')', parametersBegin) + 1;
+					parameters = synComment->GetData().substr(parametersBegin, parametersEnd - parametersBegin);
+				}
+
+				if (!attributeClass->GetAttributeShortDef().empty())
+					attributes += string(".") + attributeClass->GetAttributeShortDef() + parameters;
+				else
+					attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + parameters + ")";
+			}
+		}
+	}		
+
+	return attributes;
 }
 
 string CodeToolApplication::GetEnumMeta(SyntaxEnum* enm)

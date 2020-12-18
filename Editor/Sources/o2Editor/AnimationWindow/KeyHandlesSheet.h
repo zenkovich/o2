@@ -227,25 +227,25 @@ CLASS_BASES_META(Editor::KeyHandlesSheet)
 END_META;
 CLASS_FIELDS_META(Editor::KeyHandlesSheet)
 {
-	PRIVATE_FIELD(mSelectionFrameOffsets).DEFAULT_VALUE(RectF(-9, -3, 5, 2));
-	PRIVATE_FIELD(mSelectionFrameCursorOffsets).DEFAULT_VALUE(RectF(-2, -3, 2, 2));
-	PRIVATE_FIELD(mAnimationWindow).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mTrackControls);
-	PRIVATE_FIELD(mTrackControlsMap);
-	PRIVATE_FIELD(mHandlesGroups);
-	PRIVATE_FIELD(mContextMenu).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mContextMenuPressPoint);
-	PRIVATE_FIELD(mNeedUpdateSelectionFrame).DEFAULT_VALUE(false);
-	PRIVATE_FIELD(mHandleHasMoved).DEFAULT_VALUE(false);
-	PRIVATE_FIELD(mSelectionFrame).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mSelectionRect);
-	PRIVATE_FIELD(mBeginSelectPoint);
-	PRIVATE_FIELD(mIsFrameSelecting).DEFAULT_VALUE(false);
-	PRIVATE_FIELD(mBeginSelectHandles);
-	PRIVATE_FIELD(mLeftFrameDragHandle);
-	PRIVATE_FIELD(mRightFrameDragHandle);
-	PRIVATE_FIELD(mCenterFrameDragHandle);
-	PRIVATE_FIELD(mBeforeChangeKeysData);
+	FIELD().DEFAULT_VALUE(RectF(-9, -3, 5, 2)).NAME(mSelectionFrameOffsets).PRIVATE();
+	FIELD().DEFAULT_VALUE(RectF(-2, -3, 2, 2)).NAME(mSelectionFrameCursorOffsets).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow).PRIVATE();
+	FIELD().NAME(mTrackControls).PRIVATE();
+	FIELD().NAME(mTrackControlsMap).PRIVATE();
+	FIELD().NAME(mHandlesGroups).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mContextMenu).PRIVATE();
+	FIELD().NAME(mContextMenuPressPoint).PRIVATE();
+	FIELD().DEFAULT_VALUE(false).NAME(mNeedUpdateSelectionFrame).PRIVATE();
+	FIELD().DEFAULT_VALUE(false).NAME(mHandleHasMoved).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectionFrame).PRIVATE();
+	FIELD().NAME(mSelectionRect).PRIVATE();
+	FIELD().NAME(mBeginSelectPoint).PRIVATE();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsFrameSelecting).PRIVATE();
+	FIELD().NAME(mBeginSelectHandles).PRIVATE();
+	FIELD().NAME(mLeftFrameDragHandle).PRIVATE();
+	FIELD().NAME(mRightFrameDragHandle).PRIVATE();
+	FIELD().NAME(mCenterFrameDragHandle).PRIVATE();
+	FIELD().NAME(mBeforeChangeKeysData).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::KeyHandlesSheet)

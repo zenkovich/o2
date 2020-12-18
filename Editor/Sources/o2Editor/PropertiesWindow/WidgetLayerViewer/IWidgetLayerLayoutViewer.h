@@ -58,7 +58,7 @@ CLASS_BASES_META(Editor::IWidgetLayerLayoutViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerLayoutViewer)
 {
-	PROTECTED_FIELD(mSpoiler);
+	FIELD().NAME(mSpoiler).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerLayoutViewer)

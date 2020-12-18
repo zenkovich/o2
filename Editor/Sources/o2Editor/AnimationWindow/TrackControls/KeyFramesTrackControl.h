@@ -496,20 +496,20 @@ END_META;
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
-	PRIVATE_FIELD(mHandles);
-	PRIVATE_FIELD(mTrackPath);
-	PRIVATE_FIELD(mTreeControls).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mPropertyField);
-	PRIVATE_FIELD(mPropertyValue).DEFAULT_VALUE(TrackValueType());
-	PRIVATE_FIELD(mPropertyValueProxy);
-	PRIVATE_FIELD(mAddKeyDotButton).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mAddKeyButton).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mLastValue).DEFAULT_VALUE(TrackValueType());
-	PRIVATE_FIELD(mTrack).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mPlayer).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mTimeline).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mHandlesSheet).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mDisableHandlesUpdate).DEFAULT_VALUE(false);
+	FIELD().NAME(mHandles).PRIVATE();
+	FIELD().NAME(mTrackPath).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTreeControls).PRIVATE();
+	FIELD().NAME(mPropertyField).PRIVATE();
+	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue).PRIVATE();
+	FIELD().NAME(mPropertyValueProxy).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton).PRIVATE();
+	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPlayer).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeline).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet).PRIVATE();
+	FIELD().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate).PRIVATE();
 }
 END_META;
 META_TEMPLATES(typename AnimationTrackType)

@@ -443,47 +443,47 @@ CLASS_BASES_META(o2::DragHandle)
 END_META;
 CLASS_FIELDS_META(o2::DragHandle)
 {
-	PUBLIC_FIELD(angle);
-	PUBLIC_FIELD(position);
-	PUBLIC_FIELD(enabled);
-	PUBLIC_FIELD(selected);
-	PUBLIC_FIELD(cursorType).DEFAULT_VALUE(CursorType::Arrow);
-	PUBLIC_FIELD(pixelPerfect).DEFAULT_VALUE(true);
-	PUBLIC_FIELD(snappingKey).DEFAULT_VALUE(VK_CONTROL);
-	PUBLIC_FIELD(onChangedPos);
-	PUBLIC_FIELD(onPressed);
-	PUBLIC_FIELD(onReleased);
-	PUBLIC_FIELD(onBeganDragging);
-	PUBLIC_FIELD(onChangeCompleted);
-	PUBLIC_FIELD(isPointInside);
-	PUBLIC_FIELD(screenToLocalTransformFunc);
-	PUBLIC_FIELD(localToScreenTransformFunc);
-	PUBLIC_FIELD(checkPositionFunc);
-	PUBLIC_FIELD(checkSnappingFunc);
-	PUBLIC_FIELD(onRightButtonPressed);
-	PUBLIC_FIELD(onRightButtonReleased);
-	PROTECTED_FIELD(mRegularSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHoverSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mPressedSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectedSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectedHoverSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelectedPressedSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mEnabled).DEFAULT_VALUE(true);
-	PROTECTED_FIELD(mPosition);
-	PROTECTED_FIELD(mScreenPosition);
-	PROTECTED_FIELD(mLastDrawnScreenPosition);
-	PROTECTED_FIELD(mLastScreenPosUpdateFrame).DEFAULT_VALUE(-1);
-	PROTECTED_FIELD(mAngle).DEFAULT_VALUE(0.0f);
-	PROTECTED_FIELD(mDragOffset);
-	PROTECTED_FIELD(mDragPosition);
-	PROTECTED_FIELD(mDragBeginPosition);
-	PROTECTED_FIELD(mPressedCursorId);
-	PROTECTED_FIELD(mPressedCursorPos);
-	PROTECTED_FIELD(mIsDragging).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mIsHovered).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mIsSelected).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mSelectGroup).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mDragDistanceThreshold).DEFAULT_VALUE(3.0f);
+	FIELD().NAME(angle).PUBLIC();
+	FIELD().NAME(position).PUBLIC();
+	FIELD().NAME(enabled).PUBLIC();
+	FIELD().NAME(selected).PUBLIC();
+	FIELD().DEFAULT_VALUE(CursorType::Arrow).NAME(cursorType).PUBLIC();
+	FIELD().DEFAULT_VALUE(true).NAME(pixelPerfect).PUBLIC();
+	FIELD().DEFAULT_VALUE(VK_CONTROL).NAME(snappingKey).PUBLIC();
+	FIELD().NAME(onChangedPos).PUBLIC();
+	FIELD().NAME(onPressed).PUBLIC();
+	FIELD().NAME(onReleased).PUBLIC();
+	FIELD().NAME(onBeganDragging).PUBLIC();
+	FIELD().NAME(onChangeCompleted).PUBLIC();
+	FIELD().NAME(isPointInside).PUBLIC();
+	FIELD().NAME(screenToLocalTransformFunc).PUBLIC();
+	FIELD().NAME(localToScreenTransformFunc).PUBLIC();
+	FIELD().NAME(checkPositionFunc).PUBLIC();
+	FIELD().NAME(checkSnappingFunc).PUBLIC();
+	FIELD().NAME(onRightButtonPressed).PUBLIC();
+	FIELD().NAME(onRightButtonReleased).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mRegularSprite).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHoverSprite).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mPressedSprite).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedSprite).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedHoverSprite).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectedPressedSprite).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mEnabled).PROTECTED();
+	FIELD().NAME(mPosition).PROTECTED();
+	FIELD().NAME(mScreenPosition).PROTECTED();
+	FIELD().NAME(mLastDrawnScreenPosition).PROTECTED();
+	FIELD().DEFAULT_VALUE(-1).NAME(mLastScreenPosUpdateFrame).PROTECTED();
+	FIELD().DEFAULT_VALUE(0.0f).NAME(mAngle).PROTECTED();
+	FIELD().NAME(mDragOffset).PROTECTED();
+	FIELD().NAME(mDragPosition).PROTECTED();
+	FIELD().NAME(mDragBeginPosition).PROTECTED();
+	FIELD().NAME(mPressedCursorId).PROTECTED();
+	FIELD().NAME(mPressedCursorPos).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsDragging).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsHovered).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsSelected).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectGroup).PROTECTED();
+	FIELD().DEFAULT_VALUE(3.0f).NAME(mDragDistanceThreshold).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::DragHandle)
@@ -553,9 +553,9 @@ CLASS_BASES_META(o2::WidgetDragHandle)
 END_META;
 CLASS_FIELDS_META(o2::WidgetDragHandle)
 {
-	PUBLIC_FIELD(widgetOffsetToLocalTransformFunc);
-	PUBLIC_FIELD(localToWidgetOffsetTransformFunc);
-	PUBLIC_FIELD(onLayoutUpdated);
+	FIELD().NAME(widgetOffsetToLocalTransformFunc).PUBLIC();
+	FIELD().NAME(localToWidgetOffsetTransformFunc).PUBLIC();
+	FIELD().NAME(onLayoutUpdated).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetDragHandle)

@@ -12,5 +12,5 @@ namespace o2
 	};
 
 #define NO_HEADER_ATTRIBUTE() \
-    AddAttribute(new NoHeaderAttribute())
+    AddAttribute<NoHeaderAttribute>()
 }

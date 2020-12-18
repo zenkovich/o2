@@ -19,8 +19,8 @@ namespace o2
 	};
 
 #define EDITOR_IGNORE_ATTRIBUTE() \
-    AddAttribute(new IgnoreEditorPropertyAttribute())
+    AddAttribute<IgnoreEditorPropertyAttribute>()
 
 #define EDITOR_PROPERTY_ATTRIBUTE() \
-    AddAttribute(new EditorPropertyAttribute())
+    AddAttribute<EditorPropertyAttribute>()
 }

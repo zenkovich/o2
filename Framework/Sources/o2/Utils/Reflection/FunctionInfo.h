@@ -56,7 +56,7 @@ namespace o2
 		Vector<Parameter> mParameters;     // Function parameters list
 
 		friend class Type;
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 	};
 
 	// ----------------------------
@@ -82,7 +82,7 @@ namespace o2
 		bool mIsContant; // Is function constant
 
 		friend class Type;
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 	};
 
 	// ---------------------------
@@ -100,7 +100,7 @@ namespace o2
 
 	protected:
 		friend class Type;
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 	};
 
 	// ----------------------------------
@@ -134,7 +134,7 @@ namespace o2
 	private:
 		_res_type(*mFunctionPtr)(_args ... args); // Pointer to static function
 
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 	};
 
 	// -------------------------------
@@ -160,7 +160,7 @@ namespace o2
 	protected:
 		_res_type(_class_type::*mFunctionPtr)(_args ... args);
 
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 	};
 
 	// ----------------------------------------
@@ -186,7 +186,7 @@ namespace o2
 	protected:
 		_res_type(_class_type::*mFunctionPtr)(_args ... args) const;
 
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 	};
 	
 	template<typename _res_type, typename ... _args>

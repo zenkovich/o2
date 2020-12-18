@@ -43,8 +43,8 @@ CLASS_BASES_META(Editor::DefaultPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultPropertiesViewer)
 {
-	PROTECTED_FIELD(mViewer);
-	PROTECTED_FIELD(mTargets);
+	FIELD().NAME(mViewer).PROTECTED();
+	FIELD().NAME(mTargets).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultPropertiesViewer)

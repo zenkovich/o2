@@ -152,6 +152,9 @@ protected:
 	// Returns class reflection meta
 	string GetClassMeta(SyntaxClass* cls);
 
+	// Returns class field attributes
+	string GetFieldAttributes(SyntaxClass* cls, SyntaxVariable * x, SyntaxComment* synComment);
+
 	// Return enum reflection meta
 	string GetEnumMeta(SyntaxEnum* enm);
 

@@ -459,32 +459,32 @@ CLASS_BASES_META(Editor::CurvesEditor)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor)
 {
-	PUBLIC_FIELD(actionsListDelegate).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mContextMenu).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mMainHandleSample).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSupportHandleSample).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHandleSamplesStubInfo);
-	PROTECTED_FIELD(mCurves);
-	PROTECTED_FIELD(mRanges);
-	PROTECTED_FIELD(mSupportHandles);
-	PROTECTED_FIELD(mSupportHandlesGroup);
-	PROTECTED_FIELD(mSelectingHandlesBuf);
-	PROTECTED_FIELD(mSelectionSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mAdjustCurvesScale).DEFAULT_VALUE(true);
-	PROTECTED_FIELD(mTextFont).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mTextLeft).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTextRight).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTextTop).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTextBottom).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTextBorder);
-	PROTECTED_FIELD(mSelectingPressedPoint);
-	PROTECTED_FIELD(mTransformFrame);
-	PROTECTED_FIELD(mTransformFrameVisible).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mTransformFrameBasis);
-	PROTECTED_FIELD(mIsViewScrolling).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mNeedAdjustView).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mBeforeTransformKeys);
-	PROTECTED_FIELD(mActionsList);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(actionsListDelegate).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mContextMenu).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mMainHandleSample).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mSupportHandleSample).PROTECTED();
+	FIELD().NAME(mHandleSamplesStubInfo).PROTECTED();
+	FIELD().NAME(mCurves).PROTECTED();
+	FIELD().NAME(mRanges).PROTECTED();
+	FIELD().NAME(mSupportHandles).PROTECTED();
+	FIELD().NAME(mSupportHandlesGroup).PROTECTED();
+	FIELD().NAME(mSelectingHandlesBuf).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mAdjustCurvesScale).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mTextFont).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTextLeft).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTextRight).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTextTop).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTextBottom).PROTECTED();
+	FIELD().NAME(mTextBorder).PROTECTED();
+	FIELD().NAME(mSelectingPressedPoint).PROTECTED();
+	FIELD().NAME(mTransformFrame).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mTransformFrameVisible).PROTECTED();
+	FIELD().NAME(mTransformFrameBasis).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsViewScrolling).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mNeedAdjustView).PROTECTED();
+	FIELD().NAME(mBeforeTransformKeys).PROTECTED();
+	FIELD().NAME(mActionsList).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor)
@@ -577,7 +577,7 @@ CLASS_BASES_META(Editor::CurvesEditor::CurveHandle)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor::CurveHandle)
 {
-	PROTECTED_FIELD(curveInfo).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(curveInfo).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveHandle)
@@ -598,8 +598,8 @@ CLASS_BASES_META(Editor::CurvesEditor::CurveCopyInfo)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesEditor::CurveCopyInfo)
 {
-	PUBLIC_FIELD(curveId).SERIALIZABLE_ATTRIBUTE();
-	PUBLIC_FIELD(keys).SERIALIZABLE_ATTRIBUTE();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(curveId).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(keys).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveCopyInfo)

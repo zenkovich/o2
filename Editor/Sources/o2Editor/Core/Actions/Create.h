@@ -51,10 +51,10 @@ CLASS_BASES_META(Editor::CreateAction)
 END_META;
 CLASS_FIELDS_META(Editor::CreateAction)
 {
-	PUBLIC_FIELD(objectsData);
-	PUBLIC_FIELD(objectsIds);
-	PUBLIC_FIELD(insertParentId);
-	PUBLIC_FIELD(insertPrevObjectId);
+	FIELD().NAME(objectsData).PUBLIC();
+	FIELD().NAME(objectsIds).PUBLIC();
+	FIELD().NAME(insertParentId).PUBLIC();
+	FIELD().NAME(insertPrevObjectId).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::CreateAction)

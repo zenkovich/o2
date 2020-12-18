@@ -15,6 +15,20 @@ namespace o2
 	class Type;
 	class DataValue;
 
+	struct IDefaultValue
+	{
+		virtual bool Equals(void* value) const = 0;
+	};
+
+	template<typename T>
+	struct DefaultValue: public IDefaultValue
+	{
+		T value;
+
+		DefaultValue(const T& value): value(value) {}
+		bool Equals(void* value) const override { return *(T*)value == this->value; }
+	};
+
 	// -----------------------
 	// Class field information
 	// -----------------------
@@ -22,20 +36,6 @@ namespace o2
 	{
 	public:
 		typedef void*(*GetValuePointerFuncPtr)(void*);
-
-		struct IDefaultValue
-		{
-			virtual bool Equals(void* value) const = 0;
-		};
-
-		template<typename T>
-		struct DefaultValue: public IDefaultValue
-		{
-			T value;
-
-			DefaultValue(const T& value): value(value) {}
-			bool Equals(void* value) const override { return *(T*)value == this->value; }
-		};
 
 	public:
 		// Default constructor
@@ -54,9 +54,6 @@ namespace o2
 		// Equal operator
 		bool operator==(const FieldInfo& other) const;
 
-		// Adds attribute
-		FieldInfo& AddAttribute(IAttribute* attribute);
-
 		// Adds attribute by type and parameters
 		template<typename _attr_type, typename ... _args>
 		FieldInfo& AddAttribute(_args ... args);
@@ -67,6 +64,9 @@ namespace o2
 
 		// Returns name of field
 		const String& GetName() const;
+
+		// Sets protection section
+		void SetProtectSection(ProtectSection section);
 
 		// Protection section
 		ProtectSection GetProtectionSection() const;
@@ -142,7 +142,7 @@ namespace o2
 
 		friend class Type;
 		friend class VectorType;
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 
 		template<typename _type, typename _accessor_type>
 		friend class TStringPointerAccessorType;

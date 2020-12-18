@@ -9,7 +9,7 @@ namespace o2
 	template<typename _type>
 	const Type& GetTypeOf();
 
-	class TypeInitializer;
+	class ReflectionInitializationTypeProcessor;
 	class Reflection;
 
 	// ----------------------------------------------------
@@ -37,7 +37,7 @@ namespace o2
 		template<typename _type>
 		friend const o2::Type& o2::GetTypeOf();
 
-		friend class TypeInitializer;
+		friend class ReflectionInitializationTypeProcessor;
 		friend class Reflection;
 	};
 
@@ -74,7 +74,7 @@ private:                                                                        
     template<typename _type>																					\
 	friend class IValueProxy;																			        \
                                                                                                                 \
-    friend class o2::TypeInitializer;                                                                           \
+    friend class o2::ReflectionInitializationTypeProcessor;                                                     \
     friend class o2::Reflection;                                                                                \
     friend class o2::DataValue;                                                                                 \
                                                                                                                 \

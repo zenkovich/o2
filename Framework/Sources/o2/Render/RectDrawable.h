@@ -66,8 +66,8 @@ namespace o2
 		SERIALIZABLE(IRectDrawable);
 
 	protected:
-		Color4 mColor;   // Color @SERIALIZABLE
-		bool   mEnabled; // True, when drawable enabled and needs to draw @SERIALIZABLE
+		Color4 mColor;          // Color @SERIALIZABLE
+		bool   mEnabled = true; // True, when drawable enabled and needs to draw @SERIALIZABLE
 
 	protected:
 		// It is called when color was changed
@@ -86,11 +86,11 @@ CLASS_BASES_META(o2::IRectDrawable)
 END_META;
 CLASS_FIELDS_META(o2::IRectDrawable)
 {
-	PUBLIC_FIELD(color);
-	PUBLIC_FIELD(transparency);
-	PUBLIC_FIELD(enabled);
-	PROTECTED_FIELD(mColor).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mEnabled).SERIALIZABLE_ATTRIBUTE();
+	FIELD().NAME(color).PUBLIC();
+	FIELD().NAME(transparency).PUBLIC();
+	FIELD().NAME(enabled).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mColor).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::IRectDrawable)

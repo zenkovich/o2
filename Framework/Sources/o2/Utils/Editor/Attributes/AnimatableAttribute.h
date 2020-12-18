@@ -12,5 +12,5 @@ namespace o2
 	};
 
 #define ANIMATABLE_ATTRIBUTE() \
-    AddAttribute(new AnimatableAttribute())
+    AddAttribute<AnimatableAttribute>()
 }

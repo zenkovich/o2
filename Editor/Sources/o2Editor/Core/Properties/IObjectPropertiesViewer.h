@@ -150,15 +150,15 @@ CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 {
-	PUBLIC_FIELD(onChanged);
-	PUBLIC_FIELD(onChangeCompleted);
-	PUBLIC_FIELD(path);
-	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHeaderEnabled).DEFAULT_VALUE(true);
-	PROTECTED_FIELD(mPropertiesBuilt).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mTargetObjets);
-	PROTECTED_FIELD(mPropertiesContext);
-	PROTECTED_FIELD(mOnChildFieldChangeCompleted);
+	FIELD().NAME(onChanged).PUBLIC();
+	FIELD().NAME(onChangeCompleted).PUBLIC();
+	FIELD().NAME(path).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mHeaderEnabled).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mPropertiesBuilt).PROTECTED();
+	FIELD().NAME(mTargetObjets).PROTECTED();
+	FIELD().NAME(mPropertiesContext).PROTECTED();
+	FIELD().NAME(mOnChildFieldChangeCompleted).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IObjectPropertiesViewer)

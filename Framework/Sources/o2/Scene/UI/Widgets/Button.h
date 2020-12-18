@@ -113,13 +113,13 @@ CLASS_BASES_META(o2::Button)
 END_META;
 CLASS_FIELDS_META(o2::Button)
 {
-	PUBLIC_FIELD(caption);
-	PUBLIC_FIELD(icon);
-	PUBLIC_FIELD(onClick);
-	PUBLIC_FIELD(isPointInside);
-	PUBLIC_FIELD(shortcut);
-	PROTECTED_FIELD(mCaptionText).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mIconSprite).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(caption).PUBLIC();
+	FIELD().NAME(icon).PUBLIC();
+	FIELD().NAME(onClick).PUBLIC();
+	FIELD().NAME(isPointInside).PUBLIC();
+	FIELD().NAME(shortcut).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaptionText).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mIconSprite).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Button)

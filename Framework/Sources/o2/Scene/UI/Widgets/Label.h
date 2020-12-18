@@ -157,22 +157,22 @@ CLASS_BASES_META(o2::Label)
 END_META;
 CLASS_FIELDS_META(o2::Label)
 {
-	PUBLIC_FIELD(text);
-	PUBLIC_FIELD(font);
-	PUBLIC_FIELD(fontAsset);
-	PUBLIC_FIELD(height);
-	PUBLIC_FIELD(color);
-	PUBLIC_FIELD(verAlign);
-	PUBLIC_FIELD(horAlign);
-	PUBLIC_FIELD(horOverflow);
-	PUBLIC_FIELD(verOverflow);
-	PUBLIC_FIELD(expandBorder);
-	PUBLIC_FIELD(symbolsDistanceCoef);
-	PUBLIC_FIELD(linesDistanceCoef);
-	PROTECTED_FIELD(mTextDrawable).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHorOverflow).DEFAULT_VALUE(HorOverflow::None).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mVerOverflow).DEFAULT_VALUE(VerOverflow::None).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mExpandBorder).SERIALIZABLE_ATTRIBUTE();
+	FIELD().NAME(text).PUBLIC();
+	FIELD().NAME(font).PUBLIC();
+	FIELD().NAME(fontAsset).PUBLIC();
+	FIELD().NAME(height).PUBLIC();
+	FIELD().NAME(color).PUBLIC();
+	FIELD().NAME(verAlign).PUBLIC();
+	FIELD().NAME(horAlign).PUBLIC();
+	FIELD().NAME(horOverflow).PUBLIC();
+	FIELD().NAME(verOverflow).PUBLIC();
+	FIELD().NAME(expandBorder).PUBLIC();
+	FIELD().NAME(symbolsDistanceCoef).PUBLIC();
+	FIELD().NAME(linesDistanceCoef).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTextDrawable).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(HorOverflow::None).NAME(mHorOverflow).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(VerOverflow::None).NAME(mVerOverflow).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mExpandBorder).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Label)

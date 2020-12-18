@@ -51,8 +51,8 @@ CLASS_BASES_META(Editor::ImageAssetViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ImageAssetViewer)
 {
-	PRIVATE_FIELD(mSlicesEditor).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mAtlasProperty).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAtlasProperty).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageAssetViewer)

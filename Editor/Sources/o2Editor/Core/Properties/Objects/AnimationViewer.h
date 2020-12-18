@@ -48,8 +48,8 @@ CLASS_BASES_META(Editor::AnimationViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationViewer)
 {
-	PRIVATE_FIELD(mEditButton).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mCurrentAnimation).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditButton).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentAnimation).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationViewer)

@@ -160,7 +160,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartFields<_thisType>(object, type);
 
-			PROTECTED_FIELD(mSpecComponent);
+			FIELD().NAME(mSpecComponent).PROTECTED();
 		}
 
 		template<typename _type_processor>
@@ -189,8 +189,8 @@ CLASS_BASES_META(o2::ComponentRef)
 END_META;
 CLASS_FIELDS_META(o2::ComponentRef)
 {
-	PROTECTED_FIELD(mComponent).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mWasDeleted).DEFAULT_VALUE(false);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mComponent).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mWasDeleted).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::ComponentRef)

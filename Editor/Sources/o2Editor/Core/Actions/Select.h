@@ -48,8 +48,8 @@ CLASS_BASES_META(Editor::SelectAction)
 END_META;
 CLASS_FIELDS_META(Editor::SelectAction)
 {
-	PUBLIC_FIELD(selectedObjectsIds);
-	PUBLIC_FIELD(prevSelectedObjectsIds);
+	FIELD().NAME(selectedObjectsIds).PUBLIC();
+	FIELD().NAME(prevSelectedObjectsIds).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::SelectAction)

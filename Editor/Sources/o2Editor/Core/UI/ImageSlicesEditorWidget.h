@@ -90,14 +90,14 @@ CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 END_META;
 CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget)
 {
-	PRIVATE_FIELD(mPreviewImage).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mPreviewImageBack).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mBorderLeftHandle);
-	PRIVATE_FIELD(mBorderRightHandle);
-	PRIVATE_FIELD(mBorderTopHandle);
-	PRIVATE_FIELD(mBorderBottomHandle);
-	PRIVATE_FIELD(mBordersSmoothValue);
-	PRIVATE_FIELD(mBorderProperty).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPreviewImage).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPreviewImageBack).PRIVATE();
+	FIELD().NAME(mBorderLeftHandle).PRIVATE();
+	FIELD().NAME(mBorderRightHandle).PRIVATE();
+	FIELD().NAME(mBorderTopHandle).PRIVATE();
+	FIELD().NAME(mBorderBottomHandle).PRIVATE();
+	FIELD().NAME(mBordersSmoothValue).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mBorderProperty).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)

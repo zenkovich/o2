@@ -193,10 +193,10 @@ CLASS_BASES_META(Editor::AddComponentPanel)
 END_META;
 CLASS_FIELDS_META(Editor::AddComponentPanel)
 {
-	PRIVATE_FIELD(mViewer).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mFilterBox).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mAddButton).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mTree).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewer).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mFilterBox).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButton).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTree).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
@@ -221,8 +221,8 @@ CLASS_BASES_META(Editor::ComponentsTree)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTree)
 {
-	PRIVATE_FIELD(mFilterStr);
-	PRIVATE_FIELD(mRoot);
+	FIELD().NAME(mFilterStr).PRIVATE();
+	FIELD().NAME(mRoot).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTree)
@@ -248,10 +248,10 @@ CLASS_BASES_META(Editor::ComponentsTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTreeNode)
 {
-	PUBLIC_FIELD(data).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mName);
-	PRIVATE_FIELD(mIcon);
-	PRIVATE_FIELD(mTree).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(data).PUBLIC();
+	FIELD().NAME(mName).PRIVATE();
+	FIELD().NAME(mIcon).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTree).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)

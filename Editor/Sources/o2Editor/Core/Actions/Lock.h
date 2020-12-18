@@ -47,8 +47,8 @@ CLASS_BASES_META(Editor::LockAction)
 END_META;
 CLASS_FIELDS_META(Editor::LockAction)
 {
-	PUBLIC_FIELD(objectsIds);
-	PUBLIC_FIELD(lock);
+	FIELD().NAME(objectsIds).PUBLIC();
+	FIELD().NAME(lock).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::LockAction)

@@ -61,19 +61,17 @@ namespace o2
 
 	class SerializationTypeProcessor
 	{
-		// !!! Remove attributes pointer!!!
+	public:
+		struct BaseFieldProcessor;
+
+		template<typename _type>
+		struct SerializeDefaultFieldProcessor;
+
 	public:
 		DataValue& node;
 
 	public:
 		SerializationTypeProcessor(DataValue& node):node(node) {}
-
-		template<typename _object_type, typename _base_type>
-		void BaseType(_object_type* object, Type* type, const char* name)
-		{
-			if constexpr (std::is_base_of<ISerializable, _base_type>::value)
-				object->_base_type::Serialize(node);
-		}
 
 		template<typename _object_type>
 		void StartBases(_object_type* object, Type* type) {}
@@ -81,34 +79,128 @@ namespace o2
 		template<typename _object_type>
 		void StartFields(_object_type* object, Type* type) {}
 
-		template<typename _field_type>
-		struct FieldInfo
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name);
+
+		BaseFieldProcessor StartField();
+
+		struct BaseFieldProcessor
 		{
-			_field_type* fieldPtr;
-			DataValue&   node;
-			const char*  name;
+			DataValue& node;
 
-			FieldInfo(_field_type* fieldPtr, DataValue& node, const char* name):fieldPtr(fieldPtr), node(node), name(name) {}
+			BaseFieldProcessor(DataValue& node):node(node) {}
 
-			template<typename _attribute_type>
-			FieldInfo& AddAttribute(_attribute_type* attribute)
-			{
-				if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-					node.AddMember(name).Set(*fieldPtr);
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args);
 
-				return *this;
-			}
+			template<typename _type>
+			BaseFieldProcessor& SetDefaultValue(const _type& value);
 
-			FieldInfo& SetDefaultValue(const _field_type& val) { return *this; }
+			template<typename _object_type, typename _field_type>
+			BaseFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+											_field_type& field);
+
+			void SetProtectSection(ProtectSection section);
 		};
 
-		template<typename _object_type, typename _field_type>
-		FieldInfo<_field_type> Field(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field, ProtectSection protection)
+		struct SerializeFieldProcessor: public BaseFieldProcessor
 		{
-			_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-			return FieldInfo<_field_type>(fieldPtr, node, name);
-		}
+			SerializeFieldProcessor(DataValue& node):BaseFieldProcessor(node) {}
+
+			template<typename _attribute_type, typename ... _args>
+			SerializeFieldProcessor& AddAttribute(_args ... args);
+
+			template<typename _type>
+			SerializeDefaultFieldProcessor<_type> SetDefaultValue(const _type& value);
+
+			template<typename _object_type, typename _field_type>
+			SerializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+												 _field_type& field);
+		};
+
+		template<typename _type>
+		struct SerializeDefaultFieldProcessor: public SerializeFieldProcessor
+		{
+			_type defaultValue;
+
+			SerializeDefaultFieldProcessor(DataValue& node, const _type& defaultValue):
+				SerializeFieldProcessor(node), defaultValue(defaultValue)
+			{}
+
+			template<typename _object_type, typename _field_type>
+			SerializeDefaultFieldProcessor<_type>& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+															   _field_type& field);
+		};
 	};
+
+	template<typename _object_type, typename _base_type>
+	void SerializationTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
+	{
+		if constexpr (std::is_base_of<ISerializable, _base_type>::value)
+			object->_base_type::Serialize(node);
+	}
+
+	template<typename _attribute_type, typename ... _args>
+	auto SerializationTypeProcessor::BaseFieldProcessor::AddAttribute(_args ... args)
+	{
+		if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
+			return SerializeFieldProcessor(node);
+		else
+			return *this;
+	}
+
+	template<typename _object_type, typename _field_type>
+	SerializationTypeProcessor::BaseFieldProcessor& SerializationTypeProcessor::BaseFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
+																												void*(*pointerGetter)(void*), _field_type& field)
+	{
+		return *this;
+	}
+
+	template<typename _type>
+	SerializationTypeProcessor::BaseFieldProcessor& SerializationTypeProcessor::BaseFieldProcessor::SetDefaultValue(const _type& value)
+	{
+		return *this;
+	}
+
+	template<typename _attribute_type, typename ... _args>
+	SerializationTypeProcessor::SerializeFieldProcessor& SerializationTypeProcessor::SerializeFieldProcessor::AddAttribute(_args ... args)
+	{
+		return *this;
+	}
+
+	template<typename _type>
+	SerializationTypeProcessor::SerializeDefaultFieldProcessor<_type> SerializationTypeProcessor::SerializeFieldProcessor::SetDefaultValue(const _type& value)
+	{
+		return SerializeDefaultFieldProcessor<_type>(node, value);
+	}
+
+	template<typename _object_type, typename _field_type>
+	SerializationTypeProcessor::SerializeFieldProcessor& SerializationTypeProcessor::SerializeFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
+																														  void*(*pointerGetter)(void*), _field_type& field)
+	{
+		_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object)); 
+		
+		if constexpr (std::is_default_constructible<_field_type>::value && SupportsEqualOperator<_field_type>::value)
+		{
+			if (Math::Equals(*fieldPtr, _field_type()))
+				return *this;
+		}
+
+		node.AddMember(name).Set(*fieldPtr);
+		return *this;
+	}
+
+	template<typename _type>
+	template<typename _object_type, typename _field_type>
+	SerializationTypeProcessor::SerializeDefaultFieldProcessor<_type>& SerializationTypeProcessor::SerializeDefaultFieldProcessor<_type>::FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field)
+	{
+		_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+		if (*fieldPtr != defaultValue)
+			node.AddMember(name).Set(*fieldPtr);
+
+		return *this;
+	}
+
 
 	// Serialization implementation macros
 #define SERIALIZABLE_MAIN(CLASS)  							                                                    \
@@ -146,7 +238,7 @@ namespace o2
     SERIALIZABLE(CLASS)
 
 #define SERIALIZABLE_ATTRIBUTE() \
-    AddAttribute(new SerializableAttribute())
+    AddAttribute<SerializableAttribute>()
 }
 
 CLASS_BASES_META(o2::ISerializable)

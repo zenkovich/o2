@@ -12,5 +12,5 @@ namespace o2
 	};
 
 #define DONT_DELETE_ATTRIBUTE() \
-    AddAttribute(new DontDeleteAttribute())
+    AddAttribute<DontDeleteAttribute>()
 }

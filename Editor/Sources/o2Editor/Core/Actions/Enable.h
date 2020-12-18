@@ -48,8 +48,8 @@ CLASS_BASES_META(Editor::EnableAction)
 END_META;
 CLASS_FIELDS_META(Editor::EnableAction)
 {
-	PUBLIC_FIELD(objectsIds);
-	PUBLIC_FIELD(enable);
+	FIELD().NAME(objectsIds).PUBLIC();
+	FIELD().NAME(enable).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::EnableAction)

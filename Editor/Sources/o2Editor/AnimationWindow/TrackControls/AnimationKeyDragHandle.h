@@ -52,11 +52,11 @@ CLASS_BASES_META(Editor::AnimationKeyDragHandle)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
-	PUBLIC_FIELD(trackPath);
-	PUBLIC_FIELD(track).DEFAULT_VALUE(nullptr);
-	PUBLIC_FIELD(trackControl).DEFAULT_VALUE(nullptr);
-	PUBLIC_FIELD(keyUid).DEFAULT_VALUE(0);
-	PUBLIC_FIELD(isMapping).DEFAULT_VALUE(false);
+	FIELD().NAME(trackPath).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(track).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(trackControl).PUBLIC();
+	FIELD().DEFAULT_VALUE(0).NAME(keyUid).PUBLIC();
+	FIELD().DEFAULT_VALUE(false).NAME(isMapping).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeyDragHandle)

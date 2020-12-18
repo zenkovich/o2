@@ -96,14 +96,14 @@ CLASS_BASES_META(Editor::PropertiesWindow)
 END_META;
 CLASS_FIELDS_META(Editor::PropertiesWindow)
 {
-	PROTECTED_FIELD(mTargets);
-	PROTECTED_FIELD(mCurrentViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mViewers);
-	PROTECTED_FIELD(mDefaultViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mOnTargetsChangedDelegate);
-	PROTECTED_FIELD(mTargetsChanged).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mRefreshDelay).DEFAULT_VALUE(0.5f);
-	PROTECTED_FIELD(mRefreshRemainingTime).DEFAULT_VALUE(0.5f);
+	FIELD().NAME(mTargets).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentViewer).PROTECTED();
+	FIELD().NAME(mViewers).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDefaultViewer).PROTECTED();
+	FIELD().NAME(mOnTargetsChangedDelegate).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mTargetsChanged).PROTECTED();
+	FIELD().DEFAULT_VALUE(0.5f).NAME(mRefreshDelay).PROTECTED();
+	FIELD().DEFAULT_VALUE(0.5f).NAME(mRefreshRemainingTime).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertiesWindow)

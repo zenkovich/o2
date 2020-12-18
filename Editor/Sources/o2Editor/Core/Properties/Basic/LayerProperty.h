@@ -57,8 +57,8 @@ CLASS_BASES_META(Editor::LayerProperty)
 END_META;
 CLASS_FIELDS_META(Editor::LayerProperty)
 {
-	PROTECTED_FIELD(mDropDown).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mUpdatingValue).DEFAULT_VALUE(false);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDropDown).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mUpdatingValue).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::LayerProperty)

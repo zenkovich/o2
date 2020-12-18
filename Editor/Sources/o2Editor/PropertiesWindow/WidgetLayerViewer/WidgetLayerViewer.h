@@ -83,11 +83,11 @@ CLASS_BASES_META(Editor::WidgetLayerViewer)
 END_META;
 CLASS_FIELDS_META(Editor::WidgetLayerViewer)
 {
-	PROTECTED_FIELD(mTargetLayers);
-	PROTECTED_FIELD(mHeaderViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLayoutViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mPropertiesViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mViewersLayout).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mTargetLayers).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayoutViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewersLayout).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::WidgetLayerViewer)

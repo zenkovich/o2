@@ -55,13 +55,13 @@ CLASS_BASES_META(Editor::DefaultWidgetLayerLayoutViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
-	PROTECTED_FIELD(mLayers);
-	PROTECTED_FIELD(mPositionProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mSizeProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAnchorRightTopProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAnchorLeftBottomProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(moffsetRightTopProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mOffsetLeftBottomProperty).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mLayers).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPositionProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizeProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)

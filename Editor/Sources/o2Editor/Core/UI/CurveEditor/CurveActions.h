@@ -77,8 +77,8 @@ CLASS_BASES_META(Editor::CurveAddKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::CurveAddKeysAction)
 {
-	PROTECTED_FIELD(mInfos);
-	PROTECTED_FIELD(mEditor);
+	FIELD().NAME(mInfos).PROTECTED();
+	FIELD().NAME(mEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveAddKeysAction)
@@ -97,8 +97,8 @@ CLASS_BASES_META(Editor::CurveDeleteKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::CurveDeleteKeysAction)
 {
-	PROTECTED_FIELD(mInfos);
-	PROTECTED_FIELD(mEditor);
+	FIELD().NAME(mInfos).PROTECTED();
+	FIELD().NAME(mEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveDeleteKeysAction)
@@ -117,8 +117,8 @@ CLASS_BASES_META(Editor::CurveKeysChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::CurveKeysChangeAction)
 {
-	PROTECTED_FIELD(mInfos);
-	PROTECTED_FIELD(mEditor);
+	FIELD().NAME(mInfos).PROTECTED();
+	FIELD().NAME(mEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveKeysChangeAction)

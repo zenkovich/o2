@@ -111,19 +111,19 @@ CLASS_BASES_META(Editor::LogWindow)
 END_META;
 CLASS_FIELDS_META(Editor::LogWindow)
 {
-	PROTECTED_FIELD(mList).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLastMessageView).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mMessagesCountLabel).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mWarningsCountLabel).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mErrorsCountLabel).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAllMessages);
-	PROTECTED_FIELD(mVisibleMessages);
-	PROTECTED_FIELD(mRegularMessagesEnabled);
-	PROTECTED_FIELD(mWarningMessagesEnabled);
-	PROTECTED_FIELD(mErrorMessagesEnabled);
-	PROTECTED_FIELD(mRegularMessagesCount);
-	PROTECTED_FIELD(mWarningMessagesCount);
-	PROTECTED_FIELD(mErrorMessagesCount);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mList).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLastMessageView).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mMessagesCountLabel).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mWarningsCountLabel).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mErrorsCountLabel).PROTECTED();
+	FIELD().NAME(mAllMessages).PROTECTED();
+	FIELD().NAME(mVisibleMessages).PROTECTED();
+	FIELD().NAME(mRegularMessagesEnabled).PROTECTED();
+	FIELD().NAME(mWarningMessagesEnabled).PROTECTED();
+	FIELD().NAME(mErrorMessagesEnabled).PROTECTED();
+	FIELD().NAME(mRegularMessagesCount).PROTECTED();
+	FIELD().NAME(mWarningMessagesCount).PROTECTED();
+	FIELD().NAME(mErrorMessagesCount).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::LogWindow)

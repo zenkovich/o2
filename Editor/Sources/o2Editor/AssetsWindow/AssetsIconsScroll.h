@@ -360,29 +360,29 @@ CLASS_BASES_META(Editor::AssetsIconsScrollArea)
 END_META;
 CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 {
-	PUBLIC_FIELD(onAssetsSelected);
-	PROTECTED_FIELD(mAssetIconSize).DEFAULT_VALUE(Vec2F(50, 60));
-	PROTECTED_FIELD(mCurrentPath).DEFAULT_VALUE("_");
-	PROTECTED_FIELD(mVisibleAssetIcons);
-	PROTECTED_FIELD(mContextMenu).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mSelectedPreloadedAssets);
-	PROTECTED_FIELD(mNewAsset).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHighlightIcon).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHighlightAnim).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHighlightSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mHighlightLayout).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mIconsPool);
-	PROTECTED_FIELD(mSelectionSprite).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PROTECTED_FIELD(mSelecting).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mPressedPoint);
-	PROTECTED_FIELD(mIsDraggingIcons).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mDragEnded).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mDragIcon).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mDragOffset);
-	PROTECTED_FIELD(mInstantiatedSceneDragObjects);
-	PROTECTED_FIELD(mCuttingAssets);
-	PROTECTED_FIELD(mNeedRebuildAssets).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mChangePropertiesTargetsFromThis).DEFAULT_VALUE(false);
+	FIELD().NAME(onAssetsSelected).PUBLIC();
+	FIELD().DEFAULT_VALUE(Vec2F(50, 60)).NAME(mAssetIconSize).PROTECTED();
+	FIELD().DEFAULT_VALUE("_").NAME(mCurrentPath).PROTECTED();
+	FIELD().NAME(mVisibleAssetIcons).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mContextMenu).PROTECTED();
+	FIELD().NAME(mSelectedPreloadedAssets).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNewAsset).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHighlightIcon).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightAnim).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHighlightSprite).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightLayout).PROTECTED();
+	FIELD().NAME(mIconsPool).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mSelecting).PROTECTED();
+	FIELD().NAME(mPressedPoint).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsDraggingIcons).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mDragEnded).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDragIcon).PROTECTED();
+	FIELD().NAME(mDragOffset).PROTECTED();
+	FIELD().NAME(mInstantiatedSceneDragObjects).PROTECTED();
+	FIELD().NAME(mCuttingAssets).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mNeedRebuildAssets).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mChangePropertiesTargetsFromThis).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetsIconsScrollArea)

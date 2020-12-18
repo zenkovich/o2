@@ -169,14 +169,14 @@ CLASS_BASES_META(Editor::LayersPopup)
 END_META;
 CLASS_FIELDS_META(Editor::LayersPopup)
 {
-	PRIVATE_FIELD(mItemSample).DEFAULT_VALUE(nullptr).SERIALIZABLE_ATTRIBUTE();
-	PRIVATE_FIELD(mItemsCache);
-	PRIVATE_FIELD(mDraggingItem).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mDragOffset);
-	PRIVATE_FIELD(mDragAnimTime).DEFAULT_VALUE(0.4f);
-	PRIVATE_FIELD(mDragAnimFunc).DEFAULT_VALUE(Curve::EaseInOut());
-	PRIVATE_FIELD(mAddButtonLayout).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mAddButton).DEFAULT_VALUE(nullptr);
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample).PRIVATE();
+	FIELD().NAME(mItemsCache).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDraggingItem).PRIVATE();
+	FIELD().NAME(mDragOffset).PRIVATE();
+	FIELD().DEFAULT_VALUE(0.4f).NAME(mDragAnimTime).PRIVATE();
+	FIELD().DEFAULT_VALUE(Curve::EaseInOut()).NAME(mDragAnimFunc).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButtonLayout).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButton).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::LayersPopup)
@@ -206,15 +206,15 @@ CLASS_BASES_META(Editor::LayerPopupItem)
 END_META;
 CLASS_FIELDS_META(Editor::LayerPopupItem)
 {
-	PRIVATE_FIELD(mLayer).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mPopup).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mDragHandle);
-	PRIVATE_FIELD(mVisibleToggle).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mNameCaption).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mRemoveBtn).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mEditBox).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mDragInsertCoef).DEFAULT_VALUE(0.0f);
-	PRIVATE_FIELD(mDragTargetInsertCoef).DEFAULT_VALUE(0.0f);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayer).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPopup).PRIVATE();
+	FIELD().NAME(mDragHandle).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mVisibleToggle).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameCaption).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PRIVATE();
+	FIELD().DEFAULT_VALUE(0.0f).NAME(mDragInsertCoef).PRIVATE();
+	FIELD().DEFAULT_VALUE(0.0f).NAME(mDragTargetInsertCoef).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::LayerPopupItem)

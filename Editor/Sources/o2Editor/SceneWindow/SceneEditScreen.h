@@ -263,17 +263,17 @@ CLASS_BASES_META(Editor::SceneEditScreen)
 END_META;
 CLASS_FIELDS_META(Editor::SceneEditScreen)
 {
-	PUBLIC_FIELD(onSelectionChanged);
-	PROTECTED_FIELD(mSelectedObjectColor).DEFAULT_VALUE(Color4(220, 220, 220, 255));
-	PROTECTED_FIELD(mMultiSelectedObjectColor).DEFAULT_VALUE(Color4(220, 220, 220, 100));
-	PROTECTED_FIELD(mObjectMinimalSelectionSize).DEFAULT_VALUE(10.0f);
-	PROTECTED_FIELD(mSceneTree);
-	PROTECTED_FIELD(mSelectedObjects);
-	PROTECTED_FIELD(mTopSelectedObjects);
-	PROTECTED_FIELD(mSelectedFromThis).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mTools);
-	PROTECTED_FIELD(mEnabledTool).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mDragHandles);
+	FIELD().NAME(onSelectionChanged).PUBLIC();
+	FIELD().DEFAULT_VALUE(Color4(220, 220, 220, 255)).NAME(mSelectedObjectColor).PROTECTED();
+	FIELD().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mMultiSelectedObjectColor).PROTECTED();
+	FIELD().DEFAULT_VALUE(10.0f).NAME(mObjectMinimalSelectionSize).PROTECTED();
+	FIELD().NAME(mSceneTree).PROTECTED();
+	FIELD().NAME(mSelectedObjects).PROTECTED();
+	FIELD().NAME(mTopSelectedObjects).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mSelectedFromThis).PROTECTED();
+	FIELD().NAME(mTools).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnabledTool).PROTECTED();
+	FIELD().NAME(mDragHandles).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneEditScreen)

@@ -106,18 +106,18 @@ CLASS_BASES_META(Editor::ScaleTool)
 END_META;
 CLASS_FIELDS_META(Editor::ScaleTool)
 {
-	PUBLIC_FIELD(bothScaleSence).DEFAULT_VALUE(0.01f);
-	PROTECTED_FIELD(mHorDragHandle);
-	PROTECTED_FIELD(mVerDragHandle);
-	PROTECTED_FIELD(mBothDragHandle);
-	PROTECTED_FIELD(mHandlesAngle).DEFAULT_VALUE(0.0f);
-	PROTECTED_FIELD(mSceneHandlesPos);
-	PROTECTED_FIELD(mHandlesSize).DEFAULT_VALUE(Vec2F(100, 100));
-	PROTECTED_FIELD(mLastHorHandlePos);
-	PROTECTED_FIELD(mLastVerHandlePos);
-	PROTECTED_FIELD(mLastBothHandlePos);
-	PROTECTED_FIELD(mBeforeTransforms);
-	PROTECTED_FIELD(mTransformAction).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(0.01f).NAME(bothScaleSence).PUBLIC();
+	FIELD().NAME(mHorDragHandle).PROTECTED();
+	FIELD().NAME(mVerDragHandle).PROTECTED();
+	FIELD().NAME(mBothDragHandle).PROTECTED();
+	FIELD().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle).PROTECTED();
+	FIELD().NAME(mSceneHandlesPos).PROTECTED();
+	FIELD().DEFAULT_VALUE(Vec2F(100, 100)).NAME(mHandlesSize).PROTECTED();
+	FIELD().NAME(mLastHorHandlePos).PROTECTED();
+	FIELD().NAME(mLastVerHandlePos).PROTECTED();
+	FIELD().NAME(mLastBothHandlePos).PROTECTED();
+	FIELD().NAME(mBeforeTransforms).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTransformAction).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::ScaleTool)

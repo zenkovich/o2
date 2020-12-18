@@ -69,9 +69,9 @@ CLASS_BASES_META(Editor::TagsProperty)
 END_META;
 CLASS_FIELDS_META(Editor::TagsProperty)
 {
-	PROTECTED_FIELD(mEditBox).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTagsContext).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mPushingTag).DEFAULT_VALUE(false);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTagsContext).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mPushingTag).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::TagsProperty)

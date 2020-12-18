@@ -52,8 +52,8 @@ CLASS_BASES_META(Editor::DefaultActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
-	PROTECTED_FIELD(mComponentType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mViewer).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mComponentType).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewer).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)

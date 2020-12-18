@@ -179,29 +179,29 @@ CLASS_BASES_META(o2::IAnimation)
 END_META;
 CLASS_FIELDS_META(o2::IAnimation)
 {
-	PUBLIC_FIELD(playing);
-	PUBLIC_FIELD(reversed);
-	PUBLIC_FIELD(speed);
-	PUBLIC_FIELD(time);
-	PUBLIC_FIELD(relTime);
-	PUBLIC_FIELD(beginBound);
-	PUBLIC_FIELD(endBound);
-	PUBLIC_FIELD(loop);
-	PUBLIC_FIELD(duration);
-	PUBLIC_FIELD(onPlayEvent);
-	PUBLIC_FIELD(onStopEvent);
-	PUBLIC_FIELD(onPlayedEvent);
-	PUBLIC_FIELD(onUpdate);
-	PROTECTED_FIELD(mTime);
-	PROTECTED_FIELD(mInDurationTime);
-	PROTECTED_FIELD(mDuration);
-	PROTECTED_FIELD(mBeginTime);
-	PROTECTED_FIELD(mEndTime);
-	PROTECTED_FIELD(mDirection);
-	PROTECTED_FIELD(mSpeed);
-	PROTECTED_FIELD(mLoop);
-	PROTECTED_FIELD(mPlaying);
-	PROTECTED_FIELD(mTimeEvents);
+	FIELD().NAME(playing).PUBLIC();
+	FIELD().NAME(reversed).PUBLIC();
+	FIELD().NAME(speed).PUBLIC();
+	FIELD().NAME(time).PUBLIC();
+	FIELD().NAME(relTime).PUBLIC();
+	FIELD().NAME(beginBound).PUBLIC();
+	FIELD().NAME(endBound).PUBLIC();
+	FIELD().NAME(loop).PUBLIC();
+	FIELD().NAME(duration).PUBLIC();
+	FIELD().NAME(onPlayEvent).PUBLIC();
+	FIELD().NAME(onStopEvent).PUBLIC();
+	FIELD().NAME(onPlayedEvent).PUBLIC();
+	FIELD().NAME(onUpdate).PUBLIC();
+	FIELD().NAME(mTime).PROTECTED();
+	FIELD().NAME(mInDurationTime).PROTECTED();
+	FIELD().NAME(mDuration).PROTECTED();
+	FIELD().NAME(mBeginTime).PROTECTED();
+	FIELD().NAME(mEndTime).PROTECTED();
+	FIELD().NAME(mDirection).PROTECTED();
+	FIELD().NAME(mSpeed).PROTECTED();
+	FIELD().NAME(mLoop).PROTECTED();
+	FIELD().NAME(mPlaying).PROTECTED();
+	FIELD().NAME(mTimeEvents).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimation)

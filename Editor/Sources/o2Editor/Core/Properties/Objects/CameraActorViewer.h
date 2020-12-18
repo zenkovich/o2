@@ -54,14 +54,14 @@ CLASS_BASES_META(Editor::CameraActorViewer)
 END_META;
 CLASS_FIELDS_META(Editor::CameraActorViewer)
 {
-	PROTECTED_FIELD(mColorProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLayersProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTypeProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHiddenTypeProperties).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mSizePropertySpoiler).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mSizeProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mUnitsPropertySpoiler).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mUnitsProperty).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mColorProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayersProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTypeProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHiddenTypeProperties).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizePropertySpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizeProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mUnitsPropertySpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mUnitsProperty).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::CameraActorViewer)

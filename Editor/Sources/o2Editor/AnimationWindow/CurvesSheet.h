@@ -59,9 +59,9 @@ CLASS_BASES_META(Editor::CurvesSheet)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesSheet)
 {
-	PRIVATE_FIELD(mCurvesEditor);
-	PRIVATE_FIELD(mAnimationWindow).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mEditorViewLock).DEFAULT_VALUE(false);
+	FIELD().NAME(mCurvesEditor).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow).PRIVATE();
+	FIELD().DEFAULT_VALUE(false).NAME(mEditorViewLock).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)

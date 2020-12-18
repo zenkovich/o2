@@ -117,11 +117,11 @@ CLASS_BASES_META(Editor::ObjectProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
-	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mObjectViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mNoHeader).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mExpanded).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mCaption);
+	FIELD().NAME(mTargetObjects).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mObjectViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mNoHeader).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mExpanded).PROTECTED();
+	FIELD().NAME(mCaption).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectProperty)

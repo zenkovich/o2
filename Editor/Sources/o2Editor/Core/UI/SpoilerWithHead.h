@@ -57,11 +57,11 @@ CLASS_BASES_META(Editor::SpoilerWithHead)
 END_META;
 CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
-	PUBLIC_FIELD(onOptionsPressed);
-	PUBLIC_FIELD(onSavePressed);
-	PRIVATE_FIELD(mOptionsBtn).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mSaveBtn).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mIcon).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(onOptionsPressed).PUBLIC();
+	FIELD().NAME(onSavePressed).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSaveBtn).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mIcon).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)

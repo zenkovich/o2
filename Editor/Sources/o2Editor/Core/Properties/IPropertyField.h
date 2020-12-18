@@ -558,18 +558,18 @@ CLASS_BASES_META(Editor::IPropertyField)
 END_META;
 CLASS_FIELDS_META(Editor::IPropertyField)
 {
-	PUBLIC_FIELD(onChanged);
-	PUBLIC_FIELD(onChangeCompleted);
-	PROTECTED_FIELD(mFieldInfo).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mParentContext).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mRevertable).DEFAULT_VALUE(true);
-	PROTECTED_FIELD(mValuesProxies);
-	PROTECTED_FIELD(mValuesDifferent).DEFAULT_VALUE(true);
-	PROTECTED_FIELD(mRevertBtn).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mRemoveBtn).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mValuesPath);
-	PROTECTED_FIELD(mBeforeChangeValues);
+	FIELD().NAME(onChanged).PUBLIC();
+	FIELD().NAME(onChangeCompleted).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mFieldInfo).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mParentContext).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mRevertable).PROTECTED();
+	FIELD().NAME(mValuesProxies).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mValuesDifferent).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRevertBtn).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaption).PROTECTED();
+	FIELD().NAME(mValuesPath).PROTECTED();
+	FIELD().NAME(mBeforeChangeValues).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
@@ -616,8 +616,8 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(Editor::TPropertyField<_type>)
 {
-	PROTECTED_FIELD(mCommonValue).DEFAULT_VALUE(_type());
-	PROTECTED_FIELD(mRealType).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(_type()).NAME(mCommonValue).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRealType).PROTECTED();
 }
 END_META;
 META_TEMPLATES(typename _type)

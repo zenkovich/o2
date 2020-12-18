@@ -134,21 +134,21 @@ CLASS_BASES_META(Editor::ObjectPtrProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
-	PROTECTED_FIELD(mBasicObjectType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCurrentObjectType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mBuiltObjectType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAvailableMultipleTypes).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mDontDeleteEnabled).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mNoHeader).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mExpanded).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mObjectViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTypeCaption).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCreateDeleteButton).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCreateMenu).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mContextInitialized).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mImmediateCreateObject).DEFAULT_VALUE(false);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mBasicObjectType).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentObjectType).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mBuiltObjectType).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mAvailableMultipleTypes).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mDontDeleteEnabled).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mNoHeader).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mExpanded).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mObjectViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaption).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTypeCaption).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCreateDeleteButton).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCreateMenu).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mContextInitialized).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mImmediateCreateObject).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectPtrProperty)

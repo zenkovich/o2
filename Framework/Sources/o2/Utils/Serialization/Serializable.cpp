@@ -26,6 +26,15 @@ namespace o2
 	{
 		node.Get(thisObject);
 	}
+
+	void SerializationTypeProcessor::BaseFieldProcessor::SetProtectSection(ProtectSection section)
+	{}
+
+	SerializationTypeProcessor::BaseFieldProcessor SerializationTypeProcessor::StartField()
+	{
+		return BaseFieldProcessor(node);
+	}
+
 }
 
 DECLARE_CLASS(o2::ISerializable);

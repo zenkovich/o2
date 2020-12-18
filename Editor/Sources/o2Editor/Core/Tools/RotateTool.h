@@ -130,25 +130,25 @@ CLASS_BASES_META(Editor::RotateTool)
 END_META;
 CLASS_FIELDS_META(Editor::RotateTool)
 {
-	PUBLIC_FIELD(angleSnapStep).DEFAULT_VALUE(15.0f);
-	PROTECTED_FIELD(mRotateRingInsideRadius).DEFAULT_VALUE(60);
-	PROTECTED_FIELD(mRotateRingOutsideRadius).DEFAULT_VALUE(100);
-	PROTECTED_FIELD(mRotateRingSegs).DEFAULT_VALUE(50);
-	PROTECTED_FIELD(mRotateRingsColor).DEFAULT_VALUE(Color4(220, 220, 220, 255));
-	PROTECTED_FIELD(mRotateRingsFillColor).DEFAULT_VALUE(Color4(220, 220, 220, 50));
-	PROTECTED_FIELD(mRotateRingsFillColor2).DEFAULT_VALUE(Color4(220, 220, 220, 100));
-	PROTECTED_FIELD(mRotateMeshClockwiseColor).DEFAULT_VALUE(Color4(211, 87, 40, 100));
-	PROTECTED_FIELD(mRotateMeshCClockwiseColor).DEFAULT_VALUE(Color4(87, 211, 40, 100));
-	PROTECTED_FIELD(mRotateRingFillMesh).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAngleMesh).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mScenePivot);
-	PROTECTED_FIELD(mPivotDragHandle);
-	PROTECTED_FIELD(mPressAngle);
-	PROTECTED_FIELD(mCurrentRotateAngle);
-	PROTECTED_FIELD(mRingPressed).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mSnapAngleAccumulated).DEFAULT_VALUE(0.0f);
-	PROTECTED_FIELD(mBeforeTransforms);
-	PROTECTED_FIELD(mTransformAction).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(15.0f).NAME(angleSnapStep).PUBLIC();
+	FIELD().DEFAULT_VALUE(60).NAME(mRotateRingInsideRadius).PROTECTED();
+	FIELD().DEFAULT_VALUE(100).NAME(mRotateRingOutsideRadius).PROTECTED();
+	FIELD().DEFAULT_VALUE(50).NAME(mRotateRingSegs).PROTECTED();
+	FIELD().DEFAULT_VALUE(Color4(220, 220, 220, 255)).NAME(mRotateRingsColor).PROTECTED();
+	FIELD().DEFAULT_VALUE(Color4(220, 220, 220, 50)).NAME(mRotateRingsFillColor).PROTECTED();
+	FIELD().DEFAULT_VALUE(Color4(220, 220, 220, 100)).NAME(mRotateRingsFillColor2).PROTECTED();
+	FIELD().DEFAULT_VALUE(Color4(211, 87, 40, 100)).NAME(mRotateMeshClockwiseColor).PROTECTED();
+	FIELD().DEFAULT_VALUE(Color4(87, 211, 40, 100)).NAME(mRotateMeshCClockwiseColor).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRotateRingFillMesh).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAngleMesh).PROTECTED();
+	FIELD().NAME(mScenePivot).PROTECTED();
+	FIELD().NAME(mPivotDragHandle).PROTECTED();
+	FIELD().NAME(mPressAngle).PROTECTED();
+	FIELD().NAME(mCurrentRotateAngle).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mRingPressed).PROTECTED();
+	FIELD().DEFAULT_VALUE(0.0f).NAME(mSnapAngleAccumulated).PROTECTED();
+	FIELD().NAME(mBeforeTransforms).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTransformAction).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::RotateTool)

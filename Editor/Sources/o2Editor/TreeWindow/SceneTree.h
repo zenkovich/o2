@@ -229,13 +229,13 @@ CLASS_BASES_META(Editor::SceneTree)
 END_META;
 CLASS_FIELDS_META(Editor::SceneTree)
 {
-	PUBLIC_FIELD(onObjectsSelectionChanged);
-	PROTECTED_FIELD(mEnableTogglesGroup);
-	PROTECTED_FIELD(mLockTogglesGroup);
-	PROTECTED_FIELD(mAttachedToSceneEvents);
-	PROTECTED_FIELD(mDragActorPropertyField);
-	PROTECTED_FIELD(mDragComponentPropertyField);
-	PROTECTED_FIELD(mWatchEditor).DEFAULT_VALUE(false);
+	FIELD().NAME(onObjectsSelectionChanged).PUBLIC();
+	FIELD().NAME(mEnableTogglesGroup).PROTECTED();
+	FIELD().NAME(mLockTogglesGroup).PROTECTED();
+	FIELD().NAME(mAttachedToSceneEvents).PROTECTED();
+	FIELD().NAME(mDragActorPropertyField).PROTECTED();
+	FIELD().NAME(mDragComponentPropertyField).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mWatchEditor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneTree)
@@ -286,16 +286,16 @@ CLASS_BASES_META(Editor::SceneTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::SceneTreeNode)
 {
-	PROTECTED_FIELD(mTargetObject).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLockToggle).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLockToggleLockedState).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLockToggleHalfHideState).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mEnableToggle).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLinkBtn).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLinkBtnHalfHideState).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mNameDrawable).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mNameEditBox).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mEditState).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTargetObject).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLockToggle).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLockToggleLockedState).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLockToggleHalfHideState).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnableToggle).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLinkBtn).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLinkBtnHalfHideState).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameDrawable).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameEditBox).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditState).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneTreeNode)

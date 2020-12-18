@@ -57,10 +57,10 @@ CLASS_BASES_META(Editor::PropertyChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::PropertyChangeAction)
 {
-	PUBLIC_FIELD(objectsIds);
-	PUBLIC_FIELD(propertyPath);
-	PUBLIC_FIELD(beforeValues);
-	PUBLIC_FIELD(afterValues);
+	FIELD().NAME(objectsIds).PUBLIC();
+	FIELD().NAME(propertyPath).PUBLIC();
+	FIELD().NAME(beforeValues).PUBLIC();
+	FIELD().NAME(afterValues).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertyChangeAction)

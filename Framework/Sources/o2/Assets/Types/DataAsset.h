@@ -57,7 +57,7 @@ CLASS_BASES_META(o2::DataAsset)
 END_META;
 CLASS_FIELDS_META(o2::DataAsset)
 {
-	PUBLIC_FIELD(data);
+	FIELD().NAME(data).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::DataAsset)

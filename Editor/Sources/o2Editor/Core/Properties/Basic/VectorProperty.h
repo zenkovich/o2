@@ -157,17 +157,17 @@ CLASS_BASES_META(Editor::VectorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::VectorProperty)
 {
-	PROTECTED_FIELD(mSpoiler);
-	PROTECTED_FIELD(mVectorType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTargetObjects);
-	PROTECTED_FIELD(mValueProperties);
-	PROTECTED_FIELD(mValuePropertiesPool);
-	PROTECTED_FIELD(mCountProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCountDifferents).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mCountOfElements).DEFAULT_VALUE(0);
-	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAddButton).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mIsRefreshing).DEFAULT_VALUE(false);
+	FIELD().NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mVectorType).PROTECTED();
+	FIELD().NAME(mTargetObjects).PROTECTED();
+	FIELD().NAME(mValueProperties).PROTECTED();
+	FIELD().NAME(mValuePropertiesPool).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCountProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mCountDifferents).PROTECTED();
+	FIELD().DEFAULT_VALUE(0).NAME(mCountOfElements).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButton).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsRefreshing).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::VectorProperty)

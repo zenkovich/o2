@@ -81,9 +81,9 @@ CLASS_BASES_META(o2::List)
 END_META;
 CLASS_FIELDS_META(o2::List)
 {
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(values);
-	PUBLIC_FIELD(onSelectedText);
+	FIELD().NAME(value).PUBLIC();
+	FIELD().NAME(values).PUBLIC();
+	FIELD().NAME(onSelectedText).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::List)

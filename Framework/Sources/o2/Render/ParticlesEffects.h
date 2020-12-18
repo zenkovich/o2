@@ -55,7 +55,7 @@ CLASS_BASES_META(o2::ParticlesGravityEffect)
 END_META;
 CLASS_FIELDS_META(o2::ParticlesGravityEffect)
 {
-	PUBLIC_FIELD(gravity).SERIALIZABLE_ATTRIBUTE();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(gravity).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::ParticlesGravityEffect)

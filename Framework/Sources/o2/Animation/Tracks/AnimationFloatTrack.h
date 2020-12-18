@@ -223,8 +223,8 @@ CLASS_BASES_META(o2::AnimationTrack<float>)
 END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<float>)
 {
-	PUBLIC_FIELD(keys);
-	PUBLIC_FIELD(curve).SERIALIZABLE_ATTRIBUTE();
+	FIELD().NAME(keys).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(curve).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>)
@@ -271,18 +271,18 @@ CLASS_BASES_META(o2::AnimationTrack<float>::Player)
 END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<float>::Player)
 {
-	PUBLIC_FIELD(value);
-	PUBLIC_FIELD(target);
-	PUBLIC_FIELD(targetDelegate);
-	PUBLIC_FIELD(targetProxy);
-	PROTECTED_FIELD(mTrack).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCurrentValue);
-	PROTECTED_FIELD(mPrevInDurationTime).DEFAULT_VALUE(0.0f);
-	PROTECTED_FIELD(mPrevKey).DEFAULT_VALUE(0);
-	PROTECTED_FIELD(mPrevKeyApproximation).DEFAULT_VALUE(0);
-	PROTECTED_FIELD(mTarget).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mTargetDelegate);
-	PROTECTED_FIELD(mTargetProxy).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(value).PUBLIC();
+	FIELD().NAME(target).PUBLIC();
+	FIELD().NAME(targetDelegate).PUBLIC();
+	FIELD().NAME(targetProxy).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PROTECTED();
+	FIELD().NAME(mCurrentValue).PROTECTED();
+	FIELD().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime).PROTECTED();
+	FIELD().DEFAULT_VALUE(0).NAME(mPrevKey).PROTECTED();
+	FIELD().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTarget).PROTECTED();
+	FIELD().NAME(mTargetDelegate).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTargetProxy).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>::Player)

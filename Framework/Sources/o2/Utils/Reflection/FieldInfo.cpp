@@ -43,16 +43,14 @@ namespace o2
 			mProtectSection == other.mProtectSection;
 	}
 
-	FieldInfo& FieldInfo::AddAttribute(IAttribute* attribute)
-	{
-		attribute->mOwnerFieldInfo = this;
-		mAttributes.Add(attribute);
-		return *this;
-	}
-
 	const String& FieldInfo::GetName() const
 	{
 		return mName;
+	}
+
+	void FieldInfo::SetProtectSection(ProtectSection section)
+	{
+		mProtectSection = section;
 	}
 
 	ProtectSection FieldInfo::GetProtectionSection() const

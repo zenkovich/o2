@@ -96,15 +96,15 @@ CLASS_BASES_META(Editor::DockWindowPlace)
 END_META;
 CLASS_FIELDS_META(Editor::DockWindowPlace)
 {
-	PROTECTED_FIELD(mResizibleDir);
-	PROTECTED_FIELD(mNeighborMin);
-	PROTECTED_FIELD(mDragHandleMin);
-	PROTECTED_FIELD(mDragHandleLayoutMin);
-	PROTECTED_FIELD(mDragHandleAreaMin);
-	PROTECTED_FIELD(mNeighborMax);
-	PROTECTED_FIELD(mDragHandleMax);
-	PROTECTED_FIELD(mDragHandleLayoutMax);
-	PROTECTED_FIELD(mDragHandleAreaMax);
+	FIELD().NAME(mResizibleDir).PROTECTED();
+	FIELD().NAME(mNeighborMin).PROTECTED();
+	FIELD().NAME(mDragHandleMin).PROTECTED();
+	FIELD().NAME(mDragHandleLayoutMin).PROTECTED();
+	FIELD().NAME(mDragHandleAreaMin).PROTECTED();
+	FIELD().NAME(mNeighborMax).PROTECTED();
+	FIELD().NAME(mDragHandleMax).PROTECTED();
+	FIELD().NAME(mDragHandleLayoutMax).PROTECTED();
+	FIELD().NAME(mDragHandleAreaMax).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DockWindowPlace)

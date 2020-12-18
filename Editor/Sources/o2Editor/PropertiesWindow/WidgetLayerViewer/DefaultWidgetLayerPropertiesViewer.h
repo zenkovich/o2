@@ -58,10 +58,10 @@ CLASS_BASES_META(Editor::DefaultWidgetLayerPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
-	PROTECTED_FIELD(mLayers);
-	PROTECTED_FIELD(mViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mFitSizeButton).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mDrawableType).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mLayers).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mFitSizeButton).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDrawableType).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)

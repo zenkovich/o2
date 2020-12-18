@@ -61,22 +61,22 @@ CLASS_BASES_META(Editor::DefaultActorTransformViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 {
-	PROTECTED_FIELD(mTargetActors);
-	PROTECTED_FIELD(mPositionProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mPivotProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mScaleProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mSizeProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mRotationProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mDepthProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mLayoutEnabled).DEFAULT_VALUE(false);
-	PROTECTED_FIELD(mLayoutSpoiler).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAnchorRightTopProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAnchorLeftBottomProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(moffsetRightTopProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mOffsetLeftBottomProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mMinSizeProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mMaxSizeProperty).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mWeightProperty).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(mTargetActors).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPositionProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPivotProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mScaleProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizeProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mRotationProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mDepthProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mLayoutEnabled).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayoutSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mMinSizeProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mMaxSizeProperty).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mWeightProperty).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorTransformViewer)

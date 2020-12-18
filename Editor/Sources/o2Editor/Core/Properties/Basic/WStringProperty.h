@@ -51,7 +51,7 @@ CLASS_BASES_META(Editor::WStringProperty)
 END_META;
 CLASS_FIELDS_META(Editor::WStringProperty)
 {
-	PROTECTED_FIELD(mEditBox).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::WStringProperty)

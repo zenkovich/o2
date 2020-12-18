@@ -134,15 +134,15 @@ CLASS_BASES_META(Editor::AssetProperty)
 END_META;
 CLASS_FIELDS_META(Editor::AssetProperty)
 {
-	PROTECTED_FIELD(mBox).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mNameText).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCaption).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mCreateInstanceBtn).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mHeaderContainer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAssetObjectViewer).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAssetType).DEFAULT_VALUE(nullptr);
-	PROTECTED_FIELD(mAvailableToHaveInstance).DEFAULT_VALUE(false);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mBox).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameText).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaption).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCreateInstanceBtn).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetObjectViewer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetType).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mAvailableToHaveInstance).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetProperty)

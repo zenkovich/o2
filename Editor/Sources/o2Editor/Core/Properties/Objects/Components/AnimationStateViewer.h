@@ -71,11 +71,11 @@ CLASS_BASES_META(Editor::AnimationStateViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationStateViewer)
 {
-	PRIVATE_FIELD(mPlayPause).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mEditBtn).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mLooped).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mTimeProgress).DEFAULT_VALUE(nullptr);
-	PRIVATE_FIELD(mSubscribedPlayer).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPlayPause).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBtn).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mLooped).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeProgress).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationStateViewer)

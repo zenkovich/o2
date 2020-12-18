@@ -59,7 +59,7 @@ CLASS_BASES_META(Editor::IActorTransformViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorTransformViewer)
 {
-	PROTECTED_FIELD(mSpoiler).DEFAULT_VALUE(nullptr);
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorTransformViewer)

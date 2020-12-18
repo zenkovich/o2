@@ -65,10 +65,10 @@ CLASS_BASES_META(o2::Image)
 END_META;
 CLASS_FIELDS_META(o2::Image)
 {
-	PUBLIC_FIELD(image);
-	PUBLIC_FIELD(imageAsset);
-	PUBLIC_FIELD(imageName);
-	PROTECTED_FIELD(mImage).DEFAULT_VALUE(nullptr);
+	FIELD().NAME(image).PUBLIC();
+	FIELD().NAME(imageAsset).PUBLIC();
+	FIELD().NAME(imageName).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mImage).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Image)
