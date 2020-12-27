@@ -4604,8 +4604,6 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		checkEditedDate = false;
-
 		String thisSourcePath = "o2/Editor/Sources/o2Editor/Core/UIStyle/EditorUIStyle.cpp";
 		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
 
@@ -4641,21 +4639,12 @@ namespace Editor
 			o2Debug.Log(func->GetName() + " for " + (String)time + " sec");
 		}
 
-		if (saveStyle || true)
+		if (saveStyle)
 		{
-			float sum = 0;
-			for (int i = 0; i < 100; i++)
-			{
-				Timer t;
-				DataDocument newStylesData;
-				o2UI.SaveStyle(newStylesData["styles"]);
-				float x = t.GetDeltaTime();
-				o2Debug.Log((String)x);
-				sum += x;
-			}
-			o2Debug.Log((String)(sum/100.0f));
-// 			newStylesData["generatedDate"] = thisSourceEditedDate;
-// 			newStylesData.SaveToFile(GetEditorAssetsPath() + stylesFileName);
+			DataDocument newStylesData;
+			o2UI.SaveStyle(newStylesData["styles"]);
+			newStylesData["generatedDate"] = thisSourceEditedDate;
+			newStylesData.SaveToFile(GetEditorAssetsPath() + stylesFileName);
 		}
 	}
 }

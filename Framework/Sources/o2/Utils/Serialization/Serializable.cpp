@@ -25,6 +25,14 @@ namespace o2
 		return BaseFieldProcessor(node);
 	}
 
+	DeserializeTypeProcessor::BaseFieldProcessor DeserializeTypeProcessor::StartField()
+	{
+		return BaseFieldProcessor(node);
+	}
+
+	void DeserializeTypeProcessor::BaseFieldProcessor::SetProtectSection(ProtectSection section)
+	{}
+
 }
 
 DECLARE_CLASS(o2::ISerializable);

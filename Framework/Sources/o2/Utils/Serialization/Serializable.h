@@ -133,6 +133,66 @@ namespace o2
 		};
 	};
 
+	class DeserializeTypeProcessor
+	{
+	public:
+		struct BaseFieldProcessor;
+
+		template<typename _type>
+		struct DeserializeDefaultFieldProcessor;
+
+	public:
+		const DataValue& node;
+
+	public:
+		DeserializeTypeProcessor(const DataValue& node):node(node) {}
+
+		template<typename _object_type>
+		void StartBases(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartFields(_object_type* object, Type* type) {}
+
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name);
+
+		BaseFieldProcessor StartField();
+
+		struct BaseFieldProcessor
+		{
+			const DataValue& node;
+
+			BaseFieldProcessor(const DataValue& node):node(node) {}
+
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args);
+
+			template<typename _type>
+			BaseFieldProcessor& SetDefaultValue(const _type& value);
+
+			template<typename _object_type, typename _field_type>
+			BaseFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+											_field_type& field);
+
+			void SetProtectSection(ProtectSection section);
+		};
+
+		struct DeserializeFieldProcessor: public BaseFieldProcessor
+		{
+			DeserializeFieldProcessor(const DataValue& node):BaseFieldProcessor(node) {}
+
+			template<typename _attribute_type, typename ... _args>
+			DeserializeFieldProcessor& AddAttribute(_args ... args);
+
+			template<typename _type>
+			DeserializeFieldProcessor& SetDefaultValue(const _type& value);
+
+			template<typename _object_type, typename _field_type>
+			DeserializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+												   _field_type& field);
+		};
+	};
+
 	template<typename T>
 	struct DataValue::Converter<T, typename std::enable_if<std::is_base_of<ISerializable, T>::value>::type>
 	{
@@ -146,39 +206,8 @@ namespace o2
 
 		static void Read(T& value, const DataValue& data)
 		{
-			struct helper
-			{
-				static void ReadObject(void* object, const ObjectType& type, const DataValue& node)
-				{
-					for (auto baseType : type.GetBaseTypes())
-					{
-						const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
-						if (!baseObjectType)
-							continue;
-
-						void* baseObject = (*baseType.dynamicCastUpFunc)(object);
-						ReadObject(baseObject, *baseObjectType, node);
-					}
-
-					for (auto& field : type.GetFields())
-					{
-						auto srlzAttribute = field.GetAttribute<SerializableAttribute>();
-						if (srlzAttribute)
-						{
-							auto fldNode = node.FindMember(field.GetName());
-							if (fldNode)
-								field.DeserializeFromObject(object, *fldNode);
-						}
-					}
-				}
-			};
-
-			const ObjectType& type = dynamic_cast<const ObjectType&>(value.GetType());
-			void* objectPtr = type.DynamicCastFromIObject(dynamic_cast<IObject*>(&value));
-			helper::ReadObject(objectPtr, type, data);
-
-			if (value.GetType().IsBasedOn(TypeOf(ISerializable)))
-				dynamic_cast<ISerializable&>(value).OnDeserialized(data);
+			value.DeserializeBasic(data);
+			value.OnDeserialized(data);
 		}
 	};
 
@@ -250,6 +279,59 @@ namespace o2
 		return *this;
 	}
 
+	template<typename _object_type, typename _base_type>
+	void DeserializeTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
+	{
+		if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
+			object->_base_type::DeserializeBasic(node);
+	}
+
+	template<typename _attribute_type, typename ... _args>
+	auto DeserializeTypeProcessor::BaseFieldProcessor::AddAttribute(_args ... args)
+	{
+		if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
+			return DeserializeFieldProcessor(node);
+		else
+			return *this;
+	}
+
+	template<typename _object_type, typename _field_type>
+	DeserializeTypeProcessor::BaseFieldProcessor& DeserializeTypeProcessor::BaseFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
+																											void*(*pointerGetter)(void*), _field_type& field)
+	{
+		return *this;
+	}
+
+	template<typename _type>
+	DeserializeTypeProcessor::BaseFieldProcessor& DeserializeTypeProcessor::BaseFieldProcessor::SetDefaultValue(const _type& value)
+	{
+		return *this;
+	}
+
+	template<typename _attribute_type, typename ... _args>
+	DeserializeTypeProcessor::DeserializeFieldProcessor& DeserializeTypeProcessor::DeserializeFieldProcessor::AddAttribute(_args ... args)
+	{
+		return *this;
+	}
+
+	template<typename _type>
+	DeserializeTypeProcessor::DeserializeFieldProcessor& DeserializeTypeProcessor::DeserializeFieldProcessor::SetDefaultValue(const _type& value)
+	{
+		return *this;
+	}
+
+	template<typename _object_type, typename _field_type>
+	DeserializeTypeProcessor::DeserializeFieldProcessor& DeserializeTypeProcessor::DeserializeFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
+																														  void*(*pointerGetter)(void*), _field_type& field)
+	{
+		_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+
+		if (auto m = node.FindMember(name))
+			m->Get(*fieldPtr);
+
+		return *this;
+	}
+
 
 	// Serialization implementation macros
 #define SERIALIZABLE_MAIN(CLASS)  							                                                    \
@@ -267,11 +349,13 @@ namespace o2
 	}	                                                                                                        \
     void DeserializeBasic(const o2::DataValue& node) override                                                   \
     {												                                                            \
-        node.Get(*this);                                                                                        \
+        DeserializeTypeProcessor processor(node);															    \
+    	ProcessBaseTypes(const_cast<CLASS*>(this), processor);													\
+    	ProcessFields(const_cast<CLASS*>(this), processor);														\
 	}																											\
     void Deserialize(const o2::DataValue& node) override                                                        \
     {												                                                            \
-        DeserializeBasic(node);                                                                                 \
+        node.Get(*this);                                                                                        \
 	}												                                                            \
 	CLASS& operator=(const o2::DataValue& node) 		                                                        \
 	{												                                                            \
