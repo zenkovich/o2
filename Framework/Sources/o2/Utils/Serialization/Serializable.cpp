@@ -17,20 +17,10 @@ namespace o2
 		Deserialize(doc);
 	}
 
-	void ISerializable::SerializeBasic(const IObject& thisObject, DataValue& node) const
-	{
-		node.Set(thisObject);
-	}
-
-	void ISerializable::DeserializeBasic(IObject& thisObject, const DataValue& node)
-	{
-		node.Get(thisObject);
-	}
-
-	void SerializationTypeProcessor::BaseFieldProcessor::SetProtectSection(ProtectSection section)
+	void SerializeTypeProcessor::BaseFieldProcessor::SetProtectSection(ProtectSection section)
 	{}
 
-	SerializationTypeProcessor::BaseFieldProcessor SerializationTypeProcessor::StartField()
+	SerializeTypeProcessor::BaseFieldProcessor SerializeTypeProcessor::StartField()
 	{
 		return BaseFieldProcessor(node);
 	}

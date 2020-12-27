@@ -31,6 +31,16 @@ namespace o2
 			mOwner->OnChanged();
 	}
 
+	void DrawableComponent::OnSerialize(DataValue& node) const
+	{
+		Component::OnSerialize(node);
+	}
+
+	void DrawableComponent::OnDeserialized(const DataValue& node)
+	{
+		Component::OnDeserialized(node);
+	}
+
 	void DrawableComponent::UpdateEnabled()
 	{
 		bool lastResEnabled = mResEnabled;

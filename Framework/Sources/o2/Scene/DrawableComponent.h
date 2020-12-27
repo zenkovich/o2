@@ -29,6 +29,12 @@ namespace o2
 		using Component::mOwner;
 
 	protected:
+		// Beginning serialization callback
+		void OnSerialize(DataValue& node) const override;
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataValue& node) override;
+
 		// Updates component enable
 		void UpdateEnabled();
 
@@ -68,6 +74,8 @@ CLASS_METHODS_META(o2::DrawableComponent)
 {
 
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
 	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);

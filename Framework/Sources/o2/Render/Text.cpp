@@ -147,7 +147,7 @@ namespace o2
 		if (mFont)
 			mFont->onCharactersRebuilt -= ObjFunctionPtr<Text, void>(this, &Text::CheckCharactersAndRebuildMesh);
 
-		if (asset)
+		if (asset.IsValid())
 		{
 			mFont = asset->GetFont();
 			mFontAssetId = asset->GetUID();

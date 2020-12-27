@@ -36,6 +36,9 @@ namespace o2
 		// It is called when actor's transform was changed
 		void OnTransformUpdated();
 
+		// Beginning serialization callback
+		void OnSerialize(DataValue& node) const override;
+
 		// It is called when object was deserialized
 		void OnDeserialized(const DataValue& node) override;
 	};
@@ -60,6 +63,7 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	PUBLIC_STATIC_FUNCTION(String, GetCategory);
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

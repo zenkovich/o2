@@ -15,7 +15,7 @@ namespace o2
 	// -----------
 	// Drag handle
 	// -----------
-	class DragHandle : public IDrawable, public CursorAreaEventsListener, virtual public ISerializable
+	class DragHandle: public IDrawable, public CursorAreaEventsListener, virtual public ISerializable
 	{
 	public:
 		PROPERTIES(DragHandle);
@@ -263,12 +263,12 @@ namespace o2
 	// ---------------------------------------------------------
 	// Widget drag handle. Can be attached to widget as children
 	// ---------------------------------------------------------
-	class WidgetDragHandle : public DragHandle, public Widget
+	class WidgetDragHandle: public DragHandle, public Widget
 	{
 	public:
 		Function<Vec2F(const Vec2F&)> widgetOffsetToLocalTransformFunc; // Widget offset relative to parent to local transformation function
 		Function<Vec2F(const Vec2F&)> localToWidgetOffsetTransformFunc; // Local position to widget offset relative to parent transformation function
-		
+
 		Function<void()> onLayoutUpdated; // It is called when this layout were updated
 
 	public:
@@ -277,7 +277,7 @@ namespace o2
 
 		// Constructor with views
 		WidgetDragHandle(Sprite* regular, Sprite* hover = nullptr, Sprite* pressed = nullptr,
-				         Sprite* selected = nullptr, Sprite* selectedHovered = nullptr, 
+						 Sprite* selected = nullptr, Sprite* selectedHovered = nullptr,
 						 Sprite* selectedPressed = nullptr);
 
 		// Copy-constructor
@@ -309,9 +309,9 @@ namespace o2
 
 		SERIALIZABLE(WidgetDragHandle);
 
-	private:
+	protected:
 		// Hide public functions
-		using DragHandle::screenToLocalTransformFunc; 
+		using DragHandle::screenToLocalTransformFunc;
 		using DragHandle::localToScreenTransformFunc;
 
 		// Updates layers layouts, calls after updating widget layout
@@ -380,7 +380,7 @@ namespace o2
 	// ----------------------------------
 	// Selectable draggable handles group
 	// ----------------------------------
-	class SelectableDragHandlesGroup : public ISelectableDragHandlesGroup
+	class SelectableDragHandlesGroup: public ISelectableDragHandlesGroup
 	{
 	public:
 		// Destructor
@@ -567,8 +567,8 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocal, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreen, const Vec2F&);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, UpdateLayersLayouts);
-	PRIVATE_FUNCTION(void, OnSerialize, DataValue&);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

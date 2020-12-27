@@ -53,6 +53,12 @@ namespace o2
 		basis = mOwner->transform->GetWorldBasis();
 	}
 
+	void ParticlesEmitterComponent::OnSerialize(DataValue& node) const
+	{
+		DrawableComponent::OnSerialize(node);
+		ParticlesEmitter::OnSerialize(node);
+	}
+
 	void ParticlesEmitterComponent::OnDeserialized(const DataValue& node)
 	{
 		DrawableComponent::OnDeserialized(node);
