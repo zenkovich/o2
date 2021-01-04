@@ -325,6 +325,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\SerializeFieldProcessors.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Singleton.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\System\Clipboard.h" />

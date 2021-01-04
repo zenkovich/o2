@@ -22,6 +22,12 @@ namespace o2
 		// Deserializing object from data node
 		virtual void Deserialize(const DataValue& node) {};
 
+		// Serializing object delta from origin into data node
+		virtual void SerializeDelta(DataValue& node, const IObject& origin) const {}
+
+		// Deserializing object delta from origin from data node
+		virtual void DeserializeDelta(const DataValue& node, const IObject& origin) {};
+
 		// Serializes data to string
 		String SerializeToString() const;
 
@@ -40,6 +46,12 @@ namespace o2
 		// Completion deserialization callback
 		virtual void OnDeserialized(const DataValue& node) {}
 
+		// Beginning serialization delta callback
+		virtual void OnSerializeDelta(DataValue& node, const IObject& origin) const {}
+
+		// Completion deserialization delta callback
+		virtual void OnDeserializedDelta(const DataValue& node, const IObject& origin) {}
+
 		IOBJECT(ISerializable);
 
 	protected:
@@ -48,149 +60,12 @@ namespace o2
 
 		// Deserializing object from data node
 		virtual void DeserializeBasic(const DataValue& node) {}
-	};
 
-	// ----------------------------
-	// Serializable field attribute
-	// ----------------------------
-	class SerializableAttribute: public IAttribute
-	{
-		ATTRIBUTE_COMMENT_DEFINITION("SERIALIZABLE");
-		ATTRIBUTE_SHORT_DEFINITION("SERIALIZABLE_ATTRIBUTE");
-	};
+		// Serializing object into data node
+		virtual void SerializeDeltaBasic(DataValue& node, const IObject& origin) const {}
 
-	class SerializeTypeProcessor
-	{
-	public:
-		struct BaseFieldProcessor;
-
-		template<typename _type>
-		struct SerializeDefaultFieldProcessor;
-
-	public:
-		DataValue& node;
-
-	public:
-		SerializeTypeProcessor(DataValue& node):node(node) {}
-
-		template<typename _object_type>
-		void StartBases(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartFields(_object_type* object, Type* type) {}
-
-		template<typename _object_type, typename _base_type>
-		void BaseType(_object_type* object, Type* type, const char* name);
-
-		BaseFieldProcessor StartField();
-
-		struct BaseFieldProcessor
-		{
-			DataValue& node;
-
-			BaseFieldProcessor(DataValue& node):node(node) {}
-
-			template<typename _attribute_type, typename ... _args>
-			auto AddAttribute(_args ... args);
-
-			template<typename _type>
-			BaseFieldProcessor& SetDefaultValue(const _type& value);
-
-			template<typename _object_type, typename _field_type>
-			BaseFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-											_field_type& field);
-
-			void SetProtectSection(ProtectSection section);
-		};
-
-		struct SerializeFieldProcessor: public BaseFieldProcessor
-		{
-			SerializeFieldProcessor(DataValue& node):BaseFieldProcessor(node) {}
-
-			template<typename _attribute_type, typename ... _args>
-			SerializeFieldProcessor& AddAttribute(_args ... args);
-
-			template<typename _type>
-			SerializeDefaultFieldProcessor<_type> SetDefaultValue(const _type& value);
-
-			template<typename _object_type, typename _field_type>
-			SerializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-												 _field_type& field);
-		};
-
-		template<typename _type>
-		struct SerializeDefaultFieldProcessor: public SerializeFieldProcessor
-		{
-			_type defaultValue;
-
-			SerializeDefaultFieldProcessor(DataValue& node, const _type& defaultValue):
-				SerializeFieldProcessor(node), defaultValue(defaultValue)
-			{}
-
-			template<typename _object_type, typename _field_type>
-			SerializeDefaultFieldProcessor<_type>& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-															   _field_type& field);
-		};
-	};
-
-	class DeserializeTypeProcessor
-	{
-	public:
-		struct BaseFieldProcessor;
-
-		template<typename _type>
-		struct DeserializeDefaultFieldProcessor;
-
-	public:
-		const DataValue& node;
-
-	public:
-		DeserializeTypeProcessor(const DataValue& node):node(node) {}
-
-		template<typename _object_type>
-		void StartBases(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartFields(_object_type* object, Type* type) {}
-
-		template<typename _object_type, typename _base_type>
-		void BaseType(_object_type* object, Type* type, const char* name);
-
-		BaseFieldProcessor StartField();
-
-		struct BaseFieldProcessor
-		{
-			const DataValue& node;
-
-			BaseFieldProcessor(const DataValue& node):node(node) {}
-
-			template<typename _attribute_type, typename ... _args>
-			auto AddAttribute(_args ... args);
-
-			template<typename _type>
-			BaseFieldProcessor& SetDefaultValue(const _type& value);
-
-			template<typename _object_type, typename _field_type>
-			BaseFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-											_field_type& field);
-
-			void SetProtectSection(ProtectSection section);
-		};
-
-		struct DeserializeFieldProcessor: public BaseFieldProcessor
-		{
-			DeserializeFieldProcessor(const DataValue& node):BaseFieldProcessor(node) {}
-
-			template<typename _attribute_type, typename ... _args>
-			DeserializeFieldProcessor& AddAttribute(_args ... args);
-
-			template<typename _type>
-			DeserializeFieldProcessor& SetDefaultValue(const _type& value);
-
-			template<typename _object_type, typename _field_type>
-			DeserializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-												   _field_type& field);
-		};
+		// Deserializing object from data node
+		virtual void DeserializeDeltaBasic(const DataValue& node, const IObject& origin) {}
 	};
 
 	template<typename T>
@@ -211,127 +86,14 @@ namespace o2
 		}
 	};
 
-	template<typename _object_type, typename _base_type>
-	void SerializeTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
+	// ----------------------------
+	// Serializable field attribute
+	// ----------------------------
+	class SerializableAttribute: public IAttribute
 	{
-		if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
-			object->_base_type::SerializeBasic(node);
-	}
-
-	template<typename _attribute_type, typename ... _args>
-	auto SerializeTypeProcessor::BaseFieldProcessor::AddAttribute(_args ... args)
-	{
-		if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-			return SerializeFieldProcessor(node);
-		else
-			return *this;
-	}
-
-	template<typename _object_type, typename _field_type>
-	SerializeTypeProcessor::BaseFieldProcessor& SerializeTypeProcessor::BaseFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
-																										void*(*pointerGetter)(void*), _field_type& field)
-	{
-		return *this;
-	}
-
-	template<typename _type>
-	SerializeTypeProcessor::BaseFieldProcessor& SerializeTypeProcessor::BaseFieldProcessor::SetDefaultValue(const _type& value)
-	{
-		return *this;
-	}
-
-	template<typename _attribute_type, typename ... _args>
-	SerializeTypeProcessor::SerializeFieldProcessor& SerializeTypeProcessor::SerializeFieldProcessor::AddAttribute(_args ... args)
-	{
-		return *this;
-	}
-
-	template<typename _type>
-	SerializeTypeProcessor::SerializeDefaultFieldProcessor<_type> SerializeTypeProcessor::SerializeFieldProcessor::SetDefaultValue(const _type& value)
-	{
-		return SerializeDefaultFieldProcessor<_type>(node, value);
-	}
-
-	template<typename _object_type, typename _field_type>
-	SerializeTypeProcessor::SerializeFieldProcessor& SerializeTypeProcessor::SerializeFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
-																												  void*(*pointerGetter)(void*), _field_type& field)
-	{
-		_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-
-		if constexpr (std::is_default_constructible<_field_type>::value && SupportsEqualOperator<_field_type>::value)
-		{
-			if (Math::Equals(*fieldPtr, _field_type()))
-				return *this;
-		}
-
-		node.AddMember(name).Set(*fieldPtr);
-		return *this;
-	}
-
-	template<typename _type>
-	template<typename _object_type, typename _field_type>
-	SerializeTypeProcessor::SerializeDefaultFieldProcessor<_type>& SerializeTypeProcessor::SerializeDefaultFieldProcessor<_type>::FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*), _field_type& field)
-	{
-		_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-		if (*fieldPtr != defaultValue)
-			node.AddMember(name).Set(*fieldPtr);
-
-		return *this;
-	}
-
-	template<typename _object_type, typename _base_type>
-	void DeserializeTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
-	{
-		if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
-			object->_base_type::DeserializeBasic(node);
-	}
-
-	template<typename _attribute_type, typename ... _args>
-	auto DeserializeTypeProcessor::BaseFieldProcessor::AddAttribute(_args ... args)
-	{
-		if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-			return DeserializeFieldProcessor(node);
-		else
-			return *this;
-	}
-
-	template<typename _object_type, typename _field_type>
-	DeserializeTypeProcessor::BaseFieldProcessor& DeserializeTypeProcessor::BaseFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
-																											void*(*pointerGetter)(void*), _field_type& field)
-	{
-		return *this;
-	}
-
-	template<typename _type>
-	DeserializeTypeProcessor::BaseFieldProcessor& DeserializeTypeProcessor::BaseFieldProcessor::SetDefaultValue(const _type& value)
-	{
-		return *this;
-	}
-
-	template<typename _attribute_type, typename ... _args>
-	DeserializeTypeProcessor::DeserializeFieldProcessor& DeserializeTypeProcessor::DeserializeFieldProcessor::AddAttribute(_args ... args)
-	{
-		return *this;
-	}
-
-	template<typename _type>
-	DeserializeTypeProcessor::DeserializeFieldProcessor& DeserializeTypeProcessor::DeserializeFieldProcessor::SetDefaultValue(const _type& value)
-	{
-		return *this;
-	}
-
-	template<typename _object_type, typename _field_type>
-	DeserializeTypeProcessor::DeserializeFieldProcessor& DeserializeTypeProcessor::DeserializeFieldProcessor::FieldBasics(_object_type* object, Type* type, const char* name,
-																														  void*(*pointerGetter)(void*), _field_type& field)
-	{
-		_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-
-		if (auto m = node.FindMember(name))
-			m->Get(*fieldPtr);
-
-		return *this;
-	}
-
+		ATTRIBUTE_COMMENT_DEFINITION("SERIALIZABLE");
+		ATTRIBUTE_SHORT_DEFINITION("SERIALIZABLE_ATTRIBUTE");
+	};
 
 	// Serialization implementation macros
 #define SERIALIZABLE_MAIN(CLASS)  							                                                    \
@@ -356,6 +118,26 @@ namespace o2
     void Deserialize(const o2::DataValue& node) override                                                        \
     {												                                                            \
         node.Get(*this);                                                                                        \
+	}												                                                            \
+    void SerializeDeltaBasic(o2::DataValue& node, const IObject& origin) const override                         \
+    {						                                                                                    \
+    	SerializeDeltaTypeProcessor<CLASS> processor(node, dynamic_cast<const CLASS&>(origin));                 \
+		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													\
+		ProcessFields(const_cast<CLASS*>(this), processor);														\
+	}	                                                                                                        \
+    void SerializeDelta(o2::DataValue& node, const IObject& origin) const override                              \
+    {						                                                                                    \
+		node.SetValueDelta(*this, origin);                                                                      \
+	}	                                                                                                        \
+    void DeserializeDeltaBasic(const o2::DataValue& node, const IObject& origin) override                       \
+    {												                                                            \
+    	DeserializeDeltaTypeProcessor<CLASS> processor(node, dynamic_cast<const CLASS&>(origin));               \
+    	ProcessBaseTypes(const_cast<CLASS*>(this), processor);													\
+    	ProcessFields(const_cast<CLASS*>(this), processor);														\
+	}																											\
+    void DeserializeDelta(const o2::DataValue& node, const IObject& origin) override                            \
+    {												                                                            \
+        node.GetValueDelta(*this, origin);                                                                      \
 	}												                                                            \
 	CLASS& operator=(const o2::DataValue& node) 		                                                        \
 	{												                                                            \
@@ -382,6 +164,8 @@ namespace o2
     AddAttribute<SerializableAttribute>()
 }
 
+#include "o2/Utils/Serialization/SerializeFieldProcessors.h"
+
 CLASS_BASES_META(o2::ISerializable)
 {
 	BASE_CLASS(o2::IObject);
@@ -396,11 +180,17 @@ CLASS_METHODS_META(o2::ISerializable)
 
 	PUBLIC_FUNCTION(void, Serialize, DataValue&);
 	PUBLIC_FUNCTION(void, Deserialize, const DataValue&);
+	PUBLIC_FUNCTION(void, SerializeDelta, DataValue&, const IObject&);
+	PUBLIC_FUNCTION(void, DeserializeDelta, const DataValue&, const IObject&);
 	PUBLIC_FUNCTION(String, SerializeToString);
 	PUBLIC_FUNCTION(void, DeserializeFromString, const String&);
 	PUBLIC_FUNCTION(void, OnSerialize, DataValue&);
 	PUBLIC_FUNCTION(void, OnDeserialized, const DataValue&);
+	PUBLIC_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PUBLIC_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, SerializeBasic, DataValue&);
 	PROTECTED_FUNCTION(void, DeserializeBasic, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeDeltaBasic, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, DeserializeDeltaBasic, const DataValue&, const IObject&);
 }
 END_META;

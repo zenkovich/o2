@@ -658,121 +658,18 @@ namespace o2
 		return mData.arrayData.elements + mData.arrayData.count;
 	}
 
-	DataValue& DataValue::SetValueDelta(const IObject& object, const IObject& source)
+	DataValue& DataValue::SetValueDelta(const ISerializable& object, const IObject& source)
 	{
-		struct helper
-		{
-			static void WriteObject(void* object, void* source, const ObjectType& type, DataValue& node)
-			{
-				for (auto baseType : type.GetBaseTypes())
-				{
-					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
-					if (!baseObjectType)
-						continue;
-
-					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
-					void* baseSourceObject = (*baseType.dynamicCastUpFunc)(source);
-					WriteObject(baseObject, baseSourceObject, *baseObjectType, node);
-				}
-
-				for (auto& field : type.GetFields())
-				{
-					if (!field.GetAttribute<SerializableAttribute>())
-						continue;
-
-					if (field.GetType()->IsBasedOn(TypeOf(IObject)))
-					{
-						DataValue& newFieldNode = node.AddMember(field.GetName());
-
-						newFieldNode.SetValueDelta(*(IObject*)field.GetValuePtr(object),
-												   *(IObject*)field.GetValuePtr(source));
-
-						if (newFieldNode.IsEmpty())
-							node.RemoveMember(field.GetName());
-
-						continue;
-					}
-
-					if (!field.IsValueEquals(object, source))
-					{
-						DataValue& newFieldNode = node.AddMember(field.GetName());
-
-						field.SerializeFromObject(object, newFieldNode);
-
-						if (newFieldNode.IsEmpty())
-							node.RemoveMember(field.GetName());
-					}
-				}
-			}
-		};
-
-		auto& objectType = object.GetType();
-		auto& sourceType = source.GetType();
-		if (!objectType.IsBasedOn(sourceType) && !sourceType.IsBasedOn(objectType))
-			return Set(object);
-
-		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
-			((ISerializable&)object).OnSerialize(*this);
-
-		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
-		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
-		void* sourcePtr = type.DynamicCastFromIObject(const_cast<IObject*>(&source));
-
-		helper::WriteObject(objectPtr, sourcePtr, type, *this);
+		object.SerializeDeltaBasic(*this, source);
+		object.OnSerializeDelta(*this, source);
 
 		return *this;
 	}
 
-	void DataValue::GetValueDelta(IObject& object, const IObject& source) const
+	void DataValue::GetValueDelta(ISerializable& object, const IObject& source) const
 	{
-		struct helper
-		{
-			static void ReadObject(void* object, void* source, const ObjectType& type, const DataValue& node)
-			{
-				for (auto baseType : type.GetBaseTypes())
-				{
-					const ObjectType* baseObjectType = dynamic_cast<const ObjectType*>(baseType.type);
-					if (!baseObjectType)
-						continue;
-
-					void* baseObject = (*baseType.dynamicCastUpFunc)(object);
-					void* baseSourceObject = (*baseType.dynamicCastUpFunc)(source);
-					ReadObject(baseObject, baseSourceObject, *baseObjectType, node);
-				}
-
-				for (auto& field : type.GetFields())
-				{
-					if (!field.GetAttribute<SerializableAttribute>())
-						continue;
-
-					auto fldNode = node.FindMember(field.GetName());
-					if (fldNode)
-					{
-						if (field.GetType()->IsBasedOn(TypeOf(IObject)))
-						{
-							fldNode->GetValueDelta(*(IObject*)field.GetValuePtr(object),
-												   *(IObject*)field.GetValuePtr(source));
-						}
-						else field.DeserializeFromObject(object, *fldNode);
-					}
-					else field.CopyValue(object, source);
-				}
-			}
-		};
-
-		if (!object.GetType().IsBasedOn(source.GetType()) && !source.GetType().IsBasedOn(object.GetType()))
-		{
-			Get(object);
-			return;
-		}
-
-		const ObjectType& type = dynamic_cast<const ObjectType&>(object.GetType());
-		void* objectPtr = type.DynamicCastFromIObject(const_cast<IObject*>(&object));
-		void* sourcePtr = type.DynamicCastFromIObject(const_cast<IObject*>(&source));
-		helper::ReadObject(objectPtr, sourcePtr, type, *this);
-
-		if (object.GetType().IsBasedOn(TypeOf(ISerializable)))
-			((ISerializable&)object).OnDeserialized(*this);
+		object.DeserializeDeltaBasic(*this, source);
+		object.OnDeserializedDelta(*this, source);
 	}
 
 	bool DataValue::IsEmpty() const

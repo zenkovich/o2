@@ -13,6 +13,8 @@
 
 namespace o2
 {
+	class ISerializable;
+
 	class DataDocument;
 	struct DataMember;
 
@@ -247,10 +249,10 @@ namespace o2
 		DataMemberIterator RemoveMember(DataMemberIterator it);
 
 		// Sets objects with delta from source object
-		DataValue& SetValueDelta(const IObject& object, const IObject& source);
+		DataValue& SetValueDelta(const ISerializable& object, const IObject& source);
 
 		// Gets objects with delta from source object
-		void GetValueDelta(IObject& object, const IObject& source) const;
+		void GetValueDelta(ISerializable& object, const IObject& source) const;
 
 		// Begin array iterator
 		DataMemberIterator BeginMember();

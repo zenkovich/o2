@@ -683,6 +683,9 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\SerializeFieldProcessors.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">
