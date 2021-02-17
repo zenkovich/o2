@@ -91,11 +91,13 @@ namespace o2
 
 	void ImageComponent::OnDeserialized(const DataValue& node)
 	{
+		DrawableComponent::OnDeserialized(node);
 		Sprite::OnDeserialized(node);
 	}
 
 	void ImageComponent::OnSerialize(DataValue& node) const
 	{
+		DrawableComponent::OnSerialize(node);
 		Sprite::OnSerialize(node);
 	}
 

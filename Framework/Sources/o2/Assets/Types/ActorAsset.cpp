@@ -47,8 +47,22 @@ namespace o2
 		return "proto";
 	}
 
+	void ActorAsset::OnSerialize(DataValue& node) const
+	{
+		mActor->mIsAsset = false;
+		node["mActor"] = mActor;
+		mActor->mIsAsset = true;
+	}
+
 	void ActorAsset::OnDeserialized(const DataValue& node)
 	{
+		int lockDepth = ActorRefResolver::GetLockDepth();
+		ActorRefResolver::UnlockResolving(lockDepth);
+
+		mActor = node["mActor"];
+
+		ActorRefResolver::LockResolving(lockDepth);
+
 		if (mActor)
 		{
 			mActor->RemoveFromScene();

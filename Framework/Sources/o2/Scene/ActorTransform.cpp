@@ -777,6 +777,17 @@ namespace o2
 		SetDirty();
 	}
 
+	void ActorTransform::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		node.SetDelta(*mData, *dynamic_cast<const ActorTransform&>(origin).mData);
+	}
+
+	void ActorTransform::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		node.GetDelta(*mData, *dynamic_cast<const ActorTransform&>(origin).mData);
+		SetDirty();
+	}
+
 	Vec2F ActorTransform::GetParentPosition() const
 	{
 		if (!mData->owner || !mData->owner->mParent)

@@ -4,6 +4,7 @@
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Animation/AnimationClip.h"
 #include "o2/Animation/AnimationMask.h"
 #include "o2/Animation/AnimationState.h"

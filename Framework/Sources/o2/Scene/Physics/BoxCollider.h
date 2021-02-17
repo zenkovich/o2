@@ -65,6 +65,11 @@ namespace o2
 
 		// It is called when transformation was changed; fits size by actor size when required
 		void OnTransformChanged() override;
+
+		void FitSize();
+
+		// It is called when actor was included to scene; fits size if required
+		void OnAddToScene() override;
 	};
 }
 
@@ -95,5 +100,7 @@ CLASS_METHODS_META(o2::BoxCollider)
 	PUBLIC_FUNCTION(void, OnAddedFromEditor);
 	PRIVATE_FUNCTION(b2Shape*, GetShape, const Basis&);
 	PRIVATE_FUNCTION(void, OnTransformChanged);
+	PRIVATE_FUNCTION(void, FitSize);
+	PRIVATE_FUNCTION(void, OnAddToScene);
 }
 END_META;

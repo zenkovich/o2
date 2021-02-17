@@ -12,276 +12,12 @@ namespace o2
 	void Actor::MakePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
 	{
 		SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
-		const_cast<Actor*>(source)->mPrototypeLink = target;
+		const_cast<Actor*>(source)->mPrototypeLink.CopyWithoutRemap(target);
 	}
 
 	void Actor::MakePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
 	{
 		SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
-	}
-
-	void Actor::SerializeWithProto(DataValue& node) const
-	{
-		const Actor* proto = mPrototypeLink.Get();
-
-		// Prototype data
-		if (mPrototype)
-			node["Prototype"] = mPrototype;
-
-		if (mPrototypeLink)
-			node["PrototypeLink"] = proto->GetID();
-
-		// Basic data
-		node["Id"] = mId;
-
-		if (mName != proto->mName)
-			node["Name"] = mName;
-
-		if (mEnabled != proto->mEnabled)
-			node["Enabled"] = mEnabled;
-
-		if (mLocked != proto->mLocked)
-			node["Locked"] = mLocked;
-
-		if (mLayer != proto->mLayer)
-			node["LayerName"] = mLayer->mName;
-
-		// Transform data
-		auto transformNode = node.AddMember("Transform");
-
-		if (transform->mData->position != proto->transform->mData->position)
-			transformNode["Position"] = transform->mData->position;
-
-		if (transform->mData->size != proto->transform->mData->size)
-			transformNode["Size"] = transform->mData->size;
-
-		if (transform->mData->scale != proto->transform->mData->scale)
-			transformNode["Scale"] = transform->mData->scale;
-
-		if (transform->mData->pivot != proto->transform->mData->pivot)
-			transformNode["Pivot"] = transform->mData->pivot;
-
-		if (!Math::Equals(transform->mData->angle, proto->transform->mData->angle))
-			transformNode["Angle"] = transform->mData->angle;
-
-		if (!Math::Equals(transform->mData->shear, proto->transform->mData->shear))
-			transformNode["Shear"] = transform->mData->shear;
-
-		// Children data
-		auto& childsNode = node.AddMember("Children");
-		childsNode.SetArray();
-		for (auto child : mChildren)
-		{
-			auto& childNode = childsNode.AddElement();
-			childNode.AddMember("Type") = child->GetType().GetName();
-			child->Serialize(childNode.AddMember("Data"));
-		}
-
-		// Components data
-		auto& componentsNode = node.AddMember("Components");
-		componentsNode.SetArray();
-		for (auto component : mComponents)
-		{
-			auto& compNode = componentsNode.AddElement();
-			compNode.AddMember("Type") = component->GetType().GetName();
-
-			auto& dataValue = compNode.AddMember("Data");
-			if (auto componentProtoLink = component->mPrototypeLink)
-			{
-				dataValue["PrototypeLink"] = componentProtoLink->mId;
-				dataValue.SetValueDelta(*component, *component->mPrototypeLink);
-			}
-			else
-				component->Serialize(dataValue);
-		}
-	}
-
-	void Actor::DeserializeWithProto(const DataValue& node)
-	{
-		RemoveAllChildren();
-		RemoveAllComponents();
-
-		ActorRefResolver::Instance().LockResolving();
-		ActorRefResolver::Instance().ActorCreated(this);
-
-		if (auto prototypeNode = node.FindMember("Prototype"))
-			SetPrototype(*prototypeNode);
-
-		if (auto prototypeLinkNode = node.FindMember("PrototypeLink"))
-		{
-			SceneUID id = *prototypeLinkNode;
-			Actor* parent = mParent;
-			while (parent && parent->mPrototypeLink)
-			{
-				bool found = false;
-
-				Actor* protoLink = parent->mPrototypeLink.Get();
-				while (protoLink)
-				{
-					if (auto fnd = protoLink->FindActorById(id))
-					{
-						mPrototypeLink = fnd;
-						found = true;
-						break;
-					}
-
-					protoLink = protoLink->mPrototypeLink.Get();
-				}
-
-				if (found)
-					break;
-
-				parent = parent->mParent;
-			}
-		}
-
-		SetID(node.GetMember("Id"));
-
-		if (!mPrototypeLink)
-		{
-			ActorRefResolver::Instance().UnlockResolving();
-			ActorRefResolver::Instance().ResolveRefs();
-			return;
-		}
-
-		const Actor* proto = mPrototypeLink.Get();
-
-		if (auto subNode = node.FindMember("Name"))
-			mName = *subNode;
-		else
-			mName = proto->mName;
-
-		if (auto subNode = node.FindMember("Enabled"))
-			mEnabled = *subNode;
-		else
-			mEnabled = proto->mEnabled;
-
-		if (auto subNode = node.FindMember("Locked"))
-			mLocked = *subNode;
-		else
-			mLocked = proto->mLocked;
-
-		if (auto subNode = node.FindMember("LayerName"))
-			SetLayer(*subNode);
-		else
-			SetLayer(proto->mLayerName);
-
-		// Transform data
-		if (auto transformNode = node.FindMember("Transform"))
-		{
-			if (auto subNode = transformNode->FindMember("Position"))
-				transform->mData->position = *subNode;
-			else
-				transform->mData->position = proto->transform->mData->position;
-
-			if (auto subNode = transformNode->FindMember("Size"))
-				transform->mData->size = *subNode;
-			else
-				transform->mData->size = proto->transform->mData->size;
-
-			if (auto subNode = transformNode->FindMember("Scale"))
-				transform->mData->scale = *subNode;
-			else
-				transform->mData->scale = proto->transform->mData->scale;
-
-			if (auto subNode = transformNode->FindMember("Pivot"))
-				transform->mData->pivot = *subNode;
-			else
-				transform->mData->pivot = proto->transform->mData->pivot;
-
-			if (auto subNode = transformNode->FindMember("Angle"))
-				transform->mData->angle = *subNode;
-			else
-				transform->mData->angle = proto->transform->mData->angle;
-
-			if (auto subNode = transformNode->FindMember("Shear"))
-				transform->mData->shear = *subNode;
-			else
-				transform->mData->shear = proto->transform->mData->shear;
-		}
-
-		// children
-		auto childrenNode = node.FindMember("Children");
-		if (childrenNode && childrenNode->IsArray())
-		{
-			for (auto& childNode : *childrenNode)
-			{
-				const DataValue* typeNode = childNode.FindMember("Type");
-				const DataValue* dataValue = childNode.FindMember("Data");
-				if (typeNode && dataValue)
-				{
-					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
-					if (type)
-					{
-						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
-						AddChild(child);
-						child->Deserialize(*dataValue);
-					}
-				}
-			}
-		}
-
-		// components
-		auto componentsNode = node.FindMember("Components");
-		if (componentsNode && componentsNode->IsArray())
-		{
-			for (auto& componentNode : *componentsNode)
-			{
-				String type = componentNode["Type"];
-				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
-
-				mComponents.Add(newComponent);
-				newComponent->mOwner = this;
-
-				if (newComponent)
-				{
-					auto& componentDataValue = componentNode["Data"];
-
-					if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
-					{
-						SceneUID id = *prototypeLinkNode;
-						if (mPrototypeLink)
-						{
-							for (auto protoLinkComponent : mPrototypeLink->mComponents)
-							{
-								if (protoLinkComponent->mId == id)
-								{
-									newComponent->mPrototypeLink = protoLinkComponent;
-									break;
-								}
-							}
-						}
-
-						if (!newComponent->mPrototypeLink)
-							newComponent->Deserialize(componentDataValue);
-						else
-							componentDataValue.GetValueDelta(*newComponent, *newComponent->mPrototypeLink);
-					}
-				}
-				else o2Debug.LogError("Can't create component with type:" + type);
-			}
-		}
-
-		transform->SetDirty();
-
-		ActorRefResolver::Instance().UnlockResolving();
-		ActorRefResolver::Instance().ResolveRefs();
-	}
-
-	ActorAssetRef Actor::GetPrototype() const
-	{
-		if (mPrototype)
-			return mPrototype;
-
-		if (mPrototypeLink && mParent)
-			return mParent->GetPrototype();
-
-		return ActorAssetRef();
-	}
-
-	ActorAssetRef Actor::GetPrototypeDirectly() const
-	{
-		return mPrototype;
 	}
 
 	void Actor::BreakPrototypeLink()
@@ -354,29 +90,6 @@ namespace o2
 		prototype->OnChanged();
 
 		return prototypeAsset;
-	}
-
-	void Actor::SetPrototype(ActorAssetRef asset)
-	{
-		o2Scene.OnActorPrototypeBroken(this);
-
-		auto linkAsset = asset;
-		while (linkAsset)
-		{
-			o2Scene.OnActorLinkedToPrototype(linkAsset, this);
-			linkAsset = linkAsset->GetActor()->GetPrototype();
-		}
-
-		mPrototype = asset;
-		if (asset)
-			mPrototypeLink = asset->GetActor();
-		else
-			mPrototypeLink = nullptr;
-	}
-
-	ActorRef Actor::GetPrototypeLink() const
-	{
-		return mPrototypeLink;
 	}
 
 	void Actor::SeparateActors(Vector<Actor*>& separatedActors)
@@ -606,9 +319,9 @@ namespace o2
 			bool isChildProtoLinked = child->mPrototypeLink != nullptr;
 
 			if (isChildProtoLinked)
-				newProtoChild->mPrototypeLink = child->mPrototypeLink;
+				newProtoChild->mPrototypeLink.CopyWithoutRemap(child->mPrototypeLink);
 
-			child->mPrototypeLink = newProtoChild;
+			child->mPrototypeLink.CopyWithoutRemap(newProtoChild);
 
 			// copy components
 			for (auto component : child->mComponents)
@@ -643,7 +356,7 @@ namespace o2
 				if (child->mPrototype)
 					newChild->SetPrototype(child->mPrototype);
 
-				newChild->mPrototypeLink = newProtoChild;
+				newChild->mPrototypeLink.CopyWithoutRemap(newProtoChild);
 
 				for (auto component : child->mComponents)
 				{
@@ -739,20 +452,6 @@ namespace o2
 		for (auto child : mChildren)
 		{
 			if (auto res = child->FindLinkedActor(id))
-				return res;
-		}
-
-		return nullptr;
-	}
-
-	Actor* Actor::FindActorById(SceneUID id)
-	{
-		if (mId == id)
-			return this;
-
-		for (auto child : mChildren)
-		{
-			if (auto res = child->FindActorById(id))
 				return res;
 		}
 

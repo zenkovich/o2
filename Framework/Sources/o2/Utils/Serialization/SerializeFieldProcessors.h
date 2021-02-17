@@ -173,14 +173,14 @@ namespace o2
 			}
 
 			template<typename _type>
-			BaseFieldProcessor& SetDefaultValue(const _type& value) 
+			BaseFieldProcessor& SetDefaultValue(const _type& value)
 			{
 				return *this;
 			}
 
 			template<typename _object_type, typename _field_type>
 			BaseFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-											_field_type& field) 
+											_field_type& field)
 			{
 				return *this;
 			}
@@ -194,13 +194,13 @@ namespace o2
 			DeserializeFieldProcessor(const DataValue& node):BaseFieldProcessor(node) {}
 
 			template<typename _attribute_type, typename ... _args>
-			DeserializeFieldProcessor& AddAttribute(_args ... args) 
+			DeserializeFieldProcessor& AddAttribute(_args ... args)
 			{
 				return *this;
 			}
 
 			template<typename _type>
-			DeserializeFieldProcessor& SetDefaultValue(const _type& value) 
+			DeserializeFieldProcessor& SetDefaultValue(const _type& value)
 			{
 				return *this;
 			}
@@ -303,15 +303,19 @@ namespace o2
 												 _field_type& field)
 			{
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
 
 				if constexpr (SupportsEqualOperator<_field_type>::value)
 				{
-					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
-					if (Math::Equals(*fieldPtr, *originFieldPtr))
+					if (EqualsForDeltaSerialize(*fieldPtr, *originFieldPtr))
 						return *this;
 				}
 
-				node.AddMember(name).Set(*fieldPtr);
+				DataValue& member = node.AddMember(name);
+				member.SetDelta(*fieldPtr, *originFieldPtr);
+				if (member.IsNull())
+					node.RemoveMember(name);
+
 				return *this;
 			}
 		};
@@ -405,9 +409,17 @@ namespace o2
 												   _field_type& field)
 			{
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
 
-				if (auto m = node.FindMember(name))
-					m->Get(*fieldPtr);
+				if (auto m = node.FindMember(name); m && !m->IsNull())
+				{
+					m->GetDelta(*fieldPtr, *originFieldPtr);
+				}
+				else
+				{
+					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
+					*fieldPtr = *originFieldPtr;
+				}
 
 				return *this;
 			}

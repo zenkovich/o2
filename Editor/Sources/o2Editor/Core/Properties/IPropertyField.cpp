@@ -199,10 +199,22 @@ namespace Editor
 				mRevertBtn = o2UI.CreateWidget<Button>("revert");
 				*mRevertBtn->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(20, 20), Vec2F());
 				mRevertBtn->layout->maxWidth = 0;
-				AddChild(mRevertBtn);
 
-				AnimationClip revertStateAnim = AnimationClip::EaseInOut("child/revert/layout/maxWidth", 0.0f, 20.0f, 0.15f);
-				*revertStateAnim.AddTrack<bool>("child/revert/enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
+				if (auto layout = FindChild("layout"))
+					layout->AddChild(mRevertBtn, 0);
+				else
+					AddChild(mRevertBtn);
+
+				String path;
+				Actor* itActor = mRevertBtn;
+				while (itActor != this)
+				{
+					path = "child/" + itActor->GetName() + "/" + path;
+					itActor = itActor->GetParent();
+				}
+
+				AnimationClip revertStateAnim = AnimationClip::EaseInOut(path + "layout/maxWidth", 0.0f, 20.0f, 0.15f);
+				*revertStateAnim.AddTrack<bool>(path + "enabled") = AnimationTrack<bool>::EaseInOut(false, true, 0.15f);
 				AddState("revert", revertStateAnim);
 			}
 

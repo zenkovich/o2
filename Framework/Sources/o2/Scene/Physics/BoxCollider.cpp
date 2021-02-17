@@ -86,15 +86,26 @@ namespace o2
 	void BoxCollider::OnTransformChanged()
 	{
 		if (!o2Physics.IsUpdatingPhysicsNow() && mFitByActor)
-		{
-			Vec2F prevSize = mSize;
-			mSize = mOwner->transform->GetSize();
-
-			if (prevSize != mSize)
-				OnShapeChanged();
-		}
+			FitSize();
 
 		ICollider::OnTransformChanged();
+	}
+
+	void BoxCollider::OnAddToScene()
+	{
+		if (mFitByActor)
+			FitSize();
+
+		ICollider::OnAddToScene();
+	}
+
+	void BoxCollider::FitSize()
+	{
+		Vec2F prevSize = mSize;
+		mSize = mOwner->transform->GetSize();
+
+		if (prevSize != mSize)
+			OnShapeChanged();
 	}
 
 #if IS_EDITOR

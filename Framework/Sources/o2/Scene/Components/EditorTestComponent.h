@@ -32,6 +32,9 @@ namespace o2
 			WString mWString; // @SERIALIZABLE
 			bool mBool;		  // @SERIALIZABLE
 
+			ComponentRef mComponent;   // @SERIALIZABLE
+			Ref<RigidBody> mRigidBody; // @SERIALIZABLE
+
 			bool operator==(const TestInside& other) const { return false; }
 
 			SERIALIZABLE(TestInside);
@@ -191,6 +194,8 @@ CLASS_FIELDS_META(o2::EditorTestComponent::TestInside)
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mString).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mWString).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mBool).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mComponent).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::EditorTestComponent::TestInside)

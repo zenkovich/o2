@@ -3,6 +3,7 @@
 
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Events/EventSystem.h"
 #include "o2/Render/Render.h"

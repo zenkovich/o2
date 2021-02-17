@@ -37,16 +37,8 @@ namespace o2
 
 	ComponentRef& ComponentRef::operator=(const ComponentRef& other)
 	{
-		if (mComponent)
-			mComponent->mReferences.Remove(this);
-
-		mComponent = other.mComponent;
-		mWasDeleted = other.mWasDeleted;
-
-		UpdateSpecComponent();
-
-		if (mComponent)
-			mComponent->mReferences.Add(this);
+		CopyWithoutRemap(other);
+		ActorRefResolver::RequireRemap(*this);
 
 		return *this;
 	}
@@ -110,6 +102,31 @@ namespace o2
 	const Type* ComponentRef::GetComponentTypeStatic()
 	{
 		return &TypeOf(Component);
+	}
+
+	bool ComponentRef::EqualsDelta(const ComponentRef& obj, const ComponentRef& origin)
+	{
+		if (obj.mComponent == origin.mComponent)
+			return true;
+
+		if (obj.mComponent && obj.mComponent->mPrototypeLink == origin.mComponent)
+			return true;
+
+		return false;
+	}
+
+	void ComponentRef::CopyWithoutRemap(const ComponentRef& other)
+	{
+		if (mComponent)
+			mComponent->mReferences.Remove(this);
+
+		mComponent = other.mComponent;
+		mWasDeleted = other.mWasDeleted;
+
+		UpdateSpecComponent();
+
+		if (mComponent)
+			mComponent->mReferences.Add(this);
 	}
 
 	void ComponentRef::OnSerialize(DataValue& node) const

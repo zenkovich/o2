@@ -69,6 +69,9 @@ namespace o2
 		// Returns component type
 		static const Type* GetComponentTypeStatic();
 
+		// Checks refs are equals for serializing delta
+		static bool EqualsDelta(const ComponentRef& obj, const ComponentRef& origin);
+
 		SERIALIZABLE(ComponentRef);
 
 	protected:
@@ -78,6 +81,9 @@ namespace o2
 	protected:
 		// Updates specialized component pointer
 		virtual void UpdateSpecComponent() {}
+
+		// Copying ref without requiring remap
+		void CopyWithoutRemap(const ComponentRef& other);
 
 		// Beginning serialization callback
 		void OnSerialize(DataValue& node) const override;
@@ -203,7 +209,9 @@ CLASS_METHODS_META(o2::ComponentRef)
 	PUBLIC_FUNCTION(bool, IsWasDeleted);
 	PUBLIC_FUNCTION(const Type&, GetComponentType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetComponentTypeStatic);
+	PUBLIC_STATIC_FUNCTION(bool, EqualsDelta, const ComponentRef&, const ComponentRef&);
 	PROTECTED_FUNCTION(void, UpdateSpecComponent);
+	PROTECTED_FUNCTION(void, CopyWithoutRemap, const ComponentRef&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }

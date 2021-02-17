@@ -43,16 +43,8 @@ namespace o2
 
 	ActorRef& ActorRef::operator=(const ActorRef& other)
 	{
-		if (mActor)
-			mActor->mReferences.Remove(this);
-
-		mActor = other.mActor;
-		mWasDeleted = other.mWasDeleted;
-
-		UpdateSpecActor();
-
-		if (mActor)
-			mActor->mReferences.Add(this);
+		CopyWithoutRemap(other);
+		ActorRefResolver::RequireRemap(*this);
 
 		return *this;
 	}
@@ -118,6 +110,31 @@ namespace o2
 		return &TypeOf(Actor);
 	}
 
+	bool ActorRef::EqualsDelta(const ActorRef& obj, const ActorRef& origin)
+	{
+		if (obj.mActor == origin.mActor)
+			return true;
+
+		if (obj.mActor && obj.mActor->mPrototypeLink == origin.mActor)
+			return true;
+
+		return false;
+	}
+
+	void ActorRef::CopyWithoutRemap(const ActorRef& other)
+	{
+		if (mActor)
+			mActor->mReferences.Remove(this);
+
+		mActor = other.mActor;
+		mWasDeleted = other.mWasDeleted;
+
+		UpdateSpecActor();
+
+		if (mActor)
+			mActor->mReferences.Add(this);
+	}
+
 	void ActorRef::OnSerialize(DataValue& node) const
 	{
 		if (mActor)
@@ -137,7 +154,6 @@ namespace o2
 			ActorRefResolver::RequireResolve(*this, (SceneUID)*sceneIdNode);
 		else *this = nullptr;
 	}
-
 }
 
 DECLARE_CLASS_MANUAL(o2::Ref<o2::Actor>);

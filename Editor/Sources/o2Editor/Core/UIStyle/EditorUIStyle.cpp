@@ -4,6 +4,7 @@
 #include "o2/Animation/Animate.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Assets/Types/BinaryAsset.h"
 #include "o2/Assets/Types/DataAsset.h"
@@ -651,10 +652,10 @@ namespace Editor
 		sample->layout->minSize = Vec2F(20, 20);
 		auto rootLayer = sample->AddLayer("root", nullptr);
 		auto selectLayer = rootLayer->AddChildLayer("hover", nullptr);
-		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_rotate_tool.png"),
+		auto iconLayer = selectLayer->AddChildLayer("regular", mnew Sprite("ui/UI4_revert.png"),
 			Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
-		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_rotate_tool_pressed.png"),
+		auto pressedIconLayer = selectLayer->AddChildLayer("pressed", mnew Sprite("ui/UI4_revert.png"),
 			Layout::Based(BaseCorner::Center, Vec2F(20, 20)));
 
 		sample->AddState("hover", AnimationClip::EaseInOut("layer/root/child/hover/transparency", 1.0f, 0.5f, 0.1f))

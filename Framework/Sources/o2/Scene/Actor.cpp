@@ -62,7 +62,7 @@ namespace o2
 		mResEnabledInHierarchy = mEnabled;
 		transform->CopyFrom(*other.transform);
 		mAssetId = other.mAssetId;
-		mPrototypeLink = other.mPrototypeLink;
+		mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
 
 		if (!other.mCopyVisitor)
 			other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
@@ -207,7 +207,7 @@ namespace o2
 		mResEnabledInHierarchy = mEnabled;
 		transform->CopyFrom(*other.transform);
 		mAssetId = other.mAssetId;
-		mPrototypeLink = other.mPrototypeLink;
+		mPrototypeLink.CopyWithoutRemap(other.mPrototypeLink);
 
 		if (!other.mCopyVisitor)
 			other.mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
@@ -682,6 +682,20 @@ namespace o2
 		OnChildrenChanged();
 	}
 
+	Actor* Actor::FindActorById(SceneUID id)
+	{
+		if (mId == id)
+			return this;
+
+		for (auto child : mChildren)
+		{
+			if (auto res = child->FindActorById(id))
+				return res;
+		}
+
+		return nullptr;
+	}
+
 	Component* Actor::AddComponent(Component* component)
 	{
 		component->SetOwnerActor(this);
@@ -962,24 +976,30 @@ namespace o2
 			child->UpdateResEnabledInHierarchy();
 	}
 
-	void Actor::OnSerialize(DataValue& node) const
+	void Actor::SerializeBasicOverride(DataValue& node) const
 	{
 		if (mPrototypeLink)
 			SerializeWithProto(node);
 		else
 			SerializeRaw(node);
+
+		OnSerialize(node);
 	}
 
-	void Actor::OnDeserialized(const DataValue& node)
+	void Actor::DeserializeBasicOverride(const DataValue& node)
 	{
 		if (node.FindMember("PrototypeLink") || node.FindMember("Prototype"))
 			DeserializeWithProto(node);
 		else
 			DeserializeRaw(node);
+
+		OnDeserialized(node);
 	}
 
 	void Actor::SerializeRaw(DataValue& node) const
 	{
+		SerializeBasic(node);
+
 		node["Id"] = mId;
 		node["Name"] = mName;
 
@@ -990,7 +1010,9 @@ namespace o2
 			node["Locked"] = mLocked;
 
 		node["Transform"].Set(*transform);
-		node["LayerName"] = mLayerName;
+
+		if (mLayerName != "Default")
+			node["LayerName"] = mLayerName;
 
 		if (!mChildren.IsEmpty())
 		{
@@ -998,8 +1020,8 @@ namespace o2
 			for (auto child : mChildren)
 			{
 				auto& childNode = childsNode.AddElement();
-				childNode.AddMember("Type") = child->GetType().GetName();
 				child->Serialize(childNode.AddMember("Data"));
+				childNode.AddMember("Type") = child->GetType().GetName();
 			}
 		}
 
@@ -1009,14 +1031,16 @@ namespace o2
 			for (auto component : mComponents)
 			{
 				auto& componentNode = componentsNode.AddElement();
-				component->Serialize(componentNode.AddMember("Data"));
 				componentNode.AddMember("Type") = component->GetType().GetName();
+				component->Serialize(componentNode.AddMember("Data"));
 			}
 		}
 	}
 
 	void Actor::DeserializeRaw(const DataValue& node)
 	{
+		DeserializeBasic(node);
+
 		ActorRefResolver::Instance().LockResolving();
 		if (ActorRefResolver::Instance().mLockDepth == 0)
 			ActorRefResolver::Instance().ActorCreated(this);
@@ -1083,6 +1107,286 @@ namespace o2
 		ActorRefResolver::Instance().ResolveRefs();
 
 		SetLayer(layerName);
+	}
+
+	void Actor::SerializeWithProto(DataValue& node) const
+	{
+		const Actor* proto = mPrototypeLink.Get();
+
+		// Prototype data
+		if (mPrototype)
+			node["Prototype"] = mPrototype;
+
+		if (mPrototypeLink)
+			node["PrototypeLink"] = proto->GetID();
+
+		// Basic data
+		node["Id"] = mId;
+
+		if (mName != proto->mName)
+			node["Name"] = mName;
+
+		if (mEnabled != proto->mEnabled)
+			node["Enabled"] = mEnabled;
+
+		if (mLocked != proto->mLocked)
+			node["Locked"] = mLocked;
+
+		if (mLayer != proto->mLayer)
+			node["LayerName"] = mLayer->mName;
+
+		// Transform data
+		auto& transformNode = node.AddMember("Transform");
+		transform->SerializeDelta(transformNode, *proto->transform);
+
+		if (transformNode.IsEmpty() || transformNode.IsNull())
+			node.RemoveMember("Transform");
+
+		SerializeDelta(node, *mPrototypeLink.Get());
+
+		// Children data
+		if (!mChildren.IsEmpty())
+		{
+			auto& childsNode = node.AddMember("Children");
+			childsNode.SetArray();
+			for (auto child : mChildren)
+			{
+				auto& childNode = childsNode.AddElement();
+				childNode.AddMember("Type") = child->GetType().GetName();
+				child->Serialize(childNode.AddMember("Data"));
+			}
+		}
+
+		// Components data
+		if (!mComponents.IsEmpty())
+		{
+			auto& componentsNode = node.AddMember("Components");
+			componentsNode.SetArray();
+			for (auto component : mComponents)
+			{
+				auto& compNode = componentsNode.AddElement();
+				compNode.AddMember("Type") = component->GetType().GetName();
+
+				auto& dataValue = compNode.AddMember("Data");
+				if (auto componentProtoLink = component->mPrototypeLink)
+				{
+					dataValue["PrototypeLink"] = componentProtoLink->mId;
+					dataValue.SetDelta(*component, *component->mPrototypeLink);
+				}
+				else
+					component->Serialize(dataValue);
+			}
+		}
+	}
+
+	void Actor::DeserializeWithProto(const DataValue& node)
+	{
+		RemoveAllChildren();
+		RemoveAllComponents();
+
+		ActorRefResolver::Instance().LockResolving();
+		ActorRefResolver::Instance().ActorCreated(this);
+
+		if (auto prototypeNode = node.FindMember("Prototype"))
+			SetPrototype(*prototypeNode);
+
+		if (auto prototypeLinkNode = node.FindMember("PrototypeLink"))
+		{
+			SceneUID id = *prototypeLinkNode;
+			Actor* parent = mParent;
+			while (parent && parent->mPrototypeLink)
+			{
+				bool found = false;
+
+				Actor* protoLink = parent->mPrototypeLink.Get();
+				while (protoLink)
+				{
+					if (auto fnd = protoLink->FindActorById(id))
+					{
+						mPrototypeLink.CopyWithoutRemap(fnd);
+						found = true;
+						break;
+					}
+
+					protoLink = protoLink->mPrototypeLink.Get();
+				}
+
+				if (found)
+					break;
+
+				parent = parent->mParent;
+			}
+		}
+
+		if (mPrototypeLink)
+			DeserializeDelta(node, *mPrototypeLink.Get());
+		else
+			DeserializeBasic(node);
+
+		SetID(node.GetMember("Id"));
+
+		if (!mPrototypeLink)
+		{
+			ActorRefResolver::Instance().UnlockResolving();
+			ActorRefResolver::Instance().ResolveRefs();
+			return;
+		}
+
+		const Actor* proto = mPrototypeLink.Get();
+
+		if (!mCopyVisitor)
+			mCopyVisitor = mnew SourceToTargetMapCloneVisitor();
+
+		mCopyVisitor->depth++;
+		mCopyVisitor->OnCopyActor(proto, this);
+
+		if (auto subNode = node.FindMember("Name"))
+			mName = *subNode;
+		else
+			mName = proto->mName;
+
+		if (auto subNode = node.FindMember("Enabled"))
+			mEnabled = *subNode;
+		else
+			mEnabled = proto->mEnabled;
+
+		if (auto subNode = node.FindMember("Locked"))
+			mLocked = *subNode;
+		else
+			mLocked = proto->mLocked;
+
+		if (auto subNode = node.FindMember("LayerName"))
+			SetLayer(*subNode);
+		else
+			SetLayer(proto->mLayerName);
+
+		// Transform data
+		if (auto transformNode = node.FindMember("Transform"))
+			transform->DeserializeDelta(*transformNode, *proto->transform);
+		else
+			transform->CopyFrom(*proto->transform);
+
+		// children
+		auto childrenNode = node.FindMember("Children");
+		if (childrenNode && childrenNode->IsArray())
+		{
+			for (auto& childNode : *childrenNode)
+			{
+				const DataValue* typeNode = childNode.FindMember("Type");
+				const DataValue* dataValue = childNode.FindMember("Data");
+				if (typeNode && dataValue)
+				{
+					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
+					if (type)
+					{
+						Actor* child = dynamic_cast<Actor*>(type->DynamicCastToIObject(type->CreateSample()));
+						AddChild(child);
+						child->mCopyVisitor = mCopyVisitor;
+						child->Deserialize(*dataValue);
+					}
+				}
+			}
+		}
+
+		// components
+		auto componentsNode = node.FindMember("Components");
+		if (componentsNode && componentsNode->IsArray())
+		{
+			for (auto& componentNode : *componentsNode)
+			{
+				String type = componentNode["Type"];
+				Component* newComponent = (Component*)o2Reflection.CreateTypeSample(type);
+
+				mComponents.Add(newComponent);
+				newComponent->mOwner = this;
+
+				if (newComponent)
+				{
+					auto& componentDataValue = componentNode["Data"];
+
+					if (auto prototypeLinkNode = componentDataValue.FindMember("PrototypeLink"))
+					{
+						SceneUID id = *prototypeLinkNode;
+						if (mPrototypeLink)
+						{
+							for (auto protoLinkComponent : mPrototypeLink->mComponents)
+							{
+								if (protoLinkComponent->mId == id)
+								{
+									newComponent->mPrototypeLink = protoLinkComponent;
+									break;
+								}
+							}
+						}
+
+						if (!newComponent->mPrototypeLink)
+							newComponent->Deserialize(componentDataValue);
+						else
+						{
+							componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
+							mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
+						}
+					}
+				}
+				else o2Debug.LogError("Can't create component with type:" + type);
+			}
+		}
+
+		transform->SetDirty();
+
+		ActorRefResolver::Instance().UnlockResolving();
+		ActorRefResolver::Instance().ResolveRefs();
+
+		if (mCopyVisitor)
+		{
+			mCopyVisitor->depth--;
+
+			if (mCopyVisitor->depth == 0)
+			{
+				mCopyVisitor->Finalize();
+				delete mCopyVisitor;
+				mCopyVisitor = nullptr;
+			}
+		}
+	}
+
+	ActorAssetRef Actor::GetPrototype() const
+	{
+		if (mPrototype)
+			return mPrototype;
+
+		if (mPrototypeLink && mParent)
+			return mParent->GetPrototype();
+
+		return ActorAssetRef();
+	}
+
+	ActorAssetRef Actor::GetPrototypeDirectly() const
+	{
+		return mPrototype;
+	}
+
+	void Actor::SetPrototype(ActorAssetRef asset)
+	{
+		o2Scene.OnActorPrototypeBroken(this);
+
+		auto linkAsset = asset;
+		while (linkAsset)
+		{
+			o2Scene.OnActorLinkedToPrototype(linkAsset, this);
+			linkAsset = linkAsset->GetActor()->GetPrototype();
+		}
+
+		mPrototype = asset;
+		if (asset)
+			mPrototypeLink.CopyWithoutRemap(asset->GetActor());
+		else
+			mPrototypeLink.CopyWithoutRemap(nullptr);
+	}
+
+	ActorRef Actor::GetPrototypeLink() const
+	{
+		return mPrototypeLink;
 	}
 
 	Map<String, Actor*> Actor::GetAllChilds()
@@ -1240,7 +1544,7 @@ namespace o2
 	void Actor::InstantiatePrototypeVisitor::OnCopyActor(const Actor* source, Actor* target)
 	{
 		SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
-		target->mPrototypeLink = const_cast<Actor*>(source);
+		target->mPrototypeLink.CopyWithoutRemap(const_cast<Actor*>(source));
 	}
 
 	void Actor::InstantiatePrototypeVisitor::OnCopyComponent(const Component* source, Component* target)

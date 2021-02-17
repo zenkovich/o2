@@ -90,7 +90,12 @@ namespace Editor
 		mMenuPanel->AddItem("Debug/Curve editor test", [&]() { OnCurveEditorTestPressed(); });
 		mMenuPanel->AddItem("Debug/Save layout as default", [&]() { OnSaveDefaultLayoutPressed(); });
 		mMenuPanel->AddItem("Debug/Update assets", [&]() { o2Assets.RebuildAssets(); });
-		mMenuPanel->AddItem("Debug/Add property", [&]() { o2UI.CreateWidget<ObjectPtrProperty>("with caption")->GetRemoveButton(); });
+		mMenuPanel->AddItem("Debug/Add property", [&]() { 
+			static float xx = 0, yy = 1;
+			ForcePopEditorScopeOnStack scope; 
+			auto prop = o2UI.CreateWidget<FloatProperty>("with caption"); 
+			prop->SetValueAndPrototypeProxy({ { mnew PointerValueProxy(&xx), mnew PointerValueProxy(&yy) } });
+		});
 
 		mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
 		

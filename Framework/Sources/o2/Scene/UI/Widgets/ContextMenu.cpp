@@ -848,6 +848,7 @@ namespace o2
 			ContextMenu* subMenu = o2UI.CreateWidget<ContextMenu>();
 			subMenu->RemoveAllItems();
 			subMenu->AddItems(item->subItems);
+			item->subItems.Clear();
 
 			AddChild(subMenu);
 		}

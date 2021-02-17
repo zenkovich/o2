@@ -65,7 +65,15 @@ namespace o2
 		return mInstance->mLockDepth != 0;
 	}
 
-	void ActorRefResolver::RemapReferences(const Map<const Actor*, Actor*>& actors, 
+	int ActorRefResolver::GetLockDepth()
+	{
+		if (!mInstance)
+			return 0;
+
+		return mInstance->mLockDepth;
+	}
+
+	void ActorRefResolver::RemapReferences(const Map<const Actor*, Actor*>& actors,
 										   const Map<const Component*, Component*>& components)
 	{
 		if (!mInstance)
@@ -75,14 +83,14 @@ namespace o2
 		{
 			Actor* res = nullptr;
 			if (actors.TryGetValue(ref->mActor, res))
-				*ref = res;
+				ref->CopyWithoutRemap(res);
 		}
 
 		for (auto ref : mInstance->mRemapComponentRefs)
 		{
 			Component* res = nullptr;
 			if (components.TryGetValue(ref->mComponent, res))
-				*ref = res;
+				ref->CopyWithoutRemap(res);
 		}
 
 		mInstance->mRemapActorRefs.Clear();
@@ -111,20 +119,20 @@ namespace o2
 		mInstance->mRemapComponentRefs.Add(&ref);
 	}
 
-	void ActorRefResolver::LockResolving()
+	void ActorRefResolver::LockResolving(int depth /*= 1*/)
 	{
 		if (!mInstance)
 			return;
 
-		mInstance->mLockDepth++;
+		mInstance->mLockDepth += depth;
 	}
 
-	void ActorRefResolver::UnlockResolving()
+	void ActorRefResolver::UnlockResolving(int depth /*= 1*/)
 	{
 		if (!mInstance)
 			return;
 
-		mInstance->mLockDepth--;
+		mInstance->mLockDepth -= depth;
 
 		if (mInstance->mLockDepth == 0)
 			ResolveRefs();

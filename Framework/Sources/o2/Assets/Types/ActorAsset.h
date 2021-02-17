@@ -49,9 +49,12 @@ namespace o2
 		SERIALIZABLE(ActorAsset);
 
 	protected:
-		Actor* mActor; // Asset data @SERIALIZABLE
+		Actor* mActor; // Asset data 
 
 	protected:
+		// Beginning serialization callback
+		void OnSerialize(DataValue& node) const override;
+
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
@@ -68,7 +71,7 @@ CLASS_BASES_META(o2::ActorAsset)
 END_META;
 CLASS_FIELDS_META(o2::ActorAsset)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mActor).PROTECTED();
+	FIELD().NAME(mActor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::ActorAsset)
@@ -80,6 +83,7 @@ CLASS_METHODS_META(o2::ActorAsset)
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

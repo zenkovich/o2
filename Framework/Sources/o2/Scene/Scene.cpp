@@ -485,9 +485,8 @@ namespace o2
 	void Scene::Load(const String& path, bool append /*= false*/)
 	{
 		DataDocument data;
-		data.LoadFromFile(path);
-
-		Load(data, append);
+		if (data.LoadFromFile(path))
+			Load(data, append);
 	}
 
 	void Scene::Load(const DataDocument& doc, bool append /*= false*/)

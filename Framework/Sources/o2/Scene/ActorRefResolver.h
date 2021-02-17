@@ -32,16 +32,19 @@ namespace o2
 		static void RequireRemap(ComponentRef& ref);
 
 		// Locks references resolving depth
-		static void LockResolving();
+		static void LockResolving(int depth = 1);
 
 		// Unlocks references resolving depth
-		static void UnlockResolving();
+		static void UnlockResolving(int depth = 1);
 
 		// Resolves references. Works when lock depth is 0
 		static void ResolveRefs();
 
 		// Returns is resolver depth locked
 		static bool IsLocked();
+
+		// Returns lock depth
+		static int GetLockDepth();
 
 		// Remaps required refs 
 		static void RemapReferences(const Map<const Actor*, Actor*>& actors, const Map<const Component*, Component*>& components);

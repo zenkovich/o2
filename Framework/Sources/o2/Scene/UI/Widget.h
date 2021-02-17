@@ -146,7 +146,6 @@ namespace o2
 		// Returns all layers
 		const Vector<WidgetLayer*>& GetLayers() const;
 
-
 		// Adds new state with name
 		WidgetState* AddState(const String& name);
 
@@ -249,6 +248,9 @@ namespace o2
 		template<typename _type>
 		_type* FindInternalWidgetByType() const;
 
+		// Searches actor with id in this and this children
+		Actor* FindActorById(SceneUID id) override;
+
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
@@ -258,12 +260,12 @@ namespace o2
 		using Actor::mLayer;
 		using Actor::mSceneStatus;
 
-		Vector<WidgetLayer*> mLayers; // Layers array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
-		Vector<WidgetState*> mStates; // States array @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
+		Vector<WidgetLayer*> mLayers; // Layers array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
+		Vector<WidgetState*> mStates; // States array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)
 
 		Widget*         mParentWidget = nullptr; // Parent widget. When parent is not widget, this field will be null 
 		Vector<Widget*> mChildWidgets;           // Children widgets, a part of all children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
-		Vector<Widget*> mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @SERIALIZABLE @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
+		Vector<Widget*> mInternalWidgets;        // Internal widgets, used same as children widgets, but not really children @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 		Vector<Widget*> mDrawingChildren;        // Children widgets, which drawing depth isn't overridden @DONT_DELETE @DEFAULT_TYPE(o2::Widget)
 
 		bool mOverrideDepth = false; // Is sorting order depth overridden. If not, sorting order depends on hierarchy @SERIALIZABLE
@@ -286,6 +288,21 @@ namespace o2
 		RectF mBoundsWithChilds; // Widget with childs bounds
 
 	protected:
+		// Regular serializing without prototype
+		void SerializeRaw(DataValue& node) const override;
+
+		// Regular deserializing without prototype
+		void DeserializeRaw(const DataValue& node) override;
+
+		// Regular serializing with prototype
+		void SerializeWithProto(DataValue& node) const override;
+
+		// Regular deserializing with prototype
+		void DeserializeWithProto(const DataValue& node) override;
+
+		// Completion deserialization callback; initializes layers and children
+		void OnDeserialized(const DataValue& node) override;
+
 		// Updates result read enable flag
 		void UpdateResEnabled() override;
 
@@ -420,12 +437,6 @@ namespace o2
 
 		// Returns dictionary of all states by names
 		Map<String, WidgetState*> GetAllStates();
-
-		// Beginning serialization callback
-		void OnSerialize(DataValue& node) const override;
-
-		// It is called when deserialized
-		void OnDeserialized(const DataValue& node) override;
 
 		friend class ContextMenu;
 		friend class CustomDropDown;
@@ -719,11 +730,11 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().NAME(onUnfocused).PUBLIC();
 	FIELD().NAME(onShow).PUBLIC();
 	FIELD().NAME(onHide).PUBLIC();
-	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mLayers).PROTECTED();
-	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).SERIALIZABLE_ATTRIBUTE().NAME(mStates).PROTECTED();
+	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().NAME(mLayers).PROTECTED();
+	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).NAME(mStates).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mParentWidget).PROTECTED();
 	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mChildWidgets).PROTECTED();
-	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mInternalWidgets).PROTECTED();
+	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mInternalWidgets).PROTECTED();
 	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::Widget).DONT_DELETE_ATTRIBUTE().NAME(mDrawingChildren).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mOverrideDepth).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTransparency).PROTECTED();
@@ -800,7 +811,13 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(void, AddInternalWidget, Widget*, bool);
 	PUBLIC_FUNCTION(Widget*, GetInternalWidget, const String&);
 	PUBLIC_FUNCTION(Widget*, FindInternalWidget, const String&);
+	PUBLIC_FUNCTION(Actor*, FindActorById, SceneUID);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
+	PROTECTED_FUNCTION(void, SerializeRaw, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeRaw, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
@@ -846,8 +863,6 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp3, GetAllInternalWidgets);
 	PROTECTED_FUNCTION(_tmp4, GetAllStates);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);

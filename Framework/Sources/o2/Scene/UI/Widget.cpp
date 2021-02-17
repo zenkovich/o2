@@ -46,13 +46,22 @@ namespace o2
 	{
 		layout->SetOwner(this);
 
+		WidgetLayer::ICopyVisitor* layerCopyVisitor = nullptr;
+		if (dynamic_cast<InstantiatePrototypeVisitor*>(other.mCopyVisitor) || other.mIsAsset)
+			layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeVisitor();
+
 		for (auto layer : other.mLayers)
 		{
+			layer->mCopyVisitor = layerCopyVisitor;
+
 			auto newLayer = mnew WidgetLayer(*layer);
 			newLayer->SetOwnerWidget(this);
 			mLayers.Add(newLayer);
 			OnLayerAdded(newLayer);
 		}
+
+		if (layerCopyVisitor)
+			delete layerCopyVisitor;
 
 		for (auto child : mChildren)
 		{
@@ -314,6 +323,157 @@ namespace o2
 		o2Render.DrawRectFrame(mBoundsWithChilds, Color4::SomeColor(colr++));
 	}
 
+	void Widget::SerializeRaw(DataValue& node) const
+	{
+		Actor::SerializeRaw(node);
+
+		node["InternalWidgets"] = mInternalWidgets;
+		node["Layers"] = mLayers;
+		node["States"] = mStates;
+	}
+
+	void Widget::DeserializeRaw(const DataValue& node)
+	{
+		Actor::DeserializeRaw(node);
+
+		if (auto internalWidgetsNode = node.FindMember("InternalWidgets"))
+			mInternalWidgets = *internalWidgetsNode;
+
+		if (auto layersNode = node.FindMember("Layers"))
+			mLayers = *layersNode;
+
+		if (auto statesNode = node.FindMember("States"))
+			mStates = *statesNode;
+	}
+
+	void Widget::SerializeWithProto(DataValue& node) const
+	{
+		Actor::SerializeWithProto(node);
+
+		if (!mInternalWidgets.IsEmpty())
+		{
+			auto& internalWidgetsNode = node.AddMember("InternalWidgets");
+			internalWidgetsNode.SetArray();
+			for (auto widget : mInternalWidgets)
+			{
+				auto& widgetNode = internalWidgetsNode.AddElement();
+				widgetNode.AddMember("Type") = widget->GetType().GetName();
+				widget->Serialize(widgetNode.AddMember("Data"));
+			}
+		}
+
+		if (!mLayers.IsEmpty())
+		{
+			auto& layersNode = node.AddMember("Layers");
+			layersNode.SetArray();
+			for (auto layer : mLayers)
+				layer->Serialize(layersNode.AddElement());
+		}
+
+		if (!mStates.IsEmpty())
+		{
+			const Widget* proto = dynamic_cast<const Widget*>(mPrototypeLink.Get());
+			auto& statesNode = node.AddMember("States");
+			for (auto state : mStates)
+			{
+				if (auto protoState = proto->GetStateObject(state->name))
+				{
+					auto& stateNode = statesNode.AddElement();
+					stateNode["mName"] = state->name;
+					stateNode.SetDelta(*state, *protoState);
+				}
+				else
+					statesNode.AddElement().Set(*state);
+			}
+		}
+	}
+
+	void Widget::DeserializeWithProto(const DataValue& node)
+	{
+		Actor::DeserializeWithProto(node);
+
+		auto internalWidgetsNode = node.FindMember("InternalWidgets");
+		if (internalWidgetsNode && internalWidgetsNode->IsArray())
+		{
+			for (auto& widgetNode : *internalWidgetsNode)
+			{
+				const DataValue* typeNode = widgetNode.FindMember("Type");
+				const DataValue* dataValue = widgetNode.FindMember("Data");
+				if (typeNode && dataValue)
+				{
+					const ObjectType* type = dynamic_cast<const ObjectType*>(o2Reflection.GetType(*typeNode));
+					if (type)
+					{
+						Widget* widget = dynamic_cast<Widget*>(type->DynamicCastToIObject(type->CreateSample()));
+						AddInternalWidget(widget);
+						widget->mCopyVisitor = mCopyVisitor;
+						widget->Deserialize(*dataValue);
+					}
+				}
+			}
+		}
+
+		auto layersNode = node.FindMember("Layers");
+		if (layersNode && layersNode->IsArray())
+		{
+			for (auto& layerNode : *layersNode)
+			{
+				WidgetLayer* layer = mnew WidgetLayer();
+				AddLayer(layer);
+				layer->Deserialize(layerNode);
+			}
+		}
+
+		auto statesNode = node.FindMember("States");
+		if (statesNode && statesNode->IsArray())
+		{
+			const Widget* proto = dynamic_cast<const Widget*>(mPrototypeLink.Get());
+
+			for (auto& stateNode : *statesNode)
+			{
+				WidgetState* state = mnew WidgetState();
+				stateNode["mName"].Get(state->name);
+				if (auto protoState = proto->GetStateObject(state->name))
+					stateNode.GetDelta(*state, *protoState);
+				else
+					stateNode.Get(*state);
+			}
+		}
+	}
+
+	void Widget::OnDeserialized(const DataValue& node)
+	{
+		for (auto layer : mLayers)
+			layer->SetOwnerWidget(this);
+
+		for (auto layer : mLayers)
+			OnLayerAdded(layer);
+
+		mChildWidgets.Clear();
+		for (auto child : mChildren)
+		{
+			Widget* childWidget = dynamic_cast<Widget*>(child);
+			if (childWidget)
+			{
+				childWidget->mParentWidget = this;
+				mChildWidgets.Add(childWidget);
+				OnChildAdded(childWidget);
+			}
+		}
+
+		for (auto child : mInternalWidgets)
+		{
+			child->mParent = this;
+			child->mParentWidget = this;
+
+			child->RemoveFromScene();
+		}
+
+		RetargetStatesAnimations();
+		SetEnableForcible(mEnabled);
+		UpdateLayersDrawingSequence();
+	}
+
 	void Widget::OnTransformUpdated()
 	{
 		mIsClipped = false;
@@ -355,6 +515,20 @@ namespace o2
 	const Vector<Widget*>& Widget::GetChildWidgets() const
 	{
 		return mChildWidgets;
+	}
+
+	Actor* Widget::FindActorById(SceneUID id)
+	{
+		if (auto res = Actor::FindActorById(id))
+			return res;
+
+		for (auto widget : mInternalWidgets)
+		{
+			if (auto res = widget->FindActorById(id))
+				return res;
+		}
+
+		return nullptr;
 	}
 
 	String Widget::GetCreateMenuCategory()
@@ -956,11 +1130,6 @@ namespace o2
 		return res;
 	}
 
-	void Widget::OnSerialize(DataValue& node) const
-	{
-		Actor::OnSerialize(node);
-	}
-
 	void Widget::OnLayerAdded(WidgetLayer* layer)
 	{}
 
@@ -1087,41 +1256,6 @@ namespace o2
 	void Widget::SetChildrenWorldRect(const RectF& childrenWorldRect)
 	{
 		layout->mData->childrenWorldRect = childrenWorldRect;
-	}
-
-	void Widget::OnDeserialized(const DataValue& node)
-	{
-		Actor::OnDeserialized(node);
-
-		for (auto layer : mLayers)
-			layer->SetOwnerWidget(this);
-
-		for (auto layer : mLayers)
-			OnLayerAdded(layer);
-
-		mChildWidgets.Clear();
-		for (auto child : mChildren)
-		{
-			Widget* childWidget = dynamic_cast<Widget*>(child);
-			if (childWidget)
-			{
-				childWidget->mParentWidget = this;
-				mChildWidgets.Add(childWidget);
-				OnChildAdded(childWidget);
-			}
-		}
-
-		for (auto child : mInternalWidgets)
-		{
-			child->mParent = this;
-			child->mParentWidget = this;
-
-			child->RemoveFromScene();
-		}
-
-		RetargetStatesAnimations();
-		SetEnableForcible(mEnabled);
-		UpdateLayersDrawingSequence();
 	}
 
 	void Widget::ForceDraw(const RectF& area, float transparency)

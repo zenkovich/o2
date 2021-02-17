@@ -41,12 +41,30 @@ namespace o2
 			static void Read(__type& value, const DataValue& data) {}
 		};
 
+		// Specialize this template class for your custom serialization types with DELTA
+		template<typename _type, typename _enable = void>
+		struct DeltaConverter
+		{
+			static constexpr bool isSupported = Converter<_type>::isSupported;
+			using __type = typename std::conditional<std::is_same<void, _type>::value, int, _type>::type;
+
+			static void Write(const __type& value, const __type& origin, DataValue& data);
+			static void Read(__type& value, const __type& origin, const DataValue& data);
+		};
+
 	public:
 		// Is DataValue supporting type trait
 		template<typename _type>
 		struct IsSupports
 		{
 			static constexpr bool value = Converter<_type>::isSupported;
+		};
+
+		// Is DataValue supporting delta type trait
+		template<typename _type>
+		struct IsSupportsDelta
+		{
+			static constexpr bool value = DeltaConverter<_type>::isSupported;
 		};
 
 	public:
@@ -114,13 +132,21 @@ namespace o2
 		template<typename _type>
 		DataValue& operator=(const _type& value);
 
-		// Sets value. Using DataValueConverter specializations
+		// Sets value. Using DataValue::Converter specializations
 		template<typename _type>
 		DataValue& Set(const _type& value);
 
-		// Gets value. Using DataValueConverter specializations
+		// Gets value. Using DataValue::Converter specializations
 		template<typename _type>
 		void Get(_type& value) const;
+
+		// Sets value. Using DataValue::DeltaConverter specializations
+		template<typename _type>
+		DataValue& SetDelta(const _type& value, const _type& origin);
+
+		// Gets value. Using DataValue::DeltaConverter specializations
+		template<typename _type>
+		void GetDelta(_type& value, const _type& origin) const;
 
 		// Sets value as null
 		void SetNull();
@@ -247,12 +273,6 @@ namespace o2
 
 		// Removes member
 		DataMemberIterator RemoveMember(DataMemberIterator it);
-
-		// Sets objects with delta from source object
-		DataValue& SetValueDelta(const ISerializable& object, const IObject& source);
-
-		// Gets objects with delta from source object
-		void GetValueDelta(ISerializable& object, const IObject& source) const;
 
 		// Begin array iterator
 		DataMemberIterator BeginMember();
@@ -542,6 +562,33 @@ namespace o2
 
 namespace o2
 {
+	template<typename _type, typename _enable = void>
+	struct IsDeltaEquals
+	{
+		static bool Check(const _type& obj, const _type& origin)
+		{
+			if constexpr (SupportsEqualOperator<_type>::value)
+				return Math::Equals(obj, origin);
+			else
+				return false;
+		}
+	};
+
+	template<typename T>
+	struct IsDeltaEquals<T, typename void_t<decltype(&T::EqualsDelta)>>
+	{
+		static bool Check(const T& obj, const T& origin)
+		{
+			return T::EqualsDelta(obj, origin);
+		}
+	};
+
+	template<typename T>
+	bool EqualsForDeltaSerialize(const T& obj, const T& origin)
+	{
+		return IsDeltaEquals<T>::Check(obj, origin);
+	}
+
 	template<typename _type>
 	DataValue::DataValue(const _type& value, DataDocument& document):
 		mData(), mDocument(&document)
@@ -559,6 +606,19 @@ namespace o2
 	DataValue& DataValue::Set(const _type& value)
 	{
 		Converter<_type>::Write(value, *this);
+		return *this;
+	}
+
+	template<typename _type>
+	void DataValue::GetDelta(_type& value, const _type& origin) const
+	{
+		DeltaConverter<_type>::Read(value, origin, *this);
+	}
+
+	template<typename _type>
+	DataValue& DataValue::SetDelta(const _type& value, const _type& origin)
+	{
+		DeltaConverter<_type>::Write(value, origin, *this);
 		return *this;
 	}
 
@@ -1164,16 +1224,12 @@ namespace o2
 		{
 			if (auto typeNode = data.FindMember("Type"))
 			{
-				String typeName = *typeNode;
-				if (typeName == "Editor::AssetProperty")
-					typeName = typeName;
-
 				if (auto valueNode = data.FindMember("Value"))
 				{
 					if (value)
 						delete value;
 
-					auto type = Reflection::GetType(typeName);
+					auto type = Reflection::GetType(*typeNode);
 					void* sample = type->CreateSample();
 					if (type->GetUsage() == Type::Usage::Object)
 					{
@@ -1187,23 +1243,6 @@ namespace o2
 						valueNode->Get(*value);
 				}
 			}
-		}
-	};
-
-	template<typename T>
-	struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value &&
-		!std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value && !std::is_same<void*, T>::value>::type>
-	{
-		static constexpr bool isSupported = DataValue::Converter<std::remove_pointer<T>::type>::isSupported;
-
-		static void Write(const T& value, DataValue& data)
-		{
-			DataValue::Converter<std::remove_pointer<T>::type>::Write(*value, data);
-		}
-
-		static void Read(T& value, const DataValue& data)
-		{
-			DataValue::Converter<std::remove_pointer<T>::type>::Read(*value, data);
 		}
 	};
 
@@ -1315,6 +1354,99 @@ namespace o2
 			TValueType val;
 			data.Get(val);
 			value.Set(val);
+		}
+	};
+
+	template<typename _type, typename _enable /*= void*/>
+	void DataValue::DeltaConverter<_type, _enable>::Write(const __type& value, const __type& origin, DataValue& data)
+	{
+		if (!EqualsForDeltaSerialize(value, origin))
+			data.Set(value);
+	}
+
+	template<typename _type, typename _enable /*= void*/>
+	void DataValue::DeltaConverter<_type, _enable>::Read(__type& value, const __type& origin, const DataValue& data)
+	{
+		data.Get(value);
+	}
+
+	template<typename T>
+	struct DataValue::DeltaConverter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value &&
+		std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const T& value, const T& origin, DataValue& data)
+		{
+			if (value)
+			{
+				if (!origin)
+					DataValue::Converter<T>::Write(value, data);
+				else
+				{
+					if (!EqualsForDeltaSerialize(*value, *origin))
+						data.SetDelta(*value, *origin);
+				}
+			}
+		}
+
+		static void Read(T& value, const T& origin, const DataValue& data)
+		{
+			if (!origin)
+				DataValue::Converter<T>::Read(value, data);
+			else
+			{
+				value = origin->CloneAs<typename std::remove_pointer<T>::type>();
+				data.GetDelta(*value, *origin);
+			}
+		}
+	};
+
+	template<typename T>
+	struct DataValue::DeltaConverter<Vector<T>>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const Vector<T>& value, const Vector<T>& origin, DataValue& data)
+		{
+			data.mData.flagsData.flags = Flags::Array;
+			data.mData.arrayData.elements = nullptr;
+			data.mData.arrayData.count = 0;
+			data.mData.arrayData.capacity = 0;
+
+			for (int i = 0; i < value.Count(); i++)
+			{
+				if (i < origin.Count())
+				{
+					if (EqualsForDeltaSerialize(value[i], origin[i]))
+						data.AddElement();
+					else
+						data.AddElement().SetDelta(value[i], origin[i]);
+				}
+				else
+					data.AddElement().SetDelta(value[i], origin[i]);
+			}
+		}
+
+		static void Read(Vector<T>& value, const Vector<T>& origin, const DataValue& data)
+		{
+			if (data.IsArray())
+			{
+				value.Clear();
+				int i = 0;
+				for (auto& element : data)
+				{
+					T v = T();
+					if (element.IsNull() && i < origin.Count())
+						v = origin[i];
+					else
+						element.GetDelta(v, origin[i]);
+
+					value.Add(v);
+
+					i++;
+				}
+			}
 		}
 	};
 }

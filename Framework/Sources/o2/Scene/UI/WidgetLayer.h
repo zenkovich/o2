@@ -103,7 +103,7 @@ namespace o2
 
 		// Adds child layer
 		WidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
-									 float depth = 0.0f);
+								   float depth = 0.0f);
 
 		// Returns child layer by path
 		WidgetLayer* GetChild(const String& path);
@@ -223,12 +223,39 @@ namespace o2
 		// It is called when something changed in this object
 		void OnChanged() override;
 
+		// Beginning serialization callback
+		void SerializeBasicOverride(DataValue& node) const;
+
+		// Completion deserialization callback
+		void DeserializeBasicOverride(const DataValue& node);
+
 #endif // IS_EDITOR
 
 	protected:
+		struct ICopyVisitor
+		{
+			virtual ~ICopyVisitor() {}
+			virtual void OnCopy(const WidgetLayer* source, WidgetLayer* target) = 0;
+		};
+
+		struct InstantiatePrototypeVisitor: ICopyVisitor
+		{
+			void OnCopy(const WidgetLayer* source, WidgetLayer* target) override;
+		};
+
+	protected:
+		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. Used when instantiating prefab
+
+		const WidgetLayer* mPrototypeLink = nullptr; // Linked prototype layer
+
 		IRectDrawable* mDrawable; // Drawable @SERIALIZABLE
 
+		SceneUID mUID = Math::Random(); // Scene editor uid @SERIALIZABLE
+
 		bool mEnabled = true; // Is layer enabled
+#if IS_EDITOR
+		bool mIsLocked = false; // Is locked
+#endif 
 
 		float mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
 		float mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
@@ -241,16 +268,23 @@ namespace o2
 		Widget* mOwnerWidget = nullptr; // Owner widget pointer 
 
 		WidgetLayer*         mParent = nullptr; // Pointer to parent layer 
-		Vector<WidgetLayer*> mChildren;         // Children layers @SERIALIZABLE
+		Vector<WidgetLayer*> mChildren;         // Children layers
 
 		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
-#if IS_EDITOR
-		bool     mIsLocked = false;     // Is locked
-		SceneUID mUID = Math::Random(); // Scene editor uid // @SERIALIZABLE
-#endif 
-
 	protected:
+		// Regular serializing without prototype
+		void SerializeRaw(DataValue& node) const;
+
+		// Regular deserializing without prototype
+		void DeserializeRaw(const DataValue& node);
+
+		// Regular serializing with prototype
+		void SerializeWithProto(DataValue& node) const;
+
+		// Regular deserializing with prototype
+		void DeserializeWithProto(const DataValue& node);
+
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
@@ -316,8 +350,12 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(layout).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(name).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(interactableLayout).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mDrawable).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Math::Random()).NAME(mUID).PROTECTED();
 	FIELD().DEFAULT_VALUE(true).NAME(mEnabled).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsLocked).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTransparency).PROTECTED();
 	FIELD().DEFAULT_VALUE(1.0f).NAME(mResTransparency).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDepth).PROTECTED();
@@ -325,10 +363,8 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	FIELD().NAME(mInteractableArea).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwnerWidget).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mParent).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mChildren).PROTECTED();
+	FIELD().NAME(mChildren).PROTECTED();
 	FIELD().DEFAULT_VALUE(false).NAME(mUpdatingLayout).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mIsLocked).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Math::Random()).NAME(mUID).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetLayer)
@@ -389,6 +425,12 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	PUBLIC_FUNCTION(Layout, GetLayout);
 	PUBLIC_FUNCTION(void, SetLayout, const Layout&);
 	PUBLIC_FUNCTION(void, OnChanged);
+	PUBLIC_FUNCTION(void, SerializeBasicOverride, DataValue&);
+	PUBLIC_FUNCTION(void, DeserializeBasicOverride, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeRaw, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeRaw, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, SetOwnerWidget, Widget*);
 	PROTECTED_FUNCTION(void, OnChildAdded, WidgetLayer*);

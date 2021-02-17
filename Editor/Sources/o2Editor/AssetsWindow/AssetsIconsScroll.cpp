@@ -973,7 +973,7 @@ namespace Editor
 
 	Actor* AssetsIconsScrollArea::InstantiateAsset(const ActorAssetRef& asset)
 	{
-		return mnew Actor(*(asset->GetActor()));
+		return asset->GetActor()->CloneAs<Actor>();
 	}
 
 	void AssetsIconsScrollArea::CheckPreloadedAssetsSaving()

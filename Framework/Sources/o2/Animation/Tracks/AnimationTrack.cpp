@@ -21,12 +21,3 @@ DECLARE_CLASS_MANUAL(o2::AnimationTrack<int>::Key);
 
 template<>
 DECLARE_CLASS_MANUAL(o2::AnimationTrack<int>::Player);
-
-template<>
-DECLARE_CLASS_MANUAL(o2::AnimationTrack<o2::Color4>);
-
-template<>
-DECLARE_CLASS_MANUAL(o2::AnimationTrack<o2::Color4>::Key);
-
-template<>
-DECLARE_CLASS_MANUAL(o2::AnimationTrack<o2::Color4>::Player);

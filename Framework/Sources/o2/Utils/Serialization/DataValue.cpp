@@ -658,20 +658,6 @@ namespace o2
 		return mData.arrayData.elements + mData.arrayData.count;
 	}
 
-	DataValue& DataValue::SetValueDelta(const ISerializable& object, const IObject& source)
-	{
-		object.SerializeDeltaBasic(*this, source);
-		object.OnSerializeDelta(*this, source);
-
-		return *this;
-	}
-
-	void DataValue::GetValueDelta(ISerializable& object, const IObject& source) const
-	{
-		object.DeserializeDeltaBasic(*this, source);
-		object.OnDeserializedDelta(*this, source);
-	}
-
 	bool DataValue::IsEmpty() const
 	{
 		if (IsObject())

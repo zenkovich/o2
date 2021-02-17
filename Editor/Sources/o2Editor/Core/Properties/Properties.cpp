@@ -492,7 +492,7 @@ namespace Editor
 			begn.Erase(0, 4);
 
 		if (begn.StartsWith("Editor::"))
-			begn.Erase(0, 9);
+			begn.Erase(0, 8);
 
 		if (begn.StartsWith("UI"))
 			begn = begn;

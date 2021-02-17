@@ -450,6 +450,12 @@ namespace o2
 		// It is called when object was deserialized, reads data
 		void OnDeserialized(const DataValue& node) override;
 
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		// Returns parent world rect position - left bottom corner
 		Vec2F GetParentPosition() const;
 
@@ -667,6 +673,8 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
 }
 END_META;

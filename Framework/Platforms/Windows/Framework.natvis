@@ -364,6 +364,7 @@
       <Item Name="layout" ExcludeView="simple">layout</Item>
       <Item Name="name" ExcludeView="simple">name</Item>
       <Item Name="drawable" ExcludeView="simple">mDrawable</Item>
+      <Item Name="prototype link" ExcludeView="simple">mPrototypeLink</Item>
       <Item Name="transparency" ExcludeView="simple">mTransparency</Item>
       <Item Name="absolute rect" ExcludeView="simple">mAbsolutePosition</Item>
       <Item Name="owner" ExcludeView="simple">mOwnerWidget</Item>

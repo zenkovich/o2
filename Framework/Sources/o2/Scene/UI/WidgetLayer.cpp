@@ -23,11 +23,20 @@ namespace o2
 		mResTransparency(1.0f), interactableLayout(other.interactableLayout), mParent(nullptr), mOwnerWidget(nullptr),
 		mDrawable(nullptr), depth(this), transparency(this)
 	{
+		if (other.mCopyVisitor)
+			other.mCopyVisitor->OnCopy(&other, this);
+
 		if (other.mDrawable)
 			mDrawable = other.mDrawable->CloneAs<IRectDrawable>();
 
 		for (auto child : other.mChildren)
+		{
+			mCopyVisitor = other.mCopyVisitor;
+
 			AddChild(child->CloneAs<WidgetLayer>());
+
+			mCopyVisitor = nullptr;
+		}
 
 		if constexpr (IS_EDITOR)
 		{
@@ -220,6 +229,106 @@ namespace o2
 	const Vector<WidgetLayer*>& o2::WidgetLayer::GetChilds() const
 	{
 		return mChildren;
+	}
+
+	void WidgetLayer::SerializeBasicOverride(DataValue& node) const
+	{
+		if (mPrototypeLink)
+			SerializeWithProto(node);
+		else
+			SerializeRaw(node);
+	}
+
+	void WidgetLayer::DeserializeBasicOverride(const DataValue& node)
+	{
+		if (node.FindMember("PrototypeLink"))
+			DeserializeWithProto(node);
+		else
+			DeserializeRaw(node);
+	}
+
+	void WidgetLayer::SerializeRaw(DataValue& node) const
+	{
+		SerializeBasic(node);
+
+		if (!mChildren.IsEmpty())
+			node["Children"] = mChildren;
+	}
+
+	void WidgetLayer::DeserializeRaw(const DataValue& node)
+	{
+		DeserializeBasic(node);
+
+		if (auto childrenNode = node.FindMember("Children"))
+		{
+			for (auto& childNode : *childrenNode)
+			{
+				auto layer = mnew WidgetLayer();
+				AddChild(layer);
+				layer->Deserialize(childNode["Value"]);
+			}
+		}
+	}
+
+	void WidgetLayer::SerializeWithProto(DataValue& node) const
+	{
+		SerializeDelta(node, *mPrototypeLink);
+
+		node["PrototypeLink"] = mPrototypeLink->mUID;
+
+		if (!mChildren.IsEmpty())
+		{
+			auto& childrenNode = node.AddMember("Children");
+			childrenNode.SetArray();
+
+			for (auto child : mChildren)
+				child->Serialize(childrenNode.AddElement());
+		}
+	}
+
+	void WidgetLayer::DeserializeWithProto(const DataValue& node)
+	{
+		if (auto protoNode = node.FindMember("PrototypeLink"))
+		{
+			SceneUID protoUID = *protoNode;
+			if (mParent && mParent->mPrototypeLink)
+			{
+				for (auto protoChild : mParent->mPrototypeLink->mChildren)
+				{
+					if (protoChild->mUID == protoUID)
+					{
+						mPrototypeLink = protoChild;
+						break;
+					}
+				}
+			}
+			else if (mOwnerWidget->mPrototypeLink)
+			{
+				for (auto protoChild : dynamic_cast<Widget*>(mOwnerWidget->mPrototypeLink.Get())->mLayers)
+				{
+					if (protoChild->mUID == protoUID)
+					{
+						mPrototypeLink = protoChild;
+						break;
+					}
+				}
+			}
+		}
+
+		if (mPrototypeLink)
+			DeserializeDelta(node, *mPrototypeLink);
+		else
+			DeserializeBasic(node);
+
+		if (auto childrenNode = node.FindMember("Children"))
+		{
+			for (auto& childNode : *childrenNode)
+			{
+				auto layer = mnew WidgetLayer();
+				AddChild(layer);
+				layer->Deserialize(childNode);
+			}
+		}
 	}
 
 	WidgetLayer* WidgetLayer::AddChildLayer(const String& name, IRectDrawable* drawable,
@@ -630,6 +739,11 @@ namespace o2
 	}
 
 #endif // IS_EDITOR
+
+	void WidgetLayer::InstantiatePrototypeVisitor::OnCopy(const WidgetLayer* source, WidgetLayer* target)
+	{
+		target->mPrototypeLink = source;
+	}
 
 }
 

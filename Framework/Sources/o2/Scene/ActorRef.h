@@ -69,6 +69,9 @@ namespace o2
 		// Returns actor type
 		static const Type* GetActorTypeStatic();
 
+		// Checks refs are equals for serializing delta
+		static bool EqualsDelta(const ActorRef& obj, const ActorRef& origin);
+
 		SERIALIZABLE(ActorRef);
 
 	protected:
@@ -78,6 +81,9 @@ namespace o2
 	protected:
 		// Updates specialized actor pointer
 		virtual void UpdateSpecActor() {}
+
+		// Copying ref without requiring remap
+		void CopyWithoutRemap(const ActorRef& other);
 
 		// Beginning serialization callback
 		void OnSerialize(DataValue& node) const override;
@@ -203,7 +209,9 @@ CLASS_METHODS_META(o2::ActorRef)
 	PUBLIC_FUNCTION(bool, IsWasDeleted);
 	PUBLIC_FUNCTION(const Type&, GetActorType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetActorTypeStatic);
+	PUBLIC_STATIC_FUNCTION(bool, EqualsDelta, const ActorRef&, const ActorRef&);
 	PROTECTED_FUNCTION(void, UpdateSpecActor);
+	PROTECTED_FUNCTION(void, CopyWithoutRemap, const ActorRef&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }

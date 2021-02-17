@@ -3,6 +3,7 @@
 
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Events/EventSystem.h"
@@ -255,7 +256,8 @@ namespace Editor
 		mUIRoot->Update(dt);
 		mToolsPanel->Update(dt);
 
-		o2Application.windowCaption = String("o2 Editor. FPS: ") + (String)((int)o2Time.GetFPS()) +
+		o2Application.windowCaption = String("o2 Editor: ") + mLoadedScene + 
+			"; FPS: " + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
 			" Cursor: " + (String)o2Input.GetCursorPos();
 
