@@ -442,7 +442,7 @@ namespace Editor
 		for (auto object : selectedObjects)
 		{
 			if (object->IsSupportsDeleting())
-				delete object;
+				o2Scene.DestroyEditableObject(object);
 		}
 
 		mSceneTree->UpdateNodesView();

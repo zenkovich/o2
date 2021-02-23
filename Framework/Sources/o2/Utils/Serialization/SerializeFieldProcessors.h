@@ -7,6 +7,18 @@ namespace o2
 {
 	class ISerializable;
 
+	template<class T, class = void_t<>>
+	struct HasCheckSerialize: std::false_type { };
+
+	template<class T>
+	struct HasCheckSerialize<T, void_t<decltype(&T::CheckSerialize)>>: std::true_type { };
+
+	template<class T, class = void_t<>>
+	struct HasAttributeProcessor: std::false_type { };
+
+	template<class T>
+	struct HasAttributeProcessor<T, void_t<decltype(&T::hasSerializeFieldProcessor)>>: std::true_type { };
+
 	class SerializeTypeProcessor
 	{
 	public:
@@ -45,13 +57,19 @@ namespace o2
 
 			BaseFieldProcessor(DataValue& node):node(node) {}
 
+			template<typename _base, typename _attribute_type, typename ... _args>
+			auto AddAttributeImpl(const _base& base, _args ... args)
+			{
+				if constexpr (HasAttributeProcessor<_attribute_type>::value)
+					return _attribute_type::SerializeFieldProcessor<_base>(base, args ...);
+				else
+					return *this;
+			}
+
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-					return SerializeFieldProcessor(node);
-				else
-					return *this;
+				return AddAttributeImpl<BaseFieldProcessor, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -68,59 +86,12 @@ namespace o2
 			}
 
 			void SetProtectSection(ProtectSection section) {}
-		};
-
-		struct SerializeFieldProcessor: public BaseFieldProcessor
-		{
-			SerializeFieldProcessor(DataValue& node):BaseFieldProcessor(node) {}
-
-			template<typename _attribute_type, typename ... _args>
-			SerializeFieldProcessor& AddAttribute(_args ... args)
-			{
-				return *this;
-			}
-
-			template<typename _type>
-			SerializeDefaultFieldProcessor<_type> SetDefaultValue(const _type& value)
-			{
-				return SerializeDefaultFieldProcessor<_type>(node, value);
-			}
 
 			template<typename _object_type, typename _field_type>
-			SerializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-												 _field_type& field)
+			bool CheckSerialize(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+								_field_type& field)
 			{
-				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-
-				if constexpr (std::is_default_constructible<_field_type>::value && SupportsEqualOperator<_field_type>::value)
-				{
-					if (Math::Equals(*fieldPtr, _field_type()))
-						return *this;
-				}
-
-				node.AddMember(name).Set(*fieldPtr);
-				return *this;
-			}
-		};
-
-		template<typename _type>
-		struct SerializeDefaultFieldProcessor: public SerializeFieldProcessor
-		{
-			_type defaultValue;
-
-			SerializeDefaultFieldProcessor(DataValue& node, const _type& defaultValue):
-				SerializeFieldProcessor(node), defaultValue(defaultValue)
-			{}
-
-			template<typename _object_type, typename _field_type>
-			SerializeDefaultFieldProcessor<_type>& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-															   _field_type& field)
-			{
-				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				if (*fieldPtr != defaultValue)
-					node.AddMember(name).Set(*fieldPtr);
-
-				return *this;
+				return true;
 			}
 		};
 	};

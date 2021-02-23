@@ -221,6 +221,8 @@ namespace Editor
 			mScene->Update(dt);
 			o2EditorSceneScreen.NeedRedraw();
 		}
+		else
+			mScene->UpdateDestroyingEntities();
 	}
 
 	void EditorApplication::FixedUpdateScene(float dt)

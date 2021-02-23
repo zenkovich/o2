@@ -89,6 +89,44 @@ namespace o2
 		DrawableComponent::SetOwnerActor(actor);
 	}
 
+	void ImageComponent::SerializeBasicOverride(DataValue& node) const
+	{
+		SerializeTypeProcessor processor(node);
+		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
+		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
+		ProcessFields(const_cast<ImageComponent*>(this), processor);
+		OnSerialize(node);
+	}
+
+	void ImageComponent::DeserializeBasicOverride(const DataValue& node)
+	{
+		DeserializeTypeProcessor processor(node);
+		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
+		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
+		ProcessFields(const_cast<ImageComponent*>(this), processor);
+		OnDeserialized(node);
+	}
+
+	void ImageComponent::SerializeDeltaBasicOverride(DataValue& node, const IObject& origin) const
+	{
+		SerializeDeltaTypeProcessor<ImageComponent> processor(node, dynamic_cast<const ImageComponent&>(origin));
+		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
+		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
+		ProcessFields(const_cast<ImageComponent*>(this), processor);
+		OnSerializeDelta(node, origin);
+		OnSerialize(node);
+	}
+
+	void ImageComponent::DeserializeDeltaBasicOverride(const DataValue& node, const IObject& origin)
+	{
+		DeserializeDeltaTypeProcessor<ImageComponent> processor(node, dynamic_cast<const ImageComponent&>(origin));
+		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
+		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
+		ProcessFields(const_cast<ImageComponent*>(this), processor);
+		OnDeserializedDelta(node, origin);
+		OnDeserialized(node);
+	}
+
 	void ImageComponent::OnDeserialized(const DataValue& node)
 	{
 		DrawableComponent::OnDeserialized(node);

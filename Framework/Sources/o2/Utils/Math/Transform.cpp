@@ -36,6 +36,11 @@ namespace o2
 		BasisChanged();
 	}
 
+	bool Transform::IsSerializeEnabled() const
+	{
+		return mSerializeEnabled;
+	}
+
 	Transform& Transform::operator=(const Transform& other)
 	{
 		mPosition = other.mPosition;
@@ -414,6 +419,12 @@ namespace o2
 
 		return dx >= 0.0f && dx <= rs.x && dy >= 0.0f && dy < rs.y;
 	}
+
+	void Transform::SetSerializeEnabled(bool enabled)
+	{
+		mSerializeEnabled = enabled;
+	}
+
 }
 
 DECLARE_CLASS(o2::Transform);

@@ -146,6 +146,9 @@ namespace o2
 		// Updates root actors with fixed delta time
 		void FixedUpdate(float dt);
 
+		// Updates destroying actors and components
+		void UpdateDestroyingEntities();
+
 		IOBJECT(Scene);
 
 	protected:
@@ -187,9 +190,6 @@ namespace o2
 
 		// Updates starting actors and components
 		void UpdateStartingEntities();
-
-		// Updates destroying actors and components
-		void UpdateDestroyingEntities();
 
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
@@ -243,6 +243,9 @@ namespace o2
 
 		// Removes object from registered list
 		void UnregEditableObject(SceneEditableObject* object);
+
+		// Removes object at end of frame
+		void DestroyEditableObject(SceneEditableObject* object);
 
 		// Returns all editable objects
 		const Vector<SceneEditableObject*>& GetAllEditableObjects();
@@ -299,8 +302,9 @@ namespace o2
 	protected:
 		Map<ActorAssetRef, Vector<Actor*>> mPrototypeLinksCache; // Cache of linked to prototypes actors
 
-		Vector<SceneEditableObject*> mChangedObjects;  // Changed actors array
-		Vector<SceneEditableObject*> mEditableObjects; // All scene editable objects
+		Vector<SceneEditableObject*> mChangedObjects;    // Changed actors array
+		Vector<SceneEditableObject*> mEditableObjects;   // All scene editable objects
+		Vector<SceneEditableObject*> mDestroyingObjects; // Destroying scene editable objects
 
 		Vector<SceneEditableObject*> mDrawnObjects;           // List of drawn on last frame editable objects
 		bool                         mIsDrawingScene = false; // Sets true when started drawing scene, and false when not
@@ -372,6 +376,7 @@ CLASS_FIELDS_META(o2::Scene)
 	FIELD().NAME(mPrototypeLinksCache).PROTECTED();
 	FIELD().NAME(mChangedObjects).PROTECTED();
 	FIELD().NAME(mEditableObjects).PROTECTED();
+	FIELD().NAME(mDestroyingObjects).PROTECTED();
 	FIELD().NAME(mDrawnObjects).PROTECTED();
 	FIELD().DEFAULT_VALUE(false).NAME(mIsDrawingScene).PROTECTED();
 }
@@ -413,10 +418,10 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, FixedUpdate, float);
+	PUBLIC_FUNCTION(void, UpdateDestroyingEntities);
 	PROTECTED_FUNCTION(void, UpdateActors, float);
 	PROTECTED_FUNCTION(void, UpdateAddedEntities);
 	PROTECTED_FUNCTION(void, UpdateStartingEntities);
-	PROTECTED_FUNCTION(void, UpdateDestroyingEntities);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
 	PROTECTED_FUNCTION(void, DestroyActor, Actor*);
 	PROTECTED_FUNCTION(void, AddActorToScene, Actor*);
@@ -431,6 +436,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	PUBLIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, DestroyEditableObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetAllEditableObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetChangedObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetDrawnEditableObjects);

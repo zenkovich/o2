@@ -106,6 +106,9 @@ namespace o2
 	void WidgetLayer::SetDrawable(IRectDrawable* drawable)
 	{
 		mDrawable = drawable;
+		
+		if (mDrawable)
+			mDrawable->SetSerializeEnabled(false);
 
 		if (mOwnerWidget)
 		{

@@ -215,18 +215,23 @@ namespace o2
 		// Returns true when point inside this
 		virtual bool IsPointInside(const Vec2F& point) const;
 
+		// Sets serialization enable or disable
+		void SetSerializeEnabled(bool enabled);
+
 		SERIALIZABLE(Transform);
 
 	protected:
-		Vec2F  mPosition; // Position @SERIALIZABLE
-		Vec2F  mSize;     // Size @SERIALIZABLE
-		Vec2F  mScale;    // Scale, (1; 1) is default @SERIALIZABLE
-		Vec2F  mPivot;    // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE
-		float  mAngle;    // Rotation angle in radians @SERIALIZABLE
-		float  mShear;    // Shear @SERIALIZABLE
+		Vec2F  mPosition; // Position @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		Vec2F  mSize;     // Size @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		Vec2F  mScale;    // Scale, (1; 1) is default @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		Vec2F  mPivot;    // Pivot: (0; 0) is left bottom corner - (1; 1) is right top corner @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		float  mAngle;    // Rotation angle in radians @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		float  mShear;    // Shear @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
 
 		Basis  mTransform;         // Final transform basis
 		Basis  mNonSizedTransform; // Final transform basis without size
+
+		bool mSerializeEnabled = true; // Is serializations fields enabled
 
 	protected:
 		// It is called when basis changed
@@ -237,6 +242,9 @@ namespace o2
 
 		// Updates mTransform 
 		virtual void UpdateTransform();
+
+		// Returns is serialize enabled; used to turn off fields serialization
+		virtual bool IsSerializeEnabled() const;
 	};
 }
 
@@ -270,14 +278,15 @@ CLASS_FIELDS_META(o2::Transform)
 	FIELD().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(up).PUBLIC();
 	FIELD().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(down).PUBLIC();
 	FIELD().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(lookAtPoint).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mPosition).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mSize).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mScale).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mPivot).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mAngle).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mShear).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mPosition).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mSize).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mScale).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mPivot).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mAngle).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mShear).PROTECTED();
 	FIELD().NAME(mTransform).PROTECTED();
 	FIELD().NAME(mNonSizedTransform).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mSerializeEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Transform)
@@ -333,8 +342,10 @@ CLASS_METHODS_META(o2::Transform)
 	PUBLIC_FUNCTION(Vec2F, World2LocalDir, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, Local2WorldDir, const Vec2F&);
 	PUBLIC_FUNCTION(bool, IsPointInside, const Vec2F&);
+	PUBLIC_FUNCTION(void, SetSerializeEnabled, bool);
 	PROTECTED_FUNCTION(void, BasisChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, UpdateTransform);
+	PROTECTED_FUNCTION(bool, IsSerializeEnabled);
 }
 END_META;

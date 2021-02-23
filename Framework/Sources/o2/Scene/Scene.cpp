@@ -91,6 +91,15 @@ namespace o2
 
 		for (auto comp : destroyComponents)
 			delete comp;
+
+		if constexpr (IS_EDITOR)
+		{
+			auto destroyingObjects = mDestroyingObjects;
+			mDestroyingObjects.Clear();
+
+			for (auto object : destroyingObjects)
+				delete object;
+		}
 	}
 
 	void Scene::DestroyActor(Actor* actor)
@@ -107,6 +116,11 @@ namespace o2
 	{
 		mActorsMap.Remove(prevId);
 		mActorsMap[actor->mId] = actor;
+	}
+
+	void Scene::DestroyEditableObject(SceneEditableObject* object)
+	{
+		mDestroyingObjects.Add(object);
 	}
 
 	void Scene::UpdateActors(float dt)
