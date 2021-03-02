@@ -14,10 +14,16 @@ namespace o2
 	struct HasCheckSerialize<T, void_t<decltype(&T::CheckSerialize)>>: std::true_type { };
 
 	template<class T, class = void_t<>>
-	struct HasAttributeProcessor: std::false_type { };
+	struct HasAttributeSerializeProcessor: std::false_type { };
 
 	template<class T>
-	struct HasAttributeProcessor<T, void_t<decltype(&T::hasSerializeFieldProcessor)>>: std::true_type { };
+	struct HasAttributeSerializeProcessor<T, void_t<decltype(&T::hasSerializeFieldProcessor)>>: std::true_type { };
+
+	template<class T, class = void_t<>>
+	struct HasAttributeDeserializeProcessor: std::false_type { };
+
+	template<class T>
+	struct HasAttributeDeserializeProcessor<T, void_t<decltype(&T::hasDeserializeFieldProcessor)>>: std::true_type { };
 
 	class SerializeTypeProcessor
 	{
@@ -60,7 +66,7 @@ namespace o2
 			template<typename _base, typename _attribute_type, typename ... _args>
 			auto AddAttributeImpl(const _base& base, _args ... args)
 			{
-				if constexpr (HasAttributeProcessor<_attribute_type>::value)
+				if constexpr (HasAttributeSerializeProcessor<_attribute_type>::value)
 					return _attribute_type::SerializeFieldProcessor<_base>(base, args ...);
 				else
 					return *this;
@@ -134,13 +140,19 @@ namespace o2
 
 			BaseFieldProcessor(const DataValue& node):node(node) {}
 
+			template<typename _base, typename _attribute_type, typename ... _args>
+			auto AddAttributeImpl(const _base& base, _args ... args)
+			{
+				if constexpr (HasAttributeDeserializeProcessor<_attribute_type>::value)
+					return _attribute_type::DeserializeFieldProcessor<_base>(base, args ...);
+				else
+					return (_base&)(*this);
+			}
+
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-					return DeserializeFieldProcessor(node);
-				else
-					return *this;
+				return AddAttributeImpl<BaseFieldProcessor, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -158,35 +170,6 @@ namespace o2
 
 			void SetProtectSection(ProtectSection section)
 			{}
-		};
-
-		struct DeserializeFieldProcessor: public BaseFieldProcessor
-		{
-			DeserializeFieldProcessor(const DataValue& node):BaseFieldProcessor(node) {}
-
-			template<typename _attribute_type, typename ... _args>
-			DeserializeFieldProcessor& AddAttribute(_args ... args)
-			{
-				return *this;
-			}
-
-			template<typename _type>
-			DeserializeFieldProcessor& SetDefaultValue(const _type& value)
-			{
-				return *this;
-			}
-
-			template<typename _object_type, typename _field_type>
-			DeserializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-												   _field_type& field)
-			{
-				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-
-				if (auto m = node.FindMember(name))
-					m->Get(*fieldPtr);
-
-				return *this;
-			}
 		};
 	};
 
@@ -226,15 +209,23 @@ namespace o2
 			DataValue& node;
 			const _origin_type& origin;
 
+			typedef _origin_type OriginType;
+
 			BaseFieldProcessor(DataValue& node, const _origin_type& origin):node(node), origin(origin) {}
+
+			template<typename _base, typename _attribute_type, typename ... _args>
+			auto AddAttributeImpl(const _base& base, _args ... args)
+			{
+				if constexpr (HasAttributeSerializeProcessor<_attribute_type>::value)
+					return _attribute_type::SerializeDeltaFieldProcessor<_base>(base, args ...);
+				else
+					return *this;
+			}
 
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-					return SerializeFieldProcessor(node, origin);
-				else
-					return *this;
+				return AddAttributeImpl<BaseFieldProcessor, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -251,43 +242,12 @@ namespace o2
 			}
 
 			void SetProtectSection(ProtectSection section) {}
-		};
-
-		struct SerializeFieldProcessor: public BaseFieldProcessor
-		{
-			SerializeFieldProcessor(DataValue& node, const _origin_type& origin):BaseFieldProcessor(node, origin) {}
-
-			template<typename _attribute_type, typename ... _args>
-			SerializeFieldProcessor& AddAttribute(_args ... args)
-			{
-				return *this;
-			}
-
-			template<typename _type>
-			SerializeFieldProcessor& SetDefaultValue(const _type& value)
-			{
-				return *this;
-			}
 
 			template<typename _object_type, typename _field_type>
-			SerializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-												 _field_type& field)
+			bool CheckSerialize(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+								_field_type& field)
 			{
-				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
-
-				if constexpr (SupportsEqualOperator<_field_type>::value)
-				{
-					if (EqualsForDeltaSerialize(*fieldPtr, *originFieldPtr))
-						return *this;
-				}
-
-				DataValue& member = node.AddMember(name);
-				member.SetDelta(*fieldPtr, *originFieldPtr);
-				if (member.IsNull())
-					node.RemoveMember(name);
-
-				return *this;
+				return true;
 			}
 		};
 	};
@@ -331,15 +291,23 @@ namespace o2
 			const DataValue& node;
 			const _origin_type& origin;
 
+			typedef _origin_type OriginType;
+
 			BaseFieldProcessor(const DataValue& node, const _origin_type& origin):node(node), origin(origin) {}
+
+			template<typename _base, typename _attribute_type, typename ... _args>
+			auto AddAttributeImpl(const _base& base, _args ... args)
+			{
+				if constexpr (HasAttributeDeserializeProcessor<_attribute_type>::value)
+					return _attribute_type::DeserializeDeltaFieldProcessor<_base>(base, args ...);
+				else
+					return *this;
+			}
 
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				if constexpr (std::is_same<_attribute_type, SerializableAttribute>::value)
-					return DeserializeFieldProcessor(node, origin);
-				else
-					return *this;
+				return AddAttributeImpl<BaseFieldProcessor, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -357,43 +325,6 @@ namespace o2
 
 			void SetProtectSection(ProtectSection section)
 			{}
-		};
-
-		struct DeserializeFieldProcessor: public BaseFieldProcessor
-		{
-			DeserializeFieldProcessor(const DataValue& node, const _origin_type& origin):BaseFieldProcessor(node, origin) {}
-
-			template<typename _attribute_type, typename ... _args>
-			DeserializeFieldProcessor& AddAttribute(_args ... args)
-			{
-				return *this;
-			}
-
-			template<typename _type>
-			DeserializeFieldProcessor& SetDefaultValue(const _type& value)
-			{
-				return *this;
-			}
-
-			template<typename _object_type, typename _field_type>
-			DeserializeFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
-												   _field_type& field)
-			{
-				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
-
-				if (auto m = node.FindMember(name); m && !m->IsNull())
-				{
-					m->GetDelta(*fieldPtr, *originFieldPtr);
-				}
-				else
-				{
-					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_origin_type*>(&origin)));
-					*fieldPtr = *originFieldPtr;
-				}
-
-				return *this;
-			}
 		};
 	};
 }

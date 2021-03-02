@@ -5,6 +5,7 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/HorizontalScrollBar.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
+#include "o2Editor/SceneWindow/SceneEditScreen.h"
 
 namespace Editor
 {
@@ -362,6 +363,8 @@ namespace Editor
 		{
 			mPlayer->Stop();
 			mPlayer->SetTime(time);
+
+			o2EditorSceneScreen.NeedRedraw();
 		}
 
 		mAnimationWindow->mDisableTimeTracking = false;

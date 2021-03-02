@@ -8,39 +8,57 @@ namespace o2
 {
 	ImageComponent::ImageComponent():
 		DrawableComponent(), Sprite()
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(const ImageAssetRef& image) :
 		DrawableComponent(), Sprite(image)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(const String& imagePath) :
 		DrawableComponent(), Sprite(imagePath)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(const UID& imageId) :
 		DrawableComponent(), Sprite(imageId)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(TextureRef texture, const RectI& srcRect) :
 		DrawableComponent(), Sprite(texture, srcRect)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(const Color4& color) :
 		DrawableComponent(), Sprite(color)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(Bitmap* bitmap) :
 		DrawableComponent(), Sprite(bitmap)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(const Sprite& sprite) :
 		DrawableComponent(), Sprite(sprite)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::ImageComponent(const ImageComponent& other) :
 		DrawableComponent(other), Sprite(other)
-	{}
+	{
+		mSerializeEnabled = false;
+	}
 
 	ImageComponent::~ImageComponent()
 	{}
@@ -87,44 +105,6 @@ namespace o2
 	void ImageComponent::SetOwnerActor(Actor* actor)
 	{
 		DrawableComponent::SetOwnerActor(actor);
-	}
-
-	void ImageComponent::SerializeBasicOverride(DataValue& node) const
-	{
-		SerializeTypeProcessor processor(node);
-		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
-		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
-		ProcessFields(const_cast<ImageComponent*>(this), processor);
-		OnSerialize(node);
-	}
-
-	void ImageComponent::DeserializeBasicOverride(const DataValue& node)
-	{
-		DeserializeTypeProcessor processor(node);
-		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
-		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
-		ProcessFields(const_cast<ImageComponent*>(this), processor);
-		OnDeserialized(node);
-	}
-
-	void ImageComponent::SerializeDeltaBasicOverride(DataValue& node, const IObject& origin) const
-	{
-		SerializeDeltaTypeProcessor<ImageComponent> processor(node, dynamic_cast<const ImageComponent&>(origin));
-		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
-		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
-		ProcessFields(const_cast<ImageComponent*>(this), processor);
-		OnSerializeDelta(node, origin);
-		OnSerialize(node);
-	}
-
-	void ImageComponent::DeserializeDeltaBasicOverride(const DataValue& node, const IObject& origin)
-	{
-		DeserializeDeltaTypeProcessor<ImageComponent> processor(node, dynamic_cast<const ImageComponent&>(origin));
-		IRectDrawable::ProcessFields((IRectDrawable*)const_cast<ImageComponent*>(this), processor);
-		Sprite::ProcessFields((Sprite*)const_cast<ImageComponent*>(this), processor);
-		ProcessFields(const_cast<ImageComponent*>(this), processor);
-		OnDeserializedDelta(node, origin);
-		OnDeserialized(node);
 	}
 
 	void ImageComponent::OnDeserialized(const DataValue& node)

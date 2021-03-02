@@ -207,7 +207,7 @@ namespace Editor
 				ForcePopEditorScopeOnStack scope;
 				auto objectType = dynamic_cast<const ObjectType*>(subType);
 				Actor* newActor = dynamic_cast<Actor*>(objectType->DynamicCastToIObject(subType->CreateSample()));
-				newActor->name = path;
+				newActor->name = path.ReplacedAll("/", " ");
 				OnCreateObject(newActor);
 			});
 		}

@@ -437,6 +437,8 @@ namespace o2
 					stateNode.GetDelta(*state, *protoState);
 				else
 					stateNode.Get(*state);
+
+				AddState(state);
 			}
 		}
 	}

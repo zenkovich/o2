@@ -34,6 +34,12 @@ namespace o2
 	template<typename... Ts> using void_t = typename make_void<Ts...>::type;
 
 	template<class T, class = void_t<>>
+	struct IsCloneable: std::false_type { };
+
+	template<class T>
+	struct IsCloneable<T, void_t<decltype(&T::Clone)>>: std::true_type { };
+
+	template<class T, class = void_t<>>
 	struct IsAccessor : std::false_type { };
 
 	template<class T>

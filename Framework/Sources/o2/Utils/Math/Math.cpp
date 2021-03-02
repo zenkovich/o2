@@ -27,7 +27,7 @@ namespace o2
 
 		bool Lerp(bool a, bool b, float coef)
 		{
-			return a;
+			return coef < 0.99f ? a : b;
 		}
 
 		bool Lerp(int a, int b, float coef)

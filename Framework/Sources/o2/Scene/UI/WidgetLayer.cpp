@@ -27,7 +27,10 @@ namespace o2
 			other.mCopyVisitor->OnCopy(&other, this);
 
 		if (other.mDrawable)
+		{
 			mDrawable = other.mDrawable->CloneAs<IRectDrawable>();
+			mDrawable->SetSerializeEnabled(false);
+		}
 
 		for (auto child : other.mChildren)
 		{
@@ -82,7 +85,10 @@ namespace o2
 		name = other.name;
 
 		if (other.mDrawable)
+		{
 			mDrawable = other.mDrawable->CloneAs<IRectDrawable>();
+			mDrawable->SetSerializeEnabled(false);
+		}
 
 		for (auto child : other.mChildren)
 			AddChild(child->CloneAs<WidgetLayer>());
@@ -240,6 +246,8 @@ namespace o2
 			SerializeWithProto(node);
 		else
 			SerializeRaw(node);
+
+		OnSerialize(node);
 	}
 
 	void WidgetLayer::DeserializeBasicOverride(const DataValue& node)
@@ -248,6 +256,8 @@ namespace o2
 			DeserializeWithProto(node);
 		else
 			DeserializeRaw(node);
+
+		OnDeserialized(node);
 	}
 
 	void WidgetLayer::SerializeRaw(DataValue& node) const
@@ -452,6 +462,9 @@ namespace o2
 			child->mParent = this;
 			child->mOwnerWidget = mOwnerWidget;
 		}
+
+		if (mDrawable)
+			mDrawable->SetSerializeEnabled(false);
 	}
 
 	void WidgetLayer::SetOwnerWidget(Widget* owner)

@@ -74,18 +74,6 @@ namespace o2
 		// Sets owner actor
 		void SetOwnerActor(Actor* actor) override;
 
-		// Serializing object into data node; ignores transformation properties
-		void SerializeBasicOverride(DataValue& node) const;
-
-		// Deserializing object from data node; ignores transformation properties
-		void DeserializeBasicOverride(const DataValue& node);
-
-		// Serializing object delta from origin into data node; ignores transformation properties
-		void SerializeDeltaBasicOverride(DataValue& node, const IObject& origin) const;
-
-		// Deserializing object delta from origin from data node; ignores transformation properties
-		void DeserializeDeltaBasicOverride(const DataValue& node, const IObject& origin);
-
 		// Calling when deserializing
 		void OnDeserialized(const DataValue& node) override;
 
@@ -114,10 +102,6 @@ CLASS_METHODS_META(o2::ImageComponent)
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
-	PROTECTED_FUNCTION(void, SerializeBasicOverride, DataValue&);
-	PROTECTED_FUNCTION(void, DeserializeBasicOverride, const DataValue&);
-	PROTECTED_FUNCTION(void, SerializeDeltaBasicOverride, DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, DeserializeDeltaBasicOverride, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 }

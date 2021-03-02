@@ -195,6 +195,7 @@ namespace o2
 
 	public:
 		static constexpr bool hasSerializeFieldProcessor = true;
+		static constexpr bool hasDeserializeFieldProcessor = true;
 
 		template<typename _base, typename _type>
 		struct SerializeDefaultProcessorMixin: public _base
@@ -229,8 +230,7 @@ namespace o2
 		template<typename _base>
 		struct SerializeFieldProcessor: public _base
 		{
-			SerializeFieldProcessor(const _base& base):
-				_base(base) {}
+			SerializeFieldProcessor(const _base& base): _base(base) {}
 
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
@@ -270,6 +270,144 @@ namespace o2
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
 				node.AddMember(name).Set(*fieldPtr);
+
+				return *this;
+			}
+		};
+
+		template<typename _base>
+		struct DeserializeFieldProcessor: public _base
+		{
+			DeserializeFieldProcessor(const _base& base): _base(base) {}
+
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args)
+			{
+				return AddAttributeImpl<DeserializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+			}
+
+			template<typename _type>
+			auto& SetDefaultValue(const _type& value)
+			{
+				return *this;
+			}
+
+			template<typename _object_type, typename _field_type>
+			auto& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+							  _field_type& field)
+			{
+				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+
+				if (auto m = node.FindMember(name))
+					m->Get(*fieldPtr);
+
+				return *this;
+			}
+		};
+
+		template<typename _base>
+		struct SerializeDeltaFieldProcessor: public _base
+		{
+			SerializeDeltaFieldProcessor(const _base& base):_base(base) {}
+
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args)
+			{
+				return AddAttributeImpl<SerializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+			}
+
+			template<typename _type>
+			auto& SetDefaultValue(const _type& value)
+			{
+				return *this;
+			}
+
+			template<typename _object_type, typename _field_type>
+			bool CheckSerialize(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+								_field_type& field)
+			{
+				if (!_base::CheckSerialize(object, type, name, pointerGetter, field))
+					return false;
+
+				if constexpr (SupportsEqualOperator<_field_type>::value)
+				{
+					_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+
+					if (EqualsForDeltaSerialize(*fieldPtr, *originFieldPtr))
+						return false;
+				}
+
+				return true;
+			}
+
+			template<typename _object_type, typename _field_type>
+			auto& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+												 _field_type& field)
+			{
+				if (!CheckSerialize(object, type, name, pointerGetter, field))
+					return *this;
+
+				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+
+				DataValue& member = node.AddMember(name);
+				member.SetDelta(*fieldPtr, *originFieldPtr);
+				if (member.IsNull())
+					node.RemoveMember(name);
+
+				return *this;
+			}
+		};
+
+		template<typename _base>
+		struct DeserializeDeltaFieldProcessor: public _base
+		{
+			DeserializeDeltaFieldProcessor(const _base& base):_base(base) {}
+
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args)
+			{
+				return AddAttributeImpl<DeserializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+			}
+
+			template<typename _type>
+			auto& SetDefaultValue(const _type& value)
+			{
+				return *this;
+			}
+
+			template<typename _object_type, typename _field_type>
+			auto& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+												   _field_type& field)
+			{
+				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+
+				if (auto m = node.FindMember(name); m && !m->IsNull())
+					m->GetDelta(*fieldPtr, *originFieldPtr);
+				else
+				{
+					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+					if constexpr (std::is_pointer<_field_type>::value &&
+								  std::is_copy_constructible<std::remove_pointer<_field_type>::type>::value)
+					{
+						typedef std::remove_pointer<_field_type>::type _field_type_unp;
+						if constexpr (IsCloneable<_field_type_unp>::value)
+						{
+							if constexpr (std::is_same<std::invoke_result<decltype(&_field_type_unp::Clone)()>::type, _field_type>::value)
+								*fieldPtr = (*originFieldPtr)->Clone();
+							else
+								*fieldPtr = dynamic_cast<_field_type>((*originFieldPtr)->Clone());
+						}
+						else
+							*fieldPtr = mnew typename std::remove_pointer<_field_type>::type(**originFieldPtr);
+					}
+					else
+					{
+						*fieldPtr = *originFieldPtr;
+					}
+				}
 
 				return *this;
 			}
@@ -334,6 +472,55 @@ namespace o2
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
 				node.AddMember(name).Set(*fieldPtr);
+
+				return *this;
+			}
+		};
+
+		template<typename _base>
+		struct SerializeDeltaFieldProcessor: public _base
+		{
+			bool(_class::*functionPtr)() const;
+
+			SerializeDeltaFieldProcessor(const _base& base, bool(_class::*functionPtr)() const):
+				_base(base), functionPtr(functionPtr) {}
+
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args)
+			{
+				return AddAttributeImpl<SerializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+			}
+
+			template<typename _type>
+			auto& SetDefaultValue(const _type& value)
+			{
+				return *this;
+			}
+
+			template<typename _object_type, typename _field_type>
+			bool CheckSerialize(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+								_field_type& field)
+			{
+				if (!(object->*functionPtr)())
+					return false;
+
+				return _base::CheckSerialize(object, type, name, pointerGetter, field);
+			}
+
+			template<typename _object_type, typename _field_type>
+			auto& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+							  _field_type& field)
+			{
+				if (!CheckSerialize(object, type, name, pointerGetter, field))
+					return *this;
+
+				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_base::OriginType*>(&origin)));
+
+				DataValue& member = node.AddMember(name);
+				member.SetDelta(*fieldPtr, *originFieldPtr);
+				if (member.IsNull())
+					node.RemoveMember(name);
 
 				return *this;
 			}
