@@ -48,4 +48,20 @@ namespace o2
 		_type* GetValuePointer() const { return mValuePtr; }
 		void* GetValueVoidPointer() const override { return (void*)mValuePtr; }
 	};
+
+	template<typename _type>
+	class FunctionalValueProxy: public IValueProxy<_type>
+	{
+	protected:
+		Function<void(_type)> mSetter;
+		Function<_type()>     mGetter;
+
+	public:
+		FunctionalValueProxy() {}
+		FunctionalValueProxy(const Function<void(_type)> setter, const Function<_type()> getter):
+			mSetter(setter), mGetter(getter) {}
+
+		void SetValue(const _type& value) override { mSetter(value); }
+		_type GetValue() const override { return mGetter(); }
+	};
 }

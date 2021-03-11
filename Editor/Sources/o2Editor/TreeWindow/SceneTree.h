@@ -75,6 +75,9 @@ namespace Editor
 		// Sets watching editor UI state
 		void SetEditorWatching(bool watching);
 
+		// Returns is watching editor UI state
+		bool IsEditorWatching() const;
+
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
@@ -253,6 +256,7 @@ CLASS_METHODS_META(Editor::SceneTree)
 	PUBLIC_FUNCTION(void, DeselectAllObjects);
 	PUBLIC_FUNCTION(void, ScrollTo, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, SetEditorWatching, bool);
+	PUBLIC_FUNCTION(bool, IsEditorWatching);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PROTECTED_FUNCTION(void, Initialize);
 	PROTECTED_FUNCTION(void, UpdateVisibleNodes);

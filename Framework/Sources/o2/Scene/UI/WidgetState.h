@@ -95,6 +95,9 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		friend class Widget;
 	};
 }
@@ -135,5 +138,6 @@ CLASS_METHODS_META(o2::WidgetState)
 	PUBLIC_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnAnimationChanged);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

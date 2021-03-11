@@ -142,6 +142,11 @@ namespace Editor
 		UpdateNodesView();
 	}
 
+	bool SceneTree::IsEditorWatching() const
+	{
+		return mWatchEditor;
+	}
+
 	String SceneTree::GetCreateMenuCategory()
 	{
 		return "UI/Editor";

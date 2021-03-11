@@ -10,7 +10,7 @@ namespace Editor
 	AssetProperty::AssetProperty()
 	{}
 
-	AssetProperty::AssetProperty(const AssetProperty& other) :
+	AssetProperty::AssetProperty(const AssetProperty& other):
 		TPropertyField(other)
 	{
 		InitializeControls();
@@ -47,18 +47,23 @@ namespace Editor
 		}
 
 		mCreateInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/container/layout/create");
-		mCreateInstanceBtn->onClick = THIS_FUNC(OnCreateInstancePressed);
+		if (mCreateInstanceBtn)
+			mCreateInstanceBtn->onClick = THIS_FUNC(OnCreateInstancePressed);
 
 		auto saveInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/container/layout/save");
-		saveInstanceBtn->onClick = THIS_FUNC(OnSaveInstancePressed);
+		if (saveInstanceBtn)
+			saveInstanceBtn->onClick = THIS_FUNC(OnSaveInstancePressed);
 
 		auto removeInstanceBtn = mSpoiler->GetInternalWidgetByType<Button>("mainLayout/container/layout/remove");
-		removeInstanceBtn->onClick = THIS_FUNC(OnRemoveInstancePressed);
+		if (removeInstanceBtn)
+			removeInstanceBtn->onClick = THIS_FUNC(OnRemoveInstancePressed);
 	}
 
 	void AssetProperty::UpdateValueView()
 	{
-		mCreateInstanceBtn->SetEnabled(mAvailableToHaveInstance && !mValuesDifferent);
+		if (mCreateInstanceBtn)
+			mCreateInstanceBtn->SetEnabled(mAvailableToHaveInstance && !mValuesDifferent);
+
 		bool allAreInstance = false;
 
 		if (!mValuesDifferent)
@@ -205,7 +210,7 @@ namespace Editor
 	void AssetProperty::OnCreateInstancePressed()
 	{
 		SetState("instance", true);
-		
+
 		for (auto proxy : mValuesProxies)
 		{
 			auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
@@ -253,7 +258,7 @@ namespace Editor
 			return;
 		}
 
-		String relativePath = o2FileSystem.CanonicalizePath(o2FileSystem.GetPathRelativeToPath(defaultPath, path)); 
+		String relativePath = o2FileSystem.CanonicalizePath(o2FileSystem.GetPathRelativeToPath(defaultPath, path));
 		relativePath.ReplaceAll("\\", "/");
 
 		auto asset = GetProxy(mValuesProxies[0].first);

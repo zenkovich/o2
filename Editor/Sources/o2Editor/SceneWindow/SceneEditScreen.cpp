@@ -151,27 +151,35 @@ namespace Editor
 
 	void SceneEditScreen::DrawObjects()
 	{
-		o2Scene.BeginDrawingScene();
-
-		for (auto layer : o2Scene.GetLayers())
+		if (o2EditorTree.GetSceneTree()->IsEditorWatching())
 		{
-			if (!layer->visible)
-				continue;
+			static bool drawing = false;
+			if (drawing)
+				return;
+			
+			drawing = true;
+			EditorUIRoot.GetRootWidget()->Draw();
+			drawing = false;
 
-			for (auto drw : layer->GetEnabledDrawables())
-				drw->Draw();
+			mNeedRedraw = true;
 		}
+		else
+		{
+			o2Scene.BeginDrawingScene();
 
-		o2Scene.EndDrawingScene();
+			for (auto layer : o2Scene.GetLayers())
+			{
+				if (!layer->visible)
+					continue;
 
-		o2Physics.DrawDebug();
-// 		static bool drawing = false;
-// 		if (drawing)
-// 			return;
-// 
-// 		drawing = true;
-// 		EditorUIRoot.GetRootWidget()->Draw();
-// 		drawing = false;
+				for (auto drw : layer->GetEnabledDrawables())
+					drw->Draw();
+			}
+
+			o2Scene.EndDrawingScene();
+
+			o2Physics.DrawDebug();
+		}
 	}
 
 	void SceneEditScreen::DrawSelection()

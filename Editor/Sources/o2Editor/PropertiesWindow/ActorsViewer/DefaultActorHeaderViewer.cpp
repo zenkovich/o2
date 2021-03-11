@@ -61,9 +61,9 @@ namespace Editor
 		*linkImg->layout = WidgetLayout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(1, -20));
 		prototypeRoot->AddChild(linkImg);
 
-// 		mPrototypeProperty = o2UI.CreateWidget<AssetProperty>("actor head asset property");
-// 		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 21, 65, 17, 22);
-// 		prototypeRoot->AddChild(mPrototypeProperty);
+		mPrototypeProperty = o2UI.CreateWidget<AssetProperty>("actor head asset property");
+		*mPrototypeProperty->layout = WidgetLayout::HorStretch(VerAlign::Top, 19, 65, 17, 24);
+		prototypeRoot->AddChild(mPrototypeProperty);
 
 		mPrototypeApplyBtn = o2UI.CreateWidget<Button>("accept prototype");
 		*mPrototypeApplyBtn->layout = WidgetLayout::Based(BaseCorner::RightTop, Vec2F(25, 25), Vec2F(-40, -18));
@@ -85,17 +85,17 @@ namespace Editor
 		mDataView->AddChild(tagsImg);
 
 		mTagsProperty = o2UI.CreateWidget<TagsProperty>("actor head tags");
-		*mTagsProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 129, 17, 3);
+		*mTagsProperty->layout = WidgetLayout::HorStretch(VerAlign::Bottom, 21, 189, 17, 3);
 		mTagsProperty->SetValuePath("tags");
 		mTagsProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mTagsProperty);
 
 		auto layerImg = o2UI.CreateImage("ui/UI4_layer_big.png");
-		*layerImg->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(20, 20), Vec2F(-109, 1));
+		*layerImg->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(20, 20), Vec2F(-169, 1));
 		mDataView->AddChild(layerImg);
 
 		mLayerProperty = o2UI.CreateWidget<LayerProperty>("actor head layer");
-		*mLayerProperty->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(106, 17), Vec2F(-4, 3));
+		*mLayerProperty->layout = WidgetLayout::Based(BaseCorner::RightBottom, Vec2F(166, 17), Vec2F(-4, 3));
 		mLayerProperty->SetValuePath("layer");
 		mLayerProperty->onChangeCompleted = THIS_FUNC(OnPropertyChanged);
 		mDataView->AddChild(mLayerProperty);
@@ -134,7 +134,7 @@ namespace Editor
 		mActors = actors;
 
 		auto prototypes = actors.Convert<Actor*>([](Actor* x) { return x->GetPrototypeLink().Get(); });
-				
+
 		mEnableProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::enabled)>(
 			actors, prototypes, [](Actor* x) { return &x->enabled; });
 
@@ -144,16 +144,17 @@ namespace Editor
 		mLockProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::locked)>(
 			actors, prototypes, [](Actor* x) { return &x->locked; });
 
-		// mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
-		// 	actors, [](Actor* x) { return &x->prototype; });
+		mPrototypeProperty->SelectValuesProperties<Actor, decltype(Actor::prototype)>(
+			actors, [](Actor* x) { return &x->prototype; });
 
-		//mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
+		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
 
 		mTagsProperty->SelectValueAndPrototypePointers<TagGroup, Actor>(
 			actors, prototypes, [](Actor* x) { return &x->tags; });
 
-// 		mLayerProperty->SelectValueAndPrototypeProperties<Actor, decltype(Actor::layer)>(
-// 			actors, prototypes, [](Actor* x) { return &x->GetLayer(); });
+		mLayerProperty->SelectValueAndPrototypeFunctional<SceneLayer*, Actor>(
+			actors, prototypes, [](Actor* x) { return x->GetLayer(); },
+			[](Actor* x, const SceneLayer* l) { x->SetLayer(l->GetName()); });
 	}
 
 	Widget* DefaultActorHeaderViewer::GetWidget() const
@@ -166,11 +167,11 @@ namespace Editor
 		mEnableProperty->Refresh();
 		mNameProperty->Refresh();
 		mLockProperty->Refresh();
-		//mPrototypeProperty->Refresh();
+		mPrototypeProperty->Refresh();
 		mTagsProperty->Refresh();
 		mLayerProperty->Refresh();
 
-		//*mDataView->state["prototype"] = mPrototypeProperty->GetCommonValue().IsValid();
+		mDataView->state["prototype"]->SetState(mPrototypeProperty->GetCommonValue().IsValid());
 	}
 
 	void DefaultActorHeaderViewer::OnApplyPrototypePressed()
@@ -238,7 +239,7 @@ namespace Editor
 		return applyActors;
 	}
 
-	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue, 
+	void DefaultActorHeaderViewer::OnPropertyChanged(const String& path, const Vector<DataDocument>& prevValue,
 													 const Vector<DataDocument>& newValue)
 	{
 		PropertyChangeAction* action = mnew PropertyChangeAction(

@@ -476,6 +476,11 @@ namespace o2
 		UpdateLayersDrawingSequence();
 	}
 
+	void Widget::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		OnDeserialized(node);
+	}
+
 	void Widget::OnTransformUpdated()
 	{
 		mIsClipped = false;

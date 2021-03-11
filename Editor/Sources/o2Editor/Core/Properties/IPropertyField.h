@@ -22,7 +22,7 @@ namespace Editor
 	// -------------------------------
 	// Editor property field interface
 	// -------------------------------
-	class IPropertyField : public HorizontalLayout
+	class IPropertyField: public HorizontalLayout
 	{
 	public:
 		typedef Pair<IAbstractValueProxy*, IAbstractValueProxy*> TargetPair;
@@ -134,6 +134,13 @@ namespace Editor
 											   const Vector<_object_type*>& prototypes,
 											   std::function<_property_type* (_object_type*)> getter);
 
+		// Sets targets properties
+		template<typename _type, typename _object_type>
+		void SelectValueAndPrototypeFunctional(const Vector<_object_type*>& targets,
+											   const Vector<_object_type*>& prototypes,
+											   std::function<const _type&(_object_type*)> getter,
+											   std::function<void(_object_type*, const _type&)> setter);
+
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
@@ -196,7 +203,7 @@ namespace Editor
 	};
 
 	template<typename _type>
-	class TPropertyField : public IPropertyField
+	class TPropertyField: public IPropertyField
 	{
 	public:
 		// Default constructor
@@ -320,7 +327,7 @@ namespace Editor
 
 	template<typename _object_type, typename _property_type>
 	void IPropertyField::SelectValuesProperties(const Vector<_object_type*>& targets,
-		std::function<_property_type* (_object_type*)> getter)
+												std::function<_property_type* (_object_type*)> getter)
 	{
 		SetValueAndPrototypeProxy(targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[&](_object_type* target)
@@ -332,8 +339,8 @@ namespace Editor
 
 	template<typename _type, typename _object_type>
 	void IPropertyField::SelectValueAndPrototypePointers(const Vector<_object_type*>& targets,
-		const Vector<_object_type*>& prototypes,
-		std::function<_type* (_object_type*)> getter)
+														 const Vector<_object_type*>& prototypes,
+														 std::function<_type* (_object_type*)> getter)
 	{
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
 		targetPairs.Reserve(targets.Count());
@@ -343,7 +350,7 @@ namespace Editor
 			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
 				mnew PointerValueProxy<_type>(getter(targets[i])),
 				prototypes[i] ? mnew PointerValueProxy<_type>(getter(prototypes[i])) : nullptr
-				));
+			));
 		}
 
 		SetValueAndPrototypeProxy(targetPairs);
@@ -351,8 +358,8 @@ namespace Editor
 
 	template<typename _object_type, typename _property_type>
 	void IPropertyField::SelectValueAndPrototypeProperties(const Vector<_object_type*>& targets,
-		const Vector<_object_type*>& prototypes,
-		std::function<_property_type* (_object_type*)> getter)
+														   const Vector<_object_type*>& prototypes,
+														   std::function<_property_type* (_object_type*)> getter)
 	{
 		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
 		targetPairs.Reserve(targets.Count());
@@ -362,11 +369,36 @@ namespace Editor
 			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
 				mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(targets[i])),
 				prototypes[i] ? mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(prototypes[i])) : nullptr
-				));
+			));
 		}
 
 		SetValueAndPrototypeProxy(targetPairs);
 	}
+
+	template<typename _type, typename _object_type>
+	void IPropertyField::SelectValueAndPrototypeFunctional(const Vector<_object_type*>& targets,
+														   const Vector<_object_type*>& prototypes,
+														   std::function<const _type&(_object_type*)> getter,
+														   std::function<void(_object_type*, const _type&)> setter)
+	{
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> targetPairs;
+		targetPairs.Reserve(targets.Count());
+
+		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
+		{
+			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
+				mnew FunctionalValueProxy<_type>(
+				[=](const _type& v) { setter(targets[i], v); },
+				[=]() { return getter(targets[i]); }),
+				prototypes[i] ? mnew FunctionalValueProxy<_type>(
+				[=](const _type& v) { setter(prototypes[i], v); },
+				[=]() { return getter(prototypes[i]); }): nullptr));
+		}
+
+		SetValueAndPrototypeProxy(targetPairs);
+	}
+
+
 
 	// -----------------------------
 	// TPropertyField implementation
@@ -377,7 +409,7 @@ namespace Editor
 	{}
 
 	template<typename _type>
-	TPropertyField<_type>::TPropertyField(const TPropertyField& other) :
+	TPropertyField<_type>::TPropertyField(const TPropertyField& other):
 		IPropertyField(other)
 	{}
 

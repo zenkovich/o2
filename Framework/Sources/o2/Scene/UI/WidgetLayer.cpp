@@ -240,6 +240,11 @@ namespace o2
 		return mChildren;
 	}
 
+	void WidgetLayer::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		OnDeserialized(node);
+	}
+
 	void WidgetLayer::SerializeBasicOverride(DataValue& node) const
 	{
 		if (mPrototypeLink)

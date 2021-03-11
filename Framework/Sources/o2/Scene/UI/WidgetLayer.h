@@ -288,6 +288,9 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		// Sets owner widget for this and children
 		void SetOwnerWidget(Widget* owner);
 
@@ -432,6 +435,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, SetOwnerWidget, Widget*);
 	PROTECTED_FUNCTION(void, OnChildAdded, WidgetLayer*);
 	PROTECTED_FUNCTION(void, OnLayoutChanged);

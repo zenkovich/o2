@@ -303,6 +303,9 @@ namespace o2
 		// Completion deserialization callback; initializes layers and children
 		void OnDeserialized(const DataValue& node) override;
 
+		// Completion deserialization delta callback; initializes layers and children
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		// Updates result read enable flag
 		void UpdateResEnabled() override;
 
@@ -818,6 +821,7 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, UpdateResEnabled);
 	PROTECTED_FUNCTION(void, UpdateResEnabledInHierarchy);
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
