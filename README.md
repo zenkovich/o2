@@ -6,11 +6,6 @@ Here is the test project: https://github.com/zenkovich/o2-Template
 
 Now work in progress.
 
-[Installation](https://github.com/zenkovich/o2/wiki/Installation)  
-[Getting started](https://github.com/zenkovich/o2/wiki/Beginning)  
-[Tutorials](https://github.com/zenkovich/o2/wiki/Tutorials)  
-[Documentation](https://github.com/zenkovich/o2/wiki)  
-
 ![](https://github.com/zenkovich/o2/blob/master/editor.png)
 
 ### Features
