@@ -1,7 +1,8 @@
 #pragma once
+#include "o2/Events/CursorAreaEventsListener.h"
+#include "o2/Render/Camera.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Types/Containers/Vector.h"
-#include "o2/Events/CursorAreaEventsListener.h"
 
 namespace o2
 {
@@ -10,13 +11,17 @@ namespace o2
 	class CursorAreaEventListenersLayer: public CursorAreaEventsListener
 	{
 	public:
-		Basis drawnTransform;
-		Basis viewPortBasis;
-		Basis renderBasis;
+		Basis  drawnTransform;
+		Basis  viewPortBasis;
+		Basis  renderBasis;
+		Camera camera;
 
 		Vector<CursorAreaEventsListener*> cursorEventAreaListeners;
 
 	public:
+		// Destructor. Unregisters from events system
+		~CursorAreaEventListenersLayer();
+
 		// It is called when layer sub listeners has began draw with actual camera
 		void OnBeginDraw();
 

@@ -111,6 +111,13 @@ namespace o2
 		// Returns actor by path (ex "some node/other/target")
 		Actor* FindActor(const String& path);
 
+		// Returns actor with type in scene
+		template<typename _type>
+		_type* FindActorByType();
+
+		// Returns cameras on scene
+		const Vector<CameraActor*>& GetCameras() const;
+
 		// Returns component with type in scene
 		template<typename _type>
 		_type* FindActorComponent();
@@ -148,6 +155,12 @@ namespace o2
 
 		// Updates destroying actors and components
 		void UpdateDestroyingEntities();
+
+		// Adds actor to destroy list, will be removed at next frame
+		void DestroyActor(Actor* actor);
+
+		// Adds component to destroy list, will be removed at next frame
+		void DestroyComponent(Component* component);
 
 		IOBJECT(Scene);
 
@@ -194,9 +207,6 @@ namespace o2
 		// Draws debug info for actor under cursor
 		void DrawCursorDebugInfo();
 
-		// Adds actor to destroy list
-		void DestroyActor(Actor* actor);
-
 		// It is called when actor adding to scene; registers in actors list and events list
 		void AddActorToScene(Actor* actor);
 
@@ -225,10 +235,11 @@ namespace o2
 		void OnCameraRemovedScene(CameraActor* camera);
 
 		friend class Actor;
+		friend class ActorRef;
 		friend class Application;
 		friend class CameraActor;
+		friend class ComponentRef;
 		friend class DrawableComponent;
-		friend class ActorRef;
 		friend class SceneLayer;
 		friend class Widget;
 		friend class WidgetLayer;
@@ -330,6 +341,21 @@ namespace o2
 	}
 
 	template<typename _type>
+	_type* Scene::FindActorByType()
+	{
+		for (auto actor : mRootActors)
+		{
+			if (auto res = dynamic_cast<_type*>(actor))
+				return res;
+
+			if (auto res = actor->FindChildByType<_type>())
+				return res;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _type>
 	_type* Scene::FindActorComponent()
 	{
 		for (auto actor : mRootActors)
@@ -409,6 +435,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(Actor*, GetActorByID, SceneUID);
 	PUBLIC_FUNCTION(Actor*, GetAssetActorByID, const UID&);
 	PUBLIC_FUNCTION(Actor*, FindActor, const String&);
+	PUBLIC_FUNCTION(const Vector<CameraActor*>&, GetCameras);
 	PUBLIC_FUNCTION(void, Clear, bool);
 	PUBLIC_FUNCTION(void, ClearCache);
 	PUBLIC_FUNCTION(void, Load, const String&, bool);
@@ -419,11 +446,12 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, FixedUpdate, float);
 	PUBLIC_FUNCTION(void, UpdateDestroyingEntities);
+	PUBLIC_FUNCTION(void, DestroyActor, Actor*);
+	PUBLIC_FUNCTION(void, DestroyComponent, Component*);
 	PROTECTED_FUNCTION(void, UpdateActors, float);
 	PROTECTED_FUNCTION(void, UpdateAddedEntities);
 	PROTECTED_FUNCTION(void, UpdateStartingEntities);
 	PROTECTED_FUNCTION(void, DrawCursorDebugInfo);
-	PROTECTED_FUNCTION(void, DestroyActor, Actor*);
 	PROTECTED_FUNCTION(void, AddActorToScene, Actor*);
 	PROTECTED_FUNCTION(void, AddActorToSceneDeferred, Actor*);
 	PROTECTED_FUNCTION(void, RemoveActorFromScene, Actor*, bool);

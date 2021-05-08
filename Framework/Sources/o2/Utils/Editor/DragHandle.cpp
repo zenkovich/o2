@@ -807,6 +807,11 @@ namespace o2
 		Widget::OnDeserialized(node);
 	}
 
+	void WidgetDragHandle::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		Widget::OnDeserializedDelta(node, origin);
+	}
+
 	void ISelectableDragHandlesGroup::DeselectAll()
 	{
 		auto handles = GetAllHandles();

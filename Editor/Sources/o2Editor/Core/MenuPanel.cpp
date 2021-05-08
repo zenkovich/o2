@@ -30,6 +30,7 @@
 #include "o2Editor/SceneWindow/SceneWindow.h"
 #include "o2Editor/TreeWindow/SceneTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
+#include "o2/Utils/Tasks/TaskManager.h"
 
 DECLARE_SINGLETON(Editor::MenuPanel);
 
@@ -200,30 +201,34 @@ namespace Editor
 
 	void MenuPanel::OnNewScenePressed()
 	{
-		CheckSceneSaving([]() { o2EditorApplication.MakeNewScene(); });
+		o2Tasks.Invoke([&] { CheckSceneSaving([]() { o2EditorApplication.MakeNewScene(); }); });
 	}
 
 	void MenuPanel::OnOpenScenePressed()
 	{
-		auto openDialog = []() {
-			String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
+		o2Tasks.Invoke([&] {
+			auto openDialog = []() {
+				String fileName = GetOpenFileNameDialog("Load scene", { { "o2 Scene", "*.scn" }, { "All", "*.*" } });
 
-			if (fileName.IsEmpty())
-				return;
+				if (fileName.IsEmpty())
+					return;
 
-			ForcePopEditorScopeOnStack scope;
-			o2EditorApplication.LoadScene(fileName); 
-		};
+				ForcePopEditorScopeOnStack scope;
+				o2EditorApplication.LoadScene(fileName);
+			};
 
-		CheckSceneSaving(openDialog);
+			CheckSceneSaving(openDialog);
+		});
 	}
 
 	void MenuPanel::OnSaveScenePressed()
 	{
-		if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
-			OnSaveSceneAsPressed();
-		else
-			o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
+		o2Tasks.Invoke([&] {
+			if (o2EditorApplication.GetLoadedSceneName().IsEmpty())
+				OnSaveSceneAsPressed();
+			else
+				o2EditorApplication.SaveScene(o2EditorApplication.GetLoadedSceneName());
+		});
 	}
 
 	void MenuPanel::OnSaveSceneAsPressed()
@@ -236,7 +241,7 @@ namespace Editor
 		if (!fileName.EndsWith(".scn"))
 			fileName += ".scn";
 
-		o2EditorApplication.SaveScene(fileName);
+		o2Tasks.Invoke([&] { o2EditorApplication.SaveScene(fileName); });
 	}
 
 	void MenuPanel::OnExitPressed()

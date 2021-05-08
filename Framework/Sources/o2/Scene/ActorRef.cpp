@@ -88,6 +88,8 @@ namespace o2
 	{
 		if (mActor)
 			o2Scene.DestroyActor(mActor);
+
+		*this = nullptr;
 	}
 
 	bool ActorRef::IsValid() const

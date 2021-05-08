@@ -81,7 +81,9 @@ namespace o2
 	void ComponentRef::Destroy()
 	{
 		if (mComponent)
-			delete mComponent;
+			o2Scene.DestroyComponent(mComponent);
+
+		*this = nullptr;
 	}
 
 	bool ComponentRef::IsValid() const

@@ -54,6 +54,9 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const AssetRef& other) const;
 
+		// Less operator, for map
+		bool operator<(const AssetRef& other) const;
+
 		// Returns is reference is valid
 		bool IsValid() const;
 

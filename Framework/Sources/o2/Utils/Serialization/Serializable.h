@@ -392,16 +392,19 @@ namespace o2
 					if constexpr (std::is_pointer<_field_type>::value &&
 								  std::is_copy_constructible<std::remove_pointer<_field_type>::type>::value)
 					{
-						typedef std::remove_pointer<_field_type>::type _field_type_unp;
-						if constexpr (IsCloneable<_field_type_unp>::value)
+						if (*originFieldPtr != nullptr)
 						{
-							if constexpr (std::is_same<std::invoke_result<decltype(&_field_type_unp::Clone)()>::type, _field_type>::value)
-								*fieldPtr = (*originFieldPtr)->Clone();
+							typedef std::remove_pointer<_field_type>::type _field_type_unp;
+							if constexpr (IsCloneable<_field_type_unp>::value)
+							{
+								if constexpr (std::is_same<std::invoke_result<decltype(&_field_type_unp::Clone)()>::type, _field_type>::value)
+									*fieldPtr = (*originFieldPtr)->Clone();
+								else
+									*fieldPtr = dynamic_cast<_field_type>((*originFieldPtr)->Clone());
+							}
 							else
-								*fieldPtr = dynamic_cast<_field_type>((*originFieldPtr)->Clone());
+								*fieldPtr = mnew typename std::remove_pointer<_field_type>::type(**originFieldPtr);
 						}
-						else
-							*fieldPtr = mnew typename std::remove_pointer<_field_type>::type(**originFieldPtr);
 					}
 					else
 					{

@@ -84,8 +84,9 @@ namespace Editor
 
 		DataDocument mSceneDump; // Scene dump, created before playing
 
-		bool mIsPlaying = false;  // Is editor scene playing
-		bool mUpdateStep = false; // True when frame updating available on this frame
+		bool mIsPlaying = false;      // Is editor scene playing
+		bool mPlayingChanged = false; // True when need to update playing mode on update
+		bool mUpdateStep = false;     // True when frame updating available on this frame
 
 		int mDrawCalls; // Draw calls count, stored before beginning rendering
 
@@ -146,5 +147,8 @@ namespace Editor
 
 		// Processing frame update, drawing and input messages without scene
 		void ProcessFrame() override;
+
+		// Checks that required to switch playing mode
+		void CheckPlayingSwitch();
 	};
 }

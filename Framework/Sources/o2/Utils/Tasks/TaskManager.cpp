@@ -44,7 +44,7 @@ namespace o2
 		task->update = update;
 	}
 
-	void TaskManager::Invoke(const Function<void()> func, float delay)
+	void TaskManager::Invoke(const Function<void()> func, float delay /*= 0*/)
 	{
 		auto task = mnew FunctionalDelayedTask(delay);
 		task->doTask = func;

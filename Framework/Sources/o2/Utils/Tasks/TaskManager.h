@@ -34,7 +34,7 @@ namespace o2
 		void Run(const Function<void(float)>& update, float time);
 
 		// It is called function after delay
-		void Invoke(const Function<void()> func, float delay);
+		void Invoke(const Function<void()> func, float delay = 0.0f);
 
 		// Updates tasks and checking for done
 		void Update(float dt);

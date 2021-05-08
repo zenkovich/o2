@@ -132,6 +132,11 @@ namespace o2
 		return mAssetPtr;
 	}
 
+	bool AssetRef::operator<(const AssetRef& other) const
+	{
+		return mAssetPtr < other.mAssetPtr;
+	}
+
 	bool AssetRef::IsValid() const
 	{
 		return mAssetPtr != nullptr;

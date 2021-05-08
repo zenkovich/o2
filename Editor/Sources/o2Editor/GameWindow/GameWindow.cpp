@@ -146,22 +146,39 @@ namespace Editor
 
 		o2Render.BindRenderTexture(mRenderTarget);
 
-		o2EditorApplication.GetGameViewListenersLayer().OnBeginDraw();
-
 		int editorDepth = EditorScope::GetDepth();
 		EditorScope::Exit(editorDepth);
 
 		o2Scene.Draw();
 
+		if (!o2Scene.GetCameras().IsEmpty() && o2Input.IsKeyDown(VK_F1))
+		{
+			auto prevCamera = o2Render.GetCamera();
+			auto cameraActor = o2Scene.GetCameras()[0];
+			cameraActor->Setup();
+
+			auto localCursor = cameraActor->listenersLayer.ToLocal(o2Input.GetCursorPos());
+			o2Render.DrawCross(localCursor, 5.0f, Color4::Red());
+			o2Debug.Log((String)localCursor);
+
+			o2Render.SetCamera(prevCamera);
+		}
+
 		EditorScope::Enter(editorDepth);
 
-		o2EditorApplication.GetGameViewListenersLayer().OnEndDraw();
 		o2Render.UnbindRenderTexture();
 
 		mRenderTargetSprite->Draw();
 
 		if (o2EditorApplication.IsPlaying())
-			o2EditorApplication.GetGameViewListenersLayer().OnDrawn(mRenderTargetSprite->GetBasis());
+		{
+			EditorScope::Exit(editorDepth);
+
+			for (auto camera : o2Scene.GetCameras())
+				camera->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
+
+			EditorScope::Enter(editorDepth);
+		}
 	}
 
 	String GameWindow::GameView::GetCreateMenuCategory()

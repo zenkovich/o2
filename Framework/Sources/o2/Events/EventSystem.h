@@ -82,8 +82,8 @@ namespace o2
 
 		Vector<CursorEventsListener*> mCursorListeners; // All cursor non area listeners
 
-		Vector<CursorAreaEventListenersLayer*> mCursorAreaEventsListenersLayers; // Drawn cursor area events lsteners layers
-
+		Vector<CursorAreaEventListenersLayer*> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
+		
 		CursorAreaEventListenersLayer  mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
 		CursorAreaEventListenersLayer* mCurrentCursorAreaEventsLayer;  // Current list of area listeners
 
@@ -95,6 +95,9 @@ namespace o2
 	protected:
 		// Sets current cursor area events listeners layer
 		static void SetCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+
+		// Unregisters layer
+		static void RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
 
 		// Registering cursor area events listener
 		static void DrawnCursorAreaListener(CursorAreaEventsListener* listener);

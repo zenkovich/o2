@@ -12,20 +12,21 @@
 
 namespace o2
 {
-	class Type;
 	class EnumType;
-	class PropertyType;
-	class VectorType;
+	class FieldInfo;
+	class FunctionInfo;
+	class IAttribute;
+	class IObject;
 	class MapType;
+	class PropertyType;
+	class ReflectionInitializationTypeProcessor;
+	class StaticFunctionInfo;
+	class Type;
+	class VectorType;
+	struct IDefaultValue;
 
 	template<typename _return_type, typename _accessor_type>
 	class TStringPointerAccessorType;
-
-	class ReflectionInitializationTypeProcessor;
-	class FieldInfo;
-	class FunctionInfo;
-	class IObject;
-	struct IDefaultValue;
 
 	typedef UInt TypeId;
 

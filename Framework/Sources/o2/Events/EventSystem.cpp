@@ -272,6 +272,11 @@ namespace o2
 			mInstance->mCurrentCursorAreaEventsLayer = &mInstance->mCursorAreaListenersBasicLayer;
 	}
 
+	void EventSystem::RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
+	{
+		mInstance->mCursorAreaEventsListenersLayers.Remove(layer);
+	}
+
 	void EventSystem::DrawnCursorAreaListener(CursorAreaEventsListener* listener)
 	{
 		if (!IsSingletonInitialzed())
@@ -286,7 +291,10 @@ namespace o2
 	void EventSystem::UnregCursorAreaListener(CursorAreaEventsListener* listener)
 	{
 		for (auto layer : mInstance->mCursorAreaEventsListenersLayers)
-			layer->UnregCursorAreaListener(listener);
+		{
+			if (layer != listener)
+				layer->UnregCursorAreaListener(listener);
+		}
 	}
 
 	void EventSystem::RegCursorListener(CursorEventsListener* listener)

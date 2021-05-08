@@ -82,7 +82,7 @@ namespace Editor
 			while (topTargetActor->GetPrototypeLink() != topSourceActor && topTargetActor->GetParent())
 				topTargetActor = topTargetActor->GetParent();
 
-			Actor* sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceActor);
+			Actor* sameToProtoSourceActor = topTargetActor->FindLinkedActor(sourceActor.Get());
 
 			if (sameToProtoSourceActor)
 			{

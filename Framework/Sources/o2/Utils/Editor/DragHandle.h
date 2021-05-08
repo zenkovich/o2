@@ -322,6 +322,9 @@ namespace o2
 
 		// It is called when deserialized
 		void OnDeserialized(const DataValue& node) override;
+
+		// Completion deserialization delta callback; calls widget's function
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 	};
 
 	// --------------------------------------------
@@ -570,5 +573,6 @@ CLASS_METHODS_META(o2::WidgetDragHandle)
 	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

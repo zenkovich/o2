@@ -34,6 +34,11 @@ namespace o2
 		delete mDefaultLayer;
 	}
 
+	const o2::Vector<CameraActor*>& Scene::GetCameras() const
+	{
+		return mCameras;
+	}
+
 	void Scene::Update(float dt)
 	{
 		UpdateAddedEntities();
@@ -105,6 +110,11 @@ namespace o2
 	void Scene::DestroyActor(Actor* actor)
 	{
 		mDestroyActors.Add(actor);
+	}
+
+	void Scene::DestroyComponent(Component* component)
+	{
+		mDestroyComponents.Add(component);
 	}
 
 	void Scene::AddActorToSceneDeferred(Actor* actor)

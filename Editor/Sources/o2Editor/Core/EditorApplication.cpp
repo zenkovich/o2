@@ -85,25 +85,10 @@ namespace Editor
 
 	void EditorApplication::SetPlaying(bool playing)
 	{
-		ForcePopEditorScopeOnStack scope;
-
 		if (playing == mIsPlaying)
 			return;
 
-		if (playing)
-		{
-			o2EditorSceneScreen.ClearSelection();
-
-			mSceneDump.Clear();
-			o2Scene.Save(mSceneDump);
-			o2Scene.Load(mSceneDump);
-		}
-		else
-		{
-			o2EditorSceneScreen.ClearSelection();
-			o2Scene.Load(mSceneDump);
-		}
-
+		mPlayingChanged = true;
 		mIsPlaying = playing;
 	}
 
@@ -192,6 +177,30 @@ namespace Editor
 		mDrawCalls = mRender->GetDrawCallsCount();
 	}
 
+	void EditorApplication::CheckPlayingSwitch()
+	{
+		if (!mPlayingChanged)
+			return;
+
+		ForcePopEditorScopeOnStack scope;
+
+		if (mIsPlaying)
+		{
+			o2EditorSceneScreen.ClearSelection();
+
+			mSceneDump.Clear();
+			o2Scene.Save(mSceneDump);
+			o2Scene.Load(mSceneDump);
+		}
+		else
+		{
+			o2EditorSceneScreen.ClearSelection();
+			o2Scene.Load(mSceneDump);
+		}
+
+		mPlayingChanged = false;
+	}
+
 	void EditorApplication::LoadUIStyle()
 	{
 		EditorUIStyleBuilder builder;
@@ -257,6 +266,8 @@ namespace Editor
 		mWindowsManager->Update(dt);
 		mUIRoot->Update(dt);
 		mToolsPanel->Update(dt);
+
+		CheckPlayingSwitch();
 
 		o2Application.windowCaption = String("o2 Editor: ") + mLoadedScene + 
 			"; FPS: " + (String)((int)o2Time.GetFPS()) +

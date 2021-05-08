@@ -6,6 +6,12 @@
 
 namespace o2
 {
+
+	CursorAreaEventListenersLayer::~CursorAreaEventListenersLayer()
+	{
+		o2Events.RemoveCursorAreaEventsListenersLayer(this);
+	}
+
 	void CursorAreaEventListenersLayer::OnBeginDraw()
 	{
 		viewPortBasis = o2Render.GetCamera().GetBasis();
@@ -14,14 +20,14 @@ namespace o2
 
 	void CursorAreaEventListenersLayer::OnEndDraw()
 	{
-		renderBasis = Camera().GetBasis();
+		renderBasis = o2Render.GetCamera().GetBasis();
 		o2Events.SetCursorAreaEventsListenersLayer(nullptr);
 	}
 
 	void CursorAreaEventListenersLayer::OnDrawn(const Basis& transform)
 	{
 		drawnTransform = transform;
-		mLocalToWorldTransform = viewPortBasis.Inverted()*drawnTransform;
+		mLocalToWorldTransform = camera.GetBasis().Inverted()*renderBasis*viewPortBasis.Inverted()*drawnTransform;
 
 		CursorAreaEventsListener::OnDrawn();
 	}

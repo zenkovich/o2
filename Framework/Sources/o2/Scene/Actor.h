@@ -55,24 +55,9 @@ namespace o2
 		ACCESSOR(Actor*, child, String, GetChild, GetAllChilds);                 // Children accessor
 		ACCESSOR(Component*, component, String, GetComponent, GetAllComponents); // Component accessor by type name
 
-#if IS_EDITOR
-		PROPERTY(bool, locked, SetLocked, IsLocked);          // Is actor locked property @EDITOR_IGNORE
-		GETTER(bool, lockedInHierarchy, IsLockedInHierarchy); // Is actor locked in hierarchy getter
-#endif
-
 	public:
 		TagGroup              tags;      // Tags group @EDITOR_IGNORE
 		ActorTransform* const transform; // Transformation of actor @EDITOR_IGNORE @ANIMATABLE
-
-	public:
-#if IS_EDITOR
-		Function<void(bool)>   onEnableChanged;         // Enable changing event
-		Function<void()>       onChanged;               // Something in actor change event
-		Function<void(Actor*)> onParentChanged;         // Actor change parent event
-		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event
-		Function<void(bool)>   onLockChanged;           // Locking changing event
-		Function<void()>       onNameChanged;           // Name changing event
-#endif // IS_EDITOR
 
 	public:
 		// Default constructor
@@ -219,6 +204,9 @@ namespace o2
 		// Returns children array
 		const Vector<Actor*>& GetChildren() const;
 
+		// Returns all children actors with their children
+		void GetAllChildrenActors(Vector<Actor*>& actors);
+
 		// Removes child and destroys him if needed
 		void RemoveChild(Actor* actor, bool release = true);
 
@@ -299,96 +287,6 @@ namespace o2
 		// Returns create menu group in editor
 		static String GetCreateMenuGroup();
 
-#if IS_EDITOR
-		// Sets locking. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		void SetLocked(bool locked);
-
-		// Locks actor. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		void Lock();
-
-		// Unlocks actor. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		void Unlock();
-
-		// Returns is actor locked. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		bool IsLocked() const;
-
-		// Returns is actor locked in hierarchy. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		bool IsLockedInHierarchy() const;
-
-		// Breaks link to prototype
-		void BreakPrototypeLink();
-
-		// Applies all changes to prototype and saves it
-		void ApplyChangesToPrototype();
-
-		// Reverts all properties to prototype
-		void RevertToPrototype();
-
-		// Makes prototype asset from this actor and links this to new asset
-		ActorAssetRef MakePrototype();
-
-		// Returns is this linked to specified actor with depth links search
-		bool IsLinkedToActor(Actor* actor) const;
-
-		// Returns is this linked to specified actor id with depth links search
-		bool IsLinkedToActor(SceneUID id) const;
-
-		// Searches actor in this, what linked to linkActor
-		Actor* FindLinkedActor(Actor* linkActor);
-
-		// Searches actor in this, what linked to actor with id
-		Actor* FindLinkedActor(SceneUID id);
-
-		// Returns list of object's children
-		Vector<SceneEditableObject*> GetEditablesChildren() const override;
-
-		// Returns object's parent object. Return nullptr when it is a root scene object
-		SceneEditableObject* GetEditableParent() const override;
-
-		// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
-		void SetEditableParent(SceneEditableObject* object) override;
-
-		// Adds child. idx is place in parent children. idx == -1 means last
-		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
-
-		// Returns is that type of object can be enabled and disabled
-		bool IsSupportsDisabling() const override;
-
-		// Returns is that type of object can be locked
-		bool IsSupportsLocking() const override;
-
-		// Returns is that type of object can be transformed
-		bool IsSupportsTransforming() const override;
-
-		// Returns transform, override when it's supports
-		Basis GetTransform() const override;
-
-		// Sets transform of object, override when it's supports
-		void SetTransform(const Basis& transform) override;
-
-		// Returns is object supports pivot 
-		bool IsSupportsPivot() const override;
-
-		// Sets transform pivot point
-		void SetPivot(const Vec2F& pivot) override;
-
-		// Returns transform pivot
-		Vec2F GetPivot() const override;
-
-		// It is called when some changed in actor
-		void OnChanged() override;
-
-		// It is called when actor's locking was changed
-		void OnLockChanged() override;
-
-		// It is called when actor's name was changed
-		void OnNameChanged() override;
-
-		// It is called when child changed
-		void OnChildrenChanged() override;
-
-#endif //IS_EDITOR
-
 		SERIALIZABLE(Actor);
 
 	protected:
@@ -422,13 +320,13 @@ namespace o2
 		static ActorCreateMode mDefaultCreationMode;   // Default mode creation
 
 		SceneUID mId;   // Unique actor id
-		String   mName; // Name of actor
+		String   mName; // Name of actor @SERIALIZABLE
 
 		ActorAssetRef mPrototype;               // Prototype asset
 		ActorRef      mPrototypeLink = nullptr; // Prototype link actor. Links to source actor from prototype
 
-		String      mLayerName;       // Scene layer name
-		SceneLayer* mLayer = nullptr; // Scene layer. Empty when actor isn't on scene
+		String      mLayerName = String("Default"); // Scene layer name @SERIALIZABLE
+		SceneLayer* mLayer = nullptr;       // Scene layer. Empty when actor isn't on scene
 
 		Actor*         mParent = nullptr; // Parent actor 
 		Vector<Actor*> mChildren;         // Children actors 
@@ -447,11 +345,6 @@ namespace o2
 		Vector<ActorRef*> mReferences; // References to this actor
 
 		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. It is called when copying actor and calls on actor or component copying
-
-#if IS_EDITOR
-		bool mLocked = false;    // Is actor locked
-		bool mResLocked = false; // Is actor locked in hierarchy
-#endif
 
 	protected:
 		// Base actor constructor with transform
@@ -515,9 +408,6 @@ namespace o2
 		// Returns dictionary of all components by type names
 		Map<String, Component*> GetAllComponents();
 
-		// Returns all children actors with their children
-		void GetAllChildrenActors(Vector<Actor*>& actors);
-
 		// Sets parent
 		void SetParentProp(Actor* actor);
 
@@ -570,6 +460,19 @@ namespace o2
 		virtual void OnComponentRemoving(Component* component);
 
 #if IS_EDITOR
+	public:
+		PROPERTY(bool, locked, SetLocked, IsLocked);          // Is actor locked property @EDITOR_IGNORE
+		GETTER(bool, lockedInHierarchy, IsLockedInHierarchy); // Is actor locked in hierarchy getter
+
+	public:
+		Function<void(bool)>   onEnableChanged;         // Enable changing event
+		Function<void()>       onChanged;               // Something in actor change event
+		Function<void(Actor*)> onParentChanged;         // Actor change parent event
+		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event
+		Function<void(bool)>   onLockChanged;           // Locking changing event
+		Function<void()>       onNameChanged;           // Name changing event
+
+	public:
 		struct MakePrototypeCloneVisitor: SourceToTargetMapCloneVisitor
 		{
 			void OnCopyActor(const Actor* source, Actor* target) override;
@@ -582,25 +485,199 @@ namespace o2
 		struct ApplyActorInfo
 		{
 			Actor*         actor;
-			Actor*         matchingChild;
 			Vector<Actor*> allChildren;
-
-			Vector<Actor**>     actorPointersFields;
-			Vector<Component**> componentPointersFields;
 
 			Map<const Actor*, Actor*>         actorsMap;
 			Map<const Component*, Component*> componentsMap;
 
+			ApplyActorInfo();
+			ApplyActorInfo(Actor* actor);
+
 			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
 		};
 
-		// Copies changed field from source to dest
-		void CopyChangedFields(Vector<const FieldInfo*>& fields,
-							   IObject* source, IObject* changed, IObject* dest,
-							   Vector<Actor**>& actorsPointers,
-							   Vector<Component**>& componentsPointers,
-							   Vector<ISerializable*>& serializableObjects);
+		// ------------------------------------------
+		// Differences between instance and prototype
+		// ------------------------------------------
+		struct Differences
+		{
+			struct IDifference
+			{
+				virtual IDifference* Clone() const = 0;
+				virtual void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const = 0;
+			};
 
+			struct RemovedChild: public IDifference
+			{
+				Actor* prototypeLink;
+
+				IDifference* Clone() const override;
+				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
+			};
+
+			struct NewChild: public IDifference
+			{
+				Actor* parentPrototypeLink;
+				Actor* newChild;
+
+				IDifference* Clone() const override;
+				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
+			};
+
+			struct RemovedComponent: public IDifference
+			{
+				Actor*     ownerPrototypeLink;
+				Component* prototypeLink;
+
+				IDifference* Clone() const override;
+				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
+			};
+
+			struct NewComponent: public IDifference
+			{
+				Actor*     ownerPrototypeLink;
+				Component* newComponent;
+
+				IDifference* Clone() const override;
+				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
+			};
+
+			struct ChangedActorField: public IDifference
+			{
+				Actor* prototypeLink;
+				String path;
+
+				IDifference* Clone() const override;
+				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
+			};
+
+			struct ChangedComponentField: public IDifference
+			{
+				Actor*     ownerPrototypeLink;
+				Component* prototypeLink;
+				String     path;
+
+				IDifference* Clone() const override;
+				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
+			};
+
+		public:
+			Vector<IDifference*> removedChildren;
+			Vector<IDifference*> newChildren;
+			Vector<IDifference*> removedComponents;
+			Vector<IDifference*> newComponents;
+			Vector<IDifference*> changedActorFields;
+			Vector<IDifference*> changedComponentFields;
+
+		public:
+			Differences();
+			Differences(const Differences& other);
+			~Differences();
+
+			// Returns differences between
+			static Differences GetDifference(Actor* changedActor, Actor* prototype);
+
+			// Collects object differences
+			static void GetObjectDifferences(const Function<void(const String& path)>& createDiffFunc,
+											 Vector<const FieldInfo*>& stack,
+											 const Type& objectType, void* changedObject, void* protoObject);
+
+			// Checks difference in field
+			static void GetFieldDifference(const Function<void(const String& path)>& createDiffFunc,
+										   Vector<const FieldInfo*>& stack,
+										   const Type& fieldType, void* changedFieldObject, void* protoFieldObject);
+
+			// Returns path to field by fields stack
+			static String GetFieldPath(const Vector<const FieldInfo*>& stack);
+		};
+
+	public:
+		// Sets locking. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
+		void SetLocked(bool locked);
+
+		// Locks actor. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
+		void Lock();
+
+		// Unlocks actor. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
+		void Unlock();
+
+		// Returns is actor locked. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
+		bool IsLocked() const;
+
+		// Returns is actor locked in hierarchy. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
+		bool IsLockedInHierarchy() const;
+
+		// Breaks link to prototype
+		void BreakPrototypeLink();
+
+		// Applies all changes to prototype and saves it
+		void ApplyChangesToPrototype();
+
+		// Reverts all properties to prototype
+		void RevertToPrototype();
+
+		// Makes prototype asset from this actor and links this to new asset
+		ActorAssetRef MakePrototype();
+
+		// Returns is this linked to specified actor with depth links search
+		bool IsLinkedToActor(Actor* actor) const;
+
+		// Searches actor in this, what linked to linkActor
+		Actor* FindLinkedActor(Actor* linkActor);
+
+		// Returns list of object's children
+		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+
+		// Returns object's parent object. Return nullptr when it is a root scene object
+		SceneEditableObject* GetEditableParent() const override;
+
+		// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
+		void SetEditableParent(SceneEditableObject* object) override;
+
+		// Adds child. idx is place in parent children. idx == -1 means last
+		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
+
+		// Returns is that type of object can be enabled and disabled
+		bool IsSupportsDisabling() const override;
+
+		// Returns is that type of object can be locked
+		bool IsSupportsLocking() const override;
+
+		// Returns is that type of object can be transformed
+		bool IsSupportsTransforming() const override;
+
+		// Returns transform, override when it's supports
+		Basis GetTransform() const override;
+
+		// Sets transform of object, override when it's supports
+		void SetTransform(const Basis& transform) override;
+
+		// Returns is object supports pivot 
+		bool IsSupportsPivot() const override;
+
+		// Sets transform pivot point
+		void SetPivot(const Vec2F& pivot) override;
+
+		// Returns transform pivot
+		Vec2F GetPivot() const override;
+
+		// It is called when some changed in actor
+		void OnChanged() override;
+
+		// It is called when actor's locking was changed
+		void OnLockChanged() override;
+
+		// It is called when actor's name was changed
+		void OnNameChanged() override;
+
+		// It is called when child changed
+		void OnChildrenChanged() override;
+
+	protected:
+		bool mLocked = false;    // Is actor locked @SERIALIZABLE
+		bool mResLocked = false; // Is actor locked in hierarchy @SERIALIZABLE
+
+	protected:
 		// Applies basic actor fields and transform from source to dest  
 		void CopyActorChangedFields(Actor* source, Actor* changed, Actor* dest, Vector<Actor*>& allDestChilds, bool withTransform);
 
@@ -613,6 +690,8 @@ namespace o2
 							  Map<const Actor*, Actor*>& actorsMap,
 							  Map<const Component*, Component*>& componentsMap,
 							  Vector<ISerializable*>& serializableObjects);
+
+		virtual void GetDifferences(Differences& differences) const;
 
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
@@ -757,21 +836,13 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().NAME(components).PUBLIC();
 	FIELD().NAME(child).PUBLIC();
 	FIELD().NAME(component).PUBLIC();
-	FIELD().EDITOR_IGNORE_ATTRIBUTE().NAME(locked).PUBLIC();
-	FIELD().NAME(lockedInHierarchy).PUBLIC();
 	FIELD().EDITOR_IGNORE_ATTRIBUTE().NAME(tags).PUBLIC();
 	FIELD().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(transform).PUBLIC();
-	FIELD().NAME(onEnableChanged).PUBLIC();
-	FIELD().NAME(onChanged).PUBLIC();
-	FIELD().NAME(onParentChanged).PUBLIC();
-	FIELD().NAME(onChildHierarchyChanged).PUBLIC();
-	FIELD().NAME(onLockChanged).PUBLIC();
-	FIELD().NAME(onNameChanged).PUBLIC();
 	FIELD().NAME(mId).PROTECTED();
-	FIELD().NAME(mName).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mName).PROTECTED();
 	FIELD().NAME(mPrototype).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink).PROTECTED();
-	FIELD().NAME(mLayerName).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(String("Default")).NAME(mLayerName).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayer).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mParent).PROTECTED();
 	FIELD().NAME(mChildren).PROTECTED();
@@ -784,8 +855,16 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().NAME(mAssetId).PROTECTED();
 	FIELD().NAME(mReferences).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mLocked).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mResLocked).PROTECTED();
+	FIELD().EDITOR_IGNORE_ATTRIBUTE().NAME(locked).PUBLIC();
+	FIELD().NAME(lockedInHierarchy).PUBLIC();
+	FIELD().NAME(onEnableChanged).PUBLIC();
+	FIELD().NAME(onChanged).PUBLIC();
+	FIELD().NAME(onParentChanged).PUBLIC();
+	FIELD().NAME(onChildHierarchyChanged).PUBLIC();
+	FIELD().NAME(onLockChanged).PUBLIC();
+	FIELD().NAME(onNameChanged).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mLocked).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mResLocked).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Actor)
@@ -835,6 +914,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
 	PUBLIC_FUNCTION(Actor*, FindChild, const String&);
 	PUBLIC_FUNCTION(const Vector<Actor*>&, GetChildren);
+	PUBLIC_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
 	PUBLIC_FUNCTION(void, RemoveAllChildren, bool);
 	PUBLIC_FUNCTION(Actor*, FindActorById, SceneUID);
@@ -855,35 +935,6 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_STATIC_FUNCTION(bool, IsModeOnScene, ActorCreateMode);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PUBLIC_FUNCTION(void, SetLocked, bool);
-	PUBLIC_FUNCTION(void, Lock);
-	PUBLIC_FUNCTION(void, Unlock);
-	PUBLIC_FUNCTION(bool, IsLocked);
-	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
-	PUBLIC_FUNCTION(void, BreakPrototypeLink);
-	PUBLIC_FUNCTION(void, ApplyChangesToPrototype);
-	PUBLIC_FUNCTION(void, RevertToPrototype);
-	PUBLIC_FUNCTION(ActorAssetRef, MakePrototype);
-	PUBLIC_FUNCTION(bool, IsLinkedToActor, Actor*);
-	PUBLIC_FUNCTION(bool, IsLinkedToActor, SceneUID);
-	PUBLIC_FUNCTION(Actor*, FindLinkedActor, Actor*);
-	PUBLIC_FUNCTION(Actor*, FindLinkedActor, SceneUID);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
-	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
-	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
-	PUBLIC_FUNCTION(bool, IsSupportsDisabling);
-	PUBLIC_FUNCTION(bool, IsSupportsLocking);
-	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
-	PUBLIC_FUNCTION(Basis, GetTransform);
-	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
-	PUBLIC_FUNCTION(bool, IsSupportsPivot);
-	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetPivot);
-	PUBLIC_FUNCTION(void, OnChanged);
-	PUBLIC_FUNCTION(void, OnLockChanged);
-	PUBLIC_FUNCTION(void, OnNameChanged);
-	PUBLIC_FUNCTION(void, OnChildrenChanged);
 	PROTECTED_FUNCTION(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	PROTECTED_FUNCTION(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
 	PROTECTED_FUNCTION(void, GetComponentFields, Component*, Vector<const FieldInfo*>&);
@@ -896,7 +947,6 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
 	PROTECTED_FUNCTION(_tmp3, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp4, GetAllComponents);
-	PROTECTED_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, SetParentProp, Actor*);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);
@@ -914,10 +964,37 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, OnLayerChanged, SceneLayer*);
 	PROTECTED_FUNCTION(void, OnComponentAdded, Component*);
 	PROTECTED_FUNCTION(void, OnComponentRemoving, Component*);
-	PROTECTED_FUNCTION(void, CopyChangedFields, Vector<const FieldInfo*>&, IObject*, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
+	PUBLIC_FUNCTION(void, SetLocked, bool);
+	PUBLIC_FUNCTION(void, Lock);
+	PUBLIC_FUNCTION(void, Unlock);
+	PUBLIC_FUNCTION(bool, IsLocked);
+	PUBLIC_FUNCTION(bool, IsLockedInHierarchy);
+	PUBLIC_FUNCTION(void, BreakPrototypeLink);
+	PUBLIC_FUNCTION(void, ApplyChangesToPrototype);
+	PUBLIC_FUNCTION(void, RevertToPrototype);
+	PUBLIC_FUNCTION(ActorAssetRef, MakePrototype);
+	PUBLIC_FUNCTION(bool, IsLinkedToActor, Actor*);
+	PUBLIC_FUNCTION(Actor*, FindLinkedActor, Actor*);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
+	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
+	PUBLIC_FUNCTION(bool, IsSupportsDisabling);
+	PUBLIC_FUNCTION(bool, IsSupportsLocking);
+	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
+	PUBLIC_FUNCTION(Basis, GetTransform);
+	PUBLIC_FUNCTION(void, SetTransform, const Basis&);
+	PUBLIC_FUNCTION(bool, IsSupportsPivot);
+	PUBLIC_FUNCTION(void, SetPivot, const Vec2F&);
+	PUBLIC_FUNCTION(Vec2F, GetPivot);
+	PUBLIC_FUNCTION(void, OnChanged);
+	PUBLIC_FUNCTION(void, OnLockChanged);
+	PUBLIC_FUNCTION(void, OnNameChanged);
+	PUBLIC_FUNCTION(void, OnChildrenChanged);
 	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, Vector<ISerializable*>&);
+	PROTECTED_FUNCTION(void, GetDifferences, Differences&);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateLocking);
 }

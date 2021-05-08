@@ -39,8 +39,12 @@ namespace o2
 		if (fillBackground)
 			o2Render.Clear(fillColor);
 
+		listenersLayer.OnBeginDraw();
+
 		Camera prevCamera = o2Render.GetCamera();
 		Setup();
+
+		listenersLayer.camera = o2Render.GetCamera();
 
 		for (auto layer : drawLayers.GetLayers())
 		{
@@ -49,6 +53,8 @@ namespace o2
 		}
 
 		o2Render.SetCamera(prevCamera);
+
+		listenersLayer.OnEndDraw();
 	}
 
 	Camera CameraActor::GetRenderCamera() const

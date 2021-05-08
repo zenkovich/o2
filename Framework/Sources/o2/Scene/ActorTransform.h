@@ -417,7 +417,7 @@ namespace o2
 		SERIALIZABLE(ActorTransform);
 
 	protected:
-		ActorTransformData* mData;
+		ActorTransformData* mData; // Data container. Will be stored in optimized storage @SERIALIZABLE
 
 	protected:
 		// Actor transform constructor with specified data
@@ -444,14 +444,8 @@ namespace o2
 		// Check parentInvertedTransform for actual
 		void CheckParentInvTransform();
 
-		// Beginning serialization callback, writes data
-		void OnSerialize(DataValue& node) const override;
-
 		// It is called when object was deserialized, reads data
 		void OnDeserialized(const DataValue& node) override;
-
-		// Beginning serialization delta callback
-		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
 		// Completion deserialization delta callback
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
@@ -553,7 +547,7 @@ CLASS_FIELDS_META(o2::ActorTransform)
 	FIELD().NAME(worldBottom).PUBLIC();
 	FIELD().NAME(worldRect).PUBLIC();
 	FIELD().NAME(worldAABB).PUBLIC();
-	FIELD().NAME(mData).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mData).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform)
@@ -671,9 +665,7 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, UpdateTransform);
 	PROTECTED_FUNCTION(void, UpdateRectangle);
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
 }

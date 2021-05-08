@@ -1,6 +1,7 @@
 #pragma once
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/SceneLayersList.h"
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 
 namespace o2
 {
@@ -17,6 +18,8 @@ namespace o2
 
 		bool   fillBackground = true;       // Is background filling with solid color @SERIALIZABLE
 		Color4 fillColor = Color4::White(); // Background fill color @SERIALIZABLE
+
+		CursorAreaEventListenersLayer listenersLayer;
 
 	public:
 		// Default constructor
@@ -89,6 +92,7 @@ CLASS_FIELDS_META(o2::CameraActor)
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(drawLayers).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(fillBackground).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Color4::White()).NAME(fillColor).PUBLIC();
+	FIELD().NAME(listenersLayer).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Type::Default).NAME(mType).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mFixedOrFittedSize).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Units::Centimeters).NAME(mUnits).PROTECTED();

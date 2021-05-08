@@ -1001,18 +1001,7 @@ namespace o2
 		SerializeBasic(node);
 
 		node["Id"] = mId;
-		node["Name"] = mName;
-
-		if (!mEnabled)
-			node["Enabled"] = mEnabled;
-
-		if (mLocked)
-			node["Locked"] = mLocked;
-
 		node["Transform"].Set(*transform);
-
-		if (mLayerName != "Default")
-			node["LayerName"] = mLayerName;
 
 		if (!mChildren.IsEmpty())
 		{
@@ -1046,20 +1035,6 @@ namespace o2
 			ActorRefResolver::Instance().ActorCreated(this);
 
 		SetID(node.GetMember("Id"));
-		mName = node.GetMember("Name");
-
-		if (auto lockedNode = node.FindMember("Locked"))
-			mLocked = *lockedNode;
-
-		if (auto lockedNode = node.FindMember("Enabled"))
-			mEnabled = *lockedNode;
-
-		String layerName;
-		if (auto layerNode = node.FindMember("LayerName"))
-			layerNode->Get(layerName);
-		else
-			layerName = o2Scene.GetDefaultLayer()->GetName();
-
 		node.GetMember("Transform").Get(*transform);
 
 		RemoveAllComponents();
@@ -1122,18 +1097,6 @@ namespace o2
 
 		// Basic data
 		node["Id"] = mId;
-
-		if (mName != proto->mName)
-			node["Name"] = mName;
-
-		if (mEnabled != proto->mEnabled)
-			node["Enabled"] = mEnabled;
-
-		if (mLocked != proto->mLocked)
-			node["Locked"] = mLocked;
-
-		if (mLayer != proto->mLayer)
-			node["LayerName"] = mLayer->mName;
 
 		// Transform data
 		auto& transformNode = node.AddMember("Transform");
@@ -1239,26 +1202,6 @@ namespace o2
 
 		mCopyVisitor->depth++;
 		mCopyVisitor->OnCopyActor(proto, this);
-
-		if (auto subNode = node.FindMember("Name"))
-			mName = *subNode;
-		else
-			mName = proto->mName;
-
-		if (auto subNode = node.FindMember("Enabled"))
-			mEnabled = *subNode;
-		else
-			mEnabled = proto->mEnabled;
-
-		if (auto subNode = node.FindMember("Locked"))
-			mLocked = *subNode;
-		else
-			mLocked = proto->mLocked;
-
-		if (auto subNode = node.FindMember("LayerName"))
-			SetLayer(*subNode);
-		else
-			SetLayer(proto->mLayerName);
 
 		// Transform data
 		if (auto transformNode = node.FindMember("Transform"))
