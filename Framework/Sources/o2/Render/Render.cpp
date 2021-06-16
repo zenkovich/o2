@@ -135,7 +135,7 @@ namespace o2
 		mesh.Draw();
 	}
 
-	RectI Render::CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect)
+	RectI Render::CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect) const
 	{
 		Basis defaultCameraBasis((Vec2F)mCurrentResolution*-0.5f, Vec2F((float)mCurrentResolution.x, 0.0f), Vec2F(0.0f, (float)mCurrentResolution.y));
 		Basis camTransf = mCamera.GetBasis().Inverted()*defaultCameraBasis;
@@ -523,10 +523,7 @@ namespace o2
 	RectI Render::GetResScissorRect() const
 	{
 		if (mStackScissors.IsEmpty() || mStackScissors.Last().mRenderTarget)
-		{
-			return RectI(-(int)(mCurrentResolution.x*0.5f), -(int)(mCurrentResolution.y*0.5f),
-				(int)(mCurrentResolution.x*0.5f), (int)(mCurrentResolution.y*0.5f));
-		}
+			return RectI(INT_MIN, INT_MIN, INT_MAX, INT_MAX);
 
 		return (RectI)(mStackScissors.Last().mSummaryScissorRect);
 	}

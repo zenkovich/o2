@@ -70,6 +70,8 @@ namespace o2
 
 		SERIALIZABLE(ImageComponent);
 
+		using Sprite::onDraw;
+
 	protected:
 		// It is called when actor's transform was changed
 		void OnTransformUpdated() override;

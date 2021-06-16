@@ -352,7 +352,7 @@ namespace o2
 		void UpdateCameraTransforms();
 
 		// Calculates screen space scissor clipping rectangle from camera space rectangle
-		RectI CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect);
+		RectI CalculateScreenSpaceScissorRect(const RectF& cameraSpaceScissorRect) const;
 
 		// Checks render compatibles
 		void CheckCompatibles();
