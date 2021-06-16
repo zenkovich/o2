@@ -241,7 +241,7 @@ namespace Editor
 		if (!fileName.EndsWith(".scn"))
 			fileName += ".scn";
 
-		o2Tasks.Invoke([&] { o2EditorApplication.SaveScene(fileName); });
+		o2Tasks.Invoke([=] { o2EditorApplication.SaveScene(fileName); });
 	}
 
 	void MenuPanel::OnExitPressed()

@@ -803,6 +803,11 @@ namespace o2
 	return widths;
 }
 
+	bool WidgetLayoutData::IsSerializeEnabled() const
+	{
+		return false;
+	}
+
 }
 
 DECLARE_CLASS(o2::WidgetLayout);

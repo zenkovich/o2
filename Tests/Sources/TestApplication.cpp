@@ -4,7 +4,6 @@
 
 void TestApplication::OnStarted()
 {
-	TestPrototypes();
-
 	Editor::EditorApplication::OnStarted();
+	TestPrototypes();
 }

@@ -35,6 +35,12 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		// Updates component enable
 		void UpdateEnabled();
 
@@ -76,6 +82,8 @@ CLASS_METHODS_META(o2::DrawableComponent)
 	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, UpdateEnabled);
 	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
 	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);

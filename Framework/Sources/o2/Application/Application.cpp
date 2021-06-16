@@ -175,6 +175,9 @@ namespace o2
 		mRender->End();
 
 		mInput->Update(dt);
+		mUIManager->Update();
+
+		mAssets->CheckAssetsUnload();
 	}
 
 	void Application::DrawScene()

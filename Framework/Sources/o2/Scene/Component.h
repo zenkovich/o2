@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Scene/SceneLayer.h"
+#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
 namespace o2
@@ -116,14 +117,20 @@ namespace o2
 		// Completion deserialization callback
 		void OnDeserialized(const DataValue& node) override;
 
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		// Sets owner actor
 		virtual void SetOwnerActor(Actor* actor);
 
 		// It is called when actor was included to scene
-		virtual void OnAddToScene() {}
+		virtual void OnAddToScene();
 
 		// It is called when actor was excluded from scene
-		virtual void OnRemoveFromScene() {}
+		virtual void OnRemoveFromScene();
 
 		// It is called when component started working on first update frame
 		virtual void OnStart() {}
@@ -162,6 +169,7 @@ namespace o2
 		virtual void OnComponentRemoving(Component* component) {}
 
 		friend class Actor;
+		friend struct ActorDifferences;
 		friend class ActorRefResolver;
 		friend class ComponentRef;
 		friend class Scene;
@@ -261,6 +269,8 @@ CLASS_METHODS_META(o2::Component)
 	PUBLIC_FUNCTION(void, OnAddedFromEditor);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnAddToScene);
 	PROTECTED_FUNCTION(void, OnRemoveFromScene);

@@ -22,7 +22,7 @@ namespace o2
 	// Basic UI Widget. Its a simple and basic element of UI, 
 	// everything other UI's are based on this
 	// ------------------------------------------------------
-	class Widget : public Actor, public ISceneDrawable
+	class Widget: public Actor, public ISceneDrawable
 	{
 	public:
 		PROPERTIES(Widget);
@@ -470,8 +470,14 @@ namespace o2
 		friend class Window;
 
 #if IS_EDITOR
-		class LayersEditable : public SceneEditableObject
+		class LayersEditable: public SceneEditableObject
 		{
+		public:
+			Widget*  widget = nullptr;
+			SceneUID UID = Math::Random();
+
+			const LayersEditable* prototypeLink = nullptr;
+
 		public:
 			// Default constructor
 			LayersEditable();
@@ -485,16 +491,17 @@ namespace o2
 			// Generates new random id 
 			void GenerateNewID(bool childs = true) override;
 
-
 			// Returns name of object
 			const String& GetName() const override;
 
 			// Sets name of object
 			void SetName(const String& name) override;
 
+			// Returns object's link to prototype
+			const SceneEditableObject* GetEditableLink() const override;
 
 			// Returns list of object's children
-			Vector<SceneEditableObject*> GetEditablesChildren() const override;
+			Vector<SceneEditableObject*> GetEditableChildren() const override;
 
 			// Returns object's parent object. Return nullptr when it is a root scene object
 			SceneEditableObject* GetEditableParent() const override;
@@ -508,25 +515,25 @@ namespace o2
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
 
-
 			// Returns is that type of object can be deleted from editor
 			bool IsSupportsDeleting() const override;
-
 
 			// Returns transform, override when it's supports
 			Basis GetTransform() const override;
 
 			SERIALIZABLE(LayersEditable);
 
-		private:
-			Widget* mWidget = nullptr;
-			SceneUID  mUID = Math::Random();
-
 			friend class Widget;
 		};
 
-		class InternalChildrenEditableEditable : public SceneEditableObject
+		class InternalChildrenEditableEditable: public SceneEditableObject
 		{
+		public:
+			Widget*  widget = nullptr;
+			SceneUID UID = Math::Random();
+
+			const InternalChildrenEditableEditable* prototypeLink = nullptr;
+
 		public:
 			// Default constructor
 			InternalChildrenEditableEditable();
@@ -540,21 +547,22 @@ namespace o2
 			// Generates new random id 
 			void GenerateNewID(bool childs = true) override;
 
-
 			// Returns name of object
 			const String& GetName() const override;
 
 			// Sets name of object
 			void SetName(const String& name) override;
 
+			// Returns object's link to prototype
+			const SceneEditableObject* GetEditableLink() const override;
 
 			// Returns list of object's children
-			Vector<SceneEditableObject*> GetEditablesChildren() const override;
+			Vector<SceneEditableObject*> GetEditableChildren() const override;
 
 			// Returns object's parent object. Return nullptr when it is a root scene object
 			SceneEditableObject* GetEditableParent() const override;
 
-			// Sets parent object. nullptr means make this object as root. idx is place in parent children. idx == -1 means last
+			// Sets parent object. nullptr means make this object as root
 			void SetEditableParent(SceneEditableObject* object) override;
 
 			// Adds child. idx is place in parent children. idx == -1 means last
@@ -563,19 +571,13 @@ namespace o2
 			// Sets index in siblings - children of parent
 			void SetIndexInSiblings(int idx) override;
 
-
 			// Returns is that type of object can be deleted from editor
 			bool IsSupportsDeleting() const override;
-
 
 			// Returns transform, override when it's supports
 			Basis GetTransform() const override;
 
 			SERIALIZABLE(InternalChildrenEditableEditable);
-
-		private:
-			Widget* mWidget = nullptr;
-			SceneUID  mUID = Math::Random();
 
 			friend class Widget;
 		};
@@ -583,20 +585,21 @@ namespace o2
 		static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
 		static bool isEditorInternalChildrenVisible; // Is widgets internal children visible in hierarchy
 
-		LayersEditable layersEditable = LayersEditable(this);
+		LayersEditable                   layersEditable = LayersEditable(this);
 		InternalChildrenEditableEditable internalChildrenEditable = InternalChildrenEditableEditable(this);
 
 	public:
+		// Sets parent object. nullptr means make this object as root
+		void SetEditableParent(SceneEditableObject* object) override;
+
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		SceneEditableObject* GetEditableParent() const override;
 
-
 		// Returns list of object's children
-		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+		Vector<SceneEditableObject*> GetEditableChildren() const override;
 
 		// Adds child. idx is place in parent children. idx == -1 means last
 		void AddEditableChild(SceneEditableObject* object, int idx = -1) override;
-
 
 		// Returns is that type of object can be transformed
 		bool IsSupportsTransforming() const override;
@@ -607,7 +610,6 @@ namespace o2
 		// Sets transform of object, override when it's supports
 		void SetTransform(const Basis& transform) override;
 
-
 		// Returns is that type of object can be transformed with layout
 		bool IsSupportsLayout() const override;
 
@@ -617,10 +619,8 @@ namespace o2
 		// Sets layout of object, override when it's supports
 		void SetLayout(const Layout& layout) override;
 
-
 		// Returns pointer to owner editable object
 		SceneEditableObject* GetEditableOwner() override;
-
 
 		friend class LayersEditable;
 		friend class InternalChildrenEditableEditable;
@@ -867,8 +867,9 @@ CLASS_METHODS_META(o2::Widget)
 	PROTECTED_FUNCTION(_tmp2, GetAllChilds);
 	PROTECTED_FUNCTION(_tmp3, GetAllInternalWidgets);
 	PROTECTED_FUNCTION(_tmp4, GetAllStates);
+	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditableChildren);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
 	PUBLIC_FUNCTION(bool, IsSupportsTransforming);
 	PUBLIC_FUNCTION(Basis, GetTransform);
@@ -887,8 +888,9 @@ CLASS_BASES_META(o2::Widget::LayersEditable)
 END_META;
 CLASS_FIELDS_META(o2::Widget::LayersEditable)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mWidget).PRIVATE();
-	FIELD().DEFAULT_VALUE(Math::Random()).NAME(mUID).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(widget).PUBLIC();
+	FIELD().DEFAULT_VALUE(Math::Random()).NAME(UID).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(prototypeLink).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::Widget::LayersEditable)
@@ -898,7 +900,8 @@ CLASS_METHODS_META(o2::Widget::LayersEditable)
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(const SceneEditableObject*, GetEditableLink);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditableChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
@@ -915,8 +918,9 @@ CLASS_BASES_META(o2::Widget::InternalChildrenEditableEditable)
 END_META;
 CLASS_FIELDS_META(o2::Widget::InternalChildrenEditableEditable)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mWidget).PRIVATE();
-	FIELD().DEFAULT_VALUE(Math::Random()).NAME(mUID).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(widget).PUBLIC();
+	FIELD().DEFAULT_VALUE(Math::Random()).NAME(UID).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(prototypeLink).PUBLIC();
 }
 END_META;
 CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
@@ -926,7 +930,8 @@ CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(const SceneEditableObject*, GetEditableLink);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditableChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);

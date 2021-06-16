@@ -1,5 +1,4 @@
 #pragma once
-
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Layout.h"
 #include "o2/Utils/Serialization/Serializable.h"
@@ -8,6 +7,8 @@
 
 namespace o2
 {
+	struct ActorDifferences;
+
 	// ----------------------------------------------------------
 	// Object, that can be shown in editor's tree view and edited
 	// ----------------------------------------------------------
@@ -26,9 +27,6 @@ namespace o2
 		// Returns true when object is on scene
 		virtual bool IsOnScene() const;
 
-		// Returns true when object's hierarchy is on scene. This is on scene or one of parent is on scene
-		virtual bool IsHieararchyOnScene() const;
-
 		// Returns unique id
 		virtual SceneUID GetID() const;
 
@@ -41,8 +39,20 @@ namespace o2
 		// Sets name of object
 		virtual void SetName(const String& name);
 
+		// Returns object's link to prototype
+		virtual const SceneEditableObject* GetEditableLink() const;
+
+		// Returns is object linked to another object
+		virtual bool IsEditableLinkedTo(SceneEditableObject* link) const;
+
+		// Is supports linking to prototype
+		virtual bool IsSupportsLinking() const;
+
 		// Returns list of object's children
-		virtual Vector<SceneEditableObject*> GetEditablesChildren() const;
+		virtual Vector<SceneEditableObject*> GetEditableChildren() const;
+
+		// Collects all children in hierarchy
+		void GetAllEditableChildren(Vector<SceneEditableObject*>& children);
 
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		virtual SceneEditableObject* GetEditableParent() const;
@@ -69,7 +79,7 @@ namespace o2
 		virtual bool IsEnabledInHierarchy() const;
 
 		// Sets enabling of object, override when it's supports
-		virtual void SetEnabled(bool enabled);		
+		virtual void SetEnabled(bool enabled);
 
 		// Returns is that type of object can be locked
 		virtual bool IsSupportsLocking() const;
@@ -128,7 +138,19 @@ namespace o2
 		// It is called when child changed
 		virtual void OnChildrenChanged();
 
+		// It is called before making prototype from this object
+		virtual void BeginMakePrototype() const {}
+
+		// It is called before instantiate from this object
+		virtual void BeginInstantiatePrototype() const {}
+
 		SERIALIZABLE(SceneEditableObject);
+
+	protected:
+		// Collects differences between this and prototype
+		virtual void GetDifferences(ActorDifferences& differences) const;
+
+		friend struct ActorDifferences;
 	};
 }
 
@@ -146,12 +168,15 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 {
 
 	PUBLIC_FUNCTION(bool, IsOnScene);
-	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(const SceneEditableObject*, GetEditableLink);
+	PUBLIC_FUNCTION(bool, IsEditableLinkedTo, SceneEditableObject*);
+	PUBLIC_FUNCTION(bool, IsSupportsLinking);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditableChildren);
+	PUBLIC_FUNCTION(void, GetAllEditableChildren, Vector<SceneEditableObject*>&);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
@@ -180,5 +205,8 @@ CLASS_METHODS_META(o2::SceneEditableObject)
 	PUBLIC_FUNCTION(void, OnLockChanged);
 	PUBLIC_FUNCTION(void, OnNameChanged);
 	PUBLIC_FUNCTION(void, OnChildrenChanged);
+	PUBLIC_FUNCTION(void, BeginMakePrototype);
+	PUBLIC_FUNCTION(void, BeginInstantiatePrototype);
+	PROTECTED_FUNCTION(void, GetDifferences, ActorDifferences&);
 }
 END_META;

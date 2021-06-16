@@ -25,7 +25,7 @@ namespace Editor
 			{
 				info.parentId = parent->GetID();
 
-				auto parentChilds = parent->GetEditablesChildren();
+				auto parentChilds = parent->GetEditableChildren();
 				info.prevObjectId = 0;
 
 				for (auto child : parentChilds)
@@ -85,7 +85,7 @@ namespace Editor
 			if (parent)
 			{
 				SceneUID prevId = info.prevObjectId;
-				int idx = parent->GetEditablesChildren().IndexOf([=](SceneEditableObject* x) { return x->GetID() == prevId; }) + 1;
+				int idx = parent->GetEditableChildren().IndexOf([=](SceneEditableObject* x) { return x->GetID() == prevId; }) + 1;
 
 				SceneEditableObject* newObject;
 				info.objectData.Get(newObject);

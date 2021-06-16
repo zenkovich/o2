@@ -102,8 +102,17 @@ namespace o2
 		// Completion deserialization callback -  reads path and id and searches asset
 		void OnDeserialized(const DataValue& node) override;
 
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		// Updates specialized asset pointer
 		virtual void UpdateSpecAsset() {};
+
+		// It is required to process asset reference as single object when searching deltas for prototypes
+		static bool IsDeltaAsSingleObject();
 
 		friend class Assets;
 	};
@@ -235,6 +244,9 @@ CLASS_METHODS_META(o2::AssetRef)
 	PUBLIC_FUNCTION(bool, IsInstance);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, UpdateSpecAsset);
+	PROTECTED_STATIC_FUNCTION(bool, IsDeltaAsSingleObject);
 }
 END_META;

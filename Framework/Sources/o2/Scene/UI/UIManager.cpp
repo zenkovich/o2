@@ -57,7 +57,12 @@ namespace o2
 			mFocusedWidget = nullptr;
 
 			lastFocusedWidget->mIsFocused = false;
-			lastFocusedWidget->OnUnfocused();
+
+			auto focusedIdx = mLastFocusedWidgets.IndexOf(lastFocusedWidget);
+			if (focusedIdx >= 0)
+				mLastFocusedWidgets.RemoveAt(focusedIdx);
+			else
+				mLastUnfocusedWidgets.Add(lastFocusedWidget);
 
 			if (lastFocusedWidget->mFocusedState)
 				lastFocusedWidget->mFocusedState->SetState(false);
@@ -69,7 +74,11 @@ namespace o2
 		{
 			mFocusedWidget->mIsFocused = true;
 
-			mFocusedWidget->OnFocused();
+			auto unfocusedIdx = mLastUnfocusedWidgets.IndexOf(mFocusedWidget);
+			if (unfocusedIdx >= 0)
+				mLastUnfocusedWidgets.RemoveAt(unfocusedIdx);
+			else
+				mLastFocusedWidgets.Add(mFocusedWidget);
 
 			if (mFocusedWidget->mParentWidget)
 				mFocusedWidget->mParentWidget->OnChildFocused(mFocusedWidget);
@@ -339,6 +348,18 @@ namespace o2
 
 		if (o2Input.IsKeyPressed(VK_TAB))
 			FocusNextWidget();
+	}
+
+	void UIManager::Update()
+	{
+		for (auto widget : mLastFocusedWidgets)
+			widget->OnFocused();
+
+		for (auto widget : mLastUnfocusedWidgets)
+			widget->OnUnfocused();
+
+		mLastFocusedWidgets.Clear();
+		mLastUnfocusedWidgets.Clear();
 	}
 
 	void UIManager::DrawWidgetAtTop(Widget* widget)

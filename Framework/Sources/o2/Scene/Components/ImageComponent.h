@@ -56,6 +56,9 @@ namespace o2
 		// Sets actor's size as image size
 		void FitActorByImage() const;
 
+		// Returns true if point is under drawable
+		bool IsUnderPoint(const Vec2F& point) override;
+
 		// Returns name of component
 		static String GetName();
 
@@ -79,6 +82,12 @@ namespace o2
 
 		// Calling when serializing
 		void OnSerialize(DataValue& node) const override;
+
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 	};
 }
 
@@ -97,6 +106,7 @@ CLASS_METHODS_META(o2::ImageComponent)
 
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(void, FitActorByImage);
+	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_STATIC_FUNCTION(String, GetName);
 	PUBLIC_STATIC_FUNCTION(String, GetCategory);
 	PUBLIC_STATIC_FUNCTION(String, GetIcon);
@@ -104,5 +114,7 @@ CLASS_METHODS_META(o2::ImageComponent)
 	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

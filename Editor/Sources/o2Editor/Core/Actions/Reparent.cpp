@@ -20,7 +20,7 @@ namespace Editor
 			SceneEditableObject* parent = object->GetEditableParent();
 
 			Vector<SceneEditableObject*> parentChildren = parent ? 
-				parent->GetEditablesChildren() : 
+				parent->GetEditableChildren() : 
 				o2Scene.GetRootActors().Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 
 			int actorIdx = parentChildren.IndexOf(object);
@@ -61,7 +61,7 @@ namespace Editor
 
 		if (parent)
 		{
-			int insertIdx = parent->GetEditablesChildren().IndexOf(prevObject) + 1;
+			int insertIdx = parent->GetEditableChildren().IndexOf(prevObject) + 1;
 
 			for (auto info : objectsInfos)
 			{
@@ -104,7 +104,7 @@ namespace Editor
 
 			if (parent)
 			{
-				int idx = parent->GetEditablesChildren().IndexOf(prevObject) + 1;
+				int idx = parent->GetEditableChildren().IndexOf(prevObject) + 1;
 				parent->AddEditableChild(object, idx);
 				object->SetTransform(info->transform);
 			}

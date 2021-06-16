@@ -86,6 +86,8 @@ namespace Editor
 		}
 
 		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
+
+		onCursorPressedOutside(*o2Input.GetCursor());
 	}
 
 	void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
@@ -96,6 +98,7 @@ namespace Editor
 		auto node = dynamic_cast<ComponentsTreeNode*>(nodeWidget);
 		if (!node->data->type)
 			return;
+
 		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->data->type);
 
 		for (auto actor : mViewer->mTargetActors)

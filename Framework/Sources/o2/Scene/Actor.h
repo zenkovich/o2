@@ -21,6 +21,8 @@ namespace o2
 
 #if IS_EDITOR
 	typedef SceneEditableObject ActorBase;
+
+	struct ActorDifferences;
 #else
 	typedef ISerializable ActorBase;
 #endif
@@ -144,9 +146,6 @@ namespace o2
 		// Is actor on scene
 		bool IsOnScene() const;
 
-		// Is actor hierarchy on scene. Returns true when this on scene, or some parent actor on scene
-		bool IsHieararchyOnScene() const;
-
 		// Sets actor enabling
 		virtual void SetEnabled(bool enabled);
 
@@ -189,6 +188,9 @@ namespace o2
 		// Returns child actor by name
 		Actor* FindChild(const String& name) const;
 
+		// Returns child actor by predicate
+		Actor* FindChild(const Function<bool(const Actor* child)>& pred) const;
+
 		// Returns child actor by path (ex "root/some node/other node/target node")
 		template<typename _type>
 		_type* GetChildByType(const String& path) const;
@@ -205,7 +207,7 @@ namespace o2
 		const Vector<Actor*>& GetChildren() const;
 
 		// Returns all children actors with their children
-		void GetAllChildrenActors(Vector<Actor*>& actors);
+		virtual void GetAllChildrenActors(Vector<Actor*>& actors);
 
 		// Removes child and destroys him if needed
 		void RemoveChild(Actor* actor, bool release = true);
@@ -310,7 +312,7 @@ namespace o2
 			void Finalize() override;
 		};
 
-		struct InstantiatePrototypeVisitor: public SourceToTargetMapCloneVisitor
+		struct InstantiatePrototypeCloneVisitor: public SourceToTargetMapCloneVisitor
 		{
 			void OnCopyActor(const Actor* source, Actor* target) override;
 			void OnCopyComponent(const Component* source, Component* target) override;
@@ -479,118 +481,6 @@ namespace o2
 			void OnCopyComponent(const Component* source, Component* target) override;
 		};
 
-		// -----------------------------
-		// Actor prototype applying info
-		// -----------------------------
-		struct ApplyActorInfo
-		{
-			Actor*         actor;
-			Vector<Actor*> allChildren;
-
-			Map<const Actor*, Actor*>         actorsMap;
-			Map<const Component*, Component*> componentsMap;
-
-			ApplyActorInfo();
-			ApplyActorInfo(Actor* actor);
-
-			bool operator==(const ApplyActorInfo& other) const { return actor == other.actor; }
-		};
-
-		// ------------------------------------------
-		// Differences between instance and prototype
-		// ------------------------------------------
-		struct Differences
-		{
-			struct IDifference
-			{
-				virtual IDifference* Clone() const = 0;
-				virtual void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const = 0;
-			};
-
-			struct RemovedChild: public IDifference
-			{
-				Actor* prototypeLink;
-
-				IDifference* Clone() const override;
-				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
-			};
-
-			struct NewChild: public IDifference
-			{
-				Actor* parentPrototypeLink;
-				Actor* newChild;
-
-				IDifference* Clone() const override;
-				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
-			};
-
-			struct RemovedComponent: public IDifference
-			{
-				Actor*     ownerPrototypeLink;
-				Component* prototypeLink;
-
-				IDifference* Clone() const override;
-				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
-			};
-
-			struct NewComponent: public IDifference
-			{
-				Actor*     ownerPrototypeLink;
-				Component* newComponent;
-
-				IDifference* Clone() const override;
-				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
-			};
-
-			struct ChangedActorField: public IDifference
-			{
-				Actor* prototypeLink;
-				String path;
-
-				IDifference* Clone() const override;
-				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
-			};
-
-			struct ChangedComponentField: public IDifference
-			{
-				Actor*     ownerPrototypeLink;
-				Component* prototypeLink;
-				String     path;
-
-				IDifference* Clone() const override;
-				void Apply(ApplyActorInfo& applyInfo, bool applyPrototype) const override;
-			};
-
-		public:
-			Vector<IDifference*> removedChildren;
-			Vector<IDifference*> newChildren;
-			Vector<IDifference*> removedComponents;
-			Vector<IDifference*> newComponents;
-			Vector<IDifference*> changedActorFields;
-			Vector<IDifference*> changedComponentFields;
-
-		public:
-			Differences();
-			Differences(const Differences& other);
-			~Differences();
-
-			// Returns differences between
-			static Differences GetDifference(Actor* changedActor, Actor* prototype);
-
-			// Collects object differences
-			static void GetObjectDifferences(const Function<void(const String& path)>& createDiffFunc,
-											 Vector<const FieldInfo*>& stack,
-											 const Type& objectType, void* changedObject, void* protoObject);
-
-			// Checks difference in field
-			static void GetFieldDifference(const Function<void(const String& path)>& createDiffFunc,
-										   Vector<const FieldInfo*>& stack,
-										   const Type& fieldType, void* changedFieldObject, void* protoFieldObject);
-
-			// Returns path to field by fields stack
-			static String GetFieldPath(const Vector<const FieldInfo*>& stack);
-		};
-
 	public:
 		// Sets locking. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
 		void SetLocked(bool locked);
@@ -625,8 +515,11 @@ namespace o2
 		// Searches actor in this, what linked to linkActor
 		Actor* FindLinkedActor(Actor* linkActor);
 
+		// Returns object's link to prototype
+		const SceneEditableObject* GetEditableLink() const override;
+
 		// Returns list of object's children
-		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+		Vector<SceneEditableObject*> GetEditableChildren() const override;
 
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		SceneEditableObject* GetEditableParent() const override;
@@ -691,7 +584,14 @@ namespace o2
 							  Map<const Component*, Component*>& componentsMap,
 							  Vector<ISerializable*>& serializableObjects);
 
-		virtual void GetDifferences(Differences& differences) const;
+		// Collects differences between this and prototype
+		virtual void GetDifferences(ActorDifferences& differences) const;
+
+		// It is called before making prototype from this object
+		void BeginMakePrototype() const override;
+
+		// It is called before instantiate from this object
+		void BeginInstantiatePrototype() const override;
 
 		// Not using prototype setter
 		void SetProtytypeDummy(ActorAssetRef asset);
@@ -898,7 +798,6 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(void, AddToScene);
 	PUBLIC_FUNCTION(void, RemoveFromScene, bool);
 	PUBLIC_FUNCTION(bool, IsOnScene);
-	PUBLIC_FUNCTION(bool, IsHieararchyOnScene);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
 	PUBLIC_FUNCTION(void, Enable);
 	PUBLIC_FUNCTION(void, Disable);
@@ -913,6 +812,7 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(Actor*, AddChild, Actor*, int);
 	PUBLIC_FUNCTION(Actor*, GetChild, const String&);
 	PUBLIC_FUNCTION(Actor*, FindChild, const String&);
+	PUBLIC_FUNCTION(Actor*, FindChild, const Function<bool(const Actor* child)>&);
 	PUBLIC_FUNCTION(const Vector<Actor*>&, GetChildren);
 	PUBLIC_FUNCTION(void, GetAllChildrenActors, Vector<Actor*>&);
 	PUBLIC_FUNCTION(void, RemoveChild, Actor*, bool);
@@ -975,7 +875,8 @@ CLASS_METHODS_META(o2::Actor)
 	PUBLIC_FUNCTION(ActorAssetRef, MakePrototype);
 	PUBLIC_FUNCTION(bool, IsLinkedToActor, Actor*);
 	PUBLIC_FUNCTION(Actor*, FindLinkedActor, Actor*);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(const SceneEditableObject*, GetEditableLink);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditableChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
@@ -994,7 +895,9 @@ CLASS_METHODS_META(o2::Actor)
 	PROTECTED_FUNCTION(void, CopyActorChangedFields, Actor*, Actor*, Actor*, Vector<Actor*>&, bool);
 	PROTECTED_FUNCTION(void, SeparateActors, Vector<Actor*>&);
 	PROTECTED_FUNCTION(void, ProcessReverting, Actor*, const Actor*, const Vector<Actor*>&, Vector<Actor**>&, Vector<Component**>&, _tmp5, _tmp6, Vector<ISerializable*>&);
-	PROTECTED_FUNCTION(void, GetDifferences, Differences&);
+	PROTECTED_FUNCTION(void, GetDifferences, ActorDifferences&);
+	PROTECTED_FUNCTION(void, BeginMakePrototype);
+	PROTECTED_FUNCTION(void, BeginInstantiatePrototype);
 	PROTECTED_FUNCTION(void, SetProtytypeDummy, ActorAssetRef);
 	PROTECTED_FUNCTION(void, UpdateLocking);
 }

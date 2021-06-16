@@ -82,6 +82,11 @@ namespace o2
 			mOwner->transform->size = mImageAsset->GetSize();
 	}
 
+	bool ImageComponent::IsUnderPoint(const Vec2F& point)
+	{
+		return Sprite::IsUnderPoint(point);
+	}
+
 	String ImageComponent::GetName()
 	{
 		return "Image";
@@ -117,6 +122,18 @@ namespace o2
 	{
 		DrawableComponent::OnSerialize(node);
 		Sprite::OnSerialize(node);
+	}
+
+	void ImageComponent::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		DrawableComponent::OnSerializeDelta(node, origin);
+		Sprite::OnSerializeDelta(node, origin);
+	}
+
+	void ImageComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		DrawableComponent::OnDeserializedDelta(node, origin);
+		Sprite::OnDeserializedDelta(node, origin);
 	}
 
 }

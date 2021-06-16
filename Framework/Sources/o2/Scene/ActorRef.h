@@ -1,11 +1,12 @@
 #pragma once
 
-#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Scene/ActorCreationMode.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
 namespace o2
 {
+	class Actor;
+
 	// --------------------------------------------------------------
 	// Actor reference, automatically invalidates when actor deleting
 	// --------------------------------------------------------------

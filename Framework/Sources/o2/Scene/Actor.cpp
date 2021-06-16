@@ -52,7 +52,7 @@ namespace o2
 
 		if (other.mIsAsset)
 		{
-			other.mCopyVisitor = mnew InstantiatePrototypeVisitor();
+			other.mCopyVisitor = mnew InstantiatePrototypeCloneVisitor();
 			SetPrototype(ActorAssetRef(other.GetAssetID()));
 		}
 
@@ -159,6 +159,8 @@ namespace o2
 
 	Actor::~Actor()
 	{
+		SetPrototype(nullptr);
+
 		for (auto ref : mReferences)
 		{
 			ref->mActor = nullptr;
@@ -443,14 +445,6 @@ namespace o2
 		return mSceneStatus != SceneStatus::NotInScene;
 	}
 
-	bool Actor::IsHieararchyOnScene() const
-	{
-		if (mParent)
-			return IsOnScene() || mParent->IsOnScene() || mParent->IsHieararchyOnScene();
-
-		return IsOnScene();
-	}
-
 	void Actor::SetEnabled(bool enabled)
 	{
 		if (mEnabled == enabled)
@@ -463,7 +457,7 @@ namespace o2
 
 		if constexpr (IS_EDITOR)
 		{
-			if (IsHieararchyOnScene())
+			if (IsOnScene())
 				o2Scene.onEnableChanged(this);
 		}
 
@@ -634,6 +628,20 @@ namespace o2
 				return child;
 
 			if (auto res = child->FindChild(name))
+				return res;
+		}
+
+		return nullptr;
+	}
+
+	Actor* Actor::FindChild(const Function<bool(const Actor* child)>& pred) const
+	{
+		for (auto child : mChildren)
+		{
+			if (pred(child))
+				return child;
+
+			if (auto res = child->FindChild(pred))
 				return res;
 		}
 
@@ -909,12 +917,7 @@ namespace o2
 	void Actor::OnComponentAdded(Component* component)
 	{
 		if (mSceneStatus == SceneStatus::InScene)
-		{
-			if (Scene::IsSingletonInitialzed())
-				o2Scene.OnComponentAdded(component);
-
 			component->OnAddToScene();
-		}
 
 		for (auto comp : mComponents)
 			comp->OnComponentAdded(component);
@@ -923,12 +926,7 @@ namespace o2
 	void Actor::OnComponentRemoving(Component* component)
 	{
 		if (IsOnScene())
-		{
-			if (Scene::IsSingletonInitialzed())
-				o2Scene.OnComponentRemoved(component);
-
 			component->OnRemoveFromScene();
-		}
 
 		for (auto comp : mComponents)
 			comp->OnComponentRemoving(component);
@@ -961,7 +959,7 @@ namespace o2
 
 			if constexpr (IS_EDITOR)
 			{
-				if (IsHieararchyOnScene())
+				if (IsOnScene())
 					o2Scene.onEnableChanged(this);
 			}
 
@@ -1261,14 +1259,14 @@ namespace o2
 								}
 							}
 						}
+					}
 
-						if (!newComponent->mPrototypeLink)
-							newComponent->Deserialize(componentDataValue);
-						else
-						{
-							componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
-							mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
-						}
+					if (!newComponent->mPrototypeLink)
+						newComponent->Deserialize(componentDataValue);
+					else
+					{
+						componentDataValue.GetDelta(*newComponent, *newComponent->mPrototypeLink);
+						mCopyVisitor->OnCopyComponent(newComponent->mPrototypeLink, newComponent);
 					}
 				}
 				else o2Debug.LogError("Can't create component with type:" + type);
@@ -1484,13 +1482,13 @@ namespace o2
 		ActorRefResolver::RemapReferences(sourceToTargetActors, sourceToTargetComponents);
 	}
 
-	void Actor::InstantiatePrototypeVisitor::OnCopyActor(const Actor* source, Actor* target)
+	void Actor::InstantiatePrototypeCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
 	{
 		SourceToTargetMapCloneVisitor::OnCopyActor(source, target);
 		target->mPrototypeLink.CopyWithoutRemap(const_cast<Actor*>(source));
 	}
 
-	void Actor::InstantiatePrototypeVisitor::OnCopyComponent(const Component* source, Component* target)
+	void Actor::InstantiatePrototypeCloneVisitor::OnCopyComponent(const Component* source, Component* target)
 	{
 		SourceToTargetMapCloneVisitor::OnCopyComponent(source, target);
 		target->mPrototypeLink = const_cast<Component*>(source);

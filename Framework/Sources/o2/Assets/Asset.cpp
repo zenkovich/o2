@@ -35,12 +35,13 @@ namespace o2
 
 	void Asset::SetPath(const String& path)
 	{
-		o2Assets.RemoveAssetCache(this);
+		auto oldPath = mInfo.path;
+		auto oldUID = mInfo.meta->mId;
 
 		mInfo.path = path;
 		mInfo.meta->mId.Randomize();
 
-		o2Assets.AddAssetCache(this);
+		o2Assets.UpdateAssetCache(this, oldPath, oldUID);
 	}
 
 	const UID& Asset::GetUID() const

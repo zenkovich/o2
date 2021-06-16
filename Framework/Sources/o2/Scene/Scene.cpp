@@ -246,7 +246,7 @@ namespace o2
 		if constexpr (IS_EDITOR)
 		{
 			mChangedObjects.Add(actor);
-			RegEditableObject(actor);
+			AddEditableObjectToScene(actor);
 			onAddedToScene(actor);
 		}
 	}
@@ -265,10 +265,9 @@ namespace o2
 		if constexpr (IS_EDITOR)
 		{
 			if (!keepEditorObjects)
-				UnregEditableObject(actor);
+				RemoveEditableObjectFromScene(actor);
 
-			OnObjectDestroyed(actor);
-			OnActorPrototypeBroken(actor);
+			OnObjectRemoveFromScene(actor);
 		}
 	}
 
@@ -597,12 +596,12 @@ namespace o2
 		return mRootActors.Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
-	void Scene::RegEditableObject(SceneEditableObject* object)
+	void Scene::AddEditableObjectToScene(SceneEditableObject* object)
 	{
 		mEditableObjects.Add(object);
 	}
 
-	void Scene::UnregEditableObject(SceneEditableObject* object)
+	void Scene::RemoveEditableObjectFromScene(SceneEditableObject* object)
 	{
 		mChangedObjects.Remove(object);
 		mEditableObjects.Remove(object);
@@ -622,7 +621,7 @@ namespace o2
 	{
 		if (object->GetEditableParent())
 		{
-			return object->GetEditableParent()->GetEditablesChildren().IndexOf(object) + GetObjectHierarchyIdx(object->GetEditableParent());
+			return object->GetEditableParent()->GetEditableChildren().IndexOf(object) + GetObjectHierarchyIdx(object->GetEditableParent());
 		}
 
 		return mRootActors.IndexOf([=](Actor* x) { return dynamic_cast<SceneEditableObject*>(x) == object; });
@@ -657,7 +656,7 @@ namespace o2
 
 		if (newParent)
 		{
-			int insertIdx = newParent->GetEditablesChildren().IndexOf(prevObject) + 1;
+			int insertIdx = newParent->GetEditableChildren().IndexOf(prevObject) + 1;
 
 			for (auto def : objectsDefs)
 			{
@@ -702,8 +701,6 @@ namespace o2
 		if (mChangedObjects.Count() > 0) {
 			onObjectsChanged(mChangedObjects);
 			mChangedObjects.Clear();
-
-			Update(0);
 		}
 	}
 
@@ -733,13 +730,13 @@ namespace o2
 		mIsDrawingScene = false;
 	}
 
-	void Scene::OnObjectCreated(SceneEditableObject* object)
+	void Scene::OnObjectAddToScene(SceneEditableObject* object)
 	{
 		onAddedToScene(object);
 		OnObjectChanged(object);
 	}
 
-	void Scene::OnObjectDestroyed(SceneEditableObject* object)
+	void Scene::OnObjectRemoveFromScene(SceneEditableObject* object)
 	{
 		onRemovedFromScene(object);
 		OnObjectChanged(nullptr);

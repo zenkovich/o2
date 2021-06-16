@@ -114,7 +114,7 @@ namespace Editor
 	void AssetsWindow::InitializeFoldersTree()
 	{
 		mFoldersTree = mnew AssetsFoldersTree();
-		*mFoldersTree->layout = WidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 0.0f, -18.0f, 0.0f, 18.0f);
+		*mFoldersTree->layout = WidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 5.0f, -18.0f, 0.0f, 18.0f);
 
 		auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI4_Ver_separator.png"),
 													 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
@@ -269,10 +269,7 @@ namespace Editor
 		String assetPath = o2Assets.GetAssetPath(id);
 		String folder = o2FileSystem.GetParentPath(assetPath);
 
-		if (GetOpenedFolderPath() != folder)
-			OpenFolder(folder);
-
-		mAssetsGridScroll->HighlightAsset(id);
+		ShowAssetIcon(folder, id);
 	}
 
 	void AssetsWindow::ShowAssetIcon(const String& path)
@@ -280,6 +277,11 @@ namespace Editor
 		UID assetId = o2Assets.GetAssetId(path);
 		String folder = o2FileSystem.GetParentPath(path);
 
+		ShowAssetIcon(folder, assetId);
+	}
+
+	void AssetsWindow::ShowAssetIcon(const String& folder, UID assetId)
+	{
 		if (GetOpenedFolderPath() != folder)
 			OpenFolder(folder);
 

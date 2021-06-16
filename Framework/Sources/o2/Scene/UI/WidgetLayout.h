@@ -311,6 +311,9 @@ namespace o2
 		Widget* owner = nullptr; // owner widget pointer 
 
 		SERIALIZABLE(WidgetLayoutData);
+
+		// Returns is serialize enabled; used to turn off fields serialization
+		bool IsSerializeEnabled() const override;
 	};
 
 	// Calculates children widths or heights by weights and min/max sizes
@@ -446,5 +449,7 @@ CLASS_FIELDS_META(o2::WidgetLayoutData)
 END_META;
 CLASS_METHODS_META(o2::WidgetLayoutData)
 {
+
+	PUBLIC_FUNCTION(bool, IsSerializeEnabled);
 }
 END_META;

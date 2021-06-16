@@ -47,8 +47,21 @@ namespace o2
 		layout->SetOwner(this);
 
 		WidgetLayer::ICopyVisitor* layerCopyVisitor = nullptr;
-		if (dynamic_cast<InstantiatePrototypeVisitor*>(other.mCopyVisitor) || other.mIsAsset)
-			layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeVisitor();
+
+		if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
+			layerCopyVisitor = mnew WidgetLayer::InstantiatePrototypeCloneVisitor();
+
+		if (dynamic_cast<MakePrototypeCloneVisitor*>(other.mCopyVisitor))
+			layerCopyVisitor = mnew WidgetLayer::MakePrototypeCloneVisitor();
+
+		if constexpr (IS_EDITOR)
+		{
+			if (dynamic_cast<InstantiatePrototypeCloneVisitor*>(other.mCopyVisitor) || other.mIsAsset)
+			{
+				layersEditable.prototypeLink = &other.layersEditable;
+				internalChildrenEditable.prototypeLink = &other.internalChildrenEditable;
+			}
+		}
 
 		for (auto layer : other.mLayers)
 		{
@@ -207,9 +220,6 @@ namespace o2
 
 			if (!mIsClipped)
 			{
-				for (auto layer : mLayers)
-					layer->Update(dt);
-
 				for (auto state : mStates)
 				{
 					if (state)
@@ -547,6 +557,8 @@ namespace o2
 	{
 		if (layer->mParent)
 			layer->mParent->RemoveChild(layer, false);
+		else if (layer->mOwnerWidget)
+			layer->mOwnerWidget->RemoveLayer(layer, false);
 
 		mLayers.Add(layer);
 		layer->SetOwnerWidget(this);
@@ -555,7 +567,7 @@ namespace o2
 
 		if constexpr (IS_EDITOR)
 		{
-			if (Scene::IsSingletonInitialzed() && IsHieararchyOnScene())
+			if (Scene::IsSingletonInitialzed() && IsOnScene())
 			{
 				o2Scene.OnObjectChanged(&layersEditable);
 				o2Scene.onChildrenHierarchyChanged(&layersEditable);
@@ -618,7 +630,7 @@ namespace o2
 
 	void Widget::RemoveLayer(WidgetLayer* layer, bool release /*= true*/)
 	{
-		layer->mOwnerWidget = nullptr;
+		layer->SetOwnerWidget(nullptr);
 
 		mLayers.Remove(layer);
 
@@ -1215,7 +1227,7 @@ namespace o2
 		}
 
 		for (auto layer : mLayers)
-			layer->OnExcludeFromScene();
+			layer->OnRemoveFromScene();
 
 		for (auto child : mInternalWidgets)
 			child->OnRemoveFromScene();
@@ -1231,7 +1243,7 @@ namespace o2
 			child->OnAddToScene();
 
 		for (auto layer : mLayers)
-			layer->OnIncludeInScene();
+			layer->OnAddToScene();
 
 		if constexpr (IS_EDITOR)
 		{
@@ -1353,7 +1365,7 @@ namespace o2
 
 			if constexpr (IS_EDITOR)
 			{
-				if (IsHieararchyOnScene())
+				if (IsOnScene())
 					o2Scene.onEnableChanged(this);
 			}
 
@@ -1457,6 +1469,14 @@ namespace o2
 	bool Widget::isEditorLayersVisible = true;
 	bool Widget::isEditorInternalChildrenVisible = true;
 
+	void Widget::SetEditableParent(SceneEditableObject* object)
+	{
+		if (auto inter = dynamic_cast<InternalChildrenEditableEditable*>(object))
+			SetInternalParent(inter->widget);
+		else
+			Actor::SetEditableParent(object);
+	}
+
 	SceneEditableObject* Widget::GetEditableParent() const
 	{
 		if (mParentWidget && std::find(mParentWidget->mInternalWidgets.begin(),
@@ -1468,9 +1488,9 @@ namespace o2
 		return Actor::GetEditableParent();
 	}
 
-	Vector<SceneEditableObject*> Widget::GetEditablesChildren() const
+	Vector<SceneEditableObject*> Widget::GetEditableChildren() const
 	{
-		Vector<SceneEditableObject*> res = Actor::GetEditablesChildren();
+		Vector<SceneEditableObject*> res = Actor::GetEditableChildren();
 
 		if (isEditorInternalChildrenVisible)
 			res.Insert(const_cast<SceneEditableObject*>(dynamic_cast<const SceneEditableObject*>(&internalChildrenEditable)), 0);
@@ -1536,17 +1556,17 @@ namespace o2
 	{}
 
 	Widget::LayersEditable::LayersEditable(Widget* widget):
-		mWidget(widget)
+		widget(widget)
 	{}
 
 	SceneUID Widget::LayersEditable::GetID() const
 	{
-		return mUID;
+		return UID;
 	}
 
 	void Widget::LayersEditable::GenerateNewID(bool childs /*= true*/)
 	{
-		mUID = Math::Random();
+		UID = Math::Random();
 	}
 
 	const String& Widget::LayersEditable::GetName() const
@@ -1558,14 +1578,14 @@ namespace o2
 	void Widget::LayersEditable::SetName(const String& name)
 	{}
 
-	Vector<SceneEditableObject*> Widget::LayersEditable::GetEditablesChildren() const
+	Vector<SceneEditableObject*> Widget::LayersEditable::GetEditableChildren() const
 	{
-		return mWidget->mLayers.Convert<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return widget->mLayers.Convert<SceneEditableObject*>([](WidgetLayer* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	o2::SceneEditableObject* Widget::LayersEditable::GetEditableParent() const
 	{
-		return dynamic_cast<SceneEditableObject*>(mWidget);
+		return dynamic_cast<SceneEditableObject*>(widget);
 	}
 
 	void Widget::LayersEditable::SetEditableParent(SceneEditableObject* object)
@@ -1574,7 +1594,7 @@ namespace o2
 	void Widget::LayersEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (WidgetLayer* layer = dynamic_cast<WidgetLayer*>(object))
-			mWidget->AddLayer(layer);
+			widget->AddLayer(layer);
 	}
 
 	void Widget::LayersEditable::SetIndexInSiblings(int idx)
@@ -1587,24 +1607,29 @@ namespace o2
 
 	Basis Widget::LayersEditable::GetTransform() const
 	{
-		return mWidget->GetTransform();
+		return widget->GetTransform();
+	}
+
+	const SceneEditableObject* Widget::LayersEditable::GetEditableLink() const
+	{
+		return prototypeLink;
 	}
 
 	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable()
 	{}
 
 	Widget::InternalChildrenEditableEditable::InternalChildrenEditableEditable(Widget* widget):
-		mWidget(widget)
+		widget(widget)
 	{}
 
 	SceneUID Widget::InternalChildrenEditableEditable::GetID() const
 	{
-		return mUID;
+		return UID;
 	}
 
 	void Widget::InternalChildrenEditableEditable::GenerateNewID(bool childs /*= true*/)
 	{
-		mUID = Math::Random();
+		UID = Math::Random();
 	}
 
 	const String& Widget::InternalChildrenEditableEditable::GetName() const
@@ -1616,14 +1641,14 @@ namespace o2
 	void Widget::InternalChildrenEditableEditable::SetName(const String& name)
 	{}
 
-	Vector<SceneEditableObject*> Widget::InternalChildrenEditableEditable::GetEditablesChildren() const
+	Vector<SceneEditableObject*> Widget::InternalChildrenEditableEditable::GetEditableChildren() const
 	{
-		return mWidget->mInternalWidgets.Convert<SceneEditableObject*>([](Widget* x) { return dynamic_cast<SceneEditableObject*>(x); });
+		return widget->mInternalWidgets.Convert<SceneEditableObject*>([](Widget* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}
 
 	o2::SceneEditableObject* Widget::InternalChildrenEditableEditable::GetEditableParent() const
 	{
-		return dynamic_cast<SceneEditableObject*>(mWidget);
+		return dynamic_cast<SceneEditableObject*>(widget);
 	}
 
 	void Widget::InternalChildrenEditableEditable::SetEditableParent(SceneEditableObject* object)
@@ -1632,7 +1657,7 @@ namespace o2
 	void Widget::InternalChildrenEditableEditable::AddEditableChild(SceneEditableObject* object, int idx /*= -1*/)
 	{
 		if (Widget* widget = dynamic_cast<Widget*>(object))
-			widget->SetInternalParent(mWidget);
+			widget->SetInternalParent(widget);
 	}
 
 	void Widget::InternalChildrenEditableEditable::SetIndexInSiblings(int idx)
@@ -1645,10 +1670,16 @@ namespace o2
 
 	Basis Widget::InternalChildrenEditableEditable::GetTransform() const
 	{
-		return mWidget->GetTransform();
+		return widget->GetTransform();
+	}
+
+	const SceneEditableObject* Widget::InternalChildrenEditableEditable::GetEditableLink() const
+	{
+		return prototypeLink;
 	}
 
 #endif // IS_EDITOR
+
 }
 
 DECLARE_CLASS(o2::Widget);

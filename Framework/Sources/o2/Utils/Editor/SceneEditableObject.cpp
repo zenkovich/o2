@@ -16,11 +16,6 @@ namespace o2
 		return true;
 	}
 
-	bool SceneEditableObject::IsHieararchyOnScene() const
-	{
-		return true;
-	}
-
 	SceneUID SceneEditableObject::GetID() const
 	{
 		return 0;
@@ -37,9 +32,45 @@ namespace o2
 	void SceneEditableObject::SetName(const String& name)
 	{ }
 
-	Vector<SceneEditableObject*> SceneEditableObject::GetEditablesChildren() const
+	const SceneEditableObject* SceneEditableObject::GetEditableLink() const
+	{
+		return nullptr;
+	}
+
+	bool SceneEditableObject::IsEditableLinkedTo(SceneEditableObject* link) const
+	{
+		if (auto thisLink = GetEditableLink())
+		{
+			while (thisLink)
+			{
+				if (thisLink == link)
+					return true;
+
+				thisLink = thisLink->GetEditableLink();
+			}
+		}
+
+		return false;
+	}
+
+	bool SceneEditableObject::IsSupportsLinking() const
+	{
+		return true;
+	}
+
+	Vector<SceneEditableObject*> SceneEditableObject::GetEditableChildren() const
 	{
 		return Vector<SceneEditableObject*>();
+	}
+
+	void SceneEditableObject::GetAllEditableChildren(Vector<SceneEditableObject*>& children)
+	{
+		auto thisChildren = GetEditableChildren();
+
+		children.Add(thisChildren);
+
+		for (auto child : thisChildren)
+			child->GetAllEditableChildren(children);
 	}
 
 	SceneEditableObject* SceneEditableObject::GetEditableParent() const
@@ -155,6 +186,9 @@ namespace o2
 	{ }
 
 	void SceneEditableObject::OnChildrenChanged()
+	{ }
+
+	void SceneEditableObject::GetDifferences(ActorDifferences& differences) const
 	{ }
 
 }

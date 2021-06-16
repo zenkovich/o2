@@ -185,6 +185,9 @@ namespace o2
 		// Calling when deserializing
 		void OnDeserialized(const DataValue& node) override;
 
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
 		SERIALIZABLE(Sprite);
 
 	protected:
@@ -318,6 +321,7 @@ CLASS_METHODS_META(o2::Sprite)
 	PUBLIC_FUNCTION(void, NormalizeAspect);
 	PUBLIC_FUNCTION(void, OnSerialize, DataValue&);
 	PUBLIC_FUNCTION(void, OnDeserialized, const DataValue&);
+	PUBLIC_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, BasisChanged);
 	PROTECTED_FUNCTION(void, ColorChanged);
 	PROTECTED_FUNCTION(void, UpdateMesh);

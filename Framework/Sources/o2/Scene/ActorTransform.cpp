@@ -766,13 +766,25 @@ namespace o2
 			mData->parentInvertedTransform = Basis::Identity();
 	}
 
+	void ActorTransform::OnSerialize(DataValue& node) const
+	{
+		node.Set(*mData);
+	}
+
 	void ActorTransform::OnDeserialized(const DataValue& node)
 	{
+		node.Get(*mData);
 		SetDirty();
+	}
+
+	void ActorTransform::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		node.SetDelta(*mData, *dynamic_cast<const ActorTransform&>(origin).mData);
 	}
 
 	void ActorTransform::OnDeserializedDelta(const DataValue& node, const IObject& origin)
 	{
+		node.GetDelta(*mData, *dynamic_cast<const ActorTransform&>(origin).mData);
 		SetDirty();
 	}
 
@@ -791,6 +803,12 @@ namespace o2
 
 		return mData->owner->mParent->transform->GetWorldRect();
 	}
+
+	bool ActorTransformData::IsSerializeEnabled() const
+	{
+		return true;
+	}
+
 }
 
 DECLARE_CLASS(o2::ActorTransform);

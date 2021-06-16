@@ -50,7 +50,9 @@ namespace Editor
 
 		mDragIcon = o2UI.CreateWidget<AssetIcon>();
 
+		mHighlighClip = other.mHighlighClip;
 		mHighlightAnim.SetTarget(mHighlightSprite);
+		mHighlightAnim.SetClip(&mHighlighClip);
 
 		RetargetStatesAnimations();
 		SetLayoutDirty();
@@ -84,7 +86,9 @@ namespace Editor
 
 		mHighlightLayout = other.mHighlightLayout;
 		mHighlightSprite = other.mHighlightSprite->CloneAs<Sprite>();
+		mHighlighClip = other.mHighlighClip;
 		mHighlightAnim.SetTarget(mHighlightSprite);
+		mHighlightAnim.SetClip(&mHighlighClip);
 
 		mSelectionSprite = other.mSelectionSprite->CloneAs<Sprite>();
 
@@ -256,7 +260,7 @@ namespace Editor
 
 		SetViewingPath(assetFolder);
 
-		auto assetInfo = &o2Assets.GetAssetInfo(id);	
+		auto assetInfo = &o2Assets.GetAssetInfo(id);
 		if (!assetInfo->IsValid())
 			return;
 
@@ -300,18 +304,15 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnAssetsSelected()
 	{
-		if (!mSelectedAssets.IsEmpty())
+		auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
+		for (auto asset : lastSelectedPreloadedAssets)
 		{
-			auto lastSelectedPreloadedAssets = mSelectedPreloadedAssets;
-			for (auto asset : lastSelectedPreloadedAssets)
+			if (!mSelectedAssets.Contains([&](const AssetInfo* x) {
+				return x->meta->ID() == (*asset)->GetUID(); }))
 			{
-				if (!mSelectedAssets.Contains([&](const AssetInfo* x) {
-					return x->meta->ID() == (*asset)->GetUID(); }))
-				{
-					mSelectedPreloadedAssets.Remove(asset);
-					(*asset)->Save(false);
-					delete asset;
-				}
+				mSelectedPreloadedAssets.Remove(asset);
+				(*asset)->Save(false);
+				delete asset;
 			}
 		}
 
@@ -547,7 +548,7 @@ namespace Editor
 	{
 		mDragIcon->SetEditableParent(nullptr);
 		mDragIcon->layout->SetRect(RectF(o2Input.GetCursorPos() - mAssetIconSize*0.5f + mDragOffset,
-										 o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
+								   o2Input.GetCursorPos() + mAssetIconSize*0.5f + mDragOffset));
 
 		mDragIcon->UpdateSelfTransform();
 		mDragIcon->UpdateChildrenTransforms();
@@ -626,7 +627,7 @@ namespace Editor
 
 		auto firstInstObject = mInstantiatedSceneDragObjects[0];
 		auto parent = firstInstObject->GetEditableParent();
-		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
+		auto parentChilds = parent ? parent->GetEditableChildren() : o2Scene.GetRootEditableObjects();
 		int idx = parentChilds.IndexOf(firstInstObject);
 		auto prevActor = idx > 0 ? parentChilds[idx - 1] : nullptr;
 
@@ -850,6 +851,7 @@ namespace Editor
 
 	void AssetsIconsScrollArea::SetHighlightAnimation(const AnimationClip& animation)
 	{
+		mHighlighClip = animation;
 		mHighlightAnim.SetClip(animation.CloneAs<AnimationClip>(), true);
 		mHighlightAnim.SetTarget(mHighlightSprite);
 	}
@@ -926,21 +928,21 @@ namespace Editor
 
 		SortAssetInfos();
 		OnItemsUpdated(true);
-		ScrollTo((void*)&mNewAsset->GetInfo()); 
-		
+		ScrollTo((void*)&mNewAsset->GetInfo());
+
 		AssetIcon* icon = (AssetIcon*)(mChildWidgets.FindOrDefault([=](Widget* x) {
 			return &((AssetIcon*)x)->GetAssetInfo() == &mNewAsset->GetInfo(); }));
 
 		if (!icon)
 			return;
-		
- 		StartAssetRenaming(icon, newAssetName,
- 						   [&](const String& name)
- 		{
+
+		StartAssetRenaming(icon, newAssetName,
+						   [&](const String& name)
+		{
 			String path = !mCurrentPath.IsEmpty() ? mCurrentPath + "/" + name : name;
 			mNewAsset->Save(path);
- 			o2EditorAssets.SelectAsset(path);
- 		});
+			o2EditorAssets.SelectAsset(path);
+		});
 	}
 
 	void AssetsIconsScrollArea::OnContextCreateFolderPressed()

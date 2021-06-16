@@ -69,10 +69,10 @@ private:                                                                        
 	friend class o2::TObjectType;                                                                               \
                                                                                                                 \
     template<typename __type>                                                                                   \
-	friend class PointerValueProxy;                                                                             \
+	friend class o2::PointerValueProxy;                                                                         \
 																												\
     template<typename _type>																					\
-	friend class IValueProxy;																			        \
+	friend class o2::IValueProxy;																			    \
                                                                                                                 \
     friend class o2::ReflectionInitializationTypeProcessor;                                                     \
     friend class o2::Reflection;                                                                                \
@@ -80,7 +80,7 @@ private:                                                                        
                                                                                                                 \
 public:                                                                                                         \
 	typedef CLASS thisclass;                                                                                    \
-	IObject* Clone() const override {return SafeClone<CLASS>::Clone(*this); }                                   \
+	o2::IObject* Clone() const override {return o2::SafeClone<CLASS>::Clone(*this); }                           \
 	const o2::Type& GetType() const override { return *type; };                                                 \
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \

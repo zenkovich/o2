@@ -65,6 +65,17 @@ namespace o2
 		ParticlesEmitter::OnDeserialized(node);
 	}
 
+	void ParticlesEmitterComponent::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		DrawableComponent::OnSerializeDelta(node, origin);
+		ParticlesEmitter::OnSerializeDelta(node, origin);
+	}
+
+	void ParticlesEmitterComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		DrawableComponent::OnDeserializedDelta(node, origin);
+		ParticlesEmitter::OnDeserializedDelta(node, origin);
+	}
 }
 
 DECLARE_CLASS_MANUAL(o2::Ref<o2::ParticlesEmitterComponent>);

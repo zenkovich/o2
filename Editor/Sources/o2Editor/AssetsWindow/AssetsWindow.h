@@ -154,6 +154,9 @@ namespace Editor
 		// It is called when assets was rebuilt
 		void OnAssetsRebuilt(const Vector<UID>& changedAssets);
 
+		// Shows and highligh asset icon
+		void ShowAssetIcon(const String& folder, UID assetId);
+
 		// Copies asset folder recursively
 		void CopyAssetFolder(const String& src, const String& dst);
 
@@ -217,6 +220,7 @@ CLASS_METHODS_META(Editor::AssetsWindow)
 	PROTECTED_FUNCTION(void, OnMenuFilterPressed);
 	PROTECTED_FUNCTION(void, OnShowTreePressed);
 	PROTECTED_FUNCTION(void, OnAssetsRebuilt, const Vector<UID>&);
+	PROTECTED_FUNCTION(void, ShowAssetIcon, const String&, UID);
 	PROTECTED_FUNCTION(void, CopyAssetFolder, const String&, const String&);
 }
 END_META;

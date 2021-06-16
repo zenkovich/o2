@@ -710,13 +710,13 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
     template FieldBasics<thisclass, decltype(object->NAME)>(object, type, #NAME, (GetValuePointerFuncPtr)([](void* obj) { return (void*)&((thisclass*)obj)->NAME; }), object->NAME)
 
 #define PUBLIC() \
-	SetProtectSection(ProtectSection::Public)
+	SetProtectSection(o2::ProtectSection::Public)
 
 #define PRIVATE() \
-	SetProtectSection(ProtectSection::Private)
+	SetProtectSection(o2::ProtectSection::Private)
 
 #define PROTECTED() \
-	SetProtectSection(ProtectSection::Protected)
+	SetProtectSection(o2::ProtectSection::Protected)
 
 #define DEFAULT_VALUE \
 	SetDefaultValue
@@ -727,28 +727,28 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define ATTRIBUTES(...)
 
 #define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Public)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Public)
 
 #define PRIVATE_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Private)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Private)
 
 #define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
+    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Protected)
 
 #define STATIC_FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::PROTECT_SECTION)
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::PROTECT_SECTION)
 
 #define PUBLIC_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Public)
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Public)
 
 #define PRIVATE_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Private)
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Private)
 
 #define PROTECTED_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, ProtectSection::Protected)
+    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Protected)
 
 #define END_META }
 

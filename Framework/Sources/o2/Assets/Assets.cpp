@@ -339,7 +339,8 @@ namespace o2
 
 	void Assets::RebuildAssets(bool forcible /*= false*/)
 	{
-		ClearAssetsCache();
+		auto oldAssetsTrees = mAssetsTrees;
+		mAssetsTrees.Clear();
 
 		auto editorAssetsTree = mnew AssetsTree();
 		auto changedAssetsIds = mAssetsBuilder->BuildAssets(::GetEditorAssetsPath(), ::GetEditorBuiltAssetsPath(),
@@ -351,6 +352,27 @@ namespace o2
 
 		mAssetsTrees.Add(mMainAssetsTree);
 		mAssetsTrees.Add(editorAssetsTree);
+
+		auto cachedAssets = mCachedAssets;
+		for (auto cached : cachedAssets)
+		{
+			cached->asset->mInfo.tree = mAssetsTrees.FindOrDefault([&](AssetsTree* tree) { 
+				return tree->assetsPath == cached->asset->mInfo.tree->assetsPath;
+			});
+
+			if (changedAssetsIds.Contains(cached->asset->GetUID()))
+			{
+				auto fnd = mCachedAssetsByUID.find(cached->asset->GetUID());
+				if (fnd != mCachedAssetsByUID.end())
+					mCachedAssetsByUID.erase(fnd);
+
+				auto fnd2 = mCachedAssetsByPath.find(cached->asset->GetPath());
+				if (fnd2 != mCachedAssetsByPath.end())
+					mCachedAssetsByPath.erase(fnd2);
+			}
+		}
+
+		oldAssetsTrees.ForEach([](auto x) { delete x; });
 
 		onAssetsRebuilt(changedAssetsIds);
 	}
@@ -450,7 +472,6 @@ namespace o2
 				mCachedAssetsByPath.Remove((*it)->asset->GetPath());
 				mCachedAssetsByUID.Remove((*it)->asset->GetUID());
 
-				delete (*it)->asset;
 				delete* it;
 
 				it = mCachedAssets.erase(it);
@@ -518,12 +539,38 @@ namespace o2
 
 		if (cached) {
 			mCachedAssets.Remove(cached);
+			delete cached;
+		}
+	}
+
+	void Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
+	{
+		AssetCache* cached = nullptr;
+		auto fnd = mCachedAssetsByUID.find(oldUID);
+		if (fnd != mCachedAssetsByUID.end()) {
+			cached = fnd->second;
+			mCachedAssetsByUID.erase(fnd);
+		}
+
+		auto fnd2 = mCachedAssetsByPath.find(oldPath);
+		if (fnd2 != mCachedAssetsByPath.end()) {
+			cached = fnd2->second;
+			mCachedAssetsByPath.erase(fnd2);
+		}
+
+		if (cached)
+		{
+			mCachedAssetsByUID[asset->GetUID()] = cached;
+			mCachedAssetsByPath[asset->GetPath()] = cached;
 		}
 	}
 
 	Assets::AssetCache::~AssetCache()
 	{
-		delete asset;
+		Assert(referencesCount == 0, "Some references not removed for asset");
+
+		if (asset)
+			delete asset;
 	}
 
 }

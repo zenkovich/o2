@@ -187,11 +187,11 @@ namespace Editor
 		if (object)
 		{
 			SceneEditableObject* parent = (SceneEditableObject*)object;
-			return parent->GetEditablesChildren().Cast<void*>();
+			return parent->GetEditableChildren().Cast<void*>();
 		}
 
 		if (mWatchEditor)
-			return EditorUIRoot.GetRootWidget()->GetEditablesChildren().Cast<void*>();
+			return EditorUIRoot.GetRootWidget()->GetEditableChildren().Cast<void*>();
 
 		return o2Scene.GetRootActors().Convert<void*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });
 	}

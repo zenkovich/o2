@@ -19,5 +19,5 @@ namespace o2
 	};
 
 #define DEFAULT_TYPE_ATTRIBUTE(type) \
-    AddAttribute<DefaultTypeAttribute>(&TypeOf(type))
+    AddAttribute<o2::DefaultTypeAttribute>(&TypeOf(type))
 }

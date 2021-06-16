@@ -41,6 +41,12 @@ namespace o2
 
 		// It is called when object was deserialized
 		void OnDeserialized(const DataValue& node) override;
+
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 	};
 }
 
@@ -65,5 +71,7 @@ CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 	PROTECTED_FUNCTION(void, OnTransformUpdated);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

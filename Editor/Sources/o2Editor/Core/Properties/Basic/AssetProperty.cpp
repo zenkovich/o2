@@ -296,6 +296,7 @@ namespace Editor
 	void AssetProperty::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		o2UI.FocusWidget(mBox);
+
 		if (mCommonValue)
 			o2EditorAssets.ShowAssetIcon(mCommonValue->GetPath());
 	}

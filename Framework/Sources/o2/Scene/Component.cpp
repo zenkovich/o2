@@ -163,6 +163,16 @@ namespace o2
 		ActorRefResolver::OnComponentIdChanged(this, prevId);
 	}
 
+	void Component::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		OnSerialize(node);
+	}
+
+	void Component::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		OnDeserialized(node);
+	}
+
 	void Component::SetOwnerActor(Actor* actor)
 	{
 		if (mOwner == actor)
@@ -175,6 +185,16 @@ namespace o2
 
 		if (mOwner)
 			OnTransformUpdated();
+	}
+
+	void Component::OnAddToScene()
+	{
+		o2Scene.OnComponentAdded(this);
+	}
+
+	void Component::OnRemoveFromScene()
+	{
+		o2Scene.OnComponentRemoved(this);
 	}
 
 	void Component::FixedUpdate(float dt)

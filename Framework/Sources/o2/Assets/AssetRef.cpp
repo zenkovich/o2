@@ -33,8 +33,14 @@ namespace o2
 	AssetRef::AssetRef(Asset* instance)
 	{
 		mAssetPtr = instance;
-		mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
-		mAssetOwner = true;
+
+		if (instance)
+		{
+			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+			mAssetOwner = true;
+		}
+		else
+			mAssetOwner = false;
 	}
 
 	void AssetRef::OnSerialize(DataValue& node) const
@@ -83,6 +89,21 @@ namespace o2
 			*this = o2Assets.GetAssetRef((String)pathNode);
 			UpdateSpecAsset();
 		}
+	}
+
+	void AssetRef::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		OnSerialize(node);
+	}
+
+	void AssetRef::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		OnDeserialized(node);
+	}
+
+	bool AssetRef::IsDeltaAsSingleObject()
+	{
+		return true;
 	}
 
 	AssetRef::~AssetRef()

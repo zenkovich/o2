@@ -126,7 +126,8 @@ namespace Editor
 		Asset* mNewAsset = nullptr; // Temporary new asset. Used when creating new asset
 						        
 		AssetIcon*      mHighlightIcon = nullptr;   // Current highlighting asset icon
-		AnimationPlayer mHighlightAnim;             // Icon highlight animation @SERIALIZABLE
+		AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
+		AnimationPlayer mHighlightAnim;             // Icon highlight animation
 		Sprite*         mHighlightSprite = nullptr; // Icon highlight sprite @SERIALIZABLE
 		Layout          mHighlightLayout;           // Icon highlight sprite layout @SERIALIZABLE
 						        
@@ -368,7 +369,8 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 	FIELD().NAME(mSelectedPreloadedAssets).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mNewAsset).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mHighlightIcon).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightAnim).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mHighlighClip).PROTECTED();
+	FIELD().NAME(mHighlightAnim).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mHighlightSprite).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mHighlightLayout).PROTECTED();
 	FIELD().NAME(mIconsPool).PROTECTED();

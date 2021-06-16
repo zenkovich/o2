@@ -11,30 +11,76 @@ namespace o2
 	{
 		mActor->mIsAsset = true;
 		mActor->mAssetId = ID();
+		mOwnActor = true;
 	}
 
 	ActorAsset::ActorAsset(const ActorAsset& other):
-		AssetWithDefaultMeta<ActorAsset>(other), mActor(other.mActor->CloneAs<Actor>())
-	{}
+		AssetWithDefaultMeta<ActorAsset>(other)
+	{
+		if (other.mOwnActor)
+		{
+			mActor = other.mActor->CloneAs<Actor>();
+			mActor->mIsAsset = true;
+			mActor->mAssetId = ID();
+			mOwnActor = true;
+		}
+		else
+		{
+			mActor = other.mActor;
+			mOwnActor = false;
+		}
+	}
 
 	ActorAsset::ActorAsset(Actor* actor):
 		mActor(actor)
 	{
-		mActor->mIsAsset = true;
-		mActor->mAssetId = ID();
+		if (!actor->IsAsset())
+		{
+			mActor->RemoveFromScene();
+			mActor->mIsAsset = true;
+			mActor->mAssetId = ID();
+		}
+		else
+			ID() = mActor->mAssetId;
+
+		mOwnActor = false;
 	}
 
 	ActorAsset::~ActorAsset()
 	{
-		delete mActor;
+		if (mOwnActor)
+			delete mActor;
 	}
 
 	ActorAsset& ActorAsset::operator=(const ActorAsset& other)
 	{
 		Asset::operator=(other);
-		*mActor = *other.mActor;
+
+		if (mOwnActor)
+			delete mActor;
+		
+		if (other.mOwnActor)
+		{
+			mActor = other.mActor->CloneAs<Actor>();
+			mActor->mIsAsset = true;
+			mActor->mAssetId = ID();
+			mOwnActor = true;
+		}
+		else
+		{
+			mActor = other.mActor;
+			mOwnActor = false;
+		}
 
 		return *this;
+	}
+
+	ActorRef ActorAsset::Instantiate()
+	{
+		if (!mActor)
+			return nullptr;
+
+		return mActor->CloneAs<Actor>();
 	}
 
 	ActorAsset::Meta* ActorAsset::GetMeta() const
@@ -68,6 +114,7 @@ namespace o2
 			mActor->RemoveFromScene();
 			mActor->mIsAsset = true;
 			mActor->mAssetId = GetUID();
+			mOwnActor = true;
 		}
 	}
 
@@ -75,6 +122,28 @@ namespace o2
 	{
 		return mActor;
 	}
+
+	void ActorAsset::SetActor(Actor* actor, bool own /*= true*/)
+	{
+		if (mActor && mOwnActor)
+			delete mActor;
+
+		mActor = actor;
+		mOwnActor = own;
+
+		if (mActor)
+		{
+			if (!actor->IsAsset())
+			{
+				mActor->RemoveFromScene();
+				mActor->mIsAsset = true;
+				mActor->mAssetId = ID();
+			}
+			else
+				ID() = mActor->mAssetId;
+		}
+	}
+
 }
 
 DECLARE_CLASS_MANUAL(o2::AssetWithDefaultMeta<o2::ActorAsset>);

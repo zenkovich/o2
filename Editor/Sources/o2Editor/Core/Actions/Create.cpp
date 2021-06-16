@@ -35,7 +35,7 @@ namespace Editor
 
 		if (parent)
 		{
-			int insertIdx = parent->GetEditablesChildren().IndexOf(prevObject) + 1;
+			int insertIdx = parent->GetEditableChildren().IndexOf(prevObject) + 1;
 
 			objectsData.Get(objects);
 

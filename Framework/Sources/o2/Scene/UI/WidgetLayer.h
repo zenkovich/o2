@@ -33,10 +33,6 @@ namespace o2
 
 		ACCESSOR(WidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
-#if IS_EDITOR
-		PROPERTY(bool, locked, SetLocked, IsLocked); // Is locked property
-#endif 
-
 	public:
 		WidgetLayerLayout layout; // Drawable layout @SERIALIZABLE
 
@@ -59,6 +55,9 @@ namespace o2
 		// Returns pointer to owner widget
 		Widget* GetOwnerWidget() const;
 
+		// Returns link to prototype
+		const WidgetLayer* GetPrototypeLink() const;
+
 		// Sets layer drawable
 		void SetDrawable(IRectDrawable* drawable);
 
@@ -77,9 +76,6 @@ namespace o2
 		// Sets enabling of layer
 		void SetEnabled(bool enabled) override;
 
-		// Updates drawable and layout
-		void Update(float dt);
-
 		// Sets parent layer
 		void SetParent(WidgetLayer* parent);
 
@@ -90,16 +86,16 @@ namespace o2
 		WidgetLayer* AddChild(WidgetLayer* node);
 
 		// Remove child layer and releases him if needs
-		bool RemoveChild(WidgetLayer* node, bool release = true);
+		void RemoveChild(WidgetLayer* node, bool release = true);
 
 		// Removes and releases all children nodes
-		void RemoveAllChilds();
+		void RemoveAllChildren();
 
 		// Return child layers
-		Vector<WidgetLayer*>& GetChilds();
+		Vector<WidgetLayer*>& GetChildren();
 
 		// Returns constant child layers
-		const Vector<WidgetLayer*>& GetChilds() const;
+		const Vector<WidgetLayer*>& GetChildren() const;
 
 		// Adds child layer
 		WidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
@@ -141,7 +137,94 @@ namespace o2
 
 		SERIALIZABLE(WidgetLayer);
 
+	protected:
+		struct ICopyVisitor
+		{
+			virtual ~ICopyVisitor() {}
+			virtual void OnCopy(const WidgetLayer* source, WidgetLayer* target) = 0;
+		};
+
+		struct MakePrototypeCloneVisitor: public ICopyVisitor
+		{
+			void OnCopy(const WidgetLayer* source, WidgetLayer* target) override;
+		};
+
+		struct InstantiatePrototypeCloneVisitor: public ICopyVisitor
+		{
+			void OnCopy(const WidgetLayer* source, WidgetLayer* target) override;
+		};
+
+	protected:
+		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. Used when instantiating prefab
+
+		const WidgetLayer* mPrototypeLink = nullptr; // Linked prototype layer
+
+		IRectDrawable* mDrawable = nullptr; // Drawable @SERIALIZABLE
+
+		SceneUID mUID = Math::Random(); // Scene editor uid @SERIALIZABLE @IGNORE_DELTA_SEARCH
+
+		bool mEnabled = true; // Is layer enabled
+
+		float mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
+		float mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
+
+		float mDepth = 0.0f; // Depth of drawable @SERIALIZABLE
+
+		RectF mAbsolutePosition; // Result absolute drawable position
+		RectF mInteractableArea; // Interactable area, depends on interactableLayout
+
+		Widget* mOwnerWidget = nullptr; // Owner widget pointer 
+
+		WidgetLayer*         mParent = nullptr; // Pointer to parent layer 
+		Vector<WidgetLayer*> mChildren;         // Children layers
+
+		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
+
+	protected:
+		// Regular serializing without prototype
+		void SerializeRaw(DataValue& node) const;
+
+		// Regular deserializing without prototype
+		void DeserializeRaw(const DataValue& node);
+
+		// Regular serializing with prototype
+		void SerializeWithProto(DataValue& node) const;
+
+		// Regular deserializing with prototype
+		void DeserializeWithProto(const DataValue& node);
+
+		// Completion deserialization callback
+		void OnDeserialized(const DataValue& node) override;
+
+		// Completion deserialization delta callback
+		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
+
+		// Sets owner widget for this and children
+		void SetOwnerWidget(Widget* owner);
+
+		// It is called when layout was changed, calls owner widget layout updating
+		void OnLayoutChanged();
+
+		// Updates drawable rect, calling when widget's layout was changed
+		void UpdateLayout();
+
+		// It is called when transparency was changed and updates children transparencies
+		void UpdateResTransparency();
+
+		// It is called when owner widget including in scene. Registers editable object and it's children
+		void OnAddToScene();
+
+		// It is called when owner widget excluding in scene. Unregisters editable object and it's children
+		void OnRemoveFromScene();
+
+		// Returns dictionary with all child layers
+		Map<String, WidgetLayer*> GetAllChildLayers();
+
 #if IS_EDITOR
+	public:
+		PROPERTY(bool, locked, SetLocked, IsLocked); // Is locked property
+
+	public:
 		// Returns true when object is on scene
 		bool IsOnScene() const override;
 
@@ -157,8 +240,11 @@ namespace o2
 		// Sets name of object
 		void SetName(const String& name) override;
 
+		// Returns object's link to prototype
+		const SceneEditableObject* GetEditableLink() const override;
+
 		// Returns list of object's children
-		Vector<SceneEditableObject*> GetEditablesChildren() const override;
+		Vector<SceneEditableObject*> GetEditableChildren() const override;
 
 		// Returns object's parent object. Return nullptr when it is a root scene object
 		SceneEditableObject* GetEditableParent() const override;
@@ -229,91 +315,17 @@ namespace o2
 		// Completion deserialization callback
 		void DeserializeBasicOverride(const DataValue& node);
 
-#endif // IS_EDITOR
-
 	protected:
-		struct ICopyVisitor
-		{
-			virtual ~ICopyVisitor() {}
-			virtual void OnCopy(const WidgetLayer* source, WidgetLayer* target) = 0;
-		};
-
-		struct InstantiatePrototypeVisitor: ICopyVisitor
-		{
-			void OnCopy(const WidgetLayer* source, WidgetLayer* target) override;
-		};
-
-	protected:
-		mutable ICopyVisitor* mCopyVisitor = nullptr; // Copy visitor. Used when instantiating prefab
-
-		const WidgetLayer* mPrototypeLink = nullptr; // Linked prototype layer
-
-		IRectDrawable* mDrawable; // Drawable @SERIALIZABLE
-
-		SceneUID mUID = Math::Random(); // Scene editor uid @SERIALIZABLE
-
-		bool mEnabled = true; // Is layer enabled
-#if IS_EDITOR
 		bool mIsLocked = false; // Is locked
-#endif 
-
-		float mTransparency = 1.0f;    // Layer transparency @SERIALIZABLE
-		float mResTransparency = 1.0f; // Result drawable transparency, depends on parent transparency
-
-		float mDepth = 0.0f; // Depth of drawable @SERIALIZABLE
-
-		RectF mAbsolutePosition; // Result absolute drawable position
-		RectF mInteractableArea; // Interactable area, depends on interactableLayout
-
-		Widget* mOwnerWidget = nullptr; // Owner widget pointer 
-
-		WidgetLayer*         mParent = nullptr; // Pointer to parent layer 
-		Vector<WidgetLayer*> mChildren;         // Children layers
-
-		bool mUpdatingLayout = false; // It is true when updating layout now, prevents recursive layout updating 
 
 	protected:
-		// Regular serializing without prototype
-		void SerializeRaw(DataValue& node) const;
+		// It is called before making prototype from this object
+		void BeginMakePrototype() const override;
 
-		// Regular deserializing without prototype
-		void DeserializeRaw(const DataValue& node);
+		// It is called before instantiate from this object
+		void BeginInstantiatePrototype() const override;
 
-		// Regular serializing with prototype
-		void SerializeWithProto(DataValue& node) const;
-
-		// Regular deserializing with prototype
-		void DeserializeWithProto(const DataValue& node);
-
-		// Completion deserialization callback
-		void OnDeserialized(const DataValue& node) override;
-
-		// Completion deserialization delta callback
-		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
-
-		// Sets owner widget for this and children
-		void SetOwnerWidget(Widget* owner);
-
-		// It is called when added new child layer, sets his owner same as this owner and calls UpdateLayersDrawingSequence in owner
-		void OnChildAdded(WidgetLayer* child);
-
-		// It is called when layout was changed, calls onwer widget layout updating
-		void OnLayoutChanged();
-
-		// Updates drawable rect, calling when widget's layout was changed
-		void UpdateLayout();
-
-		// It is called when transparency was changed and updates children transparencies
-		void UpdateResTransparency();
-
-		// It is called when owner widget including in scene. Registers editable object and it's children
-		void OnIncludeInScene();
-
-		// It is called when owner widget excluding in scene. Unregisters editable object and it's children
-		void OnExcludeFromScene();
-
-		// Returns dictionary with all child layers
-		Map<String, WidgetLayer*> GetAllChildLayers();
+#endif // IS_EDITOR
 
 		friend class Widget;
 		friend class WidgetLayerLayout;
@@ -349,16 +361,13 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	FIELD().NAME(transparency).PUBLIC();
 	FIELD().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(drawable).PUBLIC();
 	FIELD().NAME(child).PUBLIC();
-	FIELD().NAME(locked).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(layout).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(name).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(interactableLayout).PUBLIC();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mDrawable).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Math::Random()).NAME(mUID).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDrawable).PROTECTED();
 	FIELD().DEFAULT_VALUE(true).NAME(mEnabled).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mIsLocked).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTransparency).PROTECTED();
 	FIELD().DEFAULT_VALUE(1.0f).NAME(mResTransparency).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDepth).PROTECTED();
@@ -368,6 +377,8 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mParent).PROTECTED();
 	FIELD().NAME(mChildren).PROTECTED();
 	FIELD().DEFAULT_VALUE(false).NAME(mUpdatingLayout).PROTECTED();
+	FIELD().NAME(locked).PUBLIC();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsLocked).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetLayer)
@@ -376,20 +387,20 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	typedef Map<String, WidgetLayer*> _tmp1;
 
 	PUBLIC_FUNCTION(Widget*, GetOwnerWidget);
+	PUBLIC_FUNCTION(const WidgetLayer*, GetPrototypeLink);
 	PUBLIC_FUNCTION(void, SetDrawable, IRectDrawable*);
 	PUBLIC_FUNCTION(IRectDrawable*, GetDrawable);
 	PUBLIC_FUNCTION(void, Draw);
 	PUBLIC_FUNCTION(bool, IsEnabled);
 	PUBLIC_FUNCTION(bool, IsEnabledInHierarchy);
 	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, SetParent, WidgetLayer*);
 	PUBLIC_FUNCTION(WidgetLayer*, GetParent);
 	PUBLIC_FUNCTION(WidgetLayer*, AddChild, WidgetLayer*);
-	PUBLIC_FUNCTION(bool, RemoveChild, WidgetLayer*, bool);
-	PUBLIC_FUNCTION(void, RemoveAllChilds);
-	PUBLIC_FUNCTION(Vector<WidgetLayer*>&, GetChilds);
-	PUBLIC_FUNCTION(const Vector<WidgetLayer*>&, GetChilds);
+	PUBLIC_FUNCTION(void, RemoveChild, WidgetLayer*, bool);
+	PUBLIC_FUNCTION(void, RemoveAllChildren);
+	PUBLIC_FUNCTION(Vector<WidgetLayer*>&, GetChildren);
+	PUBLIC_FUNCTION(const Vector<WidgetLayer*>&, GetChildren);
 	PUBLIC_FUNCTION(WidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
 	PUBLIC_FUNCTION(WidgetLayer*, GetChild, const String&);
 	PUBLIC_FUNCTION(WidgetLayer*, FindChild, const String&);
@@ -401,12 +412,26 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	PUBLIC_FUNCTION(float, GetResTransparency);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(const RectF&, GetRect);
+	PROTECTED_FUNCTION(void, SerializeRaw, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeRaw, const DataValue&);
+	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
+	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	PROTECTED_FUNCTION(void, SetOwnerWidget, Widget*);
+	PROTECTED_FUNCTION(void, OnLayoutChanged);
+	PROTECTED_FUNCTION(void, UpdateLayout);
+	PROTECTED_FUNCTION(void, UpdateResTransparency);
+	PROTECTED_FUNCTION(void, OnAddToScene);
+	PROTECTED_FUNCTION(void, OnRemoveFromScene);
+	PROTECTED_FUNCTION(_tmp1, GetAllChildLayers);
 	PUBLIC_FUNCTION(bool, IsOnScene);
 	PUBLIC_FUNCTION(SceneUID, GetID);
 	PUBLIC_FUNCTION(void, GenerateNewID, bool);
 	PUBLIC_FUNCTION(const String&, GetName);
 	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditablesChildren);
+	PUBLIC_FUNCTION(const SceneEditableObject*, GetEditableLink);
+	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetEditableChildren);
 	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableParent);
 	PUBLIC_FUNCTION(void, SetEditableParent, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, AddEditableChild, SceneEditableObject*, int);
@@ -430,19 +455,7 @@ CLASS_METHODS_META(o2::WidgetLayer)
 	PUBLIC_FUNCTION(void, OnChanged);
 	PUBLIC_FUNCTION(void, SerializeBasicOverride, DataValue&);
 	PUBLIC_FUNCTION(void, DeserializeBasicOverride, const DataValue&);
-	PROTECTED_FUNCTION(void, SerializeRaw, DataValue&);
-	PROTECTED_FUNCTION(void, DeserializeRaw, const DataValue&);
-	PROTECTED_FUNCTION(void, SerializeWithProto, DataValue&);
-	PROTECTED_FUNCTION(void, DeserializeWithProto, const DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, SetOwnerWidget, Widget*);
-	PROTECTED_FUNCTION(void, OnChildAdded, WidgetLayer*);
-	PROTECTED_FUNCTION(void, OnLayoutChanged);
-	PROTECTED_FUNCTION(void, UpdateLayout);
-	PROTECTED_FUNCTION(void, UpdateResTransparency);
-	PROTECTED_FUNCTION(void, OnIncludeInScene);
-	PROTECTED_FUNCTION(void, OnExcludeFromScene);
-	PROTECTED_FUNCTION(_tmp1, GetAllChildLayers);
+	PROTECTED_FUNCTION(void, BeginMakePrototype);
+	PROTECTED_FUNCTION(void, BeginInstantiatePrototype);
 }
 END_META;

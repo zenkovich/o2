@@ -34,11 +34,25 @@ namespace o2
 	void DrawableComponent::OnSerialize(DataValue& node) const
 	{
 		Component::OnSerialize(node);
+		ISceneDrawable::OnSerialize(node);
 	}
 
 	void DrawableComponent::OnDeserialized(const DataValue& node)
 	{
 		Component::OnDeserialized(node);
+		ISceneDrawable::OnDeserialized(node);
+	}
+
+	void DrawableComponent::OnSerializeDelta(DataValue& node, const IObject& origin) const
+	{
+		Component::OnSerializeDelta(node, origin);
+		ISceneDrawable::OnSerializeDelta(node, origin);
+	}
+
+	void DrawableComponent::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		Component::OnDeserializedDelta(node, origin);
+		ISceneDrawable::OnDeserializedDelta(node, origin);
 	}
 
 	void DrawableComponent::UpdateEnabled()

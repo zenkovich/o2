@@ -128,6 +128,9 @@ namespace o2
 		// Returns main tree
 		const AssetsTree& GetAssetsTree() const;
 
+		// Checks assets with zero references and removes them
+		void CheckAssetsUnload();
+
 		// Makes unique asset name from first path variant
 		String MakeUniqueAssetName(const String& path);
 
@@ -160,9 +163,6 @@ namespace o2
 		// Initializes types extensions dictionary
 		void LoadAssetTypes();
 
-		// Checks assets with zero references and removes them
-		void CheckAssetsUnload();
-
 		// Returns asset cache by path
 		AssetCache* FindAssetCache(const String& path);
 
@@ -177,6 +177,9 @@ namespace o2
 
 		// Removes asset from cache by UID and path
 		void RemoveAssetCache(Asset* asset);
+
+		// Updates asset chached path and id
+		void UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
 
 		// Removes asset by info
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);

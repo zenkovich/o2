@@ -290,7 +290,7 @@ namespace Editor
 		if (object->GetName().CountOf(searchStr) > 0)
 			mSearchObjects.Add(object);
 
-		for (auto child : object->GetEditablesChildren())
+		for (auto child : object->GetEditableChildren())
 			SearchObjectsRecursive(child, searchStr);
 	}
 
@@ -334,7 +334,7 @@ namespace Editor
 			SceneEditableObject* parentObject = obj;
 			parentObject->AddEditableChild(newObject);
 
-			auto parentChilds = parentObject->GetEditablesChildren();
+			auto parentChilds = parentObject->GetEditableChildren();
 			auto action = mnew CreateAction({ newObject }, parentObject,
 											parentChilds.Count() > 1 ? parentChilds[parentChilds.Count() - 2] : nullptr);
 
@@ -405,7 +405,7 @@ namespace Editor
 		auto selectedObjects = mSceneTree->GetSelectedObjects();
 
 		SceneEditableObject* parent = selectedObjects.Count() > 0 ? selectedObjects.Last() : nullptr;
-		auto parentChilds = parent ? parent->GetEditablesChildren() : o2Scene.GetRootEditableObjects();
+		auto parentChilds = parent ? parent->GetEditableChildren() : o2Scene.GetRootEditableObjects();
 		SceneEditableObject* prevObject = parentChilds.Count() > 0 ? parentChilds.Last() : nullptr;
 
 		WString clipboardData = Clipboard::GetText();

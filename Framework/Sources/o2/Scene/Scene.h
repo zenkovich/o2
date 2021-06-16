@@ -238,6 +238,7 @@ namespace o2
 		friend class ActorRef;
 		friend class Application;
 		friend class CameraActor;
+		friend class Component;
 		friend class ComponentRef;
 		friend class DrawableComponent;
 		friend class SceneLayer;
@@ -249,11 +250,11 @@ namespace o2
 		// Returns root editable objects
 		Vector<SceneEditableObject*> GetRootEditableObjects();
 
-		// Registers editable object
-		void RegEditableObject(SceneEditableObject* object);
+		// Adds editable object to scene
+		void AddEditableObjectToScene(SceneEditableObject* object);
 
-		// Removes object from registered list
-		void UnregEditableObject(SceneEditableObject* object);
+		// Removes object from scene
+		void RemoveEditableObjectFromScene(SceneEditableObject* object);
 
 		// Removes object at end of frame
 		void DestroyEditableObject(SceneEditableObject* object);
@@ -290,10 +291,10 @@ namespace o2
 		void EndDrawingScene();
 
 		// It is called when object was created
-		void OnObjectCreated(SceneEditableObject* object);
+		void OnObjectAddToScene(SceneEditableObject* object);
 
 		// It is called when object is destroying
-		void OnObjectDestroyed(SceneEditableObject* object);
+		void OnObjectRemoveFromScene(SceneEditableObject* object);
 
 		// It is called when object was changed
 		void OnObjectChanged(SceneEditableObject* object);
@@ -462,8 +463,8 @@ CLASS_METHODS_META(o2::Scene)
 	PROTECTED_FUNCTION(void, OnCameraAddedOnScene, CameraActor*);
 	PROTECTED_FUNCTION(void, OnCameraRemovedScene, CameraActor*);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
-	PUBLIC_FUNCTION(void, RegEditableObject, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, UnregEditableObject, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, AddEditableObjectToScene, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, RemoveEditableObjectFromScene, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, DestroyEditableObject, SceneEditableObject*);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetAllEditableObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetChangedObjects);
@@ -475,8 +476,8 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(_tmp2, GetPrototypesLinksCache);
 	PUBLIC_FUNCTION(void, BeginDrawingScene);
 	PUBLIC_FUNCTION(void, EndDrawingScene);
-	PUBLIC_FUNCTION(void, OnObjectCreated, SceneEditableObject*);
-	PUBLIC_FUNCTION(void, OnObjectDestroyed, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, OnObjectAddToScene, SceneEditableObject*);
+	PUBLIC_FUNCTION(void, OnObjectRemoveFromScene, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, OnObjectChanged, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, OnObjectDrawn, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, OnActorWithPrototypeCreated, Actor*);

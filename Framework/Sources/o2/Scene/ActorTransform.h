@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Utils/Editor/Attributes/PrototypeDeltaSearchAttribute.h"
 #include "o2/Utils/Math/Transform.h"
 #include "o2/Utils/Math/Vector2.h"
 
@@ -417,7 +418,7 @@ namespace o2
 		SERIALIZABLE(ActorTransform);
 
 	protected:
-		ActorTransformData* mData; // Data container. Will be stored in optimized storage @SERIALIZABLE
+		ActorTransformData* mData; // Data container. Will be stored in optimized storage @DELTA_SEARCH
 
 	protected:
 		// Actor transform constructor with specified data
@@ -444,8 +445,14 @@ namespace o2
 		// Check parentInvertedTransform for actual
 		void CheckParentInvTransform();
 
+		// Beginning serialization callback, writes data
+		void OnSerialize(DataValue& node) const override;
+
 		// It is called when object was deserialized, reads data
 		void OnDeserialized(const DataValue& node) override;
+
+		// Beginning serialization delta callback
+		void OnSerializeDelta(DataValue& node, const IObject& origin) const override;
 
 		// Completion deserialization delta callback
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
@@ -463,12 +470,12 @@ namespace o2
 		int dirtyFrame = 1;  // Frame index, when layout was marked as dirty
 		int updateFrame = 1; // Frame index, when layout was updated
 
-		Vec2F position;            // Position @SERIALIZABLE
-		Vec2F size;                // Size @SERIALIZABLE
-		Vec2F scale = Vec2F(1, 1); // Scale, (1, 1) is default @SERIALIZABLE
-		Vec2F pivot;               // Pivot: (0, 0) is left bottom corner - (1, 1) is right top corner @SERIALIZABLE
-		float angle = 0.0f;        // Rotation angle in radians @SERIALIZABLE
-		float shear = 0.0f;        // Shear @SERIALIZABLE
+		Vec2F position;            // Position @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		Vec2F size;                // Size @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		Vec2F scale = Vec2F(1, 1); // Scale, (1, 1) is default @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		Vec2F pivot;               // Pivot: (0, 0) is left bottom corner - (1, 1) is right top corner @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		float angle = 0.0f;        // Rotation angle in radians @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
+		float shear = 0.0f;        // Shear @SERIALIZABLE @SERIALIZE_IF(IsSerializeEnabled)
 
 		RectF rectangle;              // The rectangle in local space
 		RectF parentRectangle;        // The parent rectangle
@@ -488,6 +495,9 @@ namespace o2
 		Actor* owner = nullptr; // Owner actor 
 
 		SERIALIZABLE(ActorTransformData);
+
+		// Returns is serialize enabled; used to turn off fields serialization
+		virtual bool IsSerializeEnabled() const;
 	};
 }
 
@@ -547,7 +557,7 @@ CLASS_FIELDS_META(o2::ActorTransform)
 	FIELD().NAME(worldBottom).PUBLIC();
 	FIELD().NAME(worldRect).PUBLIC();
 	FIELD().NAME(worldAABB).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mData).PROTECTED();
+	FIELD().DELTA_SEARCH_ATTRIBUTE().NAME(mData).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::ActorTransform)
@@ -665,7 +675,9 @@ CLASS_METHODS_META(o2::ActorTransform)
 	PROTECTED_FUNCTION(void, UpdateTransform);
 	PROTECTED_FUNCTION(void, UpdateRectangle);
 	PROTECTED_FUNCTION(void, CheckParentInvTransform);
+	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
 	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
 	PROTECTED_FUNCTION(Vec2F, GetParentPosition);
 }
@@ -680,12 +692,12 @@ CLASS_FIELDS_META(o2::ActorTransformData)
 {
 	FIELD().DEFAULT_VALUE(1).NAME(dirtyFrame).PUBLIC();
 	FIELD().DEFAULT_VALUE(1).NAME(updateFrame).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(position).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(size).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(scale).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(pivot).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(angle).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(shear).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(position).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(size).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).DEFAULT_VALUE(Vec2F(1, 1)).NAME(scale).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(pivot).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).DEFAULT_VALUE(0.0f).NAME(angle).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).DEFAULT_VALUE(0.0f).NAME(shear).PUBLIC();
 	FIELD().NAME(rectangle).PUBLIC();
 	FIELD().NAME(parentRectangle).PUBLIC();
 	FIELD().NAME(parentRectangePosition).PUBLIC();
@@ -702,5 +714,7 @@ CLASS_FIELDS_META(o2::ActorTransformData)
 END_META;
 CLASS_METHODS_META(o2::ActorTransformData)
 {
+
+	PUBLIC_FUNCTION(bool, IsSerializeEnabled);
 }
 END_META;

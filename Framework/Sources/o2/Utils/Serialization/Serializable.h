@@ -420,8 +420,15 @@ namespace o2
 	// ----------------------------------
 	// Serialize with condition attribute
 	// ----------------------------------
+	class ISerializeIfAttribute: public IAttribute
+	{
+	public:
+		virtual bool Invoke(const void* object) const = 0;
+	};
+
+
 	template<typename _class>
-	class SerializeIfAttribute: public IAttribute
+	class SerializeIfAttribute: public ISerializeIfAttribute
 	{
 		ATTRIBUTE_COMMENT_DEFINITION("SERIALIZE_IF");
 		ATTRIBUTE_SHORT_DEFINITION("SERIALIZE_IF_ATTRIBUTE");
@@ -432,6 +439,7 @@ namespace o2
 		SerializeIfAttribute(bool(_class::*functionPtr)() const): functionPtr(functionPtr) {}
 
 		bool Invoke(const _class* object) const { return (object->*functionPtr)(); }
+		bool Invoke(const void* object) const override { return Invoke((_class*)object); }
 
 	public:
 		static constexpr bool hasSerializeFieldProcessor = true;
@@ -531,76 +539,76 @@ namespace o2
 	};
 
 #define SERIALIZABLE_ATTRIBUTE() \
-    AddAttribute<SerializableAttribute>()
+    AddAttribute<o2::SerializableAttribute>()
 
 #define SERIALIZE_IF_ATTRIBUTE(FUNC) \
-    AddAttribute<SerializeIfAttribute<thisclass>>(&thisclass::FUNC)
+    AddAttribute<o2::SerializeIfAttribute<thisclass>>(&thisclass::FUNC)
 
 	// Serialization implementation macros
-#define SERIALIZABLE_MAIN(CLASS)  							                                                                       \
-    IOBJECT_MAIN(CLASS)																							                   \
-                                                                                                                                   \
-	template<typename _type, typename _enable>       															                   \
-	friend struct CheckSerializeBasicOverridden;                                                                                   \
-	                                                                                                                               \
-	template<typename _type, typename _enable>       															                   \
-	friend struct CheckDeserializeBasicOverridden;																                   \
-                                                                                                                                   \
-	template<typename _type, typename _enable>       															                   \
-	friend struct CheckSerializeDeltaBasicOverridden;                                                                              \
-	                                                                                                                               \
-	template<typename _type, typename _enable>       															                   \
-	friend struct CheckDeserializeDeltaBasicOverridden;																               \
-                                                                                                                                   \
-    void SerializeBasic(o2::DataValue& node) const override                                                                        \
-    {						                                                                                                       \
-    	SerializeTypeProcessor processor(node);                                                                                    \
-		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                   \
-		ProcessFields(const_cast<CLASS*>(this), processor);														                   \
-	}	                                                                                                                           \
-    void Serialize(o2::DataValue& node) const override                                                                             \
-    {						                                                                                                       \
-		CheckSerializeBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), node);                                             \
-	}	                                                                                                                           \
-    void DeserializeBasic(const o2::DataValue& node) override                                                                      \
-    {												                                                                               \
-    	DeserializeTypeProcessor processor(node);                                                                                  \
-		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                   \
-		ProcessFields(const_cast<CLASS*>(this), processor);														                   \
-	}																											                   \
-    void Deserialize(const o2::DataValue& node) override                                                                           \
-    {												                                                                               \
-		CheckDeserializeBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), node);                                           \
-	}												                                                                               \
-    void SerializeDeltaBasic(o2::DataValue& node, const IObject& origin) const override                                            \
-    {						                                                                                                       \
-    	SerializeDeltaTypeProcessor<CLASS> processor(node, dynamic_cast<const CLASS&>(origin));                                    \
-		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                   \
-		ProcessFields(const_cast<CLASS*>(this), processor);														                   \
-	}	                                                                                                                           \
-    void SerializeDelta(o2::DataValue& node, const IObject& origin) const override                                                 \
-    {						                                                                                                       \
-		CheckSerializeDeltaBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), dynamic_cast<const CLASS*>(&origin), node);   \
-	}	                                                                                                                           \
-    void DeserializeDeltaBasic(const o2::DataValue& node, const IObject& origin) override                                          \
-    {												                                                                               \
-    	DeserializeDeltaTypeProcessor<CLASS> processor(node, dynamic_cast<const CLASS&>(origin));                                  \
-    	ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                   \
-    	ProcessFields(const_cast<CLASS*>(this), processor);														                   \
-	}																											                   \
-    void DeserializeDelta(const o2::DataValue& node, const IObject& origin) override                                               \
-    {												                                                                               \
-		CheckDeserializeDeltaBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), dynamic_cast<const CLASS*>(&origin), node); \
-	}												                                                                               \
-	CLASS& operator=(const o2::DataValue& node) 		                                                                           \
-	{												                                                                               \
-		Deserialize(node); return *this; 			                                                                               \
-	}                                                                                                                              \
-	operator DataDocument() const                                                                                                  \
-	{                																							                   \
-		DataDocument doc;																						                   \
-		Serialize(doc);																							                   \
-		return doc;                                                                                                                \
+#define SERIALIZABLE_MAIN(CLASS)  							                                                                           \
+    IOBJECT_MAIN(CLASS)																							                       \
+                                                                                                                                       \
+	template<typename _type, typename _enable>       															                       \
+	friend struct o2::CheckSerializeBasicOverridden;                                                                                   \
+	                                                                                                                                   \
+	template<typename _type, typename _enable>       															                       \
+	friend struct o2::CheckDeserializeBasicOverridden;																                   \
+                                                                                                                                       \
+	template<typename _type, typename _enable>       															                       \
+	friend struct o2::CheckSerializeDeltaBasicOverridden;                                                                              \
+	                                                                                                                                   \
+	template<typename _type, typename _enable>       															                       \
+	friend struct o2::CheckDeserializeDeltaBasicOverridden;																               \
+                                                                                                                                       \
+    void SerializeBasic(o2::DataValue& node) const override                                                                            \
+    {						                                                                                                           \
+    	o2::SerializeTypeProcessor processor(node);                                                                                    \
+		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                       \
+		ProcessFields(const_cast<CLASS*>(this), processor);														                       \
+	}	                                                                                                                               \
+    void Serialize(o2::DataValue& node) const override                                                                                 \
+    {						                                                                                                           \
+		o2::CheckSerializeBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), node);                                             \
+	}	                                                                                                                               \
+    void DeserializeBasic(const o2::DataValue& node) override                                                                          \
+    {												                                                                                   \
+    	o2::DeserializeTypeProcessor processor(node);                                                                                  \
+		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                       \
+		ProcessFields(const_cast<CLASS*>(this), processor);														                       \
+	}																											                       \
+    void Deserialize(const o2::DataValue& node) override                                                                               \
+    {												                                                                                   \
+		o2::CheckDeserializeBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), node);                                           \
+	}												                                                                                   \
+    void SerializeDeltaBasic(o2::DataValue& node, const o2::IObject& origin) const override                                            \
+    {						                                                                                                           \
+    	o2::SerializeDeltaTypeProcessor<CLASS> processor(node, dynamic_cast<const CLASS&>(origin));                                    \
+		ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                       \
+		ProcessFields(const_cast<CLASS*>(this), processor);														                       \
+	}	                                                                                                                               \
+    void SerializeDelta(o2::DataValue& node, const o2::IObject& origin) const override                                                 \
+    {						                                                                                                           \
+		o2::CheckSerializeDeltaBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), dynamic_cast<const CLASS*>(&origin), node);   \
+	}	                                                                                                                               \
+    void DeserializeDeltaBasic(const o2::DataValue& node, const o2::IObject& origin) override                                          \
+    {												                                                                                   \
+    	o2::DeserializeDeltaTypeProcessor<CLASS> processor(node, dynamic_cast<const CLASS&>(origin));                                  \
+    	ProcessBaseTypes(const_cast<CLASS*>(this), processor);													                       \
+    	ProcessFields(const_cast<CLASS*>(this), processor);														                       \
+	}																											                       \
+    void DeserializeDelta(const o2::DataValue& node, const o2::IObject& origin) override                                               \
+    {												                                                                                   \
+		o2::CheckDeserializeDeltaBasicOverridden<CLASS>::Process(const_cast<CLASS*>(this), dynamic_cast<const CLASS*>(&origin), node); \
+	}												                                                                                   \
+	CLASS& operator=(const o2::DataValue& node) 		                                                                               \
+	{												                                                                                   \
+		Deserialize(node); return *this; 			                                                                                   \
+	}                                                                                                                                  \
+	operator o2::DataDocument() const                                                                                                  \
+	{                																							                       \
+		o2::DataDocument doc;																						                   \
+		Serialize(doc);																							                       \
+		return doc;                                                                                                                    \
 	}
 
 #define SERIALIZABLE(CLASS)                                                                                     \

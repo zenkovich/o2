@@ -1,4 +1,5 @@
 #pragma once
+#include "o2/Utils/Reflection/Enum.h"
 
 namespace o2
 {

@@ -54,7 +54,7 @@ namespace o2
 			}
 		}
 
-		meta = other.meta;
+		meta = other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr;
 		path = other.path;
 		editTime = other.editTime;
 		tree = other.tree;

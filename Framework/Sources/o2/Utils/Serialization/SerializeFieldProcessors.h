@@ -301,7 +301,7 @@ namespace o2
 				if constexpr (HasAttributeDeserializeProcessor<_attribute_type>::value)
 					return _attribute_type::DeserializeDeltaFieldProcessor<_base>(base, args ...);
 				else
-					return *this;
+					return base;
 			}
 
 			template<typename _attribute_type, typename ... _args>

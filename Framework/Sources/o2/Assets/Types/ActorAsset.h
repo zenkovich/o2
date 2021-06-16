@@ -1,7 +1,7 @@
 #pragma once
-
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetRef.h"
+#include "o2/Scene/ActorRef.h"
 
 namespace o2
 {
@@ -28,11 +28,17 @@ namespace o2
 		// Check equals operator
 		ActorAsset& operator=(const ActorAsset& asset);
 
+		// Instantiates actor toscene
+		ActorRef Instantiate();
+
 		// Returns meta information
 		Meta* GetMeta() const;
 
 		// Returns actor
 		Actor* GetActor() const;
+
+		// Sets actor
+		void SetActor(Actor* actor, bool own = true);
 
 		// Returns extensions string
 		static const char* GetFileExtensions();
@@ -49,7 +55,8 @@ namespace o2
 		SERIALIZABLE(ActorAsset);
 
 	protected:
-		Actor* mActor; // Asset data 
+		Actor* mActor = nullptr;  // Asset data 
+		bool   mOwnActor = false; // Is asset owns this actor
 
 	protected:
 		// Beginning serialization callback
@@ -71,14 +78,17 @@ CLASS_BASES_META(o2::ActorAsset)
 END_META;
 CLASS_FIELDS_META(o2::ActorAsset)
 {
-	FIELD().NAME(mActor).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mActor).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mOwnActor).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::ActorAsset)
 {
 
+	PUBLIC_FUNCTION(ActorRef, Instantiate);
 	PUBLIC_FUNCTION(Meta*, GetMeta);
 	PUBLIC_FUNCTION(Actor*, GetActor);
+	PUBLIC_FUNCTION(void, SetActor, Actor*, bool);
 	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);

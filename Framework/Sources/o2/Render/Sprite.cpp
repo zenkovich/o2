@@ -1128,20 +1128,15 @@ namespace o2
 			mImageAsset     = image;
 			mTextureSrcRect = mImageAsset->GetAtlasRect();
 		}
-		else
-		{
-			if (auto textureFileNameNode = node.FindMember("textureFileName"))
-				mMesh->SetTexture(TextureRef(*textureFileNameNode));
-			else
-				mMesh->SetTexture(NoTexture());
-
-			if (auto textureSrcRectNode = node.FindMember("mTextureSrcRect"))
-				mTextureSrcRect = *textureSrcRectNode;
-		}
 
 		SpriteMode mode = mMode;
 		mMode = (SpriteMode)((int)mode + 1);
 		SetMode(mode);
+	}
+
+	void Sprite::OnDeserializedDelta(const DataValue& node, const IObject& origin)
+	{
+		OnDeserialized(node);
 	}
 
 	void Sprite::ReloadImage()
