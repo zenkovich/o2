@@ -105,8 +105,8 @@ namespace o2
 	void Application::DeinitializeSystems()
 	{
 		delete mUIManager;
-		delete mPhysics;
 		delete mScene;
+		delete mPhysics;
 		delete mRender;
 		delete mInput;
 		delete mTime;

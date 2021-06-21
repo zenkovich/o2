@@ -195,6 +195,9 @@ namespace o2
 		// Destructor
 		~Scene();
 
+		// Draws cameras
+		void DrawCameras(bool callOnDrawnLayer);
+
 		// Updates root actors and their children
 		void UpdateActors(float dt);
 
@@ -247,6 +250,9 @@ namespace o2
 
 #if IS_EDITOR	  	
 	public:
+		// Draws scene, but not draws
+		void DrawWithouLayers();
+
 		// Returns root editable objects
 		Vector<SceneEditableObject*> GetRootEditableObjects();
 
@@ -449,6 +455,7 @@ CLASS_METHODS_META(o2::Scene)
 	PUBLIC_FUNCTION(void, UpdateDestroyingEntities);
 	PUBLIC_FUNCTION(void, DestroyActor, Actor*);
 	PUBLIC_FUNCTION(void, DestroyComponent, Component*);
+	PROTECTED_FUNCTION(void, DrawCameras, bool);
 	PROTECTED_FUNCTION(void, UpdateActors, float);
 	PROTECTED_FUNCTION(void, UpdateAddedEntities);
 	PROTECTED_FUNCTION(void, UpdateStartingEntities);
@@ -462,6 +469,7 @@ CLASS_METHODS_META(o2::Scene)
 	PROTECTED_FUNCTION(void, OnLayerRenamed, SceneLayer*, const String&);
 	PROTECTED_FUNCTION(void, OnCameraAddedOnScene, CameraActor*);
 	PROTECTED_FUNCTION(void, OnCameraRemovedScene, CameraActor*);
+	PUBLIC_FUNCTION(void, DrawWithouLayers);
 	PUBLIC_FUNCTION(Vector<SceneEditableObject*>, GetRootEditableObjects);
 	PUBLIC_FUNCTION(void, AddEditableObjectToScene, SceneEditableObject*);
 	PUBLIC_FUNCTION(void, RemoveEditableObjectFromScene, SceneEditableObject*);

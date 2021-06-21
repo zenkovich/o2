@@ -125,6 +125,16 @@ namespace o2
 			o2Assets.RebuildAssets();
 	}
 
+	void Asset::SetDirty(bool dirty /*= true*/)
+	{
+		mDirty = dirty;
+	}
+
+	bool Asset::IsDirty() const
+	{
+		return mDirty;
+	}
+
 	const char* Asset::GetFileExtensions()
 	{
 		return "";

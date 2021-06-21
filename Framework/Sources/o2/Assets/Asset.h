@@ -66,6 +66,12 @@ namespace o2
 		// Saves asset
 		void Save(bool rebuildAssetsImmediately = true);
 
+		// Sets asset dirty
+		void SetDirty(bool dirty = true);
+
+		// Returns is asset dirty
+		bool IsDirty() const;
+
 		// Returns extensions string (something like "ext1 ext2 ent asf")
 		static const char* GetFileExtensions();
 
@@ -87,6 +93,8 @@ namespace o2
 		PROPERTY(AssetMeta*, mMeta, SetMeta, GetMeta); // @EDITOR_PROPERTY @DONT_DELETE @EXPANDED_BY_DEFAULT @NO_HEADER
 
 		AssetInfo mInfo; // Asset info 
+
+		bool mDirty = false; // Is asset was changed
 
 	private:
 		// Hidden default constructor
@@ -166,6 +174,7 @@ CLASS_FIELDS_META(o2::Asset)
 	FIELD().NAME(meta).PUBLIC();
 	FIELD().DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mMeta).PUBLIC();
 	FIELD().NAME(mInfo).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mDirty).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Asset)
@@ -182,6 +191,8 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(void, Load, const UID&);
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
 	PUBLIC_FUNCTION(void, Save, bool);
+	PUBLIC_FUNCTION(void, SetDirty, bool);
+	PUBLIC_FUNCTION(bool, IsDirty);
 	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);

@@ -46,15 +46,17 @@ namespace o2
 		// Sets platform
 		void SetPlatform(Platform platform);
 
+		// Save config to file
+		void Save() const;
+
+		// Loads config file
+		void Load();
+
 		SERIALIZABLE(ProjectConfig);
 
 	protected:
 		String   mProjectName; // Current project name @SERIALIZABLE
 		Platform mPlatform;    // Current project target platform
-
-	protected:
-		// Initializes config by default
-		void InitializeDefault(const String& configFilePath);
 
 		friend class AssetBuildSystem;
 		friend class Application;
@@ -83,6 +85,7 @@ CLASS_METHODS_META(o2::ProjectConfig)
 	PUBLIC_FUNCTION(void, SetProjectName, const String&);
 	PUBLIC_FUNCTION(Platform, GetPlatform);
 	PUBLIC_FUNCTION(void, SetPlatform, Platform);
-	PROTECTED_FUNCTION(void, InitializeDefault, const String&);
+	PUBLIC_FUNCTION(void, Save);
+	PUBLIC_FUNCTION(void, Load);
 }
 END_META;

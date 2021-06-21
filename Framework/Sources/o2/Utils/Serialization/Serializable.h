@@ -75,6 +75,7 @@ namespace o2
 
 		static void Write(const T& value, DataValue& data)
 		{
+			data.SetObject();
 			value.Serialize(data);
 		}
 

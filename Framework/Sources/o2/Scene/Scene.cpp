@@ -143,7 +143,13 @@ namespace o2
 	}
 
 #undef DrawText
+
 	void Scene::Draw()
+	{
+		DrawCameras(true);
+	}
+
+	void Scene::DrawCameras(bool callOnDrawnLayer)
 	{
 		if constexpr (IS_EDITOR)
 			BeginDrawingScene();
@@ -165,7 +171,10 @@ namespace o2
 		else
 		{
 			for (auto camera : mCameras)
+			{
 				camera->SetupAndDraw();
+				camera->listenersLayer.OnDrawn(Camera().GetBasis());
+			}
 		}
 
 		DrawCursorDebugInfo();
@@ -173,8 +182,6 @@ namespace o2
 		if constexpr (IS_EDITOR)
 			EndDrawingScene();
 	}
-
-#undef DrawText
 
 	void Scene::DrawCursorDebugInfo()
 	{
@@ -591,6 +598,11 @@ namespace o2
 	}
 
 #if IS_EDITOR
+	void Scene::DrawWithouLayers()
+	{
+		DrawCameras(false);
+	}
+
 	Vector<SceneEditableObject*> Scene::GetRootEditableObjects()
 	{
 		return mRootActors.Convert<SceneEditableObject*>([](Actor* x) { return dynamic_cast<SceneEditableObject*>(x); });

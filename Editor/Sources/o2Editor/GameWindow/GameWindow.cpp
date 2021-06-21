@@ -149,7 +149,7 @@ namespace Editor
 		int editorDepth = EditorScope::GetDepth();
 		EditorScope::Exit(editorDepth);
 
-		o2Scene.Draw();
+		o2Scene.DrawWithouLayers();
 
 		if (!o2Scene.GetCameras().IsEmpty() && o2Input.IsKeyDown(VK_F1))
 		{

@@ -344,7 +344,7 @@ namespace Editor
 				targets = mSelectedPreloadedAssets.DynamicCast<IObject*>();
 
 			if (!targets.IsEmpty())
-				o2EditorPropertiesWindow.SetTargets(targets, THIS_FUNC(CheckPreloadedAssetsSaving));
+				o2EditorPropertiesWindow.SetTargets(targets, THIS_FUNC(OnAssetsPropertiesChanged));
 
 			mChangePropertiesTargetsFromThis = false;
 		}
@@ -976,6 +976,14 @@ namespace Editor
 	Actor* AssetsIconsScrollArea::InstantiateAsset(const ActorAssetRef& asset)
 	{
 		return asset->GetActor()->CloneAs<Actor>();
+	}
+
+	void AssetsIconsScrollArea::OnAssetsPropertiesChanged()
+	{
+		for (auto asset : mSelectedPreloadedAssets)
+			(*asset)->SetDirty();
+
+		CheckPreloadedAssetsSaving();
 	}
 
 	void AssetsIconsScrollArea::CheckPreloadedAssetsSaving()

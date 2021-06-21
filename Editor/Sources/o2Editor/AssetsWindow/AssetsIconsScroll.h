@@ -278,6 +278,9 @@ namespace Editor
 		// Instantiate actor from actor asset
 		Actor* InstantiateAsset(const ActorAssetRef& asset);
 
+		// It is called when assets was changed from properties
+		void OnAssetsPropertiesChanged();
+
 		// Checks preloaded assets for saving
 		void CheckPreloadedAssetsSaving();
 		
@@ -451,6 +454,7 @@ CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const AssetInfo&);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ImageAssetRef&);
 	PROTECTED_FUNCTION(Actor*, InstantiateAsset, const ActorAssetRef&);
+	PROTECTED_FUNCTION(void, OnAssetsPropertiesChanged);
 	PROTECTED_FUNCTION(void, CheckPreloadedAssetsSaving);
 	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetSelectedDragObjects);
 	PROTECTED_FUNCTION(Vector<SelectableDragableObject*>, GetAllObjects);

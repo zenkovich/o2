@@ -845,7 +845,8 @@ namespace o2
 				continue;
 
 			auto node = mVisibleNodes[nodeIdx];
-			UpdateNodeView(node, node->widget, -1);
+			if (node->widget)
+				UpdateNodeView(node, node->widget, -1);
 		}
 	}
 

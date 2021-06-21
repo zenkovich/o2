@@ -616,8 +616,6 @@ namespace o2
 				filteredText += text[i];
 		}
 
-		filteredText += '\0';
-
 		return filteredText;
 	}
 

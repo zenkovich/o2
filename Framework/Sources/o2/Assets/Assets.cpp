@@ -360,16 +360,16 @@ namespace o2
 				return tree->assetsPath == cached->asset->mInfo.tree->assetsPath;
 			});
 
-			if (changedAssetsIds.Contains(cached->asset->GetUID()))
-			{
-				auto fnd = mCachedAssetsByUID.find(cached->asset->GetUID());
-				if (fnd != mCachedAssetsByUID.end())
-					mCachedAssetsByUID.erase(fnd);
-
-				auto fnd2 = mCachedAssetsByPath.find(cached->asset->GetPath());
-				if (fnd2 != mCachedAssetsByPath.end())
-					mCachedAssetsByPath.erase(fnd2);
-			}
+// 			if (changedAssetsIds.Contains(cached->asset->GetUID()))
+// 			{
+// 				auto fnd = mCachedAssetsByUID.find(cached->asset->GetUID());
+// 				if (fnd != mCachedAssetsByUID.end())
+// 					mCachedAssetsByUID.erase(fnd);
+// 
+// 				auto fnd2 = mCachedAssetsByPath.find(cached->asset->GetPath());
+// 				if (fnd2 != mCachedAssetsByPath.end())
+// 					mCachedAssetsByPath.erase(fnd2);
+// 			}
 		}
 
 		oldAssetsTrees.ForEach([](auto x) { delete x; });

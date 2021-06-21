@@ -65,7 +65,9 @@ namespace Editor
 
 		mMenuPanel->AddItem("Edit/---");
 
-		mMenuPanel->AddItem("Edit/Project/Physics", [&]() { o2EditorPropertiesWindow.SetTarget(&o2Config.physics); });
+		mMenuPanel->AddItem("Edit/Project/Physics", [&]() { 
+			o2EditorPropertiesWindow.SetTarget(&o2Config.physics); 
+		});
 
 		// VIEW
 		mMenuPanel->AddItem("View/Show Tree", [&]() { OnShowTreePressed(); });

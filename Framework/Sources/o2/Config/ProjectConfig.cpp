@@ -10,10 +10,14 @@ namespace o2
 
 	ProjectConfig::ProjectConfig():
 		mPlatform(GetEnginePlatform())
-	{}
+	{
+		Load();
+	}
 
 	ProjectConfig::~ProjectConfig()
-	{}
+	{
+		Save();
+	}
 
 	String ProjectConfig::GetProjectName() const
 	{
@@ -35,12 +39,20 @@ namespace o2
 		mPlatform = platform;
 	}
 
-	void ProjectConfig::InitializeDefault(const String& configFilePath)
+	void ProjectConfig::Load()
 	{
-		mProjectName = "Unnamed";
+		DataDocument data;
+		if (!data.LoadFromFile(GetProjectSettingPath()))
+			return;
+
+		Deserialize(data);
+	}
+
+	void ProjectConfig::Save() const
+	{
 		DataDocument data;
 		Serialize(data);
-		data.SaveToFile(configFilePath);
+		data.SaveToFile(GetProjectSettingPath());
 	}
 }
 

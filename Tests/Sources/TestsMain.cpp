@@ -22,6 +22,7 @@ int main()
 	TestApplication* app = mnew TestApplication();
 	app->Initialize();
 	app->Launch();
+	delete app;
 
 	return 0;
 }
