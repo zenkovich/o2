@@ -6,6 +6,8 @@ Here is the test project: https://github.com/zenkovich/o2-Template
 
 Now work in progress.
 
+Discord channel - https://discord.gg/6hstsSjf
+
 ![](https://github.com/zenkovich/o2/blob/master/editor.png)
 
 ### Features
@@ -21,7 +23,7 @@ Fast and flexible UI system, a lot of default widgets, styles, integration with 
 - Render  
 Easy to learn rendering system with meshes, fonts, sprites, culling, shaders and render targets.
 
-- Sound  
+- Sound (WIP)
 Playing sounds, music, streaming sounds, audio mixer
 
 - Animations  
@@ -36,8 +38,8 @@ Rigid bodies, colliders, joints, effects
 - Input  
 Multiplatform input processing, easy clicks and touches processing
 
-- Platforms  
-IOS, Android, Windows, MAC OSX, Webassembly
+- Platforms 
+Windows, IOS (WIP), Android (WIP), MAC OSX (WIP), Webassembly (WIP)
 
 - Editor  
 Flexible editor "all-in-one", plugins
