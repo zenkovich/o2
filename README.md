@@ -6,7 +6,7 @@ Here is the test project: https://github.com/zenkovich/o2-Template
 
 Now work in progress.
 
-Discord channel - https://discord.gg/6hstsSjf
+Discord channel - https://discord.gg/FqBBYpYGfS
 
 ![](https://github.com/zenkovich/o2/blob/master/editor.png)
 
