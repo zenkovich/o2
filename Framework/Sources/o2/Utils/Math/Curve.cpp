@@ -575,12 +575,12 @@ namespace o2
 			UpdateApproximation();
 	}
 
-	void Curve::SetKey(const Key& key, int position)
+	void Curve::SetKey(const Key& key, int idx)
 	{
-		if (position < 0 || position > mKeys.Count() - 1)
+		if (idx < 0 || idx > mKeys.Count() - 1)
 			return;
 
-		mKeys[position] = key;
+		mKeys[idx] = key;
 		CheckSmoothKeys();
 
 		if (mBatchChange)

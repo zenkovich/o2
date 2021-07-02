@@ -87,6 +87,9 @@ namespace o2
 		// Returns keys array
 		const Vector<Key>& GetKeys() const;
 
+		// Sets key at position
+		void SetKey(int idx, const Key& key);
+
 		// Returns key at position
 		Key GetKey(float position) const;
 
@@ -475,6 +478,20 @@ namespace o2
 	typename AnimationTrack<_type>::Key AnimationTrack<_type>::GetKeyAt(int idx) const
 	{
 		return mKeys[idx];
+	}
+
+	template<typename _type>
+	void AnimationTrack<_type>::SetKey(int idx, const Key& key)
+	{
+		if (idx < 0 || idx > mKeys.Count() - 1)
+			return;
+
+		mKeys[idx] = key;
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
 	}
 
 	template<typename _type>
@@ -920,6 +937,7 @@ CLASS_METHODS_META(o2::AnimationTrack<_type>)
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
+	PUBLIC_FUNCTION(void, SetKey, int, const Key&);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);

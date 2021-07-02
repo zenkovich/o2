@@ -273,6 +273,19 @@ namespace o2
 		return mKeys[idx];
 	}
 
+	void AnimationTrack<o2::Vec2F>::SetKey(int idx, const Key& key)
+	{
+		if (idx < 0 || idx > mKeys.Count() - 1)
+			return;
+
+		mKeys[idx] = key;
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
+	}
+
 	AnimationTrack<Vec2F>::Key AnimationTrack<Vec2F>::FindKey(UInt64 uid) const
 	{
 		for (auto& key : mKeys)

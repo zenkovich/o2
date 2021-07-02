@@ -21,6 +21,7 @@
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneDragHandle.h"
+#include "o2Editor/SceneWindow/SceneEditorLayer.h"
 #include "o2Editor/TreeWindow/SceneTree.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 
@@ -57,13 +58,21 @@ namespace Editor
 
 		mRenderTargetSprite->Draw();
 
+		CursorAreaEventsListener::OnDrawn();
+
 		if (mEnabledTool)
 			mEnabledTool->DrawScreen();
 
-		CursorAreaEventsListener::OnDrawn();
-
 		for (auto handle : mDragHandles)
 			handle->Draw();
+
+		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });
+
+		for (auto layer : mEditorLayers)
+		{
+			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
+				layer->DrawOverScene();
+		}
 	}
 
 	void SceneEditScreen::NeedRedraw()
@@ -79,6 +88,12 @@ namespace Editor
 
 		UpdateCamera(dt);
 		o2Scene.CheckChangedObjects();
+
+		for (auto layer : mEditorLayers)
+		{
+			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
+				layer->Update(dt);
+		}
 
 		if (mEnabledTool)
 			mEnabledTool->Update(dt);
@@ -141,6 +156,14 @@ namespace Editor
 		DrawGrid();
  		DrawObjects();
 		DrawSelection();
+
+		mEditorLayers.SortBy<int>([](SceneEditorLayer* l) { return l->GetOrder(); });
+
+		for (auto layer : mEditorLayers)
+		{
+			if (layer->IsEnabled() && IsLayerEnabled(layer->GetName()))
+				layer->DrawScene();
+		}
 
 		if (mEnabledTool)
 		{
@@ -263,6 +286,28 @@ namespace Editor
 			auto selectionAction = mnew SelectAction(mSelectedObjects, prevSelectedObjects);
 			o2EditorApplication.DoneAction(selectionAction);
 		}
+	}
+
+	void SceneEditScreen::AddEditorLayer(SceneEditorLayer* layer)
+	{
+		mEditorLayers.Add(layer);
+	}
+
+	void SceneEditScreen::RemoveEditorLayer(SceneEditorLayer* layer)
+	{
+		mEditorLayers.Remove(layer);
+	}
+
+	void SceneEditScreen::SetLayerEnabled(const String& name, bool enabled)
+	{
+		mEditorLayersEnabled[name] = enabled;
+	}
+
+	bool SceneEditScreen::IsLayerEnabled(const String& name) const
+	{
+		bool enabled = true;
+		mEditorLayersEnabled.TryGetValue(name, enabled);
+		return enabled;
 	}
 
 	const Vector<SceneEditableObject*>& SceneEditScreen::GetSelectedObjects() const

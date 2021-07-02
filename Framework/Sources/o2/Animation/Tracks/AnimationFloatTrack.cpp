@@ -127,6 +127,11 @@ namespace o2
 		return curve.GetKeyAt(idx);
 	}
 
+	void AnimationTrack<float>::SetKey(int idx, const Key& key)
+	{
+		curve.SetKey(key, idx);
+	}
+
 	AnimationTrack<float>::Key AnimationTrack<float>::FindKey(UInt64 uid) const
 	{
 		return curve.FindKey(uid);

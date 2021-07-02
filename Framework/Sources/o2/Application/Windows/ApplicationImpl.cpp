@@ -342,11 +342,13 @@ namespace o2
 			break;
 
 			case WM_KEYDOWN:
+			case WM_SYSKEYDOWN:
 			key = (int)wParam;
 			app->mInput->OnKeyPressed(key);
 			break;
 
 			case WM_KEYUP:
+			case WM_SYSKEYUP:
 			app->mInput->OnKeyReleased((int)wParam);
 			break;
 

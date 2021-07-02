@@ -29,6 +29,9 @@ namespace Editor
 	void ITrackControl::SetCurveViewColor(const Color4& color)
 	{}
 
+	void ITrackControl::SetActive(bool active)
+	{}
+
 	void ITrackControl::InsertNewKey(float time)
 	{}
 

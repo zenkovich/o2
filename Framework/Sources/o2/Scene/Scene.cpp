@@ -713,6 +713,10 @@ namespace o2
 		if (mChangedObjects.Count() > 0) {
 			onObjectsChanged(mChangedObjects);
 			mChangedObjects.Clear();
+
+			UpdateAddedEntities();
+			UpdateStartingEntities();
+			UpdateDestroyingEntities();
 		}
 	}
 

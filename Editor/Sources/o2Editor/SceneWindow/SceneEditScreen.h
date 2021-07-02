@@ -24,8 +24,9 @@ namespace o2
 
 namespace Editor
 {
-	class SceneDragHandle;
 	class IEditTool;
+	class SceneDragHandle;
+	class SceneEditorLayer;
 	class SceneTree;
 
 	// --------------------
@@ -85,6 +86,18 @@ namespace Editor
 		// Clears objects selection
 		void ClearSelection();
 
+		// Adds editable layer
+		void AddEditorLayer(SceneEditorLayer* layer);
+
+		// Removes editable layer
+		void RemoveEditorLayer(SceneEditorLayer* layer);
+
+		// Sets layers with name enabled
+		void SetLayerEnabled(const String& name, bool enabled);
+
+		// Returns is layer enabled
+		bool IsLayerEnabled(const String& name) const;
+
 		// Selects tool with type
 		template<typename _type>
 		void SelectTool();
@@ -124,6 +137,9 @@ namespace Editor
 		IEditTool*         mEnabledTool = nullptr; // Current enabled tool
 
 		Vector<SceneDragHandle*> mDragHandles; // Dragging handles array
+
+		Vector<SceneEditorLayer*> mEditorLayers;        // List of editable layers
+		Map<String, bool>         mEditorLayersEnabled; // Map of enabled or disabled layers by user
 		
 	protected:
 		// Initializes tools
@@ -274,6 +290,8 @@ CLASS_FIELDS_META(Editor::SceneEditScreen)
 	FIELD().NAME(mTools).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnabledTool).PROTECTED();
 	FIELD().NAME(mDragHandles).PROTECTED();
+	FIELD().NAME(mEditorLayers).PROTECTED();
+	FIELD().NAME(mEditorLayersEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneEditScreen)
@@ -292,6 +310,10 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(void, SelectObject, SceneEditableObject*, bool);
 	PUBLIC_FUNCTION(void, SelectAllObjects);
 	PUBLIC_FUNCTION(void, ClearSelection);
+	PUBLIC_FUNCTION(void, AddEditorLayer, SceneEditorLayer*);
+	PUBLIC_FUNCTION(void, RemoveEditorLayer, SceneEditorLayer*);
+	PUBLIC_FUNCTION(void, SetLayerEnabled, const String&, bool);
+	PUBLIC_FUNCTION(bool, IsLayerEnabled, const String&);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetSelectedObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetTopSelectedObjects);
 	PUBLIC_FUNCTION(const Color4&, GetSingleObjectSelectionColor);

@@ -48,6 +48,9 @@ namespace Editor
 		// Sets curves view mode color
 		virtual void SetCurveViewColor(const Color4& color);
 
+		// Sets track active when user selects it
+		virtual void SetActive(bool active);
+
 		// Inserts new key at time
 		virtual void InsertNewKey(float time);
 
@@ -92,6 +95,7 @@ CLASS_METHODS_META(Editor::ITrackControl)
 	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
 	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
 	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);
+	PUBLIC_FUNCTION(void, SetActive, bool);
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PUBLIC_FUNCTION(void, BeginKeysDrag);
 	PUBLIC_FUNCTION(void, EndKeysDrag);

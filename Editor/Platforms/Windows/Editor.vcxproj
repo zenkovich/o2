@@ -365,6 +365,7 @@
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
+    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\Vec2KeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.h" />
@@ -437,6 +438,7 @@
     <ClInclude Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\UI\ScrollView.h" />
+    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\SplineEditor\SplineEditor.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\UIRoot.h" />
     <ClInclude Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.h" />
@@ -471,6 +473,7 @@
     <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h" />
     <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\LayersPopup.h" />
     <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.h" />
+    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditorLayer.h" />
     <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditScreen.h" />
     <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneWindow.h" />
     <ClInclude Include="..\..\Sources\o2Editor\TreeWindow\SceneTree.h" />
@@ -488,6 +491,7 @@
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp" />
+    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\Vec2KeyFramesTrackControl.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Tree.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\AssetsWindow\AssetsIconsScroll.cpp" />
@@ -559,6 +563,7 @@
     <ClCompile Include="..\..\Sources\o2Editor\Core\UI\FrameScrollView.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\UI\ImageSlicesEditorWidget.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\UI\ScrollView.cpp" />
+    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\SplineEditor\SplineEditor.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\UI\SpoilerWithHead.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\UIRoot.cpp" />
     <ClCompile Include="..\..\Sources\o2Editor\Core\UIStyle\BasicUIStyle.cpp" />

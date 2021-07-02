@@ -160,7 +160,7 @@ namespace o2
 		void SetKeys(const Vector<Key>& keys);
 
 		// Sets key data at position
-		void SetKey(const Key& key, int position);
+		void SetKey(const Key& key, int idx);
 
 		// Smooths key at position
 		void SmoothKey(float position, float smoothCoef = 1.0f);

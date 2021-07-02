@@ -4,11 +4,12 @@
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
 #include "o2Editor/AnimationWindow/TrackControls/KeyFramesTrackControl.h"
 #include "o2Editor/AnimationWindow/TrackControls/MapKeyFramesTrackControl.h"
+#include "o2Editor/AnimationWindow/TrackControls/Vec2KeyFramesTrackControl.h"
 #include "o2Editor/AnimationWindow/Tree.h"
-#include "o2/Utils/Editor/EditorScope.h"
 
 namespace Editor
 {
@@ -398,7 +399,7 @@ namespace Editor
 		{
 			{ &TypeOf(AnimationTrack<float>), &TypeOf(KeyFramesTrackControl<AnimationTrack<float>>) },
 			{ &TypeOf(AnimationTrack<bool>), &TypeOf(KeyFramesTrackControl<AnimationTrack<bool>>) },
-			{ &TypeOf(AnimationTrack<Vec2F>), &TypeOf(KeyFramesTrackControl<AnimationTrack<Vec2F>>) },
+			{ &TypeOf(AnimationTrack<Vec2F>), &TypeOf(Vec2KeyFramesTrackControl) },
 			{ &TypeOf(AnimationTrack<Color4>), &TypeOf(KeyFramesTrackControl<AnimationTrack<Color4>>) }
 		};
 

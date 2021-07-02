@@ -20,7 +20,7 @@ namespace Editor
 	// Creates handles for each keys and updates them
 	// -------------------------------------------------
 	template<typename AnimationTrackType>
-	class KeyFramesTrackControl : public ITrackControl
+	class KeyFramesTrackControl: public ITrackControl
 	{
 	public:
 		// Default constructor
@@ -79,7 +79,7 @@ namespace Editor
 
 		SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
 
-	private:
+	protected:
 		typedef typename AnimationTrackType::ValueType TrackValueType;
 		typedef typename AnimationTrackType::Player TrackPlayerType;
 
@@ -109,6 +109,9 @@ namespace Editor
 		void InitializeControls();
 		void InitializeHandles();
 
+		virtual void OnSetTrack() {}
+		virtual void OnKeysChanged() {}
+
 		AnimationKeyDragHandle* CreateHandle();
 
 		void CheckCanCreateKey(float time);
@@ -117,14 +120,14 @@ namespace Editor
 	};
 
 	template<typename AnimationTrackType>
-	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl() :
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl():
 		ITrackControl()
 	{
 		InitializeControls();
 	}
 
 	template<typename AnimationTrackType>
-	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(const KeyFramesTrackControl& other) :
+	KeyFramesTrackControl<AnimationTrackType>::KeyFramesTrackControl(const KeyFramesTrackControl& other):
 		ITrackControl(other)
 	{
 		InitializeControls();
@@ -205,6 +208,8 @@ namespace Editor
 
 		InitializeHandles();
 		CheckCanCreateKey(mTimeline->GetTimeCursor());
+
+		OnSetTrack();
 	}
 
 	template<typename AnimationTrackType>
@@ -413,9 +418,11 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InsertNewKey(float time)
 	{
-		int idx = mTrack->AddKey(time, mTrack->GetValue(time)); 
+		int idx = mTrack->AddKey(time, mTrack->GetValue(time));
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
+
+		OnKeysChanged();
 
 		DataDocument keyData;
 		Map<String, Vector<UInt64>> keys = { { mTrackPath, { mTrack->GetKeyAt(idx).uid } } };
@@ -451,6 +458,8 @@ namespace Editor
 			mTrack->AddKey(time, mPropertyValue);
 			InitializeHandles();
 		}
+
+		OnKeysChanged();
 	}
 
 	template<typename AnimationTrackType>
@@ -463,7 +472,7 @@ namespace Editor
 
 	template<typename AnimationTrackType>
 	UInt64 KeyFramesTrackControl<AnimationTrackType>::DeserializeKey(const DataValue& data, float relativeTime,
-																	bool generateNewUid /*= true*/)
+																	 bool generateNewUid /*= true*/)
 	{
 		AnimationTrackType::Key key;
 		data.Get(key);
@@ -496,20 +505,20 @@ END_META;
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
-	FIELD().NAME(mHandles).PRIVATE();
-	FIELD().NAME(mTrackPath).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTreeControls).PRIVATE();
-	FIELD().NAME(mPropertyField).PRIVATE();
-	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue).PRIVATE();
-	FIELD().NAME(mPropertyValueProxy).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton).PRIVATE();
-	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPlayer).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeline).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet).PRIVATE();
-	FIELD().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate).PRIVATE();
+	FIELD().NAME(mHandles).PROTECTED();
+	FIELD().NAME(mTrackPath).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTreeControls).PROTECTED();
+	FIELD().NAME(mPropertyField).PROTECTED();
+	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue).PROTECTED();
+	FIELD().NAME(mPropertyValueProxy).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton).PROTECTED();
+	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPlayer).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeline).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate).PROTECTED();
 }
 END_META;
 META_TEMPLATES(typename AnimationTrackType)
@@ -532,6 +541,8 @@ CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 	PUBLIC_FUNCTION(void, InsertNewKey, float);
 	PRIVATE_FUNCTION(void, InitializeControls);
 	PRIVATE_FUNCTION(void, InitializeHandles);
+	PRIVATE_FUNCTION(void, OnSetTrack);
+	PRIVATE_FUNCTION(void, OnKeysChanged);
 	PRIVATE_FUNCTION(AnimationKeyDragHandle*, CreateHandle);
 	PRIVATE_FUNCTION(void, CheckCanCreateKey, float);
 	PRIVATE_FUNCTION(void, OnPropertyChanged);

@@ -194,6 +194,19 @@ namespace o2
 		return mKeys[idx];
 	}
 
+	void AnimationTrack<Color4>::SetKey(int idx, const Key& key)
+	{
+		if (idx < 0 || idx > mKeys.Count() - 1)
+			return;
+
+		mKeys[idx] = key;
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			onKeysChanged();
+	}
+
 	AnimationTrack<Color4>::Key AnimationTrack<Color4>::FindKey(UInt64 uid) const
 	{
 		for (auto& key : mKeys)

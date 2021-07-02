@@ -32,6 +32,9 @@
     <Filter Include="Sources\o2Editor\Core\Dialogs\System\Windows">
       <UniqueIdentifier>{41532706-fbc0-4598-ba11-545e96cab0e0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sources\o2Editor\Core\UI\SplineEditor">
+      <UniqueIdentifier>{1863c2cd-421f-497c-84ca-9ceeb95f1c4a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.h">
@@ -62,6 +65,9 @@
       <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h">
+      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\Vec2KeyFramesTrackControl.h">
       <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h">
@@ -182,6 +188,9 @@
       <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.h">
+      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.h">
       <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.h">
@@ -373,6 +382,9 @@
     <ClInclude Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.h">
       <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\LayersPopup.h">
+      <Filter>Sources\o2Editor\SceneWindow</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.h">
       <Filter>Sources\o2Editor\SceneWindow</Filter>
     </ClInclude>
@@ -391,10 +403,10 @@
     <ClInclude Include="..\..\Sources\o2Editor\stdafx.h">
       <Filter>Sources\o2Editor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.h">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+    <ClInclude Include="..\..\Sources\o2Editor\Core\UI\SplineEditor\SplineEditor.h">
+      <Filter>Sources\o2Editor\Core\UI\SplineEditor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\LayersPopup.h">
+    <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditorLayer.h">
       <Filter>Sources\o2Editor\SceneWindow</Filter>
     </ClInclude>
   </ItemGroup>
@@ -427,6 +439,9 @@
       <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.cpp">
+      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\Vec2KeyFramesTrackControl.cpp">
       <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\Tree.cpp">
@@ -544,6 +559,9 @@
       <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\RectangleIntProperty.cpp">
+      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.cpp">
       <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.cpp">
@@ -735,6 +753,9 @@
     <ClCompile Include="..\..\Sources\o2Editor\PropertiesWindow\WidgetLayerViewer\WidgetLayerViewer.cpp">
       <Filter>Sources\o2Editor\PropertiesWindow\WidgetLayerViewer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\LayersPopup.cpp">
+      <Filter>Sources\o2Editor\SceneWindow</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\SceneDragHandle.cpp">
       <Filter>Sources\o2Editor\SceneWindow</Filter>
     </ClCompile>
@@ -753,11 +774,8 @@
     <ClCompile Include="..\..\Sources\o2Editor\stdafx.cpp">
       <Filter>Sources\o2Editor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.cpp">
-      <Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2Editor\SceneWindow\LayersPopup.cpp">
-      <Filter>Sources\o2Editor\SceneWindow</Filter>
+    <ClCompile Include="..\..\Sources\o2Editor\Core\UI\SplineEditor\SplineEditor.cpp">
+      <Filter>Sources\o2Editor\Core\UI\SplineEditor</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

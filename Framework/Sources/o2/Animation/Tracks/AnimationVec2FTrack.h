@@ -82,6 +82,9 @@ namespace o2
 		// Returns keys array
 		const Vector<Key>& GetKeys() const;
 
+		// Sets key at position
+		void SetKey(int idx, const Key& key);
+
 		// Returns key at position
 		Key GetKey(float position) const;
 
@@ -312,6 +315,7 @@ CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>)
 	PUBLIC_FUNCTION(void, RemoveAllKeys);
 	PUBLIC_FUNCTION(bool, ContainsKey, float);
 	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
+	PUBLIC_FUNCTION(void, SetKey, int, const Key&);
 	PUBLIC_FUNCTION(Key, GetKey, float);
 	PUBLIC_FUNCTION(Key, GetKeyAt, int);
 	PUBLIC_FUNCTION(Key, FindKey, UInt64);

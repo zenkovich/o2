@@ -9,13 +9,13 @@
 
 namespace Editor
 {
-	GameWindow::GameWindow() :
+	GameWindow::GameWindow():
 		IEditorWindow()
 	{
 		InitializeWindow();
 	}
 
-	GameWindow::GameWindow(const GameWindow& other) :
+	GameWindow::GameWindow(const GameWindow& other):
 		IEditorWindow(other)
 	{
 		InitializeWindow();
@@ -74,23 +74,23 @@ namespace Editor
 
 		mDevicesMenu = o2UI.CreateWidget<ContextMenu>();
 
-// 		mCurrentWindowSizeItem = mDevicesMenu->AddToggleItem("Current window size", true, THIS_FUNC(OnCurrentWindowSize));
-// 
-// 		mCustomSizeItem = mDevicesMenu->AddToggleItem("Custom resolution", false, THIS_FUNC(OnCustomResolution));
-// 		mCustomSizeProperty = o2UI.CreateWidget<Vec2IProperty>();
-// 		mCustomSizeProperty->SetValue(Vec2I(800, 600));
-// 		*mCustomSizeProperty->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(150, 20));
-// 		mCustomSizeProperty->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnCustomResolution(true); };
-// 		mCustomSizeItem->AddChild(mCustomSizeProperty);
-// 
-// 		mDevicesMenu->AddItem("---");
-// 
-// 		for (auto kv : mDevicesList)
-// 		{
-// 			String caption = kv.first + " (" + (String)kv.second.resolution.x + " x " + (String)kv.second.resolution.y + ")";
-// 			auto item = mDevicesMenu->AddToggleItem(caption, false, [](bool) {});
-// 			item->onChecked = [=](bool checked) { OnDeviceSelected(kv.first, item); };
-// 		}
+		// 		mCurrentWindowSizeItem = mDevicesMenu->AddToggleItem("Current window size", true, THIS_FUNC(OnCurrentWindowSize));
+		// 
+		// 		mCustomSizeItem = mDevicesMenu->AddToggleItem("Custom resolution", false, THIS_FUNC(OnCustomResolution));
+		// 		mCustomSizeProperty = o2UI.CreateWidget<Vec2IProperty>();
+		// 		mCustomSizeProperty->SetValue(Vec2I(800, 600));
+		// 		*mCustomSizeProperty->layout = WidgetLayout::Based(BaseCorner::Right, Vec2F(150, 20));
+		// 		mCustomSizeProperty->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnCustomResolution(true); };
+		// 		mCustomSizeItem->AddChild(mCustomSizeProperty);
+		// 
+		// 		mDevicesMenu->AddItem("---");
+		// 
+		// 		for (auto kv : mDevicesList)
+		// 		{
+		// 			String caption = kv.first + " (" + (String)kv.second.resolution.x + " x " + (String)kv.second.resolution.y + ")";
+		// 			auto item = mDevicesMenu->AddToggleItem(caption, false, [](bool) {});
+		// 			item->onChecked = [=](bool checked) { OnDeviceSelected(kv.first, item); };
+		// 		}
 
 		mWindow->AddChild(mDevicesMenu);
 	}
@@ -170,15 +170,12 @@ namespace Editor
 
 		mRenderTargetSprite->Draw();
 
-		if (o2EditorApplication.IsPlaying())
-		{
-			EditorScope::Exit(editorDepth);
+		EditorScope::Exit(editorDepth);
 
-			for (auto camera : o2Scene.GetCameras())
-				camera->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
+		for (auto camera : o2Scene.GetCameras())
+			camera->listenersLayer.OnDrawn(mRenderTargetSprite->GetBasis());
 
-			EditorScope::Enter(editorDepth);
-		}
+		EditorScope::Enter(editorDepth);
 	}
 
 	String GameWindow::GameView::GetCreateMenuCategory()
