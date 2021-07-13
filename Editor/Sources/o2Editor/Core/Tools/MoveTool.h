@@ -43,6 +43,12 @@ namespace Editor
 		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
 	protected:
+		// Returns toggle in menu panel icon name
+		String GetPanelIcon() const override;
+
+		// Returns shortcut keys for toggle
+		ShortcutKeys GetShortcut() const override;
+
 		// Updates tool
 		void Update(float dt);
 
@@ -117,6 +123,8 @@ END_META;
 CLASS_METHODS_META(Editor::MoveTool)
 {
 
+	PROTECTED_FUNCTION(String, GetPanelIcon);
+	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
 	PROTECTED_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);

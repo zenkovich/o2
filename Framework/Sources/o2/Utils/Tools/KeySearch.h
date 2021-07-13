@@ -12,15 +12,18 @@ namespace o2
 		bool found = false;
 		if (direction)
 		{
-			for (int i = cacheKey + 1; i < keysCount; i++)
+			if (keys[cacheKey].position < position)
 			{
-				if (keys[i].position >= position)
+				for (int i = cacheKey + 1; i < keysCount; i++)
 				{
-					begin = i - 1;
-					end = i;
+					if (keys[i].position >= position)
+					{
+						begin = i - 1;
+						end = i;
 
-					found = true;
-					break;
+						found = true;
+						break;
+					}
 				}
 			}
 
@@ -46,14 +49,17 @@ namespace o2
 		}
 		else
 		{
-			for (int i = cacheKey; i >= 0; i--)
+			if (keys[cacheKey].position > position)
 			{
-				if (keys[i].position < position)
+				for (int i = cacheKey; i >= 0; i--)
 				{
-					begin = i;
-					end = i + 1;
-					found = true;
-					break;
+					if (keys[i].position < position)
+					{
+						begin = i;
+						end = i + 1;
+						found = true;
+						break;
+					}
 				}
 			}
 

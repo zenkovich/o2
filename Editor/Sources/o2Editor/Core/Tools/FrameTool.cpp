@@ -151,6 +151,16 @@ namespace Editor
 	FrameTool::~FrameTool()
 	{}
 
+	String FrameTool::GetPanelIcon() const
+	{
+		return "ui/UI4_frame_tool.png";
+	}
+
+	ShortcutKeys FrameTool::GetShortcut() const
+	{
+		return ShortcutKeys('T');
+	}
+
 	void FrameTool::DrawScene()
 	{
 		SelectionTool::DrawScene();

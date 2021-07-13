@@ -14,9 +14,13 @@
 #include "o2Editor/AssetsWindow/AssetsIconsScroll.h"
 #include "o2Editor/Core/Actions/Select.h"
 #include "o2Editor/Core/EditorApplication.h"
+#include "o2Editor/Core/Tools/FrameTool.h"
 #include "o2Editor/Core/Tools/IEditorTool.h"
 #include "o2Editor/Core/Tools/MoveTool.h"
+#include "o2Editor/Core/Tools/RotateTool.h"
+#include "o2Editor/Core/Tools/ScaleTool.h"
 #include "o2Editor/Core/Tools/SelectionTool.h"
+#include "o2Editor/Core/ToolsPanel.h"
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
@@ -124,14 +128,13 @@ namespace Editor
 		return point / mViewCamera.GetScale();
 	}
 
-	void SceneEditScreen::InitializeTools(const Type* toolType /*= nullptr*/)
+	void SceneEditScreen::InitializeTools()
 	{
-		auto toolsTypes = toolType ? toolType->GetDerivedTypes() : TypeOf(IEditTool).GetDerivedTypes();
-		for (auto toolType : toolsTypes)
-		{
-			mTools.Add((IEditTool*)toolType->CreateSample());
-			InitializeTools(toolType);
-		}
+		mTools.Add(mnew SelectionTool());
+		mTools.Add(mnew MoveTool());
+		mTools.Add(mnew RotateTool());
+		mTools.Add(mnew ScaleTool());
+		mTools.Add(mnew FrameTool());
 	}
 
 	bool SceneEditScreen::IsHandleWorking(const Input::Cursor& cursor) const
@@ -308,6 +311,44 @@ namespace Editor
 		bool enabled = true;
 		mEditorLayersEnabled.TryGetValue(name, enabled);
 		return enabled;
+	}
+
+	void SceneEditScreen::SelectTool(const IEditTool* tool)
+	{
+		if (tool == mEnabledTool)
+			return;
+
+		if (mEnabledTool)
+			mEnabledTool->OnDisabled();
+
+		mEnabledTool = const_cast<IEditTool*>(tool);
+		if (auto toggle = mEnabledTool->GetPanelToggle())
+			toggle->SetValue(true);
+
+		if (mEnabledTool)
+			mEnabledTool->OnEnabled();
+	}
+
+	IEditTool* SceneEditScreen::GetSelectedTool() const
+	{
+		return mEnabledTool;
+	}
+
+	void SceneEditScreen::AddTool(IEditTool* tool)
+	{
+		mTools.Add(tool);
+		o2EditorTools.AddToolToggle(tool->GetPanelToggle());
+	}
+
+	void SceneEditScreen::RemoveTool(IEditTool* tool)
+	{
+		mTools.Remove(tool);
+		o2EditorTools.RemoveToolToggle(tool->GetPanelToggle());
+	}
+
+	const Vector<IEditTool*>& SceneEditScreen::GetTools() const
+	{
+		return mTools;
 	}
 
 	const Vector<SceneEditableObject*>& SceneEditScreen::GetSelectedObjects() const

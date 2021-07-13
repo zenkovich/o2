@@ -24,6 +24,10 @@ namespace Editor
 
 		mSplineColor = Color4(44, 62, 80, 255);
 		mSplineSupportColor = Color4(190, 190, 190, 255);
+
+		mBackgroundEvents.isUnderPoint = [](const Vec2F& p) { return true; };
+		mBackgroundEvents.onDblClicked = [&](const Input::Cursor& curs) { OnBackgroundDblClicked(curs.position); };
+		mBackgroundEvents.isInputTransparent = true;
 	}
 
 	SplineEditor::~SplineEditor()
@@ -43,6 +47,8 @@ namespace Editor
 	{
 		if (!mSplineWrapper)
 			return;
+
+		mBackgroundEvents.OnDrawn();
 
 		auto drawPoints = mSplineWrapper->GetDrawPoints();
 		o2Render.DrawAALine(drawPoints, mSplineColor);
@@ -101,6 +107,11 @@ namespace Editor
 
 	}
 
+	void SplineEditor::SetInputTransparent(bool transparent)
+	{
+		mBackgroundEvents.isInputTransparent = transparent;
+	}
+
 	void SplineEditor::ClearHandles()
 	{
 		for (auto handles : mSplineHandles)
@@ -123,19 +134,22 @@ namespace Editor
 
 			handles->position = mHandlesSample.position;
 			handles->position.SetPosition(mSplineWrapper->GetPointPos(i));
+			handles->position.SetSelectionGroup(this);
 			handles->position.onChangedPos = [=](const Vec2F& pos) { OnMainHandleMoved(i, pos, handles); };
 			handles->position.localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
 			handles->position.screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
 
 			handles->prevSupport = mHandlesSample.prevSupport;
-			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i));
+			handles->prevSupport.SetPosition(mSplineWrapper->GetPointPrevSupportPos(i) + mSplineWrapper->GetPointPos(i));
+			handles->prevSupport.SetSelectionGroup(&mSupportHandlesGroup);
 			handles->prevSupport.onChangedPos = [=](const Vec2F& pos) { OnPrevHandleMoved(i, pos, handles); };
 			handles->prevSupport.onPressed = [=]() { CheckDragSymmetric(i, handles); };
 			handles->prevSupport.localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
 			handles->prevSupport.screenToLocalTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->WorldToLocal(p); };
 
 			handles->nextSupport = mHandlesSample.nextSupport;
-			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
+			handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i) + mSplineWrapper->GetPointPos(i));
+			handles->nextSupport.SetSelectionGroup(&mSupportHandlesGroup);
 			handles->nextSupport.onChangedPos = [=](const Vec2F& pos) { OnNextHandleMoved(i, pos, handles); };
 			handles->nextSupport.onPressed = [=]() { CheckDragSymmetric(i, handles); };
 			handles->nextSupport.localToScreenTransformFunc = [&](const Vec2F& p) { return mSplineWrapper->LocalToWorld(p); };
@@ -190,6 +204,13 @@ namespace Editor
 		handles->nextSupport.SetPosition(mSplineWrapper->GetPointNextSupportPos(i));
 	}
 
+	void SplineEditor::OnBackgroundDblClicked(const Vec2F& point)
+	{
+		mSplineWrapper->AddPoint(Math::Max(0, mSplineWrapper->GetPointsCount() - 1), mSplineWrapper->WorldToLocal(point), 
+								 Vec2F(), Vec2F());
+		OnSplineChanged();
+	}
+
 	void SplineEditor::CheckDragSymmetric(int i, PointHandles* handles)
 	{
 		Vec2F prev = mSplineWrapper->GetPointPrevSupportPos(i);
@@ -218,8 +239,8 @@ namespace Editor
 			Vec2F prevPos = GetPointPos(i - 1);
 			Vec2F currPos = GetPointPos(i);
 
-			Vec2F prevNextSupportPos = GetPointNextSupportPos(i - 1);
-			Vec2F currPrevSupportPos = GetPointPrevSupportPos(i);
+			Vec2F prevNextSupportPos = GetPointNextSupportPos(i - 1) + currPos;
+			Vec2F currPrevSupportPos = GetPointPrevSupportPos(i) + currPos;
 
 			for (int j = 0; j < segmentPoints; j++)
 				res.Add(LocalToWorld(Bezier(prevPos, prevNextSupportPos, currPrevSupportPos, currPos, (float)j/(float)segmentPoints)));

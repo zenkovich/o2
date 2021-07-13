@@ -49,6 +49,16 @@ namespace Editor
 	ScaleTool::~ScaleTool()
 	{}
 
+	String ScaleTool::GetPanelIcon() const
+	{
+		return "ui/UI4_scale_tool.png";
+	}
+
+	ShortcutKeys ScaleTool::GetShortcut() const
+	{
+		return ShortcutKeys('R');
+	}
+
 	void ScaleTool::Update(float dt)
 	{}
 

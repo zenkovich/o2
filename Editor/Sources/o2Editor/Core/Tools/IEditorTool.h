@@ -10,6 +10,7 @@ using namespace o2;
 namespace o2
 {
 	class SceneEditableObject;
+	class Toggle;
 }
 
 namespace Editor
@@ -22,12 +23,26 @@ namespace Editor
 	public:
 		virtual ~IEditTool() {}
 
+		// Creates if required and retuns toggle button for menu panel
+		virtual Toggle* GetPanelToggle() const;
+
 		IOBJECT(IEditTool);
 
 	protected:
 		bool mNeedRedraw = false; // True when need redraw scene
 
+		mutable Toggle* mPanelToggle = nullptr; // Toggle button in menu panel
+
 	protected:
+		// Creates toggle button for menu panel
+		virtual Toggle* CreatePanelToggle() const;
+
+		// Returns toggle in menu panel icon name
+		virtual String GetPanelIcon() const;
+
+		// Returns shortcut keys for toggle
+		virtual ShortcutKeys GetShortcut() const;
+
 		// Draws tool
 		virtual void DrawScene() {}
 
@@ -112,11 +127,16 @@ END_META;
 CLASS_FIELDS_META(Editor::IEditTool)
 {
 	FIELD().DEFAULT_VALUE(false).NAME(mNeedRedraw).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mPanelToggle).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditTool)
 {
 
+	PUBLIC_FUNCTION(Toggle*, GetPanelToggle);
+	PROTECTED_FUNCTION(Toggle*, CreatePanelToggle);
+	PROTECTED_FUNCTION(String, GetPanelIcon);
+	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
 	PROTECTED_FUNCTION(void, DrawScene);
 	PROTECTED_FUNCTION(void, DrawScreen);
 	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);

@@ -118,7 +118,7 @@ namespace Editor
 			if (mObjectViewer)
 			{
 				o2EditorProperties.FreeObjectViewer(mObjectViewer);
-				mCaption->SetEnableForcible(true);
+				mCaption->SetEnabledForcible(true);
 				mCaption->AddChildWidget(mHeaderContainer);
 				borderLeft = 11;
 			}
@@ -136,11 +136,11 @@ namespace Editor
 				mObjectViewer->SetExpanded(mExpanded);
 				AddChild(mObjectViewer->GetSpoiler());
 
-				mCaption->SetEnableForcible(false);
+				mCaption->SetEnabledForcible(false);
 				mHeaderContainer->SetInternalParent(mObjectViewer->GetSpoiler());
 
 				mTypeCaption->text = mCurrentObjectType->GetName();
-				mTypeCaption->SetEnableForcible(mAvailableMultipleTypes && !mNoHeader);
+				mTypeCaption->SetEnabledForcible(mAvailableMultipleTypes && !mNoHeader);
 
 				mCreateDeleteButton->caption = "Delete";
 				mCreateDeleteButton->enabledForcibly = !mDontDeleteEnabled;
@@ -151,7 +151,7 @@ namespace Editor
 			}
 			else
 			{
-				mTypeCaption->SetEnableForcible(true);
+				mTypeCaption->SetEnabledForcible(true);
 				mTypeCaption->text = "nullptr";
 				mCreateDeleteButton->caption = "Create";
 				mCreateDeleteButton->enabledForcibly = true;

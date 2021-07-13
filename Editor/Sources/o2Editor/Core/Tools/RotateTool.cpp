@@ -35,6 +35,16 @@ namespace Editor
 			delete mAngleMesh;
 	}
 
+	String RotateTool::GetPanelIcon() const
+	{
+		return "ui/UI4_rotate_tool.png";
+	}
+
+	ShortcutKeys RotateTool::GetShortcut() const
+	{
+		return ShortcutKeys('E');
+	}
+
 	void RotateTool::Update(float dt)
 	{}
 

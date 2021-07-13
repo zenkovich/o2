@@ -117,7 +117,7 @@ namespace Editor
 							mSpoiler->AddChild(mAssetObjectViewer);
 						}
 
-						mCreateInstanceBtn->SetEnableForcible(false);
+						mCreateInstanceBtn->SetEnabledForcible(false);
 						mAssetObjectViewer->SetEnabled(true);
 						mAssetObjectViewer->Refresh(targets);
 					}

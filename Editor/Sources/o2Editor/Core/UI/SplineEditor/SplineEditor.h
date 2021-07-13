@@ -1,6 +1,8 @@
 #pragma once
+#include "o2/Events/CursorEventsArea.h"
 #include "o2/Utils/Editor/DragHandle.h"
 #include "o2/Utils/Editor/FrameHandles.h"
+#include "../../Tools/IEditorTool.h"
 
 using namespace o2;
 
@@ -53,6 +55,9 @@ namespace Editor
 		// Sets spline wrapper
 		void SetSpline(ISplineWrapper* wrapper);
 
+		// Sets background input transparency
+		void SetInputTransparent(bool transparent);
+
 		// It is called when spline was updated and need to refresh handles
 		void OnSplineChanged();
 
@@ -66,11 +71,14 @@ namespace Editor
 			bool dragSymmetric = false;
 		};
 
+	protected:
+
 		ISplineWrapper* mSplineWrapper = nullptr; // Spline getters and setters wrapper
 
 		PointHandles mHandlesSample; // Samples of handles for cloning
 
-		Vector<PointHandles*> mSplineHandles; // Spline handles
+		Vector<PointHandles*> mSplineHandles;    // Spline handles
+		CursorEventsArea      mBackgroundEvents; // Events area for catching events in background
 
 		Color4 mSplineColor;        // Color of spline line
 		Color4 mSplineSupportColor; // Color of support handles lines
@@ -81,6 +89,8 @@ namespace Editor
 		FrameHandles mTransformFrame;                // Keys transformation frame
 		bool         mTransformFrameVisible = false; // Is transform frame visible. it visible when 2 or more main handles was selected
 		Basis        mTransformFrameBasis;           // Basis of transform frame in screen space
+
+		SelectableDragHandlesGroup mSupportHandlesGroup; // Support points handles selection group. They are must be selectable separately from main handles
 
 	protected:
 		// Removes all handles
@@ -100,6 +110,9 @@ namespace Editor
 
 		// It is called when main handle moved. Updates support handles positions alsu
 		void OnMainHandleMoved(int i, const Vec2F& pos, PointHandles* handles);
+
+		// It is called when background double clicked
+		void OnBackgroundDblClicked(const Vec2F& point);
 
 		// Draws all main handles
 		void DrawMainHandles();

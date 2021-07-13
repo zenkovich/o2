@@ -41,7 +41,13 @@ namespace Editor
         Vector<Basis>    mBeforeTransforms;			 // Array of objects' transformations before changing
         TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
-    protected:
+	protected:
+		// Returns toggle in menu panel icon name
+		String GetPanelIcon() const override;
+
+		// Returns shortcut keys for toggle
+		ShortcutKeys GetShortcut() const override;
+
         // Updates tool
         void Update(float dt);
 
@@ -123,6 +129,8 @@ END_META;
 CLASS_METHODS_META(Editor::ScaleTool)
 {
 
+	PROTECTED_FUNCTION(String, GetPanelIcon);
+	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
 	PROTECTED_FUNCTION(void, Update, float);
 	PROTECTED_FUNCTION(void, DrawScreen);
 	PROTECTED_FUNCTION(void, OnEnabled);

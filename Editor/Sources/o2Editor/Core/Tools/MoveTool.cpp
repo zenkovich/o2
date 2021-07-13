@@ -282,6 +282,16 @@ namespace Editor
 		mTransformAction = nullptr;
 	}
 
+	String MoveTool::GetPanelIcon() const
+	{
+		return "ui/UI4_move_tool.png";
+	}
+
+	ShortcutKeys MoveTool::GetShortcut() const
+	{
+		return ShortcutKeys('W');
+	}
+
 }
 
 DECLARE_CLASS(Editor::MoveTool);

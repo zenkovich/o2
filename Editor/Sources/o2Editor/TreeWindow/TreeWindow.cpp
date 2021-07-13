@@ -227,7 +227,7 @@ namespace Editor
 			{
 				ForcePopEditorScopeOnStack scope;
 				Widget* newWidget = styleWidget->CloneAs<Widget>();
-				newWidget->SetEnableForcible(true);
+				newWidget->SetEnabledForcible(true);
 				OnCreateObject(newWidget);
 			});
 		}

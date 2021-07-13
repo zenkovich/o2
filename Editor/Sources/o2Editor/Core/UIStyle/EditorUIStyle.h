@@ -15,12 +15,6 @@ namespace Editor
 		void RebuildStepButtonStyle();
 		void RebuildRoundDropDown();
 		void RebuildMenuPanelDropDown();
-		void RebuildArrowToggle();
-		void RebuildBrushToggle();
-		void RebuildMoveToggle();
-		void RebuildRotateToggle();
-		void RebuildScaleToggle();
-		void RebuildFrameToggle();
 		void RebuildSearchButton();
 		void RebuildListTreeToggle();
 		void RebuildRevertBtn();
@@ -179,12 +173,6 @@ CLASS_METHODS_META(Editor::EditorUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildStepButtonStyle);
 	PUBLIC_FUNCTION(void, RebuildRoundDropDown);
 	PUBLIC_FUNCTION(void, RebuildMenuPanelDropDown);
-	PUBLIC_FUNCTION(void, RebuildArrowToggle);
-	PUBLIC_FUNCTION(void, RebuildBrushToggle);
-	PUBLIC_FUNCTION(void, RebuildMoveToggle);
-	PUBLIC_FUNCTION(void, RebuildRotateToggle);
-	PUBLIC_FUNCTION(void, RebuildScaleToggle);
-	PUBLIC_FUNCTION(void, RebuildFrameToggle);
 	PUBLIC_FUNCTION(void, RebuildSearchButton);
 	PUBLIC_FUNCTION(void, RebuildListTreeToggle);
 	PUBLIC_FUNCTION(void, RebuildRevertBtn);

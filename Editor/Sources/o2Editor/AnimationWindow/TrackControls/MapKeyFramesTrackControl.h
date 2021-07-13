@@ -4,6 +4,7 @@
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/AnimationWindow/Timeline.h"
 #include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
+#include "o2Editor/AnimationWindow/TrackControls/AnimationTrackWrapper.h"
 #include "o2Editor/AnimationWindow/Tree.h"
 
 using namespace o2;
@@ -96,6 +97,8 @@ namespace Editor
 		template<typename TrackType>
 		struct HandlesGroup: public IHandlesGroup
 		{
+			typedef AnimationTrackWrapper<TrackType> Wrapper;
+
 			TrackType* track;
 
 		public:
@@ -155,7 +158,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		for (auto& key : track->GetKeys())
+		for (auto& key : Wrapper::GetKeys(*track))
 		{
 			AnimationKeyDragHandle* handle = nullptr;
 
@@ -174,8 +177,8 @@ namespace Editor
 			handle->SetSelectionGroup(trackControl->mHandlesSheet);
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
-				auto& keys = track->GetKeys();
-				keyHandle.handle->SetPosition(Vec2F(track->FindKey(handle->keyUid).position, 0.0f));
+				auto& keys = Wrapper::GetKeys(*track);
+				keyHandle.handle->SetPosition(Vec2F(Wrapper::FindKey(*track, handle->keyUid).position, 0.0f));
 			};
 
 			KeyHandle* keyHandle = mnew KeyHandle(key.uid, handle, track, updatePosFunc);
@@ -202,7 +205,7 @@ namespace Editor
 		if (trackControl->mDisableHandlesUpdate)
 			return;
 
-		if (track->GetKeys().Count() != handles.Count())
+		if (Wrapper::GetKeys(*track).Count() != handles.Count())
 		{
 			Vector<UInt64> selectedHandles;
 			for (auto keyHandle : handles)
@@ -229,12 +232,12 @@ namespace Editor
 	{
 		trackControl->mDisableHandlesUpdate = true;
 
-		int keyIdx = track->FindKeyIdx(keyHandle->keyUid);
-		auto key = track->GetKeys()[keyIdx];
+		int keyIdx = Wrapper::FindKeyIdx(*track, keyHandle->keyUid);
+		auto key = Wrapper::GetKeys(*track)[keyIdx];
 
 		key.position = pos.x;
-		track->RemoveKeyAt(keyIdx);
-		auto newIdx = track->AddKey(key);
+		Wrapper::RemoveKeyAt(*track, keyIdx);
+		Wrapper::AddKey(*track, key);
 
 		trackControl->mDisableHandlesUpdate = false;
 	}
@@ -242,11 +245,11 @@ namespace Editor
 	template<typename TrackType>
 	bool MapKeyFramesTrackControl::HandlesGroup<TrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{
-		int idx = track->FindKeyIdx(keyUid);
+		int idx = Wrapper::FindKeyIdx(*track, keyUid);
 		if (idx < 0)
 			return false;
 
-		auto key = track->GetKeyAt(idx);
+		auto key = Wrapper::GetKey(*track, idx);
 		key.position -= relativeTime;
 		data.Set(key);
 
@@ -256,9 +259,9 @@ namespace Editor
 	template<typename TrackType>
 	void MapKeyFramesTrackControl::HandlesGroup<TrackType>::DeleteKey(UInt64 keyUid)
 	{
-		int idx = track->FindKeyIdx(keyUid);
+		int idx = Wrapper::FindKeyIdx(*track, keyUid);
 		if (idx >= 0)
-			track->RemoveKeyAt(idx);
+			Wrapper::RemoveKeyAt(*track, idx);
 	}
 }
 

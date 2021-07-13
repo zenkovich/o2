@@ -36,7 +36,27 @@ namespace Editor
 
 	HorizontalLayout* ToolsPanel::GetToolsPanel() const
 	{
-		return mEditToolsPanel;
+		return mToolsPanel;
+	}
+
+	void ToolsPanel::AddToolToggle(Toggle* toggle)
+	{
+		if (!toggle->GetStateObject("visible")->GetAnimationClip().GetTrack<float>("layout/minWidth"))
+		{
+			*toggle->GetStateObject("visible")->GetAnimationClip().AddTrack<float>("layout/minWidth") =
+				AnimationTrack<float>::EaseInOut(0.0f, 20.0f, 0.2f);
+		}
+
+		mToolsPanel->AddChild(toggle);
+		toggle->SetEnabledForcible(false);
+		toggle->SetEnabled(true);
+		toggle->SetToggleGroup(&mToolsTogglesGroup);
+	}
+
+	void ToolsPanel::RemoveToolToggle(Toggle* toggle)
+	{
+		toggle->GetStateObject("visible")->onStateFullyFalse = [=]() { mToolsPanel->RemoveChild(toggle, false); };
+		toggle->SetEnabled(false);
 	}
 
 	void ToolsPanel::Update(float dt)
@@ -45,7 +65,8 @@ namespace Editor
 		mPauseToggle->value = o2EditorApplication.isPaused;
 	}
 
-	ToolsPanel::ToolsPanel()
+	ToolsPanel::ToolsPanel():
+		mToolsTogglesGroup(ToggleGroup::Type::OnlySingleTrue)
 	{
 		mPanelRoot = mnew Widget();
 		mPanelRoot->name = "tools panel";
@@ -134,52 +155,19 @@ namespace Editor
 
 	void ToolsPanel::InitializeToolsPanel()
 	{
-		mEditToolsPanel = mnew HorizontalLayout();
-		mEditToolsPanel->name = "edit tools";
-		mEditToolsPanel->AddLayer("back", mnew Sprite("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
-		*mEditToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
-		mEditToolsPanel->expandHeight = true;
-		mEditToolsPanel->expandWidth = false;
-		mEditToolsPanel->fitByChildren = true;
-		mEditToolsPanel->baseCorner = BaseCorner::Center;
-		mPanelRoot->AddChild(mEditToolsPanel);
+		mToolsPanel = mnew HorizontalLayout();
+		mToolsPanel->name = "edit tools";
+		mToolsPanel->AddLayer("back", mnew Sprite("ui/UI4_panel_subpanel_bk.png"), Layout::BothStretch(-7, -5, -10, -5));
+		*mToolsPanel->layout = WidgetLayout::VerStretch(HorAlign::Middle, 3, 2, 200, 10);
+		mToolsPanel->expandHeight = true;
+		mToolsPanel->expandWidth = false;
+		mToolsPanel->fitByChildren = true;
+		mToolsPanel->baseCorner = BaseCorner::Center;
+		mPanelRoot->AddChild(mToolsPanel);
 
-		mArrowToolToggle = o2UI.CreateWidget<Toggle>("arrow");
-		mBrushToolToggle = o2UI.CreateWidget<Toggle>("brush");
-		mMoveToolToggle = o2UI.CreateWidget<Toggle>("move");
-		mRotateToolToggle = o2UI.CreateWidget<Toggle>("rotate");
-		mScaleToolToggle = o2UI.CreateWidget<Toggle>("scale");
-		mFrameToolToggle = o2UI.CreateWidget<Toggle>("frame");
+		for (auto tool : o2EditorSceneScreen.GetTools())
+			AddToolToggle(tool->GetPanelToggle());
 
-		mEditToolsPanel->AddChild(mArrowToolToggle);
-		mEditToolsPanel->AddChild(mBrushToolToggle);
-		mEditToolsPanel->AddChild(mMoveToolToggle);
-		mEditToolsPanel->AddChild(mRotateToolToggle);
-		mEditToolsPanel->AddChild(mScaleToolToggle);
-		mEditToolsPanel->AddChild(mFrameToolToggle);
-
-		mArrowToolToggle->toggleGroup = mnew ToggleGroup(ToggleGroup::Type::OnlySingleTrue);
-		mBrushToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
-		mMoveToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
-		mRotateToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
-		mScaleToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
-		mFrameToolToggle->toggleGroup = mArrowToolToggle->toggleGroup;
-
-		mArrowToolToggle->shortcut = ShortcutKeys('Q');
-		mBrushToolToggle->shortcut = ShortcutKeys('W');
-		mMoveToolToggle->shortcut = ShortcutKeys('E');
-		mRotateToolToggle->shortcut = ShortcutKeys('R');
-		mScaleToolToggle->shortcut = ShortcutKeys('T');
-		mFrameToolToggle->shortcut = ShortcutKeys('Y');
-
-		mArrowToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<SelectionTool>(); };
-		mBrushToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<SelectionTool>(); };
-		mMoveToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<MoveTool>(); };
-		mRotateToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<RotateTool>(); };
-		mScaleToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<ScaleTool>(); };
-		mFrameToolToggle->onToggle = [](bool value) { if (value) o2EditorSceneScreen.SelectTool<FrameTool>(); };
-
-		mFrameToolToggle->SetValue(true);
 		o2EditorSceneScreen.SelectTool<FrameTool>();
 	}
 

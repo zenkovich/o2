@@ -365,6 +365,7 @@
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\ITrackControl.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\KeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\MapKeyFramesTrackControl.h" />
+    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationTrackWrapper.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\Vec2KeyFramesTrackControl.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\Tree.h" />
     <ClInclude Include="..\..\Sources\o2Editor\AssetsWindow\AssetIcon.h" />

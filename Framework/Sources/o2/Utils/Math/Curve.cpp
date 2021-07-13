@@ -16,7 +16,7 @@ namespace o2
 		UpdateApproximation();
 	}
 
-	Curve::Curve(Vector<Vec2F> values, bool smooth /*= true*/)
+	Curve::Curve(const Vector<Vec2F>& values, bool smooth /*= true*/)
 	{
 		AppendKeys(values, smooth);
 	}
@@ -155,7 +155,7 @@ namespace o2
 		InsertKeys(curve.mKeys, position);
 	}
 
-	void Curve::AppendKeys(Vector<Vec2F> values, bool smooth /*= true*/)
+	void Curve::AppendKeys(const Vector<Vec2F>& values, bool smooth /*= true*/)
 	{
 		AppendKeys(values.Convert<Key>([=](const Vec2F& v) {
 			Key res(v.x, v.y, 0, 0, 0, 0);
@@ -185,7 +185,7 @@ namespace o2
 			UpdateApproximation();
 	}
 
-	void Curve::PrependKeys(Vector<Vec2F> values, bool smooth /*= true*/)
+	void Curve::PrependKeys(const Vector<Vec2F>& values, bool smooth /*= true*/)
 	{
 		PrependKeys(values.Convert<Key>([=](const Vec2F& v) {
 			Key res(v.x, v.y, 0, 0, 0, 0);
@@ -215,7 +215,7 @@ namespace o2
 			UpdateApproximation();
 	}
 
-	void Curve::InsertKeys(Vector<Vec2F> values, float position, bool smooth /*= true*/)
+	void Curve::InsertKeys(const Vector<Vec2F>& values, float position, bool smooth /*= true*/)
 	{
 		InsertKeys(values.Convert<Key>([=](const Vec2F& v) {
 			Key res(v.x, v.y, 0, 0, 0, 0);
@@ -664,24 +664,33 @@ namespace o2
 		return Key();
 	}
 
-	Curve Curve::EaseIn()
+	Curve Curve::Parametric(float begin, float end, float duration, 
+							float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition)
 	{
-		return Curve(0.0f, 0.5f, 1.0f, 1.0f);
+		Curve res;
+		res.InsertKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef) - begin, beginCoefPosition*duration);
+		res.InsertKey(duration, end, Math::Lerp(begin, end, endCoef) - end, -endCoefPosition*duration, 0.0f, 0.0f);
+		return res;
 	}
 
-	Curve Curve::EaseOut()
+	Curve Curve::EaseIn(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/, float strongness /*= 0.4f*/)
 	{
-		return Curve(0.0f, 0.0f, 1.0f, 0.5f);
+		return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
 	}
 
-	Curve Curve::EaseInOut()
+	Curve Curve::EaseOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/, float strongness /*= 0.4f*/)
 	{
-		return Curve(0.0f, 0.4f, 1.0f, 1.0f);
+		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, strongness);
 	}
 
-	Curve Curve::Linear()
+	Curve Curve::EaseInOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/, float strongness /*= 0.4f*/)
 	{
-		return Curve(0.0f, 0.0f, 1.0f, 1.0f);
+		return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
+	}
+
+	Curve Curve::Linear(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
+	{
+		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 1.0f);
 	}
 
 	void Curve::CheckSmoothKeys()
@@ -831,7 +840,7 @@ namespace o2
 		leftSupportPosition(other.leftSupportPosition), rightSupportValue(other.rightSupportValue),
 		rightSupportPosition(other.rightSupportPosition), supportsType(other.supportsType), mApproxValuesBounds(other.mApproxValuesBounds)
 	{
-		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(Vec2F));
+		memcpy(mApproxValues, other.mApproxValues, mApproxValuesCount * sizeof(ApproximationValue));
 	}
 
 	Curve::Key::operator float() const

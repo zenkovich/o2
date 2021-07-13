@@ -16,6 +16,11 @@ namespace o2
 		return isUnderPoint(point);
 	}
 
+	bool CursorEventsArea::IsInputTransparent() const
+	{
+		return isInputTransparent;
+	}
+
 	void CursorEventsArea::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		onCursorPressed(cursor);

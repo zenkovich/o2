@@ -91,7 +91,13 @@ namespace Editor
 
         Vector<SnapLine> mSnapLines; // Immediate drawing lines, used for drawing snapping
 
-    protected:
+	protected:
+		// Returns toggle in menu panel icon name
+		String GetPanelIcon() const override;
+
+		// Returns shortcut keys for toggle
+		ShortcutKeys GetShortcut() const override;
+
         // Draws tool
         void DrawScene();
 
@@ -378,6 +384,8 @@ END_META;
 CLASS_METHODS_META(Editor::FrameTool)
 {
 
+	PROTECTED_FUNCTION(String, GetPanelIcon);
+	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
 	PROTECTED_FUNCTION(void, DrawScene);
 	PROTECTED_FUNCTION(void, DrawSnapLines);
 	PROTECTED_FUNCTION(void, OnEnabled);

@@ -10,11 +10,16 @@
 #include "o2Editor/Core/Actions/ActionsList.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
+#include "AnimationTrackWrapper.h"
 
 using namespace o2;
 
 namespace Editor
 {
+	// Draws curve by points transformed to basis
+	void DrawCurveInCoords(const ApproximationValue* points, int pointsCount, const RectF& pointsBounds, const Basis& drawBasis,
+						   const Color4& color);
+
 	// -------------------------------------------------
 	// Animation control track for key frames animations
 	// Creates handles for each keys and updates them
@@ -80,8 +85,9 @@ namespace Editor
 		SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
 
 	protected:
-		typedef typename AnimationTrackType::ValueType TrackValueType;
-		typedef typename AnimationTrackType::Player TrackPlayerType;
+		typedef AnimationTrackWrapper<AnimationTrackType> Wrapper;
+		typedef typename Wrapper::TrackPlayerType         TrackPlayerType;
+		typedef typename Wrapper::ValueType               TrackValueType;
 
 		Vector<KeyHandle*> mHandles; // List of handles, each for keys
 
@@ -178,11 +184,15 @@ namespace Editor
 	{
 		Widget::Update(dt);
 
-		if (mPlayer && !Math::Equals(mLastValue, mPlayer->GetValue()))
+		if (mPlayer)
 		{
-			mPropertyValue = mPlayer->GetValue();
-			mLastValue = mPropertyValue;
-			mPropertyField->Refresh();
+			auto playerValue = Wrapper::GetValue(*mPlayer);
+			if (!Math::Equals(mLastValue, playerValue))
+			{
+				mPropertyValue = playerValue;
+				mLastValue = mPropertyValue;
+				mPropertyField->Refresh();
+			}
 		}
 	}
 
@@ -252,7 +262,7 @@ namespace Editor
 	{
 		mTreeControls = mnew Widget();
 
-		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(AnimationTrackType::ValueType));
+		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(TrackValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
 		mPropertyValueProxy = PointerValueProxy<TrackValueType>(&mPropertyValue);
 		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
@@ -298,7 +308,7 @@ namespace Editor
 
 		mHandles.Clear();
 
-		for (auto& key : mTrack->GetKeys())
+		for (auto& key : Wrapper::GetKeys(*mTrack))
 		{
 			AnimationKeyDragHandle* handle = nullptr;
 
@@ -325,12 +335,12 @@ namespace Editor
 			handle->onChangedPos = [=](const Vec2F& pos) {
 				mDisableHandlesUpdate = true;
 
-				int keyIdx = mTrack->FindKeyIdx(keyhandle->keyUid);
-				auto key = mTrack->GetKeys()[keyIdx];
+				int keyIdx = Wrapper::FindKeyIdx(*mTrack, keyhandle->keyUid);
+				auto key = Wrapper::GetKeys(*mTrack)[keyIdx];
 				key.position = pos.x;
 
-				mTrack->RemoveKeyAt(keyIdx);
-				mTrack->AddKey(key);
+				Wrapper::RemoveKeyAt(*mTrack, keyIdx);
+				Wrapper::AddKey(*mTrack, key);
 
 				mDisableHandlesUpdate = false;
 			};
@@ -347,14 +357,14 @@ namespace Editor
 		if (mDisableHandlesUpdate)
 			return;
 
-		if (mTrack->GetKeys().Count() != mHandles.Count())
+		if (Wrapper::GetKeys(*mTrack).Count() != mHandles.Count())
 		{
 			InitializeHandles();
 		}
 		else
 		{
 			for (auto keyHandle : mHandles)
-				keyHandle->handle->SetPosition(Vec2F(mTrack->FindKey(keyHandle->keyUid).position, 0.0f));
+				keyHandle->handle->SetPosition(Vec2F(Wrapper::FindKey(*mTrack, keyHandle->keyUid).position, 0.0f));
 		}
 	}
 
@@ -364,7 +374,7 @@ namespace Editor
 		time = mTimeline->GetTimeCursor();
 
 		bool hasKeyAtTime = false;
-		for (auto key : mTrack->GetKeys())
+		for (auto key : Wrapper::GetKeys(*mTrack))
 		{
 			if (mTimeline->IsSameTime(key.position, time))
 			{
@@ -418,14 +428,19 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InsertNewKey(float time)
 	{
-		int idx = mTrack->AddKey(time, mTrack->GetValue(time));
+		Wrapper::KeyType key;
+		key.position = time;
+		key.value = Wrapper::GetValue(*mTrack, time);
+
+		int idx = Wrapper::AddKey(*mTrack, key);
+
 		InitializeHandles();
 		mTimeline->SetTimeCursor(time);
 
 		OnKeysChanged();
 
 		DataDocument keyData;
-		Map<String, Vector<UInt64>> keys = { { mTrackPath, { mTrack->GetKeyAt(idx).uid } } };
+		Map<String, Vector<UInt64>> keys = { { mTrackPath, { Wrapper::GetKey(*mTrack, idx).uid } } };
 		mHandlesSheet->SerializeKeys(keyData, keys, 0);
 		mHandlesSheet->mAnimationWindow->mActionsList.DoneAction(mnew AnimationAddKeysAction(keys, keyData, mHandlesSheet));
 	}
@@ -436,7 +451,7 @@ namespace Editor
 		auto time = mTimeline->GetTimeCursor();
 		int keyIdx = -1;
 		int i = 0;
-		for (auto& key : mTrack->GetKeys())
+		for (auto& key : Wrapper::GetKeys(*mTrack))
 		{
 			if (mTimeline->IsSameTime(key.position, time))
 			{
@@ -448,14 +463,17 @@ namespace Editor
 
 		if (keyIdx >= 0)
 		{
-			auto key = mTrack->GetKeys()[keyIdx];
-			mTrack->RemoveKeyAt(keyIdx);
+			auto key = Wrapper::GetKeys(*mTrack)[keyIdx];
+			Wrapper::RemoveKeyAt(*mTrack, keyIdx);
 			key.value = mPropertyValue;
-			mTrack->AddKey(key);
+			Wrapper::AddKey(*mTrack, key);
 		}
 		else
 		{
-			mTrack->AddKey(time, mPropertyValue);
+			Wrapper::KeyType key;
+			key.position = time;
+			key.value = mPropertyValue;
+			Wrapper::AddKey(*mTrack, key);
 			InitializeHandles();
 		}
 
@@ -465,7 +483,7 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::SerializeKey(UInt64 keyUid, DataValue& data, float relativeTime)
 	{
-		auto key = mTrack->FindKey(keyUid);
+		auto key = Wrapper::FindKey(*mTrack, keyUid);
 		key.position -= relativeTime;
 		data.Set(key);
 	}
@@ -474,14 +492,14 @@ namespace Editor
 	UInt64 KeyFramesTrackControl<AnimationTrackType>::DeserializeKey(const DataValue& data, float relativeTime,
 																	 bool generateNewUid /*= true*/)
 	{
-		AnimationTrackType::Key key;
+		Wrapper::KeyType key;
 		data.Get(key);
 		key.position += relativeTime;
 
 		if (generateNewUid)
 			key.uid = Math::Random();
 
-		mTrack->AddKey(key);
+		Wrapper::AddKey(*mTrack, key);
 
 		return key.uid;
 	}
@@ -489,9 +507,9 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::DeleteKey(UInt64 keyUid)
 	{
-		int idx = mTrack->FindKeyIdx(keyUid);
+		int idx = Wrapper::FindKeyIdx(*mTrack, keyUid);
 		if (idx >= 0)
-			mTrack->RemoveKeyAt(idx);
+			Wrapper::RemoveKeyAt(*mTrack, idx);
 	}
 
 }

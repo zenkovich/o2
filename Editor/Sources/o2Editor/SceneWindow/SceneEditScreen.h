@@ -102,6 +102,21 @@ namespace Editor
 		template<typename _type>
 		void SelectTool();
 
+		// Selects tool
+		void SelectTool(const IEditTool* tool);
+
+		// Returns selected tool
+		IEditTool* GetSelectedTool() const;
+
+		// Adds tool
+		void AddTool(IEditTool* tool);
+
+		// Removes tool
+		void RemoveTool(IEditTool* tool);
+
+		// Returns all registered tools
+		const Vector<IEditTool*>& GetTools() const;
+
 		// Returns selected objects array
 		const Vector<SceneEditableObject*>& GetSelectedObjects() const;
 
@@ -143,7 +158,7 @@ namespace Editor
 		
 	protected:
 		// Initializes tools
-		void InitializeTools(const Type* toolType = nullptr);
+		void InitializeTools();
 
 		// Returns true if some handle hovered or pressed by cursor
 		bool IsHandleWorking(const Input::Cursor& cursor) const;
@@ -256,16 +271,7 @@ namespace Editor
 	template<typename _type>
 	void SceneEditScreen::SelectTool()
 	{
-		if (mEnabledTool && mEnabledTool->GetType() == TypeOf(_type))
-			return;
-
-		if (mEnabledTool)
-			mEnabledTool->OnDisabled();
-
-		mEnabledTool = mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); });
-
-		if (mEnabledTool)
-			mEnabledTool->OnEnabled();
+		SelectTool(mTools.FindOrDefault([&](auto x) { return x->GetType() == TypeOf(_type); }));
 	}
 }
 
@@ -314,13 +320,18 @@ CLASS_METHODS_META(Editor::SceneEditScreen)
 	PUBLIC_FUNCTION(void, RemoveEditorLayer, SceneEditorLayer*);
 	PUBLIC_FUNCTION(void, SetLayerEnabled, const String&, bool);
 	PUBLIC_FUNCTION(bool, IsLayerEnabled, const String&);
+	PUBLIC_FUNCTION(void, SelectTool, const IEditTool*);
+	PUBLIC_FUNCTION(IEditTool*, GetSelectedTool);
+	PUBLIC_FUNCTION(void, AddTool, IEditTool*);
+	PUBLIC_FUNCTION(void, RemoveTool, IEditTool*);
+	PUBLIC_FUNCTION(const Vector<IEditTool*>&, GetTools);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetSelectedObjects);
 	PUBLIC_FUNCTION(const Vector<SceneEditableObject*>&, GetTopSelectedObjects);
 	PUBLIC_FUNCTION(const Color4&, GetSingleObjectSelectionColor);
 	PUBLIC_FUNCTION(const Color4&, GetManyObjectsSelectionColor);
 	PUBLIC_FUNCTION(void, OnSceneChanged);
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, InitializeTools, const Type*);
+	PROTECTED_FUNCTION(void, InitializeTools);
 	PROTECTED_FUNCTION(bool, IsHandleWorking, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
 	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);

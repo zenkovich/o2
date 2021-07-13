@@ -69,6 +69,8 @@ namespace Editor
 	{
 		mAnimationWindow->mHandlesSheet->UnregAllTrackControls();
 
+		mPrevSelectedNodes.Clear();
+
 		RebuildAnimationTree();
 		ExpandAll();
 		OnObjectsChanged({ (void*)mRootValue });
@@ -288,11 +290,19 @@ namespace Editor
 
 	void AnimationTree::OnNodesSelectionChanged(Vector<void*> objects)
 	{
+		for (auto node : mPrevSelectedNodes)
+			node->trackControl->SetActive(false);
+
 		mAnimationWindow->mHandlesSheet->DeselectAll();
 
+		mPrevSelectedNodes.Clear();
 		for (auto obj : objects) 
 		{
 			TrackNode* node = (TrackNode*)obj;
+			mPrevSelectedNodes.Add(node);
+
+			node->trackControl->SetActive(true);
+
 			for (auto handle : node->trackControl->GetKeyHandles())
 				handle->handle->SetSelected(true);
 		}

@@ -217,7 +217,7 @@ namespace o2
 			res = mnew _type();
 
 		if (TypeOf(_type) != TypeOf(ContextMenu))
-			res->SetEnableForcible(true);
+			res->SetEnabledForcible(true);
 
 		return res;
 	}

@@ -14,4 +14,14 @@ namespace o2
 
 		operator Vec2F() const { return Vec2F(position, value); }
 	};
+
+	struct ApproximationVec2F
+	{
+		float position;
+		Vec2F value;
+
+	public:
+		ApproximationVec2F() = default;
+		ApproximationVec2F(const Vec2F& value, float position):position(position), value(value) {}
+	};
 }

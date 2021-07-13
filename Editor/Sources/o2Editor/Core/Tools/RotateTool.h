@@ -61,6 +61,12 @@ namespace Editor
 		TransformAction* mTransformAction = nullptr; // Current transform action. Creates when transform started
 
 	public:
+		// Returns toggle in menu panel icon name
+		String GetPanelIcon() const override;
+
+		// Returns shortcut keys for toggle
+		ShortcutKeys GetShortcut() const override;
+
 		// Updates tool
 		void Update(float dt);
 
@@ -154,6 +160,8 @@ END_META;
 CLASS_METHODS_META(Editor::RotateTool)
 {
 
+	PUBLIC_FUNCTION(String, GetPanelIcon);
+	PUBLIC_FUNCTION(ShortcutKeys, GetShortcut);
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(void, DrawScreen);
 	PUBLIC_FUNCTION(void, OnEnabled);

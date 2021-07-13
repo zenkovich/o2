@@ -89,11 +89,13 @@ namespace o2
 
 		// ----------------------
 		// Template key container
+		// ----------------------
 		template<typename T>
 		struct KeyContainer: public IKeyContainer
 		{
 			typename AnimationTrack<T>::Key key;
-			AnimationTrack<T>*              animatedValue;
+
+			AnimationTrack<T>* animatedValue;
 
 			~KeyContainer() {}
 
@@ -101,6 +103,25 @@ namespace o2
 			{
 				key.position = time;
 				animatedValue->AddKey(key);
+			}
+		};
+
+		// ---------------
+		// Vec2F container
+		// ---------------
+		template<>
+		struct KeyContainer<Vec2F>: public IKeyContainer
+		{
+			Curve::Key timeKey;
+
+			AnimationTrack<Vec2F>* animatedValue;
+
+			~KeyContainer() {}
+
+			void Apply(float time)
+			{
+				timeKey.position = time;
+				animatedValue->timeCurve.InsertKey(timeKey);
 			}
 		};
 

@@ -409,6 +409,9 @@
     <ClInclude Include="..\..\Sources\o2Editor\SceneWindow\SceneEditorLayer.h">
       <Filter>Sources\o2Editor\SceneWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2Editor\AnimationWindow\TrackControls\AnimationTrackWrapper.h">
+      <Filter>Sources\o2Editor\AnimationWindow\TrackControls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2Editor\AnimationWindow\AnimationKeysActions.cpp">

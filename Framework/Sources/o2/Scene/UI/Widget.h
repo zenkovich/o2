@@ -27,7 +27,7 @@ namespace o2
 	public:
 		PROPERTIES(Widget);
 
-		PROPERTY(bool, enabledForcibly, SetEnableForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(bool, enabledForcibly, SetEnabledForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE
 
 		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency @EDITOR_IGNORE @ANIMATABLE
@@ -198,7 +198,7 @@ namespace o2
 		float GetResTransparency() const;
 
 		// Sets visibility
-		void SetEnableForcible(bool visible);
+		void SetEnabledForcible(bool visible);
 
 		// Sets visibility to true
 		void Show(bool forcible = false);
@@ -801,7 +801,7 @@ CLASS_METHODS_META(o2::Widget)
 	PUBLIC_FUNCTION(void, SetTransparency, float);
 	PUBLIC_FUNCTION(float, GetTransparency);
 	PUBLIC_FUNCTION(float, GetResTransparency);
-	PUBLIC_FUNCTION(void, SetEnableForcible, bool);
+	PUBLIC_FUNCTION(void, SetEnabledForcible, bool);
 	PUBLIC_FUNCTION(void, Show, bool);
 	PUBLIC_FUNCTION(void, Hide, bool);
 	PUBLIC_FUNCTION(void, Focus);

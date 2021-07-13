@@ -33,7 +33,7 @@ namespace o2
 		Curve(float beginCoef, float beginCoefPosition, float endCoef, float endCoefPosition);
 
 		// Constructor from keys with smoothing
-		Curve(Vector<Vec2F> values, bool smooth = true);
+		Curve(const Vector<Vec2F>& values, bool smooth = true);
 
 		// Copy-constructor
 		Curve(const Curve& other);
@@ -79,19 +79,19 @@ namespace o2
 		void InsertCurve(const Curve& curve, float position);
 
 		// Adds keys with smoothing at end
-		void AppendKeys(Vector<Vec2F> values, bool smooth = true);
+		void AppendKeys(const Vector<Vec2F>& values, bool smooth = true);
 
 		// Adds keys at end
 		void AppendKeys(const Vector<Key>& keys);
 
 		// Adds keys with smoothing at beginning
-		void PrependKeys(Vector<Vec2F> values, bool smooth = true);
+		void PrependKeys(const Vector<Vec2F>& values, bool smooth = true);
 
 		// Adds keys at beginning
 		void PrependKeys(const Vector<Key>& keys);
 
 		// Inserts keys with smoothing at position
-		void InsertKeys(Vector<Vec2F> values, float position, bool smooth = true);
+		void InsertKeys(const Vector<Vec2F>& values, float position, bool smooth = true);
 
 		// Inserts keys at position
 		void InsertKeys(const Vector<Key>& keys, float position);
@@ -123,7 +123,7 @@ namespace o2
 		int PrependKey(float offset, float value, float leftCoef, float leftCoefPosition,
 					   float rightCoef, float rightCoefPosition);
 
-		 // Prepends key at beginning with offset and smoothing and returns index
+		// Prepends key at beginning with offset and smoothing and returns index
 		int PrependKey(float offset, float value, float smoothCoef = 1.0f);
 
 		// Prepends flat key at beginning with offset
@@ -180,17 +180,23 @@ namespace o2
 		// Key access operator by position
 		Key operator[](float position) const;
 
-		// Returns ease in curve
-		static Curve EaseIn();
+		// Returns parametric specified curve
+		// Sample: Parametric(someBegin, someEnd, 1.0f, 0.0f, 0.4f, 1.0f, 0.6f) 
+		static Curve Parametric(float begin, float end, float duration,
+								float beginCoef, float beginCoefPosition,
+								float endCoef, float endCoefPosition);
 
-		// Returns ease out curve
-		static Curve EaseOut();
+		// Returns tween animation from begin to end in duration with ease in
+		static Curve EaseIn(float begin = 0.0f, float end = 1.0f, float duration = 1.0f, float strongness = 0.4f);
 
-		// Returns ease in-out curve
-		static Curve EaseInOut();
+		// Returns tween animation from begin to end in duration with ease out
+		static Curve EaseOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f, float strongness = 0.4f);
 
-		// Returns linear curve
-		static Curve Linear();
+		// Returns tween animation from begin to end in duration with ease in-out
+		static Curve EaseInOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f, float strongness = 0.4f);
+
+		// Returns tween animation from begin to end in duration with linear transition
+		static Curve Linear(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
 
 		SERIALIZABLE(Curve);
 
@@ -271,7 +277,7 @@ namespace o2
 		// Checks all smooth keys and updates supports points
 		void CheckSmoothKeys();
 
-	    // Updates approximation
+		// Updates approximation
 		void UpdateApproximation();
 
 		// Returns keys (for property)
@@ -317,11 +323,11 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(void, AppendCurve, const Curve&);
 	PUBLIC_FUNCTION(void, PrependCurve, const Curve&);
 	PUBLIC_FUNCTION(void, InsertCurve, const Curve&, float);
-	PUBLIC_FUNCTION(void, AppendKeys, Vector<Vec2F>, bool);
+	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Vec2F>&, bool);
 	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, PrependKeys, Vector<Vec2F>, bool);
+	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Vec2F>&, bool);
 	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, InsertKeys, Vector<Vec2F>, float, bool);
+	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Vec2F>&, float, bool);
 	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Key>&, float);
 	PUBLIC_FUNCTION(int, InsertKey, const Key&);
 	PUBLIC_FUNCTION(int, InsertKey, float, float, float, float, float, float);
@@ -349,10 +355,11 @@ CLASS_METHODS_META(o2::Curve)
 	PUBLIC_FUNCTION(float, Length);
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PUBLIC_FUNCTION(RectF, GetRect);
-	PUBLIC_STATIC_FUNCTION(Curve, EaseIn);
-	PUBLIC_STATIC_FUNCTION(Curve, EaseOut);
-	PUBLIC_STATIC_FUNCTION(Curve, EaseInOut);
-	PUBLIC_STATIC_FUNCTION(Curve, Linear);
+	PUBLIC_STATIC_FUNCTION(Curve, Parametric, float, float, float, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(Curve, EaseIn, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(Curve, EaseOut, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(Curve, EaseInOut, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(Curve, Linear, float, float, float);
 	PROTECTED_FUNCTION(void, CheckSmoothKeys);
 	PROTECTED_FUNCTION(void, UpdateApproximation);
 	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);

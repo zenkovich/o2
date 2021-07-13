@@ -175,25 +175,27 @@ namespace o2
 														  float endCoef, float endCoefPosition)
 	{
 		AnimationTrack<float> res;
-		res.curve.InsertKey(0.0f, begin, 0.0f, 0.0f, Math::Lerp(begin, end, beginCoef) - begin, beginCoefPosition*duration);
-		res.curve.InsertKey(duration, end, Math::Lerp(begin, end, endCoef) - end, -endCoefPosition*duration, 0.0f, 0.0f);
+		res.curve = Curve::Parametric(begin, end, duration, beginCoef, beginCoefPosition, endCoef, endCoefPosition);
 		return res;
 	}
 
 
-	AnimationTrack<float> AnimationTrack<float>::EaseIn(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
+	AnimationTrack<float> AnimationTrack<float>::EaseIn(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/,
+														float strongness /*= 0.4f*/)
 	{
-		return Parametric(begin, end, duration, 0.0f, 0.5f, 1.0f, 1.0f);
+		return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
 	}
 
-	AnimationTrack<float> AnimationTrack<float>::EaseOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
+	AnimationTrack<float> AnimationTrack<float>::EaseOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/,
+														 float strongness /*= 0.4f*/)
 	{
-		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, 0.5f);
+		return Parametric(begin, end, duration, 0.0f, 0.0f, 1.0f, strongness);
 	}
 
-	AnimationTrack<float> AnimationTrack<float>::EaseInOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)
+	AnimationTrack<float> AnimationTrack<float>::EaseInOut(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/,
+														   float strongness /*= 0.4f*/)
 	{
-		return Parametric(begin, end, duration, 0.0f, 0.4f, 1.0f, 1.0f);
+		return Parametric(begin, end, duration, 0.0f, strongness, 1.0f, 1.0f);
 	}
 
 	AnimationTrack<float> AnimationTrack<float>::Linear(float begin /*= 0.0f*/, float end /*= 1.0f*/, float duration /*= 1.0f*/)

@@ -9,13 +9,13 @@ namespace o2
 	PopupWidget::PopupWidget():
 		ScrollArea()
 	{
-		SetEnableForcible(false);
+		SetEnabledForcible(false);
 	}
 
 	PopupWidget::PopupWidget(const PopupWidget& other):
 		ScrollArea(other), mFitSizeMin(other.mFitSizeMin)
 	{
-		SetEnableForcible(false);
+		SetEnabledForcible(false);
 	}
 
 	PopupWidget::~PopupWidget()

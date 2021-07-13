@@ -135,6 +135,8 @@ namespace Editor
 
 		OnResizing();
 
+		FreeConsole();
+
 		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
 		o2EditorAnimationWindow.SetAnimation(&widget->GetStateObject("playing")->GetAnimationClip(),
 											 &widget->GetStateObject("playing")->player);

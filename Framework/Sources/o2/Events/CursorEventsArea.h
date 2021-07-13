@@ -4,9 +4,9 @@
 
 namespace o2
 {
-	// ----------------------
-	// Functional drag handle
-	// ----------------------
+	// -----------------------------
+	// Functional cursor events area 
+	// -----------------------------
 	class CursorEventsArea: public CursorAreaEventsListener
 	{
 	public:
@@ -22,12 +22,17 @@ namespace o2
 	public:
 		CursorType cursorType; // Cursor type when hovering and dragging
 
+		bool isInputTransparent = false; // Is input transparent, clicks pass through
+
 	public:
 		// Default constructor
 		CursorEventsArea();
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
 
 	protected:
 		// It is called when cursor pressed on this

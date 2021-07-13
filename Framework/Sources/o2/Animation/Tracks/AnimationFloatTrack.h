@@ -115,13 +115,13 @@ namespace o2
 												float endCoef, float endCoefPosition);
 
 		// Returns tween animation from begin to end in duration with ease in
-		static AnimationTrack<float> EaseIn(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
+		static AnimationTrack<float> EaseIn(float begin = 0.0f, float end = 1.0f, float duration = 1.0f, float strongness = 0.4f);
 
 		// Returns tween animation from begin to end in duration with ease out
-		static AnimationTrack<float> EaseOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
+		static AnimationTrack<float> EaseOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f, float strongness = 0.4f);
 
 		// Returns tween animation from begin to end in duration with ease in-out
-		static AnimationTrack<float> EaseInOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
+		static AnimationTrack<float> EaseInOut(float begin = 0.0f, float end = 1.0f, float duration = 1.0f, float strongness = 0.4f);
 
 		// Returns tween animation from begin to end in duration with linear transition
 		static AnimationTrack<float> Linear(float begin = 0.0f, float end = 1.0f, float duration = 1.0f);
@@ -258,9 +258,9 @@ CLASS_METHODS_META(o2::AnimationTrack<float>)
 	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
 	PUBLIC_FUNCTION(void, SmoothKey, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, Parametric, float, float, float, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseIn, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseOut, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseInOut, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseIn, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseOut, float, float, float, float);
+	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseInOut, float, float, float, float);
 	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, Linear, float, float, float);
 	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
 	PROTECTED_FUNCTION(void, OnCurveChanged);

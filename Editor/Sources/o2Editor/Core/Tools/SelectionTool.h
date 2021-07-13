@@ -36,6 +36,12 @@ namespace Editor
 		bool  mSelectingObjects = false; // Is selecting objects now
 
 	protected:
+		// Returns toggle in menu panel icon name
+		String GetPanelIcon() const override;
+
+		// Returns shortcut keys for toggle
+		ShortcutKeys GetShortcut() const override;
+
 		// Draws tool
 		void DrawScene();
 
@@ -92,6 +98,8 @@ END_META;
 CLASS_METHODS_META(Editor::SelectionTool)
 {
 
+	PROTECTED_FUNCTION(String, GetPanelIcon);
+	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
 	PROTECTED_FUNCTION(void, DrawScene);
 	PROTECTED_FUNCTION(void, DrawScreen);
 	PROTECTED_FUNCTION(void, Update, float);

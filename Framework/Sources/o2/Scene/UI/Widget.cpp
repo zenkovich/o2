@@ -482,7 +482,7 @@ namespace o2
 		}
 
 		RetargetStatesAnimations();
-		SetEnableForcible(mEnabled);
+		SetEnabledForcible(mEnabled);
 		UpdateLayersDrawingSequence();
 	}
 
@@ -856,7 +856,7 @@ namespace o2
 		return mResTransparency;
 	}
 
-	void Widget::SetEnableForcible(bool visible)
+	void Widget::SetEnabledForcible(bool visible)
 	{
 		if (mVisibleState)
 			mVisibleState->SetStateForcible(visible);
@@ -869,7 +869,7 @@ namespace o2
 	void Widget::Show(bool forcible /*= false*/)
 	{
 		if (forcible)
-			SetEnableForcible(true);
+			SetEnabledForcible(true);
 		else
 			SetEnabled(true);
 	}
@@ -877,7 +877,7 @@ namespace o2
 	void Widget::Hide(bool forcible /*= false*/)
 	{
 		if (forcible)
-			SetEnableForcible(false);
+			SetEnabledForcible(false);
 		else
 			SetEnabled(false);
 	}

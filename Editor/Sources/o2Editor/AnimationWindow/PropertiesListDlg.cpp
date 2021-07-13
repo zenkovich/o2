@@ -319,8 +319,8 @@ namespace Editor
 		mData = data;
 		mTree = tree;
 
-		mAddButton->SetEnableForcible(!data->used && data->children.IsEmpty());
-		mRemoveButton->SetEnableForcible(data->used && data->children.IsEmpty());
+		mAddButton->SetEnabledForcible(!data->used && data->children.IsEmpty());
+		mRemoveButton->SetEnabledForcible(data->used && data->children.IsEmpty());
 	}
 
 	String AnimationPropertiesTreeNode::GetCreateMenuCategory()

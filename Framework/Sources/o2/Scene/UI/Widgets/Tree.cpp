@@ -1501,7 +1501,7 @@ namespace o2
 		res->SetInteractable(!mIsDraggingNodes);
 		res->mIsSelected = false;
 		res->mIsClipped = false;
-		res->SetEnableForcible(true);
+		res->SetEnabledForcible(true);
 		Widget::UpdateTransparency();
 
 		mIsNeedUpdateView = false;

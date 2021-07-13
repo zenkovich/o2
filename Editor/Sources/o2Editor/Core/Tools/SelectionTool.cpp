@@ -22,6 +22,16 @@ namespace Editor
 			delete mSelectionSprite;
 	}
 
+	String SelectionTool::GetPanelIcon() const
+	{
+		return "ui/UI4_select_tool.png";
+	}
+
+	ShortcutKeys SelectionTool::GetShortcut() const
+	{
+		return ShortcutKeys('Q');
+	}
+
 	void SelectionTool::DrawScene()
 	{
 		for (auto object : mCurrentSelectingObjects)

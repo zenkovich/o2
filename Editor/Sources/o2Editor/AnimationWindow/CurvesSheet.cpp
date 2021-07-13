@@ -1,6 +1,7 @@
 #include "o2Editor/stdafx.h"
 
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
+#include "o2/Animation/Tracks/AnimationVec2FTrack.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2Editor/AnimationWindow/AnimationWindow.h"
@@ -42,6 +43,8 @@ namespace Editor
 		{
 			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
 				mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
+			else if (auto vec2Track = dynamic_cast<AnimationTrack<Vec2F>*>(track))
+				mCurvesEditor->AddCurve(track->path, &vec2Track->timeCurve);
 		}
 
 		UpdateCurvesColors();
@@ -61,6 +64,12 @@ namespace Editor
 				mCurvesEditor->SetCurveColor(&floatTrack->curve, curveColor);
 				curveColor = Color4::SomeColor(colorIdx++);
 			}
+			else if (auto vec2Track = dynamic_cast<AnimationTrack<Vec2F>*>(track))
+			{
+				mAnimationWindow->mTree->SetAnimationValueColor(track->path, curveColor);
+				mCurvesEditor->SetCurveColor(&vec2Track->timeCurve, curveColor);
+				curveColor = Color4::SomeColor(colorIdx++);
+			}
 		}
 	}
 
@@ -73,13 +82,19 @@ namespace Editor
 		Vector<Curve*> animCurves;
 		for (auto track : mAnimationWindow->mAnimation->GetTracks())
 		{
+			Curve* curve = nullptr;
 			if (auto floatTrack = dynamic_cast<AnimationTrack<float>*>(track))
-			{
-				animCurves.Add(&floatTrack->curve);
+				curve = &floatTrack->curve;
+			else if (auto vec2Track = dynamic_cast<AnimationTrack<Vec2F>*>(track))
+				curve = &vec2Track->timeCurve;
 
-				if (!currentCurves.ContainsValue(&floatTrack->curve))
+			if (curve)
+			{
+				animCurves.Add(curve);
+
+				if (!currentCurves.ContainsValue(curve))
 				{
-					mCurvesEditor->AddCurve(track->path, &floatTrack->curve);
+					mCurvesEditor->AddCurve(track->path, curve);
 					changed = true;
 				}
 			}

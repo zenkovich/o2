@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Scene/UI/Widgets/Toggle.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/String.h"
 
@@ -11,7 +12,6 @@ namespace o2
 	class CustomDropDown;
 	class DropDown;
 	class HorizontalLayout;
-	class Toggle;
 	class Widget;
 }
 
@@ -35,6 +35,12 @@ namespace Editor
 		// Returns tools' panel widget 
 		HorizontalLayout* GetToolsPanel() const;
 
+		// Adds tool to panel
+		void AddToolToggle(Toggle* toggle);
+
+		// Removes tool from panel
+		void RemoveToolToggle(Toggle* toggle);
+
 		// Updates panel
 		void Update(float dt);
 
@@ -42,22 +48,16 @@ namespace Editor
 		const String mDefaultSchemeName = "Default";
 		const String mSaveAsSchemeName = "Save as ...";
 
-		Widget* mPanelRoot; // Root panel widget
+		Widget* mPanelRoot = nullptr;     // Root panel widget
 
-		Widget*   mPlayPanel;	// Play panel widget
-		Toggle*   mPlayToggle;	// Play toggle
-		Toggle*   mPauseToggle;	// Pause toggle
-		Button*   mStepButton;	// Step button
-		DropDown* mDevicesList;	// Devices list dropdown
+		Widget*   mPlayPanel = nullptr;	    // Play panel widget
+		Toggle*   mPlayToggle = nullptr;	// Play toggle
+		Toggle*   mPauseToggle = nullptr;	// Pause toggle
+		Button*   mStepButton = nullptr;	// Step button
+		DropDown* mDevicesList = nullptr;	// Devices list dropdown
 
-		HorizontalLayout* mEditToolsPanel;	// Tools panel layout
-
-		Toggle* mArrowToolToggle;  // Arrow tool
-		Toggle* mBrushToolToggle;  // Brush tool
-		Toggle* mMoveToolToggle;   // Move tool
-		Toggle* mRotateToolToggle; // Rotate tool
-		Toggle* mScaleToolToggle;  // Scale tool
-		Toggle* mFrameToolToggle;  // Frame tool
+		HorizontalLayout* mToolsPanel = nullptr; // Tools panel layout
+		ToggleGroup       mToolsTogglesGroup;    // Group for toggles
 
 		DropDown* mLayoutSchemesList; // Layouts schemes list
 

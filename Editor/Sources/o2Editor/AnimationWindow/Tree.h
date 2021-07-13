@@ -84,6 +84,8 @@ namespace Editor
 		TrackNode*   mRootValue = nullptr; // Root animation properties tree node
 		ContextMenu* mContextMenu;         // Context menu
 
+		Vector<TrackNode*> mPrevSelectedNodes; // Previous selected nodes before new selection
+
 		float mTreeWidth = 100.0f; // Tree - part width
 
 	private:
@@ -215,6 +217,7 @@ CLASS_FIELDS_META(Editor::AnimationTree)
 	FIELD().DEFAULT_VALUE(0).NAME(mAnimationValuesCount).PRIVATE();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mRootValue).PRIVATE();
 	FIELD().NAME(mContextMenu).PRIVATE();
+	FIELD().NAME(mPrevSelectedNodes).PRIVATE();
 	FIELD().DEFAULT_VALUE(100.0f).NAME(mTreeWidth).PRIVATE();
 }
 END_META;

@@ -188,7 +188,7 @@ namespace o2
 			res = (Widget*)type.CreateSample();
 
 		if (type != TypeOf(ContextMenu))
-			res->SetEnableForcible(true);
+			res->SetEnabledForcible(true);
 
 		return res;
 	}
