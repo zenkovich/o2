@@ -163,6 +163,7 @@ namespace o2
 	void AnimationClip::OnTrackAdded(IAnimationTrack* track)
 	{
 		track->onKeysChanged += THIS_FUNC(OnTrackChanged);
+		track->mOwnerClip = this;
 
 		onTrackAdded(track);
 		onChanged();

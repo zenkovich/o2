@@ -45,6 +45,8 @@ namespace Editor
 			Vec2KeyFramesTrackControl* trackControl;
 
 		public:
+			Vec2F GetOrigin() const;
+
 			Vec2F WorldToLocal(const Vec2F& point) const override;
 			Vec2F LocalToWorld(const Vec2F& point) const override;
 
@@ -63,6 +65,11 @@ namespace Editor
 			void SetPointNextSupportPos(int idx, const Vec2F& pos) override;
 
 			Vector<Vec2F> GetDrawPoints() const override;
+
+			const ApproximationVec2F* GetPointApproximation(int idx) const override;
+			int GetPointApproximationCount(int idx) const override;
+
+			void OnChanged() override;
 		};
 
 		struct SplineSceneLayer: public SceneEditorLayer
@@ -83,22 +90,33 @@ namespace Editor
 
 		struct SplineTool: public IEditTool
 		{
+			Vec2KeyFramesTrackControl* trackControl;
+
+		public:
 			// Returns toggle in menu panel icon name
 			String GetPanelIcon() const override;
+
+			// It is called when tool was enabled
+			void OnEnabled() override;
+
+			// It is called when tool was disabled
+			void OnDisabled() override;
 		};
 
 	private:
-		SplineEditor     mSplineEditor; 
-		SplineSceneLayer mSceneLayer;
+		SplineEditor     mSplineEditor; // Animation spline editor
+		SplineSceneLayer mSceneLayer;   // Scene layer for drawing spline
 
+		bool mIsEnabled = false; // Is track editing enabled
 
-		bool mIsEnabled = false;
+		SplineTool mTool;                       // Other handles locking tool
+		IEditTool* mPrevSelectedTool = nullptr; // Previous selected tool, for restore
 
-		SplineTool mTool;
-		IEditTool* mPrevSelectedTool = nullptr;
+		Actor* mTrackOwner = nullptr; // Actor which animated in track
 
 	private:
 		void InitializeControls();
+		void TryFindOwnerTrack();
 		void OnSetTrack() override;
 		void OnKeysChanged() override;
 	};
@@ -116,6 +134,7 @@ CLASS_FIELDS_META(Editor::Vec2KeyFramesTrackControl)
 	FIELD().DEFAULT_VALUE(false).NAME(mIsEnabled).PRIVATE();
 	FIELD().NAME(mTool).PRIVATE();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool).PRIVATE();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrackOwner).PRIVATE();
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
@@ -125,6 +144,7 @@ CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
 	PUBLIC_FUNCTION(void, Draw);
 	PRIVATE_FUNCTION(void, InitializeControls);
+	PRIVATE_FUNCTION(void, TryFindOwnerTrack);
 	PRIVATE_FUNCTION(void, OnSetTrack);
 	PRIVATE_FUNCTION(void, OnKeysChanged);
 }

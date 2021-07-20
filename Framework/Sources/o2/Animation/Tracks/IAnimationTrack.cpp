@@ -94,10 +94,20 @@ namespace o2
 		}
 	}
 
+	const AnimationPlayer* IAnimationTrack::IPlayer::GetOwnerPlayer() const
+	{
+		return mOwnerPlayer;
+	}
+
 	IAnimationTrack& IAnimationTrack::operator=(const IAnimationTrack& other)
 	{
 		loop = other.loop;
 		return *this;
+	}
+
+	const AnimationClip* IAnimationTrack::GetOwnerClip() const
+	{
+		return mOwnerClip;
 	}
 
 }

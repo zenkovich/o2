@@ -33,7 +33,7 @@ namespace Editor
 		{
 			o2EditorSceneScreen.AddTool(&mTool);
 			mPrevSelectedTool = o2EditorSceneScreen.GetSelectedTool();
-			o2EditorSceneScreen.SelectTool<SplineTool>();	
+			o2EditorSceneScreen.SelectTool<SplineTool>();
 		}
 		else
 		{
@@ -54,6 +54,31 @@ namespace Editor
 	{
 		o2EditorSceneScreen.AddEditorLayer(&mSceneLayer);
 		mSceneLayer.trackControl = this;
+		mTool.trackControl = this;
+	}
+
+	void Vec2KeyFramesTrackControl::TryFindOwnerTrack()
+	{
+		mTrackOwner = nullptr;
+
+		if (!mPlayer)
+			return;
+
+		auto path = mTrack->path;
+		Actor* root = dynamic_cast<Actor*>(mPlayer->GetOwnerPlayer()->GetTarget());
+		while (root && path.StartsWith("child"))
+		{
+			int nextSlash = path.Find("/");
+			if (nextSlash < 0)
+				return;
+
+			int nextChildSlash = path.Find("/", nextSlash + 1);
+			auto childName = path.SubStr(nextSlash + 1, nextChildSlash);
+			root = root->GetChild(childName);
+			path.Erase(0, nextChildSlash + 1);
+		}
+
+		mTrackOwner = root;
 	}
 
 	void Vec2KeyFramesTrackControl::OnSetTrack()
@@ -62,6 +87,8 @@ namespace Editor
 		wrapper->trackControl = this;
 
 		mSplineEditor.SetSpline(wrapper);
+
+		TryFindOwnerTrack();
 	}
 
 	void Vec2KeyFramesTrackControl::OnKeysChanged()
@@ -109,14 +136,22 @@ namespace Editor
 		DrawDebugFrame();
 	}
 
+	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::GetOrigin() const
+	{
+		if (trackControl->mTrackOwner && trackControl->mTrackOwner->GetParent())
+			return trackControl->mTrackOwner->GetParent()->transform->worldPosition;
+
+		return Vec2F();
+	}
+
 	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::WorldToLocal(const Vec2F& point) const
 	{
-		return o2EditorSceneScreen.ScreenToLocalPoint(point);
+		return o2EditorSceneScreen.ScreenToLocalPoint(point) - GetOrigin();
 	}
 
 	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::LocalToWorld(const Vec2F& point) const
 	{
-		return o2EditorSceneScreen.LocalToScreenPoint(point);
+		return o2EditorSceneScreen.LocalToScreenPoint(point + GetOrigin());
 	}
 
 	int Vec2KeyFramesTrackControl::SplineWrapper::GetPointsCount() const
@@ -177,20 +212,31 @@ namespace Editor
 	Vector<Vec2F> Vec2KeyFramesTrackControl::SplineWrapper::GetDrawPoints() const
 	{
 		Vector<Vec2F> res;
-		bool first = true;
-		for (auto& key : trackControl->mTrack->spline.GetKeys())
+		auto& keys = trackControl->mTrack->spline.GetKeys();
+		for (int i = 1; i < keys.Count(); i++)
 		{
-			if (first)
-			{
-				first = false;
-				continue;
-			}
+			for (int j = 0; j < keys[i].GetApproximatedPointsCount() - 1; j++)
+				res.Add(LocalToWorld(keys[i].GetApproximatedPoints()[j].value));
 
-			for (int i = 0; i < key.GetApproximatedPointsCount(); i++)
-				res.Add(LocalToWorld(key.GetApproximatedPoints()[i].value));
+			if (i == keys.Count() - 1)
+				res.Add(LocalToWorld(keys[i].value));
 		}
 
 		return res;
+	}
+
+	const ApproximationVec2F* Vec2KeyFramesTrackControl::SplineWrapper::GetPointApproximation(int idx) const
+	{
+		return trackControl->mTrack->spline.GetKeys()[idx].GetApproximatedPoints();
+	}
+
+	int Vec2KeyFramesTrackControl::SplineWrapper::GetPointApproximationCount(int idx) const
+	{
+		return trackControl->mTrack->spline.GetKeys()[idx].GetApproximatedPointsCount();
+	}
+
+	void Vec2KeyFramesTrackControl::SplineWrapper::OnChanged()
+	{
 	}
 
 	void Vec2KeyFramesTrackControl::SplineSceneLayer::DrawOverScene()
@@ -227,6 +273,16 @@ namespace Editor
 	String Vec2KeyFramesTrackControl::SplineTool::GetPanelIcon() const
 	{
 		return "ui/UI4_path_tool.png";
+	}
+
+	void Vec2KeyFramesTrackControl::SplineTool::OnEnabled()
+	{
+		trackControl->mIsEnabled = true;
+	}
+
+	void Vec2KeyFramesTrackControl::SplineTool::OnDisabled()
+	{
+		trackControl->mIsEnabled = false;
 	}
 
 }

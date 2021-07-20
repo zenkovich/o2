@@ -33,6 +33,12 @@ namespace Editor
 		if (mPlayer && mOwnPlayer)
 			mPlayer->Update(dt);
 
+		if (mTargetActor)
+		{
+			mTargetActor->Update(dt);
+			mTargetActor->UpdateChildren(dt);
+		}
+
 		if (mPlayer && mPlayer->IsPlaying() != mPlayPauseToggle->GetValue())
 			mPlayPauseToggle->SetValue(mPlayer->IsPlaying());
 
@@ -110,7 +116,7 @@ namespace Editor
 		if (!mPlayer && mAnimation)
 		{
 			mPlayer = mnew AnimationPlayer(mTargetActor.Get(), mAnimation);
-			mTimeline->SetAnimation(mAnimation, mPlayer);
+			SetAnimation(mAnimation, mPlayer);
 			mOwnPlayer = true;
 		}
 	}

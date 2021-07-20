@@ -12,12 +12,14 @@ namespace o2
 	AnimationTrack<Vec2F>::AnimationTrack()
 	{
 		timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+		spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
 	}
 
 	AnimationTrack<Vec2F>::AnimationTrack(const AnimationTrack<Vec2F>& other) :
 		IAnimationTrack(other), timeCurve(other.timeCurve), spline(other.spline)
 	{
 		timeCurve.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
+		spline.onKeysChanged.Add(this, &AnimationTrack<Vec2F>::OnCurveChanged);
 	}
 
 	AnimationTrack<Vec2F>& AnimationTrack<Vec2F>::operator=(const AnimationTrack<Vec2F>& other)

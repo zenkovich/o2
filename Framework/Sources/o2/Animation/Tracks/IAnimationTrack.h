@@ -4,6 +4,8 @@
 
 namespace o2
 {
+	class AnimationClip;
+	class AnimationPlayer;
 	class AnimationState;
 
 	// -------------------------
@@ -42,7 +44,15 @@ namespace o2
 			// Force setting time (using in Animation): works same as update, but by hard setting time
 			void ForceSetTime(float time, float duration);
 
+			//Returns owner player
+			const AnimationPlayer* GetOwnerPlayer() const;
+
 			IOBJECT(IPlayer);
+
+		protected:
+			AnimationPlayer* mOwnerPlayer = nullptr;
+
+			friend class AnimationPlayer;
 		};
 
 	public:
@@ -79,7 +89,15 @@ namespace o2
 		// Creates track-type specific player
 		virtual IPlayer* CreatePlayer() const { return nullptr; }
 
+		// Returns owner clip
+		const AnimationClip* GetOwnerClip() const;
+
 		SERIALIZABLE(IAnimationTrack);
+
+	protected:
+		AnimationClip* mOwnerClip = nullptr;
+
+		friend class AnimationClip;
 	};
 };
 
@@ -94,6 +112,7 @@ CLASS_FIELDS_META(o2::IAnimationTrack)
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(loop).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(path).PUBLIC();
 	FIELD().NAME(onKeysChanged).PUBLIC();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwnerClip).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimationTrack)
@@ -103,6 +122,7 @@ CLASS_METHODS_META(o2::IAnimationTrack)
 	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
 	PUBLIC_FUNCTION(float, GetDuration);
 	PUBLIC_FUNCTION(IPlayer*, CreatePlayer);
+	PUBLIC_FUNCTION(const AnimationClip*, GetOwnerClip);
 }
 END_META;
 
@@ -113,6 +133,7 @@ CLASS_BASES_META(o2::IAnimationTrack::IPlayer)
 END_META;
 CLASS_FIELDS_META(o2::IAnimationTrack::IPlayer)
 {
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwnerPlayer).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
@@ -126,5 +147,6 @@ CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
 	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
 	PUBLIC_FUNCTION(void, RegMixer, AnimationState*, const String&);
 	PUBLIC_FUNCTION(void, ForceSetTime, float, float);
+	PUBLIC_FUNCTION(const AnimationPlayer*, GetOwnerPlayer);
 }
 END_META;

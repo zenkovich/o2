@@ -179,6 +179,11 @@ namespace o2
 		return mFrameColor;
 	}
 
+	bool FrameHandles::IsInputTransparent() const
+	{
+		return isInputTransparent;
+	}
+
 	void FrameHandles::OnCursorPressed(const Input::Cursor& cursor)
 	{
 		if (mFrame.IsPointInside(cursor.position))

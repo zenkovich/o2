@@ -17,6 +17,8 @@ namespace o2
 		Function<void()>             onReleased;        // Some handle released event
 		Function<void()>             onChangeCompleted; // Basis changing completed, all handles released and transform was changed
 
+		bool isInputTransparent = false;
+
 	public:
 		// Default constructor. Initializes handles
 		FrameHandles();
@@ -51,8 +53,11 @@ namespace o2
 		// Returns is rotation available
 		bool IsRotationEnabled() const; 
 
-		// Returns frame drwaing color
+		// Returns frame drawing color
 		const Color4& GetFrameColor() const;
+
+		// Returns true when input events can be handled by down listeners
+		bool IsInputTransparent() const override;
 
 	protected:
 		const Color4 mFrameColor = Color4(44, 62, 80, 255); // Regular handle color
