@@ -602,6 +602,7 @@ namespace Editor
 		*sample->GetHighlightDrawable() = Sprite("ui/UI4_selection_frame.png");
 		sample->GetHighlightDrawable()->pivot = Vec2F(0.5f, 0.5f);
 		sample->SetHighlightLayout(Layout::BothStretch());
+
 		sample->SetHighlightAnimation(Animate(*sample->GetHighlightDrawable()).
 									  Hide().Scale(1.5f).Then().
 									  Wait(0.3f).Then().
@@ -4473,21 +4474,21 @@ namespace Editor
 		BuildPropertyWithCaption<SceneLayersListProperty>("standard", "with caption");
 	}
 
-	void EditorUIStyleBuilder::RebuildEditorUIManager(const String& stylesFileName, bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)
+	void EditorUIStyleBuilder::RebuildEditorUIManager(const String& stylesFolder, bool saveStyle /*= true*/, bool checkEditedDate /*= true*/)
 	{
 		PushEditorScopeOnStack scope;
 
 		String thisSourcePath = "o2/Editor/Sources/o2Editor/Core/UIStyle/EditorUIStyle.cpp";
 		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
 
-		DataDocument stylesData;
-		if (stylesData.LoadFromFile(GetEditorAssetsPath() + stylesFileName))
+		DataDocument stylesRebuildDateData;
+		if (stylesRebuildDateData.LoadFromFile(GetEditorAssetsPath() + stylesFolder + "/rebuildDate.json"))
 		{
-			TimeStamp cachedDate = stylesData["generatedDate"];
+			TimeStamp cachedDate = stylesRebuildDateData["generatedDate"];
 
 			if (thisSourceEditedDate == cachedDate && checkEditedDate)
 			{
-				o2UI.LoadStyle(stylesData["styles"]);
+				o2UI.LoadStyle(stylesFolder);
 				return;
 			}
 		}
@@ -4514,10 +4515,11 @@ namespace Editor
 
 		if (saveStyle)
 		{
-			DataDocument newStylesData;
-			o2UI.SaveStyle(newStylesData["styles"]);
-			newStylesData["generatedDate"] = thisSourceEditedDate;
-			newStylesData.SaveToFile(GetEditorAssetsPath() + stylesFileName);
+			o2UI.SaveStyle(stylesFolder);
+
+			DataDocument newStylesRebuildDateData;
+			newStylesRebuildDateData["generatedDate"] = thisSourceEditedDate;
+			newStylesRebuildDateData.SaveToFile(GetEditorAssetsPath() + stylesFolder + "/rebuildDate.json");
 		}
 	}
 }

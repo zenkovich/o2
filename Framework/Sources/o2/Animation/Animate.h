@@ -120,7 +120,11 @@ namespace o2
 
 			void Apply(float time)
 			{
+				timeKey.value = 0.0f;
+				animatedValue->timeCurve.InsertKey(timeKey);
+
 				timeKey.position = time;
+				timeKey.value = 1.0f;
 				animatedValue->timeCurve.InsertKey(timeKey);
 			}
 		};

@@ -114,6 +114,9 @@ namespace Editor
 
 		Actor* mTrackOwner = nullptr; // Actor which animated in track
 
+		static Vec2KeyFramesTrackControl* mLastActive; // Last active track control of this type; When multiple track
+		                                               // controls are activated, only the last one works
+
 	private:
 		void InitializeControls();
 		void TryFindOwnerTrack();

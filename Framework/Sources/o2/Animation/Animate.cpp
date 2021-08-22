@@ -74,6 +74,7 @@ namespace o2
 		KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
 		container->animatedValue = mPositionAnimatedValue;
 		container->animatedValue->spline.AppendKey(point);
+		container->timeKey.position = mTime;
 		mKeyContainers.Add(container);
 
 		return *this;
@@ -138,6 +139,7 @@ namespace o2
 		KeyContainer<Vec2F>* container = mnew KeyContainer<Vec2F>();
 		container->animatedValue = mScaleAnimatedValue;
 		container->animatedValue->spline.AppendKey(scale);
+		container->timeKey.position = mTime;
 		mKeyContainers.Add(container);
 
 		return *this;

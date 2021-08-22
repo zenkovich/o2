@@ -172,6 +172,8 @@ namespace Editor
 			for (auto track : mAnimationWindow->mAnimation->GetTracks())
 				AddAnimationTrack(track, nullptr);
 		}
+
+		UpdateNodesStructure();
 	}
 
 	void AnimationTree::AddAnimationTrack(IAnimationTrack* track, IAnimationTrack::IPlayer* player /*= nullptr*/)
@@ -429,7 +431,7 @@ namespace Editor
 			trackControl->Initialize(mTimeline, mHandlesSheet);
 			trackControl->SetMappedTracks(*mData);
 
-			AddChild(mTrackControl);
+ 			AddChild(mTrackControl);
 		}
 		else
 		{

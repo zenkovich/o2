@@ -400,6 +400,27 @@ namespace o2
 
 	void Widget::DeserializeWithProto(const DataValue& node)
 	{
+		for (auto layer : mLayers)
+		{
+			layer->mOwnerWidget = nullptr;
+			delete layer;
+		}
+
+		for (auto state : mStates)
+			delete state;
+
+		for (auto child : mInternalWidgets)
+		{
+			child->mParent = nullptr;
+			child->mParentWidget = nullptr;
+
+			delete child;
+		}
+
+		mLayers.Clear();
+		mStates.Clear();
+		mInternalWidgets.Clear();
+
 		Actor::DeserializeWithProto(node);
 
 		auto internalWidgetsNode = node.FindMember("InternalWidgets");
@@ -418,6 +439,7 @@ namespace o2
 						AddInternalWidget(widget);
 						widget->mCopyVisitor = mCopyVisitor;
 						widget->Deserialize(*dataValue);
+						widget->mCopyVisitor = nullptr;
 					}
 				}
 			}
@@ -448,7 +470,7 @@ namespace o2
 				else
 					stateNode.Get(*state);
 
-				AddState(state);
+				AddState(state, false);
 			}
 		}
 	}

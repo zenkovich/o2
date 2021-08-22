@@ -1,6 +1,7 @@
 #include "o2Editor/stdafx.h"
 #include "DefaultActorPropertiesViewer.h"
 
+#include "o2/Utils/StringUtils.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
@@ -16,7 +17,7 @@ namespace Editor
 	void DefaultActorPropertiesViewer::SetTargetActors(const Vector<Actor*>& actors)
 	{
 		if (!actors.IsEmpty())
-			mSpoiler->SetCaption(o2EditorProperties.MakeSmartFieldName(mActorType->GetName()));
+			mSpoiler->SetCaption(GetSmartName(mActorType->GetName()));
 
 		mTargetActors = actors;
 		Refresh();

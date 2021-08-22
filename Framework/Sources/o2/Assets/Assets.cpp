@@ -9,6 +9,7 @@
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2/EngineSettings.h"
 
 namespace o2
 {
@@ -109,13 +110,7 @@ namespace o2
 			Asset* asset = (Asset*)type->CreateSample();
 			asset->Load(assetInfo);
 
-			cached = mnew AssetCache();
-			cached->asset = asset;
-			cached->referencesCount = 0;
-
-			mCachedAssets.Add(cached);
-			mCachedAssetsByPath[cached->asset->GetPath()] = cached;
-			mCachedAssetsByUID[cached->asset->GetUID()] = cached;
+			cached = FindAssetCache(asset->GetUID());
 		}
 
 		return AssetRef(cached->asset, &cached->referencesCount);
@@ -129,18 +124,15 @@ namespace o2
 		{
 			auto& assetInfo = GetAssetInfo(id);
 			if (!assetInfo.IsValid())
+			{
+				Assert(false, "Can't load asset by id - " + (String)id);
 				return AssetRef();
+			}
 
 			Asset* asset = (Asset*)assetInfo.meta->GetAssetType()->CreateSample();
-			asset->Load(id);
+			asset->Load(assetInfo);
 
-			cached = mnew AssetCache();
-			cached->asset = asset;
-			cached->referencesCount = 0;
-
-			mCachedAssets.Add(cached);
-			mCachedAssetsByPath[cached->asset->GetPath()] = cached;
-			mCachedAssetsByUID[cached->asset->GetUID()] = cached;
+			cached = FindAssetCache(id);
 		}
 
 		return AssetRef(cached->asset, &cached->referencesCount);
@@ -226,7 +218,7 @@ namespace o2
 			o2FileSystem.FolderCreate(GetAssetsPath() + dest);
 			FolderAssetRef folderAsset(info.path);
 
-			for (auto inInfo : folderAsset->GetContainingAssetsInfos())
+			for (auto inInfo : folderAsset->GetChildrenAssets())
 				CopyAsset(inInfo, dest + o2FileSystem.GetPathWithoutDirectories(inInfo->GetPath()), false);
 		}
 		else o2FileSystem.FileCopy(GetAssetsPath() + info.path, GetAssetsPath() + dest);
@@ -356,20 +348,20 @@ namespace o2
 		auto cachedAssets = mCachedAssets;
 		for (auto cached : cachedAssets)
 		{
-			cached->asset->mInfo.tree = mAssetsTrees.FindOrDefault([&](AssetsTree* tree) { 
+			cached->asset->mInfo.tree = mAssetsTrees.FindOrDefault([&](AssetsTree* tree) {
 				return tree->assetsPath == cached->asset->mInfo.tree->assetsPath;
 			});
 
-// 			if (changedAssetsIds.Contains(cached->asset->GetUID()))
-// 			{
-// 				auto fnd = mCachedAssetsByUID.find(cached->asset->GetUID());
-// 				if (fnd != mCachedAssetsByUID.end())
-// 					mCachedAssetsByUID.erase(fnd);
-// 
-// 				auto fnd2 = mCachedAssetsByPath.find(cached->asset->GetPath());
-// 				if (fnd2 != mCachedAssetsByPath.end())
-// 					mCachedAssetsByPath.erase(fnd2);
-// 			}
+			// 			if (changedAssetsIds.Contains(cached->asset->GetUID()))
+			// 			{
+			// 				auto fnd = mCachedAssetsByUID.find(cached->asset->GetUID());
+			// 				if (fnd != mCachedAssetsByUID.end())
+			// 					mCachedAssetsByUID.erase(fnd);
+			// 
+			// 				auto fnd2 = mCachedAssetsByPath.find(cached->asset->GetPath());
+			// 				if (fnd2 != mCachedAssetsByPath.end())
+			// 					mCachedAssetsByPath.erase(fnd2);
+			// 			}
 		}
 
 		oldAssetsTrees.ForEach([](auto x) { delete x; });
@@ -465,18 +457,33 @@ namespace o2
 
 	void Assets::CheckAssetsUnload()
 	{
-		for (auto it = mCachedAssets.Begin(); it != mCachedAssets.End();)
+		const bool checkDuplications = false;
+		if (checkDuplications)
 		{
-			if ((*it)->referencesCount <= 0)
+			for (int i = 0; i < mCachedAssets.Count(); i++)
 			{
-				mCachedAssetsByPath.Remove((*it)->asset->GetPath());
-				mCachedAssetsByUID.Remove((*it)->asset->GetUID());
+				auto cache = mCachedAssets[i];
+				for (int j = i + 1; j < mCachedAssets.Count(); j++)
+				{
+					auto otherCache = mCachedAssets[j];
 
-				delete* it;
+					if (!cache->asset->GetPath().IsEmpty() && cache->asset->GetPath() == otherCache->asset->GetPath())
+						o2Debug.LogError("Duplicate asset path \"" + cache->asset->GetPath() + "\"");
 
-				it = mCachedAssets.erase(it);
+					if (cache->asset->GetUID() == otherCache->asset->GetUID())
+						o2Debug.LogError("Duplicate asset UID \"" + cache->asset->GetPath() + "\" - " + cache->asset->GetUID());
+
+					if (cache->asset == otherCache->asset)
+						o2Debug.LogError("Duplicate asset cache");
+				}
 			}
-			else ++it;
+		}
+
+		auto cachedAssets = mCachedAssets;
+		for (auto cached : cachedAssets)
+		{
+			if (cached->referencesCount <= 0)
+				delete cached->asset;
 		}
 	}
 
@@ -513,11 +520,24 @@ namespace o2
 	{
 		auto cached = mnew AssetCache();
 		cached->asset = asset;
-		cached->referencesCount = 1;
+		cached->referencesCount = 0;
 
 		mCachedAssets.Add(cached);
-		mCachedAssetsByPath[cached->asset->GetPath()] = cached;
-		mCachedAssetsByUID[cached->asset->GetUID()] = cached;
+
+		if constexpr (IS_EDITOR)
+		{
+			if (asset->GetPath() == "stdFont.ttf")
+				o2Debug.Log("asd");
+
+			if (mCachedAssetsByUID.ContainsKey(asset->GetUID()))
+				mLog->Error("Duplicated asset cache id: " + (String)asset->GetUID() + " - \"" + asset->GetPath() + "\"");
+
+			if (!asset->GetPath().IsEmpty() && mCachedAssetsByPath.ContainsKey(asset->GetPath()))
+				mLog->Error("Duplicated asset cache path: \"" + asset->GetPath() + "\"");
+		}
+
+		mCachedAssetsByPath[asset->GetPath()] = cached;
+		mCachedAssetsByUID[asset->GetUID()] = cached;
 
 		return cached;
 	}
@@ -533,7 +553,6 @@ namespace o2
 
 		auto fnd2 = mCachedAssetsByPath.find(asset->GetPath());
 		if (fnd2 != mCachedAssetsByPath.end()) {
-			cached = fnd2->second;
 			mCachedAssetsByPath.erase(fnd2);
 		}
 
@@ -541,11 +560,24 @@ namespace o2
 			mCachedAssets.Remove(cached);
 			delete cached;
 		}
+		else {
+			for (auto cache : mCachedAssets)
+			{
+				if (cache->asset == asset)
+				{
+					mCachedAssets.Remove(cache);
+					break;
+				}
+			}
+
+			o2Debug.Log("Asset cache not found!");
+		}
 	}
 
-	void Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
+	Assets::AssetCache* Assets::UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID)
 	{
 		AssetCache* cached = nullptr;
+
 		auto fnd = mCachedAssetsByUID.find(oldUID);
 		if (fnd != mCachedAssetsByUID.end()) {
 			cached = fnd->second;
@@ -554,23 +586,28 @@ namespace o2
 
 		auto fnd2 = mCachedAssetsByPath.find(oldPath);
 		if (fnd2 != mCachedAssetsByPath.end()) {
-			cached = fnd2->second;
 			mCachedAssetsByPath.erase(fnd2);
 		}
 
 		if (cached)
 		{
+			if (mCachedAssetsByUID.ContainsKey(asset->GetUID()))
+				mLog->Error("Duplicated asset cache id: " + (String)asset->GetUID() + " - \"" + asset->GetPath() + "\"");
+
 			mCachedAssetsByUID[asset->GetUID()] = cached;
 			mCachedAssetsByPath[asset->GetPath()] = cached;
 		}
+		else
+		{
+			o2Debug.LogError("Can't find asset cache: " + (String)asset->GetUID() + " - \"" + asset->GetPath() + "\"");
+		}
+
+		return cached;
 	}
 
 	Assets::AssetCache::~AssetCache()
 	{
 		Assert(referencesCount == 0, "Some references not removed for asset");
-
-		if (asset)
-			delete asset;
 	}
 
 }

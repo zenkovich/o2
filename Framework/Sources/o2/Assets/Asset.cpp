@@ -12,21 +12,31 @@ namespace o2
 
 	Asset::Asset(const Asset& other):
 		mInfo(other.mInfo)
-	{}
+	{
+		mInfo.meta->mId.Randomize();
+
+		o2Assets.AddAssetCache(this);
+	}
 
 	Asset::Asset(AssetMeta* meta)
 	{
 		mInfo.meta = meta;
+		mInfo.meta->mId.Randomize();
+
+		o2Assets.AddAssetCache(this);
 	}
 
 	Asset& Asset::operator=(const Asset& other)
 	{
+		o2Assets.RemoveAssetCache(this);
 		mInfo = other.mInfo;
 		return *this;
 	}
 
 	Asset::~Asset()
-	{}
+	{
+		o2Assets.RemoveAssetCache(this);
+	}
 
 	const String& Asset::GetPath() const
 	{
@@ -42,6 +52,7 @@ namespace o2
 		mInfo.meta->mId.Randomize();
 
 		o2Assets.UpdateAssetCache(this, oldPath, oldUID);
+		OnUIDChanged(oldUID);
 	}
 
 	const UID& Asset::GetUID() const
@@ -63,6 +74,20 @@ namespace o2
 	{
 		return mInfo;
 	}
+
+#if IS_EDITOR
+	void Asset::SetEditorAsset(bool isEditor)
+	{
+		mInfo.tree = !isEditor ?
+			&o2Assets.GetAssetsTree() :
+			o2Assets.GetAssetsTrees().FindOrDefault([](auto x) { return x != &o2Assets.GetAssetsTree(); });
+	}
+
+	bool Asset::IsEditorAsset() const
+	{
+		return mInfo.tree != &o2Assets.GetAssetsTree();
+	}
+#endif
 
 	void Asset::Load(const String& path)
 	{
@@ -92,7 +117,13 @@ namespace o2
 
 	void Asset::Load(const AssetInfo& info)
 	{
+		auto oldPath = mInfo.path;
+		auto oldUID = mInfo.meta->mId;
+
 		mInfo = info;
+
+		o2Assets.UpdateAssetCache(this, oldPath, oldUID);
+
 		LoadData(GetBuiltFullPath());
 	}
 
@@ -176,6 +207,9 @@ namespace o2
 		Serialize(data);
 		data.SaveToFile(path);
 	}
+
+	void Asset::OnUIDChanged(const UID& oldUID)
+	{}
 
 }
 

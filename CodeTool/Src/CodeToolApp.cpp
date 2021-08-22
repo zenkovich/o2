@@ -758,8 +758,15 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		// try search comment
 		SyntaxComment* synComment = cls->FindCommentNearLine(x->GetLine());
 
-		if (synComment && synComment->GetData().find("@IGNORE") != string::npos)
-			continue;
+		if (synComment) {
+			auto fnd = synComment->GetData().find("@IGNORE");
+			if (fnd != string::npos)
+			{
+				auto nextSymbol = synComment->GetData()[fnd + strlen("@IGNORE")];
+				if (nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0')
+					continue;
+			}
+		}
 
 		res += "\tFIELD()";
 
@@ -900,18 +907,22 @@ string CodeToolApplication::GetFieldAttributes(SyntaxClass* cls, SyntaxVariable*
 			auto fnd = synComment->GetData().find(attributeClass->GetAttributeCommentDef());
 			if (!attributeClass->GetAttributeCommentDef().empty() && fnd != string::npos)
 			{
-				string parameters = "()";
-				auto parametersBegin = fnd + attributeClass->GetAttributeCommentDef().length();
-				if (synComment->GetData()[parametersBegin] == '(')
+				auto nextSymbol = synComment->GetData()[fnd + attributeClass->GetAttributeCommentDef().length()];
+				if ((nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0') && synComment->GetData()[fnd - 1] == '@')
 				{
-					auto parametersEnd = synComment->GetData().find(')', parametersBegin) + 1;
-					parameters = synComment->GetData().substr(parametersBegin, parametersEnd - parametersBegin);
-				}
+					string parameters = "()";
+					auto parametersBegin = fnd + attributeClass->GetAttributeCommentDef().length();
+					if (synComment->GetData()[parametersBegin] == '(')
+					{
+						auto parametersEnd = synComment->GetData().find(')', parametersBegin) + 1;
+						parameters = synComment->GetData().substr(parametersBegin, parametersEnd - parametersBegin);
+					}
 
-				if (!attributeClass->GetAttributeShortDef().empty())
-					attributes += string(".") + attributeClass->GetAttributeShortDef() + parameters;
-				else
-					attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + parameters + ")";
+					if (!attributeClass->GetAttributeShortDef().empty())
+						attributes += string(".") + attributeClass->GetAttributeShortDef() + parameters;
+					else
+						attributes += string(".ATTRIBUTE(") + attributeClass->GetFullName() + parameters + ")";
+				}
 			}
 		}
 	}		

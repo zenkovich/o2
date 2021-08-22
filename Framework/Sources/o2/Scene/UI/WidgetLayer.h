@@ -161,7 +161,7 @@ namespace o2
 
 		IRectDrawable* mDrawable = nullptr; // Drawable @SERIALIZABLE
 
-		SceneUID mUID = Math::Random(); // Scene editor uid @SERIALIZABLE @IGNORE_DELTA_SEARCH
+		SceneUID mUID = 0; // Scene editor uid @SERIALIZABLE @IGNORE_DELTA_SEARCH
 
 		bool mEnabled = true; // Is layer enabled
 
@@ -367,6 +367,7 @@ CLASS_FIELDS_META(o2::WidgetLayer)
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDrawable).PROTECTED();
+	FIELD().IGNORE_DELTA_SEARCH_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0).NAME(mUID).PROTECTED();
 	FIELD().DEFAULT_VALUE(true).NAME(mEnabled).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTransparency).PROTECTED();
 	FIELD().DEFAULT_VALUE(1.0f).NAME(mResTransparency).PROTECTED();

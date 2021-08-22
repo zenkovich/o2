@@ -127,7 +127,7 @@ namespace Editor
 
 		if (assetTreeNode)
 		{
-			return assetTreeNode->children
+			return assetTreeNode->GetChildren()
 				.FindAll([](AssetInfo* x) { return x->meta->GetAssetType() == &TypeOf(FolderAsset); })
 				.Sorted([](AssetInfo* a, AssetInfo* b) { return a->path < b->path; })
 				.Convert<void*>([](AssetInfo* x) { return (void*)x; });

@@ -1,6 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "AssetProperty.h"
 
+#include "o2/Utils/StringUtils.h"
+#include "o2Editor/AssetsWindow/AssetIcon.h"
 #include "o2Editor/Core/Dialogs/System/OpenSaveDialog.h"
 #include "o2Editor/Core/Properties/ObjectViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
@@ -72,7 +74,7 @@ namespace Editor
 			{
 				mNameText->text = "Null";
 				if (mAssetType)
-					mNameText->text += WString(": " + o2EditorProperties.MakeSmartFieldName(mAssetType->GetName()));
+					mNameText->text += WString(": " + GetSmartName(mAssetType->GetName()));
 
 				mBox->layer["caption"]->transparency = 0.5f;
 			}
@@ -247,7 +249,7 @@ namespace Editor
 
 	void AssetProperty::OnSaveInstancePressed()
 	{
-		String assetTypeName = o2EditorProperties.MakeSmartFieldName(mAssetType->GetName());
+		String assetTypeName = GetSmartName(mAssetType->GetName());
 		String extesions = mAssetType->InvokeStatic<const char*>("GetFileExtensions");
 		auto extension = extesions.Split(" ")[0];
 		String defaultPath = o2Application.GetBinPath() + "\\" + o2Assets.GetAssetsPath().ReplacedAll("/", "\\");
@@ -351,11 +353,11 @@ namespace Editor
 		if (!assetIconsScroll)
 			return;
 
-		auto lastSelectedAsset = assetIconsScroll->GetSelectedAssets().Last();
-		if (!lastSelectedAsset->meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
+		auto lastSelectedAssetIcon = dynamic_cast<const AssetIcon*>(assetIconsScroll->GetDraggingObject());
+		if (!lastSelectedAssetIcon || !lastSelectedAssetIcon->GetAssetInfo().meta->GetAssetType()->IsBasedOn(mCommonValue.GetAssetType()))
 			return;
 
-		SetAssetIdByUser(lastSelectedAsset->meta->ID());
+		SetAssetIdByUser(lastSelectedAssetIcon->GetAssetInfo().meta->ID());
 
 		o2Application.SetCursor(CursorType::Arrow);
 		mBox->Focus();

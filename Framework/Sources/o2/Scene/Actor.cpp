@@ -1309,12 +1309,15 @@ namespace o2
 
 	void Actor::SetPrototype(ActorAssetRef asset)
 	{
-		o2Scene.OnActorPrototypeBroken(this);
+		if (Scene::IsSingletonInitialzed())
+			o2Scene.OnActorPrototypeBroken(this);
 
 		auto linkAsset = asset;
 		while (linkAsset)
 		{
-			o2Scene.OnActorLinkedToPrototype(linkAsset, this);
+			if (Scene::IsSingletonInitialzed())
+				o2Scene.OnActorLinkedToPrototype(linkAsset, this);
+
 			linkAsset = linkAsset->GetActor()->GetPrototype();
 		}
 

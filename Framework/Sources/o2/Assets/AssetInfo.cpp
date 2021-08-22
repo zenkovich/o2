@@ -15,7 +15,7 @@ namespace o2
 	AssetInfo::AssetInfo(const AssetInfo& other):
 		path(other.path), editTime(other.editTime), tree(other.tree), 
 		meta(other.meta ? other.meta->CloneAs<AssetMeta>() : nullptr),
-		ownChildren(false), children(other.children)
+		mOwnChildren(false), mChildren(other.mChildren)
 	{}
 
 	AssetInfo::AssetInfo(AssetMeta* meta):
@@ -33,9 +33,9 @@ namespace o2
 		if (parent)
 			parent->RemoveChild(this, false);
 
-		if (ownChildren)
+		if (mOwnChildren)
 		{
-			for (auto child : children)
+			for (auto child : mChildren)
 			{
 				child->parent = nullptr;
 				delete child;
@@ -45,9 +45,9 @@ namespace o2
 
 	AssetInfo& AssetInfo::operator=(const AssetInfo& other)
 	{
-		if (ownChildren)
+		if (mOwnChildren)
 		{
-			for (auto child : children)
+			for (auto child : mChildren)
 			{
 				child->parent = nullptr;
 				delete child;
@@ -58,8 +58,8 @@ namespace o2
 		path = other.path;
 		editTime = other.editTime;
 		tree = other.tree;
-		children = other.children;
-		ownChildren = false;
+		mChildren = other.mChildren;
+		mOwnChildren = false;
 
 		return *this;
 	}
@@ -76,7 +76,7 @@ namespace o2
 
 		node->parent = this;
 
-		children.Add(node);
+		mChildren.Add(node);
 
 		return node;
 	}
@@ -85,7 +85,7 @@ namespace o2
 	{
 		node->parent = nullptr;
 
-		children.Remove(node);
+		mChildren.Remove(node);
 
 		if (release && node)
 			delete node;
@@ -106,7 +106,7 @@ namespace o2
 
 	void AssetInfo::OnDeserialized(const DataValue& node)
 	{
-		for (auto child : children)
+		for (auto child : mChildren)
 			child->parent = this;
 	}
 
@@ -119,8 +119,23 @@ namespace o2
 		if (meta)
 			tree->allAssetsByUID[meta->ID()] = this;
 
-		for (auto child : children)
+		for (auto child : mChildren)
 			child->SetTree(tree);
+	}
+
+	const Vector<AssetInfo*>& AssetInfo::GetChildren() const
+	{
+		if (mOwnChildren)
+			return mChildren;
+
+		if (tree)
+		{
+			AssetInfo* sameInTree = nullptr;
+			if (tree->allAssetsByUID.TryGetValue(meta->ID(), sameInTree))
+				return sameInTree->GetChildren();
+		}
+
+		return mChildren;
 	}
 
 	bool AssetInfo::IsValid() const

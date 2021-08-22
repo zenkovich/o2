@@ -620,7 +620,7 @@ namespace o2
 		if (mKeys.Count() == 0)
 			return 0.0f;
 
-		return mKeys.Last().position - mKeys[0].position;
+		return mKeys.Last().position;
 	}
 
 	bool Curve::IsEmpty() const

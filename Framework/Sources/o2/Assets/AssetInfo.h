@@ -19,9 +19,7 @@ namespace o2
 
 		AssetMeta* meta = nullptr; // Asset meta data @SERIALIZABLE
 
-		AssetInfo*         parent = nullptr;   // Parent asset info
-		Vector<AssetInfo*> children;           // Children assets infos @SERIALIZABLE
-		bool               ownChildren = true; // Is children assets is owned by this asset info
+		AssetInfo* parent = nullptr; // Parent asset info
 
 	public:
 		// Default constructor
@@ -57,6 +55,9 @@ namespace o2
 		// Sets asset tree, adds in tree's allAssets map
 		void SetTree(AssetsTree* tree);
 
+		// Returns children list. if it doesn't own children, then looks for the same in the tree and returns its children
+		const Vector<AssetInfo*>& GetChildren() const;
+
 		// Returns is asset valid - checks id for empty
 		bool IsValid() const;
 
@@ -64,7 +65,11 @@ namespace o2
 
 		SERIALIZABLE(AssetInfo);
 
-	private:
+	protected:
+		Vector<AssetInfo*> mChildren;           // Children assets infos @SERIALIZABLE
+		bool               mOwnChildren = true; // Is children assets is owned by this asset info
+
+	protected:
 		// Completion deserialization callback, reads asset type name
 		void OnDeserialized(const DataValue& node) override;
 
@@ -86,8 +91,8 @@ CLASS_FIELDS_META(o2::AssetInfo)
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(editTime).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(meta).PUBLIC();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(parent).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(children).PUBLIC();
-	FIELD().DEFAULT_VALUE(true).NAME(ownChildren).PUBLIC();
+	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mChildren).PROTECTED();
+	FIELD().DEFAULT_VALUE(true).NAME(mOwnChildren).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::AssetInfo)
@@ -97,7 +102,8 @@ CLASS_METHODS_META(o2::AssetInfo)
 	PUBLIC_FUNCTION(void, RemoveChild, AssetInfo*, bool);
 	PUBLIC_FUNCTION(void, SetParent, AssetInfo*);
 	PUBLIC_FUNCTION(void, SetTree, AssetsTree*);
+	PUBLIC_FUNCTION(const Vector<AssetInfo*>&, GetChildren);
 	PUBLIC_FUNCTION(bool, IsValid);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
+	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }
 END_META;

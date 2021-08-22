@@ -40,8 +40,6 @@ namespace o2
 		void RebuildExpandWhiteButton();
 		void RebuildSpoiler();
 
-		void RebuildBasicUIManager();
-
 		IOBJECT(BasicUIStyleBuilder);
 	};
 }
@@ -89,6 +87,5 @@ CLASS_METHODS_META(o2::BasicUIStyleBuilder)
 	PUBLIC_FUNCTION(void, RebuildExpandButton);
 	PUBLIC_FUNCTION(void, RebuildExpandWhiteButton);
 	PUBLIC_FUNCTION(void, RebuildSpoiler);
-	PUBLIC_FUNCTION(void, RebuildBasicUIManager);
 }
 END_META;

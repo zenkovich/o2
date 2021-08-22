@@ -134,6 +134,12 @@ namespace o2
 		// Selects all in group
 		void SelectAll();
 
+		// Returns current dragging object or null
+		const SelectableDragableObject* GetDraggingObject() const;
+
+	protected:
+		SelectableDragableObject* mDraggingObject = nullptr;
+
 	protected:
 		// It is called when selectable draggable object was pressed
 		virtual void OnSelectableObjectCursorPressed(SelectableDragableObject* object, const Input::Cursor& cursor) {}

@@ -69,6 +69,9 @@ namespace o2
 		// Returns asset type
 		virtual const Type& GetAssetType() const;
 
+		template<typename T, typename E = std::enable_if<std::is_base_of<Asset, T>::value>>
+		Ref<T> Cast() const;
+
 		// Sets asset instance
 		void SetInstance(Asset* asset);
 
@@ -88,7 +91,7 @@ namespace o2
 		SERIALIZABLE(AssetRef);
 
 	protected:
-		bool   mAssetOwner = false;   // Is this reference owner of asset
+		bool   mIsInstance = false;   // Is this reference owner of asset
 		int*   mRefCounter = nullptr; // Reference count pointer
 		Asset* mAssetPtr = nullptr;   // Asset pointer   
 
@@ -128,13 +131,13 @@ namespace o2
 		Ref(T* instance): AssetRef(instance) { mSpecAssetPtr = instance; }
 
 		// Copy-constructor
-		Ref(const AssetRef& other): AssetRef(other) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const AssetRef& other): AssetRef(other) { UpdateSpecAsset(); }
 
 		// Constructor from asset path
-		Ref(const String& path): AssetRef(path) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const String& path): AssetRef(path) { UpdateSpecAsset(); }
 
 		// Constructor from asset id
-		Ref(const UID& id): AssetRef(id) { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); }
+		Ref(const UID& id): AssetRef(id) { UpdateSpecAsset(); }
 
 		// Boolean cast operator, true means that reference is valid
 		operator bool() const { return IsValid(); }
@@ -214,8 +217,21 @@ namespace o2
 
 	protected:
 		// Updates specialized asset pointer
-		void UpdateSpecAsset() override { mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr); };
+		void UpdateSpecAsset() override 
+		{
+			mSpecAssetPtr = dynamic_cast<T*>(mAssetPtr);
+
+			if (!mSpecAssetPtr && mAssetPtr)
+				*this = Ref<T>();
+		};
 	};
+
+	template<typename T, typename E>
+	Ref<T> AssetRef::Cast() const
+	{
+		return Ref<T>(*this);
+	}
+
 }
 
 CLASS_BASES_META(o2::AssetRef)
@@ -225,7 +241,7 @@ CLASS_BASES_META(o2::AssetRef)
 END_META;
 CLASS_FIELDS_META(o2::AssetRef)
 {
-	FIELD().DEFAULT_VALUE(false).NAME(mAssetOwner).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mIsInstance).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mRefCounter).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetPtr).PROTECTED();
 }

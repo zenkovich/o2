@@ -6,6 +6,7 @@
 
 namespace Editor
 {
+	Vec2KeyFramesTrackControl* Vec2KeyFramesTrackControl::mLastActive = nullptr;
 
 	Vec2KeyFramesTrackControl::Vec2KeyFramesTrackControl():
 		Base()
@@ -31,9 +32,14 @@ namespace Editor
 
 		if (active)
 		{
+			if (mLastActive)
+				mLastActive->SetActive(false);
+
 			o2EditorSceneScreen.AddTool(&mTool);
 			mPrevSelectedTool = o2EditorSceneScreen.GetSelectedTool();
 			o2EditorSceneScreen.SelectTool<SplineTool>();
+
+			mLastActive = this;
 		}
 		else
 		{
@@ -41,6 +47,9 @@ namespace Editor
 				o2EditorSceneScreen.SelectTool(mPrevSelectedTool);
 
 			o2EditorSceneScreen.RemoveTool(&mTool);
+
+			if (mLastActive == this)
+				mLastActive = nullptr;
 		}
 	}
 

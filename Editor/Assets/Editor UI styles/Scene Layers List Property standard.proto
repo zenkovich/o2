@@ -1,0 +1,535 @@
+{
+    "mActor": {
+        "Type": "Editor::SceneLayersListProperty",
+        "Value": {
+            "mName": "standard",
+            "Id": 1677946974492852515,
+            "Transform": {
+                "minSize": {
+                    "x": 0.0,
+                    "y": 20.0
+                }
+            },
+            "Children": [
+                {
+                    "Data": {
+                        "mName": "container",
+                        "Id": 9807941787142410637,
+                        "Transform": {
+                            "anchorMax": {
+                                "x": 1.0,
+                                "y": 1.0
+                            },
+                            "offsetMax": {
+                                "x": -0.0,
+                                "y": -0.0
+                            }
+                        },
+                        "Children": [
+                            {
+                                "Data": {
+                                    "mName": "layout",
+                                    "Id": 13406013889785391431,
+                                    "Transform": {
+                                        "anchorMax": {
+                                            "x": 1.0,
+                                            "y": 1.0
+                                        },
+                                        "offsetMax": {
+                                            "x": -0.0,
+                                            "y": -0.0
+                                        }
+                                    },
+                                    "Children": [
+                                        {
+                                            "Data": {
+                                                "mName": "box",
+                                                "mIsFocusable": true,
+                                                "Id": 3772222358189822346,
+                                                "Transform": {
+                                                    "anchorMax": {
+                                                        "x": 1.0,
+                                                        "y": 1.0
+                                                    },
+                                                    "offsetMax": {
+                                                        "x": -0.0,
+                                                        "y": -0.0
+                                                    }
+                                                },
+                                                "InternalWidgets": [],
+                                                "Layers": [
+                                                    {
+                                                        "Type": "o2::WidgetLayer",
+                                                        "Value": {
+                                                            "layout": {
+                                                                "mOffsetMin": {
+                                                                    "x": -9.0,
+                                                                    "y": -9.0
+                                                                },
+                                                                "mOffsetMax": {
+                                                                    "x": 9.0,
+                                                                    "y": 9.0
+                                                                }
+                                                            },
+                                                            "name": "back",
+                                                            "mDrawable": {
+                                                                "Type": "o2::Sprite",
+                                                                "Value": {
+                                                                    "mSize": {
+                                                                        "x": 18.0,
+                                                                        "y": 18.0
+                                                                    },
+                                                                    "mScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0
+                                                                    },
+                                                                    "mPivot": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mImageAsset": {
+                                                                        "id": "41516f7f0265318f5f6d731f16f66682",
+                                                                        "path": "ui/UI4_Editbox_regular.png"
+                                                                    },
+                                                                    "mMode": "Sliced",
+                                                                    "mSlices": {
+                                                                        "left": 13,
+                                                                        "bottom": 14,
+                                                                        "right": 14,
+                                                                        "top": 14
+                                                                    }
+                                                                }
+                                                            },
+                                                            "mUID": 14779021597896518918
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetLayer",
+                                                        "Value": {
+                                                            "layout": {
+                                                                "mOffsetMin": {
+                                                                    "x": -9.0,
+                                                                    "y": -9.0
+                                                                },
+                                                                "mOffsetMax": {
+                                                                    "x": 9.0,
+                                                                    "y": 9.0
+                                                                }
+                                                            },
+                                                            "name": "hover",
+                                                            "mDrawable": {
+                                                                "Type": "o2::Sprite",
+                                                                "Value": {
+                                                                    "mSize": {
+                                                                        "x": 18.0,
+                                                                        "y": 18.0
+                                                                    },
+                                                                    "mScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0
+                                                                    },
+                                                                    "mPivot": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mColor": {
+                                                                        "r": 255,
+                                                                        "g": 255,
+                                                                        "b": 255,
+                                                                        "a": 0
+                                                                    },
+                                                                    "mImageAsset": {
+                                                                        "id": "4fc26f8f22f13b4d2b45412a54061211",
+                                                                        "path": "ui/UI4_Editbox_select.png"
+                                                                    },
+                                                                    "mMode": "Sliced",
+                                                                    "mSlices": {
+                                                                        "left": 13,
+                                                                        "bottom": 14,
+                                                                        "right": 14,
+                                                                        "top": 14
+                                                                    }
+                                                                }
+                                                            },
+                                                            "mUID": 12517382004608581483,
+                                                            "mTransparency": 0.0,
+                                                            "mDepth": 1.0
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetLayer",
+                                                        "Value": {
+                                                            "layout": {
+                                                                "mOffsetMin": {
+                                                                    "x": -9.0,
+                                                                    "y": -9.0
+                                                                },
+                                                                "mOffsetMax": {
+                                                                    "x": 9.0,
+                                                                    "y": 9.0
+                                                                }
+                                                            },
+                                                            "name": "focus",
+                                                            "mDrawable": {
+                                                                "Type": "o2::Sprite",
+                                                                "Value": {
+                                                                    "mSize": {
+                                                                        "x": 18.0,
+                                                                        "y": 18.0
+                                                                    },
+                                                                    "mScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0
+                                                                    },
+                                                                    "mPivot": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mColor": {
+                                                                        "r": 255,
+                                                                        "g": 255,
+                                                                        "b": 255,
+                                                                        "a": 0
+                                                                    },
+                                                                    "mImageAsset": {
+                                                                        "id": "7c09624e7daa45ef4dd24628717942d5",
+                                                                        "path": "ui/UI4_Editbox_focus.png"
+                                                                    },
+                                                                    "mMode": "Sliced",
+                                                                    "mSlices": {
+                                                                        "left": 13,
+                                                                        "bottom": 14,
+                                                                        "right": 14,
+                                                                        "top": 14
+                                                                    }
+                                                                }
+                                                            },
+                                                            "mUID": 17450784933262935360,
+                                                            "mTransparency": 0.0,
+                                                            "mDepth": 2.0
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetLayer",
+                                                        "Value": {
+                                                            "layout": {
+                                                                "mOffsetMin": {
+                                                                    "x": -4.0,
+                                                                    "y": -4.0
+                                                                },
+                                                                "mOffsetMax": {
+                                                                    "x": 5.0,
+                                                                    "y": 5.0
+                                                                }
+                                                            },
+                                                            "name": "pressed",
+                                                            "mDrawable": {
+                                                                "Type": "o2::Sprite",
+                                                                "Value": {
+                                                                    "mPosition": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mSize": {
+                                                                        "x": 9.0,
+                                                                        "y": 9.0
+                                                                    },
+                                                                    "mScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0
+                                                                    },
+                                                                    "mPivot": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mColor": {
+                                                                        "r": 255,
+                                                                        "g": 255,
+                                                                        "b": 255,
+                                                                        "a": 0
+                                                                    },
+                                                                    "mImageAsset": {
+                                                                        "id": "3bb56ec16bfd38e07e6d0ebc282642fa",
+                                                                        "path": "ui/UI4_Editbox_pressed.png"
+                                                                    },
+                                                                    "mMode": "Sliced",
+                                                                    "mSlices": {
+                                                                        "left": 13,
+                                                                        "bottom": 14,
+                                                                        "right": 14,
+                                                                        "top": 14
+                                                                    }
+                                                                }
+                                                            },
+                                                            "mUID": 1688949636290813438,
+                                                            "mTransparency": 0.0,
+                                                            "mDepth": 3.0
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetLayer",
+                                                        "Value": {
+                                                            "layout": {
+                                                                "mAnchorMin": {
+                                                                    "x": 1.0,
+                                                                    "y": 0.5
+                                                                },
+                                                                "mAnchorMax": {
+                                                                    "x": 1.0,
+                                                                    "y": 0.5
+                                                                },
+                                                                "mOffsetMin": {
+                                                                    "x": -20.0,
+                                                                    "y": -10.0
+                                                                },
+                                                                "mOffsetMax": {
+                                                                    "x": 0.0,
+                                                                    "y": 10.0
+                                                                }
+                                                            },
+                                                            "name": "arrow",
+                                                            "mDrawable": {
+                                                                "Type": "o2::Sprite",
+                                                                "Value": {
+                                                                    "mPosition": {
+                                                                        "x": -10.0,
+                                                                        "y": 0.0
+                                                                    },
+                                                                    "mSize": {
+                                                                        "x": 20.0,
+                                                                        "y": 20.0
+                                                                    },
+                                                                    "mScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0
+                                                                    },
+                                                                    "mPivot": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mImageAsset": {
+                                                                        "id": "2b793b1a747167266984178a32e32d37",
+                                                                        "path": "ui/UI4_Down_icn.png"
+                                                                    }
+                                                                }
+                                                            },
+                                                            "mUID": 16757730223549888478,
+                                                            "mDepth": 4.0
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetLayer",
+                                                        "Value": {
+                                                            "layout": {
+                                                                "mOffsetMin": {
+                                                                    "x": 2.0,
+                                                                    "y": 2.0
+                                                                },
+                                                                "mOffsetMax": {
+                                                                    "x": -2.0,
+                                                                    "y": -2.0
+                                                                }
+                                                            },
+                                                            "name": "caption",
+                                                            "mDrawable": {
+                                                                "Type": "o2::Text",
+                                                                "Value": {
+                                                                    "mSize": {
+                                                                        "x": 4.0,
+                                                                        "y": 4.0
+                                                                    },
+                                                                    "mScale": {
+                                                                        "x": 1.0,
+                                                                        "y": 1.0
+                                                                    },
+                                                                    "mPivot": {
+                                                                        "x": 0.5,
+                                                                        "y": 0.5
+                                                                    },
+                                                                    "mColor": {
+                                                                        "r": 96,
+                                                                        "g": 125,
+                                                                        "b": 139,
+                                                                        "a": 255
+                                                                    },
+                                                                    "mText": "--",
+                                                                    "mFontAssetId": "28ea3885486a6d3e5658445b2de14465",
+                                                                    "mHeight": 11,
+                                                                    "mSymbolsDistCoef": 1.0,
+                                                                    "mLinesDistanceCoef": 1.0,
+                                                                    "mVerAlign": "Middle",
+                                                                    "mDotsEndings": true
+                                                                }
+                                                            },
+                                                            "mUID": 6834256553926141854,
+                                                            "mDepth": 5.0
+                                                        }
+                                                    }
+                                                ],
+                                                "States": [
+                                                    {
+                                                        "Type": "o2::WidgetState",
+                                                        "Value": {
+                                                            "name": "focused",
+                                                            "offStateAnimationSpeed": 0.5,
+                                                            "mAnimation": {
+                                                                "instance": {
+                                                                    "Type": "o2::AnimationAsset",
+                                                                    "Value": {
+                                                                        "animation": {
+                                                                            "mTracks": [
+                                                                                {
+                                                                                    "Type": "o2::AnimationTrack<float>",
+                                                                                    "Value": {
+                                                                                        "path": "layer/focus/transparency",
+                                                                                        "curve": {
+                                                                                            "mKeys": [
+                                                                                                {
+                                                                                                    "uid": 9406973200125753186,
+                                                                                                    "rightSupportPosition": 0.020000001415610315,
+                                                                                                    "supportsType": "Broken"
+                                                                                                },
+                                                                                                {
+                                                                                                    "uid": 11342968635942716145,
+                                                                                                    "value": 1.0,
+                                                                                                    "position": 0.05000000074505806,
+                                                                                                    "leftSupportPosition": -0.05000000074505806,
+                                                                                                    "supportsType": "Broken"
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ],
+                                                                            "mDuration": 0.05000000074505806
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "meta": {
+                                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
+                                                                    "Value": {
+                                                                        "mId": "415e15495e9b4402706941b501494a35"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetState",
+                                                        "Value": {
+                                                            "name": "hover",
+                                                            "offStateAnimationSpeed": 0.5,
+                                                            "mAnimation": {
+                                                                "instance": {
+                                                                    "Type": "o2::AnimationAsset",
+                                                                    "Value": {
+                                                                        "animation": {
+                                                                            "mTracks": [
+                                                                                {
+                                                                                    "Type": "o2::AnimationTrack<float>",
+                                                                                    "Value": {
+                                                                                        "path": "layer/hover/transparency",
+                                                                                        "curve": {
+                                                                                            "mKeys": [
+                                                                                                {
+                                                                                                    "uid": 5830484497939424489,
+                                                                                                    "rightSupportPosition": 0.020000001415610315,
+                                                                                                    "supportsType": "Broken"
+                                                                                                },
+                                                                                                {
+                                                                                                    "uid": 1429391752282392020,
+                                                                                                    "value": 1.0,
+                                                                                                    "position": 0.05000000074505806,
+                                                                                                    "leftSupportPosition": -0.05000000074505806,
+                                                                                                    "supportsType": "Broken"
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ],
+                                                                            "mDuration": 0.05000000074505806
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "meta": {
+                                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
+                                                                    "Value": {
+                                                                        "mId": "2a540de05f5549f33bd008e227ae0e34"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::WidgetState",
+                                                        "Value": {
+                                                            "name": "pressed",
+                                                            "offStateAnimationSpeed": 0.5,
+                                                            "mAnimation": {
+                                                                "instance": {
+                                                                    "Type": "o2::AnimationAsset",
+                                                                    "Value": {
+                                                                        "animation": {
+                                                                            "mTracks": [
+                                                                                {
+                                                                                    "Type": "o2::AnimationTrack<float>",
+                                                                                    "Value": {
+                                                                                        "path": "layer/pressed/transparency",
+                                                                                        "curve": {
+                                                                                            "mKeys": [
+                                                                                                {
+                                                                                                    "uid": 15691059935285030416,
+                                                                                                    "rightSupportPosition": 0.020000001415610315,
+                                                                                                    "supportsType": "Broken"
+                                                                                                },
+                                                                                                {
+                                                                                                    "uid": 2666050887220403343,
+                                                                                                    "value": 1.0,
+                                                                                                    "position": 0.05000000074505806,
+                                                                                                    "leftSupportPosition": -0.05000000074505806,
+                                                                                                    "supportsType": "Broken"
+                                                                                                }
+                                                                                            ]
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            ],
+                                                                            "mDuration": 0.05000000074505806
+                                                                        }
+                                                                    }
+                                                                },
+                                                                "meta": {
+                                                                    "Type": "o2::DefaultAssetMeta<o2::AnimationAsset>",
+                                                                    "Value": {
+                                                                        "mId": "37961dcd6064640c10d6589f60420b67"
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            "Type": "o2::Button"
+                                        }
+                                    ],
+                                    "InternalWidgets": [],
+                                    "Layers": [],
+                                    "States": []
+                                },
+                                "Type": "o2::HorizontalLayout"
+                            }
+                        ],
+                        "InternalWidgets": [],
+                        "Layers": [],
+                        "States": []
+                    },
+                    "Type": "o2::Widget"
+                }
+            ],
+            "InternalWidgets": [],
+            "Layers": [],
+            "States": []
+        }
+    }
+}

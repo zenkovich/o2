@@ -7,9 +7,10 @@
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
+#include "o2/Utils/Editor/EditorScope.h"
+#include "o2/Utils/StringUtils.h"
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Basic/AssetProperty.h"
 #include "o2Editor/Core/Properties/Basic/EnumProperty.h"
 #include "o2Editor/Core/Properties/Basic/ObjectProperty.h"
@@ -108,7 +109,7 @@ namespace Editor
 		Timer timer;
 
 		const Type* fieldType = fieldInfo->GetType();
-		String propertyName = MakeSmartFieldName(fieldInfo->GetName());
+		String propertyName = GetSmartName(fieldInfo->GetName());
 
 		auto fieldWidget = CreateFieldProperty(fieldType, propertyName, onChangeCompleted, onChanged);
 		if (!fieldWidget)
@@ -473,71 +474,6 @@ namespace Editor
 		mObjectPropertiesViewersPool[type].Add(viewer);
 		viewer->OnFree();
 		viewer->GetSpoiler()->SetParent(nullptr);
-	}
-
-	String Properties::MakeSmartFieldName(const String& fieldName)
-	{
-		String begn;
-
-		if (fieldName[0] == 'm' && fieldName[1] >= 'A' && fieldName[1] <= 'Z')
-			begn = fieldName.SubStr(1);
-		else if (fieldName[0] == 'm' && fieldName[1] == '_')
-			begn = fieldName.SubStr(2);
-		else if (fieldName[0] == '_')
-			begn = fieldName.SubStr(1);
-		else
-			begn = fieldName;
-
-		if (begn.StartsWith("o2::"))
-			begn.Erase(0, 4);
-
-		if (begn.StartsWith("Editor::"))
-			begn.Erase(0, 8);
-
-		if (begn.StartsWith("UI"))
-			begn = begn;
-
-		String res;
-		int len = begn.Length();
-		bool newWord = true;
-		bool lastUpper = false;
-		for (int i = 0; i < len; i++)
-		{
-			if (begn[i] == '_')
-			{
-				res += ' ';
-				newWord = true;
-				lastUpper = false;
-			}
-			else if (newWord && begn[i] >= 'a' && begn[i] <= 'z')
-			{
-				res += begn[i] + ('A' - 'a');
-				lastUpper = true;
-			}
-			else if (!newWord && begn[i] >= 'A' && begn[i] <= 'Z')
-			{
-				if (!lastUpper)
-					res += ' ';
-
-				res += begn[i];
-				lastUpper = begn[i] >= 'A' && begn[i] <= 'Z';
-			}
-			else if (i < len - 1 && begn[i] == ':' && begn[i + 1] == ':')
-			{
-				res += ": ";
-				lastUpper = false;
-				i++;
-			}
-			else
-			{
-				res += begn[i];
-				lastUpper = begn[i] >= 'A' && begn[i] <= 'Z';
-			}
-
-			newWord = begn[i] >= '0' && begn[i] <= '9';
-		}
-
-		return res;
 	}
 
 	const Type* Properties::GetFieldPropertyType(const Type* valueType) const

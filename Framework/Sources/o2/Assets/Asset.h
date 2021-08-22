@@ -54,6 +54,14 @@ namespace o2
 		// Returns asset info
 		const AssetInfo& GetInfo() const;
 
+#if IS_EDITOR
+		// Does the asset for the editor or not
+		void SetEditorAsset(bool isEditor);
+
+		// Returns is asset for editor or not
+		bool IsEditorAsset() const;
+#endif
+
 		// Loads asset from path
 		void Load(const String& path);
 
@@ -128,6 +136,9 @@ namespace o2
 		// Saves asset data, using DataValue and serialization
 		virtual void SaveData(const String& path) const;
 
+		// Itis called when UID has changed
+		virtual void OnUIDChanged(const UID& oldUID);
+
 		friend class AssetRef;
 		friend class Assets;
 		friend class AssetsBuilder;
@@ -187,6 +198,8 @@ CLASS_METHODS_META(o2::Asset)
 	PUBLIC_FUNCTION(const UID&, GetUID);
 	PUBLIC_FUNCTION(AssetMeta*, GetMeta);
 	PUBLIC_FUNCTION(const AssetInfo&, GetInfo);
+	PUBLIC_FUNCTION(void, SetEditorAsset, bool);
+	PUBLIC_FUNCTION(bool, IsEditorAsset);
 	PUBLIC_FUNCTION(void, Load, const String&);
 	PUBLIC_FUNCTION(void, Load, const UID&);
 	PUBLIC_FUNCTION(void, Save, const String&, bool);
@@ -205,6 +218,7 @@ CLASS_METHODS_META(o2::Asset)
 	PROTECTED_FUNCTION(void, Load, const AssetInfo&);
 	PROTECTED_FUNCTION(void, LoadData, const String&);
 	PROTECTED_FUNCTION(void, SaveData, const String&);
+	PROTECTED_FUNCTION(void, OnUIDChanged, const UID&);
 }
 END_META;
 

@@ -127,7 +127,7 @@ namespace Editor
 		void RebuildAnimationStateViewerProgressBar();
 		void RebuildAnimationSpoiler();
 
-		void RebuildEditorUIManager(const String& stylesFileName, bool saveStyle = true, bool checkEditedDate = true);
+		void RebuildEditorUIManager(const String& stylesFolder, bool saveStyle = true, bool checkEditedDate = true);
 
 		IOBJECT(EditorUIStyleBuilder);
 

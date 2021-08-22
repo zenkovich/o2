@@ -8,12 +8,12 @@
 namespace o2
 {
 	WidgetLayer::WidgetLayer():
-		layout(this), interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F())
+		layout(this), interactableLayout(Vec2F(), Vec2F(1.0f, 1.0f), Vec2F(), Vec2F()), mUID(Math::Random())
 	{}
 
 	WidgetLayer::WidgetLayer(const WidgetLayer& other):
 		mDepth(other.mDepth), name(other.name), layout(this, other.layout), mTransparency(other.mTransparency),
-		interactableLayout(other.interactableLayout), depth(this), transparency(this)
+		interactableLayout(other.interactableLayout), mUID(Math::Random()), depth(this), transparency(this)
 	{
 		if (other.mCopyVisitor)
 			other.mCopyVisitor->OnCopy(&other, this);
@@ -26,11 +26,11 @@ namespace o2
 
 		for (auto child : other.mChildren)
 		{
-			mCopyVisitor = other.mCopyVisitor;
+			child->mCopyVisitor = other.mCopyVisitor;
 
 			AddChild(child->CloneAs<WidgetLayer>());
 
-			mCopyVisitor = nullptr;
+			child->mCopyVisitor = nullptr;
 		}
 	}
 

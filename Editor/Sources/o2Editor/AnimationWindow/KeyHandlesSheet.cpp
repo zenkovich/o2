@@ -132,6 +132,7 @@ namespace Editor
 	{
 		mTrackControls.Clear();
 		mTrackControlsMap.Clear();
+		mHandles.Clear();
 	}
 
 	void KeyHandlesSheet::AddHandle(DragHandle* handle)

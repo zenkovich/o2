@@ -6,6 +6,7 @@
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/Image.h"
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2/Utils/StringUtils.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/Core/UI/SpoilerWithHead.h"
 
@@ -47,7 +48,7 @@ namespace Editor
 		{
 			String caption = components[0]->GetName();
 			if (caption.IsEmpty())
-				caption = o2EditorProperties.MakeSmartFieldName(GetComponentType()->GetName());
+				caption = GetSmartName(GetComponentType()->GetName());
 
 			mSpoiler->SetCaption(caption);
 			mSpoiler->GetIcon()->SetImageName(components[0]->GetIcon());

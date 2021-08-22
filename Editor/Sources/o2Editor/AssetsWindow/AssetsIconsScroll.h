@@ -123,7 +123,7 @@ namespace Editor
 		Vector<const AssetInfo*> mSelectedAssets;          // Selected assets icons @IGNORE
 		Vector<AssetRef*>        mSelectedPreloadedAssets; // Preloaded selected assets
 
-		Asset* mNewAsset = nullptr; // Temporary new asset. Used when creating new asset
+		AssetRef mNewAsset; // Temporary new asset. Used when creating new asset
 						        
 		AssetIcon*      mHighlightIcon = nullptr;   // Current highlighting asset icon
 		AnimationClip   mHighlighClip;              // Node highlight animation clip @SERIALIZABLE 
@@ -370,7 +370,7 @@ CLASS_FIELDS_META(Editor::AssetsIconsScrollArea)
 	FIELD().NAME(mVisibleAssetIcons).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mContextMenu).PROTECTED();
 	FIELD().NAME(mSelectedPreloadedAssets).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mNewAsset).PROTECTED();
+	FIELD().NAME(mNewAsset).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mHighlightIcon).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mHighlighClip).PROTECTED();
 	FIELD().NAME(mHighlightAnim).PROTECTED();

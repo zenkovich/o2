@@ -54,7 +54,7 @@ namespace o2
 			mAnimation->animation = animation;
 		else
 		{
-			mAnimation = AnimationAssetRef(mnew AnimationAsset(animation));
+			mAnimation.SetInstance(mnew AnimationAsset(animation));
 			player.SetClip(&mAnimation->animation);
 		}
 	}

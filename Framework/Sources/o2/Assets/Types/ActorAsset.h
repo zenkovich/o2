@@ -59,6 +59,9 @@ namespace o2
 		bool   mOwnActor = false; // Is asset owns this actor
 
 	protected:
+		// Itis called when UID has changed; updates actor asset id
+		void OnUIDChanged(const UID& oldUID) override;
+
 		// Beginning serialization callback
 		void OnSerialize(DataValue& node) const override;
 
@@ -93,6 +96,7 @@ CLASS_METHODS_META(o2::ActorAsset)
 	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
 	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
 	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
+	PROTECTED_FUNCTION(void, OnUIDChanged, const UID&);
 	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
 	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
 }

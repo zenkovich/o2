@@ -141,9 +141,6 @@ namespace Editor
 		// Free object viewer, store in pool for reuse
 		void FreeObjectViewer(IObjectPropertiesViewer* viewer);
 
-		// Makes smarter field name
-		static String MakeSmartFieldName(const String& fieldName);
-
 	protected:
 		typedef Map<const Type*, const Type*> PropertiesFieldsMap;
 		typedef Map<const Type*, Vector<IPropertyField*>> TypePropertyMap;

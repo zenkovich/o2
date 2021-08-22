@@ -18,6 +18,7 @@
 #include "o2/Scene/UI/Widgets/Tree.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/Editor/SceneEditableObject.h"
+#include "o2/Utils/StringUtils.h"
 #include "o2/Utils/System/Clipboard.h"
 #include "o2Editor/Core/Actions/Create.h"
 #include "o2Editor/Core/Actions/Delete.h"
@@ -190,7 +191,7 @@ namespace Editor
 			String category = subType->InvokeStatic<String>("GetCreateMenuCategory");
 			String path;
 			if (category.IsEmpty())
-				path = o2EditorProperties.MakeSmartFieldName(subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/"));
+				path = GetSmartName(subType->GetName().ReplacedAll("o2::", "").ReplacedAll("::", "/"));
 			else
 			{
 				String name = subType->GetName().ReplacedAll("o2::", "");
@@ -198,7 +199,7 @@ namespace Editor
 				if (fnd >= 0)
 					name = name.SubStr(fnd + 2);
 
-				path = category + "/" + o2EditorProperties.MakeSmartFieldName(name);
+				path = category + "/" + GetSmartName(name);
 			}
 
 			String group = subType->InvokeStatic<String>("GetCreateMenuGroup");
@@ -219,14 +220,14 @@ namespace Editor
 
 		for (auto styleWidget : styleWidgets)
 		{
-			auto path = styleWidget->GetType().GetName() + "/" + styleWidget->GetName();
+			auto path = styleWidget->GetType().GetName() + "/" + styleWidget->GetActor()->GetName();
 			path.ReplaceAll("o2::", "");
 			path.ReplaceAll("::", "/");
 
 			mTreeContextMenu->AddItem(String("Create/UI/Style/") + path, [=]()
 			{
 				ForcePopEditorScopeOnStack scope;
-				Widget* newWidget = styleWidget->CloneAs<Widget>();
+				Widget* newWidget = styleWidget->GetActor()->CloneAs<Widget>();
 				newWidget->SetEnabledForcible(true);
 				OnCreateObject(newWidget);
 			});

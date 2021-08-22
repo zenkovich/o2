@@ -3,7 +3,11 @@
 
 #include "o2/Application/Application.h"
 #include "o2/Assets/Assets.h"
+#include "o2/Assets/Types/FolderAsset.h"
 #include "o2/Render/Render.h"
+#include "o2/Scene/UI/Widget.h"
+#include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
 #include "o2/Scene/UI/Widgets/CustomDropDown.h"
@@ -21,12 +25,10 @@
 #include "o2/Scene/UI/Widgets/VerticalLayout.h"
 #include "o2/Scene/UI/Widgets/VerticalProgress.h"
 #include "o2/Scene/UI/Widgets/VerticalScrollBar.h"
-#include "o2/Scene/UI/Widget.h"
-#include "o2/Scene/UI/WidgetLayout.h"
-#include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/Window.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "o2/Utils/StringUtils.h"
 #include "o2/Utils/System/Time/Timer.h"
 
 #undef CreateWindow
@@ -117,53 +119,37 @@ namespace o2
 		FocusWidget(nextFocusingWidget);
 	}
 
-	void UIManager::LoadStyle(const String& path)
+	void UIManager::LoadStyle(const String& stylesPath)
 	{
-		Timer t;
-		DataDocument styleData;
-		styleData.LoadFromFile(o2Assets.GetBuiltAssetsPath() + path);
+		ClearStyle();
 
-		o2Debug.Log("Loaded file " + path + " for " + String(t.GetDeltaTime()) + "sec");
-
-		LoadStyle(styleData);
+		FolderAssetRef folder(stylesPath);
+		for (auto& subAsset : folder->GetChildrenAssets())
+		{
+			if (auto& actorAsset = subAsset.Cast<ActorAsset>())
+				mStyleSamples.Add(actorAsset);
+		}
 	}
 
-	void UIManager::LoadStyle(const DataValue& data)
+	void UIManager::SaveStyle(const String& stylesPath)
 	{
-		Timer t;
+		for (auto& asset : mStyleSamples)
+		{
+			asset->SetEditorAsset(true);
+			auto path = stylesPath + "/" + GetSmartName(asset->GetActor()->GetType().GetName()) + " " + 
+				asset->GetActor()->GetName() + ".proto";
 
-		for (auto st : mStyleSamples)
-			delete st;
+			if (path.Contains("Context Menu standard"))
+				o2Debug.Log("asd");
 
-		mStyleSamples.Clear();
-
-		data.Get(mStyleSamples);
-
-		for (auto styleSample : mStyleSamples)
-			styleSample->Hide(true);
-
-		o2Debug.Log("Loaded styles for " + String(t.GetDeltaTime()) + "sec");
-	}
-
-	void UIManager::SaveStyle(const String& path)
-	{
-		DataDocument styleData;
-		SaveStyle(styleData);
-		styleData.SaveToFile(o2Assets.GetAssetsPath() + path);
+			asset->Save(path, false);
+		}
 
 		o2Assets.RebuildAssets();
 	}
 
-	void UIManager::SaveStyle(DataValue& data)
-	{
-		data = mStyleSamples;
-	}
-
 	void UIManager::ClearStyle()
 	{
-		for (auto sample : mStyleSamples)
-			delete sample;
-
 		mStyleSamples.Clear();
 	}
 
@@ -171,7 +157,7 @@ namespace o2
 	{
 		widget->Hide(true);
 		widget->SetName(style);
-		mStyleSamples.Add(widget);
+		mStyleSamples.Add(mnew ActorAsset(widget));
 	}
 
 	Widget* UIManager::CreateWidget(const Type& type, const String& style /*= "standard"*/)
@@ -197,10 +183,10 @@ namespace o2
 	{
 		for (auto styleWidget : mStyleSamples)
 		{
-			if (type == styleWidget->GetType())
+			if (type == styleWidget->GetActor()->GetType())
 			{
-				if (style == styleWidget->GetName())
-					return styleWidget;
+				if (style == styleWidget->GetActor()->GetName())
+					return dynamic_cast<Widget*>(styleWidget->GetActor());
 			}
 		}
 
@@ -367,7 +353,7 @@ namespace o2
 		mTopWidgets.Add(widget);
 	}
 
-	const Vector<Widget*>& UIManager::GetWidgetStyles() const
+	const Vector<ActorAssetRef>& UIManager::GetWidgetStyles() const
 	{
 		return mStyleSamples;
 	}

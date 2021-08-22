@@ -692,18 +692,18 @@ namespace o2
 
 		if (mHorScrollBar)
 		{
+			mEnableHorScroll = mHorScrollBar->IsEnabled();
+
 			if (mOwnHorScrollBar) delete mHorScrollBar;
 			else                  mHorScrollBar->onSmoothChange -= THIS_FUNC(OnHorScrollChanged);
-
-			mEnableHorScroll = mHorScrollBar->IsEnabled();
 		}
 
 		if (mVerScrollBar)
 		{
+			mEnableVerScroll = mVerScrollBar->IsEnabled();
+
 			if (mOwnVerScrollBar) delete mVerScrollBar;
 			else                  mVerScrollBar->onSmoothChange -= THIS_FUNC(OnVerScrollChanged);
-
-			mEnableVerScroll = mVerScrollBar->IsEnabled();
 		}
 
 		mHorScrollBar = GetInternalWidgetByType<HorizontalScrollBar>("horScrollBar");

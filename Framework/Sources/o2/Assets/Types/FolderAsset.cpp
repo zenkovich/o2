@@ -19,10 +19,10 @@ namespace o2
 		return *this;
 	}
 
-	Vector<AssetRef> FolderAsset::GetContainingAssetsInfos() const
+	Vector<AssetRef> FolderAsset::GetChildrenAssets() const
 	{
 		Vector<AssetRef> res;
-		for (auto asset : mInfo.children)
+		for (auto asset : mInfo.GetChildren())
 			res.Add(AssetRef(asset->meta->ID()));
 
 		return res;

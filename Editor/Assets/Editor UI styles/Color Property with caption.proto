@@ -1,0 +1,229 @@
+{
+    "mActor": {
+        "Type": "Editor::ColorProperty",
+        "Value": {
+            "Prototype": {
+                "id": "32be73fa44fe0f8c64083b865d211423",
+                "path": "Editor UI styles/Color Property standard.proto"
+            },
+            "PrototypeLink": 15833813687261013872,
+            "Id": 2218456487303916445,
+            "mName": "with caption",
+            "mBorder": {
+                "left": 10.0,
+                "bottom": 0.0,
+                "right": 0.0,
+                "top": 0.0
+            },
+            "Children": [
+                {
+                    "Type": "o2::Label",
+                    "Data": {
+                        "Prototype": {
+                            "id": "7b7b14e07ff2688973981a6a2c094e38",
+                            "path": "Editor UI styles/Label standard.proto"
+                        },
+                        "PrototypeLink": 17134334659035912292,
+                        "Id": 7033118097326856825,
+                        "Transform": {
+                            "size": {
+                                "x": 20.0,
+                                "y": 20.0
+                            },
+                            "weight": {
+                                "x": 0.6000000238418579,
+                                "y": 1.0
+                            }
+                        },
+                        "mName": "propertyName",
+                        "Layers": [
+                            {
+                                "mDrawable": {
+                                    "mPosition": {
+                                        "x": 10.0,
+                                        "y": 10.0
+                                    },
+                                    "mSize": {
+                                        "x": 20.0,
+                                        "y": 20.0
+                                    },
+                                    "mHorAlign": "Left"
+                                },
+                                "mUID": 4321172770752391672,
+                                "PrototypeLink": 10671903703429593787
+                            }
+                        ]
+                    }
+                },
+                {
+                    "Type": "o2::Widget",
+                    "Data": {
+                        "PrototypeLink": 12000171985790597237,
+                        "Id": 11537518877287951625,
+                        "Children": [
+                            {
+                                "Type": "o2::HorizontalLayout",
+                                "Data": {
+                                    "PrototypeLink": 12207616097997470070,
+                                    "Id": 6394539484253306142,
+                                    "Children": [
+                                        {
+                                            "Type": "o2::Widget",
+                                            "Data": {
+                                                "PrototypeLink": 364593706086913480,
+                                                "Id": 6172638090752010032,
+                                                "Transform": {
+                                                    "minSize": {
+                                                        "x": 0.0,
+                                                        "y": 10.0
+                                                    }
+                                                },
+                                                "Children": [
+                                                    {
+                                                        "Type": "o2::Image",
+                                                        "Data": {
+                                                            "mName": "unnamed",
+                                                            "Id": 9249466725006079501,
+                                                            "Transform": {
+                                                                "position": {
+                                                                    "x": -1.0,
+                                                                    "y": -1.0
+                                                                },
+                                                                "size": {
+                                                                    "x": 2.0,
+                                                                    "y": 2.0
+                                                                },
+                                                                "anchorMax": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMin": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMax": {
+                                                                    "x": -1.0,
+                                                                    "y": -1.0
+                                                                }
+                                                            },
+                                                            "InternalWidgets": [],
+                                                            "Layers": [
+                                                                {
+                                                                    "Type": "o2::WidgetLayer",
+                                                                    "Value": {
+                                                                        "name": "image",
+                                                                        "mDrawable": {
+                                                                            "Type": "o2::Sprite",
+                                                                            "Value": {
+                                                                                "mSize": {
+                                                                                    "x": 2.0,
+                                                                                    "y": 2.0
+                                                                                },
+                                                                                "mScale": {
+                                                                                    "x": 1.0,
+                                                                                    "y": 1.0
+                                                                                },
+                                                                                "mPivot": {
+                                                                                    "x": 0.5,
+                                                                                    "y": 0.5
+                                                                                },
+                                                                                "mMode": "Tiled",
+                                                                                "mTextureSrcRect": {
+                                                                                    "left": 0,
+                                                                                    "bottom": 0,
+                                                                                    "right": 20,
+                                                                                    "top": 20
+                                                                                },
+                                                                                "textureFileName": ""
+                                                                            }
+                                                                        },
+                                                                        "mUID": 10593034592476983445
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "States": []
+                                                        }
+                                                    },
+                                                    {
+                                                        "Type": "o2::Image",
+                                                        "Data": {
+                                                            "mName": "unnamed",
+                                                            "Id": 7614897111838710407,
+                                                            "Transform": {
+                                                                "position": {
+                                                                    "x": -1.0,
+                                                                    "y": -1.0
+                                                                },
+                                                                "size": {
+                                                                    "x": 2.0,
+                                                                    "y": 2.0
+                                                                },
+                                                                "anchorMax": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMin": {
+                                                                    "x": 1.0,
+                                                                    "y": 1.0
+                                                                },
+                                                                "offsetMax": {
+                                                                    "x": -1.0,
+                                                                    "y": -1.0
+                                                                }
+                                                            },
+                                                            "InternalWidgets": [],
+                                                            "Layers": [
+                                                                {
+                                                                    "Type": "o2::WidgetLayer",
+                                                                    "Value": {
+                                                                        "name": "image",
+                                                                        "mDrawable": {
+                                                                            "Type": "o2::Sprite",
+                                                                            "Value": {
+                                                                                "mSize": {
+                                                                                    "x": 2.0,
+                                                                                    "y": 2.0
+                                                                                },
+                                                                                "mScale": {
+                                                                                    "x": 1.0,
+                                                                                    "y": 1.0
+                                                                                },
+                                                                                "mPivot": {
+                                                                                    "x": 0.5,
+                                                                                    "y": 0.5
+                                                                                },
+                                                                                "mTextureSrcRect": {
+                                                                                    "left": 0,
+                                                                                    "bottom": 0,
+                                                                                    "right": 20,
+                                                                                    "top": 20
+                                                                                },
+                                                                                "textureFileName": ""
+                                                                            }
+                                                                        },
+                                                                        "mUID": 9347835092440088746
+                                                                    }
+                                                                }
+                                                            ],
+                                                            "States": []
+                                                        }
+                                                    }
+                                                ],
+                                                "Layers": [
+                                                    {
+                                                        "mUID": 3662842236004234847,
+                                                        "PrototypeLink": 2284823064995776811
+                                                    }
+                                                ]
+                                            }
+                                        }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

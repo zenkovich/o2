@@ -179,7 +179,7 @@ namespace o2
 		void RemoveAssetCache(Asset* asset);
 
 		// Updates asset chached path and id
-		void UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
+		AssetCache* UpdateAssetCache(Asset* asset, const String& oldPath, const UID& oldUID);
 
 		// Removes asset by info
 		bool RemoveAsset(const AssetInfo& info, bool rebuildAssets = true);

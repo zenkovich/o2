@@ -9,7 +9,7 @@ namespace o2
 	{}
 
 	AssetRef::AssetRef(const AssetRef& other) :
-		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter), mAssetOwner(other.mAssetOwner)
+		mAssetPtr(other.mAssetPtr), mRefCounter(other.mRefCounter), mIsInstance(other.mIsInstance)
 	{
 		if (mAssetPtr)
 			(*mRefCounter)++;
@@ -30,28 +30,22 @@ namespace o2
 			(*mRefCounter)++;
 	}
 
-	AssetRef::AssetRef(Asset* instance)
+	AssetRef::AssetRef(Asset* instance):
+		AssetRef(instance ? o2Assets.GetAssetRef(instance->GetUID()) : AssetRef())
 	{
-		mAssetPtr = instance;
-
-		if (instance)
-		{
-			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
-			mAssetOwner = true;
-		}
-		else
-			mAssetOwner = false;
+		mIsInstance = true;
 	}
 
 	void AssetRef::OnSerialize(DataValue& node) const
 	{
-		if (mAssetOwner)
+		if (mIsInstance)
 		{
-			node["own"] = true;
-
 			if (mAssetPtr)
 			{
-				node["asset"] = mAssetPtr;
+				AssetRef* nonConstThis = const_cast<AssetRef*>(this);
+				*nonConstThis = AssetRef(mAssetPtr->CloneAs<Asset>());
+
+				node["instance"] = mAssetPtr;
 				node["meta"] = mAssetPtr->GetMeta();
 			}
 		}
@@ -69,14 +63,25 @@ namespace o2
 
 		mAssetPtr = nullptr;
 		mRefCounter = nullptr;
-		mAssetOwner = false;
+		mIsInstance = false;
 
-		if (node.FindMember("own"))
+		if (auto instanceNode = node.FindMember("instance"))
 		{
-			mAssetOwner = true;
-			mAssetPtr = node.GetMember("asset");
+			mIsInstance = true;
+			mAssetPtr = (Asset*)(*instanceNode);
+
+			UID oldUid = mAssetPtr->GetUID();
 			mAssetPtr->mInfo.meta = node.GetMember("meta");
-			mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+			auto assetCache = o2Assets.UpdateAssetCache(mAssetPtr, "", oldUid);
+			Assert(assetCache, "Can't find asset cache");
+			if (assetCache)
+			{
+				mRefCounter = &assetCache->referencesCount;
+				(*mRefCounter)++;
+			}
+			else
+				mAssetPtr = nullptr;
+
 			UpdateSpecAsset();
 		}
 		else if (auto idNode = node.FindMember("id"))
@@ -119,7 +124,7 @@ namespace o2
 
 		mAssetPtr = other.mAssetPtr;
 		mRefCounter = other.mRefCounter;
-		mAssetOwner = other.mAssetOwner;
+		mIsInstance = other.mIsInstance;
 		UpdateSpecAsset();
 
 		if (mAssetPtr)
@@ -175,12 +180,15 @@ namespace o2
 
 	const Type& AssetRef::GetAssetType() const
 	{
+		if (mAssetPtr)
+			return mAssetPtr->GetType();
+
 		return TypeOf(Asset);
 	}
 
 	void AssetRef::SetInstance(Asset* asset)
 	{
-		if (mAssetOwner)
+		if (mIsInstance)
 			return;
 
 		if (mAssetPtr)
@@ -188,15 +196,24 @@ namespace o2
 
 		mAssetPtr = asset;
 
-		mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+		auto assetCache = o2Assets.FindAssetCache(mAssetPtr->GetUID());
+		Assert(assetCache, "Can't find asset cache");
+		if (assetCache)
+		{
+			mRefCounter = &assetCache->referencesCount;
+			(*mRefCounter)++;
+		}
+		else
+			mAssetPtr = nullptr;
+
 		UpdateSpecAsset();
 
-		mAssetOwner = true;
+		mIsInstance = true;
 	}
 
 	void AssetRef::CreateInstance()
 	{
-		if (mAssetOwner)
+		if (mIsInstance)
 			return;
 
 		if (mAssetPtr)
@@ -210,20 +227,29 @@ namespace o2
 			mAssetPtr = dynamic_cast<Asset*>(objectType->DynamicCastToIObject(objectType->CreateSample()));
 		}
 
-		mRefCounter = &o2Assets.AddAssetCache(mAssetPtr)->referencesCount;
+		auto assetCache = o2Assets.FindAssetCache(mAssetPtr->GetUID());
+		Assert(assetCache, "Can't find asset cache");
+		if (assetCache)
+		{
+			mRefCounter = &assetCache->referencesCount;
+			(*mRefCounter)++;
+		}
+		else
+			mAssetPtr = nullptr;
+
 		UpdateSpecAsset();
 
-		mAssetOwner = true;
+		mIsInstance = true;
 	}
 
 	void AssetRef::RemoveInstance()
 	{
-		if (!mAssetOwner)
+		if (!mIsInstance)
 			return;
 
 		*mRefCounter--;
 
-		mAssetOwner = false;
+		mIsInstance = false;
 		mAssetPtr = nullptr;
 
 		UpdateSpecAsset();
@@ -231,7 +257,7 @@ namespace o2
 
 	void AssetRef::SaveInstance(const String& path)
 	{
-		if (!mAssetOwner)
+		if (!mIsInstance)
 			return;
 
 		mAssetPtr->SetPath(path);
@@ -242,7 +268,7 @@ namespace o2
 
 	bool AssetRef::IsInstance() const
 	{
-		return mAssetOwner;
+		return mIsInstance;
 	}
 
 	bool AssetRef::operator!=(const AssetRef& other) const

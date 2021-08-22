@@ -135,7 +135,7 @@ namespace Editor
 
 		OnResizing();
 
-		FreeConsole();
+		//FreeConsole();
 
 		auto widget = EditorUIRoot.GetRootWidget()->GetChildWidget("tools panel/play panel");
 		o2EditorAnimationWindow.SetAnimation(&widget->GetStateObject("playing")->GetAnimationClip(),
@@ -206,7 +206,7 @@ namespace Editor
 	void EditorApplication::LoadUIStyle()
 	{
 		EditorUIStyleBuilder builder;
-		builder.RebuildEditorUIManager("editor_ui_style.json", true, true);
+		builder.RebuildEditorUIManager("Editor UI styles", true, true);
 	}
 
 	void EditorApplication::PreUpdatePhysics()

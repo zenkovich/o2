@@ -490,13 +490,16 @@ namespace Editor
 				{
 					if (auto nameField = objectType->GetField(name))
 					{
-						void* objectPtr;
-						proxies[0].first->GetValuePtr(&objectPtr);
-						String name = nameField->GetValue<String>(objectPtr);
-						if (!name.IsEmpty())
-							propertyDef->SetCaption("#" + propertyDef->GetValuePath() + " - " + name);
+						if (nameField->GetType() == &TypeOf(String))
+						{
+							void* objectPtr;
+							proxies[0].first->GetValuePtr(&objectPtr);
+							String name = nameField->GetValue<String>(objectPtr);
+							if (!name.IsEmpty())
+								propertyDef->SetCaption("#" + propertyDef->GetValuePath() + " - " + name);
 
-						return;
+							return;
+						}
 					}
 				}
 			}

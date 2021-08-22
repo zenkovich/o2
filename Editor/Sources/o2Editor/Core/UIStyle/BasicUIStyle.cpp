@@ -1324,21 +1324,6 @@ namespace o2
 
 		o2UI.AddWidgetStyle(sample, "expand with caption");
 	}
-
-	void BasicUIStyleBuilder::RebuildBasicUIManager()
-	{
-		o2UI.ClearStyle();
-
-		for (auto func : GetType().GetFunctions())
-		{
-			if (func->GetName() == "RebuildBasicUIManager")
-				continue;
-
-			func->Invoke<void>(this);
-		}
-
-		o2UI.SaveStyle("basic_ui_style.json");
-	}
 }
 
 DECLARE_CLASS(o2::BasicUIStyleBuilder);

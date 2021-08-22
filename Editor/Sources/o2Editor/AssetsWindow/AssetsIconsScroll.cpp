@@ -1,8 +1,8 @@
 #include "o2Editor/stdafx.h"
 #include "AssetsIconsScroll.h"
 
-#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/AnimationClip.h"
+#include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Application/Application.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Assets/Types/AnimationAsset.h"
@@ -17,12 +17,13 @@
 #include "o2/Scene/UI/Widgets/EditBox.h"
 #include "o2/Scene/UI/Widgets/GridLayout.h"
 #include "o2/Scene/UI/Widgets/Label.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2/Utils/StringUtils.h"
 #include "o2Editor/AssetsWindow/AssetIcon.h"
 #include "o2Editor/AssetsWindow/AssetsWindow.h"
 #include "o2Editor/Core/Actions/Create.h"
 #include "o2Editor/Core/EditorApplication.h"
-#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/Properties/Properties.h"
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/TreeWindow/SceneTree.h"
@@ -191,7 +192,7 @@ namespace Editor
 		if (mCurrentPath != "")
 		{
 			FolderAssetRef ref(mCurrentPath);
-			mAssetInfos = ref->GetInfo().children.Cast<const AssetInfo*>();
+			mAssetInfos = ref->GetInfo().GetChildren().Cast<const AssetInfo*>();
 		}
 		else mAssetInfos = o2Assets.GetAssetsTree().rootAssets.Cast<const AssetInfo*>();
 
@@ -767,7 +768,7 @@ namespace Editor
 			if (type == &TypeOf(FolderAsset))
 				continue;
 
-			mContextMenu->AddItem("Create/" + o2EditorProperties.MakeSmartFieldName(type->GetName()),
+			mContextMenu->AddItem("Create/" + GetSmartName(type->GetName()),
 								  [=]() { OnContextCreateAssetPressed(type); });
 		}
 	}
@@ -918,7 +919,7 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnContextCreateAssetPressed(const Type* assetType)
 	{
-		String newAssetName = "New " + o2EditorProperties.MakeSmartFieldName(assetType->GetName());
+		String newAssetName = "New " + GetSmartName(assetType->GetName());
 
 		auto objectType = dynamic_cast<const ObjectType*>(assetType);
 
@@ -1037,8 +1038,8 @@ namespace Editor
 
 	void AssetsIconsScrollArea::OnSelectableObjectCursorReleased(SelectableDragableObject* object, const Input::Cursor& cursor)
 	{
-		if ((mPressedPoint - cursor.position).Length() > 5.0f)
-			return;
+// 		if ((mPressedPoint - cursor.position).Length() > 5.0f)
+// 			return;
 
 		if (!o2Input.IsKeyDown(VK_CONTROL) && !o2Input.IsKeyDown(VK_SHIFT))
 			DeselectAllAssets();
@@ -1066,7 +1067,12 @@ namespace Editor
 			}
 		}
 		else
-			Select(object);
+		{
+			if (object->IsSelected())
+				Deselect(object);
+			else
+				Select(object);
+		}
 	}
 
 	void AssetsIconsScrollArea::OnSelectableObjectBeganDragging(SelectableDragableObject* object)

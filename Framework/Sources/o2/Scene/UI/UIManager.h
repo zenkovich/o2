@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Scene/UI/Widgets/ContextMenu.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
 #include "o2/Utils/Property.h"
@@ -39,16 +40,10 @@ namespace o2
 	{
 	public:
 		// Loads widgets style
-		void LoadStyle(const String& path);
-
-		// Loads widgets style
-		void LoadStyle(const DataValue& data);
+		void LoadStyle(const String& stylesPath);
 
 		// Saves style
-		void SaveStyle(const String& path);
-
-		// Saves style
-		void SaveStyle(DataValue& data);
+		void SaveStyle(const String& stylesPath);
 
 		// Clears style widgets
 		void ClearStyle();
@@ -145,7 +140,7 @@ namespace o2
 		void DrawWidgetAtTop(Widget* widget);
 
 		// Returns all styles widgets
-		const Vector<Widget*>& GetWidgetStyles() const;
+		const Vector<ActorAssetRef>& GetWidgetStyles() const;
 
 	protected:
 		LogStream * mLog = nullptr; // UI Log stream
@@ -157,7 +152,7 @@ namespace o2
 
 		Vector<Widget*> mTopWidgets; // Top widgets, drawing after mScreenWidget 
 
-		Vector<Widget*> mStyleSamples; // Style widgets
+		Vector<ActorAssetRef> mStyleSamples; // Style widgets
 
 	protected:
 		// Default constructor
@@ -181,10 +176,10 @@ namespace o2
 	{
 		for (auto styleWidget : mStyleSamples)
 		{
-			if (TypeOf(_type) == styleWidget->GetType())
+			if (TypeOf(_type) == styleWidget->GetActor()->GetType())
 			{
-				if (style == styleWidget->GetName())
-					return dynamic_cast<_type*>(styleWidget);
+				if (style == styleWidget->GetActor()->GetName())
+					return dynamic_cast<_type*>(styleWidget->GetActor());
 			}
 		}
 
@@ -194,11 +189,16 @@ namespace o2
 	template<typename _type>
 	void UIManager::RemoveWidgetStyle(const String& style)
 	{
-		_type* widgetStyle = GetWidgetStyle<_type>(style);
-		if (widgetStyle)
+		for (auto styleWidget : mStyleSamples)
 		{
-			mStyleSamples.Remove(widgetStyle);
-			delete widgetStyle;
+			if (TypeOf(_type) == styleWidget->GetActor()->GetType())
+			{
+				if (style == styleWidget->GetActor()->GetName())
+				{
+					mStyleSamples.Remove(styleWidget);
+					break;
+				}
+			}
 		}
 	}
 

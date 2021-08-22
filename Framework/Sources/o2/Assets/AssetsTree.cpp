@@ -118,7 +118,7 @@ namespace o2
 
 		if (asset->meta->GetAssetType() == &TypeOf(FolderAsset) && release)
 		{
-			auto& childs = asset->children;
+			auto& childs = asset->mChildren;
 			for (auto ch : childs)
 				RemoveAsset(ch, release);
 		}
@@ -140,7 +140,7 @@ namespace o2
 
 	void AssetsTree::LoadFolder(const FolderInfo& folder, AssetInfo* parentAsset)
 	{
-		auto& parentChilds = parentAsset ? parentAsset->children : rootAssets;
+		auto& parentChilds = parentAsset ? parentAsset->mChildren : rootAssets;
 
 		for (auto fileInfo : folder.files)
 		{

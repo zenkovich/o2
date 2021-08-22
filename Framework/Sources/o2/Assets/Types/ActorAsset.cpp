@@ -93,6 +93,12 @@ namespace o2
 		return "proto";
 	}
 
+	void ActorAsset::OnUIDChanged(const UID& oldUID)
+	{
+		if (mActor)
+			mActor->mAssetId = ID();
+	}
+
 	void ActorAsset::OnSerialize(DataValue& node) const
 	{
 		mActor->mIsAsset = false;

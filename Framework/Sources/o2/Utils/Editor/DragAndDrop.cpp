@@ -344,7 +344,10 @@ namespace o2
 				mIsDragging = true;
 
 				if (mSelectGroup)
+				{
 					mSelectGroup->OnSelectableObjectBeganDragging(this);
+					mSelectGroup->mDraggingObject = this;
+				}
 				else 
 					Select();
 
@@ -399,7 +402,10 @@ namespace o2
 			{
 				OnDropped(dragDropArea);
 				if (mSelectGroup)
+				{
 					dragDropArea->OnDropped(mSelectGroup);
+					mSelectGroup->mDraggingObject = nullptr;
+				}
 				else
 					dragDropArea->OnDropped(this);
 			}
@@ -446,4 +452,10 @@ namespace o2
 		for (auto object : objects)
 			Select(object);
 	}
+
+	const SelectableDragableObject* ISelectableDragableObjectsGroup::GetDraggingObject() const
+	{
+		return mDraggingObject;
+	}
+
 }
