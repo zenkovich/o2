@@ -62,12 +62,21 @@ namespace o2
 			DataValue& node;
 
 			BaseFieldProcessor(DataValue& node):node(node) {}
+			
+			template<typename _base, typename _attribute_type>
+			struct AttributeWrapper: public _attribute_type::template SerializeFieldProcessor<_base>
+			{
+				template<typename ... _args>
+				AttributeWrapper(const _base& base, _args ... args):_attribute_type::template SerializeFieldProcessor<_base>(base, args ...) {}
+			};
 
 			template<typename _base, typename _attribute_type, typename ... _args>
 			auto AddAttributeImpl(const _base& base, _args ... args)
 			{
 				if constexpr (HasAttributeSerializeProcessor<_attribute_type>::value)
-					return _attribute_type::SerializeFieldProcessor<_base>(base, args ...);
+				{
+					return AttributeWrapper<_base, _attribute_type>(base, args ...);
+				}
 				else
 					return *this;
 			}
@@ -139,12 +148,19 @@ namespace o2
 			const DataValue& node;
 
 			BaseFieldProcessor(const DataValue& node):node(node) {}
+			
+			template<typename _base, typename _attribute_type>
+			struct AttributeWrapper: public _attribute_type::template DeserializeFieldProcessor<_base>
+			{
+				template<typename ... _args>
+				AttributeWrapper(const _base& base, _args ... args):_attribute_type::template DeserializeFieldProcessor<_base>(base, args ...) {}
+			};
 
 			template<typename _base, typename _attribute_type, typename ... _args>
 			auto AddAttributeImpl(const _base& base, _args ... args)
 			{
 				if constexpr (HasAttributeDeserializeProcessor<_attribute_type>::value)
-					return _attribute_type::DeserializeFieldProcessor<_base>(base, args ...);
+					return AttributeWrapper<_base, _attribute_type>(base, args ...);
 				else
 					return (_base&)(*this);
 			}
@@ -212,12 +228,19 @@ namespace o2
 			typedef _origin_type OriginType;
 
 			BaseFieldProcessor(DataValue& node, const _origin_type& origin):node(node), origin(origin) {}
+			
+			template<typename _base, typename _attribute_type>
+			struct AttributeWrapper: public _attribute_type::template SerializeDeltaFieldProcessor<_base>
+			{
+				template<typename ... _args>
+				AttributeWrapper(const _base& base, _args ... args):_attribute_type::template SerializeDeltaFieldProcessor<_base>(base, args ...) {}
+			};
 
 			template<typename _base, typename _attribute_type, typename ... _args>
 			auto AddAttributeImpl(const _base& base, _args ... args)
 			{
 				if constexpr (HasAttributeSerializeProcessor<_attribute_type>::value)
-					return _attribute_type::SerializeDeltaFieldProcessor<_base>(base, args ...);
+					return AttributeWrapper<_base, _attribute_type>(base, args ...);
 				else
 					return *this;
 			}
@@ -295,11 +318,18 @@ namespace o2
 
 			BaseFieldProcessor(const DataValue& node, const _origin_type& origin):node(node), origin(origin) {}
 
+			template<typename _base, typename _attribute_type>
+			struct AttributeWrapper: public _attribute_type::template DeserializeDeltaFieldProcessor<_base>
+			{
+				template<typename ... _args>
+				AttributeWrapper(const _base& base, _args ... args):_attribute_type::template DeserializeDeltaFieldProcessor<_base>(base, args ...) {}
+			};
+			
 			template<typename _base, typename _attribute_type, typename ... _args>
 			auto AddAttributeImpl(const _base& base, _args ... args)
 			{
 				if constexpr (HasAttributeDeserializeProcessor<_attribute_type>::value)
-					return _attribute_type::DeserializeDeltaFieldProcessor<_base>(base, args ...);
+					return AttributeWrapper<_base, _attribute_type>(base, args ...);
 				else
 					return base;
 			}

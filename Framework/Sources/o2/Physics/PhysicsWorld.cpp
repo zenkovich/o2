@@ -5,6 +5,7 @@
 #include "o2/Config/ProjectConfig.h"
 #include "o2/Scene/Physics/ICollider.h"
 #include "o2/Scene/Physics/RigidBody.h"
+#include "o2/Render/Render.h"
 
 namespace o2
 {

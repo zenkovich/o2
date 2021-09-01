@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Animation/AnimationClip.h"
-#include "o2/Animation/AnimationState.h"
 #include "o2/Animation/Editor/EditableAnimation.h"
 #include "o2/Animation/Tracks/AnimationTrack.h"
 #include "o2/Scene/Component.h"
@@ -12,6 +11,9 @@
 
 namespace o2
 {
+	class AnimationState;
+	class AnimationMask;
+	
 	// -------------------
 	// Animation component
 	// -------------------
@@ -195,7 +197,12 @@ namespace o2
 		template<typename _type>
 		friend class AnimationTrack;
 	};
+}
 
+#include "o2/Animation/AnimationState.h"
+
+namespace o2
+{
 	template<typename _type>
 	void AnimationComponent::RegTrack(typename AnimationTrack<_type>::Player* player, const String& path, AnimationState* state)
 	{
@@ -261,16 +268,16 @@ namespace o2
 	template<typename _type>
 	void AnimationComponent::TrackMixer<_type>::Update()
 	{
-		AnimationState* firstValueState = tracks[0].first;
-		AnimationTrack<_type>::Player* firstValue = tracks[0].second;
+		auto firstValueState = tracks[0].first;
+		auto firstValue = tracks[0].second;
 
 		float weightsSum = firstValueState->mWeight*firstValueState->blend*firstValueState->mask.GetNodeWeight(path);
 		_type valueSum = firstValue->GetValue();
 
 		for (int i = 1; i < tracks.Count(); i++)
 		{
-			AnimationState* valueState = tracks[i].first;
-			AnimationTrack<_type>::Player* value = tracks[i].second;
+			auto valueState = tracks[i].first;
+			auto value = tracks[i].second;
 
 			weightsSum += valueState->mWeight*valueState->blend*valueState->mask.GetNodeWeight(path);
 			valueSum += value->GetValue();
@@ -278,6 +285,12 @@ namespace o2
 
 		_type resValue = valueSum / weightsSum;
 		target->SetValue(resValue);
+	}
+	
+	template<typename _type>
+	void AnimationTrack<_type>::Player::RegMixer(AnimationState* state, const String& path)
+	{
+		state->mOwner->RegTrack<_type>(this, path, state);
 	}
 }
 

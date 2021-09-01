@@ -209,8 +209,6 @@ namespace o2
 	void GridLayout::ArrangeFromLeftTop()
 	{
 		int cellsCount = mChildren.Count();
-		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -272,7 +270,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -345,8 +342,6 @@ namespace o2
 	void GridLayout::ArrangeFromRightTop()
 	{
 		int cellsCount = mChildren.Count();
-		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -408,7 +403,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -486,7 +480,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -584,7 +577,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -662,7 +654,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -727,7 +718,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{
@@ -813,7 +803,6 @@ namespace o2
 	{
 		int cellsCount = mChildren.Count();
 		int rem = cellsCount % mArrangeAxisMaxCells;
-		float maxCells = (float)mArrangeAxisMaxCells;
 
 		if (mArrangeAxis == TwoDirection::Horizontal)
 		{

@@ -71,7 +71,7 @@ private:                                                                        
     template<typename __type>                                                                                   \
 	friend class o2::PointerValueProxy;                                                                         \
 																												\
-    template<typename _type>																					\
+    template<typename __type>																					\
 	friend class o2::IValueProxy;																			    \
                                                                                                                 \
     friend class o2::ReflectionInitializationTypeProcessor;                                                     \

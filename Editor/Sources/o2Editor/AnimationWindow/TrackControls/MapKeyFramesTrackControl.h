@@ -6,6 +6,7 @@
 #include "o2Editor/AnimationWindow/TrackControls/ITrackControl.h"
 #include "o2Editor/AnimationWindow/TrackControls/AnimationTrackWrapper.h"
 #include "o2Editor/AnimationWindow/Tree.h"
+#include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
 
 using namespace o2;
 
@@ -174,7 +175,7 @@ namespace Editor
 			handle->trackControl = trackControl;
 			handle->keyUid = key.uid;
 			handle->isMapping = true;
-			handle->SetSelectionGroup(trackControl->mHandlesSheet);
+			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(trackControl->mHandlesSheet));
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
 				auto& keys = Wrapper::GetKeys(*track);

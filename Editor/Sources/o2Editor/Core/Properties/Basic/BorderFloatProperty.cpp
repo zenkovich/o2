@@ -249,6 +249,6 @@ namespace Editor
 	}
 
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::BorderF>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::BorderF>);
 
 DECLARE_CLASS(Editor::BorderFProperty);

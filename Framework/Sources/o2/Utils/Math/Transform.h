@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2/Animation/AnimationClip.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Editor/Attributes/AnimatableAttribute.h"
 #include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"

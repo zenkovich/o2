@@ -1,5 +1,8 @@
 #pragma once
 
+#include "o2/Utils/Memory/MemoryManager.h"
+#include "o2/Utils/Reflection/TypeTraits.h"
+
 namespace o2
 {
 	class DataValue;

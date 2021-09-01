@@ -2,6 +2,8 @@
 #include "CameraActor.h"
 
 #include "o2/Scene/Scene.h"
+#include "o2/Scene/ISceneDrawable.h"
+#include "o2/Render/Render.h"
 
 namespace o2
 {

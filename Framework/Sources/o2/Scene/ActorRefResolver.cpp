@@ -2,6 +2,7 @@
 #include "ActorRefResolver.h"
 
 #include "o2/Scene/Actor.h"
+#include "o2/Scene/Scene.h"
 
 namespace o2
 {

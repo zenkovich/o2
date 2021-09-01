@@ -3,6 +3,7 @@
 
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/WidgetLayout.h"
+#include "o2/Render/Render.h"
 
 namespace o2
 {

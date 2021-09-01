@@ -2,6 +2,7 @@
 #include "ActorDifferences.h"
 
 #include "o2/Scene/Component.h"
+#include "o2/Scene/Scene.h"
 #include "o2/Utils/Editor/SceneEditableObject.h"
 
 namespace o2

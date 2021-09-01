@@ -1,10 +1,10 @@
 #pragma once
 #include "o2/Animation/AnimationClip.h"
-
 #include "o2/Animation/AnimationPlayer.h"
 #include "o2/Assets/Types/AnimationAsset.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/String.h"
+#include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 
 namespace o2
 {

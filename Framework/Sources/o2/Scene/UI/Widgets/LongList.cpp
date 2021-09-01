@@ -361,7 +361,7 @@ namespace o2
 			*pressedState = false;
 
 		int itemIdx = -1;
-		Widget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
+		GetItemUnderPoint(cursor.position, &itemIdx);
 
 		onFocused(itemIdx);
 		OnSelectionChanged();

@@ -4,6 +4,7 @@
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
+#include "o2/Utils/Editor/Attributes/EditorPropertyAttribute.h"
 
 namespace o2
 {

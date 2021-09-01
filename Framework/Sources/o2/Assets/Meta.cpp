@@ -1,6 +1,8 @@
 #include "o2/stdafx.h"
 #include "Meta.h"
 
+#include "o2/Assets/Asset.h"
+
 namespace o2
 {
 	AssetMeta::AssetMeta() :

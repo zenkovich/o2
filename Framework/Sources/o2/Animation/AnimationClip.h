@@ -144,7 +144,7 @@ namespace o2
 		for (auto track : mTracks)
 		{
 			if (track->path == path)
-				return dynamic_cast<AnimationTrack<_type>*>(val.animatedValue);
+				return dynamic_cast<AnimationTrack<_type>*>(track);
 		}
 
 		return nullptr;

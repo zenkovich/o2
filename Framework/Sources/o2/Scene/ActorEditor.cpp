@@ -125,7 +125,7 @@ namespace o2
 			return;
 
 		// Get difference between this actor and prototype first
-		auto& diffs = ActorDifferences::GetDifference(this, mPrototype->GetActor());
+		auto diffs = ActorDifferences::GetDifference(this, mPrototype->GetActor());
 
 		// Get applying actors infos
 		ApplyActorInfo prototypeApplyInfo(mPrototype->GetActor());

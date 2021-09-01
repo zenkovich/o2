@@ -298,7 +298,7 @@ namespace Editor
 	template<typename _type>
 	void IPropertyField::SetValuePointers(const Vector<_type*>& targets)
 	{
-		SetValueAndPrototypeProxy(targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_type* target)
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_type* target)
 		{
 			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(mnew PointerValueProxy<_type>(target), nullptr);
 		}));
@@ -307,17 +307,17 @@ namespace Editor
 	template<typename _property_type>
 	void IPropertyField::SetValuePropertyPointers(const Vector<_property_type*>& targets)
 	{
-		SetValueAndPrototypeProxy(targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_property_type* target)
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>([](_property_type* target)
 		{
 			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PropertyValueProxy<_property_type::valueType, _property_type>(target), nullptr);
+				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(target), nullptr);
 		}));
 	}
 
 	template<typename _type, typename _object_type>
 	void IPropertyField::SelectValuesPointers(const Vector<_object_type*>& targets, std::function<_type* (_object_type*)> getter)
 	{
-		SetValueAndPrototypeProxy(targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[&](_object_type* target)
 		{
 			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
@@ -329,11 +329,11 @@ namespace Editor
 	void IPropertyField::SelectValuesProperties(const Vector<_object_type*>& targets,
 												std::function<_property_type* (_object_type*)> getter)
 	{
-		SetValueAndPrototypeProxy(targets.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		SetValueAndPrototypeProxy(targets.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[&](_object_type* target)
 		{
 			return Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(target)), nullptr);
+				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(target)), nullptr);
 		}));
 	}
 
@@ -367,8 +367,8 @@ namespace Editor
 		for (int i = 0; i < targets.Count() && i < prototypes.Count(); i++)
 		{
 			targetPairs.Add(Pair<IAbstractValueProxy*, IAbstractValueProxy*>(
-				mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(targets[i])),
-				prototypes[i] ? mnew PropertyValueProxy<_property_type::valueType, _property_type>(getter(prototypes[i])) : nullptr
+				mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(targets[i])),
+				prototypes[i] ? mnew PropertyValueProxy<typename _property_type::valueType, _property_type>(getter(prototypes[i])) : nullptr
 			));
 		}
 

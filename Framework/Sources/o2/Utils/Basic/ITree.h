@@ -132,13 +132,13 @@ namespace o2
 	}
 
 	template<typename _type>
-	typename Vector<_type*>& ITreeNode<_type>::GetChilds()
+	Vector<_type*>& ITreeNode<_type>::GetChilds()
 	{
 		return mChildren;
 	}
 
 	template<typename _type>
-	const typename Vector<_type*>& o2::ITreeNode<_type>::GetChilds() const
+	const Vector<_type*>& ITreeNode<_type>::GetChilds() const
 	{
 		return mChildren;
 	}

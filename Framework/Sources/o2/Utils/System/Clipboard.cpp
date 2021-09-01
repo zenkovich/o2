@@ -43,7 +43,9 @@ namespace o2
 
 		return res;
 #elif PLATFORM_ANDROID
-        return WString();
+		return WString();
+#elif PLATFORM_MAC
+		return WString();
 #endif
 	}
 

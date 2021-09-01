@@ -1,5 +1,7 @@
 #include "o2/stdafx.h"
 #include "LinearAllocator.h"
+#include <string.h>
+#include <cstddef>
 
 namespace o2
 {

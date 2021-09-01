@@ -158,6 +158,6 @@ namespace o2
 	}
 }
 
-DECLARE_CLASS_MANUAL(o2::Ref<o2::Actor>);
+DECLARE_TEMPLATE_CLASS(o2::Ref<o2::Actor>);
 
 DECLARE_CLASS(o2::ActorRef);

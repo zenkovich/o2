@@ -113,7 +113,7 @@ namespace o2
 	};
 
 	template<typename T>
-	struct CheckSerializeBasicOverridden<T, typename void_t<decltype(&T::SerializeBasicOverride)>>
+	struct CheckSerializeBasicOverridden<T, typename std::void_t<decltype(&T::SerializeBasicOverride)>>
 	{
 		// Using overridden function
 		static void Process(T* object, DataValue& node)
@@ -134,7 +134,7 @@ namespace o2
 	};
 
 	template<typename T>
-	struct CheckDeserializeBasicOverridden<T, typename void_t<decltype(&T::DeserializeBasicOverride)>>
+	struct CheckDeserializeBasicOverridden<T, typename std::void_t<decltype(&T::DeserializeBasicOverride)>>
 	{
 		// Using overridden function
 		static void Process(T* object, const DataValue& node)
@@ -155,7 +155,7 @@ namespace o2
 	};
 
 	template<typename T>
-	struct CheckSerializeDeltaBasicOverridden<T, typename void_t<decltype(&T::SerializeDeltaBasicOverride)>>
+	struct CheckSerializeDeltaBasicOverridden<T, typename std::void_t<decltype(&T::SerializeDeltaBasicOverride)>>
 	{
 		// Using overridden function
 		static void Process(T* object, const T* origin, DataValue& node)
@@ -176,7 +176,7 @@ namespace o2
 	};
 
 	template<typename T>
-	struct CheckDeserializeDeltaBasicOverridden<T, typename void_t<decltype(&T::DeserializeDeltaBasicOverride)>>
+	struct CheckDeserializeDeltaBasicOverridden<T, typename std::void_t<decltype(&T::DeserializeDeltaBasicOverride)>>
 	{
 		// Using overridden function
 		static void Process(T* object, const T* origin, const DataValue& node)
@@ -222,7 +222,7 @@ namespace o2
 					return *this;
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				node.AddMember(name).Set(*fieldPtr);
+				_base::node.AddMember(name).Set(*fieldPtr);
 
 				return *this;
 			}
@@ -236,7 +236,7 @@ namespace o2
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				return AddAttributeImpl<SerializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+				return _base::template AddAttributeImpl<SerializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -270,7 +270,7 @@ namespace o2
 					return *this;
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				node.AddMember(name).Set(*fieldPtr);
+				_base::node.AddMember(name).Set(*fieldPtr);
 
 				return *this;
 			}
@@ -284,7 +284,7 @@ namespace o2
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				return AddAttributeImpl<DeserializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+				return _base::template AddAttributeImpl<DeserializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -299,7 +299,7 @@ namespace o2
 			{
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
 
-				if (auto m = node.FindMember(name))
+				if (auto m = _base::node.FindMember(name))
 					m->Get(*fieldPtr);
 
 				return *this;
@@ -314,7 +314,7 @@ namespace o2
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				return AddAttributeImpl<SerializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+				return _base::template AddAttributeImpl<SerializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -333,7 +333,7 @@ namespace o2
 				if constexpr (SupportsEqualOperator<_field_type>::value)
 				{
 					_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(&const_cast<_object_type&>(_base::origin)));
 
 					if (EqualsForDeltaSerialize(*fieldPtr, *originFieldPtr))
 						return false;
@@ -350,12 +350,12 @@ namespace o2
 					return *this;
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(&const_cast<_object_type&>(_base::origin)));
 
-				DataValue& member = node.AddMember(name);
+				DataValue& member = _base::node.AddMember(name);
 				member.SetDelta(*fieldPtr, *originFieldPtr);
 				if (member.IsNull())
-					node.RemoveMember(name);
+					_base::node.RemoveMember(name);
 
 				return *this;
 			}
@@ -369,7 +369,7 @@ namespace o2
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				return AddAttributeImpl<DeserializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+				return _base::template AddAttributeImpl<DeserializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -383,22 +383,22 @@ namespace o2
 												   _field_type& field)
 			{
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(&const_cast<_object_type&>(_base::origin)));
 
-				if (auto m = node.FindMember(name); m && !m->IsNull())
+				if (auto m = _base::node.FindMember(name); m && !m->IsNull())
 					m->GetDelta(*fieldPtr, *originFieldPtr);
 				else
 				{
-					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_object_type*>(&origin)));
+					_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(&const_cast<_object_type&>(_base::origin)));
 					if constexpr (std::is_pointer<_field_type>::value &&
-								  std::is_copy_constructible<std::remove_pointer<_field_type>::type>::value)
+								  std::is_copy_constructible<typename std::remove_pointer<_field_type>::type>::value)
 					{
 						if (*originFieldPtr != nullptr)
 						{
-							typedef std::remove_pointer<_field_type>::type _field_type_unp;
+							typedef typename std::remove_pointer<_field_type>::type _field_type_unp;
 							if constexpr (IsCloneable<_field_type_unp>::value)
 							{
-								if constexpr (std::is_same<std::invoke_result<decltype(&_field_type_unp::Clone)()>::type, _field_type>::value)
+								if constexpr (std::is_same<typename std::invoke_result<decltype(&_field_type_unp::Clone)()>::type, _field_type>::value)
 									*fieldPtr = (*originFieldPtr)->Clone();
 								else
 									*fieldPtr = dynamic_cast<_field_type>((*originFieldPtr)->Clone());
@@ -456,7 +456,7 @@ namespace o2
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				return AddAttributeImpl<SerializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+				return _base::template AddAttributeImpl<SerializeFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -483,7 +483,7 @@ namespace o2
 					return *this;
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				node.AddMember(name).Set(*fieldPtr);
+				_base::node.AddMember(name).Set(*fieldPtr);
 
 				return *this;
 			}
@@ -500,7 +500,7 @@ namespace o2
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args)
 			{
-				return AddAttributeImpl<SerializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
+				return _base::template AddAttributeImpl<SerializeDeltaFieldProcessor<_base>, _attribute_type, _args ...>(*this, args ...);
 			}
 
 			template<typename _type>
@@ -527,12 +527,12 @@ namespace o2
 					return *this;
 
 				_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(const_cast<_base::OriginType*>(&origin)));
+				_field_type* originFieldPtr = (_field_type*)((*pointerGetter)(&const_cast<typename _base::OriginType&>(_base::origin)));
 
-				DataValue& member = node.AddMember(name);
+				DataValue& member = _base::node.AddMember(name);
 				member.SetDelta(*fieldPtr, *originFieldPtr);
 				if (member.IsNull())
-					node.RemoveMember(name);
+					_base::node.RemoveMember(name);
 
 				return *this;
 			}
@@ -540,25 +540,25 @@ namespace o2
 	};
 
 #define SERIALIZABLE_ATTRIBUTE() \
-    AddAttribute<o2::SerializableAttribute>()
+    template AddAttribute<o2::SerializableAttribute>()
 
 #define SERIALIZE_IF_ATTRIBUTE(FUNC) \
-    AddAttribute<o2::SerializeIfAttribute<thisclass>>(&thisclass::FUNC)
+    template AddAttribute<o2::SerializeIfAttribute<thisclass>>(&thisclass::FUNC)
 
 	// Serialization implementation macros
 #define SERIALIZABLE_MAIN(CLASS)  							                                                                           \
     IOBJECT_MAIN(CLASS)																							                       \
                                                                                                                                        \
-	template<typename _type, typename _enable>       															                       \
+	template<typename __type, typename _enable>       															                       \
 	friend struct o2::CheckSerializeBasicOverridden;                                                                                   \
 	                                                                                                                                   \
-	template<typename _type, typename _enable>       															                       \
+	template<typename __type, typename _enable>       															                       \
 	friend struct o2::CheckDeserializeBasicOverridden;																                   \
                                                                                                                                        \
-	template<typename _type, typename _enable>       															                       \
+	template<typename __type, typename _enable>       															                       \
 	friend struct o2::CheckSerializeDeltaBasicOverridden;                                                                              \
 	                                                                                                                                   \
-	template<typename _type, typename _enable>       															                       \
+	template<typename __type, typename _enable>       															                       \
 	friend struct o2::CheckDeserializeDeltaBasicOverridden;																               \
                                                                                                                                        \
     void SerializeBasic(o2::DataValue& node) const override                                                                            \

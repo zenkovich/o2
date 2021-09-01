@@ -19,8 +19,8 @@ namespace o2
 	};
 
 #define EDITOR_IGNORE_ATTRIBUTE() \
-    AddAttribute<o2::IgnoreEditorPropertyAttribute>()
+    template AddAttribute<o2::IgnoreEditorPropertyAttribute>()
 
 #define EDITOR_PROPERTY_ATTRIBUTE() \
-    AddAttribute<o2::EditorPropertyAttribute>()
+	template AddAttribute<o2::EditorPropertyAttribute>()
 }

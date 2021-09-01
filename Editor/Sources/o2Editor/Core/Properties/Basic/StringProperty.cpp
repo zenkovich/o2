@@ -47,6 +47,6 @@ namespace Editor
 		SetValueByUser(data);
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::String>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::String>);
 
 DECLARE_CLASS(Editor::StringProperty);

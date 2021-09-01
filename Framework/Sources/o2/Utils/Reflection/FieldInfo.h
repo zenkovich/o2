@@ -1,10 +1,6 @@
 #pragma once
 
 #include "o2/Utils/Reflection/Attributes.h"
-#include "o2/Utils/Reflection/TypeSerializer.h"
-#include "o2/Utils/Reflection/TypeSerializer.h"
-#include "o2/Utils/Reflection/TypeTraits.h"
-#include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
@@ -147,7 +143,13 @@ namespace o2
 		template<typename _type, typename _accessor_type>
 		friend class TStringPointerAccessorType;
 	};
+}
 
+#include "o2/Utils/Reflection/TypeTraits.h"
+#include "o2/Utils/Serialization/DataValue.h"
+
+namespace o2
+{
 	template<typename _attr_type>
 	bool FieldInfo::HasAttribute() const
 	{

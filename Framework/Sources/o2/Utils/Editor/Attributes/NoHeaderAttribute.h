@@ -12,5 +12,5 @@ namespace o2
 	};
 
 #define NO_HEADER_ATTRIBUTE() \
-    AddAttribute<o2::NoHeaderAttribute>()
+	template AddAttribute<o2::NoHeaderAttribute>()
 }

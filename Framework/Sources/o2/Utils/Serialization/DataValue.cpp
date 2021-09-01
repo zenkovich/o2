@@ -472,7 +472,7 @@ namespace o2
 		}
 
 		DataMember* newMember =
-			new (mData.objectData.members + mData.objectData.count) DataMember(name, DataValue(*mDocument));
+			new (mData.objectData.members + mData.objectData.count) DataMember(name, *mDocument);
 
 		mData.objectData.count++;
 

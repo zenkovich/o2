@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Scene/ComponentRef.h"
-#include "o2/Scene/Scene.h"
 #include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Singleton.h"
 

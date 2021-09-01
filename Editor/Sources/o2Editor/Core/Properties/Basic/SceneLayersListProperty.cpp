@@ -77,6 +77,6 @@ namespace Editor
 		mPropertyText->text = layers;
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::SceneLayersList>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::SceneLayersList>);
 
 DECLARE_CLASS(Editor::SceneLayersListProperty);

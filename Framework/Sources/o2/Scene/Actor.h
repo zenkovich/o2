@@ -10,8 +10,6 @@
 #include "o2/Utils/Editor/SceneEditableObject.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/UID.h"
-#include "Scene.h"
-#include "ActorRefResolver.h"
 
 namespace o2
 {
@@ -617,6 +615,7 @@ namespace o2
 }
 
 #include "o2/Scene/Component.h"
+#include "o2/Scene/ActorRefResolver.h"
 
 namespace o2
 {

@@ -704,7 +704,7 @@ namespace o2
 
 	void ContextMenu::RebuildItems()
 	{
-		PushEditorScopeOnStack scope(IEventsListener::mIsEditorMode ? 1 : 0);
+		PushEditorScopeOnStack scope(KeyboardEventsListener::mIsEditorMode ? 1 : 0);
 
 		Vector<ContextMenuItem*> cache;
 
@@ -722,7 +722,7 @@ namespace o2
 				cache.Add(item);
 				mItemsLayout->RemoveChild(item, false);
 			}
-			else if (child->name == "Separator")
+			else if (child->name == String("Separator"))
 				mItemsLayout->RemoveChild(child);
 		}
 

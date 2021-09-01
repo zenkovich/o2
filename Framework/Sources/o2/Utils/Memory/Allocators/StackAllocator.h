@@ -1,6 +1,9 @@
 #pragma once
 #include "o2/Utils/Memory/Allocators/DefaultAllocator.h"
 #include "o2/Utils/Memory/Allocators/IAllocator.h"
+#include "o2/Utils/Debug/Assert.h"
+#include "o2/Utils/Math/Math.h"
+#include <cstddef>
 
 namespace o2
 {

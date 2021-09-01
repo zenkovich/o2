@@ -120,6 +120,7 @@ namespace o2
 }
 
 #include "o2/Utils/Reflection/Type.h"
+#include "o2/Utils/Reflection/Reflection.h"
 
 namespace o2
 {

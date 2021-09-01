@@ -6,6 +6,7 @@
 #include "o2/Utils/Editor/Attributes/InvokeOnChangeAttribute.h"
 #include "o2/Utils/Serialization/Serializable.h"
 #include "o2/Utils/Types/Containers/Vector.h"
+#include "o2/Assets/AssetRef.h"
 
 namespace o2
 {
@@ -47,7 +48,7 @@ namespace o2
 
 	protected:
 		AnimationComponent* mOwner = nullptr; // Animation state owner component
-		AnimationAssetRef   mAnimation;       // Animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
+		AnimationAssetRef   mAnimation;        // Animation @SERIALIZABLE @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnAnimationChanged)
 		float               mWeight = 1.0f;   // State weight @SERIALIZABLE @EDITOR_PROPERTY
 
 	protected:

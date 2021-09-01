@@ -13,5 +13,5 @@ namespace o2
 	};
 
 #define EXPANDED_BY_DEFAULT_ATTRIBUTE() \
-    AddAttribute<o2::ExpandedByDefaultAttribute>()
+	template AddAttribute<o2::ExpandedByDefaultAttribute>()
 }

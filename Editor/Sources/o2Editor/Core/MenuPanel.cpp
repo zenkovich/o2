@@ -101,11 +101,6 @@ namespace Editor
 		});
 
 		mMenuPanel->AddToggleItem("Debug/View editor UI tree", false, [&](bool x) { o2EditorTree.GetSceneTree()->SetEditorWatching(x); });
-		
-		mMenuPanel->AddItem("Debug/RebuildEditorUIManager", [&]() {
-			EditorUIStyleBuilder builder;
-			builder.RebuildEditorUIManager(false);
-		});
 
 		mMenuPanel->AddItem("Debug/Dump memory", [&]() { o2Memory.DumpInfo(); });
 	}

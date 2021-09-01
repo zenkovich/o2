@@ -12,6 +12,8 @@
 #include "o2/Application/Android/ApplicationBase.h"
 #include <jni.h>
 #include <android/asset_manager.h>
+#elif defined PLATFORM_MAC
+#include "o2/Application/Mac/ApplicationBase.h"
 #endif
 
 // Application access macros
@@ -148,7 +150,6 @@ namespace o2
 		static bool IsReady();
 
 #if defined PLATFORM_WINDOWS
-
 		// Initializes engine application
 		virtual void Initialize();
 
@@ -156,7 +157,6 @@ namespace o2
 		virtual void Launch();
 
 #elif defined PLATFORM_ANDROID
-
 		// Launching application
 		virtual void Initialize(JNIEnv* env, jobject activity, AAssetManager* assetManager, String dataPath,
 								const Vec2I& resolution);
@@ -164,6 +164,16 @@ namespace o2
 		// Launching application cycle
 		virtual void Launch();
 
+		// Updates frame
+		void Update();
+		
+#elif defined PLATFORM_MAC		
+		// Initializes engine application
+		virtual void Initialize();
+		
+		// Launching application cycle
+		virtual void Launch();
+		
 		// Updates frame
 		void Update();
 

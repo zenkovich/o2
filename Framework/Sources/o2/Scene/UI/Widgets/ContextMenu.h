@@ -5,6 +5,7 @@
 #include "o2/Scene/UI/Widgets/PopupWidget.h"
 #include "o2/Scene/UI/Widgets/ScrollArea.h"
 #include "o2/Utils/System/ShortcutKeys.h"
+#include "o2/Render/Sprite.h"
 
 namespace o2
 {

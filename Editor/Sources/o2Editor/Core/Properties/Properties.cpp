@@ -31,7 +31,7 @@ namespace Editor
 		InitializeAvailableObjectPropertiesViewers();
 
 		mOnPropertyCompletedChangingUndoCreateDelegate = 
-			MakeFunction<EditorApplication, void, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&>(
+			MakeFunction<ActionsList, void, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&>(
 			&o2EditorApplication, &EditorApplication::DoneActorPropertyChangeAction);
 	}
 

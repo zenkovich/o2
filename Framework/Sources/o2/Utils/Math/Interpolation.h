@@ -62,7 +62,6 @@ namespace o2
 		else
 		{
 			float itp = -tp;
-			float ip = -p;
 
 			float r = Math::Sqrt(itp*itp*itp);
 			float phi = Math::ACos(-(q / (2.0f * r)));

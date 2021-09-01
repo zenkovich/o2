@@ -18,8 +18,8 @@ namespace o2
 	};
 
 #define DELTA_SEARCH_ATTRIBUTE() \
-    AddAttribute<o2::PrototypeDeltaSearchAttribute>()
+	template AddAttribute<o2::PrototypeDeltaSearchAttribute>()
 
 #define IGNORE_DELTA_SEARCH_ATTRIBUTE() \
-    AddAttribute<o2::IgnorePrototypeDeltaSearchAttribute>()
+	template AddAttribute<o2::IgnorePrototypeDeltaSearchAttribute>()
 }

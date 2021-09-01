@@ -1,9 +1,11 @@
 #pragma once
 
-#include "o2/Utils/Reflection/Type.h"
+#include "o2/Utils/Function.h"
 
 namespace o2
 {
+	class Type;
+	
 	class IAbstractValueProxy
 	{
 	public:
@@ -21,9 +23,9 @@ namespace o2
 		virtual void SetValue(const _type& value) = 0;
 		virtual _type GetValue() const = 0;
 
-		void SetValuePtr(void* value) override { SetValue(*(_type*)value); }
-		void GetValuePtr(void* value) const override { *(_type*)value = GetValue(); }
-		const Type& GetType() const override { return TypeOf(_type); }
+		void SetValuePtr(void* value) override;
+		void GetValuePtr(void* value) const override;
+		const Type& GetType() const override;
 	};
 
 	class IPointerValueProxy
@@ -64,4 +66,41 @@ namespace o2
 		void SetValue(const _type& value) override { mSetter(value); }
 		_type GetValue() const override { return mGetter(); }
 	};
+	
+	template<typename _type, typename _property_type>
+	class PropertyValueProxy: public IValueProxy<_type>
+	{
+		_property_type* mProperty;
+	public:
+		PropertyValueProxy() {}
+		PropertyValueProxy(_property_type* ptr):mProperty(ptr) {}
+		
+		bool operator==(const PropertyValueProxy<_type, _property_type>& other) const { return mProperty == other.mProperty; }
+		
+		void SetValue(const _type& value) override { mProperty->Set(value); }
+		_type GetValue() const override { return mProperty->Get(); }
+	};
+}
+
+#include "o2/Utils/Reflection/Type.h"
+
+namespace o2
+{
+	template<typename _type>
+	void IValueProxy<_type>::SetValuePtr(void* value)
+	{
+		SetValue(*(_type*)value);
+	}
+	
+	template<typename _type>
+	void IValueProxy<_type>::GetValuePtr(void* value) const
+	{
+		*(_type*)value = GetValue();
+	}
+	
+	template<typename _type>
+	const Type& IValueProxy<_type>::GetType() const
+	{
+		return TypeOf(_type);
+	}
 }

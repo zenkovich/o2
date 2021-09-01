@@ -44,7 +44,7 @@ namespace o2
 	// --------------------------
 	// Draggable object interface
 	// --------------------------
-	class DragableObject: public CursorAreaEventsListener
+	class DragableObject: virtual public CursorAreaEventsListener
 	{
 	public:
 		// Default constructor

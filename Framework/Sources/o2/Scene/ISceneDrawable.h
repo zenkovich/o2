@@ -54,10 +54,10 @@ namespace o2
 
 	protected:
 		// Returns current scene layer
-		virtual SceneLayer* GetSceneDrawableSceneLayer() const = 0;
+		virtual SceneLayer* GetSceneDrawableSceneLayer() const { return nullptr; }
 
 		// Returns is drawable enabled
-		virtual bool IsSceneDrawableEnabled() const = 0;
+		virtual bool IsSceneDrawableEnabled() const { return false; }
 
 		// Is is called when drawable has enabled
 		void OnEnabled();

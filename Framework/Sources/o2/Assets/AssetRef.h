@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
-#include "o2/Assets/Assets.h"
 #include "o2/Utils/Types/Ref.h"
 
 namespace o2
@@ -119,7 +118,12 @@ namespace o2
 
 		friend class Assets;
 	};
+}
 
+#include "o2/Assets/Assets.h"
+
+namespace o2
+{
 	template<typename T>
 	class Ref<T, typename std::enable_if<std::is_base_of<Asset, T>::value>::type>: public AssetRef
 	{

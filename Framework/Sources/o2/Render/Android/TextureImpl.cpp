@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "o2/stdafx.h"
 
 #ifdef PLATFORM_ANDROID
 #include "Render/Texture.h"

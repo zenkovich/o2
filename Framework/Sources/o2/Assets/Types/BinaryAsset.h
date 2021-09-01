@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Assets/Asset.h"
+#include "o2/Assets/AssetRef.h"
 
 namespace o2
 {

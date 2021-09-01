@@ -27,10 +27,6 @@ namespace o2
 		static bool eventsListenersEnabledByDefault; // Then it is true, new events listeners will be enabled on initialization
 
 	public:
-		// Returns first cursor event listener under cursor with specified type
-		template<typename _type = CursorAreaEventsListener>
-		_type* GetCursorListenerUnderCursor(CursorId cursorId) const;
-
 		// Returns all cursor listeners under cursor arranged by depth
 		Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
 
@@ -138,22 +134,4 @@ namespace o2
 		friend class KeyboardEventsListener;
 		friend class WndProcFunc;
 	};
-
-	template<typename _type /*= CursorAreaEventsListener*/>
-	_type* EventSystem::GetCursorListenerUnderCursor(CursorId cursorId) const
-	{
-		if (mUnderCursorListeners.ContainsKey(cursorId))
-		{
-			for (auto listener : mUnderCursorListeners.Get(cursorId))
-			{
-				if (auto tListener = dynamic_cast<_type*>(listener))
-					return tListener;
-
-				if (!listener->IsInputTransparent())
-					break;
-			}
-		}
-
-		return nullptr;
-	}
 }

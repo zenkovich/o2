@@ -99,6 +99,6 @@ namespace Editor
 	}
 
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::SceneLayer*>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::SceneLayer*>);
 
 DECLARE_CLASS(Editor::LayerProperty);

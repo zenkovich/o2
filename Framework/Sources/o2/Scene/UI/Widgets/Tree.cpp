@@ -13,6 +13,7 @@
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Utils/Tasks/TaskManager.h"
+#include "o2/Utils/Debug/Debug.h"
 
 namespace o2
 {
@@ -1125,7 +1126,6 @@ namespace o2
 
 	void Tree::UpdateNodeView(Node* node, TreeNode* widget, int idx)
 	{
-		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		node->widget = widget;
 
 		FillNodeDataByObject(widget, node->object);
@@ -1349,7 +1349,6 @@ namespace o2
 		mExpandingNodeCurrHeight = mExpandingNodeFunc.Evaluate(mExpandingNodeCurrCoef)*mExpandingNodeTargetHeight;
 		mExpandingNodeBottomPosition = mExpandingNodePosition + mExpandingNodeCurrHeight;
 
-		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		float offs = mExpandingNodeBottomPosition - lastExpandBottom;
 		for (int i = Math::Max(mExpandingNodeIdx + mExpandingNodeChildsCount + 1, mMinVisibleNodeIdx); i <= mMaxVisibleNodeIdx && i < mAllNodes.Count(); i++)
 		{
@@ -1598,7 +1597,6 @@ namespace o2
 
 	void Tree::UpdateDraggingInsertionAnim(float dt)
 	{
-		float nodeHeight = mNodeWidgetSample->layout->GetMinHeight();
 		for (auto node : mVisibleNodes)
 		{
 			bool changed = false;

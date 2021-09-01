@@ -69,9 +69,9 @@ namespace Editor
 
 		ColorPickerDlg::Show(mCommonValue,
 							 MakeFunction<TPropertyField<Color4>, void, const Color4&>(this, &ColorProperty::SetValue),
-							 MakeFunction<TPropertyField<Color4>, void>(this, &ColorProperty::CheckValueChangeCompleted));
+							 MakeFunction<IPropertyField, void>(this, &ColorProperty::CheckValueChangeCompleted));
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::Color4>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::Color4>);
 
 DECLARE_CLASS(Editor::ColorProperty);

@@ -147,16 +147,16 @@ namespace o2
 		_sel_type Sum(const Function<_sel_type(const _key_type&, const _value_type&)>& selector) const;
 
 		// Returns begin iterator
-		Iterator Begin() { return begin(); }
+		Iterator Begin() { return std::map<_key_type, _value_type>::begin(); }
 
 		// Returns end iterator
-		Iterator End() { return end(); }
+		Iterator End() { return std::map<_key_type, _value_type>::end(); }
 
 		// Returns constant begin iterator
-		ConstIterator Begin() const { return cbegin(); }
+		ConstIterator Begin() const { return std::map<_key_type, _value_type>::cbegin(); }
 
 		// Returns constant end iterator
-		ConstIterator End() const { return cend(); }
+		ConstIterator End() const { return std::map<_key_type, _value_type>::cend(); }
 	};
 
 	template<typename _key_type, typename _value_type>
@@ -199,13 +199,13 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::Add(const _key_type& key, const _value_type& value)
 	{
-		insert({ key, value });
+		std::map<_key_type, _value_type>::insert({ key, value });
 	}
 
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::Add(const KeyValuePair& keyValue)
 	{
-		insert(keyValue);
+		std::map<_key_type, _value_type>::insert(keyValue);
 	}
 
 	template<typename _key_type, typename _value_type>
@@ -218,25 +218,25 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::Remove(const _key_type& key)
 	{
-		erase(key);
+		std::map<_key_type, _value_type>::erase(key);
 	}
 
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::Clear()
 	{
-		clear();
+		std::map<_key_type, _value_type>::clear();
 	}
 
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::ContainsKey(const _key_type& key) const
 	{
-		return find(key) != end();
+		return std::map<_key_type, _value_type>::find(key) != std::map<_key_type, _value_type>::end();
 	}
 
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::ContainsValue(const _value_type& value) const
 	{
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (it->second == value)
 				return true;
@@ -248,15 +248,15 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::Contains(const KeyValuePair& keyValue) const
 	{
-		auto fnd = find(keyValue.first);
-		return fnd != end() && fnd->second == keyValue.second;
+		auto fnd = std::map<_key_type, _value_type>::find(keyValue.first);
+		return fnd != std::map<_key_type, _value_type>::end() && fnd->second == keyValue.second;
 	}
 
 	template<typename _key_type, typename _value_type>
 	typename Map<_key_type, _value_type>::KeyValuePair Map<_key_type, _value_type>::FindKey(const _key_type& key) const
 	{
-		auto fnd = find(key);
-		if (fnd != end())
+		auto fnd = std::map<_key_type, _value_type>::find(key);
+		if (fnd != std::map<_key_type, _value_type>::end())
 			return { fnd->first, fnd->second };
 
 		return KeyValuePair();
@@ -265,7 +265,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	typename Map<_key_type, _value_type>::KeyValuePair Map<_key_type, _value_type>::FindValue(const _value_type& value) const
 	{
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (it->second == value)
 				return { it->first, it->second };
@@ -277,18 +277,18 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::Set(const _key_type& key, const _value_type& value)
 	{
-		auto fnd = find(key);
-		if (fnd != end())
+		auto fnd = std::map<_key_type, _value_type>::find(key);
+		if (fnd != std::map<_key_type, _value_type>::end())
 			fnd->second = value;
 		else
-			insert({ key, value });
+			std::map<_key_type, _value_type>::insert({ key, value });
 	}
 
 	template<typename _key_type, typename _value_type>
 	_value_type& Map<_key_type, _value_type>::Get(const _key_type& key)
 	{
-		auto fnd = find(key);
-		if (fnd != end())
+		auto fnd = std::map<_key_type, _value_type>::find(key);
+		if (fnd != std::map<_key_type, _value_type>::end())
 			return fnd->second;
 
 		Assert(false, "Failed to get value from dictionary: not found key");
@@ -300,8 +300,8 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	const _value_type& Map<_key_type, _value_type>::Get(const _key_type& key) const
 	{
-		auto fnd = find(key);
-		if (fnd != end())
+		auto fnd = std::map<_key_type, _value_type>::find(key);
+		if (fnd != std::map<_key_type, _value_type>::end())
 			return fnd->second;
 
 		Assert(false, "Failed to get value from dictionary: not found key");
@@ -313,8 +313,8 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::TryGetValue(const _key_type& key, _value_type& output) const
 	{
-		auto fnd = find(key);
-		if (fnd != end())
+		auto fnd = std::map<_key_type, _value_type>::find(key);
+		if (fnd != std::map<_key_type, _value_type>::end())
 		{
 			output = fnd->second;
 			return true;
@@ -327,7 +327,7 @@ namespace o2
 	typename Map<_key_type, _value_type>::KeyValuePair Map<_key_type, _value_type>::GetIdx(int index) const
 	{
 		int i = 0; 
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (i == index)
 				return { it->first, it->second };
@@ -341,19 +341,19 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	int Map<_key_type, _value_type>::Count() const
 	{
-		return size();
+		return std::map<_key_type, _value_type>::size();
 	}
 
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::IsEmpty() const
 	{
-		return empty();
+		return std::map<_key_type, _value_type>::empty();
 	}
 
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::ForEach(const Function<void(const _key_type&, _value_type&)>& func)
 	{
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 			func(it->first, it->second);
 	}
 
@@ -361,7 +361,7 @@ namespace o2
 	int Map<_key_type, _value_type>::Count(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
 		int res = 0; 
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (match(it->first, it->second))
 				res++;
@@ -373,7 +373,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	typename Map<_key_type, _value_type>::KeyValuePair Map<_key_type, _value_type>::Last(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
-		for (auto it = rbegin(); it != rend(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::rbegin(); it != std::map<_key_type, _value_type>::rend(); ++it)
 		{
 			if (match(it->first, it->second))
 				return { it->first, it->second };
@@ -385,7 +385,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	typename Map<_key_type, _value_type>::KeyValuePair Map<_key_type, _value_type>::First(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (match(it->first, it->second))
 				return { it->first, it->second };
@@ -409,7 +409,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::Contains(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
-		for (auto it = rbegin(); it != rend(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::rbegin(); it != std::map<_key_type, _value_type>::rend(); ++it)
 		{
 			if (match(it->first, it->second))
 				return true;
@@ -421,7 +421,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	void Map<_key_type, _value_type>::RemoveAll(const Function<bool(const _key_type&, const _value_type&)>& match)
 	{
-		for (auto it = begin(); it != end();)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end();)
 		{
 			if (match(it->first, it->second)) 
 				it = erase(it);
@@ -435,7 +435,7 @@ namespace o2
 	_sel_type Map<_key_type, _value_type>::Sum(const Function<_sel_type(const _key_type&, const _value_type&)>& selector) const
 	{
 		_sel_type res = _sel_type();
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 			res += res + selector(it->first, it->second);
 
 		return res;
@@ -444,7 +444,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::Any(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
-		for (auto it = begin(); it != end(); ++it) 
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (match(it->first, it->second))
 				return true;
@@ -456,7 +456,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	bool Map<_key_type, _value_type>::All(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (!match(it->first, it->second))
 				return false;
@@ -472,9 +472,9 @@ namespace o2
 		int idx = 0;
 		int maxIdx = 0;
 		_sel_type maxVal;
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
-			if (it == begin())
+			if (it == std::map<_key_type, _value_type>::begin())
 				maxVal = selector(it->first, it->second);
 			else
 			{
@@ -498,9 +498,9 @@ namespace o2
 	{
 		_sel_type maxVal;
 		KeyValuePair res;
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
-			if (it == begin())
+			if (it == std::map<_key_type, _value_type>::begin())
 			{
 				maxVal = selector(it->first, it->second);
 				res = { it->first, it->second };
@@ -526,9 +526,9 @@ namespace o2
 		int idx = 0;
 		int minIdx = 0;
 		_sel_type minVal;
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
-			if (it == begin())
+			if (it == std::map<_key_type, _value_type>::begin())
 				minVal = selector(it->first, it->second);
 			else
 			{
@@ -552,9 +552,9 @@ namespace o2
 	{
 		_sel_type minVal;
 		KeyValuePair res;
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
-			if (it == begin())
+			if (it == std::map<_key_type, _value_type>::begin())
 			{
 				minVal = selector(it->first, it->second);
 				res = { it->first, it->second };
@@ -577,7 +577,7 @@ namespace o2
 	Map<_key_type, _value_type> Map<_key_type, _value_type>::Where(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
 		Map res;
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (match(it->first, it->second))
 				res.Add(it->first, it->second);
@@ -590,7 +590,7 @@ namespace o2
 	Map<_key_type, _value_type> Map<_key_type, _value_type>::FindAll(const Function<bool(const _key_type&, const _value_type&)>& match) const
 	{
 		Map res;
-		for (auto it = begin(); it != end(); ++it)
+		for (auto it = std::map<_key_type, _value_type>::begin(); it != std::map<_key_type, _value_type>::end(); ++it)
 		{
 			if (match(it->first, it->second))
 				res.Add(it->first, it->second);

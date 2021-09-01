@@ -133,6 +133,6 @@ namespace Editor
 		SetTags(editText);
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<o2::TagGroup>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<o2::TagGroup>);
 
 DECLARE_CLASS(Editor::TagsProperty);

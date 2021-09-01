@@ -1306,7 +1306,6 @@ namespace o2
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
 		auto oldParentWidget = mParentWidget;
-		bool oldClipped = mIsClipped;
 		bool oldResEnabledInHierarchy = mResEnabledInHierarchy;
 
 		GetLayoutData().offsetMin = area.LeftBottom();

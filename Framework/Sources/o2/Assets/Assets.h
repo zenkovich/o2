@@ -2,7 +2,6 @@
 
 #include "o2/Assets/Asset.h"
 #include "o2/Assets/AssetInfo.h"
-#include "o2/Assets/AssetRef.h"
 #include "o2/Assets/AssetsTree.h"
 #include "o2/Utils/FileSystem/FileInfo.h"
 #include "o2/Utils/Property.h"
@@ -17,6 +16,7 @@ namespace o2
 {
 	class AssetsBuilder;
 	class LogStream;
+	class AssetRef;
 
 	// ----------------
 	// Assets utilities
@@ -197,7 +197,12 @@ namespace o2
 		friend class AssetRef;
 		friend class FolderAsset;
 	};
+}
 
+#include "o2/Assets/AssetRef.h"
+
+namespace o2
+{
 	template<typename _asset_type, typename ... _args>
 	AssetRef Assets::CreateAsset(_args ... args)
 	{

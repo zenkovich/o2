@@ -109,16 +109,16 @@ namespace o2
 	TString<T>::TString(float value)
 	{
 		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
-		erase(std::basic_string<T>::find_last_not_of('0') + 1, std::string::npos);
-		erase(std::basic_string<T>::find_last_not_of('.') + 1, std::string::npos);
+		std::basic_string<T>::erase(std::basic_string<T>::find_last_not_of('0') + 1, std::string::npos);
+		std::basic_string<T>::erase(std::basic_string<T>::find_last_not_of('.') + 1, std::string::npos);
 	}
 
 	template<typename T>
 	TString<T>::TString(double value)
 	{
 		ConvertString(*this, TString<T>(std::to_string(value).c_str()));
-		erase(std::basic_string<T>::find_last_not_of('0') + 1, std::string::npos);
-		erase(std::basic_string<T>::find_last_not_of('.') + 1, std::string::npos);
+		std::basic_string<T>::erase(std::basic_string<T>::find_last_not_of('0') + 1, std::string::npos);
+		std::basic_string<T>::erase(std::basic_string<T>::find_last_not_of('.') + 1, std::string::npos);
 	}
 
 	template<typename T>
@@ -270,14 +270,14 @@ namespace o2
 	template<typename T>
 	TString<T>::operator Vec2F() const
 	{
-		if constexpr (std::is_same<T, char>)
+		if constexpr (std::is_same<T, char>::value)
 		{
-			wchar_t *px = c_str(), *py;
+			wchar_t *px = std::basic_string<T>::c_str(), *py;
 			return Vec2F(wcstof(px, &py), wcstof(py, nullptr));
 		}
 		else
 		{
-			char *px = c_str(), *py;
+			char *px = std::basic_string<T>::c_str(), *py;
 			return Vec2F(strtof(px, &py), strtof(py, nullptr));
 		}
 	}
@@ -285,29 +285,29 @@ namespace o2
 	template<typename T>
 	TString<T>::operator Vec2I() const
 	{
-		if constexpr (std::is_same<T, wchar_t>)
+		if constexpr (std::is_same<T, wchar_t>::value)
 		{
-			wchar_t *px = c_str(), *py;
-			return Vec2F((int)wcstol(px, &py), (int)wcstol(py, nullptr));
+			wchar_t *px = std::basic_string<T>::c_str(), *py;
+			return Vec2F((int)wcstol(px, &py, 10), (int)wcstol(py, nullptr, 10));
 		}
 		else
 		{
-			char *px = c_str(), *py;
-			return Vec2F((int)strtol(px, &py), (int)strtol(py, nullptr));
+			char *px = std::basic_string<T>::c_str(), *py;
+			return Vec2F((int)strtol(px, &py, 10), (int)strtol(py, nullptr, 10));
 		}
 	}
 
 	template<typename T>
 	TString<T>::operator RectF() const
 	{
-		if constexpr (std::is_same<T, char>)
+		if constexpr (std::is_same<T, char>::value)
 		{
-			wchar_t *pl = c_str(), *pb, *pr, *pt;
+			wchar_t *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
 			return RectF(wcstof(pl, &pb), wcstof(pb, &pr), wcstof(pr, &pt), wcstof(pt, nullptr));
 		}
 		else
 		{
-			char *pl = c_str(), *pb, *pr, *pt;
+			char *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
 			return RectF(strtof(pl, &pb), strtof(pb, &pr), strtof(pr, &pt), strtof(pt, nullptr));
 		}
 	}
@@ -315,60 +315,60 @@ namespace o2
 	template<typename T>
 	TString<T>::operator RectI() const
 	{
-		if constexpr (std::is_same<T, char>)
+		if constexpr (std::is_same<T, char>::value)
 		{
-			wchar_t *pl = c_str(), *pb, *pr, *pt;
-			return RectF((int)wcstol(pl, &pb), (int)wcstol(pb, &pr), (int)wcstol(pr, &pt), (int)wcstol(pt, nullptr));
+			wchar_t *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
+			return RectF((int)wcstol(pl, &pb, 10), (int)wcstol(pb, &pr, 10), (int)wcstol(pr, &pt, 10), (int)wcstol(pt, nullptr, 10));
 		}
 		else
 		{
-			char *pl = c_str(), *pb, *pr, *pt;
-			return RectF((int)strtol(pl, &pb), (int)strtol(pb, &pr), (int)strtol(pr, &pt), (int)strtol(pt, nullptr));
+			char *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
+			return RectF((int)strtol(pl, &pb, 10), (int)strtol(pb, &pr, 10), (int)strtol(pr, &pt, 10), (int)strtol(pt, nullptr, 10));
 		}
 	}
 
 	template<typename T>
 	TString<T>::operator BorderF() const
 	{
-		if constexpr (std::is_same<T, char>)
+		if constexpr (std::is_same<T, char>::value)
 		{
-			wchar_t *pl = c_str(), *pb, *pr, *pt;
-			return RectF(wcstof(pl, &pb), wcstof(pb, &pr), wcstof(pr, &pt), wcstof(pt, nullptr));
+			wchar_t *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
+			return BorderF(wcstof(pl, &pb), wcstof(pb, &pr), wcstof(pr, &pt), wcstof(pt, nullptr));
 		}
 		else
 		{
-			char *pl = c_str(), *pb, *pr, *pt;
-			return RectF(strtof(pl, &pb), strtof(pb, &pr), strtof(pr, &pt), strtof(pt, nullptr));
+			char *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
+			return BorderF(strtof(pl, &pb), strtof(pb, &pr), strtof(pr, &pt), strtof(pt, nullptr));
 		}
 	}
 
 	template<typename T>
 	TString<T>::operator BorderI() const
 	{
-		if constexpr (std::is_same<T, char>)
+		if constexpr (std::is_same<T, char>::value)
 		{
-			wchar_t *pl = c_str(), *pb, *pr, *pt;
-			return RectF((int)wcstol(pl, &pb), (int)wcstol(pb, &pr), (int)wcstol(pr, &pt), (int)wcstol(pt, nullptr));
+			wchar_t *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
+			return BorderI((int)wcstol(pl, &pb, 10), (int)wcstol(pb, &pr, 10), (int)wcstol(pr, &pt, 10), (int)wcstol(pt, nullptr, 10));
 		}
 		else
 		{
-			char *pl = c_str(), *pb, *pr, *pt;
-			return RectF((int)strtol(pl, &pb), (int)strtol(pb, &pr), (int)strtol(pr, &pt), (int)strtol(pt, nullptr));
+			char *pl = std::basic_string<T>::c_str(), *pb, *pr, *pt;
+			return BorderI((int)strtol(pl, &pb, 10), (int)strtol(pb, &pr, 10), (int)strtol(pr, &pt, 10), (int)strtol(pt, nullptr, 10));
 		}
 	}
 
 	template<typename T>
 	TString<T>::operator Color4() const
 	{
-		if constexpr (std::is_same<T, char>)
+		if constexpr (std::is_same<T, char>::value)
 		{
-			wchar_t *pr = c_str(), *pg, *pb, *pa;
-			return RectF((int)wcstol(pr, &pg), (int)wcstol(pg, &pb), (int)wcstol(pb, &pa), (int)wcstol(pa, nullptr));
+			wchar_t *pr = std::basic_string<T>::c_str(), *pg, *pb, *pa;
+			return Color4((int)wcstol(pr, &pg, 10), (int)wcstol(pg, &pb, 10), (int)wcstol(pb, &pa, 10), (int)wcstol(pa, nullptr, 10));
 		}
 		else
 		{
-			char *pr = c_str(), *pg, *pb, *pa;
-			return RectF((int)strtol(pr, &pg), (int)strtol(pg, &pb), (int)strtol(pb, &pa), (int)strtol(pa, nullptr));
+			char *pr = std::basic_string<T>::c_str(), *pg, *pb, *pa;
+			return Color4((int)strtol(pr, &pg, 10), (int)strtol(pg, &pb, 10), (int)strtol(pb, &pa, 10), (int)strtol(pa, nullptr, 10));
 		}
 	}
 

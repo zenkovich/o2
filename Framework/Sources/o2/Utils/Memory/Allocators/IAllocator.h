@@ -1,4 +1,5 @@
 #pragma once
+#include <stddef.h>
 
 namespace o2
 {

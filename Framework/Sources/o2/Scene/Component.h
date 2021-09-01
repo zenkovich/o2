@@ -175,23 +175,12 @@ namespace o2
 		friend class Scene;
 		friend class Widget;
 	};
+}
 
-	// ------------------------
-	// Component data converter
-	// ------------------------
-// 	class ComponentDataValueConverter: public IDataValueTypeConverter
-// 	{
-// 	public:
-// 		// Converts component pointer to data
-// 		void ToData(void* object, DataValue& data);
-// 
-// 		// Converts from data to component pointer
-// 		void FromData(void* object, const DataValue& data);
-// 
-// 		// Checks that type is based on Component type
-// 		bool IsConvertsType(const Type* type) const;
-// 	};
+#include "o2/Scene/Actor.h"
 
+namespace o2
+{
 	template<typename _type>
 	Vector<_type*> Component::GetComponentsInChildren() const
 	{

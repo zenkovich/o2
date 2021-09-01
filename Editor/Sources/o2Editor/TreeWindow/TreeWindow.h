@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/Editor/EditorScope.h"
 #include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
 
 namespace o2

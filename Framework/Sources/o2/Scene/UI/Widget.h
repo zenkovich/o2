@@ -470,6 +470,7 @@ namespace o2
 		friend class Window;
 
 #if IS_EDITOR
+	public:
 		class LayersEditable: public SceneEditableObject
 		{
 		public:
@@ -582,6 +583,7 @@ namespace o2
 			friend class Widget;
 		};
 
+	public:
 		static bool isEditorLayersVisible;           // Is widgets layers visible in hierarchy
 		static bool isEditorInternalChildrenVisible; // Is widgets internal children visible in hierarchy
 

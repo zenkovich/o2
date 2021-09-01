@@ -1,6 +1,8 @@
 #include "o2/stdafx.h"
 #include "ComponentRef.h"
 
+#include "o2/Scene/Scene.h"
+
 namespace o2
 {
 	ComponentRef::ComponentRef()

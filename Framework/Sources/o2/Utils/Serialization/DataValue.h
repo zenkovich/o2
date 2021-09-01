@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Utils/Memory/Allocators/ChunkPoolAllocator.h"
-#include "o2/Utils/Property.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
@@ -416,7 +415,9 @@ namespace o2
 		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& target, const char* source);
 
 		friend class JsonDataDocumentParseHandler;
-		friend class TType<DataValue>;
+		
+		template<typename T>
+		friend class TType;
 	};
 
 	// ------------------------------------------
@@ -487,7 +488,6 @@ namespace o2
 		DataValue name;
 		DataValue value;
 
-		DataMember() = default;
 		DataMember(DataValue& name, DataValue& value);
 
 		DataMember& operator=(DataMember& other);
@@ -523,8 +523,8 @@ namespace o2
 
 		BaseMemberIterator<_const>& operator++() { ++mPointer; return *this; }
 		BaseMemberIterator<_const>& operator--() { --mPointer; return *this; }
-		BaseMemberIterator<_const>  operator++(int) { Iterator old(*this); ++mPointer; return old; }
-		BaseMemberIterator<_const>  operator--(int) { Iterator old(*this); --mPointer; return old; }
+		BaseMemberIterator<_const>  operator++(int) { BaseMemberIterator<_const> old(*this); ++mPointer; return old; }
+		BaseMemberIterator<_const>  operator--(int) { BaseMemberIterator<_const> old(*this); --mPointer; return old; }
 
 		BaseMemberIterator<_const> operator+(int n) const { return Iterator(mPointer+n); }
 		BaseMemberIterator<_const> operator-(int n) const { return Iterator(mPointer-n); }
@@ -559,6 +559,7 @@ namespace o2
 }
 
 #include "o2/Utils/Reflection/Reflection.h"
+#include "o2/Utils/Property.h"
 
 namespace o2
 {
@@ -575,7 +576,7 @@ namespace o2
 	};
 
 	template<typename T>
-	struct IsDeltaEquals<T, typename void_t<decltype(&T::EqualsDelta)>>
+	struct IsDeltaEquals<T, typename std::void_t<decltype(&T::EqualsDelta)>>
 	{
 		static bool Check(const T& obj, const T& origin)
 		{
@@ -1259,7 +1260,7 @@ namespace o2
 			data.mData.arrayData.capacity = 0;
 
 			for (auto& v : value)
-				data.AddElement(DataValue(v, *data.mDocument));
+				data.AddElement() = DataValue(v, *data.mDocument);
 		}
 
 		static void Read(Vector<T>& value, const DataValue& data)
@@ -1341,7 +1342,7 @@ namespace o2
 	template<typename T>
 	struct DataValue::Converter<T, typename std::enable_if<IsProperty<T>::value>::type>
 	{
-		static constexpr bool isSupported = DataValue::IsSupports<T::valueType>::value;
+		static constexpr bool isSupported = DataValue::IsSupports<typename T::valueType>::value;
 		using TValueType = typename T::valueType;
 
 		static void Write(const T& value, DataValue& data)
@@ -1396,7 +1397,7 @@ namespace o2
 				DataValue::Converter<T>::Read(value, data);
 			else
 			{
-				value = origin->CloneAs<typename std::remove_pointer<T>::type>();
+				value = origin->template CloneAs<typename std::remove_pointer<T>::type>();
 				data.GetDelta(*value, *origin);
 			}
 		}

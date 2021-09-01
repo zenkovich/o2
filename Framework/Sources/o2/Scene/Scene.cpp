@@ -4,6 +4,7 @@
 #include "o2/Application/Input.h"
 #include "o2/Assets/Types/ActorAsset.h"
 #include "o2/Render/Render.h"
+#include "o2/Render/Text.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/ActorRefResolver.h"
 #include "o2/Scene/CameraActor.h"
@@ -14,6 +15,7 @@
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Render/VectorFontEffects.h"
+#include "o2/Utils/Debug/Debug.h"
 
 namespace o2
 {
@@ -792,7 +794,7 @@ namespace o2
 	void Scene::OnActorPrototypeBroken(Actor* actor)
 	{
 		// !!! TODO: Optimize this
-		for (auto& it = mPrototypeLinksCache.Begin(); it != mPrototypeLinksCache.End();)
+		for (auto it = mPrototypeLinksCache.Begin(); it != mPrototypeLinksCache.End();)
 		{
 			it->second.Remove(actor);
 			if (it->second.IsEmpty())

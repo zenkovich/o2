@@ -105,6 +105,6 @@ namespace Editor
 		CheckValueChangeCompleted();
 	}
 }
-DECLARE_CLASS_MANUAL(Editor::TPropertyField<float>);
+DECLARE_TEMPLATE_CLASS(Editor::TPropertyField<float>);
 
 DECLARE_CLASS(Editor::FloatProperty);

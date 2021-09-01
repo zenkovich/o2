@@ -7,6 +7,8 @@
 #include "o2/Render/Windows/RenderBase.h"
 #elif defined PLATFORM_ANDROID
 #include "o2/Render/Android/RenderBase.h"
+#elif defined PLATFORM_MAC
+#include "o2/Render/Mac/RenderBase.h"
 #endif
 
 #include "o2/Render/Camera.h"

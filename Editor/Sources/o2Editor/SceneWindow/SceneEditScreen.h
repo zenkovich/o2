@@ -267,7 +267,12 @@ namespace Editor
 		friend class TreeWindow;
 		friend class CreateAction;
 	};
+}
 
+#include "o2Editor/Core/Tools/IEditorTool.h"
+
+namespace Editor
+{
 	template<typename _type>
 	void SceneEditScreen::SelectTool()
 	{

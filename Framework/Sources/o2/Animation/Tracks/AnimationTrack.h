@@ -1,6 +1,5 @@
 #pragma once
 
-#include "o2/Animation/AnimationState.h"
 #include "o2/Animation/IAnimation.h"
 #include "o2/Animation/Tracks/IAnimationTrack.h"
 #include "o2/Utils/Math/Curve.h"
@@ -10,6 +9,8 @@
 
 namespace o2
 {
+	class AnimationState;
+	
 	// ------------------------
 	// Template Animation track
 	// ------------------------
@@ -280,8 +281,6 @@ namespace o2
 		void OnDeserialized(const DataValue& node) override;
 	};
 }
-
-#include "o2/Scene/Components/AnimationComponent.h"
 
 namespace o2
 {
@@ -647,8 +646,6 @@ namespace o2
 			beginKey.leftSupportPosition = Math::Clamp01(beginKey.leftSupportPosition);
 			endKey.rightSupportPosition = Math::Clamp01(endKey.rightSupportPosition);
 
-			float dist = endKey.position - beginKey.position;
-
 			Vec2F curvea(beginKey.position, 0.0f);
 			Vec2F curveb(Math::Lerp(beginKey.position, endKey.position, beginKey.rightSupportPosition), beginKey.rightSupportValue);
 			Vec2F curvec(Math::Lerp(beginKey.position, endKey.position, endKey.leftSupportPosition), endKey.leftSupportValue);
@@ -892,12 +889,6 @@ namespace o2
 		}
 		else if (mTargetProxy)
 			mTargetProxy->SetValue(mCurrentValue);
-	}
-
-	template<typename _type>
-	void AnimationTrack<_type>::Player::RegMixer(AnimationState* state, const String& path)
-	{
-		state->mOwner->RegTrack<_type>(this, path, state);
 	}
 };
 

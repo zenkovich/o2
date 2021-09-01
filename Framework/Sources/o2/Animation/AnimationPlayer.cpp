@@ -1,6 +1,10 @@
 #include "o2/stdafx.h"
 #include "AnimationPlayer.h"
 
+#include "o2/Animation/AnimationClip.h"
+#include "o2/Animation/AnimationState.h"
+#include "o2/Utils/Debug/Debug.h"
+
 namespace o2
 {
 	AnimationPlayer::AnimationPlayer(IObject* target /*= nullptr*/, AnimationClip* clip /*= nullptr*/):

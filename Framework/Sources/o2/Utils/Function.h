@@ -1,6 +1,6 @@
 #pragma once
 
-#include <algorithm>
+#include <string>
 #include <functional>
 #include <vector>
 #include "o2/Utils/Memory/MemoryManager.h"
@@ -87,7 +87,7 @@ namespace o2
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const
 		{
 			return new (memory) FunctionPtr(*this);
 		}
@@ -156,25 +156,25 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const override
 		{
 			return mnew ObjFunctionPtr(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
 		{
 			return new (memory) ObjFunctionPtr(*this);
 		}
 
 		// Invokes function with arguments as functor
-		_res_type Invoke(_args ... args) const
+		_res_type Invoke(_args ... args) const override
 		{
 			return (mObject->*mFunctionPtr)(args ...);
 		}
 
 		// Returns true if functions is equal
-		bool Equals(const IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const override
 		{
 			const ObjFunctionPtr* otherFuncPtr = dynamic_cast<const ObjFunctionPtr*>(other);
 			if (otherFuncPtr)
@@ -302,19 +302,19 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const override
 		{
 			return mnew SharedLambda(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
 		{
 			return new (memory) SharedLambda(*this);
 		}
 
 		// Invokes function with arguments as functor
-		_res_type Invoke(_args ... args) const
+		_res_type Invoke(_args ... args) const override
 		{
 			return mLambda(args ...);
 		}
@@ -332,7 +332,7 @@ namespace o2
 		}
 
 		// Returns true if functions is equals
-		bool Equals(const IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const override
 		{
 			const SharedLambda* otherFuncPtr = dynamic_cast<const SharedLambda*>(other);
 			if (otherFuncPtr)
@@ -464,7 +464,7 @@ namespace o2
 		}
 
 		// Constructor from static function pointer
-		template<typename _static_func_type, typename enable = std::enable_if<std::is_function<_static_func_type>::value>::type>
+		template<typename _static_func_type, typename enable = typename std::enable_if<std::is_function<_static_func_type>::value>::type>
 		Function(const _static_func_type* func):
 			Function()
 		{
@@ -472,7 +472,7 @@ namespace o2
 		}
 
 		// Constructor from lambda
-		template<typename _lambda_type, typename enable = std::enable_if<std::is_invocable_r<_res_type, _lambda_type, _args ...>::value && !std::is_base_of<IFunction<_res_type(_args ...)>, _lambda_type>::value>::type>
+		template<typename _lambda_type, typename enable = typename std::enable_if<std::is_invocable_r<_res_type, _lambda_type, _args ...>::value && !std::is_base_of<IFunction<_res_type(_args ...)>, _lambda_type>::value>::type>
 		Function(const _lambda_type& lambda):
 			Function()
 		{
@@ -480,9 +480,9 @@ namespace o2
 		}
 
 		// Move-constructor from lambda
-		template<typename _lambda_type, typename enable = std::enable_if<
+		template<typename _lambda_type, typename enable = typename std::enable_if<
 			std::is_invocable_r<_res_type, _lambda_type, _args ...>::value &&
-			!std::is_base_of<IFunction<_res_type(_args ...)>, std::remove_reference<_lambda_type>::type>::value &&
+			!std::is_base_of<IFunction<_res_type(_args ...)>, typename std::remove_reference<_lambda_type>::type>::value &&
 			std::is_rvalue_reference<_lambda_type&&>::value
 		>::type>
 		Function(_lambda_type&& lambda):
@@ -522,13 +522,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const override
 		{
 			return mnew Function(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
 		{
 			return new (memory) Function(*this);
 		}
@@ -558,7 +558,7 @@ namespace o2
 		}
 
 		// Emplace function
-		template<typename _function_type, typename enabled = std::enable_if<std::is_base_of<IFunction<_res_type(_args ...)>, _function_type>::value>::type>
+		template<typename _function_type, typename enabled = typename std::enable_if<std::is_base_of<IFunction<_res_type(_args ...)>, _function_type>::value>::type>
 		void Emplace(_function_type&& func)
 		{
 			auto size = sizeof(_function_type);
@@ -715,7 +715,7 @@ namespace o2
 		}
 
 		// Invokes function with arguments
-		_res_type Invoke(_args ... args) const
+		_res_type Invoke(_args ... args) const override
 		{
 			if (mData.typeData.type == DataType::OneFunction)
 				return OneFunctionRef().Invoke(args ...);
@@ -854,7 +854,7 @@ namespace o2
 		}
 
 		// Returns true when functions is equal
-		bool Equals(const IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const override
 		{
 			const Function* otherFuncPtr = dynamic_cast<const Function*>(other);
 			if (otherFuncPtr)
@@ -1000,25 +1000,25 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const
+		IFunction<_res_type(_args ...)>* Clone() const override
 		{
 			return mnew Subscription(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
 		{
 			return new (memory) Subscription(*this);
 		}
 
 		// Invokes function with arguments as functor
-		_res_type Invoke(_args ... args) const
+		_res_type Invoke(_args ... args) const override
 		{
 			return mFunction.Invoke(args ...);
 		}
 
 		// Returns true if functions is equal
-		bool Equals(const IFunction<_res_type(_args ...)>* other) const
+		bool Equals(const IFunction<_res_type(_args ...)>* other) const override
 		{
 			const Subscription* otherFuncPtr = dynamic_cast<const Subscription*>(other);
 			if (otherFuncPtr)

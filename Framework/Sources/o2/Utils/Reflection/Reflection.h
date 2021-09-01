@@ -182,6 +182,9 @@ namespace o2
 
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Reflection/Enum.h"
+#include "o2/Utils/Reflection/FieldInfo.h"
+#include "o2/Utils/Reflection/FunctionInfo.h"
+#include "o2/Utils/Reflection/TypeTraits.h"
 
 namespace o2
 {
@@ -320,7 +323,6 @@ namespace o2
 	template<typename _return_type, typename _accessor_type>
 	const TStringPointerAccessorType<_return_type, _accessor_type>* Reflection::InitializeAccessorType()
 	{
-		const Type* type = &TypeOf(_return_type);
 		String typeName = (String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">";
 
 		auto fnd = mInstance->mTypes.find(typeName);

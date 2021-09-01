@@ -6,8 +6,8 @@
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
 
-#ifdef PLATFORM_ANDROID
-#include "o2/Application/Android/VKCodes.h"
+#if defined(PLATFORM_ANDROID) || defined(PLATFORM_MAC)
+#include "o2/Application/VKCodes.h"
 #elif PLATFORM_WINDOWS
 #include <windows.h>
 #endif

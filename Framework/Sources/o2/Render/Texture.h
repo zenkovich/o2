@@ -4,6 +4,8 @@
 #include "o2/Render/Windows/TextureBase.h"
 #elif defined PLATFORM_ANDROID
 #include "o2/Render/Android/TextureBase.h"
+#elif defined PLATFORM_MAC
+#include "o2/Render/Mac/TextureBase.h"
 #endif
 
 #include "o2/Utils/Math/Vector2.h"

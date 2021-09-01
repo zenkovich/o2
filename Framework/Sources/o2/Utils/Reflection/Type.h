@@ -4,8 +4,6 @@
 
 #include "o2/Utils/Function.h"
 #include "o2/Utils/Reflection/Attributes.h"
-#include "o2/Utils/Reflection/TypeSerializer.h"
-#include "o2/Utils/Reflection/TypeTraits.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
@@ -22,6 +20,8 @@ namespace o2
 	class IObject;
 	class StaticFunctionInfo;
 	class Type;
+	class ITypeSerializer;
+	class DataValue;
 
 	template<typename _type>
 	class IValueProxy;
@@ -159,11 +159,11 @@ namespace o2
 		// --------------------
 		struct Dummy { static Type* type; };
 
-		template<class T, class = void_t<>>
+		template<class T, class = std::void_t<>>
 		struct IsConstructible: std::false_type {};
 
 		template<class T>
-		struct IsConstructible<T, void_t<decltype(std::declval<T()>())>>: std::true_type {};
+		struct IsConstructible<T, std::void_t<decltype(std::declval<T()>())>>: std::true_type {};
 
 	protected:
 		TypeId mId;   // Id of type
@@ -380,7 +380,7 @@ namespace o2
 		VectorType(const String& name, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
-		virtual Usage GetUsage() const;
+		virtual Usage GetUsage() const override;
 
 		// Returns type of vector element
 		const Type* GetElementType() const;
@@ -453,17 +453,6 @@ namespace o2
 		const Type* GetPointerType() const override;
 	};
 
-	template<typename _element_type>
-	struct VectorCountFieldSerializer : public ITypeSerializer
-	{
-		VectorCountFieldSerializer() { }
-		void Serialize(void* object, DataValue& data) const;
-		void Deserialize(void* object, DataValue& data) const;
-		bool Equals(void* objectA, void* objectB) const;
-		void Copy(void* objectA, void* objectB) const;
-		ITypeSerializer* Clone() const;
-	};
-
 	// --------------------------
 	// Type of Dictionary<> value
 	// --------------------------
@@ -474,7 +463,7 @@ namespace o2
 		MapType(const Type* keyType, const Type* valueType, int size, ITypeSerializer* serializer);
 
 		// Returns type usage
-		virtual Usage GetUsage() const;
+		virtual Usage GetUsage() const override;
 
 		// Returns type of dictionary key
 		const Type* GetKeyType() const;
@@ -655,7 +644,10 @@ namespace o2
 typedef void*(*GetValuePointerFuncPtr)(void*);
 
 #define DECLARE_CLASS(CLASS)                                                                                   \
-    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)										             
+    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
+
+#define DECLARE_TEMPLATE_CLASS(CLASS)                                                                                   \
+	template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
 																											   
 #define CLASS_BASES_META(CLASS)                                                                                \
     template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor) \
@@ -722,7 +714,7 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 	SetDefaultValue
 
 #define ATTRIBUTE(NAME) \
-    AddAttribute<NAME>()
+	template AddAttribute<NAME>()
 
 #define ATTRIBUTES(...)
 
@@ -759,6 +751,8 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #include "o2/Utils/Types/StringImpl.h"
 #include "o2/Utils/Types/UID.h"
 #include "o2/Utils/ValueProxy.h"
+#include "o2/Utils/Reflection/TypeSerializer.h"
+#include "o2/Utils/Reflection/TypeTraits.h"
 
 namespace o2
 {
@@ -961,6 +955,17 @@ namespace o2
 	// --------------------------
 	// TVectorType implementation
 	// --------------------------
+	
+	template<typename _element_type>
+	struct VectorCountFieldSerializer : public ITypeSerializer
+	{
+		VectorCountFieldSerializer() { }
+		void Serialize(void* object, DataValue& data) const;
+		void Deserialize(void* object, DataValue& data) const;
+		bool Equals(void* objectA, void* objectB) const;
+		void Copy(void* objectA, void* objectB) const;
+		ITypeSerializer* Clone() const;
+	};
 
 	template<typename _element_type>
 	void* TVectorType<_element_type>::GetObjectVectorElementPtr(void* object, int idx) const
@@ -1059,10 +1064,10 @@ namespace o2
 		{
 			for (int i = size; i < newSize; i++)
 			{
-				if (auto elementData = elementsData->GetMember("Element" + (WString)i))
+				if (auto elementData = elementsData.GetMember("Element" + (WString)i))
 				{
 					void* elementPtr = type.GetObjectVectorElementPtr(object, i);
-					type.mElementFieldInfo->Deserialize(elementPtr, *elementData);
+					type.mElementFieldInfo->Deserialize(elementPtr, elementData);
 				}
 			}
 		}

@@ -87,6 +87,8 @@ namespace o2
 		return TimeStamp(tm.wSecond, tm.wMinute, tm.wHour, tm.wDay, tm.wMonth, tm.wYear);
 #elif defined PLATFORM_ANDROID
         return TimeStamp();
+#elif defined PLATFORM_MAC
+		return TimeStamp();
 #endif
 	}
 

@@ -11,7 +11,7 @@ namespace o2
 	{
 	public:
 		// Returns vector of processing assets types
-		Vector<const Type*> GetProcessingAssetsTypes() const;
+		Vector<const Type*> GetProcessingAssetsTypes() const override;
 
 		// Converts folder by path
 		void ConvertAsset(const AssetInfo& node);

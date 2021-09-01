@@ -80,7 +80,12 @@ namespace Editor
 		friend class ToolsPanel;
 		friend class WindowsLayout;
 	};
+}
 
+#include "o2Editor/Core/WindowsSystem/IEditorWindow.h"
+
+namespace Editor
+{
 	template<typename _type>
 	_type* WindowsManager::GetWindow() const
 	{

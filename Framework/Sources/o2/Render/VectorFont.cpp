@@ -117,7 +117,7 @@ namespace o2
 			return res;
 
 		Vec2I dpi = o2Render.GetDPI();
-		FT_Error error = FT_Set_Char_Size(mFreeTypeFace, 0, height*64, dpi.x, dpi.y);
+		FT_Set_Char_Size(mFreeTypeFace, 0, height*64, dpi.x, dpi.y);
 
 		FT_Load_Char(mFreeTypeFace, 'A', FT_LOAD_RENDER);
 

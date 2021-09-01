@@ -12,5 +12,5 @@ namespace o2
 	};
 
 #define ANIMATABLE_ATTRIBUTE() \
-    AddAttribute<o2::AnimatableAttribute>()
+	template AddAttribute<o2::AnimatableAttribute>()
 }

@@ -12,5 +12,5 @@ namespace o2
 	};
 
 #define DONT_DELETE_ATTRIBUTE() \
-    AddAttribute<o2::DontDeleteAttribute>()
+	template AddAttribute<o2::DontDeleteAttribute>()
 }
