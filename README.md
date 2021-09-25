@@ -7,6 +7,7 @@ Here is the test project: https://github.com/zenkovich/o2-Template
 Now work in progress.
 
 Discord channel - https://discord.gg/FqBBYpYGfS
+Telegram channel - https://t.me/o2engine
 
 ![](https://github.com/zenkovich/o2/blob/master/editor.png)
 
