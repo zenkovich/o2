@@ -1,6 +1,6 @@
 #pragma once
 
-#include <windows.h>
+#include <chrono>
 #include "CppSyntaxParser.h"
 
 class Timer
@@ -13,15 +13,13 @@ public:
 	void Reset();
 
 	// Returns time in seconds from last Reset() call
-	float GetTime();
+	float GetTime(); //TODO maybe unused
 
 	// Returns time in seconds from last Reset() or GetElapsedTime() call
 	float GetDeltaTime();
 
-protected:
-	LONGLONG      mLastElapsedTime;
-	LARGE_INTEGER mFrequency;
-	LARGE_INTEGER mStartTime;
+private:
+	std::chrono::time_point<std::chrono::steady_clock> mLastElapsedTime;
 };
 
 class CodeToolCache

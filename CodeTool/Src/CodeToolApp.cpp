@@ -7,8 +7,6 @@
 #include <iostream>
 #include <locale>
 #include <sstream>
-#include <shlwapi.h>
-#include <windows.h>
 #include <iostream>
 
 #undef GetClassName
@@ -20,31 +18,23 @@ Timer::Timer()
 
 void Timer::Reset()
 {
-	QueryPerformanceFrequency(&mFrequency);
-	QueryPerformanceCounter(&mStartTime);
-	mLastElapsedTime = mStartTime.QuadPart;
+	mLastElapsedTime = std::chrono::steady_clock::now();
 }
 
-float Timer::GetTime()
+float Timer::GetTime() //TODO maybe unused
 {
-	LARGE_INTEGER curTime;
-	QueryPerformanceCounter(&curTime);
-
-	float res = (float)((double)(curTime.QuadPart - (double)mStartTime.QuadPart)/(double)mFrequency.QuadPart);
-	mLastElapsedTime = curTime.QuadPart;
-
-	return res;
+	using float_sec = std::chrono::duration<float, std::chrono::seconds::period>;
+	mLastElapsedTime = std::chrono::steady_clock::now();
+	auto res = std::chrono::time_point_cast<float_sec>(mLastElapsedTime);
+	return res.time_since_epoch().count();
 }
 
 float Timer::GetDeltaTime()
 {
-	LARGE_INTEGER curTime;
-	QueryPerformanceCounter(&curTime);
-
-	float res = (float)((double)(curTime.QuadPart - (double)mLastElapsedTime)/(double)mFrequency.QuadPart);
-	mLastElapsedTime = curTime.QuadPart;
-
-	return res;
+	auto curTime = std::chrono::steady_clock::now();
+	std::chrono::duration<float> res = curTime - mLastElapsedTime;
+	mLastElapsedTime = curTime;
+	return res.count();
 }
 
 CodeToolApplication::CodeToolApplication()

@@ -3,6 +3,7 @@
 /Editor/Platforms/Windows/Editor.vcxproj.user
 /Framework/Platforms/Windows/3rdPartyLibs.vcxproj.user
 /CodeTool/x64
+/CodeTool/build
 /CodeTool/Bin/*.pdb
 /CodeTool/Bin/*.iobj
 /CodeTool/Bin/*.ipdb
