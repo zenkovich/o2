@@ -35,7 +35,6 @@ protected:
 	typedef vector<ExpressionParser*> ParsersVec;
 
 protected:
-	SyntaxTree* mSyntaxTree = nullptr;
 	string      mSourcesPath;
 	ParsersVec  mParsers;
 

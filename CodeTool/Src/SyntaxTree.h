@@ -264,7 +264,6 @@ protected:
 
 	friend class CodeToolCache;
 	friend class CppSyntaxParser;
-	friend class SyntaxTree;
 };
 
 // Syntax namespace
@@ -275,7 +274,6 @@ public:
 
 	friend class CodeToolCache;
 	friend class CppSyntaxParser;
-	friend class SyntaxTree;
 };
 
 // Syntax class inheritance definition
@@ -313,7 +311,6 @@ protected:
 
 	friend class CodeToolCache;
 	friend class CppSyntaxParser;
-	friend class SyntaxTree;
 };
 typedef vector<SyntaxClassInheritance> SyntaxClassInheritancsVec;
 
@@ -392,7 +389,6 @@ protected:
 
 	friend class CodeToolCache;
 	friend class CppSyntaxParser;
-	friend class SyntaxTree;
 };
 
 // Syntax attributes list
@@ -407,7 +403,6 @@ protected:
 
 	friend class CodeToolCache;
 	friend class CppSyntaxParser;
-	friend class SyntaxTree;
 };
 
 // Syntax variable type
