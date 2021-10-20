@@ -52,7 +52,7 @@ struct TimeStamp
 	void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	void LoadFrom(pugi::xml_node& node);
+	void LoadFrom(const pugi::xml_node& node);
 };
 
 // Abstract syntax tree file
@@ -81,7 +81,7 @@ public:
 	void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	void LoadFrom(pugi::xml_node& node);
+	void LoadFrom(const pugi::xml_node& node);
 
 protected:
 	string           mPath;                      // File path
@@ -144,7 +144,7 @@ public:
 	void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	void LoadFrom(pugi::xml_node& node);
+	void LoadFrom(const pugi::xml_node& node);
 
 protected:
 	string          mUsingNamespaceName;       // Using namespace name
@@ -174,7 +174,7 @@ public:
 	void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	void LoadFrom(pugi::xml_node& node);
+	void LoadFrom(const pugi::xml_node& node);
 
 protected:
 	string          mWhatName;              // What was used to defined name (X)
@@ -247,7 +247,7 @@ public:
 	virtual void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	virtual void LoadFrom(pugi::xml_node& node);
+	virtual void LoadFrom(const pugi::xml_node& node);
 
 protected:
 	string                   mName;                    // Short name of section
@@ -302,7 +302,7 @@ public:
 	void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	void LoadFrom(pugi::xml_node& node);
+	void LoadFrom(const pugi::xml_node& node);
 
 protected:
 	string                  mClassName;       // Inheritance class name
@@ -373,7 +373,7 @@ public:
 	void SaveTo(pugi::xml_node& node) const;
 
 	// Loads data from xml node
-	void LoadFrom(pugi::xml_node& node);
+	void LoadFrom(const pugi::xml_node& node);
 
 protected:
 	SyntaxClassInheritancsVec mBaseClasses;             // Base classes

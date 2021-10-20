@@ -9,8 +9,13 @@
 #include <iostream>
 #include <sstream>
 
-string& TrimStart(string &str, const string& chars /*= " "*/)
+size_t str_len(const string &str) {
+	return str.length();
+}
+
+string& TrimStart(const string &str, const string& chars /*= " "*/)
 {
+	string s = str;
 	int l = (int)str.length();
 	int i = 0;
 	for (; i < l; i++)
@@ -19,13 +24,14 @@ string& TrimStart(string &str, const string& chars /*= " "*/)
 			break;
 	}
 
-	str.erase(0, i);
+	s.erase(0, i);
 
-	return str;
+	return s;
 }
 
-string& TrimEnd(string &str, const string& chars /*= " "*/)
+string& TrimEnd(const string &str, const string& chars /*= " "*/)
 {
+	string s = str;
 	int l = (int)str.length();
 	int i = l - 1;
 	for (; i >= 0; i--)
@@ -34,14 +40,15 @@ string& TrimEnd(string &str, const string& chars /*= " "*/)
 			break;
 	}
 
-	str.erase(i + 1);
+	s.erase(i + 1);
 
-	return str;
+	return s;
 }
 
-string& Trim(string &str, const string& chars /*= " "*/)
+string& Trim(const string &str, const string& chars /*= " "*/)
 {
-	return TrimStart(TrimEnd(str, chars), chars);
+	string s = str;
+	return TrimStart(TrimEnd(s, chars), chars);
 }
 
 bool StartsWith(const string& str, const string& starts)
@@ -477,7 +484,7 @@ void CppSyntaxParser::ParseNamespace(SyntaxSection& section, int& caret,
 									 SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("namespace");
+	caret += (int)str_len("namespace");
 
 	string namespaceName = ReadWord(section.mData, caret);
 	int namespaceBegin = (int)section.mData.find("{", caret) + 1;
@@ -501,7 +508,7 @@ void CppSyntaxParser::ParseComment(SyntaxSection& section, int& caret,
 								   SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("//");
+	caret += (int)str_len("//");
 
 	SyntaxComment* comment = new SyntaxComment();
 
@@ -551,7 +558,7 @@ void CppSyntaxParser::ParseMultilineComment(SyntaxSection& section, int& caret,
 											SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("/*");
+	caret += (int)str_len("/*");
 	int end = (int)section.mData.find("*/", caret);
 	caret = end;
 
@@ -568,7 +575,7 @@ void CppSyntaxParser::ParsePragma(SyntaxSection& section, int& caret,
 								  SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#pragma");
+	caret += (int)str_len("#pragma");
 	ReadWord(section.mData, caret);
 }
 
@@ -576,7 +583,7 @@ void CppSyntaxParser::ParseInclude(SyntaxSection& section, int& caret,
 								   SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#include");
+	caret += (int)str_len("#include");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -584,7 +591,7 @@ void CppSyntaxParser::ParseDefine(SyntaxSection& section, int& caret,
 								  SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#define");
+	caret += (int)str_len("#define");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -592,7 +599,7 @@ void CppSyntaxParser::ParseIfdefMacros(SyntaxSection& section, int& caret,
 									SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#ifdef");
+	caret += (int)str_len("#ifdef");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -600,7 +607,7 @@ void CppSyntaxParser::ParseIfMacros(SyntaxSection& section, int& caret,
 									SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#if");
+	caret += (int)str_len("#if");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -608,7 +615,7 @@ void CppSyntaxParser::ParseEndIfMacros(SyntaxSection& section, int& caret,
 									SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#endif");
+	caret += (int)str_len("#endif");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -616,7 +623,7 @@ void CppSyntaxParser::ParseElifMacros(SyntaxSection& section, int& caret,
 									SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#elif");
+	caret += (int)str_len("#elif");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -624,7 +631,7 @@ void CppSyntaxParser::ParseElseMacros(SyntaxSection& section, int& caret,
 									SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("#else");
+	caret += (int)str_len("#else");
 	ReadWord(section.mData, caret, "\n", "");
 }
 
@@ -653,10 +660,10 @@ void CppSyntaxParser::ParseClassOrStruct(SyntaxSection& section, int& caret,
 	int begin = caret;
 
 	if (isMeta)
-		caret += (int)strlen("meta");
+		caret += (int)str_len("meta");
 
-	if (isClass) caret += (int)strlen("class");
-	else         caret += (int)strlen("struct");
+	if (isClass) caret += (int)str_len("class");
+	else         caret += (int)str_len("struct");
 
 	string className = ReadWord(section.mData, caret, " \n\t\r:;/");
 	string afterName = Trim(ReadWord(section.mData, caret, ";{/"), " :\r\n\t");
@@ -692,7 +699,7 @@ void CppSyntaxParser::ParseClassOrStruct(SyntaxSection& section, int& caret,
 			{
 				if (StartsWith(baseClass, "virtual"))
 				{
-					baseClass.erase(0, strlen("virtual") + 1);
+					baseClass.erase(0, str_len("virtual") + 1);
 					spacePos = (int)baseClass.find(' ');
 				}
 
@@ -700,7 +707,7 @@ void CppSyntaxParser::ParseClassOrStruct(SyntaxSection& section, int& caret,
 				string baseClassName = baseClass.substr(spacePos + 1);
 
 				if (StartsWith(baseClassName, "virtual"))
-					baseClassName.erase(0, strlen("virtual") + 1);
+					baseClassName.erase(0, str_len("virtual") + 1);
 
 				SyntaxProtectionSection sectionType = SyntaxProtectionSection::Private;
 
@@ -736,7 +743,7 @@ void CppSyntaxParser::ParseClassOrStruct(SyntaxSection& section, int& caret,
 void CppSyntaxParser::ParseTemplate(SyntaxSection& section, int& caret,
 									SyntaxProtectionSection& protectionSection)
 {
-	caret += (int)strlen("template");
+	caret += (int)str_len("template");
 
 	int dataLen = (int)section.mData.length();
 
@@ -804,14 +811,14 @@ void CppSyntaxParser::ParseTypedef(SyntaxSection& section, int& caret,
 								   SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("typedef");
+	caret += (int)str_len("typedef");
 	string temp = Trim(ReadWord(section.mData, caret, ";"), " \r\n\t");
 	int lastSpace = (int)temp.rfind(' ');
 	string value = Trim(temp.substr(0, lastSpace), " \r\t\n");
 	string name = Trim(temp.substr(lastSpace + 1), " \r\t\n;");
 
 	if (StartsWith(value, "typename"))
-		value.erase(0, strlen("typename "));
+		value.erase(0, str_len("typename "));
 
 	SyntaxTypedef* synTypedef = new SyntaxTypedef();
 	synTypedef->mBegin      = begin;
@@ -828,7 +835,7 @@ void CppSyntaxParser::ParseEnum(SyntaxSection& section, int& caret,
 								SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("enum");
+	caret += (int)str_len("enum");
 
 	string name = ReadWord(section.mData, caret);
 
@@ -873,7 +880,7 @@ void CppSyntaxParser::ParseUsing(SyntaxSection& section, int& caret,
 								 SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("using");
+	caret += (int)str_len("using");
 
 	int tmpCaret = caret;
 	string allWord = ReadWord(section.mData, tmpCaret, ";");
@@ -900,21 +907,21 @@ void CppSyntaxParser::ParseUsing(SyntaxSection& section, int& caret,
 void CppSyntaxParser::ParsePublicSection(SyntaxSection& section, int& caret,
 										 SyntaxProtectionSection& protectionSection)
 {
-	caret += (int)strlen("public:");
+	caret += (int)str_len("public:");
 	protectionSection = SyntaxProtectionSection::Public;
 }
 
 void CppSyntaxParser::ParsePrivateSection(SyntaxSection& section, int& caret,
 										  SyntaxProtectionSection& protectionSection)
 {
-	caret += (int)strlen("private:");
+	caret += (int)str_len("private:");
 	protectionSection = SyntaxProtectionSection::Private;
 }
 
 void CppSyntaxParser::ParseProtectedSection(SyntaxSection& section, int& caret,
 											SyntaxProtectionSection& protectionSection)
 {
-	caret += (int)strlen("protected:");
+	caret += (int)str_len("protected:");
 	protectionSection = SyntaxProtectionSection::Protected;
 }
 
@@ -922,7 +929,7 @@ void CppSyntaxParser::ParseFriend(SyntaxSection& section, int& caret,
 								  SyntaxProtectionSection& protectionSection)
 {
 	int begin = caret;
-	caret += (int)strlen("friend");
+	caret += (int)str_len("friend");
 	ReadWord(section.mData, caret, " \n\r\t");
 	ReadWord(section.mData, caret, " \n\r\t");
 }
@@ -932,7 +939,7 @@ void CppSyntaxParser::ParseAttributeCommentDef(SyntaxSection& section, int& care
 {
 	SyntaxClass* classSection = dynamic_cast<SyntaxClass*>(&section);
 
-	caret += (int)strlen("ATTRIBUTE_COMMENT_DEFINITION");
+	caret += (int)str_len("ATTRIBUTE_COMMENT_DEFINITION");
 	caret = (int)section.mData.find('"', caret) + 1;
 	int begin = caret;
 	caret = (int)section.mData.find('"', caret);
@@ -947,7 +954,7 @@ void CppSyntaxParser::ParseAttributeShortDef(SyntaxSection& section, int& caret,
 {
 	SyntaxClass* classSection = dynamic_cast<SyntaxClass*>(&section);
 
-	caret += (int)strlen("ATTRIBUTE_SHORT_DEFINITION");
+	caret += (int)str_len("ATTRIBUTE_SHORT_DEFINITION");
 	caret = (int)section.mData.find('"', caret) + 1;
 	int begin = caret;
 	caret = (int)section.mData.find('"', caret);
@@ -961,7 +968,7 @@ void CppSyntaxParser::ParseAttributes(SyntaxSection& section, int& caret, Syntax
 {
 	int begin = caret;
 
-	caret += (int)strlen("ATTRIBUTES");
+	caret += (int)str_len("ATTRIBUTES");
 	caret = (int)section.mData.find('(', caret) + 1;
 	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
 	caret = (int)section.mData.find(';', caret);
@@ -984,7 +991,7 @@ void CppSyntaxParser::ParseProperties(SyntaxSection& section, int& caret, Syntax
 {
 	int begin = caret;
 
-	caret += (int)strlen("PROPERTIES");
+	caret += (int)str_len("PROPERTIES");
 	caret = (int)section.mData.find('(', caret);
 	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
 	caret = (int)section.mData.find(';', caret);
@@ -994,7 +1001,7 @@ void CppSyntaxParser::ParseProperty(SyntaxSection& section, int& caret, SyntaxPr
 {
 	int begin = caret;
 
-	caret += (int)strlen("PROPERTY");
+	caret += (int)str_len("PROPERTY");
 	caret = (int)section.mData.find('(', caret);
 	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
 	caret = (int)section.mData.find(';', caret);
@@ -1018,7 +1025,7 @@ void CppSyntaxParser::ParseGetter(SyntaxSection& section, int& caret, SyntaxProt
 {
 	int begin = caret;
 
-	caret += (int)strlen("GETTER");
+	caret += (int)str_len("GETTER");
 	caret = (int)section.mData.find('(', caret);
 	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
 	caret = (int)section.mData.find(';', caret);
@@ -1042,7 +1049,7 @@ void CppSyntaxParser::ParseSetter(SyntaxSection& section, int& caret, SyntaxProt
 {
 	int begin = caret;
 
-	caret += (int)strlen("SETTER");
+	caret += (int)str_len("SETTER");
 	caret = (int)section.mData.find('(', caret);
 	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
 	caret = (int)section.mData.find(';', caret);
@@ -1066,7 +1073,7 @@ void CppSyntaxParser::ParseAccessor(SyntaxSection& section, int& caret, SyntaxPr
 {
 	int begin = caret;
 
-	caret += (int)strlen("ACCESSOR");
+	caret += (int)str_len("ACCESSOR");
 	caret = (int)section.mData.find('(', caret);
 	string braces = Trim(ReadBraces(section.mData, caret), " \n\r\t()");
 	caret = (int)section.mData.find(';', caret);

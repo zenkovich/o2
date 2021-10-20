@@ -8,6 +8,7 @@
 #include <locale>
 #include <sstream>
 #include <iostream>
+#include <filesystem>
 
 #undef GetClassName
 
@@ -98,59 +99,51 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 {
 	map<string, TimeStamp> res;
 
-	WIN32_FIND_DATA f;
-	HANDLE h = FindFirstFile((path + "/*").c_str(), &f);
-	if (h != INVALID_HANDLE_VALUE)
+	for (const auto& entry: filesystem::directory_iterator(path))
 	{
-		do
+		if (entry.is_directory())
 		{
-			if (strcmp(f.cFileName, ".") == 0 || strcmp(f.cFileName, "..") == 0)
-				continue;
-
-			if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
+			auto subFolderFiles = GetFolderFiles(entry.path());
+			for (const auto& x : subFolderFiles)
 			{
-				auto subFolderFiles = GetFolderFiles(path + "/" + f.cFileName);
-				for (auto x : subFolderFiles)
-					res[x.first] = x.second;
-			}
-			else
-			{
-				string filePath = path + "/" + f.cFileName;
-				res[filePath] = GetFileEditedDate(filePath);
+				res[x.first] = x.second;
 			}
 		}
-		while (FindNextFile(h, &f));
+		else
+		{
+			const string filePath = entry.path();
+			res[filePath] = GetFileEditedDate(filePath);
+		}
 	}
-
-	FindClose(h);
 
 	return res;
 }
 
+time_t last_write_time_to_time_t(filesystem::file_time_type const& tp)
+{
+    auto sctp = chrono::time_point_cast<chrono::system_clock::duration>(tp - filesystem::file_time_type::clock::now()
+              + chrono::system_clock::now());
+    return chrono::system_clock::to_time_t(sctp);
+}
+
 TimeStamp CodeToolApplication::GetFileEditedDate(const string& path)
 {
-	FILETIME creationTime, lastAccessTime, lastWriteTime;
-	HANDLE hFile = CreateFileA(path.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
-							   FILE_FLAG_OVERLAPPED, NULL);
+	const filesystem::directory_entry file {path};
 
-	if (hFile == NULL || hFile == INVALID_HANDLE_VALUE)
-		return TimeStamp();
-
-	if (!GetFileTime(hFile, &creationTime, &lastAccessTime, &lastWriteTime))
+	if (!file.exists())
 	{
-		CloseHandle(hFile);
 		return TimeStamp();
 	}
 
-	SYSTEMTIME stUTC, stLocal;
+	auto const& lwTime = file.last_write_time();
+	time_t cftime = last_write_time_to_time_t(lwTime);
+    auto const& stLocal = std::localtime(&cftime);
+	if (!stLocal)
+	{
+		return TimeStamp();
+	}
 
-	FileTimeToSystemTime(&lastWriteTime, &stUTC);
-	SystemTimeToTzSpecificLocalTime(NULL, &stUTC, &stLocal);
-
-	TimeStamp res(stLocal.wSecond, stLocal.wMinute, stLocal.wHour, stLocal.wDay, stLocal.wMonth,
-				  stLocal.wYear);
-
-	CloseHandle(hFile);
+	TimeStamp res(stLocal->tm_sec, stLocal->tm_min, stLocal->tm_hour, stLocal->tm_mday, stLocal->tm_mon, stLocal->tm_year);
 
 	return res;
 }
@@ -206,43 +199,29 @@ string CodeToolApplication::ReadFile(const string& path) const
 
 bool CodeToolApplication::IsFileExist(const string& path) const
 {
-	DWORD tp = GetFileAttributes(path.c_str());
-
-	if (tp == INVALID_FILE_ATTRIBUTES)
+	filesystem::directory_entry entry{path};
+	if (entry.is_directory()) {
 		return false;
+	}
 
-	if (tp & FILE_ATTRIBUTE_DIRECTORY)
-		return false;
-
-	return true;
+	return entry.exists();
 }
 
 string CodeToolApplication::GetPathWithoutDirectories(const string& path)
 {
-	return path.substr(max(path.rfind('/'), path.rfind('\\')) + 1);
+	filesystem::path p{path};
+	return p.filename().string();
 }
 
 string CodeToolApplication::GetParentPath(const string& path)
 {
-	auto a = path.rfind('/');
-	auto b = path.rfind("\\");
-
-	int _a = a == string::npos ? -1 : (int)a;
-	int _b = b == string::npos ? -1 : (int)b;
-
-	int idx = max(_a, _b);
-
-	if (idx < 0)
-		return string();
-
-	return path.substr(0, idx);
+	filesystem::path p{path};
+	return p.parent_path().string();
 }
 
 string CodeToolApplication::GetRelativePath(const string& from, const string& to)
 {
-	char out[MAX_PATH];
-	PathRelativePathTo(out, from.c_str(), FILE_ATTRIBUTE_DIRECTORY, to.c_str(), FILE_ATTRIBUTE_NORMAL);
-	return (string)out;
+	return filesystem::relative(to, from);
 }
 
 void CodeToolApplication::LoadCache()
@@ -708,10 +687,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		if (className.find(',') != string::npos)
 		{
 			typedefs++;
-			char buf[256];
-			_itoa(typedefs, buf, 10);
-
-			auto newClassName = string("_tmp") + buf;
+			auto newClassName = string("_tmp") + to_string(typedefs);
 			res += string("\ttypedef ") + className + ' ' + newClassName + ";\n";
 			className = newClassName;
 		}
@@ -749,10 +725,11 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		SyntaxComment* synComment = cls->FindCommentNearLine(x->GetLine());
 
 		if (synComment) {
-			auto fnd = synComment->GetData().find("@IGNORE");
+			string ignore{"@IGNORE"};
+			auto fnd = synComment->GetData().find(ignore);
 			if (fnd != string::npos)
 			{
-				auto nextSymbol = synComment->GetData()[fnd + strlen("@IGNORE")];
+				auto nextSymbol = synComment->GetData()[fnd + ignore.size()];
 				if (nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0')
 					continue;
 			}
@@ -819,9 +796,8 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 		if (returnTypeName.find(',') != returnTypeName.npos)
 		{
-			char buf[255];
 			supportingTypedefs.push_back(returnTypeName);
-			returnTypeName = (string)"_tmp" + _itoa((int)supportingTypedefs.size(), buf, 10);
+			returnTypeName = (string)"_tmp" + to_string((int)supportingTypedefs.size());
 		}
 
 		res += returnTypeName;
@@ -834,8 +810,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			if (parameterName.find(',') != parameterName.npos)
 			{
 				supportingTypedefs.push_back(parameterName);
-				char buf[255];
-				parameterName = string("_tmp") + _itoa((int)supportingTypedefs.size(), buf, 10);
+				parameterName = string("_tmp") + to_string((int)supportingTypedefs.size());
 			}
 
 			res += string(", ") + parameterName;
@@ -847,10 +822,9 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	// supporting typedefs
 	if (!supportingTypedefs.empty())
 	{
-		char buf[255];
 		string supportingTypedefsStr = "\n";
 		for (int i = 0; i < supportingTypedefs.size(); i++)
-			supportingTypedefsStr += (string)"\ttypedef " + supportingTypedefs[i] + " _tmp" + _itoa(i + 1, buf, 10) + ";\n";
+			supportingTypedefsStr += (string)"\ttypedef " + supportingTypedefs[i] + " _tmp" + to_string(i + 1) + ";\n";
 
 		res.insert(supportingTypedefsPos, supportingTypedefsStr);
 	}
@@ -941,7 +915,7 @@ string CodeToolApplication::GetEnumPreMeta(SyntaxEnum* enm)
 	return res;
 }
 
-void RemoveSubstrs(string& s, string& p)
+void RemoveSubstrs(string& s, string const& p)
 {
 	string::size_type n = p.length();
 	for (string::size_type i = s.find(p); i != string::npos; i = s.find(p))
@@ -1017,9 +991,9 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 		for (auto& templateParam : templateParams)
 		{
 			Trim(templateParam);
-
-			if (StartsWith(templateParam, "typename "))
-				templateParam.erase(0, strlen("typename "));
+			string typename_str{"typename "};
+			if (StartsWith(templateParam, typename_str))
+				templateParam.erase(0, typename_str.size());
 
 			if (!firstParam)
 				fullName += ", ";
@@ -1055,12 +1029,14 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 		if (!allowMultiline)
 		{
-			auto newLinePos = data.find("\n", caret + strlen(keyword));
+			string keyword_str{keyword};
+			auto newLinePos = data.find("\n", caret + keyword_str.size());
 			if (newLinePos != string::npos && newLinePos < end)
 				return;
 		}
 
-		data.erase(caret + 1, end + strlen(endword) - caret - 1);
+		string endword_str{endword};
+		data.erase(caret + 1, end + endword_str.size() - caret - 1);
 		caret = data.find(keyword);
 	}
 
@@ -1286,8 +1262,10 @@ void CodeToolCache::Save(const string& file) const
 	pugi::xml_document doc;
 
 	pugi::xml_node filesNode = doc.append_child("files");
-	for (auto file : originalFiles)
-		file->SaveTo(filesNode.append_child("file"));
+	for (auto file : originalFiles) {
+		auto file_node = filesNode.append_child("file");
+		file->SaveTo(file_node);
+	}
 
 	pugi::xml_node parentProjsNode = doc.append_child("parentProjects");
 	for (auto& proj : parentProjects)
