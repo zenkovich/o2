@@ -34,11 +34,13 @@ SyntaxNamespace* SyntaxFile::GetGlobalNamespace() const
 void SyntaxFile::SaveTo(pugi::xml_node& node) const
 {
 	node.append_attribute("path") = mPath.c_str();
-	mLastEditedDate.SaveTo(node.append_child("date"));
-	mGlobalNamespace->SaveTo(node.append_child("globalNamespace"));
+	auto date = node.append_child("date");
+	mLastEditedDate.SaveTo(date);
+	auto globalNamespace = node.append_child("globalNamespace");
+	mGlobalNamespace->SaveTo(globalNamespace);
 }
 
-void SyntaxFile::LoadFrom(pugi::xml_node& node)
+void SyntaxFile::LoadFrom(const pugi::xml_node& node)
 {
 	mPath = node.attribute("path").as_string();
 	mLastEditedDate.LoadFrom(node.child("date"));
@@ -253,19 +255,25 @@ void SyntaxSection::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("fullname") = mFullName.c_str();
 
 	pugi::xml_node sectionsNode = node.append_child("sections");
-	for (auto x : mSections)
-		x->SaveTo(sectionsNode.append_child("section"));
+	for (auto x : mSections) {
+		auto section = sectionsNode.append_child("section");
+		x->SaveTo(section);
+	}
 
 	pugi::xml_node typedefsNode = node.append_child("typedefs");
-	for (auto x : mTypedefs)
-		x->SaveTo(typedefsNode.append_child("typedef"));
+	for (auto x : mTypedefs) {
+		auto td = typedefsNode.append_child("typedef");
+		x->SaveTo(td);
+	}
 
 	pugi::xml_node usingsNode = node.append_child("usings");
-	for (auto x : mUsingNamespaces)
-		x->SaveTo(usingsNode.append_child("typedef"));
+	for (auto x : mUsingNamespaces) {
+		auto td = usingsNode.append_child("typedef");
+		x->SaveTo(td);
+	}
 }
 
-void SyntaxSection::LoadFrom(pugi::xml_node& node)
+void SyntaxSection::LoadFrom(const pugi::xml_node& node)
 {
 	mName = node.attribute("name").as_string();
 	mFullName = node.attribute("fullname").as_string();
@@ -446,11 +454,13 @@ void SyntaxClass::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("attributeShortDef") = mAttributeShortDef.c_str();
 
 	pugi::xml_node baseClassesNode = node.append_child("baseClasses");
-	for (auto& x : mBaseClasses)
-		x.SaveTo(baseClassesNode.append_child("class"));
+	for (auto& x : mBaseClasses) {
+		auto nc = baseClassesNode.append_child("class");
+		x.SaveTo(nc);
+	}
 }
 
-void SyntaxClass::LoadFrom(pugi::xml_node& node)
+void SyntaxClass::LoadFrom(const pugi::xml_node& node)
 {
 	SyntaxSection::LoadFrom(node);
 
@@ -608,7 +618,7 @@ void SyntaxClassInheritance::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("protection") = (int)mInheritanceType;
 }
 
-void SyntaxClassInheritance::LoadFrom(pugi::xml_node& node)
+void SyntaxClassInheritance::LoadFrom(const pugi::xml_node& node)
 {
 	mClassName = node.attribute("name").as_string();
 	mInheritanceType = (SyntaxProtectionSection)node.attribute("protection").as_int();
@@ -634,7 +644,7 @@ void SyntaxUsingNamespace::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("name") = mUsingNamespaceName.c_str();
 }
 
-void SyntaxUsingNamespace::LoadFrom(pugi::xml_node& node)
+void SyntaxUsingNamespace::LoadFrom(const pugi::xml_node& node)
 {
 	mUsingNamespaceName = node.attribute("name").as_string();
 }
@@ -665,7 +675,7 @@ void SyntaxTypedef::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("newDef") = mNewDefName.c_str();
 }
 
-void SyntaxTypedef::LoadFrom(pugi::xml_node& node)
+void SyntaxTypedef::LoadFrom(const pugi::xml_node& node)
 {
 	mWhatName = node.attribute("what").as_string();
 	mNewDefName = node.attribute("newDef").as_string();
@@ -686,7 +696,7 @@ void TimeStamp::SaveTo(pugi::xml_node& node) const
 	node.append_attribute("second") = second;
 }
 
-void TimeStamp::LoadFrom(pugi::xml_node& node)
+void TimeStamp::LoadFrom(const pugi::xml_node& node)
 {
 	year = node.attribute("year").as_int();
 	month = node.attribute("month").as_int();
