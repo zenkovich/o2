@@ -1,14 +1,17 @@
 #!/bin/bash
 
-CMAKE_GENERATOR="Unix Makefiles"
-
 SCRIPT_DIR="$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)"
 BUILD_DIR="${SCRIPT_DIR}/build"
 [ -d ${BUILD_DIR} ] || { 
     mkdir -pv ${BUILD_DIR}
 }
 
-cmake -G "${CMAKE_GENERATOR}" -S ./ -B ${BUILD_DIR}
+if [[ "$(uname -s)" == *"MINGW"* ]]; then
+	cmake -G "Visual Studio 16 2019" -T v142 -S ./ -B ${BUILD_DIR}
+else
+	cmake -G "Unix Makefiles" -S ./ -B ${BUILD_DIR}
+fi
+
 cmake --build ${BUILD_DIR} --config Release
 
 echo "path to binary: ${BUILD_DIR}"
