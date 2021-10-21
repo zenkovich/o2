@@ -9,6 +9,7 @@
 #include <sstream>
 #include <iostream>
 #include <filesystem>
+#include <cstdarg>
 
 #undef GetClassName
 
@@ -103,7 +104,7 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 	{
 		if (entry.is_directory())
 		{
-			auto subFolderFiles = GetFolderFiles(entry.path());
+			auto subFolderFiles = GetFolderFiles(entry.path().string());
 			for (const auto& x : subFolderFiles)
 			{
 				res[x.first] = x.second;
@@ -111,7 +112,7 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 		}
 		else
 		{
-			const string filePath = entry.path();
+			const string filePath = entry.path().string();
 			res[filePath] = GetFileEditedDate(filePath);
 		}
 	}
@@ -221,7 +222,7 @@ string CodeToolApplication::GetParentPath(const string& path)
 
 string CodeToolApplication::GetRelativePath(const string& from, const string& to)
 {
-	return filesystem::relative(to, from);
+	return filesystem::relative(to, from).string();
 }
 
 void CodeToolApplication::LoadCache()

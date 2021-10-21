@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(firework LANGUAGES CXX)
+project(CodeTool LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 17)
 
 set(SOURCE_FILES
 	Src/CodeToolApp.cpp
@@ -17,6 +18,6 @@ set(HEADER_FILES
 	Src/pugixml/pugiconfig.hpp
 )
 
-set(CMAKE_CXX_STANDARD 17)
+add_executable(CodeTool ${HEADER_FILES} ${SOURCE_FILES})
 
-add_executable(CodeTool WIN32 ${HEADER_FILES} ${SOURCE_FILES})
+
