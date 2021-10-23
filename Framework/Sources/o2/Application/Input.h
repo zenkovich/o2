@@ -13,7 +13,7 @@
 #endif
 
 // Input access macros
-#define o2Input Input::Instance()
+#define o2Input o2::Input::Instance()
 
 namespace o2
 {

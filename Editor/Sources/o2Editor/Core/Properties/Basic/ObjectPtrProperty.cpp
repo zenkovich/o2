@@ -167,7 +167,7 @@ namespace Editor
 			}));
 		}
 
-		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty() || !mNoHeader);
+		SetEnabled((mObjectViewer && !mObjectViewer->IsEmpty()) || !mNoHeader);
 	}
 
 	const Type* ObjectPtrProperty::GetValueType() const

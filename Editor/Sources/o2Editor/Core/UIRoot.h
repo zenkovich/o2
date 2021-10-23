@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Events/ApplicationEventsListener.h"
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 #include "o2/Utils/Singleton.h"
 
 using namespace o2;
@@ -35,6 +36,7 @@ namespace Editor
 
 	private:
 		Widget* mRootWidget = nullptr;
+		CursorAreaEventListenersLayer mListenersLayer;
 
 	private:
 		// Default constructor, creates root widget

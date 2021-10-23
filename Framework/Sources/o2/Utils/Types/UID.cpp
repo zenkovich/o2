@@ -99,8 +99,7 @@ namespace o2
 	void UID::FromString(const WString& stringData)
 	{
 		wchar_t* pp;
-		wchar_t* str = mnew wchar_t[stringData.Length() + 1];
-		wcscpy(str, stringData.Data());
+		wchar_t* str = const_cast<wchar_t*>(stringData.Data());
 		for (int i = 0; i < 16; i += 4)
 		{
 			int ii = i * 2;

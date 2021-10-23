@@ -4,12 +4,18 @@
 
 namespace o2
 {
+	struct MTLTextureImpl;
+	
 	class TextureBase
 	{
 		friend class Render;
 		friend class VectorFont;
 
 	protected:
+		TextureBase();
+		
+	protected:
+		MTLTextureImpl* mImpl;
 	};
 }
 

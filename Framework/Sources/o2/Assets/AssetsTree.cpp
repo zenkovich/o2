@@ -78,7 +78,7 @@ namespace o2
 	AssetInfo* AssetsTree::AddAsset(AssetInfo* asset)
 	{
 		int delPos = asset->path.FindLast("/");
-		if (delPos < 0)
+		if (delPos < 0 || delPos == asset->path.Length() - 1)
 		{
 			rootAssets.Add(asset);
 			asset->SetTree(this);
@@ -175,7 +175,14 @@ namespace o2
 				continue;
 			}
 
-			asset = LoadAssetNode(subFolder.path, parentAsset, TimeStamp());
+			String subFolderPath = subFolder.path;
+			if (subFolderPath.EndsWith("/"))
+			{
+				int len = subFolderPath.Length();
+				subFolderPath.Erase(len - 1, len);
+			}
+
+			asset = LoadAssetNode(subFolderPath, parentAsset, TimeStamp());
 
 			LoadFolder(subFolder, asset);
 		}
@@ -186,7 +193,7 @@ namespace o2
 		DataDocument metaData;
 		metaData.LoadFromFile(this->assetsPath + path + ".meta");
 
-		AssetMeta* meta = nullptr;;
+		AssetMeta* meta = nullptr;
 		meta = metaData;
 
 		AssetInfo* asset = mnew AssetInfo();

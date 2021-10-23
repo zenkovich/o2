@@ -77,6 +77,7 @@ namespace o2
 
 	void Render::SetCamera(const Camera& camera)
 	{
+		DrawPrimitives();
 		mCamera = camera;
 		UpdateCameraTransforms();
 	}

@@ -565,9 +565,10 @@ namespace Editor
 			{
 				auto objectType = dynamic_cast<const ObjectType*>(mRealType);
 				void* typeSample = objectType->CreateSample();
+				IObject* typeSampleObject = objectType->DynamicCastToIObject(typeSample);
 				proxy->GetValuePtr(typeSample);
-				_type res = *dynamic_cast<_type*>(objectType->DynamicCastToIObject(typeSample));
-				delete typeSample;
+				_type res = *dynamic_cast<_type*>(typeSampleObject);
+				delete typeSampleObject;
 				return res;
 			}
 		}

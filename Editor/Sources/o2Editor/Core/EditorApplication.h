@@ -63,9 +63,6 @@ namespace Editor
 		// Is scene playing
 		bool IsPlaying() const;
 
-		// Returns game view render target listeners layer
-		CursorAreaEventListenersLayer& GetGameViewListenersLayer();
-
 	protected:
 		Sprite* mBackground; // Background sprite
 		Sprite* mBackSign;   // Background o2 signature
@@ -77,8 +74,6 @@ namespace Editor
 		MenuPanel*      mMenuPanel;      // Menu panel
 
 		Properties* mProperties; // Properties manager
-
-		CursorAreaEventListenersLayer* mListenersLayer = nullptr; // Game view render target listeners layer
 
 		String mLoadedScene; // Current loaded scene
 

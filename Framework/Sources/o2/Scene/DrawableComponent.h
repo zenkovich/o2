@@ -42,7 +42,7 @@ namespace o2
 		void OnDeserializedDelta(const DataValue& node, const IObject& origin) override;
 
 		// Updates component enable
-		void UpdateEnabled();
+		void UpdateEnabled() override;
 
 		// Returns current scene layer
 		SceneLayer* GetSceneDrawableSceneLayer() const override;
@@ -51,10 +51,10 @@ namespace o2
 		bool IsSceneDrawableEnabled() const override;
 
 		// It is called when actor was included to scene
-		void OnAddToScene();
+		void OnAddToScene() override;
 
 		// It is called when actor was excluded from scene
-		void OnRemoveFromScene();
+		void OnRemoveFromScene() override;
 
 		friend class Scene;
 

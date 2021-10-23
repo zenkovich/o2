@@ -26,7 +26,7 @@ namespace o2
 	public:
 		float radius = 0;
 
-		Vec2F GetEmittinPoint();
+		Vec2F GetEmittinPoint() override;
 	};
 
 	// ---------------------------------
@@ -39,7 +39,7 @@ namespace o2
 	public:
 		Vec2F size;
 
-		Vec2F GetEmittinPoint();
+		Vec2F GetEmittinPoint() override;
 	};
 }
 

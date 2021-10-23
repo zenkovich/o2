@@ -724,7 +724,7 @@ namespace o2
 
 		static void Write(const charPtr& value, DataValue& data)
 		{
-			data.SetString(value, strlen(value), true);
+			data.SetString(value, (int)strlen(value), true);
 		}
 
 		static void Read(charPtr& value, const DataValue& data)
@@ -769,7 +769,7 @@ namespace o2
 
 		static void Write(const charPtr& value, DataValue& data)
 		{
-			data.SetString(value, strlen(value), true);
+			data.SetString(value, (int)strlen(value), true);
 		}
 
 		static void Read(charPtr& value, const DataValue& data)

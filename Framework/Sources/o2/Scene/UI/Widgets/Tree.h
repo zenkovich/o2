@@ -424,10 +424,10 @@ namespace o2
 		void UpdateNodeExpanding(float dt);
 
 		// Calculates scroll area
-		void CalculateScrollArea();
+		void CalculateScrollArea() override;
 
 		// Moves scroll position and updates children widgets clipping and layout
-		void MoveScrollPosition(const Vec2F& delta);
+		void MoveScrollPosition(const Vec2F& delta) override;
 
 		// It is called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;

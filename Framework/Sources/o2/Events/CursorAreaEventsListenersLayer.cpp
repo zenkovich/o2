@@ -184,7 +184,7 @@ namespace o2
 
 			if (!mUnderCursorListeners.ContainsKey(localCursor.id))
 				mUnderCursorListeners.Add(localCursor.id, {});
-
+			
 			mUnderCursorListeners[localCursor.id].Add(listener);
 
 			if (!listener->IsInputTransparent())
@@ -234,7 +234,10 @@ namespace o2
 		for (auto listener : mUnderCursorListeners[localCursor.id])
 		{
 			float time = o2Time.GetApplicationTime();
-			if (time - listener->mLastPressedTime < o2Events.GetDoubleClickTime())
+			float s = time - listener->mLastPressedTime;
+			float x = o2Events.GetDoubleClickTime();
+			float d = s - x;
+			if (d < 0)
 				listener->OnCursorDblClicked(localCursor);
 			else
 			{

@@ -72,7 +72,7 @@ namespace o2
 		void SetDirty(bool fromParent = false) override;
 
 		// Copies data parameters from other layout
-		void CopyFrom(const ActorTransform& other);
+		void CopyFrom(const ActorTransform& other) override;
 
 		// Sets position
 		void SetPosition(const Vec2F& position) override;

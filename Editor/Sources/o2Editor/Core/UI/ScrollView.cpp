@@ -248,6 +248,7 @@ namespace Editor
 	{
 		mNeedRedraw = false;
 		UpdateLocalScreenTransforms();
+		Camera prevCamera = o2Render.GetCamera();
 		o2Render.BindRenderTexture(mRenderTarget);
 
 		o2Render.Clear(mBackColor);
@@ -255,8 +256,8 @@ namespace Editor
 
 		RedrawContent();
 
+		o2Render.SetCamera(prevCamera);
 		o2Render.UnbindRenderTexture();
-		o2Render.SetCamera(Camera());
 	}
 
 	void ScrollView::RedrawContent()

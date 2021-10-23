@@ -21,8 +21,12 @@ namespace o2
 	typedef SceneEditableObject ActorBase;
 
 	struct ActorDifferences;
+	
+#define OPTIONAL_OVERRIDE override
 #else
 	typedef ISerializable ActorBase;
+	
+#define OPTIONAL_OVERRIDE override
 #endif
 
 	// ---------------------------------------------------------------------------------------------
@@ -94,7 +98,7 @@ namespace o2
 		virtual void FixedUpdateChildren(float dt);
 
 		// Updates self transform, dependent parents and children transforms
-		virtual void UpdateTransform();
+		virtual void UpdateTransform() OPTIONAL_OVERRIDE;
 
 		// Updates transform
 		virtual void UpdateSelfTransform();
@@ -103,19 +107,19 @@ namespace o2
 		virtual void UpdateChildrenTransforms();
 
 		// Sets actor's name
-		void SetName(const String& name);
+		void SetName(const String& name) OPTIONAL_OVERRIDE;
 
 		// Returns name
-		const String& GetName() const;
+		const String& GetName() const OPTIONAL_OVERRIDE;
 
 		// Returns actor's unique id
-		SceneUID GetID() const;
+		SceneUID GetID() const OPTIONAL_OVERRIDE;
 
 		// Sets id. Be carefully! Ids must be unique! Not recommended to change this
 		void SetID(SceneUID id);
 
 		// Generates new random id 
-		void GenerateNewID(bool withChildren = true);
+		void GenerateNewID(bool withChildren = true) OPTIONAL_OVERRIDE;
 
 		// Returns asset id
 		UID GetAssetID() const;
@@ -142,10 +146,10 @@ namespace o2
 		void RemoveFromScene(bool keepEditorObjects = false);
 
 		// Is actor on scene
-		bool IsOnScene() const;
+		bool IsOnScene() const OPTIONAL_OVERRIDE;
 
 		// Sets actor enabling
-		virtual void SetEnabled(bool enabled);
+		virtual void SetEnabled(bool enabled) OPTIONAL_OVERRIDE;
 
 		// Enables actor
 		void Enable();
@@ -154,13 +158,13 @@ namespace o2
 		void Disable();
 
 		// Returns is actor enabled
-		bool IsEnabled() const;
+		bool IsEnabled() const OPTIONAL_OVERRIDE;
 
 		// Returns is really enabled
 		bool IsResEnabled() const;
 
 		// Returns is actor enabled in hierarchy
-		bool IsEnabledInHierarchy() const;
+		bool IsEnabledInHierarchy() const OPTIONAL_OVERRIDE;
 
 		// Sets parent
 		void SetParent(Actor* actor, bool worldPositionStays = true);
@@ -169,7 +173,7 @@ namespace o2
 		Actor* GetParent() const;
 
 		// Sets index position in parent or scene
-		virtual void SetIndexInSiblings(int index);
+		virtual void SetIndexInSiblings(int index) OPTIONAL_OVERRIDE;
 
 		// Add child actor
 		Actor* AddChild(Actor* actor);
@@ -481,7 +485,7 @@ namespace o2
 
 	public:
 		// Sets locking. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		void SetLocked(bool locked);
+		void SetLocked(bool locked) OPTIONAL_OVERRIDE;
 
 		// Locks actor. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
 		void Lock();
@@ -490,10 +494,10 @@ namespace o2
 		void Unlock();
 
 		// Returns is actor locked. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		bool IsLocked() const;
+		bool IsLocked() const OPTIONAL_OVERRIDE;
 
 		// Returns is actor locked in hierarchy. Locked actor can't be selected in editor scene view. But is can be selected in scene tree
-		bool IsLockedInHierarchy() const;
+		bool IsLockedInHierarchy() const OPTIONAL_OVERRIDE;
 
 		// Breaks link to prototype
 		void BreakPrototypeLink();
@@ -583,7 +587,7 @@ namespace o2
 							  Vector<ISerializable*>& serializableObjects);
 
 		// Collects differences between this and prototype
-		virtual void GetDifferences(ActorDifferences& differences) const;
+		virtual void GetDifferences(ActorDifferences& differences) const OPTIONAL_OVERRIDE;
 
 		// It is called before making prototype from this object
 		void BeginMakePrototype() const override;

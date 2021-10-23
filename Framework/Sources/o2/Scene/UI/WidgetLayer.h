@@ -286,7 +286,7 @@ namespace o2
 		void SetTransform(const Basis& transform) override;
 
 		// Updates transform immediately
-		void UpdateTransform();
+		void UpdateTransform() OPTIONAL_OVERRIDE;
 
 		// Returns is object supports pivot 
 		bool IsSupportsPivot() const override;

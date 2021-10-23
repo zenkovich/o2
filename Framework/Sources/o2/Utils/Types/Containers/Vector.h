@@ -405,7 +405,7 @@ namespace o2
 	template<typename _type>
 	int Vector<_type>::Count() const
 	{
-		return std::vector<_type>::size();
+		return (int)std::vector<_type>::size();
 	}
 
 	template<typename _type>
@@ -491,7 +491,7 @@ namespace o2
 		if (fnd == std::vector<_type>::end())
 			return -1;
 
-		return fnd - std::vector<_type>::begin();
+		return (int)(fnd - std::vector<_type>::begin());
 	}
 
 	template<typename _type>

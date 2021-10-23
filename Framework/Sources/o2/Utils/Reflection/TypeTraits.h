@@ -124,7 +124,8 @@ namespace o2
 
 namespace o2
 {
-
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wundefined-var-template"
 	// Returns type of template parameter
 	template<typename _type>
 	const Type& GetTypeOf()
@@ -166,4 +167,5 @@ namespace o2
 			return *Type::Dummy::type;
 		}
 	}
+#pragma GCC diagnostic pop
 }

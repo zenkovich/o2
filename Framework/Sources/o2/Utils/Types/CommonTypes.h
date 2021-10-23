@@ -15,6 +15,8 @@ namespace o2
 
 	typedef int KeyboardKey;
 	typedef int CursorId;
+	
+	typedef UInt Color32Bit;
 
 	typedef UInt64 SceneUID;
 
@@ -41,8 +43,10 @@ namespace o2
 	enum class HorAlign { Left, Middle, Right, Both };
 
 	enum class ProtectSection { Public, Private, Protected };
-
+	
 	enum class Platform { Windows, Mac, iOS, Android };
+	
+	enum class DeviceType { PC, Tablet, Phone };
 
 	enum class LineType { Solid, Dash };
 

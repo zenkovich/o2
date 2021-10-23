@@ -38,13 +38,10 @@ namespace Editor
 {
 	EditorApplication::EditorApplication()
 	{
-		PushEditorScopeOnStack scope;
-		mListenersLayer = mnew CursorAreaEventListenersLayer();
 	}
 
 	EditorApplication::~EditorApplication()
 	{
-		delete mListenersLayer;
 	}
 
 	const String& EditorApplication::GetLoadedSceneName() const
@@ -95,11 +92,6 @@ namespace Editor
 	bool EditorApplication::IsPlaying() const
 	{
 		return mIsPlaying;
-	}
-
-	CursorAreaEventListenersLayer& EditorApplication::GetGameViewListenersLayer()
-	{
-		return *mListenersLayer;
 	}
 
 	void EditorApplication::OnStarted()
@@ -287,7 +279,7 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		o2Render.Clear();
-		o2Render.camera = Camera::Default();
+		o2Render.camera = Camera();
 
 		mBackground->Draw();
 		mBackSign->Draw();

@@ -12,6 +12,15 @@ o2::Platform GetEnginePlatform()
 #endif
 }
 
+o2::DeviceType GetDeviceType()
+{
+	auto platform = GetEnginePlatform();
+	if (platform == o2::Platform::Windows || platform == o2::Platform::Mac)
+		return o2::DeviceType::PC;
+	
+	return o2::DeviceType::Phone;
+}
+
 const char* GetProjectPath()
 {
 	if constexpr (IS_EDITOR)
@@ -51,7 +60,7 @@ bool IsReleaseBuild()
 
 bool IsAssetsPrebuildEnabled()
 {
-#ifdef PLATFORM_WINDOWS
+#if defined(PLATFORM_WINDOWS) || defined(PLATFORM_MAC)
 	return true;
 #else
 	return false;
@@ -70,7 +79,7 @@ const char* GetBuiltAssetsPath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/BuiltAssets/";
 #elif defined PLATFORM_MAC
-	return "BuiltAssets/Windows/Data/";
+	return "BuiltAssets/Mac/Data/";
 #endif
 }
 

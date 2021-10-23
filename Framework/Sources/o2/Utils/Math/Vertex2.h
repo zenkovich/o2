@@ -10,19 +10,19 @@ namespace o2
 	public:
 		float x, y;
 		float z;
-		ULong color;
+		Color32Bit color;
 		float tu, tv;
 
 		inline Vertex2();
 		inline Vertex2(float vx, float vy);
 		inline Vertex2(float vx, float vy, float vz);
-		inline Vertex2(float vx, float vy, float vz, ULong vcolor, float vtu, float vtv);
-		inline Vertex2(float vx, float vy, ULong vcolor, float vtu, float vtv);
-		inline Vertex2(const Vec2F& pos, ULong vcolor, float vtu, float vtv);
+		inline Vertex2(float vx, float vy, float vz, Color32Bit vcolor, float vtu, float vtv);
+		inline Vertex2(float vx, float vy, Color32Bit vcolor, float vtu, float vtv);
+		inline Vertex2(const Vec2F& pos, Color32Bit vcolor, float vtu, float vtv);
 
-		inline void Set(const Vec2F& pos, ULong ccolor, float u, float v);
-		inline void Set(float px, float py, ULong ccolor, float u, float v);
-		inline void Set(const Vec2F& pos, float cz, ULong ccolor, float u, float v);
+		inline void Set(const Vec2F& pos, Color32Bit ccolor, float u, float v);
+		inline void Set(float px, float py, Color32Bit ccolor, float u, float v);
+		inline void Set(const Vec2F& pos, float cz, Color32Bit ccolor, float u, float v);
 
 		inline void SetUV(float u, float v);
 		inline void SetUV(const Vec2F& uv);
@@ -44,33 +44,33 @@ namespace o2
 		x(vx), y(vy), z(vz), color(0), tu(0), tv(0)
 	{}
 
-	Vertex2::Vertex2(float vx, float vy, float vz, ULong vcolor, float vtu, float vtv):
+	Vertex2::Vertex2(float vx, float vy, float vz, Color32Bit vcolor, float vtu, float vtv):
 		x(vx), y(vy), z(vz), color(vcolor), tu(vtu), tv(vtv)
 	{}
 
-	Vertex2::Vertex2(float vx, float vy, ULong vcolor, float vtu, float vtv):
+	Vertex2::Vertex2(float vx, float vy, Color32Bit vcolor, float vtu, float vtv):
 		x(vx), y(vy), z(1), color(vcolor), tu(vtu), tv(vtv)
 	{}
 
-	Vertex2::Vertex2(const Vec2F& pos, ULong vcolor, float vtu, float vtv):
+	Vertex2::Vertex2(const Vec2F& pos, Color32Bit vcolor, float vtu, float vtv):
 		x(pos.x), y(pos.y), z(1), color(vcolor), tu(vtu), tv(vtv)
 	{}
 
-	void Vertex2::Set(const Vec2F& pos, ULong ccolor, float u, float v)
+	void Vertex2::Set(const Vec2F& pos, Color32Bit ccolor, float u, float v)
 	{
 		x = pos.x; y = pos.y;
 		color = ccolor;
 		tu = u; tv = v;
 	}
 
-	void Vertex2::Set(float px, float py, ULong ccolor, float u, float v)
+	void Vertex2::Set(float px, float py, Color32Bit ccolor, float u, float v)
 	{
 		x = px; y = py;
 		color = ccolor;
 		tu = u; tv = v;
 	}
 
-	void Vertex2::Set(const Vec2F& pos, float cz, ULong ccolor, float u, float v)
+	void Vertex2::Set(const Vec2F& pos, float cz, Color32Bit ccolor, float u, float v)
 	{
 		x = pos.x; y = pos.y;
 		z = cz;

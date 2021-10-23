@@ -222,7 +222,7 @@ namespace o2
 		void SetFocusable(bool focusable);
 
 		// Returns true if point is under drawable
-		bool IsUnderPoint(const Vec2F& point);
+		bool IsUnderPoint(const Vec2F& point) override;
 
 		// Sets parent,  doesn't adds to parent's children but adds to internal children
 		void SetInternalParent(Widget* parent, bool worldPositionStays = false);

@@ -193,7 +193,7 @@ namespace o2
 		virtual void OnSelectionChanged();
 
 		// Moves scroll position and updates children widgets clipping and layout
-		void MoveScrollPosition(const Vec2F& delta);
+		void MoveScrollPosition(const Vec2F& delta) override;
 
 		// Updates selections sprites rectangles
 		void UpdateSelectionSprites();

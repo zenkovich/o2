@@ -10,7 +10,7 @@ namespace o2
 
 	Input::Input()
 	{
-		if (GetEnginePlatform() == Platform::Windows)
+		if (GetDeviceType() == DeviceType::PC)
 		{
 			mCursors.Add(Cursor());
 			mCursors.Last().isPressed = false;
@@ -351,7 +351,7 @@ namespace o2
 
 	void Input::OnCursorPressedMsgApply(const Vec2F& pos, CursorId id /*= 0*/)
 	{
-		if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
+		if (id == 0 && GetDeviceType() == DeviceType::PC)
 		{
 			mCursors[0].position = pos;
 			mCursors[0].isPressed = true;
@@ -392,7 +392,7 @@ namespace o2
 			{
 				releasedCursor = cursor;
 
-				if (id == 0 && o2Config.GetPlatform() == Platform::Windows)
+				if (id == 0 && GetDeviceType() == DeviceType::PC)
 					cursor.isPressed = false;
 				else
 					mCursors.Remove(cursor);
@@ -406,7 +406,7 @@ namespace o2
 
 	void Input::OnMouseWheelMsgApply(float delta)
 	{
-		mMouseWheelDelta = delta;
+		mMouseWheelDelta += delta;
 	}
 
 	void Input::OnAltCursorPressed(const Vec2F& pos)

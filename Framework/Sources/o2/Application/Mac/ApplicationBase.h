@@ -9,14 +9,6 @@ namespace o2
 	// -------------------------------
 	class ApplicationBase
 	{
-    protected:
-        Vec2I mResolution;
-
-
-	public:
-
-		// Returns android data path
-		String GetDataPath() const;
     };
 }
 

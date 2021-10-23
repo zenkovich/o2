@@ -209,11 +209,14 @@ namespace o2
 	void VectorFont::UpdateCharacters(Vector<wchar_t>& newCharacters, int height)
 	{
 		RenderNewCharacters(newCharacters, height);
-		onCharactersRebuilt();
+		//onCharactersRebuilt();
 	}
 
 	void VectorFont::RenderNewCharacters(Vector<wchar_t>& newCharacters, int height)
 	{
+		if (!mFreeTypeFace)
+			return;
+		
 		Vec2I dpi = o2Render.GetDPI();
 		FT_Set_Char_Size(mFreeTypeFace, 0, height * 64, dpi.x, dpi.y);
 

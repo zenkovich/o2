@@ -17,7 +17,7 @@
 #endif
 
 // Application access macros
-#define o2Application Application::Instance()
+#define o2Application o2::Application::Instance()
 
 namespace o2
 {
@@ -145,6 +145,9 @@ namespace o2
 
 		// Returns application's path
 		virtual String GetBinPath() const;
+		
+		// Returns grahics scale
+		virtual float GetGraphicsScale() const;
 
 		// Returns is application ready to use
 		static bool IsReady();
@@ -200,6 +203,8 @@ namespace o2
 		Vec2F mCursorCorrectionDelta;             // Cursor corrections delta - result of infinite cursors offset
 
 		float mAccumulatedDT = 0.0f; // Accumulated delta time for fixed FPS update
+		
+		float mGraphicsScale = 1.0f; // Application graphics scale. Used in mac for retina displays
 
 	protected:
 		// Basic initialization for all platforms

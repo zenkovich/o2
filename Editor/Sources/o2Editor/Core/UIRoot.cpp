@@ -42,7 +42,23 @@ namespace Editor
 
 	void UIRoot::Draw()
 	{
+		mListenersLayer.OnBeginDraw();
+		
+		Camera prevCamera = o2Render.GetCamera();
+		
+		float scale = o2Application.GetGraphicsScale();
+		Camera camera = Camera::Default();
+		camera.scale = Vec2F(1.0f/scale, 1.0f/scale);
+		o2Render.camera = camera;
+		
+		mListenersLayer.camera = o2Render.GetCamera();
+		
 		mRootWidget->Draw();
+		
+		o2Render.SetCamera(prevCamera);
+		
+		mListenersLayer.OnEndDraw();
+		mListenersLayer.OnDrawn(Camera::Default().GetBasis());
 	}
 
 	void UIRoot::Update(float dt)
@@ -53,7 +69,7 @@ namespace Editor
 
 	void UIRoot::OnApplicationSized()
 	{
-		*mRootWidget->layout = WidgetLayout::Based(BaseCorner::Center, o2Application.GetContentSize());
+		*mRootWidget->layout = WidgetLayout::Based(BaseCorner::Center, o2Application.GetContentSize()/o2Application.GetGraphicsScale());
 	}
 
 }

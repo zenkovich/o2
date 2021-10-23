@@ -373,7 +373,7 @@ namespace o2
 	template<typename T>
 	Rect<T> Rect<T>::Scale(const Vec2<T>& scale, const Vec2<T>& origin) const
 	{
-		return ((*this) - origin).Scale(scale) + origin;
+		return Rect<T>((LeftTop() - origin)*scale + origin, (RightBottom() - origin)*scale + origin);
 	}
 
 	template<typename T>

@@ -17,7 +17,7 @@ namespace Editor
 	// ----------------------------
 	// Scrollable and zoomable view
 	// ----------------------------
-	class ScrollView: public Widget, public CursorAreaEventsListener
+	class ScrollView: public Widget, virtual public CursorAreaEventsListener
 	{
 	public:
 		bool horGridEnabled = true; // Is horizontal lines of grid are enabled

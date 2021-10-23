@@ -1,4 +1,7 @@
 #import "AppDelegate.h"
+#import <MetalKit/MetalKit.h>
+#import "RendererView.h"
+#include "ApplicationPlatformWrapper.h"
 
 @interface AppDelegate ()
 
@@ -6,12 +9,10 @@
 
 @implementation AppDelegate
 
-- (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-    // Insert code here to initialize your application
+- (void)applicationWillFinishLaunching:(NSNotification *)aNotification {
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
-    // Insert code here to tear down your application
 }
 
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {

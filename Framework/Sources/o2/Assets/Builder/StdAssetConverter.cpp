@@ -6,6 +6,7 @@
 #include "o2/Assets/Builder/AssetsBuilder.h"
 #include "o2/Assets/Types/ImageAsset.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
+#include "o2/Assets/Types/FolderAsset.h"
 
 namespace o2
 {
@@ -21,8 +22,13 @@ namespace o2
 		String sourceAssetPath = mAssetsBuilder->GetSourceAssetsPath() + node.path;
 		String buildedAssetPath = mAssetsBuilder->GetBuiltAssetsPath() + node.path;
 
-		o2FileSystem.FileCopy(sourceAssetPath, buildedAssetPath);
-		o2FileSystem.SetFileEditDate(buildedAssetPath, node.editTime);
+		if (node.meta->GetAssetType() == &TypeOf(FolderAsset)) {
+			o2FileSystem.FolderCreate(buildedAssetPath, true);
+		}
+		else {
+			o2FileSystem.FileCopy(sourceAssetPath, buildedAssetPath);
+			o2FileSystem.SetFileEditDate(buildedAssetPath, node.editTime);
+		}
 	}
 
 	void StdAssetConverter::RemoveAsset(const AssetInfo& node)

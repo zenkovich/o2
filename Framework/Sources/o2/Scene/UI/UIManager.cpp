@@ -126,7 +126,7 @@ namespace o2
 		FolderAssetRef folder(stylesPath);
 		for (auto& subAsset : folder->GetChildrenAssets())
 		{
-			if (auto& actorAsset = subAsset.Cast<ActorAsset>())
+			if (auto actorAsset = subAsset.Cast<ActorAsset>())
 				mStyleSamples.Add(actorAsset);
 		}
 	}

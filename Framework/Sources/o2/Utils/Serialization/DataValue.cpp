@@ -471,8 +471,10 @@ namespace o2
 			}
 		}
 
+		DataValue value(*mDocument);
+
 		DataMember* newMember =
-			new (mData.objectData.members + mData.objectData.count) DataMember(name, *mDocument);
+			new (mData.objectData.members + mData.objectData.count) DataMember(name, value);
 
 		mData.objectData.count++;
 

@@ -341,7 +341,7 @@ namespace o2
 	template<typename _key_type, typename _value_type>
 	int Map<_key_type, _value_type>::Count() const
 	{
-		return std::map<_key_type, _value_type>::size();
+		return (int)std::map<_key_type, _value_type>::size();
 	}
 
 	template<typename _key_type, typename _value_type>

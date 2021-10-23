@@ -121,7 +121,7 @@ namespace o2
 		int GetHeight() const;
 
 		// Updates layout
-		void UpdateSelfTransform();
+		void UpdateSelfTransform() override;
 
 		// Returns create menu group in editor
 		static String GetCreateMenuGroup();

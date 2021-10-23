@@ -36,7 +36,7 @@ namespace o2
 
 	void FolderInfo::ClampPathNames()
 	{
-		ProcessPathNamesClamping(path.Length() + 1);
+		ProcessPathNamesClamping(path.Length());
 	}
 
 	void FolderInfo::ProcessPathNamesClamping(int charCount)

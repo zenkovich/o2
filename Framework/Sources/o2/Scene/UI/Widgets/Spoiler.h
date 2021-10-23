@@ -86,7 +86,7 @@ namespace o2
 		void CreateExpandAnimation();
 
 		// Updates layout's weight and minimal size
-		virtual void UpdateLayoutParametres();
+		virtual void UpdateLayoutParametres() override;
 
 		// Checks is expand button exist and sets click callback, searching caption layer
 		void InitializeControls();

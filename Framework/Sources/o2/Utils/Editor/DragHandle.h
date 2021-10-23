@@ -334,7 +334,7 @@ namespace o2
 	{
 	public:
 		// Returns selected handles in group
-		virtual Vector<DragHandle*> GetSelectedHandles() const = 0;
+		virtual const Vector<DragHandle*>& GetSelectedHandles() const = 0;
 
 		// Returns all handles in group 
 		virtual Vector<DragHandle*> GetAllHandles() const = 0;
@@ -390,7 +390,7 @@ namespace o2
 		~SelectableDragHandlesGroup();
 
 		// Returns selected handles in group
-		Vector<DragHandle*> GetSelectedHandles() const;
+		const Vector<DragHandle*>& GetSelectedHandles() const;
 
 		// Returns all handles in group 
 		Vector<DragHandle*> GetAllHandles() const;

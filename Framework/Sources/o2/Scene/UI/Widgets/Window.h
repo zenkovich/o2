@@ -68,7 +68,7 @@ namespace o2
 								const Layout& rightBottom);
 
 		// Returns is this widget can be selected
-		bool IsFocusable() const;
+		bool IsFocusable() const override;
 
 		// Sets is window modal
 		void SetModal(bool isModal);
@@ -77,7 +77,7 @@ namespace o2
 		bool IsModal() const;
 
 		// Updates layout
-		void UpdateSelfTransform();
+		void UpdateSelfTransform() override;
 
 		// Returns back cursor events listener
 		CursorEventsArea& GetBackCursorListener();

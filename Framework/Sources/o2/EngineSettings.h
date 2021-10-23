@@ -21,6 +21,9 @@
 // Current working platform
 o2::Platform GetEnginePlatform();
 
+// Returns current device type
+o2::DeviceType GetDeviceType();
+
 // Project config file path. Relative from executable
 const char* GetProjectSettingPath();
 

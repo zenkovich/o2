@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A612A95D26DF4CAA00CD45A5 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = A612A95526DF4CAA00CD45A5 /* Renderer.mm */; };
+		A612A95D26DF4CAA00CD45A5 /* RendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = A612A95526DF4CAA00CD45A5 /* RendererView.mm */; };
 		A612A95E26DF4CAA00CD45A5 /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = A612A95826DF4CAA00CD45A5 /* AppDelegate.mm */; };
-		A612A95F26DF4CAA00CD45A5 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = A612A95926DF4CAA00CD45A5 /* Shaders.metal */; };
-		A612A96026DF4CAA00CD45A5 /* GameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = A612A95B26DF4CAA00CD45A5 /* GameViewController.mm */; };
-		A612A96326DF943000CD45A5 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A612A96226DF943000CD45A5 /* MetalKit.framework */; };
+		A646005626F644EE0096726D /* Spline.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A646005126F643E00096726D /* Spline.cpp */; };
 		A6A0AD2A26DA5E030004FFD6 /* ProjectConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AB7326DA5E020004FFD6 /* ProjectConfig.cpp */; };
 		A6A0AD2B26DA5E030004FFD6 /* PhysicsConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AB7626DA5E020004FFD6 /* PhysicsConfig.cpp */; };
 		A6A0AD2C26DA5E030004FFD6 /* EngineSettings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AB7726DA5E020004FFD6 /* EngineSettings.cpp */; };
@@ -92,7 +90,7 @@
 		A6A0AD8126DA5E030004FFD6 /* Type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC6326DA5E030004FFD6 /* Type.cpp */; };
 		A6A0AD8226DA5E030004FFD6 /* PhysicsWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC6626DA5E030004FFD6 /* PhysicsWorld.cpp */; };
 		A6A0AD8326DA5E030004FFD6 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC6A26DA5E030004FFD6 /* Input.cpp */; };
-		A6A0AD8426DA5E030004FFD6 /* ApplicationImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC6F26DA5E030004FFD6 /* ApplicationImpl.cpp */; };
+		A6A0AD8426DA5E030004FFD6 /* ApplicationImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC6F26DA5E030004FFD6 /* ApplicationImpl.mm */; };
 		A6A0AD8626DA5E030004FFD6 /* Application.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC7326DA5E030004FFD6 /* Application.cpp */; };
 		A6A0AD8826DA5E030004FFD6 /* stdafx.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC7726DA5E030004FFD6 /* stdafx.cpp */; };
 		A6A0AD8926DA5E030004FFD6 /* ActorCreationMode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AC7926DA5E030004FFD6 /* ActorCreationMode.cpp */; };
@@ -180,20 +178,22 @@
 		A6A0ADDB26DA5E030004FFD6 /* IAssetConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AD2526DA5E030004FFD6 /* IAssetConverter.cpp */; };
 		A6A0ADDC26DA5E030004FFD6 /* AssetsBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AD2626DA5E030004FFD6 /* AssetsBuilder.cpp */; };
 		A6A0ADDD26DA5E030004FFD6 /* AtlasAssetConverter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0AD2926DA5E030004FFD6 /* AtlasAssetConverter.cpp */; };
-		A6A0ADE526DA61DC0004FFD6 /* RenderImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0ADE026DA61DC0004FFD6 /* RenderImpl.cpp */; };
-		A6A0ADE726DA61DC0004FFD6 /* TextureImpl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6A0ADE426DA61DC0004FFD6 /* TextureImpl.cpp */; };
+		A6A0ADE526DA61DC0004FFD6 /* RenderImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6A0ADE026DA61DC0004FFD6 /* RenderImpl.mm */; };
+		A6A0ADE726DA61DC0004FFD6 /* TextureImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6A0ADE426DA61DC0004FFD6 /* TextureImpl.mm */; };
+		A6B2148526E1226E0093D355 /* FileSystemImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6B2148326E1226E0093D355 /* FileSystemImpl.mm */; };
+		A6B2148626E1226E0093D355 /* FileImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = A6B2148426E1226E0093D355 /* FileImpl.mm */; };
+		A6B2148926E1528B0093D355 /* StringUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A6B2148826E1528B0093D355 /* StringUtils.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		A612A95526DF4CAA00CD45A5 /* Renderer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Renderer.mm; sourceTree = "<group>"; };
+		A612A95526DF4CAA00CD45A5 /* RendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RendererView.mm; sourceTree = "<group>"; };
 		A612A95626DF4CAA00CD45A5 /* ShaderTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		A612A95726DF4CAA00CD45A5 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A612A95826DF4CAA00CD45A5 /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
-		A612A95926DF4CAA00CD45A5 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
-		A612A95A26DF4CAA00CD45A5 /* Renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
-		A612A95B26DF4CAA00CD45A5 /* GameViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GameViewController.mm; sourceTree = "<group>"; };
-		A612A95C26DF4CAA00CD45A5 /* GameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		A612A96226DF943000CD45A5 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		A612A95A26DF4CAA00CD45A5 /* RendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RendererView.h; sourceTree = "<group>"; };
+		A646004A26F12EDC0096726D /* MetalWrappers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MetalWrappers.h; sourceTree = "<group>"; };
+		A646005026F643E00096726D /* Spline.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Spline.h; sourceTree = "<group>"; };
+		A646005126F643E00096726D /* Spline.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Spline.cpp; sourceTree = "<group>"; };
 		A68E84EE26D5464400DD2240 /* libFramework.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libFramework.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		A6A0AB7026DA5E020004FFD6 /* O2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = O2.h; sourceTree = "<group>"; };
 		A6A0AB7126DA5E020004FFD6 /* stdafx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stdafx.h; sourceTree = "<group>"; };
@@ -403,7 +403,7 @@
 		A6A0AC6B26DA5E030004FFD6 /* VKCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VKCodes.h; sourceTree = "<group>"; };
 		A6A0AC6C26DA5E030004FFD6 /* Application.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Application.h; sourceTree = "<group>"; };
 		A6A0AC6E26DA5E030004FFD6 /* ApplicationBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationBase.h; sourceTree = "<group>"; };
-		A6A0AC6F26DA5E030004FFD6 /* ApplicationImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationImpl.cpp; sourceTree = "<group>"; };
+		A6A0AC6F26DA5E030004FFD6 /* ApplicationImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ApplicationImpl.mm; sourceTree = "<group>"; };
 		A6A0AC7326DA5E030004FFD6 /* Application.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Application.cpp; sourceTree = "<group>"; };
 		A6A0AC7726DA5E030004FFD6 /* stdafx.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stdafx.cpp; sourceTree = "<group>"; };
 		A6A0AC7926DA5E030004FFD6 /* ActorCreationMode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ActorCreationMode.cpp; sourceTree = "<group>"; };
@@ -575,10 +575,15 @@
 		A6A0AD2726DA5E030004FFD6 /* FolderAssetConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FolderAssetConverter.h; sourceTree = "<group>"; };
 		A6A0AD2826DA5E030004FFD6 /* ImageAssetConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageAssetConverter.h; sourceTree = "<group>"; };
 		A6A0AD2926DA5E030004FFD6 /* AtlasAssetConverter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AtlasAssetConverter.cpp; sourceTree = "<group>"; };
-		A6A0ADE026DA61DC0004FFD6 /* RenderImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderImpl.cpp; sourceTree = "<group>"; };
+		A6A0ADE026DA61DC0004FFD6 /* RenderImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = RenderImpl.mm; sourceTree = "<group>"; };
 		A6A0ADE126DA61DC0004FFD6 /* RenderBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderBase.h; sourceTree = "<group>"; };
 		A6A0ADE226DA61DC0004FFD6 /* TextureBase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureBase.h; sourceTree = "<group>"; };
-		A6A0ADE426DA61DC0004FFD6 /* TextureImpl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TextureImpl.cpp; sourceTree = "<group>"; };
+		A6A0ADE426DA61DC0004FFD6 /* TextureImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = TextureImpl.mm; sourceTree = "<group>"; };
+		A6B2148326E1226E0093D355 /* FileSystemImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileSystemImpl.mm; sourceTree = "<group>"; };
+		A6B2148426E1226E0093D355 /* FileImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = FileImpl.mm; sourceTree = "<group>"; };
+		A6B2148726E1528B0093D355 /* StringUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringUtils.h; sourceTree = "<group>"; };
+		A6B2148826E1528B0093D355 /* StringUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StringUtils.cpp; sourceTree = "<group>"; };
+		E294FC03FFE30A4E5937F221 /* ApplicationPlatformWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ApplicationPlatformWrapper.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -586,7 +591,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A612A96326DF943000CD45A5 /* MetalKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -596,7 +600,6 @@
 		A612A96126DF943000CD45A5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A612A96226DF943000CD45A5 /* MetalKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -621,19 +624,19 @@
 		A6A0AB6F26DA5E020004FFD6 /* o2 */ = {
 			isa = PBXGroup;
 			children = (
-				A6A0AB7726DA5E020004FFD6 /* EngineSettings.cpp */,
-				A6A0AC7726DA5E030004FFD6 /* stdafx.cpp */,
-				A6A0AC6426DA5E030004FFD6 /* EngineSettings.h */,
-				A6A0AB7026DA5E020004FFD6 /* O2.h */,
-				A6A0AB7126DA5E020004FFD6 /* stdafx.h */,
 				A6A0ABAB26DA5E020004FFD6 /* Animation */,
 				A6A0AC6826DA5E030004FFD6 /* Application */,
 				A6A0ACFB26DA5E030004FFD6 /* Assets */,
 				A6A0AB7226DA5E020004FFD6 /* Config */,
+				A6A0AB7726DA5E020004FFD6 /* EngineSettings.cpp */,
+				A6A0AC6426DA5E030004FFD6 /* EngineSettings.h */,
 				A6A0ACE826DA5E030004FFD6 /* Events */,
+				A6A0AB7026DA5E020004FFD6 /* O2.h */,
 				A6A0AC6526DA5E030004FFD6 /* Physics */,
 				A6A0AB7826DA5E020004FFD6 /* Render */,
 				A6A0AC7826DA5E030004FFD6 /* Scene */,
+				A6A0AC7726DA5E030004FFD6 /* stdafx.cpp */,
+				A6A0AB7126DA5E020004FFD6 /* stdafx.h */,
 				A6A0ABC526DA5E020004FFD6 /* Utils */,
 			);
 			name = o2;
@@ -644,8 +647,8 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AB7626DA5E020004FFD6 /* PhysicsConfig.cpp */,
-				A6A0AB7326DA5E020004FFD6 /* ProjectConfig.cpp */,
 				A6A0AB7426DA5E020004FFD6 /* PhysicsConfig.h */,
+				A6A0AB7326DA5E020004FFD6 /* ProjectConfig.cpp */,
 				A6A0AB7526DA5E020004FFD6 /* ProjectConfig.h */,
 			);
 			path = Config;
@@ -655,42 +658,42 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AB8026DA5E020004FFD6 /* BitmapFont.cpp */,
-				A6A0AB8426DA5E020004FFD6 /* Camera.cpp */,
-				A6A0AB8926DA5E020004FFD6 /* Font.cpp */,
-				A6A0ABA826DA5E020004FFD6 /* FontRef.cpp */,
-				A6A0AB8F26DA5E020004FFD6 /* IDrawable.cpp */,
-				A6A0AB7D26DA5E020004FFD6 /* Mesh.cpp */,
-				A6A0ABAA26DA5E020004FFD6 /* ParticlesEffects.cpp */,
-				A6A0ABA026DA5E020004FFD6 /* ParticlesEmitter.cpp */,
-				A6A0AB8D26DA5E020004FFD6 /* ParticlesEmitterShapes.cpp */,
-				A6A0AB9B26DA5E020004FFD6 /* RectDrawable.cpp */,
-				A6A0AB7B26DA5E020004FFD6 /* Render.cpp */,
-				A6A0AB8726DA5E020004FFD6 /* Sprite.cpp */,
-				A6A0AB8126DA5E020004FFD6 /* Text.cpp */,
-				A6A0AB8A26DA5E020004FFD6 /* Texture.cpp */,
-				A6A0AB9C26DA5E020004FFD6 /* TextureRef.cpp */,
-				A6A0AB8326DA5E020004FFD6 /* VectorFont.cpp */,
-				A6A0AB7C26DA5E020004FFD6 /* VectorFontEffects.cpp */,
 				A6A0AB8626DA5E020004FFD6 /* BitmapFont.h */,
+				A6A0AB8426DA5E020004FFD6 /* Camera.cpp */,
 				A6A0AB8526DA5E020004FFD6 /* Camera.h */,
 				A6A0AB8826DA5E020004FFD6 /* DrawPolyLine.h */,
+				A6A0AB8926DA5E020004FFD6 /* Font.cpp */,
 				A6A0AB9D26DA5E020004FFD6 /* Font.h */,
+				A6A0ABA826DA5E020004FFD6 /* FontRef.cpp */,
 				A6A0AB9226DA5E020004FFD6 /* FontRef.h */,
+				A6A0AB8F26DA5E020004FFD6 /* IDrawable.cpp */,
 				A6A0AB7E26DA5E020004FFD6 /* IDrawable.h */,
+				A6A0ADDE26DA61DC0004FFD6 /* Mac */,
+				A6A0AB7D26DA5E020004FFD6 /* Mesh.cpp */,
 				A6A0AB8B26DA5E020004FFD6 /* Mesh.h */,
 				A6A0AB9326DA5E020004FFD6 /* Particle.h */,
+				A6A0ABAA26DA5E020004FFD6 /* ParticlesEffects.cpp */,
 				A6A0AB9026DA5E020004FFD6 /* ParticlesEffects.h */,
+				A6A0ABA026DA5E020004FFD6 /* ParticlesEmitter.cpp */,
 				A6A0AB7926DA5E020004FFD6 /* ParticlesEmitter.h */,
+				A6A0AB8D26DA5E020004FFD6 /* ParticlesEmitterShapes.cpp */,
 				A6A0AB8C26DA5E020004FFD6 /* ParticlesEmitterShapes.h */,
+				A6A0AB9B26DA5E020004FFD6 /* RectDrawable.cpp */,
 				A6A0AB8E26DA5E020004FFD6 /* RectDrawable.h */,
+				A6A0AB7B26DA5E020004FFD6 /* Render.cpp */,
 				A6A0ABA926DA5E020004FFD6 /* Render.h */,
+				A6A0AB8726DA5E020004FFD6 /* Sprite.cpp */,
 				A6A0AB9126DA5E020004FFD6 /* Sprite.h */,
+				A6A0AB8126DA5E020004FFD6 /* Text.cpp */,
 				A6A0AB8226DA5E020004FFD6 /* Text.h */,
+				A6A0AB8A26DA5E020004FFD6 /* Texture.cpp */,
 				A6A0AB9E26DA5E020004FFD6 /* Texture.h */,
+				A6A0AB9C26DA5E020004FFD6 /* TextureRef.cpp */,
 				A6A0AB9F26DA5E020004FFD6 /* TextureRef.h */,
+				A6A0AB8326DA5E020004FFD6 /* VectorFont.cpp */,
 				A6A0AB7F26DA5E020004FFD6 /* VectorFont.h */,
+				A6A0AB7C26DA5E020004FFD6 /* VectorFontEffects.cpp */,
 				A6A0AB7A26DA5E020004FFD6 /* VectorFontEffects.h */,
-				A6A0ADDE26DA61DC0004FFD6 /* Mac */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -699,18 +702,18 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ABBE26DA5E020004FFD6 /* Animate.cpp */,
-				A6A0ABAD26DA5E020004FFD6 /* AnimationClip.cpp */,
-				A6A0ABC026DA5E020004FFD6 /* AnimationMask.cpp */,
-				A6A0ABBC26DA5E020004FFD6 /* AnimationPlayer.cpp */,
-				A6A0ABBD26DA5E020004FFD6 /* AnimationState.cpp */,
-				A6A0ABC126DA5E020004FFD6 /* IAnimation.cpp */,
 				A6A0ABAC26DA5E020004FFD6 /* Animate.h */,
+				A6A0ABAD26DA5E020004FFD6 /* AnimationClip.cpp */,
 				A6A0ABBF26DA5E020004FFD6 /* AnimationClip.h */,
+				A6A0ABC026DA5E020004FFD6 /* AnimationMask.cpp */,
 				A6A0ABAF26DA5E020004FFD6 /* AnimationMask.h */,
+				A6A0ABBC26DA5E020004FFD6 /* AnimationPlayer.cpp */,
 				A6A0ABBB26DA5E020004FFD6 /* AnimationPlayer.h */,
+				A6A0ABBD26DA5E020004FFD6 /* AnimationState.cpp */,
 				A6A0ABC426DA5E020004FFD6 /* AnimationState.h */,
-				A6A0ABAE26DA5E020004FFD6 /* IAnimation.h */,
 				A6A0ABC226DA5E020004FFD6 /* Editor */,
+				A6A0ABC126DA5E020004FFD6 /* IAnimation.cpp */,
+				A6A0ABAE26DA5E020004FFD6 /* IAnimation.h */,
 				A6A0ABB026DA5E020004FFD6 /* Tracks */,
 			);
 			path = Animation;
@@ -744,23 +747,25 @@
 		A6A0ABC526DA5E020004FFD6 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A6A0AC3226DA5E020004FFD6 /* Function.h */,
-				A6A0AC3126DA5E020004FFD6 /* Property.h */,
-				A6A0ABEB26DA5E020004FFD6 /* Singleton.h */,
-				A6A0ABC626DA5E020004FFD6 /* ValueProxy.h */,
 				A6A0ABFB26DA5E020004FFD6 /* Basic */,
 				A6A0ABEC26DA5E020004FFD6 /* Bitmap */,
 				A6A0AC4926DA5E020004FFD6 /* Debug */,
 				A6A0AC3326DA5E020004FFD6 /* Editor */,
 				A6A0ABFF26DA5E020004FFD6 /* FileSystem */,
+				A6A0AC3226DA5E020004FFD6 /* Function.h */,
 				A6A0AC0C26DA5E020004FFD6 /* Math */,
 				A6A0ABDE26DA5E020004FFD6 /* Memory */,
+				A6A0AC3126DA5E020004FFD6 /* Property.h */,
 				A6A0AC5726DA5E030004FFD6 /* Reflection */,
 				A6A0ABF126DA5E020004FFD6 /* Serialization */,
+				A6A0ABEB26DA5E020004FFD6 /* Singleton.h */,
+				A6B2148826E1528B0093D355 /* StringUtils.cpp */,
+				A6B2148726E1528B0093D355 /* StringUtils.h */,
 				A6A0AC2526DA5E020004FFD6 /* System */,
 				A6A0ABC726DA5E020004FFD6 /* Tasks */,
 				A6A0ABCC26DA5E020004FFD6 /* Tools */,
 				A6A0ABD026DA5E020004FFD6 /* Types */,
+				A6A0ABC626DA5E020004FFD6 /* ValueProxy.h */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -769,8 +774,8 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ABCB26DA5E020004FFD6 /* Task.cpp */,
-				A6A0ABCA26DA5E020004FFD6 /* TaskManager.cpp */,
 				A6A0ABC926DA5E020004FFD6 /* Task.h */,
+				A6A0ABCA26DA5E020004FFD6 /* TaskManager.cpp */,
 				A6A0ABC826DA5E020004FFD6 /* TaskManager.h */,
 			);
 			path = Tasks;
@@ -779,8 +784,8 @@
 		A6A0ABCC26DA5E020004FFD6 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				A6A0ABCF26DA5E020004FFD6 /* RectPacker.cpp */,
 				A6A0ABCD26DA5E020004FFD6 /* KeySearch.h */,
+				A6A0ABCF26DA5E020004FFD6 /* RectPacker.cpp */,
 				A6A0ABCE26DA5E020004FFD6 /* RectPacker.h */,
 			);
 			path = Tools;
@@ -790,14 +795,14 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ABD226DA5E020004FFD6 /* CommonTypes.cpp */,
-				A6A0ABD326DA5E020004FFD6 /* UID.cpp */,
 				A6A0ABD426DA5E020004FFD6 /* CommonTypes.h */,
+				A6A0ABD626DA5E020004FFD6 /* Containers */,
 				A6A0ABDB26DA5E020004FFD6 /* Ref.h */,
 				A6A0ABDD26DA5E020004FFD6 /* String.h */,
 				A6A0ABD526DA5E020004FFD6 /* StringDef.h */,
 				A6A0ABD126DA5E020004FFD6 /* StringImpl.h */,
+				A6A0ABD326DA5E020004FFD6 /* UID.cpp */,
 				A6A0ABDC26DA5E020004FFD6 /* UID.h */,
-				A6A0ABD626DA5E020004FFD6 /* Containers */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -816,9 +821,9 @@
 		A6A0ABDE26DA5E020004FFD6 /* Memory */ = {
 			isa = PBXGroup;
 			children = (
+				A6A0ABE126DA5E020004FFD6 /* Allocators */,
 				A6A0ABE026DA5E020004FFD6 /* MemoryManager.cpp */,
 				A6A0ABDF26DA5E020004FFD6 /* MemoryManager.h */,
-				A6A0ABE126DA5E020004FFD6 /* Allocators */,
 			);
 			path = Memory;
 			sourceTree = "<group>";
@@ -827,13 +832,13 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ABE626DA5E020004FFD6 /* ChunkPoolAllocator.cpp */,
-				A6A0ABE326DA5E020004FFD6 /* DefaultAllocator.cpp */,
-				A6A0ABE526DA5E020004FFD6 /* LinearAllocator.cpp */,
-				A6A0ABE826DA5E020004FFD6 /* StackAllocator.cpp */,
 				A6A0ABE726DA5E020004FFD6 /* ChunkPoolAllocator.h */,
+				A6A0ABE326DA5E020004FFD6 /* DefaultAllocator.cpp */,
 				A6A0ABE226DA5E020004FFD6 /* DefaultAllocator.h */,
 				A6A0ABE926DA5E020004FFD6 /* IAllocator.h */,
+				A6A0ABE526DA5E020004FFD6 /* LinearAllocator.cpp */,
 				A6A0ABEA26DA5E020004FFD6 /* LinearAllocator.h */,
+				A6A0ABE826DA5E020004FFD6 /* StackAllocator.cpp */,
 				A6A0ABE426DA5E020004FFD6 /* StackAllocator.h */,
 			);
 			path = Allocators;
@@ -843,8 +848,8 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ABED26DA5E020004FFD6 /* Bitmap.cpp */,
-				A6A0ABEE26DA5E020004FFD6 /* PngFormat.cpp */,
 				A6A0ABF026DA5E020004FFD6 /* Bitmap.h */,
+				A6A0ABEE26DA5E020004FFD6 /* PngFormat.cpp */,
 				A6A0ABEF26DA5E020004FFD6 /* PngFormat.h */,
 			);
 			path = Bitmap;
@@ -854,13 +859,13 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ABF926DA5E020004FFD6 /* DataValue.cpp */,
-				A6A0ABF326DA5E020004FFD6 /* JsonDataFormat.cpp */,
-				A6A0ABF726DA5E020004FFD6 /* Serializable.cpp */,
-				A6A0ABF526DA5E020004FFD6 /* XmlDataFormat.cpp */,
 				A6A0ABFA26DA5E020004FFD6 /* DataValue.h */,
+				A6A0ABF326DA5E020004FFD6 /* JsonDataFormat.cpp */,
 				A6A0ABF226DA5E020004FFD6 /* JsonDataFormat.h */,
+				A6A0ABF726DA5E020004FFD6 /* Serializable.cpp */,
 				A6A0ABF426DA5E020004FFD6 /* Serializable.h */,
 				A6A0ABF826DA5E020004FFD6 /* SerializeFieldProcessors.h */,
+				A6A0ABF526DA5E020004FFD6 /* XmlDataFormat.cpp */,
 				A6A0ABF626DA5E020004FFD6 /* XmlDataFormat.h */,
 			);
 			path = Serialization;
@@ -879,11 +884,12 @@
 		A6A0ABFF26DA5E020004FFD6 /* FileSystem */ = {
 			isa = PBXGroup;
 			children = (
+				A6B2148226E1226E0093D355 /* Mac */,
 				A6A0AC0526DA5E020004FFD6 /* File.cpp */,
-				A6A0AC0126DA5E020004FFD6 /* FileInfo.cpp */,
-				A6A0AC0426DA5E020004FFD6 /* FileSystem.cpp */,
 				A6A0AC0326DA5E020004FFD6 /* File.h */,
+				A6A0AC0126DA5E020004FFD6 /* FileInfo.cpp */,
 				A6A0AC0226DA5E020004FFD6 /* FileInfo.h */,
+				A6A0AC0426DA5E020004FFD6 /* FileSystem.cpp */,
 				A6A0AC0026DA5E020004FFD6 /* FileSystem.h */,
 			);
 			path = FileSystem;
@@ -892,27 +898,29 @@
 		A6A0AC0C26DA5E020004FFD6 /* Math */ = {
 			isa = PBXGroup;
 			children = (
-				A6A0AC1826DA5E020004FFD6 /* Color.cpp */,
-				A6A0AC1126DA5E020004FFD6 /* Curve.cpp */,
-				A6A0AC0E26DA5E020004FFD6 /* Geometry.cpp */,
-				A6A0AC0D26DA5E020004FFD6 /* Intersection.cpp */,
-				A6A0AC1526DA5E020004FFD6 /* Layout.cpp */,
-				A6A0AC1426DA5E020004FFD6 /* Math.cpp */,
-				A6A0AC1D26DA5E020004FFD6 /* Transform.cpp */,
+				A646005126F643E00096726D /* Spline.cpp */,
+				A646005026F643E00096726D /* Spline.h */,
 				A6A0AC2126DA5E020004FFD6 /* ApproximationValue.h */,
 				A6A0AC0F26DA5E020004FFD6 /* Basis.h */,
 				A6A0AC2326DA5E020004FFD6 /* Border.h */,
+				A6A0AC1826DA5E020004FFD6 /* Color.cpp */,
 				A6A0AC1626DA5E020004FFD6 /* Color.h */,
+				A6A0AC1126DA5E020004FFD6 /* Curve.cpp */,
 				A6A0AC1A26DA5E020004FFD6 /* Curve.h */,
+				A6A0AC0E26DA5E020004FFD6 /* Geometry.cpp */,
 				A6A0AC2426DA5E020004FFD6 /* Geometry.h */,
 				A6A0AC1326DA5E020004FFD6 /* Interpolation.h */,
+				A6A0AC0D26DA5E020004FFD6 /* Intersection.cpp */,
 				A6A0AC1026DA5E020004FFD6 /* Intersection.h */,
+				A6A0AC1526DA5E020004FFD6 /* Layout.cpp */,
 				A6A0AC1B26DA5E020004FFD6 /* Layout.h */,
+				A6A0AC1426DA5E020004FFD6 /* Math.cpp */,
 				A6A0AC2026DA5E020004FFD6 /* Math.h */,
 				A6A0AC2226DA5E020004FFD6 /* OBB.h */,
 				A6A0AC1926DA5E020004FFD6 /* PolyLine.h */,
 				A6A0AC1F26DA5E020004FFD6 /* Ray.h */,
 				A6A0AC1C26DA5E020004FFD6 /* Rect.h */,
+				A6A0AC1D26DA5E020004FFD6 /* Transform.cpp */,
 				A6A0AC1E26DA5E020004FFD6 /* Transform.h */,
 				A6A0AC1226DA5E020004FFD6 /* Vector2.h */,
 				A6A0AC1726DA5E020004FFD6 /* Vertex2.h */,
@@ -924,8 +932,8 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC3026DA5E020004FFD6 /* Clipboard.cpp */,
-				A6A0AC2F26DA5E020004FFD6 /* ShortcutKeys.cpp */,
 				A6A0AC2E26DA5E020004FFD6 /* Clipboard.h */,
+				A6A0AC2F26DA5E020004FFD6 /* ShortcutKeys.cpp */,
 				A6A0AC2626DA5E020004FFD6 /* ShortcutKeys.h */,
 				A6A0AC2726DA5E020004FFD6 /* Time */,
 			);
@@ -936,10 +944,10 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC2D26DA5E020004FFD6 /* Time.cpp */,
-				A6A0AC2926DA5E020004FFD6 /* Timer.cpp */,
-				A6A0AC2B26DA5E020004FFD6 /* TimeStamp.cpp */,
 				A6A0AC2826DA5E020004FFD6 /* Time.h */,
+				A6A0AC2926DA5E020004FFD6 /* Timer.cpp */,
 				A6A0AC2A26DA5E020004FFD6 /* Timer.h */,
+				A6A0AC2B26DA5E020004FFD6 /* TimeStamp.cpp */,
 				A6A0AC2C26DA5E020004FFD6 /* TimeStamp.h */,
 			);
 			path = Time;
@@ -949,18 +957,18 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC4726DA5E020004FFD6 /* ActorDifferences.cpp */,
-				A6A0AC3626DA5E020004FFD6 /* DragAndDrop.cpp */,
-				A6A0AC3926DA5E020004FFD6 /* DragHandle.cpp */,
-				A6A0AC3A26DA5E020004FFD6 /* EditorScope.cpp */,
-				A6A0AC3826DA5E020004FFD6 /* FrameHandles.cpp */,
-				A6A0AC4426DA5E020004FFD6 /* SceneEditableObject.cpp */,
 				A6A0AC3526DA5E020004FFD6 /* ActorDifferences.h */,
-				A6A0AC4526DA5E020004FFD6 /* DragAndDrop.h */,
-				A6A0AC4826DA5E020004FFD6 /* DragHandle.h */,
-				A6A0AC4626DA5E020004FFD6 /* EditorScope.h */,
-				A6A0AC3426DA5E020004FFD6 /* FrameHandles.h */,
-				A6A0AC3726DA5E020004FFD6 /* SceneEditableObject.h */,
 				A6A0AC3B26DA5E020004FFD6 /* Attributes */,
+				A6A0AC3626DA5E020004FFD6 /* DragAndDrop.cpp */,
+				A6A0AC4526DA5E020004FFD6 /* DragAndDrop.h */,
+				A6A0AC3926DA5E020004FFD6 /* DragHandle.cpp */,
+				A6A0AC4826DA5E020004FFD6 /* DragHandle.h */,
+				A6A0AC3A26DA5E020004FFD6 /* EditorScope.cpp */,
+				A6A0AC4626DA5E020004FFD6 /* EditorScope.h */,
+				A6A0AC3826DA5E020004FFD6 /* FrameHandles.cpp */,
+				A6A0AC3426DA5E020004FFD6 /* FrameHandles.h */,
+				A6A0AC4426DA5E020004FFD6 /* SceneEditableObject.cpp */,
+				A6A0AC3726DA5E020004FFD6 /* SceneEditableObject.h */,
 			);
 			path = Editor;
 			sourceTree = "<group>";
@@ -984,12 +992,12 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC4C26DA5E020004FFD6 /* Assert.cpp */,
-				A6A0AC4E26DA5E020004FFD6 /* Debug.cpp */,
-				A6A0AC4D26DA5E020004FFD6 /* StackTrace.cpp */,
 				A6A0AC5626DA5E030004FFD6 /* Assert.h */,
+				A6A0AC4E26DA5E020004FFD6 /* Debug.cpp */,
 				A6A0AC4A26DA5E020004FFD6 /* Debug.h */,
-				A6A0AC4B26DA5E020004FFD6 /* StackTrace.h */,
 				A6A0AC4F26DA5E030004FFD6 /* Log */,
+				A6A0AC4D26DA5E020004FFD6 /* StackTrace.cpp */,
+				A6A0AC4B26DA5E020004FFD6 /* StackTrace.h */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -998,10 +1006,10 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC5026DA5E030004FFD6 /* ConsoleLogStream.cpp */,
-				A6A0AC5226DA5E030004FFD6 /* FileLogStream.cpp */,
-				A6A0AC5126DA5E030004FFD6 /* LogStream.cpp */,
 				A6A0AC5426DA5E030004FFD6 /* ConsoleLogStream.h */,
+				A6A0AC5226DA5E030004FFD6 /* FileLogStream.cpp */,
 				A6A0AC5526DA5E030004FFD6 /* FileLogStream.h */,
+				A6A0AC5126DA5E030004FFD6 /* LogStream.cpp */,
 				A6A0AC5326DA5E030004FFD6 /* LogStream.h */,
 			);
 			path = Log;
@@ -1010,15 +1018,15 @@
 		A6A0AC5726DA5E030004FFD6 /* Reflection */ = {
 			isa = PBXGroup;
 			children = (
-				A6A0AC5F26DA5E030004FFD6 /* FieldInfo.cpp */,
-				A6A0AC5C26DA5E030004FFD6 /* FunctionInfo.cpp */,
-				A6A0AC6026DA5E030004FFD6 /* Reflection.cpp */,
-				A6A0AC6326DA5E030004FFD6 /* Type.cpp */,
 				A6A0AC5B26DA5E030004FFD6 /* Attributes.h */,
 				A6A0AC5A26DA5E030004FFD6 /* Enum.h */,
+				A6A0AC5F26DA5E030004FFD6 /* FieldInfo.cpp */,
 				A6A0AC6126DA5E030004FFD6 /* FieldInfo.h */,
+				A6A0AC5C26DA5E030004FFD6 /* FunctionInfo.cpp */,
 				A6A0AC5D26DA5E030004FFD6 /* FunctionInfo.h */,
+				A6A0AC6026DA5E030004FFD6 /* Reflection.cpp */,
 				A6A0AC6226DA5E030004FFD6 /* Reflection.h */,
+				A6A0AC6326DA5E030004FFD6 /* Type.cpp */,
 				A6A0AC5826DA5E030004FFD6 /* Type.h */,
 				A6A0AC5E26DA5E030004FFD6 /* TypeSerializer.h */,
 				A6A0AC5926DA5E030004FFD6 /* TypeTraits.h */,
@@ -1039,11 +1047,11 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC7326DA5E030004FFD6 /* Application.cpp */,
-				A6A0AC6A26DA5E030004FFD6 /* Input.cpp */,
 				A6A0AC6C26DA5E030004FFD6 /* Application.h */,
+				A6A0AC6A26DA5E030004FFD6 /* Input.cpp */,
 				A6A0AC6926DA5E030004FFD6 /* Input.h */,
-				A6A0AC6B26DA5E030004FFD6 /* VKCodes.h */,
 				A6A0AC6D26DA5E030004FFD6 /* Mac */,
+				A6A0AC6B26DA5E030004FFD6 /* VKCodes.h */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -1053,14 +1061,11 @@
 			children = (
 				A612A95726DF4CAA00CD45A5 /* AppDelegate.h */,
 				A612A95826DF4CAA00CD45A5 /* AppDelegate.mm */,
-				A612A95C26DF4CAA00CD45A5 /* GameViewController.h */,
-				A612A95B26DF4CAA00CD45A5 /* GameViewController.mm */,
-				A612A95A26DF4CAA00CD45A5 /* Renderer.h */,
-				A612A95526DF4CAA00CD45A5 /* Renderer.mm */,
-				A612A95926DF4CAA00CD45A5 /* Shaders.metal */,
-				A612A95626DF4CAA00CD45A5 /* ShaderTypes.h */,
-				A6A0AC6F26DA5E030004FFD6 /* ApplicationImpl.cpp */,
 				A6A0AC6E26DA5E030004FFD6 /* ApplicationBase.h */,
+				A6A0AC6F26DA5E030004FFD6 /* ApplicationImpl.mm */,
+				A612A95A26DF4CAA00CD45A5 /* RendererView.h */,
+				A612A95526DF4CAA00CD45A5 /* RendererView.mm */,
+				E294FC03FFE30A4E5937F221 /* ApplicationPlatformWrapper.h */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -1069,36 +1074,36 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ACC126DA5E030004FFD6 /* Actor.cpp */,
+				A6A0ACD026DA5E030004FFD6 /* Actor.h */,
 				A6A0AC7926DA5E030004FFD6 /* ActorCreationMode.cpp */,
+				A6A0ACC026DA5E030004FFD6 /* ActorCreationMode.h */,
 				A6A0ACD426DA5E030004FFD6 /* ActorEditor.cpp */,
 				A6A0ACE526DA5E030004FFD6 /* ActorRef.cpp */,
-				A6A0ACBD26DA5E030004FFD6 /* ActorRefResolver.cpp */,
-				A6A0ACE726DA5E030004FFD6 /* ActorTransform.cpp */,
-				A6A0ACE226DA5E030004FFD6 /* CameraActor.cpp */,
-				A6A0ACBF26DA5E030004FFD6 /* Component.cpp */,
-				A6A0ACD126DA5E030004FFD6 /* ComponentRef.cpp */,
-				A6A0ACD626DA5E030004FFD6 /* DrawableComponent.cpp */,
-				A6A0ACE326DA5E030004FFD6 /* ISceneDrawable.cpp */,
-				A6A0ACBB26DA5E030004FFD6 /* Scene.cpp */,
-				A6A0ACC626DA5E030004FFD6 /* SceneLayer.cpp */,
-				A6A0ACC526DA5E030004FFD6 /* SceneLayersList.cpp */,
-				A6A0ACC326DA5E030004FFD6 /* Tags.cpp */,
-				A6A0ACD026DA5E030004FFD6 /* Actor.h */,
-				A6A0ACC026DA5E030004FFD6 /* ActorCreationMode.h */,
 				A6A0ACC426DA5E030004FFD6 /* ActorRef.h */,
+				A6A0ACBD26DA5E030004FFD6 /* ActorRefResolver.cpp */,
 				A6A0ACE126DA5E030004FFD6 /* ActorRefResolver.h */,
+				A6A0ACE726DA5E030004FFD6 /* ActorTransform.cpp */,
 				A6A0ACBC26DA5E030004FFD6 /* ActorTransform.h */,
+				A6A0ACE226DA5E030004FFD6 /* CameraActor.cpp */,
 				A6A0ACBA26DA5E030004FFD6 /* CameraActor.h */,
+				A6A0ACBF26DA5E030004FFD6 /* Component.cpp */,
 				A6A0ACD726DA5E030004FFD6 /* Component.h */,
+				A6A0ACD126DA5E030004FFD6 /* ComponentRef.cpp */,
 				A6A0ACD226DA5E030004FFD6 /* ComponentRef.h */,
-				A6A0ACE426DA5E030004FFD6 /* DrawableComponent.h */,
-				A6A0ACD326DA5E030004FFD6 /* ISceneDrawable.h */,
-				A6A0ACE626DA5E030004FFD6 /* Scene.h */,
-				A6A0ACC226DA5E030004FFD6 /* SceneLayer.h */,
-				A6A0ACBE26DA5E030004FFD6 /* SceneLayersList.h */,
-				A6A0ACD526DA5E030004FFD6 /* Tags.h */,
 				A6A0ACC726DA5E030004FFD6 /* Components */,
+				A6A0ACD626DA5E030004FFD6 /* DrawableComponent.cpp */,
+				A6A0ACE426DA5E030004FFD6 /* DrawableComponent.h */,
+				A6A0ACE326DA5E030004FFD6 /* ISceneDrawable.cpp */,
+				A6A0ACD326DA5E030004FFD6 /* ISceneDrawable.h */,
 				A6A0ACD826DA5E030004FFD6 /* Physics */,
+				A6A0ACBB26DA5E030004FFD6 /* Scene.cpp */,
+				A6A0ACE626DA5E030004FFD6 /* Scene.h */,
+				A6A0ACC626DA5E030004FFD6 /* SceneLayer.cpp */,
+				A6A0ACC226DA5E030004FFD6 /* SceneLayer.h */,
+				A6A0ACC526DA5E030004FFD6 /* SceneLayersList.cpp */,
+				A6A0ACBE26DA5E030004FFD6 /* SceneLayersList.h */,
+				A6A0ACC326DA5E030004FFD6 /* Tags.cpp */,
+				A6A0ACD526DA5E030004FFD6 /* Tags.h */,
 				A6A0AC7A26DA5E030004FFD6 /* UI */,
 			);
 			path = Scene;
@@ -1108,18 +1113,18 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC8326DA5E030004FFD6 /* UIManager.cpp */,
-				A6A0AC7B26DA5E030004FFD6 /* Widget.cpp */,
-				A6A0AC7F26DA5E030004FFD6 /* WidgetLayer.cpp */,
-				A6A0AC7D26DA5E030004FFD6 /* WidgetLayerLayout.cpp */,
-				A6A0AC8226DA5E030004FFD6 /* WidgetLayout.cpp */,
-				A6A0AC8026DA5E030004FFD6 /* WidgetState.cpp */,
 				A6A0AC8526DA5E030004FFD6 /* UIManager.h */,
+				A6A0AC7B26DA5E030004FFD6 /* Widget.cpp */,
 				A6A0AC7E26DA5E030004FFD6 /* Widget.h */,
+				A6A0AC7F26DA5E030004FFD6 /* WidgetLayer.cpp */,
 				A6A0AC8426DA5E030004FFD6 /* WidgetLayer.h */,
+				A6A0AC7D26DA5E030004FFD6 /* WidgetLayerLayout.cpp */,
 				A6A0AC8626DA5E030004FFD6 /* WidgetLayerLayout.h */,
+				A6A0AC8226DA5E030004FFD6 /* WidgetLayout.cpp */,
 				A6A0AC7C26DA5E030004FFD6 /* WidgetLayout.h */,
-				A6A0AC8126DA5E030004FFD6 /* WidgetState.h */,
 				A6A0AC8726DA5E030004FFD6 /* Widgets */,
+				A6A0AC8026DA5E030004FFD6 /* WidgetState.cpp */,
+				A6A0AC8126DA5E030004FFD6 /* WidgetState.h */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1128,54 +1133,54 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AC8F26DA5E030004FFD6 /* Button.cpp */,
-				A6A0AC9A26DA5E030004FFD6 /* ContextMenu.cpp */,
-				A6A0ACB326DA5E030004FFD6 /* CustomDropDown.cpp */,
-				A6A0AC9626DA5E030004FFD6 /* CustomList.cpp */,
-				A6A0AC9F26DA5E030004FFD6 /* DropDown.cpp */,
-				A6A0ACAB26DA5E030004FFD6 /* EditBox.cpp */,
-				A6A0ACAD26DA5E030004FFD6 /* GridLayout.cpp */,
-				A6A0AC9326DA5E030004FFD6 /* GridLayoutScrollArea.cpp */,
-				A6A0ACB626DA5E030004FFD6 /* HorizontalLayout.cpp */,
-				A6A0ACA926DA5E030004FFD6 /* HorizontalProgress.cpp */,
-				A6A0ACAC26DA5E030004FFD6 /* HorizontalScrollBar.cpp */,
-				A6A0AC9126DA5E030004FFD6 /* Image.cpp */,
-				A6A0ACA626DA5E030004FFD6 /* Label.cpp */,
-				A6A0ACA826DA5E030004FFD6 /* List.cpp */,
-				A6A0ACB926DA5E030004FFD6 /* LongList.cpp */,
-				A6A0AC8C26DA5E030004FFD6 /* MenuPanel.cpp */,
-				A6A0ACB126DA5E030004FFD6 /* PopupWidget.cpp */,
-				A6A0AC9826DA5E030004FFD6 /* ScrollArea.cpp */,
-				A6A0AC9D26DA5E030004FFD6 /* Spoiler.cpp */,
-				A6A0AC9026DA5E030004FFD6 /* Toggle.cpp */,
-				A6A0ACA026DA5E030004FFD6 /* Tree.cpp */,
-				A6A0AC8D26DA5E030004FFD6 /* VerticalLayout.cpp */,
-				A6A0ACAF26DA5E030004FFD6 /* VerticalProgress.cpp */,
-				A6A0AC8E26DA5E030004FFD6 /* VerticalScrollBar.cpp */,
-				A6A0AC9526DA5E030004FFD6 /* Window.cpp */,
 				A6A0ACAA26DA5E030004FFD6 /* Button.h */,
+				A6A0AC9A26DA5E030004FFD6 /* ContextMenu.cpp */,
 				A6A0AC9726DA5E030004FFD6 /* ContextMenu.h */,
+				A6A0ACB326DA5E030004FFD6 /* CustomDropDown.cpp */,
 				A6A0AC8826DA5E030004FFD6 /* CustomDropDown.h */,
+				A6A0AC9626DA5E030004FFD6 /* CustomList.cpp */,
 				A6A0ACA326DA5E030004FFD6 /* CustomList.h */,
+				A6A0AC9F26DA5E030004FFD6 /* DropDown.cpp */,
 				A6A0AC8A26DA5E030004FFD6 /* DropDown.h */,
+				A6A0ACAB26DA5E030004FFD6 /* EditBox.cpp */,
 				A6A0ACA726DA5E030004FFD6 /* EditBox.h */,
+				A6A0ACAD26DA5E030004FFD6 /* GridLayout.cpp */,
 				A6A0ACB226DA5E030004FFD6 /* GridLayout.h */,
+				A6A0AC9326DA5E030004FFD6 /* GridLayoutScrollArea.cpp */,
 				A6A0ACA526DA5E030004FFD6 /* GridLayoutScrollArea.h */,
+				A6A0ACB626DA5E030004FFD6 /* HorizontalLayout.cpp */,
 				A6A0AC9E26DA5E030004FFD6 /* HorizontalLayout.h */,
+				A6A0ACA926DA5E030004FFD6 /* HorizontalProgress.cpp */,
 				A6A0ACAE26DA5E030004FFD6 /* HorizontalProgress.h */,
+				A6A0ACAC26DA5E030004FFD6 /* HorizontalScrollBar.cpp */,
 				A6A0AC9926DA5E030004FFD6 /* HorizontalScrollBar.h */,
+				A6A0AC9126DA5E030004FFD6 /* Image.cpp */,
 				A6A0ACB726DA5E030004FFD6 /* Image.h */,
+				A6A0ACA626DA5E030004FFD6 /* Label.cpp */,
 				A6A0AC8B26DA5E030004FFD6 /* Label.h */,
+				A6A0ACA826DA5E030004FFD6 /* List.cpp */,
 				A6A0ACA426DA5E030004FFD6 /* List.h */,
+				A6A0ACB926DA5E030004FFD6 /* LongList.cpp */,
 				A6A0ACB526DA5E030004FFD6 /* LongList.h */,
+				A6A0AC8C26DA5E030004FFD6 /* MenuPanel.cpp */,
 				A6A0ACB826DA5E030004FFD6 /* MenuPanel.h */,
+				A6A0ACB126DA5E030004FFD6 /* PopupWidget.cpp */,
 				A6A0ACB426DA5E030004FFD6 /* PopupWidget.h */,
+				A6A0AC9826DA5E030004FFD6 /* ScrollArea.cpp */,
 				A6A0AC9426DA5E030004FFD6 /* ScrollArea.h */,
+				A6A0AC9D26DA5E030004FFD6 /* Spoiler.cpp */,
 				A6A0ACB026DA5E030004FFD6 /* Spoiler.h */,
+				A6A0AC9026DA5E030004FFD6 /* Toggle.cpp */,
 				A6A0ACA226DA5E030004FFD6 /* Toggle.h */,
+				A6A0ACA026DA5E030004FFD6 /* Tree.cpp */,
 				A6A0AC9C26DA5E030004FFD6 /* Tree.h */,
+				A6A0AC8D26DA5E030004FFD6 /* VerticalLayout.cpp */,
 				A6A0AC9226DA5E030004FFD6 /* VerticalLayout.h */,
+				A6A0ACAF26DA5E030004FFD6 /* VerticalProgress.cpp */,
 				A6A0ACA126DA5E030004FFD6 /* VerticalProgress.h */,
+				A6A0AC8E26DA5E030004FFD6 /* VerticalScrollBar.cpp */,
 				A6A0AC8926DA5E030004FFD6 /* VerticalScrollBar.h */,
+				A6A0AC9526DA5E030004FFD6 /* Window.cpp */,
 				A6A0AC9B26DA5E030004FFD6 /* Window.h */,
 			);
 			path = Widgets;
@@ -1185,12 +1190,12 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ACCB26DA5E030004FFD6 /* AnimationComponent.cpp */,
-				A6A0ACC826DA5E030004FFD6 /* EditorTestComponent.cpp */,
-				A6A0ACCC26DA5E030004FFD6 /* ImageComponent.cpp */,
-				A6A0ACCE26DA5E030004FFD6 /* ParticlesEmitterComponent.cpp */,
 				A6A0ACCF26DA5E030004FFD6 /* AnimationComponent.h */,
+				A6A0ACC826DA5E030004FFD6 /* EditorTestComponent.cpp */,
 				A6A0ACC926DA5E030004FFD6 /* EditorTestComponent.h */,
+				A6A0ACCC26DA5E030004FFD6 /* ImageComponent.cpp */,
 				A6A0ACCA26DA5E030004FFD6 /* ImageComponent.h */,
+				A6A0ACCE26DA5E030004FFD6 /* ParticlesEmitterComponent.cpp */,
 				A6A0ACCD26DA5E030004FFD6 /* ParticlesEmitterComponent.h */,
 			);
 			path = Components;
@@ -1200,12 +1205,12 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ACE026DA5E030004FFD6 /* BoxCollider.cpp */,
-				A6A0ACDE26DA5E030004FFD6 /* CircleCollider.cpp */,
-				A6A0ACDB26DA5E030004FFD6 /* ICollider.cpp */,
-				A6A0ACDC26DA5E030004FFD6 /* RigidBody.cpp */,
 				A6A0ACD926DA5E030004FFD6 /* BoxCollider.h */,
+				A6A0ACDE26DA5E030004FFD6 /* CircleCollider.cpp */,
 				A6A0ACDF26DA5E030004FFD6 /* CircleCollider.h */,
+				A6A0ACDB26DA5E030004FFD6 /* ICollider.cpp */,
 				A6A0ACDA26DA5E030004FFD6 /* ICollider.h */,
+				A6A0ACDC26DA5E030004FFD6 /* RigidBody.cpp */,
 				A6A0ACDD26DA5E030004FFD6 /* RigidBody.h */,
 			);
 			path = Physics;
@@ -1215,22 +1220,22 @@
 			isa = PBXGroup;
 			children = (
 				A6A0ACF126DA5E030004FFD6 /* ApplicationEventsListener.cpp */,
-				A6A0ACFA26DA5E030004FFD6 /* CursorAreaEventsListener.cpp */,
-				A6A0ACF826DA5E030004FFD6 /* CursorAreaEventsListenersLayer.cpp */,
-				A6A0ACEA26DA5E030004FFD6 /* CursorEventsArea.cpp */,
-				A6A0ACEC26DA5E030004FFD6 /* DrawableCursorEventsListener.cpp */,
-				A6A0ACF526DA5E030004FFD6 /* EventSystem.cpp */,
-				A6A0ACF026DA5E030004FFD6 /* IEventsListener.cpp */,
-				A6A0ACF426DA5E030004FFD6 /* KeyboardEventsListener.cpp */,
-				A6A0ACF626DA5E030004FFD6 /* ShortcutKeysListener.cpp */,
 				A6A0ACED26DA5E030004FFD6 /* ApplicationEventsListener.h */,
+				A6A0ACFA26DA5E030004FFD6 /* CursorAreaEventsListener.cpp */,
 				A6A0ACF226DA5E030004FFD6 /* CursorAreaEventsListener.h */,
+				A6A0ACF826DA5E030004FFD6 /* CursorAreaEventsListenersLayer.cpp */,
 				A6A0ACEB26DA5E030004FFD6 /* CursorAreaEventsListenersLayer.h */,
+				A6A0ACEA26DA5E030004FFD6 /* CursorEventsArea.cpp */,
 				A6A0ACEE26DA5E030004FFD6 /* CursorEventsArea.h */,
+				A6A0ACEC26DA5E030004FFD6 /* DrawableCursorEventsListener.cpp */,
 				A6A0ACEF26DA5E030004FFD6 /* DrawableCursorEventsListener.h */,
+				A6A0ACF526DA5E030004FFD6 /* EventSystem.cpp */,
 				A6A0ACE926DA5E030004FFD6 /* EventSystem.h */,
+				A6A0ACF026DA5E030004FFD6 /* IEventsListener.cpp */,
 				A6A0ACF326DA5E030004FFD6 /* IEventsListener.h */,
+				A6A0ACF426DA5E030004FFD6 /* KeyboardEventsListener.cpp */,
 				A6A0ACF926DA5E030004FFD6 /* KeyboardEventsListener.h */,
+				A6A0ACF626DA5E030004FFD6 /* ShortcutKeysListener.cpp */,
 				A6A0ACF726DA5E030004FFD6 /* ShortcutKeysListener.h */,
 			);
 			path = Events;
@@ -1240,18 +1245,18 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AD1426DA5E030004FFD6 /* Asset.cpp */,
-				A6A0AD1626DA5E030004FFD6 /* AssetInfo.cpp */,
-				A6A0AD1826DA5E030004FFD6 /* AssetRef.cpp */,
-				A6A0AD1326DA5E030004FFD6 /* Assets.cpp */,
-				A6A0ACFD26DA5E030004FFD6 /* AssetsTree.cpp */,
-				A6A0AD1926DA5E030004FFD6 /* Meta.cpp */,
 				A6A0AD1C26DA5E030004FFD6 /* Asset.h */,
+				A6A0AD1626DA5E030004FFD6 /* AssetInfo.cpp */,
 				A6A0AD1526DA5E030004FFD6 /* AssetInfo.h */,
+				A6A0AD1826DA5E030004FFD6 /* AssetRef.cpp */,
 				A6A0AD1A26DA5E030004FFD6 /* AssetRef.h */,
+				A6A0AD1326DA5E030004FFD6 /* Assets.cpp */,
 				A6A0AD1726DA5E030004FFD6 /* Assets.h */,
+				A6A0ACFD26DA5E030004FFD6 /* AssetsTree.cpp */,
 				A6A0ACFC26DA5E030004FFD6 /* AssetsTree.h */,
-				A6A0AD1B26DA5E030004FFD6 /* Meta.h */,
 				A6A0AD1D26DA5E030004FFD6 /* Builder */,
+				A6A0AD1926DA5E030004FFD6 /* Meta.cpp */,
+				A6A0AD1B26DA5E030004FFD6 /* Meta.h */,
 				A6A0ACFE26DA5E030004FFD6 /* Types */,
 			);
 			path = Assets;
@@ -1288,16 +1293,16 @@
 			isa = PBXGroup;
 			children = (
 				A6A0AD2626DA5E030004FFD6 /* AssetsBuilder.cpp */,
-				A6A0AD2926DA5E030004FFD6 /* AtlasAssetConverter.cpp */,
-				A6A0AD2126DA5E030004FFD6 /* FolderAssetConverter.cpp */,
-				A6A0AD2526DA5E030004FFD6 /* IAssetConverter.cpp */,
-				A6A0AD2426DA5E030004FFD6 /* ImageAssetConverter.cpp */,
-				A6A0AD1E26DA5E030004FFD6 /* StdAssetConverter.cpp */,
 				A6A0AD2026DA5E030004FFD6 /* AssetsBuilder.h */,
+				A6A0AD2926DA5E030004FFD6 /* AtlasAssetConverter.cpp */,
 				A6A0AD1F26DA5E030004FFD6 /* AtlasAssetConverter.h */,
+				A6A0AD2126DA5E030004FFD6 /* FolderAssetConverter.cpp */,
 				A6A0AD2726DA5E030004FFD6 /* FolderAssetConverter.h */,
+				A6A0AD2526DA5E030004FFD6 /* IAssetConverter.cpp */,
 				A6A0AD2226DA5E030004FFD6 /* IAssetConverter.h */,
+				A6A0AD2426DA5E030004FFD6 /* ImageAssetConverter.cpp */,
 				A6A0AD2826DA5E030004FFD6 /* ImageAssetConverter.h */,
+				A6A0AD1E26DA5E030004FFD6 /* StdAssetConverter.cpp */,
 				A6A0AD2326DA5E030004FFD6 /* StdAssetConverter.h */,
 			);
 			path = Builder;
@@ -1306,10 +1311,21 @@
 		A6A0ADDE26DA61DC0004FFD6 /* Mac */ = {
 			isa = PBXGroup;
 			children = (
-				A6A0ADE026DA61DC0004FFD6 /* RenderImpl.cpp */,
-				A6A0ADE426DA61DC0004FFD6 /* TextureImpl.cpp */,
+				A612A95626DF4CAA00CD45A5 /* ShaderTypes.h */,
 				A6A0ADE126DA61DC0004FFD6 /* RenderBase.h */,
+				A6A0ADE026DA61DC0004FFD6 /* RenderImpl.mm */,
 				A6A0ADE226DA61DC0004FFD6 /* TextureBase.h */,
+				A6A0ADE426DA61DC0004FFD6 /* TextureImpl.mm */,
+				A646004A26F12EDC0096726D /* MetalWrappers.h */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
+		A6B2148226E1226E0093D355 /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				A6B2148326E1226E0093D355 /* FileSystemImpl.mm */,
+				A6B2148426E1226E0093D355 /* FileImpl.mm */,
 			);
 			path = Mac;
 			sourceTree = "<group>";
@@ -1369,6 +1385,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A646005626F644EE0096726D /* Spline.cpp in Sources */,
 				A6A0ADA526DA5E030004FFD6 /* PopupWidget.cpp in Sources */,
 				A6A0AD5D26DA5E030004FFD6 /* Serializable.cpp in Sources */,
 				A6A0ADAC26DA5E030004FFD6 /* Actor.cpp in Sources */,
@@ -1433,7 +1450,6 @@
 				A6A0ADD726DA5E030004FFD6 /* Meta.cpp in Sources */,
 				A6A0AD4A26DA5E030004FFD6 /* AnimationPlayer.cpp in Sources */,
 				A6A0AD4326DA5E030004FFD6 /* ParticlesEffects.cpp in Sources */,
-				A612A95F26DF4CAA00CD45A5 /* Shaders.metal in Sources */,
 				A6A0AD7E26DA5E030004FFD6 /* FunctionInfo.cpp in Sources */,
 				A6A0AD7B26DA5E030004FFD6 /* ConsoleLogStream.cpp in Sources */,
 				A6A0AD9C26DA5E030004FFD6 /* DropDown.cpp in Sources */,
@@ -1466,12 +1482,13 @@
 				A6A0AD4D26DA5E030004FFD6 /* AnimationMask.cpp in Sources */,
 				A6A0AD6E26DA5E030004FFD6 /* TimeStamp.cpp in Sources */,
 				A6A0AD4926DA5E030004FFD6 /* AnimationVec2FTrack.cpp in Sources */,
-				A6A0ADE726DA61DC0004FFD6 /* TextureImpl.cpp in Sources */,
+				A6A0ADE726DA61DC0004FFD6 /* TextureImpl.mm in Sources */,
 				A6A0AD7F26DA5E030004FFD6 /* FieldInfo.cpp in Sources */,
+				A6B2148926E1528B0093D355 /* StringUtils.cpp in Sources */,
 				A6A0AD7626DA5E030004FFD6 /* SceneEditableObject.cpp in Sources */,
 				A6A0AD9E26DA5E030004FFD6 /* Label.cpp in Sources */,
-				A6A0ADE526DA61DC0004FFD6 /* RenderImpl.cpp in Sources */,
-				A612A95D26DF4CAA00CD45A5 /* Renderer.mm in Sources */,
+				A6A0ADE526DA61DC0004FFD6 /* RenderImpl.mm in Sources */,
+				A612A95D26DF4CAA00CD45A5 /* RendererView.mm in Sources */,
 				A6A0AD3426DA5E030004FFD6 /* Sprite.cpp in Sources */,
 				A6A0ADAF26DA5E030004FFD6 /* SceneLayer.cpp in Sources */,
 				A6A0AD3826DA5E030004FFD6 /* IDrawable.cpp in Sources */,
@@ -1505,13 +1522,13 @@
 				A6A0ADD026DA5E030004FFD6 /* AnimationAsset.cpp in Sources */,
 				A6A0AD8126DA5E030004FFD6 /* Type.cpp in Sources */,
 				A6A0ADA426DA5E030004FFD6 /* VerticalProgress.cpp in Sources */,
-				A612A96026DF4CAA00CD45A5 /* GameViewController.mm in Sources */,
 				A6A0AD6F26DA5E030004FFD6 /* Time.cpp in Sources */,
 				A6A0ADD526DA5E030004FFD6 /* AssetInfo.cpp in Sources */,
 				A6A0AD9F26DA5E030004FFD6 /* List.cpp in Sources */,
 				A6A0AD5F26DA5E030004FFD6 /* FileInfo.cpp in Sources */,
 				A6A0AD3C26DA5E030004FFD6 /* RectDrawable.cpp in Sources */,
 				A6A0ADA926DA5E030004FFD6 /* Scene.cpp in Sources */,
+				A6B2148626E1226E0093D355 /* FileImpl.mm in Sources */,
 				A6A0ADB526DA5E030004FFD6 /* ActorEditor.cpp in Sources */,
 				A6A0AD4F26DA5E030004FFD6 /* TaskManager.cpp in Sources */,
 				A6A0AD9426DA5E030004FFD6 /* Toggle.cpp in Sources */,
@@ -1524,12 +1541,13 @@
 				A6A0ADC826DA5E030004FFD6 /* AssetsTree.cpp in Sources */,
 				A6A0AD3226DA5E030004FFD6 /* VectorFont.cpp in Sources */,
 				A612A95E26DF4CAA00CD45A5 /* AppDelegate.mm in Sources */,
+				A6B2148526E1226E0093D355 /* FileSystemImpl.mm in Sources */,
 				A6A0ADD226DA5E030004FFD6 /* FontAsset.cpp in Sources */,
 				A6A0ADA226DA5E030004FFD6 /* HorizontalScrollBar.cpp in Sources */,
 				A6A0AD3126DA5E030004FFD6 /* Text.cpp in Sources */,
 				A6A0ADA126DA5E030004FFD6 /* EditBox.cpp in Sources */,
 				A6A0AD8E26DA5E030004FFD6 /* WidgetLayout.cpp in Sources */,
-				A6A0AD8426DA5E030004FFD6 /* ApplicationImpl.cpp in Sources */,
+				A6A0AD8426DA5E030004FFD6 /* ApplicationImpl.mm in Sources */,
 				A6A0AD6726DA5E030004FFD6 /* Geometry.cpp in Sources */,
 				A6A0ADCB26DA5E030004FFD6 /* BitmapFontAsset.cpp in Sources */,
 				A6A0AD6026DA5E030004FFD6 /* FileSystem.cpp in Sources */,
@@ -1607,6 +1625,7 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fdeclspec",
+					"-Wundefined-var-template",
 				);
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = (
@@ -1616,6 +1635,7 @@
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
 				);
+				WARNING_CFLAGS = "-Wundefined-var-template";
 			};
 			name = Debug;
 		};
@@ -1674,6 +1694,7 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fdeclspec",
+					"-Wundefined-var-template",
 				);
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = (
@@ -1683,13 +1704,14 @@
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
 				);
+				WARNING_CFLAGS = "-Wundefined-var-template";
 			};
 			name = Release;
 		};
 		A68E84FA26D5464400DD2240 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_STYLE = Automatic;
@@ -1697,18 +1719,26 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MTL_ENABLE_MODULES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USE_HEADERMAP = NO;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/Users/playrix/PetStory/o2/Framework/Sources,
+					/Users/playrix/PetStory/o2/Framework,
+					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
+					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
+					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
+				);
+				USE_HEADERMAP = YES;
 			};
 			name = Debug;
 		};
 		A68E84FB26D5464400DD2240 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_STYLE = Automatic;
@@ -1716,11 +1746,19 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_ENABLE_CPP_EXCEPTIONS = YES;
 				GCC_ENABLE_CPP_RTTI = YES;
-				HEADER_SEARCH_PATHS = "$(inherited)";
+				GENERATE_MASTER_OBJECT_FILE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MTL_ENABLE_MODULES = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				USE_HEADERMAP = NO;
+				SYSTEM_HEADER_SEARCH_PATHS = (
+					/Users/playrix/PetStory/o2/Framework/Sources,
+					/Users/playrix/PetStory/o2/Framework,
+					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
+					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
+					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
+				);
+				USE_HEADERMAP = YES;
 			};
 			name = Release;
 		};

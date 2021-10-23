@@ -646,7 +646,7 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 #define DECLARE_CLASS(CLASS)                                                                                   \
     o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
 
-#define DECLARE_TEMPLATE_CLASS(CLASS)                                                                                   \
+#define DECLARE_TEMPLATE_CLASS(CLASS)                                                                          \
 	template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
 																											   
 #define CLASS_BASES_META(CLASS)                                                                                \

@@ -266,6 +266,11 @@ namespace o2
 	{
 		return mInstance->mTime;
 	}
+	
+	float Application::GetGraphicsScale() const
+	{
+		return mGraphicsScale;
+	}
 
 	MemoryManager* MemoryManager::mInstance = new MemoryManager();
 	template<> Debug* Singleton<Debug>::mInstance = mnew Debug();

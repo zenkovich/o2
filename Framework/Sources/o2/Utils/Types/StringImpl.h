@@ -508,13 +508,13 @@ namespace o2
 	template<typename T>
 	int TString<T>::Length() const
 	{
-		return std::basic_string<T>::length();
+		return (int)std::basic_string<T>::length();
 	}
 
 	template<typename T>
 	int TString<T>::Capacity() const
 	{
-		return std::basic_string<T>::capacity();
+		return (int)std::basic_string<T>::capacity();
 	}
 
 

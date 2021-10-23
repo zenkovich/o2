@@ -837,7 +837,7 @@ namespace o2
 			handle->mSelectGroup = nullptr;
 	}
 
-	Vector<DragHandle*> SelectableDragHandlesGroup::GetSelectedHandles() const
+	const Vector<DragHandle*>& SelectableDragHandlesGroup::GetSelectedHandles() const
 	{
 		return mSelectedHandles;
 	}

@@ -457,6 +457,7 @@ namespace o2
 
 	void Assets::CheckAssetsUnload()
 	{
+		return;
 		const bool checkDuplications = false;
 		if (checkDuplications)
 		{

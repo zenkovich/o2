@@ -61,7 +61,7 @@ namespace o2
 		ParticlesEmitter& operator=(const ParticlesEmitter& other);
 
 		// DRaws particles
-		void Draw();
+		void Draw() override;
 
 		// Updates particles
 		void Update(float dt);
@@ -292,7 +292,7 @@ namespace o2
 		void UpdateMesh(); 
 		
 		// It is called when basis was changed, updates particles positions from last transform
-		void BasisChanged();
+		void BasisChanged() override;
 
 		friend class ParticlesEffect;
 	};

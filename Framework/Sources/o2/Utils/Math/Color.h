@@ -60,13 +60,13 @@ namespace o2
 		void   Normalize();
 		Color4 Normalized() const;
 
-		ULong ARGB() const;
-		ULong ABGR() const;
-		ULong RGBA() const;
+		Color32Bit ARGB() const;
+		Color32Bit ABGR() const;
+		Color32Bit RGBA() const;
 
-		void SetARGB(ULong color);
-		void SetABGR(ULong color);
-		void SetRGBA(ULong color);
+		void SetARGB(Color32Bit color);
+		void SetABGR(Color32Bit color);
+		void SetRGBA(Color32Bit color);
 
 		void SetHSL(float hue, float saturation, float lightness);
 		void ToHSL(float& hue, float& saturation, float& lightness);

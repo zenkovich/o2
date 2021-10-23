@@ -80,7 +80,7 @@ namespace Editor
 		void DeleteKey(UInt64 keyUid) override;
 
 		// Inserts new key at time
-		void InsertNewKey(float time);
+		void InsertNewKey(float time) override;
 
 		SERIALIZABLE(KeyFramesTrackControl<AnimationTrackType>);
 
@@ -428,7 +428,7 @@ namespace Editor
 	template<typename AnimationTrackType>
 	void KeyFramesTrackControl<AnimationTrackType>::InsertNewKey(float time)
 	{
-		Wrapper::KeyType key;
+		typename Wrapper::KeyType key;
 		key.position = time;
 		key.value = Wrapper::GetValue(*mTrack, time);
 
@@ -470,7 +470,7 @@ namespace Editor
 		}
 		else
 		{
-			Wrapper::KeyType key;
+			typename Wrapper::KeyType key;
 			key.position = time;
 			key.value = mPropertyValue;
 			Wrapper::AddKey(*mTrack, key);
@@ -492,7 +492,7 @@ namespace Editor
 	UInt64 KeyFramesTrackControl<AnimationTrackType>::DeserializeKey(const DataValue& data, float relativeTime,
 																	 bool generateNewUid /*= true*/)
 	{
-		Wrapper::KeyType key;
+		typename Wrapper::KeyType key;
 		data.Get(key);
 		key.position += relativeTime;
 

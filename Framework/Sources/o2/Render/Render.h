@@ -378,5 +378,6 @@ namespace o2
 		friend class VectorFont;
 		friend class VectorFontAsset;
 		friend class WndProcFunc;
+		friend struct ApplicationPlatformWrapper;
 	};
 }

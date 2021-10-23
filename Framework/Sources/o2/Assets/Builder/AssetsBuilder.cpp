@@ -52,11 +52,14 @@ namespace o2
 		ProcessMissingMetasCreation(folderInfo);
 
 		mSourceAssetsTree.assetsPath = assetsPath;
+		mSourceAssetsTree.log = mLog;
 		mSourceAssetsTree.Build(folderInfo);
 
 		DataDocument builtAssetsTreeDoc;
 		builtAssetsTreeDoc.LoadFromFile(mBuiltAssetsTreePath);
 		mBuiltAssetsTree->Deserialize(builtAssetsTreeDoc);
+
+        mBuiltAssetsTree->log = mLog;
 
 		ProcessRemovedAssets();
 		ProcessNewAssets();

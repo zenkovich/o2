@@ -1044,10 +1044,16 @@ namespace o2
 			{
 				for (auto& componentNode : *componentsNode)
 				{
-					Component* component = (Component*)o2Reflection.CreateTypeSample(componentNode.GetMember("Type"));
-					component->Deserialize(componentNode.GetMember("Data"));
+					String componentType = componentNode.GetMember("Type");
+					Component* component = (Component*)o2Reflection.CreateTypeSample(componentType);
+					if (component)
+					{
+                        component->Deserialize(componentNode.GetMember("Data"));
+                        AddComponent(component);
+                    }
+					else
+						o2Debug.LogError("Can't create component by type %s", componentType.Data());
 
-					AddComponent(component);
 				}
 			}
 		}

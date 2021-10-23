@@ -34,6 +34,8 @@ namespace o2
 		puts(((String)str).Data());
 #elif defined PLATFORM_ANDROID
 		__android_log_print(ANDROID_LOG_INFO, "o2: ", "%s", ((String)str).Data());
+#elif defined PLATFORM_MAC
+		std::cout << ((String)str).Data() << std::endl;
 #endif
 	}
 

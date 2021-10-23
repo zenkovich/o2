@@ -28,7 +28,7 @@ namespace Editor
 	{
 		typedef Curve::Key KeyType;
 		typedef AnimationTrack<Vec2F> TrackType;
-		typedef typename float ValueType;
+		typedef float ValueType;
 		typedef typename AnimationTrack<Vec2F>::Player TrackPlayerType;
 
 		static auto GetValue(TrackPlayerType& player) 
