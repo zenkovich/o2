@@ -519,6 +519,8 @@ namespace o2
 		DataDocument data;
 		if (data.LoadFromFile(path))
 			Load(data, append);
+		else
+			o2Debug.LogError("Failed to load scene " + path);
 	}
 
 	void Scene::Load(const DataDocument& doc, bool append /*= false*/)

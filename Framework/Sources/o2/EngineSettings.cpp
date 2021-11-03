@@ -9,6 +9,8 @@ o2::Platform GetEnginePlatform()
 	return o2::Platform::Android;
 #elif defined PLATFORM_MAC
 	return o2::Platform::Mac;
+#elif defined PLATFORM_IOS
+	return o2::Platform::iOS;
 #endif
 }
 
@@ -80,6 +82,8 @@ const char* GetBuiltAssetsPath()
 	return "AndroidAssets/BuiltAssets/";
 #elif defined PLATFORM_MAC
 	return "BuiltAssets/Mac/Data/";
+#elif defined PLATFORM_IOS
+	return "Data/";
 #endif
 }
 
@@ -96,6 +100,8 @@ const char* GetBuiltAssetsTreePath()
 	return "AndroidAssets/AssetsTree.json";
 #elif defined PLATFORM_MAC
 	return "BuiltAssets/Mac/Data.json";
+#elif defined PLATFORM_IOS
+	return "Data.json";
 #endif
 }
 
@@ -106,6 +112,7 @@ const char* GetEditorAssetsPath()
 #elif defined PLATFORM_MAC
 	return "o2/Editor/Assets/";
 #endif
+	return "";
 }
 
 const char* GetEditorBuiltAssetsPath()
@@ -115,6 +122,7 @@ const char* GetEditorBuiltAssetsPath()
 #elif defined PLATFORM_MAC
 	return "BuiltAssets/Mac/EditorData/";
 #endif
+	return "";
 }
 
 const char* GetEditorBuiltAssetsTreePath()
@@ -124,6 +132,7 @@ const char* GetEditorBuiltAssetsTreePath()
 #elif defined PLATFORM_MAC
 	return "BuiltAssets/Mac/EditorData.json";
 #endif
+	return "";
 }
 
 #ifdef PLATFORM_ANDROID

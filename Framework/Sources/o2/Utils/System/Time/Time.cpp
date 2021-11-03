@@ -89,6 +89,8 @@ namespace o2
         return TimeStamp();
 #elif defined PLATFORM_MAC
 		return TimeStamp();
+#elif defined PLATFORM_IOS
+		return TimeStamp();
 #endif
 	}
 

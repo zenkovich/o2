@@ -14,6 +14,8 @@
 #include <android/asset_manager.h>
 #elif defined PLATFORM_MAC
 #include "o2/Application/Mac/ApplicationBase.h"
+#elif defined PLATFORM_IOS
+#include "o2/Application/iOS/ApplicationBase.h"
 #endif
 
 // Application access macros
@@ -67,6 +69,9 @@ namespace o2
 
 		// Destructor 
 		virtual ~Application();
+		
+		// Platform-specific initializations
+		void InitializePlatform();
 
 		// Returns pointer to log object
 		virtual LogStream* GetLog() const;
@@ -170,7 +175,7 @@ namespace o2
 		// Updates frame
 		void Update();
 		
-#elif defined PLATFORM_MAC		
+#elif defined PLATFORM_MAC
 		// Initializes engine application
 		virtual void Initialize();
 		
@@ -179,6 +184,16 @@ namespace o2
 		
 		// Updates frame
 		void Update();
+		
+#elif defined PLATFORM_IOS
+		// Initializes engine and runs it
+		virtual void Run(int argc, char * argv[]);
+		
+		// Updates frame
+		void Update();
+		
+		// Launching application
+		virtual void Launch();
 
 #endif
 
@@ -209,9 +224,6 @@ namespace o2
 	protected:
 		// Basic initialization for all platforms
 		void BasicInitialize();
-
-		// Platform-specific initializations
-		void InitializePlatform();
 
 		// Updates scene
 		virtual void UpdateScene(float dt);

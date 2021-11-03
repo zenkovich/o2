@@ -42,7 +42,7 @@ namespace o2
 	}
 #endif
 
-#ifdef PLATFORM_ANDROID
+#if defined PLATFORM_ANDROID || defined PLATFORM_MAC || defined PLATFORM_IOS
 	void Timer::Reset()
 	{
 		gettimeofday(&mStartTime, NULL);
@@ -68,36 +68,6 @@ namespace o2
 		deltaTime /= 1000.0f;
 		mLastElapsedTime = now;
 
-		return deltaTime;
-	}
-#endif
-	
-#ifdef PLATFORM_MAC
-	void Timer::Reset()
-	{
-		gettimeofday(&mStartTime, NULL);
-		gettimeofday(&mLastElapsedTime, NULL);
-	}
-	
-	float Timer::GetTime()
-	{
-		struct timeval now;
-		gettimeofday(&now, NULL);
-		float deltaTime = (now.tv_sec - mStartTime.tv_sec)*1000 + (now.tv_usec - mStartTime.tv_usec)/1000.0f;
-		deltaTime /= 1000.0f;
-		mLastElapsedTime = now;
-		
-		return deltaTime;
-	}
-	
-	float Timer::GetDeltaTime()
-	{
-		struct timeval now;
-		gettimeofday(&now, NULL);
-		float deltaTime = (now.tv_sec - mLastElapsedTime.tv_sec)*1000 + (now.tv_usec - mLastElapsedTime.tv_usec)/1000.0f;
-		deltaTime /= 1000.0f;
-		mLastElapsedTime = now;
-		
 		return deltaTime;
 	}
 #endif

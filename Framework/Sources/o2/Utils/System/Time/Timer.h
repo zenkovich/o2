@@ -2,7 +2,7 @@
 
 #if definedPLATFORM_WINDOWS
 #include <Windows.h>
-#elif defined PLATFORM_ANDROID || defined PLATFORM_MAC
+#elif defined PLATFORM_ANDROID || defined PLATFORM_MAC || defined PLATFORM_IOS
 #include <sys/time.h>
 #endif
 
@@ -36,7 +36,7 @@ namespace o2
 		LONGLONG      mLastElapsedTime;
 		LARGE_INTEGER mFrequency;
 		LARGE_INTEGER mStartTime;
-#elif defined PLATFORM_ANDROID || defined PLATFORM_MAC
+#elif defined PLATFORM_ANDROID || defined PLATFORM_MAC|| defined PLATFORM_IOS
 		struct timeval mLastElapsedTime;
 		struct timeval mStartTime;
 #endif
