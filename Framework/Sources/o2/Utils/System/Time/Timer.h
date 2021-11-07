@@ -32,7 +32,7 @@ namespace o2
 		float GetDeltaTime();
 
 	protected:
-#if definedPLATFORM_WINDOWS
+#if defined PLATFORM_WINDOWS
 		LONGLONG      mLastElapsedTime;
 		LARGE_INTEGER mFrequency;
 		LARGE_INTEGER mStartTime;

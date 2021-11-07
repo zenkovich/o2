@@ -79,6 +79,8 @@ PRE_ENUM_META(o2::ProtectSection);
 
 PRE_ENUM_META(o2::Platform);
 
+PRE_ENUM_META(o2::DeviceType);
+
 PRE_ENUM_META(o2::LineType);
 
 PRE_ENUM_META(o2::PrimitiveType);

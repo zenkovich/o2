@@ -25,7 +25,7 @@ namespace o2
 		res.path = path;
 
 		WIN32_FIND_DATA f;
-		HANDLE h = FindFirstFile(path + "/*", &f);
+		HANDLE h = FindFirstFile(path + "*", &f);
 		if (h != INVALID_HANDLE_VALUE)
 		{
 			do
@@ -34,9 +34,9 @@ namespace o2
 					continue;
 
 				if (f.dwFileAttributes == FILE_ATTRIBUTE_DIRECTORY)
-					res.folders.Add(GetFolderInfo(path + "/" + f.cFileName));
+					res.folders.Add(GetFolderInfo(path + f.cFileName + "/"));
 				else
-					res.files.Add(GetFileInfo(path + "/" + f.cFileName));
+					res.files.Add(GetFileInfo(path + f.cFileName));
 			} while (FindNextFile(h, &f));
 		}
 		else

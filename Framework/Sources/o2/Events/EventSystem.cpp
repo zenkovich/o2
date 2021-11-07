@@ -212,17 +212,7 @@ namespace o2
 
 	Vector<CursorAreaEventsListener*> EventSystem::GetAllCursorListenersUnderCursor(CursorId cursorId) const
 	{
-		Vector<CursorAreaEventsListener*> res;
-		Vec2F cursorPos = o2Input.GetCursorPos(cursorId);
-		for (auto listener : mCursorAreaListenersBasicLayer.cursorEventAreaListeners)
-		{
-			if (!listener->IsUnderPoint(cursorPos) || !listener->mScissorRect.IsInside(cursorPos) || !listener->mInteractable)
-				continue;
-
-			res.Add(listener);
-		}
-
-		return res;
+		return mCursorAreaListenersBasicLayer.GetAllCursorListenersUnderCursor(o2Input.GetCursorPos(cursorId));
 	}
 
 	void EventSystem::BreakCursorEvent()
@@ -261,14 +251,24 @@ namespace o2
 		}
 	}
 
-	void EventSystem::SetCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
+	void EventSystem::PushCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer)
 	{
 		if (layer)
 		{
+			layer->mParentLayer = mInstance->mCurrentCursorAreaEventsLayer;
+
 			mInstance->mCurrentCursorAreaEventsLayer = layer;
 			mInstance->mCursorAreaEventsListenersLayers.Add(layer);
+			mInstance->mLayersStack.Add(layer);
 		}
-		else 
+	}
+
+	void EventSystem::PopCursorAreaEventsListenersLayer()
+	{
+		mInstance->mLayersStack.PopBack();
+		if (!mInstance->mLayersStack.IsEmpty())
+			mInstance->mCurrentCursorAreaEventsLayer = mInstance->mLayersStack.Last();
+		else
 			mInstance->mCurrentCursorAreaEventsLayer = &mInstance->mCursorAreaListenersBasicLayer;
 	}
 

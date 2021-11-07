@@ -31,11 +31,17 @@ namespace o2
 		// It is called when layer has drawn
 		void OnDrawn(const Basis& transform);
 
-		// Converts point to local coordinates
+		// Converts point to local coordinates from parent layer
 		Vec2F ToLocal(const Vec2F& point) const;
 
-		// Converts from local point
+		// Converts from local point from parent layer
 		Vec2F FromLocal(const Vec2F& point) const;
+
+		// Converts point to local coordinates from screen coordinates
+		Vec2F ScreenToLocal(const Vec2F& point) const;
+
+		// Converts from local point from screen coordinates
+		Vec2F ScreenFromLocal(const Vec2F& point) const;
 
 		// Updates and processes events
 		void Update();
@@ -53,7 +59,7 @@ namespace o2
 		void UnregDragListener(DragableObject* listener);
 
 		// Returns all cursor listeners under cursor arranged by depth
-		Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(CursorId cursorId) const;
+		Vector<CursorAreaEventsListener*> GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const;
 
 		// Returns true if point is in this object
 		bool IsUnderPoint(const Vec2F& point) override;
@@ -62,6 +68,8 @@ namespace o2
 		bool mEnabled = false;
 
 		Basis mLocalToWorldTransform = Basis::Identity();
+
+		CursorAreaEventListenersLayer* mParentLayer = nullptr; // Layer in which this
 
 		Map<CursorId, Vector<CursorAreaEventsListener*>> mPressedListeners;             // Pressed listeners for all pressed cursors
 		Vector<CursorAreaEventsListener*>                mRightButtonPressedListeners;  // Right mouse button pressed listener

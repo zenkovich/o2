@@ -113,6 +113,14 @@ ENUM_META(o2::Platform)
 }
 END_ENUM_META;
 
+ENUM_META(o2::DeviceType)
+{
+	ENUM_ENTRY(PC);
+	ENUM_ENTRY(Phone);
+	ENUM_ENTRY(Tablet);
+}
+END_ENUM_META;
+
 ENUM_META(o2::LineType)
 {
 	ENUM_ENTRY(Dash);

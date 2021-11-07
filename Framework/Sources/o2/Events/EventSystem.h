@@ -80,8 +80,9 @@ namespace o2
 
 		Vector<CursorAreaEventListenersLayer*> mCursorAreaEventsListenersLayers; // Drawn cursor area events listeners layers
 		
-		CursorAreaEventListenersLayer  mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
-		CursorAreaEventListenersLayer* mCurrentCursorAreaEventsLayer;  // Current list of area listeners
+		CursorAreaEventListenersLayer          mCursorAreaListenersBasicLayer; // Basic cursor area events listeners layer, for main screen
+		CursorAreaEventListenersLayer*         mCurrentCursorAreaEventsLayer;  // Current list of area listeners
+		Vector<CursorAreaEventListenersLayer*> mLayersStack;                   // Input layers stack, in order they are pushed
 
 		Vector<KeyboardEventsListener*>    mKeyboardListeners;    // Keyboard events listeners
 		Vector<ApplicationEventsListener*> mApplicationListeners; // Application events listeners
@@ -89,8 +90,11 @@ namespace o2
 		ShortcutKeysListenersManager* mShortcutEventsManager; // Shortcut events manager
 
 	protected:
-		// Sets current cursor area events listeners layer
-		static void SetCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+		// Push current cursor area events listeners layer in layers stack
+		static void PushCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);
+
+		// Pops current cursor area events listeners layer
+		static void PopCursorAreaEventsListenersLayer();
 
 		// Unregisters layer
 		static void RemoveCursorAreaEventsListenersLayer(CursorAreaEventListenersLayer* layer);

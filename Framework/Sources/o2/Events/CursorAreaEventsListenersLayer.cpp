@@ -15,13 +15,13 @@ namespace o2
 	void CursorAreaEventListenersLayer::OnBeginDraw()
 	{
 		viewPortBasis = o2Render.GetCamera().GetBasis();
-		o2Events.SetCursorAreaEventsListenersLayer(this);
+		o2Events.PushCursorAreaEventsListenersLayer(this);
 	}
 
 	void CursorAreaEventListenersLayer::OnEndDraw()
 	{
 		renderBasis = o2Render.GetCamera().GetBasis();
-		o2Events.SetCursorAreaEventsListenersLayer(nullptr);
+		o2Events.PopCursorAreaEventsListenersLayer();
 	}
 
 	void CursorAreaEventListenersLayer::OnDrawn(const Basis& transform)
@@ -40,6 +40,22 @@ namespace o2
 	Vec2F CursorAreaEventListenersLayer::FromLocal(const Vec2F& point) const
 	{
 		return point*mLocalToWorldTransform;
+	}
+
+	Vec2F CursorAreaEventListenersLayer::ScreenToLocal(const Vec2F& point) const
+	{
+		if (mParentLayer)
+			return ToLocal(mParentLayer->ScreenToLocal(point));
+		
+		return ToLocal(point);
+	}
+
+	Vec2F CursorAreaEventListenersLayer::ScreenFromLocal(const Vec2F& point) const
+	{
+		if (mParentLayer)
+			return FromLocal(mParentLayer->ScreenFromLocal(point));
+
+		return FromLocal(point);
 	}
 
 	void CursorAreaEventListenersLayer::Update()
@@ -140,9 +156,22 @@ namespace o2
 		mDragListeners.Remove(listener);
 	}
 
-	Vector<CursorAreaEventsListener*> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(CursorId cursorId) const
+	Vector<CursorAreaEventsListener*> CursorAreaEventListenersLayer::GetAllCursorListenersUnderCursor(const Vec2F& cursorPos) const
 	{
-		return cursorEventAreaListeners;
+		Vector<CursorAreaEventsListener*> res;
+		Vec2F localCursorPos = ToLocal(cursorPos);
+		for (auto listener : cursorEventAreaListeners)
+		{
+			if (!listener->IsUnderPoint(localCursorPos) || !listener->mScissorRect.IsInside(localCursorPos) || !listener->mInteractable)
+				continue;
+
+			res.Add(listener);
+
+			if (auto layer = dynamic_cast<CursorAreaEventListenersLayer*>(listener))
+				res += layer->GetAllCursorListenersUnderCursor(localCursorPos);
+		}
+
+		return res;
 	}
 
 	bool CursorAreaEventListenersLayer::IsUnderPoint(const Vec2F& point)
@@ -163,8 +192,8 @@ namespace o2
 	Input::Cursor CursorAreaEventListenersLayer::ConvertLocalCursor(const Input::Cursor& cursor) const
 	{
 		Input::Cursor localCursor = cursor;
-		localCursor.position = ToLocal(cursor.position);
-		localCursor.delta = ToLocal(cursor.position) - ToLocal(cursor.position - cursor.delta);
+		localCursor.position = ScreenToLocal(cursor.position);
+		localCursor.delta = ScreenToLocal(cursor.position) - ScreenToLocal(cursor.position - cursor.delta);
 
 		return localCursor;
 	}

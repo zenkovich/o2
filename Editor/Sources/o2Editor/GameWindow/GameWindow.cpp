@@ -151,13 +151,13 @@ namespace Editor
 
 		o2Scene.DrawWithouLayers();
 
-		if (!o2Scene.GetCameras().IsEmpty() && (o2Input.IsKeyDown(VK_F1) || true))
+		if (!o2Scene.GetCameras().IsEmpty() && o2Input.IsKeyDown(VK_F1))
 		{
 			auto prevCamera = o2Render.GetCamera();
 			auto cameraActor = o2Scene.GetCameras()[0];
 			cameraActor->Setup();
 
-			auto localCursor = cameraActor->listenersLayer.ToLocal(o2Input.GetCursorPos());
+			auto localCursor = cameraActor->listenersLayer.ScreenToLocal(o2Input.GetCursorPos());
 			o2Render.DrawCross(localCursor, 25.0f, Color4::Red());
 			o2Debug.Log((String)localCursor);
 
@@ -187,7 +187,7 @@ namespace Editor
 	{
 		Widget::OnTransformUpdated();
 
-		Vec2I size = fixedResolution ? resolution : (Vec2I)layout->size.Get();
+		Vec2I size = fixedResolution ? resolution : layout->size.Get();
 		size.x = Math::Max(size.x, 32);
 		size.y = Math::Max(size.y, 32);
 
