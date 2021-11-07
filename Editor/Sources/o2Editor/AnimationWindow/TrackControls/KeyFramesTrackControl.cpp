@@ -153,7 +153,6 @@ namespace Editor
 
 				if (i > 0)
 				{
-					auto& prevKey = mTrack->GetKeys()[i - 1];
 					int np = (i - 1)*2;
 
 					mesh.indexes[np*3] = nv - 2;

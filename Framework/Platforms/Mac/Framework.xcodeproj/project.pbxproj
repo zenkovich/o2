@@ -1608,6 +1608,8 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ../../Sources/o2/stdafx.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					PLATFORM_MAC,
 					"$(inherited)",
@@ -1625,7 +1627,6 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fdeclspec",
-					"-Wundefined-var-template",
 				);
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = (
@@ -1635,7 +1636,7 @@
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
 				);
-				WARNING_CFLAGS = "-Wundefined-var-template";
+				WARNING_CFLAGS = "-Wno-undefined-var-template";
 			};
 			name = Debug;
 		};
@@ -1678,6 +1679,8 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = ../../Sources/o2/stdafx.h;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					PLATFORM_MAC,
 					"$(inherited)",
@@ -1694,7 +1697,6 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fdeclspec",
-					"-Wundefined-var-template",
 				);
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = (
@@ -1704,7 +1706,7 @@
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
 					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
 				);
-				WARNING_CFLAGS = "-Wundefined-var-template";
+				WARNING_CFLAGS = "-Wno-undefined-var-template";
 			};
 			name = Release;
 		};

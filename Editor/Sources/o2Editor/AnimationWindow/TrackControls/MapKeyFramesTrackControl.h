@@ -178,7 +178,6 @@ namespace Editor
 			handle->SetSelectionGroup(dynamic_cast<ISelectableDragHandlesGroup*>(trackControl->mHandlesSheet));
 
 			auto updatePosFunc = [=](KeyHandle& keyHandle) {
-				auto& keys = Wrapper::GetKeys(*track);
 				keyHandle.handle->SetPosition(Vec2F(Wrapper::FindKey(*track, handle->keyUid).position, 0.0f));
 			};
 

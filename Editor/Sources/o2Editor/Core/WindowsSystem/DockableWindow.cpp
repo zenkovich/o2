@@ -153,7 +153,6 @@ namespace Editor
 
 	void DockableWindow::RecalculateTabWidth()
 	{
-		float width = 0;
 		float expand = 35;
 		if (auto textLayer = GetLayer(mTabCaptionLayerPath))
 		{
@@ -374,7 +373,6 @@ namespace Editor
 		}
 		else
 		{
-			Vec2F cursorPos = o2Input.cursorPos;
 			auto listenersUnderCursor = o2Events.GetAllCursorListenersUnderCursor(0);
 			auto dockPlaceListener = listenersUnderCursor.FindOrDefault([](CursorAreaEventsListener* x) {
 				return dynamic_cast<DockWindowPlace*>(x) != nullptr;
@@ -538,7 +536,6 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		mNonDockSize = layout->size;
-		RectF dockPlaceRect = targetDock->layout->GetWorldRect();
 
 		DockWindowPlace* windowDock = mnew DockWindowPlace();
 		windowDock->name = "window dock";
@@ -596,7 +593,6 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		mNonDockSize = layout->size;
-		RectF dockPlaceRect = targetDock->layout->GetWorldRect();
 
 		DockWindowPlace* windowDock = mnew DockWindowPlace();
 		windowDock->name = "window dock";

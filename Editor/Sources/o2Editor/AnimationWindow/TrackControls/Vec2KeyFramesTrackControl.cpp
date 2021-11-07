@@ -187,7 +187,6 @@ namespace Editor
 	void Vec2KeyFramesTrackControl::SplineWrapper::SetPointPos(int idx, const Vec2F& pos)
 	{
 		auto key = trackControl->mTrack->spline.GetKey(idx);
-		Vec2F delta = pos - key.value;
 		key.value = pos;
 		trackControl->mTrack->spline.SetKey(key, idx);
 	}

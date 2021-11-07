@@ -165,7 +165,6 @@ namespace Editor
 		camRect.right = mAnimationWindow->mTimeline->WorldToLocal(mAnimationWindow->mTimeline->layout->worldRight);
 
 		camera.SetRect(camRect, false);
-		RectF checkRect = camera.GetRect();
 
 		mEditorViewLock = true;
 		mCurvesEditor->SetCamera(camera);

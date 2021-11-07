@@ -1374,7 +1374,6 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fdeclspec",
-					"-Wundefined-var-template",
 				);
 				SDKROOT = macosx;
 				SYSTEM_HEADER_SEARCH_PATHS = (
@@ -1393,7 +1392,7 @@
 					/Users/playrix/PetStory/o2/Editor/Sources,
 				);
 				USE_HEADERMAP = YES;
-				WARNING_CFLAGS = "-Wundefined-var-template";
+				WARNING_CFLAGS = "-Wno-undefined-var-template";
 			};
 			name = Debug;
 		};
@@ -1452,7 +1451,6 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-fdeclspec",
-					"-Wundefined-var-template",
 				);
 				SDKROOT = macosx;
 				SYSTEM_HEADER_SEARCH_PATHS = (
@@ -1471,7 +1469,7 @@
 					/Users/playrix/PetStory/o2/Editor/Sources,
 				);
 				USE_HEADERMAP = YES;
-				WARNING_CFLAGS = "-Wundefined-var-template";
+				WARNING_CFLAGS = "-Wno-undefined-var-template";
 			};
 			name = Release;
 		};

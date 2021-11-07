@@ -1,5 +1,5 @@
 #include "o2Editor/stdafx.h"
-#include "Vector2intProperty.h"
+#include "Vector2IntProperty.h"
 
 #include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
 

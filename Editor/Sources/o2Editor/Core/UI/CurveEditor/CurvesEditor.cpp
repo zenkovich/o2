@@ -465,7 +465,6 @@ namespace Editor
 
 		Vec2F gridScale(1, 1);
 		Vec2F gridOffset(0, 0);
-		bool drawText = false;
 
 		bool allSameCurve = !mSelectedHandles.IsEmpty() && mSelectedHandles.All([&](DragHandle* x) {
 			return ((CurveHandle*)x)->curveInfo == ((CurveHandle*)mSelectedHandles[0])->curveInfo;
@@ -535,7 +534,6 @@ namespace Editor
 		Vec2I cellsCount(Math::CeilToInt(curveViewCameraRect.Width()/curveViewCellSize.x),
 						 Math::CeilToInt(curveViewCameraRect.Height()/curveViewCellSize.y));
 
-		Vec2F screenTenCellsSize = screenCellSize*10.0f;
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
 		Vec2F tenCurveViewCellSize = curveViewCellSize*10.0f;
@@ -1019,7 +1017,6 @@ namespace Editor
 			Curve::Key prevKey = info->curve->GetKeyAt(Math::Max(handles->curveKeyIdx - 1, 0));
 
 			Vec2F rightSupportVector = Vec2F(key.rightSupportPosition, key.rightSupportValue);
-			Vec2F leftSupportVector = rightSupportVector.Inverted();
 
 			key.leftSupportPosition = -key.rightSupportPosition;
 			key.leftSupportValue = -key.rightSupportValue;
@@ -1075,7 +1072,6 @@ namespace Editor
 	void CurvesEditor::OnCursorDblClicked(const Input::Cursor& cursor)
 	{
 		const float createPointDistanceThreshold = 7;
-		const float supportValuesCoef = 0.15f;
 
 		CurveInfo* clickedCurveInfo = nullptr;
 		Curve::Key newKey;
@@ -1113,8 +1109,6 @@ namespace Editor
 					if (pointDistance < createPointDistanceThreshold ||
 						(lineDistance < createPointDistanceThreshold && proj > 0.0f && proj < abl))
 					{
-						const Curve::Key& lastKey = keys[keyIdx - 1];
-
 						Vec2F p = abnp*(abnp.Dot(localCursorPos - a)) + localCursorPos;
 						Vec2F pc = LocalToCurveView(p, info->viewScale, info->viewOffset);
 						newKey.position = pc.x;
@@ -1232,7 +1226,6 @@ namespace Editor
 			Vec2F thisToLast = lastKeyPoint - thisKeyPoint;
 			Vec2F thisToNext = nextKeyPoint - thisKeyPoint;
 
-			Vec2F lengthNorm = (nextKeyPoint - lastKeyPoint).Normalized();
 			float supportLength = Math::Min(thisToNext.Length(), thisToLast.Length())*autoSmoothCoef;
 			Vec2F supportVec = Math::CalculateEllipseTangent(lastKeyPoint, thisKeyPoint, nextKeyPoint)*supportLength;
 

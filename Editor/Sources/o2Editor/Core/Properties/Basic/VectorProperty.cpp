@@ -452,7 +452,6 @@ namespace Editor
 	void VectorProperty::Remove(int idx)
 	{
 		Vector<DataDocument> prevValues, newValues;
-		auto elementFieldInfo = mVectorType->GetElementFieldInfo();
 
 		for (auto& obj : mTargetObjects)
 		{

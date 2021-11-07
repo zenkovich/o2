@@ -442,7 +442,6 @@ namespace Editor
 			mSplineWrapper->WorldToLocal(Vec2F()).x;
 
 		Vec2F prev = mSplineWrapper->GetPointPrevSupportPos(i);
-		Vec2F curr = mSplineWrapper->GetPointPos(i);
 		Vec2F next = mSplineWrapper->GetPointNextSupportPos(i);
 
 		handles->startDragFromZero = (next - prev).Length() < threshold;
@@ -496,7 +495,6 @@ namespace Editor
 		Vec2F localBasisYV = mSplineWrapper->WorldToLocal(basis.yv - Vec2F(0, mTransformBasisOffet.y*2.0f) + basis.origin + mTransformBasisOffet) - localBasisOrig;
 		Basis localBasis(localBasisOrig, localBasisXV, localBasisYV);
 
-		Basis lastTransformBasis = mTransformFrameBasis;
 		Basis delta = mTransformFrameBasis.Inverted()*localBasis;
 
 		if (delta.origin.Length() > 0.01f || delta.xv != Vec2F(1, 0) || delta.yv != Vec2F(0, 1))

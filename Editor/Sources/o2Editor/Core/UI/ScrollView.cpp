@@ -206,7 +206,6 @@ namespace Editor
 		Basis cameraTransform = camera.basis;
 
 		Basis sceneToCamTransform = identityCamTransform.Inverted()*cameraTransform;
-		Basis drawRectTransform = Transform(rectangle.Size(), rectangle.Center()).basis;
 
 		return Basis::Translated(rectangle.Center()*-1.0f)*sceneToCamTransform;
 	}
@@ -289,7 +288,6 @@ namespace Editor
 
 		int cellsCount = Math::CeilToInt(cameraMaxSize / cellSize);
 		float tenCeilsSize = cellSize*10.0f;
-		float screenCellSize = cellSize / mViewCamera.GetScale().x;
 		Color4 cellColorSmoothed = Math::Lerp(mGridColor, mBackColor, 0.7f);
 
 		for (int i = -cellsCount / 2; i < cellsCount / 2; i++)

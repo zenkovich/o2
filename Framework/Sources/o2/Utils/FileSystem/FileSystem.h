@@ -33,7 +33,7 @@ namespace o2
 #if defined PLATFORM_ANDROID
         // Returns android asset manager
         AAssetManager* GetAssetManager() const;
-#else defined PLATFORM_MAC
+#elif defined PLATFORM_MAC || defined PLATFORM_IOS
 		// Returns bundle path
 		const String& GetBundlePath() const;
 #endif

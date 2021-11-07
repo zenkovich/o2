@@ -330,7 +330,6 @@ namespace Editor
 		if (selectedObjects.Count() > 0)
 		{
 			auto obj = selectedObjects.Last();
-			auto node = mSceneTree->GetNode(obj);
 
 			SceneEditableObject* parentObject = obj;
 			parentObject->AddEditableChild(newObject);
