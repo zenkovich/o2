@@ -4478,7 +4478,7 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		String thisSourcePath = "o2/Editor/Sources/o2Editor/Core/UIStyle/EditorUIStyle.cpp";
+		String thisSourcePath = "../../o2/Editor/Sources/o2Editor/Core/UIStyle/EditorUIStyle.cpp";
 		TimeStamp thisSourceEditedDate = o2FileSystem.GetFileInfo(thisSourcePath).editDate;
 
 		DataDocument stylesRebuildDateData;

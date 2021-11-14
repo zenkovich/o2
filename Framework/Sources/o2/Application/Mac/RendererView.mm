@@ -46,14 +46,69 @@
 	[self addTrackingArea:area];
 }
 
+- (int)getKeyCode:(NSEvent *)event
+{
+	const auto keyFlags = [event modifierFlags];
+	if (!(keyFlags & NSEventModifierFlagFunction))
+	{
+		NSString *str = [event charactersIgnoringModifiers];
+		if (str && [str length] != 0)
+		{
+			const int charCode = [str characterAtIndex : 0];
+			if (charCode >= 0)
+			{
+				constexpr int keyBackspace = 0x7f;
+				constexpr int keyReturn = 0x0d;
+				constexpr int keyPadEnter = 0x03;
+				constexpr int keyEscape = 0x1b;
+				
+				if ((charCode != keyBackspace) && (charCode != keyReturn) && (charCode != keyPadEnter) && (charCode != keyEscape))
+					return charCode;
+			}
+		}
+	}
+	
+	return -[event keyCode];
+}
+
 - (void)keyDown:(NSEvent *)event
 {
-	o2Input.OnKeyPressed([event keyCode]);
+	o2Input.OnKeyPressed([self getKeyCode:event]);
 }
 
 - (void)keyUp:(NSEvent *)event
 {
-	o2Input.OnKeyReleased([event keyCode]);
+	o2Input.OnKeyReleased([self getKeyCode:event]);
+}
+
+- (void)flagsChanged:(NSEvent*)event
+{
+	bool shift = event.modifierFlags & NSShiftKeyMask;
+	bool alt = event.modifierFlags & NSAlternateKeyMask;
+	bool ctrl = event.modifierFlags & NSControlKeyMask;
+	bool command = event.modifierFlags & NSCommandKeyMask;
+	
+	static bool prevShift = shift;
+	static bool prevAlt = alt;
+	static bool prevCtrl = ctrl;
+	static bool prevCommand = command;
+	
+	if (shift != prevShift)
+		shift ? o2Input.OnKeyPressed(VK_SHIFT) : o2Input.OnKeyReleased(VK_SHIFT);
+	
+	if (alt != prevAlt)
+		alt ? o2Input.OnKeyPressed(VK_MENU) : o2Input.OnKeyReleased(VK_MENU);
+	
+	if (ctrl != prevCtrl)
+		ctrl ? o2Input.OnKeyPressed(VK_CONTROL) : o2Input.OnKeyReleased(VK_CONTROL);
+	
+	if (command != prevCommand)
+		command ? o2Input.OnKeyPressed(VK_COMMAND) : o2Input.OnKeyReleased(VK_COMMAND);
+	
+	prevShift = shift;
+	prevAlt = alt;
+	prevCtrl = ctrl;
+	prevCommand = command;
 }
 
 - (o2::Vec2F)getMousePos:(NSEvent *)event

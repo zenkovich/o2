@@ -99,7 +99,7 @@ namespace Editor
 
 	void TreeWindow::InitializeTestScene()
 	{
-		o2EditorApplication.LoadScene("Assets/test.scn");
+		o2EditorApplication.LoadScene("../../Assets/test.scn");
 	}
 
 	void TreeWindow::InitializeSceneTree()

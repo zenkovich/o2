@@ -1430,20 +1430,20 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
-					/Users/playrix/PetStory/o2/Editor/Sources,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
+					../../o2/Editor/Sources,
 				);
 				USER_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
-					/Users/playrix/PetStory/o2/Editor/Sources,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
+					../../o2/Editor/Sources,
 				);
 			};
 			name = Debug;
@@ -1499,20 +1499,20 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
-					/Users/playrix/PetStory/o2/Editor/Sources,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
+					../../o2/Editor/Sources,
 				);
 				USER_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
-					/Users/playrix/PetStory/o2/Editor/Sources,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
+					../../o2/Editor/Sources,
 				);
 			};
 			name = Release;

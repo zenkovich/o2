@@ -1630,11 +1630,11 @@
 				);
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
+					../../o2/Framework/Sources,
+					../../o2/Framework,
+					../../o2/Framework/3rdPartyLibs/FreeType/include,
+					../../o2/Framework/3rdPartyLibs,
+					../../o2/Framework/3rdPartyLibs/rapidjson/include,
 				);
 				WARNING_CFLAGS = "-Wno-undefined-var-template";
 			};
@@ -1700,11 +1700,11 @@
 				);
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
+					../../o2/Framework/Sources,
+					../../o2/Framework,
+					../../o2/Framework/3rdPartyLibs/FreeType/include,
+					../../o2/Framework/3rdPartyLibs,
+					../../o2/Framework/3rdPartyLibs/rapidjson/include,
 				);
 				WARNING_CFLAGS = "-Wno-undefined-var-template";
 			};

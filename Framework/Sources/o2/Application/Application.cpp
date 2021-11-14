@@ -116,6 +116,13 @@ namespace o2
 		delete mEventSystem;
 		delete mTaskManager;
 	}
+	
+	void Application::SetupGraphicsScaledCamera()
+	{
+		Camera camera = Camera::Default();
+		camera.scale = Vec2F(1.0f/mGraphicsScale, 1.0f/mGraphicsScale);
+		o2Render.camera = camera;
+	}
 
 	void Application::ProcessFrame()
 	{
@@ -164,6 +171,10 @@ namespace o2
 		}
 
 		PostUpdateEventSystem();
+		
+		mMainListenersLayer.OnBeginDraw();
+		SetupGraphicsScaledCamera();
+		mMainListenersLayer.camera = o2Render.GetCamera();
 
 		OnDraw();
 		DrawScene();
@@ -172,6 +183,8 @@ namespace o2
 
 		o2Debug.Draw();
 
+		mMainListenersLayer.OnEndDraw();
+		mMainListenersLayer.OnDrawn(Camera::Default().GetBasis());
 		mRender->End();
 
 		mInput->Update(dt);

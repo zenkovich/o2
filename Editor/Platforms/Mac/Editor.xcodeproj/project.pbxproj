@@ -521,6 +521,8 @@
 		A646005D26F645730096726D /* o2Editor */ = {
 			isa = PBXGroup;
 			children = (
+				A646012326F645740096726D /* stdafx.cpp */,
+				A646005E26F645730096726D /* stdafx.h */,
 				A646015726F645740096726D /* AnimationWindow */,
 				A646011026F645740096726D /* AssetsWindow */,
 				A646005F26F645730096726D /* Core */,
@@ -528,8 +530,6 @@
 				A646015426F645740096726D /* LogWindow */,
 				A646012426F645740096726D /* PropertiesWindow */,
 				A646011926F645740096726D /* SceneWindow */,
-				A646012326F645740096726D /* stdafx.cpp */,
-				A646005E26F645730096726D /* stdafx.h */,
 				A646010B26F645740096726D /* TreeWindow */,
 			);
 			name = o2Editor;
@@ -786,15 +786,15 @@
 		A64600F726F645740096726D /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
+				A646010526F645740096726D /* ColorPickerDlg.cpp */,
+				A646010426F645740096726D /* ColorPickerDlg.h */,
 				A64600F826F645740096726D /* CurveEditorDlg.cpp */,
+				A646010626F645740096726D /* CurveEditorDlg.h */,
+				A64600FB26F645740096726D /* EditNameDlg.cpp */,
 				A64600F926F645740096726D /* EditNameDlg.h */,
 				A64600FA26F645740096726D /* KeyEditDlg.cpp */,
-				A64600FB26F645740096726D /* EditNameDlg.cpp */,
-				A64600FC26F645740096726D /* System */,
 				A646010326F645740096726D /* KeyEditDlg.h */,
-				A646010426F645740096726D /* ColorPickerDlg.h */,
-				A646010526F645740096726D /* ColorPickerDlg.cpp */,
-				A646010626F645740096726D /* CurveEditorDlg.h */,
+				A64600FC26F645740096726D /* System */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -944,21 +944,21 @@
 		A646015726F645740096726D /* AnimationWindow */ = {
 			isa = PBXGroup;
 			children = (
-				A646015826F645740096726D /* KeyHandlesSheet.h */,
 				A646015926F645740096726D /* AnimationKeysActions.cpp */,
-				A646015A26F645740096726D /* KeyHandlesSheet.cpp */,
-				A646015B26F645740096726D /* Tree.h */,
+				A646017126F645740096726D /* AnimationKeysActions.h */,
+				A646016F26F645740096726D /* AnimationWindow.cpp */,
+				A646016126F645740096726D /* AnimationWindow.h */,
+				A646016226F645740096726D /* CurvesSheet.cpp */,
 				A646015C26F645740096726D /* CurvesSheet.h */,
+				A646015A26F645740096726D /* KeyHandlesSheet.cpp */,
+				A646015826F645740096726D /* KeyHandlesSheet.h */,
 				A646015D26F645740096726D /* PropertiesListDlg.cpp */,
 				A646015E26F645740096726D /* PropertiesListDlg.h */,
 				A646015F26F645740096726D /* Timeline.cpp */,
-				A646016026F645740096726D /* Tree.cpp */,
-				A646016126F645740096726D /* AnimationWindow.h */,
-				A646016226F645740096726D /* CurvesSheet.cpp */,
-				A646016326F645740096726D /* TrackControls */,
-				A646016F26F645740096726D /* AnimationWindow.cpp */,
 				A646017026F645740096726D /* Timeline.h */,
-				A646017126F645740096726D /* AnimationKeysActions.h */,
+				A646016326F645740096726D /* TrackControls */,
+				A646016026F645740096726D /* Tree.cpp */,
+				A646015B26F645740096726D /* Tree.h */,
 			);
 			path = AnimationWindow;
 			sourceTree = "<group>";
@@ -1377,19 +1377,19 @@
 				);
 				SDKROOT = macosx;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
 				);
 				USER_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
-					/Users/playrix/PetStory/o2/Editor/Sources,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
+					../../Sources,
 				);
 				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = "-Wno-undefined-var-template";
@@ -1454,19 +1454,19 @@
 				);
 				SDKROOT = macosx;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
 				);
 				USER_HEADER_SEARCH_PATHS = (
-					/Users/playrix/PetStory/o2/Framework/Sources,
-					/Users/playrix/PetStory/o2/Framework,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/FreeType/include,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs,
-					/Users/playrix/PetStory/o2/Framework/3rdPartyLibs/rapidjson/include,
-					/Users/playrix/PetStory/o2/Editor/Sources,
+					../../Sources,
+					../..,
+					../../3rdPartyLibs/FreeType/include,
+					../../3rdPartyLibs,
+					../../3rdPartyLibs/rapidjson/include,
+					../../Sources,
 				);
 				USE_HEADERMAP = YES;
 				WARNING_CFLAGS = "-Wno-undefined-var-template";

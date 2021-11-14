@@ -5,6 +5,7 @@
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/String.h"
+#include "o2/Events/CursorAreaEventsListenersLayer.h"
 
 #if defined PLATFORM_WINDOWS
 #include "o2/Application/Windows/ApplicationBase.h"
@@ -219,6 +220,8 @@ namespace o2
 
 		float mAccumulatedDT = 0.0f; // Accumulated delta time for fixed FPS update
 		
+		CursorAreaEventListenersLayer mMainListenersLayer; // Main listeners layer, required for processing default scaled camera
+		
 		float mGraphicsScale = 1.0f; // Application graphics scale. Used in mac for retina displays
 
 	protected:
@@ -257,6 +260,9 @@ namespace o2
 
 		// Calling on updating by fixed FPS
 		virtual void OnFixedUpdate(float dt);
+		
+		// Setups default camera with scaled graphics
+		virtual void SetupGraphicsScaledCamera();
 
 		// Calling on drawing
 		virtual void OnDraw();

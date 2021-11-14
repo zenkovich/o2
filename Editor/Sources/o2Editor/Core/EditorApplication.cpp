@@ -279,7 +279,6 @@ namespace Editor
 		PushEditorScopeOnStack scope;
 
 		o2Render.Clear();
-		o2Render.camera = Camera();
 
 		mBackground->Draw();
 		mBackSign->Draw();

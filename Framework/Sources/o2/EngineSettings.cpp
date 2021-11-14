@@ -33,7 +33,11 @@ const char* GetProjectPath()
 
 const char* GetProjectSettingPath()
 {
+#if defined PLATFORM_MAC
+	return "../../ProjectSettings.json";
+#else
 	return "ProjectSettings.json";
+#endif
 }
 
 bool IsStoppingOnLogErrors()
@@ -71,7 +75,11 @@ bool IsAssetsPrebuildEnabled()
 
 const char* GetAssetsPath()
 {
+#if defined PLATFORM_MAC
+	return "../../Assets/";
+#else
 	return "Assets/";
+#endif
 }
 
 const char* GetBuiltAssetsPath()
@@ -81,7 +89,7 @@ const char* GetBuiltAssetsPath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/BuiltAssets/";
 #elif defined PLATFORM_MAC
-	return "BuiltAssets/Mac/Data/";
+	return "../../BuiltAssets/Mac/Data/";
 #elif defined PLATFORM_IOS
 	return "Data/";
 #endif
@@ -99,7 +107,7 @@ const char* GetBuiltAssetsTreePath()
 #elif defined PLATFORM_ANDROID
 	return "AndroidAssets/AssetsTree.json";
 #elif defined PLATFORM_MAC
-	return "BuiltAssets/Mac/Data.json";
+	return "../../BuiltAssets/Mac/Data.json";
 #elif defined PLATFORM_IOS
 	return "Data.json";
 #endif
@@ -110,7 +118,7 @@ const char* GetEditorAssetsPath()
 #if defined PLATFORM_WINDOWS
 	return "o2/Editor/Assets/";
 #elif defined PLATFORM_MAC
-	return "o2/Editor/Assets/";
+	return "../../o2/Editor/Assets/";
 #endif
 	return "";
 }
@@ -120,7 +128,7 @@ const char* GetEditorBuiltAssetsPath()
 #if defined PLATFORM_WINDOWS
 	return "BuiltAssets/Windows/EditorData/";
 #elif defined PLATFORM_MAC
-	return "BuiltAssets/Mac/EditorData/";
+	return "../../BuiltAssets/Mac/EditorData/";
 #endif
 	return "";
 }
@@ -130,7 +138,7 @@ const char* GetEditorBuiltAssetsTreePath()
 #if defined PLATFORM_WINDOWS
 	return "BuiltAssets/Windows/EditorData.json";
 #elif defined PLATFORM_MAC
-	return "BuiltAssets/Mac/EditorData.json";
+	return "../../BuiltAssets/Mac/EditorData.json";
 #endif
 	return "";
 }

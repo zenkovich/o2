@@ -226,13 +226,15 @@ namespace o2
 
 	void Input::PreUpdate()
 	{
-		for (auto msg : mInputQueue)
+		auto inputQueue = mInputQueue;
+		for (auto msg : inputQueue)
 		{
-			msg->Apply();
-			delete msg;
+			if (msg->Apply())
+			{
+				mInputQueue.Remove(msg);
+				delete msg;
+			}
 		}
-
-		mInputQueue.Clear();
 	}
 
 	void Input::OnKeyPressed(KeyboardKey key)
@@ -327,26 +329,25 @@ namespace o2
 		mPressedKeys.Add(Key(key));
 	}
 
-	void Input::OnKeyReleasedMsgApply(KeyboardKey key)
+	bool Input::OnKeyReleasedMsgApply(KeyboardKey key)
 	{
+		for (auto ikey : mPressedKeys)
+		{
+			if (ikey.keyCode == key)
+				return false;
+		}
+		
 		for (auto ikey : mDownKeys)
 		{
 			if (ikey.keyCode == key)
 			{
 				mDownKeys.Remove(ikey);
 				mReleasedKeys.Add(Key(key));
-				return;
+				return true;
 			}
 		}
-
-		for (auto ikey : mPressedKeys)
-		{
-			if (ikey.keyCode == key)
-			{
-				mPressedKeys.Remove(ikey);
-				return;
-			}
-		}
+		
+		return true;
 	}
 
 	void Input::OnCursorPressedMsgApply(const Vec2F& pos, CursorId id /*= 0*/)
@@ -463,34 +464,39 @@ namespace o2
 		return keyCode == key;
 	}
 
-	void Input::InputCursorPressedMsg::Apply()
+	bool Input::InputCursorPressedMsg::Apply()
 	{
 		o2Input.OnCursorPressedMsgApply(position, id);
+		return true;
 	}
 
-	void Input::InputCursorMovedMsg::Apply()
+	bool Input::InputCursorMovedMsg::Apply()
 	{
 		o2Input.OnCursorMovedMsgApply(position, id);
+		return true;
 	}
 
-	void Input::InputCursorReleasedMsg::Apply()
+	bool Input::InputCursorReleasedMsg::Apply()
 	{
 		o2Input.OnCursorReleasedMsgApply(id);
+		return true;
 	}
 
-	void Input::InputKeyPressedMsg::Apply()
+	bool Input::InputKeyPressedMsg::Apply()
 	{
 		o2Input.OnKeyPressedMsgApply(key);
+		return true;
 	}
 
-	void Input::InputKeyReleasedMsg::Apply()
+	bool Input::InputKeyReleasedMsg::Apply()
 	{
-		o2Input.OnKeyReleasedMsgApply(key);
+		return o2Input.OnKeyReleasedMsgApply(key);
 	}
 
-	void Input::InputMouseWheelMsg::Apply()
+	bool Input::InputMouseWheelMsg::Apply()
 	{
 		o2Input.OnMouseWheelMsgApply(delta);
+		return true;
 	}
 
 }

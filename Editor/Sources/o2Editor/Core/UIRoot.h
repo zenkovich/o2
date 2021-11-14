@@ -36,7 +36,6 @@ namespace Editor
 
 	private:
 		Widget* mRootWidget = nullptr;
-		CursorAreaEventListenersLayer mListenersLayer;
 
 	private:
 		// Default constructor, creates root widget

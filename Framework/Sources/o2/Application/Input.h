@@ -207,8 +207,8 @@ namespace o2
 			// Virtual destructor
 			virtual ~IInputMsg() {}
 
-			// Applies input message
-			virtual void Apply() = 0;
+			// Applies input message. Returns true when message processed, and false when not and must be processed at next frame
+			virtual bool Apply() = 0;
 		};
 
 		struct InputCursorPressedMsg : public IInputMsg
@@ -216,7 +216,7 @@ namespace o2
 			int   id;
 			Vec2F position;
 
-			void Apply() override;
+			bool Apply() override;
 		};
 
 		struct InputCursorMovedMsg : public IInputMsg
@@ -224,35 +224,35 @@ namespace o2
 			int   id;
 			Vec2F position;
 
-			void Apply() override;
+			bool Apply() override;
 		};
 
 		struct InputCursorReleasedMsg : public IInputMsg
 		{
 			int id;
 
-			void Apply() override;
+			bool Apply() override;
 		};
 
 		struct InputKeyPressedMsg : public IInputMsg
 		{
 			KeyboardKey key;
 
-			void Apply() override;
+			bool Apply() override;
 		};
 
 		struct InputKeyReleasedMsg : public IInputMsg
 		{
 			KeyboardKey key;
 
-			void Apply() override;
+			bool Apply() override;
 		};
 
 		struct InputMouseWheelMsg : public IInputMsg
 		{
 			float delta;
 
-			void Apply() override;
+			bool Apply() override;
 		};
 
 	protected:
@@ -290,7 +290,7 @@ namespace o2
 		void OnKeyPressedMsgApply(KeyboardKey key);
 
 		// It is called when key released message apply
-		void OnKeyReleasedMsgApply(KeyboardKey key);
+		bool OnKeyReleasedMsgApply(KeyboardKey key);
 
 		// It is called when cursor pressed message apply
 		void OnCursorPressedMsgApply(const Vec2F& pos, CursorId id = 0);

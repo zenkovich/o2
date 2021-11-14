@@ -56,8 +56,8 @@ namespace Editor
 			SERIALIZABLE(ProjectConfig);
 		};
 	protected:
-		String mConfigPath = "EditorConfig.json";
-		String mGlobalConfigPath = "Config.json";
+		String mConfigPath = "../../EditorConfig.json";
+		String mGlobalConfigPath = "../../Config.json";
 
 		bool          mConfigsLoaded = false; // True if configurations were loaded
 		ProjectConfig mProjectConfig;         // Project editor config

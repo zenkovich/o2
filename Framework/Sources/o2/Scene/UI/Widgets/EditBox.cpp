@@ -1084,9 +1084,13 @@ namespace o2
 		ToUnicodeEx(code, 0, allKeys, reinterpret_cast<wchar_t*>(&unicode), 1, 0, layout);
 
 		return unicode;
+		
+#elif defined PLATFORM_MAC
+		if (code < 0)
+			return 0;
+		
+		return (UInt16)code;
 #endif
-
-		return 0;
 	}
 
 	void EditBox::CheckCharacterTyping(KeyboardKey key)
