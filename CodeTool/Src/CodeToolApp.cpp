@@ -908,7 +908,7 @@ string CodeToolApplication::GetFieldAttributes(SyntaxClass* cls, SyntaxVariable*
 			if (!attributeClass->GetAttributeCommentDef().empty() && fnd != string::npos)
 			{
 				auto nextSymbol = synComment->GetData()[fnd + attributeClass->GetAttributeCommentDef().length()];
-				if ((nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0') && synComment->GetData()[fnd - 1] == '@')
+				if ((nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0' || nextSymbol == '(') && synComment->GetData()[fnd - 1] == '@')
 				{
 					string parameters = "()";
 					auto parametersBegin = fnd + attributeClass->GetAttributeCommentDef().length();
