@@ -61,28 +61,15 @@ namespace Editor
 	protected:
 		// Removes target components
 		void RemoveTargetComponents();
+
+		// Enable viewer event function
+		virtual void OnEnabled() {}
+
+		// Disable viewer event function
+		virtual void OnDisabled() {}
+
+		friend class ActorViewer;
 	};
-
-	template<typename _component_type>
-	class TActorComponentViewer : public IActorComponentViewer
-	{
-	public:
-		// Sets target actors
-		void SetTargetComponents(const Vector<Component*>& components) override;
-
-		IOBJECT(TActorComponentViewer<_component_type>);
-
-	protected:
-		Vector<_component_type*> mTargetComponents;
-	};
-
-	template<typename _component_type>
-	void TActorComponentViewer<_component_type>::SetTargetComponents(const Vector<Component*>& components)
-	{
-		IActorComponentViewer::SetTargetComponents(components);
-		mTargetComponents = components.DynamicCast<_component_type*>();
-	}
-
 }
 
 CLASS_BASES_META(Editor::IActorComponentViewer)
@@ -107,25 +94,7 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
 	PROTECTED_FUNCTION(void, RemoveTargetComponents);
-}
-END_META;
-
-META_TEMPLATES(typename _component_type)
-CLASS_BASES_META(Editor::TActorComponentViewer<_component_type>)
-{
-	BASE_CLASS(Editor::IActorComponentViewer);
-}
-END_META;
-META_TEMPLATES(typename _component_type)
-CLASS_FIELDS_META(Editor::TActorComponentViewer<_component_type>)
-{
-	FIELD().NAME(mTargetComponents).PROTECTED();
-}
-END_META;
-META_TEMPLATES(typename _component_type)
-CLASS_METHODS_META(Editor::TActorComponentViewer<_component_type>)
-{
-
-	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 }
 END_META;

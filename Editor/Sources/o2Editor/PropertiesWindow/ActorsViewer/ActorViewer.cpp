@@ -37,7 +37,12 @@ namespace Editor
 		// Create available component and actors viewers
 		auto componentsViewersTypes = TypeOf(IActorComponentViewer).GetDerivedTypes();
 		for (auto type : componentsViewersTypes)
+		{
+			if (type->GetName().Contains("TActorComponentViewer"))
+				continue;
+
 			mAvailableComponentsViewers.Add((IActorComponentViewer*)type->CreateSample());
+		}
 
 		auto actorPropertiessViewersTypes = TypeOf(IActorPropertiesViewer).GetDerivedTypes();
 		for (auto type : actorPropertiessViewersTypes)
@@ -274,16 +279,11 @@ namespace Editor
 
 		for (const Type* type : mCommonComponentsTypes)
 		{
-			bool usingDefaultComponentViewer = false;
-
 			auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](IActorComponentViewer* x) {
 				return x->GetComponentType() == type; });
 
 			if (!viewerSample)
-			{
 				viewerSample = mDefaultComponentViewer;
-				usingDefaultComponentViewer = true;
-			}
 
 			if (!mComponentViewersPool.ContainsKey(type) || mComponentViewersPool[type].IsEmpty())
 			{
@@ -291,9 +291,6 @@ namespace Editor
 					mComponentViewersPool.Add(type, Vector<IActorComponentViewer*>());
 
 				auto newViewer = (IActorComponentViewer*)(viewerSample->GetType().CreateSample());
-
-				if (usingDefaultComponentViewer)
-					((DefaultActorComponentViewer*)newViewer)->SpecializeComponentType(type);
 
 				mComponentViewersPool[type].Add(newViewer);
 			}
@@ -309,10 +306,26 @@ namespace Editor
 	}
 
 	void ActorViewer::OnEnabled()
-	{}
+	{
+		mHeaderViewer->OnEnabled();
+		mTransformViewer->OnEnabled();
+
+		if (mActorPropertiesViewer)
+			mActorPropertiesViewer->OnEnabled();
+
+		mComponentsViewers.ForEach([](auto x) { x->OnEnabled(); });
+	}
 
 	void ActorViewer::OnDisabled()
 	{
+		mHeaderViewer->OnDisabled();
+		mTransformViewer->OnDisabled();
+
+		if (mActorPropertiesViewer)
+			mActorPropertiesViewer->OnDisabled();
+
+		mComponentsViewers.ForEach([](auto x) { x->OnDisabled(); });
+
 		mTargetActors.Clear();
 	}
 

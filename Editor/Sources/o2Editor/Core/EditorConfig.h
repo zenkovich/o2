@@ -96,8 +96,8 @@ CLASS_BASES_META(Editor::EditorConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)
 {
-	FIELD().DEFAULT_VALUE("EditorConfig.json").NAME(mConfigPath).PROTECTED();
-	FIELD().DEFAULT_VALUE("Config.json").NAME(mGlobalConfigPath).PROTECTED();
+	FIELD().DEFAULT_VALUE("../../EditorConfig.json").NAME(mConfigPath).PROTECTED();
+	FIELD().DEFAULT_VALUE("../../Config.json").NAME(mGlobalConfigPath).PROTECTED();
 	FIELD().DEFAULT_VALUE(false).NAME(mConfigsLoaded).PROTECTED();
 	FIELD().NAME(mProjectConfig).PROTECTED();
 	FIELD().NAME(mGlobalConfig).PROTECTED();

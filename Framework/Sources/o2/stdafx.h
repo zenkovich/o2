@@ -1,5 +1,6 @@
 #pragma once
 
+#define NOMINMAX
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"

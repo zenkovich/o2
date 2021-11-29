@@ -33,6 +33,15 @@ namespace Editor
 		virtual void Refresh() {}
 
 		IOBJECT(IActorHeaderViewer);
+
+	protected:
+		// Enable viewer event function
+		virtual void OnEnabled() {}
+
+		// Disable viewer event function
+		virtual void OnDisabled() {}
+
+		friend class ActorViewer;
 	};
 }
 
@@ -51,5 +60,7 @@ CLASS_METHODS_META(Editor::IActorHeaderViewer)
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 }
 END_META;

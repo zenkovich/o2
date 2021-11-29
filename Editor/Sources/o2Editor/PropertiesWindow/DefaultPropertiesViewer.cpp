@@ -37,6 +37,19 @@ namespace Editor
 		mTargets = targets;
 		Refresh();
 	}
+
+	void DefaultPropertiesViewer::OnEnabled()
+	{
+		if (mViewer)
+			mViewer->OnEnabled();
+	}
+
+	void DefaultPropertiesViewer::OnDisabled()
+	{
+		if (mViewer)
+			mViewer->OnDisabled();
+	}
+
 }
 
 DECLARE_CLASS(Editor::DefaultPropertiesViewer);

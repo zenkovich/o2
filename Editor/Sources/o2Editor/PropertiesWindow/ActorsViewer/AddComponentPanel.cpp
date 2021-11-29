@@ -77,7 +77,13 @@ namespace Editor
 			return;
 
 		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->type);
+		CreateComponent(objType);
 
+		onCursorPressedOutside(*o2Input.GetCursor());
+	}
+
+	void AddComponentPanel::CreateComponent(const ObjectType* objType)
+	{
 		for (auto actor : mViewer->mTargetActors)
 		{
 			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
@@ -86,8 +92,7 @@ namespace Editor
 		}
 
 		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
-
-		onCursorPressedOutside(*o2Input.GetCursor());
+		mViewer->OnEnabled();
 	}
 
 	void AddComponentPanel::OnNodeDblClick(TreeNode* nodeWidget)
@@ -100,15 +105,7 @@ namespace Editor
 			return;
 
 		const ObjectType* objType = dynamic_cast<const ObjectType*>(node->data->type);
-
-		for (auto actor : mViewer->mTargetActors)
-		{
-			auto comp = dynamic_cast<Component*>(objType->DynamicCastToIObject(objType->CreateSample()));
-			actor->AddComponent(comp);
-			comp->OnAddedFromEditor();
-		}
-
-		mViewer->SetTargets(mViewer->mTargetActors.Convert<IObject*>([](auto x) { return dynamic_cast<IObject*>(x); }));
+		CreateComponent(objType);
 	}
 
 	void AddComponentPanel::OnKeyReleased(const Input::Key& key)

@@ -99,6 +99,18 @@ namespace Editor
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
 	}
 
+	void DefaultActorPropertiesViewer::OnEnabled()
+	{
+		if (mViewer)
+			mViewer->OnEnabled();
+	}
+
+	void DefaultActorPropertiesViewer::OnDisabled()
+	{
+		if (mViewer)
+			mViewer->OnDisabled();
+	}
+
 }
 
 DECLARE_CLASS(Editor::DefaultActorPropertiesViewer);

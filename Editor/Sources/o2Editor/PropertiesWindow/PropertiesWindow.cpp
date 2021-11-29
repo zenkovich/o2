@@ -22,6 +22,9 @@ namespace Editor
 
 	PropertiesWindow::~PropertiesWindow()
 	{
+		if (mCurrentViewer)
+			mCurrentViewer->OnDisabled();
+
 		for (auto viewer : mViewers)
 			delete viewer;
 	}
@@ -118,14 +121,16 @@ namespace Editor
 				mCurrentViewer->mContentWidget->SetParent(mWindow);
 				*mCurrentViewer->mContentWidget->layout = WidgetLayout::BothStretch();
 				mCurrentViewer->mContentWidget->Show(true);
-				mCurrentViewer->OnEnabled();
 			}
 		}
 
 		mTargets = targets;
 
 		if (mCurrentViewer)
+		{
 			mCurrentViewer->SetTargets(mTargets);
+			mCurrentViewer->OnEnabled();
+		}
 
 		mOnTargetsChangedDelegate = targetsChangedDelegate;
 		mTargetsChanged = false;

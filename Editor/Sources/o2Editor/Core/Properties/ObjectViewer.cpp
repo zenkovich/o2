@@ -79,6 +79,18 @@ namespace Editor
 		return "UI/Editor";
 	}
 
+	void ObjectViewer::OnEnabled()
+	{
+		if (mPropertiesViewer)
+			mPropertiesViewer->OnEnabled();
+	}
+
+	void ObjectViewer::OnDisabled()
+	{
+		if (mPropertiesViewer)
+			mPropertiesViewer->OnDisabled();
+	}
+
 }
 
 DECLARE_CLASS(Editor::ObjectViewer);

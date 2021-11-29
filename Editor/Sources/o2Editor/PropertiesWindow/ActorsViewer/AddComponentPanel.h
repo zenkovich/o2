@@ -61,6 +61,9 @@ namespace Editor
 		// It is called when add button pressed. Adds selected component to target actors from viewer
 		void OnAddPressed();
 
+		// Creates component by type
+		void CreateComponent(const ObjectType* objType);
+
 		// It is called when tree node was double clicked
 		void OnNodeDblClick(TreeNode* nodeWidget);
 
@@ -209,6 +212,7 @@ CLASS_METHODS_META(Editor::AddComponentPanel)
 	PUBLIC_FUNCTION(bool, IsInputTransparent);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 	PRIVATE_FUNCTION(void, OnAddPressed);
+	PRIVATE_FUNCTION(void, CreateComponent, const ObjectType*);
 	PRIVATE_FUNCTION(void, OnNodeDblClick, TreeNode*);
 	PRIVATE_FUNCTION(void, OnKeyReleased, const Input::Key&);
 }

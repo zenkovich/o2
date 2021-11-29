@@ -47,7 +47,7 @@ namespace Editor
 		if (!components.IsEmpty())
 		{
 			String caption = components[0]->GetName();
-			if (caption.IsEmpty())
+			if (caption.IsEmpty() && GetComponentType())
 				caption = GetSmartName(GetComponentType()->GetName());
 
 			mSpoiler->SetCaption(caption);

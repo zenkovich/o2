@@ -26,6 +26,12 @@ namespace Editor
 		// Sets parent context
 		void SetParentContext(PropertiesContext* context);
 
+		// Enable viewer event function
+		virtual void OnEnabled();
+
+		// Disable viewer event function
+		virtual void OnDisabled();
+
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const;
 
@@ -60,6 +66,8 @@ CLASS_METHODS_META(Editor::ObjectViewer)
 	PUBLIC_FUNCTION(void, Refresh, _tmp1);
 	PUBLIC_FUNCTION(void, Refresh, const Vector<IObject*>&);
 	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
+	PUBLIC_FUNCTION(void, OnEnabled);
+	PUBLIC_FUNCTION(void, OnDisabled);
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
 }

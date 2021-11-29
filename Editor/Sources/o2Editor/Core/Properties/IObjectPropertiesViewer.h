@@ -72,6 +72,12 @@ namespace Editor
 		// Returns is viewer empty
 		bool IsEmpty() const;
 
+		// This is called when object viewer enabled
+		virtual void OnEnabled() {}
+
+		// This is called when object viewer disabled
+		virtual void OnDisabled() {}
+
 		IOBJECT(IObjectPropertiesViewer);
 
 	protected:
@@ -181,6 +187,8 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	PUBLIC_FUNCTION(void, SetCaption, const WString&);
 	PUBLIC_FUNCTION(const WString&, GetCaption);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PUBLIC_FUNCTION(void, OnEnabled);
+	PUBLIC_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(Spoiler*, CreateSpoiler);
 	PROTECTED_FUNCTION(void, OnHeaderEnableChanged, bool);
 	PROTECTED_FUNCTION(bool, CheckBuildProperties, _tmp2);

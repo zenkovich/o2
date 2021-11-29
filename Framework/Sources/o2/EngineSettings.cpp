@@ -26,14 +26,14 @@ o2::DeviceType GetDeviceType()
 const char* GetProjectPath()
 {
 	if constexpr (IS_EDITOR)
-		return "";
+		return "../..";
 	else
 		return "AndroidAssets/";
 }
 
 const char* GetProjectSettingPath()
 {
-#if defined PLATFORM_MAC
+#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
 	return "../../ProjectSettings.json";
 #else
 	return "ProjectSettings.json";
@@ -75,7 +75,7 @@ bool IsAssetsPrebuildEnabled()
 
 const char* GetAssetsPath()
 {
-#if defined PLATFORM_MAC
+#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
 	return "../../Assets/";
 #else
 	return "Assets/";
@@ -115,12 +115,11 @@ const char* GetBuiltAssetsTreePath()
 
 const char* GetEditorAssetsPath()
 {
-#if defined PLATFORM_WINDOWS
+#if defined PLATFORM_WINDOWS || defined PLATFORM_MAC
 	return "../../o2/Editor/Assets/";
-#elif defined PLATFORM_MAC
-	return "../../o2/Editor/Assets/";
-#endif
+#else
 	return "";
+#endif
 }
 
 const char* GetEditorBuiltAssetsPath()

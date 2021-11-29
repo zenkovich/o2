@@ -31,6 +31,9 @@
     <Filter Include="rapidjson">
       <UniqueIdentifier>{140584e6-bedb-4d3e-962a-cb225d7c934b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CDT">
+      <UniqueIdentifier>{4391d0c8-2c3a-41e6-ab1e-c090ea22fb32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugiconfig.hpp">
@@ -362,6 +365,36 @@
     </ClInclude>
     <ClInclude Include="..\..\3rdPartyLibs\rapidjson\include\rapidjson\writer.h">
       <Filter>rapidjson</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDT.h">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDT.hpp">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDTUtils.h">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDTUtils.hpp">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\KDTree.h">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\LocatorKDTree.h">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\predicates.h">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\remove_at.hpp">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\extras\InitializeWithGrid.h">
+      <Filter>CDT</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\extras\VerifyTopology.h">
+      <Filter>CDT</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -715,6 +748,9 @@
     </ClCompile>
     <ClCompile Include="..\..\3rdPartyLibs\Box2D\Rope\b2Rope.cpp">
       <Filter>Box2D</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\CDT\src\CDT.cpp">
+      <Filter>CDT</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

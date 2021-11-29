@@ -9,7 +9,8 @@ namespace o2
 
 	CursorAreaEventListenersLayer::~CursorAreaEventListenersLayer()
 	{
-		o2Events.RemoveCursorAreaEventsListenersLayer(this);
+		if (EventSystem::IsSingletonInitialzed())
+			o2Events.RemoveCursorAreaEventsListenersLayer(this);
 	}
 
 	void CursorAreaEventListenersLayer::OnBeginDraw()

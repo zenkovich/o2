@@ -47,6 +47,12 @@ namespace Editor
 		// It is called when some property changed, marks Actor as changed and calls default Undo create callback
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
 							   const Vector<DataDocument>& after);
+
+		// Enable viewer event function
+		void OnEnabled() override;
+
+		// Disable viewer event function
+		void OnDisabled() override;
 	};
 }
 
@@ -71,5 +77,7 @@ CLASS_METHODS_META(Editor::DefaultActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(bool, IsEmpty);
 	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 }
 END_META;

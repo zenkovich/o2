@@ -49,6 +49,15 @@ namespace Editor
 
 	protected:
 		SpoilerWithHead* mSpoiler = nullptr;
+
+	protected:
+		// Enable viewer event function
+		virtual void OnEnabled() {}
+
+		// Disable viewer event function
+		virtual void OnDisabled() {}
+
+		friend class ActorViewer;
 	};
 }
 
@@ -70,5 +79,7 @@ CLASS_METHODS_META(Editor::IActorTransformViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 }
 END_META;

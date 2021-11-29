@@ -198,7 +198,7 @@ namespace o2
 		BorderI       mSlices;                     // Slice borders @SERIALIZABLE
 		float         mFill = 1.0f;                // Sprite fillness @SERIALIZABLE
 		float         mTileScale = 1.0f;           // Scale of tiles in tiled mode. 1.0f is default and equals to default image size @SERIALIZABLE
-		Mesh*         mMesh;                       // Drawing mesh
+		Mesh          mMesh;                       // Drawing mesh
 
 		void(Sprite::*mMeshBuildFunc)(); // Mesh building function pointer (by mode)
 

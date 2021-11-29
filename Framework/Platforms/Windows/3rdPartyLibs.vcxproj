@@ -74,6 +74,16 @@
     <ClInclude Include="..\..\3rdPartyLibs\Box2D\Dynamics\Joints\b2WeldJoint.h" />
     <ClInclude Include="..\..\3rdPartyLibs\Box2D\Dynamics\Joints\b2WheelJoint.h" />
     <ClInclude Include="..\..\3rdPartyLibs\Box2D\Rope\b2Rope.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\extras\InitializeWithGrid.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\extras\VerifyTopology.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDT.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDT.hpp" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDTUtils.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\CDTUtils.hpp" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\KDTree.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\LocatorKDTree.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\predicates.h" />
+    <ClInclude Include="..\..\3rdPartyLibs\CDT\include\remove_at.hpp" />
     <ClInclude Include="..\..\3rdPartyLibs\LibPNG\png.h" />
     <ClInclude Include="..\..\3rdPartyLibs\LibPNG\pngconf.h" />
     <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugiconfig.hpp" />
@@ -185,6 +195,7 @@
     <ClCompile Include="..\..\3rdPartyLibs\Box2D\Dynamics\Joints\b2WeldJoint.cpp" />
     <ClCompile Include="..\..\3rdPartyLibs\Box2D\Dynamics\Joints\b2WheelJoint.cpp" />
     <ClCompile Include="..\..\3rdPartyLibs\Box2D\Rope\b2Rope.cpp" />
+    <ClCompile Include="..\..\3rdPartyLibs\CDT\src\CDT.cpp" />
     <ClCompile Include="..\..\3rdPartyLibs\LibPNG\png.c" />
     <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngerror.c" />
     <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pnggccrd.c" />

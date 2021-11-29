@@ -34,8 +34,8 @@ namespace o2
 
 	Mesh& Mesh::operator=(const Mesh& other)
 	{
+		SetTexture(other.mTexture);
 		Resize(other.mMaxVertexCount, other.mMaxPolyCount);
-		mTexture = other.mTexture;
 
 		vertexCount = other.vertexCount;
 		polyCount = other.polyCount;

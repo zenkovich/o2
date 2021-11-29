@@ -24,20 +24,15 @@ namespace Editor
 		return mComponentType;
 	}
 
-	void DefaultActorComponentViewer::SpecializeComponentType(const Type* type)
-	{
-		if (mComponentType == type)
-			return;
-
-		mComponentType = type;
-		mSpoiler->name = "component " + mComponentType->GetName();
-	}
-
 	void DefaultActorComponentViewer::Refresh()
 	{
-		bool requiredNewViewer = mViewer ? !mComponentType->IsBasedOn(*mViewer->GetViewingObjectType()) : mComponentType != nullptr;
-		if (requiredNewViewer) 
+		const Type* objectsType = &mTargetComponents[0]->GetType();
+
+		if (mComponentType != objectsType)
 		{
+			mComponentType = objectsType;
+			mSpoiler->name = "component " + mComponentType->GetName();
+
 			if (mViewer)
 				o2EditorProperties.FreeObjectViewer(mViewer);
 
@@ -64,6 +59,18 @@ namespace Editor
 			component->GetOwnerActor()->OnChanged();
 
 		o2EditorApplication.DoneActorPropertyChangeAction(path, before, after);
+	}
+
+	void DefaultActorComponentViewer::OnEnabled()
+	{
+		if (mViewer)
+			mViewer->OnEnabled();
+	}
+
+	void DefaultActorComponentViewer::OnDisabled()
+	{
+		if (mViewer)
+			mViewer->OnDisabled();
 	}
 
 }
