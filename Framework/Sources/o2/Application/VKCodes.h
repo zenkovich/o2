@@ -117,7 +117,7 @@
 #define VK_Y 'Y'
 #define VK_Z 'Z'
 
-#elif defined PLATFORM_MAC
+#elif defined PLATFORM_MAC || defined PLATFORM_IOS
 
 #define VK_F1             -122
 #define VK_F2             -120

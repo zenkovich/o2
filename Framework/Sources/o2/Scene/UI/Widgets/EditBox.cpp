@@ -1091,6 +1091,7 @@ namespace o2
 		
 		return (UInt16)code;
 #endif
+		return 0;
 	}
 
 	void EditBox::CheckCharacterTyping(KeyboardKey key)

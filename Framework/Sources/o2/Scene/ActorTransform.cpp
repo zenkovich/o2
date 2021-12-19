@@ -708,9 +708,6 @@ namespace o2
 		mData->rectangle.right = rightTop.x;
 		mData->rectangle.bottom = leftBottom.y;
 		mData->rectangle.top = rightTop.y;
-
-		if (o2Input.IsKeyDown(VK_F5))
-			o2Debug.Log("--" + mData->owner->mName + " " + (String)o2Time.GetCurrentFrame());
 	}
 
 	void ActorTransform::UpdateTransform()
