@@ -166,10 +166,10 @@ namespace o2
 			if (!listener->IsUnderPoint(localCursorPos) || !listener->mScissorRect.IsInside(localCursorPos) || !listener->mInteractable)
 				continue;
 
-			res.Add(listener);
-
 			if (auto layer = dynamic_cast<CursorAreaEventListenersLayer*>(listener))
 				res += layer->GetAllCursorListenersUnderCursor(localCursorPos);
+			else
+				res.Add(listener);
 		}
 
 		return res;

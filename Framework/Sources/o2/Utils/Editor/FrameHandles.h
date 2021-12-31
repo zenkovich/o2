@@ -27,7 +27,7 @@ namespace o2
 		void SetBasis(const Basis& basis);
 
 		// Returns current basis
-		Basis GetCurrentBasis() const;
+		const Basis& GetCurrentBasis() const;
 
 		// Sets pivot point
 		void SetPivot(const Vec2F& position);

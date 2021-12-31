@@ -22,14 +22,11 @@ namespace Editor
 
 	Vec2KeyFramesTrackControl::~Vec2KeyFramesTrackControl()
 	{
-		o2EditorSceneScreen.RemoveEditorLayer(&mSceneLayer);
 		o2EditorSceneScreen.RemoveTool(&mTool);
 	}
 
 	void Vec2KeyFramesTrackControl::SetActive(bool active)
 	{
-		mIsEnabled = active;
-
 		if (active)
 		{
 			if (mLastActive)
@@ -60,11 +57,7 @@ namespace Editor
 	}
 
 	void Vec2KeyFramesTrackControl::InitializeControls()
-	{
-		o2EditorSceneScreen.AddEditorLayer(&mSceneLayer);
-		mSceneLayer.trackControl = this;
-		mTool.trackControl = this;
-	}
+	{}
 
 	void Vec2KeyFramesTrackControl::TryFindOwnerTrack()
 	{
@@ -92,17 +85,19 @@ namespace Editor
 
 	void Vec2KeyFramesTrackControl::OnSetTrack()
 	{
-		SplineWrapper* wrapper = mnew SplineWrapper();
-		wrapper->trackControl = this;
-
-		mSplineEditor.SetSpline(wrapper);
-
 		TryFindOwnerTrack();
+
+		mTool.SetSpline(&mTrack->spline, [&]() { 
+			if (mTrackOwner && mTrackOwner->GetParent())
+				return mTrackOwner->GetParent()->transform->worldPosition.Get(); 
+
+			return Vec2F();
+		});
 	}
 
 	void Vec2KeyFramesTrackControl::OnKeysChanged()
 	{
-		mSplineEditor.OnSplineChanged();
+		mTool.splineEditor.OnSplineChanged();
 	}
 
 	void Vec2KeyFramesTrackControl::SetCurveViewEnabled(bool enabled)
@@ -144,155 +139,6 @@ namespace Editor
 
 		DrawDebugFrame();
 	}
-
-	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::GetOrigin() const
-	{
-		if (trackControl->mTrackOwner && trackControl->mTrackOwner->GetParent())
-			return trackControl->mTrackOwner->GetParent()->transform->worldPosition;
-
-		return Vec2F();
-	}
-
-	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::WorldToLocal(const Vec2F& point) const
-	{
-		return o2EditorSceneScreen.ScreenToLocalPoint(point) - GetOrigin();
-	}
-
-	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::LocalToWorld(const Vec2F& point) const
-	{
-		return o2EditorSceneScreen.LocalToScreenPoint(point + GetOrigin());
-	}
-
-	int Vec2KeyFramesTrackControl::SplineWrapper::GetPointsCount() const
-	{
-		return trackControl->mTrack->spline.GetKeys().Count();
-	}
-
-	void Vec2KeyFramesTrackControl::SplineWrapper::AddPoint(int idx, const Vec2F& position, const Vec2F& prevSupport,
-															const Vec2F& nextSupport)
-	{
-		trackControl->mTrack->spline.InsertKey(idx, position, prevSupport, nextSupport);
-	}
-
-	void Vec2KeyFramesTrackControl::SplineWrapper::RemovePoint(int idx)
-	{
-		trackControl->mTrack->spline.RemoveKey(idx);
-	}
-
-	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::GetPointPos(int idx) const
-	{
-		return trackControl->mTrack->spline.GetKey(idx).value;
-	}
-
-	void Vec2KeyFramesTrackControl::SplineWrapper::SetPointPos(int idx, const Vec2F& pos)
-	{
-		auto key = trackControl->mTrack->spline.GetKey(idx);
-		key.value = pos;
-		trackControl->mTrack->spline.SetKey(key, idx);
-	}
-
-	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::GetPointPrevSupportPos(int idx) const
-	{
-		auto key = trackControl->mTrack->spline.GetKey(idx);
-		return key.prevSupport + key.value;
-	}
-
-	void Vec2KeyFramesTrackControl::SplineWrapper::SetPointPrevSupportPos(int idx, const Vec2F& pos)
-	{
-		auto key = trackControl->mTrack->spline.GetKey(idx);
-		key.prevSupport = pos - key.value;
-		trackControl->mTrack->spline.SetKey(key, idx);
-	}
-
-	Vec2F Vec2KeyFramesTrackControl::SplineWrapper::GetPointNextSupportPos(int idx) const
-	{
-		auto key = trackControl->mTrack->spline.GetKey(idx);
-		return key.nextSupport + key.value;
-	}
-
-	void Vec2KeyFramesTrackControl::SplineWrapper::SetPointNextSupportPos(int idx, const Vec2F& pos)
-	{
-		auto key = trackControl->mTrack->spline.GetKey(idx);
-		key.nextSupport = pos - key.value;
-		trackControl->mTrack->spline.SetKey(key, idx);
-	}
-
-	Vector<Vec2F> Vec2KeyFramesTrackControl::SplineWrapper::GetDrawPoints() const
-	{
-		Vector<Vec2F> res;
-		auto& keys = trackControl->mTrack->spline.GetKeys();
-		for (int i = 1; i < keys.Count(); i++)
-		{
-			for (int j = 0; j < keys[i].GetApproximatedPointsCount() - 1; j++)
-				res.Add(LocalToWorld(keys[i].GetApproximatedPoints()[j].value));
-
-			if (i == keys.Count() - 1)
-				res.Add(LocalToWorld(keys[i].value));
-		}
-
-		return res;
-	}
-
-	const ApproximationVec2F* Vec2KeyFramesTrackControl::SplineWrapper::GetPointApproximation(int idx) const
-	{
-		return trackControl->mTrack->spline.GetKeys()[idx].GetApproximatedPoints();
-	}
-
-	int Vec2KeyFramesTrackControl::SplineWrapper::GetPointApproximationCount(int idx) const
-	{
-		return trackControl->mTrack->spline.GetKeys()[idx].GetApproximatedPointsCount();
-	}
-
-	void Vec2KeyFramesTrackControl::SplineWrapper::OnChanged()
-	{
-	}
-
-	void Vec2KeyFramesTrackControl::SplineSceneLayer::DrawOverScene()
-	{
-		trackControl->mSplineEditor.Draw();
-	}
-
-	void Vec2KeyFramesTrackControl::SplineSceneLayer::Update(float dt)
-	{
-		trackControl->mSplineEditor.Update(dt);
-	}
-
-	int Vec2KeyFramesTrackControl::SplineSceneLayer::GetOrder() const
-	{
-		return 0;
-	}
-
-	bool Vec2KeyFramesTrackControl::SplineSceneLayer::IsEnabled() const
-	{
-		return trackControl->mIsEnabled;
-	}
-
-	const String& Vec2KeyFramesTrackControl::SplineSceneLayer::GetName() const
-	{
-		static String res("Animation spline");
-		return res;
-	}
-
-	const String& Vec2KeyFramesTrackControl::SplineSceneLayer::GetIconName() const
-	{
-		return String::empty;
-	}
-
-	String Vec2KeyFramesTrackControl::SplineTool::GetPanelIcon() const
-	{
-		return "ui/UI4_path_tool.png";
-	}
-
-	void Vec2KeyFramesTrackControl::SplineTool::OnEnabled()
-	{
-		trackControl->mIsEnabled = true;
-	}
-
-	void Vec2KeyFramesTrackControl::SplineTool::OnDisabled()
-	{
-		trackControl->mIsEnabled = false;
-	}
-
 }
 
 DECLARE_CLASS(Editor::Vec2KeyFramesTrackControl);

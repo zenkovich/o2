@@ -16,6 +16,9 @@ namespace o2
 
 	DragDropArea* DragableObject::GetDropAreaUnderCursor(CursorId cursorId) const
 	{
+		if (o2Input.IsKeyDown('J'))
+			o2Debug.Log("asd");
+
 		auto underCursorListeners = o2Events.GetAllCursorListenersUnderCursor(cursorId);
 		DragDropArea* dragDropArea = nullptr;
 

@@ -108,7 +108,7 @@ namespace o2
 		UpdateHandlesTransform();
 	}
 
-	Basis FrameHandles::GetCurrentBasis() const
+	const Basis& FrameHandles::GetCurrentBasis() const
 	{
 		return mFrame;
 	}

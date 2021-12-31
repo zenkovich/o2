@@ -188,11 +188,6 @@ namespace Editor
 		// clear 
 		mViewersLayout->RemoveAllChildren(false);
 
-		for (auto viewer : mComponentsViewers)
-			mComponentViewersPool[viewer->GetComponentType()].Add(viewer);
-
-		mComponentsViewers.Clear();
-
 		// rebuild
 		Vector<Widget*> viewersWidgets;
 		viewersWidgets.Add(mHeaderViewer->GetWidget());
@@ -275,8 +270,14 @@ namespace Editor
 	{
 		PushEditorScopeOnStack scope;
 
-		mCommonComponentsTypes = GetCommonComponentsTypes(targets);
+		auto lastComponentViewers = mComponentsViewers;
 
+		for (auto viewer : mComponentsViewers)
+			mComponentViewersPool[viewer->GetComponentType()].Add(viewer);
+
+		mComponentsViewers.Clear();
+
+		mCommonComponentsTypes = GetCommonComponentsTypes(targets);
 		for (const Type* type : mCommonComponentsTypes)
 		{
 			auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](IActorComponentViewer* x) {
@@ -302,7 +303,15 @@ namespace Editor
 
 			componentViewer->SetTargetComponents(
 				mTargetActors.Convert<Component*>([&](Actor* x) { return x->GetComponent(type); }));
+
+			if (lastComponentViewers.Contains(componentViewer))
+				lastComponentViewers.Remove(componentViewer);
+			else
+				componentViewer->OnEnabled();
 		}
+
+		for (auto viewer : lastComponentViewers)
+			viewer->OnDisabled();
 	}
 
 	void ActorViewer::OnEnabled()

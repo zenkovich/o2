@@ -56,6 +56,17 @@ namespace o2
 		return mImageAsset;
 	}
 
+	void MeshComponent::SetMappingFrame(const RectF& frame)
+	{
+		mImageMapping = frame;
+		UpdateMesh();
+	}
+
+	const RectF& MeshComponent::GetMappingFrame() const
+	{
+		return mImageMapping;
+	}
+
 	void MeshComponent::SetColor(const Color4& color)
 	{
 		mColor = color;
@@ -109,7 +120,7 @@ namespace o2
 			auto key = spline.GetKey(i);
 			for (int j = 0; j < key.GetApproximatedPointsCount() - 1; j++)
 			{
-				Vec2F worldPoint = key.GetApproximatedPoints()[j].value*mTransform;
+				Vec2F worldPoint = key.GetApproximatedPoints()[j].value;
 				verticies.push_back(CDT::V2d<float>::make(worldPoint.x, worldPoint.y));
 
 				if (verticies.size() > 1)
@@ -125,9 +136,23 @@ namespace o2
 		triangulation.eraseOuterTriangles();
 
 		mMesh.Resize(triangulation.vertices.size(), triangulation.triangles.size());
+
+		auto texture = mImageAsset->GetAtlasTextureRef();
+		Vec2F invTexSize(1.0f, 1.0f);
+		if (texture)
+			invTexSize.Set(1.0f/texture->GetSize().x, 1.0f/texture->GetSize().y);
+
+		RectF imageRect = mImageAsset->GetAtlasRect();
+		RectF imageUV = RectF(imageRect.left*invTexSize.x, imageRect.bottom*invTexSize.y,
+							  imageRect.right*invTexSize.x, imageRect.top*invTexSize.y);
+
 		for (int i = 0; i < triangulation.vertices.size(); i++)
 		{
-			mMesh.vertices[i].Set(Vec2F(triangulation.vertices[i].x, triangulation.vertices[i].y), 1.0f, mColor.ARGB(), 0, 0);
+			Vec2F p(triangulation.vertices[i].x, triangulation.vertices[i].y);
+			mMesh.vertices[i].Set(p*mTransform, 1.0f,
+								  mColor.ARGB(),
+								  imageUV.left + (p.x - mImageMapping.left)/mImageMapping.Width()*imageUV.Width(),
+								  imageUV.bottom + (p.y - mImageMapping.bottom)/mImageMapping.Height()*imageUV.Height());
 		}
 
 		for (int i = 0; i < triangulation.triangles.size(); i++)
@@ -137,6 +162,7 @@ namespace o2
 			mMesh.indexes[i*3 + 2] = triangulation.triangles[i].vertices[2];
 		}
 
+		mMesh.SetTexture(mImageAsset->GetAtlasTextureRef());
 		mMesh.vertexCount = triangulation.vertices.size();
 		mMesh.polyCount = triangulation.triangles.size();
 	}

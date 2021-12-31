@@ -226,6 +226,16 @@ namespace Editor
 		return point*mLocalToScreenTransform;
 	}
 
+	const Basis& ScrollView::GetLocalToScreenTransform() const
+	{
+		return mLocalToScreenTransform;
+	}
+
+	const Basis& ScrollView::GetScreenToLocalTransform() const
+	{
+		return mScreenToLocalTransform;
+	}
+
 	Vec2F ScrollView::GetCameraScale() const
 	{
 		return Vec2F(mScreenToLocalTransform.xv.Length(), mScreenToLocalTransform.yv.Length());

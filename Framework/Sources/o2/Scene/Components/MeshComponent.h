@@ -15,8 +15,9 @@ namespace o2
 	{
 	public:
 		PROPERTIES(MeshComponent);
-		PROPERTY(ImageAssetRef, image, SetImage, GetImage); // Image property
-		PROPERTY(Color4, color, SetColor, GetColor);        // Color property
+		PROPERTY(ImageAssetRef, image, SetImage, GetImage);              // Image property
+		PROPERTY(RectF, mappingFrame, SetMappingFrame, GetMappingFrame); // Image mapping frame
+		PROPERTY(Color4, color, SetColor, GetColor);                     // Color property
 
 		Spline spline; // Shell spline @SERIALIZABLE
 
@@ -45,6 +46,12 @@ namespace o2
 		// Returns image
 		const ImageAssetRef& GetImage() const;
 
+		// Sets image mapping frame
+		void SetMappingFrame(const RectF& frame);
+
+		// Returns image mapping frame
+		const RectF& GetMappingFrame() const;
+
 		// Sets color
 		void SetColor(const Color4& color);
 
@@ -66,8 +73,8 @@ namespace o2
 		Mesh   mMesh;      // Drawing mesh, built from spline
 		Basis  mTransform; // Transform where mesh was built
 
-		ImageAssetRef mImageAsset;   // Image asset @SERIALIZABLE
-		RectF         mImageMapping; // Image mapping rectangle @SERIALIZABLE
+		ImageAssetRef mImageAsset;                         // Image asset @SERIALIZABLE
+		RectF         mImageMapping = RectF(0, 0, 10, 10); // Image mapping rectangle @SERIALIZABLE
 
 		Color4 mColor = Color4::White(); // Mesh color @SERIALIZABLE
 
@@ -97,12 +104,13 @@ END_META;
 CLASS_FIELDS_META(o2::MeshComponent)
 {
 	FIELD().NAME(image).PUBLIC();
+	FIELD().NAME(mappingFrame).PUBLIC();
 	FIELD().NAME(color).PUBLIC();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(spline).PUBLIC();
 	FIELD().NAME(mMesh).PROTECTED();
 	FIELD().NAME(mTransform).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mImageMapping).PROTECTED();
+	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(RectF(0, 0, 10, 10)).NAME(mImageMapping).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Color4::White()).NAME(mColor).PROTECTED();
 }
 END_META;
@@ -113,6 +121,8 @@ CLASS_METHODS_META(o2::MeshComponent)
 	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
 	PUBLIC_FUNCTION(void, SetImage, const ImageAssetRef&);
 	PUBLIC_FUNCTION(const ImageAssetRef&, GetImage);
+	PUBLIC_FUNCTION(void, SetMappingFrame, const RectF&);
+	PUBLIC_FUNCTION(const RectF&, GetMappingFrame);
 	PUBLIC_FUNCTION(void, SetColor, const Color4&);
 	PUBLIC_FUNCTION(const Color4&, GetColor);
 	PUBLIC_STATIC_FUNCTION(String, GetName);

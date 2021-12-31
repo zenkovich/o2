@@ -48,6 +48,12 @@ namespace Editor
 		// Transforms point from local space to screen space
 		Vec2F LocalToScreenPoint(const Vec2F& point);
 
+		// Returns local to screen transform
+		const Basis& GetLocalToScreenTransform() const;
+
+		// Returns screen to local transform
+		const Basis& GetScreenToLocalTransform() const;
+
 		// Returns camera scale
 		Vec2F GetCameraScale() const;
 
@@ -188,6 +194,8 @@ CLASS_METHODS_META(Editor::ScrollView)
 	PUBLIC_FUNCTION(void, Update, float);
 	PUBLIC_FUNCTION(Vec2F, ScreenToLocalPoint, const Vec2F&);
 	PUBLIC_FUNCTION(Vec2F, LocalToScreenPoint, const Vec2F&);
+	PUBLIC_FUNCTION(const Basis&, GetLocalToScreenTransform);
+	PUBLIC_FUNCTION(const Basis&, GetScreenToLocalTransform);
 	PUBLIC_FUNCTION(Vec2F, GetCameraScale);
 	PUBLIC_FUNCTION(void, SetCamera, const Camera&);
 	PUBLIC_FUNCTION(const Camera&, GetCamera);
