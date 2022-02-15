@@ -28,25 +28,25 @@
     <ProjectGuid>{26545724-2F68-426F-92BB-B5FCCA666B15}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EditorApp</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
@@ -87,9 +87,9 @@
     <ClCompile>
       <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
@@ -107,9 +107,9 @@
     <ClCompile>
       <WarningLevel>Level2</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
@@ -130,9 +130,9 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <SDLCheck>false</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

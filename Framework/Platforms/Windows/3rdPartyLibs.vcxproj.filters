@@ -34,6 +34,18 @@
     <Filter Include="CDT">
       <UniqueIdentifier>{4391d0c8-2c3a-41e6-ab1e-c090ea22fb32}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JerryScript">
+      <UniqueIdentifier>{262d1b9b-f8ed-405c-9609-e14d29012429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JerryScript\core">
+      <UniqueIdentifier>{49c49c57-d6c9-49dd-b754-c0f394814b5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JerryScript\ext">
+      <UniqueIdentifier>{352c6d95-c58e-43a6-a212-b8848f73f3bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="JerryScript\port">
+      <UniqueIdentifier>{1f1e0198-b0be-4ae2-a8ae-4ca8181d9283}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugiconfig.hpp">
@@ -751,6 +763,630 @@
     </ClCompile>
     <ClCompile Include="..\..\3rdPartyLibs\CDT\src\CDT.cpp">
       <Filter>CDT</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\byte-code.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\common.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\debugger\debugger.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-alloc.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-arguments-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-arraybuffer-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-array-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-async-generator-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-bigint.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-bigint-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-big-uint.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-boolean-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-arraybuffer.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-arraybuffer-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array-prototype-unscopables.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-function.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-function-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-generator.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-generator-function.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-generator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-bigint.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-bigint64array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-bigint64array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-bigint-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-biguint64array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-biguint64array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-boolean.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-boolean-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-dataview.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-dataview-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-date.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-date-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-error.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-error-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-evalerror.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-evalerror-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float32array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float32array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float64array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float64array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-function.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-function-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-generator.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-generator-function.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-generator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-global.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-handlers.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-date.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-error.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-json.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-sort.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int8array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int8array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int16array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int16array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int32array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int32array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-intrinsic.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-json.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-map.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-map-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-map-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-math.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-number.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-number-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-object-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-promise.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-promise-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-proxy.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-rangeerror.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-rangeerror-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-referenceerror.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-referenceerror-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-reflect.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-regexp.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-regexp-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-regexp-string-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtins.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-set.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-set-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-set-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-string.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-string-iterator-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-string-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-symbol.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-symbol-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-syntaxerror.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-syntaxerror-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-typedarray.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-typedarray-helpers.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-typedarray-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-typeerror.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-typeerror-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-type-error-thrower.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8clampedarray.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8clampedarray-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint16array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint16array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint32array.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint32array-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-urierror.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-urierror-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakmap.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakmap-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakset.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakset-prototype.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-comparison.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-container-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-conversion.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-dataview-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-eval.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-exceptions.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-function-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-gc.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-get-put-value.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-collection.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-conversion.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-errol.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-external-pointers.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-number.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-string.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-value.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-init-finalize.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-iterator-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-jobqueue.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-lcache.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-lex-env.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-literal-storage.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-module.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-number-arithmetic.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-number-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-objects.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-objects-general.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-promise-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-property-hashmap.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-proxy-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-reference.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-regexp-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-string-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-symbol-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-typedarray-object.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jcontext\jcontext.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry-debugger.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry-debugger-transport.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry-snapshot.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jmem\jmem-allocator.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jmem\jmem-heap.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jmem\jmem-poolman.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jrt\jrt-fatals.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-lexer.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-expr.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-mem.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-module.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-statm.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-tagged-template-literal.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-util.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-scanner.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-scanner-ops.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-scanner-util.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\lit\lit-char-helpers.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\lit\lit-magic-strings.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\lit\lit-strings.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes-ecma-arithmetics.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes-ecma-bitwise.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes-ecma-relational-equality.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp\re-bytecode.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp\re-compiler.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp\re-parser.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\vm.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\vm-stack.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\vm-utils.c">
+      <Filter>JerryScript\core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\arg\arg.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\arg\arg-js-iterator-helper.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\arg\arg-transform-functions.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-common.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-rp.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-serial.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-sha1.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-tcp.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-ws.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-assert.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-gc.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-print.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-register.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-resource-name.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handle-scope\handle-scope.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handle-scope\handle-scope-allocator.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\module\module.c">
+      <Filter>JerryScript\ext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-date.c">
+      <Filter>JerryScript\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-debugger.c">
+      <Filter>JerryScript\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-external-context.c">
+      <Filter>JerryScript\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-fatal.c">
+      <Filter>JerryScript\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-io.c">
+      <Filter>JerryScript\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-module.c">
+      <Filter>JerryScript\port</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-promise.c">
+      <Filter>JerryScript\port</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -196,6 +196,214 @@
     <ClCompile Include="..\..\3rdPartyLibs\Box2D\Dynamics\Joints\b2WheelJoint.cpp" />
     <ClCompile Include="..\..\3rdPartyLibs\Box2D\Rope\b2Rope.cpp" />
     <ClCompile Include="..\..\3rdPartyLibs\CDT\src\CDT.cpp" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry-debugger-transport.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry-debugger.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry-snapshot.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\api\jerry.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\debugger\debugger.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-alloc.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-gc.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-collection.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-conversion.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-errol.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-external-pointers.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-number.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-string.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers-value.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-helpers.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-init-finalize.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-lcache.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-literal-storage.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-module.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base\ecma-property-hashmap.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array-prototype-unscopables.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-arraybuffer-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-arraybuffer.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-function-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-function.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-generator-function.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-generator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-generator.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-async-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-bigint-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-bigint.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-boolean-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-boolean.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-dataview-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-dataview.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-date-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-date.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-error-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-error.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-evalerror-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-evalerror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-function-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-function.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-generator-function.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-generator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-generator.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-global.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-handlers.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-date.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-error.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-json.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers-sort.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-helpers.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-intrinsic.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-json.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-map-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-map-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-map.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-math.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-number-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-number.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-object-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-promise-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-promise.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-proxy.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-rangeerror-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-rangeerror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-referenceerror-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-referenceerror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-reflect.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-regexp-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-regexp-string-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-regexp.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-set-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-set-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-set.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-string-iterator-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-string-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-string.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-symbol-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-symbol.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-syntaxerror-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-syntaxerror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-type-error-thrower.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-typeerror-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-typeerror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-urierror-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-urierror.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakmap-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakmap.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakset-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtin-weakset.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\ecma-builtins.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-bigint64array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-bigint64array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-biguint64array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-biguint64array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float32array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float32array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float64array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-float64array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int16array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int16array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int32array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int32array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int8array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-int8array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-typedarray-helpers.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-typedarray-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-typedarray.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint16array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint16array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint32array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint32array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8array-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8array.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8clampedarray-prototype.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray\ecma-builtin-uint8clampedarray.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-arguments-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-array-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-arraybuffer-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-async-generator-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-big-uint.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-bigint-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-bigint.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-boolean-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-comparison.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-container-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-conversion.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-dataview-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-eval.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-exceptions.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-function-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-get-put-value.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-iterator-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-jobqueue.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-lex-env.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-number-arithmetic.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-number-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-objects-general.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-objects.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-promise-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-proxy-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-reference.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-regexp-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-string-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-symbol-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations\ecma-typedarray-object.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jcontext\jcontext.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jmem\jmem-allocator.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jmem\jmem-heap.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jmem\jmem-poolman.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\jrt\jrt-fatals.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\lit\lit-char-helpers.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\lit\lit-magic-strings.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\lit\lit-strings.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\byte-code.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\common.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-lexer.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-expr.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-mem.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-module.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-statm.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-tagged-template-literal.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser-util.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-parser.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-scanner-ops.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-scanner-util.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js\js-scanner.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp\re-bytecode.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp\re-compiler.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp\re-parser.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes-ecma-arithmetics.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes-ecma-bitwise.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes-ecma-relational-equality.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\opcodes.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\vm-stack.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\vm-utils.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-core\vm\vm.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\arg\arg-js-iterator-helper.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\arg\arg-transform-functions.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\arg\arg.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-common.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-rp.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-serial.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-sha1.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-tcp.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-ws.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handle-scope\handle-scope-allocator.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handle-scope\handle-scope.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-assert.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-gc.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-print.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-register.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\handler\handler-resource-name.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\module\module.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-date.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-debugger.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-external-context.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-fatal.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-io.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-module.c" />
+    <ClCompile Include="..\..\3rdPartyLibs\jerryscript\jerry-port\default\default-promise.c" />
     <ClCompile Include="..\..\3rdPartyLibs\LibPNG\png.c" />
     <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pngerror.c" />
     <ClCompile Include="..\..\3rdPartyLibs\LibPNG\pnggccrd.c" />
@@ -271,38 +479,38 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{69E3A44A-2755-4CC4-9697-4F43876C1BC0}</ProjectGuid>
     <RootNamespace>3rdPartyLibs</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>NotSet</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>NotSet</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='FastDebug|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -339,8 +547,8 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\api;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\debugger;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jcontext;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jmem;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jrt;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\lit;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\vm;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\common;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-port\default\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;WIN32;_WINDOWS;_BSD_SOURCE;_DEFAULT_SOURCE;HAVE_TIME_H;JERRY_GC_LIMIT=(0);JERRY_CPOINTER_32_BIT=0;JERRY_ERROR_MESSAGES=0;JERRY_EXTERNAL_CONTEXT=0;JERRY_PARSER=1;JERRY_LINE_INFO=0;JERRY_LOGGING=0;JERRY_MEM_STATS=0;JERRY_DEBUGGER=0;JERRY_MEM_GC_BEFORE_EACH_ALLOC=0;JERRY_PARSER_DUMP_BYTE_CODE=0;JERRY_REGEXP_STRICT_MODE=0;JERRY_REGEXP_DUMP_BYTE_CODE=0;JERRY_SNAPSHOT_EXEC=0;JERRY_SNAPSHOT_SAVE=0;JERRY_SYSTEM_ALLOCATOR=0;JERRY_VALGRIND=0;JERRY_VM_EXEC_STOP=0;JERRY_GLOBAL_HEAP_SIZE=(512);JERRY_STACK_LIMIT=(0);JERRY_GC_MARK_LIMIT=(8)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
@@ -366,8 +574,8 @@
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
       <Optimization>MaxSpeed</Optimization>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\api;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\debugger;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jcontext;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jmem;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jrt;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\lit;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\vm;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\common;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-port\default\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;WIN32;_WINDOWS;_BSD_SOURCE;_DEFAULT_SOURCE;HAVE_TIME_H;JERRY_GC_LIMIT=(0);JERRY_CPOINTER_32_BIT=0;JERRY_ERROR_MESSAGES=0;JERRY_EXTERNAL_CONTEXT=0;JERRY_PARSER=1;JERRY_LINE_INFO=0;JERRY_LOGGING=0;JERRY_MEM_STATS=0;JERRY_DEBUGGER=0;JERRY_MEM_GC_BEFORE_EACH_ALLOC=0;JERRY_PARSER_DUMP_BYTE_CODE=0;JERRY_REGEXP_STRICT_MODE=0;JERRY_REGEXP_DUMP_BYTE_CODE=0;JERRY_SNAPSHOT_EXEC=0;JERRY_SNAPSHOT_SAVE=0;JERRY_SYSTEM_ALLOCATOR=0;JERRY_VALGRIND=0;JERRY_VM_EXEC_STOP=0;JERRY_GLOBAL_HEAP_SIZE=(512);JERRY_STACK_LIMIT=(0);JERRY_GC_MARK_LIMIT=(8)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>false</WholeProgramOptimization>
@@ -397,8 +605,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\api;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\debugger;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jcontext;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jmem;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jrt;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\lit;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\vm;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\common;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-port\default\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;WIN32;_WINDOWS;_BSD_SOURCE;_DEFAULT_SOURCE;HAVE_TIME_H;JERRY_GC_LIMIT=(0);JERRY_CPOINTER_32_BIT=0;JERRY_ERROR_MESSAGES=0;JERRY_EXTERNAL_CONTEXT=0;JERRY_PARSER=1;JERRY_LINE_INFO=0;JERRY_LOGGING=0;JERRY_MEM_STATS=0;JERRY_DEBUGGER=0;JERRY_MEM_GC_BEFORE_EACH_ALLOC=0;JERRY_PARSER_DUMP_BYTE_CODE=0;JERRY_REGEXP_STRICT_MODE=0;JERRY_REGEXP_DUMP_BYTE_CODE=0;JERRY_SNAPSHOT_EXEC=0;JERRY_SNAPSHOT_SAVE=0;JERRY_SYSTEM_ALLOCATOR=0;JERRY_VALGRIND=0;JERRY_VM_EXEC_STOP=0;JERRY_GLOBAL_HEAP_SIZE=(512);JERRY_STACK_LIMIT=(0);JERRY_GC_MARK_LIMIT=(8)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>

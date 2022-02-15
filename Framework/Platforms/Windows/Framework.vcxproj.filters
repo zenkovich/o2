@@ -55,6 +55,12 @@
     <Filter Include="Sources\o2\Application\iOS" />
     <Filter Include="Sources\o2\Render\Mac" />
     <Filter Include="Sources\o2\Render\iOS" />
+    <Filter Include="Sources\o2\Scripts">
+      <UniqueIdentifier>{63d6b7c2-ada4-4880-bc83-590058bab39b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sources\o2\Scripts\JerryScript">
+      <UniqueIdentifier>{de48974b-cdad-45a3-9b9a-6a4e1cca2cef}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
@@ -360,6 +366,9 @@
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ImageComponent.h">
       <Filter>Sources\o2\Scene\Components</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\MeshComponent.h">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h">
       <Filter>Sources\o2\Scene\Components</Filter>
     </ClInclude>
@@ -485,6 +494,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Window.h">
       <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptEngineBase.h">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueBase.h">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\ScriptEngine.h">
+      <Filter>Sources\o2\Scripts</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\ScriptValue.h">
+      <Filter>Sources\o2\Scripts</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Basic\IDynamic.h">
       <Filter>Sources\o2\Utils\Basic</Filter>
@@ -756,8 +777,11 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Scene\Components\MeshComponent.h">
-      <Filter>Sources\o2\Scene\Components</Filter>
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.h">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueConverters.h">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1004,6 +1028,9 @@
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ImageComponent.cpp">
       <Filter>Sources\o2\Scene\Components</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\MeshComponent.cpp">
+      <Filter>Sources\o2\Scene\Components</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp">
       <Filter>Sources\o2\Scene\Components</Filter>
     </ClCompile>
@@ -1129,6 +1156,18 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Window.cpp">
       <Filter>Sources\o2\Scene\UI\Widgets</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scripts\JerryScript\ScriptEngineImpl.cpp">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.cpp">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scripts\ScriptEngine.cpp">
+      <Filter>Sources\o2\Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Scripts\ScriptValue.cpp">
+      <Filter>Sources\o2\Scripts</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.cpp">
       <Filter>Sources\o2\Utils\Bitmap</Filter>
@@ -1285,9 +1324,6 @@
     </ClCompile>
     <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
       <Filter>Sources\o2</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Scene\Components\MeshComponent.cpp">
-      <Filter>Sources\o2\Scene\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

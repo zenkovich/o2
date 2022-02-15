@@ -1,0 +1,10 @@
+cmake/*
+docs/*
+jerry-main/*
+jerry-math/*
+jerry-port/default/default-date.c
+jerry-port/default/default-io.c
+targets/*
+tests/*
+third-party/*
+tools/*
