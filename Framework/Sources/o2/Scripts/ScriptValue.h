@@ -20,7 +20,7 @@ namespace o2
 		template<typename _type, typename _enable = void>
 		struct Converter
 		{
-			static constexpr bool isSupported = false;
+			static constexpr bool isSupported = true;
 			using __type = typename std::conditional<std::is_same<void, _type>::value, int, _type>::type;
 
 			static void Write(const __type& value, ScriptValue& data);
@@ -67,6 +67,7 @@ namespace o2
 		// Returns error description, if value type is error
 		String GetError() const;
 
+	// Object methods
 		// Iterates properties in object
 		void ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const;
 
@@ -76,6 +77,19 @@ namespace o2
 		// Sets property value
 		void SetProperty(const ScriptValue& name, const ScriptValue& value);
 
+		// Sets property wrapper. Uses value reference to get/set value from script
+		template<typename _type>
+		void SetPropertyWrapper(const ScriptValue& name, _type& value);
+
+		// Sets property wrapper. Uses setter and getter functions to get/set value from script
+		template<typename _type>
+		void SetPropertyWrapper(const ScriptValue& name, const Function<void(const _type& value)>& setter,
+								const Function<_type()>& getter);
+
+		// Removes property
+		void RemoveProperty(const ScriptValue& name);
+
+	// Array methods
 		// Returns length of array
 		int GetLength() const;
 
@@ -85,6 +99,10 @@ namespace o2
 		// Adds array element at end
 		void AddElement(const ScriptValue& value);
 
+		// Removes array element
+		void RemoveElement(int idx);
+
+	//Value methods
 		// Boolean cast
 		bool ToBool() const;
 
@@ -102,6 +120,7 @@ namespace o2
 		template<typename _type>
 		void SetValue(const _type& value);
 
+	// Function methods
 		// Invokes function
 		ScriptValue InvokeRaw(const Vector<ScriptValue>& args) const;
 

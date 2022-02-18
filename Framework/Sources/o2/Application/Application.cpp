@@ -21,6 +21,10 @@
 #include "o2/Utils/System/Time/Timer.h"
 #include "o2/Utils/Tasks/TaskManager.h"
 
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptEngine.h"
+#endif
+
 namespace o2
 {
 	DECLARE_SINGLETON(Application);
@@ -99,6 +103,10 @@ namespace o2
 
 		mPhysics = mnew PhysicsWorld();
 
+#if IS_SCRIPTING_SUPPORTED
+		mScriptingEngine = mnew ScriptEngine();
+#endif
+
 		mLog->Out("Initialized");
 	}
 
@@ -115,6 +123,10 @@ namespace o2
 		delete mAssets;
 		delete mEventSystem;
 		delete mTaskManager;
+
+#if IS_SCRIPTING_SUPPORTED
+		delete mScriptingEngine;
+#endif
 	}
 	
 	void Application::SetupGraphicsScaledCamera()

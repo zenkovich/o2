@@ -38,6 +38,10 @@ namespace o2
 	class Timer;
 	class UIManager;
 
+#if IS_SCRIPTING_SUPPORTED
+	class ScriptEngine;
+#endif
+
 	// -----------
 	// Application
 	// -----------
@@ -214,6 +218,10 @@ namespace o2
 		Time*          mTime = nullptr;          // Time utilities
 		Timer*         mTimer = nullptr;         // Timer for detecting delta time for update
 		UIManager*     mUIManager = nullptr;     // UI manager
+
+#if IS_SCRIPTING_SUPPORTED
+		ScriptEngine*  mScriptingEngine = nullptr; // Scripting engine
+#endif
 
 		bool  mCursorInfiniteModeEnabled = false; // Is cursor infinite mode enabled
 		Vec2F mCursorCorrectionDelta;             // Cursor corrections delta - result of infinite cursors offset

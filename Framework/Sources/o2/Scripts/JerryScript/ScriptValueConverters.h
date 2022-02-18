@@ -6,14 +6,112 @@
 
 namespace o2
 {
+	class ReflectScriptValueTypeProcessor
+	{
+	public:
+		struct FieldProcessor
+		{
+			ScriptValue& value;
+
+		public:
+			FieldProcessor(ScriptValue& value):value(value) {}
+
+			template<typename _attribute_type, typename ... _args>
+			FieldProcessor& AddAttribute(_args ... args) { return *this; }
+
+			template<typename _type>
+			FieldProcessor& SetDefaultValue(const _type& value) { return *this; }
+
+			void SetProtectSection(ProtectSection section) {}
+
+			template<typename _object_type, typename _field_type>
+			FieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
+										_field_type& field)
+			{
+				if constexpr (std::is_copy_constructible<_field_type>::value)
+				{
+					_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
+					ScriptValue prop;
+					prop.SetValue(*fieldPtr);
+					value.SetProperty(ScriptValue(name), prop);
+				}
+
+				return *this;
+			}
+		};
+
+	public:
+		ScriptValue& value;
+
+	public:
+		ReflectScriptValueTypeProcessor(ScriptValue& value):value(value) {}
+
+		template<typename _object_type>
+		void Start(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartBases(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartFields(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartMethods(_object_type* object, Type* type) {}
+
+		FieldProcessor StartField() { return FieldProcessor(value); }
+
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name)
+		{
+			if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
+				_base_type::ProcessType<ReflectScriptValueTypeProcessor>(object, *this);
+		}
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		void Method(_object_type* object, Type* type, const char* name,
+					_res_type(_object_type::* pointer)(_args ...), ProtectSection protection)
+		{
+
+		}
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		void Method(_object_type* object, Type* type, const char* name,
+					_res_type(_object_type::* pointer)(_args ...) const, ProtectSection protection)
+		{
+		}
+
+		template<typename _object_type, typename _res_type, typename ... _args>
+		void StaticMethod(_object_type* object, Type* type, const char* name,
+						  _res_type(*pointer)(_args ...), ProtectSection protection)
+		{
+		}
+	};
+
 	template<typename _type, typename _enable /*= void*/>
 	void ScriptValue::Converter<_type, _enable>::Read(__type& value, const ScriptValue& data)
-	{}
+	{
+		void* dataPtr = nullptr;
+		jerry_get_object_native_pointer(data.jvalue, &dataPtr, &GetDataDeleter().info);
+		auto dataContainer = dynamic_cast<DataContainer<_type*>>((IDataContainer*)dataPtr);
+		if (dataContainer)
+			value = dataContainer->data;
+		else
+			value = _type();
+	}
 
 	template<typename _type, typename _enable /*= void*/>
 	void ScriptValue::Converter<_type, _enable>::Write(const __type& value, ScriptValue& data)
 	{
-		data.jvalue = jerry_create_undefined();
+		data.jvalue = jerry_create_object();
+
+		auto dataContainer = new DataContainer<_type>(value);
+		jerry_set_object_native_pointer(data.jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
+
+		if constexpr (std::is_base_of<IObject, _type>::value)
+		{
+			ReflectScriptValueTypeProcessor processor(data);
+			_type::ProcessType<ReflectScriptValueTypeProcessor>(&dataContainer->data, processor);
+		}
 	}
 
 	template<>
@@ -452,7 +550,7 @@ namespace o2
 	template<typename T>
 	struct ScriptValue::Converter<T, typename std::enable_if<IsProperty<T>::value>::type>
 	{
-		static constexpr bool isSupported = ScriptValue::IsSupports<typename T::valueType>::value;
+		static constexpr bool isSupported = ScriptValue::Converter<typename T::valueType>::isSupported;
 		using TValueType = typename T::valueType;
 
 		static void Write(const T& value, ScriptValue& data)
@@ -482,6 +580,10 @@ namespace o2
 
 		static void Read(Function<_res_type(_args ...)>& value, const ScriptValue& data)
 		{
+			value = [dataCopy = data](_args ... args) 
+			{ 
+				return dataCopy.Invoke<_res_type, _args ...>(args ...); 
+			};
 		}
 	};
 }

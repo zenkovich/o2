@@ -76,7 +76,7 @@ namespace o2
 
 		return jerry_get_array_length(jvalue);
 	}
-	
+
 	String ScriptValue::GetError() const
 	{
 		if (GetValueType() != ValueType::Error)
@@ -111,9 +111,8 @@ namespace o2
 
 		if (GetValueType() != ValueType::Object)
 		{
-			auto prev = jvalue;
-			jvalue = jerry_value_to_object(jvalue);
-			jerry_release_value(prev);
+			jerry_release_value(jvalue);
+			jvalue = jerry_create_object();
 		}
 
 		jerry_foreach_object_property(jvalue, &Helper::IterateFunc, (void*)&func);
@@ -123,9 +122,8 @@ namespace o2
 	{
 		if (GetValueType() != ValueType::Object)
 		{
-			auto prev = jvalue;
-			jvalue = jerry_value_to_object(jvalue);
-			jerry_release_value(prev);
+			jerry_release_value(jvalue);
+			jvalue = jerry_create_object();
 		}
 
 		ScriptValue res;
@@ -138,29 +136,37 @@ namespace o2
 	{
 		if (GetValueType() != ValueType::Object)
 		{
-			auto prev = jvalue;
-			jvalue = jerry_value_to_object(jvalue);
-			jerry_release_value(prev);
+			jerry_release_value(jvalue);
+			jvalue = jerry_create_object();
 		}
 
 		jerry_set_property(jvalue, name.jvalue, value.jvalue);
 	}
 
+	void ScriptValue::RemoveProperty(const ScriptValue& name)
+	{
+		jerry_delete_property(jvalue, name.jvalue);
+	}
+
 	void ScriptValue::SetElement(const ScriptValue& value, int idx)
 	{
-		if (GetValueType() != ValueType::Array)
+		if (GetValueType() != ValueType::Object)
 		{
-			auto prev = jvalue;
-			jvalue = jerry_value_to_object(jvalue);
-			jerry_release_value(prev);
+			jerry_release_value(jvalue);
+			jvalue = jerry_create_object();
 		}
 
-		jerry_set_property(jvalue, ScriptValue(idx), value.jvalue);
+		jerry_set_property_by_index(jvalue, idx, value.jvalue);
 	}
 
 	void ScriptValue::AddElement(const ScriptValue& value)
 	{
 		SetElement(value, GetLength());
+	}
+
+	void ScriptValue::RemoveElement(int idx)
+	{
+		jerry_delete_property_by_index(jvalue, idx);
 	}
 
 	bool ScriptValue::ToBool() const
@@ -246,6 +252,32 @@ namespace o2
 
 		IFunctionContainer* container = dynamic_cast<IFunctionContainer*>((IDataContainer*)ptr);
 		return container->Invoke(this_val, (jerry_value_t*)args_p, args_count);
+	}
+
+	jerry_value_t ScriptValueBase::DescriptorSetter(const jerry_value_t function_obj,
+													const jerry_value_t this_val,
+													const jerry_value_t args_p[],
+													const jerry_length_t args_count)
+	{
+		void* ptr = nullptr;
+		jerry_get_object_native_pointer(function_obj, &ptr, &GetDataDeleter().info);
+
+		ISetterWrapperContainer* container = dynamic_cast<ISetterWrapperContainer*>((IDataContainer*)ptr);
+		container->Set(args_p[0]);
+
+		return jerry_create_undefined();
+	}
+
+	jerry_value_t ScriptValueBase::DescriptorGetter(const jerry_value_t function_obj,
+													const jerry_value_t this_val,
+													const jerry_value_t args_p[],
+													const jerry_length_t args_count)
+	{
+		void* ptr = nullptr;
+		jerry_get_object_native_pointer(function_obj, &ptr, &GetDataDeleter().info);
+
+		IGetterWrapperContainer* container = dynamic_cast<IGetterWrapperContainer*>((IDataContainer*)ptr);
+		return container->Get();
 	}
 }
 

@@ -4,119 +4,10 @@
 
 namespace o2
 {
-	class ReflectScriptValueTypeProcessor
-	{
-	public:
-		struct FieldProcessor
-		{
-			ScriptValue& value;
-
-		public:
-			FieldProcessor(ScriptValue& value):value(value) {}
-
-			template<typename _attribute_type, typename ... _args>
-			FieldProcessor& AddAttribute(_args ... args) { return *this; }
-
-			template<typename _type>
-			FieldProcessor& SetDefaultValue(const _type& value) { return *this; }
-
-			void SetProtectSection(ProtectSection section) {}
-
-			template<typename _object_type, typename _field_type>
-			FieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
-										_field_type& field)
-			{
-				if constexpr (std::is_copy_constructible<_field_type>::value)
-				{
-					_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-					ScriptValue prop;
-					prop.SetValue(*fieldPtr);
-					value.SetProperty(ScriptValue(name), prop);
-				}
-
-				return *this;
-			}
-		};
-
-	public:
-		ScriptValue& value;
-
-	public:
-		ReflectScriptValueTypeProcessor(ScriptValue& value):value(value) {}
-
-		template<typename _object_type>
-		void Start(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartBases(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartFields(_object_type* object, Type* type) {}
-
-		template<typename _object_type>
-		void StartMethods(_object_type* object, Type* type) {}
-
-		FieldProcessor StartField() { return FieldProcessor(value); }
-
-		template<typename _object_type, typename _base_type>
-		void BaseType(_object_type* object, Type* type, const char* name)
-		{
-			if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
-				_base_type::ProcessType<ReflectScriptValueTypeProcessor>(object, *this);
-		}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		void Method(_object_type* object, Type* type, const char* name,
-					_res_type(_object_type::* pointer)(_args ...), ProtectSection protection)
-		{
-
-		}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		void Method(_object_type* object, Type* type, const char* name,
-					_res_type(_object_type::* pointer)(_args ...) const, ProtectSection protection)
-		{
-		}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		void StaticMethod(_object_type* object, Type* type, const char* name,
-						  _res_type(*pointer)(_args ...), ProtectSection protection)
-		{
-		}
-	};
-
 	template<typename _type>
 	ScriptValue::ScriptValue(const _type& value)
 	{
 		Converter<_type>::Write(value, *this);
-		// 		if constexpr (std::is_same<DataType, bool>::value)
-		// 			mValue = jerry_create_boolean(value);
-		// 		else if constexpr (std::is_floating_point<DataType>::value)
-		// 			mValue = jerry_create_number((double)value);
-		// 		else if constexpr (std::is_same<DataType, String>::value)
-		// 			mValue = jerry_create_string((jerry_char_t*)value.Data());
-		// 		else if constexpr (std::is_same<DataType, const char*>::value)
-		// 			mValue = jerry_create_string((jerry_char_t*)value);
-		// 		else if constexpr (std::is_invocable<DataType>::value)
-		// 		{
-		// 			mValue = jerry_create_external_function(&CallFunction);
-		// 
-		// 			IDataContainer* funcContainer = new FunctionContainer<DataType>(value);
-		// 			jerry_set_object_native_pointer(mValue, funcContainer, &GetDataDeleter().info);
-		// 		}
-		// 		else
-		// 		{
-		// 			mValue = jerry_create_object();
-		// 
-		// 			auto dataContainer = new DataContainer<DataType>(value);
-		// 			jerry_set_object_native_pointer(mValue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
-		// 
-		// 			if constexpr (std::is_base_of<IObject, DataType>::value)
-		// 			{
-		// 				ReflectScriptValueTypeProcessor processor(*this);
-		// 				DataType::ProcessType<ReflectScriptValueTypeProcessor>(&dataContainer->data, processor);
-		// 			}
-		// 		}
 	}
 
 	template<typename _type>
@@ -147,23 +38,73 @@ namespace o2
 		_type res;
 		Converter<_type>::Read(res, *this);
 		return std::move(res);
+	}
 
-		// 		if constexpr (std::is_same<DataType, bool>::value)
-		// 			return ToBool();
-		// 		else if constexpr (std::is_floating_point<DataType>::value)
-		// 			return ToNumber();
-		// 		else if constexpr (std::is_same<DataType, String>::value)
-		// 			return ToString()
-		// 		else
-		// 		{
-		// 			void* dataPtr = nullptr;
-		// 			jerry_get_object_native_pointer(mValue, &dataPtr, &GetDataDeleter().info);
-		// 			auto dataContainer = dynamic_cast<DataContainer<DataType*>>((IDataContainer*)dataPtr);
-		// 			if (dataContainer)
-		// 				return dataContainer->data;
-		// 			else
-		// 				return DataType();
-		// 		}
+	template<typename _type>
+	void ScriptValue::SetPropertyWrapper(const ScriptValue& name, _type& value)
+	{
+		if (GetValueType() != ValueType::Object)
+		{
+			jerry_release_value(jvalue);
+			jvalue = jerry_create_object();
+		}
+
+		jerry_property_descriptor_t propertyDescriptor;
+		jerry_init_property_descriptor_fields(&propertyDescriptor);
+
+		propertyDescriptor.is_enumerable = true;
+		propertyDescriptor.is_enumerable_defined = true;
+
+		propertyDescriptor.is_get_defined = true;
+		propertyDescriptor.getter = jerry_create_external_function(DescriptorGetter);
+		auto getterWrapperContainer = new PointerGetterWrapperContainer<_type>();
+		getterWrapperContainer->dataPtr = &value;
+		jerry_set_object_native_pointer(propertyDescriptor.getter, getterWrapperContainer, &GetDataDeleter().info);
+
+		propertyDescriptor.is_set_defined = true;
+		propertyDescriptor.setter = jerry_create_external_function(DescriptorSetter);
+		auto setterWrapperContainer = new PointerSetterWrapperContainer<_type>();
+		setterWrapperContainer->dataPtr = &value;
+		jerry_set_object_native_pointer(propertyDescriptor.setter, setterWrapperContainer, &GetDataDeleter().info);
+
+		jerry_value_t newPropertyValue = jerry_define_own_property(jvalue, name.jvalue, &propertyDescriptor);
+		jerry_release_value(newPropertyValue);
+
+		jerry_free_property_descriptor_fields(&propertyDescriptor);
+	}
+
+	template<typename _type>
+	void ScriptValue::SetPropertyWrapper(const ScriptValue& name, const Function<void(const _type& value)>& setter,
+										 const Function<_type()>& getter)
+	{
+		if (GetValueType() != ValueType::Object)
+		{
+			jerry_release_value(jvalue);
+			jvalue = jerry_create_object();
+		}
+
+		jerry_property_descriptor_t propertyDescriptor;
+		jerry_init_property_descriptor_fields(&propertyDescriptor);
+
+		propertyDescriptor.is_enumerable = true;
+		propertyDescriptor.is_enumerable_defined = true;
+
+		propertyDescriptor.is_get_defined = true;
+		propertyDescriptor.getter = jerry_create_external_function(DescriptorGetter);
+		auto getterWrapperContainer = new FunctionalGetterWrapperContainer<_type>();
+		getterWrapperContainer->getter = getter;
+		jerry_set_object_native_pointer(propertyDescriptor.getter, getterWrapperContainer, &GetDataDeleter().info);
+
+		propertyDescriptor.is_set_defined = true;
+		propertyDescriptor.setter = jerry_create_external_function(DescriptorSetter);
+		auto setterWrapperContainer = new FunctionalSetterWrapperContainer<_type>();
+		setterWrapperContainer->setter = setter;
+		jerry_set_object_native_pointer(propertyDescriptor.setter, setterWrapperContainer, &GetDataDeleter().info);
+
+		jerry_value_t newPropertyValue = jerry_define_own_property(jvalue, name.jvalue, &propertyDescriptor);
+		jerry_release_value(newPropertyValue);
+
+		jerry_free_property_descriptor_fields(&propertyDescriptor);
 	}
 
 	template<typename _res_type, typename ... _args>
@@ -203,6 +144,37 @@ namespace o2
 		}
 	}
 
+	template<typename _type>
+	jerry_value_t ScriptValueBase::PointerGetterWrapperContainer<_type>::Get()
+	{
+		ScriptValue tmp;
+		tmp.SetValue<_type>(*dataPtr);
+		return jerry_acquire_value(tmp.jvalue);
+	}
+
+	template<typename _type>
+	void ScriptValueBase::PointerSetterWrapperContainer<_type>::Set(jerry_value_t value)
+	{
+		ScriptValue tmp;
+		tmp.AcquireValue(value);
+		*dataPtr = tmp.GetValue<_type>();
+	}
+
+	template<typename _type>
+	jerry_value_t ScriptValueBase::FunctionalGetterWrapperContainer<_type>::Get()
+	{
+		ScriptValue tmp;
+		tmp.SetValue<_type>(getter());
+		return jerry_acquire_value(tmp.jvalue);
+	}
+
+	template<typename _type>
+	void ScriptValueBase::FunctionalSetterWrapperContainer<_type>::Set(jerry_value_t value)
+	{
+		ScriptValue tmp;
+		tmp.AcquireValue(value);
+		setter(tmp.GetValue<_type>());
+	}
 }
 
 #endif // SCRIPTING_BACKEND_JERRYSCRIPT

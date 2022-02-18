@@ -18,6 +18,13 @@
 // Describes that engine running as editor
 #define IS_EDITOR true
 
+// Is enabled scripting engine
+#if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
+#define IS_SCRIPTING_SUPPORTED true
+#else
+#define IS_SCRIPTING_SUPPORTED false
+#endif
+
 // Current working platform
 o2::Platform GetEnginePlatform();
 
