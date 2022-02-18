@@ -50,7 +50,7 @@ namespace o2
 	void ISceneDrawable::OnDisabled()
 	{
 		if (auto layer = GetSceneDrawableSceneLayer())
-			layer->OnDrawableEnabled(this);
+			layer->OnDrawableDisabled(this);
 	}
 
 	void ISceneDrawable::OnAddToScene()

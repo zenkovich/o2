@@ -124,8 +124,11 @@ namespace o2
 
 namespace o2
 {
+#if defined PLATFORM_IOS || defined PLATFORM_MAC || defined PLATFORM_ANDROID
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wundefined-var-template"
+#endif
+
 	// Returns type of template parameter
 	template<typename _type>
 	const Type& GetTypeOf()
@@ -167,5 +170,9 @@ namespace o2
 			return *Type::Dummy::type;
 		}
 	}
+
+#if defined PLATFORM_IOS || defined PLATFORM_MAC || defined PLATFORM_ANDROID
 #pragma GCC diagnostic pop
+#endif
+
 }

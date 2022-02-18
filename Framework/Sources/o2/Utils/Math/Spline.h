@@ -60,6 +60,12 @@ namespace o2
 		// It is called when keys batch change completed. Updates approximation
 		void CompleteKeysBatchingChange();
 
+		// Sets spline closed or not
+		void SetClosed(bool closed);
+
+		// Reutnrs is spline closed
+		bool IsClosed() const;
+
 		// Appends Spline at end
 		void AppendSpline(const Spline& Spline);
 
@@ -219,6 +225,8 @@ namespace o2
 
 		Vector<Key> mKeys; // Spline keys @SERIALIZABLE
 
+		bool mClosed = false; // Is spline closed
+
 	protected:
 		// Checks all smooth keys and updates supports points
 		void CheckSmoothKeys();
@@ -252,6 +260,7 @@ CLASS_FIELDS_META(o2::Spline)
 	FIELD().DEFAULT_VALUE(false).NAME(mBatchChange).PROTECTED();
 	FIELD().DEFAULT_VALUE(false).NAME(mChangedKeys).PROTECTED();
 	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mKeys).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mClosed).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(o2::Spline)
@@ -261,6 +270,8 @@ CLASS_METHODS_META(o2::Spline)
 	PUBLIC_FUNCTION(Vec2F, Evaluate, float, bool, int&, int&);
 	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
 	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
+	PUBLIC_FUNCTION(void, SetClosed, bool);
+	PUBLIC_FUNCTION(bool, IsClosed);
 	PUBLIC_FUNCTION(void, AppendSpline, const Spline&);
 	PUBLIC_FUNCTION(void, PrependSpline, const Spline&);
 	PUBLIC_FUNCTION(void, InsertSpline, const Spline&, int);

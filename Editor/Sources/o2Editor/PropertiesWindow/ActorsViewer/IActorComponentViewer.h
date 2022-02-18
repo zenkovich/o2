@@ -50,6 +50,12 @@ namespace Editor
 		// Updates all component values
 		virtual void Refresh();
 
+		// Sets viewer enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is viewer enabled
+		bool IsEnabled() const;
+
 		IOBJECT(IActorComponentViewer);
 
 	protected:
@@ -57,6 +63,8 @@ namespace Editor
 
 		SpoilerWithHead* mSpoiler = nullptr;      // Component's spoiler
 		Button*          mRemoveButton = nullptr; // Remove component button
+
+		bool mEnabled = false; // Is viewer enabled 
 
 	protected:
 		// Removes target components
@@ -82,6 +90,7 @@ CLASS_FIELDS_META(Editor::IActorComponentViewer)
 	FIELD().NAME(mTargetComponents).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mRemoveButton).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorComponentViewer)
@@ -93,6 +102,8 @@ CLASS_METHODS_META(Editor::IActorComponentViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
 	PROTECTED_FUNCTION(void, RemoveTargetComponents);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);

@@ -307,33 +307,33 @@ namespace Editor
 			if (lastComponentViewers.Contains(componentViewer))
 				lastComponentViewers.Remove(componentViewer);
 			else
-				componentViewer->OnEnabled();
+				componentViewer->SetEnabled(true);
 		}
 
 		for (auto viewer : lastComponentViewers)
-			viewer->OnDisabled();
+			viewer->SetEnabled(false);
 	}
 
 	void ActorViewer::OnEnabled()
 	{
-		mHeaderViewer->OnEnabled();
-		mTransformViewer->OnEnabled();
+		mHeaderViewer->SetEnabled(true);
+		mTransformViewer->SetEnabled(true);
 
 		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->OnEnabled();
+			mActorPropertiesViewer->SetEnabled(true);
 
-		mComponentsViewers.ForEach([](auto x) { x->OnEnabled(); });
+		mComponentsViewers.ForEach([](auto x) { x->SetEnabled(true); });
 	}
 
 	void ActorViewer::OnDisabled()
 	{
-		mHeaderViewer->OnDisabled();
-		mTransformViewer->OnDisabled();
+		mHeaderViewer->SetEnabled(false);
+		mTransformViewer->SetEnabled(false);
 
 		if (mActorPropertiesViewer)
-			mActorPropertiesViewer->OnDisabled();
+			mActorPropertiesViewer->SetEnabled(false);
 
-		mComponentsViewers.ForEach([](auto x) { x->OnDisabled(); });
+		mComponentsViewers.ForEach([](auto x) { x->SetEnabled(false); });
 
 		mTargetActors.Clear();
 	}

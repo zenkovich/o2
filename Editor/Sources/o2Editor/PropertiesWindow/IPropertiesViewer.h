@@ -25,18 +25,26 @@ namespace Editor
 		// Returns viewing object type
 		virtual const Type* GetViewingObjectType() const;
 
+		// Sets target objects
+		virtual void SetTargets(const Vector<IObject*> targets) {}
+
 		// Refreshes viewing properties
 		virtual void Refresh();
+
+		// Sets viewer enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is viewer enabled
+		bool IsEnabled() const;
 
 		IOBJECT(IPropertiesViewer);
 
 	protected:
 		Widget* mContentWidget; // Data content widget (turning on/off on enabling/disabling)
 
-	protected:
-		// Sets target objects
-		virtual void SetTargets(const Vector<IObject*> targets) {}
+		bool mEnabled = false; // Is viewer enabled
 
+	protected:
 		// Enable viewer event function
 		virtual void OnEnabled() {}
 
@@ -61,14 +69,17 @@ END_META;
 CLASS_FIELDS_META(Editor::IPropertiesViewer)
 {
 	FIELD().NAME(mContentWidget).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
+	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>);
 	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
 	PROTECTED_FUNCTION(void, Update, float);

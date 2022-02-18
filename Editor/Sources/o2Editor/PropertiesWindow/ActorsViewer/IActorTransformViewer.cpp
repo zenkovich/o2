@@ -50,6 +50,24 @@ namespace Editor
 	void IActorTransformViewer::Refresh()
 	{}
 
+	void IActorTransformViewer::SetEnabled(bool enabled)
+	{
+		if (mEnabled == enabled)
+			return;
+
+		mEnabled = enabled;
+
+		if (mEnabled)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
+
+	bool IActorTransformViewer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IActorTransformViewer);

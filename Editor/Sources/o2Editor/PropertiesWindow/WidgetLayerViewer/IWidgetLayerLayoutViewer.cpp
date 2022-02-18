@@ -42,6 +42,24 @@ namespace Editor
 	void IWidgetLayerLayoutViewer::Refresh()
 	{}
 
+	void IWidgetLayerLayoutViewer::SetEnabled(bool enabled)
+	{
+		if (mEnabled == enabled)
+			return;
+
+		mEnabled = enabled;
+
+		if (mEnabled)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
+
+	bool IWidgetLayerLayoutViewer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IWidgetLayerLayoutViewer);

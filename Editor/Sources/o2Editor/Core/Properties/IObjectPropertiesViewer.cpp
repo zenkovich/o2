@@ -46,7 +46,7 @@ namespace Editor
 
 	void IObjectPropertiesViewer::Refresh(const Vector<Pair<IObject*, IObject*>>& targetObjets)
 	{
-		mTargetObjets = targetObjets;
+		mTargetObjects = targetObjets;
 		auto spoiler = GetSpoiler();
 
 		if (!mHeaderEnabled || spoiler->IsExpanded())
@@ -79,7 +79,7 @@ namespace Editor
 		{
 			mSpoiler = CreateSpoiler();
 			mSpoiler->onExpand = [&]() { 
-				Refresh(mTargetObjets);
+				Refresh(mTargetObjects);
 			};
 		}
 

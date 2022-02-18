@@ -73,6 +73,24 @@ namespace Editor
 	void IActorComponentViewer::Refresh()
 	{	}
 
+	void IActorComponentViewer::SetEnabled(bool enabled)
+	{
+		if (mEnabled == enabled)
+			return;
+
+		mEnabled = enabled;
+
+		if (mEnabled)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
+
+	bool IActorComponentViewer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
 	void IActorComponentViewer::RemoveTargetComponents()
 	{
 		for (auto comp : mTargetComponents)

@@ -49,10 +49,26 @@ namespace Editor
 
 		// Returns is there no properties
 		virtual bool IsEmpty() const;
+
+		// Sets viewer enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is viewer enabled
+		bool IsEnabled() const;
+
 		IOBJECT(IWidgetLayerPropertiesViewer);
 
 	protected:
 		SpoilerWithHead* mSpoiler = nullptr;
+
+		bool mEnabled = false; // Is viewer enabled 
+
+	protected:
+		// Enable viewer event function
+		virtual void OnEnabled() {}
+
+		// Disable viewer event function
+		virtual void OnDisabled() {}
 	};
 }
 
@@ -64,6 +80,7 @@ END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerPropertiesViewer)
 {
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)
@@ -76,5 +93,9 @@ CLASS_METHODS_META(Editor::IWidgetLayerPropertiesViewer)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 }
 END_META;

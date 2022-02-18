@@ -50,6 +50,24 @@ namespace Editor
 		return true;
 	}
 
+	void IWidgetLayerPropertiesViewer::SetEnabled(bool enabled)
+	{
+		if (mEnabled == enabled)
+			return;
+
+		mEnabled = enabled;
+
+		if (mEnabled)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
+
+	bool IWidgetLayerPropertiesViewer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IWidgetLayerPropertiesViewer);

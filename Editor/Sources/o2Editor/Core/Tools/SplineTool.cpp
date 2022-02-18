@@ -30,6 +30,11 @@ namespace Editor
 		return spline->GetKeys().Count();
 	}
 
+	bool SplineTool::SplineWrapper::IsClosed() const
+	{
+		return spline->IsClosed();
+	}
+
 	void SplineTool::SplineWrapper::AddPoint(int idx, const Vec2F& position,
 											 const Vec2F& prevSupport, const Vec2F& nextSupport)
 	{
@@ -107,6 +112,7 @@ namespace Editor
 
 	void SplineTool::SplineWrapper::OnChanged()
 	{
+		tool->onChanged();
 	}
 
 	void SplineTool::SplineSceneLayer::DrawOverScene()
@@ -145,6 +151,7 @@ namespace Editor
 		auto wrapper = mnew SplineWrapper();
 		wrapper->spline = spline;
 		wrapper->getOrigin = getOrigin;
+		wrapper->tool = this;
 		splineEditor.SetSpline(wrapper);
 	}
 

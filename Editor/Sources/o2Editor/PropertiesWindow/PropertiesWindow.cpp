@@ -23,7 +23,7 @@ namespace Editor
 	PropertiesWindow::~PropertiesWindow()
 	{
 		if (mCurrentViewer)
-			mCurrentViewer->OnDisabled();
+			mCurrentViewer->SetEnabled(false);
 
 		for (auto viewer : mViewers)
 			delete viewer;
@@ -111,7 +111,7 @@ namespace Editor
 			if (mCurrentViewer)
 			{
 				mCurrentViewer->mContentWidget->Hide(true);
-				mCurrentViewer->OnDisabled();
+				mCurrentViewer->SetEnabled(false);
 			}
 
 			mCurrentViewer = objectViewer;
@@ -129,7 +129,7 @@ namespace Editor
 		if (mCurrentViewer)
 		{
 			mCurrentViewer->SetTargets(mTargets);
-			mCurrentViewer->OnEnabled();
+			mCurrentViewer->SetEnabled(true);
 		}
 
 		mOnTargetsChangedDelegate = targetsChangedDelegate;

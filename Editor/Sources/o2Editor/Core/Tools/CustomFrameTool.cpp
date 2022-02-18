@@ -8,21 +8,26 @@ namespace Editor
 	CustomFrameTool::CustomFrameTool()
 	{
 		sceneLayer.tool = this;
+		frameHandles.isInputTransparent = true;
 		frameHandles.onTransformed = [&](const Basis& x) {
-			mBasis = x*o2EditorSceneScreen.GetScreenToLocalTransform();
+			auto b = x*o2EditorSceneScreen.GetScreenToLocalTransform();
+			b.origin -= getOrigin();
+			mBasis = b;
 			onChanged(mBasis);
 		};
 	}
 
 	void CustomFrameTool::SceneLayer::DrawOverScene()
 	{
-		tool->frameHandles.SetBasis(tool->mBasis*o2EditorSceneScreen.GetLocalToScreenTransform());
+		Basis b = tool->mBasis;
+		b.origin += tool->getOrigin();
+
+		tool->frameHandles.SetBasis(b*o2EditorSceneScreen.GetLocalToScreenTransform());
 		tool->frameHandles.Draw();
 	}
 
 	void CustomFrameTool::SceneLayer::Update(float dt)
-	{
-	}
+	{}
 
 	int CustomFrameTool::SceneLayer::GetOrder() const
 	{

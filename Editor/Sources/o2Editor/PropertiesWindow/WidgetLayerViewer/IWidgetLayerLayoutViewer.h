@@ -44,10 +44,25 @@ namespace Editor
 		// Updates properties values
 		virtual void Refresh();
 
+		// Sets viewer enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is viewer enabled
+		bool IsEnabled() const;
+
 		IOBJECT(IWidgetLayerLayoutViewer);
 
 	protected:
-		SpoilerWithHead* mSpoiler;
+		SpoilerWithHead* mSpoiler = nullptr;
+
+		bool mEnabled = false; // Is viewer enabled 
+
+	protected:
+		// Enable viewer event function
+		virtual void OnEnabled() {}
+
+		// Disable viewer event function
+		virtual void OnDisabled() {}
 	};
 }
 
@@ -58,7 +73,8 @@ CLASS_BASES_META(Editor::IWidgetLayerLayoutViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerLayoutViewer)
 {
-	FIELD().NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerLayoutViewer)
@@ -69,5 +85,9 @@ CLASS_METHODS_META(Editor::IWidgetLayerLayoutViewer)
 	PUBLIC_FUNCTION(void, Expand);
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
+	PROTECTED_FUNCTION(void, OnEnabled);
+	PROTECTED_FUNCTION(void, OnDisabled);
 }
 END_META;

@@ -27,11 +27,12 @@ namespace Editor
 			const String& GetIconName() const override;
 		};
 
-		FrameHandles frameHandles;     // Frame handles 
-		SceneLayer   sceneLayer;       // Scene layer for drawing spline
-		bool         isEnabled = true; // Is tool enabled now
+		FrameHandles frameHandles;      // Frame handles 
+		SceneLayer   sceneLayer;        // Scene layer for drawing spline
+		bool         isEnabled = false; // Is tool enabled now
 
 		Function<void(const Basis&)> onChanged; // Called when frame changes
+		Function<Vec2F()>            getOrigin; // Returns origin of frame         
 
 	public:
 		// Default constructor

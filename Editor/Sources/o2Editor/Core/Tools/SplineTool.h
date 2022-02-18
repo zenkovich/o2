@@ -16,6 +16,7 @@ namespace Editor
 	{
 		struct SplineWrapper: public SplineEditor::ISplineWrapper
 		{
+			SplineTool* tool = nullptr;
 			Spline* spline = nullptr;
 			Function<Vec2F()> getOrigin;
 
@@ -26,6 +27,8 @@ namespace Editor
 			Vec2F LocalToWorld(const Vec2F& point) const override;
 
 			int GetPointsCount() const override;
+
+			bool IsClosed() const override;
 
 			void AddPoint(int idx, const Vec2F& position, const Vec2F& prevSupport, const Vec2F& nextSupport) override;
 			void RemovePoint(int idx) override;
@@ -62,6 +65,11 @@ namespace Editor
 			const String& GetName() const override;
 			const String& GetIconName() const override;
 		};
+
+	public:
+		Function<void()> onChanged; // It is called when spline was changed
+
+	public:
 
 		SplineEditor     splineEditor;     // Animation spline editor
 		SplineSceneLayer sceneLayer;       // Scene layer for drawing spline

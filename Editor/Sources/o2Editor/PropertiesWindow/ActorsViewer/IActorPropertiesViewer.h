@@ -51,10 +51,18 @@ namespace Editor
 		// Returns is there no properties
 		virtual bool IsEmpty() const;
 
+		// Sets viewer enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is viewer enabled
+		bool IsEnabled() const;
+
 		IOBJECT(IActorPropertiesViewer);
 
 	protected:
 		SpoilerWithHead* mSpoiler = nullptr;
+
+		bool mEnabled = false; // Is viewer enabled 
 
 	protected:
 		// Enable viewer event function
@@ -75,6 +83,7 @@ END_META;
 CLASS_FIELDS_META(Editor::IActorPropertiesViewer)
 {
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
+	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorPropertiesViewer)
@@ -87,6 +96,8 @@ CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 	PUBLIC_FUNCTION(void, Collapse);
 	PUBLIC_FUNCTION(void, Refresh);
 	PUBLIC_FUNCTION(bool, IsEmpty);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
 }

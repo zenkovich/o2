@@ -32,7 +32,16 @@ namespace Editor
 		// Updates properties values
 		virtual void Refresh() {}
 
+		// Sets viewer enabled
+		void SetEnabled(bool enabled);
+
+		// Returns is viewer enabled
+		bool IsEnabled() const;
+
 		IOBJECT(IActorHeaderViewer);
+
+	protected:
+		bool mEnabled = false; // Is viewer enabled 
 
 	protected:
 		// Enable viewer event function
@@ -52,6 +61,7 @@ CLASS_BASES_META(Editor::IActorHeaderViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorHeaderViewer)
 {
+	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorHeaderViewer)
@@ -60,6 +70,8 @@ CLASS_METHODS_META(Editor::IActorHeaderViewer)
 	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
 	PUBLIC_FUNCTION(Widget*, GetWidget);
 	PUBLIC_FUNCTION(void, Refresh);
+	PUBLIC_FUNCTION(void, SetEnabled, bool);
+	PUBLIC_FUNCTION(bool, IsEnabled);
 	PROTECTED_FUNCTION(void, OnEnabled);
 	PROTECTED_FUNCTION(void, OnDisabled);
 }

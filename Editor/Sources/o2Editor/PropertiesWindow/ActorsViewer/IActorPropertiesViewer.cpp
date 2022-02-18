@@ -54,6 +54,24 @@ namespace Editor
 		return true;
 	}
 
+	void IActorPropertiesViewer::SetEnabled(bool enabled)
+	{
+		if (mEnabled == enabled)
+			return;
+
+		mEnabled = enabled;
+
+		if (mEnabled)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
+
+	bool IActorPropertiesViewer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IActorPropertiesViewer);

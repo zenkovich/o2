@@ -1,15 +1,17 @@
 #include "o2Editor/stdafx.h"
 #include "ToolsPanel.h"
 
+#include "EditorApplication.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
-#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Scene/UI/UIManager.h"
 #include "o2/Scene/UI/Widget.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Scene/UI/Widgets/DropDown.h"
 #include "o2/Scene/UI/Widgets/HorizontalLayout.h"
 #include "o2/Scene/UI/Widgets/Toggle.h"
+#include "o2/Utils/Tasks/TaskManager.h"
 #include "o2Editor/Core/Dialogs/EditNameDlg.h"
 #include "o2Editor/Core/Tools/FrameTool.h"
 #include "o2Editor/Core/Tools/MoveTool.h"
@@ -19,7 +21,6 @@
 #include "o2Editor/Core/UIRoot.h"
 #include "o2Editor/Core/WindowsSystem/WindowsManager.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
-#include "EditorApplication.h"
 
 
 namespace Editor
@@ -55,7 +56,9 @@ namespace Editor
 
 	void ToolsPanel::RemoveToolToggle(Toggle* toggle)
 	{
-		toggle->GetStateObject("visible")->onStateFullyFalse = [=]() { mToolsPanel->RemoveChild(toggle, false); };
+		toggle->GetStateObject("visible")->onStateFullyFalse = [=]() { 
+			o2Tasks.Invoke([=]() { mToolsPanel->RemoveChild(toggle, false); });
+		};
 		toggle->SetEnabled(false);
 	}
 

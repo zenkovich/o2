@@ -14,14 +14,14 @@
 
 namespace o2
 {
+	class DataValue;
 	class FieldInfo;
 	class FunctionInfo;
 	class IAbstractValueProxy;
 	class IObject;
 	class StaticFunctionInfo;
 	class Type;
-	class ITypeSerializer;
-	class DataValue;
+	struct ITypeSerializer;
 
 	template<typename _type>
 	class IValueProxy;

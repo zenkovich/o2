@@ -71,7 +71,11 @@ namespace o2
 
 		int prevCacheKey = cacheKey;
 		int keyLeftIdx = -1, keyRightIdx = -1;
-		SearchKey(mKeys, count, position, keyLeftIdx, keyRightIdx, direction, cacheKey);
+
+		if (mClosed)
+			SearchKeyClosed(mKeys, count, position, keyLeftIdx, keyRightIdx, direction, cacheKey);
+		else
+			SearchKey(mKeys, count, position, keyLeftIdx, keyRightIdx, direction, cacheKey);
 
 		if (keyLeftIdx < 0)
 			return Vec2F();
@@ -106,6 +110,21 @@ namespace o2
 		UpdateApproximation();
 		mBatchChange = false;
 		mChangedKeys = false;
+	}
+
+	void Spline::SetClosed(bool closed)
+	{
+		mClosed = closed;
+
+		if (mBatchChange)
+			mChangedKeys = true;
+		else
+			UpdateApproximation();
+	}
+
+	bool Spline::IsClosed() const
+	{
+		return mClosed;
 	}
 
 	void Spline::AppendSpline(const Spline& Spline)
@@ -387,7 +406,7 @@ namespace o2
 		if (mKeys.Count() == 0)
 			return 0.0f;
 
-		return mKeys.Last().position;
+		return mClosed ? mKeys[0].position : mKeys.Last().position;
 	}
 
 	bool Spline::IsEmpty() const
@@ -457,10 +476,9 @@ namespace o2
 			mKeys[0].position = 0.0f;
 		}
 
-		for (int i = 1; i < mKeys.Count(); i++)
-		{
-			Key& beginKey = mKeys[i - 1];
-			Key& endKey = mKeys[i];
+		auto calculateApproximation = [&](int begin, int end) {
+			Key& beginKey = mKeys[begin];
+			Key& endKey = mKeys[end];
 
 			Vec2F a = beginKey.value;
 			Vec2F b = beginKey.value + beginKey.nextSupport;
@@ -485,8 +503,14 @@ namespace o2
 				endKey.mApproxValuesBounds.bottom = Math::Min(endKey.mApproxValuesBounds.bottom, p.y);
 			}
 
-			mKeys[i].position = length;
-		}
+			mKeys[end].position = length;
+		};
+
+		for (int i = 1; i < mKeys.Count(); i++)
+			calculateApproximation(i - 1, i);
+
+		if (mClosed && !mKeys.IsEmpty())
+			calculateApproximation(mKeys.Count() - 1, 0);
 
 		onKeysChanged();
 	}

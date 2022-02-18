@@ -75,16 +75,18 @@ namespace Editor
 				handles->prevSupport.UpdateScreenPosition();
 				handles->nextSupport.UpdateScreenPosition();
 
-				if (!handles->isFirst)
+				bool broken = (o2Input.IsKeyDown(VK_MENU) || handles->startDragFromZero) && o2Input.IsCursorDown();
+
+				if (!handles->isFirst || mSplineWrapper->IsClosed())
 				{
 					o2Render.DrawAALine(handles->position.GetScreenPosition(), handles->prevSupport.GetScreenPosition(),
-										mSplineSupportColor);
+										mSplineSupportColor, 1.0f, broken ? LineType::Dash : LineType::Solid);
 				}
 
-				if (!handles->isLast)
+				if (!handles->isLast || mSplineWrapper->IsClosed())
 				{
 					o2Render.DrawAALine(handles->position.GetScreenPosition(), handles->nextSupport.GetScreenPosition(),
-										mSplineSupportColor);
+										mSplineSupportColor, 1.0f, broken ? LineType::Dash : LineType::Solid);
 				}
 			}
 		}
@@ -137,10 +139,10 @@ namespace Editor
 		{
 			if (handles->IsSupportsVisible())
 			{
-				if (!handles->isFirst)
+				if (!handles->isFirst || mSplineWrapper->IsClosed())
 					handles->prevSupport.Draw();
 
-				if (!handles->isLast)
+				if (!handles->isLast || mSplineWrapper->IsClosed())
 					handles->nextSupport.Draw();
 			}
 		}
@@ -148,7 +150,6 @@ namespace Editor
 
 	void SplineEditor::Update(float dt)
 	{
-
 	}
 
 	void SplineEditor::SetSpline(ISplineWrapper* wrapper)
@@ -164,7 +165,6 @@ namespace Editor
 			return;
 
 		InitializeHandles();
-
 	}
 
 	bool SplineEditor::IsUnderPoint(const Vec2F& point)
@@ -342,7 +342,7 @@ namespace Editor
 			bool found = false;
 
 			const ApproximationVec2F* points = mSplineWrapper->GetPointApproximation(i);
-			for (int j = 1; j < mSplineWrapper->GetPointApproximationCount(j); j++)
+			for (int j = 1; j < mSplineWrapper->GetPointApproximationCount(i); j++)
 			{
 				Vec2F a = mSplineWrapper->LocalToWorld(points[j - 1].value);
 				Vec2F b = mSplineWrapper->LocalToWorld(points[j].value);
@@ -435,6 +435,23 @@ namespace Editor
 	{
 	}
 
+	void SplineEditor::OnKeyReleased(const Input::Key& key)
+	{
+		if (key.keyCode == VK_DELETE)
+		{
+			auto selectedHandles = mSelectedHandles;
+			for (auto handle : selectedHandles)
+			{
+				int idx = mHandles.IndexOf(handle);
+				mSplineWrapper->RemovePoint(idx);
+			}
+
+			OnSplineChanged();
+			mSplineWrapper->OnChanged();
+			onChanged();
+		}
+	}
+
 	void SplineEditor::CheckDragFromZero(int i, PointHandles* handles)
 	{
 		float screenThreshold = 3.0f;
@@ -451,7 +468,7 @@ namespace Editor
 	{
 		mTransformFrameVisible = IsTransformFrameVisible();
 
-		if (!mTransformFrameVisible)
+		if (!mTransformFrameVisible || mSelectedHandles.IsEmpty())
 			return;
 
 		RectF aabb((mSelectedHandles[0])->GetPosition(), (mSelectedHandles[0])->GetPosition());

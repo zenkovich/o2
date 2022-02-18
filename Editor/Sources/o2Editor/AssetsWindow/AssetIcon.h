@@ -67,6 +67,10 @@ namespace Editor
 		AssetsIconsScrollArea* mOwner = nullptr;         // Owner assets scroll area
 
 	protected:
+		using SelectableDragableObject::OnDrawn;
+		using SelectableDragableObject::OnCursorPressed;
+		using SelectableDragableObject::OnCursorReleased;
+
 		// Sets is this selected
 		void SetSelected(bool selected);
 

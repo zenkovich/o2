@@ -12,12 +12,14 @@ namespace o2
 		DrawableComponent()
 	{
 		spline.onKeysChanged = THIS_FUNC(UpdateMesh);
+		spline.SetClosed(true);
 	}
 
 	MeshComponent::MeshComponent(const MeshComponent& other):
 		DrawableComponent(other), mMesh(other.mMesh), spline(other.spline)
 	{
 		spline.onKeysChanged = THIS_FUNC(UpdateMesh);
+		spline.SetClosed(true);
 	}
 
 	MeshComponent::~MeshComponent()
@@ -33,6 +35,9 @@ namespace o2
 
 	void MeshComponent::Draw()
 	{
+		if (mNeedUpdateMesh)
+			UpdateMesh();
+
 		mMesh.Draw();
 		DrawableComponent::OnDrawn();
 
@@ -45,10 +50,44 @@ namespace o2
 		return false;
 	}
 
+	const Mesh& MeshComponent::GetMesh() const
+	{
+		return mMesh;
+	}
+
+	void MeshComponent::SetExtraPoints(const Vector<Vec2F>& points)
+	{
+		mExtraPoints = points;
+		mNeedUpdateMesh = true;
+	}
+
+	const Vector<Vec2F>& MeshComponent::GetExtraPoints() const
+	{
+		return mExtraPoints;
+	}
+
+	void MeshComponent::SetExtraPoint(int idx, const Vec2F& pos)
+	{
+		mExtraPoints[idx] = pos;
+		mNeedUpdateMesh = true;
+	}
+
+	void MeshComponent::AddExtraPoint(const Vec2F& point)
+	{
+		mExtraPoints.Add(point);
+		mNeedUpdateMesh = true;
+	}
+
+	void MeshComponent::RemoveExtraPoint(int idx)
+	{
+		mExtraPoints.RemoveAt(idx);
+		mNeedUpdateMesh = true;
+	}
+
 	void MeshComponent::SetImage(const ImageAssetRef& image)
 	{
 		mImageAsset = image;
-		UpdateMesh();
+		mNeedUpdateMesh = true;
 	}
 
 	const ImageAssetRef& MeshComponent::GetImage() const
@@ -59,7 +98,7 @@ namespace o2
 	void MeshComponent::SetMappingFrame(const RectF& frame)
 	{
 		mImageMapping = frame;
-		UpdateMesh();
+		mNeedUpdateMesh = true;
 	}
 
 	const RectF& MeshComponent::GetMappingFrame() const
@@ -70,7 +109,7 @@ namespace o2
 	void MeshComponent::SetColor(const Color4& color)
 	{
 		mColor = color;
-		UpdateMesh();
+		mNeedUpdateMesh = true;
 	}
 
 	const Color4& MeshComponent::GetColor() const
@@ -109,26 +148,41 @@ namespace o2
 
 	void MeshComponent::UpdateMesh()
 	{
+		mNeedUpdateMesh = false;
+
 		if (spline.GetKeys().Count() < 3)
 			return;
 
 		std::vector<CDT::V2d<float>> verticies;
 		std::vector<CDT::Edge> edges;
 
-		for (int i = 1; i < spline.GetKeys().Count(); i++)
+		auto pushVertex = [&](const Vec2F& p) {
+			verticies.push_back(CDT::V2d<float>::make(p.x, p.y));
+
+			if (verticies.size() > 1)
+				edges.push_back(CDT::Edge(verticies.size() - 2, verticies.size() - 1));
+		};
+
+		int count = spline.GetKeys().Count();
+		for (int i = 0; i < count; i++)
 		{
 			auto key = spline.GetKey(i);
-			for (int j = 0; j < key.GetApproximatedPointsCount() - 1; j++)
-			{
-				Vec2F worldPoint = key.GetApproximatedPoints()[j].value;
-				verticies.push_back(CDT::V2d<float>::make(worldPoint.x, worldPoint.y));
+			auto prevKey = spline.GetKey((i - 1 + count)%count);
 
-				if (verticies.size() > 1)
-					edges.push_back(CDT::Edge(verticies.size() - 2, verticies.size() - 1));
+			const float noSupportsThreshold = 0.01f;
+			if (!(key.prevSupport.Length() < noSupportsThreshold && prevKey.nextSupport.Length() < noSupportsThreshold))
+			{
+				for (int j = 1; j < key.GetApproximatedPointsCount() - 1; j++)
+					pushVertex(key.GetApproximatedPoints()[j].value);
 			}
+
+			pushVertex(key.value);
 		}
 
 		edges.push_back(CDT::Edge(verticies.size() - 1, 0));
+
+		for (auto& p : mExtraPoints)
+			verticies.push_back(CDT::V2d<float>::make(p.x, p.y));
 
 		CDT::Triangulation<float> triangulation(CDT::VertexInsertionOrder::AsProvided);
 		triangulation.insertVertices(verticies);
@@ -137,22 +191,23 @@ namespace o2
 
 		mMesh.Resize(triangulation.vertices.size(), triangulation.triangles.size());
 
-		auto texture = mImageAsset->GetAtlasTextureRef();
+		auto texture = mImageAsset ? mImageAsset->GetAtlasTextureRef() : TextureRef::Null();
 		Vec2F invTexSize(1.0f, 1.0f);
 		if (texture)
 			invTexSize.Set(1.0f/texture->GetSize().x, 1.0f/texture->GetSize().y);
 
-		RectF imageRect = mImageAsset->GetAtlasRect();
-		RectF imageUV = RectF(imageRect.left*invTexSize.x, imageRect.bottom*invTexSize.y,
-							  imageRect.right*invTexSize.x, imageRect.top*invTexSize.y);
+		RectF imageRect = mImageAsset ? mImageAsset->GetAtlasRect() : RectF();
+		RectF imageUV = RectF(imageRect.left*invTexSize.x, 1.0f - imageRect.top*invTexSize.y,
+							  imageRect.right*invTexSize.x, 1.0f - imageRect.bottom*invTexSize.y);
 
 		for (int i = 0; i < triangulation.vertices.size(); i++)
 		{
 			Vec2F p(triangulation.vertices[i].x, triangulation.vertices[i].y);
+			Vec2F coef((p.x - mImageMapping.left)/mImageMapping.Width(), (p.y - mImageMapping.bottom)/mImageMapping.Height());
 			mMesh.vertices[i].Set(p*mTransform, 1.0f,
 								  mColor.ARGB(),
-								  imageUV.left + (p.x - mImageMapping.left)/mImageMapping.Width()*imageUV.Width(),
-								  imageUV.bottom + (p.y - mImageMapping.bottom)/mImageMapping.Height()*imageUV.Height());
+								  imageUV.left + coef.x*imageUV.Width(),
+								  imageUV.bottom + coef.y*imageUV.Height());
 		}
 
 		for (int i = 0; i < triangulation.triangles.size(); i++)
@@ -162,7 +217,7 @@ namespace o2
 			mMesh.indexes[i*3 + 2] = triangulation.triangles[i].vertices[2];
 		}
 
-		mMesh.SetTexture(mImageAsset->GetAtlasTextureRef());
+		mMesh.SetTexture(texture);
 		mMesh.vertexCount = triangulation.vertices.size();
 		mMesh.polyCount = triangulation.triangles.size();
 	}

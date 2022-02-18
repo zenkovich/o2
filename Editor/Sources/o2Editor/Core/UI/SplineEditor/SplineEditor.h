@@ -25,6 +25,8 @@ namespace Editor
 
 			virtual int GetPointsCount() const = 0;
 
+			virtual bool IsClosed() const = 0;
+
 			virtual void AddPoint(int idx, const Vec2F& position, const Vec2F& prevSupport, const Vec2F& nextSupport) = 0;
 			virtual void RemovePoint(int idx) = 0;
 
@@ -185,5 +187,8 @@ namespace Editor
 
 		// It is called when selection is changed - some handle was added or removed from selection; checks visible handles
 		void OnSelectionChanged() override;
+
+		// It is called when key was released
+		void OnKeyReleased(const Input::Key& key) override;
 	};
 }

@@ -101,9 +101,9 @@ namespace Editor
 
 	void AnimationStateViewer::OnEditPressed()
 	{
-		if (!mTargetObjets.IsEmpty())
+		if (!mTargetObjects.IsEmpty())
 		{
-			auto animationState = dynamic_cast<AnimationState*>(mTargetObjets.Last().first);
+			auto animationState = dynamic_cast<AnimationState*>(mTargetObjects.Last().first);
 			auto animationRef = animationState->GetAnimation();
 			if (!animationRef) {
 				animationRef.CreateInstance();

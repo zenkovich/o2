@@ -86,7 +86,7 @@ namespace Editor
 
 		bool mPropertiesBuilt = false; // True when properties built at first refreshing
 
-		Vector<Pair<IObject*, IObject*>> mTargetObjets; // Target objects
+		Vector<Pair<IObject*, IObject*>> mTargetObjects; // Target objects
 
 		PropertiesContext mPropertiesContext; // Field properties information
 
@@ -133,6 +133,13 @@ namespace Editor
 		static const Type* GetViewingObjectTypeStatic();
 
 		IOBJECT(TObjectPropertiesViewer<_object_type>);
+
+	protected:
+		Vector<Pair<_object_type*, _object_type*>> mTypeTargetObjects; // Target objects casted to viewer type
+
+	protected:
+		// It is called when viewer is refreshed
+		void OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets) override;
 	};
 
 	template<typename _object_type>
@@ -147,6 +154,13 @@ namespace Editor
 		return &TypeOf(_object_type);
 	}
 
+	template<typename _object_type>
+	void TObjectPropertiesViewer<_object_type>::OnRefreshed(const Vector<Pair<IObject*, IObject*>>& targetObjets)
+	{
+		mTypeTargetObjects = targetObjets.Convert<Pair<_object_type*, _object_type*>>([](const auto& x) {
+			return Pair<_object_type*, _object_type*>(dynamic_cast<_object_type*>(x.first), dynamic_cast<_object_type*>(x.second));
+		});
+	}
 }
 
 CLASS_BASES_META(Editor::IObjectPropertiesViewer)
@@ -162,7 +176,7 @@ CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
 	FIELD().DEFAULT_VALUE(true).NAME(mHeaderEnabled).PROTECTED();
 	FIELD().DEFAULT_VALUE(false).NAME(mPropertiesBuilt).PROTECTED();
-	FIELD().NAME(mTargetObjets).PROTECTED();
+	FIELD().NAME(mTargetObjects).PROTECTED();
 	FIELD().NAME(mPropertiesContext).PROTECTED();
 	FIELD().NAME(mOnChildFieldChangeCompleted).PROTECTED();
 }
@@ -208,13 +222,17 @@ END_META;
 META_TEMPLATES(typename _object_type)
 CLASS_FIELDS_META(Editor::TObjectPropertiesViewer<_object_type>)
 {
+	FIELD().NAME(mTypeTargetObjects).PROTECTED();
 }
 END_META;
 META_TEMPLATES(typename _object_type)
 CLASS_METHODS_META(Editor::TObjectPropertiesViewer<_object_type>)
 {
 
+	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
+
 	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
 	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
+	PROTECTED_FUNCTION(void, OnRefreshed, _tmp1);
 }
 END_META;

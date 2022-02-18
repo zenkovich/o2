@@ -59,19 +59,19 @@ namespace Editor
 		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets);
+		void SetTargets(const Vector<IObject*> targets) override;
 
 		// Enable viewer event function
-		void OnEnabled();
+		void OnEnabled() override;
 
 		// Disable viewer event function
-		void OnDisabled();
+		void OnDisabled() override;
 
 		// Updates viewer
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws something
-		void Draw();
+		void Draw() override;
 	};
 
 }

@@ -18,6 +18,25 @@ namespace Editor
 
 	void IPropertiesViewer::Refresh()
 	{}
+
+	void IPropertiesViewer::SetEnabled(bool enabled)
+	{
+		if (mEnabled == enabled)
+			return;
+
+		mEnabled = enabled;
+
+		if (mEnabled)
+			OnEnabled();
+		else
+			OnDisabled();
+	}
+
+	bool IPropertiesViewer::IsEnabled() const
+	{
+		return mEnabled;
+	}
+
 }
 
 DECLARE_CLASS(Editor::IPropertiesViewer);

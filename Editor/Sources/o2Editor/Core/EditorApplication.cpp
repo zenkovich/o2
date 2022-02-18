@@ -1,9 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "EditorApplication.h"
 
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
-#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Application/Input.h"
 #include "o2/Assets/Assets.h"
 #include "o2/Events/EventSystem.h"
@@ -16,6 +16,7 @@
 #include "o2/Scene/UI/WidgetState.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
 #include "o2/Scene/UI/Widgets/MenuPanel.h"
+#include "o2/Scripts/ScriptEngine.h"
 #include "o2/Utils/Debug/Debug.h"
 #include "o2/Utils/Editor/EditorScope.h"
 #include "o2/Utils/System/Time/Time.h"
@@ -134,6 +135,56 @@ namespace Editor
 											 &widget->GetStateObject("playing")->player);
 
 		o2EditorAnimationWindow.SetTarget(widget);
+
+		o2Scripts.Eval("print('hello world!');");
+		o2Scripts.Eval("var x = 5 + 5; function myf(a, b) { print(a); print(b); var sum = a + b; print(sum); return sum; }");
+		ScriptValue v2(Vec2F(3, 4));
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("mm"), v2);
+		o2Scripts.Eval("print(JSON.stringify(mm));");
+		o2Scripts.CollectGarbage();
+		ScriptValue p(Function<float(int, float)>([](int a, float b) { o2Debug.Log("prived pidor " + (String)(a + b)); return a + b + 5; }));
+		o2Scripts.CollectGarbage();
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("myfunc"), p);
+		o2Scripts.CollectGarbage();
+		o2Scripts.Eval("print(myfunc(1, 3.2));");
+		o2Scripts.CollectGarbage();
+
+		int testPtr = 2;
+		ScriptValue obj;
+ 		obj.SetPropertyWrapper(ScriptValue("ptrProp"), testPtr);
+ 		obj.SetPropertyWrapper<int>(ScriptValue("funcProp"), [](int v) { o2Debug.Log((String)v); }, []() { return 15; });
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("obj"), obj);
+		o2Scripts.Eval("print(JSON.stringify(obj));");
+ 		o2Scripts.Eval("obj.ptrProp = obj.ptrProp + 5");
+ 		o2Scripts.Eval("obj.funcProp = obj.funcProp + 5");
+
+		auto myfuncRef = o2Scripts.GetGlobal().GetProperty(ScriptValue("myfunc")).GetValue<Function<float(int, float)>>();
+		auto mffr = myfuncRef(2, 3.5f);
+
+		auto myfRef = o2Scripts.GetGlobal().GetProperty(ScriptValue("myf")).GetValue<Function<float(int, float)>>();
+		auto myfr = myfRef(2, 3.5f);
+
+		ScriptValue mb; mb.SetValue(*mBackground); mb.SetProperty(ScriptValue("a"), ScriptValue("b"));
+		ScriptValue xx = mb;
+		auto xxxx = o2Scripts.GetGlobal().GetProperty(ScriptValue("myf")).Invoke<float>(33, 56);
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("myObj"), mb);
+		o2Scripts.Eval("print(JSON.stringify(myObj));");
+
+// 		{
+// 			ScriptValue x([]() {
+// 				o2Debug.Log("prived pidor");
+// 			});
+// 			x.Invoke();
+// 
+// 			ScriptValue y;
+// 			y.SetValue([]() {
+// 				o2Debug.Log("prived pidor ti");
+// 			});
+// 			y.Invoke();
+// 		}
+// 		o2Scripts.CollectGarbage();
+// 		auto xx = x.ToString();
+ 		float res = o2Scripts.GetGlobal().GetProperty(ScriptValue("x")).ToNumber();
 	}
 
 	void EditorApplication::OnClosing()
@@ -214,7 +265,8 @@ namespace Editor
 
 	void EditorApplication::PostUpdatePhysics()
 	{
-		Application::PostUpdatePhysics();
+		if (mUpdateStep)
+			Application::PostUpdatePhysics();
 	}
 
 	void EditorApplication::UpdateScene(float dt)
