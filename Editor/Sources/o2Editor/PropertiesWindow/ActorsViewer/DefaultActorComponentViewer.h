@@ -84,19 +84,19 @@ CLASS_BASES_META(Editor::DefaultActorComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorComponentViewer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mComponentType).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewer).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponentType);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
-	PUBLIC_FUNCTION(const Type*, GetComponentType);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;
 
@@ -109,14 +109,14 @@ END_META;
 META_TEMPLATES(typename _component_type)
 CLASS_FIELDS_META(Editor::TActorComponentViewer<_component_type>)
 {
-	FIELD().NAME(mTargetComponents).PROTECTED();
+	FIELD().PROTECTED().NAME(mTargetComponents);
 }
 END_META;
 META_TEMPLATES(typename _component_type)
 CLASS_METHODS_META(Editor::TActorComponentViewer<_component_type>)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetComponents, const Vector<Component*>&);
-	PUBLIC_FUNCTION(const Type*, GetComponentType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
 }
 END_META;

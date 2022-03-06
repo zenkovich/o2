@@ -5,6 +5,7 @@
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 #include "o2/Scripts/JerryScript/ScriptValueBase.h"
 #endif
+#include "o2/Utils/Types/String.h"
 
 namespace o2
 {

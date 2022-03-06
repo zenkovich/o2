@@ -55,15 +55,15 @@ CLASS_BASES_META(o2::AssetMeta)
 END_META;
 CLASS_FIELDS_META(o2::AssetMeta)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mId).PRIVATE();
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mId);
 }
 END_META;
 CLASS_METHODS_META(o2::AssetMeta)
 {
 
-	PUBLIC_FUNCTION(const UID&, ID);
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
-	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
+	FUNCTION().PUBLIC().SIGNATURE(const UID&, ID);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetAssetType);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
 }
 END_META;
 
@@ -82,6 +82,6 @@ META_TEMPLATES(typename T)
 CLASS_METHODS_META(o2::DefaultAssetMeta<T>)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetAssetType);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetAssetType);
 }
 END_META;

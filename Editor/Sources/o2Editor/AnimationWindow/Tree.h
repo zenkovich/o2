@@ -213,40 +213,40 @@ CLASS_BASES_META(Editor::AnimationTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTree)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow).PRIVATE();
-	FIELD().DEFAULT_VALUE(0).NAME(mAnimationValuesCount).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mRootValue).PRIVATE();
-	FIELD().NAME(mContextMenu).PRIVATE();
-	FIELD().NAME(mPrevSelectedNodes).PRIVATE();
-	FIELD().DEFAULT_VALUE(100.0f).NAME(mTreeWidth).PRIVATE();
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+	FIELD().PRIVATE().DEFAULT_VALUE(0).NAME(mAnimationValuesCount);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mRootValue);
+	FIELD().PRIVATE().NAME(mContextMenu);
+	FIELD().PRIVATE().NAME(mPrevSelectedNodes);
+	FIELD().PRIVATE().DEFAULT_VALUE(100.0f).NAME(mTreeWidth);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*);
-	PUBLIC_FUNCTION(void, OnAnimationChanged);
-	PUBLIC_FUNCTION(void, SetTreeWidth, float);
-	PUBLIC_FUNCTION(void, SetAnimationValueColor, String, const Color4&);
-	PUBLIC_FUNCTION(float, GetLineNumber, float);
-	PUBLIC_FUNCTION(float, GetLineWorldPosition, float);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, InitializeContext);
-	PRIVATE_FUNCTION(void, RebuildAnimationTree);
-	PRIVATE_FUNCTION(void, AddAnimationTrack, IAnimationTrack*, IAnimationTrack::IPlayer*);
-	PRIVATE_FUNCTION(void, UpdateTreeWidth);
-	PRIVATE_FUNCTION(void, SetCurveViewMode, bool);
-	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
-	PRIVATE_FUNCTION(Vector<void*>, GetObjectChilds, void*);
-	PRIVATE_FUNCTION(String, GetObjectDebug, void*);
-	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
-	PRIVATE_FUNCTION(void, FreeNodeData, TreeNode*, void*);
-	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
-	PRIVATE_FUNCTION(void, OnNodeRBClick, TreeNode*);
-	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, Vector<void*>);
-	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
-	PRIVATE_FUNCTION(void, OnDeletePropertyPressed);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationValueColor, String, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetLineNumber, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetLineWorldPosition, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeContext);
+	FUNCTION().PRIVATE().SIGNATURE(void, RebuildAnimationTree);
+	FUNCTION().PRIVATE().SIGNATURE(void, AddAnimationTrack, IAnimationTrack*, IAnimationTrack::IPlayer*);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateTreeWidth);
+	FUNCTION().PRIVATE().SIGNATURE(void, SetCurveViewMode, bool);
+	FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
+	FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
+	FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, FreeNodeData, TreeNode*, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnNodeRBClick, TreeNode*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
+	FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDeletePropertyPressed);
 }
 END_META;
 
@@ -257,28 +257,28 @@ CLASS_BASES_META(Editor::AnimationTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationTreeNode)
 {
-	FIELD().DEFAULT_VALUE(2.0f).NAME(mPropertyBorder).PROTECTED();
-	FIELD().DEFAULT_VALUE(25.0f).NAME(mAddKeyButtonSize).PROTECTED();
-	FIELD().DEFAULT_VALUE(130.0f).NAME(mPropertySize).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mData).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeline).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameDrawable).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrackControl).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(2.0f).NAME(mPropertyBorder);
+	FIELD().PROTECTED().DEFAULT_VALUE(25.0f).NAME(mAddKeyButtonSize);
+	FIELD().PROTECTED().DEFAULT_VALUE(130.0f).NAME(mPropertySize);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mData);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameDrawable);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrackControl);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
-	PUBLIC_FUNCTION(void, Setup, AnimationTree::TrackNode*, AnimationTimeline*, KeyHandlesSheet*);
-	PUBLIC_FUNCTION(void, Free);
-	PUBLIC_FUNCTION(void, SetTreeWidth, float);
-	PUBLIC_FUNCTION(void, OnDoubleClicked, const Input::Cursor&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, InitilizeTrackControl);
-	PROTECTED_FUNCTION(void, FreeTrackControl);
-	PROTECTED_FUNCTION(void, UpdateTrackControlView);
+	FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationTree::TrackNode*, AnimationTimeline*, KeyHandlesSheet*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Free);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDoubleClicked, const Input::Cursor&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitilizeTrackControl);
+	FUNCTION().PROTECTED().SIGNATURE(void, FreeTrackControl);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateTrackControlView);
 }
 END_META;

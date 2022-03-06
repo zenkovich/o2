@@ -64,20 +64,20 @@ CLASS_BASES_META(Editor::Vec2KeyFramesTrackControl)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2KeyFramesTrackControl)
 {
-	FIELD().NAME(mTool).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrackOwner).PRIVATE();
+	FIELD().PRIVATE().NAME(mTool);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTrackOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 {
 
-	PUBLIC_FUNCTION(void, SetActive, bool);
-	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
-	PUBLIC_FUNCTION(void, Draw);
-	PRIVATE_FUNCTION(void, InitializeControls);
-	PRIVATE_FUNCTION(void, TryFindOwnerTrack);
-	PRIVATE_FUNCTION(void, OnSetTrack);
-	PRIVATE_FUNCTION(void, OnKeysChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+	FUNCTION().PRIVATE().SIGNATURE(void, TryFindOwnerTrack);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
 }
 END_META;

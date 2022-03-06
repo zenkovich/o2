@@ -181,54 +181,54 @@ CLASS_BASES_META(o2::MenuPanel)
 END_META;
 CLASS_FIELDS_META(o2::MenuPanel)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayout).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample).PROTECTED();
-	FIELD().NAME(mClickFunctions).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout).PROTECTED();
-	FIELD().NAME(mCurrentSelectionRect).PROTECTED();
-	FIELD().NAME(mTargetSelectionRect).PROTECTED();
-	FIELD().NAME(mLastSelectCheckCursor).PROTECTED();
-	FIELD().DEFAULT_VALUE(-1).NAME(mSelectedItem).PROTECTED();
-	FIELD().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOpenedContext).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayout);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+	FIELD().PROTECTED().NAME(mClickFunctions);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout);
+	FIELD().PROTECTED().NAME(mCurrentSelectionRect);
+	FIELD().PROTECTED().NAME(mTargetSelectionRect);
+	FIELD().PROTECTED().NAME(mLastSelectCheckCursor);
+	FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mSelectedItem);
+	FIELD().PROTECTED().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOpenedContext);
 }
 END_META;
 CLASS_METHODS_META(o2::MenuPanel)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(Widget*, AddItem, const Item&);
-	PUBLIC_FUNCTION(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(void, InsertItem, const Item&, int);
-	PUBLIC_FUNCTION(void, AddItems, Vector<Item>);
-	PUBLIC_FUNCTION(void, InsertItems, Vector<Item>, int);
-	PUBLIC_FUNCTION(Item, GetItem, int);
-	PUBLIC_FUNCTION(Vector<Item>, GetItems);
-	PUBLIC_FUNCTION(void, RemoveItem, int);
-	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
-	PUBLIC_FUNCTION(void, RemoveAllItems);
-	PUBLIC_FUNCTION(HorizontalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(Widget*, GetItemSample);
-	PUBLIC_FUNCTION(void, SetItemSample, Widget*);
-	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
-	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(ContextMenu*, CreateSubContext, WString&);
-	PROTECTED_FUNCTION(Widget*, CreateItem, const Item&);
-	PROTECTED_FUNCTION(Item, GetItemDef, int);
-	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, const Item&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, const Item&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddItems, Vector<Item>);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, Vector<Item>, int);
+	FUNCTION().PUBLIC().SIGNATURE(Item, GetItem, int);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<Item>, GetItems);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
+	FUNCTION().PUBLIC().SIGNATURE(HorizontalLayout*, GetItemsLayout);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
+	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
+	FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(ContextMenu*, CreateSubContext, WString&);
+	FUNCTION().PROTECTED().SIGNATURE(Widget*, CreateItem, const Item&);
+	FUNCTION().PROTECTED().SIGNATURE(Item, GetItemDef, int);
+	FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
 }
 END_META;
 
@@ -239,9 +239,9 @@ CLASS_BASES_META(o2::MenuPanel::Item)
 END_META;
 CLASS_FIELDS_META(o2::MenuPanel::Item)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(text).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(subItems).PUBLIC();
-	FIELD().NAME(onClick).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(text);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(subItems);
+	FIELD().PUBLIC().NAME(onClick);
 }
 END_META;
 CLASS_METHODS_META(o2::MenuPanel::Item)

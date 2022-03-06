@@ -51,14 +51,14 @@ CLASS_BASES_META(Editor::WStringProperty)
 END_META;
 CLASS_FIELDS_META(Editor::WStringProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
 }
 END_META;
 CLASS_METHODS_META(Editor::WStringProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OnEdited, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
 }
 END_META;

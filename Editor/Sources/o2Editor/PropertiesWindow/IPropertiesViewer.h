@@ -68,21 +68,21 @@ CLASS_BASES_META(Editor::IPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IPropertiesViewer)
 {
-	FIELD().NAME(mContentWidget).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
+	FIELD().PROTECTED().NAME(mContentWidget);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, Draw);
 }
 END_META;

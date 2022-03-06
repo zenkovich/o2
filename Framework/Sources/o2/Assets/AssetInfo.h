@@ -86,24 +86,24 @@ CLASS_BASES_META(o2::AssetInfo)
 END_META;
 CLASS_FIELDS_META(o2::AssetInfo)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(tree).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(path).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(editTime).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(meta).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(parent).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mChildren).PROTECTED();
-	FIELD().DEFAULT_VALUE(true).NAME(mOwnChildren).PROTECTED();
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(tree);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(path);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(editTime);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(meta);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(parent);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mChildren);
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mOwnChildren);
 }
 END_META;
 CLASS_METHODS_META(o2::AssetInfo)
 {
 
-	PUBLIC_FUNCTION(AssetInfo*, AddChild, AssetInfo*);
-	PUBLIC_FUNCTION(void, RemoveChild, AssetInfo*, bool);
-	PUBLIC_FUNCTION(void, SetParent, AssetInfo*);
-	PUBLIC_FUNCTION(void, SetTree, AssetsTree*);
-	PUBLIC_FUNCTION(const Vector<AssetInfo*>&, GetChildren);
-	PUBLIC_FUNCTION(bool, IsValid);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, AddChild, AssetInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, AssetInfo*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetParent, AssetInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTree, AssetsTree*);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<AssetInfo*>&, GetChildren);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;

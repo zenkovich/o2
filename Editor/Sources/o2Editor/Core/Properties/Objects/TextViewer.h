@@ -55,17 +55,17 @@ CLASS_BASES_META(Editor::TextViewer)
 END_META;
 CLASS_FIELDS_META(Editor::TextViewer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mColorProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mFontProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTextProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeightProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHorAlignProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mVerAlignProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mWordWrapProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDotsEndingsProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSymbolsDistCoefProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLinesDistCoefProperty).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFontProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTextProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeightProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHorAlignProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVerAlignProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWordWrapProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDotsEndingsProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSymbolsDistCoefProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLinesDistCoefProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::TextViewer)
@@ -73,6 +73,6 @@ CLASS_METHODS_META(Editor::TextViewer)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	PROTECTED_FUNCTION(void, RebuildProperties, _tmp1);
+	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
 }
 END_META;

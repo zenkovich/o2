@@ -51,17 +51,17 @@ CLASS_BASES_META(Editor::CreateAction)
 END_META;
 CLASS_FIELDS_META(Editor::CreateAction)
 {
-	FIELD().NAME(objectsData).PUBLIC();
-	FIELD().NAME(objectsIds).PUBLIC();
-	FIELD().NAME(insertParentId).PUBLIC();
-	FIELD().NAME(insertPrevObjectId).PUBLIC();
+	FIELD().PUBLIC().NAME(objectsData);
+	FIELD().PUBLIC().NAME(objectsIds);
+	FIELD().PUBLIC().NAME(insertParentId);
+	FIELD().PUBLIC().NAME(insertPrevObjectId);
 }
 END_META;
 CLASS_METHODS_META(Editor::CreateAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

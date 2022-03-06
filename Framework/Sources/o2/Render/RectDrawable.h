@@ -86,25 +86,25 @@ CLASS_BASES_META(o2::IRectDrawable)
 END_META;
 CLASS_FIELDS_META(o2::IRectDrawable)
 {
-	FIELD().NAME(color).PUBLIC();
-	FIELD().NAME(transparency).PUBLIC();
-	FIELD().NAME(enabled).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mColor).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled).PROTECTED();
+	FIELD().PUBLIC().NAME(color);
+	FIELD().PUBLIC().NAME(transparency);
+	FIELD().PUBLIC().NAME(enabled);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mColor);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(o2::IRectDrawable)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetColor);
-	PUBLIC_FUNCTION(void, SetTransparency, float);
-	PUBLIC_FUNCTION(float, GetTransparency);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, ColorChanged);
-	PROTECTED_FUNCTION(void, EnableChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetColor);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTransparency, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetTransparency);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, ColorChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, EnableChanged);
 }
 END_META;

@@ -58,16 +58,16 @@ CLASS_BASES_META(o2::AnimationAsset)
 END_META;
 CLASS_FIELDS_META(o2::AnimationAsset)
 {
-	FIELD().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(animation).PUBLIC();
+	FIELD().PUBLIC().EXPANDED_BY_DEFAULT_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(animation);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationAsset)
 {
 
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PUBLIC_STATIC_FUNCTION(bool, IsReferenceCanOwnInstance);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
 }
 END_META;

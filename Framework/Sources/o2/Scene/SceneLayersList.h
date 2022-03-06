@@ -79,23 +79,23 @@ CLASS_BASES_META(o2::SceneLayersList)
 END_META;
 CLASS_FIELDS_META(o2::SceneLayersList)
 {
-	FIELD().DEFAULT_VALUE(true).NAME(mAllLayers).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mLayers).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mAllLayers);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mLayers);
 }
 END_META;
 CLASS_METHODS_META(o2::SceneLayersList)
 {
 
-	PUBLIC_FUNCTION(bool, HasLayer, SceneLayer*);
-	PUBLIC_FUNCTION(bool, HasLayer, const String&);
-	PUBLIC_FUNCTION(void, AddLayer, SceneLayer*);
-	PUBLIC_FUNCTION(void, AddLayer, const String&);
-	PUBLIC_FUNCTION(void, RemoveLayer, SceneLayer*);
-	PUBLIC_FUNCTION(void, RemoveLayer, const String&);
-	PUBLIC_FUNCTION(void, SetLayers, const Vector<SceneLayer*>&);
-	PUBLIC_FUNCTION(void, SetLayers, const Vector<String>&);
-	PUBLIC_FUNCTION(void, SetAllLayers);
-	PUBLIC_FUNCTION(Vector<SceneLayer*>, GetLayers);
-	PUBLIC_FUNCTION(const Vector<String>&, GetLayersNames);
+	FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, SceneLayer*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddLayer, SceneLayer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddLayer, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, SceneLayer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLayers, const Vector<SceneLayer*>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLayers, const Vector<String>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAllLayers);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneLayer*>, GetLayers);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<String>&, GetLayersNames);
 }
 END_META;

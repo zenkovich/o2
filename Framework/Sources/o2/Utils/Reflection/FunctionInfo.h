@@ -48,12 +48,24 @@ namespace o2
 		// Returns protection section of function
 		ProtectSection GetProtectionSection() const;
 
+		// Returns attribute of field, if it is not exist - returns nullptr
+		template<typename _attr_type>
+		_attr_type* GetAttribute() const;
+
+		// Returns true if exist attribute with specified type
+		template<typename _attr_type>
+		bool HasAttribute() const;
+
+		// Returns attributes array
+		const Vector<IAttribute*>& GetAttributes() const;
+
 	protected:
-		ProtectSection    mProtectSection; // Protection section
-		Type*             mOwnerType;      // Owner type pointer
-		String            mName;           // Name of function
-		const Type*       mReturnType;     // Function returning type
-		Vector<Parameter> mParameters;     // Function parameters list
+		ProtectSection      mProtectSection; // Protection section
+		Vector<IAttribute*> mAttributes;     // Attributes array
+		Type*               mOwnerType;      // Owner type pointer
+		String              mName;           // Name of function
+		const Type*         mReturnType;     // Function returning type
+		Vector<Parameter>   mParameters;     // Function parameters list
 
 		friend class Type;
 		friend class ReflectionInitializationTypeProcessor;
@@ -203,4 +215,28 @@ namespace o2
 		return thisSpec->Invoke(args ...);
 	}
 
+	template<typename _attr_type>
+	_attr_type* FunctionInfoBase::GetAttribute() const
+	{
+		for (auto attr : mAttributes)
+		{
+			_attr_type* res = dynamic_cast<_attr_type*>(attr);
+			if (res)
+				return res;
+		}
+
+		return nullptr;
+	}
+
+	template<typename _attr_type>
+	bool FunctionInfoBase::HasAttribute() const
+	{
+		for (auto attr : mAttributes)
+		{
+			if (dynamic_cast<_attr_type*>(attr))
+				return true;
+		}
+
+		return false;
+	}
 }

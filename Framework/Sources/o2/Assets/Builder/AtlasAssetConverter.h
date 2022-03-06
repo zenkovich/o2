@@ -102,18 +102,18 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAssetConverter)
 {
 
-	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetInfo&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetInfo&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetInfo&, const AssetInfo&);
-	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
-	PUBLIC_FUNCTION(void, Reset);
-	PROTECTED_FUNCTION(void, CheckBasicAtlas);
-	PROTECTED_FUNCTION(Vector<UID>, CheckRebuildingAtlases);
-	PROTECTED_FUNCTION(bool, CheckAtlasRebuilding, AssetInfo*);
-	PROTECTED_FUNCTION(bool, IsAtlasNeedRebuild, Vector<Image>&, Vector<Image>&);
-	PROTECTED_FUNCTION(void, RebuildAtlas, AssetInfo*, Vector<Image>&);
-	PROTECTED_FUNCTION(void, SaveImageAsset, ImagePackDef&);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<const Type*>, GetProcessingAssetsTypes);
+	FUNCTION().PUBLIC().SIGNATURE(void, ConvertAsset, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, MoveAsset, const AssetInfo&, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<UID>, AssetsPostProcess);
+	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckBasicAtlas);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<UID>, CheckRebuildingAtlases);
+	FUNCTION().PROTECTED().SIGNATURE(bool, CheckAtlasRebuilding, AssetInfo*);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsAtlasNeedRebuild, Vector<Image>&, Vector<Image>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, RebuildAtlas, AssetInfo*, Vector<Image>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveImageAsset, ImagePackDef&);
 }
 END_META;
 
@@ -124,8 +124,8 @@ CLASS_BASES_META(o2::AtlasAssetConverter::Image)
 END_META;
 CLASS_FIELDS_META(o2::AtlasAssetConverter::Image)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(id).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(time).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(id);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(time);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAssetConverter::Image)

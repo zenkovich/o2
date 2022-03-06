@@ -40,20 +40,20 @@ CLASS_BASES_META(o2::Layout)
 END_META;
 CLASS_FIELDS_META(o2::Layout)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(anchorMin).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(anchorMax).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(offsetMin).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(offsetMax).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(anchorMin);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(anchorMax);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(offsetMin);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(offsetMax);
 }
 END_META;
 CLASS_METHODS_META(o2::Layout)
 {
 
-	PUBLIC_FUNCTION(RectF, Calculate, const RectF&);
-	PUBLIC_STATIC_FUNCTION(Layout, BothStretch, const BorderF&);
-	PUBLIC_STATIC_FUNCTION(Layout, BothStretch, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(Layout, Based, BaseCorner, const Vec2F&, const Vec2F&);
-	PUBLIC_STATIC_FUNCTION(Layout, HorStretch, VerAlign, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(Layout, VerStretch, HorAlign, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(RectF, Calculate, const RectF&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, BothStretch, const BorderF&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, BothStretch, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, Based, BaseCorner, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, HorStretch, VerAlign, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, VerStretch, HorAlign, float, float, float, float);
 }
 END_META;

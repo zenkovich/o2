@@ -83,26 +83,26 @@ CLASS_BASES_META(Editor::WidgetLayerViewer)
 END_META;
 CLASS_FIELDS_META(Editor::WidgetLayerViewer)
 {
-	FIELD().NAME(mTargetLayers).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayoutViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewersLayout).PROTECTED();
+	FIELD().PROTECTED().NAME(mTargetLayers);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertiesViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
 }
 END_META;
 CLASS_METHODS_META(Editor::WidgetLayerViewer)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(void, SetHeaderViewer, IWidgetLayerHeaderViewer*);
-	PUBLIC_FUNCTION(void, SetLayoutViewer, IWidgetLayerLayoutViewer*);
-	PUBLIC_FUNCTION(void, SetActorPropertiesViewer, IWidgetLayerPropertiesViewer*);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderViewer, IWidgetLayerHeaderViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutViewer, IWidgetLayerLayoutViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActorPropertiesViewer, IWidgetLayerPropertiesViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, Draw);
 }
 END_META;

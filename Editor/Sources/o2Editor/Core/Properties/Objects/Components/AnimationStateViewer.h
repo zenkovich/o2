@@ -71,11 +71,11 @@ CLASS_BASES_META(Editor::AnimationStateViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationStateViewer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPlayPause).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBtn).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLooped).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeProgress).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer).PRIVATE();
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPlayPause);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBtn);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLooped);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTimeProgress);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSubscribedPlayer);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationStateViewer)
@@ -83,15 +83,15 @@ CLASS_METHODS_META(Editor::AnimationStateViewer)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
-	PRIVATE_FUNCTION(Spoiler*, CreateSpoiler);
-	PRIVATE_FUNCTION(void, OnRefreshed, _tmp1);
-	PRIVATE_FUNCTION(void, OnFree);
-	PRIVATE_FUNCTION(void, OnPlayPauseToggled, bool);
-	PRIVATE_FUNCTION(void, OnLoopToggled, bool);
-	PRIVATE_FUNCTION(void, OnEditPressed);
-	PRIVATE_FUNCTION(void, OnTimeProgressChanged, float);
-	PRIVATE_FUNCTION(void, OnAnimationUpdated, float);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
+	FUNCTION().PRIVATE().SIGNATURE(Spoiler*, CreateSpoiler);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp1);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnFree);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnPlayPauseToggled, bool);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnLoopToggled, bool);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnEditPressed);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnTimeProgressChanged, float);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnAnimationUpdated, float);
 }
 END_META;

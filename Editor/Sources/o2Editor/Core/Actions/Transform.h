@@ -68,19 +68,19 @@ CLASS_BASES_META(Editor::TransformAction)
 END_META;
 CLASS_FIELDS_META(Editor::TransformAction)
 {
-	FIELD().NAME(objectsIds).PUBLIC();
-	FIELD().NAME(beforeTransforms).PUBLIC();
-	FIELD().NAME(doneTransforms).PUBLIC();
+	FIELD().PUBLIC().NAME(objectsIds);
+	FIELD().PUBLIC().NAME(beforeTransforms);
+	FIELD().PUBLIC().NAME(doneTransforms);
 }
 END_META;
 CLASS_METHODS_META(Editor::TransformAction)
 {
 
-	PUBLIC_FUNCTION(void, Completed);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-	PRIVATE_FUNCTION(void, GetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
-	PRIVATE_FUNCTION(void, SetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Completed);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+	FUNCTION().PRIVATE().SIGNATURE(void, GetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
+	FUNCTION().PRIVATE().SIGNATURE(void, SetTransforms, const Vector<SceneUID>&, Vector<Transform>&);
 }
 END_META;

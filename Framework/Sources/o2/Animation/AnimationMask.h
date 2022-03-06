@@ -29,12 +29,12 @@ CLASS_BASES_META(o2::AnimationMask)
 END_META;
 CLASS_FIELDS_META(o2::AnimationMask)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(weights).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(weights);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationMask)
 {
 
-	PUBLIC_FUNCTION(float, GetNodeWeight, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetNodeWeight, const String&);
 }
 END_META;

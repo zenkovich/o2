@@ -85,26 +85,26 @@ CLASS_BASES_META(o2::DropDown)
 END_META;
 CLASS_FIELDS_META(o2::DropDown)
 {
-	FIELD().NAME(value).PUBLIC();
-	FIELD().NAME(onSelectedText).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectedText).PROTECTED();
+	FIELD().PUBLIC().NAME(value);
+	FIELD().PUBLIC().NAME(onSelectedText);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedText);
 }
 END_META;
 CLASS_METHODS_META(o2::DropDown)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(int, AddItem, const WString&);
-	PUBLIC_FUNCTION(int, AddItem, const WString&, int);
-	PUBLIC_FUNCTION(void, AddItems, const Vector<WString>&);
-	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
-	PUBLIC_FUNCTION(int, FindItem, const WString&);
-	PUBLIC_FUNCTION(WString, GetItemText, int);
-	PUBLIC_FUNCTION(Vector<WString>, GetAllItemsText);
-	PUBLIC_FUNCTION(WString, GetSelectedItemText);
-	PUBLIC_FUNCTION(void, SelectItemText, const WString&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, OnSelectionChanged);
-	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<WString>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(int, FindItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetItemText, int);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<WString>, GetAllItemsText);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetSelectedItemText);
+	FUNCTION().PUBLIC().SIGNATURE(void, SelectItemText, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectionChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
 }
 END_META;

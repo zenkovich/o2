@@ -109,37 +109,37 @@ CLASS_BASES_META(o2::GridLayoutScrollArea)
 END_META;
 CLASS_FIELDS_META(o2::GridLayoutScrollArea)
 {
-	FIELD().NAME(getItemsCountFunc).PUBLIC();
-	FIELD().NAME(getItemsRangeFunc).PUBLIC();
-	FIELD().NAME(setupItemFunc).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mItemsSpacing).PROTECTED();
-	FIELD().DEFAULT_VALUE(-1).NAME(mMinVisibleItemIdx).PROTECTED();
-	FIELD().DEFAULT_VALUE(-1).NAME(mMaxVisibleItemIdx).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevItemsInLine).PROTECTED();
-	FIELD().NAME(mItemsPool).PROTECTED();
+	FIELD().PUBLIC().NAME(getItemsCountFunc);
+	FIELD().PUBLIC().NAME(getItemsRangeFunc);
+	FIELD().PUBLIC().NAME(setupItemFunc);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mItemsSpacing);
+	FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMinVisibleItemIdx);
+	FIELD().PROTECTED().DEFAULT_VALUE(-1).NAME(mMaxVisibleItemIdx);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevItemsInLine);
+	FIELD().PROTECTED().NAME(mItemsPool);
 }
 END_META;
 CLASS_METHODS_META(o2::GridLayoutScrollArea)
 {
 
-	PUBLIC_FUNCTION(void, SetItemSample, Widget*);
-	PUBLIC_FUNCTION(Widget*, GetItemSample);
-	PUBLIC_FUNCTION(void, SetItemsSpacing, const Vec2F&);
-	PUBLIC_FUNCTION(const Vec2F&, GetItemsSpacing);
-	PUBLIC_FUNCTION(void, OnItemsUpdated, bool);
-	PUBLIC_FUNCTION(void, ScrollTo, void*);
-	PUBLIC_FUNCTION(void, UpdateSelfTransform);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(void, CalculateScrollArea);
-	PROTECTED_FUNCTION(void, MoveScrollPosition, const Vec2F&);
-	PROTECTED_FUNCTION(int, GetItemsCount);
-	PROTECTED_FUNCTION(Vector<void*>, GetItemsRange, int, int);
-	PROTECTED_FUNCTION(void, SetupItemWidget, Widget*, void*);
-	PROTECTED_FUNCTION(void, UpdateVisibleItems);
-	PROTECTED_FUNCTION(Widget*, GetItemUnderPoint, const Vec2F&, int*);
-	PROTECTED_FUNCTION(int, GetItemsInLine);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItemsSpacing, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(const Vec2F&, GetItemsSpacing);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnItemsUpdated, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, ScrollTo, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, CalculateScrollArea);
+	FUNCTION().PROTECTED().SIGNATURE(void, MoveScrollPosition, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetItemsCount);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetItemsRange, int, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetupItemWidget, Widget*, void*);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleItems);
+	FUNCTION().PROTECTED().SIGNATURE(Widget*, GetItemUnderPoint, const Vec2F&, int*);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetItemsInLine);
 }
 END_META;

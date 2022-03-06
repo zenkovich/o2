@@ -77,16 +77,16 @@ CLASS_BASES_META(Editor::CurveAddKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::CurveAddKeysAction)
 {
-	FIELD().NAME(mInfos).PROTECTED();
-	FIELD().NAME(mEditor).PROTECTED();
+	FIELD().PROTECTED().NAME(mInfos);
+	FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveAddKeysAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
@@ -97,16 +97,16 @@ CLASS_BASES_META(Editor::CurveDeleteKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::CurveDeleteKeysAction)
 {
-	FIELD().NAME(mInfos).PROTECTED();
-	FIELD().NAME(mEditor).PROTECTED();
+	FIELD().PROTECTED().NAME(mInfos);
+	FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveDeleteKeysAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
@@ -117,15 +117,15 @@ CLASS_BASES_META(Editor::CurveKeysChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::CurveKeysChangeAction)
 {
-	FIELD().NAME(mInfos).PROTECTED();
-	FIELD().NAME(mEditor).PROTECTED();
+	FIELD().PROTECTED().NAME(mInfos);
+	FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveKeysChangeAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

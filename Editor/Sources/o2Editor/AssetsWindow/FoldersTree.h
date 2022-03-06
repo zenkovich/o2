@@ -128,35 +128,35 @@ CLASS_BASES_META(Editor::AssetsFoldersTree)
 END_META;
 CLASS_FIELDS_META(Editor::AssetsFoldersTree)
 {
-	FIELD().NAME(mFoldersTree).PROTECTED();
-	FIELD().NAME(mContextMenu).PROTECTED();
-	FIELD().NAME(mCurrentPath).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mOpengingFolderFromThis).PROTECTED();
+	FIELD().PROTECTED().NAME(mFoldersTree);
+	FIELD().PROTECTED().NAME(mContextMenu);
+	FIELD().PROTECTED().NAME(mCurrentPath);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOpengingFolderFromThis);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, SelectAndExpandFolder, const String&);
-	PROTECTED_FUNCTION(void, UpdateView);
-	PROTECTED_FUNCTION(void, InitializeContext);
-	PROTECTED_FUNCTION(void*, GetFoldersTreeNodeParent, void*);
-	PROTECTED_FUNCTION(Vector<void*>, GetFoldersTreeNodeChilds, void*);
-	PROTECTED_FUNCTION(void, SetupFoldersTreeNode, TreeNode*, void*);
-	PROTECTED_FUNCTION(void, OnFoldersTreeNodeDblClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnFoldersTreeSelect, Vector<void*>);
-	PROTECTED_FUNCTION(void, OnFoldersTreeRightClick, TreeNode*);
-	PROTECTED_FUNCTION(void, OnContextCopyPressed);
-	PROTECTED_FUNCTION(void, OnContextCutPressed);
-	PROTECTED_FUNCTION(void, OnContextPastePressed);
-	PROTECTED_FUNCTION(void, OnContextDeletePressed);
-	PROTECTED_FUNCTION(void, OnContextOpenPressed);
-	PROTECTED_FUNCTION(void, OnContextShowInExplorerPressed);
-	PROTECTED_FUNCTION(void, OnContextCreateFolderPressed);
-	PROTECTED_FUNCTION(void, OnContextExpandPressed);
-	PROTECTED_FUNCTION(void, OnContextCollapsePressed);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeContext);
+	FUNCTION().PROTECTED().SIGNATURE(void*, GetFoldersTreeNodeParent, void*);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetFoldersTreeNodeChilds, void*);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetupFoldersTreeNode, TreeNode*, void*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeNodeDblClick, TreeNode*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeSelect, Vector<void*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFoldersTreeRightClick, TreeNode*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCopyPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCutPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextPastePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextDeletePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextOpenPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextShowInExplorerPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCreateFolderPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextExpandPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnContextCollapsePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
 
@@ -172,7 +172,7 @@ END_META;
 CLASS_METHODS_META(Editor::FoldersTree)
 {
 
-	PROTECTED_FUNCTION(void, UpdateVisibleNodes);
-	PROTECTED_STATIC_FUNCTION(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleNodes);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;

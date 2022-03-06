@@ -58,19 +58,19 @@ CLASS_BASES_META(Editor::DefaultWidgetLayerPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
-	FIELD().NAME(mLayers).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mFitSizeButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDrawableType).PROTECTED();
+	FIELD().PROTECTED().NAME(mLayers);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitSizeButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDrawableType);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-	PUBLIC_FUNCTION(const Type*, GetDrawableType);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(bool, IsEmpty);
-	PROTECTED_FUNCTION(void, FitLayerByDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+	FUNCTION().PROTECTED().SIGNATURE(void, FitLayerByDrawable);
 }
 END_META;

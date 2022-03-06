@@ -69,21 +69,21 @@ CLASS_BASES_META(o2::BinaryAsset)
 END_META;
 CLASS_FIELDS_META(o2::BinaryAsset)
 {
-	FIELD().NAME(data).PUBLIC();
-	FIELD().NAME(dataSize).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mData).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mDataSize).PROTECTED();
+	FIELD().PUBLIC().NAME(data);
+	FIELD().PUBLIC().NAME(dataSize);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mData);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mDataSize);
 }
 END_META;
 CLASS_METHODS_META(o2::BinaryAsset)
 {
 
-	PUBLIC_FUNCTION(char*, GetData);
-	PUBLIC_FUNCTION(UInt, GetDataSize);
-	PUBLIC_FUNCTION(void, SetData, char*, UInt);
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(char*, GetData);
+	FUNCTION().PUBLIC().SIGNATURE(UInt, GetDataSize);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetData, char*, UInt);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 }
 END_META;

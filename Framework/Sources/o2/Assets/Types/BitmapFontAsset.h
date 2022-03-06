@@ -66,16 +66,16 @@ CLASS_BASES_META(o2::BitmapFontAsset)
 END_META;
 CLASS_FIELDS_META(o2::BitmapFontAsset)
 {
-	FIELD().NAME(meta).PUBLIC();
+	FIELD().PUBLIC().NAME(meta);
 }
 END_META;
 CLASS_METHODS_META(o2::BitmapFontAsset)
 {
 
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
 }
 END_META;
 

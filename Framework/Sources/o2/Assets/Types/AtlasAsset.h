@@ -161,29 +161,29 @@ CLASS_BASES_META(o2::AtlasAsset)
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset)
 {
-	FIELD().NAME(meta).PUBLIC();
-	FIELD().NAME(images).PUBLIC();
-	FIELD().NAME(pages).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mImages).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mPages).PROTECTED();
+	FIELD().PUBLIC().NAME(meta);
+	FIELD().PUBLIC().NAME(images);
+	FIELD().PUBLIC().NAME(pages);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImages);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mPages);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAsset)
 {
 
-	PUBLIC_FUNCTION(const Vector<ImageAssetRef>&, GetImages);
-	PUBLIC_FUNCTION(const Vector<Page>&, GetPages);
-	PUBLIC_FUNCTION(bool, ContainsImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, AddImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, RemoveImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(void, RemoveAllImages);
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetPageTextureFileName, const AssetInfo&, UInt);
-	PUBLIC_STATIC_FUNCTION(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<ImageAssetRef>&, GetImages);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Page>&, GetPages);
+	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddImage, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveImage, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllImages);
+	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetPageTextureFileName, const AssetInfo&, UInt);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(TextureRef, GetPageTextureRef, const AssetInfo&, UInt);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
@@ -194,8 +194,8 @@ CLASS_BASES_META(o2::AtlasAsset::PlatformMeta)
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::PlatformMeta)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(2048, 2048)).NAME(maxSize).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(format).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(2048, 2048)).NAME(maxSize);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(format);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAsset::PlatformMeta)
@@ -210,17 +210,17 @@ CLASS_BASES_META(o2::AtlasAsset::Meta)
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::Meta)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(ios).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(android).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(macOS).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(windows).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(border).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(ios);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(android);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(macOS);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(border);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAsset::Meta)
 {
 
-	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
 }
 END_META;
 
@@ -231,10 +231,10 @@ CLASS_BASES_META(o2::AtlasAsset::Page)
 END_META;
 CLASS_FIELDS_META(o2::AtlasAsset::Page)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mId).PRIVATE();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mSize).PRIVATE();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mImagesRects).PRIVATE();
-	FIELD().NAME(mOwner).PRIVATE();
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mId);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mSize);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mImagesRects);
+	FIELD().PRIVATE().NAME(mOwner);
 }
 END_META;
 CLASS_METHODS_META(o2::AtlasAsset::Page)
@@ -242,10 +242,10 @@ CLASS_METHODS_META(o2::AtlasAsset::Page)
 
 	typedef const Map<UID, RectI>& _tmp1;
 
-	PUBLIC_FUNCTION(UInt, ID);
-	PUBLIC_FUNCTION(Vec2I, Size);
-	PUBLIC_FUNCTION(TextureRef, GetTextureRef);
-	PUBLIC_FUNCTION(String, GetTextureFileName);
-	PUBLIC_FUNCTION(_tmp1, ImagesRects);
+	FUNCTION().PUBLIC().SIGNATURE(UInt, ID);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2I, Size);
+	FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetTextureRef);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetTextureFileName);
+	FUNCTION().PUBLIC().SIGNATURE(_tmp1, ImagesRects);
 }
 END_META;

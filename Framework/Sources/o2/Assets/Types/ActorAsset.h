@@ -81,23 +81,23 @@ CLASS_BASES_META(o2::ActorAsset)
 END_META;
 CLASS_FIELDS_META(o2::ActorAsset)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mActor).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mOwnActor).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActor);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mOwnActor);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorAsset)
 {
 
-	PUBLIC_FUNCTION(ActorRef, Instantiate);
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(Actor*, GetActor);
-	PUBLIC_FUNCTION(void, SetActor, Actor*, bool);
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PROTECTED_FUNCTION(void, OnUIDChanged, const UID&);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(ActorRef, Instantiate);
+	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE(Actor*, GetActor);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActor, Actor*, bool);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnUIDChanged, const UID&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;

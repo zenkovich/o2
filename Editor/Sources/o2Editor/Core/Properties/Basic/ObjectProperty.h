@@ -117,32 +117,32 @@ CLASS_BASES_META(Editor::ObjectProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectProperty)
 {
-	FIELD().NAME(mTargetObjects).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mObjectViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mNoHeader).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mExpanded).PROTECTED();
-	FIELD().NAME(mCaption).PROTECTED();
+	FIELD().PROTECTED().NAME(mTargetObjects);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
+	FIELD().PROTECTED().NAME(mCaption);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(const Type*, GetValueType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
-	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(Button*, GetRemoveButton);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PROTECTED_FUNCTION(void, OnFreeProperty);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, CheckViewer);
-	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckViewer);
+	FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

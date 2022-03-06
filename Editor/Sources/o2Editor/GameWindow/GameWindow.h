@@ -106,25 +106,25 @@ CLASS_BASES_META(Editor::GameWindow)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mGameView).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mResolutionsButton).PROTECTED();
-	FIELD().NAME(mDevicesList).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDevicesMenu).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentWindowSizeItem).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCustomSizeItem).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCustomSizeProperty).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGameView);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mResolutionsButton);
+	FIELD().PROTECTED().NAME(mDevicesList);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDevicesMenu);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentWindowSizeItem);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCustomSizeItem);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCustomSizeProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow)
 {
 
-	PROTECTED_FUNCTION(void, InitializeWindow);
-	PROTECTED_FUNCTION(void, InitializeDevicesMenu);
-	PROTECTED_FUNCTION(void, SetResolution, const Vec2I&);
-	PROTECTED_FUNCTION(void, OnCurrentWindowSize, bool);
-	PROTECTED_FUNCTION(void, OnCustomResolution, bool);
-	PROTECTED_FUNCTION(void, OnDeviceSelected, const String&, const ContextMenuItem*);
-	PROTECTED_FUNCTION(void, SetDeviceMenuCheckedItem, const ContextMenuItem*);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDevicesMenu);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Vec2I&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCurrentWindowSize, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCustomResolution, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeviceSelected, const String&, const ContextMenuItem*);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetDeviceMenuCheckedItem, const ContextMenuItem*);
 }
 END_META;
 
@@ -135,18 +135,18 @@ CLASS_BASES_META(Editor::GameWindow::GameView)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::GameView)
 {
-	FIELD().DEFAULT_VALUE(true).NAME(fixedResolution).PUBLIC();
-	FIELD().NAME(resolution).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite).PROTECTED();
-	FIELD().NAME(mRenderTarget).PROTECTED();
+	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(fixedResolution);
+	FIELD().PUBLIC().NAME(resolution);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRenderTargetSprite);
+	FIELD().PROTECTED().NAME(mRenderTarget);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
 }
 END_META;
 
@@ -157,8 +157,8 @@ CLASS_BASES_META(Editor::GameWindow::SimulationDevice)
 END_META;
 CLASS_FIELDS_META(Editor::GameWindow::SimulationDevice)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(deviceName).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(resolution).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(deviceName);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(resolution);
 }
 END_META;
 CLASS_METHODS_META(Editor::GameWindow::SimulationDevice)

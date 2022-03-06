@@ -34,6 +34,7 @@
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
+#include "jerryscript/jerry-ext/include/jerryscript-ext/handler.h"
 
 namespace Editor
 {
@@ -149,14 +150,39 @@ namespace Editor
 		o2Scripts.Eval("print(myfunc(1, 3.2));");
 		o2Scripts.CollectGarbage();
 
+		std::tuple<std::remove_reference<const String&>::type> t = { "as" };
+		auto fff = [](const String& x) { o2Debug.Log(x); };
+		std::apply(fff, t);
+		ScriptValue ff(Function<void(const String&)>([](const String& xx) { o2Debug.Log(xx); }));
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("ff"), ff);
+		o2Scripts.Eval("ff('asd');");
+
 		int testPtr = 2;
 		ScriptValue obj;
  		obj.SetPropertyWrapper(ScriptValue("ptrProp"), testPtr);
  		obj.SetPropertyWrapper<int>(ScriptValue("funcProp"), [](int v) { o2Debug.Log((String)v); }, []() { return 15; });
+		obj.SetProperty(ScriptValue("func"), ScriptValue(Function<float()>([]() { 
+			o2Debug.Log("ass"); 
+			return 5.0f;
+		})));
 		o2Scripts.GetGlobal().SetProperty(ScriptValue("obj"), obj);
 		o2Scripts.Eval("print(JSON.stringify(obj));");
- 		o2Scripts.Eval("obj.ptrProp = obj.ptrProp + 5");
- 		o2Scripts.Eval("obj.funcProp = obj.funcProp + 5");
+		o2Scripts.Eval("obj.ptrProp = obj.ptrProp + 5");
+		o2Scripts.Eval("obj.ptrProp = obj.func() + 5");
+		o2Scripts.Eval("obj.funcProp = obj.funcProp + 5");
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("obj"), obj);
+		o2Scripts.Eval("print(JSON.stringify(obj));");
+
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("wrp"), mBackground->GetScriptValue());
+		o2Scripts.Eval("wrp.Draw()");
+		o2Scripts.Eval("wrp.SetFill(wrp.GetFill() - 0.1)");
+		auto pres = o2Scripts.Parse("vaddr str = 'Hello, World!';");
+		if (!pres.IsOk()) {
+			o2Debug.Log(pres.GetError());
+		}
+		else {
+			o2Scripts.Run(pres);
+		}
 
 		auto myfuncRef = o2Scripts.GetGlobal().GetProperty(ScriptValue("myfunc")).GetValue<Function<float(int, float)>>();
 		auto mffr = myfuncRef(2, 3.5f);
@@ -168,6 +194,8 @@ namespace Editor
 		ScriptValue xx = mb;
 		auto xxxx = o2Scripts.GetGlobal().GetProperty(ScriptValue("myf")).Invoke<float>(33, 56);
 		o2Scripts.GetGlobal().SetProperty(ScriptValue("myObj"), mb);
+		o2Scripts.Eval("print(JSON.stringify(myObj));");
+		o2Scripts.Eval("myObj.fill = 0.5");
 		o2Scripts.Eval("print(JSON.stringify(myObj));");
 
 // 		{

@@ -96,30 +96,30 @@ CLASS_BASES_META(Editor::PropertiesWindow)
 END_META;
 CLASS_FIELDS_META(Editor::PropertiesWindow)
 {
-	FIELD().NAME(mTargets).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentViewer).PROTECTED();
-	FIELD().NAME(mViewers).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDefaultViewer).PROTECTED();
-	FIELD().NAME(mOnTargetsChangedDelegate).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mTargetsChanged).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.5f).NAME(mRefreshDelay).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.5f).NAME(mRefreshRemainingTime).PROTECTED();
+	FIELD().PROTECTED().NAME(mTargets);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentViewer);
+	FIELD().PROTECTED().NAME(mViewers);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultViewer);
+	FIELD().PROTECTED().NAME(mOnTargetsChangedDelegate);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mTargetsChanged);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.5f).NAME(mRefreshDelay);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.5f).NAME(mRefreshRemainingTime);
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertiesWindow)
 {
 
-	PUBLIC_FUNCTION(void, ResetTargets);
-	PUBLIC_FUNCTION(void, SetTarget, IObject*);
-	PUBLIC_FUNCTION(void, SetTargets, const Vector<IObject*>, const Function<void()>&);
-	PUBLIC_FUNCTION(Vector<IObject*>, GetTargets);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(bool, IsTargetsChanged);
-	PROTECTED_FUNCTION(void, InitializeWindow);
-	PROTECTED_FUNCTION(void, InitializeWindowContext);
-	PROTECTED_FUNCTION(void, InitializeViewers);
-	PROTECTED_FUNCTION(void, OnPrivateFieldsVisibleChanged, bool);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
+	FUNCTION().PUBLIC().SIGNATURE(void, ResetTargets);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<IObject*>, GetTargets);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsTargetsChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindowContext);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeViewers);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPrivateFieldsVisibleChanged, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;

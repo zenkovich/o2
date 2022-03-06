@@ -48,8 +48,8 @@ CLASS_BASES_META(Editor::AnimationViewer)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationViewer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditButton).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentAnimation).PRIVATE();
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditButton);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mCurrentAnimation);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationViewer)
@@ -58,10 +58,10 @@ CLASS_METHODS_META(Editor::AnimationViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
-	PRIVATE_FUNCTION(void, RebuildProperties, _tmp1);
-	PRIVATE_FUNCTION(void, OnRefreshed, _tmp2);
-	PRIVATE_FUNCTION(void, OnEditPressed);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
+	FUNCTION().PRIVATE().SIGNATURE(void, RebuildProperties, _tmp1);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnRefreshed, _tmp2);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnEditPressed);
 }
 END_META;

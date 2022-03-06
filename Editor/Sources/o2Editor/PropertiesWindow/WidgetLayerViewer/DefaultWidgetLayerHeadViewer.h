@@ -62,19 +62,19 @@ CLASS_BASES_META(Editor::DefaultWidgetLayerHeaderViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
-	FIELD().NAME(mLayers).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDataView).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnableProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLockProperty).PUBLIC();
+	FIELD().PUBLIC().NAME(mLayers);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerHeaderViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-	PUBLIC_FUNCTION(Widget*, GetWidget);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

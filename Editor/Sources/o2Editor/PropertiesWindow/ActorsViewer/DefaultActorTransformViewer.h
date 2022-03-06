@@ -61,29 +61,29 @@ CLASS_BASES_META(Editor::DefaultActorTransformViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorTransformViewer)
 {
-	FIELD().NAME(mTargetActors).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPositionProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPivotProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mScaleProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizeProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mRotationProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDepthProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mLayoutEnabled).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayoutSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mMinSizeProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mMaxSizeProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mWeightProperty).PROTECTED();
+	FIELD().PROTECTED().NAME(mTargetActors);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPositionProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPivotProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mScaleProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRotationProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDepthProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mLayoutEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayoutSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMinSizeProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMaxSizeProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWeightProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

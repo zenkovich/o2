@@ -142,31 +142,31 @@ CLASS_BASES_META(Editor::BorderIProperty)
 END_META;
 CLASS_FIELDS_META(Editor::BorderIProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLeftProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mRightProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTopProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mBottomProperty).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLeftProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRightProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTopProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::BorderIProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, SetValue, const BorderI&);
-	PUBLIC_FUNCTION(void, SetValueLeft, int);
-	PUBLIC_FUNCTION(void, SetValueRight, int);
-	PUBLIC_FUNCTION(void, SetValueTop, int);
-	PUBLIC_FUNCTION(void, SetValueBottom, int);
-	PUBLIC_FUNCTION(void, SetUnknownValue, const BorderI&);
-	PUBLIC_FUNCTION(void, SetLeftUnknownValue, int);
-	PUBLIC_FUNCTION(void, SetRightUnknownValue, int);
-	PUBLIC_FUNCTION(void, SetTopUnknownValue, int);
-	PUBLIC_FUNCTION(void, SetBottomUnknownValue, int);
-	PUBLIC_FUNCTION(BorderI, GetCommonValue);
-	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(const Type*, GetValueType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
-	PROTECTED_FUNCTION(void, InitializeControls);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const BorderI&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueLeft, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueRight, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueTop, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueBottom, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const BorderI&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftUnknownValue, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetRightUnknownValue, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTopUnknownValue, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetBottomUnknownValue, int);
+	FUNCTION().PUBLIC().SIGNATURE(BorderI, GetCommonValue);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;

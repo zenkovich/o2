@@ -70,17 +70,17 @@ CLASS_BASES_META(Editor::AnimationAddKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationAddKeysAction)
 {
-	FIELD().NAME(mKeys).PROTECTED();
-	FIELD().NAME(mKeysData).PROTECTED();
-	FIELD().NAME(mEditor).PROTECTED();
+	FIELD().PROTECTED().NAME(mKeys);
+	FIELD().PROTECTED().NAME(mKeysData);
+	FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationAddKeysAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
@@ -91,17 +91,17 @@ CLASS_BASES_META(Editor::AnimationDeleteKeysAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationDeleteKeysAction)
 {
-	FIELD().NAME(mKeys).PROTECTED();
-	FIELD().NAME(mKeysData).PROTECTED();
-	FIELD().NAME(mEditor).PROTECTED();
+	FIELD().PROTECTED().NAME(mKeys);
+	FIELD().PROTECTED().NAME(mKeysData);
+	FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationDeleteKeysAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;
 
@@ -112,17 +112,17 @@ CLASS_BASES_META(Editor::AnimationKeysChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeysChangeAction)
 {
-	FIELD().NAME(mKeys).PROTECTED();
-	FIELD().NAME(mBeforeKeysData).PROTECTED();
-	FIELD().NAME(mAfterKeysData).PROTECTED();
-	FIELD().NAME(mEditor).PROTECTED();
+	FIELD().PROTECTED().NAME(mKeys);
+	FIELD().PROTECTED().NAME(mBeforeKeysData);
+	FIELD().PROTECTED().NAME(mAfterKeysData);
+	FIELD().PROTECTED().NAME(mEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeysChangeAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

@@ -175,8 +175,8 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartMethods<_thisType>(object, type);
 
-			PUBLIC_FUNCTION(const Type&, GetComponentType);
-			PUBLIC_STATIC_FUNCTION(const Type*, GetComponentTypeStatic);
+			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
 		}
 
 	protected:
@@ -195,24 +195,24 @@ CLASS_BASES_META(o2::ComponentRef)
 END_META;
 CLASS_FIELDS_META(o2::ComponentRef)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mComponent).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mWasDeleted).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mComponent);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
 }
 END_META;
 CLASS_METHODS_META(o2::ComponentRef)
 {
 
-	PUBLIC_FUNCTION(Component*, Get);
-	PUBLIC_FUNCTION(const Component*, Get);
-	PUBLIC_FUNCTION(void, Destroy);
-	PUBLIC_FUNCTION(bool, IsValid);
-	PUBLIC_FUNCTION(bool, IsWasDeleted);
-	PUBLIC_FUNCTION(const Type&, GetComponentType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetComponentTypeStatic);
-	PUBLIC_STATIC_FUNCTION(bool, EqualsDelta, const ComponentRef&, const ComponentRef&);
-	PROTECTED_FUNCTION(void, UpdateSpecComponent);
-	PROTECTED_FUNCTION(void, CopyWithoutRemap, const ComponentRef&);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(Component*, Get);
+	FUNCTION().PUBLIC().SIGNATURE(const Component*, Get);
+	FUNCTION().PUBLIC().SIGNATURE(void, Destroy);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsWasDeleted);
+	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const ComponentRef&, const ComponentRef&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecComponent);
+	FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const ComponentRef&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;

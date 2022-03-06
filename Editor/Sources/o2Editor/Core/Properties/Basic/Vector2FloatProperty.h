@@ -108,26 +108,26 @@ CLASS_BASES_META(Editor::Vec2FProperty)
 END_META;
 CLASS_FIELDS_META(Editor::Vec2FProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mXProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mYProperty).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mXProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mYProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::Vec2FProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, Revert);
-	PUBLIC_FUNCTION(void, SetValue, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetValueX, float);
-	PUBLIC_FUNCTION(void, SetValueY, float);
-	PUBLIC_FUNCTION(void, SetUnknownValue, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetXUnknownValue, float);
-	PUBLIC_FUNCTION(void, SetYUnknownValue, float);
-	PUBLIC_FUNCTION(Vec2F, GetCommonValue);
-	PUBLIC_FUNCTION(bool, IsValuesDifferent);
-	PUBLIC_FUNCTION(const Type*, GetValueType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
-	PROTECTED_FUNCTION(void, InitializeControls);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueX, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueY, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetUnknownValue, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetXUnknownValue, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetYUnknownValue, float);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetCommonValue);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValuesDifferent);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;

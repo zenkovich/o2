@@ -49,16 +49,16 @@ CLASS_BASES_META(Editor::DefaultPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultPropertiesViewer)
 {
-	FIELD().NAME(mViewer).PROTECTED();
-	FIELD().NAME(mTargets).PROTECTED();
+	FIELD().PROTECTED().NAME(mViewer);
+	FIELD().PROTECTED().NAME(mTargets);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;

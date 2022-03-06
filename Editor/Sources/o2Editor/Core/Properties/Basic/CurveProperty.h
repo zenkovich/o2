@@ -56,16 +56,16 @@ CLASS_BASES_META(Editor::CurveProperty)
 END_META;
 CLASS_FIELDS_META(Editor::CurveProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPreviewImage).PROTECTED();
-	FIELD().NAME(mClickArea).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
+	FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurveProperty)
 {
 
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OnValueChanged);
-	PROTECTED_FUNCTION(void, OnClicked);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;

@@ -100,7 +100,10 @@ namespace o2
 				return *this;
 			}
 
-			void SetProtectSection(ProtectSection section) {}
+			BaseFieldProcessor& SetProtectSection(ProtectSection section)
+			{
+				return *this;
+			}
 
 			template<typename _object_type, typename _field_type>
 			bool CheckSerialize(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
@@ -184,8 +187,10 @@ namespace o2
 				return *this;
 			}
 
-			void SetProtectSection(ProtectSection section)
-			{}
+			BaseFieldProcessor& SetProtectSection(ProtectSection section)
+			{
+				return *this;
+			}
 		};
 	};
 
@@ -264,7 +269,10 @@ namespace o2
 				return *this;
 			}
 
-			void SetProtectSection(ProtectSection section) {}
+			BaseFieldProcessor& SetProtectSection(ProtectSection section)
+			{
+				return *this;
+			}
 
 			template<typename _object_type, typename _field_type>
 			bool CheckSerialize(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
@@ -353,8 +361,10 @@ namespace o2
 				return *this;
 			}
 
-			void SetProtectSection(ProtectSection section)
-			{}
+			BaseFieldProcessor& SetProtectSection(ProtectSection section)
+			{
+				return *this;
+			}
 		};
 	};
 }

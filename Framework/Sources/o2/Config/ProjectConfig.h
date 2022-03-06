@@ -71,21 +71,21 @@ CLASS_BASES_META(o2::ProjectConfig)
 END_META;
 CLASS_FIELDS_META(o2::ProjectConfig)
 {
-	FIELD().NAME(projectName).PUBLIC();
-	FIELD().NAME(currentPlatform).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(physics).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mProjectName).PROTECTED();
-	FIELD().NAME(mPlatform).PROTECTED();
+	FIELD().PUBLIC().NAME(projectName);
+	FIELD().PUBLIC().NAME(currentPlatform);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(physics);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mProjectName);
+	FIELD().PROTECTED().NAME(mPlatform);
 }
 END_META;
 CLASS_METHODS_META(o2::ProjectConfig)
 {
 
-	PUBLIC_FUNCTION(String, GetProjectName);
-	PUBLIC_FUNCTION(void, SetProjectName, const String&);
-	PUBLIC_FUNCTION(Platform, GetPlatform);
-	PUBLIC_FUNCTION(void, SetPlatform, Platform);
-	PUBLIC_FUNCTION(void, Save);
-	PUBLIC_FUNCTION(void, Load);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetProjectName);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetProjectName, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(Platform, GetPlatform);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetPlatform, Platform);
+	FUNCTION().PUBLIC().SIGNATURE(void, Save);
+	FUNCTION().PUBLIC().SIGNATURE(void, Load);
 }
 END_META;

@@ -109,38 +109,38 @@ CLASS_BASES_META(Editor::MoveTool)
 END_META;
 CLASS_FIELDS_META(Editor::MoveTool)
 {
-	FIELD().DEFAULT_VALUE(10.0f).NAME(snapStep).PUBLIC();
-	FIELD().NAME(mHorDragHandle).PROTECTED();
-	FIELD().NAME(mVerDragHandle).PROTECTED();
-	FIELD().NAME(mBothDragHandle).PROTECTED();
-	FIELD().NAME(mLastSceneHandlesPos).PROTECTED();
-	FIELD().NAME(mSnapPosition).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle).PROTECTED();
-	FIELD().NAME(mBeforeTransforms).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTransformAction).PROTECTED();
+	FIELD().PUBLIC().DEFAULT_VALUE(10.0f).NAME(snapStep);
+	FIELD().PROTECTED().NAME(mHorDragHandle);
+	FIELD().PROTECTED().NAME(mVerDragHandle);
+	FIELD().PROTECTED().NAME(mBothDragHandle);
+	FIELD().PROTECTED().NAME(mLastSceneHandlesPos);
+	FIELD().PROTECTED().NAME(mSnapPosition);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle);
+	FIELD().PROTECTED().NAME(mBeforeTransforms);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::MoveTool)
 {
 
-	PROTECTED_FUNCTION(String, GetPanelIcon);
-	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
-	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
-	PROTECTED_FUNCTION(void, OnHorDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnVerDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnBothDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, HandlePressed);
-	PROTECTED_FUNCTION(void, HandleReleased);
-	PROTECTED_FUNCTION(void, HandlesMoved, const Vec2F&, bool, bool);
-	PROTECTED_FUNCTION(void, UpdateHandlesPosition);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, MoveSelectedObjects, const Vec2F&);
-	PROTECTED_FUNCTION(void, MoveSelectedObjectsWithAction, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
+	FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
+	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, HandlePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, HandleReleased);
+	FUNCTION().PROTECTED().SIGNATURE(void, HandlesMoved, const Vec2F&, bool, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPosition);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, MoveSelectedObjects, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, MoveSelectedObjectsWithAction, const Vec2F&);
 }
 END_META;

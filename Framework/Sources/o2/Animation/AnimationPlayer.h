@@ -79,28 +79,28 @@ CLASS_BASES_META(o2::AnimationPlayer)
 END_META;
 CLASS_FIELDS_META(o2::AnimationPlayer)
 {
-	FIELD().NAME(onTrackPlayerAdded).PUBLIC();
-	FIELD().NAME(onTrackPlayerRemove).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mClip).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mClipOwner).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTarget).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimationState).PROTECTED();
-	FIELD().NAME(mTrackPlayers).PROTECTED();
+	FIELD().PUBLIC().NAME(onTrackPlayerAdded);
+	FIELD().PUBLIC().NAME(onTrackPlayerRemove);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mClip);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mClipOwner);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnimationState);
+	FIELD().PROTECTED().NAME(mTrackPlayers);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationPlayer)
 {
 
-	PUBLIC_FUNCTION(void, SetTarget, IObject*, bool);
-	PUBLIC_FUNCTION(IObject*, GetTarget);
-	PUBLIC_FUNCTION(void, SetClip, AnimationClip*, bool);
-	PUBLIC_FUNCTION(AnimationClip*, GetClip);
-	PUBLIC_FUNCTION(const Vector<IAnimationTrack::IPlayer*>&, GetTrackPlayers);
-	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, BindTracks, bool);
-	PROTECTED_FUNCTION(void, BindTrack, const ObjectType*, void*, IAnimationTrack*, bool);
-	PROTECTED_FUNCTION(void, OnClipTrackAdded, IAnimationTrack*);
-	PROTECTED_FUNCTION(void, OnClipTrackRemove, IAnimationTrack*);
-	PROTECTED_FUNCTION(void, OnClipDurationChanged, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(IObject*, GetTarget);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetClip, AnimationClip*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationClip*, GetClip);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<IAnimationTrack::IPlayer*>&, GetTrackPlayers);
+	FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
+	FUNCTION().PROTECTED().SIGNATURE(void, BindTracks, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, BindTrack, const ObjectType*, void*, IAnimationTrack*, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClipTrackAdded, IAnimationTrack*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClipTrackRemove, IAnimationTrack*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClipDurationChanged, float);
 }
 END_META;

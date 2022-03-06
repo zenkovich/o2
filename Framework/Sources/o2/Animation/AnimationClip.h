@@ -231,32 +231,32 @@ CLASS_BASES_META(o2::AnimationClip)
 END_META;
 CLASS_FIELDS_META(o2::AnimationClip)
 {
-	FIELD().NAME(loop).PUBLIC();
-	FIELD().NAME(duration).PUBLIC();
-	FIELD().NAME(onChanged).PUBLIC();
-	FIELD().NAME(onDurationChange).PUBLIC();
-	FIELD().NAME(onTrackAdded).PUBLIC();
-	FIELD().NAME(onTrackRemove).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mTracks).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDuration).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(mLoop).PROTECTED();
+	FIELD().PUBLIC().NAME(loop);
+	FIELD().PUBLIC().NAME(duration);
+	FIELD().PUBLIC().NAME(onChanged);
+	FIELD().PUBLIC().NAME(onDurationChange);
+	FIELD().PUBLIC().NAME(onTrackAdded);
+	FIELD().PUBLIC().NAME(onTrackRemove);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mTracks);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDuration);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(mLoop);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationClip)
 {
 
-	PUBLIC_FUNCTION(void, Clear);
-	PUBLIC_FUNCTION(float, GetDuration);
-	PUBLIC_FUNCTION(void, SetLoop, Loop);
-	PUBLIC_FUNCTION(Loop, GetLoop);
-	PUBLIC_FUNCTION(Vector<IAnimationTrack*>&, GetTracks);
-	PUBLIC_FUNCTION(const Vector<IAnimationTrack*>&, GetTracks);
-	PUBLIC_FUNCTION(bool, ContainsTrack, const String&);
-	PUBLIC_FUNCTION(IAnimationTrack*, AddTrack, const String&, const Type&);
-	PUBLIC_FUNCTION(void, RemoveTrack, const String&);
-	PROTECTED_FUNCTION(void, OnTrackChanged);
-	PROTECTED_FUNCTION(void, RecalculateDuration);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnTrackAdded, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Clear);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLoop, Loop);
+	FUNCTION().PUBLIC().SIGNATURE(Loop, GetLoop);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<IAnimationTrack*>&, GetTracks);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<IAnimationTrack*>&, GetTracks);
+	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsTrack, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, AddTrack, const String&, const Type&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTrack, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTrackChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, RecalculateDuration);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTrackAdded, IAnimationTrack*);
 }
 END_META;

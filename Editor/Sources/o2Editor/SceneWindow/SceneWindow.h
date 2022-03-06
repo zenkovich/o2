@@ -51,17 +51,17 @@ CLASS_BASES_META(Editor::SceneWindow)
 END_META;
 CLASS_FIELDS_META(Editor::SceneWindow)
 {
-	FIELD().NAME(mEditWidget).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mUpPanel).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayersButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayersPopup).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mGizomsView).PROTECTED();
+	FIELD().PROTECTED().NAME(mEditWidget);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mUpPanel);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersPopup);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mGizomsView);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneWindow)
 {
 
-	PROTECTED_FUNCTION(void, InitializeWindow);
-	PROTECTED_FUNCTION(void, PostInitializeWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
 }
 END_META;

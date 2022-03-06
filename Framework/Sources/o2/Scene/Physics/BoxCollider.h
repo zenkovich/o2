@@ -80,27 +80,27 @@ CLASS_BASES_META(o2::BoxCollider)
 END_META;
 CLASS_FIELDS_META(o2::BoxCollider)
 {
-	FIELD().NAME(size).PUBLIC();
-	FIELD().NAME(fitByActor).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mSize).PRIVATE();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mFitByActor).PRIVATE();
-	FIELD().NAME(mShape).PRIVATE();
+	FIELD().PUBLIC().NAME(size);
+	FIELD().PUBLIC().NAME(fitByActor);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mSize);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mFitByActor);
+	FIELD().PRIVATE().NAME(mShape);
 }
 END_META;
 CLASS_METHODS_META(o2::BoxCollider)
 {
 
-	PUBLIC_FUNCTION(void, SetSize, const Vec2F&);
-	PUBLIC_FUNCTION(Vec2F, GetSize);
-	PUBLIC_FUNCTION(void, SetFitByActor, bool);
-	PUBLIC_FUNCTION(bool, IsFitByActor);
-	PUBLIC_STATIC_FUNCTION(String, GetName);
-	PUBLIC_STATIC_FUNCTION(String, GetCategory);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableFromCreateMenu);
-	PUBLIC_FUNCTION(void, OnAddedFromEditor);
-	PRIVATE_FUNCTION(b2Shape*, GetShape, const Basis&);
-	PRIVATE_FUNCTION(void, OnTransformChanged);
-	PRIVATE_FUNCTION(void, FitSize);
-	PRIVATE_FUNCTION(void, OnAddToScene);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSize, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetSize);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFitByActor, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsFitByActor);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
+	FUNCTION().PRIVATE().SIGNATURE(b2Shape*, GetShape, const Basis&);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformChanged);
+	FUNCTION().PRIVATE().SIGNATURE(void, FitSize);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnAddToScene);
 }
 END_META;

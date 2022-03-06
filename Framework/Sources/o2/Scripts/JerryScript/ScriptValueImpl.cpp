@@ -82,17 +82,14 @@ namespace o2
 		if (GetValueType() != ValueType::Error)
 			return String();
 
-		static Map<jerry_error_t, const char*> errorsMap = {
-			{ JERRY_ERROR_COMMON, "JERRY_ERROR_COMMON" },
-			{ JERRY_ERROR_EVAL, "JERRY_ERROR_EVAL" },
-			{ JERRY_ERROR_RANGE, "JERRY_ERROR_RANGE" },
-			{ JERRY_ERROR_REFERENCE, "JERRY_ERROR_REFERENCE" },
-			{ JERRY_ERROR_SYNTAX, "JERRY_ERROR_SYNTAX" },
-			{ JERRY_ERROR_TYPE, "JERRY_ERROR_TYPE" },
-			{ JERRY_ERROR_URI, "JERRY_ERROR_URI" }
-		};
+		auto errorJValue = jerry_get_value_from_error(jvalue, true);
 
-		return errorsMap[jerry_get_error_type(jvalue)];
+		ScriptValue errorValue;
+		errorValue.Accept(jerry_value_to_string(errorJValue));
+
+		jerry_release_value(errorJValue);
+
+		return errorValue.GetValue<String>();
 	}
 
 	void ScriptValue::ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const

@@ -345,67 +345,67 @@ CLASS_BASES_META(o2::ContextMenu)
 END_META;
 CLASS_FIELDS_META(o2::ContextMenu)
 {
-	FIELD().DEFAULT_VALUE(0.8f).NAME(mOpenSubMenuDelay).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mMaxVisibleItems).PROTECTED();
-	FIELD().NAME(mItems).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mItemsLayout).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mItemsBuilt).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSeparatorSample).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout).PROTECTED();
-	FIELD().NAME(mCurrentSelectionRect).PROTECTED();
-	FIELD().NAME(mTargetSelectionRect).PROTECTED();
-	FIELD().NAME(mLastSelectCheckCursor).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectedItem).PROTECTED();
-	FIELD().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(0.8f).NAME(mOpenSubMenuDelay);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(100).NAME(mMaxVisibleItems);
+	FIELD().PROTECTED().NAME(mItems);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mItemsLayout);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mItemsBuilt);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSeparatorSample);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mSelectionDrawable);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSelectionLayout);
+	FIELD().PROTECTED().NAME(mCurrentSelectionRect);
+	FIELD().PROTECTED().NAME(mTargetSelectionRect);
+	FIELD().PROTECTED().NAME(mLastSelectCheckCursor);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedItem);
+	FIELD().PROTECTED().DEFAULT_VALUE(-1.0f).NAME(mSelectSubContextTime);
 }
 END_META;
 CLASS_METHODS_META(o2::ContextMenu)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Show, PopupWidget*, const Vec2F&);
-	PUBLIC_FUNCTION(void, Show, const Vec2F&);
-	PUBLIC_FUNCTION(void, AddItem, Item*);
-	PUBLIC_FUNCTION(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
-	PUBLIC_FUNCTION(void, InsertItem, Item*, int);
-	PUBLIC_FUNCTION(void, AddItems, const Vector<Item*>&);
-	PUBLIC_FUNCTION(void, InsertItems, const Vector<Item*>&, int);
-	PUBLIC_FUNCTION(ContextMenuItem*, GetItemWidget, int);
-	PUBLIC_FUNCTION(int, FindItem, const WString&);
-	PUBLIC_FUNCTION(ContextMenuItem*, FindItemWidget, const WString&);
-	PUBLIC_FUNCTION(void, SetItem, int, Item*);
-	PUBLIC_FUNCTION(const Vector<Item*>&, GetItems);
-	PUBLIC_FUNCTION(void, RemoveItem, int);
-	PUBLIC_FUNCTION(void, RemoveItem, const WString&);
-	PUBLIC_FUNCTION(void, RemoveAllItems);
-	PUBLIC_FUNCTION(void, SetItemChecked, int, bool);
-	PUBLIC_FUNCTION(bool, IsItemChecked, int);
-	PUBLIC_FUNCTION(VerticalLayout*, GetItemsLayout);
-	PUBLIC_FUNCTION(ContextMenuItem*, GetItemSample);
-	PUBLIC_FUNCTION(Widget*, GetSeparatorSample);
-	PUBLIC_FUNCTION(Sprite*, GetSelectionDrawable);
-	PUBLIC_FUNCTION(void, SetSelectionDrawableLayout, const Layout&);
-	PUBLIC_FUNCTION(Layout, GetSelectionDrawableLayout);
-	PUBLIC_FUNCTION(void, SetMaxItemsVisible, int);
-	PUBLIC_FUNCTION(void, SetItemsMaxPriority);
-	PUBLIC_FUNCTION(void, SetItemsMinPriority);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
-	PROTECTED_FUNCTION(void, HideWithParent);
-	PROTECTED_FUNCTION(void, HideWithChild);
-	PROTECTED_FUNCTION(void, SpecialDraw);
-	PROTECTED_FUNCTION(void, RebuildItems);
-	PROTECTED_FUNCTION(Vector<Item*>*, CreateItemsByPath, WString&);
-	PROTECTED_FUNCTION(Item*, GetItem, int);
-	PROTECTED_FUNCTION(ContextMenuItem*, GetItemUnderPoint, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateHover, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, Show, PopupWidget*, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddItem, Item*);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddItem, const WString&, const Function<void()>&, const ImageAssetRef&, const ShortcutKeys&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddToggleItem, const WString&, bool, const Function<void(bool)>&, const ImageAssetRef&, const ShortcutKeys&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertItem, Item*, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<Item*>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertItems, const Vector<Item*>&, int);
+	FUNCTION().PUBLIC().SIGNATURE(ContextMenuItem*, GetItemWidget, int);
+	FUNCTION().PUBLIC().SIGNATURE(int, FindItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(ContextMenuItem*, FindItemWidget, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItem, int, Item*);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Item*>&, GetItems);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllItems);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItemChecked, int, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsItemChecked, int);
+	FUNCTION().PUBLIC().SIGNATURE(VerticalLayout*, GetItemsLayout);
+	FUNCTION().PUBLIC().SIGNATURE(ContextMenuItem*, GetItemSample);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetSeparatorSample);
+	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetSelectionDrawable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSelectionDrawableLayout, const Layout&);
+	FUNCTION().PUBLIC().SIGNATURE(Layout, GetSelectionDrawableLayout);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMaxItemsVisible, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItemsMaxPriority);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetItemsMinPriority);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, FitSizeAndPosition, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, HideWithParent);
+	FUNCTION().PROTECTED().SIGNATURE(void, HideWithChild);
+	FUNCTION().PROTECTED().SIGNATURE(void, SpecialDraw);
+	FUNCTION().PROTECTED().SIGNATURE(void, RebuildItems);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<Item*>*, CreateItemsByPath, WString&);
+	FUNCTION().PROTECTED().SIGNATURE(Item*, GetItem, int);
+	FUNCTION().PROTECTED().SIGNATURE(ContextMenuItem*, GetItemUnderPoint, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHover, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
 }
 END_META;
 
@@ -416,31 +416,31 @@ CLASS_BASES_META(o2::ContextMenuItem)
 END_META;
 CLASS_FIELDS_META(o2::ContextMenuItem)
 {
-	FIELD().NAME(text).PUBLIC();
-	FIELD().NAME(onClick).PUBLIC();
-	FIELD().NAME(onChecked).PUBLIC();
-	FIELD().NAME(mSubMenu).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mChecked).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mCheckable).PROTECTED();
+	FIELD().PUBLIC().NAME(text);
+	FIELD().PUBLIC().NAME(onClick);
+	FIELD().PUBLIC().NAME(onChecked);
+	FIELD().PROTECTED().NAME(mSubMenu);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChecked);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCheckable);
 }
 END_META;
 CLASS_METHODS_META(o2::ContextMenuItem)
 {
 
-	PUBLIC_FUNCTION(void, Setup, ContextMenu::Item*);
-	PUBLIC_FUNCTION(void, SetText, const WString&);
-	PUBLIC_FUNCTION(WString, GetText);
-	PUBLIC_FUNCTION(ContextMenu*, GetSubMenu);
-	PUBLIC_FUNCTION(void, SetChecked, bool);
-	PUBLIC_FUNCTION(bool, IsChecked);
-	PUBLIC_FUNCTION(void, SetCheckable, bool);
-	PUBLIC_FUNCTION(bool, IsCheckable);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PUBLIC_FUNCTION(void, Enable);
-	PUBLIC_FUNCTION(void, Disable);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, OnChildAdded, Widget*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Setup, ContextMenu::Item*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetText);
+	FUNCTION().PUBLIC().SIGNATURE(ContextMenu*, GetSubMenu);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetChecked, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsChecked);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCheckable, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsCheckable);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, Enable);
+	FUNCTION().PUBLIC().SIGNATURE(void, Disable);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnChildAdded, Widget*);
 }
 END_META;
 
@@ -452,27 +452,27 @@ CLASS_BASES_META(o2::ContextMenu::Item)
 END_META;
 CLASS_FIELDS_META(o2::ContextMenu::Item)
 {
-	FIELD().NAME(shortcut).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(text).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(group).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(icon).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(subItems).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(checked).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(checkable).PUBLIC();
-	FIELD().NAME(onClick).PUBLIC();
-	FIELD().NAME(onChecked).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(widget).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mShortcut).PRIVATE();
+	FIELD().PUBLIC().NAME(shortcut);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(text);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(group);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(icon);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(subItems);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(checked);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(checkable);
+	FIELD().PUBLIC().NAME(onClick);
+	FIELD().PUBLIC().NAME(onChecked);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(widget);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mShortcut);
 }
 END_META;
 CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 
-	PUBLIC_FUNCTION(void, SetShortcut, const ShortcutKeys&);
-	PUBLIC_FUNCTION(const ShortcutKeys&, GetShortcut);
-	PUBLIC_FUNCTION(void, SetMaxPriority);
-	PUBLIC_FUNCTION(void, SetMinPriority);
-	PUBLIC_STATIC_FUNCTION(Item*, Separator);
-	PRIVATE_FUNCTION(void, OnShortcutPressed);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetShortcut, const ShortcutKeys&);
+	FUNCTION().PUBLIC().SIGNATURE(const ShortcutKeys&, GetShortcut);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMaxPriority);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMinPriority);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Item*, Separator);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnShortcutPressed);
 }
 END_META;

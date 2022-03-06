@@ -61,20 +61,20 @@ CLASS_BASES_META(Editor::EnumProperty)
 END_META;
 CLASS_FIELDS_META(Editor::EnumProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnumType).PROTECTED();
-	FIELD().NAME(mEntries).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDropDown).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mUpdatingValue).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEnumType);
+	FIELD().PROTECTED().NAME(mEntries);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
 }
 END_META;
 CLASS_METHODS_META(Editor::EnumProperty)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetValueType);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OnSelectedItem, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SpecializeType, const Type*);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSelectedItem, const WString&);
 }
 END_META;

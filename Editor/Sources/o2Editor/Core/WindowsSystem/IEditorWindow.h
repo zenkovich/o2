@@ -70,21 +70,21 @@ CLASS_BASES_META(Editor::IEditorWindow)
 END_META;
 CLASS_FIELDS_META(Editor::IEditorWindow)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mWindow).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWindow);
 }
 END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)
 {
 
-	PUBLIC_FUNCTION(void, SetVisible, bool);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(bool, IsVisible);
-	PUBLIC_FUNCTION(void, Show);
-	PUBLIC_FUNCTION(void, Hide);
-	PUBLIC_FUNCTION(DockableWindow*, GetWindow);
-	PROTECTED_FUNCTION(void, PostInitializeWindow);
-	PROTECTED_FUNCTION(void, OnOpened);
-	PROTECTED_FUNCTION(void, OnClosed);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsVisible);
+	FUNCTION().PUBLIC().SIGNATURE(void, Show);
+	FUNCTION().PUBLIC().SIGNATURE(void, Hide);
+	FUNCTION().PUBLIC().SIGNATURE(DockableWindow*, GetWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnOpened);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClosed);
 }
 END_META;

@@ -57,18 +57,18 @@ CLASS_BASES_META(Editor::PropertyChangeAction)
 END_META;
 CLASS_FIELDS_META(Editor::PropertyChangeAction)
 {
-	FIELD().NAME(objectsIds).PUBLIC();
-	FIELD().NAME(propertyPath).PUBLIC();
-	FIELD().NAME(beforeValues).PUBLIC();
-	FIELD().NAME(afterValues).PUBLIC();
+	FIELD().PUBLIC().NAME(objectsIds);
+	FIELD().PUBLIC().NAME(propertyPath);
+	FIELD().PUBLIC().NAME(beforeValues);
+	FIELD().PUBLIC().NAME(afterValues);
 }
 END_META;
 CLASS_METHODS_META(Editor::PropertyChangeAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
-	PROTECTED_FUNCTION(void, SetProperties, Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetProperties, Vector<DataDocument>&);
 }
 END_META;

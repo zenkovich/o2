@@ -130,4 +130,22 @@ namespace o2
 	{
 		return FieldProcessor();
 	}
+
+	ReflectionInitializationTypeProcessor::FunctionProcessor ReflectionInitializationTypeProcessor::StartFunction()
+	{
+		return FunctionProcessor();
+	}
+
+	ReflectionInitializationTypeProcessor::FieldProcessor& ReflectionInitializationTypeProcessor::FieldProcessor::SetProtectSection(ProtectSection section)
+	{
+		this->section = section;
+		return *this;
+	}
+
+	ReflectionInitializationTypeProcessor::FunctionProcessor& ReflectionInitializationTypeProcessor::FunctionProcessor::SetProtectSection(ProtectSection section)
+	{
+		this->section = section;
+		return *this;
+	}
+
 }

@@ -110,34 +110,34 @@ CLASS_BASES_META(o2::PopupWidget)
 END_META;
 CLASS_FIELDS_META(o2::PopupWidget)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(fitByChildren).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(40.0f).NAME(mFitSizeMin).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mParentPopup).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mChildPopup).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mShownAtFrame).PROTECTED();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(fitByChildren);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(40.0f).NAME(mFitSizeMin);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentPopup);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mChildPopup);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mShownAtFrame);
 }
 END_META;
 CLASS_METHODS_META(o2::PopupWidget)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Show, PopupWidget*, const Vec2F&);
-	PUBLIC_FUNCTION(void, Show, const Vec2F&);
-	PUBLIC_FUNCTION(void, SetMinFitSize, float);
-	PUBLIC_FUNCTION(bool, IsScrollable);
-	PUBLIC_FUNCTION(bool, IsInputTransparent);
-	PUBLIC_FUNCTION(void, FitSizeAndPosition, const Vec2F&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, CheckClipping, const RectF&);
-	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(void, FitPosition, const Vec2F&, Vec2F);
-	PROTECTED_FUNCTION(Vec2F, GetContentSize);
-	PROTECTED_FUNCTION(void, HideWithParent);
-	PROTECTED_FUNCTION(void, HideWithChild);
-	PROTECTED_FUNCTION(void, SpecialDraw);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleasedOutside, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, Show, PopupWidget*, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMinFitSize, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsScrollable);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+	FUNCTION().PUBLIC().SIGNATURE(void, FitSizeAndPosition, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckClipping, const RectF&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, FitPosition, const Vec2F&, Vec2F);
+	FUNCTION().PROTECTED().SIGNATURE(Vec2F, GetContentSize);
+	FUNCTION().PROTECTED().SIGNATURE(void, HideWithParent);
+	FUNCTION().PROTECTED().SIGNATURE(void, HideWithChild);
+	FUNCTION().PROTECTED().SIGNATURE(void, SpecialDraw);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
 }
 END_META;

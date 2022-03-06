@@ -56,18 +56,18 @@ CLASS_BASES_META(o2::IAssetConverter)
 END_META;
 CLASS_FIELDS_META(o2::IAssetConverter)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetsBuilder).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetsBuilder);
 }
 END_META;
 CLASS_METHODS_META(o2::IAssetConverter)
 {
 
-	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetInfo&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetInfo&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetInfo&, const AssetInfo&);
-	PUBLIC_FUNCTION(Vector<UID>, AssetsPostProcess);
-	PUBLIC_FUNCTION(void, Reset);
-	PUBLIC_FUNCTION(void, SetAssetsBuilder, AssetsBuilder*);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<const Type*>, GetProcessingAssetsTypes);
+	FUNCTION().PUBLIC().SIGNATURE(void, ConvertAsset, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, MoveAsset, const AssetInfo&, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<UID>, AssetsPostProcess);
+	FUNCTION().PUBLIC().SIGNATURE(void, Reset);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetsBuilder, AssetsBuilder*);
 }
 END_META;

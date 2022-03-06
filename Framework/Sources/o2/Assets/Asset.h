@@ -179,46 +179,46 @@ CLASS_BASES_META(o2::Asset)
 END_META;
 CLASS_FIELDS_META(o2::Asset)
 {
-	FIELD().EDITOR_IGNORE_ATTRIBUTE().NAME(path).PUBLIC();
-	FIELD().NAME(fullPath).PUBLIC();
-	FIELD().NAME(id).PUBLIC();
-	FIELD().NAME(meta).PUBLIC();
-	FIELD().DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mMeta).PUBLIC();
-	FIELD().NAME(mInfo).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mDirty).PROTECTED();
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(path);
+	FIELD().PUBLIC().NAME(fullPath);
+	FIELD().PUBLIC().NAME(id);
+	FIELD().PUBLIC().NAME(meta);
+	FIELD().PUBLIC().DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mMeta);
+	FIELD().PROTECTED().NAME(mInfo);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDirty);
 }
 END_META;
 CLASS_METHODS_META(o2::Asset)
 {
 
-	PUBLIC_FUNCTION(const String&, GetPath);
-	PUBLIC_FUNCTION(void, SetPath, const String&);
-	PUBLIC_FUNCTION(String, GetFullPath);
-	PUBLIC_FUNCTION(String, GetBuiltFullPath);
-	PUBLIC_FUNCTION(const UID&, GetUID);
-	PUBLIC_FUNCTION(AssetMeta*, GetMeta);
-	PUBLIC_FUNCTION(const AssetInfo&, GetInfo);
-	PUBLIC_FUNCTION(void, SetEditorAsset, bool);
-	PUBLIC_FUNCTION(bool, IsEditorAsset);
-	PUBLIC_FUNCTION(void, Load, const String&);
-	PUBLIC_FUNCTION(void, Load, const UID&);
-	PUBLIC_FUNCTION(void, Save, const String&, bool);
-	PUBLIC_FUNCTION(void, Save, bool);
-	PUBLIC_FUNCTION(void, SetDirty, bool);
-	PUBLIC_FUNCTION(bool, IsDirty);
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PUBLIC_STATIC_FUNCTION(bool, IsReferenceCanOwnInstance);
-	PROTECTED_FUNCTION(String, GetMetaFullPath);
-	PROTECTED_FUNCTION(UID&, ID);
-	PROTECTED_FUNCTION(LogStream*, GetAssetsLogStream);
-	PROTECTED_FUNCTION(void, SetMeta, AssetMeta*);
-	PROTECTED_FUNCTION(void, Load, const AssetInfo&);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, OnUIDChanged, const UID&);
+	FUNCTION().PUBLIC().SIGNATURE(const String&, GetPath);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetPath, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetFullPath);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetBuiltFullPath);
+	FUNCTION().PUBLIC().SIGNATURE(const UID&, GetUID);
+	FUNCTION().PUBLIC().SIGNATURE(AssetMeta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetInfo);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEditorAsset, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEditorAsset);
+	FUNCTION().PUBLIC().SIGNATURE(void, Load, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Load, const UID&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Save, const String&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, Save, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsDirty);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsReferenceCanOwnInstance);
+	FUNCTION().PROTECTED().SIGNATURE(String, GetMetaFullPath);
+	FUNCTION().PROTECTED().SIGNATURE(UID&, ID);
+	FUNCTION().PROTECTED().SIGNATURE(LogStream*, GetAssetsLogStream);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetMeta, AssetMeta*);
+	FUNCTION().PROTECTED().SIGNATURE(void, Load, const AssetInfo&);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnUIDChanged, const UID&);
 }
 END_META;
 
@@ -231,13 +231,13 @@ END_META;
 META_TEMPLATES(typename T)
 CLASS_FIELDS_META(o2::AssetWithDefaultMeta<T>)
 {
-	FIELD().NAME(meta).PUBLIC();
+	FIELD().PUBLIC().NAME(meta);
 }
 END_META;
 META_TEMPLATES(typename T)
 CLASS_METHODS_META(o2::AssetWithDefaultMeta<T>)
 {
 
-	PUBLIC_FUNCTION(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
 }
 END_META;

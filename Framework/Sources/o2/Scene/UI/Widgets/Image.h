@@ -65,21 +65,21 @@ CLASS_BASES_META(o2::Image)
 END_META;
 CLASS_FIELDS_META(o2::Image)
 {
-	FIELD().NAME(image).PUBLIC();
-	FIELD().NAME(imageAsset).PUBLIC();
-	FIELD().NAME(imageName).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mImage).PROTECTED();
+	FIELD().PUBLIC().NAME(image);
+	FIELD().PUBLIC().NAME(imageAsset);
+	FIELD().PUBLIC().NAME(imageName);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mImage);
 }
 END_META;
 CLASS_METHODS_META(o2::Image)
 {
 
-	PUBLIC_FUNCTION(void, SetImage, Sprite*);
-	PUBLIC_FUNCTION(Sprite*, GetImage);
-	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
-	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
-	PUBLIC_FUNCTION(void, SetImageName, const String&);
-	PUBLIC_FUNCTION(String, GetImageName);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetImage, Sprite*);
+	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetImage);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(ImageAssetRef, GetImageAsset);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetImageName, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetImageName);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
 }
 END_META;

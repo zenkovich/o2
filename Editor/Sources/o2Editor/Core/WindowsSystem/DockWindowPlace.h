@@ -96,31 +96,31 @@ CLASS_BASES_META(Editor::DockWindowPlace)
 END_META;
 CLASS_FIELDS_META(Editor::DockWindowPlace)
 {
-	FIELD().NAME(mResizibleDir).PROTECTED();
-	FIELD().NAME(mNeighborMin).PROTECTED();
-	FIELD().NAME(mDragHandleMin).PROTECTED();
-	FIELD().NAME(mDragHandleLayoutMin).PROTECTED();
-	FIELD().NAME(mDragHandleAreaMin).PROTECTED();
-	FIELD().NAME(mNeighborMax).PROTECTED();
-	FIELD().NAME(mDragHandleMax).PROTECTED();
-	FIELD().NAME(mDragHandleLayoutMax).PROTECTED();
-	FIELD().NAME(mDragHandleAreaMax).PROTECTED();
+	FIELD().PROTECTED().NAME(mResizibleDir);
+	FIELD().PROTECTED().NAME(mNeighborMin);
+	FIELD().PROTECTED().NAME(mDragHandleMin);
+	FIELD().PROTECTED().NAME(mDragHandleLayoutMin);
+	FIELD().PROTECTED().NAME(mDragHandleAreaMin);
+	FIELD().PROTECTED().NAME(mNeighborMax);
+	FIELD().PROTECTED().NAME(mDragHandleMax);
+	FIELD().PROTECTED().NAME(mDragHandleLayoutMax);
+	FIELD().PROTECTED().NAME(mDragHandleAreaMax);
 }
 END_META;
 CLASS_METHODS_META(Editor::DockWindowPlace)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
-	PUBLIC_FUNCTION(TwoDirection, GetResizibleDir);
-	PUBLIC_FUNCTION(void, ArrangeChildWindows);
-	PUBLIC_FUNCTION(void, SetActiveTab, DockableWindow*);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, UpdateSelfTransform);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, OnDragHandleMinMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnDragHandleMaxMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, CheckInteractable);
-	PROTECTED_FUNCTION(void, InitializeDragHandle);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
+	FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);
+	FUNCTION().PUBLIC().SIGNATURE(void, ArrangeChildWindows);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActiveTab, DockableWindow*);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateSelfTransform);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMinMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMaxMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckInteractable);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDragHandle);
 }
 END_META;

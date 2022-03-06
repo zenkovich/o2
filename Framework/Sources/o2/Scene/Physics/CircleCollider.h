@@ -75,25 +75,25 @@ CLASS_BASES_META(o2::CircleCollider)
 END_META;
 CLASS_FIELDS_META(o2::CircleCollider)
 {
-	FIELD().NAME(radius).PUBLIC();
-	FIELD().NAME(fitByActor).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mRadius).PRIVATE();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mFitByActor).PRIVATE();
-	FIELD().NAME(mShape).PRIVATE();
+	FIELD().PUBLIC().NAME(radius);
+	FIELD().PUBLIC().NAME(fitByActor);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mRadius);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mFitByActor);
+	FIELD().PRIVATE().NAME(mShape);
 }
 END_META;
 CLASS_METHODS_META(o2::CircleCollider)
 {
 
-	PUBLIC_FUNCTION(void, SetRadius, float);
-	PUBLIC_FUNCTION(float, GetRadius);
-	PUBLIC_FUNCTION(void, SetFitByActor, bool);
-	PUBLIC_FUNCTION(bool, IsFitByActor);
-	PUBLIC_STATIC_FUNCTION(String, GetName);
-	PUBLIC_STATIC_FUNCTION(String, GetCategory);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableFromCreateMenu);
-	PUBLIC_FUNCTION(void, OnAddedFromEditor);
-	PRIVATE_FUNCTION(b2Shape*, GetShape, const Basis&);
-	PRIVATE_FUNCTION(void, OnTransformChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetRadius, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetRadius);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFitByActor, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsFitByActor);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableFromCreateMenu);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnAddedFromEditor);
+	FUNCTION().PRIVATE().SIGNATURE(b2Shape*, GetShape, const Basis&);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnTransformChanged);
 }
 END_META;

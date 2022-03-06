@@ -160,8 +160,8 @@ END_META;
 CLASS_METHODS_META(o2::VectorFont::Effect)
 {
 
-	PUBLIC_FUNCTION(void, Process, Bitmap*);
-	PUBLIC_FUNCTION(Vec2I, GetSizeExtend);
-	PUBLIC_FUNCTION(bool, IsEqual, Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, Effect*);
 }
 END_META;

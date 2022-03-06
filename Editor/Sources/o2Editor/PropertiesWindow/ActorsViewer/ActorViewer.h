@@ -111,37 +111,37 @@ CLASS_BASES_META(Editor::ActorViewer)
 END_META;
 CLASS_FIELDS_META(Editor::ActorViewer)
 {
-	FIELD().NAME(mTargetActors).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTransformViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mActorPropertiesViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDefaultActorPropertiesViewer).PROTECTED();
-	FIELD().NAME(mAvailableActorPropertiesViewers).PROTECTED();
-	FIELD().NAME(mActorPropertiesViewersPool).PROTECTED();
-	FIELD().NAME(mCommonComponentsTypes).PROTECTED();
-	FIELD().NAME(mComponentsViewers).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDefaultComponentViewer).PROTECTED();
-	FIELD().NAME(mAvailableComponentsViewers).PROTECTED();
-	FIELD().NAME(mComponentViewersPool).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddComponentPanel).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewersLayout).PROTECTED();
+	FIELD().PROTECTED().NAME(mTargetActors);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActorPropertiesViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultActorPropertiesViewer);
+	FIELD().PROTECTED().NAME(mAvailableActorPropertiesViewers);
+	FIELD().PROTECTED().NAME(mActorPropertiesViewersPool);
+	FIELD().PROTECTED().NAME(mCommonComponentsTypes);
+	FIELD().PROTECTED().NAME(mComponentsViewers);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultComponentViewer);
+	FIELD().PROTECTED().NAME(mAvailableComponentsViewers);
+	FIELD().PROTECTED().NAME(mComponentViewersPool);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddComponentPanel);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mViewersLayout);
 }
 END_META;
 CLASS_METHODS_META(Editor::ActorViewer)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_FUNCTION(void, SetActorHeaderViewer, IActorHeaderViewer*);
-	PUBLIC_FUNCTION(void, SetActorTransformViewer, IActorTransformViewer*);
-	PUBLIC_FUNCTION(void, AddComponentViewerType, IActorComponentViewer*);
-	PUBLIC_FUNCTION(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<Widget*>&);
-	PROTECTED_FUNCTION(void, SetTargetsComponents, const Vector<IObject*>, Vector<Widget*>&);
-	PROTECTED_FUNCTION(Vector<const Type*>, GetCommonComponentsTypes, const Vector<IObject*>);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActorHeaderViewer, IActorHeaderViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetActorTransformViewer, IActorTransformViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddComponentViewerType, IActorComponentViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<Widget*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>, Vector<Widget*>&);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<const Type*>, GetCommonComponentsTypes, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;

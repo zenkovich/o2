@@ -1,13 +1,15 @@
 #pragma once
 
 #define NOMINMAX
-#include "o2/Utils/Types/CommonTypes.h"
+#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Animation/Tracks/AnimationFloatTrack.h"
 #include "o2/Animation/Tracks/AnimationVec2FTrack.h"
-#include "o2/Animation/Tracks/AnimationColor4Track.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/Sprite.h"
 #include "o2/Render/Text.h"
+#include "o2/Render/Texture.h"
+#include "o2/Render/TextureRef.h"
+#include "o2/Render/VectorFont.h"
 #include "o2/Scene/Actor.h"
 #include "o2/Scene/Component.h"
 #include "o2/Scene/UI/Widget.h"
@@ -32,6 +34,11 @@
 #include "o2/Utils/Reflection/TypeTraits.h"
 #include "o2/Utils/Serialization/DataValue.h"
 #include "o2/Utils/Serialization/Serializable.h"
+#include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Types/String.h"
+
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptValue.h"
+#endif

@@ -211,9 +211,9 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartMethods<_thisType>(object, type);
 
-			PUBLIC_FUNCTION(const Type&, GetAssetType);
-			PUBLIC_STATIC_FUNCTION(Ref<T>, CreateAsset);
-			PUBLIC_STATIC_FUNCTION(const Type*, GetAssetTypeStatic);
+			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<T>, CreateAsset);
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
 		}
 
 	protected:
@@ -245,28 +245,28 @@ CLASS_BASES_META(o2::AssetRef)
 END_META;
 CLASS_FIELDS_META(o2::AssetRef)
 {
-	FIELD().DEFAULT_VALUE(false).NAME(mIsInstance).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mRefCounter).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAssetPtr).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsInstance);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mRefCounter);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAssetPtr);
 }
 END_META;
 CLASS_METHODS_META(o2::AssetRef)
 {
 
-	PUBLIC_FUNCTION(bool, IsValid);
-	PUBLIC_FUNCTION(Asset*, Get);
-	PUBLIC_FUNCTION(const Asset*, Get);
-	PUBLIC_FUNCTION(const Type&, GetAssetType);
-	PUBLIC_FUNCTION(void, SetInstance, Asset*);
-	PUBLIC_FUNCTION(void, CreateInstance);
-	PUBLIC_FUNCTION(void, RemoveInstance);
-	PUBLIC_FUNCTION(void, SaveInstance, const String&);
-	PUBLIC_FUNCTION(bool, IsInstance);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, UpdateSpecAsset);
-	PROTECTED_STATIC_FUNCTION(bool, IsDeltaAsSingleObject);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
+	FUNCTION().PUBLIC().SIGNATURE(Asset*, Get);
+	FUNCTION().PUBLIC().SIGNATURE(const Asset*, Get);
+	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetInstance, Asset*);
+	FUNCTION().PUBLIC().SIGNATURE(void, CreateInstance);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveInstance);
+	FUNCTION().PUBLIC().SIGNATURE(void, SaveInstance, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsInstance);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecAsset);
+	FUNCTION().PROTECTED().SIGNATURE_STATIC(bool, IsDeltaAsSingleObject);
 }
 END_META;

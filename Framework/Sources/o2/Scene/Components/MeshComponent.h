@@ -126,44 +126,44 @@ CLASS_BASES_META(o2::MeshComponent)
 END_META;
 CLASS_FIELDS_META(o2::MeshComponent)
 {
-	FIELD().NAME(image).PUBLIC();
-	FIELD().NAME(mappingFrame).PUBLIC();
-	FIELD().NAME(color).PUBLIC();
-	FIELD().NAME(extraPoints).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(spline).PUBLIC();
-	FIELD().NAME(mMesh).PROTECTED();
-	FIELD().NAME(mTransform).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(RectF(0, 0, 10, 10)).NAME(mImageMapping).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mExtraPoints).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Color4::White()).NAME(mColor).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mNeedUpdateMesh).PROTECTED();
+	FIELD().PUBLIC().NAME(image);
+	FIELD().PUBLIC().NAME(mappingFrame);
+	FIELD().PUBLIC().NAME(color);
+	FIELD().PUBLIC().NAME(extraPoints);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
+	FIELD().PROTECTED().NAME(mMesh);
+	FIELD().PROTECTED().NAME(mTransform);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(RectF(0, 0, 10, 10)).NAME(mImageMapping);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mExtraPoints);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Color4::White()).NAME(mColor);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedUpdateMesh);
 }
 END_META;
 CLASS_METHODS_META(o2::MeshComponent)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(const Mesh&, GetMesh);
-	PUBLIC_FUNCTION(void, SetExtraPoints, const Vector<Vec2F>&);
-	PUBLIC_FUNCTION(const Vector<Vec2F>&, GetExtraPoints);
-	PUBLIC_FUNCTION(void, SetExtraPoint, int, const Vec2F&);
-	PUBLIC_FUNCTION(void, AddExtraPoint, const Vec2F&);
-	PUBLIC_FUNCTION(void, RemoveExtraPoint, int);
-	PUBLIC_FUNCTION(void, SetImage, const ImageAssetRef&);
-	PUBLIC_FUNCTION(const ImageAssetRef&, GetImage);
-	PUBLIC_FUNCTION(void, SetMappingFrame, const RectF&);
-	PUBLIC_FUNCTION(const RectF&, GetMappingFrame);
-	PUBLIC_FUNCTION(void, SetColor, const Color4&);
-	PUBLIC_FUNCTION(const Color4&, GetColor);
-	PUBLIC_STATIC_FUNCTION(String, GetName);
-	PUBLIC_STATIC_FUNCTION(String, GetCategory);
-	PUBLIC_STATIC_FUNCTION(String, GetIcon);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
-	PROTECTED_FUNCTION(void, UpdateMesh);
-	PROTECTED_FUNCTION(void, SetOwnerActor, Actor*);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(const Mesh&, GetMesh);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoints, const Vector<Vec2F>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Vec2F>&, GetExtraPoints);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExtraPoint, int, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddExtraPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveExtraPoint, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetImage, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(const ImageAssetRef&, GetImage);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMappingFrame, const RectF&);
+	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetMappingFrame);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(const Color4&, GetColor);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

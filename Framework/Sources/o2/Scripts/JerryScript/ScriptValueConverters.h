@@ -1,43 +1,139 @@
 #pragma once
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
-
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Reflection/Type.h"
 
 namespace o2
 {
 	class ReflectScriptValueTypeProcessor
 	{
 	public:
-		struct FieldProcessor
+		struct FieldProcessor;
+
+		struct BaseFieldProcessor
 		{
 			ScriptValue& value;
+			ProtectSection section;
 
 		public:
-			FieldProcessor(ScriptValue& value):value(value) {}
+			BaseFieldProcessor(ScriptValue& value):value(value) {}
 
 			template<typename _attribute_type, typename ... _args>
-			FieldProcessor& AddAttribute(_args ... args) { return *this; }
+			auto AddAttribute(_args ... args);
 
 			template<typename _type>
-			FieldProcessor& SetDefaultValue(const _type& value) { return *this; }
+			BaseFieldProcessor& SetDefaultValue(const _type& value) { return *this; }
 
-			void SetProtectSection(ProtectSection section) {}
+			BaseFieldProcessor& SetProtectSection(ProtectSection section)
+			{
+				this->section = section;
+				return *this;
+			}
+
+			template<typename _object_type, typename _field_type>
+			BaseFieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
+											_field_type& field)
+			{
+				return *this;
+			}
+		};
+
+		struct FieldProcessor: public BaseFieldProcessor
+		{
+		public:
+			FieldProcessor(ScriptValue& value, ProtectSection section):BaseFieldProcessor(value) { this->section = section; }
 
 			template<typename _object_type, typename _field_type>
 			FieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
 										_field_type& field)
 			{
+				if (section != ProtectSection::Public)
+					return *this;
+
 				if constexpr (std::is_copy_constructible<_field_type>::value)
 				{
 					_field_type* fieldPtr = (_field_type*)((*pointerGetter)(object));
-					ScriptValue prop;
-					prop.SetValue(*fieldPtr);
-					value.SetProperty(ScriptValue(name), prop);
+					value.SetPropertyWrapper(ScriptValue(name), *fieldPtr);
 				}
 
 				return *this;
 			}
+		};
+
+		struct BaseFunctionProcessor
+		{
+			ScriptValue& value;
+			ProtectSection section;
+
+		public:
+			BaseFunctionProcessor(ScriptValue& value):value(value) {}
+
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args);
+
+			BaseFunctionProcessor& SetProtectSection(ProtectSection section)
+			{
+				this->section = section;
+				return *this;
+			}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...)) {}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...) const) {}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void SignatureStatic(_object_type* object, Type* type, const char* name,
+								 _res_type(*pointer)(_args ...)) {}
+		};
+
+		struct FunctionProcessor: public BaseFunctionProcessor
+		{
+		public:
+			FunctionProcessor(BaseFunctionProcessor& base):BaseFunctionProcessor(base) {}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...)) 
+			{
+				if constexpr (std::is_same<void, _res_type>::value)
+					value.SetProperty(ScriptValue(name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
+				else
+				{
+					typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+					value.SetProperty(ScriptValue(name),
+									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
+					{
+						__res_type res = (object->*pointer)(args ...);
+						return res;
+					})));
+				}
+			}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...) const)
+			{
+				if constexpr (std::is_same<void, _res_type>::value)
+					value.SetProperty(ScriptValue(name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
+				else
+				{
+					typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+					value.SetProperty(ScriptValue(name),
+									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
+					{
+						__res_type res = (object->*pointer)(args ...);
+						return res;
+					})));
+				}
+			}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void SignatureStatic(_object_type* object, Type* type, const char* name,
+								 _res_type(*pointer)(_args ...)) {}
 		};
 
 	public:
@@ -58,8 +154,6 @@ namespace o2
 		template<typename _object_type>
 		void StartMethods(_object_type* object, Type* type) {}
 
-		FieldProcessor StartField() { return FieldProcessor(value); }
-
 		template<typename _object_type, typename _base_type>
 		void BaseType(_object_type* object, Type* type, const char* name)
 		{
@@ -67,34 +161,37 @@ namespace o2
 				_base_type::ProcessType<ReflectScriptValueTypeProcessor>(object, *this);
 		}
 
-		template<typename _object_type, typename _res_type, typename ... _args>
-		void Method(_object_type* object, Type* type, const char* name,
-					_res_type(_object_type::* pointer)(_args ...), ProtectSection protection)
-		{
+		BaseFieldProcessor StartField() { return BaseFieldProcessor(value); }
 
-		}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		void Method(_object_type* object, Type* type, const char* name,
-					_res_type(_object_type::* pointer)(_args ...) const, ProtectSection protection)
-		{
-		}
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		void StaticMethod(_object_type* object, Type* type, const char* name,
-						  _res_type(*pointer)(_args ...), ProtectSection protection)
-		{
-		}
+		BaseFunctionProcessor StartFunction() { return BaseFunctionProcessor(value); }
 	};
+
+	template<typename _attribute_type, typename ... _args>
+	auto ReflectScriptValueTypeProcessor::BaseFieldProcessor::AddAttribute(_args ... args)
+	{
+		if constexpr (std::is_same<_attribute_type, ScriptableAttribute>::value)
+			return FieldProcessor(value, section);
+		else
+			return *this;
+	}
+
+	template<typename _attribute_type, typename ... _args>
+	auto ReflectScriptValueTypeProcessor::BaseFunctionProcessor::AddAttribute(_args ... args)
+	{
+		if constexpr (std::is_same<_attribute_type, ScriptableAttribute>::value)
+			return FunctionProcessor(*this);
+		else
+			return *this;
+	}
 
 	template<typename _type, typename _enable /*= void*/>
 	void ScriptValue::Converter<_type, _enable>::Read(__type& value, const ScriptValue& data)
 	{
 		void* dataPtr = nullptr;
 		jerry_get_object_native_pointer(data.jvalue, &dataPtr, &GetDataDeleter().info);
-		auto dataContainer = dynamic_cast<DataContainer<_type*>>((IDataContainer*)dataPtr);
+		auto dataContainer = dynamic_cast<DataContainer<_type*>*>((IDataContainer*)dataPtr);
 		if (dataContainer)
-			value = dataContainer->data;
+			value = *dataContainer->data;
 		else
 			value = _type();
 	}
@@ -104,13 +201,13 @@ namespace o2
 	{
 		data.jvalue = jerry_create_object();
 
-		auto dataContainer = new DataContainer<_type>(value);
+		auto dataContainer = new DataContainer<_type*>(&const_cast<__type&>(value));
 		jerry_set_object_native_pointer(data.jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
 
-		if constexpr (std::is_base_of<IObject, _type>::value)
+		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
 		{
 			ReflectScriptValueTypeProcessor processor(data);
-			_type::ProcessType<ReflectScriptValueTypeProcessor>(&dataContainer->data, processor);
+			_type::ProcessType<ReflectScriptValueTypeProcessor>(dataContainer->data, processor);
 		}
 	}
 
@@ -543,7 +640,7 @@ namespace o2
 
 		static void Read(T& value, const ScriptValue& data)
 		{
-			value = Reflection::GetEnumValue<T>(data.GetValue<String>(buf));
+			value = Reflection::GetEnumValue<T>(data.GetValue<String>());
 		}
 	};
 
@@ -564,7 +661,7 @@ namespace o2
 			value.Set(data.GetValue<TValueType>());
 		}
 	};
-	
+
 	template<typename _res_type, typename ... _args>
 	struct ScriptValue::Converter<Function<_res_type(_args ...)>>
 	{
@@ -573,16 +670,16 @@ namespace o2
 		static void Write(const Function<_res_type(_args ...)>& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_external_function(&CallFunction);
-			
- 			IDataContainer* funcContainer = new FunctionContainer<Function<_res_type(_args ...)>, _res_type, _args ...>(value);
- 			jerry_set_object_native_pointer(data.jvalue, funcContainer, &GetDataDeleter().info);
+
+			IDataContainer* funcContainer = new FunctionContainer<Function<_res_type(_args ...)>, _res_type, _args ...>(value);
+			jerry_set_object_native_pointer(data.jvalue, funcContainer, &GetDataDeleter().info);
 		}
 
 		static void Read(Function<_res_type(_args ...)>& value, const ScriptValue& data)
 		{
-			value = [dataCopy = data](_args ... args) 
-			{ 
-				return dataCopy.Invoke<_res_type, _args ...>(args ...); 
+			value = [dataCopy = data](_args ... args)
+			{
+				return dataCopy.Invoke<_res_type, _args ...>(args ...);
 			};
 		}
 	};

@@ -3,9 +3,13 @@
 
 namespace o2
 {
+	class LogStream;
+
 	class ScriptParseResultBase
 	{
 	public:
+		ScriptParseResultBase() = default;
+		ScriptParseResultBase(const ScriptParseResultBase& other);
 		virtual ~ScriptParseResultBase();
 
 	protected:
@@ -16,7 +20,11 @@ namespace o2
 
 	class ScriptEngineBase
 	{
+	protected:
+		LogStream* mLog = nullptr; // Scripting log stream
 
+	protected:
+		static void ErrorCallback(const jerry_value_t error_object, void* user_p);
 	};
 }
 

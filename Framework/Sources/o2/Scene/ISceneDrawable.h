@@ -93,24 +93,24 @@ CLASS_BASES_META(o2::ISceneDrawable)
 END_META;
 CLASS_FIELDS_META(o2::ISceneDrawable)
 {
-	FIELD().NAME(drawDepth).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDrawingDepth).PROTECTED();
+	FIELD().PUBLIC().NAME(drawDepth);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mDrawingDepth);
 }
 END_META;
 CLASS_METHODS_META(o2::ISceneDrawable)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
-	PUBLIC_FUNCTION(float, GetSceneDrawableDepth);
-	PUBLIC_FUNCTION(void, SetLastOnCurrentDepth);
-	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
-	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnAddToScene);
-	PROTECTED_FUNCTION(void, OnRemoveFromScene);
-	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
-	PUBLIC_FUNCTION(void, OnDrawn);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetSceneDrawableDepth);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLastOnCurrentDepth);
+	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDrawn);
 }
 END_META;

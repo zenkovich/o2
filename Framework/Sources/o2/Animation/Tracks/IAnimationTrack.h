@@ -108,21 +108,21 @@ CLASS_BASES_META(o2::IAnimationTrack)
 END_META;
 CLASS_FIELDS_META(o2::IAnimationTrack)
 {
-	FIELD().NAME(duration).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(loop).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(path).PUBLIC();
-	FIELD().NAME(onKeysChanged).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwnerClip).PROTECTED();
+	FIELD().PUBLIC().NAME(duration);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Loop::None).NAME(loop);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(path);
+	FIELD().PUBLIC().NAME(onKeysChanged);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwnerClip);
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimationTrack)
 {
 
-	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
-	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
-	PUBLIC_FUNCTION(float, GetDuration);
-	PUBLIC_FUNCTION(IPlayer*, CreatePlayer);
-	PUBLIC_FUNCTION(const AnimationClip*, GetOwnerClip);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
+	FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+	FUNCTION().PUBLIC().SIGNATURE(const AnimationClip*, GetOwnerClip);
 }
 END_META;
 
@@ -133,20 +133,20 @@ CLASS_BASES_META(o2::IAnimationTrack::IPlayer)
 END_META;
 CLASS_FIELDS_META(o2::IAnimationTrack::IPlayer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwnerPlayer).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwnerPlayer);
 }
 END_META;
 CLASS_METHODS_META(o2::IAnimationTrack::IPlayer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxyVoid, void*);
-	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
-	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
-	PUBLIC_FUNCTION(void, RegMixer, AnimationState*, const String&);
-	PUBLIC_FUNCTION(void, ForceSetTime, float, float);
-	PUBLIC_FUNCTION(const AnimationPlayer*, GetOwnerPlayer);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+	FUNCTION().PUBLIC().SIGNATURE(void, RegMixer, AnimationState*, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, ForceSetTime, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(const AnimationPlayer*, GetOwnerPlayer);
 }
 END_META;

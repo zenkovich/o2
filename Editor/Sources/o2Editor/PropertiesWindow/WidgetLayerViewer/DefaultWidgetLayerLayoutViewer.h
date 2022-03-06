@@ -55,21 +55,21 @@ CLASS_BASES_META(Editor::DefaultWidgetLayerLayoutViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
-	FIELD().NAME(mLayers).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPositionProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizeProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty).PROTECTED();
+	FIELD().PROTECTED().NAME(mLayers);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPositionProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizeProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorRightTopProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAnchorLeftBottomProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(moffsetRightTopProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOffsetLeftBottomProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerLayoutViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, IPropertyField*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, IPropertyField*);
 }
 END_META;

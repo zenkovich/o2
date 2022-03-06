@@ -49,6 +49,11 @@ namespace o2
 		return mProtectSection;
 	}
 
+	const Vector<IAttribute*>& FunctionInfoBase::GetAttributes() const
+	{
+		return mAttributes;
+	}
+
 	bool FunctionInfoBase::Parameter::operator==(const Parameter& other) const
 	{
 		return name == other.name && type == other.type && isConstant == other.isConstant && isPointer == other.isPointer &&

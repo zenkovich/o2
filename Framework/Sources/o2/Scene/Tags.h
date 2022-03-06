@@ -152,18 +152,18 @@ CLASS_BASES_META(o2::Tag)
 END_META;
 CLASS_FIELDS_META(o2::Tag)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mName).PROTECTED();
-	FIELD().NAME(mActors).PROTECTED();
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mName);
+	FIELD().PROTECTED().NAME(mActors);
 }
 END_META;
 CLASS_METHODS_META(o2::Tag)
 {
 
-	PUBLIC_FUNCTION(const String&, GetName);
-	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(void, AddActor, Actor*);
-	PUBLIC_FUNCTION(void, RemoveActor, Actor*);
-	PUBLIC_FUNCTION(void, Clear);
+	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddActor, Actor*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveActor, Actor*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Clear);
 }
 END_META;
 
@@ -174,22 +174,22 @@ CLASS_BASES_META(o2::TagGroup)
 END_META;
 CLASS_FIELDS_META(o2::TagGroup)
 {
-	FIELD().NAME(onTagAdded).PUBLIC();
-	FIELD().NAME(onTagRemoved).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mTags).PRIVATE();
+	FIELD().PUBLIC().NAME(onTagAdded);
+	FIELD().PUBLIC().NAME(onTagRemoved);
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().NAME(mTags);
 }
 END_META;
 CLASS_METHODS_META(o2::TagGroup)
 {
 
-	PUBLIC_FUNCTION(void, AddTag, const String&);
-	PUBLIC_FUNCTION(void, AddTag, Tag*);
-	PUBLIC_FUNCTION(void, RemoveTag, const String&);
-	PUBLIC_FUNCTION(void, RemoveTag, Tag*);
-	PUBLIC_FUNCTION(void, Clear);
-	PUBLIC_FUNCTION(bool, IsHaveTag, const String&);
-	PUBLIC_FUNCTION(bool, IsHaveTag, Tag*);
-	PUBLIC_FUNCTION(const Vector<Tag*>&, GetTags);
-	PUBLIC_FUNCTION(Vector<String>, GetTagsNames);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddTag, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddTag, Tag*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTag, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTag, Tag*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Clear);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsHaveTag, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsHaveTag, Tag*);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Tag*>&, GetTags);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<String>, GetTagsNames);
 }
 END_META;

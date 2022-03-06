@@ -302,41 +302,41 @@ CLASS_BASES_META(o2::AnimationComponent)
 END_META;
 CLASS_FIELDS_META(o2::AnimationComponent)
 {
-	FIELD().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).SERIALIZABLE_ATTRIBUTE().NAME(mStates).PROTECTED();
-	FIELD().NAME(mValues).PROTECTED();
-	FIELD().NAME(mBlend).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mInEditMode).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::AnimationState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).SERIALIZABLE_ATTRIBUTE().NAME(mStates);
+	FIELD().PROTECTED().NAME(mValues);
+	FIELD().PROTECTED().NAME(mBlend);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mInEditMode);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationComponent)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(AnimationState*, AddState, AnimationState*);
-	PUBLIC_FUNCTION(AnimationState*, AddState, const String&, const AnimationClip&, const AnimationMask&, float);
-	PUBLIC_FUNCTION(AnimationState*, AddState, const String&);
-	PUBLIC_FUNCTION(void, RemoveState, AnimationState*);
-	PUBLIC_FUNCTION(void, RemoveState, const String&);
-	PUBLIC_FUNCTION(void, RemoveAllStates);
-	PUBLIC_FUNCTION(AnimationState*, GetState, const String&);
-	PUBLIC_FUNCTION(const Vector<AnimationState*>&, GetStates);
-	PUBLIC_FUNCTION(AnimationState*, Play, const AnimationClip&, const String&);
-	PUBLIC_FUNCTION(AnimationState*, Play, const AnimationClip&);
-	PUBLIC_FUNCTION(AnimationState*, Play, const String&);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const AnimationClip&, const String&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const AnimationClip&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, const String&, float);
-	PUBLIC_FUNCTION(AnimationState*, BlendTo, AnimationState*, float);
-	PUBLIC_FUNCTION(void, Stop, const String&);
-	PUBLIC_FUNCTION(void, StopAll);
-	PUBLIC_FUNCTION(void, BeginAnimationEdit);
-	PUBLIC_FUNCTION(void, EndAnimationEdit);
-	PUBLIC_STATIC_FUNCTION(String, GetName);
-	PUBLIC_STATIC_FUNCTION(String, GetCategory);
-	PUBLIC_STATIC_FUNCTION(String, GetIcon);
-	PROTECTED_FUNCTION(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
-	PROTECTED_FUNCTION(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
-	PROTECTED_FUNCTION(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);
-	PROTECTED_FUNCTION(void, OnStatesListChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, AnimationState*);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&, const AnimationClip&, const AnimationMask&, float);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, AnimationState*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveState, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllStates);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, GetState, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<AnimationState*>&, GetStates);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const AnimationClip&, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const AnimationClip&);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, Play, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const AnimationClip&, const String&, float);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const AnimationClip&, float);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, const String&, float);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, BlendTo, AnimationState*, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, Stop, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, StopAll);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginAnimationEdit);
+	FUNCTION().PUBLIC().SIGNATURE(void, EndAnimationEdit);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+	FUNCTION().PROTECTED().SIGNATURE(void, UnregTrack, IAnimationTrack::IPlayer*, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackAdded, AnimationState*, IAnimationTrack::IPlayer*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnStateAnimationTrackRemoved, AnimationState*, IAnimationTrack::IPlayer*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnStatesListChanged);
 }
 END_META;

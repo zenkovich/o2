@@ -112,42 +112,42 @@ CLASS_BASES_META(Editor::ScaleTool)
 END_META;
 CLASS_FIELDS_META(Editor::ScaleTool)
 {
-	FIELD().DEFAULT_VALUE(0.01f).NAME(bothScaleSence).PUBLIC();
-	FIELD().NAME(mHorDragHandle).PROTECTED();
-	FIELD().NAME(mVerDragHandle).PROTECTED();
-	FIELD().NAME(mBothDragHandle).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle).PROTECTED();
-	FIELD().NAME(mSceneHandlesPos).PROTECTED();
-	FIELD().DEFAULT_VALUE(Vec2F(100, 100)).NAME(mHandlesSize).PROTECTED();
-	FIELD().NAME(mLastHorHandlePos).PROTECTED();
-	FIELD().NAME(mLastVerHandlePos).PROTECTED();
-	FIELD().NAME(mLastBothHandlePos).PROTECTED();
-	FIELD().NAME(mBeforeTransforms).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTransformAction).PROTECTED();
+	FIELD().PUBLIC().DEFAULT_VALUE(0.01f).NAME(bothScaleSence);
+	FIELD().PROTECTED().NAME(mHorDragHandle);
+	FIELD().PROTECTED().NAME(mVerDragHandle);
+	FIELD().PROTECTED().NAME(mBothDragHandle);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mHandlesAngle);
+	FIELD().PROTECTED().NAME(mSceneHandlesPos);
+	FIELD().PROTECTED().DEFAULT_VALUE(Vec2F(100, 100)).NAME(mHandlesSize);
+	FIELD().PROTECTED().NAME(mLastHorHandlePos);
+	FIELD().PROTECTED().NAME(mLastVerHandlePos);
+	FIELD().PROTECTED().NAME(mLastBothHandlePos);
+	FIELD().PROTECTED().NAME(mBeforeTransforms);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTransformAction);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScaleTool)
 {
 
-	PROTECTED_FUNCTION(String, GetPanelIcon);
-	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, DrawScreen);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnSceneChanged, Vector<SceneEditableObject*>);
-	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
-	PROTECTED_FUNCTION(void, OnHorDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnVerDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, OnBothDragHandleMoved, const Vec2F&);
-	PROTECTED_FUNCTION(void, UpdateHandlesPosition);
-	PROTECTED_FUNCTION(void, UpdateHandlesAngleAndPositions, float);
-	PROTECTED_FUNCTION(void, UpdateHandlesPositions);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyStayDown, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, ScaleSelectedObjects, const Vec2F&);
-	PROTECTED_FUNCTION(void, HandlePressed);
-	PROTECTED_FUNCTION(void, HandleReleased);
+	FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
+	FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
+	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnHorDragHandleMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnVerDragHandleMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnBothDragHandleMoved, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPosition);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesAngleAndPositions, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateHandlesPositions);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyStayDown, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, ScaleSelectedObjects, const Vec2F&);
+	FUNCTION().PROTECTED().SIGNATURE(void, HandlePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, HandleReleased);
 }
 END_META;

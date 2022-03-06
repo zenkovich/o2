@@ -55,16 +55,16 @@ CLASS_BASES_META(Editor::ColorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ColorProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mColorSprite).PROTECTED();
-	FIELD().NAME(mClickArea).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorSprite);
+	FIELD().PROTECTED().NAME(mClickArea);
 }
 END_META;
 CLASS_METHODS_META(Editor::ColorProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OnClicked);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);
 }
 END_META;

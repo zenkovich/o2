@@ -169,32 +169,32 @@ CLASS_BASES_META(Editor::LayersPopup)
 END_META;
 CLASS_FIELDS_META(Editor::LayersPopup)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample).PRIVATE();
-	FIELD().NAME(mItemsCache).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDraggingItem).PRIVATE();
-	FIELD().NAME(mDragOffset).PRIVATE();
-	FIELD().DEFAULT_VALUE(0.4f).NAME(mDragAnimTime).PRIVATE();
-	FIELD().DEFAULT_VALUE(Curve::EaseInOut()).NAME(mDragAnimFunc).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButtonLayout).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButton).PRIVATE();
+	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mItemSample);
+	FIELD().PRIVATE().NAME(mItemsCache);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mDraggingItem);
+	FIELD().PRIVATE().NAME(mDragOffset);
+	FIELD().PRIVATE().DEFAULT_VALUE(0.4f).NAME(mDragAnimTime);
+	FIELD().PRIVATE().DEFAULT_VALUE(Curve::EaseInOut()).NAME(mDragAnimFunc);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButtonLayout);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::LayersPopup)
 {
 
-	PUBLIC_FUNCTION(void, Show, const Vec2F&);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, SpecialDraw);
-	PRIVATE_FUNCTION(Vec2F, GetContentSize);
-	PRIVATE_FUNCTION(void, InitializeControls);
-	PRIVATE_FUNCTION(void, UpdateItemLayout, LayerPopupItem*, int);
-	PRIVATE_FUNCTION(void, UpdateLayersList);
-	PRIVATE_FUNCTION(void, UpdateLayersListAndFit);
-	PRIVATE_FUNCTION(void, BeginDragging, LayerPopupItem*);
-	PRIVATE_FUNCTION(void, UpdateDragging);
-	PRIVATE_FUNCTION(void, UpdateDragAnimation, float);
-	PRIVATE_FUNCTION(void, EndDragging);
+	FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, SpecialDraw);
+	FUNCTION().PRIVATE().SIGNATURE(Vec2F, GetContentSize);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateItemLayout, LayerPopupItem*, int);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateLayersList);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateLayersListAndFit);
+	FUNCTION().PRIVATE().SIGNATURE(void, BeginDragging, LayerPopupItem*);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateDragging);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateDragAnimation, float);
+	FUNCTION().PRIVATE().SIGNATURE(void, EndDragging);
 }
 END_META;
 
@@ -206,32 +206,32 @@ CLASS_BASES_META(Editor::LayerPopupItem)
 END_META;
 CLASS_FIELDS_META(Editor::LayerPopupItem)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayer).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPopup).PRIVATE();
-	FIELD().NAME(mDragHandle).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mVisibleToggle).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameCaption).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PRIVATE();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mDragInsertCoef).PRIVATE();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mDragTargetInsertCoef).PRIVATE();
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mLayer);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPopup);
+	FIELD().PRIVATE().NAME(mDragHandle);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mVisibleToggle);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mNameCaption);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mRemoveBtn);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+	FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDragInsertCoef);
+	FIELD().PRIVATE().DEFAULT_VALUE(0.0f).NAME(mDragTargetInsertCoef);
 }
 END_META;
 CLASS_METHODS_META(Editor::LayerPopupItem)
 {
 
-	PUBLIC_FUNCTION(void, SetLayer, SceneLayer*);
-	PUBLIC_FUNCTION(void, BeginEditName);
-	PUBLIC_FUNCTION(void, BreakEditName);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
-	PRIVATE_FUNCTION(void, OnDragStart, const Input::Cursor&);
-	PRIVATE_FUNCTION(void, OnDragged, const Input::Cursor&, DragDropArea*);
-	PRIVATE_FUNCTION(void, OnDragEnd, const Input::Cursor&);
-	PRIVATE_FUNCTION(void, OnNameEditChanged, const WString&);
-	PRIVATE_FUNCTION(void, OnVisibleChanged, bool);
-	PRIVATE_FUNCTION(void, OnRemovePressed);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, SceneLayer*);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginEditName);
+	FUNCTION().PUBLIC().SIGNATURE(void, BreakEditName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDragStart, const Input::Cursor&);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnNameEditChanged, const WString&);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnVisibleChanged, bool);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnRemovePressed);
 }
 END_META;

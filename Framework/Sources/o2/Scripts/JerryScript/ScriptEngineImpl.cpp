@@ -1,30 +1,50 @@
 #include "o2/stdafx.h"
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
-#include "o2/Scripts/ScriptEngine.h"
 #include "jerryscript/jerry-ext/include/jerryscript-ext/handler.h"
+#include "o2/Scripts/ScriptEngine.h"
+#include "o2/Utils/Debug/Log/LogStream.h"
 
 namespace o2
 {
+	void ScriptEngineBase::ErrorCallback(const jerry_value_t error_object, void* user_p)
+	{
+		auto strValue = jerry_value_to_string(error_object);
+		ScriptValue tmp;
+		tmp.AcquireValue(strValue);
+		o2Scripts.mLog->ErrorStr(tmp.GetValue<String>());
+	}
+
 	ScriptParseResultBase::~ScriptParseResultBase()
 	{
 		jerry_release_value(mParsedCode);
 	}
 
+	ScriptParseResultBase::ScriptParseResultBase(const ScriptParseResultBase& other)
+	{
+		mParsedCode = jerry_acquire_value(other.mParsedCode);
+	}
+
 	bool ScriptParseResult::IsOk() const
 	{
-		return jerry_value_is_error(mParsedCode);
+		return !jerry_value_is_error(mParsedCode);
 	}
 
 	String ScriptParseResult::GetError() const
 	{
-		return "Unknown";
+		ScriptValue tmp;
+		tmp.AcquireValue(mParsedCode);
+		return tmp.GetError();
 	}
 
 	ScriptEngine::ScriptEngine()
 	{
+		mLog = mnew LogStream("Scripting");
+		o2Debug.GetLog()->BindStream(mLog);
+
 		jerry_init(JERRY_INIT_EMPTY);
 		jerryx_handler_register_global((const jerry_char_t*)"print", jerryx_handler_print);
+		jerry_set_error_object_created_callback(&ErrorCallback, NULL);
 
 		RegisterTypes();
 	}
@@ -54,10 +74,6 @@ namespace o2
 	{
 		ScriptValue res;
 		res.Accept(jerry_eval((jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS));
-
-		if (res.GetValueType() == ScriptValue::ValueType::Error)
-			o2Debug.Log("Failed to evaluate: " + res.GetError());
-
 		return res;
 	}
 

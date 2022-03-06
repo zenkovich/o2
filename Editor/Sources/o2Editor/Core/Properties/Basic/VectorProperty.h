@@ -157,46 +157,46 @@ CLASS_BASES_META(Editor::VectorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::VectorProperty)
 {
-	FIELD().NAME(mSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mVectorType).PROTECTED();
-	FIELD().NAME(mTargetObjects).PROTECTED();
-	FIELD().NAME(mValueProperties).PROTECTED();
-	FIELD().NAME(mValuePropertiesPool).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCountProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mCountDifferents).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mCountOfElements).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mIsRefreshing).PROTECTED();
+	FIELD().PROTECTED().NAME(mSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVectorType);
+	FIELD().PROTECTED().NAME(mTargetObjects);
+	FIELD().PROTECTED().NAME(mValueProperties);
+	FIELD().PROTECTED().NAME(mValuePropertiesPool);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCountProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCountDifferents);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCountOfElements);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
 }
 END_META;
 CLASS_METHODS_META(Editor::VectorProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(const Type*, GetValueType);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(Button*, GetRemoveButton);
-	PUBLIC_FUNCTION(void, SpecializeType, const Type*);
-	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
-	PUBLIC_FUNCTION(const Type*, GetSpecializedType);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void*, GetProxyValuePointer, IAbstractValueProxy*);
-	PROTECTED_FUNCTION(IPropertyField*, GetFreeValueProperty);
-	PROTECTED_FUNCTION(void, FreeValueProperty, IPropertyField*);
-	PROTECTED_FUNCTION(void, UpdateElementCaption, IPropertyField*);
-	PROTECTED_FUNCTION(void, OnCountChanged, IPropertyField*);
-	PROTECTED_FUNCTION(void, Resize, int);
-	PROTECTED_FUNCTION(void, Remove, int);
-	PROTECTED_FUNCTION(void, OnAddPressed);
-	PROTECTED_FUNCTION(void, OnExpand);
-	PROTECTED_FUNCTION(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+	FUNCTION().PUBLIC().SIGNATURE(void, SpecializeType, const Type*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetSpecializedType);
+	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void*, GetProxyValuePointer, IAbstractValueProxy*);
+	FUNCTION().PROTECTED().SIGNATURE(IPropertyField*, GetFreeValueProperty);
+	FUNCTION().PROTECTED().SIGNATURE(void, FreeValueProperty, IPropertyField*);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateElementCaption, IPropertyField*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
+	FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, Remove, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
+	FUNCTION().PROTECTED().SIGNATURE(TargetObjectData, GetObjectFromProxy, IAbstractValueProxy*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

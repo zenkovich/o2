@@ -59,20 +59,20 @@ CLASS_BASES_META(Editor::CurvesSheet)
 END_META;
 CLASS_FIELDS_META(Editor::CurvesSheet)
 {
-	FIELD().NAME(mCurvesEditor).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow).PRIVATE();
-	FIELD().DEFAULT_VALUE(false).NAME(mEditorViewLock).PRIVATE();
+	FIELD().PRIVATE().NAME(mCurvesEditor);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimationWindow);
+	FIELD().PRIVATE().DEFAULT_VALUE(false).NAME(mEditorViewLock);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
-	PUBLIC_FUNCTION(void, SetAnimation, AnimationClip*);
-	PUBLIC_FUNCTION(void, UpdateCurvesColors);
-	PUBLIC_FUNCTION(void, OnAnimationChanged);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, InitializeControls);
-	PRIVATE_FUNCTION(void, SetCameraAsTimelineView);
-	PRIVATE_FUNCTION(void, OnEditorViewChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+	FUNCTION().PRIVATE().SIGNATURE(void, SetCameraAsTimelineView);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnEditorViewChanged);
 }
 END_META;

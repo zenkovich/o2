@@ -57,18 +57,18 @@ CLASS_BASES_META(Editor::SpoilerWithHead)
 END_META;
 CLASS_FIELDS_META(Editor::SpoilerWithHead)
 {
-	FIELD().NAME(onOptionsPressed).PUBLIC();
-	FIELD().NAME(onSavePressed).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSaveBtn).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mIcon).PRIVATE();
+	FIELD().PUBLIC().NAME(onOptionsPressed);
+	FIELD().PUBLIC().NAME(onSavePressed);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mOptionsBtn);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mSaveBtn);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mIcon);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)
 {
 
-	PUBLIC_FUNCTION(Image*, GetIcon);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, InitializeControls);
+	FUNCTION().PUBLIC().SIGNATURE(Image*, GetIcon);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;

@@ -128,8 +128,7 @@ map<string, TimeStamp> CodeToolApplication::GetFolderFiles(const string& path)
 				string filePath = path + "/" + f.cFileName;
 				res[filePath] = GetFileEditedDate(filePath);
 			}
-		}
-		while (FindNextFile(h, &f));
+		} while (FindNextFile(h, &f));
 	}
 
 	FindClose(h);
@@ -194,7 +193,7 @@ void CodeToolApplication::WriteFile(const string& path, const string& data) cons
 	fout.open(path.c_str());
 	if (!fout.is_open())
 		return;
-	
+
 	fout.write(data.c_str(), data.length());
 
 	fout.close();
@@ -390,7 +389,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 	}
 
 	VerboseLog("Project changed. New files:%i, new filters:%i, need reset:%s\n", newFiles.size(), newFilters.size(),
-			   (mNeedReset ? "true":"false"));
+			   (mNeedReset ? "true" : "false"));
 
 	// generate new filters file
 	pugi::xml_document newDoc;
@@ -525,7 +524,7 @@ void CodeToolApplication::UpdateCodeReflection()
 		auto fnd = find_if(mSourceFiles.begin(), mSourceFiles.end(), [&](auto x) { return x.first == (*parseFileInfo)->GetPath(); });
 		if (fnd == mSourceFiles.end())
 		{
-			delete *parseFileInfo;
+			delete* parseFileInfo;
 			parseFileInfo = mCache.originalFiles.erase(parseFileInfo);
 			mCache.files.erase(find(mCache.files.begin(), mCache.files.end(), *parseFileInfo));
 		}
@@ -642,8 +641,8 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 	auto classes = file->GetGlobalNamespace()->GetAllClasses();
 	for (auto cls : classes)
 	{
-		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(), 
-									   [](SyntaxFunction* x) { 
+		bool hasIObject = std::find_if(cls->GetFunctions().begin(), cls->GetFunctions().end(),
+									   [](SyntaxFunction* x) {
 			return x->GetName() == "IOBJECT" || x->GetName() == "SERIALIZABLE" || x->GetName() == "ASSET_TYPE";
 		}) != cls->GetFunctions().end();
 
@@ -655,7 +654,7 @@ void CodeToolApplication::UpdateSourceReflection(SyntaxFile* file)
 			checkCppLoad();
 			cppSource += GetClassDeclaration(cls);
 		}
-		
+
 		hSource += GetClassMeta(cls);
 
 		VerboseLog("Generated meta for class:%s\n", cls->GetFullName().c_str());
@@ -725,7 +724,7 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			res += string("\ttypedef ") + className + ' ' + newClassName + ";\n";
 			className = newClassName;
 		}
-		
+
 		res += string("\tBASE_CLASS(") + className +  +");\n";
 	}
 	res += "}\nEND_META;\n";
@@ -734,55 +733,48 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	res += templates;
 	res += "CLASS_FIELDS_META(" + classDef + ")\n{\n";
 
-	for (auto x : cls->GetFunctions())
+	for (auto function : cls->GetFunctions())
 	{
-		if (x->GetName() == "PROPERTY" || x->GetName() == "SETTER" || x->GetName() == "GETTER" || x->GetName() == "ACCESSOR")
+		if (function->GetName() == "PROPERTY" || function->GetName() == "SETTER" || function->GetName() == "GETTER" || function->GetName() == "ACCESSOR")
 		{
-			if (x->GetParameters().size() > 2)
+			if (function->GetParameters().size() > 2)
 			{
-				if (x->GetClassSection() == SyntaxProtectionSection::Public)
-					res += "\tPUBLIC_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-				else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-					res += "\tPRIVATE_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
-				else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-					res += "\tPROTECTED_FIELD(" + x->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+				if (function->GetClassSection() == SyntaxProtectionSection::Public)
+					res += "\tPUBLIC_FIELD(" + function->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+				else if (function->GetClassSection() == SyntaxProtectionSection::Private)
+					res += "\tPRIVATE_FIELD(" + function->GetParameters()[2]->GetVariableType().GetName() + ");\n";
+				else if (function->GetClassSection() == SyntaxProtectionSection::Protected)
+					res += "\tPROTECTED_FIELD(" + function->GetParameters()[2]->GetVariableType().GetName() + ");\n";
 			}
 		}
 	}
 
-	for (auto x : cls->GetVariables())
+	for (auto variable : cls->GetVariables())
 	{
-		if (x->IsStatic() || x->GetName().empty())
+		if (variable->IsStatic() || variable->GetName().empty())
 			continue;
 
 		// try search comment
-		SyntaxComment* synComment = cls->FindCommentNearLine(x->GetLine());
+		SyntaxComment* synComment = cls->FindCommentNearLine(variable->GetLine());
 
-		if (synComment) {
-			auto fnd = synComment->GetData().find("@IGNORE");
-			if (fnd != string::npos)
-			{
-				auto nextSymbol = synComment->GetData()[fnd + strlen("@IGNORE")];
-				if (nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0')
-					continue;
-			}
-		}
+		if (IsIgnoreComment(synComment))
+			continue;
 
 		res += "\tFIELD()";
 
-		res += GetFieldAttributes(cls, x, synComment);
+		if (variable->GetClassSection() == SyntaxProtectionSection::Public)
+			res += ".PUBLIC()";
+		else if (variable->GetClassSection() == SyntaxProtectionSection::Private)
+			res += ".PRIVATE()";
+		else if (variable->GetClassSection() == SyntaxProtectionSection::Protected)
+			res += ".PROTECTED()";
 
-		if (!x->GetDefaultValue().empty() && x->GetDefaultValue().find("this") == string::npos)
-			res += ".DEFAULT_VALUE(" + x->GetDefaultValue() + ")";
+		res += GetAttributes(cls, variable->GetLine(), synComment);
 
-		res += ".NAME(" + x->GetName() + ")";
+		if (!variable->GetDefaultValue().empty() && variable->GetDefaultValue().find("this") == string::npos)
+			res += ".DEFAULT_VALUE(" + variable->GetDefaultValue() + ")";
 
-		if (x->GetClassSection() == SyntaxProtectionSection::Public)
-			res += ".PUBLIC();\n";
-		else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-			res += ".PRIVATE();\n";
-		else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-			res += ".PROTECTED();\n";
+		res += ".NAME(" + variable->GetName() + ");\n";
 
 	}
 	res += "}\nEND_META;\n";
@@ -795,9 +787,15 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	vector<string> supportingTypedefs;
 
 	bool firstFunction = true;
-	for (auto x : cls->GetFunctions())
+	for (auto function : cls->GetFunctions())
 	{
-		if (!IsFunctionReflectable(x, cls))
+		if (!IsFunctionReflectable(function, cls))
+			continue;
+		
+		// try search comment
+		SyntaxComment* synComment = cls->FindCommentNearLine(function->GetLine());
+
+		if (IsIgnoreComment(synComment))
 			continue;
 
 		if (firstFunction)
@@ -806,26 +804,23 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 			res += "\n";
 		}
 
-		if (x->IsStatic())
-		{
-			if (x->GetClassSection() == SyntaxProtectionSection::Public)
-				res += "\tPUBLIC_STATIC_FUNCTION(";
-			else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-				res += "\tPRIVATE_STATIC_FUNCTION(";
-			else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-				res += "\tPROTECTED_STATIC_FUNCTION(";
-		}
-		else
-		{
-			if (x->GetClassSection() == SyntaxProtectionSection::Public)
-				res += "\tPUBLIC_FUNCTION(";
-			else if (x->GetClassSection() == SyntaxProtectionSection::Private)
-				res += "\tPRIVATE_FUNCTION(";
-			else if (x->GetClassSection() == SyntaxProtectionSection::Protected)
-				res += "\tPROTECTED_FUNCTION(";
-		}
+		res += "\tFUNCTION()";
 
-		auto returnTypeName = (x->GetReturnType().IsConstant() ? "const " : "") + x->GetReturnType().GetName();
+		if (function->GetClassSection() == SyntaxProtectionSection::Public)
+			res += ".PUBLIC()";
+		else if (function->GetClassSection() == SyntaxProtectionSection::Private)
+			res += ".PRIVATE()";
+		else if (function->GetClassSection() == SyntaxProtectionSection::Protected)
+			res += ".PROTECTED()";
+
+		res += GetAttributes(cls, function->GetLine(), synComment);
+
+		if (function->IsStatic())
+			res += ".SIGNATURE_STATIC(";
+		else
+			res += ".SIGNATURE(";
+
+		auto returnTypeName = (function->GetReturnType().IsConstant() ? "const " : "") + function->GetReturnType().GetName();
 
 		if (returnTypeName.find(',') != returnTypeName.npos)
 		{
@@ -835,11 +830,11 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 		}
 
 		res += returnTypeName;
-		res += string(", ") + x->GetName();
+		res += string(", ") + function->GetName();
 
-		for (auto y : x->GetParameters())
+		for (auto param : function->GetParameters())
 		{
-			string parameterName = (y->GetVariableType().IsConstant() ? "const " : "") + y->GetVariableType().GetName();
+			string parameterName = (param->GetVariableType().IsConstant() ? "const " : "") + param->GetVariableType().GetName();
 
 			if (parameterName.find(',') != parameterName.npos)
 			{
@@ -870,14 +865,29 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 	return res;
 }
 
-string CodeToolApplication::GetFieldAttributes(SyntaxClass* cls, SyntaxVariable* x, SyntaxComment* synComment)
+bool CodeToolApplication::IsIgnoreComment(SyntaxComment* synComment)
+{
+	if (synComment) {
+		auto fnd = synComment->GetData().find("@IGNORE");
+		if (fnd != string::npos)
+		{
+			auto nextSymbol = synComment->GetData()[fnd + strlen("@IGNORE")];
+			if (nextSymbol == ' ' || nextSymbol == '\t' || nextSymbol == '\n' || nextSymbol == '\0')
+				return true;
+		}
+	}
+
+	return false;
+}
+
+string CodeToolApplication::GetAttributes(SyntaxClass* cls, int line, SyntaxComment* synComment)
 {
 	string attributes;
 
 	SyntaxAttributes* synAttributes = nullptr;
 	for (auto attr : cls->GetAttributes())
 	{
-		if (attr->GetLine() == x->GetLine() - 1)
+		if (attr->GetLine() == line - 1)
 		{
 			synAttributes = attr;
 			break;
@@ -925,7 +935,7 @@ string CodeToolApplication::GetFieldAttributes(SyntaxClass* cls, SyntaxVariable*
 				}
 			}
 		}
-	}		
+	}
 
 	return attributes;
 }
@@ -1045,7 +1055,7 @@ string CodeToolApplication::GetClassNormalizedTemplates(const string& name, cons
 	return fullName;
 }
 
-void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword, 
+void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const char* endword,
 									  bool allowMultiline /*= true*/)
 {
 	auto isSkipingChar = [](char x) { return x == '\n' || x == '\r' || x == '\t' || x == '\0' || x == ' '; };
@@ -1084,7 +1094,7 @@ void CodeToolApplication::RemoveMetas(string& data, const char* keyword, const c
 
 bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, SyntaxSection* owner) const
 {
-	static vector<string> ignoringNames ={ "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
+	static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
 
 	return !StartsWith(owner->GetName(), function->GetName()) &&
 		!StartsWith(function->GetName(), string("~") + owner->GetName()) &&

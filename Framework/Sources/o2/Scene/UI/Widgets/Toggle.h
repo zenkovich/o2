@@ -180,43 +180,43 @@ CLASS_BASES_META(o2::Toggle)
 END_META;
 CLASS_FIELDS_META(o2::Toggle)
 {
-	FIELD().NAME(value).PUBLIC();
-	FIELD().NAME(caption).PUBLIC();
-	FIELD().NAME(toggleGroup).PUBLIC();
-	FIELD().NAME(onClick).PUBLIC();
-	FIELD().NAME(onToggle).PUBLIC();
-	FIELD().NAME(onToggleByUser).PUBLIC();
-	FIELD().NAME(shortcut).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mValue).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mValueUnknown).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaptionText).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mBackLayer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mToggleGroup).PROTECTED();
+	FIELD().PUBLIC().NAME(value);
+	FIELD().PUBLIC().NAME(caption);
+	FIELD().PUBLIC().NAME(toggleGroup);
+	FIELD().PUBLIC().NAME(onClick);
+	FIELD().PUBLIC().NAME(onToggle);
+	FIELD().PUBLIC().NAME(onToggleByUser);
+	FIELD().PUBLIC().NAME(shortcut);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mValue);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mValueUnknown);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBackLayer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mToggleGroup);
 }
 END_META;
 CLASS_METHODS_META(o2::Toggle)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(void, SetValue, bool);
-	PUBLIC_FUNCTION(void, SetValueUnknown);
-	PUBLIC_FUNCTION(bool, IsValueUnknown);
-	PUBLIC_FUNCTION(bool, GetValue);
-	PUBLIC_FUNCTION(void, SetToggleGroup, ToggleGroup*);
-	PUBLIC_FUNCTION(ToggleGroup*, GetToggleGroup);
-	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
-	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueUnknown);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValueUnknown);
+	FUNCTION().PUBLIC().SIGNATURE(bool, GetValue);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetToggleGroup, ToggleGroup*);
+	FUNCTION().PUBLIC().SIGNATURE(ToggleGroup*, GetToggleGroup);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;

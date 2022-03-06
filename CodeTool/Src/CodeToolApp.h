@@ -152,8 +152,11 @@ protected:
 	// Returns class reflection meta
 	string GetClassMeta(SyntaxClass* cls);
 
+	// Returns is comment ignoring
+	bool IsIgnoreComment(SyntaxComment* synComment);
+
 	// Returns class field attributes
-	string GetFieldAttributes(SyntaxClass* cls, SyntaxVariable * x, SyntaxComment* synComment);
+	string GetAttributes(SyntaxClass* cls, int line, SyntaxComment* synComment);
 
 	// Return enum reflection meta
 	string GetEnumMeta(SyntaxEnum* enm);

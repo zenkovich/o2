@@ -57,17 +57,17 @@ CLASS_BASES_META(Editor::LayerProperty)
 END_META;
 CLASS_FIELDS_META(Editor::LayerProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDropDown).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mUpdatingValue).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDropDown);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mUpdatingValue);
 }
 END_META;
 CLASS_METHODS_META(Editor::LayerProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, UpdateLayersList);
-	PROTECTED_FUNCTION(void, SelectLayer, const WString&);
-	PROTECTED_FUNCTION(bool, IsAlwaysRefresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersList);
+	FUNCTION().PROTECTED().SIGNATURE(void, SelectLayer, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsAlwaysRefresh);
 }
 END_META;

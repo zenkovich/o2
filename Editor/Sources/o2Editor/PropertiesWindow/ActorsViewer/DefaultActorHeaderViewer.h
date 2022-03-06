@@ -86,29 +86,29 @@ CLASS_BASES_META(Editor::DefaultActorHeaderViewer)
 END_META;
 CLASS_FIELDS_META(Editor::DefaultActorHeaderViewer)
 {
-	FIELD().NAME(mActors).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mDataView).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEnableProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLockProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTagsProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayerProperty).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn).PUBLIC();
+	FIELD().PUBLIC().NAME(mActors);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mDataView);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mEnableProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mNameProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLockProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mTagsProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mLayerProperty);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeApplyBtn);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeRevertBtn);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(mPrototypeBreakBtn);
 }
 END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(Widget*, GetWidget);
-	PUBLIC_FUNCTION(void, Refresh);
-	PROTECTED_FUNCTION(void, OnApplyPrototypePressed);
-	PROTECTED_FUNCTION(void, OnRevertPrototypePressed);
-	PROTECTED_FUNCTION(void, OnBreakPrototypePressed);
-	PROTECTED_FUNCTION(Vector<Actor*>, GetRootApplyActors);
-	PROTECTED_FUNCTION(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnApplyPrototypePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRevertPrototypePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnBreakPrototypePressed);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<Actor*>, GetRootApplyActors);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

@@ -113,22 +113,22 @@ CLASS_BASES_META(o2::VectorFontAsset)
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAsset)
 {
-	FIELD().NAME(meta).PUBLIC();
+	FIELD().PUBLIC().NAME(meta);
 }
 END_META;
 CLASS_METHODS_META(o2::VectorFontAsset)
 {
 
-	PUBLIC_FUNCTION(Meta*, GetMeta);
-	PUBLIC_FUNCTION(const Vector<VectorFont::Effect*>&, GetEffects);
-	PUBLIC_FUNCTION(void, AddEffect, VectorFont::Effect*);
-	PUBLIC_FUNCTION(void, RemoveEffect, VectorFont::Effect*);
-	PUBLIC_FUNCTION(void, RemoveAllEffects);
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
-	PROTECTED_FUNCTION(void, UpdateFontEffects);
+	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<VectorFont::Effect*>&, GetEffects);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveEffect, VectorFont::Effect*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllEffects);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateFontEffects);
 }
 END_META;
 
@@ -139,14 +139,14 @@ CLASS_BASES_META(o2::VectorFontAsset::Meta)
 END_META;
 CLASS_FIELDS_META(o2::VectorFontAsset::Meta)
 {
-	FIELD().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(UpdateFontEffects).SERIALIZABLE_ATTRIBUTE().NAME(mEffects).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAsset).PROTECTED();
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().EXPANDED_BY_DEFAULT_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(UpdateFontEffects).SERIALIZABLE_ATTRIBUTE().NAME(mEffects);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAsset);
 }
 END_META;
 CLASS_METHODS_META(o2::VectorFontAsset::Meta)
 {
 
-	PUBLIC_FUNCTION(bool, IsEqual, AssetMeta*);
-	PROTECTED_FUNCTION(void, UpdateFontEffects);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, AssetMeta*);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateFontEffects);
 }
 END_META;

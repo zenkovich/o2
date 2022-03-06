@@ -51,8 +51,8 @@ namespace o2
 		struct BaseType
 		{
 			const Type* type;
-			void*(*dynamicCastUpFunc)(void*);
-			void*(*dynamicCastDownFunc)(void*);
+			void* (*dynamicCastUpFunc)(void*);
+			void* (*dynamicCastDownFunc)(void*);
 
 			bool operator==(const BaseType& other) const { return type == other.type; }
 		};
@@ -218,7 +218,7 @@ namespace o2
 	{
 	public:
 		// Constructor
-		ObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*), ITypeSerializer* serializer);
+		ObjectType(const String& name, int size, void* (*castFromFunc)(void*), void* (*castToFunc)(void*), ITypeSerializer* serializer);
 
 		// Returns type usage
 		Usage GetUsage() const override;
@@ -233,8 +233,8 @@ namespace o2
 		void* GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const override;
 
 	protected:
-		void*(*mCastFromFunc)(void*); // Dynamic cast function from IObject
-		void*(*mCastToFunc)(void*); // Dynamic cast function from IObject
+		void* (*mCastFromFunc)(void*); // Dynamic cast function from IObject
+		void* (*mCastToFunc)(void*); // Dynamic cast function from IObject
 	};
 
 	// -----------------------
@@ -245,7 +245,7 @@ namespace o2
 	{
 	public:
 		// Default constructor
-		TObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*));
+		TObjectType(const String& name, int size, void* (*castFromFunc)(void*), void* (*castToFunc)(void*));
 
 		// Creates sample copy and returns him
 		void* CreateSample() const override;
@@ -411,8 +411,8 @@ namespace o2
 
 	protected:
 		const Type* mElementType;
-		FieldInfo*  mElementFieldInfo;
-		FieldInfo*  mCountFieldInfo;
+		FieldInfo* mElementFieldInfo;
+		FieldInfo* mCountFieldInfo;
 
 		template<typename _element_type>
 		friend struct VectorCountFieldSerializer;
@@ -488,8 +488,8 @@ namespace o2
 		const Type* mValueType;
 
 		Function<int(void*)>        mGetDictionaryObjectSizeFunc;
-		Function<void*(void*, int)> mGetObjectDictionaryKeyPtrFunc;
-		Function<void*(void*, int)> mGetObjectDictionaryValuePtrFunc;
+		Function<void* (void*, int)> mGetObjectDictionaryKeyPtrFunc;
+		Function<void* (void*, int)> mGetObjectDictionaryValuePtrFunc;
 	};
 
 	template<typename _key_type, typename _value_type>
@@ -512,7 +512,7 @@ namespace o2
 	// -------------------------------------------
 	// Accessor<_return_type*, const String&> type
 	// -------------------------------------------
-	class StringPointerAccessorType : public Type
+	class StringPointerAccessorType: public Type
 	{
 	public:
 		// Default constructor
@@ -639,28 +639,109 @@ namespace o2
 
 		friend class Reflection;
 	};
+
+	// ---------------------------------------------------------------------
+	// Base type processor class. You can use it as base class or as example
+	// ---------------------------------------------------------------------
+	class BaseTypeProcessor
+	{
+	public:
+		// ----------------------------------------------------------
+		// Field processor. Use it for meta-program field definitions
+		// ----------------------------------------------------------
+		struct FieldProcessor
+		{
+			template<typename _attribute_type, typename ... _args>
+			FieldProcessor& AddAttribute(_args ... args) { return *this; }
+
+			template<typename _type>
+			FieldProcessor& SetDefaultValue(const _type& value) { return *this; }
+
+			FieldProcessor& SetProtectSection(ProtectSection section) { return *this; }
+
+			template<typename _object_type, typename _field_type>
+			void FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
+							 _field_type& field) {}
+		};
+
+		// ----------------------------------------------------------------
+		// Function processor. Use it for meta-program function definitions
+		// ----------------------------------------------------------------
+		struct FunctionProcessor
+		{
+			template<typename _attribute_type, typename ... _args>
+			FunctionProcessor& AddAttribute(_args ... args) { return *this; }
+
+			FunctionProcessor& SetProtectSection(ProtectSection section) { return *this; }
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...)) {}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...) const) {}
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void SignatureStatic(_object_type* object, Type* type, const char* name,
+								 _res_type(*pointer)(_args ...)) {}
+		};
+
+		template<typename _object_type>
+		void Start(_object_type* object, Type* type) {}
+
+		template<typename _object_type>
+		void StartBases(_object_type* object, Type* type) {}
+
+		template<typename _object_type, typename _base_type>
+		void BaseType(_object_type* object, Type* type, const char* name)
+		{
+			typedef typename std::conditional<std::is_base_of<IObject, _base_type>::value, _base_type, Type::Dummy>::type _base_under;
+
+			if (std::is_same<_base_under, Type::Dummy>::value)
+				return;
+		}
+
+		template<typename _object_type>
+		void StartFields(_object_type* object, Type* type) {}
+
+		FieldProcessor StartField() { return FieldProcessor(); }
+
+		template<typename _object_type>
+		void StartMethods(_object_type* object, Type* type) {}
+
+		FunctionProcessor StartFunction() { return FunctionProcessor(); }
+	};
 }
 
-typedef void*(*GetValuePointerFuncPtr)(void*);
+typedef void* (*GetValuePointerFuncPtr)(void*);
+
+#if IS_SCRIPTING_SUPPORTED
+#define DECLARE_SCRIPTING(CLASS) o2::ScriptValue CLASS::GetScriptValue() const { return o2::ScriptValue(*this); }
+#else
+#define DECLARE_SCRIPTING(CLASS)
+#endif
 
 #define DECLARE_CLASS(CLASS)                                                                                   \
-    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
+    o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS);                                     \
+    DECLARE_SCRIPTING(CLASS)
 
 #define DECLARE_TEMPLATE_CLASS(CLASS)                                                                          \
-	template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS)
-																											   
+	template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS);                          \
+    template<> DECLARE_SCRIPTING(CLASS)
+
 #define CLASS_BASES_META(CLASS)                                                                                \
     template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor) \
 	{                                                                                                          \
         typedef CLASS thisclass;                                                                               \
 		processor.template StartBases<CLASS>(object, type);														         
-																											   
+
 #define CLASS_FIELDS_META(CLASS)                                                                               \
     template<typename _type_processor> void CLASS::ProcessFields(CLASS* object, _type_processor& processor)    \
 	{                                                                                                          \
         typedef CLASS thisclass;                                                                               \
 		processor.template StartFields<CLASS>(object, type);													             
-																											   
+
 #define CLASS_METHODS_META(CLASS)                                                                              \
     template<typename _type_processor> void CLASS::ProcessMethods(CLASS* object, _type_processor& processor)   \
 	{                                                                                                          \
@@ -718,29 +799,14 @@ typedef void*(*GetValuePointerFuncPtr)(void*);
 
 #define ATTRIBUTES(...)
 
-#define FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::PROTECT_SECTION)
+#define FUNCTION() \
+    processor.StartFunction()
 
-#define PUBLIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Public)
+#define SIGNATURE(RETURN_TYPE, NAME, ...) \
+    template Signature<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME)
 
-#define PRIVATE_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Private)
-
-#define PROTECTED_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template Method<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Protected)
-
-#define STATIC_FUNCTION(PROTECT_SECTION, RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::PROTECT_SECTION)
-
-#define PUBLIC_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Public)
-
-#define PRIVATE_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Private)
-
-#define PROTECTED_STATIC_FUNCTION(RETURN_TYPE, NAME, ...) \
-    processor.template StaticMethod<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME, o2::ProtectSection::Protected)
+#define SIGNATURE_STATIC(RETURN_TYPE, NAME, ...) \
+    template SignatureStatic<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME)
 
 #define END_META }
 
@@ -812,7 +878,7 @@ namespace o2
 	// --------------------------
 
 	template<typename _type>
-	TObjectType<_type>::TObjectType(const String& name, int size, void*(*castFromFunc)(void*), void*(*castToFunc)(void*)):
+	TObjectType<_type>::TObjectType(const String& name, int size, void* (*castFromFunc)(void*), void* (*castToFunc)(void*)):
 		ObjectType(name, size, castFromFunc, castToFunc, mnew TypeSerializer<_type>())
 	{}
 
@@ -870,7 +936,7 @@ namespace o2
 	template<typename _type>
 	void* TPointerType<_type>::CreateSample() const
 	{
-		return mnew void*();
+		return mnew void* ();
 	}
 
 	template<typename _type>
@@ -894,7 +960,7 @@ namespace o2
 
 	template<typename _value_type, typename _property_type>
 	TPropertyType<_value_type, _property_type>::TPropertyType():
-		PropertyType((String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">", sizeof(_value_type), 
+		PropertyType((String)(typeid(_property_type).name()) + (String)"<" + TypeOf(_value_type).GetName() + ">", sizeof(_value_type),
 					 mnew TypeSerializer<_property_type>())
 	{
 		mValueType = &GetTypeOf<_value_type>();
@@ -955,9 +1021,9 @@ namespace o2
 	// --------------------------
 	// TVectorType implementation
 	// --------------------------
-	
+
 	template<typename _element_type>
-	struct VectorCountFieldSerializer : public ITypeSerializer
+	struct VectorCountFieldSerializer: public ITypeSerializer
 	{
 		VectorCountFieldSerializer() { }
 		void Serialize(void* object, DataValue& data) const;
@@ -1021,8 +1087,8 @@ namespace o2
 		mElementType = &GetTypeOf<_element_type>();
 
 		mElementFieldInfo = mnew FieldInfo(this, "element", 0, mElementType, ProtectSection::Private);
-		mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public, 
-										 mnew DefaultValue<int>(0), 
+		mCountFieldInfo = mnew FieldInfo(this, "count", 0, &GetTypeOf<int>(), ProtectSection::Public,
+										 mnew DefaultValue<int>(0),
 										 mnew VectorCountFieldSerializer<_element_type>());
 	}
 
@@ -1146,7 +1212,7 @@ namespace o2
 	template<typename _return_type, typename _accessor_type>
 	TStringPointerAccessorType<_return_type, _accessor_type>::TStringPointerAccessorType():
 		StringPointerAccessorType((String)(typeid(_accessor_type).name()) + (String)"<" + TypeOf(_return_type).GetName() + ">",
-			 sizeof(_accessor_type), mnew TypeSerializer<_accessor_type>())
+								  sizeof(_accessor_type), mnew TypeSerializer<_accessor_type>())
 	{
 		mReturnType = &GetTypeOf<_return_type>();
 	}
@@ -1242,60 +1308,60 @@ namespace o2
 
 	FUNDAMENTAL_META(RectF)
 	{
-		FIELD().NAME(left).PUBLIC();
-		FIELD().NAME(right).PUBLIC();
-		FIELD().NAME(top).PUBLIC();
-		FIELD().NAME(bottom).PUBLIC();
+		FIELD().PUBLIC().NAME(left);
+		FIELD().PUBLIC().NAME(right);
+		FIELD().PUBLIC().NAME(top);
+		FIELD().PUBLIC().NAME(bottom);
 	}
 	END_META;
 
 	FUNDAMENTAL_META(RectI)
 	{
-		FIELD().NAME(left).PUBLIC();
-		FIELD().NAME(right).PUBLIC();
-		FIELD().NAME(top).PUBLIC();
-		FIELD().NAME(bottom).PUBLIC();
+		FIELD().PUBLIC().NAME(left);
+		FIELD().PUBLIC().NAME(right);
+		FIELD().PUBLIC().NAME(top);
+		FIELD().PUBLIC().NAME(bottom);
 	}
 	END_META;
 
 	FUNDAMENTAL_META(BorderF)
 	{
-		FIELD().NAME(left).PUBLIC();
-		FIELD().NAME(right).PUBLIC();
-		FIELD().NAME(top).PUBLIC();
-		FIELD().NAME(bottom).PUBLIC();
+		FIELD().PUBLIC().NAME(left);
+		FIELD().PUBLIC().NAME(right);
+		FIELD().PUBLIC().NAME(top);
+		FIELD().PUBLIC().NAME(bottom);
 	}
 	END_META;
 
 	FUNDAMENTAL_META(BorderI)
 	{
-		FIELD().NAME(left).PUBLIC();
-		FIELD().NAME(right).PUBLIC();
-		FIELD().NAME(top).PUBLIC();
-		FIELD().NAME(bottom).PUBLIC();
+		FIELD().PUBLIC().NAME(left);
+		FIELD().PUBLIC().NAME(right);
+		FIELD().PUBLIC().NAME(top);
+		FIELD().PUBLIC().NAME(bottom);
 	}
 	END_META;
 
 	FUNDAMENTAL_META(Vec2F)
 	{
-		FIELD().NAME(x).PUBLIC();
-		FIELD().NAME(y).PUBLIC();
+		FIELD().PUBLIC().NAME(x);
+		FIELD().PUBLIC().NAME(y);
 	}
 	END_META;
 
 	FUNDAMENTAL_META(Vec2I)
 	{
-		FIELD().NAME(x).PUBLIC();
-		FIELD().NAME(y).PUBLIC();
+		FIELD().PUBLIC().NAME(x);
+		FIELD().PUBLIC().NAME(y);
 	}
 	END_META;
 
 	FUNDAMENTAL_META(Color4)
 	{
-		FIELD().NAME(r).PUBLIC();
-		FIELD().NAME(g).PUBLIC();
-		FIELD().NAME(b).PUBLIC();
-		FIELD().NAME(a).PUBLIC();
+		FIELD().PUBLIC().NAME(r);
+		FIELD().PUBLIC().NAME(g);
+		FIELD().PUBLIC().NAME(b);
+		FIELD().PUBLIC().NAME(a);
 	}
 	END_META;
 

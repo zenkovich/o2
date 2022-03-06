@@ -59,18 +59,18 @@ CLASS_BASES_META(Editor::IWidgetLayerHeaderViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IWidgetLayerHeaderViewer)
 {
-	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerHeaderViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetLayers, const Vector<WidgetLayer*>&);
-	PUBLIC_FUNCTION(Widget*, GetWidget);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;

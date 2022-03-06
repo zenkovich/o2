@@ -166,25 +166,25 @@ CLASS_BASES_META(o2::AnimationTrack<o2::Vec2F>)
 END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(timeCurve).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(spline).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(timeCurve);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(spline);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>)
 {
 
-	PUBLIC_FUNCTION(Vec2F, GetValue, float);
-	PUBLIC_FUNCTION(Vec2F, GetValue, float, bool, int&, int&, int&, int&);
-	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
-	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
-	PUBLIC_FUNCTION(float, GetDuration);
-	PUBLIC_FUNCTION(IPlayer*, CreatePlayer);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<Vec2F>, Parametric, const Vec2F&, const Vec2F&, float, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<Vec2F>, EaseIn, const Vec2F&, const Vec2F&, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<Vec2F>, EaseOut, const Vec2F&, const Vec2F&, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<Vec2F>, EaseInOut, const Vec2F&, const Vec2F&, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<Vec2F>, Linear, const Vec2F&, const Vec2F&, float);
-	PROTECTED_FUNCTION(void, OnCurveChanged);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue, float);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue, float, bool, int&, int&, int&, int&);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
+	FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, Parametric, const Vec2F&, const Vec2F&, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, EaseIn, const Vec2F&, const Vec2F&, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, EaseOut, const Vec2F&, const Vec2F&, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, EaseInOut, const Vec2F&, const Vec2F&, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<Vec2F>, Linear, const Vec2F&, const Vec2F&, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveChanged);
 }
 END_META;
 
@@ -195,38 +195,38 @@ CLASS_BASES_META(o2::AnimationTrack<o2::Vec2F>::Player)
 END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<o2::Vec2F>::Player)
 {
-	FIELD().NAME(value).PUBLIC();
-	FIELD().NAME(target).PUBLIC();
-	FIELD().NAME(targetDelegate).PUBLIC();
-	FIELD().NAME(targetProxy).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PROTECTED();
-	FIELD().NAME(mCurrentValue).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevTimeKey).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevTimeKeyApproximation).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevSplineKey).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevSplineKeyApproximation).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTarget).PROTECTED();
-	FIELD().NAME(mTargetDelegate).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTargetProxy).PROTECTED();
+	FIELD().PUBLIC().NAME(value);
+	FIELD().PUBLIC().NAME(target);
+	FIELD().PUBLIC().NAME(targetDelegate);
+	FIELD().PUBLIC().NAME(targetProxy);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+	FIELD().PROTECTED().NAME(mCurrentValue);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevTimeKey);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevTimeKeyApproximation);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevSplineKey);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevSplineKeyApproximation);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
+	FIELD().PROTECTED().NAME(mTargetDelegate);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)
 {
 
-	PUBLIC_FUNCTION(void, SetTarget, Vec2F*);
-	PUBLIC_FUNCTION(void, SetTarget, Vec2F*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<Vec2F>*);
-	PUBLIC_FUNCTION(void, SetTrack, AnimationTrack<Vec2F>*);
-	PUBLIC_FUNCTION(AnimationTrack<Vec2F>*, GetTrackT);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxyVoid, void*);
-	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
-	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
-	PUBLIC_FUNCTION(Vec2F, GetValue);
-	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, RegMixer, AnimationState*, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<Vec2F>*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<Vec2F>*);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<Vec2F>*, GetTrackT);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue);
+	FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
+	FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
 }
 END_META;

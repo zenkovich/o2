@@ -2,6 +2,10 @@
 
 #include "o2/Utils/Memory/MemoryManager.h"
 
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptValue.h"
+#endif
+
 namespace o2
 {
 	class Type;
@@ -31,6 +35,11 @@ namespace o2
 		// Returns type
 		virtual const Type& GetType() const { return *type; }
 
+#if IS_SCRIPTING_SUPPORTED
+		// Returns script value with wrapped object
+		virtual ScriptValue GetScriptValue() const { return ScriptValue(*this); }
+#endif
+
 	private:
 		static Type* type;
 
@@ -57,6 +66,12 @@ namespace o2
 // -------------------------------
 // Types meta information macroses
 // -------------------------------
+ 
+#if IS_SCRIPTING_SUPPORTED
+#define IOBJECT_SCRIPTING() ScriptValue GetScriptValue() const override
+#else
+#define IOBJECT_SCRIPTING()
+#endif
 
 #define IOBJECT_MAIN(CLASS)  							                                                        \
 private:                                                                                                        \
@@ -82,6 +97,7 @@ public:                                                                         
 	typedef CLASS thisclass;                                                                                    \
 	o2::IObject* Clone() const override {return o2::SafeClone<CLASS>::Clone(*this); }                           \
 	const o2::Type& GetType() const override { return *type; };                                                 \
+	IOBJECT_SCRIPTING();                                                                                        \
                                                                                                                 \
     template<typename _type_processor> static void ProcessType(CLASS* object, _type_processor& processor)       \
 	{                                                                                                           \

@@ -48,15 +48,15 @@ CLASS_BASES_META(Editor::SelectAction)
 END_META;
 CLASS_FIELDS_META(Editor::SelectAction)
 {
-	FIELD().NAME(selectedObjectsIds).PUBLIC();
-	FIELD().NAME(prevSelectedObjectsIds).PUBLIC();
+	FIELD().PUBLIC().NAME(selectedObjectsIds);
+	FIELD().PUBLIC().NAME(prevSelectedObjectsIds);
 }
 END_META;
 CLASS_METHODS_META(Editor::SelectAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

@@ -106,37 +106,37 @@ CLASS_BASES_META(o2::Spoiler)
 END_META;
 CLASS_FIELDS_META(o2::Spoiler)
 {
-	FIELD().NAME(caption).PUBLIC();
-	FIELD().NAME(headHeight).PUBLIC();
-	FIELD().NAME(expanded).PUBLIC();
-	FIELD().NAME(onExpand).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mHeadHeight).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mExpandState).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mExpandCoef).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mTargetHeight).PROTECTED();
+	FIELD().PUBLIC().NAME(caption);
+	FIELD().PUBLIC().NAME(headHeight);
+	FIELD().PUBLIC().NAME(expanded);
+	FIELD().PUBLIC().NAME(onExpand);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(mHeadHeight);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mExpandState);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mExpandCoef);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mTargetHeight);
 }
 END_META;
 CLASS_METHODS_META(o2::Spoiler)
 {
 
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(const WString&, GetCaption);
-	PUBLIC_FUNCTION(void, SetHeadHeight, float);
-	PUBLIC_FUNCTION(float, GetHeadHeight);
-	PUBLIC_FUNCTION(Button*, GetExpandButton);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, RearrangeChilds);
-	PROTECTED_FUNCTION(float, GetMinHeightWithChildren);
-	PROTECTED_FUNCTION(void, UpdateExpanding, float);
-	PROTECTED_FUNCTION(void, CreateExpandAnimation);
-	PROTECTED_FUNCTION(void, UpdateLayoutParametres);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(bool, IsFullyExpanded);
-	PROTECTED_FUNCTION(bool, IsFullyCollapsed);
+	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetHeadHeight, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetHeadHeight);
+	FUNCTION().PUBLIC().SIGNATURE(Button*, GetExpandButton);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, RearrangeChilds);
+	FUNCTION().PROTECTED().SIGNATURE(float, GetMinHeightWithChildren);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateExpanding, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, CreateExpandAnimation);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayoutParametres);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyExpanded);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsFullyCollapsed);
 }
 END_META;

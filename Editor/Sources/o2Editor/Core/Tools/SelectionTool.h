@@ -88,29 +88,29 @@ CLASS_BASES_META(Editor::SelectionTool)
 END_META;
 CLASS_FIELDS_META(Editor::SelectionTool)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite).PROTECTED();
-	FIELD().NAME(mCurrentSelectingObjects).PROTECTED();
-	FIELD().NAME(mBeforeSelectingObjects).PROTECTED();
-	FIELD().NAME(mPressPoint).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mSelectingObjects).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectionSprite);
+	FIELD().PROTECTED().NAME(mCurrentSelectingObjects);
+	FIELD().PROTECTED().NAME(mBeforeSelectingObjects);
+	FIELD().PROTECTED().NAME(mPressPoint);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mSelectingObjects);
 }
 END_META;
 CLASS_METHODS_META(Editor::SelectionTool)
 {
 
-	PROTECTED_FUNCTION(String, GetPanelIcon);
-	PROTECTED_FUNCTION(ShortcutKeys, GetShortcut);
-	PROTECTED_FUNCTION(void, DrawScene);
-	PROTECTED_FUNCTION(void, DrawScreen);
-	PROTECTED_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorStillDown, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(String, GetPanelIcon);
+	FUNCTION().PROTECTED().SIGNATURE(ShortcutKeys, GetShortcut);
+	FUNCTION().PROTECTED().SIGNATURE(void, DrawScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, DrawScreen);
+	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnObjectsSelectionChanged, Vector<SceneEditableObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorMoved, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
 }
 END_META;

@@ -57,17 +57,17 @@ CLASS_BASES_META(o2::DataAsset)
 END_META;
 CLASS_FIELDS_META(o2::DataAsset)
 {
-	FIELD().NAME(data).PUBLIC();
+	FIELD().PUBLIC().NAME(data);
 }
 END_META;
 CLASS_METHODS_META(o2::DataAsset)
 {
 
-	PUBLIC_STATIC_FUNCTION(const char*, GetFileExtensions);
-	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 }
 END_META;

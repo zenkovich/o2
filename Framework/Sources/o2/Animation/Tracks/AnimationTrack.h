@@ -901,48 +901,48 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(o2::AnimationTrack<_type>)
 {
-	FIELD().NAME(keys).PUBLIC();
-	FIELD().DEFAULT_VALUE(false).NAME(mBatchChange).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mChangedKeys).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mKeys).PROTECTED();
+	FIELD().PUBLIC().NAME(keys);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mBatchChange);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChangedKeys);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mKeys);
 }
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimationTrack<_type>)
 {
 
-	PUBLIC_FUNCTION(_type, GetValue, float);
-	PUBLIC_FUNCTION(_type, GetValue, float, bool, int&, int&);
-	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
-	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
-	PUBLIC_FUNCTION(float, GetDuration);
-	PUBLIC_FUNCTION(IPlayer*, CreatePlayer);
-	PUBLIC_FUNCTION(void, AddKeys, Vector<Key>, float);
-	PUBLIC_FUNCTION(int, AddKey, const Key&);
-	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
-	PUBLIC_FUNCTION(int, AddSmoothKey, const Key&, float);
-	PUBLIC_FUNCTION(int, AddKey, float, const _type&, float, float, float, float);
-	PUBLIC_FUNCTION(int, AddKey, float, const _type&, float);
-	PUBLIC_FUNCTION(bool, RemoveKey, float);
-	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
-	PUBLIC_FUNCTION(void, RemoveAllKeys);
-	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
-	PUBLIC_FUNCTION(void, SetKey, int, const Key&);
-	PUBLIC_FUNCTION(Key, GetKey, float);
-	PUBLIC_FUNCTION(Key, GetKeyAt, int);
-	PUBLIC_FUNCTION(Key, FindKey, UInt64);
-	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, SmoothKey, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<_type>, Parametric, const _type&, const _type&, float, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<_type>, EaseIn, const _type&, const _type&, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<_type>, EaseOut, const _type&, const _type&, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<_type>, EaseInOut, const _type&, const _type&, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<_type>, Linear, const _type&, const _type&, float);
-	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
-	PROTECTED_FUNCTION(void, UpdateApproximation);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(_type, GetValue, float);
+	FUNCTION().PUBLIC().SIGNATURE(_type, GetValue, float, bool, int&, int&);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
+	FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddKeys, Vector<Key>, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddSmoothKey, const Key&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, float, const _type&, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, float, const _type&, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKeyAt, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllKeys);
+	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Key>&, GetKeys);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKey, int, const Key&);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKeyAt, int);
+	FUNCTION().PUBLIC().SIGNATURE(Key, FindKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(int, FindKeyIdx, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<_type>, Parametric, const _type&, const _type&, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<_type>, EaseIn, const _type&, const _type&, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<_type>, EaseOut, const _type&, const _type&, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<_type>, EaseInOut, const _type&, const _type&, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<_type>, Linear, const _type&, const _type&, float);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<Key>, GetKeysNonContant);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateApproximation);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
@@ -955,38 +955,38 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(o2::AnimationTrack<_type>::Player)
 {
-	FIELD().NAME(value).PUBLIC();
-	FIELD().NAME(target).PUBLIC();
-	FIELD().NAME(targetDelegate).PUBLIC();
-	FIELD().NAME(targetProxy).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PROTECTED();
-	FIELD().NAME(mCurrentValue).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevKey).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTarget).PROTECTED();
-	FIELD().NAME(mTargetDelegate).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTargetProxy).PROTECTED();
+	FIELD().PUBLIC().NAME(value);
+	FIELD().PUBLIC().NAME(target);
+	FIELD().PUBLIC().NAME(targetDelegate);
+	FIELD().PUBLIC().NAME(targetProxy);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+	FIELD().PROTECTED().NAME(mCurrentValue);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKey);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
+	FIELD().PROTECTED().NAME(mTargetDelegate);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
 }
 END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimationTrack<_type>::Player)
 {
 
-	PUBLIC_FUNCTION(void, SetTarget, _type*);
-	PUBLIC_FUNCTION(void, SetTarget, _type*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<_type>*);
-	PUBLIC_FUNCTION(void, SetTrack, AnimationTrack<_type>*);
-	PUBLIC_FUNCTION(AnimationTrack<_type>*, GetTrackT);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxyVoid, void*);
-	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
-	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
-	PUBLIC_FUNCTION(_type, GetValue);
-	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, RegMixer, AnimationState*, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, _type*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, _type*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<_type>*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<_type>*);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<_type>*, GetTrackT);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+	FUNCTION().PUBLIC().SIGNATURE(_type, GetValue);
+	FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
+	FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
 }
 END_META;
 
@@ -999,14 +999,14 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_FIELDS_META(o2::AnimationTrack<_type>::Key)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(uid).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(position).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(_type()).NAME(value).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportValue).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportPosition).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportValue).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportPosition).PUBLIC();
-	FIELD().NAME(mCurveApproxValues).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(uid);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(position);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(_type()).NAME(value);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportValue);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportPosition);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportValue);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportPosition);
+	FIELD().PUBLIC().NAME(mCurveApproxValues);
 }
 END_META;
 META_TEMPLATES(typename _type)

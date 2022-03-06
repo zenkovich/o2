@@ -57,15 +57,35 @@ namespace o2
 
 		propertyDescriptor.is_get_defined = true;
 		propertyDescriptor.getter = jerry_create_external_function(DescriptorGetter);
-		auto getterWrapperContainer = new PointerGetterWrapperContainer<_type>();
-		getterWrapperContainer->dataPtr = &value;
-		jerry_set_object_native_pointer(propertyDescriptor.getter, getterWrapperContainer, &GetDataDeleter().info);
+
+		if constexpr (IsProperty<_type>::value)
+		{
+			auto getterWrapperContainer = new PropertyGetterWrapperContainer<_type>();
+			getterWrapperContainer->propertyPtr = &value;
+			jerry_set_object_native_pointer(propertyDescriptor.getter, getterWrapperContainer, &GetDataDeleter().info);
+		}
+		else
+		{
+			auto getterWrapperContainer = new PointerGetterWrapperContainer<_type>();
+			getterWrapperContainer->dataPtr = &value;
+			jerry_set_object_native_pointer(propertyDescriptor.getter, getterWrapperContainer, &GetDataDeleter().info);
+		}
 
 		propertyDescriptor.is_set_defined = true;
 		propertyDescriptor.setter = jerry_create_external_function(DescriptorSetter);
-		auto setterWrapperContainer = new PointerSetterWrapperContainer<_type>();
-		setterWrapperContainer->dataPtr = &value;
-		jerry_set_object_native_pointer(propertyDescriptor.setter, setterWrapperContainer, &GetDataDeleter().info);
+
+		if constexpr (IsProperty<_type>::value)
+		{
+			auto setterWrapperContainer = new PropertySetterWrapperContainer<_type>();
+			setterWrapperContainer->propertyPtr = &value;
+			jerry_set_object_native_pointer(propertyDescriptor.setter, setterWrapperContainer, &GetDataDeleter().info);
+		}
+		else
+		{
+			auto setterWrapperContainer = new PointerSetterWrapperContainer<_type>();
+			setterWrapperContainer->dataPtr = &value;
+			jerry_set_object_native_pointer(propertyDescriptor.setter, setterWrapperContainer, &GetDataDeleter().info);
+		}
 
 		jerry_value_t newPropertyValue = jerry_define_own_property(jvalue, name.jvalue, &propertyDescriptor);
 		jerry_release_value(newPropertyValue);
@@ -118,7 +138,8 @@ namespace o2
 	{
 		Vector<ScriptValue> argsValues;
 
-		PackArgs(argsValues, args ...);
+		if constexpr (sizeof...(_args) > 0)
+			PackArgs(argsValues, args ...);
 
 		if constexpr (std::is_same<_res_type, void>::value)
 			InvokeRaw(thisValue, argsValues);
@@ -129,18 +150,34 @@ namespace o2
 	template<typename _invocable_type, typename _res_type, typename ... _args>
 	jerry_value_t ScriptValueBase::FunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount)
 	{
-		std::tuple<_args ...> argst;
-		UnpackArgs(argst, args, argsCount);
-
-		if constexpr (std::is_same<_res_type, void>::value)
+		if constexpr (sizeof...(_args) > 0)
 		{
-			std::apply(data, argst);
-			return jerry_create_undefined();
+			std::tuple<typename std::remove_const<typename std::remove_reference<_args>::type>::type...> argst;
+			UnpackArgs(argst, args, argsCount);
+
+			if constexpr (std::is_same<_res_type, void>::value)
+			{
+				std::apply(data, argst);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res(std::apply(data, argst));
+				return jerry_acquire_value(res.jvalue);
+			}
 		}
 		else
 		{
-			ScriptValue res(std::apply(data, argst));
-			return jerry_acquire_value(res.jvalue);
+			if constexpr (std::is_same<_res_type, void>::value)
+			{
+				data();
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res(data());
+				return jerry_acquire_value(res.jvalue);
+			}
 		}
 	}
 
@@ -158,6 +195,22 @@ namespace o2
 		ScriptValue tmp;
 		tmp.AcquireValue(value);
 		*dataPtr = tmp.GetValue<_type>();
+	}
+
+	template<typename _property_type>
+	jerry_value_t ScriptValueBase::PropertyGetterWrapperContainer<_property_type>::Get()
+	{
+		ScriptValue tmp;
+		tmp.SetValue<ExtractPropertyValueType<_property_type>::type>(propertyPtr->Get());
+		return jerry_acquire_value(tmp.jvalue);
+	}
+
+	template<typename _property_type>
+	void ScriptValueBase::PropertySetterWrapperContainer<_property_type>::Set(jerry_value_t value)
+	{
+		ScriptValue tmp;
+		tmp.AcquireValue(value);
+		propertyPtr->Set(tmp.GetValue<ExtractPropertyValueType<_property_type>::type>());
 	}
 
 	template<typename _type>

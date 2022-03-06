@@ -176,8 +176,8 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartMethods<_thisType>(object, type);
 
-			PUBLIC_FUNCTION(const Type&, GetActorType);
-			PUBLIC_STATIC_FUNCTION(const Type*, GetActorTypeStatic);
+			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
+			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
 		}
 
 	protected:
@@ -196,24 +196,24 @@ CLASS_BASES_META(o2::ActorRef)
 END_META;
 CLASS_FIELDS_META(o2::ActorRef)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mActor).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mWasDeleted).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mActor);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mWasDeleted);
 }
 END_META;
 CLASS_METHODS_META(o2::ActorRef)
 {
 
-	PUBLIC_FUNCTION(Actor*, Get);
-	PUBLIC_FUNCTION(const Actor*, Get);
-	PUBLIC_FUNCTION(void, Destroy);
-	PUBLIC_FUNCTION(bool, IsValid);
-	PUBLIC_FUNCTION(bool, IsWasDeleted);
-	PUBLIC_FUNCTION(const Type&, GetActorType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetActorTypeStatic);
-	PUBLIC_STATIC_FUNCTION(bool, EqualsDelta, const ActorRef&, const ActorRef&);
-	PROTECTED_FUNCTION(void, UpdateSpecActor);
-	PROTECTED_FUNCTION(void, CopyWithoutRemap, const ActorRef&);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(Actor*, Get);
+	FUNCTION().PUBLIC().SIGNATURE(const Actor*, Get);
+	FUNCTION().PUBLIC().SIGNATURE(void, Destroy);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsWasDeleted);
+	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const ActorRef&, const ActorRef&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateSpecActor);
+	FUNCTION().PROTECTED().SIGNATURE(void, CopyWithoutRemap, const ActorRef&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;

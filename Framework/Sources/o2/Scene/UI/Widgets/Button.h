@@ -113,36 +113,36 @@ CLASS_BASES_META(o2::Button)
 END_META;
 CLASS_FIELDS_META(o2::Button)
 {
-	FIELD().NAME(caption).PUBLIC();
-	FIELD().NAME(icon).PUBLIC();
-	FIELD().NAME(onClick).PUBLIC();
-	FIELD().NAME(isPointInside).PUBLIC();
-	FIELD().NAME(shortcut).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaptionText).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mIconSprite).PROTECTED();
+	FIELD().PUBLIC().NAME(caption);
+	FIELD().PUBLIC().NAME(icon);
+	FIELD().PUBLIC().NAME(onClick);
+	FIELD().PUBLIC().NAME(isPointInside);
+	FIELD().PUBLIC().NAME(shortcut);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mIconSprite);
 }
 END_META;
 CLASS_METHODS_META(o2::Button)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(void, SetIcon, Sprite*);
-	PUBLIC_FUNCTION(Sprite*, GetIcon);
-	PUBLIC_FUNCTION(bool, IsFocusable);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuGroup);
-	PROTECTED_FUNCTION(void, OnCursorPressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorPressBreak, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnKeyPressed, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, OnLayerAdded, WidgetLayer*);
-	PROTECTED_FUNCTION(void, OnEnableInHierarchyChanged);
-	PROTECTED_FUNCTION(void, OnBecomeInteractable);
-	PROTECTED_FUNCTION(void, OnBecomeNotInteractable);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetIcon, Sprite*);
+	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetIcon);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyPressed, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerAdded, WidgetLayer*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnableInHierarchyChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnBecomeInteractable);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnBecomeNotInteractable);
 }
 END_META;

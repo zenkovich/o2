@@ -4,6 +4,7 @@
 #include "o2/Render/Mesh.h"
 #include "o2/Render/RectDrawable.h"
 #include "o2/Render/TextureRef.h"
+#include "o2/Utils/Editor/Attributes/ScriptableAttribute.h"
 #include "o2/Utils/Math/Border.h"
 
 namespace o2
@@ -17,18 +18,18 @@ namespace o2
 	{
 	public:
 		PROPERTIES(Sprite);
-		PROPERTY(TextureRef, texture, SetTexture, GetTexture);                         // Texture property
-		PROPERTY(RectI, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);         // Texture source rectangle property
-		PROPERTY(ImageAssetRef, image, SetImageAsset, GetImageAsset);                  // Sets image asset
-		PROPERTY(String, imageName, LoadFromImage, GetImageName);                      // Sets image asset path
-		PROPERTY(Color4, leftTopColor, SetLeftTopColor, GetLeftTopCorner);	           // Color of left top corner property
-		PROPERTY(Color4, rightTopColor, SetRightTopColor, GetRightTopCorner);          // Color of right top corner property
-		PROPERTY(Color4, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);    // Color of left bottom corner property
-		PROPERTY(Color4, rightBottomColor, SetRightBottomColor, GetRightBottomCorner); // Color of right bottom corner property
-		PROPERTY(SpriteMode, mode, SetMode, GetMode);                                  // Sprite drawing mode property
-		PROPERTY(float, fill, SetFill, GetFill);                                       // Sprite fill property
-		PROPERTY(float, tileScale, SetTileScale, GetTileScale);                        // Sprite tile scale property, 1.0f is default
-		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);                // Slice border property
+		PROPERTY(TextureRef, texture, SetTexture, GetTexture);                         // Texture property @SCRIPTABLE
+		PROPERTY(RectI, textureSrcRect, SetTextureSrcRect, GetTextureSrcRect);         // Texture source rectangle property @SCRIPTABLE
+		PROPERTY(ImageAssetRef, image, SetImageAsset, GetImageAsset);                  // Sets image asset @SCRIPTABLE
+		PROPERTY(String, imageName, LoadFromImage, GetImageName);                      // Sets image asset path @SCRIPTABLE
+		PROPERTY(Color4, leftTopColor, SetLeftTopColor, GetLeftTopCorner);	           // Color of left top corner property @SCRIPTABLE
+		PROPERTY(Color4, rightTopColor, SetRightTopColor, GetRightTopCorner);          // Color of right top corner property @SCRIPTABLE
+		PROPERTY(Color4, leftBottomColor, SetLeftBottomColor, GetLeftBottomCorner);    // Color of left bottom corner property @SCRIPTABLE
+		PROPERTY(Color4, rightBottomColor, SetRightBottomColor, GetRightBottomCorner); // Color of right bottom corner property @SCRIPTABLE
+		PROPERTY(SpriteMode, mode, SetMode, GetMode);                                  // Sprite drawing mode property @SCRIPTABLE
+		PROPERTY(float, fill, SetFill, GetFill);                                       // Sprite fill property @SCRIPTABLE
+		PROPERTY(float, tileScale, SetTileScale, GetTileScale);                        // Sprite tile scale property, 1.0f is default @SCRIPTABLE
+		PROPERTY(BorderI, sliceBorder, SetSliceBorder, GetSliceBorder);                // Slice border property @SCRIPTABLE
 		SETTER(Bitmap*, bitmap, LoadFromBitmap);                                       // Sets image from bitmap
 
 	public:
@@ -83,7 +84,7 @@ namespace o2
 		// Loads sprite from bitmap
 		void LoadFromBitmap(Bitmap* bitmap, bool setSizeByImage = true);
 
-		// Draws sprite 
+		// Draws sprite @SCRIPTABLE
 		void Draw() override;
 
 		// Sets using texture
@@ -131,10 +132,10 @@ namespace o2
 		// Returns left bottom corner color
 		Color4 GetLeftBottomCorner() const;
 
-		// Sets sprite fill value (0 ... 1)
+		// Sets sprite fill value (0 ... 1) @SCRIPTABLE
 		void SetFill(float fill);
 
-		// Returns sprite fill
+		// Returns sprite fill @SCRIPTABLE
 		float GetFill() const;
 
 		// Sets tile scale. 1.0f is default
@@ -256,85 +257,85 @@ CLASS_BASES_META(o2::Sprite)
 END_META;
 CLASS_FIELDS_META(o2::Sprite)
 {
-	FIELD().NAME(texture).PUBLIC();
-	FIELD().NAME(textureSrcRect).PUBLIC();
-	FIELD().NAME(image).PUBLIC();
-	FIELD().NAME(imageName).PUBLIC();
-	FIELD().NAME(leftTopColor).PUBLIC();
-	FIELD().NAME(rightTopColor).PUBLIC();
-	FIELD().NAME(leftBottomColor).PUBLIC();
-	FIELD().NAME(rightBottomColor).PUBLIC();
-	FIELD().NAME(mode).PUBLIC();
-	FIELD().NAME(fill).PUBLIC();
-	FIELD().NAME(tileScale).PUBLIC();
-	FIELD().NAME(sliceBorder).PUBLIC();
-	FIELD().NAME(bitmap).PUBLIC();
-	FIELD().NAME(mTextureSrcRect).PROTECTED();
-	FIELD().NAME(mCornersColors).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(SpriteMode::Default).NAME(mMode).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mSlices).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mFill).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTileScale).PROTECTED();
-	FIELD().NAME(mMesh).PROTECTED();
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(texture);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(textureSrcRect);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(image);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(imageName);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftTopColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightTopColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftBottomColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightBottomColor);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(mode);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(fill);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(tileScale);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(sliceBorder);
+	FIELD().PUBLIC().NAME(bitmap);
+	FIELD().PROTECTED().NAME(mTextureSrcRect);
+	FIELD().PROTECTED().NAME(mCornersColors);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mImageAsset);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(SpriteMode::Default).NAME(mMode);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mSlices);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mFill);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(mTileScale);
+	FIELD().PROTECTED().NAME(mMesh);
 }
 END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
-	PUBLIC_FUNCTION(void, LoadFromImage, const ImageAssetRef&, bool);
-	PUBLIC_FUNCTION(void, LoadFromImage, const String&, bool);
-	PUBLIC_FUNCTION(void, LoadFromImage, UID, bool);
-	PUBLIC_FUNCTION(void, LoadMonoColor, const Color4&);
-	PUBLIC_FUNCTION(void, LoadFromBitmap, Bitmap*, bool);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetTexture, TextureRef);
-	PUBLIC_FUNCTION(TextureRef, GetTexture);
-	PUBLIC_FUNCTION(void, SetTextureSrcRect, const RectI&);
-	PUBLIC_FUNCTION(RectI, GetTextureSrcRect);
-	PUBLIC_FUNCTION(Vec2I, GetOriginalSize);
-	PUBLIC_FUNCTION(void, SetCornerColor, Corner, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetCornerColor, Corner);
-	PUBLIC_FUNCTION(void, SetLeftTopColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetLeftTopCorner);
-	PUBLIC_FUNCTION(void, SetRightTopColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetRightTopCorner);
-	PUBLIC_FUNCTION(void, SetRightBottomColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetRightBottomCorner);
-	PUBLIC_FUNCTION(void, SetLeftBottomColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetLeftBottomCorner);
-	PUBLIC_FUNCTION(void, SetFill, float);
-	PUBLIC_FUNCTION(float, GetFill);
-	PUBLIC_FUNCTION(void, SetTileScale, float);
-	PUBLIC_FUNCTION(float, GetTileScale);
-	PUBLIC_FUNCTION(void, SetMode, SpriteMode);
-	PUBLIC_FUNCTION(SpriteMode, GetMode);
-	PUBLIC_FUNCTION(void, SetSliceBorder, const BorderI&);
-	PUBLIC_FUNCTION(BorderI, GetSliceBorder);
-	PUBLIC_FUNCTION(void, SetImageAsset, const ImageAssetRef&);
-	PUBLIC_FUNCTION(ImageAssetRef, GetImageAsset);
-	PUBLIC_FUNCTION(String, GetImageName);
-	PUBLIC_FUNCTION(UID, GetAtlasAssetId);
-	PUBLIC_FUNCTION(void, NormalizeSize);
-	PUBLIC_FUNCTION(void, NormalizeAspectByWidth);
-	PUBLIC_FUNCTION(void, NormalizeAspectByHeight);
-	PUBLIC_FUNCTION(void, NormalizeAspect);
-	PUBLIC_FUNCTION(void, OnSerialize, DataValue&);
-	PUBLIC_FUNCTION(void, OnDeserialized, const DataValue&);
-	PUBLIC_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, BasisChanged);
-	PROTECTED_FUNCTION(void, ColorChanged);
-	PROTECTED_FUNCTION(void, UpdateMesh);
-	PROTECTED_FUNCTION(void, BuildDefaultMesh);
-	PROTECTED_FUNCTION(void, BuildSlicedMesh);
-	PROTECTED_FUNCTION(void, BuildTiledMesh);
-	PROTECTED_FUNCTION(void, BuildFixedAspectMesh);
-	PROTECTED_FUNCTION(void, BuildFillLeftToRightMesh);
-	PROTECTED_FUNCTION(void, BuildFillRightToLeftMesh);
-	PROTECTED_FUNCTION(void, BuildFillUpToDownMesh);
-	PROTECTED_FUNCTION(void, BuildFillDownToUpMesh);
-	PROTECTED_FUNCTION(void, BuildFill360CWMesh);
-	PROTECTED_FUNCTION(void, BuildFill360CCWMesh);
-	PROTECTED_FUNCTION(void, ReloadImage);
+	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, const ImageAssetRef&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, const String&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, UID, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, LoadMonoColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromBitmap, Bitmap*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, TextureRef);
+	FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetTexture);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTextureSrcRect, const RectI&);
+	FUNCTION().PUBLIC().SIGNATURE(RectI, GetTextureSrcRect);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetOriginalSize);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCornerColor, Corner, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetCornerColor, Corner);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftTopColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetLeftTopCorner);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetRightTopColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetRightTopCorner);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetRightBottomColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetRightBottomCorner);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftBottomColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetLeftBottomCorner);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFill, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetFill);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTileScale, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetTileScale);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetMode, SpriteMode);
+	FUNCTION().PUBLIC().SIGNATURE(SpriteMode, GetMode);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetSliceBorder, const BorderI&);
+	FUNCTION().PUBLIC().SIGNATURE(BorderI, GetSliceBorder);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(ImageAssetRef, GetImageAsset);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetImageName);
+	FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlasAssetId);
+	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeSize);
+	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspectByWidth);
+	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspectByHeight);
+	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspect);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, BasisChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, ColorChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildDefaultMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildSlicedMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildTiledMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFixedAspectMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFillLeftToRightMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFillRightToLeftMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFillUpToDownMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFillDownToUpMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFill360CWMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, BuildFill360CCWMesh);
+	FUNCTION().PROTECTED().SIGNATURE(void, ReloadImage);
 }
 END_META;

@@ -69,21 +69,21 @@ CLASS_BASES_META(Editor::TagsProperty)
 END_META;
 CLASS_FIELDS_META(Editor::TagsProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTagsContext).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mPushingTag).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTagsContext);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPushingTag);
 }
 END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, SetCommonValue, const TagGroup&);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, UpdateContextData, const WString&);
-	PROTECTED_FUNCTION(void, OnEditBoxChanged, const WString&);
-	PROTECTED_FUNCTION(void, OnEditBoxChangeCompleted, const WString&);
-	PROTECTED_FUNCTION(void, SetTags, const WString&);
-	PROTECTED_FUNCTION(void, PushTag, String);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const TagGroup&);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateContextData, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEditBoxChanged, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEditBoxChangeCompleted, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTags, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, PushTag, String);
 }
 END_META;

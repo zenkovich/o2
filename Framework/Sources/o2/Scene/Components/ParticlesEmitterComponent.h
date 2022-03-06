@@ -63,15 +63,15 @@ END_META;
 CLASS_METHODS_META(o2::ParticlesEmitterComponent)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_STATIC_FUNCTION(String, GetName);
-	PUBLIC_STATIC_FUNCTION(String, GetCategory);
-	PUBLIC_STATIC_FUNCTION(String, GetIcon);
-	PROTECTED_FUNCTION(void, OnTransformUpdated);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

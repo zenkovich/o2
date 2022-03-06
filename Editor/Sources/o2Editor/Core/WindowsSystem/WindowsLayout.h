@@ -60,15 +60,15 @@ CLASS_BASES_META(Editor::WindowsLayout)
 END_META;
 CLASS_FIELDS_META(Editor::WindowsLayout)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mainDock).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(windows).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mainDock);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
 }
 END_META;
 CLASS_METHODS_META(Editor::WindowsLayout)
 {
 
-	PROTECTED_FUNCTION(void, RestoreDock, WindowDockPlace*, DockWindowPlace*);
-	PROTECTED_FUNCTION(void, CleanEmptyDocks, DockWindowPlace*);
+	FUNCTION().PROTECTED().SIGNATURE(void, RestoreDock, WindowDockPlace*, DockWindowPlace*);
+	FUNCTION().PROTECTED().SIGNATURE(void, CleanEmptyDocks, DockWindowPlace*);
 }
 END_META;
 
@@ -79,15 +79,15 @@ CLASS_BASES_META(Editor::WindowsLayout::WindowDockPlace)
 END_META;
 CLASS_FIELDS_META(Editor::WindowsLayout::WindowDockPlace)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(anchors).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(windows).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(active).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(childs).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(anchors);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(windows);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(active);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(childs);
 }
 END_META;
 CLASS_METHODS_META(Editor::WindowsLayout::WindowDockPlace)
 {
 
-	PUBLIC_FUNCTION(void, RetrieveLayout, Widget*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RetrieveLayout, Widget*);
 }
 END_META;

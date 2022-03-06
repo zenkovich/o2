@@ -83,30 +83,30 @@ CLASS_BASES_META(o2::AssetsTree)
 END_META;
 CLASS_FIELDS_META(o2::AssetsTree)
 {
-	FIELD().NAME(log).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(assetsPath).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(builtAssetsPath).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(rootAssets).PUBLIC();
-	FIELD().NAME(allAssets).PUBLIC();
-	FIELD().NAME(allAssetsByPath).PUBLIC();
-	FIELD().NAME(allAssetsByUID).PUBLIC();
+	FIELD().PUBLIC().NAME(log);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(assetsPath);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(builtAssetsPath);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rootAssets);
+	FIELD().PUBLIC().NAME(allAssets);
+	FIELD().PUBLIC().NAME(allAssetsByPath);
+	FIELD().PUBLIC().NAME(allAssetsByUID);
 }
 END_META;
 CLASS_METHODS_META(o2::AssetsTree)
 {
 
-	PUBLIC_FUNCTION(void, Build, const String&);
-	PUBLIC_FUNCTION(void, Build, const FolderInfo&);
-	PUBLIC_FUNCTION(void, Rebuild);
-	PUBLIC_FUNCTION(void, SortAssets);
-	PUBLIC_FUNCTION(void, SortAssetsInverse);
-	PUBLIC_FUNCTION(AssetInfo*, Find, const String&);
-	PUBLIC_FUNCTION(AssetInfo*, Find, const UID&);
-	PUBLIC_FUNCTION(AssetInfo*, AddAsset, AssetInfo*);
-	PUBLIC_FUNCTION(void, RemoveAsset, AssetInfo*, bool);
-	PUBLIC_FUNCTION(void, Clear);
-	PROTECTED_FUNCTION(void, LoadFolder, const FolderInfo&, AssetInfo*);
-	PROTECTED_FUNCTION(AssetInfo*, LoadAssetNode, const String&, AssetInfo*, const TimeStamp&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Build, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Build, const FolderInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Rebuild);
+	FUNCTION().PUBLIC().SIGNATURE(void, SortAssets);
+	FUNCTION().PUBLIC().SIGNATURE(void, SortAssetsInverse);
+	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, Find, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, Find, const UID&);
+	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, AddAsset, AssetInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, AssetInfo*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, Clear);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadFolder, const FolderInfo&, AssetInfo*);
+	FUNCTION().PROTECTED().SIGNATURE(AssetInfo*, LoadAssetNode, const String&, AssetInfo*, const TimeStamp&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;

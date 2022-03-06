@@ -82,23 +82,23 @@ CLASS_BASES_META(Editor::IActorPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IActorPropertiesViewer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mEnabled).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mEnabled);
 }
 END_META;
 CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(void, SetTargetActors, const Vector<Actor*>&);
-	PUBLIC_FUNCTION(const Type*, GetActorType);
-	PUBLIC_FUNCTION(Widget*, GetWidget);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(void, SetEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsEnabled);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetActorType);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
+	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }
 END_META;

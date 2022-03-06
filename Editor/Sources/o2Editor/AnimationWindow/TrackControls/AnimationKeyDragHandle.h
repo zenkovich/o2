@@ -52,17 +52,17 @@ CLASS_BASES_META(Editor::AnimationKeyDragHandle)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationKeyDragHandle)
 {
-	FIELD().NAME(trackPath).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(track).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(trackControl).PUBLIC();
-	FIELD().DEFAULT_VALUE(0).NAME(keyUid).PUBLIC();
-	FIELD().DEFAULT_VALUE(false).NAME(isMapping).PUBLIC();
+	FIELD().PUBLIC().NAME(trackPath);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(track);
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(trackControl);
+	FIELD().PUBLIC().DEFAULT_VALUE(0).NAME(keyUid);
+	FIELD().PUBLIC().DEFAULT_VALUE(false).NAME(isMapping);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationKeyDragHandle)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;

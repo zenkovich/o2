@@ -53,9 +53,9 @@ END_META;
 CLASS_METHODS_META(o2::Camera)
 {
 
-	PUBLIC_STATIC_FUNCTION(Camera, Default);
-	PUBLIC_STATIC_FUNCTION(Camera, FixedSize, const Vec2F&);
-	PUBLIC_STATIC_FUNCTION(Camera, FittedSize, const Vec2F&);
-	PUBLIC_STATIC_FUNCTION(Camera, PhysicalCorrect, Units);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, Default);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, FixedSize, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, FittedSize, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, PhysicalCorrect, Units);
 }
 END_META;

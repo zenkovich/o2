@@ -226,45 +226,45 @@ CLASS_BASES_META(o2::AnimationTrack<float>)
 END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<float>)
 {
-	FIELD().NAME(keys).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(curve).PUBLIC();
+	FIELD().PUBLIC().NAME(keys);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(curve);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>)
 {
 
-	PUBLIC_FUNCTION(float, GetValue, float);
-	PUBLIC_FUNCTION(float, GetValue, float, bool, int&, int&);
-	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
-	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
-	PUBLIC_FUNCTION(float, GetDuration);
-	PUBLIC_FUNCTION(IPlayer*, CreatePlayer);
-	PUBLIC_FUNCTION(void, AddKeys, Vector<Vec2F>, float);
-	PUBLIC_FUNCTION(int, AddKey, const Key&);
-	PUBLIC_FUNCTION(int, AddKey, const Key&, float);
-	PUBLIC_FUNCTION(int, AddSmoothKey, const Key&, float);
-	PUBLIC_FUNCTION(int, AddKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, AddKey, float, float, float);
-	PUBLIC_FUNCTION(bool, RemoveKey, float);
-	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
-	PUBLIC_FUNCTION(void, RemoveAllKeys);
-	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
-	PUBLIC_FUNCTION(void, SetKey, int, const Key&);
-	PUBLIC_FUNCTION(Key, GetKey, float);
-	PUBLIC_FUNCTION(Key, GetKeyAt, int);
-	PUBLIC_FUNCTION(Key, FindKey, UInt64);
-	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, SmoothKey, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, Parametric, float, float, float, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseIn, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseOut, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, EaseInOut, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(AnimationTrack<float>, Linear, float, float, float);
-	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
-	PROTECTED_FUNCTION(void, OnCurveChanged);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetValue, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetValue, float, bool, int&, int&);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);
+	FUNCTION().PUBLIC().SIGNATURE(IPlayer*, CreatePlayer);
+	FUNCTION().PUBLIC().SIGNATURE(void, AddKeys, Vector<Vec2F>, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, const Key&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddSmoothKey, const Key&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AddKey, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKeyAt, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllKeys);
+	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Key>&, GetKeys);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKey, int, const Key&);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKeyAt, int);
+	FUNCTION().PUBLIC().SIGNATURE(Key, FindKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(int, FindKeyIdx, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<float>, Parametric, float, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<float>, EaseIn, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<float>, EaseOut, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<float>, EaseInOut, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(AnimationTrack<float>, Linear, float, float, float);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<Key>, GetKeysNonContant);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
@@ -275,36 +275,36 @@ CLASS_BASES_META(o2::AnimationTrack<float>::Player)
 END_META;
 CLASS_FIELDS_META(o2::AnimationTrack<float>::Player)
 {
-	FIELD().NAME(value).PUBLIC();
-	FIELD().NAME(target).PUBLIC();
-	FIELD().NAME(targetDelegate).PUBLIC();
-	FIELD().NAME(targetProxy).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PROTECTED();
-	FIELD().NAME(mCurrentValue).PROTECTED();
-	FIELD().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevKey).PROTECTED();
-	FIELD().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTarget).PROTECTED();
-	FIELD().NAME(mTargetDelegate).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTargetProxy).PROTECTED();
+	FIELD().PUBLIC().NAME(value);
+	FIELD().PUBLIC().NAME(target);
+	FIELD().PUBLIC().NAME(targetDelegate);
+	FIELD().PUBLIC().NAME(targetProxy);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+	FIELD().PROTECTED().NAME(mCurrentValue);
+	FIELD().PROTECTED().DEFAULT_VALUE(0.0f).NAME(mPrevInDurationTime);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKey);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mPrevKeyApproximation);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTarget);
+	FIELD().PROTECTED().NAME(mTargetDelegate);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTargetProxy);
 }
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
 {
 
-	PUBLIC_FUNCTION(void, SetTarget, float*);
-	PUBLIC_FUNCTION(void, SetTarget, float*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetDelegate, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxy, IValueProxy<float>*);
-	PUBLIC_FUNCTION(void, SetTrack, AnimationTrack<float>*);
-	PUBLIC_FUNCTION(AnimationTrack<float>*, GetTrackT);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*);
-	PUBLIC_FUNCTION(void, SetTargetVoid, void*, const Function<void()>&);
-	PUBLIC_FUNCTION(void, SetTargetProxyVoid, void*);
-	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*);
-	PUBLIC_FUNCTION(IAnimationTrack*, GetTrack);
-	PUBLIC_FUNCTION(float, GetValue);
-	PROTECTED_FUNCTION(void, Evaluate);
-	PROTECTED_FUNCTION(void, RegMixer, AnimationState*, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxy, IValueProxy<float>*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, AnimationTrack<float>*);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationTrack<float>*, GetTrackT);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetVoid, void*, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetProxyVoid, void*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*);
+	FUNCTION().PUBLIC().SIGNATURE(IAnimationTrack*, GetTrack);
+	FUNCTION().PUBLIC().SIGNATURE(float, GetValue);
+	FUNCTION().PROTECTED().SIGNATURE(void, Evaluate);
+	FUNCTION().PROTECTED().SIGNATURE(void, RegMixer, AnimationState*, const String&);
 }
 END_META;

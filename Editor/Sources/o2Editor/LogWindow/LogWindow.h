@@ -111,37 +111,37 @@ CLASS_BASES_META(Editor::LogWindow)
 END_META;
 CLASS_FIELDS_META(Editor::LogWindow)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mList).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLastMessageView).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mMessagesCountLabel).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mWarningsCountLabel).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mErrorsCountLabel).PROTECTED();
-	FIELD().NAME(mAllMessages).PROTECTED();
-	FIELD().NAME(mVisibleMessages).PROTECTED();
-	FIELD().NAME(mRegularMessagesEnabled).PROTECTED();
-	FIELD().NAME(mWarningMessagesEnabled).PROTECTED();
-	FIELD().NAME(mErrorMessagesEnabled).PROTECTED();
-	FIELD().NAME(mRegularMessagesCount).PROTECTED();
-	FIELD().NAME(mWarningMessagesCount).PROTECTED();
-	FIELD().NAME(mErrorMessagesCount).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mList);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLastMessageView);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mMessagesCountLabel);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mWarningsCountLabel);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mErrorsCountLabel);
+	FIELD().PROTECTED().NAME(mAllMessages);
+	FIELD().PROTECTED().NAME(mVisibleMessages);
+	FIELD().PROTECTED().NAME(mRegularMessagesEnabled);
+	FIELD().PROTECTED().NAME(mWarningMessagesEnabled);
+	FIELD().PROTECTED().NAME(mErrorMessagesEnabled);
+	FIELD().PROTECTED().NAME(mRegularMessagesCount);
+	FIELD().PROTECTED().NAME(mWarningMessagesCount);
+	FIELD().PROTECTED().NAME(mErrorMessagesCount);
 }
 END_META;
 CLASS_METHODS_META(Editor::LogWindow)
 {
 
-	PUBLIC_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, InitializeWindow);
-	PROTECTED_FUNCTION(void, OnClearPressed);
-	PROTECTED_FUNCTION(void, OnRegularMessagesToggled, bool);
-	PROTECTED_FUNCTION(void, OnWarningMessagesToggled, bool);
-	PROTECTED_FUNCTION(void, OnErrorMessagesToggled, bool);
-	PROTECTED_FUNCTION(void, UpdateVisibleMessages);
-	PROTECTED_FUNCTION(int, GetVisibleMessagesCount);
-	PROTECTED_FUNCTION(Vector<void*>, GetVisibleMessagesRange, int, int);
-	PROTECTED_FUNCTION(void, SetupListMessage, Widget*, void*);
-	PROTECTED_FUNCTION(void, OutStrEx, const WString&);
-	PROTECTED_FUNCTION(void, OutErrorEx, const WString&);
-	PROTECTED_FUNCTION(void, OutWarningEx, const WString&);
-	PROTECTED_FUNCTION(void, UpdateLastMessageView);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnClearPressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRegularMessagesToggled, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnWarningMessagesToggled, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnErrorMessagesToggled, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateVisibleMessages);
+	FUNCTION().PROTECTED().SIGNATURE(int, GetVisibleMessagesCount);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<void*>, GetVisibleMessagesRange, int, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetupListMessage, Widget*, void*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OutStrEx, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OutErrorEx, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OutWarningEx, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLastMessageView);
 }
 END_META;

@@ -109,35 +109,35 @@ CLASS_BASES_META(o2::WidgetState)
 END_META;
 CLASS_FIELDS_META(o2::WidgetState)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(name).PUBLIC();
-	FIELD().NAME(player).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(offStateAnimationSpeed).PUBLIC();
-	FIELD().NAME(state).PUBLIC();
-	FIELD().EDITOR_IGNORE_ATTRIBUTE().NAME(animationAsset).PUBLIC();
-	FIELD().EDITOR_IGNORE_ATTRIBUTE().NAME(animationClip).PUBLIC();
-	FIELD().NAME(onStateFullyTrue).PUBLIC();
-	FIELD().NAME(onStateFullyFalse).PUBLIC();
-	FIELD().NAME(onStateBecomesTrue).PUBLIC();
-	FIELD().NAME(onStateBecomesFalse).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mState).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwner).PROTECTED();
-	FIELD().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE().NAME(mAnimation).PROTECTED();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(name);
+	FIELD().PUBLIC().NAME(player);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(offStateAnimationSpeed);
+	FIELD().PUBLIC().NAME(state);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(animationAsset);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(animationClip);
+	FIELD().PUBLIC().NAME(onStateFullyTrue);
+	FIELD().PUBLIC().NAME(onStateFullyFalse);
+	FIELD().PUBLIC().NAME(onStateBecomesTrue);
+	FIELD().PUBLIC().NAME(onStateBecomesFalse);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mState);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnAnimationChanged).SERIALIZABLE_ATTRIBUTE().NAME(mAnimation);
 }
 END_META;
 CLASS_METHODS_META(o2::WidgetState)
 {
 
-	PUBLIC_FUNCTION(void, SetOwner, Widget*, bool);
-	PUBLIC_FUNCTION(void, SetAnimationAsset, const AnimationAssetRef&);
-	PUBLIC_FUNCTION(const AnimationAssetRef&, GetAnimationAsset);
-	PUBLIC_FUNCTION(void, SetAnimationClip, const AnimationClip&);
-	PUBLIC_FUNCTION(AnimationClip&, GetAnimationClip);
-	PUBLIC_FUNCTION(void, SetState, bool);
-	PUBLIC_FUNCTION(void, SetStateForcible, bool);
-	PUBLIC_FUNCTION(bool, GetState);
-	PUBLIC_FUNCTION(void, Update, float);
-	PROTECTED_FUNCTION(void, OnAnimationChanged);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetOwner, Widget*, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
+	FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const AnimationClip&);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationClip&, GetAnimationClip);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetState, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetStateForcible, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, GetState);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

@@ -47,15 +47,15 @@ CLASS_BASES_META(Editor::LockAction)
 END_META;
 CLASS_FIELDS_META(Editor::LockAction)
 {
-	FIELD().NAME(objectsIds).PUBLIC();
-	FIELD().NAME(lock).PUBLIC();
+	FIELD().PUBLIC().NAME(objectsIds);
+	FIELD().PUBLIC().NAME(lock);
 }
 END_META;
 CLASS_METHODS_META(Editor::LockAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

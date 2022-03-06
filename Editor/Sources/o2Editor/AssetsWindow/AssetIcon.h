@@ -117,33 +117,33 @@ CLASS_BASES_META(Editor::AssetIcon)
 END_META;
 CLASS_FIELDS_META(Editor::AssetIcon)
 {
-	FIELD().NAME(assetName).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mNameText).PROTECTED();
-	FIELD().NAME(mAssetInfo).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSelectedState).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mOwner).PROTECTED();
+	FIELD().PUBLIC().NAME(assetName);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mNameText);
+	FIELD().PROTECTED().NAME(mAssetInfo);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSelectedState);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mOwner);
 }
 END_META;
 CLASS_METHODS_META(Editor::AssetIcon)
 {
 
-	PUBLIC_FUNCTION(void, SetAssetInfo, const AssetInfo*);
-	PUBLIC_FUNCTION(const AssetInfo&, GetAssetInfo);
-	PUBLIC_FUNCTION(void, SetAssetName, const WString&);
-	PUBLIC_FUNCTION(WString, GetAssetName);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(bool, IsInputTransparent);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, SetSelected, bool);
-	PROTECTED_FUNCTION(void, OnCursorDblClicked, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorRightMouseReleased, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorEnter, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnCursorExit, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnDragStart, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnDragged, const Input::Cursor&, DragDropArea*);
-	PROTECTED_FUNCTION(void, OnDragEnd, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnSelected);
-	PROTECTED_FUNCTION(void, OnDeselected);
-	PROTECTED_FUNCTION(void, OnDropped, ISelectableDragableObjectsGroup*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const AssetInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetAssetInfo);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetName, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetAssetName);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetSelected, bool);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragStart, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnd, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSelected);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeselected);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDropped, ISelectableDragableObjectsGroup*);
 }
 END_META;

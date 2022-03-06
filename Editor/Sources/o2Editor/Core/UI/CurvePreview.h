@@ -77,25 +77,25 @@ CLASS_BASES_META(Editor::CurvePreview)
 END_META;
 CLASS_FIELDS_META(Editor::CurvePreview)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurve).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mNeedRedraw).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSprite).PROTECTED();
-	FIELD().DEFAULT_VALUE(Color4(225, 232, 232)).NAME(mBackColor).PROTECTED();
-	FIELD().DEFAULT_VALUE(Color4(44, 62, 80)).NAME(mCurveColor).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurve);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedRedraw);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSprite);
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(225, 232, 232)).NAME(mBackColor);
+	FIELD().PROTECTED().DEFAULT_VALUE(Color4(44, 62, 80)).NAME(mCurveColor);
 }
 END_META;
 CLASS_METHODS_META(Editor::CurvePreview)
 {
 
-	PUBLIC_FUNCTION(void, SetCurve, Curve*);
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, SetBackColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetBackColor);
-	PUBLIC_FUNCTION(void, SetCurveColor, const Color4&);
-	PUBLIC_FUNCTION(Color4, GetCurveColor);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, UpdateLayersLayouts);
-	PROTECTED_FUNCTION(void, Redraw);
-	PROTECTED_FUNCTION(void, OnCurveChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, Curve*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetBackColor);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(Color4, GetCurveColor);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersLayouts);
+	FUNCTION().PROTECTED().SIGNATURE(void, Redraw);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCurveChanged);
 }
 END_META;

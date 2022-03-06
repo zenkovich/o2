@@ -90,27 +90,27 @@ CLASS_BASES_META(Editor::ImageSlicesEditorWidget)
 END_META;
 CLASS_FIELDS_META(Editor::ImageSlicesEditorWidget)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPreviewImage).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPreviewImageBack).PRIVATE();
-	FIELD().NAME(mBorderLeftHandle).PRIVATE();
-	FIELD().NAME(mBorderRightHandle).PRIVATE();
-	FIELD().NAME(mBorderTopHandle).PRIVATE();
-	FIELD().NAME(mBorderBottomHandle).PRIVATE();
-	FIELD().NAME(mBordersSmoothValue).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mBorderProperty).PRIVATE();
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPreviewImage);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mPreviewImageBack);
+	FIELD().PRIVATE().NAME(mBorderLeftHandle);
+	FIELD().PRIVATE().NAME(mBorderRightHandle);
+	FIELD().PRIVATE().NAME(mBorderTopHandle);
+	FIELD().PRIVATE().NAME(mBorderBottomHandle);
+	FIELD().PRIVATE().NAME(mBordersSmoothValue);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mBorderProperty);
 }
 END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 {
 
-	PUBLIC_FUNCTION(void, Setup, const ImageAssetRef&, BorderIProperty*);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PROTECTED_FUNCTION(void, InitializeImagePreview);
-	PROTECTED_FUNCTION(void, InitializeSliceHandles);
-	PROTECTED_FUNCTION(void, FitImage);
-	PROTECTED_FUNCTION(void, UpdateBordersAnchors);
-	PROTECTED_FUNCTION(void, UpdateBordersValue);
-	PROTECTED_FUNCTION(Sprite*, CreateGridSprite);
+	FUNCTION().PUBLIC().SIGNATURE(void, Setup, const ImageAssetRef&, BorderIProperty*);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeImagePreview);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeSliceHandles);
+	FUNCTION().PROTECTED().SIGNATURE(void, FitImage);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateBordersAnchors);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateBordersValue);
+	FUNCTION().PROTECTED().SIGNATURE(Sprite*, CreateGridSprite);
 }
 END_META;
 
@@ -126,7 +126,7 @@ END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget::PreviewImage)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }
 END_META;

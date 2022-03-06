@@ -523,46 +523,46 @@ END_META;
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_FIELDS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
-	FIELD().NAME(mHandles).PROTECTED();
-	FIELD().NAME(mTrackPath).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTreeControls).PROTECTED();
-	FIELD().NAME(mPropertyField).PROTECTED();
-	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue).PROTECTED();
-	FIELD().NAME(mPropertyValueProxy).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTrack).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPlayer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTimeline).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate).PROTECTED();
+	FIELD().PROTECTED().NAME(mHandles);
+	FIELD().PROTECTED().NAME(mTrackPath);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTreeControls);
+	FIELD().PROTECTED().NAME(mPropertyField);
+	FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mPropertyValue);
+	FIELD().PROTECTED().NAME(mPropertyValueProxy);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyDotButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddKeyButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(TrackValueType()).NAME(mLastValue);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTrack);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPlayer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTimeline);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHandlesSheet);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDisableHandlesUpdate);
 }
 END_META;
 META_TEMPLATES(typename AnimationTrackType)
 CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(void, Update, float);
-	PUBLIC_FUNCTION(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
-	PUBLIC_FUNCTION(AnimationTrackType*, GetTrack);
-	PUBLIC_FUNCTION(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
-	PUBLIC_FUNCTION(void, UpdateHandles);
-	PUBLIC_FUNCTION(Vector<KeyHandle*>, GetKeyHandles);
-	PUBLIC_FUNCTION(Widget*, GetTreePartControls);
-	PUBLIC_FUNCTION(void, SetCurveViewEnabled, bool);
-	PUBLIC_FUNCTION(void, SetCurveViewColor, const Color4&);
-	PUBLIC_FUNCTION(void, SerializeKey, UInt64, DataValue&, float);
-	PUBLIC_FUNCTION(UInt64, DeserializeKey, const DataValue&, float, bool);
-	PUBLIC_FUNCTION(void, DeleteKey, UInt64);
-	PUBLIC_FUNCTION(void, InsertNewKey, float);
-	PRIVATE_FUNCTION(void, InitializeControls);
-	PRIVATE_FUNCTION(void, InitializeHandles);
-	PRIVATE_FUNCTION(void, OnSetTrack);
-	PRIVATE_FUNCTION(void, OnKeysChanged);
-	PRIVATE_FUNCTION(AnimationKeyDragHandle*, CreateHandle);
-	PRIVATE_FUNCTION(void, CheckCanCreateKey, float);
-	PRIVATE_FUNCTION(void, OnPropertyChanged);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(AnimationTrackType*, GetTrack);
+	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
+	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<KeyHandle*>, GetKeyHandles);
+	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetTreePartControls);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewColor, const Color4&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SerializeKey, UInt64, DataValue&, float);
+	FUNCTION().PUBLIC().SIGNATURE(UInt64, DeserializeKey, const DataValue&, float, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, DeleteKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertNewKey, float);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeHandles);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnSetTrack);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnKeysChanged);
+	FUNCTION().PRIVATE().SIGNATURE(AnimationKeyDragHandle*, CreateHandle);
+	FUNCTION().PRIVATE().SIGNATURE(void, CheckCanCreateKey, float);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnPropertyChanged);
 }
 END_META;

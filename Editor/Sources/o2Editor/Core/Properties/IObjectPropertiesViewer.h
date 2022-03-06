@@ -170,15 +170,15 @@ CLASS_BASES_META(Editor::IObjectPropertiesViewer)
 END_META;
 CLASS_FIELDS_META(Editor::IObjectPropertiesViewer)
 {
-	FIELD().NAME(onChanged).PUBLIC();
-	FIELD().NAME(onChangeCompleted).PUBLIC();
-	FIELD().NAME(path).PUBLIC();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(true).NAME(mHeaderEnabled).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mPropertiesBuilt).PROTECTED();
-	FIELD().NAME(mTargetObjects).PROTECTED();
-	FIELD().NAME(mPropertiesContext).PROTECTED();
-	FIELD().NAME(mOnChildFieldChangeCompleted).PROTECTED();
+	FIELD().PUBLIC().NAME(onChanged);
+	FIELD().PUBLIC().NAME(onChangeCompleted);
+	FIELD().PUBLIC().NAME(path);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mHeaderEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mPropertiesBuilt);
+	FIELD().PROTECTED().NAME(mTargetObjects);
+	FIELD().PROTECTED().NAME(mPropertiesContext);
+	FIELD().PROTECTED().NAME(mOnChildFieldChangeCompleted);
 }
 END_META;
 CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
@@ -189,27 +189,27 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp3;
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp4;
 
-	PUBLIC_FUNCTION(void, Refresh, _tmp1);
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
-	PUBLIC_FUNCTION(void, SetParentContext, PropertiesContext*);
-	PUBLIC_FUNCTION(Spoiler*, GetSpoiler);
-	PUBLIC_FUNCTION(void, SetHeaderEnabled, bool);
-	PUBLIC_FUNCTION(bool, IsHeaderEnabled);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(const WString&, GetCaption);
-	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(void, OnEnabled);
-	PUBLIC_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(Spoiler*, CreateSpoiler);
-	PROTECTED_FUNCTION(void, OnHeaderEnableChanged, bool);
-	PROTECTED_FUNCTION(bool, CheckBuildProperties, _tmp2);
-	PROTECTED_FUNCTION(void, RebuildProperties, _tmp3);
-	PROTECTED_FUNCTION(void, OnRefreshed, _tmp4);
-	PROTECTED_FUNCTION(void, OnFree);
-	PROTECTED_FUNCTION(void, OnFieldChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);
+	FUNCTION().PUBLIC().SIGNATURE(Spoiler*, GetSpoiler);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderEnabled, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(const WString&, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnEnabled);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(Spoiler*, CreateSpoiler);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnHeaderEnableChanged, bool);
+	FUNCTION().PROTECTED().SIGNATURE(bool, CheckBuildProperties, _tmp2);
+	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp3);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp4);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFree);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFieldChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;
 
@@ -222,7 +222,7 @@ END_META;
 META_TEMPLATES(typename _object_type)
 CLASS_FIELDS_META(Editor::TObjectPropertiesViewer<_object_type>)
 {
-	FIELD().NAME(mTypeTargetObjects).PROTECTED();
+	FIELD().PROTECTED().NAME(mTypeTargetObjects);
 }
 END_META;
 META_TEMPLATES(typename _object_type)
@@ -231,8 +231,8 @@ CLASS_METHODS_META(Editor::TObjectPropertiesViewer<_object_type>)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetViewingObjectTypeStatic);
-	PROTECTED_FUNCTION(void, OnRefreshed, _tmp1);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp1);
 }
 END_META;

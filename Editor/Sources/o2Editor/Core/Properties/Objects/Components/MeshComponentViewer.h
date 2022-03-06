@@ -194,12 +194,12 @@ CLASS_BASES_META(Editor::MeshComponentViewer)
 END_META;
 CLASS_FIELDS_META(Editor::MeshComponentViewer)
 {
-	FIELD().NAME(mSplineTool).PROTECTED();
-	FIELD().NAME(mFrameTool).PROTECTED();
-	FIELD().NAME(mTopologyTool).PROTECTED();
-	FIELD().NAME(mFrameTetxureLayer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton).PROTECTED();
+	FIELD().PROTECTED().NAME(mSplineTool);
+	FIELD().PROTECTED().NAME(mFrameTool);
+	FIELD().PROTECTED().NAME(mTopologyTool);
+	FIELD().PROTECTED().NAME(mFrameTetxureLayer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrevSelectedTool);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFitAndCenterButton);
 }
 END_META;
 CLASS_METHODS_META(Editor::MeshComponentViewer)
@@ -208,10 +208,10 @@ CLASS_METHODS_META(Editor::MeshComponentViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	PROTECTED_FUNCTION(void, RebuildProperties, _tmp1);
-	PROTECTED_FUNCTION(void, OnRefreshed, _tmp2);
-	PROTECTED_FUNCTION(void, OnEnabled);
-	PROTECTED_FUNCTION(void, OnDisabled);
-	PROTECTED_FUNCTION(void, FitAndCenterize);
+	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, FitAndCenterize);
 }
 END_META;

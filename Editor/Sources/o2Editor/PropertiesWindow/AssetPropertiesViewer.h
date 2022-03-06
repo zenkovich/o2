@@ -38,7 +38,7 @@ END_META;
 CLASS_METHODS_META(Editor::AssetPropertiesViewer)
 {
 
-	PUBLIC_FUNCTION(const Type*, GetViewingObjectType);
-	PROTECTED_FUNCTION(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
 }
 END_META;

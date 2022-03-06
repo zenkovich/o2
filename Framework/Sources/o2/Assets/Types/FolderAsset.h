@@ -59,11 +59,11 @@ END_META;
 CLASS_METHODS_META(o2::FolderAsset)
 {
 
-	PUBLIC_FUNCTION(Vector<AssetRef>, GetChildrenAssets);
-	PUBLIC_STATIC_FUNCTION(String, GetEditorIcon);
-	PUBLIC_STATIC_FUNCTION(int, GetEditorSorting);
-	PUBLIC_STATIC_FUNCTION(bool, IsAvailableToCreateFromEditor);
-	PROTECTED_FUNCTION(void, LoadData, const String&);
-	PROTECTED_FUNCTION(void, SaveData, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<AssetRef>, GetChildrenAssets);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsAvailableToCreateFromEditor);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadData, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveData, const String&);
 }
 END_META;

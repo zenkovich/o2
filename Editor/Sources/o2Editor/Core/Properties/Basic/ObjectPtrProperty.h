@@ -134,46 +134,46 @@ CLASS_BASES_META(Editor::ObjectPtrProperty)
 END_META;
 CLASS_FIELDS_META(Editor::ObjectPtrProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mBasicObjectType).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCurrentObjectType).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mBuiltObjectType).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mAvailableMultipleTypes).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mDontDeleteEnabled).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mNoHeader).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mExpanded).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mObjectViewer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCaption).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTypeCaption).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCreateDeleteButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mCreateMenu).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mContextInitialized).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mImmediateCreateObject).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBasicObjectType);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCurrentObjectType);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mBuiltObjectType);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mAvailableMultipleTypes);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mDontDeleteEnabled);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNoHeader);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mObjectViewer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaption);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTypeCaption);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateDeleteButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCreateMenu);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mContextInitialized);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mImmediateCreateObject);
 }
 END_META;
 CLASS_METHODS_META(Editor::ObjectPtrProperty)
 {
 
-	PUBLIC_FUNCTION(void, SetValueAndPrototypeProxy, const TargetsVec&);
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(const Type*, GetValueType);
-	PUBLIC_STATIC_FUNCTION(const Type*, GetValueTypeStatic);
-	PUBLIC_FUNCTION(void, SetFieldInfo, const FieldInfo*);
-	PUBLIC_FUNCTION(void, SetCaption, const WString&);
-	PUBLIC_FUNCTION(WString, GetCaption);
-	PUBLIC_FUNCTION(Button*, GetRemoveButton);
-	PUBLIC_FUNCTION(void, SetBasicType, const ObjectType*);
-	PUBLIC_FUNCTION(void, Expand);
-	PUBLIC_FUNCTION(void, Collapse);
-	PUBLIC_FUNCTION(void, SetExpanded, bool);
-	PUBLIC_FUNCTION(bool, IsExpanded);
-	PROTECTED_FUNCTION(void, OnFreeProperty);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, UpdateViewerHeader);
-	PROTECTED_FUNCTION(void, OnCreateOrDeletePressed);
-	PROTECTED_FUNCTION(void, CreateObject, const ObjectType*);
-	PROTECTED_FUNCTION(void, StoreValues, Vector<DataDocument>&);
-	PROTECTED_FUNCTION(IObject*, GetProxy, IAbstractValueProxy*);
-	PROTECTED_FUNCTION(void, SetProxy, IAbstractValueProxy*, IObject*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetValueTypeStatic);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetCaption, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE(WString, GetCaption);
+	FUNCTION().PUBLIC().SIGNATURE(Button*, GetRemoveButton);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetBasicType, const ObjectType*);
+	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
+	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateViewerHeader);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCreateOrDeletePressed);
+	FUNCTION().PROTECTED().SIGNATURE(void, CreateObject, const ObjectType*);
+	FUNCTION().PROTECTED().SIGNATURE(void, StoreValues, Vector<DataDocument>&);
+	FUNCTION().PROTECTED().SIGNATURE(IObject*, GetProxy, IAbstractValueProxy*);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetProxy, IAbstractValueProxy*, IObject*);
 }
 END_META;

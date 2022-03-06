@@ -637,19 +637,19 @@ END_META;
 CLASS_METHODS_META(o2::ISerializable)
 {
 
-	PUBLIC_FUNCTION(void, Serialize, DataValue&);
-	PUBLIC_FUNCTION(void, Deserialize, const DataValue&);
-	PUBLIC_FUNCTION(void, SerializeDelta, DataValue&, const IObject&);
-	PUBLIC_FUNCTION(void, DeserializeDelta, const DataValue&, const IObject&);
-	PUBLIC_FUNCTION(String, SerializeToString);
-	PUBLIC_FUNCTION(void, DeserializeFromString, const String&);
-	PROTECTED_FUNCTION(void, SerializeBasic, DataValue&);
-	PROTECTED_FUNCTION(void, DeserializeBasic, const DataValue&);
-	PROTECTED_FUNCTION(void, SerializeDeltaBasic, DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, DeserializeDeltaBasic, const DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Serialize, DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Deserialize, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SerializeDelta, DataValue&, const IObject&);
+	FUNCTION().PUBLIC().SIGNATURE(void, DeserializeDelta, const DataValue&, const IObject&);
+	FUNCTION().PUBLIC().SIGNATURE(String, SerializeToString);
+	FUNCTION().PUBLIC().SIGNATURE(void, DeserializeFromString, const String&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SerializeBasic, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeBasic, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SerializeDeltaBasic, DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeDeltaBasic, const DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
 }
 END_META;

@@ -48,13 +48,13 @@ CLASS_BASES_META(Editor::BooleanProperty)
 END_META;
 CLASS_FIELDS_META(Editor::BooleanProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mToggle).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mToggle);
 }
 END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }
 END_META;

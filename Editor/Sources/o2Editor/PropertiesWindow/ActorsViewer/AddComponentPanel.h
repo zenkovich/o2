@@ -196,25 +196,25 @@ CLASS_BASES_META(Editor::AddComponentPanel)
 END_META;
 CLASS_FIELDS_META(Editor::AddComponentPanel)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mViewer).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mFilterBox).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAddButton).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTree).PRIVATE();
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mViewer);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mFilterBox);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
 {
 
-	PUBLIC_FUNCTION(void, Draw);
-	PUBLIC_FUNCTION(EditBox*, GetFilter);
-	PUBLIC_FUNCTION(ComponentsTree*, GetTree);
-	PUBLIC_FUNCTION(bool, IsUnderPoint, const Vec2F&);
-	PUBLIC_FUNCTION(bool, IsInputTransparent);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, OnAddPressed);
-	PRIVATE_FUNCTION(void, CreateComponent, const ObjectType*);
-	PRIVATE_FUNCTION(void, OnNodeDblClick, TreeNode*);
-	PRIVATE_FUNCTION(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetFilter);
+	FUNCTION().PUBLIC().SIGNATURE(ComponentsTree*, GetTree);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnAddPressed);
+	FUNCTION().PRIVATE().SIGNATURE(void, CreateComponent, const ObjectType*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 }
 END_META;
 
@@ -225,23 +225,23 @@ CLASS_BASES_META(Editor::ComponentsTree)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTree)
 {
-	FIELD().NAME(mFilterStr).PRIVATE();
-	FIELD().NAME(mRoot).PRIVATE();
+	FIELD().PRIVATE().NAME(mFilterStr);
+	FIELD().PRIVATE().NAME(mRoot);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTree)
 {
 
-	PUBLIC_FUNCTION(void, Refresh);
-	PUBLIC_FUNCTION(void, SetFilter, const WString&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
-	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
-	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
-	PRIVATE_FUNCTION(Vector<void*>, GetObjectChilds, void*);
-	PRIVATE_FUNCTION(String, GetObjectDebug, void*);
-	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
+	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
+	FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+	FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
+	FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
+	FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
 }
 END_META;
 
@@ -252,18 +252,18 @@ CLASS_BASES_META(Editor::ComponentsTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::ComponentsTreeNode)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(data).PUBLIC();
-	FIELD().NAME(mName).PRIVATE();
-	FIELD().NAME(mIcon).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTree).PRIVATE();
+	FIELD().PUBLIC().DEFAULT_VALUE(nullptr).NAME(data);
+	FIELD().PRIVATE().NAME(mName);
+	FIELD().PRIVATE().NAME(mIcon);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)
 {
 
-	PUBLIC_FUNCTION(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
-	PRIVATE_FUNCTION(void, InitializeControls);
+	FUNCTION().PUBLIC().SIGNATURE(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;

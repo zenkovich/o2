@@ -55,7 +55,7 @@ END_META;
 CLASS_METHODS_META(o2::ParticlesEmitterShape)
 {
 
-	PUBLIC_FUNCTION(Vec2F, GetEmittinPoint);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
 }
 END_META;
 
@@ -66,13 +66,13 @@ CLASS_BASES_META(o2::CircleParticlesEmitterShape)
 END_META;
 CLASS_FIELDS_META(o2::CircleParticlesEmitterShape)
 {
-	FIELD().DEFAULT_VALUE(0).NAME(radius).PUBLIC();
+	FIELD().PUBLIC().DEFAULT_VALUE(0).NAME(radius);
 }
 END_META;
 CLASS_METHODS_META(o2::CircleParticlesEmitterShape)
 {
 
-	PUBLIC_FUNCTION(Vec2F, GetEmittinPoint);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
 }
 END_META;
 
@@ -83,12 +83,12 @@ CLASS_BASES_META(o2::SquareParticlesEmitterShape)
 END_META;
 CLASS_FIELDS_META(o2::SquareParticlesEmitterShape)
 {
-	FIELD().NAME(size).PUBLIC();
+	FIELD().PUBLIC().NAME(size);
 }
 END_META;
 CLASS_METHODS_META(o2::SquareParticlesEmitterShape)
 {
 
-	PUBLIC_FUNCTION(Vec2F, GetEmittinPoint);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetEmittinPoint);
 }
 END_META;

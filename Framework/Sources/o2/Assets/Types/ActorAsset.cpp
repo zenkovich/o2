@@ -4,6 +4,8 @@
 #include "o2/Assets/Assets.h"
 #include "o2/Scene/Actor.h"
 
+#include "o2/Scripts/ScriptValue.h"
+
 namespace o2
 {
 	ActorAsset::ActorAsset():

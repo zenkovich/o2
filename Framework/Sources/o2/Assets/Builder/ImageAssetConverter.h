@@ -38,9 +38,9 @@ END_META;
 CLASS_METHODS_META(o2::ImageAssetConverter)
 {
 
-	PUBLIC_FUNCTION(Vector<const Type*>, GetProcessingAssetsTypes);
-	PUBLIC_FUNCTION(void, ConvertAsset, const AssetInfo&);
-	PUBLIC_FUNCTION(void, RemoveAsset, const AssetInfo&);
-	PUBLIC_FUNCTION(void, MoveAsset, const AssetInfo&, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(Vector<const Type*>, GetProcessingAssetsTypes);
+	FUNCTION().PUBLIC().SIGNATURE(void, ConvertAsset, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAsset, const AssetInfo&);
+	FUNCTION().PUBLIC().SIGNATURE(void, MoveAsset, const AssetInfo&, const AssetInfo&);
 }
 END_META;

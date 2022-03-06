@@ -110,32 +110,32 @@ CLASS_BASES_META(o2::SceneLayer)
 END_META;
 CLASS_FIELDS_META(o2::SceneLayer)
 {
-	FIELD().DEFAULT_VALUE(true).NAME(visible).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mName).PROTECTED();
-	FIELD().NAME(mActors).PROTECTED();
-	FIELD().NAME(mEnabledActors).PROTECTED();
-	FIELD().NAME(mDrawables).PROTECTED();
-	FIELD().NAME(mEnabledDrawables).PROTECTED();
+	FIELD().PUBLIC().DEFAULT_VALUE(true).NAME(visible);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mName);
+	FIELD().PROTECTED().NAME(mActors);
+	FIELD().PROTECTED().NAME(mEnabledActors);
+	FIELD().PROTECTED().NAME(mDrawables);
+	FIELD().PROTECTED().NAME(mEnabledDrawables);
 }
 END_META;
 CLASS_METHODS_META(o2::SceneLayer)
 {
 
-	PUBLIC_FUNCTION(void, SetName, const String&);
-	PUBLIC_FUNCTION(const String&, GetName);
-	PUBLIC_FUNCTION(const Vector<Actor*>&, GetActors);
-	PUBLIC_FUNCTION(const Vector<Actor*>&, GetEnabledActors);
-	PUBLIC_FUNCTION(const Vector<ISceneDrawable*>&, GetDrawables);
-	PUBLIC_FUNCTION(const Vector<ISceneDrawable*>&, GetEnabledDrawables);
-	PROTECTED_FUNCTION(void, RegisterActor, Actor*);
-	PROTECTED_FUNCTION(void, UnregisterActor, Actor*);
-	PROTECTED_FUNCTION(void, OnActorEnabled, Actor*);
-	PROTECTED_FUNCTION(void, OnActorDisabled, Actor*);
-	PROTECTED_FUNCTION(void, RegisterDrawable, ISceneDrawable*);
-	PROTECTED_FUNCTION(void, UnregisterDrawable, ISceneDrawable*);
-	PROTECTED_FUNCTION(void, OnDrawableDepthChanged, ISceneDrawable*);
-	PROTECTED_FUNCTION(void, OnDrawableEnabled, ISceneDrawable*);
-	PROTECTED_FUNCTION(void, OnDrawableDisabled, ISceneDrawable*);
-	PROTECTED_FUNCTION(void, SetLastByDepth, ISceneDrawable*);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
+	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Actor*>&, GetActors);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Actor*>&, GetEnabledActors);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetDrawables);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<ISceneDrawable*>&, GetEnabledDrawables);
+	FUNCTION().PROTECTED().SIGNATURE(void, RegisterActor, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, UnregisterActor, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnActorEnabled, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnActorDisabled, Actor*);
+	FUNCTION().PROTECTED().SIGNATURE(void, RegisterDrawable, ISceneDrawable*);
+	FUNCTION().PROTECTED().SIGNATURE(void, UnregisterDrawable, ISceneDrawable*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableDepthChanged, ISceneDrawable*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableEnabled, ISceneDrawable*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDrawableDisabled, ISceneDrawable*);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetLastByDepth, ISceneDrawable*);
 }
 END_META;

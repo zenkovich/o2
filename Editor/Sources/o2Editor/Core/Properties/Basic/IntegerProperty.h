@@ -67,19 +67,19 @@ CLASS_BASES_META(Editor::IntegerProperty)
 END_META;
 CLASS_FIELDS_META(Editor::IntegerProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mEditBox).PROTECTED();
-	FIELD().NAME(mDragHangle).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mEditBox);
+	FIELD().PROTECTED().NAME(mDragHangle);
 }
 END_META;
 CLASS_METHODS_META(Editor::IntegerProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, OnKeyReleased, const Input::Key&);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OnEdited, const WString&);
-	PROTECTED_FUNCTION(void, OnDragHandleMoved, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandlePressed, const Input::Cursor&);
-	PROTECTED_FUNCTION(void, OnMoveHandleReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDragHandleMoved, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandlePressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnMoveHandleReleased, const Input::Cursor&);
 }
 END_META;

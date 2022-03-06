@@ -68,17 +68,17 @@ CLASS_BASES_META(Editor::ReparentAction)
 END_META;
 CLASS_FIELDS_META(Editor::ReparentAction)
 {
-	FIELD().NAME(objectsInfos).PUBLIC();
-	FIELD().NAME(newParentId).PUBLIC();
-	FIELD().NAME(newPrevObjectId).PUBLIC();
+	FIELD().PUBLIC().NAME(objectsInfos);
+	FIELD().PUBLIC().NAME(newParentId);
+	FIELD().PUBLIC().NAME(newPrevObjectId);
 }
 END_META;
 CLASS_METHODS_META(Editor::ReparentAction)
 {
 
-	PUBLIC_FUNCTION(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

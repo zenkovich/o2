@@ -96,22 +96,22 @@ CLASS_BASES_META(Editor::EditorConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig)
 {
-	FIELD().DEFAULT_VALUE("../../EditorConfig.json").NAME(mConfigPath).PROTECTED();
-	FIELD().DEFAULT_VALUE("../../Config.json").NAME(mGlobalConfigPath).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mConfigsLoaded).PROTECTED();
-	FIELD().NAME(mProjectConfig).PROTECTED();
-	FIELD().NAME(mGlobalConfig).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE("../../EditorConfig.json").NAME(mConfigPath);
+	FIELD().PROTECTED().DEFAULT_VALUE("../../Config.json").NAME(mGlobalConfigPath);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mConfigsLoaded);
+	FIELD().PROTECTED().NAME(mProjectConfig);
+	FIELD().PROTECTED().NAME(mGlobalConfig);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
 {
 
-	PROTECTED_FUNCTION(void, SaveGlobalConfigs);
-	PROTECTED_FUNCTION(void, SaveProjectConfigs);
-	PROTECTED_FUNCTION(void, LoadConfigs);
-	PROTECTED_FUNCTION(void, LoadProjectConfig);
-	PROTECTED_FUNCTION(void, LoadGlobalConfig);
-	PROTECTED_FUNCTION(void, OnWindowChange);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveGlobalConfigs);
+	FUNCTION().PROTECTED().SIGNATURE(void, SaveProjectConfigs);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadConfigs);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadProjectConfig);
+	FUNCTION().PROTECTED().SIGNATURE(void, LoadGlobalConfig);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnWindowChange);
 }
 END_META;
 
@@ -122,8 +122,8 @@ CLASS_BASES_META(Editor::EditorConfig::GlobalConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::GlobalConfig)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mDefaultLayout).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableLayouts).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mDefaultLayout);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mAvailableLayouts);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::GlobalConfig)
@@ -138,10 +138,10 @@ CLASS_BASES_META(Editor::EditorConfig::ProjectConfig)
 END_META;
 CLASS_FIELDS_META(Editor::EditorConfig::ProjectConfig)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(800, 600)).NAME(mWindowSize).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mWindowPosition).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMaximized).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mLayout).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2I(800, 600)).NAME(mWindowSize);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWindowPosition);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mMaximized);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mLayout);
 }
 END_META;
 CLASS_METHODS_META(Editor::EditorConfig::ProjectConfig)

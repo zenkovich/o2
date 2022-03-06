@@ -1,5 +1,6 @@
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 #include "jerryscript/jerry-core/include/jerryscript-core.h"
+#include "o2/Utils/Function.h"
 
 namespace o2
 {
@@ -65,6 +66,22 @@ namespace o2
 		struct PointerGetterWrapperContainer: public IGetterWrapperContainer
 		{
 			_type* dataPtr = nullptr;
+
+			jerry_value_t Get() override;
+		};
+
+		template<typename _property_type>
+		struct PropertySetterWrapperContainer: public ISetterWrapperContainer
+		{
+			_property_type* propertyPtr = nullptr;
+
+			void Set(jerry_value_t value) override;
+		};
+
+		template<typename _property_type>
+		struct PropertyGetterWrapperContainer: public IGetterWrapperContainer
+		{
+			_property_type* propertyPtr = nullptr;
 
 			jerry_value_t Get() override;
 		};

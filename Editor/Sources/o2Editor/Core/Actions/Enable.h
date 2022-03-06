@@ -48,15 +48,15 @@ CLASS_BASES_META(Editor::EnableAction)
 END_META;
 CLASS_FIELDS_META(Editor::EnableAction)
 {
-	FIELD().NAME(objectsIds).PUBLIC();
-	FIELD().NAME(enable).PUBLIC();
+	FIELD().PUBLIC().NAME(objectsIds);
+	FIELD().PUBLIC().NAME(enable);
 }
 END_META;
 CLASS_METHODS_META(Editor::EnableAction)
 {
 
-	PUBLIC_FUNCTION(String, GetName);
-	PUBLIC_FUNCTION(void, Redo);
-	PUBLIC_FUNCTION(void, Undo);
+	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
+	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
+	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
 }
 END_META;

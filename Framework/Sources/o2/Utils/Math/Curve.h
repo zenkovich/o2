@@ -303,69 +303,69 @@ CLASS_BASES_META(o2::Curve)
 END_META;
 CLASS_FIELDS_META(o2::Curve)
 {
-	FIELD().NAME(keys).PUBLIC();
-	FIELD().NAME(length).PUBLIC();
-	FIELD().NAME(onKeysChanged).PUBLIC();
-	FIELD().DEFAULT_VALUE(false).NAME(mBatchChange).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mChangedKeys).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mKeys).PROTECTED();
+	FIELD().PUBLIC().NAME(keys);
+	FIELD().PUBLIC().NAME(length);
+	FIELD().PUBLIC().NAME(onKeysChanged);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mBatchChange);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChangedKeys);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mKeys);
 }
 END_META;
 CLASS_METHODS_META(o2::Curve)
 {
 
-	PUBLIC_FUNCTION(float, Evaluate, float);
-	PUBLIC_FUNCTION(float, Evaluate, float, bool, int&, int&);
-	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
-	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
-	PUBLIC_FUNCTION(void, MoveKeys, float);
-	PUBLIC_FUNCTION(void, MoveKeysFrom, float, float);
-	PUBLIC_FUNCTION(void, AppendCurve, const Curve&);
-	PUBLIC_FUNCTION(void, PrependCurve, const Curve&);
-	PUBLIC_FUNCTION(void, InsertCurve, const Curve&, float);
-	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Vec2F>&, bool);
-	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Vec2F>&, bool);
-	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Vec2F>&, float, bool);
-	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Key>&, float);
-	PUBLIC_FUNCTION(int, InsertKey, const Key&);
-	PUBLIC_FUNCTION(int, InsertKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, InsertKey, float, float, float);
-	PUBLIC_FUNCTION(int, InsertFlatKey, float, float);
-	PUBLIC_FUNCTION(int, AppendKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, AppendKey, float, float, float);
-	PUBLIC_FUNCTION(int, AppendKey, float, float);
-	PUBLIC_FUNCTION(int, PrependKey, float, float, float, float, float, float);
-	PUBLIC_FUNCTION(int, PrependKey, float, float, float);
-	PUBLIC_FUNCTION(int, PrependKey, float, float);
-	PUBLIC_FUNCTION(bool, RemoveKey, float);
-	PUBLIC_FUNCTION(bool, RemoveKeyAt, int);
-	PUBLIC_FUNCTION(void, RemoveAllKeys);
-	PUBLIC_FUNCTION(bool, ContainsKey, float);
-	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
-	PUBLIC_FUNCTION(Key, GetKey, float);
-	PUBLIC_FUNCTION(Key, GetKeyAt, int);
-	PUBLIC_FUNCTION(Key, FindKey, UInt64);
-	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
-	PUBLIC_FUNCTION(void, SmoothKey, float, float);
-	PUBLIC_FUNCTION(void, SmoothKeyAt, int, float);
-	PUBLIC_FUNCTION(float, Length);
-	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(RectF, GetRect);
-	PUBLIC_STATIC_FUNCTION(Curve, Parametric, float, float, float, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(Curve, EaseIn, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(Curve, EaseOut, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(Curve, EaseInOut, float, float, float, float);
-	PUBLIC_STATIC_FUNCTION(Curve, Linear, float, float, float);
-	PROTECTED_FUNCTION(void, CheckSmoothKeys);
-	PROTECTED_FUNCTION(void, UpdateApproximation);
-	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
-	PROTECTED_FUNCTION(void, InternalSmoothKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float, bool, int&, int&);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, MoveKeys, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, MoveKeysFrom, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, AppendCurve, const Curve&);
+	FUNCTION().PUBLIC().SIGNATURE(void, PrependCurve, const Curve&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertCurve, const Curve&, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, AppendKeys, const Vector<Vec2F>&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, AppendKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, PrependKeys, const Vector<Vec2F>&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, PrependKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Vec2F>&, float, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Key>&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, const Key&);
+	FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, InsertKey, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, InsertFlatKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKeyAt, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllKeys);
+	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Key>&, GetKeys);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKey, float);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKeyAt, int);
+	FUNCTION().PUBLIC().SIGNATURE(Key, FindKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(int, FindKeyIdx, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKey, const Key&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKey, float, float);
+	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKeyAt, int, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, Length);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+	FUNCTION().PUBLIC().SIGNATURE(RectF, GetRect);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, Parametric, float, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, EaseIn, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, EaseOut, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, EaseInOut, float, float, float, float);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, Linear, float, float, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckSmoothKeys);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateApproximation);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<Key>, GetKeysNonContant);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, InternalSmoothKeyAt, int, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, InternalSmoothKey, float, float);
 }
 END_META;
 
@@ -376,23 +376,23 @@ CLASS_BASES_META(o2::Curve::Key)
 END_META;
 CLASS_FIELDS_META(o2::Curve::Key)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(uid).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(value).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(position).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportValue).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportPosition).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportValue).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportPosition).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(supportsType).PUBLIC();
-	FIELD().NAME(mApproxValues).PUBLIC();
-	FIELD().NAME(mApproxValuesBounds).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(uid);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(value);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(position);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportValue);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(leftSupportPosition);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportValue);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(rightSupportPosition);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(supportsType);
+	FIELD().PUBLIC().NAME(mApproxValues);
+	FIELD().PUBLIC().NAME(mApproxValuesBounds);
 }
 END_META;
 CLASS_METHODS_META(o2::Curve::Key)
 {
 
-	PUBLIC_FUNCTION(const ApproximationValue*, GetApproximatedPoints);
-	PUBLIC_FUNCTION(int, GetApproximatedPointsCount);
-	PUBLIC_FUNCTION(const RectF&, GetGetApproximatedPointsBounds);
+	FUNCTION().PUBLIC().SIGNATURE(const ApproximationValue*, GetApproximatedPoints);
+	FUNCTION().PUBLIC().SIGNATURE(int, GetApproximatedPointsCount);
+	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);
 }
 END_META;

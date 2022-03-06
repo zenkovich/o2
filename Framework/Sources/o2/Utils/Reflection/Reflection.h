@@ -126,13 +126,14 @@ namespace o2
 		friend class Type;
 	};
 
-	class ReflectionInitializationTypeProcessor
+	class ReflectionInitializationTypeProcessor: public BaseTypeProcessor
 	{
 	public:
 		struct FieldProcessor
 		{
 			Vector<IAttribute*> attributes;
 			IDefaultValue* defaultValue = nullptr;
+			ProtectSection section = ProtectSection::Public;
 
 			template<typename _attribute_type, typename ... _args>
 			FieldProcessor& AddAttribute(_args ... args);
@@ -143,36 +144,39 @@ namespace o2
 			template<typename _object_type, typename _field_type>
 			FieldInfo& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
 								   _field_type& field);
+
+			FieldProcessor& SetProtectSection(ProtectSection section);
 		};
 
-		template<typename _object_type>
-		void Start(_object_type* object, Type* type);
+		struct FunctionProcessor
+		{
+			Vector<IAttribute*> attributes;
+			ProtectSection section = ProtectSection::Public;
 
-		template<typename _object_type>
-		void StartBases(_object_type* object, Type* type);
+			template<typename _attribute_type, typename ... _args>
+			FunctionProcessor& AddAttribute(_args ... args);
 
-		template<typename _object_type>
-		void StartFields(_object_type* object, Type* type);
+			FunctionProcessor& SetProtectSection(ProtectSection section);
 
-		FieldProcessor StartField();
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...));
 
-		template<typename _object_type>
-		void StartMethods(_object_type* object, Type* type);
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void Signature(_object_type* object, Type* type, const char* name,
+						   _res_type(_object_type::* pointer)(_args ...) const);
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void SignatureStatic(_object_type* object, Type* type, const char* name,
+								 _res_type(*pointer)(_args ...));
+		};
 
 		template<typename _object_type, typename _base_type>
 		void BaseType(_object_type* object, Type* type, const char* name);
 
-		template<typename _object_type, typename _res_type, typename ... _args>
-		FunctionInfo* Method(_object_type* object, Type* type, const char* name,
-							 _res_type(_object_type::*pointer)(_args ...), ProtectSection protection);
+		FieldProcessor StartField();
 
-		template<typename _object_type, typename _res_type, typename ... _args>
-		FunctionInfo* Method(_object_type* object, Type* type, const char* name,
-							 _res_type(_object_type::*pointer)(_args ...) const, ProtectSection protection);
-
-		template<typename _object_type, typename _res_type, typename ... _args>
-		StaticFunctionInfo* StaticMethod(_object_type* object, Type* type, const char* name,
-										 _res_type(*pointer)(_args ...), ProtectSection protection);
+		FunctionProcessor StartFunction();
 	};
 }
 
@@ -337,22 +341,6 @@ namespace o2
 		return newType;
 	}
 
-	template<typename _object_type>
-	void ReflectionInitializationTypeProcessor::Start(_object_type* object, Type* type)
-	{}
-
-	template<typename _object_type>
-	void ReflectionInitializationTypeProcessor::StartBases(_object_type* object, Type* type)
-	{}
-
-	template<typename _object_type>
-	void ReflectionInitializationTypeProcessor::StartFields(_object_type* object, Type* type)
-	{}
-
-	template<typename _object_type>
-	void ReflectionInitializationTypeProcessor::StartMethods(_object_type* object, Type* type)
-	{}
-
 	template<typename _object_type, typename _base_type>
 	void ReflectionInitializationTypeProcessor::BaseType(_object_type* object, Type* type, const char* name)
 	{
@@ -395,14 +383,21 @@ namespace o2
 		type->mFields.emplace_back(FieldInfo(type, name, pointerGetter, valType, ProtectSection::Private));
 		type->mFields.Last().mAttributes.Add(attributes);
 		type->mFields.Last().mDefaultValue = defaultValue;
+		type->mFields.Last().SetProtectSection(section);
 
 		return type->mFields.Last();
 	}
 
+	template<typename _attribute_type, typename ... _args>
+	ReflectionInitializationTypeProcessor::FunctionProcessor& ReflectionInitializationTypeProcessor::FunctionProcessor::AddAttribute(_args ... args)
+	{
+		attributes.Add(mnew _attribute_type(args ...));
+		return *this;
+	}
+
 	template<typename _object_type, typename _res_type, typename ... _args>
-	FunctionInfo* ReflectionInitializationTypeProcessor::Method(_object_type* object, Type* type, const char* name, 
-																_res_type(_object_type::*pointer)(_args ...), 
-																ProtectSection protection)
+	void ReflectionInitializationTypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
+																_res_type(_object_type::*pointer)(_args ...))
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -411,17 +406,15 @@ namespace o2
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;
 		funcInfo->mIsContant = false;
-		funcInfo->mProtectSection = protection;
+		funcInfo->mProtectSection = section;
 		funcInfo->mOwnerType = type;
+		funcInfo->mAttributes = attributes;
 		type->mFunctions.Add(funcInfo);
-
-		return funcInfo;
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
-	FunctionInfo* ReflectionInitializationTypeProcessor::Method(_object_type* object, Type* type, const char* name, 
-																_res_type(_object_type::*pointer)(_args ...) const,
-																ProtectSection protection)
+	void ReflectionInitializationTypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
+																_res_type(_object_type::*pointer)(_args ...) const)
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -430,17 +423,15 @@ namespace o2
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;
 		funcInfo->mIsContant = false;
-		funcInfo->mProtectSection = protection;
+		funcInfo->mProtectSection = section;
 		funcInfo->mOwnerType = type;
+		funcInfo->mAttributes = attributes;
 		type->mFunctions.Add(funcInfo);
-
-		return funcInfo;
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
-	StaticFunctionInfo* ReflectionInitializationTypeProcessor::StaticMethod(_object_type* object, Type* type, 
-																			const char* name, _res_type(*pointer)(_args ...), 
-																			ProtectSection protection)
+	void ReflectionInitializationTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type,
+																			const char* name, _res_type(*pointer)(_args ...))
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -448,11 +439,9 @@ namespace o2
 		funcInfo->mName = name;
 		funcInfo->mFunctionPtr = pointer;
 		funcInfo->mReturnType = retType;
-		funcInfo->mProtectSection = protection;
+		funcInfo->mProtectSection = section;
 		funcInfo->mOwnerType = type;
+		funcInfo->mAttributes = attributes;
 		type->mStaticFunctions.Add(funcInfo);
-
-		return funcInfo;
 	}
-
 }

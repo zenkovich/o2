@@ -79,16 +79,16 @@ END_META;
 CLASS_METHODS_META(o2::DrawableComponent)
 {
 
-	PUBLIC_FUNCTION(void, SetDrawingDepth, float);
-	PROTECTED_FUNCTION(void, OnSerialize, DataValue&);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, OnSerializeDelta, DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, OnDeserializedDelta, const DataValue&, const IObject&);
-	PROTECTED_FUNCTION(void, UpdateEnabled);
-	PROTECTED_FUNCTION(SceneLayer*, GetSceneDrawableSceneLayer);
-	PROTECTED_FUNCTION(bool, IsSceneDrawableEnabled);
-	PROTECTED_FUNCTION(void, OnAddToScene);
-	PROTECTED_FUNCTION(void, OnRemoveFromScene);
-	PUBLIC_FUNCTION(SceneEditableObject*, GetEditableOwner);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(SceneLayer*, GetSceneDrawableSceneLayer);
+	FUNCTION().PROTECTED().SIGNATURE(bool, IsSceneDrawableEnabled);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRemoveFromScene);
+	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableOwner);
 }
 END_META;

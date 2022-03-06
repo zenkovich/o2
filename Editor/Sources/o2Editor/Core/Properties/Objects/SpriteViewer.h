@@ -70,20 +70,20 @@ CLASS_BASES_META(Editor::SpriteViewer)
 END_META;
 CLASS_FIELDS_META(Editor::SpriteViewer)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mHiddenProperties).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mImageProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mColorProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSizePivotProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPivotProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mModeProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mFillPropertiesSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mFillProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSlicedPropertiesSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSliceBorderProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTiledPropertiesSpoiler).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTileScaleProperty).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHiddenProperties);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mImageProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mColorProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAlphaProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSizePivotProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPivotProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mModeProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillPropertiesSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mFillProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicedPropertiesSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSliceBorderProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTiledPropertiesSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mTileScaleProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSlicesEditor);
 }
 END_META;
 CLASS_METHODS_META(Editor::SpriteViewer)
@@ -92,8 +92,8 @@ CLASS_METHODS_META(Editor::SpriteViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
-	PROTECTED_FUNCTION(void, RebuildProperties, _tmp1);
-	PROTECTED_FUNCTION(void, OnRefreshed, _tmp2);
-	PROTECTED_FUNCTION(void, OnModeSelected);
+	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnModeSelected);
 }
 END_META;

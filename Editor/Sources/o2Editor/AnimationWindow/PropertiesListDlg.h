@@ -191,32 +191,32 @@ CLASS_BASES_META(Editor::AnimationPropertiesTree)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTree)
 {
-	FIELD().NAME(mFilterStr).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mAnimation).PRIVATE();
-	FIELD().NAME(mActor).PRIVATE();
-	FIELD().NAME(mRoot).PRIVATE();
-	FIELD().NAME(mPassedObject).PRIVATE();
+	FIELD().PRIVATE().NAME(mFilterStr);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mAnimation);
+	FIELD().PRIVATE().NAME(mActor);
+	FIELD().PRIVATE().NAME(mRoot);
+	FIELD().PRIVATE().NAME(mPassedObject);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 {
 
-	PUBLIC_FUNCTION(void, Initialize, AnimationClip*, ActorRef);
-	PUBLIC_FUNCTION(void, SetFilter, const WString&);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, InitializeTreeNode, NodeData*, IObject*);
-	PRIVATE_FUNCTION(void, ProcessObject, void*, const ObjectType*, NodeData*);
-	PRIVATE_FUNCTION(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);
-	PRIVATE_FUNCTION(void, InitializePropertyNode, NodeData*, const String&, const Type*);
-	PRIVATE_FUNCTION(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, NodeData*);
-	PRIVATE_FUNCTION(void, UpdateVisibleNodes);
-	PRIVATE_FUNCTION(TreeNode*, CreateTreeNodeWidget);
-	PRIVATE_FUNCTION(void*, GetObjectParent, void*);
-	PRIVATE_FUNCTION(Vector<void*>, GetObjectChilds, void*);
-	PRIVATE_FUNCTION(String, GetObjectDebug, void*);
-	PRIVATE_FUNCTION(void, FillNodeDataByObject, TreeNode*, void*);
-	PRIVATE_FUNCTION(void, OnNodeDblClick, TreeNode*);
-	PRIVATE_FUNCTION(void, OnNodesSelectionChanged, Vector<void*>);
+	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationClip*, ActorRef);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeTreeNode, NodeData*, IObject*);
+	FUNCTION().PRIVATE().SIGNATURE(void, ProcessObject, void*, const ObjectType*, NodeData*);
+	FUNCTION().PRIVATE().SIGNATURE(void, ProcessTreeNode, void*, const Type*, const String&, NodeData*);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializePropertyNode, NodeData*, const String&, const Type*);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeObjectTreeNode, const ObjectType*, void*, const String&, NodeData*);
+	FUNCTION().PRIVATE().SIGNATURE(void, UpdateVisibleNodes);
+	FUNCTION().PRIVATE().SIGNATURE(TreeNode*, CreateTreeNodeWidget);
+	FUNCTION().PRIVATE().SIGNATURE(void*, GetObjectParent, void*);
+	FUNCTION().PRIVATE().SIGNATURE(Vector<void*>, GetObjectChilds, void*);
+	FUNCTION().PRIVATE().SIGNATURE(String, GetObjectDebug, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, FillNodeDataByObject, TreeNode*, void*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnNodeDblClick, TreeNode*);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnNodesSelectionChanged, Vector<void*>);
 }
 END_META;
 
@@ -227,20 +227,20 @@ CLASS_BASES_META(Editor::AnimationPropertiesTreeNode)
 END_META;
 CLASS_FIELDS_META(Editor::AnimationPropertiesTreeNode)
 {
-	FIELD().NAME(mName).PRIVATE();
-	FIELD().NAME(mIcon).PRIVATE();
-	FIELD().NAME(mAddButton).PRIVATE();
-	FIELD().NAME(mRemoveButton).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mData).PRIVATE();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mTree).PRIVATE();
+	FIELD().PRIVATE().NAME(mName);
+	FIELD().PRIVATE().NAME(mIcon);
+	FIELD().PRIVATE().NAME(mAddButton);
+	FIELD().PRIVATE().NAME(mRemoveButton);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mData);
+	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mTree);
 }
 END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 {
 
-	PUBLIC_FUNCTION(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
-	PUBLIC_STATIC_FUNCTION(String, GetCreateMenuCategory);
-	PRIVATE_FUNCTION(void, OnDeserialized, const DataValue&);
-	PRIVATE_FUNCTION(void, InitializeControls);
+	FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
+	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
+	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);
 }
 END_META;

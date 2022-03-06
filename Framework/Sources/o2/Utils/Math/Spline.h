@@ -254,57 +254,57 @@ CLASS_BASES_META(o2::Spline)
 END_META;
 CLASS_FIELDS_META(o2::Spline)
 {
-	FIELD().NAME(keys).PUBLIC();
-	FIELD().NAME(length).PUBLIC();
-	FIELD().NAME(onKeysChanged).PUBLIC();
-	FIELD().DEFAULT_VALUE(false).NAME(mBatchChange).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mChangedKeys).PROTECTED();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(mKeys).PROTECTED();
-	FIELD().DEFAULT_VALUE(false).NAME(mClosed).PROTECTED();
+	FIELD().PUBLIC().NAME(keys);
+	FIELD().PUBLIC().NAME(length);
+	FIELD().PUBLIC().NAME(onKeysChanged);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mBatchChange);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mChangedKeys);
+	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mKeys);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mClosed);
 }
 END_META;
 CLASS_METHODS_META(o2::Spline)
 {
 
-	PUBLIC_FUNCTION(Vec2F, Evaluate, float);
-	PUBLIC_FUNCTION(Vec2F, Evaluate, float, bool, int&, int&);
-	PUBLIC_FUNCTION(void, BeginKeysBatchChange);
-	PUBLIC_FUNCTION(void, CompleteKeysBatchingChange);
-	PUBLIC_FUNCTION(void, SetClosed, bool);
-	PUBLIC_FUNCTION(bool, IsClosed);
-	PUBLIC_FUNCTION(void, AppendSpline, const Spline&);
-	PUBLIC_FUNCTION(void, PrependSpline, const Spline&);
-	PUBLIC_FUNCTION(void, InsertSpline, const Spline&, int);
-	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Vec2F>&, bool);
-	PUBLIC_FUNCTION(void, AppendKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Vec2F>&, bool);
-	PUBLIC_FUNCTION(void, PrependKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Vec2F>&, int, bool);
-	PUBLIC_FUNCTION(void, InsertKeys, const Vector<Key>&, int);
-	PUBLIC_FUNCTION(void, InsertKey, const Key&, int);
-	PUBLIC_FUNCTION(void, InsertKey, int, const Vec2F&, const Vec2F&, const Vec2F&);
-	PUBLIC_FUNCTION(void, InsertKey, int, const Vec2F&, float);
-	PUBLIC_FUNCTION(int, AppendKey, const Vec2F&, const Vec2F&, const Vec2F&);
-	PUBLIC_FUNCTION(int, AppendKey, const Vec2F&, float);
-	PUBLIC_FUNCTION(int, PrependKey, const Vec2F&, const Vec2F&, const Vec2F&);
-	PUBLIC_FUNCTION(int, PrependKey, const Vec2F&, float);
-	PUBLIC_FUNCTION(bool, RemoveKey, int);
-	PUBLIC_FUNCTION(void, RemoveAllKeys);
-	PUBLIC_FUNCTION(const Vector<Key>&, GetKeys);
-	PUBLIC_FUNCTION(Key, GetKey, int);
-	PUBLIC_FUNCTION(Key, FindKey, UInt64);
-	PUBLIC_FUNCTION(int, FindKeyIdx, UInt64);
-	PUBLIC_FUNCTION(void, SetKeys, const Vector<Key>&);
-	PUBLIC_FUNCTION(void, SetKey, const Key&, int);
-	PUBLIC_FUNCTION(void, SmoothKey, int, float);
-	PUBLIC_FUNCTION(float, Length);
-	PUBLIC_FUNCTION(bool, IsEmpty);
-	PUBLIC_FUNCTION(RectF, GetRect);
-	PROTECTED_FUNCTION(void, CheckSmoothKeys);
-	PROTECTED_FUNCTION(void, UpdateApproximation);
-	PROTECTED_FUNCTION(Vector<Key>, GetKeysNonContant);
-	PROTECTED_FUNCTION(void, OnDeserialized, const DataValue&);
-	PROTECTED_FUNCTION(void, InternalSmoothKeyAt, int, float);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float);
+	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float, bool, int&, int&);
+	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetClosed, bool);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsClosed);
+	FUNCTION().PUBLIC().SIGNATURE(void, AppendSpline, const Spline&);
+	FUNCTION().PUBLIC().SIGNATURE(void, PrependSpline, const Spline&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertSpline, const Spline&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, AppendKeys, const Vector<Vec2F>&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, AppendKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, PrependKeys, const Vector<Vec2F>&, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, PrependKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Vec2F>&, int, bool);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKeys, const Vector<Key>&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, const Key&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, int, const Vec2F&, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(void, InsertKey, int, const Vec2F&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, const Vec2F&, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(int, AppendKey, const Vec2F&, float);
+	FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, const Vec2F&, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().SIGNATURE(int, PrependKey, const Vec2F&, float);
+	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveKey, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllKeys);
+	FUNCTION().PUBLIC().SIGNATURE(const Vector<Key>&, GetKeys);
+	FUNCTION().PUBLIC().SIGNATURE(Key, GetKey, int);
+	FUNCTION().PUBLIC().SIGNATURE(Key, FindKey, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(int, FindKeyIdx, UInt64);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKeys, const Vector<Key>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetKey, const Key&, int);
+	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKey, int, float);
+	FUNCTION().PUBLIC().SIGNATURE(float, Length);
+	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+	FUNCTION().PUBLIC().SIGNATURE(RectF, GetRect);
+	FUNCTION().PROTECTED().SIGNATURE(void, CheckSmoothKeys);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateApproximation);
+	FUNCTION().PROTECTED().SIGNATURE(Vector<Key>, GetKeysNonContant);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
+	FUNCTION().PROTECTED().SIGNATURE(void, InternalSmoothKeyAt, int, float);
 }
 END_META;
 
@@ -315,21 +315,21 @@ CLASS_BASES_META(o2::Spline::Key)
 END_META;
 CLASS_FIELDS_META(o2::Spline::Key)
 {
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Math::Random()).NAME(uid).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(position).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(value).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(prevSupport).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().NAME(nextSupport).PUBLIC();
-	FIELD().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Type::Smooth).NAME(supportsType).PUBLIC();
-	FIELD().NAME(mApproxValues).PUBLIC();
-	FIELD().NAME(mApproxValuesBounds).PUBLIC();
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Math::Random()).NAME(uid);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(0.0f).NAME(position);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(value);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(prevSupport);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(nextSupport);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Type::Smooth).NAME(supportsType);
+	FIELD().PUBLIC().NAME(mApproxValues);
+	FIELD().PUBLIC().NAME(mApproxValuesBounds);
 }
 END_META;
 CLASS_METHODS_META(o2::Spline::Key)
 {
 
-	PUBLIC_FUNCTION(const ApproximationVec2F*, GetApproximatedPoints);
-	PUBLIC_FUNCTION(int, GetApproximatedPointsCount);
-	PUBLIC_FUNCTION(const RectF&, GetGetApproximatedPointsBounds);
+	FUNCTION().PUBLIC().SIGNATURE(const ApproximationVec2F*, GetApproximatedPoints);
+	FUNCTION().PUBLIC().SIGNATURE(int, GetApproximatedPointsCount);
+	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);
 }
 END_META;

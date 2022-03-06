@@ -55,16 +55,16 @@ CLASS_BASES_META(Editor::SceneLayersListProperty)
 END_META;
 CLASS_FIELDS_META(Editor::SceneLayersListProperty)
 {
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPropertyButton).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mPropertyText).PROTECTED();
-	FIELD().DEFAULT_VALUE(nullptr).NAME(mLayersContext).PROTECTED();
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPropertyText);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mLayersContext);
 }
 END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)
 {
 
-	PROTECTED_FUNCTION(void, UpdateValueView);
-	PROTECTED_FUNCTION(void, InitializeControls);
-	PROTECTED_FUNCTION(void, OpenContext);
+	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
+	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
+	FUNCTION().PROTECTED().SIGNATURE(void, OpenContext);
 }
 END_META;
