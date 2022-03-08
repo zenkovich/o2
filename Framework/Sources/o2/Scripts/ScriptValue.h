@@ -50,10 +50,10 @@ namespace o2
 		operator _type() const;
 
 		// Property accessor operator
-		ScriptValue operator [](const ScriptValue& name);
+		ScriptValue operator [](const ScriptValue& name) const;
 
 		// Array index operator
-		ScriptValue operator [](int idx);
+		ScriptValue operator [](int idx) const;
 
 		// Copy-operator. Copies reference on value
 		ScriptValue& operator=(const ScriptValue& other);
@@ -68,15 +68,31 @@ namespace o2
 		// Returns error description, if value type is error
 		String GetError() const;
 
+		// Dumps data into string
+		String Dump(const String& tab = "") const;
+
 	// Object methods
+		// Creates empty object
+		static ScriptValue EmptyObject();
+
 		// Iterates properties in object
 		void ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const;
 
 		// Returns property value
 		ScriptValue GetProperty(const ScriptValue& name) const;
 
+		// Returns property value
+		ScriptValue GetProperty(const char* name) const;
+
 		// Sets property value
 		void SetProperty(const ScriptValue& name, const ScriptValue& value);
+
+		// Sets property value
+		void SetProperty(const char* name, const ScriptValue& value);
+
+		// Sets property value
+		template<typename _type>
+		void SetProperty(const char* name, const _type& value);
 
 		// Sets property wrapper. Uses value reference to get/set value from script
 		template<typename _type>
@@ -89,6 +105,9 @@ namespace o2
 
 		// Removes property
 		void RemoveProperty(const ScriptValue& name);
+
+		// Sets prototype object
+		void SetPrototype(const ScriptValue& proto);
 
 	// Array methods
 		// Returns length of array

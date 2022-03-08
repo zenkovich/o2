@@ -47,8 +47,8 @@ namespace o2
 		// Parses script from string and returns parse result
 		ScriptParseResult Parse(const String& script);
 
-		// Runs parsed script, and returns is it ok
-		bool Run(const ScriptParseResult& parseResult);
+		// Runs parsed script, and returns retult
+		ScriptValue Run(const ScriptParseResult& parseResult);
 
 		// Evaluates script
 		ScriptValue Eval(const String& script);
@@ -62,6 +62,9 @@ namespace o2
 	private:
 		// Registers all types from reflection
 		void RegisterTypes();
+
+		// Runs built in script with math and etc, required to work framework
+		void RunBuildtinScripts();
 	};
 }
 

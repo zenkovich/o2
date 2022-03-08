@@ -74,6 +74,9 @@ const char* GetEditorBuiltAssetsPath();
 // Editor's built assets assets tree path
 const char* GetEditorBuiltAssetsTreePath();
 
+// Built in assets path. Relative from executable
+const char* GetBuiltitAssetsPath();
+
 
 // ----------------------
 // Platform configuration

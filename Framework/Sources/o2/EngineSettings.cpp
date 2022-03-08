@@ -142,6 +142,15 @@ const char* GetEditorBuiltAssetsTreePath()
 	return "";
 }
 
+const char* GetBuiltitAssetsPath()
+{
+#if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
+	return "../../o2/Framework/Assets/";
+#else
+	return "FrameworkAssets/";
+#endif
+}
+
 #ifdef PLATFORM_ANDROID
 
 const char* GetAndroidAssetsPath()

@@ -46,6 +46,8 @@ namespace o2
 		jerryx_handler_register_global((const jerry_char_t*)"print", jerryx_handler_print);
 		jerry_set_error_object_created_callback(&ErrorCallback, NULL);
 
+		RunBuildtinScripts();
+		InitializeBasicPrototypes();
 		RegisterTypes();
 	}
 
@@ -61,13 +63,11 @@ namespace o2
 		return res;
 	}
 
-	bool ScriptEngine::Run(const ScriptParseResult& parseResult)
+	ScriptValue ScriptEngine::Run(const ScriptParseResult& parseResult)
 	{
-		jerry_value_t retValue = jerry_run(parseResult.mParsedCode);
-		bool result = !jerry_value_is_error(retValue);
-		jerry_release_value(retValue);
-
-		return result;
+		ScriptValue res;
+		res.Accept(jerry_run(parseResult.mParsedCode));
+		return res;
 	}
 
 	ScriptValue ScriptEngine::Eval(const String& script)
@@ -89,6 +89,14 @@ namespace o2
 		jerry_gc(JERRY_GC_PRESSURE_HIGH);
 	}
 
+	void ScriptEngineBase::InitializeBasicPrototypes()
+	{
+		auto global = o2Scripts.GetGlobal();
+		ScriptValuePrototypes::GetVec2Prototype() = global.GetProperty("Vec2");
+		ScriptValuePrototypes::GetRectPrototype() = global.GetProperty("Rect");
+		ScriptValuePrototypes::GetBorderPrototype() = global.GetProperty("Border");
+		ScriptValuePrototypes::GetColor4Prototype() = global.GetProperty("Color4");
+	}
 }
 
 #endif

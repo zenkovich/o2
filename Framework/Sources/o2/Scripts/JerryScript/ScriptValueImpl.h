@@ -4,6 +4,14 @@
 
 namespace o2
 {
+	struct ScriptValuePrototypes
+	{
+		static ScriptValue& GetVec2Prototype();
+		static ScriptValue& GetRectPrototype();
+		static ScriptValue& GetBorderPrototype();
+		static ScriptValue& GetColor4Prototype();
+	};
+
 	template<typename _type>
 	ScriptValue::ScriptValue(const _type& value)
 	{
@@ -38,6 +46,12 @@ namespace o2
 		_type res;
 		Converter<_type>::Read(res, *this);
 		return std::move(res);
+	}
+
+	template<typename _type>
+	void ScriptValue::SetProperty(const char* name, const _type& value)
+	{
+		SetProperty(ScriptValue(name), ScriptValue(value));
 	}
 
 	template<typename _type>

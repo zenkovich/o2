@@ -16,6 +16,13 @@ namespace o2
 		jvalue = jerry_acquire_value(v);
 	}
 
+	ScriptValue ScriptValue::EmptyObject()
+	{
+		ScriptValue res;
+		res.Accept(jerry_create_object());
+		return res;
+	}
+
 	void ScriptValueBase::Accept(jerry_value_t v)
 	{
 		jerry_release_value(jvalue);
@@ -32,15 +39,15 @@ namespace o2
 		jvalue = jerry_acquire_value(other.jvalue);
 	}
 
-	ScriptValue ScriptValue::operator[](const ScriptValue& name)
+	ScriptValue ScriptValue::operator[](const ScriptValue& name) const
 	{
 		return GetProperty(name);
 	}
 
-	ScriptValue ScriptValue::operator[](int idx)
+	ScriptValue ScriptValue::operator[](int idx) const
 	{
 		ScriptValue res;
-		res.jvalue = jerry_get_property_by_index(jvalue, idx);
+		res.Accept(jerry_get_property_by_index(jvalue, idx));
 		return res;
 	}
 
@@ -100,8 +107,8 @@ namespace o2
 			{
 				auto func = (Function<bool(const ScriptValue&, const ScriptValue&)>*)user_data_p;
 				ScriptValue name, value;
-				name.jvalue = property_name;
-				value.jvalue = property_value;
+				name.AcquireValue(property_name);
+				value.AcquireValue(property_value);
 				return (*func)(name, value);
 			}
 		};
@@ -124,8 +131,7 @@ namespace o2
 		}
 
 		ScriptValue res;
-		jerry_release_value(res.jvalue);
-		res.jvalue = jerry_get_property(jvalue, name.jvalue);
+		res.Accept(jerry_get_property(jvalue, name.jvalue));
 		return res;
 	}
 
@@ -143,6 +149,12 @@ namespace o2
 	void ScriptValue::RemoveProperty(const ScriptValue& name)
 	{
 		jerry_delete_property(jvalue, name.jvalue);
+	}
+
+	void ScriptValue::SetPrototype(const ScriptValue& proto)
+	{
+		ScriptValue res;
+		res.Accept(jerry_set_prototype(jvalue, proto.jvalue));
 	}
 
 	void ScriptValue::SetElement(const ScriptValue& value, int idx)
@@ -276,6 +288,31 @@ namespace o2
 		IGetterWrapperContainer* container = dynamic_cast<IGetterWrapperContainer*>((IDataContainer*)ptr);
 		return container->Get();
 	}
+
+	ScriptValue& ScriptValuePrototypes::GetVec2Prototype()
+	{
+		static ScriptValue value;
+		return value;
+	}
+
+	ScriptValue& ScriptValuePrototypes::GetRectPrototype()
+	{
+		static ScriptValue value;
+		return value;
+	}
+
+	ScriptValue& ScriptValuePrototypes::GetBorderPrototype()
+	{
+		static ScriptValue value;
+		return value;
+	}
+
+	ScriptValue& ScriptValuePrototypes::GetColor4Prototype()
+	{
+		static ScriptValue value;
+		return value;
+	}
+
 }
 
 #endif

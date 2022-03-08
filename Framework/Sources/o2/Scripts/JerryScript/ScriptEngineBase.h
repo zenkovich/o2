@@ -25,6 +25,9 @@ namespace o2
 
 	protected:
 		static void ErrorCallback(const jerry_value_t error_object, void* user_p);
+
+		// Initialized basic prototypes for math and other
+		void InitializeBasicPrototypes();
 	};
 }
 

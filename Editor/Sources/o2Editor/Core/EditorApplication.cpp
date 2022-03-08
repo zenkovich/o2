@@ -35,6 +35,7 @@
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
 #include "jerryscript/jerry-ext/include/jerryscript-ext/handler.h"
+#include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace Editor
 {
@@ -153,7 +154,7 @@ namespace Editor
 		std::tuple<std::remove_reference<const String&>::type> t = { "as" };
 		auto fff = [](const String& x) { o2Debug.Log(x); };
 		std::apply(fff, t);
-		ScriptValue ff(Function<void(const String&)>([](const String& xx) { o2Debug.Log(xx); }));
+		ScriptValue ff(Function<void(const String&)>([](const String& xx) { o2Debug.Log("called ff" + xx); }));
 		o2Scripts.GetGlobal().SetProperty(ScriptValue("ff"), ff);
 		o2Scripts.Eval("ff('asd');");
 
@@ -173,9 +174,42 @@ namespace Editor
 		o2Scripts.GetGlobal().SetProperty(ScriptValue("obj"), obj);
 		o2Scripts.Eval("print(JSON.stringify(obj));");
 
+		o2Scripts.GetGlobal().SetProperty(ScriptValue("scriptValueFunc"), ScriptValue(Function<ScriptValue()>([&]()
+		{
+			return mBackground->GetScriptValue();
+		})));
+
+		//o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
+
+		o2Scripts.Eval("print(JSON.stringify(scriptValueFunc()))");
+
+		o2Scripts.Eval("var testSprite = o2.Sprite.New(); testSprite.SetFill(testSprite.GetFill() - 0.5); print(testSprite.fill);");
+
+		ScriptValue prot;
+		prot.SetProperty("a", 5);
+		prot.SetProperty("func", Function<void()>([]() { o2Debug.Log("privet"); }));
+
+		Vec2F tv2(3, 5);
+		o2Scripts.GetGlobal().SetProperty("gettt", Function<Vec2F(const Vec2F&)>([&](const Vec2F& in) { tv2 += in; return tv2; }));
+		o2Scripts.Eval("print(JSON.stringify(gettt(Vec2.New(2, 3))));");
+
+		ScriptValue exm = ScriptValue::EmptyObject();
+		exm.SetPrototype(prot);
+		o2Scripts.GetGlobal().SetProperty("exm", exm);
+		o2Scripts.Eval("exm.func();");
+
+		o2Scripts.Run(o2Scripts.Parse(o2FileSystem.ReadFile(GetAssetsPath() + String("test.js"))));
+
+		o2Scripts.Eval("yy.func();");
+
+		o2Scripts.Eval("function testDefault(x = 5) { print(Math.sqrt(x)); }; testDefault(); testDefault(10);");
+		o2Scripts.Eval("let vv = Vec2.New(3, 5); let gg = vv.Add(Vec2.New(1, 1)); print(gg.x + '; ' + gg.y);");
+
 		o2Scripts.GetGlobal().SetProperty(ScriptValue("wrp"), mBackground->GetScriptValue());
 		o2Scripts.Eval("wrp.Draw()");
 		o2Scripts.Eval("wrp.SetFill(wrp.GetFill() - 0.1)");
+		o2Scripts.Eval("wrp.position = wrp.position.Add(Vec2.New(2, 2));");
+		o2Scripts.Eval("print(wrp.GetImageName()); wrp.LoadFromImage('ui/UI_Background.png')");
 		auto pres = o2Scripts.Parse("vaddr str = 'Hello, World!';");
 		if (!pres.IsOk()) {
 			o2Debug.Log(pres.GetError());

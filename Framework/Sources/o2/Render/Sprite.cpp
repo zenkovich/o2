@@ -372,12 +372,12 @@ namespace o2
 		return mImageAsset;
 	}
 
-	String Sprite::GetImageName() const
+	const String& Sprite::GetImageName() const
 	{
 		if (mImageAsset)
 			return mImageAsset->GetPath();
 
-		return String();
+		return String::empty;
 	}
 
 	UID Sprite::GetAtlasAssetId() const

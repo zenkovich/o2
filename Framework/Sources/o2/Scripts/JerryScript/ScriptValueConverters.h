@@ -387,7 +387,7 @@ namespace o2
 
 		static void Read(String& value, const ScriptValue& data)
 		{
-			value.resize(jerry_get_string_length(data.jvalue) + 1);
+			value.resize(jerry_get_string_length(data.jvalue));
 			jerry_string_to_char_buffer(data.jvalue, (jerry_char_t*)value.Data(), value.Capacity());
 		}
 	};
@@ -417,6 +417,7 @@ namespace o2
 		static void Write(const Vec2F& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetVec2Prototype());
 			data.SetProperty(ScriptValue("x"), ScriptValue(value.x));
 			data.SetProperty(ScriptValue("y"), ScriptValue(value.y));
 		}
@@ -436,6 +437,7 @@ namespace o2
 		static void Write(const Vec2I& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetVec2Prototype());
 			data.SetProperty(ScriptValue("x"), ScriptValue(value.x));
 			data.SetProperty(ScriptValue("y"), ScriptValue(value.y));
 		}
@@ -455,6 +457,7 @@ namespace o2
 		static void Write(const RectF& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetRectPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -478,6 +481,7 @@ namespace o2
 		static void Write(const RectI& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetRectPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -501,6 +505,7 @@ namespace o2
 		static void Write(const BorderF& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetBorderPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -524,6 +529,7 @@ namespace o2
 		static void Write(const BorderI& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetBorderPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -547,6 +553,7 @@ namespace o2
 		static void Write(const Color4& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+			data.SetPrototype(ScriptValuePrototypes::GetColor4Prototype());
 			data.SetProperty(ScriptValue("r"), ScriptValue(value.r));
 			data.SetProperty(ScriptValue("g"), ScriptValue(value.g));
 			data.SetProperty(ScriptValue("b"), ScriptValue(value.b));

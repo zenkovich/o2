@@ -72,7 +72,7 @@ namespace o2
 		// Loads sprite from image asset
 		void LoadFromImage(const ImageAssetRef& image, bool setSizeByImage = true);
 
-		// Loads sprite from image asset by path
+		// Loads sprite from image asset by path @SCRIPTABLE
 		void LoadFromImage(const String& imagePath, bool setSizeByImage = true);
 
 		// Loads sprite from image asset by id
@@ -162,8 +162,8 @@ namespace o2
 		// Returns asset
 		ImageAssetRef GetImageAsset() const;
 
-		// Returns image asset name
-		String GetImageName() const;
+		// Returns image asset name @SCRIPTABLE
+		const String& GetImageName() const;
 
 		// Returns atlas asset id (returns 0 when sprite is not from atlas)
 		UID GetAtlasAssetId() const;
@@ -284,7 +284,7 @@ CLASS_METHODS_META(o2::Sprite)
 {
 
 	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, const ImageAssetRef&, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, const String&, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadFromImage, const String&, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, UID, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, LoadMonoColor, const Color4&);
 	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromBitmap, Bitmap*, bool);
@@ -314,7 +314,7 @@ CLASS_METHODS_META(o2::Sprite)
 	FUNCTION().PUBLIC().SIGNATURE(BorderI, GetSliceBorder);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(ImageAssetRef, GetImageAsset);
-	FUNCTION().PUBLIC().SIGNATURE(String, GetImageName);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetImageName);
 	FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlasAssetId);
 	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeSize);
 	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspectByWidth);
