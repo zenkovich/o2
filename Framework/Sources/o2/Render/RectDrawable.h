@@ -14,9 +14,9 @@ namespace o2
 	{
 	public:
 		PROPERTIES(IRectDrawable);
-		PROPERTY(Color4, color, SetColor, GetColor);                     // Color property
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property
+		PROPERTY(Color4, color, SetColor, GetColor);                     // Color property @SCRIPTABLE
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property, changing alpha in color @SCRIPTABLE
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property @SCRIPTABLE
 
 	public:
 		// Constructor
@@ -86,9 +86,9 @@ CLASS_BASES_META(o2::IRectDrawable)
 END_META;
 CLASS_FIELDS_META(o2::IRectDrawable)
 {
-	FIELD().PUBLIC().NAME(color);
-	FIELD().PUBLIC().NAME(transparency);
-	FIELD().PUBLIC().NAME(enabled);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(color);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(transparency);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(enabled);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mColor);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mEnabled);
 }

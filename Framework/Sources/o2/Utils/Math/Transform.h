@@ -29,19 +29,19 @@ namespace o2
 		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property @EDITOR_IGNORE @ANIMATABLE
 		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Sets the position and size @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Sets the position and size @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 
-		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Left top corner property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Left top corner property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Left top corner property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Left top corner property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 
-		PROPERTY(Vec2F, right, SetRight, GetRight); // X Axis direction property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, left, SetLeft, GetLeft);    // Negative X Axis direction property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, up, SetUp, GetUp);          // Y Axis direction property @EDITOR_IGNORE @ANIMATABLE
-		PROPERTY(Vec2F, down, SetDown, GetDown);    // Negative Y Axis direction property @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(Vec2F, right, SetRight, GetRight); // X Axis direction property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, left, SetLeft, GetLeft);    // Negative X Axis direction property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, up, SetUp, GetUp);          // Y Axis direction property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(Vec2F, down, SetDown, GetDown);    // Negative Y Axis direction property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 
 		SETTER(Vec2F, lookAtPoint, LookAt); // Look at point setter @EDITOR_IGNORE @ANIMATABLE
 
@@ -200,19 +200,19 @@ namespace o2
 		// Sets x axis directed to worldPoint
 		virtual void LookAt(const Vec2F& worldPoint);
 
-		// Transforms point from world space into local
+		// Transforms point from world space into local @SCRIPTABLE
 		virtual Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
 
-		// Transforms point from local space into world
+		// Transforms point from local space into world @SCRIPTABLE
 		virtual Vec2F Local2WorldPoint(const Vec2F& localPoint) const;
 
-		// Transforms direction from world space into local
+		// Transforms direction from world space into local @SCRIPTABLE
 		virtual Vec2F World2LocalDir(const Vec2F& worldDir) const;
 
-		// Transforms direction from local space into world
+		// Transforms direction from local space into world @SCRIPTABLE
 		virtual Vec2F Local2WorldDir(const Vec2F& localDir) const;
 
-		// Returns true when point inside this
+		// Returns true when point inside this @SCRIPTABLE
 		virtual bool IsPointInside(const Vec2F& point) const;
 
 		// Sets serialization enable or disable
@@ -266,17 +266,17 @@ CLASS_FIELDS_META(o2::Transform)
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(shear);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(basis);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(nonSizedBasis);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(rect);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(AABB);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(leftTop);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(leftBottom);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(rightTop);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(rightBottom);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(center);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(right);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(left);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(up);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(down);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(rect);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(AABB);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(leftTop);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(leftBottom);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(rightTop);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(rightBottom);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(center);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(right);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(left);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(up);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(down);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(lookAtPoint);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mPosition);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().SERIALIZE_IF_ATTRIBUTE(IsSerializeEnabled).NAME(mSize);
@@ -337,11 +337,11 @@ CLASS_METHODS_META(o2::Transform)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDown, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetDown);
 	FUNCTION().PUBLIC().SIGNATURE(void, LookAt, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, World2LocalPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Local2WorldPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, World2LocalDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Local2WorldDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsPointInside, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, World2LocalPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, Local2WorldPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, World2LocalDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, Local2WorldDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsPointInside, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSerializeEnabled, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, BasisChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

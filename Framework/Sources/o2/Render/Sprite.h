@@ -69,16 +69,16 @@ namespace o2
 		// Not equals operator
 		bool operator!=(const Sprite& other) const;
 
-		// Loads sprite from image asset
+		// Loads sprite from image asset @SCRIPTABLE_NAME(LoadFromImageRef)
 		void LoadFromImage(const ImageAssetRef& image, bool setSizeByImage = true);
 
 		// Loads sprite from image asset by path @SCRIPTABLE
 		void LoadFromImage(const String& imagePath, bool setSizeByImage = true);
 
-		// Loads sprite from image asset by id
+		// Loads sprite from image asset by id @SCRIPTABLE_NAME(LoadFromImageUID)
 		void LoadFromImage(UID imageId, bool setSizeByImage = true);
 
-		// Loads sprite from mono color
+		// Loads sprite from mono color @SCRIPTABLE
 		void LoadMonoColor(const Color4& color);
 
 		// Loads sprite from bitmap
@@ -87,10 +87,10 @@ namespace o2
 		// Draws sprite @SCRIPTABLE
 		void Draw() override;
 
-		// Sets using texture
+		// Sets using texture @SCRIPTABLE
 		void SetTexture(TextureRef texture);
 
-		// Returns using texture
+		// Returns using texture @SCRIPTABLE
 		TextureRef GetTexture() const;
 
 		// Sets texture source rectangle
@@ -144,10 +144,10 @@ namespace o2
 		// Returns tile scale
 		float GetTileScale() const;
 
-		// Sets sprite drawing mode
+		// Sets sprite drawing mode @SCRIPTABLE
 		void SetMode(SpriteMode mode);
 
-		// Returns sprite drawing mode
+		// Returns sprite drawing mode @SCRIPTABLE
 		SpriteMode GetMode() const;
 
 		// Sets sprite slice border
@@ -156,28 +156,28 @@ namespace o2
 		// Returns sprite slice border
 		BorderI GetSliceBorder() const;
 
-		// Sets asset
+		// Sets asset @SCRIPTABLE
 		void SetImageAsset(const ImageAssetRef& asset);
 
-		// Returns asset
+		// Returns asset @SCRIPTABLE
 		ImageAssetRef GetImageAsset() const;
 
 		// Returns image asset name @SCRIPTABLE
 		const String& GetImageName() const;
 
-		// Returns atlas asset id (returns 0 when sprite is not from atlas)
+		// Returns atlas asset id (returns 0 when sprite is not from atlas) @SCRIPTABLE
 		UID GetAtlasAssetId() const;
 
-		// Sets size by texture source rectangle size
+		// Sets size by texture source rectangle size @SCRIPTABLE
 		void NormalizeSize();
 
-		// Sets size with equal aspect as texture source rectangle by width
+		// Sets size with equal aspect as texture source rectangle by width @SCRIPTABLE
 		void NormalizeAspectByWidth();
 
-		// Sets size with equal aspect as texture source rectangle by width
+		// Sets size with equal aspect as texture source rectangle by width @SCRIPTABLE
 		void NormalizeAspectByHeight();
 
-		// Sets size with equal aspect as texture source rectangle by nearest value
+		// Sets size with equal aspect as texture source rectangle by nearest value @SCRIPTABLE
 		void NormalizeAspect();
 
 		// Calling when serializing
@@ -283,14 +283,14 @@ END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
-	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, const ImageAssetRef&, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageRef).SIGNATURE(void, LoadFromImage, const ImageAssetRef&, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadFromImage, const String&, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromImage, UID, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, LoadMonoColor, const Color4&);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageUID).SIGNATURE(void, LoadFromImage, UID, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadMonoColor, const Color4&);
 	FUNCTION().PUBLIC().SIGNATURE(void, LoadFromBitmap, Bitmap*, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTexture, TextureRef);
-	FUNCTION().PUBLIC().SIGNATURE(TextureRef, GetTexture);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetTexture, TextureRef);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(TextureRef, GetTexture);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTextureSrcRect, const RectI&);
 	FUNCTION().PUBLIC().SIGNATURE(RectI, GetTextureSrcRect);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetOriginalSize);
@@ -308,18 +308,18 @@ CLASS_METHODS_META(o2::Sprite)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetFill);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTileScale, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetTileScale);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetMode, SpriteMode);
-	FUNCTION().PUBLIC().SIGNATURE(SpriteMode, GetMode);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetMode, SpriteMode);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SpriteMode, GetMode);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSliceBorder, const BorderI&);
 	FUNCTION().PUBLIC().SIGNATURE(BorderI, GetSliceBorder);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
-	FUNCTION().PUBLIC().SIGNATURE(ImageAssetRef, GetImageAsset);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ImageAssetRef, GetImageAsset);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetImageName);
-	FUNCTION().PUBLIC().SIGNATURE(UID, GetAtlasAssetId);
-	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeSize);
-	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspectByWidth);
-	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspectByHeight);
-	FUNCTION().PUBLIC().SIGNATURE(void, NormalizeAspect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(UID, GetAtlasAssetId);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, NormalizeSize);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, NormalizeAspectByWidth);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, NormalizeAspectByHeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, NormalizeAspect);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnSerialize, DataValue&);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnDeserializedDelta, const DataValue&, const IObject&);
