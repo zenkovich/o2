@@ -1,10 +1,10 @@
 # o2
 
-o2 - it's an open-source technology for easy making 2D games and applications for mobile and PC platforms using C++ and Lua with very flexible editor. The main features are performance, usability and effective development.
+o2 - it's an open-source technology for easy making 2D games and applications for mobile and PC platforms using C++ and JavaScript with visual editor. The main features are performance, usability and effective development.
 
 Here is the test project: https://github.com/zenkovich/o2-Template
 
-Now work in progress.
+**Now work in progress.**
 
 Discord channel - https://discord.gg/FqBBYpYGfS
 Telegram channel - https://t.me/o2engine
@@ -41,6 +41,9 @@ Multiplatform input processing, easy clicks and touches processing
 
 - Platforms 
 Windows, IOS (WIP), Android (WIP), MAC OSX (WIP), Webassembly (WIP)
+
+- Scripting
+JavaScript on jerry script engine
 
 - Editor  
 Flexible editor "all-in-one", plugins
