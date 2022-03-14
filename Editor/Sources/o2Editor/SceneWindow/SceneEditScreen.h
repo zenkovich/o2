@@ -308,6 +308,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneEditScreen)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneEditScreen&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, NeedRedraw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);

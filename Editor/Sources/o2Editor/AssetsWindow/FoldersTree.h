@@ -137,6 +137,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsFoldersTree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsFoldersTree&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PROTECTED().SIGNATURE(void, SelectAndExpandFolder, const String&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateView);

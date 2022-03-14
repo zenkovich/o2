@@ -77,6 +77,9 @@ namespace o2
 				return *this;
 			}
 
+			template<typename _object_type, typename ... _args>
+			void Constructor(_object_type* object, Type* type) {}
+
 			template<typename _object_type, typename _res_type, typename ... _args>
 			void Signature(_object_type* object, Type* type, const char* name,
 						   _res_type(_object_type::* pointer)(_args ...)) {}

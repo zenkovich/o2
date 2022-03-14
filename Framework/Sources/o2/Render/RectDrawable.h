@@ -96,6 +96,8 @@ END_META;
 CLASS_METHODS_META(o2::IRectDrawable)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float, const Vec2F&, const Color4&, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const IRectDrawable&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetColor, const Color4&);
 	FUNCTION().PUBLIC().SIGNATURE(Color4, GetColor);

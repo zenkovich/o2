@@ -311,6 +311,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationComponent)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, AnimationState*);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationState*, AddState, const String&, const AnimationClip&, const AnimationMask&, float);

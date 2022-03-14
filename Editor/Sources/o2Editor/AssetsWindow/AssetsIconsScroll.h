@@ -393,6 +393,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsIconsScrollArea)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetsIconsScrollArea&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetViewingPath, const String&);

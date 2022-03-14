@@ -254,6 +254,8 @@ END_META;
 CLASS_METHODS_META(o2::ScrollArea)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ScrollArea&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);

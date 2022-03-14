@@ -198,6 +198,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalScrollBar)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalScrollBar&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);

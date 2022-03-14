@@ -72,6 +72,8 @@ END_META;
 CLASS_METHODS_META(Editor::Vec2KeyFramesTrackControl)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2KeyFramesTrackControl&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetActive, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetCurveViewEnabled, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);

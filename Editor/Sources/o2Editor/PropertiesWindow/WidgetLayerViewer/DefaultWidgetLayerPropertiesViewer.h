@@ -67,6 +67,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultWidgetLayerPropertiesViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetDrawableType);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

@@ -191,6 +191,9 @@ END_META;
 CLASS_METHODS_META(o2::WidgetLayerLayout)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*, const WidgetLayerLayout&);
 	FUNCTION().PUBLIC().SIGNATURE(RectF, Calculate, const RectF&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMin, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMin);

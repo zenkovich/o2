@@ -244,6 +244,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneTree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneTree&);
 	FUNCTION().PUBLIC().SIGNATURE(void, AttachToSceneEvents);
 	FUNCTION().PUBLIC().SIGNATURE(void, DeattachFromSceneEvents);
 	FUNCTION().PUBLIC().SIGNATURE(TreeNode*, GetNode, SceneEditableObject*);
@@ -305,6 +307,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneTreeNode)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneTreeNode&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSceneObject, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, EnableEditName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);

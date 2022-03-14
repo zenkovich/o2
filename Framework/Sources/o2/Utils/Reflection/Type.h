@@ -674,6 +674,9 @@ namespace o2
 
 			FunctionProcessor& SetProtectSection(ProtectSection section) { return *this; }
 
+			template<typename _object_type, typename ... _args>
+			void Constructor(_object_type* object, Type* type) {}
+
 			template<typename _object_type, typename _res_type, typename ... _args>
 			void Signature(_object_type* object, Type* type, const char* name,
 						   _res_type(_object_type::* pointer)(_args ...)) {}
@@ -804,6 +807,9 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
 
 #define SIGNATURE(RETURN_TYPE, NAME, ...) \
     template Signature<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME)
+
+#define CONSTRUCTOR(...) \
+    template Constructor<thisclass, ##__VA_ARGS__>(object, type)
 
 #define SIGNATURE_STATIC(RETURN_TYPE, NAME, ...) \
     template SignatureStatic<thisclass, RETURN_TYPE, ##__VA_ARGS__>(object, type, #NAME, &thisclass::NAME)

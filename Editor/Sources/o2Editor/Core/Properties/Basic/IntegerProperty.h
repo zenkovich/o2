@@ -74,6 +74,8 @@ END_META;
 CLASS_METHODS_META(Editor::IntegerProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const IntegerProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnKeyReleased, const Input::Key&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

@@ -86,6 +86,10 @@ END_META;
 CLASS_METHODS_META(o2::SceneLayersList)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneLayer*>&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<String>&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayersList&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, SceneLayer*);
 	FUNCTION().PUBLIC().SIGNATURE(bool, HasLayer, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddLayer, SceneLayer*);

@@ -197,6 +197,8 @@ END_META;
 CLASS_METHODS_META(o2::MenuPanel)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const MenuPanel&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddItem, const Item&);
@@ -246,5 +248,9 @@ CLASS_FIELDS_META(o2::MenuPanel::Item)
 END_META;
 CLASS_METHODS_META(o2::MenuPanel::Item)
 {
+
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<ContextMenu::Item*>&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>);
 }
 END_META;

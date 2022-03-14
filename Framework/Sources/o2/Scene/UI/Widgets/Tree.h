@@ -660,6 +660,8 @@ END_META;
 CLASS_METHODS_META(o2::Tree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Tree&);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnObjectCreated, void*, void*);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnObjectRemoved, void*);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnObjectsChanged, const Vector<void*>&);
@@ -784,6 +786,8 @@ END_META;
 CLASS_METHODS_META(o2::TreeNode)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const TreeNode&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetExpanded, bool, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsExpanded);
 	FUNCTION().PUBLIC().SIGNATURE(void, Expand, bool);

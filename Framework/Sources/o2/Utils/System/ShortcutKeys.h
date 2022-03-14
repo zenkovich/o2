@@ -47,6 +47,8 @@ END_META;
 CLASS_METHODS_META(o2::ShortcutKeys)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(KeyboardKey, bool, bool, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsPressed);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsDown);
 	FUNCTION().PUBLIC().SIGNATURE(String, AsString);

@@ -181,6 +181,8 @@ END_META;
 CLASS_METHODS_META(o2::HorizontalLayout)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalLayout&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
 	FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);

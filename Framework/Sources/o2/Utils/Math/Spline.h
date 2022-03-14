@@ -266,6 +266,9 @@ END_META;
 CLASS_METHODS_META(o2::Spline)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Vec2F>&, bool);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Spline&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Evaluate, float, bool, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
@@ -328,6 +331,9 @@ END_META;
 CLASS_METHODS_META(o2::Spline::Key)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
 	FUNCTION().PUBLIC().SIGNATURE(const ApproximationVec2F*, GetApproximatedPoints);
 	FUNCTION().PUBLIC().SIGNATURE(int, GetApproximatedPointsCount);
 	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);

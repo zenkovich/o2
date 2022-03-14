@@ -127,6 +127,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetIcon)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetIcon&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetInfo, const AssetInfo*);
 	FUNCTION().PUBLIC().SIGNATURE(const AssetInfo&, GetAssetInfo);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetName, const WString&);

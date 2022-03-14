@@ -364,6 +364,9 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenu)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Item*>&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ContextMenu&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Show, PopupWidget*, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
@@ -427,6 +430,8 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenuItem)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ContextMenuItem&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Setup, ContextMenu::Item*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
 	FUNCTION().PUBLIC().SIGNATURE(WString, GetText);
@@ -468,6 +473,10 @@ END_META;
 CLASS_METHODS_META(o2::ContextMenu::Item)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Vector<Item*>&, const WString&, const ImageAssetRef&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, const Function<void()>, const WString&, const ImageAssetRef&, const ShortcutKeys&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WString&, bool, Function<void(bool)>, const WString&, const ImageAssetRef&, const ShortcutKeys&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetShortcut, const ShortcutKeys&);
 	FUNCTION().PUBLIC().SIGNATURE(const ShortcutKeys&, GetShortcut);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetMaxPriority);

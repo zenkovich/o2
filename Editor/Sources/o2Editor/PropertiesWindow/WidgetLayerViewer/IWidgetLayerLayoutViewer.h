@@ -80,6 +80,7 @@ END_META;
 CLASS_METHODS_META(Editor::IWidgetLayerLayoutViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetLayers, const Vector<WidgetLayer*>&);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
 	FUNCTION().PUBLIC().SIGNATURE(void, Expand);

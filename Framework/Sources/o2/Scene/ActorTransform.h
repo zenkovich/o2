@@ -563,6 +563,8 @@ END_META;
 CLASS_METHODS_META(o2::ActorTransform)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorTransform&);
 	FUNCTION().PUBLIC().SIGNATURE(Actor*, GetOwnerActor);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsDirty);
@@ -668,6 +670,7 @@ CLASS_METHODS_META(o2::ActorTransform)
 	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldTop);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldBottom, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldBottom);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransformData*);
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyFrom, const ActorTransform&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(RectF, GetParentRectangle);

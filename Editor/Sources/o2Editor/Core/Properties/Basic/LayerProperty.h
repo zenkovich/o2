@@ -64,6 +64,8 @@ END_META;
 CLASS_METHODS_META(Editor::LayerProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const LayerProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateLayersList);

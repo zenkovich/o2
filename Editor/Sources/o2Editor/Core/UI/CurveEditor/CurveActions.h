@@ -84,6 +84,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurveAddKeysAction)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -104,6 +106,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurveDeleteKeysAction)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<CurvesEditor::CurveKeysInfo>&, CurvesEditor*);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);
@@ -124,6 +128,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurveKeysChangeAction)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<KeysInfo>&, CurvesEditor*);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);

@@ -130,6 +130,7 @@ CLASS_METHODS_META(Editor::LogWindow)
 {
 
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnClearPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRegularMessagesToggled, bool);

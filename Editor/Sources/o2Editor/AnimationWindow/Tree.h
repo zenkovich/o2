@@ -224,6 +224,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTree&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);
@@ -270,6 +272,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTreeNode)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTreeNode&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationTree::TrackNode*, AnimationTimeline*, KeyHandlesSheet*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Free);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTreeWidth, float);

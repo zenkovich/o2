@@ -61,6 +61,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneWindow)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneWindow&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
 	FUNCTION().PROTECTED().SIGNATURE(void, PostInitializeWindow);
 }

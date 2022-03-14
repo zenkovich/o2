@@ -102,6 +102,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultActorHeaderViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

@@ -89,6 +89,7 @@ END_META;
 CLASS_METHODS_META(Editor::IActorPropertiesViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetActorType);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetWidget);

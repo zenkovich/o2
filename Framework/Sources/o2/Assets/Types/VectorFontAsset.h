@@ -119,6 +119,8 @@ END_META;
 CLASS_METHODS_META(o2::VectorFontAsset)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<VectorFont::Effect*>&, GetEffects);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddEffect, VectorFont::Effect*);

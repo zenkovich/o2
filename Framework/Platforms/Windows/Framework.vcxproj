@@ -1,569 +1,571 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup Label="ProjectConfigurations">
-		<ProjectConfiguration Include="Debug|x64">
-			<Configuration>Debug</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="FastDebug|x64">
-			<Configuration>FastDebug</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|x64">
-			<Configuration>Release</Configuration>
-			<Platform>x64</Platform>
-		</ProjectConfiguration>
-	</ItemGroup>
-	<PropertyGroup Label="Globals">
-		<ProjectGuid>{ED115911-D293-41D3-A9EC-AF7F2613A1CF}</ProjectGuid>
-		<RootNamespace>o2engine</RootNamespace>
-		<WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-		<ProjectName>FrameworkLib</ProjectName>
-	</PropertyGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-		<PlatformToolset>v143</PlatformToolset>
-		<ConfigurationType>StaticLibrary</ConfigurationType>
-	</PropertyGroup>
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<PlatformToolset>v143</PlatformToolset>
-		<ConfigurationType>StaticLibrary</ConfigurationType>
-	</PropertyGroup>
-	<PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<PlatformToolset>v143</PlatformToolset>
-		<ConfigurationType>StaticLibrary</ConfigurationType>
-	</PropertyGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-	<ImportGroup Label="ExtensionSettings" />
-	<PropertyGroup Label="UserMacros" />
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-		<IntDir>$(SolutionDir)Temp\$(Configuration)\FrameworkLib\</IntDir>
-		<TargetName>Framework</TargetName>
-		<TargetExt>.lib</TargetExt>
-		<PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-		<IntDir>$(SolutionDir)Temp\$(Configuration)\FrameworkLib\</IntDir>
-		<TargetName>Framework</TargetName>
-		<TargetExt>.lib</TargetExt>
-		<PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
-		<IntDir>$(SolutionDir)Temp\$(Configuration)\FrameworkLib\</IntDir>
-		<TargetName>Framework</TargetName>
-		<TargetExt>.lib</TargetExt>
-		<PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
-	</PropertyGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<PreBuildEvent>
-			<Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources\o2" -msvs_project "$(ProjectPath)"</Command>
-		</PreBuildEvent>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-		<PreBuildEvent>
-			<Message>Reflection generation</Message>
-		</PreBuildEvent>
-		<ClCompile>
-			<PrecompiledHeader>Use</PrecompiledHeader>
-			<AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
-			<WarningLevel>Level2</WarningLevel>
-			<MultiProcessorCompilation>true</MultiProcessorCompilation>
-			<LanguageStandard>stdcpp17</LanguageStandard>
-			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-			<PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
-			<SupportJustMyCode>true</SupportJustMyCode>
-			<SDLCheck>true</SDLCheck>
-			<Optimization>Disabled</Optimization>
-			<BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-			<ShowIncludes>false</ShowIncludes>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-		<PreBuildEvent>
-			<Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources\o2" -msvs_project "$(ProjectPath)"</Command>
-		</PreBuildEvent>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
-		<PreBuildEvent>
-			<Message>Reflection generation</Message>
-		</PreBuildEvent>
-		<ClCompile>
-			<PrecompiledHeader>Use</PrecompiledHeader>
-			<AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-			<WarningLevel>Level2</WarningLevel>
-			<MultiProcessorCompilation>true</MultiProcessorCompilation>
-			<LanguageStandard>stdcpp17</LanguageStandard>
-			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-			<PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
-			<SupportJustMyCode>true</SupportJustMyCode>
-			<SDLCheck>true</SDLCheck>
-			<Optimization>Disabled</Optimization>
-			<BasicRuntimeChecks>Default</BasicRuntimeChecks>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<PreBuildEvent>
-			<Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources\o2" -msvs_project "$(ProjectPath)"</Command>
-		</PreBuildEvent>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-		<PreBuildEvent>
-			<Message>Reflection generation</Message>
-		</PreBuildEvent>
-		<ClCompile>
-			<PrecompiledHeader>Use</PrecompiledHeader>
-			<AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-			<PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
-			<WarningLevel>Level2</WarningLevel>
-			<MultiProcessorCompilation>true</MultiProcessorCompilation>
-			<LanguageStandard>stdcpp17</LanguageStandard>
-			<PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
-			<EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-			<EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
-			<SDLCheck>false</SDLCheck>
-			<InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-			<IntrinsicFunctions>true</IntrinsicFunctions>
-			<FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-			<WholeProgramOptimization>true</WholeProgramOptimization>
-			<FunctionLevelLinking>true</FunctionLevelLinking>
-		</ClCompile>
-	</ItemDefinitionGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-	<ImportGroup Label="ExtensionTargets" />
-	<ItemGroup>
-		<Natvis Include="Framework.natvis" />
-	</ItemGroup>
-	<ItemGroup>
-		<ClInclude Include="..\..\Sources\o2\Animation\Animate.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimationClip.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimationMask.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimationPlayer.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\AnimationState.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\Editor\EditableAnimation.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\IAnimation.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationColor4Track.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationVec2FTrack.h" />
-		<ClInclude Include="..\..\Sources\o2\Animation\Tracks\IAnimationTrack.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Application.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Input.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Mac\AppDelegate.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Mac\ApplicationBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Mac\ApplicationPlatformWrapper.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Mac\RendererView.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\VKCodes.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\Windows\ApplicationBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\iOS\AppDelegate.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\iOS\ApplicationBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\iOS\ApplicationPlatformWrapper.h" />
-		<ClInclude Include="..\..\Sources\o2\Application\iOS\RendererView.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Asset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetInfo.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetRef.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Assets.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\AssetsTree.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Meta.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\ActorAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\AnimationAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\AtlasAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\BinaryAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\DataAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\FolderAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\FontAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\ImageAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.h" />
-		<ClInclude Include="..\..\Sources\o2\Config\PhysicsConfig.h" />
-		<ClInclude Include="..\..\Sources\o2\Config\ProjectConfig.h" />
-		<ClInclude Include="..\..\Sources\o2\EngineSettings.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\ApplicationEventsListener.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListener.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\CursorEventsArea.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\EventSystem.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\IEventsListener.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\KeyboardEventsListener.h" />
-		<ClInclude Include="..\..\Sources\o2\Events\ShortcutKeysListener.h" />
-		<ClInclude Include="..\..\Sources\o2\O2.h" />
-		<ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\BitmapFont.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Camera.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\DrawPolyLine.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Font.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\FontRef.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\IDrawable.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Mac\MetalWrappers.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Mac\RenderBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Mac\ShaderTypes.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Mac\TextureBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Mesh.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Particle.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\ParticlesEffects.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitter.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\RectDrawable.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Render.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Sprite.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Text.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Texture.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\TextureRef.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\VectorFont.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\VectorFontEffects.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Windows\OpenGL.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Windows\RenderBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\Windows\TextureBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\iOS\MetalWrappers.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\iOS\RenderBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\iOS\ShaderTypes.h" />
-		<ClInclude Include="..\..\Sources\o2\Render\iOS\TextureBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Actor.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorRefResolver.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\CameraActor.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Component.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\ComponentRef.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\AnimationComponent.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\ImageComponent.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\MeshComponent.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\ISceneDrawable.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Physics\BoxCollider.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Physics\CircleCollider.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Physics\ICollider.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Scene.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\SceneLayer.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\SceneLayersList.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\Tags.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\UIManager.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widget.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayer.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayout.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetState.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Button.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayoutScrollArea.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Image.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Label.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\List.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\PopupWidget.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.h" />
-		<ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Window.h" />
-		<ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptEngineBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueBase.h" />
-		<ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueConverters.h" />
-		<ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.h" />
-		<ClInclude Include="..\..\Sources\o2\Scripts\ScriptEngine.h" />
-		<ClInclude Include="..\..\Sources\o2\Scripts\ScriptValue.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Basic\IDynamic.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Basic\IObject.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Basic\ITree.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Assert.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Debug.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Debug\StackTrace.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\ActorDifferences.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\AnimatableAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DefaultTypeAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DontDeleteAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\EditorPropertyAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\ExpandedByDefaultAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\InvokeOnChangeAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\NoHeaderAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\PrototypeDeltaSearchAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\ScriptableAttribute.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\DragHandle.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\EditorScope.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\FrameHandles.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\FileSystem\File.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Function.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Border.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Color.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Curve.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Geometry.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Interpolation.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Intersection.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Layout.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Math.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\OBB.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\PolyLine.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Ray.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Rect.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Spline.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Transform.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\IAllocator.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Property.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Enum.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Reflection.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\Type.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeSerializer.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeTraits.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\SerializeFieldProcessors.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Singleton.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\StringUtils.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Clipboard.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\System\ShortcutKeys.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Time\Time.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\System\Time\Timer.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Tasks\Task.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Tasks\TaskManager.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Tools\KeySearch.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Tools\RectPacker.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\CommonTypes.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Map.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pair.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pool.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Vector.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\Ref.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\String.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\StringDef.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\StringImpl.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\Types\UID.h" />
-		<ClInclude Include="..\..\Sources\o2\Utils\ValueProxy.h" />
-		<ClInclude Include="..\..\Sources\o2\stdafx.h" />
-	</ItemGroup>
-	<ItemGroup>
-		<ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimationClip.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimationMask.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimationPlayer.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\AnimationState.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\IAnimation.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationColor4Track.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationVec2FTrack.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Animation\Tracks\IAnimationTrack.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Application\Application.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Application\Input.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Application\Windows\ApplicationImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Asset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetInfo.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetRef.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Assets.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\AssetsTree.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Meta.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\ActorAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\AnimationAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\AtlasAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\BinaryAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\DataAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\FolderAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\FontAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\ImageAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Config\PhysicsConfig.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Config\ProjectConfig.cpp" />
-		<ClCompile Include="..\..\Sources\o2\EngineSettings.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\ApplicationEventsListener.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListener.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\CursorEventsArea.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\EventSystem.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\IEventsListener.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\KeyboardEventsListener.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Events\ShortcutKeysListener.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\BitmapFont.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Camera.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Font.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\FontRef.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\IDrawable.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Mesh.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\ParticlesEffects.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitter.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\RectDrawable.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Render.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Sprite.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Text.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Texture.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\TextureRef.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\VectorFont.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\VectorFontEffects.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Windows\OpenGL.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Windows\RenderImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Render\Windows\TextureImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Actor.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorCreationMode.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorEditor.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorRef.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorRefResolver.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ActorTransform.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\CameraActor.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Component.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ComponentRef.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\AnimationComponent.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\ImageComponent.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\MeshComponent.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\ISceneDrawable.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Physics\BoxCollider.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Physics\CircleCollider.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Physics\ICollider.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\SceneLayer.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\SceneLayersList.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\Tags.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\UIManager.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widget.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayer.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayout.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetState.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Button.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayoutScrollArea.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Image.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Label.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\List.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\PopupWidget.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Window.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scripts\JerryScript\ScriptEngineImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scripts\ScriptEngine.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Scripts\ScriptValue.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Assert.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Debug.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Debug\StackTrace.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\ActorDifferences.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\DragHandle.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\EditorScope.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\FrameHandles.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\File.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileSystemImpl.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Color.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Curve.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Geometry.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Intersection.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Layout.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Math.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Spline.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Math\Transform.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Memory\MemoryManager.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\Reflection.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Reflection\Type.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\DataValue.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\Serializable.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\StringUtils.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Clipboard.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\System\ShortcutKeys.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Time\Time.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\System\Time\Timer.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Tasks\Task.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Tasks\TaskManager.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Tools\RectPacker.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Types\CommonTypes.cpp" />
-		<ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp" />
-		<ClCompile Include="..\..\Sources\o2\stdafx.cpp">
-			<PrecompiledHeader>Create</PrecompiledHeader>
-			<PrecompiledHeader>Create</PrecompiledHeader>
-		</ClCompile>
-	</ItemGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="FastDebug|x64">
+      <Configuration>FastDebug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ED115911-D293-41D3-A9EC-AF7F2613A1CF}</ProjectGuid>
+    <RootNamespace>o2engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>FrameworkLib</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformToolset>v143</PlatformToolset>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\FrameworkLib\</IntDir>
+    <TargetName>Framework</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\FrameworkLib\</IntDir>
+    <TargetName>Framework</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)Temp\$(Configuration)\Libs\</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\FrameworkLib\</IntDir>
+    <TargetName>Framework</TargetName>
+    <TargetExt>.lib</TargetExt>
+    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PreBuildEvent>
+      <Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources\o2" -msvs_project "$(ProjectPath)"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PreBuildEvent>
+      <Message>Reflection generation</Message>
+    </PreBuildEvent>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
+      <WarningLevel>Level2</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <SDLCheck>true</SDLCheck>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+    <PreBuildEvent>
+      <Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources\o2" -msvs_project "$(ProjectPath)"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
+    <PreBuildEvent>
+      <Message>Reflection generation</Message>
+    </PreBuildEvent>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <WarningLevel>Level2</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
+      <SupportJustMyCode>true</SupportJustMyCode>
+      <SDLCheck>true</SDLCheck>
+      <Optimization>Disabled</Optimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PreBuildEvent>
+      <Command>$(ProjectDir)..\..\..\CodeTool\Bin\CodeTool.exe -sources "$(ProjectDir)..\..\Sources\o2" -msvs_project "$(ProjectPath)"</Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PreBuildEvent>
+      <Message>Reflection generation</Message>
+    </PreBuildEvent>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..\Sources;$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
+      <WarningLevel>Level2</WarningLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
+      <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
+      <SDLCheck>false</SDLCheck>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+  <ItemGroup>
+    <Natvis Include="Framework.natvis" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Sources\o2\Animation\Animate.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationClip.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationMask.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationPlayer.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\AnimationState.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Editor\EditableAnimation.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\IAnimation.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationColor4Track.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\AnimationVec2FTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Animation\Tracks\IAnimationTrack.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Application.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Input.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Mac\AppDelegate.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Mac\ApplicationBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Mac\ApplicationPlatformWrapper.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Mac\RendererView.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\VKCodes.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\Windows\ApplicationBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\iOS\AppDelegate.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\iOS\ApplicationBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\iOS\ApplicationPlatformWrapper.h" />
+    <ClInclude Include="..\..\Sources\o2\Application\iOS\RendererView.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Asset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\AssetInfo.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\AssetRef.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Assets.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\AssetsTree.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Meta.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\ActorAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\AnimationAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\AtlasAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\BinaryAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\DataAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\FolderAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\FontAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\ImageAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.h" />
+    <ClInclude Include="..\..\Sources\o2\Config\PhysicsConfig.h" />
+    <ClInclude Include="..\..\Sources\o2\Config\ProjectConfig.h" />
+    <ClInclude Include="..\..\Sources\o2\EngineSettings.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\ApplicationEventsListener.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListener.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\CursorEventsArea.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\EventSystem.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\IEventsListener.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\KeyboardEventsListener.h" />
+    <ClInclude Include="..\..\Sources\o2\Events\ShortcutKeysListener.h" />
+    <ClInclude Include="..\..\Sources\o2\O2.h" />
+    <ClInclude Include="..\..\Sources\o2\Physics\PhysicsWorld.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\BitmapFont.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Camera.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\DrawPolyLine.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Font.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\FontRef.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\IDrawable.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Mac\MetalWrappers.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Mac\RenderBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Mac\ShaderTypes.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Mac\TextureBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Mesh.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Particle.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\ParticlesEffects.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitter.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\RectDrawable.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Render.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Sprite.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Text.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Texture.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\TextureRef.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\VectorFont.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\VectorFontEffects.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Windows\OpenGL.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Windows\RenderBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\Windows\TextureBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\iOS\MetalWrappers.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\iOS\RenderBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\iOS\ShaderTypes.h" />
+    <ClInclude Include="..\..\Sources\o2\Render\iOS\TextureBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Actor.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorRefResolver.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\CameraActor.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Component.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ComponentRef.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\AnimationComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\ImageComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\MeshComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ISceneDrawable.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\BoxCollider.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\CircleCollider.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\ICollider.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Physics\RigidBody.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Scene.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\SceneLayer.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\SceneLayersList.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\Tags.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\UIManager.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widget.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayer.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetLayout.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\WidgetState.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Button.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayoutScrollArea.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Image.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Label.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\List.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\PopupWidget.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\UI\Widgets\Window.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptEngineBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueBase.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueConverters.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\ScriptEngine.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\ScriptValue.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Basic\IDynamic.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Basic\IObject.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Basic\ITree.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Assert.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Debug.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Debug\StackTrace.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\ActorDifferences.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\AnimatableAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DefaultTypeAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\DontDeleteAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\EditorPropertyAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\ExpandedByDefaultAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\InvokeOnChangeAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\NoHeaderAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\PrototypeDeltaSearchAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\Attributes\ScriptableAttribute.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\DragHandle.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\EditorScope.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\FrameHandles.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\File.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Border.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Color.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Curve.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Geometry.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Interpolation.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Intersection.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Layout.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Math.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\OBB.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\PolyLine.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Ray.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Rect.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Spline.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Transform.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vector2.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Math\Vertex2.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\IAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Memory\MemoryManager.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Property.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Attributes.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Enum.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Reflection.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\Type.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeSerializer.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeTraits.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\SerializeFieldProcessors.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Singleton.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\StringUtils.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Clipboard.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\System\ShortcutKeys.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Time\Time.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\System\Time\Timer.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Tasks\Task.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Tasks\TaskManager.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Tools\KeySearch.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Tools\RectPacker.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\CommonTypes.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Map.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pair.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Pool.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Containers\Vector.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\Ref.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\String.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\StringDef.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\StringImpl.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Types\UID.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\ValueProxy.h" />
+    <ClInclude Include="..\..\Sources\o2\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationClip.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationMask.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationPlayer.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\AnimationState.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\IAnimation.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationColor4Track.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationFloatTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\AnimationVec2FTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Animation\Tracks\IAnimationTrack.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Application\Application.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Application\Input.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Application\Windows\ApplicationImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Asset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\AssetInfo.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\AssetRef.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Assets.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\AssetsTree.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\AssetsBuilder.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\AtlasAssetConverter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\FolderAssetConverter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\IAssetConverter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\ImageAssetConverter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Builder\StdAssetConverter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Meta.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\ActorAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\AnimationAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\AtlasAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\BinaryAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\BitmapFontAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\DataAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\FolderAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\FontAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\ImageAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Config\PhysicsConfig.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Config\ProjectConfig.cpp" />
+    <ClCompile Include="..\..\Sources\o2\EngineSettings.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\ApplicationEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\CursorAreaEventsListenersLayer.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\CursorEventsArea.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\DrawableCursorEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\EventSystem.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\IEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\KeyboardEventsListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Events\ShortcutKeysListener.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Physics\PhysicsWorld.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\BitmapFont.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Camera.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Font.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\FontRef.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\IDrawable.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Mesh.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\ParticlesEffects.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitter.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\ParticlesEmitterShapes.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\RectDrawable.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Render.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Sprite.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Text.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Texture.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\TextureRef.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\VectorFont.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\VectorFontEffects.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Windows\OpenGL.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Windows\RenderImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Render\Windows\TextureImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Actor.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorCreationMode.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorEditor.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorRef.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorRefResolver.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ActorTransform.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\CameraActor.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Component.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ComponentRef.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\AnimationComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\EditorTestComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\ImageComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\MeshComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\ISceneDrawable.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\BoxCollider.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\CircleCollider.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\ICollider.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Physics\RigidBody.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Scene.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\SceneLayer.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\SceneLayersList.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\Tags.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\UIManager.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widget.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayer.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayerLayout.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetLayout.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\WidgetState.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Button.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ContextMenu.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomDropDown.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\CustomList.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\DropDown.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\EditBox.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayout.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\GridLayoutScrollArea.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalLayout.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalProgress.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\HorizontalScrollBar.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Image.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Label.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\List.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\LongList.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\MenuPanel.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\PopupWidget.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\ScrollArea.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Spoiler.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Toggle.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Tree.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalLayout.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalProgress.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\VerticalScrollBar.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scene\UI\Widgets\Window.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scripts\JerryScript\ScriptEngineImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scripts\ScriptEngine.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Scripts\ScriptValue.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Bitmap\Bitmap.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Bitmap\PngFormat.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Assert.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Debug.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\ConsoleLogStream.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\FileLogStream.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\Log\LogStream.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Debug\StackTrace.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\ActorDifferences.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\DragAndDrop.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\DragHandle.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\EditorScope.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\FrameHandles.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Editor\SceneEditableObject.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\File.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileSystemImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Color.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Curve.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Geometry.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Intersection.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Layout.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Math.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Spline.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Math\Transform.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\ChunkPoolAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\DefaultAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\LinearAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\Allocators\StackAllocator.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Memory\MemoryManager.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FieldInfo.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\FunctionInfo.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\Reflection.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Reflection\Type.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\DataValue.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\Serializable.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Serialization\XmlDataFormat.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\StringUtils.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Clipboard.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\System\ShortcutKeys.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Time\Time.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Time\TimeStamp.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\System\Time\Timer.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Tasks\Task.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Tasks\TaskManager.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Tools\RectPacker.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Types\CommonTypes.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp" />
+    <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
 </Project>

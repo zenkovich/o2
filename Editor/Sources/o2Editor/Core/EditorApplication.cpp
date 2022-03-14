@@ -179,11 +179,11 @@ namespace Editor
 			return mBackground->GetScriptValue();
 		})));
 
-		//o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
+		o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
 
 		o2Scripts.Eval("print(JSON.stringify(scriptValueFunc()))");
 
-		o2Scripts.Eval("var testSprite = o2.Sprite.New(); testSprite.SetFill(testSprite.GetFill() - 0.5); print(testSprite.fill);");
+		o2Scripts.Eval("var testSprite = o2.Sprite.New('ui/UI4_Background.png'); testSprite.image = o2.RefImageAsset.New('ui/UI_Background.png');");
 
 		ScriptValue prot;
 		prot.SetProperty("a", 5);
@@ -204,6 +204,8 @@ namespace Editor
 
 		o2Scripts.Eval("function testDefault(x = 5) { print(Math.sqrt(x)); }; testDefault(); testDefault(10);");
 		o2Scripts.Eval("let vv = Vec2.New(3, 5); let gg = vv.Add(Vec2.New(1, 1)); print(gg.x + '; ' + gg.y);");
+
+		o2Debug.LogStr("---Dump mBackground---\n" + mBackground->GetScriptValue().Dump() + "\n---------------");
 
 		o2Scripts.GetGlobal().SetProperty(ScriptValue("wrp"), mBackground->GetScriptValue());
 		o2Scripts.Eval("wrp.Draw()");

@@ -151,6 +151,8 @@ END_META;
 CLASS_METHODS_META(Editor::BorderIProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const BorderIProperty&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const BorderI&);

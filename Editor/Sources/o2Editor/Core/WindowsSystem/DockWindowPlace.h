@@ -110,6 +110,8 @@ END_META;
 CLASS_METHODS_META(Editor::DockWindowPlace)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const DockWindowPlace&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetResizibleDir, TwoDirection, float, DockWindowPlace*, DockWindowPlace*);
 	FUNCTION().PUBLIC().SIGNATURE(TwoDirection, GetResizibleDir);

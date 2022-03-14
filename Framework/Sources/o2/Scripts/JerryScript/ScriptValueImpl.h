@@ -242,6 +242,47 @@ namespace o2
 		tmp.AcquireValue(value);
 		setter(tmp.GetValue<_type>());
 	}
+
+	class Type;
+
+	struct ScriptConstructorTypeProcessor: public BaseTypeProcessor
+	{
+		struct BaseFunctionProcessor: public BaseTypeProcessor::FunctionProcessor
+		{
+			template<typename _attribute_type, typename ... _args>
+			auto AddAttribute(_args ... args);
+
+			BaseFunctionProcessor& SetProtectSection(ProtectSection section) { return *this; }
+		};
+
+		struct FunctionProcessor: public BaseFunctionProcessor
+		{
+			template<typename _object_type, typename ... _args>
+			void Constructor(_object_type* object, Type* type);
+		};
+
+		BaseFunctionProcessor StartFunction() { return BaseFunctionProcessor(); }
+
+		static void RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc);
+	};
+
+	template<typename _attribute_type, typename... _args>
+	auto ScriptConstructorTypeProcessor::BaseFunctionProcessor::AddAttribute(_args ... args)
+	{
+		if constexpr (std::is_same<ScriptableAttribute, _attribute_type>::value)
+			return ScriptConstructorTypeProcessor::FunctionProcessor();
+		else
+			return *this;
+	}
+
+	template<typename _object_type, typename... _args>
+	void ScriptConstructorTypeProcessor::FunctionProcessor::Constructor(_object_type* object, Type* type)
+	{
+		ScriptConstructorTypeProcessor::RegisterTypeConstructor(type, ScriptValue(Function<ScriptValue(_args ...)>([](_args ... args) {
+			_object_type* sample = mnew _object_type(args ...);
+			return sample->GetScriptValue();
+		})));
+	}
 }
 
 #endif // SCRIPTING_BACKEND_JERRYSCRIPT

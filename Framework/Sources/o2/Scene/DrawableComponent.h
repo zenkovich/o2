@@ -79,6 +79,8 @@ END_META;
 CLASS_METHODS_META(o2::DrawableComponent)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const DrawableComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

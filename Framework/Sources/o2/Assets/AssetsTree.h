@@ -95,6 +95,7 @@ END_META;
 CLASS_METHODS_META(o2::AssetsTree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Build, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Build, const FolderInfo&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Rebuild);

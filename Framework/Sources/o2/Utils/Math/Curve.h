@@ -314,6 +314,10 @@ END_META;
 CLASS_METHODS_META(o2::Curve)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Vec2F>&, bool);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Curve&);
 	FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float, bool, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
@@ -391,6 +395,10 @@ END_META;
 CLASS_METHODS_META(o2::Curve::Key)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float, float, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
 	FUNCTION().PUBLIC().SIGNATURE(const ApproximationValue*, GetApproximatedPoints);
 	FUNCTION().PUBLIC().SIGNATURE(int, GetApproximatedPointsCount);
 	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetGetApproximatedPointsBounds);

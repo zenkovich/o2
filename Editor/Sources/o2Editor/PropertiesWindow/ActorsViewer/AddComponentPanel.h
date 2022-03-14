@@ -205,6 +205,8 @@ END_META;
 CLASS_METHODS_META(Editor::AddComponentPanel)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(ActorViewer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(EditBox*, GetFilter);
 	FUNCTION().PUBLIC().SIGNATURE(ComponentsTree*, GetTree);
@@ -232,6 +234,8 @@ END_META;
 CLASS_METHODS_META(Editor::ComponentsTree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTree&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
@@ -261,6 +265,8 @@ END_META;
 CLASS_METHODS_META(Editor::ComponentsTreeNode)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentsTreeNode&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Setup, ComponentsTree::NodeData*, ComponentsTree*);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);

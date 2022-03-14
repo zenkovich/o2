@@ -82,6 +82,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultActorTransformViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetActors, const Vector<Actor*>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChangeCompleted, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);

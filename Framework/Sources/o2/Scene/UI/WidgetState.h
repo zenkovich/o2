@@ -127,6 +127,8 @@ END_META;
 CLASS_METHODS_META(o2::WidgetState)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetState&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetOwner, Widget*, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);

@@ -57,6 +57,8 @@ END_META;
 CLASS_METHODS_META(Editor::WStringProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WStringProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEdited, const WString&);

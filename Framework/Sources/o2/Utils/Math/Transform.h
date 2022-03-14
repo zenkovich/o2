@@ -292,6 +292,8 @@ END_META;
 CLASS_METHODS_META(o2::Transform)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Transform&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetPosition, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPosition);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSize, const Vec2F&);

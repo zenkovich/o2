@@ -76,6 +76,8 @@ END_META;
 CLASS_METHODS_META(Editor::IEditorWindow)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const IEditorWindow&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetVisible, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);

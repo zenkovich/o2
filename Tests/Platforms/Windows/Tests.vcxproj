@@ -18,10 +18,12 @@
     <ClCompile Include="..\..\Sources\TestApplication.cpp" />
     <ClCompile Include="..\..\Sources\TestsMain.cpp" />
     <ClCompile Include="..\..\Sources\Tests\Prototypes.cpp" />
+    <ClCompile Include="..\..\Sources\Tests\Scripts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\TestApplication.h" />
     <ClInclude Include="..\..\Sources\Tests\Prototypes.h" />
+    <ClInclude Include="..\..\Sources\Tests\Scripts.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -67,19 +69,19 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorApp\</IntDir>
+    <OutDir>$(SolutionDir)..\..\Bin\Win</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\TestsApp\</IntDir>
     <TargetName>Tests_dbg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='FastDebug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\</OutDir>
-    <IntDir>$(SolutionDir)Temp\$(Configuration)\EditorApp\</IntDir>
+    <OutDir>$(SolutionDir)..\..\Bin\Win</OutDir>
+    <IntDir>$(SolutionDir)Temp\$(Configuration)\TestsApp\</IntDir>
     <TargetName>Tests_fast_dbg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)..\..\</OutDir>
+    <OutDir>$(SolutionDir)..\..\Bin\Win</OutDir>
     <IntDir>$(SolutionDir)Temp\$(Configuration)\TestsApp\</IntDir>
     <TargetName>Tests</TargetName>
   </PropertyGroup>

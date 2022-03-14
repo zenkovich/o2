@@ -1,3 +1,4 @@
+#include "o2/stdafx.h"
 #include "Prototypes.h"
 
 #include "o2/Scene/Actor.h"
@@ -7,6 +8,8 @@
 #include "o2/Scene/UI/WidgetLayout.h"
 #include "o2/Scene/UI/Widgets/Button.h"
 #include "o2/Utils/Editor/ActorDifferences.h"
+#include "o2/Scene/Components/AnimationComponent.h"
+#include "o2/Scene/Scene.h"
 
 using namespace o2;
 

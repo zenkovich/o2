@@ -42,5 +42,7 @@ CLASS_FIELDS_META(o2::TimeStamp)
 END_META;
 CLASS_METHODS_META(o2::TimeStamp)
 {
+
+	FUNCTION().PUBLIC().CONSTRUCTOR(int, int, int, int, int, int);
 }
 END_META;

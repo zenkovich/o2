@@ -109,6 +109,7 @@ END_META;
 CLASS_METHODS_META(Editor::PropertiesWindow)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, ResetTargets);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>, const Function<void()>&);

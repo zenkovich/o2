@@ -169,8 +169,8 @@ Color4.New = function(r = 255, g = 255, b = 255, a = 255)
 	return res;
 }
 
-Color4.red = Color4.New(255, 0, 0, 255);
-Color4.green = Color4.New(0, 255, 0, 255);
-Color4.blue = Color4.New(0, 0, 255, 255);
-Color4.white = Color4.New(255, 255, 255, 255);
-Color4.black = Color4.New(0, 0, 0, 255);
+Color4.Red = function() { return Color4.New(255, 0, 0, 255); }
+Color4.Green = function() { return Color4.New(0, 255, 0, 255); }
+Color4.Blue = function() { return Color4.New(0, 0, 255, 255); }
+Color4.White = function() { return Color4.New(255, 255, 255, 255); }
+Color4.Black = function() { return Color4.New(0, 0, 0, 255); }

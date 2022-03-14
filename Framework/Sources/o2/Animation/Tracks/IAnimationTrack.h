@@ -118,6 +118,8 @@ END_META;
 CLASS_METHODS_META(o2::IAnimationTrack)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const IAnimationTrack&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
 	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetDuration);

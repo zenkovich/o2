@@ -171,6 +171,8 @@ END_META;
 CLASS_METHODS_META(o2::AtlasAsset)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AtlasAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<ImageAssetRef>&, GetImages);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Page>&, GetPages);
 	FUNCTION().PUBLIC().SIGNATURE(bool, ContainsImage, const ImageAssetRef&);

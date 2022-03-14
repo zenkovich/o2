@@ -250,6 +250,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Color4>)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTrack<Color4>&);
 	FUNCTION().PUBLIC().SIGNATURE(Color4, GetValue, float);
 	FUNCTION().PUBLIC().SIGNATURE(Color4, GetValue, float, bool, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
@@ -300,6 +302,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Color4>::Player)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Color4*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Color4*, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
@@ -331,5 +334,10 @@ CLASS_FIELDS_META(o2::AnimationTrack<o2::Color4>::Key)
 END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Color4>::Key)
 {
+
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, const Color4&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
 }
 END_META;

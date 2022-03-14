@@ -233,6 +233,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTrack<float>&);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetValue, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetValue, float, bool, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
@@ -292,6 +294,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<float>::Player)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, float*, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);

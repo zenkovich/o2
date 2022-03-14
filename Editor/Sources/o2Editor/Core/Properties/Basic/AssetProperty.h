@@ -148,6 +148,8 @@ END_META;
 CLASS_METHODS_META(Editor::AssetProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetProperty&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetId, const UID&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAssetType, const Type*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetFieldInfo, const FieldInfo*);

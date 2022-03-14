@@ -158,6 +158,9 @@ namespace o2
 
 			FunctionProcessor& SetProtectSection(ProtectSection section);
 
+			template<typename _object_type, typename ... _args>
+			void Constructor(_object_type* object, Type* type) {}
+
 			template<typename _object_type, typename _res_type, typename ... _args>
 			void Signature(_object_type* object, Type* type, const char* name,
 						   _res_type(_object_type::* pointer)(_args ...));
@@ -189,6 +192,10 @@ namespace o2
 #include "o2/Utils/Reflection/FieldInfo.h"
 #include "o2/Utils/Reflection/FunctionInfo.h"
 #include "o2/Utils/Reflection/TypeTraits.h"
+
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptEngine.h"
+#endif
 
 namespace o2
 {
@@ -225,6 +232,10 @@ namespace o2
 
 		Reflection::Instance().mInitializingFunctions.Add((TypeInitializingFunc)&_type::template ProcessType<ReflectionInitializationTypeProcessor>);
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
+
+#if IS_SCRIPTING_SUPPORTED
+		ScriptEngine::GetRegisterConstructorFuncs().Add((ScriptEngine::RegisterConstructorFunc)&_type::template ProcessType<ScriptConstructorTypeProcessor>);
+#endif
 
 		mInstance->mTypes[res->GetName()] = res;
 

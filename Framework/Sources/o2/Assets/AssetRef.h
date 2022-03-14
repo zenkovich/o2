@@ -202,7 +202,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartFields<_thisType>(object, type);
 
-			FIELD().NAME(mSpecAssetPtr).PUBLIC();
+			FIELD().PUBLIC().NAME(mSpecAssetPtr);
 		}
 
 		template<typename _type_processor>
@@ -211,6 +211,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartMethods<_thisType>(object, type);
 
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
 			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(Ref<T>, CreateAsset);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetAssetTypeStatic);
@@ -253,6 +254,11 @@ END_META;
 CLASS_METHODS_META(o2::AssetRef)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetRef&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(Asset*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
 	FUNCTION().PUBLIC().SIGNATURE(Asset*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(const Asset*, Get);
@@ -262,6 +268,7 @@ CLASS_METHODS_META(o2::AssetRef)
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveInstance);
 	FUNCTION().PUBLIC().SIGNATURE(void, SaveInstance, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsInstance);
+	FUNCTION().PROTECTED().CONSTRUCTOR(Asset*, int*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSerializeDelta, DataValue&, const IObject&);

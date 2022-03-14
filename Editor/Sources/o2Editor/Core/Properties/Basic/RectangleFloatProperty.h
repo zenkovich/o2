@@ -151,6 +151,8 @@ END_META;
 CLASS_METHODS_META(Editor::RectFProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const RectFProperty&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, const RectF&);

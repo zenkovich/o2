@@ -64,6 +64,9 @@ END_META;
 CLASS_METHODS_META(o2::AnimationAsset)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationAsset&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationClip&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

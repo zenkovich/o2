@@ -201,6 +201,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTree)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTree&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationClip*, ActorRef);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetFilter, const WString&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
@@ -238,6 +240,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationPropertiesTreeNode)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationPropertiesTreeNode&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Setup, AnimationPropertiesTree::NodeData*, AnimationPropertiesTree*);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PRIVATE().SIGNATURE(void, OnDeserialized, const DataValue&);

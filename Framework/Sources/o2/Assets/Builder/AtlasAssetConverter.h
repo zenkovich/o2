@@ -130,5 +130,8 @@ CLASS_FIELDS_META(o2::AtlasAssetConverter::Image)
 END_META;
 CLASS_METHODS_META(o2::AtlasAssetConverter::Image)
 {
+
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&, const TimeStamp&);
 }
 END_META;

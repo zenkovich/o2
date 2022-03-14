@@ -189,6 +189,7 @@ CLASS_METHODS_META(Editor::IObjectPropertiesViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp3;
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp4;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetViewingObjectTypeStatic);

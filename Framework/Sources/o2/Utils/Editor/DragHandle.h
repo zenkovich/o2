@@ -492,6 +492,9 @@ END_META;
 CLASS_METHODS_META(o2::DragHandle)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw, const RectF&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
@@ -564,6 +567,9 @@ END_META;
 CLASS_METHODS_META(o2::WidgetDragHandle)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetDragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);

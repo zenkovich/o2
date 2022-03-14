@@ -39,7 +39,7 @@ namespace o2
 		// Constructor from image asset
 		Sprite(const ImageAssetRef& image);
 
-		// Constructor from image asset by path
+		// Constructor from image asset by path @SCRIPTABLE
 		Sprite(const String& imagePath);
 
 		// Constructor from image asset by id
@@ -283,6 +283,14 @@ END_META;
 CLASS_METHODS_META(o2::Sprite)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(const String&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(UID);
+	FUNCTION().PUBLIC().CONSTRUCTOR(TextureRef, const RectI&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(Bitmap*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Sprite&);
 	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageRef).SIGNATURE(void, LoadFromImage, const ImageAssetRef&, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, LoadFromImage, const String&, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(LoadFromImageUID).SIGNATURE(void, LoadFromImage, UID, bool);

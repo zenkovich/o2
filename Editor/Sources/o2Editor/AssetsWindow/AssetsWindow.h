@@ -190,6 +190,7 @@ END_META;
 CLASS_METHODS_META(Editor::AssetsWindow)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const UID&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SelectAsset, const String&);

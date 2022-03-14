@@ -115,6 +115,8 @@ END_META;
 CLASS_METHODS_META(Editor::Vec2IProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2IProperty&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(void, Revert);

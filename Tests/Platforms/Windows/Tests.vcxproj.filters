@@ -13,11 +13,13 @@
       <Filter>Sources</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Sources\Tests\Prototypes.cpp" />
+    <ClCompile Include="..\..\Sources\Tests\Scripts.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\TestApplication.h">
       <Filter>Sources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\Tests\Prototypes.h" />
+    <ClInclude Include="..\..\Sources\Tests\Scripts.h" />
   </ItemGroup>
 </Project>

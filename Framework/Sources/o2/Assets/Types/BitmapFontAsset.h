@@ -72,6 +72,8 @@ END_META;
 CLASS_METHODS_META(o2::BitmapFontAsset)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const char*, GetFileExtensions);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

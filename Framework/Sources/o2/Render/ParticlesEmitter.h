@@ -368,6 +368,8 @@ END_META;
 CLASS_METHODS_META(o2::ParticlesEmitter)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ParticlesEmitter&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetPlaying, bool);

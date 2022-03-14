@@ -77,6 +77,8 @@ END_META;
 CLASS_METHODS_META(Editor::TagsProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const TagsProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetCommonValue, const TagGroup&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);

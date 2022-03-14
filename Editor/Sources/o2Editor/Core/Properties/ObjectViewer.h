@@ -63,6 +63,7 @@ CLASS_METHODS_META(Editor::ObjectViewer)
 
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh, _tmp1);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh, const Vector<IObject*>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetParentContext, PropertiesContext*);

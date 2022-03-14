@@ -780,6 +780,11 @@ CLASS_METHODS_META(o2::Actor)
 	typedef Map<const Actor*, Actor*>& _tmp5;
 	typedef Map<const Component*, Component*>& _tmp6;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAssetRef&, ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&, ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Actor&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, FixedUpdate, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);
@@ -838,6 +843,11 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsModeOnScene, ActorCreateMode);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, SceneStatus, const String&, bool, bool, bool, bool, const String&, SceneLayer*, SceneUID, UID);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const ActorAssetRef&, ActorCreateMode);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Component*>, ActorCreateMode);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const Actor&, ActorCreateMode);
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyFields, Vector<const FieldInfo*>&, IObject*, IObject*, Vector<Actor**>&, Vector<Component**>&, Vector<ISerializable*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, CollectFixingFields, Component*, Vector<Component**>&, Vector<Actor**>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, GetComponentFields, Component*, Vector<const FieldInfo*>&);

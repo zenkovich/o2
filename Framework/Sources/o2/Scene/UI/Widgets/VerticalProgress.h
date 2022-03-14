@@ -170,6 +170,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalProgress)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalProgress&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);

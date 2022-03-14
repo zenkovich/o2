@@ -118,6 +118,8 @@ END_META;
 CLASS_METHODS_META(Editor::GameWindow)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const GameWindow&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeDevicesMenu);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetResolution, const Vec2I&);
@@ -144,6 +146,7 @@ END_META;
 CLASS_METHODS_META(Editor::GameWindow::GameView)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTransformUpdated);

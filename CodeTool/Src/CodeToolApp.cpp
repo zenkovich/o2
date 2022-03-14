@@ -815,23 +815,31 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 
 		res += GetAttributes(cls, function->GetLine(), synComment);
 
+		bool isConstructor = StartsWith(cls->GetName(), function->GetName());
+
 		if (function->IsStatic())
 			res += ".SIGNATURE_STATIC(";
+		else if (isConstructor)
+			res += ".CONSTRUCTOR(";
 		else
 			res += ".SIGNATURE(";
 
-		auto returnTypeName = (function->GetReturnType().IsConstant() ? "const " : "") + function->GetReturnType().GetName();
-
-		if (returnTypeName.find(',') != returnTypeName.npos)
+		if (!isConstructor)
 		{
-			char buf[255];
-			supportingTypedefs.push_back(returnTypeName);
-			returnTypeName = (string)"_tmp" + _itoa((int)supportingTypedefs.size(), buf, 10);
+			auto returnTypeName = (function->GetReturnType().IsConstant() ? "const " : "") + function->GetReturnType().GetName();
+
+			if (returnTypeName.find(',') != returnTypeName.npos)
+			{
+				char buf[255];
+				supportingTypedefs.push_back(returnTypeName);
+				returnTypeName = (string)"_tmp" + _itoa((int)supportingTypedefs.size(), buf, 10);
+			}
+
+			res += returnTypeName;
+			res += string(", ") + function->GetName();
 		}
 
-		res += returnTypeName;
-		res += string(", ") + function->GetName();
-
+		bool first = isConstructor;
 		for (auto param : function->GetParameters())
 		{
 			string parameterName = (param->GetVariableType().IsConstant() ? "const " : "") + param->GetVariableType().GetName();
@@ -843,7 +851,12 @@ string CodeToolApplication::GetClassMeta(SyntaxClass* cls)
 				parameterName = string("_tmp") + _itoa((int)supportingTypedefs.size(), buf, 10);
 			}
 
-			res += string(", ") + parameterName;
+			if (!first)
+				res += string(", ");
+			else
+				first = false;
+
+			res += parameterName;
 		}
 
 		res += ");\n";
@@ -1096,8 +1109,7 @@ bool CodeToolApplication::IsFunctionReflectable(SyntaxFunction* function, Syntax
 {
 	static vector<string> ignoringNames = { "SERIALIZABLE", "PROPERTY", "GETTER", "SETTER", "IOBJECT", "ASSET_TYPE", "ATTRIBUTE_COMMENT_DEFINITION", "ATTRIBUTE_SHORT_DEFINITION" };
 
-	return !StartsWith(owner->GetName(), function->GetName()) &&
-		!StartsWith(function->GetName(), string("~") + owner->GetName()) &&
+	return !StartsWith(function->GetName(), string("~") + owner->GetName()) &&
 		function->GetName().find('~') == string::npos &&
 		function->GetName().find("operator") == function->GetName().npos &&
 		!function->IsTemplate() &&

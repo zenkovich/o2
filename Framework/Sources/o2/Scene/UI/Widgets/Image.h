@@ -74,6 +74,8 @@ END_META;
 CLASS_METHODS_META(o2::Image)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Image&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetImage, Sprite*);
 	FUNCTION().PUBLIC().SIGNATURE(Sprite*, GetImage);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetImageAsset, const ImageAssetRef&);

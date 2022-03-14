@@ -120,6 +120,8 @@ END_META;
 CLASS_METHODS_META(Editor::ActorProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorProperty&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnTypeSpecialized, const Type&);

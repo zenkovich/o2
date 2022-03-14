@@ -154,6 +154,8 @@ END_META;
 CLASS_METHODS_META(Editor::ObjectPtrProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ObjectPtrProperty&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);

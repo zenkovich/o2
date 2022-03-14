@@ -764,6 +764,10 @@ CLASS_METHODS_META(o2::Widget)
 	typedef Map<String, Widget*> _tmp3;
 	typedef Map<String, WidgetState*> _tmp4;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAssetRef&, ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Widget&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildren, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateTransform);
@@ -898,6 +902,8 @@ END_META;
 CLASS_METHODS_META(o2::Widget::LayersEditable)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
 	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
 	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
@@ -928,6 +934,8 @@ END_META;
 CLASS_METHODS_META(o2::Widget::InternalChildrenEditableEditable)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
 	FUNCTION().PUBLIC().SIGNATURE(void, GenerateNewID, bool);
 	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);

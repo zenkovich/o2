@@ -87,6 +87,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurvePreview)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CurvePreview&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetCurve, Curve*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetBackColor, const Color4&);

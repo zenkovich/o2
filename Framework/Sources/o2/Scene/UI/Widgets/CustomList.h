@@ -263,6 +263,8 @@ CLASS_METHODS_META(o2::CustomList)
 
 	typedef const Function<bool(Widget*, Widget*)>& _tmp1;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CustomList&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);

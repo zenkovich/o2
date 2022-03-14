@@ -49,6 +49,8 @@ END_META;
 CLASS_METHODS_META(o2::Layout)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, const Vec2F&, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(RectF, Calculate, const RectF&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, BothStretch, const BorderF&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Layout, BothStretch, float, float, float, float);

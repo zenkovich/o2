@@ -59,6 +59,8 @@ END_META;
 CLASS_METHODS_META(o2::FolderAsset)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const FolderAsset&);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<AssetRef>, GetChildrenAssets);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetEditorIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(int, GetEditorSorting);

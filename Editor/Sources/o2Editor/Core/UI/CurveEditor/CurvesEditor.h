@@ -492,6 +492,8 @@ CLASS_METHODS_META(Editor::CurvesEditor)
 
 	typedef Map<String, Curve*> _tmp1;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesEditor&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(_tmp1, GetCurves);
@@ -583,6 +585,9 @@ END_META;
 CLASS_METHODS_META(Editor::CurvesEditor::CurveHandle)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const DragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLocalPosition);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToCurveView, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, CurveViewToLocal, const Vec2F&);

@@ -182,6 +182,8 @@ END_META;
 CLASS_METHODS_META(o2::VerticalLayout)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const VerticalLayout&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
 	FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);

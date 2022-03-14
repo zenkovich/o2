@@ -208,6 +208,7 @@ CLASS_METHODS_META(Editor::MeshComponentViewer)
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp1;
 	typedef const Vector<Pair<IObject*, IObject*>>& _tmp2;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PROTECTED().SIGNATURE(void, RebuildProperties, _tmp1);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnRefreshed, _tmp2);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);

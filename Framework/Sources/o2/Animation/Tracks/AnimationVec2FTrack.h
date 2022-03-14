@@ -173,6 +173,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTrack<Vec2F>&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue, float);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetValue, float, bool, int&, int&, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
@@ -214,6 +216,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationTrack<o2::Vec2F>::Player)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, Vec2F*, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);

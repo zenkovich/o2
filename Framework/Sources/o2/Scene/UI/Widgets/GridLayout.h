@@ -193,6 +193,8 @@ END_META;
 CLASS_METHODS_META(o2::GridLayout)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayout&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetBaseCorner, BaseCorner);
 	FUNCTION().PUBLIC().SIGNATURE(BaseCorner, GetBaseCorner);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetSpacing, float);

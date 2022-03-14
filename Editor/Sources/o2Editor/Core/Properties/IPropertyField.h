@@ -608,6 +608,8 @@ END_META;
 CLASS_METHODS_META(Editor::IPropertyField)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const IPropertyField&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueAndPrototypeProxy, const TargetsVec&);
 	FUNCTION().PUBLIC().SIGNATURE(const TargetsVec&, GetValueAndPrototypeProxy);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueProxy, const Vector<IAbstractValueProxy*>&);
@@ -657,6 +659,8 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(Editor::TPropertyField<_type>)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const TPropertyField&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(void, Revert);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetValueType);

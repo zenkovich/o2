@@ -387,6 +387,8 @@ CLASS_METHODS_META(o2::WidgetLayer)
 
 	typedef Map<String, WidgetLayer*> _tmp1;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayer&);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetOwnerWidget);
 	FUNCTION().PUBLIC().SIGNATURE(const WidgetLayer*, GetPrototypeLink);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawable, IRectDrawable*);

@@ -100,6 +100,8 @@ END_META;
 CLASS_METHODS_META(o2::ISceneDrawable)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ISceneDrawable&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawingDepth, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetSceneDrawableDepth);

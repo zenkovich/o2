@@ -88,6 +88,8 @@ END_META;
 CLASS_METHODS_META(o2::AnimationState)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetWeight, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetWeight);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, const AnimationAssetRef&);

@@ -91,6 +91,7 @@ END_META;
 CLASS_METHODS_META(o2::AnimationPlayer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(IObject*, AnimationClip*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*, bool);
 	FUNCTION().PUBLIC().SIGNATURE(IObject*, GetTarget);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetClip, AnimationClip*, bool);

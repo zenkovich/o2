@@ -204,6 +204,7 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationWindow)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationEditable, IEditableAnimation*);

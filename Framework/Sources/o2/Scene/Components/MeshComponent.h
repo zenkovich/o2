@@ -143,6 +143,8 @@ END_META;
 CLASS_METHODS_META(o2::MeshComponent)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const MeshComponent&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(const Mesh&, GetMesh);

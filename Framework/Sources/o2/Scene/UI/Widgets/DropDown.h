@@ -93,6 +93,8 @@ END_META;
 CLASS_METHODS_META(o2::DropDown)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const DropDown&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&);
 	FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&, int);

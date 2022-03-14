@@ -67,6 +67,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurvesSheet)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CurvesSheet&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateCurvesColors);
 	FUNCTION().PUBLIC().SIGNATURE(void, OnAnimationChanged);

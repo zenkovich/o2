@@ -93,6 +93,7 @@ END_META;
 CLASS_METHODS_META(Editor::WidgetLayerViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHeaderViewer, IWidgetLayerHeaderViewer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutViewer, IWidgetLayerLayoutViewer*);

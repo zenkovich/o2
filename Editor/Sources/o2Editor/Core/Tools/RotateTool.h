@@ -160,6 +160,7 @@ END_META;
 CLASS_METHODS_META(Editor::RotateTool)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(String, GetPanelIcon);
 	FUNCTION().PUBLIC().SIGNATURE(ShortcutKeys, GetShortcut);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);

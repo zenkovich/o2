@@ -81,6 +81,7 @@ END_META;
 CLASS_METHODS_META(o2::ProjectConfig)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(String, GetProjectName);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetProjectName, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(Platform, GetPlatform);

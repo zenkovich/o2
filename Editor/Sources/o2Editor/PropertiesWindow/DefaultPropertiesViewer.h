@@ -56,6 +56,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultPropertiesViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);

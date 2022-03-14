@@ -283,6 +283,8 @@ END_META;
 CLASS_METHODS_META(Editor::MapKeyFramesTrackControl)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const MapKeyFramesTrackControl&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Initialize, AnimationTimeline*, KeyHandlesSheet*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateHandles);

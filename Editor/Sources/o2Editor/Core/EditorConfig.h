@@ -106,6 +106,7 @@ END_META;
 CLASS_METHODS_META(Editor::EditorConfig)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveGlobalConfigs);
 	FUNCTION().PROTECTED().SIGNATURE(void, SaveProjectConfigs);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadConfigs);

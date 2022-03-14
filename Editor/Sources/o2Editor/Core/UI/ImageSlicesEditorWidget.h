@@ -103,6 +103,8 @@ END_META;
 CLASS_METHODS_META(Editor::ImageSlicesEditorWidget)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageSlicesEditorWidget&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Setup, const ImageAssetRef&, BorderIProperty*);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeImagePreview);

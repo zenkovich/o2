@@ -167,7 +167,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartFields<_thisType>(object, type);
 
-			FIELD().NAME(mSpecActor).PROTECTED();
+			FIELD().PROTECTED().NAME(mSpecActor);
 		}
 
 		template<typename _type_processor>
@@ -203,6 +203,9 @@ END_META;
 CLASS_METHODS_META(o2::ActorRef)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorRef&);
 	FUNCTION().PUBLIC().SIGNATURE(Actor*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(const Actor*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(void, Destroy);

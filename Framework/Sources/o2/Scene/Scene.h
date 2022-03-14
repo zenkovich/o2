@@ -455,6 +455,7 @@ CLASS_METHODS_META(o2::Scene)
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateDestroyingEntities);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyActor, Actor*);
 	FUNCTION().PUBLIC().SIGNATURE(void, DestroyComponent, Component*);
+	FUNCTION().PROTECTED().CONSTRUCTOR();
 	FUNCTION().PROTECTED().SIGNATURE(void, DrawCameras, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateActors, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateAddedEntities);

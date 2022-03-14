@@ -911,6 +911,8 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimationTrack<_type>)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTrack<_type>&);
 	FUNCTION().PUBLIC().SIGNATURE(_type, GetValue, float);
 	FUNCTION().PUBLIC().SIGNATURE(_type, GetValue, float, bool, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
@@ -973,6 +975,7 @@ META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimationTrack<_type>::Player)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, _type*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, _type*, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetDelegate, const Function<void()>&);
@@ -1012,5 +1015,11 @@ END_META;
 META_TEMPLATES(typename _type)
 CLASS_METHODS_META(o2::AnimationTrack<_type>::Key)
 {
+
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const _type&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, const _type&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, const _type&, float, float, float, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Key&);
 }
 END_META;

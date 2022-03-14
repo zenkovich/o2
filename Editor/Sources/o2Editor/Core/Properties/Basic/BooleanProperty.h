@@ -54,6 +54,8 @@ END_META;
 CLASS_METHODS_META(Editor::BooleanProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const BooleanProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 }

@@ -85,6 +85,8 @@ END_META;
 CLASS_METHODS_META(o2::CircleCollider)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CircleCollider&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetRadius, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetRadius);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetFitByActor, bool);

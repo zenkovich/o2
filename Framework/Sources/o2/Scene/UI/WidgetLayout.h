@@ -354,6 +354,10 @@ END_META;
 CLASS_METHODS_META(o2::WidgetLayout)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float, float, float, float, float);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayout&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, CopyFrom, const ActorTransform&);

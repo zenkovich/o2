@@ -63,6 +63,8 @@ END_META;
 CLASS_METHODS_META(Editor::SceneLayersListProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneLayersListProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateValueView);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, OpenContext);

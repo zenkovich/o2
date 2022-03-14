@@ -55,6 +55,9 @@ END_META;
 CLASS_METHODS_META(Editor::SceneDragHandle)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SceneDragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, ScreenToLocal, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, LocalToScreen, const Vec2F&);

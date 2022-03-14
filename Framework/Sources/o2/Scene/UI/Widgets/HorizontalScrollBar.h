@@ -195,6 +195,8 @@ END_META;
 CLASS_METHODS_META(o2::HorizontalScrollBar)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const HorizontalScrollBar&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValue, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetValueForcible, float);

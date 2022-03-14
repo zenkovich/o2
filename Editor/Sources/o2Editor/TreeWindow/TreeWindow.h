@@ -205,6 +205,8 @@ CLASS_METHODS_META(Editor::TreeWindow)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsWidgetsLayersVisible);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetWidgetsInternalChildrenVisible, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsWidgetsInternalChildrenVisible);
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const TreeWindow&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeWindow);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeTestScene);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeSceneTree);

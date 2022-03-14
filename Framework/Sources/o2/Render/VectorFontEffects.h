@@ -121,6 +121,7 @@ END_META;
 CLASS_METHODS_META(o2::FontStrokeEffect)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, const Color4&, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
@@ -144,6 +145,7 @@ END_META;
 CLASS_METHODS_META(o2::FontGradientEffect)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&, const Color4&, float, float, Vec2F);
 	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
@@ -163,6 +165,7 @@ END_META;
 CLASS_METHODS_META(o2::FontColorEffect)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Color4&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);
@@ -184,6 +187,7 @@ END_META;
 CLASS_METHODS_META(o2::FontShadowEffect)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR(float, const Vec2I, const Color4&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Process, Bitmap*);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2I, GetSizeExtend);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEqual, VectorFont::Effect*);

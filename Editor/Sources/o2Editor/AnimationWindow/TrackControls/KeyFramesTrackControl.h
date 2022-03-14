@@ -543,6 +543,8 @@ META_TEMPLATES(typename AnimationTrackType)
 CLASS_METHODS_META(Editor::KeyFramesTrackControl<AnimationTrackType>)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const KeyFramesTrackControl&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTrack, IAnimationTrack*, IAnimationTrack::IPlayer*, const String&);

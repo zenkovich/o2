@@ -159,6 +159,8 @@ END_META;
 CLASS_METHODS_META(o2::Tag)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddActor, Actor*);
@@ -182,6 +184,8 @@ END_META;
 CLASS_METHODS_META(o2::TagGroup)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const TagGroup&);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddTag, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddTag, Tag*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveTag, const String&);

@@ -130,6 +130,7 @@ END_META;
 CLASS_METHODS_META(Editor::ActorViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetActorHeaderViewer, IActorHeaderViewer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetActorTransformViewer, IActorTransformViewer*);

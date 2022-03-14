@@ -62,6 +62,9 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationKeyDragHandle)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(Sprite*, Sprite*, Sprite*, Sprite*, Sprite*, Sprite*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationKeyDragHandle&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 }

@@ -15,6 +15,9 @@
 
 namespace o2
 {
+	class ScriptValue;
+	struct ScriptConstructorTypeProcessor;
+
 	// -------------------
 	// Script parse result
 	// -------------------
@@ -65,6 +68,12 @@ namespace o2
 
 		// Runs built in script with math and etc, required to work framework
 		void RunBuildtinScripts();
+
+	private:
+		typedef void(*RegisterConstructorFunc)(void*, ScriptConstructorTypeProcessor&);
+		static Vector<RegisterConstructorFunc>& GetRegisterConstructorFuncs();
+
+		friend class Reflection;
 	};
 }
 

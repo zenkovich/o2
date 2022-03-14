@@ -91,6 +91,7 @@ END_META;
 CLASS_METHODS_META(Editor::DefaultActorComponentViewer)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTargetComponents, const Vector<Component*>&);
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetComponentType);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);

@@ -207,6 +207,8 @@ END_META;
 CLASS_METHODS_META(o2::IAnimation)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const IAnimation&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Play);
 	FUNCTION().PUBLIC().SIGNATURE(void, PlayInBounds, float, float);

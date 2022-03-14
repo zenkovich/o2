@@ -123,6 +123,8 @@ END_META;
 CLASS_METHODS_META(o2::GridLayoutScrollArea)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const GridLayoutScrollArea&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetItemSample, Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetItemSample);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetItemsSpacing, const Vec2F&);

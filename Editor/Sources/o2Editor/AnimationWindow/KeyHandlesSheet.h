@@ -257,6 +257,8 @@ CLASS_METHODS_META(Editor::KeyHandlesSheet)
 	typedef const Map<String, Vector<UInt64>>& _tmp4;
 	typedef Map<String, Vector<UInt64>>& _tmp5;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const KeyHandlesSheet&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);

@@ -98,6 +98,9 @@ END_META;
 CLASS_METHODS_META(o2::AssetInfo)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(AssetMeta*);
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AssetInfo&);
 	FUNCTION().PUBLIC().SIGNATURE(AssetInfo*, AddChild, AssetInfo*);
 	FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, AssetInfo*, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetParent, AssetInfo*);

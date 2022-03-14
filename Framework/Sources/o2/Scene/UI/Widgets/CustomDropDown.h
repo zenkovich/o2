@@ -186,6 +186,8 @@ CLASS_METHODS_META(o2::CustomDropDown)
 
 	typedef const Function<bool(Widget*, Widget*)>& _tmp1;
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CustomDropDown&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Expand);
 	FUNCTION().PUBLIC().SIGNATURE(void, Collapse);

@@ -182,6 +182,7 @@ END_META;
 CLASS_METHODS_META(Editor::LayersPopup)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Show, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
@@ -220,6 +221,8 @@ END_META;
 CLASS_METHODS_META(Editor::LayerPopupItem)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const LayerPopupItem&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, SceneLayer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginEditName);
 	FUNCTION().PUBLIC().SIGNATURE(void, BreakEditName);

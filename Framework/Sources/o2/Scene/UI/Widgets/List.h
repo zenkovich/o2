@@ -89,6 +89,8 @@ END_META;
 CLASS_METHODS_META(o2::List)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const List&);
 	FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&);
 	FUNCTION().PUBLIC().SIGNATURE(int, AddItem, const WString&, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, AddItems, const Vector<WString>&);

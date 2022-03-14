@@ -64,6 +64,8 @@ END_META;
 CLASS_METHODS_META(Editor::CurveProperty)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const CurveProperty&);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnClicked);

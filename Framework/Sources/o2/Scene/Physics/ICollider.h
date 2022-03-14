@@ -134,6 +134,8 @@ END_META;
 CLASS_METHODS_META(o2::ICollider)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const ICollider&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetFriction, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetFriction);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDensity, float);

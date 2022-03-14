@@ -76,6 +76,8 @@ END_META;
 CLASS_METHODS_META(Editor::ReparentAction)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, ObjectsReparented, SceneEditableObject*, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(void, Redo);

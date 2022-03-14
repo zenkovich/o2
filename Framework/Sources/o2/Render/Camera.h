@@ -53,6 +53,8 @@ END_META;
 CLASS_METHODS_META(o2::Camera)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, Default);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, FixedSize, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, FittedSize, const Vec2F&);

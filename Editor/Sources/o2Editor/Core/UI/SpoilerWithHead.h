@@ -67,6 +67,8 @@ END_META;
 CLASS_METHODS_META(Editor::SpoilerWithHead)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const SpoilerWithHead&);
 	FUNCTION().PUBLIC().SIGNATURE(Image*, GetIcon);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PRIVATE().SIGNATURE(void, InitializeControls);

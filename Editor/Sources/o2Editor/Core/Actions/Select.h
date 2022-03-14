@@ -55,6 +55,8 @@ END_META;
 CLASS_METHODS_META(Editor::SelectAction)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<SceneEditableObject*>&, const Vector<SceneEditableObject*>&);
 	FUNCTION().PUBLIC().SIGNATURE(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(void, Redo);
 	FUNCTION().PUBLIC().SIGNATURE(void, Undo);

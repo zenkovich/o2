@@ -254,6 +254,8 @@ END_META;
 CLASS_METHODS_META(Editor::AnimationTimeline)
 {
 
+	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().CONSTRUCTOR(const AnimationTimeline&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimation, AnimationClip*, AnimationPlayer*);
