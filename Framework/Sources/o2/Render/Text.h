@@ -22,24 +22,24 @@ namespace o2
 
 	public:
 		PROPERTIES(Text);
-		PROPERTY(FontRef, font, SetFont, GetFont);                     // Font reference property
-		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property
+		PROPERTY(FontRef, font, SetFont, GetFont);                     // Font reference property @SCRIPTABLE
+		PROPERTY(FontAssetRef, fontAsset, SetFontAsset, GetFontAsset); // Font asset reference property @SCRIPTABLE
 		
-		PROPERTY(WString, text, SetText, GetText); // Text property, wstring
+		PROPERTY(WString, text, SetText, GetText); // Text property, wstring @SCRIPTABLE
 		
-		PROPERTY(int, height, SetHeight, GetHeight); // Text height
+		PROPERTY(int, height, SetHeight, GetHeight); // Text height @SCRIPTABLE
 		
-		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property
-		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property
+		PROPERTY(VerAlign, verAlign, SetVerAlign, GetVerAlign); // vertical align property @SCRIPTABLE
+		PROPERTY(HorAlign, horAlign, SetHorAlign, GetHorAlign); // Horizontal align property @SCRIPTABLE
 		
-		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);         // Words wrapping flag property
-		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings); // Dots endings when overflow property
+		PROPERTY(bool, wordWrap, SetWordWrap, GetWordWrap);         // Words wrapping flag property @SCRIPTABLE
+		PROPERTY(bool, dotsEngings, SetDotsEngings, IsDotsEngings); // Dots endings when overflow property @SCRIPTABLE
 		
-		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard
-		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard
+		PROPERTY(float, symbolsDistanceCoef, SetSymbolsDistanceCoef, GetSymbolsDistanceCoef); // Characters distance coef, 1 is standard @SCRIPTABLE
+		PROPERTY(float, linesDistanceCoef, SetLinesDistanceCoef, GetLinesDistanceCoef);       // Lines distance coef, 1 is standard @SCRIPTABLE
 
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		Text();
 
 		// Constructor
@@ -66,19 +66,19 @@ namespace o2
 		// Assign operator
 		Text& operator=(const Text& other);
 
-		// Draw text
+		// Draw text @SCRIPTABLE
 		void Draw() override;
 
-		// Sets using font
+		// Sets using font @SCRIPTABLE
 		void SetFont(FontRef font);
 
-		// Returns using font
+		// Returns using font @SCRIPTABLE
 		FontRef GetFont() const;
 
-		// Sets bitmap font asset 
+		// Sets bitmap font asset  @SCRIPTABLE
 		void SetFontAsset(const FontAssetRef& asset);
 
-		// Returns asset by font asset id
+		// Returns asset by font asset id @SCRIPTABLE
 		FontAssetRef GetFontAsset() const;
 
 		// Sets font height
@@ -132,10 +132,10 @@ namespace o2
 		// Returns symbol set structure pointer
 		SymbolsSet& GetSymbolsSet();
 
-		// Returns real text size
+		// Returns real text size @SCRIPTABLE
 		Vec2F GetRealSize();
 
-		// Returns real text rectangle
+		// Returns real text rectangle @SCRIPTABLE
 		RectF GetRealRect();
 
 		// Returns text size
@@ -279,16 +279,16 @@ CLASS_BASES_META(o2::Text)
 END_META;
 CLASS_FIELDS_META(o2::Text)
 {
-	FIELD().PUBLIC().NAME(font);
-	FIELD().PUBLIC().NAME(fontAsset);
-	FIELD().PUBLIC().NAME(text);
-	FIELD().PUBLIC().NAME(height);
-	FIELD().PUBLIC().NAME(verAlign);
-	FIELD().PUBLIC().NAME(horAlign);
-	FIELD().PUBLIC().NAME(wordWrap);
-	FIELD().PUBLIC().NAME(dotsEngings);
-	FIELD().PUBLIC().NAME(symbolsDistanceCoef);
-	FIELD().PUBLIC().NAME(linesDistanceCoef);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(font);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(fontAsset);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(text);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(height);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(verAlign);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(horAlign);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(wordWrap);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(dotsEngings);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(symbolsDistanceCoef);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(linesDistanceCoef);
 	FIELD().PROTECTED().DEFAULT_VALUE(4096).NAME(mMeshMaxPolyCount);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mText);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mFontAssetId);
@@ -309,18 +309,18 @@ END_META;
 CLASS_METHODS_META(o2::Text)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(FontRef);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const BitmapFontAssetRef&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const VectorFontAssetRef&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Text&);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFont, FontRef);
-	FUNCTION().PUBLIC().SIGNATURE(FontRef, GetFont);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
-	FUNCTION().PUBLIC().SIGNATURE(FontAssetRef, GetFontAsset);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFont, FontRef);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontRef, GetFont);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFontAsset, const FontAssetRef&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(FontAssetRef, GetFontAsset);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, int);
 	FUNCTION().PUBLIC().SIGNATURE(int, GetHeight);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetText, const WString&);
@@ -338,8 +338,8 @@ CLASS_METHODS_META(o2::Text)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLinesDistanceCoef, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetLinesDistanceCoef);
 	FUNCTION().PUBLIC().SIGNATURE(SymbolsSet&, GetSymbolsSet);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetRealSize);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, GetRealRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetRealSize);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetRealRect);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Vec2F, GetTextSize, const WString&, Font*, int, const Vec2F&, HorAlign, VerAlign, bool, bool, float, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, UpdateMesh);
 	FUNCTION().PROTECTED().SIGNATURE(void, CheckCharactersAndRebuildMesh);

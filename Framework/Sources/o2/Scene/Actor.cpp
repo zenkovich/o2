@@ -1467,6 +1467,13 @@ namespace o2
 				*componentPtr = newComponentPtr;
 		}
 	}
+	
+#if IS_SCRIPTING_SUPPORTED
+	void Actor::ReflectValue(ScriptValue& value)
+	{
+		value.SetProperty("transform", ScriptValue(*transform));
+	}
+#endif
 
 	String Actor::GetCreateMenuCategory()
 	{
@@ -1477,6 +1484,7 @@ namespace o2
 	{
 		return "";
 	}
+
 	void Actor::SourceToTargetMapCloneVisitor::OnCopyActor(const Actor* source, Actor* target)
 	{
 		sourceToTargetActors[source] = target;

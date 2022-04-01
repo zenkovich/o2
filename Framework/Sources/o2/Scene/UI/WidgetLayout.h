@@ -17,33 +17,33 @@ namespace o2
 	{
 	public:
 		PROPERTIES(WidgetLayout);
-		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property
-		PROPERTY(Vec2F, anchorMax, SetAnchorMax,GetAnchorMax);  // Right top anchor property
+		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property @SCRIPTABLE
+		PROPERTY(Vec2F, anchorMax, SetAnchorMax,GetAnchorMax);  // Right top anchor property @SCRIPTABLE
 
-		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property
-		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property
+		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property @SCRIPTABLE
+		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property @SCRIPTABLE
 
-		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
-		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
-		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
-		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
+		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property @SCRIPTABLE
+		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property @SCRIPTABLE
+		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property @SCRIPTABLE
+		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property @SCRIPTABLE
 
-		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
-		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property
-		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
-		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
+		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property @SCRIPTABLE
+		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property @SCRIPTABLE
+		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property @SCRIPTABLE
+		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property @SCRIPTABLE
 
-		PROPERTY(Vec2F, minSize, SetMinimalSize, GetMinimalSize);      // Minimal size property
-		PROPERTY(float, minWidth, SetMinimalWidth, GetMinWidth);   // Minimal width property
-		PROPERTY(float, minHeight,SetMinimalHeight, GetMinHeight); // Minimal height property
+		PROPERTY(Vec2F, minSize, SetMinimalSize, GetMinimalSize);      // Minimal size property @SCRIPTABLE
+		PROPERTY(float, minWidth, SetMinimalWidth, GetMinWidth);   // Minimal width property @SCRIPTABLE
+		PROPERTY(float, minHeight,SetMinimalHeight, GetMinHeight); // Minimal height property @SCRIPTABLE
 
-		PROPERTY(Vec2F, maxSize, SetMaximalSize, GetMaximalSize);       // Maximum size property
-		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaxWidth);    // Maximum width property
-		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaxHeight); // Maximum height property
+		PROPERTY(Vec2F, maxSize, SetMaximalSize, GetMaximalSize);       // Maximum size property @SCRIPTABLE
+		PROPERTY(float, maxWidth, SetMaximalWidth, GetMaxWidth);    // Maximum width property @SCRIPTABLE
+		PROPERTY(float, maxHeight, SetMaximalHeight, GetMaxHeight); // Maximum height property @SCRIPTABLE
 
-		PROPERTY(Vec2F, weight, SetWeight, GetWeight);                   // Layout weight property
-		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property
-		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property
+		PROPERTY(Vec2F, weight, SetWeight, GetWeight);                   // Layout weight property @SCRIPTABLE
+		PROPERTY(float, widthWeight, SetWidthWeight, GetWidthWeight);    // Width layout weight property @SCRIPTABLE
+		PROPERTY(float, heigthWeight, SetHeightWeight, GetHeightWeight); // Height layout weight property @SCRIPTABLE
 
 	public:
 		// Default constructor, creates both stretching layout  
@@ -54,7 +54,7 @@ namespace o2
 
 		// Constructor with parameters
 		WidgetLayout(float anchorLeft, float anchorTop, float anchorRight, float anchorBottom,
-					   float offsetLeft, float offsetTop, float offsetRight, float offsetBottom);
+					 float offsetLeft, float offsetTop, float offsetRight, float offsetBottom);
 
 		// Copy-constructor
 		WidgetLayout(const WidgetLayout& other);
@@ -248,17 +248,16 @@ namespace o2
 		// Returns height layout weight
 		float GetHeightWeight();
 
-		// Returns both axis stretching by parent layout with border offsets
-		static WidgetLayout BothStretch(float borderLeft = 0, float borderBottom = 0, 
-										  float borderRight = 0, float borderTop = 0);
+		// Returns both axis stretching by parent layout with border offsets @SCRIPTABLE
+		static WidgetLayout BothStretch(float borderLeft = 0, float borderBottom = 0, float borderRight = 0, float borderTop = 0);
 
-		// Returns fixed by size layout, positioned relative to corner with offset 
+		// Returns fixed by size layout, positioned relative to corner with offset  @SCRIPTABLE
 		static WidgetLayout Based(BaseCorner corner, const Vec2F& size, const Vec2F& offset = Vec2F());
 
-		// Returns horizontal stretching by parent layout, anchored by height with offsets and left and right border
+		// Returns horizontal stretching by parent layout, anchored by height with offsets and left and right border @SCRIPTABLE
 		static WidgetLayout HorStretch(VerAlign align, float left, float right, float height, float offsY = 0.0f);
 
-		// Returns vertical stretching by parent layout, anchored by width with offsets and left and right border
+		// Returns vertical stretching by parent layout, anchored by width with offsets and left and right border @SCRIPTABLE
 		static WidgetLayout VerStretch(HorAlign align, float top, float bottom, float width, float offsX = 0.0f);
 
 		SERIALIZABLE(WidgetLayout);
@@ -327,27 +326,27 @@ CLASS_BASES_META(o2::WidgetLayout)
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayout)
 {
-	FIELD().PUBLIC().NAME(anchorMin);
-	FIELD().PUBLIC().NAME(anchorMax);
-	FIELD().PUBLIC().NAME(offsetMin);
-	FIELD().PUBLIC().NAME(offsetMax);
-	FIELD().PUBLIC().NAME(anchorLeft);
-	FIELD().PUBLIC().NAME(anchorRight);
-	FIELD().PUBLIC().NAME(anchorBottom);
-	FIELD().PUBLIC().NAME(anchorTop);
-	FIELD().PUBLIC().NAME(offsetLeft);
-	FIELD().PUBLIC().NAME(offsetRight);
-	FIELD().PUBLIC().NAME(offsetBottom);
-	FIELD().PUBLIC().NAME(offsetTop);
-	FIELD().PUBLIC().NAME(minSize);
-	FIELD().PUBLIC().NAME(minWidth);
-	FIELD().PUBLIC().NAME(minHeight);
-	FIELD().PUBLIC().NAME(maxSize);
-	FIELD().PUBLIC().NAME(maxWidth);
-	FIELD().PUBLIC().NAME(maxHeight);
-	FIELD().PUBLIC().NAME(weight);
-	FIELD().PUBLIC().NAME(widthWeight);
-	FIELD().PUBLIC().NAME(heigthWeight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorMin);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorMax);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetMin);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetMax);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorLeft);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorRight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetLeft);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetRight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(minSize);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(minWidth);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(minHeight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(maxSize);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(maxWidth);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(maxHeight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(weight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(widthWeight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(heigthWeight);
 	FIELD().PROTECTED().NAME(mData);
 }
 END_META;
@@ -419,10 +418,10 @@ CLASS_METHODS_META(o2::WidgetLayout)
 	FUNCTION().PUBLIC().SIGNATURE(float, GetWidthWeight);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetHeightWeight, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetHeightWeight);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(WidgetLayout, BothStretch, float, float, float, float);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(WidgetLayout, Based, BaseCorner, const Vec2F&, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(WidgetLayout, HorStretch, VerAlign, float, float, float, float);
-	FUNCTION().PUBLIC().SIGNATURE_STATIC(WidgetLayout, VerStretch, HorAlign, float, float, float, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, BothStretch, float, float, float, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, Based, BaseCorner, const Vec2F&, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, HorStretch, VerAlign, float, float, float, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE_STATIC(WidgetLayout, VerStretch, HorAlign, float, float, float, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(RectF, GetParentRectangle);
 	FUNCTION().PROTECTED().SIGNATURE(void, FloorRectangle);

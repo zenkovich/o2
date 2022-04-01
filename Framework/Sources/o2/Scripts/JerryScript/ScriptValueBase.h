@@ -19,18 +19,21 @@ namespace o2
 		// Releases current value and accepts new. After this class will release value
 		void Accept(jerry_value_t v);
 
-	protected:
+	public:
 		struct IDataContainer
 		{
+			bool isDataOwner = true;
+
 			virtual ~IDataContainer() = default;
 		};
 
 		template<typename _type>
 		struct DataContainer: public IDataContainer
 		{
-			_type data;
+			_type* data;
 
-			DataContainer(const _type& data):data(data) {}
+			DataContainer(_type* data):data(data) {}
+			~DataContainer() { if (isDataOwner && data) delete data; }
 		};
 
 		struct IFunctionContainer
@@ -41,7 +44,7 @@ namespace o2
 		template<typename _invocable_type, typename _res_type, typename ... _args>
 		struct FunctionContainer: public DataContainer<_invocable_type>, public IFunctionContainer
 		{
-			FunctionContainer(const _invocable_type& function):DataContainer(function) {}
+			FunctionContainer(_invocable_type* function):DataContainer(function) {}
 			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
 		};
 

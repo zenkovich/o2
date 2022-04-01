@@ -27,9 +27,9 @@ namespace o2
 	public:
 		PROPERTIES(Widget);
 
-		PROPERTY(bool, enabledForcibly, SetEnabledForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE
+		PROPERTY(bool, enabledForcibly, SetEnabledForcible, IsEnabled); // Enable property, works forcibly @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
 
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Transparency property @SCRIPTABLE
 		GETTER(float, resTransparency, GetResTransparency);              // Result transparency getter, depends on parent transparency @EDITOR_IGNORE @ANIMATABLE
 
 		GETTER(Vector<Widget*>, childrenWidgets, GetChildrenNonConst); // Widget children getter
@@ -53,7 +53,7 @@ namespace o2
 		Function<void()> onHide;          // Widget hiding event
 
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		Widget(ActorCreateMode mode = ActorCreateMode::Default);
 
 		// Widget constructor from prototype
@@ -86,22 +86,22 @@ namespace o2
 		// Draws widget and child widgets with not overridden depth
 		void Draw() override;
 
-		// Forcible drawing in area with transparency
+		// Forcible drawing in area with transparency @SCRIPTABLE
 		void ForceDraw(const RectF& area, float transparency);
 
-		// Sets layout dirty, and update it in update loop
+		// Sets layout dirty, and update it in update loop @SCRIPTABLE
 		void SetLayoutDirty();
 
-		// Returns parent widget
+		// Returns parent widget @SCRIPTABLE
 		Widget* GetParentWidget() const;
 
-		// Returns children rectangle layout
+		// Returns children rectangle layout @SCRIPTABLE
 		const RectF& GetChildrenWorldRect() const;
 
-		// Returns child widget by path (like "root/some node/other node/target node")
+		// Returns child widget by path (like "root/some node/other node/target node") @SCRIPTABLE
 		Widget* GetChildWidget(const String& path) const;
 
-		// Adds child widget and returns them
+		// Adds child widget and returns them @SCRIPTABLE
 		Widget* AddChildWidget(Widget* widget);
 
 		// Adds child widget at position and returns them
@@ -110,29 +110,29 @@ namespace o2
 		// Returns constant children widgets vector
 		const Vector<Widget*>& GetChildWidgets() const;
 
-		// Sets index position in parent or scene
+		// Sets index position in parent or scene @SCRIPTABLE
 		void SetIndexInSiblings(int index) override;
 
-		// Adds layer
+		// Adds layer @SCRIPTABLE
 		WidgetLayer* AddLayer(WidgetLayer* layer);
 
-		// Adds layer
+		// Adds layer @SCRIPTABLE_NAME(AddLayerNew)
 		WidgetLayer* AddLayer(const String& name, IRectDrawable* drawable,
 							  const Layout& layout = Layout::BothStretch(), float depth = 0.0f);
 
-		// Removes layer
+		// Removes layer @SCRIPTABLE
 		void RemoveLayer(WidgetLayer* layer, bool release = true);
 
-		// Removes layer
+		// Removes layer @SCRIPTABLE_NAME(RemoveLayerByPath)
 		void RemoveLayer(const String& path);
 
-		// Removes all layers
+		// Removes all layers @SCRIPTABLE
 		void RemoveAllLayers();
 
-		// Returns layer by path. Returns null if layer isn't exist
+		// Returns layer by path. Returns null if layer isn't exist @SCRIPTABLE
 		WidgetLayer* GetLayer(const String& path) const;
 
-		// Returns layer by name in layers hierarchy. Returns null if layer isn't exist
+		// Returns layer by name in layers hierarchy. Returns null if layer isn't exist @SCRIPTABLE
 		WidgetLayer* FindLayer(const String& name) const;
 
 		// Searches layer with drawable with specified type
@@ -143,49 +143,49 @@ namespace o2
 		template<typename _type>
 		_type* GetLayerDrawable(const String& path) const;
 
-		// Returns all layers
+		// Returns all layers @SCRIPTABLE
 		const Vector<WidgetLayer*>& GetLayers() const;
 
-		// Adds new state with name
+		// Adds new state with name @SCRIPTABLE_NAME(AddStateNew)
 		WidgetState* AddState(const String& name);
 
-		// Adds new state with name and animation
+		// Adds new state with name and animation @SCRIPTABLE_NAME(AddStateWithClip)
 		WidgetState* AddState(const String& name, const AnimationClip& animation);
 
-		// Adds new state with name and animation
+		// Adds new state with name and animation @SCRIPTABLE_NAME(AddStateWithClipAsset)
 		WidgetState* AddState(const String& name, const AnimationAssetRef& animation);
 
-		// Adds state
+		// Adds state @SCRIPTABLE
 		WidgetState* AddState(WidgetState* state, bool showAnimErrors = true);
 
-		// Removes state by name
+		// Removes state by name @SCRIPTABLE_NAME(RemoveStateByName)
 		bool RemoveState(const String& name);
 
-		// Removes state
+		// Removes state @SCRIPTABLE
 		bool RemoveState(WidgetState* state);
 
-		// Removes all states
+		// Removes all states @SCRIPTABLE
 		void RemoveAllStates();
 
-		// Sets state value
+		// Sets state value @SCRIPTABLE
 		void SetState(const String& name, bool state);
 
-		// Sets state value immediately
+		// Sets state value immediately @SCRIPTABLE
 		void SetStateForcible(const String& name, bool state);
 
-		// Returns state value
+		// Returns state value @SCRIPTABLE
 		bool GetState(const String& name) const;
 
-		// Returns state object by name
+		// Returns state object by name @SCRIPTABLE
 		WidgetState* GetStateObject(const String& name) const;
 
-		// Returns all states
+		// Returns all states @SCRIPTABLE
 		const Vector<WidgetState*>& GetStates() const;
 
-		// Sets depth overriding
+		// Sets depth overriding @SCRIPTABLE
 		void SetDepthOverridden(bool overrideDepth);
 
-		// Is sorting depth overridden
+		// Is sorting depth overridden @SCRIPTABLE
 		bool IsDepthOverriden() const;
 
 		// Sets widget's transparency
@@ -194,50 +194,50 @@ namespace o2
 		// Returns widget's transparency
 		float GetTransparency() const;
 
-		// Returns widget's result transparency (depends on parent's result transparency)
+		// Returns widget's result transparency (depends on parent's result transparency) @SCRIPTABLE
 		float GetResTransparency() const;
 
-		// Sets visibility
+		// Sets visibility @SCRIPTABLE
 		void SetEnabledForcible(bool visible);
 
-		// Sets visibility to true
+		// Sets visibility to true @SCRIPTABLE
 		void Show(bool forcible = false);
 
-		// Sets visibility to false
+		// Sets visibility to false @SCRIPTABLE
 		void Hide(bool forcible = false);
 
-		// Focus this widget
+		// Focus this widget @SCRIPTABLE
 		void Focus();
 
-		// Unfocus this widget
+		// Unfocus this widget @SCRIPTABLE
 		void Unfocus();
 
-		// Returns is this widget focused
+		// Returns is this widget focused @SCRIPTABLE
 		bool IsFocused() const;
 
-		// Returns is this widget can be focused
+		// Returns is this widget can be focused @SCRIPTABLE
 		virtual bool IsFocusable() const;
 
-		// Sets widget can be focused
+		// Sets widget can be focused @SCRIPTABLE
 		void SetFocusable(bool focusable);
 
-		// Returns true if point is under drawable
+		// Returns true if point is under drawable @SCRIPTABLE
 		bool IsUnderPoint(const Vec2F& point) override;
 
-		// Sets parent,  doesn't adds to parent's children but adds to internal children
+		// Sets parent,  doesn't adds to parent's children but adds to internal children @SCRIPTABLE
 		void SetInternalParent(Widget* parent, bool worldPositionStays = false);
 
-		// Adds widget to internal children
+		// Adds widget to internal children @SCRIPTABLE
 		void AddInternalWidget(Widget* widget, bool worldPositionStays = false);
 
-		// Returns internal child widget by path (like "root/some node/other node/target node")
+		// Returns internal child widget by path (like "root/some node/other node/target node") @SCRIPTABLE
 		Widget* GetInternalWidget(const String& path) const;
 
 		// Returns internal child widget by path (like "root/some node/other node/target node")
 		template<typename _type>
 		_type* GetInternalWidgetByType(const String& path) const;
 
-		// Searches widget with name in internal widgets hierarchy
+		// Searches widget with name in internal widgets hierarchy @SCRIPTABLE
 		Widget* FindInternalWidget(const String& name) const;
 
 		// Searches widget with type and name in internal widgets hierarchy
@@ -248,7 +248,7 @@ namespace o2
 		template<typename _type>
 		_type* FindInternalWidgetByType() const;
 
-		// Searches actor with id in this and this children
+		// Searches actor with id in this and this children @SCRIPTABLE
 		Actor* FindActorById(SceneUID id) override;
 
 		// Returns create menu category in editor
@@ -440,6 +440,11 @@ namespace o2
 
 		// Returns dictionary of all states by names
 		Map<String, WidgetState*> GetAllStates();
+
+#if IS_SCRIPTING_SUPPORTED
+	public:
+		void ReflectValue(ScriptValue& value) override;
+#endif
 
 		friend class ContextMenu;
 		friend class CustomDropDown;
@@ -719,8 +724,8 @@ CLASS_BASES_META(o2::Widget)
 END_META;
 CLASS_FIELDS_META(o2::Widget)
 {
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(enabledForcibly);
-	FIELD().PUBLIC().NAME(transparency);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(enabledForcibly);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(transparency);
 	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(resTransparency);
 	FIELD().PUBLIC().NAME(childrenWidgets);
 	FIELD().PUBLIC().NAME(layers);
@@ -764,7 +769,7 @@ CLASS_METHODS_META(o2::Widget)
 	typedef Map<String, Widget*> _tmp3;
 	typedef Map<String, WidgetState*> _tmp4;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR(ActorCreateMode);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAssetRef&, ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(Vector<Component*>, ActorCreateMode);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Widget&);
@@ -773,54 +778,54 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateTransform);
 	FUNCTION().PUBLIC().SIGNATURE(void, UpdateChildrenTransforms);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(void, ForceDraw, const RectF&, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLayoutDirty);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetParentWidget);
-	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetChildrenWorldRect);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetChildWidget, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddChildWidget, Widget*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, ForceDraw, const RectF&, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayoutDirty);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, GetParentWidget);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetChildrenWorldRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, GetChildWidget, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, AddChildWidget, Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddChildWidget, Widget*, int);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Widget*>&, GetChildWidgets);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetIndexInSiblings, int);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, AddLayer, WidgetLayer*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetIndexInSiblings, int);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, AddLayer, WidgetLayer*);
 	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, AddLayer, const String&, IRectDrawable*, const Layout&, float);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, WidgetLayer*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveLayer, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllLayers);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, GetLayer, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, FindLayer, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<WidgetLayer*>&, GetLayers);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetState*, AddState, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetState*, AddState, const String&, const AnimationClip&);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetState*, AddState, const String&, const AnimationAssetRef&);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetState*, AddState, WidgetState*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveState, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, RemoveState, WidgetState*);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllStates);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetState, const String&, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetStateForcible, const String&, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, GetState, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetState*, GetStateObject, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(const Vector<WidgetState*>&, GetStates);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDepthOverridden, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsDepthOverriden);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveLayer, WidgetLayer*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(RemoveLayerByPath).SIGNATURE(void, RemoveLayer, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllLayers);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, GetLayer, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, FindLayer, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<WidgetLayer*>&, GetLayers);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateNew).SIGNATURE(WidgetState*, AddState, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClip).SIGNATURE(WidgetState*, AddState, const String&, const AnimationClip&);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(AddStateWithClipAsset).SIGNATURE(WidgetState*, AddState, const String&, const AnimationAssetRef&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetState*, AddState, WidgetState*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_NAME_ATTRIBUTE(RemoveStateByName).SIGNATURE(bool, RemoveState, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, RemoveState, WidgetState*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllStates);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetState, const String&, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetStateForcible, const String&, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, GetState, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetState*, GetStateObject, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<WidgetState*>&, GetStates);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDepthOverridden, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsDepthOverriden);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTransparency, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetTransparency);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetResTransparency);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabledForcible, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Show, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Hide, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, Focus);
-	FUNCTION().PUBLIC().SIGNATURE(void, Unfocus);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocused);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsFocusable);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetFocusable, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetInternalParent, Widget*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, AddInternalWidget, Widget*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetInternalWidget, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, FindInternalWidget, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(Actor*, FindActorById, SceneUID);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetResTransparency);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetEnabledForcible, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Show, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Hide, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Focus);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Unfocus);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsFocused);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsFocusable);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetFocusable, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetInternalParent, Widget*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddInternalWidget, Widget*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, GetInternalWidget, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, FindInternalWidget, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindActorById, SceneUID);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
@@ -873,6 +878,7 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllChilds);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetAllInternalWidgets);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp4, GetAllStates);
+	FUNCTION().PUBLIC().SIGNATURE(void, ReflectValue, ScriptValue&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);

@@ -26,21 +26,21 @@ namespace o2
 	{
 	public:
 		PROPERTIES(WidgetLayer);
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property
-		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later)
-		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property
-		PROPERTY(IRectDrawable*, drawable, SetDrawable, GetDrawable);    // Drawable property @EXPANDED_BY_DEFAULT
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);                  // Enable property @SCRIPTABLE
+		PROPERTY(float, depth, SetDepth, GetDepth);                      // Drawing depth (higher depths will draw later) @SCRIPTABLE
+		PROPERTY(float, transparency, SetTransparency, GetTransparency); // Drawable transparency property @SCRIPTABLE
+		PROPERTY(IRectDrawable*, drawable, SetDrawable, GetDrawable);    // Drawable property @EXPANDED_BY_DEFAULT @SCRIPTABLE
 
 		ACCESSOR(WidgetLayer*, child, String, GetChild, GetAllChildLayers); // Child layer accessor
 
 	public:
-		WidgetLayerLayout layout; // Drawable layout @SERIALIZABLE
+		WidgetLayerLayout layout; // Drawable layout @SERIALIZABLE @SCRIPTABLE
 
-		String name;                // Name of layer @SERIALIZABLE
-		Layout interactableLayout;  // Interactable area layout @SERIALIZABLE
+		String name;                // Name of layer @SERIALIZABLE @SCRIPTABLE
+		Layout interactableLayout;  // Interactable area layout @SERIALIZABLE @SCRIPTABLE
 
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		WidgetLayer();
 
 		// Copy-constructor
@@ -52,10 +52,10 @@ namespace o2
 		// Copy-operator
 		WidgetLayer& operator=(const WidgetLayer& other);
 
-		// Returns pointer to owner widget
+		// Returns pointer to owner widget @SCRIPTABLE
 		Widget* GetOwnerWidget() const;
 
-		// Returns link to prototype
+		// Returns link to prototype @SCRIPTABLE
 		const WidgetLayer* GetPrototypeLink() const;
 
 		// Sets layer drawable
@@ -64,54 +64,54 @@ namespace o2
 		// Returns layer drawable
 		IRectDrawable* GetDrawable() const;
 
-		// Draws drawable
+		// Draws drawable @SCRIPTABLE
 		void Draw();
 
-		// Returns is layer enabled
+		// Returns is layer enabled @SCRIPTABLE
 		bool IsEnabled() const override;
 
-		// Returns is layer enabled and all parent are enabled too
+		// Returns is layer enabled and all parent are enabled too @SCRIPTABLE
 		bool IsEnabledInHierarchy() const override;
 
-		// Sets enabling of layer
+		// Sets enabling of layer @SCRIPTABLE
 		void SetEnabled(bool enabled) override;
 
-		// Sets parent layer
+		// Sets parent layer @SCRIPTABLE
 		void SetParent(WidgetLayer* parent);
 
-		// Returns parent layer
+		// Returns parent layer @SCRIPTABLE
 		WidgetLayer* GetParent() const;
 
-		// Adds new child layer and returns him
+		// Adds new child layer and returns him @SCRIPTABLE
 		WidgetLayer* AddChild(WidgetLayer* node);
 
-		// Remove child layer and releases him if needs
+		// Remove child layer and releases him if needs @SCRIPTABLE
 		void RemoveChild(WidgetLayer* node, bool release = true);
 
-		// Removes and releases all children nodes
+		// Removes and releases all children nodes @SCRIPTABLE
 		void RemoveAllChildren();
 
-		// Return child layers
+		// Return child layers @SCRIPTABLE
 		Vector<WidgetLayer*>& GetChildren();
 
 		// Returns constant child layers
 		const Vector<WidgetLayer*>& GetChildren() const;
 
-		// Adds child layer
+		// Adds child layer @SCRIPTABLE
 		WidgetLayer* AddChildLayer(const String& name, IRectDrawable* drawable, const Layout& layout = Layout::BothStretch(),
 								   float depth = 0.0f);
 
-		// Returns child layer by path
+		// Returns child layer by path @SCRIPTABLE
 		WidgetLayer* GetChild(const String& path);
 
-		// Returns child layer by name
+		// Returns child layer by name @SCRIPTABLE
 		WidgetLayer* FindChild(const String& name);
 
 		// Returns child layer with type
 		template<typename _type>
 		_type* FindChild() const;
 
-		// Returns all child layers
+		// Returns all child layers @SCRIPTABLE
 		Vector<WidgetLayer*> GetAllChilds() const;
 
 		// Sets depth
@@ -126,13 +126,13 @@ namespace o2
 		// Returns transparency
 		float GetTransparency();
 
-		// Returns result transparency
+		// Returns result transparency @SCRIPTABLE
 		float GetResTransparency() const;
 
-		// Returns true if layer is under point
+		// Returns true if layer is under point @SCRIPTABLE
 		bool IsUnderPoint(const Vec2F& point);
 
-		// Returns layout rectangle
+		// Returns layout rectangle @SCRIPTABLE
 		const RectF& GetRect() const;
 
 		SERIALIZABLE(WidgetLayer);
@@ -356,14 +356,14 @@ CLASS_BASES_META(o2::WidgetLayer)
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayer)
 {
-	FIELD().PUBLIC().NAME(enabled);
-	FIELD().PUBLIC().NAME(depth);
-	FIELD().PUBLIC().NAME(transparency);
-	FIELD().PUBLIC().EXPANDED_BY_DEFAULT_ATTRIBUTE().NAME(drawable);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(enabled);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(depth);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(transparency);
+	FIELD().PUBLIC().EXPANDED_BY_DEFAULT_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(drawable);
 	FIELD().PUBLIC().NAME(child);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(layout);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(name);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(interactableLayout);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(layout);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(name);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(interactableLayout);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mPrototypeLink);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(nullptr).NAME(mDrawable);
@@ -387,34 +387,34 @@ CLASS_METHODS_META(o2::WidgetLayer)
 
 	typedef Map<String, WidgetLayer*> _tmp1;
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetLayer&);
-	FUNCTION().PUBLIC().SIGNATURE(Widget*, GetOwnerWidget);
-	FUNCTION().PUBLIC().SIGNATURE(const WidgetLayer*, GetPrototypeLink);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, GetOwnerWidget);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const WidgetLayer*, GetPrototypeLink);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDrawable, IRectDrawable*);
 	FUNCTION().PUBLIC().SIGNATURE(IRectDrawable*, GetDrawable);
-	FUNCTION().PUBLIC().SIGNATURE(void, Draw);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabledInHierarchy);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetParent, WidgetLayer*);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, GetParent);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, AddChild, WidgetLayer*);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveChild, WidgetLayer*, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, RemoveAllChildren);
-	FUNCTION().PUBLIC().SIGNATURE(Vector<WidgetLayer*>&, GetChildren);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Draw);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabledInHierarchy);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, WidgetLayer*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, GetParent);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, AddChild, WidgetLayer*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, WidgetLayer*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vector<WidgetLayer*>&, GetChildren);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<WidgetLayer*>&, GetChildren);
 	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, AddChildLayer, const String&, IRectDrawable*, const Layout&, float);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, GetChild, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(WidgetLayer*, FindChild, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(Vector<WidgetLayer*>, GetAllChilds);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, GetChild, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(WidgetLayer*, FindChild, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vector<WidgetLayer*>, GetAllChilds);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetDepth, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetDepth);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTransparency, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, GetTransparency);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetResTransparency);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(const RectF&, GetRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetResTransparency);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetRect);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeRaw, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, DeserializeRaw, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SerializeWithProto, DataValue&);

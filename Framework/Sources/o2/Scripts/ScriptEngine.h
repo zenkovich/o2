@@ -48,13 +48,13 @@ namespace o2
 		~ScriptEngine();
 
 		// Parses script from string and returns parse result
-		ScriptParseResult Parse(const String& script);
+		ScriptParseResult Parse(const String& script, const String& filename = "");
 
 		// Runs parsed script, and returns retult
 		ScriptValue Run(const ScriptParseResult& parseResult);
 
 		// Evaluates script
-		ScriptValue Eval(const String& script);
+		ScriptValue Eval(const String& script, const String& filename = "");
 
 		// Returns global namespace
 		ScriptValue GetGlobal() const;

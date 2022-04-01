@@ -24,62 +24,62 @@ namespace o2
 		PROPERTIES(ActorTransform);
 		GETTER(Actor*, actor, GetOwnerActor); // Owner actor getter 
 
-		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
-		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
-		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property
-		PROPERTY(float, height, SetHeight, GetHeight);                  // Width property
-		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property
-		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space
-		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property
-		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians
-		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees
-		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property
+		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property @SCRIPTABLE
+		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property @SCRIPTABLE
+		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property @SCRIPTABLE
+		PROPERTY(float, height, SetHeight, GetHeight);                  // Width property @SCRIPTABLE
+		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property @SCRIPTABLE
+		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space @SCRIPTABLE
+		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property @SCRIPTABLE
+		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians @SCRIPTABLE
+		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees @SCRIPTABLE
+		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property @SCRIPTABLE
 
-		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property
-		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property
+		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property @SCRIPTABLE
+		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property @SCRIPTABLE
 
-		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle
-		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Rectangle - transform without angle, scale and shear. 
-											                           // Sets the position and size
+		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle @SCRIPTABLE
+		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Rectangle - transform without angle, scale and shear.  @SCRIPTABLE
+											                           // Sets the position and size @SCRIPTABLE
 
-		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property
-		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property
-		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Right top corner property
-		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Right bottom corner property
-		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center position property
-		PROPERTY(Vec2F, rightDir, SetRightDir, GetRightDir);          // X axis direction property
-		PROPERTY(Vec2F, leftDir, SetLeftDir, GetLeftDir);             // Negative X axis direction property
-		PROPERTY(Vec2F, upDir, SetUpDir, GetUpDir);                   // Y axis direction property
-		PROPERTY(Vec2F, downDir, SetDownDir, GetDownDir);             // Negative Y axis direction property
-		PROPERTY(float, right, SetRight, GetRight);                   // Right border position property
-		PROPERTY(float, left, SetLeft, GetLeft);                      // Left border position property
-		PROPERTY(float, top, SetTop, GetTop);                         // Top border position property
-		PROPERTY(float, bottom, SetBottom, GetBottom);                // Bottom border position property
+		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property @SCRIPTABLE
+		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property @SCRIPTABLE
+		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Right top corner property @SCRIPTABLE
+		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Right bottom corner property @SCRIPTABLE
+		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center position property @SCRIPTABLE
+		PROPERTY(Vec2F, rightDir, SetRightDir, GetRightDir);          // X axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, leftDir, SetLeftDir, GetLeftDir);             // Negative X axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, upDir, SetUpDir, GetUpDir);                   // Y axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, downDir, SetDownDir, GetDownDir);             // Negative Y axis direction property @SCRIPTABLE
+		PROPERTY(float, right, SetRight, GetRight);                   // Right border position property @SCRIPTABLE
+		PROPERTY(float, left, SetLeft, GetLeft);                      // Left border position property @SCRIPTABLE
+		PROPERTY(float, top, SetTop, GetTop);                         // Top border position property @SCRIPTABLE
+		PROPERTY(float, bottom, SetBottom, GetBottom);                // Bottom border position property @SCRIPTABLE
 
-		PROPERTY(Vec2F, worldPosition, SetWorldPosition, GetWorldPosition);                // World position property
-		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);                         // Pivot property, in world space
-		PROPERTY(float, worldAngle, SetWorldAngle, GetWorldAngle);                         // World rotation angle in radians
-		PROPERTY(float, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);       // World rotation angle in degree
-		PROPERTY(Basis, worldBasis, SetWorldBasis, GetWorldBasis);                         // World transformation basis
-		PROPERTY(Basis, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis); // World transformation basis without size
+		PROPERTY(Vec2F, worldPosition, SetWorldPosition, GetWorldPosition);                // World position property @SCRIPTABLE
+		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);                         // Pivot property, in world space @SCRIPTABLE
+		PROPERTY(float, worldAngle, SetWorldAngle, GetWorldAngle);                         // World rotation angle in radians @SCRIPTABLE
+		PROPERTY(float, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);       // World rotation angle in degree @SCRIPTABLE
+		PROPERTY(Basis, worldBasis, SetWorldBasis, GetWorldBasis);                         // World transformation basis @SCRIPTABLE
+		PROPERTY(Basis, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis); // World transformation basis without size @SCRIPTABLE
 
-		PROPERTY(Vec2F, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);             // World Left top corner property
-		PROPERTY(Vec2F, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);    // World Left bottom corner property
-		PROPERTY(Vec2F, worldRightTop, SetWorldRightTop, GetWorldRightTop);          // World Right top corner property
-		PROPERTY(Vec2F, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom); // World Right bottom corner property
-		PROPERTY(Vec2F, worldCenter, SetWorldCenter, GetWorldCenter);                // World center property
-		PROPERTY(Vec2F, worldRightDir, SetWorldRightDir, GetWorldRightDir);          // World X axis direction property
-		PROPERTY(Vec2F, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);             // World Negative X axis direction property
-		PROPERTY(Vec2F, worldUpDir, SetWorldUpDir, GetWorldUpDir);                   // World Y axis direction property
-		PROPERTY(Vec2F, worldDownDir, SetWorldDownDir, GetWorldDownDir);             // World Negative Y axis direction property
+		PROPERTY(Vec2F, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);             // World Left top corner property @SCRIPTABLE
+		PROPERTY(Vec2F, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);    // World Left bottom corner property @SCRIPTABLE
+		PROPERTY(Vec2F, worldRightTop, SetWorldRightTop, GetWorldRightTop);          // World Right top corner property @SCRIPTABLE
+		PROPERTY(Vec2F, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom); // World Right bottom corner property @SCRIPTABLE
+		PROPERTY(Vec2F, worldCenter, SetWorldCenter, GetWorldCenter);                // World center property @SCRIPTABLE
+		PROPERTY(Vec2F, worldRightDir, SetWorldRightDir, GetWorldRightDir);          // World X axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);             // World Negative X axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, worldUpDir, SetWorldUpDir, GetWorldUpDir);                   // World Y axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, worldDownDir, SetWorldDownDir, GetWorldDownDir);             // World Negative Y axis direction property @SCRIPTABLE
 
-		PROPERTY(float, worldRight, SetWorldRight, GetWorldRight);    // World Right border position property
-		PROPERTY(float, worldLeft, SetWorldLeft, GetWorldLeft);       // World Left border position property
-		PROPERTY(float, worldTop, SetWorldTop, GetWorldTop);          // World Top border position property
-		PROPERTY(float, worldBottom, SetWorldBottom, GetWorldBottom); // World Bottom border position property
+		PROPERTY(float, worldRight, SetWorldRight, GetWorldRight);    // World Right border position property @SCRIPTABLE
+		PROPERTY(float, worldLeft, SetWorldLeft, GetWorldLeft);       // World Left border position property @SCRIPTABLE
+		PROPERTY(float, worldTop, SetWorldTop, GetWorldTop);          // World Top border position property @SCRIPTABLE
+		PROPERTY(float, worldBottom, SetWorldBottom, GetWorldBottom); // World Bottom border position property @SCRIPTABLE
 
-		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                       // World rectangle property. Sets the position and size
-		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect); // World direction aligned rectangle
+		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                       // World rectangle property. Sets the position and size @SCRIPTABLE
+		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect); // World direction aligned rectangle @SCRIPTABLE
 
 	public:
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
@@ -103,10 +103,10 @@ namespace o2
 		// Returns owner actor
 		Actor* GetOwnerActor() const;
 
-		// Sets transform dirty and needed to update
+		// Sets transform dirty and needed to update @SCRIPTABLE
 		virtual void SetDirty(bool fromParent = false);
 
-		// Returns is transform dirty
+		// Returns is transform dirty @SCRIPTABLE
 		bool IsDirty() const;
 
 		// Updates transformation
@@ -509,54 +509,54 @@ END_META;
 CLASS_FIELDS_META(o2::ActorTransform)
 {
 	FIELD().PUBLIC().NAME(actor);
-	FIELD().PUBLIC().NAME(position);
-	FIELD().PUBLIC().NAME(size);
-	FIELD().PUBLIC().NAME(width);
-	FIELD().PUBLIC().NAME(height);
-	FIELD().PUBLIC().NAME(scale);
-	FIELD().PUBLIC().NAME(pivot);
-	FIELD().PUBLIC().NAME(szPivot);
-	FIELD().PUBLIC().NAME(angle);
-	FIELD().PUBLIC().NAME(angleDegree);
-	FIELD().PUBLIC().NAME(shear);
-	FIELD().PUBLIC().NAME(basis);
-	FIELD().PUBLIC().NAME(nonSizedBasis);
-	FIELD().PUBLIC().NAME(AABB);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(position);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(size);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(width);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(height);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(scale);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(pivot);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(szPivot);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(angle);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(angleDegree);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(shear);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(basis);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(nonSizedBasis);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(AABB);
 	FIELD().PUBLIC().NAME(rect);
-	FIELD().PUBLIC().NAME(leftTop);
-	FIELD().PUBLIC().NAME(leftBottom);
-	FIELD().PUBLIC().NAME(rightTop);
-	FIELD().PUBLIC().NAME(rightBottom);
-	FIELD().PUBLIC().NAME(center);
-	FIELD().PUBLIC().NAME(rightDir);
-	FIELD().PUBLIC().NAME(leftDir);
-	FIELD().PUBLIC().NAME(upDir);
-	FIELD().PUBLIC().NAME(downDir);
-	FIELD().PUBLIC().NAME(right);
-	FIELD().PUBLIC().NAME(left);
-	FIELD().PUBLIC().NAME(top);
-	FIELD().PUBLIC().NAME(bottom);
-	FIELD().PUBLIC().NAME(worldPosition);
-	FIELD().PUBLIC().NAME(worldPivot);
-	FIELD().PUBLIC().NAME(worldAngle);
-	FIELD().PUBLIC().NAME(worldAngleDegree);
-	FIELD().PUBLIC().NAME(worldBasis);
-	FIELD().PUBLIC().NAME(worldNonSizedBasis);
-	FIELD().PUBLIC().NAME(worldLeftTop);
-	FIELD().PUBLIC().NAME(worldLeftBottom);
-	FIELD().PUBLIC().NAME(worldRightTop);
-	FIELD().PUBLIC().NAME(worldRightBottom);
-	FIELD().PUBLIC().NAME(worldCenter);
-	FIELD().PUBLIC().NAME(worldRightDir);
-	FIELD().PUBLIC().NAME(worldLeftDir);
-	FIELD().PUBLIC().NAME(worldUpDir);
-	FIELD().PUBLIC().NAME(worldDownDir);
-	FIELD().PUBLIC().NAME(worldRight);
-	FIELD().PUBLIC().NAME(worldLeft);
-	FIELD().PUBLIC().NAME(worldTop);
-	FIELD().PUBLIC().NAME(worldBottom);
-	FIELD().PUBLIC().NAME(worldRect);
-	FIELD().PUBLIC().NAME(worldAABB);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(center);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(upDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(downDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(right);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(left);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(top);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(bottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldPosition);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldPivot);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldAngle);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldAngleDegree);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldBasis);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldNonSizedBasis);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeftTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeftBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRightTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRightBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldCenter);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRightDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeftDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldUpDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldDownDir);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeft);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRect);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldAABB);
 	FIELD().PROTECTED().DELTA_SEARCH_ATTRIBUTE().NAME(mData);
 }
 END_META;
@@ -566,8 +566,8 @@ CLASS_METHODS_META(o2::ActorTransform)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float, const Vec2F&, const Vec2F&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorTransform&);
 	FUNCTION().PUBLIC().SIGNATURE(Actor*, GetOwnerActor);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDirty, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsDirty);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDirty, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsDirty);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetPosition, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPosition);

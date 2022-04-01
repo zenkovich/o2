@@ -6,10 +6,10 @@ namespace o2
 {
 	struct ScriptValuePrototypes
 	{
-		static ScriptValue& GetVec2Prototype();
-		static ScriptValue& GetRectPrototype();
-		static ScriptValue& GetBorderPrototype();
-		static ScriptValue& GetColor4Prototype();
+		static ScriptValue*& GetVec2Prototype();
+		static ScriptValue*& GetRectPrototype();
+		static ScriptValue*& GetBorderPrototype();
+		static ScriptValue*& GetColor4Prototype();
 	};
 
 	template<typename _type>
@@ -171,12 +171,12 @@ namespace o2
 
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
-				std::apply(data, argst);
+				std::apply(*data, argst);
 				return jerry_create_undefined();
 			}
 			else
 			{
-				ScriptValue res(std::apply(data, argst));
+				ScriptValue res(std::apply(*data, argst));
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -184,12 +184,12 @@ namespace o2
 		{
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
-				data();
+				(*data)();
 				return jerry_create_undefined();
 			}
 			else
 			{
-				ScriptValue res(data());
+				ScriptValue res((*data)());
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -259,14 +259,19 @@ namespace o2
 		{
 			template<typename _object_type, typename ... _args>
 			void Constructor(_object_type* object, Type* type);
+
+			template<typename _object_type, typename _res_type, typename ... _args>
+			void SignatureStatic(_object_type* object, Type* type, const char* name,
+								 _res_type(*pointer)(_args ...));
 		};
 
 		BaseFunctionProcessor StartFunction() { return BaseFunctionProcessor(); }
 
 		static void RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc);
+		static void RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func);
 	};
 
-	template<typename _attribute_type, typename... _args>
+	template<typename _attribute_type, typename ... _args>
 	auto ScriptConstructorTypeProcessor::BaseFunctionProcessor::AddAttribute(_args ... args)
 	{
 		if constexpr (std::is_same<ScriptableAttribute, _attribute_type>::value)
@@ -275,14 +280,26 @@ namespace o2
 			return *this;
 	}
 
-	template<typename _object_type, typename... _args>
+	template<typename _object_type, typename ... _args>
 	void ScriptConstructorTypeProcessor::FunctionProcessor::Constructor(_object_type* object, Type* type)
 	{
 		ScriptConstructorTypeProcessor::RegisterTypeConstructor(type, ScriptValue(Function<ScriptValue(_args ...)>([](_args ... args) {
 			_object_type* sample = mnew _object_type(args ...);
-			return sample->GetScriptValue();
+			auto res = sample->GetScriptValue();
+			res.SetObjectOwnership(true);
+			return res;
 		})));
 	}
+
+	template<typename _object_type, typename _res_type, typename ... _args>
+	void ScriptConstructorTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type, 
+																			const char* name, _res_type(*pointer)(_args ...))
+	{
+		ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(type, name, ScriptValue(Function<_res_type(_args ...)>([=](_args ... args) {
+			return (*pointer)(args ...);
+		})));
+	}
+
 }
 
 #endif // SCRIPTING_BACKEND_JERRYSCRIPT

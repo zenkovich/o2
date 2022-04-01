@@ -11,24 +11,24 @@ namespace o2
 	{
 	public:
 		PROPERTIES(WidgetLayerLayout);
-		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Left bottom anchor property
-		PROPERTY(Vec2F, size, SetSize, GetSize);             // Left bottom anchor property
+		PROPERTY(Vec2F, position, SetPosition, GetPosition); // Left bottom anchor property @SCRIPTABLE
+		PROPERTY(Vec2F, size, SetSize, GetSize);             // Left bottom anchor property @SCRIPTABLE
 
-		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property
-		PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax); // Right top anchor property
+		PROPERTY(Vec2F, anchorMin, SetAnchorMin, GetAnchorMin); // Left bottom anchor property @SCRIPTABLE
+		PROPERTY(Vec2F, anchorMax, SetAnchorMax, GetAnchorMax); // Right top anchor property @SCRIPTABLE
 
-		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property
-		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property
+		PROPERTY(Vec2F, offsetMin, SetOffsetMin, GetOffsetMin); // Left bottom corner offset property @SCRIPTABLE
+		PROPERTY(Vec2F, offsetMax, SetOffsetMax, GetOffsetMax); // Right top corner offset property @SCRIPTABLE
 
-		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property
-		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property
-		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property
-		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property
+		PROPERTY(float, anchorLeft, SetAnchorLeft, GetAnchorLeft);       // Left anchor property @SCRIPTABLE
+		PROPERTY(float, anchorRight, SetAnchorRight, GetAnchorRight);    // Right anchor property @SCRIPTABLE
+		PROPERTY(float, anchorBottom, SetAnchorBottom, GetAnchorBottom); // Bottom anchor property @SCRIPTABLE
+		PROPERTY(float, anchorTop, SetAnchorTop, GetAnchorTop);          // Top anchor property @SCRIPTABLE
 
-		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property
-		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property
-		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property
-		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property
+		PROPERTY(float, offsetLeft, SetOffsetLeft, GetOffsetLeft);       // Left offset property @SCRIPTABLE
+		PROPERTY(float, offsetRight, SetoffsetRight, GetoffsetRight);    // Right offset property @SCRIPTABLE
+		PROPERTY(float, offsetBottom, SetOffsetBottom, GetOffsetBottom); // Bottom offset property @SCRIPTABLE
+		PROPERTY(float, offsetTop, SetOffsetTop, GetOffsetTop);          // Top offset property @SCRIPTABLE
 
 	public:
 		// Default unused constructor, required for IObject
@@ -61,7 +61,7 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const Layout& other) const;
 
-		// Returns calculated rectangle by anchors and offsets relative to source
+		// Returns calculated rectangle by anchors and offsets relative to source @SCRIPTABLE
 		RectF Calculate(const RectF& source);
 
 		// Sets left bottom anchor. (0, 0) - left bottom of parent, (1, 1) - right top
@@ -167,20 +167,20 @@ CLASS_BASES_META(o2::WidgetLayerLayout)
 END_META;
 CLASS_FIELDS_META(o2::WidgetLayerLayout)
 {
-	FIELD().PUBLIC().NAME(position);
-	FIELD().PUBLIC().NAME(size);
-	FIELD().PUBLIC().NAME(anchorMin);
-	FIELD().PUBLIC().NAME(anchorMax);
-	FIELD().PUBLIC().NAME(offsetMin);
-	FIELD().PUBLIC().NAME(offsetMax);
-	FIELD().PUBLIC().NAME(anchorLeft);
-	FIELD().PUBLIC().NAME(anchorRight);
-	FIELD().PUBLIC().NAME(anchorBottom);
-	FIELD().PUBLIC().NAME(anchorTop);
-	FIELD().PUBLIC().NAME(offsetLeft);
-	FIELD().PUBLIC().NAME(offsetRight);
-	FIELD().PUBLIC().NAME(offsetBottom);
-	FIELD().PUBLIC().NAME(offsetTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(position);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(size);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorMin);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorMax);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetMin);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetMax);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorLeft);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorRight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(anchorTop);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetLeft);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetRight);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetBottom);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(offsetTop);
 	FIELD().PRIVATE().DEFAULT_VALUE(nullptr).NAME(mWidgetLayer);
 	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(0, 0)).NAME(mAnchorMin);
 	FIELD().PRIVATE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(Vec2F(1, 1)).NAME(mAnchorMax);
@@ -194,7 +194,7 @@ CLASS_METHODS_META(o2::WidgetLayerLayout)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(WidgetLayer*, const WidgetLayerLayout&);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, Calculate, const RectF&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, Calculate, const RectF&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMin, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetAnchorMin);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnchorMax, const Vec2F&);

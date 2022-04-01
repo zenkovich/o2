@@ -68,7 +68,11 @@ namespace o2
 // -------------------------------
  
 #if IS_SCRIPTING_SUPPORTED
-#define IOBJECT_SCRIPTING() ScriptValue GetScriptValue() const override
+#define IOBJECT_SCRIPTING()                                                             \
+    ScriptValue GetScriptValue() const override;                                        \
+    template<typename _type> 															\
+    friend struct ScriptValueBase::DataContainer
+
 #else
 #define IOBJECT_SCRIPTING()
 #endif

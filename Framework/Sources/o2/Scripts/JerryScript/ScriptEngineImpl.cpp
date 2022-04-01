@@ -46,6 +46,8 @@ namespace o2
 		jerryx_handler_register_global((const jerry_char_t*)"print", jerryx_handler_print);
 		jerry_set_error_object_created_callback(&ErrorCallback, NULL);
 
+		GetGlobal().SetProperty("Dump", Function<String(const ScriptValue&)>([](const ScriptValue& v) { return v.Dump(); }));
+
 		RunBuildtinScripts();
 		InitializeBasicPrototypes();
 		RegisterTypes();
@@ -53,13 +55,19 @@ namespace o2
 
 	ScriptEngine::~ScriptEngine()
 	{
+		delete ScriptValuePrototypes::GetVec2Prototype();
+		delete ScriptValuePrototypes::GetRectPrototype();
+		delete ScriptValuePrototypes::GetBorderPrototype();
+		delete ScriptValuePrototypes::GetColor4Prototype();
 		jerry_cleanup();
 	}
 
-	ScriptParseResult ScriptEngine::Parse(const String& script)
+	ScriptParseResult ScriptEngine::Parse(const String& script, const String& filename /*= ""*/)
 	{
 		ScriptParseResult res;
-		res.mParsedCode = jerry_parse(nullptr, 0, (jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS);
+		res.mParsedCode = jerry_parse((jerry_char_t*)filename.Data(), filename.Length(),
+			(jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_MODULE);
+
 		return res;
 	}
 
@@ -70,11 +78,13 @@ namespace o2
 		return res;
 	}
 
-	ScriptValue ScriptEngine::Eval(const String& script)
+	ScriptValue ScriptEngine::Eval(const String& script, const String& filename /*= ""*/)
 	{
-		ScriptValue res;
-		res.Accept(jerry_eval((jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS));
-		return res;
+		auto parseRes = Parse(script, filename);
+		if (parseRes.IsOk())
+			return Run(parseRes);
+
+		return ScriptValue();
 	}
 
 	ScriptValue ScriptEngine::GetGlobal() const
@@ -92,10 +102,10 @@ namespace o2
 	void ScriptEngineBase::InitializeBasicPrototypes()
 	{
 		auto global = o2Scripts.GetGlobal();
-		ScriptValuePrototypes::GetVec2Prototype() = global.GetProperty("Vec2");
-		ScriptValuePrototypes::GetRectPrototype() = global.GetProperty("Rect");
-		ScriptValuePrototypes::GetBorderPrototype() = global.GetProperty("Border");
-		ScriptValuePrototypes::GetColor4Prototype() = global.GetProperty("Color4");
+		ScriptValuePrototypes::GetVec2Prototype() = mnew ScriptValue(o2Scripts.Eval("Vec2.prototype"));
+		ScriptValuePrototypes::GetRectPrototype() = mnew ScriptValue(o2Scripts.Eval("Rect.prototype"));
+		ScriptValuePrototypes::GetBorderPrototype() = mnew ScriptValue(o2Scripts.Eval("Border.prototype"));
+		ScriptValuePrototypes::GetColor4Prototype() = mnew ScriptValue(o2Scripts.Eval("Color4.prototype"));
 	}
 }
 

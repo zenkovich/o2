@@ -99,6 +99,26 @@ namespace o2
 		return errorValue.GetValue<String>();
 	}
 
+	bool ScriptValue::IsObjectOwner() const
+	{
+		void* dataPtr = nullptr;
+		jerry_get_object_native_pointer(jvalue, &dataPtr, &GetDataDeleter().info);
+		auto dataContainer = (IDataContainer*)dataPtr;
+		if (dataContainer)
+			return dataContainer->isDataOwner;
+
+		return false;
+	}
+
+	void ScriptValue::SetObjectOwnership(bool own)
+	{
+		void* dataPtr = nullptr;
+		jerry_get_object_native_pointer(jvalue, &dataPtr, &GetDataDeleter().info);
+		auto dataContainer = (IDataContainer*)dataPtr;
+		if (dataContainer)
+			dataContainer->isDataOwner = own;
+	}
+
 	void ScriptValue::ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const
 	{
 		struct Helper
@@ -159,10 +179,10 @@ namespace o2
 
 	void ScriptValue::SetElement(const ScriptValue& value, int idx)
 	{
-		if (GetValueType() != ValueType::Object)
+		if (GetValueType() != ValueType::Array)
 		{
 			jerry_release_value(jvalue);
-			jvalue = jerry_create_object();
+			jvalue = jerry_create_array(0);
 		}
 
 		jerry_set_property_by_index(jvalue, idx, value.jvalue);
@@ -289,27 +309,27 @@ namespace o2
 		return container->Get();
 	}
 
-	ScriptValue& ScriptValuePrototypes::GetVec2Prototype()
+	ScriptValue*& ScriptValuePrototypes::GetVec2Prototype()
 	{
-		static ScriptValue value;
+		static ScriptValue* value;
 		return value;
 	}
 
-	ScriptValue& ScriptValuePrototypes::GetRectPrototype()
+	ScriptValue*& ScriptValuePrototypes::GetRectPrototype()
 	{
-		static ScriptValue value;
+		static ScriptValue* value;
 		return value;
 	}
 
-	ScriptValue& ScriptValuePrototypes::GetBorderPrototype()
+	ScriptValue*& ScriptValuePrototypes::GetBorderPrototype()
 	{
-		static ScriptValue value;
+		static ScriptValue* value;
 		return value;
 	}
 
-	ScriptValue& ScriptValuePrototypes::GetColor4Prototype()
+	ScriptValue*& ScriptValuePrototypes::GetColor4Prototype()
 	{
-		static ScriptValue value;
+		static ScriptValue* value;
 		return value;
 	}
 
@@ -340,16 +360,7 @@ namespace o2
 			}
 		}
 
-		if (fnd < 0)
-		{
-			String fixedPath = path;
-			FixNamespace(fixedPath);
-			ScriptValue endPath = ScriptValue::EmptyObject();
-			base.SetProperty(ScriptValue(fixedPath), endPath);
-			return endPath;
-		}
-
-		auto subPath = path.SubStr(0, fnd);
+		auto subPath = fnd >= 0 ? path.SubStr(0, fnd) : path;
 		FixNamespace(subPath);
 		ScriptValue subPathValue(subPath);
 		ScriptValue subPathProp = base.GetProperty(subPathValue);
@@ -359,12 +370,20 @@ namespace o2
 			base.SetProperty(ScriptValue(subPath), subPathProp);
 		}
 
+		if (fnd < 0)
+			return subPathProp;
+
 		return GetNameSpace(subPathProp, path.SubStr(fnd + 2));
 	}
 
 	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc)
 	{
 		GetNameSpace(o2Scripts.GetGlobal(), type->GetName()).SetProperty("New", constructorFunc);
+	}
+
+	void ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func)
+	{
+		GetNameSpace(o2Scripts.GetGlobal(), type->GetName()).SetProperty(name, func);
 	}
 }
 

@@ -1485,6 +1485,14 @@ namespace o2
 		GetLayoutData().childrenWorldRect = childrenWorldRect;
 	}
 
+#if IS_SCRIPTING_SUPPORTED
+	void Widget::ReflectValue(ScriptValue& value)
+	{
+		value.SetProperty("layout", ScriptValue(*layout));
+	}
+#endif
+
+
 #if IS_EDITOR
 
 	bool Widget::isEditorLayersVisible = true;

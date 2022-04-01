@@ -75,6 +75,12 @@ namespace o2
 		// Creates empty object
 		static ScriptValue EmptyObject();
 
+		// Returns is object memory is handling GC. When it's true, containing object will be destroyed by GC. 
+		bool IsObjectOwner() const;
+
+		// Sets containing object ownership. When it's true, containing object will be destroyed by GC. 
+		void SetObjectOwnership(bool own);
+
 		// Iterates properties in object
 		void ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const;
 

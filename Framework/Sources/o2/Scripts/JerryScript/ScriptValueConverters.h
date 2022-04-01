@@ -5,6 +5,21 @@
 
 namespace o2
 {
+	template<typename _type, typename _enable = void>
+	struct CheckReflectValueOverridden
+	{
+		static void Process(_type* object, ScriptValue& value) {}
+	};
+
+	template<typename T>
+	struct CheckReflectValueOverridden<T, typename std::void_t<decltype(&T::ReflectValue)>>
+	{
+		static void Process(T* object, ScriptValue& value)
+		{
+			object->ReflectValue(value);
+		}
+	};
+
 	class ReflectScriptValueTypeProcessor
 	{
 	public:
@@ -149,7 +164,10 @@ namespace o2
 		ReflectScriptValueTypeProcessor(ScriptValue& value):value(value) {}
 
 		template<typename _object_type>
-		void Start(_object_type* object, Type* type) {}
+		void Start(_object_type* object, Type* type) 
+		{
+			CheckReflectValueOverridden<_object_type>::Process(object, value);
+		}
 
 		template<typename _object_type>
 		void StartBases(_object_type* object, Type* type) {}
@@ -199,7 +217,7 @@ namespace o2
 		jerry_get_object_native_pointer(data.jvalue, &dataPtr, &GetDataDeleter().info);
 		auto dataContainer = dynamic_cast<DataContainer<_type*>*>((IDataContainer*)dataPtr);
 		if (dataContainer)
-			value = *dataContainer->data;
+			value = **dataContainer->data;
 		else
 			value = _type();
 	}
@@ -209,15 +227,32 @@ namespace o2
 	{
 		data.jvalue = jerry_create_object();
 
-		auto dataContainer = new DataContainer<_type*>(&const_cast<__type&>(value));
+		auto dataContainer = mnew DataContainer<_type*>(mnew _type*(&const_cast<__type&>(value)));
+		dataContainer->isDataOwner = false;
 		jerry_set_object_native_pointer(data.jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
 
 		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
 		{
 			ReflectScriptValueTypeProcessor processor(data);
-			_type::ProcessType<ReflectScriptValueTypeProcessor>(dataContainer->data, processor);
+			_type::ProcessType<ReflectScriptValueTypeProcessor>(*dataContainer->data, processor);
 		}
 	}
+
+	template<>
+	struct ScriptValue::Converter<ScriptValue>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const ScriptValue& value, ScriptValue& data)
+		{
+			data = value;
+		}
+
+		static void Read(ScriptValue& value, const ScriptValue& data)
+		{
+			value = data;
+		}
+	};
 
 	template<>
 	struct ScriptValue::Converter<char*>
@@ -425,7 +460,7 @@ namespace o2
 		static void Write(const Vec2F& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetVec2Prototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetVec2Prototype());
 			data.SetProperty(ScriptValue("x"), ScriptValue(value.x));
 			data.SetProperty(ScriptValue("y"), ScriptValue(value.y));
 		}
@@ -445,7 +480,7 @@ namespace o2
 		static void Write(const Vec2I& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetVec2Prototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetVec2Prototype());
 			data.SetProperty(ScriptValue("x"), ScriptValue(value.x));
 			data.SetProperty(ScriptValue("y"), ScriptValue(value.y));
 		}
@@ -465,7 +500,7 @@ namespace o2
 		static void Write(const RectF& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetRectPrototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetRectPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -489,7 +524,7 @@ namespace o2
 		static void Write(const RectI& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetRectPrototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetRectPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -513,7 +548,7 @@ namespace o2
 		static void Write(const BorderF& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetBorderPrototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetBorderPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -537,7 +572,7 @@ namespace o2
 		static void Write(const BorderI& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetBorderPrototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetBorderPrototype());
 			data.SetProperty(ScriptValue("left"), ScriptValue(value.left));
 			data.SetProperty(ScriptValue("bottom"), ScriptValue(value.bottom));
 			data.SetProperty(ScriptValue("right"), ScriptValue(value.right));
@@ -561,7 +596,7 @@ namespace o2
 		static void Write(const Color4& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
-			data.SetPrototype(ScriptValuePrototypes::GetColor4Prototype());
+			data.SetPrototype(*ScriptValuePrototypes::GetColor4Prototype());
 			data.SetProperty(ScriptValue("r"), ScriptValue(value.r));
 			data.SetProperty(ScriptValue("g"), ScriptValue(value.g));
 			data.SetProperty(ScriptValue("b"), ScriptValue(value.b));
@@ -577,19 +612,39 @@ namespace o2
 		}
 	};
 
-	template<typename T>
-	struct ScriptValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
-		std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
+	template<typename _ptr_type>
+	struct ScriptValue::Converter<_ptr_type, typename std::enable_if<std::is_pointer<_ptr_type>::value && !std::is_const<_ptr_type>::value &&
+		std::is_base_of<o2::IObject, typename std::remove_pointer<_ptr_type>::type>::value>::type>
 	{
 		static constexpr bool isSupported = true;
 
-		static void Write(const T& value, ScriptValue& data)
+		typedef typename std::remove_const<typename std::remove_pointer<typename std::remove_reference<_ptr_type>::type>::type>::type _non_ptr_type;
+
+		static void Write(const _ptr_type& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_object();
+
+			auto ptr = (_non_ptr_type*)(const_cast<_ptr_type&>(value));
+			auto dataContainer = mnew DataContainer<_non_ptr_type>(ptr);
+			dataContainer->isDataOwner = false;
+			jerry_set_object_native_pointer(data.jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
+
+			if constexpr (std::is_base_of<IObject, _non_ptr_type>::value && !std::is_same<IObject, _non_ptr_type>::value)
+			{
+				ReflectScriptValueTypeProcessor processor(data);
+				_non_ptr_type::ProcessType<ReflectScriptValueTypeProcessor>(ptr, processor);
+			}
 		}
 
-		static void Read(T& value, const ScriptValue& data)
+		static void Read(_ptr_type& value, const ScriptValue& data)
 		{
+			void* dataPtr = nullptr;
+			jerry_get_object_native_pointer(data.jvalue, &dataPtr, &GetDataDeleter().info);
+			auto dataContainer = dynamic_cast<DataContainer<_non_ptr_type>*>((IDataContainer*)dataPtr);
+			if (dataContainer)
+				value = dataContainer->data;
+			else
+				value = nullptr;
 		}
 	};
 
@@ -600,7 +655,7 @@ namespace o2
 
 		static void Write(const Vector<T>& value, ScriptValue& data)
 		{
-			data.jvalue = jerry_create_array();
+			data.jvalue = jerry_create_array(0);
 
 			for (auto& v : value)
 				data.AddElement(ScriptValue(v));
@@ -686,7 +741,9 @@ namespace o2
 		{
 			data.jvalue = jerry_create_external_function(&CallFunction);
 
-			IDataContainer* funcContainer = new FunctionContainer<Function<_res_type(_args ...)>, _res_type, _args ...>(value);
+			IDataContainer* funcContainer = new FunctionContainer<Function<_res_type(_args ...)>, _res_type, _args ...>(
+				mnew Function<_res_type(_args ...)>(value));
+
 			jerry_set_object_native_pointer(data.jvalue, funcContainer, &GetDataDeleter().info);
 		}
 

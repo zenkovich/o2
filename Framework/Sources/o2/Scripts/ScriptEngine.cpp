@@ -25,26 +25,14 @@ namespace o2
 			func(0, processor);
 
 		GetRegisterConstructorFuncs().Clear();
-// 		auto& types = o2Reflection.GetTypes();
-// 		for (auto kv : types)
-// 		{
-// 			if (kv.second->GetUsage() == Type::Usage::Object)
-// 			{
-// 				auto objectType = dynamic_cast<ObjectType*>(kv.second);
-// 				ScriptValue nspace = GetNameSpace(global, kv.first);
-// 				nspace.SetProperty(ScriptValue("New"), ScriptValue(Function<ScriptValue()>([=]() {
-// 					auto iobject = objectType->DynamicCastToIObject(objectType->CreateSample());
-// 					return iobject->GetScriptValue();
-// 				})));
-// 			}
-// 		}
 
 		mLog->Out("Registered types in " + (String)t.GetDeltaTime() + " seconds");
 	}
 
 	void ScriptEngine::RunBuildtinScripts()
 	{
-		Eval(o2FileSystem.ReadFile(GetBuiltitAssetsPath() + String("Scripts/Math.js")));
+		String filename("Scripts/Math.js");
+		Eval(o2FileSystem.ReadFile(GetBuiltitAssetsPath() + filename), filename);
 	}
 
 	Vector<ScriptEngine::RegisterConstructorFunc>& ScriptEngine::GetRegisterConstructorFuncs()

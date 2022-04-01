@@ -16,17 +16,17 @@ namespace o2
 	class WidgetState: public ISerializable
 	{
 	public:
-		String name; // State name @SERIALIZABLE
+		String name; // State name @SERIALIZABLE @SCRIPTABLE
 
 		AnimationPlayer player;                        // Animation player
-		float           offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE
+		float           offStateAnimationSpeed = 1.0f; // False state transition animation speed @SERIALIZABLE @SCRIPTABLE
 
 	public:
 		PROPERTIES(WidgetState);
-		PROPERTY(bool, state, SetState, GetState); // State flag property
+		PROPERTY(bool, state, SetState, GetState); // State flag property @SCRIPTABLE
 
-		PROPERTY(AnimationAssetRef, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property @EDITOR_IGNORE
-		PROPERTY(AnimationClip, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property @EDITOR_IGNORE
+		PROPERTY(AnimationAssetRef, animationAsset, SetAnimationAsset, GetAnimationAsset); // Animation asset property @EDITOR_IGNORE @SCRIPTABLE
+		PROPERTY(AnimationClip, animationClip, SetAnimationClip, GetAnimationClip);        // animation clip property @EDITOR_IGNORE @SCRIPTABLE
 
 	public:
 		Function<void()> onStateFullyTrue;	  // This event calls when state is completely true (at the end of animation)
@@ -35,7 +35,7 @@ namespace o2
 		Function<void()> onStateBecomesFalse; // This event calls when state becomes to true
 
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		WidgetState();
 
 		// Copy-constructor
@@ -53,7 +53,7 @@ namespace o2
 		// Equals operator
 		bool operator==(const WidgetState& other) const;
 
-		// Sets owner widget
+		// Sets owner widget @SCRIPTABLE
 		void SetOwner(Widget* owner, bool errors);
 
 		// Sets animation asset
@@ -68,13 +68,13 @@ namespace o2
 		// Returns animation asset instance clip, if exists
 		AnimationClip& GetAnimationClip();
 
-		// Sets current state
+		// Sets current state @SCRIPTABLE
 		void SetState(bool state);
 
-		// Sets state immediately
+		// Sets state immediately @SCRIPTABLE
 		void SetStateForcible(bool state);
 
-		// Returns current state
+		// Returns current state @SCRIPTABLE
 		bool GetState() const;
 
 		// Updates animation
@@ -109,12 +109,12 @@ CLASS_BASES_META(o2::WidgetState)
 END_META;
 CLASS_FIELDS_META(o2::WidgetState)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(name);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(name);
 	FIELD().PUBLIC().NAME(player);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(offStateAnimationSpeed);
-	FIELD().PUBLIC().NAME(state);
-	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(animationAsset);
-	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(animationClip);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.0f).NAME(offStateAnimationSpeed);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(state);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(animationAsset);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(animationClip);
 	FIELD().PUBLIC().NAME(onStateFullyTrue);
 	FIELD().PUBLIC().NAME(onStateFullyFalse);
 	FIELD().PUBLIC().NAME(onStateBecomesTrue);
@@ -127,16 +127,16 @@ END_META;
 CLASS_METHODS_META(o2::WidgetState)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const WidgetState&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetOwner, Widget*, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetOwner, Widget*, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationAsset, const AnimationAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(const AnimationAssetRef&, GetAnimationAsset);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetAnimationClip, const AnimationClip&);
 	FUNCTION().PUBLIC().SIGNATURE(AnimationClip&, GetAnimationClip);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetState, bool);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetStateForcible, bool);
-	FUNCTION().PUBLIC().SIGNATURE(bool, GetState);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetState, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetStateForcible, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, GetState);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAnimationChanged);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);

@@ -13,8 +13,8 @@ namespace o2
 	class Camera: public Transform
 	{
 	public:
-		// Default constructor
-		Camera();
+		// Default constructor @SCRIPTABLE
+		Camera(); 
 
 		// Constructor
 		Camera(const Vec2F& position, const Vec2F& size = Vec2F(), float angle = 0.0f);
@@ -53,7 +53,7 @@ END_META;
 CLASS_METHODS_META(o2::Camera)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Vec2F&, const Vec2F&, float);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, Default);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Camera, FixedSize, const Vec2F&);
