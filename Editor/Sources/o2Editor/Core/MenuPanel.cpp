@@ -81,9 +81,10 @@ namespace Editor
 		mMenuPanel->AddItem("View/Reset layout", [&]() { OnResetLayoutPressed(); });
 
 		// BUILD
-		mMenuPanel->AddItem("Build/Run", [&]() { OnRunPressed(); }, ImageAssetRef(), ShortcutKeys(VK_F5));
-		mMenuPanel->AddItem("Build/Build & run", [&]() { OnBuildAndRunPressed(); }, ImageAssetRef(), ShortcutKeys('R', true));
-		mMenuPanel->AddItem("Build/Build", [&]() { OnBuildPressed(); }, ImageAssetRef(), ShortcutKeys('R', true, true));
+		mMenuPanel->AddItem("Run/Connect scripts debugger", [&]() { o2Scripts.ConnectDebugger(); }, ImageAssetRef(), ShortcutKeys(VK_F5));
+		mMenuPanel->AddItem("Run/---"); 
+		mMenuPanel->AddItem("Run/Build & Run", [&]() { OnBuildAndRunPressed(); }, ImageAssetRef(), ShortcutKeys('R', true));
+		mMenuPanel->AddItem("Run/Build", [&]() { OnBuildPressed(); }, ImageAssetRef(), ShortcutKeys('R', true, true));
 
 		// HELP
 		mMenuPanel->AddItem("Help/About", [&]() { OnAboutPressed(); });

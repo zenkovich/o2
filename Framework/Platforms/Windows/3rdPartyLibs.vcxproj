@@ -84,6 +84,7 @@
     <ClInclude Include="..\..\3rdPartyLibs\CDT\include\LocatorKDTree.h" />
     <ClInclude Include="..\..\3rdPartyLibs\CDT\include\predicates.h" />
     <ClInclude Include="..\..\3rdPartyLibs\CDT\include\remove_at.hpp" />
+    <ClInclude Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-sha1.h" />
     <ClInclude Include="..\..\3rdPartyLibs\LibPNG\png.h" />
     <ClInclude Include="..\..\3rdPartyLibs\LibPNG\pngconf.h" />
     <ClInclude Include="..\..\3rdPartyLibs\PugiXml\pugiconfig.hpp" />
@@ -545,20 +546,20 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>TurnOffAllWarnings</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <SDLCheck>false</SDLCheck>
       <AdditionalIncludeDirectories>$(ProjectDir)..\..\3rdPartyLibs;$(ProjectDir)..\..\3rdPartyLibs\FreeType\include;$(ProjectDir)..\..;$(ProjectDir)..\..\3rdPartyLibs\rapidjson\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\api;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\debugger;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\base;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\builtin-objects\typedarray;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\ecma\operations;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jcontext;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jmem;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\jrt;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\lit;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\js;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\parser\regexp;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-core\vm;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\include;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-ext\common;$(ProjectDir)..\..\3rdPartyLibs\jerryscript\jerry-port\default\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;WIN32;_WINDOWS;_BSD_SOURCE;_DEFAULT_SOURCE;HAVE_TIME_H;JERRY_GC_LIMIT=(0);JERRY_CPOINTER_32_BIT=0;JERRY_ERROR_MESSAGES=1;JERRY_EXTERNAL_CONTEXT=0;JERRY_PARSER=1;JERRY_LINE_INFO=1;JERRY_LOGGING=1;JERRY_MEM_STATS=0;JERRY_DEBUGGER=1;JERRY_MEM_GC_BEFORE_EACH_ALLOC=0;JERRY_PARSER_DUMP_BYTE_CODE=0;JERRY_REGEXP_STRICT_MODE=0;JERRY_REGEXP_DUMP_BYTE_CODE=0;JERRY_SNAPSHOT_EXEC=0;JERRY_SNAPSHOT_SAVE=0;JERRY_SYSTEM_ALLOCATOR=0;JERRY_VALGRIND=0;JERRY_VM_EXEC_STOP=0;JERRY_GLOBAL_HEAP_SIZE=(512);JERRY_STACK_LIMIT=(0);JERRY_GC_MARK_LIMIT=(8)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;FT2_BUILD_LIBRARY;WIN32;_WINDOWS;_BSD_SOURCE;_DEFAULT_SOURCE;HAVE_TIME_H;JERRY_GC_LIMIT=(0);JERRY_CPOINTER_32_BIT=0;JERRY_ERROR_MESSAGES=1;JERRY_EXTERNAL_CONTEXT=0;JERRY_PARSER=1;JERRY_LINE_INFO=1;JERRY_LOGGING=1;JERRY_MEM_STATS=0;JERRY_DEBUGGER=1;JERRY_MEM_GC_BEFORE_EACH_ALLOC=0;JERRY_PARSER_DUMP_BYTE_CODE=0;JERRY_REGEXP_STRICT_MODE=0;JERRY_REGEXP_DUMP_BYTE_CODE=0;JERRY_SNAPSHOT_EXEC=0;JERRY_SNAPSHOT_SAVE=0;JERRY_SYSTEM_ALLOCATOR=0;JERRY_VALGRIND=0;JERRY_VM_EXEC_STOP=0;JERRY_GLOBAL_HEAP_SIZE=0;JERRY_STACK_LIMIT=(0);JERRY_GC_MARK_LIMIT=(8)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <OpenMPSupport>true</OpenMPSupport>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-      <EnableFiberSafeOptimizations>true</EnableFiberSafeOptimizations>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
     </ClCompile>

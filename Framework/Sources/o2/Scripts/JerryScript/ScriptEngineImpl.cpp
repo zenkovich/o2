@@ -1,9 +1,11 @@
 #include "o2/stdafx.h"
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
+#include "jerryscript/jerry-ext/include/jerryscript-ext/debugger.h"
 #include "jerryscript/jerry-ext/include/jerryscript-ext/handler.h"
 #include "o2/Scripts/ScriptEngine.h"
 #include "o2/Utils/Debug/Log/LogStream.h"
+#include "../../jerry-port/default/include/jerryscript-port-default.h"
 
 namespace o2
 {
@@ -51,6 +53,8 @@ namespace o2
 		RunBuildtinScripts();
 		InitializeBasicPrototypes();
 		RegisterTypes();
+
+		jerry_port_default_set_log_level(JERRY_LOG_LEVEL_DEBUG);
 	}
 
 	ScriptEngine::~ScriptEngine()
@@ -97,6 +101,11 @@ namespace o2
 	void ScriptEngine::CollectGarbage() const
 	{
 		jerry_gc(JERRY_GC_PRESSURE_HIGH);
+	}
+	
+	void ScriptEngine::ConnectDebugger() const
+	{
+		jerryx_debugger_after_connect(jerryx_debugger_tcp_create(5001) && jerryx_debugger_ws_create());
 	}
 
 	void ScriptEngineBase::InitializeBasicPrototypes()

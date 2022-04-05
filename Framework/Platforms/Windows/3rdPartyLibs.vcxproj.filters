@@ -408,6 +408,9 @@
     <ClInclude Include="..\..\3rdPartyLibs\CDT\extras\VerifyTopology.h">
       <Filter>CDT</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\3rdPartyLibs\jerryscript\jerry-ext\debugger\debugger-sha1.h">
+      <Filter>JerryScript\port</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\3rdPartyLibs\PugiXml\pugixml.cpp">

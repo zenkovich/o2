@@ -62,6 +62,9 @@ namespace o2
 		// Collects garbage
 		void CollectGarbage() const;
 
+		// Starts debugging session and waits for connect
+		void ConnectDebugger() const;
+
 	private:
 		// Registers all types from reflection
 		void RegisterTypes();

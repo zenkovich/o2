@@ -302,19 +302,20 @@ jerry_debugger_get_variable_type (ecma_value_t value) /**< input ecma value */
   }
   else
   {
-    JERRY_ASSERT (ecma_is_value_object (value));
-
-    if (ecma_get_object_type (ecma_get_object_from_value (value)) == ECMA_OBJECT_TYPE_ARRAY)
-    {
-      ret_value = JERRY_DEBUGGER_VALUE_ARRAY;
-    }
-    else
-    {
-      ret_value = ecma_op_is_callable (value) ? JERRY_DEBUGGER_VALUE_FUNCTION : JERRY_DEBUGGER_VALUE_OBJECT;
-    }
+      if (ecma_is_value_object(value))
+      {
+          if (ecma_get_object_type(ecma_get_object_from_value(value)) == ECMA_OBJECT_TYPE_ARRAY)
+          {
+              ret_value = JERRY_DEBUGGER_VALUE_ARRAY;
+          }
+          else
+          {
+              ret_value = ecma_op_is_callable(value) ? JERRY_DEBUGGER_VALUE_FUNCTION : JERRY_DEBUGGER_VALUE_OBJECT;
+          }
+      }
   }
 
-  JERRY_ASSERT (ret_value != JERRY_DEBUGGER_VALUE_NONE);
+  //JERRY_ASSERT (ret_value != JERRY_DEBUGGER_VALUE_NONE);
 
   return ret_value;
 } /* jerry_debugger_get_variable_type */
@@ -506,19 +507,22 @@ jerry_debugger_send_scope_variables (const uint8_t *recv_buffer_p) /**< pointer 
 
         uint8_t variable_type = jerry_debugger_get_variable_type (prop_value_p.value);
 
-        ecma_string_t *str_p = ecma_op_to_string (prop_value_p.value);
-        JERRY_ASSERT (str_p != NULL);
-
-        if (!jerry_debugger_copy_variables_to_string_message (variable_type,
-                                                              str_p,
-                                                              message_string_p,
-                                                              &buffer_pos))
+        if (variable_type != JERRY_DEBUGGER_VALUE_NONE)
         {
-          ecma_deref_ecma_string (str_p);
-          return;
-        }
+            ecma_string_t* str_p = ecma_op_to_string(prop_value_p.value);
+            JERRY_ASSERT(str_p != NULL);
 
-        ecma_deref_ecma_string (str_p);
+            if (!jerry_debugger_copy_variables_to_string_message(variable_type,
+                str_p,
+                message_string_p,
+                &buffer_pos))
+            {
+                ecma_deref_ecma_string(str_p);
+                return;
+            }
+
+            ecma_deref_ecma_string(str_p);
+        }
       }
     }
 
