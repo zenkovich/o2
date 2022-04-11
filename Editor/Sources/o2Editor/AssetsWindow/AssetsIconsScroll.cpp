@@ -420,6 +420,7 @@ namespace Editor
 		else
 		{
 			iconSprite->imageName = asset->meta->GetAssetType()->InvokeStatic<String>("GetEditorIcon");
+			iconSprite->mode = SpriteMode::FixedAspect;
 			iconLayer->layout = Layout::Based(BaseCorner::Center, Vec2F(40, 40), Vec2F(0, 10));
 		}
 

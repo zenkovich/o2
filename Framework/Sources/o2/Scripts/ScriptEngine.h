@@ -56,6 +56,12 @@ namespace o2
 		// Evaluates script
 		ScriptValue Eval(const String& script, const String& filename = "");
 
+		// Creates new realm
+		ScriptValue CreateRealm();
+
+		// Sets current realm
+		ScriptValue SetCurrentRealm(const ScriptValue& realm);
+
 		// Returns global namespace
 		ScriptValue GetGlobal() const;
 

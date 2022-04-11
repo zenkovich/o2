@@ -194,6 +194,9 @@
 		<ClInclude Include="..\..\Sources\o2\Assets\Types\ImageAsset.h">
 			<Filter>Sources\o2\Assets\Types</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Assets\Types\JavaScriptAsset.h">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.h">
 			<Filter>Sources\o2\Assets\Types</Filter>
 		</ClInclude>
@@ -366,6 +369,9 @@
 			<Filter>Sources\o2\Scene\Components</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.h">
+			<Filter>Sources\o2\Scene\Components</Filter>
+		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2\Scene\Components\ScriptableComponent.h">
 			<Filter>Sources\o2\Scene\Components</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2\Scene\DrawableComponent.h">
@@ -889,6 +895,9 @@
 		<ClCompile Include="..\..\Sources\o2\Assets\Types\ImageAsset.cpp">
 			<Filter>Sources\o2\Assets\Types</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Assets\Types\JavaScriptAsset.cpp">
+			<Filter>Sources\o2\Assets\Types</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Assets\Types\VectorFontAsset.cpp">
 			<Filter>Sources\o2\Assets\Types</Filter>
 		</ClCompile>
@@ -1031,6 +1040,9 @@
 			<Filter>Sources\o2\Scene\Components</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Scene\Components\ParticlesEmitterComponent.cpp">
+			<Filter>Sources\o2\Scene\Components</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2\Scene\Components\ScriptableComponent.cpp">
 			<Filter>Sources\o2\Scene\Components</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2\Scene\DrawableComponent.cpp">

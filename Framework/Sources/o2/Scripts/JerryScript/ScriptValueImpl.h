@@ -48,6 +48,17 @@ namespace o2
 		return std::move(res);
 	}
 
+	template<typename ... _args>
+	ScriptValue ScriptValue::Construct(_args ... args) const
+	{
+		Vector<ScriptValue> argsValues;
+
+		if constexpr (sizeof...(_args) > 0)
+			PackArgs(argsValues, args ...);
+
+		return Construct(argsValues);
+	}
+
 	template<typename _type>
 	void ScriptValue::SetProperty(const char* name, const _type& value)
 	{

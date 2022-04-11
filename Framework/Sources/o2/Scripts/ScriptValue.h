@@ -15,7 +15,7 @@ namespace o2
 	class ScriptValue: public ScriptValueBase
 	{
 	public:
-		enum class ValueType { None = 0, Undefined, Null, Bool, Number, String, Object, Function, Error, Symbol, BigInt, Array };
+		enum class ValueType { None = 0, Undefined, Null, Bool, Number, String, Object, Function, Constructor, Error, Symbol, BigInt, Array };
 
 	public:
 		template<typename _type, typename _enable = void>
@@ -80,6 +80,13 @@ namespace o2
 
 		// Sets containing object ownership. When it's true, containing object will be destroyed by GC. 
 		void SetObjectOwnership(bool own);
+
+		// Constructs object from this
+		ScriptValue Construct(const Vector<ScriptValue>& args);
+
+		// Invokes function
+		template<typename ... _args>
+		ScriptValue Construct(_args ... args) const;
 
 		// Iterates properties in object
 		void ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const;

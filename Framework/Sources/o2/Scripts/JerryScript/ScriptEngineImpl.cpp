@@ -55,6 +55,8 @@ namespace o2
 		RegisterTypes();
 
 		jerry_port_default_set_log_level(JERRY_LOG_LEVEL_DEBUG);
+
+		//ConnectDebugger();
 	}
 
 	ScriptEngine::~ScriptEngine()
@@ -70,7 +72,7 @@ namespace o2
 	{
 		ScriptParseResult res;
 		res.mParsedCode = jerry_parse((jerry_char_t*)filename.Data(), filename.Length(),
-			(jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_MODULE);
+			(jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS);
 
 		return res;
 	}
@@ -95,6 +97,20 @@ namespace o2
 	{
 		ScriptValue res;
 		res.Accept(jerry_get_global_object());
+		return res;
+	}
+
+	ScriptValue ScriptEngine::CreateRealm()
+	{
+		ScriptValue res;
+		res.Accept(jerry_create_realm());
+		return res;
+	}
+
+	ScriptValue ScriptEngine::SetCurrentRealm(const ScriptValue& realm)
+	{
+		ScriptValue res;
+		res.AcquireValue(jerry_set_realm(realm.jvalue));
 		return res;
 	}
 

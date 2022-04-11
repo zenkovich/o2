@@ -138,7 +138,7 @@ namespace Editor
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
-		float testValue = 0;
+		//float testValue = 0;
 		//o2Scripts.GetGlobal().SetProperty("back", mBackground);
 // 		o2Scripts.GetGlobal().SetPropertyWrapper<float>(ScriptValue("test"),
 // 			Function<void(float)>([&](float xx) { testValue = xx; }),
@@ -148,8 +148,8 @@ namespace Editor
 // 
 // 		o2Scripts.Eval("print('test is ' + test + ', and its type is ' + typeof test);");
 
-		auto filename = GetAssetsPath() + String("test.js");
-		o2Scripts.Run(o2Scripts.Parse(o2FileSystem.ReadFile(filename), filename));
+		//auto filename = GetAssetsPath() + String("test.js");
+		//o2Scripts.Run(o2Scripts.Parse(o2FileSystem.ReadFile(filename), filename));
 
 		//o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
 

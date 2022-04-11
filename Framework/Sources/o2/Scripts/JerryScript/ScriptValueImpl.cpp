@@ -73,6 +73,9 @@ namespace o2
 		if (jerry_value_is_array(jvalue))
 			return ValueType::Array;
 
+		if (jerry_value_is_constructor(jvalue))
+			return ValueType::Constructor;
+
 		return (ValueType)jerry_value_get_type(jvalue);
 	}
 
@@ -117,6 +120,18 @@ namespace o2
 		auto dataContainer = (IDataContainer*)dataPtr;
 		if (dataContainer)
 			dataContainer->isDataOwner = own;
+	}
+	
+	ScriptValue ScriptValue::Construct(const Vector<ScriptValue>& args)
+	{
+		const int maxParameters = 16;
+		jerry_value_t valuesBuf[maxParameters];
+		for (int i = 0; i < args.Count() && i < maxParameters; i++)
+			valuesBuf[i] = args[i].jvalue;
+
+		ScriptValue res;
+		res.Accept(jerry_construct_object(jvalue, valuesBuf, args.Count()));
+		return res;
 	}
 
 	void ScriptValue::ForEachProperties(const Function<bool(const ScriptValue& name, const ScriptValue& value)>& func) const
@@ -244,7 +259,7 @@ namespace o2
 			for (int i = 0; i < args.Count() && i < maxParameters; i++)
 				valuesBuf[i] = args[i].jvalue;
 
-			auto res = jerry_call_function(jvalue, ScriptValue().jvalue, valuesBuf, args.Count());
+			auto res = jerry_call_function(jvalue, thisValue.jvalue, valuesBuf, args.Count());
 
 			ScriptValue resValue;
 			jerry_release_value(resValue.jvalue);
