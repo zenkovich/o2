@@ -94,11 +94,20 @@ namespace o2
 		// Returns property value
 		ScriptValue GetProperty(const ScriptValue& name) const;
 
+		// Returns internal property value
+		ScriptValue GetInternalProperty(const ScriptValue& name) const;
+
+		// Returns own property value
+		ScriptValue GetOwnProperty(const ScriptValue& name) const;
+
 		// Returns property value
 		ScriptValue GetProperty(const char* name) const;
 
 		// Sets property value
 		void SetProperty(const ScriptValue& name, const ScriptValue& value);
+
+		// Sets internal property value
+		void SetInternalProperty(const ScriptValue& name, const ScriptValue& value);
 
 		// Sets property value
 		void SetProperty(const char* name, const ScriptValue& value);

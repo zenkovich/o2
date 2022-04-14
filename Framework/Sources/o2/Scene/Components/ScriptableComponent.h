@@ -52,6 +52,12 @@ namespace o2
 
 		ScriptValue mObject; // Script value instance
 
+		ScriptValue mOnStartFunc;
+		ScriptValue mUpdateEnabledFunc;
+		ScriptValue mOnEnabledFunc;
+		ScriptValue mOnDisabledFunc;
+		ScriptValue mUpdateFunc;
+
 	protected:
 		// Loads script and creates object instance
 		void LoadScriptAndCreateObject();
@@ -98,6 +104,11 @@ CLASS_FIELDS_META(o2::ScriptableComponent)
 	FIELD().PUBLIC().NAME(script);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mScript);
 	FIELD().PROTECTED().NAME(mObject);
+	FIELD().PROTECTED().NAME(mOnStartFunc);
+	FIELD().PROTECTED().NAME(mUpdateEnabledFunc);
+	FIELD().PROTECTED().NAME(mOnEnabledFunc);
+	FIELD().PROTECTED().NAME(mOnDisabledFunc);
+	FIELD().PROTECTED().NAME(mUpdateFunc);
 }
 END_META;
 CLASS_METHODS_META(o2::ScriptableComponent)

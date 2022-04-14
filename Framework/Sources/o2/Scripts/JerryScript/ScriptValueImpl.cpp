@@ -170,6 +170,33 @@ namespace o2
 		return res;
 	}
 
+	ScriptValue ScriptValue::GetInternalProperty(const ScriptValue& name) const
+	{
+		ScriptValue res;
+		res.Accept(jerry_get_internal_property(jvalue, name.jvalue));
+		return res;
+	}
+	
+	ScriptValue ScriptValue::GetOwnProperty(const ScriptValue& name) const
+	{
+		ScriptValue res;
+
+		jerry_property_descriptor_t descr;
+		jerry_init_property_descriptor_fields(&descr);
+
+		if (jerry_get_own_property_descriptor(jvalue, name.jvalue, &descr))
+			res.AcquireValue(descr.value);
+
+		jerry_free_property_descriptor_fields(&descr);
+
+		return res;
+	}
+
+	void ScriptValue::SetInternalProperty(const ScriptValue& name, const ScriptValue& value)
+	{
+		jerry_set_internal_property(jvalue, name.jvalue, value.jvalue);
+	}
+
 	void ScriptValue::SetProperty(const ScriptValue& name, const ScriptValue& value)
 	{
 		if (GetValueType() != ValueType::Object)
