@@ -50,7 +50,7 @@ namespace o2
 	protected:
 		JavaScriptAssetRef mScript; // Java script asset link @SERIALIZABLE
 
-		ScriptValue mObject; // Script value instance
+		ScriptValue mObject; // Script value instance @EDITOR_PROPERTY @NO_HEADER
 
 		ScriptValue mOnStartFunc;
 		ScriptValue mUpdateEnabledFunc;
@@ -103,7 +103,7 @@ CLASS_FIELDS_META(o2::ScriptableComponent)
 {
 	FIELD().PUBLIC().NAME(script);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mScript);
-	FIELD().PROTECTED().NAME(mObject);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mObject);
 	FIELD().PROTECTED().NAME(mOnStartFunc);
 	FIELD().PROTECTED().NAME(mUpdateEnabledFunc);
 	FIELD().PROTECTED().NAME(mOnEnabledFunc);

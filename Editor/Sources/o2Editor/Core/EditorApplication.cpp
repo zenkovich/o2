@@ -138,6 +138,8 @@ namespace Editor
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
+		o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
+		// 
 		//float testValue = 0;
 		//o2Scripts.GetGlobal().SetProperty("back", mBackground);
 // 		o2Scripts.GetGlobal().SetPropertyWrapper<float>(ScriptValue("test"),

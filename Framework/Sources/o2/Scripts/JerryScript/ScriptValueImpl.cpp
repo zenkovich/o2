@@ -53,12 +53,14 @@ namespace o2
 
 	bool ScriptValue::operator!=(const ScriptValue& other) const
 	{
-		return !jerry_binary_operation(JERRY_BIN_OP_EQUAL, jvalue, other.jvalue);
+		return !operator==(other);
 	}
 
 	bool ScriptValue::operator==(const ScriptValue& other) const
 	{
-		return jerry_binary_operation(JERRY_BIN_OP_EQUAL, jvalue, other.jvalue);
+		ScriptValue res;
+		res.Accept(jerry_binary_operation(JERRY_BIN_OP_EQUAL, jvalue, other.jvalue));
+		return res.ToBool();
 	}
 
 	ScriptValue& ScriptValue::operator=(const ScriptValue& other)
@@ -102,7 +104,45 @@ namespace o2
 		return errorValue.GetValue<String>();
 	}
 
-	bool ScriptValue::IsObjectOwner() const
+	bool ScriptValue::IsObjectContainer() const
+	{
+		if (!IsObject())
+			return false;
+
+		void* dataPtr = nullptr;
+		jerry_get_object_native_pointer(jvalue, &dataPtr, &GetDataDeleter().info);
+		return dataPtr != nullptr;
+	}
+
+	const Type* ScriptValue::GetObjectContainerType() const
+	{
+		if (!IsObject())
+			return nullptr;
+
+		void* dataPtr = nullptr;
+		jerry_get_object_native_pointer(jvalue, &dataPtr, &GetDataDeleter().info);
+		auto dataContainer = (IDataContainer*)dataPtr;
+		if (dataContainer)
+			return dataContainer->GetType();
+
+		return nullptr;
+	}
+
+	void* ScriptValue::GetContainingObject() const
+	{
+		if (!IsObject())
+			return nullptr;
+
+		void* dataPtr = nullptr;
+		jerry_get_object_native_pointer(jvalue, &dataPtr, &GetDataDeleter().info);
+		auto dataContainer = (IDataContainer*)dataPtr;
+		if (dataContainer)
+			return dataContainer->GetData();
+
+		return nullptr;
+	}
+
+	bool ScriptValue::IsObjectContainerOwner() const
 	{
 		void* dataPtr = nullptr;
 		jerry_get_object_native_pointer(jvalue, &dataPtr, &GetDataDeleter().info);
@@ -217,6 +257,13 @@ namespace o2
 	{
 		ScriptValue res;
 		res.Accept(jerry_set_prototype(jvalue, proto.jvalue));
+	}
+
+	ScriptValue ScriptValue::GetPrototype() const
+	{
+		ScriptValue res;
+		res.Accept(jerry_get_prototype(jvalue));
+		return res;
 	}
 
 	void ScriptValue::SetElement(const ScriptValue& value, int idx)

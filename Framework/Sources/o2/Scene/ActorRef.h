@@ -49,19 +49,19 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const ActorRef& other) const;
 
-		// Returns actor pointer
+		// Returns actor pointer @SCRIPTABLE
 		Actor* Get();
 
 		// Returns actor pointer
 		const Actor* Get() const;
 
-		// Destroy the actor
+		// Destroy the actor @SCRIPTABLE
 		void Destroy();
 
-		// Returns is reference is valid
+		// Returns is reference is valid @SCRIPTABLE
 		bool IsValid() const;
 
-		// Returns is actor was deleted
+		// Returns is actor was deleted @SCRIPTABLE
 		bool IsWasDeleted() const;
 
 		// Returns actor type
@@ -176,6 +176,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartMethods<_thisType>(object, type);
 
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
 		}
@@ -206,11 +207,11 @@ CLASS_METHODS_META(o2::ActorRef)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorRef&);
-	FUNCTION().PUBLIC().SIGNATURE(Actor*, Get);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(const Actor*, Get);
-	FUNCTION().PUBLIC().SIGNATURE(void, Destroy);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsWasDeleted);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsWasDeleted);
 	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetActorType);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetActorTypeStatic);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const ActorRef&, const ActorRef&);

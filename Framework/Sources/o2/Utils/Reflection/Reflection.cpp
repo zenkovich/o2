@@ -50,6 +50,7 @@ namespace o2
 	DECLARE_FUNDAMENTAL_TYPE(o2::WString);
 	DECLARE_FUNDAMENTAL_TYPE(o2::DataValue);
 	DECLARE_FUNDAMENTAL_TYPE(o2::UID);
+	DECLARE_FUNDAMENTAL_TYPE(o2::ScriptValue);
 
 	Reflection::Reflection():
 		mLastGivenTypeId(1)

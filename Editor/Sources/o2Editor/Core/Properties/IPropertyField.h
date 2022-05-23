@@ -43,7 +43,7 @@ namespace Editor
 		IPropertyField(const IPropertyField& other);
 
 		// Virtual destructor
-		virtual ~IPropertyField() {}
+		virtual ~IPropertyField();
 
 		// Copy-operator
 		IPropertyField& operator=(const IPropertyField& other);
@@ -153,8 +153,8 @@ namespace Editor
 
 		bool mRevertable = true; // Is property can be reverted
 
-		TargetsVec mValuesProxies;          // Target values proxies
-		bool       mValuesDifferent = true; // Are values different
+		Vector<Pair<IAbstractValueProxy*, IAbstractValueProxy*>> mValuesProxies;          // Target values proxies
+		bool                                                     mValuesDifferent = true; // Are values different
 
 		Button* mRevertBtn = nullptr; // Revert to source prototype button
 		Button* mRemoveBtn = nullptr; // Remove from array button
@@ -184,6 +184,9 @@ namespace Editor
 
 		// It is called when field value changed
 		virtual void OnValueChanged();
+
+		// Frees values proxies
+		void FreeValuesProxies();
 
 		// It is called when user began to change value and we need to store initial value data
 		void BeginUserChanging();
@@ -637,6 +640,7 @@ CLASS_METHODS_META(Editor::IPropertyField)
 	FUNCTION().PROTECTED().SIGNATURE(void, CheckRevertableState);
 	FUNCTION().PROTECTED().SIGNATURE(bool, IsValueRevertable);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnValueChanged);
+	FUNCTION().PROTECTED().SIGNATURE(void, FreeValuesProxies);
 	FUNCTION().PROTECTED().SIGNATURE(void, BeginUserChanging);
 	FUNCTION().PROTECTED().SIGNATURE(void, EndUserChanging);
 }

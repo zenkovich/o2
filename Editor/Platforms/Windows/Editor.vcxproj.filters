@@ -197,6 +197,9 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\ScriptValueProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
@@ -240,9 +243,6 @@
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.h">
-			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-		</ClInclude>
-		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\ScriptValuePropertiesViewer.h">
 			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
 		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.h">
@@ -583,6 +583,9 @@
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\SceneLayersListProperty.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\ScriptValueProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\StringProperty.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
@@ -626,9 +629,6 @@
 			<Filter>Sources\o2Editor\Core\Properties\Objects\Components</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\DefaultObjectPropertiesViewer.cpp">
-			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
-		</ClCompile>
-		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\ScriptValuePropertiesViewer.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Objects</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Objects\SpriteViewer.cpp">

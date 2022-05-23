@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Scripts/ScriptValueDef.h"
 #include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Color.h"
@@ -116,6 +117,7 @@ namespace o2
 		std::is_same<T, String>::value ||
 		std::is_same<T, WString>::value ||
 		std::is_same<T, UID>::value ||
+		std::is_same<T, ScriptValue>::value ||
 		std::is_same<T, DataValue>::value, std::true_type, std::false_type>::type {};
 }
 

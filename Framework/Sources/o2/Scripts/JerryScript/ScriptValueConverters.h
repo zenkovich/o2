@@ -640,9 +640,23 @@ namespace o2
 		{
 			void* dataPtr = nullptr;
 			jerry_get_object_native_pointer(data.jvalue, &dataPtr, &GetDataDeleter().info);
-			auto dataContainer = dynamic_cast<DataContainer<_non_ptr_type>*>((IDataContainer*)dataPtr);
+			auto dataContainer = (IDataContainer*)dataPtr;
 			if (dataContainer)
-				value = dataContainer->data;
+			{
+				if constexpr (std::is_base_of<IObject, _non_ptr_type>::value)
+				{
+					auto object = dataContainer->TryCastToIObject();
+					value = dynamic_cast<_ptr_type>(object);
+				}
+				else
+				{
+					auto typedDataContainer = dynamic_cast<DataContainer<_non_ptr_type>*>(dataContainer);
+					if (typedDataContainer)
+						value = typedDataContainer->data;
+					else
+						value = nullptr;
+				}
+			}
 			else
 				value = nullptr;
 		}

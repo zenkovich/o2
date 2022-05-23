@@ -95,9 +95,9 @@ namespace Editor
 
 		Widget* mTreeControls = nullptr; // Returns a container of controllers that are part of a tree
 
-		IPropertyField*                   mPropertyField;
-		TrackValueType                    mPropertyValue = TrackValueType();
-		PointerValueProxy<TrackValueType> mPropertyValueProxy;
+		IPropertyField*                    mPropertyField;
+		TrackValueType                     mPropertyValue = TrackValueType();
+		PointerValueProxy<TrackValueType>* mPropertyValueProxy;
 
 		Button* mAddKeyDotButton = nullptr; // Dot add key button colored with curve color
 		Button* mAddKeyButton = nullptr;    // Add key button, enables when available to add new key
@@ -264,8 +264,8 @@ namespace Editor
 
 		auto fieldProto = o2EditorProperties.GetFieldPropertyType(&TypeOf(TrackValueType));
 		mPropertyField = dynamic_cast<IPropertyField*>(o2UI.CreateWidget(*fieldProto, "standard"));
-		mPropertyValueProxy = PointerValueProxy<TrackValueType>(&mPropertyValue);
-		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(&mPropertyValueProxy) });
+		mPropertyValueProxy = mnew PointerValueProxy<TrackValueType>(&mPropertyValue);
+		mPropertyField->SetValueProxy({ dynamic_cast<IAbstractValueProxy*>(mPropertyValueProxy) });
 		mPropertyField->onChangeCompleted = [&](const String&, const Vector<DataDocument>&, const Vector<DataDocument>&) { OnPropertyChanged(); };
 		*mPropertyField->layout = WidgetLayout::BothStretch(0, 0, 20, 0);
 

@@ -27,15 +27,18 @@ namespace o2
 		class TestInside: public ISerializable
 		{
 		public:
-			float mFloat;	  // @SERIALIZABLE
-			String mString;	  // @SERIALIZABLE
-			WString mWString; // @SERIALIZABLE
-			bool mBool;		  // @SERIALIZABLE
-
-			ComponentRef mComponent;   // @SERIALIZABLE
-			Ref<RigidBody> mRigidBody; // @SERIALIZABLE
+			float mFloat = 1.2f;        // @SERIALIZABLE @SCRIPTABLE
+			String mString = String("bla bla"); // @SERIALIZABLE @SCRIPTABLE
+			WString mWString;           // @SERIALIZABLE @SCRIPTABLE
+			bool mBool = true;          // @SERIALIZABLE @SCRIPTABLE
+			 
+			ComponentRef mComponent;   // @SERIALIZABLE @SCRIPTABLE
+			Ref<RigidBody> mRigidBody; // @SERIALIZABLE @SCRIPTABLE
 
 			bool operator==(const TestInside& other) const { return false; }
+
+			// @SCRIPTABLE
+			TestInside() {}
 
 			SERIALIZABLE(TestInside);
 		};
@@ -190,15 +193,17 @@ CLASS_BASES_META(o2::EditorTestComponent::TestInside)
 END_META;
 CLASS_FIELDS_META(o2::EditorTestComponent::TestInside)
 {
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mFloat);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mString);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mWString);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mBool);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mComponent);
-	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(1.2f).NAME(mFloat);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(String("bla bla")).NAME(mString);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mWString);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(true).NAME(mBool);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mComponent);
+	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mRigidBody);
 }
 END_META;
 CLASS_METHODS_META(o2::EditorTestComponent::TestInside)
 {
+
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 }
 END_META;

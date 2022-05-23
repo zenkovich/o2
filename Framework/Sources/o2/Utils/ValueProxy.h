@@ -71,6 +71,7 @@ namespace o2
 	class PropertyValueProxy: public IValueProxy<_type>
 	{
 		_property_type* mProperty;
+
 	public:
 		PropertyValueProxy() {}
 		PropertyValueProxy(_property_type* ptr):mProperty(ptr) {}

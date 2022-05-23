@@ -1,10 +1,12 @@
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 #include "jerryscript/jerry-core/include/jerryscript-core.h"
 #include "o2/Utils/Function.h"
-#include "o2/Utils/Reflection/Type.h"
 
 namespace o2
 {
+	class IObject;
+	class Type;
+
 	class ScriptValueBase
 	{
 	public:
@@ -25,6 +27,10 @@ namespace o2
 			bool isDataOwner = true;
 
 			virtual ~IDataContainer() = default;
+
+			virtual void* GetData() const { return nullptr; }
+			virtual IObject* TryCastToIObject() const { return nullptr; }
+			virtual const Type* GetType() const { return nullptr; }
 		};
 
 		template<typename _type>
@@ -33,7 +39,17 @@ namespace o2
 			_type* data;
 
 			DataContainer(_type* data):data(data) {}
-			~DataContainer() { if (isDataOwner && data) delete data; }
+			~DataContainer() override 
+			{ 
+				if (isDataOwner && data) 
+					delete data; 
+			}
+
+			void* GetData() const override { return data; }
+
+			IObject* TryCastToIObject() const override;
+
+			const Type* GetType() const override;
 		};
 
 		struct IFunctionContainer

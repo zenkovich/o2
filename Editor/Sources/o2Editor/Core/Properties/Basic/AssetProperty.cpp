@@ -90,7 +90,7 @@ namespace Editor
 				{
 					Vector<IObject*> targets;
 
-					allAreInstance = true;
+					allAreInstance = false;
 					for (auto proxy : mValuesProxies)
 					{
 						auto proxyType = dynamic_cast<const ObjectType*>(&proxy.first->GetType());
@@ -100,7 +100,10 @@ namespace Editor
 							if (AssetRef* refPtr = dynamic_cast<AssetRef*>(proxyType->DynamicCastToIObject(rawAssetRefPtr)))
 							{
 								if (refPtr->IsInstance())
+								{
 									targets.Add(refPtr->Get());
+									allAreInstance = true;
+								}
 								else
 								{
 									allAreInstance = false;

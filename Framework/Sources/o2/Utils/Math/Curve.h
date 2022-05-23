@@ -1,5 +1,6 @@
 #pragma once
 
+#include "o2/Utils/Editor/Attributes/ScriptableAttribute.h"
 #include "o2/Utils/Math/ApproximationValue.h"
 #include "o2/Utils/Math/Math.h"
 #include "o2/Utils/Math/Vector2.h"
@@ -26,7 +27,7 @@ namespace o2
 		Function<void()> onKeysChanged; // Keys changed event
 
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		Curve();
 
 		// Constructor by bezier coefficient in 0...1 range (some line as css-bezier)
@@ -50,7 +51,7 @@ namespace o2
 		// Append other curve at end
 		Curve& operator+=(const Curve& other);
 
-		// Returns value by position
+		// Returns value by position @SCRIPTABLE
 		float Evaluate(float position) const;
 
 		// Returns value by position
@@ -168,10 +169,10 @@ namespace o2
 		// Smooths key at index
 		void SmoothKeyAt(int idx, float smoothCoef = 1.0f);
 
-		// Returns curve max position
+		// Returns curve max position @SCRIPTABLE
 		float Length() const;
 
-		// Returns true if curve is empty
+		// Returns true if curve is empty @SCRIPTABLE
 		bool IsEmpty() const;
 
 		// Returns bounding approximated keys rectangle
@@ -314,11 +315,11 @@ END_META;
 CLASS_METHODS_META(o2::Curve)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(float, float, float, float);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Vector<Vec2F>&, bool);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const Curve&);
-	FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, Evaluate, float);
 	FUNCTION().PUBLIC().SIGNATURE(float, Evaluate, float, bool, int&, int&);
 	FUNCTION().PUBLIC().SIGNATURE(void, BeginKeysBatchChange);
 	FUNCTION().PUBLIC().SIGNATURE(void, CompleteKeysBatchingChange);
@@ -356,8 +357,8 @@ CLASS_METHODS_META(o2::Curve)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetKey, const Key&, int);
 	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKey, float, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SmoothKeyAt, int, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, Length);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEmpty);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, Length);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEmpty);
 	FUNCTION().PUBLIC().SIGNATURE(RectF, GetRect);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, Parametric, float, float, float, float, float, float, float);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(Curve, EaseIn, float, float, float, float);

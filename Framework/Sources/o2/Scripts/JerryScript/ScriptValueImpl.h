@@ -1,16 +1,26 @@
 #pragma once
 
+#include "o2/Utils/Reflection/Type.h"
+
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 
 namespace o2
 {
-	struct ScriptValuePrototypes
+	template<typename _type>
+	IObject* ScriptValueBase::DataContainer<_type>::TryCastToIObject() const
 	{
-		static ScriptValue*& GetVec2Prototype();
-		static ScriptValue*& GetRectPrototype();
-		static ScriptValue*& GetBorderPrototype();
-		static ScriptValue*& GetColor4Prototype();
-	};
+		if constexpr (std::is_base_of<IObject, _type>::value)
+			return dynamic_cast<IObject*>(data);
+
+		return nullptr;
+	}
+
+	template<typename _type>
+	const Type* ScriptValueBase::DataContainer<_type>::GetType() const
+	{
+		return &TypeOf(_type);
+	}
+
 
 	template<typename _type>
 	ScriptValue::ScriptValue(const _type& value)

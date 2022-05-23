@@ -21,6 +21,11 @@ namespace Editor
 		HorizontalLayout(other)
 	{}
 
+	IPropertyField::~IPropertyField()
+	{
+		FreeValuesProxies();
+	}
+
 	IPropertyField& IPropertyField::operator=(const IPropertyField& other)
 	{
 		HorizontalLayout::operator=(other);
@@ -29,12 +34,27 @@ namespace Editor
 
 	void IPropertyField::SetValueAndPrototypeProxy(const TargetsVec& targets)
 	{
+		FreeValuesProxies();
+
 		mValuesProxies = targets;
 
 		if (!mValuesProxies.IsEmpty())
 			OnTypeSpecialized(mValuesProxies[0].first->GetType());
 
 		Refresh();
+	}
+
+	void IPropertyField::FreeValuesProxies()
+	{
+		for (auto pair : mValuesProxies)
+		{
+			delete pair.first;
+
+			if (pair.second)
+				delete pair.second;
+		}
+
+		mValuesProxies.Clear();
 	}
 
 	const IPropertyField::TargetsVec& IPropertyField::GetValueAndPrototypeProxy() const
