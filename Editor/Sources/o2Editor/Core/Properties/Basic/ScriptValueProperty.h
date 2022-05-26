@@ -73,55 +73,6 @@ namespace Editor
 		IOBJECT(ScriptValueProperty);
 
 	protected:
-		struct Property
-		{
-			ScriptValue object;
-			ScriptValue name;
-
-			ScriptValue Get() const;
-			void Set(const ScriptValue& value);
-
-			bool operator==(const Property& other) const;
-		};
-
-		template<typename _type>
-		class ScriptValueProxy : public IValueProxy<_type>, public Property
-		{
-		public:
-			ScriptValueProxy();
-			ScriptValueProxy(const Property& prop);
-
-			void SetValue(const _type& value) override;
-			_type GetValue() const override;
-		};
-
-		class SimpleScriptValueProxy : public IAbstractValueProxy, public Property
-		{
-		public:
-			SimpleScriptValueProxy();
-			SimpleScriptValueProxy(const Property& prop);
-
-			void SetValuePtr(void* value) override;
-			void GetValuePtr(void* value) const override;
-			const Type& GetType() const override;
-		};
-
-		template<typename _type>
-		class PtrScriptValueProxy : public IValueProxy<_type>, public Property
-		{
-		public:
-			Property prop;
-
-		public:
-			PtrScriptValueProxy();
-			PtrScriptValueProxy(const Property& prop);
-
-			void SetValue(const _type& value) override;
-			_type GetValue() const override;
-
-			const Type& GetType() const override;
-		};
-
 		Spoiler* mSpoiler = nullptr; // Properties spoiler. Expands forcible when viewer hasn't header
 
 		Map<String, ScriptValue::ValueType> mPreviousBuiltTypes; // Built types of fields, used to check 
@@ -141,19 +92,19 @@ namespace Editor
 		void InitializeControls();
 
 		// Returns mapped common properties
-		Map<String, Vector<Pair<Property, Property>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values) const;
+		Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values) const;
 
 		//Adds property by type
 		void AddProperty(const String& name, const Type* type);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldProxies(Map<String, Vector<Pair<ScriptValueProperty::Property, ScriptValueProperty::Property>>>& commonProperties,
+		void SetFieldProxies(Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>>& commonProperties,
 							 const String& name, IPropertyField* field);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldPtrProxies(Map<String, Vector<Pair<ScriptValueProperty::Property, ScriptValueProperty::Property>>>& commonProperties,
+		void SetFieldPtrProxies(Map<String, Vector<Pair<ScriptValueProperty, ScriptValueProperty>>>& commonProperties,
 								const String& name, IPropertyField* field);
 
 		// It is called when some property changed, sets value via proxy
@@ -162,36 +113,16 @@ namespace Editor
 	};
 
 	template<typename _type>
-	ScriptValueProperty::ScriptValueProxy<_type>::ScriptValueProxy(const Property& prop) :Property(prop)
-	{}
-
-	template<typename _type>
-	ScriptValueProperty::ScriptValueProxy<_type>::ScriptValueProxy()
-	{}
-
-	template<typename _type>
-	void ScriptValueProperty::ScriptValueProxy<_type>::SetValue(const _type& value)
-	{
-		Set(ScriptValue(value));
-	}
-
-	template<typename _type>
-	_type ScriptValueProperty::ScriptValueProxy<_type>::GetValue() const
-	{
-		return Get().GetValue<_type>();
-	}
-
-	template<typename _type>
-	void ScriptValueProperty::SetFieldProxies(Map<String, Vector<Pair<Property, Property>>>& commonProperties,
+	void ScriptValueProperty::SetFieldProxies(Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>>& commonProperties,
 											  const String& name, IPropertyField* field)
 	{
 		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](const Pair<Property, Property>& x)
+			[](const Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-				res.first = mnew ScriptValueProxy<_type>(x.first);
+				res.first = mnew TypeScriptValueProxy<_type>(x.first);
 				if (x.second.object.IsObject())
-					res.second = mnew ScriptValueProxy<_type>(x.second);
+					res.second = mnew TypeScriptValueProxy<_type>(x.second);
 
 				return res;
 			});
@@ -200,11 +131,11 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void ScriptValueProperty::SetFieldPtrProxies(Map<String, Vector<Pair<Property, Property>>>& commonProperties,
+	void ScriptValueProperty::SetFieldPtrProxies(Map<String, Vector<Pair<ScriptValueProperty, ScriptValueProperty>>>& commonProperties,
 												 const String& name, IPropertyField* field)
 	{
 		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](const Pair<Property, Property>& x)
+			[](const Pair<ScriptValueProperty, ScriptValueProperty>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
 				res.first = mnew PtrScriptValueProxy<_type>(x.first);
@@ -215,35 +146,6 @@ namespace Editor
 			});
 
 		field->SetValueAndPrototypeProxy(proxies);
-	}
-
-	template<typename _type>
-	ScriptValueProperty::PtrScriptValueProxy<_type>::PtrScriptValueProxy(const Property& prop) :Property(prop)
-	{}
-
-	template<typename _type>
-	ScriptValueProperty::PtrScriptValueProxy<_type>::PtrScriptValueProxy()
-	{}
-
-	template<typename _type>
-	void ScriptValueProperty::PtrScriptValueProxy<_type>::SetValue(const _type& value)
-	{
-		Set(ScriptValue(mnew _type(value)));
-	}
-
-	template<typename _type>
-	_type ScriptValueProperty::PtrScriptValueProxy<_type>::GetValue() const
-	{
-		return *Get().GetValue<_type*>();
-	}
-
-	template<typename _type>
-	const Type& ScriptValueProperty::PtrScriptValueProxy<_type>::GetType() const
-	{
-		if constexpr (std::is_base_of<IObject, _type>::value)
-			return Get().GetValue<_type*>()->GetType();
-		else
-			return TypeOf(_type);
 	}
 }
 
@@ -265,7 +167,7 @@ END_META;
 CLASS_METHODS_META(Editor::ScriptValueProperty)
 {
 
-	typedef Map<String, Vector<Pair<Property, Property>>> _tmp1;
+	typedef Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> _tmp1;
 	typedef const Vector<Pair<ScriptValue, ScriptValue>>& _tmp2;
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();

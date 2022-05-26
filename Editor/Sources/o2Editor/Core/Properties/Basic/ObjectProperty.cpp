@@ -85,9 +85,9 @@ namespace Editor
 		{
 			mObjectViewer->Refresh(mTargetObjects.Convert<Pair<IObject*, IObject*>>(
 				[&](const Pair<TargetObjectData, TargetObjectData>& x)
-			{
-				return Pair<IObject*, IObject*>(x.first.data, x.second.data);
-			}));
+				{
+					return Pair<IObject*, IObject*>(x.first.data, x.second.data);
+				}));
 		}
 
 		SetEnabled(mObjectViewer && !mObjectViewer->IsEmpty() || !mNoHeader);
@@ -113,13 +113,14 @@ namespace Editor
 
 			if (objectType)
 			{
-				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath, onChangeCompleted, 
+				mObjectViewer = o2EditorProperties.CreateObjectViewer(objectType, mValuesPath,
+																	  THIS_FUNC(OnPropertyChanged),
 																	  onChanged);
 
 				AddChild(mObjectViewer->GetSpoiler());
 				mObjectViewer->SetParentContext(mParentContext);
 				mObjectViewer->SetHeaderEnabled(!mNoHeader);
-				mObjectViewer->SetExpanded(mExpanded); 
+				mObjectViewer->SetExpanded(mExpanded);
 				mObjectViewer->GetSpoiler()->SetCaption(mCaption);
 			}
 		}
@@ -207,12 +208,31 @@ namespace Editor
 		res.proxy = proxy;
 
 		const ObjectType& objectType = dynamic_cast<const ObjectType&>(proxy->GetType());
+
+		bool usedRawPointer = false;
 		if (auto pointerProxy = dynamic_cast<IPointerValueProxy*>(proxy))
 		{
 			res.data = objectType.DynamicCastToIObject(pointerProxy->GetValueVoidPointer());
 			res.isCreated = false;
+			usedRawPointer = true;
 		}
-		else
+		
+#if IS_SCRIPTING_SUPPORTED
+		if (auto scriptProxy = dynamic_cast<ScriptValueProxy*>(proxy))
+		{
+			ScriptValue value = scriptProxy->Get();
+			if (value.IsObjectContainer())
+			{
+				if (auto valueObjectType = dynamic_cast<const ObjectType*>(value.GetObjectContainerType()))
+				{
+					res.data = valueObjectType->DynamicCastToIObject(value.GetContainingObject());
+					res.isCreated = false;
+					usedRawPointer = true;
+				}
+			}
+		}
+#endif
+		if (!usedRawPointer)
 		{
 			void* sample = objectType.CreateSample();
 			proxy->GetValuePtr(sample);
@@ -224,7 +244,7 @@ namespace Editor
 		return res;
 	}
 
-	void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
+	void ObjectProperty::OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
 										   const Vector<DataDocument>& after)
 	{
 		for (auto& pair : mTargetObjects)

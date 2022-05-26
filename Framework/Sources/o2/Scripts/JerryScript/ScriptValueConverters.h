@@ -58,6 +58,12 @@ namespace o2
 		public:
 			FieldProcessor(ScriptValue& value, ProtectSection section):BaseFieldProcessor(value) { this->section = section; }
 
+			template<typename _attribute_type, typename ... _args>
+			FieldProcessor& AddAttribute(_args ... args) { return *this; }
+
+			template<typename _type>
+			FieldProcessor& SetDefaultValue(const _type& value) { return *this; }
+
 			template<typename _object_type, typename _field_type>
 			FieldProcessor& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
 										_field_type& field)

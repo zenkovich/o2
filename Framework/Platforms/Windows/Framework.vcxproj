@@ -576,5 +576,6 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\ValueProxy.cpp" />
   </ItemGroup>
 </Project>

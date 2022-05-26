@@ -95,6 +95,20 @@ namespace o2
 		return GetValueType() == ValueType::Function;
 	}
 
+	bool ScriptValueProperty::operator==(const ScriptValueProperty& other) const
+	{
+		return object == other.object && name == other.name;
+	}
+
+	ScriptValue ScriptValueProperty::Get() const
+	{
+		return object.GetProperty(name);
+	}
+
+	void ScriptValueProperty::Set(const ScriptValue& value)
+	{
+		object.SetProperty(name, value);
+	}
 }
 
 ENUM_META(o2::ScriptValue::ValueType)

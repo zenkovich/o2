@@ -21,7 +21,6 @@ namespace o2
 		return &TypeOf(_type);
 	}
 
-
 	template<typename _type>
 	ScriptValue::ScriptValue(const _type& value)
 	{
@@ -320,7 +319,6 @@ namespace o2
 			return (*pointer)(args ...);
 		})));
 	}
-
 }
 
 #endif // SCRIPTING_BACKEND_JERRYSCRIPT

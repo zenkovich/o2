@@ -2,10 +2,17 @@
 
 #include "o2/Utils/Function.h"
 
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptValue.h"
+#endif
+
 namespace o2
 {
 	class Type;
 	
+	// ----------------------------------------------------------------------------
+	// Abstract value proxy. Accepts by void*, value by pointer must match the type
+	// ----------------------------------------------------------------------------
 	class IAbstractValueProxy
 	{
 	public:
@@ -16,6 +23,9 @@ namespace o2
 		virtual const Type& GetType() const = 0;
 	};
 
+	// -----------------
+	// Typed value proxy
+	// -----------------
 	template<typename _type>
 	class IValueProxy: public IAbstractValueProxy
 	{
@@ -28,12 +38,18 @@ namespace o2
 		const Type& GetType() const override;
 	};
 
+	// ------------------------------------------------------------
+	// Pointer value proxy interface. Can returns to source pointer
+	// ------------------------------------------------------------
 	class IPointerValueProxy
 	{
 	public:
 		virtual void* GetValueVoidPointer() const = 0;
 	};
 
+	// ------------------------------------------------------------------------
+	// Typed pointer value proxy. Stores the pointer to value and works with it
+	// ------------------------------------------------------------------------
 	template<typename _type>
 	class PointerValueProxy: public IValueProxy<_type>, public IPointerValueProxy
 	{
@@ -51,6 +67,9 @@ namespace o2
 		void* GetValueVoidPointer() const override { return (void*)mValuePtr; }
 	};
 
+	// ----------------------------------------------------
+	// Functional proxy, uses function to set and get value
+	// ----------------------------------------------------
 	template<typename _type>
 	class FunctionalValueProxy: public IValueProxy<_type>
 	{
@@ -67,6 +86,9 @@ namespace o2
 		_type GetValue() const override { return mGetter(); }
 	};
 	
+	// -------------------------------------------------------------------------
+	// Property proxy, uses setter and getter from property to set and get value
+	// -------------------------------------------------------------------------
 	template<typename _type, typename _property_type>
 	class PropertyValueProxy: public IValueProxy<_type>
 	{
@@ -81,6 +103,56 @@ namespace o2
 		void SetValue(const _type& value) override { mProperty->Set(value); }
 		_type GetValue() const override { return mProperty->Get(); }
 	};
+
+
+#if IS_SCRIPTING_SUPPORTED
+	// --------------------------
+	// Unified script value proxy
+	// --------------------------
+	class ScriptValueProxy : public IAbstractValueProxy, public ScriptValueProperty
+	{
+	public:
+		ScriptValueProxy();
+		ScriptValueProxy(const ScriptValueProperty& prop);
+
+		void SetValuePtr(void* value) override;
+		void GetValuePtr(void* value) const override;
+		const Type& GetType() const override;
+	};
+
+	// ------------------------
+	// Script value typed proxy
+	// ------------------------
+	template<typename _type>
+	class TypeScriptValueProxy : public IValueProxy<_type>, public ScriptValueProperty
+	{
+	public:
+		TypeScriptValueProxy();
+		TypeScriptValueProxy(const ScriptValueProperty& prop);
+
+		void SetValue(const _type& value) override;
+		_type GetValue() const override;
+	};
+
+	// ----------------------------------------
+	// Pointer script value proxy, using _type*
+	// ----------------------------------------
+	template<typename _type>
+	class PtrScriptValueProxy : public IValueProxy<_type>, public ScriptValueProperty
+	{
+	public:
+		ScriptValueProperty prop;
+
+	public:
+		PtrScriptValueProxy();
+		PtrScriptValueProxy(const ScriptValueProperty& prop);
+
+		void SetValue(const _type& value) override;
+		_type GetValue() const override;
+
+		const Type& GetType() const override;
+	};
+#endif
 }
 
 #include "o2/Utils/Reflection/Type.h"
@@ -104,4 +176,55 @@ namespace o2
 	{
 		return TypeOf(_type);
 	}
+
+#if IS_SCRIPTING_SUPPORTED
+	template<typename _type>
+	TypeScriptValueProxy<_type>::TypeScriptValueProxy(const ScriptValueProperty& prop) :ScriptValueProperty(prop)
+	{}
+
+	template<typename _type>
+	TypeScriptValueProxy<_type>::TypeScriptValueProxy()
+	{}
+
+	template<typename _type>
+	void TypeScriptValueProxy<_type>::SetValue(const _type& value)
+	{
+		Set(ScriptValue(value));
+	}
+
+	template<typename _type>
+	_type TypeScriptValueProxy<_type>::GetValue() const
+	{
+		return Get().GetValue<_type>();
+	}
+
+	template<typename _type>
+	PtrScriptValueProxy<_type>::PtrScriptValueProxy(const ScriptValueProperty& prop) :ScriptValueProperty(prop)
+	{}
+
+	template<typename _type>
+	PtrScriptValueProxy<_type>::PtrScriptValueProxy()
+	{}
+
+	template<typename _type>
+	void PtrScriptValueProxy<_type>::SetValue(const _type& value)
+	{
+		Set(ScriptValue(mnew _type(value)));
+	}
+
+	template<typename _type>
+	_type PtrScriptValueProxy<_type>::GetValue() const
+	{
+		return *Get().GetValue<_type*>();
+	}
+
+	template<typename _type>
+	const Type& PtrScriptValueProxy<_type>::GetType() const
+	{
+		if constexpr (std::is_base_of<IObject, _type>::value)
+			return Get().GetValue<_type*>()->GetType();
+		else
+			return TypeOf(_type);
+	}
+#endif
 }

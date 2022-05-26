@@ -208,7 +208,24 @@ namespace o2
 		}
 	};
 
+	// ------------------------------
+	// Script object property wrapper
+	// ------------------------------
+	struct ScriptValueProperty
+	{
+		ScriptValue object; // Property owner object
+		ScriptValue name;   // Property name
+
+	public:
+		ScriptValue Get() const;
+		void Set(const ScriptValue& value);
+
+		bool operator==(const ScriptValueProperty& other) const;
+	};
+
+	// ----------------------------------------------
 	// Script value simple types prototypes container
+	// ----------------------------------------------
 	struct ScriptValuePrototypes
 	{
 		static ScriptValue*& GetVec2Prototype();

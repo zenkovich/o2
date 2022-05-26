@@ -45,17 +45,17 @@ namespace Editor
 		AddChild(mSpoiler);
 	}
 
-	Map<String, Vector<Pair<ScriptValueProperty::Property, ScriptValueProperty::Property>>> ScriptValueProperty::GetCommonProperties(
+	Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> ScriptValueProperty::GetCommonProperties(
 		const Vector<Pair<ScriptValue, ScriptValue>>& values) const
 	{
-		Map<String, Vector<Pair<Property, Property>>> res;
+		Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> res;
 
 		for (auto kv : values)
 		{
 			kv.first.ForEachProperties(
 				[&](const ScriptValue& name, const ScriptValue& value)
 				{
-					Pair<Property, Property> elem;
+					Pair<o2::ScriptValueProperty, o2::ScriptValueProperty> elem;
 					elem.first = { kv.first, name };
 					if (kv.second.IsObject())
 						elem.second = { kv.second, name };
@@ -66,7 +66,7 @@ namespace Editor
 		}
 
 		// Leave only common properties
-		res.RemoveAll([&](const String& k, const Vector<Pair<Property, Property>>& v)
+		res.RemoveAll([&](const String& k, const auto& v)
 					  {
 						  return v.Count() != values.Count();
 					  });
@@ -182,12 +182,12 @@ namespace Editor
 					else if (value.IsObjectContainer())
 					{
 						auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-							[](const Pair<Property, Property>& x)
+							[](const Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>& x)
 							{
 								Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-								res.first = mnew SimpleScriptValueProxy(x.first);
+								res.first = mnew ScriptValueProxy(x.first);
 								if (x.second.object.IsObject())
-									res.second = mnew SimpleScriptValueProxy(x.second);
+									res.second = mnew ScriptValueProxy(x.second);
 
 								return res;
 							});
@@ -309,43 +309,6 @@ namespace Editor
 	{
 		onChangeCompleted(path, before, after);
 	}
-
-	bool ScriptValueProperty::Property::operator==(const Property& other) const
-	{
-		return object == other.object && name == other.name;
-	}
-
-	ScriptValue ScriptValueProperty::Property::Get() const
-	{
-		return object.GetProperty(name);
-	}
-
-	void ScriptValueProperty::Property::Set(const ScriptValue& value)
-	{
-		object.SetProperty(name, value);
-	}
-
-	ScriptValueProperty::SimpleScriptValueProxy::SimpleScriptValueProxy(const Property& prop) :Property(prop)
-	{}
-
-	ScriptValueProperty::SimpleScriptValueProxy::SimpleScriptValueProxy()
-	{}
-
-	void ScriptValueProperty::SimpleScriptValueProxy::SetValuePtr(void* value)
-	{
-		GetType().CopyValue(Get().GetContainingObject(), value);
-	}
-
-	void ScriptValueProperty::SimpleScriptValueProxy::GetValuePtr(void* value) const
-	{
-		GetType().CopyValue(value, Get().GetContainingObject());
-	}
-
-	const Type& ScriptValueProperty::SimpleScriptValueProxy::GetType() const
-	{
-		return *Get().GetObjectContainerType();
-	}
-
 }
 
 DECLARE_CLASS(Editor::ScriptValueProperty);
