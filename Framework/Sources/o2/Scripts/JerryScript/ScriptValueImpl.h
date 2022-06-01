@@ -74,6 +74,48 @@ namespace o2
 		SetProperty(ScriptValue(name), ScriptValue(value));
 	}
 
+	template<typename _class_type, typename _res_type, typename ... _args>
+	void ScriptValue::SetProperty(const char* name, _class_type* object, _res_type(_class_type::* functionPtr)(_args ... args))
+	{
+		if constexpr (std::is_same<void, _res_type>::value) {
+			SetProperty(name, std::function<void(_args ...)>(
+				[object, functionPtr](_args ... args)
+				{
+					(object->*functionPtr)(args ...);
+				}));
+		}
+		else {
+			typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+			SetProperty(name, std::function<__res_type(_args ...)>(
+				[object, functionPtr](_args ... args)
+				{
+					__res_type res = (object->*functionPtr)(args ...);
+					return res;
+				}));
+		}
+	}
+
+	template<typename _class_type, typename _res_type, typename ... _args>
+	void ScriptValue::SetProperty(const char* name, _class_type* object, _res_type(_class_type::* functionPtr)(_args ... args) const)
+	{
+		if constexpr (std::is_same<void, _res_type>::value) {
+			SetProperty(name, std::function<void(_args ...)>(
+				[object, functionPtr](_args ... args)
+				{
+					(object->*functionPtr)(args ...);
+				}));
+		}
+		else {
+			typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+			SetProperty(name, std::function<__res_type(_args ...)>(
+				[object, functionPtr](_args ... args)
+				{
+					__res_type res = (object->*functionPtr)(args ...);
+					return res;
+				}));
+		}
+	}
+
 	template<typename _type>
 	void ScriptValue::SetPropertyWrapper(const ScriptValue& name, _type& value)
 	{
@@ -181,6 +223,17 @@ namespace o2
 			return InvokeRaw(thisValue, argsValues).GetValue<_res_type>();
 	}
 
+	template<typename _res_type, typename ... _args>
+	void ScriptValue::SetThisFunction(const Function<_res_type(ScriptValue, _args ...)>& func)
+	{
+		Accept(jerry_create_external_function(&CallFunction));
+
+		IDataContainer* funcContainer = mnew ThisFunctionContainer<Function<_res_type(ScriptValue, _args ...)>, _res_type, _args ...>(
+			mnew Function<_res_type(ScriptValue, _args ...)>(func));
+
+		jerry_set_object_native_pointer(jvalue, funcContainer, &GetDataDeleter().info);
+	}
+
 	template<typename _invocable_type, typename _res_type, typename ... _args>
 	jerry_value_t ScriptValueBase::FunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount)
 	{
@@ -210,6 +263,44 @@ namespace o2
 			else
 			{
 				ScriptValue res((*data)());
+				return jerry_acquire_value(res.jvalue);
+			}
+		}
+	}
+
+	template<typename _invocable_type, typename _res_type, typename ... _args>
+	jerry_value_t ScriptValueBase::ThisFunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount)
+	{
+		ScriptValue thisValueObj;
+		thisValueObj.AcquireValue(thisValue);
+
+		if constexpr (sizeof...(_args) > 0)
+		{
+			std::tuple<ScriptValue, typename std::remove_const<typename std::remove_reference<_args>::type>::type...> argst;
+			std::get<0>(argst) = thisValueObj;
+			UnpackArgs<1, 0, ScriptValue, _args ...>(argst, args, argsCount);
+
+			if constexpr (std::is_same<_res_type, void>::value)
+			{
+				std::apply(*data, argst);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res(std::apply(*data, argst));
+				return jerry_acquire_value(res.jvalue);
+			}
+		}
+		else
+		{
+			if constexpr (std::is_same<_res_type, void>::value)
+			{
+				(*data)(thisValueObj);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res((*data)(thisValueObj));
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -265,9 +356,9 @@ namespace o2
 
 	class Type;
 
-	struct ScriptConstructorTypeProcessor: public BaseTypeProcessor
+	struct ScriptConstructorTypeProcessor : public BaseTypeProcessor
 	{
-		struct BaseFunctionProcessor: public BaseTypeProcessor::FunctionProcessor
+		struct BaseFunctionProcessor : public BaseTypeProcessor::FunctionProcessor
 		{
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args);
@@ -275,7 +366,7 @@ namespace o2
 			BaseFunctionProcessor& SetProtectSection(ProtectSection section) { return *this; }
 		};
 
-		struct FunctionProcessor: public BaseFunctionProcessor
+		struct FunctionProcessor : public BaseFunctionProcessor
 		{
 			template<typename _object_type, typename ... _args>
 			void Constructor(_object_type* object, Type* type);
@@ -308,16 +399,16 @@ namespace o2
 			auto res = sample->GetScriptValue();
 			res.SetObjectOwnership(true);
 			return res;
-		})));
+																												   })));
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
-	void ScriptConstructorTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type, 
+	void ScriptConstructorTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type,
 																			const char* name, _res_type(*pointer)(_args ...))
 	{
 		ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(type, name, ScriptValue(Function<_res_type(_args ...)>([=](_args ... args) {
 			return (*pointer)(args ...);
-		})));
+																														  })));
 	}
 }
 

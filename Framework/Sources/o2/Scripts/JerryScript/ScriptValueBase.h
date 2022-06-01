@@ -34,15 +34,15 @@ namespace o2
 		};
 
 		template<typename _type>
-		struct DataContainer: public IDataContainer
+		struct DataContainer : public IDataContainer
 		{
 			_type* data;
 
-			DataContainer(_type* data):data(data) {}
-			~DataContainer() override 
-			{ 
-				if (isDataOwner && data) 
-					delete data; 
+			DataContainer(_type* data) :data(data) {}
+			~DataContainer() override
+			{
+				if (isDataOwner && data)
+					delete data;
 			}
 
 			void* GetData() const override { return data; }
@@ -58,24 +58,31 @@ namespace o2
 		};
 
 		template<typename _invocable_type, typename _res_type, typename ... _args>
-		struct FunctionContainer: public DataContainer<_invocable_type>, public IFunctionContainer
+		struct FunctionContainer : public DataContainer<_invocable_type>, public IFunctionContainer
 		{
-			FunctionContainer(_invocable_type* function):DataContainer(function) {}
+			FunctionContainer(_invocable_type* function) :DataContainer(function) {}
 			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
 		};
 
-		struct ISetterWrapperContainer: public IDataContainer
+		template<typename _invocable_type, typename _res_type, typename ... _args>
+		struct ThisFunctionContainer : public DataContainer<_invocable_type>, public IFunctionContainer
+		{
+			ThisFunctionContainer(_invocable_type* function) :DataContainer(function) {}
+			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
+		};
+
+		struct ISetterWrapperContainer : public IDataContainer
 		{
 			virtual void Set(jerry_value_t value) = 0;
 		};
 
-		struct IGetterWrapperContainer: public IDataContainer
+		struct IGetterWrapperContainer : public IDataContainer
 		{
 			virtual jerry_value_t Get() = 0;
 		};
 
 		template<typename _type>
-		struct PointerSetterWrapperContainer: public ISetterWrapperContainer
+		struct PointerSetterWrapperContainer : public ISetterWrapperContainer
 		{
 			_type* dataPtr = nullptr;
 
@@ -83,7 +90,7 @@ namespace o2
 		};
 
 		template<typename _type>
-		struct PointerGetterWrapperContainer: public IGetterWrapperContainer
+		struct PointerGetterWrapperContainer : public IGetterWrapperContainer
 		{
 			_type* dataPtr = nullptr;
 
@@ -91,7 +98,7 @@ namespace o2
 		};
 
 		template<typename _property_type>
-		struct PropertySetterWrapperContainer: public ISetterWrapperContainer
+		struct PropertySetterWrapperContainer : public ISetterWrapperContainer
 		{
 			_property_type* propertyPtr = nullptr;
 
@@ -99,7 +106,7 @@ namespace o2
 		};
 
 		template<typename _property_type>
-		struct PropertyGetterWrapperContainer: public IGetterWrapperContainer
+		struct PropertyGetterWrapperContainer : public IGetterWrapperContainer
 		{
 			_property_type* propertyPtr = nullptr;
 
@@ -107,7 +114,7 @@ namespace o2
 		};
 
 		template<typename _type>
-		struct FunctionalSetterWrapperContainer: public ISetterWrapperContainer
+		struct FunctionalSetterWrapperContainer : public ISetterWrapperContainer
 		{
 			Function<void(const _type& value)> setter;
 
@@ -115,7 +122,7 @@ namespace o2
 		};
 
 		template<typename _type>
-		struct FunctionalGetterWrapperContainer: public IGetterWrapperContainer
+		struct FunctionalGetterWrapperContainer : public IGetterWrapperContainer
 		{
 			Function<_type()> getter;
 
@@ -148,17 +155,17 @@ namespace o2
 											  const jerry_value_t args_p[],
 											  const jerry_length_t args_count);
 
-		template<size_t _i = 0, typename... _args>
+		template<size_t _i = 0, size_t _j = 0, typename... _args>
 		static void UnpackArgs(std::tuple<_args ...>& argst, jerry_value_t* args, int argsCount)
 		{
-			if (_i < argsCount)
+			if (_j < argsCount)
 			{
 				ScriptValue tmp;
-				tmp.AcquireValue(args[_i]);
+				tmp.AcquireValue(args[_j]);
 				std::get<_i>(argst) = tmp.GetValue<std::remove_reference<decltype(std::get<_i>(argst))>::type>();
 
 				if constexpr (_i + 1 != sizeof...(_args))
-					UnpackArgs<_i + 1>(argst, args, argsCount);
+					UnpackArgs<_i + 1, _j + 1>(argst, args, argsCount);
 			}
 		}
 

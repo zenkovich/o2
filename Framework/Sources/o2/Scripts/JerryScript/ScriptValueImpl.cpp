@@ -161,7 +161,7 @@ namespace o2
 		if (dataContainer)
 			dataContainer->isDataOwner = own;
 	}
-	
+
 	ScriptValue ScriptValue::Construct(const Vector<ScriptValue>& args)
 	{
 		const int maxParameters = 16;
@@ -216,7 +216,7 @@ namespace o2
 		res.Accept(jerry_get_internal_property(jvalue, name.jvalue));
 		return res;
 	}
-	
+
 	ScriptValue ScriptValue::GetOwnProperty(const ScriptValue& name) const
 	{
 		ScriptValue res;

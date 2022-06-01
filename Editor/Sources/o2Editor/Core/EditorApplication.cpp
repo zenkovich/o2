@@ -138,6 +138,12 @@ namespace Editor
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
+		ScriptValue tttConstruct;
+		tttConstruct.SetThisFunction(Function<void(ScriptValue, int)>([](ScriptValue xx, int x) { xx.SetProperty("x", x); }));
+		o2Scripts.GetGlobal().SetProperty("ttt", tttConstruct);
+
+		o2Scripts.Eval("let xttt = new ttt(5); print(JSON.stringify(xttt));");
+
 		o2Debug.LogStr("---Dump global---\n" + o2Scripts.GetGlobal().Dump() + "\n---------------");
 		// 
 		//float testValue = 0;
