@@ -69,6 +69,15 @@ namespace o2
 	}
 
 	template<typename _type>
+	void ScriptValue::SetContainingObject(_type* object, bool owner /*= true*/)
+	{
+		auto dataContainer = mnew DataContainer<_type>(object);
+		dataContainer->isDataOwner = owner;
+		jerry_set_object_native_pointer(jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
+	}
+
+
+	template<typename _type>
 	void ScriptValue::SetProperty(const char* name, const _type& value)
 	{
 		SetProperty(ScriptValue(name), ScriptValue(value));
@@ -278,7 +287,7 @@ namespace o2
 		{
 			std::tuple<ScriptValue, typename std::remove_const<typename std::remove_reference<_args>::type>::type...> argst;
 			std::get<0>(argst) = thisValueObj;
-			UnpackArgs<1, 0, ScriptValue, _args ...>(argst, args, argsCount);
+			UnpackArgs<1, 0, ScriptValue, typename std::remove_const<typename std::remove_reference<_args>::type>::type...>(argst, args, argsCount);
 
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
@@ -394,12 +403,20 @@ namespace o2
 	template<typename _object_type, typename ... _args>
 	void ScriptConstructorTypeProcessor::FunctionProcessor::Constructor(_object_type* object, Type* type)
 	{
-		ScriptConstructorTypeProcessor::RegisterTypeConstructor(type, ScriptValue(Function<ScriptValue(_args ...)>([](_args ... args) {
-			_object_type* sample = mnew _object_type(args ...);
-			auto res = sample->GetScriptValue();
-			res.SetObjectOwnership(true);
-			return res;
-																												   })));
+		ScriptValue thisFunc;
+		thisFunc.SetThisFunction<void, _args ...>(Function<void(ScriptValue thisValue, _args ...)>(
+			[](ScriptValue thisValue, _args ... args) {
+				_object_type* sample = mnew _object_type(args ...);
+				thisValue.SetContainingObject(sample, true);
+
+				if constexpr (std::is_base_of<IObject, _object_type>::value && !std::is_same<IObject, _object_type>::value)
+				{
+					ReflectScriptValueTypeProcessor processor(thisValue);
+					_object_type::ProcessType<ReflectScriptValueTypeProcessor>(sample, processor);
+				}
+			}));
+
+		ScriptConstructorTypeProcessor::RegisterTypeConstructor(type, thisFunc);
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>

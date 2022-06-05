@@ -791,6 +791,9 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueReflectionProcessor.h">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">

@@ -467,7 +467,19 @@ namespace o2
 
 	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc)
 	{
-		GetNameSpace(o2Scripts.GetGlobal(), type->GetName()).SetProperty("New", constructorFunc);
+		String typeName = type->GetName();
+		String nameSpace, shortTypeName;
+
+		int del = typeName.FindLast("::");
+		if (del < 0)
+			shortTypeName = typeName;
+		else
+		{
+			nameSpace = typeName.SubStr(0, del);
+			shortTypeName = typeName.SubStr(del + 2);
+		}
+
+		GetNameSpace(o2Scripts.GetGlobal(), nameSpace).SetProperty(shortTypeName.Data(), constructorFunc);
 	}
 
 	void ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func)

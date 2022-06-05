@@ -294,6 +294,7 @@
     <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueBase.h" />
     <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueConverters.h" />
     <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.h" />
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueReflectionProcessor.h" />
     <ClInclude Include="..\..\Sources\o2\Scripts\ScriptEngine.h" />
     <ClInclude Include="..\..\Sources\o2\Scripts\ScriptValue.h" />
     <ClInclude Include="..\..\Sources\o2\Scripts\ScriptValueDef.h" />
