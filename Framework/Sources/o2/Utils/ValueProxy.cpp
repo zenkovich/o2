@@ -4,25 +4,32 @@
 namespace o2
 {
 #if IS_SCRIPTING_SUPPORTED
-	ScriptValueProxy::ScriptValueProxy(const ScriptValueProperty& prop) :ScriptValueProperty(prop)
+	ScriptValueProxy::ScriptValueProxy(IScriptValueProperty* prop) :
+		scriptProperty(prop)
 	{}
 
 	ScriptValueProxy::ScriptValueProxy()
 	{}
 
+	ScriptValueProxy::~ScriptValueProxy()
+	{
+		if (scriptProperty)
+			delete scriptProperty;
+	}
+
 	void ScriptValueProxy::SetValuePtr(void* value)
 	{
-		GetType().CopyValue(Get().GetContainingObject(), value);
+		GetType().CopyValue(scriptProperty->Get().GetContainingObject(), value);
 	}
 
 	void ScriptValueProxy::GetValuePtr(void* value) const
 	{
-		GetType().CopyValue(value, Get().GetContainingObject());
+		GetType().CopyValue(value, scriptProperty->Get().GetContainingObject());
 	}
 
 	const Type& ScriptValueProxy::GetType() const
 	{
-		return *Get().GetObjectContainerType();
+		return *scriptProperty->Get().GetObjectContainerType();
 	}
 #endif
 }

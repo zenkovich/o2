@@ -92,19 +92,19 @@ namespace Editor
 		void InitializeControls();
 
 		// Returns mapped common properties
-		Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values) const;
+		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values) const;
 
 		//Adds property by type
 		void AddProperty(const String& name, const Type* type);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldProxies(Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>>& commonProperties,
+		void SetFieldProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
 							 const String& name, IPropertyField* field);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldPtrProxies(Map<String, Vector<Pair<ScriptValueProperty, ScriptValueProperty>>>& commonProperties,
+		void SetFieldPtrProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
 								const String& name, IPropertyField* field);
 
 		// It is called when some property changed, sets value via proxy
@@ -113,15 +113,15 @@ namespace Editor
 	};
 
 	template<typename _type>
-	void ScriptValueProperty::SetFieldProxies(Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>>& commonProperties,
+	void ScriptValueProperty::SetFieldProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
 											  const String& name, IPropertyField* field)
 	{
 		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](const Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>& x)
+			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
 				res.first = mnew TypeScriptValueProxy<_type>(x.first);
-				if (x.second.object.IsObject())
+				if (x.second->Get().IsObject())
 					res.second = mnew TypeScriptValueProxy<_type>(x.second);
 
 				return res;
@@ -131,15 +131,15 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void ScriptValueProperty::SetFieldPtrProxies(Map<String, Vector<Pair<ScriptValueProperty, ScriptValueProperty>>>& commonProperties,
+	void ScriptValueProperty::SetFieldPtrProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
 												 const String& name, IPropertyField* field)
 	{
 		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-			[](const Pair<ScriptValueProperty, ScriptValueProperty>& x)
+			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
 				res.first = mnew PtrScriptValueProxy<_type>(x.first);
-				if (x.second.object.IsObject())
+				if (x.second->Get().IsObject())
 					res.second = mnew PtrScriptValueProxy<_type>(x.second);
 
 				return res;
@@ -167,7 +167,7 @@ END_META;
 CLASS_METHODS_META(Editor::ScriptValueProperty)
 {
 
-	typedef Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> _tmp1;
+	typedef Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> _tmp1;
 	typedef const Vector<Pair<ScriptValue, ScriptValue>>& _tmp2;
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();

@@ -109,11 +109,15 @@ namespace o2
 	// --------------------------
 	// Unified script value proxy
 	// --------------------------
-	class ScriptValueProxy : public IAbstractValueProxy, public ScriptValueProperty
+	class ScriptValueProxy : public IAbstractValueProxy
 	{
 	public:
+		IScriptValueProperty* scriptProperty = nullptr;
+
+	public:
 		ScriptValueProxy();
-		ScriptValueProxy(const ScriptValueProperty& prop);
+		ScriptValueProxy(IScriptValueProperty* prop);
+		~ScriptValueProxy() override;
 
 		void SetValuePtr(void* value) override;
 		void GetValuePtr(void* value) const override;
@@ -127,8 +131,12 @@ namespace o2
 	class TypeScriptValueProxy : public IValueProxy<_type>, public ScriptValueProperty
 	{
 	public:
+		IScriptValueProperty* scriptProperty = nullptr;
+
+	public:
 		TypeScriptValueProxy();
-		TypeScriptValueProxy(const ScriptValueProperty& prop);
+		TypeScriptValueProxy(IScriptValueProperty* prop);
+		~TypeScriptValueProxy() override;
 
 		void SetValue(const _type& value) override;
 		_type GetValue() const override;
@@ -141,11 +149,12 @@ namespace o2
 	class PtrScriptValueProxy : public IValueProxy<_type>, public ScriptValueProperty
 	{
 	public:
-		ScriptValueProperty prop;
+		IScriptValueProperty* scriptProperty = nullptr;
 
 	public:
 		PtrScriptValueProxy();
-		PtrScriptValueProxy(const ScriptValueProperty& prop);
+		PtrScriptValueProxy(IScriptValueProperty* prop);
+		~PtrScriptValueProxy() override;
 
 		void SetValue(const _type& value) override;
 		_type GetValue() const override;
@@ -179,50 +188,66 @@ namespace o2
 
 #if IS_SCRIPTING_SUPPORTED
 	template<typename _type>
-	TypeScriptValueProxy<_type>::TypeScriptValueProxy(const ScriptValueProperty& prop) :ScriptValueProperty(prop)
-	{}
-
-	template<typename _type>
 	TypeScriptValueProxy<_type>::TypeScriptValueProxy()
 	{}
 
 	template<typename _type>
+	TypeScriptValueProxy<_type>::TypeScriptValueProxy(IScriptValueProperty* prop)
+		:scriptProperty(prop)
+	{}
+
+	template<typename _type>
+	TypeScriptValueProxy<_type>::~TypeScriptValueProxy()
+	{
+		if (scriptProperty)
+			delete scriptProperty;
+	}
+
+	template<typename _type>
 	void TypeScriptValueProxy<_type>::SetValue(const _type& value)
 	{
-		Set(ScriptValue(value));
+		scriptProperty->Set(ScriptValue(value));
 	}
 
 	template<typename _type>
 	_type TypeScriptValueProxy<_type>::GetValue() const
 	{
-		return Get().GetValue<_type>();
+		return scriptProperty->Get().GetValue<_type>();
 	}
-
-	template<typename _type>
-	PtrScriptValueProxy<_type>::PtrScriptValueProxy(const ScriptValueProperty& prop) :ScriptValueProperty(prop)
-	{}
 
 	template<typename _type>
 	PtrScriptValueProxy<_type>::PtrScriptValueProxy()
 	{}
 
 	template<typename _type>
+	PtrScriptValueProxy<_type>::PtrScriptValueProxy(IScriptValueProperty* prop)
+		:scriptProperty(prop)
+	{}
+
+	template<typename _type>
+	PtrScriptValueProxy<_type>::~PtrScriptValueProxy()
+	{
+		if (scriptProperty)
+			delete scriptProperty;
+	}
+
+	template<typename _type>
 	void PtrScriptValueProxy<_type>::SetValue(const _type& value)
 	{
-		Set(ScriptValue(mnew _type(value)));
+		scriptProperty->Set(ScriptValue(mnew _type(value)));
 	}
 
 	template<typename _type>
 	_type PtrScriptValueProxy<_type>::GetValue() const
 	{
-		return *Get().GetValue<_type*>();
+		return *scriptProperty->Get().GetValue<_type*>();
 	}
 
 	template<typename _type>
 	const Type& PtrScriptValueProxy<_type>::GetType() const
 	{
 		if constexpr (std::is_base_of<IObject, _type>::value)
-			return Get().GetValue<_type*>()->GetType();
+			return scriptProperty->Get().GetValue<_type*>()->GetType();
 		else
 			return TypeOf(_type);
 	}

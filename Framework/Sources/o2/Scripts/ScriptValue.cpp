@@ -109,6 +109,21 @@ namespace o2
 	{
 		object.SetProperty(name, value);
 	}
+
+	ScriptValue ScriptValueArrayElement::Get() const
+	{
+		return object.GetElement(idx);
+	}
+
+	void ScriptValueArrayElement::Set(const ScriptValue& value)
+	{
+		object.SetElement(value, idx);
+	}
+
+	bool ScriptValueArrayElement::operator==(const ScriptValueArrayElement& other) const
+	{
+		return object == other.object && idx == other.idx;
+	}
 }
 
 ENUM_META(o2::ScriptValue::ValueType)

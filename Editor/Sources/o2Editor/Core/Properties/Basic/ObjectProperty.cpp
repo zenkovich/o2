@@ -220,7 +220,7 @@ namespace Editor
 #if IS_SCRIPTING_SUPPORTED
 		if (auto scriptProxy = dynamic_cast<ScriptValueProxy*>(proxy))
 		{
-			ScriptValue value = scriptProxy->Get();
+			ScriptValue value = scriptProxy->scriptProperty->Get();
 			if (value.IsObjectContainer())
 			{
 				if (auto valueObjectType = dynamic_cast<const ObjectType*>(value.GetObjectContainerType()))

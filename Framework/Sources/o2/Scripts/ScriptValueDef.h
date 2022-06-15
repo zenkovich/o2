@@ -170,6 +170,9 @@ namespace o2
 		// Sets array index
 		void SetElement(const ScriptValue& value, int idx);
 
+		// Returns array index
+		ScriptValue GetElement(int idx) const;
+
 		// Adds array element at end
 		void AddElement(const ScriptValue& value);
 
@@ -224,19 +227,51 @@ namespace o2
 		}
 	};
 
+	// -----------------------------------
+	// Basic script value property wrapper
+	// -----------------------------------
+	struct IScriptValueProperty
+	{
+		virtual ScriptValue Get() const = 0;
+		virtual void Set(const ScriptValue& value) = 0;
+	};
+
 	// ------------------------------
 	// Script object property wrapper
 	// ------------------------------
-	struct ScriptValueProperty
+	struct ScriptValueProperty : public IScriptValueProperty
 	{
 		ScriptValue object; // Property owner object
 		ScriptValue name;   // Property name
 
 	public:
-		ScriptValue Get() const;
-		void Set(const ScriptValue& value);
+		ScriptValueProperty() {}
+ 		ScriptValueProperty(const ScriptValue& object, const ScriptValue& name) :
+ 			object(object), name(name) {}
+
+		ScriptValue Get() const /*override*/;
+		void Set(const ScriptValue& value) /*override*/;
 
 		bool operator==(const ScriptValueProperty& other) const;
+	};
+
+	// -------------------------------------
+	// Script array element property wrapper
+	// -------------------------------------
+	struct ScriptValueArrayElement : public IScriptValueProperty
+	{
+		ScriptValue object;  // Property owner array
+		int         idx = 0; // Value idx
+
+	public:
+		ScriptValueArrayElement() {}
+		ScriptValueArrayElement(const ScriptValue& object, int idx) :
+			object(object), idx(idx) {}
+
+		ScriptValue Get() const override;
+		void Set(const ScriptValue& value) override;
+
+		bool operator==(const ScriptValueArrayElement& other) const;
 	};
 
 	// ----------------------------------------------

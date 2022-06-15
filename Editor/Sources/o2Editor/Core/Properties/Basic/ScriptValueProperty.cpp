@@ -45,24 +45,39 @@ namespace Editor
 		AddChild(mSpoiler);
 	}
 
-	Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> ScriptValueProperty::GetCommonProperties(
+	Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> ScriptValueProperty::GetCommonProperties(
 		const Vector<Pair<ScriptValue, ScriptValue>>& values) const
 	{
-		Map<String, Vector<Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>>> res;
+		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> res;
 
 		for (auto kv : values)
 		{
-			kv.first.ForEachProperties(
-				[&](const ScriptValue& name, const ScriptValue& value)
-				{
-					Pair<o2::ScriptValueProperty, o2::ScriptValueProperty> elem;
-					elem.first = { kv.first, name };
-					if (kv.second.IsObject())
-						elem.second = { kv.second, name };
+			if (kv.first.IsObject())
+			{
+				kv.first.ForEachProperties(
+					[&](const ScriptValue& name, const ScriptValue& value)
+					{
+						Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
+						elem.first = mnew o2::ScriptValueProperty{ kv.first, name };
+						if (kv.second.IsObject())
+							elem.second = mnew o2::ScriptValueProperty{ kv.second, name };
 
-					res[name.ToString()].Add(elem);
-					return true;
-				});
+						res[name.ToString()].Add(elem);
+						return true;
+					});
+			}
+			else
+			{
+				for (int i = 0; i < kv.first.GetLength(); i++)
+				{
+					Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
+					elem.first = mnew ScriptValueArrayElement{ kv.first, i };
+					if (kv.second.IsObject())
+						elem.second = mnew ScriptValueArrayElement{ kv.second, i };
+
+					res[(String)i].Add(elem);
+				}
+			}
 		}
 
 		// Leave only common properties
@@ -107,7 +122,7 @@ namespace Editor
 		for (auto kv : commonProperties)
 		{
 			if (!mPreviousBuiltTypes.ContainsKey(kv.first) ||
-				mPreviousBuiltTypes[kv.first] != kv.second[0].first.Get().GetValueType())
+				mPreviousBuiltTypes[kv.first] != kv.second[0].first->Get().GetValueType())
 			{
 				changedProperties = true;
 				break;
@@ -122,7 +137,7 @@ namespace Editor
 			for (auto kv : commonProperties)
 			{
 				auto& name = kv.first;
-				auto value = kv.second[0].first.Get();
+				auto value = kv.second[0].first->Get();
 				auto type = value.GetValueType();
 				mPreviousBuiltTypes[name] = type;
 
@@ -132,7 +147,7 @@ namespace Editor
 					AddProperty(name, &TypeOf(String));
 				else if (type == ScriptValue::ValueType::Bool)
 					AddProperty(name, &TypeOf(bool));
-				else if (type == ScriptValue::ValueType::Object)
+				else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
 				{
 					auto prototype = value.GetPrototype();
 					if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
@@ -158,7 +173,7 @@ namespace Editor
 			if (mNeedUpdateProxies)
 			{
 				auto& name = kv.first;
-				auto value = commonProperties[kv.first][0].first.Get();
+				auto value = commonProperties[kv.first][0].first->Get();
 				auto type = value.GetValueType();
 				auto field = kv.second;
 
@@ -168,7 +183,7 @@ namespace Editor
 					SetFieldProxies<String>(commonProperties, name, field);
 				else if (type == ScriptValue::ValueType::Bool)
 					SetFieldProxies<bool>(commonProperties, name, field);
-				else if (type == ScriptValue::ValueType::Object)
+				else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
 				{
 					auto prototype = value.GetPrototype();
 					if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
@@ -182,11 +197,11 @@ namespace Editor
 					else if (value.IsObjectContainer())
 					{
 						auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-							[](const Pair<o2::ScriptValueProperty, o2::ScriptValueProperty>& x)
+							[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 							{
 								Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
 								res.first = mnew ScriptValueProxy(x.first);
-								if (x.second.object.IsObject())
+								if (x.second->Get().IsObject())
 									res.second = mnew ScriptValueProxy(x.second);
 
 								return res;

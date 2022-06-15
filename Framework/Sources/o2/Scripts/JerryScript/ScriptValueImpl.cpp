@@ -189,10 +189,7 @@ namespace o2
 		};
 
 		if (GetValueType() != ValueType::Object)
-		{
-			jerry_release_value(jvalue);
-			jvalue = jerry_create_object();
-		}
+			return;
 
 		jerry_foreach_object_property(jvalue, &Helper::IterateFunc, (void*)&func);
 	}
@@ -277,6 +274,13 @@ namespace o2
 		jerry_set_property_by_index(jvalue, idx, value.jvalue);
 	}
 
+	ScriptValue ScriptValue::GetElement(int idx) const
+	{
+		ScriptValue res;
+		res.Accept(jerry_get_property_by_index(jvalue, idx));
+		return res;
+	}
+
 	void ScriptValue::AddElement(const ScriptValue& value)
 	{
 		SetElement(value, GetLength());
@@ -306,7 +310,7 @@ namespace o2
 
 	String ScriptValue::ToString() const
 	{
-		if (GetValueType() != ValueType::Number)
+		if (GetValueType() != ValueType::String)
 		{
 			auto prev = jvalue;
 			jvalue = jerry_value_to_string(jvalue);
@@ -430,7 +434,7 @@ namespace o2
 		path.ReplaceAll("_o2", "");
 	}
 
-	ScriptValue GetNameSpace(ScriptValue& base, const String& path)
+	int FindNamespaceDel(const String& path)
 	{
 		int fnd = -1;
 		int braces = 0;
@@ -449,8 +453,16 @@ namespace o2
 			}
 		}
 
+		return fnd;
+	}
+
+	ScriptValue GetNameSpace(ScriptValue& base, const String& path)
+	{
+		int fnd = FindNamespaceDel(path);
+
 		auto subPath = fnd >= 0 ? path.SubStr(0, fnd) : path;
 		FixNamespace(subPath);
+
 		ScriptValue subPathValue(subPath);
 		ScriptValue subPathProp = base.GetProperty(subPathValue);
 		if (subPathProp.GetValueType() == ScriptValue::ValueType::Undefined)
@@ -465,21 +477,35 @@ namespace o2
 		return GetNameSpace(subPathProp, path.SubStr(fnd + 2));
 	}
 
-	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc)
+	ScriptValue GetNameSpaceAndConstructor(ScriptValue& base, const String& path, String& constructor)
 	{
-		String typeName = type->GetName();
-		String nameSpace, shortTypeName;
+		int fnd = FindNamespaceDel(path);
 
-		int del = typeName.FindLast("::");
-		if (del < 0)
-			shortTypeName = typeName;
-		else
+		auto subPath = fnd >= 0 ? path.SubStr(0, fnd) : path;
+		FixNamespace(subPath);
+
+		if (fnd < 0)
 		{
-			nameSpace = typeName.SubStr(0, del);
-			shortTypeName = typeName.SubStr(del + 2);
+			constructor = subPath;
+			return base;
 		}
 
-		GetNameSpace(o2Scripts.GetGlobal(), nameSpace).SetProperty(shortTypeName.Data(), constructorFunc);
+		ScriptValue subPathValue(subPath);
+		ScriptValue subPathProp = base.GetProperty(subPathValue);
+		if (subPathProp.GetValueType() == ScriptValue::ValueType::Undefined)
+		{
+			subPathProp = ScriptValue::EmptyObject();
+			base.SetProperty(ScriptValue(subPath), subPathProp);
+		}
+
+		return GetNameSpaceAndConstructor(subPathProp, path.SubStr(fnd + 2), constructor);
+	}
+
+	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc)
+	{
+		String constructor;
+		GetNameSpaceAndConstructor(o2Scripts.GetGlobal(), type->GetName(), constructor)
+			.SetProperty(constructor.Data(), constructorFunc);
 	}
 
 	void ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func)
