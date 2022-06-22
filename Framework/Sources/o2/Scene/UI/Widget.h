@@ -101,6 +101,12 @@ namespace o2
 		// Returns child widget by path (like "root/some node/other node/target node") @SCRIPTABLE
 		Widget* GetChildWidget(const String& path) const;
 
+		// Add child actor @SCRIPTABLE
+		Actor* AddChild(Actor* actor) override;
+
+		// Add child actor @SCRIPTABLE
+		Actor* AddChild(Actor* actor, int index) override;
+
 		// Adds child widget and returns them @SCRIPTABLE
 		Widget* AddChildWidget(Widget* widget);
 
@@ -783,6 +789,8 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, GetParentWidget);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const RectF&, GetChildrenWorldRect);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, GetChildWidget, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*, int);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Widget*, AddChildWidget, Widget*);
 	FUNCTION().PUBLIC().SIGNATURE(Widget*, AddChildWidget, Widget*, int);
 	FUNCTION().PUBLIC().SIGNATURE(const Vector<Widget*>&, GetChildWidgets);

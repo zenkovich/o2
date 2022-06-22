@@ -1109,6 +1109,18 @@ namespace o2
 		Actor* actor = GetChild(path);
 		return dynamic_cast<Widget*>(actor);
 	}
+	
+	Actor* Widget::AddChild(Actor* actor)
+	{
+		return Actor::AddChild(actor);
+	}
+
+	Actor* Widget::AddChild(Actor* actor, int index)
+	{
+		Actor::AddChild(actor, index);
+		UpdateChildWidgetsList();
+		return actor;
+	}
 
 	Widget* Widget::AddChildWidget(Widget* widget)
 	{

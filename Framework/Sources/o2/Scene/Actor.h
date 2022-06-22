@@ -177,13 +177,13 @@ namespace o2
 		virtual void SetIndexInSiblings(int index) OPTIONAL_OVERRIDE;
 
 		// Add child actor @SCRIPTABLE
-		Actor* AddChild(Actor* actor);
+		virtual Actor* AddChild(Actor* actor);
 
 		// Add children actors @SCRIPTABLE
 		void AddChildren(const Vector<Actor*>& actors);
 
 		// Add child actor @SCRIPTABLE
-		Actor* AddChild(Actor* actor, int index);
+		virtual Actor* AddChild(Actor* actor, int index);
 
 		// Returns child actor by path (ex "root/some node/other node/target node") @SCRIPTABLE
 		Actor* GetChild(const String& path) const;

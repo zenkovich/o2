@@ -6,6 +6,7 @@
 #include "o2/Scene/UI/Widgets/Spoiler.h"
 #include "o2/Utils/Editor/Attributes/NoHeaderAttribute.h"
 #include "o2/Utils/Editor/EditorScope.h"
+#include "o2Editor/Core/Properties/Basic/IntegerProperty.h"
 #include "o2Editor/Core/Properties/IObjectPropertiesViewer.h"
 #include "o2Editor/Core/Properties/Properties.h"
 
@@ -43,10 +44,45 @@ namespace Editor
 
 		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 		AddChild(mSpoiler);
+
+		mSpoiler->borderTop = 5;
+
+		mHeaderContainer = mnew HorizontalLayout();
+		*mHeaderContainer->layout = WidgetLayout::HorStretch(VerAlign::Top, 100, 0, 20, 0);
+		mHeaderContainer->baseCorner = BaseCorner::Right;
+		mHeaderContainer->expandHeight = false;
+		mHeaderContainer->SetInternalParent(mSpoiler, false);
+
+		// Add button
+		mAddButton = mSpoiler->FindChildByTypeAndName<Button>("add button");
+		if (!mAddButton)
+		{
+			mAddButton = o2UI.CreateWidget<Button>("add small");
+			mAddButton->name = "add button";
+			mAddButton->layout->maxWidth = 20;
+			mAddButton->layout->minHeight = 20;
+			mAddButton->onClick = THIS_FUNC(OnAddPressed);
+
+			mHeaderContainer->AddChild(mAddButton);
+		}
+
+		// Count property
+		mCountProperty = mSpoiler->FindChildByType<IntegerProperty>(false);
+		if (!mCountProperty)
+			mCountProperty = o2UI.CreateWidget<IntegerProperty>();
+
+		if (mCountProperty)
+		{
+			mHeaderContainer->AddChild(mCountProperty);
+
+			mCountProperty->layout->maxWidth = 40;
+			mCountProperty->SetValue(0);
+			mCountProperty->onChanged = THIS_FUNC(OnCountChanged);
+		}
 	}
 
 	Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> ScriptValueProperty::GetCommonProperties(
-		const Vector<Pair<ScriptValue, ScriptValue>>& values) const
+		const Vector<Pair<ScriptValue, ScriptValue>>& values, bool& isArray) const
 	{
 		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> res;
 
@@ -54,6 +90,8 @@ namespace Editor
 		{
 			if (kv.first.IsObject())
 			{
+				isArray = false;
+
 				kv.first.ForEachProperties(
 					[&](const ScriptValue& name, const ScriptValue& value)
 					{
@@ -66,8 +104,10 @@ namespace Editor
 						return true;
 					});
 			}
-			else
+			else if (kv.first.IsArray())
 			{
+				isArray = true;
+
 				for (int i = 0; i < kv.first.GetLength(); i++)
 				{
 					Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
@@ -97,6 +137,8 @@ namespace Editor
 
 	void ScriptValueProperty::Refresh()
 	{
+		mIsRefreshing = true;
+
 		PushEditorScopeOnStack scope;
 
 		// Get values from proxies
@@ -115,7 +157,35 @@ namespace Editor
 		);
 
 		// Get common properties
-		auto commonProperties = GetCommonProperties(values);
+		auto commonProperties = GetCommonProperties(values, mIsArray);
+
+		if (mIsArray && !values.IsEmpty())
+		{
+			int commonCount = values[0].first.GetLength();
+			bool coundDifferents = false;
+
+			for (int i = 1; i < values.Count(); i++)
+			{
+				int count = values[i].first.GetLength();
+				if (count != commonCount)
+					coundDifferents = true;
+			}
+
+			if (mCountDifferents != coundDifferents || mCountOfElements != commonCount)
+			{
+				if (mCountDifferents)
+					mCountProperty->SetUnknownValue(commonCount);
+				else
+					mCountProperty->SetValue(commonCount);
+			}
+
+			mCountOfElements = commonCount;
+			mCountDifferents = coundDifferents;
+
+			mHeaderContainer->SetEnabled(true);
+		}
+		else
+			mHeaderContainer->SetEnabled(false);
 
 		// Check that last built properties are same
 		bool changedProperties = false;
@@ -133,6 +203,15 @@ namespace Editor
 		if (changedProperties)
 		{
 			mPreviousBuiltTypes.Clear();
+			for (auto kv : mBuiltProperties)
+			{
+				mSpoiler->RemoveChild(kv.second, false);
+				kv.second->RemoveLayer("drag");
+				kv.second->SetValueAndPrototypeProxy({});
+				o2EditorProperties.FreeProperty(kv.second);
+			}
+
+			mBuiltProperties.Clear();
 
 			for (auto kv : commonProperties)
 			{
@@ -141,27 +220,29 @@ namespace Editor
 				auto type = value.GetValueType();
 				mPreviousBuiltTypes[name] = type;
 
+				int idx = mIsArray ? (int)name : 0;
+
 				if (type == ScriptValue::ValueType::Number)
-					AddProperty(name, &TypeOf(float));
+					AddProperty(name, &TypeOf(float), idx);
 				else if (type == ScriptValue::ValueType::String)
-					AddProperty(name, &TypeOf(String));
+					AddProperty(name, &TypeOf(String), idx);
 				else if (type == ScriptValue::ValueType::Bool)
-					AddProperty(name, &TypeOf(bool));
+					AddProperty(name, &TypeOf(bool), idx);
 				else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
 				{
 					auto prototype = value.GetPrototype();
 					if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
-						AddProperty(name, &TypeOf(Vec2F));
+						AddProperty(name, &TypeOf(Vec2F), idx);
 					else if (prototype == *ScriptValuePrototypes::GetRectPrototype())
-						AddProperty(name, &TypeOf(RectF));
+						AddProperty(name, &TypeOf(RectF), idx);
 					else if (prototype == *ScriptValuePrototypes::GetBorderPrototype())
-						AddProperty(name, &TypeOf(BorderF));
+						AddProperty(name, &TypeOf(BorderF), idx);
 					else if (prototype == *ScriptValuePrototypes::GetColor4Prototype())
-						AddProperty(name, &TypeOf(Color4));
+						AddProperty(name, &TypeOf(Color4), idx);
 					else if (value.IsObjectContainer())
-						AddProperty(name, value.GetObjectContainerType());
+						AddProperty(name, value.GetObjectContainerType(), idx);
 					else
-						AddProperty(name, &TypeOf(ScriptValue));
+						AddProperty(name, &TypeOf(ScriptValue), idx);
 				}
 			}
 
@@ -200,9 +281,9 @@ namespace Editor
 							[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 							{
 								Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-								res.first = mnew ScriptValueProxy(x.first);
-								if (x.second->Get().IsObject())
-									res.second = mnew ScriptValueProxy(x.second);
+								res.first = mnew ScriptValueProxy(x.first->Clone());
+								if (x.second && x.second->Get().IsObject())
+									res.second = mnew ScriptValueProxy(x.second->Clone());
 
 								return res;
 							});
@@ -217,14 +298,92 @@ namespace Editor
 				kv.second->Refresh();
 		}
 
+		for (auto kv : commonProperties)
+		{
+			for (auto x : kv.second)
+			{
+				delete x.first;
+				delete x.second;
+			}
+		}
+
 		mNeedUpdateProxies = false;
+		mIsRefreshing = false;
 	}
 
-	void ScriptValueProperty::AddProperty(const String& name, const Type* type)
+	void ScriptValueProperty::AddProperty(const String& name, const Type* type, int idx)
 	{
 		auto prop = o2EditorProperties.CreateFieldProperty(type, name);
+		if (mIsArray)
+		{
+			prop->GetRemoveButton()->onClick = [=]() { Remove(idx); };
+			prop->AddLayer("drag", mnew Sprite("ui/UI4_drag_handle.png"),
+						   Layout::Based(BaseCorner::LeftTop, Vec2F(20, 20), Vec2F(-18, 0)));
+		}
+
 		mSpoiler->AddChild(prop);
 		mBuiltProperties.Add(name, prop);
+	}
+
+	void ScriptValueProperty::OnCountChanged(IPropertyField* def)
+	{
+		if (mIsRefreshing)
+			return;
+
+		Resize(mCountProperty->GetCommonValue());
+	}
+
+	void ScriptValueProperty::Resize(int newCount)
+	{
+		if (mIsRefreshing)
+			return;
+
+		for (auto p : mValuesProxies)
+		{
+			ScriptValue first;
+			p.first->GetValuePtr(&first);
+
+			int length = first.GetLength();
+			if (length > newCount)
+			{
+				for (int i = 0; i < length - newCount; i++)
+					first.RemoveElement(first.GetLength() - 1);
+			}
+			else
+			{
+				for (int i = 0; i < newCount - length; i++)
+					OnAddPressed();
+			}
+		}
+
+		Refresh();
+	}
+
+	void ScriptValueProperty::Remove(int idx)
+	{
+		for (auto p : mValuesProxies)
+		{
+			ScriptValue first;
+			p.first->GetValuePtr(&first);
+			first.RemoveElement(idx);
+		}
+
+		Refresh();
+	}
+
+	void ScriptValueProperty::OnAddPressed()
+	{
+		for (auto p : mValuesProxies)
+		{
+			ScriptValue first;
+			p.first->GetValuePtr(&first);
+			if (first.GetLength() > 0)
+				first.AddElement(first.GetElement(first.GetLength() - 1).Copy());
+			else
+				first.AddElement(ScriptValue(0));
+		}
+
+		Refresh();
 	}
 
 	const Type* ScriptValueProperty::GetValueType() const

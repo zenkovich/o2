@@ -13,6 +13,8 @@ namespace o2
 
 namespace Editor
 {
+	class IntegerProperty;
+
 	// --------------------
 	// ScriptValue property
 	// --------------------
@@ -84,6 +86,19 @@ namespace Editor
 
 		bool mNeedUpdateProxies = false; // True when targets changed and required to refresh script values proxies
 
+		bool mIsArray = false; // Is value array
+
+		IntegerProperty* mCountProperty = nullptr; // Vector count property
+
+		bool mCountDifferents = false; // Is targets counts of elements are different
+		int  mCountOfElements = 0;     // Common count of elements
+
+		HorizontalLayout* mHeaderContainer = nullptr; // Count property and other controls container
+
+		Button* mAddButton = nullptr; // Add button, adds new element at end
+
+		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
+
 	protected:
 		// It is called when property puts in buffer. Releases properties
 		void OnFreeProperty() override;
@@ -92,10 +107,22 @@ namespace Editor
 		void InitializeControls();
 
 		// Returns mapped common properties
-		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values) const;
+		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values, bool& isArray) const;
 
 		//Adds property by type
-		void AddProperty(const String& name, const Type* type);
+		void AddProperty(const String& name, const Type* type, int idx);
+
+		// It is called when count property changing
+		void OnCountChanged(IPropertyField* def);
+
+		// Sets new count of elements in vector
+		void Resize(int newCount);
+
+		// Removes element from vector
+		void Remove(int idx);
+
+		// It is called when add button has pressed
+		void OnAddPressed();
 
 		// Sets property proxies
 		template<typename _type>
@@ -120,9 +147,9 @@ namespace Editor
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-				res.first = mnew TypeScriptValueProxy<_type>(x.first);
-				if (x.second->Get().IsObject())
-					res.second = mnew TypeScriptValueProxy<_type>(x.second);
+				res.first = mnew TypeScriptValueProxy<_type>(x.first->Clone());
+				if (x.second && x.second->Get().IsObject())
+					res.second = mnew TypeScriptValueProxy<_type>(x.second->Clone());
 
 				return res;
 			});
@@ -138,9 +165,9 @@ namespace Editor
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-				res.first = mnew PtrScriptValueProxy<_type>(x.first);
-				if (x.second->Get().IsObject())
-					res.second = mnew PtrScriptValueProxy<_type>(x.second);
+				res.first = mnew PtrScriptValueProxy<_type>(x.first->Clone());
+				if (x.second && x.second->Get().IsObject())
+					res.second = mnew PtrScriptValueProxy<_type>(x.second->Clone());
 
 				return res;
 			});
@@ -162,6 +189,13 @@ CLASS_FIELDS_META(Editor::ScriptValueProperty)
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mHeaderEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mExpanded);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mNeedUpdateProxies);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsArray);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCountProperty);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mCountDifferents);
+	FIELD().PROTECTED().DEFAULT_VALUE(0).NAME(mCountOfElements);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mHeaderContainer);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mAddButton);
+	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsRefreshing);
 }
 END_META;
 CLASS_METHODS_META(Editor::ScriptValueProperty)
@@ -188,8 +222,12 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetCommonProperties, _tmp2);
-	FUNCTION().PROTECTED().SIGNATURE(void, AddProperty, const String&, const Type*);
+	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetCommonProperties, _tmp2, bool&);
+	FUNCTION().PROTECTED().SIGNATURE(void, AddProperty, const String&, const Type*, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
+	FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, Remove, int);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnPropertyChanged, const String&, const Vector<DataDocument>&, const Vector<DataDocument>&);
 }
 END_META;

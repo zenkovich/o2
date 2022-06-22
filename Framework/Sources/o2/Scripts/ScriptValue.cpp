@@ -124,6 +124,16 @@ namespace o2
 	{
 		return object == other.object && idx == other.idx;
 	}
+
+	IScriptValueProperty* ScriptValueProperty::Clone() const
+	{
+		return mnew ScriptValueProperty(*this);
+	}
+
+	IScriptValueProperty* ScriptValueArrayElement::Clone() const
+	{
+		return mnew ScriptValueArrayElement(*this);
+	}
 }
 
 ENUM_META(o2::ScriptValue::ValueType)

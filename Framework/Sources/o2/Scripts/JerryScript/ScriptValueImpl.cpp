@@ -23,6 +23,13 @@ namespace o2
 		return res;
 	}
 
+	ScriptValue ScriptValue::EmptyArray()
+	{
+		ScriptValue res;
+		res.Accept(jerry_create_array(0));
+		return res;
+	}
+
 	void ScriptValueBase::Accept(jerry_value_t v)
 	{
 		jerry_release_value(jvalue);
@@ -79,6 +86,31 @@ namespace o2
 			return ValueType::Constructor;
 
 		return (ValueType)jerry_value_get_type(jvalue);
+	}
+
+	ScriptValue ScriptValue::Copy() const
+	{
+		auto type = GetValueType();
+		if (type == ValueType::Array) 
+		{
+			ScriptValue res = EmptyArray();
+			for (int i = 0; i < GetLength(); i++)
+				res.AddElement(GetElement(i).Copy());
+
+			return res;
+		}
+		else if (type == ValueType::Object)
+		{
+			ScriptValue res = EmptyObject();
+			ForEachProperties([&](const ScriptValue& name, const ScriptValue& value)
+							  {
+								  res[name] = value.Copy();
+								  return true;
+							  });
+			return res;
+		}
+
+		return *this;
 	}
 
 	int ScriptValue::GetLength() const

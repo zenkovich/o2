@@ -67,6 +67,9 @@ namespace o2
 		// Returns type of value
 		ValueType GetValueType() const;
 
+		// Creates deep copy of value
+		ScriptValue Copy() const;
+
 		// Returns error description, if value type is error
 		String GetError() const;
 
@@ -161,6 +164,9 @@ namespace o2
 		ScriptValue GetPrototype() const;
 
 	// Array methods
+		// Creates empty array
+		static ScriptValue EmptyArray();
+
 		// Returns is array
 		bool IsArray() const;
 
@@ -232,8 +238,10 @@ namespace o2
 	// -----------------------------------
 	struct IScriptValueProperty
 	{
+		virtual ~IScriptValueProperty() {}
 		virtual ScriptValue Get() const = 0;
 		virtual void Set(const ScriptValue& value) = 0;
+		virtual IScriptValueProperty* Clone() const = 0;
 	};
 
 	// ------------------------------
@@ -249,8 +257,10 @@ namespace o2
  		ScriptValueProperty(const ScriptValue& object, const ScriptValue& name) :
  			object(object), name(name) {}
 
-		ScriptValue Get() const /*override*/;
-		void Set(const ScriptValue& value) /*override*/;
+		ScriptValue Get() const override;
+		void Set(const ScriptValue& value) override;
+
+		IScriptValueProperty* Clone() const override;
 
 		bool operator==(const ScriptValueProperty& other) const;
 	};
@@ -270,6 +280,8 @@ namespace o2
 
 		ScriptValue Get() const override;
 		void Set(const ScriptValue& value) override;
+
+		IScriptValueProperty* Clone() const override;
 
 		bool operator==(const ScriptValueArrayElement& other) const;
 	};
