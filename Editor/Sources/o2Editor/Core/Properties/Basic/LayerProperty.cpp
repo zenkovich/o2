@@ -71,7 +71,7 @@ namespace Editor
 		auto dropdownLayers = mDropDown->GetAllItemsText();
 		for (auto itemName : dropdownLayers)
 		{
-			if (!layers.Contains([&](SceneLayer* x) { return x->GetName() == itemName; }))
+			if (!layers.Contains([&](SceneLayer* x) { return x->GetName() == (String)itemName; }))
 				mDropDown->RemoveItem(itemName);
 		}
 
@@ -92,7 +92,7 @@ namespace Editor
 
 	bool LayerProperty::IsAlwaysRefresh() const
 	{
-		if (mCommonValue && !mValuesDifferent && mCommonValue->GetName() != mDropDown->GetSelectedItemText())
+		if (mCommonValue && !mValuesDifferent && mCommonValue->GetName() != (String)mDropDown->GetSelectedItemText())
 			return true;
 
 		return false;

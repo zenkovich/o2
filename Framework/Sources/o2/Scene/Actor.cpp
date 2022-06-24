@@ -592,7 +592,7 @@ namespace o2
 	Actor* Actor::GetChild(const String& path) const
 	{
 		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
+		String pathPart = path.SubStr(0, delPos);
 
 		if (pathPart == "..")
 		{

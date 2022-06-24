@@ -196,7 +196,7 @@ namespace o2
 		if (texture)
 			invTexSize.Set(1.0f/texture->GetSize().x, 1.0f/texture->GetSize().y);
 
-		RectF imageRect = mImageAsset ? mImageAsset->GetAtlasRect() : RectF();
+		RectF imageRect = mImageAsset ? mImageAsset->GetAtlasRect() : RectI();
 		RectF imageUV = RectF(imageRect.left*invTexSize.x, 1.0f - imageRect.top*invTexSize.y,
 							  imageRect.right*invTexSize.x, 1.0f - imageRect.bottom*invTexSize.y);
 

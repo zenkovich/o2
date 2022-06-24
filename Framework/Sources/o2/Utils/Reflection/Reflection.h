@@ -125,8 +125,26 @@ namespace o2
 
 		friend class Type;
 	};
+}
 
-	class ReflectionInitializationTypeProcessor: public BaseTypeProcessor
+#define DECLARE_FUNDAMENTAL_TYPE(TYPE) \
+    template<>                         \
+	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
+
+#include "o2/Utils/Reflection/Type.h"
+#include "o2/Utils/Reflection/Enum.h"
+#include "o2/Utils/Reflection/FieldInfo.h"
+#include "o2/Utils/Reflection/FunctionInfo.h"
+#include "o2/Utils/Reflection/TypeTraits.h"
+
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptEngine.h"
+#endif
+
+namespace o2
+{
+
+	class ReflectionInitializationTypeProcessor : public BaseTypeProcessor
 	{
 	public:
 		struct FieldProcessor
@@ -142,7 +160,7 @@ namespace o2
 			FieldProcessor& SetDefaultValue(const _type& value);
 
 			template<typename _object_type, typename _field_type>
-			FieldInfo& FieldBasics(_object_type* object, Type* type, const char* name, void*(*pointerGetter)(void*),
+			FieldInfo& FieldBasics(_object_type* object, Type* type, const char* name, void* (*pointerGetter)(void*),
 								   _field_type& field);
 
 			FieldProcessor& SetProtectSection(ProtectSection section);
@@ -181,24 +199,7 @@ namespace o2
 
 		FunctionProcessor StartFunction();
 	};
-}
 
-#define DECLARE_FUNDAMENTAL_TYPE(TYPE) \
-    template<>                         \
-	o2::Type* o2::FundamentalTypeContainer<TYPE>::type = o2::Reflection::InitializeFundamentalType<TYPE>(#TYPE)
-
-#include "o2/Utils/Reflection/Type.h"
-#include "o2/Utils/Reflection/Enum.h"
-#include "o2/Utils/Reflection/FieldInfo.h"
-#include "o2/Utils/Reflection/FunctionInfo.h"
-#include "o2/Utils/Reflection/TypeTraits.h"
-
-#if IS_SCRIPTING_SUPPORTED
-#include "o2/Scripts/ScriptEngine.h"
-#endif
-
-namespace o2
-{
 	template<typename _type>
 	_type Reflection::GetEnumValue(const String& name)
 	{

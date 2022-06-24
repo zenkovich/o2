@@ -55,6 +55,9 @@ namespace Editor
 		// Returns true when input events can be handled by down listeners
 		bool IsInputTransparent() const override;
 
+		// It is called when listener was drawn
+		void OnDrawn() override;
+
 		// Returns create menu category in editor
 		static String GetCreateMenuCategory();
 
@@ -85,6 +88,21 @@ namespace Editor
 
 		// It is called when cursor exits this object, moving hover of tree to this
 		void OnCursorExit(const Input::Cursor& cursor) override;
+
+		// It is called when cursor pressed on this
+		void OnCursorPressed(const Input::Cursor& cursor) override;
+
+		// It is called when cursor moved on this (or moved outside when this was pressed)
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
+
+		// It is called when cursor released (only when cursor pressed this at previous time)
+		void OnCursorReleased(const Input::Cursor& cursor) override;
+
+		// It is called when cursor released outside this(only when cursor pressed this at previous time)
+		void OnCursorReleasedOutside(const Input::Cursor& cursor) override;
+
+		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when started dragging
 		void OnDragStart(const Input::Cursor& cursor) override;
@@ -135,12 +153,18 @@ CLASS_METHODS_META(Editor::AssetIcon)
 	FUNCTION().PUBLIC().SIGNATURE(WString, GetAssetName);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsUnderPoint, const Vec2F&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsInputTransparent);
+	FUNCTION().PUBLIC().SIGNATURE(void, OnDrawn);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetSelected, bool);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorDblClicked, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorRightMouseReleased, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorEnter, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorExit, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressed, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorStillDown, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleased, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorReleasedOutside, const Input::Cursor&);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnCursorPressBreak, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragStart, const Input::Cursor&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragged, const Input::Cursor&, DragDropArea*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDragEnd, const Input::Cursor&);

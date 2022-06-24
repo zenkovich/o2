@@ -367,7 +367,7 @@ namespace o2
 	WidgetLayer* WidgetLayer::GetChild(const String& path)
 	{
 		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
+		String pathPart = path.SubStr(0, delPos);
 
 		if (pathPart == "..")
 		{

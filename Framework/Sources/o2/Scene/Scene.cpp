@@ -469,7 +469,7 @@ namespace o2
 	Actor* Scene::FindActor(const String& path)
 	{
 		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
+		String pathPart = path.SubStr(0, delPos);
 
 		for (auto actor : mRootActors)
 		{

@@ -196,7 +196,7 @@ namespace Editor
 
 	void ToolsPanel::OnSchemeSelected(const WString& name)
 	{
-		if (name == mSaveAsSchemeName)
+		if ((String)name == mSaveAsSchemeName)
 		{
 			NameEditDlg::Show("New layout", [&](const String& name) {
 				o2EditorWindows.mAvailableLayouts.Add(name, o2EditorWindows.GetWindowsLayout());
@@ -204,7 +204,7 @@ namespace Editor
 			});
 		}
 
-		if (name == mDefaultSchemeName)
+		if ((String)name == mDefaultSchemeName)
 		{
 			o2EditorWindows.SetDefaultWindowsLayout();
 		}

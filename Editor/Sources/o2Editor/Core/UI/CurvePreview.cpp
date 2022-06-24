@@ -96,7 +96,7 @@ namespace Editor
 			return;
 
 		TextureRef texture = mSprite->GetTexture();
-		if (!texture || texture->GetSize() != layout->GetSize())
+		if (!texture || texture->GetSize() != (Vec2I)layout->GetSize())
 		{
 			texture = TextureRef(layout->GetSize(), PixelFormat::R8G8B8A8, Texture::Usage::RenderTarget);
 			mSprite->SetTexture(texture);

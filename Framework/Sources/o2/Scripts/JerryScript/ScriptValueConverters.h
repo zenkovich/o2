@@ -44,7 +44,7 @@ namespace o2
 		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
 		{
 			ReflectScriptValueTypeProcessor processor(data);
-			_type::ProcessType<ReflectScriptValueTypeProcessor>(*dataContainer->data, processor);
+			_type::template ProcessType<ReflectScriptValueTypeProcessor>(*dataContainer->data, processor);
 		}
 	}
 
@@ -442,7 +442,7 @@ namespace o2
 			if constexpr (std::is_base_of<IObject, _non_ptr_type>::value && !std::is_same<IObject, _non_ptr_type>::value)
 			{
 				ReflectScriptValueTypeProcessor processor(data);
-				_non_ptr_type::ProcessType<ReflectScriptValueTypeProcessor>(ptr, processor);
+				_non_ptr_type::template ProcessType<ReflectScriptValueTypeProcessor>(ptr, processor);
 			}
 		}
 

@@ -488,7 +488,7 @@ namespace o2
 		return fnd;
 	}
 
-	ScriptValue GetNameSpace(ScriptValue& base, const String& path)
+	ScriptValue GetNameSpace(ScriptValue base, const String& path)
 	{
 		int fnd = FindNamespaceDel(path);
 
@@ -509,7 +509,7 @@ namespace o2
 		return GetNameSpace(subPathProp, path.SubStr(fnd + 2));
 	}
 
-	ScriptValue GetNameSpaceAndConstructor(ScriptValue& base, const String& path, String& constructor)
+	ScriptValue GetNameSpaceAndConstructor(ScriptValue base, const String& path, String& constructor)
 	{
 		int fnd = FindNamespaceDel(path);
 

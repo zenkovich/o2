@@ -619,7 +619,7 @@ namespace o2
 	WidgetLayer* Widget::GetLayer(const String& path) const
 	{
 		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
+		String pathPart = path.SubStr(0, delPos);
 
 		for (auto layer : mLayers)
 		{
@@ -1434,7 +1434,7 @@ namespace o2
 	Widget* Widget::GetInternalWidget(const String& path) const
 	{
 		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
+		String pathPart = path.SubStr(0, delPos);
 
 		if (pathPart == "..")
 		{

@@ -3,6 +3,7 @@
 #include "o2/Utils/Property.h"
 #include "o2Editor/Core/Properties/IPropertyField.h"
 #include "o2Editor/Core/Properties/PropertiesContext.h"
+#include <unordered_map>
 
 using namespace o2;
 
@@ -100,6 +101,8 @@ namespace Editor
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
+		typedef std::unordered_map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> PropertiesList;
+
 		// It is called when property puts in buffer. Releases properties
 		void OnFreeProperty() override;
 
@@ -107,7 +110,7 @@ namespace Editor
 		void InitializeControls();
 
 		// Returns mapped common properties
-		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values, bool& isArray) const;
+		PropertiesList GetCommonProperties(const Vector<Pair<ScriptValue, ScriptValue>>& values, bool& isArray) const;
 
 		//Adds property by type
 		void AddProperty(const String& name, const Type* type, int idx);
@@ -126,13 +129,11 @@ namespace Editor
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
-							 const String& name, IPropertyField* field);
+		void SetFieldProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
 
 		// Sets property proxies
 		template<typename _type>
-		void SetFieldPtrProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
-								const String& name, IPropertyField* field);
+		void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
 
 		// It is called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
@@ -140,8 +141,8 @@ namespace Editor
 	};
 
 	template<typename _type>
-	void ScriptValueProperty::SetFieldProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
-											  const String& name, IPropertyField* field)
+	void ScriptValueProperty::SetFieldProxies(PropertiesList& commonProperties, const String& name, 
+											  IPropertyField* field)
 	{
 		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
@@ -158,8 +159,8 @@ namespace Editor
 	}
 
 	template<typename _type>
-	void ScriptValueProperty::SetFieldPtrProxies(Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>& commonProperties,
-												 const String& name, IPropertyField* field)
+	void ScriptValueProperty::SetFieldPtrProxies(PropertiesList& commonProperties, const String& name,
+												 IPropertyField* field)
 	{
 		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
@@ -201,8 +202,7 @@ END_META;
 CLASS_METHODS_META(Editor::ScriptValueProperty)
 {
 
-	typedef Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> _tmp1;
-	typedef const Vector<Pair<ScriptValue, ScriptValue>>& _tmp2;
+	typedef const Vector<Pair<ScriptValue, ScriptValue>>& _tmp1;
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ScriptValueProperty&);
@@ -222,7 +222,7 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsHeaderEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnFreeProperty);
 	FUNCTION().PROTECTED().SIGNATURE(void, InitializeControls);
-	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetCommonProperties, _tmp2, bool&);
+	FUNCTION().PROTECTED().SIGNATURE(PropertiesList, GetCommonProperties, _tmp1, bool&);
 	FUNCTION().PROTECTED().SIGNATURE(void, AddProperty, const String&, const Type*, int);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
 	FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);

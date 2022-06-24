@@ -60,14 +60,14 @@ namespace o2
 		template<typename _invocable_type, typename _res_type, typename ... _args>
 		struct FunctionContainer : public DataContainer<_invocable_type>, public IFunctionContainer
 		{
-			FunctionContainer(_invocable_type* function) :DataContainer(function) {}
+			FunctionContainer(_invocable_type* function) :DataContainer<_invocable_type>(function) {}
 			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
 		};
 
 		template<typename _invocable_type, typename _res_type, typename ... _args>
 		struct ThisFunctionContainer : public DataContainer<_invocable_type>, public IFunctionContainer
 		{
-			ThisFunctionContainer(_invocable_type* function) :DataContainer(function) {}
+			ThisFunctionContainer(_invocable_type* function) :DataContainer<_invocable_type>(function) {}
 			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
 		};
 
@@ -156,18 +156,7 @@ namespace o2
 											  const jerry_length_t args_count);
 
 		template<size_t _i = 0, size_t _j = 0, typename... _args>
-		static void UnpackArgs(std::tuple<_args ...>& argst, jerry_value_t* args, int argsCount)
-		{
-			if (_j < argsCount)
-			{
-				ScriptValue tmp;
-				tmp.AcquireValue(args[_j]);
-				std::get<_i>(argst) = tmp.GetValue<std::remove_reference<decltype(std::get<_i>(argst))>::type>();
-
-				if constexpr (_i + 1 != sizeof...(_args))
-					UnpackArgs<_i + 1, _j + 1>(argst, args, argsCount);
-			}
-		}
+		static void UnpackArgs(std::tuple<_args ...>& argst, jerry_value_t* args, int argsCount);
 
 		friend class ScriptEngine;
 	};

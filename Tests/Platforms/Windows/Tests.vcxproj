@@ -92,7 +92,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>

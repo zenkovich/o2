@@ -180,7 +180,7 @@ namespace o2
 	void Render::CheckCompatibles()
 	{
 		//check render targets available
-		char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
+		const char* extensions[] = { "GL_ARB_framebuffer_object", "GL_EXT_framebuffer_object", "GL_EXT_framebuffer_blit",
 			"GL_EXT_packed_depth_stencil" };
 
 		mRenderTargetsAvailable = true;

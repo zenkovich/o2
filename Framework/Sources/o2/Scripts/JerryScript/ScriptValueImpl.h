@@ -21,6 +21,20 @@ namespace o2
 		return &TypeOf(_type);
 	}
 
+	template<size_t _i /*= 0*/, size_t _j /*= 0*/, typename... _args>
+	void o2::ScriptValueBase::UnpackArgs(std::tuple<_args ...>& argst, jerry_value_t* args, int argsCount)
+	{
+		if (_j < argsCount)
+		{
+			ScriptValue tmp;
+			tmp.AcquireValue(args[_j]);
+			std::get<_i>(argst) = tmp.GetValue<std::remove_reference<decltype(std::get<_i>(argst))>::type>();
+
+			if constexpr (_i + 1 != sizeof...(_args))
+				UnpackArgs<_i + 1, _j + 1>(argst, args, argsCount);
+		}
+	}
+
 	template<typename _type>
 	ScriptValue::ScriptValue(const _type& value)
 	{
@@ -253,12 +267,12 @@ namespace o2
 
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
-				std::apply(*data, argst);
+				std::apply(*this->data, argst);
 				return jerry_create_undefined();
 			}
 			else
 			{
-				ScriptValue res(std::apply(*data, argst));
+				ScriptValue res(std::apply(*this->data, argst));
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -266,12 +280,12 @@ namespace o2
 		{
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
-				(*data)();
+				(*this->data)();
 				return jerry_create_undefined();
 			}
 			else
 			{
-				ScriptValue res((*data)());
+				ScriptValue res((*this->data)());
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -291,12 +305,12 @@ namespace o2
 
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
-				std::apply(*data, argst);
+				std::apply(*this->data, argst);
 				return jerry_create_undefined();
 			}
 			else
 			{
-				ScriptValue res(std::apply(*data, argst));
+				ScriptValue res(std::apply(*this->data, argst));
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -304,12 +318,12 @@ namespace o2
 		{
 			if constexpr (std::is_same<_res_type, void>::value)
 			{
-				(*data)(thisValueObj);
+				(*this->data)(thisValueObj);
 				return jerry_create_undefined();
 			}
 			else
 			{
-				ScriptValue res((*data)(thisValueObj));
+				ScriptValue res((*this->data)(thisValueObj));
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -412,7 +426,7 @@ namespace o2
 				if constexpr (std::is_base_of<IObject, _object_type>::value && !std::is_same<IObject, _object_type>::value)
 				{
 					ReflectScriptValueTypeProcessor processor(thisValue);
-					_object_type::ProcessType<ReflectScriptValueTypeProcessor>(sample, processor);
+					_object_type::template ProcessType<ReflectScriptValueTypeProcessor>(sample, processor);
 				}
 			}));
 

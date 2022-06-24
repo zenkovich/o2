@@ -73,6 +73,13 @@ namespace Editor
 		return false;
 	}
 
+	void AssetIcon::OnDrawn()
+	{
+		Widget::OnDrawn();
+		SelectableDragableObject::OnDrawn();
+		DragDropArea::OnDrawn();
+	}
+
 	String AssetIcon::GetCreateMenuCategory()
 	{
 		return "UI/Editor";
@@ -112,6 +119,31 @@ namespace Editor
 	void AssetIcon::OnCursorExit(const Input::Cursor& cursor)
 	{
 		SetState("hover", false);
+	}
+
+	void AssetIcon::OnCursorPressed(const Input::Cursor& cursor)
+	{
+		SelectableDragableObject::OnCursorPressed(cursor);
+	}
+
+	void AssetIcon::OnCursorStillDown(const Input::Cursor& cursor)
+	{
+		SelectableDragableObject::OnCursorStillDown(cursor);
+	}
+
+	void AssetIcon::OnCursorReleased(const Input::Cursor& cursor)
+	{
+		SelectableDragableObject::OnCursorReleased(cursor);
+	}
+
+	void AssetIcon::OnCursorReleasedOutside(const Input::Cursor& cursor)
+	{
+		SelectableDragableObject::OnCursorReleasedOutside(cursor);
+	}
+
+	void AssetIcon::OnCursorPressBreak(const Input::Cursor& cursor)
+	{
+		SelectableDragableObject::OnCursorPressBreak(cursor);
 	}
 
 	void AssetIcon::OnDragStart(const Input::Cursor& cursor)

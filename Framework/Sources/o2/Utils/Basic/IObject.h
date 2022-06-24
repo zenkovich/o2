@@ -3,7 +3,7 @@
 #include "o2/Utils/Memory/MemoryManager.h"
 
 #if IS_SCRIPTING_SUPPORTED
-#include "o2/Scripts/ScriptValue.h"
+#include "o2/Scripts/ScriptValueDef.h"
 #endif
 
 namespace o2
@@ -37,7 +37,7 @@ namespace o2
 
 #if IS_SCRIPTING_SUPPORTED
 		// Returns script value with wrapped object
-		virtual ScriptValue GetScriptValue() const { return ScriptValue(*this); }
+		virtual ScriptValue GetScriptValue() const;
 #endif
 
 	private:
@@ -117,3 +117,16 @@ public:                                                                         
     template<typename _type_processor> static void ProcessBaseTypes(CLASS* object, _type_processor& processor); \
     template<typename _type_processor> static void ProcessFields(CLASS* object, _type_processor& processor);    \
     template<typename _type_processor> static void ProcessMethods(CLASS* object, _type_processor& processor)
+
+
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptValue.h"
+
+namespace o2
+{
+	inline ScriptValue IObject::GetScriptValue() const
+	{
+		return ScriptValue(*this);
+	}
+}
+#endif

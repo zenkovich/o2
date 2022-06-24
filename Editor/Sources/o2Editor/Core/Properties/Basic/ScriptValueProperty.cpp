@@ -81,10 +81,10 @@ namespace Editor
 		}
 	}
 
-	Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> ScriptValueProperty::GetCommonProperties(
+	ScriptValueProperty::PropertiesList ScriptValueProperty::GetCommonProperties(
 		const Vector<Pair<ScriptValue, ScriptValue>>& values, bool& isArray) const
 	{
-		Map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> res;
+		PropertiesList res;
 
 		for (auto kv : values)
 		{
@@ -121,9 +121,9 @@ namespace Editor
 		}
 
 		// Leave only common properties
-		res.RemoveAll([&](const String& k, const auto& v)
+		std::erase_if(res, [&](const auto& item)
 					  {
-						  return v.Count() != values.Count();
+						  return item.value.Count() != values.Count();
 					  });
 
 		return res;
@@ -187,115 +187,118 @@ namespace Editor
 		else
 			mHeaderContainer->SetEnabled(false);
 
-		// Check that last built properties are same
-		bool changedProperties = false;
-		for (auto kv : commonProperties)
+		if (IsExpanded())
 		{
-			if (!mPreviousBuiltTypes.ContainsKey(kv.first) ||
-				mPreviousBuiltTypes[kv.first] != kv.second[0].first->Get().GetValueType())
-			{
-				changedProperties = true;
-				break;
-			}
-		}
-
-		// Rebuild properties if needed
-		if (changedProperties)
-		{
-			mPreviousBuiltTypes.Clear();
-			for (auto kv : mBuiltProperties)
-			{
-				mSpoiler->RemoveChild(kv.second, false);
-				kv.second->RemoveLayer("drag");
-				kv.second->SetValueAndPrototypeProxy({});
-				o2EditorProperties.FreeProperty(kv.second);
-			}
-
-			mBuiltProperties.Clear();
-
+			// Check that last built properties are same
+			bool changedProperties = false;
 			for (auto kv : commonProperties)
 			{
-				auto& name = kv.first;
-				auto value = kv.second[0].first->Get();
-				auto type = value.GetValueType();
-				mPreviousBuiltTypes[name] = type;
-
-				int idx = mIsArray ? (int)name : 0;
-
-				if (type == ScriptValue::ValueType::Number)
-					AddProperty(name, &TypeOf(float), idx);
-				else if (type == ScriptValue::ValueType::String)
-					AddProperty(name, &TypeOf(String), idx);
-				else if (type == ScriptValue::ValueType::Bool)
-					AddProperty(name, &TypeOf(bool), idx);
-				else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
+				if (!mPreviousBuiltTypes.ContainsKey(kv.first) ||
+					mPreviousBuiltTypes[kv.first] != kv.second[0].first->Get().GetValueType())
 				{
-					auto prototype = value.GetPrototype();
-					if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
-						AddProperty(name, &TypeOf(Vec2F), idx);
-					else if (prototype == *ScriptValuePrototypes::GetRectPrototype())
-						AddProperty(name, &TypeOf(RectF), idx);
-					else if (prototype == *ScriptValuePrototypes::GetBorderPrototype())
-						AddProperty(name, &TypeOf(BorderF), idx);
-					else if (prototype == *ScriptValuePrototypes::GetColor4Prototype())
-						AddProperty(name, &TypeOf(Color4), idx);
-					else if (value.IsObjectContainer())
-						AddProperty(name, value.GetObjectContainerType(), idx);
-					else
-						AddProperty(name, &TypeOf(ScriptValue), idx);
+					changedProperties = true;
+					break;
 				}
 			}
 
-			mNeedUpdateProxies = true;
-		}
-
-		for (auto kv : mBuiltProperties)
-		{
-			if (mNeedUpdateProxies)
+			// Rebuild properties if needed
+			if (changedProperties)
 			{
-				auto& name = kv.first;
-				auto value = commonProperties[kv.first][0].first->Get();
-				auto type = value.GetValueType();
-				auto field = kv.second;
-
-				if (type == ScriptValue::ValueType::Number)
-					SetFieldProxies<float>(commonProperties, name, field);
-				else if (type == ScriptValue::ValueType::String)
-					SetFieldProxies<String>(commonProperties, name, field);
-				else if (type == ScriptValue::ValueType::Bool)
-					SetFieldProxies<bool>(commonProperties, name, field);
-				else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
+				mPreviousBuiltTypes.Clear();
+				for (auto kv : mBuiltProperties)
 				{
-					auto prototype = value.GetPrototype();
-					if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
-						SetFieldProxies<Vec2F>(commonProperties, name, field);
-					else if (prototype == *ScriptValuePrototypes::GetRectPrototype())
-						SetFieldProxies<RectF>(commonProperties, name, field);
-					else if (prototype == *ScriptValuePrototypes::GetBorderPrototype())
-						SetFieldProxies<BorderF>(commonProperties, name, field);
-					else if (prototype == *ScriptValuePrototypes::GetColor4Prototype())
-						SetFieldProxies<Color4>(commonProperties, name, field);
-					else if (value.IsObjectContainer())
-					{
-						auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
-							[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
-							{
-								Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
-								res.first = mnew ScriptValueProxy(x.first->Clone());
-								if (x.second && x.second->Get().IsObject())
-									res.second = mnew ScriptValueProxy(x.second->Clone());
-
-								return res;
-							});
-
-						field->SetValueAndPrototypeProxy(proxies);
-					}
-					else
-						SetFieldProxies<ScriptValue>(commonProperties, name, field);
+					mSpoiler->RemoveChild(kv.second, false);
+					kv.second->RemoveLayer("drag");
+					kv.second->SetValueAndPrototypeProxy({});
+					o2EditorProperties.FreeProperty(kv.second);
 				}
+
+				mBuiltProperties.Clear();
+
+				for (auto kv : commonProperties)
+				{
+					auto& name = kv.first;
+					auto value = kv.second[0].first->Get();
+					auto type = value.GetValueType();
+					mPreviousBuiltTypes[name] = type;
+
+					int idx = mIsArray ? (int)name : 0;
+
+					if (type == ScriptValue::ValueType::Number)
+						AddProperty(name, &TypeOf(float), idx);
+					else if (type == ScriptValue::ValueType::String)
+						AddProperty(name, &TypeOf(String), idx);
+					else if (type == ScriptValue::ValueType::Bool)
+						AddProperty(name, &TypeOf(bool), idx);
+					else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
+					{
+						auto prototype = value.GetPrototype();
+						if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
+							AddProperty(name, &TypeOf(Vec2F), idx);
+						else if (prototype == *ScriptValuePrototypes::GetRectPrototype())
+							AddProperty(name, &TypeOf(RectF), idx);
+						else if (prototype == *ScriptValuePrototypes::GetBorderPrototype())
+							AddProperty(name, &TypeOf(BorderF), idx);
+						else if (prototype == *ScriptValuePrototypes::GetColor4Prototype())
+							AddProperty(name, &TypeOf(Color4), idx);
+						else if (value.IsObjectContainer())
+							AddProperty(name, value.GetObjectContainerType(), idx);
+						else
+							AddProperty(name, &TypeOf(ScriptValue), idx);
+					}
+				}
+
+				mNeedUpdateProxies = true;
 			}
-			else
-				kv.second->Refresh();
+
+			for (auto kv : mBuiltProperties)
+			{
+				if (mNeedUpdateProxies)
+				{
+					auto& name = kv.first;
+					auto value = commonProperties[kv.first][0].first->Get();
+					auto type = value.GetValueType();
+					auto field = kv.second;
+
+					if (type == ScriptValue::ValueType::Number)
+						SetFieldProxies<float>(commonProperties, name, field);
+					else if (type == ScriptValue::ValueType::String)
+						SetFieldProxies<String>(commonProperties, name, field);
+					else if (type == ScriptValue::ValueType::Bool)
+						SetFieldProxies<bool>(commonProperties, name, field);
+					else if (type == ScriptValue::ValueType::Object || type == ScriptValue::ValueType::Array)
+					{
+						auto prototype = value.GetPrototype();
+						if (prototype == *ScriptValuePrototypes::GetVec2Prototype())
+							SetFieldProxies<Vec2F>(commonProperties, name, field);
+						else if (prototype == *ScriptValuePrototypes::GetRectPrototype())
+							SetFieldProxies<RectF>(commonProperties, name, field);
+						else if (prototype == *ScriptValuePrototypes::GetBorderPrototype())
+							SetFieldProxies<BorderF>(commonProperties, name, field);
+						else if (prototype == *ScriptValuePrototypes::GetColor4Prototype())
+							SetFieldProxies<Color4>(commonProperties, name, field);
+						else if (value.IsObjectContainer())
+						{
+							auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+								[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
+								{
+									Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
+									res.first = mnew ScriptValueProxy(x.first->Clone());
+									if (x.second && x.second->Get().IsObject())
+										res.second = mnew ScriptValueProxy(x.second->Clone());
+
+									return res;
+								});
+
+							field->SetValueAndPrototypeProxy(proxies);
+						}
+						else
+							SetFieldProxies<ScriptValue>(commonProperties, name, field);
+					}
+				}
+				else
+					kv.second->Refresh();
+			}
 		}
 
 		for (auto kv : commonProperties)

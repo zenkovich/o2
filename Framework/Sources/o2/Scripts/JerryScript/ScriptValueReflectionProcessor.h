@@ -1,5 +1,8 @@
 #pragma once
 
+#include "o2/Utils/Editor/Attributes/ScriptableAttribute.h"
+#include "o2/Utils/Serialization/Serializable.h"
+
 namespace o2
 {
 	class ReflectScriptValueTypeProcessor
@@ -170,7 +173,7 @@ namespace o2
 		void BaseType(_object_type* object, Type* type, const char* name)
 		{
 			if constexpr (std::is_base_of<ISerializable, _base_type>::value && !std::is_same<ISerializable, _base_type>::value)
-				_base_type::ProcessType<ReflectScriptValueTypeProcessor>(object, *this);
+				_base_type::template ProcessType<ReflectScriptValueTypeProcessor>(object, *this);
 		}
 
 		BaseFieldProcessor StartField() { return BaseFieldProcessor(value); }

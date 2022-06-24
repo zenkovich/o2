@@ -72,7 +72,7 @@
       <PreprocessorDefinitions>PLATFORM_WINDOWS;SCRIPTING_BACKEND_JERRYSCRIPT;_CRT_SECURE_NO_WARNINGS;DEBUG</PreprocessorDefinitions>
       <WarningLevel>Level2</WarningLevel>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeaderFile>o2/stdafx.h</PrecompiledHeaderFile>
       <SupportJustMyCode>true</SupportJustMyCode>

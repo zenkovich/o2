@@ -199,7 +199,7 @@ namespace o2
 	void* Type::GetFieldPtr(void* object, const String& path, const FieldInfo*& fieldInfo) const
 	{
 		int delPos = path.Find("/");
-		WString pathPart = path.SubStr(0, delPos);
+		String pathPart = path.SubStr(0, delPos);
 
 		for (auto& field : mFields)
 		{
