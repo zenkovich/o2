@@ -101,7 +101,7 @@ namespace Editor
 		bool mIsRefreshing = false; // Is currently refreshing content. Need to prevent cycled size changing
 
 	protected:
-		typedef std::unordered_map<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>> PropertiesList;
+		typedef Vector<Pair<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>> PropertiesList;
 
 		// It is called when property puts in buffer. Releases properties
 		void OnFreeProperty() override;
@@ -144,7 +144,8 @@ namespace Editor
 	void ScriptValueProperty::SetFieldProxies(PropertiesList& commonProperties, const String& name, 
 											  IPropertyField* field)
 	{
-		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
+		auto proxies = prop->second.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
@@ -162,7 +163,8 @@ namespace Editor
 	void ScriptValueProperty::SetFieldPtrProxies(PropertiesList& commonProperties, const String& name,
 												 IPropertyField* field)
 	{
-		auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
+		auto proxies = prop->second.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;

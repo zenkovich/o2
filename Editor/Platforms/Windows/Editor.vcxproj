@@ -258,7 +258,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <SDLCheck>true</SDLCheck>
@@ -330,7 +330,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\FreeType\include;$(SolutionDir)..\..\o2\Framework;$(SolutionDir)..\..\o2\Framework\Sources;$(SolutionDir)..\..\o2\Editor\Sources;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\rapidjson\include;$(SolutionDir)..\..\o2\Framework\3rdPartyLibs\jerryscript\jerry-core\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <PrecompiledHeaderFile>o2Editor/stdafx.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <SDLCheck>false</SDLCheck>

@@ -437,10 +437,87 @@ namespace o2
 	void ScriptConstructorTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type,
 																			const char* name, _res_type(*pointer)(_args ...))
 	{
-		ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(type, name, ScriptValue(Function<_res_type(_args ...)>([=](_args ... args) {
-			return (*pointer)(args ...);
-																														  })));
+		ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(type, name, ScriptValue(Function<_res_type(_args ...)>(
+			[=](_args ... args) {
+				return (*pointer)(args ...);
+			})));
 	}
+
+	template<>
+	struct DataValue::Converter<ScriptValue>
+	{
+		static constexpr bool isSupported = true;
+
+		static void Write(const ScriptValue& value, DataValue& data)
+		{
+			auto type = value.GetValueType();
+			if (type == ScriptValue::ValueType::Number)
+				data.Set(value.ToNumber());
+			else if (type == ScriptValue::ValueType::String)
+				data.Set(value.ToString());
+			else if (type == ScriptValue::ValueType::Bool)
+				data.Set(value.ToBool());
+			else if (type == ScriptValue::ValueType::Array)
+			{
+				int length = value.GetLength();
+				for (int i = 0; i < length; i++)
+					data.AddElement().Set(value.GetElement(i));
+			}
+			else if (type == ScriptValue::ValueType::Object)
+			{
+				if (value.IsObjectContainer())
+				{
+					if (auto objType = dynamic_cast<const ObjectType*>(value.GetObjectContainerType()))
+					{
+						IObject* object = objType->DynamicCastToIObject(value.GetContainingObject());
+						if (auto serializable = dynamic_cast<ISerializable*>(object))
+							data = serializable;
+					}
+				}
+				else
+				{
+					value.ForEachProperties(
+						[&](const ScriptValue& name, const ScriptValue& vvalue)
+						{
+							data[name.ToString()].Set(vvalue);
+							return true;
+						});
+				}
+			}
+			else
+				data.SetNull();
+		}
+
+		static void Read(ScriptValue& value, const DataValue& data)
+		{
+			if (data.IsNull())
+				value = ScriptValue();
+			else if (data.IsNumber())
+				value = (float)data;
+			else if (data.IsBoolean())
+				value = (bool)data;
+			else if (data.IsString())
+				value = String(data.GetString());
+			else if (data.IsArray())
+			{
+				for (auto& element : data)
+					value.AddElement((ScriptValue)element);
+			}
+			else if (data.IsObject())
+			{
+				if (auto typeMember = data.FindMember("Type"))
+				{
+					IObject* object = data;
+					value.SetContainingObject(object);
+				}
+				else
+				{
+					for (auto it = data.BeginMember(); it != data.EndMember(); ++it)
+						value.SetProperty((ScriptValue)it->name, (ScriptValue)it->value);
+				}
+			}
+		}
+	};
 }
 
 #endif // SCRIPTING_BACKEND_JERRYSCRIPT

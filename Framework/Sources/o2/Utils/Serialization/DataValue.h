@@ -354,7 +354,7 @@ namespace o2
 
 		struct ShortStringData
 		{
-			static constexpr int maxLength = DataPayloadSize/sizeof(Byte) - 1;
+			static constexpr int maxLength = DataPayloadSize / sizeof(Byte) - 1;
 			char stringValue[maxLength + 1];
 		};
 
@@ -415,7 +415,7 @@ namespace o2
 		static bool Transcode(rapidjson::GenericStringBuffer<rapidjson::UTF16<>>& target, const char* source);
 
 		friend class JsonDataDocumentParseHandler;
-		
+
 		template<typename T>
 		friend class TType;
 	};
@@ -423,7 +423,7 @@ namespace o2
 	// ------------------------------------------
 	// Data values document. Must be object value
 	// ------------------------------------------
-	class DataDocument: public DataValue
+	class DataDocument : public DataValue
 	{
 	public:
 		enum class Format { Xml, JSON, Binary };
@@ -513,7 +513,7 @@ namespace o2
 
 	public:
 		BaseMemberIterator() {}
-		BaseMemberIterator(const BaseMemberIterator<true>& other): mPointer(other.mPointer) {}
+		BaseMemberIterator(const BaseMemberIterator<true>& other) : mPointer(other.mPointer) {}
 
 		operator bool() const { return mPointer != nullptr; }
 
@@ -526,8 +526,8 @@ namespace o2
 		BaseMemberIterator<_const>  operator++(int) { BaseMemberIterator<_const> old(*this); ++mPointer; return old; }
 		BaseMemberIterator<_const>  operator--(int) { BaseMemberIterator<_const> old(*this); --mPointer; return old; }
 
-		BaseMemberIterator<_const> operator+(int n) const { return Iterator(mPointer+n); }
-		BaseMemberIterator<_const> operator-(int n) const { return Iterator(mPointer-n); }
+		BaseMemberIterator<_const> operator+(int n) const { return Iterator(mPointer + n); }
+		BaseMemberIterator<_const> operator-(int n) const { return Iterator(mPointer - n); }
 
 		BaseMemberIterator<_const>& operator+=(int n) { mPointer += n; return *this; }
 		BaseMemberIterator<_const>& operator-=(int n) { mPointer -= n; return *this; }
@@ -546,7 +546,7 @@ namespace o2
 		bool IsValid() const { return mPointer != nullptr; }
 
 	private:
-		explicit BaseMemberIterator(DataMemberType* p): mPointer(p) {}
+		explicit BaseMemberIterator(DataMemberType* p) : mPointer(p) {}
 
 	private:
 		DataMemberType* mPointer = nullptr;
@@ -591,7 +591,7 @@ namespace o2
 	}
 
 	template<typename _type>
-	DataValue::DataValue(const _type& value, DataDocument& document):
+	DataValue::DataValue(const _type& value, DataDocument& document) :
 		mData(), mDocument(&document)
 	{
 		Set(value);
@@ -738,7 +738,7 @@ namespace o2
 			else
 			{
 				auto length = data.mData.stringPtrData.stringLength;
-				memcpy(value, data.mData.stringPtrData.stringPtr, sizeof(char)*length);
+				memcpy(value, data.mData.stringPtrData.stringPtr, sizeof(char) * length);
 				value[length] = '\0';
 			}
 		}
@@ -1207,7 +1207,7 @@ namespace o2
 	};
 
 	template<typename T>
-	struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value &&
+	struct DataValue::Converter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
 		std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
 	{
 		static constexpr bool isSupported = true;
@@ -1372,7 +1372,7 @@ namespace o2
 	}
 
 	template<typename T>
-	struct DataValue::DeltaConverter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value &&
+	struct DataValue::DeltaConverter<T, typename std::enable_if<std::is_pointer<T>::value && !std::is_const<T>::value&&
 		std::is_base_of<o2::IObject, typename std::remove_pointer<T>::type>::value>::type>
 	{
 		static constexpr bool isSupported = true;

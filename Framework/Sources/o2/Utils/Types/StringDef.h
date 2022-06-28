@@ -353,24 +353,12 @@ namespace o2
 
 namespace std 
 {
-
 	template <>
-	struct hash<String>
+	struct hash<o2::String>
 	{
-		std::size_t operator()(const String& k) const
+		std::size_t operator()(const o2::String& k) const
 		{
-			using std::size_t;
-			using std::hash;
-			using std::string;
-
-			// Compute individual hash values for first,
-			// second and third and combine them using XOR
-			// and bit shifting:
-
-			return ((hash<string>()(k.first)
-					 ^ (hash<string>()(k.second) << 1)) >> 1)
-				^ (hash<int>()(k.third) << 1);
+			return hash<std::string>()(k);
 		}
 	};
-
 }

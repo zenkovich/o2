@@ -100,7 +100,13 @@ namespace Editor
 						if (kv.second.IsObject())
 							elem.second = mnew o2::ScriptValueProperty{ kv.second, name };
 
-						res[name.ToString()].Add(elem);
+						auto nameStr = name.ToString();
+						auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
+						if (fnd)
+							fnd->second.Add(elem);
+						else
+							res.Add({ nameStr, { elem } });
+
 						return true;
 					});
 			}
@@ -115,7 +121,12 @@ namespace Editor
 					if (kv.second.IsObject())
 						elem.second = mnew ScriptValueArrayElement{ kv.second, i };
 
-					res[(String)i].Add(elem);
+					auto nameStr = (String)i;
+					auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
+					if (fnd)
+						fnd->second.Add(elem);
+					else
+						res.Add({ nameStr, { elem } });
 				}
 			}
 		}
@@ -123,7 +134,7 @@ namespace Editor
 		// Leave only common properties
 		std::erase_if(res, [&](const auto& item)
 					  {
-						  return item.value.Count() != values.Count();
+						  return item.second.Count() != values.Count();
 					  });
 
 		return res;
@@ -256,7 +267,8 @@ namespace Editor
 				if (mNeedUpdateProxies)
 				{
 					auto& name = kv.first;
-					auto value = commonProperties[kv.first][0].first->Get();
+					auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
+					auto value = prop->second[0].first->Get();
 					auto type = value.GetValueType();
 					auto field = kv.second;
 
@@ -279,7 +291,7 @@ namespace Editor
 							SetFieldProxies<Color4>(commonProperties, name, field);
 						else if (value.IsObjectContainer())
 						{
-							auto proxies = commonProperties[name].Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+							auto proxies = prop->second.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 								[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 								{
 									Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
