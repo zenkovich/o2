@@ -31,7 +31,13 @@ namespace o2
 
 	void ScriptEngine::RunBuildtinScripts()
 	{
-		String filename("Scripts/Math.js");
+		RunBuiltinScript("Scripts/o2.js");
+		RunBuiltinScript("Scripts/Math.js");
+		RunBuiltinScript("Scripts/Component.js");
+	}
+
+	void ScriptEngine::RunBuiltinScript(const String& filename)
+	{
 		Eval(o2FileSystem.ReadFile(GetBuiltitAssetsPath() + filename), filename);
 	}
 

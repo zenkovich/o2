@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Reflection/Type.h"
+#include <type_traits>
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 
@@ -28,7 +29,8 @@ namespace o2
 		{
 			ScriptValue tmp;
 			tmp.AcquireValue(args[_j]);
-			std::get<_i>(argst) = tmp.GetValue<std::remove_reference<decltype(std::get<_i>(argst))>::type>();
+			using x = std::remove_reference<decltype(std::get<_i>(argst))>::type;
+			std::get<_i>(argst) = tmp.GetValue<x>();
 
 			if constexpr (_i + 1 != sizeof...(_args))
 				UnpackArgs<_i + 1, _j + 1>(argst, args, argsCount);
@@ -379,9 +381,9 @@ namespace o2
 
 	class Type;
 
-	struct ScriptConstructorTypeProcessor : public BaseTypeProcessor
+	struct ScriptConstructorTypeProcessor: public BaseTypeProcessor
 	{
-		struct BaseFunctionProcessor : public BaseTypeProcessor::FunctionProcessor
+		struct BaseFunctionProcessor: public BaseTypeProcessor::FunctionProcessor
 		{
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args);
@@ -389,7 +391,7 @@ namespace o2
 			BaseFunctionProcessor& SetProtectSection(ProtectSection section) { return *this; }
 		};
 
-		struct FunctionProcessor : public BaseFunctionProcessor
+		struct FunctionProcessor: public BaseFunctionProcessor
 		{
 			template<typename _object_type, typename ... _args>
 			void Constructor(_object_type* object, Type* type);
@@ -479,7 +481,9 @@ namespace o2
 					value.ForEachProperties(
 						[&](const ScriptValue& name, const ScriptValue& vvalue)
 						{
-							data[name.ToString()].Set(vvalue);
+							auto nameStr = name.ToString();
+							if (nameStr[0] != '_')
+								data[nameStr].Set(vvalue);
 							return true;
 						});
 				}
@@ -513,7 +517,11 @@ namespace o2
 				else
 				{
 					for (auto it = data.BeginMember(); it != data.EndMember(); ++it)
-						value.SetProperty((ScriptValue)it->name, (ScriptValue)it->value);
+					{
+						ScriptValue itName, itValue;
+						it->name.Get(itName); it->value.Get(itValue);
+						value.SetProperty(itName, itValue);
+					}
 				}
 			}
 		}

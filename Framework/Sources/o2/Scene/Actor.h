@@ -191,7 +191,7 @@ namespace o2
 		// Returns child actor by name @SCRIPTABLE
 		Actor* FindChild(const String& name) const;
 
-		// Returns child actor by predicate @SCRIPTABLE
+		// Returns child actor by predicate
 		Actor* FindChild(const Function<bool(const Actor* child)>& pred) const;
 
 		// Returns child actor by path (ex "root/some node/other node/target node")
@@ -826,7 +826,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, AddChild, Actor*, int);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, GetChild, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindChild, const String&);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindChild, const Function<bool(const Actor* child)>&);
+	FUNCTION().PUBLIC().SIGNATURE(Actor*, FindChild, const Function<bool(const Actor* child)>&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Actor*>&, GetChildren);
 	FUNCTION().PUBLIC().SIGNATURE(void, GetAllChildrenActors, Vector<Actor*>&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool);

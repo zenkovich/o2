@@ -17,6 +17,19 @@ namespace o2
 		o2Scripts.mLog->ErrorStr(tmp.GetValue<String>());
 	}
 
+	jerry_value_t ScriptEngineBase::PrintCallback(const jerry_value_t func_obj_val, const jerry_value_t this_p,
+												  const jerry_value_t args_p[], const jerry_length_t args_cnt)
+	{
+		for (int i = 0; i < args_cnt; i++)
+		{
+			ScriptValue v;
+			v.AcquireValue(args_p[i]);
+			o2Scripts.mLog->OutStr(v.GetValue<String>());
+		}
+
+		return jerry_create_undefined();
+	}
+
 	ScriptParseResultBase::~ScriptParseResultBase()
 	{
 		jerry_release_value(mParsedCode);
@@ -45,7 +58,7 @@ namespace o2
 		o2Debug.GetLog()->BindStream(mLog);
 
 		jerry_init(JERRY_INIT_EMPTY);
-		jerryx_handler_register_global((const jerry_char_t*)"print", jerryx_handler_print);
+		jerryx_handler_register_global((const jerry_char_t*)"print", PrintCallback);
 		jerry_set_error_object_created_callback(&ErrorCallback, NULL);
 
 		GetGlobal().SetProperty("Dump", Function<String(const ScriptValue&)>([](const ScriptValue& v) { return v.Dump(); }));
@@ -72,7 +85,7 @@ namespace o2
 	{
 		ScriptParseResult res;
 		res.mParsedCode = jerry_parse((jerry_char_t*)filename.Data(), filename.Length(),
-			(jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS);
+									  (jerry_char_t*)script.Data(), script.Length(), JERRY_PARSE_NO_OPTS);
 
 		return res;
 	}
@@ -118,7 +131,7 @@ namespace o2
 	{
 		jerry_gc(JERRY_GC_PRESSURE_HIGH);
 	}
-	
+
 	void ScriptEngine::ConnectDebugger() const
 	{
 		jerryx_debugger_after_connect(jerryx_debugger_tcp_create(5001) && jerryx_debugger_ws_create());

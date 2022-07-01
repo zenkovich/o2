@@ -48,9 +48,9 @@ namespace o2
 		SERIALIZABLE(ScriptableComponent);
 
 	protected:
-		JavaScriptAssetRef mScript; // Java script asset link @SERIALIZABLE
+		JavaScriptAssetRef mScript; // Java script asset link
 
-		ScriptValue mObject; // Script value instance @SERIALIZABLE @EDITOR_PROPERTY @NO_HEADER
+		ScriptValue mObject; // Script value instance @EDITOR_PROPERTY @NO_HEADER
 
 		ScriptValue mOnStartFunc;
 		ScriptValue mUpdateEnabledFunc;
@@ -61,6 +61,9 @@ namespace o2
 	protected:
 		// Loads script and creates object instance
 		void LoadScriptAndCreateObject();
+
+		// Beginning serialization callback
+		void OnSerialize(DataValue& node) const override;
 
 		// Completion deserialization callback, loads script and creates instance
 		void OnDeserialized(const DataValue& node) override;
@@ -102,8 +105,8 @@ END_META;
 CLASS_FIELDS_META(o2::ScriptableComponent)
 {
 	FIELD().PUBLIC().NAME(script);
-	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().NAME(mScript);
-	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().NO_HEADER_ATTRIBUTE().SERIALIZABLE_ATTRIBUTE().NAME(mObject);
+	FIELD().PROTECTED().NAME(mScript);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mObject);
 	FIELD().PROTECTED().NAME(mOnStartFunc);
 	FIELD().PROTECTED().NAME(mUpdateEnabledFunc);
 	FIELD().PROTECTED().NAME(mOnEnabledFunc);
@@ -123,6 +126,7 @@ CLASS_METHODS_META(o2::ScriptableComponent)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);
 	FUNCTION().PROTECTED().SIGNATURE(void, LoadScriptAndCreateObject);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnSerialize, DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDeserialized, const DataValue&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetOwnerActor, Actor*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddToScene);

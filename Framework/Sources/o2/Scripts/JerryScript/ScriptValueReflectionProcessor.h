@@ -115,7 +115,8 @@ namespace o2
 					value.SetProperty(ScriptValue(this->name ? this->name : name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
 				else
 				{
-					typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+					using x = std::remove_reference<_res_type>::type;
+					typedef std::remove_const<x>::type __res_type;
 					value.SetProperty(ScriptValue(this->name ? this->name : name),
 									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
 																				  {
@@ -133,7 +134,8 @@ namespace o2
 					value.SetProperty(ScriptValue(name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
 				else
 				{
-					typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+					using x = std::remove_reference<_res_type>::type;
+					using __res_type = std::remove_const<x>::type;
 					value.SetProperty(ScriptValue(name),
 									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
 																				  {

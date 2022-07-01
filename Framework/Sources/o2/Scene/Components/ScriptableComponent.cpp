@@ -86,53 +86,72 @@ namespace o2
 		}
 	}
 
+	void ScriptableComponent::OnSerialize(DataValue& node) const
+	{
+		Component::OnSerialize(node);
+
+		node["mScript"].Set(mScript);
+
+		if (mObject.IsObject())
+			node["mObject"].Set(mObject);
+	}
+
 	void ScriptableComponent::OnDeserialized(const DataValue& node)
 	{
+		Component::OnDeserialized(node);
+
+		node["mScript"].Get(mScript);
 		LoadScriptAndCreateObject();
+
+		if (mObject.IsObject())
+			node["mObject"].Get(mObject);
 	}
 
 	void ScriptableComponent::SetOwnerActor(Actor* actor)
 	{
 		Component::SetOwnerActor(actor);
+
+		if (mObject.IsObject())
+			mObject.SetProperty("_actor", actor);
 	}
 
 	void ScriptableComponent::OnAddToScene()
 	{
-
+		Component::OnAddToScene();
 	}
 
 	void ScriptableComponent::OnRemoveFromScene()
 	{
-
+		Component::OnRemoveFromScene();
 	}
 
 	void ScriptableComponent::OnStart()
 	{
-		if (mOnStartFunc.GetValueType() == ScriptValue::ValueType::Function)
+		if (mOnStartFunc.IsFunction())
 			mOnStartFunc.InvokeRaw(mObject, {});
 	}
 
 	void ScriptableComponent::Update(float dt)
 	{
-		if (mUpdateFunc.GetValueType() == ScriptValue::ValueType::Function)
+		if (mUpdateFunc.IsFunction())
 			mUpdateFunc.Invoke<void, float>(mObject, dt);
 	}
 
 	void ScriptableComponent::UpdateEnabled()
 	{
-		if (mUpdateEnabledFunc.GetValueType() == ScriptValue::ValueType::Function)
+		if (mUpdateEnabledFunc.IsFunction())
 			mUpdateEnabledFunc.InvokeRaw(mObject, {});
 	}
 
 	void ScriptableComponent::OnEnabled()
 	{
-		if (mOnEnabledFunc.GetValueType() == ScriptValue::ValueType::Function)
+		if (mOnEnabledFunc.IsFunction())
 			mOnEnabledFunc.InvokeRaw(mObject, {});
 	}
 
 	void ScriptableComponent::OnDisabled()
 	{
-		if (mOnDisabledFunc.GetValueType() == ScriptValue::ValueType::Function)
+		if (mOnDisabledFunc.IsFunction())
 			mOnDisabledFunc.InvokeRaw(mObject, {});
 	}
 

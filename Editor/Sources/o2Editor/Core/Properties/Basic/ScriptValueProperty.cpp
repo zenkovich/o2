@@ -101,11 +101,14 @@ namespace Editor
 							elem.second = mnew o2::ScriptValueProperty{ kv.second, name };
 
 						auto nameStr = name.ToString();
-						auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
-						if (fnd)
-							fnd->second.Add(elem);
-						else
-							res.Add({ nameStr, { elem } });
+						if (nameStr[0] != '_')
+						{
+							auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
+							if (fnd)
+								fnd->second.Add(elem);
+							else
+								res.Add({ nameStr, { elem } });
+						}
 
 						return true;
 					});

@@ -78,6 +78,9 @@ namespace o2
 		// Runs built in script with math and etc, required to work framework
 		void RunBuildtinScripts();
 
+		// Runs built in script from file
+		void RunBuiltinScript(const String& filename);
+
 	private:
 		typedef void(*RegisterConstructorFunc)(void*, ScriptConstructorTypeProcessor&);
 		static Vector<RegisterConstructorFunc>& GetRegisterConstructorFuncs();

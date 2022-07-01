@@ -16,7 +16,8 @@ namespace o2
 	{
 		static void Process(T* object, ScriptValue& value)
 		{
-			object->ReflectValue(value);
+			if (object)
+				object->ReflectValue(value);
 		}
 	};
 
