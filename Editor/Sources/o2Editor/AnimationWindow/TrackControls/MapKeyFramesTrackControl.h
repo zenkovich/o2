@@ -55,10 +55,10 @@ namespace Editor
 		void UpdateHandlesForTrack(IAnimationTrack* track);
 
 		// It is called when group of keys began dragged, disables keys combining
-		void BeginKeysDrag();
+		void BeginKeysDrag() override;
 
 		// It is called when group of keys completed drag, enables keys combining
-		void EndKeysDrag();
+		void EndKeysDrag() override;
 
 		SERIALIZABLE(MapKeyFramesTrackControl);
 

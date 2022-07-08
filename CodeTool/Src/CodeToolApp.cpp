@@ -277,7 +277,7 @@ void CodeToolApplication::UpdateProjectFilesFilter()
 
 		while (!dir.empty() && dir[0] == '.')
 		{
-			auto slashPos = dir.find('\\');
+			auto slashPos = dir.find('/');
 			if (slashPos != string::npos)
 				dir.erase(0, slashPos + 1);
 		}
@@ -1433,9 +1433,6 @@ void CodeToolCache::ResolveBaseClassDependencies(SyntaxSection* section)
 		SyntaxClass* cls = (SyntaxClass*)section;
 		for (auto& baseClass : cls->mBaseClasses)
 		{
-			if (baseClass.GetClassName() == "TAsset<AtlasAsset>")
-				int x = 5;
-
 			baseClass.mClass = (SyntaxClass*)FindSection(baseClass.mClassName, section);
 
 			if (!baseClass.mClass)

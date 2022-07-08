@@ -20,10 +20,10 @@ namespace Editor
 		~DefaultActorTransformViewer();
 
 		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors);
+		void SetTargetActors(const Vector<Actor*>& actors) override;
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(DefaultActorTransformViewer);
 

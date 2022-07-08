@@ -218,7 +218,7 @@ namespace Editor
 		void OnObjectsSelectedFromThis();
 
 		// Redraws scene texture
-		void RedrawContent();
+		void RedrawContent() override;
 
 		// Draws objects drawables components
 		void DrawObjects();

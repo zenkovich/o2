@@ -52,7 +52,6 @@ namespace o2
 
 		if (pugi::xml_node charsNode = root.child(L"chars"))
 		{
-			int i = 0;
 			Vec2F texOffs = mTextureSrcRect.LeftBottom();
 			for (pugi::xml_node charNode = charsNode.child(L"char"); charNode; charNode = charNode.next_sibling(L"char"))
 			{

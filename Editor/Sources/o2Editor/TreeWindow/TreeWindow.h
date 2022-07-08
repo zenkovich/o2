@@ -94,7 +94,7 @@ namespace Editor
 		void InitUILayersCreateMenu();
 
 		// It is called after that all windows was created
-		void PostInitializeWindow();
+		void PostInitializeWindow() override;
 
 		// It is called when search button pressed
 		void OnSearchPressed();

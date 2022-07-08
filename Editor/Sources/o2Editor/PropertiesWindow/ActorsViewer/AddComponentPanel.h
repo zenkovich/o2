@@ -31,7 +31,7 @@ namespace Editor
 		AddComponentPanel(ActorViewer* viewer);
 
 		// Draws widget, calls OnDrawn for CursorEventsListener
-		void Draw();
+		void Draw() override;
 
 		// Returns filter widget
 		EditBox* GetFilter() const;
@@ -68,7 +68,7 @@ namespace Editor
 		void OnNodeDblClick(TreeNode* nodeWidget);
 
 		// It is called when key was released. When returns has pressed, component is creating
-		void OnKeyReleased(const Input::Key& key);
+		void OnKeyReleased(const Input::Key& key) override;
 	};
 	
 	// ---------------------------------------------------------------------

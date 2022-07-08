@@ -129,7 +129,7 @@ namespace Editor
 		void OnNodesSelectionChanged(Vector<void*> objects) override;
 
 		// Gets tree node from pool or creates new, in editor scope
-		TreeNode* CreateTreeNodeWidget();
+		TreeNode* CreateTreeNodeWidget() override;
 
 		// Removes selected property
 		void OnDeletePropertyPressed();

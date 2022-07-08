@@ -144,10 +144,7 @@ namespace o2
 			wchar_t c = needChararacters[i];
 			auto fndHeight = mCharacters.find(height);
 			if (fndHeight != mCharacters.End())
-			{
-				auto fndId = fndHeight->second.find(c);
 				isNew = fndHeight->second.find(c) == fndHeight->second.End();
-			}
 
 			if (isNew)
 				isNew = !needToRenderChars.Contains(c);

@@ -140,8 +140,6 @@ namespace o2
 
 	void AssetsTree::LoadFolder(const FolderInfo& folder, AssetInfo* parentAsset)
 	{
-		auto& parentChilds = parentAsset ? parentAsset->mChildren : rootAssets;
-
 		for (auto fileInfo : folder.files)
 		{
 			String extension = o2FileSystem.GetFileExtension(fileInfo.path);

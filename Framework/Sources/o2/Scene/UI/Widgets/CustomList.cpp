@@ -461,7 +461,7 @@ namespace o2
 			ClearSelection();
 
 		int itemIdx = -1;
-		Widget* itemUnderCursor = GetItemUnderPoint(cursor.position, &itemIdx);
+		GetItemUnderPoint(cursor.position, &itemIdx);
 		SelectItemAt(itemIdx);
 
 		OnSelectionChanged();

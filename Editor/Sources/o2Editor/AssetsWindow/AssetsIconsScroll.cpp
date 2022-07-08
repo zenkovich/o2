@@ -474,8 +474,6 @@ namespace Editor
 		if (cursor.delta == Vec2F())
 			return;
 
-		float beginDragOrSelectThreshold = 5.0f;
-
 		if (mSelecting)
 			UpdateSelection(cursor);
 	}

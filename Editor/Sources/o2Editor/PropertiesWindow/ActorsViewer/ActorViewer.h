@@ -34,7 +34,7 @@ namespace Editor
 		~ActorViewer();
 
 		// Returns viewing object type
-		const Type* GetViewingObjectType() const;
+		const Type* GetViewingObjectType() const override;
 
 		// Sets header viewer
 		void SetActorHeaderViewer(IActorHeaderViewer* viewer);

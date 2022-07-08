@@ -4,9 +4,9 @@
 
 bool EndsWith(const string& str, const string& ends);
 bool StartsWith(const string& str, const string& starts);
-string& Trim(const string &str, const string& chars = " ");
-string& TrimEnd(const string &str, const string& chars = " ");
-string& TrimStart(const string &str, const string& chars = " ");
+string Trim(const string &str, const string& chars = " ");
+string TrimEnd(const string &str, const string& chars = " ");
+string TrimStart(const string &str, const string& chars = " ");
 void Split(const string &s, char delim, vector<string> &elems);
 vector<string> Split(const string &s, char delim);
 

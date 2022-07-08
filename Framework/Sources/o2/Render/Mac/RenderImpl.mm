@@ -286,7 +286,6 @@ namespace o2
 			if (mScissorEnabled)
 			{
 				Basis scissorRect(mScissorRect);
-				Basis screenScissorRect = scissorRect*mCamera.GetBasis().Inverted()*Camera().GetBasis();
 				
 				RectI clipRect = scissorRect.AABB().Move(Vec2I(mCurrentResolution.x/2, mCurrentResolution.y/2));
 				clipRect.left = Math::Clamp(clipRect.left, 0, mCurrentResolution.x);

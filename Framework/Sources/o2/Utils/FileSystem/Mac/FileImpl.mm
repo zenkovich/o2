@@ -56,7 +56,7 @@ namespace o2
 
     void InFile::ReadData(void *dataPtr, UInt bytes)
     {
-        auto& r = mIfstream.read((char*)dataPtr, bytes);
+        mIfstream.read((char*)dataPtr, bytes);
     }
 
     void InFile::SetCaretPos(UInt pos)
@@ -73,7 +73,7 @@ namespace o2
     {
         mIfstream.seekg(0, std::ios::beg);
         mIfstream.seekg(0, std::ios::end);
-        UInt res = (long unsigned int)mIfstream.tellg();
+        UInt res = (UInt)mIfstream.tellg();
         mIfstream.seekg(0, std::ios::beg);
 
         return res;

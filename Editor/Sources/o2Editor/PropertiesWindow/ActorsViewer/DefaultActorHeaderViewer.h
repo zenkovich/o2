@@ -33,13 +33,13 @@ namespace Editor
 		~DefaultActorHeaderViewer();
 
 		// Sets target actors
-		void SetTargetActors(const Vector<Actor*>& actors);
+		void SetTargetActors(const Vector<Actor*>& actors) override;
 
 		// Returns data widget
-		Widget* GetWidget() const;
+		Widget* GetWidget() const override;
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(DefaultActorHeaderViewer);
 

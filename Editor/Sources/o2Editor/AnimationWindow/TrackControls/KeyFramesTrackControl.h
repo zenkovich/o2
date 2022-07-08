@@ -56,7 +56,7 @@ namespace Editor
 		void Initialize(AnimationTimeline* timeline, KeyHandlesSheet* handlesSheet) override;
 
 		// Updates handles position on timeline
-		void UpdateHandles();
+		void UpdateHandles() override;
 
 		// Returns key handles list
 		Vector<KeyHandle*> GetKeyHandles() const override;

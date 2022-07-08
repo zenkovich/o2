@@ -104,10 +104,10 @@ namespace Editor
 		for (auto wnd : mEditorWindows)
 			wnd->Draw();
 
-		return;
-		String hierarchy;
-		ProcHierarchy(hierarchy, EditorUIRoot.GetRootWidget(), 0);
-		o2Debug.DrawText((Vec2F)(o2Render.GetResolution().InvertedX())*0.5f, hierarchy);
+//		return;
+//		String hierarchy;
+//		ProcHierarchy(hierarchy, EditorUIRoot.GetRootWidget(), 0);
+//		o2Debug.DrawText((Vec2F)(o2Render.GetResolution().InvertedX())*0.5f, hierarchy);
 	}
 
 	void WindowsManager::AddWindow(IEditorWindow* window)

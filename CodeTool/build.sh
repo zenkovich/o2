@@ -12,8 +12,5 @@ else
 	cmake -G "Unix Makefiles" -S ./ -B ${BUILD_DIR}
 fi
 
-cmake --build ${BUILD_DIR} --config Release
-
-echo "path to binary: ${BUILD_DIR}"
 echo "done"
 exit 0;

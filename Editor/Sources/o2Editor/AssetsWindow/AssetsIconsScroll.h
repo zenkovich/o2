@@ -64,7 +64,7 @@ namespace Editor
 		void UpdateAssetsByCurrentPath();
 
 		// Returns is this widget can be selected
-		bool IsFocusable() const;
+		bool IsFocusable() const override;
 
 		// Highlights asset
 		void HighlightAsset(const UID& id);

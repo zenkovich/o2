@@ -116,8 +116,9 @@ namespace Editor
 		mFoldersTree = mnew AssetsFoldersTree();
 		*mFoldersTree->layout = WidgetLayout(0.0f, 1.0f, 0.5f, 0.0f, 5.0f, -18.0f, 0.0f, 18.0f);
 
-		auto separatorLayer = mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI4_Ver_separator.png"),
-													 Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
+		mFoldersTree->AddLayer("separator", mnew Sprite("ui/UI4_Ver_separator.png"),
+							   Layout::VerStretch(HorAlign::Right, -2, 0, 5, 0));
+		
 		mFoldersTree->UpdateView();
 		mWindow->AddChild(mFoldersTree);
 

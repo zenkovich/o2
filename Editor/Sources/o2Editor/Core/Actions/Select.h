@@ -29,13 +29,13 @@ namespace Editor
 		SelectAction(const Vector<SceneEditableObject*>& selectedObjects, const Vector<SceneEditableObject*>& prevSelectedObjects);
 
 		// Returns name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Selects objects again
-		void Redo();
+		void Redo() override;
 
 		// Selects previous selected objects
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(SelectAction);
 	};

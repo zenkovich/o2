@@ -39,22 +39,22 @@ namespace Editor
 		Sprite* GetDockingFrameSample() const; 
 
 		// Sets icon sprite
-		void SetIcon(Sprite* icon);
+		void SetIcon(Sprite* icon) override;
 
 		// Returns icon sprite
-		Sprite* GetIcon() const;
+		Sprite* GetIcon() const override;
 
 		// Sets icon layer layout
-		void SetIconLayout(const Layout& layout);
+		void SetIconLayout(const Layout& layout) override;
 
 		// Returns icon layer layout
-		Layout GetIconLayout() const;
+		Layout GetIconLayout() const override;
 
 		// Sets caption text
-		void SetCaption(const WString& caption);
+		void SetCaption(const WString& caption) override;
 
 		// Returns caption text
-		WString GetCaption() const;
+		WString GetCaption() const override;
 
 		// Sets tab size
 		void SetTabWidth(float width);

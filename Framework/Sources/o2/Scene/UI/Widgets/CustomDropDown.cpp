@@ -219,8 +219,6 @@ namespace o2
 
 	void CustomDropDown::MoveAndCheckClipping(const Vec2F& delta, const RectF& clipArea)
 	{
-		RectF last = mBoundsWithChilds;
-
 		mBoundsWithChilds += delta;
 		mIsClipped = !mBoundsWithChilds.IsIntersects(clipArea);
 

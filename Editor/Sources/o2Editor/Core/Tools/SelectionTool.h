@@ -43,40 +43,40 @@ namespace Editor
 		ShortcutKeys GetShortcut() const override;
 
 		// Draws tool
-		void DrawScene();
+		void DrawScene() override;
 
 		// Draws tool
-		void DrawScreen();
+		void DrawScreen() override;
 
 		// Updates tool
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// It is called when tool was enabled
-		void OnEnabled();
+		void OnEnabled() override;
 
 		// It is called when tool was disabled
-		void OnDisabled();
+		void OnDisabled() override;
 
 		// It is called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when cursor moved on this (or moved outside when this was pressed)
-		void OnCursorMoved(const Input::Cursor& cursor);
+		void OnCursorMoved(const Input::Cursor& cursor) override;
 
 		// It is called when key was pressed
-		void OnKeyPressed(const Input::Key& key);
+		void OnKeyPressed(const Input::Key& key) override;
 	};
 
 }

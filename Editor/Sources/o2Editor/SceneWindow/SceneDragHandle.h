@@ -28,13 +28,13 @@ namespace Editor
 		SceneDragHandle& operator=(const SceneDragHandle& other);
 
 		// Set handle enabled. Disabled handle don't drawn and interact
-		void SetEnabled(bool enabled);
+		void SetEnabled(bool enabled) override;
 
 		// Converts point from screen to local space
-		Vec2F ScreenToLocal(const Vec2F& point);
+		Vec2F ScreenToLocal(const Vec2F& point) override;
 
 		// Converts point from local to screen space
-		Vec2F LocalToScreen(const Vec2F& point);
+		Vec2F LocalToScreen(const Vec2F& point) override;
 
 		SERIALIZABLE(SceneDragHandle);
 
