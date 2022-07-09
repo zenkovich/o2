@@ -2,6 +2,7 @@
 
 #include "o2/Utils/Reflection/Type.h"
 #include <type_traits>
+#include "o2/Utils/Debug/Debug.h"
 
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 
@@ -505,22 +506,34 @@ namespace o2
 			else if (data.IsArray())
 			{
 				for (auto& element : data)
-					value.AddElement((ScriptValue)element);
+				{
+					ScriptValue newElement;
+					element.Get(newElement);
+					value.AddElement(newElement);
+				}
 			}
 			else if (data.IsObject())
 			{
 				if (auto typeMember = data.FindMember("Type"))
 				{
 					IObject* object = data;
-					value.SetContainingObject(object);
+					value = object->GetScriptValue();
 				}
 				else
 				{
 					for (auto it = data.BeginMember(); it != data.EndMember(); ++it)
 					{
-						ScriptValue itName, itValue;
-						it->name.Get(itName); it->value.Get(itValue);
-						value.SetProperty(itName, itValue);
+						ScriptValue itName;
+						it->name.Get(itName);
+						auto prop = value.GetProperty(itName);
+						if (prop.IsObject())
+							it->value.Get(prop);
+						else
+						{
+							ScriptValue itValue;
+							it->value.Get(itValue);
+							value.SetProperty(itName, itValue);
+						}
 					}
 				}
 			}

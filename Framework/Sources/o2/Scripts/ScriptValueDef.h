@@ -67,6 +67,9 @@ namespace o2
 		// Returns type of value
 		ValueType GetValueType() const;
 
+		// Returns is value undefined
+		bool IsUndefined() const;
+
 		// Creates deep copy of value
 		ScriptValue Copy() const;
 

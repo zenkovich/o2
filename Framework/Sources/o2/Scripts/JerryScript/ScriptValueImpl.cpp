@@ -88,6 +88,11 @@ namespace o2
 		return (ValueType)jerry_value_get_type(jvalue);
 	}
 
+	bool ScriptValue::IsUndefined() const
+	{
+		return GetValueType() == ValueType::Undefined;
+	}
+
 	ScriptValue ScriptValue::Copy() const
 	{
 		auto type = GetValueType();

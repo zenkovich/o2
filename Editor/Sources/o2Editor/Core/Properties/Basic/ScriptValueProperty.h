@@ -118,6 +118,9 @@ namespace Editor
 		// It is called when count property changing
 		void OnCountChanged(IPropertyField* def);
 
+		// It is called when expanding spoiler, refreshing properties
+		void OnExpand();
+
 		// Sets new count of elements in vector
 		void Resize(int newCount);
 
@@ -227,6 +230,7 @@ CLASS_METHODS_META(Editor::ScriptValueProperty)
 	FUNCTION().PROTECTED().SIGNATURE(PropertiesList, GetCommonProperties, _tmp1, bool&);
 	FUNCTION().PROTECTED().SIGNATURE(void, AddProperty, const String&, const Type*, int);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnCountChanged, IPropertyField*);
+	FUNCTION().PROTECTED().SIGNATURE(void, OnExpand);
 	FUNCTION().PROTECTED().SIGNATURE(void, Resize, int);
 	FUNCTION().PROTECTED().SIGNATURE(void, Remove, int);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnAddPressed);

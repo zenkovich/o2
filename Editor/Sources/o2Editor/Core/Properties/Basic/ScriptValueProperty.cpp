@@ -45,6 +45,9 @@ namespace Editor
 		mSpoiler = o2UI.CreateWidget<Spoiler>("expand with caption");
 		AddChild(mSpoiler);
 
+		if (mSpoiler)
+			mSpoiler->onExpand = THIS_FUNC(OnExpand);
+
 		mSpoiler->borderTop = 5;
 
 		mHeaderContainer = mnew HorizontalLayout();
@@ -314,6 +317,8 @@ namespace Editor
 				else
 					kv.second->Refresh();
 			}
+
+			mSpoiler->SetLayoutDirty();
 		}
 
 		for (auto kv : commonProperties)
@@ -349,6 +354,11 @@ namespace Editor
 			return;
 
 		Resize(mCountProperty->GetCommonValue());
+	}
+
+	void ScriptValueProperty::OnExpand()
+	{
+		Refresh();
 	}
 
 	void ScriptValueProperty::Resize(int newCount)

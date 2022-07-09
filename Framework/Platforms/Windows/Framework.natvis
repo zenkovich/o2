@@ -33,16 +33,27 @@
     <DisplayString>{{ vertx = { vertexCount }/{ mMaxVertexCount } poly = { polyCount }/{ mMaxPolyCount } tex = { mTexture.mTexture } }}</DisplayString>
     <Expand>
       <Item Name="texture" ExcludeView="simple">mTexture.mTexture</Item>
-      <Item Name="verticies" ExcludeView="simple">vertexCount</Item>
-      <Item Name="polygons" ExcludeView="simple">polyCount</Item>
-      <ArrayItems>
-        <Size>vertexCount</Size>
-        <ValuePointer>vertices</ValuePointer>
-      </ArrayItems>
-      <ArrayItems>
-        <Size>polyCount*3</Size>
-        <ValuePointer>indexes</ValuePointer>
-      </ArrayItems>
+
+      <Synthetic Name="verticies">
+        <DisplayString>{ vertexCount }/{ mMaxVertexCount }</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>vertexCount</Size>
+            <ValuePointer>vertices</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+
+      <Synthetic Name="indexes">
+        <DisplayString>{ polyCount }/{ mMaxPolyCount }</DisplayString>
+        <Expand>
+          <ArrayItems>
+            <Size>polyCount*3</Size>
+            <ValuePointer>indexes</ValuePointer>
+          </ArrayItems>
+        </Expand>
+      </Synthetic>
+      
     </Expand>
   </Type>
 

@@ -342,7 +342,7 @@ namespace o2
 			for (auto& symb : line.mSymbols)
 			{
 				if (currentMesh->polyCount + 2 >= currentMesh->GetMaxPolyCount())
-					currentMesh = mMeshes[currentMeshIdx++];
+					currentMesh = mMeshes[++currentMeshIdx];
 
 				unsigned long color = mColor.ABGR();
 				Vec2F points[4] =
