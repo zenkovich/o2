@@ -104,7 +104,10 @@ namespace o2
 		LoadScriptAndCreateObject();
 
 		if (mObject.IsObject())
-			node["mObject"].Get(mObject);
+		{
+			if (auto objectNode = node.FindMember("mObject"))
+				objectNode->Get(mObject);
+		}
 	}
 
 	void ScriptableComponent::SetOwnerActor(Actor* actor)

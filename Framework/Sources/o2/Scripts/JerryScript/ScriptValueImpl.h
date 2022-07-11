@@ -88,9 +88,28 @@ namespace o2
 	template<typename _type>
 	void ScriptValue::SetContainingObject(_type* object, bool owner /*= true*/)
 	{
+		if (!object)
+		{
+			*this = ScriptValue();
+			return;
+		}
+
 		auto dataContainer = mnew DataContainer<_type>(object);
 		dataContainer->isDataOwner = owner;
 		jerry_set_object_native_pointer(jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
+
+		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
+		{
+			ReflectScriptValueTypeProcessor processor(*this);
+			_type::template ProcessType<ReflectScriptValueTypeProcessor>(object, processor);
+		}
+
+		SetProperty("FreeOwnership", Function<ScriptValue()>(
+			[d = dataContainer, j = jvalue]() {
+				d->isDataOwner = false;
+				ScriptValue th; th.AcquireValue(j);
+				return th;
+			}));
 	}
 
 
@@ -382,9 +401,9 @@ namespace o2
 
 	class Type;
 
-	struct ScriptConstructorTypeProcessor: public BaseTypeProcessor
+	struct ScriptConstructorTypeProcessor : public BaseTypeProcessor
 	{
-		struct BaseFunctionProcessor: public BaseTypeProcessor::FunctionProcessor
+		struct BaseFunctionProcessor : public BaseTypeProcessor::FunctionProcessor
 		{
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args);
@@ -392,7 +411,7 @@ namespace o2
 			BaseFunctionProcessor& SetProtectSection(ProtectSection section) { return *this; }
 		};
 
-		struct FunctionProcessor: public BaseFunctionProcessor
+		struct FunctionProcessor : public BaseFunctionProcessor
 		{
 			template<typename _object_type, typename ... _args>
 			void Constructor(_object_type* object, Type* type);
@@ -425,12 +444,6 @@ namespace o2
 			[](ScriptValue thisValue, _args ... args) {
 				_object_type* sample = mnew _object_type(args ...);
 				thisValue.SetContainingObject(sample, true);
-
-				if constexpr (std::is_base_of<IObject, _object_type>::value && !std::is_same<IObject, _object_type>::value)
-				{
-					ReflectScriptValueTypeProcessor processor(thisValue);
-					_object_type::template ProcessType<ReflectScriptValueTypeProcessor>(sample, processor);
-				}
 			}));
 
 		ScriptConstructorTypeProcessor::RegisterTypeConstructor(type, thisFunc);

@@ -98,14 +98,14 @@ namespace Editor
 				kv.first.ForEachProperties(
 					[&](const ScriptValue& name, const ScriptValue& value)
 					{
-						Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
-						elem.first = mnew o2::ScriptValueProperty{ kv.first, name };
-						if (kv.second.IsObject())
-							elem.second = mnew o2::ScriptValueProperty{ kv.second, name };
-
 						auto nameStr = name.ToString();
 						if (nameStr[0] != '_')
 						{
+							Pair<IScriptValueProperty*, IScriptValueProperty*> elem;
+							elem.first = mnew o2::ScriptValueProperty{ kv.first, name };
+							if (kv.second.IsObject())
+								elem.second = mnew o2::ScriptValueProperty{ kv.second, name };
+
 							auto fnd = res.Find([&](auto& x) { return x.first == nameStr; });
 							if (fnd)
 								fnd->second.Add(elem);
@@ -138,10 +138,7 @@ namespace Editor
 		}
 
 		// Leave only common properties
-		std::erase_if(res, [&](const auto& item)
-					  {
-						  return item.second.Count() != values.Count();
-					  });
+		res.RemoveAll([&](const auto& item) { return item.second.Count() != values.Count(); });
 
 		return res;
 	}

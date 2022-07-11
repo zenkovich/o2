@@ -111,7 +111,11 @@ namespace o2
 
 	void Scene::DestroyActor(Actor* actor)
 	{
-		mDestroyActors.Add(actor);
+		if (actor->mState != Actor::State::Destroying)
+		{
+			actor->mState = Actor::State::Destroying;
+			mDestroyActors.Add(actor);
+		}
 	}
 
 	void Scene::DestroyComponent(Component* component)

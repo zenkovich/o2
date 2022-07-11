@@ -175,6 +175,7 @@ namespace o2
 			typedef _thisType thisclass;
 			processor.template StartMethods<_thisType>(object, type);
 
+			FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(T*);
 			FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
 			FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
 		}

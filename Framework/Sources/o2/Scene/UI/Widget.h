@@ -264,7 +264,7 @@ namespace o2
 
 	protected:
 		using Actor::mLayer;
-		using Actor::mSceneStatus;
+		using Actor::mState;
 
 		Vector<WidgetLayer*> mLayers; // Layers array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetLayer)
 		Vector<WidgetState*> mStates; // States array @DONT_DELETE @DEFAULT_TYPE(o2::WidgetState) @EDITOR_PROPERTY @INVOKE_ON_CHANGE(OnStatesListChanged)

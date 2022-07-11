@@ -40,7 +40,7 @@ namespace o2
 	class Actor: virtual public ActorBase
 	{
 	public:
-		enum class SceneStatus { InScene, NotInScene, WaitingAddToScene };
+		enum class State { InScene, NotInScene, WaitingAddToScene, Destroying };
 
 	public:
 		PROPERTIES(Actor);
@@ -237,10 +237,10 @@ namespace o2
 		// Returns component with type name @SCRIPTABLE
 		Component* GetComponent(const String& typeName);
 
-		// Returns component with type @SCRIPTABLE
+		// Returns component with type
 		Component* GetComponent(const Type* type);
 
-		// Returns component by id @SCRIPTABLE
+		// Returns component by id
 		Component* GetComponent(SceneUID id);
 
 		// Returns component with type
@@ -342,7 +342,7 @@ namespace o2
 		bool mResEnabled = true;            // Is actor really enabled. 
 		bool mResEnabledInHierarchy = true; // Is actor enabled in hierarchy
 
-		SceneStatus mSceneStatus = SceneStatus::NotInScene; // Actor on scene status
+		State mState = State::NotInScene; // Actor on scene status
 
 		bool mIsAsset = false; // Is this actor cached asset
 		UID  mAssetId;         // Source asset id
@@ -353,7 +353,7 @@ namespace o2
 
 	protected:
 		// Base actor constructor with transform
-		Actor(ActorTransform* transform, SceneStatus sceneStatus = SceneStatus::WaitingAddToScene,
+		Actor(ActorTransform* transform, State sceneStatus = State::WaitingAddToScene,
 			  const String& name = "unnamed", bool enabled = true, bool resEnabled = true, bool locked = false,
 			  bool resLocked = false, const String& layerName = "", SceneLayer* layer = nullptr,
 			  SceneUID id = Math::Random(), UID assetId = UID(0));
@@ -726,7 +726,7 @@ namespace o2
 
 }
 
-PRE_ENUM_META(o2::Actor::SceneStatus);
+PRE_ENUM_META(o2::Actor::State);
 
 CLASS_BASES_META(o2::Actor)
 {
@@ -759,7 +759,7 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabled);
 	FIELD().PROTECTED().DEFAULT_VALUE(true).NAME(mResEnabledInHierarchy);
-	FIELD().PROTECTED().DEFAULT_VALUE(SceneStatus::NotInScene).NAME(mSceneStatus);
+	FIELD().PROTECTED().DEFAULT_VALUE(State::NotInScene).NAME(mState);
 	FIELD().PROTECTED().DEFAULT_VALUE(false).NAME(mIsAsset);
 	FIELD().PROTECTED().NAME(mAssetId);
 	FIELD().PROTECTED().NAME(mReferences);
@@ -836,8 +836,8 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveComponent, Component*, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllComponents);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const String&);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const Type*);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, SceneUID);
+	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, const Type*);
+	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, SceneUID);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Component*>&, GetComponents);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SceneLayer*, GetLayer);
@@ -849,7 +849,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, IsModeOnScene, ActorCreateMode);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCreateMenuGroup);
-	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, SceneStatus, const String&, bool, bool, bool, bool, const String&, SceneLayer*, SceneUID, UID);
+	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, State, const String&, bool, bool, bool, bool, const String&, SceneLayer*, SceneUID, UID);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, const ActorAssetRef&, ActorCreateMode);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransform*, Vector<Component*>, ActorCreateMode);

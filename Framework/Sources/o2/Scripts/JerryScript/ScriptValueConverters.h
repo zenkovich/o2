@@ -436,15 +436,8 @@ namespace o2
 			data.jvalue = jerry_create_object();
 
 			auto ptr = (_non_ptr_type*)(const_cast<_ptr_type&>(value));
-			auto dataContainer = mnew DataContainer<_non_ptr_type>(ptr);
-			dataContainer->isDataOwner = false;
-			jerry_set_object_native_pointer(data.jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
 
-			if constexpr (std::is_base_of<IObject, _non_ptr_type>::value && !std::is_same<IObject, _non_ptr_type>::value)
-			{
-				ReflectScriptValueTypeProcessor processor(data);
-				_non_ptr_type::template ProcessType<ReflectScriptValueTypeProcessor>(ptr, processor);
-			}
+			data.SetContainingObject(ptr, false);
 		}
 
 		static void Read(_ptr_type& value, const ScriptValue& data)

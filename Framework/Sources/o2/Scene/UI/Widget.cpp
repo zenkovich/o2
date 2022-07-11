@@ -1377,7 +1377,7 @@ namespace o2
 			{
 				onShow();
 
-				if (mLayer && mSceneStatus == Actor::SceneStatus::InScene)
+				if (mLayer && mState == Actor::State::InScene)
 				{
 					mLayer->OnActorEnabled(this);
 					ISceneDrawable::OnEnabled();
@@ -1387,7 +1387,7 @@ namespace o2
 			{
 				onHide();
 
-				if (mLayer && mSceneStatus == Actor::SceneStatus::InScene)
+				if (mLayer && mState == Actor::State::InScene)
 				{
 					mLayer->OnActorDisabled(this);
 					ISceneDrawable::OnDisabled();

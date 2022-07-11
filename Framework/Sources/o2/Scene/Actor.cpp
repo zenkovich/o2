@@ -11,17 +11,17 @@ namespace o2
 {
 	ActorCreateMode Actor::mDefaultCreationMode = ActorCreateMode::InScene;
 
-	Actor::Actor(ActorTransform* transform, SceneStatus sceneStatus /*= SceneStatus::WaitingAddToScene*/,
+	Actor::Actor(ActorTransform* transform, State sceneStatus /*= SceneStatus::WaitingAddToScene*/,
 				 const String& name /*= "unnamed"*/, bool enabled /*= true*/, bool resEnabled /*= true*/,
 				 bool locked /*= false*/, bool resLocked /*= false*/, const String& layerName /*= ""*/,
 				 SceneLayer* layer /*= nullptr*/, SceneUID id /*= Math::Random()*/, UID assetId /*= UID(0)*/):
 		transform(transform), mName(name), mEnabled(enabled), mResEnabled(enabled), mResEnabledInHierarchy(resEnabled),
 		mLocked(locked), mResLocked(resLocked), mLayerName(layerName), mLayer(layer), mId(id), mAssetId(assetId),
-		mSceneStatus(sceneStatus)
+		mState(sceneStatus)
 	{}
 
 	Actor::Actor(ActorTransform* transform, ActorCreateMode mode /*= ActorCreateMode::Default*/):
-		Actor(transform, IsModeOnScene(mode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene)
+		Actor(transform, IsModeOnScene(mode) ? State::WaitingAddToScene : State::NotInScene)
 	{
 		tags.onTagAdded = [&](Tag* tag) { tag->mActors.Add(this); };
 		tags.onTagRemoved = [&](Tag* tag) { tag->mActors.Remove(this); };
@@ -43,7 +43,7 @@ namespace o2
 	}
 
 	Actor::Actor(ActorTransform* transform, const Actor& other, ActorCreateMode mode /*= ActorCreateMode::Default*/):
-		Actor(transform, IsModeOnScene(mode) ? SceneStatus::WaitingAddToScene : SceneStatus::NotInScene,
+		Actor(transform, IsModeOnScene(mode) ? State::WaitingAddToScene : State::NotInScene,
 			  other.mName, other.mEnabled, other.mEnabled, other.mLocked, other.mLocked, other.mLayerName, other.mLayer,
 			  Math::Random(), other.mAssetId)
 	{
@@ -409,7 +409,7 @@ namespace o2
 		OnRemoveFromScene();
 
 		mLayer = nullptr;
-		mSceneStatus = SceneStatus::NotInScene;
+		mState = State::NotInScene;
 
 		for (auto child : mChildren)
 			child->RemoveFromScene();
@@ -435,7 +435,7 @@ namespace o2
 			o2Scene.AddActorToScene(this);
 		}
 
-		mSceneStatus = SceneStatus::InScene;
+		mState = State::InScene;
 
 		for (auto child : mChildren)
 			child->AddToScene();
@@ -443,7 +443,7 @@ namespace o2
 
 	bool Actor::IsOnScene() const
 	{
-		return mSceneStatus != SceneStatus::NotInScene;
+		return mState != State::NotInScene;
 	}
 
 	void Actor::SetEnabled(bool enabled)
@@ -550,7 +550,7 @@ namespace o2
 
 		UpdateResEnabledInHierarchy();
 
-		if (mParent && mParent->mSceneStatus != mSceneStatus)
+		if (mParent && mParent->mState != mState)
 		{
 			if (mParent->IsOnScene())
 				AddToScene();
@@ -840,7 +840,7 @@ namespace o2
 
 	void Actor::OnTransformChanged()
 	{
-		if (mSceneStatus == SceneStatus::WaitingAddToScene)
+		if (mState == State::WaitingAddToScene)
 			return;
 
 		for (auto comp : mComponents)
@@ -854,7 +854,7 @@ namespace o2
 
 	void Actor::OnAddToScene()
 	{
-		mSceneStatus = SceneStatus::InScene;
+		mState = State::InScene;
 
 		if (mLayer)
 		{
@@ -917,7 +917,7 @@ namespace o2
 
 	void Actor::OnComponentAdded(Component* component)
 	{
-		if (mSceneStatus == SceneStatus::InScene)
+		if (mState == State::InScene)
 			component->OnAddToScene();
 
 		for (auto comp : mComponents)
@@ -950,7 +950,7 @@ namespace o2
 
 		if (lastResEnabledInHierarchy != mResEnabledInHierarchy)
 		{
-			if (mLayer && mSceneStatus == SceneStatus::InScene)
+			if (mLayer && mState == State::InScene)
 			{
 				if (mResEnabledInHierarchy)
 					mLayer->OnActorEnabled(this);
@@ -1531,8 +1531,9 @@ namespace o2
 #endif // !IS_EDITOR
 }
 
-ENUM_META(o2::Actor::SceneStatus)
+ENUM_META(o2::Actor::State)
 {
+	ENUM_ENTRY(Destroying);
 	ENUM_ENTRY(InScene);
 	ENUM_ENTRY(NotInScene);
 	ENUM_ENTRY(WaitingAddToScene);
