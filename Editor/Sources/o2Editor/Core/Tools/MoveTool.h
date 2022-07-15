@@ -92,7 +92,7 @@ namespace Editor
 		void OnKeyStayDown(const Input::Key& key) override;
 
 		// It is called when key was pressed
-		void OnKeyReleased(const Input::Key& key);
+		void OnKeyReleased(const Input::Key& key) override;
 
 		// Moves selected objects on delta
 		void MoveSelectedObjects(const Vec2F& delta);

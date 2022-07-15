@@ -15,7 +15,7 @@ namespace o2
 
 	ScriptParseResult JavaScriptAsset::Parse() const
 	{
-		return o2Scripts.Parse(o2FileSystem.ReadFile(GetFullPath()), mInfo.path);
+		return o2Scripts.Parse(o2FileSystem.ReadFile(GetBuiltFullPath()), mInfo.path);
 	}
 
 	ScriptValue JavaScriptAsset::Run() const

@@ -29,7 +29,7 @@ namespace Editor
 		~WidgetLayerViewer();
 
 		// Returns viewing object type
-		const Type* GetViewingObjectType() const;
+		const Type* GetViewingObjectType() const override;
 
 		// Sets header viewer
 		void SetHeaderViewer(IWidgetLayerHeaderViewer* viewer);

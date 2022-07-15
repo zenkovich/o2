@@ -1,3 +1,5 @@
+#ifdef PLATFORM_MAC
+
 #import "AppDelegate.h"
 #import <MetalKit/MetalKit.h>
 #include "o2/Utils/Math/Vector2.h"
@@ -17,3 +19,5 @@ namespace o2
 		static void OnWindowRsized(const Vec2I& resolution);
 	};
 }
+
+#endif

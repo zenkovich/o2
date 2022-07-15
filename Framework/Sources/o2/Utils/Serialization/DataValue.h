@@ -553,6 +553,27 @@ namespace o2
 
 		friend class DataValue;
 	};
+	
+	template<typename _type, typename _enable = void>
+	struct IsDeltaEquals
+	{
+		static bool Check(const _type& obj, const _type& origin);
+	};
+	
+	template<typename T>
+	struct IsDeltaEquals<T, typename std::void_t<decltype(&T::EqualsDelta)>>
+	{
+		static bool Check(const T& obj, const T& origin)
+		{
+			return T::EqualsDelta(obj, origin);
+		}
+	};
+	
+	template<typename T>
+	bool EqualsForDeltaSerialize(const T& obj, const T& origin)
+	{
+		return IsDeltaEquals<T>::Check(obj, origin);
+	}
 
 	DataValue::Flags operator&(const DataValue::Flags& a, const DataValue::Flags& b);
 	DataValue::Flags operator|(const DataValue::Flags& a, const DataValue::Flags& b);
@@ -563,33 +584,15 @@ namespace o2
 
 namespace o2
 {
-	template<typename _type, typename _enable = void>
-	struct IsDeltaEquals
+	template<typename _type, typename _enable>
+	bool IsDeltaEquals<_type, _enable>::Check(const _type& obj, const _type& origin)
 	{
-		static bool Check(const _type& obj, const _type& origin)
-		{
-			if constexpr (SupportsEqualOperator<_type>::value)
-				return Math::Equals(obj, origin);
-			else
-				return false;
-		}
-	};
-
-	template<typename T>
-	struct IsDeltaEquals<T, typename std::void_t<decltype(&T::EqualsDelta)>>
-	{
-		static bool Check(const T& obj, const T& origin)
-		{
-			return T::EqualsDelta(obj, origin);
-		}
-	};
-
-	template<typename T>
-	bool EqualsForDeltaSerialize(const T& obj, const T& origin)
-	{
-		return IsDeltaEquals<T>::Check(obj, origin);
+		if constexpr (SupportsEqualOperator<_type>::value)
+			return Math::Equals(obj, origin);
+		else
+			return false;
 	}
-
+	
 	template<typename _type>
 	DataValue::DataValue(const _type& value, DataDocument& document) :
 		mData(), mDocument(&document)

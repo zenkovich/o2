@@ -28,13 +28,13 @@ namespace Editor
 		LockAction(const Vector<SceneEditableObject*>& object, bool lock);
 
 		// Return name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Sets stored lock
-		void Redo();
+		void Redo() override;
 
 		// Sets previous lock 
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(LockAction);
 	};

@@ -3,7 +3,7 @@
 #include "o2/Utils/Function.h"
 
 #if IS_SCRIPTING_SUPPORTED
-#include "o2/Scripts/ScriptValue.h"
+#include "o2/Scripts/ScriptValueDef.h"
 #endif
 
 namespace o2
@@ -165,6 +165,9 @@ namespace o2
 }
 
 #include "o2/Utils/Reflection/Type.h"
+#if IS_SCRIPTING_SUPPORTED
+#include "o2/Scripts/ScriptValue.h"
+#endif
 
 namespace o2
 {

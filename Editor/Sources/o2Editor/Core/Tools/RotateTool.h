@@ -68,22 +68,22 @@ namespace Editor
 		ShortcutKeys GetShortcut() const override;
 
 		// Updates tool
-		void Update(float dt);
+		void Update(float dt) override;
 
 		// Draws tool
-		void DrawScreen();
+		void DrawScreen() override;
 
 		// It is called when tool was enabled
-		void OnEnabled();
+		void OnEnabled() override;
 
 		// It is called when tool was disabled
-		void OnDisabled();
+		void OnDisabled() override;
 
 		// It is called when scene objects was changed
-		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects);
+		void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
 
 		// It is called when objects selection was changed
-		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
+		void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
 
 		// Updates ring and angle meshes
 		void UpdateMeshes();
@@ -98,22 +98,22 @@ namespace Editor
 		bool IsPointInRotateRing(const Vec2F& point) const;
 
 		// It is called when cursor pressed on this
-		void OnCursorPressed(const Input::Cursor& cursor);
+		void OnCursorPressed(const Input::Cursor& cursor) override;
 
 		// It is called when cursor released (only when cursor pressed this at previous time)
-		void OnCursorReleased(const Input::Cursor& cursor);
+		void OnCursorReleased(const Input::Cursor& cursor) override;
 
 		// It is called when cursor pressing was broken (when scrolled scroll area or some other)
-		void OnCursorPressBreak(const Input::Cursor& cursor);
+		void OnCursorPressBreak(const Input::Cursor& cursor) override;
 
 		// It is called when cursor stay down during frame
-		void OnCursorStillDown(const Input::Cursor& cursor);
+		void OnCursorStillDown(const Input::Cursor& cursor) override;
 
 		// It is called when key was pressed
-		void OnKeyPressed(const Input::Key& key);
+		void OnKeyPressed(const Input::Key& key) override;
 
 		// It is called when key stay down during frame
-		void OnKeyStayDown(const Input::Key& key);
+		void OnKeyStayDown(const Input::Key& key) override;
 
 		// Rotates objects on angle
 		void RotateObjects(float angleDelta);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include "o2/Scripts/ScriptValueDef.h"
-#include "o2/Utils/Basic/IObject.h"
 #include "o2/Utils/Math/Basis.h"
 #include "o2/Utils/Math/Color.h"
 #include "o2/Utils/Math/Rect.h"
@@ -123,6 +122,7 @@ namespace o2
 
 #include "o2/Utils/Reflection/Type.h"
 #include "o2/Utils/Reflection/Reflection.h"
+#include "o2/Utils/Basic/IObject.h"
 
 namespace o2
 {

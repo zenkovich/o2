@@ -20,6 +20,8 @@ namespace Editor
 		// ---------------------------------------------------
 		struct ISplineWrapper
 		{
+			virtual ~ISplineWrapper() {}
+			
 			virtual Vec2F WorldToLocal(const Vec2F& point) const;
 			virtual Vec2F LocalToWorld(const Vec2F& point) const;
 

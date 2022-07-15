@@ -49,22 +49,22 @@ namespace Editor
 		ShortcutKeys GetShortcut() const override;
 
         // Updates tool
-        void Update(float dt);
+        void Update(float dt) override;
 
         // Draws screen
-        void DrawScreen();
+        void DrawScreen() override;
 
         // It is called when tool was enabled
-        void OnEnabled();
+        void OnEnabled() override;
 
         // It is called when tool was disabled
-        void OnDisabled();
+        void OnDisabled() override;
 
         // It is called when scene objects was changed
-        void OnSceneChanged(Vector<SceneEditableObject*> changedObjects);
+        void OnSceneChanged(Vector<SceneEditableObject*> changedObjects) override;
 
         // It is called when objects selection was changed
-        void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects);
+        void OnObjectsSelectionChanged(Vector<SceneEditableObject*> objects) override;
 
         // It is called when horizontal drag handle was moved
         void OnHorDragHandleMoved(const Vec2F& position);
@@ -85,13 +85,13 @@ namespace Editor
         void UpdateHandlesPositions();
 
         // It is called when key was pressed
-        void OnKeyPressed(const Input::Key& key);
+        void OnKeyPressed(const Input::Key& key) override;
 
         // It is called when key stay down during frame
-        void OnKeyStayDown(const Input::Key& key);
+        void OnKeyStayDown(const Input::Key& key) override;
 
         // It is called when key was pressed
-        void OnKeyReleased(const Input::Key& key);
+        void OnKeyReleased(const Input::Key& key) override;
 
         // Moves selected objects on delta
         void ScaleSelectedObjects(const Vec2F& scale);

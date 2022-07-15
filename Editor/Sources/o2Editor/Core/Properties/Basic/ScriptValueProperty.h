@@ -148,7 +148,7 @@ namespace Editor
 											  IPropertyField* field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
-		auto proxies = prop->second.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;
@@ -167,7 +167,7 @@ namespace Editor
 												 IPropertyField* field)
 	{
 		auto prop = commonProperties.Find([&](auto& x) { return x.first == name; });
-		auto proxies = prop->second.Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
+		auto proxies = prop->second.template Convert<Pair<IAbstractValueProxy*, IAbstractValueProxy*>>(
 			[](const Pair<IScriptValueProperty*, IScriptValueProperty*>& x)
 			{
 				Pair<IAbstractValueProxy*, IAbstractValueProxy*> res;

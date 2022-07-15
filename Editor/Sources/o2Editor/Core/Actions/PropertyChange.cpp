@@ -57,10 +57,7 @@ namespace Editor
 		for (auto object : objects)
 		{
 			if (!object)
-			{
 				continue;
-				i++;
-			}
 
 			const FieldInfo* fi = nullptr;
 			void* ptr = nullptr;

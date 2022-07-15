@@ -1,3 +1,5 @@
+#ifdef PLATFORM_MAC
+
 #import <MetalKit/MetalKit.h>
 
 @interface RendererView : NSObject <MTKViewDelegate>
@@ -9,3 +11,5 @@
 @interface ViewController : MTKView
 
 @end
+
+#endif

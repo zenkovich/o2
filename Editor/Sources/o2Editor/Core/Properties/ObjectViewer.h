@@ -27,10 +27,10 @@ namespace Editor
 		void SetParentContext(PropertiesContext* context);
 
 		// Enable viewer event function
-		virtual void OnEnabled();
+		void OnEnabled() override;
 
 		// Disable viewer event function
-		virtual void OnDisabled();
+		void OnDisabled() override;
 
 		// Returns viewing objects type
 		const Type* GetViewingObjectType() const;

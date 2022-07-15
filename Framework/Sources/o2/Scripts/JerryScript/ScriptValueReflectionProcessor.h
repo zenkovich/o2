@@ -5,6 +5,22 @@
 
 namespace o2
 {
+	template<typename _type, typename _enable = void>
+	struct CheckReflectValueOverridden
+	{
+		static void Process(_type* object, ScriptValue& value) {}
+	};
+	
+	template<typename T>
+	struct CheckReflectValueOverridden<T, typename std::void_t<decltype(&T::ReflectValue)>>
+	{
+		static void Process(T* object, ScriptValue& value)
+		{
+			if (object)
+				object->ReflectValue(value);
+		}
+	};
+	
 	class ReflectScriptValueTypeProcessor
 	{
 	public:
@@ -115,8 +131,8 @@ namespace o2
 					value.SetProperty(ScriptValue(this->name ? this->name : name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
 				else
 				{
-					using x = std::remove_reference<_res_type>::type;
-					typedef std::remove_const<x>::type __res_type;
+					using x = typename std::remove_reference<_res_type>::type;
+					typedef typename std::remove_const<x>::type __res_type;
 					value.SetProperty(ScriptValue(this->name ? this->name : name),
 									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
 																				  {
@@ -134,8 +150,8 @@ namespace o2
 					value.SetProperty(ScriptValue(name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
 				else
 				{
-					using x = std::remove_reference<_res_type>::type;
-					using __res_type = std::remove_const<x>::type;
+					using x = typename std::remove_reference<_res_type>::type;
+					using __res_type = typename std::remove_const<x>::type;
 					value.SetProperty(ScriptValue(name),
 									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
 																				  {

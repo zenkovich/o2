@@ -88,13 +88,13 @@ namespace Editor
 		void SetupListMessage(Widget* item, void* object);
 
 		// Outs string to stream
-		void OutStrEx(const WString& str);
+		void OutStrEx(const WString& str) override;
 
 		// Outs error to stream
-		void OutErrorEx(const WString& str);
+		void OutErrorEx(const WString& str) override;
 
 		// Outs warning to stream
-		void OutWarningEx(const WString& str);
+		void OutWarningEx(const WString& str) override;
 
 		// Updates last message view
 		void UpdateLastMessageView();

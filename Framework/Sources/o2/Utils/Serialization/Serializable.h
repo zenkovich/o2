@@ -7,6 +7,7 @@
 #include "o2/Utils/Reflection/Reflection.h"
 #include "o2/Utils/Types/String.h"
 #include "o2/Utils/Singleton.h"
+#include "o2/Utils/ValueProxy.h"
 
 namespace o2
 {

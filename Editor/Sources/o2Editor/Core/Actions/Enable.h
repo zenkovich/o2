@@ -29,13 +29,13 @@ namespace Editor
 		EnableAction(const Vector<SceneEditableObject*>& objects, bool enable);
 
 		// Returns name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Enable or disable again
-		void Redo();
+		void Redo() override;
 
 		// Reverts objects to previous state
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(EnableAction);
 	};

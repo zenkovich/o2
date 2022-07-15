@@ -75,7 +75,7 @@ namespace Editor
 		using SelectableDragableObject::OnCursorReleased;
 
 		// Sets is this selected
-		void SetSelected(bool selected);
+		void SetSelected(bool selected) override;
 
 		// It is called when cursor double clicked
 		void OnCursorDblClicked(const Input::Cursor& cursor) override;

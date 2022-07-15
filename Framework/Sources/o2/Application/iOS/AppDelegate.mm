@@ -1,3 +1,4 @@
+#ifdef PLATFORM_IOS
 #import "AppDelegate.h"
 #import <MetalKit/MetalKit.h>
 #import "ApplicationPlatformWrapper.h"
@@ -64,5 +65,6 @@
 	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
-
 @end
+
+#endif

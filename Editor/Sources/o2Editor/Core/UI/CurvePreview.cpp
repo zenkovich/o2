@@ -106,7 +106,6 @@ namespace Editor
 		o2Render.BindRenderTexture(texture);
 		o2Render.Clear(mBackColor);
 
-		RectF rect(mCurve->GetRect());
 		Camera camera; camera.SetRect(mCurve->GetRect());
 		camera.SetScale(camera.GetScale().InvertedY());
 

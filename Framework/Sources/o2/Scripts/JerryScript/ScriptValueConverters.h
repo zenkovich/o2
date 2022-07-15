@@ -5,22 +5,6 @@
 
 namespace o2
 {
-	template<typename _type, typename _enable = void>
-	struct CheckReflectValueOverridden
-	{
-		static void Process(_type* object, ScriptValue& value) {}
-	};
-
-	template<typename T>
-	struct CheckReflectValueOverridden<T, typename std::void_t<decltype(&T::ReflectValue)>>
-	{
-		static void Process(T* object, ScriptValue& value)
-		{
-			if (object)
-				object->ReflectValue(value);
-		}
-	};
-
 	template<typename _type, typename _enable /*= void*/>
 	void ScriptValue::Converter<_type, _enable>::Read(__type& value, const ScriptValue& data)
 	{

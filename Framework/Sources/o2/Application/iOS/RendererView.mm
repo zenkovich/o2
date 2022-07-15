@@ -1,5 +1,7 @@
 #import "RendererView.h"
 
+#ifdef PLATFORM_IOS
+
 #import "ShaderTypes.h"
 #include "o2/Render/Render.h"
 #include "o2/Render/iOS/MetalWrappers.h"
@@ -67,3 +69,5 @@
 }
 
 @end
+
+#endif

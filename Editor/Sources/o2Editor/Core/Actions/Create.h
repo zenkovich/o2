@@ -31,13 +31,13 @@ namespace Editor
 		CreateAction(const Vector<SceneEditableObject*>& objects, SceneEditableObject* parent, SceneEditableObject* prevObject);
 
 		// Returns name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Creates all objects again
-		void Redo();
+		void Redo() override;
 
 		// Removes created objects
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(CreateAction);
 	};

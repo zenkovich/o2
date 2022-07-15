@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#if defined PLATFORM_ANDROID || true
+#if defined PLATFORM_ANDROID
 
 #include "Utils/FileSystem/File.h"
 

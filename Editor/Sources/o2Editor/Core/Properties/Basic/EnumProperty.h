@@ -25,7 +25,7 @@ namespace Editor
 		EnumProperty& operator=(const EnumProperty& other);
 
 		// Returns editing by this field type
-		const Type* GetValueType() const;
+		const Type* GetValueType() const override;
 
 		// Specializes field type
 		void SpecializeType(const Type* type);

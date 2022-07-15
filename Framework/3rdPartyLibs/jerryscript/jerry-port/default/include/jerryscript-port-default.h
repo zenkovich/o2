@@ -18,8 +18,8 @@
 
 #include <stdbool.h>
 
-#include "jerryscript.h"
-#include "jerryscript-port.h"
+#include "jerryscript/jerry-core/include/jerryscript.h"
+#include "jerryscript/jerry-core/include/jerryscript-port.h"
 
 #ifdef __cplusplus
 extern "C"

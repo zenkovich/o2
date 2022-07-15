@@ -298,10 +298,10 @@ namespace Editor
 		void RecalculateViewArea();
 
 		// Redraws content into render target
-		void RedrawContent();
+		void RedrawContent() override;
 
 		// Draws grid and captions
-		void DrawGrid();
+		void DrawGrid() override;
 
 		// Draws curves
 		void DrawCurves();

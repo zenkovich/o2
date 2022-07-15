@@ -1,3 +1,5 @@
+#ifdef PLATFORM_MAC
+
 #import "AppDelegate.h"
 #import <MetalKit/MetalKit.h>
 #import "RendererView.h"
@@ -20,3 +22,5 @@
 }
 
 @end
+
+#endif

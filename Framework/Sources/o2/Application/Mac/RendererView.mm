@@ -1,3 +1,5 @@
+#ifdef PLATFORM_MAC
+
 #import "RendererView.h"
 
 #import "ShaderTypes.h"
@@ -160,3 +162,5 @@
 }
 
 @end
+
+#endif

@@ -34,7 +34,6 @@
 #include "o2Editor/PropertiesWindow/PropertiesWindow.h"
 #include "o2Editor/SceneWindow/SceneEditScreen.h"
 #include "o2Editor/TreeWindow/TreeWindow.h"
-#include "jerryscript/jerry-ext/include/jerryscript-ext/handler.h"
 #include "o2/Utils/FileSystem/FileSystem.h"
 
 namespace Editor

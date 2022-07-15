@@ -24,7 +24,7 @@ namespace Editor
 		void SetTargetLayers(const Vector<WidgetLayer*>& layers) override;
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(DefaultWidgetLayerLayoutViewer);
 

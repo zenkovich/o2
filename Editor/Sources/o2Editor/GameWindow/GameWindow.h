@@ -28,7 +28,7 @@ namespace Editor
 		public:
 			GameView();
 
-			void Draw();
+			void Draw() override;
 
 			// Returns create menu category in editor
 			static String GetCreateMenuCategory();

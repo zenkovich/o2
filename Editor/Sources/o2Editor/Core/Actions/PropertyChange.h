@@ -34,13 +34,13 @@ namespace Editor
 							 const Vector<DataDocument>& afterValues);
 
 		// Returns name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Sets object's properties value as after change
-		void Redo();
+		void Redo() override;
 
 		// Sets object's properties value as before change
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(PropertyChangeAction);
 

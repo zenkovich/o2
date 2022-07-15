@@ -1,6 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Reflection/Type.h"
+#include "o2/Utils/Reflection/TypeTraits.h"
 #include <type_traits>
 #include "o2/Utils/Debug/Debug.h"
 
@@ -30,7 +31,7 @@ namespace o2
 		{
 			ScriptValue tmp;
 			tmp.AcquireValue(args[_j]);
-			using x = std::remove_reference<decltype(std::get<_i>(argst))>::type;
+			using x = typename std::remove_reference<decltype(std::get<_i>(argst))>::type;
 			std::get<_i>(argst) = tmp.GetValue<x>();
 
 			if constexpr (_i + 1 != sizeof...(_args))
@@ -130,7 +131,7 @@ namespace o2
 				}));
 		}
 		else {
-			typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+			typedef typename std::remove_const<typename std::remove_reference<_res_type>::type>::type __res_type;
 			SetProperty(name, std::function<__res_type(_args ...)>(
 				[object, functionPtr](_args ... args)
 				{
@@ -151,7 +152,7 @@ namespace o2
 				}));
 		}
 		else {
-			typedef std::remove_const<std::remove_reference<_res_type>::type>::type __res_type;
+			typedef typename std::remove_const<typename std::remove_reference<_res_type>::type>::type __res_type;
 			SetProperty(name, std::function<__res_type(_args ...)>(
 				[object, functionPtr](_args ... args)
 				{
@@ -371,7 +372,7 @@ namespace o2
 	jerry_value_t ScriptValueBase::PropertyGetterWrapperContainer<_property_type>::Get()
 	{
 		ScriptValue tmp;
-		tmp.SetValue<ExtractPropertyValueType<_property_type>::type>(propertyPtr->Get());
+		tmp.SetValue<typename ExtractPropertyValueType<_property_type>::type>(propertyPtr->Get());
 		return jerry_acquire_value(tmp.jvalue);
 	}
 
@@ -380,7 +381,7 @@ namespace o2
 	{
 		ScriptValue tmp;
 		tmp.AcquireValue(value);
-		propertyPtr->Set(tmp.GetValue<ExtractPropertyValueType<_property_type>::type>());
+		propertyPtr->Set(tmp.GetValue<typename ExtractPropertyValueType<_property_type>::type>());
 	}
 
 	template<typename _type>

@@ -1,18 +1,10 @@
 #include "o2Editor/stdafx.h"
 #include "KeyFramesTrackControl.h"
 
-
-template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<float>>);
-
-template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<bool>>);
-
-template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Color4>>);
-
-template<>
-DECLARE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>);
+DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<float>>);
+DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<bool>>);
+DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Color4>>);
+DECLARE_TEMPLATE_CLASS_MANUAL(Editor::KeyFramesTrackControl<AnimationTrack<Vec2F>>);
 
 namespace Editor
 {

@@ -4,7 +4,6 @@
 #include <float.h>
 #include "o2/Utils/Math/Math.h"
 #include "o2/Utils/Math/Vector2.h"
-#include "o2/Utils/Basic/IObject.h"
 
 namespace o2
 {

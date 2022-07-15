@@ -42,13 +42,13 @@ namespace Editor
 		void Completed();
 
 		// Returns name of action
-		String GetName() const;
+		String GetName() const override;
 
 		// Sets new transforms again
-		void Redo();
+		void Redo() override;
 
 		// Sets transformations before transform
-		void Undo();
+		void Undo() override;
 
 		SERIALIZABLE(TransformAction);
 

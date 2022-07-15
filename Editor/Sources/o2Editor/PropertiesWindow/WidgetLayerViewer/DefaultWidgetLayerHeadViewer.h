@@ -35,7 +35,7 @@ namespace Editor
 		Widget* GetWidget() const override;
 
 		// Updates properties values
-		void Refresh();
+		void Refresh() override;
 
 		IOBJECT(DefaultWidgetLayerHeaderViewer);
 
