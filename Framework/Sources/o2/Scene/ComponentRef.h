@@ -15,7 +15,7 @@ namespace o2
 		// Default constructor, no reference
 		ComponentRef();
 
-		// Constructor with referencing on component
+		// Constructor with referencing on component @SCRIPTABLE
 		ComponentRef(Component* component);
 
 		// Creates a copy of component and returns reference on it
@@ -48,19 +48,22 @@ namespace o2
 		// Check not equals operator
 		bool operator!=(const ComponentRef& other) const;
 
-		// Returns component pointer
+		// Sets component @SCRIPTABLE
+		void Set(Component* component);
+
+		// Returns component pointer @SCRIPTABLE
 		Component* Get();
 
 		// Returns component pointer
 		const Component* Get() const;
 
-		// Destroy the component
+		// Destroy the component @SCRIPTABLE
 		void Destroy();
 
-		// Returns is reference is valid
+		// Returns is reference is valid @SCRIPTABLE
 		bool IsValid() const;
 
-		// Returns is component was deleted
+		// Returns is component was deleted @SCRIPTABLE
 		bool IsWasDeleted() const;
 
 		// Returns component type
@@ -204,13 +207,14 @@ CLASS_METHODS_META(o2::ComponentRef)
 {
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
-	FUNCTION().PUBLIC().CONSTRUCTOR(Component*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR(Component*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ComponentRef&);
-	FUNCTION().PUBLIC().SIGNATURE(Component*, Get);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Set, Component*);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(const Component*, Get);
-	FUNCTION().PUBLIC().SIGNATURE(void, Destroy);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsWasDeleted);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Destroy);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsValid);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsWasDeleted);
 	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetComponentType);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(const Type*, GetComponentTypeStatic);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(bool, EqualsDelta, const ComponentRef&, const ComponentRef&);

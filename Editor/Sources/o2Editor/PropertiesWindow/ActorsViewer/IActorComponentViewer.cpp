@@ -22,7 +22,7 @@ namespace Editor
 		mSpoiler->expandWidth = true;
 		mSpoiler->fitByChildren = true;
 		mSpoiler->borderBottom = 5;
-		mSpoiler->SetCaption("COmponent");
+		mSpoiler->SetCaption("Component");
 		mSpoiler->GetIcon()->SetImageName("ui/UI4_component_icon.png");
 		mSpoiler->GetIcon()->layout->center -= Vec2F(2, 0);
 		mSpoiler->GetIcon()->GetImage()->SetColor(Color4(235, 255, 253));
@@ -46,12 +46,12 @@ namespace Editor
 
 		if (!components.IsEmpty())
 		{
-			String caption = components[0]->GetName();
-			if (caption.IsEmpty() && GetComponentType())
-				caption = GetSmartName(GetComponentType()->GetName());
+			String caption = components[0]->GetType().InvokeStatic<String>("GetName");
+			if (caption.IsEmpty())
+				caption = GetSmartName(components[0]->GetType().GetName());
 
 			mSpoiler->SetCaption(caption);
-			mSpoiler->GetIcon()->SetImageName(components[0]->GetIcon());
+			mSpoiler->GetIcon()->SetImageName(components[0]->GetType().InvokeStatic<String>("GetIcon"));
 		}
 	}
 

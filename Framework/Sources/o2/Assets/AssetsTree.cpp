@@ -161,7 +161,11 @@ namespace o2
 		{
 			AssetInfo* asset = nullptr;
 
-			String folderFullPath = assetsPath + subFolder.path;
+			String subFolderPath = subFolder.path;
+			if (subFolderPath.EndsWith("/"))
+				subFolderPath.Erase(subFolderPath.Length() - 1);
+
+			String folderFullPath = assetsPath + subFolderPath;
 			String metaFullPath = folderFullPath + ".meta";
 
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
@@ -171,13 +175,6 @@ namespace o2
 					log->Warning("Can't load asset info for " + subFolder.path + " - missing meta file");
 
 				continue;
-			}
-
-			String subFolderPath = subFolder.path;
-			if (subFolderPath.EndsWith("/"))
-			{
-				int len = subFolderPath.Length();
-				subFolderPath.Erase(len - 1, len);
 			}
 
 			asset = LoadAssetNode(subFolderPath, parentAsset, TimeStamp());

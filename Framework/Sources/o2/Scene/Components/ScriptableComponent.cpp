@@ -38,6 +38,16 @@ namespace o2
 		return mScript;
 	}
 
+	ScriptValue ScriptableComponent::GetInstance() const
+	{
+		return mInstance;
+	}
+
+	ScriptValue ScriptableComponent::GetClass() const
+	{
+		return mClass;
+	}
+
 	String ScriptableComponent::GetName()
 	{
 		return "Scriptable";
@@ -50,7 +60,7 @@ namespace o2
 
 	String ScriptableComponent::GetIcon()
 	{
-		return "ui/UI4_animation_component.png";
+		return "ui/UI4_component_icon.png";
 	}
 
 	void ScriptableComponent::LoadScriptAndCreateObject()
@@ -61,23 +71,25 @@ namespace o2
 		auto parseRes = mScript->Parse();
 		o2Scripts.Run(parseRes);
 
-		auto className = o2FileSystem.GetFileNameWithoutExtension(mScript->GetPath());
+		auto className = o2FileSystem.GetPathWithoutDirectories(o2FileSystem.GetFileNameWithoutExtension(mScript->GetPath()));
 		auto classObj = o2Scripts.GetGlobal().GetOwnProperty(ScriptValue(className));
-		if (classObj.GetValueType() == ScriptValue::ValueType::Constructor)
+		if (classObj.IsConstructor())
 		{
-			mObject = classObj.Construct({});
+			mInstance = classObj.Construct({});
+			mClass = classObj;
 
-			mOnStartFunc = mObject.GetProperty("OnStart");
-			mUpdateEnabledFunc = mObject.GetProperty("UpdateEnabled");
-			mOnEnabledFunc = mObject.GetProperty("OnEnabled");
-			mOnDisabledFunc = mObject.GetProperty("OnDisabled");
-			mUpdateFunc = mObject.GetProperty("Update");
+			mOnStartFunc = mInstance.GetProperty("OnStart");
+			mUpdateEnabledFunc = mInstance.GetProperty("UpdateEnabled");
+			mOnEnabledFunc = mInstance.GetProperty("OnEnabled");
+			mOnDisabledFunc = mInstance.GetProperty("OnDisabled");
+			mUpdateFunc = mInstance.GetProperty("Update");
 		}
 		else
 		{
 			o2Debug.LogError("Can't find scripting class '" + className + "' in component file - " + mScript->GetPath());
 
-			mObject = ScriptValue();
+			mInstance = ScriptValue();
+			mClass = ScriptValue();
 			mOnStartFunc = ScriptValue();
 			mUpdateEnabledFunc = ScriptValue();
 			mOnEnabledFunc = ScriptValue();
@@ -92,8 +104,8 @@ namespace o2
 
 		node["mScript"].Set(mScript);
 
-		if (mObject.IsObject())
-			node["mObject"].Set(mObject);
+		if (mInstance.IsObject())
+			node["mInstance"].Set(mInstance);
 	}
 
 	void ScriptableComponent::OnDeserialized(const DataValue& node)
@@ -103,10 +115,10 @@ namespace o2
 		node["mScript"].Get(mScript);
 		LoadScriptAndCreateObject();
 
-		if (mObject.IsObject())
+		if (mInstance.IsObject())
 		{
-			if (auto objectNode = node.FindMember("mObject"))
-				objectNode->Get(mObject);
+			if (auto objectNode = node.FindMember("mInstance"))
+				objectNode->Get(mInstance);
 		}
 	}
 
@@ -114,8 +126,8 @@ namespace o2
 	{
 		Component::SetOwnerActor(actor);
 
-		if (mObject.IsObject())
-			mObject.SetProperty("_actor", actor);
+		if (mInstance.IsObject())
+			mInstance.SetProperty("_actor", actor);
 	}
 
 	void ScriptableComponent::OnAddToScene()
@@ -131,31 +143,31 @@ namespace o2
 	void ScriptableComponent::OnStart()
 	{
 		if (mOnStartFunc.IsFunction())
-			mOnStartFunc.InvokeRaw(mObject, {});
+			mOnStartFunc.InvokeRaw(mInstance, {});
 	}
 
 	void ScriptableComponent::Update(float dt)
 	{
 		if (mUpdateFunc.IsFunction())
-			mUpdateFunc.Invoke<void, float>(mObject, dt);
+			mUpdateFunc.Invoke<void, float>(mInstance, dt);
 	}
 
 	void ScriptableComponent::UpdateEnabled()
 	{
 		if (mUpdateEnabledFunc.IsFunction())
-			mUpdateEnabledFunc.InvokeRaw(mObject, {});
+			mUpdateEnabledFunc.InvokeRaw(mInstance, {});
 	}
 
 	void ScriptableComponent::OnEnabled()
 	{
 		if (mOnEnabledFunc.IsFunction())
-			mOnEnabledFunc.InvokeRaw(mObject, {});
+			mOnEnabledFunc.InvokeRaw(mInstance, {});
 	}
 
 	void ScriptableComponent::OnDisabled()
 	{
 		if (mOnDisabledFunc.IsFunction())
-			mOnDisabledFunc.InvokeRaw(mObject, {});
+			mOnDisabledFunc.InvokeRaw(mInstance, {});
 	}
 
 	void ScriptableComponent::OnTransformChanged()

@@ -158,7 +158,8 @@ namespace Editor
 		if (mTargetActors.IsEmpty())
 			return;
 
-		if (mCommonComponentsTypes != GetCommonComponentsTypes(mTargetActors.DynamicCast<IObject*>()))
+		auto currentComponentGroups = GetGroupedComponents();
+		if (mComponentGroupsTypes != currentComponentGroups)
 		{
 			SetTargets(mTargetActors.DynamicCast<IObject*>());
 			return;
@@ -245,25 +246,45 @@ namespace Editor
 		mActorPropertiesViewer = propertiesViewer;
 	}
 
-	Vector<const Type*> ActorViewer::GetCommonComponentsTypes(const Vector<IObject*> targets) const
+	Vector<Pair<const Type*, Vector<Component*>>> ActorViewer::GetGroupedComponents() const
 	{
-		auto commonComponentsTypes = mTargetActors[0]->GetComponents().Convert<const Type*>([](auto x) {
-			return &x->GetType(); });
+		Vector<Pair<const Type*, Vector<Component*>>> res;
 
-		for (int i = 1; i < mTargetActors.Count(); i++)
+		for (auto actor : mTargetActors)
 		{
-			auto actorComponentsTypes = mTargetActors[i]->GetComponents().Convert<const Type*>([](auto x) {
-				return &x->GetType(); });
-
-			auto commTypesTemp = commonComponentsTypes;
-			for (auto type : commTypesTemp)
+			Map<const Type*, int> offsets;
+			for (auto component : actor->GetComponents())
 			{
-				if (!actorComponentsTypes.Contains(type))
-					commonComponentsTypes.Remove(type);
+				auto type = &component->GetType();
+				auto offset = offsets[type];
+				offsets[type]++;
+
+				Vector<Component*>* list = nullptr;
+				for (int i = 0; i < res.Count(); i++)
+				{
+					if (res[i].first == type)
+					{
+						if (offset == 0)
+						{
+							list = &res[i].second;
+							break;
+						}
+						else
+							offset--;
+					}
+				}
+
+				if (!list)
+				{
+					res.Add({ type, {} });
+					list = &res.Last().second;
+				}
+
+				list->Add(component);
 			}
 		}
 
-		return commonComponentsTypes;
+		return res;
 	}
 
 	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
@@ -277,11 +298,11 @@ namespace Editor
 
 		mComponentsViewers.Clear();
 
-		mCommonComponentsTypes = GetCommonComponentsTypes(targets);
-		for (const Type* type : mCommonComponentsTypes)
+		mComponentGroupsTypes = GetGroupedComponents();
+		for (auto pair : mComponentGroupsTypes)
 		{
 			auto viewerSample = mAvailableComponentsViewers.FindOrDefault([&](IActorComponentViewer* x) {
-				return x->GetComponentType() == type; });
+				return x->GetComponentType() == pair.first; });
 
 			if (!viewerSample)
 				viewerSample = mDefaultComponentViewer;
@@ -289,7 +310,7 @@ namespace Editor
 			if (!mComponentViewersPool.ContainsKey(type) || mComponentViewersPool[type].IsEmpty())
 			{
 				if (!mComponentViewersPool.ContainsKey(type))
-					mComponentViewersPool.Add(type, Vector<IActorComponentViewer*>());
+					mComponentViewersPool.Add(type, {});
 
 				auto newViewer = (IActorComponentViewer*)(viewerSample->GetType().CreateSample());
 
@@ -301,8 +322,7 @@ namespace Editor
 			viewersWidgets.Add(componentViewer->GetWidget());
 			mComponentsViewers.Add(componentViewer);
 
-			componentViewer->SetTargetComponents(
-				mTargetActors.Convert<Component*>([&](Actor* x) { return x->GetComponent(type); }));
+			componentViewer->SetTargetComponents(pair.second);
 
 			if (lastComponentViewers.Contains(componentViewer))
 				lastComponentViewers.Remove(componentViewer);

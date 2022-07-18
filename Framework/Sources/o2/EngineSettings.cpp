@@ -73,13 +73,32 @@ bool IsAssetsPrebuildEnabled()
 #endif
 }
 
-const char* GetAssetsPath()
+const char* GetProjectRootPath()
 {
 #if defined PLATFORM_MAC || defined PLATFORM_WINDOWS
-	return "../../Assets/";
+	return "../../";
 #else
-	return "Assets/";
+	return "";
 #endif
+}
+
+const char* GetAssetsRootPath()
+{
+	return "Assets/";
+}
+
+const char* GetAssetsPath()
+{
+	static char path[256] = "";
+	static bool initialized = false;
+	if (!initialized)
+	{
+		initialized = true;
+		strcat(path, GetProjectRootPath());
+		strcat(path, GetAssetsRootPath());
+	}
+
+	return path;
 }
 
 const char* GetBuiltAssetsPath()

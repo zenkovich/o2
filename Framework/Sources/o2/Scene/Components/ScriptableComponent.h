@@ -36,6 +36,12 @@ namespace o2
 		// Returns script
 		const JavaScriptAssetRef& GetScript() const;
 
+		// Returns scripting instance
+		ScriptValue GetInstance() const;
+
+		// Returns scripting instance class
+		ScriptValue GetClass() const;
+
 		// Returns name of component
 		static String GetName();
 
@@ -50,7 +56,8 @@ namespace o2
 	protected:
 		JavaScriptAssetRef mScript; // Java script asset link
 
-		ScriptValue mObject; // Script value instance @EDITOR_PROPERTY @NO_HEADER
+		ScriptValue mInstance;  // Script value instance @EDITOR_PROPERTY @NO_HEADER
+		ScriptValue mClass;     // Script instance class
 
 		ScriptValue mOnStartFunc;
 		ScriptValue mUpdateEnabledFunc;
@@ -106,7 +113,8 @@ CLASS_FIELDS_META(o2::ScriptableComponent)
 {
 	FIELD().PUBLIC().NAME(script);
 	FIELD().PROTECTED().NAME(mScript);
-	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mObject);
+	FIELD().PROTECTED().EDITOR_PROPERTY_ATTRIBUTE().NO_HEADER_ATTRIBUTE().NAME(mInstance);
+	FIELD().PROTECTED().NAME(mClass);
 	FIELD().PROTECTED().NAME(mOnStartFunc);
 	FIELD().PROTECTED().NAME(mUpdateEnabledFunc);
 	FIELD().PROTECTED().NAME(mOnEnabledFunc);
@@ -122,6 +130,8 @@ CLASS_METHODS_META(o2::ScriptableComponent)
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetScript, const JavaScriptAssetRef&);
 	FUNCTION().PUBLIC().SIGNATURE(const JavaScriptAssetRef&, GetScript);
+	FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetInstance);
+	FUNCTION().PUBLIC().SIGNATURE(ScriptValue, GetClass);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetName);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetCategory);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(String, GetIcon);

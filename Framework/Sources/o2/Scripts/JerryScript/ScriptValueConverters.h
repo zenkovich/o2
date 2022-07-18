@@ -8,29 +8,20 @@ namespace o2
 	template<typename _type, typename _enable /*= void*/>
 	void ScriptValue::Converter<_type, _enable>::Read(__type& value, const ScriptValue& data)
 	{
-		void* dataPtr = nullptr;
-		jerry_get_object_native_pointer(data.jvalue, &dataPtr, &GetDataDeleter().info);
-		auto dataContainer = dynamic_cast<DataContainer<_type*>*>((IDataContainer*)dataPtr);
-		if (dataContainer)
-			value = **dataContainer->data;
-		else
-			value = _type();
+		if constexpr (std::is_pointer<__type>::value)
+			value = (__type)data.GetContainingObject();
+		else if (auto objPtr = (__type*)data.GetContainingObject())
+			value = *objPtr;
 	}
 
 	template<typename _type, typename _enable /*= void*/>
 	void ScriptValue::Converter<_type, _enable>::Write(const __type& value, ScriptValue& data)
 	{
 		data.jvalue = jerry_create_object();
-
-		auto dataContainer = mnew DataContainer<_type*>(mnew _type*(&const_cast<__type&>(value)));
-		dataContainer->isDataOwner = false;
-		jerry_set_object_native_pointer(data.jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
-
-		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
-		{
-			ReflectScriptValueTypeProcessor processor(data);
-			_type::template ProcessType<ReflectScriptValueTypeProcessor>(*dataContainer->data, processor);
-		}
+		if constexpr (std::is_pointer<__type>::value)
+			data.SetContainingObject(value, false);
+		else
+			data.SetContainingObject(mnew __type(value), true);
 	}
 
 	template<>

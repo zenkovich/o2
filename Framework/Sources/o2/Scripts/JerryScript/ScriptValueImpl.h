@@ -424,7 +424,7 @@ namespace o2
 
 		BaseFunctionProcessor StartFunction() { return BaseFunctionProcessor(); }
 
-		static void RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc);
+		static void RegisterTypeConstructor(Type* type, ScriptValue& constructorFunc);
 		static void RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func);
 	};
 
@@ -530,7 +530,7 @@ namespace o2
 			{
 				if (auto typeMember = data.FindMember("Type"))
 				{
-					IObject* object = data;
+					ISerializable* object = data;
 					value = object->GetScriptValue();
 				}
 				else
@@ -540,14 +540,10 @@ namespace o2
 						ScriptValue itName;
 						it->name.Get(itName);
 						auto prop = value.GetProperty(itName);
-						if (prop.IsObject())
-							it->value.Get(prop);
-						else
-						{
-							ScriptValue itValue;
-							it->value.Get(itValue);
-							value.SetProperty(itName, itValue);
-						}
+
+						ScriptValue itValue;
+						it->value.Get(itValue);
+						value.SetProperty(itName, itValue);
 					}
 				}
 			}

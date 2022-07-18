@@ -67,11 +67,11 @@ namespace Editor
 		Vector<IActorPropertiesViewer*> mAvailableActorPropertiesViewers;        // Available actor properties viewers										 							      
 		TypeActorViewersmap             mActorPropertiesViewersPool;             // Actor properties viewers pool
 
-		Vector<const Type*>            mCommonComponentsTypes;            // List of common components types for targets
-		Vector<IActorComponentViewer*> mComponentsViewers;                // Components viewers
-		DefaultActorComponentViewer*   mDefaultComponentViewer = nullptr; // Default component viewer sample
-		Vector<IActorComponentViewer*> mAvailableComponentsViewers;       // Available components' viewers										 							      
-		TypeCompViewersMap             mComponentViewersPool;             // Components viewers pool
+		Vector<Pair<const Type*, Vector<Component*>>> mComponentGroupsTypes;             // List of components group types for targets
+		Vector<IActorComponentViewer*>                mComponentsViewers;                // Components viewers
+		DefaultActorComponentViewer*                  mDefaultComponentViewer = nullptr; // Default component viewer sample
+		Vector<IActorComponentViewer*>                mAvailableComponentsViewers;       // Available components' viewers										 							      
+		TypeCompViewersMap                            mComponentViewersPool;             // Components viewers pool
 
 		AddComponentPanel* mAddComponentPanel = nullptr; // Add component panel. Shown by clicking on filter field
 									    
@@ -90,8 +90,8 @@ namespace Editor
 		// Sets target components: gets common components and initializes them
 		void SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
 
-		// Returns list of common components types for targets
-		Vector<const Type*> GetCommonComponentsTypes(const Vector<IObject*> targets) const;
+		// Returns list of grouped by types components
+		Vector<Pair<const Type*, Vector<Component*>>> GetGroupedComponents() const;
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -118,7 +118,7 @@ CLASS_FIELDS_META(Editor::ActorViewer)
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultActorPropertiesViewer);
 	FIELD().PROTECTED().NAME(mAvailableActorPropertiesViewers);
 	FIELD().PROTECTED().NAME(mActorPropertiesViewersPool);
-	FIELD().PROTECTED().NAME(mCommonComponentsTypes);
+	FIELD().PROTECTED().NAME(mComponentGroupsTypes);
 	FIELD().PROTECTED().NAME(mComponentsViewers);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mDefaultComponentViewer);
 	FIELD().PROTECTED().NAME(mAvailableComponentsViewers);
@@ -129,6 +129,8 @@ CLASS_FIELDS_META(Editor::ActorViewer)
 END_META;
 CLASS_METHODS_META(Editor::ActorViewer)
 {
+
+	typedef Vector<Pair<const Type*, Vector<Component*>>> _tmp1;
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
@@ -141,7 +143,7 @@ CLASS_METHODS_META(Editor::ActorViewer)
 	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<Widget*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>, Vector<Widget*>&);
-	FUNCTION().PROTECTED().SIGNATURE(Vector<const Type*>, GetCommonComponentsTypes, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetGroupedComponents);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }

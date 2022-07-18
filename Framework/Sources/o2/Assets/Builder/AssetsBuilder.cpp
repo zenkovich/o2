@@ -150,7 +150,11 @@ namespace o2
 
 		for (auto subFolder : folder.folders)
 		{
-			String folderFullPath = mSourceAssetsPath + subFolder.path;
+			String subFolderPath = subFolder.path;
+			subFolderPath.Erase(subFolderPath.Length() - 1);
+
+			String folderFullPath = mSourceAssetsPath + subFolderPath;
+
 			String metaFullPath = folderFullPath + ".meta";
 			bool isExistMetaForFolder = o2FileSystem.IsFileExist(metaFullPath);
 			if (!isExistMetaForFolder)

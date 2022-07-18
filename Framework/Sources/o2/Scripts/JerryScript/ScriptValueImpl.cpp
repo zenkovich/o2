@@ -82,10 +82,12 @@ namespace o2
 		if (jerry_value_is_array(jvalue))
 			return ValueType::Array;
 
-		if (jerry_value_is_constructor(jvalue))
-			return ValueType::Constructor;
-
 		return (ValueType)jerry_value_get_type(jvalue);
+	}
+
+	bool ScriptValue::IsConstructor() const
+	{
+		return jerry_value_is_constructor(jvalue);
 	}
 
 	bool ScriptValue::IsUndefined() const
@@ -367,7 +369,7 @@ namespace o2
 
 	ScriptValue ScriptValue::InvokeRaw(const ScriptValue& thisValue, const Vector<ScriptValue>& args) const
 	{
-		if (GetValueType() == ValueType::Function)
+		if (IsFunction())
 		{
 			const int maxParameters = 16;
 			jerry_value_t valuesBuf[maxParameters];
@@ -538,11 +540,16 @@ namespace o2
 		return GetNameSpaceAndConstructor(subPathProp, path.SubStr(fnd + 2), constructor);
 	}
 
-	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, const ScriptValue& constructorFunc)
+	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, ScriptValue& constructorFunc)
 	{
 		String constructor;
-		GetNameSpaceAndConstructor(o2Scripts.GetGlobal(), type->GetName(), constructor)
-			.SetProperty(constructor.Data(), constructorFunc);
+		auto nspace = GetNameSpaceAndConstructor(o2Scripts.GetGlobal(), type->GetName(), constructor);
+		auto t1 = constructorFunc.GetValueType();
+		ScriptValue proto;
+		proto.SetProperty("type", ScriptValue(type));
+		constructorFunc.SetPrototype(proto);
+		auto t2 = proto.GetValueType();
+		nspace.SetProperty(constructor.Data(), constructorFunc);
 	}
 
 	void ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func)

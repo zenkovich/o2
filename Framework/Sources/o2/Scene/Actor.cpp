@@ -6,6 +6,7 @@
 #include "o2/Scene/Scene.h"
 #include "o2/Scene/SceneLayer.h"
 #include "o2/Utils/Debug/Debug.h"
+#include "Components/ScriptableComponent.h"
 
 namespace o2
 {
@@ -769,6 +770,41 @@ namespace o2
 
 		return nullptr;
 	}
+
+#if IS_SCRIPTING_SUPPORTED
+	Component* Actor::GetComponent(const ScriptValue& typeValue)
+	{
+		auto proto = typeValue.GetPrototype();
+		auto protoYpe = proto.GetValueType();
+		if (proto.IsObject())
+		{
+			auto typeProp = proto.GetProperty("type");
+			if (typeProp.IsObjectContainer())
+			{
+				const Type* type = typeProp.GetValue<const Type*>();
+				for (auto component : mComponents)
+				{
+					if (component->GetType().IsBasedOn(*type))
+						return component;
+				}
+			}
+		}
+		else
+		{
+			for (auto component : mComponents)
+			{
+				if (auto scriptComponent = dynamic_cast<ScriptableComponent*>(component))
+				{
+					if (scriptComponent->GetClass() == typeValue)
+						return component;
+				}
+			}
+		}
+
+		return nullptr;
+	}
+#endif
+
 
 	const Vector<Component*>& Actor::GetComponents() const
 	{

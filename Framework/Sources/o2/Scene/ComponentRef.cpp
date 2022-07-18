@@ -70,6 +70,11 @@ namespace o2
 		return mComponent;
 	}
 
+	void ComponentRef::Set(Component* component)
+	{
+		*this = ComponentRef(component);
+	}
+
 	Component* ComponentRef::Get()
 	{
 		return mComponent;

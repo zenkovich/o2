@@ -10,7 +10,10 @@
 #include "o2/Utils/Editor/SceneEditableObject.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/UID.h"
+
+#if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValue.h"
+#endif
 
 namespace o2
 {
@@ -225,7 +228,7 @@ namespace o2
 		template<typename _type>
 		_type* AddComponent();
 
-		// Adds new component @SCRIPTABLE
+		// Adds new component
 		Component* AddComponent(Component* component);
 
 		// Removes component @SCRIPTABLE
@@ -246,6 +249,11 @@ namespace o2
 		// Returns component with type
 		template<typename _type>
 		_type* GetComponent() const;
+
+#if IS_SCRIPTING_SUPPORTED
+		// Returns component with type name @SCRIPTABLE
+		Component* GetComponent(const ScriptValue& typeValue);
+#endif
 
 		// Returns component with type in this and children
 		template<typename _type>
@@ -832,12 +840,13 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveChild, Actor*, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllChildren, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Actor*, FindActorById, SceneUID);
-	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, AddComponent, Component*);
+	FUNCTION().PUBLIC().SIGNATURE(Component*, AddComponent, Component*);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveComponent, Component*, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveAllComponents);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const String&);
 	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, const Type*);
 	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, SceneUID);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const ScriptValue&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Component*>&, GetComponents);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SceneLayer*, GetLayer);

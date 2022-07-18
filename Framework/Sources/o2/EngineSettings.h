@@ -53,6 +53,12 @@ bool IsReleaseBuild();
 // Building assets before launching app
 bool IsAssetsPrebuildEnabled();
 
+// Project root path. Relative from executable
+const char* GetProjectRootPath();
+
+// Assets path. Relative from project root
+const char* GetAssetsRootPath();
+
 // Basic atlas path (from assets path)
 const char* GetBasicAtlasPath();
 

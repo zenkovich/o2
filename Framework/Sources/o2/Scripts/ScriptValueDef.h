@@ -17,7 +17,7 @@ namespace o2
 	class ScriptValue: public ScriptValueBase
 	{
 	public:
-		enum class ValueType { None = 0, Undefined, Null, Bool, Number, String, Object, Function, Constructor, Error, Symbol, BigInt, Array };
+		enum class ValueType { None = 0, Undefined, Null, Bool, Number, String, Object, Function, Error, Symbol, BigInt, Array };
 
 	public:
 		template<typename _type, typename _enable = void>
@@ -209,6 +209,9 @@ namespace o2
 	// Function methods
 		// Returns is function
 		bool IsFunction() const;
+
+		// Returns is constructor function
+		bool IsConstructor() const;
 	 
 		// Invokes function
 		ScriptValue InvokeRaw(const Vector<ScriptValue>& args) const;

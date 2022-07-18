@@ -167,3 +167,8 @@ class Color4
 	static White() { return new Color4(255, 255, 255, 255); }
 	static Black() { return new Color4(0, 0, 0, 255); }
 }
+
+Math.randomBetween = function(a, b)
+{
+	return a + Math.random()*(b - a);
+}

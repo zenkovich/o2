@@ -17,7 +17,7 @@ namespace o2
 		PROPERTIES(ImageComponent);
 
 	public:
-		// Default constructor
+		// Default constructor @SCRIPTABLE
 		ImageComponent();
 
 		// Constructor from image asset
@@ -106,7 +106,7 @@ END_META;
 CLASS_METHODS_META(o2::ImageComponent)
 {
 
-	FUNCTION().PUBLIC().CONSTRUCTOR();
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ImageAssetRef&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
