@@ -38,6 +38,9 @@ namespace o2
 #if IS_SCRIPTING_SUPPORTED
 		// Returns script value with wrapped object
 		virtual ScriptValue GetScriptValue() const;
+
+		// Reflects object into script value. Adds properties, functions etc
+		virtual void ReflectIntoScriptValue(ScriptValue& scriptValue) const;
 #endif
 
 	private:
@@ -70,6 +73,7 @@ namespace o2
 #if IS_SCRIPTING_SUPPORTED
 #define IOBJECT_SCRIPTING()                                                             \
     ScriptValue GetScriptValue() const override;                                        \
+    void ReflectIntoScriptValue(ScriptValue& scriptValue) const override;               \
     template<typename __type> 															\
     friend struct ScriptValueBase::DataContainer
 
@@ -128,5 +132,8 @@ namespace o2
 	{
 		return ScriptValue(*this);
 	}
+
+	void IObject::ReflectIntoScriptValue(ScriptValue& scriptValue) const
+	{}
 }
 #endif

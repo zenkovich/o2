@@ -260,7 +260,7 @@ namespace o2
 
 		auto itemsInRange = getItemsRangeFunc(mMinVisibleItemIdx, mMaxVisibleItemIdx + 1);
 		Vector<Widget*> itemsWidgets;
-		itemsWidgets.Resize(mMaxVisibleItemIdx - mMinVisibleItemIdx + 1);
+		itemsWidgets.Resize(Math::Max(0, mMaxVisibleItemIdx - mMinVisibleItemIdx + 1));
 
 		Vector<Widget*> removingItems;
 		for (int i = lastMinItemIdx; i <= lastMaxItemIdx; i++)

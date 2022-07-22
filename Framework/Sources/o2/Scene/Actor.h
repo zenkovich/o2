@@ -134,7 +134,7 @@ namespace o2
 		// Sets prototype and links actor to them
 		void SetPrototype(ActorAssetRef asset);
 
-		// Returns prototype from this or this parent
+		// Returns prototype from this or this parent @SCRIPTABLE
 		ActorAssetRef GetPrototype() const;
 
 		// Returns prototype directly from only this
@@ -814,7 +814,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(UID, GetAssetID);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsAsset);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetPrototype, ActorAssetRef);
-	FUNCTION().PUBLIC().SIGNATURE(ActorAssetRef, GetPrototype);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorAssetRef, GetPrototype);
 	FUNCTION().PUBLIC().SIGNATURE(ActorAssetRef, GetPrototypeDirectly);
 	FUNCTION().PUBLIC().SIGNATURE(ActorRef, GetPrototypeLink);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddToScene);

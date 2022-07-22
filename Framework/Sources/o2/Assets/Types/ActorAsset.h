@@ -28,7 +28,7 @@ namespace o2
 		// Check equals operator
 		ActorAsset& operator=(const ActorAsset& asset);
 
-		// Instantiates actor toscene
+		// Instantiates actor toscene @SCRIPTABLE
 		ActorRef Instantiate();
 
 		// Returns meta information
@@ -91,7 +91,7 @@ CLASS_METHODS_META(o2::ActorAsset)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().CONSTRUCTOR(Actor*);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const ActorAsset&);
-	FUNCTION().PUBLIC().SIGNATURE(ActorRef, Instantiate);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorRef, Instantiate);
 	FUNCTION().PUBLIC().SIGNATURE(Meta*, GetMeta);
 	FUNCTION().PUBLIC().SIGNATURE(Actor*, GetActor);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetActor, Actor*, bool);

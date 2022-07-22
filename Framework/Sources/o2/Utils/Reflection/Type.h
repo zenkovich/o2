@@ -720,7 +720,13 @@ namespace o2
 typedef void* (*GetValuePointerFuncPtr)(void*);
 
 #if IS_SCRIPTING_SUPPORTED
-#define DECLARE_SCRIPTING(CLASS) o2::ScriptValue CLASS::GetScriptValue() const { return o2::ScriptValue(this); }
+#define DECLARE_SCRIPTING(CLASS)                                                                               \
+	o2::ScriptValue CLASS::GetScriptValue() const { return o2::ScriptValue(this); }                            \
+    void CLASS::ReflectIntoScriptValue(o2::ScriptValue& scriptValue) const                                     \
+	{																										   \
+		ReflectScriptValueTypeProcessor processor(scriptValue);												   \
+		ProcessType<ReflectScriptValueTypeProcessor>(this, processor);						                   \
+	}																										   
 #else
 #define DECLARE_SCRIPTING(CLASS)
 #endif

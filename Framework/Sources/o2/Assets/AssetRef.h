@@ -59,7 +59,7 @@ namespace o2
 		// Returns is reference is valid
 		bool IsValid() const;
 
-		// Returns asset
+		// Returns asset @SCRIPTABLE
 		Asset* Get();
 
 		// Returns asset
@@ -260,7 +260,7 @@ CLASS_METHODS_META(o2::AssetRef)
 	FUNCTION().PUBLIC().CONSTRUCTOR(const String&);
 	FUNCTION().PUBLIC().CONSTRUCTOR(const UID&);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsValid);
-	FUNCTION().PUBLIC().SIGNATURE(Asset*, Get);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Asset*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(const Asset*, Get);
 	FUNCTION().PUBLIC().SIGNATURE(const Type&, GetAssetType);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetInstance, Asset*);

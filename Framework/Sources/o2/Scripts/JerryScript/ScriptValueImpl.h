@@ -101,8 +101,7 @@ namespace o2
 
 		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
 		{
-			ReflectScriptValueTypeProcessor processor(*this);
-			_type::template ProcessType<ReflectScriptValueTypeProcessor>(object, processor);
+			object->ReflectIntoScriptValue(*this);
 		}
 
 		SetProperty("FreeOwnership", Function<ScriptValue()>(
@@ -539,10 +538,15 @@ namespace o2
 					{
 						ScriptValue itName;
 						it->name.Get(itName);
-						auto prop = value.GetProperty(itName);
 
 						ScriptValue itValue;
 						it->value.Get(itValue);
+
+						auto oldProp = value.GetProperty(itName);
+						auto oldPropProto = oldProp.GetPrototype();
+						if (oldPropProto.IsObject())
+							itValue->SetPrototype(oldPropProto);
+
 						value.SetProperty(itName, itValue);
 					}
 				}
