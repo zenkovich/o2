@@ -198,7 +198,7 @@ namespace Editor
 
 	String SceneTree::GetObjectDebug(void* object)
 	{
-		return object ? ((SceneEditableObject*)object)->GetName() : "null";
+		return object ? ((SceneEditableObject*)object)->GetName() : String("null");
 	}
 
 	void SceneTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)

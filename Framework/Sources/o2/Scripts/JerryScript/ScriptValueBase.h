@@ -57,18 +57,35 @@ namespace o2
 			virtual jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) = 0;
 		};
 
-		template<typename _invocable_type, typename _res_type, typename ... _args>
-		struct FunctionContainer : public DataContainer<_invocable_type>, public IFunctionContainer
+		template<typename _res_type, typename _this_type, typename ... _args>
+		struct TFunctionContainer
 		{
-			FunctionContainer(_invocable_type* function) :DataContainer<_invocable_type>(function) {}
 			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
+
+			virtual _res_type InvokeT(_this_type this_, _args ... args) const = 0;
 		};
 
 		template<typename _invocable_type, typename _res_type, typename ... _args>
-		struct ThisFunctionContainer : public DataContainer<_invocable_type>, public IFunctionContainer
+		struct FunctionContainer : public DataContainer<_invocable_type>, public TFunctionContainer<_res_type, void, _args ...>
+		{
+			FunctionContainer(_invocable_type* function) :DataContainer<_invocable_type>(function) {}
+			_res_type InvokeT(void, _args ... args) const override;
+		};
+
+		template<typename _invocable_type, typename _res_type, typename ... _args>
+		struct ThisFunctionContainer : public DataContainer<_invocable_type>, public TFunctionContainer<_res_type, ScriptValue, _args ...>
 		{
 			ThisFunctionContainer(_invocable_type* function) :DataContainer<_invocable_type>(function) {}
-			jerry_value_t Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount) override;
+			_res_type InvokeT(ScriptValue this_, _args ... args) const override;
+		};
+
+		template<typename _class_type, typename _res_type, typename ... _args>
+		struct ThisClassFunctionContainer : public DataContainer<_res_type(_class_type::*)(_args ... args)>, public TFunctionContainer<_res_type, _class_type*, _args ...>
+		{
+			ThisClassFunctionContainer(_res_type(_class_type::*functionPtr)(_args ... args)):
+				DataContainer<_res_type(_class_type::*)(_args ... args)>(functionPtr) {}
+
+			_res_type InvokeT(_class_type* this_, _args ... args) const override;
 		};
 
 		struct ISetterWrapperContainer : public IDataContainer

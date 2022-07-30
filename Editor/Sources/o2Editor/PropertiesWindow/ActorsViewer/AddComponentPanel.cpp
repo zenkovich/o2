@@ -162,7 +162,7 @@ namespace Editor
 				{
 					int fnd = category.Find('/');
 					String subStr = category.SubStr(0, fnd);
-					category = fnd != -1 ? category.SubStr(fnd + 1) : "";
+					category = fnd != -1 ? category.SubStr(fnd + 1) : String("");
 
 					auto nextIt = it->children.FindOrDefault([&](NodeData* x) { return x->name == subStr; });
 					if (!nextIt)

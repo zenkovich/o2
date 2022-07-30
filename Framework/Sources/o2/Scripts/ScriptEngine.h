@@ -66,7 +66,10 @@ namespace o2
 		ScriptValue GetGlobal() const;
 
 		// Collects garbage
-		void CollectGarbage() const;
+		void CollectGarbage() const; 
+		
+		// Returns used memory in bytes
+		int GetUsedMemory() const;
 
 		// Starts debugging session and waits for connect
 		void ConnectDebugger() const;

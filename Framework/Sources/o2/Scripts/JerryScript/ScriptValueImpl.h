@@ -99,7 +99,7 @@ namespace o2
 		dataContainer->isDataOwner = owner;
 		jerry_set_object_native_pointer(jvalue, (IDataContainer*)dataContainer, &GetDataDeleter().info);
 
-		if constexpr (std::is_base_of<IObject, _type>::value && !std::is_same<IObject, _type>::value)
+		if constexpr (std::is_base_of<IObject, _type>::value)
 		{
 			object->ReflectIntoScriptValue(*this);
 		}
@@ -279,6 +279,16 @@ namespace o2
 		jerry_set_object_native_pointer(jvalue, funcContainer, &GetDataDeleter().info);
 	}
 
+	template<typename _class_type, typename _res_type, typename ... _args>
+	void ScriptValue::SetThisFunction(_res_type(_class_type::* functionPtr)(_args ... args) const)
+	{
+		Accept(jerry_create_external_function(&CallFunction));
+
+		IDataContainer* funcContainer;
+
+		jerry_set_object_native_pointer(jvalue, funcContainer, &GetDataDeleter().info);
+	}
+
 	template<typename _invocable_type, typename _res_type, typename ... _args>
 	jerry_value_t ScriptValueBase::FunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount)
 	{
@@ -314,7 +324,8 @@ namespace o2
 	}
 
 	template<typename _invocable_type, typename _res_type, typename ... _args>
-	jerry_value_t ScriptValueBase::ThisFunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue, jerry_value_t* args, int argsCount)
+	jerry_value_t ScriptValueBase::ThisFunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue,
+																										jerry_value_t* args, int argsCount)
 	{
 		ScriptValue thisValueObj;
 		thisValueObj.AcquireValue(thisValue);
@@ -346,6 +357,93 @@ namespace o2
 			else
 			{
 				ScriptValue res((*this->data)(thisValueObj));
+				return jerry_acquire_value(res.jvalue);
+			}
+		}
+	}
+
+	template<typename _invocable_type, typename _res_type, typename ... _args>
+	jerry_value_t ScriptValueBase::ThisClassFunctionContainer<_invocable_type, _res_type, _args ...>::Invoke(jerry_value_t thisValue,
+																											 jerry_value_t* args, int argsCount)
+	{
+		ScriptValue thisValueObj;
+		thisValueObj.AcquireValue(thisValue);
+
+		if constexpr (sizeof...(_args) > 0)
+		{
+			std::tuple<ScriptValue, typename std::remove_const<typename std::remove_reference<_args>::type>::type...> argst;
+			std::get<0>(argst) = thisValueObj;
+			UnpackArgs<1, 0, ScriptValue, typename std::remove_const<typename std::remove_reference<_args>::type>::type...>(argst, args, argsCount);
+
+			if constexpr (std::is_same<_res_type, void>::value)
+			{
+				std::apply(*this->data, argst);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res(std::apply(*this->data, argst));
+				return jerry_acquire_value(res.jvalue);
+			}
+		}
+		else
+		{
+			if constexpr (std::is_same<_res_type, void>::value)
+			{
+				(*this->data)(thisValueObj);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res((*this->data)(thisValueObj));
+				return jerry_acquire_value(res.jvalue);
+			}
+		}
+	}
+
+	template<typename _res_type, typename _this_type, typename ... _args>
+	jerry_value_t ScriptValueBase::TFunctionContainer<_res_type, _this_type, _args ...>::Invoke(jerry_value_t thisValue,
+																								jerry_value_t* args, int argsCount)
+	{
+		template<typename T>
+		struct RemoveConstAndRef
+		{
+			typedef typename std::remove_const<typename std::remove_reference<T>::type>::type type;
+		};
+
+		ScriptValue thisValueObj;
+		thisValueObj.AcquireValue(thisValue);
+
+		if constexpr (sizeof...(_args) > 0)
+		{
+			std::tuple<_this_type, RemoveConstAndRef<_args>::type...> argst;
+
+			if constexpr (!std::is_void<_this_type>::value)
+				std::get<0>(argst) = thisValueObj;
+
+			UnpackArgs<1, 0, _this_type, RemoveConstAndRef<_args>::type...>(argst, args, argsCount);
+
+			if constexpr (std::is_void<_res_type>::value)
+			{
+				std::apply(InvokeT, argst);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res(std::apply(InvokeT, argst));
+				return jerry_acquire_value(res.jvalue);
+			}
+		}
+		else
+		{
+			if constexpr (std::is_void<_res_type>::value)
+			{
+				InvokeT(thisValueObj);
+				return jerry_create_undefined();
+			}
+			else
+			{
+				ScriptValue res(InvokeT(thisValueObj));
 				return jerry_acquire_value(res.jvalue);
 			}
 		}
@@ -543,9 +641,12 @@ namespace o2
 						it->value.Get(itValue);
 
 						auto oldProp = value.GetProperty(itName);
-						auto oldPropProto = oldProp.GetPrototype();
-						if (oldPropProto.IsObject())
-							itValue->SetPrototype(oldPropProto);
+						if (oldProp.IsObject())
+						{
+							auto oldPropProto = oldProp.GetPrototype();
+							if (oldPropProto.IsObject())
+								itValue.SetPrototype(oldPropProto);
+						}
 
 						value.SetProperty(itName, itValue);
 					}

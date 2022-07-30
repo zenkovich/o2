@@ -408,11 +408,8 @@ namespace o2
 
 		static void Write(const _ptr_type& value, ScriptValue& data)
 		{
-			data.jvalue = jerry_create_object();
-
-			auto ptr = (_non_ptr_type*)(const_cast<_ptr_type&>(value));
-
-			data.SetContainingObject(ptr, false);
+			data.jvalue = jerry_create_undefined();
+			data = value->GetScriptValue();
 		}
 
 		static void Read(_ptr_type& value, const ScriptValue& data)
@@ -422,19 +419,8 @@ namespace o2
 			auto dataContainer = (IDataContainer*)dataPtr;
 			if (dataContainer)
 			{
-				if constexpr (std::is_base_of<IObject, _non_ptr_type>::value)
-				{
-					auto object = dataContainer->TryCastToIObject();
-					value = dynamic_cast<_ptr_type>(object);
-				}
-				else
-				{
-					auto typedDataContainer = dynamic_cast<DataContainer<_non_ptr_type>*>(dataContainer);
-					if (typedDataContainer)
-						value = typedDataContainer->data;
-					else
-						value = nullptr;
-				}
+				auto object = dataContainer->TryCastToIObject();
+				value = dynamic_cast<_ptr_type>(object);
 			}
 			else
 				value = nullptr;

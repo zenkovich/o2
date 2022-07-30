@@ -137,6 +137,21 @@ namespace Editor
 
 		o2EditorAnimationWindow.SetTarget(widget);
 
+		int mem = o2Scripts.GetUsedMemory();
+
+		o2Scripts.GetGlobal().SetProperty("vv", mnew Actor());
+		int mem2 = o2Scripts.GetUsedMemory();
+		int d1 = mem2 - mem;
+
+		o2Scripts.GetGlobal().SetProperty("dd", 5);
+		int mem3 = o2Scripts.GetUsedMemory();
+		int d2 = mem3 - mem2;
+
+		auto v = widget->GetScriptValue();
+		//String tmp = v.Dump();
+
+		mem = o2Scripts.GetUsedMemory();
+
 // 		ScriptValue tmp(Vector<int>({ 0, 1, 2, 3, 4 }));
 // 
 // 		auto typ = tmp.GetValueType();
@@ -434,7 +449,8 @@ namespace Editor
 		o2Application.windowCaption = String("o2 Editor: ") + mLoadedScene +
 			"; FPS: " + (String)((int)o2Time.GetFPS()) +
 			" DC: " + (String)mDrawCalls +
-			" Cursor: " + (String)o2Input.GetCursorPos();
+			" Cursor: " + (String)o2Input.GetCursorPos() + 
+			" JS: " + (String)(o2Scripts.GetUsedMemory()/1024) + "kb";
 
 		if (o2Input.IsKeyPressed('K'))
 			o2Memory.DumpInfo();

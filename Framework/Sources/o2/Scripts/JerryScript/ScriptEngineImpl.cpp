@@ -78,7 +78,7 @@ namespace o2
 		delete ScriptValuePrototypes::GetRectPrototype();
 		delete ScriptValuePrototypes::GetBorderPrototype();
 		delete ScriptValuePrototypes::GetColor4Prototype();
-		jerry_cleanup();
+		//jerry_cleanup();
 	}
 
 	ScriptParseResult ScriptEngine::Parse(const String& script, const String& filename /*= ""*/)
@@ -130,6 +130,13 @@ namespace o2
 	void ScriptEngine::CollectGarbage() const
 	{
 		jerry_gc(JERRY_GC_PRESSURE_HIGH);
+	}
+	
+	int ScriptEngine::GetUsedMemory() const
+	{
+		jerry_heap_stats_t stats = { 0 };
+		bool get_stats_ret = jerry_get_memory_stats(&stats);
+		return stats.allocated_bytes;
 	}
 
 	void ScriptEngine::ConnectDebugger() const

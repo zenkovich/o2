@@ -23,7 +23,13 @@ namespace o2
 	{
 	public:
 		// Virtual destructor
-		virtual ~IObject() {}
+		virtual ~IObject() 
+		{
+#if IS_SCRIPTING_SUPPORTED
+			if (mScriptValueCache)
+				delete mScriptValueCache;
+#endif
+		}
 
 		// Cloning interface
 		virtual IObject* Clone() const { return nullptr; };
@@ -41,6 +47,12 @@ namespace o2
 
 		// Reflects object into script value. Adds properties, functions etc
 		virtual void ReflectIntoScriptValue(ScriptValue& scriptValue) const;
+
+	protected:
+		// Sets this into script value as containing object
+		virtual void SetScriptValueContainer(ScriptValue& value) const;
+
+		mutable ScriptValue* mScriptValueCache = nullptr;
 #endif
 
 	private:
@@ -72,7 +84,7 @@ namespace o2
  
 #if IS_SCRIPTING_SUPPORTED
 #define IOBJECT_SCRIPTING()                                                             \
-    ScriptValue GetScriptValue() const override;                                        \
+    void SetScriptValueContainer(ScriptValue& value) const override;                    \
     void ReflectIntoScriptValue(ScriptValue& scriptValue) const override;               \
     template<typename __type> 															\
     friend struct ScriptValueBase::DataContainer
@@ -130,10 +142,21 @@ namespace o2
 {
 	inline ScriptValue IObject::GetScriptValue() const
 	{
-		return ScriptValue(*this);
+		if (!mScriptValueCache)
+		{
+			mScriptValueCache = mnew ScriptValue(ScriptValue::EmptyObject());
+			SetScriptValueContainer(*mScriptValueCache);
+		}
+
+		return *mScriptValueCache;
 	}
 
-	void IObject::ReflectIntoScriptValue(ScriptValue& scriptValue) const
+	inline void IObject::ReflectIntoScriptValue(ScriptValue& scriptValue) const
 	{}
+
+	inline void IObject::SetScriptValueContainer(ScriptValue& value) const
+	{
+		value.SetContainingObject(const_cast<IObject*>(this), false);
+	}
 }
 #endif

@@ -1507,7 +1507,7 @@ namespace o2
 #if IS_SCRIPTING_SUPPORTED
 	void Actor::ReflectValue(ScriptValue& value)
 	{
-		value.SetProperty("transform", ScriptValue(*transform));
+		//value.SetProperty("transform", ScriptValue(transform));
 	}
 #endif
 

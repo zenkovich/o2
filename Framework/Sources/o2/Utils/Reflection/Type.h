@@ -720,24 +720,27 @@ namespace o2
 typedef void* (*GetValuePointerFuncPtr)(void*);
 
 #if IS_SCRIPTING_SUPPORTED
-#define DECLARE_SCRIPTING(CLASS)                                                                               \
-	o2::ScriptValue CLASS::GetScriptValue() const { return o2::ScriptValue(this); }                            \
-    void CLASS::ReflectIntoScriptValue(o2::ScriptValue& scriptValue) const                                     \
+#define DECLARE_SCRIPTING(CLASS, TEMPLATE_OPT)                                                                 \
+	TEMPLATE_OPT void CLASS::SetScriptValueContainer(ScriptValue& value) const 								   \
+	{																										   \
+		value.SetContainingObject(const_cast<CLASS*>(this), false);											   \
+	}                           																			   \
+    TEMPLATE_OPT void CLASS::ReflectIntoScriptValue(o2::ScriptValue& scriptValue) const                        \
 	{																										   \
 		ReflectScriptValueTypeProcessor processor(scriptValue);												   \
-		ProcessType<ReflectScriptValueTypeProcessor>(this, processor);						                   \
+		ProcessType<ReflectScriptValueTypeProcessor>(const_cast<CLASS*>(this), processor);					   \
 	}																										   
 #else
-#define DECLARE_SCRIPTING(CLASS)
+#define DECLARE_SCRIPTING(CLASS, TEMPLATE_OPT)
 #endif
 
 #define DECLARE_CLASS(CLASS)                                                                                   \
     o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS);                                     \
-    DECLARE_SCRIPTING(CLASS)
+    DECLARE_SCRIPTING(CLASS, )
 
 #define DECLARE_TEMPLATE_CLASS(CLASS)                                                                          \
 	template<> o2::Type* CLASS::type = o2::Reflection::InitializeType<CLASS>(#CLASS);                          \
-    template<> DECLARE_SCRIPTING(CLASS)
+    DECLARE_SCRIPTING(CLASS, template<>)
 
 #define CLASS_BASES_META(CLASS)                                                                                \
     template<typename _type_processor> void CLASS::ProcessBaseTypes(CLASS* object, _type_processor& processor) \

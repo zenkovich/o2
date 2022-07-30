@@ -263,7 +263,7 @@ namespace Editor
 	String AnimationTree::GetObjectDebug(void* object)
 	{
 		auto treeNode = (TrackNode*)object;
-		return treeNode ? treeNode->name : "Empty";
+		return treeNode ? treeNode->name : String("Empty");
 	}
 
 	void AnimationTree::FillNodeDataByObject(TreeNode* nodeWidget, void* object)

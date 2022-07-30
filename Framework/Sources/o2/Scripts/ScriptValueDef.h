@@ -231,6 +231,10 @@ namespace o2
 		template<typename _res_type, typename ... _args>
 		void SetThisFunction(const Function<_res_type(ScriptValue, _args ...)>& func);
 
+		// Sets function from class. This must contain
+		template<typename _class_type, typename _res_type, typename ... _args>
+		void SetThisFunction(_res_type(_class_type::* functionPtr)(_args ... args) const);
+
 	private:
 		template<typename ... _args>
 		static void PackArgs(Vector<ScriptValue>& argsValues, _args ... args)
