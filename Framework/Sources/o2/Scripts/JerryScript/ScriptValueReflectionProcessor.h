@@ -21,7 +21,7 @@ namespace o2
 		}
 	};
 	
-	class ReflectScriptValueTypeProcessor
+	class ReflectScriptValueTypeProcessor : public BaseTypeProcessor
 	{
 	public:
 		struct FieldProcessor;
@@ -82,90 +82,6 @@ namespace o2
 			}
 		};
 
-		struct BaseFunctionProcessor
-		{
-			ScriptValue& value;
-			ProtectSection section;
-
-		public:
-			BaseFunctionProcessor(ScriptValue& value) :value(value) {}
-
-			template<typename _attribute_type, typename ... _args>
-			auto AddAttribute(_args ... args);
-
-			BaseFunctionProcessor& SetProtectSection(ProtectSection section)
-			{
-				this->section = section;
-				return *this;
-			}
-
-			template<typename _object_type, typename ... _args>
-			void Constructor(_object_type* object, Type* type) {}
-
-			template<typename _object_type, typename _res_type, typename ... _args>
-			void Signature(_object_type* object, Type* type, const char* name,
-						   _res_type(_object_type::* pointer)(_args ...)) {}
-
-			template<typename _object_type, typename _res_type, typename ... _args>
-			void Signature(_object_type* object, Type* type, const char* name,
-						   _res_type(_object_type::* pointer)(_args ...) const) {}
-
-			template<typename _object_type, typename _res_type, typename ... _args>
-			void SignatureStatic(_object_type* object, Type* type, const char* name,
-								 _res_type(*pointer)(_args ...)) {}
-		};
-
-		struct FunctionProcessor : public BaseFunctionProcessor
-		{
-		public:
-			const char* name = 0;
-
-		public:
-			FunctionProcessor(BaseFunctionProcessor& base, const char* name) :BaseFunctionProcessor(base), name(name) {}
-
-			template<typename _object_type, typename _res_type, typename ... _args>
-			void Signature(_object_type* object, Type* type, const char* name,
-						   _res_type(_object_type::* pointer)(_args ...))
-			{
-				if constexpr (std::is_same<void, _res_type>::value)
-					value.SetProperty(ScriptValue(this->name ? this->name : name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
-				else
-				{
-					using x = typename std::remove_reference<_res_type>::type;
-					typedef typename std::remove_const<x>::type __res_type;
-					value.SetProperty(ScriptValue(this->name ? this->name : name),
-									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
-																				  {
-																					  __res_type res = (object->*pointer)(args ...);
-																					  return res;
-																				  })));
-				}
-			}
-
-			template<typename _object_type, typename _res_type, typename ... _args>
-			void Signature(_object_type* object, Type* type, const char* name,
-						   _res_type(_object_type::* pointer)(_args ...) const)
-			{
-				if constexpr (std::is_same<void, _res_type>::value)
-					value.SetProperty(ScriptValue(name), ScriptValue(Function<_res_type(_args ...)>(object, pointer)));
-				else
-				{
-					using x = typename std::remove_reference<_res_type>::type;
-					using __res_type = typename std::remove_const<x>::type;
-					value.SetProperty(ScriptValue(name),
-									  ScriptValue(Function<__res_type(_args ...)>([=](_args ... args)
-																				  {
-																					  __res_type res = (object->*pointer)(args ...);
-																					  return res;
-																				  })));
-				}
-			}
-
-			template<typename _object_type, typename _res_type, typename ... _args>
-			void SignatureStatic(_object_type* object, Type* type, const char* name,
-								 _res_type(*pointer)(_args ...)) {}
-		};
-
 	public:
 		ScriptValue& value;
 
@@ -195,8 +111,6 @@ namespace o2
 		}
 
 		BaseFieldProcessor StartField() { return BaseFieldProcessor(value); }
-
-		BaseFunctionProcessor StartFunction() { return BaseFunctionProcessor(value); }
 	};
 
 	template<typename _attribute_type, typename ... _args>
@@ -204,17 +118,6 @@ namespace o2
 	{
 		if constexpr (std::is_same<_attribute_type, ScriptableAttribute>::value)
 			return FieldProcessor(value, section);
-		else
-			return *this;
-	}
-
-	template<typename _attribute_type, typename ... _args>
-	auto ReflectScriptValueTypeProcessor::BaseFunctionProcessor::AddAttribute(_args ... args)
-	{
-		if constexpr (std::is_same<_attribute_type, ScriptableAttribute>::value)
-			return FunctionProcessor(*this, 0);
-		else if constexpr (std::is_same<_attribute_type, ScriptableNameAttribute>::value)
-			return FunctionProcessor(*this, args ...);
 		else
 			return *this;
 	}

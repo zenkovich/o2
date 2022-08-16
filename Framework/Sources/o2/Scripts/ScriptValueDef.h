@@ -233,7 +233,19 @@ namespace o2
 
 		// Sets function from class. This must contain
 		template<typename _class_type, typename _res_type, typename ... _args>
-		void SetThisFunction(_res_type(_class_type::* functionPtr)(_args ... args) const);
+		void SetClassFunction(_res_type(_class_type::* functionPtr)(_args ... args));
+
+		// Sets function from class. This must contain
+		template<typename _class_type, typename _res_type, typename ... _args>
+		void SetClassFunction(_res_type(_class_type::* functionPtr)(_args ... args) const);
+
+		// Creates script value from class function
+		template<typename _class_type, typename _res_type, typename ... _args>
+		static ScriptValue ClassFunction(_res_type(_class_type::* functionPtr)(_args ... args));
+
+		// Creates script value from class function
+		template<typename _class_type, typename _res_type, typename ... _args>
+		static ScriptValue ClassFunction(_res_type(_class_type::* functionPtr)(_args ... args) const);
 
 	private:
 		template<typename ... _args>

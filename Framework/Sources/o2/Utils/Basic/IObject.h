@@ -41,22 +41,26 @@ namespace o2
 		// Returns type
 		virtual const Type& GetType() const { return *type; }
 
+	private:
+		static Type* type;
+
 #if IS_SCRIPTING_SUPPORTED
+	public:
 		// Returns script value with wrapped object
 		virtual ScriptValue GetScriptValue() const;
 
 		// Reflects object into script value. Adds properties, functions etc
 		virtual void ReflectIntoScriptValue(ScriptValue& scriptValue) const;
 
+		// Script type prototype
+		static ScriptValue GetScriptPrototype();
+
 	protected:
 		// Sets this into script value as containing object
 		virtual void SetScriptValueContainer(ScriptValue& value) const;
 
-		mutable ScriptValue* mScriptValueCache = nullptr;
+		mutable ScriptValue* mScriptValueCache = nullptr; // Cached script value
 #endif
-
-	private:
-		static Type* type;
 
 		template<typename _type>
 		friend const o2::Type& o2::GetTypeOf();
@@ -86,6 +90,7 @@ namespace o2
 #define IOBJECT_SCRIPTING()                                                             \
     void SetScriptValueContainer(ScriptValue& value) const override;                    \
     void ReflectIntoScriptValue(ScriptValue& scriptValue) const override;               \
+    static ScriptValue GetScriptPrototype();                                            \
     template<typename __type> 															\
     friend struct ScriptValueBase::DataContainer
 
@@ -158,5 +163,12 @@ namespace o2
 	{
 		value.SetContainingObject(const_cast<IObject*>(this), false);
 	}
+
+	inline ScriptValue IObject::GetScriptPrototype()
+	{
+		static ScriptValue proto = ScriptValue::EmptyObject();
+		return proto;
+	}
+
 }
 #endif

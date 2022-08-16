@@ -118,6 +118,12 @@ namespace o2
 		std::is_same<T, UID>::value ||
 		std::is_same<T, ScriptValue>::value ||
 		std::is_same<T, DataValue>::value, std::true_type, std::false_type>::type {};
+
+	template<typename T>
+	struct RemoveConstAndRef
+	{
+		using type = typename std::remove_const<typename std::remove_reference<T>::type>::type;
+	};
 }
 
 #include "o2/Utils/Reflection/Type.h"

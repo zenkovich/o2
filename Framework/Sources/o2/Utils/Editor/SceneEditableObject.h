@@ -23,7 +23,7 @@ namespace o2
 		SceneEditableObject();
 
 		// Destructor, unregisters from scene editable objects list
-		virtual ~SceneEditableObject();
+		~SceneEditableObject() override;
 
 		// Returns true when object is on scene
 		virtual bool IsOnScene() const;

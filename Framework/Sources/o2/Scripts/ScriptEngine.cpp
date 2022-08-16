@@ -20,9 +20,11 @@ namespace o2
 		Timer t;
 
 		auto global = GetGlobal();
-		ScriptConstructorTypeProcessor processor;
 		for (auto func : GetRegisterConstructorFuncs())
+		{
+			ScriptConstructorTypeProcessor processor;
 			func(0, processor);
+		}
 
 		GetRegisterConstructorFuncs().Clear();
 

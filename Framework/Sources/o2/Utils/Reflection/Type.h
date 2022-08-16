@@ -721,6 +721,11 @@ typedef void* (*GetValuePointerFuncPtr)(void*);
 
 #if IS_SCRIPTING_SUPPORTED
 #define DECLARE_SCRIPTING(CLASS, TEMPLATE_OPT)                                                                 \
+    TEMPLATE_OPT o2::ScriptValue CLASS::GetScriptPrototype()                                                   \
+    {																										   \
+        static o2::ScriptValue proto = o2::ScriptValue::EmptyObject();										   \
+		return proto;																						   \
+    }																										   \
 	TEMPLATE_OPT void CLASS::SetScriptValueContainer(ScriptValue& value) const 								   \
 	{																										   \
 		value.SetContainingObject(const_cast<CLASS*>(this), false);											   \

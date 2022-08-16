@@ -447,11 +447,6 @@ namespace o2
 		// Returns dictionary of all states by names
 		Map<String, WidgetState*> GetAllStates();
 
-#if IS_SCRIPTING_SUPPORTED
-	public:
-		void ReflectValue(ScriptValue& value) override;
-#endif
-
 		friend class ContextMenu;
 		friend class CustomDropDown;
 		friend class CustomList;
@@ -886,7 +881,6 @@ CLASS_METHODS_META(o2::Widget)
 	FUNCTION().PROTECTED().SIGNATURE(_tmp2, GetAllChilds);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp3, GetAllInternalWidgets);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp4, GetAllStates);
-	FUNCTION().PUBLIC().SIGNATURE(void, ReflectValue, ScriptValue&);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEditableParent, SceneEditableObject*);
 	FUNCTION().PUBLIC().SIGNATURE(SceneEditableObject*, GetEditableParent);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<SceneEditableObject*>, GetEditableChildren);

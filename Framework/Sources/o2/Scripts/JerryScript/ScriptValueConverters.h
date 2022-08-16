@@ -409,7 +409,8 @@ namespace o2
 		static void Write(const _ptr_type& value, ScriptValue& data)
 		{
 			data.jvalue = jerry_create_undefined();
-			data = value->GetScriptValue();
+			if (value)
+				data = value->GetScriptValue();
 		}
 
 		static void Read(_ptr_type& value, const ScriptValue& data)
@@ -520,7 +521,7 @@ namespace o2
 		{
 			data.jvalue = jerry_create_external_function(&CallFunction);
 
-			IDataContainer* funcContainer = new FunctionContainer<Function<_res_type(_args ...)>, _res_type, _args ...>(
+			IDataContainer* funcContainer = new ScriptFunctionContainer<Function<_res_type(_args ...)>, _res_type, _args ...>(
 				mnew Function<_res_type(_args ...)>(value));
 
 			jerry_set_object_native_pointer(data.jvalue, funcContainer, &GetDataDeleter().info);

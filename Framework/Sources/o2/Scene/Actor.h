@@ -50,11 +50,11 @@ namespace o2
 		PROPERTY(ActorAssetRef, prototype, SetPrototype, GetPrototype); // Prototype asset reference property @EDITOR_IGNORE
 
 		GETTER(SceneUID, id, GetID);              // Actor unique id
-		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(String, name, SetName, GetName); // Actor name property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(String, layerName, SetLayer, GetLayerName); // Layer name property @EDITOR_IGNORE @ANIMATABLE
 
-		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE @SCRIPTABLE
+		PROPERTY(bool, enabled, SetEnabled, IsEnabled);         // Is actor enabled property @EDITOR_IGNORE @ANIMATABLE
 		GETTER(bool, enabledInHierarchy, IsEnabledInHierarchy); // Is actor enabled in hierarchy getter
 
 		GETTER(Vector<Actor*>, children, GetChildren);         // Children array getter
@@ -110,10 +110,10 @@ namespace o2
 		// Updates children transforms @SCRIPTABLE
 		virtual void UpdateChildrenTransforms();
 
-		// Sets actor's name
+		// Sets actor's name @SCRIPTABLE
 		void SetName(const String& name) OPTIONAL_OVERRIDE;
 
-		// Returns name
+		// Returns name @SCRIPTABLE
 		const String& GetName() const OPTIONAL_OVERRIDE;
 
 		// Returns actor's unique id
@@ -152,7 +152,7 @@ namespace o2
 		// Is actor on scene @SCRIPTABLE
 		bool IsOnScene() const OPTIONAL_OVERRIDE;
 
-		// Sets actor enabling
+		// Sets actor enabling @SCRIPTABLE
 		virtual void SetEnabled(bool enabled) OPTIONAL_OVERRIDE;
 
 		// Enables actor @SCRIPTABLE
@@ -161,7 +161,7 @@ namespace o2
 		// Disables actor @SCRIPTABLE
 		void Disable();
 
-		// Returns is actor enabled
+		// Returns is actor enabled @SCRIPTABLE
 		bool IsEnabled() const OPTIONAL_OVERRIDE;
 
 		// Returns is really enabled @SCRIPTABLE
@@ -270,13 +270,13 @@ namespace o2
 		// Returns all components @SCRIPTABLE
 		const Vector<Component*>& GetComponents() const;
 
-		// Sets layer by name
+		// Sets layer by name @SCRIPTABLE
 		void SetLayer(const String& layerName);
 
 		// Returns layer @SCRIPTABLE
 		SceneLayer* GetLayer() const;
 
-		// Returns layer name
+		// Returns layer name @SCRIPTABLE
 		const String& GetLayerName() const;
 
 		// Beginning serialization callback
@@ -474,7 +474,8 @@ namespace o2
 
 #if IS_SCRIPTING_SUPPORTED
 	public:
-		virtual void ReflectValue(ScriptValue& value);
+		// Returns transform for scripting @SCRIPTABLE
+		ActorTransform* GetTransform();
 #endif
 
 #if IS_EDITOR
@@ -745,9 +746,9 @@ CLASS_FIELDS_META(o2::Actor)
 {
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(prototype);
 	FIELD().PUBLIC().NAME(id);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(name);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(layerName);
-	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().SCRIPTABLE_ATTRIBUTE().NAME(enabled);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(name);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(layerName);
+	FIELD().PUBLIC().ANIMATABLE_ATTRIBUTE().EDITOR_IGNORE_ATTRIBUTE().NAME(enabled);
 	FIELD().PUBLIC().NAME(enabledInHierarchy);
 	FIELD().PUBLIC().NAME(children);
 	FIELD().PUBLIC().NAME(components);
@@ -806,8 +807,8 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, UpdateTransform);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, UpdateSelfTransform);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, UpdateChildrenTransforms);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetName, const String&);
-	FUNCTION().PUBLIC().SIGNATURE(const String&, GetName);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetName, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetName);
 	FUNCTION().PUBLIC().SIGNATURE(SceneUID, GetID);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetID, SceneUID);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, GenerateNewID, bool);
@@ -820,10 +821,10 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, AddToScene);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, RemoveFromScene, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsOnScene);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetEnabled, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Enable);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, Disable);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabled);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsResEnabled);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsEnabledInHierarchy);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetParent, Actor*, bool);
@@ -848,9 +849,9 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PUBLIC().SIGNATURE(Component*, GetComponent, SceneUID);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Component*, GetComponent, const ScriptValue&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const Vector<Component*>&, GetComponents);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLayer, const String&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLayer, const String&);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(SceneLayer*, GetLayer);
-	FUNCTION().PUBLIC().SIGNATURE(const String&, GetLayerName);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(const String&, GetLayerName);
 	FUNCTION().PUBLIC().SIGNATURE(void, SerializeBasicOverride, DataValue&);
 	FUNCTION().PUBLIC().SIGNATURE(void, DeserializeBasicOverride, const DataValue&);
 	FUNCTION().PUBLIC().SIGNATURE_STATIC(void, SetDefaultCreationMode, ActorCreateMode);
@@ -892,7 +893,7 @@ CLASS_METHODS_META(o2::Actor)
 	FUNCTION().PROTECTED().SIGNATURE(void, OnLayerChanged, SceneLayer*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentAdded, Component*);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnComponentRemoving, Component*);
-	FUNCTION().PUBLIC().SIGNATURE(void, ReflectValue, ScriptValue&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(ActorTransform*, GetTransform);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLocked, bool);
 	FUNCTION().PUBLIC().SIGNATURE(void, Lock);
 	FUNCTION().PUBLIC().SIGNATURE(void, Unlock);

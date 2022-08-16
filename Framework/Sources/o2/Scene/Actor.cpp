@@ -190,6 +190,8 @@ namespace o2
 				o2Scene.RemoveActorFromScene(this);
 			}
 		}
+
+		delete transform;
 	}
 
 	Actor& Actor::operator=(const Actor& other)
@@ -1505,9 +1507,9 @@ namespace o2
 	}
 	
 #if IS_SCRIPTING_SUPPORTED
-	void Actor::ReflectValue(ScriptValue& value)
+	ActorTransform* Actor::GetTransform()
 	{
-		//value.SetProperty("transform", ScriptValue(transform));
+		return transform;
 	}
 #endif
 
