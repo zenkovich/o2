@@ -22,7 +22,7 @@ namespace o2
 		auto global = GetGlobal();
 		for (auto func : GetRegisterConstructorFuncs())
 		{
-			ScriptConstructorTypeProcessor processor;
+			ScriptPrototypeProcessor processor;
 			func(0, processor);
 		}
 

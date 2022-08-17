@@ -24,62 +24,62 @@ namespace o2
 		PROPERTIES(ActorTransform);
 		GETTER(Actor*, actor, GetOwnerActor); // Owner actor getter 
 
-		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property @SCRIPTABLE
-		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property @SCRIPTABLE
-		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property @SCRIPTABLE
-		PROPERTY(float, height, SetHeight, GetHeight);                  // Width property @SCRIPTABLE
-		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property @SCRIPTABLE
-		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space @SCRIPTABLE
-		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property @SCRIPTABLE
-		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians @SCRIPTABLE
-		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees @SCRIPTABLE
-		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property @SCRIPTABLE
+		PROPERTY(Vec2F, position, SetPosition, GetPosition);            // Position property
+		PROPERTY(Vec2F, size, SetSize, GetSize);                        // Size property
+		PROPERTY(float, width, SetWidth, GetWidth);                     // Width property
+		PROPERTY(float, height, SetHeight, GetHeight);                  // Width property
+		PROPERTY(Vec2F, scale, SetScale, GetScale);                     // Scale property
+		PROPERTY(Vec2F, pivot, SetPivot, GetPivot);                     // Pivot property, in local space
+		PROPERTY(Vec2F, szPivot, SetSizePivot, GetSizePivot);           // Pivot in size space property
+		PROPERTY(float, angle, SetAngle, GetAngle);                     // Rotation angle in radians
+		PROPERTY(float, angleDegree, SetAngleDegrees, GetAngleDegrees); // Rotation angle in degrees
+		PROPERTY(float, shear, SetShear, GetShear);                     // Shear property
 
-		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property @SCRIPTABLE
-		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property @SCRIPTABLE
+		PROPERTY(Basis, basis, SetBasis, GetBasis);                         // Transformation basis property
+		PROPERTY(Basis, nonSizedBasis, SetNonSizedBasis, GetNonSizedBasis); // Non sizes transformation basis property
 
-		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle @SCRIPTABLE
-		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Rectangle - transform without angle, scale and shear.  @SCRIPTABLE
-											                           // Sets the position and size @SCRIPTABLE
+		PROPERTY(RectF, AABB, SetAxisAlignedRect, GetAxisAlignedRect); // Axis aligned rectangle
+		PROPERTY(RectF, rect, SetRect, GetRect);                       // Rectangle property. Rectangle - transform without angle, scale and shear. 
+											                           // Sets the position and size
 
-		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property @SCRIPTABLE
-		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property @SCRIPTABLE
-		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Right top corner property @SCRIPTABLE
-		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Right bottom corner property @SCRIPTABLE
-		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center position property @SCRIPTABLE
-		PROPERTY(Vec2F, rightDir, SetRightDir, GetRightDir);          // X axis direction property @SCRIPTABLE
-		PROPERTY(Vec2F, leftDir, SetLeftDir, GetLeftDir);             // Negative X axis direction property @SCRIPTABLE
-		PROPERTY(Vec2F, upDir, SetUpDir, GetUpDir);                   // Y axis direction property @SCRIPTABLE
-		PROPERTY(Vec2F, downDir, SetDownDir, GetDownDir);             // Negative Y axis direction property @SCRIPTABLE
-		PROPERTY(float, right, SetRight, GetRight);                   // Right border position property @SCRIPTABLE
-		PROPERTY(float, left, SetLeft, GetLeft);                      // Left border position property @SCRIPTABLE
-		PROPERTY(float, top, SetTop, GetTop);                         // Top border position property @SCRIPTABLE
-		PROPERTY(float, bottom, SetBottom, GetBottom);                // Bottom border position property @SCRIPTABLE
+		PROPERTY(Vec2F, leftTop, SetLeftTop, GetLeftTop);             // Left top corner property
+		PROPERTY(Vec2F, leftBottom, SetLeftBottom, GetLeftBottom);    // Left bottom corner property
+		PROPERTY(Vec2F, rightTop, SetRightTop, GetRightTop);          // Right top corner property
+		PROPERTY(Vec2F, rightBottom, SetRightBottom, GetRightBottom); // Right bottom corner property
+		PROPERTY(Vec2F, center, SetCenter, GetCenter);                // Center position property
+		PROPERTY(Vec2F, rightDir, SetRightDir, GetRightDir);          // X axis direction property
+		PROPERTY(Vec2F, leftDir, SetLeftDir, GetLeftDir);             // Negative X axis direction property
+		PROPERTY(Vec2F, upDir, SetUpDir, GetUpDir);                   // Y axis direction property
+		PROPERTY(Vec2F, downDir, SetDownDir, GetDownDir);             // Negative Y axis direction property
+		PROPERTY(float, right, SetRight, GetRight);                   // Right border position property
+		PROPERTY(float, left, SetLeft, GetLeft);                      // Left border position property
+		PROPERTY(float, top, SetTop, GetTop);                         // Top border position property
+		PROPERTY(float, bottom, SetBottom, GetBottom);                // Bottom border position property
 
-		PROPERTY(Vec2F, worldPosition, SetWorldPosition, GetWorldPosition);                // World position property @SCRIPTABLE
-		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);                         // Pivot property, in world space @SCRIPTABLE
-		PROPERTY(float, worldAngle, SetWorldAngle, GetWorldAngle);                         // World rotation angle in radians @SCRIPTABLE
-		PROPERTY(float, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);       // World rotation angle in degree @SCRIPTABLE
-		PROPERTY(Basis, worldBasis, SetWorldBasis, GetWorldBasis);                         // World transformation basis @SCRIPTABLE
-		PROPERTY(Basis, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis); // World transformation basis without size @SCRIPTABLE
+		PROPERTY(Vec2F, worldPosition, SetWorldPosition, GetWorldPosition);                // World position property
+		PROPERTY(Vec2F, worldPivot, SetWorldPivot, GetWorldPivot);                         // Pivot property, in world space
+		PROPERTY(float, worldAngle, SetWorldAngle, GetWorldAngle);                         // World rotation angle in radians
+		PROPERTY(float, worldAngleDegree, SetWorldAngleDegree, GetWorldAngleDegree);       // World rotation angle in degree
+		PROPERTY(Basis, worldBasis, SetWorldBasis, GetWorldBasis);                         // World transformation basis
+		PROPERTY(Basis, worldNonSizedBasis, SetWorldNonSizedBasis, GetWorldNonSizedBasis); // World transformation basis without size
 
-		PROPERTY(Vec2F, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);             // World Left top corner property @SCRIPTABLE
-		PROPERTY(Vec2F, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);    // World Left bottom corner property @SCRIPTABLE
-		PROPERTY(Vec2F, worldRightTop, SetWorldRightTop, GetWorldRightTop);          // World Right top corner property @SCRIPTABLE
-		PROPERTY(Vec2F, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom); // World Right bottom corner property @SCRIPTABLE
-		PROPERTY(Vec2F, worldCenter, SetWorldCenter, GetWorldCenter);                // World center property @SCRIPTABLE
-		PROPERTY(Vec2F, worldRightDir, SetWorldRightDir, GetWorldRightDir);          // World X axis direction property @SCRIPTABLE
-		PROPERTY(Vec2F, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);             // World Negative X axis direction property @SCRIPTABLE
-		PROPERTY(Vec2F, worldUpDir, SetWorldUpDir, GetWorldUpDir);                   // World Y axis direction property @SCRIPTABLE
-		PROPERTY(Vec2F, worldDownDir, SetWorldDownDir, GetWorldDownDir);             // World Negative Y axis direction property @SCRIPTABLE
+		PROPERTY(Vec2F, worldLeftTop, SetWorldLeftTop, GetWorldLeftTop);             // World Left top corner property
+		PROPERTY(Vec2F, worldLeftBottom, SetWorldLeftBottom, GetWorldLeftBottom);    // World Left bottom corner property
+		PROPERTY(Vec2F, worldRightTop, SetWorldRightTop, GetWorldRightTop);          // World Right top corner property
+		PROPERTY(Vec2F, worldRightBottom, SetWorldRightBottom, GetWorldRightBottom); // World Right bottom corner property
+		PROPERTY(Vec2F, worldCenter, SetWorldCenter, GetWorldCenter);                // World center property
+		PROPERTY(Vec2F, worldRightDir, SetWorldRightDir, GetWorldRightDir);          // World X axis direction property
+		PROPERTY(Vec2F, worldLeftDir, SetWorldLeftDir, GetWorldLeftDir);             // World Negative X axis direction property
+		PROPERTY(Vec2F, worldUpDir, SetWorldUpDir, GetWorldUpDir);                   // World Y axis direction property
+		PROPERTY(Vec2F, worldDownDir, SetWorldDownDir, GetWorldDownDir);             // World Negative Y axis direction property
 
-		PROPERTY(float, worldRight, SetWorldRight, GetWorldRight);    // World Right border position property @SCRIPTABLE
-		PROPERTY(float, worldLeft, SetWorldLeft, GetWorldLeft);       // World Left border position property @SCRIPTABLE
-		PROPERTY(float, worldTop, SetWorldTop, GetWorldTop);          // World Top border position property @SCRIPTABLE
-		PROPERTY(float, worldBottom, SetWorldBottom, GetWorldBottom); // World Bottom border position property @SCRIPTABLE
+		PROPERTY(float, worldRight, SetWorldRight, GetWorldRight);    // World Right border position property
+		PROPERTY(float, worldLeft, SetWorldLeft, GetWorldLeft);       // World Left border position property
+		PROPERTY(float, worldTop, SetWorldTop, GetWorldTop);          // World Top border position property
+		PROPERTY(float, worldBottom, SetWorldBottom, GetWorldBottom); // World Bottom border position property
 
-		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                       // World rectangle property. Sets the position and size @SCRIPTABLE
-		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect); // World direction aligned rectangle @SCRIPTABLE
+		PROPERTY(RectF, worldRect, SetWorldRect, GetWorldRect);                       // World rectangle property. Sets the position and size
+		PROPERTY(RectF, worldAABB, SetWorldAxisAlignedRect, GetWorldAxisAlignedRect); // World direction aligned rectangle
 
 	public:
 		ActorTransform(const Vec2F& size = Vec2F(), const Vec2F& position = Vec2F(), float angle = 0.0f,
@@ -112,307 +112,307 @@ namespace o2
 		// Updates transformation
 		virtual void Update();
 
-		// Sets position
+		// Sets position @SCRIPTABLE
 		virtual void SetPosition(const Vec2F& position);
 
-		// Returns position
+		// Returns position @SCRIPTABLE
 		Vec2F GetPosition() const;
 
-		// Sets size
+		// Sets size @SCRIPTABLE
 		virtual void SetSize(const Vec2F& size);
 
-		// Return size
+		// Return size @SCRIPTABLE
 		virtual Vec2F GetSize() const;
 
-		// Sets width
+		// Sets width @SCRIPTABLE
 		virtual void SetWidth(float value);
 
-		// Return width
+		// Return width @SCRIPTABLE
 		virtual float GetWidth() const;
 
-		// Sets height
+		// Sets height @SCRIPTABLE
 		virtual void SetHeight(float value);
 
-		// Return height
+		// Return height @SCRIPTABLE
 		virtual float GetHeight() const;
 
-		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
+		// Sets pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top @SCRIPTABLE
 		virtual void SetPivot(const Vec2F& pivot);
 
-		// Return pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top
+		// Return pivot, in local space, where (0, 0) - left down corner, (1; 1) - right top @SCRIPTABLE
 		Vec2F GetPivot() const;
 
-		// Sets size pivot, in local space, where (0, 0) - left down corner, (size.x, size.y) - right top
+		// Sets size pivot, in local space, where (0, 0) - left down corner, (size.x, size.y) - right top @SCRIPTABLE
 		void SetSizePivot(const Vec2F& relPivot);
 
-		// Returns size pivot, in local space, where (0, 0) - left down corner, (size.x, size.y) - right top
+		// Returns size pivot, in local space, where (0, 0) - left down corner, (size.x, size.y) - right top @SCRIPTABLE
 		Vec2F GetSizePivot() const;
 
-		// Sets scale
+		// Sets scale @SCRIPTABLE
 		void SetScale(const Vec2F& scale);
 
-		// Returns scale
+		// Returns scale @SCRIPTABLE
 		Vec2F GetScale() const;
 
-		// Sets rotation angle, in radians
+		// Sets rotation angle, in radians @SCRIPTABLE
 		void SetAngle(float rad);
 
-		// Returns rotation angle in radians
+		// Returns rotation angle in radians @SCRIPTABLE
 		float GetAngle() const;
 
-		// Sets rotation angle, in degrees
+		// Sets rotation angle, in degrees @SCRIPTABLE
 		void SetAngleDegrees(float deg);
 
-		// Returns rotation angle in degrees
+		// Returns rotation angle in degrees @SCRIPTABLE
 		float GetAngleDegrees() const;
 
-		// Sets shear
+		// Sets shear @SCRIPTABLE
 		void SetShear(float shear);
 
-		// Returns shear
+		// Returns shear @SCRIPTABLE
 		float GetShear() const;
 
-		// Sets basis
+		// Sets basis @SCRIPTABLE
 		virtual void SetBasis(const Basis& basis);
 
-		// Returns basis
+		// Returns basis @SCRIPTABLE
 		Basis GetBasis() const;
 
-		// Sets basis without size
+		// Sets basis without size @SCRIPTABLE
 		virtual void SetNonSizedBasis(const Basis& basis);
 
-		// Returns basis without size
+		// Returns basis without size @SCRIPTABLE
 		Basis GetNonSizedBasis() const;
 
-		// Sets rect
+		// Sets rect @SCRIPTABLE
 		virtual void SetRect(const RectF& rect);
 
-		// Returns rect
+		// Returns rect @SCRIPTABLE
 		virtual RectF GetRect() const;
 
-		// Sets direction aligned rectangle transformation
+		// Sets direction aligned rectangle transformation @SCRIPTABLE
 		virtual void SetAxisAlignedRect(const RectF& rect);
 
-		// Returns direction aligned rectangle transformation
+		// Returns direction aligned rectangle transformation @SCRIPTABLE
 		RectF GetAxisAlignedRect() const;
 
-		// Sets left top corner position
+		// Sets left top corner position @SCRIPTABLE
 		void SetLeftTop(const Vec2F& position);
 
-		// Returns left top corner position
+		// Returns left top corner position @SCRIPTABLE
 		Vec2F GetLeftTop() const;
 
-		// Sets right top corner position
+		// Sets right top corner position @SCRIPTABLE
 		void SetRightTop(const Vec2F& position);
 
-		// Returns right top corner position
+		// Returns right top corner position @SCRIPTABLE
 		Vec2F GetRightTop() const;
 
 		// Sets left down corner position
 		void SetLeftBottom(const Vec2F& position);
 
-		// Returns left down corner position
+		// Returns left down corner position @SCRIPTABLE
 		Vec2F GetLeftBottom() const;
 
-		// Sets left right bottom position
+		// Sets left right bottom position @SCRIPTABLE
 		void SetRightBottom(const Vec2F& position);
 
-		// Returns right bottom corner position
+		// Returns right bottom corner position @SCRIPTABLE
 		Vec2F GetRightBottom() const;
 
-		// Sets center position
+		// Sets center position @SCRIPTABLE
 		void SetCenter(const Vec2F& position);
 
-		// Returns center position
+		// Returns center position @SCRIPTABLE
 		Vec2F GetCenter() const;
 
-		// Set local right direction
+		// Set local right direction @SCRIPTABLE
 		void SetRightDir(const Vec2F& dir);
 
-		// Returns local right direction
+		// Returns local right direction @SCRIPTABLE
 		Vec2F GetRightDir() const;
 
-		// Set local left direction
+		// Set local left direction @SCRIPTABLE
 		void SetLeftDir(const Vec2F& dir);
 
-		// Returns local left direction
+		// Returns local left direction @SCRIPTABLE
 		Vec2F GetLeftDir() const;
 
-		// Set local up direction
+		// Set local up direction @SCRIPTABLE
 		void SetUpDir(const Vec2F& dir);
 
-		// Returns local up direction
+		// Returns local up direction @SCRIPTABLE
 		Vec2F GetUpDir() const;
 
-		// Set local down direction
+		// Set local down direction @SCRIPTABLE
 		void SetDownDir(const Vec2F& dir);
 
-		// Returns local down direction
+		// Returns local down direction @SCRIPTABLE
 		Vec2F GetDownDir() const;
 
-		// Set local right border position
+		// Set local right border position @SCRIPTABLE
 		void SetRight(float value);
 
-		// Returns local right border position
+		// Returns local right border position @SCRIPTABLE
 		float GetRight() const;
 
-		// Set local left border position
+		// Set local left border position @SCRIPTABLE
 		void SetLeft(float value);
 
-		// Returns local left border position
+		// Returns local left border position @SCRIPTABLE
 		float GetLeft() const;
 
-		// Set local top border position
+		// Set local top border position @SCRIPTABLE
 		void SetTop(float value);
 
-		// Returns local top border position
+		// Returns local top border  @SCRIPTABLE
 		float GetTop() const;
 
-		// Set local down border position
+		// Set local down border position @SCRIPTABLE
 		void SetBottom(float value);
 
-		// Returns local down border position
+		// Returns local down border position @SCRIPTABLE
 		float GetBottom() const;
 
-		// Transforms point from world space into local
+		// Transforms point from world space into local @SCRIPTABLE
 		Vec2F World2LocalPoint(const Vec2F& worldPoint) const;
 
-		// Transforms point from local space into world
+		// Transforms point from local space into world @SCRIPTABLE
 		Vec2F Local2WorldPoint(const Vec2F& localPoint) const;
 
-		// Transforms direction from world space into local
+		// Transforms direction from world space into local @SCRIPTABLE
 		Vec2F World2LocalDir(const Vec2F& worldDir) const;
 
-		// Transforms direction from local space into world
+		// Transforms direction from local space into world @SCRIPTABLE
 		Vec2F Local2WorldDir(const Vec2F& localDir) const;
 
-		// Returns true when point inside this
+		// Returns true when point inside this @SCRIPTABLE
 		bool IsPointInside(const Vec2F& point) const;
 
-		// Sets world position
+		// Sets world position @SCRIPTABLE
 		void SetWorldPosition(const Vec2F& position);
 
-		// Returns world position
+		// Returns world position @SCRIPTABLE
 		Vec2F GetWorldPosition() const;
 
-		// Sets pivot by world coordinates
+		// Sets pivot by world coordinates @SCRIPTABLE
 		void SetWorldPivot(const Vec2F& pivot);
 
-		// Returns pivot position in world coordinates
+		// Returns pivot position in world coordinates @SCRIPTABLE
 		Vec2F GetWorldPivot() const;
 
-		// Sets world rotation angle, in radians
+		// Sets world rotation angle, in radians @SCRIPTABLE
 		void SetWorldAngle(float rad);
 
-		// Returns world rotation angle in radians
+		// Returns world rotation angle in radians @SCRIPTABLE
 		float GetWorldAngle() const;
 
-		// Sets world rotation angle, in degrees
+		// Sets world rotation angle, in degrees @SCRIPTABLE
 		void SetWorldAngleDegree(float deg);
 
-		// Returns world rotation angle in degrees
+		// Returns world rotation angle in degrees @SCRIPTABLE
 		float GetWorldAngleDegree() const;
 
-		// Sets world basis
+		// Sets world basis @SCRIPTABLE
 		void SetWorldBasis(const Basis& basis);
 
-		// Returns world basis
+		// Returns world basis @SCRIPTABLE
 		Basis GetWorldBasis() const;
 
-		// Sets world basis without size
+		// Sets world basis without size @SCRIPTABLE
 		void SetWorldNonSizedBasis(const Basis& basis);
 
-		// Returns world basis without size
+		// Returns world basis without size @SCRIPTABLE
 		Basis GetWorldNonSizedBasis() const;
 
-		// Sets world rect
+		// Sets world rect @SCRIPTABLE
 		void SetWorldRect(const RectF& rect);
 
-		// Returns world rect
+		// Returns world rect @SCRIPTABLE
 		RectF GetWorldRect() const;
 
-		// Sets world direction aligned rectangle transformation
+		// Sets world direction aligned rectangle transformation @SCRIPTABLE
 		void SetWorldAxisAlignedRect(const RectF& rect);
 
-		// Returns world direction aligned rectangle transformation
+		// Returns world direction aligned rectangle transformation @SCRIPTABLE
 		RectF GetWorldAxisAlignedRect() const;
 
-		// Sets world left top corner position
+		// Sets world left top corner position @SCRIPTABLE
 		void SetWorldLeftTop(const Vec2F& position);
 
-		// Returns world left top corner position
+		// Returns world left top corner position @SCRIPTABLE
 		Vec2F GetWorldLeftTop() const;
 
-		// Sets world right top corner position
+		// Sets world right top corner position @SCRIPTABLE
 		void SetWorldRightTop(const Vec2F& position);
 
-		// Returns world right top corner position
+		// Returns world right top corner position @SCRIPTABLE
 		Vec2F GetWorldRightTop() const;
 
-		// Sets world left down corner position
+		// Sets world left down corner position @SCRIPTABLE
 		void SetWorldLeftBottom(const Vec2F& position);
 
-		// Returns world left down corner position
+		// Returns world left down corner position @SCRIPTABLE
 		Vec2F GetWorldLeftBottom() const;
 
-		// Sets world left right bottom position
+		// Sets world left right bottom position @SCRIPTABLE
 		void SetWorldRightBottom(const Vec2F& position);
 
-		// Returns world right bottom corner position
+		// Returns world right bottom corner position @SCRIPTABLE
 		Vec2F GetWorldRightBottom() const;
 
-		// Sets world center position
+		// Sets world center position @SCRIPTABLE
 		void SetWorldCenter(const Vec2F& position);
 
-		// Returns world center position
+		// Returns world center position @SCRIPTABLE
 		Vec2F GetWorldCenter() const;
 
-		// Set World right direction
+		// Set World right direction @SCRIPTABLE
 		void SetWorldRightDir(const Vec2F& dir);
 
-		// Returns World right direction
+		// Returns World right direction @SCRIPTABLE
 		Vec2F GetWorldRightDir() const;
 
-		// Set World left direction
+		// Set World left direction @SCRIPTABLE
 		void SetWorldLeftDir(const Vec2F& dir);
 
-		// Returns World left direction
+		// Returns World left direction @SCRIPTABLE
 		Vec2F GetWorldLeftDir() const;
 
-		// Set World up direction
+		// Set World up direction @SCRIPTABLE
 		void SetWorldUpDir(const Vec2F& dir);
 
-		// Returns World up direction
+		// Returns World up direction @SCRIPTABLE
 		Vec2F GetWorldUpDir() const;
 
-		// Set World down direction
+		// Set World down direction @SCRIPTABLE
 		void SetWorldDownDir(const Vec2F& dir);
 
-		// Returns World down direction
+		// Returns World down direction @SCRIPTABLE
 		Vec2F GetWorldDownDir() const;
 
-		// Set World right border position
+		// Set World right border position @SCRIPTABLE
 		void SetWorldRight(float value);
 
-		// Returns World right border position
+		// Returns World right border position @SCRIPTABLE
 		float GetWorldRight() const;
 
-		// Set World left border position
+		// Set World left border position @SCRIPTABLE
 		void SetWorldLeft(float value);
 
-		// Returns World left border position
+		// Returns World left border position @SCRIPTABLE
 		float GetWorldLeft() const;
 
-		// Set World top border position
+		// Set World top border position @SCRIPTABLE
 		void SetWorldTop(float value);
 
-		// Returns World top border position
+		// Returns World top border position @SCRIPTABLE
 		float GetWorldTop() const;
 
-		// Set World down border position
+		// Set World down border position @SCRIPTABLE
 		void SetWorldBottom(float value);
 
-		// Returns World down border position
+		// Returns World down border position @SCRIPTABLE
 		float GetWorldBottom() const;
 
 		SERIALIZABLE(ActorTransform);
@@ -509,54 +509,54 @@ END_META;
 CLASS_FIELDS_META(o2::ActorTransform)
 {
 	FIELD().PUBLIC().NAME(actor);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(position);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(size);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(width);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(height);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(scale);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(pivot);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(szPivot);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(angle);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(angleDegree);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(shear);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(basis);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(nonSizedBasis);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(AABB);
+	FIELD().PUBLIC().NAME(position);
+	FIELD().PUBLIC().NAME(size);
+	FIELD().PUBLIC().NAME(width);
+	FIELD().PUBLIC().NAME(height);
+	FIELD().PUBLIC().NAME(scale);
+	FIELD().PUBLIC().NAME(pivot);
+	FIELD().PUBLIC().NAME(szPivot);
+	FIELD().PUBLIC().NAME(angle);
+	FIELD().PUBLIC().NAME(angleDegree);
+	FIELD().PUBLIC().NAME(shear);
+	FIELD().PUBLIC().NAME(basis);
+	FIELD().PUBLIC().NAME(nonSizedBasis);
+	FIELD().PUBLIC().NAME(AABB);
 	FIELD().PUBLIC().NAME(rect);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(center);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(rightDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(leftDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(upDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(downDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(right);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(left);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(top);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(bottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldPosition);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldPivot);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldAngle);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldAngleDegree);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldBasis);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldNonSizedBasis);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeftTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeftBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRightTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRightBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldCenter);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRightDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeftDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldUpDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldDownDir);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRight);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldLeft);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldTop);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldBottom);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldRect);
-	FIELD().PUBLIC().SCRIPTABLE_ATTRIBUTE().NAME(worldAABB);
+	FIELD().PUBLIC().NAME(leftTop);
+	FIELD().PUBLIC().NAME(leftBottom);
+	FIELD().PUBLIC().NAME(rightTop);
+	FIELD().PUBLIC().NAME(rightBottom);
+	FIELD().PUBLIC().NAME(center);
+	FIELD().PUBLIC().NAME(rightDir);
+	FIELD().PUBLIC().NAME(leftDir);
+	FIELD().PUBLIC().NAME(upDir);
+	FIELD().PUBLIC().NAME(downDir);
+	FIELD().PUBLIC().NAME(right);
+	FIELD().PUBLIC().NAME(left);
+	FIELD().PUBLIC().NAME(top);
+	FIELD().PUBLIC().NAME(bottom);
+	FIELD().PUBLIC().NAME(worldPosition);
+	FIELD().PUBLIC().NAME(worldPivot);
+	FIELD().PUBLIC().NAME(worldAngle);
+	FIELD().PUBLIC().NAME(worldAngleDegree);
+	FIELD().PUBLIC().NAME(worldBasis);
+	FIELD().PUBLIC().NAME(worldNonSizedBasis);
+	FIELD().PUBLIC().NAME(worldLeftTop);
+	FIELD().PUBLIC().NAME(worldLeftBottom);
+	FIELD().PUBLIC().NAME(worldRightTop);
+	FIELD().PUBLIC().NAME(worldRightBottom);
+	FIELD().PUBLIC().NAME(worldCenter);
+	FIELD().PUBLIC().NAME(worldRightDir);
+	FIELD().PUBLIC().NAME(worldLeftDir);
+	FIELD().PUBLIC().NAME(worldUpDir);
+	FIELD().PUBLIC().NAME(worldDownDir);
+	FIELD().PUBLIC().NAME(worldRight);
+	FIELD().PUBLIC().NAME(worldLeft);
+	FIELD().PUBLIC().NAME(worldTop);
+	FIELD().PUBLIC().NAME(worldBottom);
+	FIELD().PUBLIC().NAME(worldRect);
+	FIELD().PUBLIC().NAME(worldAABB);
 	FIELD().PROTECTED().DELTA_SEARCH_ATTRIBUTE().NAME(mData);
 }
 END_META;
@@ -569,107 +569,107 @@ CLASS_METHODS_META(o2::ActorTransform)
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDirty, bool);
 	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsDirty);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetPosition, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPosition);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSize, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetSize);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWidth, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWidth);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetHeight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetHeight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetPivot, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetPivot);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetSizePivot, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetSizePivot);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetScale, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetScale);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAngle, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetAngle);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAngleDegrees, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetAngleDegrees);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetShear, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetShear);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetBasis, const Basis&);
-	FUNCTION().PUBLIC().SIGNATURE(Basis, GetBasis);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetNonSizedBasis, const Basis&);
-	FUNCTION().PUBLIC().SIGNATURE(Basis, GetNonSizedBasis);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRect, const RectF&);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, GetRect);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetAxisAlignedRect, const RectF&);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, GetAxisAlignedRect);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftTop, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLeftTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRightTop, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetRightTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetPosition, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetPosition);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetSize, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetSize);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWidth, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWidth);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetHeight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetHeight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetPivot, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetPivot);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetSizePivot, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetSizePivot);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetScale, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetScale);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAngle, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAngle);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAngleDegrees, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetAngleDegrees);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetShear, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetShear);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetBasis, const Basis&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Basis, GetBasis);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetNonSizedBasis, const Basis&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Basis, GetNonSizedBasis);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetRect, const RectF&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetAxisAlignedRect, const RectF&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetAxisAlignedRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLeftTop, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetLeftTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetRightTop, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetRightTop);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftBottom, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLeftBottom);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRightBottom, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetRightBottom);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetCenter, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetCenter);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRightDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetRightDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLeftDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetLeftDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetUpDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetUpDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetDownDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetDownDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetRight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetRight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetLeft, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetLeft);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTop, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetBottom, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetBottom);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, World2LocalPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Local2WorldPoint, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, World2LocalDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, Local2WorldDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(bool, IsPointInside, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldPosition, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldPosition);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldPivot, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldPivot);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldAngle, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldAngle);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldAngleDegree, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldAngleDegree);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldBasis, const Basis&);
-	FUNCTION().PUBLIC().SIGNATURE(Basis, GetWorldBasis);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldNonSizedBasis, const Basis&);
-	FUNCTION().PUBLIC().SIGNATURE(Basis, GetWorldNonSizedBasis);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldRect, const RectF&);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, GetWorldRect);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldAxisAlignedRect, const RectF&);
-	FUNCTION().PUBLIC().SIGNATURE(RectF, GetWorldAxisAlignedRect);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldLeftTop, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldLeftTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldRightTop, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldRightTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldLeftBottom, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldLeftBottom);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldRightBottom, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldRightBottom);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldCenter, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldCenter);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldRightDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldRightDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldLeftDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldLeftDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldUpDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldUpDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldDownDir, const Vec2F&);
-	FUNCTION().PUBLIC().SIGNATURE(Vec2F, GetWorldDownDir);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldRight, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldRight);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldLeft, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldLeft);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldTop, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldTop);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetWorldBottom, float);
-	FUNCTION().PUBLIC().SIGNATURE(float, GetWorldBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetLeftBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetRightBottom, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetRightBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetCenter, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetCenter);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetRightDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetRightDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLeftDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetLeftDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetUpDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetUpDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetDownDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetDownDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetRight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetRight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetLeft, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetLeft);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetTop, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetBottom, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, World2LocalPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, Local2WorldPoint, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, World2LocalDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, Local2WorldDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(bool, IsPointInside, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldPosition, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldPosition);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldPivot, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldPivot);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldAngle, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldAngle);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldAngleDegree, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldAngleDegree);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldBasis, const Basis&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Basis, GetWorldBasis);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldNonSizedBasis, const Basis&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Basis, GetWorldNonSizedBasis);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldRect, const RectF&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetWorldRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldAxisAlignedRect, const RectF&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(RectF, GetWorldAxisAlignedRect);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldLeftTop, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldLeftTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldRightTop, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldRightTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldLeftBottom, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldLeftBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldRightBottom, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldRightBottom);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldCenter, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldCenter);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldRightDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldRightDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldLeftDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldLeftDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldUpDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldUpDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldDownDir, const Vec2F&);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(Vec2F, GetWorldDownDir);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldRight, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldRight);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldLeft, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldLeft);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldTop, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldTop);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(void, SetWorldBottom, float);
+	FUNCTION().PUBLIC().SCRIPTABLE_ATTRIBUTE().SIGNATURE(float, GetWorldBottom);
 	FUNCTION().PROTECTED().CONSTRUCTOR(ActorTransformData*);
 	FUNCTION().PROTECTED().SIGNATURE(void, CopyFrom, const ActorTransform&);
 	FUNCTION().PROTECTED().SIGNATURE(void, SetOwner, Actor*);

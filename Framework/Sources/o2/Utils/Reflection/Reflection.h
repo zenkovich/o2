@@ -235,7 +235,7 @@ namespace o2
 		res->mId = Reflection::Instance().mLastGivenTypeId++;
 
 #if IS_SCRIPTING_SUPPORTED
-		ScriptEngine::GetRegisterConstructorFuncs().Add((ScriptEngine::RegisterConstructorFunc)&_type::template ProcessType<ScriptConstructorTypeProcessor>);
+		ScriptEngine::GetRegisterConstructorFuncs().Add((ScriptEngine::RegisterConstructorFunc)&_type::template ProcessType<ScriptPrototypeProcessor>);
 #endif
 
 		mInstance->mTypes[res->GetName()] = res;

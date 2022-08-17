@@ -242,6 +242,7 @@
     <ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorRefResolver.h" />
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorSubscription.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\CameraActor.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Component.h" />

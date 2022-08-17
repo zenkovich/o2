@@ -502,17 +502,17 @@ namespace o2
 
 	class Type;
 
-	struct ScriptConstructorTypeProcessor : public BaseTypeProcessor
+	struct ScriptPrototypeProcessor : public BaseTypeProcessor
 	{
 		ScriptValue proto = ScriptValue::EmptyObject();
 
 	public:
 		struct BaseFunctionProcessor : public BaseTypeProcessor::FunctionProcessor
 		{
-			ScriptConstructorTypeProcessor& processor;
+			ScriptPrototypeProcessor& processor;
 
 		public:
-			BaseFunctionProcessor(ScriptConstructorTypeProcessor& processor) : processor(processor) {}
+			BaseFunctionProcessor(ScriptPrototypeProcessor& processor) : processor(processor) {}
 
 			template<typename _attribute_type, typename ... _args>
 			auto AddAttribute(_args ... args);
@@ -554,16 +554,16 @@ namespace o2
 	};
 
 	template<typename _attribute_type, typename ... _args>
-	auto ScriptConstructorTypeProcessor::BaseFunctionProcessor::AddAttribute(_args ... args)
+	auto ScriptPrototypeProcessor::BaseFunctionProcessor::AddAttribute(_args ... args)
 	{
 		if constexpr (std::is_same<ScriptableAttribute, _attribute_type>::value)
-			return ScriptConstructorTypeProcessor::FunctionProcessor(*this);
+			return ScriptPrototypeProcessor::FunctionProcessor(*this);
 		else
 			return *this;
 	}
 
 	template<typename _object_type, typename ... _args>
-	void ScriptConstructorTypeProcessor::FunctionProcessor::Constructor(_object_type* object, Type* type)
+	void ScriptPrototypeProcessor::FunctionProcessor::Constructor(_object_type* object, Type* type)
 	{
 		ScriptValue thisFunc;
 		thisFunc.SetThisFunction<void, _args ...>(Function<void(ScriptValue thisValue, _args ...)>(
@@ -574,28 +574,28 @@ namespace o2
 				thisValue.SetPrototype(_object_type::GetScriptPrototype());
 			}));
 
-		ScriptConstructorTypeProcessor::RegisterTypeConstructor(type, thisFunc);
+		ScriptPrototypeProcessor::RegisterTypeConstructor(type, thisFunc);
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
-	void ScriptConstructorTypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
+	void ScriptPrototypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
 																	  _res_type(_object_type::* pointer)(_args ...))
 	{
 		_object_type::GetScriptPrototype().SetProperty(name, ScriptValue::ClassFunction<_object_type, _res_type, _args ...>(pointer));
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
-	void ScriptConstructorTypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
+	void ScriptPrototypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
 																	  _res_type(_object_type::* pointer)(_args ...) const)
 	{
 		_object_type::GetScriptPrototype().SetProperty(name, ScriptValue::ClassFunction<_object_type, _res_type, _args ...>(pointer));
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
-	void ScriptConstructorTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type,
+	void ScriptPrototypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type,
 																			const char* name, _res_type(*pointer)(_args ...))
 	{
-		ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(type, name, ScriptValue(Function<_res_type(_args ...)>(
+		ScriptPrototypeProcessor::RegisterTypeStaticFunction(type, name, ScriptValue(Function<_res_type(_args ...)>(
 			[=](_args ... args) {
 				return (*pointer)(args ...);
 			})));

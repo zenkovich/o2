@@ -794,6 +794,9 @@
     <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueReflectionProcessor.h">
       <Filter>Sources\o2\Scripts\JerryScript</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scene\ActorSubscription.h">
+      <Filter>Sources\o2\Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Sources\o2\Animation\Animate.cpp">

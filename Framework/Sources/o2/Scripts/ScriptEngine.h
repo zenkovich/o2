@@ -16,7 +16,7 @@
 namespace o2
 {
 	class ScriptValue;
-	struct ScriptConstructorTypeProcessor;
+	struct ScriptPrototypeProcessor;
 
 	// -------------------
 	// Script parse result
@@ -85,7 +85,7 @@ namespace o2
 		void RunBuiltinScript(const String& filename);
 
 	private:
-		typedef void(*RegisterConstructorFunc)(void*, ScriptConstructorTypeProcessor&);
+		typedef void(*RegisterConstructorFunc)(void*, ScriptPrototypeProcessor&);
 		static Vector<RegisterConstructorFunc>& GetRegisterConstructorFuncs();
 
 		friend class Reflection;

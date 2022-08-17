@@ -540,7 +540,7 @@ namespace o2
 		return GetNameSpaceAndConstructor(subPathProp, path.SubStr(fnd + 2), constructor);
 	}
 
-	void ScriptConstructorTypeProcessor::RegisterTypeConstructor(Type* type, ScriptValue& constructorFunc)
+	void ScriptPrototypeProcessor::RegisterTypeConstructor(Type* type, ScriptValue& constructorFunc)
 	{
 		String constructor;
 		auto nspace = GetNameSpaceAndConstructor(o2Scripts.GetGlobal(), type->GetName(), constructor);
@@ -552,7 +552,7 @@ namespace o2
 		nspace.SetProperty(constructor.Data(), constructorFunc);
 	}
 
-	void ScriptConstructorTypeProcessor::RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func)
+	void ScriptPrototypeProcessor::RegisterTypeStaticFunction(Type* type, const char* name, const ScriptValue& func)
 	{
 		GetNameSpace(o2Scripts.GetGlobal(), type->GetName()).SetProperty(name, func);
 	}

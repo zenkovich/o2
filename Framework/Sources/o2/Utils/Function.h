@@ -46,20 +46,22 @@ namespace o2
 	// Static function delegate
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class FunctionPtr: public IFunction<_res_type(_args ...)>
+	class FunctionPtr : public IFunction<_res_type(_args ...)>
 	{
 		_res_type(*mFunctionPtr)(_args ... args); // Pointer to static function
 
 	public:
 		// Constructor
-		FunctionPtr(_res_type(*functionPtr)(_args ... args)):
+		FunctionPtr(_res_type(*functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr)
-		{}
+		{
+		}
 
 		// Copy-constructor
-		FunctionPtr(const FunctionPtr& other):
+		FunctionPtr(const FunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr)
-		{}
+		{
+		}
 
 		// Copy-operator
 		FunctionPtr& operator=(const FunctionPtr& other)
@@ -119,21 +121,23 @@ namespace o2
 	// Object function delegate
 	// ------------------------
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjFunctionPtr: public IFunction<_res_type(_args ...)>
+	class ObjFunctionPtr : public IFunction<_res_type(_args ...)>
 	{
-		_res_type(_class_type::*mFunctionPtr)(_args ... args); // Pointer to function
+		_res_type(_class_type::* mFunctionPtr)(_args ... args); // Pointer to function
 		_class_type* mObject;                                  // Pointer to function's owner object
 
 	public:
 		// Constructor
-		ObjFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args)):
+		ObjFunctionPtr(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args)) :
 			mFunctionPtr(functionPtr), mObject(object)
-		{}
+		{
+		}
 
 		// Copy-constructor
-		ObjFunctionPtr(const ObjFunctionPtr& other):
+		ObjFunctionPtr(const ObjFunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
-		{}
+		{
+		}
 
 		// Copy-operator
 		ObjFunctionPtr& operator=(const ObjFunctionPtr& other)
@@ -194,21 +198,23 @@ namespace o2
 	// Object constant function delegate
 	// ---------------------------------
 	template<typename _class_type, typename _res_type, typename ... _args>
-	class ObjConstFunctionPtr: public IFunction<_res_type(_args ...)>
+	class ObjConstFunctionPtr : public IFunction<_res_type(_args ...)>
 	{
-		_res_type(_class_type::*mFunctionPtr)(_args ... args) const; // Pointer to const function
+		_res_type(_class_type::* mFunctionPtr)(_args ... args) const; // Pointer to const function
 		_class_type* mObject;                                        // Pointer to function's owner object
 
 	public:
 		// Constructor
-		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
+		ObjConstFunctionPtr(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args) const) :
 			mFunctionPtr(functionPtr), mObject(object)
-		{}
+		{
+		}
 
 		// Copy-constructor
-		ObjConstFunctionPtr(const ObjConstFunctionPtr& other):
+		ObjConstFunctionPtr(const ObjConstFunctionPtr& other) :
 			mFunctionPtr(other.mFunctionPtr), mObject(other.mObject)
-		{}
+		{
+		}
 
 		// Copy-operator
 		ObjConstFunctionPtr& operator=(const ObjConstFunctionPtr& other)
@@ -269,30 +275,34 @@ namespace o2
 	// Shared lambda delegate
 	// ----------------------
 	template<typename _lambda_type, typename _res_type, typename ... _args>
-	class SharedLambda: public IFunction<_res_type(_args ...)>
+	class SharedLambda : public IFunction<_res_type(_args ...)>
 	{
 		_lambda_type mLambda;
 
 	public:
 		// Constructor
-		SharedLambda(const _lambda_type& lambda):
+		SharedLambda(const _lambda_type& lambda) :
 			mLambda(lambda)
-		{}
+		{
+		}
 
 		// Constructor
-		SharedLambda(_lambda_type&& lambda):
+		SharedLambda(_lambda_type&& lambda) :
 			mLambda(std::forward<_lambda_type>(lambda))
-		{}
+		{
+		}
 
 		// Copy-constructor
-		SharedLambda(const SharedLambda& other):
+		SharedLambda(const SharedLambda& other) :
 			mLambda(other.mLambda)
-		{}
+		{
+		}
 
 		// Move-constructor
-		SharedLambda(SharedLambda&& other):
+		SharedLambda(SharedLambda&& other) :
 			mLambda(std::forward<_lambda_type>(other.mLambda))
-		{}
+		{
+		}
 
 		// Copy-operator
 		SharedLambda& operator=(const SharedLambda& other)
@@ -355,7 +365,7 @@ namespace o2
 	// Combined delegate. Can contain many other functors
 	// --------------------------------------------------
 	template<typename _res_type, typename ... _args>
-	class Function<_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
+	class Function<_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
 		enum class DataType { Empty, OneFunction, CoupleOfFunctions };
 
@@ -424,7 +434,8 @@ namespace o2
 		// Constructor
 		Function()
 			: mData()
-		{}
+		{
+		}
 
 		// Copy-constructor
 		Function(const Function& other)
@@ -465,7 +476,7 @@ namespace o2
 
 		// Constructor from static function pointer
 		template<typename _static_func_type, typename enable = typename std::enable_if<std::is_function<_static_func_type>::value>::type>
-		Function(const _static_func_type* func):
+		Function(const _static_func_type* func) :
 			Function()
 		{
 			Emplace(FunctionPtr<_res_type, _args ...>(func));
@@ -473,7 +484,7 @@ namespace o2
 
 		// Constructor from lambda
 		template<typename _lambda_type, typename enable = typename std::enable_if<std::is_invocable_r<_res_type, _lambda_type, _args ...>::value && !std::is_base_of<IFunction<_res_type(_args ...)>, _lambda_type>::value>::type>
-		Function(const _lambda_type& lambda):
+		Function(const _lambda_type& lambda) :
 			Function()
 		{
 			Emplace(SharedLambda<_lambda_type, _res_type, _args ...>(lambda));
@@ -482,10 +493,10 @@ namespace o2
 		// Move-constructor from lambda
 		template<typename _lambda_type, typename enable = typename std::enable_if<
 			std::is_invocable_r<_res_type, _lambda_type, _args ...>::value &&
-			!std::is_base_of<IFunction<_res_type(_args ...)>, typename std::remove_reference<_lambda_type>::type>::value &&
+			!std::is_base_of<IFunction<_res_type(_args ...)>, typename std::remove_reference<_lambda_type>::type>::value&&
 			std::is_rvalue_reference<_lambda_type&&>::value
 		>::type>
-		Function(_lambda_type&& lambda):
+			Function(_lambda_type&& lambda) :
 			Function()
 		{
 			Emplace(std::forward<SharedLambda<_lambda_type, _res_type, _args ...>>(SharedLambda<_lambda_type, _res_type, _args ...>(std::forward<_lambda_type>(lambda))));
@@ -493,7 +504,7 @@ namespace o2
 
 		// Constructor from object and his function
 		template<typename _class_type>
-		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+		Function(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args))
 			: Function()
 		{
 			Emplace(std::forward<ObjFunctionPtr<_class_type, _res_type, _args ...>>(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
@@ -501,7 +512,7 @@ namespace o2
 
 		// Constructor from object and his function
 		template<typename _class_type>
-		Function(const ObjFunctionPtr<_class_type, _res_type, _args ...>& func):
+		Function(const ObjFunctionPtr<_class_type, _res_type, _args ...>& func) :
 			Function()
 		{
 			Emplace(std::forward<ObjFunctionPtr<_class_type, _res_type, _args ...>>(ObjFunctionPtr<_class_type, _res_type, _args ...>(func)));
@@ -509,7 +520,7 @@ namespace o2
 
 		// Constructor from object and his function
 		template<typename _class_type>
-		Function(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const):
+		Function(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args) const) :
 			Function()
 		{
 			Emplace(std::forward<ObjConstFunctionPtr<_class_type, _res_type, _args ...>>(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
@@ -618,7 +629,7 @@ namespace o2
 				{
 					if ((*funcIt)->Equals(&function))
 					{
-						delete *funcIt;
+						delete* funcIt;
 						mData.functions.erase(funcIt);
 						break;
 					}
@@ -641,14 +652,14 @@ namespace o2
 
 		// Add delegate to inside list
 		template<typename _class_type>
-		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+		void Add(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args))
 		{
 			Emplace(std::forward<ObjFunctionPtr<_class_type, _res_type, _args ...>>(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
 		}
 
 		// Add delegate to inside list
 		template<typename _class_type>
-		void Add(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
+		void Add(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args) const)
 		{
 			Emplace(std::forward<ObjConstFunctionPtr<_class_type, _res_type, _args ...>>(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr)));
 		}
@@ -679,14 +690,14 @@ namespace o2
 
 		// Remove delegate from list
 		template<typename _class_type>
-		void Remove(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+		void Remove(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args))
 		{
 			Remove(ObjFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
 
 		// Remove delegate from list
 		template<typename _class_type>
-		void Remove(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args) const)
+		void Remove(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args) const)
 		{
 			Remove(ObjConstFunctionPtr<_class_type, _res_type, _args ...>(object, functionPtr));
 		}
@@ -934,7 +945,7 @@ namespace o2
 	const Function<_res_type(_args ...)> Function<_res_type(_args ...)>::empty;
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	Function<_res_type(_args ...)> MakeFunction(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args))
+	Function<_res_type(_args ...)> MakeFunction(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args))
 	{
 		return Function<_res_type(_args ...)>(object, functionPtr);
 	}
@@ -948,7 +959,7 @@ namespace o2
 	// Function holder delegate
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class Subscription <_res_type(_args ...)>: public IFunction<_res_type(_args ...)>
+	class Subscription <_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
 		Function<_res_type(_args ...)> mFunction;
 		Function<void()> mOnDestroy;
@@ -956,14 +967,14 @@ namespace o2
 
 	public:
 		// Constructor
-		Subscription(const Function<_res_type(_args ...)>& function, const Function<void()>& onDestroy):
+		Subscription(const Function<_res_type(_args ...)>& function, const Function<void()>& onDestroy) :
 			mFunction(function), mOnDestroy(onDestroy)
 		{
 			(*mRefs) = 1;
 		}
 
 		// Copy-constructor
-		Subscription(const Subscription& other):
+		Subscription(const Subscription& other) :
 			mFunction(other.mFunction), mOnDestroy(other.mOnDestroy), mRefs(other.mRefs)
 		{
 			(*mRefs)++;
@@ -1046,12 +1057,11 @@ namespace o2
 	};
 
 	template<typename _class_type, typename _res_type, typename ... _args>
-	Subscription<_res_type(_args ...)> MakeSubscription(_class_type* object, _res_type(_class_type::*functionPtr)(_args ... args),
+	Subscription<_res_type(_args ...)> MakeSubscription(_class_type* object, _res_type(_class_type::* functionPtr)(_args ... args),
 														const Function<void()>& onDestroy)
 	{
 		return Subscription<_res_type(_args ...)>(MakeFunction(object, functionPtr), onDestroy);
 	}
 
 #define THIS_SUBSCRIPTION(NAME, ON_DESTROY) MakeSubscription(this, &thisclass::NAME, ON_DESTROY)
-
 }
