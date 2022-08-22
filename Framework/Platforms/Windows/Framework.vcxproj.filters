@@ -57,6 +57,9 @@
     <Filter Include="Sources\o2\Animation" />
     <Filter Include="Sources\o2\Animation\Editor" />
     <Filter Include="Sources\o2\Animation\Tracks" />
+    <Filter Include="Sources\o2\Utils\Function">
+      <UniqueIdentifier>{02d623a1-f6ec-4959-8914-f58e0374f2a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Sources\o2\Animation\Animate.h">
@@ -509,6 +512,9 @@
     <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueImpl.h">
       <Filter>Sources\o2\Scripts\JerryScript</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueReflectionProcessor.h">
+      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Scripts\ScriptEngine.h">
       <Filter>Sources\o2\Scripts</Filter>
     </ClInclude>
@@ -605,8 +611,11 @@
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h">
       <Filter>Sources\o2\Utils\FileSystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Utils\Function.h">
-      <Filter>Sources\o2\Utils</Filter>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\ActorSubscription.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\Function.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h">
       <Filter>Sources\o2\Utils\Math</Filter>
@@ -791,11 +800,14 @@
     <ClInclude Include="..\..\Sources\o2\stdafx.h">
       <Filter>Sources\o2</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Scripts\JerryScript\ScriptValueReflectionProcessor.h">
-      <Filter>Sources\o2\Scripts\JerryScript</Filter>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\FunctionDataValueConverter.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Sources\o2\Scene\ActorSubscription.h">
-      <Filter>Sources\o2\Scene</Filter>
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValueConverters.h">
+      <Filter>Sources\o2\Utils\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\SerializableFunction.h">
+      <Filter>Sources\o2\Utils\Function</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1249,6 +1261,9 @@
     <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileSystemImpl.cpp">
       <Filter>Sources\o2\Utils\FileSystem\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\Utils\Function\ActorSubscription.cpp">
+      <Filter>Sources\o2\Utils\Function</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Color.cpp">
       <Filter>Sources\o2\Utils\Math</Filter>
     </ClCompile>
@@ -1345,11 +1360,11 @@
     <ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp">
       <Filter>Sources\o2\Utils\Types</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
-      <Filter>Sources\o2</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Sources\o2\Utils\ValueProxy.cpp">
       <Filter>Sources\o2\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
+      <Filter>Sources\o2</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

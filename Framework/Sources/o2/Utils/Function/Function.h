@@ -21,10 +21,10 @@ namespace o2
 		virtual ~IFunction() {}
 
 		// Returns cloned copy of this
-		virtual IFunction* Clone() const = 0;
+		virtual IFunction* MakeClone() const = 0;
 
 		// Returns cloned emplace copy of this in memory
-		virtual IFunction* Clone(void* memory) const = 0;
+		virtual IFunction* MakeClone(void* memory) const = 0;
 
 		// Invokes function with arguments
 		virtual _res_type Invoke(_args ... args) const = 0;
@@ -83,13 +83,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const
+		IFunction<_res_type(_args ...)>* MakeClone() const
 		{
 			return mnew FunctionPtr(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* MakeClone(void* memory) const
 		{
 			return new (memory) FunctionPtr(*this);
 		}
@@ -160,13 +160,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const override
+		IFunction<_res_type(_args ...)>* MakeClone() const override
 		{
 			return mnew ObjFunctionPtr(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
+		IFunction<_res_type(_args ...)>* MakeClone(void* memory) const override
 		{
 			return new (memory) ObjFunctionPtr(*this);
 		}
@@ -237,13 +237,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const
+		IFunction<_res_type(_args ...)>* MakeClone() const
 		{
 			return mnew ObjConstFunctionPtr(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const
+		IFunction<_res_type(_args ...)>* MakeClone(void* memory) const
 		{
 			return new (memory) ObjConstFunctionPtr(*this);
 		}
@@ -312,13 +312,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const override
+		IFunction<_res_type(_args ...)>* MakeClone() const override
 		{
 			return mnew SharedLambda(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
+		IFunction<_res_type(_args ...)>* MakeClone(void* memory) const override
 		{
 			return new (memory) SharedLambda(*this);
 		}
@@ -367,6 +367,7 @@ namespace o2
 	template<typename _res_type, typename ... _args>
 	class Function<_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
 	{
+	protected:
 		enum class DataType { Empty, OneFunction, CoupleOfFunctions };
 
 		static constexpr UInt payloadSize = sizeof(std::vector<void*>);
@@ -398,8 +399,10 @@ namespace o2
 			~Data() {}
 		};
 
+	protected:
 		Data mData;
 
+	protected:
 		IFunction<_res_type(_args ...)>& OneFunctionRef() const
 		{
 			return *const_cast<Function<_res_type(_args ...)>*>(reinterpret_cast<const Function<_res_type(_args ...)>*>(mData.oneFunctionData.functionData));
@@ -415,7 +418,7 @@ namespace o2
 		{
 			if (mData.typeData.type == DataType::OneFunction)
 			{
-				IFunction<_res_type(_args ...)>* firstFunction = OneFunctionRef().Clone();
+				IFunction<_res_type(_args ...)>* firstFunction = OneFunctionRef().MakeClone();
 				DestroyOneFunction();
 
 				new (&mData.functions) std::vector<IFunction<_res_type(_args ...)>*>();
@@ -533,13 +536,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const override
+		IFunction<_res_type(_args ...)>* MakeClone() const override
 		{
 			return mnew Function(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
+		IFunction<_res_type(_args ...)>* MakeClone(void* memory) const override
 		{
 			return new (memory) Function(*this);
 		}
@@ -592,14 +595,14 @@ namespace o2
 			auto size = func.GetSizeOf();
 			if (mData.typeData.type == DataType::Empty && size <= OneFunctionData::capacity)
 			{
-				func.Clone(mData.oneFunctionData.functionData);
+				func.MakeClone(mData.oneFunctionData.functionData);
 				mData.oneFunctionData.destructor = [](IFunction<_res_type(_args ...)>* f) { f->~IFunction<_res_type(_args ...)>(); };
 				mData.typeData.type = DataType::OneFunction;
 			}
 			else
 			{
 				ConvertToCoupleFunctionsType();
-				mData.functions.push_back(func.Clone());
+				mData.functions.push_back(func.MakeClone());
 			}
 		}
 
@@ -934,6 +937,19 @@ namespace o2
 			return *this;
 		}
 
+		// Iterating over functions
+		template<typename _invocable>
+		void ForEach(const _invocable& func) const
+		{
+			if (mData.typeData.type == DataType::OneFunction)
+				func(&OneFunctionRef());
+			else if (mData.typeData.type == DataType::CoupleOfFunctions)
+			{
+				for (auto& it : mData.functions)
+					func(it);
+			}
+		}
+
 		// Returns size of function
 		UInt GetSizeOf() const override
 		{
@@ -1011,13 +1027,13 @@ namespace o2
 		}
 
 		// Returns cloned copy of this
-		IFunction<_res_type(_args ...)>* Clone() const override
+		IFunction<_res_type(_args ...)>* MakeClone() const override
 		{
 			return mnew Subscription(*this);
 		}
 
 		// Returns cloned emplace copy of this in memory
-		IFunction<_res_type(_args ...)>* Clone(void* memory) const override
+		IFunction<_res_type(_args ...)>* MakeClone(void* memory) const override
 		{
 			return new (memory) Subscription(*this);
 		}

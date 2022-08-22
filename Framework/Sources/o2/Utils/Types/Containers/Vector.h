@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Debug/Assert.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Memory/MemoryManager.h"
 #include "o2/Utils/Math/Math.h"
 #include <vector>

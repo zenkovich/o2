@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Reflection/Attributes.h"
 #include "o2/Utils/Types/CommonTypes.h"
 #include "o2/Utils/Types/Containers/Map.h"

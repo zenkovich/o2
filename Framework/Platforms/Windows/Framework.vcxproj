@@ -242,7 +242,6 @@
     <ClInclude Include="..\..\Sources\o2\Scene\ActorCreationMode.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorRef.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorRefResolver.h" />
-    <ClInclude Include="..\..\Sources\o2\Scene\ActorSubscription.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\ActorTransform.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\CameraActor.h" />
     <ClInclude Include="..\..\Sources\o2\Scene\Component.h" />
@@ -331,7 +330,10 @@
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\File.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileInfo.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.h" />
-    <ClInclude Include="..\..\Sources\o2\Utils\Function.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\ActorSubscription.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\Function.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\FunctionDataValueConverter.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Function\SerializableFunction.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\ApproximationValue.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Basis.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Math\Border.h" />
@@ -366,6 +368,7 @@
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeSerializer.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Reflection\TypeTraits.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValue.h" />
+    <ClInclude Include="..\..\Sources\o2\Utils\Serialization\DataValueConverters.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\JsonDataFormat.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\Serializable.h" />
     <ClInclude Include="..\..\Sources\o2\Utils\Serialization\SerializeFieldProcessors.h" />
@@ -545,6 +548,7 @@
     <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\FileSystem.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileImpl.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\FileSystem\Windows\FileSystemImpl.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\Function\ActorSubscription.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Color.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Curve.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Math\Geometry.cpp" />
@@ -577,10 +581,10 @@
     <ClCompile Include="..\..\Sources\o2\Utils\Tools\RectPacker.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Types\CommonTypes.cpp" />
     <ClCompile Include="..\..\Sources\o2\Utils\Types\UID.cpp" />
+    <ClCompile Include="..\..\Sources\o2\Utils\ValueProxy.cpp" />
     <ClCompile Include="..\..\Sources\o2\stdafx.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\Sources\o2\Utils\ValueProxy.cpp" />
   </ItemGroup>
 </Project>

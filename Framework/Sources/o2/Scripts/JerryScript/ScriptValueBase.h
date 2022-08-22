@@ -1,6 +1,6 @@
 #if defined(SCRIPTING_BACKEND_JERRYSCRIPT)
 #include "jerryscript/jerry-core/include/jerryscript-core.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 
 namespace o2
 {

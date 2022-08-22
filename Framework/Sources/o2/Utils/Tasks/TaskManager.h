@@ -2,7 +2,7 @@
 
 #include "o2/Utils/Types/Containers/Vector.h"
 #include "o2/Utils/Singleton.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 
 // Task manager access macros
 #define o2Tasks o2::TaskManager::Instance()

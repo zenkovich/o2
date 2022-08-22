@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Singleton.h"
 #include "o2/Utils/Types/String.h"
 #include "o2Editor/Core/EditorApplication.h"

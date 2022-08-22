@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Math/Vector2.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Singleton.h"

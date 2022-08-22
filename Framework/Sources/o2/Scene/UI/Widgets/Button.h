@@ -21,7 +21,7 @@ namespace o2
 		PROPERTY(Sprite*, icon, SetIcon, GetIcon);          // Icon image asset setter. Searches sprite layer with name "icon" and sets image
 
 	public:
-		Function<void()>             onClick;       // Click event
+		Function<void()>             onClick;       // Click event @SERIALIZABLE
 		Function<bool(const Vec2F&)> isPointInside; // Checking pointer function. When this empty using default widget pointer check
 
 	public:
@@ -115,7 +115,7 @@ CLASS_FIELDS_META(o2::Button)
 {
 	FIELD().PUBLIC().NAME(caption);
 	FIELD().PUBLIC().NAME(icon);
-	FIELD().PUBLIC().NAME(onClick);
+	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(onClick);
 	FIELD().PUBLIC().NAME(isPointInside);
 	FIELD().PUBLIC().NAME(shortcut);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "o2/Utils/Basic/IObject.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Types/Containers/Map.h"
 

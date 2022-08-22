@@ -1,6 +1,6 @@
 #pragma once
 
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 
 #if IS_SCRIPTING_SUPPORTED
 #include "o2/Scripts/ScriptValueDef.h"

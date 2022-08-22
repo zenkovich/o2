@@ -3,7 +3,7 @@
 #include "o2/Events/CursorAreaEventsListener.h"
 #include "o2/Render/IDrawable.h"
 #include "o2/Scene/UI/Widget.h"
-#include "o2/Utils/Function.h"
+#include "o2/Utils/Function/Function.h"
 #include "o2/Utils/Property.h"
 #include "o2/Utils/Serialization/Serializable.h"
 
