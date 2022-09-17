@@ -7,6 +7,18 @@
 
 namespace o2
 {
+	class IAbstractValueProxy;
+
+	// ---------------------------
+	// Abstract function interface
+	// ---------------------------
+	class IAbstractFunction
+	{
+	public:
+		// Calls a function passing parameters through a proxies, writes the value to result Proxy
+		virtual void InvokeRaw(IAbstractValueProxy* resultProxy, IAbstractValueProxy** parameters, int parametersCount) {}
+	};
+
 	template <typename UnusedType>
 	class IFunction;
 
@@ -14,7 +26,7 @@ namespace o2
 	// Basic delegate interface
 	// ------------------------
 	template<typename _res_type, typename ... _args>
-	class IFunction<_res_type(_args ...)>
+	class IFunction<_res_type(_args ...)>: public IAbstractFunction
 	{
 	public:
 		// Virtual destructor
@@ -31,6 +43,9 @@ namespace o2
 
 		// Returns true if other functions is equal
 		virtual bool Equals(const IFunction<_res_type(_args ...)>* other) const = 0;
+
+		// Calls a function passing parameters through a proxies, writes the value to result Proxy
+		void InvokeRaw(IAbstractValueProxy* resultProxy, IAbstractValueProxy** parameters, int parametersCount) override {}
 
 		// Returns size of function
 		virtual UInt GetSizeOf() const = 0;
@@ -358,6 +373,24 @@ namespace o2
 		}
 	};
 
+	class ISerializableFunction;
+
+	// -----------------------------------------------------
+	// Basic interface for enumeration of internal functions
+	// -----------------------------------------------------
+	class AbstractFunction
+	{
+	public:
+		// Iterates over functions over an abstract interface
+		virtual void ForEachAbstract(const IFunction<void(const IAbstractFunction*)>& func) {}
+
+		// Adds function to list
+		virtual void AddActorSubscription() {}
+
+		// Removes abstract function
+		virtual void RemoveFunction(const IAbstractFunction* func) {}
+	};
+
 	template <typename UnusedType>
 	class Function;
 
@@ -365,7 +398,7 @@ namespace o2
 	// Combined delegate. Can contain many other functors
 	// --------------------------------------------------
 	template<typename _res_type, typename ... _args>
-	class Function<_res_type(_args ...)> : public IFunction<_res_type(_args ...)>
+	class Function<_res_type(_args ...)> : public IFunction<_res_type(_args ...)>, public AbstractFunction
 	{
 	protected:
 		enum class DataType { Empty, OneFunction, CoupleOfFunctions };
@@ -405,7 +438,7 @@ namespace o2
 	protected:
 		IFunction<_res_type(_args ...)>& OneFunctionRef() const
 		{
-			return *const_cast<Function<_res_type(_args ...)>*>(reinterpret_cast<const Function<_res_type(_args ...)>*>(mData.oneFunctionData.functionData));
+			return *const_cast<IFunction<_res_type(_args ...)>*>(reinterpret_cast<const IFunction<_res_type(_args ...)>*>(mData.oneFunctionData.functionData));
 		}
 
 		void DestroyOneFunction()
@@ -651,6 +684,13 @@ namespace o2
 
 				delete function;
 			}
+		}
+
+		// Removes abstract function
+		void RemoveFunction(const IAbstractFunction* func) override 
+		{
+			if (auto casted = dynamic_cast<const IFunction<_res_type(_args ...)>*>(func))
+				Remove(*casted);
 		}
 
 		// Add delegate to inside list
@@ -950,11 +990,20 @@ namespace o2
 			}
 		}
 
+		// Iterates over functions over an abstract interface
+		void ForEachAbstract(const IFunction<void(const IAbstractFunction*)>& func) override
+		{
+			ForEach([&](const IFunction<_res_type(_args ...)>* x) { func(dynamic_cast<const IAbstractFunction*>(x)); });
+		}
+
 		// Returns size of function
 		UInt GetSizeOf() const override
 		{
 			return sizeof(*this);
 		}
+
+		// Adds function to list
+		void AddActorSubscription() override;
 	};
 
 	template<typename _res_type, typename ... _args>

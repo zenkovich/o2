@@ -1,6 +1,9 @@
 #include "o2Editor/stdafx.h"
 #include "ITrackControl.h"
 
+#include "o2Editor/AnimationWindow/KeyHandlesSheet.h"
+#include "o2Editor/AnimationWindow/Timeline.h"
+
 namespace Editor
 {
 

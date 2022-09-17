@@ -31,7 +31,7 @@ namespace Editor
 
 	protected:
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets) override;
+		void SetTargets(const Vector<IObject*>& targets) override;
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -58,7 +58,7 @@ CLASS_METHODS_META(Editor::DefaultPropertiesViewer)
 
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 }

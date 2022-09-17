@@ -484,12 +484,12 @@ namespace o2
 		GETTER(bool, lockedInHierarchy, IsLockedInHierarchy); // Is actor locked in hierarchy getter
 
 	public:
-		Function<void(bool)>   onEnableChanged;         // Enable changing event
-		Function<void()>       onChanged;               // Something in actor change event
-		Function<void(Actor*)> onParentChanged;         // Actor change parent event
-		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event
-		Function<void(bool)>   onLockChanged;           // Locking changing event
-		Function<void()>       onNameChanged;           // Name changing event
+		Function<void(bool)>   onEnableChanged;         // Enable changing event  @EDITOR_IGNORE
+		Function<void()>       onChanged;               // Something in actor change event @EDITOR_IGNORE
+		Function<void(Actor*)> onParentChanged;         // Actor change parent event @EDITOR_IGNORE
+		Function<void()>       onChildHierarchyChanged; // Actor childs hierarchy change event @EDITOR_IGNORE
+		Function<void(bool)>   onLockChanged;           // Locking changing event @EDITOR_IGNORE
+		Function<void()>       onNameChanged;           // Name changing event @EDITOR_IGNORE
 
 	public:
 		struct MakePrototypeCloneVisitor: SourceToTargetMapCloneVisitor
@@ -775,12 +775,12 @@ CLASS_FIELDS_META(o2::Actor)
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCopyVisitor);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(locked);
 	FIELD().PUBLIC().NAME(lockedInHierarchy);
-	FIELD().PUBLIC().NAME(onEnableChanged);
-	FIELD().PUBLIC().NAME(onChanged);
-	FIELD().PUBLIC().NAME(onParentChanged);
-	FIELD().PUBLIC().NAME(onChildHierarchyChanged);
-	FIELD().PUBLIC().NAME(onLockChanged);
-	FIELD().PUBLIC().NAME(onNameChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onEnableChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onParentChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onChildHierarchyChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onLockChanged);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onNameChanged);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mLocked);
 	FIELD().PROTECTED().SERIALIZABLE_ATTRIBUTE().DEFAULT_VALUE(false).NAME(mResLocked);
 }

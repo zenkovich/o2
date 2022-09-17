@@ -26,7 +26,7 @@ namespace Editor
 		virtual const Type* GetViewingObjectType() const;
 
 		// Sets target objects
-		virtual void SetTargets(const Vector<IObject*> targets) {}
+		virtual void SetTargets(const Vector<IObject*>& targets) {}
 
 		// Refreshes viewing properties
 		virtual void Refresh();
@@ -76,7 +76,7 @@ CLASS_METHODS_META(Editor::IPropertiesViewer)
 {
 
 	FUNCTION().PUBLIC().SIGNATURE(const Type*, GetViewingObjectType);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetEnabled, bool);
 	FUNCTION().PUBLIC().SIGNATURE(bool, IsEnabled);

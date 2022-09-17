@@ -267,6 +267,7 @@ namespace o2
 
 		onSelectedPos(itemPos);
 		onSelectedItem(item);
+
 		OnSelectionChanged();
 		SetLayoutDirty();
 	}

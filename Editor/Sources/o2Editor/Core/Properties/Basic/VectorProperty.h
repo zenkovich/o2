@@ -90,7 +90,7 @@ namespace Editor
 		};
 
 	protected:
-		Spoiler* mSpoiler; // Properties spoiler
+		Spoiler* mSpoiler = nullptr; // Properties spoiler
 
 		const VectorType* mVectorType = nullptr; // Vector type
 
@@ -126,7 +126,7 @@ namespace Editor
 		// Updates element caption
 		void UpdateElementCaption(IPropertyField* propertyDef) const;
 
-		// It is called when count property changing
+		// Called when count property changing
 		void OnCountChanged(IPropertyField* def);
 
 		// Sets new count of elements in vector
@@ -135,16 +135,16 @@ namespace Editor
 		// Removes element from vector
 		void Remove(int idx);
 
-		// It is called when add button has pressed
+		// Called when add button has pressed
 		void OnAddPressed();
 
-		// It is called when expanding spoiler, refreshing array properties
+		// Called when expanding spoiler, refreshing array properties
 		void OnExpand();
 
 		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
 		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
 
-		// It is called when some property changed, sets value via proxy
+		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
 							   const Vector<DataDocument>& after);
 	};
@@ -157,7 +157,7 @@ CLASS_BASES_META(Editor::VectorProperty)
 END_META;
 CLASS_FIELDS_META(Editor::VectorProperty)
 {
-	FIELD().PROTECTED().NAME(mSpoiler);
+	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mSpoiler);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mVectorType);
 	FIELD().PROTECTED().NAME(mTargetObjects);
 	FIELD().PROTECTED().NAME(mValueProperties);

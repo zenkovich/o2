@@ -78,16 +78,16 @@ namespace Editor
 		// Sets asset id, checks value changed, calls onChangeCompleted
 		void SetAssetIdByUser(const UID& id);
 
-		// It is called when create instance button pressed, creates asset instance
+		// Called when create instance button pressed, creates asset instance
 		void OnCreateInstancePressed();
 
-		// It is called when remove instance button pressed, removes asset instance
+		// Called when remove instance button pressed, removes asset instance
 		void OnRemoveInstancePressed();
 
-		// It is called when save instance button pressed, saves asset instance as asset
+		// Called when save instance button pressed, saves asset instance as asset
 		void OnSaveInstancePressed();
 
-		// It is called when type specialized during setting value proxy
+		// Called when type specialized during setting value proxy
 		void OnTypeSpecialized(const Type& type) override;
 
 		// Returns value from proxy
@@ -102,25 +102,25 @@ namespace Editor
 		// Is required refresh view every time
 		bool IsAlwaysRefresh() const override;
 
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was entered to this area
+		// Called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was exited from this area
+		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 	};
 }

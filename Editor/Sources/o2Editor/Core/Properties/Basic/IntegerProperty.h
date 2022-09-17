@@ -38,7 +38,7 @@ namespace Editor
 		// Updates value view
 		void UpdateValueView() override;
 
-		// It is called when key was released
+		// Called when key was released
 		void OnKeyReleased(const Input::Key& key) override;
 
 		// Searches controls widgets and layers and initializes them
@@ -47,13 +47,13 @@ namespace Editor
 		// Edit box change event
 		void OnEdited(const WString& data);
 
-		// It is called when drag handle was moved and changes the property value
+		// Called when drag handle was moved and changes the property value
 		void OnDragHandleMoved(const Input::Cursor& cursor);
 
-		// It is called when change value move handle pressed, sets cursor infinite mode and stores value to data
+		// Called when change value move handle pressed, sets cursor infinite mode and stores value to data
 		void OnMoveHandlePressed(const Input::Cursor& cursor);
 
-		// It is called when change value move handle  released, turns off cursor infinite mode, 
+		// Called when change value move handle  released, turns off cursor infinite mode, 
 		// checks value was changed then calls value change completed event
 		void OnMoveHandleReleased(const Input::Cursor& cursor);
 	};

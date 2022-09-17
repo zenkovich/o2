@@ -75,8 +75,8 @@ namespace o2
 	{
 		onBeforeExpand();
 
-		float itemHeight   = mItemsList->GetItemSample()->layout->minHeight;
-		int itemsVisible   = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
+		float itemHeight = mItemsList->GetItemSample()->layout->minHeight;
+		int itemsVisible = Math::Min(mMaxListItems, mItemsList->GetItemsCount());
 
 		mItemsList->layout->minHeight = itemHeight*(float)itemsVisible +
 			mItemsList->mViewAreaLayout.offsetMin.y - mItemsList->mViewAreaLayout.offsetMax.y;

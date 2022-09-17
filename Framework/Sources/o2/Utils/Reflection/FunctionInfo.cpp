@@ -54,13 +54,7 @@ namespace o2
 		return mAttributes;
 	}
 
-	bool FunctionInfoBase::Parameter::operator==(const Parameter& other) const
-	{
-		return name == other.name && type == other.type && isConstant == other.isConstant && isPointer == other.isPointer &&
-			isReference == other.isReference;
-	}
-
-	const Vector<FunctionInfoBase::Parameter>& FunctionInfoBase::GetParameters() const
+	const Vector<const Type*>& FunctionInfoBase::GetParameters() const
 	{
 		return mParameters;
 	}

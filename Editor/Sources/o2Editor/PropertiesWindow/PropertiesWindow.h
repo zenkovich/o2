@@ -41,7 +41,7 @@ namespace Editor
 		void SetTarget(IObject* target);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
+		void SetTargets(const Vector<IObject*>& targets, const Function<void()>& targetsChangedDelegate = Function<void()>());
 
 		// Returns target object
 		Vector<IObject*> GetTargets() const;
@@ -112,7 +112,7 @@ CLASS_METHODS_META(Editor::PropertiesWindow)
 	FUNCTION().PUBLIC().CONSTRUCTOR();
 	FUNCTION().PUBLIC().SIGNATURE(void, ResetTargets);
 	FUNCTION().PUBLIC().SIGNATURE(void, SetTarget, IObject*);
-	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>, const Function<void()>&);
+	FUNCTION().PUBLIC().SIGNATURE(void, SetTargets, const Vector<IObject*>&, const Function<void()>&);
 	FUNCTION().PUBLIC().SIGNATURE(Vector<IObject*>, GetTargets);
 	FUNCTION().PUBLIC().SIGNATURE(void, Update, float);
 	FUNCTION().PUBLIC().SIGNATURE(void, Draw);

@@ -176,6 +176,9 @@
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
+		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\FunctionProperty.h">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClInclude>
 		<ClInclude Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.h">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClInclude>
@@ -560,6 +563,9 @@
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\FloatProperty.cpp">
+			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
+		</ClCompile>
+		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\FunctionProperty.cpp">
 			<Filter>Sources\o2Editor\Core\Properties\Basic</Filter>
 		</ClCompile>
 		<ClCompile Include="..\..\Sources\o2Editor\Core\Properties\Basic\IntegerProperty.cpp">

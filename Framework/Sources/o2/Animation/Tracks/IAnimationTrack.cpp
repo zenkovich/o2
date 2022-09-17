@@ -1,6 +1,8 @@
 #include "o2/stdafx.h"
 #include "AnimationTrack.h"
 
+#include "o2/Animation/AnimationState.h"
+
 namespace o2
 {
 

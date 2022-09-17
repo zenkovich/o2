@@ -13,20 +13,6 @@ namespace o2
 	class FunctionInfoBase
 	{
 	public:
-		struct Parameter
-		{
-			String name;
-
-			const Type* type;
-
-			bool isConstant;
-			bool isReference;
-			bool isPointer;
-
-			bool operator==(const Parameter& other) const;
-		};
-
-	public:
 		// Returns cloned copy
 		virtual FunctionInfoBase* Clone() const;
 
@@ -43,7 +29,7 @@ namespace o2
 		const Type* GetReturnType() const;
 
 		// Returns function's parameters
-		const Vector<Parameter>& GetParameters() const;
+		const Vector<const Type*>& GetParameters() const;
 
 		// Returns protection section of function
 		ProtectSection GetProtectionSection() const;
@@ -65,7 +51,7 @@ namespace o2
 		Type*               mOwnerType;      // Owner type pointer
 		String              mName;           // Name of function
 		const Type*         mReturnType;     // Function returning type
-		Vector<Parameter>   mParameters;     // Function parameters list
+		Vector<const Type*> mParameters;     // Function parameters list
 
 		friend class Type;
 		friend class ReflectionInitializationTypeProcessor;

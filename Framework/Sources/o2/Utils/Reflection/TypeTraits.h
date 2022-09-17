@@ -29,6 +29,10 @@ namespace o2
 	template<class T, class T2> struct MapValueTypeGetterHelper { typedef T2 type; };
 	template<class T, class T2> struct MapValueTypeGetterHelper<Map<T, T2>, void> { typedef T2 type; };
 	template<class T> struct ExtractMapValueType : MapValueTypeGetterHelper<typename std::remove_cv<T>::type, void> {};
+
+	template<class T> struct IsFunctionHelper : std::false_type {};
+	template<typename _res_type, typename ... _args> struct IsFunctionHelper<Function<_res_type(_args ...)>> : std::true_type {};
+	template<class T> struct IsFunction : IsFunctionHelper<typename std::remove_cv<T>::type> {};
 	
 	template<typename... Ts> struct make_void { typedef void type; };
 	template<typename... Ts> using void_t = typename make_void<Ts...>::type;
@@ -172,6 +176,10 @@ namespace o2
 		else if constexpr (std::is_enum<_type>::value && IsEnumReflectable<_type>::value)
 		{
 			return *EnumTypeContainer<_type>::type;
+		}
+		else if constexpr (IsFunction<_type>::value)
+		{
+			return *FunctionType::commonType;
 		}
 		else
 		{

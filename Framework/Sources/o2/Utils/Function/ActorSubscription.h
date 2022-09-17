@@ -8,9 +8,10 @@ namespace o2
 {
 	class IActorSubscription : public ISerializableFunction
 	{
-	protected:
-		ActorRef mActor;  // Target actor
-		String   mMethod; // Method name
+	public:
+		ActorRef     actorRef;     // Target actor
+		ComponentRef componentRef; // Target component
+		String       method;       // Method name
 	};
 
 	template <typename UnusedType>
@@ -22,27 +23,28 @@ namespace o2
 	public:
 		// Constructor
 		ActorSubscription()
-		{}
+		{
+		}
 
 		// Constructor
 		ActorSubscription(const ActorRef& actor, const String& method)
 		{
-			mActor = actor;
-			mMethod = method;
+			this->actorRef = actor;
+			this->method = method;
 		}
 
 		// Copy-constructor
 		ActorSubscription(const ActorSubscription& other)
 		{
-			mActor = other.mActor;
-			mMethod = other.mMethod;
+			actorRef = other.actorRef;
+			method = other.method;
 		}
 
 		// Copy-operator
 		ActorSubscription& operator=(const ActorSubscription& other)
 		{
-			mActor = other.mActor;
-			mMethod = other.mMethod;
+			actorRef = other.actorRef;
+			method = other.method;
 
 			return *this;
 		}
@@ -50,13 +52,13 @@ namespace o2
 		// Equal operator
 		bool operator==(const ActorSubscription& other) const
 		{
-			return mActor == other.mActor && mMethod == other.mMethod;
+			return actorRef == other.actorRef && method == other.method;
 		}
 
 		// Not equal operator
 		bool operator!=(const ActorSubscription& other) const
 		{
-			return mActor != other.mActor || mMethod != other.mMethod;
+			return actorRef != other.actorRef || method != other.method;
 		}
 
 		// Returns cloned copy of this
@@ -74,12 +76,15 @@ namespace o2
 		// Invokes function with arguments as functor
 		_res_type Invoke(_args ... args) const override
 		{
-			if (auto actor = mActor.Get())
-			{
-				auto& objType = dynamic_cast<const ObjectType&>(actor->GetType());
-				void* obj = objType.DynamicCastFromIObject(const_cast<IObject*>(dynamic_cast<const IObject*>(actor)));
-				return objType.Invoke<_res_type, _args ...>(mMethod, obj, args ...);
-			}
+			const IObject* callSource = nullptr;
+			if (auto component = componentRef.Get())
+				callSource = component;
+			else if (auto actor = actorRef.Get())
+				callSource = actor;
+
+			auto& objType = dynamic_cast<const ObjectType&>(callSource->GetType());
+			void* obj = objType.DynamicCastFromIObject(const_cast<IObject*>(dynamic_cast<const IObject*>(callSource)));
+			return objType.Invoke<_res_type, _args ...>(method, obj, args ...);
 
 			return _res_type();
 		}
@@ -101,20 +106,35 @@ namespace o2
 		}
 
 		// Serializes a function
-		void Serialize(DataValue& data) const override 
+		void Serialize(DataValue& data) const override
 		{
 			data["type"] = "ActorFunction";
-			data["actor"] = mActor;
-			data["func"] = mMethod;
+			if (componentRef)
+				data["component"] = componentRef;
+			else
+				data["actor"] = actorRef;
+
+			data["func"] = method;
 		}
 
 		// Deserializes a function
-		void Deserialize(const DataValue& data) override 
+		void Deserialize(const DataValue& data) override
 		{
-			mActor = data["actor"];
-			mMethod = data["func"];
+			if (auto actorData = data.FindMember("actor"))
+				actorRef = *actorData;
+
+			if (auto componentData = data.FindMember("component"))
+				componentRef = *componentData;
+
+			method = data["func"];
 		}
 	};
+
+	template<typename _res_type, typename ... _args>
+	void Function<_res_type(_args ...)>::AddActorSubscription()
+	{
+		Add(mnew ActorSubscription<_res_type(_args...)>());
+	}
 }
 
 #include "o2/Utils/Function/FunctionDataValueConverter.h"

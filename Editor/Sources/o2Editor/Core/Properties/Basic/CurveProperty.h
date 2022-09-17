@@ -41,10 +41,10 @@ namespace Editor
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
-		// It is called when common curve changed in curve edit dialog, tells to drawing content
+		// Called when common curve changed in curve edit dialog, tells to drawing content
 		void OnValueChanged();
 
-		// It is called when box pressed and shows color picking dialog
+		// Called when box pressed and shows color picking dialog
 		void OnClicked();
 	};
 }

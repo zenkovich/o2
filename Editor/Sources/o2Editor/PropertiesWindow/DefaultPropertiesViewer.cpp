@@ -32,7 +32,7 @@ namespace Editor
 		mViewer->Refresh(mTargets);
 	}
 
-	void DefaultPropertiesViewer::SetTargets(const Vector<IObject*> targets)
+	void DefaultPropertiesViewer::SetTargets(const Vector<IObject*>& targets)
 	{
 		mTargets = targets;
 		Refresh();

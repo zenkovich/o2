@@ -22,7 +22,7 @@ namespace o2
 
 	public:
 		Function<void()>             onClick;       // Click event @SERIALIZABLE
-		Function<bool(const Vec2F&)> isPointInside; // Checking pointer function. When this empty using default widget pointer check
+		Function<bool(const Vec2F&)> isPointInside; // Checking pointer function. When this empty using default widget pointer check @EDITOR_IGNORE
 
 	public:
 		ShortcutKeys shortcut; // Shortcut keys
@@ -116,7 +116,7 @@ CLASS_FIELDS_META(o2::Button)
 	FIELD().PUBLIC().NAME(caption);
 	FIELD().PUBLIC().NAME(icon);
 	FIELD().PUBLIC().SERIALIZABLE_ATTRIBUTE().NAME(onClick);
-	FIELD().PUBLIC().NAME(isPointInside);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(isPointInside);
 	FIELD().PUBLIC().NAME(shortcut);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mCaptionText);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mIconSprite);

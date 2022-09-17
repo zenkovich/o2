@@ -103,7 +103,7 @@ namespace Editor
 	protected:
 		typedef Vector<Pair<String, Vector<Pair<IScriptValueProperty*, IScriptValueProperty*>>>> PropertiesList;
 
-		// It is called when property puts in buffer. Releases properties
+		// Called when property puts in buffer. Releases properties
 		void OnFreeProperty() override;
 
 		// Searches controls widgets and layers and initializes them
@@ -115,10 +115,10 @@ namespace Editor
 		//Adds property by type
 		void AddProperty(const String& name, const Type* type, int idx);
 
-		// It is called when count property changing
+		// Called when count property changing
 		void OnCountChanged(IPropertyField* def);
 
-		// It is called when expanding spoiler, refreshing properties
+		// Called when expanding spoiler, refreshing properties
 		void OnExpand();
 
 		// Sets new count of elements in vector
@@ -127,7 +127,7 @@ namespace Editor
 		// Removes element from vector
 		void Remove(int idx);
 
-		// It is called when add button has pressed
+		// Called when add button has pressed
 		void OnAddPressed();
 
 		// Sets property proxies
@@ -138,7 +138,7 @@ namespace Editor
 		template<typename _type>
 		void SetFieldPtrProxies(PropertiesList& commonProperties, const String& name, IPropertyField* field);
 
-		// It is called when some property changed, sets value via proxy
+		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before,
 							   const Vector<DataDocument>& after);
 	};

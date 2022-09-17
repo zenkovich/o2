@@ -59,7 +59,7 @@ namespace Editor
 		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets) override;
+		void SetTargets(const Vector<IObject*>& targets) override;
 
 		// Enable viewer event function
 		void OnEnabled() override;
@@ -100,7 +100,7 @@ CLASS_METHODS_META(Editor::WidgetLayerViewer)
 	FUNCTION().PUBLIC().SIGNATURE(void, SetActorPropertiesViewer, IWidgetLayerPropertiesViewer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, Update, float);

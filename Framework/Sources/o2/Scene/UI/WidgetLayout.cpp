@@ -764,7 +764,7 @@ namespace o2
 
 	int childCount = widgets.Count();
 
-	availableWidth -= spacing*(float)widgets.Count();
+	availableWidth -= (spacing*(float)Math::Max(0, widgets.Count() - 1));
 	float expandWidth = availableWidth - minSizesSum;
 	while (expandWidth > 0)
 	{

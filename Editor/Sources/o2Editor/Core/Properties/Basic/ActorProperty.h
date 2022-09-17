@@ -47,7 +47,7 @@ namespace Editor
 		Text*   mNameText = nullptr; // Asset name text
 
 	protected:
-		// It is called when type specialized during setting value proxy
+		// Called when type specialized during setting value proxy
 		void OnTypeSpecialized(const Type& type) override;
 
 		// Checks is value can be reverted
@@ -56,25 +56,25 @@ namespace Editor
 		// Updates value view
 		void UpdateValueView() override;
 
-		// It is called when cursor enters this object
+		// Called when cursor enters this object
 		void OnCursorEnter(const Input::Cursor& cursor) override;
 
-		// It is called when cursor exits this object
+		// Called when cursor exits this object
 		void OnCursorExit(const Input::Cursor& cursor) override;
 
-		// It is called when cursor pressed on this
+		// Called when cursor pressed on this
 		void OnCursorPressed(const Input::Cursor& cursor) override;
 
-		// It is called when key was pressed
+		// Called when key was pressed
 		void OnKeyPressed(const Input::Key& key) override;
 
-		// It is called when some selectable listeners was dropped to this
+		// Called when some selectable listeners was dropped to this
 		void OnDropped(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was entered to this area
+		// Called when some drag listeners was entered to this area
 		void OnDragEnter(ISelectableDragableObjectsGroup* group) override;
 
-		// It is called when some drag listeners was exited from this area
+		// Called when some drag listeners was exited from this area
 		void OnDragExit(ISelectableDragableObjectsGroup* group) override;
 
 		// Searches controls widgets and layers and initializes them
@@ -83,22 +83,22 @@ namespace Editor
 		// Reverts target value to source
 		void RevertoToPrototype(IAbstractValueProxy* target, IAbstractValueProxy* source, IObject* targetOwner);
 
-		// It is called when actors tree nodes was dragged and dropped to this
+		// Called when actors tree nodes was dragged and dropped to this
 		void OnDroppedFromActorsTree(SceneTree* actorsTree);
 
-		// It is called when actors tree nodes was dragged and entered to this
+		// Called when actors tree nodes was dragged and entered to this
 		void OnDragEnterFromActorsTree(SceneTree* actorsTree);
 
-		// It is called when actors tree nodes was dragged and exited from this
+		// Called when actors tree nodes was dragged and exited from this
 		void OnDragExitFromActorsTree(SceneTree* actorsTree);
 
-		// It is called when assets scroll icons was dragged and dropped to this
+		// Called when assets scroll icons was dragged and dropped to this
 		void OnDroppedFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 
-		// It is called when assets scroll icons was dragged and entered to this
+		// Called when assets scroll icons was dragged and entered to this
 		void OnDragEnterFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 
-		// It is called when assets scroll icons was dragged and exited from this
+		// Called when assets scroll icons was dragged and exited from this
 		void OnDragExitFromAssetsScroll(AssetsIconsScrollArea* assetsIconsScroll);
 	};
 }

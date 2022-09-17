@@ -46,11 +46,11 @@ namespace o2
 		WidgetLayout* const layout; // Widget layout @EDITOR_IGNORE
 
 	public:
-		Function<void()> onLayoutUpdated; // Layout change event
-		Function<void()> onFocused;       // Widget focused event
-		Function<void()> onUnfocused;     // Widget unfocused event
-		Function<void()> onShow;          // Widget showing vent
-		Function<void()> onHide;          // Widget hiding event
+		Function<void()> onLayoutUpdated; // Layout change event @EDITOR_IGNORE
+		Function<void()> onFocused;       // Widget focused event @EDITOR_IGNORE
+		Function<void()> onUnfocused;     // Widget unfocused event @EDITOR_IGNORE
+		Function<void()> onShow;          // Widget showing vent @EDITOR_IGNORE
+		Function<void()> onHide;          // Widget hiding event @EDITOR_IGNORE
 
 	public:
 		// Default constructor @SCRIPTABLE
@@ -736,11 +736,11 @@ CLASS_FIELDS_META(o2::Widget)
 	FIELD().PUBLIC().NAME(layer);
 	FIELD().PUBLIC().NAME(state);
 	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(layout);
-	FIELD().PUBLIC().NAME(onLayoutUpdated);
-	FIELD().PUBLIC().NAME(onFocused);
-	FIELD().PUBLIC().NAME(onUnfocused);
-	FIELD().PUBLIC().NAME(onShow);
-	FIELD().PUBLIC().NAME(onHide);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onLayoutUpdated);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onFocused);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onUnfocused);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onShow);
+	FIELD().PUBLIC().EDITOR_IGNORE_ATTRIBUTE().NAME(onHide);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetLayer).DONT_DELETE_ATTRIBUTE().NAME(mLayers);
 	FIELD().PROTECTED().DEFAULT_TYPE_ATTRIBUTE(o2::WidgetState).DONT_DELETE_ATTRIBUTE().EDITOR_PROPERTY_ATTRIBUTE().INVOKE_ON_CHANGE_ATTRIBUTE(OnStatesListChanged).NAME(mStates);
 	FIELD().PROTECTED().DEFAULT_VALUE(nullptr).NAME(mParentWidget);

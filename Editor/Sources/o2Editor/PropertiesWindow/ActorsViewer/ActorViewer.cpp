@@ -180,7 +180,7 @@ namespace Editor
 		Refresh();
 	}
 
-	void ActorViewer::SetTargets(const Vector<IObject*> targets)
+	void ActorViewer::SetTargets(const Vector<IObject*>& targets)
 	{
 		PushEditorScopeOnStack scope;
 
@@ -203,7 +203,7 @@ namespace Editor
 		mViewersLayout->AddChildren(viewersWidgets.Cast<Actor*>());
 	}
 
-	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
+	void ActorViewer::SetTargetsActorProperties(const Vector<IObject*>& targets, Vector<Widget*>& viewersWidgets)
 	{
 		PushEditorScopeOnStack scope;
 
@@ -287,7 +287,7 @@ namespace Editor
 		return res;
 	}
 
-	void ActorViewer::SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets)
+	void ActorViewer::SetTargetsComponents(const Vector<IObject*>& targets, Vector<Widget*>& viewersWidgets)
 	{
 		PushEditorScopeOnStack scope;
 

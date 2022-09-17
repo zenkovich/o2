@@ -99,7 +99,7 @@ namespace Editor
 		Refresh();
 	}
 
-	void WidgetLayerViewer::SetTargets(const Vector<IObject*> targets)
+	void WidgetLayerViewer::SetTargets(const Vector<IObject*>& targets)
 	{
 		PushEditorScopeOnStack scope;
 

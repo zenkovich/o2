@@ -43,7 +43,7 @@ namespace Editor
 		// Searches controls widgets and layers and initializes them
 		void InitializeControls();
 
-		// It is called when box pressed and shows color picking dialog
+		// Called when box pressed and shows color picking dialog
 		void OnClicked();
 	};
 }

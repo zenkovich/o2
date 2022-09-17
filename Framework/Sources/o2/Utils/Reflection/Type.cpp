@@ -457,6 +457,36 @@ namespace o2
 		return Usage::StringAccessor;
 	}
 
+	FunctionType::FunctionType():
+		Type("Function", sizeof(Function<void()>), mnew TypeSerializer<Function<void()>>())
+	{}
+
+	Type::Usage FunctionType::GetUsage() const
+	{
+		return Type::Usage::Function;
+	}
+
+	FunctionType* FunctionType::commonType = new FunctionType();
+
+	const Type* FunctionType::GetPointerType() const
+	{
+		return nullptr;
+	}
+
+	void* FunctionType::CreateSample() const
+	{
+		return nullptr;
+	}
+
+	IAbstractValueProxy* FunctionType::GetValueProxy(void* object) const
+	{
+		static int offs = (int)((AbstractFunction*)((Function<void()>*)1)) - (int)(Function<void()>*)1;
+		auto btpr = reinterpret_cast<std::byte*>(object);
+		auto ptr = btpr + offs;
+
+		return mnew PointerValueProxy<AbstractFunction>(reinterpret_cast<AbstractFunction*>(ptr));
+	}
+
 }
 
 ENUM_META(o2::Type::Usage)

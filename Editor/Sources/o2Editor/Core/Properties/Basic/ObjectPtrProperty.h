@@ -101,7 +101,7 @@ namespace Editor
 		bool mImmediateCreateObject = false; // True when no reason to show context menu, because there is only one available type
 
 	protected:
-		// It is called when property puts in buffer. Here you can release your shared resources
+		// Called when property puts in buffer. Here you can release your shared resources
 		void OnFreeProperty() override;
 
 		// Searches controls widgets and layers and initializes them
@@ -110,7 +110,7 @@ namespace Editor
 		// Updates viewer header caption and header container 
 		void UpdateViewerHeader();
 
-		// It is called when create button pressed and shows create object menu
+		// Called when create button pressed and shows create object menu
 		void OnCreateOrDeletePressed();
 
 		// Creates object by type

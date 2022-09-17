@@ -151,7 +151,7 @@ namespace Editor
 
 		o2Scripts.GetGlobal().SetProperty("vv", mnew Actor());
 		int mem2 = o2Scripts.GetUsedMemory();
-		int d1 = mem2 - mem; 
+		int d1 = mem2 - mem;
 
 		o2Scripts.GetGlobal().SetProperty("dd", 5);
 		int mem3 = o2Scripts.GetUsedMemory();

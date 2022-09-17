@@ -45,7 +45,7 @@ namespace o2
 	public:
 		enum class Usage
 		{
-			Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Property
+			Regular, Object, Vector, Map, StringAccessor, Enumeration, Pointer, Property, Function
 		};
 
 		struct BaseType
@@ -209,6 +209,32 @@ namespace o2
 
 		// Returns pointer of type (type -> type*)
 		const Type* GetPointerType() const override;
+	};
+
+	// -------------
+	// Function type
+	// -------------
+	class FunctionType : public Type
+	{
+	public:
+		// Constructor
+		FunctionType();
+
+		// Returns type usage
+		Usage GetUsage() const override;
+
+		// Returns pointer of type (type -> type*)
+		const Type* GetPointerType() const override;
+
+		// Creates sample copy and returns him
+		void* CreateSample() const override;
+
+		// Returns abstract value proxy for object value
+		IAbstractValueProxy* GetValueProxy(void* object) const override;
+
+	public:
+		static FunctionType* commonType; // Common function type container
+
 	};
 
 	// --------------------------------------------------------------------

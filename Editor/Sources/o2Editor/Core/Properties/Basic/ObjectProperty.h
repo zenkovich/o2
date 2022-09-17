@@ -92,7 +92,7 @@ namespace Editor
 		WString mCaption; // Property caption
 
 	protected:
-		// It is called when property puts in buffer. Here you can release your shared resources
+		// Called when property puts in buffer. Here you can release your shared resources
 		void OnFreeProperty() override;
 
 		// Searches controls widgets and layers and initializes them
@@ -104,7 +104,7 @@ namespace Editor
 		// Returns object target data from proxy. Creates copy of object when it is property proxy, or gets pointer from pointer proxy
 		TargetObjectData GetObjectFromProxy(IAbstractValueProxy* proxy);
 
-		// It is called when some property changed, sets value via proxy
+		// Called when some property changed, sets value via proxy
 		void OnPropertyChanged(const String& path, const Vector<DataDocument>& before, 
 							   const Vector<DataDocument>& after);
 	};

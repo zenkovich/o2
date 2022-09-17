@@ -386,10 +386,10 @@ namespace o2
 	}
 
 	template<typename _object_type, typename _field_type>
-	FieldInfo& ReflectionInitializationTypeProcessor::FieldProcessor::FieldBasics(_object_type* object, Type* type, 
-																					const char* name, 
-																					void*(*pointerGetter)(void*), 
-																					_field_type& field)
+	FieldInfo& ReflectionInitializationTypeProcessor::FieldProcessor::FieldBasics(_object_type* object, Type* type,
+																				  const char* name,
+																				  void* (*pointerGetter)(void*),
+																				  _field_type& field)
 	{
 		auto valType = &TypeOf(_field_type);
 		type->mFields.emplace_back(FieldInfo(type, name, pointerGetter, valType, ProtectSection::Private));
@@ -409,7 +409,7 @@ namespace o2
 
 	template<typename _object_type, typename _res_type, typename ... _args>
 	void ReflectionInitializationTypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
-																_res_type(_object_type::*pointer)(_args ...))
+																			 _res_type(_object_type::* pointer)(_args ...))
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -421,12 +421,15 @@ namespace o2
 		funcInfo->mProtectSection = section;
 		funcInfo->mOwnerType = type;
 		funcInfo->mAttributes = attributes;
+
+		[](...) {}((funcInfo->mParameters.Add(&TypeOf(_args)))...);
+
 		type->mFunctions.Add(funcInfo);
 	}
 
 	template<typename _object_type, typename _res_type, typename ... _args>
 	void ReflectionInitializationTypeProcessor::FunctionProcessor::Signature(_object_type* object, Type* type, const char* name,
-																_res_type(_object_type::*pointer)(_args ...) const)
+																			 _res_type(_object_type::* pointer)(_args ...) const)
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -443,7 +446,7 @@ namespace o2
 
 	template<typename _object_type, typename _res_type, typename ... _args>
 	void ReflectionInitializationTypeProcessor::FunctionProcessor::SignatureStatic(_object_type* object, Type* type,
-																			const char* name, _res_type(*pointer)(_args ...))
+																				   const char* name, _res_type(*pointer)(_args ...))
 	{
 		auto retType = &TypeOf(_res_type);
 
@@ -456,4 +459,5 @@ namespace o2
 		funcInfo->mAttributes = attributes;
 		type->mStaticFunctions.Add(funcInfo);
 	}
+
 }

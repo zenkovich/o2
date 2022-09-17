@@ -82,13 +82,13 @@ namespace Editor
 		void OnSceneObjectsChanged(const Vector<SceneEditableObject*>& objects);
 
 		// Sets target objects
-		void SetTargets(const Vector<IObject*> targets) override;
+		void SetTargets(const Vector<IObject*>& targets) override;
 
 		// Sets target actor properties
-		void SetTargetsActorProperties(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
+		void SetTargetsActorProperties(const Vector<IObject*>& targets, Vector<Widget*>& viewersWidgets);
 
 		// Sets target components: gets common components and initializes them
-		void SetTargetsComponents(const Vector<IObject*> targets, Vector<Widget*>& viewersWidgets);
+		void SetTargetsComponents(const Vector<IObject*>& targets, Vector<Widget*>& viewersWidgets);
 
 		// Returns list of grouped by types components
 		Vector<Pair<const Type*, Vector<Component*>>> GetGroupedComponents() const;
@@ -140,9 +140,9 @@ CLASS_METHODS_META(Editor::ActorViewer)
 	FUNCTION().PUBLIC().SIGNATURE(void, AddActorPropertiesViewerType, IActorPropertiesViewer*);
 	FUNCTION().PUBLIC().SIGNATURE(void, Refresh);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnSceneObjectsChanged, const Vector<SceneEditableObject*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>, Vector<Widget*>&);
-	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>, Vector<Widget*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargets, const Vector<IObject*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsActorProperties, const Vector<IObject*>&, Vector<Widget*>&);
+	FUNCTION().PROTECTED().SIGNATURE(void, SetTargetsComponents, const Vector<IObject*>&, Vector<Widget*>&);
 	FUNCTION().PROTECTED().SIGNATURE(_tmp1, GetGroupedComponents);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnEnabled);
 	FUNCTION().PROTECTED().SIGNATURE(void, OnDisabled);

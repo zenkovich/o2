@@ -1318,7 +1318,7 @@ namespace o2
 		float oldTransparency = mTransparency;
 		auto oldParent = mParent;
 		auto oldParentWidget = mParentWidget;
-		bool oldResEnabledInHierarchy = mResEnabledInHierarchy;
+		bool oldResEnabledInHierarchy = mEnabled;
 
 		GetLayoutData().offsetMin = area.LeftBottom();
 		GetLayoutData().offsetMax = area.RightTop();
@@ -1326,7 +1326,8 @@ namespace o2
 		mParent = nullptr;
 		mParentWidget = nullptr;
 		mIsClipped = false;
-		mResEnabledInHierarchy = true;
+
+		SetEnabledForcible(true);
 
 		UpdateSelfTransform();
 		UpdateChildrenTransforms();
@@ -1340,7 +1341,8 @@ namespace o2
 		mParent = oldParent;
 		mParentWidget = oldParentWidget;
 		mIsClipped = false;
-		mResEnabledInHierarchy = oldResEnabledInHierarchy;
+
+		SetEnabledForcible(oldResEnabledInHierarchy);
 
 		UpdateSelfTransform();
 		UpdateChildrenTransforms();
